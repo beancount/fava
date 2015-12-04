@@ -336,6 +336,14 @@ p.empty {
 
 // Journal
 
+.tablefilter {
+    position: absolute;
+    right: 20px;
+    top: 22px;
+
+    input { margin-left: 10px; }
+}
+
 table {
     &.entry-table {
         width: 100%;

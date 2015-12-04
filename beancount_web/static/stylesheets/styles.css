@@ -1,4 +1,4 @@
-/* line 5, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 5, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,45 +20,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 103, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 32, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
+/* line 116, ../../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
@@ -1536,112 +1536,123 @@ p.empty {
   width: 100%;
 }
 
-/* line 340, ../sass/styles.scss */
+/* line 339, ../sass/styles.scss */
+.tablefilter {
+  position: absolute;
+  right: 20px;
+  top: 22px;
+}
+/* line 344, ../sass/styles.scss */
+.tablefilter input {
+  margin-left: 10px;
+}
+
+/* line 348, ../sass/styles.scss */
 table.entry-table {
   width: 100%;
 }
-/* line 343, ../sass/styles.scss */
+/* line 351, ../sass/styles.scss */
 table.entry-table a {
   font-weight: bold;
 }
-/* line 347, ../sass/styles.scss */
+/* line 355, ../sass/styles.scss */
 table.entry-table td.datecell a {
   font-weight: normal;
 }
-/* line 351, ../sass/styles.scss */
+/* line 359, ../sass/styles.scss */
 table.entry-table td.flag {
   text-align: center;
 }
-/* line 355, ../sass/styles.scss */
+/* line 363, ../sass/styles.scss */
 table.entry-table td {
   border: thin solid #fff;
 }
-/* line 359, ../sass/styles.scss */
+/* line 367, ../sass/styles.scss */
 table.entry-table th {
   color: #888;
 }
-/* line 362, ../sass/styles.scss */
+/* line 370, ../sass/styles.scss */
 table.entry-table th.description {
   width: 90%;
 }
-/* line 369, ../sass/styles.scss */
+/* line 377, ../sass/styles.scss */
 table.entry-table tr td.change {
   font-weight: bold;
 }
-/* line 373, ../sass/styles.scss */
+/* line 381, ../sass/styles.scss */
 table.entry-table tr td.description {
   white-space: normal;
 }
-/* line 376, ../sass/styles.scss */
+/* line 384, ../sass/styles.scss */
 table.entry-table tr td.description span.links {
   margin-left: 1em;
   margin-right: 1em;
   text-decoration: none;
 }
-/* line 384, ../sass/styles.scss */
+/* line 392, ../sass/styles.scss */
 table.entry-table tr.open {
   background-color: #e8e8e8;
 }
-/* line 388, ../sass/styles.scss */
+/* line 396, ../sass/styles.scss */
 table.entry-table tr.close {
   background-color: #606060;
 }
-/* line 392, ../sass/styles.scss */
+/* line 400, ../sass/styles.scss */
 table.entry-table tr.note {
   background-color: #aad0ff;
 }
-/* line 396, ../sass/styles.scss */
+/* line 404, ../sass/styles.scss */
 table.entry-table tr.document {
   background-color: #ffc8ff;
 }
-/* line 400, ../sass/styles.scss */
+/* line 408, ../sass/styles.scss */
 table.entry-table tr.pad {
   background-color: #8ff;
 }
-/* line 404, ../sass/styles.scss */
+/* line 412, ../sass/styles.scss */
 table.entry-table tr.padding {
   background-color: #cff;
 }
-/* line 408, ../sass/styles.scss */
+/* line 416, ../sass/styles.scss */
 table.entry-table tr.summarize {
   background-color: #cff;
 }
-/* line 412, ../sass/styles.scss */
+/* line 420, ../sass/styles.scss */
 table.entry-table tr.transfer {
   background-color: #cff;
 }
-/* line 416, ../sass/styles.scss */
+/* line 424, ../sass/styles.scss */
 table.entry-table tr.transaction.warning {
   background-color: #f8a;
 }
-/* line 420, ../sass/styles.scss */
+/* line 428, ../sass/styles.scss */
 table.entry-table tr.balance {
   background-color: #cfc;
 }
-/* line 423, ../sass/styles.scss */
+/* line 431, ../sass/styles.scss */
 table.entry-table tr.balance.fail {
   background-color: #f8a;
 }
-/* line 428, ../sass/styles.scss */
+/* line 436, ../sass/styles.scss */
 table.entry-table tr.posting {
   font-size: x-small;
   background-color: #e8e8e8;
   opacity: 0.6;
 }
-/* line 433, ../sass/styles.scss */
+/* line 441, ../sass/styles.scss */
 table.entry-table tr.posting.warning {
   background-color: #f66;
 }
-/* line 440, ../sass/styles.scss */
+/* line 448, ../sass/styles.scss */
 table.trial {
   width: auto;
 }
 
-/* line 446, ../sass/styles.scss */
+/* line 454, ../sass/styles.scss */
 span.payee {
   font-weight: bold;
 }
-/* line 450, ../sass/styles.scss */
+/* line 458, ../sass/styles.scss */
 span.pnsep {
   margin-left: 5px;
   margin-right: 5px;

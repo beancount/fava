@@ -188,6 +188,7 @@ class BeancountReportAPI(object):
                         leg = {
                             'account': posting_.account,
                             'flag': posting_.flag,
+                            'hash': entry['hash']
                             # 'meta': {
                             #     'filename': posting_.meta.filename,
                             #     'lineno': posting_.meta.lineno

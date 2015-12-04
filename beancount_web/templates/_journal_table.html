@@ -1,3 +1,19 @@
+<div class="tablefilter">
+    <form>
+        {% for type, default_checked in [('open',        False),
+                                         ('close',       False),
+                                         ('balance',     True),
+                                         ('note',        True),
+                                         ('document',    True),
+                                         ('transaction', True),
+                                         ('pad',         False),
+                                         ('padding',     False)] %}
+            <input type="checkbox" value="{{ type }}" id="filter-{{ type }}"{% if default_checked %} checked{% endif %}>
+            <label for="filter-{{ type }}">{{ type|capitalize }}</label>
+        {% endfor %}
+        <input type="submit" id="toggle-legs" value="Toggle legs">
+    </form>
+</div>
 <table class="entry-table">
     <thead>
         <tr>
@@ -13,7 +29,7 @@
     </thead>
     <tbody>
         {% for journal_entry in journal %} {# war account.journal #}
-            <tr class="{{ journal_entry.meta.type }}" title="{{ journal_entry.meta.filename }}:{{ journal_entry.meta.lineno }}">
+            <tr class="{{ journal_entry.meta.type }} journal-entry-{{ journal_entry.hash }}" title="{{ journal_entry.meta.filename }}:{{ journal_entry.meta.lineno }}">
                 <td class="datecell"><a href="{{ url_for('context', ehash=journal_entry.hash) }}">{{ journal_entry.date.strftime('%Y-%m-%d') or '' }}</a></td>
                 <td class="flag">{{ journal_entry.flag or '' }}</td>
                 <td class="description" colspan="4">
@@ -42,7 +58,7 @@
                 </td>
             </tr>
             {% for leg in journal_entry.legs %}
-                <tr class="posting leg">
+                <tr class="posting leg leg-{{ journal_entry.meta.type }} journal-entry-{{ journal_entry.hash }}">
                     <td class="datecell"></td>
                     <td class="flag"></td>
                     <td class="description"><a href="{{ url_for('account', name=leg.account) }}">{{ leg.account or '' }}</a></td>
