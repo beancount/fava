@@ -286,8 +286,8 @@ class BeancountReportAPI(object):
 
         for error in self._errors:
             errors.append({
-                'file': error.source.filename,
-                'line': error.source.lineno,
+                'file': error.source['filename'],
+                'line': error.source['lineno'],
                 'error': error.message,
                 'entry': error.entry  # TODO render entry
             })
