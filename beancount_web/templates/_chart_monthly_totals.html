@@ -1,0 +1,21 @@
+<div class="charts">
+    <div class="ct-chart" id="chart-monthly-totals"></div>
+    <script>
+        var data_monthly_totals = {
+            labels: [
+                {% for total in monthly_totals.totals -%}
+                new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
+                {% endfor -%}
+            ],
+            series: [
+                {% for currency in monthly_totals.operating_currencies -%}
+                    [
+                    {% for total in monthly_totals.totals -%}
+                        {{ (total.income_totals.operating_totals[currency] + total.expenses_totals.operating_totals[currency]) * -1 }},
+                    {% endfor -%}
+                    ],
+                {% endfor -%}
+            ]
+        };
+    </script>
+</div>

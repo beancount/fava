@@ -1,0 +1,24 @@
+// Chartist
+
+.ct-series-a .ct-line {
+    /* Set the colour of this series line */
+    stroke: #113861;
+
+    /* Control the thikness of your lines */
+    stroke-width: 2px;
+}
+
+.ct-series-a .ct-bar {
+    stroke: #990000;
+    stroke-width: 14px;
+}
+
+.ct-series-b .ct-bar {
+    stroke: #113861;
+    stroke-width: 14px;
+}
+
+.ct-series-c .ct-bar {
+    stroke: #777;
+    stroke-width: 14px;
+}

@@ -1,0 +1,125 @@
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/css3/user-interface";
+@import "compass/utilities/general/clearfix";
+
+// @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700);
+
+// Elements
+
+* {
+    box-sizing: border-box;
+}
+
+html, body, html > body {
+    font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    height: 100%;
+}
+
+.bodywrapper {
+    min-height: 100%;
+}
+
+strong {
+    font-weight: bold;
+}
+
+p, ol, ul, dl {
+    margin: .2em 0 .8em 0;
+}
+
+p {
+    padding: 0;
+    line-height: 140%;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 18px;
+    color: #333;
+
+    // padding: 0 6px 0 0;
+    margin: 0 0 .2em 0;
+}
+
+h2 {
+    font-size: 16px;
+
+    // margin: 1em 0 .5em 0;
+}
+
+h2.subhead {
+    font-weight: normal;
+    margin-top: 0;
+}
+
+h3 {
+    font-size: 14px;
+    margin: .8em 0 .3em 0;
+    color: #333;
+    font-weight: bold;
+    display: block;
+    text-align: center;
+}
+
+h4 {
+    font-size: 12px;
+
+    // margin: 1em 0 .8em 0;
+    padding-bottom: 3px;
+}
+
+h5 {
+    font-size: 10px;
+
+    // margin: 1.5em 0 .5em 0;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+strong, b {
+    font-weight: bold;
+}
+
+em, i {
+    font-style: italic;
+}
+
+a {
+    text-decoration: underline;
+
+    &:hover, &:focus {
+        color: darker(#3572b0);
+        text-decoration: none;
+    }
+
+    &:link, &:visited {
+        color: #3572b0;
+
+        // #5b80b2;
+        text-decoration: none;
+    }
+
+    &:active {
+        outline: none;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    img {
+        border: none;
+    }
+
+    &.section:link, &.section:visited {
+        color: white;
+        text-decoration: none;
+    }
+}

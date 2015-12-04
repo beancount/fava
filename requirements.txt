@@ -1,0 +1,11 @@
+-e hg+https://bitbucket.org/blais/beancount#egg=beancount
+-e git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount_pygments_lexer
+Flask==0.10.1
+itsdangerous==0.24
+Jinja2==2.8
+livereload==2.4.0
+MarkupSafe==0.23
+Pygments==2.0.2
+six==1.10.0
+tornado==4.3
+Werkzeug==0.11.2

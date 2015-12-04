@@ -1,0 +1,9 @@
+{% extends "_layout.html" %}
+{% set active_page = 'context' %}
+
+{% block title %}Context{% endblock %}
+
+{% block content %}
+    <h1>Context: <span>{{ context.hash }}</span></h1>
+    {{ context.context_highlighted | safe }}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "_layout.html" %}
+{% set active_page = 'source' %}
+
+{% block title %}Source{% endblock %}
+
+{% block content %}
+    <h1>Source</h1>
+    {{ source | safe }}
+{% endblock %}

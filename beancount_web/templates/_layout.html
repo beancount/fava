@@ -1,0 +1,94 @@
+{% set navigation_bar = [
+    ('/balance_sheet/',      'balance_sheet',  'Balance Sheet'),
+    ('/journal/',            'journal',        'General Journal'),
+    ('/income_statement/',   'income_stmt',    'Income Statement'),
+    ('/documents/',          'documents',      'Documents'),
+    ('/source/',             'source',         'Source'),
+    ('/trial_balance/',      'trial_balance',  'Trial Balance'),
+    ('/holdings/',           'holdings',       'Equity/Holdings'),
+    ('/net_worth/',          'net_worth',       'Net Worth'),
+    ('/errors/',             'errors',         'Errors'),
+] -%}
+{% set active_page = active_page|default('journal') -%}
+<!doctype html>
+<html>
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
+    <title>{% block title %}{% endblock %} - Test</title>
+    {% endblock %}
+</head>
+<body>
+    <div class="bodywrapper">
+        <header id="header">
+            <div id="header">
+                <div id="branding">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAsVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3mHKcAAAAOnRSTlMAAQMEBQYHCAwNDg8QExkaISImJzQ7RUZHSUtVZGtsb3FzdXd4f5WYm56jr7y+xcfP2tze4OLk6/X9+wsXVgAAAMJJREFUKFPFkWkTgiAYhDG1wy677VSzw0q6pKz3//+wBGRkGO2r+4ndZ9hhFoQq0AaXKZoiKFfE4Uzt82iKOWyrcJjDJU90N45dnZ/3HCbrPvfmE64YHkZ216MQi6rwPUBp0VF4GVrQowlAqwA6cN8xKJ4uwyDNGdz+g0EBnAvoFEALxjZC9gIsCd60zJy6ZqpRmFmNLfQ9NJirE7pWbDLTuYj5SI0Fhk+IzwdqfvLhJ0jRSvqVl/rRCYdnKNVG7atcP+gmOQsBuK8NAAAAAElFTkSuQmCC" alt="">
+                    <h1 id="site-name">{{ title }}</h1>
+                </div>
+                <ul class="topmenu">
+                    {# <li><a href="#"><span>2015/11/01 - Now</span></a></li> #}
+                    {#           <li><a href="#"><span>#recurring</span></a></li> #}
+                    {#           <li><a href="#"><span>Expenses:IT</span></a></li> #}
+                    <li>
+                        <a href="#"><span>Time</span></a>
+                        <div class="filter">
+                            <div class="inputcontainer">
+                                <input type="search">
+                            </div>
+                            <ul>
+                                {% for year in active_years %}
+                                <li><a href="{{ request.path }}?filter_year={{ year }}">{{ year }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><span>Tag</span></a>
+                        <div class="filter">
+                            <div class="inputcontainer">
+                                <input type="search">
+                            </div>
+                            <ul>
+                                {% for tag in active_tags %}
+                                <li><a href="{{ request.path }}?filter_tag={{ tag }}"># {{ tag }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><span>Component</span></a>
+                        <div class="filter">
+                            <div class="inputcontainer">
+                                <input type="search">
+                            </div>
+                            <ul>
+                                {% for component in active_components %}
+                                <li><a href="{{ url_for('account', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </header>
+        <div class="wrapper">
+            <div class="sidebar">
+                <ul id="navigation">
+                    {% for href, id, caption in navigation_bar %}
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="main">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='vendor/jquery-js/jquery-2.1.4.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/moment-js/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
+</body>
+</html>

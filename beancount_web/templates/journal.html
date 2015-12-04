@@ -1,0 +1,9 @@
+{% extends "_layout.html" %}
+{% set active_page = 'journal' %}
+
+{% block title %}General Ledger{% endblock %}
+
+{% block content %}
+    <h1>General Ledger</h1>
+    {% include "_journal_table.html" %}
+{% endblock %}

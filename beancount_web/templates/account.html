@@ -1,0 +1,22 @@
+{% extends "_layout.html" %}
+{% set active_page = 'account' %}
+
+{% block title %}Account {{ account.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ account.name }}</h1>
+<div class="charts">
+    <div class="ct-chart" id="chart-account"></div>
+    <script>
+        var data_account = [
+        {% for date, value in chart_data %}
+        { x: new Date({{ date.year }}, {{ date.month-1 }}, {{ date.day }}), y: {{ value }} },
+        {% endfor %}
+        ];
+    </script>
+</div>
+<h3>Journal</h3>
+{% with journal=account.journal %}
+    {% include "_journal_table.html" %}
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,5 @@
+*.pyc
+/dist/
+/build/
+/*.egg-info
+*sass-cache*/

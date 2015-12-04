@@ -1,0 +1,36 @@
+{% extends "_layout.html" %}
+{% set active_page = 'holdings' %}
+
+{% block title %}Equity/Holdings{% endblock %}
+
+{% block content %}
+<h1>Equity/Holdings</h1>
+<table class="holdings">
+    <thead>
+        <tr>
+            <th>Account</th>
+            <th>Units</th>
+            <th>Currency</th>
+            <th>Cost Currency</th>
+            <th>Average Cost</th>
+            <th>Price</th>
+            <th>Book Value</th>
+            <th>Market Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for holding in holdings.body %}
+        <tr>
+           <td><a href="{{ url_for('account', name=holding.0) }}">{{ holding.0 }}</a></td>
+           <td class="num">{{ holding.1 }}</td>
+           <td>{{ holding.2 }}</td>
+           <td>{{ holding.3 }}</td>
+           <td class="num">{{ holding.4 }}</td>
+           <td class="num">{{ holding.5 }}</td>
+           <td class="num">{{ holding.6 }}</td>
+           <td class="num">{{ holding.7 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,58 @@
+<table class="entry-table">
+    <thead>
+        <tr>
+            <th class="datecell">Date</th>
+            <th class="flag">F</th>
+            <th class="description">Narration/Payee</th>
+            <th class="position">Position</th>
+            <th class="price">Price</th>
+            <th class="cost">Cost</th>
+            <th class="change">Change</th>
+            <th class="balance">Balance</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for journal_entry in journal %} {# war account.journal #}
+            <tr class="{{ journal_entry.meta.type }}" title="{{ journal_entry.meta.filename }}:{{ journal_entry.meta.lineno }}">
+                <td class="datecell"><a href="{{ url_for('context', ehash=journal_entry.hash) }}">{{ journal_entry.date.strftime('%Y-%m-%d') or '' }}</a></td>
+                <td class="flag">{{ journal_entry.flag or '' }}</td>
+                <td class="description" colspan="4">
+                    {% if journal_entry.meta.type == 'open' %}Open <a href="{{ url_for('account', name=journal_entry.account) }}">{{ journal_entry.account }}</a>{% endif %}
+                    {% if journal_entry.meta.type == 'note' %}Note: {{ journal_entry.comment }}{% endif %}
+                    {% if journal_entry.meta.type == 'pad' %}Pad{% endif %}
+                    {% if journal_entry.meta.type == 'padding' %}{{ journal_entry.narration }}{% endif %}
+                    {% if journal_entry.meta.type == 'document' %}Document for <a href="{{ url_for('account', name=journal_entry.account) }}">{{ journal_entry.account }}</a>: <a href="#TODO">{{ journal_entry.filename }}</a>{% endif %}
+                    {% if journal_entry.meta.type == 'balance' %}Balance <a href="{{ url_for('account', name=journal_entry.account) }}">{{ journal_entry.account }}</a> has {{ journal_entry.amount }} {{ journal_entry.amount_currency }}{% endif %}
+                    {% if journal_entry.meta.type == 'transaction' %}<strong>{{ journal_entry.payee or '' }}</strong>{% if journal_entry.payee and journal_entry.narration %} | {% endif %}{{ journal_entry.narration or '' }}{% endif %}
+
+                </td>
+                <td class="change num">
+                    {% if journal_entry.change %}
+                        {% for change in journal_entry.change %}
+                            {{ change.number|format_currency }} {{ change.currency }}<br>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td class="balance num">
+                    {% if journal_entry.balance %}
+                        {% for balance in journal_entry.balance %}
+                            {{ balance.number|format_currency }} {{ balance.currency }}<br>
+                        {% endfor %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% for leg in journal_entry.legs %}
+                <tr class="posting leg">
+                    <td class="datecell"></td>
+                    <td class="flag"></td>
+                    <td class="description"><a href="{{ url_for('account', name=leg.account) }}">{{ leg.account or '' }}</a></td>
+                    <td class="position num">{{ leg.position|format_currency or '' }} {{ leg.position_currency or '' }}</td>
+                    <td class="price num">{{ leg.price|format_currency or '' }} {{ leg.price_currency or '' }}</td>
+                    <td class="cost num">{{ leg.cost|format_currency or '' }} {{ leg.cost_currency or '' }}</td>
+                    <td class="change num"></td>
+                    <td class="balance num"></td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>

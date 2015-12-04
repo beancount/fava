@@ -1,0 +1,43 @@
+{% if table_title %}
+    <h3>{{ table_title }}</h3>
+{% endif %}
+<table class="fullwidth tree-table">
+    <thead>
+        <tr>
+            <th class="first">Account</th>
+            {% for currency in currencies %}
+                <th>{{ currency }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for asset in table_data %}
+            <tr>
+                <td class="account account-level-{{ account_level(asset.account) }}"><a href="{{ url_for('account', name=asset.account) }}" class="account">{{ asset.account|last_segment }}</a></td>
+                {% for currency, balance in asset.operating_balances.items() %}
+                    <td class="num">{{ balance or '' }}</td>
+                {% endfor %}
+                <td class="num">
+                    {% for currency, balance in asset.other_balances.items() %}
+                        {{ balance }} {{ currency }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    {% if totals %}
+        <tfoot>
+            <tr>
+                <td>&nbsp;</td>
+                {% for currency, balance in totals.operating_totals.items() %}
+                    <td class="num">{{ balance or '' }}</td>
+                {% endfor %}
+                <td class="num">
+                    {% for currency, balance in totals.other_totals.items() %}
+                        {{ balance }} {{ currency }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+        </tfoot>
+    {% endif %}
+</table>
