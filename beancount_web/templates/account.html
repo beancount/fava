@@ -16,7 +16,7 @@
     </script>
 </div>
 <h3>Journal</h3>
-{% with journal=account.journal %}
+{% with journal=account.journal, show_tablefilter=True %}
     {% include "_journal_table.html" %}
 {% endwith %}
 {% endblock %}

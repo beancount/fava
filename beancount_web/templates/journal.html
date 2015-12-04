@@ -5,5 +5,7 @@
 
 {% block content %}
     <h1>General Ledger</h1>
-    {% include "_journal_table.html" %}
+    {% with show_tablefilter=True  %}
+        {% include "_journal_table.html" %}
+    {% endwith %}
 {% endblock %}

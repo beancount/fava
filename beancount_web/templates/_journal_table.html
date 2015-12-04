@@ -1,19 +1,21 @@
-<div class="tablefilter">
-    <form>
-        {% for type, default_checked in [('open',        False),
-                                         ('close',       False),
-                                         ('balance',     True),
-                                         ('note',        True),
-                                         ('document',    True),
-                                         ('transaction', True),
-                                         ('pad',         False),
-                                         ('padding',     False)] %}
-            <input type="checkbox" value="{{ type }}" id="filter-{{ type }}"{% if default_checked %} checked{% endif %}>
-            <label for="filter-{{ type }}">{{ type|capitalize }}</label>
-        {% endfor %}
-        <input type="submit" id="toggle-legs" value="Toggle legs">
-    </form>
-</div>
+{% if show_tablefilter %}
+    <div class="tablefilter">
+        <form>
+            {% for type, default_checked in [('open',        False),
+                                             ('close',       False),
+                                             ('balance',     True),
+                                             ('note',        True),
+                                             ('document',    True),
+                                             ('transaction', True),
+                                             ('pad',         False),
+                                             ('padding',     False)] %}
+                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}"{% if default_checked %} checked{% endif %}>
+                <label for="filter-{{ type }}">{{ type|capitalize }}</label>
+            {% endfor %}
+            <input type="submit" id="toggle-legs" value="Toggle legs">
+        </form>
+    </div>
+{% endif %}
 <table class="entry-table">
     <thead>
         <tr>
