@@ -338,6 +338,18 @@ class BeancountReportAPI(object):
                                 for entry in self.entries
                                 if ehash == compare.hash_entry(entry)]
 
+        content = ""
+
+        dcontext = self.options_map['dcontext']
+        for entry in matching_entries:
+            content += context.render_entry_context(
+                self.entries, self.options_map, dcontext,
+                entry.meta["filename"], entry.meta["lineno"])
+
+        return {
+            'hash': ehash,
+            'context': content
+        }
 
     def active_years(self):
         return list(getters.get_active_years(self.all_entries))
@@ -383,19 +395,6 @@ class BeancountReportAPI(object):
 #            printer.print_entries(matching_entries, dcontext, file=oss)
 #
 #        else:
-
-        content = ""
-
-        dcontext = self.options_map['dcontext']
-        for entry in matching_entries:
-            content += context.render_entry_context(
-                self.entries, self.options_map, dcontext,
-                entry.meta["filename"], entry.meta["lineno"])
-
-        return {
-            'hash': ehash,
-            'context': content
-        }
 
     def source(self):
         return self._source
