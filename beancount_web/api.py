@@ -122,8 +122,8 @@ class BeancountReportAPI(object):
 
                 entry = {
                     'meta': {
-                        'filename': posting.meta.filename,
-                        'lineno': posting.meta.lineno
+                        'filename': posting.meta['filename'],
+                        'lineno': posting.meta['lineno']
                     },
                     'date': posting.date,
                     'hash': compare.hash_entry(posting)
