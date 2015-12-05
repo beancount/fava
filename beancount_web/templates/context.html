@@ -6,4 +6,8 @@
 {% block content %}
     <h1>Context: <span>{{ context.hash }}</span></h1>
     {{ context.context_highlighted | safe }}
+    <h3>Journal Entries</h3>
+    {% with journal=context.journal %}
+        {% include "_journal_table.html" %}
+    {% endwith %}
 {% endblock %}

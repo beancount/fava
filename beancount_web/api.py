@@ -348,7 +348,8 @@ class BeancountReportAPI(object):
 
         return {
             'hash': ehash,
-            'context': content
+            'context': content,
+            'journal': self._process_postings(matching_entries)
         }
 
     def active_years(self):
