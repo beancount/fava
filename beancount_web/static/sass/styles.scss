@@ -291,6 +291,35 @@ table {
             padding-left: 6px;
         }
     }
+
+    &.tree-table {
+        td.account a {
+            position: relative;
+            margin-left: 15px;
+        }
+
+        // td.account.leaf a { margin-left: 10px; }
+
+        span.expander {
+            width: 5px;
+            height: 5px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #AFC1D3;
+            position: absolute;
+            left: -15px;
+            top: 5px;
+            cursor: pointer;
+
+            &.toggled {
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-left: 5px solid #AFC1D3;
+                left: -12px;
+                top: 2px;
+            }
+        }
+    }
 }
 
 #assets, #liabilities, #equity, #income, #expenses {

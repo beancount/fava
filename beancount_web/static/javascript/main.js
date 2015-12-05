@@ -122,6 +122,42 @@ $(document).ready(function() {
 
         return false;
     });
+
+    // Tree-expanding
+
+    function getLevel(tableRow) {
+        if ($(tableRow).length == 0) { return 0; }
+        return parseInt($(tableRow).prop('class').substring(10));
+    }
+
+    var level = 1;
+    $('table.tree-table tr').each(function() {
+        var nextLevel = getLevel($(this).next());
+        if (nextLevel <= level) { $(this).children().first().addClass('leaf'); }
+        level = nextLevel;
+    });
+
+    $('table.tree-table tr td:first-child:not(.leaf) a.account').each(function() {
+        $(this).append('<span class="expander"></span>');
+    });
+
+    $('table.tree-table span.expander').click(function() {
+        var row = $(this).parents('tr');
+        var level = getLevel(row);
+        var hide = !$(this).hasClass('toggled');
+        $(this).toggleClass('toggled');
+
+        row = row.next();
+        while (row.length > 0 && getLevel(row) > level) {
+            row.toggle(hide);
+            row.children().first().toggleClass('hidden', hide);
+            row.toggle();
+            row.find('span.expander').removeClass('toggled');
+            row = row.next();
+        }
+
+        return false;
+    });
 });
 
 

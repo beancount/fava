@@ -12,7 +12,7 @@
     </thead>
     <tbody>
         {% for asset in table_data %}
-            <tr>
+            <tr class="row-level-{{ account_level(asset.account) }}">
                 <td class="account account-level-{{ account_level(asset.account) }}"><a href="{{ url_for('account', name=asset.account) }}" class="account">{{ asset.account|last_segment }}</a></td>
                 {% for currency, balance in asset.operating_balances.items() %}
                     <td class="num">{{ balance or '' }}</td>
