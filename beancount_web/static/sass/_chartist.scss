@@ -1,6 +1,6 @@
 // Chartist
 
-.ct-series-a .ct-line {
+.ct-line {
     /* Set the colour of this series line */
     stroke: #113861;
 
@@ -21,4 +21,33 @@
 .ct-series-c .ct-bar {
     stroke: #777;
     stroke-width: 14px;
+}
+
+.ct-point {
+  stroke-width: 5px;
+}
+
+.ct-label {
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.chart-labels {
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+
+    a {
+        color: rgba(0, 0, 0, 0.3);
+        padding: 0 5px;
+
+        &:hover {
+            text-decoration: underline;
+            color: rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    a.selected, label.selected { color: rgba(0, 0, 0, 0.5); }
 }

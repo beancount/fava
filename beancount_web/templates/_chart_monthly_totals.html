@@ -1,5 +1,15 @@
 <div class="charts">
+    <div class="chart-filter">
+        <form>
+            <input type="submit" id="toggle-chart" value="Hide chart">
+        </form>
+    </div>
     <div class="ct-chart" id="chart-monthly-totals"></div>
+    <div class="chart-labels">
+        <label for="chart-monthly-totals" class="selected">Monthly changes</label>
+        {# <a for="chart-monthly-totals" href="" class="selected">Monthly changes</a>
+        | <a for="chart-monthly-totals" href="">Expenses/Income</a> #}
+    </div>
     <script>
         var data_monthly_totals = {
             labels: [

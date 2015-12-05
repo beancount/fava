@@ -24,17 +24,23 @@ $color_bittersweet_approx: #f66;
     right: 0;
 }
 
+.halfleft, .halfright {
+    width: 50%;
+
+    h3 { text-align: center; }
+}
+
 .halfleft {
     float: left;
-    width: 50%;
     padding-right: 20px;
 }
 
 .halfright {
     float: right;
-    width: 50%;
     padding-left: 20px;
 }
+
+// Header
 
 #header {
     @include clearfix;
@@ -334,15 +340,14 @@ p.empty {
     }
 }
 
-// Journal
-
-.tablefilter {
-    position: absolute;
-    right: 20px;
-    top: 22px;
+.table-filter, .chart-filter {
+    float: right;
+    margin-top: -20px;
 
     input { margin-left: 10px; }
 }
+
+// Journal
 
 table {
     &.entry-table {
@@ -461,6 +466,4 @@ span {
     }
 }
 
-.chart {
-    @import "chartist";
-}
+@import "chartist";

@@ -1,5 +1,5 @@
 {% if show_tablefilter %}
-    <div class="tablefilter">
+    <div class="table-filter">
         <form>
             {% for type, default_checked in [('open',        False),
                                              ('close',       False),
@@ -12,7 +12,7 @@
                 <input type="checkbox" value="{{ type }}" id="filter-{{ type }}"{% if default_checked %} checked{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
-            <input type="submit" id="toggle-legs" value="Toggle legs">
+            <input type="submit" id="toggle-legs" value="Hide legs">
         </form>
     </div>
 {% endif %}

@@ -45,7 +45,7 @@ $(document).ready(function() {
         series: {
           remaining: {
             lineSmooth: Chartist.Interpolation.step(),
-            showPoint: false
+            // showPoint: true
           },
         },
         height: 240,
@@ -77,7 +77,7 @@ $(document).ready(function() {
     }
 
     function toggle_journal_types() {
-        $('.tablefilter input[type="checkbox"]').each(function() {
+        $('.table-filter input[type="checkbox"]').each(function() {
             var type = $(this).prop('id').substring(7);
             $('table.entry-table tr.' + type).toggle($(this).prop('checked'));
             $('table.entry-table tr.leg-' + type).toggle($(this).prop('checked'));
@@ -86,7 +86,7 @@ $(document).ready(function() {
     }
 
     // Toggle positions with checkboxes
-    $('.tablefilter input[type="checkbox"]').change(function() {
+    $('.table-filter input[type="checkbox"]').change(function() {
         toggle_journal_types();
     });
     toggle_journal_types();
@@ -101,10 +101,25 @@ $(document).ready(function() {
         });
     });
 
-    // Toggle all legs by clicking on "Toggle legs"
-    $('.tablefilter input#toggle-legs').click(function() {
+    // Toggle all legs by clicking on "Hide/Show legs"
+    $('.table-filter input#toggle-legs').click(function() {
         $('table.entry-table tr.leg').not('.hidden').toggle($(this).hasClass('hide-legs'));
         $(this).toggleClass('hide-legs');
+
+        var text = $(this).prop('value');
+        $(this).prop('value', text === 'Hide legs' ? 'Show legs' : 'Hide legs');
+
+        return false;
+    });
+
+    // Toggle chart by clicking on "Hide/Show chart"
+    $('.charts input#toggle-chart').click(function() {
+        $('.ct-chart, .chart-labels').not('.hidden').toggle($(this).hasClass('hide-charts'));
+        $(this).toggleClass('hide-charts');
+
+        var text = $(this).prop('value');
+        $(this).prop('value', text === 'Hide chart' ? 'Show chart' : 'Hide chart');
+
         return false;
     });
 });

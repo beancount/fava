@@ -15,7 +15,7 @@
 <head>
     {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
-    <title>{% block title %}{% endblock %} - Test</title>
+    <title>{% block title %}{% endblock %} - {{ title }}</title>
     {% endblock %}
 </head>
 <body>
@@ -27,9 +27,6 @@
                     <h1 id="site-name">{{ title }}</h1>
                 </div>
                 <ul class="topmenu">
-                    {# <li><a href="#"><span>2015/11/01 - Now</span></a></li> #}
-                    {#           <li><a href="#"><span>#recurring</span></a></li> #}
-                    {#           <li><a href="#"><span>Expenses:IT</span></a></li> #}
                     <li>
                         <a href="#"><span>Time</span></a>
                         <div class="filter">
@@ -37,9 +34,9 @@
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for year in active_years %}
+                                {% for year in active_years -%}
                                 <li><a href="{{ request.path }}?filter_year={{ year }}">{{ year }}</a></li>
-                                {% endfor %}
+                                {% endfor -%}
                             </ul>
                         </div>
                     </li>
@@ -50,9 +47,9 @@
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for tag in active_tags %}
+                                {% for tag in active_tags -%}
                                 <li><a href="{{ request.path }}?filter_tag={{ tag }}"># {{ tag }}</a></li>
-                                {% endfor %}
+                                {% endfor -%}
                             </ul>
                         </div>
                     </li>
@@ -63,9 +60,9 @@
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for component in active_components %}
+                                {% for component in active_components -%}
                                 <li><a href="{{ url_for('account', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
-                                {% endfor %}
+                                {% endfor -%}
                             </ul>
                         </div>
                     </li>
@@ -75,9 +72,9 @@
         <div class="wrapper">
             <div class="sidebar">
                 <ul id="navigation">
-                    {% for href, id, caption in navigation_bar %}
+                    {% for href, id, caption in navigation_bar -%}
                     <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
-                    {% endfor %}
+                    {% endfor -%}
                 </ul>
             </div>
             <div class="main">

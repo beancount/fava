@@ -6,7 +6,15 @@
 {% block content %}
 <h1>{{ account.name }}</h1>
 <div class="charts">
+    <div class="chart-filter">
+        <form>
+            <input type="submit" id="toggle-chart" value="Hide chart">
+        </form>
+    </div>
     <div class="ct-chart" id="chart-account"></div>
+    <div class="chart-labels">
+        <label for="chart-account" class="selected">Account balance</label>
+    </div>
     <script>
         var data_account = [
         {% for date, value in chart_data %}
