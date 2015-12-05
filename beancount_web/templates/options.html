@@ -1,0 +1,24 @@
+{% extends "_layout.html" %}
+{% set active_page = 'options' %}
+
+{% block title %}Options{% endblock %}
+
+{% block content %}
+    <h1>Options</h1>
+    <table class="options_map">
+        <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in options.items() | sort %}
+            <tr>
+               <td class="num">{{ key }}</td>
+               <td class="num">{{ value }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

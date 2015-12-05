@@ -64,6 +64,11 @@ def holdings():
     holdings = app.api.holdings()
     return render_template('holdings.html', holdings=holdings)
 
+@app.route('/options/')
+def options():
+    options = app.api.options()
+    return render_template('options.html', options=options)
+
 @app.route('/net_worth/')
 def net_worth():
     net_worth = app.api.net_worth()

@@ -412,4 +412,5 @@ class BeancountReportAPI(object):
             'journal': journal
         }
 
-
+    def options(self):
+        return self.options_map

@@ -130,8 +130,18 @@ $color_bittersweet_approx: #f66;
     border-right: 1px solid #ccc;
     background-color: #f5f5f5;
 
+    h3 {
+        text-transform: uppercase;
+        margin-top: 50px;
+        margin-left: 20px;
+        font-size: 11px;
+        color: #999;
+    }
+
     ul {
-        margin-top: 20px;
+        margin-top: 10px;
+
+        &:nth-child(1) { margin-top: 20px; }
     }
 
     li {
@@ -269,6 +279,16 @@ table {
             margin: 0;
             line-height: 1.2em;
             font-size: 1.1em;
+        }
+    }
+
+    &.options_map {
+        td:nth-child(1) { font-weight: bold; }
+
+        td:nth-child(2) {
+            white-space: normal;
+            text-align: left;
+            padding-left: 6px;
         }
     }
 }

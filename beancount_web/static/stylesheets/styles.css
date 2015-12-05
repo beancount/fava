@@ -963,7 +963,17 @@ a.section:link, a.section:visited {
   border-right: 1px solid #ccc;
   background-color: #f5f5f5;
 }
+.sidebar h3 {
+  text-transform: uppercase;
+  margin-top: 50px;
+  margin-left: 20px;
+  font-size: 11px;
+  color: #999;
+}
 .sidebar ul {
+  margin-top: 10px;
+}
+.sidebar ul:nth-child(1) {
   margin-top: 20px;
 }
 .sidebar li {
@@ -1234,6 +1244,14 @@ table.highlighttable pre {
   margin: 0;
   line-height: 1.2em;
   font-size: 1.1em;
+}
+table.options_map td:nth-child(1) {
+  font-weight: bold;
+}
+table.options_map td:nth-child(2) {
+  white-space: normal;
+  text-align: left;
+  padding-left: 6px;
 }
 
 #assets table, #liabilities table, #equity table, #income table, #expenses table {

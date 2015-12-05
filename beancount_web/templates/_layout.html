@@ -1,13 +1,18 @@
 {% set navigation_bar = [
-    ('/balance_sheet/',      'balance_sheet',  'Balance Sheet'),
-    ('/journal/',            'journal',        'General Journal'),
-    ('/income_statement/',   'income_stmt',    'Income Statement'),
-    ('/documents/',          'documents',      'Documents'),
-    ('/source/',             'source',         'Source'),
-    ('/trial_balance/',      'trial_balance',  'Trial Balance'),
-    ('/holdings/',           'holdings',       'Equity/Holdings'),
-    ('/net_worth/',          'net_worth',       'Net Worth'),
-    ('/errors/',             'errors',         'Errors'),
+    ("", [
+        ('/balance_sheet/',      'balance_sheet',  'Balance Sheet'),
+        ('/journal/',            'journal',        'General Journal'),
+        ('/income_statement/',   'income_stmt',    'Income Statement'),
+        ('/documents/',          'documents',      'Documents'),
+        ('/trial_balance/',      'trial_balance',  'Trial Balance'),
+        ('/holdings/',           'holdings',       'Equity/Holdings'),
+        ('/net_worth/',          'net_worth',      'Net Worth'),
+    ]),
+    ("Debug", [
+        ('/source/',             'source',         'Source'),
+        ('/options/',            'options',        'Options'),
+        ('/errors/',             'errors',         'Errors'),
+    ])
 ] -%}
 {% set active_page = active_page|default('journal') -%}
 <!doctype html>
@@ -71,11 +76,14 @@
         </header>
         <div class="wrapper">
             <div class="sidebar">
-                <ul id="navigation">
-                    {% for href, id, caption in navigation_bar -%}
-                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
+                {% for title_, menuitems in navigation_bar %}
+                    {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
+                    <ul id="navigation">
+                    {% for href, id, caption in menuitems -%}
+                        <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
                     {% endfor -%}
-                </ul>
+                    </ul>
+                {% endfor %}
             </div>
             <div class="main">
                 {% block content %}{% endblock %}
