@@ -10,12 +10,9 @@ This is mainly a proof-of-concept and playground for figuring out what a new web
 
 ## Usage
 
-A `bin`-file for running it directly off a command line prompt is still missing. Therefore you have to run it off a Python prompt.
+1. Install beancount-web: `python setup.py install`.
+2. Start beancount-web: `beancount-web /Volumes/Ledger/example.ledger` (substitute with the path to your own beancount-file) to run the included web server.
+3. Point your browser at `http://localhost:5000` to view the web interface.
 
-1. Open a `python`-prompt (Python 3 required)
-2. `from beancount_web import application` to import the web application
-3. `application.run('/Volumes/Ledger/example.ledger')` (substitute with the path to your own beancount-file) to run the included web server.
-4. Point your browser at `http://localhost:5000` to view the web interface. 
-
---- 
+---
 **Caution**: This is far from finished. Consider it *alpha*-software. Contributions are very welcome :-)
