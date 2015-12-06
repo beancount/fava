@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import argparse
+
+from beancount_web import application
+
+"""
+Run script for beancount-web.
+
+"""
+
+
+def main(arguments):
+    parser = argparse.ArgumentParser(description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('filename', help = "Beancount input file", type = str)
+    args = parser.parse_args(arguments)
+    application.run(args.filename)
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
