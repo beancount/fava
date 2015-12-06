@@ -11,11 +11,14 @@
             ],
             series: [
                 {% for currency in operating_currencies -%}
-                    [
-                    {% for total in monthly_totals -%}
-                        {{ total.totals[currency] or '0' }},
-                    {% endfor %}
+                {
+                    name: "{{ currency }}",
+                    data: [
+                        {% for total in monthly_totals -%}
+                            {{ total.totals[currency] or '0' }},
+                        {% endfor %}
                     ],
+                },
                 {% endfor -%}
             ]
         }

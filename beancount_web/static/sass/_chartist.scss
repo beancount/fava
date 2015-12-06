@@ -1,35 +1,30 @@
 // Chartist
 
+
+$ct-bar-width: 14px;
+$ct-line-width: 3px;
+$ct-point-size: 6px;
+$ct-series-colors: (
+  #990000,
+  #113861,
+  #777,
+  #1B9900,
+  #FF8800,
+  #59922b,
+  #0544d3,
+  #6b0392,
+  #f05b4f,
+  #dda458,
+  #eacf7d,
+  #86797d,
+  #b2c326,
+  #6188e2,
+  #a748ca
+);
+
 @import "../vendor/chartist-js/scss/chartist";
 
 .charts {
-    .ct-series-a, .ct-series-b, .ct-series-c, .ct-series-d, .ct-series-e {
-        .ct-line { stroke-width: 3px; }
-        .ct-point { stroke-width: 6px; }
-
-        .ct-bar { stroke-width: 14px; }
-    }
-
-    .ct-series-a {
-        .ct-line, .ct-point, .ct-bar { stroke: #990000; }
-    }
-
-    .ct-series-b {
-        .ct-line, .ct-point, .ct-bar { stroke: #113861; }
-    }
-
-    .ct-series-c {
-        .ct-line, .ct-point, .ct-bar { stroke: #777; }
-    }
-
-    .ct-series-d {
-        .ct-line, .ct-point, .ct-bar { stroke: #1B9900; }
-    }
-
-    .ct-series-e {
-        .ct-line, .ct-point, .ct-bar { stroke: #FF8800; }
-    }
-
     .ct-label {
       font-size: 11px;
       font-weight: bold;
@@ -53,6 +48,48 @@
             }
 
             &.selected { color: rgba(0, 0, 0, 0.5); }
+        }
+    }
+
+    .ct-chart { position: relative; }
+
+    .ct-legend {
+        position: absolute;
+        z-index: 10;
+        top: 17px;
+        left: 10px;
+
+        li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 3px;
+        }
+
+        li:before {
+            width: 8px;
+            height: 7px;
+            position: absolute;
+            left: 0;
+            content: '';
+            border: 3px solid transparent;
+            top: -1px;
+        }
+
+        li.inactive:before {
+            background: transparent;
+        }
+
+        &.ct-legend-inside {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        @for $i from 0 to length($ct-series-colors) {
+            .ct-series-#{$i}:before {
+                background-color: nth($ct-series-colors, $i + 1);
+                border-color: nth($ct-series-colors, $i + 1);
+            }
         }
     }
 }

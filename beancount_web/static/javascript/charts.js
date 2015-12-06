@@ -18,6 +18,9 @@ $(document).ready(function() {
                 },
                 referenceValue: 0,
             },
+            plugins: [
+                Chartist.plugins.legend()
+            ]
         };
 
         switch(chart.type) {

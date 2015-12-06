@@ -11,11 +11,14 @@
             ],
             series: [
                 {% for currency in operating_currencies -%}
-                    [
-                    {% for total in monthly_totals -%}
-                        {{ (total.income_totals[currency] + total.expenses_totals[currency]) * -1 }},
-                    {% endfor %}
+                {
+                    name: "{{ currency }}",
+                    data: [
+                        {% for total in monthly_totals -%}
+                            {{ (total.income_totals[currency] + total.expenses_totals[currency]) * -1 }},
+                        {% endfor %}
                     ],
+                },
                 {% endfor -%}
             ]
         }
@@ -33,11 +36,14 @@
             ],
             series: [
                 {% for currency in operating_currencies -%}
-                    [
-                    {% for row in monthly_totals -%}
-                        {{ (row.income_totals[currency] * -1) or '0' }},
-                    {% endfor %}
+                {
+                    name: "{{ currency }}",
+                    data: [
+                        {% for row in monthly_totals -%}
+                            {{ (row.income_totals[currency] * -1) or '0' }},
+                        {% endfor %}
                     ],
+                },
                 {% endfor -%}
             ]
         }
@@ -55,11 +61,14 @@
             ],
             series: [
                 {% for currency in operating_currencies -%}
-                    [
-                    {% for row in monthly_totals -%}
-                        {{ (row.expenses_totals[currency] * -1) or '0' }},
-                    {% endfor %}
+                {
+                    name: "{{ currency }}",
+                    data: [
+                        {% for row in monthly_totals -%}
+                            {{ (row.expenses_totals[currency] * -1) or '0' }},
+                        {% endfor %}
                     ],
+                },
                 {% endfor -%}
             ]
         }

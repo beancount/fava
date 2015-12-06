@@ -861,13 +861,13 @@ span.pnsep {
 }
 
 .ct-point {
-  stroke-width: 10px;
+  stroke-width: 6px;
   stroke-linecap: round;
 }
 
 .ct-line {
   fill: none;
-  stroke-width: 4px;
+  stroke-width: 3px;
 }
 
 .ct-area {
@@ -877,7 +877,7 @@ span.pnsep {
 
 .ct-bar {
   fill: none;
-  stroke-width: 10px;
+  stroke-width: 14px;
 }
 
 .ct-slice-donut {
@@ -886,38 +886,38 @@ span.pnsep {
 }
 
 .ct-series-a .ct-point, .ct-series-a .ct-line, .ct-series-a .ct-bar, .ct-series-a .ct-slice-donut {
-  stroke: #d70206;
+  stroke: #990000;
 }
 .ct-series-a .ct-slice-pie, .ct-series-a .ct-area {
-  fill: #d70206;
+  fill: #990000;
 }
 
 .ct-series-b .ct-point, .ct-series-b .ct-line, .ct-series-b .ct-bar, .ct-series-b .ct-slice-donut {
-  stroke: #f05b4f;
+  stroke: #113861;
 }
 .ct-series-b .ct-slice-pie, .ct-series-b .ct-area {
-  fill: #f05b4f;
+  fill: #113861;
 }
 
 .ct-series-c .ct-point, .ct-series-c .ct-line, .ct-series-c .ct-bar, .ct-series-c .ct-slice-donut {
-  stroke: #f4c63d;
+  stroke: #777;
 }
 .ct-series-c .ct-slice-pie, .ct-series-c .ct-area {
-  fill: #f4c63d;
+  fill: #777;
 }
 
 .ct-series-d .ct-point, .ct-series-d .ct-line, .ct-series-d .ct-bar, .ct-series-d .ct-slice-donut {
-  stroke: #d17905;
+  stroke: #1B9900;
 }
 .ct-series-d .ct-slice-pie, .ct-series-d .ct-area {
-  fill: #d17905;
+  fill: #1B9900;
 }
 
 .ct-series-e .ct-point, .ct-series-e .ct-line, .ct-series-e .ct-bar, .ct-series-e .ct-slice-donut {
-  stroke: #453d3f;
+  stroke: #FF8800;
 }
 .ct-series-e .ct-slice-pie, .ct-series-e .ct-area {
-  fill: #453d3f;
+  fill: #FF8800;
 }
 
 .ct-series-f .ct-point, .ct-series-f .ct-line, .ct-series-f .ct-bar, .ct-series-f .ct-slice-donut {
@@ -1415,30 +1415,6 @@ span.pnsep {
   left: 0;
 }
 
-.charts .ct-series-a .ct-line, .charts .ct-series-b .ct-line, .charts .ct-series-c .ct-line, .charts .ct-series-d .ct-line, .charts .ct-series-e .ct-line {
-  stroke-width: 3px;
-}
-.charts .ct-series-a .ct-point, .charts .ct-series-b .ct-point, .charts .ct-series-c .ct-point, .charts .ct-series-d .ct-point, .charts .ct-series-e .ct-point {
-  stroke-width: 6px;
-}
-.charts .ct-series-a .ct-bar, .charts .ct-series-b .ct-bar, .charts .ct-series-c .ct-bar, .charts .ct-series-d .ct-bar, .charts .ct-series-e .ct-bar {
-  stroke-width: 14px;
-}
-.charts .ct-series-a .ct-line, .charts .ct-series-a .ct-point, .charts .ct-series-a .ct-bar {
-  stroke: #990000;
-}
-.charts .ct-series-b .ct-line, .charts .ct-series-b .ct-point, .charts .ct-series-b .ct-bar {
-  stroke: #113861;
-}
-.charts .ct-series-c .ct-line, .charts .ct-series-c .ct-point, .charts .ct-series-c .ct-bar {
-  stroke: #777;
-}
-.charts .ct-series-d .ct-line, .charts .ct-series-d .ct-point, .charts .ct-series-d .ct-bar {
-  stroke: #1B9900;
-}
-.charts .ct-series-e .ct-line, .charts .ct-series-e .ct-point, .charts .ct-series-e .ct-bar {
-  stroke: #FF8800;
-}
 .charts .ct-label {
   font-size: 11px;
   font-weight: bold;
@@ -1461,6 +1437,97 @@ span.pnsep {
 }
 .charts .chart-labels label.selected {
   color: rgba(0, 0, 0, 0.5);
+}
+.charts .ct-chart {
+  position: relative;
+}
+.charts .ct-legend {
+  position: absolute;
+  z-index: 10;
+  top: 17px;
+  left: 10px;
+}
+.charts .ct-legend li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 3px;
+}
+.charts .ct-legend li:before {
+  width: 8px;
+  height: 7px;
+  position: absolute;
+  left: 0;
+  content: '';
+  border: 3px solid transparent;
+  top: -1px;
+}
+.charts .ct-legend li.inactive:before {
+  background: transparent;
+}
+.charts .ct-legend.ct-legend-inside {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.charts .ct-legend .ct-series-0:before {
+  background-color: #990000;
+  border-color: #990000;
+}
+.charts .ct-legend .ct-series-1:before {
+  background-color: #113861;
+  border-color: #113861;
+}
+.charts .ct-legend .ct-series-2:before {
+  background-color: #777;
+  border-color: #777;
+}
+.charts .ct-legend .ct-series-3:before {
+  background-color: #1B9900;
+  border-color: #1B9900;
+}
+.charts .ct-legend .ct-series-4:before {
+  background-color: #FF8800;
+  border-color: #FF8800;
+}
+.charts .ct-legend .ct-series-5:before {
+  background-color: #59922b;
+  border-color: #59922b;
+}
+.charts .ct-legend .ct-series-6:before {
+  background-color: #0544d3;
+  border-color: #0544d3;
+}
+.charts .ct-legend .ct-series-7:before {
+  background-color: #6b0392;
+  border-color: #6b0392;
+}
+.charts .ct-legend .ct-series-8:before {
+  background-color: #f05b4f;
+  border-color: #f05b4f;
+}
+.charts .ct-legend .ct-series-9:before {
+  background-color: #dda458;
+  border-color: #dda458;
+}
+.charts .ct-legend .ct-series-10:before {
+  background-color: #eacf7d;
+  border-color: #eacf7d;
+}
+.charts .ct-legend .ct-series-11:before {
+  background-color: #86797d;
+  border-color: #86797d;
+}
+.charts .ct-legend .ct-series-12:before {
+  background-color: #b2c326;
+  border-color: #b2c326;
+}
+.charts .ct-legend .ct-series-13:before {
+  background-color: #6188e2;
+  border-color: #6188e2;
+}
+.charts .ct-legend .ct-series-14:before {
+  background-color: #a748ca;
+  border-color: #a748ca;
 }
 
 /*# sourceMappingURL=styles.css.map */
