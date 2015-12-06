@@ -16,6 +16,7 @@ setup(name='beancount-web',
             'livereload',
             'Pygments'
       ],
+      include_package_data=True,
       dependency_links=[
             'hg+https://bitbucket.org/blais/beancount#egg=beancount',
             'git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount_pygments_lexer'

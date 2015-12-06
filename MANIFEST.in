@@ -1,0 +1,3 @@
+recursive-include beancount_web/templates *
+recursive-include beancount_web/static *
+
