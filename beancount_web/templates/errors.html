@@ -5,28 +5,28 @@
 
 {% block content %}
 <h1>Errors</h1>
-{% if errors %}
-<table class="errors">
-    <thead>
-        <tr>
-            <th>File</th>
-            <th>Line</th>
-            <th>Error</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for error in errors %}
-        <tr>
-            <td><a class="source" href="/source?hl_line={{ error.line }}#line-{{ error.line-5 }}">{{ error.file }}</a></td>
-            <td class="num"><a class="source" href="/source?hl_line={{ error.line }}#line-{{ error.line-5 }}">{{ error.line }}</a></td>
-            <td>{{ error.error }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p class="empty">
-    No errors.
-</p>
-{% endif %}
+    {% if errors %}
+        <table class="errors">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Line</th>
+                    <th>Error</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for error in errors %}
+                <tr>
+                    <td><a class="source" href="/source?hl_line={{ error.line }}#line-{{ error.line-5 }}">{{ error.file }}</a></td>
+                    <td class="num"><a class="source" href="/source?hl_line={{ error.line }}#line-{{ error.line-5 }}">{{ error.line }}</a></td>
+                    <td>{{ error.error }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="empty">
+            No errors.
+        </p>
+    {% endif %}
 {% endblock %}

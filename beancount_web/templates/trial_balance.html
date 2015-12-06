@@ -1,14 +1,15 @@
 {% extends "_layout.html" %}
-{% set active_page = 'context' %}
+{% set active_page = 'trial_balance' %}
 
 {% block title %}Trial Balance{% endblock %}
+
 {% block content %}
-<h1>Trial Balance</h1>
-<div class="tables">
-    <div id="trial_balance">
-        {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance.positions, totals=None %}
-            {% include "_balance_sheet_table.html" %}
-        {% endwith %}
+    <h1>Trial Balance</h1>
+    <div class="tables">
+        <div id="trial_balance">
+            {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance.positions, totals=None %}
+                {% include "_balance_sheet_table.html" %}
+            {% endwith %}
+        </div>
     </div>
-</div>
 {% endblock %}

@@ -15,7 +15,7 @@
     <div class="tables">
         <div class="halfleft">
             <div id="assets">
-                {% with table_title="Account", currencies=balance_sheet.currencies, table_data=balance_sheet.assets, totals=balance_sheet.assets_totals %}
+                {% with table_title="Assets", currencies=balance_sheet.currencies, table_data=balance_sheet.assets, totals=balance_sheet.assets_totals %}
                     {% include "_balance_sheet_table.html" %}
                 {% endwith %}
             </div>
