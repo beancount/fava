@@ -182,10 +182,12 @@ def run(beancount_file, port=5000, host='localhost', debug=True):
 
     app.api = BeancountReportAPI(app.beancount_file)
 
-    server = Server(app.wsgi_app)
-    server.watch(app.beancount_file, reload_beancount_file)
-    server.serve(port=port, host=host, debug=debug)
-    # app.run(host, port, debug)
+    if debug:
+        app.run(host, port, debug)
+    else:
+        server = Server(app.wsgi_app)
+        server.watch(app.beancount_file, reload_beancount_file)
+        server.serve(port=port, host=host)
 
 if __name__ == '__main__':
     run(sys.argv[1])

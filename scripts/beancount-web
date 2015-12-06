@@ -9,16 +9,36 @@ from beancount_web import application
 
 """
 Run script for beancount-web.
-
 """
-
 
 def main(arguments):
     parser = argparse.ArgumentParser(description=__doc__,
             formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('filename', help = "Beancount input file", type = str)
+
+    parser.add_argument('-p', '--port',
+                        action='store',
+                        type=int,
+                        default=5000,
+                        help="Port to listen on.")
+
+    parser.add_argument('-H', '--host',
+                        action='store',
+                        type=str,
+                        default='localhost',
+                        help="Host for the webserver.")
+
+    parser.add_argument('-d', '--debug',
+                        action='store_true',
+                        help="Turn on debugging. This also uses the built-in Flask webserver.")
+
+    parser.add_argument('filename',
+                        type=str,
+                        help="Beancount input file.")
+
+
     args = parser.parse_args(arguments)
-    application.run(args.filename)
+
+    application.run(args.filename, port=args.port, host=args.host, debug=args.debug)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))
