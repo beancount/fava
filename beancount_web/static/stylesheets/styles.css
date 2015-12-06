@@ -1451,6 +1451,7 @@ span.pnsep {
   position: relative;
   padding-left: 20px;
   margin-bottom: 3px;
+  cursor: pointer;
 }
 .charts .ct-legend li:before {
   width: 8px;
