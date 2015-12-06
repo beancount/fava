@@ -6,11 +6,11 @@
 {% block content %}
     <h1>Balance Sheet</h1>
 
-    {% include "_chart_skeleton.html" %}
+    {% include "charts/_chart_skeleton.html" %}
     {% with monthly_totals=balance_sheet.monthly_totals %}
-        {% include "_chart_monthly_ie_changes.html" %}
+        {% include "charts/_chart_monthly_ie_changes.html" %}
     {% endwith %}
-    {% include "_chart_monthly_net_worth.html" %}
+    {% include "charts/_chart_monthly_net_worth.html" %}
 
     <div class="tables">
         <div class="halfleft">

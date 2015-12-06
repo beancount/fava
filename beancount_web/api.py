@@ -85,13 +85,8 @@ class BeancountReportAPI(object):
     def _process_postings(self, postings):
         jrnl = []
 
-        #for posting in postings:
         i = 1
         for posting, leg_postings, change, entry_balance in realization.iterate_with_balance(postings):
-
-            # print(change, change.__class__)
-            # print("Balance: ", entry_balance)
-            # print()
             i += 1
 
             if  isinstance(posting, Transaction) or \

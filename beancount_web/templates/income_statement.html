@@ -6,9 +6,9 @@
 {% block content %}
     <h1>Income Statement</h1>
 
-    {% include "_chart_skeleton.html" %}
+    {% include "charts/_chart_skeleton.html" %}
     {% with monthly_totals=income_statement.monthly_totals  %}
-        {% include "_chart_monthly_ie_changes.html" %}
+        {% include "charts/_chart_monthly_ie_changes.html" %}
     {% endwith %}
 
     <div class="tables">

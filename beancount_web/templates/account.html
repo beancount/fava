@@ -6,7 +6,7 @@
 {% block content %}
     <h1>{{ account.name }}</h1>
 
-    {% include "_chart_skeleton.html" %}
+    {% include "charts/_chart_skeleton.html" %}
     <script>
         window.chart_data.push({
             label: "Account balance",
@@ -30,7 +30,7 @@
         });
     </script>
     {% with monthly_totals = account.monthly_totals %}
-        {% include "_chart_monthly_totals.html" %}
+        {% include "charts/_chart_monthly_totals.html" %}
     {% endwith %}
 
     <h3>Journal</h3>
