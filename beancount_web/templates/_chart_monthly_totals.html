@@ -5,15 +5,15 @@
         dateformat: "MMM 'YY",
         data: {
             labels: [
-                {% for total in monthly_totals.totals -%}
+                {% for total in monthly_totals -%}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
             series: [
-                {% for currency in monthly_totals.operating_currencies -%}
+                {% for currency in operating_currencies -%}
                     [
-                    {% for row in monthly_totals.totals -%}
-                        {{ row.totals.operating_totals[currency] or '0' }},
+                    {% for total in monthly_totals -%}
+                        {{ total.totals[currency] or '0' }},
                     {% endfor %}
                     ],
                 {% endfor -%}

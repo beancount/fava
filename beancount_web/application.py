@@ -148,7 +148,8 @@ def inject_errors():
                 active_years=app.api.active_years(),
                 active_tags=app.api.active_tags(),
                 active_components=app.api.active_components(),
-                operating_currencies=options['operating_currency'])
+                operating_currencies=options['operating_currency'],
+                commodities=options['commodities'])
 
 @app.before_request
 def perform_global_filters():

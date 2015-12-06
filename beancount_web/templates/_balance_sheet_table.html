@@ -5,21 +5,24 @@
     <thead>
         <tr>
             <th class="first">Account</th>
-            {% for currency in currencies %}
+            {% for currency in operating_currencies %}
                 <th>{{ currency }}</th>
             {% endfor %}
+            <th>Other</th>
         </tr>
     </thead>
     <tbody>
         {% for asset in table_data %}
             <tr>
                 <td class="account account-level-{{ account_level(asset.account) }}"><a href="{{ url_for('account', name=asset.account) }}" class="account">{{ asset.account|last_segment }}</a></td>
-                {% for currency, balance in asset.operating_balances.items() %}
-                    <td class="num">{{ balance or '' }}</td>
+                {% for currency in operating_currencies %}
+                    <td class="num">{{ asset.balances[currency] or '' }}</td>
                 {% endfor %}
                 <td class="num">
-                    {% for currency, balance in asset.other_balances.items() %}
-                        {{ balance }} {{ currency }}<br>
+                    {% for currency in commodities %}
+                        {% if currency not in  operating_currencies and asset.balances[currency] %}
+                            {{ asset.balances[currency] or '' }} {{ currency }}<br>
+                        {% endif %}
                     {% endfor %}
                 </td>
             </tr>
@@ -29,12 +32,14 @@
         <tfoot>
             <tr>
                 <td>&nbsp;</td>
-                {% for currency, balance in totals.operating_totals.items() %}
-                    <td class="num">{{ balance or '' }}</td>
+                {% for currency in operating_currencies %}
+                    <td class="num">{{ totals[currency] or '' }}</td>
                 {% endfor %}
                 <td class="num">
-                    {% for currency, balance in totals.other_totals.items() %}
-                        {{ balance }} {{ currency }}<br>
+                    {% for currency in commodities %}
+                        {% if currency not in  operating_currencies and totals[currency] %}
+                            {{ totals[currency] or '' }} {{ currency }}<br>
+                        {% endif %}
                     {% endfor %}
                 </td>
             </tr>

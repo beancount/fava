@@ -10,7 +10,7 @@ from beancount.web.views import AllView
 from beancount.parser import options
 from beancount.core import compare
 from beancount.core.number import ZERO
-from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad  # TODO fehlende implementieren
+from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad  # TODO implement missing
 from beancount.reports import holdings_reports
 from beancount.core import getters
 from beancount.web.views import YearView, TagView
@@ -52,37 +52,22 @@ class BeancountReportAPI(object):
 
             line = {
                 'account': line_data.account,
-                'operating_balances': { currency: None for currency in self.options_map['operating_currency']},
-                'other_balances': {}
+                'balances': { currency: None for currency in self.options_map['commodities']}
             }
 
             for pos in line_data.balance.cost():
-                if pos.lot.currency in self.options_map['operating_currency']:
-                    line['operating_balances'][pos.lot.currency] = pos.number
-                else:
-                    line['other_balances'][pos.lot.currency] = pos.number
+                line['balances'][pos.lot.currency] = pos.number
 
             lines.append(line)
 
         return lines
 
     def _table_totals(self, root_accounts):
-        totals = {
-            'operating_totals': { currency: ZERO for currency in self.options_map['operating_currency']},
-            'other_totals': {}
-        }
+        totals = { currency: ZERO for currency in self.options_map['commodities']}
 
         for real_account in realization.dump(root_accounts):
-            line_data = real_account[2]
-
-            for pos in line_data.balance.cost():
-                if pos.lot.currency in self.options_map['operating_currency']:
-                    totals['operating_totals'][pos.lot.currency] += pos.number
-                else:
-                    if pos.lot.currency in totals['other_totals']:
-                        totals['other_totals'][pos.lot.currency] += pos.number
-                    else:
-                        totals['other_totals'][pos.lot.currency] = pos.number
+            for pos in real_account[2].balance.cost():
+                totals[pos.lot.currency] += pos.number
 
         return totals
 
@@ -211,16 +196,7 @@ class BeancountReportAPI(object):
         return jrnl
 
     def _get_month_tuples(self, entries):
-
-        # TODO very ugly
-        def filter_paddings(entries):
-            ret = []
-            for entry in entries:
-                if isinstance(entry, Transaction) and entry.narration.startswith('(Padding'): continue
-                else: ret.append(entry)
-            return ret
-
-        date_first, date_last = getters.get_min_max_dates(filter_paddings(entries), (Transaction))
+        date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
 
         def get_next_month(datee):
             month = (datee.month % 12) + 1
@@ -246,15 +222,11 @@ class BeancountReportAPI(object):
             monthly_totals.append({
                 'begin_date': begin_date,
                 'end_date': end_date,
-                'operating_currencies': self.options_map['operating_currency'],
                 'income_totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_income'])),
                 'expenses_totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses']))
             })
 
-        return {
-            'operating_currencies': self.options_map['operating_currency'],
-            'totals': monthly_totals
-        }
+        return monthly_totals
 
     def _get_monthly_totals(self, account_name, entries):
         month_tuples = self._get_month_tuples(self.entries)
@@ -265,14 +237,10 @@ class BeancountReportAPI(object):
             monthly_totals.append({
                 'begin_date': begin_date,
                 'end_date': end_date,
-                'operating_currencies': self.options_map['operating_currency'],
                 'totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name)),
             })
 
-        return {
-            'operating_currencies': self.options_map['operating_currency'],
-            'totals': monthly_totals
-        }
+        return monthly_totals
 
     def balance_sheet(self, timespan=None, components=None, tags=None):
         return {
@@ -282,14 +250,8 @@ class BeancountReportAPI(object):
             'liabilities_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_liabilities'])),
             'equity':             self._table_tree(realization.get(self.real_accounts, self.options_map['name_equity'])),
             'equity_totals':      self._table_totals(realization.get(self.real_accounts, self.options_map['name_equity'])),
-            'currencies':         self.options_map['operating_currency'] + [ 'Other' ],
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
-
-        # aex='account ~ "Expenses"'
-        # alo='account ~ "Liabilities:Loans"'
-        # ain='account ~ "Income"'
-
 
     def income_statement(self, timespan=None, components=None, tags=None):
         return {
@@ -297,14 +259,12 @@ class BeancountReportAPI(object):
             'income_totals':      self._table_totals(realization.get(self.real_accounts, self.options_map['name_income'])),
             'expenses':        self._table_tree(realization.get(self.real_accounts, self.options_map['name_expenses'])),
             'expenses_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_expenses'])),
-            'currencies':         self.options_map['operating_currency'] + [ 'Other' ],
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
     def trial_balance(self, timespan=None, components=None, tags=None):
         return {
             'positions':  self._table_tree(self.real_accounts),
-            'currencies': self.options_map['operating_currency'] + [ 'Other' ]
         }
 
     def errors(self):
@@ -371,14 +331,12 @@ class BeancountReportAPI(object):
                 totals[key] = float(value.replace(',', ''))
 
             monthly_totals.append({
-                'date': end_date,
+                'begin_date': begin_date,
+                'end_date': end_date,
                 'totals': totals
             })
 
-        return {
-            'operating_currencies': self.options_map['operating_currency'],
-            'totals': monthly_totals
-        }
+        return monthly_totals
 
     def net_worth(self):
         networthtable = holdings_reports.NetWorthReport(None, None)

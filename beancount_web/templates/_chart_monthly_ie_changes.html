@@ -5,16 +5,16 @@
         dateformat: "MMM 'YY",
         data: {
             labels: [
-                {% for total in monthly_totals.totals -%}
+                {% for total in monthly_totals -%}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
             series: [
-                {% for currency in monthly_totals.operating_currencies -%}
+                {% for currency in operating_currencies -%}
                     [
-                    {% for total in monthly_totals.totals -%}
-                        {{ (total.income_totals.operating_totals[currency] + total.expenses_totals.operating_totals[currency]) * -1 }},
-                        {% endfor %}
+                    {% for total in monthly_totals -%}
+                        {{ (total.income_totals[currency] + total.expenses_totals[currency]) * -1 }},
+                    {% endfor %}
                     ],
                 {% endfor -%}
             ]
@@ -27,15 +27,15 @@
         dateformat: "MMM 'YY",
         data: {
             labels: [
-                {% for total in monthly_totals.totals -%}
+                {% for total in monthly_totals -%}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
             series: [
-                {% for currency in monthly_totals.operating_currencies -%}
+                {% for currency in operating_currencies -%}
                     [
-                    {% for row in monthly_totals.totals -%}
-                        {{ (row.income_totals.operating_totals[currency] * -1) or '0' }},
+                    {% for row in monthly_totals -%}
+                        {{ (row.income_totals[currency] * -1) or '0' }},
                     {% endfor %}
                     ],
                 {% endfor -%}
@@ -49,15 +49,15 @@
         dateformat: "MMM 'YY",
         data: {
             labels: [
-                {% for total in monthly_totals.totals -%}
+                {% for total in monthly_totals -%}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
             series: [
-                {% for currency in monthly_totals.operating_currencies -%}
+                {% for currency in operating_currencies -%}
                     [
-                    {% for row in monthly_totals.totals -%}
-                        {{ (row.expenses_totals.operating_totals[currency] * -1) or '0' }},
+                    {% for row in monthly_totals -%}
+                        {{ (row.expenses_totals[currency] * -1) or '0' }},
                     {% endfor %}
                     ],
                 {% endfor -%}
