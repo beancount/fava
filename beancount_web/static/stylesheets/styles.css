@@ -69,6 +69,10 @@ html, body, html > body {
   min-height: 100%;
 }
 
+.hidden {
+  display: none;
+}
+
 strong {
   font-weight: bold;
 }
