@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import sys
+import json
+import decimal
 
-from datetime import date
+from datetime import date, datetime
 
 from flask import Flask, render_template, url_for, request, redirect
 from flask.helpers import locked_cached_property
@@ -21,12 +23,17 @@ def account(name=None):
     # if not account:
     #     redirect to index
     account = app.api.account(name=name)
-    chart_data = []
 
+    # should this be done in the api?
+    chart_data = []
     for journal_entry in account['journal']:
         if 'balance' in journal_entry.keys():
-            for balance in journal_entry['balance']:
-                chart_data.append((journal_entry['date'], balance['number']))  # TODO fix multi currency accounts
+            change = { x['currency']: x['number'] for x in journal_entry['change'] }
+            chart_data.append({
+                'date': journal_entry['date'],
+                'balance': { x['currency']: x['number'] for x in journal_entry['balance'] if x['currency'] in change },
+                'change': change,
+            })
 
     return render_template('account.html', account=account, chart_data=chart_data)
 
@@ -47,7 +54,8 @@ def index():
 @app.route('/balance_sheet/')
 def balance_sheet():
     balance_sheet = app.api.balance_sheet()
-    return render_template('balance_sheet.html', balance_sheet=balance_sheet)
+    net_worth = app.api.net_worth()
+    return render_template('balance_sheet.html', balance_sheet=balance_sheet, net_worth=net_worth)
 
 @app.route('/income_statement/')
 def income_statement():
@@ -64,15 +72,15 @@ def holdings():
     holdings = app.api.holdings()
     return render_template('holdings.html', holdings=holdings)
 
-@app.route('/options/')
-def options():
-    options = app.api.options()
-    return render_template('options.html', options=options)
-
 @app.route('/net_worth/')
 def net_worth():
     net_worth = app.api.net_worth()
     return render_template('net_worth.html', net_worth=net_worth)
+
+
+@app.route('/options/')
+def options():
+    return render_template('options.html') # options are globally added
 
 @app.route('/errors/')
 def errors():
@@ -107,6 +115,24 @@ def format_currency(value):
 def last_segment(account):
     return account.split(':')[-1]
 
+class MyJSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.strftime('%Y-%m-%dT%H:%M:%SZ')
+        elif isinstance(obj, date):
+            return obj.strftime('%Y-%m-%d')
+        elif isinstance(obj, decimal.Decimal):
+            return float(obj)
+        elif isinstance(obj, frozenset):
+            return list(obj)
+        # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
+
+@app.template_filter('pretty_print')
+def pretty_print(json_object):
+    json_dump = json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder)
+    return _hightlight(json_dump, language='python')
+
 @app.context_processor
 def utility_processor():
     def account_level(account_full):
@@ -115,11 +141,14 @@ def utility_processor():
 
 @app.context_processor
 def inject_errors():
+    options = app.api.options()
     return dict(errors=app.api.errors(),
+                options=options,
                 title=app.api.title(),
                 active_years=app.api.active_years(),
                 active_tags=app.api.active_tags(),
-                active_components=app.api.active_components())
+                active_components=app.api.active_components(),
+                operating_currencies=options['operating_currency'])
 
 @app.before_request
 def perform_global_filters():
@@ -137,8 +166,8 @@ def perform_global_filters():
     if tag != app.filter_tag:
         app.filter_tag = tag
 
-def _hightlight(source, hl_lines=[]):
-    lexer = get_lexer_by_name("beancount", stripall=True)
+def _hightlight(source, language="beancount", hl_lines=[]):
+    lexer = get_lexer_by_name(language, stripall=True)
     formatter = HtmlFormatter(linenos=True, lineanchors='line', anchorlinenos=True, hl_lines=hl_lines)
     return highlight(source, lexer, formatter)
 

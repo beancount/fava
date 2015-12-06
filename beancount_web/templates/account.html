@@ -4,27 +4,37 @@
 {% block title %}Account {{ account.name }}{% endblock %}
 
 {% block content %}
-<h1>{{ account.name }}</h1>
-<div class="charts">
-    <div class="chart-filter">
-        <form>
-            <input type="submit" id="toggle-chart" value="Hide chart">
-        </form>
-    </div>
-    <div class="ct-chart" id="chart-account"></div>
-    <div class="chart-labels">
-        <label for="chart-account" class="selected">Account balance</label>
-    </div>
+    <h1>{{ account.name }}</h1>
+
+    {% include "_chart_skeleton.html" %}
     <script>
-        var data_account = [
-        {% for date, value in chart_data %}
-        { x: new Date({{ date.year }}, {{ date.month-1 }}, {{ date.day }}), y: {{ value }} },
-        {% endfor %}
-        ];
+        window.chart_data.push({
+            label: "Account balance",
+            type: "line",
+            data: {
+                series: [
+                    {% for currency in operating_currencies %}
+                        {
+                            name: 'account_balance_{{ currency }}',
+                            data: [
+                                {% for row in chart_data -%}
+                                    {% if currency in row.balance -%}
+                                    { x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}), y: {{ row.balance[currency] or '0' }} },
+                                    {% endif -%}
+                                {% endfor -%}
+                            ]
+                        },
+                    {% endfor %}
+                ]
+            }
+        });
     </script>
-</div>
-<h3>Journal</h3>
-{% with journal=account.journal, show_tablefilter=True %}
-    {% include "_journal_table.html" %}
-{% endwith %}
+    {% with monthly_totals = account.monthly_totals %}
+        {% include "_chart_monthly_totals.html" %}
+    {% endwith %}
+
+    <h3>Journal</h3>
+    {% with journal=account.journal, show_tablefilter=True %}
+        {% include "_journal_table.html" %}
+    {% endwith %}
 {% endblock %}

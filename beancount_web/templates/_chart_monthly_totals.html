@@ -1,31 +1,23 @@
-<div class="charts">
-    <div class="chart-filter">
-        <form>
-            <input type="submit" id="toggle-chart" value="Hide chart">
-        </form>
-    </div>
-    <div class="ct-chart" id="chart-monthly-totals"></div>
-    <div class="chart-labels">
-        <label for="chart-monthly-totals" class="selected">Monthly changes</label>
-        {# <a for="chart-monthly-totals" href="" class="selected">Monthly changes</a>
-        | <a for="chart-monthly-totals" href="">Expenses/Income</a> #}
-    </div>
-    <script>
-        var data_monthly_totals = {
+<script>
+    window.chart_data.push({
+        label: "Monthly totals",
+        type:  "bar",
+        dateformat: "MMM 'YY",
+        data: {
             labels: [
                 {% for total in monthly_totals.totals -%}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
-                {% endfor -%}
+                {% endfor %}
             ],
             series: [
                 {% for currency in monthly_totals.operating_currencies -%}
                     [
-                    {% for total in monthly_totals.totals -%}
-                        {{ (total.income_totals.operating_totals[currency] + total.expenses_totals.operating_totals[currency]) * -1 }},
-                    {% endfor -%}
+                    {% for row in monthly_totals.totals -%}
+                        {{ row.totals.operating_totals[currency] or '0' }},
+                    {% endfor %}
                     ],
                 {% endfor -%}
             ]
-        };
-    </script>
-</div>
+        }
+    });
+</script>

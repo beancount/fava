@@ -1,5 +1,4 @@
 @import "base";
-@import "../vendor/chartist-js/scss/chartist";
 
 //colors
 $white: #fff;
@@ -270,15 +269,6 @@ table {
             a {
                 color: #A7A5A5;
             }
-        }
-
-        pre {
-            display: block;
-            font-family: monospace;
-            white-space: pre;
-            margin: 0;
-            line-height: 1.2em;
-            font-size: 1.1em;
         }
     }
 

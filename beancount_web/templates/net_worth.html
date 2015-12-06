@@ -4,21 +4,25 @@
 {% block title %}Net Worth{% endblock %}
 
 {% block content %}
-<h1>Net Worth</h1>
-<table class="net_worth">
-    <thead>
-        <tr>
-            <th>Currency</th>
-            <th>Net Worth</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for row in net_worth.body %}
-        <tr>
-           <td>{{ row.0 }}</td>
-           <td class="num">{{ row.1 }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <h1>Net Worth</h1>
+
+    {% include "_chart_skeleton.html" %}
+    {% include "_chart_monthly_net_worth.html" %}
+
+    <table class="net_worth">
+        <thead>
+            <tr>
+                <th>Currency</th>
+                <th>Net Worth</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for currency, number in net_worth.net_worth.items() %}
+            <tr>
+               <td>{{ currency }}</td>
+               <td class="num">{{ number|format_currency }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

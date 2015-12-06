@@ -122,3 +122,15 @@ a {
         text-decoration: none;
     }
 }
+
+pre {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    margin: 0;
+    line-height: 1.2em;
+    font-size: 1.1em;
+    overflow-x: scroll;
+
+    &.debug { word-wrap: break-word; }
+}

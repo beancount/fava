@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
     <title>{% block title %}{% endblock %} - {{ title }}</title>
     {% endblock %}
+    <script>window.chart_data = [];</script>
 </head>
 <body>
     <div class="bodywrapper">
@@ -94,6 +95,8 @@
     <script src="{{ url_for('static', filename='vendor/jquery-js/jquery-2.1.4.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/chartist-js/chartist.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/moment-js/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/helpers.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/charts.js') }}"></script>
 </body>
 </html>

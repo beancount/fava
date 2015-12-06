@@ -4,24 +4,27 @@
 {% block title %}Income Statement{% endblock %}
 
 {% block content %}
-<h1>Income Statement</h1>
-{% with monthly_totals=income_statement.monthly_totals  %}
-    {% include "_chart_monthly_totals.html" %}
-{% endwith %}
-<div class="tables">
-    <div class="halfleft">
-        <div id="income">
-            {% with table_title="Income", currencies=income_statement.currencies, table_data=income_statement.income, totals=income_statement.income_totals %}
-                {% include "_balance_sheet_table.html" %}
-            {% endwith %}
+    <h1>Income Statement</h1>
+
+    {% include "_chart_skeleton.html" %}
+    {% with monthly_totals=income_statement.monthly_totals  %}
+        {% include "_chart_monthly_ie_changes.html" %}
+    {% endwith %}
+
+    <div class="tables">
+        <div class="halfleft">
+            <div id="income">
+                {% with table_title="Income", currencies=income_statement.currencies, table_data=income_statement.income, totals=income_statement.income_totals %}
+                    {% include "_balance_sheet_table.html" %}
+                {% endwith %}
+            </div>
+        </div>
+        <div class="halfright">
+            <div id="expenses">
+                {% with table_title="Expenses", currencies=income_statement.currencies, table_data=income_statement.expenses, totals=income_statement.expenses_totals %}
+                    {% include "_balance_sheet_table.html" %}
+                {% endwith %}
+            </div>
         </div>
     </div>
-    <div class="halfright">
-        <div id="expenses">
-            {% with table_title="Expenses", currencies=income_statement.currencies, table_data=income_statement.expenses, totals=income_statement.expenses_totals %}
-                {% include "_balance_sheet_table.html" %}
-            {% endwith %}
-        </div>
-    </div>
-</div>
 {% endblock %}

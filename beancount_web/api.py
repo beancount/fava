@@ -211,7 +211,16 @@ class BeancountReportAPI(object):
         return jrnl
 
     def _get_month_tuples(self, entries):
-        date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
+
+        # TODO very ugly
+        def filter_paddings(entries):
+            ret = []
+            for entry in entries:
+                if isinstance(entry, Transaction) and entry.narration.startswith('(Padding'): continue
+                else: ret.append(entry)
+            return ret
+
+        date_first, date_last = getters.get_min_max_dates(filter_paddings(entries), (Transaction))
 
         def get_next_month(datee):
             month = (datee.month % 12) + 1
@@ -228,7 +237,7 @@ class BeancountReportAPI(object):
 
         return month_tuples
 
-    def _get_monthly_totals(self, entries):
+    def _get_monthly_ie_totals(self, entries):
         month_tuples = self._get_month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
@@ -247,6 +256,23 @@ class BeancountReportAPI(object):
             'totals': monthly_totals
         }
 
+    def _get_monthly_totals(self, account_name, entries):
+        month_tuples = self._get_month_tuples(self.entries)
+        monthly_totals = []
+        for begin_date, end_date in month_tuples:
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+                                                          self.options_map)
+            monthly_totals.append({
+                'begin_date': begin_date,
+                'end_date': end_date,
+                'operating_currencies': self.options_map['operating_currency'],
+                'totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name)),
+            })
+
+        return {
+            'operating_currencies': self.options_map['operating_currency'],
+            'totals': monthly_totals
+        }
 
     def balance_sheet(self, timespan=None, components=None, tags=None):
         return {
@@ -257,7 +283,7 @@ class BeancountReportAPI(object):
             'equity':             self._table_tree(realization.get(self.real_accounts, self.options_map['name_equity'])),
             'equity_totals':      self._table_totals(realization.get(self.real_accounts, self.options_map['name_equity'])),
             'currencies':         self.options_map['operating_currency'] + [ 'Other' ],
-            'monthly_totals':     self._get_monthly_totals(self.entries)
+            'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
         # aex='account ~ "Expenses"'
@@ -272,7 +298,7 @@ class BeancountReportAPI(object):
             'expenses':        self._table_tree(realization.get(self.real_accounts, self.options_map['name_expenses'])),
             'expenses_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_expenses'])),
             'currencies':         self.options_map['operating_currency'] + [ 'Other' ],
-            'monthly_totals':     self._get_monthly_totals(self.entries)
+            'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
     def trial_balance(self, timespan=None, components=None, tags=None):
@@ -328,10 +354,44 @@ class BeancountReportAPI(object):
     def holdings(self):
         return holdings_reports.report_holdings(None, False, self.entries, self.options_map)
 
-    def net_worth(self):
+    def _net_worth_in_periods(self):
+        month_tuples = self._get_month_tuples(self.entries)
+        monthly_totals = []
+        date_start = month_tuples[0][0]
         networthtable = holdings_reports.NetWorthReport(None, None)
 
-        return networthtable.generate_table(self.entries, self.errors, self.options_map)
+        for begin_date, end_date in month_tuples:
+            entries, index = summarize.clamp_opt(self.entries, date_start, end_date,
+                                                          self.options_map)
+
+            networth_as_table = networthtable.generate_table(entries, self.errors, self.options_map)
+
+            totals = dict(networth_as_table[2])
+            for key, value in totals.items():
+                totals[key] = float(value.replace(',', ''))
+
+            monthly_totals.append({
+                'date': end_date,
+                'totals': totals
+            })
+
+        return {
+            'operating_currencies': self.options_map['operating_currency'],
+            'totals': monthly_totals
+        }
+
+    def net_worth(self):
+        networthtable = holdings_reports.NetWorthReport(None, None)
+        networth_as_table = networthtable.generate_table(self.entries, self.errors, self.options_map)
+
+        current_net_worth = dict(networth_as_table[2])
+        for key, value in current_net_worth.items():
+            current_net_worth[key] = float(value.replace(',', ''))
+
+        return {
+            'net_worth': current_net_worth,
+            'monthly_totals': self._net_worth_in_periods()
+        }
 
     def context(self, ehash=None):
         matching_entries = [entry
@@ -409,7 +469,8 @@ class BeancountReportAPI(object):
 
         return {
             'name': name,
-            'journal': journal
+            'journal': journal,
+            'monthly_totals': self._get_monthly_totals(name, postings)
         }
 
     def options(self):
