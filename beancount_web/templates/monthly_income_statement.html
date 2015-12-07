@@ -1,0 +1,40 @@
+{% extends "_layout.html" %}
+{% set active_page = 'monthly_income_stmt' %}
+3
+{% block title %}Monthly Income Statement{% endblock %}
+
+{% block content %}
+    <h1>Montly Income Statement</h1>
+    <p>
+        <em>For now this just shows Expenses-accounts.</em>
+    </p>
+    <table class="fullwidth tree-table">
+        <thead>
+            <tr>
+                <th>Account</th>
+                {% for end_date in monthly_ie.months|reverse %}
+                    <th>{{ end_date.strftime("%b '%y") }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in monthly_ie.vals %}
+            <tr>
+                <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
+
+                {% for end_date in monthly_ie.months|reverse %}
+                    <td class="num">
+                        {% if end_date.isoformat() in row.totals %}
+                            {% for currency, value in row.totals[end_date.isoformat()].items() %}
+                                {% if value %}
+                                    {{ value|format_currency }} {{ currency }}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

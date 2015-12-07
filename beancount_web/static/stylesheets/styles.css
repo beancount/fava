@@ -333,6 +333,7 @@ table th, table tfoot td {
   font-weight: bold;
   background: #dadad9;
   color: #888;
+  white-space: nowrap;
 }
 table tfoot td {
   color: #666;

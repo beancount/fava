@@ -257,6 +257,38 @@ class BeancountReportAPI(object):
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
+    def monthly_ie(self):
+        # the account tree at time now
+        account_names = [item['account'] for item in self.income_statement()['expenses']]
+
+        month_tuples = self._get_month_tuples(self.entries)
+        monthly_totals = []
+
+        arr = { account_name: {} for account_name in account_names }
+
+        for begin_date, end_date in month_tuples:
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+                                                         self.options_map)
+
+            mod_real_accounts = realization.realize(entries, self.account_types)
+            root_accounts = realization.get(mod_real_accounts, self.options_map['name_expenses'])
+
+            for real_account in realization.dump(root_accounts):
+                line_data = real_account[2]
+
+
+                line = { currency: None for currency in self.options_map['commodities']}
+
+                for pos in line_data.balance.cost():
+                    line[pos.lot.currency] = pos.number
+
+                arr[line_data.account][end_date.isoformat()] = line
+
+        return {
+            'months': [end_date for begin_date, end_date in month_tuples],
+            'vals': sorted([{ 'account': account, 'totals': totals} for account, totals in arr.items()], key=lambda x: x['account'])
+        }
+
     def trial_balance(self, timespan=None, components=None, tags=None):
         return {
             'positions':  self._table_tree(self.real_accounts),
