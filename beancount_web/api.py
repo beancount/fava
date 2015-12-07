@@ -214,17 +214,29 @@ class BeancountReportAPI(object):
         return month_tuples
 
     def _get_monthly_ie_totals(self, entries):
-        month_tuples = self._get_month_tuples(self.entries)
+        month_tuples = self._get_month_tuples(entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
                                                           self.options_map)
-            monthly_totals.append({
-                'begin_date': begin_date,
-                'end_date': end_date,
-                'income_totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_income'])),
-                'expenses_totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses']))
-            })
+
+            income_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_income']))
+            expenses_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses']))
+
+            # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
+            sum_ = ZERO
+            for currency, number in income_totals.items():
+                sum_ += number
+            for currency, number in expenses_totals.items():
+                sum_ += number
+
+            if sum_ != ZERO:
+                monthly_totals.append({
+                    'begin_date': begin_date,
+                    'end_date': end_date,
+                    'income_totals': income_totals,
+                    'expenses_totals': expenses_totals
+                })
 
         return monthly_totals
 
@@ -235,13 +247,19 @@ class BeancountReportAPI(object):
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
                                                           self.options_map)
 
-            totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name)),
+            totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name))
 
-            monthly_totals.append({
-                'begin_date': begin_date,
-                'end_date': end_date,
-                'totals': totals
-            })
+            # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
+            sum_ = 0
+            for currency, number in totals.items():
+                sum_ += number
+
+            if sum_ != 0:
+                monthly_totals.append({
+                    'begin_date': begin_date,
+                    'end_date': end_date,
+                    'totals': totals
+                })
 
         return monthly_totals
 
