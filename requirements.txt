@@ -1,5 +1,5 @@
 -e hg+https://bitbucket.org/blais/beancount#egg=beancount
--e git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount_pygments_lexer
+-e git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount-pygments-lexer
 Flask==0.10.1
 itsdangerous==0.24
 Jinja2==2.8

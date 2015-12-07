@@ -19,6 +19,6 @@ setup(name='beancount-web',
       include_package_data=True,
       dependency_links=[
             'hg+https://bitbucket.org/blais/beancount#egg=beancount',
-            'git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount_pygments_lexer'
+            'git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount-pygments-lexer'
       ],
       zip_safe=False)
