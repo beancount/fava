@@ -65,9 +65,14 @@ class BeancountReportAPI(object):
     def _table_totals(self, root_accounts):
         totals = { currency: ZERO for currency in self.options_map['commodities']}
 
-        for real_account in realization.dump(root_accounts):
-            for pos in real_account[2].balance.cost():
-                totals[pos.lot.currency] += pos.number
+        try:
+            for real_account in realization.dump(root_accounts):
+                for pos in real_account[2].balance.cost():
+                    totals[pos.lot.currency] += pos.number
+        except Exception as e:
+            # FIXME For some accounts (/account/...) the .dump does not work
+            # raise e
+            pass
 
         return totals
 
@@ -229,10 +234,13 @@ class BeancountReportAPI(object):
         for begin_date, end_date in month_tuples:
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
                                                           self.options_map)
+
+            totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name)),
+
             monthly_totals.append({
                 'begin_date': begin_date,
                 'end_date': end_date,
-                'totals': self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name)),
+                'totals': totals
             })
 
         return monthly_totals
@@ -419,11 +427,12 @@ class BeancountReportAPI(object):
         real_account = realization.get(self.real_accounts, name)
         postings = realization.get_postings(real_account)
         journal = self._process_postings(postings)
+        monthly_totals = self._get_monthly_totals(name, postings)
 
         return {
             'name': name,
             'journal': journal,
-            'monthly_totals': self._get_monthly_totals(name, postings)
+            'monthly_totals': monthly_totals
         }
 
     def options(self):
