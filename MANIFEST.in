@@ -1,3 +1,6 @@
 recursive-include beancount_web/templates *
 recursive-include beancount_web/static *
 
+# Be sure this is last
+global-exclude *.pyc .gitignore *.orig
+global-exclude .sass-cache/*
