@@ -262,7 +262,7 @@ class BeancountReportAPI(object):
         account_names = [item['account'] for item in self.income_statement()['expenses']]
 
         month_tuples = self._get_month_tuples(self.entries)
-        monthly_totals = []
+        monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options_map['commodities']} for begin_date, end_date in month_tuples }
 
         arr = { account_name: {} for account_name in account_names }
 
@@ -276,17 +276,22 @@ class BeancountReportAPI(object):
             for real_account in realization.dump(root_accounts):
                 line_data = real_account[2]
 
-
                 line = { currency: None for currency in self.options_map['commodities']}
 
                 for pos in line_data.balance.cost():
                     line[pos.lot.currency] = pos.number
+                    monthly_totals[end_date.isoformat()][pos.lot.currency] += pos.number
 
                 arr[line_data.account][end_date.isoformat()] = line
 
+        vals = sorted([
+                        { 'account': account, 'totals': totals } for account, totals in arr.items()
+                      ], key=lambda x: x['account'])
+
         return {
             'months': [end_date for begin_date, end_date in month_tuples],
-            'vals': sorted([{ 'account': account, 'totals': totals} for account, totals in arr.items()], key=lambda x: x['account'])
+            'vals': vals,
+            'totals': monthly_totals
         }
 
     def trial_balance(self, timespan=None, components=None, tags=None):

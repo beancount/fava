@@ -25,9 +25,9 @@
                 {% for end_date in monthly_ie.months|reverse %}
                     <td class="num">
                         {% if end_date.isoformat() in row.totals %}
-                            {% for currency, value in row.totals[end_date.isoformat()].items() %}
-                                {% if value %}
-                                    {{ value|format_currency }} {{ currency }}
+                            {% for currency, number in row.totals[end_date.isoformat()].items() %}
+                                {% if number %}
+                                    {{ number|format_currency }} {{ currency }}
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -36,5 +36,19 @@
             </tr>
         {% endfor %}
         </tbody>
+        <tfoot>
+            <tr>
+                <td>&nbsp;</td>
+                {% for end_date in monthly_ie.months|reverse %}
+                    <td class="num">
+                        {% for currency, number in monthly_ie.totals[end_date.isoformat()].items() %}
+                            {% if number %}
+                                    {{ number|format_currency }} {{ currency }}
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+        </tfoot>
     </table>
 {% endblock %}
