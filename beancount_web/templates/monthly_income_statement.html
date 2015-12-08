@@ -27,7 +27,7 @@
                         {% if end_date.isoformat() in row.totals %}
                             {% for currency, number in row.totals[end_date.isoformat()].items() %}
                                 {% if number %}
-                                    {{ number|format_currency }} {{ currency }}
+                                    {{ number|format_currency }} {{ currency }}<br>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
