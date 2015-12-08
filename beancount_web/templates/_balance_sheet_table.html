@@ -13,7 +13,7 @@
     </thead>
     <tbody>
         {% for asset in table_data %}
-            <tr{% if not asset.is_leaf %} class="parent"{% endif %}>
+            <tr class="row-level-{{ account_level(asset.account) }} {% if not asset.is_leaf %}parent{% endif %}">
                 <td class="account account-level-{{ account_level(asset.account) }}"><a href="{{ url_for('account', name=asset.account) }}" class="account">{{ asset.account|last_segment }}</a></td>
                 {% for currency in operating_currencies %}
                     <td class="num">

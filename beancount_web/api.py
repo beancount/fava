@@ -50,19 +50,14 @@ class BeancountReportAPI(object):
     def _table_tree(self, root_accounts):
         lines = []
 
-        account_level = -1
-        # reverse the results to make the account_level-lookahead possible
-        for real_account in reversed(realization.dump(root_accounts)):
+        for real_account in realization.dump(root_accounts):
             real_account = real_account[2]
-
-            is_leaf = (self._account_level(real_account.account) >= account_level)
 
             line = {
                 'account': real_account.account,
                 'balances_children': self._table_totals(real_account),
                 'balances': {},
                 'is_leaf': (len(list(realization.iter_children(real_account))) == 1), # True if the accoutn has no children or has entries
-                'has_postings': len(real_account.txn_postings)
             }
 
             for pos in real_account.balance.cost():
@@ -72,14 +67,11 @@ class BeancountReportAPI(object):
             for currency in self.options_map['commodities']:
                 if currency in line['balances'] and currency in line['balances_children']:
                     if line['balances'][currency] != line['balances_children'][currency]:
-                        is_leaf = True
+                        line['is_leaf'] = True
 
-            line['is_leaf'] = is_leaf
-
-            account_level = self._account_level(real_account.account)
             lines.append(line)
 
-        return list(reversed(lines))
+        return lines
 
     def _table_totals(self, root_accounts):
         totals = {}

@@ -219,11 +219,15 @@ table {
         }
 
         &.num {
+            color: black;
             padding-left: 14px;
             font: 1.1em/1.1em monospace;
             text-align: right;
             padding-right: 6px !important;
             vertical-align: top;
+
+            span.balance { display: block; }
+            span.tree-balance { display: none; }
         }
 
         a.account {
@@ -241,13 +245,19 @@ table {
         }
     }
 
-    // Trees
-    span.balance { display: block; }
-    span.tree-balance { display: none; }
-    tr.parent {
-        td.num { color: #E5E5E5; }
+    // Subtotals
+    // class ".tree-balance-show" is added via JavaScript
+
+    tr.parent td.num, td.num.tree-balance-show { color: #E5E5E5; }
+    td.num.tree-balance-show span.tree-balance { display: block }
+
+    tr.hides td.num {
         span.tree-balance { display: block; }
         span.balance { display: none; }
+    }
+
+    &:hover {
+        tr.parent td.num, tr td.num.tree-balance-show { color: #BEBEBE; }
     }
 
 
@@ -292,9 +302,47 @@ table {
             padding-left: 6px;
         }
     }
-}
 
-table:hover tr.parent td.num { color: #BEBEBE; }
+    // Collapsable trees
+    &.tree-table {
+        td.account a {
+            position: relative;
+            margin-left: 15px;
+        }
+
+        // td.account.leaf a { margin-left: 10px; }
+
+        tr.hides {
+            // td.num { color: black; }
+            span.tree-balance { display: block; color: black; }
+            span.balance { display: none; }
+        }
+
+        &:hover {
+            tr.hides td.num { color: black; }
+        }
+
+        span.expander {
+            width: 5px;
+            height: 5px;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid #AFC1D3;
+            position: absolute;
+            left: -15px;
+            top: 5px;
+            cursor: pointer;
+
+            &.toggled {
+                border-top: 5px solid transparent;
+                border-bottom: 5px solid transparent;
+                border-left: 5px solid #AFC1D3;
+                left: -12px;
+                top: 2px;
+            }
+        }
+    }
+}
 
 #assets, #liabilities, #equity, #income, #expenses {
     table {
