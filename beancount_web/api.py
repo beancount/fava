@@ -212,7 +212,7 @@ class BeancountReportAPI(object):
         month_tuples = self._get_month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
                                                           self.options_map)
             monthly_totals.append({
                 'begin_date': begin_date,
@@ -227,7 +227,7 @@ class BeancountReportAPI(object):
         month_tuples = self._get_month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
                                                           self.options_map)
             monthly_totals.append({
                 'begin_date': begin_date,
@@ -267,7 +267,7 @@ class BeancountReportAPI(object):
         arr = { account_name: {} for account_name in account_names }
 
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
                                                          self.options_map)
 
             mod_real_accounts = realization.realize(entries, self.account_types)
@@ -348,7 +348,7 @@ class BeancountReportAPI(object):
         networthtable = holdings_reports.NetWorthReport(None, None)
 
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, date_start, end_date,
+            entries, index = summarize.clamp_opt(self.entries, date_start, end_date + timedelta(days=1),
                                                           self.options_map)
 
             networth_as_table = networthtable.generate_table(entries, self.errors, self.options_map)
