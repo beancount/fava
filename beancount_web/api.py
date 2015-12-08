@@ -44,48 +44,58 @@ class BeancountReportAPI(object):
         # self.allview = AllView(self.entries, self.options_map, 'TEST')
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
+    def _account_level(self, account_name):
+        return account_name.count(":")+1
+
     def _table_tree(self, root_accounts):
         lines = []
 
         for real_account in realization.dump(root_accounts):
-            line_data = real_account[2]
+            real_account = real_account[2]
 
             line = {
-                'account': line_data.account,
-                'balances': { currency: None for currency in self.options_map['commodities']}
+                'account': real_account.account,
+                'balances_children': self._table_totals(real_account),
+                'balances': {},
+                'is_leaf': (len(list(realization.iter_children(real_account))) == 1), # True if the accoutn has no children or has entries
+                'postings_count': len(real_account.txn_postings)
             }
 
-            for pos in line_data.balance.cost():
+            for pos in real_account.balance.cost():
                 line['balances'][pos.lot.currency] = pos.number
+
+            # Accounts that are not leafs but have entries are leafs as well
+            for currency in self.options_map['commodities']:
+                if currency in line['balances'] and currency in line['balances_children']:
+                    if line['balances'][currency] != line['balances_children'][currency]:
+                        line['is_leaf'] = True
 
             lines.append(line)
 
         return lines
 
     def _table_totals(self, root_accounts):
-        totals = { currency: ZERO for currency in self.options_map['commodities']}
+        totals = {}
 
-        try:
-            for real_account in realization.dump(root_accounts):
-                for pos in real_account[2].balance.cost():
-                    totals[pos.lot.currency] += pos.number
-        except Exception as e:
-            # FIXME For some accounts (/account/...) the .dump does not work
-            # raise e
-            pass
+        # FIXME This sometimes happens when called from self.account(...)
+        #       and there is no entry in that specific month. This also produces
+        #       a missing bar in the bar chart.
+        if isinstance(root_accounts, None.__class__):
+            return {}
+
+        for real_account in realization.dump(root_accounts):
+            for pos in real_account[2].balance.cost():
+                if not pos.lot.currency in totals:
+                    totals[pos.lot.currency] = ZERO
+                totals[pos.lot.currency] += pos.number
 
         return totals
 
     def _inventory_to_json(self, inventory):
-        json = []
-
-        for position in sorted(inventory):
-            json.append({
-                'number':   position.number,
-                'currency': position.lot.currency
-            })
-
-        return json
+        return [{
+                    'number': position.number,
+                    'currency': position.lot.currency
+                } for position in sorted(inventory)]
 
     def _process_postings(self, postings):
         jrnl = []
@@ -217,7 +227,7 @@ class BeancountReportAPI(object):
         month_tuples = self._get_month_tuples(entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
                                                           self.options_map)
 
             income_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_income']))
@@ -244,7 +254,7 @@ class BeancountReportAPI(object):
         month_tuples = self._get_month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date,
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
                                                           self.options_map)
 
             totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name))
@@ -281,6 +291,43 @@ class BeancountReportAPI(object):
             'expenses':        self._table_tree(realization.get(self.real_accounts, self.options_map['name_expenses'])),
             'expenses_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_expenses'])),
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
+        }
+
+    def monthly_ie(self):
+        # TODO include balances_children
+        # the account tree at time now
+        account_names = [item['account'] for item in self.income_statement()['expenses']]
+
+        month_tuples = self._get_month_tuples(self.entries)
+        monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options_map['commodities']} for begin_date, end_date in month_tuples }
+
+        arr = { account_name: {} for account_name in account_names }
+
+        for begin_date, end_date in month_tuples:
+            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
+                                                         self.options_map)
+
+            root_accounts = realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses'])
+
+            _table_tree = self._table_tree(root_accounts)
+            for line in _table_tree:
+                arr[line['account']][end_date.isoformat()] = {
+                    'balances': line['balances'],
+                    'balances_children': line['balances_children']
+                }
+
+                if line['postings_count'] > 0:
+                    for currency, number in line['balances'].items():
+                        monthly_totals[end_date.isoformat()][currency] += number
+
+        vals = sorted([
+                        { 'account': account, 'totals': totals } for account, totals in arr.items()
+                      ], key=lambda x: x['account'])
+
+        return {
+            'months': [end_date for begin_date, end_date in month_tuples],
+            'vals': vals,
+            'totals': monthly_totals
         }
 
     def trial_balance(self, timespan=None, components=None, tags=None):
@@ -342,7 +389,7 @@ class BeancountReportAPI(object):
         networthtable = holdings_reports.NetWorthReport(None, None)
 
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, date_start, end_date,
+            entries, index = summarize.clamp_opt(self.entries, date_start, end_date + timedelta(days=1),
                                                           self.options_map)
 
             networth_as_table = networthtable.generate_table(entries, self.errors, self.options_map)
@@ -442,10 +489,12 @@ class BeancountReportAPI(object):
     def account(self, name=None, timespan=None, tags=None):
         journal = []
 
+        # real_account = realization.RealAccount(name) #get(self.real_accounts, name)
         real_account = realization.get(self.real_accounts, name)
+        # raise ValueError
         postings = realization.get_postings(real_account)
         journal = self._process_postings(postings)
-        monthly_totals = self._get_monthly_totals(name, postings)
+        monthly_totals = self._get_monthly_totals(real_account.account, self.entries)
 
         return {
             'name': name,

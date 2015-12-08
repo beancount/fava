@@ -15,7 +15,7 @@
                     name: "{{ currency }}",
                     data: [
                         {% for total in monthly_totals -%}
-                            {{ (total.income_totals[currency] + total.expenses_totals[currency]) * -1 }},
+                            {{ ((total.income_totals[currency] or 0) + (total.expenses_totals[currency] or 0)) * -1 }},
                         {% endfor %}
                     ],
                 },
@@ -40,7 +40,7 @@
                     name: "{{ currency }}",
                     data: [
                         {% for row in monthly_totals -%}
-                            {{ (row.income_totals[currency] * -1) or '0' }},
+                            {{ (row.income_totals[currency] or 0) * -1 }},
                         {% endfor %}
                     ],
                 },
@@ -65,7 +65,7 @@
                     name: "{{ currency }}",
                     data: [
                         {% for row in monthly_totals -%}
-                            {{ (row.expenses_totals[currency] * -1) or '0' }},
+                            {{ (row.expenses_totals[currency] or 0) * -1 }},
                         {% endfor %}
                     ],
                 },

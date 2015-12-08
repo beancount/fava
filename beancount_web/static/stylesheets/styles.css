@@ -333,6 +333,7 @@ table th, table tfoot td {
   font-weight: bold;
   background: #dadad9;
   color: #888;
+  white-space: nowrap;
 }
 table tfoot td {
   color: #666;
@@ -350,11 +351,18 @@ table td:first-child {
   min-width: 200px;
 }
 table td.num {
+  color: black;
   padding-left: 14px;
   font: 1.1em/1.1em monospace;
   text-align: right;
   padding-right: 6px !important;
   vertical-align: top;
+}
+table td.num span.balance {
+  display: block;
+}
+table td.num span.tree-balance {
+  display: none;
 }
 table td a.account {
   font-weight: bold;
@@ -394,6 +402,21 @@ table td.account-level-11 {
 }
 table td.account-level-12 {
   padding-left: 15.1em;
+}
+table tr.parent td.num, table td.num.tree-balance-show {
+  color: #E5E5E5;
+}
+table td.num.tree-balance-show span.tree-balance {
+  display: block;
+}
+table tr.hides td.num span.tree-balance {
+  display: block;
+}
+table tr.hides td.num span.balance {
+  display: none;
+}
+table:hover tr.parent td.num, table:hover tr td.num.tree-balance-show {
+  color: #BEBEBE;
 }
 table tr.posting.leg td {
   padding: 2px 6px;
@@ -553,6 +576,38 @@ table.options_map td:nth-child(2) {
   white-space: normal;
   text-align: left;
   padding-left: 6px;
+}
+table.tree-table td.account a {
+  position: relative;
+  margin-left: 15px;
+}
+table.tree-table tr.hides span.tree-balance {
+  display: block;
+  color: black;
+}
+table.tree-table tr.hides span.balance {
+  display: none;
+}
+table.tree-table:hover tr.hides td.num {
+  color: black;
+}
+table.tree-table span.expander {
+  width: 5px;
+  height: 5px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #AFC1D3;
+  position: absolute;
+  left: -15px;
+  top: 5px;
+  cursor: pointer;
+}
+table.tree-table span.expander.toggled {
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 5px solid #AFC1D3;
+  left: -12px;
+  top: 2px;
 }
 
 #assets table, #liabilities table, #equity table, #income table, #expenses table {

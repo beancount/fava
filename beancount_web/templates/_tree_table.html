@@ -1,0 +1,60 @@
+{% if table_title %}
+    <h3>{{ table_title }}</h3>
+{% endif %}
+<table class="fullwidth tree-table">
+    <thead>
+        <tr>
+            <th class="first">Account</th>
+            {% for currency in operating_currencies %}
+                <th>{{ currency }}</th>
+            {% endfor %}
+            <th>Other</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in table_data %}
+            <tr class="row-level-{{ account_level(row.account) }} {% if not row.is_leaf %}parent{% endif %}">
+                <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
+                {% for currency in operating_currencies %}
+                    <td class="num">
+                        {% if currency in row.balances %}
+                            <span class="balance">{{ row.balances[currency]|format_currency or '' }}</span>
+                        {% endif %}
+                        {% if currency in row.balances_children %}
+                            <span class="tree-balance">{{ row.balances_children[currency]|format_currency or '' }}</span>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+                <td class="num">
+                    {% for currency in commodities %}
+                        {% if currency not in operating_currencies %}
+                            {% if currency in row.balances %}
+                                <span class="balance">{{ row.balances[currency]|format_currency or '' }} {{ currency }}</span>
+                            {% endif %}
+                            {% if currency in row.balances_children %}
+                                <span class="tree-balance">{{ row.balances_children[currency]|format_currency or '' }} {{ currency }}</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    {% if totals %}
+        <tfoot>
+            <tr>
+                <td>&nbsp;</td>
+                {% for currency in operating_currencies %}
+                    <td class="num">{{ totals[currency]|format_currency or '' }}</td>
+                {% endfor %}
+                <td class="num">
+                    {% for currency in commodities %}
+                        {% if currency not in  operating_currencies and totals[currency] %}
+                            {{ totals[currency]|format_currency or '' }} {{ currency }}<br>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+            </tr>
+        </tfoot>
+    {% endif %}
+</table>

@@ -62,6 +62,11 @@ def income_statement():
     income_statement = app.api.income_statement()
     return render_template('income_statement.html', income_statement=income_statement)
 
+@app.route('/monthly_income_stmt/')
+def monthly_income_stmt():
+    monthly_ie = app.api.monthly_ie()
+    return render_template('monthly_income_statement.html', monthly_ie=monthly_ie)
+
 @app.route('/trial_balance/')
 def trial_balance():
     trial_balance = app.api.trial_balance()
