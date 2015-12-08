@@ -58,6 +58,7 @@ class BeancountReportAPI(object):
                 'balances_children': self._table_totals(real_account),
                 'balances': {},
                 'is_leaf': (len(list(realization.iter_children(real_account))) == 1), # True if the accoutn has no children or has entries
+                'postings_count': len(real_account.txn_postings)
             }
 
             for pos in real_account.balance.cost():
@@ -283,11 +284,12 @@ class BeancountReportAPI(object):
 
             _table_tree = self._table_tree(root_accounts)
             for line in _table_tree:
-                arr[line['account']][end_date.isoformat()] = line['balances']
-                # arr[line['account']]['is_leaf'] = line['is_leaf']
-                # arr[line['account']]['has_postings'] = line['has_postings']
+                arr[line['account']][end_date.isoformat()] = {
+                    'balances': line['balances'],
+                    'balances_children': line['balances_children']
+                }
 
-                if line['has_postings'] > 0:
+                if line['postings_count'] > 0:
                     for currency, number in line['balances'].items():
                         monthly_totals[end_date.isoformat()][currency] += number
 

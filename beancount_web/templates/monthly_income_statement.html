@@ -19,18 +19,29 @@
         </thead>
         <tbody>
         {% for row in monthly_ie.vals %}
-            <tr{# {% if not row.is_leaf %} class="parent"{% endif %} #}>
+            <tr class="row-level-{{ account_level(row.account) }}">
                 <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
 
                 {% for end_date in monthly_ie.months|reverse %}
                     <td class="num">
-                        {% if end_date.isoformat() in row.totals %}
-                            {% for currency, number in row.totals[end_date.isoformat()].items() %}
-                                {% if number %}
+                        {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances|length > 0 -%}
+                            <span class="balance">
+                            {% for currency, number in row.totals[end_date.isoformat()].balances.items() -%}
+                                {% if number -%}
                                     {{ number|format_currency }} {{ currency }}<br>
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
+                                {% endif -%}
+                            {% endfor -%}
+                            </span>
+                        {% endif -%}
+                        {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances_children|length > 0 -%}
+                            <span class="tree-balance">
+                            {% for currency, number in row.totals[end_date.isoformat()].balances_children.items() -%}
+                                {% if number -%}
+                                    {{ number|format_currency }} {{ currency }}<br>
+                                {% endif -%}
+                            {% endfor -%}
+                            </span>
+                        {% endif -%}
                     </td>
                 {% endfor %}
             </tr>
@@ -43,7 +54,7 @@
                     <td class="num">
                         {% for currency, number in monthly_ie.totals[end_date.isoformat()].items() %}
                             {% if number %}
-                                    {{ number|format_currency }} {{ currency }}
+                                    {{ number|format_currency }} {{ currency }}<br>
                             {% endif %}
                         {% endfor %}
                     </td>

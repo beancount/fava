@@ -12,27 +12,27 @@
         </tr>
     </thead>
     <tbody>
-        {% for asset in table_data %}
-            <tr class="row-level-{{ account_level(asset.account) }} {% if not asset.is_leaf %}parent{% endif %}">
-                <td class="account account-level-{{ account_level(asset.account) }}"><a href="{{ url_for('account', name=asset.account) }}" class="account">{{ asset.account|last_segment }}</a></td>
+        {% for row in table_data %}
+            <tr class="row-level-{{ account_level(row.account) }} {% if not row.is_leaf %}parent{% endif %}">
+                <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
                 {% for currency in operating_currencies %}
                     <td class="num">
-                        {% if currency in asset.balances %}
-                            <span class="balance">{{ asset.balances[currency]|format_currency or '' }}</span>
+                        {% if currency in row.balances %}
+                            <span class="balance">{{ row.balances[currency]|format_currency or '' }}</span>
                         {% endif %}
-                        {% if currency in asset.balances_children %}
-                            <span class="tree-balance">{{ asset.balances_children[currency]|format_currency or '' }}</span>
+                        {% if currency in row.balances_children %}
+                            <span class="tree-balance">{{ row.balances_children[currency]|format_currency or '' }}</span>
                         {% endif %}
                     </td>
                 {% endfor %}
                 <td class="num">
                     {% for currency in commodities %}
                         {% if currency not in operating_currencies %}
-                            {% if currency in asset.balances %}
-                                <span class="balance">{{ asset.balances[currency]|format_currency or '' }} {{ currency }}</span>
+                            {% if currency in row.balances %}
+                                <span class="balance">{{ row.balances[currency]|format_currency or '' }} {{ currency }}</span>
                             {% endif %}
-                            {% if currency in asset.balances_children %}
-                                <span class="tree-balance">{{ asset.balances_children[currency]|format_currency or '' }} {{ currency }}</span>
+                            {% if currency in row.balances_children %}
+                                <span class="tree-balance">{{ row.balances_children[currency]|format_currency or '' }} {{ currency }}</span>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
