@@ -241,6 +241,16 @@ table {
         }
     }
 
+    // Trees
+    span.balance { display: block; }
+    span.tree-balance { display: none; }
+    tr.parent {
+        td.num { color: #E5E5E5; }
+        span.tree-balance { display: block; }
+        span.balance { display: none; }
+    }
+
+
     tr.posting.leg td {
         padding: 2px 6px;
     }
@@ -283,6 +293,8 @@ table {
         }
     }
 }
+
+table:hover tr.parent td.num { color: #BEBEBE; }
 
 #assets, #liabilities, #equity, #income, #expenses {
     table {

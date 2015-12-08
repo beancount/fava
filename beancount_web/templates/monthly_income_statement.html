@@ -19,7 +19,7 @@
         </thead>
         <tbody>
         {% for row in monthly_ie.vals %}
-            <tr>
+            <tr{# {% if not row.is_leaf %} class="parent"{% endif %} #}>
                 <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
 
                 {% for end_date in monthly_ie.months|reverse %}

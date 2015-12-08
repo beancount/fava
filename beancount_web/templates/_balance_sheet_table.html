@@ -13,15 +13,27 @@
     </thead>
     <tbody>
         {% for asset in table_data %}
-            <tr>
+            <tr{% if not asset.is_leaf %} class="parent"{% endif %}>
                 <td class="account account-level-{{ account_level(asset.account) }}"><a href="{{ url_for('account', name=asset.account) }}" class="account">{{ asset.account|last_segment }}</a></td>
                 {% for currency in operating_currencies %}
-                    <td class="num">{{ asset.balances[currency] or '' }}</td>
+                    <td class="num">
+                        {% if currency in asset.balances %}
+                            <span class="balance">{{ asset.balances[currency]|format_currency or '' }}</span>
+                        {% endif %}
+                        {% if currency in asset.balances_children %}
+                            <span class="tree-balance">{{ asset.balances_children[currency]|format_currency or '' }}</span>
+                        {% endif %}
+                    </td>
                 {% endfor %}
                 <td class="num">
                     {% for currency in commodities %}
-                        {% if currency not in  operating_currencies and asset.balances[currency] %}
-                            {{ asset.balances[currency] or '' }} {{ currency }}<br>
+                        {% if currency not in operating_currencies %}
+                            {% if currency in asset.balances %}
+                                <span class="balance">{{ asset.balances[currency]|format_currency or '' }} {{ currency }}</span>
+                            {% endif %}
+                            {% if currency in asset.balances_children %}
+                                <span class="tree-balance">{{ asset.balances_children[currency]|format_currency or '' }} {{ currency }}</span>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </td>
@@ -33,12 +45,12 @@
             <tr>
                 <td>&nbsp;</td>
                 {% for currency in operating_currencies %}
-                    <td class="num">{{ totals[currency] or '' }}</td>
+                    <td class="num">{{ totals[currency]|format_currency or '' }}</td>
                 {% endfor %}
                 <td class="num">
                     {% for currency in commodities %}
                         {% if currency not in  operating_currencies and totals[currency] %}
-                            {{ totals[currency] or '' }} {{ currency }}<br>
+                            {{ totals[currency]|format_currency or '' }} {{ currency }}<br>
                         {% endif %}
                     {% endfor %}
                 </td>

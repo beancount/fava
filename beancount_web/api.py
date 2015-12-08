@@ -44,43 +44,59 @@ class BeancountReportAPI(object):
         # self.allview = AllView(self.entries, self.options_map, 'TEST')
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
+    def _account_level(self, account_name):
+        return account_name.count(":")+1
+
     def _table_tree(self, root_accounts):
         lines = []
 
-        for real_account in realization.dump(root_accounts):
-            line_data = real_account[2]
+        account_level = -1
+        # reverse the results to make the account_level-lookahead possible
+        for real_account in reversed(realization.dump(root_accounts)):
+            real_account = real_account[2]
+
+            is_leaf = (self._account_level(real_account.account) >= account_level)
 
             line = {
-                'account': line_data.account,
-                'balances': { currency: None for currency in self.options_map['commodities']}
+                'account': real_account.account,
+                'balances_children': self._table_totals(real_account),
+                'balances': {},
+                'is_leaf': (len(list(realization.iter_children(real_account))) == 1), # True if the accoutn has no children or has entries
+                'has_postings': len(real_account.txn_postings)
             }
 
-            for pos in line_data.balance.cost():
+            for pos in real_account.balance.cost():
                 line['balances'][pos.lot.currency] = pos.number
 
+            # Accounts that are not leafs but have entries are leafs as well
+            for currency in self.options_map['commodities']:
+                if currency in line['balances'] and currency in line['balances_children']:
+                    if line['balances'][currency] != line['balances_children'][currency]:
+                        is_leaf = True
+
+            line['is_leaf'] = is_leaf
+
+            account_level = self._account_level(real_account.account)
             lines.append(line)
 
-        return lines
+        return list(reversed(lines))
 
     def _table_totals(self, root_accounts):
-        totals = { currency: ZERO for currency in self.options_map['commodities']}
+        totals = {}
 
         for real_account in realization.dump(root_accounts):
             for pos in real_account[2].balance.cost():
+                if not pos.lot.currency in totals:
+                    totals[pos.lot.currency] = ZERO
                 totals[pos.lot.currency] += pos.number
 
         return totals
 
     def _inventory_to_json(self, inventory):
-        json = []
-
-        for position in sorted(inventory):
-            json.append({
-                'number':   position.number,
-                'currency': position.lot.currency
-            })
-
-        return json
+        return [{
+                    'number': position.number,
+                    'currency': position.lot.currency
+                } for position in sorted(inventory)]
 
     def _process_postings(self, postings):
         jrnl = []
@@ -258,6 +274,7 @@ class BeancountReportAPI(object):
         }
 
     def monthly_ie(self):
+        # TODO include balances_children
         # the account tree at time now
         account_names = [item['account'] for item in self.income_statement()['expenses']]
 
@@ -270,19 +287,17 @@ class BeancountReportAPI(object):
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
                                                          self.options_map)
 
-            mod_real_accounts = realization.realize(entries, self.account_types)
-            root_accounts = realization.get(mod_real_accounts, self.options_map['name_expenses'])
+            root_accounts = realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses'])
 
-            for real_account in realization.dump(root_accounts):
-                line_data = real_account[2]
+            _table_tree = self._table_tree(root_accounts)
+            for line in _table_tree:
+                arr[line['account']][end_date.isoformat()] = line['balances']
+                # arr[line['account']]['is_leaf'] = line['is_leaf']
+                # arr[line['account']]['has_postings'] = line['has_postings']
 
-                line = { currency: None for currency in self.options_map['commodities']}
-
-                for pos in line_data.balance.cost():
-                    line[pos.lot.currency] = pos.number
-                    monthly_totals[end_date.isoformat()][pos.lot.currency] += pos.number
-
-                arr[line_data.account][end_date.isoformat()] = line
+                if line['has_postings'] > 0:
+                    for currency, number in line['balances'].items():
+                        monthly_totals[end_date.isoformat()][currency] += number
 
         vals = sorted([
                         { 'account': account, 'totals': totals } for account, totals in arr.items()
