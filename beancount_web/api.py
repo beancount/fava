@@ -424,23 +424,29 @@ class BeancountReportAPI(object):
                                 for entry in self.entries
                                 if ehash == compare.hash_entry(entry)]
 
-        context_str = ""
-
+        contexts = []
         dcontext = self.options_map['dcontext']
+
         for entry in matching_entries:
-            context_str += context.render_entry_context(
+            context_str = context.render_entry_context(
                 self.entries, self.options_map, dcontext,
                 entry.meta["filename"], entry.meta["lineno"])
 
-        filenamelineno = context_str.split("\n",2)[1]
-        filename = filenamelineno.split(":")[1].strip()
-        lineno = int(filenamelineno.split(":")[2].strip())
+            hash_ = context_str.split("\n",2)[0].split(':')[1].strip()
+            filenamelineno = context_str.split("\n",2)[1]
+            filename = filenamelineno.split(":")[1].strip()
+            lineno = int(filenamelineno.split(":")[2].strip())
+
+            contexts.append({
+                'hash': hash_,
+                'context': context_str.split("\n",2)[2],
+                'filename': filename,
+                'line': lineno
+            })
 
         return {
             'hash': ehash,
-            'context': context_str.split("\n",2)[2],
-            'filename': filename,
-            'line': lineno,
+            'contexts': contexts,
             'journal': self._process_postings(matching_entries)
         }
 

@@ -95,7 +95,10 @@ def errors():
 @app.route('/context/<ehash>/')
 def context(ehash=None):
     context = app.api.context(ehash)
-    context['context_highlighted'] = _hightlight(context['context'])
+
+    for context_ in context['contexts']:
+        context_['context_highlighted'] = _hightlight(context_['context'])
+
     # TODO handle errors
     return render_template('context.html', context=context)
 
