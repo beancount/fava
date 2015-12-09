@@ -1,40 +1,19 @@
 <script>
 {% for currency in operating_currencies %}
 window.chartData.push({
-    label: "Income ({{ currency }})",
+    label: "{{ label }} ({{ currency }})",
     type:  "treemap",
     options: {
         dateformat: "MMM 'YY",
-        treemapColorLevel: 1
+        treemapColorLevel: {{ level or 1 }}
     },
     data: [
-        {% for row in income_statement.income -%}
+        {% for row in rows -%}
             {% if row.is_leaf and currency in row.balances -%}
                 {
                     label: '{{ row.account|last_segment }}',
                     value: {{ row.balances[currency] }},
-                    id: '{{ row.account }}-{{ currency }}', // this is not optimal
-                    accountName: '{{ row.account }}',
-                    balance: '{{ row.balances[currency]|format_currency }} {{ currency }}'
-                },
-            {% endif -%}
-        {% endfor -%}
-    ]
-});
-window.chartData.push({
-    label: "Expenses ({{ currency }})",
-    type:  "treemap",
-    options: {
-        dateformat: "MMM 'YY",
-        treemapColorLevel: 1
-    },
-    data: [
-        {% for row in income_statement.expenses -%}
-            {% if row.is_leaf and currency in row.balances -%}
-                {
-                    label: '{{ row.account|last_segment }}',
-                    value: {{ row.balances[currency] }},
-                    id: '{{ row.account }}-{{ currency }}', // this is not optimal
+                    id: '{{ row.account }}-{{ currency }}',
                     accountName: '{{ row.account }}',
                     balance: '{{ row.balances[currency]|format_currency }} {{ currency }}'
                 },

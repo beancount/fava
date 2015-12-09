@@ -66,7 +66,50 @@ def income_statement():
 @app.route('/monthly_income_stmt/')
 def monthly_income_stmt():
     monthly_ie = app.api.monthly_ie()
-    return render_template('monthly_income_statement.html', monthly_ie=monthly_ie)
+    monthly_ie_treetable = []
+    # monthly_ie_treetable = monthly_ie
+    # {
+    #             "account": "Expenses",
+    #             "totals": {
+    #                 "2012-01-31": {
+    #                     "balances": {},
+    #                     "balances_children": {
+    #                         "IRAUSD": 2400.0,
+    #                         "USD": 7247.63
+    #                     }
+    #                 },
+    #                 "2012-02-29": {
+    #                     "balances": {},
+    #                     "balances_children": {
+    #                         "IRAUSD": 2400.0,
+    #                         "USD": 7479.34
+    #                     }
+    #                 },
+
+    # row.account
+    # row.balances[currency]
+
+    accounts = {}
+    month = monthly_ie['months'][0]  # :  # for
+    for account in monthly_ie['vals']:
+        if not account['account'] in accounts:
+            accounts[account['account']] = {
+                'account': account['account'],
+                'balances': {}
+            }
+            # for date_, balances_ in account['totals'].items():
+            #     if month in total['balances']:
+            #         accounts[account['account']]['balances'] = total['balances'][month]
+
+            if month in account['totals']:
+                accounts[account['account']]['balances'] = account['totals']['month']['balances']
+
+    monthly_ie_treetable.append({
+        'label': month.year,
+        'data': accounts
+    })
+
+    return render_template('monthly_income_statement.html', monthly_ie=monthly_ie, monthly_ie_treetable=monthly_ie_treetable)
 
 @app.route('/trial_balance/')
 def trial_balance():
@@ -189,7 +232,7 @@ def _hightlight(source, language="beancount", hl_lines=[]):
 def reload_beancount_file():
     app.api.reload()
 
-def run(beancount_file, port=5000, host='localhost', debug=False):
+def run(beancount_file, port=5000, host='localhost', debug=True):
     app.beancount_file = beancount_file
     app.filter_year = None
     app.filter_tag = None
