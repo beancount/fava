@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import sys
 import json
 import decimal
@@ -180,7 +181,7 @@ def _hightlight(source, language="beancount", hl_lines=[]):
 def reload_beancount_file():
     app.api.reload()
 
-def run(beancount_file, port=5000, host='localhost', debug=True):
+def run(beancount_file, port=5000, host='localhost', debug=False):
     app.beancount_file = beancount_file
     app.filter_year = None
     app.filter_tag = None
@@ -191,7 +192,13 @@ def run(beancount_file, port=5000, host='localhost', debug=True):
         app.run(host, port, debug)
     else:
         server = Server(app.wsgi_app)
+
+        # auto-reload the main beancount-file and all it's includes
         server.watch(app.beancount_file, reload_beancount_file)
+        include_path = os.path.dirname(app.beancount_file)
+        for filename in app.api.options()['include']:
+            server.watch(os.path.join(include_path, filename), reload_beancount_file)
+
         server.serve(port=port, host=host)
 
 if __name__ == '__main__':

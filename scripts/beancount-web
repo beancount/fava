@@ -29,7 +29,8 @@ def main(arguments):
 
     parser.add_argument('-d', '--debug',
                         action='store_true',
-                        help="Turn on debugging. This also uses the built-in Flask webserver.")
+                        help="Turn on debugging. This uses the built-in Flask \
+                              webserver, and live-reloading of beancount-files is disabled.")
 
     parser.add_argument('filename',
                         type=str,
