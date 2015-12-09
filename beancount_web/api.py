@@ -273,6 +273,8 @@ class BeancountReportAPI(object):
 
         return monthly_totals
 
+
+
     def balance_sheet(self, timespan=None, components=None, tags=None):
         return {
             'assets':             self._table_tree(realization.get(self.real_accounts, self.options_map['name_assets'])),
@@ -292,6 +294,20 @@ class BeancountReportAPI(object):
             'expenses_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_expenses'])),
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
+
+    def balances(self, account, begin_date=None, end_date=None):
+        date_first, date_last = getters.get_min_max_dates(self.entries, (Transaction))
+        if begin_date:
+            date_first = begin_date
+        if end_date:
+            date_last = end_date
+
+        entries, index = summarize.clamp_opt(self.entries, date_first, date_last + timedelta(days=1),
+                                                     self.options_map)
+
+        root_accounts = realization.get(realization.realize(entries, self.account_types), account)
+
+        return self._table_tree(root_accounts)
 
     def monthly_ie(self):
         # TODO include balances_children

@@ -8,6 +8,15 @@
     <p>
         <em>For now this just shows Expenses-accounts.</em>
     </p>
+
+    {% include "charts/_chart_skeleton.html" %}
+
+    {% for month in monthly_ie_treetable %}
+        {% with label=month.label, rows=month.balances %}
+            {% include "charts/_chart_treemap.html" %}
+        {% endwith %}
+    {% endfor %}
+
     <table class="fullwidth tree-table">
         <thead>
             <tr>

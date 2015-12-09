@@ -67,7 +67,19 @@ def income_statement():
 def monthly_income_stmt():
     monthly_ie = app.api.monthly_ie()
 
-    return render_template('monthly_income_statement.html', monthly_ie=monthly_ie)
+    monthly_ie_treetable = []
+    number_of_months = len(monthly_ie['months']) if len(monthly_ie['months']) < 3 else 3
+
+    for month_end in monthly_ie['months'][::-1][:3]:
+        month_begin = date(month_end.year, month_end.month, 1)
+        monthly_ie_treetable.append({
+            'label': month_end.strftime('%Y-%m'),
+            'month_begin': month_begin,
+            'month_end': month_end,
+            'balances': app.api.balances('Expenses', begin_date=month_begin, end_date=month_end)
+        })
+
+    return render_template('monthly_income_statement.html', monthly_ie=monthly_ie, monthly_ie_treetable=monthly_ie_treetable)
 
 @app.route('/trial_balance/')
 def trial_balance():
