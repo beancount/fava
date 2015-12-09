@@ -1,13 +1,11 @@
 {% extends "_layout.html" %}
-{% set active_page = 'monthly_income_stmt' %}
+{% set active_page = 'monthly_expenses' %}
 
-{% block title %}Monthly Income Statement{% endblock %}
+{% block title %}Monthly Expenses{% endblock %}
 
 {% block content %}
-    <h1>Monthly Income Statement</h1>
-    <p>
-        <em>For now this just shows Expenses-accounts.</em>
-    </p>
+    <h1>Monthly Expenses</h1>
+    {# TODO make this generic enough to work with any account, eg. month-by-month view for each account #}
 
     {% include "charts/_chart_skeleton.html" %}
 
