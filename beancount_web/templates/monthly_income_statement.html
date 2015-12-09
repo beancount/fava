@@ -12,7 +12,7 @@
     {% include "charts/_chart_skeleton.html" %}
 
     {% for month in monthly_ie_treetable %}
-        {% with label=month.label, rows=month.balances %}
+        {% with label=month.label, rows=month.balances, modifier=month.modifier %}
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}
     {% endfor %}

@@ -17,7 +17,7 @@
     {% with label="Liabilities", rows=balance_sheet.liabilities %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
-    {% with label="Equity", rows=balance_sheet.equity %}
+    {% with label="Equity", rows=balance_sheet.equity, modifier=-1 %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 

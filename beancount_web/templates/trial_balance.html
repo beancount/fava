@@ -7,9 +7,14 @@
     <h1>Trial Balance</h1>
 
     {% include "charts/_chart_skeleton.html" %}
-    {% with label="Balances", rows=trial_balance.positions %}
-        {% include "charts/_chart_treemap.html" %}
-    {% endwith %}
+
+    {% for balance in treemap_balances %}
+        {% with label=balance.label, rows=balance.balances, modifier=balance.modifier %}
+            {% include "charts/_chart_treemap.html" %}
+        {% endwith %}
+    {% endfor %}
+
+
 
     <div class="tables">
         <div id="trial_balance">

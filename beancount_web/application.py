@@ -36,7 +36,13 @@ def account(name=None):
                 'change': change,
             })
 
-    return render_template('account.html', account=account, chart_data=chart_data)
+    treemap = {
+        'label': 'Subaccounts',
+        'balances': app.api.balances(name),
+        'modifier': 1  # TODO find out via API?
+    }
+
+    return render_template('account.html', account=account, chart_data=chart_data, treemap=treemap)
 
 @app.route('/journal/')
 def journal():
@@ -73,18 +79,51 @@ def monthly_income_stmt():
     for month_end in monthly_ie['months'][::-1][:3]:
         month_begin = date(month_end.year, month_end.month, 1)
         monthly_ie_treetable.append({
-            'label': month_end.strftime('%Y-%m'),
+            'label': 'Expenses ({})'.format(month_end.strftime("%b '%y")),
             'month_begin': month_begin,
             'month_end': month_end,
             'balances': app.api.balances('Expenses', begin_date=month_begin, end_date=month_end)
         })
+        # monthly_ie_treetable.append({
+        #     'label': 'Income ({})'.format(month_end.strftime('%Y-%m')),
+        #     'month_begin': month_begin,
+        #     'month_end': month_end,
+        #     'balances': app.api.balances('Income', begin_date=month_begin, end_date=month_end),
+        #     'modifier': -1
+        # })
+
+    # monthly_ie_treetable = sorted(monthly_ie_treetable, key=lambda x: x['label'])
 
     return render_template('monthly_income_statement.html', monthly_ie=monthly_ie, monthly_ie_treetable=monthly_ie_treetable)
 
 @app.route('/trial_balance/')
 def trial_balance():
     trial_balance = app.api.trial_balance()
-    return render_template('trial_balance.html', trial_balance=trial_balance)
+    treemap_balances = []
+    treemap_balances.append({
+        'label': app.api.options()['name_expenses'],
+        'balances': app.api.balances(app.api.options()['name_expenses'])
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_income'],
+        'balances': app.api.balances(app.api.options()['name_income']),
+        'modifier': -1
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_assets'],
+        'balances': app.api.balances(app.api.options()['name_assets'])
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_equity'],
+        'balances': app.api.balances(app.api.options()['name_equity']),
+        'modifier': -1
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_liabilities'],
+        'balances': app.api.balances(app.api.options()['name_liabilities'])
+    })
+
+    return render_template('trial_balance.html', trial_balance=trial_balance, treemap_balances=treemap_balances)
 
 @app.route('/holdings/')
 def holdings():

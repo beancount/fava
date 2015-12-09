@@ -32,6 +32,9 @@
     {% with monthly_totals = account.monthly_totals %}
         {% include "charts/_chart_monthly_totals.html" %}
     {% endwith %}
+    {% with label=treemap.label, rows=treemap.balances, modifier=treemap.modifier, level=account.name.split(':')|length %}
+        {% include "charts/_chart_treemap.html" %}
+    {% endwith %}
 
     <h3>Journal</h3>
     {% with journal=account.journal, show_tablefilter=True %}
