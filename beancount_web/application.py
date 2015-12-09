@@ -1,22 +1,15 @@
 # -*- coding: utf-8 -*-
-import os
-import sys
 import json
 import decimal
-import argparse
 
 from datetime import date, datetime
 
 from flask import Flask, render_template, url_for, request, redirect
-from flask.helpers import locked_cached_property
 
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
 
-from livereload import Server, shell
-
-from beancount_web.api import BeancountReportAPI
 
 app = Flask(__name__)
 
@@ -238,57 +231,3 @@ def _hightlight(source, language="beancount", hl_lines=[]):
     lexer = get_lexer_by_name(language, stripall=True)
     formatter = HtmlFormatter(linenos=True, lineanchors='line', anchorlinenos=True, hl_lines=hl_lines)
     return highlight(source, lexer, formatter)
-
-def reload_beancount_file():
-    app.api.reload()
-
-def run(argv):
-    parser = argparse.ArgumentParser(description=__doc__,
-            formatter_class=argparse.RawDescriptionHelpFormatter)
-
-    parser.add_argument('-p', '--port',
-                        action='store',
-                        type=int,
-                        default=5000,
-                        help="Port to listen on.")
-
-    parser.add_argument('-H', '--host',
-                        action='store',
-                        type=str,
-                        default='localhost',
-                        help="Host for the webserver.")
-
-    parser.add_argument('-d', '--debug',
-                        action='store_true',
-                        help="Turn on debugging. This uses the built-in Flask \
-                              webserver, and live-reloading of beancount-files is disabled.")
-
-    parser.add_argument('filename',
-                        type=str,
-                        help="Beancount input file.")
-
-
-    args = parser.parse_args(argv)
-
-
-    app.beancount_file = args.filename
-    app.filter_year = None
-    app.filter_tag = None
-
-    app.api = BeancountReportAPI(app.beancount_file)
-
-    if args.debug:
-        app.run(args.host, args.port, args.debug)
-    else:
-        server = Server(app.wsgi_app)
-
-        # auto-reload the main beancount-file and all it's includes
-        server.watch(app.beancount_file, reload_beancount_file)
-        include_path = os.path.dirname(app.beancount_file)
-        for filename in app.api.options()['include']:
-            server.watch(os.path.join(include_path, filename), reload_beancount_file)
-
-        server.serve(port=args.port, host=args.host, debug=args.debug)
-
-if __name__ == '__main__':
-    run(sys.argv[1:])

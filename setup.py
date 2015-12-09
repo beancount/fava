@@ -8,7 +8,11 @@ setup(name='beancount-web',
       author_email='dominik@aumayr.name',
       license='MIT',
       packages=['beancount_web'],
-      scripts=['scripts/beancount-web'],
+      entry_points={
+          'console_scripts': [
+              'beancount-web = beancount_web.cli:main',
+          ]
+      },
       install_requires=[
             'beancount',
             'beancount-pygments-lexer',
