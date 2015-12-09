@@ -554,4 +554,23 @@ span {
     }
 }
 
+// Charts
 @import "chartist";
+
+.treemap-label { text-align: center !important; }
+
+#treetable-popover {
+    position: absolute;
+    background: rgb(244, 244, 244);
+    border: 1px solid #CCC;
+    box-shadow: 0px 0px 5px rgb(221, 221, 221);
+    padding: 10px 5px 0 15px;
+
+    dl {
+        margin-top: 0;
+        min-width: 270px;
+    }
+
+    dt { width: 60px; }
+    dd { margin-bottom: 8px; }
+}

@@ -1,13 +1,20 @@
 {% extends "_layout.html" %}
-{% set active_page = 'monthly_income_stmt' %}
-3
-{% block title %}Monthly Income Statement{% endblock %}
+{% set active_page = 'monthly_expenses' %}
+
+{% block title %}Monthly Expenses{% endblock %}
 
 {% block content %}
-    <h1>Monthly Income Statement</h1>
-    <p>
-        <em>For now this just shows Expenses-accounts.</em>
-    </p>
+    <h1>Monthly Expenses</h1>
+    {# TODO make this generic enough to work with any account, eg. month-by-month view for each account #}
+
+    {% include "charts/_chart_skeleton.html" %}
+
+    {% for month in monthly_ie_treetable %}
+        {% with label=month.label, rows=month.balances, modifier=month.modifier %}
+            {% include "charts/_chart_treemap.html" %}
+        {% endwith %}
+    {% endfor %}
+
     <table class="fullwidth tree-table">
         <thead>
             <tr>

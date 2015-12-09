@@ -1,9 +1,11 @@
 <script>
 {% for currency in operating_currencies %}
-    window.chart_data.push({
+    window.chartData.push({
         label: "Net worth (in {{ currency }})",
         type: "line",
-        dateformat: "MMM 'YY",
+        options: {
+            dateformat: "MMM 'YY"
+        },
         data: {
             series: [{
                 name: '{{ currency }}',

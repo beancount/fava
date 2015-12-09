@@ -1,0 +1,25 @@
+<script>
+{% for currency in operating_currencies %}
+window.chartData.push({
+    label: "{{ label }} ({{ currency }})",
+    type:  "treemap",
+    options: {
+        dateformat: "MMM 'YY",
+        treemapColorLevel: {{ level or 1 }}
+    },
+    data: [
+        {% for row in rows -%}
+            {% if row.is_leaf and currency in row.balances and row.balances[currency] * (modifier or 1) >= 0 -%}
+                {
+                    label: '{{ row.account|last_segment }}',
+                    value: {{ row.balances[currency] * (modifier or 1) }},
+                    id: '{{ row.account }}-{{ currency }}',
+                    accountName: '{{ row.account }}',
+                    balance: '{{ row.balances[currency]|format_currency }} {{ currency }}'
+                },
+            {% endif -%}
+        {% endfor -%}
+    ]
+});
+{% endfor %}
+</script>

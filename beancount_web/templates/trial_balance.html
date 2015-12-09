@@ -5,6 +5,17 @@
 
 {% block content %}
     <h1>Trial Balance</h1>
+
+    {% include "charts/_chart_skeleton.html" %}
+
+    {% for balance in treemap_balances %}
+        {% with label=balance.label, rows=balance.balances, modifier=balance.modifier %}
+            {% include "charts/_chart_treemap.html" %}
+        {% endwith %}
+    {% endfor %}
+
+
+
     <div class="tables">
         <div id="trial_balance">
             {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance.positions, totals=None %}

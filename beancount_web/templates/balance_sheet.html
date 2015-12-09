@@ -11,6 +11,15 @@
         {% include "charts/_chart_monthly_ie_changes.html" %}
     {% endwith %}
     {% include "charts/_chart_monthly_net_worth.html" %}
+    {% with label="Assets", rows=balance_sheet.assets %}
+        {% include "charts/_chart_treemap.html" %}
+    {% endwith %}
+    {% with label="Liabilities", rows=balance_sheet.liabilities %}
+        {% include "charts/_chart_treemap.html" %}
+    {% endwith %}
+    {% with label="Equity", rows=balance_sheet.equity, modifier=-1 %}
+        {% include "charts/_chart_treemap.html" %}
+    {% endwith %}
 
     <div class="tables">
         <div class="halfleft">

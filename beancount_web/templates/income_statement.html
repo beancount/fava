@@ -11,6 +11,14 @@
         {% include "charts/_chart_monthly_ie_changes.html" %}
     {% endwith %}
 
+    {% with label="Income", rows=income_statement.income %}
+        {% include "charts/_chart_treemap.html" %}
+    {% endwith %}
+
+    {% with label="Expenses", rows=income_statement.expenses %}
+        {% include "charts/_chart_treemap.html" %}
+    {% endwith %}
+
     <div class="tables">
         <div class="halfleft">
             <div id="income">

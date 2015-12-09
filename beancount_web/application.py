@@ -36,7 +36,13 @@ def account(name=None):
                 'change': change,
             })
 
-    return render_template('account.html', account=account, chart_data=chart_data)
+    treemap = {
+        'label': 'Subaccounts',
+        'balances': app.api.balances(name),
+        'modifier': 1  # TODO find out via API?
+    }
+
+    return render_template('account.html', account=account, chart_data=chart_data, treemap=treemap)
 
 @app.route('/journal/')
 def journal():
@@ -63,15 +69,61 @@ def income_statement():
     income_statement = app.api.income_statement()
     return render_template('income_statement.html', income_statement=income_statement)
 
-@app.route('/monthly_income_stmt/')
-def monthly_income_stmt():
+@app.route('/monthly_expenses/')
+def monthly_expenses():
     monthly_ie = app.api.monthly_ie()
-    return render_template('monthly_income_statement.html', monthly_ie=monthly_ie)
+
+    monthly_ie_treetable = []
+    number_of_months = len(monthly_ie['months']) if len(monthly_ie['months']) < 3 else 3
+
+    for month_end in monthly_ie['months'][::-1][:3]:
+        month_begin = date(month_end.year, month_end.month, 1)
+        monthly_ie_treetable.append({
+            'label': '{}'.format(month_end.strftime("%b '%y")),
+            'month_begin': month_begin,
+            'month_end': month_end,
+            'balances': app.api.balances('Expenses', begin_date=month_begin, end_date=month_end)
+        })
+        # monthly_ie_treetable.append({
+        #     'label': 'Income ({})'.format(month_end.strftime('%Y-%m')),
+        #     'month_begin': month_begin,
+        #     'month_end': month_end,
+        #     'balances': app.api.balances('Income', begin_date=month_begin, end_date=month_end),
+        #     'modifier': -1
+        # })
+
+    # monthly_ie_treetable = sorted(monthly_ie_treetable, key=lambda x: x['label'])
+
+    return render_template('monthly_expenses.html', monthly_ie=monthly_ie, monthly_ie_treetable=monthly_ie_treetable)
 
 @app.route('/trial_balance/')
 def trial_balance():
     trial_balance = app.api.trial_balance()
-    return render_template('trial_balance.html', trial_balance=trial_balance)
+    treemap_balances = []
+    treemap_balances.append({
+        'label': app.api.options()['name_expenses'],
+        'balances': app.api.balances(app.api.options()['name_expenses'])
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_income'],
+        'balances': app.api.balances(app.api.options()['name_income']),
+        'modifier': -1
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_assets'],
+        'balances': app.api.balances(app.api.options()['name_assets'])
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_equity'],
+        'balances': app.api.balances(app.api.options()['name_equity']),
+        'modifier': -1
+    })
+    treemap_balances.append({
+        'label': app.api.options()['name_liabilities'],
+        'balances': app.api.balances(app.api.options()['name_liabilities'])
+    })
+
+    return render_template('trial_balance.html', trial_balance=trial_balance, treemap_balances=treemap_balances)
 
 @app.route('/holdings/')
 def holdings():
@@ -142,11 +194,16 @@ def pretty_print(json_object):
     json_dump = json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder)
     return _hightlight(json_dump, language='python')
 
+@app.template_filter('last_segment')
+def last_segment(account_name):
+    return account_name.split(':')[-1]
+
 @app.context_processor
 def utility_processor():
     def account_level(account_full):
         return account_full.count(":")+1
     return dict(account_level=account_level)
+
 
 @app.context_processor
 def inject_errors():
@@ -184,7 +241,7 @@ def _hightlight(source, language="beancount", hl_lines=[]):
 def reload_beancount_file():
     app.api.reload()
 
-def run(beancount_file, port=5000, host='localhost', debug=False):
+def run(beancount_file, port=5000, host='localhost', debug=True):
     app.beancount_file = beancount_file
     app.filter_year = None
     app.filter_tag = None

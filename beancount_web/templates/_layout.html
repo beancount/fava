@@ -3,7 +3,7 @@
         ('/balance_sheet/',       'balance_sheet',          'Balance Sheet'),
         ('/journal/',             'journal',                'General Journal'),
         ('/income_statement/',    'income_stmt',            'Income Statement'),
-        ('/monthly_income_stmt/', 'monthly_income_stmt',    'Monthly Income Statement'),
+        ('/monthly_expenses/',    'monthly_expenses',       'Monthly Expenses'),
         ('/documents/',           'documents',              'Documents'),
         ('/trial_balance/',       'trial_balance',          'Trial Balance'),
         ('/holdings/',            'holdings',               'Equity/Holdings'),
@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
     <title>{% block title %}{% endblock %} - {{ title }}</title>
     {% endblock %}
-    <script>window.chart_data = [];</script>
+    <script>window.chartData = [];</script>
 </head>
 <body>
     <div class="bodywrapper">
@@ -97,6 +97,7 @@
     <script src="{{ url_for('static', filename='vendor/chartist-js/chartist.min.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/chartist-js/chartist-plugin-legend.js') }}"></script>
     <script src="{{ url_for('static', filename='vendor/moment-js/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='vendor/jquery-treemap-js/jquery-treemap.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/helpers.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/charts.js') }}"></script>
