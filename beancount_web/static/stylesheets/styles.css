@@ -1602,4 +1602,26 @@ span.pnsep {
   border-color: #a748ca;
 }
 
+.treemap-label {
+  text-align: center !important;
+}
+
+#treetable-popover {
+  position: absolute;
+  background: #f4f4f4;
+  border: 1px solid #CCC;
+  box-shadow: 0px 0px 5px #dddddd;
+  padding: 10px 5px 0 15px;
+}
+#treetable-popover dl {
+  margin-top: 0;
+  min-width: 270px;
+}
+#treetable-popover dt {
+  width: 60px;
+}
+#treetable-popover dd {
+  margin-bottom: 8px;
+}
+
 /*# sourceMappingURL=styles.css.map */

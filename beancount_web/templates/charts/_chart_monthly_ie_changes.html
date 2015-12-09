@@ -1,8 +1,10 @@
 <script>
-    window.chart_data.push({
+    window.chartData.push({
         label: "Monthly changes (Income/Expenses)",
         type:  "bar",
-        dateformat: "MMM 'YY",
+        options: {
+            dateformat: "MMM 'YY"
+        },
         data: {
             labels: [
                 {% for total in monthly_totals -%}
@@ -24,10 +26,12 @@
         }
     });
 
-    window.chart_data.push({
+    window.chartData.push({
         label: "Monthly income",
         type:  "bar",
-        dateformat: "MMM 'YY",
+        options: {
+            dateformat: "MMM 'YY"
+        },
         data: {
             labels: [
                 {% for total in monthly_totals -%}
@@ -49,10 +53,12 @@
         }
     });
 
-    window.chart_data.push({
+    window.chartData.push({
         label: "Monthly expenses",
         type:  "bar",
-        dateformat: "MMM 'YY",
+        options: {
+            dateformat: "MMM 'YY"
+        },
         data: {
             labels: [
                 {% for total in monthly_totals -%}

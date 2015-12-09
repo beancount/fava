@@ -142,11 +142,16 @@ def pretty_print(json_object):
     json_dump = json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder)
     return _hightlight(json_dump, language='python')
 
+@app.template_filter('last_segment')
+def last_segment(account_name):
+    return account_name.split(':')[-1]
+
 @app.context_processor
 def utility_processor():
     def account_level(account_full):
         return account_full.count(":")+1
     return dict(account_level=account_level)
+
 
 @app.context_processor
 def inject_errors():
