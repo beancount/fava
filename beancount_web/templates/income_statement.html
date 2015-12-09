@@ -11,7 +11,7 @@
         {% include "charts/_chart_monthly_ie_changes.html" %}
     {% endwith %}
 
-    {% with label="Income", rows=income_statement.income %}
+    {% with label="Income", rows=income_statement.income, modifier=-1 %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
