@@ -350,6 +350,23 @@ table {
     }
 }
 
+h1 pre {
+    overflow-x: inherit;
+    display: inline-block;
+}
+
+dl {
+    margin-top: 20px;
+    font-size: 13px;
+
+    dt {
+        display: inline-block;
+        width: 120px;
+        float: left;
+        font-weight: bold;
+    }
+}
+
 p.empty {
     margin-top: 20px;
 }

@@ -4,7 +4,15 @@
 {% block title %}Context{% endblock %}
 
 {% block content %}
-    <h1>Context: <span>{{ context.hash }}</span></h1>
+    <h1>Context: <pre>{{ context.hash }}</pre></h1>
+
+    <dl>
+        <dt>Hash:</dt>
+        <dd><pre>{{ context.hash }}</pre></dd>
+        <dt>Location:</dt>
+        <dd><pre><a href="beancount://open?url={{ context.filename }}&line={{ context.line }}">{{ context.filename }}:{{ context.line }}</a></pre></dd>
+    </dl>
+
     {{ context.context_highlighted | safe }}
     <h3>Journal Entries</h3>
     {% with journal=context.journal %}
