@@ -133,8 +133,6 @@ class BeancountReportAPI(object):
                 if isinstance(posting, Close):
                     entry['meta']['type'] = 'close'
                     entry['account'] =       posting.account
-                    entry['currencies'] =    posting.currencies
-                    entry['booking'] =       posting.booking # TODO im html-template
 
                 if isinstance(posting, Note):
                     entry['meta']['type'] = 'note'
