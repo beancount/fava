@@ -3,6 +3,7 @@ import os
 import sys
 import json
 import decimal
+import argparse
 
 from datetime import date, datetime
 
@@ -241,15 +242,43 @@ def _hightlight(source, language="beancount", hl_lines=[]):
 def reload_beancount_file():
     app.api.reload()
 
-def run(beancount_file, port=5000, host='localhost', debug=True):
-    app.beancount_file = beancount_file
+def run(argv):
+    parser = argparse.ArgumentParser(description=__doc__,
+            formatter_class=argparse.RawDescriptionHelpFormatter)
+
+    parser.add_argument('-p', '--port',
+                        action='store',
+                        type=int,
+                        default=5000,
+                        help="Port to listen on.")
+
+    parser.add_argument('-H', '--host',
+                        action='store',
+                        type=str,
+                        default='localhost',
+                        help="Host for the webserver.")
+
+    parser.add_argument('-d', '--debug',
+                        action='store_true',
+                        help="Turn on debugging. This uses the built-in Flask \
+                              webserver, and live-reloading of beancount-files is disabled.")
+
+    parser.add_argument('filename',
+                        type=str,
+                        help="Beancount input file.")
+
+
+    args = parser.parse_args(argv)
+
+
+    app.beancount_file = args.filename
     app.filter_year = None
     app.filter_tag = None
 
     app.api = BeancountReportAPI(app.beancount_file)
 
-    if debug:
-        app.run(host, port, debug)
+    if args.debug:
+        app.run(args.host, args.port, args.debug)
     else:
         server = Server(app.wsgi_app)
 
@@ -259,7 +288,7 @@ def run(beancount_file, port=5000, host='localhost', debug=True):
         for filename in app.api.options()['include']:
             server.watch(os.path.join(include_path, filename), reload_beancount_file)
 
-        server.serve(port=port, host=host)
+        server.serve(port=args.port, host=args.host, debug=args.debug)
 
 if __name__ == '__main__':
-    run(sys.argv[1])
+    run(sys.argv[1:])
