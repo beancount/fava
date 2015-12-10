@@ -7,9 +7,6 @@
     <h1>Balance Sheet</h1>
 
     {% include "charts/_chart_skeleton.html" %}
-    {% with monthly_totals=balance_sheet.monthly_totals %}
-        {% include "charts/_chart_monthly_ie_changes.html" %}
-    {% endwith %}
     {% include "charts/_chart_monthly_net_worth.html" %}
     {% with label="Assets", rows=balance_sheet.assets %}
         {% include "charts/_chart_treemap.html" %}

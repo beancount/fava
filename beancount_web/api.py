@@ -65,7 +65,7 @@ class BeancountReportAPI(object):
 
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
-    def _account_components(self, entries):
+    def _account_components(self):
         # TODO rename
         """Gather all the account components available in the given directives.
 
@@ -392,7 +392,6 @@ class BeancountReportAPI(object):
             'liabilities_totals': self.balances_totals(self.options_map['name_liabilities']),
             'equity':             self.balances(self.options_map['name_equity']),
             'equity_totals':      self.balances_totals(self.options_map['name_equity']),
-            'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
     def income_statement(self, timespan=None, components=None, tags=None):
@@ -468,7 +467,7 @@ class BeancountReportAPI(object):
         # TODO include balances_children
         # the account tree at time now
 
-        account_names = [account['full_name'] for account in self._account_components(self.entries) if account['full_name'].startswith(account_name)]
+        account_names = [account['full_name'] for account in self._account_components() if account['full_name'].startswith(account_name)]
 
         month_tuples = self._month_tuples(self.entries)
         monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options_map['commodities']} for begin_date, end_date in month_tuples }
@@ -619,7 +618,7 @@ class BeancountReportAPI(object):
 
     def active_components(self):
         # TODO rename?
-        return self._account_components(self.all_entries)
+        return self._account_components()
 
     def source(self):
         return self._source
