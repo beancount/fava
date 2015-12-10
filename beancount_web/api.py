@@ -97,9 +97,9 @@ class BeancountReportAPI(object):
         """
         return account_name.count(":")+1
 
-    def _table_tree(self, root_accounts):
+    def _table_tree(self, real_accounts):
         """
-        Renders root_accounts and it's children as a flat list to be used
+        Renders real_accounts and it's children as a flat list to be used
         in rendering tables.
 
         Returns:
@@ -119,11 +119,11 @@ class BeancountReportAPI(object):
         """
 
         # FIXME this does not seem correct
-        if isinstance(root_accounts, None.__class__):
+        if isinstance(real_accounts, None.__class__):
             return []
 
         lines = []
-        for real_account in realization.iter_children(root_accounts):
+        for real_account in realization.iter_children(real_accounts):
 
             line = {
                 'account': real_account.account,
@@ -146,7 +146,7 @@ class BeancountReportAPI(object):
 
         return lines
 
-    def _table_totals(self, root_accounts):
+    def _table_totals(self, real_accounts):
         """
             Renders the total balances for root_acccounts and their children.
 
@@ -162,10 +162,10 @@ class BeancountReportAPI(object):
         # FIXME This sometimes happens when called from self.account(...)
         #       and there is no entry in that specific month. This also produces
         #       a missing bar in the bar chart.
-        if isinstance(root_accounts, None.__class__):
+        if isinstance(real_accounts, None.__class__):
             return {}
 
-        for real_account in realization.iter_children(root_accounts):
+        for real_account in realization.iter_children(real_accounts):
             for pos in real_account.balance.cost():
                 if not pos.lot.currency in totals:
                     totals[pos.lot.currency] = ZERO
@@ -474,9 +474,9 @@ class BeancountReportAPI(object):
         arr = { account_name: {} for account_name in account_names }
 
         for begin_date, end_date in month_tuples:
-            root_accounts = self._real_accounts(account_name, begin_date=begin_date, end_date=end_date)
+            real_accounts = self._real_accounts(account_name, begin_date=begin_date, end_date=end_date)
 
-            _table_tree = self._table_tree(root_accounts)
+            _table_tree = self._table_tree(real_accounts)
             for line in _table_tree:
                 arr[line['account']][end_date.isoformat()] = {
                     'balances': line['balances'],
