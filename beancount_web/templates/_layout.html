@@ -67,7 +67,7 @@
                             </div>
                             <ul>
                                 {% for component in active_components -%}
-                                <li><a href="{{ url_for('account', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
+                                <li><a href="{{ url_for('account_with_journal', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
                                 {% endfor -%}
                             </ul>
                         </div>

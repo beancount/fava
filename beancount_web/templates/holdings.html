@@ -21,7 +21,7 @@
       <tbody>
           {% for holding in holdings.body %}
           <tr>
-             <td><a href="{{ url_for('account', name=holding.0) }}">{{ holding.0 }}</a></td>
+             <td><a href="{{ url_for('account_with_journal', name=holding.0) }}">{{ holding.0 }}</a></td>
              <td class="num">{{ holding.1 }}</td>
              <td>{{ holding.2 }}</td>
              <td>{{ holding.3 }}</td>

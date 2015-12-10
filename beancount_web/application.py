@@ -14,28 +14,55 @@ from pygments.formatters import HtmlFormatter
 app = Flask(__name__)
 
 @app.route('/account/<name>/')
-def account(name=None):
-    # if not account:
-    #     redirect to index
-    account = app.api.account(account_name=name)
+def account_with_journal(name=None):
+    return account(account_name=name, with_journal=True)
 
-    # should this be done in the api?
-    chart_data = []
-    for journal_entry in account['journal']:
-        if 'balance' in journal_entry.keys():
-            chart_data.append({
-                'date': journal_entry['date'],
-                'balance': journal_entry['balance'],
-                'change': journal_entry['change'],
+@app.route('/account/<name>/monthly_balances/')
+def account_with_monthly_balances(name=None):
+    return account(account_name=name, with_monthly_balances=True)
+
+def account(account_name=None, with_journal=False, with_monthly_balances=False):
+    account = app.api.account(account_name=account_name)
+
+    if with_journal:
+        journal = app.api.journal(account_name)
+        monthly_totals = app.api.monthly_totals(account_name)
+
+        # should this be done in the api?
+        linechart_data = []
+        for journal_entry in journal:
+            if 'balance' in journal_entry.keys():
+                linechart_data.append({
+                    'date': journal_entry['date'],
+                    'balance': journal_entry['balance'],
+                    'change': journal_entry['change'],
+                })
+
+        treemap = {
+            'label': 'Subaccounts',
+            'balances': app.api.balances(account_name),
+            'modifier': 1  # TODO find out via API?
+        }
+
+        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data, monthly_totals=monthly_totals, treemap=treemap)
+
+    if with_monthly_balances:
+        monthly_balances = app.api.monthly_balances(account_name)
+        monthly_treemaps = []
+        # Only show three latest months
+        max_months = int(request.args.get('months', 3))
+        number_of_months = len(monthly_balances['months']) if len(monthly_balances['months']) < max_months else max_months
+
+        for month_end in monthly_balances['months'][::-1][:number_of_months]:
+            month_begin = date(month_end.year, month_end.month, 1)
+            monthly_treemaps.append({
+                'label': '{}'.format(month_end.strftime("%b '%y")),
+                'month_begin': month_begin,
+                'month_end': month_end,
+                'balances': app.api.balances(account_name, begin_date=month_begin, end_date=month_end)
             })
 
-    treemap = {
-        'label': 'Subaccounts',
-        'balances': app.api.balances(name),
-        'modifier': 1  # TODO find out via API?
-    }
-
-    return render_template('account.html', account=account, chart_data=chart_data, treemap=treemap)
+        return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps)
 
 @app.route('/journal/')
 def journal():
@@ -61,25 +88,6 @@ def balance_sheet():
 def income_statement():
     income_statement = app.api.income_statement()
     return render_template('income_statement.html', income_statement=income_statement)
-
-# TODO currently only works for top-level accounts
-@app.route('/monthly_balances/<account>/')
-def monthly_balances(account=None):
-    monthly_balances = app.api.monthly_balances(account)
-    monthly_treetables = []
-    # Only show three latest months
-    number_of_months = len(monthly_balances['months']) if len(monthly_balances['months']) < 3 else 3
-
-    for month_end in monthly_balances['months'][::-1][:3]:
-        month_begin = date(month_end.year, month_end.month, 1)
-        monthly_treetables.append({
-            'label': '{}'.format(month_end.strftime("%b '%y")),
-            'month_begin': month_begin,
-            'month_end': month_end,
-            'balances': app.api.balances(account, begin_date=month_begin, end_date=month_end)
-        })
-
-    return render_template('monthly_balances.html', account=account, balances=monthly_balances, treetables=monthly_treetables)
 
 @app.route('/trial_balance/')
 def trial_balance():

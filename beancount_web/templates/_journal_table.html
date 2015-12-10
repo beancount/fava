@@ -35,12 +35,12 @@
                 <td class="datecell"><a href="{{ url_for('context', ehash=journal_entry.hash) }}">{{ journal_entry.date.strftime('%Y-%m-%d') or '' }}</a></td>
                 <td class="flag">{{ journal_entry.flag or '' }}</td>
                 <td class="description" colspan="4">
-                    {% if journal_entry.meta.type == 'open' %}Open <a href="{{ url_for('account', name=journal_entry.account) }}">{{ journal_entry.account }}</a>{% endif %}
+                    {% if journal_entry.meta.type == 'open' %}Open <a href="{{ url_for('account_with_journal', name=journal_entry.account) }}">{{ journal_entry.account }}</a>{% endif %}
                     {% if journal_entry.meta.type == 'note' %}Note: {{ journal_entry.comment }}{% endif %}
                     {% if journal_entry.meta.type == 'pad' %}Pad{% endif %}
                     {% if journal_entry.meta.type == 'padding' %}{{ journal_entry.narration }}{% endif %}
-                    {% if journal_entry.meta.type == 'document' %}Document for <a href="{{ url_for('account', name=journal_entry.account) }}">{{ journal_entry.account }}</a>: <a href="#TODO">{{ journal_entry.filename }}</a>{% endif %}
-                    {% if journal_entry.meta.type == 'balance' %}Balance <a href="{{ url_for('account', name=journal_entry.account) }}">{{ journal_entry.account }}</a> has {{ journal_entry.amount }} {{ journal_entry.amount_currency }}{% endif %}
+                    {% if journal_entry.meta.type == 'document' %}Document for <a href="{{ url_for('account_with_journal', name=journal_entry.account) }}">{{ journal_entry.account }}</a>: <a href="#TODO">{{ journal_entry.filename }}</a>{% endif %}
+                    {% if journal_entry.meta.type == 'balance' %}Balance <a href="{{ url_for('account_with_journal', name=journal_entry.account) }}">{{ journal_entry.account }}</a> has {{ journal_entry.amount }} {{ journal_entry.amount_currency }}{% endif %}
                     {% if journal_entry.meta.type == 'transaction' %}<strong>{{ journal_entry.payee or '' }}</strong>{% if journal_entry.payee and journal_entry.narration %} | {% endif %}{{ journal_entry.narration or '' }}{% endif %}
 
                 </td>
@@ -63,7 +63,7 @@
                 <tr class="posting leg leg-{{ journal_entry.meta.type }} journal-entry-{{ journal_entry.hash }}">
                     <td class="datecell"></td>
                     <td class="flag"></td>
-                    <td class="description"><a href="{{ url_for('account', name=leg.account) }}">{{ leg.account or '' }}</a></td>
+                    <td class="description"><a href="{{ url_for('account_with_journal', name=leg.account) }}">{{ leg.account or '' }}</a></td>
                     <td class="position num">{{ leg.position|format_currency or '' }} {{ leg.position_currency or '' }}</td>
                     <td class="price num">{{ leg.price|format_currency or '' }} {{ leg.price_currency or '' }}</td>
                     <td class="cost num">{{ leg.cost|format_currency or '' }} {{ leg.cost_currency or '' }}</td>

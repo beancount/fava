@@ -497,8 +497,8 @@ class BeancountReportAPI(object):
             'totals': monthly_totals
         }
 
-    def trial_balance(self, timespan=None, components=None, tags=None):
-        return self._table_tree(self.real_accounts)
+    def trial_balance(self):
+        return self._table_tree(self.real_accounts)[1:]
 
     def errors(self):
         errors = []
@@ -513,11 +513,16 @@ class BeancountReportAPI(object):
 
         return errors
 
-    def journal(self, account_name=None, timespan=None, tags=None):
-        postings = realization.get_postings(self.real_accounts)
+    def journal(self, account_name=None):
+        if account_name:
+            real_account = realization.get(self.real_accounts, account_name)
+        else:
+            real_account = self.real_accounts
+
+        postings = realization.get_postings(real_account)
         return self._journal_for_postings(postings)
 
-    def documents(self, account_name=None, timespan=None, tags=None):
+    def documents(self, account_name=None):
         postings = realization.get_postings(self.real_accounts)
         return self._journal_for_postings(postings, Document)
 
@@ -622,7 +627,7 @@ class BeancountReportAPI(object):
     def source(self):
         return self._source
 
-    def account(self, account_name=None, timespan=None, tags=None):
+    def account(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)
         postings = realization.get_postings(real_account)
         monthly_totals = self._monthly_totals(real_account.account, self.entries)
@@ -632,6 +637,10 @@ class BeancountReportAPI(object):
             'journal': self._journal_for_postings(postings),
             'monthly_totals': monthly_totals
         }
+
+    def monthly_totals(self, account_name):
+        real_account = realization.get(self.real_accounts, account_name)
+        return self._monthly_totals(real_account.account, self.entries)
 
     def options(self):
         return self.options_map
