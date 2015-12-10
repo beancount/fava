@@ -323,6 +323,18 @@ pre.debug {
   padding: 20px;
 }
 
+.headerline h3 {
+  display: inline-block;
+  margin-right: 15px;
+}
+.headerline h3 a {
+  color: #aaa;
+}
+.headerline h3 a:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
 table {
   margin-top: 20px;
   margin-bottom: 20px;

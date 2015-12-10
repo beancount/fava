@@ -36,7 +36,9 @@
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
-    <h3>Journal</h3>
+    <div class="headerline">
+        <h3>Journal</h3> <h3><a href="{{ url_for('monthly_balances', account=account.name) }}">Monthly balances</a></h3>
+    </div>
     {% with journal=account.journal, show_tablefilter=True %}
         {% include "_journal_table.html" %}
     {% endwith %}

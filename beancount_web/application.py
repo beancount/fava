@@ -76,7 +76,7 @@ def monthly_balances(account=None):
             'label': '{}'.format(month_end.strftime("%b '%y")),
             'month_begin': month_begin,
             'month_end': month_end,
-            'balances': app.api.balances(app.api.options()['name_expenses'], begin_date=month_begin, end_date=month_end)
+            'balances': app.api.balances(account, begin_date=month_begin, end_date=month_end)
         })
 
     return render_template('monthly_balances.html', account=account, balances=monthly_balances, treetables=monthly_treetables)

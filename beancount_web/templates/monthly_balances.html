@@ -4,8 +4,7 @@
 {% block title %}Monthly Balances for {{ account }}{% endblock %}
 
 {% block content %}
-    <h1>Monthly Balances for <pre>{{ account }}</pre></h1>
-    {# TODO make this generic enough to work with any account, eg. month-by-month view for each account #}
+    <h1>{{ account }} - Monthly Balances</h1>
 
     {% include "charts/_chart_skeleton.html" %}
 

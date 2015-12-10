@@ -117,8 +117,12 @@ class BeancountReportAPI(object):
                 }, ...
             ]
         """
-        lines = []
 
+        # FIXME this does not seem correct
+        if isinstance(root_accounts, None.__class__):
+            return []
+
+        lines = []
         for real_account in realization.iter_children(root_accounts):
 
             line = {
