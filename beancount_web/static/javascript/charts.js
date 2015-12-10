@@ -55,8 +55,6 @@ $(document).ready(function() {
 
                 break;
             case 'treemap': {
-                // FIXME The treemap does not work for accounts with a very big balance
-
                 var colors = ['#990000', '#113861', '#777', '#1B9900', '#FF8800', '#59922b', '#0544d3', '#6b0392', '#f05b4f', '#dda458', '#eacf7d', '#86797d', '#b2c326', '#6188e2', '#a748ca'].reverse();
                 var colorsMap = {};
 

@@ -281,9 +281,9 @@ class BeancountReportAPI(object):
         """
         date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
 
-        def get_next_month(datee):
-            month = (datee.month % 12) + 1
-            year = datee.year + (datee.month + 1 > 12)
+        def get_next_month(date_):
+            month = (date_.month % 12) + 1
+            year = date_.year + (date_.month + 1 > 12)
             return date(year, month, 1)
 
         date_first = date(date_first.year, date_first.month, 1)
