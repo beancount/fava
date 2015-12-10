@@ -361,11 +361,18 @@ table {
     }
 }
 
-h1 pre {
-    overflow-x: inherit;
-    display: inline-block;
-}
+h1 {
+    a:link, a:visited {
+        color: #333;
 
+        &:hover { text-decoration: underline; }
+    }
+
+    pre {
+        overflow-x: inherit;
+        display: inline-block;
+    }
+}
 dl {
     margin-top: 20px;
     font-size: 13px;

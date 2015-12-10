@@ -1,0 +1,12 @@
+<h1>
+    {% set levels = account_name.split(':')|length %}
+    {% for level in range(0, levels) -%}
+        {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] -%}
+        {% set subaccount_part = account_name.split(':')[level] -%}
+
+        {% if loop.last -%}
+            {{ subaccount_part }}
+        {% else -%}
+            <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>{% endif -%}
+    {% endfor -%}
+</h1>

@@ -4,7 +4,7 @@
 {% block title %}Account {{ account_name }}{% endblock %}
 
 {% block content %}
-    <h1>{{ account_name }}</h1>
+    {% include "_account_name_header.html" %}
 
     {% if journal %}
 
