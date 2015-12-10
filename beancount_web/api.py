@@ -42,15 +42,19 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
-        self.reload()
+        self.load_file()
 
-    def reload(self, year=None, tag=None):
+    def load_file(self):
         with open(self.beancount_file_path, encoding='utf8') as f:
             self._source = f.read()
 
         self.entries, self._errors, self.options_map = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
 
+        self.account_types = options.get_account_types(self.options_map)
+        self.real_accounts = realization.realize(self.entries, self.account_types)
+
+    def filter(self, year=None, tag=None):
         if year:
             yv = YearView(self.all_entries, self.options_map, str(year), year)
             self.entries = yv.entries
@@ -59,8 +63,6 @@ class BeancountReportAPI(object):
             tv = TagView(self.all_entries, self.options_map, tag, set([tag]))
             self.entries = tv.entries
 
-        self.account_types = options.get_account_types(self.options_map)
-        # self.allview = AllView(self.entries, self.options_map, 'TEST')
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
     def _account_components(self, entries):
