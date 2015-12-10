@@ -557,7 +557,11 @@ span {
 // Charts
 @import "chartist";
 
-.treemap-label { text-align: center !important; }
+.treemap-node .treemap-label a {
+    color: white;
+
+    &:hover { text-decoration: underline; }
+}
 
 #treetable-popover {
     position: absolute;

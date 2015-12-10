@@ -66,9 +66,6 @@ $(document).ready(function() {
                         if (!(parentName in colorsMap)) { colorsMap[parentName] = colors.pop(); }
                         return colorsMap[parentName];
                     },
-                    color: function ($box, node) {
-                        return 'white';
-                    },
                     smallestFontSize: 6,
                     startingFontSize: 15,
                     centerLabelVertically: true,

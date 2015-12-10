@@ -1493,6 +1493,7 @@ span.pnsep {
 .charts .chart-labels {
   color: rgba(0, 0, 0, 0.2);
   font-size: 11px;
+  line-height: 14px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 20px;
@@ -1602,8 +1603,11 @@ span.pnsep {
   border-color: #a748ca;
 }
 
-.treemap-label {
-  text-align: center !important;
+.treemap-node .treemap-label a {
+  color: white;
+}
+.treemap-node .treemap-label a:hover {
+  text-decoration: underline;
 }
 
 #treetable-popover {
