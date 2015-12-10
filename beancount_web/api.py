@@ -300,13 +300,9 @@ class BeancountReportAPI(object):
 
         return month_tuples
 
-    # TODO rendundant
-    def _get_monthly_ie_totals(self, entries):
-        """
-        Renders TODO
-        """
 
-        month_tuples = self._month_tuples(entries)
+    def monthly_income_expenses_totals(self):
+        month_tuples = self._month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
@@ -366,21 +362,6 @@ class BeancountReportAPI(object):
                 })
 
         return monthly_totals
-
-
-    def balance_sheet(self, timespan=None, components=None, tags=None):
-        return {
-            'assets':             self.balances(self.options_map['name_assets']),
-            'liabilities':        self.balances(self.options_map['name_liabilities']),
-            'equity':             self.balances(self.options_map['name_equity']),
-        }
-
-    def income_statement(self, timespan=None, components=None, tags=None):
-        return {
-            'income':             self.balances(self.options_map['name_income']),
-            'expenses':           self.balances(self.options_map['name_expenses']),
-            'monthly_totals':     self._get_monthly_ie_totals(self.entries)
-        }
 
     def _real_accounts(self, account_name, begin_date=None, end_date=None):
         """

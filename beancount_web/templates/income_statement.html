@@ -7,29 +7,37 @@
     <h1>Income Statement</h1>
 
     {% include "charts/_chart_skeleton.html" %}
-    {% with monthly_totals=income_statement.monthly_totals  %}
+    {# {% with .monthly_totals  %} #}
         {% include "charts/_chart_monthly_ie_changes.html" %}
+    {# {% endwith %} #}
+
+    {% with label="Monthly income", monthly_totals=income_monthly_totals %}
+        {% include "charts/_chart_monthly_totals.html" %}
     {% endwith %}
 
-    {% with label="Income", rows=income_statement.income, modifier=-1 %}
+    {% with label="Monthly expenses", monthly_totals=expenses_monthly_totals %}
+        {% include "charts/_chart_monthly_totals.html" %}
+    {% endwith %}
+
+    {% with label="Income", rows=income, modifier=-1 %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
-    {% with label="Expenses", rows=income_statement.expenses %}
+    {% with label="Expenses", rows=expenses %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
     <div class="tables">
         <div class="halfleft">
             <div id="income">
-                {% with table_title="Income", currencies=income_statement.currencies, table_data=income_statement.income, totals=True %}
+                {% with table_title="Income", table_data=income, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>
         </div>
         <div class="halfright">
             <div id="expenses">
-                {% with table_title="Expenses", currencies=income_statement.currencies, table_data=income_statement.expenses, totals=True %}
+                {% with table_title="Expenses", table_data=expenses, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>

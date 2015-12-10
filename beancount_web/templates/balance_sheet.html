@@ -8,32 +8,32 @@
 
     {% include "charts/_chart_skeleton.html" %}
     {% include "charts/_chart_monthly_net_worth.html" %}
-    {% with label="Assets", rows=balance_sheet.assets %}
+    {% with label="Assets", rows=assets %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
-    {% with label="Liabilities", rows=balance_sheet.liabilities %}
+    {% with label="Liabilities", rows=liabilities %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
-    {% with label="Equity", rows=balance_sheet.equity, modifier=-1 %}
+    {% with label="Equity", rows=equity, modifier=-1 %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
     <div class="tables">
         <div class="halfleft">
             <div id="assets">
-                {% with table_title="Assets", currencies=balance_sheet.currencies, table_data=balance_sheet.assets, totals=True %}
+                {% with table_title="Assets", table_data=assets, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>
         </div>
         <div class="halfright">
             <div id="liabilities">
-                {% with table_title="Liabilities", currencies=balance_sheet.currencies, table_data=balance_sheet.liabilities, totals=True %}
+                {% with table_title="Liabilities", table_data=liabilities, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>
             <div id="equity">
-                {% with table_title="Equity", currencies=balance_sheet.currencies, table_data=balance_sheet.equity, totals=True %}
+                {% with table_title="Equity", table_data=equity, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>

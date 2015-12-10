@@ -36,13 +36,13 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
                     'change': journal_entry['change'],
                 })
 
-        treemap = {
+        treemap_data = {
             'label': 'Subaccounts',
             'balances': app.api.balances(account_name),
             'modifier': 1  # TODO find out via API?
         }
 
-        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data, monthly_totals=monthly_totals, treemap=treemap)
+        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data, monthly_totals=monthly_totals, treemap_data=treemap_data)
 
     if with_monthly_balances:
         monthly_balances = app.api.monthly_balances(account_name)
@@ -78,14 +78,25 @@ def index():
 
 @app.route('/balance_sheet/')
 def balance_sheet():
-    balance_sheet = app.api.balance_sheet()
+    assets = app.api.balances(app.api.options()['name_assets'])
+    liabilities = app.api.balances(app.api.options()['name_liabilities'])
+    equity = app.api.balances(app.api.options()['name_equity'])
     net_worth = app.api.net_worth()
-    return render_template('balance_sheet.html', balance_sheet=balance_sheet, net_worth=net_worth)
+    return render_template('balance_sheet.html', assets=assets, liabilities=liabilities, equity=equity, net_worth=net_worth)
 
 @app.route('/income_statement/')
 def income_statement():
-    income_statement = app.api.income_statement()
-    return render_template('income_statement.html', income_statement=income_statement)
+    options = app.api.options()
+
+    income = app.api.balances(options['name_income'])
+    expenses = app.api.balances(options['name_expenses'])
+
+    income_monthly_totals = app.api.monthly_totals(options['name_income'])
+    expenses_monthly_totals = app.api.monthly_totals(options['name_expenses'])
+    # TODO calls api.monthly_totals twice for income and expenses
+    monthly_totals = app.api.monthly_income_expenses_totals()
+
+    return render_template('income_statement.html', income=income, expenses=expenses, income_monthly_totals=income_monthly_totals, expenses_monthly_totals=expenses_monthly_totals, monthly_totals=monthly_totals)
 
 @app.route('/trial_balance/')
 def trial_balance():
