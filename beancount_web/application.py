@@ -218,7 +218,7 @@ def perform_global_filters():
     tag = request.args.get('filter_tag', None)
 
     if year != app.filter_year or tag != app.filter_tag:
-        app.api.reload(year=year, tag=tag)
+        app.api.filter(year=year, tag=tag)
 
     if year != app.filter_year:
         app.filter_year = year

@@ -9,10 +9,6 @@ from beancount_web.api import BeancountReportAPI
 from beancount_web.application import app
 
 
-def reload_beancount_file():
-    app.api.reload()
-
-
 def run(argv):
     parser = argparse.ArgumentParser(description=__doc__,
                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -52,10 +48,10 @@ def run(argv):
         server = Server(app.wsgi_app)
 
         # auto-reload the main beancount-file and all it's includes
-        server.watch(app.beancount_file, reload_beancount_file)
+        server.watch(app.beancount_file, app.api.load_file)
         include_path = os.path.dirname(app.beancount_file)
         for filename in app.api.options()['include']:
-            server.watch(os.path.join(include_path, filename), reload_beancount_file)
+            server.watch(os.path.join(include_path, filename), app.api.load_file)
 
         server.serve(port=args.port, host=args.host, debug=args.debug)
 
