@@ -14,11 +14,9 @@
         {% endwith %}
     {% endfor %}
 
-
-
     <div class="tables">
         <div id="trial_balance">
-            {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance.positions, totals=None %}
+            {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance, totals=None %}
                 {% include "_tree_table.html" %}
             {% endwith %}
         </div>

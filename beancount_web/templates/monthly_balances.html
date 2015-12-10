@@ -1,15 +1,15 @@
 {% extends "_layout.html" %}
 {% set active_page = 'monthly_expenses' %}
 
-{% block title %}Monthly Expenses{% endblock %}
+{% block title %}Monthly Balances for {{ account }}{% endblock %}
 
 {% block content %}
-    <h1>Monthly Expenses</h1>
+    <h1>Monthly Balances for <pre>{{ account }}</pre></h1>
     {# TODO make this generic enough to work with any account, eg. month-by-month view for each account #}
 
     {% include "charts/_chart_skeleton.html" %}
 
-    {% for month in monthly_ie_treetable %}
+    {% for month in treetables %}
         {% with label=month.label, rows=month.balances, modifier=month.modifier %}
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}
@@ -19,17 +19,17 @@
         <thead>
             <tr>
                 <th>Account</th>
-                {% for end_date in monthly_ie.months|reverse %}
+                {% for end_date in balances.months|reverse %}
                     <th>{{ end_date.strftime("%b '%y") }}</th>
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
-        {% for row in monthly_ie.vals %}
+        {% for row in balances.balances %}
             <tr class="row-level-{{ account_level(row.account) }}">
                 <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
 
-                {% for end_date in monthly_ie.months|reverse %}
+                {% for end_date in balances.months|reverse %}
                     <td class="num">
                         {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances|length > 0 -%}
                             <span class="balance">
@@ -57,9 +57,9 @@
         <tfoot>
             <tr>
                 <td>&nbsp;</td>
-                {% for end_date in monthly_ie.months|reverse %}
+                {% for end_date in balances.months|reverse %}
                     <td class="num">
-                        {% for currency, number in monthly_ie.totals[end_date.isoformat()].items() %}
+                        {% for currency, number in balances.totals[end_date.isoformat()].items() %}
                             {% if number %}
                                     {{ number|format_currency }} {{ currency }}<br>
                             {% endif %}

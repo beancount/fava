@@ -1,13 +1,13 @@
 {% set navigation_bar = [
     ("", [
-        ('/balance_sheet/',       'balance_sheet',          'Balance Sheet'),
-        ('/journal/',             'journal',                'General Journal'),
-        ('/income_statement/',    'income_stmt',            'Income Statement'),
-        ('/monthly_expenses/',    'monthly_expenses',       'Monthly Expenses'),
-        ('/documents/',           'documents',              'Documents'),
-        ('/trial_balance/',       'trial_balance',          'Trial Balance'),
-        ('/holdings/',            'holdings',               'Equity/Holdings'),
-        ('/net_worth/',           'net_worth',              'Net Worth'),
+        ('/balance_sheet/',       'balance_sheet',        'Balance Sheet'),
+        ('/journal/',             'journal',              'General Journal'),
+        ('/income_statement/',    'income_stmt',          'Income Statement'),
+        ('/monthly_balances/' + options["name_expenses"], 'monthly_expenses', 'Monthly Expenses'),
+        ('/documents/',           'documents',            'Documents'),
+        ('/trial_balance/',       'trial_balance',        'Trial Balance'),
+        ('/holdings/',            'holdings',             'Equity/Holdings'),
+        ('/net_worth/',           'net_worth',            'Net Worth'),
     ]),
     ("Debug", [
         ('/source/',             'source',         'Source'),

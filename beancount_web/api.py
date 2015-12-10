@@ -44,10 +44,64 @@ class BeancountReportAPI(object):
         # self.allview = AllView(self.entries, self.options_map, 'TEST')
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
+    def _account_components(self, entries):
+        # TODO rename
+        """Gather all the account components available in the given directives.
+
+        Args:
+          entries: A list of directive instances.
+        Returns:
+            [
+                {
+                    'name': 'TV',
+                    'full_name': 'Expenses:Tech:TV',
+                    'depth': 3
+                }, ...
+            ]
+        """
+        accounts = realization.dump(self.real_accounts)  # self.real_accounts  # getters.get_accounts(entries)
+        components = []
+        for real_account in accounts:
+            line_data = real_account[2]
+            account_name = line_data.account
+
+            components.append({
+                'name': account_name.split(':')[-1],
+                'full_name': account_name,
+                'depth': len(account_name.split(':'))
+            })
+
+        return components
+
     def _account_level(self, account_name):
+        """
+        The sublevel at which an account is. Eg. "Exenses:IT" is level 2, "Expenses:IT:Internet" is level 3
+
+        Returns:
+            The sublevel at which an account is.
+        """
         return account_name.count(":")+1
 
     def _table_tree(self, root_accounts):
+        """
+        Renders root_accounts and it's children as a flat list to be used
+        in rendering tables.
+
+        Returns:
+            [
+                {
+                    'account': 'Expenses:Vacation',
+                    'balances_children': {
+                        'USD': 123.45, ...
+                    },
+                    'balances': {
+                        'USD': 123.45, ...
+                    },
+                    'is_leaf': True,
+                    'postings_count': 3
+                }, ...
+            ]
+        """
         lines = []
 
         for real_account in realization.dump(root_accounts):
@@ -75,6 +129,16 @@ class BeancountReportAPI(object):
         return lines
 
     def _table_totals(self, root_accounts):
+        """
+            Renders the total balances for root_acccounts and their children.
+
+            Returns:
+                {
+                    'USD': 123.45,
+                    ...
+                }
+        """
+
         totals = {}
 
         # FIXME This sometimes happens when called from self.account(...)
@@ -92,17 +156,26 @@ class BeancountReportAPI(object):
         return totals
 
     def _inventory_to_json(self, inventory):
-        return [{
-                    'number': position.number,
-                    'currency': position.lot.currency
-                } for position in sorted(inventory)]
+        """
+        Renders an Inventory to an array.
 
-    def _process_postings(self, postings):
-        jrnl = []
+        Returns:
+            [
+                {
+                    'number': 123.45,
+                    'currency': 'USD'
+                }, ...
+            ]
+        """
+        return { position.lot.currency: position.number for position in sorted(inventory) }
 
-        i = 1
+    def _journal_for_postings(self, postings, include_types=None):
+        journal = []
+
         for posting, leg_postings, change, entry_balance in realization.iterate_with_balance(postings):
-            i += 1
+
+            if include_types and not isinstance(posting, include_types):
+                continue
 
             if  isinstance(posting, Transaction) or \
                 isinstance(posting, Note) or \
@@ -149,17 +222,13 @@ class BeancountReportAPI(object):
                     entry['source_account'] =      posting.source_account
 
                 if isinstance(posting, Balance):
+                    # TODO failed balances
                     entry['meta']['type'] = 'balance'
                     entry['account'] =       posting.account
-                    entry['change'] =        [
-                                                {
-                                                    'number':     posting.amount.number,
-                                                    'currency':   posting.amount.currency
-                                                }
-                                             ]
-                    entry['balance'] =        self._inventory_to_json(entry_balance)
-                    entry['tolerance'] =     posting.tolerance  # TODO währung? TODO im html-template
-                    entry['diff_amount'] =     posting.diff_amount  # TODO währung? TODO im html-template
+                    entry['change'] =        { posting.amount.currency: posting.amount.number }
+                    entry['balance'] =       { posting.amount.currency: posting.amount.number }
+                    entry['tolerance'] =     posting.tolerance  # TODO currency? TODO in HTML-template
+                    entry['diff_amount'] =   posting.diff_amount  # TODO currency? TODO in HTML-template
 
                 if isinstance(posting, Transaction):
                     if posting.flag == 'P':
@@ -167,14 +236,14 @@ class BeancountReportAPI(object):
                     else:
                         entry['meta']['type'] = 'transaction'
 
-                    entry['flag'] =       posting.flag
-                    entry['payee'] =      posting.payee
-                    entry['narration'] =      posting.narration
-                    entry['tags'] =      posting.tags
-                    entry['links'] =      posting.links
-                    entry['change']         = self._inventory_to_json(change)
-                    entry['balance']         = self._inventory_to_json(entry_balance)
-                    entry['legs'] = []
+                    entry['flag'] =         posting.flag
+                    entry['payee'] =        posting.payee
+                    entry['narration'] =    posting.narration
+                    entry['tags'] =         posting.tags
+                    entry['links'] =        posting.links
+                    entry['change'] =       self._inventory_to_json(change)
+                    entry['balance'] =      self._inventory_to_json(entry_balance)
+                    entry['legs'] =         []
 
 
                     for posting_ in posting.postings:
@@ -182,10 +251,6 @@ class BeancountReportAPI(object):
                             'account': posting_.account,
                             'flag': posting_.flag,
                             'hash': entry['hash']
-                            # 'meta': {
-                            #     'filename': posting_.meta.filename,
-                            #     'lineno': posting_.meta.lineno
-                            # }
                         }
 
                         if posting_.position:
@@ -199,11 +264,21 @@ class BeancountReportAPI(object):
                         entry['legs'].append(leg)
 
 
-                jrnl.append(entry)
+                journal.append(entry)
 
-        return jrnl
+        return journal
 
-    def _get_month_tuples(self, entries):
+    def _month_tuples(self, entries):
+        """
+        Calculates tuples of (month_begin, month_end) for the period in
+        which entries contains Transactions.
+
+        Returns:
+            [
+                (begin_date, end_date),
+                ...
+            ]
+        """
         date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
 
         def get_next_month(datee):
@@ -221,8 +296,13 @@ class BeancountReportAPI(object):
 
         return month_tuples
 
+    # TODO rendundant
     def _get_monthly_ie_totals(self, entries):
-        month_tuples = self._get_month_tuples(entries)
+        """
+        Renders TODO
+        """
+
+        month_tuples = self._month_tuples(entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
@@ -248,14 +328,26 @@ class BeancountReportAPI(object):
 
         return monthly_totals
 
-    def _get_monthly_totals(self, account_name, entries):
-        month_tuples = self._get_month_tuples(self.entries)
+    def _monthly_totals(self, account_name, entries):
+        """
+        Renders totals for the active months in the entries
+
+        Returns:
+          [
+              {
+                  'begin_date': Date(...),    # TODO rename to date_begin
+                  'end_date':   Date(...),    # TODO rename to date_end
+                  'totals':     {
+                                    'USD': 123.45,
+                                }
+              }, ...
+          ]
+        """
+
+        month_tuples = self._month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
-                                                          self.options_map)
-
-            totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), account_name))
+            totals = self.balances_totals(account_name, begin_date=begin_date, end_date=end_date)
 
             # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
             sum_ = 0
@@ -272,56 +364,99 @@ class BeancountReportAPI(object):
         return monthly_totals
 
 
-
     def balance_sheet(self, timespan=None, components=None, tags=None):
         return {
-            'assets':             self._table_tree(realization.get(self.real_accounts, self.options_map['name_assets'])),
-            'assets_totals':      self._table_totals(realization.get(self.real_accounts, self.options_map['name_assets'])),
-            'liabilities':        self._table_tree(realization.get(self.real_accounts, self.options_map['name_liabilities'])),
-            'liabilities_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_liabilities'])),
-            'equity':             self._table_tree(realization.get(self.real_accounts, self.options_map['name_equity'])),
-            'equity_totals':      self._table_totals(realization.get(self.real_accounts, self.options_map['name_equity'])),
+            'assets':             self.balances(self.options_map['name_assets']),
+            'assets_totals':      self.balances_totals(self.options_map['name_assets']),
+            'liabilities':        self.balances(self.options_map['name_liabilities']),
+            'liabilities_totals': self.balances_totals(self.options_map['name_liabilities']),
+            'equity':             self.balances(self.options_map['name_equity']),
+            'equity_totals':      self.balances_totals(self.options_map['name_equity']),
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
     def income_statement(self, timespan=None, components=None, tags=None):
         return {
-            'income':             self._table_tree(realization.get(self.real_accounts, self.options_map['name_income'])),
-            'income_totals':      self._table_totals(realization.get(self.real_accounts, self.options_map['name_income'])),
-            'expenses':        self._table_tree(realization.get(self.real_accounts, self.options_map['name_expenses'])),
-            'expenses_totals': self._table_totals(realization.get(self.real_accounts, self.options_map['name_expenses'])),
+            'income':             self.balances(self.options_map['name_income']),
+            'income_totals':      self.balances_totals(self.options_map['name_income']),
+            'expenses':           self.balances(self.options_map['name_expenses']),
+            'expenses_totals':    self.balances_totals(self.options_map['name_expenses']),
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
-    def balances(self, account, begin_date=None, end_date=None):
-        date_first, date_last = getters.get_min_max_dates(self.entries, (Transaction))
-        if begin_date:
-            date_first = begin_date
-        if end_date:
-            date_last = end_date
+    def _real_accounts(self, account_name, begin_date=None, end_date=None):
+        """
+        Returns the realization.RealAccount instances for account_name, and their entries
+        clamped by the optional begin_date and end_date.
 
-        entries, index = summarize.clamp_opt(self.entries, date_first, date_last + timedelta(days=1),
+        Returns:
+            realization.RealAccount instances
+        """
+        begin_date_, end_date_ = getters.get_min_max_dates(self.entries, (Transaction))
+        if begin_date:
+            begin_date_ = begin_date
+        if end_date:
+            end_date_ = end_date
+
+        entries, index = summarize.clamp_opt(self.entries, begin_date_, end_date_ + timedelta(days=1),
                                                      self.options_map)
 
-        root_accounts = realization.get(realization.realize(entries, self.account_types), account)
+        real_accounts = realization.get(realization.realize(entries, self.account_types), account_name)
 
-        return self._table_tree(root_accounts)
+        return real_accounts
 
-    def monthly_ie(self):
+
+    def balances(self, account_name, begin_date=None, end_date=None):
+        """
+        Renders account_name and it's children as a flat list to be used
+        in rendering tables.
+
+        Returns:
+          [
+              {
+                  'account': 'Expenses:Vacation',
+                  'balances_children': {
+                      'USD': 123.45, ...
+                  },
+                  'balances': {
+                      'USD': 123.45, ...
+                  },
+                  'is_leaf': True,
+                  'postings_count': 3
+              }, ...
+          ]
+        """
+        real_accounts = self._real_accounts(account_name, begin_date, end_date)
+
+        return self._table_tree(real_accounts)
+
+    def balances_totals(self, account_name, begin_date=None, end_date=None):
+        """
+        Renders account_name and it's children as a flat list to be used
+        in rendering tables.
+
+        Returns:
+            {
+               'USD': 123.45,
+            }
+        """
+        real_accounts = self._real_accounts(account_name, begin_date, end_date)
+
+        return self._table_totals(real_accounts)
+
+    def monthly_balances(self, account_name):
         # TODO include balances_children
         # the account tree at time now
-        account_names = [item['account'] for item in self.income_statement()['expenses']]
 
-        month_tuples = self._get_month_tuples(self.entries)
+        account_names = [account['full_name'] for account in self._account_components(self.entries) if account['full_name'].startswith(account_name)]
+
+        month_tuples = self._month_tuples(self.entries)
         monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options_map['commodities']} for begin_date, end_date in month_tuples }
 
         arr = { account_name: {} for account_name in account_names }
 
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
-                                                         self.options_map)
-
-            root_accounts = realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses'])
+            root_accounts = self._real_accounts(account_name, begin_date=begin_date, end_date=end_date)
 
             _table_tree = self._table_tree(root_accounts)
             for line in _table_tree:
@@ -334,20 +469,18 @@ class BeancountReportAPI(object):
                     for currency, number in line['balances'].items():
                         monthly_totals[end_date.isoformat()][currency] += number
 
-        vals = sorted([
+        balances = sorted([
                         { 'account': account, 'totals': totals } for account, totals in arr.items()
                       ], key=lambda x: x['account'])
 
         return {
             'months': [end_date for begin_date, end_date in month_tuples],
-            'vals': vals,
+            'balances': balances,
             'totals': monthly_totals
         }
 
     def trial_balance(self, timespan=None, components=None, tags=None):
-        return {
-            'positions':  self._table_tree(self.real_accounts),
-        }
+        return self._table_tree(self.real_accounts)
 
     def errors(self):
         errors = []
@@ -363,32 +496,12 @@ class BeancountReportAPI(object):
         return errors
 
     def journal(self, account_name=None, timespan=None, tags=None):
-        journal = []
-
         postings = realization.get_postings(self.real_accounts)
-        journal = self._process_postings(postings)
-
-        return journal
+        return self._journal_for_postings(postings)
 
     def documents(self, account_name=None, timespan=None, tags=None):
-        documents = []
-
         postings = realization.get_postings(self.real_accounts)
-
-        for posting in postings:
-            if isinstance(posting, Document):
-                documents.append({
-                    'meta': {
-                        'type': 'document',
-                        'filename': posting.meta['filename'],
-                        'lineno': posting.meta['lineno']
-                    },
-                    'date': posting.date,
-                    'account': posting.account,
-                    'filename': posting.filename
-                })
-
-        return documents
+        return self._journal_for_postings(postings, Document)
 
     def title(self):
         return self.options_map['title']
@@ -397,7 +510,7 @@ class BeancountReportAPI(object):
         return holdings_reports.report_holdings(None, False, self.entries, self.options_map)
 
     def _net_worth_in_periods(self):
-        month_tuples = self._get_month_tuples(self.entries)
+        month_tuples = self._month_tuples(self.entries)
         monthly_totals = []
         date_start = month_tuples[0][0]
         networthtable = holdings_reports.NetWorthReport(None, None)
@@ -421,8 +534,8 @@ class BeancountReportAPI(object):
         return monthly_totals
 
     def net_worth(self):
-        networthtable = holdings_reports.NetWorthReport(None, None)
-        networth_as_table = networthtable.generate_table(self.entries, self.errors, self.options_map)
+        networth_report = holdings_reports.NetWorthReport(None, None)
+        networth_as_table = networth_report.generate_table(self.entries, self.errors, self.options_map)
 
         current_net_worth = dict(networth_as_table[2])
         for key, value in current_net_worth.items():
@@ -458,10 +571,24 @@ class BeancountReportAPI(object):
                 'line': lineno
             })
 
+        # TODO
+        #        if len(matching_entries) == 0:
+        #            print("ERROR: Could not find matching entry for '{}'".format(ehash),
+        #                  file=oss)
+        #
+        #        elif len(matching_entries) > 1:
+        #            print("ERROR: Ambiguous entries for '{}'".format(ehash),
+        #                  file=oss)
+        #            print(file=oss)
+        #            dcontext = app.options['dcontext']
+        #            printer.print_entries(matching_entries, dcontext, file=oss)
+        #
+        #        else:
+
         return {
             'hash': ehash,
             'contexts': contexts,
-            'journal': self._process_postings(matching_entries)
+            'journal': self._journal_for_postings(matching_entries)
         }
 
     def active_years(self):
@@ -470,61 +597,21 @@ class BeancountReportAPI(object):
     def active_tags(self):
         return list(getters.get_all_tags(self.all_entries))
 
-    def _my_get_account_components(self, entries):
-        """Gather all the account components available in the given directives.
-
-        Args:
-          entries: A list of directive instances.
-        Returns:
-          A set of strings, the unique account components, including the root
-          account names.
-        """
-        accounts = realization.dump(self.real_accounts)  # self.real_accounts  # getters.get_accounts(entries)
-        components = []
-        for real_account in accounts:
-            line_data = real_account[2]
-            account_name = line_data.account
-
-            components.append({
-                'name': account_name.split(':')[-1],
-                'full_name': account_name,
-                'depth': len(account_name.split(':'))
-            })
-
-        return components
-
     def active_components(self):
-        return self._my_get_account_components(self.all_entries)
-# TODO
-#        if len(matching_entries) == 0:
-#            print("ERROR: Could not find matching entry for '{}'".format(ehash),
-#                  file=oss)
-#
-#        elif len(matching_entries) > 1:
-#            print("ERROR: Ambiguous entries for '{}'".format(ehash),
-#                  file=oss)
-#            print(file=oss)
-#            dcontext = app.options['dcontext']
-#            printer.print_entries(matching_entries, dcontext, file=oss)
-#
-#        else:
+        # TODO rename?
+        return self._account_components(self.all_entries)
 
     def source(self):
         return self._source
 
-    def account(self, name=None, timespan=None, tags=None):
-        journal = []
-
-        # real_account = realization.RealAccount(name) #get(self.real_accounts, name)
-        real_account = realization.get(self.real_accounts, name)
-        # raise ValueError
+    def account(self, account_name=None, timespan=None, tags=None):
+        real_account = realization.get(self.real_accounts, account_name)
         postings = realization.get_postings(real_account)
-        journal = self._process_postings(postings)
-        monthly_totals = self._get_monthly_totals(real_account.account, self.entries)
+        monthly_totals = self._monthly_totals(real_account.account, self.entries)
 
         return {
-            'name': name,
-            'journal': journal,
+            'name': account_name,
+            'journal': self._journal_for_postings(postings),
             'monthly_totals': monthly_totals
         }
 

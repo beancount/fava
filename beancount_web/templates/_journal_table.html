@@ -46,15 +46,15 @@
                 </td>
                 <td class="change num">
                     {% if journal_entry.change %}
-                        {% for change in journal_entry.change %}
-                            {{ change.number|format_currency }} {{ change.currency }}<br>
+                        {% for currency, number in journal_entry.change.items() %}
+                            {{ number|format_currency }} {{ currency }}<br>
                         {% endfor %}
                     {% endif %}
                 </td>
                 <td class="balance num">
                     {% if journal_entry.balance %}
-                        {% for balance in journal_entry.balance %}
-                            {{ balance.number|format_currency }} {{ balance.currency }}<br>
+                        {% for currency, number in journal_entry.balance.items() %}
+                            {{ number|format_currency }} {{ currency }}<br>
                         {% endfor %}
                     {% endif %}
                 </td>

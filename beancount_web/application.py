@@ -24,17 +24,16 @@ app = Flask(__name__)
 def account(name=None):
     # if not account:
     #     redirect to index
-    account = app.api.account(name=name)
+    account = app.api.account(account_name=name)
 
     # should this be done in the api?
     chart_data = []
     for journal_entry in account['journal']:
         if 'balance' in journal_entry.keys():
-            change = { x['currency']: x['number'] for x in journal_entry['change'] }
             chart_data.append({
                 'date': journal_entry['date'],
-                'balance': { x['currency']: x['number'] for x in journal_entry['balance'] if x['currency'] in change },
-                'change': change,
+                'balance': journal_entry['balance'],
+                'change': journal_entry['change'],
             })
 
     treemap = {
@@ -70,32 +69,24 @@ def income_statement():
     income_statement = app.api.income_statement()
     return render_template('income_statement.html', income_statement=income_statement)
 
-@app.route('/monthly_expenses/')
-def monthly_expenses():
-    monthly_ie = app.api.monthly_ie()
+# TODO currently only works for top-level accounts
+@app.route('/monthly_balances/<account>/')
+def monthly_balances(account=None):
+    monthly_balances = app.api.monthly_balances(account)
+    monthly_treetables = []
+    # Only show three latest months
+    number_of_months = len(monthly_balances['months']) if len(monthly_balances['months']) < 3 else 3
 
-    monthly_ie_treetable = []
-    number_of_months = len(monthly_ie['months']) if len(monthly_ie['months']) < 3 else 3
-
-    for month_end in monthly_ie['months'][::-1][:3]:
+    for month_end in monthly_balances['months'][::-1][:3]:
         month_begin = date(month_end.year, month_end.month, 1)
-        monthly_ie_treetable.append({
+        monthly_treetables.append({
             'label': '{}'.format(month_end.strftime("%b '%y")),
             'month_begin': month_begin,
             'month_end': month_end,
-            'balances': app.api.balances('Expenses', begin_date=month_begin, end_date=month_end)
+            'balances': app.api.balances(app.api.options()['name_expenses'], begin_date=month_begin, end_date=month_end)
         })
-        # monthly_ie_treetable.append({
-        #     'label': 'Income ({})'.format(month_end.strftime('%Y-%m')),
-        #     'month_begin': month_begin,
-        #     'month_end': month_end,
-        #     'balances': app.api.balances('Income', begin_date=month_begin, end_date=month_end),
-        #     'modifier': -1
-        # })
 
-    # monthly_ie_treetable = sorted(monthly_ie_treetable, key=lambda x: x['label'])
-
-    return render_template('monthly_expenses.html', monthly_ie=monthly_ie, monthly_ie_treetable=monthly_ie_treetable)
+    return render_template('monthly_balances.html', account=account, balances=monthly_balances, treetables=monthly_treetables)
 
 @app.route('/trial_balance/')
 def trial_balance():
