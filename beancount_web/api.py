@@ -85,19 +85,10 @@ class BeancountReportAPI(object):
             accounts.append({
                 'name': child_account.account.split(':')[-1],
                 'full_name': child_account.account,
-                'depth': len(child_account.account.split(':'))
+                'depth': child_account.count(':')+1,
             })
 
         return accounts[1:]
-
-    def _account_level(self, account_name):
-        """
-        The sublevel at which an account is. Eg. "Exenses:IT" is level 2, "Expenses:IT:Internet" is level 3
-
-        Returns:
-            The sublevel at which an account is.
-        """
-        return account_name.count(":")+1
 
     def _table_tree(self, root_accounts):
         """
@@ -210,6 +201,7 @@ class BeancountReportAPI(object):
 
                 entry = {
                     'meta': {
+                        'type': posting.__class__.__name__.lower(),
                         'filename': posting.meta['filename'],
                         'lineno': posting.meta['lineno']
                     },
@@ -218,32 +210,26 @@ class BeancountReportAPI(object):
                 }
 
                 if isinstance(posting, Open):
-                    entry['meta']['type'] = 'open'
                     entry['account'] =       posting.account
                     entry['currencies'] =    posting.currencies
                     entry['booking'] =       posting.booking # TODO im html-template
 
                 if isinstance(posting, Close):
-                    entry['meta']['type'] = 'close'
                     entry['account'] =       posting.account
 
                 if isinstance(posting, Note):
-                    entry['meta']['type'] = 'note'
                     entry['comment'] =       posting.comment
 
                 if isinstance(posting, Document):
-                    entry['meta']['type'] = 'document'
                     entry['account'] =       posting.account
                     entry['filename'] =      posting.filename
 
                 if isinstance(posting, Pad):
-                    entry['meta']['type'] = 'pad'
                     entry['account'] =       posting.account
                     entry['source_account'] =      posting.source_account
 
                 if isinstance(posting, Balance):
                     # TODO failed balances
-                    entry['meta']['type'] = 'balance'
                     entry['account'] =       posting.account
                     entry['change'] =        { posting.amount.currency: posting.amount.number }
                     entry['balance'] =       { posting.amount.currency: posting.amount.number }
@@ -253,8 +239,6 @@ class BeancountReportAPI(object):
                 if isinstance(posting, Transaction):
                     if posting.flag == 'P':
                         entry['meta']['type'] = 'padding'
-                    else:
-                        entry['meta']['type'] = 'transaction'
 
                     entry['flag'] =         posting.flag
                     entry['payee'] =        posting.payee
@@ -387,19 +371,14 @@ class BeancountReportAPI(object):
     def balance_sheet(self, timespan=None, components=None, tags=None):
         return {
             'assets':             self.balances(self.options_map['name_assets']),
-            'assets_totals':      self.balances_totals(self.options_map['name_assets']),
             'liabilities':        self.balances(self.options_map['name_liabilities']),
-            'liabilities_totals': self.balances_totals(self.options_map['name_liabilities']),
             'equity':             self.balances(self.options_map['name_equity']),
-            'equity_totals':      self.balances_totals(self.options_map['name_equity']),
         }
 
     def income_statement(self, timespan=None, components=None, tags=None):
         return {
             'income':             self.balances(self.options_map['name_income']),
-            'income_totals':      self.balances_totals(self.options_map['name_income']),
             'expenses':           self.balances(self.options_map['name_expenses']),
-            'expenses_totals':    self.balances_totals(self.options_map['name_expenses']),
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
