@@ -42,15 +42,19 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
-        self.reload()
+        self.load_file()
 
-    def reload(self, year=None, tag=None):
+    def load_file(self):
         with open(self.beancount_file_path, encoding='utf8') as f:
             self._source = f.read()
 
         self.entries, self._errors, self.options_map = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
 
+        self.account_types = options.get_account_types(self.options_map)
+        self.real_accounts = realization.realize(self.entries, self.account_types)
+
+    def filter(self, year=None, tag=None):
         if year:
             yv = YearView(self.all_entries, self.options_map, str(year), year)
             self.entries = yv.entries
@@ -59,11 +63,9 @@ class BeancountReportAPI(object):
             tv = TagView(self.all_entries, self.options_map, tag, set([tag]))
             self.entries = tv.entries
 
-        self.account_types = options.get_account_types(self.options_map)
-        # self.allview = AllView(self.entries, self.options_map, 'TEST')
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
-    def _account_components(self, entries):
+    def _account_components(self):
         # TODO rename
         """Gather all the account components available in the given directives.
 
@@ -83,19 +85,10 @@ class BeancountReportAPI(object):
             accounts.append({
                 'name': child_account.account.split(':')[-1],
                 'full_name': child_account.account,
-                'depth': len(child_account.account.split(':'))
+                'depth': child_account.count(':')+1,
             })
 
         return accounts[1:]
-
-    def _account_level(self, account_name):
-        """
-        The sublevel at which an account is. Eg. "Exenses:IT" is level 2, "Expenses:IT:Internet" is level 3
-
-        Returns:
-            The sublevel at which an account is.
-        """
-        return account_name.count(":")+1
 
     def _table_tree(self, root_accounts):
         """
@@ -208,6 +201,7 @@ class BeancountReportAPI(object):
 
                 entry = {
                     'meta': {
+                        'type': posting.__class__.__name__.lower(),
                         'filename': posting.meta['filename'],
                         'lineno': posting.meta['lineno']
                     },
@@ -216,32 +210,26 @@ class BeancountReportAPI(object):
                 }
 
                 if isinstance(posting, Open):
-                    entry['meta']['type'] = 'open'
                     entry['account'] =       posting.account
                     entry['currencies'] =    posting.currencies
                     entry['booking'] =       posting.booking # TODO im html-template
 
                 if isinstance(posting, Close):
-                    entry['meta']['type'] = 'close'
                     entry['account'] =       posting.account
 
                 if isinstance(posting, Note):
-                    entry['meta']['type'] = 'note'
                     entry['comment'] =       posting.comment
 
                 if isinstance(posting, Document):
-                    entry['meta']['type'] = 'document'
                     entry['account'] =       posting.account
                     entry['filename'] =      posting.filename
 
                 if isinstance(posting, Pad):
-                    entry['meta']['type'] = 'pad'
                     entry['account'] =       posting.account
                     entry['source_account'] =      posting.source_account
 
                 if isinstance(posting, Balance):
                     # TODO failed balances
-                    entry['meta']['type'] = 'balance'
                     entry['account'] =       posting.account
                     entry['change'] =        { posting.amount.currency: posting.amount.number }
                     entry['balance'] =       { posting.amount.currency: posting.amount.number }
@@ -251,8 +239,6 @@ class BeancountReportAPI(object):
                 if isinstance(posting, Transaction):
                     if posting.flag == 'P':
                         entry['meta']['type'] = 'padding'
-                    else:
-                        entry['meta']['type'] = 'transaction'
 
                     entry['flag'] =         posting.flag
                     entry['payee'] =        posting.payee
@@ -385,20 +371,14 @@ class BeancountReportAPI(object):
     def balance_sheet(self, timespan=None, components=None, tags=None):
         return {
             'assets':             self.balances(self.options_map['name_assets']),
-            'assets_totals':      self.balances_totals(self.options_map['name_assets']),
             'liabilities':        self.balances(self.options_map['name_liabilities']),
-            'liabilities_totals': self.balances_totals(self.options_map['name_liabilities']),
             'equity':             self.balances(self.options_map['name_equity']),
-            'equity_totals':      self.balances_totals(self.options_map['name_equity']),
-            'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
     def income_statement(self, timespan=None, components=None, tags=None):
         return {
             'income':             self.balances(self.options_map['name_income']),
-            'income_totals':      self.balances_totals(self.options_map['name_income']),
             'expenses':           self.balances(self.options_map['name_expenses']),
-            'expenses_totals':    self.balances_totals(self.options_map['name_expenses']),
             'monthly_totals':     self._get_monthly_ie_totals(self.entries)
         }
 
@@ -466,7 +446,7 @@ class BeancountReportAPI(object):
         # TODO include balances_children
         # the account tree at time now
 
-        account_names = [account['full_name'] for account in self._account_components(self.entries) if account['full_name'].startswith(account_name)]
+        account_names = [account['full_name'] for account in self._account_components() if account['full_name'].startswith(account_name)]
 
         month_tuples = self._month_tuples(self.entries)
         monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options_map['commodities']} for begin_date, end_date in month_tuples }
@@ -617,7 +597,7 @@ class BeancountReportAPI(object):
 
     def active_components(self):
         # TODO rename?
-        return self._account_components(self.all_entries)
+        return self._account_components()
 
     def source(self):
         return self._source

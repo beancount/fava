@@ -22,14 +22,14 @@
     <div class="tables">
         <div class="halfleft">
             <div id="income">
-                {% with table_title="Income", currencies=income_statement.currencies, table_data=income_statement.income, totals=income_statement.income_totals %}
+                {% with table_title="Income", currencies=income_statement.currencies, table_data=income_statement.income, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>
         </div>
         <div class="halfright">
             <div id="expenses">
-                {% with table_title="Expenses", currencies=income_statement.currencies, table_data=income_statement.expenses, totals=income_statement.expenses_totals %}
+                {% with table_title="Expenses", currencies=income_statement.currencies, table_data=income_statement.expenses, totals=True %}
                     {% include "_tree_table.html" %}
                 {% endwith %}
             </div>
