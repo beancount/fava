@@ -85,12 +85,12 @@ class BeancountReportAPI(object):
             accounts.append({
                 'name': child_account.account.split(':')[-1],
                 'full_name': child_account.account,
-                'depth': child_account.count(':')+1,
+                'depth': child_account.account.count(':')+1,
             })
 
         return accounts[1:]
 
-    def _table_tree(self, root_accounts):
+    def _table_tree(self, real_accounts):
         """
         Renders real_accounts and it's children as a flat list to be used
         in rendering tables.
@@ -606,17 +606,6 @@ class BeancountReportAPI(object):
 
     def source(self):
         return self._source
-
-    def account(self, account_name):
-        real_account = realization.get(self.real_accounts, account_name)
-        postings = realization.get_postings(real_account)
-        monthly_totals = self._monthly_totals(real_account.account, self.entries)
-
-        return {
-            'name': account_name,
-            'journal': self._journal_for_postings(postings),
-            'monthly_totals': monthly_totals
-        }
 
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)

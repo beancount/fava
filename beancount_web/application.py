@@ -22,8 +22,6 @@ def account_with_monthly_balances(name=None):
     return account(account_name=name, with_monthly_balances=True)
 
 def account(account_name=None, with_journal=False, with_monthly_balances=False):
-    account = app.api.account(account_name=account_name)
-
     if with_journal:
         journal = app.api.journal(account_name)
         monthly_totals = app.api.monthly_totals(account_name)
