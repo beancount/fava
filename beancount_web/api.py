@@ -18,7 +18,26 @@ from beancount.ops import summarize
 
 
 class BeancountReportAPI(object):
-    """docstring for BeancountReportAPI"""
+    """
+    The rationale behind api.py is the following:
+
+    One day there will be a new module in beancount.report that returns all (for
+    beancount-web required) views as Python-dicts and -arrays, compatible with
+    JSON (so no datetime, etc.). Right now beancount.report does return data to
+    be displayed in a console, and HTML, and this (JSON) could be a third way of
+    "rendering" the data. These methods should be highly optimized for performance
+    and numerical correctness. If that one day really makes it's way into the
+    beancount-repo, then api.py is redundant and will be removed.
+
+    For the JSON-part: I want to keep all the returns in api.py JSON-serializeable
+    (although they are called directly right now), because then, with very little
+    overhead, beancount-web could run on an external server and call into a local
+    bean-report.
+
+    Right now api.py it is just a hacky placeholder for what could be in the future,
+    and therefore I only tried to get the numbers required, and did not optimize
+    for performance at all.
+    """
 
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
