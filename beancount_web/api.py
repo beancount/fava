@@ -78,19 +78,15 @@ class BeancountReportAPI(object):
                 }, ...
             ]
         """
-        accounts = realization.dump(self.real_accounts)  # self.real_accounts  # getters.get_accounts(entries)
-        components = []
-        for real_account in accounts:
-            line_data = real_account[2]
-            account_name = line_data.account
-
-            components.append({
-                'name': account_name.split(':')[-1],
-                'full_name': account_name,
-                'depth': len(account_name.split(':'))
+        accounts = []
+        for child_account in realization.iter_children(self.real_accounts):
+            accounts.append({
+                'name': child_account.account.split(':')[-1],
+                'full_name': child_account.account,
+                'depth': len(child_account.account.split(':'))
             })
 
-        return components
+        return accounts[1:]
 
     def _account_level(self, account_name):
         """
@@ -123,8 +119,7 @@ class BeancountReportAPI(object):
         """
         lines = []
 
-        for real_account in realization.dump(root_accounts):
-            real_account = real_account[2]
+        for real_account in realization.iter_children(root_accounts):
 
             line = {
                 'account': real_account.account,
@@ -166,8 +161,8 @@ class BeancountReportAPI(object):
         if isinstance(root_accounts, None.__class__):
             return {}
 
-        for real_account in realization.dump(root_accounts):
-            for pos in real_account[2].balance.cost():
+        for real_account in realization.iter_children(root_accounts):
+            for pos in real_account.balance.cost():
                 if not pos.lot.currency in totals:
                     totals[pos.lot.currency] = ZERO
                 totals[pos.lot.currency] += pos.number
