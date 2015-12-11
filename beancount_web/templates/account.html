@@ -34,6 +34,7 @@
         {% with monthly_totals = monthly_totals %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
+        {% set treemap_data = api.treemap_data(account_name) %}
         {% with label=treemap_data.label, rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name.split(':')|length %}
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}

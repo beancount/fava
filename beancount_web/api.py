@@ -11,6 +11,7 @@ from beancount.parser import options
 from beancount.core import compare
 from beancount.core.number import ZERO
 from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad  # TODO implement missing
+from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
 from beancount.web.views import YearView, TagView
@@ -573,6 +574,13 @@ class BeancountReportAPI(object):
             'hash': ehash,
             'contexts': contexts,
             'journal': self._journal_for_postings(matching_entries)
+        }
+
+    def treemap_data(self, account_name):
+        return {
+            'label': account_name,
+            'balances': self.balances(account_name),
+            'modifier': get_account_sign(account_name, self.account_types),
         }
 
     def active_components(self):

@@ -9,7 +9,8 @@
 
     {% include "charts/_chart_skeleton.html" %}
 
-    {% for balance in treemap_balances %}
+    {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
+        {% set balance = api.treemap_data(options['name_{}'.format(base_account)]) %}
         {% with label=balance.label, rows=balance.balances, modifier=balance.modifier %}
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}

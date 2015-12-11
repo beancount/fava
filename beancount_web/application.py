@@ -36,13 +36,7 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
                     'change': journal_entry['change'],
                 })
 
-        treemap_data = {
-            'label': 'Subaccounts',
-            'balances': app.api.balances(account_name),
-            'modifier': 1  # TODO find out via API?
-        }
-
-        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data, monthly_totals=monthly_totals, treemap_data=treemap_data)
+        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data, monthly_totals=monthly_totals)
 
     if with_monthly_balances:
         monthly_balances = app.api.monthly_balances(account_name)
@@ -65,34 +59,6 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
 @app.route('/')
 def index():
     return redirect(url_for('report', report_name='balance_sheet'))
-
-@app.route('/trial_balance/')
-def trial_balance():
-    treemap_balances = []
-    treemap_balances.append({
-        'label': app.api.options['name_expenses'],
-        'balances': app.api.balances(app.api.options['name_expenses'])
-    })
-    treemap_balances.append({
-        'label': app.api.options['name_income'],
-        'balances': app.api.balances(app.api.options['name_income']),
-        'modifier': -1
-    })
-    treemap_balances.append({
-        'label': app.api.options['name_assets'],
-        'balances': app.api.balances(app.api.options['name_assets'])
-    })
-    treemap_balances.append({
-        'label': app.api.options['name_equity'],
-        'balances': app.api.balances(app.api.options['name_equity']),
-        'modifier': -1
-    })
-    treemap_balances.append({
-        'label': app.api.options['name_liabilities'],
-        'balances': app.api.balances(app.api.options['name_liabilities'])
-    })
-
-    return render_template('trial_balance.html', treemap_balances=treemap_balances)
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
@@ -126,6 +92,7 @@ def report(report_name):
             'holdings',
             'options',
             'net_worth',
+            'trial_balance',
     ]:
         return render_template('{}.html'.format(report_name))
     return redirect(url_for('report', report_name='balance_sheet'))
