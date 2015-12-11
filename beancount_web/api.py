@@ -10,7 +10,6 @@ from beancount.reports import context
 from beancount.utils import bisect_key
 from beancount.core import realization, flags
 from beancount.core import interpolate
-from beancount.web.views import AllView
 from beancount.parser import options
 from beancount.core import compare
 from beancount.core.account import has_component
@@ -24,6 +23,8 @@ from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
 from beancount.core.realization import RealAccount, find_last_active_posting
 from beancount.core.data import get_entry
+
+from beancount_web.util.dateparser import parse_date
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
 def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
@@ -200,9 +201,8 @@ class BeancountReportAPI(object):
         self.active_payees = list(getters.get_all_payees(self.all_entries))
 
         if self.filter_year:
-            begin_date = date(self.filter_year, 1, 1)
-            end_date = date(self.filter_year+1, 1, 1)
-            self.entries = self._entries_in_inclusive_range(begin_date, end_date)
+            begin_date, end_date = parse_date(self.filter_year)
+            self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
 
         if self.filter_tags:
             self.entries = [entry
