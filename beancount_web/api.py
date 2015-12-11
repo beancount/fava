@@ -54,6 +54,8 @@ class BeancountReportAPI(object):
         self.entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
 
+        self.title = self.options['title']
+
         self.errors = []
         for error in self._errors:
             self.errors.append({
@@ -68,6 +70,7 @@ class BeancountReportAPI(object):
 
         self.account_types = options.get_account_types(self.options)
         self.real_accounts = realization.realize(self.entries, self.account_types)
+        self.all_accounts = self._account_components()
 
     def filter(self, year=None, tag=None):
         if year:
@@ -489,9 +492,6 @@ class BeancountReportAPI(object):
         postings = realization.get_postings(self.real_accounts)
         return self._journal_for_postings(postings, Document)
 
-    def title(self):
-        return self.options['title']
-
     def holdings(self):
         return holdings_reports.report_holdings(None, False, self.entries, self.options)
 
@@ -582,10 +582,6 @@ class BeancountReportAPI(object):
             'balances': self.balances(account_name),
             'modifier': get_account_sign(account_name, self.account_types),
         }
-
-    def active_components(self):
-        # TODO rename?
-        return self._account_components()
 
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)

@@ -40,7 +40,7 @@
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for year in active_years -%}
+                                {% for year in api.active_years -%}
                                 <li><a href="{{ request.path }}?filter_year={{ year }}">{{ year }}</a></li>
                                 {% endfor -%}
                             </ul>
@@ -53,7 +53,7 @@
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for tag in active_tags -%}
+                                {% for tag in api.active_tags -%}
                                 <li><a href="{{ request.path }}?filter_tag={{ tag }}"># {{ tag }}</a></li>
                                 {% endfor -%}
                             </ul>
@@ -66,7 +66,7 @@
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for component in active_components -%}
+                                {% for component in api.all_accounts -%}
                                 <li><a href="{{ url_for('account_with_journal', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
                                 {% endfor -%}
                             </ul>

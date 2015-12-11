@@ -141,10 +141,7 @@ def inject_errors():
     return dict(errors=app.api.errors,
                 api=app.api,
                 options=options,
-                title=app.api.title(),
-                active_years=app.api.active_years,
-                active_tags=app.api.active_tags,
-                active_components=app.api.active_components(),
+                title=app.api.title,
                 operating_currencies=options['operating_currency'],
                 commodities=options['commodities'])
 
