@@ -5,6 +5,10 @@
 
 {% block content %}
     <h1>Balance Sheet</h1>
+    {% set assets = api.balances(api.options['name_assets']) %}
+    {% set liabilities = api.balances(api.options['name_liabilities']) %}
+    {% set equity = api.balances(api.options['name_equity']) %}
+    {% set net_worth = api.net_worth() %}
 
     {% include "charts/_chart_skeleton.html" %}
     {% include "charts/_chart_monthly_net_worth.html" %}

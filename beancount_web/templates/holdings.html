@@ -4,6 +4,7 @@
 {% block title %}Equity/Holdings{% endblock %}
 
 {% block content %}
+    {% set holdings = api.holdings() %}
     <h1>Equity/Holdings</h1>
     <table class="holdings">
       <thead>

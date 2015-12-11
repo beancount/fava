@@ -4,7 +4,7 @@ import decimal
 
 from datetime import date, datetime
 
-from flask import Flask, render_template, url_for, request, redirect
+from flask import Flask, render_template, url_for, request, redirect, abort
 
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
@@ -62,89 +62,37 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
 
         return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps)
 
-@app.route('/journal/')
-def journal():
-    journal = app.api.journal()
-    return render_template('journal.html', journal=journal)
-
-@app.route('/documents/')
-def documents():
-    documents = app.api.documents()
-    return render_template('documents.html', documents=documents)
-
 @app.route('/')
 def index():
-    return redirect(url_for('balance_sheet'))
-
-@app.route('/balance_sheet/')
-def balance_sheet():
-    assets = app.api.balances(app.api.options()['name_assets'])
-    liabilities = app.api.balances(app.api.options()['name_liabilities'])
-    equity = app.api.balances(app.api.options()['name_equity'])
-    net_worth = app.api.net_worth()
-    return render_template('balance_sheet.html', assets=assets, liabilities=liabilities, equity=equity, net_worth=net_worth)
-
-@app.route('/income_statement/')
-def income_statement():
-    options = app.api.options()
-
-    income = app.api.balances(options['name_income'])
-    expenses = app.api.balances(options['name_expenses'])
-
-    income_monthly_totals = app.api.monthly_totals(options['name_income'])
-    expenses_monthly_totals = app.api.monthly_totals(options['name_expenses'])
-    # TODO calls api.monthly_totals twice for income and expenses
-    monthly_totals = app.api.monthly_income_expenses_totals()
-
-    return render_template('income_statement.html', income=income, expenses=expenses, income_monthly_totals=income_monthly_totals, expenses_monthly_totals=expenses_monthly_totals, monthly_totals=monthly_totals)
+    return redirect(url_for('report', report_name='balance_sheet'))
 
 @app.route('/trial_balance/')
 def trial_balance():
-    trial_balance = app.api.trial_balance()
     treemap_balances = []
     treemap_balances.append({
-        'label': app.api.options()['name_expenses'],
-        'balances': app.api.balances(app.api.options()['name_expenses'])
+        'label': app.api.options['name_expenses'],
+        'balances': app.api.balances(app.api.options['name_expenses'])
     })
     treemap_balances.append({
-        'label': app.api.options()['name_income'],
-        'balances': app.api.balances(app.api.options()['name_income']),
+        'label': app.api.options['name_income'],
+        'balances': app.api.balances(app.api.options['name_income']),
         'modifier': -1
     })
     treemap_balances.append({
-        'label': app.api.options()['name_assets'],
-        'balances': app.api.balances(app.api.options()['name_assets'])
+        'label': app.api.options['name_assets'],
+        'balances': app.api.balances(app.api.options['name_assets'])
     })
     treemap_balances.append({
-        'label': app.api.options()['name_equity'],
-        'balances': app.api.balances(app.api.options()['name_equity']),
+        'label': app.api.options['name_equity'],
+        'balances': app.api.balances(app.api.options['name_equity']),
         'modifier': -1
     })
     treemap_balances.append({
-        'label': app.api.options()['name_liabilities'],
-        'balances': app.api.balances(app.api.options()['name_liabilities'])
+        'label': app.api.options['name_liabilities'],
+        'balances': app.api.balances(app.api.options['name_liabilities'])
     })
 
-    return render_template('trial_balance.html', trial_balance=trial_balance, treemap_balances=treemap_balances)
-
-@app.route('/holdings/')
-def holdings():
-    holdings = app.api.holdings()
-    return render_template('holdings.html', holdings=holdings)
-
-@app.route('/net_worth/')
-def net_worth():
-    net_worth = app.api.net_worth()
-    return render_template('net_worth.html', net_worth=net_worth)
-
-
-@app.route('/options/')
-def options():
-    return render_template('options.html') # options are globally added
-
-@app.route('/errors/')
-def errors():
-    return render_template('errors.html') # errors are globally added
+    return render_template('trial_balance.html', treemap_balances=treemap_balances)
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
@@ -158,16 +106,29 @@ def context(ehash=None):
 
 @app.route('/source/')
 def source():
-    source = app.api.source()
-
     line = request.args.get('hl_line', None)
     if line:
         lines = [int(line)]
     else:
         lines = []
 
-    source_highlighted = _hightlight(source, hl_lines=lines)
+    source_highlighted = _hightlight(app.api.source, hl_lines=lines)
     return render_template('source.html', source=source_highlighted)
+
+@app.route('/<report_name>/')
+def report(report_name):
+    if report_name in [
+            'balance_sheet',
+            'documents',
+            'errors',
+            'income_statement',
+            'journal',
+            'holdings',
+            'options',
+            'net_worth',
+    ]:
+        return render_template('{}.html'.format(report_name))
+    return redirect(url_for('report', report_name='balance_sheet'))
 
 @app.template_filter('format_currency')
 def format_currency(value):
@@ -209,12 +170,13 @@ def utility_processor():
 
 @app.context_processor
 def inject_errors():
-    options = app.api.options()
-    return dict(errors=app.api.errors(),
+    options = app.api.options
+    return dict(errors=app.api.errors,
+                api=app.api,
                 options=options,
                 title=app.api.title(),
-                active_years=app.api.active_years(),
-                active_tags=app.api.active_tags(),
+                active_years=app.api.active_years,
+                active_tags=app.api.active_tags,
                 active_components=app.api.active_components(),
                 operating_currencies=options['operating_currency'],
                 commodities=options['commodities'])

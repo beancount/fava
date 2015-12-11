@@ -5,7 +5,12 @@
 
 {% block content %}
     <h1>Income Statement</h1>
-
+    {% set income = api.balances(options['name_income']) %}
+    {% set expenses = api.balances(options['name_expenses']) %}
+    {% set income_monthly_totals = api.monthly_totals(options['name_income']) %}
+    {% set expenses_monthly_totals = api.monthly_totals(options['name_expenses']) %}
+    {# TODO calls api.monthly_totals twice for income and expenses#}
+    {% set monthly_totals = api.monthly_income_expenses_totals() %}
     {% include "charts/_chart_skeleton.html" %}
     {# {% with .monthly_totals  %} #}
         {% include "charts/_chart_monthly_ie_changes.html" %}

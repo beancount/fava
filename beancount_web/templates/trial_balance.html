@@ -5,6 +5,7 @@
 
 {% block content %}
     <h1>Trial Balance</h1>
+    {% set trial_balance = api.trial_balance() %}
 
     {% include "charts/_chart_skeleton.html" %}
 
