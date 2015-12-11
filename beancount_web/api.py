@@ -11,6 +11,7 @@ from beancount.parser import options
 from beancount.core import compare
 from beancount.core.number import ZERO
 from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad  # TODO implement missing
+from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
 from beancount.web.views import YearView, TagView
@@ -45,22 +46,39 @@ class BeancountReportAPI(object):
         self.load_file()
 
     def load_file(self):
+        """Load self.beancount_file_path and compute things that are independent
+        of how the entries might be filtered later"""
         with open(self.beancount_file_path, encoding='utf8') as f:
-            self._source = f.read()
+            self.source = f.read()
 
-        self.entries, self._errors, self.options_map = loader.load_file(self.beancount_file_path)
+        self.entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
 
-        self.account_types = options.get_account_types(self.options_map)
+        self.title = self.options['title']
+
+        self.errors = []
+        for error in self._errors:
+            self.errors.append({
+                'file': error.source['filename'],
+                'line': error.source['lineno'],
+                'error': error.message,
+                'entry': error.entry  # TODO render entry
+            })
+
+        self.active_years = list(getters.get_active_years(self.all_entries))
+        self.active_tags = list(getters.get_all_tags(self.all_entries))
+
+        self.account_types = options.get_account_types(self.options)
         self.real_accounts = realization.realize(self.entries, self.account_types)
+        self.all_accounts = self._account_components()
 
     def filter(self, year=None, tag=None):
         if year:
-            yv = YearView(self.all_entries, self.options_map, str(year), year)
+            yv = YearView(self.all_entries, self.options, str(year), year)
             self.entries = yv.entries
 
         if tag:
-            tv = TagView(self.all_entries, self.options_map, tag, set([tag]))
+            tv = TagView(self.all_entries, self.options, tag, set([tag]))
             self.entries = tv.entries
 
         self.real_accounts = realization.realize(self.entries, self.account_types)
@@ -130,7 +148,7 @@ class BeancountReportAPI(object):
                 line['balances'][pos.lot.currency] = pos.number
 
             # Accounts that are not leafs but have entries are leafs as well
-            for currency in self.options_map['commodities']:
+            for currency in self.options['commodities']:
                 if currency in line['balances'] and currency in line['balances_children']:
                     if line['balances'][currency] != line['balances_children'][currency]:
                         line['is_leaf'] = True
@@ -306,10 +324,10 @@ class BeancountReportAPI(object):
         monthly_totals = []
         for begin_date, end_date in month_tuples:
             entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
-                                                          self.options_map)
+                                                          self.options)
 
-            income_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_income']))
-            expenses_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options_map['name_expenses']))
+            income_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options['name_income']))
+            expenses_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options['name_expenses']))
 
             # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
             sum_ = ZERO
@@ -378,7 +396,7 @@ class BeancountReportAPI(object):
             end_date_ = end_date
 
         entries, index = summarize.clamp_opt(self.entries, begin_date_, end_date_ + timedelta(days=1),
-                                                     self.options_map)
+                                                     self.options)
 
         real_accounts = realization.get(realization.realize(entries, self.account_types), account_name)
 
@@ -430,7 +448,7 @@ class BeancountReportAPI(object):
         account_names = [account['full_name'] for account in self._account_components() if account['full_name'].startswith(account_name)]
 
         month_tuples = self._month_tuples(self.entries)
-        monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options_map['commodities']} for begin_date, end_date in month_tuples }
+        monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options['commodities']} for begin_date, end_date in month_tuples }
 
         arr = { account_name: {} for account_name in account_names }
 
@@ -461,19 +479,6 @@ class BeancountReportAPI(object):
     def trial_balance(self):
         return self._table_tree(self.real_accounts)[1:]
 
-    def errors(self):
-        errors = []
-
-        for error in self._errors:
-            errors.append({
-                'file': error.source['filename'],
-                'line': error.source['lineno'],
-                'error': error.message,
-                'entry': error.entry  # TODO render entry
-            })
-
-        return errors
-
     def journal(self, account_name=None):
         if account_name:
             real_account = realization.get(self.real_accounts, account_name)
@@ -487,11 +492,8 @@ class BeancountReportAPI(object):
         postings = realization.get_postings(self.real_accounts)
         return self._journal_for_postings(postings, Document)
 
-    def title(self):
-        return self.options_map['title']
-
     def holdings(self):
-        return holdings_reports.report_holdings(None, False, self.entries, self.options_map)
+        return holdings_reports.report_holdings(None, False, self.entries, self.options)
 
     def _net_worth_in_periods(self):
         month_tuples = self._month_tuples(self.entries)
@@ -501,9 +503,9 @@ class BeancountReportAPI(object):
 
         for begin_date, end_date in month_tuples:
             entries, index = summarize.clamp_opt(self.entries, date_start, end_date + timedelta(days=1),
-                                                          self.options_map)
+                                                          self.options)
 
-            networth_as_table = networthtable.generate_table(entries, self.errors, self.options_map)
+            networth_as_table = networthtable.generate_table(entries, self.errors, self.options)
 
             totals = dict(networth_as_table[2])
             for key, value in totals.items():
@@ -519,7 +521,7 @@ class BeancountReportAPI(object):
 
     def net_worth(self):
         networth_report = holdings_reports.NetWorthReport(None, None)
-        networth_as_table = networth_report.generate_table(self.entries, self.errors, self.options_map)
+        networth_as_table = networth_report.generate_table(self.entries, self.errors, self.options)
 
         current_net_worth = dict(networth_as_table[2])
         for key, value in current_net_worth.items():
@@ -536,11 +538,11 @@ class BeancountReportAPI(object):
                                 if ehash == compare.hash_entry(entry)]
 
         contexts = []
-        dcontext = self.options_map['dcontext']
+        dcontext = self.options['dcontext']
 
         for entry in matching_entries:
             context_str = context.render_entry_context(
-                self.entries, self.options_map, entry)
+                self.entries, self.options, entry)
 
             hash_ = context_str.split("\n",2)[0].split(':')[1].strip()
             filenamelineno = context_str.split("\n",2)[1]
@@ -574,22 +576,13 @@ class BeancountReportAPI(object):
             'journal': self._journal_for_postings(matching_entries)
         }
 
-    def active_years(self):
-        return list(getters.get_active_years(self.all_entries))
-
-    def active_tags(self):
-        return list(getters.get_all_tags(self.all_entries))
-
-    def active_components(self):
-        # TODO rename?
-        return self._account_components()
-
-    def source(self):
-        return self._source
+    def treemap_data(self, account_name):
+        return {
+            'label': account_name,
+            'balances': self.balances(account_name),
+            'modifier': get_account_sign(account_name, self.account_types),
+        }
 
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)
         return self._monthly_totals(real_account.account, self.entries)
-
-    def options(self):
-        return self.options_map
