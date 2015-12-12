@@ -2,6 +2,7 @@
 {% set active_page = 'editor' %}
 
 {% block title %}Editor{% endblock %}
+{% block javascript %}<script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>{% endblock %}
 
 {% block content %}
     <h1>Editor</h1>

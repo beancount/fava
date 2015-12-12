@@ -102,6 +102,6 @@
     <script src="{{ url_for('static', filename='javascript/helpers.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
     <script src="{{ url_for('static', filename='javascript/charts.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>
+    {% block javascript %}{% endblock %}
 </body>
 </html>

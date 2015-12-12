@@ -7,20 +7,13 @@ $(document).ready(function() {
     editor.setTheme("ace/theme/chrome");
     editor.setOption('wrap', true);
     editor.setOption('printMargin', false);
+    editor.setOption('fontSize', "13px");
+    editor.setOption('fontFamily', "monospace");
     editor.getSession().setMode("ace/mode/beancount");
-
-    $('form.editor-source').submit(function(event) {
-        event.preventDefault();
-        var $this = $(this);
-        $.get($(this).attr('action'), { file: $('form.editor-source select').val() } )
-          .done(function( data ) {
-            alert( "Data Loaded: " + data );
-          });
-    });
 
     $.hlLine = $.urlParam('hl_line');
     $('form.editor-source select').change(function(event) {
-        // event.preventDefault();
+        event.preventDefault();
         var $this = $(this);
         $.get($(this).parents('form').attr('action'), { file: $(this).val() } )
         .done(function(data) {

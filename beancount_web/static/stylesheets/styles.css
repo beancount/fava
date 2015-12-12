@@ -1680,4 +1680,29 @@ form.editor-save {
   margin-top: 10px;
 }
 
+#editor .ace_comment {
+  color: #999988;
+  font-style: italic;
+}
+#editor .ace_directive {
+  color: #333;
+  font-weight: bold;
+}
+#editor .ace_class, #editor .ace_double {
+  color: #bb8844;
+}
+#editor .ace_date {
+  color: #009999;
+}
+#editor .ace_constant, #editor .ace_tag {
+  color: #008080;
+}
+#editor .ace_account {
+  color: #333;
+}
+#editor .ace_invalid {
+  color: #333;
+  background: transparent;
+}
+
 /*# sourceMappingURL=styles.css.map */

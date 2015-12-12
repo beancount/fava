@@ -16,6 +16,10 @@ var BeancountHighlightRules = function() {
             regex: /^#!.*/,
             comment: "Shebangs"
         }, {
+            token: "string.quoted.double.beancount",
+            regex: /\".*\"/,
+            comment: "strings"
+        }, {
             token: [
                 "text",
                 "constant.language.beancount",
@@ -38,10 +42,6 @@ var BeancountHighlightRules = function() {
             ],
             regex: /(\s)([a-z][A-Za-z0-9\-\_]+)(:)/,
             comment: "Metadata"
-        }, {
-            token: "string.quoted.double.beancount",
-            regex: /\".*\"/,
-            comment: "strings"
         }, {
             token: [
                 "support.function.directive.option.beancount",
