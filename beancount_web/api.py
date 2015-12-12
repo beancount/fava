@@ -1,3 +1,5 @@
+import os
+
 from datetime import date, timedelta
 
 from beancount import loader
@@ -585,8 +587,33 @@ class BeancountReportAPI(object):
         # TODO rename?
         return self._account_components()
 
-    def source(self):
+    def source_files(self):
+        files = [self.beancount_file_path]
+
+        include_path = os.path.dirname(self.beancount_file_path)
+        for filename in self.options_map['include']:
+            files.append(filename)
+
+        return [os.path.join(include_path, filename) for filename in self.options_map['include']]
+
+    def source(self, file_path=None):
+        if file_path:
+            if file_path in self.source_files():
+                with open(file_path, encoding='utf8') as f:
+                    source_ = f.read()
+                return source_
+            else:
+                return None  # TODO raise
+
         return self._source
+
+    def set_source(self, file_path, source):
+        if file_path in self.source_files():
+            with open(file_path, 'w+', encoding='utf8') as f:
+                f.write(source)
+            return True
+        else:
+            return False  # TODO raise
 
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)

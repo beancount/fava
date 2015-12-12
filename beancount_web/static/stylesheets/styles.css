@@ -266,7 +266,7 @@ pre.debug {
 .sidebar {
   width: 200px;
   float: left;
-  height: 100%;
+  min-height: 100%;
   position: absolute;
   color: #dadad9;
   border-right: 1px solid #ccc;
@@ -321,6 +321,7 @@ pre.debug {
 .main {
   margin-left: 200px;
   padding: 20px;
+  min-height: 100%;
 }
 
 .headerline h3 {
@@ -1644,6 +1645,39 @@ span.pnsep {
 }
 #treetable-popover dd {
   margin-bottom: 8px;
+}
+
+#editor-wrapper {
+  position: relative;
+  margin-top: 20px;
+}
+
+#editor {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border: 1px solid #e8e8e8;
+}
+#editor .ace_gutter {
+  border-right: 1px solid #e8e8e8;
+  background: white;
+  color: #A7A5A5;
+  font-weight: normal;
+}
+#editor .ace_gutter-cell {
+  padding: 0 6px;
+}
+
+form.editor-source {
+  float: right;
+  margin-top: -20px;
+}
+
+form.editor-save {
+  float: right;
+  margin-top: 10px;
 }
 
 /*# sourceMappingURL=styles.css.map */

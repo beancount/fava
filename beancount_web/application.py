@@ -155,9 +155,9 @@ def context(ehash=None):
 
     # TODO handle errors
     return render_template('context.html', context=context)
-
 @app.route('/source/')
 def source():
+    # TODO what about includes?
     source = app.api.source()
 
     line = request.args.get('hl_line', None)
@@ -168,6 +168,22 @@ def source():
 
     source_highlighted = _hightlight(source, hl_lines=lines)
     return render_template('source.html', source=source_highlighted)
+
+@app.route('/editor/', methods=['GET', 'POST'])
+def editor():
+    if request.method == "GET":
+        files = app.api.source_files()
+
+        file_path = request.args.get('file', None)
+        if file_path:
+            return app.api.source(file_path=file_path)
+        else:
+            return render_template('editor.html', files=files)
+
+    elif request.method == "POST":
+        successful_write = app.api.set_source(file_path=request.form['file'], source=request.form['source'])
+        return str(successful_write)
+
 
 @app.template_filter('format_currency')
 def format_currency(value):

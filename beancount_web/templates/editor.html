@@ -1,0 +1,21 @@
+{% extends "_layout.html" %}
+{% set active_page = 'editor' %}
+
+{% block title %}Editor{% endblock %}
+
+{% block content %}
+    <h1>Editor</h1>
+    <form class="editor-source" action="{{ url_for('editor') }}" method="get">
+        <select name="file">
+            {% for file in files -%}
+                <option{% if loop.first %} selected="selected"{% endif %}>{{ file }}</option>
+            {% endfor -%}
+        </select>
+    </form>
+    <div id="editor-wrapper">
+        <div id="editor"></div>
+    </div>
+    <form class="editor-save" action="{{ url_for('editor') }}" method="post">
+        <input type="submit" value="Save">
+    </form>
+{% endblock %}
