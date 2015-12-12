@@ -30,7 +30,7 @@ $(document).ready(function() {
                         type: Chartist.FixedScaleAxis,
                         divisor: chart.data.series[0].data.length > 15 ? 15 : chart.data.series[0].data.length,  // no of days
                         labelInterpolationFnc: function(value) {
-                            return moment(value).format(chart.dateformat ? chart.dateformat : 'MMM D');
+                            return moment(value).format(chart.options.dateformat ? chart.options.dateformat : 'MMM D');
                         }
                     },
                     lineSmooth: Chartist.Interpolation.none()
@@ -44,7 +44,7 @@ $(document).ready(function() {
                 var options = {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
-                            return moment(value).format(chart.dateformat ? chart.dateformat : "MMM 'YY");
+                            return moment(value).format(chart.options.dateformat ? chart.options.dateformat : "MMM 'YY");
                         }
                     }
                 };
