@@ -42,7 +42,7 @@
         <div class="headerline">
             <h3>Journal</h3> <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
         </div>
-        {% with show_tablefilter=True %}
+        {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
 

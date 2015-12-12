@@ -18,7 +18,7 @@ def account_with_monthly_balances(name=None):
 
 def account(account_name=None, with_journal=False, with_monthly_balances=False):
     if with_journal:
-        journal = app.api.journal(account_name)
+        journal = app.api.journal(account_name, with_change_and_balance=True)
         monthly_totals = app.api.monthly_totals(account_name)
 
         # should this be done in the api?

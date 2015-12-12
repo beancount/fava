@@ -25,8 +25,10 @@
             <th class="position">Position</th>
             <th class="price">Price</th>
             <th class="cost">Cost</th>
-            <th class="change">Change</th>
-            <th class="balance">Balance</th>
+            {% if show_change_and_balance %}
+                <th class="change">Change</th>
+                <th class="balance">Balance</th>
+            {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -44,20 +46,22 @@
                     {% if journal_entry.meta.type == 'transaction' %}<strong>{{ journal_entry.payee or '' }}</strong>{% if journal_entry.payee and journal_entry.narration %} | {% endif %}{{ journal_entry.narration or '' }}{% endif %}
 
                 </td>
-                <td class="change num">
-                    {% if journal_entry.change %}
-                        {% for currency, number in journal_entry.change.items() %}
-                            {{ number|format_currency }} {{ currency }}<br>
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                <td class="balance num">
-                    {% if journal_entry.balance %}
-                        {% for currency, number in journal_entry.balance.items() %}
-                            {{ number|format_currency }} {{ currency }}<br>
-                        {% endfor %}
-                    {% endif %}
-                </td>
+                {% if show_change_and_balance %}
+                    <td class="change num">
+                        {% if journal_entry.change %}
+                            {% for currency, number in journal_entry.change.items() %}
+                                {{ number|format_currency }} {{ currency }}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td class="balance num">
+                        {% if journal_entry.balance %}
+                            {% for currency, number in journal_entry.balance.items() %}
+                                {{ number|format_currency }} {{ currency }}<br>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                {% endif %}
             </tr>
             {% for leg in journal_entry.legs %}
                 <tr class="posting leg leg-{{ journal_entry.meta.type }} journal-entry-{{ journal_entry.hash }}">
@@ -67,8 +71,10 @@
                     <td class="position num">{{ leg.position|format_currency or '' }} {{ leg.position_currency or '' }}</td>
                     <td class="price num">{{ leg.price|format_currency or '' }} {{ leg.price_currency or '' }}</td>
                     <td class="cost num">{{ leg.cost|format_currency or '' }} {{ leg.cost_currency or '' }}</td>
-                    <td class="change num"></td>
-                    <td class="balance num"></td>
+                    {% if show_change_and_balance %}
+                        <td class="change num">&nbsp;</td>
+                        <td class="balance num">&nbsp;</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         {% endfor %}
