@@ -309,17 +309,19 @@ class BeancountReportAPI(object):
 
     def _inventory_to_json(self, inventory):
         """
-        Renders an Inventory to an array.
+        Renders an Inventory to a currency -> amount dict.
 
         Returns:
-            [
-                {
-                    'number': 123.45,
-                    'currency': 'USD'
-                }, ...
-            ]
+            {
+                'USD': 123.45,
+                'CAD': 567.89,
+                ...
+            }
         """
-        return { position.lot.currency: position.number for position in sorted(inventory) }
+        result = collections.defaultdict(lambda: ZERO)
+        for position in inventory:
+            result[position.lot.currency] += position.number
+        return { currency: number for currency, number in result.items() if number != ZERO }
 
     def _journal_for_postings(self, postings, include_types=None):
         journal = []
