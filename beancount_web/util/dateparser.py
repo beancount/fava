@@ -10,12 +10,11 @@ all_months = months[1:] + months_abbr[1:]
 rel_dates = {'yesterday': -1, 'today': 0, 'tomorrow': 1}
 modifiers = {'this': 0, 'next': 1, 'last': -1}
 
-is_range_re = re.compile('(?:from )?(.*?)\s(?:-|to)\s(.*)')
+is_range_re = re.compile('(.*?)\s(?:-|to)\s(.*)')
 
-# this matches dates of the form 'year-month-day' (. instead of - is possible)
+# this matches dates of the form 'year-month-day'
 # day or month and day may be omitted
-year_first_re = re.compile('^(\d{4})(?:[.-](\d{2}))?(?:[.-](\d{2}))?$')
-
+year_first_re = re.compile('^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$')
 
 # this will match any date of the form "day month_name year".
 year_last_re = re.compile('^(?:{1} )?'
@@ -33,7 +32,7 @@ mod_date_re = re.compile('(?:({}) )?({}) ({})'.format(
 
 def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
     """A helper function that returns a tuple with the starting and end date for
-    for the given range of dates. If called with empty arguments it will return
+    the given range of dates. If called with empty arguments it will return
     the current day as start and beginning. Otherwise day or month and day may
     be omitted to get the whole month or whole year respectively. Timedelta is
     only used if all other arguments are none and if it is set the dates that
@@ -70,14 +69,13 @@ def parse_date(string):
 
     Example of supported formats:
      - today, tomorrow, yesterday
-     - 2010-03-15, 2010.03, 2010 ('.' and '-' are possible delimiters)
+     - 2010-03-15, 2010-03, 2010
      - march 2010, mar 2010
      - this month, last year, next year
      - october this year, aug last year
 
     Ranges of dates can be expressed in the following forms:
      - start - end
-     - from start to end
      - start to end
     where start and end look like one of the above examples
     """
@@ -134,6 +132,8 @@ if __name__ == '__main__':
         'august next year': daterange(today.year + 1, 8),
         '2nd aug, 2010': daterange(2010, 8, 2),
         'august 3rd, 2012': daterange(2012, 8, 3),
+        '2014 to 2015': (daterange(2014)[0], daterange(2015)[1]),
+        '2011-10 - 2015': (daterange(2011, 10)[0], daterange(2015)[1]),
     }
     for test, result in tests.items():
         assert parse_date(test) == result
