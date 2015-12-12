@@ -6,11 +6,6 @@ from datetime import date, datetime
 
 from flask import Flask, render_template, url_for, request, redirect
 
-from pygments import highlight
-from pygments.lexers import get_lexer_by_name
-from pygments.formatters import HtmlFormatter
-
-
 app = Flask(__name__)
 
 @app.route('/account/<name>/')
@@ -149,33 +144,16 @@ def errors():
 @app.route('/context/<ehash>/')
 def context(ehash=None):
     context = app.api.context(ehash)
-
-    for context_ in context['contexts']:
-        context_['context_highlighted'] = _hightlight(context_['context'])
-
     # TODO handle errors
     return render_template('context.html', context=context)
-@app.route('/source/')
+
+@app.route('/source/', methods=['GET', 'POST'])
 def source():
-    # TODO what about includes?
-    source = app.api.source()
-
-    line = request.args.get('hl_line', None)
-    if line:
-        lines = [int(line)]
-    else:
-        lines = []
-
-    source_highlighted = _hightlight(source, hl_lines=lines)
-    return render_template('source.html', source=source_highlighted)
-
-@app.route('/editor/', methods=['GET', 'POST'])
-def editor():
     if request.method == "GET":
         if request.args.get('is_ajax', False):
             return app.api.source(file_path=request.args.get('file_path', None))
         else:
-            return render_template('editor.html', file_path=request.args.get('file_path', None))
+            return render_template('source.html', file_path=request.args.get('file_path', None))
 
     elif request.method == "POST":
         successful_write = app.api.set_source(file_path=request.form['file_path'], source=request.form['source'])
@@ -206,10 +184,20 @@ class MyJSONEncoder(json.JSONEncoder):
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
 
-@app.template_filter('pretty_print')
+@app.template_filter('pp')
 def pretty_print(json_object):
+    # This filter is used only for debugging purposes
+    from flask import Markup
+    from pygments import highlight
+    from pygments.lexers import get_lexer_by_name
+    from pygments.formatters import HtmlFormatter
+
     json_dump = json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder)
-    return _hightlight(json_dump, language='python')
+    lexer = get_lexer_by_name('python', stripall=True)
+    formatter = HtmlFormatter(linenos=True, lineanchors='line', anchorlinenos=True)
+    highlighted_source = highlight(json_dump, lexer, formatter)
+
+    return Markup(highlighted_source)
 
 @app.template_filter('last_segment')
 def last_segment(account_name):
@@ -251,7 +239,3 @@ def perform_global_filters():
     if tag != app.filter_tag:
         app.filter_tag = tag
 
-def _hightlight(source, language="beancount", hl_lines=[]):
-    lexer = get_lexer_by_name(language, stripall=True)
-    formatter = HtmlFormatter(linenos=True, lineanchors='line', anchorlinenos=True, hl_lines=hl_lines)
-    return highlight(source, lexer, formatter)

@@ -15,7 +15,6 @@ setup(name='beancount-web',
       },
       install_requires=[
             'beancount',
-            'beancount-pygments-lexer',
             'Flask==0.10.1',
             'livereload',
             'Pygments'
@@ -23,6 +22,5 @@ setup(name='beancount-web',
       include_package_data=True,
       dependency_links=[
             'hg+https://bitbucket.org/blais/beancount#egg=beancount',
-            'git+ssh://git@github.com/aumayr/beancount-pygments-lexer.git#egg=beancount-pygments-lexer'
       ],
       zip_safe=False)

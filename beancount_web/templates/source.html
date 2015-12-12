@@ -2,8 +2,21 @@
 {% set active_page = 'source' %}
 
 {% block title %}Source{% endblock %}
+{% block javascript %}<script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>{% endblock %}
 
 {% block content %}
     <h1>Source</h1>
-    {{ source | safe }}
+    <form class="editor-source" action="{{ url_for('source') }}" method="get">
+        <select name="file">
+            {% for source_file in api.source_files() -%}
+                <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
+            {% endfor -%}
+        </select>
+    </form>
+    <div class="editor-wrapper editor-wrapper-source">
+        <div class="editor" id="editor-source"></div>
+    </div>
+    <form class="editor-save" action="{{ url_for('source') }}" method="post">
+        <input type="submit" value="Save">
+    </form>
 {% endblock %}

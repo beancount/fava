@@ -374,6 +374,7 @@ h1 {
         display: inline-block;
     }
 }
+
 dl {
     margin-top: 20px;
     font-size: 13px;
@@ -384,6 +385,9 @@ dl {
         float: left;
         font-weight: bold;
     }
+
+    dt, dd { margin-bottom: 3px; }
+    pre { overflow-x: auto; }
 }
 
 p.empty {

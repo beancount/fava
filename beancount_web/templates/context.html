@@ -2,6 +2,7 @@
 {% set active_page = 'context' %}
 
 {% block title %}Context{% endblock %}
+{% block javascript %}<script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>{% endblock %}
 
 {% block content %}
     <h1>Context: <pre>{{ context.hash }}</pre></h1>
@@ -11,10 +12,11 @@
             <dt>Hash:</dt>
             <dd><pre>{{ context_.hash }}</pre></dd>
             <dt>Location:</dt>
-            <dd><pre><a href="beancount://open?url={{context_.filename }}&line={{ context_.line }}">{{ context_.filename }}:{{ context_.line }}</a></pre></dd>
+            <dd><pre><a href="{{ url_for('source') }}?file_path={{context_.filename }}&line={{ context_.line }}">{{ context_.filename }}:{{ context_.line }}</a></pre></dd>
         </dl>
-
-        {{ context_.context_highlighted | safe }}
+        <div class="editor-wrapper">
+            <div class="editor editor-readonly" id="editor-{{ context.hash }}"><pre>{{ context_.context | safe }}</pre></div>
+        </div>
     {% endfor %}
 
     <h3>Matching Journal Entries</h3>

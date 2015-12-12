@@ -542,8 +542,7 @@ class BeancountReportAPI(object):
 
         for entry in matching_entries:
             context_str = context.render_entry_context(
-                self.entries, self.options_map, dcontext,
-                entry.meta["filename"], entry.meta["lineno"])
+                self.entries, self.options_map, entry)
 
             hash_ = context_str.split("\n",2)[0].split(':')[1].strip()
             filenamelineno = context_str.split("\n",2)[1]

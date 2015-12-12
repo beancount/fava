@@ -648,6 +648,12 @@ dl dt {
   float: left;
   font-weight: bold;
 }
+dl dt, dl dd {
+  margin-bottom: 3px;
+}
+dl pre {
+  overflow-x: auto;
+}
 
 p.empty {
   margin-top: 20px;
@@ -1647,27 +1653,56 @@ span.pnsep {
   margin-bottom: 8px;
 }
 
-#editor-wrapper {
+.editor-wrapper {
   position: relative;
   margin-top: 20px;
 }
-
-#editor {
+.editor-wrapper.editor-wrapper-source {
+  position: relative;
+}
+.editor-wrapper.editor-wrapper-source .editor {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+}
+
+.editor.ace-chrome {
   border: 1px solid #e8e8e8;
 }
-#editor .ace_gutter {
+.editor.ace-chrome .ace_gutter {
   border-right: 1px solid #e8e8e8;
   background: white;
   color: #A7A5A5;
   font-weight: normal;
 }
-#editor .ace_gutter-cell {
+.editor.ace-chrome .ace_gutter-cell {
   padding: 0 6px;
+}
+.editor.ace-chrome .ace_comment {
+  color: #999988;
+  font-style: italic;
+}
+.editor.ace-chrome .ace_directive {
+  color: #333;
+  font-weight: bold;
+}
+.editor.ace-chrome .ace_class, .editor.ace-chrome .ace_double {
+  color: #bb8844;
+}
+.editor.ace-chrome .ace_constant.ace_numeric.ace_date {
+  color: #009999;
+}
+.editor.ace-chrome .ace_constant, .editor.ace-chrome .ace_constant.ace_language, .editor.ace-chrome .ace_tag {
+  color: #008080;
+}
+.editor.ace-chrome .ace_account {
+  color: #333;
+}
+.editor.ace-chrome .ace_invalid {
+  color: #333;
+  background: transparent;
 }
 
 form.editor-source {
@@ -1678,31 +1713,6 @@ form.editor-source {
 form.editor-save {
   float: right;
   margin-top: 10px;
-}
-
-#editor .ace_comment {
-  color: #999988;
-  font-style: italic;
-}
-#editor .ace_directive {
-  color: #333;
-  font-weight: bold;
-}
-#editor .ace_class, #editor .ace_double {
-  color: #bb8844;
-}
-#editor .ace_date {
-  color: #009999;
-}
-#editor .ace_constant, #editor .ace_tag {
-  color: #008080;
-}
-#editor .ace_account {
-  color: #333;
-}
-#editor .ace_invalid {
-  color: #333;
-  background: transparent;
 }
 
 /*# sourceMappingURL=styles.css.map */
