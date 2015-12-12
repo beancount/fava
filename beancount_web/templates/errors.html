@@ -17,7 +17,7 @@
             <tbody>
                 {% for error in errors %}
                 <tr>
-                    <td><a class="source" href="/source?hl_line={{ error.line }}#line-{{ error.line-5 }}">{{ error.file }}</a></td>
+                    <td><a class="source" href="{{ url_for('editor') }}?file_path={{ error.file|e }}&hl_line={{ error.line }}">{{ error.file }}</a></td>
                     <td class="num"><a class="source" href="/source?hl_line={{ error.line }}#line-{{ error.line-5 }}">{{ error.line }}</a></td>
                     <td>{{ error.error }}</td>
                 </tr>

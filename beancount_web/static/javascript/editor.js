@@ -15,10 +15,10 @@ $(document).ready(function() {
     $('form.editor-source select').change(function(event) {
         event.preventDefault();
         var $this = $(this);
-        $.get($(this).parents('form').attr('action'), { file: $(this).val() } )
+        $.get($(this).parents('form').attr('action'), { file_path: $(this).val(), is_ajax: true } )
         .done(function(data) {
             editor.setValue(data, -1);
-            editor.selection.moveCursorToPosition({row: $.urlParam('hl_line')-1, column: 0});
+            editor.gotoLine($.hlLine, 1, true);
             $.hlLine = 1;
         });
     });
@@ -30,10 +30,11 @@ $(document).ready(function() {
         var $this = $(this);
         var fileName = $('form.editor-source select').val();
 
-        $.post($(this).parents('form').attr('action'), { file: fileName, source: editor.getValue() } )
+        $.post($(this).parents('form').attr('action'), { file_path: fileName, source: editor.getValue() } )
         .done(function(data) {
             if (data == "True") {
-                alert("Successfully saved to\n\n\t" + fileName);
+                alert("Successfully saved to\n\n\t" + fileName + "\n\nReloading files...");
+                location.reload();
             } else {
                 alert("Writing to\n\n\t" + fileName + "\n\nwas not successful.");
             }

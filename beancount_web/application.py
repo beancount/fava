@@ -172,16 +172,15 @@ def source():
 @app.route('/editor/', methods=['GET', 'POST'])
 def editor():
     if request.method == "GET":
-        files = app.api.source_files()
-
-        file_path = request.args.get('file', None)
-        if file_path:
-            return app.api.source(file_path=file_path)
+        if request.args.get('is_ajax', False):
+            return app.api.source(file_path=request.args.get('file_path', None))
         else:
-            return render_template('editor.html', files=files)
+            return render_template('editor.html', file_path=request.args.get('file_path', None))
 
     elif request.method == "POST":
-        successful_write = app.api.set_source(file_path=request.form['file'], source=request.form['source'])
+        successful_write = app.api.set_source(file_path=request.form['file_path'], source=request.form['source'])
+        if (successful_write):
+            app.api.load_file()
         return str(successful_write)
 
 
@@ -229,6 +228,7 @@ def inject_errors():
     return dict(errors=app.api.errors(),
                 options=options,
                 title=app.api.title(),
+                api=app.api,
                 active_years=app.api.active_years(),
                 active_tags=app.api.active_tags(),
                 active_components=app.api.active_components(),

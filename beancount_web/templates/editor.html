@@ -8,8 +8,8 @@
     <h1>Editor</h1>
     <form class="editor-source" action="{{ url_for('editor') }}" method="get">
         <select name="file">
-            {% for file in files -%}
-                <option{% if loop.first %} selected="selected"{% endif %}>{{ file }}</option>
+            {% for source_file in api.source_files() -%}
+                <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
             {% endfor -%}
         </select>
     </form>
