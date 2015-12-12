@@ -31,7 +31,7 @@
                 }
             });
         </script>
-        {% with monthly_totals = monthly_totals %}
+        {% with label="Monthly totals", monthly_totals = monthly_totals %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
         {% set treemap_data = api.treemap_data(account_name) %}
