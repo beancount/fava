@@ -87,6 +87,7 @@ def report(report_name):
             'journal',
             'holdings',
             'options',
+            'commodities',
             'net_worth',
             'trial_balance',
     ]:

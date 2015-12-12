@@ -590,6 +590,9 @@ table.options_map td:nth-child(2) {
   text-align: left;
   padding-left: 6px;
 }
+table.commodity td:first-child {
+  min-width: inherit;
+}
 table.tree-table td.account a {
   position: relative;
   margin-left: 15px;

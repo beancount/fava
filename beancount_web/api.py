@@ -748,3 +748,9 @@ class BeancountReportAPI(object):
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)
         return self._monthly_totals(real_account.account, self.entries)
+
+    def commodities(self):
+        return sorted(self.price_map.forward_pairs)
+
+    def prices(self, base, quote):
+        return prices.get_all_prices(self.price_map, "{}/{}".format(base, quote))

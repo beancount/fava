@@ -315,6 +315,10 @@ table {
         }
     }
 
+    &.commodity {
+        td:first-child { min-width: inherit; }
+    }
+
     // Collapsable trees
     &.tree-table {
         td.account a {
