@@ -16,8 +16,7 @@ setup(name='beancount-web',
       install_requires=[
             'beancount',
             'Flask==0.10.1',
-            'livereload',
-            'Pygments'
+            'livereload'
       ],
       include_package_data=True,
       dependency_links=[

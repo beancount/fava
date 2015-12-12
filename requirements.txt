@@ -4,7 +4,6 @@ itsdangerous==0.24
 Jinja2==2.8
 livereload==2.4.0
 MarkupSafe==0.23
-Pygments==2.0.2
 six==1.10.0
 tornado==4.3
 Werkzeug==0.11.2
