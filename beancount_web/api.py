@@ -721,7 +721,10 @@ class BeancountReportAPI(object):
         }
 
     def source_files(self):
-        return [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
+        return list(set(
+                        [self.beancount_file_path]
+                        + [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
+                ))
 
     def source(self, file_path=None):
         if file_path:

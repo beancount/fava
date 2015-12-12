@@ -68,7 +68,7 @@ def source():
         if request.args.get('is_ajax', False):
             return app.api.source(file_path=request.args.get('file_path', None))
         else:
-            return render_template('source.html', file_path=request.args.get('file_path', None))
+            return render_template('source.html', file_path=request.args.get('file_path', app.api.beancount_file_path))
 
     elif request.method == "POST":
         successful_write = app.api.set_source(file_path=request.form['file_path'], source=request.form['source'])
