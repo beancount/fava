@@ -1,0 +1,60 @@
+// Editor
+
+.editor-wrapper {
+    position: relative;
+    margin-top: 20px;
+
+    &.editor-wrapper-source {
+        position: relative;
+
+        .editor {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+    }
+
+    &.editor-wrapper-readonly { margin-bottom: 20px; }
+}
+
+.editor.ace-chrome {
+    border: 1px solid #e8e8e8;
+
+    .ace_gutter {
+        border-right: 1px solid #e8e8e8;
+        background: white;
+        color: #A7A5A5;
+        font-weight: normal;
+    }
+
+    .ace_gutter-cell { padding: 0 6px; }
+
+    .ace_comment {
+        color: #999988;
+        font-style: italic;
+    }
+
+    .ace_directive {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .ace_class, .ace_double { color: #bb8844; }
+    .ace_constant.ace_numeric.ace_date { color: #009999; }
+    .ace_constant, .ace_constant.ace_language, .ace_tag { color: #008080; }
+    .ace_account { color: #333; }
+    .ace_invalid { color: #333; background: transparent; }
+    // .ace_marker-layer .ace_active-line { background: #ffffcc; }
+}
+
+form.editor-source {
+    float: right;
+    margin-top: -20px;
+}
+
+form.editor-save {
+    float: right;
+    margin-top: 10px;
+}

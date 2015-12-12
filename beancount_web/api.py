@@ -1,3 +1,5 @@
+import os
+
 from datetime import date, timedelta
 
 import bisect, re, collections
@@ -170,8 +172,6 @@ class BeancountReportAPI(object):
     def load_file(self):
         """Load self.beancount_file_path and compute things that are independent
         of how the entries might be filtered later"""
-        with open(self.beancount_file_path, encoding='utf8') as f:
-            self.source = f.read()
 
         self.entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
@@ -646,7 +646,7 @@ class BeancountReportAPI(object):
                         total += holding.market_value
                 if total != ZERO:
                     totals[currency] = total
-                
+
             monthly_totals.append({
                 'begin_date': begin_date,
                 'end_date': end_date,
@@ -715,6 +715,28 @@ class BeancountReportAPI(object):
             'balances': self.balances(account_name),
             'modifier': get_account_sign(account_name, self.account_types),
         }
+
+    def source_files(self):
+        return [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
+
+    def source(self, file_path=None):
+        if file_path:
+            if file_path in self.source_files():
+                with open(file_path, encoding='utf8') as f:
+                    source_ = f.read()
+                return source_
+            else:
+                return None  # TODO raise
+
+        return self._source
+
+    def set_source(self, file_path, source):
+        if file_path in self.source_files():
+            with open(file_path, 'w+', encoding='utf8') as f:
+                f.write(source)
+            return True
+        else:
+            return False  # TODO raise
 
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)

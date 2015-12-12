@@ -123,7 +123,7 @@ $color_bittersweet_approx: #f66;
 .sidebar {
     width: 200px;
     float: left;
-    height: 100%;
+    min-height: 100%;
     position: absolute;
     color: #dadad9;
     border-right: 1px solid #ccc;
@@ -183,6 +183,7 @@ $color_bittersweet_approx: #f66;
 .main {
     margin-left: 200px;
     padding: 20px;
+    min-height: 100%;
 }
 
 .headerline h3 {
@@ -373,6 +374,7 @@ h1 {
         display: inline-block;
     }
 }
+
 dl {
     margin-top: 20px;
     font-size: 13px;
@@ -383,6 +385,9 @@ dl {
         float: left;
         font-weight: bold;
     }
+
+    dt, dd { margin-bottom: 3px; }
+    pre { overflow-x: auto; }
 }
 
 p.empty {
@@ -596,3 +601,5 @@ span {
     dt { width: 60px; }
     dd { margin-bottom: 8px; }
 }
+
+@import "editor";
