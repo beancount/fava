@@ -1,0 +1,18 @@
+{% extends "_layout.html" %}
+{% set active_page = 'notes' %}
+
+{% block title %}Notes{% endblock %}
+
+{% block content %}
+    <h1>Notes</h1>
+    {% set notes = api.notes() %}
+    {% if notes %}
+        {% with journal=notes %}
+            {% include "_journal_table.html" %}
+        {% endwith %}
+    {% else %}
+    <p class="empty">
+        No notes.
+    </p>
+    {% endif %}
+{% endblock %}

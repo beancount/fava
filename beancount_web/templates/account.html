@@ -49,6 +49,10 @@
     {% elif monthly_balances %}
 
         {% include "charts/_chart_skeleton.html" %}
+        {% with label="Monthly totals", monthly_totals = monthly_totals %}
+            {% include "charts/_chart_monthly_totals.html" %}
+        {% endwith %}
+
         {% for m_treemap in monthly_treemaps %}
             {% with label=m_treemap.label, rows=m_treemap.balances, modifier=m_treemap.modifier, level=account_name.split(':')|length %}
                 {% include "charts/_chart_treemap.html" %}

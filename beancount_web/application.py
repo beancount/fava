@@ -17,9 +17,10 @@ def account_with_monthly_balances(name=None):
     return account(account_name=name, with_monthly_balances=True)
 
 def account(account_name=None, with_journal=False, with_monthly_balances=False):
+    monthly_totals = app.api.monthly_totals(account_name)
+
     if with_journal:
         journal = app.api.journal(account_name)
-        monthly_totals = app.api.monthly_totals(account_name)
 
         # should this be done in the api?
         linechart_data = []
@@ -49,11 +50,11 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
                 'balances': app.api.balances(account_name, begin_date=month_begin, end_date=month_end)
             })
 
-        return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps)
+        return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps, monthly_totals=monthly_totals)
 
 @app.route('/')
 def index():
-    return redirect(url_for('report', report_name='balance_sheet'))
+    return redirect(url_for('report', report_name='income_statement'))
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
@@ -80,6 +81,7 @@ def report(report_name):
     if report_name in [
             'balance_sheet',
             'documents',
+            'notes',
             'errors',
             'income_statement',
             'journal',

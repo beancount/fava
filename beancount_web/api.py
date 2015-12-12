@@ -621,9 +621,13 @@ class BeancountReportAPI(object):
         postings = realization.get_postings(real_account)
         return self._journal_for_postings(postings)
 
-    def documents(self, account_name=None):
+    def documents(self):
         postings = realization.get_postings(self.real_accounts)
         return self._journal_for_postings(postings, Document)
+
+    def notes(self):
+        postings = realization.get_postings(self.real_accounts)
+        return self._journal_for_postings(postings, Note)
 
     def holdings(self):
         return holdings_reports.report_holdings(None, False, self.entries, self.options)
