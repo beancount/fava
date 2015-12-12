@@ -29,12 +29,36 @@ def run(argv):
                         action='store_true',
                         help="Turn on debugging. This uses the built-in Flask \
                               webserver, and live-reloading of beancount-files is disabled.")
+    parser.add_argument('--profile',
+                        action = 'store_true',
+                        help="Turn on profiling.  Implies --debug.  Profiling \
+                              information for each request will be printed to the \
+                              log, unless --pstats-output is also specified.")
+
+    parser.add_argument('--pstats-output',
+                        type=str,
+                        help="Output directory for profiling pstats data.  \
+                              Implies --profile.  If this is specified, \
+                              profiling information will be saved to the \
+                              specified directly and will not be printed to \
+                              the log.")
+
+    parser.add_argument('--profile-restriction',
+                        type=int,
+                        default=30,
+                        help='Maximum number of functions to show in profile printed \
+                              to the log.')
 
     parser.add_argument('filename',
                         type=str,
                         help="Beancount input file.")
 
     args = parser.parse_args(argv)
+
+    if args.pstats_output is not None:
+        args.profile = True
+    if args.profile:
+        args.debug = True
 
     app.beancount_file = args.filename
     app.filter_year = None
@@ -43,6 +67,13 @@ def run(argv):
     app.api = BeancountReportAPI(app.beancount_file)
 
     if args.debug:
+        if args.profile:
+            from werkzeug.contrib.profiler import ProfilerMiddleware
+            app.config['PROFILE'] = True
+            kwargs = {}
+            if args.pstats_output is not None:
+                kwargs['profile_dir'] = args.pstats_output
+            app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[args.profile_restriction], **kwargs)
         app.run(args.host, args.port, args.debug)
     else:
         server = Server(app.wsgi_app)

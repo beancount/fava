@@ -1,10 +1,13 @@
 from datetime import date, timedelta
 
+import bisect, re, collections
+
 from beancount import loader
 from beancount.reports import balance_reports
 from beancount.reports import html_formatter
 from beancount.reports import context
-from beancount.core import realization
+from beancount.utils import bisect_key
+from beancount.core import realization, flags
 from beancount.core import interpolate
 from beancount.web.views import AllView
 from beancount.parser import options
@@ -15,8 +18,127 @@ from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
 from beancount.web.views import YearView, TagView
-from beancount.ops import summarize
+from beancount.ops import summarize, prices, holdings
+from beancount.ops.holdings import Holding
 
+# This really belongs in beancount:src/python/beancount/ops/holdings.py
+def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
+    """Compute a Holding corresponding to the specified position 'pos'.
+
+    :param lot: A Lot object.
+    :param number: The number of units of 'lot' in the position.
+    :param account: A str, the name of the account, or None if not needed.
+    :param price_map: A dict of prices, as built by prices.build_price_map().
+    :param date: A datetime.date instance, the date at which to price the
+        holdings.  If left unspecified, we use the latest price information.
+
+    :return: A Holding object.
+    """
+    if lot.cost is not None:
+        # Get price information if we have a price_map.
+        market_value = None
+        if price_map is not None:
+            base_quote = (lot.currency, lot.cost.currency)
+            price_date, price_number = prices.get_price(price_map,
+                                                        base_quote, date)
+            if price_number is not None:
+                market_value = number * price_number
+        else:
+            price_date, price_number = None, None
+
+        return Holding(account,
+                       number,
+                       lot.currency,
+                       lot.cost.number,
+                       lot.cost.currency,
+                       number * lot.cost.number,
+                       market_value,
+                       price_number,
+                       price_date)
+    else:
+        return Holding(account,
+                       number,
+                       lot.currency,
+                       None,
+                       lot.currency,
+                       number,
+                       number,
+                       None,
+                       None)
+
+def inventory_at_dates(entries, dates, transaction_predicate, posting_predicate):
+    """Generator that yields the aggregate inventory at the specified dates.
+
+    The inventory for a specified date includes all matching postings PRIOR to
+    it.
+
+    :param entries: list of entries, sorted by date.
+    :param dates: iterator of dates
+    :param transaction_predicate: predicate called on each Transaction entry to
+        decide whether to include its postings in the inventory.
+    :param posting_predicate: predicate with the Transaction and Posting to
+        decide whether to include the posting in the inventory.
+    """
+    entry_i = 0
+    num_entries = len(entries)
+
+    # inventory maps lot to amount
+    inventory = collections.defaultdict(lambda: ZERO)
+    prev_date = None
+    for date in dates:
+        assert prev_date is None or date >= prev_date
+        prev_date = date
+        while entry_i < num_entries and entries[entry_i].date < date:
+            entry = entries[entry_i]
+            entry_i += 1
+            if isinstance(entry, Transaction) and transaction_predicate(entry):
+                for posting in entry.postings:
+                    if posting_predicate(entry, posting):
+                        old_value = inventory[posting.position.lot]
+                        new_value = old_value + posting.position.number
+                        if new_value == ZERO:
+                            del inventory[posting.position.lot]
+                        else:
+                            inventory[posting.position.lot] = new_value
+        yield inventory
+
+def account_descendants_re_pattern(*roots):
+    """Returns pattern for matching descendant accounts.
+
+    :param roots: The list of parent account names.  These should not
+        end with a ':'.
+
+    :return: The regular expression pattern for matching descendants of
+             the specified parents, or those parents themselves.
+    """
+    return '|'.join('(?:^' + re.escape(name) + '(?::|$))' for name in roots)
+
+def holdings_at_dates(entries, dates, price_map, options_map):
+    """Computes aggregate holdings at mulitple dates.
+
+    Yields for each date the list of Holding objects.  The holdings are
+    aggregated across accounts; the Holding objects will have the account field
+    set to None.
+
+    :param entries: The list of entries.
+    :param dates: The list of dates.
+    :param price_map: A dict of prices, as built by prices.build_price_map().
+    :param options_map: The account options.
+    """
+    account_types = options.get_account_types(options_map)
+    FLAG_UNREALIZED = flags.FLAG_UNREALIZED
+    transaction_predicate = lambda e: e.flag != FLAG_UNREALIZED
+    account_re = re.compile(account_descendants_re_pattern(
+        account_types.assets,
+        account_types.liabilities))
+    posting_predicate = lambda e, p: account_re.match(p.account)
+    for date, inventory in zip(dates,
+                               inventory_at_dates(
+                                   entries, dates,
+                                   transaction_predicate = transaction_predicate,
+                                   posting_predicate = posting_predicate)):
+        yield [get_holding_from_position(lot, number, price_map=price_map, date=date)
+               for lot, number in inventory.items()]
 
 class BeancountReportAPI(object):
     """
@@ -53,6 +175,7 @@ class BeancountReportAPI(object):
 
         self.entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
+        self.price_map = prices.build_price_map(self.all_entries)
 
         self.title = self.options['title']
 
@@ -186,17 +309,19 @@ class BeancountReportAPI(object):
 
     def _inventory_to_json(self, inventory):
         """
-        Renders an Inventory to an array.
+        Renders an Inventory to a currency -> amount dict.
 
         Returns:
-            [
-                {
-                    'number': 123.45,
-                    'currency': 'USD'
-                }, ...
-            ]
+            {
+                'USD': 123.45,
+                'CAD': 567.89,
+                ...
+            }
         """
-        return { position.lot.currency: position.number for position in sorted(inventory) }
+        result = collections.defaultdict(lambda: ZERO)
+        for position in inventory:
+            result[position.lot.currency] += position.number
+        return { currency: number for currency, number in result.items() if number != ZERO }
 
     def _journal_for_postings(self, postings, include_types=None):
         journal = []
@@ -323,11 +448,10 @@ class BeancountReportAPI(object):
         month_tuples = self._month_tuples(self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, begin_date, end_date + timedelta(days=1),
-                                                          self.options)
-
-            income_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options['name_income']))
-            expenses_totals = self._table_totals(realization.get(realization.realize(entries, self.account_types), self.options['name_expenses']))
+            entries = self._entries_in_inclusive_range(begin_date, end_date)
+            realized = realization.realize(entries, self.account_types)
+            income_totals = self._table_totals(realization.get(realized, self.account_types.income))
+            expenses_totals = self._table_totals(realization.get(realized, self.account_types.expenses))
 
             # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
             sum_ = ZERO
@@ -381,23 +505,32 @@ class BeancountReportAPI(object):
 
         return monthly_totals
 
+    def _entries_in_inclusive_range(self, begin_date=None, end_date=None):
+        """
+        Returns the list of entries satisfying begin_date <= date <= end_date.
+        """
+        get_date = lambda x: x.date
+        if begin_date is None:
+            begin_index = 0
+        else:
+            begin_index = bisect_key.bisect_left_with_key(self.entries, begin_date, key=get_date)
+        if end_date is None:
+            end_index = len(self.entries)
+        else:
+            end_index = bisect_key.bisect_left_with_key(self.entries, end_date+timedelta(days=1), key=get_date)
+        return self.entries[begin_index:end_index]
+
     def _real_accounts(self, account_name, begin_date=None, end_date=None):
         """
-        Returns the realization.RealAccount instances for account_name, and their entries
-        clamped by the optional begin_date and end_date.
+        Returns the realization.RealAccount instances for account_name, and
+        their entries clamped by the optional begin_date and end_date.
 
-        Returns:
-            realization.RealAccount instances
+        Warning: For efficiency, the returned result does not include any added
+        postings to account for balances at 'begin_date'.
+
+        :return: realization.RealAccount instances
         """
-        begin_date_, end_date_ = getters.get_min_max_dates(self.entries, (Transaction))
-        if begin_date:
-            begin_date_ = begin_date
-        if end_date:
-            end_date_ = end_date
-
-        entries, index = summarize.clamp_opt(self.entries, begin_date_, end_date_ + timedelta(days=1),
-                                                     self.options)
-
+        entries = self._entries_in_inclusive_range(begin_date=begin_date, end_date=end_date)
         real_accounts = realization.get(realization.realize(entries, self.account_types), account_name)
 
         return real_accounts
@@ -498,38 +631,38 @@ class BeancountReportAPI(object):
     def _net_worth_in_periods(self):
         month_tuples = self._month_tuples(self.entries)
         monthly_totals = []
-        date_start = month_tuples[0][0]
-        networthtable = holdings_reports.NetWorthReport(None, None)
+        end_dates = [p[1] + timedelta(days=1) for p in month_tuples]
 
-        for begin_date, end_date in month_tuples:
-            entries, index = summarize.clamp_opt(self.entries, date_start, end_date + timedelta(days=1),
-                                                          self.options)
-
-            networth_as_table = networthtable.generate_table(entries, self.errors, self.options)
-
-            totals = dict(networth_as_table[2])
-            for key, value in totals.items():
-                totals[key] = float(value.replace(',', ''))
-
+        for (begin_date, end_date), holdings_list in zip(month_tuples,
+                                                        holdings_at_dates(entries=self.entries,
+                                                                          dates=end_dates,
+                                                                          options_map=self.options,
+                                                                          price_map=self.price_map)):
+            totals = dict()
+            for currency in self.options['operating_currency']:
+                total = ZERO
+                for holding in holdings.convert_to_currency(self.price_map, currency, holdings_list):
+                    if holding.cost_currency == currency and holding.market_value:
+                        total += holding.market_value
+                if total != ZERO:
+                    totals[currency] = total
+                
             monthly_totals.append({
                 'begin_date': begin_date,
                 'end_date': end_date,
                 'totals': totals
             })
-
         return monthly_totals
 
     def net_worth(self):
-        networth_report = holdings_reports.NetWorthReport(None, None)
-        networth_as_table = networth_report.generate_table(self.entries, self.errors, self.options)
-
-        current_net_worth = dict(networth_as_table[2])
-        for key, value in current_net_worth.items():
-            current_net_worth[key] = float(value.replace(',', ''))
-
+        monthly_totals = self._net_worth_in_periods()
+        if monthly_totals:
+            current = monthly_totals[-1]['totals']
+        else:
+            current = {}
         return {
-            'net_worth': current_net_worth,
-            'monthly_totals': self._net_worth_in_periods()
+            'net_worth': current,
+            'monthly_totals': monthly_totals
         }
 
     def context(self, ehash=None):
