@@ -50,7 +50,7 @@ def run(argv):
         # auto-reload the main beancount-file and all it's includes
         server.watch(app.beancount_file, app.api.load_file)
         include_path = os.path.dirname(app.beancount_file)
-        for filename in app.api.options()['include']:
+        for filename in app.api.options['include']:
             server.watch(os.path.join(include_path, filename), app.api.load_file)
 
         server.serve(port=args.port, host=args.host, debug=args.debug)
