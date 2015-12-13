@@ -779,10 +779,18 @@ class BeancountReportAPI(object):
     def statistics(self):
         entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
         nb_entries_by_type = { name: len(entries) for name, entries in entries_by_type.items() }
-        # rows = sorted(nb_entries_by_type.items(),
-        #               key=lambda x: x[1], reverse=True)
+
+        all_postings = [posting
+                        for entry in self.entries
+                        if isinstance(entry, Transaction)
+                        for posting in entry.postings]
+
+        postings_by_account = misc_utils.groupby(lambda posting: posting.account, all_postings)
+        nb_postings_by_account = { key: len(postings) for key, postings in postings_by_account.items() }
 
         return {
-            'types': nb_entries_by_type,
-            'total': sum(nb_entries_by_type.values())
+            'entries_by_type':           nb_entries_by_type,
+            'entries_by_type_total':     sum(nb_entries_by_type.values()),
+            'postings_by_account':       nb_postings_by_account,
+            'postings_by_account_total': sum(nb_postings_by_account.values())
         }

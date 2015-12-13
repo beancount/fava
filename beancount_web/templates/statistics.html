@@ -6,28 +6,57 @@
 {% block content %}
     <h1>Statistics</h1>
 
-    <h3>Directive Statistics: Type</h3>
     {% set statistics = api.statistics() %}
-    <table class="statistics">
-        <thead>
-            <tr>
-                <th>Type</th>
-                <th># Entries</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for type, num in statistics.types|dictsort(false, 'value')|reverse %}
+
+    <div class="left statistics">
+        <h3>Postings per Account</h3>
+        <table class="statistics">
+            <thead>
                 <tr>
-                    <td>{{ type }}</td>
-                    <td class="num">{{ num }}</td>
+                    <th>Type</th>
+                    <th># Entries</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td>Total</td>
-                <td class="num">{{ statistics.total }}</td>
-            </tr>
-        </tfoot>
-    </table>
+            </thead>
+            <tbody>
+                {% for account_name, num in statistics.postings_by_account|dictsort(false, 'value')|reverse %}
+                    <tr>
+                        <td><a href="{{ url_for('account_with_journal', name=account_name) }}">{{account_name }}</a></td>
+                        <td class="num">{{ num }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td class="num">{{ statistics.postings_by_account_total }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="left statistics">
+        <h3>Directive Type</h3>
+        <table class="statistics">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th># Entries</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for type, num in statistics.entries_by_type|dictsort(false, 'value')|reverse %}
+                    <tr>
+                        <td>{{ type }}</td>
+                        <td class="num">{{ num }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total</td>
+                    <td class="num">{{ statistics.entries_by_type_total }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 {% endblock %}

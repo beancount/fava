@@ -171,6 +171,10 @@ pre.debug {
   word-wrap: break-word;
 }
 
+.left {
+  float: left;
+}
+
 .wrapper {
   position: absolute;
   top: 41px;
@@ -1719,6 +1723,10 @@ form.editor-source {
 form.editor-save {
   float: right;
   margin-top: 10px;
+}
+
+.left.statistics {
+  margin-right: 30px;
 }
 
 /*# sourceMappingURL=styles.css.map */
