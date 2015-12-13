@@ -95,8 +95,9 @@ def report(report_name):
 
 @app.template_filter('format_currency')
 def format_currency(value):
-    if value:   return "{:,.2f}".format(value)
-    else:       return ''
+    if isinstance(value, decimal.Decimal):
+        return "{:,.2f}".format(value)
+    return ''
 
 @app.template_filter('last_segment')
 def last_segment(account):
