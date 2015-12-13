@@ -17,7 +17,12 @@
                     name: "{{ currency }}",
                     data: [
                         {% for total in monthly_totals -%}
-                            {{ ((total.income_totals[currency] or 0) + (total.expenses_totals[currency] or 0)) * -1 }},
+                            {
+                                {% with value = ((total.income_totals[currency] or 0) + (total.expenses_totals[currency] or 0)) * -1 %}
+                                y: {{ value }},
+                                meta: "{{ value|format_currency }} {{ currency }}"
+                                {% endwith %}
+                            },
                         {% endfor %}
                     ],
                 },

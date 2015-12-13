@@ -28,7 +28,11 @@
                                     name: '{{ event.type }}',
                                     data: [
                                         {% for event in events_chart -%}
-                                            { x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}), y: {{ outer_loop.index }} },
+                                            {
+                                                x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}),
+                                                y: {{ outer_loop.index }},
+                                                meta: "{{ event.description }}<br><em>{{ event.date }} - {{ event.type }}</em>"
+                                            },
                                         {% endfor %}
                                     ]
                                 },

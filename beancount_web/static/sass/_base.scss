@@ -5,6 +5,9 @@
 
 // @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700);
 
+$font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+$font_family_monospaced: monospace;
+
 // Elements
 
 * {
@@ -12,7 +15,7 @@
 }
 
 html, body, html > body {
-    font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+    font-family: $font_family;
     font-weight: 400;
     font-size: 12px;
     height: 100%;
@@ -127,7 +130,7 @@ a {
 
 pre {
     display: block;
-    font-family: monospace;
+    font-family: $font_family_monospaced;
     white-space: pre;
     margin: 0;
     line-height: 1.2em;

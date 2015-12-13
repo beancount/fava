@@ -23,7 +23,11 @@
                     data: [
                         {% set prices = api.prices(commodity.0, commodity.1) %}
                         {% for price in prices -%}
-                            { x: new Date({{ price.0.year }}, {{ price.0.month-1 }}, {{ price.0.day }}), y: {{ price.1 }} },
+                            {
+                                x: new Date({{ price.0.year }}, {{ price.0.month-1 }}, {{ price.0.day }}),
+                                y: {{ price.1 }},
+                                meta: "{{ price.1|format_currency }}<br><em>{{ price.0 }}</em>"
+                            },
                         {% endfor %}
                     ]
                 }]
@@ -46,7 +50,7 @@
                         {% for price in prices -%}
                             <tr>
                                 <td>{{ price.0 }}</td>
-                                <td class="num">{{ price.1 }}</td>
+                                <td class="num">{{ price.1|format_currency }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>

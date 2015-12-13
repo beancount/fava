@@ -28,7 +28,11 @@
                                 data: [
                                     {% for row in linechart_data -%}
                                         {% if currency in row.balance -%}
-                                        { x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}), y: {{ row.balance[currency] or '0' }} },
+                                        {
+                                            x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}),
+                                            y: {{ row.balance[currency] }},
+                                            meta: "{{ row.balance[currency]|format_currency }} {{ currency }}<br><em>{{ row.date }}</em>"
+                                        },
                                         {% endif -%}
                                     {% endfor -%}
                                 ]

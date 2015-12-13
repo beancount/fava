@@ -25,3 +25,29 @@ $.urlParam = function(name){
        return results[1] || 0;
     }
 }
+
+// http://stackoverflow.com/a/27385169
+var decodeEntities = (function() {
+    // this prevents any overhead from creating the object each time
+    var element = document.createElement('div');
+
+    // regular expression matching HTML entities
+    var entity = /&(?:#x[a-f0-9]+|#[0-9]+|[a-z0-9]+);?/ig;
+
+    return function decodeHTMLEntities(str) {
+        // find and replace all the html entities
+        str = str.replace(entity, function(m) {
+            element.innerHTML = m;
+            return element.textContent;
+        });
+
+        // reset the value
+        element.textContent = '';
+
+        return str;
+    }
+})();
+
+function formatCurrency(x){
+    return parseFloat(x.toFixed(2))
+}

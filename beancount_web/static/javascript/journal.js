@@ -23,7 +23,7 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
 });
 
 Handlebars.registerHelper('format_currency', function(number) {
-    if (number) return number.toFixed(2);
+    if (number) return formatCurrency(number);
 });
 
 Handlebars.registerHelper('context_url', function(hash) {

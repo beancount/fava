@@ -1671,6 +1671,47 @@ span.pnsep {
   border-color: #a748ca;
 }
 
+.chartist-tooltip {
+  font-family: monospace;
+  font-size: 13px;
+  position: absolute;
+  display: inline-block;
+  opacity: 0;
+  min-width: 5em;
+  padding: .5em;
+  background: #f4f4f4;
+  border: 1px solid #CCC;
+  box-shadow: 0px 0px 5px #dddddd;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+  -webkit-transition: opacity .2s linear;
+  -moz-transition: opacity .2s linear;
+  -o-transition: opacity .2s linear;
+  transition: opacity .2s linear;
+}
+.chartist-tooltip:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -15px;
+  border: 15px solid transparent;
+  border-top-color: #ccc;
+}
+.chartist-tooltip.tooltip-show {
+  opacity: 1;
+}
+.chartist-tooltip em {
+  font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+  font-size: 0.9em;
+  display: block;
+  margin-top: 5px;
+  color: #777;
+}
+
 .treemap-node .treemap-label a {
   color: white;
 }
@@ -1678,22 +1719,38 @@ span.pnsep {
   text-decoration: underline;
 }
 
-#treetable-popover {
+.treetable-popover {
+  z-index: 999;
   position: absolute;
   background: #f4f4f4;
   border: 1px solid #CCC;
   box-shadow: 0px 0px 5px #dddddd;
   padding: 10px 5px 0 15px;
 }
-#treetable-popover dl {
+.treetable-popover:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -15px;
+  border: 15px solid transparent;
+  border-top-color: #ccc;
+}
+.treetable-popover dl {
   margin-top: 0;
   min-width: 270px;
 }
-#treetable-popover dt {
+.treetable-popover dt {
   width: 60px;
 }
-#treetable-popover dd {
+.treetable-popover dd {
   margin-bottom: 8px;
+}
+.treetable-popover dd pre {
+  font-size: 13px;
+  line-height: 1em;
 }
 
 .editor-wrapper {

@@ -110,3 +110,45 @@ $ct-series-colors: (
         }
     }
 }
+
+.chartist-tooltip {
+    font-family: $font_family_monospaced;
+    font-size: 13px;
+    position: absolute;
+    display: inline-block;
+    opacity: 0;
+    min-width: 5em;
+    padding: .5em;
+    background: rgb(244, 244, 244);
+    border: 1px solid #CCC;
+    box-shadow: 0px 0px 5px rgb(221, 221, 221);
+    text-align: center;
+    pointer-events: none;
+    z-index: 1;
+    -webkit-transition: opacity .2s linear;
+    -moz-transition: opacity .2s linear;
+    -o-transition: opacity .2s linear;
+    transition: opacity .2s linear;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -15px;
+        border: 15px solid transparent;
+        border-top-color: #ccc;
+    }
+
+    &.tooltip-show { opacity: 1; }
+
+    em {
+        font-family: $font_family;
+        font-size: 0.9em;
+        display: block;
+        margin-top: 5px;
+        color: #777;
+    }
+}

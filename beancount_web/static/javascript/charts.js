@@ -23,7 +23,12 @@ $(document).ready(function() {
                 referenceValue: 0,
             },
             plugins: [
-                Chartist.plugins.legend()
+                Chartist.plugins.legend(),
+                Chartist.plugins.tooltip({
+                    tooltipFnc: function(meta, value){
+                        return decodeEntities(meta);
+                    }
+                })
             ]
         };
 
@@ -73,20 +78,20 @@ $(document).ready(function() {
                     centerLabelVertically: true,
                     itemMargin: 3,
                     mouseenter: function (node, event) {
-                        $('.charts-container').append('<div id="treetable-popover"></div>');
-                        $('#treetable-popover').html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><pre>' + node.balance + '</pre></dd></dl>').hide().fadeIn(200);
-                    },
-                    mousemove: function (node, event) {
+                        $(event.target).append('<div class="treetable-popover"></div>');
+                        var $popover = $('.treetable-popover');
+                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><pre>' + node.balance + '</pre></dd></dl>').hide().fadeIn(200);
+
                         var windowWidth = $(window.window).width();
-                        var popover = $('#treetable-popover');
-                        var left = event.pageX + popover.width() + 45 > windowWidth ? windowWidth - $('#treetable-popover').width() - 45 : event.pageX;
-                        $('#treetable-popover').css({
-                           left:  left,
-                           top:   event.pageY
+                        var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,
+                        left = (left + $popover.width() > windowWidth) ? (windowWidth - $popover.width()) : left;
+                        $popover.css({
+                            left: left,
+                            top:  node.bounds.height / 2 - $popover.height() - 30
                         });
                     },
                     mouseleave: function (node, event) {
-                        $('#treetable-popover').remove();
+                        $('.treetable-popover').remove();
                     }
                 };
 

@@ -233,7 +233,7 @@ table {
         &.num {
             color: black;
             padding-left: 14px;
-            font: 1.1em/1.1em monospace;
+            font: 1.1em/1.1em $font_family_monospaced;
             text-align: right;
             padding-right: 6px !important;
             vertical-align: top;
@@ -610,12 +610,25 @@ span {
     &:hover { text-decoration: underline; }
 }
 
-#treetable-popover {
+.treetable-popover {
+    z-index: 999;
     position: absolute;
     background: rgb(244, 244, 244);
     border: 1px solid #CCC;
     box-shadow: 0px 0px 5px rgb(221, 221, 221);
     padding: 10px 5px 0 15px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -15px;
+        border: 15px solid transparent;
+        border-top-color: #ccc;
+    }
 
     dl {
         margin-top: 0;
@@ -624,6 +637,7 @@ span {
 
     dt { width: 60px; }
     dd { margin-bottom: 8px; }
+    dd pre { font-size: 13px; line-height: 1em; }
 }
 
 // Editor
