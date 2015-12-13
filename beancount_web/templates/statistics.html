@@ -1,0 +1,33 @@
+{% extends "_layout.html" %}
+{% set active_page = 'statistics' %}
+
+{% block title %}Statistics{% endblock %}
+
+{% block content %}
+    <h1>Statistics</h1>
+
+    <h3>Directive Statistics: Type</h3>
+    {% set statistics = api.statistics() %}
+    <table class="statistics">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th># Entries</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for type, num in statistics.types|dictsort(false, 'value')|reverse %}
+                <tr>
+                    <td>{{ type }}</td>
+                    <td class="num">{{ num }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Total</td>
+                <td class="num">{{ statistics.total }}</td>
+            </tr>
+        </tfoot>
+    </table>
+{% endblock %}

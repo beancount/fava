@@ -22,6 +22,7 @@ from beancount.core import getters
 from beancount.web.views import YearView, TagView
 from beancount.ops import summarize, prices, holdings
 from beancount.ops.holdings import Holding
+from beancount.utils import misc_utils
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
 def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
@@ -774,3 +775,14 @@ class BeancountReportAPI(object):
 
     def prices(self, base, quote):
         return prices.get_all_prices(self.price_map, "{}/{}".format(base, quote))
+
+    def statistics(self):
+        entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
+        nb_entries_by_type = { name: len(entries) for name, entries in entries_by_type.items() }
+        # rows = sorted(nb_entries_by_type.items(),
+        #               key=lambda x: x[1], reverse=True)
+
+        return {
+            'types': nb_entries_by_type,
+            'total': sum(nb_entries_by_type.values())
+        }
