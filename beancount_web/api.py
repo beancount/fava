@@ -23,6 +23,8 @@ from beancount.web.views import YearView, TagView
 from beancount.ops import summarize, prices, holdings
 from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
+from beancount.core.realization import RealAccount, find_last_active_posting
+from beancount.core.data import get_entry
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
 def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
@@ -777,6 +779,7 @@ class BeancountReportAPI(object):
         return prices.get_all_prices(self.price_map, "{}/{}".format(base, quote))
 
     def statistics(self):
+        # nb_entries_by_type
         entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
         nb_entries_by_type = { name: len(entries) for name, entries in entries_by_type.items() }
 
@@ -785,12 +788,34 @@ class BeancountReportAPI(object):
                         if isinstance(entry, Transaction)
                         for posting in entry.postings]
 
+        # nb_postings_by_account
         postings_by_account = misc_utils.groupby(lambda posting: posting.account, all_postings)
         nb_postings_by_account = { key: len(postings) for key, postings in postings_by_account.items() }
+
+        # nb_activity_by_account
+        nb_activity_by_account = []
+        for real_account in realization.iter_children(self.real_accounts):
+            if not isinstance(real_account, RealAccount):
+                continue
+            last_posting = realization.find_last_active_posting(
+                real_account.txn_postings)
+
+            if last_posting is None or isinstance(last_posting, Close):
+                continue
+
+            entry = get_entry(last_posting)
+
+            nb_activity_by_account.append({
+                'account': real_account.account,
+                'last_posting_date': entry.date,
+                'filename': entry.meta['filename'],
+                'lineno': entry.meta['lineno']
+            })
 
         return {
             'entries_by_type':           nb_entries_by_type,
             'entries_by_type_total':     sum(nb_entries_by_type.values()),
             'postings_by_account':       nb_postings_by_account,
-            'postings_by_account_total': sum(nb_postings_by_account.values())
+            'postings_by_account_total': sum(nb_postings_by_account.values()),
+            'activity_by_account':       nb_activity_by_account
         }

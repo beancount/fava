@@ -20,7 +20,7 @@
             <tbody>
                 {% for account_name, num in statistics.postings_by_account|dictsort(false, 'value')|reverse %}
                     <tr>
-                        <td><a href="{{ url_for('account_with_journal', name=account_name) }}">{{account_name }}</a></td>
+                        <td><a href="{{ url_for('account_with_journal', name=account_name) }}">{{ account_name }}</a></td>
                         <td class="num">{{ num }}</td>
                     </tr>
                 {% endfor %}
@@ -31,6 +31,26 @@
                     <td class="num">{{ statistics.postings_by_account_total }}</td>
                 </tr>
             </tfoot>
+        </table>
+    </div>
+
+    <div class="left statistics">
+        <h3>Update Activity per Account</h3>
+        <table class="statistics">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    <th>Last Entry</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for activity in statistics.activity_by_account %}
+                    <tr>
+                        <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
+                        <td><a href="{{ url_for('source') }}?file_path={{ activity.filename }}&line={{ activity.lineno }}">{{ activity.last_posting_date }}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 
