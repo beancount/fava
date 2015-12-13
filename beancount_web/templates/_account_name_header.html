@@ -12,6 +12,6 @@
 
     <div class="last-activity">
         {% set activity = api.statistics(account_name=account_name) -%}
-        (Last activity: <a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename }}&line={{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
+        (Last activity: <a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
     </div>
 </h1>

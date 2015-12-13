@@ -630,4 +630,8 @@ span {
 @import "editor";
 
 // Statistics
-.left.statistics { margin-right: 30px; }
+.left.statistics {
+    margin-right: 30px;
+
+    table.statistics td:first-child a { font-weight: bold; }
+}

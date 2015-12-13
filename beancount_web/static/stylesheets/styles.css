@@ -1764,5 +1764,8 @@ form.editor-save {
 .left.statistics {
   margin-right: 30px;
 }
+.left.statistics table.statistics td:first-child a {
+  font-weight: bold;
+}
 
 /*# sourceMappingURL=styles.css.map */
