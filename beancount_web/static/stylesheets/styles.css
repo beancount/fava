@@ -644,6 +644,20 @@ h1 pre {
   overflow-x: inherit;
   display: inline-block;
 }
+h1 .last-activity {
+  color: #999;
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: italic;
+}
+h1 .last-activity a {
+  color: #999;
+}
+h1 .last-activity a:hover {
+  color: #333;
+}
 
 dl {
   margin-top: 20px;

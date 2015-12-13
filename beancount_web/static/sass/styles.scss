@@ -377,6 +377,18 @@ h1 {
         overflow-x: inherit;
         display: inline-block;
     }
+
+    .last-activity {
+        color: #999;
+        display: inline-block;
+        margin-left: 20px;
+        font-size: 12px;
+        font-weight: normal;
+        font-style: italic;
+
+        a { color: #999; }
+        a:hover { color: #333; }
+    }
 }
 
 dl {
