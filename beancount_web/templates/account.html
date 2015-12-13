@@ -3,6 +3,11 @@
 
 {% block title %}Account {{ account_name }}{% endblock %}
 
+{% block javascript %}
+    <script src="{{ url_for('static', filename='vendor/handlebars-js/handlebars-v4.0.5.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/journal.js') }}"></script>
+{% endblock javascript %}
+
 {% block content %}
     {% include "_account_name_header.html" %}
 
@@ -31,7 +36,7 @@
                 }
             });
         </script>
-        {% with monthly_totals = monthly_totals %}
+        {% with label="Monthly totals", monthly_totals = monthly_totals %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
         {% set treemap_data = api.treemap_data(account_name) %}
@@ -42,7 +47,7 @@
         <div class="headerline">
             <h3>Journal</h3> <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
         </div>
-        {% with show_tablefilter=True %}
+        {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
 

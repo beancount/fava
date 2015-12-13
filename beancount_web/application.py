@@ -20,7 +20,7 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
     monthly_totals = app.api.monthly_totals(account_name)
 
     if with_journal:
-        journal = app.api.journal(account_name)
+        journal = app.api.journal(account_name, with_change_and_balance=True)
 
         # should this be done in the api?
         linechart_data = []
