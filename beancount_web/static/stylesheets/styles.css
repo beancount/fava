@@ -1544,6 +1544,19 @@ span.pnsep {
 .charts .chart-labels label.selected {
   color: rgba(0, 0, 0, 0.5);
 }
+.charts .charts-container {
+  position: relative;
+  height: 240px;
+}
+.charts .charts-container .loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  margin-top: 90px;
+}
 .charts .ct-chart {
   position: relative;
 }

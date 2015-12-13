@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('.charts-container').html('');
+
     $.each(window.chartData, function(index, chart) {
         chart.id = "chart-" + index;
         chart.options = $.extend({}, chart.options);
