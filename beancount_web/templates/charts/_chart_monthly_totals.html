@@ -15,10 +15,12 @@
                     name: "{{ currency }}",
                     data: [
                         {% for total in monthly_totals -%}
-                            {
-                                y: {{ total.totals[currency] }},
-                                meta: "{{ total.totals[currency]|format_currency }} {{ currency }}"
-                            },
+                            {% if total.totals[currency] %}
+                                {
+                                    y: {{ total.totals[currency] }},
+                                    meta: "{{ total.totals[currency]|format_currency }} {{ currency }}"
+                                },
+                            {% endif %}
                         {% endfor %}
                     ],
                 },
