@@ -17,8 +17,6 @@ def account_with_monthly_balances(name=None):
     return account(account_name=name, with_monthly_balances=True)
 
 def account(account_name=None, with_journal=False, with_monthly_balances=False):
-    monthly_totals = app.api.monthly_totals(account_name)
-
     if with_journal:
         journal = app.api.journal(account_name, with_change_and_balance=True)
 
@@ -32,7 +30,7 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
                     'change': journal_entry['change'],
                 })
 
-        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data, monthly_totals=monthly_totals)
+        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data)
 
     if with_monthly_balances:
         monthly_balances = app.api.monthly_balances(account_name)
@@ -50,7 +48,7 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
                 'balances': app.api.balances(account_name, begin_date=month_begin, end_date=month_end)
             })
 
-        return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps, monthly_totals=monthly_totals)
+        return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps)
 
 @app.route('/')
 def index():
