@@ -48,6 +48,6 @@ var decodeEntities = (function() {
     }
 })();
 
-function formatCurrency(x){
-    return parseFloat(x.toFixed(2))
+function formatCurrency(x) {
+    return parseFloat(x).toFixed(2)
 }
