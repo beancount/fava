@@ -4,7 +4,7 @@ import decimal
 
 from datetime import date, datetime
 
-from flask import Flask, render_template, url_for, request, redirect, abort
+from flask import Flask, render_template, url_for, request, redirect, abort, Markup
 
 app = Flask(__name__)
 
@@ -116,15 +116,18 @@ class MyJSONEncoder(json.JSONEncoder):
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
 
+@app.template_filter('to_json')
+def to_json(json_object):
+    return Markup(json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder))
+
 @app.template_filter('pp')
 def pretty_print(json_object):
     # This filter is used only for debugging purposes
-    from flask import Markup
     from pygments import highlight
     from pygments.lexers import get_lexer_by_name
     from pygments.formatters import HtmlFormatter
 
-    json_dump = json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder)
+    json_dump = to_json(json_object)
     lexer = get_lexer_by_name('python', stripall=True)
     formatter = HtmlFormatter(linenos=True, lineanchors='line', anchorlinenos=True)
     highlighted_source = highlight(json_dump, lexer, formatter)

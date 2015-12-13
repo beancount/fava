@@ -1,5 +1,4 @@
 import os
-
 from datetime import date, timedelta
 
 import bisect, re, collections
@@ -377,7 +376,9 @@ class BeancountReportAPI(object):
                     entry['change'] =        { posting.amount.currency: posting.amount.number }
                     entry['balance'] =       { posting.amount.currency: posting.amount.number }
                     entry['tolerance'] =     posting.tolerance  # TODO currency? TODO in HTML-template
-                    entry['diff_amount'] =   posting.diff_amount  # TODO currency? TODO in HTML-template
+                    if posting.diff_amount:
+                        entry['diff_amount'] =          posting.diff_amount.number  # TODO in HTML-template
+                        entry['diff_amount_currency'] = posting.diff_amount.currency  # TODO in HTML-template
 
                 if isinstance(posting, Transaction):
                     if posting.flag == 'P':
@@ -391,7 +392,6 @@ class BeancountReportAPI(object):
                     entry['change'] =       self._inventory_to_json(change)
                     entry['balance'] =      self._inventory_to_json(entry_balance)
                     entry['legs'] =         []
-
 
                     for posting_ in posting.postings:
                         leg = {
