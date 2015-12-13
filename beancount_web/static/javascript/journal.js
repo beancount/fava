@@ -34,9 +34,9 @@ Handlebars.registerHelper('account_url', function(accountName) {
     return window.accountURL.replace("_REPLACE_ME_", accountName);
 });
 
-// Handlebars.registerHelper('showType', function (type, options) {
-//     return $('.table-filter input#filter-' + type).prop('checked') ? options.fn(this) : options.inverse(this);
-// });
+Handlebars.registerHelper('ifShowChangeAndBalance', function(unused, options) {
+    return window.journalShowChangeAndBalance ? options.fn(this) : options.inverse(this);
+});
 
 $(document).ready(function() {
     var source   = $("#journal-template").html();

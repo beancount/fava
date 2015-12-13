@@ -21,6 +21,7 @@
     window.contextURL = "{{ url_for('context', ehash='_REPLACE_ME_') }}";
     window.accountURL = "{{ url_for('account_with_journal', name='_REPLACE_ME_') }}";
     window.journalAsJSON = {{ journal|to_json }};
+    window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
 </script>
 
 <div class="journal-table">
@@ -38,8 +39,10 @@
                 <th class="position">Position</th>
                 <th class="price">Price</th>
                 <th class="cost">Cost</th>
-                <th class="change">Change</th>
-                <th class="balance">Balance</th>
+                {{#ifShowChangeAndBalance window}}
+                    <th class="change">Change</th>
+                    <th class="balance">Balance</th>
+                {{/ifShowChangeAndBalance}}
             </tr>
         </thead>
         <tbody>
@@ -75,20 +78,22 @@
                         {{ narration }}
                     {{/ifCond}}
                 </td>
-                <td class="change num">
-                    {{#if change }}
-                        {{#each change }}
-                            {{ format_currency this }} {{ @key }}<br>
-                        {{/each}}
-                    {{/if}}
-                </td>
-                <td class="balance num">
-                    {{#if balance }}
-                        {{#each balance }}
-                            {{ format_currency this }} {{ @key }}<br>
-                        {{/each}}
-                    {{/if}}
-                </td>
+                {{#ifShowChangeAndBalance window}}
+                    <td class="change num">
+                        {{#if change }}
+                            {{#each change }}
+                                {{ format_currency this }} {{ @key }}<br>
+                            {{/each}}
+                        {{/if}}
+                    </td>
+                    <td class="balance num">
+                        {{#if balance }}
+                            {{#each balance }}
+                                {{ format_currency this }} {{ @key }}<br>
+                            {{/each}}
+                        {{/if}}
+                    </td>
+                {{/ifShowChangeAndBalance}}
             </tr>
                 {{#with this as |journalEntry|}}
                 {{#each legs }}
@@ -99,8 +104,10 @@
                         <td class="position num">{{ format_currency position }} {{ position_currency }}</td>
                         <td class="price num">{{ format_currency price }} {{ price_currency }}</td>
                         <td class="cost num">{{ format_currency cost }} {{ cost_currency }}</td>
-                        <td class="change num"></td>
-                        <td class="balance num"></td>
+                        {{#ifShowChangeAndBalance window}}
+                            <td class="change num"></td>
+                            <td class="balance num"></td>
+                        {{/ifShowChangeAndBalance}}
                     </tr>
                 {{/each}}
                 {{/with}}
