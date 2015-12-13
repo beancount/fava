@@ -32,6 +32,7 @@ $(document).ready(function() {
 
         var editor = ace.edit("editor-source");
         editor.setOptions(defaultOptions);
+        editor.focus();
 
         $.hlLine = $.urlParam('line');
         $('form.editor-source select[name="file_path"]').change(function(event) {
