@@ -9,4 +9,9 @@
         {% else -%}
             <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>{% endif -%}
     {% endfor -%}
+
+    <div class="last-activity">
+        {% set activity = api.statistics(account_name=account_name) -%}
+        (Last activity: <a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename }}&line={{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
+    </div>
 </h1>

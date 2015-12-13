@@ -1,0 +1,61 @@
+{% extends "_layout.html" %}
+{% set active_page = 'events' %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+    <h1>Event: {{ event_type }}</h1>
+
+    {% set events = api.events(event_type=event_type) %}
+
+    {% if events %}
+        {% include "charts/_chart_skeleton.html" %}
+        <script>
+            window.chartData.push({
+                label: "Event: {{ event_type }}",
+                type: "line",
+                options: {
+                    showLine: false,
+                    high: 2,
+                    low: 0
+                },
+                data: {
+                    series: [{
+                        name: '{{ event_type }}',
+                        data: [
+                            {% for event in events -%}
+                                { x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}), y: 1 },
+                            {% endfor %}
+                        ]
+                    }]
+                }
+            });
+        </script>
+
+        <h3>Entries</h3>
+        <table class="events">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        {% with link=url_for('source')+"?file_path=" + event.meta.filename + "&line=" + event.meta.lineno|safe %}
+                        <td><a href="{{ link }}">{{ event.date }}</a></td>
+                        {% endwith %}
+                        <td>{{ event.type }}</td>
+                        <td>{{ event.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <p class="empty">
+        No events.
+    </p>
+    {% endif %}
+{% endblock %}

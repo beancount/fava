@@ -74,17 +74,24 @@ def source():
             app.api.load_file()
         return str(successful_write)
 
+@app.route('/event/<event_type>/')
+def event_details(event_type=None):
+    return render_template('event_detail.html', event_type=event_type)
+
 @app.route('/<report_name>/')
 def report(report_name):
     if report_name in [
             'balance_sheet',
             'documents',
             'notes',
+            'events',
             'errors',
             'income_statement',
             'journal',
             'holdings',
             'options',
+            'statistics',
+            'commodities',
             'net_worth',
             'trial_balance',
     ]:

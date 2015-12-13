@@ -1,0 +1,57 @@
+{% extends "_layout.html" %}
+{% set active_page = 'commodities' %}
+
+{% block title %}Commodities{% endblock %}
+
+{% block content %}
+    <h1>Commodities</h1>
+
+    {% set commodities = api.commodities() %}
+
+    {% include "charts/_chart_skeleton.html" %}
+    <script>
+    {% for commodity in commodities %}
+        window.chartData.push({
+            label: "{{ commodity.0 }} / {{ commodity.1 }}",
+            type: "line",
+            options: {
+                dateformat: "MMM 'YY"
+            },
+            data: {
+                series: [{
+                    name: '{{ commodity.0 }} /  {{ commodity.1 }}',
+                    data: [
+                        {% set prices = api.prices(commodity.0, commodity.1) %}
+                        {% for price in prices -%}
+                            { x: new Date({{ price.0.year }}, {{ price.0.month-1 }}, {{ price.0.day }}), y: {{ price.1 }} },
+                        {% endfor %}
+                    ]
+                }]
+            }
+        });
+    {% endfor %}
+    </script>
+
+    <div class="commodities">
+        {% for commodity in commodities %}
+            <div class="commodity-container commodity-{{ commodity.0 }}-{{ commodity.1 }}" style="float: left; margin-right: 20px; ">
+                <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
+                <table class="commodity">
+                    <thead>
+                        <th>Date</th>
+                        <th>Price</th>
+                    </thead>
+                    <tbody>
+                        {% set prices = api.prices(commodity.0, commodity.1) %}
+                        {% for price in prices -%}
+                            <tr>
+                                <td>{{ price.0 }}</td>
+                                <td class="num">{{ price.1 }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "_layout.html" %}
+{% set active_page = 'events' %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+    <h1>Events</h1>
+    {% set events = api.events(only_include_newest=True) %}
+    {% if events %}
+        {% include "charts/_chart_skeleton.html" %}
+
+        <script>
+
+                window.chartData.push({
+                    label: "Events",
+                    type: "line",
+                    options: {
+                        showLine: false,
+                        high: {{ events|length + 1 }},
+                        low: 0
+                    },
+                    data: {
+                        series: [
+                            {% for event in events %}
+                                {% set outer_loop = loop %}
+                                {% set events_chart = api.events(event_type=event.type, only_include_newest=False) %}
+                                {
+                                    name: '{{ event.type }}',
+                                    data: [
+                                        {% for event in events_chart -%}
+                                            { x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}), y: {{ outer_loop.index }} },
+                                        {% endfor %}
+                                    ]
+                                },
+                        {% endfor %}
+                        ]
+                    }
+                });
+
+        </script>
+
+        <h3>Entries</h3>
+        <table class="events">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        {% with link=url_for('source')+"?file_path=" + event.meta.filename + "&line=" + event.meta.lineno|safe %}
+                        <td><a href="{{ link }}">{{ event.date }}</a></td>
+                        {% endwith %}
+                        <td><a href="{{ url_for('event_details', event_type=event.type) }}">{{ event.type }}</a></td>
+                        <td>{{ event.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+    <p class="empty">
+        No events.
+    </p>
+    {% endif %}
+{% endblock %}

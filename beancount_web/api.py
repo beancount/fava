@@ -14,13 +14,16 @@ from beancount.web.views import AllView
 from beancount.parser import options
 from beancount.core import compare
 from beancount.core.number import ZERO
-from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad  # TODO implement missing
+from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad, Event  # TODO implement missing
 from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
 from beancount.web.views import YearView, TagView
 from beancount.ops import summarize, prices, holdings
 from beancount.ops.holdings import Holding
+from beancount.utils import misc_utils
+from beancount.core.realization import RealAccount, find_last_active_posting
+from beancount.core.data import get_entry
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
 def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
@@ -342,6 +345,7 @@ class BeancountReportAPI(object):
                 isinstance(posting, Open) or \
                 isinstance(posting, Close) or \
                 isinstance(posting, Pad) or \
+                isinstance(posting, Event) or \
                 isinstance(posting, Document):   # TEMP
 
                 # if isinstance(posting, TxnPosting):
@@ -364,6 +368,10 @@ class BeancountReportAPI(object):
 
                 if isinstance(posting, Close):
                     entry['account'] =       posting.account
+
+                if isinstance(posting, Event):
+                    entry['type'] =             posting.type
+                    entry['description'] =      posting.description
 
                 if isinstance(posting, Note):
                     entry['comment'] =       posting.comment
@@ -639,6 +647,21 @@ class BeancountReportAPI(object):
         postings = realization.get_postings(self.real_accounts)
         return self._journal_for_postings(postings, Note)
 
+    def events(self, event_type=None, only_include_newest=False):
+        events = self._journal_for_postings(self.entries, Event)
+
+        if event_type:
+            events = [event for event in events if event['type'] == event_type]
+
+        if only_include_newest:
+            seen_types = list()
+            for event in events:
+                if not event['type'] in seen_types:
+                    seen_types.append(event['type'])
+            events = list({ event['type']: event for event in events }.values())
+
+        return events
+
     def holdings(self):
         return holdings_reports.report_holdings(None, False, self.entries, self.options)
 
@@ -758,3 +781,59 @@ class BeancountReportAPI(object):
     def monthly_totals(self, account_name):
         real_account = realization.get(self.real_accounts, account_name)
         return self._monthly_totals(real_account.account, self.entries)
+
+    def commodities(self):
+        return sorted(self.price_map.forward_pairs)
+
+    def prices(self, base, quote):
+        return prices.get_all_prices(self.price_map, "{}/{}".format(base, quote))
+
+    def _activity_by_account(self, account_name=None):
+        nb_activity_by_account = []
+        for real_account in realization.iter_children(self.real_accounts):
+            if not isinstance(real_account, RealAccount):
+                continue
+            if account_name and real_account.account != account_name:
+                continue
+
+            last_posting = realization.find_last_active_posting(
+                real_account.txn_postings)
+
+            if last_posting is None or isinstance(last_posting, Close):
+                continue
+
+            entry = get_entry(last_posting)
+
+            nb_activity_by_account.append({
+                'account': real_account.account,
+                'last_posting_date': entry.date,
+                'last_posting_filename': entry.meta['filename'],
+                'last_posting_lineno': entry.meta['lineno']
+            })
+
+        return nb_activity_by_account
+
+    def statistics(self, account_name=None):
+        if account_name:
+            return self._activity_by_account(account_name)[0]
+        else:
+            # nb_entries_by_type
+            entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
+            nb_entries_by_type = { name: len(entries) for name, entries in entries_by_type.items() }
+
+            all_postings = [posting
+                            for entry in self.entries
+                            if isinstance(entry, Transaction)
+                            for posting in entry.postings]
+
+            # nb_postings_by_account
+            postings_by_account = misc_utils.groupby(lambda posting: posting.account, all_postings)
+            nb_postings_by_account = { key: len(postings) for key, postings in postings_by_account.items() }
+
+            return {
+                'entries_by_type':           nb_entries_by_type,
+                'entries_by_type_total':     sum(nb_entries_by_type.values()),
+                'postings_by_account':       nb_postings_by_account,
+                'postings_by_account_total': sum(nb_postings_by_account.values()),
+                'activity_by_account':       self._activity_by_account()
+            }

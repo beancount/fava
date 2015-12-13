@@ -171,6 +171,10 @@ pre.debug {
   word-wrap: break-word;
 }
 
+.left {
+  float: left;
+}
+
 .wrapper {
   position: absolute;
   top: 41px;
@@ -590,6 +594,9 @@ table.options_map td:nth-child(2) {
   text-align: left;
   padding-left: 6px;
 }
+table.commodity td:first-child, table.events td:first-child {
+  min-width: inherit;
+}
 table.tree-table td.account a {
   position: relative;
   margin-left: 15px;
@@ -636,6 +643,20 @@ h1 a:link:hover, h1 a:visited:hover {
 h1 pre {
   overflow-x: inherit;
   display: inline-block;
+}
+h1 .last-activity {
+  color: #999;
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 12px;
+  font-weight: normal;
+  font-style: italic;
+}
+h1 .last-activity a {
+  color: #999;
+}
+h1 .last-activity a:hover {
+  color: #333;
 }
 
 dl {
@@ -1738,6 +1759,10 @@ form.editor-source {
 form.editor-save {
   float: right;
   margin-top: 10px;
+}
+
+.left.statistics {
+  margin-right: 30px;
 }
 
 /*# sourceMappingURL=styles.css.map */
