@@ -815,7 +815,8 @@ class BeancountReportAPI(object):
 
     def statistics(self, account_name=None):
         if account_name:
-            return self._activity_by_account(account_name)[0]
+            activity_by_account = self._activity_by_account(account_name)
+            return activity_by_account[0] if len(activity_by_account) == 1 else None
         else:
             # nb_entries_by_type
             entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
