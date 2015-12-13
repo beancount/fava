@@ -26,7 +26,7 @@
                             {
                                 x: new Date({{ price.0.year }}, {{ price.0.month-1 }}, {{ price.0.day }}),
                                 y: {{ price.1 }},
-                                meta: "{{ price.1 }}<br><em>{{ price.0 }}</em>"
+                                meta: "1 {{ commodity.0 }} = {{ price.1 }} {{ commodity.1 }}<br><em>{{ price.0 }}</em>"
                             },
                         {% endfor %}
                     ]

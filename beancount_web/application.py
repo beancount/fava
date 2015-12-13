@@ -99,9 +99,9 @@ def report(report_name):
     return redirect(url_for('report', report_name='balance_sheet'))
 
 @app.template_filter('format_currency')
-def format_currency(value):
+def format_currency(value, digits=2):
     if isinstance(value, decimal.Decimal):
-        return "{:,.2f}".format(value)
+        return ("{:,." + str(digits) + "f}").format(value)
     return ''
 
 @app.template_filter('last_segment')
