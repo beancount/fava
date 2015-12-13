@@ -31,6 +31,21 @@ $(document).ready(function() {
         });
     });
 
+    // Button "Hide legs"
+    $('input#toggle-legs').click(function(event) {
+        event.preventDefault();
+        var shouldHide = $(this).hasClass('hide-legs');
+        $('table.entry-table tr').each(function() {
+            $.each($(this).prop('class').split(' '), function(index, clazz) {
+                if (clazz.startsWith('journal-entry-')) {
+                    $('table.entry-table tr.leg.' + clazz).toggle(shouldHide);
+                    $('table.entry-table tr.leg.' + clazz).toggleClass('hidden', shouldHide);
+                }
+            });
+        });
+        $(this).toggleClass('hide-legs');
+    });
+
     // Tree-expanding
 
     // This fixes if there is a tree-balance, no balance and the row is not a parent.

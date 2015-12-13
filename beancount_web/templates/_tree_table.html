@@ -45,7 +45,7 @@
             <tr>
                 <td>&nbsp;</td>
                 {% for currency in operating_currencies %}
-                    <td class="num">{{ table_data[0]['balances_children'][currency]|format_currency or '' }}</td>
+                    <td class="num">{{ table_data[0]['balances_children'][currency]|format_currency }}</td>
                 {% endfor %}
                 <td class="num">
                     {% for currency in commodities %}
