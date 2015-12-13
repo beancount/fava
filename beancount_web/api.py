@@ -15,7 +15,7 @@ from beancount.web.views import AllView
 from beancount.parser import options
 from beancount.core import compare
 from beancount.core.number import ZERO
-from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad  # TODO implement missing
+from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad, Event  # TODO implement missing
 from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
@@ -337,6 +337,7 @@ class BeancountReportAPI(object):
                 isinstance(posting, Open) or \
                 isinstance(posting, Close) or \
                 isinstance(posting, Pad) or \
+                isinstance(posting, Event) or \
                 isinstance(posting, Document):   # TEMP
 
                 # if isinstance(posting, TxnPosting):
@@ -359,6 +360,10 @@ class BeancountReportAPI(object):
 
                 if isinstance(posting, Close):
                     entry['account'] =       posting.account
+
+                if isinstance(posting, Event):
+                    entry['type'] =             posting.type
+                    entry['description'] =      posting.description
 
                 if isinstance(posting, Note):
                     entry['comment'] =       posting.comment
@@ -628,6 +633,21 @@ class BeancountReportAPI(object):
     def notes(self):
         postings = realization.get_postings(self.real_accounts)
         return self._journal_for_postings(postings, Note)
+
+    def events(self, event_type=None, only_include_newest=False):
+        events = self._journal_for_postings(self.entries, Event)
+
+        if event_type:
+            events = [event for event in events if event['type'] == event_type]
+
+        if only_include_newest:
+            seen_types = list()
+            for event in events:
+                if not event['type'] in seen_types:
+                    seen_types.append(event['type'])
+            events = list({ event['type']: event for event in events }.values())
+
+        return events
 
     def holdings(self):
         return holdings_reports.report_holdings(None, False, self.entries, self.options)
