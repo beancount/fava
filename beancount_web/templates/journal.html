@@ -3,6 +3,11 @@
 
 {% block title %}General Ledger{% endblock %}
 
+{% block javascript %}
+    <script src="{{ url_for('static', filename='vendor/handlebars-js/handlebars-v4.0.5.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/journal.js') }}"></script>
+{% endblock javascript %}
+
 {% block content %}
     <h1>General Ledger</h1>
     {% set journal = api.journal() %}

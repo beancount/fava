@@ -15,7 +15,7 @@
     {% with label="Assets", rows=assets %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
-    {% with label="Liabilities", rows=liabilities %}
+    {% with label="Liabilities", rows=liabilities, modifier=-1 %}
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
     {% with label="Equity", rows=equity, modifier=-1 %}

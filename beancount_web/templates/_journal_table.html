@@ -16,61 +16,103 @@
         </form>
     </div>
 {% endif %}
-<table class="entry-table">
-    <thead>
-        <tr>
-            <th class="datecell">Date</th>
-            <th class="flag">F</th>
-            <th class="description">Narration/Payee</th>
-            <th class="position">Position</th>
-            <th class="price">Price</th>
-            <th class="cost">Cost</th>
-            <th class="change">Change</th>
-            <th class="balance">Balance</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for journal_entry in journal %} {# war account.journal #}
-            <tr class="{{ journal_entry.meta.type }} journal-entry-{{ journal_entry.hash }}" title="{{ journal_entry.meta.filename }}:{{ journal_entry.meta.lineno }}">
-                <td class="datecell"><a href="{{ url_for('context', ehash=journal_entry.hash) }}">{{ journal_entry.date.strftime('%Y-%m-%d') or '' }}</a></td>
-                <td class="flag">{{ journal_entry.flag or '' }}</td>
-                <td class="description" colspan="4">
-                    {% if journal_entry.meta.type == 'open' %}Open <a href="{{ url_for('account_with_journal', name=journal_entry.account) }}">{{ journal_entry.account }}</a>{% endif %}
-                    {% if journal_entry.meta.type == 'note' %}Note: {{ journal_entry.comment }}{% endif %}
-                    {% if journal_entry.meta.type == 'pad' %}Pad{% endif %}
-                    {% if journal_entry.meta.type == 'padding' %}{{ journal_entry.narration }}{% endif %}
-                    {% if journal_entry.meta.type == 'document' %}Document for <a href="{{ url_for('account_with_journal', name=journal_entry.account) }}">{{ journal_entry.account }}</a>: <a href="#TODO">{{ journal_entry.filename }}</a>{% endif %}
-                    {% if journal_entry.meta.type == 'balance' %}Balance <a href="{{ url_for('account_with_journal', name=journal_entry.account) }}">{{ journal_entry.account }}</a> has {{ journal_entry.amount }} {{ journal_entry.amount_currency }}{% endif %}
-                    {% if journal_entry.meta.type == 'transaction' %}<strong>{{ journal_entry.payee or '' }}</strong>{% if journal_entry.payee and journal_entry.narration %} | {% endif %}{{ journal_entry.narration or '' }}{% endif %}
 
-                </td>
-                <td class="change num">
-                    {% if journal_entry.change %}
-                        {% for currency, number in journal_entry.change.items() %}
-                            {{ number|format_currency }} {{ currency }}<br>
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                <td class="balance num">
-                    {% if journal_entry.balance %}
-                        {% for currency, number in journal_entry.balance.items() %}
-                            {{ number|format_currency }} {{ currency }}<br>
-                        {% endfor %}
-                    {% endif %}
-                </td>
+<script>
+    window.contextURL = "{{ url_for('context', ehash='_REPLACE_ME_') }}";
+    window.accountURL = "{{ url_for('account_with_journal', name='_REPLACE_ME_') }}";
+    window.journalAsJSON = {{ journal|to_json }};
+    window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
+</script>
+
+<div class="journal-table">
+    <div class="loading">Loading journal entries&hellip;</div>
+</div>
+
+{% raw %}
+<script id="journal-template" type="text/x-handlebars-template">
+  <table class="entry-table">
+        <thead>
+            <tr>
+                <th class="datecell">Date</th>
+                <th class="flag">F</th>
+                <th class="description">Narration/Payee</th>
+                <th class="position">Position</th>
+                <th class="price">Price</th>
+                <th class="cost">Cost</th>
+                {{#ifShowChangeAndBalance window}}
+                    <th class="change">Change</th>
+                    <th class="balance">Balance</th>
+                {{/ifShowChangeAndBalance}}
             </tr>
-            {% for leg in journal_entry.legs %}
-                <tr class="posting leg leg-{{ journal_entry.meta.type }} journal-entry-{{ journal_entry.hash }}">
-                    <td class="datecell"></td>
-                    <td class="flag"></td>
-                    <td class="description"><a href="{{ url_for('account_with_journal', name=leg.account) }}">{{ leg.account or '' }}</a></td>
-                    <td class="position num">{{ leg.position|format_currency or '' }} {{ leg.position_currency or '' }}</td>
-                    <td class="price num">{{ leg.price|format_currency or '' }} {{ leg.price_currency or '' }}</td>
-                    <td class="cost num">{{ leg.cost|format_currency or '' }} {{ leg.cost_currency or '' }}</td>
-                    <td class="change num"></td>
-                    <td class="balance num"></td>
-                </tr>
-            {% endfor %}
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            {{#each journal}}
+            <tr class="{{ meta.type }} journal-entry-{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
+                <td class="datecell"><a href="{{ context_url hash }}">{{ date }}</a></td>
+                <td class="flag">{{ flag }}</td>
+                <td class="description" colspan="4">
+                    {{#ifCond meta.type '==' 'open'}}
+                        <a href="{{ account_url account }}">{{ account }}</a>
+                    {{/ifCond}}
+                    {{#ifCond meta.type '==' 'note'}}
+                        Note: {{ comment }}
+                    {{/ifCond}}
+                    {{#ifCond meta.type '==' 'pad'}}
+                        Pad
+                    {{/ifCond}}
+                    {{#ifCond meta.type '==' 'padding'}}
+                        {{ narration }}
+                    {{/ifCond}}
+                    {{#ifCond meta.type '==' 'document'}}
+                        Document for <a href="{{ account_url account }}">{{ account }}</a>: <a href="#TODO">{{ filename }}</a>
+                    {{/ifCond}}
+                    {{#ifCond meta.type '==' 'balance'}}
+                        Balance <a href="{{ account_url account }}">{{ account }}</a> has
+                        {{#each balance }}
+                            {{ format_currency this }} {{ @key }}<br>
+                        {{/each}}
+                    {{/ifCond}}
+                    {{#ifCond meta.type '==' 'transaction'}}
+                        <strong>{{ payee }}</strong>
+                        {{#if payee }} {{#if narration }} | {{/if}} {{/if}}
+                        {{ narration }}
+                    {{/ifCond}}
+                </td>
+                {{#ifShowChangeAndBalance window}}
+                    <td class="change num">
+                        {{#if change }}
+                            {{#each change }}
+                                {{ format_currency this }} {{ @key }}<br>
+                            {{/each}}
+                        {{/if}}
+                    </td>
+                    <td class="balance num">
+                        {{#if balance }}
+                            {{#each balance }}
+                                {{ format_currency this }} {{ @key }}<br>
+                            {{/each}}
+                        {{/if}}
+                    </td>
+                {{/ifShowChangeAndBalance}}
+            </tr>
+                {{#with this as |journalEntry|}}
+                {{#each legs }}
+                    <tr class="posting leg leg-{{ journalEntry.meta.type }} journal-entry-{{ journalEntry.hash }}">
+                        <td class="datecell"></td>
+                        <td class="flag"></td>
+                        <td class="description"><a href="{{ account_url account }}">{{ account }}</a></td>
+                        <td class="position num">{{ format_currency position }} {{ position_currency }}</td>
+                        <td class="price num">{{ format_currency price }} {{ price_currency }}</td>
+                        <td class="cost num">{{ format_currency cost }} {{ cost_currency }}</td>
+                        {{#ifShowChangeAndBalance window}}
+                            <td class="change num"></td>
+                            <td class="balance num"></td>
+                        {{/ifShowChangeAndBalance}}
+                    </tr>
+                {{/each}}
+                {{/with}}
+            {{/each}}
+        </tbody>
+    </table>
+</script>
+{% endraw %}

@@ -1,5 +1,4 @@
 import os
-
 from datetime import date, timedelta
 
 import bisect, re, collections
@@ -307,9 +306,14 @@ class BeancountReportAPI(object):
 
         return totals
 
-    def _inventory_to_json(self, inventory):
+    def _inventory_to_json(self, inventory, include_currencies=None):
         """
         Renders an Inventory to a currency -> amount dict.
+
+        Args:
+            inventory: The inventory to render.
+            include_currencies: Array of strings (eg. ['USD', 'EUR']). If set the
+                                inventory will only contain those currencies.
 
         Returns:
             {
@@ -320,10 +324,11 @@ class BeancountReportAPI(object):
         """
         result = collections.defaultdict(lambda: ZERO)
         for position in inventory:
-            result[position.lot.currency] += position.number
+            if (not include_currencies) or (position.lot.currency in include_currencies):
+                result[position.lot.currency] += position.number
         return { currency: number for currency, number in result.items() if number != ZERO }
 
-    def _journal_for_postings(self, postings, include_types=None):
+    def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
         journal = []
 
         for posting, leg_postings, change, entry_balance in realization.iterate_with_balance(postings):
@@ -374,10 +379,10 @@ class BeancountReportAPI(object):
                 if isinstance(posting, Balance):
                     # TODO failed balances
                     entry['account'] =       posting.account
-                    entry['change'] =        { posting.amount.currency: posting.amount.number }
-                    entry['balance'] =       { posting.amount.currency: posting.amount.number }
                     entry['tolerance'] =     posting.tolerance  # TODO currency? TODO in HTML-template
-                    entry['diff_amount'] =   posting.diff_amount  # TODO currency? TODO in HTML-template
+                    if posting.diff_amount:
+                        entry['diff_amount'] =          posting.diff_amount.number  # TODO in HTML-template
+                        entry['diff_amount_currency'] = posting.diff_amount.currency  # TODO in HTML-template
 
                 if isinstance(posting, Transaction):
                     if posting.flag == 'P':
@@ -388,10 +393,7 @@ class BeancountReportAPI(object):
                     entry['narration'] =    posting.narration
                     entry['tags'] =         posting.tags
                     entry['links'] =        posting.links
-                    entry['change'] =       self._inventory_to_json(change)
-                    entry['balance'] =      self._inventory_to_json(entry_balance)
                     entry['legs'] =         []
-
 
                     for posting_ in posting.postings:
                         leg = {
@@ -410,6 +412,14 @@ class BeancountReportAPI(object):
 
                         entry['legs'].append(leg)
 
+                if with_change_and_balance:
+                    if isinstance(posting, Balance):
+                        entry['change'] =        { posting.amount.currency: posting.amount.number }
+                        entry['balance'] =       { posting.amount.currency: posting.amount.number }
+
+                    if isinstance(posting, Transaction):
+                        entry['change'] =       self._inventory_to_json(change)
+                        entry['balance'] =      self._inventory_to_json(entry_balance, include_currencies=entry['change'].keys())
 
                 journal.append(entry)
 
@@ -612,14 +622,14 @@ class BeancountReportAPI(object):
     def trial_balance(self):
         return self._table_tree(self.real_accounts)[1:]
 
-    def journal(self, account_name=None):
+    def journal(self, account_name=None, with_change_and_balance=False):
         if account_name:
             real_account = realization.get(self.real_accounts, account_name)
         else:
             real_account = self.real_accounts
 
         postings = realization.get_postings(real_account)
-        return self._journal_for_postings(postings)
+        return self._journal_for_postings(postings, with_change_and_balance=with_change_and_balance)
 
     def documents(self):
         postings = realization.get_postings(self.real_accounts)
