@@ -23,7 +23,9 @@
     window.journalAsJSON = {{ journal|to_json }};
 </script>
 
-<div class="journal-table"></div>
+<div class="journal-table">
+    <div class="loading">Loading journal entries&hellip;</div>
+</div>
 
 {% raw %}
 <script id="journal-template" type="text/x-handlebars-template">

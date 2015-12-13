@@ -394,6 +394,12 @@ p.empty {
     margin-top: 20px;
 }
 
+.loading {
+    margin-top: 20px;
+    font-style: italic;
+    color: #999;
+}
+
 .filters {
     width: 100%;
     background: #f06449;
@@ -558,6 +564,8 @@ table {
                     background-color: $color_bittersweet_approx;
                 }
             }
+
+            &.transaction, &.padding { cursor: pointer; }
         }
     }
 

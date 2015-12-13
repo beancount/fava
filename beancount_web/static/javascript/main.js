@@ -6,46 +6,6 @@ $(document).ready(function() {
         $(this).parents('.filter').find('li:contains(' + value + ')').show();
     });
 
-    function toggle_journal_types() {
-        $('.table-filter input[type="checkbox"]').each(function() {
-            var type = $(this).prop('id').substring(7);
-            $('table.entry-table tr.' + type).toggle($(this).prop('checked'));
-            $('table.entry-table tr.leg-' + type).toggle($(this).prop('checked'));
-            $('table.entry-table tr.leg-' + type).toggleClass('hidden', !$(this).prop('checked'));
-        });
-    }
-
-    // Toggle positions with checkboxes
-    $('.table-filter input[type="checkbox"]').change(function() {
-        toggle_journal_types();
-    });
-    toggle_journal_types();
-
-    // Toggle legs by clicking on transaction/padding row
-    $('table.entry-table tr.transaction td, table.entry-table tr.padding td').click(function() {
-        $.each($(this).parents('tr').prop('class').split(' '), function(index, clazz) {
-            if (clazz.startsWith('journal-entry-')) {
-                $('table.entry-table tr.leg.' + clazz).toggle();
-                $('table.entry-table tr.leg.' + clazz).toggleClass('hidden');
-            }
-        });
-    });
-
-    // Button "Hide legs"
-    $('input#toggle-legs').click(function(event) {
-        event.preventDefault();
-        var shouldHide = $(this).hasClass('hide-legs');
-        $('table.entry-table tr').each(function() {
-            $.each($(this).prop('class').split(' '), function(index, clazz) {
-                if (clazz.startsWith('journal-entry-')) {
-                    $('table.entry-table tr.leg.' + clazz).toggle(shouldHide);
-                    $('table.entry-table tr.leg.' + clazz).toggleClass('hidden', shouldHide);
-                }
-            });
-        });
-        $(this).toggleClass('hide-legs');
-    });
-
     // Tree-expanding
 
     // This fixes if there is a tree-balance, no balance and the row is not a parent.

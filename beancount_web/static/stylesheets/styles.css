@@ -659,6 +659,12 @@ p.empty {
   margin-top: 20px;
 }
 
+.loading {
+  margin-top: 20px;
+  font-style: italic;
+  color: #999;
+}
+
 .filters {
   width: 100%;
   background: #f06449;
@@ -790,6 +796,9 @@ table.entry-table tr.posting {
 }
 table.entry-table tr.posting.warning {
   background-color: #f66;
+}
+table.entry-table tr.transaction, table.entry-table tr.padding {
+  cursor: pointer;
 }
 table.trial {
   width: auto;
