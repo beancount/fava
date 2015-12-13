@@ -1,6 +1,8 @@
 $(document).ready(function() {
     $.each(window.chartData, function(index, chart) {
         chart.id = "chart-" + index;
+        chart.options = $.extend({}, chart.options);
+
         $('.charts-container').append('<div class="ct-chart" id="' + chart.id + '"></div>');
         var divider = $('.chart-labels').children().length > 0 ? " | " : "";
         $('.chart-labels').append(divider + '<label for="' + chart.id + '">' + chart.label + '</label>');
@@ -30,7 +32,7 @@ $(document).ready(function() {
                         type: Chartist.FixedScaleAxis,
                         divisor: chart.data.series[0].data.length > 15 ? 15 : chart.data.series[0].data.length,  // no of days
                         labelInterpolationFnc: function(value) {
-                            return moment(value).format(chart.options.dateformat ? chart.options.dateformat : 'MMM D');
+                            return moment(value).format(chart.options.dateformat ? chart.options.dateformat : "MMM 'YY");
                         }
                     },
                     lineSmooth: Chartist.Interpolation.none()
