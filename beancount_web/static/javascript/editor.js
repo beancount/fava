@@ -32,20 +32,24 @@ $(document).ready(function() {
 
         var editor = ace.edit("editor-source");
         editor.setOptions(defaultOptions);
+        editor.$blockScrolling = Infinity;
         editor.focus();
 
-        $.hlLine = $.urlParam('line');
+        var hlLine = $.urlParam('line');
         $('form.editor-source select[name="file_path"]').change(function(event) {
             event.preventDefault();
-            var $this = $(this);
-            $.filePath = $(this).val();
-            $.get($(this).parents('form').attr('action'), { file_path: $(this).val(), is_ajax: true } )
+            event.stopImmediatePropagation();
+            var $select = $(this);
+            $select.attr('disabled', 'disabled');
+            $filePath = $select.val();
+            $.get($select.parents('form').attr('action'), { file_path: $filePath, is_ajax: true } )
             .done(function(data) {
                 editor.setValue(data, -1);
-                editor.gotoLine($.hlLine, 1, true);
-                if ($.filePath != $.urlParam('file_path')) {
-                    $.hlLine = 1;
+                editor.gotoLine(hlLine, 1, true);
+                if ($filePath != $.urlParam('file_path')) {
+                    hlLine = 1;
                 }
+                $select.removeAttr('disabled');
             });
         });
 
@@ -53,10 +57,11 @@ $(document).ready(function() {
 
         $('form.editor-save input[type="submit"]').click(function(event) {
             event.preventDefault();
-            var $this = $(this);
+            event.stopImmediatePropagation();
+            var $button = $(this);
+            $button.attr('disabled', 'disabled').attr('value', 'Saving...');
             var fileName = $('form.editor-source select').val();
-
-            $.post($(this).parents('form').attr('action'), { file_path: fileName, source: editor.getValue() } )
+            $.post($button.parents('form').attr('action'), { file_path: fileName, source: editor.getValue() } )
             .done(function(data) {
                 if (data == "True") {
                     alert("Successfully saved to\n\n\t" + fileName + "\n\nReloading files...");
