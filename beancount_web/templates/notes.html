@@ -4,9 +4,13 @@
 {% block title %}Notes{% endblock %}
 
 {% block javascript %}
-    <script src="{{ url_for('static', filename='vendor/handlebars-js/handlebars-v4.0.5.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/journal.js') }}"></script>
-{% endblock javascript %}
+    {% assets
+        output="gen/packed-journal.js",
+        "vendor/handlebars-js/handlebars-v4.0.5.js",
+        "javascript/journal.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}
 
 {% block content %}
     <h1>Notes</h1>

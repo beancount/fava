@@ -16,6 +16,7 @@ setup(name='beancount-web',
       install_requires=[
             'beancount',
             'Flask==0.10.1',
+            'Flask-Assets==0.11',
             'livereload'
       ],
       include_package_data=True,

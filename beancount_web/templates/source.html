@@ -2,15 +2,27 @@
 {% set active_page = 'source' %}
 
 {% block title %}Source{% endblock %}
-{% block javascript %}<script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>{% endblock %}
+
+{% block javascript %}
+    {% assets
+        filters="rjsmin",
+        output="gen/packed-editor.js",
+        "vendor/ace-js/ace.js",
+        "vendor/ace-js/ext-searchbox.js",
+        "vendor/ace-js/mode-beancount.js",
+        "vendor/ace-js/theme-chrome.js",
+        "javascript/editor.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}
 
 {% block content %}
     <h1>Source</h1>
     <form class="editor-source" action="{{ url_for('source') }}" method="get">
         <select name="file_path">
-            {% for source_file in api.source_files() -%}
+            {% for source_file in api.source_files() %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
-            {% endfor -%}
+            {% endfor %}
         </select>
     </form>
     <div class="editor-wrapper editor-wrapper-source">

@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('aside').css('top', $('header').offset().top + $('header').outerHeight() + 'px');
+
     $('.filter input').keyup(function() {
         var $this = $(this);
         var value = $this.val();

@@ -3,8 +3,6 @@
 @import "compass/css3/user-interface";
 @import "compass/utilities/general/clearfix";
 
-// @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,700);
-
 $font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
 $font_family_monospaced: monospace;
 
@@ -21,11 +19,9 @@ html, body, html > body {
     height: 100%;
 }
 
-.bodywrapper {
-    min-height: 100%;
+.hidden {
+    display: none;
 }
-
-.hidden { display: none; }
 
 strong {
     font-weight: bold;
@@ -128,16 +124,41 @@ a {
     }
 }
 
-pre {
-    display: block;
+code, pre > code {
     font-family: $font_family_monospaced;
     white-space: pre;
     margin: 0;
     line-height: 1.2em;
     font-size: 1.1em;
-    overflow-x: scroll;
-
-    &.debug { word-wrap: break-word; }
 }
 
-.left { float: left; }
+pre {
+    overflow-x: scroll;
+    white-space: pre;
+
+    &.debug {
+        word-wrap: break-word;
+    }
+}
+
+.halfleft, .halfright {
+    width: 50%;
+
+    h3 {
+        text-align: center;
+    }
+}
+
+.halfleft {
+    float: left;
+    padding-right: 20px;
+}
+
+.halfright {
+    float: right;
+    padding-left: 20px;
+}
+
+.left {
+    float: left;
+}

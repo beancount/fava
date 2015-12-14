@@ -1,33 +1,32 @@
 // Chartist
 
-
 $ct-bar-width: 14px;
 $ct-line-width: 3px;
 $ct-point-size: 6px;
 $ct-series-colors: (
-  #990000,
-  #113861,
-  #777,
-  #1B9900,
-  #FF8800,
-  #59922b,
-  #0544d3,
-  #6b0392,
-  #f05b4f,
-  #dda458,
-  #eacf7d,
-  #86797d,
-  #b2c326,
-  #6188e2,
-  #a748ca
+    #990000,
+    #113861,
+    #777,
+    #1B9900,
+    #FF8800,
+    #59922b,
+    #0544d3,
+    #6b0392,
+    #f05b4f,
+    #dda458,
+    #eacf7d,
+    #86797d,
+    #b2c326,
+    #6188e2,
+    #a748ca
 );
 
 @import "../vendor/chartist-js/scss/chartist";
 
 .charts {
     .ct-label {
-      font-size: 11px;
-      font-weight: bold;
+        font-size: 11px;
+        font-weight: bold;
     }
 
     .chart-labels {
@@ -48,7 +47,9 @@ $ct-series-colors: (
                 cursor: pointer;
             }
 
-            &.selected { color: rgba(0, 0, 0, 0.5); }
+            &.selected {
+                color: rgba(0, 0, 0, 0.5);
+            }
         }
     }
 
@@ -57,17 +58,19 @@ $ct-series-colors: (
         height: 240px;
 
         .loading {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          text-align: center;
-          margin-top: 90px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            margin-top: 90px;
         }
     }
 
-    .ct-chart { position: relative; }
+    .ct-chart {
+        position: relative;
+    }
 
     .ct-legend {
         position: absolute;
@@ -142,7 +145,9 @@ $ct-series-colors: (
         border-top-color: #ccc;
     }
 
-    &.tooltip-show { opacity: 1; }
+    &.tooltip-show {
+        opacity: 1;
+    }
 
     em {
         font-family: $font_family;
