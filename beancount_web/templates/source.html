@@ -20,9 +20,9 @@
     <h1>Source</h1>
     <form class="editor-source" action="{{ url_for('source') }}" method="get">
         <select name="file_path">
-            {% for source_file in api.source_files() -%}
+            {% for source_file in api.source_files() %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
-            {% endfor -%}
+            {% endfor %}
         </select>
     </form>
     <div class="editor-wrapper editor-wrapper-source">

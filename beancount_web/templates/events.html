@@ -27,7 +27,7 @@
                                 {
                                     name: '{{ event.type }}',
                                     data: [
-                                        {% for event in events_chart -%}
+                                        {% for event in events_chart %}
                                             {
                                                 x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}),
                                                 y: {{ outer_loop.index }},

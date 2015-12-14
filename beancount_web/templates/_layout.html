@@ -19,8 +19,8 @@
         ('/statistics/',         'statistics',     'Statistics'),
         ('/errors/',             'errors',         'Errors'),
     ])
-] -%}
-{% set active_page = active_page|default('journal') -%}
+] %}
+{% set active_page = active_page|default('journal') %}
 <!doctype html>
 <html>
 <head>
@@ -58,11 +58,11 @@
                             <input type="search">
                         </div>
                         <ul>
-                            {% for year in api.active_years -%}
+                            {% for year in api.active_years %}
                             <li{% if year == entry_filters['year'] %} class="selected"{% endif %} data-filter="{{ year }}">
                                 <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
                             </li>
-                            {% endfor -%}
+                            {% endfor %}
                         </ul>
                     </div>
                 </li>
@@ -85,11 +85,11 @@
                             <input type="search">
                         </div>
                         <ul>
-                            {% for tag in api.active_tags -%}
+                            {% for tag in api.active_tags %}
                             <li{% if tag in entry_filters['tags'] %} class="selected"{% endif %} data-filter="{{ tag|lower }}">
                                 <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
                             </li>
-                            {% endfor -%}
+                            {% endfor %}
                         </ul>
                     </div>
                 </li>
@@ -102,13 +102,11 @@
                             <input type="search">
                         </div>
                         <ul>
-                            {% for account in api.all_accounts -%}
+                            {% for account in api.all_accounts %}
                             <li{% if account.full_name == entry_filters['account'] %} class="selected"{% endif %} data-filter="{{ account.full_name|lower }}">
-                                <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">
-                                    {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
-                                </a>
+                                <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">{% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}</a>
                             </li>
-                            {% endfor -%}
+                            {% endfor %}
                         </ul>
                     </div>
                 </li>
@@ -131,11 +129,11 @@
                             <input type="search">
                         </div>
                         <ul>
-                            {% for payee in api.active_payees -%}
+                            {% for payee in api.active_payees %}
                             <li{% if payee in entry_filters['payees'] %} class="selected"{% endif %} data-filter="{{ payee|lower }}">
                                 <a href="{{ request.path }}?{% if payee in entry_filters['payees'] %}remove_filter_payee={{ payee }}{% else %}filter_payee={{ payee }}{% endif %}">{{ payee }}</a>
                             </li>
-                            {% endfor -%}
+                            {% endfor %}
                         </ul>
                     </div>
                 </li>
@@ -147,9 +145,9 @@
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
-                {% for href, id, caption in menuitems -%}
+                {% for href, id, caption in menuitems %}
                     <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
-                {% endfor -%}
+                {% endfor %}
                 </ul>
             {% endfor %}
         </aside>

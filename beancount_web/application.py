@@ -8,6 +8,8 @@ from flask import Flask, render_template, url_for, request, redirect, abort, Mar
 from flask.ext.assets import Environment, Bundle
 
 app = Flask(__name__)
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 app.entry_filters = {}
 
 assets = Environment()

@@ -23,7 +23,7 @@
                     series: [{
                         name: '{{ event_type }}',
                         data: [
-                            {% for event in events -%}
+                            {% for event in events %}
                                 {
                                     x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}),
                                     y: 1,
