@@ -4,13 +4,13 @@
         label: "Net worth (in {{ currency }})",
         type: "line",
         options: {
-            dateformat: "MMM 'YY"
+            dateFormat: "MMM 'YY"
         },
         data: {
             series: [{
                 name: '{{ currency }}',
                 data: [
-                    {% for row in net_worth.monthly_totals -%}
+                    {% for row in net_worth.monthly_totals %}
                         {
                             x: new Date({{ row.end_date.year }}, {{ row.end_date.month-1 }}, {{ row.end_date.day }}),
                             y: {{ row.totals[currency] }},

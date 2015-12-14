@@ -5,9 +5,15 @@ import decimal
 from datetime import date, datetime
 
 from flask import Flask, render_template, url_for, request, redirect, abort, Markup
+from flask.ext.assets import Environment, Bundle
 
 app = Flask(__name__)
+app.jinja_env.trim_blocks = True
+app.jinja_env.lstrip_blocks = True
 app.entry_filters = {}
+
+assets = Environment()
+assets.init_app(app)
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):

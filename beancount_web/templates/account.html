@@ -5,10 +5,14 @@
 
 {% block javascript %}
     {% if journal %}
-        <script src="{{ url_for('static', filename='vendor/handlebars-js/handlebars-v4.0.5.js') }}"></script>
-        <script src="{{ url_for('static', filename='javascript/journal.js') }}"></script>
+        {% assets
+            output="gen/packed-journal.js",
+            "vendor/handlebars-js/handlebars-v4.0.5.js",
+            "javascript/journal.js" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
     {% endif %}
-{% endblock javascript %}
+{% endblock %}
 
 {% block content %}
     {% include "_account_name_header.html" %}
@@ -26,15 +30,15 @@
                             {
                                 name: '{{ currency }}',
                                 data: [
-                                    {% for row in linechart_data -%}
-                                        {% if currency in row.balance -%}
+                                    {% for row in linechart_data %}
+                                        {% if currency in row.balance %}
                                         {
                                             x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}),
                                             y: {{ row.balance[currency] }},
                                             meta: "{{ row.balance[currency]|format_currency }} {{ currency }}<br><em>{{ row.date }}</em>"
                                         },
-                                        {% endif -%}
-                                    {% endfor -%}
+                                        {% endif %}
+                                    {% endfor %}
                                 ]
                             },
                         {% endfor %}
@@ -89,24 +93,24 @@
 
                     {% for end_date in monthly_balances.months|reverse %}
                         <td class="num">
-                            {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances|length > 0 -%}
+                            {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances|length > 0 %}
                                 <span class="balance">
-                                {% for currency, number in row.totals[end_date.isoformat()].balances.items() -%}
-                                    {% if number -%}
+                                {% for currency, number in row.totals[end_date.isoformat()].balances.items() %}
+                                    {% if number %}
                                         {{ number|format_currency }} {{ currency }}<br>
-                                    {% endif -%}
-                                {% endfor -%}
+                                    {% endif %}
+                                {% endfor %}
                                 </span>
-                            {% endif -%}
-                            {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances_children|length > 0 -%}
+                            {% endif %}
+                            {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances_children|length > 0 %}
                                 <span class="tree-balance">
-                                {% for currency, number in row.totals[end_date.isoformat()].balances_children.items() -%}
-                                    {% if number -%}
+                                {% for currency, number in row.totals[end_date.isoformat()].balances_children.items() %}
+                                    {% if number %}
                                         {{ number|format_currency }} {{ currency }}<br>
-                                    {% endif -%}
-                                {% endfor -%}
+                                    {% endif %}
+                                {% endfor %}
                                 </span>
-                            {% endif -%}
+                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>

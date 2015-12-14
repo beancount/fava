@@ -4,21 +4,21 @@ window.chartData.push({
     label: "{{ label }} ({{ currency }})",
     type:  "treemap",
     options: {
-        dateformat: "MMM 'YY",
+        dateFormat: "MMM 'YY",
         treemapColorLevel: {{ level or 1 }}
     },
     data: [
-        {% for row in rows -%}
-            {% if row.is_leaf and currency in row.balances and row.balances[currency] * (modifier or 1) >= 0 -%}
-                {
-                    label: '<a href="{{ url_for("account_with_journal", name=row.account) }}">{{ row.account|last_segment }}</a>',
-                    value: {{ row.balances[currency] * (modifier or 1) }},
-                    id: '{{ row.account }}-{{ currency }}',
-                    accountName: '{{ row.account }}',
-                    balance: '{{ row.balances[currency]|format_currency }} {{ currency }}'
-                },
-            {% endif -%}
-        {% endfor -%}
+        {% for row in rows %}
+            {% if row.is_leaf and currency in row.balances and row.balances[currency] * (modifier or 1) >= 0 %}
+            {
+                label: '<a href="{{ url_for("account_with_journal", name=row.account) }}">{{ row.account|last_segment }}</a>',
+                value: {{ row.balances[currency] * (modifier or 1) }},
+                id: '{{ row.account }}-{{ currency }}',
+                accountName: '{{ row.account }}',
+                balance: '{{ row.balances[currency]|format_currency }} {{ currency }}'
+            },
+            {% endif %}
+        {% endfor %}
     ]
 });
 {% endfor %}

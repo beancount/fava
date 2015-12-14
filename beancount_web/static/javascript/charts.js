@@ -18,7 +18,7 @@ $(document).ready(function() {
                 position: 'end',
                 scaleMinSpace: 15,
                 labelInterpolationFnc: function(value) {
-                    return value.toLocaleString();
+                    return value;
                 },
                 referenceValue: 0,
             },
@@ -38,8 +38,9 @@ $(document).ready(function() {
                     axisX: {
                         type: Chartist.FixedScaleAxis,
                         divisor: chart.data.series[0].data.length > 15 ? 15 : chart.data.series[0].data.length,  // no of days
-                        labelInterpolationFnc: function(value) {
-                            return moment(value).format(chart.options.dateformat ? chart.options.dateformat : "MMM 'YY");
+                        labelInterpolationFnc: function(value, index) {
+                            var val = isNumber(value) ? new Date(value) : value;
+                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     },
                     lineSmooth: Chartist.Interpolation.none()
@@ -53,7 +54,8 @@ $(document).ready(function() {
                 var options = {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
-                            return moment(value).format(chart.options.dateformat ? chart.options.dateformat : "MMM 'YY");
+                            var val = isNumber(value) ? new Date(value) : value;
+                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     }
                 };
@@ -80,7 +82,7 @@ $(document).ready(function() {
                     mouseenter: function (node, event) {
                         $(event.target).append('<div class="treetable-popover"></div>');
                         var $popover = $('.treetable-popover');
-                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><pre>' + node.balance + '</pre></dd></dl>').hide().fadeIn(200);
+                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><code>' + node.balance + '</code></dd></dl>').hide().fadeIn(200);
 
                         var windowWidth = $(window.window).width();
                         var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,

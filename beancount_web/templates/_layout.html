@@ -19,148 +19,156 @@
         ('/statistics/',         'statistics',     'Statistics'),
         ('/errors/',             'errors',         'Errors'),
     ])
-] -%}
-{% set active_page = active_page|default('journal') -%}
+] %}
+{% set active_page = active_page|default('journal') %}
 <!doctype html>
 <html>
 <head>
     {% block head %}
-    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
+    <link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="shortcut icon" type="image/x-icon" id="favicon"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
     <title>{% block title %}{% endblock %} - {{ title }}</title>
     {% endblock %}
     <script>window.chartData = [];</script>
 </head>
 <body>
-    <div class="bodywrapper">
-        <header id="header">
-            <div id="header">
-                <div id="branding">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAsVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3mHKcAAAAOnRSTlMAAQMEBQYHCAwNDg8QExkaISImJzQ7RUZHSUtVZGtsb3FzdXd4f5WYm56jr7y+xcfP2tze4OLk6/X9+wsXVgAAAMJJREFUKFPFkWkTgiAYhDG1wy677VSzw0q6pKz3//+wBGRkGO2r+4ndZ9hhFoQq0AaXKZoiKFfE4Uzt82iKOWyrcJjDJU90N45dnZ/3HCbrPvfmE64YHkZ216MQi6rwPUBp0VF4GVrQowlAqwA6cN8xKJ4uwyDNGdz+g0EBnAvoFEALxjZC9gIsCd60zJy6ZqpRmFmNLfQ9NJirE7pWbDLTuYj5SI0Fhk+IzwdqfvLhJ0jRSvqVl/rRCYdnKNVG7atcP+gmOQsBuK8NAAAAAElFTkSuQmCC" alt="">
-                    <h1 id="site-name">{{ title }}</h1>
+    {% if not options['operating_currency'] %}
+        <ul class="warnings">
+            <li class="error">
+                <div class="warning-wrapper">
+                    No <code>operating_currency</code> specified.
+                    Add <code>option "operating_currency" "USD"</code> to your beancount file.
                 </div>
-                <ul class="topmenu">
-                    <li{% if entry_filters['year'] %} class="selected"{% endif %}>
-                        <a href="">
-                            <span>{{ entry_filters['year'] or 'Time' }}</span>
-                        </a>
-                        <div class="filter">
-                            <div class="inputcontainer">
-                                <input type="search">
-                            </div>
-                            <ul>
-                                {% for year in api.active_years -%}
-                                <li{% if year == entry_filters['year'] %} class="selected"{% endif %} data-filter="{{ year }}">
-                                    <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
-                                </li>
-                                {% endfor -%}
-                            </ul>
-                        </div>
-                    </li>
-                    <li{% if entry_filters['tags']  %} class="selected"{% endif %}>
-                        <a href="">
-                            <span>
-                                {% if entry_filters['tags'] %}
-                                    {% if entry_filters['tags']|length == 1 %}
-                                        # {{ entry_filters['tags']|first }}
-                                    {% else %}
-                                        Multiple tags
-                                    {% endif %}
-                                {% else %}
-                                    Tag
-                                {% endif %}
-                            </span>
-                        </a>
-                        <div class="filter">
-                            <div class="inputcontainer">
-                                <input type="search">
-                            </div>
-                            <ul>
-                                {% for tag in api.active_tags -%}
-                                <li{% if tag in entry_filters['tags'] %} class="selected"{% endif %} data-filter="{{ tag|lower }}">
-                                    <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
-                                </li>
-                                {% endfor -%}
-                            </ul>
-                        </div>
-                    </li>
-                    <li{% if entry_filters['account'] %} class="selected"{% endif %}>
-                        <a href="">
-                            <span>{{ entry_filters['account'] or 'Component' }}</span>
-                        </a>
-                        <div class="filter">
-                            <div class="inputcontainer">
-                                <input type="search">
-                            </div>
-                            <ul>
-                                {% for account in api.all_accounts -%}
-                                <li{% if account.full_name == entry_filters['account'] %} class="selected"{% endif %} data-filter="{{ account.full_name|lower }}">
-                                    <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">
-                                        {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
-                                    </a>
-                                </li>
-                                {% endfor -%}
-                            </ul>
-                        </div>
-                    </li>
-                    <li{% if entry_filters['payees']  %} class="selected"{% endif %}>
-                        <a href="">
-                            <span>
-                                {% if entry_filters['payees'] %}
-                                    {% if entry_filters['payees']|length == 1 %}
-                                        {{ entry_filters['payees']|first }}
-                                    {% else %}
-                                        Multiple payees
-                                    {% endif %}
-                                {% else %}
-                                    Payee
-                                {% endif %}
-                            </span>
-                        </a>
-                        <div class="filter">
-                            <div class="inputcontainer">
-                                <input type="search">
-                            </div>
-                            <ul>
-                                {% for payee in api.active_payees -%}
-                                <li{% if payee in entry_filters['payees'] %} class="selected"{% endif %} data-filter="{{ payee|lower }}">
-                                    <a href="{{ request.path }}?{% if payee in entry_filters['payees'] %}remove_filter_payee={{ payee }}{% else %}filter_payee={{ payee }}{% endif %}">{{ payee }}</a>
-                                </li>
-                                {% endfor -%}
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header>
-        <div class="wrapper">
-            <div class="sidebar">
-                {% for title_, menuitems in navigation_bar %}
-                    {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
-                    <ul id="navigation">
-                    {% for href, id, caption in menuitems -%}
-                        <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
-                    {% endfor -%}
-                    </ul>
-                {% endfor %}
-            </div>
-            <div class="main">
-                {% block content %}{% endblock %}
-            </div>
+            </li>
+        </ul>
+    {% endif %}
+    <header>
+        <div class="branding">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAsVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3mHKcAAAAOnRSTlMAAQMEBQYHCAwNDg8QExkaISImJzQ7RUZHSUtVZGtsb3FzdXd4f5WYm56jr7y+xcfP2tze4OLk6/X9+wsXVgAAAMJJREFUKFPFkWkTgiAYhDG1wy677VSzw0q6pKz3//+wBGRkGO2r+4ndZ9hhFoQq0AaXKZoiKFfE4Uzt82iKOWyrcJjDJU90N45dnZ/3HCbrPvfmE64YHkZ216MQi6rwPUBp0VF4GVrQowlAqwA6cN8xKJ4uwyDNGdz+g0EBnAvoFEALxjZC9gIsCd60zJy6ZqpRmFmNLfQ9NJirE7pWbDLTuYj5SI0Fhk+IzwdqfvLhJ0jRSvqVl/rRCYdnKNVG7atcP+gmOQsBuK8NAAAAAElFTkSuQmCC" alt="">
+            <h1 class="site-name">{{ title or 'Beancount Web' }}</h1>
         </div>
+        <nav>
+            <ul class="topmenu">
+                <li{% if entry_filters['year'] %} class="selected"{% endif %}>
+                    <a href="">
+                        <span>{{ entry_filters['year'] or 'Time' }}</span>
+                    </a>
+                    <div class="filter">
+                        <div class="inputcontainer">
+                            <input type="search">
+                        </div>
+                        <ul>
+                            {% for year in api.active_years %}
+                            <li{% if year == entry_filters['year'] %} class="selected"{% endif %} data-filter="{{ year }}">
+                                <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+                <li{% if entry_filters['tags']  %} class="selected"{% endif %}>
+                    <a href="">
+                        <span>
+                            {% if entry_filters['tags'] %}
+                                {% if entry_filters['tags']|length == 1 %}
+                                    # {{ entry_filters['tags']|first }}
+                                {% else %}
+                                    Multiple tags
+                                {% endif %}
+                            {% else %}
+                                Tag
+                            {% endif %}
+                        </span>
+                    </a>
+                    <div class="filter">
+                        <div class="inputcontainer">
+                            <input type="search">
+                        </div>
+                        <ul>
+                            {% for tag in api.active_tags %}
+                            <li{% if tag in entry_filters['tags'] %} class="selected"{% endif %} data-filter="{{ tag|lower }}">
+                                <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+                <li{% if entry_filters['account'] %} class="selected"{% endif %}>
+                    <a href="">
+                        <span>{{ entry_filters['account'] or 'Component' }}</span>
+                    </a>
+                    <div class="filter">
+                        <div class="inputcontainer">
+                            <input type="search">
+                        </div>
+                        <ul>
+                            {% for account in api.all_accounts %}
+                            <li{% if account.full_name == entry_filters['account'] %} class="selected"{% endif %} data-filter="{{ account.full_name|lower }}">
+                                <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">{% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+                <li{% if entry_filters['payees']  %} class="selected"{% endif %}>
+                    <a href="">
+                        <span>
+                            {% if entry_filters['payees'] %}
+                                {% if entry_filters['payees']|length == 1 %}
+                                    {{ entry_filters['payees']|first }}
+                                {% else %}
+                                    Multiple payees
+                                {% endif %}
+                            {% else %}
+                                Payee
+                            {% endif %}
+                        </span>
+                    </a>
+                    <div class="filter">
+                        <div class="inputcontainer">
+                            <input type="search">
+                        </div>
+                        <ul>
+                            {% for payee in api.active_payees %}
+                            <li{% if payee in entry_filters['payees'] %} class="selected"{% endif %} data-filter="{{ payee|lower }}">
+                                <a href="{{ request.path }}?{% if payee in entry_filters['payees'] %}remove_filter_payee={{ payee }}{% else %}filter_payee={{ payee }}{% endif %}">{{ payee }}</a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div class="main">
+        <aside>
+            {% for title_, menuitems in navigation_bar %}
+                {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
+                <ul class="navigation">
+                {% for href, id, caption in menuitems %}
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
+                {% endfor %}
+                </ul>
+            {% endfor %}
+        </aside>
+        <article>
+            {% block content %}{% endblock %}
+        </article>
     </div>
 
-    <script src="{{ url_for('static', filename='vendor/jquery-js/jquery-2.1.4.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist-plugin-legend.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist-plugin-tooltip.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/moment-js/moment.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/jquery-treemap-js/jquery-treemap.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/ace-js/ace.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/helpers.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/charts.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
+    {% assets
+            filters="rjsmin",
+            output="gen/packed-general.js",
+            "vendor/jquery-js/jquery-2.1.4.js",
+            "vendor/chartist-js/chartist.js",
+            "vendor/chartist-js/chartist-plugin-legend.js",
+            "vendor/chartist-js/chartist-plugin-tooltip.js",
+            "vendor/jquery-treemap-js/jquery-treemap.js",
+            "javascript/helpers.js",
+            "javascript/charts.js",
+            "javascript/main.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     {% block javascript %}{% endblock %}
 </body>
 </html>

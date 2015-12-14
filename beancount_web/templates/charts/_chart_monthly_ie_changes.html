@@ -3,20 +3,20 @@
         label: "Monthly changes (Income/Expenses)",
         type:  "bar",
         options: {
-            dateformat: "MMM 'YY"
+            dateFormat: "MMM 'YY"
         },
         data: {
             labels: [
-                {% for total in monthly_totals -%}
+                {% for total in monthly_totals %}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
             series: [
-                {% for currency in operating_currencies -%}
+                {% for currency in operating_currencies %}
                 {
                     name: "{{ currency }}",
                     data: [
-                        {% for total in monthly_totals -%}
+                        {% for total in monthly_totals %}
                             {
                                 {% with value = ((total.income_totals[currency] or 0) + (total.expenses_totals[currency] or 0)) * -1 %}
                                 y: {{ value }},
@@ -26,7 +26,7 @@
                         {% endfor %}
                     ],
                 },
-                {% endfor -%}
+                {% endfor %}
             ]
         }
     });

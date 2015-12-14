@@ -1,16 +1,16 @@
 <h1>
     {% set levels = account_name.count(':')+1 %}
-    {% for level in range(0, levels) -%}
-        {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] -%}
-        {% set subaccount_part = account_name.split(':')[level] -%}
+    {% for level in range(0, levels) %}
+        {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] %}
+        {% set subaccount_part = account_name.split(':')[level] %}
 
-        {% if loop.last -%}
+        {% if loop.last %}
             {{ subaccount_part }}
-        {% else -%}
-            <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>{% endif -%}
-    {% endfor -%}
+        {% else %}
+            <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>{% endif %}
+    {% endfor %}
 
-    {% set activity = api.statistics(account_name=account_name) -%}
+    {% set activity = api.statistics(account_name=account_name) %}
     {% if activity %}
     <div class="last-activity">
         (Last entry: <a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
