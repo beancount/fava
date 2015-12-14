@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    $('aside').css('top', $('header').offset().top + $('header').outerHeight() + 'px');
+
     $('.filter input').keyup(function() {
         var value = $(this).val();
         $(this).parents('.filter').find('li').hide();

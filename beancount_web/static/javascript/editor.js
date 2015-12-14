@@ -27,7 +27,7 @@ $(document).ready(function() {
 
     // The /source/ editor
     if ($('#editor-source').length) {
-        var editorHeight = $('.main').height() - 60;
+        var editorHeight = $(window).height() - $('header').outerHeight() - 110;
         $('.editor-wrapper').height(editorHeight);
 
         var editor = ace.edit("editor-source");
