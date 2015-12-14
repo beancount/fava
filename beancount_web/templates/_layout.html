@@ -50,7 +50,7 @@
                             </div>
                             <ul>
                                 {% for year in api.active_years -%}
-                                <li {% if year == entry_filters['year'] %} class="selected"{% endif %}>
+                                <li{% if year == entry_filters['year'] %} class="selected"{% endif %} data-filter="{{ year }}">
                                     <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
                                 </li>
                                 {% endfor -%}
@@ -77,7 +77,7 @@
                             </div>
                             <ul>
                                 {% for tag in api.active_tags -%}
-                                <li {% if tag in entry_filters['tags'] %} class="selected"{% endif %}>
+                                <li{% if tag in entry_filters['tags'] %} class="selected"{% endif %} data-filter="{{ tag|lower }}">
                                     <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
                                 </li>
                                 {% endfor -%}
@@ -94,7 +94,7 @@
                             </div>
                             <ul>
                                 {% for account in api.all_accounts -%}
-                                <li {% if account.full_name == entry_filters['account'] %} class="selected"{% endif %}>
+                                <li{% if account.full_name == entry_filters['account'] %} class="selected"{% endif %} data-filter="{{ account.full_name|lower }}">
                                     <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">
                                         {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
                                     </a>

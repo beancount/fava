@@ -1,9 +1,8 @@
 $(document).ready(function() {
     $('.filter input').keyup(function() {
         var value = $(this).val();
-
-        $(this).parents('.filter').find('li:not(:contains(' + value + '))').hide();
-        $(this).parents('.filter').find('li:contains(' + value + ')').show();
+        $(this).parents('.filter').find('li').hide();
+        $(this).parents('.filter').find("li[data-filter*='" + value.toLowerCase() + "']").show();
     });
 
     // Tree-expanding
