@@ -14,6 +14,13 @@
         "javascript/editor.js" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+
+    {% assets
+        output="gen/packed-journal.js",
+        "vendor/handlebars-js/handlebars-v4.0.5.js",
+        "javascript/journal.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}
@@ -28,7 +35,7 @@
         </dl>
         <div class="editor-wrapper editor-wrapper-readonly">
             <div class="editor editor-readonly" id="editor-{{ context.hash }}">
-                <pre><code>{{ context_.context | safe }}</code></pre>
+                <pre><code>{{ context_.context|safe }}</code></pre>
             </div>
         </div>
     {% endfor %}
