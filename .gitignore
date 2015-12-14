@@ -5,3 +5,5 @@
 *sass-cache*/
 *.css.map
 TODO.md
+beancount_web/static/gen/
+*.webassets-cache*/

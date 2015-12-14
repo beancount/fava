@@ -158,14 +158,19 @@
         </article>
     </div>
 
-    <script src="{{ url_for('static', filename='vendor/jquery-js/jquery-2.1.4.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist-plugin-legend.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/chartist-js/chartist-plugin-tooltip.js') }}"></script>
-    <script src="{{ url_for('static', filename='vendor/jquery-treemap-js/jquery-treemap.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/helpers.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/charts.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/main.js') }}"></script>
+    {% assets
+            filters="rjsmin",
+            output="gen/packed-general.js",
+            "vendor/jquery-js/jquery-2.1.4.js",
+            "vendor/chartist-js/chartist.js",
+            "vendor/chartist-js/chartist-plugin-legend.js",
+            "vendor/chartist-js/chartist-plugin-tooltip.js",
+            "vendor/jquery-treemap-js/jquery-treemap.js",
+            "javascript/helpers.js",
+            "javascript/charts.js",
+            "javascript/main.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     {% block javascript %}{% endblock %}
 </body>
 </html>

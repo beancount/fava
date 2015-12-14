@@ -4,8 +4,16 @@
 {% block title %}Context{% endblock %}
 
 {% block javascript %}
-    <script src="{{ url_for('static', filename='vendor/ace-js/ace.js') }}"></script>
-    <script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>
+    {% assets
+        filters="rjsmin",
+        output="gen/packed-editor.js",
+        "vendor/ace-js/ace.js",
+        "vendor/ace-js/ext-searchbox.js",
+        "vendor/ace-js/mode-beancount.js",
+        "vendor/ace-js/theme-chrome.js",
+        "javascript/editor.js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 {% endblock %}
 
 {% block content %}
