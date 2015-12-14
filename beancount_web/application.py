@@ -171,7 +171,7 @@ def perform_global_filters():
         if filter_year == "":
             app.entry_filters.pop('year', None)
         else:
-            app.entry_filters['year'] = int(filter_year)
+            app.entry_filters['year'] = filter_year
 
     filter_tag = request.args.get('filter_tag', None)
     if filter_tag != None:

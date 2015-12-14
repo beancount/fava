@@ -199,9 +199,12 @@ class BeancountReportAPI(object):
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
+        self.apply_filters()
 
+    def apply_filters(self):
         if self.filter_year:
             begin_date, end_date = parse_date(self.filter_year)
+            self.entries = self.all_entries
             self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
 
         if self.filter_tags:
@@ -232,7 +235,7 @@ class BeancountReportAPI(object):
         self.filter_tags = tags
         self.filter_account = account
         self.filter_payees = payees
-        self.load_file()
+        self.apply_filters()
 
     def _account_components(self):
         # TODO rename
