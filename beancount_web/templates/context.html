@@ -2,7 +2,11 @@
 {% set active_page = 'context' %}
 
 {% block title %}Context{% endblock %}
-{% block javascript %}<script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>{% endblock %}
+
+{% block javascript %}
+    <script src="{{ url_for('static', filename='vendor/ace-js/ace.js') }}"></script>
+    <script src="{{ url_for('static', filename='javascript/editor.js') }}"></script>
+{% endblock %}
 
 {% block content %}
     <h1>Context: <code>{{ context.hash }}</code></h1>
