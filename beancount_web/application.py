@@ -166,12 +166,12 @@ def inject_errors():
 def perform_global_filters():
     # app.entry_filters = {}
 
-    filter_year = request.args.get('filter_year', None)
-    if filter_year != None:
-        if filter_year == "":
-            app.entry_filters.pop('year', None)
+    filter_time = request.args.get('filter_time', None)
+    if filter_time != None:
+        if filter_time == "":
+            app.entry_filters.pop('time', None)
         else:
-            app.entry_filters['year'] = int(filter_year)
+            app.entry_filters['time'] = filter_time
 
     filter_tag = request.args.get('filter_tag', None)
     if filter_tag != None:
@@ -214,9 +214,9 @@ def perform_global_filters():
         else:
             app.entry_filters['account'] = filter_account
 
-    app.api.filter(year=app.entry_filters.get('year', None),
-                   tags=app.entry_filters.get('tags', set()),
-                account=app.entry_filters.get('account', None),
-                 payees=app.entry_filters.get('payees', set()))
+    app.api.filter(time_str=app.entry_filters.get('time', None),
+                       tags=app.entry_filters.get('tags', set()),
+                    account=app.entry_filters.get('account', None),
+                     payees=app.entry_filters.get('payees', set()))
 
 

@@ -10,7 +10,6 @@ from beancount.reports import context
 from beancount.utils import bisect_key
 from beancount.core import realization, flags
 from beancount.core import interpolate
-from beancount.web.views import AllView
 from beancount.parser import options
 from beancount.core import compare
 from beancount.core.account import has_component
@@ -24,6 +23,8 @@ from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
 from beancount.core.realization import RealAccount, find_last_active_posting
 from beancount.core.data import get_entry
+
+from beancount_web.util.dateparser import parse_date
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
 def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
@@ -169,7 +170,7 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
-        self.filter_year = None
+        self.filter_time = None
         self.filter_tags = set()
         self.filter_account = None
         self.filter_payees = set()
@@ -198,16 +199,24 @@ class BeancountReportAPI(object):
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
+        self.apply_filters()
 
-        if self.filter_year:
-            begin_date = date(self.filter_year, 1, 1)
-            end_date = date(self.filter_year+1, 1, 1)
-            self.entries = self._entries_in_inclusive_range(begin_date, end_date)
+    def apply_filters(self):
+        self.entries = self.all_entries
+
+        if self.filter_time:
+            begin_date, end_date = parse_date(self.filter_time)
+            self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
 
         if self.filter_tags:
             self.entries = [entry
                             for entry in self.entries
                             if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
+
+        if self.filter_payees:
+            self.entries = [entry
+                            for entry in self.entries
+                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
 
         self.real_accounts = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
@@ -219,20 +228,17 @@ class BeancountReportAPI(object):
                                 any(has_component(posting.account, self.filter_account)
                                     for posting in entry.postings)]
 
-        if self.filter_payees:
-            self.entries = [entry
-                            for entry in self.entries
-                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
-
         # need to do this again to realize the filtered entries (otherwise self.all_accounts would be wrong)
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
-    def filter(self, year=None, tags=set(), account=None, payees=set()):
-        self.filter_year = year
+    def filter(self, time_str=None, tags=set(), account=None, payees=set()):
+        self.filter_time = time_str
         self.filter_tags = tags
         self.filter_account = account
         self.filter_payees = payees
-        self.load_file()
+
+        # TODO only apply filters if something has changed
+        self.apply_filters()
 
     def _account_components(self):
         # TODO rename

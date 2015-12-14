@@ -41,7 +41,7 @@ $color_bittersweet_approx: #f66;
 
 // Header
 
-#header {
+header {
     @include clearfix;
 
     background: #205081;
@@ -429,33 +429,46 @@ p.empty {
     border-bottom-right-radius: 3px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
     position: absolute;
-    right: 20px;
+    right: 0;
     color: black;
-    width: 260px;
+    width: 400px;
     z-index: 2;
     top: 39px;
 
-    ul {
+    &> ul {
         max-height: 240px;
         overflow-y: auto;
-    }
 
-    ul li a {
-        padding-right: 20px !important;
-        display: block;
-        line-height: 1;
-        padding: 8px 10px;
-        color: #3572b0 !important;
-    }
+        & > li.info {
+            padding: 3px 10px;
+            color: #999;
+            line-height: 1.3em;
 
-    ul li a:hover, ul li.selected a {
-        background-color: #3572b0 !important;
-        color: white !important;
-    }
+            a {
+                color: #666;
+                text-decoration: underline;
+            }
+        }
 
-    ul li.selected a {
-        padding-left: 28px;
-        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
+        li.suggestion {
+            a {
+                padding-right: 20px !important;
+                display: block;
+                line-height: 1;
+                padding: 8px 10px;
+                color: #3572b0 !important;
+            }
+
+            &.selected a, a:hover {
+                background-color: #3572b0 !important;
+                color: white !important;
+            }
+
+            &.selected a {
+                padding-left: 28px;
+                background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
+            }
+        }
     }
 
     .inputcontainer {
