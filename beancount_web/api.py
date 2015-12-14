@@ -656,6 +656,9 @@ class BeancountReportAPI(object):
 
     def journal(self, account_name=None, with_change_and_balance=False):
         if account_name:
+            if not account_name in [account['full_name'] for account in self.all_accounts]:
+                return []
+
             real_account = realization.get(self.real_accounts, account_name)
         else:
             real_account = self.real_accounts

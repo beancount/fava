@@ -187,6 +187,8 @@ def perform_global_filters():
         if 'tags' in app.entry_filters:
             if remove_filter_tag in app.entry_filters['tags']:
                 app.entry_filters['tags'].remove(remove_filter_tag)
+            if len(app.entry_filters['tags']) == 0:
+                app.entry_filters.pop('tags', None)
 
     filter_account = request.args.get('filter_account', None)
     if filter_account != None:
