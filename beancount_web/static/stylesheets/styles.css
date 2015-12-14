@@ -65,10 +65,6 @@ html, body, html > body {
   height: 100%;
 }
 
-.bodywrapper {
-  min-height: 100%;
-}
-
 .hidden {
   display: none;
 }
@@ -179,10 +175,6 @@ pre.debug {
   word-wrap: break-word;
 }
 
-.left {
-  float: left;
-}
-
 .halfleft, .halfright {
   width: 50%;
 }
@@ -198,6 +190,10 @@ pre.debug {
 .halfright {
   float: right;
   padding-left: 20px;
+}
+
+.left {
+  float: left;
 }
 
 ul.warnings {

@@ -1,6 +1,7 @@
 @import "base";
 
-//colors
+// Colors
+
 $white: #fff;
 $color_suva_gray_approx: #888;
 $color_tickle_me_pink_approx: #f8a;
@@ -12,24 +13,6 @@ $color_snowy_mint_approx: #cfc;
 $color_anakiwa_approx: #8ff;
 $color_onahau_approx: #cff;
 $color_bittersweet_approx: #f66;
-
-// Layout
-
-.halfleft, .halfright {
-    width: 50%;
-
-    h3 { text-align: center; }
-}
-
-.halfleft {
-    float: left;
-    padding-right: 20px;
-}
-
-.halfright {
-    float: right;
-    padding-left: 20px;
-}
 
 // Warnings
 
@@ -123,8 +106,13 @@ header {
                     }
                 }
 
-                &:hover > .filter { display: block; }
-                &.selected > a { background-color: #3572b0; }
+                &:hover > .filter {
+                    display: block;
+                }
+
+                &.selected > a {
+                    background-color: #3572b0;
+                }
 
                 & > .filter {
                     display: none;
@@ -204,7 +192,9 @@ header {
             margin-top: 0;
             padding-top: 10px;
 
-            &:nth-child(1) { padding-top: 20px; }
+            &:nth-child(1) {
+                padding-top: 20px;
+            }
 
             li {
                 font-size: 1.1em;
@@ -250,14 +240,17 @@ article {
     padding: 20px 24px;
 
     .headerline h3 {
-      display: inline-block;
-      margin-right: 15px;
+        display: inline-block;
+        margin-right: 15px;
 
-      a {
-          color: #aaa;
+        a {
+            color: #aaa;
 
-          &:hover { color: #333; text-decoration: underline;}
-      }
+            &:hover {
+                color: #333;
+                text-decoration: underline;
+            }
+        }
     }
 
     table {
@@ -296,13 +289,18 @@ article {
             &.num {
                 color: black;
                 padding-left: 14px;
-                font: 1.1em/1.1em $font_family_monospaced;
+                font: 1.1em / 1.1em $font_family_monospaced;
                 text-align: right;
                 padding-right: 6px !important;
                 vertical-align: top;
 
-                span.balance { display: block; }
-                span.tree-balance { display: none; }
+                span.balance {
+                    display: block;
+                }
+
+                span.tree-balance {
+                    display: none;
+                }
             }
 
             a.account {
@@ -323,18 +321,29 @@ article {
         // Subtotals
         // class ".tree-balance-show" is added via JavaScript
 
-        tr.parent td.num, td.num.tree-balance-show { color: #E5E5E5; }
-        td.num.tree-balance-show span.tree-balance { display: block }
+        tr.parent td.num, td.num.tree-balance-show {
+            color: #E5E5E5;
+        }
+
+        td.num.tree-balance-show span.tree-balance {
+            display: block;
+        }
 
         tr.hides td.num {
-            span.tree-balance { display: block; }
-            span.balance { display: none; }
+            span.tree-balance {
+                display: block;
+            }
+
+            span.balance {
+                display: none;
+            }
         }
 
         &:hover {
-            tr.parent td.num, tr td.num.tree-balance-show { color: #BEBEBE; }
+            tr.parent td.num, tr td.num.tree-balance-show {
+                color: #BEBEBE;
+            }
         }
-
 
         tr.posting.leg td {
             padding: 2px 6px;
@@ -369,7 +378,9 @@ article {
         }
 
         &.options_map {
-            td:nth-child(1) { font-weight: bold; }
+            td:nth-child(1) {
+                font-weight: bold;
+            }
 
             td:nth-child(2) {
                 white-space: normal;
@@ -379,7 +390,9 @@ article {
         }
 
         &.commodity, &.events {
-            td:first-child { min-width: inherit; }
+            td:first-child {
+                min-width: inherit;
+            }
         }
 
         // Collapsable trees
@@ -393,12 +406,20 @@ article {
 
             tr.hides {
                 // td.num { color: black; }
-                span.tree-balance { display: block; color: black; }
-                span.balance { display: none; }
+                span.tree-balance {
+                    display: block;
+                    color: black;
+                }
+
+                span.balance {
+                    display: none;
+                }
             }
 
             &:hover {
-                tr.hides td.num { color: black; }
+                tr.hides td.num {
+                    color: black;
+                }
             }
 
             span.expander {
@@ -433,7 +454,9 @@ article {
         a:link, a:visited {
             color: #333;
 
-            &:hover { text-decoration: underline; }
+            &:hover {
+                text-decoration: underline;
+            }
         }
 
         pre {
@@ -449,8 +472,13 @@ article {
             font-weight: normal;
             font-style: italic;
 
-            a { color: #999; }
-            a:hover { color: #333; }
+            a {
+                color: #999;
+            }
+
+            a:hover {
+                color: #333;
+            }
         }
     }
 
@@ -465,8 +493,13 @@ article {
             font-weight: bold;
         }
 
-        dt, dd { margin-bottom: 3px; }
-        pre { overflow-x: auto; }
+        dt, dd {
+            margin-bottom: 3px;
+        }
+
+        pre {
+            overflow-x: auto;
+        }
     }
 
     p.empty {
@@ -479,12 +512,13 @@ article {
         color: #999;
     }
 
-
     .table-filter, .chart-filter {
         float: right;
         margin-top: -20px;
 
-        input { margin-left: 10px; }
+        input {
+            margin-left: 10px;
+        }
     }
 
     // Journal
@@ -588,7 +622,9 @@ article {
                     }
                 }
 
-                &.transaction, &.padding { cursor: pointer; }
+                &.transaction, &.padding {
+                    cursor: pointer;
+                }
             }
         }
 
@@ -615,7 +651,9 @@ article {
     .left.statistics {
         margin-right: 30px;
 
-        table.statistics td:first-child a { font-weight: bold; }
+        table.statistics td:first-child a {
+            font-weight: bold;
+        }
     }
 }
 
@@ -625,7 +663,9 @@ article {
 .treemap-node .treemap-label a {
     color: white;
 
-    &:hover { text-decoration: underline; }
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 .treetable-popover {
@@ -653,8 +693,16 @@ article {
         min-width: 270px;
     }
 
-    dt { width: 60px; }
-    dd { margin-bottom: 8px; }
-    dd pre { font-size: 13px; line-height: 1em; }
-}
+    dt {
+        width: 60px;
+    }
 
+    dd {
+        margin-bottom: 8px;
+    }
+
+    dd pre {
+        font-size: 13px;
+        line-height: 1em;
+    }
+}
