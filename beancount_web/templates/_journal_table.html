@@ -9,7 +9,7 @@
                                              ('transaction', True),
                                              ('pad',         False),
                                              ('padding',     False)] %}
-                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}"{% if default_checked %} checked{% endif %}>
+                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if default_checked %} checked="checked"{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
             <input type="submit" id="toggle-legs" value="Hide legs">
@@ -47,7 +47,7 @@
         </thead>
         <tbody>
             {{#each journal}}
-            <tr class="{{ meta.type }} journal-entry-{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
+            <tr class="{{ meta.type }}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
                 <td class="datecell"><a href="{{ context_url hash }}">{{ date }}</a></td>
                 <td class="flag">{{ flag }}</td>
                 <td class="description" colspan="4">
@@ -97,7 +97,7 @@
             </tr>
                 {{#with this as |journalEntry|}}
                 {{#each legs }}
-                    <tr class="posting leg leg-{{ journalEntry.meta.type }} journal-entry-{{ journalEntry.hash }}">
+                    <tr class="posting leg" data-type="leg" data-parent-type="{{ journalEntry.meta.type }}" data-parent-hash="{{ journalEntry.hash }}">
                         <td class="datecell"></td>
                         <td class="flag"></td>
                         <td class="description"><a href="{{ account_url account }}">{{ account }}</a></td>

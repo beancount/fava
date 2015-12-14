@@ -44,43 +44,29 @@ $(document).ready(function() {
     var html    = template({ journal: window.journalAsJSON });
     $('.journal-table').html(html);
 
-    function toggle_journal_types() {
-        $('.table-filter input[type="checkbox"]').each(function() {
-            var type = $(this).prop('id').substring(7);
-            $('table.entry-table tr.' + type).toggle($(this).prop('checked'));
-            $('table.entry-table tr.leg-' + type).toggle($(this).prop('checked'));
-            $('table.entry-table tr.leg-' + type).toggleClass('hidden', !$(this).prop('checked'));
-        });
-    }
-
     // Toggle positions with checkboxes
     $('.table-filter input[type="checkbox"]').change(function() {
-        toggle_journal_types();
+        var $this = $(this);
+        var type = $this.attr('data-type');
+        var shouldHide = $this.prop('checked');
+        console.log(type, shouldHide);
+        $('table.entry-table tr[data-type="' + type + '"]').toggle(shouldHide);
+        $('table.entry-table tr[data-parent-type="' + type + '"]').toggle(shouldHide).toggleClass('hidden', !shouldHide);
     });
-    toggle_journal_types();
+    $('.table-filter input[type="checkbox"]').each(function() { $(this).trigger('change'); });
 
     // Toggle legs by clicking on transaction/padding row
-    $('table.entry-table tr.transaction td, table.entry-table tr.padding td').click(function() {
-        $.each($(this).parents('tr').prop('class').split(' '), function(index, clazz) {
-            if (clazz.startsWith('journal-entry-')) {
-                $('table.entry-table tr.leg.' + clazz).toggle();
-                $('table.entry-table tr.leg.' + clazz).toggleClass('hidden');
-            }
-        });
+    $('table.entry-table tr[data-has-legs="True"]').click(function() {
+        var hash = $(this).attr('data-hash');
+        $('table.entry-table tr[data-parent-hash="' + hash + '"]').toggle(); // .toggleClass('hidden', shouldHide);
     });
 
-    // Button "Hide legs"
+    // Button "Hide/Show legs"
     $('input#toggle-legs').click(function(event) {
         event.preventDefault();
-        var shouldHide = $(this).hasClass('hide-legs');
-        $('table.entry-table tr').each(function() {
-            $.each($(this).prop('class').split(' '), function(index, clazz) {
-                if (clazz.startsWith('journal-entry-')) {
-                    $('table.entry-table tr.leg.' + clazz).toggle(shouldHide);
-                    $('table.entry-table tr.leg.' + clazz).toggleClass('hidden', shouldHide);
-                }
-            });
-        });
-        $(this).toggleClass('hide-legs');
+        var shouldHide = true;  // $(this).hasClass('hide-legs');
+        $('table.entry-table tr[data-type="leg"]:not(.hidden)').toggle(!shouldHide).toggleClass('hidden', shouldHide);
+        // $(this).toggleClass('hide-legs');
+        // $(this).val(shouldHide ? 'Hide legs' : 'Show legs');
     });
 });
