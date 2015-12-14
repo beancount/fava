@@ -57,9 +57,19 @@
                             </ul>
                         </div>
                     </li>
-                    <li{% if entry_filters['tag'] %} class="selected"{% endif %}>
+                    <li{% if entry_filters['tags']  %} class="selected"{% endif %}>
                         <a href="">
-                            <span>{% if entry_filters['tag'] %}# {{ entry_filters['tag'] }}{% else %}Tag{% endif %}</span>
+                            <span>
+                                {% if entry_filters['tags'] %}
+                                    {% if entry_filters['tags']|length == 1 %}
+                                        # {{ entry_filters['tags']|first }}
+                                    {% else %}
+                                        Multiple tags
+                                    {% endif %}
+                                {% else %}
+                                    Tag
+                                {% endif %}
+                            </span>
                         </a>
                         <div class="filter">
                             <div class="inputcontainer">
@@ -67,8 +77,8 @@
                             </div>
                             <ul>
                                 {% for tag in api.active_tags -%}
-                                <li {% if tag == entry_filters['tag'] %} class="selected"{% endif %}>
-                                    <a href="{{ request.path }}?filter_tag={% if tag != entry_filters['tag'] %}{{ tag }}{% endif %}"># {{ tag }}</a>
+                                <li {% if tag in entry_filters['tags'] %} class="selected"{% endif %}>
+                                    <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
                                 </li>
                                 {% endfor -%}
                             </ul>

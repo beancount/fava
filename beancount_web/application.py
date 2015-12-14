@@ -117,7 +117,7 @@ class MyJSONEncoder(json.JSONEncoder):
             return obj.strftime('%Y-%m-%d')
         elif isinstance(obj, decimal.Decimal):
             return float(obj)
-        elif isinstance(obj, frozenset):
+        elif isinstance(obj, (set, frozenset)):
             return list(obj)
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
@@ -175,15 +175,23 @@ def perform_global_filters():
 
     filter_tag = request.args.get('filter_tag', None)  # TODO multiple tags
     if filter_tag != None:
-        if filter_tag == "":
-            app.entry_filters.pop('tag', None)
+        if filter_tag == "" and app.entry_filters['tags']:
+            app.entry_filters.pop('tags', None)
         else:
-            app.entry_filters['tag'] = filter_tag
+            if not 'tags' in app.entry_filters:
+                app.entry_filters['tags'] = set()
+            app.entry_filters['tags'].add(filter_tag)
+
+    remove_filter_tag = request.args.get('remove_filter_tag', None)
+    if remove_filter_tag != None:
+        if 'tags' in app.entry_filters:
+            if remove_filter_tag in app.entry_filters['tags']:
+                app.entry_filters['tags'].remove(remove_filter_tag)
 
     # TODO account
 
     app.api.filter(year=app.entry_filters.get('year', None),
-                    tag=app.entry_filters.get('tag', None),
+                   tags=app.entry_filters.get('tags', set()),
                 account=app.entry_filters.get('account', None))
 
 

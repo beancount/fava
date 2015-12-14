@@ -169,7 +169,7 @@ class BeancountReportAPI(object):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
         self.filter_year = None
-        self.filter_tag = None
+        self.filter_tags = None
         self.filter_account = None
         self.load_file()
 
@@ -200,20 +200,19 @@ class BeancountReportAPI(object):
             end_date = date(self.filter_year+1, 1, 1)
             self.entries = self._entries_in_inclusive_range(begin_date, end_date)
 
-        if self.filter_tag:
-            tags = set([self.filter_tag])
+        if self.filter_tags:
             self.entries = [
                 entry
                 for entry in self.entries
-                if isinstance(entry, Transaction) and entry.tags and (entry.tags & tags)]
+                if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
 
         self.account_types = options.get_account_types(self.options)
         self.real_accounts = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
 
-    def filter(self, year=None, tag=None, account=None):
+    def filter(self, year=None, tags=set(), account=None):
         self.filter_year = year
-        self.filter_tag = tag
+        self.filter_tags = tags
         self.filter_account = account
         self.load_file()
 
