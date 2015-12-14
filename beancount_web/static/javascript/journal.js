@@ -49,22 +49,22 @@ $(document).ready(function() {
         var $this = $(this);
         var type = $this.attr('data-type');
         var shouldHide = $this.prop('checked');
-        $('table.entry-table tr[data-type="' + type + '"]').toggle(shouldHide);
-        $('table.entry-table tr[data-parent-type="' + type + '"]').toggle(shouldHide).toggleClass('hidden', !shouldHide);
+        $('table.journal-table tr[data-type="' + type + '"]').toggle(shouldHide);
+        $('table.journal-table tr[data-parent-type="' + type + '"]').toggle(shouldHide).toggleClass('hidden', !shouldHide);
     });
     $('.table-filter input[type="checkbox"]').each(function() { $(this).trigger('change'); });
 
     // Toggle legs by clicking on transaction/padding row
-    $('table.entry-table tr[data-has-legs="True"]').click(function() {
+    $('table.journal-table tr[data-has-legs="True"]').click(function() {
         var hash = $(this).attr('data-hash');
-        $('table.entry-table tr[data-parent-hash="' + hash + '"]').toggle(); // .toggleClass('hidden', shouldHide);
+        $('table.journal-table tr[data-parent-hash="' + hash + '"]').toggle(); // .toggleClass('hidden', shouldHide);
     });
 
     // Button "Hide/Show legs"
     $('input#toggle-legs').click(function(event) {
         event.preventDefault();
         var shouldHide = true;  // $(this).hasClass('hide-legs');
-        $('table.entry-table tr[data-type="leg"]:not(.hidden)').toggle(!shouldHide).toggleClass('hidden', shouldHide);
+        $('table.journal-table tr[data-type="leg"]:not(.hidden)').toggle(!shouldHide).toggleClass('hidden', shouldHide);
         // $(this).toggleClass('hide-legs');
         // $(this).val(shouldHide ? 'Hide legs' : 'Show legs');
     });

@@ -372,7 +372,7 @@ article {
             }
         }
 
-        &.highlighttable, &.entry-table {
+        &.highlighttable, &.journal-table {
             td:first-child {
                 min-width: inherit;
             }
@@ -455,80 +455,9 @@ article {
                 }
             }
         }
-    }
 
-    #assets, #liabilities, #equity, #income, #expenses {
-        table {
-            width: 100%;
-        }
-    }
-
-    h1 {
-        a:link, a:visited {
-            color: #333;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-
-        .last-activity {
-            color: #999;
-            display: inline-block;
-            margin-left: 20px;
-            font-size: 12px;
-            font-weight: normal;
-            font-style: italic;
-
-            a {
-                color: #999;
-            }
-
-            a:hover {
-                color: #333;
-            }
-        }
-    }
-
-    dl {
-        margin-top: 20px;
-        font-size: 13px;
-
-        dt {
-            display: inline-block;
-            width: 120px;
-            float: left;
-            font-weight: bold;
-        }
-
-        dt, dd {
-            margin-bottom: 3px;
-        }
-    }
-
-    p.empty {
-        margin-top: 20px;
-    }
-
-    .loading {
-        margin-top: 20px;
-        font-style: italic;
-        color: #999;
-    }
-
-    .table-filter, .chart-filter {
-        float: right;
-        margin-top: -20px;
-
-        input {
-            margin-left: 10px;
-        }
-    }
-
-    // Journal
-
-    table {
-        &.entry-table {
+        // Journal
+        &.journal-table {
             width: 100%;
 
             a {
@@ -631,9 +560,73 @@ article {
                 }
             }
         }
+    }
 
-        &.trial {
-            width: auto;
+    #assets, #liabilities, #equity, #income, #expenses {
+        table {
+            width: 100%;
+        }
+    }
+
+    h1 {
+        a:link, a:visited {
+            color: #333;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .last-activity {
+            color: #999;
+            display: inline-block;
+            margin-left: 20px;
+            font-size: 12px;
+            font-weight: normal;
+            font-style: italic;
+
+            a {
+                color: #999;
+            }
+
+            a:hover {
+                color: #333;
+            }
+        }
+    }
+
+    dl {
+        margin-top: 20px;
+        font-size: 13px;
+
+        dt {
+            display: inline-block;
+            width: 120px;
+            float: left;
+            font-weight: bold;
+        }
+
+        dt, dd {
+            margin-bottom: 3px;
+        }
+    }
+
+    p.empty {
+        margin-top: 20px;
+    }
+
+    .loading {
+        margin-top: 20px;
+        font-style: italic;
+        color: #999;
+    }
+
+    .table-filter, .chart-filter {
+        float: right;
+        margin-top: -20px;
+
+        input {
+            margin-left: 10px;
         }
     }
 

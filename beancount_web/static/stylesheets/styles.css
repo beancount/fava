@@ -502,7 +502,7 @@ article table tr td.change.num, article table tr td.balance.num {
 article table.errors a, article table.holdings a, article table.net_worth a {
   font-weight: bold;
 }
-article table.highlighttable td:first-child, article table.entry-table td:first-child {
+article table.highlighttable td:first-child, article table.journal-table td:first-child {
   min-width: inherit;
 }
 article table.highlighttable {
@@ -687,6 +687,82 @@ article table.tree-table span.expander.toggled {
   left: -12px;
   top: 2px;
 }
+article table.journal-table {
+  width: 100%;
+}
+article table.journal-table a {
+  font-weight: bold;
+}
+article table.journal-table td.datecell a {
+  font-weight: normal;
+}
+article table.journal-table td.flag {
+  text-align: center;
+}
+article table.journal-table td {
+  border: thin solid #fff;
+}
+article table.journal-table th {
+  color: #888;
+}
+article table.journal-table th.description {
+  width: 90%;
+}
+article table.journal-table tr td.change {
+  font-weight: bold;
+}
+article table.journal-table tr td.description {
+  white-space: normal;
+}
+article table.journal-table tr td.description span.links {
+  margin-left: 1em;
+  margin-right: 1em;
+  text-decoration: none;
+}
+article table.journal-table tr.open {
+  background-color: #e8e8e8;
+}
+article table.journal-table tr.close {
+  background-color: #606060;
+}
+article table.journal-table tr.note {
+  background-color: #aad0ff;
+}
+article table.journal-table tr.document {
+  background-color: #ffc8ff;
+}
+article table.journal-table tr.pad {
+  background-color: #8ff;
+}
+article table.journal-table tr.padding {
+  background-color: #cff;
+}
+article table.journal-table tr.summarize {
+  background-color: #cff;
+}
+article table.journal-table tr.transfer {
+  background-color: #cff;
+}
+article table.journal-table tr.transaction.warning {
+  background-color: #f8a;
+}
+article table.journal-table tr.balance {
+  background-color: #cfc;
+}
+article table.journal-table tr.balance.fail {
+  background-color: #f8a;
+}
+article table.journal-table tr.posting {
+  font-size: x-small;
+  background-color: #e8e8e8;
+  opacity: 0.6;
+}
+article table.journal-table tr.posting.warning {
+  background-color: #f66;
+}
+article table.journal-table tr.transaction, article table.journal-table tr.padding {
+  cursor: pointer;
+}
 article #assets table, article #liabilities table, article #equity table, article #income table, article #expenses table {
   width: 100%;
 }
@@ -737,85 +813,6 @@ article .table-filter, article .chart-filter {
 }
 article .table-filter input, article .chart-filter input {
   margin-left: 10px;
-}
-article table.entry-table {
-  width: 100%;
-}
-article table.entry-table a {
-  font-weight: bold;
-}
-article table.entry-table td.datecell a {
-  font-weight: normal;
-}
-article table.entry-table td.flag {
-  text-align: center;
-}
-article table.entry-table td {
-  border: thin solid #fff;
-}
-article table.entry-table th {
-  color: #888;
-}
-article table.entry-table th.description {
-  width: 90%;
-}
-article table.entry-table tr td.change {
-  font-weight: bold;
-}
-article table.entry-table tr td.description {
-  white-space: normal;
-}
-article table.entry-table tr td.description span.links {
-  margin-left: 1em;
-  margin-right: 1em;
-  text-decoration: none;
-}
-article table.entry-table tr.open {
-  background-color: #e8e8e8;
-}
-article table.entry-table tr.close {
-  background-color: #606060;
-}
-article table.entry-table tr.note {
-  background-color: #aad0ff;
-}
-article table.entry-table tr.document {
-  background-color: #ffc8ff;
-}
-article table.entry-table tr.pad {
-  background-color: #8ff;
-}
-article table.entry-table tr.padding {
-  background-color: #cff;
-}
-article table.entry-table tr.summarize {
-  background-color: #cff;
-}
-article table.entry-table tr.transfer {
-  background-color: #cff;
-}
-article table.entry-table tr.transaction.warning {
-  background-color: #f8a;
-}
-article table.entry-table tr.balance {
-  background-color: #cfc;
-}
-article table.entry-table tr.balance.fail {
-  background-color: #f8a;
-}
-article table.entry-table tr.posting {
-  font-size: x-small;
-  background-color: #e8e8e8;
-  opacity: 0.6;
-}
-article table.entry-table tr.posting.warning {
-  background-color: #f66;
-}
-article table.entry-table tr.transaction, article table.entry-table tr.padding {
-  cursor: pointer;
-}
-article table.trial {
-  width: auto;
 }
 article span.payee {
   font-weight: bold;
