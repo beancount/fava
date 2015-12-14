@@ -168,10 +168,12 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
-        self.filter_time = None
-        self.filter_tags = set()
-        self.filter_account = None
-        self.filter_payees = set()
+        self.filters = {
+            'time_str': None,
+            'tags': set(),
+            'account': None,
+            'payees': set(),
+        }
         self.load_file()
 
     def load_file(self):
@@ -202,38 +204,39 @@ class BeancountReportAPI(object):
     def apply_filters(self):
         self.entries = self.all_entries
 
-        if self.filter_time:
-            begin_date, end_date = parse_date(self.filter_time)
+        if self.filters['time_str']:
+            begin_date, end_date = parse_date(self.filters['time_str'])
             self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
 
-        if self.filter_tags:
+        if self.filters['tags']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
+                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter['tags']))]
 
-        if self.filter_payees:
+        if self.filters['payees']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
+                            if isinstance(entry, Transaction) and (entry.payee in self.filters['payees'])]
 
-        if self.filter_account:
+        if self.filters['account']:
             self.entries = [entry
                             for entry in self.entries
                             if isinstance(entry, Transaction) and
-                                any(has_component(posting.account, self.filter_account)
+                                any(has_component(posting.account, self.filters['account'])
                                     for posting in entry.postings)]
 
         self.root_account = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
 
-    def filter(self, time_str=None, tags=set(), account=None, payees=set()):
-        self.filter_time = time_str
-        self.filter_tags = tags
-        self.filter_account = account
-        self.filter_payees = payees
+    def filter(self, **kwargs):
+        changed = False
+        for filter, current_value in self.filters.items():
+            if filter in kwargs and kwargs[filter] != current_value:
+                self.filters[filter] = kwargs[filter]
+                changed = True
 
-        # TODO only apply filters if something has changed
-        self.apply_filters()
+        if changed:
+            self.apply_filters()
 
     def _account_components(self):
         # TODO rename
