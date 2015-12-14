@@ -459,11 +459,6 @@ article {
             }
         }
 
-        pre {
-            overflow-x: inherit;
-            display: inline-block;
-        }
-
         .last-activity {
             color: #999;
             display: inline-block;
@@ -495,10 +490,6 @@ article {
 
         dt, dd {
             margin-bottom: 3px;
-        }
-
-        pre {
-            overflow-x: auto;
         }
     }
 
@@ -701,7 +692,7 @@ article {
         margin-bottom: 8px;
     }
 
-    dd pre {
+    dd code {
         font-size: 13px;
         line-height: 1em;
     }

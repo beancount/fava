@@ -163,13 +163,8 @@ code, pre > code {
 }
 
 pre {
-  display: block;
   overflow-x: scroll;
-  font-family: monospace;
   white-space: pre;
-  margin: 0;
-  line-height: 1.2em;
-  font-size: 1.1em;
 }
 pre.debug {
   word-wrap: break-word;
@@ -693,10 +688,6 @@ article h1 a:link, article h1 a:visited {
 article h1 a:link:hover, article h1 a:visited:hover {
   text-decoration: underline;
 }
-article h1 pre {
-  overflow-x: inherit;
-  display: inline-block;
-}
 article h1 .last-activity {
   color: #999;
   display: inline-block;
@@ -723,9 +714,6 @@ article dl dt {
 }
 article dl dt, article dl dd {
   margin-bottom: 3px;
-}
-article dl pre {
-  overflow-x: auto;
 }
 article p.empty {
   margin-top: 20px;
@@ -1811,7 +1799,7 @@ article .left.statistics table.statistics td:first-child a {
 .treetable-popover dd {
   margin-bottom: 8px;
 }
-.treetable-popover dd pre {
+.treetable-popover dd code {
   font-size: 13px;
   line-height: 1em;
 }

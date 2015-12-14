@@ -80,7 +80,7 @@ $(document).ready(function() {
                     mouseenter: function (node, event) {
                         $(event.target).append('<div class="treetable-popover"></div>');
                         var $popover = $('.treetable-popover');
-                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><pre>' + node.balance + '</pre></dd></dl>').hide().fadeIn(200);
+                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><code>' + node.balance + '</code></dd></dl>').hide().fadeIn(200);
 
                         var windowWidth = $(window.window).width();
                         var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,
