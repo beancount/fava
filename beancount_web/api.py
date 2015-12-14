@@ -18,7 +18,6 @@ from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting
 from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
-from beancount.web.views import YearView, TagView
 from beancount.ops import summarize, prices, holdings
 from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
@@ -169,6 +168,9 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
+        self.filter_year = None
+        self.filter_tag = None
+        self.filter_account = None
         self.load_file()
 
     def load_file(self):
@@ -193,20 +195,27 @@ class BeancountReportAPI(object):
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
 
+        if self.filter_year:
+            begin_date = date(self.filter_year, 1, 1)
+            end_date = date(self.filter_year+1, 1, 1)
+            self.entries = self._entries_in_inclusive_range(begin_date, end_date)
+
+        if self.filter_tag:
+            tags = set([self.filter_tag])
+            self.entries = [
+                entry
+                for entry in self.entries
+                if isinstance(entry, Transaction) and entry.tags and (entry.tags & tags)]
+
         self.account_types = options.get_account_types(self.options)
         self.real_accounts = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
 
-    def filter(self, year=None, tag=None):
-        if year:
-            yv = YearView(self.all_entries, self.options, str(year), year)
-            self.entries = yv.entries
-
-        if tag:
-            tv = TagView(self.all_entries, self.options, tag, set([tag]))
-            self.entries = tv.entries
-
-        self.real_accounts = realization.realize(self.entries, self.account_types)
+    def filter(self, year=None, tag=None, account=None):
+        self.filter_year = year
+        self.filter_tag = tag
+        self.filter_account = account
+        self.load_file()
 
     def _account_components(self):
         # TODO rename
@@ -444,6 +453,10 @@ class BeancountReportAPI(object):
                 ...
             ]
         """
+
+        if len(entries) == 0:
+            return []
+
         date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
 
         def get_next_month(date_):

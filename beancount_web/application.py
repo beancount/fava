@@ -7,6 +7,7 @@ from datetime import date, datetime
 from flask import Flask, render_template, url_for, request, redirect, abort, Markup
 
 app = Flask(__name__)
+app.entry_filters = {}
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
@@ -158,21 +159,31 @@ def inject_errors():
                 options=options,
                 title=app.api.title,
                 operating_currencies=options['operating_currency'],
-                commodities=options['commodities'])
+                commodities=options['commodities'],
+                entry_filters=app.entry_filters)
 
 @app.before_request
 def perform_global_filters():
-    year = request.args.get('filter_year', None)
-    if year: year = int(year)
+    # app.entry_filters = {}
 
-    tag = request.args.get('filter_tag', None)
+    filter_year = request.args.get('filter_year', None)
+    if filter_year != None:
+        if filter_year == "":
+            app.entry_filters.pop('year', None)
+        else:
+            app.entry_filters['year'] = int(filter_year)
 
-    if year != app.filter_year or tag != app.filter_tag:
-        app.api.filter(year=year, tag=tag)
+    filter_tag = request.args.get('filter_tag', None)  # TODO multiple tags
+    if filter_tag != None:
+        if filter_tag == "":
+            app.entry_filters.pop('tag', None)
+        else:
+            app.entry_filters['tag'] = filter_tag
 
-    if year != app.filter_year:
-        app.filter_year = year
+    # TODO account
 
-    if tag != app.filter_tag:
-        app.filter_tag = tag
+    app.api.filter(year=app.entry_filters.get('year', None),
+                    tag=app.entry_filters.get('tag', None),
+                account=app.entry_filters.get('account', None))
+
 

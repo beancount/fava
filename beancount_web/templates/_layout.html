@@ -40,34 +40,42 @@
                     <h1 id="site-name">{{ title }}</h1>
                 </div>
                 <ul class="topmenu">
-                    <li>
-                        <a href="#"><span>Time</span></a>
+                    <li{% if entry_filters['year'] %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>{{ entry_filters['year'] or 'Time' }}</span>
+                        </a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
                             </div>
                             <ul>
                                 {% for year in api.active_years -%}
-                                <li><a href="{{ request.path }}?filter_year={{ year }}">{{ year }}</a></li>
+                                <li {% if year == entry_filters['year'] %} class="selected"{% endif %}>
+                                    <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
+                                </li>
                                 {% endfor -%}
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="#"><span>Tag</span></a>
+                    <li{% if entry_filters['tag'] %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>{% if entry_filters['tag'] %}# {{ entry_filters['tag'] }}{% else %}Tag{% endif %}</span>
+                        </a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
                             </div>
                             <ul>
                                 {% for tag in api.active_tags -%}
-                                <li><a href="{{ request.path }}?filter_tag={{ tag }}"># {{ tag }}</a></li>
+                                <li {% if tag == entry_filters['tag'] %} class="selected"{% endif %}>
+                                    <a href="{{ request.path }}?filter_tag={% if tag != entry_filters['tag'] %}{{ tag }}{% endif %}"># {{ tag }}</a>
+                                </li>
                                 {% endfor -%}
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <a href="#"><span>Component</span></a>
+                        <a href=""><span>Account</span></a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
