@@ -297,18 +297,12 @@ class BeancountReportAPI(object):
                 'account': real_account.account,
                 'balances_children': self._table_totals(real_account),
                 'balances': {},
-                'is_leaf': (len(list(realization.iter_children(real_account))) == 1), # True if the accoutn has no children or has entries
+                'is_leaf': len(real_account) == 0 or real_account.txn_postings,
                 'postings_count': len(real_account.txn_postings)
             }
 
             for pos in real_account.balance.cost():
                 line['balances'][pos.lot.currency] = pos.number
-
-            # Accounts that are not leafs but have entries are leafs as well
-            for currency in self.options['commodities']:
-                if currency in line['balances'] and currency in line['balances_children']:
-                    if line['balances'][currency] != line['balances_children'][currency]:
-                        line['is_leaf'] = True
 
             lines.append(line)
 
@@ -478,10 +472,10 @@ class BeancountReportAPI(object):
             ]
         """
 
-        if len(entries) == 0:
-            return []
-
         date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
+
+        if not date_first:
+            return []
 
         def get_next_month(date_):
             month = (date_.month % 12) + 1
