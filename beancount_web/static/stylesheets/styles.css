@@ -154,7 +154,7 @@ a.section:link, a.section:visited {
   text-decoration: none;
 }
 
-code, pre > code {
+code, pre, pre > code {
   font-family: monospace;
   white-space: pre;
   margin: 0;
@@ -163,7 +163,6 @@ code, pre > code {
 }
 
 pre {
-  overflow-x: scroll;
   white-space: pre;
 }
 pre.debug {

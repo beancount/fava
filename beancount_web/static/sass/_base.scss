@@ -124,7 +124,7 @@ a {
     }
 }
 
-code, pre > code {
+code, pre, pre > code {
     font-family: $font_family_monospaced;
     white-space: pre;
     margin: 0;
@@ -133,7 +133,7 @@ code, pre > code {
 }
 
 pre {
-    overflow-x: scroll;
+    // overflow-x: scroll;
     white-space: pre;
 
     &.debug {
