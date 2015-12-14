@@ -18,7 +18,7 @@ $(document).ready(function() {
                 position: 'end',
                 scaleMinSpace: 15,
                 labelInterpolationFnc: function(value) {
-                    return value.toLocaleString();
+                    return value;
                 },
                 referenceValue: 0,
             },
@@ -38,8 +38,9 @@ $(document).ready(function() {
                     axisX: {
                         type: Chartist.FixedScaleAxis,
                         divisor: chart.data.series[0].data.length > 15 ? 15 : chart.data.series[0].data.length,  // no of days
-                        labelInterpolationFnc: function(value) {
-                            return value.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
+                        labelInterpolationFnc: function(value, index) {
+                            var val = isNumber(value) ? new Date(value) : value;
+                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     },
                     lineSmooth: Chartist.Interpolation.none()
@@ -53,7 +54,8 @@ $(document).ready(function() {
                 var options = {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
-                            return value.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
+                            var val = isNumber(value) ? new Date(value) : value;
+                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     }
                 };

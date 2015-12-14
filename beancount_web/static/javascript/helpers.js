@@ -66,3 +66,8 @@ if (typeof Date.prototype.formatWithString != 'function') {
         return dateStr;
     };
 }
+
+// http://stackoverflow.com/a/7195920
+function isNumber(num) {
+    return (typeof num == 'string' || typeof num == 'number') && !isNaN(num - 0) && num !== '';
+};

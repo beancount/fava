@@ -49,7 +49,6 @@ $(document).ready(function() {
         var $this = $(this);
         var type = $this.attr('data-type');
         var shouldHide = $this.prop('checked');
-        console.log(type, shouldHide);
         $('table.entry-table tr[data-type="' + type + '"]').toggle(shouldHide);
         $('table.entry-table tr[data-parent-type="' + type + '"]').toggle(shouldHide).toggleClass('hidden', !shouldHide);
     });
