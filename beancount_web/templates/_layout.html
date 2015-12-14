@@ -58,7 +58,7 @@
                             <input type="search" class="search-direct-apply" data-url="{{ request.path }}?filter_time=">
                         </div>
                         <ul>
-                            {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'october this year', 'aug last year'] %}
+                            {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'aug last year', '2010-10 - 2014'] %}
                             <li class="info">Supports search strings like
                                 {% for suggestion in time_search_strings %}
                                     <a href="{{ request.path }}?filter_time={% if suggestion != entry_filters['time'] %}{{ suggestion }}{% endif %}" data-filter="{{ suggestion }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}

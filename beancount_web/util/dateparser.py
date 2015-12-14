@@ -49,7 +49,7 @@ def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
         end = datetime.date(year + 1, 1, 1)
     elif (not day) and month:
         start = datetime.date(year, month, 1)
-        end = datetime.date(year, month + 1, 1)
+        end = datetime.date(year + (month > 11), (month % 12) + 1, 1)
     else:  # ~= if (year and month and day)
         start = end = datetime.date(year, month, day)
     return start, end
@@ -130,6 +130,9 @@ if __name__ == '__main__':
         '2000-01-03': daterange(2000, 1, 3),
         'this year': daterange(today.year),
         'august next year': daterange(today.year + 1, 8),
+        'this month': daterange(today.year, today.month),
+        'this december': daterange(today.year, 12),
+        'this november': daterange(today.year, 11),
         '2nd aug, 2010': daterange(2010, 8, 2),
         'august 3rd, 2012': daterange(2012, 8, 3),
         '2014 to 2015': (daterange(2014)[0], daterange(2015)[1]),

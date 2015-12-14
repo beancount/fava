@@ -471,10 +471,10 @@ class BeancountReportAPI(object):
             ]
         """
 
-        if len(entries) == 0:
-            return []
-
         date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
+
+        if not date_first:
+            return []
 
         def get_next_month(date_):
             month = (date_.month % 12) + 1
