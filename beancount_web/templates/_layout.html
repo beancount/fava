@@ -32,6 +32,16 @@
     <script>window.chartData = [];</script>
 </head>
 <body>
+    {% if not options['operating_currency'] %}
+        <ul class="warnings">
+            <li class="error">
+                <div class="warning-wrapper">
+                    No <code>operating_currency</code> specified.
+                    Add <code>option "operating_currency" "USD"</code> to your beancount file.
+                </div>
+            </li>
+        </ul>
+    {% endif %}
     <header>
         <div class="branding">
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAsVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3mHKcAAAAOnRSTlMAAQMEBQYHCAwNDg8QExkaISImJzQ7RUZHSUtVZGtsb3FzdXd4f5WYm56jr7y+xcfP2tze4OLk6/X9+wsXVgAAAMJJREFUKFPFkWkTgiAYhDG1wy677VSzw0q6pKz3//+wBGRkGO2r+4ndZ9hhFoQq0AaXKZoiKFfE4Uzt82iKOWyrcJjDJU90N45dnZ/3HCbrPvfmE64YHkZ216MQi6rwPUBp0VF4GVrQowlAqwA6cN8xKJ4uwyDNGdz+g0EBnAvoFEALxjZC9gIsCd60zJy6ZqpRmFmNLfQ9NJirE7pWbDLTuYj5SI0Fhk+IzwdqfvLhJ0jRSvqVl/rRCYdnKNVG7atcP+gmOQsBuK8NAAAAAElFTkSuQmCC" alt="">

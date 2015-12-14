@@ -128,14 +128,24 @@ a {
     }
 }
 
-pre {
-    display: block;
+code, pre>code {
     font-family: $font_family_monospaced;
     white-space: pre;
     margin: 0;
     line-height: 1.2em;
     font-size: 1.1em;
+}
+
+pre {
+    display: block;
+
     overflow-x: scroll;
+
+    font-family: $font_family_monospaced;
+    white-space: pre;
+    margin: 0;
+    line-height: 1.2em;
+    font-size: 1.1em;
 
     &.debug { word-wrap: break-word; }
 }

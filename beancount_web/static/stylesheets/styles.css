@@ -158,14 +158,22 @@ a.section:link, a.section:visited {
   text-decoration: none;
 }
 
-pre {
-  display: block;
+code, pre > code {
   font-family: monospace;
   white-space: pre;
   margin: 0;
   line-height: 1.2em;
   font-size: 1.1em;
+}
+
+pre {
+  display: block;
   overflow-x: scroll;
+  font-family: monospace;
+  white-space: pre;
+  margin: 0;
+  line-height: 1.2em;
+  font-size: 1.1em;
 }
 pre.debug {
   word-wrap: break-word;
@@ -190,6 +198,21 @@ pre.debug {
 .halfright {
   float: right;
   padding-left: 20px;
+}
+
+ul.warnings {
+  margin: 0;
+  padding: 0;
+}
+ul.warnings > li {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  line-height: 1.4em;
+}
+ul.warnings > li.error {
+  color: white;
+  background: #990000;
 }
 
 header {

@@ -31,6 +31,25 @@ $color_bittersweet_approx: #f66;
     padding-left: 20px;
 }
 
+// Warnings
+
+ul.warnings {
+    margin: 0;
+    padding: 0;
+
+    & > li {
+        display: block;
+        text-align: center;
+        padding: 10px;
+        line-height: 1.4em;
+
+        &.error {
+            color: white;
+            background: #990000;
+        }
+    }
+}
+
 // Header
 
 header {
