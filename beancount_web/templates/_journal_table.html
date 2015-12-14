@@ -23,7 +23,6 @@
     window.journalAsJSON = {{ journal|to_json }};
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
 </script>
-
 <div class="journal-table">
     <div class="loading">Loading journal entries&hellip;</div>
 </div>
@@ -47,7 +46,7 @@
         </thead>
         <tbody>
             {{#each journal}}
-            <tr class="{{ meta.type }}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
+            <tr class="{{ meta.type }}{{#if diff_amount }} fail{{/if}}{{#ifCond flag '==' '!'}} warning{{/ifCond}}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
                 <td class="datecell"><a href="{{ context_url hash }}">{{ date }}</a></td>
                 <td class="flag">{{ flag }}</td>
                 <td class="description" colspan="4">
@@ -67,10 +66,26 @@
                         Document for <a href="{{ account_url account }}">{{ account }}</a>: <a href="#TODO">{{ filename }}</a>
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'balance'}}
-                        Balance <a href="{{ account_url account }}">{{ account }}</a> has
-                        {{#each balance }}
-                            {{ format_currency this }} {{ @key }}<br>
-                        {{/each}}
+                        Balance <a href="{{ account_url account }}">{{ account }}</a>
+                        {{#if diff_amount }} fails;
+                            expected =
+                            {{#each amount }}
+                                {{ format_currency this }} {{ @key }},
+                            {{/each}}
+                            balance =
+                            {{#each balance }}
+                                {{ format_currency this }} {{ @key }},
+                            {{/each}}
+                            difference =
+                            {{#each diff_amount }}
+                                {{ format_currency this }} {{ @key }}
+                            {{/each}}
+                        {{else}}
+                            has
+                            {{#each amount }}
+                                {{ format_currency this }} {{ @key }}<br>
+                            {{/each}}
+                        {{/if}}
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'transaction'}}
                         <strong>{{ payee }}</strong>

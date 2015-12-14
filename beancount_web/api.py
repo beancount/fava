@@ -378,10 +378,7 @@ class BeancountReportAPI(object):
                 isinstance(posting, Close) or \
                 isinstance(posting, Pad) or \
                 isinstance(posting, Event) or \
-                isinstance(posting, Document):   # TEMP
-
-                # if isinstance(posting, TxnPosting):
-                #     posting = posting.txn
+                isinstance(posting, Document):
 
                 entry = {
                     'meta': {
@@ -394,46 +391,47 @@ class BeancountReportAPI(object):
                 }
 
                 if isinstance(posting, Open):
-                    entry['account'] =       posting.account
-                    entry['currencies'] =    posting.currencies
-                    entry['booking'] =       posting.booking # TODO im html-template
+                    entry['account']        = posting.account
+                    entry['currencies']     = posting.currencies
 
                 if isinstance(posting, Close):
-                    entry['account'] =       posting.account
+                    entry['account']        = posting.account
 
                 if isinstance(posting, Event):
-                    entry['type'] =             posting.type
-                    entry['description'] =      posting.description
+                    entry['type']           = posting.type
+                    entry['description']    = posting.description
 
                 if isinstance(posting, Note):
-                    entry['comment'] =       posting.comment
+                    entry['comment']        = posting.comment
 
                 if isinstance(posting, Document):
-                    entry['account'] =       posting.account
-                    entry['filename'] =      posting.filename
+                    entry['account']        = posting.account
+                    entry['filename']       = posting.filename
 
                 if isinstance(posting, Pad):
-                    entry['account'] =       posting.account
-                    entry['source_account'] =      posting.source_account
+                    entry['account']        = posting.account
+                    entry['source_account'] = posting.source_account
 
                 if isinstance(posting, Balance):
-                    # TODO failed balances
-                    entry['account'] =       posting.account
-                    entry['tolerance'] =     posting.tolerance  # TODO currency? TODO in HTML-template
+                    entry['account']        = posting.account
+                    entry['change']         = { posting.amount.currency: posting.amount.number }
+                    entry['amount']         = { posting.amount.currency: posting.amount.number }
+
                     if posting.diff_amount:
-                        entry['diff_amount'] =          posting.diff_amount.number  # TODO in HTML-template
-                        entry['diff_amount_currency'] = posting.diff_amount.currency  # TODO in HTML-template
+                        balance              = entry_balance.get_units(posting.amount.currency)
+                        entry['diff_amount'] = { posting.diff_amount.currency: posting.diff_amount.number }
+                        entry['balance']     = { balance.currency: balance.number }
 
                 if isinstance(posting, Transaction):
                     if posting.flag == 'P':
-                        entry['meta']['type'] = 'padding'
+                        entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
 
-                    entry['flag'] =         posting.flag
-                    entry['payee'] =        posting.payee
-                    entry['narration'] =    posting.narration
-                    entry['tags'] =         posting.tags
-                    entry['links'] =        posting.links
-                    entry['legs'] =         []
+                    entry['flag']       = posting.flag
+                    entry['payee']      = posting.payee
+                    entry['narration']  = posting.narration
+                    entry['tags']       = posting.tags or []
+                    entry['links']      = posting.links or []
+                    entry['legs']       = []
 
                     for posting_ in posting.postings:
                         leg = {
@@ -443,23 +441,26 @@ class BeancountReportAPI(object):
                         }
 
                         if posting_.position:
-                            leg['position'] = posting_.position.number
+                            leg['position']          = posting_.position.number
                             leg['position_currency'] = posting_.position.lot.currency
+                            cost                     = interpolate.get_posting_weight(posting_)
+                            leg['cost']              = cost.number
+                            leg['cost_currency']     = cost.currency
 
                         if posting_.price:
-                            leg['price'] = posting_.price.number
-                            leg['price_currency'] = posting_.price.currency
+                            leg['price']             = posting_.price.number
+                            leg['price_currency']    = posting_.price.currency
 
                         entry['legs'].append(leg)
 
                 if with_change_and_balance:
                     if isinstance(posting, Balance):
-                        entry['change'] =        { posting.amount.currency: posting.amount.number }
-                        entry['balance'] =       { posting.amount.currency: posting.amount.number }
+                        entry['change']     = { posting.amount.currency: posting.amount.number }
+                        entry['balance']    = self._inventory_to_json(entry_balance)  #, include_currencies=entry['change'].keys())
 
                     if isinstance(posting, Transaction):
-                        entry['change'] =       self._inventory_to_json(change)
-                        entry['balance'] =      self._inventory_to_json(entry_balance, include_currencies=entry['change'].keys())
+                        entry['change']     = self._inventory_to_json(change)
+                        entry['balance']    = self._inventory_to_json(entry_balance, include_currencies=entry['change'].keys())
 
                 journal.append(entry)
 
