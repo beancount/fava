@@ -40,20 +40,34 @@
                     <h1 id="site-name">{{ title }}</h1>
                 </div>
                 <ul class="topmenu">
-                    <li{% if entry_filters['year'] %} class="selected"{% endif %}>
+                    <li{% if entry_filters['time'] %} class="selected"{% endif %}>
                         <a href="">
-                            <span>{{ entry_filters['year'] or 'Time' }}</span>
+                            <span>{{ entry_filters['time'] or 'Time' }}</span>
                         </a>
-                        <div class="filter">
+                        <div class="filter" id="filter-time">
                             <div class="inputcontainer">
-                                <input type="search">
+                                <input type="search" class="search-direct-apply" data-url="{{ request.path }}?filter_time=">
                             </div>
                             <ul>
-                                {% for year in api.active_years -%}
-                                <li{% if year == entry_filters['year'] %} class="selected"{% endif %} data-filter="{{ year }}">
-                                    <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
+                                {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'october this year', 'aug last year'] %}
+                                <li class="info">Supports search strings like
+                                    {% for suggestion in time_search_strings %}
+                                        <a href="{{ request.path }}?filter_time={% if suggestion != entry_filters['time'] %}{{ suggestion }}{% endif %}" data-filter="{{ suggestion }}"><code>{{ suggestion }}</code></a>{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </li>
+
+                                {% if entry_filters['time'] and entry_filters['time'] not in api.active_years|map('string') %}
+                                    <li class="suggestion selected" data-filter="{{ entry_filters['time'] }}">
+                                        <a href="{{ request.path }}?filter_time=">{{ entry_filters['time'] }}</a>
+                                    </li>
+                                {% endif %}
+
+                                {% for time_ in api.active_years -%}
+                                <li class="suggestion{% if time_|string == entry_filters['time'] %} selected{% endif %}" data-filter="{{ time_ }}">
+                                    <a href="{{ request.path }}?filter_time={% if time_|string != entry_filters['time'] %}{{ time_ }}{% endif %}">{{ time_ }}</a>
                                 </li>
                                 {% endfor -%}
+
                             </ul>
                         </div>
                     </li>
@@ -76,8 +90,10 @@
                                 <input type="search">
                             </div>
                             <ul>
+                                <li class="info">You can select multiple tags.</li>
+
                                 {% for tag in api.active_tags -%}
-                                <li{% if tag in entry_filters['tags'] %} class="selected"{% endif %} data-filter="{{ tag|lower }}">
+                                <li class="suggestion{% if tag in entry_filters['tags'] %} selected{% endif %}" data-filter="{{ tag|lower }}">
                                     <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
                                 </li>
                                 {% endfor -%}
@@ -94,7 +110,7 @@
                             </div>
                             <ul>
                                 {% for account in api.all_accounts -%}
-                                <li{% if account.full_name == entry_filters['account'] %} class="selected"{% endif %} data-filter="{{ account.full_name|lower }}">
+                                <li class="suggestion{% if account.full_name == entry_filters['account'] %} selected{% endif %}" data-filter="{{ account.full_name|lower }}">
                                     <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">
                                         {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
                                     </a>
@@ -122,8 +138,10 @@
                                 <input type="search">
                             </div>
                             <ul>
+                                <li class="info">You can select multiple payees.</li>
+
                                 {% for payee in api.active_payees -%}
-                                <li{% if payee in entry_filters['payees'] %} class="selected"{% endif %} data-filter="{{ payee|lower }}">
+                                <li class="suggestion{% if payee in entry_filters['payees'] %} selected{% endif %}" data-filter="{{ payee|lower }}">
                                     <a href="{{ request.path }}?{% if payee in entry_filters['payees'] %}remove_filter_payee={{ payee }}{% else %}filter_payee={{ payee }}{% endif %}">{{ payee }}</a>
                                 </li>
                                 {% endfor -%}

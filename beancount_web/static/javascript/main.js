@@ -1,8 +1,19 @@
 $(document).ready(function() {
     $('.filter input').keyup(function() {
-        var value = $(this).val();
-        $(this).parents('.filter').find('li').hide();
+        var $this = $(this);
+        var value = $this.val();
+        $(this).parents('.filter').find('li.suggestion').toggle(value == '');
         $(this).parents('.filter').find("li[data-filter*='" + value.toLowerCase() + "']").show();
+    });
+
+    $('.filter#filter-time input').keyup(function(e) {
+        var $this = $(this);
+        var code = e.which;
+        if (code == 13) {
+            e.preventDefault();
+            var value = $this.val();
+            window.location.href = $this.attr('data-url') + htmlEncode(value);
+        }
     });
 
     // Tree-expanding

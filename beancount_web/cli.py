@@ -61,7 +61,7 @@ def run(argv):
         args.debug = True
 
     app.beancount_file = args.filename
-    app.filter_year = None
+    app.filter_time = None
     app.filter_tag = None
 
     app.api = BeancountReportAPI(app.beancount_file)

@@ -170,7 +170,7 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
-        self.filter_year = None
+        self.filter_time = None
         self.filter_tags = set()
         self.filter_account = None
         self.filter_payees = set()
@@ -202,15 +202,21 @@ class BeancountReportAPI(object):
         self.apply_filters()
 
     def apply_filters(self):
-        if self.filter_year:
-            begin_date, end_date = parse_date(self.filter_year)
-            self.entries = self.all_entries
+        self.entries = self.all_entries
+
+        if self.filter_time:
+            begin_date, end_date = parse_date(self.filter_time)
             self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
 
         if self.filter_tags:
             self.entries = [entry
                             for entry in self.entries
                             if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
+
+        if self.filter_payees:
+            self.entries = [entry
+                            for entry in self.entries
+                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
 
         self.real_accounts = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
@@ -222,19 +228,16 @@ class BeancountReportAPI(object):
                                 any(has_component(posting.account, self.filter_account)
                                     for posting in entry.postings)]
 
-        if self.filter_payees:
-            self.entries = [entry
-                            for entry in self.entries
-                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
-
         # need to do this again to realize the filtered entries (otherwise self.all_accounts would be wrong)
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
-    def filter(self, year=None, tags=set(), account=None, payees=set()):
-        self.filter_year = year
+    def filter(self, time_str=None, tags=set(), account=None, payees=set()):
+        self.filter_time = time_str
         self.filter_tags = tags
         self.filter_account = account
         self.filter_payees = payees
+
+        # TODO only apply filters if something has changed
         self.apply_filters()
 
     def _account_components(self):

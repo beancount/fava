@@ -200,7 +200,7 @@ pre.debug {
   padding-left: 20px;
 }
 
-#header {
+header {
   overflow: hidden;
   *zoom: 1;
   background: #205081;
@@ -210,11 +210,11 @@ pre.debug {
   padding: 0 10px;
   height: 41px;
 }
-#header #branding img {
+header #branding img {
   margin-top: 7px;
   float: left;
 }
-#header #branding h1 {
+header #branding h1 {
   float: left;
   color: #fff;
   display: block;
@@ -223,22 +223,22 @@ pre.debug {
   font-size: 14px;
   font-weight: normal;
 }
-#header a {
+header a {
   color: white;
   text-decoration: none;
 }
-#header a:hover {
+header a:hover {
   text-decoration: none;
 }
-#header ul.topmenu {
+header ul.topmenu {
   position: absolute;
   right: 20px;
 }
-#header ul.topmenu > li {
+header ul.topmenu > li {
   float: left;
   padding: 0;
 }
-#header ul.topmenu > li > a {
+header ul.topmenu > li > a {
   position: relative;
   padding-right: 23px !important;
   color: #fff;
@@ -246,10 +246,10 @@ pre.debug {
   line-height: 1;
   padding: 13px 10px;
 }
-#header ul.topmenu > li > a:hover {
+header ul.topmenu > li > a:hover {
   background-color: #3572b0;
 }
-#header ul.topmenu > li > a::after {
+header ul.topmenu > li > a::after {
   border: 4px solid transparent;
   border-top-color: #fff;
   content: "";
@@ -263,10 +263,10 @@ pre.debug {
   top: 50%;
   width: 0;
 }
-#header ul.topmenu > li:hover > .filter {
+header ul.topmenu > li:hover > .filter {
   display: block;
 }
-#header ul.topmenu > li.selected > a {
+header ul.topmenu > li.selected > a {
   background-color: #3572b0;
 }
 
@@ -703,28 +703,37 @@ p.empty {
   border-bottom-right-radius: 3px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   position: absolute;
-  right: 20px;
+  right: 0;
   color: black;
-  width: 260px;
+  width: 400px;
   z-index: 2;
   top: 39px;
 }
-.filter ul {
+.filter > ul {
   max-height: 240px;
   overflow-y: auto;
 }
-.filter ul li a {
+.filter > ul > li.info {
+  padding: 3px 10px;
+  color: #999;
+  line-height: 1.3em;
+}
+.filter > ul > li.info a {
+  color: #666;
+  text-decoration: underline;
+}
+.filter > ul li.suggestion a {
   padding-right: 20px !important;
   display: block;
   line-height: 1;
   padding: 8px 10px;
   color: #3572b0 !important;
 }
-.filter ul li a:hover, .filter ul li.selected a {
+.filter > ul li.suggestion.selected a, .filter > ul li.suggestion a:hover {
   background-color: #3572b0 !important;
   color: white !important;
 }
-.filter ul li.selected a {
+.filter > ul li.suggestion.selected a {
   padding-left: 28px;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
 }
