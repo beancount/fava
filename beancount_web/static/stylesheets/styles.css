@@ -266,6 +266,9 @@ pre.debug {
 #header ul.topmenu > li:hover > .filter {
   display: block;
 }
+#header ul.topmenu > li.selected > a {
+  background-color: #3572b0;
+}
 
 .sidebar {
   width: 200px;
