@@ -103,6 +103,33 @@
                             </ul>
                         </div>
                     </li>
+                    <li{% if entry_filters['payees']  %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>
+                                {% if entry_filters['payees'] %}
+                                    {% if entry_filters['payees']|length == 1 %}
+                                        {{ entry_filters['payees']|first }}
+                                    {% else %}
+                                        Multiple payees
+                                    {% endif %}
+                                {% else %}
+                                    Payee
+                                {% endif %}
+                            </span>
+                        </a>
+                        <div class="filter">
+                            <div class="inputcontainer">
+                                <input type="search">
+                            </div>
+                            <ul>
+                                {% for payee in api.active_payees -%}
+                                <li{% if payee in entry_filters['payees'] %} class="selected"{% endif %} data-filter="{{ payee|lower }}">
+                                    <a href="{{ request.path }}?{% if payee in entry_filters['payees'] %}remove_filter_payee={{ payee }}{% else %}filter_payee={{ payee }}{% endif %}">{{ payee }}</a>
+                                </li>
+                                {% endfor -%}
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </header>

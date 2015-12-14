@@ -170,8 +170,9 @@ class BeancountReportAPI(object):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
         self.filter_year = None
-        self.filter_tags = None
+        self.filter_tags = set()
         self.filter_account = None
+        self.filter_payees = set()
         self.load_file()
 
     def load_file(self):
@@ -196,6 +197,7 @@ class BeancountReportAPI(object):
 
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
+        self.active_payees = list(getters.get_all_payees(self.all_entries))
 
         if self.filter_year:
             begin_date = date(self.filter_year, 1, 1)
@@ -203,29 +205,33 @@ class BeancountReportAPI(object):
             self.entries = self._entries_in_inclusive_range(begin_date, end_date)
 
         if self.filter_tags:
-            self.entries = [
-                entry
-                for entry in self.entries
-                if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
+            self.entries = [entry
+                            for entry in self.entries
+                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
 
         self.real_accounts = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
 
         if self.filter_account:
-            self.entries = [
-                entry
-                for entry in self.entries
-                if isinstance(entry, Transaction) and
-                    any(has_component(posting.account, self.filter_account)
-                        for posting in entry.postings)]
+            self.entries = [entry
+                            for entry in self.entries
+                            if isinstance(entry, Transaction) and
+                                any(has_component(posting.account, self.filter_account)
+                                    for posting in entry.postings)]
+
+        if self.filter_payees:
+            self.entries = [entry
+                            for entry in self.entries
+                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
 
         # need to do this again to realize the filtered entries (otherwise self.all_accounts would be wrong)
         self.real_accounts = realization.realize(self.entries, self.account_types)
 
-    def filter(self, year=None, tags=set(), account=None):
+    def filter(self, year=None, tags=set(), account=None, payees=set()):
         self.filter_year = year
         self.filter_tags = tags
         self.filter_account = account
+        self.filter_payees = payees
         self.load_file()
 
     def _account_components(self):

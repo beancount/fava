@@ -190,6 +190,23 @@ def perform_global_filters():
             if len(app.entry_filters['tags']) == 0:
                 app.entry_filters.pop('tags', None)
 
+    filter_payee = request.args.get('filter_payee', None)
+    if filter_payee != None:
+        if filter_payee == "" and app.entry_filters['payees']:
+            app.entry_filters.pop('payees', None)
+        else:
+            if not 'payees' in app.entry_filters:
+                app.entry_filters['payees'] = set()
+            app.entry_filters['payees'].add(filter_payee)
+
+    remove_filter_payee = request.args.get('remove_filter_payee', None)
+    if remove_filter_payee != None:
+        if 'payees' in app.entry_filters:
+            if remove_filter_payee in app.entry_filters['payees']:
+                app.entry_filters['payees'].remove(remove_filter_payee)
+            if len(app.entry_filters['payees']) == 0:
+                app.entry_filters.pop('payees', None)
+
     filter_account = request.args.get('filter_account', None)
     if filter_account != None:
         if filter_account == "":
@@ -199,6 +216,7 @@ def perform_global_filters():
 
     app.api.filter(year=app.entry_filters.get('year', None),
                    tags=app.entry_filters.get('tags', set()),
-                account=app.entry_filters.get('account', None))
+                account=app.entry_filters.get('account', None),
+                 payees=app.entry_filters.get('payees', set()))
 
 
