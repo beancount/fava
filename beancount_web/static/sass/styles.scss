@@ -113,9 +113,8 @@ $color_bittersweet_approx: #f66;
                 }
             }
 
-            &:hover > .filter {
-                display: block;
-            }
+            &:hover > .filter { display: block; }
+            &.selected > a { background-color: #3572b0; }
         }
     }
 }

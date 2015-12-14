@@ -129,4 +129,10 @@
         </table>
 
     {% endif %}
+
+    {% if not journal and not monthly_balances %}
+        <p class="empty">
+            No entries for this account{% if entry_filters %} and the applied filters{% endif %}.
+        </p>
+    {% endif %}
 {% endblock %}

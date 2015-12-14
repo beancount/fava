@@ -40,41 +40,92 @@
                     <h1 id="site-name">{{ title }}</h1>
                 </div>
                 <ul class="topmenu">
-                    <li>
-                        <a href="#"><span>Time</span></a>
+                    <li{% if entry_filters['year'] %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>{{ entry_filters['year'] or 'Time' }}</span>
+                        </a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
                             </div>
                             <ul>
                                 {% for year in api.active_years -%}
-                                <li><a href="{{ request.path }}?filter_year={{ year }}">{{ year }}</a></li>
+                                <li{% if year == entry_filters['year'] %} class="selected"{% endif %} data-filter="{{ year }}">
+                                    <a href="{{ request.path }}?filter_year={% if year != entry_filters['year'] %}{{ year }}{% endif %}">{{ year }}</a>
+                                </li>
                                 {% endfor -%}
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="#"><span>Tag</span></a>
+                    <li{% if entry_filters['tags']  %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>
+                                {% if entry_filters['tags'] %}
+                                    {% if entry_filters['tags']|length == 1 %}
+                                        # {{ entry_filters['tags']|first }}
+                                    {% else %}
+                                        Multiple tags
+                                    {% endif %}
+                                {% else %}
+                                    Tag
+                                {% endif %}
+                            </span>
+                        </a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
                             </div>
                             <ul>
                                 {% for tag in api.active_tags -%}
-                                <li><a href="{{ request.path }}?filter_tag={{ tag }}"># {{ tag }}</a></li>
+                                <li{% if tag in entry_filters['tags'] %} class="selected"{% endif %} data-filter="{{ tag|lower }}">
+                                    <a href="{{ request.path }}?{% if tag in entry_filters['tags'] %}remove_filter_tag={{ tag }}{% else %}filter_tag={{ tag }}{% endif %}"># {{ tag }}</a>
+                                </li>
                                 {% endfor -%}
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="#"><span>Component</span></a>
+                    <li{% if entry_filters['account'] %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>{{ entry_filters['account'] or 'Component' }}</span>
+                        </a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for component in api.all_accounts -%}
-                                <li><a href="{{ url_for('account_with_journal', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
+                                {% for account in api.all_accounts -%}
+                                <li{% if account.full_name == entry_filters['account'] %} class="selected"{% endif %} data-filter="{{ account.full_name|lower }}">
+                                    <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">
+                                        {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
+                                    </a>
+                                </li>
+                                {% endfor -%}
+                            </ul>
+                        </div>
+                    </li>
+                    <li{% if entry_filters['payees']  %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>
+                                {% if entry_filters['payees'] %}
+                                    {% if entry_filters['payees']|length == 1 %}
+                                        {{ entry_filters['payees']|first }}
+                                    {% else %}
+                                        Multiple payees
+                                    {% endif %}
+                                {% else %}
+                                    Payee
+                                {% endif %}
+                            </span>
+                        </a>
+                        <div class="filter">
+                            <div class="inputcontainer">
+                                <input type="search">
+                            </div>
+                            <ul>
+                                {% for payee in api.active_payees -%}
+                                <li{% if payee in entry_filters['payees'] %} class="selected"{% endif %} data-filter="{{ payee|lower }}">
+                                    <a href="{{ request.path }}?{% if payee in entry_filters['payees'] %}remove_filter_payee={{ payee }}{% else %}filter_payee={{ payee }}{% endif %}">{{ payee }}</a>
+                                </li>
                                 {% endfor -%}
                             </ul>
                         </div>

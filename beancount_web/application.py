@@ -7,6 +7,7 @@ from datetime import date, datetime
 from flask import Flask, render_template, url_for, request, redirect, abort, Markup
 
 app = Flask(__name__)
+app.entry_filters = {}
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
@@ -116,7 +117,7 @@ class MyJSONEncoder(json.JSONEncoder):
             return obj.strftime('%Y-%m-%d')
         elif isinstance(obj, decimal.Decimal):
             return float(obj)
-        elif isinstance(obj, frozenset):
+        elif isinstance(obj, (set, frozenset)):
             return list(obj)
         # Let the base class default method raise the TypeError
         return json.JSONEncoder.default(self, obj)
@@ -158,21 +159,64 @@ def inject_errors():
                 options=options,
                 title=app.api.title,
                 operating_currencies=options['operating_currency'],
-                commodities=options['commodities'])
+                commodities=options['commodities'],
+                entry_filters=app.entry_filters)
 
 @app.before_request
 def perform_global_filters():
-    year = request.args.get('filter_year', None)
-    if year: year = int(year)
+    # app.entry_filters = {}
 
-    tag = request.args.get('filter_tag', None)
+    filter_year = request.args.get('filter_year', None)
+    if filter_year != None:
+        if filter_year == "":
+            app.entry_filters.pop('year', None)
+        else:
+            app.entry_filters['year'] = int(filter_year)
 
-    if year != app.filter_year or tag != app.filter_tag:
-        app.api.filter(year=year, tag=tag)
+    filter_tag = request.args.get('filter_tag', None)
+    if filter_tag != None:
+        if filter_tag == "" and app.entry_filters['tags']:
+            app.entry_filters.pop('tags', None)
+        else:
+            if not 'tags' in app.entry_filters:
+                app.entry_filters['tags'] = set()
+            app.entry_filters['tags'].add(filter_tag)
 
-    if year != app.filter_year:
-        app.filter_year = year
+    remove_filter_tag = request.args.get('remove_filter_tag', None)
+    if remove_filter_tag != None:
+        if 'tags' in app.entry_filters:
+            if remove_filter_tag in app.entry_filters['tags']:
+                app.entry_filters['tags'].remove(remove_filter_tag)
+            if len(app.entry_filters['tags']) == 0:
+                app.entry_filters.pop('tags', None)
 
-    if tag != app.filter_tag:
-        app.filter_tag = tag
+    filter_payee = request.args.get('filter_payee', None)
+    if filter_payee != None:
+        if filter_payee == "" and app.entry_filters['payees']:
+            app.entry_filters.pop('payees', None)
+        else:
+            if not 'payees' in app.entry_filters:
+                app.entry_filters['payees'] = set()
+            app.entry_filters['payees'].add(filter_payee)
+
+    remove_filter_payee = request.args.get('remove_filter_payee', None)
+    if remove_filter_payee != None:
+        if 'payees' in app.entry_filters:
+            if remove_filter_payee in app.entry_filters['payees']:
+                app.entry_filters['payees'].remove(remove_filter_payee)
+            if len(app.entry_filters['payees']) == 0:
+                app.entry_filters.pop('payees', None)
+
+    filter_account = request.args.get('filter_account', None)
+    if filter_account != None:
+        if filter_account == "":
+            app.entry_filters.pop('account', None)
+        else:
+            app.entry_filters['account'] = filter_account
+
+    app.api.filter(year=app.entry_filters.get('year', None),
+                   tags=app.entry_filters.get('tags', set()),
+                account=app.entry_filters.get('account', None),
+                 payees=app.entry_filters.get('payees', set()))
+
 
