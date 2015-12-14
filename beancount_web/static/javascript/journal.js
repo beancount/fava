@@ -39,33 +39,35 @@ Handlebars.registerHelper('ifShowChangeAndBalance', function(unused, options) {
 });
 
 $(document).ready(function() {
-    var source   = $("#journal-template").html();
-    var template = Handlebars.compile(source);
-    var html    = template({ journal: window.journalAsJSON });
-    $('.journal-table').html(html);
+    if (window.journalAsJSON != undefined) {
+        var source   = $("#journal-template").html();
+        var template = Handlebars.compile(source);
+        var html    = template({ journal: window.journalAsJSON });
+        $('.journal-table').html(html);
 
-    // Toggle positions with checkboxes
-    $('.table-filter input[type="checkbox"]').change(function() {
-        var $this = $(this);
-        var type = $this.attr('data-type');
-        var shouldHide = $this.prop('checked');
-        $('table.journal-table tr[data-type="' + type + '"]').toggle(shouldHide);
-        $('table.journal-table tr[data-parent-type="' + type + '"]').toggle(shouldHide).toggleClass('hidden', !shouldHide);
-    });
-    $('.table-filter input[type="checkbox"]').each(function() { $(this).trigger('change'); });
+        // Toggle positions with checkboxes
+        $('.table-filter input[type="checkbox"]').change(function() {
+            var $this = $(this);
+            var type = $this.attr('data-type');
+            var shouldHide = $this.prop('checked');
+            $('table.journal-table tr[data-type="' + type + '"]').toggle(shouldHide);
+            $('table.journal-table tr[data-parent-type="' + type + '"]').toggle(shouldHide).toggleClass('hidden', !shouldHide);
+        });
+        $('.table-filter input[type="checkbox"]').each(function() { $(this).trigger('change'); });
 
-    // Toggle legs by clicking on transaction/padding row
-    $('table.journal-table tr[data-has-legs="True"]').click(function() {
-        var hash = $(this).attr('data-hash');
-        $('table.journal-table tr[data-parent-hash="' + hash + '"]').toggle(); // .toggleClass('hidden', shouldHide);
-    });
+        // Toggle legs by clicking on transaction/padding row
+        $('table.journal-table tr[data-has-legs="True"]').click(function() {
+            var hash = $(this).attr('data-hash');
+            $('table.journal-table tr[data-parent-hash="' + hash + '"]').toggle(); // .toggleClass('hidden', shouldHide);
+        });
 
-    // Button "Hide/Show legs"
-    $('input#toggle-legs').click(function(event) {
-        event.preventDefault();
-        var shouldHide = true;  // $(this).hasClass('hide-legs');
-        $('table.journal-table tr[data-type="leg"]:not(.hidden)').toggle(!shouldHide).toggleClass('hidden', shouldHide);
-        // $(this).toggleClass('hide-legs');
-        // $(this).val(shouldHide ? 'Hide legs' : 'Show legs');
-    });
+        // Button "Hide/Show legs"
+        $('input#toggle-legs').click(function(event) {
+            event.preventDefault();
+            var shouldHide = true;  // $(this).hasClass('hide-legs');
+            $('table.journal-table tr[data-type="leg"]:not(.hidden)').toggle(!shouldHide).toggleClass('hidden', shouldHide);
+            // $(this).toggleClass('hide-legs');
+            // $(this).val(shouldHide ? 'Hide legs' : 'Show legs');
+        });
+    }
 });
