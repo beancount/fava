@@ -173,7 +173,7 @@ def perform_global_filters():
         else:
             app.entry_filters['year'] = int(filter_year)
 
-    filter_tag = request.args.get('filter_tag', None)  # TODO multiple tags
+    filter_tag = request.args.get('filter_tag', None)
     if filter_tag != None:
         if filter_tag == "" and app.entry_filters['tags']:
             app.entry_filters.pop('tags', None)
@@ -188,7 +188,12 @@ def perform_global_filters():
             if remove_filter_tag in app.entry_filters['tags']:
                 app.entry_filters['tags'].remove(remove_filter_tag)
 
-    # TODO account
+    filter_account = request.args.get('filter_account', None)
+    if filter_account != None:
+        if filter_account == "":
+            app.entry_filters.pop('account', None)
+        else:
+            app.entry_filters['account'] = filter_account
 
     app.api.filter(year=app.entry_filters.get('year', None),
                    tags=app.entry_filters.get('tags', set()),

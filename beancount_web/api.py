@@ -13,6 +13,7 @@ from beancount.core import interpolate
 from beancount.web.views import AllView
 from beancount.parser import options
 from beancount.core import compare
+from beancount.core.account import has_component
 from beancount.core.number import ZERO
 from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad, Event  # TODO implement missing
 from beancount.core.account_types import get_account_sign
@@ -180,6 +181,7 @@ class BeancountReportAPI(object):
         self.entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.all_entries = self.entries
         self.price_map = prices.build_price_map(self.all_entries)
+        self.account_types = options.get_account_types(self.options)
 
         self.title = self.options['title']
 
@@ -206,9 +208,19 @@ class BeancountReportAPI(object):
                 for entry in self.entries
                 if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
 
-        self.account_types = options.get_account_types(self.options)
         self.real_accounts = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
+
+        if self.filter_account:
+            self.entries = [
+                entry
+                for entry in self.entries
+                if isinstance(entry, Transaction) and
+                    any(has_component(posting.account, self.filter_account)
+                        for posting in entry.postings)]
+
+        # need to do this again to realize the filtered entries (otherwise self.all_accounts would be wrong)
+        self.real_accounts = realization.realize(self.entries, self.account_types)
 
     def filter(self, year=None, tags=set(), account=None):
         self.filter_year = year

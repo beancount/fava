@@ -84,15 +84,21 @@
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href=""><span>Account</span></a>
+                    <li{% if entry_filters['account'] %} class="selected"{% endif %}>
+                        <a href="">
+                            <span>{{ entry_filters['account'] or 'Component' }}</span>
+                        </a>
                         <div class="filter">
                             <div class="inputcontainer">
                                 <input type="search">
                             </div>
                             <ul>
-                                {% for component in api.all_accounts -%}
-                                <li><a href="{{ url_for('account_with_journal', name=component.full_name) }}" title="{{ component.full_name }}">{% for i in range(component.depth) %}&ndash;{% endfor %}&nbsp;{{ component.name }}</a></li>
+                                {% for account in api.all_accounts -%}
+                                <li {% if account.full_name == entry_filters['account'] %} class="selected"{% endif %}>
+                                    <a href="{{ request.path }}?filter_account={% if account.full_name != entry_filters['account'] %}{{ account.full_name }}{% endif %}">
+                                        {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
+                                    </a>
+                                </li>
                                 {% endfor -%}
                             </ul>
                         </div>
