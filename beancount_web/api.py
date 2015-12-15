@@ -478,20 +478,12 @@ class BeancountReportAPI(object):
             income_totals = self._table_totals(realization.get(realized, self.account_types.income))
             expenses_totals = self._table_totals(realization.get(realized, self.account_types.expenses))
 
-            # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
-            sum_ = ZERO
-            for currency, number in income_totals.items():
-                sum_ += number
-            for currency, number in expenses_totals.items():
-                sum_ += number
-
-            if sum_ != ZERO:
-                monthly_totals.append({
-                    'begin_date': begin_date,
-                    'end_date': end_date,
-                    'income_totals': income_totals,
-                    'expenses_totals': expenses_totals
-                })
+            monthly_totals.append({
+                'begin_date': begin_date,
+                'end_date': end_date,
+                'income_totals': income_totals,
+                'expenses_totals': expenses_totals
+            })
 
         return monthly_totals
 
@@ -516,17 +508,11 @@ class BeancountReportAPI(object):
         for begin_date, end_date in month_tuples:
             totals = self.balances_totals(account_name, begin_date=begin_date, end_date=end_date)
 
-            # FIXME find better way to only include relevant totals (lots of ZERO-ones at the beginning)
-            sum_ = 0
-            for currency, number in totals.items():
-                sum_ += number
-
-            if sum_ != 0:
-                monthly_totals.append({
-                    'begin_date': begin_date,
-                    'end_date': end_date,
-                    'totals': totals
-                })
+            monthly_totals.append({
+                'begin_date': begin_date,
+                'end_date': end_date,
+                'totals': totals
+            })
 
         return monthly_totals
 
