@@ -484,6 +484,35 @@ article {
                 }
             }
 
+            .narration {
+                display: inline-block;
+
+                span {
+                    color: #999;
+                    display: inline-block;
+                    margin: 0 2px;
+                }
+            }
+
+            .tags {
+                display: inline-block;
+                margin-left: 2px;
+
+                a {
+                    font-weight: normal;
+                    display: inline-block;
+                    margin-right: 8px;
+                    color: #6AA2DB;
+
+                    &:hover {
+                        color: darken(#6AA2DB, 30%);
+                        text-decoration: underline;
+                    }
+
+                    span { opacity: 0.4; }
+                }
+            }
+
             tr {
                 td {
                     &.change {
@@ -515,6 +544,8 @@ article {
 
                 &.document {
                     background-color: $color_pink_lace_approx;
+
+                    a:nth-child(1) { font-weight: normal; }
                 }
 
                 &.pad {

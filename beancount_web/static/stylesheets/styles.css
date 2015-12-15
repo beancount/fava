@@ -708,6 +708,31 @@ article table.journal-table th {
 article table.journal-table th.description {
   width: 90%;
 }
+article table.journal-table .narration {
+  display: inline-block;
+}
+article table.journal-table .narration span {
+  color: #999;
+  display: inline-block;
+  margin: 0 2px;
+}
+article table.journal-table .tags {
+  display: inline-block;
+  margin-left: 2px;
+}
+article table.journal-table .tags a {
+  font-weight: normal;
+  display: inline-block;
+  margin-right: 8px;
+  color: #6AA2DB;
+}
+article table.journal-table .tags a:hover {
+  color: #21568b;
+  text-decoration: underline;
+}
+article table.journal-table .tags a span {
+  opacity: 0.4;
+}
 article table.journal-table tr td.change {
   font-weight: bold;
 }
@@ -730,6 +755,9 @@ article table.journal-table tr.note {
 }
 article table.journal-table tr.document {
   background-color: #ffc8ff;
+}
+article table.journal-table tr.document a:nth-child(1) {
+  font-weight: normal;
 }
 article table.journal-table tr.pad {
   background-color: #8ff;

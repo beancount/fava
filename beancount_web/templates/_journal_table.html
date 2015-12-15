@@ -1,9 +1,9 @@
 {% set entry_types = [('open',        False),
                       ('close',       False),
+                      ('transaction', True),
                       ('balance',     True),
                       ('note',        True),
                       ('document',    True),
-                      ('transaction', True),
                       ('pad',         False),
                       ('padding',     False)] %}
 
@@ -102,9 +102,16 @@
                         {{/if}}
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'transaction'}}
-                        <strong>{{ payee }}</strong>
-                        {{#if payee }} {{#if narration }} | {{/if}} {{/if}}
-                        {{ narration }}
+                        <div class="narration">
+                            <strong>{{ payee }}</strong>
+                            {{#if payee }} {{#if narration }}<span>|</span>{{/if}} {{/if}}
+                            {{ narration }}
+                        </div>
+                        {{#if tags }}
+                            <div class="tags">
+                                {{#each tags }}<a href="{{ request.path }}?filter_tag={{ this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
+                            </div>
+                        {{/if}}
                     {{/ifCond}}
                 </td>
                 {{#ifShowChangeAndBalance window}}
