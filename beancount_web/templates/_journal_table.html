@@ -20,6 +20,7 @@
 <script>
     window.contextURL = "{{ url_for('context', ehash='_REPLACE_ME_') }}";
     window.accountURL = "{{ url_for('account_with_journal', name='_REPLACE_ME_') }}";
+    window.documentURL = "{{ url_for('document') }}?file_path=_REPLACE_ME_";
     window.journalAsJSON = {{ journal|to_json }};
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
 </script>
@@ -63,7 +64,7 @@
                         {{ narration }}
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'document'}}
-                        Document for <a href="{{ account_url account }}">{{ account }}</a>: <a href="#TODO">{{ filename }}</a>
+                        Document for <a href="{{ account_url account }}">{{ account }}</a>: <a href="{{ document_url filename }}">{{ filename }}</a>
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'balance'}}
                         Balance <a href="{{ account_url account }}">{{ account }}</a>

@@ -848,3 +848,18 @@ class BeancountReportAPI(object):
                 'postings_by_account_total': sum(nb_postings_by_account.values()),
                 'activity_by_account':       self._activity_by_account()
             }
+
+
+    def is_valid_document(self, file_path):
+        """Check if the given file_path is present in one of the
+           Document entries.
+
+           :param file_path: A path to a file.
+           :return: True when the file_path is refered to in a Document entry,
+                    False otherwise.
+        """
+        for entry in misc_utils.filter_type(self.entries, Document):
+            if entry.filename == file_path:
+                return True
+        else:
+            return False

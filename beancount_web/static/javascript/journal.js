@@ -34,6 +34,10 @@ Handlebars.registerHelper('account_url', function(accountName) {
     return window.accountURL.replace("_REPLACE_ME_", accountName);
 });
 
+Handlebars.registerHelper('document_url', function(documentPath) {
+    return window.documentURL.replace("_REPLACE_ME_", htmlEncode(documentPath));
+});
+
 Handlebars.registerHelper('ifShowChangeAndBalance', function(unused, options) {
     return window.journalShowChangeAndBalance ? options.fn(this) : options.inverse(this);
 });

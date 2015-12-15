@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import os
 import json
 import decimal
 
 from datetime import date, datetime
 
-from flask import Flask, render_template, url_for, request, redirect, abort, Markup
+from flask import Flask, render_template, url_for, request, redirect, abort, Markup, send_from_directory
 from flask.ext.assets import Environment, Bundle
 
 app = Flask(__name__)
@@ -60,6 +61,17 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
 @app.route('/')
 def index():
     return redirect(url_for('report', report_name='income_statement'))
+
+@app.route('/document/')
+def document():
+    document_path = request.args.get('file_path', None)
+
+    if document_path and app.api.is_valid_document(document_path):
+        directory = os.path.dirname(document_path)
+        filename = os.path.basename(document_path)
+        return send_from_directory(directory, filename, as_attachment=True)
+    else:
+        return "File \"{}\" not found in entries.".format(document_path), 404
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
