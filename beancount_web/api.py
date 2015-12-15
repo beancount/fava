@@ -603,7 +603,7 @@ class BeancountReportAPI(object):
         # TODO include balances_children
         # the account tree at time now
 
-        account_names = [account['full_name'] for account in self._account_components() if account['full_name'].startswith(account_name)]
+        account_names = [account['full_name'] for account in self.all_accounts if account['full_name'].startswith(account_name)]
 
         month_tuples = self._month_tuples(self.entries)
         monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options['commodities']} for begin_date, end_date in month_tuples }
@@ -643,19 +643,16 @@ class BeancountReportAPI(object):
                 return []
 
             real_account = realization.get(self.root_account, account_name)
+            postings = realization.get_postings(real_account)
+            return self._journal_for_postings(postings, with_change_and_balance=with_change_and_balance)
         else:
-            real_account = self.root_account
-
-        postings = realization.get_postings(real_account)
-        return self._journal_for_postings(postings, with_change_and_balance=with_change_and_balance)
+            return self._journal_for_postings(self.entries, with_change_and_balance=with_change_and_balance)
 
     def documents(self):
-        postings = realization.get_postings(self.root_account)
-        return self._journal_for_postings(postings, Document)
+        return self._journal_for_postings(self.entries, Document)
 
     def notes(self):
-        postings = realization.get_postings(self.root_account)
-        return self._journal_for_postings(postings, Note)
+        return self._journal_for_postings(self.entries, Note)
 
     def events(self, event_type=None, only_include_newest=False):
         events = self._journal_for_postings(self.entries, Event)
