@@ -1,18 +1,20 @@
+{% set entry_types = [('open',        False),
+                      ('close',       False),
+                      ('balance',     True),
+                      ('note',        True),
+                      ('document',    True),
+                      ('transaction', True),
+                      ('pad',         False),
+                      ('padding',     False)] %}
+
 {% if show_tablefilter %}
     <div class="table-filter">
         <form>
-            {% for type, default_checked in [('open',        False),
-                                             ('close',       False),
-                                             ('balance',     True),
-                                             ('note',        True),
-                                             ('document',    True),
-                                             ('transaction', True),
-                                             ('pad',         False),
-                                             ('padding',     False)] %}
+            {% for type, default_checked in entry_types %}
                 <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if default_checked %} checked="checked"{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
-            <input type="submit" id="toggle-legs" value="Hide legs">
+            <input type="submit" id="toggle-legs" value="Show legs">
         </form>
     </div>
 {% endif %}
@@ -21,15 +23,25 @@
     window.contextURL = "{{ url_for('context', ehash='_REPLACE_ME_') }}";
     window.accountURL = "{{ url_for('account_with_journal', name='_REPLACE_ME_') }}";
     window.documentURL = "{{ url_for('document') }}?file_path=_REPLACE_ME_";
+    window.journalURL = "{{ url_for('journal') }}";
+
+{% if journal is defined %}
     window.journalAsJSON = {{ journal|to_json }};
+{% endif %}
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
+    window.journalShowLegs = false;
+    window.journalShowTypes = [
+        {% for type, default_checked in entry_types %}
+            {% if show_tablefilter %}{% if default_checked %}'{{ type }}',{% endif %}{% else %}'{{ type }}',{% endif %}
+        {% endfor %}
+    ];
 </script>
 <div class="journal-table">
     <div class="loading">Loading journal entries&hellip;</div>
 </div>
 
 {% raw %}
-<script id="journal-template" type="text/x-handlebars-template">
+<script id="journal-table-template" type="text/x-handlebars-template">
   <table class="journal-table">
         <thead>
             <tr>
@@ -46,8 +58,9 @@
             </tr>
         </thead>
         <tbody>
-            {{#each journal}}
-            <tr class="{{ meta.type }}{{#if diff_amount }} fail{{/if}}{{#ifCond flag '==' '!'}} warning{{/ifCond}}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
+        {{#each journal}}
+            {{#ifShowType window}}
+            <tr class="{{ meta.type }}{{#if diff_amount }} fail{{/if}}{{#ifCond flag '==' '!'}} warning{{/ifCond}}{{#ifShowLegs window}}{{#if legs }} display-legs{{/if}}{{/ifShowLegs}}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
                 <td class="datecell"><a href="{{ context_url hash }}">{{ date }}</a></td>
                 <td class="flag">{{ flag }}</td>
                 <td class="description" colspan="4">
@@ -111,24 +124,30 @@
                     </td>
                 {{/ifShowChangeAndBalance}}
             </tr>
-                {{#with this as |journalEntry|}}
-                {{#each legs }}
-                    <tr class="posting leg" data-type="leg" data-parent-type="{{ journalEntry.meta.type }}" data-parent-hash="{{ journalEntry.hash }}">
-                        <td class="datecell"></td>
-                        <td class="flag"></td>
-                        <td class="description"><a href="{{ account_url account }}">{{ account }}</a></td>
-                        <td class="position num">{{ format_currency position }} {{ position_currency }}</td>
-                        <td class="price num">{{ format_currency price }} {{ price_currency }}</td>
-                        <td class="cost num">{{ format_currency cost }} {{ cost_currency }}</td>
-                        {{#ifShowChangeAndBalance window}}
-                            <td class="change num"></td>
-                            <td class="balance num"></td>
-                        {{/ifShowChangeAndBalance}}
-                    </tr>
-                {{/each}}
-                {{/with}}
-            {{/each}}
+                {{#ifShowLegs window}}
+                    {{#with this as |journalEntry|}}
+                        {{> legPartialTemplate }}
+                    {{/with}}
+                {{/ifShowLegs}}
+            {{/ifShowType}}
+        {{/each}}
         </tbody>
     </table>
+</script>
+<script id="journal-leg-template" type="text/x-handlebars-template">
+    {{#each legs }}
+        <tr class="posting leg" data-type="leg" data-parent-hash="{{ hash }}">
+            <td class="datecell"></td>
+            <td class="flag"></td>
+            <td class="description"><a href="{{ account_url account }}">{{ account }}</a></td>
+            <td class="position num">{{ format_currency position }} {{ position_currency }}</td>
+            <td class="price num">{{ format_currency price }} {{ price_currency }}</td>
+            <td class="cost num">{{ format_currency cost }} {{ cost_currency }}</td>
+            {{#ifShowChangeAndBalance window}}
+                <td class="change num"></td>
+                <td class="balance num"></td>
+            {{/ifShowChangeAndBalance}}
+        </tr>
+    {{/each}}
 </script>
 {% endraw %}
