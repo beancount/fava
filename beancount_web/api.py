@@ -210,7 +210,7 @@ class BeancountReportAPI(object):
         if self.filters['tags']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter['tags']))]
+                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filters['tags']))]
 
         if self.filters['payees']:
             self.entries = [entry
