@@ -15,6 +15,9 @@ app.jinja_env.lstrip_blocks = True
 app.entry_filters = {}
 
 assets = Environment()
+app.config['ASSETS_CACHE'] = False
+app.config['ASSETS_DEBUG'] = False
+app.config['ASSETS_MANIFEST'] = None
 assets.init_app(app)
 
 @app.route('/account/<name>/')

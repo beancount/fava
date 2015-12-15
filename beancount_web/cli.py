@@ -71,6 +71,10 @@ def run(argv):
             if args.pstats_output is not None:
                 kwargs['profile_dir'] = args.pstats_output
             app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[args.profile_restriction], **kwargs)
+
+        app.config['ASSETS_CACHE'] = True
+        app.config['ASSETS_DEBUG'] = True
+
         app.run(args.host, args.port, args.debug)
     else:
         server = Server(app.wsgi_app)
