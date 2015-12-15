@@ -88,8 +88,11 @@
             </thead>
             <tbody>
             {% for row in monthly_balances.balances %}
-                <tr class="row-level-{{ account_level(row.account) }}">
-                    <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
+                {% with account_level = account_level(row.account)  %}
+                <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}">
+                    <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
+                        <a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a>
+                    </td>
 
                     {% for end_date in monthly_balances.months|reverse %}
                         <td class="num">
@@ -114,6 +117,7 @@
                         </td>
                     {% endfor %}
                 </tr>
+                {% endwith %}
             {% endfor %}
             </tbody>
             <tfoot>

@@ -30,15 +30,7 @@ $(document).ready(function() {
 
     function getLevel(tableRow) {
         if ($(tableRow).length == 0) { return 0; }
-
-        var rowLevel = -1;
-
-        $($(tableRow).prop('class').split(' ')).each(function(index, clazz) {
-            if (clazz.startsWith('row-level-')) {
-                rowLevel = parseInt(clazz.substring(10));
-            }
-        });
-
+        var rowLevel = parseInt($(tableRow).attr('data-level'));
         return rowLevel;
     }
 
@@ -63,8 +55,6 @@ $(document).ready(function() {
         row = row.next();
         while (row.length > 0 && getLevel(row) > level) {
             row.toggleClass('hidden', hide);
-            // console.log('row', row, hide, row.prop('class'));
-            // row.children().first().toggleClass('hide', hide);
             row.find('span.expander').removeClass('toggled');
             row = row.next();
         }

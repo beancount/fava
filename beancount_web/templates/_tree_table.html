@@ -15,8 +15,11 @@
     </thead>
     <tbody>
         {% for row in table_data %}
-            <tr class="row-level-{{ account_level(row.account) }} {% if not row.is_leaf %}parent{% endif %}">
-                <td class="account account-level-{{ account_level(row.account) }}"><a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a></td>
+            {% with account_level = account_level(row.account)  %}
+            <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}">
+                <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
+                    <a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a>
+                </td>
             {% for currency in operating_currencies %}
                 <td class="num">
                 {% if currency in row.balances %}
@@ -42,6 +45,7 @@
                 </td>
             {% endif %}
             </tr>
+            {% endwith %}
         {% endfor %}
     </tbody>
     {% if totals %}
