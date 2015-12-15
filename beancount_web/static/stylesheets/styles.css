@@ -799,7 +799,7 @@ article dl dt {
 article dl dt, article dl dd {
   margin-bottom: 3px;
 }
-article p.empty {
+article p.empty, article p.description {
   margin-top: 20px;
 }
 article .loading {
