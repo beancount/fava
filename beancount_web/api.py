@@ -192,8 +192,7 @@ class BeancountReportAPI(object):
             self.errors.append({
                 'file': error.source['filename'],
                 'line': error.source['lineno'],
-                'error': error.message,
-                'entry': error.entry  # TODO render entry
+                'error': error.message
             })
 
         self.active_years = list(getters.get_active_years(self.all_entries))
