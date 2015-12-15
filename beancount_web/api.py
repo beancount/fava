@@ -1,11 +1,9 @@
 import os
 from datetime import date, timedelta
-
-import bisect, re, collections
+import re
+import collections
 
 from beancount import loader
-from beancount.reports import balance_reports
-from beancount.reports import html_formatter
 from beancount.reports import context
 from beancount.utils import bisect_key
 from beancount.core import realization, flags
@@ -18,10 +16,10 @@ from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting
 from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
-from beancount.ops import summarize, prices, holdings
+from beancount.ops import prices, holdings
 from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
-from beancount.core.realization import RealAccount, find_last_active_posting
+from beancount.core.realization import RealAccount
 from beancount.core.data import get_entry
 
 from beancount_web.util.dateparser import parse_date
@@ -170,10 +168,12 @@ class BeancountReportAPI(object):
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
-        self.filter_time = None
-        self.filter_tags = set()
-        self.filter_account = None
-        self.filter_payees = set()
+        self.filters = {
+            'time_str': None,
+            'tags': set(),
+            'account': None,
+            'payees': set(),
+        }
         self.load_file()
 
     def load_file(self):
@@ -204,41 +204,39 @@ class BeancountReportAPI(object):
     def apply_filters(self):
         self.entries = self.all_entries
 
-        if self.filter_time:
-            begin_date, end_date = parse_date(self.filter_time)
+        if self.filters['time_str']:
+            begin_date, end_date = parse_date(self.filters['time_str'])
             self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
 
-        if self.filter_tags:
+        if self.filters['tags']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter_tags))]
+                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filter['tags']))]
 
-        if self.filter_payees:
+        if self.filters['payees']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and (entry.payee in self.filter_payees)]
+                            if isinstance(entry, Transaction) and (entry.payee in self.filters['payees'])]
 
-        self.real_accounts = realization.realize(self.entries, self.account_types)
-        self.all_accounts = self._account_components()
-
-        if self.filter_account:
+        if self.filters['account']:
             self.entries = [entry
                             for entry in self.entries
                             if isinstance(entry, Transaction) and
-                                any(has_component(posting.account, self.filter_account)
+                                any(has_component(posting.account, self.filters['account'])
                                     for posting in entry.postings)]
 
-        # need to do this again to realize the filtered entries (otherwise self.all_accounts would be wrong)
-        self.real_accounts = realization.realize(self.entries, self.account_types)
+        self.root_account = realization.realize(self.entries, self.account_types)
+        self.all_accounts = self._account_components()
 
-    def filter(self, time_str=None, tags=set(), account=None, payees=set()):
-        self.filter_time = time_str
-        self.filter_tags = tags
-        self.filter_account = account
-        self.filter_payees = payees
+    def filter(self, **kwargs):
+        changed = False
+        for filter, current_value in self.filters.items():
+            if filter in kwargs and kwargs[filter] != current_value:
+                self.filters[filter] = kwargs[filter]
+                changed = True
 
-        # TODO only apply filters if something has changed
-        self.apply_filters()
+        if changed:
+            self.apply_filters()
 
     def _account_components(self):
         # TODO rename
@@ -256,7 +254,7 @@ class BeancountReportAPI(object):
             ]
         """
         accounts = []
-        for child_account in realization.iter_children(self.real_accounts):
+        for child_account in realization.iter_children(self.root_account):
             accounts.append({
                 'name': child_account.account.split(':')[-1],
                 'full_name': child_account.account,
@@ -286,29 +284,20 @@ class BeancountReportAPI(object):
             ]
         """
 
-        # FIXME this does not seem correct
-        if isinstance(real_accounts, None.__class__):
-            return []
-
         lines = []
         for real_account in realization.iter_children(real_accounts):
-
             line = {
                 'account': real_account.account,
                 'balances_children': self._table_totals(real_account),
-                'balances': {},
+                'balances': self._inventory_to_json(real_account.balance, at_cost=True),
                 'is_leaf': len(real_account) == 0 or real_account.txn_postings,
                 'postings_count': len(real_account.txn_postings)
             }
-
-            for pos in real_account.balance.cost():
-                line['balances'][pos.lot.currency] = pos.number
-
             lines.append(line)
 
         return lines
 
-    def _table_totals(self, real_accounts):
+    def _table_totals(self, real_account):
         """
             Renders the total balances for root_acccounts and their children.
 
@@ -318,24 +307,9 @@ class BeancountReportAPI(object):
                     ...
                 }
         """
+        return self._inventory_to_json(realization.compute_balance(real_account), at_cost=True)
 
-        totals = {}
-
-        # FIXME This sometimes happens when called from self.account(...)
-        #       and there is no entry in that specific month. This also produces
-        #       a missing bar in the bar chart.
-        if isinstance(real_accounts, None.__class__):
-            return {}
-
-        for real_account in realization.iter_children(real_accounts):
-            for pos in real_account.balance.cost():
-                if not pos.lot.currency in totals:
-                    totals[pos.lot.currency] = ZERO
-                totals[pos.lot.currency] += pos.number
-
-        return totals
-
-    def _inventory_to_json(self, inventory, include_currencies=None):
+    def _inventory_to_json(self, inventory, at_cost=False, include_currencies=None):
         """
         Renders an Inventory to a currency -> amount dict.
 
@@ -351,11 +325,14 @@ class BeancountReportAPI(object):
                 ...
             }
         """
-        result = collections.defaultdict(lambda: ZERO)
-        for position in inventory:
-            if (not include_currencies) or (position.lot.currency in include_currencies):
-                result[position.lot.currency] += position.number
-        return { currency: number for currency, number in result.items() if number != ZERO }
+        if at_cost:
+            inventory = inventory.cost()
+        else:
+            inventory = inventory.units()
+        result = {p.lot.currency: p.number for p in inventory if p.number != ZERO}
+        if include_currencies:
+            result = {c: result[c] for c in set(include_currencies) & set(result.keys())}
+        return result
 
     def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
         journal = []
@@ -580,7 +557,7 @@ class BeancountReportAPI(object):
         :return: realization.RealAccount instances
         """
         entries = self._entries_in_inclusive_range(begin_date=begin_date, end_date=end_date)
-        real_accounts = realization.get(realization.realize(entries, self.account_types), account_name)
+        real_accounts = realization.get(realization.realize(entries, [account_name]), account_name)
 
         return real_accounts
 
@@ -659,26 +636,26 @@ class BeancountReportAPI(object):
         }
 
     def trial_balance(self):
-        return self._table_tree(self.real_accounts)[1:]
+        return self._table_tree(self.root_account)[1:]
 
     def journal(self, account_name=None, with_change_and_balance=False):
         if account_name:
             if not account_name in [account['full_name'] for account in self.all_accounts]:
                 return []
 
-            real_account = realization.get(self.real_accounts, account_name)
+            real_account = realization.get(self.root_account, account_name)
         else:
-            real_account = self.real_accounts
+            real_account = self.root_account
 
         postings = realization.get_postings(real_account)
         return self._journal_for_postings(postings, with_change_and_balance=with_change_and_balance)
 
     def documents(self):
-        postings = realization.get_postings(self.real_accounts)
+        postings = realization.get_postings(self.root_account)
         return self._journal_for_postings(postings, Document)
 
     def notes(self):
-        postings = realization.get_postings(self.real_accounts)
+        postings = realization.get_postings(self.root_account)
         return self._journal_for_postings(postings, Note)
 
     def events(self, event_type=None, only_include_newest=False):
@@ -813,7 +790,7 @@ class BeancountReportAPI(object):
             return False  # TODO raise
 
     def monthly_totals(self, account_name):
-        real_account = realization.get(self.real_accounts, account_name)
+        real_account = realization.get(self.root_account, account_name)
         return self._monthly_totals(real_account.account, self.entries)
 
     def commodities(self):
@@ -824,7 +801,7 @@ class BeancountReportAPI(object):
 
     def _activity_by_account(self, account_name=None):
         nb_activity_by_account = []
-        for real_account in realization.iter_children(self.real_accounts):
+        for real_account in realization.iter_children(self.root_account):
             if not isinstance(real_account, RealAccount):
                 continue
             if account_name and real_account.account != account_name:
