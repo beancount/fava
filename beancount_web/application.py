@@ -5,8 +5,9 @@ import decimal
 
 from datetime import date, datetime
 
-from flask import Flask, render_template, url_for, request, redirect, abort, Markup, send_from_directory
+from flask import Flask, render_template, url_for, request, redirect, abort, Markup, send_from_directory, jsonify
 from flask.ext.assets import Environment, Bundle
+from flask.json import JSONEncoder
 
 app = Flask(__name__)
 app.jinja_env.trim_blocks = True
@@ -79,6 +80,13 @@ def context(ehash=None):
     # TODO handle errors
     return render_template('context.html', context=context)
 
+@app.route('/journal/')
+def journal():
+    if request.args.get('is_ajax', False):
+        return jsonify({ 'data': app.api.journal() })
+    else:
+        return render_template('journal.html')
+
 @app.route('/source/', methods=['GET', 'POST'])
 def source():
     if request.method == "GET":
@@ -106,7 +114,6 @@ def report(report_name):
             'events',
             'errors',
             'income_statement',
-            'journal',
             'holdings',
             'options',
             'statistics',
@@ -127,7 +134,7 @@ def format_currency(value, digits=2):
 def last_segment(account):
     return account.split(':')[-1]
 
-class MyJSONEncoder(json.JSONEncoder):
+class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
             return obj.strftime('%Y-%m-%dT%H:%M:%SZ')
@@ -138,7 +145,9 @@ class MyJSONEncoder(json.JSONEncoder):
         elif isinstance(obj, (set, frozenset)):
             return list(obj)
         # Let the base class default method raise the TypeError
-        return json.JSONEncoder.default(self, obj)
+        return JSONEncoder.default(self, obj)
+
+app.json_encoder = MyJSONEncoder
 
 @app.template_filter('to_json')
 def to_json(json_object):

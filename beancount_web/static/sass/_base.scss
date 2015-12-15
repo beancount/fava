@@ -95,7 +95,7 @@ a {
     text-decoration: underline;
 
     &:hover, &:focus {
-        color: darker(#3572b0);
+        color: darken(#3572b0, 40%);
         text-decoration: none;
     }
 

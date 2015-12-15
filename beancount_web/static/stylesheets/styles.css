@@ -133,7 +133,7 @@ a {
   text-decoration: underline;
 }
 a:hover, a:focus {
-  color: darker(#3572b0);
+  color: #060c13;
   text-decoration: none;
 }
 a:link, a:visited {
@@ -753,7 +753,7 @@ article table.journal-table tr.balance.fail {
   background-color: #f8a;
 }
 article table.journal-table tr.posting {
-  font-size: x-small;
+  font-size: 11px;
   background-color: #e8e8e8;
   opacity: 0.6;
 }
