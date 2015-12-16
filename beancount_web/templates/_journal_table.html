@@ -71,7 +71,7 @@
                         Note: {{ comment }}
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'pad'}}
-                        Pad
+                        Pad <a href="{{ account_url account }}">{{ account }}</a> from <a href="{{ account_url source_account }}">{{ source_account }}</a>
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'padding'}}
                         {{ narration }}
