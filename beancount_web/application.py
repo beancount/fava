@@ -245,8 +245,8 @@ def perform_global_filters():
             app.entry_filters['account'] = filter_account
 
     app.api.filter(time_str=app.entry_filters.get('time', None),
-                       tags=app.entry_filters.get('tags', set()),
+                       tags=app.entry_filters.get('tags', set()).copy(),
                     account=app.entry_filters.get('account', None),
-                     payees=app.entry_filters.get('payees', set()))
+                     payees=app.entry_filters.get('payees', set()).copy())
 
 

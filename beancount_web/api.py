@@ -215,7 +215,7 @@ class BeancountReportAPI(object):
         if self.filters['payees']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and (entry.payee in self.filters['payees'])]
+                            if isinstance(entry, Transaction) and entry.payee and (entry.payee in self.filters['payees'])]
 
         if self.filters['account']:
             self.entries = [entry
