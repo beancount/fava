@@ -136,3 +136,9 @@
         </li>
     </ul>
 </form>
+
+{% if entry_filters['time'] or entry_filters['account'] or entry_filters['payees'] or entry_filters['tags'] %}
+    <a id="filter-permalink" href="{{ url_for('filter_permalink') }}?{{ entry_filters|filter_url|safe }}" title="Save current filters as permalink">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAV1BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////+ORg7oAAAAHHRSTlMAAQIDBAYIDCAxO0pNYmN3ibS3urzBxcfM6+35eVmfrAAAAGZJREFUGFeNzkkOgCAMQNG2WnEecNbe/5wiRYM7f0iAF9IAozwdFdyJmdwloUTyufXA1oE/pEvzBUjX+guQnej2XmfupOoW+xBeiFJA0jBA935tULBleGEkQBEG8E/YJO4gQI4juAC37QvMhMtgFAAAAABJRU5ErkJggg==" alt="Save">
+    </a>
+{% endif %}

@@ -127,6 +127,39 @@ def report(report_name):
         return render_template('{}.html'.format(report_name))
     return redirect(url_for('report', report_name='balance_sheet'))
 
+@app.route('/filter/permalink/')
+def filter_permalink():
+    next_ = request.values.get('next', None)
+    filter_types = request.values.getlist('filter_type')
+    filter_values = request.values.getlist('filter_value')
+
+    if len(filter_types) != len(filter_values):
+        return "Invalid arguments: Lengths of filter types and filter values do not match", 400
+
+    if len(list(ftype for ftype in filter_types if ftype == 'time')) > 1:
+        return "Invalid arguments: Only one time filter allowed", 400
+
+    if len(list(ftype for ftype in filter_types if ftype == 'account')) > 1:
+        return "Invalid arguments: Only one account filter allowed", 400
+
+    app.entry_filters['time'] = None
+    app.entry_filters['account'] = None
+    app.entry_filters['tags'] = set()
+    app.entry_filters['payees'] = set()
+
+    for index, type_ in enumerate(filter_types):
+        if type_ in ['tags', 'payees']:
+            app.entry_filters[type_].add(filter_values[index])
+        if type_ in ['account', 'time']:
+            app.entry_filters[type_] = filter_values[index]
+
+    app.api.filter(time_str = app.entry_filters.get('time', None),
+                    account = app.entry_filters.get('account', None),
+                       tags = app.entry_filters.get('tags', set()).copy(),
+                     payees = app.entry_filters.get('payees', set()).copy())
+
+    return redirect(next_)
+
 @app.route('/filter/', methods=['GET', 'POST'])
 def filter_entries():
     type_ = request.values.get('filter_type', None)
@@ -213,12 +246,19 @@ def pretty_print(json_object):
 def last_segment(account_name):
     return account_name.split(':')[-1]
 
+@app.template_filter('filter_url')
+def generate_filter_url(entry_filters):
+    url_time    = "filter_type=time&filter_value={}&".format(entry_filters['time']) if 'time' in entry_filters and entry_filters['time'] else ''
+    url_account = "filter_type=account&filter_value={}&".format(entry_filters['account']) if 'account' in entry_filters and entry_filters['account'] else ''
+    url_tags    = "".join(list("filter_type=tags&filter_value={}&".format(tag) for tag in entry_filters['tags'])) if 'tags' in entry_filters else ''
+    url_payees  = "".join(list("filter_type=payees&filter_value={}&".format(payee) for payee in entry_filters['payees'])) if 'payees' in entry_filters else ''
+    return "{}{}{}{}next={}".format(url_time, url_account, url_tags, url_payees, request.path)
+
 @app.context_processor
 def utility_processor():
     def account_level(account_full):
         return account_full.count(":")+1
     return dict(account_level=account_level)
-
 
 @app.context_processor
 def inject_errors():
