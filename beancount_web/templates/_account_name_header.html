@@ -13,7 +13,7 @@
     {% set activity = api.statistics(account_name=account_name) %}
     {% if activity %}
     <div class="last-activity">
-        (Last entry: <a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
+        (Last entry: <a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename|urlencode }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
     </div>
     {% endif %}
 </h1>

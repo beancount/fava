@@ -109,7 +109,7 @@
                         </div>
                         {{#if tags }}
                             <div class="tags">
-                                {{#each tags }}<a href="{{ request.path }}?filter_tag={{ this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
+                                {{#each tags }}<a href="{% endraw %}{{ url_for('filter_entries') }}?next={{ request.path|urlencode }}{% raw %}&filter_type=tags&filter_value={{ this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
                             </div>
                         {{/if}}
                     {{/ifCond}}
