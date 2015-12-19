@@ -127,6 +127,45 @@ def report(report_name):
         return render_template('{}.html'.format(report_name))
     return redirect(url_for('report', report_name='balance_sheet'))
 
+@app.route('/filter/', methods=['GET', 'POST'])
+def filter_entries():
+    type_ = request.values.get('filter_type', None)
+    value = request.values.get('filter_value', None)
+    next_ = request.values.get('next', None)
+
+    if type_ and value and next_:
+        remove = request.values.get('filter_remove', False)
+        if remove and remove.lower() == 'true': remove = True
+        else:                                   remove = False
+
+        if type_ in ['time', 'account']:
+            if remove:
+                app.entry_filters.pop(type_, None)
+            else:
+                app.entry_filters[type_] = value
+
+        if type_ in ['tags', 'payees']:
+            if remove:
+                if type_ in app.entry_filters:
+                    if value in app.entry_filters[type_]:
+                        app.entry_filters[type_].remove(value)
+            else:
+                if value == "" and app.entry_filters[type_]:
+                    app.entry_filters.pop(type_, None)
+                else:
+                    if not type_ in app.entry_filters:
+                        app.entry_filters[type_] = set()
+                    app.entry_filters[type_].add(value)
+
+        app.api.filter(time_str = app.entry_filters.get('time', None),
+                        account = app.entry_filters.get('account', None),
+                           tags = app.entry_filters.get('tags', set()).copy(),
+                         payees = app.entry_filters.get('payees', set()).copy())
+
+        return redirect(next_)
+
+    return "Parameters missing", 400
+
 @app.template_filter('format_currency')
 def format_currency(value, digits=2):
     if isinstance(value, decimal.Decimal):
@@ -191,62 +230,3 @@ def inject_errors():
                 operating_currencies=options['operating_currency'],
                 commodities=options['commodities'],
                 entry_filters=app.entry_filters)
-
-@app.before_request
-def perform_global_filters():
-    # app.entry_filters = {}
-
-    filter_time = request.args.get('filter_time', None)
-    if filter_time != None:
-        if filter_time == "":
-            app.entry_filters.pop('time', None)
-        else:
-            app.entry_filters['time'] = filter_time
-
-    filter_tag = request.args.get('filter_tag', None)
-    if filter_tag != None:
-        if filter_tag == "" and app.entry_filters['tags']:
-            app.entry_filters.pop('tags', None)
-        else:
-            if not 'tags' in app.entry_filters:
-                app.entry_filters['tags'] = set()
-            app.entry_filters['tags'].add(filter_tag)
-
-    remove_filter_tag = request.args.get('remove_filter_tag', None)
-    if remove_filter_tag != None:
-        if 'tags' in app.entry_filters:
-            if remove_filter_tag in app.entry_filters['tags']:
-                app.entry_filters['tags'].remove(remove_filter_tag)
-            if len(app.entry_filters['tags']) == 0:
-                app.entry_filters.pop('tags', None)
-
-    filter_payee = request.args.get('filter_payee', None)
-    if filter_payee != None:
-        if filter_payee == "" and app.entry_filters['payees']:
-            app.entry_filters.pop('payees', None)
-        else:
-            if not 'payees' in app.entry_filters:
-                app.entry_filters['payees'] = set()
-            app.entry_filters['payees'].add(filter_payee)
-
-    remove_filter_payee = request.args.get('remove_filter_payee', None)
-    if remove_filter_payee != None:
-        if 'payees' in app.entry_filters:
-            if remove_filter_payee in app.entry_filters['payees']:
-                app.entry_filters['payees'].remove(remove_filter_payee)
-            if len(app.entry_filters['payees']) == 0:
-                app.entry_filters.pop('payees', None)
-
-    filter_account = request.args.get('filter_account', None)
-    if filter_account != None:
-        if filter_account == "":
-            app.entry_filters.pop('account', None)
-        else:
-            app.entry_filters['account'] = filter_account
-
-    app.api.filter(time_str=app.entry_filters.get('time', None),
-                       tags=app.entry_filters.get('tags', set()).copy(),
-                    account=app.entry_filters.get('account', None),
-                     payees=app.entry_filters.get('payees', set()).copy())
-
-

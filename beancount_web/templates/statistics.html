@@ -47,7 +47,7 @@
                 {% for activity in statistics.activity_by_account %}
                     <tr>
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
-                        <td><a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
+                        <td><a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename|urlencode }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
