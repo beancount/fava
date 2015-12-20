@@ -621,7 +621,7 @@ class BeancountReportAPI(object):
                       ], key=lambda x: x['account'])
 
         return {
-            'months': [end_date for begin_date, end_date in month_tuples],
+            'interval_end_dates': [end_date for begin_date, end_date in month_tuples],
             'balances': balances,
             'totals': monthly_totals
         }
@@ -656,7 +656,7 @@ class BeancountReportAPI(object):
                       ], key=lambda x: x['account'])
 
         return {
-            'years': [end_date for begin_date, end_date in year_tuples],
+            'interval_end_dates': [end_date for begin_date, end_date in year_tuples],
             'balances': balances,
             'totals': yearly_totals
         }

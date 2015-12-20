@@ -49,41 +49,33 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False, 
         return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data)
 
     if with_monthly_balances:
-        monthly_balances = app.api.monthly_balances(account_name)
-        monthly_treemaps = []
-        # Only show three latest months
-        max_months = int(request.args.get('months', 3))
-        number_of_months = len(monthly_balances['months']) if len(monthly_balances['months']) < max_months else max_months
-
-        for month_end in monthly_balances['months'][::-1][:number_of_months]:
-            month_begin = date(month_end.year, month_end.month, 1)
-            monthly_treemaps.append({
-                'label': '{}'.format(month_end.strftime("%b '%y")),
-                'month_begin': month_begin,
-                'month_end': month_end,
-                'balances': app.api.balances(account_name, begin_date=month_begin, end_date=month_end)
-            })
-
-        return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps)
+        interval_balances = app.api.monthly_balances(account_name)
+        interval_format_str = "%b '%y"
+        interval_begin_date_lambda = lambda x: date(x.year, x.month, 1)
 
     if with_yearly_balances:
-        yearly_balances = app.api.yearly_balances(account_name)
-        yearly_treemaps = []
-        # Only show three latest years
-        max_years = int(request.args.get('years', 3))
-        number_of_years = len(yearly_balances['years']) if len(yearly_balances['years']) < max_years else max_years
+        interval_balances = app.api.yearly_balances(account_name)
+        interval_format_str = "%Y"
+        interval_begin_date_lambda = lambda x: date(x.year, 1, 1)
 
-        for year_end in yearly_balances['years'][::-1][:number_of_years]:
-            year_begin = date(year_end.year, 1, 1)
-            yearly_treemaps.append({
-                'label': '{}'.format(year_end.strftime("%Y")),
-                'year_begin': year_begin,
-                'year_end': year_end,
-                'balances': app.api.balances(account_name, begin_date=year_begin, end_date=year_end)
+    if with_monthly_balances or with_yearly_balances:
+        interval_treemaps = []
+        max_intervals = int(request.args.get('interval_end_dates', 3)) # Only show three latest treemaps
+        num_of_intervals = len(interval_balances['interval_end_dates']) if len(interval_balances['interval_end_dates']) < max_intervals else max_intervals
+
+        for interval_end_date in interval_balances['interval_end_dates'][::-1][:num_of_intervals]:
+            interval_begin_date = interval_begin_date_lambda(interval_end_date)
+            interval_treemaps.append({
+                'label': '{}'.format(interval_end_date.strftime(interval_format_str)),
+                'balances': app.api.balances(account_name, begin_date=interval_begin_date, end_date=interval_end_date)
             })
 
-        return render_template('account.html', account_name=account_name, yearly_balances=yearly_balances, yearly_treemaps=yearly_treemaps)
-
+        return render_template('account.html', account_name=account_name,
+                                        interval_format_str=interval_format_str,
+                                          interval_balances=interval_balances,
+                                          interval_treemaps=interval_treemaps,
+                                       with_yearly_balances=with_yearly_balances,
+                                      with_monthly_balances=with_monthly_balances)
 @app.route('/')
 def index():
     return redirect(url_for('report', report_name='income_statement'))
