@@ -16,7 +16,7 @@ from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting
 from beancount.core.account_types import get_account_sign
 from beancount.reports import holdings_reports
 from beancount.core import getters
-from beancount.ops import prices, holdings
+from beancount.ops import prices, holdings, summarize
 from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
 from beancount.core.realization import RealAccount
@@ -205,7 +205,7 @@ class BeancountReportAPI(object):
 
         if self.filters['time_str']:
             begin_date, end_date = parse_date(self.filters['time_str'])
-            self.entries = self._entries_in_inclusive_range(begin_date, end_date-timedelta(days=1))
+            self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
 
         if self.filters['tags']:
             self.entries = [entry
