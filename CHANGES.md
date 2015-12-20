@@ -1,0 +1,22 @@
+# beancount-web: CHANGES
+
+*Note: This file contains only user-facing changes in the 'master' branch.*
+
+2015-12-20
+
+  - Added a yearly balances table to the Account-view (thanks to David 
+    Stephens for the PR).
+
+  - Limited the number of x-axis-labels for bar charts to a maximum of 25
+    (Issue #45).
+
+  - Fixed a minor bug where treemaps would show white areas (Issue #49).
+  
+  - Fixed daterange filtering of entries (thanks to Jakob Schnitzer for the PR)
+
+2015-12-19
+
+  - Added a permalink for the currently set filters, so a user can bookmark
+    different filter-settings for quickly applying them (Issue #26).
+
+(Beginning to summarize user-facing changes 2015-12-19.)
