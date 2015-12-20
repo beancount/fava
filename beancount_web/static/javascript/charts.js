@@ -54,8 +54,12 @@ $(document).ready(function() {
                 var options = {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
-                            var val = isNumber(value) ? new Date(value) : value;
-                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
+                            if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
+                                var val = isNumber(value) ? new Date(value) : value;
+                                return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
+                            } else {
+                                return null;
+                            }
                         }
                     }
                 };

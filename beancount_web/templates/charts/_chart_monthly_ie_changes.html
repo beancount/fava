@@ -20,7 +20,7 @@
                             {
                                 {% with value = ((total.income_totals[currency] or 0) + (total.expenses_totals[currency] or 0)) * -1 %}
                                 y: {{ value }},
-                                meta: "{{ value|format_currency }} {{ currency }}"
+                                meta: "{{ value|format_currency }} {{ currency }}<br><em>{{ total.begin_date.strftime('%b \'%y') }}</em>"
                                 {% endwith %}
                             },
                         {% endfor %}

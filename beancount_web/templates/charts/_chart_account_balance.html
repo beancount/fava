@@ -13,7 +13,7 @@
                                 {
                                     x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}),
                                     y: {{ row.balance[currency] }},
-                                    meta: "{{ row.balance[currency]|format_currency }} {{ currency }}<br><em>{{ row.date }}</em>"
+                                    meta: "{{ row.balance[currency]|format_currency }} {{ currency }}<br><em>{{ row.date.strftime('%Y-%m-%d') }}</em>"
                                 },
                                 {% endif %}
                             {% endfor %}
