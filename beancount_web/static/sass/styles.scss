@@ -72,7 +72,9 @@ header {
     nav {
         ul.topmenu {
             position: absolute;
-            right: 20px;
+            right: 33px;
+            top: 0;
+            margin: 0;
 
             & > li {
                 float: left;
@@ -83,8 +85,8 @@ header {
                     padding-right: 23px !important;
                     color: #fff;
                     display: block;
-                    line-height: 1;
-                    padding: 13px 10px;
+                    line-height: 41px;
+                    padding: 0 10px;
 
                     &:hover {
                         background-color: #3572b0;
@@ -126,7 +128,7 @@ header {
                     color: black;
                     width: 400px;
                     z-index: 2;
-                    top: 39px;
+                    top: 41px;
 
                     & > ul {
                         max-height: 240px;
@@ -178,6 +180,17 @@ header {
                     }
                 }
             }
+        }
+
+        a#filter-permalink {
+            display: block;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            height: 41px;
+            padding: 13px 8px;
+
+            &:hover { background: #3572b0; }
         }
     }
 }

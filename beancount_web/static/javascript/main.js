@@ -8,14 +8,47 @@ $(document).ready(function() {
         $(this).parents('.filter').find("li[data-filter*='" + value.toLowerCase() + "']").show();
     });
 
+    function reloadWithFilter(url, type, value, isRemove, nextURL) {
+        console.log("Reloading with", url, type, value, isRemove, nextURL);
+        $.post(url, {
+            filter_type: type,
+            filter_value: value,
+            filter_remove: (isRemove ? isRemove : false),
+            next: nextURL
+        }).done(function(response) {
+            location.reload();
+            // window.location.href = nextURL;
+        });
+    }
+
     $('.filter#filter-time input').keyup(function(e) {
         var $this = $(this);
         var code = e.which;
         if (code == 13) {
             e.preventDefault();
-            var value = $this.val();
-            window.location.href = $this.attr('data-url') + htmlEncode(value);
+            reloadWithFilter($('form#filter-form').attr('action'),
+                             'time',
+                             $this.val(),
+                             false,
+                             window.location.href);
         }
+    });
+
+    $('.filter li.suggestion a').click(function(e) {
+        e.preventDefault();
+        var href = $(this).attr('href');
+        var next = $.urlParam(href, 'next');
+        reloadWithFilter($('form#filter-form').attr('action'),
+                         $.urlParam(href, 'filter_type'),
+                         $.urlParam(href, 'filter_value'),
+                         $.urlParam(href, 'filter_remove'),
+                         next);
+
+    });
+
+    $('a#filter-permalink').click(function(event) {
+        event.preventDefault();
+        alert("To create a permalink to this view with the currently selected filters save this URL in your bookmarks:\n\n" + location.origin + $(this).attr('href'));
     });
 
     // Tree-expanding
