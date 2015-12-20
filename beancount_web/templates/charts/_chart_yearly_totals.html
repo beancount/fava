@@ -2,7 +2,9 @@
     window.chartData.push({
         label: "{{ label }}",
         type:  "bar",
-        dateFormat: "YYYY", // #TODO: Why doesn't this work?
+        options: {
+            dateFormat: "YYYY"
+        },
         data: {
             labels: [
                 {% for total in yearly_totals %}

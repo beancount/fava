@@ -138,7 +138,7 @@
     {% elif yearly_balances%}
 
         {% include "charts/_chart_skeleton.html" %}
-        {% with label="yearly totals", yearly_totals = api.yearly_totals(account_name) %}
+        {% with label="Yearly totals", yearly_totals = api.yearly_totals(account_name) %}
             {% include "charts/_chart_yearly_totals.html" %}
         {% endwith %}
 
@@ -158,7 +158,7 @@
                 <tr>
                     <th>Account</th>
                     {% for end_date in yearly_balances.years|reverse %}
-                        <th>{{ end_date.strftime("%b '%y") }}</th>
+                        <th>{{ end_date.strftime("%Y") }}</th>
                     {% endfor %}
                 </tr>
             </thead>

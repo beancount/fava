@@ -76,7 +76,7 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False, 
         for year_end in yearly_balances['years'][::-1][:number_of_years]:
             year_begin = date(year_end.year, 1, 1)
             yearly_treemaps.append({
-                'label': '{}'.format(year_end.strftime("%b '%y")),
+                'label': '{}'.format(year_end.strftime("%Y")),
                 'year_begin': year_begin,
                 'year_end': year_end,
                 'balances': app.api.balances(account_name, begin_date=year_begin, end_date=year_end)

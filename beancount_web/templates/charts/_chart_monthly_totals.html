@@ -2,7 +2,9 @@
     window.chartData.push({
         label: "{{ label }}",
         type:  "bar",
-        dateFormat: "MMM 'YY",
+        options: {
+            dateFormat: "MMM 'YY"
+        },
         data: {
             labels: [
                 {% for total in monthly_totals %}
