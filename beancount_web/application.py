@@ -28,7 +28,11 @@ def account_with_journal(name=None):
 def account_with_monthly_balances(name=None):
     return account(account_name=name, with_monthly_balances=True)
 
-def account(account_name=None, with_journal=False, with_monthly_balances=False):
+@app.route('/account/<name>/yearly_balances/')
+def account_with_yearly_balances(name=None):
+    return account(account_name=name, with_yearly_balances=True)
+
+def account(account_name=None, with_journal=False, with_monthly_balances=False, with_yearly_balances=False):
     if with_journal:
         journal = app.api.journal(account_name, with_change_and_balance=True)
 
@@ -61,6 +65,24 @@ def account(account_name=None, with_journal=False, with_monthly_balances=False):
             })
 
         return render_template('account.html', account_name=account_name, monthly_balances=monthly_balances, monthly_treemaps=monthly_treemaps)
+
+    if with_yearly_balances:
+        yearly_balances = app.api.yearly_balances(account_name)
+        yearly_treemaps = []
+        # Only show three latest years
+        max_years = int(request.args.get('years', 3))
+        number_of_years = len(yearly_balances['years']) if len(yearly_balances['years']) < max_years else max_years
+
+        for year_end in yearly_balances['years'][::-1][:number_of_years]:
+            year_begin = date(year_end.year, 1, 1)
+            yearly_treemaps.append({
+                'label': '{}'.format(year_end.strftime("%b '%y")),
+                'year_begin': year_begin,
+                'year_end': year_end,
+                'balances': app.api.balances(account_name, begin_date=year_begin, end_date=year_end)
+            })
+
+        return render_template('account.html', account_name=account_name, yearly_balances=yearly_balances, yearly_treemaps=yearly_treemaps)
 
 @app.route('/')
 def index():

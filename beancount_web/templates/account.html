@@ -55,7 +55,9 @@
         {% endwith %}
 
         <div class="headerline">
-            <h3>Journal</h3> <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
+            <h3>Journal</h3>
+            <h3><a href="{{ url_for('account_with_yearly_balances', name=account_name) }}">Yearly balances</a></h3>
+            <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
         </div>
         {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
@@ -75,7 +77,9 @@
         {% endfor %}
 
         <div class="headerline">
-            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3> <h3>Monthly balances</h3>
+            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
+            <h3><a href="{{ url_for('account_with_yearly_balances', name=account_name) }}">Yearly balances</a></h3>
+            <h3>Monthly balances</h3>
         </div>
         <table class="fullwidth tree-table">
             <thead>
@@ -136,9 +140,85 @@
             </tfoot>
         </table>
 
+    {% elif yearly_balances%}
+
+        {% include "charts/_chart_skeleton.html" %}
+        {% with label="yearly totals", yearly_totals = api.yearly_totals(account_name) %}
+            {% include "charts/_chart_yearly_totals.html" %}
+        {% endwith %}
+
+        {% for m_treemap in yearly_treemaps %}
+            {% with label=m_treemap.label, rows=m_treemap.balances, modifier=m_treemap.modifier, level=account_name.split(':')|length %}
+                {% include "charts/_chart_treemap.html" %}
+            {% endwith %}
+        {% endfor %}
+
+        <div class="headerline">
+            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
+            <h3>Yearly balances</h3>
+            <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
+        </div>
+        <table class="fullwidth tree-table">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    {% for end_date in yearly_balances.years|reverse %}
+                        <th>{{ end_date.strftime("%b '%y") }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+            {% for row in yearly_balances.balances %}
+                {% with account_level = account_level(row.account)  %}
+                <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}">
+                    <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
+                        <a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a>
+                    </td>
+
+                    {% for end_date in yearly_balances.years|reverse %}
+                        <td class="num">
+                            {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances|length > 0 %}
+                                <span class="balance">
+                                {% for currency, number in row.totals[end_date.isoformat()].balances.items() %}
+                                    {% if number %}
+                                        {{ number|format_currency }} {{ currency }}<br>
+                                    {% endif %}
+                                {% endfor %}
+                                </span>
+                            {% endif %}
+                            {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances_children|length > 0 %}
+                                <span class="tree-balance">
+                                {% for currency, number in row.totals[end_date.isoformat()].balances_children.items() %}
+                                    {% if number %}
+                                        {{ number|format_currency }} {{ currency }}<br>
+                                    {% endif %}
+                                {% endfor %}
+                                </span>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+                {% endwith %}
+            {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    {% for end_date in yearly_balances.years|reverse %}
+                        <td class="num">
+                            {% for currency, number in yearly_balances.totals[end_date.isoformat()].items() %}
+                                {% if number %}
+                                        {{ number|format_currency }} {{ currency }}<br>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            </tfoot>
+        </table>
     {% endif %}
 
-    {% if not journal and not monthly_balances %}
+    {% if not journal and not monthly_balances and not yearly_balances %}
         <p class="empty">
             No entries for this account{% if entry_filters %} and the applied filters{% endif %}.
         </p>

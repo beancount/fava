@@ -468,6 +468,35 @@ class BeancountReportAPI(object):
 
         return month_tuples
 
+    def _year_tuples(self, entries):
+        """
+        Calculates tuples of (year_begin, year_end) for the period in
+        which entries contains Transactions.
+
+        Returns:
+            [
+                (begin_date, end_date),
+                ...
+            ]
+        """
+
+        date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
+
+        if not date_first:
+            return []
+
+        def get_next_year(date_):
+            return date(date_.year + 1, 1, 1)
+
+        date_first = date(date_first.year, 1, 1)
+        date_last = get_next_year(date_last) - timedelta(days=1)
+
+        year_tuples = []
+        while date_first <= date_last:
+            year_tuples.append((date_first, get_next_year(date_first) - timedelta(days=1)))
+            date_first = get_next_year(date_first)
+
+        return year_tuples
 
     def monthly_income_expenses_totals(self):
         month_tuples = self._month_tuples(self.entries)
@@ -515,6 +544,35 @@ class BeancountReportAPI(object):
             })
 
         return monthly_totals
+
+    def _yearly_totals(self, account_name, entries):
+        """
+        Renders totals for the active years in the entries
+
+        Returns:
+          [
+              {
+                  'begin_date': Date(...),    # TODO rename to date_begin
+                  'end_date':   Date(...),    # TODO rename to date_end
+                  'totals':     {
+                                    'USD': 123.45,
+                                }
+              }, ...
+          ]
+        """
+
+        year_tuples = self._year_tuples(self.entries)
+        yearly_totals = []
+        for begin_date, end_date in year_tuples:
+            totals = self.balances_totals(account_name, begin_date=begin_date, end_date=end_date)
+
+            yearly_totals.append({
+                'begin_date': begin_date,
+                'end_date': end_date,
+                'totals': totals
+            })
+
+        return yearly_totals
 
     def _entries_in_inclusive_range(self, begin_date=None, end_date=None):
         """
@@ -619,6 +677,42 @@ class BeancountReportAPI(object):
             'balances': balances,
             'totals': monthly_totals
         }
+
+    def yearly_balances(self, account_name):
+        # TODO include balances_children
+        # the account tree at time now
+
+        account_names = [account['full_name'] for account in self.all_accounts if account['full_name'].startswith(account_name)]
+
+        year_tuples = self._year_tuples(self.entries)
+        yearly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options['commodities']} for begin_date, end_date in year_tuples }
+
+        arr = { account_name: {} for account_name in account_names }
+
+        for begin_date, end_date in year_tuples:
+            real_accounts = self._real_accounts(account_name, begin_date=begin_date, end_date=end_date)
+
+            _table_tree = self._table_tree(real_accounts)
+            for line in _table_tree:
+                arr[line['account']][end_date.isoformat()] = {
+                    'balances': line['balances'],
+                    'balances_children': line['balances_children']
+                }
+
+                if line['postings_count'] > 0:
+                    for currency, number in line['balances'].items():
+                        yearly_totals[end_date.isoformat()][currency] += number
+
+        balances = sorted([
+                        { 'account': account, 'totals': totals } for account, totals in arr.items()
+                      ], key=lambda x: x['account'])
+
+        return {
+            'years': [end_date for begin_date, end_date in year_tuples],
+            'balances': balances,
+            'totals': yearly_totals
+        }
+
 
     def trial_balance(self):
         return self._table_tree(self.root_account)[1:]
@@ -774,6 +868,10 @@ class BeancountReportAPI(object):
     def monthly_totals(self, account_name):
         real_account = realization.get(self.root_account, account_name)
         return self._monthly_totals(real_account.account, self.entries)
+
+    def yearly_totals(self, account_name):
+        real_account = realization.get(self.root_account, account_name)
+        return self._yearly_totals(real_account.account, self.entries)
 
     def commodities(self):
         return sorted(self.price_map.forward_pairs)
