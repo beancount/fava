@@ -3,12 +3,12 @@
         label: "{{ label }}",
         type:  "bar",
         options: {
-            dateFormat: "MMM 'YY"
+            dateFormat: "YYYY"
         },
         data: {
             labels: [
-                {% for total in monthly_totals %}
-                new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
+                {% for total in yearly_totals %}
+                new Date({{ total.end_date.year }}, {{ total.end_date.month - 1}}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
             series: [
@@ -16,7 +16,7 @@
                 {
                     name: "{{ currency }}",
                     data: [
-                        {% for total in monthly_totals %}
+                        {% for total in yearly_totals %}
                             {
                                 y: {{ total.totals[currency] or 0 }},
                                 meta: "{{ total.totals[currency]|format_currency or 0.00 }} {{ currency }}"

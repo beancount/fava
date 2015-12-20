@@ -68,7 +68,8 @@ if (typeof Date.prototype.formatWithString != 'function') {
     var defaultLocaleMonthsShort = 'Jan_Feb_Mar_Apr_May_Jun_Jul_Aug_Sep_Oct_Nov_Dec'.split('_');
     Date.prototype.formatWithString = function (formatString) {
         var dateStr = formatString;
-        dateStr = dateStr.replace('YY', this.getYear().toString().slice(-2));
+        dateStr = dateStr.replace('YYYY', this.getFullYear().toString());
+        dateStr = dateStr.replace('YY', this.getFullYear().toString().slice(-2));
         dateStr = dateStr.replace('MMM', defaultLocaleMonthsShort[this.getMonth()]);
         return dateStr;
     };

@@ -15,33 +15,9 @@
     {% if journal %}
 
         {% include "charts/_chart_skeleton.html" %}
-        <script>
-            window.chartData.push({
-                label: "Account balance",
-                type: "line",
-                data: {
-                    series: [
-                        {% for currency in operating_currencies %}
-                            {
-                                name: '{{ currency }}',
-                                data: [
-                                    {% for row in linechart_data %}
-                                        {% if currency in row.balance %}
-                                        {
-                                            x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}),
-                                            y: {{ row.balance[currency] }},
-                                            meta: "{{ row.balance[currency]|format_currency }} {{ currency }}<br><em>{{ row.date }}</em>"
-                                        },
-                                        {% endif %}
-                                    {% endfor %}
-                                ]
-                            },
-                        {% endfor %}
-                    ]
-                }
-            });
-        </script>
-        {% with label="Monthly totals", monthly_totals = api.monthly_totals(account_name) %}
+        {% include "charts/_chart_account_balance.html" %}
+
+        {% with label="Monthly totals", monthly_totals=api.monthly_totals(account_name) %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
         {% set treemap_data = api.treemap_data(account_name) %}
@@ -50,46 +26,67 @@
         {% endwith %}
 
         <div class="headerline">
-            <h3>Journal</h3> <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
+            <h3>Journal</h3>
+            <h3><a href="{{ url_for('account_with_yearly_balances', name=account_name) }}">Yearly balances</a></h3>
+            <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
         </div>
+
         {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
 
-    {% elif monthly_balances %}
+    {% elif with_monthly_balances %}
 
         {% include "charts/_chart_skeleton.html" %}
-        {% with label="Monthly totals", monthly_totals = api.monthly_totals(account_name) %}
+        {% with label="Monthly totals", monthly_totals=api.monthly_totals(account_name) %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
 
-        {% for m_treemap in monthly_treemaps %}
-            {% with label=m_treemap.label, rows=m_treemap.balances, modifier=m_treemap.modifier, level=account_name.split(':')|length %}
+        <div class="headerline">
+            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
+            <h3><a href="{{ url_for('account_with_yearly_balances', name=account_name) }}">Yearly balances</a></h3>
+            <h3>Monthly balances</h3>
+        </div>
+
+    {% elif with_yearly_balances %}
+
+        {% include "charts/_chart_skeleton.html" %}
+        {% with label="Yearly totals", yearly_totals=api.yearly_totals(account_name) %}
+            {% include "charts/_chart_yearly_totals.html" %}
+        {% endwith %}
+
+        <div class="headerline">
+            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
+            <h3>Yearly balances</h3>
+            <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
+        </div>
+    {% endif %}
+
+    {% if with_yearly_balances or with_monthly_balances %}
+        {% for i_treemap in interval_treemaps %}
+            {% with label=i_treemap.label, rows=i_treemap.balances, modifier=i_treemap.modifier, level=account_name.split(':')|length %}
                 {% include "charts/_chart_treemap.html" %}
             {% endwith %}
         {% endfor %}
 
-        <div class="headerline">
-            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3> <h3>Monthly balances</h3>
-        </div>
         <table class="fullwidth tree-table">
             <thead>
                 <tr>
                     <th>Account</th>
-                    {% for end_date in monthly_balances.months|reverse %}
-                        <th>{{ end_date.strftime("%b '%y") }}</th>
+                    {% for end_date in interval_balances.interval_end_dates|reverse %}
+                        <th>{{ end_date.strftime(interval_format_str) }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-            {% for row in monthly_balances.balances %}
+            {% for row in interval_balances.balances %}
                 {% with account_level = account_level(row.account)  %}
                 <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}">
                     <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
                         <a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a>
                     </td>
 
-                    {% for end_date in monthly_balances.months|reverse %}
+                    {% for end_date in interval_balances.interval_end_dates|reverse %}
                         <td class="num">
                             {% if end_date.isoformat() in row.totals and row.totals[end_date.isoformat()].balances|length > 0 %}
                                 <span class="balance">
@@ -118,9 +115,9 @@
             <tfoot>
                 <tr>
                     <td>&nbsp;</td>
-                    {% for end_date in monthly_balances.months|reverse %}
+                    {% for end_date in interval_balances.interval_end_dates|reverse %}
                         <td class="num">
-                            {% for currency, number in monthly_balances.totals[end_date.isoformat()].items() %}
+                            {% for currency, number in interval_balances.totals[end_date.isoformat()].items() %}
                                 {% if number %}
                                         {{ number|format_currency }} {{ currency }}<br>
                                 {% endif %}
@@ -130,10 +127,9 @@
                 </tr>
             </tfoot>
         </table>
-
     {% endif %}
 
-    {% if not journal and not monthly_balances %}
+    {% if not journal and not with_monthly_balances and not with_yearly_balances %}
         <p class="empty">
             No entries for this account{% if entry_filters %} and the applied filters{% endif %}.
         </p>
