@@ -4,23 +4,8 @@
 {% block title %}Context{% endblock %}
 
 {% block javascript %}
-    {% assets
-        filters="rjsmin",
-        output="stylesheets/packed-editor.js",
-        "vendor/ace-js/ace.js",
-        "vendor/ace-js/ext-searchbox.js",
-        "vendor/ace-js/mode-beancount.js",
-        "vendor/ace-js/theme-chrome.js",
-        "javascript/editor.js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
-    {% assets
-        output="stylesheets/packed-journal.js",
-        "vendor/handlebars-js/handlebars-v4.0.5.js",
-        "javascript/journal.js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+    {% include "javascript/_editor.html" %}
+    {% include "javascript/_journal.html" %}
 {% endblock %}
 
 {% block content %}

@@ -3,18 +3,7 @@
 
 {% block title %}Source{% endblock %}
 
-{% block javascript %}
-    {% assets
-        filters="rjsmin",
-        output="stylesheets/packed-editor.js",
-        "vendor/ace-js/ace.js",
-        "vendor/ace-js/ext-searchbox.js",
-        "vendor/ace-js/mode-beancount.js",
-        "vendor/ace-js/theme-chrome.js",
-        "javascript/editor.js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-{% endblock %}
+{% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
 {% block content %}
     <h1>Source</h1>

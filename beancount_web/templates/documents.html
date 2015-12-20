@@ -3,14 +3,7 @@
 
 {% block title %}Documents{% endblock %}
 
-{% block javascript %}
-    {% assets
-        output="stylesheets/packed-journal.js",
-        "vendor/handlebars-js/handlebars-v4.0.5.js",
-        "javascript/journal.js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-{% endblock %}
+{% block javascript %}{% include "javascript/_journal.html" %}{% endblock %}
 
 {% block content %}
     <h1>Documents</h1>
