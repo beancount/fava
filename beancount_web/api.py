@@ -227,6 +227,9 @@ class BeancountReportAPI(object):
         self.root_account = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
 
+        self.closing_entries = summarize.cap_opt(self.entries, self.options)
+        self.closing_real_accounts = realization.realize(self.closing_entries, self.account_types)
+
     def filter(self, **kwargs):
         changed = False
         for filter, current_value in self.filters.items():
@@ -479,7 +482,7 @@ class BeancountReportAPI(object):
         month_tuples = self._interval_tuples('month', self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries = self._entries_in_inclusive_range(begin_date, end_date)
+            entries = self._entries_in_inclusive_range(self.entries, begin_date, end_date)
             realized = realization.realize(entries, self.account_types)
             income_totals = self._table_totals(realization.get(realized, self.account_types.income))
             expenses_totals = self._table_totals(realization.get(realized, self.account_types.expenses))
@@ -522,7 +525,7 @@ class BeancountReportAPI(object):
 
         return interval_totals
 
-    def _entries_in_inclusive_range(self, begin_date=None, end_date=None):
+    def _entries_in_inclusive_range(self, entries, begin_date=None, end_date=None):
         """
         Returns the list of entries satisfying begin_date <= date <= end_date.
         """
@@ -530,14 +533,14 @@ class BeancountReportAPI(object):
         if begin_date is None:
             begin_index = 0
         else:
-            begin_index = bisect_key.bisect_left_with_key(self.entries, begin_date, key=get_date)
+            begin_index = bisect_key.bisect_left_with_key(entries, begin_date, key=get_date)
         if end_date is None:
-            end_index = len(self.entries)
+            end_index = len(entries)
         else:
-            end_index = bisect_key.bisect_left_with_key(self.entries, end_date+timedelta(days=1), key=get_date)
-        return self.entries[begin_index:end_index]
+            end_index = bisect_key.bisect_left_with_key(entries, end_date+timedelta(days=1), key=get_date)
+        return entries[begin_index:end_index]
 
-    def _real_accounts(self, account_name, begin_date=None, end_date=None):
+    def _real_accounts(self, account_name, entries, begin_date=None, end_date=None):
         """
         Returns the realization.RealAccount instances for account_name, and
         their entries clamped by the optional begin_date and end_date.
@@ -547,8 +550,8 @@ class BeancountReportAPI(object):
 
         :return: realization.RealAccount instances
         """
-        entries = self._entries_in_inclusive_range(begin_date=begin_date, end_date=end_date)
-        real_accounts = realization.get(realization.realize(entries, [account_name]), account_name)
+        entries_in_range = self._entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
+        real_accounts = realization.get(realization.realize(entries_in_range, [account_name]), account_name)
 
         return real_accounts
 
@@ -573,7 +576,13 @@ class BeancountReportAPI(object):
               }, ...
           ]
         """
-        real_accounts = self._real_accounts(account_name, begin_date, end_date)
+        real_accounts = self._real_accounts(account_name, self.entries, begin_date, end_date)
+
+        return self._table_tree(real_accounts)
+
+
+    def closing_balances(self, account_name, begin_date=None, end_date=None):
+        real_accounts = self._real_accounts(account_name, self.closing_entries, begin_date, end_date)
 
         return self._table_tree(real_accounts)
 
@@ -587,7 +596,7 @@ class BeancountReportAPI(object):
                'USD': 123.45,
             }
         """
-        real_accounts = self._real_accounts(account_name, begin_date, end_date)
+        real_accounts = self._real_accounts(account_name, self.entries, begin_date, end_date)
 
         return self._table_totals(real_accounts)
 
@@ -603,7 +612,7 @@ class BeancountReportAPI(object):
         arr = { account_name: {} for account_name in account_names }
 
         for begin_date, end_date in month_tuples:
-            real_accounts = self._real_accounts(account_name, begin_date=begin_date, end_date=end_date)
+            real_accounts = self._real_accounts(account_name, self.entries, begin_date=begin_date, end_date=end_date)
 
             _table_tree = self._table_tree(real_accounts)
             for line in _table_tree:
@@ -638,7 +647,7 @@ class BeancountReportAPI(object):
         arr = { account_name: {} for account_name in account_names }
 
         for begin_date, end_date in year_tuples:
-            real_accounts = self._real_accounts(account_name, begin_date=begin_date, end_date=end_date)
+            real_accounts = self._real_accounts(account_name, self.entries, begin_date=begin_date, end_date=end_date)
 
             _table_tree = self._table_tree(real_accounts)
             for line in _table_tree:
