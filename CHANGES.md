@@ -14,6 +14,9 @@
   
   - Fixed daterange filtering of entries (thanks to Jakob Schnitzer for the PR)
 
+  - Fixed values in Balance sheet to correctly calculate the closing balances
+    (Issue #19)
+
 2015-12-19
 
   - Added a permalink for the currently set filters, so a user can bookmark
