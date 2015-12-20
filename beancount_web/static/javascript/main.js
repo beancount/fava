@@ -34,23 +34,6 @@ $(document).ready(function() {
         }
     });
 
-    $('.filter li.suggestion a').click(function(e) {
-        e.preventDefault();
-        var href = $(this).attr('href');
-        var next = $.urlParam(href, 'next');
-        reloadWithFilter($('form#filter-form').attr('action'),
-                         $.urlParam(href, 'filter_type'),
-                         $.urlParam(href, 'filter_value'),
-                         $.urlParam(href, 'filter_remove'),
-                         next);
-
-    });
-
-    $('a#filter-permalink').click(function(event) {
-        event.preventDefault();
-        alert("To create a permalink to this view with the currently selected filters save this URL in your bookmarks:\n\n" + location.origin + $(this).attr('href'));
-    });
-
     // Tree-expanding
 
     // This fixes if there is a tree-balance, no balance and the row is not a parent.
