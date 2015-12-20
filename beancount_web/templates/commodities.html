@@ -40,10 +40,10 @@
         {% for commodity in commodities %}
             <div class="commodity-container commodity-{{ commodity.0 }}-{{ commodity.1 }}" style="float: left; margin-right: 20px; ">
                 <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
-                <table class="commodity">
+                <table class="commodity sortable">
                     <thead>
-                        <th>Date</th>
-                        <th>Price</th>
+                        <th data-sort="string" data-sort-default="desc" class="sorting-asc">Date</th>
+                        <th data-sort="float">Price</th>
                     </thead>
                     <tbody>
                         {% set prices = api.prices(commodity.0, commodity.1) %}

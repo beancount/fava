@@ -6,32 +6,42 @@
 {% block content %}
     {% set holdings = api.holdings() %}
     <h1>Equity/Holdings</h1>
-    <table class="holdings">
-      <thead>
-          <tr>
-              <th>Account</th>
-              <th>Units</th>
-              <th>Currency</th>
-              <th>Cost Currency</th>
-              <th>Average Cost</th>
-              <th>Price</th>
-              <th>Book Value</th>
-              <th>Market Value</th>
-          </tr>
-      </thead>
-      <tbody>
-          {% for holding in holdings.body %}
-          <tr>
-             <td><a href="{{ url_for('account_with_journal', name=holding.0) }}">{{ holding.0 }}</a></td>
-             <td class="num">{{ holding.1 }}</td>
-             <td>{{ holding.2 }}</td>
-             <td>{{ holding.3 }}</td>
-             <td class="num">{{ holding.4 }}</td>
-             <td class="num">{{ holding.5 }}</td>
-             <td class="num">{{ holding.6 }}</td>
-             <td class="num">{{ holding.7 }}</td>
-          </tr>
-          {% endfor %}
-      </tbody>
+    <table class="holdings sortable">
+        <thead>
+            <tr>
+                <th data-sort="string" data-sort-default="desc" class="sorting-asc">Account</th>
+                <th data-sort="float" data-sort-default="desc">Units</th>
+                <th data-sort="string">Currency</th>
+                <th data-sort="string">Cost Currency</th>
+                <th data-sort="float" data-sort-default="desc">Average Cost</th>
+                <th data-sort="float" data-sort-default="desc">Price</th>
+                <th data-sort="float" data-sort-default="desc">Book Value</th>
+                <th data-sort="float" data-sort-default="desc">Market Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for holding in holdings.body %}
+            <tr>
+                <td><a href="{{ url_for('account_with_journal', name=holding.0) }}">{{ holding.0 }}</a></td>
+                <td class="num" data-sort-value="{{ holding.1|replace(',', '')|float }}">
+                    {{ holding.1|replace(',', '')|float|format_currency }}
+                </td>
+                <td>{{ holding.2 }}</td>
+                <td>{{ holding.3 }}</td>
+                <td class="num" data-sort-value="{{ holding.4|replace(',', '')|float }}">
+                    {% if holding.4 %}{{ holding.4|replace(',', '')|float|format_currency }}{% endif %}
+                </td>
+                <td class="num" data-sort-value="{{ holding.5|replace(',', '')|float }}">
+                    {% if holding.5 %}{{ holding.5|replace(',', '')|float|format_currency }}{% endif %}
+                </td>
+                <td class="num" data-sort-value="{{ holding.6|replace(',', '')|float }}">
+                    {% if holding.6 %}{{ holding.6|replace(',', '')|float|format_currency }}{% endif %}
+                </td>
+                <td class="num" data-sort-value="{{ holding.7|replace(',', '')|float }}">
+                    {% if holding.7 %}{{ holding.7|replace(',', '')|float|format_currency }}{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 {% endblock %}

@@ -604,6 +604,31 @@ article {
                 }
             }
         }
+
+        &.sortable {
+            th[data-sort] {
+                padding-right: 18px;
+                position: relative;
+                cursor: pointer;
+
+                &.sorting-asc:after, &.sorting-desc:after {
+                    content: "";
+                    display: block;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                    border-top: 5px solid #888888;
+                    position: absolute;
+                    right: 4px;
+                    top: 8px;
+                }
+
+                &.sorting-asc:after {
+                    top: 6px;
+                    border-top: none;
+                    border-bottom: 5px solid #888888;
+                }
+            }
+        }
     }
 
     #assets, #liabilities, #equity, #income, #expenses {

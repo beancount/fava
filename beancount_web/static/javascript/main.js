@@ -1,6 +1,8 @@
 $(document).ready(function() {
     $('aside').css('top', $('header').offset().top + $('header').outerHeight() + 'px');
 
+    $("table.sortable").stupidtable();
+
     $('.filter input').keyup(function() {
         var $this = $(this);
         var value = $this.val();

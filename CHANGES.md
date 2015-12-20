@@ -4,6 +4,10 @@
 
 2015-12-20
 
+  - Simple tables (Equity/Holdings, Net Worth, Events, Commodities, Options,
+    Statistics, Errors) are now sortable by clicking on the column headers
+    (Issue #46).
+
   - Added a yearly balances table to the Account-view (thanks to David 
     Stephens for the PR).
 

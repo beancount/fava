@@ -5,21 +5,23 @@
 
 {% block content %}
     <h1>Net Worth</h1>
+
     {% set net_worth = api.net_worth() %}
     {% include "charts/_chart_skeleton.html" %}
     {% include "charts/_chart_monthly_net_worth.html" %}
-    <table class="net_worth">
+
+    <table class="net_worth sortable">
         <thead>
             <tr>
-                <th>Currency</th>
-                <th>Net Worth</th>
+                <th data-sort="string" data-sort-default="desc" class="sorting-asc">Currency</th>
+                <th data-sort="float" data-sort-default="desc">Net Worth</th>
             </tr>
         </thead>
         <tbody>
             {% for currency, number in net_worth.net_worth.items() %}
             <tr>
                <td>{{ currency }}</td>
-               <td class="num">{{ number|format_currency }}</td>
+               <td class="num" data-sort-value="{{ number }}">{{ number|format_currency }}</td>
             </tr>
             {% endfor %}
         </tbody>

@@ -215,7 +215,7 @@ def filter_entries():
 
 @app.template_filter('format_currency')
 def format_currency(value, digits=2):
-    if isinstance(value, decimal.Decimal):
+    if isinstance(value, decimal.Decimal) or isinstance(value, float):
         return ("{:,." + str(digits) + "f}").format(value)
     return ''
 

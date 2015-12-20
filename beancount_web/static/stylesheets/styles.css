@@ -804,6 +804,26 @@ article table.journal-table tr.posting.warning {
 article table.journal-table tr.transaction, article table.journal-table tr.padding {
   cursor: pointer;
 }
+article table.sortable th[data-sort] {
+  padding-right: 18px;
+  position: relative;
+  cursor: pointer;
+}
+article table.sortable th[data-sort].sorting-asc:after, article table.sortable th[data-sort].sorting-desc:after {
+  content: "";
+  display: block;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #888888;
+  position: absolute;
+  right: 4px;
+  top: 8px;
+}
+article table.sortable th[data-sort].sorting-asc:after {
+  top: 6px;
+  border-top: none;
+  border-bottom: 5px solid #888888;
+}
 article #assets table, article #liabilities table, article #equity table, article #income table, article #expenses table {
   width: 100%;
 }

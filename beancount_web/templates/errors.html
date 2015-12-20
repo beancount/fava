@@ -6,12 +6,12 @@
 {% block content %}
 <h1>Errors</h1>
     {% if errors %}
-        <table class="errors">
+        <table class="errors sortable">
             <thead>
                 <tr>
-                    <th>File</th>
-                    <th>Line</th>
-                    <th>Error</th>
+                    <th data-sort="string" class="sorting-asc">File</th>
+                    <th data-sort="int">Line</th>
+                    <th data-sort="string">Error</th>
                 </tr>
             </thead>
             <tbody>
