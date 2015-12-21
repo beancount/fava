@@ -2,6 +2,12 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-21
+
+  - Custom BQL queries (like with `bean-query`) can now be run in a new
+    Custom Query view. The results will be displayed as a table and somewhat
+    formatted, as account names will be linked to the Account view for example.
+
 2015-12-20
 
   - Simple tables (Equity/Holdings, Net Worth, Events, Commodities, Options,
