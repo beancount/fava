@@ -97,6 +97,21 @@ def context(ehash=None):
     # TODO handle errors
     return render_template('context.html', context=context)
 
+@app.route('/query/')
+def query(bql=None):
+    query = bql if bql else request.args.get('bql', None)
+    error = None
+    result = None
+
+    if query:
+        try:
+            result = app.api.query(query)
+        except Exception as e:
+            result = None
+            error = e
+
+    return render_template('query.html', query=query, result=result, error=error)
+
 @app.route('/journal/')
 def journal():
     if request.args.get('is_ajax', False):

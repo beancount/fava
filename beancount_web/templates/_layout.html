@@ -4,6 +4,7 @@
         ('/balance_sheet/',       'balance_sheet',        'Balance Sheet'),
         ('/trial_balance/',       'trial_balance',        'Trial Balance'),
         ('/journal/',             'journal',              'General Journal'),
+        ('/query/',               'query',                'Custom Query'),
     ]),
     ("Other", [
         ('/holdings/',            'holdings',             'Equity/Holdings'),
@@ -62,7 +63,7 @@
                 </ul>
             {% endfor %}
         </aside>
-        <article>
+        <article id="page-{{ active_page }}">
             {% block content %}{% endblock %}
         </article>
     </div>

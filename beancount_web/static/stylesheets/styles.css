@@ -899,6 +899,9 @@ article .editor-wrapper.editor-wrapper-source .editor {
 article .editor-wrapper.editor-wrapper-readonly {
   margin-bottom: 20px;
 }
+article .editor-wrapper.editor-wrapper-query > .editor {
+  height: 180px;
+}
 article .editor.ace-chrome {
   border: 1px solid #e8e8e8;
 }
@@ -1868,4 +1871,32 @@ article .left.statistics table.statistics td:first-child a {
 .treetable-popover dd code {
   font-size: 13px;
   line-height: 1em;
+}
+
+article#page-query h3 {
+  margin-top: 25px;
+}
+
+.error {
+  color: #990000;
+  margin: 20px 30px 0 30px;
+  font-size: 13px;
+  line-height: 1.3em;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+.sample h3, .sample li, .sample code {
+  color: #AAA;
+}
+.sample ul {
+  margin-top: 10px;
+}
+.sample ul li {
+  display: block;
+  margin-bottom: 5px;
+}
+.sample ul li:before {
+  content: "-";
+  margin-right: 5px;
 }

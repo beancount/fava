@@ -35,7 +35,7 @@ Handlebars.registerHelper('account_url', function(accountName) {
 });
 
 Handlebars.registerHelper('document_url', function(documentPath) {
-    return window.documentURL.replace("_REPLACE_ME_", htmlEncode(documentPath));
+    return window.documentURL.replace("_REPLACE_ME_", encodeURIComponent(documentPath));
 });
 
 Handlebars.registerHelper('ifShowChangeAndBalance', function(unused, options) {

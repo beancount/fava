@@ -21,6 +21,7 @@ from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
 from beancount.core.realization import RealAccount
 from beancount.core.data import get_entry
+from beancount.query import query
 
 from beancount_web.util.dateparser import parse_date
 
@@ -901,3 +902,7 @@ class BeancountReportAPI(object):
                 return True
         else:
             return False
+
+    def query(self, bql_query_string):
+        return query.run_query(self.entries, self.options, bql_query_string)
+
