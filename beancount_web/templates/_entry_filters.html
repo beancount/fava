@@ -26,7 +26,11 @@
 
                     {% for time_ in api.active_years %}
                     <li class="suggestion{% if time_|string == g.filters['time'] %} selected{% endif %}" data-filter="{{ time_ }}">
-                        <a href="{{ url_for_current(time=time_) }}">{{ time_ }}</a>
+                        {% if time_|string == g.filters['time'] %}
+                            <a href="{{ url_for_current(time=None) }}">{{ g.filters['time'] }}</a>
+                        {% else %}
+                            <a href="{{ url_for_current(time=time_) }}">{{ time_ }}</a>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
