@@ -76,9 +76,9 @@ $(document).ready(function() {
 
                 var options =     {
                     backgroundColor: function ($box, node) {
-                        if (colors.length == 0) { return backupColor; }
                         var parentName = node.accountName.split(':')[chart.options.treemapColorLevel ? chart.options.treemapColorLevel : 0];
                         if (!(parentName in colorsMap)) { colorsMap[parentName] = colors.pop(); }
+                        if (colorsMap[parentName] == undefined) { return backupColor; }
                         return colorsMap[parentName];
                     },
                     smallestFontSize: 6,
