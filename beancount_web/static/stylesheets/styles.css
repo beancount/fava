@@ -235,7 +235,7 @@ header a:hover {
 }
 header nav ul.topmenu {
   position: absolute;
-  right: 33px;
+  right: 10px;
   top: 0;
   margin: 0;
 }
@@ -326,17 +326,8 @@ header nav ul.topmenu > li > .filter .inputcontainer input {
   border-radius: 5px;
   line-height: 26px;
   width: 100%;
-}
-header nav a#filter-permalink {
-  display: block;
-  position: absolute;
-  right: 0px;
-  top: 0px;
-  height: 41px;
-  padding: 13px 8px;
-}
-header nav a#filter-permalink:hover {
-  background: #3572b0;
+  font-size: 13px;
+  font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
 }
 
 .main aside {

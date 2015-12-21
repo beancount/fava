@@ -1,23 +1,23 @@
 {% set navigation_bar = [
     ("", [
-        ('/income_statement/',    'income_stmt',          'Income Statement'),
-        ('/balance_sheet/',       'balance_sheet',        'Balance Sheet'),
-        ('/trial_balance/',       'trial_balance',        'Trial Balance'),
-        ('/journal/',             'journal',              'General Journal'),
+        ('income_statement', 'Income Statement'),
+        ('balance_sheet',    'Balance Sheet'),
+        ('trial_balance',    'Trial Balance'),
+        ('journal',          'General Journal'),
     ]),
     ("Other", [
-        ('/holdings/',            'holdings',             'Equity/Holdings'),
-        ('/net_worth/',           'net_worth',            'Net Worth'),
-        ('/documents/',           'documents',            'Documents'),
-        ('/notes/',               'notes',                'Notes'),
-        ('/events/',              'events',               'Events'),
-        ('/commodities/',         'commodities',          'Commodities'),
+        ('holdings',         'Equity/Holdings'),
+        ('net_worth',        'Net Worth'),
+        ('documents',        'Documents'),
+        ('notes',            'Notes'),
+        ('events',           'Events'),
+        ('commodities',      'Commodities'),
     ]),
     ("Configuration", [
-        ('/source/',             'source',         'Source'),
-        ('/options/',            'options',        'Options'),
-        ('/statistics/',         'statistics',     'Statistics'),
-        ('/errors/',             'errors',         'Errors'),
+        ('source',           'Source'),
+        ('options',          'Options'),
+        ('statistics',       'Statistics'),
+        ('errors',           'Errors'),
     ])
 ] %}
 {% set active_page = active_page|default('journal') %}
@@ -56,8 +56,8 @@
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
-                {% for href, id, caption in menuitems %}
-                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ href|e }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
+                {% for id, caption in menuitems %}
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
                 {% endfor %}
                 </ul>
             {% endfor %}
@@ -72,6 +72,7 @@
               "vendor/chartist-js/chartist-plugin-legend.js",
               "vendor/chartist-js/chartist-plugin-tooltip.js",
               "vendor/jquery-treemap-js/jquery-treemap.js",
+              "vendor/jquery-query-object-js/jquery.query-object.js",
               "javascript/helpers.js",
               "javascript/charts.js",
               "javascript/main.js" %}

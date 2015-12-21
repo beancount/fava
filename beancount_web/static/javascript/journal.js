@@ -27,15 +27,15 @@ Handlebars.registerHelper('format_currency', function(number) {
 });
 
 Handlebars.registerHelper('context_url', function(hash) {
-    return window.contextURL.replace("_REPLACE_ME_", hash);
+    return window.contextURL.replace("REPLACEME", hash);
 });
 
 Handlebars.registerHelper('account_url', function(accountName) {
-    return window.accountURL.replace("_REPLACE_ME_", accountName);
+    return window.accountURL.replace("REPLACEME", accountName);
 });
 
 Handlebars.registerHelper('document_url', function(documentPath) {
-    return window.documentURL.replace("_REPLACE_ME_", htmlEncode(documentPath));
+    return window.documentURL.replace("REPLACEME", htmlEncode(documentPath));
 });
 
 Handlebars.registerHelper('ifShowChangeAndBalance', function(unused, options) {
