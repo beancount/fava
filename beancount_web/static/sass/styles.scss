@@ -72,7 +72,7 @@ header {
     nav {
         ul.topmenu {
             position: absolute;
-            right: 33px;
+            right: 10px;
             top: 0;
             margin: 0;
 
@@ -180,17 +180,6 @@ header {
                     }
                 }
             }
-        }
-
-        a#filter-permalink {
-            display: block;
-            position: absolute;
-            right: 0px;
-            top: 0px;
-            height: 41px;
-            padding: 13px 8px;
-
-            &:hover { background: #3572b0; }
         }
     }
 }
