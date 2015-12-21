@@ -1,47 +1,47 @@
-{% set next       = request.path|urlencode    %}
-{% set filter_url = url_for('filter_entries') %}
-
-<form id="filter-form" action="{{ filter_url }}" method="POST">
-    <input type="hidden" name="next" id="filter-next" value="{{ next }}">
+<form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
-        <li{% if entry_filters['time'] %} class="selected"{% endif %}>
+        <li{% if g.filters['time'] %} class="selected"{% endif %}>
             <a href="">
-                <span>{{ entry_filters['time'] or 'Time' }}</span>
+                <span>{{ g.filters['time'] or 'Time' }}</span>
             </a>
             <div class="filter" id="filter-time">
                 <div class="inputcontainer">
-                    <input type="search" class="search-direct-apply" data-url="{{ filter_url }}?next={{ next }}&filter_type=time&filter_value=">
+                    <input type="search" class="search-direct-apply" data-url="{{ url_for(request.endpoint, **request.view_args) }}&time=">
                 </div>
                 <ul>
                     {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'aug last year', '2010-10 - 2014'] %}
                     <li class="info">Supports search strings like
                         {% for suggestion in time_search_strings %}
-                            {% if suggestion != entry_filters['time'] %}
-                            <a href="{{ filter_url }}?next={{ next }}&filter_type=time&filter_value={{ suggestion|urlencode }}" data-filter="{{ suggestion }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
+                            {% if suggestion != g.filters['time'] %}
+                            <a href="{{ url_for_current(time=suggestion) }}" data-filter="{{ suggestion }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </li>
 
-                    {% if entry_filters['time'] and entry_filters['time'] not in api.active_years|map('string') %}
-                        <li class="suggestion selected" data-filter="{{ entry_filters['time'] }}">
-                            <a href="{{ filter_url }}?next={{ next }}&filter_remove=true&filter_type=time&filter_value={{ entry_filters['time']|urlencode }}">{{ entry_filters['time'] }}</a>
+                    {% if g.filters['time'] and g.filters['time'] not in api.active_years|map('string') %}
+                        <li class="suggestion selected" data-filter="{{ g.filters['time'] }}">
+                            <a href="{{ url_for_current(time=None) }}">{{ g.filters['time'] }}</a>
                         </li>
                     {% endif %}
 
                     {% for time_ in api.active_years %}
-                    <li class="suggestion{% if time_|string == entry_filters['time'] %} selected{% endif %}" data-filter="{{ time_ }}">
-                        <a href="{{ filter_url }}?next={{ next }}&filter_type=time&filter_value={{ time_|urlencode }}{% if time_|string == entry_filters['time'] %}&filter_remove=true{% endif %}">{{ time_ }}</a>
+                    <li class="suggestion{% if time_|string == g.filters['time'] %} selected{% endif %}" data-filter="{{ time_ }}">
+                        {% if time_|string == g.filters['time'] %}
+                            <a href="{{ url_for_current(time=None) }}">{{ g.filters['time'] }}</a>
+                        {% else %}
+                            <a href="{{ url_for_current(time=time_) }}">{{ time_ }}</a>
+                        {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
             </div>
         </li>
-        <li{% if entry_filters['tags']  %} class="selected"{% endif %}>
+        <li{% if g.filters['tag']  %} class="selected"{% endif %}>
             <a href="">
                 <span>
-                    {% if entry_filters['tags'] %}
-                        {% if entry_filters['tags']|length == 1 %}
-                            # {{ entry_filters['tags']|first }}
+                    {% if g.filters['tag'] %}
+                        {% if g.filters['tag']|length == 1 %}
+                            # {{ g.filters['tag']|first }}
                         {% else %}
                             Multiple tags
                         {% endif %}
@@ -57,39 +57,39 @@
                 <ul>
                     <li class="info">You can select multiple tags.</li>
 
-                    {% for tag in entry_filters['tags'] %}
+                    {% for tag in g.filters['tag'] %}
                     <li class="suggestion selected" data-filter="{{ tag|lower }}">
-                        <a href="{{ filter_url }}?next={{ next }}&filter_remove=true&filter_type=tags&filter_value={{ tag|urlencode }}">{{ tag }}</a>
+                        <a href="{{ url_for_current(pop=('tag',tag)) }}">{{ tag }}</a>
                     </li>
                     {% endfor %}
 
                 {% for tag in api.active_tags %}
-                    {% if tag not in entry_filters['tags'] %}
-                    <li class="suggestion{% if tag in entry_filters['tags'] %} selected{% endif %}" data-filter="{{ tag|lower }}">
-                        <a href="{{ filter_url }}?next={{ next }}&{% if tag in entry_filters['tags'] %}filter_remove=true&{% else %}filter_type=tags&filter_value={{ tag|urlencode }}{% endif %}"># {{ tag }}</a>
+                    {% if tag not in g.filters['tag'] %}
+                    <li class="suggestion" data-filter="{{ tag|lower }}">
+                        <a href="{{ url_for_current(tag=tag) }}"># {{ tag }}</a>
                     </li>
                     {% endif %}
                 {% endfor %}
                 </ul>
             </div>
         </li>
-        <li{% if entry_filters['account'] %} class="selected"{% endif %}>
+        <li{% if g.filters['account'] %} class="selected"{% endif %}>
             <a href="">
-                <span>{{ entry_filters['account'] or 'Component' }}</span>
+                <span>{{ g.filters['account'] or 'Component' }}</span>
             </a>
             <div class="filter">
                 <div class="inputcontainer">
                     <input type="search">
                 </div>
                 <ul>
-                    {% if entry_filters['account'] %}
-                        <li class="suggestion selected" data-filter="{{ entry_filters['account']|lower }}">
-                            <a href="{{ filter_url }}?next={{ next }}&filter_type=account&filter_value={{ entry_filters['account'] }}&filter_remove=true">{{ entry_filters['account'] }}</a>
+                    {% if g.filters['account'] %}
+                        <li class="suggestion selected" data-filter="{{ g.filters['account']|lower }}">
+                            <a href="{{ url_for_current(account=None) }}">{{ g.filters['account'] }}</a>
                         </li>
                     {% endif %}
                     {% for account in api.all_accounts %}
-                    <li class="suggestion{% if account.full_name == entry_filters['account'] %} selected{% endif %}" data-filter="{{ account.full_name|lower }}">
-                        <a href="{{ filter_url }}?next={{ next }}&filter_type=account&filter_value={{ account.full_name }}{% if account.full_name == entry_filters['account'] %}&filter_remove=true{% endif %}">
+                    <li class="suggestion{% if account.full_name == g.filters['account'] %} selected{% endif %}" data-filter="{{ account.full_name|lower }}">
+                        <a href="{{ url_for_current(account=account.full_name) }}">
                             {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
                         </a>
                     </li>
@@ -97,12 +97,12 @@
                 </ul>
             </div>
         </li>
-        <li{% if entry_filters['payees']  %} class="selected"{% endif %}>
+        <li{% if g.filters['payee']  %} class="selected"{% endif %}>
             <a href="">
                 <span>
-                    {% if entry_filters['payees'] %}
-                        {% if entry_filters['payees']|length == 1 %}
-                            {{ entry_filters['payees']|first }}
+                    {% if g.filters['payee'] %}
+                        {% if g.filters['payee']|length == 1 %}
+                            {{ g.filters['payee']|first }}
                         {% else %}
                             Multiple payees
                         {% endif %}
@@ -118,16 +118,16 @@
                 <ul>
                     <li class="info">You can select multiple payees.</li>
 
-                    {% for payee in entry_filters['payees'] %}
+                    {% for payee in g.filters['payee'] %}
                     <li class="suggestion selected" data-filter="{{ payee|lower }}">
-                        <a href="{{ filter_url }}?next={{ next }}&filter_remove=true&filter_type=payees&filter_value={{ payee }}">{{ payee }}</a>
+                        <a href="{{ url_for_current(pop=('payee', payee)) }}">{{ payee }}</a>
                     </li>
                     {% endfor %}
 
                 {% for payee in api.active_payees %}
-                    {% if payee and payee not in entry_filters['payees'] %} {# This excludes empty payees #}
+                    {% if payee and payee not in g.filters['payee'] %} {# This excludes empty payees #}
                     <li class="suggestion" data-filter="{{ payee|lower }}">
-                        <a href="{{ filter_url }}?next={{ next }}&filter_type=payees&filter_value={{ payee }}">{{ payee }}</a>
+                        <a href="{{ url_for_current(payee=payee) }}">{{ payee }}</a>
                     </li>
                     {% endif %}
                 {% endfor %}
@@ -136,9 +136,3 @@
         </li>
     </ul>
 </form>
-
-{% if entry_filters['time'] or entry_filters['account'] or entry_filters['payees'] or entry_filters['tags'] %}
-    <a id="filter-permalink" href="{{ url_for('filter_permalink') }}?{{ entry_filters|filter_url|safe }}" title="Save current filters as permalink">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAV1BMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////+ORg7oAAAAHHRSTlMAAQIDBAYIDCAxO0pNYmN3ibS3urzBxcfM6+35eVmfrAAAAGZJREFUGFeNzkkOgCAMQNG2WnEecNbe/5wiRYM7f0iAF9IAozwdFdyJmdwloUTyufXA1oE/pEvzBUjX+guQnej2XmfupOoW+xBeiFJA0jBA935tULBleGEkQBEG8E/YJO4gQI4juAC37QvMhMtgFAAAAABJRU5ErkJggg==" alt="Save">
-    </a>
-{% endif %}

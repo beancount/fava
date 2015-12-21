@@ -20,9 +20,9 @@
 {% endif %}
 
 <script>
-    window.contextURL = "{{ url_for('context', ehash='_REPLACE_ME_') }}";
-    window.accountURL = "{{ url_for('account_with_journal', name='_REPLACE_ME_') }}";
-    window.documentURL = "{{ url_for('document') }}?file_path=_REPLACE_ME_";
+    window.contextURL = "{{ url_for('context', ehash='REPLACEME') }}";
+    window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME') }}";
+    window.documentURL = "{{ url_for('document') }}?file_path=REPLACEME";
     window.journalURL = "{{ url_for('journal') }}";
 
 {% if journal is defined %}
@@ -109,7 +109,7 @@
                         </div>
                         {{#if tags }}
                             <div class="tags">
-                                {{#each tags }}<a href="{% endraw %}{{ url_for('filter_entries') }}?next={{ request.path|urlencode }}{% raw %}&filter_type=tags&filter_value={{ this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
+                                {{#each tags }}<a href="{% endraw %}{{ url_for_current() }}{% raw %}&tag={{ this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
                             </div>
                         {{/if}}
                     {{/ifCond}}
