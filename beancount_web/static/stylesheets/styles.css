@@ -1873,6 +1873,10 @@ article .left.statistics table.statistics td:first-child a {
   line-height: 1em;
 }
 
+article#page-query h3 {
+  margin-top: 25px;
+}
+
 .error {
   color: #990000;
   margin: 20px 30px 0 30px;
