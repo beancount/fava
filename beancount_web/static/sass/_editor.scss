@@ -19,6 +19,10 @@
     &.editor-wrapper-readonly {
         margin-bottom: 20px;
     }
+
+    &.editor-wrapper-query > .editor {
+        height: 180px;
+    }
 }
 
 .editor.ace-chrome {

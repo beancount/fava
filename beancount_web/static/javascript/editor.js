@@ -25,6 +25,23 @@ $(document).ready(function() {
         editor.renderer.$cursorLayer.element.style.opacity=0;
     });
 
+    // Query editor
+    if ($('#editor-query').length) {
+        var editor = ace.edit("editor-query");
+        editor.setOptions(defaultOptions);
+        editor.setOptions({
+            mode: "ace/mode/sql",
+        });
+
+        $('form.editor-save input[type="submit"]').click(function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var $button = $(this);
+            $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
+            window.location.href = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
+        });
+    };
+
     // The /source/ editor
     if ($('#editor-source').length) {
         var editorHeight = $(window).height() - $('header').outerHeight() - 110;

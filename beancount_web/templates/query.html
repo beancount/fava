@@ -1,0 +1,66 @@
+{% extends "_layout.html" %}
+{% set active_page = 'query' %}
+
+{% block title %}Custom Query{% endblock %}
+
+{% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
+
+{% block content %}
+    <h1>Custom Query (via <code>bean-query</code>)</h1>
+
+    <p class="description">
+        You can run custom querys (BQL) like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.
+        {# TODO Add some sample queries #}
+    </p>
+
+    <form action="{{ url_for('query') }}" method="get">
+        <div class="editor-wrapper editor-wrapper-query">
+            <div class="editor" id="editor-query"><pre><code>{{ query or '' }}</code></pre></div>
+        </div>
+    </form>
+    <form class="editor-save editor-save-query" action="{{ url_for('query') }}" method="get">
+        <input type="submit" value="Submit Query">
+    </form>
+
+    {% if error or result %}
+        <h3>Result</h3>
+    {% else %}
+        <div class="sample">
+            <h3>Sample Queries:</h3>
+            <ul>
+                <li><a href="{{ url_for('query', bql="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>
+                <li><a href="{{ url_for('query', bql="SELECT last(date) as last_date, cost(sum(position)) as cost;") }}"><code>SELECT last(date) as last_date, cost(sum(position)) as cost;</code></a></li>
+                <li><a href="{{ url_for('query', bql="SELECT date, account, position, balance WHERE account ~ 'Travel';") }}"><code>SELECT date, account, position, balance WHERE account ~ 'Travel';</code></a></li>
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if error %}
+        <p class="error">
+            {{ error }}
+        </p>
+    {% endif %}
+
+    {% if result %}
+        <table class="queryresults sortable">
+            <thead>
+                <tr>
+                    {% for name, type in result.0 %}
+                        <th>{{ name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in result.1 %}
+                    <tr>
+                        {% for name, type in result.0 %}
+                            {% with value = row[name]  %}
+                                {% include "queryresults/_querycell.html" %}
+                            {% endwith %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
