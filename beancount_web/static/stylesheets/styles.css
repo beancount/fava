@@ -326,6 +326,8 @@ header nav ul.topmenu > li > .filter .inputcontainer input {
   border-radius: 5px;
   line-height: 26px;
   width: 100%;
+  font-size: 13px;
+  font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
 }
 
 .main aside {
