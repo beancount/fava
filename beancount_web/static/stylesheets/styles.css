@@ -1700,6 +1700,17 @@ article .left.statistics table.statistics td:first-child a {
 .charts .ct-chart {
   position: relative;
 }
+.charts .ct-chart.chart-no-data div {
+  font-style: italic;
+  color: #999;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  margin-top: 90px;
+}
 .charts .ct-legend {
   position: absolute;
   z-index: 10;

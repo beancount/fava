@@ -100,6 +100,11 @@ $(document).ready(function() {
                     },
                     mouseleave: function (node, event) {
                         $('.treetable-popover').remove();
+                    },
+                    ready: function () {
+                        if (chart.data.length == 0) {
+                            $('div#' + chart.id).addClass('chart-no-data').html('<div>Chart is empty.</div>');
+                        }
                     }
                 };
 
