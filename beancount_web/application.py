@@ -292,7 +292,7 @@ def utility_processor():
 @app.context_processor
 def inject_errors():
     options = app.api.options
-    config  = app.user_config['beancount-web'] if app.user_config and 'beancount-web' in app.user_config else {}
+    config  = app.user_config['beancount-web']
     return dict(errors=app.api.errors,
                 api=app.api,
                 options=options,

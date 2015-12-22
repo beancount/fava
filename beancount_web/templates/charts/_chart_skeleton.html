@@ -1,11 +1,11 @@
 <div class="charts">
     <div class="chart-filter">
         <form>
-            <input type="submit" id="toggle-chart" value="Hide chart">
+            <input type="submit" id="toggle-chart" value="{% if config.getboolean('charts-show') %}Hide{% else %}Show{% endif %} charts"{% if not config.getboolean('charts-show') %} class="hide-charts"{% endif %}>
         </form>
     </div>
-    <div class="charts-container">
+    <div class="charts-container"{% if not config.getboolean('charts-show') %} style="display: none"{% endif %}>
         <div class="loading">Loading charts&hellip;</div>
     </div>
-    <div class="chart-labels"> </div>
+    <div class="chart-labels"{% if not config.getboolean('charts-show') %} style="display: none"{% endif %}> </div>
 </div>
