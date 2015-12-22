@@ -1,3 +1,11 @@
+// Fix sidebar styling
+$(document).ready(function() {
+    var mainHeight = $('.main').outerHeight();
+    var minHeight = $(window).height() - $('header').offset().top - $('header').outerHeight();
+    var sidebarHeight = $('aside').outerHeight();
+    $('.main, aside').css('min-height', Math.max(mainHeight, minHeight, sidebarHeight) + 'px');
+});
+
 $.expr[":"].contains = $.expr.createPseudo(function(arg) {
     return function( elem ) {
         return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;

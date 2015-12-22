@@ -2,6 +2,10 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-22
+
+  - Fixed minor styling issues
+
 2015-12-21
 
   - Custom BQL queries (like with `bean-query`) can now be run in a new

@@ -340,11 +340,8 @@ header nav a#filter-permalink:hover {
 }
 
 .main aside {
-  position: absolute;
   width: 200px;
   float: left;
-  top: 41px;
-  bottom: 0;
   color: #dadad9;
   border-right: 1px solid #ccc;
   background-color: #f5f5f5;
@@ -397,6 +394,8 @@ header nav a#filter-permalink:hover {
 }
 
 article {
+  overflow: hidden;
+  *zoom: 1;
   margin-left: 200px;
   padding: 20px 24px;
 }

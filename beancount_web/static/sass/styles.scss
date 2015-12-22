@@ -196,12 +196,12 @@ header {
 }
 
 .main {
+    // min-height set via JS
+
     aside {
-        position: absolute;
+        // min-height set via JS
         width: 200px;
         float: left;
-        top: 41px;
-        bottom: 0;
         color: #dadad9;
         border-right: 1px solid #ccc;
         background-color: #f5f5f5;
@@ -262,6 +262,7 @@ header {
 }
 
 article {
+    @include clearfix;
     margin-left: 200px;
     padding: 20px 24px;
 
