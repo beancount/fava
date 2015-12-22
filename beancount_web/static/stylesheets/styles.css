@@ -206,7 +206,7 @@ ul.warnings > li.error {
 }
 
 header {
-  overflow: hidden;
+  position: relative;
   background: #205081;
   border-bottom: 1px solid #2e3d54;
   color: #fff;
@@ -233,10 +233,13 @@ header a {
 header a:hover {
   text-decoration: none;
 }
-header nav ul.topmenu {
+header nav {
   position: absolute;
   right: 10px;
   top: 0;
+}
+header nav ul.topmenu {
+  position: relative;
   margin: 0;
 }
 header nav ul.topmenu > li {

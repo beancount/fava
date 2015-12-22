@@ -36,7 +36,7 @@ ul.warnings {
 // Header
 
 header {
-    overflow: hidden;
+    position: relative;
     background: #205081;
     border-bottom: 1px solid #2e3d54;
     color: #fff;
@@ -70,10 +70,12 @@ header {
     }
 
     nav {
+        position: absolute;
+        right: 10px;
+        top: 0;
+
         ul.topmenu {
-            position: absolute;
-            right: 10px;
-            top: 0;
+            position: relative;
             margin: 0;
 
             & > li {
