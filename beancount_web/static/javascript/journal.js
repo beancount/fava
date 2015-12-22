@@ -121,7 +121,7 @@ $(document).ready(function() {
         drawJournal();
         initJournalFilters();
     } else if (window.journalURL != undefined) {
-        $.get(window.journalURL, { is_ajax: true } )
+        $.get(window.journalURL)
         .done(function(responseData) {
             window.journalAsJSON = responseData.data;
             drawJournal();

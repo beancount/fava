@@ -59,7 +59,7 @@ $(document).ready(function() {
             var $select = $(this);
             $select.attr('disabled', 'disabled');
             $filePath = $select.val();
-            $.get($select.parents('form').attr('action'), { file_path: $filePath, is_ajax: true } )
+            $.get($select.parents('form').attr('action'), { file_path: $filePath } )
             .done(function(data) {
                 editor.setValue(data, -1);
                 editor.gotoLine(hlLine, 1, true);

@@ -114,7 +114,7 @@ def query(bql=None):
 
 @app.route('/journal/')
 def journal():
-    if request.args.get('is_ajax', False):
+    if request.is_xhr:
         return jsonify({ 'data': app.api.journal() })
     else:
         return render_template('journal.html')
@@ -122,7 +122,7 @@ def journal():
 @app.route('/source/', methods=['GET', 'POST'])
 def source():
     if request.method == "GET":
-        if request.args.get('is_ajax', False):
+        if request.is_xhr:
             return app.api.source(file_path=request.args.get('file_path', None))
         else:
             return render_template('source.html', file_path=request.args.get('file_path', app.api.beancount_file_path))
