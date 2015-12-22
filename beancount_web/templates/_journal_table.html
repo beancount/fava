@@ -22,7 +22,8 @@
 <script>
     window.contextURL = "{{ url_for('context', ehash='REPLACEME') }}";
     window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME') }}";
-    window.documentURL = "{{ url_for('document') }}?file_path=REPLACEME";
+    window.tagURL = "{{ url_for_current(tag='REPLACEME') }}";
+    window.documentURL = "{{ url_for('document', file_path='REPLACEME') }}";
     window.journalURL = "{{ url_for('journal') }}";
 
 {% if journal is defined %}
@@ -109,7 +110,7 @@
                         </div>
                         {{#if tags }}
                             <div class="tags">
-                                {{#each tags }}<a href="{% endraw %}{{ url_for_current() }}{% raw %}&tag={{ this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
+                                {{#each tags }}<a href="{{ tag_url this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
                             </div>
                         {{/if}}
                     {{/ifCond}}
