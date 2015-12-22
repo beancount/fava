@@ -35,7 +35,7 @@ $(document).ready(function() {
         editor.$blockScrolling = Infinity;
         editor.focus();
 
-        var hlLine = $.urlParamWindow('line');
+        var hlLine = $.query.get('line');
         $('form.editor-source select[name="file_path"]').change(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -46,7 +46,7 @@ $(document).ready(function() {
             .done(function(data) {
                 editor.setValue(data, -1);
                 editor.gotoLine(hlLine, 1, true);
-                if ($filePath != $.urlParamWindow('file_path')) {
+                if ($filePath != $.query.get('file_path')) {
                     hlLine = 1;
                 }
                 $select.removeAttr('disabled');
