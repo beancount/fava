@@ -34,6 +34,10 @@ Handlebars.registerHelper('account_url', function(accountName) {
     return window.accountURL.replace("REPLACEME", accountName);
 });
 
+Handlebars.registerHelper('tag_url', function(tagName) {
+    return window.tagURL.replace("REPLACEME", tagName);
+});
+
 Handlebars.registerHelper('document_url', function(documentPath) {
     return window.documentURL.replace("REPLACEME", htmlEncode(documentPath));
 });

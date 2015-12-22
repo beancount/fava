@@ -219,14 +219,14 @@ def inject_errors():
 def inject_filters(endpoint, values):
     if endpoint == 'static':
         return
-    if 'time' not in values:
-        values['time'] = g.filters['time']
-    if 'account' not in values:
-        values['account'] = g.filters['account']
-    if 'tag' in values:
-        values['tag'] = g.filters['tag'] + [values['tag']]
-    if 'payee' in values:
-        values['payee'] = g.filters['payee'] + [values['payee']]
+    for filter in ['time', 'account']:
+        if filter not in values:
+            values[filter] = g.filters[filter]
+    for list_filter in ['tag', 'payee']:
+        if list_filter in values:
+            values[list_filter] = g.filters[list_filter] + [values[list_filter]]
+        else:
+            values[list_filter] = g.filters[list_filter]
     if 'pop' in values:
         key, value = values['pop']
         values['pop'] = None
