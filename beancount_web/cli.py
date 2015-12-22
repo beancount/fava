@@ -2,6 +2,7 @@
 import argparse
 import os
 import sys
+import configparser
 
 from livereload import Server
 
@@ -25,10 +26,16 @@ def run(argv):
                         default='localhost',
                         help="Host for the webserver.")
 
+    parser.add_argument('-s', '--settings',
+                        action='store',
+                        type=str,
+                        help="Configuration-file for beancount-web.")
+
     parser.add_argument('-d', '--debug',
                         action='store_true',
                         help="Turn on debugging. This uses the built-in Flask \
                               webserver, and live-reloading of beancount-files is disabled.")
+
     parser.add_argument('--profile',
                         action = 'store_true',
                         help="Turn on profiling.  Implies --debug.  Profiling \
@@ -62,6 +69,12 @@ def run(argv):
 
     app.beancount_file = args.filename
     app.api = BeancountReportAPI(app.beancount_file)
+
+    if args.settings:
+        app.user_config = configparser.ConfigParser()
+        app.user_config.read(args.settings)
+    else:
+        app.user_config = None
 
     if args.debug:
         if args.profile:
