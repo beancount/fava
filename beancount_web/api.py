@@ -906,3 +906,25 @@ class BeancountReportAPI(object):
     def query(self, bql_query_string):
         return query.run_query(self.entries, self.options, bql_query_string)
 
+    def is_account_uptodate(self, account_name):
+        """
+        green:  if the latest posting is a balance check that passed (i.e., known-good)
+        red:    if the latest posting is a balance check that failed (i.e., known-bad)
+        yellow: if the latest posting is not a balance check (i.e., unknown)
+        gray:   if the account hasn't been updated in a while (as compared to the last available date in the file)
+        """
+        journal = self.journal(account_name=account_name)
+
+        if len(journal) == 0:
+            return 'gray'
+
+        last_entry = journal[-1]
+
+        if last_entry['meta']['type'] == 'balance':
+            if 'diff_amount' in last_entry:
+                return 'darkred'
+            else:
+                return 'green'
+        else:
+            return '#BCBD00'  # yellow
+            # TODO implement gray here
