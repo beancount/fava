@@ -2,16 +2,19 @@
 import os
 import json
 import decimal
-
 from datetime import date, datetime
 
-from flask import Flask, render_template, url_for, request, redirect, abort, Markup, send_from_directory, jsonify, g
-from flask.ext.assets import Environment, Bundle
+from flask import Flask, flash, render_template, url_for, request, redirect, abort, Markup, send_from_directory, jsonify, g
+from flask.ext.assets import Environment
 from flask.json import JSONEncoder
+
+from beancount_web.api import FilterException
 
 app = Flask(__name__)
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
+# the key is currently only required to flash messages
+app.secret_key = '1234'
 
 assets = Environment()
 app.config['ASSETS_CACHE'] = False
@@ -140,7 +143,6 @@ def report(report_name):
         return render_template('{}.html'.format(report_name))
     return redirect(url_for('report', report_name='balance_sheet'))
 
-
 @app.template_filter('format_currency')
 def format_currency(value, digits=2):
     if isinstance(value, decimal.Decimal):
@@ -215,6 +217,12 @@ def inject_errors():
                 commodities=options['commodities'])
 
 
+def uniquify(seq):
+    """Removes duplicate items from a list whilst preserving order. """
+    seen = set()
+    return [x for x in seq if x not in seen and not seen.add(x)]
+
+
 @app.url_defaults
 def inject_filters(endpoint, values):
     if endpoint == 'static':
@@ -224,9 +232,9 @@ def inject_filters(endpoint, values):
             values[filter] = g.filters[filter]
     for list_filter in ['tag', 'payee']:
         if list_filter in values:
-            values[list_filter] = g.filters[list_filter] + [values[list_filter]]
+            values[list_filter] = uniquify(g.filters[list_filter] + [values[list_filter]])
         else:
-            values[list_filter] = g.filters[list_filter]
+            values[list_filter] = uniquify(g.filters[list_filter])
     if 'pop' in values:
         key, value = values['pop']
         values['pop'] = None
@@ -241,7 +249,11 @@ def perform_global_filters():
     g.filters['tag'] = request.args.getlist('tag')
     g.filters['payee'] = request.args.getlist('payee')
 
-    app.api.filter(time_str=g.filters['time'],
-                       tags=g.filters['tag'],
-                    account=g.filters['account'],
-                     payees=g.filters['payee'])
+    try:
+        app.api.filter(time_str=g.filters['time'],
+                           tags=g.filters['tag'],
+                        account=g.filters['account'],
+                         payees=g.filters['payee'])
+    except FilterException as e:
+        g.filters['time'] = None
+        flash(str(e))

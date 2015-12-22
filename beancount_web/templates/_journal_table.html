@@ -20,11 +20,11 @@
 {% endif %}
 
 <script>
-    window.contextURL = "{{ url_for('context', ehash='REPLACEME') }}";
-    window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME') }}";
-    window.tagURL = "{{ url_for_current(tag='REPLACEME') }}";
-    window.documentURL = "{{ url_for('document', file_path='REPLACEME') }}";
-    window.journalURL = "{{ url_for('journal') }}";
+    window.contextURL = "{{ url_for('context', ehash='REPLACEME')|safe }}";
+    window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME')|safe }}";
+    window.tagURL = "{{ url_for_current(tag='REPLACEME')|safe }}";
+    window.documentURL = "{{ url_for('document', file_path='REPLACEME')|safe }}";
+    window.journalURL = "{{ url_for('journal')|safe }}";
 
 {% if journal is defined %}
     window.journalAsJSON = {{ journal|to_json }};

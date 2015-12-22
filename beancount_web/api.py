@@ -143,6 +143,11 @@ def holdings_at_dates(entries, dates, price_map, options_map):
         yield [get_holding_from_position(lot, number, price_map=price_map, date=date)
                for lot, number in inventory.items()]
 
+
+class FilterException(Exception):
+    pass
+
+
 class BeancountReportAPI(object):
     """
     The rationale behind api.py is the following:
@@ -204,8 +209,11 @@ class BeancountReportAPI(object):
         self.entries = self.all_entries
 
         if self.filters['time_str']:
-            begin_date, end_date = parse_date(self.filters['time_str'])
-            self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
+            try:
+                begin_date, end_date = parse_date(self.filters['time_str'])
+                self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
+            except TypeError:
+                raise FilterException('Failed to parse date string: {}'.format(self.filters['time_str']))
 
         if self.filters['tags']:
             self.entries = [entry
