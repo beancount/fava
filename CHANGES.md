@@ -4,6 +4,14 @@
 
 2015-12-23
 
+  - New settings to show Journal legs by default, to show different entry types
+    in a Journal by default, to hide charts by default and to show negative numbers in treemaps
+
+  - Added new command line option "--settings" to specify a settings-file for
+    beancount-web, like which entry types to display in a Journal by default.
+    There is a sample file called "default-settings.conf" in the source that
+    lists all possible settings.
+
   - Filters are now part of every URL, so every URL is a permalink to the
     view including all currently set filters (Issue #54). (Thanks to Jakob
     Schnitzer for the work on this)
