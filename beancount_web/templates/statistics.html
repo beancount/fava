@@ -48,7 +48,7 @@
                 {% for activity in statistics.activity_by_account %}
                     <tr>
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
-                        {% if activity.account.startswith(options['name_assets']) or activity.account.startswith(options['name_liabilities']) %}
+                        {% if uptodate_eligible(activity.account) %}
                             {% with status=api.is_account_uptodate(activity.account) %}
                                 <td data-sort-value="{{ status }}">
                                     <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>

@@ -296,7 +296,27 @@ def generate_filter_url(entry_filters):
 def utility_processor():
     def account_level(account_full):
         return account_full.count(":")+1
-    return dict(account_level=account_level)
+
+    def uptodate_eligible(account_name):
+        if not 'uptodate-indicator-exclude-accounts' in app.user_config['beancount-web']:
+            return False
+
+        exclude_accounts = app.user_config['beancount-web']['uptodate-indicator-exclude-accounts'].strip().split("\n")
+
+        if not (account_name.startswith(app.api.options['name_assets']) or
+           account_name.startswith(app.api.options['name_liabilities'])):
+           return False
+
+        if account_name in exclude_accounts:
+            return False
+
+        if not account_name in [account['full_name'] for account in app.api.all_accounts_leaf_only]:
+            return False
+
+        return True
+
+    return dict(account_level=account_level,
+                uptodate_eligible=uptodate_eligible)
 
 @app.context_processor
 def inject_errors():
