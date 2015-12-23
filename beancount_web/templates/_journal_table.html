@@ -1,11 +1,11 @@
-{% set entry_types = [('open',        False),
-                      ('close',       False),
-                      ('transaction', True),
-                      ('balance',     True),
-                      ('note',        True),
-                      ('document',    True),
-                      ('pad',         False),
-                      ('padding',     False)] %}
+{% set entry_types = [('open',        config.getboolean('journal-show-type-open')),
+                      ('close',       config.getboolean('journal-show-type-close')),
+                      ('transaction', config.getboolean('journal-show-type-transaction')),
+                      ('balance',     config.getboolean('journal-show-type-balance')),
+                      ('note',        config.getboolean('journal-show-type-note')),
+                      ('document',    config.getboolean('journal-show-type-document')),
+                      ('pad',         config.getboolean('journal-show-type-pad')),
+                      ('padding',     config.getboolean('journal-show-type-padding'))] %}
 
 {% if show_tablefilter %}
     <div class="table-filter">
@@ -14,7 +14,7 @@
                 <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if default_checked %} checked="checked"{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
-            <input type="submit" id="toggle-legs" value="Show legs">
+            <input type="submit" id="toggle-legs" value="{% if config.getboolean('journal-show-legs') %}Hide{% else %}Show{% endif %} legs">
         </form>
     </div>
 {% endif %}
@@ -30,7 +30,7 @@
     window.journalAsJSON = {{ journal|to_json }};
 {% endif %}
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
-    window.journalShowLegs = false;
+    window.journalShowLegs = {{ config.getboolean('journal-show-legs')|lower }};
     window.journalShowTypes = [
         {% for type, default_checked in entry_types %}
             {% if show_tablefilter %}{% if default_checked %}'{{ type }}',{% endif %}{% else %}'{{ type }}',{% endif %}

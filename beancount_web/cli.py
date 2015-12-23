@@ -70,11 +70,11 @@ def run(argv):
     app.beancount_file = args.filename
     app.api = BeancountReportAPI(app.beancount_file)
 
+    app.user_config = configparser.ConfigParser()
+    app.user_config.readfp(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-settings.conf')))
+
     if args.settings:
-        app.user_config = configparser.ConfigParser()
         app.user_config.read(args.settings)
-    else:
-        app.user_config = None
 
     if args.debug:
         if args.profile:

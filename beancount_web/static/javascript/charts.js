@@ -135,7 +135,7 @@ $(document).ready(function() {
         $(this).toggleClass('hide-charts');
 
         var text = $(this).prop('value');
-        $(this).prop('value', text === 'Hide chart' ? 'Show chart' : 'Hide chart');
+        $(this).prop('value', text === 'Hide charts' ? 'Show charts' : 'Hide charts');
 
         return false;
     });
