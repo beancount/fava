@@ -6,7 +6,7 @@
     {% endif %}
 </a>
 
-{% if config['update-indicator-show-everywhere'] %}
+{% if config['uptodate-indicator-show-everywhere'] %}
     {% if uptodate_eligible(account_name) %}
         {% set status=api.is_account_uptodate(account_name, look_back_days=config['uptodate-indicator-grey-lookback-days']|int) %}
         <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
