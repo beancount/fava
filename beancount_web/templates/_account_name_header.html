@@ -11,6 +11,12 @@
         {%- endif -%}
     {% endfor %}
 
+    {% if uptodate_eligible(account_name) %}
+        {% with status=api.is_account_uptodate(account_name, look_back_days=config['uptodate-indicator-grey-lookback-days']|int) %}
+        <span class="status-indicator status-indicator-big status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
+        {% endwith %}
+    {% endif %}
+
     {% set activity = api.statistics(account_name=account_name) %}
     {% if activity %}
     <div class="last-activity">

@@ -4,6 +4,18 @@
 
 2015-12-23
 
+  - Up-to-date indicator will be shown for Assets- and Liabilities-accounts
+    in the Statistics view that indicates:
+    
+        green:  The latest posting is a balance check that passed (known-good)
+        red:    The latest posting is a balance check that failed (known-bad)
+        yellow: The latest posting is not a balance check (unknown)
+        gray:   The account hasn't been updated in a while (as compared to the 
+                last available date in the file)
+
+    There are corresponding settings to show the indicator in all other
+    views (Balance sheet, etc.), to change the days for the look-back (yellow vs gray) and to exclude certain accounts from displaying the indicator.
+
   - New settings to show Journal legs by default, to show different entry types
     in a Journal by default, to hide charts by default and to show negative numbers in treemaps
 

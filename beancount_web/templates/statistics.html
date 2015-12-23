@@ -36,10 +36,11 @@
 
     <div class="left statistics">
         <h3>Update Activity per Account</h3>
-        <table class="statistics sortable">
+        <table class="statistics statistics-update-activity sortable">
             <thead>
                 <tr>
                     <th data-sort="string" class="sorting-asc">Account</th>
+                    <th data-sort="string" data-sort-default="desc"></th>
                     <th data-sort="string">Last Entry</th>
                 </tr>
             </thead>
@@ -47,6 +48,15 @@
                 {% for activity in statistics.activity_by_account %}
                     <tr>
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
+                        {% if uptodate_eligible(activity.account) %}
+                            {% with status=api.is_account_uptodate(activity.account, look_back_days=config['uptodate-indicator-grey-lookback-days']|int) %}
+                                <td data-sort-value="{{ status }}">
+                                    <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
+                                </td>
+                            {% endwith %}
+                        {% else %}
+                        <td></td>
+                        {% endif %}
                         <td><a href="{{ url_for('source') }}?file_path={{ activity.last_posting_filename|urlencode }}&line={{ activity.last_posting_lineno }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
                     </tr>
                 {% endfor %}

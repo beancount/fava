@@ -11,7 +11,9 @@
 {% elif type|string == "<class 'str'>" %}
     <td>
         {% if name == "account" %}
-            <a href="{{ url_for('account_with_journal', name=value) }}" class="account">{{ value }}</a>
+            {% with account_name=value %}
+                {% include "_account_name.html" %}
+            {% endwith %}
         {% else %}
             {{value }}
         {% endif %}

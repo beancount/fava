@@ -18,7 +18,9 @@
             {% with account_level = account_level(row.account)  %}
             <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}">
                 <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
-                    <a href="{{ url_for('account_with_journal', name=row.account) }}" class="account">{{ row.account|last_segment }}</a>
+                    {% with account_name=row.account, last_segment=True %}
+                        {% include "_account_name.html" %}
+                    {% endwith %}
                 </td>
             {% for currency in operating_currencies %}
                 <td class="num">

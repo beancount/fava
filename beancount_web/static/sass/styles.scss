@@ -624,6 +624,12 @@ article {
                 }
             }
         }
+
+        &.statistics-update-activity {
+            thead th:nth-child(2) { padding-left: 0; }
+            tbody td.uptodate-indicator { text-align: center; }
+            span.status-indicator { margin: 0 auto; }
+        }
     }
 
     #assets, #liabilities, #equity, #income, #expenses {
@@ -644,7 +650,7 @@ article {
         .last-activity {
             color: #999;
             display: inline-block;
-            margin-left: 20px;
+            margin-left: 10px;
             font-size: 12px;
             font-weight: normal;
             font-style: italic;
@@ -657,6 +663,8 @@ article {
                 color: #333;
             }
         }
+
+        .status-indicator { margin-left: 10px; }
     }
 
     dl {
@@ -796,5 +804,33 @@ article#page-query h3 { margin-top: 25px; }
                 margin-right: 5px;
             }
         }
+    }
+}
+
+span.status-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+
+    &.status-indicator-big {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    &.status-red { background: #990000; }
+    &.status-yellow { background: #EDD42F; }
+    &.status-green { background: #007F41; }
+    &.status-gray { background: #AAA; }
+}
+
+table.tree-table td.account,
+table.holdings,
+table.queryresults {
+    span.status-indicator {
+        float: right;
+        margin-top: 3px;
+        margin-left: 6px;
     }
 }

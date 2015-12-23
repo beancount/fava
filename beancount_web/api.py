@@ -235,6 +235,7 @@ class BeancountReportAPI(object):
 
         self.root_account = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
+        self.all_accounts_leaf_only = self._account_components(leaf_only=True)
 
         self.closing_entries = summarize.cap_opt(self.entries, self.options)
         self.closing_real_accounts = realization.realize(self.closing_entries, self.account_types)
@@ -249,7 +250,7 @@ class BeancountReportAPI(object):
         if changed:
             self.apply_filters()
 
-    def _account_components(self):
+    def _account_components(self, leaf_only=False):
         # TODO rename
         """Gather all the account components available in the given directives.
 
@@ -265,7 +266,7 @@ class BeancountReportAPI(object):
             ]
         """
         accounts = []
-        for child_account in realization.iter_children(self.root_account):
+        for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only):
             accounts.append({
                 'name': child_account.account.split(':')[-1],
                 'full_name': child_account.account,
@@ -914,3 +915,29 @@ class BeancountReportAPI(object):
     def query(self, bql_query_string):
         return query.run_query(self.entries, self.options, bql_query_string)
 
+    def is_account_uptodate(self, account_name, look_back_days=60):
+        """
+        green:  if the latest posting is a balance check that passed (i.e., known-good)
+        red:    if the latest posting is a balance check that failed (i.e., known-bad)
+        yellow: if the latest posting is not a balance check (i.e., unknown)
+        gray:   if the account hasn't been updated in a while (as compared to the last available date in the file)
+        """
+        journal = self.journal(account_name=account_name)
+        if len(journal) == 0:
+            return 'gray'
+        last_entry = journal[-1]
+
+        if last_entry['meta']['type'] == 'balance':
+            if 'diff_amount' in last_entry:
+                return 'red'
+            else:
+                return 'green'
+        else:
+            balance_entries = [entry for entry in journal if entry['meta']['type'] == 'balance']
+            if len(balance_entries) == 0:
+                return 'gray'
+            last_balance_entry = balance_entries[-1]
+            if last_balance_entry['date'] + timedelta(days=look_back_days) > last_entry['date']:
+                return 'yellow'
+            else:
+                return 'gray'

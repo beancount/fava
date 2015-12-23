@@ -1,0 +1,14 @@
+<a href="{{ url_for('account_with_journal', name=account_name) }}" class="account">
+    {% if last_segment %}
+        {{ account_name|last_segment }}
+    {% else %}
+        {{ account_name }}
+    {% endif %}
+</a>
+
+{% if config['update-indicator-show-everywhere'] %}
+    {% if uptodate_eligible(account_name) %}
+        {% set status=api.is_account_uptodate(account_name, look_back_days=config['uptodate-indicator-grey-lookback-days']|int) %}
+        <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
+    {% endif %}
+{% endif %}

@@ -819,6 +819,15 @@ article table.sortable th[data-sort].sorting-asc:after {
   border-top: none;
   border-bottom: 5px solid #888888;
 }
+article table.statistics-update-activity thead th:nth-child(2) {
+  padding-left: 0;
+}
+article table.statistics-update-activity tbody td.uptodate-indicator {
+  text-align: center;
+}
+article table.statistics-update-activity span.status-indicator {
+  margin: 0 auto;
+}
 article #assets table, article #liabilities table, article #equity table, article #income table, article #expenses table {
   width: 100%;
 }
@@ -831,7 +840,7 @@ article h1 a:link:hover, article h1 a:visited:hover {
 article h1 .last-activity {
   color: #999;
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 10px;
   font-size: 12px;
   font-weight: normal;
   font-style: italic;
@@ -841,6 +850,9 @@ article h1 .last-activity a {
 }
 article h1 .last-activity a:hover {
   color: #333;
+}
+article h1 .status-indicator {
+  margin-left: 10px;
 }
 article dl {
   margin-top: 20px;
@@ -1905,4 +1917,36 @@ article#page-query h3 {
 .sample ul li:before {
   content: "-";
   margin-right: 5px;
+}
+
+span.status-indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+}
+span.status-indicator.status-indicator-big {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
+}
+span.status-indicator.status-red {
+  background: #990000;
+}
+span.status-indicator.status-yellow {
+  background: #EDD42F;
+}
+span.status-indicator.status-green {
+  background: #007F41;
+}
+span.status-indicator.status-gray {
+  background: #AAA;
+}
+
+table.tree-table td.account span.status-indicator,
+table.holdings span.status-indicator,
+table.queryresults span.status-indicator {
+  float: right;
+  margin-top: 3px;
+  margin-left: 6px;
 }

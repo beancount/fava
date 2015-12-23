@@ -168,6 +168,15 @@ def format_currency(value, digits=2):
 def last_segment(account):
     return account.split(':')[-1]
 
+@app.template_filter('uptodate_infotext')
+def uptodate_infotext(status):
+    if status == 'green':  return "The latest posting is a balance check that passed (i.e., known-good)"
+    if status == 'red':    return "The latest posting is a balance check that failed (i.e., known-bad)"
+    if status == 'yellow': return "The latest posting is not a balance check (i.e., unknown)"
+    if status == 'gray':   return "The account hasn't been updated in a while (as compared to the last available date in the file)"
+    print("Status '{}' unknown".format(status))
+    return "Status '{}' unknown".format(status)
+
 class MyJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, datetime):
@@ -218,8 +227,27 @@ def utility_processor():
         args.update(kwargs)
         return url_for(request.endpoint, **args)
 
+    def uptodate_eligible(account_name):
+        if not 'uptodate-indicator-exclude-accounts' in app.user_config['beancount-web']:
+            return False
+
+        exclude_accounts = app.user_config['beancount-web']['uptodate-indicator-exclude-accounts'].strip().split("\n")
+
+        if not (account_name.startswith(app.api.options['name_assets']) or
+           account_name.startswith(app.api.options['name_liabilities'])):
+           return False
+
+        if account_name in exclude_accounts:
+            return False
+
+        if not account_name in [account['full_name'] for account in app.api.all_accounts_leaf_only]:
+            return False
+
+        return True
+
     return dict(account_level=account_level,
-                url_for_current=url_for_current)
+                url_for_current=url_for_current,
+                uptodate_eligible=uptodate_eligible)
 
 @app.context_processor
 def inject_errors():
