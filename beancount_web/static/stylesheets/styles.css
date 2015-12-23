@@ -1947,3 +1947,11 @@ span.status-indicator.status-green {
 span.status-indicator.status-gray {
   background: #AAA;
 }
+
+table.tree-table td.account span.status-indicator,
+table.holdings span.status-indicator,
+table.queryresults span.status-indicator {
+  float: right;
+  margin-top: 3px;
+  margin-left: 6px;
+}

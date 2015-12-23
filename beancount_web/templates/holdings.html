@@ -22,7 +22,11 @@
         <tbody>
             {% for holding in holdings.body %}
             <tr>
-                <td><a href="{{ url_for('account_with_journal', name=holding.0) }}">{{ holding.0 }}</a></td>
+                <td>
+                    {% with account_name=holding.0 %}
+                        {% include "_account_name.html" %}
+                    {% endwith %}
+                </td>
                 <td class="num" data-sort-value="{{ holding.1|replace(',', '')|float }}">
                     {{ holding.1|replace(',', '')|float|format_currency }}
                 </td>

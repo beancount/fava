@@ -830,3 +830,13 @@ span.status-indicator {
     &.status-green { background: #007F41; }
     &.status-gray { background: #AAA; }
 }
+
+table.tree-table td.account,
+table.holdings,
+table.queryresults {
+    span.status-indicator {
+        float: right;
+        margin-top: 3px;
+        margin-left: 6px;
+    }
+}
