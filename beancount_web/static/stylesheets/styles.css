@@ -824,7 +824,7 @@ article table.sortable th[data-sort].sorting-asc:after {
   border-top: none;
   border-bottom: 5px solid #888888;
 }
-article table.statistics-update-activity thead th:nth-child(3) {
+article table.statistics-update-activity thead th:nth-child(2) {
   padding-left: 0;
 }
 article table.statistics-update-activity tbody td.uptodate-indicator {
