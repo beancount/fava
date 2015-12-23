@@ -630,6 +630,12 @@ article {
                 }
             }
         }
+
+        &.statistics-update-activity {
+            thead th:nth-child(3) { padding-left: 0; }
+            tbody td.uptodate-indicator { text-align: center; }
+            span.status-indicator { margin: 0 auto; }
+        }
     }
 
     #assets, #liabilities, #equity, #income, #expenses {
@@ -803,4 +809,16 @@ article#page-query h3 { margin-top: 25px; }
             }
         }
     }
+}
+
+span.status-indicator {
+    display: block;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+
+    &.status-red { background: #990000; }
+    &.status-yellow { background: #EDD42F; }
+    &.status-green { background: #007F41; }
+    &.status-gray { background: #AAA; }
 }

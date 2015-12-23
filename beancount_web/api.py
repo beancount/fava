@@ -914,17 +914,21 @@ class BeancountReportAPI(object):
         gray:   if the account hasn't been updated in a while (as compared to the last available date in the file)
         """
         journal = self.journal(account_name=account_name)
-
         if len(journal) == 0:
             return 'gray'
-
         last_entry = journal[-1]
 
         if last_entry['meta']['type'] == 'balance':
             if 'diff_amount' in last_entry:
-                return 'darkred'
+                return 'red'
             else:
                 return 'green'
         else:
-            return '#BCBD00'  # yellow
-            # TODO implement gray here
+            balance_entries = [entry for entry in journal if entry['meta']['type'] == 'balance']
+            if len(balance_entries) == 0:
+                return 'gray'
+            last_balance_entry = balance_entries[-1]
+            if last_balance_entry['date'] + timedelta(days=60) > last_entry['date']:
+                return 'yellow'
+            else:
+                return 'gray'
