@@ -49,7 +49,7 @@
                     <tr>
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
                         {% if uptodate_eligible(activity.account) %}
-                            {% with status=api.is_account_uptodate(activity.account) %}
+                            {% with status=api.is_account_uptodate(activity.account, look_back_days=config['uptodate-indicator-grey-lookback-days']|int) %}
                                 <td data-sort-value="{{ status }}">
                                     <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
                                 </td>

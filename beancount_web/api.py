@@ -907,7 +907,7 @@ class BeancountReportAPI(object):
     def query(self, bql_query_string):
         return query.run_query(self.entries, self.options, bql_query_string)
 
-    def is_account_uptodate(self, account_name):
+    def is_account_uptodate(self, account_name, look_back_days=60):
         """
         green:  if the latest posting is a balance check that passed (i.e., known-good)
         red:    if the latest posting is a balance check that failed (i.e., known-bad)
@@ -929,7 +929,7 @@ class BeancountReportAPI(object):
             if len(balance_entries) == 0:
                 return 'gray'
             last_balance_entry = balance_entries[-1]
-            if last_balance_entry['date'] + timedelta(days=60) > last_entry['date']:
+            if last_balance_entry['date'] + timedelta(days=look_back_days) > last_entry['date']:
                 return 'yellow'
             else:
                 return 'gray'
