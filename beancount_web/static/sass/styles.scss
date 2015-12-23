@@ -398,15 +398,21 @@ article {
             }
         }
 
-        &.options_map {
+        &.options_map, &.settings {
+            font-size: 12px;
+
             td:nth-child(1) {
                 font-weight: bold;
+                text-align: left;
+                padding-left: 6px;
             }
 
             td:nth-child(2) {
                 white-space: normal;
                 text-align: left;
                 padding-left: 6px;
+
+                pre { font-size: 13px; }
             }
         }
 
@@ -685,6 +691,19 @@ article {
 
     p.empty, p.description {
         margin-top: 20px;
+        line-height: 1.6em;
+        font-size: 13px;
+
+        code {
+            background: #eee;
+            display: inline-block;
+            font-size: 13px;
+            padding: 0 4px 2px 5px;
+            border-radius: 3px;
+            border: 1px solid #ddd;
+        }
+
+        a { text-decoration: underline; }
     }
 
     .loading {

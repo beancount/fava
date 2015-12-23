@@ -71,10 +71,14 @@ def run(argv):
     app.api = BeancountReportAPI(app.beancount_file)
 
     app.user_config = configparser.ConfigParser()
-    app.user_config.readfp(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-settings.conf')))
+    user_config_defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-settings.conf')
+    app.user_config.readfp(open(user_config_defaults_file))
+    app.user_config['beancount-web']['file_defaults'] = user_config_defaults_file
+    app.user_config['beancount-web']['file_user'] = ''
 
     if args.settings:
-        app.user_config.read(args.settings)
+        app.user_config['beancount-web']['file_user'] = os.path.realpath(args.settings)
+        app.user_config.read(app.user_config['beancount-web']['file_user'])
 
     if args.debug:
         if args.profile:

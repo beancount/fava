@@ -652,13 +652,21 @@ article table.highlighttable td.linenos {
 article table.highlighttable td.linenos a {
   color: #A7A5A5;
 }
-article table.options_map td:nth-child(1) {
-  font-weight: bold;
+article table.options_map, article table.settings {
+  font-size: 12px;
 }
-article table.options_map td:nth-child(2) {
+article table.options_map td:nth-child(1), article table.settings td:nth-child(1) {
+  font-weight: bold;
+  text-align: left;
+  padding-left: 6px;
+}
+article table.options_map td:nth-child(2), article table.settings td:nth-child(2) {
   white-space: normal;
   text-align: left;
   padding-left: 6px;
+}
+article table.options_map td:nth-child(2) pre, article table.settings td:nth-child(2) pre {
+  font-size: 13px;
 }
 article table.commodity td:first-child, article table.events td:first-child {
   min-width: inherit;
@@ -869,6 +877,19 @@ article dl dt, article dl dd {
 }
 article p.empty, article p.description {
   margin-top: 20px;
+  line-height: 1.6em;
+  font-size: 13px;
+}
+article p.empty code, article p.description code {
+  background: #eee;
+  display: inline-block;
+  font-size: 13px;
+  padding: 0 4px 2px 5px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+}
+article p.empty a, article p.description a {
+  text-decoration: underline;
 }
 article .loading {
   margin-top: 20px;

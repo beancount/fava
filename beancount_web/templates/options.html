@@ -4,7 +4,29 @@
 {% block title %}Options{% endblock %}
 
 {% block content %}
-    <h1>Options</h1>
+    <h1>Options and Settings</h1>
+
+    <h3><code>beancount-web</code>&nbsp;-&nbsp;settings</h3>
+    <p class="description">
+        You can use the <code>--settings file</code> option when starting <code>beancount-web</code> to specify different settings. The settings will be merged with the default-settings, so the table below shows all possible settings-keys.
+    </p>
+    <table class="settings sortable">
+        <thead>
+            <tr>
+                <th data-sort="string" data-sort-default="desc" class="sorting-asc">Key</th>
+                <th data-sort="string">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, value in config.items() | sort %}
+            <tr>
+               <td class="num">{{ key }}</td>
+               <td class="num"><pre>{{ value|trim }}</pre></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3><code>beancount</code>&nbsp;-&nbsp;options</h3>
     <p class="description">
         For a detailed explanation of all possible <code>option</code>-values see the <a href="http://furius.ca/beancount/doc/options">Beancount Options Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.
     </p>
@@ -19,7 +41,7 @@
             {% for key, value in options.items() | sort %}
             <tr>
                <td class="num">{{ key }}</td>
-               <td class="num">{{ value }}</td>
+               <td class="num"><pre>{{ value }}</pre></td>
             </tr>
             {% endfor %}
         </tbody>
