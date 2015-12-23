@@ -36,7 +36,7 @@ ul.warnings {
 // Header
 
 header {
-    overflow: hidden;
+    position: relative;
     background: #205081;
     border-bottom: 1px solid #2e3d54;
     color: #fff;
@@ -55,6 +55,7 @@ header {
             display: block;
             line-height: 1;
             padding: 13px 10px;
+            margin: 0;
             font-size: 14px;
             font-weight: normal;
         }
@@ -70,10 +71,12 @@ header {
     }
 
     nav {
+        position: absolute;
+        right: 10px;
+        top: 0;
+
         ul.topmenu {
-            position: absolute;
-            right: 33px;
-            top: 0;
+            position: relative;
             margin: 0;
 
             & > li {
@@ -176,21 +179,12 @@ header {
                             border-radius: 5px;
                             line-height: 26px;
                             width: 100%;
+                            font-size: 13px;
+                            font-family: $font_family;
                         }
                     }
                 }
             }
-        }
-
-        a#filter-permalink {
-            display: block;
-            position: absolute;
-            right: 0px;
-            top: 0px;
-            height: 41px;
-            padding: 13px 8px;
-
-            &:hover { background: #3572b0; }
         }
     }
 }

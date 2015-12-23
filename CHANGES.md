@@ -2,9 +2,15 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-23
+
+  - Filters are now part of every URL, so every URL is a permalink to the
+    view including all currently set filters (Issue #54). (Thanks to Jakob
+    Schnitzer for the work on this)
+
 2015-12-22
 
-  - Fixed minor styling issues
+  - Fixed minor styling issues.
 
 2015-12-21
 
@@ -18,18 +24,18 @@
     Statistics, Errors) are now sortable by clicking on the column headers
     (Issue #46).
 
-  - Added a yearly balances table to the Account-view (thanks to David 
-    Stephens for the PR).
+  - Added a yearly balances table to the Account-view. (Thanks to David
+    Stephens for the PR)
 
   - Limited the number of x-axis-labels for bar charts to a maximum of 25
     (Issue #45).
 
   - Fixed a minor bug where treemaps would show white areas (Issue #49).
-  
-  - Fixed daterange filtering of entries (thanks to Jakob Schnitzer for the PR)
+
+  - Fixed daterange filtering of entries. (Thanks to Jakob Schnitzer for the PR)
 
   - Fixed values in Balance sheet to correctly calculate the closing balances
-    (Issue #19)
+    (Issue #19).
 
 2015-12-19
 
