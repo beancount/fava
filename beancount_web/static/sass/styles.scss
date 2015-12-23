@@ -656,7 +656,7 @@ article {
         .last-activity {
             color: #999;
             display: inline-block;
-            margin-left: 20px;
+            margin-left: 10px;
             font-size: 12px;
             font-weight: normal;
             font-style: italic;
@@ -669,6 +669,8 @@ article {
                 color: #333;
             }
         }
+
+        .status-indicator { margin-left: 10px; }
     }
 
     dl {
@@ -812,10 +814,16 @@ article#page-query h3 { margin-top: 25px; }
 }
 
 span.status-indicator {
-    display: block;
+    display: inline-block;
     width: 6px;
     height: 6px;
     border-radius: 6px;
+
+    &.status-indicator-big {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+    }
 
     &.status-red { background: #990000; }
     &.status-yellow { background: #EDD42F; }

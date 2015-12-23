@@ -10,6 +10,14 @@
             <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>{% endif %}
     {% endfor %}
 
+    {% if account_name.startswith(options['name_assets']) or account_name.startswith(options['name_liabilities']) %}
+        {% if account_name in api.all_accounts_leaf_only|map(attribute='full_name') %}
+            {% with status=api.is_account_uptodate(account_name) %}
+            <span class="status-indicator status-indicator-big status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
+            {% endwith %}
+        {% endif %}
+    {% endif %}
+
     {% set activity = api.statistics(account_name=account_name) %}
     {% if activity %}
     <div class="last-activity">

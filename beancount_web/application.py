@@ -240,10 +240,10 @@ def last_segment(account):
 
 @app.template_filter('uptodate_infotext')
 def uptodate_infotext(status):
-    if 'green':  return "The latest posting is a balance check that passed (i.e., known-good)"
-    if 'red':    return "The latest posting is a balance check that failed (i.e., known-bad)"
-    if 'yellow': return "The latest posting is not a balance check (i.e., unknown)"
-    if 'gray':   return "The account hasn't been updated in a while (as compared to the last available date in the file)"
+    if status == 'green':  return "The latest posting is a balance check that passed (i.e., known-good)"
+    if status == 'red':    return "The latest posting is a balance check that failed (i.e., known-bad)"
+    if status == 'yellow': return "The latest posting is not a balance check (i.e., unknown)"
+    if status == 'gray':   return "The account hasn't been updated in a while (as compared to the last available date in the file)"
     print("Status '{}' unknown".format(status))
     return "Status '{}' unknown".format(status)
 

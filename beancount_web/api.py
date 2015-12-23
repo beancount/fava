@@ -227,6 +227,7 @@ class BeancountReportAPI(object):
 
         self.root_account = realization.realize(self.entries, self.account_types)
         self.all_accounts = self._account_components()
+        self.all_accounts_leaf_only = self._account_components(leaf_only=True)
 
         self.closing_entries = summarize.cap_opt(self.entries, self.options)
         self.closing_real_accounts = realization.realize(self.closing_entries, self.account_types)
@@ -241,7 +242,7 @@ class BeancountReportAPI(object):
         if changed:
             self.apply_filters()
 
-    def _account_components(self):
+    def _account_components(self, leaf_only=False):
         # TODO rename
         """Gather all the account components available in the given directives.
 
@@ -257,7 +258,7 @@ class BeancountReportAPI(object):
             ]
         """
         accounts = []
-        for child_account in realization.iter_children(self.root_account):
+        for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only):
             accounts.append({
                 'name': child_account.account.split(':')[-1],
                 'full_name': child_account.account,

@@ -845,7 +845,7 @@ article h1 a:link:hover, article h1 a:visited:hover {
 article h1 .last-activity {
   color: #999;
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 10px;
   font-size: 12px;
   font-weight: normal;
   font-style: italic;
@@ -855,6 +855,9 @@ article h1 .last-activity a {
 }
 article h1 .last-activity a:hover {
   color: #333;
+}
+article h1 .status-indicator {
+  margin-left: 10px;
 }
 article dl {
   margin-top: 20px;
@@ -1922,10 +1925,15 @@ article#page-query h3 {
 }
 
 span.status-indicator {
-  display: block;
+  display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 6px;
+}
+span.status-indicator.status-indicator-big {
+  width: 10px;
+  height: 10px;
+  border-radius: 10px;
 }
 span.status-indicator.status-red {
   background: #990000;
