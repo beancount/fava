@@ -12,7 +12,7 @@
     {% endfor %}
 
     {% if uptodate_eligible(account_name) %}
-        {% with status=api.is_account_uptodate(account_name, look_back_days=config.getint('uptodate-indicator-grey-lookback-days'])) %}
+        {% with status=api.is_account_uptodate(account_name, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
         <span class="status-indicator status-indicator-big status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
         {% endwith %}
     {% endif %}
