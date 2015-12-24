@@ -2,6 +2,12 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-24
+
+  - Metadata is now displayed for Journal entries. For transactions, if there 
+    is a metadata-entry called "statement" and it's value is a path to a file 
+    (relative to the beancount-file or absolute), this file will be liked. 
+
 2015-12-23
 
   - Up-to-date indicator will be shown for Assets- and Liabilities-accounts
