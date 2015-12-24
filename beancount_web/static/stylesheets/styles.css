@@ -807,6 +807,39 @@ article table.journal-table tr.posting.warning {
 article table.journal-table tr.transaction, article table.journal-table tr.padding {
   cursor: pointer;
 }
+article table.journal-table tr.has-metadata td.description {
+  padding-bottom: 0;
+  padding-right: 0;
+}
+article table.journal-table tr.has-metadata dl.metadata {
+  display: none;
+  margin-top: 0;
+  padding: 2px 0 3px 6px;
+  margin: 4px 0 0 -6px;
+  font-size: 11px;
+}
+article table.journal-table tr.has-metadata dl.metadata dt, article table.journal-table tr.has-metadata dl.metadata dd {
+  margin: 0 0 3px 0;
+}
+article table.journal-table tr.has-metadata dl.metadata dt:last-child, article table.journal-table tr.has-metadata dl.metadata dd:last-child {
+  margin: 0;
+}
+article table.journal-table tr.has-metadata dl.metadata dt {
+  width: 0;
+  min-width: 65px;
+  font-weight: normal;
+  font-style: italic;
+  color: #85AACF;
+}
+article table.journal-table tr.has-metadata dl.metadata dd a {
+  font-weight: normal;
+}
+article table.journal-table tr.has-metadata dl.metadata dd a:hover {
+  text-decoration: underline;
+}
+article table.journal-table tr.has-metadata.transaction dl.metadata {
+  background: #f1f1f1;
+}
 article table.sortable th[data-sort] {
   padding-right: 18px;
   position: relative;

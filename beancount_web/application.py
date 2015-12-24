@@ -87,6 +87,9 @@ def document():
     document_path = request.args.get('file_path', None)
 
     if document_path and app.api.is_valid_document(document_path):
+        if not os.path.isabs(document_path):  # metadata-statement-paths may be relative to the beancount-file
+            document_path = os.path.join(os.path.dirname(os.path.realpath(app.beancount_file)), document_path)
+
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
         return send_from_directory(directory, filename, as_attachment=True)
