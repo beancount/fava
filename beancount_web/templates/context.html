@@ -16,7 +16,7 @@
             <dt>Hash:</dt>
             <dd><code>{{ context_.hash }}</code></dd>
             <dt>Location:</dt>
-            <dd><code><a href="{{ url_for('source') }}?file_path={{context_.filename|urlencode }}&line={{ context_.line }}" title="Show source {{ context_.filename }}:{{ context_.line }}">{{ context_.filename }}:{{ context_.line }}</a></code></dd>
+            <dd><code><a href="{{ url_for('source', file_path=context_.filename, line=context_.line) }}" title="Show source {{ context_.filename }}:{{ context_.line }}">{{ context_.filename }}:{{ context_.line }}</a></code></dd>
         </dl>
         <div class="editor-wrapper editor-wrapper-readonly">
             <div class="editor editor-readonly" id="editor-{{ context.hash }}">
