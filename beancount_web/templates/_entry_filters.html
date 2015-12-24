@@ -1,12 +1,12 @@
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
         <li{% if g.filters['time'] %} class="selected"{% endif %}>
-            <a href="">
+            <a href="{{ url_for_current(time=None) }}">
                 <span>{{ g.filters['time'] or 'Time' }}</span>
             </a>
             <div class="filter" id="filter-time">
                 <div class="inputcontainer">
-                    <input type="search" class="search-direct-apply" data-url="{{ url_for(request.endpoint, **request.view_args) }}&time=">
+                    <input type="search">
                 </div>
                 <ul>
                     {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'aug last year', '2010-10 - 2014'] %}
@@ -37,7 +37,7 @@
             </div>
         </li>
         <li{% if g.filters['tag']  %} class="selected"{% endif %}>
-            <a href="">
+            <a href="{{ url_for_current(remove='tag') }}">
                 <span>
                     {% if g.filters['tag'] %}
                         {% if g.filters['tag']|length == 1 %}
@@ -74,8 +74,8 @@
             </div>
         </li>
         <li{% if g.filters['account'] %} class="selected"{% endif %}>
-            <a href="">
-                <span>{{ g.filters['account'] or 'Component' }}</span>
+            <a href="{{ url_for_current(account=None) }}">
+                <span>{{ g.filters['account'] or 'Account' }}</span>
             </a>
             <div class="filter">
                 <div class="inputcontainer">
@@ -99,7 +99,7 @@
         </li>
         <li{% if g.filters['payee']  %} class="selected"{% endif %}>
             {% macro print_payee(payee) %}{{ payee if payee else '<No Payee>'}}{% endmacro %}
-            <a href="">
+            <a href="{{ url_for_current(remove='payee') }}">
                 <span>
                     {% if g.filters['payee'] %}
                         {% if g.filters['payee']|length == 1 %}

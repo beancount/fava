@@ -287,6 +287,9 @@ def inject_filters(endpoint, values):
         key, value = values['pop']
         values['pop'] = None
         values[key] = [v for v in g.filters[key] if v != value]
+    if 'remove' in values:
+        values[values['remove']] = []
+        values['remove'] = None
 
 
 @app.before_request
