@@ -613,7 +613,6 @@ article {
                     dl.metadata {
                         display: none;
                         margin-top: 0;
-                        background: #F1F1F1;
                         padding: 2px 0 3px 6px;
                         margin: 4px 0 0 -6px;
                         font-size: 11px;
@@ -640,6 +639,8 @@ article {
                             &:hover { text-decoration: underline; }
                         }
                     }
+
+                    &.transaction dl.metadata { background: #f1f1f1; }
                 }
             }
         }

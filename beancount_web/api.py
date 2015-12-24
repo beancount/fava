@@ -366,15 +366,17 @@ class BeancountReportAPI(object):
                 entry = {
                     'meta': {
                         'type': posting.__class__.__name__.lower(),
-                        'filename': posting.meta.pop('filename', None),
-                        'lineno': posting.meta.pop('lineno', None)
+                        'filename': posting.meta['filename'],
+                        'lineno': posting.meta['lineno']
                     },
                     'date': posting.date,
                     'hash': compare.hash_entry(posting),
-                    'metadata': posting.meta
+                    'metadata': posting.meta.copy()
                 }
 
                 entry['metadata'].pop("__tolerances__", None)
+                entry['metadata'].pop("filename", None)
+                entry['metadata'].pop("lineno", None)
 
                 if isinstance(posting, Open):
                     entry['account']        = posting.account
