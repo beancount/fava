@@ -298,10 +298,10 @@ def perform_global_filters():
     g.filters['payee'] = request.args.getlist('payee')
 
     try:
-        app.api.filter(time_str=g.filters['time'],
-                           tags=g.filters['tag'],
-                        account=g.filters['account'],
-                         payees=g.filters['payee'])
+        app.api.filter(time=g.filters['time'],
+                       tag=g.filters['tag'],
+                       account=g.filters['account'],
+                       payee=g.filters['payee'])
     except FilterException as e:
         g.filters['time'] = None
         flash(str(e))
