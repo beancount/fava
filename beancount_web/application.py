@@ -287,21 +287,22 @@ def inject_filters(endpoint, values):
         key, value = values['pop']
         values['pop'] = None
         values[key] = [v for v in g.filters[key] if v != value]
+    if 'remove' in values:
+        values[values['remove']] = []
+        values['remove'] = None
 
 
 @app.before_request
 def perform_global_filters():
-    g.filters = {}
-    g.filters['time'] = request.args.get('time', None)
-    g.filters['account'] = request.args.get('account', None)
-    g.filters['tag'] = request.args.getlist('tag')
-    g.filters['payee'] = request.args.getlist('payee')
+    g.filters = {
+        'time': request.args.get('time', None),
+        'account': request.args.get('account', None),
+        'tag': request.args.getlist('tag'),
+        'payee': request.args.getlist('payee'),
+    }
 
     try:
-        app.api.filter(time_str=g.filters['time'],
-                           tags=g.filters['tag'],
-                        account=g.filters['account'],
-                         payees=g.filters['payee'])
+        app.api.filter(**g.filters)
     except FilterException as e:
         g.filters['time'] = None
         flash(str(e))
