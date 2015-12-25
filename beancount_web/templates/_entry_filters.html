@@ -98,7 +98,7 @@
             </div>
         </li>
         <li{% if g.filters['payee']  %} class="selected"{% endif %}>
-        {% macro print_payee(payee) %}{% if payee %}{{ payee }}{% else %}<em>{{ '<No Payee>' }}</em>{% endif %}{% endmacro %}
+        {% macro print_payee(payee) %}{% if payee %}{{ payee }}{% else %}<em>{{ 'No payee' }}</em>{% endif %}{% endmacro %}
             <a href="{{ url_for_current(remove='payee') }}">
                 <span>
                     {% if g.filters['payee'] %}
