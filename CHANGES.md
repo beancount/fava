@@ -2,6 +2,11 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-25
+
+  - Entries can now be filtered for "No payee" (Issue #42). (Thanks to Jakob
+    Schnitzer for the PR)
+
 2015-12-24
 
   - Metadata is now displayed for Journal entries. For transactions, if there 
