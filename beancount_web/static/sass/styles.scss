@@ -603,6 +603,45 @@ article {
                 &.transaction, &.padding {
                     cursor: pointer;
                 }
+
+                &.has-metadata {
+                    td.description {
+                        padding-bottom: 0;
+                        padding-right: 0;
+                    }
+
+                    dl.metadata {
+                        display: none;
+                        margin-top: 0;
+                        padding: 2px 0 3px 6px;
+                        margin: 4px 0 0 -6px;
+                        font-size: 11px;
+
+                        dt, dd {
+                            margin: 0 0 3px 0;
+
+                            &:last-child {
+                                margin: 0;
+                            }
+                        }
+
+                        dt {
+                            width: 0;
+                            min-width: 65px;
+                            font-weight: normal;
+                            font-style: italic;
+                            color: #85AACF;
+                        }
+
+                        dd a {
+                            font-weight: normal;
+
+                            &:hover { text-decoration: underline; }
+                        }
+                    }
+
+                    &.transaction dl.metadata { background: #f1f1f1; }
+                }
             }
         }
 

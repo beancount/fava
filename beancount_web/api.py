@@ -175,10 +175,10 @@ class BeancountReportAPI(object):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
         self.filters = {
-            'time_str': None,
-            'tags': set(),
+            'time': None,
+            'tag': set(),
             'account': None,
-            'payees': set(),
+            'payee': set(),
         }
         self.load_file()
 
@@ -209,22 +209,23 @@ class BeancountReportAPI(object):
     def apply_filters(self):
         self.entries = self.all_entries
 
-        if self.filters['time_str']:
+        if self.filters['time']:
             try:
-                begin_date, end_date = parse_date(self.filters['time_str'])
+                begin_date, end_date = parse_date(self.filters['time'])
                 self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
             except TypeError:
-                raise FilterException('Failed to parse date string: {}'.format(self.filters['time_str']))
+                raise FilterException('Failed to parse date string: {}'.format(self.filters['time']))
 
-        if self.filters['tags']:
+        if self.filters['tag']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filters['tags']))]
+                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filters['tag']))]
 
-        if self.filters['payees']:
+        if self.filters['payee']:
             self.entries = [entry
                             for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.payee and (entry.payee in self.filters['payees'])]
+                            if (isinstance(entry, Transaction) and entry.payee and (entry.payee in self.filters['payee']))
+                            or (isinstance(entry, Transaction) and not entry.payee and ('' in self.filters['payee']))]
 
         if self.filters['account']:
             self.entries = [entry
@@ -370,8 +371,13 @@ class BeancountReportAPI(object):
                         'lineno': posting.meta['lineno']
                     },
                     'date': posting.date,
-                    'hash': compare.hash_entry(posting)
+                    'hash': compare.hash_entry(posting),
+                    'metadata': posting.meta.copy()
                 }
+
+                entry['metadata'].pop("__tolerances__", None)
+                entry['metadata'].pop("filename", None)
+                entry['metadata'].pop("lineno", None)
 
                 if isinstance(posting, Open):
                     entry['account']        = posting.account
@@ -900,17 +906,23 @@ class BeancountReportAPI(object):
 
     def is_valid_document(self, file_path):
         """Check if the given file_path is present in one of the
-           Document entries.
+           Document entries or in a "statement"-metadata in a Transaction entry.
 
            :param file_path: A path to a file.
            :return: True when the file_path is refered to in a Document entry,
                     False otherwise.
         """
+        is_present = False
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
-                return True
-        else:
-            return False
+                is_present = True
+
+        if is_present == False:
+            for entry in misc_utils.filter_type(self.entries, Transaction):
+                if 'statement' in entry.meta and entry.meta['statement'] == file_path:
+                    is_present = True
+
+        return is_present
 
     def query(self, bql_query_string):
         return query.run_query(self.entries, self.options, bql_query_string)

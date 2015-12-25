@@ -22,35 +22,43 @@ Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
     }
 });
 
-Handlebars.registerHelper('format_currency', function(number) {
+Handlebars.registerHelper('format_currency', function (number) {
     if (isNumber(number)) return formatCurrency(number);
 });
 
-Handlebars.registerHelper('context_url', function(hash) {
+Handlebars.registerHelper('context_url', function (hash) {
     return window.contextURL.replace("REPLACEME", hash);
 });
 
-Handlebars.registerHelper('account_url', function(accountName) {
+Handlebars.registerHelper('account_url', function (accountName) {
     return window.accountURL.replace("REPLACEME", accountName);
 });
 
-Handlebars.registerHelper('tag_url', function(tagName) {
+Handlebars.registerHelper('tag_url', function (tagName) {
     return window.tagURL.replace("REPLACEME", tagName);
 });
 
-Handlebars.registerHelper('document_url', function(documentPath) {
+Handlebars.registerHelper('document_url', function (documentPath) {
     return window.documentURL.replace("REPLACEME", encodeURIComponent(documentPath));
 });
 
-Handlebars.registerHelper('ifShowChangeAndBalance', function(unused, options) {
+Handlebars.registerHelper('ifHasElements', function (object, options) {
+    return Object.keys(object).length > 0 ? options.fn(this) : options.inverse(this);
+});
+
+Handlebars.registerHelper('ifShowChangeAndBalance', function (unused, options) {
     return window.journalShowChangeAndBalance ? options.fn(this) : options.inverse(this);
 });
 
-Handlebars.registerHelper('ifShowLegs', function(unused, options) {
+Handlebars.registerHelper('ifShowLegs', function (unused, options) {
     return window.journalShowLegs ? options.fn(this) : options.inverse(this);
 });
 
-Handlebars.registerHelper('ifShowType', function(unused, options) {
+Handlebars.registerHelper('ifShowMetadata', function (unused, options) {
+    return window.journalShowMetadata ? options.fn(this) : options.inverse(this);
+});
+
+Handlebars.registerHelper('ifShowType', function (unused, options) {
     return $.inArray(
             options.data.root.journal[options.data.index].meta.type,
             window.journalShowTypes
@@ -117,6 +125,15 @@ function initJournalFilters() {
         window.journalShowLegs = !window.journalShowLegs;
         drawJournal();
         $(this).val(shouldShow ? 'Hide legs' : 'Show legs');
+    });
+
+    // Button "Hide/Show metadata"
+    $('input#toggle-metadata').click(function(event) {
+        event.preventDefault();
+        var shouldShow = !window.journalShowMetadata;
+        $('table.journal-table dl.metadata').toggle(shouldShow).toggleClass('hidden', !shouldShow);
+        window.journalShowMetadata = !window.journalShowMetadata;
+        $(this).val(shouldShow ? 'Hide metadata' : 'Show metadata');
     });
 }
 

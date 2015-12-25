@@ -14,6 +14,7 @@
                 <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if default_checked %} checked="checked"{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
+            <input type="submit" id="toggle-metadata" value="{% if config.getboolean('journal-show-metadata') %}Hide{% else %}Show{% endif %} metadata">
             <input type="submit" id="toggle-legs" value="{% if config.getboolean('journal-show-legs') %}Hide{% else %}Show{% endif %} legs">
         </form>
     </div>
@@ -31,6 +32,7 @@
 {% endif %}
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
     window.journalShowLegs = {{ config.getboolean('journal-show-legs')|lower }};
+    window.journalShowMetadata = {{ config.getboolean('journal-show-metadata')|lower }};
     window.journalShowTypes = [
         {% for type, default_checked in entry_types %}
             {% if show_tablefilter %}{% if default_checked %}'{{ type }}',{% endif %}{% else %}'{{ type }}',{% endif %}
@@ -61,7 +63,7 @@
         <tbody>
         {{#each journal}}
             {{#ifShowType window}}
-            <tr class="{{ meta.type }}{{#if diff_amount }} fail{{/if}}{{#ifCond flag '==' '!'}} warning{{/ifCond}}{{#ifShowLegs window}}{{#if legs }} display-legs{{/if}}{{/ifShowLegs}}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
+            <tr class="{{ meta.type }}{{#if diff_amount }} fail{{/if}}{{#ifCond flag '==' '!'}} warning{{/ifCond}}{{#ifShowLegs window}}{{#if legs }} display-legs{{/if}}{{/ifShowLegs}}{{#ifHasElements metadata }} has-metadata{{/ifHasElements}}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
                 <td class="datecell"><a href="{{ context_url hash }}">{{ date }}</a></td>
                 <td class="flag">{{ flag }}</td>
                 <td class="description" colspan="4">
@@ -114,6 +116,18 @@
                             </div>
                         {{/if}}
                     {{/ifCond}}
+                    {{#ifHasElements metadata }}
+                        <dl class="metadata"{{#ifShowMetadata window}} style="display: block;"{{/ifShowMetadata}}>
+                            {{#each metadata }}
+                                <dt>{{ @key }}</dt>
+                                <dd>
+                                    {{#ifCond @key '==' 'statement' }}<a href="{{ document_url this }}">{{/ifCond}}
+                                    {{ this }}
+                                    {{#ifCond @key '==' 'statement' }}</a>{{/ifCond}}
+                                </dd>
+                            {{/each}}
+                        </dl>
+                    {{/ifHasElements}}
                 </td>
                 {{#ifShowChangeAndBalance window}}
                     <td class="change num">
