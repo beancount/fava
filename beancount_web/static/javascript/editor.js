@@ -62,7 +62,7 @@ $(document).ready(function() {
             $.get($select.parents('form').attr('action'), { file_path: $filePath } )
             .done(function(data) {
                 editor.setValue(data, -1);
-                editor.gotoLine(hlLine, 1, true);
+                editor.gotoLine(hlLine, 0, true);
                 if ($filePath != $.query.get('file_path')) {
                     hlLine = 1;
                 }
@@ -76,13 +76,13 @@ $(document).ready(function() {
             event.preventDefault();
             event.stopImmediatePropagation();
             var $button = $(this);
-            $button.attr('disabled', 'disabled').attr('value', 'Saving...');
             var fileName = $('form.editor-source select').val();
-            $.post($button.parents('form').attr('action'), { file_path: fileName, source: editor.getValue() } )
+            $button.attr('disabled', 'disabled').attr('value', 'Saving to ' + fileName + '...');
+            var url = $button.parents('form').attr('action');
+            $.post(url, { file_path: fileName, source: editor.getValue() } )
             .done(function(data) {
                 if (data == "True") {
-                    alert("Successfully saved to\n\n\t" + fileName + "\n\nReloading files...");
-                    location.reload();
+                    window.location = $.query.set('line', editor.getSelectionRange().start.row + 1);
                 } else {
                     alert("Writing to\n\n\t" + fileName + "\n\nwas not successful.");
                 }
