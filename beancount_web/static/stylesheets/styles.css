@@ -943,75 +943,83 @@ article span.pnsep {
   margin-left: 5px;
   margin-right: 5px;
 }
-article .editor-wrapper {
+article .left.statistics {
+  margin-right: 30px;
+}
+article .left.statistics table.statistics td:first-child a {
+  font-weight: bold;
+}
+
+.editor-wrapper {
   position: relative;
   margin-top: 20px;
 }
-article .editor-wrapper.editor-wrapper-source {
+.editor-wrapper.editor-wrapper-source {
   position: relative;
 }
-article .editor-wrapper.editor-wrapper-source .editor {
+.editor-wrapper.editor-wrapper-source .editor {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
 }
-article .editor-wrapper.editor-wrapper-readonly {
+.editor-wrapper.editor-wrapper-readonly {
   margin-bottom: 20px;
 }
-article .editor-wrapper.editor-wrapper-query > .editor {
+.editor-wrapper.editor-wrapper-query > .editor {
   height: 180px;
 }
-article .editor.ace-chrome {
+
+.ace_editor.ace-chrome {
   border: 1px solid #e8e8e8;
 }
-article .editor.ace-chrome .ace_gutter {
+.ace_editor.ace-chrome .ace_gutter {
   border-right: 1px solid #e8e8e8;
   background: white;
   color: #A7A5A5;
   font-weight: normal;
 }
-article .editor.ace-chrome .ace_gutter-cell {
+.ace_editor.ace-chrome .ace_gutter-cell {
   padding: 0 6px;
 }
-article .editor.ace-chrome .ace_comment {
+.ace_editor.ace-chrome .ace_comment {
   color: #999988;
   font-style: italic;
 }
-article .editor.ace-chrome .ace_directive {
+.ace_editor.ace-chrome .ace_directive {
   color: #333;
   font-weight: bold;
 }
-article .editor.ace-chrome .ace_class, article .editor.ace-chrome .ace_double {
+.ace_editor.ace-chrome .ace_class, .ace_editor.ace-chrome .ace_double {
   color: #bb8844;
 }
-article .editor.ace-chrome .ace_constant.ace_numeric.ace_date {
+.ace_editor.ace-chrome .ace_constant.ace_numeric.ace_date {
   color: #009999;
 }
-article .editor.ace-chrome .ace_constant, article .editor.ace-chrome .ace_constant.ace_language, article .editor.ace-chrome .ace_tag {
+.ace_editor.ace-chrome .ace_constant, .ace_editor.ace-chrome .ace_constant.ace_language, .ace_editor.ace-chrome .ace_tag {
   color: #008080;
 }
-article .editor.ace-chrome .ace_account {
+.ace_editor.ace-chrome .ace_account {
   color: #333;
 }
-article .editor.ace-chrome .ace_invalid {
+.ace_editor.ace-chrome .ace_invalid {
   color: #333;
   background: transparent;
 }
-article form.editor-source {
+.ace_editor.ace-chrome.ace_autocomplete .ace_content {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+form.editor-source {
   float: right;
   margin-top: -20px;
 }
-article form.editor-save {
+
+form.editor-save {
   float: right;
   margin-top: 10px;
-}
-article .left.statistics {
-  margin-right: 30px;
-}
-article .left.statistics table.statistics td:first-child a {
-  font-weight: bold;
 }
 
 .ct-label {

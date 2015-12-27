@@ -771,9 +771,6 @@ article {
         }
     }
 
-    // Editor
-    @import "editor";
-
     // Statistics
     .left.statistics {
         margin-right: 30px;
@@ -783,6 +780,9 @@ article {
         }
     }
 }
+
+// Editor
+@import "editor";
 
 // Charts
 @import "chartist";
