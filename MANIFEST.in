@@ -1,8 +1,10 @@
+include CHANGES.md LICENSE
+
 recursive-include beancount_web/templates *
 recursive-include beancount_web/static *
 include beancount_web/default-settings.conf
+prune beancount_web/static/sass/.sass-cache
 
 # Be sure this is last
 global-exclude *.pyc .gitignore *.orig
 
-prune beancount_web/static/sass/.sass-cache
