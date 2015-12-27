@@ -2,6 +2,11 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-27
+
+  - Source editor now supports auto-completion of accounts, commodities, 
+    directives and tags.
+
 2015-12-25
 
   - Entries can now be filtered for "No payee" (Issue #42). (Thanks to Jakob
