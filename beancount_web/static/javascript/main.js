@@ -60,6 +60,56 @@ $(document).ready(function() {
 
         return false;
     });
+
+    // Keyboard shortcuts
+
+    // Filtering:
+    $("body").click(function(){
+      $("ul.topmenu li").removeClass("selected");
+    });
+
+    $("ul.topmenu li").click(function(e){
+      e.stopPropagation();
+    });
+
+    $('ul.topmenu input[type=search]').keyup(function(e) {
+        if (e.which == 27) {
+            $(this).blur();
+            $(this).parents('li').removeClass("selected");
+        }
+    });
+
+    // Jumping through charts
+    if ($('.chart-labels').length) {
+        Mousetrap.bind({
+            'shift+c': function() { $('#toggle-chart').click(); },
+            'c':       function() {
+                var next = $('.chart-labels label.selected').next();
+                $('.chart-labels label').removeClass('selected');
+                if (next.length) { next.click(); }
+                else             { $('.chart-labels label:first-child').click(); }
+            },
+
+        }, 'keyup');
+    }
+
+    // Options in transaction pages:
+    if ($('.table-filter').length) {
+        Mousetrap.bind({
+            'l':   function() { $('#toggle-legs').click(); },
+            's l': function() { $('#toggle-legs').click(); },
+            'm':   function() { $('#toggle-metadata').click(); },
+            's m': function() { $('#toggle-metadata').click(); },
+            's o': function() { $('input#filter-open').click(); },
+            's c': function() { $('input#filter-close').click(); },
+            's t': function() { $('input#filter-transaction').click(); },
+            's b': function() { $('input#filter-balance').click(); },
+            's n': function() { $('input#filter-note').click(); },
+            's d': function() { $('input#filter-document').click(); },
+            's p': function() { $('input#filter-pad').click(); },
+            's shift+p': function() { $('input#filter-padding').click(); }
+        }, 'keyup');
+    }
 });
 
 

@@ -273,7 +273,7 @@ header nav ul.topmenu > li > a::after {
   top: 50%;
   width: 0;
 }
-header nav ul.topmenu > li:hover > .filter {
+header nav ul.topmenu > li:hover > .filter, header nav ul.topmenu > li.selected > .filter {
   display: block;
 }
 header nav ul.topmenu > li.selected > a {

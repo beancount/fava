@@ -111,7 +111,8 @@ header {
                     }
                 }
 
-                &:hover > .filter {
+                &:hover > .filter,
+                &.selected > .filter {
                     display: block;
                 }
 
