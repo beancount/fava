@@ -25,7 +25,7 @@
     }
 }
 
-.editor.ace-chrome {
+.ace_editor.ace-chrome {
     border: 1px solid #e8e8e8;
 
     .ace_gutter {
@@ -71,6 +71,11 @@
     }
 
     // .ace_marker-layer .ace_active-line { background: #ffffcc; }
+
+    &.ace_autocomplete .ace_content {
+        font-family: $font_family_monospaced;
+        font-size: 13px;
+    }
 }
 
 form.editor-source {

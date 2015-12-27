@@ -48,7 +48,37 @@ $(document).ready(function() {
         $('.editor-wrapper').height(editorHeight);
 
         var editor = ace.edit("editor-source");
+        var langTools = ace.require("ace/ext/language_tools");
+
         editor.setOptions(defaultOptions);
+
+        var completionsAccounts = window.allAccounts.map(function (account) {
+            return { name: account.full_name, value: account.full_name, score: 1, meta: "accounts" }
+        });
+        var completionsCommodities = window.allCommodities.map(function (commodity) {
+            return { name: commodity.name, value: commodity.name, score: 2, meta: "commodities" }
+        });
+        var completionsDirectives = ['open', 'close', 'commodity', 'txn', 'balance', 'pad', 'note', 'document', 'price', 'event', 'option', 'plugin', 'include'].map(function (directive) {
+            return { name: directive, value: directive, score: 3, meta: "directive" }
+        });
+        var completionsTags = window.allTags.map(function (tag) {
+            return { name: '#' + tag.name, value: tag.name, score: 4, meta: "tags" }
+        });
+        var completions = completionsAccounts.concat(completionsCommodities, completionsDirectives);
+
+        var beancountCompleter = {
+            getCompletions: function(editor, session, pos, prefix, callback) {
+                if (prefix.length === 0) { callback(null, []); return }
+                if (prefix == '#') { callback(null, completionsTags); return }
+                if (editor.session.getLine(pos.row).indexOf('#') > -1) { callback(null, completionsTags); return }
+                if (editor.session.getLine(pos.row).indexOf('"') > -1) { callback(null, []); return }
+                callback(null, completions);
+            }
+        }
+
+        langTools.setCompleters([beancountCompleter]);
+        editor.setOptions({enableLiveAutocompletion: true});
+
         editor.$blockScrolling = Infinity;
         editor.focus();
 
