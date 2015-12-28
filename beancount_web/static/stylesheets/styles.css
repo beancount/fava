@@ -1916,6 +1916,9 @@ form.editor-save {
   color: #777;
 }
 
+.treemap-node .treemap-label {
+  z-index: 1000;
+}
 .treemap-node .treemap-label a {
   color: white;
 }
