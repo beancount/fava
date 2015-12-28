@@ -65,17 +65,17 @@ $(document).ready(function() {
 
     // Filtering:
     $("body").click(function(){
-      $("ul.topmenu li").removeClass("selected");
+        $("ul.topmenu li").removeClass("opened");
     });
 
     $("ul.topmenu li").click(function(e){
-      e.stopPropagation();
+        e.stopPropagation();
     });
 
     $('ul.topmenu input[type=search]').keyup(function(e) {
         if (e.which == 27) {
             $(this).blur();
-            $(this).parents('li').removeClass("selected");
+            $(this).parents('li').removeClass("opened");
         }
     });
 

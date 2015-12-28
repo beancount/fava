@@ -112,11 +112,12 @@ header {
                 }
 
                 &:hover > .filter,
-                &.selected > .filter {
+                &.opened > .filter {
                     display: block;
                 }
 
-                &.selected > a {
+                &.selected > a,
+                &.opened > a {
                     background-color: #3572b0;
                 }
 
@@ -788,11 +789,15 @@ article {
 // Charts
 @import "chartist";
 
-.treemap-node .treemap-label a {
-    color: white;
+.treemap-node .treemap-label {
+    z-index: 1000;
 
-    &:hover {
-        text-decoration: underline;
+    a {
+        color: white;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }
 

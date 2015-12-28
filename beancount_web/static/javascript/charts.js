@@ -36,8 +36,8 @@ $(document).ready(function() {
             case 'line':
                 var options = {
                     axisX: {
-                        type: Chartist.FixedScaleAxis,
-                        divisor: chart.data.series[0].data.length > 15 ? 15 : chart.data.series[0].data.length,  // no of days
+                        type: Chartist.AutoScaleAxis,
+                        scaleMinSpace: 25,
                         labelInterpolationFnc: function(value, index) {
                             var val = isNumber(value) ? new Date(value) : value;
                             return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
@@ -45,6 +45,10 @@ $(document).ready(function() {
                     },
                     lineSmooth: Chartist.Interpolation.none()
                 };
+
+                defaultOptions.plugins.push(Chartist.plugins.zoom({
+                    // onZoom : function(chart, reset) { storeReset(reset); }
+                }));
 
                 new Chartist.Line("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)
@@ -64,9 +68,19 @@ $(document).ready(function() {
                     }
                 };
 
-                new Chartist.Bar("#" + chart.id, chart.data,
+                var chart = new Chartist.Bar("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)
                 );
+
+                function pad(n) { return n < 10 ? '0' + n : n }
+
+                $(chart.container).on('click', '.ct-bar', function() {
+                    var date = chart.data.labels[$(event.target).index()];
+                    var dateString = '' + date.getFullYear() + '-' + (pad(date.getMonth()+1));
+                    var e = $.Event('keyup');
+                    e.which = 13;
+                    $("#filter-time input[type=search]").val(dateString).trigger(e);
+                });
 
                 break;
             case 'treemap': {

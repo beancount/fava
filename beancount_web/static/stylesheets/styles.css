@@ -273,10 +273,10 @@ header nav ul.topmenu > li > a::after {
   top: 50%;
   width: 0;
 }
-header nav ul.topmenu > li:hover > .filter, header nav ul.topmenu > li.selected > .filter {
+header nav ul.topmenu > li:hover > .filter, header nav ul.topmenu > li.opened > .filter {
   display: block;
 }
-header nav ul.topmenu > li.selected > a {
+header nav ul.topmenu > li.selected > a, header nav ul.topmenu > li.opened > a {
   background-color: #3572b0;
 }
 header nav ul.topmenu > li > .filter {
@@ -1781,6 +1781,9 @@ form.editor-save {
   text-align: center;
   margin-top: 90px;
 }
+.charts .ct-chart .ct-bar {
+  cursor: pointer;
+}
 .charts .ct-legend {
   position: absolute;
   z-index: 10;
@@ -1870,6 +1873,10 @@ form.editor-save {
   background-color: #a748ca;
   border-color: #a748ca;
 }
+.charts .ct-zoom-rect {
+  fill: rgba(200, 200, 200, 0.3);
+  stroke: #666;
+}
 
 .chartist-tooltip {
   font-family: monospace;
@@ -1912,6 +1919,9 @@ form.editor-save {
   color: #777;
 }
 
+.treemap-node .treemap-label {
+  z-index: 1000;
+}
 .treemap-node .treemap-label a {
   color: white;
 }
