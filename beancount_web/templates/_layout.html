@@ -1,24 +1,24 @@
 {% set navigation_bar = [
     ("", [
-        ('income_statement', 'Income Statement'),
-        ('balance_sheet',    'Balance Sheet'),
-        ('trial_balance',    'Trial Balance'),
-        ('journal',          'General Journal'),
-        ('query',            'Custom Query'),
+        ('income_statement', 'Income Statement',    'g i'),
+        ('balance_sheet',    'Balance Sheet',       'g b'),
+        ('trial_balance',    'Trial Balance',       'g t'),
+        ('journal',          'General Journal',     'g g'),
+        ('query',            'Custom Query',        'g q'),
     ]),
     ("Other", [
-        ('holdings',         'Equity/Holdings'),
-        ('net_worth',        'Net Worth'),
-        ('documents',        'Documents'),
-        ('notes',            'Notes'),
-        ('events',           'Events'),
-        ('commodities',      'Commodities'),
+        ('holdings',         'Equity/Holdings',     'g h'),
+        ('net_worth',        'Net Worth',           'g w'),
+        ('documents',        'Documents',           'g d'),
+        ('notes',            'Notes',               'g n'),
+        ('events',           'Events',              'g e'),
+        ('commodities',      'Commodities',         'g c'),
     ]),
     ("Configuration", [
-        ('source',           'Source'),
-        ('options',          'Options'),
-        ('statistics',       'Statistics'),
-        ('errors',           'Errors'),
+        ('source',           'Source',              'g s'),
+        ('options',          'Options',             'g o'),
+        ('statistics',       'Statistics',          'g x'),
+        ('errors',           'Errors',              'g r'),
     ])
 ] %}
 {% set active_page = active_page|default('journal') %}
@@ -66,7 +66,7 @@
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
-                {% for id, caption in menuitems %}
+                {% for id, caption, shortcut in menuitems %}
                     <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
                 {% endfor %}
                 </ul>
@@ -76,6 +76,7 @@
             {% block content %}{% endblock %}
         </article>
     </div>
+    {% include "_keyboard_shortcuts.html" %}
 
     {% assets "vendor/jquery-js/jquery-2.1.4.js",
               "vendor/chartist-js/chartist.js",
@@ -84,11 +85,34 @@
               "vendor/jquery-treemap-js/jquery-treemap.js",
               "vendor/jquery-stupidtable-js/stupidtable.js",
               "vendor/jquery-query-object-js/jquery.query-object.js",
+              "vendor/mousetrap-js/mousetrap.js",
+              "vendor/mousetrap-js/plugins/bind-dictionary/mousetrap-bind-dictionary.js",
               "javascript/helpers.js",
               "javascript/charts.js",
               "javascript/main.js" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+    <script>
+        // Jumping to pages:
+        Mousetrap.bind({
+            {% for title_, menuitems in navigation_bar %}
+                {% for id, caption, shortcut in menuitems %}
+            '{{ shortcut }}': function() { window.location = '{{ url_for('report', report_name=id) }}'; },
+                {% endfor %}
+
+            {% endfor %}
+        }, 'keyup');
+
+        // Filtering:
+        Mousetrap.bind({
+            {% for shortcut in ['f t', 'f g', 'f c', 'f p'] %}
+            '{{ shortcut }}': function() {
+                $('ul.topmenu>li').removeClass('selected');
+                $('ul.topmenu>li:nth-child({{ loop.index }})').toggleClass('selected').find('input[type=search]').focus();
+            },
+            {% endfor %}
+        }, 'keyup');
+    </script>
     {% block javascript %}{% endblock %}
 </body>
 </html>
