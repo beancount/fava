@@ -34,9 +34,12 @@ def account_with_monthly_balances(name=None):
 def account_with_yearly_balances(name=None):
     return account(account_name=name, with_yearly_balances=True)
 
-def account(account_name=None, with_journal=False, with_monthly_balances=False, with_yearly_balances=False):
+def account(account_name=None, with_journal=False, with_journal_children=None, with_monthly_balances=False, with_yearly_balances=False):
     if with_journal:
-        journal = app.api.journal(account_name, with_change_and_balance=True)
+        if not with_journal_children:
+            with_journal_children = app.user_config['beancount-web'].getboolean('journal-show-childentries')
+
+        journal = app.api.journal(account_name, with_change_and_balance=True, with_journal_children=with_journal_children)
 
         # should this be done in the api?
         linechart_data = []

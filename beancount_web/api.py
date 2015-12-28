@@ -20,7 +20,7 @@ from beancount.ops import prices, holdings, summarize
 from beancount.ops.holdings import Holding
 from beancount.utils import misc_utils
 from beancount.core.realization import RealAccount
-from beancount.core.data import get_entry
+from beancount.core.data import get_entry, posting_sortkey
 from beancount.query import query
 
 from beancount_web.util.dateparser import parse_date
@@ -690,13 +690,20 @@ class BeancountReportAPI(object):
     def trial_balance(self):
         return self._table_tree(self.root_account)[1:]
 
-    def journal(self, account_name=None, with_change_and_balance=False):
+    def journal(self, account_name=None, with_change_and_balance=False, with_journal_children=True):
         if account_name:
             if not account_name in [account['full_name'] for account in self.all_accounts]:
                 return []
 
             real_account = realization.get(self.root_account, account_name)
-            postings = realization.get_postings(real_account)
+
+            if with_journal_children:
+                postings = realization.get_postings(real_account)
+            else:
+                postings = []
+                postings.extend(real_account.txn_postings)
+                postings.sort(key=posting_sortkey)
+
             return self._journal_for_postings(postings, with_change_and_balance=with_change_and_balance)
         else:
             return self._journal_for_postings(self.entries, with_change_and_balance=with_change_and_balance)
