@@ -36,8 +36,8 @@ $(document).ready(function() {
             case 'line':
                 var options = {
                     axisX: {
-                        type: Chartist.FixedScaleAxis,
-                        divisor: chart.data.series[0].data.length > 15 ? 15 : chart.data.series[0].data.length,  // no of days
+                        type: Chartist.AutoScaleAxis,
+                        scaleMinSpace: 25,
                         labelInterpolationFnc: function(value, index) {
                             var val = isNumber(value) ? new Date(value) : value;
                             return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
@@ -45,6 +45,10 @@ $(document).ready(function() {
                     },
                     lineSmooth: Chartist.Interpolation.none()
                 };
+
+                defaultOptions.plugins.push(Chartist.plugins.zoom({
+                    // onZoom : function(chart, reset) { storeReset(reset); }
+                }));
 
                 new Chartist.Line("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)

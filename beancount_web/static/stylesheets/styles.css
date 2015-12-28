@@ -1870,6 +1870,10 @@ form.editor-save {
   background-color: #a748ca;
   border-color: #a748ca;
 }
+.charts .ct-zoom-rect {
+  fill: rgba(200, 200, 200, 0.3);
+  stroke: #666;
+}
 
 .chartist-tooltip {
   font-family: monospace;

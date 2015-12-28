@@ -124,6 +124,11 @@ $ct-series-colors: (
             }
         }
     }
+
+    .ct-zoom-rect {
+        fill: rgba(200, 200, 200, 0.3);
+        stroke: #666;
+    }
 }
 
 .chartist-tooltip {
