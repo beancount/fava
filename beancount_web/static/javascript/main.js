@@ -110,6 +110,23 @@ $(document).ready(function() {
             's shift+p': function() { $('input#filter-padding').click(); }
         }, 'keyup');
     }
+
+    Mousetrap.bind({
+        '?': function() { $('.overlay-wrapper').show(); }
+    }, 'keyup');
+
+    $('.overlay-wrapper, .overlay-wrapper a.close').click(function(e) {
+        if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close')) {
+            e.preventDefault();
+            $('.overlay-wrapper').hide();
+        }
+    });
+
+    $('body').keyup(function(e) {
+        if ($('.overlay-wrapper:visible').length && e.which == 27) {
+            $('.overlay-wrapper').hide();
+        }
+    });
 });
 
 
