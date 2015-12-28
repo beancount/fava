@@ -20,6 +20,8 @@ This is mainly a proof-of-concept and playground for figuring out what a new web
 
 `beancount-web` comes with Gmail-style keyboard shortcuts:
 
+<kbd>?</kbd>: Show keyboard shortcuts overview
+
 **Jumping to pages:**
 <kbd>g</kbd> then <kbd>i</kbd>: Go to Income Statement
 <kbd>g</kbd> then <kbd>b</kbd>: Go to Balance Sheet
@@ -44,7 +46,6 @@ This is mainly a proof-of-concept and playground for figuring out what a new web
 <kbd>f</kbd> then <kbd>g</kbd>: Filter by Tag       ( pull down menu)
 <kbd>f</kbd> then <kbd>c</kbd>: Filter by Component ( pull down menu)
 <kbd>f</kbd> then <kbd>p</kbd>: Filter by Payee     ( pull down menu)
-
 
 **Options in transaction pages:**
 <kbd>l</kbd>: show/hide legs
