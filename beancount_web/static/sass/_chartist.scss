@@ -82,6 +82,8 @@ $ct-series-colors: (
             text-align: center;
             margin-top: 90px;
         }
+
+        .ct-bar { cursor: pointer; }
     }
 
     .ct-legend {
@@ -123,6 +125,11 @@ $ct-series-colors: (
                 border-color: nth($ct-series-colors, $i + 1);
             }
         }
+    }
+
+    .ct-zoom-rect {
+        fill: rgba(200, 200, 200, 0.3);
+        stroke: #666;
     }
 }
 
