@@ -97,6 +97,25 @@ $(document).ready(function() {
                     hlLine = 1;
                 }
                 $select.removeAttr('disabled');
+
+                if (window.editorInsertMarker && hlLine == 1) {
+                    var range = editor.find(window.editorInsertMarker, {
+                        wrap: true,
+                        caseSensitive: false,
+                        wholeWord: false,
+                        regExp: false,
+                        preventScroll: true // do not change selection
+                    });
+
+                    if (range) {
+                        range.start.column = 0;
+                        range.end.column = Number.MAX_VALUE;
+                        editor.session.replace(range, "\n\n" + editor.session.getLine(range.start.row));
+                        editor.gotoLine(range.start.row + 1, 0, true);
+                    } else {
+                        console.info("editor-insert-marker '" + window.editorInsertMarker + "' not found in file " + $filePath);
+                    }
+                }
             });
         });
 
