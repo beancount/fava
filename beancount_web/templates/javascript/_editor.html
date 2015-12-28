@@ -2,6 +2,9 @@
         window.allAccounts = {{ api.all_accounts_leaf_only|safe }};
         window.allCommodities = [{% for commodity in options['commodities'] %}{ name: '{{ commodity }}'},{% endfor %}];
         window.allTags = [{% for tag in api.active_tags %}{ name: '{{ tag }}'},{% endfor %}];
+        {% if config.get('editor-insert-marker') %}
+        window.editorInsertMarker = "{{ config.get('editor-insert-marker') }}";
+        {% endif %}
     </script>
 {% assets "vendor/ace-js/ace.js",
           "vendor/ace-js/ext-searchbox.js",
