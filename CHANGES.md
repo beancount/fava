@@ -2,6 +2,13 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2015-12-28
+
+  - Added keyboard shortcuts for jumping to menu items, open and focus
+    filters, Journal entry types and more. Press <kbd>?</kbd> to display
+    an overview of all keyboard shortcuts (Issue #65). (Thanks to redstreet
+    for the suggestions)
+
 2015-12-27
 
   - Source editor now supports auto-completion of accounts, commodities, 
