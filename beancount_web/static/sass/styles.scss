@@ -112,11 +112,12 @@ header {
                 }
 
                 &:hover > .filter,
-                &.selected > .filter {
+                &.opened > .filter {
                     display: block;
                 }
 
-                &.selected > a {
+                &.selected > a,
+                &.opened > a {
                     background-color: #3572b0;
                 }
 

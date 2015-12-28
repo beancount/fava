@@ -108,8 +108,8 @@
         Mousetrap.bind({
             {% for shortcut in ['f t', 'f g', 'f c', 'f p'] %}
             '{{ shortcut }}': function() {
-                $('ul.topmenu>li').removeClass('selected');
-                $('ul.topmenu>li:nth-child({{ loop.index }})').toggleClass('selected').find('input[type=search]').focus();
+                $('ul.topmenu>li').removeClass('opened');
+                $('ul.topmenu>li:nth-child({{ loop.index }})').toggleClass('opened').find('input[type=search]').focus();
             },
             {% endfor %}
         }, 'keyup');

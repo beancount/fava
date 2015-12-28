@@ -68,9 +68,19 @@ $(document).ready(function() {
                     }
                 };
 
-                new Chartist.Bar("#" + chart.id, chart.data,
+                var chart = new Chartist.Bar("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)
                 );
+
+                function pad(n) { return n < 10 ? '0' + n : n }
+
+                $(chart.container).on('click', '.ct-bar', function() {
+                    var date = chart.data.labels[$(event.target).index()];
+                    var dateString = '' + date.getFullYear() + '-' + (pad(date.getMonth()+1));
+                    var e = $.Event('keyup');
+                    e.which = 13;
+                    $("#filter-time input[type=search]").val(dateString).trigger(e);
+                });
 
                 break;
             case 'treemap': {
