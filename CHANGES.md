@@ -4,6 +4,17 @@
 
 2015-12-28
 
+  - Added new setting (and feature) called `editor-insert-marker`. If present,
+    the Source editor will jump to the specified marker (like `;;; INSERT HERE`
+    ) and will insert two newlines above it and set the cursor there (Issue 
+    #76).
+
+  - Bar chart bars are now clickable and will set the time filter to the year
+    and month the bar is representing.
+
+  - Line charts are now zoomable by drawing a rectangle with the mouse on the 
+    chart, which will then zoom to the specified area.
+
   - Added keyboard shortcuts for jumping to menu items, open and focus
     filters, Journal entry types and more. Press <kbd>?</kbd> to display
     an overview of all keyboard shortcuts (Issue #65). (Thanks to redstreet
