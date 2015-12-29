@@ -233,6 +233,28 @@ def utility_processor():
         args.update(kwargs)
         return url_for(request.endpoint, **args)
 
+    def search_suggestions(field_name):
+        if field_name == 'Time':
+            return {
+                'this month':'This Month',
+                '2015-03':'2015-03',
+                'march 2015':'March 2015',
+                'mar 2015':'Mar 2015',
+                'last year':'Last Year',
+                'aug last year':'Aug Last Year',
+                '2010-10 - 2014':'2010-10 - 2014',
+                'year to date':'Year to Date'
+            }
+        else:
+            return {}
+
+    def search_to_label(field_name, search):
+        suggestions = search_suggestions(field_name)
+        if search and search.lower() in suggestions:
+            return suggestions[search.lower()]
+        else:
+            return search or field_name
+
     def uptodate_eligible(account_name):
         if not 'uptodate-indicator-exclude-accounts' in app.user_config['beancount-web']:
             return False
@@ -253,6 +275,8 @@ def utility_processor():
 
     return dict(account_level=account_level,
                 url_for_current=url_for_current,
+                search_suggestions=search_suggestions,
+                search_to_label=search_to_label,
                 uptodate_eligible=uptodate_eligible)
 
 @app.context_processor

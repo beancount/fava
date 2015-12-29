@@ -1,26 +1,26 @@
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
+        {% set time_search_phrases = search_suggestions('Time') %}
         <li{% if g.filters['time'] %} class="selected"{% endif %}>
             <a href="{{ url_for_current(time=None) }}">
-                <span>{{ g.filters['time'] or 'Time' }}</span>
+                <span>{{ search_to_label('Time', g.filters['time']) }}</span>
             </a>
             <div class="filter" id="filter-time">
                 <div class="inputcontainer">
                     <input type="search">
                 </div>
                 <ul>
-                    {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'aug last year', '2010-10 - 2014'] %}
                     <li class="info">Supports search strings like
-                        {% for suggestion in time_search_strings %}
-                            {% if suggestion != g.filters['time'] %}
-                            <a href="{{ url_for_current(time=suggestion) }}" data-filter="{{ suggestion }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
+                        {% for search_phrase, suggestion in time_search_phrases.items() %}
+                            {% if search_phrase != g.filters['time'] %}
+                            <a href="{{ url_for_current(time=search_phrase) }}" data-filter="{{ search_phrase }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </li>
 
                     {% if g.filters['time'] and g.filters['time'] not in api.active_years|map('string') %}
                         <li class="suggestion selected" data-filter="{{ g.filters['time'] }}">
-                            <a href="{{ url_for_current(time=None) }}">{{ g.filters['time'] }}</a>
+                            <a href="{{ url_for_current(time=None) }}">{{ search_to_label('Time', g.filters['time']) }}</a>
                         </li>
                     {% endif %}
 
