@@ -47,7 +47,16 @@ $(document).ready(function() {
                 };
 
                 defaultOptions.plugins.push(Chartist.plugins.zoom({
-                    // onZoom : function(chart, reset) { storeReset(reset); }
+                    onZoom : function(chart, reset) {
+                        var dateStart = new Date(chart.options.axisX.highLow.low);
+                        var dateEnd = new Date(chart.options.axisX.highLow.high);
+
+                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (pad(dateStart.getMonth()+1));
+                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (pad(dateEnd.getMonth()+1));
+                        var e = $.Event('keyup');
+                        e.which = 13;
+                        $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
+                    }
                 }));
 
                 new Chartist.Line("#" + chart.id, chart.data,
@@ -68,11 +77,25 @@ $(document).ready(function() {
                     }
                 };
 
+                defaultOptions.plugins.push(Chartist.plugins.zoom({
+                    onZoom : function(chart, reset, x1, x2, y1, y2) {
+                        console.log(x1, x2, y1, y2);
+                        var width = parseFloat($(chart.container).find('line.ct-bar:last-child').last().attr('x2'));
+                        var pxPerBar = width / chart.data.labels.length;
+                        var dateStart = new Date(chart.data.labels[Math.floor(x1 / pxPerBar)]);
+                        var dateEnd = new Date(chart.data.labels[Math.floor(x2 / pxPerBar)]);
+
+                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (pad(dateStart.getMonth()+1));
+                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (pad(dateEnd.getMonth()+1));
+                        var e = $.Event('keyup');
+                        e.which = 13;
+                        $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
+                    }
+                }));
+
                 var chart = new Chartist.Bar("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)
                 );
-
-                function pad(n) { return n < 10 ? '0' + n : n }
 
                 $(chart.container).on('click', '.ct-bar', function() {
                     var date = chart.data.labels[$(event.target).index()];

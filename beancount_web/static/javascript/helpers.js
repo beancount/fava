@@ -65,3 +65,5 @@ if (typeof Date.prototype.formatWithString != 'function') {
 function isNumber(num) {
     return (typeof num == 'string' || typeof num == 'number') && !isNaN(num - 0) && num !== '';
 };
+
+function pad(n) { return n < 10 ? '0' + n : n }

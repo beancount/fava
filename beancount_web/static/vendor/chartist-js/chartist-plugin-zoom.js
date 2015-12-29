@@ -29,14 +29,13 @@
 
     Chartist.plugins = Chartist.plugins || {};
     Chartist.plugins.zoom = function (options) {
-
       options = Chartist.extend({}, defaultOptions, options);
 
       return function zoom(chart) {
 
-        if (!(chart instanceof Chartist.Line)) {
-          return;
-        }
+        // if (!(chart instanceof Chartist.Line)) {
+        //   return;
+        // }
 
         var rect, svg, axisX, axisY, chartRect;
         var downPosition;
@@ -93,7 +92,7 @@
 
         function copyTouch(touch) {
           var p = transform(touch.pageX, touch.pageY, svg, true);
-          p.id = touch.identifier; 
+          p.id = touch.identifier;
           return p;
         }
 
@@ -112,7 +111,7 @@
           var touches = event.changedTouches;
           for (var i = 0; i < touches.length; i++) {
             ongoingTouches.push(copyTouch(touches[i]));
-          }        
+          }
 
           if (ongoingTouches.length > 1) {
             rect.attr(getRect(ongoingTouches[0], ongoingTouches[1]));
@@ -121,7 +120,7 @@
         }
 
         function onTouchMove(event) {
-          var touches = event.changedTouches;        
+          var touches = event.changedTouches;
           for (var i = 0; i < touches.length; i++) {
             var idx = ongoingTouchIndexById(touches[i].identifier);
             ongoingTouches.splice(idx, 1, copyTouch(touches[i]));
@@ -134,8 +133,8 @@
         }
 
         function onTouchCancel(event) {
-          event.preventDefault();        
-          removeTouches(event.changedTouches);        
+          event.preventDefault();
+          removeTouches(event.changedTouches);
         }
 
         function removeTouches(touches) {
@@ -143,7 +142,7 @@
             var idx = ongoingTouchIndexById(touches[i].identifier);
             if (idx >= 0) {
               ongoingTouches.splice(idx, 1);
-            } 
+            }
           }
         }
 
@@ -194,11 +193,15 @@
               var y2 = chartRect.y1 - rect.y;
               var y1 = y2 - rect.height;
 
-              chart.options.axisX.highLow = { low: project(x1, axisX), high: project(x2, axisX) };
-              chart.options.axisY.highLow = { low: project(y1, axisY), high: project(y2, axisY) };
+              if (chart instanceof Chartist.Line) {
+                chart.options.axisX.highLow = { low: project(x1, axisX), high: project(x2, axisX) };
+                chart.options.axisY.highLow = { low: project(y1, axisY), high: project(y2, axisY) };
 
-              chart.update(chart.data, chart.options);
-              onZoom && onZoom(chart, reset);
+                chart.update(chart.data, chart.options);
+                onZoom && onZoom(chart, reset);
+              } else if (chart instanceof Chartist.Bar) {
+                onZoom && onZoom(chart, reset, x1, x2, y1, y2);
+              }
             }
         }
 
