@@ -1,5 +1,6 @@
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
+        {% set time_search_phrases = search_suggestions('Time') %}
         <li{% if g.filters['time'] %} class="selected"{% endif %}>
             <a href="{{ url_for_current(time=None) }}">
                 <span>{{ g.filters['time'] or 'Time' }}</span>
@@ -9,9 +10,8 @@
                     <input type="search">
                 </div>
                 <ul>
-                    {% set time_search_strings = ['this month', '2015-03', 'march 2015', 'mar 2015', 'last year', 'aug last year', '2010-10 - 2014'] %}
                     <li class="info">Supports search strings like
-                        {% for suggestion in time_search_strings %}
+                        {% for suggestion in time_search_phrases %}
                             {% if suggestion != g.filters['time'] %}
                             <a href="{{ url_for_current(time=suggestion) }}" data-filter="{{ suggestion }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
                             {% endif %}
