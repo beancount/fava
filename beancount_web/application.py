@@ -123,7 +123,7 @@ def query(bql=None):
 @app.route('/journal/')
 def journal():
     if request.is_xhr:
-        return jsonify({ 'data': app.api.journal() })
+        return jsonify({ 'data': app.api.journal(with_change_and_balance=app.user_config['beancount-web'].getboolean('journal-general-show-balances')) })
     else:
         return render_template('journal.html')
 
