@@ -5,9 +5,9 @@
 2015-12-28
 
   - Added new setting (and feature) called `editor-insert-marker`. If present,
-    the Source editor will jump to the specified marker (like `;;; INSERT HERE`
-    ) and will insert two newlines above it and set the cursor there (Issue 
-    #76).
+    the Source editor will jump to the specified marker (like 
+    `;;; INSERT HERE`) and will insert two newlines above it and set the cursor 
+    there (Issue #76).
 
   - Bar chart bars are now clickable and will set the time filter to the year
     and month the bar is representing.
