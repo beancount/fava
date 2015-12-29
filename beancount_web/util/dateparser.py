@@ -62,7 +62,6 @@ def _parse_month(month):
     month = months_abbr.index(month) if month in months_abbr[1:] else month
     return month
 
-
 def parse_date(string):
     """"Tries to parse the given string into two date objects marking the
     beginning and the end of the given period.
@@ -73,12 +72,16 @@ def parse_date(string):
      - march 2010, mar 2010
      - this month, last year, next year
      - october this year, aug last year
+     - year to date, ytd
 
     Ranges of dates can be expressed in the following forms:
      - start - end
      - start to end
     where start and end look like one of the above examples
     """
+    if string.strip().lower() in ['year to date', 'ytd']:
+        return parse_date(str(datetime.date.today().year) + ' - today')
+
     is_range = is_range_re.match(string)
     if is_range:
         return (parse_date(is_range.group(1))[0],

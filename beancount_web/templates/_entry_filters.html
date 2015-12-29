@@ -3,7 +3,7 @@
         {% set time_search_phrases = search_suggestions('Time') %}
         <li{% if g.filters['time'] %} class="selected"{% endif %}>
             <a href="{{ url_for_current(time=None) }}">
-                <span>{{ search_to_label('Time', g.filters['time']) }}</span>
+                <span>{{ g.filters['time'] or 'Time' }}</span>
             </a>
             <div class="filter" id="filter-time">
                 <div class="inputcontainer">
@@ -13,14 +13,14 @@
                     <li class="info">Supports search strings like
                         {% for search_phrase, suggestion in time_search_phrases.items() %}
                             {% if search_phrase != g.filters['time'] %}
-                            <a href="{{ url_for_current(time=search_phrase) }}" data-filter="{{ search_phrase }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
+                            <a href="{{ url_for_current(time=suggestion) }}" data-filter="{{ search_phrase }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </li>
 
                     {% if g.filters['time'] and g.filters['time'] not in api.active_years|map('string') %}
                         <li class="suggestion selected" data-filter="{{ g.filters['time'] }}">
-                            <a href="{{ url_for_current(time=None) }}">{{ search_to_label('Time', g.filters['time']) }}</a>
+                            <a href="{{ url_for_current(time=None) }}">{{ g.filters['time'] }}</a>
                         </li>
                     {% endif %}
 

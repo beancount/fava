@@ -236,14 +236,14 @@ def utility_processor():
     def search_suggestions(field_name):
         if field_name == 'Time':
             return {
-                'this month':'This Month',
-                '2015-03':'2015-03',
-                'march 2015':'March 2015',
-                'mar 2015':'Mar 2015',
-                'last year':'Last Year',
-                'aug last year':'Aug Last Year',
-                '2010-10 - 2014':'2010-10 - 2014',
-                'year to date':'Year to Date'
+                'this month':       'This Month',
+                '2015-03':          '2015-03',
+                'march 2015':       'March 2015',
+                'mar 2015':         'Mar 2015',
+                'last year':        'Last Year',
+                'aug last year':    'Aug Last Year',
+                '2010-10 - 2014':   '2010-10 - 2014',
+                'year to date':     'Year to Date'
             }
         else:
             return {}

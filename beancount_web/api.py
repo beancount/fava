@@ -210,12 +210,8 @@ class BeancountReportAPI(object):
         self.entries = self.all_entries
 
         if self.filters['time']:
-            time_filter = self.filters['time'].lower()
-            if time_filter == 'year to date':
-                time_filter = str(date.today().year) + ' - today'
-
             try:
-                begin_date, end_date = parse_date(time_filter)
+                begin_date, end_date = parse_date(self.filters['time'])
                 self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
             except TypeError:
                 raise FilterException('Failed to parse date string: {}'.format(self.filters['time']))
