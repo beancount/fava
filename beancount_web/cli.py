@@ -4,7 +4,7 @@ import os
 import sys
 import configparser
 
-from livereload import Server, Watcher
+from livereload import Server
 
 from beancount_web.api import BeancountReportAPI
 from beancount_web.application import app
@@ -94,16 +94,18 @@ def run(argv):
 
         app.run(args.host, args.port, args.debug)
     else:
-        server = Server(app.wsgi_app, watcher=Watcher)
-
-        # auto-reload the main beancount-file and all it's includes
-        server.watch(app.beancount_file, app.api.load_file)
-        include_path = os.path.dirname(app.beancount_file)
-        for filename in app.api.options['include']:
-            server.watch(os.path.join(include_path, filename), app.api.load_file)
+        server = Server(app.wsgi_app)
+        reload_source_files(server)
 
         server.serve(port=args.port, host=args.host, debug=args.debug)
 
+def reload_source_files(server):
+    app.api.load_file()
+    # auto-reload the main beancount-file and all it's includes
+    server.watch(app.beancount_file, lambda: reload_source_files(server))
+    include_path = os.path.dirname(app.beancount_file)
+    for filename in app.api.options['include']:
+        server.watch(os.path.join(include_path, filename), lambda: reload_source_files(server))
 
 def main():
     run(sys.argv[1:])
