@@ -4,7 +4,7 @@ import os
 import sys
 import configparser
 
-from livereload import Server
+from livereload import Server, Watcher
 
 from beancount_web.api import BeancountReportAPI
 from beancount_web.application import app
@@ -94,7 +94,7 @@ def run(argv):
 
         app.run(args.host, args.port, args.debug)
     else:
-        server = Server(app.wsgi_app)
+        server = Server(app.wsgi_app, watcher=Watcher)
 
         # auto-reload the main beancount-file and all it's includes
         server.watch(app.beancount_file, app.api.load_file)
