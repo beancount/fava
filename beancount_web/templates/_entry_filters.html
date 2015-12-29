@@ -11,9 +11,9 @@
                 </div>
                 <ul>
                     <li class="info">Supports search strings like
-                        {% for search_phrase, suggestion in time_search_phrases.items() %}
-                            {% if search_phrase != g.filters['time'] %}
-                            <a href="{{ url_for_current(time=suggestion) }}" data-filter="{{ search_phrase }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
+                        {% for suggestion in time_search_phrases %}
+                            {% if suggestion != g.filters['time'] %}
+                            <a href="{{ url_for_current(time=suggestion) }}" data-filter="{{ suggestion }}">{{ suggestion }}</a>{% if not loop.last %}, {% endif %}
                             {% endif %}
                         {% endfor %}
                     </li>
