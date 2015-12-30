@@ -3,7 +3,14 @@
         label: "{{ label }}",
         type:  "bar",
         options: {
-            dateFormat: "YYYY"
+            dateFormat: "YYYY",
+            axisY: {
+                offset: 60,
+                position: 'end',
+                labelInterpolationFnc: function(value) {
+                    return value.toLocaleString()
+                }
+            }
         },
         data: {
             labels: [
