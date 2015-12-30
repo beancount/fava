@@ -132,7 +132,7 @@ header {
                     right: 0;
                     color: black;
                     width: 400px;
-                    z-index: 2;
+                    z-index: 10;
                     top: 41px;
 
                     & > ul {
@@ -790,7 +790,7 @@ article {
 @import "chartist";
 
 .treemap-node .treemap-label {
-    z-index: 1000;
+    z-index: 8;
 
     a {
         color: white;
@@ -802,7 +802,7 @@ article {
 }
 
 .treetable-popover {
-    z-index: 999;
+    z-index: 12;
     position: absolute;
     background: rgb(244, 244, 244);
     border: 1px solid #CCC;

@@ -290,7 +290,7 @@ header nav ul.topmenu > li > .filter {
   right: 0;
   color: black;
   width: 400px;
-  z-index: 2;
+  z-index: 10;
   top: 41px;
 }
 header nav ul.topmenu > li > .filter > ul {
@@ -1786,7 +1786,7 @@ form.editor-save {
 }
 .charts .ct-legend {
   position: absolute;
-  z-index: 10;
+  z-index: 6;
   top: 17px;
   left: 10px;
 }
@@ -1920,7 +1920,7 @@ form.editor-save {
 }
 
 .treemap-node .treemap-label {
-  z-index: 1000;
+  z-index: 8;
 }
 .treemap-node .treemap-label a {
   color: white;
@@ -1930,7 +1930,7 @@ form.editor-save {
 }
 
 .treetable-popover {
-  z-index: 999;
+  z-index: 12;
   position: absolute;
   background: #f4f4f4;
   border: 1px solid #CCC;
