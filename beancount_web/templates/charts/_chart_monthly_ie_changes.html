@@ -3,7 +3,14 @@
         label: "Monthly changes (Income/Expenses)",
         type:  "bar",
         options: {
-            dateFormat: "MMM 'YY"
+            dateFormat: "MMM 'YY",
+            axisY: {
+                offset: 60,
+                position: 'end',
+                labelInterpolationFnc: function(value) {
+                    return value.toLocaleString()
+                }
+            }
         },
         data: {
             labels: [
