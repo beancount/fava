@@ -57,7 +57,7 @@
                         {% else %}
                         <td></td>
                         {% endif %}
-                        <td><a href="{{ url_for('source', file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
+                        <td><a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
