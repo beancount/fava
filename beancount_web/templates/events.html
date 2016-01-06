@@ -56,7 +56,7 @@
                 {% for event in events %}
                     <tr>
                         <td>
-                            <a href="{{ url_for('source', file_path=event.meta.filename, line=event.meta.lineno) }}" title="Show source {{ event.meta.filename }}:{{ event.meta.lineno }}">{{ event.date }}</a>
+                            <a href="{{ url_for_source(file_path=event.meta.filename, line=event.meta.lineno) }}" title="Show source {{ event.meta.filename }}:{{ event.meta.lineno }}">{{ event.date }}</a>
                         </td>
                         <td><a href="{{ url_for('event_details', event_type=event.type) }}" title="Show events of type '{{ event.type }}'">{{ event.type }}</a></td>
                         <td>{{ event.description }}</td>
