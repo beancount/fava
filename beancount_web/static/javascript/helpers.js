@@ -43,7 +43,7 @@ var decodeEntities = (function() {
 
 // Formats the given number to two fixed decimals.
 function formatCurrency(x) {
-    return parseFloat(x).toFixed(2)
+    return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
 }
 
 // Formats the given date according to formatString.
