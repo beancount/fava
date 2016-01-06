@@ -233,6 +233,17 @@ def utility_processor():
         args.update(kwargs)
         return url_for(request.endpoint, **args)
 
+    def url_for_source(**kwargs):
+        args = request.view_args.copy()
+        args.update(kwargs)
+        if app.user_config['beancount-web'].getboolean('use-external-editor'):
+            if 'line' in args:
+                return "beancount://%(file_path)s?lineno=%(line)d" % args
+            else:
+                return "beancount://%(file_path)s" % args
+        else:
+            return url_for('source', **args)
+
     def search_suggestions(field_name):
         if field_name == 'Time':
             return [
@@ -268,6 +279,7 @@ def utility_processor():
 
     return dict(account_level=account_level,
                 url_for_current=url_for_current,
+                url_for_source=url_for_source,
                 search_suggestions=search_suggestions,
                 uptodate_eligible=uptodate_eligible)
 

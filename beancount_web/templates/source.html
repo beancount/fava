@@ -7,6 +7,24 @@
 
 {% block content %}
     <h1>Source</h1>
+    {% if config.getboolean('use-external-editor') %}
+    <table class="errors sortable">
+        <thead>
+            <tr>
+                <th data-sort="string" class="sorting-asc">File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for source_file in api.source_files() %}
+            <tr>
+                {% with link=url_for_source(file_path=source_file) %}
+                <td><a class="source" href="{{ link }}" title="Show source {{ source_file }}">{{ source_file }}</a></td>
+                {% endwith %}
+             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
     <form class="editor-source" action="{{ url_for('source') }}" method="get">
         <select name="file_path">
             {% for source_file in api.source_files() %}
@@ -20,4 +38,5 @@
     <form class="editor-save" action="{{ url_for('source') }}" method="post">
         <input type="submit" value="Save">
     </form>
+    {% endif %}
 {% endblock %}
