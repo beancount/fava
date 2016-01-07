@@ -13,7 +13,7 @@
     render all links to the Source Editor als `beancount://`-URLs to open the 
     files directly in the editor specified by the `external-editor-cmd`-setting
     (The URL-scheme has to be registerd with `beancount-urlscheme` first). This
-    also renders the Source Editor view as readonly. 
+    also renders the Source Editor view as readonly (Issue #92). 
 
 2015-12-28
 
