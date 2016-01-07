@@ -44,12 +44,10 @@ $(document).ready(function() {
         $(this).append('<span class="expander"></span>');
     });
 
-    $('table.tree-table span.expander').click(function() {
-        var row = $(this).parents('tr');
+    function toggleTreeTableRow(row, hide) {
+        var expander = row.find('span.expander');
         var level = getLevel(row);
-        var hide = !$(this).hasClass('toggled');
-        $(this).toggleClass('toggled');
-
+        expander.toggleClass('toggled', hide);
         row.toggleClass('hides', hide);
         row = row.next();
         while (row.length > 0 && getLevel(row) > level) {
@@ -57,8 +55,16 @@ $(document).ready(function() {
             row.find('span.expander').removeClass('toggled');
             row = row.next();
         }
+    }
 
+    $('table.tree-table span.expander').click(function() {
+        var row = $(this).parents('tr');
+        toggleTreeTableRow(row, !row.hasClass('hides'));
         return false;
+    });
+
+    $('table.tree-table tr.hides').each(function() {
+        toggleTreeTableRow($(this), true);
     });
 
     // Keyboard shortcuts

@@ -4,6 +4,9 @@
 
 2016-01-07
 
+  - New setting `collapse-accounts` to specify a list of accounts to 
+    collapse in the account hierachy (tree-tables) (Issue #91).
+
   - Added new `beancount-urlscheme`-command to register the `beancount://`-URL
     -scheme on a Mac (other platforms still missing, but in development). There
     is a new setting called `use-external-editor` that will, if set to `True`, 

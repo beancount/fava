@@ -16,7 +16,7 @@
     <tbody>
         {% for row in table_data %}
             {% with account_level = account_level(row.account)  %}
-            <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}">
+            <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(row.account) %} class="hides"{% endif %}>
                 <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
                     {% with account_name=row.account, last_segment=True %}
                         {% include "_account_name.html" %}

@@ -277,11 +277,21 @@ def utility_processor():
 
         return True
 
+    if  'collapse-accounts' in app.user_config['beancount-web']:
+        collapse_accounts = app.user_config['beancount-web']['collapse-accounts'].strip().split("\n")
+
+    def should_collapse_account(account_name):
+        if not 'collapse-accounts' in app.user_config['beancount-web']:
+            return False
+
+        return account_name in collapse_accounts
+
     return dict(account_level=account_level,
                 url_for_current=url_for_current,
                 url_for_source=url_for_source,
                 search_suggestions=search_suggestions,
-                uptodate_eligible=uptodate_eligible)
+                uptodate_eligible=uptodate_eligible,
+                should_collapse_account=should_collapse_account)
 
 @app.context_processor
 def inject_errors():
