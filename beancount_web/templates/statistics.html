@@ -3,6 +3,17 @@
 
 {% block title %}Statistics{% endblock %}
 
+{% block javascript %}
+    {% assets "vendor/clipboard-js/clipboard-1.5.5.js" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    <script>
+        $(document).ready(function() {
+            new Clipboard('.status-indicator');
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
     <h1>Statistics</h1>
 
@@ -51,7 +62,10 @@
                         {% if uptodate_eligible(activity.account) %}
                             {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
                                 <td data-sort-value="{{ status }}">
-                                    <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}"></span>
+                                    <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}
+
+Click to copy the balance directives to the clipboard:
+{% include "_balance_directive.html" %}" data-clipboard-text="{% include "_balance_directive.html" %}"></span>
                                 </td>
                             {% endwith %}
                         {% else %}

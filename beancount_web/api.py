@@ -22,6 +22,7 @@ from beancount.utils import misc_utils
 from beancount.core.realization import RealAccount
 from beancount.core.data import get_entry, posting_sortkey
 from beancount.query import query
+from beancount.core.interpolate import compute_entries_balance
 
 from beancount_web.util.dateparser import parse_date
 
@@ -883,6 +884,9 @@ class BeancountReportAPI(object):
             })
 
         return nb_activity_by_account
+
+    def inventory(self, account_name):
+        return compute_entries_balance(self.entries, prefix=account_name)
 
     def statistics(self, account_name=None):
         if account_name:

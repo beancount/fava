@@ -879,6 +879,8 @@ span.status-indicator {
     height: 6px;
     border-radius: 6px;
 
+    &:hover { cursor: pointer; }
+
     &.status-indicator-big {
         width: 10px;
         height: 10px;

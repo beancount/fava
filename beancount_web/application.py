@@ -293,7 +293,8 @@ def inject_errors():
                 config=config,
                 title=app.api.title,
                 operating_currencies=options['operating_currency'],
-                commodities=options['commodities'])
+                commodities=options['commodities'],
+                now=datetime.now().strftime('%Y-%m-%d'))
 
 
 def uniquify(seq):
