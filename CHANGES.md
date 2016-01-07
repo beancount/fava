@@ -2,6 +2,16 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-01-07
+
+  - Added new `beancount-urlscheme`-command to register the `beancount://`-URL
+    -scheme on a Mac (other platforms still missing, but in development). There
+    is a new setting called `use-external-editor` that will, if set to `True`, 
+    render all links to the Source Editor als `beancount://`-URLs to open the 
+    files directly in the editor specified by the `external-editor-cmd`-setting
+    (The URL-scheme has to be registerd with `beancount-urlscheme` first). This
+    also renders the Source Editor view as readonly. 
+
 2015-12-28
 
   - Added new setting (and feature) called `editor-insert-marker`. If present,
