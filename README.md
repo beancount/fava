@@ -10,9 +10,18 @@ This is mainly a proof-of-concept and playground for figuring out what a new web
 
 ## Usage
 
-1. Install beancount-web: `python setup.py install`.
-2. Start beancount-web: `beancount-web /Volumes/Ledger/example.ledger` (substitute with the path to your own beancount-file) to run the included web server.
-3. Point your browser at `http://localhost:5000` to view the web interface.
+Installation: `python setup.py install`
+
+### beancount-web
+
+1. Start beancount-web: `beancount-web /Volumes/Ledger/example.ledger` (substitute with the path to your own beancount-file) to run the included web server.
+2. Point your browser at `http://localhost:5000` to view the web interface.
+
+### beancount-urlscheme
+
+1. Run `beancount-urlscheme register [path-to-your-beancount-web-settings-file]` to register the `beancount://` URL scheme on your system (currently only Mac OS is supported).
+2. Restart your browsers to make them aware of the new URL scheme (not neccesary for Safari)
+3. Set the `external-editor-cmd`-setting to set the command to be run when a `beancount://` URL is opened. You can use the `{filename}`- and `{line}`-variables (for example: `external-editor-cmd = /usr/local/bin/subl {filename}:{line}`).
 
 ## Notable features
 

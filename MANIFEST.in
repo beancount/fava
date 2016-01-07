@@ -5,6 +5,9 @@ recursive-include beancount_web/static *
 include beancount_web/default-settings.conf
 prune beancount_web/static/sass/.sass-cache
 
+recursive-include beancount_urlscheme/mac *
+include beancount_urlscheme/beancount-urlscheme-settings.conf
+
 # Be sure this is last
 global-exclude *.pyc .gitignore *.orig
 

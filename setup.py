@@ -8,20 +8,22 @@ setup(name='beancount-web',
       author_email='dominik@aumayr.name',
       license='MIT',
       packages=['beancount_web',
-                'beancount_web.util'],
+                'beancount_web.util',
+                'beancount_urlscheme'],
+      include_package_data=True,
       entry_points={
           'console_scripts': [
               'beancount-web = beancount_web.cli:main',
+              'beancount-urlscheme = beancount_urlscheme.beancount_urlscheme:main',
           ]
       },
       install_requires=[
-            'beancount',
-            'Flask==0.10.1',
-            'Flask-Assets==0.11',
-            'livereload'
+          'beancount',
+          'Flask==0.10.1',
+          'Flask-Assets==0.11',
+          'livereload'
       ],
-      include_package_data=True,
       dependency_links=[
-            'hg+https://bitbucket.org/blais/beancount#egg=beancount',
+          'hg+https://bitbucket.org/blais/beancount#egg=beancount',
       ],
       zip_safe=False)
