@@ -23,6 +23,14 @@ $(document).ready(function() {
         });
 
         editor.renderer.$cursorLayer.element.style.opacity=0;
+
+        if ($(this).hasClass('editor-async')) {
+            $.get($(this).parents('form').attr('action'), { file_path: $(this).attr('data-file-path') })
+            .done(function(data) {
+                editor.setValue(data, -1);
+                editor.setOptions({ maxLines: editor.session.getLength() });
+            });
+        }
     });
 
     // Query editor
