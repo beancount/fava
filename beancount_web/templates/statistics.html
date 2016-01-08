@@ -10,6 +10,13 @@
     <script>
         $(document).ready(function() {
             new Clipboard('.status-indicator');
+            new Clipboard('#copy-balances', {
+                text: function(trigger) {
+                    var text = trigger.getAttribute('title').split('\n');
+                    text.splice(0, 2);
+                    return text.join('\n').trim();
+                }
+            });
         });
     </script>
 {% endblock %}
@@ -46,13 +53,25 @@
     </div>
 
     <div class="left statistics">
-        <h3>Update Activity per Account</h3>
+        <h3>Update Activity per Account<input type="submit" class="right" id="copy-balances" value="Copy balance directives" title="Click to copy balance directives for accounts (except green ones) to the clipboard:
+
+        {% for activity in statistics.activity_by_account %}
+            {% if uptodate_eligible(activity.account) %}
+                {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
+                    {% if status != "green" %}
+                        {% include "_balance_directive.html" %}
+                    {% endif %}
+                {% endwith %}
+            {% endif %}
+        {% endfor %}
+        "></h3>
         <table class="statistics statistics-update-activity sortable">
             <thead>
                 <tr>
                     <th data-sort="string" class="sorting-asc">Account</th>
                     <th data-sort="string" data-sort-default="desc"></th>
                     <th data-sort="string">Last Entry</th>
+                    <th data-sort="float">Balance</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,6 +84,7 @@
                                     <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}
 
 Click to copy the balance directives to the clipboard:
+
 {% include "_balance_directive.html" %}" data-clipboard-text="{% include "_balance_directive.html" %}"></span>
                                 </td>
                             {% endwith %}
@@ -72,6 +92,11 @@ Click to copy the balance directives to the clipboard:
                         <td></td>
                         {% endif %}
                         <td><a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
+                        <td class="num">
+                            {%- for inv in api.inventory(activity.account) -%}
+                                {{ inv.number|format_currency }} {{ inv.lot.currency }}{% if not loop.last %}<br>{% endif %}
+                            {% endfor -%}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -230,6 +230,11 @@ pre.debug {
   float: left;
 }
 
+/* line 167, ../sass/_base.scss */
+.right {
+  float: right;
+}
+
 /* line 19, ../sass/styles.scss */
 ul.warnings {
   margin: 0;
