@@ -8,3 +8,5 @@ TODO.md
 beancount_web/static/gen/
 *.webassets-cache*/
 beancount_web/static/stylesheets/packed*.js
+electron/node_modules*/
+TODO
