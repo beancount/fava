@@ -49,6 +49,9 @@ def run(arguments):
 
             command = get_resource_path("mac/BeancountURLSchemeHandler.app/Contents/MacOS/applet")
             call(command.split(' '))
+        elif platform.system() == 'CYGWIN_NT-6.1':
+            print("Please follow instructions in {}/cygwin/beancountopen.bat".format(
+                os.path.dirname(os.path.realpath(__file__))))
         else:
             print("Not yet implemented for " + platform.system())
 
