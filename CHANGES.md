@@ -2,6 +2,11 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-01-09
+
+  - Added Windows/Cygwin-support to `beancount-urlscheme` (Issue #92). (Thanks 
+    to redstreet for the PR)
+
 2016-01-07
 
   - New setting `collapse-accounts` to specify a list of accounts to 
