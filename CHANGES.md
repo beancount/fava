@@ -2,6 +2,13 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-01-11
+
+  - Filters were previously shown on all pages, even those where they didn't make
+    sense or do anything. Now they got removed from pages such as `Custom Query`,
+    `Source`, `Options`, and `Errors` (Issue #97). (Thanks to Daniel Bos for the 
+    PR)
+
 2016-01-09
 
   - Added Windows/Cygwin-support to `beancount-urlscheme` (Issue #92). (Thanks 
