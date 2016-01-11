@@ -854,6 +854,26 @@ article#page-query {
         font-family: $font_family_monospaced;
     }
 
+    form.editor-store-query {
+        float: right;
+        margin: 13px 10px 0 0;
+
+        a {
+            color: #666;
+            font-size: 11px;
+            text-decoration: underline;
+        }
+    }
+
+    .stored-queries {
+        color: #666;
+        font-size: 11px;
+        float: right;
+        margin-bottom: 10px;
+    }
+
+    .editor-wrapper { clear: right; }
+
     .sample {
         h3, li, code { color: #AAA; }
 

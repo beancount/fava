@@ -1,4 +1,3 @@
-/* line 5, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -20,55 +19,45 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 
-/* line 22, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 html {
   line-height: 1;
 }
 
-/* line 24, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 26, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-/* line 28, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 30, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
   quotes: none;
 }
-/* line 103, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
 
-/* line 32, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
 }
 
-/* line 116, ../../../../../../../../usr/local/lib/ruby/gems/2.2.0/gems/compass-core-1.0.3/stylesheets/compass/reset/_utilities.scss */
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
   display: block;
 }
 
-/* line 11, ../sass/_base.scss */
 * {
   box-sizing: border-box;
 }
 
-/* line 15, ../sass/_base.scss */
 html, body, html > body {
   font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
   font-weight: 400;
@@ -77,51 +66,42 @@ html, body, html > body {
   min-width: 1235px;
 }
 
-/* line 23, ../sass/_base.scss */
 .hidden {
   display: none;
 }
 
-/* line 27, ../sass/_base.scss */
 strong {
   font-weight: bold;
 }
 
-/* line 31, ../sass/_base.scss */
 p, ol, ul, dl {
   margin: .2em 0 .8em 0;
 }
 
-/* line 35, ../sass/_base.scss */
 p {
   padding: 0;
   line-height: 140%;
 }
 
-/* line 40, ../sass/_base.scss */
 h1, h2, h3, h4, h5 {
   font-weight: bold;
 }
 
-/* line 44, ../sass/_base.scss */
 h1 {
   font-size: 18px;
   color: #333;
   margin: 0 0 .2em 0;
 }
 
-/* line 52, ../sass/_base.scss */
 h2 {
   font-size: 16px;
 }
 
-/* line 58, ../sass/_base.scss */
 h2.subhead {
   font-weight: normal;
   margin-top: 0;
 }
 
-/* line 63, ../sass/_base.scss */
 h3 {
   font-size: 14px;
   margin: .8em 0 .3em 0;
@@ -130,13 +110,11 @@ h3 {
   display: block;
 }
 
-/* line 71, ../sass/_base.scss */
 h4 {
   font-size: 12px;
   padding-bottom: 3px;
 }
 
-/* line 78, ../sass/_base.scss */
 h5 {
   font-size: 10px;
   color: #333;
@@ -144,49 +122,39 @@ h5 {
   letter-spacing: 1px;
 }
 
-/* line 87, ../sass/_base.scss */
 strong, b {
   font-weight: bold;
 }
 
-/* line 91, ../sass/_base.scss */
 em, i {
   font-style: italic;
 }
 
-/* line 95, ../sass/_base.scss */
 a {
   text-decoration: underline;
 }
-/* line 98, ../sass/_base.scss */
 a:hover, a:focus {
   color: #060c13;
   text-decoration: none;
 }
-/* line 103, ../sass/_base.scss */
 a:link, a:visited {
   color: #3572b0;
   text-decoration: none;
 }
-/* line 110, ../sass/_base.scss */
 a:active {
   outline: none;
 }
-/* line 114, ../sass/_base.scss */
 a:focus {
   outline: none;
 }
-/* line 118, ../sass/_base.scss */
 a img {
   border: none;
 }
-/* line 122, ../sass/_base.scss */
 a.section:link, a.section:visited {
   color: white;
   text-decoration: none;
 }
 
-/* line 128, ../sass/_base.scss */
 code, pre, pre > code {
   font-family: monospace;
   white-space: pre;
@@ -195,65 +163,53 @@ code, pre, pre > code {
   font-size: 1.1em;
 }
 
-/* line 136, ../sass/_base.scss */
 pre {
   white-space: pre;
 }
-/* line 140, ../sass/_base.scss */
 pre.debug {
   word-wrap: break-word;
 }
 
-/* line 145, ../sass/_base.scss */
 .halfleft, .halfright {
   width: 50%;
 }
-/* line 148, ../sass/_base.scss */
 .halfleft h3, .halfright h3 {
   text-align: center;
 }
 
-/* line 153, ../sass/_base.scss */
 .halfleft {
   float: left;
   padding-right: 20px;
 }
 
-/* line 158, ../sass/_base.scss */
 .halfright {
   float: right;
   padding-left: 20px;
 }
 
-/* line 163, ../sass/_base.scss */
 .left {
   float: left;
 }
 
-/* line 167, ../sass/_base.scss */
 .right {
   float: right;
 }
 
-/* line 19, ../sass/styles.scss */
 ul.warnings {
   margin: 0;
   padding: 0;
 }
-/* line 23, ../sass/styles.scss */
 ul.warnings > li {
   display: block;
   text-align: center;
   padding: 10px;
   line-height: 1.4em;
 }
-/* line 29, ../sass/styles.scss */
 ul.warnings > li.error {
   color: white;
   background: #990000;
 }
 
-/* line 38, ../sass/styles.scss */
 header {
   position: relative;
   background: #205081;
@@ -262,12 +218,10 @@ header {
   padding: 0 10px;
   height: 41px;
 }
-/* line 47, ../sass/styles.scss */
 header .branding img {
   margin-top: 7px;
   float: left;
 }
-/* line 52, ../sass/styles.scss */
 header .branding h1 {
   float: left;
   color: #fff;
@@ -278,32 +232,26 @@ header .branding h1 {
   font-size: 14px;
   font-weight: normal;
 }
-/* line 64, ../sass/styles.scss */
 header a {
   color: white;
   text-decoration: none;
 }
-/* line 68, ../sass/styles.scss */
 header a:hover {
   text-decoration: none;
 }
-/* line 73, ../sass/styles.scss */
 header nav {
   position: absolute;
   right: 10px;
   top: 0;
 }
-/* line 78, ../sass/styles.scss */
 header nav ul.topmenu {
   position: relative;
   margin: 0;
 }
-/* line 82, ../sass/styles.scss */
 header nav ul.topmenu > li {
   float: left;
   padding: 0;
 }
-/* line 86, ../sass/styles.scss */
 header nav ul.topmenu > li > a {
   position: relative;
   padding-right: 23px !important;
@@ -312,11 +260,9 @@ header nav ul.topmenu > li > a {
   line-height: 41px;
   padding: 0 10px;
 }
-/* line 94, ../sass/styles.scss */
 header nav ul.topmenu > li > a:hover {
   background-color: #3572b0;
 }
-/* line 98, ../sass/styles.scss */
 header nav ul.topmenu > li > a::after {
   border: 4px solid transparent;
   border-top-color: #fff;
@@ -331,15 +277,12 @@ header nav ul.topmenu > li > a::after {
   top: 50%;
   width: 0;
 }
-/* line 114, ../sass/styles.scss */
 header nav ul.topmenu > li:hover > .filter, header nav ul.topmenu > li.opened > .filter {
   display: block;
 }
-/* line 119, ../sass/styles.scss */
 header nav ul.topmenu > li.selected > a, header nav ul.topmenu > li.opened > a {
   background-color: #3572b0;
 }
-/* line 124, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter {
   display: none;
   background-color: #fff;
@@ -354,23 +297,19 @@ header nav ul.topmenu > li > .filter {
   z-index: 10;
   top: 41px;
 }
-/* line 138, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter > ul {
   max-height: 240px;
   overflow-y: auto;
 }
-/* line 142, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter > ul > li.info {
   padding: 3px 10px;
   color: #999;
   line-height: 1.3em;
 }
-/* line 147, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter > ul > li.info a {
   color: #666;
   text-decoration: underline;
 }
-/* line 154, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter > ul li.suggestion a {
   padding-right: 20px !important;
   display: block;
@@ -378,21 +317,17 @@ header nav ul.topmenu > li > .filter > ul li.suggestion a {
   padding: 8px 10px;
   color: #3572b0 !important;
 }
-/* line 162, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter > ul li.suggestion.selected a, header nav ul.topmenu > li > .filter > ul li.suggestion a:hover {
   background-color: #3572b0 !important;
   color: white !important;
 }
-/* line 167, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter > ul li.suggestion.selected a {
   padding-left: 28px;
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
 }
-/* line 174, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter .inputcontainer {
   margin: 10px;
 }
-/* line 177, ../sass/styles.scss */
 header nav ul.topmenu > li > .filter .inputcontainer input {
   height: 26px;
   display: block;
@@ -404,7 +339,6 @@ header nav ul.topmenu > li > .filter .inputcontainer input {
   font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
 }
 
-/* line 197, ../sass/styles.scss */
 .main aside {
   width: 200px;
   float: left;
@@ -412,7 +346,6 @@ header nav ul.topmenu > li > .filter .inputcontainer input {
   border-right: 1px solid #ccc;
   background-color: #f5f5f5;
 }
-/* line 205, ../sass/styles.scss */
 .main aside h3 {
   text-transform: uppercase;
   margin-top: 50px;
@@ -420,32 +353,26 @@ header nav ul.topmenu > li > .filter .inputcontainer input {
   font-size: 11px;
   color: #999;
 }
-/* line 213, ../sass/styles.scss */
 .main aside ul.navigation {
   margin-top: 0;
   padding-top: 10px;
 }
-/* line 217, ../sass/styles.scss */
 .main aside ul.navigation:nth-child(1) {
   padding-top: 20px;
 }
-/* line 221, ../sass/styles.scss */
 .main aside ul.navigation li {
   font-size: 1.1em;
   display: block;
 }
-/* line 225, ../sass/styles.scss */
 .main aside ul.navigation li.selected, .main aside ul.navigation li a:hover {
   background-color: #e6e6e6;
   color: #3572b0;
 }
-/* line 230, ../sass/styles.scss */
 .main aside ul.navigation li a {
   color: #36382e;
   display: block;
   padding: 7px 10px 7px 20px;
 }
-/* line 235, ../sass/styles.scss */
 .main aside ul.navigation li a span {
   float: right;
   margin-top: -2px;
@@ -466,33 +393,27 @@ header nav ul.topmenu > li > .filter .inputcontainer input {
   text-transform: uppercase;
 }
 
-/* line 260, ../sass/styles.scss */
 article {
   overflow: hidden;
   *zoom: 1;
   margin-left: 200px;
   padding: 20px 24px;
 }
-/* line 265, ../sass/styles.scss */
 article .headerline h3 {
   display: inline-block;
   margin-right: 15px;
 }
-/* line 269, ../sass/styles.scss */
 article .headerline h3 a {
   color: #aaa;
 }
-/* line 272, ../sass/styles.scss */
 article .headerline h3 a:hover {
   color: #333;
   text-decoration: underline;
 }
-/* line 279, ../sass/styles.scss */
 article table {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-/* line 283, ../sass/styles.scss */
 article table th, article table tfoot td {
   border: 1px solid #dadad9;
   padding: 3px 8px;
@@ -501,26 +422,21 @@ article table th, article table tfoot td {
   color: #888;
   white-space: nowrap;
 }
-/* line 293, ../sass/styles.scss */
 article table tfoot td {
   color: #666;
   padding: 2px 8px;
 }
-/* line 299, ../sass/styles.scss */
 article table tr:nth-child(2n) {
   background: #F8F8F8;
 }
-/* line 303, ../sass/styles.scss */
 article table td {
   border: 1px solid #e8e8e8;
   padding: 3px 6px;
   white-space: nowrap;
 }
-/* line 308, ../sass/styles.scss */
 article table td:first-child {
   min-width: 200px;
 }
-/* line 312, ../sass/styles.scss */
 article table td.num {
   color: black;
   padding-left: 14px;
@@ -529,326 +445,250 @@ article table td.num {
   padding-right: 6px !important;
   vertical-align: top;
 }
-/* line 320, ../sass/styles.scss */
 article table td.num span.balance {
   display: block;
 }
-/* line 324, ../sass/styles.scss */
 article table td.num span.tree-balance {
   display: none;
 }
-/* line 329, ../sass/styles.scss */
 article table td a.account {
   font-weight: bold;
 }
-/* line 333, ../sass/styles.scss */
 article table td.account-level-1 {
   padding-left: 8px;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-2 {
   padding-left: 2.1em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-3 {
   padding-left: 3.4em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-4 {
   padding-left: 4.7em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-5 {
   padding-left: 6em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-6 {
   padding-left: 7.3em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-7 {
   padding-left: 8.6em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-8 {
   padding-left: 9.9em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-9 {
   padding-left: 11.2em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-10 {
   padding-left: 12.5em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-11 {
   padding-left: 13.8em;
 }
-/* line 338, ../sass/styles.scss */
 article table td.account-level-12 {
   padding-left: 15.1em;
 }
-/* line 347, ../sass/styles.scss */
 article table tr.parent td.num, article table td.num.tree-balance-show {
   color: #E5E5E5;
 }
-/* line 351, ../sass/styles.scss */
 article table td.num.tree-balance-show span.tree-balance {
   display: block;
 }
-/* line 356, ../sass/styles.scss */
 article table tr.hides td.num span.tree-balance {
   display: block;
 }
-/* line 360, ../sass/styles.scss */
 article table tr.hides td.num span.balance {
   display: none;
 }
-/* line 366, ../sass/styles.scss */
 article table:hover tr.parent td.num, article table:hover tr td.num.tree-balance-show {
   color: #BEBEBE;
 }
-/* line 371, ../sass/styles.scss */
 article table tr.posting.leg td {
   padding: 2px 6px;
 }
-/* line 375, ../sass/styles.scss */
 article table tr td.change.num, article table tr td.balance.num {
   font-size: 12px;
 }
-/* line 380, ../sass/styles.scss */
 article table.errors a, article table.holdings a, article table.net_worth a {
   font-weight: bold;
 }
-/* line 386, ../sass/styles.scss */
 article table.highlighttable td:first-child, article table.journal-table td:first-child {
   min-width: inherit;
 }
-/* line 3, ../sass/_pygments.scss */
 article table.highlighttable {
   background: #fff;
   color: #333;
 }
-/* line 8, ../sass/_pygments.scss */
 article table.highlighttable .hll {
   display: block;
   background-color: #ffffcc;
 }
-/* line 13, ../sass/_pygments.scss */
 article table.highlighttable .c {
   color: #999988;
   font-style: italic;
 }
-/* line 21, ../sass/_pygments.scss */
 article table.highlighttable .k, article table.highlighttable .o {
   font-weight: bold;
 }
-/* line 25, ../sass/_pygments.scss */
 article table.highlighttable .cm {
   color: #999988;
   font-style: italic;
 }
-/* line 30, ../sass/_pygments.scss */
 article table.highlighttable .cp {
   color: #999999;
   font-weight: bold;
 }
-/* line 35, ../sass/_pygments.scss */
 article table.highlighttable .c1 {
   color: #999988;
   font-style: italic;
 }
-/* line 40, ../sass/_pygments.scss */
 article table.highlighttable .cs {
   color: #999999;
   font-weight: bold;
   font-style: italic;
 }
-/* line 46, ../sass/_pygments.scss */
 article table.highlighttable .gd {
   color: #000000;
   background-color: #ffdddd;
 }
-/* line 51, ../sass/_pygments.scss */
 article table.highlighttable .ge {
   font-style: italic;
 }
-/* line 55, ../sass/_pygments.scss */
 article table.highlighttable .gr {
   color: #aa0000;
 }
-/* line 59, ../sass/_pygments.scss */
 article table.highlighttable .gh {
   color: #999999;
 }
-/* line 63, ../sass/_pygments.scss */
 article table.highlighttable .gi {
   color: #000000;
   background-color: #ddffdd;
 }
-/* line 68, ../sass/_pygments.scss */
 article table.highlighttable .go {
   color: #888888;
 }
-/* line 72, ../sass/_pygments.scss */
 article table.highlighttable .gp {
   color: #555555;
 }
-/* line 76, ../sass/_pygments.scss */
 article table.highlighttable .gs {
   font-weight: bold;
 }
-/* line 80, ../sass/_pygments.scss */
 article table.highlighttable .gu {
   color: #aaaaaa;
 }
-/* line 84, ../sass/_pygments.scss */
 article table.highlighttable .gt {
   color: #aa0000;
 }
-/* line 88, ../sass/_pygments.scss */
 article table.highlighttable .kc, article table.highlighttable .kd, article table.highlighttable .kn, article table.highlighttable .kp, article table.highlighttable .kr {
   font-weight: bold;
 }
-/* line 92, ../sass/_pygments.scss */
 article table.highlighttable .kt {
   color: #445588;
   font-weight: bold;
 }
-/* line 97, ../sass/_pygments.scss */
 article table.highlighttable .m {
   color: #009999;
 }
-/* line 101, ../sass/_pygments.scss */
 article table.highlighttable .s {
   color: #bb8844;
 }
-/* line 105, ../sass/_pygments.scss */
 article table.highlighttable .na {
   color: #008080;
 }
-/* line 109, ../sass/_pygments.scss */
 article table.highlighttable .nb {
   color: #999999;
 }
-/* line 113, ../sass/_pygments.scss */
 article table.highlighttable .nc {
   color: #445588;
   font-weight: bold;
 }
-/* line 118, ../sass/_pygments.scss */
 article table.highlighttable .no {
   color: #008080;
 }
-/* line 122, ../sass/_pygments.scss */
 article table.highlighttable .ni {
   color: #800080;
 }
-/* line 126, ../sass/_pygments.scss */
 article table.highlighttable .ne, article table.highlighttable .nf {
   color: #990000;
   font-weight: bold;
 }
-/* line 131, ../sass/_pygments.scss */
 article table.highlighttable .nn {
   color: #555555;
 }
-/* line 135, ../sass/_pygments.scss */
 article table.highlighttable .nt {
   color: #000080;
 }
-/* line 139, ../sass/_pygments.scss */
 article table.highlighttable .nv {
   color: #008080;
 }
-/* line 143, ../sass/_pygments.scss */
 article table.highlighttable .ow {
   font-weight: bold;
 }
-/* line 147, ../sass/_pygments.scss */
 article table.highlighttable .w {
   color: #bbbbbb;
 }
-/* line 151, ../sass/_pygments.scss */
 article table.highlighttable .mf, article table.highlighttable .mh, article table.highlighttable .mi, article table.highlighttable .mo {
   color: #009999;
 }
-/* line 155, ../sass/_pygments.scss */
 article table.highlighttable .sb, article table.highlighttable .sc, article table.highlighttable .sd, article table.highlighttable .s2, article table.highlighttable .se, article table.highlighttable .sh, article table.highlighttable .si, article table.highlighttable .sx {
   color: #bb8844;
 }
-/* line 159, ../sass/_pygments.scss */
 article table.highlighttable .sr {
   color: #808000;
 }
-/* line 163, ../sass/_pygments.scss */
 article table.highlighttable .s1, article table.highlighttable .ss {
   color: #bb8844;
 }
-/* line 167, ../sass/_pygments.scss */
 article table.highlighttable .bp {
   color: #999999;
 }
-/* line 171, ../sass/_pygments.scss */
 article table.highlighttable .vc, article table.highlighttable .vg, article table.highlighttable .vi {
   color: #008080;
 }
-/* line 175, ../sass/_pygments.scss */
 article table.highlighttable .il {
   color: #009999;
 }
-/* line 394, ../sass/styles.scss */
 article table.highlighttable td.linenos {
   text-align: right;
 }
-/* line 397, ../sass/styles.scss */
 article table.highlighttable td.linenos a {
   color: #A7A5A5;
 }
-/* line 403, ../sass/styles.scss */
 article table.options_map, article table.settings {
   font-size: 12px;
 }
-/* line 406, ../sass/styles.scss */
 article table.options_map td:nth-child(1), article table.settings td:nth-child(1) {
   font-weight: bold;
   text-align: left;
   padding-left: 6px;
 }
-/* line 412, ../sass/styles.scss */
 article table.options_map td:nth-child(2), article table.settings td:nth-child(2) {
   white-space: normal;
   text-align: left;
   padding-left: 6px;
 }
-/* line 417, ../sass/styles.scss */
 article table.options_map td:nth-child(2) pre, article table.settings td:nth-child(2) pre {
   font-size: 13px;
 }
-/* line 422, ../sass/styles.scss */
 article table.commodity td:first-child, article table.events td:first-child {
   min-width: inherit;
 }
-/* line 429, ../sass/styles.scss */
 article table.tree-table td.account a {
   position: relative;
   margin-left: 15px;
 }
-/* line 438, ../sass/styles.scss */
 article table.tree-table tr.hides span.tree-balance {
   display: block;
   color: black;
 }
-/* line 443, ../sass/styles.scss */
 article table.tree-table tr.hides span.balance {
   display: none;
 }
-/* line 449, ../sass/styles.scss */
 article table.tree-table:hover tr.hides td.num {
   color: black;
 }
-/* line 454, ../sass/styles.scss */
 article table.tree-table span.expander {
   width: 5px;
   height: 5px;
@@ -860,7 +700,6 @@ article table.tree-table span.expander {
   top: 5px;
   cursor: pointer;
 }
-/* line 465, ../sass/styles.scss */
 article table.tree-table span.expander.toggled {
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
@@ -868,147 +707,114 @@ article table.tree-table span.expander.toggled {
   left: -12px;
   top: 2px;
 }
-/* line 476, ../sass/styles.scss */
 article table.journal-table {
   width: 100%;
 }
-/* line 479, ../sass/styles.scss */
 article table.journal-table a {
   font-weight: bold;
 }
-/* line 483, ../sass/styles.scss */
 article table.journal-table td.datecell a {
   font-weight: normal;
 }
-/* line 487, ../sass/styles.scss */
 article table.journal-table td.flag {
   text-align: center;
 }
-/* line 491, ../sass/styles.scss */
 article table.journal-table td {
   border: thin solid #fff;
 }
-/* line 495, ../sass/styles.scss */
 article table.journal-table th {
   color: #888;
 }
-/* line 498, ../sass/styles.scss */
 article table.journal-table th.description {
   width: 90%;
 }
-/* line 503, ../sass/styles.scss */
 article table.journal-table .narration {
   display: inline-block;
 }
-/* line 506, ../sass/styles.scss */
 article table.journal-table .narration span {
   color: #999;
   display: inline-block;
   margin: 0 2px;
 }
-/* line 513, ../sass/styles.scss */
 article table.journal-table .tags {
   display: inline-block;
   margin-left: 2px;
 }
-/* line 517, ../sass/styles.scss */
 article table.journal-table .tags a {
   font-weight: normal;
   display: inline-block;
   margin-right: 8px;
   color: #6AA2DB;
 }
-/* line 523, ../sass/styles.scss */
 article table.journal-table .tags a:hover {
   color: #21568b;
   text-decoration: underline;
 }
-/* line 528, ../sass/styles.scss */
 article table.journal-table .tags a span {
   opacity: 0.4;
 }
-/* line 534, ../sass/styles.scss */
 article table.journal-table tr td.change {
   font-weight: bold;
 }
-/* line 538, ../sass/styles.scss */
 article table.journal-table tr td.description {
   white-space: normal;
 }
-/* line 541, ../sass/styles.scss */
 article table.journal-table tr td.description span.links {
   margin-left: 1em;
   margin-right: 1em;
   text-decoration: none;
 }
-/* line 549, ../sass/styles.scss */
 article table.journal-table tr.open {
   background-color: #e8e8e8;
 }
-/* line 553, ../sass/styles.scss */
 article table.journal-table tr.close {
   background-color: #606060;
 }
-/* line 557, ../sass/styles.scss */
 article table.journal-table tr.note {
   background-color: #aad0ff;
 }
-/* line 561, ../sass/styles.scss */
 article table.journal-table tr.document {
   background-color: #ffc8ff;
 }
-/* line 564, ../sass/styles.scss */
 article table.journal-table tr.document a:nth-child(1) {
   font-weight: normal;
 }
-/* line 567, ../sass/styles.scss */
 article table.journal-table tr.pad {
   background-color: #8ff;
 }
-/* line 571, ../sass/styles.scss */
 article table.journal-table tr.padding {
   background-color: #cff;
 }
-/* line 575, ../sass/styles.scss */
 article table.journal-table tr.summarize {
   background-color: #cff;
 }
-/* line 579, ../sass/styles.scss */
 article table.journal-table tr.transfer {
   background-color: #cff;
 }
-/* line 583, ../sass/styles.scss */
 article table.journal-table tr.transaction.warning {
   background-color: #f8a;
 }
-/* line 587, ../sass/styles.scss */
 article table.journal-table tr.balance {
   background-color: #cfc;
 }
-/* line 590, ../sass/styles.scss */
 article table.journal-table tr.balance.fail {
   background-color: #f8a;
 }
-/* line 595, ../sass/styles.scss */
 article table.journal-table tr.posting {
   font-size: 11px;
   background-color: #e8e8e8;
   opacity: 0.6;
 }
-/* line 600, ../sass/styles.scss */
 article table.journal-table tr.posting.warning {
   background-color: #f66;
 }
-/* line 605, ../sass/styles.scss */
 article table.journal-table tr.transaction, article table.journal-table tr.padding {
   cursor: pointer;
 }
-/* line 610, ../sass/styles.scss */
 article table.journal-table tr.has-metadata td.description {
   padding-bottom: 0;
   padding-right: 0;
 }
-/* line 615, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata {
   display: none;
   margin-top: 0;
@@ -1016,15 +822,12 @@ article table.journal-table tr.has-metadata dl.metadata {
   margin: 4px 0 0 -6px;
   font-size: 11px;
 }
-/* line 622, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dt, article table.journal-table tr.has-metadata dl.metadata dd {
   margin: 0 0 3px 0;
 }
-/* line 625, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dt:last-child, article table.journal-table tr.has-metadata dl.metadata dd:last-child {
   margin: 0;
 }
-/* line 630, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dt {
   width: 0;
   min-width: 65px;
@@ -1032,25 +835,20 @@ article table.journal-table tr.has-metadata dl.metadata dt {
   font-style: italic;
   color: #85AACF;
 }
-/* line 638, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dd a {
   font-weight: normal;
 }
-/* line 641, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dd a:hover {
   text-decoration: underline;
 }
-/* line 645, ../sass/styles.scss */
 article table.journal-table tr.has-metadata.transaction dl.metadata {
   background: #f1f1f1;
 }
-/* line 651, ../sass/styles.scss */
 article table.sortable th[data-sort] {
   padding-right: 18px;
   position: relative;
   cursor: pointer;
 }
-/* line 656, ../sass/styles.scss */
 article table.sortable th[data-sort].sorting-asc:after, article table.sortable th[data-sort].sorting-desc:after {
   content: "";
   display: block;
@@ -1061,37 +859,29 @@ article table.sortable th[data-sort].sorting-asc:after, article table.sortable t
   right: 4px;
   top: 8px;
 }
-/* line 667, ../sass/styles.scss */
 article table.sortable th[data-sort].sorting-asc:after {
   top: 6px;
   border-top: none;
   border-bottom: 5px solid #888888;
 }
-/* line 676, ../sass/styles.scss */
 article table.statistics-update-activity thead th:nth-child(2) {
   padding-left: 0;
 }
-/* line 677, ../sass/styles.scss */
 article table.statistics-update-activity tbody td.uptodate-indicator {
   text-align: center;
 }
-/* line 678, ../sass/styles.scss */
 article table.statistics-update-activity span.status-indicator {
   margin: 0 auto;
 }
-/* line 683, ../sass/styles.scss */
 article #assets table, article #liabilities table, article #equity table, article #income table, article #expenses table {
   width: 100%;
 }
-/* line 689, ../sass/styles.scss */
 article h1 a:link, article h1 a:visited {
   color: #333;
 }
-/* line 692, ../sass/styles.scss */
 article h1 a:link:hover, article h1 a:visited:hover {
   text-decoration: underline;
 }
-/* line 697, ../sass/styles.scss */
 article h1 .last-activity {
   color: #999;
   display: inline-block;
@@ -1100,41 +890,33 @@ article h1 .last-activity {
   font-weight: normal;
   font-style: italic;
 }
-/* line 705, ../sass/styles.scss */
 article h1 .last-activity a {
   color: #999;
 }
-/* line 709, ../sass/styles.scss */
 article h1 .last-activity a:hover {
   color: #333;
 }
-/* line 714, ../sass/styles.scss */
 article h1 .status-indicator {
   margin-left: 10px;
 }
-/* line 717, ../sass/styles.scss */
 article dl {
   margin-top: 20px;
   font-size: 13px;
 }
-/* line 721, ../sass/styles.scss */
 article dl dt {
   display: inline-block;
   width: 120px;
   float: left;
   font-weight: bold;
 }
-/* line 728, ../sass/styles.scss */
 article dl dt, article dl dd {
   margin-bottom: 3px;
 }
-/* line 733, ../sass/styles.scss */
 article p.empty, article p.description {
   margin-top: 20px;
   line-height: 1.6em;
   font-size: 13px;
 }
-/* line 738, ../sass/styles.scss */
 article p.empty code, article p.description code {
   background: #eee;
   display: inline-block;
@@ -1143,53 +925,42 @@ article p.empty code, article p.description code {
   border-radius: 3px;
   border: 1px solid #ddd;
 }
-/* line 747, ../sass/styles.scss */
 article p.empty a, article p.description a {
   text-decoration: underline;
 }
-/* line 750, ../sass/styles.scss */
 article .loading {
   margin-top: 20px;
   font-style: italic;
   color: #999;
 }
-/* line 756, ../sass/styles.scss */
 article .table-filter, article .chart-filter {
   float: right;
   margin-top: -20px;
 }
-/* line 760, ../sass/styles.scss */
 article .table-filter input, article .chart-filter input {
   margin-left: 10px;
 }
-/* line 766, ../sass/styles.scss */
 article span.payee {
   font-weight: bold;
 }
-/* line 770, ../sass/styles.scss */
 article span.pnsep {
   margin-left: 5px;
   margin-right: 5px;
 }
-/* line 777, ../sass/styles.scss */
 article .left.statistics {
   margin-right: 30px;
 }
-/* line 780, ../sass/styles.scss */
 article .left.statistics table.statistics td:first-child a {
   font-weight: bold;
 }
 
-/* line 3, ../sass/_editor.scss */
 .editor-wrapper {
   position: relative;
   margin-top: 20px;
 }
-/* line 7, ../sass/_editor.scss */
 .editor-wrapper.editor-wrapper-source {
   position: relative;
 }
-/* line 10, ../sass/_editor.scss */
 .editor-wrapper.editor-wrapper-source .editor {
   position: absolute;
   top: 0;
@@ -1197,80 +968,64 @@ article .left.statistics table.statistics td:first-child a {
   bottom: 0;
   left: 0;
 }
-/* line 19, ../sass/_editor.scss */
 .editor-wrapper.editor-wrapper-readonly {
   margin-bottom: 20px;
 }
-/* line 23, ../sass/_editor.scss */
 .editor-wrapper.editor-wrapper-query > .editor {
   height: 180px;
 }
 
-/* line 28, ../sass/_editor.scss */
 .ace_editor.ace-chrome {
   border: 1px solid #e8e8e8;
 }
-/* line 31, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_gutter {
   border-right: 1px solid #e8e8e8;
   background: white;
   color: #A7A5A5;
   font-weight: normal;
 }
-/* line 38, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_gutter-cell {
   padding: 0 6px;
 }
-/* line 42, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_comment {
   color: #999988;
   font-style: italic;
 }
-/* line 47, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_directive {
   color: #333;
   font-weight: bold;
 }
-/* line 52, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_class, .ace_editor.ace-chrome .ace_double {
   color: #bb8844;
 }
-/* line 56, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_constant.ace_numeric.ace_date {
   color: #009999;
 }
-/* line 60, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_constant, .ace_editor.ace-chrome .ace_constant.ace_language, .ace_editor.ace-chrome .ace_tag {
   color: #008080;
 }
-/* line 64, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_account {
   color: #333;
 }
-/* line 68, ../sass/_editor.scss */
 .ace_editor.ace-chrome .ace_invalid {
   color: #333;
   background: transparent;
 }
-/* line 75, ../sass/_editor.scss */
 .ace_editor.ace-chrome.ace_autocomplete .ace_content {
   font-family: monospace;
   font-size: 13px;
 }
 
-/* line 81, ../sass/_editor.scss */
 form.editor-source {
   float: right;
   margin-top: -20px;
 }
 
-/* line 86, ../sass/_editor.scss */
 form.editor-save {
   float: right;
   margin-top: 10px;
 }
 
-/* line 117, ../vendor/chartist-js/scss/chartist.scss */
 .ct-label {
   fill: rgba(0, 0, 0, 0.4);
   color: rgba(0, 0, 0, 0.4);
@@ -1278,7 +1033,6 @@ form.editor-save {
   line-height: 1;
 }
 
-/* line 121, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-line .ct-label,
 .ct-chart-bar .ct-label {
   display: block;
@@ -1289,7 +1043,6 @@ form.editor-save {
   display: flex;
 }
 
-/* line 126, ../vendor/chartist-js/scss/chartist.scss */
 .ct-label.ct-horizontal.ct-start {
   -webkit-box-align: flex-end;
   -webkit-align-items: flex-end;
@@ -1303,7 +1056,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 132, ../vendor/chartist-js/scss/chartist.scss */
 .ct-label.ct-horizontal.ct-end {
   -webkit-box-align: flex-start;
   -webkit-align-items: flex-start;
@@ -1317,7 +1069,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 138, ../vendor/chartist-js/scss/chartist.scss */
 .ct-label.ct-vertical.ct-start {
   -webkit-box-align: flex-end;
   -webkit-align-items: flex-end;
@@ -1331,7 +1082,6 @@ form.editor-save {
   text-anchor: end;
 }
 
-/* line 144, ../vendor/chartist-js/scss/chartist.scss */
 .ct-label.ct-vertical.ct-end {
   -webkit-box-align: flex-end;
   -webkit-align-items: flex-end;
@@ -1345,7 +1095,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 150, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-bar .ct-label.ct-horizontal.ct-start {
   -webkit-box-align: flex-end;
   -webkit-align-items: flex-end;
@@ -1359,7 +1108,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 156, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-bar .ct-label.ct-horizontal.ct-end {
   -webkit-box-align: flex-start;
   -webkit-align-items: flex-start;
@@ -1373,7 +1121,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 162, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-bar.ct-horizontal-bars .ct-label.ct-horizontal.ct-start {
   -webkit-box-align: flex-end;
   -webkit-align-items: flex-end;
@@ -1387,7 +1134,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 168, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-bar.ct-horizontal-bars .ct-label.ct-horizontal.ct-end {
   -webkit-box-align: flex-start;
   -webkit-align-items: flex-start;
@@ -1401,7 +1147,6 @@ form.editor-save {
   text-anchor: start;
 }
 
-/* line 174, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-bar.ct-horizontal-bars .ct-label.ct-vertical.ct-start {
   -webkit-box-align: center;
   -webkit-align-items: center;
@@ -1415,7 +1160,6 @@ form.editor-save {
   text-anchor: end;
 }
 
-/* line 181, ../vendor/chartist-js/scss/chartist.scss */
 .ct-chart-bar.ct-horizontal-bars .ct-label.ct-vertical.ct-end {
   -webkit-box-align: center;
   -webkit-align-items: center;
@@ -1429,185 +1173,147 @@ form.editor-save {
   text-anchor: end;
 }
 
-/* line 187, ../vendor/chartist-js/scss/chartist.scss */
 .ct-grid {
   stroke: rgba(0, 0, 0, 0.2);
   stroke-width: 1px;
   stroke-dasharray: 2px;
 }
 
-/* line 191, ../vendor/chartist-js/scss/chartist.scss */
 .ct-point {
   stroke-width: 6px;
   stroke-linecap: round;
 }
 
-/* line 195, ../vendor/chartist-js/scss/chartist.scss */
 .ct-line {
   fill: none;
   stroke-width: 3px;
 }
 
-/* line 199, ../vendor/chartist-js/scss/chartist.scss */
 .ct-area {
   stroke: none;
   fill-opacity: 0.1;
 }
 
-/* line 203, ../vendor/chartist-js/scss/chartist.scss */
 .ct-bar {
   fill: none;
   stroke-width: 14px;
 }
 
-/* line 207, ../vendor/chartist-js/scss/chartist.scss */
 .ct-slice-donut {
   fill: none;
   stroke-width: 60px;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-a .ct-point, .ct-series-a .ct-line, .ct-series-a .ct-bar, .ct-series-a .ct-slice-donut {
   stroke: #990000;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-a .ct-slice-pie, .ct-series-a .ct-area {
   fill: #990000;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-b .ct-point, .ct-series-b .ct-line, .ct-series-b .ct-bar, .ct-series-b .ct-slice-donut {
   stroke: #113861;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-b .ct-slice-pie, .ct-series-b .ct-area {
   fill: #113861;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-c .ct-point, .ct-series-c .ct-line, .ct-series-c .ct-bar, .ct-series-c .ct-slice-donut {
   stroke: #777;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-c .ct-slice-pie, .ct-series-c .ct-area {
   fill: #777;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-d .ct-point, .ct-series-d .ct-line, .ct-series-d .ct-bar, .ct-series-d .ct-slice-donut {
   stroke: #1B9900;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-d .ct-slice-pie, .ct-series-d .ct-area {
   fill: #1B9900;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-e .ct-point, .ct-series-e .ct-line, .ct-series-e .ct-bar, .ct-series-e .ct-slice-donut {
   stroke: #FF8800;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-e .ct-slice-pie, .ct-series-e .ct-area {
   fill: #FF8800;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-f .ct-point, .ct-series-f .ct-line, .ct-series-f .ct-bar, .ct-series-f .ct-slice-donut {
   stroke: #59922b;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-f .ct-slice-pie, .ct-series-f .ct-area {
   fill: #59922b;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-g .ct-point, .ct-series-g .ct-line, .ct-series-g .ct-bar, .ct-series-g .ct-slice-donut {
   stroke: #0544d3;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-g .ct-slice-pie, .ct-series-g .ct-area {
   fill: #0544d3;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-h .ct-point, .ct-series-h .ct-line, .ct-series-h .ct-bar, .ct-series-h .ct-slice-donut {
   stroke: #6b0392;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-h .ct-slice-pie, .ct-series-h .ct-area {
   fill: #6b0392;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-i .ct-point, .ct-series-i .ct-line, .ct-series-i .ct-bar, .ct-series-i .ct-slice-donut {
   stroke: #f05b4f;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-i .ct-slice-pie, .ct-series-i .ct-area {
   fill: #f05b4f;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-j .ct-point, .ct-series-j .ct-line, .ct-series-j .ct-bar, .ct-series-j .ct-slice-donut {
   stroke: #dda458;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-j .ct-slice-pie, .ct-series-j .ct-area {
   fill: #dda458;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-k .ct-point, .ct-series-k .ct-line, .ct-series-k .ct-bar, .ct-series-k .ct-slice-donut {
   stroke: #eacf7d;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-k .ct-slice-pie, .ct-series-k .ct-area {
   fill: #eacf7d;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-l .ct-point, .ct-series-l .ct-line, .ct-series-l .ct-bar, .ct-series-l .ct-slice-donut {
   stroke: #86797d;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-l .ct-slice-pie, .ct-series-l .ct-area {
   fill: #86797d;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-m .ct-point, .ct-series-m .ct-line, .ct-series-m .ct-bar, .ct-series-m .ct-slice-donut {
   stroke: #b2c326;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-m .ct-slice-pie, .ct-series-m .ct-area {
   fill: #b2c326;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-n .ct-point, .ct-series-n .ct-line, .ct-series-n .ct-bar, .ct-series-n .ct-slice-donut {
   stroke: #6188e2;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-n .ct-slice-pie, .ct-series-n .ct-area {
   fill: #6188e2;
 }
 
-/* line 106, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-o .ct-point, .ct-series-o .ct-line, .ct-series-o .ct-bar, .ct-series-o .ct-slice-donut {
   stroke: #a748ca;
 }
-/* line 110, ../vendor/chartist-js/scss/chartist.scss */
 .ct-series-o .ct-slice-pie, .ct-series-o .ct-area {
   fill: #a748ca;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-square {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-square:before {
   display: block;
   float: left;
@@ -1616,13 +1322,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 100%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-square:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-square > svg {
   display: block;
   position: absolute;
@@ -1630,13 +1334,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-second {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-second:before {
   display: block;
   float: left;
@@ -1645,13 +1347,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 93.75%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-second:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-second > svg {
   display: block;
   position: absolute;
@@ -1659,13 +1359,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-second {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-second:before {
   display: block;
   float: left;
@@ -1674,13 +1372,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 88.88889%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-second:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-second > svg {
   display: block;
   position: absolute;
@@ -1688,13 +1384,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-third {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-third:before {
   display: block;
   float: left;
@@ -1703,13 +1397,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 83.33333%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-third:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-third > svg {
   display: block;
   position: absolute;
@@ -1717,13 +1409,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-third {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-third:before {
   display: block;
   float: left;
@@ -1732,13 +1422,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 80%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-third:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-third > svg {
   display: block;
   position: absolute;
@@ -1746,13 +1434,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fourth {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fourth:before {
   display: block;
   float: left;
@@ -1761,13 +1447,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 75%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fourth:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fourth > svg {
   display: block;
   position: absolute;
@@ -1775,13 +1459,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fifth {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fifth:before {
   display: block;
   float: left;
@@ -1790,13 +1472,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 66.66667%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fifth:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-perfect-fifth > svg {
   display: block;
   position: absolute;
@@ -1804,13 +1484,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-sixth {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-sixth:before {
   display: block;
   float: left;
@@ -1819,13 +1497,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 62.5%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-sixth:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-sixth > svg {
   display: block;
   position: absolute;
@@ -1833,13 +1509,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-golden-section {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-golden-section:before {
   display: block;
   float: left;
@@ -1848,13 +1522,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 61.8047%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-golden-section:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-golden-section > svg {
   display: block;
   position: absolute;
@@ -1862,13 +1534,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-sixth {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-sixth:before {
   display: block;
   float: left;
@@ -1877,13 +1547,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 60%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-sixth:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-sixth > svg {
   display: block;
   position: absolute;
@@ -1891,13 +1559,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-seventh {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-seventh:before {
   display: block;
   float: left;
@@ -1906,13 +1572,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 56.25%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-seventh:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-minor-seventh > svg {
   display: block;
   position: absolute;
@@ -1920,13 +1584,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-seventh {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-seventh:before {
   display: block;
   float: left;
@@ -1935,13 +1597,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 53.33333%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-seventh:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-seventh > svg {
   display: block;
   position: absolute;
@@ -1949,13 +1609,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-octave {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-octave:before {
   display: block;
   float: left;
@@ -1964,13 +1622,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 50%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-octave:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-octave > svg {
   display: block;
   position: absolute;
@@ -1978,13 +1634,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-tenth {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-tenth:before {
   display: block;
   float: left;
@@ -1993,13 +1647,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 40%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-tenth:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-tenth > svg {
   display: block;
   position: absolute;
@@ -2007,13 +1659,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-eleventh {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-eleventh:before {
   display: block;
   float: left;
@@ -2022,13 +1672,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 37.5%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-eleventh:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-eleventh > svg {
   display: block;
   position: absolute;
@@ -2036,13 +1684,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-twelfth {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-twelfth:before {
   display: block;
   float: left;
@@ -2051,13 +1697,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 33.33333%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-twelfth:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-major-twelfth > svg {
   display: block;
   position: absolute;
@@ -2065,13 +1709,11 @@ form.editor-save {
   left: 0;
 }
 
-/* line 227, ../vendor/chartist-js/scss/chartist.scss */
 .ct-double-octave {
   display: block;
   position: relative;
   width: 100%;
 }
-/* line 8, ../vendor/chartist-js/scss/chartist.scss */
 .ct-double-octave:before {
   display: block;
   float: left;
@@ -2080,13 +1722,11 @@ form.editor-save {
   height: 0;
   padding-bottom: 25%;
 }
-/* line 17, ../vendor/chartist-js/scss/chartist.scss */
 .ct-double-octave:after {
   content: "";
   display: table;
   clear: both;
 }
-/* line 23, ../vendor/chartist-js/scss/chartist.scss */
 .ct-double-octave > svg {
   display: block;
   position: absolute;
@@ -2094,12 +1734,10 @@ form.editor-save {
   left: 0;
 }
 
-/* line 27, ../sass/_chartist.scss */
 .charts .ct-label {
   font-size: 11px;
   font-weight: bold;
 }
-/* line 32, ../sass/_chartist.scss */
 .charts .chart-labels {
   color: rgba(0, 0, 0, 0.2);
   font-size: 11px;
@@ -2108,27 +1746,22 @@ form.editor-save {
   text-align: center;
   margin-bottom: 20px;
 }
-/* line 40, ../sass/_chartist.scss */
 .charts .chart-labels label {
   color: rgba(0, 0, 0, 0.3);
   padding: 0 5px;
 }
-/* line 44, ../sass/_chartist.scss */
 .charts .chart-labels label:hover {
   text-decoration: underline;
   color: rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
-/* line 50, ../sass/_chartist.scss */
 .charts .chart-labels label.selected {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 56, ../sass/_chartist.scss */
 .charts .charts-container {
   position: relative;
   height: 240px;
 }
-/* line 60, ../sass/_chartist.scss */
 .charts .charts-container .loading {
   position: absolute;
   top: 0;
@@ -2138,11 +1771,9 @@ form.editor-save {
   text-align: center;
   margin-top: 90px;
 }
-/* line 71, ../sass/_chartist.scss */
 .charts .ct-chart {
   position: relative;
 }
-/* line 74, ../sass/_chartist.scss */
 .charts .ct-chart.chart-no-data div {
   font-style: italic;
   color: #999;
@@ -2154,25 +1785,21 @@ form.editor-save {
   text-align: center;
   margin-top: 90px;
 }
-/* line 86, ../sass/_chartist.scss */
 .charts .ct-chart .ct-bar {
   cursor: pointer;
 }
-/* line 89, ../sass/_chartist.scss */
 .charts .ct-legend {
   position: absolute;
   z-index: 6;
   top: 17px;
   left: 10px;
 }
-/* line 95, ../sass/_chartist.scss */
 .charts .ct-legend li {
   position: relative;
   padding-left: 20px;
   margin-bottom: 3px;
   cursor: pointer;
 }
-/* line 102, ../sass/_chartist.scss */
 .charts .ct-legend li:before {
   width: 8px;
   height: 7px;
@@ -2182,98 +1809,79 @@ form.editor-save {
   border: 3px solid transparent;
   top: -1px;
 }
-/* line 112, ../sass/_chartist.scss */
 .charts .ct-legend li.inactive:before {
   background: transparent;
 }
-/* line 116, ../sass/_chartist.scss */
 .charts .ct-legend.ct-legend-inside {
   position: absolute;
   top: 0;
   right: 0;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-0:before {
   background-color: #990000;
   border-color: #990000;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-1:before {
   background-color: #113861;
   border-color: #113861;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-2:before {
   background-color: #777;
   border-color: #777;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-3:before {
   background-color: #1B9900;
   border-color: #1B9900;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-4:before {
   background-color: #FF8800;
   border-color: #FF8800;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-5:before {
   background-color: #59922b;
   border-color: #59922b;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-6:before {
   background-color: #0544d3;
   border-color: #0544d3;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-7:before {
   background-color: #6b0392;
   border-color: #6b0392;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-8:before {
   background-color: #f05b4f;
   border-color: #f05b4f;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-9:before {
   background-color: #dda458;
   border-color: #dda458;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-10:before {
   background-color: #eacf7d;
   border-color: #eacf7d;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-11:before {
   background-color: #86797d;
   border-color: #86797d;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-12:before {
   background-color: #b2c326;
   border-color: #b2c326;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-13:before {
   background-color: #6188e2;
   border-color: #6188e2;
 }
-/* line 123, ../sass/_chartist.scss */
 .charts .ct-legend .ct-series-14:before {
   background-color: #a748ca;
   border-color: #a748ca;
 }
-/* line 130, ../sass/_chartist.scss */
 .charts .ct-zoom-rect {
   fill: rgba(200, 200, 200, 0.3);
   stroke: #666;
 }
 
-/* line 136, ../sass/_chartist.scss */
 .chartist-tooltip {
   font-family: monospace;
   font-size: 13px;
@@ -2293,7 +1901,6 @@ form.editor-save {
   -o-transition: opacity .2s linear;
   transition: opacity .2s linear;
 }
-/* line 155, ../sass/_chartist.scss */
 .chartist-tooltip:before {
   content: "";
   position: absolute;
@@ -2305,11 +1912,9 @@ form.editor-save {
   border: 15px solid transparent;
   border-top-color: #ccc;
 }
-/* line 167, ../sass/_chartist.scss */
 .chartist-tooltip.tooltip-show {
   opacity: 1;
 }
-/* line 171, ../sass/_chartist.scss */
 .chartist-tooltip em {
   font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
   font-size: 0.9em;
@@ -2318,20 +1923,16 @@ form.editor-save {
   color: #777;
 }
 
-/* line 792, ../sass/styles.scss */
 .treemap-node .treemap-label {
   z-index: 8;
 }
-/* line 795, ../sass/styles.scss */
 .treemap-node .treemap-label a {
   color: white;
 }
-/* line 798, ../sass/styles.scss */
 .treemap-node .treemap-label a:hover {
   text-decoration: underline;
 }
 
-/* line 804, ../sass/styles.scss */
 .treetable-popover {
   z-index: 12;
   position: absolute;
@@ -2340,7 +1941,6 @@ form.editor-save {
   box-shadow: 0px 0px 5px #dddddd;
   padding: 10px 5px 0 15px;
 }
-/* line 812, ../sass/styles.scss */
 .treetable-popover:before {
   content: "";
   position: absolute;
@@ -2352,30 +1952,24 @@ form.editor-save {
   border: 15px solid transparent;
   border-top-color: #ccc;
 }
-/* line 824, ../sass/styles.scss */
 .treetable-popover dl {
   margin-top: 0;
   min-width: 270px;
 }
-/* line 829, ../sass/styles.scss */
 .treetable-popover dt {
   width: 60px;
 }
-/* line 833, ../sass/styles.scss */
 .treetable-popover dd {
   margin-bottom: 8px;
 }
-/* line 837, ../sass/styles.scss */
 .treetable-popover dd code {
   font-size: 13px;
   line-height: 1em;
 }
 
-/* line 846, ../sass/styles.scss */
 article#page-query h3 {
   margin-top: 25px;
 }
-/* line 848, ../sass/styles.scss */
 article#page-query .error {
   color: #990000;
   margin: 20px 30px 0 30px;
@@ -2384,60 +1978,66 @@ article#page-query .error {
   font-weight: bold;
   font-family: monospace;
 }
-/* line 858, ../sass/styles.scss */
+article#page-query form.editor-store-query {
+  float: right;
+  margin: 13px 10px 0 0;
+}
+article#page-query form.editor-store-query a {
+  color: #666;
+  font-size: 11px;
+  text-decoration: underline;
+}
+article#page-query .stored-queries {
+  color: #666;
+  font-size: 11px;
+  float: right;
+  margin-bottom: 10px;
+}
+article#page-query .editor-wrapper {
+  clear: right;
+}
 article#page-query .sample h3, article#page-query .sample li, article#page-query .sample code {
   color: #AAA;
 }
-/* line 860, ../sass/styles.scss */
 article#page-query .sample ul {
   margin-top: 10px;
 }
-/* line 863, ../sass/styles.scss */
 article#page-query .sample ul li {
   display: block;
   margin-bottom: 5px;
 }
-/* line 867, ../sass/styles.scss */
 article#page-query .sample ul li:before {
   content: "-";
   margin-right: 5px;
 }
 
-/* line 876, ../sass/styles.scss */
 span.status-indicator {
   display: inline-block;
   width: 6px;
   height: 6px;
   border-radius: 6px;
 }
-/* line 882, ../sass/styles.scss */
 span.status-indicator:hover {
   cursor: pointer;
 }
-/* line 884, ../sass/styles.scss */
 span.status-indicator.status-indicator-big {
   width: 10px;
   height: 10px;
   border-radius: 10px;
 }
-/* line 890, ../sass/styles.scss */
 span.status-indicator.status-red {
   background: #990000;
 }
-/* line 891, ../sass/styles.scss */
 span.status-indicator.status-yellow {
   background: #EDD42F;
 }
-/* line 892, ../sass/styles.scss */
 span.status-indicator.status-green {
   background: #007F41;
 }
-/* line 893, ../sass/styles.scss */
 span.status-indicator.status-gray {
   background: #AAA;
 }
 
-/* line 899, ../sass/styles.scss */
 table.tree-table td.account span.status-indicator,
 table.holdings span.status-indicator,
 table.queryresults span.status-indicator {
@@ -2446,7 +2046,6 @@ table.queryresults span.status-indicator {
   margin-left: 6px;
 }
 
-/* line 908, ../sass/styles.scss */
 .overlay-wrapper {
   display: none;
   position: fixed;
@@ -2459,7 +2058,6 @@ table.queryresults span.status-indicator {
   text-align: center;
   cursor: pointer;
 }
-/* line 917, ../sass/styles.scss */
 .overlay-wrapper .overlay {
   background: white;
   margin: 60px auto 0 auto;
@@ -2471,12 +2069,10 @@ table.queryresults span.status-indicator {
   overflow: hidden;
   *zoom: 1;
 }
-/* line 927, ../sass/styles.scss */
 .overlay-wrapper .overlay strong {
   display: inline-block;
   margin: 6px 0 5px 0;
 }
-/* line 932, ../sass/styles.scss */
 .overlay-wrapper .overlay kbd {
   display: inline-block;
   min-width: 20px;
@@ -2491,7 +2087,6 @@ table.queryresults span.status-indicator {
   box-shadow: inset 0 -1px 0 #bbb;
   margin: 0 1px 3px 0;
 }
-/* line 947, ../sass/styles.scss */
 .overlay-wrapper .overlay a.close {
   float: right;
   color: #aaa;

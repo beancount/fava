@@ -46,7 +46,31 @@ $(document).ready(function() {
             event.stopImmediatePropagation();
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
-            window.location.href = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
+            var next_url = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
+            window.location.href = next_url;
+        });
+
+        $('form.editor-store-query a').click(function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var query_title = prompt("Query title:", "Title");
+            $.post($('form.editor-store-query').attr('action'), {
+                title: query_title,
+                bql: editor.getValue()
+            }).done(function() {
+                // TODO handle errors in POST request
+                alert("Stored query with title '" + query_title + "'");
+            });
+        });
+
+        $('.stored-queries select').change(function() {
+            var selected_id_url = $(this).val();
+            if (selected_id_url != '') {
+                $.get(selected_id_url)
+                .done(function(data) {
+                    editor.setValue(data, -1);
+                });
+            }
         });
     };
 

@@ -105,6 +105,41 @@ def context(ehash=None):
     # TODO handle errors
     return render_template('context.html', context=context)
 
+# Custom query view
+
+STORED_QUERIES_DIVIDER = '--------------------'
+
+def load_stored_queries():
+    if 'stored-queries-file' in app.user_config['beancount-web']:
+        stored_queries_file = open(os.path.realpath(app.user_config['beancount-web'].get('stored-queries-file')), "r")
+        stored_queries = [(
+                            query.split('\n')[0][1:],
+                            '\n'.join(query.split('\n')[1:])
+                         ) for query in stored_queries_file.read().split(STORED_QUERIES_DIVIDER)[1:]]
+        return stored_queries
+    else:
+        return []
+
+@app.route('/query/stored_queries/', methods=['POST'])
+def store_query():
+    title = request.form['title']
+    bql = request.form['bql']
+
+    if 'stored-queries-file' in app.user_config['beancount-web']:
+        with open(os.path.realpath(app.user_config['beancount-web'].get('stored-queries-file')), "a") as stored_queries_file:
+            stored_queries_file.write(STORED_QUERIES_DIVIDER + ' ' + title + '\n')
+            stored_queries_file.write(bql + '\n\n')
+        return jsonify({ 'success': True })
+    else:
+        raise Exception('Failed to store query in file: "stored-queries-file" not specified in settings.')
+
+@app.route('/query/stored_queries/<int:stored_query_id>/')
+def get_stored_query(stored_query_id=None):
+    if request.is_xhr:
+        return load_stored_queries()[stored_query_id][1]
+    else:
+        return redirect(url_for('query', bql=load_stored_queries()[stored_query_id][1]))
+
 @app.route('/query/')
 def query(bql=None):
     query = bql if bql else request.args.get('bql', None)
@@ -118,7 +153,11 @@ def query(bql=None):
             result = None
             error = e
 
-    return render_template('query.html', query=query, result=result, error=error)
+    stored_queries = load_stored_queries()
+
+    return render_template('query.html', query=query, result=result, error=error, stored_queries=stored_queries)
+
+# Journal view
 
 @app.route('/journal/')
 def journal():

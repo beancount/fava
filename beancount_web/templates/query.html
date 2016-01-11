@@ -12,6 +12,23 @@
         You can run custom querys (BQL) like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.
         {# TODO Add some sample queries #}
     </p>
+    {% if not 'stored-queries-file' in config %}
+        <p class="description">
+            If you specify a <code>stored-queries-file</code> in your <a href="{{ url_for('report', report_name='options') }}">Settings</a> the stored queries will be displayed as a dropdown to quickly select them. A button to store a new query will be displayed as well.
+        </p>
+    {% endif %}
+
+    {% if 'stored-queries-file' in config %}
+        <div class="stored-queries">
+            <label for="stored-queries">Load stored query:</label>
+            <select id="stored-queries">
+                <option value=""></option>
+                {% for title_, sql in stored_queries %}
+                    <option value="{{ url_for('get_stored_query', stored_query_id=loop.index0) }}">{{ title_ }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
 
     <form action="{{ url_for('query') }}" method="get">
         <div class="editor-wrapper editor-wrapper-query">
@@ -21,6 +38,11 @@
     <form class="editor-save editor-save-query" action="{{ url_for('query') }}" method="get">
         <input type="submit" value="Submit Query">
     </form>
+    {% if 'stored-queries-file' in config %}
+        <form class="editor-store-query" action="{{ url_for('store_query') }}" method="post">
+            <a href="">Store query</a>
+        </form>
+    {% endif %}
 
     {% if error or result %}
         <h3>Result</h3>
