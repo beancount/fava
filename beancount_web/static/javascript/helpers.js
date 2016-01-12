@@ -47,13 +47,28 @@ function toLocaleStringSupportsOptions() {
   return !!(typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
 }
 
+if (toLocaleStringSupportsOptions() == false) {
+    Number.prototype.toLocaleString = function(locale, opts) {
+        var x = this.valueOf();
+        if (opts && opts.minimumFractionDigits) {
+            x = parseFloat(x).toFixed(opts.minimumFractionDigits);
+        }
+        var sx = (''+x).split('.'), s = '', i, j;
+        i = sx[0].length;
+        while (i > 3) {
+            j = i - 3;
+            s = ',' + sx[0].slice(j, i) + s;
+            i = j;
+        }
+        s = sx[0].slice(0, i) + s;
+        sx[0] = s;
+        return sx.join('.');
+    };
+};
+
 // Formats the given number to two fixed decimals.
 function formatCurrency(x) {
-    if (toLocaleStringSupportsOptions()) {
-        return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
-    } else {
-        return parseFloat(x).toFixed(2);
-    }
+    return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
 }
 
 // Formats the given date according to formatString.
