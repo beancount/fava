@@ -46,21 +46,22 @@ $(document).ready(function() {
             event.stopImmediatePropagation();
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
-            var next_url = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
-            window.location.href = next_url;
+            var nextUrl = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
+            var storedQuerySelectedIndex = $('.stored-queries select').prop('selectedIndex');
+            if (storedQuerySelectedIndex > 0) {
+                var storedQueryId = $('.stored-queries select option:nth-child(' + (storedQuerySelectedIndex + 1) + ')').attr('data-stored-query-id');
+                nextUrl = nextUrl + '&selected_stored_query=' + storedQueryId;
+            }
+            window.location.href = nextUrl;
         });
 
         $('form.editor-store-query a').click(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             var query_title = prompt("Query title:", "Title");
-            $.post($('form.editor-store-query').attr('action'), {
-                title: query_title,
-                bql: editor.getValue()
-            }).done(function() {
-                // TODO handle errors in POST request
-                alert("Stored query with title '" + query_title + "'");
-            });
+            $('form.editor-store-query input[name="title"]').attr('value', query_title);
+            $('form.editor-store-query input[name="bql"]').attr('value', editor.getValue());
+            $('form.editor-store-query').submit();
         });
 
         $('.stored-queries select').change(function() {

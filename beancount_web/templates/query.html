@@ -24,7 +24,7 @@
             <select id="stored-queries">
                 <option value=""></option>
                 {% for title_, sql in stored_queries %}
-                    <option value="{{ url_for('get_stored_query', stored_query_id=loop.index0) }}">{{ title_ }}</option>
+                    <option value="{{ url_for('get_stored_query', stored_query_id=loop.index0) }}" data-stored-query-id="{{ loop.index0 }}"{% if loop.index0 == selected_stored_query %} selected="selected"{% endif %}>{{ title_ }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -40,6 +40,8 @@
     </form>
     {% if 'stored-queries-file' in config %}
         <form class="editor-store-query" action="{{ url_for('store_query') }}" method="post">
+            <input type="hidden" name="bql">
+            <input type="hidden" name="title">
             <a href="">Store query</a>
         </form>
     {% endif %}

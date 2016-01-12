@@ -140,19 +140,25 @@ def store_query():
         with open(stored_queries_file_path, "a") as stored_queries_file:
             stored_queries_file.write(STORED_QUERIES_DIVIDER + ' ' + title + '\n')
             stored_queries_file.write(bql + '\n\n')
-        return jsonify({ 'success': True })
+
+        new_stored_query_id = len(load_stored_queries()) - 1
+
+        return redirect(url_for('query', bql=bql, selected_stored_query=new_stored_query_id))
     else:
-        raise Exception('Failed to store query in file: "stored-queries-file" not specified in settings.')
+        flash('Failed to store query in file: "stored-queries-file" not specified in settings.')
 
 @app.route('/query/stored_queries/<int:stored_query_id>/')
 def get_stored_query(stored_query_id=None):
     if request.is_xhr:
         return load_stored_queries()[stored_query_id][1]
     else:
-        return redirect(url_for('query', bql=load_stored_queries()[stored_query_id][1]))
+        return redirect(url_for('query', bql=load_stored_queries()[stored_query_id][1], selected_stored_query=stored_query_id))
 
 @app.route('/query/')
-def query(bql=None):
+def query(bql=None, selected_stored_query=None):
+    selected_stored_query = selected_stored_query if selected_stored_query
+                                                  else (int(request.args.get('selected_stored_query')) if request.args.get('selected_stored_query', None)
+                                                                                                       else None)
     query = bql if bql else request.args.get('bql', None)
     error = None
     result = None
@@ -166,7 +172,7 @@ def query(bql=None):
 
     stored_queries = load_stored_queries()
 
-    return render_template('query.html', query=query, result=result, error=error, stored_queries=stored_queries)
+    return render_template('query.html', query=query, result=result, error=error, stored_queries=stored_queries, selected_stored_query=selected_stored_query)
 
 # Journal view
 
