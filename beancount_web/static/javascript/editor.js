@@ -59,9 +59,11 @@ $(document).ready(function() {
             event.preventDefault();
             event.stopImmediatePropagation();
             var query_title = prompt("Query title:", "Title");
-            $('form.editor-store-query input[name="title"]').attr('value', query_title);
-            $('form.editor-store-query input[name="bql"]').attr('value', editor.getValue());
-            $('form.editor-store-query').submit();
+            if (query_title) {
+                $('form.editor-store-query input[name="title"]').attr('value', query_title);
+                $('form.editor-store-query input[name="bql"]').attr('value', editor.getValue());
+                $('form.editor-store-query').submit();
+            }
         });
 
         $('.stored-queries select').change(function() {
