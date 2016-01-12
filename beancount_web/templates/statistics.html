@@ -59,7 +59,9 @@
             {% if uptodate_eligible(activity.account) %}
                 {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
                     {% if status != "green" %}
-                        {% include "_balance_directive.html" %}
+                        {% with account_inventory=api.inventory(activity.account) %}
+                            {% include "_balance_directive.html" %}
+                        {% endwith %}
                     {% endif %}
                 {% endwith %}
             {% endif %}
@@ -81,11 +83,16 @@
                         {% if uptodate_eligible(activity.account) %}
                             {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
                                 <td data-sort-value="{{ status }}">
-                                    <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}
+                                    {% with account_inventory=api.inventory(activity.account)  %}
+                                        <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}
+                                        {%- if account_inventory|length > 0 %}
+
 
 Click to copy the balance directives to the clipboard:
 
-{% include "_balance_directive.html" %}" data-clipboard-text="{% include "_balance_directive.html" %}"></span>
+                                            {% include "_balance_directive.html" %}
+                                        {%- endif %}" data-clipboard-text="{% include "_balance_directive.html" %}"></span>
+                                    {% endwith %}
                                 </td>
                             {% endwith %}
                         {% else %}
