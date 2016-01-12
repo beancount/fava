@@ -156,7 +156,7 @@ def get_stored_query(stored_query_id=None):
 
 @app.route('/query/')
 def query(bql=None, selected_stored_query=None):
-    selected_stored_query = selected_stored_query if selected_stored_query
+    selected_stored_query = selected_stored_query if selected_stored_query \
                                                   else (int(request.args.get('selected_stored_query')) if request.args.get('selected_stored_query', None)
                                                                                                        else None)
     query = bql if bql else request.args.get('bql', None)
