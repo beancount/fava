@@ -129,12 +129,22 @@ def load_stored_queries():
     else:
         return []
 
+def query_title_already_exists(query_title):
+    for stored_query in load_stored_queries():
+        if stored_query[0] == query_title:
+            return True
+    return False
+
 @app.route('/query/stored_queries/', methods=['POST'])
 def store_query():
     title = request.form['title']
     bql = request.form['bql']
 
     if 'stored-queries-file' in app.user_config['beancount-web']:
+        if query_title_already_exists(title):
+            flash('Title "{}" already exists'.format(title))
+            return redirect(url_for('query', bql=bql))
+
         stored_queries_file_path = os.path.expanduser(app.user_config['beancount-web'].get('stored-queries-file'))
 
         with open(stored_queries_file_path, "a") as stored_queries_file:
@@ -146,6 +156,7 @@ def store_query():
         return redirect(url_for('query', bql=bql, selected_stored_query=new_stored_query_id))
     else:
         flash('Failed to store query in file: "stored-queries-file" not specified in settings.')
+        return redirect(url_for('query', bql=bql))
 
 @app.route('/query/stored_queries/<int:stored_query_id>/')
 def get_stored_query(stored_query_id=None):
