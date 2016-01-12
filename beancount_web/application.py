@@ -111,12 +111,21 @@ STORED_QUERIES_DIVIDER = '--------------------'
 
 def load_stored_queries():
     if 'stored-queries-file' in app.user_config['beancount-web']:
-        stored_queries_file = open(os.path.realpath(app.user_config['beancount-web'].get('stored-queries-file')), "r")
-        stored_queries = [(
-                            query.split('\n')[0][1:],
-                            '\n'.join(query.split('\n')[1:])
-                         ) for query in stored_queries_file.read().split(STORED_QUERIES_DIVIDER)[1:]]
-        return stored_queries
+        try:
+            stored_queries_file_path = app.user_config['beancount-web'].get('stored-queries-file')
+
+            if not os.path.exists(stored_queries_file_path):
+                open(stored_queries_file_path, 'w').close()
+
+            stored_queries_file = open(stored_queries_file_path, "r")
+            stored_queries = [(
+                                query.split('\n')[0][1:],
+                                '\n'.join(query.split('\n')[1:])
+                             ) for query in stored_queries_file.read().split(STORED_QUERIES_DIVIDER)[1:]]
+            return stored_queries
+        except FileNotFoundError as e:
+            flash("Setting 'stored-queries-file' has produced an error: {}".format(str(e)))
+            return []
     else:
         return []
 
