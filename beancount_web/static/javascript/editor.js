@@ -66,11 +66,13 @@ $(document).ready(function() {
 
         $('.stored-queries select').change(function() {
             var selected_id_url = $(this).val();
-            if (selected_id_url != '') {
+            if (selected_id_url != "") {
                 $.get(selected_id_url)
                 .done(function(data) {
                     editor.setValue(data, -1);
                 });
+            } else {
+                editor.setValue("", -1);
             }
         });
     };
