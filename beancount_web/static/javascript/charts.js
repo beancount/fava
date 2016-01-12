@@ -1,5 +1,6 @@
 $(document).ready(function() {
     $('.charts-container').html('');
+    window.chartData.charts = {}
 
     $.each(window.chartData, function(index, chart) {
         chart.id = "chart-" + index;
@@ -11,7 +12,6 @@ $(document).ready(function() {
 
         var defaultOptions = {
             height: 240,
-            width: $('.charts').width(),
             chartPadding: { left: 3 },
             axisY: {
                 onlyInteger: true,
@@ -59,7 +59,7 @@ $(document).ready(function() {
                     }
                 }));
 
-                new Chartist.Line("#" + chart.id, chart.data,
+                window.chartData.charts[chart.id] = new Chartist.Line("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)
                 );
                 break;
@@ -93,9 +93,10 @@ $(document).ready(function() {
                     }
                 }));
 
-                var chart = new Chartist.Bar("#" + chart.id, chart.data,
+                window.chartData.charts[chart.id] = new Chartist.Bar("#" + chart.id, chart.data,
                     $.extend({}, defaultOptions, options, chart.options)
                 );
+                var chart = window.chartData.charts[chart.id];
 
                 $(chart.container).on('click', '.ct-bar', function() {
                     var date = chart.data.labels[$(event.target).index()];
@@ -158,11 +159,16 @@ $(document).ready(function() {
 
     // Toggle multiple charts
     $('.charts .chart-labels label').click(function() {
+        var chartId = $(this).prop('for');
         $('.charts .ct-chart').addClass('hidden')
-        $('.charts .ct-chart#' + $(this).prop('for')).removeClass('hidden');
+        $('.charts .ct-chart#' + chartId).removeClass('hidden');
 
         $('.charts .chart-labels label').removeClass('selected');
         $(this).addClass('selected');
+
+        if (window.chartData.charts[chartId] !== undefined) {
+            window.chartData.charts[chartId].update();
+        }
     });
     $('.charts .chart-labels label:first-child').click();
 
