@@ -41,9 +41,19 @@ var decodeEntities = (function() {
     }
 })();
 
+// Test if Number supports toLocaleString
+// http://stackoverflow.com/questions/31871771/testing-for-tolocalestring-support/31872133#31872133
+function toLocaleStringSupportsOptions() {
+  return !!(typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
+}
+
 // Formats the given number to two fixed decimals.
 function formatCurrency(x) {
-    return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
+    if (toLocaleStringSupportsOptions()) {
+        return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
+    } else {
+        return parseFloat(x).toFixed(2);
+    }
 }
 
 // Formats the given date according to formatString.
