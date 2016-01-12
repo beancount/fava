@@ -112,7 +112,7 @@ STORED_QUERIES_DIVIDER = '--------------------'
 def load_stored_queries():
     if 'stored-queries-file' in app.user_config['beancount-web']:
         try:
-            stored_queries_file_path = app.user_config['beancount-web'].get('stored-queries-file')
+            stored_queries_file_path = os.path.expanduser(app.user_config['beancount-web'].get('stored-queries-file'))
 
             if not os.path.exists(stored_queries_file_path):
                 open(stored_queries_file_path, 'w').close()
@@ -135,7 +135,9 @@ def store_query():
     bql = request.form['bql']
 
     if 'stored-queries-file' in app.user_config['beancount-web']:
-        with open(os.path.realpath(app.user_config['beancount-web'].get('stored-queries-file')), "a") as stored_queries_file:
+        stored_queries_file_path = os.path.expanduser(app.user_config['beancount-web'].get('stored-queries-file'))
+
+        with open(stored_queries_file_path, "a") as stored_queries_file:
             stored_queries_file.write(STORED_QUERIES_DIVIDER + ' ' + title + '\n')
             stored_queries_file.write(bql + '\n\n')
         return jsonify({ 'success': True })
