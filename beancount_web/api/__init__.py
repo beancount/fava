@@ -40,6 +40,7 @@ from beancount.utils import misc_utils
 from beancount_web.util.dateparser import parse_date
 from beancount_web.api.helpers import entries_in_inclusive_range,\
                                       holdings_at_dates
+from beancount_web.api.serialization import serialize_inventory
 
 
 class FilterException(Exception):
@@ -178,7 +179,7 @@ class BeancountReportAPI(object):
             line = {
                 'account': real_account.account,
                 'balances_children': self._table_totals(real_account),
-                'balances': self._inventory_to_json(real_account.balance, at_cost=True),
+                'balances': serialize_inventory(real_account.balance, at_cost=True),
                 'is_leaf': len(real_account) == 0 or real_account.txn_postings,
                 'postings_count': len(real_account.txn_postings)
             }
@@ -196,32 +197,7 @@ class BeancountReportAPI(object):
                     ...
                 }
         """
-        return self._inventory_to_json(realization.compute_balance(real_account), at_cost=True)
-
-    def _inventory_to_json(self, inventory, at_cost=False, include_currencies=None):
-        """
-        Renders an Inventory to a currency -> amount dict.
-
-        Args:
-            inventory: The inventory to render.
-            include_currencies: Array of strings (eg. ['USD', 'EUR']). If set the
-                                inventory will only contain those currencies.
-
-        Returns:
-            {
-                'USD': 123.45,
-                'CAD': 567.89,
-                ...
-            }
-        """
-        if at_cost:
-            inventory = inventory.cost()
-        else:
-            inventory = inventory.units()
-        result = {p.lot.currency: p.number for p in inventory if p.number != ZERO}
-        if include_currencies:
-            result = {c: result[c] for c in set(include_currencies) & set(result.keys())}
-        return result
+        return serialize_inventory(realization.compute_balance(real_account), at_cost=True)
 
     def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
         journal = []
@@ -321,11 +297,11 @@ class BeancountReportAPI(object):
                 if with_change_and_balance:
                     if isinstance(posting, Balance):
                         entry['change']     = { posting.amount.currency: posting.amount.number }
-                        entry['balance']    = self._inventory_to_json(entry_balance)  #, include_currencies=entry['change'].keys())
+                        entry['balance']    = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
 
                     if isinstance(posting, Transaction):
-                        entry['change']     = self._inventory_to_json(change)
-                        entry['balance']    = self._inventory_to_json(entry_balance, include_currencies=entry['change'].keys())
+                        entry['change']     = serialize_inventory(change)
+                        entry['balance']    = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
 
                 journal.append(entry)
 
