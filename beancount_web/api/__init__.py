@@ -40,7 +40,7 @@ from beancount.utils import misc_utils
 from beancount_web.util.dateparser import parse_date
 from beancount_web.api.helpers import entries_in_inclusive_range,\
                                       holdings_at_dates
-from beancount_web.api.serialization import serialize_inventory, serialize_posting
+from beancount_web.api.serialization import serialize_inventory, serialize_entry
 
 
 class FilterException(Exception):
@@ -145,14 +145,14 @@ class BeancountReportAPI(object):
         """
         return [{
             'account': real_account.account,
-            'balances_children': self._table_totals(real_account),
+            'balances_children': self._total_balance(real_account),
             'balances': serialize_inventory(real_account.balance, at_cost=True),
             'is_leaf': len(real_account) == 0 or real_account.txn_postings,
             'postings_count': len(real_account.txn_postings)
         } for real_account in realization.iter_children(real_accounts)]
 
-    def _table_totals(self, real_account):
-        """Computes the total inventory for real_account and its children."""
+    def _total_balance(self, real_account):
+        """Computes the total balance for real_account and its children."""
         return serialize_inventory(realization.compute_balance(real_account), at_cost=True)
 
     def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
@@ -163,62 +163,7 @@ class BeancountReportAPI(object):
             if include_types and not isinstance(posting, include_types):
                 continue
 
-            entry = {
-                'meta': {
-                    'type': posting.__class__.__name__.lower(),
-                    'filename': posting.meta['filename'],
-                    'lineno': posting.meta['lineno']
-                },
-                'date': posting.date,
-                'hash': compare.hash_entry(posting),
-                'metadata': posting.meta.copy()
-            }
-
-            entry['metadata'].pop("__tolerances__", None)
-            entry['metadata'].pop("filename", None)
-            entry['metadata'].pop("lineno", None)
-
-            if isinstance(posting, Open):
-                entry['account']        = posting.account
-                entry['currencies']     = posting.currencies
-
-            if isinstance(posting, Close):
-                entry['account']        = posting.account
-
-            if isinstance(posting, Event):
-                entry['type']           = posting.type
-                entry['description']    = posting.description
-
-            if isinstance(posting, Note):
-                entry['comment']        = posting.comment
-
-            if isinstance(posting, Document):
-                entry['account']        = posting.account
-                entry['filename']       = posting.filename
-
-            if isinstance(posting, Pad):
-                entry['account']        = posting.account
-                entry['source_account'] = posting.source_account
-
-            if isinstance(posting, Balance):
-                entry['account']        = posting.account
-                entry['amount']         = { posting.amount.currency: posting.amount.number }
-
-                if posting.diff_amount:
-                    balance = entry_balance.get_units(posting.amount.currency)
-                    entry['diff_amount'] = { posting.diff_amount.currency: posting.diff_amount.number }
-                    entry['balance'] = { balance.currency: balance.number }
-
-            if isinstance(posting, Transaction):
-                if posting.flag == 'P':
-                    entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
-
-                entry['flag']       = posting.flag
-                entry['payee']      = posting.payee
-                entry['narration']  = posting.narration
-                entry['tags']       = posting.tags or []
-                entry['links']      = posting.links or []
-                entry['legs']       = [serialize_posting(p) for p in posting.postings]
+            entry = serialize_entry(posting)
 
             if with_change_and_balance:
                 if isinstance(posting, Balance):
@@ -280,8 +225,8 @@ class BeancountReportAPI(object):
         for begin_date, end_date in month_tuples:
             entries = entries_in_inclusive_range(self.entries, begin_date, end_date)
             realized = realization.realize(entries, self.account_types)
-            income_totals = self._table_totals(realization.get(realized, self.account_types.income))
-            expenses_totals = self._table_totals(realization.get(realized, self.account_types.expenses))
+            income_totals = self._total_balance(realization.get(realized, self.account_types.income))
+            expenses_totals = self._total_balance(realization.get(realized, self.account_types.expenses))
 
             monthly_totals.append({
                 'begin_date': begin_date,
@@ -379,7 +324,7 @@ class BeancountReportAPI(object):
         """
         real_accounts = self._real_accounts(account_name, self.entries, begin_date, end_date)
 
-        return self._table_totals(real_accounts)
+        return self._total_balance(real_accounts)
 
     def monthly_balances(self, account_name):
         # TODO include balances_children
