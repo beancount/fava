@@ -202,13 +202,12 @@ class BeancountReportAPI(object):
 
             if isinstance(posting, Balance):
                 entry['account']        = posting.account
-                entry['change']         = { posting.amount.currency: posting.amount.number }
                 entry['amount']         = { posting.amount.currency: posting.amount.number }
 
                 if posting.diff_amount:
-                    balance              = entry_balance.get_units(posting.amount.currency)
+                    balance = entry_balance.get_units(posting.amount.currency)
                     entry['diff_amount'] = { posting.diff_amount.currency: posting.diff_amount.number }
-                    entry['balance']     = { balance.currency: balance.number }
+                    entry['balance'] = { balance.currency: balance.number }
 
             if isinstance(posting, Transaction):
                 if posting.flag == 'P':
@@ -223,12 +222,14 @@ class BeancountReportAPI(object):
 
             if with_change_and_balance:
                 if isinstance(posting, Balance):
-                    entry['change']     = { posting.amount.currency: posting.amount.number }
-                    entry['balance']    = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
+                    entry['change'] = {}
+                    if posting.diff_amount:
+                        entry['change'] = {posting.diff_amount.currency: posting.diff_amount.number}
+                    entry['balance'] = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
 
                 if isinstance(posting, Transaction):
-                    entry['change']     = serialize_inventory(change)
-                    entry['balance']    = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
+                    entry['change'] = serialize_inventory(change)
+                    entry['balance'] = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
 
             journal.append(entry)
 
