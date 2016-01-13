@@ -14,10 +14,10 @@ from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
 from beancount.reports import context, holdings_reports
-from beancount.utils import bisect_key, misc_utils
+from beancount.utils import misc_utils
 
 from beancount_web.util.dateparser import parse_date
-from beancount_web.helpers import holdings_at_dates
+from beancount_web.helpers import entries_in_inclusive_range, holdings_at_dates
 
 
 class FilterException(Exception):
@@ -373,7 +373,7 @@ class BeancountReportAPI(object):
         month_tuples = self._interval_tuples('month', self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries = self._entries_in_inclusive_range(self.entries, begin_date, end_date)
+            entries = entries_in_inclusive_range(self.entries, begin_date, end_date)
             realized = realization.realize(entries, self.account_types)
             income_totals = self._table_totals(realization.get(realized, self.account_types.income))
             expenses_totals = self._table_totals(realization.get(realized, self.account_types.expenses))
@@ -416,21 +416,6 @@ class BeancountReportAPI(object):
 
         return interval_totals
 
-    def _entries_in_inclusive_range(self, entries, begin_date=None, end_date=None):
-        """
-        Returns the list of entries satisfying begin_date <= date <= end_date.
-        """
-        get_date = lambda x: x.date
-        if begin_date is None:
-            begin_index = 0
-        else:
-            begin_index = bisect_key.bisect_left_with_key(entries, begin_date, key=get_date)
-        if end_date is None:
-            end_index = len(entries)
-        else:
-            end_index = bisect_key.bisect_left_with_key(entries, end_date+timedelta(days=1), key=get_date)
-        return entries[begin_index:end_index]
-
     def _real_accounts(self, account_name, entries, begin_date=None, end_date=None):
         """
         Returns the realization.RealAccount instances for account_name, and
@@ -441,7 +426,7 @@ class BeancountReportAPI(object):
 
         :return: realization.RealAccount instances
         """
-        entries_in_range = self._entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
+        entries_in_range = entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
         real_accounts = realization.get(realization.realize(entries_in_range, [account_name]), account_name)
 
         return real_accounts

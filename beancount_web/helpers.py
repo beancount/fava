@@ -1,3 +1,4 @@
+from datetime import timedelta
 import re
 import collections
 
@@ -7,6 +8,26 @@ from beancount.core.number import ZERO
 from beancount.core.data import Transaction
 from beancount.parser import options
 from beancount.ops import prices
+from beancount.utils import bisect_key
+
+
+def entries_in_inclusive_range(entries, begin_date=None, end_date=None):
+    """
+    Returns the list of entries satisfying begin_date <= date <= end_date.
+    """
+    get_date = lambda x: x.date
+    if begin_date is None:
+        begin_index = 0
+    else:
+        begin_index = bisect_key.bisect_left_with_key(entries, begin_date,
+                                                      key=get_date)
+    if end_date is None:
+        end_index = len(entries)
+    else:
+        end_index = bisect_key.bisect_left_with_key(entries,
+                                                    end_date+timedelta(days=1),
+                                                    key=get_date)
+    return entries[begin_index:end_index]
 
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
