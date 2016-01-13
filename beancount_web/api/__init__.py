@@ -207,103 +207,74 @@ class BeancountReportAPI(object):
             if include_types and not isinstance(posting, include_types):
                 continue
 
-            if  isinstance(posting, Transaction) or \
-                isinstance(posting, Note) or \
-                isinstance(posting, Balance) or \
-                isinstance(posting, Open) or \
-                isinstance(posting, Close) or \
-                isinstance(posting, Pad) or \
-                isinstance(posting, Event) or \
-                isinstance(posting, Document):
+            entry = {
+                'meta': {
+                    'type': posting.__class__.__name__.lower(),
+                    'filename': posting.meta['filename'],
+                    'lineno': posting.meta['lineno']
+                },
+                'date': posting.date,
+                'hash': compare.hash_entry(posting),
+                'metadata': posting.meta.copy()
+            }
 
-                entry = {
-                    'meta': {
-                        'type': posting.__class__.__name__.lower(),
-                        'filename': posting.meta['filename'],
-                        'lineno': posting.meta['lineno']
-                    },
-                    'date': posting.date,
-                    'hash': compare.hash_entry(posting),
-                    'metadata': posting.meta.copy()
-                }
+            entry['metadata'].pop("__tolerances__", None)
+            entry['metadata'].pop("filename", None)
+            entry['metadata'].pop("lineno", None)
 
-                entry['metadata'].pop("__tolerances__", None)
-                entry['metadata'].pop("filename", None)
-                entry['metadata'].pop("lineno", None)
+            if isinstance(posting, Open):
+                entry['account']        = posting.account
+                entry['currencies']     = posting.currencies
 
-                if isinstance(posting, Open):
-                    entry['account']        = posting.account
-                    entry['currencies']     = posting.currencies
+            if isinstance(posting, Close):
+                entry['account']        = posting.account
 
-                if isinstance(posting, Close):
-                    entry['account']        = posting.account
+            if isinstance(posting, Event):
+                entry['type']           = posting.type
+                entry['description']    = posting.description
 
-                if isinstance(posting, Event):
-                    entry['type']           = posting.type
-                    entry['description']    = posting.description
+            if isinstance(posting, Note):
+                entry['comment']        = posting.comment
 
-                if isinstance(posting, Note):
-                    entry['comment']        = posting.comment
+            if isinstance(posting, Document):
+                entry['account']        = posting.account
+                entry['filename']       = posting.filename
 
-                if isinstance(posting, Document):
-                    entry['account']        = posting.account
-                    entry['filename']       = posting.filename
+            if isinstance(posting, Pad):
+                entry['account']        = posting.account
+                entry['source_account'] = posting.source_account
 
-                if isinstance(posting, Pad):
-                    entry['account']        = posting.account
-                    entry['source_account'] = posting.source_account
+            if isinstance(posting, Balance):
+                entry['account']        = posting.account
+                entry['change']         = { posting.amount.currency: posting.amount.number }
+                entry['amount']         = { posting.amount.currency: posting.amount.number }
 
+                if posting.diff_amount:
+                    balance              = entry_balance.get_units(posting.amount.currency)
+                    entry['diff_amount'] = { posting.diff_amount.currency: posting.diff_amount.number }
+                    entry['balance']     = { balance.currency: balance.number }
+
+            if isinstance(posting, Transaction):
+                if posting.flag == 'P':
+                    entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
+
+                entry['flag']       = posting.flag
+                entry['payee']      = posting.payee
+                entry['narration']  = posting.narration
+                entry['tags']       = posting.tags or []
+                entry['links']      = posting.links or []
+                entry['legs']       = [serialize_posting(p) for p in posting.postings]
+
+            if with_change_and_balance:
                 if isinstance(posting, Balance):
-                    entry['account']        = posting.account
-                    entry['change']         = { posting.amount.currency: posting.amount.number }
-                    entry['amount']         = { posting.amount.currency: posting.amount.number }
-
-                    if posting.diff_amount:
-                        balance              = entry_balance.get_units(posting.amount.currency)
-                        entry['diff_amount'] = { posting.diff_amount.currency: posting.diff_amount.number }
-                        entry['balance']     = { balance.currency: balance.number }
+                    entry['change']     = { posting.amount.currency: posting.amount.number }
+                    entry['balance']    = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
 
                 if isinstance(posting, Transaction):
-                    if posting.flag == 'P':
-                        entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
+                    entry['change']     = serialize_inventory(change)
+                    entry['balance']    = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
 
-                    entry['flag']       = posting.flag
-                    entry['payee']      = posting.payee
-                    entry['narration']  = posting.narration
-                    entry['tags']       = posting.tags or []
-                    entry['links']      = posting.links or []
-                    entry['legs']       = []
-
-                    for posting_ in posting.postings:
-                        leg = {
-                            'account': posting_.account,
-                            'flag': posting_.flag,
-                            'hash': entry['hash']
-                        }
-
-                        if posting_.position:
-                            leg['position']          = posting_.position.number
-                            leg['position_currency'] = posting_.position.lot.currency
-                            cost                     = interpolate.get_posting_weight(posting_)
-                            leg['cost']              = cost.number
-                            leg['cost_currency']     = cost.currency
-
-                        if posting_.price:
-                            leg['price']             = posting_.price.number
-                            leg['price_currency']    = posting_.price.currency
-
-                        entry['legs'].append(leg)
-
-                if with_change_and_balance:
-                    if isinstance(posting, Balance):
-                        entry['change']     = { posting.amount.currency: posting.amount.number }
-                        entry['balance']    = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
-
-                    if isinstance(posting, Transaction):
-                        entry['change']     = serialize_inventory(change)
-                        entry['balance']    = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
-
-                journal.append(entry)
+            journal.append(entry)
 
         return journal
 

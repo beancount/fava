@@ -1,3 +1,4 @@
+from beancount.core import interpolate
 from beancount.core.number import ZERO
 
 
@@ -26,3 +27,27 @@ def serialize_inventory(inventory, at_cost=False, include_currencies=None):
         result = {c: result[c]
                   for c in set(include_currencies) & set(result.keys())}
     return result
+
+
+def serialize_posting(posting):
+    leg = {
+        'account': posting.account,
+        'flag': posting.flag,
+    }
+
+    if posting.position:
+        cost = interpolate.get_posting_weight(posting)
+        leg.update({
+            'position': posting.position.number,
+            'position_currency': posting.position.lot.currency,
+            'cost': cost.number,
+            'cost_currency': cost.currency,
+        })
+
+    if posting.price:
+        leg.update({
+            'price': posting.price.number,
+            'price_currency': posting.price.currency,
+        })
+
+    return leg
