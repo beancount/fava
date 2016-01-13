@@ -1987,6 +1987,15 @@ article#page-query form.editor-store-query a {
   font-size: 11px;
   text-decoration: underline;
 }
+article#page-query form.editor-delete-query {
+  float: right;
+  margin: 13px 10px 0 0;
+}
+article#page-query form.editor-delete-query a {
+  color: #666;
+  font-size: 11px;
+  text-decoration: underline;
+}
 article#page-query .stored-queries {
   color: #666;
   font-size: 11px;

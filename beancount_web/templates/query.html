@@ -39,6 +39,10 @@
         <input type="submit" value="Submit Query">
     </form>
     {% if 'stored-queries-file' in config %}
+        <form class="editor-delete-query" action="{{ url_for('query') }}" method="post">
+            <input type="hidden" name="_method" value="delete">
+            <a href="">Delete query</a>
+        </form>
         <form class="editor-store-query" action="{{ url_for('store_query') }}" method="post">
             <input type="hidden" name="bql">
             <input type="hidden" name="title">

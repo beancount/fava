@@ -66,14 +66,24 @@ $(document).ready(function() {
             }
         });
 
+        $('form.editor-delete-query a').click(function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            if (confirm('Are you sure?')) {
+                $('form.editor-delete-query').submit();
+            }
+        });
+
         $('.stored-queries select').change(function() {
             var selected_id_url = $(this).val();
             if (selected_id_url != "") {
+                $('form.editor-delete-query').attr('action', selected_id_url);
                 $.get(selected_id_url)
                 .done(function(data) {
                     editor.setValue(data, -1);
                 });
             } else {
+                $('form.editor-delete-query').attr('action', '');
                 editor.setValue("", -1);
             }
         });
