@@ -1026,11 +1026,13 @@ article table.journal-table tr.has-metadata dl.metadata dt:last-child, article t
 }
 /* line 630, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dt {
-  width: 0;
   min-width: 65px;
   font-weight: normal;
   font-style: italic;
   color: #85AACF;
+}
+article table.journal-table tr.has-metadata dl.metadata dt::after {
+    content: ":\00a0\00a0";
 }
 /* line 638, ../sass/styles.scss */
 article table.journal-table tr.has-metadata dl.metadata dd a {
@@ -1120,7 +1122,6 @@ article dl {
 /* line 721, ../sass/styles.scss */
 article dl dt {
   display: inline-block;
-  width: 120px;
   float: left;
   font-weight: bold;
 }
