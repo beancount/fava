@@ -135,6 +135,23 @@ def query_title_already_exists(query_title):
             return True
     return False
 
+@app.route('/query/stored_queries/<int:stored_query_id>/', methods=['POST', 'DELETE'])
+def delete_query(stored_query_id = None):
+    if request.method == 'POST':
+        if not '_method' in request.form or request.form['_method'].upper() != 'DELETE':
+            return redirect(url_for('query'))
+    if 'stored-queries-file' in app.user_config['beancount-web']:
+        stored_queries = load_stored_queries()
+        del stored_queries[stored_query_id]
+
+        stored_queries_file_path = os.path.expanduser(app.user_config['beancount-web'].get('stored-queries-file'))
+
+        with open(stored_queries_file_path, "w") as stored_queries_file:
+            for query in stored_queries:
+                stored_queries_file.write(STORED_QUERIES_DIVIDER + ' ' + query[0] + '\n')
+                stored_queries_file.write(query[1] + '\n\n')
+    return redirect(url_for('query'))
+
 @app.route('/query/stored_queries/', methods=['POST'])
 def store_query():
     title = request.form['title']
@@ -415,3 +432,4 @@ def perform_global_filters():
     except FilterException as e:
         g.filters['time'] = None
         flash(str(e))
+
