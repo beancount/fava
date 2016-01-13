@@ -17,7 +17,8 @@ from beancount.reports import context, holdings_reports
 from beancount.utils import misc_utils
 
 from beancount_web.util.dateparser import parse_date
-from beancount_web.helpers import entries_in_inclusive_range, holdings_at_dates
+from beancount_web.api.helpers import entries_in_inclusive_range,\
+                                      holdings_at_dates
 
 
 class FilterException(Exception):
