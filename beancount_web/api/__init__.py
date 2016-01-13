@@ -23,7 +23,7 @@ import os
 from datetime import date, timedelta
 
 from beancount import loader
-from beancount.core import compare, getters, interpolate, realization
+from beancount.core import compare, getters, realization
 from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
@@ -40,7 +40,7 @@ from beancount.utils import misc_utils
 from beancount_web.util.dateparser import parse_date
 from beancount_web.api.helpers import entries_in_inclusive_range,\
                                       holdings_at_dates
-from beancount_web.api.serialization import serialize_inventory
+from beancount_web.api.serialization import serialize_inventory, serialize_posting
 
 
 class FilterException(Exception):
@@ -112,8 +112,8 @@ class BeancountReportAPI(object):
                                     for posting in entry.postings)]
 
         self.root_account = realization.realize(self.entries, self.account_types)
-        self.all_accounts = self._account_components()
-        self.all_accounts_leaf_only = self._account_components(leaf_only=True)
+        self.all_accounts = self._all_accounts()
+        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
         self.closing_entries = summarize.cap_opt(self.entries, self.options)
         self.closing_real_accounts = realization.realize(self.closing_entries, self.account_types)
@@ -128,28 +128,13 @@ class BeancountReportAPI(object):
         if changed:
             self.apply_filters()
 
-    def _account_components(self, leaf_only=False):
-        # TODO rename
-        """Gather all the account components available in the given directives.
-
-        Args:
-          entries: A list of directive instances.
-        Returns:
-            [
-                {
-                    'name': 'TV',
-                    'full_name': 'Expenses:Tech:TV',
-                    'depth': 3
-                }, ...
-            ]
-        """
-        accounts = []
-        for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only):
-            accounts.append({
-                'name': child_account.account.split(':')[-1],
-                'full_name': child_account.account,
-                'depth': child_account.account.count(':')+1,
-            })
+    def _all_accounts(self, leaf_only=False):
+        """Detailed list of all accounts."""
+        accounts = [{
+            'name': child_account.account.split(':')[-1],
+            'full_name': child_account.account,
+            'depth': child_account.account.count(':')+1,
+        } for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only)]
 
         return accounts[1:]
 
@@ -157,46 +142,17 @@ class BeancountReportAPI(object):
         """
         Renders real_accounts and it's children as a flat list to be used
         in rendering tables.
-
-        Returns:
-            [
-                {
-                    'account': 'Expenses:Vacation',
-                    'balances_children': {
-                        'USD': 123.45, ...
-                    },
-                    'balances': {
-                        'USD': 123.45, ...
-                    },
-                    'is_leaf': True,
-                    'postings_count': 3
-                }, ...
-            ]
         """
-
-        lines = []
-        for real_account in realization.iter_children(real_accounts):
-            line = {
-                'account': real_account.account,
-                'balances_children': self._table_totals(real_account),
-                'balances': serialize_inventory(real_account.balance, at_cost=True),
-                'is_leaf': len(real_account) == 0 or real_account.txn_postings,
-                'postings_count': len(real_account.txn_postings)
-            }
-            lines.append(line)
-
-        return lines
+        return [{
+            'account': real_account.account,
+            'balances_children': self._table_totals(real_account),
+            'balances': serialize_inventory(real_account.balance, at_cost=True),
+            'is_leaf': len(real_account) == 0 or real_account.txn_postings,
+            'postings_count': len(real_account.txn_postings)
+        } for real_account in realization.iter_children(real_accounts)]
 
     def _table_totals(self, real_account):
-        """
-            Renders the total balances for root_acccounts and their children.
-
-            Returns:
-                {
-                    'USD': 123.45,
-                    ...
-                }
-        """
+        """Computes the total inventory for real_account and its children."""
         return serialize_inventory(realization.compute_balance(real_account), at_cost=True)
 
     def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
