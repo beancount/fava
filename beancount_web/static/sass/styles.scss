@@ -628,17 +628,23 @@ article {
                         }
 
                         dt {
-                            width: 0;
-                            min-width: 65px;
+                            clear: left;
+                            width: auto;
+                            min-width: 60px;
+                            margin-right: 10px;
                             font-weight: normal;
                             font-style: italic;
                             color: #85AACF;
                         }
 
-                        dd a {
-                            font-weight: normal;
+                        dd {
+                            margin-left: 70px;
 
-                            &:hover { text-decoration: underline; }
+                            a {
+                                font-weight: normal;
+
+                                &:hover { text-decoration: underline; }
+                            }
                         }
                     }
 
