@@ -628,11 +628,14 @@ article {
                         }
 
                         dt {
-                            width: 0;
                             min-width: 65px;
                             font-weight: normal;
                             font-style: italic;
                             color: #85AACF;
+                        }
+
+                        dt::after {
+                            content: ":\00a0\00a0";
                         }
 
                         dd a {
@@ -720,7 +723,6 @@ article {
 
         dt {
             display: inline-block;
-            width: 120px;
             float: left;
             font-weight: bold;
         }
