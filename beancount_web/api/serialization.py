@@ -1,50 +1,29 @@
 from beancount.core import interpolate, compare
-from beancount.core.data import Open, Close, Note,\
-                                Document, Balance, Transaction, Pad, Event
+from beancount.core.data import Balance, Transaction, Price
 from beancount.core.number import ZERO
 
 
 def serialize_entry(posting):
-    entry = {
-        'meta': {
-            'type': posting.__class__.__name__.lower(),
-            'filename': posting.meta['filename'],
-            'lineno': posting.meta['lineno']
-        },
-        'date': posting.date,
+    entry = posting._asdict()
+    entry['meta'] = {
+        'type': posting.__class__.__name__.lower(),
+        'filename': posting.meta['filename'],
+        'lineno': posting.meta['lineno'],
+    }
+    entry.update({
         'hash': compare.hash_entry(posting),
         'metadata': posting.meta.copy()
-    }
+    })
 
     entry['metadata'].pop("__tolerances__", None)
     entry['metadata'].pop("filename", None)
     entry['metadata'].pop("lineno", None)
 
-    if isinstance(posting, Open):
-        entry['account']        = posting.account
-        entry['currencies']     = posting.currencies
-
-    if isinstance(posting, Close):
-        entry['account']        = posting.account
-
-    if isinstance(posting, Event):
-        entry['type']           = posting.type
-        entry['description']    = posting.description
-
-    if isinstance(posting, Note):
-        entry['comment']        = posting.comment
-
-    if isinstance(posting, Document):
-        entry['account']        = posting.account
-        entry['filename']       = posting.filename
-
-    if isinstance(posting, Pad):
-        entry['account']        = posting.account
-        entry['source_account'] = posting.source_account
+    if isinstance(posting, Price):
+        entry['amount'] = {posting.amount.currency: posting.amount.number}
 
     if isinstance(posting, Balance):
-        entry['account']        = posting.account
-        entry['amount']         = { posting.amount.currency: posting.amount.number }
+        entry['amount'] = {posting.amount.currency: posting.amount.number}
 
         if posting.diff_amount:
             entry['diff_amount'] = {posting.diff_amount.currency: posting.diff_amount.number}
@@ -54,12 +33,10 @@ def serialize_entry(posting):
         if posting.flag == 'P':
             entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
 
-        entry['flag']       = posting.flag
-        entry['payee']      = posting.payee
-        entry['narration']  = posting.narration
-        entry['tags']       = posting.tags or []
-        entry['links']      = posting.links or []
-        entry['legs']       = [serialize_posting(p) for p in posting.postings]
+        entry.pop('postings', None)
+        entry['tags'] = posting.tags or []
+        entry['links'] = posting.links or []
+        entry['legs'] = [serialize_posting(p) for p in posting.postings]
 
     return entry
 
