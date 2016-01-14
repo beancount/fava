@@ -1,149 +1,46 @@
+"""
+The rationale behind this API is the following:
+
+One day there will be a new module in beancount.report that returns all (for
+beancount-web required) views as Python-dicts and -arrays, compatible with
+JSON (so no datetime, etc.). Right now beancount.report does return data to
+be displayed in a console, and HTML, and this (JSON) could be a third way of
+"rendering" the data. These methods should be highly optimized for performance
+and numerical correctness. If that one day really makes it's way into the
+beancount-repo, then api.py is redundant and will be removed.
+
+For the JSON-part: I want to keep all the returns in the API JSON-serializeable
+(although they are called directly right now), because then, with very little
+overhead, beancount-web could run on an external server and call into a local
+bean-report.
+
+Right now this module it is just a hacky placeholder for what could be in the
+future, and therefore I only tried to get the numbers required, and did not
+optimize for performance at all.
+"""
+
 import os
 from datetime import date, timedelta
-import re
-import collections
 
 from beancount import loader
-from beancount.reports import context
-from beancount.utils import bisect_key
-from beancount.core import realization, flags
-from beancount.core import interpolate
-from beancount.parser import options
-from beancount.core import compare
-from beancount.core.account import has_component
-from beancount.core.number import ZERO
-from beancount.core.data import Open, Close, Note, Document, Balance, TxnPosting, Transaction, Pad, Event  # TODO implement missing
-from beancount.core.account_types import get_account_sign
-from beancount.reports import holdings_reports
-from beancount.core import getters
-from beancount.ops import prices, holdings, summarize
-from beancount.ops.holdings import Holding
-from beancount.utils import misc_utils
+from beancount.core import compare, getters, realization
 from beancount.core.realization import RealAccount
-from beancount.core.data import get_entry, posting_sortkey
-from beancount.query import query
 from beancount.core.interpolate import compute_entries_balance
+from beancount.core.account import has_component
+from beancount.core.account_types import get_account_sign
+from beancount.core.data import get_entry, posting_sortkey, Open, Close, Note,\
+                                Document, Balance, Transaction, Pad, Event
+from beancount.core.number import ZERO
+from beancount.ops import prices, holdings, summarize
+from beancount.parser import options
+from beancount.query import query
+from beancount.reports import context, holdings_reports
+from beancount.utils import misc_utils
 
 from beancount_web.util.dateparser import parse_date
-
-# This really belongs in beancount:src/python/beancount/ops/holdings.py
-def get_holding_from_position(lot, number, account=None, price_map=None, date=None):
-    """Compute a Holding corresponding to the specified position 'pos'.
-
-    :param lot: A Lot object.
-    :param number: The number of units of 'lot' in the position.
-    :param account: A str, the name of the account, or None if not needed.
-    :param price_map: A dict of prices, as built by prices.build_price_map().
-    :param date: A datetime.date instance, the date at which to price the
-        holdings.  If left unspecified, we use the latest price information.
-
-    :return: A Holding object.
-    """
-    if lot.cost is not None:
-        # Get price information if we have a price_map.
-        market_value = None
-        if price_map is not None:
-            base_quote = (lot.currency, lot.cost.currency)
-            price_date, price_number = prices.get_price(price_map,
-                                                        base_quote, date)
-            if price_number is not None:
-                market_value = number * price_number
-        else:
-            price_date, price_number = None, None
-
-        return Holding(account,
-                       number,
-                       lot.currency,
-                       lot.cost.number,
-                       lot.cost.currency,
-                       number * lot.cost.number,
-                       market_value,
-                       price_number,
-                       price_date)
-    else:
-        return Holding(account,
-                       number,
-                       lot.currency,
-                       None,
-                       lot.currency,
-                       number,
-                       number,
-                       None,
-                       None)
-
-def inventory_at_dates(entries, dates, transaction_predicate, posting_predicate):
-    """Generator that yields the aggregate inventory at the specified dates.
-
-    The inventory for a specified date includes all matching postings PRIOR to
-    it.
-
-    :param entries: list of entries, sorted by date.
-    :param dates: iterator of dates
-    :param transaction_predicate: predicate called on each Transaction entry to
-        decide whether to include its postings in the inventory.
-    :param posting_predicate: predicate with the Transaction and Posting to
-        decide whether to include the posting in the inventory.
-    """
-    entry_i = 0
-    num_entries = len(entries)
-
-    # inventory maps lot to amount
-    inventory = collections.defaultdict(lambda: ZERO)
-    prev_date = None
-    for date in dates:
-        assert prev_date is None or date >= prev_date
-        prev_date = date
-        while entry_i < num_entries and entries[entry_i].date < date:
-            entry = entries[entry_i]
-            entry_i += 1
-            if isinstance(entry, Transaction) and transaction_predicate(entry):
-                for posting in entry.postings:
-                    if posting_predicate(entry, posting):
-                        old_value = inventory[posting.position.lot]
-                        new_value = old_value + posting.position.number
-                        if new_value == ZERO:
-                            del inventory[posting.position.lot]
-                        else:
-                            inventory[posting.position.lot] = new_value
-        yield inventory
-
-def account_descendants_re_pattern(*roots):
-    """Returns pattern for matching descendant accounts.
-
-    :param roots: The list of parent account names.  These should not
-        end with a ':'.
-
-    :return: The regular expression pattern for matching descendants of
-             the specified parents, or those parents themselves.
-    """
-    return '|'.join('(?:^' + re.escape(name) + '(?::|$))' for name in roots)
-
-def holdings_at_dates(entries, dates, price_map, options_map):
-    """Computes aggregate holdings at mulitple dates.
-
-    Yields for each date the list of Holding objects.  The holdings are
-    aggregated across accounts; the Holding objects will have the account field
-    set to None.
-
-    :param entries: The list of entries.
-    :param dates: The list of dates.
-    :param price_map: A dict of prices, as built by prices.build_price_map().
-    :param options_map: The account options.
-    """
-    account_types = options.get_account_types(options_map)
-    FLAG_UNREALIZED = flags.FLAG_UNREALIZED
-    transaction_predicate = lambda e: e.flag != FLAG_UNREALIZED
-    account_re = re.compile(account_descendants_re_pattern(
-        account_types.assets,
-        account_types.liabilities))
-    posting_predicate = lambda e, p: account_re.match(p.account)
-    for date, inventory in zip(dates,
-                               inventory_at_dates(
-                                   entries, dates,
-                                   transaction_predicate = transaction_predicate,
-                                   posting_predicate = posting_predicate)):
-        yield [get_holding_from_position(lot, number, price_map=price_map, date=date)
-               for lot, number in inventory.items()]
+from beancount_web.api.helpers import entries_in_inclusive_range,\
+                                      holdings_at_dates
+from beancount_web.api.serialization import serialize_inventory, serialize_entry
 
 
 class FilterException(Exception):
@@ -151,27 +48,6 @@ class FilterException(Exception):
 
 
 class BeancountReportAPI(object):
-    """
-    The rationale behind api.py is the following:
-
-    One day there will be a new module in beancount.report that returns all (for
-    beancount-web required) views as Python-dicts and -arrays, compatible with
-    JSON (so no datetime, etc.). Right now beancount.report does return data to
-    be displayed in a console, and HTML, and this (JSON) could be a third way of
-    "rendering" the data. These methods should be highly optimized for performance
-    and numerical correctness. If that one day really makes it's way into the
-    beancount-repo, then api.py is redundant and will be removed.
-
-    For the JSON-part: I want to keep all the returns in api.py JSON-serializeable
-    (although they are called directly right now), because then, with very little
-    overhead, beancount-web could run on an external server and call into a local
-    bean-report.
-
-    Right now api.py it is just a hacky placeholder for what could be in the future,
-    and therefore I only tried to get the numbers required, and did not optimize
-    for performance at all.
-    """
-
     def __init__(self, beancount_file_path):
         super(BeancountReportAPI, self).__init__()
         self.beancount_file_path = beancount_file_path
@@ -236,8 +112,8 @@ class BeancountReportAPI(object):
                                     for posting in entry.postings)]
 
         self.root_account = realization.realize(self.entries, self.account_types)
-        self.all_accounts = self._account_components()
-        self.all_accounts_leaf_only = self._account_components(leaf_only=True)
+        self.all_accounts = self._all_accounts()
+        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
         self.closing_entries = summarize.cap_opt(self.entries, self.options)
         self.closing_real_accounts = realization.realize(self.closing_entries, self.account_types)
@@ -252,28 +128,13 @@ class BeancountReportAPI(object):
         if changed:
             self.apply_filters()
 
-    def _account_components(self, leaf_only=False):
-        # TODO rename
-        """Gather all the account components available in the given directives.
-
-        Args:
-          entries: A list of directive instances.
-        Returns:
-            [
-                {
-                    'name': 'TV',
-                    'full_name': 'Expenses:Tech:TV',
-                    'depth': 3
-                }, ...
-            ]
-        """
-        accounts = []
-        for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only):
-            accounts.append({
-                'name': child_account.account.split(':')[-1],
-                'full_name': child_account.account,
-                'depth': child_account.account.count(':')+1,
-            })
+    def _all_accounts(self, leaf_only=False):
+        """Detailed list of all accounts."""
+        accounts = [{
+            'name': child_account.account.split(':')[-1],
+            'full_name': child_account.account,
+            'depth': child_account.account.count(':')+1,
+        } for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only)]
 
         return accounts[1:]
 
@@ -281,72 +142,18 @@ class BeancountReportAPI(object):
         """
         Renders real_accounts and it's children as a flat list to be used
         in rendering tables.
-
-        Returns:
-            [
-                {
-                    'account': 'Expenses:Vacation',
-                    'balances_children': {
-                        'USD': 123.45, ...
-                    },
-                    'balances': {
-                        'USD': 123.45, ...
-                    },
-                    'is_leaf': True,
-                    'postings_count': 3
-                }, ...
-            ]
         """
+        return [{
+            'account': real_account.account,
+            'balances_children': self._total_balance(real_account),
+            'balances': serialize_inventory(real_account.balance, at_cost=True),
+            'is_leaf': len(real_account) == 0 or real_account.txn_postings,
+            'postings_count': len(real_account.txn_postings)
+        } for real_account in realization.iter_children(real_accounts)]
 
-        lines = []
-        for real_account in realization.iter_children(real_accounts):
-            line = {
-                'account': real_account.account,
-                'balances_children': self._table_totals(real_account),
-                'balances': self._inventory_to_json(real_account.balance, at_cost=True),
-                'is_leaf': len(real_account) == 0 or real_account.txn_postings,
-                'postings_count': len(real_account.txn_postings)
-            }
-            lines.append(line)
-
-        return lines
-
-    def _table_totals(self, real_account):
-        """
-            Renders the total balances for root_acccounts and their children.
-
-            Returns:
-                {
-                    'USD': 123.45,
-                    ...
-                }
-        """
-        return self._inventory_to_json(realization.compute_balance(real_account), at_cost=True)
-
-    def _inventory_to_json(self, inventory, at_cost=False, include_currencies=None):
-        """
-        Renders an Inventory to a currency -> amount dict.
-
-        Args:
-            inventory: The inventory to render.
-            include_currencies: Array of strings (eg. ['USD', 'EUR']). If set the
-                                inventory will only contain those currencies.
-
-        Returns:
-            {
-                'USD': 123.45,
-                'CAD': 567.89,
-                ...
-            }
-        """
-        if at_cost:
-            inventory = inventory.cost()
-        else:
-            inventory = inventory.units()
-        result = {p.lot.currency: p.number for p in inventory if p.number != ZERO}
-        if include_currencies:
-            result = {c: result[c] for c in set(include_currencies) & set(result.keys())}
-        return result
+    def _total_balance(self, real_account):
+        """Computes the total balance for real_account and its children."""
+        return serialize_inventory(realization.compute_balance(real_account), at_cost=True)
 
     def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
         journal = []
@@ -356,103 +163,20 @@ class BeancountReportAPI(object):
             if include_types and not isinstance(posting, include_types):
                 continue
 
-            if  isinstance(posting, Transaction) or \
-                isinstance(posting, Note) or \
-                isinstance(posting, Balance) or \
-                isinstance(posting, Open) or \
-                isinstance(posting, Close) or \
-                isinstance(posting, Pad) or \
-                isinstance(posting, Event) or \
-                isinstance(posting, Document):
+            entry = serialize_entry(posting)
 
-                entry = {
-                    'meta': {
-                        'type': posting.__class__.__name__.lower(),
-                        'filename': posting.meta['filename'],
-                        'lineno': posting.meta['lineno']
-                    },
-                    'date': posting.date,
-                    'hash': compare.hash_entry(posting),
-                    'metadata': posting.meta.copy()
-                }
-
-                entry['metadata'].pop("__tolerances__", None)
-                entry['metadata'].pop("filename", None)
-                entry['metadata'].pop("lineno", None)
-
-                if isinstance(posting, Open):
-                    entry['account']        = posting.account
-                    entry['currencies']     = posting.currencies
-
-                if isinstance(posting, Close):
-                    entry['account']        = posting.account
-
-                if isinstance(posting, Event):
-                    entry['type']           = posting.type
-                    entry['description']    = posting.description
-
-                if isinstance(posting, Note):
-                    entry['comment']        = posting.comment
-
-                if isinstance(posting, Document):
-                    entry['account']        = posting.account
-                    entry['filename']       = posting.filename
-
-                if isinstance(posting, Pad):
-                    entry['account']        = posting.account
-                    entry['source_account'] = posting.source_account
-
+            if with_change_and_balance:
                 if isinstance(posting, Balance):
-                    entry['account']        = posting.account
-                    entry['change']         = { posting.amount.currency: posting.amount.number }
-                    entry['amount']         = { posting.amount.currency: posting.amount.number }
-
+                    entry['change'] = {}
                     if posting.diff_amount:
-                        balance              = entry_balance.get_units(posting.amount.currency)
-                        entry['diff_amount'] = { posting.diff_amount.currency: posting.diff_amount.number }
-                        entry['balance']     = { balance.currency: balance.number }
+                        entry['change'] = {posting.diff_amount.currency: posting.diff_amount.number}
+                    entry['balance'] = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
 
                 if isinstance(posting, Transaction):
-                    if posting.flag == 'P':
-                        entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
+                    entry['change'] = serialize_inventory(change)
+                    entry['balance'] = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
 
-                    entry['flag']       = posting.flag
-                    entry['payee']      = posting.payee
-                    entry['narration']  = posting.narration
-                    entry['tags']       = posting.tags or []
-                    entry['links']      = posting.links or []
-                    entry['legs']       = []
-
-                    for posting_ in posting.postings:
-                        leg = {
-                            'account': posting_.account,
-                            'flag': posting_.flag,
-                            'hash': entry['hash']
-                        }
-
-                        if posting_.position:
-                            leg['position']          = posting_.position.number
-                            leg['position_currency'] = posting_.position.lot.currency
-                            cost                     = interpolate.get_posting_weight(posting_)
-                            leg['cost']              = cost.number
-                            leg['cost_currency']     = cost.currency
-
-                        if posting_.price:
-                            leg['price']             = posting_.price.number
-                            leg['price_currency']    = posting_.price.currency
-
-                        entry['legs'].append(leg)
-
-                if with_change_and_balance:
-                    if isinstance(posting, Balance):
-                        entry['change']     = { posting.amount.currency: posting.amount.number }
-                        entry['balance']    = self._inventory_to_json(entry_balance)  #, include_currencies=entry['change'].keys())
-
-                    if isinstance(posting, Transaction):
-                        entry['change']     = self._inventory_to_json(change)
-                        entry['balance']    = self._inventory_to_json(entry_balance, include_currencies=entry['change'].keys())
-
-                journal.append(entry)
+            journal.append(entry)
 
         return journal
 
@@ -499,10 +223,10 @@ class BeancountReportAPI(object):
         month_tuples = self._interval_tuples('month', self.entries)
         monthly_totals = []
         for begin_date, end_date in month_tuples:
-            entries = self._entries_in_inclusive_range(self.entries, begin_date, end_date)
+            entries = entries_in_inclusive_range(self.entries, begin_date, end_date)
             realized = realization.realize(entries, self.account_types)
-            income_totals = self._table_totals(realization.get(realized, self.account_types.income))
-            expenses_totals = self._table_totals(realization.get(realized, self.account_types.expenses))
+            income_totals = self._total_balance(realization.get(realized, self.account_types.income))
+            expenses_totals = self._total_balance(realization.get(realized, self.account_types.expenses))
 
             monthly_totals.append({
                 'begin_date': begin_date,
@@ -542,21 +266,6 @@ class BeancountReportAPI(object):
 
         return interval_totals
 
-    def _entries_in_inclusive_range(self, entries, begin_date=None, end_date=None):
-        """
-        Returns the list of entries satisfying begin_date <= date <= end_date.
-        """
-        get_date = lambda x: x.date
-        if begin_date is None:
-            begin_index = 0
-        else:
-            begin_index = bisect_key.bisect_left_with_key(entries, begin_date, key=get_date)
-        if end_date is None:
-            end_index = len(entries)
-        else:
-            end_index = bisect_key.bisect_left_with_key(entries, end_date+timedelta(days=1), key=get_date)
-        return entries[begin_index:end_index]
-
     def _real_accounts(self, account_name, entries, begin_date=None, end_date=None):
         """
         Returns the realization.RealAccount instances for account_name, and
@@ -567,7 +276,7 @@ class BeancountReportAPI(object):
 
         :return: realization.RealAccount instances
         """
-        entries_in_range = self._entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
+        entries_in_range = entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
         real_accounts = realization.get(realization.realize(entries_in_range, [account_name]), account_name)
 
         return real_accounts
@@ -615,7 +324,7 @@ class BeancountReportAPI(object):
         """
         real_accounts = self._real_accounts(account_name, self.entries, begin_date, end_date)
 
-        return self._table_totals(real_accounts)
+        return self._total_balance(real_accounts)
 
     def monthly_balances(self, account_name):
         # TODO include balances_children
@@ -928,7 +637,7 @@ class BeancountReportAPI(object):
             if entry.filename == file_path:
                 is_present = True
 
-        if is_present == False:
+        if not is_present:
             for entry in misc_utils.filter_type(self.entries, Transaction):
                 if 'statement' in entry.meta and entry.meta['statement'] == file_path:
                     is_present = True
