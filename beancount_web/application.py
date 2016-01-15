@@ -105,9 +105,18 @@ def context(ehash=None):
     # TODO handle errors
     return render_template('context.html', context=context)
 
+@app.route('/query/stored_queries/<string:stored_query>')
+def get_stored_query(stored_query=None):
+    bql = app.api.queries(stored_query)['query_string']
+    if request.is_xhr:
+        return bql
+    else:
+        return redirect(url_for('query', bql=bql, selected_query=stored_query))
+
 @app.route('/query/')
-def query(bql=None):
-    query = bql if bql else request.args.get('bql', None)
+def query(bql=None, selected_query=None):
+    selected_query = selected_query or request.args.get('selected_query') or ''
+    query = bql or request.args.get('bql') or app.api.queries(selected_query)['query_string']
     error = None
     result = None
 
@@ -118,7 +127,7 @@ def query(bql=None):
             result = None
             error = e
 
-    return render_template('query.html', query=query, result=result, error=error)
+    return render_template('query.html', query=query, result=result, selected_query=selected_query, error=error)
 
 @app.route('/journal/')
 def journal():

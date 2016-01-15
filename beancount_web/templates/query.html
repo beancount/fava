@@ -14,6 +14,16 @@
         {# TODO Add some sample queries #}
     </p>
 
+    <div class="stored-queries">
+        <label for="stored-queries">Load stored query:</label>
+        <select id="stored-queries">
+            <option value=""></option>
+            {% for query in api.queries() %}
+                <option value="{{ url_for('get_stored_query', stored_query=query['name']) }}"{% if query['name'] == selected_query %} selected="selected"{% endif %}>{{ query['name'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
     <form action="{{ url_for('query') }}" method="get">
         <div class="editor-wrapper editor-wrapper-query">
             <div class="editor" id="editor-query"><pre><code>{{ query or '' }}</code></pre></div>
