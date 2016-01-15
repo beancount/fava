@@ -424,14 +424,14 @@ class BeancountReportAPI(object):
     def notes(self):
         return self._journal_for_postings(self.entries, Note)
 
-    def queries(self, qname = None):
+    def queries(self, query_hash=None):
         res = self._journal_for_postings(self.entries, Query)
         no_query = {
             'name': 'None',
             'query_string': ''
         }
-        if qname:
-            return next( (x for x in res if x['name'] == qname), no_query)
+        if query_hash:
+            return next( (x for x in res if x['hash'] == query_hash), no_query)
         else:
             return res
 

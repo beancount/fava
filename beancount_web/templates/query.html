@@ -14,15 +14,21 @@
         {# TODO Add some sample queries #}
     </p>
 
-    <div class="stored-queries">
-        <label for="stored-queries">Load stored query:</label>
-        <select id="stored-queries">
-            <option value=""></option>
-            {% for query in api.queries() %}
-                <option value="{{ url_for('get_stored_query', stored_query=query['name']) }}"{% if query['name'] == selected_query %} selected="selected"{% endif %}>{{ query['name'] }}</option>
-            {% endfor %}
-        </select>
-    </div>
+    {% if api.queries()|length == 0 %}
+        <p class="description">
+            If you specify a <code>option "experiment_query_directive" "TRUE"</code> in your <a href="{{ url_for('source') }}">Source</a> files and then add <code>query</code>-Directives these stored queries will be displayed as a dropdown to quickly select them.
+        </p>
+    {% else %}
+        <div class="stored-queries">
+            <label for="stored-queries">Load stored query:</label>
+            <select id="stored-queries">
+                <option value=""></option>
+                {% for query in api.queries() %}
+                    <option value="{{ url_for('get_stored_query', stored_query_hash=query['hash']) }}"{% if query['hash'] == query_hash %} selected="selected"{% endif %}>{{ query['name'] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    {% endif %}
 
     <form action="{{ url_for('query') }}" method="get">
         <div class="editor-wrapper editor-wrapper-query">

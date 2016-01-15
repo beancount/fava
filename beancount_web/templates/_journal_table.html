@@ -24,7 +24,7 @@
 <script>
     window.contextURL = "{{ url_for('context', ehash='REPLACEME')|safe }}";
     window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME')|safe }}";
-    window.queryURL = "{{ url_for('query', selected_query='REPLACEME')|safe }}";
+    window.queryURL = "{{ url_for('query', query_hash='REPLACEME')|safe }}";
     window.tagURL = "{{ url_for_current(tag='REPLACEME')|safe }}";
     window.documentURL = "{{ url_for('document', file_path='REPLACEME')|safe }}";
     window.journalURL = "{{ url_for('journal')|safe }}";
@@ -76,7 +76,7 @@
                         Note: {{ comment }}
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'query'}}
-                        Query: <a href="{{ query_url name }}">{{ name }}</a>
+                        Query: <a href="{{ query_url hash }}">{{ name }}</a>
                     {{/ifCond}}
                     {{#ifCond meta.type '==' 'pad'}}
                         Pad <a href="{{ account_url account }}">{{ account }}</a> from <a href="{{ account_url source_account }}">{{ source_account }}</a>

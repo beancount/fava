@@ -105,18 +105,13 @@ def context(ehash=None):
     # TODO handle errors
     return render_template('context.html', context=context)
 
-@app.route('/query/stored_queries/<string:stored_query>')
-def get_stored_query(stored_query=None):
-    bql = app.api.queries(stored_query)['query_string']
-    if request.is_xhr:
-        return bql
-    else:
-        return redirect(url_for('query', bql=bql, selected_query=stored_query))
-
 @app.route('/query/')
-def query(bql=None, selected_query=None):
-    selected_query = selected_query or request.args.get('selected_query') or ''
-    query = bql or request.args.get('bql') or app.api.queries(selected_query)['query_string']
+def query(bql=None, query_hash=None):
+    query_hash = query_hash or request.args.get('query_hash', None)
+    if query_hash:
+        query = app.api.queries(query_hash=query_hash)['query_string'].strip()
+    else:
+        query = bql or request.args.get('bql')
     error = None
     result = None
 
@@ -127,7 +122,15 @@ def query(bql=None, selected_query=None):
             result = None
             error = e
 
-    return render_template('query.html', query=query, result=result, selected_query=selected_query, error=error)
+    return render_template('query.html', query=query, result=result, query_hash=query_hash, error=error)
+
+@app.route('/query/stored_queries/<string:stored_query_hash>')
+def get_stored_query(stored_query_hash=None):
+    bql = app.api.queries(query_hash=stored_query_hash)['query_string'].strip()
+    if request.is_xhr:
+        return bql
+    else:
+        return redirect(url_for('query', bql=bql, query_hash=stored_query_hash))
 
 @app.route('/journal/')
 def journal():
