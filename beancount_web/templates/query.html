@@ -24,7 +24,7 @@
             <select id="stored-queries">
                 <option value=""></option>
                 {% for query in api.queries() %}
-                    <option value="{{ url_for('get_stored_query', stored_query_hash=query['hash']) }}"{% if query['hash'] == query_hash %} selected="selected"{% endif %}>{{ query['name'] }}</option>
+                    <option value="{{ url_for('get_stored_query', stored_query_hash=query['hash']) }}" data-stored-query-hash="{{query['hash']}}"{% if query['hash'] == query_hash %} selected="selected"{% endif %}>{{ query['name'] }}</option>
                 {% endfor %}
             </select>
         </div>
