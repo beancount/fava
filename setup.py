@@ -9,6 +9,7 @@ setup(name='beancount-web',
       license='MIT',
       packages=['beancount_web',
                 'beancount_web.util',
+                'beancount_web.api',
                 'beancount_urlscheme'],
       include_package_data=True,
       entry_points={

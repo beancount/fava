@@ -106,8 +106,12 @@ def context(ehash=None):
     return render_template('context.html', context=context)
 
 @app.route('/query/')
-def query(bql=None):
-    query = bql if bql else request.args.get('bql', None)
+def query(bql=None, query_hash=None):
+    query_hash = query_hash or request.args.get('query_hash', None)
+    if query_hash:
+        query = app.api.queries(query_hash=query_hash)['query_string'].strip()
+    else:
+        query = bql or request.args.get('bql')
     error = None
     result = None
 
@@ -118,7 +122,15 @@ def query(bql=None):
             result = None
             error = e
 
-    return render_template('query.html', query=query, result=result, error=error)
+    return render_template('query.html', query=query, result=result, query_hash=query_hash, error=error)
+
+@app.route('/query/stored_queries/<string:stored_query_hash>')
+def get_stored_query(stored_query_hash=None):
+    bql = app.api.queries(query_hash=stored_query_hash)['query_string'].strip()
+    if request.is_xhr:
+        return bql
+    else:
+        return redirect(url_for('query', bql=bql, query_hash=stored_query_hash))
 
 @app.route('/journal/')
 def journal():

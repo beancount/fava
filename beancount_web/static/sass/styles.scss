@@ -558,6 +558,10 @@ article {
                     background-color: $color_sail_approx;
                 }
 
+                &.query {
+                    background-color: $color_sail_approx;
+                }
+
                 &.document {
                     background-color: $color_pink_lace_approx;
 
@@ -858,6 +862,17 @@ article#page-query {
         line-height: 1.3em;
         font-weight: bold;
         font-family: $font_family_monospaced;
+    }
+
+    .stored-queries {
+        color: #666;
+        font-size: 1px;
+        float: right;
+        margin-bottom: 10px;
+    }
+
+    .editor-wrapper {
+        clear: right;
     }
 
     .sample {

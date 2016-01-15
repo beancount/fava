@@ -48,6 +48,18 @@ $(document).ready(function() {
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
             window.location.href = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
         });
+
+        $('.stored-queries select').change(function() {
+            var selected_id_url = $(this).val();
+            if (selected_id_url != "") {
+                $.get(selected_id_url)
+                .done(function(data) {
+                    editor.setValue(data, -1);
+                });
+            } else {
+                editor.setValue("", -1);
+            }
+        });
     };
 
     // The /source/ editor

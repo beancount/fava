@@ -29,7 +29,7 @@ from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import get_entry, posting_sortkey, Open, Close, Note,\
-                                Document, Balance, Transaction, Pad, Event
+                                Document, Balance, Transaction, Pad, Event, Query
 from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
@@ -423,6 +423,17 @@ class BeancountReportAPI(object):
 
     def notes(self):
         return self._journal_for_postings(self.entries, Note)
+
+    def queries(self, query_hash=None):
+        res = self._journal_for_postings(self.entries, Query)
+        no_query = {
+            'name': 'None',
+            'query_string': ''
+        }
+        if query_hash:
+            return next( (x for x in res if x['hash'] == query_hash), no_query)
+        else:
+            return res
 
     def events(self, event_type=None, only_include_newest=False):
         events = self._journal_for_postings(self.entries, Event)

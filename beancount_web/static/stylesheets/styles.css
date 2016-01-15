@@ -773,6 +773,9 @@ article table.journal-table tr.close {
 article table.journal-table tr.note {
   background-color: #aad0ff;
 }
+article table.journal-table tr.query {
+  background-color: #aad0ff;
+}
 article table.journal-table tr.document {
   background-color: #ffc8ff;
 }
@@ -1982,6 +1985,15 @@ article#page-query .error {
   line-height: 1.3em;
   font-weight: bold;
   font-family: monospace;
+}
+article#page-query .stored-queries {
+    color: #666;
+    font-size: 11px;
+    float: right;
+    margin-bottom: 10px;
+}
+article#page-query .editor-wrapper {
+    clear: right;
 }
 article#page-query .sample h3, article#page-query .sample li, article#page-query .sample code {
   color: #AAA;
