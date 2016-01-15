@@ -237,34 +237,15 @@ class BeancountReportAPI(object):
 
         return monthly_totals
 
-    def _interval_totals(self, account_name, interval, entries):
-        """
-        Renders totals for the active intervals in the entries
-
-        Returns:
-          [
-              {
-                  'begin_date': Date(...),    # TODO rename to date_begin
-                  'end_date':   Date(...),    # TODO rename to date_end
-                  'totals':     {
-                                    'USD': 123.45,
-                                }
-              }, ...
-          ]
-        """
+    def interval_totals(self, interval, account_name):
+        """Renders totals for account in the given intervals."""
 
         interval_tuples = self._interval_tuples(interval, self.entries)
-        interval_totals = []
-        for begin_date, end_date in interval_tuples:
-            totals = self.balances_totals(account_name, begin_date=begin_date, end_date=end_date)
-
-            interval_totals.append({
-                'begin_date': begin_date,
-                'end_date': end_date,
-                'totals': totals
-            })
-
-        return interval_totals
+        return [{
+            'begin_date': begin_date,
+            'end_date': end_date,
+            'totals': self.balances_totals(account_name, begin_date=begin_date, end_date=end_date),
+        } for begin_date, end_date in interval_tuples]
 
     def _real_accounts(self, account_name, entries, begin_date=None, end_date=None):
         """
@@ -565,14 +546,6 @@ class BeancountReportAPI(object):
             return True
         else:
             return False  # TODO raise
-
-    def monthly_totals(self, account_name):
-        real_account = realization.get(self.root_account, account_name)
-        return self._interval_totals(real_account.account, 'month', self.entries)
-
-    def yearly_totals(self, account_name):
-        real_account = realization.get(self.root_account, account_name)
-        return self._interval_totals(real_account.account, 'year', self.entries)
 
     def commodities(self):
         return sorted(self.price_map.forward_pairs)

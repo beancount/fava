@@ -17,7 +17,7 @@
         {% include "charts/_chart_skeleton.html" %}
         {% include "charts/_chart_account_balance.html" %}
 
-        {% with label="Monthly totals", monthly_totals=api.monthly_totals(account_name) %}
+        {% with label="Monthly totals", monthly_totals=api.interval_totals('month' ,account_name) %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
         {% set treemap_data = api.treemap_data(account_name) %}
@@ -38,7 +38,7 @@
     {% elif with_monthly_balances %}
 
         {% include "charts/_chart_skeleton.html" %}
-        {% with label="Monthly totals", monthly_totals=api.monthly_totals(account_name) %}
+        {% with label="Monthly totals", monthly_totals=api.interval_totals('month' ,account_name) %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
 
@@ -51,7 +51,7 @@
     {% elif with_yearly_balances %}
 
         {% include "charts/_chart_skeleton.html" %}
-        {% with label="Yearly totals", yearly_totals=api.yearly_totals(account_name) %}
+        {% with label="Yearly totals", yearly_totals=api.interval_totals('year', account_name) %}
             {% include "charts/_chart_yearly_totals.html" %}
         {% endwith %}
 
