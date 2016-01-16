@@ -54,12 +54,12 @@ def account(account_name=None, with_journal=False, with_journal_children=None, w
         return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data)
 
     if with_monthly_balances:
-        interval_balances = app.api.monthly_balances(account_name)
+        interval_balances = app.api.interval_balances('month', account_name)
         interval_format_str = "%b '%y"
         interval_begin_date_lambda = lambda x: date(x.year, x.month, 1)
 
     if with_yearly_balances:
-        interval_balances = app.api.yearly_balances(account_name)
+        interval_balances = app.api.interval_balances('year', account_name)
         interval_format_str = "%Y"
         interval_begin_date_lambda = lambda x: date(x.year, 1, 1)
 

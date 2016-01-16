@@ -307,18 +307,22 @@ class BeancountReportAPI(object):
 
         return self._total_balance(real_accounts)
 
-    def monthly_balances(self, account_name):
+    def interval_balances(self, interval, account_name):
         # TODO include balances_children
         # the account tree at time now
 
         account_names = [account['full_name'] for account in self.all_accounts if account['full_name'].startswith(account_name)]
 
-        month_tuples = self._interval_tuples('month', self.entries)
-        monthly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options['commodities']} for begin_date, end_date in month_tuples }
+        interval_tuples = self._interval_tuples(interval, self.entries)
+        totals = {
+            end_date.isoformat(): {
+                currency: ZERO for currency in self.options['commodities']
+            } for begin_date, end_date in interval_tuples
+        }
 
-        arr = { account_name: {} for account_name in account_names }
+        arr = {account_name: {} for account_name in account_names}
 
-        for begin_date, end_date in month_tuples:
+        for begin_date, end_date in interval_tuples:
             real_accounts = self._real_accounts(account_name, self.entries, begin_date=begin_date, end_date=end_date)
 
             _table_tree = self._table_tree(real_accounts)
@@ -330,53 +334,17 @@ class BeancountReportAPI(object):
 
                 if line['postings_count'] > 0:
                     for currency, number in line['balances'].items():
-                        monthly_totals[end_date.isoformat()][currency] += number
+                        totals[end_date.isoformat()][currency] += number
 
         balances = sorted([
                         { 'account': account, 'totals': totals } for account, totals in arr.items()
                       ], key=lambda x: x['account'])
 
         return {
-            'interval_end_dates': [end_date for begin_date, end_date in month_tuples],
+            'interval_end_dates': [end_date for begin_date, end_date in interval_tuples],
             'balances': balances,
-            'totals': monthly_totals
+            'totals': totals,
         }
-
-    def yearly_balances(self, account_name):
-        # TODO include balances_children
-        # the account tree at time now
-
-        account_names = [account['full_name'] for account in self.all_accounts if account['full_name'].startswith(account_name)]
-
-        year_tuples = self._interval_tuples('year', self.entries)
-        yearly_totals = { end_date.isoformat(): { currency: ZERO for currency in self.options['commodities']} for begin_date, end_date in year_tuples }
-
-        arr = { account_name: {} for account_name in account_names }
-
-        for begin_date, end_date in year_tuples:
-            real_accounts = self._real_accounts(account_name, self.entries, begin_date=begin_date, end_date=end_date)
-
-            _table_tree = self._table_tree(real_accounts)
-            for line in _table_tree:
-                arr[line['account']][end_date.isoformat()] = {
-                    'balances': line['balances'],
-                    'balances_children': line['balances_children']
-                }
-
-                if line['postings_count'] > 0:
-                    for currency, number in line['balances'].items():
-                        yearly_totals[end_date.isoformat()][currency] += number
-
-        balances = sorted([
-                        { 'account': account, 'totals': totals } for account, totals in arr.items()
-                      ], key=lambda x: x['account'])
-
-        return {
-            'interval_end_dates': [end_date for begin_date, end_date in year_tuples],
-            'balances': balances,
-            'totals': yearly_totals
-        }
-
 
     def trial_balance(self):
         return self._table_tree(self.root_account)[1:]
