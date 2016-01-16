@@ -81,9 +81,9 @@ class BeancountReportAPI(object):
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
-        self.apply_filters()
+        self._apply_filters()
 
-    def apply_filters(self):
+    def _apply_filters(self):
         self.entries = self.all_entries
 
         if self.filters['time']:
@@ -116,7 +116,7 @@ class BeancountReportAPI(object):
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
         self.closing_entries = summarize.cap_opt(self.entries, self.options)
-        self.closing_real_accounts = realization.realize(self.closing_entries, self.account_types)
+        self.closing_real_account = realization.realize(self.closing_entries, self.account_types)
 
     def filter(self, **kwargs):
         changed = False
@@ -126,7 +126,7 @@ class BeancountReportAPI(object):
                 changed = True
 
         if changed:
-            self.apply_filters()
+            self._apply_filters()
 
     def _all_accounts(self, leaf_only=False):
         """Detailed list of all accounts."""
@@ -138,9 +138,9 @@ class BeancountReportAPI(object):
 
         return accounts[1:]
 
-    def _table_tree(self, real_accounts):
+    def _table_tree(self, real_account):
         """
-        Renders real_accounts and it's children as a flat list to be used
+        Renders real_account and it's children as a flat list to be used
         in rendering tables.
         """
         return [{
@@ -149,7 +149,7 @@ class BeancountReportAPI(object):
             'balances': serialize_inventory(real_account.balance, at_cost=True),
             'is_leaf': len(real_account) == 0 or real_account.txn_postings,
             'postings_count': len(real_account.txn_postings)
-        } for real_account in realization.iter_children(real_accounts)]
+        } for real_account in realization.iter_children(real_account)]
 
     def _total_balance(self, real_account):
         """Computes the total balance for real_account and its children."""
@@ -237,6 +237,10 @@ class BeancountReportAPI(object):
 
         return monthly_totals
 
+    def _balances_totals(self, account_name, begin_date=None, end_date=None):
+        real_account = self._real_account(account_name, self.entries, begin_date, end_date)
+        return self._total_balance(real_account)
+
     def interval_totals(self, interval, account_name):
         """Renders totals for account in the given intervals."""
 
@@ -244,10 +248,10 @@ class BeancountReportAPI(object):
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
-            'totals': self.balances_totals(account_name, begin_date=begin_date, end_date=end_date),
+            'totals': self._balances_totals(account_name, begin_date=begin_date, end_date=end_date),
         } for begin_date, end_date in interval_tuples]
 
-    def _real_accounts(self, account_name, entries, begin_date=None, end_date=None):
+    def _real_account(self, account_name, entries, begin_date=None, end_date=None):
         """
         Returns the realization.RealAccount instances for account_name, and
         their entries clamped by the optional begin_date and end_date.
@@ -258,9 +262,9 @@ class BeancountReportAPI(object):
         :return: realization.RealAccount instances
         """
         entries_in_range = entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
-        real_accounts = realization.get(realization.realize(entries_in_range, [account_name]), account_name)
+        real_account = realization.get(realization.realize(entries_in_range, [account_name]), account_name)
 
-        return real_accounts
+        return real_account
 
 
     def balances(self, account_name, begin_date=None, end_date=None):
@@ -283,29 +287,15 @@ class BeancountReportAPI(object):
               }, ...
           ]
         """
-        real_accounts = self._real_accounts(account_name, self.entries, begin_date, end_date)
+        real_account = self._real_account(account_name, self.entries, begin_date, end_date)
 
-        return self._table_tree(real_accounts)
+        return self._table_tree(real_account)
 
 
     def closing_balances(self, account_name, begin_date=None, end_date=None):
-        real_accounts = self._real_accounts(account_name, self.closing_entries, begin_date, end_date)
+        real_account = self._real_account(account_name, self.closing_entries, begin_date, end_date)
 
-        return self._table_tree(real_accounts)
-
-    def balances_totals(self, account_name, begin_date=None, end_date=None):
-        """
-        Renders account_name and it's children as a flat list to be used
-        in rendering tables.
-
-        Returns:
-            {
-               'USD': 123.45,
-            }
-        """
-        real_accounts = self._real_accounts(account_name, self.entries, begin_date, end_date)
-
-        return self._total_balance(real_accounts)
+        return self._table_tree(real_account)
 
     def interval_balances(self, interval, account_name):
         # TODO include balances_children
@@ -323,9 +313,9 @@ class BeancountReportAPI(object):
         arr = {account_name: {} for account_name in account_names}
 
         for begin_date, end_date in interval_tuples:
-            real_accounts = self._real_accounts(account_name, self.entries, begin_date=begin_date, end_date=end_date)
+            real_account = self._real_account(account_name, self.entries, begin_date=begin_date, end_date=end_date)
 
-            _table_tree = self._table_tree(real_accounts)
+            _table_tree = self._table_tree(real_account)
             for line in _table_tree:
                 arr[line['account']][end_date.isoformat()] = {
                     'balances': line['balances'],
