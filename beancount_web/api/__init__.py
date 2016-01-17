@@ -63,8 +63,7 @@ class BeancountReportAPI(object):
         """Load self.beancount_file_path and compute things that are independent
         of how the entries might be filtered later"""
 
-        self.entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
-        self.all_entries = self.entries
+        self.all_entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
         self.account_types = options.get_account_types(self.options)
 
@@ -154,7 +153,7 @@ class BeancountReportAPI(object):
         """Computes the total balance for real_account and its children."""
         return serialize_inventory(realization.compute_balance(real_account), at_cost=True)
 
-    def _journal_for_postings(self, postings, include_types=None, with_change_and_balance=False):
+    def _journal(self, postings, include_types=None, with_change_and_balance=False):
         journal = []
 
         for posting, leg_postings, change, entry_balance in realization.iterate_with_balance(postings):
@@ -333,18 +332,18 @@ class BeancountReportAPI(object):
                 postings.extend(real_account.txn_postings)
                 postings.sort(key=posting_sortkey)
 
-            return self._journal_for_postings(postings, with_change_and_balance=with_change_and_balance)
+            return self._journal(postings, with_change_and_balance=with_change_and_balance)
         else:
-            return self._journal_for_postings(self.entries, with_change_and_balance=with_change_and_balance)
+            return self._journal(self.entries, with_change_and_balance=with_change_and_balance)
 
     def documents(self):
-        return self._journal_for_postings(self.entries, Document)
+        return self._journal(self.entries, Document)
 
     def notes(self):
-        return self._journal_for_postings(self.entries, Note)
+        return self._journal(self.entries, Note)
 
     def queries(self, query_hash=None):
-        res = self._journal_for_postings(self.entries, Query)
+        res = self._journal(self.entries, Query)
         no_query = {
             'name': 'None',
             'query_string': ''
@@ -355,7 +354,7 @@ class BeancountReportAPI(object):
             return res
 
     def events(self, event_type=None, only_include_newest=False):
-        events = self._journal_for_postings(self.entries, Event)
+        events = self._journal(self.entries, Event)
 
         if event_type:
             events = [event for event in events if event['type'] == event_type]
@@ -388,8 +387,7 @@ class BeancountReportAPI(object):
                 for holding in holdings.convert_to_currency(self.price_map, currency, holdings_list):
                     if holding.cost_currency == currency and holding.market_value:
                         total += holding.market_value
-                if total != ZERO:
-                    totals[currency] = total
+                totals[currency] = total
 
             monthly_totals.append({
                 'begin_date': begin_date,
@@ -450,7 +448,7 @@ class BeancountReportAPI(object):
         return {
             'hash': ehash,
             'contexts': contexts,
-            'journal': self._journal_for_postings(matching_entries)
+            'journal': self._journal(matching_entries)
         }
 
     def treemap_data(self, account_name):
