@@ -116,7 +116,6 @@ class BeancountReportAPI(object):
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
         self.closing_entries = summarize.cap_opt(self.entries, self.options)
-        self.closing_real_account = realization.realize(self.closing_entries, self.account_types)
 
     def filter(self, **kwargs):
         changed = False
@@ -275,10 +274,8 @@ class BeancountReportAPI(object):
         return self._table_tree(real_account)
 
 
-    def closing_balances(self, account_name, begin_date=None, end_date=None):
-        real_account = self._real_account(account_name, self.closing_entries, begin_date, end_date)
-
-        return self._table_tree(real_account)
+    def closing_balances(self, account_name):
+        return self._table_tree(self._real_account(account_name, self.closing_entries))
 
     def interval_balances(self, interval, account_name):
         # TODO include balances_children
