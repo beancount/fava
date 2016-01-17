@@ -23,7 +23,7 @@ import os
 from datetime import date, timedelta
 
 from beancount import loader
-from beancount.core import compare, getters, realization
+from beancount.core import compare, getters, realization, inventory
 from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
@@ -219,36 +219,19 @@ class BeancountReportAPI(object):
 
         return interval_tuples
 
-    def monthly_income_expenses_totals(self):
-        month_tuples = self._interval_tuples('month', self.entries)
-        monthly_totals = []
-        for begin_date, end_date in month_tuples:
-            entries = entries_in_inclusive_range(self.entries, begin_date, end_date)
-            realized = realization.realize(entries, self.account_types)
-            income_totals = self._total_balance(realization.get(realized, self.account_types.income))
-            expenses_totals = self._total_balance(realization.get(realized, self.account_types.expenses))
-
-            monthly_totals.append({
-                'begin_date': begin_date,
-                'end_date': end_date,
-                'income_totals': income_totals,
-                'expenses_totals': expenses_totals
-            })
-
-        return monthly_totals
-
-    def _balances_totals(self, account_name, begin_date=None, end_date=None):
-        real_account = self._real_account(account_name, self.entries, begin_date, end_date)
-        return self._total_balance(real_account)
+    def _balances_totals(self, names, begin_date, end_date):
+        totals = [realization.compute_balance(self._real_account(account_name, self.entries, begin_date, end_date)) for account_name in names]
+        return serialize_inventory(sum(totals, inventory.Inventory()), at_cost=True)
 
     def interval_totals(self, interval, account_name):
-        """Renders totals for account in the given intervals."""
+        """Renders totals for account (or accounts) in the intervals."""
+        names = [account_name] if isinstance(account_name, str) else account_name
 
         interval_tuples = self._interval_tuples(interval, self.entries)
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
-            'totals': self._balances_totals(account_name, begin_date=begin_date, end_date=end_date),
+            'totals': self._balances_totals(names, begin_date, end_date),
         } for begin_date, end_date in interval_tuples]
 
     def _real_account(self, account_name, entries, begin_date=None, end_date=None):

@@ -7,14 +7,16 @@
     <h1>Income Statement</h1>
     {% set income = api.balances(options['name_income']) %}
     {% set expenses = api.balances(options['name_expenses']) %}
+
     {% set income_monthly_totals = api.interval_totals('month', options['name_income']) %}
     {% set expenses_monthly_totals = api.interval_totals('month', options['name_expenses']) %}
-    {# TODO calls api.monthly_totals twice for income and expenses#}
-    {% set monthly_totals = api.monthly_income_expenses_totals() %}
+    {% set ie_totals = api.interval_totals('month', [options['name_income'], options['name_expenses']]) %}
+
     {% include "charts/_chart_skeleton.html" %}
-    {# {% with .monthly_totals  %} #}
-        {% include "charts/_chart_monthly_ie_changes.html" %}
-    {# {% endwith %} #}
+
+    {% with label="Monthly changes (Income/Expenses)", monthly_totals=ie_totals %}
+        {% include "charts/_chart_monthly_totals.html" %}
+    {% endwith %}
 
     {% with label="Monthly income", monthly_totals=income_monthly_totals %}
         {% include "charts/_chart_monthly_totals.html" %}
