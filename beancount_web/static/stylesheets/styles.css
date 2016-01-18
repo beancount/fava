@@ -1003,7 +1003,7 @@ article .left.statistics table.statistics td:first-child a {
   color: #333;
   font-weight: bold;
 }
-.ace_editor.ace-chrome .ace_class, .ace_editor.ace-chrome .ace_double {
+.ace_editor.ace-chrome .ace_class, .ace_editor.ace-chrome .ace_double, .ace_editor.ace-chrome .ace_triple {
   color: #bb8844;
 }
 .ace_editor.ace-chrome .ace_constant.ace_numeric.ace_date {

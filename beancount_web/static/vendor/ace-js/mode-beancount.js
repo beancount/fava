@@ -3,6 +3,7 @@ define("ace/mode/beancount_highlight_rules",["require","exports","module","ace/l
 
 var oop = require("../lib/oop");
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var SqlHighlightRules = require("ace/mode/sql_highlight_rules").SqlHighlightRules;
 
 var BeancountHighlightRules = function() {
 
@@ -16,8 +17,13 @@ var BeancountHighlightRules = function() {
             regex: /^#!.*/,
             comment: "Shebangs"
         }, {
+            token: "string.quoted.triple.beancount",
+            regex: /"""/,
+            comment: "Multi-line strings (embedded SQL)",
+            next: "sql-start"
+        }, {
             token: "string.quoted.double.beancount",
-            regex: /\".*\"/,
+            regex: /"[^"]*"/,
             comment: "strings"
         }, {
             token: [
@@ -71,7 +77,7 @@ var BeancountHighlightRules = function() {
                 "text",
                 "support.function.directive.beancount"
             ],
-            regex: /([0-9]{4})(\-)([0-9]{2})(\-)([0-9]{2})(\s)(open|close|pad|balance|note|price|event|document|commodity)/,
+            regex: /([0-9]{4})(\-)([0-9]{2})(\-)([0-9]{2})(\s)(open|close|pad|balance|note|price|event|document|commodity|query)/,
             comment: "Dated directives"
         }, {
             token: [
@@ -143,6 +149,13 @@ var BeancountHighlightRules = function() {
             comment: "Commented text"
         }]
     }
+
+    this.embedRules(SqlHighlightRules, "sql-", [{
+        token: "string.quoted.triple.beancount",
+        regex: /"""/,
+        comment: "Multi-line strings",
+        next: "start"
+    }]);
 
     this.normalizeRules();
 };
