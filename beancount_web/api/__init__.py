@@ -458,6 +458,15 @@ class BeancountReportAPI(object):
             'modifier': get_account_sign(account_name, self.account_types),
         }
 
+    def linechart_data(self, account_name):
+        journal = self.journal(account_name, with_change_and_balance=True)
+
+        return [{
+            'date': journal_entry['date'],
+            'balance': journal_entry['balance'],
+            'change': journal_entry['change'],
+        } for journal_entry in journal if 'balance' in journal_entry.keys()]
+
     def source_files(self):
         return list(set(
                         [self.beancount_file_path]

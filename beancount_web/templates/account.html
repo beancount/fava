@@ -4,7 +4,7 @@
 {% block title %}Account {{ account_name }}{% endblock %}
 
 {% block javascript %}
-    {% if journal %}
+    {% if not interval %}
         {% include "javascript/_journal.html" %}
     {% endif %}
 {% endblock %}
@@ -12,14 +12,18 @@
 {% block content %}
     {% include "_account_name_header.html" %}
 
-    {% if journal %}
+    {% if not interval %}
 
         {% include "charts/_chart_skeleton.html" %}
-        {% include "charts/_chart_account_balance.html" %}
+
+        {% with linechart_data = api.linechart_data(account_name) %}
+            {% include "charts/_chart_account_balance.html" %}
+        {% endwith %}
 
         {% with label="Monthly totals", monthly_totals=api.interval_totals('month' ,account_name) %}
             {% include "charts/_chart_monthly_totals.html" %}
         {% endwith %}
+
         {% set treemap_data = api.treemap_data(account_name) %}
         {% with label=treemap_data.label, rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name.split(':')|length %}
             {% include "charts/_chart_treemap.html" %}
@@ -31,11 +35,12 @@
             <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
         </div>
 
+        {% set journal = api.journal(account_name, with_change_and_balance=True, with_journal_children=config.getboolean('journal-show-childentries')) %}
         {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
 
-    {% elif with_monthly_balances %}
+    {% elif interval == 'month' %}
 
         {% include "charts/_chart_skeleton.html" %}
         {% with label="Monthly totals", monthly_totals=api.interval_totals('month' ,account_name) %}
@@ -48,7 +53,7 @@
             <h3>Monthly balances</h3>
         </div>
 
-    {% elif with_yearly_balances %}
+    {% elif interval == 'year' %}
 
         {% include "charts/_chart_skeleton.html" %}
         {% with label="Yearly totals", yearly_totals=api.interval_totals('year', account_name) %}
@@ -62,7 +67,7 @@
         </div>
     {% endif %}
 
-    {% if with_yearly_balances or with_monthly_balances %}
+    {% if interval %}
         {% for i_treemap in interval_treemaps %}
             {% with label=i_treemap.label, rows=i_treemap.balances, modifier=i_treemap.modifier, level=account_name.split(':')|length %}
                 {% include "charts/_chart_treemap.html" %}
@@ -129,7 +134,7 @@
         </table>
     {% endif %}
 
-    {% if not journal and not with_monthly_balances and not with_yearly_balances %}
+    {% if not journal and not interval %}
         <p class="empty">
             No entries for this account{% if entry_filters %} and the applied filters{% endif %}.
         </p>

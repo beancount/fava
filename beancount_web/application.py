@@ -24,63 +24,45 @@ assets.init_app(app)
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
-    return account(account_name=name, with_journal=True)
+    return render_template('account.html', account_name=name)
 
 @app.route('/account/<name>/monthly_balances/')
 def account_with_monthly_balances(name=None):
-    return account(account_name=name, with_monthly_balances=True)
+    return account(account_name=name, interval='month')
 
 @app.route('/account/<name>/yearly_balances/')
 def account_with_yearly_balances(name=None):
-    return account(account_name=name, with_yearly_balances=True)
+    return account(account_name=name, interval='year')
 
-def account(account_name=None, with_journal=False, with_journal_children=None, with_monthly_balances=False, with_yearly_balances=False):
-    if with_journal:
-        if not with_journal_children:
-            with_journal_children = app.user_config['beancount-web'].getboolean('journal-show-childentries')
-
-        journal = app.api.journal(account_name, with_change_and_balance=True, with_journal_children=with_journal_children)
-
-        # should this be done in the api?
-        linechart_data = []
-        for journal_entry in journal:
-            if 'balance' in journal_entry.keys():
-                linechart_data.append({
-                    'date': journal_entry['date'],
-                    'balance': journal_entry['balance'],
-                    'change': journal_entry['change'],
-                })
-
-        return render_template('account.html', account_name=account_name, journal=journal, linechart_data=linechart_data)
-
-    if with_monthly_balances:
-        interval_balances = app.api.interval_balances('month', account_name)
+def account(account_name=None, interval=None):
+    if interval == 'month':
         interval_format_str = "%b '%y"
         interval_begin_date_lambda = lambda x: date(x.year, x.month, 1)
 
-    if with_yearly_balances:
-        interval_balances = app.api.interval_balances('year', account_name)
+    if interval == 'year':
         interval_format_str = "%Y"
         interval_begin_date_lambda = lambda x: date(x.year, 1, 1)
 
-    if with_monthly_balances or with_yearly_balances:
-        interval_treemaps = []
-        max_intervals = int(request.args.get('interval_end_dates', 3)) # Only show three latest treemaps
-        num_of_intervals = len(interval_balances['interval_end_dates']) if len(interval_balances['interval_end_dates']) < max_intervals else max_intervals
+    interval_balances = app.api.interval_balances(interval, account_name)
 
-        for interval_end_date in interval_balances['interval_end_dates'][::-1][:num_of_intervals]:
-            interval_begin_date = interval_begin_date_lambda(interval_end_date)
-            interval_treemaps.append({
-                'label': '{}'.format(interval_end_date.strftime(interval_format_str)),
-                'balances': app.api.balances(account_name, begin_date=interval_begin_date, end_date=interval_end_date)
-            })
+    interval_treemaps = []
+    max_intervals = int(request.args.get('interval_end_dates', 3)) # Only show three latest treemaps
+    num_of_intervals = len(interval_balances['interval_end_dates']) if len(interval_balances['interval_end_dates']) < max_intervals else max_intervals
 
-        return render_template('account.html', account_name=account_name,
-                                        interval_format_str=interval_format_str,
-                                          interval_balances=interval_balances,
-                                          interval_treemaps=interval_treemaps,
-                                       with_yearly_balances=with_yearly_balances,
-                                      with_monthly_balances=with_monthly_balances)
+    for interval_end_date in interval_balances['interval_end_dates'][::-1][:num_of_intervals]:
+        interval_begin_date = interval_begin_date_lambda(interval_end_date)
+        interval_treemaps.append({
+            'label': '{}'.format(interval_end_date.strftime(interval_format_str)),
+            'balances': app.api.balances(account_name, begin_date=interval_begin_date, end_date=interval_end_date)
+        })
+
+    return render_template('account.html', account_name=account_name,
+                           interval_format_str=interval_format_str,
+                           interval_balances=interval_balances,
+                           interval_treemaps=interval_treemaps,
+                           interval=interval)
+
+
 @app.route('/')
 def index():
     return redirect(url_for('report', report_name='income_statement'))
