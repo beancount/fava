@@ -4,7 +4,7 @@
 {% block title %}Equity/Holdings{% endblock %}
 
 {% macro num_cell(value) -%}
-<td class="num" data-sort-value="{{ value|replace(',', '')|float }}">{% if value %}{{ value }}{% endif %}</td>
+<td class="num" data-sort-value="{{ value|replace(',', '')|float }}">{% if value %}{{ value|replace(',', '')|float|format_currency }}{% endif %}</td>
 {%- endmacro %}
 
 {% block content %}
