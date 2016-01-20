@@ -16,7 +16,7 @@
 
     {% if api.queries()|length == 0 %}
         <p class="description">
-            If you specify a <code>option "experiment_query_directive" "TRUE"</code> in your <a href="{{ url_for('source') }}">Source</a> files and then add <code>query</code>-Directives these stored queries will be displayed as a dropdown to quickly select them.
+            If add <code>query</code>-Directives to your <a href="{{ url_for('source') }}">Source</a> these stored queries will be displayed as a dropdown to quickly select them.
         </p>
     {% else %}
         <div class="stored-queries">
