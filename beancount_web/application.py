@@ -6,11 +6,13 @@ from datetime import date, datetime
 
 from flask import Flask, flash, render_template, url_for, request, redirect, abort, Markup, send_from_directory, jsonify, g
 from flask.ext.assets import Environment
-from flask.json import JSONEncoder
 
 from beancount_web.api import FilterException
+from beancount_web.api.serialization import BeanJSONEncoder
+
 
 app = Flask(__name__)
+app.json_encoder = BeanJSONEncoder
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
@@ -177,24 +179,9 @@ def uptodate_infotext(status):
     print("Status '{}' unknown".format(status))
     return "Status '{}' unknown".format(status)
 
-class MyJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.strftime('%Y-%m-%dT%H:%M:%SZ')
-        elif isinstance(obj, date):
-            return obj.strftime('%Y-%m-%d')
-        elif isinstance(obj, decimal.Decimal):
-            return float(obj)
-        elif isinstance(obj, (set, frozenset)):
-            return list(obj)
-        # Let the base class default method raise the TypeError
-        return JSONEncoder.default(self, obj)
-
-app.json_encoder = MyJSONEncoder
-
 @app.template_filter('to_json')
 def to_json(json_object):
-    return Markup(json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=MyJSONEncoder))
+    return Markup(json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=BeanJSONEncoder))
 
 @app.template_filter('pp')
 def pretty_print(json_object):

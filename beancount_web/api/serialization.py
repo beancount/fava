@@ -1,6 +1,29 @@
+import decimal
+from datetime import date, datetime
+
 from beancount.core import interpolate, compare
 from beancount.core.data import Balance, Transaction, Price
+from beancount.core.amount import Amount
+from beancount.core.position import Position
 from beancount.core.number import ZERO
+from flask.json import JSONEncoder
+
+
+class BeanJSONEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.strftime('%Y-%m-%dT%H:%M:%SZ')
+        elif isinstance(o, date):
+            return o.strftime('%Y-%m-%d')
+        elif isinstance(o, decimal.Decimal):
+            return float(o)
+        elif isinstance(o, Amount):
+            return str(o)
+        elif isinstance(o, Position):
+            return str(o)
+        elif isinstance(o, (set, frozenset)):
+            return list(o)
+        return JSONEncoder.default(self, o)
 
 
 def serialize_entry(posting):
@@ -41,52 +64,14 @@ def serialize_entry(posting):
     return entry
 
 
-def serialize_inventory(inventory, at_cost=False, include_currencies=None):
-    """
-    Renders an Inventory to a currency -> amount dict.
-
-    Args:
-        inventory: The inventory to render.
-        include_currencies: Array of strings (eg. ['USD', 'EUR']). If set the
-                            inventory will only contain those currencies.
-
-    Returns:
-        {
-            'USD': 123.45,
-            'CAD': 567.89,
-            ...
-        }
-    """
+def serialize_inventory(inventory, at_cost=False):
+    """Renders an Inventory to a currency -> amount dict."""
     if at_cost:
         inventory = inventory.cost()
     else:
         inventory = inventory.units()
-    result = {p.lot.currency: p.number for p in inventory if p.number != ZERO}
-    if include_currencies:
-        result = {c: result[c]
-                  for c in set(include_currencies) & set(result.keys())}
-    return result
+    return {p.lot.currency: p.number for p in inventory if p.number != ZERO}
 
 
 def serialize_posting(posting):
-    leg = {
-        'account': posting.account,
-        'flag': posting.flag,
-    }
-
-    if posting.position:
-        cost = interpolate.get_posting_weight(posting)
-        leg.update({
-            'position': posting.position.number,
-            'position_currency': posting.position.lot.currency,
-            'cost': cost.number,
-            'cost_currency': cost.currency,
-        })
-
-    if posting.price:
-        leg.update({
-            'price': posting.price.number,
-            'price_currency': posting.price.currency,
-        })
-
-    return leg
+    return posting._asdict()
