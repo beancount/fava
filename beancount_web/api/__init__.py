@@ -369,7 +369,8 @@ class BeancountReportAPI(object):
         return events
 
     def holdings(self):
-        return holdings_reports.report_holdings(None, False, self.entries, self.options)
+        holdings_list, _ = holdings_reports.get_assets_holdings(self.entries, self.options)
+        return holdings_list
 
     def _net_worth_in_periods(self):
         month_tuples = self._interval_tuples('month', self.entries)

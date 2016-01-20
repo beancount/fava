@@ -4,7 +4,7 @@
 {% block title %}Equity/Holdings{% endblock %}
 
 {% macro num_cell(value) -%}
-<td class="num" data-sort-value="{{ value|replace(',', '')|float }}">{% if value %}{{ value|replace(',', '')|float|format_currency }}{% endif %}</td>
+<td class="num" data-sort-value="{{ value }}">{% if value %}{{ value|format_currency }}{% endif %}</td>
 {%- endmacro %}
 
 {% block content %}
@@ -24,20 +24,20 @@
             </tr>
         </thead>
         <tbody>
-            {% for holding in holdings.body %}
+            {% for holding in holdings %}
             <tr>
                 <td>
-                    {% with account_name=holding.0 %}
+                    {% with account_name=holding.account %}
                         {% include "_account_name.html" %}
                     {% endwith %}
                 </td>
-                {{ num_cell(holding.1) }}
-                <td>{{ holding.2 }}</td>
-                <td>{{ holding.3 }}</td>
-                {{ num_cell(holding.4) }}
-                {{ num_cell(holding.5) }}
-                {{ num_cell(holding.6) }}
-                {{ num_cell(holding.7) }}
+                {{ num_cell(holding.number) }}
+                <td>{{ holding.currency}}</td>
+                <td>{{ holding.cost_currency }}</td>
+                {{ num_cell(holding.cost_number) }}
+                {{ num_cell(holding.price_number) }}
+                {{ num_cell(holding.book_value) }}
+                {{ num_cell(holding.market_value) }}
             </tr>
             {% endfor %}
         </tbody>
