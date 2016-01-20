@@ -168,11 +168,11 @@ class BeancountReportAPI(object):
                     entry['change'] = {}
                     if posting.diff_amount:
                         entry['change'] = {posting.diff_amount.currency: posting.diff_amount.number}
-                    entry['balance'] = serialize_inventory(entry_balance)  #, include_currencies=entry['change'].keys())
+                    entry['balance'] = serialize_inventory(entry_balance)
 
                 if isinstance(posting, Transaction):
                     entry['change'] = serialize_inventory(change)
-                    entry['balance'] = serialize_inventory(entry_balance, include_currencies=entry['change'].keys())
+                    entry['balance'] = serialize_inventory(entry_balance)
 
             journal.append(entry)
 
