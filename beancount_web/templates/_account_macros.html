@@ -1,0 +1,51 @@
+{% set infotext = {
+    'green':  "The latest posting is a balance check that passed (i.e., known-good)",
+    'red':    "The latest posting is a balance check that failed (i.e., known-bad)",
+    'yellow': "The latest posting is not a balance check (i.e., unknown)",
+    'gray':   "The account hasn't been updated in a while (as compared to the last available date in the file)",
+} %}
+
+
+{% macro indicator(account_name) %}
+{% if uptodate_eligible(account_name) %}
+    {% set status=api.is_account_uptodate(account_name, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
+    <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}"></span>
+{% endif %}
+{% endmacro %}
+
+
+{% macro account_name(account_name, last_segment=False) %}
+<a href="{{ url_for('account_with_journal', name=account_name) }}" class="account">
+    {{ account_name|last_segment if last_segment else account_name }}
+</a>
+
+{% if config.getboolean('uptodate-indicator-show-everywhere') %}
+{{ indicator(account_name) }}
+{% endif %}
+{% endmacro %}
+
+
+{% macro account_name_header(account_name) %}
+<h1>
+    {% set levels = account_name.count(':')+1 %}
+    {% for level in range(0, levels) %}
+        {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] %}
+        {% set subaccount_part = account_name.split(':')[level] %}
+
+        {%- if loop.last -%}
+            {{ subaccount_part }}
+        {%- else -%}
+            <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>
+        {%- endif -%}
+    {% endfor %}
+
+    {{ indicator(account_name) }}
+
+    {% set activity = api.statistics(account_name=account_name) %}
+    {% if activity %}
+    <div class="last-activity">
+        (Last entry: <a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
+    </div>
+    {% endif %}
+</h1>
+{% endmacro %}

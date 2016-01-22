@@ -30,7 +30,7 @@
     window.journalURL = "{{ url_for('journal')|safe }}";
 
 {% if journal is defined %}
-    window.journalAsJSON = {{ journal|to_json }};
+    window.journalAsJSON = {{ journal|tojson|safe }};
 {% endif %}
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
     window.journalShowLegs = {{ config.getboolean('journal-show-legs')|lower }};

@@ -160,46 +160,17 @@ def report(report_name):
         return render_template('{}.html'.format(report_name))
     return redirect(url_for('report', report_name='balance_sheet'))
 
+
 @app.template_filter('format_currency')
 def format_currency(value, digits=2):
-    if isinstance(value, decimal.Decimal) or isinstance(value, float):
+    if value:
         return ("{:,." + str(digits) + "f}").format(value)
     return ''
+
 
 @app.template_filter('last_segment')
 def last_segment(account):
     return account.split(':')[-1]
-
-@app.template_filter('uptodate_infotext')
-def uptodate_infotext(status):
-    if status == 'green':  return "The latest posting is a balance check that passed (i.e., known-good)"
-    if status == 'red':    return "The latest posting is a balance check that failed (i.e., known-bad)"
-    if status == 'yellow': return "The latest posting is not a balance check (i.e., unknown)"
-    if status == 'gray':   return "The account hasn't been updated in a while (as compared to the last available date in the file)"
-    print("Status '{}' unknown".format(status))
-    return "Status '{}' unknown".format(status)
-
-@app.template_filter('to_json')
-def to_json(json_object):
-    return Markup(json.dumps(json_object, sort_keys=True, indent=4, separators=(',', ': '), cls=BeanJSONEncoder))
-
-@app.template_filter('pp')
-def pretty_print(json_object):
-    # This filter is used only for debugging purposes
-    from pygments import highlight
-    from pygments.lexers import get_lexer_by_name
-    from pygments.formatters import HtmlFormatter
-
-    json_dump = to_json(json_object)
-    lexer = get_lexer_by_name('python', stripall=True)
-    formatter = HtmlFormatter(linenos=True, lineanchors='line', anchorlinenos=True)
-    highlighted_source = highlight(json_dump, lexer, formatter)
-
-    return Markup(highlighted_source)
-
-@app.template_filter('last_segment')
-def last_segment(account_name):
-    return account_name.split(':')[-1]
 
 
 @app.context_processor

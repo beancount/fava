@@ -1,5 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'holdings' %}
+{% import '_account_macros.html' as account_macros with context %}
 
 {% macro num_cell(value) -%}
 <td class="num" data-sort-value="{{ value }}">{% if value %}{{ value|format_currency }}{% endif %}</td>
@@ -24,11 +25,7 @@
         <tbody>
             {% for holding in holdings %}
             <tr>
-                <td>
-                    {% with account_name=holding.account %}
-                        {% include "_account_name.html" %}
-                    {% endwith %}
-                </td>
+                <td>{{ account_macros.account_name(holding.account) }}</td>
                 {{ num_cell(holding.number) }}
                 <td>{{ holding.currency}}</td>
                 <td>{{ holding.cost_currency }}</td>

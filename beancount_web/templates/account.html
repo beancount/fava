@@ -1,6 +1,8 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
 
+{% import '_account_macros.html' as account_macros with context %}
+
 {% block title %}Account {{ account_name }}{% endblock %}
 
 {% block javascript %}
@@ -10,7 +12,7 @@
 {% endblock %}
 
 {% block content %}
-    {% include "_account_name_header.html" %}
+    {{ account_macros.account_name_header(account_name) }}
 
     {% if not interval %}
 
