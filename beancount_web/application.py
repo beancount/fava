@@ -277,12 +277,10 @@ def utility_processor():
 @app.context_processor
 def inject_errors():
     options = app.api.options
-    config  = app.user_config['beancount-web']
-    return dict(errors=app.api.errors,
-                api=app.api,
+    config = app.user_config['beancount-web']
+    return dict(api=app.api,
                 options=options,
                 config=config,
-                title=app.api.title,
                 operating_currencies=options['operating_currency'],
                 commodities=options['commodities'],
                 now=datetime.now().strftime('%Y-%m-%d'))

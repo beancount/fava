@@ -1,8 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
 
-{% block title %}Trial Balance{% endblock %}
-
 {% block content %}
     <h1>Trial Balance</h1>
     {% set trial_balance = api.trial_balance() %}

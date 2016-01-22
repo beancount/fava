@@ -21,6 +21,23 @@
         ('errors',           'Errors',              'g r'),
     ])
 ] %}
+{% set all_pages = {
+    'income_statement': 'Income Statement',
+    'balance_sheet':    'Balance Sheet',
+    'trial_balance':    'Trial Balance',
+    'journal':          'General Journal',
+    'query':            'Custom Query',
+    'holdings':         'Equity/Holdings',
+    'net_worth':        'Net Worth',
+    'documents':        'Documents',
+    'notes':            'Notes',
+    'events':           'Events',
+    'commodities':      'Commodities',
+    'source':           'Source',
+    'options':          'Options',
+    'statistics':       'Statistics',
+    'errors':           'Errors',
+} %}
 {% set active_page = active_page|default('journal') %}
 {% set show_filters = show_filters|default(True) %}
 <!doctype html>
@@ -29,7 +46,7 @@
     {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
-    <title>{% block title %}{% endblock %} - {{ title }}</title>
+    <title>{% block title %}{{ all_pages[active_page] }}{% endblock %} - {{ api.title }}</title>
     {% endblock %}
     <script>window.chartData = [];</script>
 </head>
@@ -56,7 +73,7 @@
     <header>
         <div class="branding">
             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAsVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3mHKcAAAAOnRSTlMAAQMEBQYHCAwNDg8QExkaISImJzQ7RUZHSUtVZGtsb3FzdXd4f5WYm56jr7y+xcfP2tze4OLk6/X9+wsXVgAAAMJJREFUKFPFkWkTgiAYhDG1wy677VSzw0q6pKz3//+wBGRkGO2r+4ndZ9hhFoQq0AaXKZoiKFfE4Uzt82iKOWyrcJjDJU90N45dnZ/3HCbrPvfmE64YHkZ216MQi6rwPUBp0VF4GVrQowlAqwA6cN8xKJ4uwyDNGdz+g0EBnAvoFEALxjZC9gIsCd60zJy6ZqpRmFmNLfQ9NJirE7pWbDLTuYj5SI0Fhk+IzwdqfvLhJ0jRSvqVl/rRCYdnKNVG7atcP+gmOQsBuK8NAAAAAElFTkSuQmCC" alt="">
-            <h1 class="site-name">{{ title or 'Beancount Web' }}</h1>
+            <h1 class="site-name">{{ api.title or 'Beancount Web' }}</h1>
         </div>
         {% if show_filters %}
         <nav>
@@ -70,7 +87,7 @@
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
                 {% for id, caption, shortcut in menuitems %}
-                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and errors|length > 0 %}<span>{{ errors|length }}</span>{% endif %}</a></li>
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a></li>
                 {% endfor %}
                 </ul>
             {% endfor %}
