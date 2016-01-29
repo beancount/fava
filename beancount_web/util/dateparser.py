@@ -40,8 +40,9 @@ def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
     """
     year, month, day = map(lambda x: int(x) if x else None, (year, month, day))
     if not (year or month or day):
-        date = datetime.date.today() + timedelta
-        return date, date
+        start = datetime.date.today() + timedelta
+        end = start + datetime.timedelta(days = 1)
+        return start, end
     elif (not year) or (day and not month):
         raise Exception
     elif (not day) and (not month):
@@ -51,7 +52,8 @@ def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
         start = datetime.date(year, month, 1)
         end = datetime.date(year + (month > 11), (month % 12) + 1, 1)
     else:  # ~= if (year and month and day)
-        start = end = datetime.date(year, month, day)
+        start = datetime.date(year, month, day)
+        end = start + datetime.timedelta(days = 1)
     return start, end
 
 
@@ -80,7 +82,7 @@ def parse_date(string):
     where start and end look like one of the above examples
     """
     if string.strip().lower() in ['year to date', 'ytd']:
-        return parse_date(str(datetime.date.today().year) + ' - tomorrow')
+        return parse_date(str(datetime.date.today().year) + ' - today')
 
     is_range = is_range_re.match(string)
     if is_range:
