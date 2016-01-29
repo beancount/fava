@@ -28,15 +28,10 @@ assets.init_app(app)
 def account_with_journal(name=None):
     return render_template('account.html', account_name=name)
 
-@app.route('/account/<name>/monthly_balances/')
-def account_with_monthly_balances(name=None):
-    return account(account_name=name, interval='month')
+@app.route('/account/<name>/<interval>ly_balances/')
+def account_with_interval_balances(name, interval):
+    account_name = name
 
-@app.route('/account/<name>/yearly_balances/')
-def account_with_yearly_balances(name=None):
-    return account(account_name=name, interval='year')
-
-def account(account_name=None, interval=None):
     if interval == 'month':
         interval_format_str = "%b '%y"
         interval_begin_date_lambda = lambda x: date(x.year, x.month, 1)

@@ -33,8 +33,8 @@
 
         <div class="headerline">
             <h3>Journal</h3>
-            <h3><a href="{{ url_for('account_with_yearly_balances', name=account_name) }}">Yearly balances</a></h3>
-            <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
+            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='year') }}">Yearly balances</a></h3>
+            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='month') }}">Monthly balances</a></h3>
         </div>
 
         {% set journal = api.journal(account_name, with_change_and_balance=True, with_journal_children=config.getboolean('journal-show-childentries')) %}
@@ -51,7 +51,7 @@
 
         <div class="headerline">
             <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
-            <h3><a href="{{ url_for('account_with_yearly_balances', name=account_name) }}">Yearly balances</a></h3>
+            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='year') }}">Yearly balances</a></h3>
             <h3>Monthly balances</h3>
         </div>
 
@@ -65,7 +65,7 @@
         <div class="headerline">
             <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
             <h3>Yearly balances</h3>
-            <h3><a href="{{ url_for('account_with_monthly_balances', name=account_name) }}">Monthly balances</a></h3>
+            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='month') }}">Monthly balances</a></h3>
         </div>
     {% endif %}
 
