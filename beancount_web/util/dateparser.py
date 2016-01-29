@@ -80,7 +80,7 @@ def parse_date(string):
     where start and end look like one of the above examples
     """
     if string.strip().lower() in ['year to date', 'ytd']:
-        return parse_date(str(datetime.date.today().year) + ' - today')
+        return parse_date(str(datetime.date.today().year) + ' - tomorrow')
 
     is_range = is_range_re.match(string)
     if is_range:
