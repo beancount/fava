@@ -94,7 +94,7 @@ function drawJournal() {
             });
 
             if (journalEntry) {
-                var html = legTemplate({ journalEntry: journalEntry, legs: journalEntry.legs  });
+                var html = legTemplate({ journalEntry: journalEntry, legs: journalEntry.legs, hash: journalEntry.hash  });
                 $this.after(html);
             } else {
                 console.warn("Hash not found", hash, window.journalAsJSON);
