@@ -22,7 +22,7 @@ setup(name='beancount-web',
           'beancount',
           'Flask==0.10.1',
           'Flask-Assets==0.11',
-          'livereload'
+          'livereload==2.4.1'
       ],
       dependency_links=[
           'hg+https://bitbucket.org/blais/beancount#egg=beancount',
