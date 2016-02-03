@@ -1,7 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'statistics' %}
 
-{% block title %}Statistics{% endblock %}
+{% import '_account_macros.html' as account_macros %}
 
 {% block javascript %}
     {% assets "vendor/clipboard-js/clipboard-1.5.5.js" %}
@@ -84,7 +84,7 @@
                             {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
                                 <td data-sort-value="{{ status }}">
                                     {% with account_inventory=api.inventory(activity.account)  %}
-                                        <span class="status-indicator status-{{ status }}" title="{{ status|uptodate_infotext }}
+                                        <span class="status-indicator status-{{ status }}" title="{{ account_macros.infotext[status] }}
                                         {%- if account_inventory|length > 0 %}
 
 

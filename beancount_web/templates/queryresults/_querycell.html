@@ -1,4 +1,4 @@
-{# {{ name }} {{ value }} {{ type }} #}
+{% import '_account_macros.html' as account_macros with context %}
 
 {% if type|string == "<class 'beancount.core.inventory.Inventory'>" %}
     <td class="num">
@@ -11,9 +11,7 @@
 {% elif type|string == "<class 'str'>" %}
     <td>
         {% if name == "account" %}
-            {% with account_name=value %}
-                {% include "_account_name.html" %}
-            {% endwith %}
+            {{ account_macros.account_name(value) }}
         {% else %}
             {{value }}
         {% endif %}

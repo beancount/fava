@@ -1,3 +1,4 @@
+{% import '_account_macros.html' as account_macros with context %}
 {% if table_title %}
     <h3>{{ table_title }}</h3>
 {% endif %}
@@ -18,9 +19,7 @@
             {% with account_level = account_level(row.account)  %}
             <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(row.account) %} class="hides"{% endif %}>
                 <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
-                    {% with account_name=row.account, last_segment=True %}
-                        {% include "_account_name.html" %}
-                    {% endwith %}
+                    {{ account_macros.account_name(row.account, last_segment=True) }}
                 </td>
             {% for currency in operating_currencies %}
                 <td class="num">
