@@ -262,16 +262,19 @@ article {
     margin-left: 200px;
     padding: 20px 24px;
 
-    .headerline h3 {
-        display: inline-block;
-        margin-right: 15px;
+    .headerline {
+        h3 {
+            display: inline-block;
+            margin: 0;
+            padding: 6px 10px;
 
-        a {
-            color: #aaa;
+            a {
+                color: #aaa;
 
-            &:hover {
-                color: #333;
-                text-decoration: underline;
+                &:hover {
+                    color: #333;
+                    text-decoration: underline;
+                }
             }
         }
     }
@@ -765,11 +768,15 @@ article {
 
     .table-filter, .chart-filter {
         float: right;
-        margin-top: -20px;
+        margin-bottom: 8px;
 
         input {
             margin-left: 10px;
         }
+    }
+
+    .chart-filter {
+        margin-top: -20px;
     }
 
     span {

@@ -401,7 +401,8 @@ article {
 }
 article .headerline h3 {
   display: inline-block;
-  margin-right: 15px;
+  margin: 0;
+  padding: 6px 10px;
 }
 article .headerline h3 a {
   color: #aaa;
@@ -943,10 +944,13 @@ article .loading {
 }
 article .table-filter, article .chart-filter {
   float: right;
-  margin-top: -20px;
+  margin-bottom: 8px;
 }
 article .table-filter input, article .chart-filter input {
   margin-left: 10px;
+}
+article .chart-filter {
+  margin-top: -20px;
 }
 article span.payee {
   font-weight: bold;
@@ -1987,13 +1991,13 @@ article#page-query .error {
   font-family: monospace;
 }
 article#page-query .stored-queries {
-    color: #666;
-    font-size: 11px;
-    float: right;
-    margin-bottom: 10px;
+  color: #666;
+  font-size: 1px;
+  float: right;
+  margin-bottom: 10px;
 }
 article#page-query .editor-wrapper {
-    clear: right;
+  clear: right;
 }
 article#page-query .sample h3, article#page-query .sample li, article#page-query .sample code {
   color: #AAA;
