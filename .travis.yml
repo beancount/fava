@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "pypy"
+install:
+  - pip install -r requirements.txt
+  - python setup.py install
