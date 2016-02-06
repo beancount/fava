@@ -51,8 +51,18 @@ $(document).ready(function() {
         row.toggleClass('hides', hide);
         row = row.next();
         while (row.length > 0 && getLevel(row) > level) {
-            row.toggleClass('hidden', hide);
-            row.find('span.expander').removeClass('toggled');
+            if (hide == true){
+                row.toggleClass('hidden', hide);
+                row.find('span.expander').removeClass('toggled');
+            }
+            else{
+                if (getLevel(row) == (level + 1)) {
+                    row.toggleClass('hides', !hide);
+                    row.toggleClass('hidden', hide);
+                    row.find('span.expander').addClass('toggled');
+                }
+
+            }
             row = row.next();
         }
     }
