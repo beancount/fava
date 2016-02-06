@@ -3,6 +3,8 @@
 Web interface for the double-entry bookkeeping software
 [beancount](http://furius.ca/beancount/) with a focus on features and usability.
 
+You can try out a demo here: [darthcloud.pythonanywhere.com](http://darthcloud.pythonanywhere.com)
+
 [![beancount-web](https://raw.githubusercontent.com/aumayr/beancount-web/master/util/screenshots/screenshot-01.png)](#screenshot)
 (More Screenshots here: [github.com/aumayr/beancount-web/tree/master/util/screenshots](https://github.com/aumayr/beancount-web/tree/master/util/screenshots))
 
