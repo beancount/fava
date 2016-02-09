@@ -473,6 +473,15 @@ article {
                     top: 2px;
                 }
             }
+
+            a.expand-all {
+               float: right;
+               color: #888;
+               font-weight: normal;
+               display: none;
+
+               &.not-fully-expanded { display: inline; }
+            }
         }
 
         // Journal

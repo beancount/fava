@@ -708,13 +708,14 @@ article table.tree-table span.expander.toggled {
   left: -12px;
   top: 2px;
 }
-article table.tree-table span.expandall{
-  width: 5px;
-  height: 5px;
-  right: 15px;
-  top: 5px;
-  cursor: pointer;
-  font-style: italic;
+article table.tree-table a.expand-all {
+  float: right;
+  color: #888;
+  font-weight: normal;
+  display: none;
+}
+article table.tree-table a.expand-all.not-fully-expanded {
+  display: inline;
 }
 article table.journal-table {
   width: 100%;

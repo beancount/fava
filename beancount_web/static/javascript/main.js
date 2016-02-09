@@ -41,7 +41,7 @@ $(document).ready(function() {
     });
 
     $('table.tree-table tr td:first-child:not(.leaf) a.account').each(function() {
-        $(this).append('<span class="expander"></span>');
+        $(this).append('<span class="expander" title="Hold the Shift-key while clicking to expand all children"></span>');
     });
 
     function toggleTreeTableRow(row, hide, all) {
@@ -51,27 +51,28 @@ $(document).ready(function() {
         row.toggleClass('hides', hide);
         row = row.next();
         while (row.length > 0 && getLevel(row) > level) {
-            if (hide == true){
+            if (hide == true) {
                 row.toggleClass('hidden', hide);
                 row.find('span.expander').removeClass('toggled');
-            }
-            else if (all==true) {
+            } else if (all == true) {
                 row.toggleClass('hidden', hide);
-            }
-            else {
+            } else {
                     if (getLevel(row) == (level + 1)) {
                         row.toggleClass('hides', !hide);
                         row.toggleClass('hidden', hide);
                         row.find('span.expander').addClass('toggled');
                     }
             }
+
             row = row.next();
         }
     }
 
-    $('table.tree-table span.expander').click(function() {
+    $('table.tree-table span.expander').click(function(e) {
         var row = $(this).parents('tr');
-        toggleTreeTableRow(row, !row.hasClass('hides'), false);
+        var all = e.shiftKey == true;
+        toggleTreeTableRow(row, !row.hasClass('hides'), all);
+        $('table.tree-table a.expand-all').addClass('not-fully-expanded');
         return false;
     });
 
@@ -79,19 +80,15 @@ $(document).ready(function() {
         toggleTreeTableRow($(this), true, false);
     });
 
-    $('table.tree-table span.expandall').click(function() {
-        var row = $(this).parents('table').children('tbody').children('tr');
-        var text = $(this).text()
-        if (text == '(expand all)'){
-            toggleTreeTableRow(row, false, true);
-            $(this).text('(collapse all)')
-        }
-        else if (text == '(collapse all)') {
-            toggleTreeTableRow(row, true, true);
-            $(this).text('(expand all)')
-        }
+    $('table.tree-table').on('click', 'a.expand-all.not-fully-expanded', function(e) {
+        e.preventDefault();
+        var $this = $(e.target);
+        var row = $this.parents('table').find('tbody tr').first();
+        toggleTreeTableRow(row, false, true);
+        $this.removeClass('not-fully-expanded');
         return false;
     });
+
     // Keyboard shortcuts
 
     // Filtering:
