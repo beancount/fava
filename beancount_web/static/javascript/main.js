@@ -44,29 +44,54 @@ $(document).ready(function() {
         $(this).append('<span class="expander"></span>');
     });
 
-    function toggleTreeTableRow(row, hide) {
+    function toggleTreeTableRow(row, hide, all) {
         var expander = row.find('span.expander');
         var level = getLevel(row);
         expander.toggleClass('toggled', hide);
         row.toggleClass('hides', hide);
         row = row.next();
         while (row.length > 0 && getLevel(row) > level) {
-            row.toggleClass('hidden', hide);
-            row.find('span.expander').removeClass('toggled');
+            if (hide == true){
+                row.toggleClass('hidden', hide);
+                row.find('span.expander').removeClass('toggled');
+            }
+            else if (all==true) {
+                row.toggleClass('hidden', hide);
+            }
+            else {
+                    if (getLevel(row) == (level + 1)) {
+                        row.toggleClass('hides', !hide);
+                        row.toggleClass('hidden', hide);
+                        row.find('span.expander').addClass('toggled');
+                    }
+            }
             row = row.next();
         }
     }
 
     $('table.tree-table span.expander').click(function() {
         var row = $(this).parents('tr');
-        toggleTreeTableRow(row, !row.hasClass('hides'));
+        toggleTreeTableRow(row, !row.hasClass('hides'), false);
         return false;
     });
 
     $('table.tree-table tr.hides').each(function() {
-        toggleTreeTableRow($(this), true);
+        toggleTreeTableRow($(this), true, false);
     });
 
+    $('table.tree-table span.expandall').click(function() {
+        var row = $(this).parents('table').children('tbody').children('tr');
+        var text = $(this).text()
+        if (text == '(expand all)'){
+            toggleTreeTableRow(row, false, true);
+            $(this).text('(collapse all)')
+        }
+        else if (text == '(collapse all)') {
+            toggleTreeTableRow(row, true, true);
+            $(this).text('(expand all)')
+        }
+        return false;
+    });
     // Keyboard shortcuts
 
     // Filtering:

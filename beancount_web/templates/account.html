@@ -69,7 +69,7 @@
         <table class="fullwidth tree-table">
             <thead>
                 <tr>
-                    <th>Account</th>
+                    <th>Account <span class="expandall">(collapse all)</span></th>
                     {% for end_date in interval_balances.interval_end_dates|reverse %}
                         <th>{{ end_date.strftime(interval_format_str) }}</th>
                     {% endfor %}
