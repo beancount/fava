@@ -221,15 +221,16 @@ class BeancountReportAPI(object):
         totals = [realization.compute_balance(self._real_account(account_name, self.entries, begin_date, end_date)) for account_name in names]
         return serialize_inventory(sum(totals, inventory.Inventory()), at_cost=True)
 
-    def interval_totals(self, interval, account_name):
+    def interval_totals(self, interval, account_name, accumulate=False):
         """Renders totals for account (or accounts) in the intervals."""
         names = [account_name] if isinstance(account_name, str) else account_name
 
         interval_tuples = self._interval_tuples(interval, self.entries)
+        date_first, date_last = getters.get_min_max_dates(self.entries, (Transaction))
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
-            'totals': self._balances_totals(names, begin_date, end_date),
+            'totals': self._balances_totals(names, begin_date if not accumulate else date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
     def _real_account(self, account_name, entries, begin_date=None, end_date=None):
@@ -276,7 +277,7 @@ class BeancountReportAPI(object):
     def closing_balances(self, account_name):
         return self._table_tree(self._real_account(account_name, self.closing_entries))
 
-    def interval_balances(self, interval, account_name):
+    def interval_balances(self, interval, account_name, accumulate=False):
         # TODO include balances_children
         # the account tree at time now
 
@@ -291,8 +292,9 @@ class BeancountReportAPI(object):
 
         arr = {account_name: {} for account_name in account_names}
 
+        date_first, date_last = getters.get_min_max_dates(self.entries, (Transaction))
         for begin_date, end_date in interval_tuples:
-            real_account = self._real_account(account_name, self.entries, begin_date=begin_date, end_date=end_date)
+            real_account = self._real_account(account_name, self.entries, begin_date=begin_date if not accumulate else date_first, end_date=end_date)
 
             _table_tree = self._table_tree(real_account)
             for line in _table_tree:

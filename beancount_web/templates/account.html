@@ -31,42 +31,32 @@
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}
 
+
+    {% elif interval == 'month' %}
+        {% include "charts/_chart_skeleton.html" %}
+        {% with label="Monthly totals", monthly_totals=api.interval_totals('month' ,account_name, accumulate) %}
+            {% include "charts/_chart_monthly_totals.html" %}
+        {% endwith %}
+    {% elif interval == 'year' %}
+        {% include "charts/_chart_skeleton.html" %}
+        {% with label="Yearly totals", yearly_totals=api.interval_totals('year', account_name, accumulate) %}
+            {% include "charts/_chart_yearly_totals.html" %}
+        {% endwith %}
+    {% endif %}
+
         <div class="headerline">
-            <h3>Journal</h3>
-            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='year') }}">Yearly balances</a></h3>
-            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='month') }}">Monthly balances</a></h3>
+            <h3>{% if interval %}<a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a>{% else %}Journal{% endif %}</h3>
+            <h3>{% if not (interval == 'year' and not accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval='year') }}">Yearly balances</a>{% else %}Yearly balances{% endif %}</h3>
+            <h3>{% if not (interval == 'month' and not accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval='month') }}">Monthly balances</a>{% else %}Monthly balances{% endif %}</h3>
+            <h3>{% if not (interval == 'year' and accumulate) %}<a href="{{ url_for('account_with_interval_totals', name=account_name, interval='year') }}">Yearly totals</a>{% else %}Yearly totals{% endif %}</h3>
+            <h3>{% if not (interval == 'month' and accumulate) %}<a href="{{ url_for('account_with_interval_totals', name=account_name, interval='month') }}">Monthly totals</a>{% else %}Monthly totals{% endif %}</h3>
         </div>
 
+    {% if not interval %}
         {% set journal = api.journal(account_name, with_change_and_balance=True, with_journal_children=config.getboolean('journal-show-childentries')) %}
         {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
-
-    {% elif interval == 'month' %}
-
-        {% include "charts/_chart_skeleton.html" %}
-        {% with label="Monthly totals", monthly_totals=api.interval_totals('month' ,account_name) %}
-            {% include "charts/_chart_monthly_totals.html" %}
-        {% endwith %}
-
-        <div class="headerline">
-            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
-            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='year') }}">Yearly balances</a></h3>
-            <h3>Monthly balances</h3>
-        </div>
-
-    {% elif interval == 'year' %}
-
-        {% include "charts/_chart_skeleton.html" %}
-        {% with label="Yearly totals", yearly_totals=api.interval_totals('year', account_name) %}
-            {% include "charts/_chart_yearly_totals.html" %}
-        {% endwith %}
-
-        <div class="headerline">
-            <h3><a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a></h3>
-            <h3>Yearly balances</h3>
-            <h3><a href="{{ url_for('account_with_interval_balances', name=account_name, interval='month') }}">Monthly balances</a></h3>
-        </div>
     {% endif %}
 
     {% if interval %}

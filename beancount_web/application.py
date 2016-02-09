@@ -28,8 +28,7 @@ assets.init_app(app)
 def account_with_journal(name=None):
     return render_template('account.html', account_name=name)
 
-@app.route('/account/<name>/<interval>ly_balances/')
-def account_with_interval_balances(name, interval):
+def _account_with_interval(name, interval, accumulate):
     account_name = name
 
     if interval == 'month':
@@ -40,7 +39,7 @@ def account_with_interval_balances(name, interval):
         interval_format_str = "%Y"
         interval_begin_date_lambda = lambda x: date(x.year, 1, 1)
 
-    interval_balances = app.api.interval_balances(interval, account_name)
+    interval_balances = app.api.interval_balances(interval, account_name, accumulate)
 
     interval_treemaps = []
     max_intervals = int(request.args.get('interval_end_dates', 3)) # Only show three latest treemaps
@@ -57,8 +56,16 @@ def account_with_interval_balances(name, interval):
                            interval_format_str=interval_format_str,
                            interval_balances=interval_balances,
                            interval_treemaps=interval_treemaps,
-                           interval=interval)
+                           interval=interval,
+                           accumulate=accumulate)
 
+@app.route('/account/<name>/<interval>ly_balances/')
+def account_with_interval_balances(name, interval):
+    return _account_with_interval(name, interval, False)
+
+@app.route('/account/<name>/<interval>ly_totals/')
+def account_with_interval_totals(name, interval):
+    return _account_with_interval(name, interval, True)
 
 @app.route('/')
 def index():
