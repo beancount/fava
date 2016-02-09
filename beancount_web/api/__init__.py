@@ -233,7 +233,7 @@ class BeancountReportAPI(object):
             'totals': self._balances_totals(names, begin_date if not accumulate else date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
-    def _real_account(self, account_name, entries, begin_date=None, end_date=None):
+    def _real_account(self, account_name, entries, begin_date=None, end_date=None, min_accounts=None):
         """
         Returns the realization.RealAccount instances for account_name, and
         their entries clamped by the optional begin_date and end_date.
@@ -244,12 +244,14 @@ class BeancountReportAPI(object):
         :return: realization.RealAccount instances
         """
         entries_in_range = entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
-        real_account = realization.get(realization.realize(entries_in_range, [account_name]), account_name)
+        if not min_accounts:
+            min_accounts = [account_name]
+        real_account = realization.get(realization.realize(entries_in_range, min_accounts), account_name)
 
         return real_account
 
 
-    def balances(self, account_name, begin_date=None, end_date=None):
+    def balances(self, account_name, begin_date=None, end_date=None, min_accounts=None):
         """
         Renders account_name and it's children as a flat list to be used
         in rendering tables.
@@ -269,7 +271,7 @@ class BeancountReportAPI(object):
               }, ...
           ]
         """
-        real_account = self._real_account(account_name, self.entries, begin_date, end_date)
+        real_account = self._real_account(account_name, self.entries, begin_date, end_date, min_accounts)
 
         return self._table_tree(real_account)
 
@@ -278,44 +280,20 @@ class BeancountReportAPI(object):
         return self._table_tree(self._real_account(account_name, self.closing_entries))
 
     def interval_balances(self, interval, account_name, accumulate=False):
-        # TODO include balances_children
-        # the account tree at time now
-
-        account_names = [account['full_name'] for account in self.all_accounts if account['full_name'].startswith(account_name)]
+        account_names = [account['full_name']
+                         for account in self.all_accounts
+                         if account['full_name'].startswith(account_name)]
 
         interval_tuples = self._interval_tuples(interval, self.entries)
-        totals = {
-            end_date.isoformat(): {
-                currency: ZERO for currency in self.options['commodities']
-            } for begin_date, end_date in interval_tuples
-        }
-
-        arr = {account_name: {} for account_name in account_names}
-
-        date_first, date_last = getters.get_min_max_dates(self.entries, (Transaction))
-        for begin_date, end_date in interval_tuples:
-            real_account = self._real_account(account_name, self.entries, begin_date=begin_date if not accumulate else date_first, end_date=end_date)
-
-            _table_tree = self._table_tree(real_account)
-            for line in _table_tree:
-                arr[line['account']][end_date.isoformat()] = {
-                    'balances': line['balances'],
-                    'balances_children': line['balances_children']
-                }
-
-                if line['postings_count'] > 0:
-                    for currency, number in line['balances'].items():
-                        totals[end_date.isoformat()][currency] += number
-
-        balances = sorted([
-                        { 'account': account, 'totals': totals } for account, totals in arr.items()
-                      ], key=lambda x: x['account'])
-
-        return {
-            'interval_end_dates': [end_date for begin_date, end_date in interval_tuples],
-            'balances': balances,
-            'totals': totals,
-        }
+        if accumulate:
+            interval_balances = [self.balances(account_name, interval_tuples[0][0], end_date,
+                                               min_accounts=account_names)
+                                 for begin_date, end_date in interval_tuples]
+        else:
+            interval_balances = [self.balances(account_name, begin_date, end_date,
+                                               min_accounts=account_names)
+                                 for begin_date, end_date in interval_tuples]
+        return zip(*interval_balances), interval_tuples
 
     def trial_balance(self):
         return self._table_tree(self.root_account)[1:]
@@ -454,10 +432,10 @@ class BeancountReportAPI(object):
             'journal': self._journal(matching_entries)
         }
 
-    def treemap_data(self, account_name):
+    def treemap_data(self, account_name, begin_date=None, end_date=None):
         return {
             'label': account_name,
-            'balances': self.balances(account_name),
+            'balances': self.balances(account_name, begin_date, end_date),
             'modifier': get_account_sign(account_name, self.account_types),
         }
 

@@ -24,48 +24,23 @@ app.config['ASSETS_DEBUG'] = False
 app.config['ASSETS_MANIFEST'] = None
 assets.init_app(app)
 
+
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
     return render_template('account.html', account_name=name)
 
-def _account_with_interval(name, interval, accumulate):
-    account_name = name
-
-    if interval == 'month':
-        interval_format_str = "%b '%y"
-        interval_begin_date_lambda = lambda x: date(x.year, x.month, 1)
-
-    if interval == 'year':
-        interval_format_str = "%Y"
-        interval_begin_date_lambda = lambda x: date(x.year, 1, 1)
-
-    interval_balances = app.api.interval_balances(interval, account_name, accumulate)
-
-    interval_treemaps = []
-    max_intervals = int(request.args.get('interval_end_dates', 3)) # Only show three latest treemaps
-    num_of_intervals = len(interval_balances['interval_end_dates']) if len(interval_balances['interval_end_dates']) < max_intervals else max_intervals
-
-    for interval_end_date in interval_balances['interval_end_dates'][::-1][:num_of_intervals]:
-        interval_begin_date = interval_begin_date_lambda(interval_end_date)
-        interval_treemaps.append({
-            'label': '{}'.format(interval_end_date.strftime(interval_format_str)),
-            'balances': app.api.balances(account_name, begin_date=interval_begin_date, end_date=interval_end_date)
-        })
-
-    return render_template('account.html', account_name=account_name,
-                           interval_format_str=interval_format_str,
-                           interval_balances=interval_balances,
-                           interval_treemaps=interval_treemaps,
-                           interval=interval,
-                           accumulate=accumulate)
 
 @app.route('/account/<name>/<interval>ly_balances/')
 def account_with_interval_balances(name, interval):
-    return _account_with_interval(name, interval, False)
+    return render_template('account.html', account_name=name,
+                           interval=interval, accumulate=True)
 
-@app.route('/account/<name>/<interval>ly_totals/')
-def account_with_interval_totals(name, interval):
-    return _account_with_interval(name, interval, True)
+
+@app.route('/account/<name>/<interval>ly_changes/')
+def account_with_interval_changes(name, interval):
+    return render_template('account.html', account_name=name,
+                           interval=interval, accumulate=False)
+
 
 @app.route('/')
 def index():
