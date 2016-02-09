@@ -70,7 +70,7 @@ def serialize_inventory(inventory, at_cost=False):
         inventory = inventory.cost()
     else:
         inventory = inventory.units()
-    return {p.lot.currency: p.number for p in inventory if p.number != ZERO}
+    return {p.units.currency: p.units.number for p in inventory if p.units.number != ZERO}
 
 
 def serialize_posting(posting):

@@ -100,8 +100,8 @@ Click to copy the balance directives to the clipboard:
                         {% endif %}
                         <td><a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
                         <td class="num">
-                            {%- for inv in api.inventory(activity.account) -%}
-                                {{ inv.number|format_currency }} {{ inv.lot.currency }}{% if not loop.last %}<br>{% endif %}
+                            {%- for position in api.inventory(activity.account) -%}
+                                {{ position.units.number|format_currency }} {{ position.units.currency }}{% if not loop.last %}<br>{% endif %}
                             {% endfor -%}
                         </td>
                     </tr>

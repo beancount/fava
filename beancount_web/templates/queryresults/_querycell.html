@@ -3,8 +3,8 @@
 {% if type|string == "<class 'beancount.core.inventory.Inventory'>" %}
     <td class="num">
     {% for position in value.cost() %}
-        {% if position.number != 0 %}
-            {{ position.number|format_currency }} {{ position.lot.currency }}<br>
+        {% if position.units.number != 0 %}
+            {{ position.units.number|format_currency }} {{ position.units.currency }}<br>
         {% endif %}
     {% endfor %}
     </td>
@@ -28,7 +28,7 @@
 {% elif type|string == "<class 'datetime.date'>" %}
     <td>{{ value }}</td>
 {% elif type|string == "<class 'beancount.core.position.Position'>" %}
-    <td class="num">{{ value.number|format_currency }} {{value.lot.currency }}</td>
+    <td class="num">{{ value.units.number|format_currency }} {{value.units.currency }}</td>
 {% else %}
     <td style="background: #990000; color: white; font-family: monospace;" title="Type {{ type|string }} not recognized">{{ value }}</td>
 {% endif %}
