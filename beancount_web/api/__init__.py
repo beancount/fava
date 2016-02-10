@@ -293,7 +293,7 @@ class BeancountReportAPI(object):
             interval_balances = [self.balances(account_name, begin_date, end_date,
                                                min_accounts=account_names)
                                  for begin_date, end_date in interval_tuples]
-        return zip(*interval_balances), interval_tuples
+        return list(zip(*interval_balances)), interval_tuples
 
     def trial_balance(self):
         return self._table_tree(self.root_account)[1:]

@@ -116,6 +116,20 @@
                 {% endwith %}
             {% endfor %}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    {% for entry in interval_balances[0]|reverse %}
+                    <td class="num">
+                        {% for currency, number in entry.balances_children.items() %}
+                            {% if number %}
+                                {{ number|format_currency }} {{ currency }}<br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
+            </tfoot>
         </table>
     {% endif %}
 
