@@ -232,13 +232,11 @@ def utility_processor():
                 should_collapse_account=should_collapse_account)
 
 @app.context_processor
-def inject_errors():
-    options = app.api.options
+def template_context():
     return dict(api=app.api,
-                options=options,
-                operating_currencies=options['operating_currency'],
-                commodities=options['commodities'],
-                now=datetime.now().strftime('%Y-%m-%d'))
+                options=app.api.options,
+                operating_currencies=app.api.options['operating_currency'],
+                today=datetime.now().strftime('%Y-%m-%d'))
 
 
 def uniquify(seq):

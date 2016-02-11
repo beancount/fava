@@ -475,7 +475,7 @@ class BeancountReportAPI(object):
         else:
             return False  # TODO raise
 
-    def commodities(self):
+    def commodity_pairs(self):
         return sorted(self.price_map.forward_pairs)
 
     def prices(self, base, quote):

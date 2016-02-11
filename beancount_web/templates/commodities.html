@@ -4,11 +4,11 @@
 {% block content %}
     <h1>Commodities</h1>
 
-    {% set commodities = api.commodities() %}
+    {% set commodity_pairs = api.commodity_pairs() %}
 
     {% include "charts/_chart_skeleton.html" %}
     <script>
-    {% for commodity in commodities %}
+    {% for commodity in commodity_pairs %}
         window.chartData.push({
             label: "{{ commodity.0 }} / {{ commodity.1 }}",
             type: "line",
@@ -35,7 +35,7 @@
     </script>
 
     <div class="commodities">
-        {% for commodity in commodities %}
+        {% for commodity in commodity_pairs %}
             <div class="commodity-container commodity-{{ commodity.0 }}-{{ commodity.1 }}" style="float: left; margin-right: 20px; ">
                 <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
                 <table class="commodity sortable">
