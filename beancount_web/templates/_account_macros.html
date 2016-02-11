@@ -27,7 +27,7 @@
 
 {% macro account_name_header(account_name) %}
 <h1>
-    {% set levels = account_name.count(':')+1 %}
+    {% set levels = account_name|account_level %}
     {% for level in range(0, levels) %}
         {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] %}
         {% set subaccount_part = account_name.split(':')[level] %}

@@ -27,7 +27,7 @@
         {% endwith %}
 
         {% set treemap_data = api.treemap_data(account_name) %}
-        {% with label=treemap_data.label, rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name.split(':')|length %}
+        {% with label=treemap_data.label, rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}
 
@@ -68,7 +68,7 @@
 
         {% for begin_date, end_date in dates[-3:]|reverse %}
             {% with treemap_data = api.treemap_data(account_name, begin_date, end_date) %}
-            {% with label=end_date.strftime(interval_format_str), rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name.split(':')|length %}
+            {% with label=end_date.strftime(interval_format_str), rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
                 {% include "charts/_chart_treemap.html" %}
             {% endwith %}
             {% endwith %}
@@ -84,7 +84,7 @@
             </thead>
             <tbody>
             {% for row in interval_balances %}
-                {% with account_level = account_level(row[0].account)  %}
+                {% with account_level = row[0].account|account_level  %}
                 <tr data-level="{{ account_level }}" data-is-parent="{% if not row[0].is_leaf %}true{% else %}false{% endif %}">
                     <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
                         <a href="{{ url_for('account_with_journal', name=row[0].account) }}" class="account">{{ row[0].account|last_segment }}</a>

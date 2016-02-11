@@ -162,23 +162,25 @@ def report(report_name):
     return redirect(url_for('report', report_name='balance_sheet'))
 
 
-@app.template_filter('format_currency')
+@app.template_filter()
 def format_currency(value, digits=2):
     if value:
         return ("{:,." + str(digits) + "f}").format(value)
     return ''
 
 
-@app.template_filter('last_segment')
+@app.template_filter()
 def last_segment(account):
     return account.split(':')[-1]
 
 
-@app.context_processor
-def utility_processor():
-    def account_level(account_full):
-        return account_full.count(":")+1
+@app.template_filter()
+def account_level(account_full):
+    return account_full.count(":")+1
 
+
+@app.context_processor
+def template_context():
     def url_for_current(**kwargs):
         if not kwargs:
             return url_for(request.endpoint, **request.view_args)
@@ -197,35 +199,20 @@ def utility_processor():
         else:
             return url_for('source', **args)
 
-    def search_suggestions(field_name):
-        if field_name == 'Time':
-            return [
-                'This Month',
-                '2015-03',
-                'March 2015',
-                'Mar 2015',
-                'Last Year',
-                'Aug Last Year',
-                '2010-10 - 2014',
-                'Year to Date'
-            ]
-        else:
-            return []
-
     def uptodate_eligible(account_name):
-        if not 'uptodate-indicator-exclude-accounts' in app.config.user:
+        if 'uptodate-indicator-exclude-accounts' not in app.config.user:
             return False
 
         exclude_accounts = app.config.user['uptodate-indicator-exclude-accounts'].strip().split("\n")
 
         if not (account_name.startswith(app.api.options['name_assets']) or
            account_name.startswith(app.api.options['name_liabilities'])):
-           return False
+            return False
 
         if account_name in exclude_accounts:
             return False
 
-        if not account_name in [account['full_name'] for account in app.api.all_accounts_leaf_only]:
+        if account_name not in [account['full_name'] for account in app.api.all_accounts_leaf_only]:
             return False
 
         return True
@@ -239,16 +226,11 @@ def utility_processor():
 
         return account_name in collapse_accounts
 
-    return dict(account_level=account_level,
-                url_for_current=url_for_current,
+    return dict(url_for_current=url_for_current,
                 url_for_source=url_for_source,
-                search_suggestions=search_suggestions,
                 uptodate_eligible=uptodate_eligible,
-                should_collapse_account=should_collapse_account)
-
-@app.context_processor
-def template_context():
-    return dict(api=app.api,
+                should_collapse_account=should_collapse_account,
+                api=app.api,
                 options=app.api.options,
                 operating_currencies=app.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'))

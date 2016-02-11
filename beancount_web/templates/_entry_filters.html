@@ -1,6 +1,6 @@
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
-        {% set time_search_phrases = search_suggestions('Time') %}
+        {% set time_search_phrases = ['This Month', '2015-03', 'March 2015', 'Mar 2015', 'Last Year', 'Aug Last Year', '2010-10 - 2014', 'Year to Date' ] %}
         <li{% if g.filters['time'] %} class="selected"{% endif %}>
             <a href="{{ url_for_current(time=None) }}">
                 <span>{{ g.filters['time'] or 'Time' }}</span>
