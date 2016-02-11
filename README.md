@@ -1,4 +1,4 @@
-# beancount web
+# fava
 
 Web interface for the double-entry bookkeeping software
 [beancount](http://furius.ca/beancount/) with a focus on features and usability.
