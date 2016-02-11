@@ -2,7 +2,7 @@
 The rationale behind this API is the following:
 
 One day there will be a new module in beancount.report that returns all (for
-beancount-web required) views as Python-dicts and -arrays, compatible with
+fava required) views as Python-dicts and -arrays, compatible with
 JSON (so no datetime, etc.). Right now beancount.report does return data to
 be displayed in a console, and HTML, and this (JSON) could be a third way of
 "rendering" the data. These methods should be highly optimized for performance
@@ -11,7 +11,7 @@ beancount-repo, then api.py is redundant and will be removed.
 
 For the JSON-part: I want to keep all the returns in the API JSON-serializeable
 (although they are called directly right now), because then, with very little
-overhead, beancount-web could run on an external server and call into a local
+overhead, fava could run on an external server and call into a local
 bean-report.
 
 Right now this module it is just a hacky placeholder for what could be in the
@@ -37,10 +37,10 @@ from beancount.query import query
 from beancount.reports import context, holdings_reports
 from beancount.utils import misc_utils
 
-from beancount_web.util.dateparser import parse_date
-from beancount_web.api.helpers import entries_in_inclusive_range,\
+from fava.util.dateparser import parse_date
+from fava.api.helpers import entries_in_inclusive_range,\
                                       holdings_at_dates
-from beancount_web.api.serialization import serialize_inventory, serialize_entry
+from fava.api.serialization import serialize_inventory, serialize_entry
 
 
 class FilterException(Exception):

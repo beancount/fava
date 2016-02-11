@@ -5,8 +5,8 @@ Web interface for the double-entry bookkeeping software
 
 You can try out a demo here: [darthcloud.pythonanywhere.com](http://darthcloud.pythonanywhere.com)
 
-[![beancount-web](https://raw.githubusercontent.com/aumayr/beancount-web/master/util/screenshots/screenshot-01.png)](#screenshot)
-(More Screenshots here: [github.com/aumayr/beancount-web/tree/master/util/screenshots](https://github.com/aumayr/beancount-web/tree/master/util/screenshots))
+[![fava](https://raw.githubusercontent.com/aumayr/fava/master/util/screenshots/screenshot-01.png)](#screenshot)
+(More Screenshots here: [github.com/aumayr/fava/tree/master/util/screenshots](https://github.com/aumayr/fava/tree/master/util/screenshots))
 
 Built on [Flask](http://flask.pocoo.org/), it relies on an artificial API
 (`api.py`) that calls into `beancount` and displays the results.
@@ -21,7 +21,7 @@ Built on [Flask](http://flask.pocoo.org/), it relies on an artificial API
 
 ## Usage
 
-1. Start `beancount-web` by running `beancount-web
+1. Start `fava` by running `fava
    /Volumes/Ledger/example.ledger` (substitute with the path to your own
    beancount-file) to run the included web server.
 2. Point your browser at `http://localhost:5000` to view the web interface.
@@ -30,24 +30,9 @@ Built on [Flask](http://flask.pocoo.org/), it relies on an artificial API
 
 *(many missing here)*
 
-### beancount-urlscheme
-
-You can set up `beancount-web` to use your text editor instead of the built-in
-source editor. To set it up follow these steps:
-
-1. Run `beancount-urlscheme register [path-to-your-beancount-web-settings-file]`
-   to register the `beancount://` URL scheme on your system (currently only Mac
-   OS is supported).
-2. Restart your browsers to make them aware of the new URL scheme (not neccesary
-   for Safari)
-3. Set the `external-editor-cmd`-setting to set the command to be run when a
-   `beancount://` URL is opened. You can use the `{filename}`- and
-   `{line}`-variables (for example: `external-editor-cmd = /usr/local/bin/subl
-   {filename}:{line}`).
-
 ### Keyboard Shortcuts
 
-`beancount-web` comes with Gmail-style keyboard shortcuts:
+`fava` comes with Gmail-style keyboard shortcuts:
 
 <kbd>?</kbd>: Show keyboard shortcuts overview  
 

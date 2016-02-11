@@ -1,6 +1,14 @@
-# beancount-web: CHANGES
+# fava: CHANGES
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
+
+2016-02-11
+
+  - Renamed the project from "beancount-web" to "fava" (Issue #85)
+
+  - Moved `beancount-urlscheme`-command to it's own project (see [github.com/au
+    mayr/beancount_urlscheme](http://github.com/aumayr/beancount_urlscheme) for
+    details).
 
 2016-01-30
 

@@ -5,8 +5,7 @@
 *sass-cache*/
 *.css.map
 TODO.md
-beancount_web/static/gen/
+fava/static/gen/
 *.webassets-cache*/
-beancount_web/static/stylesheets/packed*.js
-electron/node_modules*/
+fava/static/stylesheets/packed*.js
 TODO

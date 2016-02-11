@@ -5,7 +5,7 @@ import sys
 
 from livereload import Server
 
-from beancount_web.application import app
+from fava.application import app
 
 
 def run(argv):
@@ -27,7 +27,7 @@ def run(argv):
     parser.add_argument('-s', '--settings',
                         action='store',
                         type=str,
-                        help="Configuration-file for beancount-web.")
+                        help="Configuration-file for fava.")
 
     parser.add_argument('-d', '--debug',
                         action='store_true',

@@ -7,8 +7,8 @@ from flask import Flask, flash, render_template, url_for, request, redirect,\
                   send_from_directory, jsonify, g
 from flask.ext.assets import Environment
 
-from beancount_web.api import BeancountReportAPI, FilterException
-from beancount_web.api.serialization import BeanJSONEncoder
+from fava.api import BeancountReportAPI, FilterException
+from fava.api.serialization import BeanJSONEncoder
 
 
 app = Flask(__name__)
@@ -30,7 +30,7 @@ app.config.raw = configparser.ConfigParser()
 defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'default-settings.conf')
 app.config.raw.read(defaults_file)
-app.config.user = app.config.raw['beancount-web']
+app.config.user = app.config.raw['fava']
 app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
 
