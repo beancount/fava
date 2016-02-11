@@ -1,12 +1,12 @@
-{% set entry_types = [('open',        config.getboolean('journal-show-type-open')),
-                      ('close',       config.getboolean('journal-show-type-close')),
-                      ('transaction', config.getboolean('journal-show-type-transaction')),
-                      ('balance',     config.getboolean('journal-show-type-balance')),
-                      ('note',        config.getboolean('journal-show-type-note')),
-                      ('document',    config.getboolean('journal-show-type-document')),
-                      ('pad',         config.getboolean('journal-show-type-pad')),
-                      ('padding',     config.getboolean('journal-show-type-padding')),
-                      ('query',       config.getboolean('journal-show-type-query'))] %}
+{% set entry_types = [('open',        config.user.getboolean('journal-show-type-open')),
+                      ('close',       config.user.getboolean('journal-show-type-close')),
+                      ('transaction', config.user.getboolean('journal-show-type-transaction')),
+                      ('balance',     config.user.getboolean('journal-show-type-balance')),
+                      ('note',        config.user.getboolean('journal-show-type-note')),
+                      ('document',    config.user.getboolean('journal-show-type-document')),
+                      ('pad',         config.user.getboolean('journal-show-type-pad')),
+                      ('padding',     config.user.getboolean('journal-show-type-padding')),
+                      ('query',       config.user.getboolean('journal-show-type-query'))] %}
 
 {% if show_tablefilter %}
     <div class="table-filter">
@@ -15,8 +15,8 @@
                 <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if default_checked %} checked="checked"{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
-            <input type="submit" id="toggle-metadata" value="{% if config.getboolean('journal-show-metadata') %}Hide{% else %}Show{% endif %} metadata">
-            <input type="submit" id="toggle-legs" value="{% if config.getboolean('journal-show-legs') %}Hide{% else %}Show{% endif %} legs">
+            <input type="submit" id="toggle-metadata" value="{% if config.user.getboolean('journal-show-metadata') %}Hide{% else %}Show{% endif %} metadata">
+            <input type="submit" id="toggle-legs" value="{% if config.user.getboolean('journal-show-legs') %}Hide{% else %}Show{% endif %} legs">
         </form>
     </div>
 {% endif %}
@@ -33,8 +33,8 @@
     window.journalAsJSON = {{ journal|tojson|safe }};
 {% endif %}
     window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
-    window.journalShowLegs = {{ config.getboolean('journal-show-legs')|lower }};
-    window.journalShowMetadata = {{ config.getboolean('journal-show-metadata')|lower }};
+    window.journalShowLegs = {{ config.user.getboolean('journal-show-legs')|lower }};
+    window.journalShowMetadata = {{ config.user.getboolean('journal-show-metadata')|lower }};
     window.journalShowTypes = [
         {% for type, default_checked in entry_types %}
             {% if show_tablefilter %}{% if default_checked %}'{{ type }}',{% endif %}{% else %}'{{ type }}',{% endif %}

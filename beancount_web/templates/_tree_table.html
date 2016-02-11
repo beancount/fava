@@ -1,9 +1,9 @@
-{% import '_account_macros.html' as account_macros with context %}
+{% import '_account_macros.html' as account_macros %}
 {% if table_title %}
     <h3>{{ table_title }}</h3>
 {% endif %}
 
-{% set show_other_column = (operating_currencies|sort != commodities|list|sort) %}
+{% set show_other_column = (operating_currencies|sort != options['commodities']|list|sort) %}
 <table class="fullwidth tree-table">
     <thead>
         <tr>
@@ -16,7 +16,7 @@
     </thead>
     <tbody>
         {% for row in table_data %}
-            {% with account_level = account_level(row.account)  %}
+            {% with account_level = row.account|account_level %}
             <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(row.account) %} class="hides"{% endif %}>
                 <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
                     {{ account_macros.account_name(row.account, last_segment=True) }}
@@ -33,7 +33,7 @@
             {% endfor %}
             {% if show_other_column %}
                 <td class="num">
-                {% for currency in commodities %}
+                {% for currency in options['commodities'] %}
                     {% if currency not in operating_currencies %}
                         {% if currency in row.balances %}
                             <span class="balance">{{ row.balances[currency]|format_currency }} {{ currency }}</span>
@@ -58,7 +58,7 @@
             {% endfor %}
             {% if show_other_column %}
                 <td class="num">
-                    {% for currency in commodities %}
+                    {% for currency in options['commodities'] %}
                         {% if currency not in  operating_currencies and table_data[0]['balances_children'][currency] %}
                             {{ table_data[0]['balances_children'][currency]|format_currency }} {{ currency }}<br>
                         {% endif %}

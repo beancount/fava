@@ -48,8 +48,7 @@ class FilterException(Exception):
 
 
 class BeancountReportAPI(object):
-    def __init__(self, beancount_file_path):
-        super(BeancountReportAPI, self).__init__()
+    def __init__(self, beancount_file_path=None):
         self.beancount_file_path = beancount_file_path
         self.filters = {
             'time': None,
@@ -57,11 +56,14 @@ class BeancountReportAPI(object):
             'account': None,
             'payee': set(),
         }
-        self.load_file()
+        if self.beancount_file_path:
+            self.load_file()
 
-    def load_file(self):
+    def load_file(self, beancount_file_path=None):
         """Load self.beancount_file_path and compute things that are independent
         of how the entries might be filtered later"""
+        if beancount_file_path:
+            self.beancount_file_path = beancount_file_path
 
         self.all_entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
@@ -473,7 +475,7 @@ class BeancountReportAPI(object):
         else:
             return False  # TODO raise
 
-    def commodities(self):
+    def commodity_pairs(self):
         return sorted(self.price_map.forward_pairs)
 
     def prices(self, base, quote):

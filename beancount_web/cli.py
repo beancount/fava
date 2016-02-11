@@ -2,11 +2,9 @@
 import argparse
 import os
 import sys
-import configparser
 
 from livereload import Server
 
-from beancount_web.api import BeancountReportAPI
 from beancount_web.application import app
 
 
@@ -68,17 +66,12 @@ def run(argv):
         args.debug = True
 
     app.beancount_file = args.filename
-    app.api = BeancountReportAPI(app.beancount_file)
+    app.api.load_file(app.beancount_file)
 
-    app.user_config = configparser.ConfigParser()
-    user_config_defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-settings.conf')
-    app.user_config.readfp(open(user_config_defaults_file))
-    app.user_config['beancount-web']['file_defaults'] = user_config_defaults_file
-    app.user_config['beancount-web']['file_user'] = ''
 
     if args.settings:
-        app.user_config['beancount-web']['file_user'] = os.path.realpath(args.settings)
-        app.user_config.read(app.user_config['beancount-web']['file_user'])
+        app.config.user['file_user'] = os.path.realpath(args.settings)
+        app.config.raw.read(app.config.user['file_user'])
 
     if args.debug:
         if args.profile:
