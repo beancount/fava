@@ -15,8 +15,7 @@ Built on [Flask](http://flask.pocoo.org/), it relies on an artificial API
 
 1. Prerequisites: An installed version of
    [beancount](http://furius.ca/beancount/) and Python >= 3.5
-2. Download [`beancount web`](https://github.com/aumayr/beancount-
-   web/archive/master.zip) to your computer and unzip it
+2. Download [`fava`](https://github.com/aumayr/fava/archive/master.zip) to your computer and unzip it
 3. Install it by running `python setup.py install`
 
 ## Usage
