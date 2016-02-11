@@ -29,7 +29,7 @@ app.api = BeancountReportAPI()
 app.config.raw = configparser.ConfigParser()
 defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'default-settings.conf')
-app.config.raw.readfp(open(defaults_file))
+app.config.raw.read(defaults_file)
 app.config.user = app.config.raw['beancount-web']
 app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
