@@ -57,7 +57,7 @@
 
         {% for activity in statistics.activity_by_account %}
             {% if uptodate_eligible(activity.account) %}
-                {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
+                {% with status=api.is_account_uptodate(activity.account, look_back_days=config.user.getint('uptodate-indicator-grey-lookback-days')) %}
                     {% if status != "green" %}
                         {% with account_inventory=api.inventory(activity.account) %}
                             {% include "_balance_directive.html" %}
@@ -81,7 +81,7 @@
                     <tr>
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
                         {% if uptodate_eligible(activity.account) %}
-                            {% with status=api.is_account_uptodate(activity.account, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
+                            {% with status=api.is_account_uptodate(activity.account, look_back_days=config.user.getint('uptodate-indicator-grey-lookback-days')) %}
                                 <td data-sort-value="{{ status }}">
                                     {% with account_inventory=api.inventory(activity.account)  %}
                                         <span class="status-indicator status-{{ status }}" title="{{ account_macros.infotext[status] }}

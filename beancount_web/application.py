@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
+import configparser
 import os
-import json
-import decimal
-from datetime import date, datetime
+from datetime import datetime
 
-from flask import Flask, flash, render_template, url_for, request, redirect, abort, Markup, send_from_directory, jsonify, g
+from flask import Flask, flash, render_template, url_for, request, redirect,\
+                  send_from_directory, jsonify, g
 from flask.ext.assets import Environment
 
-from beancount_web.api import FilterException
+from beancount_web.api import BeancountReportAPI, FilterException
 from beancount_web.api.serialization import BeanJSONEncoder
 
 
@@ -23,6 +23,15 @@ app.config['ASSETS_CACHE'] = False
 app.config['ASSETS_DEBUG'] = False
 app.config['ASSETS_MANIFEST'] = None
 assets.init_app(app)
+
+app.api = BeancountReportAPI()
+
+app.config.raw = configparser.ConfigParser()
+user_config_defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-settings.conf')
+app.config.raw.readfp(open(user_config_defaults_file))
+app.config.user = app.config.raw['beancount-web']
+app.config.user['file_defaults'] = user_config_defaults_file
+app.config.user['file_user'] = ''
 
 
 @app.route('/account/<name>/')
@@ -96,7 +105,7 @@ def get_stored_query(stored_query_hash=None):
 @app.route('/journal/')
 def journal():
     if request.is_xhr:
-        return jsonify({ 'data': app.api.journal(with_change_and_balance=app.user_config['beancount-web'].getboolean('journal-general-show-balances')) })
+        return jsonify({ 'data': app.api.journal(with_change_and_balance=app.config.user.getboolean('journal-general-show-balances')) })
     else:
         return render_template('journal.html')
 
@@ -165,7 +174,7 @@ def utility_processor():
     def url_for_source(**kwargs):
         args = request.view_args.copy()
         args.update(kwargs)
-        if app.user_config['beancount-web'].getboolean('use-external-editor'):
+        if app.config.user.getboolean('use-external-editor'):
             if 'line' in args:
                 return "beancount://%(file_path)s?lineno=%(line)d" % args
             else:
@@ -189,10 +198,10 @@ def utility_processor():
             return []
 
     def uptodate_eligible(account_name):
-        if not 'uptodate-indicator-exclude-accounts' in app.user_config['beancount-web']:
+        if not 'uptodate-indicator-exclude-accounts' in app.config.user:
             return False
 
-        exclude_accounts = app.user_config['beancount-web']['uptodate-indicator-exclude-accounts'].strip().split("\n")
+        exclude_accounts = app.config.user['uptodate-indicator-exclude-accounts'].strip().split("\n")
 
         if not (account_name.startswith(app.api.options['name_assets']) or
            account_name.startswith(app.api.options['name_liabilities'])):
@@ -206,11 +215,11 @@ def utility_processor():
 
         return True
 
-    if  'collapse-accounts' in app.user_config['beancount-web']:
-        collapse_accounts = app.user_config['beancount-web']['collapse-accounts'].strip().split("\n")
+    if  'collapse-accounts' in app.config.user:
+        collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")
 
     def should_collapse_account(account_name):
-        if not 'collapse-accounts' in app.user_config['beancount-web']:
+        if not 'collapse-accounts' in app.config.user:
             return False
 
         return account_name in collapse_accounts
@@ -225,10 +234,8 @@ def utility_processor():
 @app.context_processor
 def inject_errors():
     options = app.api.options
-    config = app.user_config['beancount-web']
     return dict(api=app.api,
                 options=options,
-                config=config,
                 operating_currencies=options['operating_currency'],
                 commodities=options['commodities'],
                 now=datetime.now().strftime('%Y-%m-%d'))

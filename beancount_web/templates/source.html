@@ -6,7 +6,7 @@
 
 {% block content %}
     <h1>Source</h1>
-    {% if config.getboolean('use-external-editor') %}
+    {% if config.user.getboolean('use-external-editor') %}
         <table class="errors sortable">
             <thead>
                 <tr>

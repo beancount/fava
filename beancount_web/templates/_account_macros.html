@@ -8,7 +8,7 @@
 
 {% macro indicator(account_name) %}
 {% if uptodate_eligible(account_name) %}
-    {% set status=api.is_account_uptodate(account_name, look_back_days=config.getint('uptodate-indicator-grey-lookback-days')) %}
+    {% set status=api.is_account_uptodate(account_name, look_back_days=config.user.getint('uptodate-indicator-grey-lookback-days')) %}
     <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}"></span>
 {% endif %}
 {% endmacro %}
@@ -19,7 +19,7 @@
     {{ account_name|last_segment if last_segment else account_name }}
 </a>
 
-{% if config.getboolean('uptodate-indicator-show-everywhere') %}
+{% if config.user.getboolean('uptodate-indicator-show-everywhere') %}
 {{ indicator(account_name) }}
 {% endif %}
 {% endmacro %}

@@ -57,7 +57,7 @@
         </div>
 
     {% if not interval %}
-        {% set journal = api.journal(account_name, with_change_and_balance=True, with_journal_children=config.getboolean('journal-show-childentries')) %}
+        {% set journal = api.journal(account_name, with_change_and_balance=True, with_journal_children=config.user.getboolean('journal-show-childentries')) %}
         {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
