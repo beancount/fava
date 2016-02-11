@@ -27,10 +27,11 @@ assets.init_app(app)
 app.api = BeancountReportAPI()
 
 app.config.raw = configparser.ConfigParser()
-user_config_defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'default-settings.conf')
-app.config.raw.readfp(open(user_config_defaults_file))
+defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                             'default-settings.conf')
+app.config.raw.readfp(open(defaults_file))
 app.config.user = app.config.raw['beancount-web']
-app.config.user['file_defaults'] = user_config_defaults_file
+app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
 
 
@@ -55,12 +56,14 @@ def account_with_interval_changes(name, interval):
 def index():
     return redirect(url_for('report', report_name='income_statement'))
 
+
 @app.route('/document/')
 def document():
     document_path = request.args.get('file_path', None)
 
     if document_path and app.api.is_valid_document(document_path):
-        if not os.path.isabs(document_path):  # metadata-statement-paths may be relative to the beancount-file
+        # metadata-statement-paths may be relative to the beancount-file
+        if not os.path.isabs(document_path):
             document_path = os.path.join(os.path.dirname(os.path.realpath(app.beancount_file)), document_path)
 
         directory = os.path.dirname(document_path)
@@ -69,11 +72,13 @@ def document():
     else:
         return "File \"{}\" not found in entries.".format(document_path), 404
 
+
 @app.route('/context/<ehash>/')
 def context(ehash=None):
     context = app.api.context(ehash)
     # TODO handle errors
     return render_template('context.html', context=context)
+
 
 @app.route('/query/')
 def query(bql=None, query_hash=None):
@@ -92,7 +97,9 @@ def query(bql=None, query_hash=None):
             result = None
             error = e
 
-    return render_template('query.html', query=query, result=result, query_hash=query_hash, error=error)
+    return render_template('query.html', query=query, result=result,
+                           query_hash=query_hash, error=error)
+
 
 @app.route('/query/stored_queries/<string:stored_query_hash>')
 def get_stored_query(stored_query_hash=None):
@@ -100,14 +107,19 @@ def get_stored_query(stored_query_hash=None):
     if request.is_xhr:
         return bql
     else:
-        return redirect(url_for('query', bql=bql, query_hash=stored_query_hash))
+        return redirect(url_for('query', bql=bql,
+                                query_hash=stored_query_hash))
+
 
 @app.route('/journal/')
 def journal():
     if request.is_xhr:
-        return jsonify({ 'data': app.api.journal(with_change_and_balance=app.config.user.getboolean('journal-general-show-balances')) })
+        return jsonify({
+            'data': app.api.journal(with_change_and_balance=app.config.user.getboolean('journal-general-show-balances'))
+        })
     else:
         return render_template('journal.html')
+
 
 @app.route('/source/', methods=['GET', 'POST'])
 def source():
@@ -118,14 +130,17 @@ def source():
             return render_template('source.html', file_path=request.args.get('file_path', app.api.beancount_file_path))
 
     elif request.method == "POST":
-        successful_write = app.api.set_source(file_path=request.form['file_path'], source=request.form['source'])
-        if (successful_write):
+        successful = app.api.set_source(file_path=request.form['file_path'],
+                                        source=request.form['source'])
+        if successful:
             app.api.load_file()
-        return str(successful_write)
+        return str(successful)
+
 
 @app.route('/event/<event_type>/')
 def event_details(event_type=None):
     return render_template('event_detail.html', event_type=event_type)
+
 
 @app.route('/<report_name>/')
 def report(report_name):
@@ -215,11 +230,11 @@ def utility_processor():
 
         return True
 
-    if  'collapse-accounts' in app.config.user:
+    if 'collapse-accounts' in app.config.user:
         collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")
 
     def should_collapse_account(account_name):
-        if not 'collapse-accounts' in app.config.user:
+        if 'collapse-accounts' not in app.config.user:
             return False
 
         return account_name in collapse_accounts
