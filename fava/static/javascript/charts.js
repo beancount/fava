@@ -1,7 +1,7 @@
-var Chartist = require('chartist');
-require('imports?Chartist=chartist!chartist-plugin-legend');
-require('imports?Chartist=chartist!chartist-plugin-tooltip');
-require('imports?Chartist=chartist!chartist-plugin-zoom');
+window.Chartist = require('chartist');
+require('chartist-plugin-legend');
+require('chartist-plugin-tooltip');
+require('chartist-plugin-zoom');
 
 require('jquery-treemap/src/jquery-treemap.js');
 
