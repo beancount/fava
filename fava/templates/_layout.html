@@ -45,7 +45,7 @@
 <head>
     {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='gen/styles.css') }}">
     <title>{% block title %}{{ all_pages[active_page] }}{% endblock %} - {{ api.title }}</title>
     {% endblock %}
     <script>window.chartData = [];</script>
