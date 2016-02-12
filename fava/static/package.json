@@ -22,6 +22,7 @@
     "chartist-plugin-legend": "^0.2.1",
     "chartist-plugin-tooltip": "0.0.9",
     "chartist-plugin-zoom": "^0.1.0",
+    "clipboard": "^1.5.8",
     "compass-mixins": "^0.12.7",
     "jquery": "^2.2.0",
     "jquery-query-object": "^2.2.2",

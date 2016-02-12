@@ -5,6 +5,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 module.exports = {
   entry: {
     'app': './javascript/main.js',
+    'clipboard': './javascript/clipboard.js',
     'styles': './sass/styles.scss'
   },
   output: {
