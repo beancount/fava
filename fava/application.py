@@ -5,7 +5,6 @@ from datetime import datetime
 
 from flask import Flask, flash, render_template, url_for, request, redirect,\
                   send_from_directory, jsonify, g
-from flask.ext.assets import Environment
 
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -17,12 +16,6 @@ app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
-
-assets = Environment()
-app.config['ASSETS_CACHE'] = False
-app.config['ASSETS_DEBUG'] = False
-app.config['ASSETS_MANIFEST'] = None
-assets.init_app(app)
 
 app.api = BeancountReportAPI()
 

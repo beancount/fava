@@ -21,7 +21,6 @@ setup(
     install_requires=[
         'beancount',
         'Flask==0.10.1',
-        'Flask-Assets==0.11',
         'livereload==2.4.1'
     ],
     dependency_links=[
