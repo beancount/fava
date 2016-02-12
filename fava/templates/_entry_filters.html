@@ -88,9 +88,9 @@
                         </li>
                     {% endif %}
                     {% for account in api.all_accounts %}
-                    <li class="suggestion{% if account.full_name == g.filters['account'] %} selected{% endif %}" data-filter="{{ account.full_name|lower }}">
-                        <a href="{{ url_for_current(account=account.full_name) }}" title="{{ account.full_name }}">
-                            {% for i in range(account.depth) %}&ndash;{% endfor %}&nbsp;{{ account.name }}
+                    <li class="suggestion{% if account == g.filters['account'] %} selected{% endif %}" data-filter="{{ account|lower }}">
+                        <a href="{{ url_for_current(account=account) }}" title="{{ account }}">
+                            {% for i in range(account|account_level) %}&ndash;{% endfor %}&nbsp;{{ account|last_segment }}
                         </a>
                     </li>
                     {% endfor %}

@@ -79,16 +79,16 @@ $(document).ready(function() {
         editor.setOptions(defaultOptions);
 
         var completionsAccounts = window.allAccounts.map(function (account) {
-            return { name: account.full_name, value: account.full_name, score: 1, meta: "accounts" }
+            return { name: account, value: account, score: 1, meta: "accounts" }
         });
         var completionsCommodities = window.allCommodities.map(function (commodity) {
-            return { name: commodity.name, value: commodity.name, score: 2, meta: "commodities" }
+            return { name: commodity, value: commodity, score: 2, meta: "commodities" }
         });
         var completionsDirectives = ['open', 'close', 'commodity', 'txn', 'balance', 'pad', 'note', 'document', 'price', 'event', 'option', 'plugin', 'include'].map(function (directive) {
             return { name: directive, value: directive, score: 3, meta: "directive" }
         });
         var completionsTags = window.allTags.map(function (tag) {
-            return { name: '#' + tag.name, value: tag.name, score: 4, meta: "tags" }
+            return { name: '#' + tag, value: tag, score: 4, meta: "tags" }
         });
         var completions = completionsAccounts.concat(completionsCommodities, completionsDirectives);
 
