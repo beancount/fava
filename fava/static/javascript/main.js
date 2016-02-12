@@ -1,9 +1,12 @@
 require('jquery-query-object');
 
-var Mousetrap = require('mousetrap');
+window.Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
 require('./charts');
+
+// expose jquery to global context
+window.$ = $
 
 $(document).ready(function() {
     // TODO re-enable sortable tables
