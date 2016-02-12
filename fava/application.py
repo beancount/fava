@@ -212,7 +212,7 @@ def template_context():
         if account_name in exclude_accounts:
             return False
 
-        if account_name not in [account['full_name'] for account in app.api.all_accounts_leaf_only]:
+        if account_name not in app.api.all_accounts_leaf_only:
             return False
 
         return True
