@@ -3,6 +3,8 @@ require('imports?Chartist=chartist!chartist-plugin-legend');
 require('imports?Chartist=chartist!chartist-plugin-tooltip');
 require('imports?Chartist=chartist!chartist-plugin-zoom');
 
+require('jquery-treemap/src/jquery-treemap.js');
+
 var helpers = require('./helpers');
 
 $(document).ready(function() {
@@ -114,51 +116,51 @@ $(document).ready(function() {
                 });
 
                 break;
-            //case 'treemap': {
-            //    var colors = ['#990000', '#113861', '#777', '#1B9900', '#FF8800', '#59922b', '#0544d3', '#6b0392', '#f05b4f', '#dda458', '#eacf7d', '#86797d', '#b2c326', '#6188e2', '#a748ca'].reverse();
-            //    var backupColor = '#949494';
-            //    var colorsMap = {};
+            case 'treemap': {
+                var colors = ['#990000', '#113861', '#777', '#1B9900', '#FF8800', '#59922b', '#0544d3', '#6b0392', '#f05b4f', '#dda458', '#eacf7d', '#86797d', '#b2c326', '#6188e2', '#a748ca'].reverse();
+                var backupColor = '#949494';
+                var colorsMap = {};
 
-            //    var options =     {
-            //        backgroundColor: function ($box, node) {
-            //            var parentName = node.accountName.split(':')[chart.options.treemapColorLevel ? chart.options.treemapColorLevel : 0];
-            //            if (!(parentName in colorsMap)) { colorsMap[parentName] = colors.pop(); }
-            //            if (colorsMap[parentName] == undefined) { return backupColor; }
-            //            return colorsMap[parentName];
-            //        },
-            //        smallestFontSize: 6,
-            //        startingFontSize: 15,
-            //        centerLabelVertically: true,
-            //        itemMargin: 3,
-            //        mouseenter: function (node, event) {
-            //            $(event.target).append('<div class="treetable-popover"></div>');
-            //            var $popover = $('.treetable-popover');
-            //            $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><code>' + node.balance + '</code></dd></dl>').hide().fadeIn(200);
+                var options =     {
+                    backgroundColor: function ($box, node) {
+                        var parentName = node.accountName.split(':')[chart.options.treemapColorLevel ? chart.options.treemapColorLevel : 0];
+                        if (!(parentName in colorsMap)) { colorsMap[parentName] = colors.pop(); }
+                        if (colorsMap[parentName] == undefined) { return backupColor; }
+                        return colorsMap[parentName];
+                    },
+                    smallestFontSize: 6,
+                    startingFontSize: 15,
+                    centerLabelVertically: true,
+                    itemMargin: 3,
+                    mouseenter: function (node, event) {
+                        $(event.target).append('<div class="treetable-popover"></div>');
+                        var $popover = $('.treetable-popover');
+                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><code>' + node.balance + '</code></dd></dl>').hide().fadeIn(200);
 
-            //            var windowWidth = $(window.window).width();
-            //            var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,
-            //            left = (left + $popover.width() > windowWidth) ? (windowWidth - $popover.width()) : left;
-            //            $popover.css({
-            //                left: left,
-            //                top:  node.bounds.height / 2 - $popover.height() - 30
-            //            });
-            //        },
-            //        mouseleave: function (node, event) {
-            //            $('.treetable-popover').remove();
-            //        },
-            //        ready: function () {
-            //            if (chart.data.length == 0) {
-            //                $('div#' + chart.id).addClass('chart-no-data').html('<div>Chart is empty.</div>');
-            //            }
-            //        }
-            //    };
+                        var windowWidth = $(window.window).width();
+                        var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,
+                        left = (left + $popover.width() > windowWidth) ? (windowWidth - $popover.width()) : left;
+                        $popover.css({
+                            left: left,
+                            top:  node.bounds.height / 2 - $popover.height() - 30
+                        });
+                    },
+                    mouseleave: function (node, event) {
+                        $('.treetable-popover').remove();
+                    },
+                    ready: function () {
+                        if (chart.data.length == 0) {
+                            $('div#' + chart.id).addClass('chart-no-data').html('<div>Chart is empty.</div>');
+                        }
+                    }
+                };
 
-            //    $('div#' + chart.id).css('margin', '8px 0').append('<div id="' + chart.id + '-container" style="height: 230px; width: ' + $('div#' + chart.id).parent().width() + 'px;"></div>');
-            //    $('div#' + chart.id + '-container').treemap(chart.data,
-            //        $.extend({}, options, chart.options)
-            //    );
-            //    break;
-            //}
+                $('div#' + chart.id).css('margin', '8px 0').append('<div id="' + chart.id + '-container" style="height: 230px; width: ' + $('div#' + chart.id).parent().width() + 'px;"></div>');
+                $('div#' + chart.id + '-container').treemap(chart.data,
+                    $.extend({}, options, chart.options)
+                );
+                break;
+            }
             default:
                 console.error('Chart-Type "' + chart.type + '" unknown.');
         }

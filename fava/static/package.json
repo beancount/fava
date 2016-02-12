@@ -25,6 +25,7 @@
     "compass-mixins": "^0.12.7",
     "jquery": "^2.2.0",
     "jquery-query-object": "^2.2.2",
+    "jquery-treemap": "github:lrgalego/jquery-treemap",
     "mousetrap": "^1.5.3"
   }
 }
