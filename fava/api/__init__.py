@@ -451,9 +451,9 @@ class BeancountReportAPI(object):
         } for journal_entry in journal if 'balance' in journal_entry.keys()]
 
     def source_files(self):
-        return list(set(
-                        [self.beancount_file_path]
-                        + [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
+        # Make sure the included source files are sorted, behind the main source file
+        return [self.beancount_file_path] + sorted(filter(lambda x: x != self.beancount_file_path,
+                    [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
                 ))
 
     def source(self, file_path=None):
