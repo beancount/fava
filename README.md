@@ -3,7 +3,7 @@
 Web interface for the double-entry bookkeeping software
 [beancount](http://furius.ca/beancount/) with a focus on features and usability.
 
-You can try out a demo here: [fava.com](http://fava.pythonanywhere.com)
+You can try out a demo here: [fava.pythonanywhere.com](http://fava.pythonanywhere.com)
 
 [![fava](https://raw.githubusercontent.com/aumayr/fava/master/util/screenshots/screenshot-01.png)](#screenshot)
 (More Screenshots here: [github.com/aumayr/fava/tree/master/util/screenshots](https://github.com/aumayr/fava/tree/master/util/screenshots))
