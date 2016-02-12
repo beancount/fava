@@ -1,5 +1,12 @@
 require('jquery-query-object');
 
+require('ace-builds/src-min/ace');
+require('ace-builds/src-min/ext-searchbox');
+require('ace-builds/src-min/ext-language_tools');
+require('./ace-mode-beancount.js');
+require('ace-builds/src-min/mode-sql');
+require('ace-builds/src-min/theme-chrome');
+
 $(document).ready(function() {
     var defaultOptions = {
         theme: "ace/theme/chrome",
