@@ -91,4 +91,4 @@ window.isNumber = function(num) {
     return (typeof num == 'string' || typeof num == 'number') && !isNaN(num - 0) && num !== '';
 };
 
-function pad(n) { return n < 10 ? '0' + n : n };
+window.pad = function(n) { return n < 10 ? '0' + n : n };
