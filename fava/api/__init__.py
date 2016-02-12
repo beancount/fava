@@ -130,11 +130,10 @@ class BeancountReportAPI(object):
 
     def _all_accounts(self, leaf_only=False):
         """Detailed list of all accounts."""
-        accounts = [{
-            'name': child_account.account.split(':')[-1],
-            'full_name': child_account.account,
-            'depth': child_account.account.count(':')+1,
-        } for child_account in realization.iter_children(self.root_account, leaf_only=leaf_only)]
+        accounts = [child_account.account
+                    for child_account in
+                    realization.iter_children(self.root_account,
+                                              leaf_only=leaf_only)]
 
         return accounts[1:]
 
@@ -282,9 +281,9 @@ class BeancountReportAPI(object):
         return self._table_tree(self._real_account(account_name, self.closing_entries))
 
     def interval_balances(self, interval, account_name, accumulate=False):
-        account_names = [account['full_name']
+        account_names = [account
                          for account in self.all_accounts
-                         if account['full_name'].startswith(account_name)]
+                         if account.startswith(account_name)]
 
         interval_tuples = self._interval_tuples(interval, self.entries)
         if accumulate:
@@ -302,7 +301,7 @@ class BeancountReportAPI(object):
 
     def journal(self, account_name=None, with_change_and_balance=False, with_journal_children=True):
         if account_name:
-            if not account_name in [account['full_name'] for account in self.all_accounts]:
+            if account_name not in self.all_accounts:
                 return []
 
             real_account = realization.get(self.root_account, account_name)
