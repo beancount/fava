@@ -1,3 +1,5 @@
+require('jquery-query-object');
+
 $(document).ready(function() {
     var defaultOptions = {
         theme: "ace/theme/chrome",
