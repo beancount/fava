@@ -117,11 +117,11 @@ $(document).ready(function() {
             $filePath = $select.val();
             $.get($select.parents('form').attr('action'), { file_path: $filePath } )
             .done(function(data) {
-                editor.setValue(data, -1);
-                editor.gotoLine(hlLine, 0, true);
                 if ($filePath != $.query.get('file_path')) {
                     hlLine = 1;
                 }
+                editor.setValue(data, -1);
+                editor.gotoLine(hlLine, 0, true);
                 $select.removeAttr('disabled');
 
                 if (window.editorInsertMarker && hlLine == 1) {
@@ -157,7 +157,9 @@ $(document).ready(function() {
             $.post(url, { file_path: fileName, source: editor.getValue() } )
             .done(function(data) {
                 if (data == "True") {
-                    window.location = $.query.set('line', editor.getSelectionRange().start.row + 1);
+                    window.location = $.query
+                                            .set('line', editor.getSelectionRange().start.row + 1)
+                                            .set('file_path', fileName);
                 } else {
                     alert("Writing to\n\n\t" + fileName + "\n\nwas not successful.");
                 }
