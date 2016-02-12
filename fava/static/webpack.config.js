@@ -31,4 +31,8 @@ module.exports = {
       allChunks: true
     })
   ],
+  //for handlebars
+  node: {
+      fs: 'empty'
+  }
 }

@@ -87,7 +87,7 @@ if (typeof Date.prototype.formatWithString != 'function') {
 }
 
 // http://stackoverflow.com/a/7195920
-module.exports.isNumber = function(num) {
+window.isNumber = function(num) {
     return (typeof num == 'string' || typeof num == 'number') && !isNaN(num - 0) && num !== '';
 };
 

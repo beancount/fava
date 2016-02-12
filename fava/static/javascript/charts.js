@@ -5,7 +5,7 @@ require('imports?Chartist=chartist!chartist-plugin-zoom');
 
 require('jquery-treemap/src/jquery-treemap.js');
 
-var helpers = require('./helpers');
+require('./helpers');
 
 $(document).ready(function() {
     $('.charts-container').html('');
@@ -48,7 +48,7 @@ $(document).ready(function() {
                         type: Chartist.AutoScaleAxis,
                         scaleMinSpace: 25,
                         labelInterpolationFnc: function(value, index) {
-                            var val = helpers.isNumber(value) ? new Date(value) : value;
+                            var val = isNumber(value) ? new Date(value) : value;
                             return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     },
@@ -77,7 +77,7 @@ $(document).ready(function() {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
                             if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
-                                var val = helpers.isNumber(value) ? new Date(value) : value;
+                                var val = isNumber(value) ? new Date(value) : value;
                                 return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                             } else {
                                 return null;
