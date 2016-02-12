@@ -26,6 +26,7 @@
     "handlebars": "^4.0.5",
     "jquery": "^2.2.0",
     "jquery-query-object": "^2.2.2",
+    "jquery-stupid-table": "github:medsabir/Stupid-Table-Plugin#feat-npm-publish",
     "jquery-treemap": "github:lrgalego/jquery-treemap",
     "mousetrap": "^1.5.3"
   }

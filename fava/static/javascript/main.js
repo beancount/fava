@@ -1,4 +1,5 @@
 require('jquery-query-object');
+require('jquery-stupid-table/stupidtable');
 
 window.Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
@@ -9,8 +10,7 @@ require('./charts');
 window.$ = $
 
 $(document).ready(function() {
-    // TODO re-enable sortable tables
-    //$("table.sortable").stupidtable();
+    $("table.sortable").stupidtable();
 
     $('.filter input').keyup(function() {
         var $this = $(this);
