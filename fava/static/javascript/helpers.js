@@ -20,7 +20,7 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 // http://stackoverflow.com/a/27385169
-var decodeEntities = (function() {
+window.decodeEntities = (function() {
     // this prevents any overhead from creating the object each time
     var element = document.createElement('div');
 
@@ -67,7 +67,7 @@ if (toLocaleStringSupportsOptions() == false) {
 };
 
 // Formats the given number to two fixed decimals.
-function formatCurrency(x) {
+window.formatCurrency = function (x) {
     return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
 }
 
@@ -87,8 +87,8 @@ if (typeof Date.prototype.formatWithString != 'function') {
 }
 
 // http://stackoverflow.com/a/7195920
-function isNumber(num) {
+module.exports.isNumber = function(num) {
     return (typeof num == 'string' || typeof num == 'number') && !isNaN(num - 0) && num !== '';
 };
 
-function pad(n) { return n < 10 ? '0' + n : n }
+function pad(n) { return n < 10 ? '0' + n : n };

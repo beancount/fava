@@ -1,5 +1,13 @@
+require('jquery-query-object');
+
+var Mousetrap = require('mousetrap');
+require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
+
+require('./charts');
+
 $(document).ready(function() {
-    $("table.sortable").stupidtable();
+    // TODO re-enable sortable tables
+    //$("table.sortable").stupidtable();
 
     $('.filter input').keyup(function() {
         var $this = $(this);

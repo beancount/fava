@@ -98,21 +98,7 @@
     </div>
     {% include "_keyboard_shortcuts.html" %}
 
-    {% assets "vendor/jquery-js/jquery-2.1.4.js",
-              "vendor/chartist-js/chartist.js",
-              "vendor/chartist-js/chartist-plugin-legend.js",
-              "vendor/chartist-js/chartist-plugin-tooltip.js",
-              "vendor/chartist-js/chartist-plugin-zoom.js",
-              "vendor/jquery-treemap-js/jquery-treemap.js",
-              "vendor/jquery-stupidtable-js/stupidtable.js",
-              "vendor/jquery-query-object-js/jquery.query-object.js",
-              "vendor/mousetrap-js/mousetrap.js",
-              "vendor/mousetrap-js/plugins/bind-dictionary/mousetrap-bind-dictionary.js",
-              "javascript/helpers.js",
-              "javascript/charts.js",
-              "javascript/main.js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
+    <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
     <script>
         // Jumping to pages:
         Mousetrap.bind({
