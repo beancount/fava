@@ -20,13 +20,13 @@
   "dependencies": {
     "ace-builds": "^1.2.2",
     "chartist": "^0.9.5",
-    "chartist-plugin-legend": "github:codeyellowbv/chartist-plugin-legend",
+    "chartist-plugin-legend": "^0.2.1",
     "chartist-plugin-tooltip": "github:globegitter/chartist-plugin-tooltip",
     "clipboard": "^1.5.8",
     "compass-mixins": "^0.12.7",
     "handlebars": "^4.0.5",
     "jquery": "^2.2.0",
-    "jquery-query-object": "alrusdi/jquery-plugin-query-object",
+    "jquery-query-object": "^2.2.3",
     "jquery-stupid-table": "github:medsabir/Stupid-Table-Plugin#feat-npm-publish",
     "jquery-treemap": "github:lrgalego/jquery-treemap",
     "mousetrap": "^1.5.3"
