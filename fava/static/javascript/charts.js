@@ -1,4 +1,4 @@
-window.Chartist = require('chartist');
+Chartist = require('chartist');
 require('chartist-plugin-legend');
 require('chartist-plugin-tooltip');
 require('chartist-plugin-zoom');
