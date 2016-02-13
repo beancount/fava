@@ -22,7 +22,6 @@
     "chartist": "^0.9.5",
     "chartist-plugin-legend": "github:codeyellowbv/chartist-plugin-legend",
     "chartist-plugin-tooltip": "github:globegitter/chartist-plugin-tooltip",
-    "chartist-plugin-zoom": "^0.1.0",
     "clipboard": "^1.5.8",
     "compass-mixins": "^0.12.7",
     "handlebars": "^4.0.5",

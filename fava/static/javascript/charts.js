@@ -1,9 +1,9 @@
 Chartist = require('chartist');
 require('chartist-plugin-legend');
 require('chartist-plugin-tooltip');
-require('chartist-plugin-zoom');
+require('./vendor/chartist-plugin-zoom');
 
-require('jquery-treemap/src/jquery-treemap.js');
+require('jquery-treemap/src/jquery-treemap');
 
 require('./helpers');
 
