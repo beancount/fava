@@ -385,21 +385,9 @@ article {
             }
         }
 
-        &.highlighttable, &.journal-table {
+        &.journal-table {
             td:first-child {
                 min-width: inherit;
-            }
-        }
-
-        &.highlighttable {
-            @import "pygments";
-
-            td.linenos {
-                text-align: right;
-
-                a {
-                    color: #A7A5A5;
-                }
             }
         }
 

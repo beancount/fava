@@ -4,21 +4,7 @@
 {% import '_account_macros.html' as account_macros %}
 
 {% block javascript %}
-    {% assets "vendor/clipboard-js/clipboard-1.5.5.js" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-    <script>
-        $(document).ready(function() {
-            new Clipboard('.status-indicator');
-            new Clipboard('#copy-balances', {
-                text: function(trigger) {
-                    var text = trigger.getAttribute('title').split('\n');
-                    text.splice(0, 2);
-                    return text.join('\n').trim();
-                }
-            });
-        });
-    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='gen/clipboard.js') }}"></script>
 {% endblock %}
 
 {% block content %}

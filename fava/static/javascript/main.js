@@ -1,3 +1,14 @@
+require('jquery-query-object');
+require('jquery-stupid-table/stupidtable');
+
+window.Mousetrap = require('mousetrap');
+require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
+
+require('./charts');
+
+// expose jquery to global context
+window.$ = $
+
 $(document).ready(function() {
     $("table.sortable").stupidtable();
 

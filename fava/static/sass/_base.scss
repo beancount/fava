@@ -1,7 +1,7 @@
-@import "compass/reset";
-@import "compass/css3";
-@import "compass/css3/user-interface";
-@import "compass/utilities/general/clearfix";
+@import "~compass-mixins/lib/compass/reset";
+@import "~compass-mixins/lib/compass/css3";
+@import "~compass-mixins/lib/compass/css3/user-interface";
+@import "~compass-mixins/lib/compass/utilities/general/clearfix";
 
 $font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
 $font_family_monospaced: monospace;

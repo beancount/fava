@@ -9,3 +9,5 @@ fava/static/gen/
 *.webassets-cache*/
 fava/static/stylesheets/packed*.js
 TODO
+
+node_modules
