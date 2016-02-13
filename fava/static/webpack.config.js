@@ -21,7 +21,7 @@ module.exports = {
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
       },
       {
-        test: /(.*)?ace.*/,
+        test: [/ace-builds.*/, /.*ace-mode-beancount.*/],
         loader: 'script-loader'
       }
     ]
