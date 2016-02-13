@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='beancount-fava',
-    version='0.2.0',
+    version='0.2.1',
     description='A web interface for beancount',
     url='http://github.com/aumayr/fava',
     author='Dominik Aumayr',
