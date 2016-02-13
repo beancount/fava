@@ -2,9 +2,9 @@ include CHANGES.md LICENSE
 
 recursive-include fava/templates *
 recursive-include fava/static *
+recursive-exclude fava/static/node_modules *
 include fava/default-settings.conf
 prune fava/static/sass/.sass-cache
 
 # Be sure this is last
 global-exclude *.pyc .gitignore *.orig
-

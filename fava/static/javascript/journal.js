@@ -1,3 +1,5 @@
+var Handlebars = require('handlebars');
+
 // http://stackoverflow.com/a/16315366
 Handlebars.registerHelper('ifCond', function (v1, operator, v2, options) {
     switch (operator) {

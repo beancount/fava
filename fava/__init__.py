@@ -14,7 +14,7 @@
 from __future__ import absolute_import, unicode_literals, print_function
 
 __url__             = "http://github.com/aumayr/fava"
-__version__         = "0.2.0"
+__version__         = "0.2.1"
 __license__         = "MIT"
 __author__          = "Dominik Aumayr"
 __author_email__    = "dominik@aumayr.name"

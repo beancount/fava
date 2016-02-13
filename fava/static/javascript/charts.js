@@ -1,3 +1,12 @@
+Chartist = require('chartist');
+require('chartist-plugin-legend');
+require('chartist-plugin-tooltip');
+require('./vendor/chartist-plugin-zoom');
+
+require('jquery-treemap/src/jquery-treemap');
+
+require('./helpers');
+
 $(document).ready(function() {
     $('.charts-container').html('');
     window.chartData.charts = {}

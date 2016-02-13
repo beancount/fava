@@ -21,7 +21,7 @@ $ct-series-colors: (
     #a748ca
 );
 
-@import "../vendor/chartist-js/scss/chartist";
+@import "~chartist/dist/scss/chartist";
 
 .charts {
     .ct-label {

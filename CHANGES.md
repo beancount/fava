@@ -2,6 +2,11 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-13
+
+  - Bumped version to 0.2.1 due to changes in how JavaScript and CSS are
+    handled internally (Thanks to Jakob Schnitzler for the work!).
+
 2016-02-11
 
   - Renamed the project from "beancount-web" to "fava" (Issue #85)
