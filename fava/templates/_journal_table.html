@@ -78,7 +78,7 @@
             " data-hash="{{ entry.hash -}}
             " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
                 <td class="datecell"><a href="{{ context_url.replace('REPLACEME', entry.hash) }}">{{ entry.date }}</a></td>
-                <td class="flag">{{ flag }}</td>
+                <td class="flag">{{ entry.flag }}</td>
                 <td class="description" colspan="4">
                 {% if type == 'open' %}
                     Open {{ account_link(entry.account) }}
