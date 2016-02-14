@@ -60,9 +60,6 @@
             {%- if not show_type[entry.meta.type] %} hidden{% endif -%}
             {%- if entry.diff_amount %} fail{% endif -%}
             {%- if entry.flag == '!'%} warning{% endif -%}
-            {%- if show_legs and entry.legs %} display-legs{% endif -%}
-            {%- if entry.metadata %} has-metadata{% endif -%}
-            " data-has-legs="{{ "True" if entry.legs else "False" -}}
             " data-type="{{ entry.meta.type -}}
             " data-hash="{{ entry.hash -}}
             " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
@@ -132,7 +129,7 @@
                 {% endif %}
             </tr>
         {% for leg in entry.legs %}
-        <tr class="posting leg leg-{{ entry.meta.type }} journal-entry-{{ entry.hash }}{%- if not show_type[entry.meta.type] %} hidden{% endif -%}">
+        <tr class="posting posting-{{ entry.meta.type }}{%- if not show_legs %} hidden{% endif -%}{%- if not show_type[entry.meta.type] %} hidden-parent{% endif -%}" data-parent-hash="{{ entry.hash }}" data-type="posting">
                 <td class="datecell"></td>
                 <td class="flag"></td>
                 <td class="description"><a href="{{ url_for('account_with_journal', name=leg.account) }}">{{ leg.account }}</a></td>
