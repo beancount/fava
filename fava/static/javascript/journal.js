@@ -3,7 +3,7 @@ function initJournal() {
     $('table.journal-table tr[data-type="transaction"]').click(function() {
         var $this = $(this);
         var hash = $this.attr('data-hash');
-        $('table.journal-table tr[data-parent-hash="' + hash + '"]').toggle();
+        $('table.journal-table tr[data-parent-hash="' + hash + '"]').toggleClass("hidden");
     });
     initJournalFilters();
 }
