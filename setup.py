@@ -34,6 +34,8 @@ setup(
         ]
     },
     install_requires=[
+        'python-dateutil==2.4.2',
+        'ply==3.8',
         'beancount',
         'Flask==0.10.1',
         'livereload==2.4.1'
