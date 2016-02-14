@@ -133,42 +133,34 @@ $(document).ready(function() {
     }
 
     // Options in transaction pages:
-    if ($('.table-filter').length) {
+    if ($('#entry-filters').length) {
         Mousetrap.bind({
             'l':   function() { $('#toggle-legs').click(); },
             'm':   function() { $('#toggle-metadata').click(); },
-            's o': function() { $('input#filter-open').click(); },
-            's c': function() { $('input#filter-close').click(); },
-            's t': function() { $('input#filter-transaction').click(); },
-            's b': function() { $('input#filter-balance').click(); },
-            's n': function() { $('input#filter-note').click(); },
-            's d': function() { $('input#filter-document').click(); },
-            's p': function() { $('input#filter-pad').click(); },
-            't c': function() { $('input#filter-cleared').click(); },
-            't u': function() { $('input#filter-uncleared').click(); },
-            't p': function() { $('input#filter-padding').click(); },
-            't s': function() { $('input#filter-summarize').click(); },
-            't t': function() { $('input#filter-transfer').click(); },
+            's o': function() { $('#filter-open').click(); },
+            's c': function() { $('#filter-close').click(); },
+            's t': function() { $('#filter-transaction').click(); },
+            's b': function() { $('#filter-balance').click(); },
+            's n': function() { $('#filter-note').click(); },
+            's d': function() { $('#filter-document').click(); },
+            's p': function() { $('#filter-pad').click(); },
+            't c': function() { $('#filter-cleared').click(); },
+            't u': function() { $('#filter-uncleared').click(); },
+            't p': function() { $('#filter-padding').click(); },
+            't s': function() { $('#filter-summarize').click(); },
+            't t': function() { $('#filter-transfer').click(); },
         }, 'keyup');
     }
 
     Mousetrap.bind({
-        '?': function() { $('.overlay-wrapper').show(); }
+        '?': function() {
+            $('#overlay-wrapper').show();
+            $('#overlay-wrapper, #overlay-wrapper a.close').click(function(e) {
+                e.preventDefault();
+                $('#overlay-wrapper').hide();
+            });
+        },
+        'esc': function() { $('#overlay-wrapper').hide(); }
     }, 'keyup');
 
-    $('.overlay-wrapper, .overlay-wrapper a.close').click(function(e) {
-        if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close')) {
-            e.preventDefault();
-            $('.overlay-wrapper').hide();
-        }
-    });
-
-    $('body').keyup(function(e) {
-        if ($('.overlay-wrapper:visible').length && e.which == 27) {
-            $('.overlay-wrapper').hide();
-        }
-    });
 });
-
-
-
