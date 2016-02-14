@@ -11,7 +11,7 @@ try:
     read_md = lambda fname: convert(fname, 'rst', 'md')
 except ImportError:
     print("warning: pypandoc module not found, could not convert Markdown to RST")
-    read_md = lambda fname: open(fname, 'r').read()
+    read_md = lambda fname: open(os.path.join(os.path.dirname(__file__), fname), 'r').read()
 
 setup(
     name='beancount-fava',
@@ -36,12 +36,12 @@ setup(
     install_requires=[
         'python-dateutil==2.4.2',
         'ply==3.8',
-        'beancount',
+        'beancount==2.0b2',
         'Flask==0.10.1',
         'livereload==2.4.1'
     ],
     dependency_links=[
-        'hg+https://bitbucket.org/blais/beancount#egg=beancount',
+        'hg+https://bitbucket.org/blais/beancount#egg=beancount-2.0b2',
     ],
     zip_safe=False,
     classifiers=[

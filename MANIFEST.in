@@ -1,4 +1,4 @@
-include CHANGES.md LICENSE
+include CHANGES.md LICENSE README.md
 
 recursive-include fava/templates *
 recursive-include fava/static/gen *
