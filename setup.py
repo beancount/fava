@@ -6,15 +6,18 @@ author  = __import__('fava').__author__
 author_email  = __import__('fava').__author_email__
 url     = __import__('fava').__url__
 
-# Utility function to read the README file.
-def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+try:
+    from pypandoc import convert
+    read_md = lambda fname: convert(fname, 'rst', 'md')
+except ImportError:
+    print("warning: pypandoc module not found, could not convert Markdown to RST")
+    read_md = lambda fname: open(fname, 'r').read()
 
 setup(
     name='beancount-fava',
     version=version,
     description=('A rich web interface for the CL-accounting tool beancount.'),
-    long_description=read('README.md'),
+    long_description=read_md('README.md'),
     url=url,
     author=author,
     author_email=author_email,
