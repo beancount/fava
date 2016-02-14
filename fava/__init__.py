@@ -12,9 +12,12 @@
     limitations under the License.
 """
 from __future__ import absolute_import, unicode_literals, print_function
+from .util.version import get_version
+
+VERSION = (0, 2, 1, 'dev', 3)
 
 __url__             = "http://github.com/aumayr/fava"
-__version__         = "0.2.1"
+__version__         = get_version(VERSION)
 __license__         = "MIT"
 __author__          = "Dominik Aumayr"
 __author_email__    = "dominik@aumayr.name"

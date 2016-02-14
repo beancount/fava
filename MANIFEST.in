@@ -1,10 +1,14 @@
 include CHANGES.md LICENSE
 
 recursive-include fava/templates *
-recursive-include fava/static *
+recursive-include fava/static/gen *
+recursive-include fava/static/images *
+recursive-exclude fava/static/javascript *
+recursive-exclude fava/static/sass *
 recursive-exclude fava/static/node_modules *
+exclude fava/static/package.json
+exclude fava/static/webpack.config.js
 include fava/default-settings.conf
-prune fava/static/sass/.sass-cache
 
 # Be sure this is last
 global-exclude *.pyc .gitignore *.orig
