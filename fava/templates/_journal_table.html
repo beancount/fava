@@ -83,6 +83,9 @@
                 {% if type == 'open' %}
                     Open {{ account_link(entry.account) }}
                 {% endif %}
+                {% if type == 'close' %}
+                    Close {{ account_link(entry.account) }}
+                {% endif %}
                 {% if type == 'note' %}
                     Note: {{ entry.comment }}
                 {% endif %}
