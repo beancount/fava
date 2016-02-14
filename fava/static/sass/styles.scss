@@ -584,7 +584,7 @@ article {
                     background-color: $color_onahau_approx;
                 }
 
-                &.transaction.warning {
+                &.transaction.uncleared {
                     background-color: $color_tickle_me_pink_approx;
                 }
 
@@ -765,6 +765,7 @@ article {
 
     .table-filter, .chart-filter {
         float: right;
+        clear: right;
         margin-bottom: 8px;
 
         input {

@@ -1,4 +1,5 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'padding', 'query'] %}
+{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
+{% set transaction_types = ['cleared', 'uncleared', 'padding', 'summarize', 'transfer'] %}
 {% set show_type = {
     'open':        config.user.getboolean('journal-show-type-open'),
     'close':       config.user.getboolean('journal-show-type-close'),
@@ -7,15 +8,21 @@
     'note':        config.user.getboolean('journal-show-type-note'),
     'document':    config.user.getboolean('journal-show-type-document'),
     'pad':         config.user.getboolean('journal-show-type-pad'),
-    'padding':     config.user.getboolean('journal-show-type-padding'),
     'query':       config.user.getboolean('journal-show-type-query')
+} %}
+{% set show_transaction_type = {
+    'cleared':   config.user.getboolean('journal-show-transaction-cleared'),
+    'uncleared': config.user.getboolean('journal-show-transaction-uncleared'),
+    'padding':   config.user.getboolean('journal-show-transaction-padding'),
+    'summarize': config.user.getboolean('journal-show-transaction-summarize'),
+    'transfer':  config.user.getboolean('journal-show-transaction-transfer'),
 } %}
 
 {% set show_metadata= config.user.getboolean('journal-show-metadata') %}
 {% set show_legs = config.user.getboolean('journal-show-legs') %}
 
 {% if show_tablefilter %}
-    <div class="table-filter">
+    <div id="entry-filters" class="table-filter">
         <form>
             {% for type in entry_types %}
                 <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if show_type[type] %} checked="checked"{% endif %}>
@@ -23,6 +30,14 @@
             {% endfor %}
             <input type="submit" id="toggle-metadata" value="{% if show_metadata %}Hide{% else %}Show{% endif %} metadata">
             <input type="submit" id="toggle-legs" value="{% if show_legs %}Hide{% else %}Show{% endif %} legs">
+        </form>
+    </div>
+    <div id="transaction-filters" class="table-filter">
+        <form>
+            {% for type in transaction_types %}
+                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if show_transaction_type[type] %} checked="checked"{% endif %}>
+                <label for="filter-{{ type }}">{{ type|capitalize }}</label>
+            {% endfor %}
         </form>
     </div>
 {% endif %}
@@ -56,35 +71,33 @@
         </thead>
         <tbody>
         {% for entry in journal %}
-            <tr class="{{ entry.meta.type }}
-            {%- if not show_type[entry.meta.type] %} hidden{% endif -%}
+            {% set type = entry.meta.type %}
+            <tr class="{{ type }} {{ entry.transaction_type }}
+            {%- if not show_type[type] %} hidden{% endif -%}
+            {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden-type{% endif -%}
             {%- if entry.diff_amount %} fail{% endif -%}
-            {%- if entry.flag == '!'%} warning{% endif -%}
-            " data-type="{{ entry.meta.type -}}
+            " data-type="{{ type -}}
             " data-hash="{{ entry.hash -}}
             " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
                 <td class="datecell"><a href="{{ url_for('context', ehash=entry.hash) }}">{{ entry.date }}</a></td>
                 <td class="flag">{{ flag }}</td>
                 <td class="description" colspan="4">
-                {% if entry.meta.type == 'open' %}
+                {% if type == 'open' %}
                     Open <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a>
                 {% endif %}
-                {% if entry.meta.type == 'note' %}
+                {% if type == 'note' %}
                     Note: {{ entry.comment }}
                 {% endif %}
-                {% if entry.meta.type == 'query' %}
+                {% if type == 'query' %}
                     Query: <a href="{{ url_for('query', query_hash=entry.hash) }}">{{ entry.name }}</a>
                 {% endif %}
-                {% if entry.meta.type == 'pad' %}
+                {% if type == 'pad' %}
                     Pad <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a> from <a href="{{ url_for('account_with_journal', name=entry.source_account) }}">{{ entry.source_account }}</a>
                 {% endif %}
-                {% if entry.meta.type == 'padding' %}
-                    {{ entry.narration }}
-                {% endif %}
-                {% if entry.meta.type == 'document' %}
+                {% if type == 'document' %}
                     Document for <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a>: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename }}</a>
                 {% endif %}
-                {% if entry.meta.type == 'balance' %}
+                {% if type == 'balance' %}
                     Balance <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a>
                     {% if diff_amount %} fails;
                         expected = {{ entry.amount|format_currency }} {{ entry.amount_currency }}
@@ -94,7 +107,7 @@
                         has {{ entry.amount }} {{ entry.amount_currency }}
                     {% endif %}
                 {% endif %}
-                {% if entry.meta.type == 'transaction' %}
+                {% if type == 'transaction' %}
                     <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
                     {% for tag in entry.tags %}<a href="{{ url_for_current(tag=tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
                 {% endif %}
@@ -129,7 +142,8 @@
                 {% endif %}
             </tr>
         {% for leg in entry.legs %}
-        <tr class="posting posting-{{ entry.meta.type }}{%- if not show_legs %} hidden{% endif -%}{%- if not show_type[entry.meta.type] %} hidden-parent{% endif -%}" data-parent-hash="{{ entry.hash }}" data-type="posting">
+        <tr class="posting posting-{{ entry.transaction_type }}{%- if not show_legs %} hidden{% endif -%}{%- if not show_type[type] %} hidden-parent{% endif -%}{%- if (type == 'transaction' and not show_transaction_type[entry.transaction_type]) %} hidden-parent-type{% endif -%}
+            " data-parent-hash="{{ entry.hash }}" data-type="posting">
                 <td class="datecell"></td>
                 <td class="flag"></td>
                 <td class="description"><a href="{{ url_for('account_with_journal', name=leg.account) }}">{{ leg.account }}</a></td>

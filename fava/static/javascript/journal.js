@@ -9,8 +9,8 @@ function initJournal() {
 }
 
 function initJournalFilters() {
-    // Toggle positions with checkboxes
-    $('.table-filter input[type="checkbox"]').change(function() {
+    // Toggle entries with checkboxes
+    $('#entry-filters input[type="checkbox"]').change(function() {
         var $this = $(this);
         var type = $this.attr('data-type');
         var shouldShow = $this.prop('checked');
@@ -20,6 +20,20 @@ function initJournalFilters() {
         } else {
             $('table.journal-table tr[data-type="' + type + '"]').addClass('hidden');
             $('table.journal-table tr.posting-' + type + '').addClass('hidden-parent');
+        }
+    });
+
+    // Toggle transaction types with checkboxes
+    $('#transaction-filters input[type="checkbox"]').change(function() {
+        var $this = $(this);
+        var type = $this.attr('data-type');
+        var shouldShow = $this.prop('checked');
+        if (shouldShow) {
+            $('table.journal-table tr.' + type).removeClass('hidden-type');
+            $('table.journal-table tr.posting-' + type + '').removeClass('hidden-parent-type');
+        } else {
+            $('table.journal-table tr.' + type).addClass('hidden-type');
+            $('table.journal-table tr.posting-' + type + '').addClass('hidden-parent-type');
         }
     });
 

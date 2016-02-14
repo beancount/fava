@@ -1,8 +1,8 @@
 import decimal
 from datetime import date, datetime
 
-from beancount.core import interpolate, compare
-from beancount.core.data import Balance, Transaction, Price
+from beancount.core import compare
+from beancount.core.data import Balance, Transaction
 from beancount.core.amount import Amount
 from beancount.core.position import Position
 from beancount.core.number import ZERO
@@ -26,42 +26,44 @@ class BeanJSONEncoder(JSONEncoder):
         return JSONEncoder.default(self, o)
 
 
-def serialize_entry(posting):
-    entry = posting._asdict()
-    entry['meta'] = {
-        'type': posting.__class__.__name__.lower(),
-        'filename': posting.meta['filename'],
-        'lineno': posting.meta['lineno'],
+transaction_types = {
+    '*': 'cleared',
+    '!': 'uncleared',
+    'P': 'padding',
+    'S': 'summarize',
+    'T': 'transfer',
+}
+
+
+def serialize_entry(entry):
+    new_entry = entry._asdict()
+    new_entry['meta'] = {
+        'type': entry.__class__.__name__.lower(),
+        'filename': entry.meta['filename'],
+        'lineno': entry.meta['lineno'],
     }
-    entry.update({
-        'hash': compare.hash_entry(posting),
-        'metadata': posting.meta.copy()
+    new_entry.update({
+        'hash': compare.hash_entry(entry),
+        'metadata': entry.meta.copy()
     })
 
-    entry['metadata'].pop("__tolerances__", None)
-    entry['metadata'].pop("filename", None)
-    entry['metadata'].pop("lineno", None)
+    new_entry['metadata'].pop("__tolerances__", None)
+    new_entry['metadata'].pop("filename", None)
+    new_entry['metadata'].pop("lineno", None)
 
-    if isinstance(posting, Price):
-        entry['amount'] = {posting.amount.currency: posting.amount.number}
+    if isinstance(entry, Balance):
+        if entry.diff_amount:
+            new_entry['balance'] = entry.diff_amount + entry.amount
 
-    if isinstance(posting, Balance):
-        entry['amount'] = {posting.amount.currency: posting.amount.number}
+    if isinstance(entry, Transaction):
+        new_entry['transaction_type'] = transaction_types[entry.flag]
 
-        if posting.diff_amount:
-            entry['diff_amount'] = {posting.diff_amount.currency: posting.diff_amount.number}
-            entry['balance'] = {posting.amount.currency: posting.diff_amount.number + posting.amount.number}
+        new_entry.pop('entrys', None)
+        new_entry['tags'] = entry.tags or []
+        new_entry['links'] = entry.links or []
+        new_entry['legs'] = [serialize_posting(p) for p in entry.postings]
 
-    if isinstance(posting, Transaction):
-        if posting.flag == 'P':
-            entry['meta']['type'] = 'padding'  # TODO handle Padding, Summarize and Transfer
-
-        entry.pop('postings', None)
-        entry['tags'] = posting.tags or []
-        entry['links'] = posting.links or []
-        entry['legs'] = [serialize_posting(p) for p in posting.postings]
-
-    return entry
+    return new_entry
 
 
 def serialize_inventory(inventory, at_cost=False):
