@@ -136,9 +136,7 @@ $(document).ready(function() {
     if ($('.table-filter').length) {
         Mousetrap.bind({
             'l':   function() { $('#toggle-legs').click(); },
-            's l': function() { $('#toggle-legs').click(); },
             'm':   function() { $('#toggle-metadata').click(); },
-            's m': function() { $('#toggle-metadata').click(); },
             's o': function() { $('input#filter-open').click(); },
             's c': function() { $('input#filter-close').click(); },
             's t': function() { $('input#filter-transaction').click(); },
@@ -146,7 +144,11 @@ $(document).ready(function() {
             's n': function() { $('input#filter-note').click(); },
             's d': function() { $('input#filter-document').click(); },
             's p': function() { $('input#filter-pad').click(); },
-            's shift+p': function() { $('input#filter-padding').click(); }
+            't c': function() { $('input#filter-cleared').click(); },
+            't u': function() { $('input#filter-uncleared').click(); },
+            't p': function() { $('input#filter-padding').click(); },
+            't s': function() { $('input#filter-summarize').click(); },
+            't t': function() { $('input#filter-transfer').click(); },
         }, 'keyup');
     }
 
