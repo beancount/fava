@@ -18,7 +18,7 @@
     'transfer':  config.user.getboolean('journal-show-transaction-transfer'),
 } %}
 
-{% set show_metadata= config.user.getboolean('journal-show-metadata') %}
+{% set show_metadata = config.user.getboolean('journal-show-metadata') %}
 {% set show_legs = config.user.getboolean('journal-show-legs') %}
 
 {% if show_tablefilter %}
@@ -42,16 +42,14 @@
     </div>
 {% endif %}
 
-{#
-<script>
-    window.contextURL = "{{ url_for('context', ehash='REPLACEME')|safe }}";
-    window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME')|safe }}";
-    window.queryURL = "{{ url_for('query', query_hash='REPLACEME')|safe }}";
-    window.tagURL = "{{ url_for_current(tag='REPLACEME')|safe }}";
-    window.documentURL = "{{ url_for('document', file_path='REPLACEME')|safe }}";
-    window.journalURL = "{{ url_for('journal')|safe }}";
-</script>
-#}
+{% set context_url = url_for('context', ehash='REPLACEME') %}
+{% set account_url = url_for('account_with_journal', name='REPLACEME') %}
+{% set tag_url = url_for_current(tag='REPLACEME') %}
+
+{% macro account_link(name) -%}
+<a href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>
+{%- endmacro %}
+
 
 <div class="journal-table">
   <table class="journal-table">
@@ -79,11 +77,11 @@
             " data-type="{{ type -}}
             " data-hash="{{ entry.hash -}}
             " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
-                <td class="datecell"><a href="{{ url_for('context', ehash=entry.hash) }}">{{ entry.date }}</a></td>
+                <td class="datecell"><a href="{{ context_url.replace('REPLACEME', entry.hash) }}">{{ entry.date }}</a></td>
                 <td class="flag">{{ flag }}</td>
                 <td class="description" colspan="4">
                 {% if type == 'open' %}
-                    Open <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a>
+                    Open {{ account_link(entry.account) }}
                 {% endif %}
                 {% if type == 'note' %}
                     Note: {{ entry.comment }}
@@ -92,13 +90,13 @@
                     Query: <a href="{{ url_for('query', query_hash=entry.hash) }}">{{ entry.name }}</a>
                 {% endif %}
                 {% if type == 'pad' %}
-                    Pad <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a> from <a href="{{ url_for('account_with_journal', name=entry.source_account) }}">{{ entry.source_account }}</a>
+                    Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
                 {% endif %}
                 {% if type == 'document' %}
-                    Document for <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a>: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename }}</a>
+                    Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename }}</a>
                 {% endif %}
                 {% if type == 'balance' %}
-                    Balance <a href="{{ url_for('account_with_journal', name=entry.account) }}">{{ entry.account }}</a>
+                    Balance {{ account_link(entry.account) }}
                     {% if diff_amount %} fails;
                         expected = {{ entry.amount|format_currency }} {{ entry.amount_currency }}
                         balance = {{ entry.balance|format_currency }} {{ entry.amount_currency }}
@@ -109,7 +107,7 @@
                 {% endif %}
                 {% if type == 'transaction' %}
                     <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-                    {% for tag in entry.tags %}<a href="{{ url_for_current(tag=tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+                    {% for tag in entry.tags %}<a href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
                 {% endif %}
                 {% if entry.metadata %}
                     <dl class="metadata"{% if show_metadata %} style="display: block;"{% endif %}>
@@ -146,7 +144,7 @@
             " data-parent-hash="{{ entry.hash }}" data-type="posting">
                 <td class="datecell"></td>
                 <td class="flag"></td>
-                <td class="description"><a href="{{ url_for('account_with_journal', name=leg.account) }}">{{ leg.account }}</a></td>
+                <td class="description">{{ account_link(leg.account) }}</td>
                 <td class="position num">{{ leg.units.number|format_currency }} {{ leg.units.currency }}</td>
                 <td class="price num">{{ leg.price.number|format_currency }} {{ leg.price.currency }}</td>
                 <td class="cost num">{{ leg.cost.number|format_currency }} {{ leg.cost.currency }}</td>
