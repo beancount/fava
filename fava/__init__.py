@@ -14,7 +14,7 @@
 from __future__ import absolute_import, unicode_literals, print_function
 from .util.version import get_version
 
-VERSION = (0, 2, 1, 'dev', 3)
+VERSION = (0, 2, 2, '', 0)
 
 __url__             = "http://github.com/aumayr/fava"
 __version__         = get_version(VERSION)
