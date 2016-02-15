@@ -2,6 +2,13 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-15
+
+  - Installing via `pip install beancount-fava` now works, all requirements
+    included. Bumped version to 0.2.3 to communicate that. (Thanks to Martin
+    Blais for fixing the beancount setuptools issue and Jakob Schnitzer for the
+    PR)
+
 2016-02-13
 
   - Bumped version to 0.2.1 due to changes in how JavaScript and CSS are
@@ -29,8 +36,8 @@
 
 2016-01-18
 
-  - Display QUERY directives in a dropdown in the Custom Query view (Issue #96).
-    (Thanks to Daniel Bos and Jakob Schnitzer for the help)
+  - Display QUERY directives in a dropdown in the Custom Query view (Issue
+    #96). (Thanks to Daniel Bos and Jakob Schnitzer for the help)
 
 2016-01-14
 
@@ -40,8 +47,7 @@
 
   - Filters were previously shown on all pages, even those where they didn't
     make sense or do anything. Now they got removed from pages such as `Custom
-    Query`, `Source`, `Options`, and `Errors` (Issue #97). (Thanks to Daniel Bos
-    for the PR)
+    Query`, `Source`, `Options`, and `Errors` (Issue #97). (Thanks to Daniel Bos for the PR)
 
 2016-01-09
 

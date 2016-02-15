@@ -34,14 +34,9 @@ setup(
         ]
     },
     install_requires=[
-        'python-dateutil==2.4.2',
-        'ply==3.8',
-        'beancount==2.0b2',
-        'Flask==0.10.1',
-        'livereload==2.4.1'
-    ],
-    dependency_links=[
-        'hg+https://bitbucket.org/blais/beancount#egg=beancount-2.0b2',
+        'beancount>=2.0b6',
+        'Flask>=0.10.1',
+        'livereload>=2.4.1'
     ],
     zip_safe=False,
     classifiers=[
