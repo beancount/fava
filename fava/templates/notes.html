@@ -1,8 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'notes' %}
 
-{% block javascript %}{% include "javascript/_journal.html" %}{% endblock %}
-
 {% block content %}
     <h1>Notes</h1>
     {% set notes = api.notes() %}

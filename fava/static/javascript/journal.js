@@ -62,6 +62,4 @@ function initJournalFilters() {
     });
 }
 
-$(document).ready(function() {
-    initJournal();
-});
+module.exports.initJournal = initJournal;

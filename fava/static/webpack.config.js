@@ -7,7 +7,6 @@ module.exports = {
     'app': './javascript/main.js',
     'clipboard': './javascript/clipboard.js',
     'editor': './javascript/editor.js',
-    'journal': './javascript/journal.js',
     'styles': './sass/styles.scss'
   },
   output: {
