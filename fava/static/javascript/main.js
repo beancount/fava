@@ -119,14 +119,14 @@ $(document).ready(function() {
     });
 
     // Jumping through charts
-    if ($('.chart-labels').length) {
+    if ($('#chart-labels').length) {
         Mousetrap.bind({
             'shift+c': function() { $('#toggle-chart').click(); },
             'c':       function() {
-                var next = $('.chart-labels label.selected').next();
-                $('.chart-labels label').removeClass('selected');
+                var next = $('#chart-labels label.selected').next();
+                $('#chart-labels label').removeClass('selected');
                 if (next.length) { next.click(); }
-                else             { $('.chart-labels label:first-child').click(); }
+                else             { $('#chart-labels label:first-child').click(); }
             },
 
         }, 'keyup');
