@@ -1,13 +1,10 @@
-function initJournal() {
+module.exports.initJournal = function() {
     // Toggle legs by clicking on transaction/padding row
     $('#journal-table tr[data-type="transaction"]').click(function() {
         var hash = $(this).attr('data-hash');
         $('#journal-table tr[data-parent-hash="' + hash + '"]').toggleClass("hidden");
     });
-    initJournalFilters();
-}
 
-function initJournalFilters() {
     // Toggle entries with checkboxes
     $('#entry-filters input[type="checkbox"]').change(function() {
         var $this = $(this);
@@ -44,5 +41,3 @@ function initJournalFilters() {
         $(this).val(shouldShow ? 'Hide metadata' : 'Show metadata');
     });
 }
-
-module.exports.initJournal = initJournal;

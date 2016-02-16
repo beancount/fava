@@ -5,6 +5,7 @@ window.Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
 require('./charts');
+var clipboard = require('./clipboard');
 var filters = require('./filters');
 var journal = require('./journal');
 var treeTable = require('./tree-table');
@@ -26,6 +27,11 @@ $(document).ready(function() {
     // Journal
     if ($('#journal-table').length) {
         journal.initJournal();
+    };
+
+    // Clipboard on statistics page
+    if ($('#copy-balances').length) {
+        clipboard.initClipboard();
     };
 
     // Keyboard shortcuts
