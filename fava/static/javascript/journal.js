@@ -1,8 +1,7 @@
 function initJournal() {
     // Toggle legs by clicking on transaction/padding row
     $('#journal-table tr[data-type="transaction"]').click(function() {
-        var $this = $(this);
-        var hash = $this.attr('data-hash');
+        var hash = $(this).attr('data-hash');
         $('#journal-table tr[data-parent-hash="' + hash + '"]').toggleClass("hidden");
     });
     initJournalFilters();
@@ -14,13 +13,10 @@ function initJournalFilters() {
         var $this = $(this);
         var type = $this.attr('data-type');
         var shouldShow = $this.prop('checked');
-        if (shouldShow) {
-            $('#journal-table tr[data-type="' + type + '"]').removeClass('hidden');
-            $('#journal-table tr.posting-' + type + '').removeClass('hidden-parent');
-        } else {
-            $('#journal-table tr[data-type="' + type + '"]').addClass('hidden');
-            $('#journal-table tr.posting-' + type + '').addClass('hidden-parent');
-        }
+        $('#journal-table tr[data-type="' + type + '"]').toggleClass('hidden', !shouldShow);
+        if (type == 'transaction') {
+            $('#journal-table tr.posting').toggleClass('hidden-parent', !shouldShow);
+        };
     });
 
     // Toggle transaction types with checkboxes
@@ -28,24 +24,15 @@ function initJournalFilters() {
         var $this = $(this);
         var type = $this.attr('data-type');
         var shouldShow = $this.prop('checked');
-        if (shouldShow) {
-            $('#journal-table tr.' + type).removeClass('hidden-type');
-            $('#journal-table tr.posting-' + type + '').removeClass('hidden-parent-type');
-        } else {
-            $('#journal-table tr.' + type).addClass('hidden-type');
-            $('#journal-table tr.posting-' + type + '').addClass('hidden-parent-type');
-        }
+        $('#journal-table tr.' + type).toggleClass('hidden-type', !shouldShow);
+        $('#journal-table tr.posting-' + type + '').toggleClass('hidden-parent-type', !shouldShow);
     });
 
     // Button "Hide/Show legs"
     $('input#toggle-legs').click(function(event) {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show legs');
-        if (shouldShow) {
-            $('#journal-table tr[data-type="posting"]').removeClass('hidden');
-        } else {
-            $('#journal-table tr[data-type="posting"]').addClass('hidden');
-        }
+        $('#journal-table tr[data-type="posting"]').toggleClass('hidden', !shouldShow);
         $(this).val(shouldShow ? 'Hide legs' : 'Show legs');
     });
 
@@ -53,11 +40,7 @@ function initJournalFilters() {
     $('input#toggle-metadata').click(function(event) {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show metadata');
-        if (shouldShow) {
-            $('#journal-table dl.metadata').removeClass('hidden');
-        } else {
-            $('#journal-table dl.metadata').addClass('hidden');
-        }
+        $('#journal-table dl.metadata').toggleClass('hidden', !shouldShow);
         $(this).val(shouldShow ? 'Hide metadata' : 'Show metadata');
     });
 }
