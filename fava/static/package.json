@@ -24,7 +24,6 @@
     "chartist-plugin-tooltip": "github:globegitter/chartist-plugin-tooltip",
     "clipboard": "^1.5.8",
     "compass-mixins": "^0.12.7",
-    "handlebars": "^4.0.5",
     "jquery": "^2.2.0",
     "jquery-query-object": "^2.2.3",
     "jquery-stupid-table": "github:medsabir/Stupid-Table-Plugin#feat-npm-publish",

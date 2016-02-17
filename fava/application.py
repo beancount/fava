@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 from flask import Flask, flash, render_template, url_for, request, redirect,\
-                  send_from_directory, jsonify, g
+                  send_from_directory, g
 
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -106,12 +106,7 @@ def get_stored_query(stored_query_hash=None):
 
 @app.route('/journal/')
 def journal():
-    if request.is_xhr:
-        return jsonify({
-            'data': app.api.journal(with_change_and_balance=app.config.user.getboolean('journal-general-show-balances'))
-        })
-    else:
-        return render_template('journal.html')
+    return render_template('journal.html')
 
 
 @app.route('/source/', methods=['GET', 'POST'])

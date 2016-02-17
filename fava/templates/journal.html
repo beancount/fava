@@ -1,11 +1,9 @@
 {% extends "_layout.html" %}
 {% set active_page = 'journal' %}
 
-{% block javascript %}{% include "javascript/_journal.html" %}{% endblock %}
-
 {% block content %}
     <h1>General Ledger</h1>
-    {% with show_tablefilter=True, show_change_and_balance=config.user.getboolean('journal-general-show-balances')  %}
+    {% with journal = api.journal(), show_tablefilter=True, show_change_and_balance=config.user.getboolean('journal-general-show-balances')  %}
         {% include "_journal_table.html" %}
     {% endwith %}
 {% endblock %}

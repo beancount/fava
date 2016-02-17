@@ -551,7 +551,7 @@ article {
                 }
 
                 &.close {
-                    background-color: $color_storm_dust_approx;
+                    background-color: $color_suva_gray_approx;
                 }
 
                 &.note {
@@ -584,7 +584,7 @@ article {
                     background-color: $color_onahau_approx;
                 }
 
-                &.transaction.warning {
+                &.pending {
                     background-color: $color_tickle_me_pink_approx;
                 }
 
@@ -617,7 +617,6 @@ article {
                     }
 
                     dl.metadata {
-                        display: none;
                         margin-top: 0;
                         padding: 2px 0 3px 6px;
                         margin: 4px 0 0 -6px;
@@ -765,6 +764,7 @@ article {
 
     .table-filter, .chart-filter {
         float: right;
+        clear: right;
         margin-bottom: 8px;
 
         input {

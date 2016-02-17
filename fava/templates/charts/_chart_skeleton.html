@@ -7,5 +7,5 @@
     <div class="charts-container"{% if not config.user.getboolean('charts-show') %} style="display: none"{% endif %}>
         <div class="loading">Loading charts&hellip;</div>
     </div>
-    <div class="chart-labels"{% if not config.user.getboolean('charts-show') %} style="display: none"{% endif %}> </div>
+    <div id="chart-labels" class="chart-labels"{% if not config.user.getboolean('charts-show') %} style="display: none"{% endif %}> </div>
 </div>

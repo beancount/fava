@@ -1,53 +1,58 @@
-{% set entry_types = [('open',        config.user.getboolean('journal-show-type-open')),
-                      ('close',       config.user.getboolean('journal-show-type-close')),
-                      ('transaction', config.user.getboolean('journal-show-type-transaction')),
-                      ('balance',     config.user.getboolean('journal-show-type-balance')),
-                      ('note',        config.user.getboolean('journal-show-type-note')),
-                      ('document',    config.user.getboolean('journal-show-type-document')),
-                      ('pad',         config.user.getboolean('journal-show-type-pad')),
-                      ('padding',     config.user.getboolean('journal-show-type-padding')),
-                      ('query',       config.user.getboolean('journal-show-type-query'))] %}
+{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
+{% set transaction_types = ['cleared', 'pending', 'padding', 'summarize', 'transfer', 'other'] %}
+{% set show_type = {
+    'open':        config.user.getboolean('journal-show-type-open'),
+    'close':       config.user.getboolean('journal-show-type-close'),
+    'transaction': config.user.getboolean('journal-show-type-transaction'),
+    'balance':     config.user.getboolean('journal-show-type-balance'),
+    'note':        config.user.getboolean('journal-show-type-note'),
+    'document':    config.user.getboolean('journal-show-type-document'),
+    'pad':         config.user.getboolean('journal-show-type-pad'),
+    'query':       config.user.getboolean('journal-show-type-query')
+} %}
+{% set show_transaction_type = {
+    'cleared':   config.user.getboolean('journal-show-transaction-cleared'),
+    'pending':   config.user.getboolean('journal-show-transaction-pending'),
+    'padding':   config.user.getboolean('journal-show-transaction-padding'),
+    'summarize': config.user.getboolean('journal-show-transaction-summarize'),
+    'transfer':  config.user.getboolean('journal-show-transaction-transfer'),
+    'other':     config.user.getboolean('journal-show-transaction-other'),
+} %}
+
+{% set show_metadata = config.user.getboolean('journal-show-metadata') %}
+{% set show_legs = config.user.getboolean('journal-show-legs') %}
 
 {% if show_tablefilter %}
-    <div class="table-filter">
+    <div id="entry-filters" class="table-filter">
         <form>
-            {% for type, default_checked in entry_types %}
-                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if default_checked %} checked="checked"{% endif %}>
+            {% for type in entry_types %}
+                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if show_type[type] %} checked="checked"{% endif %}>
                 <label for="filter-{{ type }}">{{ type|capitalize }}</label>
             {% endfor %}
-            <input type="submit" id="toggle-metadata" value="{% if config.user.getboolean('journal-show-metadata') %}Hide{% else %}Show{% endif %} metadata">
-            <input type="submit" id="toggle-legs" value="{% if config.user.getboolean('journal-show-legs') %}Hide{% else %}Show{% endif %} legs">
+            <input type="submit" id="toggle-metadata" value="{% if show_metadata %}Hide{% else %}Show{% endif %} metadata">
+            <input type="submit" id="toggle-legs" value="{% if show_legs %}Hide{% else %}Show{% endif %} legs">
+        </form>
+    </div>
+    <div id="transaction-filters" class="table-filter">
+        <form>
+            {% for type in transaction_types %}
+                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if show_transaction_type[type] %} checked="checked"{% endif %}>
+                <label for="filter-{{ type }}">{{ type|capitalize }}</label>
+            {% endfor %}
         </form>
     </div>
 {% endif %}
 
-<script>
-    window.contextURL = "{{ url_for('context', ehash='REPLACEME')|safe }}";
-    window.accountURL = "{{ url_for('account_with_journal', name='REPLACEME')|safe }}";
-    window.queryURL = "{{ url_for('query', query_hash='REPLACEME')|safe }}";
-    window.tagURL = "{{ url_for_current(tag='REPLACEME')|safe }}";
-    window.documentURL = "{{ url_for('document', file_path='REPLACEME')|safe }}";
-    window.journalURL = "{{ url_for('journal')|safe }}";
+{% set context_url = url_for('context', ehash='REPLACEME') %}
+{% set account_url = url_for('account_with_journal', name='REPLACEME') %}
+{% set tag_url = url_for_current(tag='REPLACEME') %}
 
-{% if journal is defined %}
-    window.journalAsJSON = {{ journal|tojson|safe }};
-{% endif %}
-    window.journalShowChangeAndBalance = {{ show_change_and_balance|lower or 'false' }};
-    window.journalShowLegs = {{ config.user.getboolean('journal-show-legs')|lower }};
-    window.journalShowMetadata = {{ config.user.getboolean('journal-show-metadata')|lower }};
-    window.journalShowTypes = [
-        {% for type, default_checked in entry_types %}
-            {% if show_tablefilter %}{% if default_checked %}'{{ type }}',{% endif %}{% else %}'{{ type }}',{% endif %}
-        {% endfor %}
-    ];
-</script>
-<div class="journal-table">
-    <div class="loading">Loading journal entries&hellip;</div>
-</div>
+{% macro account_link(name) -%}
+<a href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>
+{%- endmacro %}
 
-{% raw %}
-<script id="journal-table-template" type="text/x-handlebars-template">
-  <table class="journal-table">
+
+  <table id="journal-table" class="journal-table">
         <thead>
             <tr>
                 <th class="datecell">Date</th>
@@ -56,125 +61,103 @@
                 <th class="position">Position</th>
                 <th class="price">Price</th>
                 <th class="cost">Cost</th>
-                {{#ifShowChangeAndBalance window}}
-                    <th class="change">Change</th>
-                    <th class="balance">Balance</th>
-                {{/ifShowChangeAndBalance}}
+                {% if show_change_and_balance %}
+                <th class="change">Change</th>
+                <th class="balance">Balance</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
-        {{#each journal}}
-            {{#ifShowType window}}
-            <tr class="{{ meta.type }}{{#if diff_amount }} fail{{/if}}{{#ifCond flag '==' '!'}} warning{{/ifCond}}{{#ifShowLegs window}}{{#if legs }} display-legs{{/if}}{{/ifShowLegs}}{{#ifHasElements metadata }} has-metadata{{/ifHasElements}}" data-has-legs="{{#if legs }}True{{else}}False{{/if}}" data-type="{{ meta.type }}" data-hash="{{ hash }}" title="{{ meta.filename }}:{{ meta.lineno }}">
-                <td class="datecell"><a href="{{ context_url hash }}">{{ date }}</a></td>
-                <td class="flag">{{ flag }}</td>
+        {% for entry in journal %}
+            {% set type = entry.meta.type %}
+            <tr class="{{ type }} {{ entry.transaction_type }}
+            {%- if not show_type[type] %} hidden{% endif -%}
+            {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden-type{% endif -%}
+            {%- if entry.diff_amount %} fail{% endif -%}
+            {%- if entry.metadata|length > 0 %} has-metadata{% endif -%}
+            " data-type="{{ type -}}
+            " data-hash="{{ entry.hash -}}
+            " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
+                <td class="datecell"><a href="{{ context_url.replace('REPLACEME', entry.hash) }}">{{ entry.date }}</a></td>
+                <td class="flag">{{ entry.flag }}</td>
                 <td class="description" colspan="4">
-                    {{#ifCond meta.type '==' 'open'}}
-                        <a href="{{ account_url account }}">{{ account }}</a>
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'note'}}
-                        Note: {{ comment }}
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'query'}}
-                        Query: <a href="{{ query_url hash }}">{{ name }}</a>
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'pad'}}
-                        Pad <a href="{{ account_url account }}">{{ account }}</a> from <a href="{{ account_url source_account }}">{{ source_account }}</a>
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'padding'}}
-                        {{ narration }}
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'document'}}
-                        Document for <a href="{{ account_url account }}">{{ account }}</a>: <a href="{{ document_url filename }}">{{ filename }}</a>
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'balance'}}
-                        Balance <a href="{{ account_url account }}">{{ account }}</a>
-                        {{#if diff_amount }} fails;
-                            expected =
-                            {{#each amount }}
-                                {{ format_currency this }} {{ @key }},
-                            {{/each}}
-                            balance =
-                            {{#each balance }}
-                                {{ format_currency this }} {{ @key }},
-                            {{/each}}
-                            difference =
-                            {{#each diff_amount }}
-                                {{ format_currency this }} {{ @key }}
-                            {{/each}}
-                        {{else}}
-                            has
-                            {{#each amount }}
-                                {{ format_currency this }} {{ @key }}<br>
-                            {{/each}}
-                        {{/if}}
-                    {{/ifCond}}
-                    {{#ifCond meta.type '==' 'transaction'}}
-                        <div class="narration">
-                            <strong>{{ payee }}</strong>
-                            {{#if payee }} {{#if narration }}<span>|</span>{{/if}} {{/if}}
-                            {{ narration }}
-                        </div>
-                        {{#if tags }}
-                            <div class="tags">
-                                {{#each tags }}<a href="{{ tag_url this }}" title="Filter for tag #{{ this }}"><span>#</span>{{ this }}</a>{{/each}}
-                            </div>
-                        {{/if}}
-                    {{/ifCond}}
-                    {{#ifHasElements metadata }}
-                        <dl class="metadata"{{#ifShowMetadata window}} style="display: block;"{{/ifShowMetadata}}>
-                            {{#each metadata }}
-                                <dt>{{ @key }}</dt>
-                                <dd>
-                                    {{#ifCond @key '==' 'statement' }}<a href="{{ document_url this }}">{{/ifCond}}
-                                    {{ this }}
-                                    {{#ifCond @key '==' 'statement' }}</a>{{/ifCond}}
-                                </dd>
-                            {{/each}}
-                        </dl>
-                    {{/ifHasElements}}
+                {% if type == 'open' %}
+                    Open {{ account_link(entry.account) }}
+                {% endif %}
+                {% if type == 'close' %}
+                    Close {{ account_link(entry.account) }}
+                {% endif %}
+                {% if type == 'note' %}
+                    Note: {{ entry.comment }}
+                {% endif %}
+                {% if type == 'query' %}
+                    Query: <a href="{{ url_for('query', query_hash=entry.hash) }}">{{ entry.name }}</a>
+                {% endif %}
+                {% if type == 'pad' %}
+                    Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
+                {% endif %}
+                {% if type == 'document' %}
+                    Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename }}</a>
+                {% endif %}
+                {% if type == 'balance' %}
+                    Balance {{ account_link(entry.account) }}
+                    {% if diff_amount %} fails;
+                        expected = {{ entry.amount|format_currency }} {{ entry.amount_currency }}
+                        balance = {{ entry.balance|format_currency }} {{ entry.amount_currency }}
+                        difference = {{ entry.diff_amount|format_currency }} {{ entry.amount_currency }}
+                    {% else %}
+                        has {{ entry.amount }} {{ entry.amount_currency }}
+                    {% endif %}
+                {% endif %}
+                {% if type == 'transaction' %}
+                    <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
+                    {% for tag in entry.tags %}<a href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+                {% endif %}
+                {% if entry.metadata %}
+                    <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
+                        {% for key, value in entry.metadata.items() %}
+                            <dt>{{ key }}</dt>
+                            <dd>
+                                {% if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif %}
+                                {{ value }}
+                                {% if key == 'statement' %}</a>{% endif %}
+                            </dd>
+                        {% endfor %}
+                    </dl>
+                {% endif %}
                 </td>
-                {{#ifShowChangeAndBalance window}}
+                {% if show_change_and_balance %}
                     <td class="change num">
-                        {{#if change }}
-                            {{#each change }}
-                                {{ format_currency this }} {{ @key }}<br>
-                            {{/each}}
-                        {{/if}}
+                    {% if entry.change %}
+                        {% for currency, number in entry.change.items() %}
+                            {{ number|format_currency }} {{ currency }}<br>
+                        {% endfor %}
+                    {% endif %}
                     </td>
                     <td class="balance num">
-                        {{#if balance }}
-                            {{#each balance }}
-                                {{ format_currency this }} {{ @key }}<br>
-                            {{/each}}
-                        {{/if}}
+                    {% if entry.balance %}
+                        {% for currency, number in entry.balance.items() %}
+                            {{ number|format_currency }} {{ currency }}<br>
+                        {% endfor %}
+                    {% endif %}
                     </td>
-                {{/ifShowChangeAndBalance}}
+                {% endif %}
             </tr>
-                {{#ifShowLegs window}}
-                    {{#with this as |journalEntry|}}
-                        {{> legPartialTemplate }}
-                    {{/with}}
-                {{/ifShowLegs}}
-            {{/ifShowType}}
-        {{/each}}
-        </tbody>
-    </table>
-</script>
-<script id="journal-leg-template" type="text/x-handlebars-template">
-    {{#each legs }}
-        <tr class="posting leg" data-type="leg" data-parent-hash="{{ ../hash }}">
-            <td class="datecell"></td>
-            <td class="flag"></td>
-            <td class="description"><a href="{{ account_url account }}">{{ account }}</a></td>
-            <td class="position num">{{ position }} {{ position_currency }}</td>
-            <td class="price num">{{ price }} {{ price_currency }}</td>
-            <td class="cost num">{{ cost }} {{ cost_currency }}</td>
-            {{#ifShowChangeAndBalance window}}
+        {% for leg in entry.postings %}
+        <tr class="posting posting-{{ entry.transaction_type }}{%- if not show_legs %} hidden{% endif -%}{%- if not show_type[type] %} hidden-parent{% endif -%}{%- if (type == 'transaction' and not show_transaction_type[entry.transaction_type]) %} hidden-parent-type{% endif -%}
+            " data-parent-hash="{{ entry.hash }}" data-type="posting">
+                <td class="datecell"></td>
+                <td class="flag"></td>
+                <td class="description">{{ account_link(leg.account) }}</td>
+                <td class="position num">{{ leg.units.number|format_currency }} {{ leg.units.currency }}</td>
+                <td class="price num">{{ leg.price.number|format_currency }} {{ leg.price.currency }}</td>
+                <td class="cost num">{{ leg.cost.number|format_currency }} {{ leg.cost.currency }}</td>
+                {% if show_change_and_balance %}
                 <td class="change num"></td>
                 <td class="balance num"></td>
-            {{/ifShowChangeAndBalance}}
-        </tr>
-    {{/each}}
-</script>
-{% endraw %}
+                {% endif %}
+            </tr>
+        {% endfor %}
+    {% endfor %}
+        </tbody>
+    </table>

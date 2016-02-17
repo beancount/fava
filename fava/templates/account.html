@@ -5,12 +5,6 @@
 
 {% block title %}Account {{ account_name }}{% endblock %}
 
-{% block javascript %}
-    {% if not interval %}
-        {% include "javascript/_journal.html" %}
-    {% endif %}
-{% endblock %}
-
 {% block content %}
     {{ account_macros.account_name_header(account_name) }}
 
