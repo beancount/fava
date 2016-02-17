@@ -1,5 +1,5 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
-{% set transaction_types = ['cleared', 'uncleared', 'padding', 'summarize', 'transfer'] %}
+{% set transaction_types = ['cleared', 'pending', 'padding', 'summarize', 'transfer', 'other'] %}
 {% set show_type = {
     'open':        config.user.getboolean('journal-show-type-open'),
     'close':       config.user.getboolean('journal-show-type-close'),
@@ -12,10 +12,11 @@
 } %}
 {% set show_transaction_type = {
     'cleared':   config.user.getboolean('journal-show-transaction-cleared'),
-    'uncleared': config.user.getboolean('journal-show-transaction-uncleared'),
+    'pending':   config.user.getboolean('journal-show-transaction-pending'),
     'padding':   config.user.getboolean('journal-show-transaction-padding'),
     'summarize': config.user.getboolean('journal-show-transaction-summarize'),
     'transfer':  config.user.getboolean('journal-show-transaction-transfer'),
+    'other':     config.user.getboolean('journal-show-transaction-other'),
 } %}
 
 {% set show_metadata = config.user.getboolean('journal-show-metadata') %}
@@ -142,7 +143,7 @@
                     </td>
                 {% endif %}
             </tr>
-        {% for leg in entry.legs %}
+        {% for leg in entry.postings %}
         <tr class="posting posting-{{ entry.transaction_type }}{%- if not show_legs %} hidden{% endif -%}{%- if not show_type[type] %} hidden-parent{% endif -%}{%- if (type == 'transaction' and not show_transaction_type[entry.transaction_type]) %} hidden-parent-type{% endif -%}
             " data-parent-hash="{{ entry.hash }}" data-type="posting">
                 <td class="datecell"></td>

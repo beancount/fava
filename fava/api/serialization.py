@@ -28,7 +28,7 @@ class BeanJSONEncoder(JSONEncoder):
 
 transaction_types = {
     '*': 'cleared',
-    '!': 'uncleared',
+    '!': 'pending',
     'P': 'padding',
     'S': 'summarize',
     'T': 'transfer',
@@ -56,12 +56,14 @@ def serialize_entry(entry):
             new_entry['balance'] = entry.diff_amount + entry.amount
 
     if isinstance(entry, Transaction):
-        new_entry['transaction_type'] = transaction_types[entry.flag]
+        if entry.flag in transaction_types:
+            new_entry['transaction_type'] = transaction_types[entry.flag]
+        else:
+            new_entry['transaction_type'] = 'other'
 
-        new_entry.pop('entrys', None)
         new_entry['tags'] = entry.tags or []
         new_entry['links'] = entry.links or []
-        new_entry['legs'] = [serialize_posting(p) for p in entry.postings]
+        new_entry['postings'] = [serialize_posting(p) for p in entry.postings]
 
     return new_entry
 
