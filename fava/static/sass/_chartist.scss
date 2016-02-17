@@ -51,9 +51,10 @@ $ct-series-colors: (
                 color: rgba(0, 0, 0, 0.5);
             }
         }
+        label+label { border-left: 1px solid rgba(0, 0, 0, 0.4) }
     }
 
-    .charts-container {
+    .chart-container {
         position: relative;
         height: 240px;
 

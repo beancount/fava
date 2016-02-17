@@ -4,7 +4,7 @@ require('jquery-stupid-table/stupidtable');
 window.Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
-require('./charts');
+var charts = require('./charts');
 var clipboard = require('./clipboard');
 var filters = require('./filters');
 var journal = require('./journal');
@@ -22,6 +22,11 @@ $(document).ready(function() {
     // Tree-expanding
     if ($('table.tree-table').length) {
         treeTable.initTreeTable();
+    };
+
+    // Charts
+    if ($('#chart-container').length) {
+        charts.initCharts();
     };
 
     // Journal

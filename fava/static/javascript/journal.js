@@ -26,7 +26,7 @@ module.exports.initJournal = function() {
     });
 
     // Button "Hide/Show legs"
-    $('input#toggle-legs').click(function(event) {
+    $('#toggle-legs').click(function(event) {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show legs');
         $('#journal-table tr[data-type="posting"]').toggleClass('hidden', !shouldShow);
@@ -34,7 +34,7 @@ module.exports.initJournal = function() {
     });
 
     // Button "Hide/Show metadata"
-    $('input#toggle-metadata').click(function(event) {
+    $('#toggle-metadata').click(function(event) {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show metadata');
         $('#journal-table dl.metadata').toggleClass('hidden', !shouldShow);
