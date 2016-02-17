@@ -5,41 +5,42 @@ require('./vendor/chartist-plugin-zoom');
 
 require('jquery-treemap/src/jquery-treemap');
 
-require('./helpers');
+var helpers = require('./helpers');
 
-$(document).ready(function() {
-    $('.charts-container').html('');
+var defaultOptions = {
+    height: 240,
+    chartPadding: { left: 3 },
+    axisY: {
+        onlyInteger: true,
+        position: 'end',
+        scaleMinSpace: 15,
+        labelInterpolationFnc: function(value) {
+            return value;
+        },
+        referenceValue: 0,
+    },
+    plugins: [
+        Chartist.plugins.legend(),
+        Chartist.plugins.tooltip({
+            tooltipFnc: function(meta, value){
+                return decodeEntities(meta);
+            }
+        })
+    ]
+};
+
+module.exports.initCharts = function() {
+    var container = $('#chart-container');
+    var labels = $('#chart-labels');
+    container.html('');
     window.chartData.charts = {}
 
     $.each(window.chartData, function(index, chart) {
         chart.id = "chart-" + index;
         chart.options = $.extend({}, chart.options);
 
-        $('.charts-container').append('<div class="ct-chart" id="' + chart.id + '"></div>');
-        var divider = $('.chart-labels').children().length > 0 ? " | " : "";
-        $('.chart-labels').append(divider + '<label for="' + chart.id + '">' + chart.label + '</label>');
-
-        var defaultOptions = {
-            height: 240,
-            chartPadding: { left: 3 },
-            axisY: {
-                onlyInteger: true,
-                position: 'end',
-                scaleMinSpace: 15,
-                labelInterpolationFnc: function(value) {
-                    return value;
-                },
-                referenceValue: 0,
-            },
-            plugins: [
-                Chartist.plugins.legend(),
-                Chartist.plugins.tooltip({
-                    tooltipFnc: function(meta, value){
-                        return decodeEntities(meta);
-                    }
-                })
-            ]
-        };
+        container.append('<div class="ct-chart" id="' + chart.id + '"></div>');
+        labels.append('<label for="' + chart.id + '">' + chart.label + '</label>');
 
         switch(chart.type) {
             case 'line':
@@ -48,7 +49,7 @@ $(document).ready(function() {
                         type: Chartist.AutoScaleAxis,
                         scaleMinSpace: 25,
                         labelInterpolationFnc: function(value, index) {
-                            var val = isNumber(value) ? new Date(value) : value;
+                            var val = helpers.isNumber(value) ? new Date(value) : value;
                             return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     },
@@ -60,8 +61,8 @@ $(document).ready(function() {
                         var dateStart = new Date(chart.options.axisX.highLow.low);
                         var dateEnd = new Date(chart.options.axisX.highLow.high);
 
-                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (pad(dateStart.getMonth()+1));
-                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (pad(dateEnd.getMonth()+1));
+                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
+                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
                         var e = $.Event('keyup');
                         e.which = 13;
                         $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
@@ -77,7 +78,7 @@ $(document).ready(function() {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
                             if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
-                                var val = isNumber(value) ? new Date(value) : value;
+                                var val = helpers.isNumber(value) ? new Date(value) : value;
                                 return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                             } else {
                                 return null;
@@ -94,8 +95,8 @@ $(document).ready(function() {
                         var dateStart = new Date(chart.data.labels[Math.floor(x1 / pxPerBar)]);
                         var dateEnd = new Date(chart.data.labels[Math.floor(x2 / pxPerBar)]);
 
-                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (pad(dateStart.getMonth()+1));
-                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (pad(dateEnd.getMonth()+1));
+                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
+                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
                         var e = $.Event('keyup');
                         e.which = 13;
                         $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
@@ -109,7 +110,7 @@ $(document).ready(function() {
 
                 $(chart.container).on('click', '.ct-bar', function() {
                     var date = chart.data.labels[$(event.target).index()];
-                    var dateString = '' + date.getFullYear() + '-' + (pad(date.getMonth()+1));
+                    var dateString = '' + date.getFullYear() + '-' + (helpers.pad(date.getMonth()+1));
                     var e = $.Event('keyup');
                     e.which = 13;
                     $("#filter-time input[type=search]").val(dateString).trigger(e);
@@ -167,31 +168,25 @@ $(document).ready(function() {
     });
 
     // Toggle multiple charts
-    $('.charts .chart-labels label').click(function() {
+    labels.find('label').click(function() {
         var chartId = $(this).prop('for');
         $('.charts .ct-chart').addClass('hidden')
         $('.charts .ct-chart#' + chartId).removeClass('hidden');
 
-        $('.charts .chart-labels label').removeClass('selected');
+        labels.find('label').removeClass('selected');
         $(this).addClass('selected');
 
         if (window.chartData.charts[chartId] !== undefined) {
             window.chartData.charts[chartId].update();
         }
     });
-    $('.charts .chart-labels label:first-child').click();
+    labels.find('label:first-child').click();
 
     // Toggle chart by clicking on "Hide/Show chart"
-    $('.charts input#toggle-chart').click(function() {
-        $('.charts-container, .chart-labels').toggle($(this).hasClass('hide-charts'));
-        $(this).toggleClass('hide-charts');
-
-        var text = $(this).prop('value');
-        $(this).prop('value', text === 'Hide charts' ? 'Show charts' : 'Hide charts');
-
-        return false;
+    $('#toggle-chart').click(function() {
+        event.preventDefault();
+        var shouldShow = ($(this).val() == 'Show charts');
+        $('#chart-container, #chart-labels').toggleClass('hidden', !shouldShow);
+        $(this).val(shouldShow ? 'Hide charts' : 'Show charts');
     });
-});
-
-
-
+}

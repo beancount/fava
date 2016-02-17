@@ -42,6 +42,7 @@ header {
     color: #fff;
     padding: 0 10px;
     height: 41px;
+    z-index: 2;
 
     .branding {
         img {
@@ -192,10 +193,16 @@ header {
 }
 
 .main {
-    // min-height set via JS
+    position:absolute;
+    width:100%;
+    margin-top:-41px;
+    padding-top:41px;
+    min-height:100%;
+    overflow:hidden;
 
     aside {
-        // min-height set via JS
+        padding-bottom: 100000px;
+        margin-bottom: -100000px;
         width: 200px;
         float: left;
         color: #dadad9;

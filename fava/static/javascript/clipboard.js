@@ -1,6 +1,6 @@
 var Clipboard = require('clipboard');
 
-$(document).ready(function() {
+module.exports.initClipboard = function() {
     new Clipboard('.status-indicator');
     new Clipboard('#copy-balances', {
         text: function(trigger) {
@@ -9,4 +9,4 @@ $(document).ready(function() {
             return text.join('\n').trim();
         }
     });
-});
+};
