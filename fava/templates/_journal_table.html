@@ -113,7 +113,7 @@
                     {% for tag in entry.tags %}<a href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
                 {% endif %}
                 {% if entry.metadata %}
-                    <dl class="metadata"{% if show_metadata %} style="display: block;"{% endif %}>
+                    <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
                         {% for key, value in entry.metadata.items() %}
                             <dt>{{ key }}</dt>
                             <dd>
