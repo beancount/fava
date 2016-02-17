@@ -5,7 +5,7 @@ require('./vendor/chartist-plugin-zoom');
 
 require('jquery-treemap/src/jquery-treemap');
 
-require('./helpers');
+var helpers = require('./helpers');
 
 var defaultOptions = {
     height: 240,
@@ -49,7 +49,7 @@ module.exports.initCharts = function() {
                         type: Chartist.AutoScaleAxis,
                         scaleMinSpace: 25,
                         labelInterpolationFnc: function(value, index) {
-                            var val = isNumber(value) ? new Date(value) : value;
+                            var val = helpers.isNumber(value) ? new Date(value) : value;
                             return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                         }
                     },
@@ -61,8 +61,8 @@ module.exports.initCharts = function() {
                         var dateStart = new Date(chart.options.axisX.highLow.low);
                         var dateEnd = new Date(chart.options.axisX.highLow.high);
 
-                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (pad(dateStart.getMonth()+1));
-                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (pad(dateEnd.getMonth()+1));
+                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
+                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
                         var e = $.Event('keyup');
                         e.which = 13;
                         $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
@@ -78,7 +78,7 @@ module.exports.initCharts = function() {
                     axisX: {
                         labelInterpolationFnc: function(value, index) {
                             if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
-                                var val = isNumber(value) ? new Date(value) : value;
+                                var val = helpers.isNumber(value) ? new Date(value) : value;
                                 return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
                             } else {
                                 return null;
@@ -95,8 +95,8 @@ module.exports.initCharts = function() {
                         var dateStart = new Date(chart.data.labels[Math.floor(x1 / pxPerBar)]);
                         var dateEnd = new Date(chart.data.labels[Math.floor(x2 / pxPerBar)]);
 
-                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (pad(dateStart.getMonth()+1));
-                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (pad(dateEnd.getMonth()+1));
+                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
+                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
                         var e = $.Event('keyup');
                         e.which = 13;
                         $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
@@ -110,7 +110,7 @@ module.exports.initCharts = function() {
 
                 $(chart.container).on('click', '.ct-bar', function() {
                     var date = chart.data.labels[$(event.target).index()];
-                    var dateString = '' + date.getFullYear() + '-' + (pad(date.getMonth()+1));
+                    var dateString = '' + date.getFullYear() + '-' + (helpers.pad(date.getMonth()+1));
                     var e = $.Event('keyup');
                     e.which = 13;
                     $("#filter-time input[type=search]").val(dateString).trigger(e);

@@ -1,9 +1,3 @@
-$.expr[":"].contains = $.expr.createPseudo(function(arg) {
-    return function( elem ) {
-        return $(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
-    };
-});
-
 //  Checks that string starts with the specific string
 if (typeof String.prototype.startsWith != 'function') {
     String.prototype.startsWith = function (str) {
@@ -79,8 +73,8 @@ if (typeof Date.prototype.formatWithString != 'function') {
 }
 
 // http://stackoverflow.com/a/7195920
-window.isNumber = function(num) {
+module.exports.isNumber = function(num) {
     return (typeof num == 'string' || typeof num == 'number') && !isNaN(num - 0) && num !== '';
 };
 
-window.pad = function(n) { return n < 10 ? '0' + n : n };
+module.exports.pad = function(n) { return n < 10 ? '0' + n : n };
