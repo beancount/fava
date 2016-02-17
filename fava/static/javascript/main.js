@@ -77,6 +77,7 @@ $(document).ready(function() {
         Mousetrap.bind({
             'l':   function() { $('#toggle-legs').click(); },
             'm':   function() { $('#toggle-metadata').click(); },
+
             's o': function() { $('#filter-open').click(); },
             's c': function() { $('#filter-close').click(); },
             's t': function() { $('#filter-transaction').click(); },
@@ -84,11 +85,13 @@ $(document).ready(function() {
             's n': function() { $('#filter-note').click(); },
             's d': function() { $('#filter-document').click(); },
             's p': function() { $('#filter-pad').click(); },
+
             't c': function() { $('#filter-cleared').click(); },
-            't u': function() { $('#filter-uncleared').click(); },
-            't p': function() { $('#filter-padding').click(); },
+            't p': function() { $('#filter-pending').click(); },
+            't shift+p': function() { $('#filter-padding').click(); },
             't s': function() { $('#filter-summarize').click(); },
             't t': function() { $('#filter-transfer').click(); },
+            't o': function() { $('#filter-other').click(); },
         }, 'keyup');
     }
 
