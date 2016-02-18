@@ -324,7 +324,7 @@ class BeancountReportAPI(object):
         return self._journal(self.entries, Note)
 
     def queries(self, query_hash=None):
-        res = self._journal(self.entries, Query)
+        res = self._journal(self.all_entries, Query)
         no_query = {
             'name': 'None',
             'query_string': ''
