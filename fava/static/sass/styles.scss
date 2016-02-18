@@ -261,10 +261,13 @@ header {
                 }
 
                 ul.navigation {
-                    padding: 0px 0px 0px 20px;
+                    padding: 0;
 
                     li {
-                        font-size: 1em;
+                        font-size: 0.95em;
+                        line-height: 0.95em;
+
+                        a { padding-left: 35px; }
                     }
                 }
             }
