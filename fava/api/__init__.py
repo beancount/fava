@@ -29,8 +29,8 @@ from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
-from beancount.core.data import get_entry, posting_sortkey, Open, Close, Note,\
-                                Document, Balance, Transaction, Pad, Event, Query
+from beancount.core.data import get_entry, posting_sortkey, Close, Note,\
+                                Document, Balance, Transaction, Event, Query
 from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
@@ -83,6 +83,11 @@ class BeancountReportAPI(object):
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
+
+        self.root_account = realization.realize(self.all_entries, self.account_types)
+        self.all_accounts = self._all_accounts()
+        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
+
         self._apply_filters()
 
     def _apply_filters(self):
@@ -114,10 +119,6 @@ class BeancountReportAPI(object):
                                     for posting in entry.postings)]
 
         self.root_account = realization.realize(self.entries, self.account_types)
-        self.all_accounts = self._all_accounts()
-        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
-
-        self.closing_entries = summarize.cap_opt(self.entries, self.options)
 
     def filter(self, **kwargs):
         changed = False
@@ -277,9 +278,9 @@ class BeancountReportAPI(object):
 
         return self._table_tree(real_account)
 
-
     def closing_balances(self, account_name):
-        return self._table_tree(self._real_account(account_name, self.closing_entries))
+        closing_entries = summarize.cap_opt(self.entries, self.options)
+        return self._table_tree(self._real_account(account_name, closing_entries))
 
     def interval_balances(self, interval, account_name, accumulate=False):
         account_names = [account
