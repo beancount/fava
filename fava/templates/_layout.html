@@ -1,24 +1,24 @@
 {% set navigation_bar = [
     ("", [
-        ('income_statement', 'Income Statement',    'g i'),
-        ('balance_sheet',    'Balance Sheet',       'g b'),
-        ('trial_balance',    'Trial Balance',       'g t'),
-        ('journal',          'General Journal',     'g g'),
-        ('query',            'Custom Query',        'g q'),
+        ('income_statement', 'Income Statement',    'g i', None),
+        ('balance_sheet',    'Balance Sheet',       'g b', None),
+        ('trial_balance',    'Trial Balance',       'g t', None),
+        ('journal',          'General Journal',     'g g', None),
+        ('query',            'Custom Query',        'g q', sidebar_queries()),
     ]),
     ("Other", [
-        ('holdings',         'Equity/Holdings',     'g h'),
-        ('net_worth',        'Net Worth',           'g w'),
-        ('documents',        'Documents',           'g d'),
-        ('notes',            'Notes',               'g n'),
-        ('events',           'Events',              'g e'),
-        ('commodities',      'Commodities',         'g c'),
+        ('holdings',         'Equity/Holdings',     'g h', None),
+        ('net_worth',        'Net Worth',           'g w', None),
+        ('documents',        'Documents',           'g d', None),
+        ('notes',            'Notes',               'g n', None),
+        ('events',           'Events',              'g e', None),
+        ('commodities',      'Commodities',         'g c', None),
     ]),
     ("Configuration", [
-        ('source',           'Source',              'g s'),
-        ('options',          'Options',             'g o'),
-        ('statistics',       'Statistics',          'g x'),
-        ('errors',           'Errors',              'g r'),
+        ('source',           'Source',              'g s', None),
+        ('options',          'Options',             'g o', None),
+        ('statistics',       'Statistics',          'g x', None),
+        ('errors',           'Errors',              'g r', None),
     ])
 ] %}
 {% set all_pages = {
@@ -86,8 +86,16 @@
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
-                {% for id, caption, shortcut in menuitems %}
-                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a></li>
+                {% for id, caption, shortcut, submenu in menuitems %}
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a>
+                    {% if submenu %}
+                        <ul class="navigation">
+                        {% for query_url, query_name in submenu %}
+                            <li><a href="{{ query_url }}">{{ query_name }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                    </li>
                 {% endfor %}
                 </ul>
             {% endfor %}
@@ -103,7 +111,7 @@
         // Jumping to pages:
         Mousetrap.bind({
             {% for title_, menuitems in navigation_bar %}
-                {% for id, caption, shortcut in menuitems %}
+                {% for id, caption, shortcut, submenu_ in menuitems %}
             '{{ shortcut }}': function() { window.location = '{{ url_for('report', report_name=id) }}'; },
                 {% endfor %}
 
