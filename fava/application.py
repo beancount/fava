@@ -214,10 +214,20 @@ def template_context():
 
         return account_name in collapse_accounts
 
+    def sidebar_queries():
+        show = app.config.user.getint('sidebar-show-queries')
+        max_length = 20
+        if show > 0:
+            truncate = lambda x: x if len(x) <= max_length else x[:(max_length - 1)].rsplit(' ', 1)[0] + '\u2026'
+            return [(url_for('get_stored_query', stored_query_hash=query['hash']), truncate(query['name'])) for query in app.api.queries()[:show]]
+        else:
+            return None
+
     return dict(url_for_current=url_for_current,
                 url_for_source=url_for_source,
                 uptodate_eligible=uptodate_eligible,
                 should_collapse_account=should_collapse_account,
+                sidebar_queries=sidebar_queries,
                 api=app.api,
                 options=app.api.options,
                 operating_currencies=app.api.options['operating_currency'],

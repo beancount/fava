@@ -259,6 +259,14 @@ header {
                         text-transform: uppercase;
                     }
                 }
+
+                ul.navigation {
+                    padding: 0px 0px 0px 20px;
+
+                    li {
+                        font-size: 1em;
+                    }
+                }
             }
         }
     }
