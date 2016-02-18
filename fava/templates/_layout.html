@@ -87,7 +87,15 @@
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
                 {% for id, caption, shortcut in menuitems %}
-                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a></li>
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a>
+                    {% if id == "query" %}
+                        <ul class="navigation">
+                        {% for query in api.queries()[:config.user.getint('sidebar-show-queries')] %}
+                            <li><a href="{{ url_for('get_stored_query', stored_query_hash=query.hash) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                    </li>
                 {% endfor %}
                 </ul>
             {% endfor %}
