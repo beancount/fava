@@ -68,9 +68,7 @@ def document():
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
-    context = app.api.context(ehash)
-    # TODO handle errors
-    return render_template('context.html', context=context)
+    return render_template('context.html', ehash=ehash)
 
 
 @app.route('/query/')
@@ -128,6 +126,11 @@ def source():
 @app.route('/event/<event_type>/')
 def event_details(event_type=None):
     return render_template('event_detail.html', event_type=event_type)
+
+
+@app.route('/holdings/by_<aggregation_key>/')
+def holdings_by(aggregation_key):
+    return render_template('holdings.html', aggregation_key=aggregation_key)
 
 
 @app.route('/<report_name>/')

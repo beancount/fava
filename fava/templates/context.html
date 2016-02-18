@@ -8,24 +8,28 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Context: <code>{{ context.hash }}</code></h1>
-
-    {% for context_ in context.contexts %}
-        <dl>
-            <dt>Hash:</dt>
-            <dd><code>{{ context_.hash }}</code></dd>
-            <dt>Location:</dt>
-            <dd><code><a href="{{ url_for_source(file_path=context_.filename, line=context_.line) }}" title="Show source {{ context_.filename }}:{{ context_.line }}">{{ context_.filename }}:{{ context_.line }}</a></code></dd>
-        </dl>
-        <div class="editor-wrapper editor-wrapper-readonly">
-            <div class="editor editor-readonly" id="editor-{{ context.hash }}">
-                <pre><code>{{ context_.context|safe }}</code></pre>
-            </div>
+    {% set context = api.context(ehash) %}
+    <h1>Context: <code>{{ ehash }}</code></h1>
+    {% if context %}
+    <dl>
+        <dt>Hash:</dt>
+        <dd><code>{{ context.hash }}</code></dd>
+        <dt>Location:</dt>
+        <dd><code><a href="{{ url_for_source(file_path=context.filename, line=context.line) }}" title="Show source {{ context.filename }}:{{ context.line }}">{{ context.filename }}:{{ context.line }}</a></code></dd>
+    </dl>
+    <div class="editor-wrapper editor-wrapper-readonly">
+        <div class="editor editor-readonly" id="editor-{{ context.hash }}">
+            <pre><code>{{ context.context|safe }}</code></pre>
         </div>
-    {% endfor %}
+    </div>
 
-    <h3>Matching Journal Entries</h3>
+    <h3>Journal Entry</h3>
     {% with journal=context.journal %}
         {% include "_journal_table.html" %}
     {% endwith %}
+    {% else %}
+    <p class="empty">
+    No entry matches the given hash.
+    </p>
+    {% endif %}
 {% endblock %}

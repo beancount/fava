@@ -19,6 +19,7 @@ future, and therefore I only tried to get the numbers required, and did not
 optimize for performance at all.
 """
 
+import operator
 import os
 from datetime import date, timedelta
 
@@ -28,13 +29,13 @@ from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
-from beancount.core.data import get_entry, posting_sortkey, Open, Close, Note,\
-                                Document, Balance, Transaction, Pad, Event, Query
+from beancount.core.data import get_entry, posting_sortkey, Close, Note,\
+                                Document, Balance, Transaction, Event, Query
 from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
-from beancount.reports import context, holdings_reports
+from beancount.reports import context
 from beancount.utils import misc_utils
 
 from fava.util.dateparser import parse_date
@@ -82,6 +83,11 @@ class BeancountReportAPI(object):
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
+
+        self.root_account = realization.realize(self.all_entries, self.account_types)
+        self.all_accounts = self._all_accounts()
+        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
+
         self._apply_filters()
 
     def _apply_filters(self):
@@ -113,10 +119,6 @@ class BeancountReportAPI(object):
                                     for posting in entry.postings)]
 
         self.root_account = realization.realize(self.entries, self.account_types)
-        self.all_accounts = self._all_accounts()
-        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
-
-        self.closing_entries = summarize.cap_opt(self.entries, self.options)
 
     def filter(self, **kwargs):
         changed = False
@@ -276,9 +278,9 @@ class BeancountReportAPI(object):
 
         return self._table_tree(real_account)
 
-
     def closing_balances(self, account_name):
-        return self._table_tree(self._real_account(account_name, self.closing_entries))
+        closing_entries = summarize.cap_opt(self.entries, self.options)
+        return self._table_tree(self._real_account(account_name, closing_entries))
 
     def interval_balances(self, interval, account_name, accumulate=False):
         account_names = [account
@@ -349,8 +351,14 @@ class BeancountReportAPI(object):
 
         return events
 
-    def holdings(self):
-        holdings_list, _ = holdings_reports.get_assets_holdings(self.entries, self.options)
+    def holdings(self, aggregation_key=None):
+        holdings_list = holdings.get_final_holdings(self.entries,
+                                                    (self.account_types.assets,
+                                                     self.account_types.liabilities),
+                                                    self.price_map)
+        if aggregation_key:
+            holdings_list = holdings.aggregate_holdings_by(holdings_list,
+                                                           operator.attrgetter(aggregation_key))
         return holdings_list
 
     def _net_worth_in_periods(self):
@@ -389,47 +397,28 @@ class BeancountReportAPI(object):
             'monthly_totals': monthly_totals
         }
 
-    def context(self, ehash=None):
-        matching_entries = [entry
-                                for entry in self.entries
-                                if ehash == compare.hash_entry(entry)]
+    def context(self, ehash):
+        matching_entries = [entry for entry in self.all_entries
+                            if ehash == compare.hash_entry(entry)]
 
-        contexts = []
-        dcontext = self.options['dcontext']
+        if not matching_entries:
+            return
 
-        for entry in matching_entries:
-            context_str = context.render_entry_context(
-                self.entries, self.options, entry)
-
-            hash_ = context_str.split("\n",2)[0].split(':')[1].strip()
-            filenamelineno = context_str.split("\n",2)[1]
-            filename = filenamelineno.split(":")[1].strip()
-            lineno = int(filenamelineno.split(":")[2].strip())
-
-            contexts.append({
-                'hash': hash_,
-                'context': context_str.split("\n",2)[2],
-                'filename': filename,
-                'line': lineno
-            })
-
-        # TODO
-        #        if len(matching_entries) == 0:
-        #            print("ERROR: Could not find matching entry for '{}'".format(ehash),
-        #                  file=oss)
-        #
-        #        elif len(matching_entries) > 1:
-        #            print("ERROR: Ambiguous entries for '{}'".format(ehash),
-        #                  file=oss)
-        #            print(file=oss)
-        #            dcontext = app.options['dcontext']
-        #            printer.print_entries(matching_entries, dcontext, file=oss)
-        #
-        #        else:
+        # the hash should uniquely identify the entry
+        assert len(matching_entries) == 1
+        entry = matching_entries[0]
+        context_str = context.render_entry_context(self.all_entries,
+                                                   self.options, entry)
+        ctx = context_str.split("\n", 2)
+        filenamelineno = ctx[1]
+        filename = filenamelineno.split(":")[1].strip()
+        lineno = int(filenamelineno.split(":")[2].strip())
 
         return {
             'hash': ehash,
-            'contexts': contexts,
+            'context': ctx[2],
+            'filename': filename,
+            'line': lineno,
             'journal': self._journal(matching_entries)
         }
 
