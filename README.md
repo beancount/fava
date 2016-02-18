@@ -35,7 +35,7 @@ If you want to hack on `fava`, this will get you up and running:
     make build-js
     pip install --editable .
 
-Note that you'll need to have `npm` installed to build the Javascript UI.
+Note that you'll need to have the newest version of `npm` and `NodeJS` installed to build the JavaScript and CSS files.
 
 ---
 **Caution**: Consider this *beta*-software. Contributions are very welcome :-)
