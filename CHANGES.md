@@ -2,6 +2,16 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-18
+
+  - Added the missing Holdings reports `bean-web` is offering. (Thanks to Jakob
+    Schnitzler for the PR)
+
+  - User-defined queries are now displayed in the sidebar for quick access. By
+    default, 5 queries are shown, which can be controlled (or entirely turned
+    off) by specifying the `sidebar-show-queries`-key in the settings file
+    (Issue #131). (Thanks to Daniel Bos for the PR)
+    
 2016-02-15
 
   - Installing via `pip install beancount-fava` now works, all requirements
