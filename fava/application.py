@@ -3,8 +3,8 @@ import configparser
 import os
 from datetime import datetime
 
-from flask import Flask, flash, render_template, url_for, request, redirect,\
-                  send_from_directory, g
+from flask import (abort, Flask, flash, render_template, url_for, request,
+                   redirect, send_from_directory, g)
 
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -175,7 +175,7 @@ def report(report_name):
             'trial_balance',
     ]:
         return render_template('{}.html'.format(report_name))
-    return redirect(url_for('report', report_name='balance_sheet'))
+    abort(404)
 
 
 @app.template_filter()
@@ -262,6 +262,8 @@ def template_context():
 def uniquify(seq):
     """Removes duplicate items from a list whilst preserving order. """
     seen = set()
+    if not seq:
+        return []
     return [x for x in seq if x not in seen and not seen.add(x)]
 
 
@@ -274,16 +276,13 @@ def inject_filters(endpoint, values):
             values[filter] = g.filters[filter]
     for list_filter in ['tag', 'payee']:
         if list_filter in values:
-            values[list_filter] = uniquify(g.filters[list_filter] + [values[list_filter]])
+            values[list_filter] = uniquify(values[list_filter])
         else:
             values[list_filter] = uniquify(g.filters[list_filter])
     if 'pop' in values:
         key, value = values['pop']
-        values['pop'] = None
+        values.pop('pop')
         values[key] = [v for v in g.filters[key] if v != value]
-    if 'remove' in values:
-        values[values['remove']] = []
-        values['remove'] = None
 
 
 @app.before_request
