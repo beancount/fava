@@ -19,6 +19,7 @@ future, and therefore I only tried to get the numbers required, and did not
 optimize for performance at all.
 """
 
+import operator
 import os
 from datetime import date, timedelta
 
@@ -34,7 +35,7 @@ from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
-from beancount.reports import context, holdings_reports
+from beancount.reports import context
 from beancount.utils import misc_utils
 
 from fava.util.dateparser import parse_date
@@ -349,8 +350,14 @@ class BeancountReportAPI(object):
 
         return events
 
-    def holdings(self):
-        holdings_list, _ = holdings_reports.get_assets_holdings(self.entries, self.options)
+    def holdings(self, aggregation_key=None):
+        holdings_list = holdings.get_final_holdings(self.entries,
+                                                    (self.account_types.assets,
+                                                     self.account_types.liabilities),
+                                                    self.price_map)
+        if aggregation_key:
+            holdings_list = holdings.aggregate_holdings_by(holdings_list,
+                                                           operator.attrgetter(aggregation_key))
         return holdings_list
 
     def _net_worth_in_periods(self):

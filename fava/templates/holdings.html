@@ -7,8 +7,15 @@
 {%- endmacro %}
 
 {% block content %}
-    {% set holdings = api.holdings() %}
-    <h1>Equity/Holdings</h1>
+    <h1>Holdings</h1>
+    {% set holdings = api.holdings(aggregation_key) %}
+    <div class="headerline">
+        <h3>{% if aggregation_key %}<a href="{{ url_for('report', report_name='holdings') }}">Holdings</a>{% else %}Holdings{% endif %}</h3>
+        {% for key in ['account', 'currency', 'cost_currency'] %}
+        <h3>{% if not (aggregation_key == key) %}<a href="{{ url_for('holdings_by', aggregation_key=key) }}">Holdings by {{key|replace('_',' ')|capitalize}}</a>{% else %}Holdings by {{key|replace('_',' ')|capitalize}}{% endif %}</h3>
+        {% endfor %}
+    </div>
+
     <table class="holdings sortable">
         <thead>
             <tr>

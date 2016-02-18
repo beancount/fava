@@ -130,6 +130,11 @@ def event_details(event_type=None):
     return render_template('event_detail.html', event_type=event_type)
 
 
+@app.route('/holdings/by_<aggregation_key>/')
+def holdings_by(aggregation_key):
+    return render_template('holdings.html', aggregation_key=aggregation_key)
+
+
 @app.route('/<report_name>/')
 def report(report_name):
     if report_name in [
