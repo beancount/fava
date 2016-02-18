@@ -62,5 +62,6 @@ def test_scrape(setup_app):
 
     while urls.stack:
         current = url = urls.pop()
+        print(url)
         rv = test_app.get(url)
         assert rv.status_code == 200
