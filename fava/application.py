@@ -68,9 +68,7 @@ def document():
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
-    context = app.api.context(ehash)
-    # TODO handle errors
-    return render_template('context.html', context=context)
+    return render_template('context.html', ehash=ehash)
 
 
 @app.route('/query/')

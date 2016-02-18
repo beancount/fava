@@ -396,47 +396,28 @@ class BeancountReportAPI(object):
             'monthly_totals': monthly_totals
         }
 
-    def context(self, ehash=None):
-        matching_entries = [entry
-                                for entry in self.entries
-                                if ehash == compare.hash_entry(entry)]
+    def context(self, ehash):
+        matching_entries = [entry for entry in self.all_entries
+                            if ehash == compare.hash_entry(entry)]
 
-        contexts = []
-        dcontext = self.options['dcontext']
+        if not matching_entries:
+            return
 
-        for entry in matching_entries:
-            context_str = context.render_entry_context(
-                self.entries, self.options, entry)
-
-            hash_ = context_str.split("\n",2)[0].split(':')[1].strip()
-            filenamelineno = context_str.split("\n",2)[1]
-            filename = filenamelineno.split(":")[1].strip()
-            lineno = int(filenamelineno.split(":")[2].strip())
-
-            contexts.append({
-                'hash': hash_,
-                'context': context_str.split("\n",2)[2],
-                'filename': filename,
-                'line': lineno
-            })
-
-        # TODO
-        #        if len(matching_entries) == 0:
-        #            print("ERROR: Could not find matching entry for '{}'".format(ehash),
-        #                  file=oss)
-        #
-        #        elif len(matching_entries) > 1:
-        #            print("ERROR: Ambiguous entries for '{}'".format(ehash),
-        #                  file=oss)
-        #            print(file=oss)
-        #            dcontext = app.options['dcontext']
-        #            printer.print_entries(matching_entries, dcontext, file=oss)
-        #
-        #        else:
+        # the hash should uniquely identify the entry
+        assert len(matching_entries) == 1
+        entry = matching_entries[0]
+        context_str = context.render_entry_context(self.all_entries,
+                                                   self.options, entry)
+        ctx = context_str.split("\n", 2)
+        filenamelineno = ctx[1]
+        filename = filenamelineno.split(":")[1].strip()
+        lineno = int(filenamelineno.split(":")[2].strip())
 
         return {
             'hash': ehash,
-            'contexts': contexts,
+            'context': ctx[2],
+            'filename': filename,
+            'line': lineno,
             'journal': self._journal(matching_entries)
         }
 
