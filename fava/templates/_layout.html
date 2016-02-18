@@ -40,6 +40,7 @@
 } %}
 {% set active_page = active_page|default('journal') %}
 {% set show_filters = show_filters|default(True) %}
+{% set user_queries = api.queries()[:config.user.getint('sidebar-show-queries')] %}
 <!doctype html>
 <html>
 <head>
@@ -88,9 +89,9 @@
                 <ul class="navigation">
                 {% for id, caption, shortcut in menuitems %}
                     <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a>
-                    {% if id == "query" %}
+                    {% if id == "query" and user_queries|length > 0 %}
                         <ul class="navigation">
-                        {% for query in api.queries()[:config.user.getint('sidebar-show-queries')] %}
+                        {% for query in user_queries %}
                             <li><a href="{{ url_for('get_stored_query', stored_query_hash=query.hash) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
                         {% endfor %}
                         </ul>
