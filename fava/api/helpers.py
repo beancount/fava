@@ -1,6 +1,6 @@
 import re
 
-from beancount.core import flags
+from beancount.core import flags, account_types
 from beancount.ops.holdings import Holding
 from beancount.core.data import Transaction
 from beancount.core.inventory import Inventory
@@ -52,8 +52,7 @@ def get_holding_from_position(position, price_map=None, date=None):
                        None)
 
 
-def inventory_at_dates(entries, dates, transaction_predicate,
-                       posting_predicate):
+def inventory_at_dates(entries, dates, posting_predicate):
     """Generator that yields the aggregate inventory at the specified dates.
 
     The inventory for a specified date includes all matching postings PRIOR to
@@ -61,8 +60,6 @@ def inventory_at_dates(entries, dates, transaction_predicate,
 
     :param entries: list of entries, sorted by date.
     :param dates: iterator of dates
-    :param transaction_predicate: predicate called on each Transaction entry to
-        decide whether to include its postings in the inventory.
     :param posting_predicate: predicate with the Transaction and Posting to
         decide whether to include the posting in the inventory.
     """
@@ -78,23 +75,11 @@ def inventory_at_dates(entries, dates, transaction_predicate,
         while entry_i < num_entries and entries[entry_i].date < date:
             entry = entries[entry_i]
             entry_i += 1
-            if isinstance(entry, Transaction) and transaction_predicate(entry):
+            if isinstance(entry, Transaction):
                 for posting in entry.postings:
-                    if posting_predicate(entry, posting):
+                    if posting_predicate(posting):
                         inventory.add_position(posting)
         yield inventory
-
-
-def account_descendants_re_pattern(*roots):
-    """Returns pattern for matching descendant accounts.
-
-    :param roots: The list of parent account names.  These should not
-        end with a ':'.
-
-    :return: The regular expression pattern for matching descendants of
-             the specified parents, or those parents themselves.
-    """
-    return '|'.join('(?:^' + re.escape(name) + '(?::|$))' for name in roots)
 
 
 def holdings_at_dates(entries, dates, price_map, options_map):
@@ -109,17 +94,19 @@ def holdings_at_dates(entries, dates, price_map, options_map):
     :param price_map: A dict of prices, as built by prices.build_price_map().
     :param options_map: The account options.
     """
-    account_types = options.get_account_types(options_map)
-    FLAG_UNREALIZED = flags.FLAG_UNREALIZED
-    transaction_predicate = lambda e: e.flag != FLAG_UNREALIZED
-    account_re = re.compile(account_descendants_re_pattern(
-        account_types.assets,
-        account_types.liabilities))
-    posting_predicate = lambda e, p: account_re.match(p.account)
+    entries = [entry for entry in entries
+               if (not isinstance(entry, Transaction) or
+                   entry.flag != flags.FLAG_UNREALIZED)]
+
+    types = options.get_account_types(options_map)
+
+    def posting_predicate(posting):
+        account_type = account_types.get_account_type(posting.account)
+        if account_type in (types.assets, types.liabilities):
+            return True
+
     for date, inventory in zip(dates,
-                               inventory_at_dates(
-                                   entries, dates,
-                                   transaction_predicate = transaction_predicate,
-                                   posting_predicate = posting_predicate)):
+                               inventory_at_dates(entries, dates,
+                                                  posting_predicate)):
         yield [get_holding_from_position(position, price_map=price_map, date=date)
                for position in inventory.units()]
