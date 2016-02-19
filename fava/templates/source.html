@@ -42,10 +42,11 @@
     {% else %}
     <form class="editor-source" action="{{ url_for('source') }}" method="get">
         <select name="file_path">
-            {% for source_file in api.source_files() %}
+            {% for source_file in api.source_files()+[config_file] %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
             {% endfor %}
         </select>
+        <input type="hidden" name="config-file-defaults" value="{{ config_file_defaults }}">
     </form>
     <div class="editor-wrapper editor-wrapper-source">
         <div class="editor" id="editor-source"></div>

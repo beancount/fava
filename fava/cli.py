@@ -5,7 +5,7 @@ import sys
 
 from livereload import Server
 
-from fava.application import app
+from fava.application import app, load_user_settings
 
 
 def run(argv):
@@ -70,8 +70,7 @@ def run(argv):
 
 
     if args.settings:
-        app.config.user['file_user'] = os.path.realpath(args.settings)
-        app.config.raw.read(app.config.user['file_user'])
+        load_user_settings(os.path.realpath(args.settings))
 
     if args.debug:
         if args.profile:
