@@ -20,13 +20,21 @@ app.secret_key = '1234'
 app.api = BeancountReportAPI()
 
 app.config.raw = configparser.ConfigParser()
-defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+config_defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'default-settings.conf')
-app.config.raw.read(defaults_file)
+app.config_file = config_defaults_file
+app.config.raw.read(config_defaults_file)
 app.config.user = app.config.raw['fava']
-app.config.user['file_defaults'] = defaults_file
+app.config.user['file_defaults'] = config_defaults_file
 app.config.user['file_user'] = ''
 
+def load_user_settings(settings_file_path):
+    app.config.user['file_user'] = settings_file_path
+    app.config.raw.read(app.config.user['file_user'])
+
+    app.config_file = app.config.user['file_defaults'] \
+                      if app.config.user['file_user'] == '' \
+                      else app.config.user['file_user']
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
@@ -111,15 +119,32 @@ def journal():
 def source():
     if request.method == "GET":
         if request.is_xhr:
-            return app.api.source(file_path=request.args.get('file_path', None))
+            requested_file_path = request.args.get('file_path', None)
+            if requested_file_path == app.config_file:
+                with open(requested_file_path, 'r') as f:
+                    settings_file_content = f.read()
+                return settings_file_content
+            else:
+                return app.api.source(file_path=requested_file_path)
         else:
             return render_template('source.html', file_path=request.args.get('file_path', app.api.beancount_file_path))
 
     elif request.method == "POST":
-        successful = app.api.set_source(file_path=request.form['file_path'],
-                                        source=request.form['source'])
+        file_path = request.form['file_path']
+        source = request.form['source']
+
+        if file_path == app.config_file:
+            if file_path != config_defaults_file:
+                with open(file_path, 'w+', encoding='utf8') as f:
+                    f.write(source)
+            successful = True
+        else:
+            successful = app.api.set_source(file_path=file_path,
+                                            source=source)
         if successful:
             app.api.load_file()
+            load_user_settings(app.config_file)
+
         return str(successful)
 
 
@@ -223,6 +248,8 @@ def template_context():
                 should_collapse_account=should_collapse_account,
                 api=app.api,
                 options=app.api.options,
+                config_file=app.config_file,
+                config_file_defaults=app.config.user['file_defaults'],
                 operating_currencies=app.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'))
 

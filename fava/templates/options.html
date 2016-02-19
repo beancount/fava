@@ -7,7 +7,7 @@
 
     <h3><code>fava</code>&nbsp;-&nbsp;settings</h3>
     <p class="description">
-        You can use the <code>--settings file</code> option when starting <code>fava</code> to specify different settings. The settings will be merged with the default-settings, so the table below shows all possible settings-keys.
+        You can use the <code>--settings [file]</code> option when starting <code>fava</code> to specify different settings. The settings will be merged with the default-settings, so the table below shows all possible settings-keys.
     </p>
     <table class="settings sortable">
         <thead>
@@ -19,8 +19,14 @@
         <tbody>
             {% for key, value in config.user.items() | sort %}
             <tr>
-               <td class="num">{{ key }}</td>
-               <td class="num"><pre>{{ value|trim }}</pre></td>
+                <td class="num">{{ key }}</td>
+                <td class="num"><pre>
+                {%- if key == "file_user" -%}
+                    <a href="{{ url_for('source', file_path=value) }}">{{ value }}</a>
+                {%- else -%}
+                    {{ value|trim }}
+                {%- endif -%}
+                </pre></td>
             </tr>
             {% endfor %}
         </tbody>

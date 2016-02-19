@@ -4,6 +4,7 @@ require('ace-builds/src-min/ace');
 require('ace-builds/src-min/ext-searchbox');
 require('ace-builds/src-min/ext-language_tools');
 require('./ace-mode-beancount.js');
+require('ace-builds/src-min/mode-ini');
 require('ace-builds/src-min/mode-sql');
 require('ace-builds/src-min/theme-chrome');
 
@@ -132,6 +133,16 @@ $(document).ready(function() {
                 editor.setValue(data, -1);
                 editor.gotoLine(hlLine, 0, true);
                 $select.removeAttr('disabled');
+
+                if ($filePath.endsWith('.conf') || $filePath.endsWith('.settings') || $filePath.endsWith('.ini')) {
+                    editor.setOptions({mode: "ace/mode/ini"});
+                    console.log($("input[name=config-file-defaults]").val());
+                    console.log($filePath);
+                } else {
+                    editor.setOptions({mode: "ace/mode/beancount"});
+                }
+
+                $("form.editor-save").toggle($filePath != $("input[name=config-file-defaults]").val());
 
                 if (window.editorInsertMarker && hlLine == 1) {
                     var range = editor.find(window.editorInsertMarker, {
