@@ -1,8 +1,9 @@
 import decimal
+import os
 from datetime import date, datetime
 
 from beancount.core import compare
-from beancount.core.data import Balance, Transaction
+from beancount.core.data import Balance, Document, Transaction
 from beancount.core.amount import Amount
 from beancount.core.position import Position
 from beancount.core.number import ZERO
@@ -54,6 +55,9 @@ def serialize_entry(entry):
     if isinstance(entry, Balance):
         if entry.diff_amount:
             new_entry['balance'] = entry.diff_amount + entry.amount
+
+    if isinstance(entry, Document):
+        new_entry['basename'] = os.path.basename(entry.filename)
 
     if isinstance(entry, Transaction):
         if entry.flag in transaction_types:
