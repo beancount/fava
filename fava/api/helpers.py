@@ -27,7 +27,7 @@ def get_holding_from_position(position, price_map=None, date=None):
             price_date, price_number = prices.get_price(price_map,
                                                         base_quote, date)
             if price_number is not None:
-                market_value = number * price_number
+                market_value = position.number * price_number
         else:
             price_date, price_number = None, None
 

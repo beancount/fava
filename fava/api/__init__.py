@@ -370,11 +370,23 @@ class BeancountReportAPI(object):
                                                                           price_map=self.price_map)):
             totals = dict()
             for currency in self.options['operating_currency']:
-                total = ZERO
-                for holding in holdings.convert_to_currency(self.price_map, currency, holdings_list):
-                    if holding.cost_currency == currency and holding.market_value:
-                        total += holding.market_value
-                totals[currency] = total
+                currency_holdings_list = \
+                    holdings.convert_to_currency(self.price_map, currency,
+                                                 holdings_list)
+                if not currency_holdings_list:
+                    continue
+
+                holdings_list = holdings.aggregate_holdings_by(
+                    currency_holdings_list, operator.attrgetter('cost_currency'))
+
+                holdings_list = [holding
+                                 for holding in holdings_list
+                                 if holding.currency and holding.cost_currency]
+
+                # If after conversion there are no valid holdings, skip the currency
+                # altogether.
+                if holdings_list:
+                    totals[currency] = holdings_list[0].market_value
 
             monthly_totals.append({
                 'begin_date': begin_date,
