@@ -2,6 +2,13 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-19
+
+  - Only the basename will be shown for Documents in the Journal view. (Thanks
+    to Daniel Bos for the PR)
+
+  - The user settings file is now editable in Source view (#136).
+
 2016-02-18
 
   - Added the missing Holdings reports `bean-web` is offering. (Thanks to Jakob
