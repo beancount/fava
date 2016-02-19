@@ -195,6 +195,11 @@ def account_level(account_full):
     return account_full.count(":")+1
 
 
+@app.template_filter()
+def basename(file_path):
+    return os.path.basename(file_path)
+
+
 @app.context_processor
 def template_context():
     def url_for_current(**kwargs):
