@@ -166,6 +166,9 @@ class BeancountReportAPI(object):
 
             entry = serialize_entry(posting)
 
+            if isinstance(posting, Document):
+                entry['basename'] = os.path.basename(entry['filename'])
+
             if with_change_and_balance:
                 if isinstance(posting, Balance):
                     entry['change'] = {}

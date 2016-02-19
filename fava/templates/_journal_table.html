@@ -97,7 +97,7 @@
                     Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
                 {% endif %}
                 {% if type == 'document' %}
-                    Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename }}</a>
+                    Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.basename }}</a>
                 {% endif %}
                 {% if type == 'balance' %}
                     Balance {{ account_link(entry.account) }}
