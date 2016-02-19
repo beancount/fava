@@ -20,21 +20,24 @@ app.secret_key = '1234'
 app.api = BeancountReportAPI()
 
 app.config.raw = configparser.ConfigParser()
-config_defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'default-settings.conf')
-app.config_file = config_defaults_file
-app.config.raw.read(config_defaults_file)
+app.config_file = defaults_file
+app.config.raw.read(defaults_file)
 app.config.user = app.config.raw['fava']
-app.config.user['file_defaults'] = config_defaults_file
+app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
+
 
 def load_user_settings(settings_file_path):
     app.config.user['file_user'] = settings_file_path
     app.config.raw.read(app.config.user['file_user'])
 
-    app.config_file = app.config.user['file_defaults'] \
-                      if app.config.user['file_user'] == '' \
-                      else app.config.user['file_user']
+    if app.config.user['file_user'] == '':
+        app.config_file = app.config.user['file_defaults']
+    else:
+        app.config_file = app.config.user['file_user']
+
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
@@ -65,7 +68,8 @@ def document():
     if document_path and app.api.is_valid_document(document_path):
         # metadata-statement-paths may be relative to the beancount-file
         if not os.path.isabs(document_path):
-            document_path = os.path.join(os.path.dirname(os.path.realpath(app.beancount_file)), document_path)
+            document_path = os.path.join(os.path.dirname(
+                os.path.realpath(app.beancount_file)), document_path)
 
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
@@ -134,7 +138,7 @@ def source():
         source = request.form['source']
 
         if file_path == app.config_file:
-            if file_path != config_defaults_file:
+            if file_path != defaults_file:
                 with open(file_path, 'w+', encoding='utf8') as f:
                     f.write(source)
             successful = True
