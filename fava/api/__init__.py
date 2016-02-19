@@ -363,12 +363,10 @@ class BeancountReportAPI(object):
         monthly_totals = []
         end_dates = [p[1] for p in month_tuples]
 
-        for (begin_date, end_date), holdings_list in zip(month_tuples,
-                                                        holdings_at_dates(entries=self.entries,
-                                                                          dates=end_dates,
-                                                                          options_map=self.options,
-                                                                          price_map=self.price_map)):
-            totals = dict()
+        for (begin_date, end_date), holdings_list in \
+                zip(month_tuples, holdings_at_dates(self.entries, end_dates,
+                                                    self.price_map, self.options)):
+            totals = {}
             for currency in self.options['operating_currency']:
                 currency_holdings_list = \
                     holdings.convert_to_currency(self.price_map, currency,

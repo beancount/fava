@@ -1,5 +1,3 @@
-import re
-
 from beancount.core import flags, account_types
 from beancount.ops.holdings import Holding
 from beancount.core.data import Transaction
@@ -27,7 +25,7 @@ def get_holding_from_position(position, price_map=None, date=None):
             price_date, price_number = prices.get_price(price_map,
                                                         base_quote, date)
             if price_number is not None:
-                market_value = position.number * price_number
+                market_value = position.units.number * price_number
         else:
             price_date, price_number = None, None
 
@@ -52,33 +50,32 @@ def get_holding_from_position(position, price_map=None, date=None):
                        None)
 
 
-def inventory_at_dates(entries, dates, posting_predicate):
+def inventory_at_dates(transactions, dates, posting_predicate):
     """Generator that yields the aggregate inventory at the specified dates.
 
     The inventory for a specified date includes all matching postings PRIOR to
     it.
 
-    :param entries: list of entries, sorted by date.
+    :param transactions: list of transactions, sorted by date.
     :param dates: iterator of dates
     :param posting_predicate: predicate with the Transaction and Posting to
         decide whether to include the posting in the inventory.
     """
-    entry_i = 0
-    num_entries = len(entries)
+    index = 0
+    length = len(transactions)
 
     # inventory maps lot to amount
     inventory = Inventory()
     prev_date = None
     for date in dates:
-        assert prev_date is None or date >= prev_date
+        assert prev_date is None or date > prev_date
         prev_date = date
-        while entry_i < num_entries and entries[entry_i].date < date:
-            entry = entries[entry_i]
-            entry_i += 1
-            if isinstance(entry, Transaction):
-                for posting in entry.postings:
-                    if posting_predicate(posting):
-                        inventory.add_position(posting)
+        while index < length and transactions[index].date < date:
+            entry = transactions[index]
+            index += 1
+            for posting in entry.postings:
+                if posting_predicate(posting):
+                    inventory.add_position(posting)
         yield inventory
 
 
@@ -94,9 +91,9 @@ def holdings_at_dates(entries, dates, price_map, options_map):
     :param price_map: A dict of prices, as built by prices.build_price_map().
     :param options_map: The account options.
     """
-    entries = [entry for entry in entries
-               if (not isinstance(entry, Transaction) or
-                   entry.flag != flags.FLAG_UNREALIZED)]
+    transactions = [entry for entry in entries
+                    if (isinstance(entry, Transaction) and
+                        entry.flag != flags.FLAG_UNREALIZED)]
 
     types = options.get_account_types(options_map)
 
@@ -106,7 +103,7 @@ def holdings_at_dates(entries, dates, price_map, options_map):
             return True
 
     for date, inventory in zip(dates,
-                               inventory_at_dates(entries, dates,
+                               inventory_at_dates(transactions, dates,
                                                   posting_predicate)):
-        yield [get_holding_from_position(position, price_map=price_map, date=date)
-               for position in inventory.units()]
+        yield [get_holding_from_position(position, price_map, date)
+               for position in inventory]
