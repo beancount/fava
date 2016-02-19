@@ -1,32 +1,9 @@
-from datetime import timedelta
-import re
-
-from beancount.core import flags
+from beancount.core import flags, account_types
 from beancount.ops.holdings import Holding
 from beancount.core.data import Transaction
 from beancount.core.inventory import Inventory
 from beancount.parser import options
 from beancount.ops import prices
-from beancount.utils import bisect_key
-
-
-def entries_in_inclusive_range(entries, begin_date=None, end_date=None):
-    """
-    Returns the list of entries satisfying begin_date <= date <= end_date.
-    """
-    get_date = lambda x: x.date
-    if begin_date is None:
-        begin_index = 0
-    else:
-        begin_index = bisect_key.bisect_left_with_key(entries, begin_date,
-                                                      key=get_date)
-    if end_date is None:
-        end_index = len(entries)
-    else:
-        end_index = bisect_key.bisect_left_with_key(entries,
-                                                    end_date+timedelta(days=1),
-                                                    key=get_date)
-    return entries[begin_index:end_index]
 
 
 # This really belongs in beancount:src/python/beancount/ops/holdings.py
@@ -48,7 +25,7 @@ def get_holding_from_position(position, price_map=None, date=None):
             price_date, price_number = prices.get_price(price_map,
                                                         base_quote, date)
             if price_number is not None:
-                market_value = number * price_number
+                market_value = position.units.number * price_number
         else:
             price_date, price_number = None, None
 
@@ -73,49 +50,33 @@ def get_holding_from_position(position, price_map=None, date=None):
                        None)
 
 
-def inventory_at_dates(entries, dates, transaction_predicate,
-                       posting_predicate):
+def inventory_at_dates(transactions, dates, posting_predicate):
     """Generator that yields the aggregate inventory at the specified dates.
 
     The inventory for a specified date includes all matching postings PRIOR to
     it.
 
-    :param entries: list of entries, sorted by date.
+    :param transactions: list of transactions, sorted by date.
     :param dates: iterator of dates
-    :param transaction_predicate: predicate called on each Transaction entry to
-        decide whether to include its postings in the inventory.
     :param posting_predicate: predicate with the Transaction and Posting to
         decide whether to include the posting in the inventory.
     """
-    entry_i = 0
-    num_entries = len(entries)
+    index = 0
+    length = len(transactions)
 
     # inventory maps lot to amount
     inventory = Inventory()
     prev_date = None
     for date in dates:
-        assert prev_date is None or date >= prev_date
+        assert prev_date is None or date > prev_date
         prev_date = date
-        while entry_i < num_entries and entries[entry_i].date < date:
-            entry = entries[entry_i]
-            entry_i += 1
-            if isinstance(entry, Transaction) and transaction_predicate(entry):
-                for posting in entry.postings:
-                    if posting_predicate(entry, posting):
-                        inventory.add_position(posting)
+        while index < length and transactions[index].date < date:
+            entry = transactions[index]
+            index += 1
+            for posting in entry.postings:
+                if posting_predicate(posting):
+                    inventory.add_position(posting)
         yield inventory
-
-
-def account_descendants_re_pattern(*roots):
-    """Returns pattern for matching descendant accounts.
-
-    :param roots: The list of parent account names.  These should not
-        end with a ':'.
-
-    :return: The regular expression pattern for matching descendants of
-             the specified parents, or those parents themselves.
-    """
-    return '|'.join('(?:^' + re.escape(name) + '(?::|$))' for name in roots)
 
 
 def holdings_at_dates(entries, dates, price_map, options_map):
@@ -130,17 +91,19 @@ def holdings_at_dates(entries, dates, price_map, options_map):
     :param price_map: A dict of prices, as built by prices.build_price_map().
     :param options_map: The account options.
     """
-    account_types = options.get_account_types(options_map)
-    FLAG_UNREALIZED = flags.FLAG_UNREALIZED
-    transaction_predicate = lambda e: e.flag != FLAG_UNREALIZED
-    account_re = re.compile(account_descendants_re_pattern(
-        account_types.assets,
-        account_types.liabilities))
-    posting_predicate = lambda e, p: account_re.match(p.account)
+    transactions = [entry for entry in entries
+                    if (isinstance(entry, Transaction) and
+                        entry.flag != flags.FLAG_UNREALIZED)]
+
+    types = options.get_account_types(options_map)
+
+    def posting_predicate(posting):
+        account_type = account_types.get_account_type(posting.account)
+        if account_type in (types.assets, types.liabilities):
+            return True
+
     for date, inventory in zip(dates,
-                               inventory_at_dates(
-                                   entries, dates,
-                                   transaction_predicate = transaction_predicate,
-                                   posting_predicate = posting_predicate)):
-        yield [get_holding_from_position(position, price_map=price_map, date=date)
-               for position in inventory.units()]
+                               inventory_at_dates(transactions, dates,
+                                                  posting_predicate)):
+        yield [get_holding_from_position(position, price_map, date)
+               for position in inventory]

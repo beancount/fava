@@ -29,8 +29,9 @@ from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
-from beancount.core.data import get_entry, posting_sortkey, Close, Note,\
-                                Document, Balance, Transaction, Event, Query
+from beancount.core.data import (get_entry, iter_entry_dates, posting_sortkey,
+                                 Close, Note, Document, Balance, Transaction,
+                                 Event, Query)
 from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
@@ -39,9 +40,19 @@ from beancount.reports import context
 from beancount.utils import misc_utils
 
 from fava.util.dateparser import parse_date
-from fava.api.helpers import entries_in_inclusive_range,\
-                                      holdings_at_dates
+from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import serialize_inventory, serialize_entry
+
+
+def get_next_interval(date_, interval):
+    if interval == 'year':
+        return date(date_.year + 1, 1, 1)
+    elif interval == 'month':
+        month = (date_.month % 12) + 1
+        year = date_.year + (date_.month + 1 > 12)
+        return date(year, month, 1)
+    else:
+        raise NotImplementedError
 
 
 class FilterException(Exception):
@@ -200,23 +211,11 @@ class BeancountReportAPI(object):
         if not date_first:
             return []
 
-        def get_next_interval(date_, interval):
-            if interval == 'year':
-                return date(date_.year + 1, 1, 1)
-            elif interval == 'month':
-                month = (date_.month % 12) + 1
-                year = date_.year + (date_.month + 1 > 12)
-                return date(year, month, 1)
-            else:
-                raise NotImplementedError
-
-        date_first = date(date_first.year, date_first.month, 1)
-        date_last = get_next_interval(date_last, interval) - timedelta(days=1)
-
         interval_tuples = []
         while date_first <= date_last:
-            interval_tuples.append((date_first, get_next_interval(date_first, interval) - timedelta(days=1)))
-            date_first = get_next_interval(date_first, interval)
+            next_date = get_next_interval(date_first, interval)
+            interval_tuples.append((date_first, next_date))
+            date_first = next_date
 
         return interval_tuples
 
@@ -229,14 +228,15 @@ class BeancountReportAPI(object):
         names = [account_name] if isinstance(account_name, str) else account_name
 
         interval_tuples = self._interval_tuples(interval, self.entries)
-        date_first, date_last = getters.get_min_max_dates(self.entries, (Transaction))
+        date_first, _ = getters.get_min_max_dates(self.entries, (Transaction))
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
             'totals': self._balances_totals(names, begin_date if not accumulate else date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
-    def _real_account(self, account_name, entries, begin_date=None, end_date=None, min_accounts=None):
+    def _real_account(self, account_name, entries, begin_date=None,
+                      end_date=None, min_accounts=None):
         """
         Returns the realization.RealAccount instances for account_name, and
         their entries clamped by the optional begin_date and end_date.
@@ -246,13 +246,13 @@ class BeancountReportAPI(object):
 
         :return: realization.RealAccount instances
         """
-        entries_in_range = entries_in_inclusive_range(entries, begin_date=begin_date, end_date=end_date)
+        if begin_date:
+            entries = list(iter_entry_dates(entries, begin_date, end_date))
         if not min_accounts:
             min_accounts = [account_name]
-        real_account = realization.get(realization.realize(entries_in_range, min_accounts), account_name)
 
-        return real_account
-
+        return realization.get(realization.realize(entries, min_accounts),
+                               account_name)
 
     def balances(self, account_name, begin_date=None, end_date=None, min_accounts=None):
         """
@@ -361,20 +361,30 @@ class BeancountReportAPI(object):
     def _net_worth_in_periods(self):
         month_tuples = self._interval_tuples('month', self.entries)
         monthly_totals = []
-        end_dates = [p[1] + timedelta(days=1) for p in month_tuples]
+        end_dates = [p[1] for p in month_tuples]
 
-        for (begin_date, end_date), holdings_list in zip(month_tuples,
-                                                        holdings_at_dates(entries=self.entries,
-                                                                          dates=end_dates,
-                                                                          options_map=self.options,
-                                                                          price_map=self.price_map)):
-            totals = dict()
+        for (begin_date, end_date), holdings_list in \
+                zip(month_tuples, holdings_at_dates(self.entries, end_dates,
+                                                    self.price_map, self.options)):
+            totals = {}
             for currency in self.options['operating_currency']:
-                total = ZERO
-                for holding in holdings.convert_to_currency(self.price_map, currency, holdings_list):
-                    if holding.cost_currency == currency and holding.market_value:
-                        total += holding.market_value
-                totals[currency] = total
+                currency_holdings_list = \
+                    holdings.convert_to_currency(self.price_map, currency,
+                                                 holdings_list)
+                if not currency_holdings_list:
+                    continue
+
+                holdings_list = holdings.aggregate_holdings_by(
+                    currency_holdings_list, operator.attrgetter('cost_currency'))
+
+                holdings_list = [holding
+                                 for holding in holdings_list
+                                 if holding.currency and holding.cost_currency]
+
+                # If after conversion there are no valid holdings, skip the currency
+                # altogether.
+                if holdings_list:
+                    totals[currency] = holdings_list[0].market_value
 
             monthly_totals.append({
                 'begin_date': begin_date,
