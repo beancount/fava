@@ -45,7 +45,7 @@
 
 {% set context_url = url_for('context', ehash='REPLACEME') %}
 {% set account_url = url_for('account_with_journal', name='REPLACEME') %}
-{% set tag_url = url_for_current(tag='REPLACEME') %}
+{% set tag_url = url_for_current(tag=['REPLACEME']+g.filters['tag']) %}
 
 {% macro account_link(name) -%}
 <a href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>

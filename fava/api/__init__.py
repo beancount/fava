@@ -303,10 +303,7 @@ class BeancountReportAPI(object):
 
     def journal(self, account_name=None, with_change_and_balance=False, with_journal_children=True):
         if account_name:
-            if account_name not in self.all_accounts:
-                return []
-
-            real_account = realization.get(self.root_account, account_name)
+            real_account = realization.get_or_create(self.root_account, account_name)
 
             if with_journal_children:
                 postings = realization.get_postings(real_account)
