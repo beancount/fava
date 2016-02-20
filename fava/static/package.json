@@ -10,6 +10,7 @@
     "compass-mixins": "^0.12.7",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-loader": "^0.8.5",
     "imports-loader": "^0.6.5",
     "node-sass": "^3.4.2",
     "sass-loader": "^3.1.2",

@@ -2,6 +2,11 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-21
+
+  - New theme, which can be turned on via the `theme`-key in the settings file
+    (Issue #59). (Thanks to Rubén Gómez for the styles)
+
 2016-02-19
 
   - Only the basename will be shown for Documents in the Journal view. (Thanks

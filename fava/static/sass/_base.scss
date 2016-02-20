@@ -1,62 +1,8 @@
 @import "~compass-mixins/lib/compass/reset";
 @import "~compass-mixins/lib/compass/css3";
 @import "~compass-mixins/lib/compass/css3/user-interface";
+@import "~compass-mixins/lib/compass/css3/font-face";
 @import "~compass-mixins/lib/compass/utilities/general/clearfix";
-
-// Fonts
-
-$font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
-$font_family_monospaced: monospace;
-
-// Colors
-
-$color_background: white;
-$color_text: black;
-$color_links: #3572b0;
-$color_headings: #333;
-$color_error: #990000;
-
-$color_sidebar_text: #dadada;
-$color_sidebar_background: #f5f5f5;
-$color_sidebar_links: #36382e;
-
-$color_header: #205081;
-$color_header_bottom: #2e3d54:
-$color_header_text: white;
-
-$color_status_red: #990000;
-$color_status_yellow: #edd42f;
-$color_status_green: #007f41;
-$color_status_gray: #aaa;
-
-$color_journalentry_close: #888;
-$color_journalentry_pending: #f8a;
-$color_journalentry_open: #e8e8e8;
-$color_storm_dust_approx: #606060;
-$color_journalentry_note: #aad0ff;
-$color_journalentry_document: #ffc8ff;
-$color_journalentry_balance: #cfc;
-$color_journalentry_pad: #8ff;
-$color_journalentry_padding: #cff;
-$color_journalentry_postingwarning: #f66;
-
-$color_journaltable_header: #888;
-$color_journaltable_border: white;
-$color_journaltable_metadata: #85aacf;
-$color_journaltable_tag: #6aa2db;
-
-$color_treetable_expander: #afc1d3;
-
-$color_treemap_text: white;
-
-$color_editor_comment: #999988;
-$color_editor_directive: #333;
-$color_editor_class: #bb8844;
-$color_editor_date: #009999;
-$color_editor_constant: #008080;
-$color_editor_account: #333;
-$color_editor_invalid: #333;
-$color_editor_activeline: #ffffcc;
 
 // Globals
 
@@ -216,4 +162,518 @@ pre {
 
 .right {
     float: right;
+}
+
+// Structural and generic elements
+
+header {
+    position: relative;
+    background: $color_header;
+    border-bottom: 1px solid $color_header_bottom;
+    color: $color_header_text;
+    padding: 0 10px;
+    height: 41px;
+    z-index: 2;
+
+    div.branding {
+        img {
+            margin-top: 7px;
+            float: left;
+        }
+
+        h1 {
+            float: left;
+            color: $color_header_text;
+            display: block;
+            line-height: 1;
+            padding: 13px 10px;
+            margin: 0;
+            font-size: 14px;
+            font-weight: normal;
+        }
+    }
+
+    a {
+        color: $color_header_text;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+
+    nav {
+        position: absolute;
+        right: 10px;
+        top: 0;
+
+        ul.topmenu {
+            position: relative;
+            margin: 0;
+
+            & > li {
+                float: left;
+                padding: 0;
+
+                & > a {
+                    position: relative;
+                    padding-right: 23px !important;
+                    color: $color_header_text;
+                    display: block;
+                    line-height: 41px;
+                    padding: 0 10px;
+
+                    &:hover { background-color: $color_links; }
+
+                    &::after {
+                        border: 4px solid transparent;
+                        border-top-color: $color_background;
+                        content: "";
+                        height: 0;
+                        margin-left: -18px;
+                        margin-top: -2px;
+                        opacity: .8;
+                        left: 100%;
+                        position: absolute;
+                        text-indent: -99999px;
+                        top: 50%;
+                        width: 0;
+                    }
+                }
+
+                &:hover > .filter,
+                &.opened > .filter {
+                    display: block;
+                }
+
+                &.selected > a,
+                &.opened > a {
+                    background-color: $color_links;
+                }
+            }
+        }
+    }
+}
+
+div.main {
+    position:absolute;
+    width:100%;
+    margin-top:-41px;
+    padding-top:41px;
+    min-height:100%;
+    overflow:hidden;
+
+    aside {
+        padding-bottom: 100000px;
+        margin-bottom: -100000px;
+        width: 200px;
+        float: left;
+        color: $color_sidebar_text;
+        border-right: 1px solid darken($color_sidebar_background, 16);
+        background-color: $color_sidebar_background;
+
+        h3 {
+            text-transform: uppercase;
+            margin-top: 50px;
+            margin-left: 20px;
+            font-size: 11px;
+            color: darken($color_sidebar_text, 25);
+        }
+
+        ul.navigation {
+            margin-top: 0;
+            padding-top: 10px;
+
+            &:nth-child(1) {
+                padding-top: 20px;
+            }
+
+            li {
+                font-size: 1.1em;
+                display: block;
+
+                &.selected, a:hover {
+                    background-color: darken($color_sidebar_background, 6);
+                    color: $color_links;
+                }
+
+                a {
+                    color: $color_sidebar_links;
+                    display: block;
+                    padding: 7px 10px 7px 20px;
+
+                    span {
+                        float: right;
+                        margin-top: -2px;
+                        background: rgba(darken($color_sidebar_background, 95), 0.2);
+                        color: rgba(darken($color_sidebar_background, 80), 0.8);
+                        border-radius: 2em;
+                        font-size: 11px;
+                        font-weight: 700;
+                        line-height: .99;
+                        min-height: 1em;
+                        min-width: 1em;
+                        padding: 3px 8px 3px;
+                        position: relative;
+                        text-shadow: none;
+                        display: inline-block;
+                        text-decoration: none;
+                        text-align: center;
+                        text-transform: uppercase;
+                    }
+                }
+
+                ul.navigation {
+                    padding: 0;
+
+                    li {
+                        font-size: 0.95em;
+                        line-height: 0.95em;
+
+                        a { padding-left: 35px; }
+                    }
+                }
+            }
+        }
+    }
+}
+
+article {
+    @include clearfix;
+    margin-left: 200px;
+    padding: 20px 24px;
+
+    div.headerline {
+        h3 {
+            display: inline-block;
+            margin: 0;
+            padding: 6px 10px;
+
+            a {
+                color: lighten($color_text, 67);
+
+                &:hover {
+                    color: lighten($color_text, 20);
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    h1 {
+        a:link,
+        a:visited {
+            color: lighten($color_text, 20);
+
+            &:hover { text-decoration: underline; }
+        }
+
+        div.last-activity {
+            color: lighten($color_text, 60);
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 12px;
+            font-weight: normal;
+            font-style: italic;
+
+            a {
+                color: lighten($color_text, 60);
+
+                &:hover { color: lighten($color_text, 20); }
+            }
+        }
+
+        span.status-indicator { margin-left: 10px; }
+    }
+
+    dl {
+        margin-top: 20px;
+        font-size: 13px;
+
+        dt {
+            display: inline-block;
+            width: 120px;
+            float: left;
+            font-weight: bold;
+        }
+
+        dt,
+        dd {
+            margin-bottom: 3px;
+        }
+    }
+
+    p.empty, p.description {
+        margin-top: 20px;
+        line-height: 1.6em;
+        font-size: 13px;
+
+        code {
+            background: darken($color_background, 7);
+            display: inline-block;
+            font-size: 13px;
+            padding: 0 4px 2px 5px;
+            border-radius: 3px;
+            border: 1px solid darken($color_background, 13);
+        }
+
+        a { text-decoration: underline; }
+    }
+
+    div.loading {
+        margin-top: 20px;
+        font-style: italic;
+        color: lighten($color_text, 60);
+    }
+
+    div.table-filter,
+    div.chart-filter {
+        float: right;
+        clear: right;
+        margin-bottom: 8px;
+
+        input { margin-left: 10px; }
+    }
+
+    div.chart-filter { margin-top: -20px; }
+
+    span {
+        &.payee { font-weight: bold; }
+
+        &.pnsep {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+    }
+
+    table {
+        margin-top: 20px;
+        margin-bottom: 20px;
+
+        &:hover {
+            // class ".tree-balance-show" is added via JavaScript
+            tr.parent td.num,
+            tr td.num.tree-balance-show {
+                color: lighten($color_text, 75);
+            }
+        }
+
+        tbody {
+            tr {
+                &:nth-child(2n) { background: darken($color_background, 3); }
+
+                &.parent td.num,
+                td.num.tree-balance-show {
+                    color: lighten($color_text, 90);
+                }
+
+                &.hides td.num {
+                    span.tree-balance { display: block; }
+                    span.balance { display: none; }
+                }
+
+                td {
+                    border: 1px solid lighten($color_text, 91);
+                    padding: 3px 6px;
+                    white-space: nowrap;
+
+                    &:first-child { min-width: 200px; }
+
+                    &.num {
+                        color: $color_text;
+                        padding-left: 14px;
+                        font: 1.1em / 1.1em $font_family_monospaced;
+                        text-align: right;
+                        padding-right: 6px !important;
+                        vertical-align: top;
+
+                        span.balance { display: block; }
+                        span.tree-balance { display: none; }
+                    }
+
+                    &.account-level-1 { padding-left: 8px; }
+
+                    @for $i from 2 through 12 {
+                        &.account-level-#{$i} {
+                            padding-left: -0.5em + $i * 1.3;
+                        }
+                    }
+
+                    &.num.tree-balance-show span.tree-balance { display: block; }
+
+                    &.change.num,
+                    &.balance.num {
+                        font-size: 12px;
+                    }
+
+                    a.account { font-weight: bold; }
+                }
+            }
+        }
+
+        thead th,
+        tfoot td {
+            border: 1px solid darken($color_background, 15);
+            padding: 3px 8px;
+            font-weight: bold;
+            background: $color_treetable_header_bg;
+            color: lighten($color_text, 53);
+            white-space: nowrap;
+        }
+
+        tfoot {
+            td {
+                color: lighten($color_text, 40);
+                padding: 2px 8px;
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Components //////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+@import "charts";
+@import "overlay";
+@import "journal-table";
+@import "tree-table";
+@import "filter";
+
+ul.warnings {
+    margin: 0;
+    padding: 0;
+
+    & > li {
+        display: block;
+        text-align: center;
+        padding: 10px;
+        line-height: 1.4em;
+
+        &.error {
+            color: white;
+            background: $color_error;
+        }
+    }
+}
+
+span.status-indicator {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+
+    &:hover { cursor: pointer; }
+
+    &.status-indicator-big {
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    &.status-red { background: $color_status_red; }
+    &.status-yellow { background: $color_status_yellow; }
+    &.status-green { background: $color_status_green; }
+    &.status-gray { background: $color_status_gray; }
+}
+
+table.sortable {
+    th[data-sort] {
+        padding-right: 18px;
+        position: relative;
+        cursor: pointer;
+
+        &.sorting-asc:after, &.sorting-desc:after {
+            content: "";
+            display: block;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid darken($color_background, 47);
+            position: absolute;
+            right: 4px;
+            top: 8px;
+        }
+
+        &.sorting-asc:after {
+            top: 6px;
+            border-top: none;
+            border-bottom: 5px solid darken($color_background, 47);
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// View-specific ///////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+@import "query";
+@import "editor";
+
+#assets, // TODO auch mit klassen
+#liabilities,
+#equity,
+#income,
+#expenses {
+    table {
+        width: 100%;
+    }
+}
+
+table.errors,
+table.holdings,
+table.net_worth {
+    a {
+        font-weight: bold;
+    }
+}
+
+table.options_map,
+table.settings {
+    font-size: 12px;
+
+    td:nth-child(1) {
+        font-weight: bold;
+        text-align: left;
+        padding-left: 6px;
+    }
+
+    td:nth-child(2) {
+        white-space: normal;
+        text-align: left;
+        padding-left: 6px;
+
+        pre { font-size: 13px; }
+    }
+}
+
+table.commodity,
+table.events {
+    td:first-child {
+        min-width: inherit;
+    }
+}
+
+table.statistics-update-activity {
+    thead th:nth-child(2) { padding-left: 0; }
+    tbody td.uptodate-indicator { text-align: center; }
+    span.status-indicator { margin: 0 auto; }
+}
+
+// Statistics
+div.left.statistics {
+    margin-right: 30px;
+
+    table.statistics td:first-child a {
+        font-weight: bold;
+    }
+}
+
+table.tree-table td.account,
+table.holdings,
+table.queryresults {
+    span.status-indicator {
+        float: right;
+        margin-top: 3px;
+        margin-left: 6px;
+    }
 }

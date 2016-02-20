@@ -1,26 +1,5 @@
 // Chartist
 
-$ct-bar-width: 14px;
-$ct-line-width: 3px;
-$ct-point-size: 6px;
-$ct-series-colors: (
-    #990000,
-    #113861,
-    #777,
-    #1B9900,
-    #FF8800,
-    #59922b,
-    #0544d3,
-    #6b0392,
-    #f05b4f,
-    #dda458,
-    #eacf7d,
-    #86797d,
-    #b2c326,
-    #6188e2,
-    #a748ca
-);
-
 @import "~chartist/dist/scss/chartist";
 
 .charts {

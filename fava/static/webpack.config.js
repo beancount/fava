@@ -2,11 +2,15 @@ var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var extractThemeDefaultCSS     = new ExtractTextPlugin('theme_default.css',     { allChunks: true });
+var extractThemeAlternativeCSS = new ExtractTextPlugin('theme_alternative.css', { allChunks: true });
+
 module.exports = {
   entry: {
     'app': './javascript/main.js',
     'editor': './javascript/editor.js',
-    'styles': './sass/styles.scss'
+    'theme_default': './sass/theme_default.scss',
+    'theme_alternative': './sass/theme_alternative.scss'
   },
   output: {
     path: __dirname + '/gen',
@@ -15,12 +19,20 @@ module.exports = {
   module: {
     loaders: [
       {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+        test: /theme_default\.scss$/,
+        loader: extractThemeDefaultCSS.extract('style-loader', 'css-loader!sass-loader')
+      },
+      {
+        test: /theme_alternative\.scss$/,
+        loader: extractThemeAlternativeCSS.extract('style-loader', 'css-loader!sass-loader')
       },
       {
         test: [/ace-builds.*/, /.*ace-mode-beancount.*/],
         loader: 'script-loader'
+      },
+      {
+        test   : /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
+        loader : 'file-loader'
       }
     ]
   },
@@ -30,8 +42,7 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery',
     }),
-    new ExtractTextPlugin('styles.css', {
-      allChunks: true
-    })
+    extractThemeDefaultCSS,
+    extractThemeAlternativeCSS
   ],
 }

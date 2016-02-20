@@ -1,0 +1,169 @@
+// Thanks to Rubén Gómez (on the Beancount Mailing List) for providing the styles for this theme
+// https://github.com/aumayr/fava/issues/59
+
+// Fonts
+
+// Tipografía Share Tech Mono http://www.fontsquirrel.com/fonts/share-regular
+@font-face {
+    font-family: ShareTechMono;
+    src: url("../fonts/Share-TechMono-webfont.eot");
+    src: url("../fonts/Share-TechMono-webfont.eot?#iefix") format('embedded-opentype'),
+         url("../fonts/Share-TechMono-webfont.woff") format('woff'),
+         url("../fonts/Share-TechMono-webfont.ttf") format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+$font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+$font_family_monospaced: ShareTechMono, serif;
+
+// Colors
+
+$color_background: #D1C7C5;
+$color_text: #725858;
+$color_links: #D36455;
+$color_headings: #333;
+$color_error: #990000;
+
+$color_sidebar_text: #dadad9;
+$color_sidebar_background: #DDD8D5;
+$color_sidebar_links: #36382e;
+
+$color_header: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
+$color_header_bottom: #2e3d54;
+$color_header_text: white;
+
+$color_status_red: #990000;
+$color_status_yellow: #edd42f;
+$color_status_green: #007f41;
+$color_status_gray: #aaa;
+
+$color_journalentry_close: #888;
+$color_journalentry_pending: #f8a;
+$color_journalentry_open: #e8e8e8;
+$color_storm_dust_approx: #606060;
+$color_journalentry_note: #aad0ff;
+$color_journalentry_document: #ffc8ff;
+$color_journalentry_balance: #cfc;
+$color_journalentry_pad: #8ff;
+$color_journalentry_padding: #cff;
+$color_journalentry_postingwarning: #f66;
+
+$color_journaltable_header: $color_text;
+$color_journaltable_border: white;
+$color_journaltable_metadata: #85aacf;
+$color_journaltable_tag: #6aa2db;
+
+$color_treetable_header_bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
+
+$color_treetable_expander: #afc1d3;
+
+$color_treemap_text: white;
+
+$color_editor_comment: #999988;
+$color_editor_directive: #333;
+$color_editor_class: #bb8844;
+$color_editor_date: #009999;
+$color_editor_constant: #008080;
+$color_editor_account: #333;
+$color_editor_invalid: #333;
+$color_editor_activeline: #ffffcc;
+
+$ct-bar-width: 14px;
+$ct-line-width: 3px;
+$ct-point-size: 6px;
+$ct-series-colors: (
+    $color_links,
+    darken($color_background, 40),
+    #777,
+    #1B9900,
+    #FF8800,
+    #59922b,
+    #0544d3,
+    #6b0392,
+    #f05b4f,
+    #dda458,
+    #eacf7d,
+    #86797d,
+    #b2c326,
+    #6188e2,
+    #a748ca
+);
+
+// Import everything
+
+@import "base";
+
+// Overrides
+
+header { border-bottom: none; }
+
+header nav ul.topmenu>li {
+    background: $color_background;
+    margin-top: 5px;
+}
+
+header nav ul.topmenu>li>a {
+    color: $color_text;
+    line-height: 36px;
+}
+
+header nav ul.topmenu>li>a:after { border-top-color: $color_text; }
+div.filter>ul>li.info a { color: $color_text; }
+div.filter { background: white; }
+div.filter>ul>li.info { color: lighten($color_text, 20); }
+div.filter div.inputcontainer input { border-color: $color_background; }
+
+div.main aside { border-right: none; }
+
+div.main aside ul.navigation li.selected,
+div.main aside ul.navigation li a:hover {
+    background: $color_background;
+}
+
+.ace_editor.ace-chrome .ace_gutter { color: $color_text; }
+
+article table tbody tr td,
+article table thead tr th,
+table.journal-table td {
+    border-left: none; border-right: none;
+}
+
+article table tfoot tr td {
+    border: none;
+    background: #DDD8D5;
+    color: $color_text;
+    font-family: $font_family_monospaced;
+}
+
+article table tr td.num {
+    font-size: 14px !important;
+    text-align: right;
+}
+
+table.tree-table span.expander { border-top-color: darken($color_links, 5); }
+table.tree-table span.expander.toggled { border-left-color: darken($color_links, 5); }
+
+input#toggle-chart,
+input#toggle-metadata,
+input#toggle-legs {
+    border: 1px solid $color_links;
+    color: $color_links;
+    background: transparent;
+    border-radius: 6px;
+}
+
+article div.headerline h3 a { color: lighten($color_text, 55); }
+article h1 a:link, article h1 a:visited { color: black; }
+article table tbody tr td.change.num { background: #DED7D6; }
+
+table.journal-table td a.tag {
+    background: #4C6684;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-weight: normal;
+    margin-right: 5px;
+    color: lighten(#748496, 20);
+
+    span { color: #748496; }
+}
