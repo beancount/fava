@@ -5,12 +5,12 @@ div.overlay-wrapper {
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
     z-index: 99;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(darken($color_background, 100), 0.6);
     text-align: center;
     cursor: pointer;
 
     div.overlay {
-        background: white;
+        background: $color_background;
         margin: 60px auto 0 auto;
         padding: 20px;
         width: 800px;
@@ -29,19 +29,19 @@ div.overlay-wrapper {
             min-width: 20px;
             text-align: center;
             padding: 3px 6px;
-            color: #555;
+            color: lighten($color_text, 30);
             vertical-align: middle;
-            background-color: #fcfcfc;
-            border: solid 1px #ccc;
-            border-bottom-color: #bbb;
+            background-color: darken($color_background, 1);
+            border: solid 1px darken($color_background, 20);
+            border-bottom-color: darken($color_background, 27);
             border-radius: 3px;
-            box-shadow: inset 0 -1px 0 #bbb;
+            box-shadow: inset 0 -1px 0 darken($color_background, 27);
             margin: 0 1px 3px 0;
         }
 
         a.close {
             float: right;
-            color: #aaa;
+            color: lighten($color_text, 67);
         }
     }
 }

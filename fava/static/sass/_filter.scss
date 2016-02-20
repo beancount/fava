@@ -2,14 +2,14 @@
 
 div.filter {
     display: none;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: $color_background;
+    border: 1px solid darken($color_background, 20);
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 6px rgba($color_text, 0.2);
     position: absolute;
     right: 0;
-    color: black;
+    color: $color_text;
     width: 400px;
     z-index: 10;
     top: 41px;
@@ -20,11 +20,11 @@ div.filter {
 
         & > li.info {
             padding: 3px 10px;
-            color: #999;
+            color: lighten($color_text, 60);
             line-height: 1.3em;
 
             a {
-                color: #666;
+                color: lighten($color_text, 40);
                 text-decoration: underline;
             }
         }
@@ -35,13 +35,13 @@ div.filter {
                 display: block;
                 line-height: 1;
                 padding: 8px 10px;
-                color: #3572b0 !important;
+                color: $color_links !important;
             }
 
             &.selected a,
             a:hover {
-                background-color: #3572b0 !important;
-                color: white !important;
+                background-color: $color_links !important;
+                color: lighten($color_text, 100) !important;
             }
 
              &.selected a {
@@ -57,7 +57,7 @@ div.filter {
         input {
             height: 26px;
             display: block;
-            border: 1px solid #ccc;
+            border: 1px solid lighten($color_text, 80);
             border-radius: 5px;
             line-height: 26px;
             width: 100%;

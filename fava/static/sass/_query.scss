@@ -4,7 +4,7 @@ article#page-query {
     h3 { margin-top: 25px; }
 
     p.error {
-        color: #990000;
+        color: $color_error;
         margin: 20px 30px 0 30px;
         font-size: 13px;
         line-height: 1.3em;
@@ -13,7 +13,7 @@ article#page-query {
     }
 
     div.stored-queries {
-        color: #666;
+        color: lighten($color_text, 40);
         font-size: 1px;
         float: right;
         margin-bottom: 10px;
@@ -24,7 +24,7 @@ article#page-query {
     }
 
     div.sample {
-        h3, li, code { color: #AAA; }
+        h3, li, code { color: lighten($color_text, 67); }
 
         ul {
             margin-top: 10px;
@@ -39,5 +39,11 @@ article#page-query {
                 }
             }
         }
+    }
+
+    td.query-error {
+        background: $color_error;
+        color: lighten($color_text, 100);
+        font-family: $font_family_monospaced;
     }
 }

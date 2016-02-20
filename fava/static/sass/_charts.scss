@@ -30,7 +30,7 @@ $ct-series-colors: (
     }
 
     .chart-labels {
-        color: rgba(0, 0, 0, 0.2);
+        color: rgba($color_text, 0.2);
         font-size: 11px;
         line-height: 14px;
         font-weight: bold;
@@ -40,19 +40,19 @@ $ct-series-colors: (
         margin-top: 8px;
 
         label {
-            color: rgba(0, 0, 0, 0.3);
+            color: rgba($color_text, 0.3);
             padding: 0 5px;
 
             &:hover {
                 text-decoration: underline;
-                color: rgba(0, 0, 0, 0.4);
+                color: rgba($color_text, 0.4);
                 cursor: pointer;
             }
 
-            &.selected { color: rgba(0, 0, 0, 0.5); }
+            &.selected { color: rgba($color_text, 0.5); }
         }
 
-        label+label { border-left: 1px solid rgba(0, 0, 0, 0.4) }
+        label+label { border-left: 1px solid rgba($color_text, 0.4) }
     }
 
     .chart-container {
@@ -75,7 +75,7 @@ $ct-series-colors: (
 
         &.chart-no-data div {
             font-style: italic;
-            color: #999;
+            color: lighten($color_text, 60);
             position: absolute;
             top: 0;
             left: 0;
@@ -141,9 +141,9 @@ $ct-series-colors: (
     opacity: 0;
     min-width: 5em;
     padding: .5em;
-    background: rgb(244, 244, 244);
+    background: darken($color_background, 5);
     border: 1px solid #CCC;
-    box-shadow: 0px 0px 5px rgb(221, 221, 221);
+    box-shadow: 0px 0px 5px darken($color_background, 6);
     text-align: center;
     pointer-events: none;
     z-index: 1;
@@ -161,7 +161,7 @@ $ct-series-colors: (
         height: 0;
         margin-left: -15px;
         border: 15px solid transparent;
-        border-top-color: #ccc;
+        border-top-color: darken($color_background, 20);
     }
 
     &.tooltip-show { opacity: 1; }
@@ -171,7 +171,7 @@ $ct-series-colors: (
         font-size: 0.9em;
         display: block;
         margin-top: 5px;
-        color: #777;
+        color: darken($color_background, 50);
     }
 }
 
@@ -181,7 +181,7 @@ $ct-series-colors: (
     z-index: 8;
 
     a {
-        color: white;
+        color: $color_treemap_text;
 
         &:hover { text-decoration: underline; }
     }
@@ -190,9 +190,9 @@ $ct-series-colors: (
 .treetable-popover {
     z-index: 12;
     position: absolute;
-    background: rgb(244, 244, 244);
-    border: 1px solid #CCC;
-    box-shadow: 0px 0px 5px rgb(221, 221, 221);
+    background: darken($color_background, 5);
+    border: 1px solid darken($color_background, 20);
+    box-shadow: 0px 0px 5px darken($color_background, 6);
     padding: 10px 5px 0 15px;
 
     &:before {
@@ -204,7 +204,7 @@ $ct-series-colors: (
         height: 0;
         margin-left: -15px;
         border: 15px solid transparent;
-        border-top-color: #ccc;
+        border-top-color: darken($color_background, 20);
     }
 
     dl {

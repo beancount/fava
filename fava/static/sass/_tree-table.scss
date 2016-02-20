@@ -12,7 +12,7 @@ table.tree-table {
     tr.hides {
         span.tree-balance {
             display: block;
-            color: black;
+            color: $color_text;
         }
 
         span.balance {
@@ -22,7 +22,7 @@ table.tree-table {
 
     &:hover {
         tr.hides td.num {
-            color: black;
+            color: $color_text;
         }
     }
 
@@ -31,7 +31,7 @@ table.tree-table {
         height: 5px;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
-        border-top: 5px solid #AFC1D3;
+        border-top: 5px solid $color_treetable_expander;
         position: absolute;
         left: -15px;
         top: 5px;
@@ -40,7 +40,7 @@ table.tree-table {
         &.toggled {
             border-top: 5px solid transparent;
             border-bottom: 5px solid transparent;
-            border-left: 5px solid #AFC1D3;
+            border-left: 5px solid $color_treetable_expander;
             left: -12px;
             top: 2px;
         }
@@ -48,7 +48,7 @@ table.tree-table {
 
     a.expand-all {
        float: right;
-       color: #888;
+       color: lighten($color_text, 53);
        font-weight: normal;
        display: none;
 

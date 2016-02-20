@@ -30,5 +30,5 @@
 {% elif type|string == "<class 'beancount.core.position.Position'>" %}
     <td class="num">{{ value.units.number|format_currency }} {{value.units.currency }}</td>
 {% else %}
-    <td style="background: #990000; color: white; font-family: monospace;" title="Type {{ type|string }} not recognized">{{ value }}</td>
+    <td class="query-error" title="Type {{ type|string }} not recognized">{{ value }}</td>
 {% endif %}

@@ -1,26 +1,12 @@
 @import "base";
 
-// Colors
-
-$white: #fff;
-$color_suva_gray_approx: #888;
-$color_tickle_me_pink_approx: #f8a;
-$color_gray_nurse_approx: #e8e8e8;
-$color_storm_dust_approx: #606060;
-$color_sail_approx: #aad0ff;
-$color_pink_lace_approx: #ffc8ff;
-$color_snowy_mint_approx: #cfc;
-$color_anakiwa_approx: #8ff;
-$color_onahau_approx: #cff;
-$color_bittersweet_approx: #f66;
-
 // Structural and generic elements
 
 header {
     position: relative;
-    background: #205081;
-    border-bottom: 1px solid #2e3d54;
-    color: #fff;
+    background: $color_header;
+    border-bottom: 1px solid $color_header_bottom;
+    color: $color_header_text;
     padding: 0 10px;
     height: 41px;
     z-index: 2;
@@ -33,7 +19,7 @@ header {
 
         h1 {
             float: left;
-            color: #fff;
+            color: $color_header_text;
             display: block;
             line-height: 1;
             padding: 13px 10px;
@@ -44,7 +30,7 @@ header {
     }
 
     a {
-        color: white;
+        color: $color_header_text;
         text-decoration: none;
 
         &:hover {
@@ -68,16 +54,16 @@ header {
                 & > a {
                     position: relative;
                     padding-right: 23px !important;
-                    color: #fff;
+                    color: $color_header_text;
                     display: block;
                     line-height: 41px;
                     padding: 0 10px;
 
-                    &:hover { background-color: #3572b0;}
+                    &:hover { background-color: $color_links; }
 
                     &::after {
                         border: 4px solid transparent;
-                        border-top-color: #fff;
+                        border-top-color: $color_background;
                         content: "";
                         height: 0;
                         margin-left: -18px;
@@ -98,7 +84,7 @@ header {
 
                 &.selected > a,
                 &.opened > a {
-                    background-color: #3572b0;
+                    background-color: $color_links;
                 }
             }
         }
@@ -118,16 +104,16 @@ div.main {
         margin-bottom: -100000px;
         width: 200px;
         float: left;
-        color: #dadad9;
-        border-right: 1px solid #ccc;
-        background-color: #f5f5f5;
+        color: $color_sidebar_text;
+        border-right: 1px solid darken($color_sidebar_background, 16);
+        background-color: $color_sidebar_background;
 
         h3 {
             text-transform: uppercase;
             margin-top: 50px;
             margin-left: 20px;
             font-size: 11px;
-            color: #999;
+            color: darken($color_sidebar_text, 25);
         }
 
         ul.navigation {
@@ -143,20 +129,20 @@ div.main {
                 display: block;
 
                 &.selected, a:hover {
-                    background-color: #e6e6e6;
-                    color: #3572b0;
+                    background-color: darken($color_sidebar_background, 6);
+                    color: $color_links;
                 }
 
                 a {
-                    color: #36382e;
+                    color: $color_sidebar_links;
                     display: block;
                     padding: 7px 10px 7px 20px;
 
                     span {
                         float: right;
                         margin-top: -2px;
-                        background: rgba(0, 0, 0, 0.2);
-                        color: rgba(51, 51, 51, 0.8);
+                        background: rgba(darken($color_sidebar_background, 95), 0.2);
+                        color: rgba(darken($color_sidebar_background, 80), 0.8);
                         border-radius: 2em;
                         font-size: 11px;
                         font-weight: 700;
@@ -200,10 +186,10 @@ article {
             padding: 6px 10px;
 
             a {
-                color: #aaa;
+                color: lighten($color_text, 67);
 
                 &:hover {
-                    color: #333;
+                    color: lighten($color_text, 20);
                     text-decoration: underline;
                 }
             }
@@ -213,13 +199,13 @@ article {
     h1 {
         a:link,
         a:visited {
-            color: #333;
+            color: lighten($color_text, 20);
 
             &:hover { text-decoration: underline; }
         }
 
         div.last-activity {
-            color: #999;
+            color: lighten($color_text, 60);
             display: inline-block;
             margin-left: 10px;
             font-size: 12px;
@@ -227,9 +213,9 @@ article {
             font-style: italic;
 
             a {
-                color: #999;
+                color: lighten($color_text, 60);
 
-                &:hover { color: #333; }
+                &:hover { color: lighten($color_text, 20); }
             }
         }
 
@@ -259,12 +245,12 @@ article {
         font-size: 13px;
 
         code {
-            background: #eee;
+            background: darken($color_background, 7);
             display: inline-block;
             font-size: 13px;
             padding: 0 4px 2px 5px;
             border-radius: 3px;
-            border: 1px solid #ddd;
+            border: 1px solid darken($color_background, 13);
         }
 
         a { text-decoration: underline; }
@@ -273,7 +259,7 @@ article {
     div.loading {
         margin-top: 20px;
         font-style: italic;
-        color: #999;
+        color: lighten($color_text, 60);
     }
 
     div.table-filter,
@@ -304,17 +290,17 @@ article {
             // class ".tree-balance-show" is added via JavaScript
             tr.parent td.num,
             tr td.num.tree-balance-show {
-                color: #BEBEBE;
+                color: lighten($color_text, 75);
             }
         }
 
         tbody {
             tr {
-                &:nth-child(2n) { background: #F8F8F8; }
+                &:nth-child(2n) { background: darken($color_background, 3); }
 
                 &.parent td.num,
                 td.num.tree-balance-show {
-                    color: #E5E5E5;
+                    color: lighten($color_text, 90);
                 }
 
                 &.hides td.num {
@@ -323,14 +309,14 @@ article {
                 }
 
                 td {
-                    border: 1px solid $color_gray_nurse_approx;
+                    border: 1px solid lighten($color_text, 91);
                     padding: 3px 6px;
                     white-space: nowrap;
 
                     &:first-child { min-width: 200px; }
 
                     &.num {
-                        color: black;
+                        color: $color_text;
                         padding-left: 14px;
                         font: 1.1em / 1.1em $font_family_monospaced;
                         text-align: right;
@@ -363,17 +349,17 @@ article {
 
         thead th,
         tfoot td {
-            border: 1px solid #dadad9;
+            border: 1px solid darken($color_background, 15);
             padding: 3px 8px;
             font-weight: bold;
-            background: #dadad9;
-            color: $color_suva_gray_approx;
+            background: darken($color_background, 15);
+            color: lighten($color_text, 53);
             white-space: nowrap;
         }
 
         tfoot {
             td {
-                color: #666;
+                color: lighten($color_text, 40);
                 padding: 2px 8px;
             }
         }
@@ -402,7 +388,7 @@ ul.warnings {
 
         &.error {
             color: white;
-            background: #990000;
+            background: $color_error;
         }
     }
 }
@@ -421,10 +407,10 @@ span.status-indicator {
         border-radius: 10px;
     }
 
-    &.status-red { background: #990000; }
-    &.status-yellow { background: #EDD42F; }
-    &.status-green { background: #007F41; }
-    &.status-gray { background: #AAA; }
+    &.status-red { background: $color_status_red; }
+    &.status-yellow { background: $color_status_yellow; }
+    &.status-green { background: $color_status_green; }
+    &.status-gray { background: $color_status_gray; }
 }
 
 table.sortable {
@@ -438,7 +424,7 @@ table.sortable {
             display: block;
             border-left: 5px solid transparent;
             border-right: 5px solid transparent;
-            border-top: 5px solid #888888;
+            border-top: 5px solid darken($color_background, 47);
             position: absolute;
             right: 4px;
             top: 8px;
@@ -447,7 +433,7 @@ table.sortable {
         &.sorting-asc:after {
             top: 6px;
             border-top: none;
-            border-bottom: 5px solid #888888;
+            border-bottom: 5px solid darken($color_background, 47);
         }
     }
 }

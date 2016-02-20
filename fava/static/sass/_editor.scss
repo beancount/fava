@@ -21,12 +21,12 @@ div.editor-wrapper {
 }
 
 .ace_editor.ace-chrome {
-    border: 1px solid #e8e8e8;
+    border: 1px solid darken($color_background, 9);
 
     .ace_gutter {
-        border-right: 1px solid #e8e8e8;
+        border-right: 1px solid darken($color_background, 9);
         background: white;
-        color: #A7A5A5;
+        color: lighten($color_text, 65);
         font-weight: normal;
     }
 
@@ -35,41 +35,41 @@ div.editor-wrapper {
     }
 
     .ace_comment {
-        color: #999988;
+        color: $color_editor_comment;
         font-style: italic;
     }
 
     .ace_directive {
-        color: #333;
+        color: $color_editor_directive;
         font-weight: bold;
     }
 
     .ace_class,
     .ace_double,
     .ace_triple {
-        color: #bb8844;
+        color: $color_editor_class;
     }
 
     .ace_constant.ace_numeric.ace_date {
-        color: #009999;
+        color: $color_editor_date;
     }
 
     .ace_constant,
     .ace_constant.ace_language,
     .ace_tag {
-        color: #008080;
+        color: $color_editor_constant;
     }
 
     .ace_account {
-        color: #333;
+        color: $color_editor_account;
     }
 
     .ace_invalid {
-        color: #333;
+        color: $color_editor_invalid;
         background: transparent;
     }
 
-    // .ace_marker-layer .ace_active-line { background: #ffffcc; }
+    // .ace_marker-layer .ace_active-line { background: $color_editor_activeline; }
 
     &.ace_autocomplete .ace_content {
         font-family: $font_family_monospaced;

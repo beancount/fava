@@ -4,7 +4,7 @@ table.journal-table {
     width: 100%;
 
     th {
-        color: $color_suva_gray_approx;
+        color: $color_journaltable_header;
 
         &.description {
             width: 90%;
@@ -39,7 +39,7 @@ table.journal-table {
                     margin-right: 10px;
                     font-weight: normal;
                     font-style: italic;
-                    color: #85AACF;
+                    color: $color_journaltable_metadata;
                 }
 
                 dd {
@@ -52,26 +52,24 @@ table.journal-table {
                     }
                 }
             }
-
-            &.transaction dl.metadata { background: #f1f1f1; }
         }
 
         // Journal entry types
 
-        &.open              { background-color: $color_gray_nurse_approx;       }
-        &.close             { background-color: $color_suva_gray_approx;        }
-        &.note              { background-color: $color_sail_approx;             }
-        &.query             { background-color: $color_sail_approx;             }
-        &.pad               { background-color: $color_anakiwa_approx;          }
-        &.padding           { background-color: $color_onahau_approx;           }
-        &.summarize         { background-color: $color_onahau_approx;           }
-        &.transfer          { background-color: $color_onahau_approx;           }
-        &.pending           { background-color: $color_tickle_me_pink_approx;   }
-        &.document          { background-color: $color_pink_lace_approx;        }
-        &.balance           { background-color: $color_snowy_mint_approx;       }
-        &.balance.fail      { background-color: $color_tickle_me_pink_approx;   }
-        &.posting           { background-color: $color_gray_nurse_approx;       }
-        &.posting.warning   { background-color: $color_bittersweet_approx;      }
+        &.open              { background-color: $color_journalentry_open;            }
+        &.close             { background-color: $color_journalentry_close;           }
+        &.note              { background-color: $color_journalentry_note;            }
+        &.query             { background-color: $color_journalentry_note;            }
+        &.pad               { background-color: $color_journalentry_pad;             }
+        &.padding           { background-color: $color_journalentry_padding;         }
+        &.summarize         { background-color: $color_journalentry_padding;         }
+        &.transfer          { background-color: $color_journalentry_padding;         }
+        &.pending           { background-color: $color_journalentry_pending;         }
+        &.document          { background-color: $color_journalentry_document;        }
+        &.balance           { background-color: $color_journalentry_balance;         }
+        &.balance.fail      { background-color: $color_journalentry_pending;         }
+        &.posting           { background-color: $color_journalentry_open;            }
+        &.posting.warning   { background-color: $color_journalentry_postingwarning;  }
 
         &.document a:nth-child(1) { font-weight: normal; }
 
@@ -87,7 +85,7 @@ table.journal-table {
     }
 
     td {
-        border: thin solid $white;
+        border: thin solid $color_journaltable_border;
 
         &:first-child { min-width: inherit; }
 
@@ -113,10 +111,10 @@ table.journal-table {
                 font-weight: normal;
                 display: inline-block;
                 margin-right: 8px;
-                color: #6AA2DB;
+                color: $color_journaltable_tag;
 
                 &:hover {
-                    color: darken(#6AA2DB, 30%);
+                    color: darken($color_journaltable_tag, 30%);
                     text-decoration: underline;
                 }
 
