@@ -49,10 +49,9 @@ $ct-series-colors: (
                 cursor: pointer;
             }
 
-            &.selected {
-                color: rgba(0, 0, 0, 0.5);
-            }
+            &.selected { color: rgba(0, 0, 0, 0.5); }
         }
+
         label+label { border-left: 1px solid rgba(0, 0, 0, 0.4) }
     }
 
@@ -100,20 +99,18 @@ $ct-series-colors: (
             padding-left: 20px;
             margin-bottom: 3px;
             cursor: pointer;
-        }
 
-        li:before {
-            width: 8px;
-            height: 7px;
-            position: absolute;
-            left: 0;
-            content: '';
-            border: 3px solid transparent;
-            top: -1px;
-        }
+            &:before {
+                width: 8px;
+                height: 7px;
+                position: absolute;
+                left: 0;
+                content: '';
+                border: 3px solid transparent;
+                top: -1px;
+            }
 
-        li.inactive:before {
-            background: transparent;
+            &.inactive:before { background: transparent; }
         }
 
         &.ct-legend-inside {
@@ -167,9 +164,7 @@ $ct-series-colors: (
         border-top-color: #ccc;
     }
 
-    &.tooltip-show {
-        opacity: 1;
-    }
+    &.tooltip-show { opacity: 1; }
 
     em {
         font-family: $font_family;
@@ -177,5 +172,52 @@ $ct-series-colors: (
         display: block;
         margin-top: 5px;
         color: #777;
+    }
+}
+
+// Treemaps
+
+.treemap-node .treemap-label {
+    z-index: 8;
+
+    a {
+        color: white;
+
+        &:hover { text-decoration: underline; }
+    }
+}
+
+.treetable-popover {
+    z-index: 12;
+    position: absolute;
+    background: rgb(244, 244, 244);
+    border: 1px solid #CCC;
+    box-shadow: 0px 0px 5px rgb(221, 221, 221);
+    padding: 10px 5px 0 15px;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        margin-left: -15px;
+        border: 15px solid transparent;
+        border-top-color: #ccc;
+    }
+
+    dl {
+        margin-top: 0;
+        min-width: 270px;
+    }
+
+    dt { width: 60px; }
+
+    dd { margin-bottom: 8px; }
+
+    dd code {
+        font-size: 13px;
+        line-height: 1em;
     }
 }

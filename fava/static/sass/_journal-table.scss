@@ -1,0 +1,127 @@
+// Journal table
+
+table.journal-table {
+    width: 100%;
+
+    th {
+        color: $color_suva_gray_approx;
+
+        &.description {
+            width: 90%;
+        }
+    }
+
+    tr {
+        &.has-metadata {
+            td.description {
+                padding-bottom: 0;
+                padding-right: 0;
+            }
+
+            dl.metadata {
+                margin-top: 0;
+                padding: 2px 0 3px 6px;
+                margin: 4px 0 0 -6px;
+                font-size: 11px;
+
+                dt, dd {
+                    margin: 0 0 3px 0;
+
+                    &:last-child {
+                        margin: 0;
+                    }
+                }
+
+                dt {
+                    clear: left;
+                    width: auto;
+                    min-width: 60px;
+                    margin-right: 10px;
+                    font-weight: normal;
+                    font-style: italic;
+                    color: #85AACF;
+                }
+
+                dd {
+                    margin-left: 70px;
+
+                    a {
+                        font-weight: normal;
+
+                        &:hover { text-decoration: underline; }
+                    }
+                }
+            }
+
+            &.transaction dl.metadata { background: #f1f1f1; }
+        }
+
+        // Journal entry types
+
+        &.open              { background-color: $color_gray_nurse_approx;       }
+        &.close             { background-color: $color_suva_gray_approx;        }
+        &.note              { background-color: $color_sail_approx;             }
+        &.query             { background-color: $color_sail_approx;             }
+        &.pad               { background-color: $color_anakiwa_approx;          }
+        &.padding           { background-color: $color_onahau_approx;           }
+        &.summarize         { background-color: $color_onahau_approx;           }
+        &.transfer          { background-color: $color_onahau_approx;           }
+        &.pending           { background-color: $color_tickle_me_pink_approx;   }
+        &.document          { background-color: $color_pink_lace_approx;        }
+        &.balance           { background-color: $color_snowy_mint_approx;       }
+        &.balance.fail      { background-color: $color_tickle_me_pink_approx;   }
+        &.posting           { background-color: $color_gray_nurse_approx;       }
+        &.posting.warning   { background-color: $color_bittersweet_approx;      }
+
+        &.document a:nth-child(1) { font-weight: normal; }
+
+        &.posting {
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        &.transaction,
+        &.padding {
+            cursor: pointer;
+        }
+    }
+
+    td {
+        border: thin solid $white;
+
+        &:first-child { min-width: inherit; }
+
+        &.datecell a { font-weight: normal; }
+        &.flag { text-align: center; }
+        &.posting.leg td { padding: 2px 6px; }
+        &.change { font-weight: bold; }
+
+        &.description {
+            white-space: normal;
+
+            span.links {
+                margin-left: 1em;
+                margin-right: 1em;
+                text-decoration: none;
+            }
+        }
+
+        a {
+            font-weight: bold;
+
+            .tag {
+                font-weight: normal;
+                display: inline-block;
+                margin-right: 8px;
+                color: #6AA2DB;
+
+                &:hover {
+                    color: darken(#6AA2DB, 30%);
+                    text-decoration: underline;
+                }
+
+                span { opacity: 0.4; }
+            }
+        }
+    }
+}

@@ -111,7 +111,7 @@
                 {% endif %}
                 {% if type == 'transaction' %}
                     <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-                    {% for tag in entry.tags %}<a href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+                    {% for tag in entry.tags %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
                 {% endif %}
                 {% if entry.metadata %}
                     <dl class="metadata{% if not show_metadata %} hidden{% endif %}">

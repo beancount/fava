@@ -1,13 +1,13 @@
 // Editor
 
-.editor-wrapper {
+div.editor-wrapper {
     position: relative;
     margin-top: 20px;
 
     &.editor-wrapper-source {
         position: relative;
 
-        .editor {
+        div.editor {
             position: absolute;
             top: 0;
             right: 0;
@@ -16,13 +16,8 @@
         }
     }
 
-    &.editor-wrapper-readonly {
-        margin-bottom: 20px;
-    }
-
-    &.editor-wrapper-query > .editor {
-        height: 180px;
-    }
+    &.editor-wrapper-readonly { margin-bottom: 20px; }
+    &.editor-wrapper-query > div.editor { height: 180px; }
 }
 
 .ace_editor.ace-chrome {
@@ -49,7 +44,9 @@
         font-weight: bold;
     }
 
-    .ace_class, .ace_double, .ace_triple {
+    .ace_class,
+    .ace_double,
+    .ace_triple {
         color: #bb8844;
     }
 
@@ -57,7 +54,9 @@
         color: #009999;
     }
 
-    .ace_constant, .ace_constant.ace_language, .ace_tag {
+    .ace_constant,
+    .ace_constant.ace_language,
+    .ace_tag {
         color: #008080;
     }
 
@@ -78,12 +77,14 @@
     }
 }
 
-form.editor-source {
-    float: right;
-    margin-top: -20px;
-}
+form {
+    &.editor-source {
+        float: right;
+        margin-top: -20px;
+    }
 
-form.editor-save {
-    float: right;
-    margin-top: 10px;
+    &.editor-save {
+        float: right;
+        margin-top: 10px;
+    }
 }

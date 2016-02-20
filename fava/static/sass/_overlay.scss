@@ -1,0 +1,47 @@
+// Overlays
+
+div.overlay-wrapper {
+    display: none;
+    position: fixed;
+    top: 0; bottom: 0; left: 0; right: 0;
+    z-index: 99;
+    background: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    cursor: pointer;
+
+    div.overlay {
+        background: white;
+        margin: 60px auto 0 auto;
+        padding: 20px;
+        width: 800px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        text-align: left;
+        cursor: auto;
+        @include clearfix;
+
+        strong {
+            display: inline-block;
+            margin: 6px 0 5px 0;
+        }
+
+        kbd {
+            display: inline-block;
+            min-width: 20px;
+            text-align: center;
+            padding: 3px 6px;
+            color: #555;
+            vertical-align: middle;
+            background-color: #fcfcfc;
+            border: solid 1px #ccc;
+            border-bottom-color: #bbb;
+            border-radius: 3px;
+            box-shadow: inset 0 -1px 0 #bbb;
+            margin: 0 1px 3px 0;
+        }
+
+        a.close {
+            float: right;
+            color: #aaa;
+        }
+    }
+}

@@ -6,13 +6,15 @@
 $font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
 $font_family_monospaced: monospace;
 
-// Elements
+// Globals
 
 * {
     box-sizing: border-box;
 }
 
-html, body, html > body {
+html,
+body,
+html > body {
     font-family: $font_family;
     font-weight: 400;
     font-size: 12px;
@@ -20,7 +22,10 @@ html, body, html > body {
     min-width: 1235px;
 }
 
-.hidden, .hidden-parent, .hidden-type, .hidden-parent-type {
+.hidden,
+.hidden-parent,
+.hidden-type,
+.hidden-parent-type {
     display: none;
 }
 
@@ -44,15 +49,11 @@ h1, h2, h3, h4, h5 {
 h1 {
     font-size: 18px;
     color: #333;
-
-    // padding: 0 6px 0 0;
     margin: 0 0 .2em 0;
 }
 
 h2 {
     font-size: 16px;
-
-    // margin: 1em 0 .5em 0;
 }
 
 h2.subhead {
@@ -70,15 +71,11 @@ h3 {
 
 h4 {
     font-size: 12px;
-
-    // margin: 1em 0 .8em 0;
     padding-bottom: 3px;
 }
 
 h5 {
     font-size: 10px;
-
-    // margin: 1.5em 0 .5em 0;
     color: #333;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -95,37 +92,35 @@ em, i {
 a {
     text-decoration: underline;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
         color: darken(#3572b0, 40%);
         text-decoration: none;
     }
 
-    &:link, &:visited {
+    &:link,
+    &:visited {
         color: #3572b0;
-
-        // #5b80b2;
         text-decoration: none;
     }
 
-    &:active {
-        outline: none;
-    }
-
-    &:focus {
-        outline: none;
-    }
-
+    &:active,
+    &:focus,
     img {
+        outline: none;
         border: none;
     }
 
-    &.section:link, &.section:visited {
+    &.section:link,
+    &.section:visited {
         color: white;
         text-decoration: none;
     }
 }
 
-code, pre, pre > code {
+code,
+pre,
+pre > code {
     font-family: $font_family_monospaced;
     white-space: pre;
     margin: 0;
@@ -142,7 +137,8 @@ pre {
     }
 }
 
-.halfleft, .halfright {
+.halfleft,
+.halfright {
     width: 50%;
 
     h3 {
