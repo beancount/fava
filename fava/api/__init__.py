@@ -567,7 +567,7 @@ class BeancountReportAPI(object):
         last_entry = journal[-1]
 
         if last_entry['meta']['type'] == 'balance':
-            if 'diff_amount' in last_entry:
+            if last_entry['diff_amount']:
                 return 'red'
             else:
                 return 'green'
