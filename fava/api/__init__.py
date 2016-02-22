@@ -554,29 +554,53 @@ class BeancountReportAPI(object):
     def query(self, bql_query_string, numberify=False):
         return query.run_query(self.entries, self.options, bql_query_string, numberify=numberify)
 
+    def _last_posting_for_account(self, account_name):
+        real_account = realization.get_or_create(self.root_account, account_name)
+
+        if not isinstance(real_account, RealAccount):
+            return None
+
+        if account_name and real_account.account != account_name:
+            return None
+
+        return realization.find_last_active_posting(real_account.txn_postings)
+
     def is_account_uptodate(self, account_name, look_back_days=60):
         """
         green:  if the latest posting is a balance check that passed (i.e., known-good)
         red:    if the latest posting is a balance check that failed (i.e., known-bad)
         yellow: if the latest posting is not a balance check (i.e., unknown)
-        gray:   if the account hasn't been updated in a while (as compared to the last available date in the file)
         """
-        journal = self.journal(account_name=account_name)
-        if len(journal) == 0:
-            return 'gray'
-        last_entry = journal[-1]
 
-        if last_entry['meta']['type'] == 'balance':
-            if last_entry['diff_amount']:
-                return 'red'
+        last_posting = self._last_posting_for_account(account_name)
+
+        if last_posting:
+            if isinstance(last_posting, Balance):
+                if last_posting.diff_amount:
+                    return 'red'
+                else:
+                    return 'green'
             else:
-                return 'green'
-        else:
-            balance_entries = [entry for entry in journal if entry['meta']['type'] == 'balance']
-            if len(balance_entries) == 0:
-                return 'gray'
-            last_balance_entry = balance_entries[-1]
-            if last_balance_entry['date'] + timedelta(days=look_back_days) > last_entry['date']:
                 return 'yellow'
-            else:
-                return 'gray'
+        else:
+            return None
+
+    def last_account_activity_in_days(self, account_name):
+        real_account = realization.get_or_create(self.root_account, account_name)
+
+        if not isinstance(real_account, RealAccount):
+            return 0
+
+        if account_name and real_account.account != account_name:
+            return 0
+
+        last_posting = realization.find_last_active_posting(
+            real_account.txn_postings)
+
+        if last_posting is None or isinstance(last_posting, Close):
+            return 0
+
+        entry = get_entry(last_posting)
+
+        return (date.today() - entry.date).days
+

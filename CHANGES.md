@@ -2,6 +2,13 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-22
+
+  - Changed behavior of the uptodate-status-indicator: Red/green/yellow work as
+    always, but gray is now a separate circle and not shown on closed accounts.
+    The sorting in the Statistics view is now red->yellow->green->none (Issue
+    #35). (Thanks to redstreet for the suggestions)
+
 2016-02-21
 
   - New theme, which can be turned on via the `theme`-key in the settings file
@@ -23,7 +30,7 @@
     default, 5 queries are shown, which can be controlled (or entirely turned
     off) by specifying the `sidebar-show-queries`-key in the settings file
     (Issue #131). (Thanks to Daniel Bos for the PR)
-    
+
 2016-02-15
 
   - Installing via `pip install beancount-fava` now works, all requirements
