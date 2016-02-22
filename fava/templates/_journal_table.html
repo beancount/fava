@@ -101,12 +101,12 @@
                 {% endif %}
                 {% if type == 'balance' %}
                     Balance {{ account_link(entry.account) }}
-                    {% if diff_amount %} fails;
-                        expected = {{ entry.amount|format_currency }} {{ entry.amount_currency }}
-                        balance = {{ entry.balance|format_currency }} {{ entry.amount_currency }}
-                        difference = {{ entry.diff_amount|format_currency }} {{ entry.amount_currency }}
+                    {% if entry.diff_amount %} fails;
+                        expected = {{ entry.amount.number|format_currency }} {{ entry.amount.currency }}
+                        balance = {{ (entry.amount.number + entry.diff_amount.number)|format_currency }} {{ entry.amount.currency }}
+                        difference = {{ entry.diff_amount.number|format_currency }} {{ entry.diff_amount.currency }}
                     {% else %}
-                        has {{ entry.amount }} {{ entry.amount_currency }}
+                        has {{ entry.amount }}
                     {% endif %}
                 {% endif %}
                 {% if type == 'transaction' %}
