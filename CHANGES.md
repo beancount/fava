@@ -9,6 +9,12 @@
     The sorting in the Statistics view is now red->yellow->green->none (Issue
     #35). (Thanks to redstreet for the suggestions)
 
+  - Uptodate-status-indicator is now shown everywhere by default (setting
+    `uptodate-indicator-show-everywhere`), but only enabled for accounts that
+    have the metadata `fava-uptodate-indication: "True"` set on their
+    `open`-directives. The setting `uptodate-indicator-exclude-accounts` is now
+    gone (Issue #35).
+
 2016-02-21
 
   - New theme, which can be turned on via the `theme`-key in the settings file

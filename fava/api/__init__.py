@@ -30,8 +30,8 @@ from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, posting_sortkey,
-                                 Close, Note, Document, Balance, Transaction,
-                                 Event, Query)
+                                 Open, Close, Note, Document, Balance,
+                                 Transaction, Event, Query)
 from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
@@ -604,3 +604,10 @@ class BeancountReportAPI(object):
 
         return (date.today() - entry.date).days
 
+    def account_open_metadata(self, account_name):
+        real_account = realization.get_or_create(self.root_account, account_name)
+        postings = realization.get_postings(real_account)
+        for posting in postings:
+            if isinstance(posting, Open):
+                return posting.meta
+        return {}

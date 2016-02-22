@@ -249,22 +249,11 @@ def template_context():
             return url_for('source', **args)
 
     def uptodate_eligible(account_name):
-        if 'uptodate-indicator-exclude-accounts' not in app.config.user:
+        key = 'fava-uptodate-indication'
+        if key in app.api.account_open_metadata(account_name):
+            return app.api.account_open_metadata(account_name)[key] == 'True'
+        else:
             return False
-
-        exclude_accounts = app.config.user['uptodate-indicator-exclude-accounts'].strip().split("\n")
-
-        if not (account_name.startswith(app.api.options['name_assets']) or
-           account_name.startswith(app.api.options['name_liabilities'])):
-            return False
-
-        if account_name in exclude_accounts:
-            return False
-
-        if account_name not in app.api.all_accounts_leaf_only:
-            return False
-
-        return True
 
     if 'collapse-accounts' in app.config.user:
         collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")
