@@ -2,6 +2,7 @@
 import configparser
 import os
 from datetime import datetime
+import io
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
@@ -87,6 +88,13 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
+def object_to_string(type, value):
+    if str(type) == "<class 'beancount.core.inventory.Inventory'>":
+        return "/".join(["%s %s" % (position.units.number, position.units.currency) for position in value.cost()])
+    elif str(type) == "<class 'beancount.core.position.Position'>":
+        return "%s %s" % (value.units.number, value.units.currency)
+    else:
+        return str(value)
 
 @app.route('/query/')
 def query(bql=None, query_hash=None, result_format='html'):
@@ -111,13 +119,23 @@ def query(bql=None, query_hash=None, result_format='html'):
     if result_format != 'html':
         if query:
             if result:
-                result_array = [["%s" % (name) for name, type in result[0]]]
+                result_array = [["%s" % (name) for name, type_ in result[0]]]
                 for row in result[1]:
-                    result_array.append([str(value) if value != None else "" for value in row])
+                    result_array.append([object_to_string(header[1], row[idx]) for idx, header in enumerate(result[0])])
             else:
                 result_array = [[error]]
 
-            respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+            if result_format in ('xls', 'xlsx', 'ods'):
+                book = pyexcel.Book({
+                    'Results': result_array,
+                    'Query':   [['Query'],[query]]
+                })
+                respIO = io.BytesIO()
+                book.save_to_memory(result_format, respIO)
+            else:
+                respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+
+            respIO.seek(0)
             response = make_response(respIO.read())
             response.headers["Content-Disposition"] = "attachment; filename=query_result.%s" % (result_format)
             return response
@@ -249,22 +267,11 @@ def template_context():
             return url_for('source', **args)
 
     def uptodate_eligible(account_name):
-        if 'uptodate-indicator-exclude-accounts' not in app.config.user:
+        key = 'fava-uptodate-indication'
+        if key in app.api.account_open_metadata(account_name):
+            return app.api.account_open_metadata(account_name)[key] == 'True'
+        else:
             return False
-
-        exclude_accounts = app.config.user['uptodate-indicator-exclude-accounts'].strip().split("\n")
-
-        if not (account_name.startswith(app.api.options['name_assets']) or
-           account_name.startswith(app.api.options['name_liabilities'])):
-            return False
-
-        if account_name in exclude_accounts:
-            return False
-
-        if account_name not in app.api.all_accounts_leaf_only:
-            return False
-
-        return True
 
     if 'collapse-accounts' in app.config.user:
         collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")
