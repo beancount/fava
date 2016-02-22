@@ -555,6 +555,9 @@ class BeancountReportAPI(object):
         return query.run_query(self.entries, self.options, bql_query_string, numberify=numberify)
 
     def _last_posting_for_account(self, account_name):
+        """
+        Returns the last posting for an account (ignores Close)
+        """
         real_account = realization.get_or_create(self.root_account, account_name)
 
         if not isinstance(real_account, RealAccount):
@@ -563,7 +566,16 @@ class BeancountReportAPI(object):
         if account_name and real_account.account != account_name:
             return None
 
-        return realization.find_last_active_posting(real_account.txn_postings)
+        last_posting = realization.find_last_active_posting(real_account.txn_postings)
+
+        if not isinstance(last_posting, Close):
+            return last_posting
+
+        postings = realization.get_postings(real_account)
+        if len(postings) >= 2:
+            return postings[-2]
+
+        return None
 
     def is_account_uptodate(self, account_name, look_back_days=60):
         """
