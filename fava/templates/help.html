@@ -1,0 +1,19 @@
+{% extends "_layout.html" %}
+{% set active_page = page_slug %}
+{% set show_filters = False %}
+
+{% block content %}
+    <div class="help">
+        <div class="help-sidebar">
+            <h4>Help pages</h4>
+            <ul>
+                {% for link, title, _ in help_pages %}
+                    <li><a href="/{{ link }}"{% if link.endswith(page_slug) %} class="selected"{% endif %}>{{ title }}</a>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="help-text">
+            {{ help_html|safe }}
+        </div>
+    </div>
+{% endblock %}

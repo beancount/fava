@@ -36,7 +36,9 @@ setup(
     install_requires=[
         'beancount>=2.0b6',
         'Flask>=0.10.1',
-        'livereload>=2.4.1'
+        'livereload>=2.4.1',
+        'pygments>=2.1.1',
+        'markdown2>=2.3.0'
     ],
     zip_safe=False,
     classifiers=[
