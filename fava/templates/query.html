@@ -37,9 +37,7 @@
         <input type="submit" value="Submit Query">
     </form>
 
-    {% if error or result %}
-        <h3>Result</h3>
-    {% else %}
+    {% if not error and not result %}
         <div class="sample">
             <h3>Sample Queries:</h3>
             <ul>
@@ -51,31 +49,42 @@
     {% endif %}
 
     {% if error %}
+        <h3>Result</h3>
         <p class="error">
             {{ error }}
         </p>
     {% endif %}
 
     {% if result %}
-        <table class="queryresults sortable">
-            <thead>
-                <tr>
-                    {% for name, type in result.0 %}
-                        <th>{{ name }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in result.1 %}
+        <h3>Result</h3>
+        <div class="queryresults-wrapper">
+            <p class="download">
+                Download as
+                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='csv') }}">CSV</a>,
+                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='xls') }}">XLS</a>,
+                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='xlsx') }}">XLSX</a> or
+                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='ods') }}">ODS</a>
+            </p>
+            <table class="queryresults sortable">
+                <thead>
                     <tr>
                         {% for name, type in result.0 %}
-                            {% with value = row[name]  %}
-                                {% include "queryresults/_querycell.html" %}
-                            {% endwith %}
+                            <th>{{ name }}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for row in result.1 %}
+                        <tr>
+                            {% for name, type in result.0 %}
+                                {% with value = row[name]  %}
+                                    {% include "queryresults/_querycell.html" %}
+                                {% endwith %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% endif %}
 {% endblock %}

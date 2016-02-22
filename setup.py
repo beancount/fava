@@ -36,7 +36,11 @@ setup(
     install_requires=[
         'beancount>=2.0b6',
         'Flask>=0.10.1',
-        'livereload>=2.4.1'
+        'livereload>=2.4.1',
+        'pyexcel>=0.2.0',
+        'pyexcel-ods3>=0.1.1',
+        'pyexcel-xls>=0.1.0',
+        'pyexcel-xlsx>=0.1.0'
     ],
     zip_safe=False,
     classifiers=[

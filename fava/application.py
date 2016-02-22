@@ -4,7 +4,12 @@ import os
 from datetime import datetime
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g)
+                   redirect, send_from_directory, g, make_response)
+
+import pyexcel
+import pyexcel.ext.xls
+import pyexcel.ext.xlsx
+import pyexcel.ext.ods3
 
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -84,21 +89,40 @@ def context(ehash=None):
 
 
 @app.route('/query/')
-def query(bql=None, query_hash=None):
-    query_hash = query_hash or request.args.get('query_hash', None)
+def query(bql=None, query_hash=None, result_format='html'):
+    query_hash = request.args.get('query_hash', None)
+    result_format = request.args.get('result_format', 'html')
+
     if query_hash:
         query = app.api.queries(query_hash=query_hash)['query_string'].strip()
     else:
-        query = bql or request.args.get('bql')
+        query = request.args.get('bql', '')
     error = None
     result = None
 
     if query:
         try:
-            result = app.api.query(query)
+            numberify = (request.path == '/query/result.csv')
+            result = app.api.query(query, numberify=numberify)
         except Exception as e:
             result = None
             error = e
+
+    if result_format != 'html':
+        if query:
+            if result:
+                result_array = [["%s" % (name) for name, type in result[0]]]
+                for row in result[1]:
+                    result_array.append([str(value) if value != None else "" for value in row])
+            else:
+                result_array = [[error]]
+
+            respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+            response = make_response(respIO.read())
+            response.headers["Content-Disposition"] = "attachment; filename=query_result.%s" % (result_format)
+            return response
+        else:
+            return redirect(url_for('query'))
 
     return render_template('query.html', query=query, result=result,
                            query_hash=query_hash, error=error)

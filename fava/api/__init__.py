@@ -551,8 +551,8 @@ class BeancountReportAPI(object):
 
         return is_present
 
-    def query(self, bql_query_string):
-        return query.run_query(self.entries, self.options, bql_query_string)
+    def query(self, bql_query_string, numberify=False):
+        return query.run_query(self.entries, self.options, bql_query_string, numberify=numberify)
 
     def is_account_uptodate(self, account_name, look_back_days=60):
         """
