@@ -1,5 +1,12 @@
 # fava
 
+[![plaintextaccounting.org](https://img.shields.io/badge/plaintextaccounting.org-beancount-red.svg)]()
+[![PyPI](https://img.shields.io/pypi/l/beancount-fava.svg)]()
+[![PyPI](https://img.shields.io/pypi/v/beancount-fava.svg)]()
+[![PyPI](https://img.shields.io/pypi/dm/beancount-fava.svg)]()
+[![GitHub commits](https://img.shields.io/github/commits-since/aumayr/fava/v0.2.2.svg)]()
+[![Travis](https://img.shields.io/travis/aumayr/fava.svg)]()
+
 Web interface for the double-entry bookkeeping software
 [beancount](http://furius.ca/beancount/) with a focus on features and usability.
 
