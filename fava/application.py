@@ -87,6 +87,13 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
+def object_to_string(type, value):
+    if str(type) == "<class 'beancount.core.inventory.Inventory'>":
+        return "/".join(["%s %s" % (position.units.number, position.units.currency) for position in value.cost()])
+    elif str(type) == "<class 'beancount.core.position.Position'>":
+        return "%s %s" % (value.units.number, value.units.currency)
+    else:
+        return str(value)
 
 @app.route('/query/')
 def query(bql=None, query_hash=None, result_format='html'):
@@ -111,9 +118,9 @@ def query(bql=None, query_hash=None, result_format='html'):
     if result_format != 'html':
         if query:
             if result:
-                result_array = [["%s" % (name) for name, type in result[0]]]
+                result_array = [["%s" % (name) for name, type_ in result[0]]]
                 for row in result[1]:
-                    result_array.append([str(value) if value != None else "" for value in row])
+                    result_array.append([object_to_string(header[1], row[idx]) for idx, header in enumerate(result[0])])
             else:
                 result_array = [[error]]
 
