@@ -4,6 +4,8 @@
 
 2016-02-22
 
+  - Query results can now be downloaded as CSV, XLS, XLSX and ODS (Issue #145).
+
   - Changed behavior of the uptodate-status-indicator: Red/green/yellow work as
     always, but gray is now a separate circle and not shown on closed accounts.
     The sorting in the Statistics view is now red->yellow->green->none (Issue
