@@ -2,6 +2,7 @@
 import configparser
 import os
 from datetime import datetime
+import io
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
@@ -124,7 +125,17 @@ def query(bql=None, query_hash=None, result_format='html'):
             else:
                 result_array = [[error]]
 
-            respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+            if result_format in ('xls', 'xlsx', 'ods'):
+                book = pyexcel.Book({
+                    'Results': result_array,
+                    'Query':   [['Query'],[query]]
+                })
+                respIO = io.BytesIO()
+                book.save_to_memory(result_format, respIO)
+            else:
+                respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+
+            respIO.seek(0)
             response = make_response(respIO.read())
             response.headers["Content-Disposition"] = "attachment; filename=query_result.%s" % (result_format)
             return response
