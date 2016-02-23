@@ -42,7 +42,8 @@ def list_help_pages():
         title = html.metadata['title']
 
         help_pages.append((slug, title, None))
-    return help_pages
+
+    return sorted(help_pages, key=lambda x: x[1] == 'Index', reverse=True)
 
 app.help_pages = list_help_pages()
 
