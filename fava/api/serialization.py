@@ -1,9 +1,8 @@
-import decimal
 from datetime import date, datetime
 
 from beancount.core import compare
 from beancount.core.data import Transaction
-from beancount.core.amount import Amount
+from beancount.core.amount import Amount, decimal
 from beancount.core.position import Position
 from beancount.core.number import ZERO
 from flask.json import JSONEncoder
