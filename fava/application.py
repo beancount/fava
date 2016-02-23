@@ -30,12 +30,14 @@ app.config.user = app.config.raw['fava']
 app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
 
+app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                         '..', 'docs')
+
 def list_help_pages():
-    docs_dir = '../docs'
     help_pages = []
 
-    for page in os.listdir(docs_dir):
-        html = markdown2.markdown_path(os.path.join(docs_dir, page), extras=["metadata"])
+    for page in os.listdir(app.docs_dir):
+        html = markdown2.markdown_path(os.path.join(app.docs_dir, page), extras=["metadata"])
         slug = "help/%s" % (os.path.splitext(os.path.basename(page))[0])
         title = html.metadata['title']
 
@@ -131,8 +133,7 @@ def get_stored_query(stored_query_hash=None):
 @app.route('/help/')
 @app.route('/help/<string:page_slug>/')
 def help_page(page_slug='index'):
-    docs_dir = '../docs'
-    html = markdown2.markdown_path(os.path.join(docs_dir, page_slug + '.md'), extras=["metadata", "fenced-code-blocks", "tables"])
+    html = markdown2.markdown_path(os.path.join(app.docs_dir, page_slug + '.md'), extras=["metadata", "fenced-code-blocks", "tables"])
     return render_template('help.html', help_html=html, page_slug=page_slug, help_pages=app.help_pages)
 
 @app.route('/journal/')
