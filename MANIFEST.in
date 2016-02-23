@@ -1,5 +1,6 @@
 include CHANGES.md LICENSE README.md
 
+recursive-include fava/docs *
 recursive-include fava/templates *
 recursive-include fava/static/gen *
 recursive-include fava/static/images *

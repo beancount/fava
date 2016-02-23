@@ -37,8 +37,7 @@ app.config.user = app.config.raw['fava']
 app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
 
-app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                         '..', 'docs')
+app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
 
 def list_help_pages():
     help_pages = []
