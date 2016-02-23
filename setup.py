@@ -38,7 +38,7 @@ setup(
         'beancount>=2.0b6',
         'pygments>=2.1.1',
         'beancount-pygments-lexer>=0.1.1',
-        'markdown2>=2.3.0'
+        'markdown2>=2.3.0',
         'Flask>=0.10.1',
         'livereload>=2.4.1',
         'pyexcel>=0.2.0',
