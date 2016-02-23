@@ -1,5 +1,6 @@
 require('jquery-query-object');
 require('jquery-stupid-table/stupidtable');
+require('jquery-dragster');
 
 window.Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
@@ -38,6 +39,59 @@ $(document).ready(function() {
     if ($('#copy-balances').length) {
         clipboard.initClipboard();
     };
+
+    // File uploads via Drag and Drop on elements with class "droptarget" and
+    // attribute "data-account-name"
+    $('.droptarget').bind({
+        dragenter: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+
+        dragover: function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+
+        drop: function(e) {
+            e.preventDefault();
+            var files = e.originalEvent.dataTransfer.files;
+
+            for (var i = 0; i < files.length; i++) {
+                var fd = new FormData();
+                fd.append('file', files[i]);
+                fd.append('account_name', $(this).attr('data-account-name'));
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/document/add/',
+                    data: fd,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    async: false,
+                    success: function(data) {
+                       alert(data);
+                    },
+                    error: function() {
+                        alert("Error while uploading.")
+                    }
+               });
+            }
+        }
+    });
+
+    $('.droptarget').dragster({
+        enter: function (dragsterEvent, event) {
+            $(this).addClass('dragover');
+        },
+        leave: function (dragsterEvent, event) {
+            $(this).removeClass('dragover');
+        },
+        drop: function (dragsterEvent, event) {
+            $(this).removeClass('dragover');
+        }
+    });
 
     // Keyboard shortcuts
 

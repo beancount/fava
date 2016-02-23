@@ -6,6 +6,7 @@ import io
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
+from werkzeug import secure_filename
 
 import pyexcel
 import pyexcel.ext.xls
@@ -67,22 +68,36 @@ def index():
     return redirect(url_for('report', report_name='income_statement'))
 
 
-@app.route('/document/')
+@app.route('/document/', methods=['GET'])
+@app.route('/document/add/', methods=['POST'])
 def document():
-    document_path = request.args.get('file_path', None)
+    if request.method == "GET":
+        document_path = request.args.get('file_path', None)
 
-    if document_path and app.api.is_valid_document(document_path):
-        # metadata-statement-paths may be relative to the beancount-file
-        if not os.path.isabs(document_path):
-            document_path = os.path.join(os.path.dirname(
-                os.path.realpath(app.beancount_file)), document_path)
+        if document_path and app.api.is_valid_document(document_path):
+            # metadata-statement-paths may be relative to the beancount-file
+            if not os.path.isabs(document_path):
+                document_path = os.path.join(os.path.dirname(
+                    os.path.realpath(app.beancount_file)), document_path)
 
-        directory = os.path.dirname(document_path)
-        filename = os.path.basename(document_path)
-        return send_from_directory(directory, filename, as_attachment=True)
+            directory = os.path.dirname(document_path)
+            filename = os.path.basename(document_path)
+            return send_from_directory(directory, filename, as_attachment=True)
+        else:
+            return "File \"{}\" not found in entries.".format(document_path), 404
     else:
-        return "File \"{}\" not found in entries.".format(document_path), 404
+        file = request.files['file']
+        if file and len(app.api.options['documents']) > 0: # and allowed_file(file.filename):
+            # TOOD Probably it should ask to enter a date, if the document
+            #      doesn't start with one, so you don't need to rename the
+            #      documents in advance.
+            filepath = os.path.join(os.path.dirname(app.beancount_file),
+                                      app.api.options['documents'][0],
+                                      request.form['account_name'].replace(':', '/').replace('..', ''),
+                                      secure_filename(file.filename))
+            file.save(filepath)
 
+        return "Uploaded to %s" % (filepath), 200
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):

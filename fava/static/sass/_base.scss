@@ -94,7 +94,7 @@ a {
 
     &:hover,
     &:focus {
-        color: darken($color_links, 40%);
+        color: darken($color_links, 40);
         text-decoration: none;
     }
 
@@ -452,6 +452,8 @@ article {
             margin-right: 5px;
         }
     }
+
+    .dragover { background: lighten($color_links, 50); }
 
     table {
         margin-top: 20px;
