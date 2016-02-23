@@ -4,6 +4,8 @@ import os
 from datetime import datetime
 import io
 
+import markdown2
+
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
 from werkzeug import secure_filename
@@ -35,6 +37,22 @@ app.config.user = app.config.raw['fava']
 app.config.user['file_defaults'] = defaults_file
 app.config.user['file_user'] = ''
 
+app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                         '..', 'docs')
+
+def list_help_pages():
+    help_pages = []
+
+    for page in os.listdir(app.docs_dir):
+        html = markdown2.markdown_path(os.path.join(app.docs_dir, page), extras=["metadata"])
+        slug = "help/%s" % (os.path.splitext(os.path.basename(page))[0])
+        title = html.metadata['title']
+
+        help_pages.append((slug, title, None))
+
+    return sorted(help_pages, key=lambda x: x[1] == 'Index', reverse=True)
+
+app.help_pages = list_help_pages()
 
 def load_user_settings(settings_file_path):
     app.config.user['file_user'] = settings_file_path
@@ -170,6 +188,11 @@ def get_stored_query(stored_query_hash=None):
         return redirect(url_for('query', bql=bql,
                                 query_hash=stored_query_hash))
 
+@app.route('/help/')
+@app.route('/help/<string:page_slug>/')
+def help_page(page_slug='index'):
+    html = markdown2.markdown_path(os.path.join(app.docs_dir, page_slug + '.md'), extras=["metadata", "fenced-code-blocks", "tables"])
+    return render_template('help.html', help_html=html, page_slug=page_slug, help_pages=app.help_pages)
 
 @app.route('/journal/')
 def journal():

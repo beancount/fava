@@ -5,6 +5,7 @@ version = __import__('fava').__version__
 author  = __import__('fava').__author__
 author_email  = __import__('fava').__author_email__
 url     = __import__('fava').__url__
+license = __import__('fava').__license__
 
 try:
     from pypandoc import convert
@@ -21,7 +22,7 @@ setup(
     url=url,
     author=author,
     author_email=author_email,
-    license='MIT',
+    license=license,
     keywords='fava beancount beancount-fava beancount-web ledger ledger-cli cl-accounting',
     packages=['fava',
               'fava.util',
@@ -35,6 +36,9 @@ setup(
     },
     install_requires=[
         'beancount>=2.0b6',
+        'pygments>=2.1.1',
+        'beancount-pygments-lexer>=0.1.1',
+        'markdown2>=2.3.0'
         'Flask>=0.10.1',
         'livereload>=2.4.1',
         'pyexcel>=0.2.0',

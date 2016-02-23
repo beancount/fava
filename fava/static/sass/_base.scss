@@ -539,6 +539,21 @@ article {
     }
 }
 
+kbd {
+    display: inline-block;
+    min-width: 20px;
+    text-align: center;
+    padding: 3px 6px;
+    color: lighten($color_text, 30);
+    vertical-align: middle;
+    background-color: darken($color_background, 1);
+    border: solid 1px darken($color_background, 20);
+    border-bottom-color: darken($color_background, 27);
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 darken($color_background, 27);
+    margin: 0 1px 3px 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Components //////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -548,6 +563,7 @@ article {
 @import "journal-table";
 @import "tree-table";
 @import "filter";
+@import "help";
 
 ul.warnings {
     margin: 0;
