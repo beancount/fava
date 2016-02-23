@@ -3,6 +3,20 @@
 article#page-query {
     h3 { margin-top: 25px; }
 
+    div.queryresults-wrapper {
+        display: inline-block;
+        margin-top: -2em;
+
+        &, table { min-width: 400px; }
+
+        p.download {
+            color: #999;
+            float: right;
+        }
+
+        table { clear: right; }
+    }
+
     p.error {
         color: $color_error;
         margin: 20px 30px 0 30px;

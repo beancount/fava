@@ -2,11 +2,18 @@
 import configparser
 import os
 from datetime import datetime
+import io
 
 import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g)
+                   redirect, send_from_directory, g, make_response)
+from werkzeug import secure_filename
+
+import pyexcel
+import pyexcel.ext.xls
+import pyexcel.ext.xlsx
+import pyexcel.ext.ods3
 
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -79,44 +86,94 @@ def index():
     return redirect(url_for('report', report_name='income_statement'))
 
 
-@app.route('/document/')
+@app.route('/document/', methods=['GET'])
+@app.route('/document/add/', methods=['POST'])
 def document():
-    document_path = request.args.get('file_path', None)
+    if request.method == "GET":
+        document_path = request.args.get('file_path', None)
 
-    if document_path and app.api.is_valid_document(document_path):
-        # metadata-statement-paths may be relative to the beancount-file
-        if not os.path.isabs(document_path):
-            document_path = os.path.join(os.path.dirname(
-                os.path.realpath(app.beancount_file)), document_path)
+        if document_path and app.api.is_valid_document(document_path):
+            # metadata-statement-paths may be relative to the beancount-file
+            if not os.path.isabs(document_path):
+                document_path = os.path.join(os.path.dirname(
+                    os.path.realpath(app.beancount_file)), document_path)
 
-        directory = os.path.dirname(document_path)
-        filename = os.path.basename(document_path)
-        return send_from_directory(directory, filename, as_attachment=True)
+            directory = os.path.dirname(document_path)
+            filename = os.path.basename(document_path)
+            return send_from_directory(directory, filename, as_attachment=True)
+        else:
+            return "File \"{}\" not found in entries.".format(document_path), 404
     else:
-        return "File \"{}\" not found in entries.".format(document_path), 404
+        file = request.files['file']
+        if file and len(app.api.options['documents']) > 0: # and allowed_file(file.filename):
+            # TOOD Probably it should ask to enter a date, if the document
+            #      doesn't start with one, so you don't need to rename the
+            #      documents in advance.
+            filepath = os.path.join(os.path.dirname(app.beancount_file),
+                                      app.api.options['documents'][0],
+                                      request.form['account_name'].replace(':', '/').replace('..', ''),
+                                      secure_filename(file.filename))
+            file.save(filepath)
 
+        return "Uploaded to %s" % (filepath), 200
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
+def object_to_string(type, value):
+    if str(type) == "<class 'beancount.core.inventory.Inventory'>":
+        return "/".join(["%s %s" % (position.units.number, position.units.currency) for position in value.cost()])
+    elif str(type) == "<class 'beancount.core.position.Position'>":
+        return "%s %s" % (value.units.number, value.units.currency)
+    else:
+        return str(value)
 
 @app.route('/query/')
-def query(bql=None, query_hash=None):
-    query_hash = query_hash or request.args.get('query_hash', None)
+def query(bql=None, query_hash=None, result_format='html'):
+    query_hash = request.args.get('query_hash', None)
+    result_format = request.args.get('result_format', 'html')
+
     if query_hash:
         query = app.api.queries(query_hash=query_hash)['query_string'].strip()
     else:
-        query = bql or request.args.get('bql')
+        query = request.args.get('bql', '')
     error = None
     result = None
 
     if query:
         try:
-            result = app.api.query(query)
+            numberify = (request.path == '/query/result.csv')
+            result = app.api.query(query, numberify=numberify)
         except Exception as e:
             result = None
             error = e
+
+    if result_format != 'html':
+        if query:
+            if result:
+                result_array = [["%s" % (name) for name, type_ in result[0]]]
+                for row in result[1]:
+                    result_array.append([object_to_string(header[1], row[idx]) for idx, header in enumerate(result[0])])
+            else:
+                result_array = [[error]]
+
+            if result_format in ('xls', 'xlsx', 'ods'):
+                book = pyexcel.Book({
+                    'Results': result_array,
+                    'Query':   [['Query'],[query]]
+                })
+                respIO = io.BytesIO()
+                book.save_to_memory(result_format, respIO)
+            else:
+                respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+
+            respIO.seek(0)
+            response = make_response(respIO.read())
+            response.headers["Content-Disposition"] = "attachment; filename=query_result.%s" % (result_format)
+            return response
+        else:
+            return redirect(url_for('query'))
 
     return render_template('query.html', query=query, result=result,
                            query_hash=query_hash, error=error)
@@ -248,22 +305,11 @@ def template_context():
             return url_for('source', **args)
 
     def uptodate_eligible(account_name):
-        if 'uptodate-indicator-exclude-accounts' not in app.config.user:
+        key = 'fava-uptodate-indication'
+        if key in app.api.account_open_metadata(account_name):
+            return app.api.account_open_metadata(account_name)[key] == 'True'
+        else:
             return False
-
-        exclude_accounts = app.config.user['uptodate-indicator-exclude-accounts'].strip().split("\n")
-
-        if not (account_name.startswith(app.api.options['name_assets']) or
-           account_name.startswith(app.api.options['name_liabilities'])):
-            return False
-
-        if account_name in exclude_accounts:
-            return False
-
-        if account_name not in app.api.all_accounts_leaf_only:
-            return False
-
-        return True
 
     if 'collapse-accounts' in app.config.user:
         collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")

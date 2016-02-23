@@ -1,7 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'statistics' %}
 
-{% import '_account_macros.html' as account_macros %}
+{% import '_account_macros.html' as account_macros with context %}
 
 {% block content %}
     <h1>Statistics</h1>
@@ -34,6 +34,7 @@
         </table>
     </div>
 
+    {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
     <div class="left statistics">
         <h3>Update Activity per Account<input type="submit" class="right" id="copy-balances" value="Copy balance directives" title="Click to copy balance directives for accounts (except green ones) to the clipboard:
 
@@ -53,6 +54,7 @@
             <thead>
                 <tr>
                     <th data-sort="string" class="sorting-asc">Account</th>
+                    <th data-sort="float" data-sort-default="desc"></th>
                     <th data-sort="string" data-sort-default="desc"></th>
                     <th data-sort="string">Last Entry</th>
                     <th data-sort="float">Balance</th>
@@ -64,10 +66,11 @@
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
                         {% if uptodate_eligible(activity.account) %}
                             {% with status=api.is_account_uptodate(activity.account, look_back_days=config.user.getint('uptodate-indicator-grey-lookback-days')) %}
-                                <td data-sort-value="{{ status }}">
+                                <td data-sort-value="{{ status_sortorder[status] }}" class="uptodate-indicator">
                                     {% with account_inventory=api.inventory(activity.account)  %}
                                         <span class="status-indicator status-{{ status }}" title="{{ account_macros.infotext[status] }}
                                         {%- if account_inventory|length > 0 %}
+
 
 
 Click to copy the balance directives to the clipboard:
@@ -77,8 +80,10 @@ Click to copy the balance directives to the clipboard:
                                     {% endwith %}
                                 </td>
                             {% endwith %}
+                            <td class="uptodate-indicator">{{ account_macros.last_account_activity(activity.account) }}</td>
                         {% else %}
-                        <td></td>
+                        <td data-sort-value="0" class="uptodate-indicator"></td>
+                        <td class="uptodate-indicator"></td>
                         {% endif %}
                         <td><a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
                         <td class="num">

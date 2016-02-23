@@ -94,7 +94,7 @@ a {
 
     &:hover,
     &:focus {
-        color: darken($color_links, 40%);
+        color: darken($color_links, 40);
         text-decoration: none;
     }
 
@@ -383,7 +383,14 @@ article {
             }
         }
 
-        span.status-indicator { margin-left: 10px; }
+        span.status-indicator {
+            border-radius: 10px;
+            height: 10px;
+            margin-left: 10px;
+            width: 10px;
+
+            &.status-gray { margin-left: 0; }
+        }
     }
 
     dl {
@@ -445,6 +452,8 @@ article {
             margin-right: 5px;
         }
     }
+
+    .dragover { background: lighten($color_links, 50); }
 
     table {
         margin-top: 20px;
@@ -581,12 +590,6 @@ span.status-indicator {
 
     &:hover { cursor: pointer; }
 
-    &.status-indicator-big {
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
-    }
-
     &.status-red { background: $color_status_red; }
     &.status-yellow { background: $color_status_yellow; }
     &.status-green { background: $color_status_green; }
@@ -670,7 +673,7 @@ table.events {
 }
 
 table.statistics-update-activity {
-    thead th:nth-child(2) { padding-left: 0; }
+    thead th:nth-child(2), thead th:nth-child(3) { padding-left: 0; }
     tbody td.uptodate-indicator { text-align: center; }
     span.status-indicator { margin: 0 auto; }
 }
@@ -690,6 +693,6 @@ table.queryresults {
     span.status-indicator {
         float: right;
         margin-top: 3px;
-        margin-left: 6px;
+        margin-left: 3px;
     }
 }
