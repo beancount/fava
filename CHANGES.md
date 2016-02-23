@@ -2,6 +2,10 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-23
+
+  - Added Help pages (Issue #149).
+
 2016-02-22
 
   - Query results can now be downloaded as CSV, XLS, XLSX and ODS (Issue #145).
