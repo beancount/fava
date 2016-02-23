@@ -66,13 +66,12 @@ def run(argv):
         args.debug = True
 
     app.beancount_file = args.filename
-    app.api.load_file(app.beancount_file)
-
-
-    if args.settings:
-        load_user_settings(os.path.realpath(args.settings))
 
     if args.debug:
+        app.api.load_file(app.beancount_file)
+        if args.settings:
+            load_user_settings(os.path.realpath(args.settings))
+
         if args.profile:
             from werkzeug.contrib.profiler import ProfilerMiddleware
             app.config['PROFILE'] = True
@@ -88,16 +87,23 @@ def run(argv):
     else:
         server = Server(app.wsgi_app)
         reload_source_files(server)
+        if args.settings:
+            reload_settings(server, os.path.realpath(args.settings))
 
         server.serve(port=args.port, host=args.host, debug=args.debug)
 
 def reload_source_files(server):
-    app.api.load_file()
-    # auto-reload the main beancount-file and all it's includes
+    """Auto-reload the main beancount-file and all it's includes the documents-folder."""
+    app.api.load_file( app.beancount_file)
     server.watch(app.beancount_file, lambda: reload_source_files(server))
     include_path = os.path.dirname(app.beancount_file)
-    for filename in app.api.options['include']:
+    for filename in app.api.options['include']+app.api.options['documents']:
         server.watch(os.path.join(include_path, filename), lambda: reload_source_files(server))
+
+def reload_settings(server, settings_path):
+    """Auto-reload the settings-file."""
+    load_user_settings(settings_path)
+    server.watch(settings_path, lambda: reload_settings(server))
 
 def main():
     run(sys.argv[1:])
