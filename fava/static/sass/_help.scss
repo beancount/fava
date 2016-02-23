@@ -37,7 +37,7 @@
         border-radius: 1px;
     }
 
-    p>code, p>tt {
+    p>code, p>tt, li>code, li>tt {
         margin: 0 2px;
         padding: 0 5px;
         white-space: nowrap;
@@ -45,6 +45,23 @@
         background-color: #f8f8f8;
         border-radius: 2px;
         font-size: 13px;
+    }
+
+    ul, ol {
+      padding-left: 30px;
+      font-size: 14px;
+    }
+
+    ul :first-child, ol :first-child {
+      margin-top: 0;
+    }
+
+    ul :last-child, ol :last-child {
+      margin-bottom: 0;
+    }
+
+    li {
+        list-style-type: disc;
     }
 }
 
