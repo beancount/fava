@@ -2,7 +2,7 @@
 title: Running fava
 ---
 
-# Running `fava`
+# Running fava
 
 The `fava`-webserver can be started with the `fava`-command:
 
