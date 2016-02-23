@@ -27,7 +27,7 @@ def run(argv):
     parser.add_argument('-s', '--settings',
                         action='store',
                         type=str,
-                        help="Configuration-file for fava.")
+                        help="Settings-file for fava.")
 
     parser.add_argument('-d', '--debug',
                         action='store_true',
