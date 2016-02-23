@@ -24,21 +24,6 @@ div.overlay-wrapper {
             margin: 6px 0 5px 0;
         }
 
-        kbd {
-            display: inline-block;
-            min-width: 20px;
-            text-align: center;
-            padding: 3px 6px;
-            color: lighten($color_text, 30);
-            vertical-align: middle;
-            background-color: darken($color_background, 1);
-            border: solid 1px darken($color_background, 20);
-            border-bottom-color: darken($color_background, 27);
-            border-radius: 3px;
-            box-shadow: inset 0 -1px 0 darken($color_background, 27);
-            margin: 0 1px 3px 0;
-        }
-
         a.close {
             float: right;
             color: lighten($color_text, 67);
