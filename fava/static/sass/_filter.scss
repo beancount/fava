@@ -15,26 +15,13 @@ div.filter {
     top: 41px;
 
     & > ul {
-        max-height: 240px;
+        max-height: 400px;
         overflow-y: auto;
 
-        & > li.info {
-            padding: 3px 10px;
-            color: lighten($color_text, 60);
-            line-height: 1.3em;
-
+        li {
             a {
-                color: lighten($color_text, 40);
-                text-decoration: underline;
-            }
-        }
-
-        li.suggestion {
-            a {
-                padding-right: 20px !important;
                 display: block;
-                line-height: 1;
-                padding: 8px 10px;
+                padding: 5px 10px;
                 color: $color_links !important;
             }
 
@@ -51,18 +38,15 @@ div.filter {
         }
     }
 
-    div.inputcontainer {
-        margin: 10px;
-
-        input {
-            height: 26px;
-            display: block;
-            border: 1px solid lighten($color_text, 80);
-            border-radius: 5px;
-            line-height: 26px;
-            width: 100%;
-            font-size: 13px;
-            font-family: $font_family;
-        }
+    input {
+        margin: 5px 10px;
+        height: 26px;
+        display: block;
+        border: 1px solid lighten($color_text, 80);
+        border-radius: 5px;
+        line-height: 26px;
+        width: 380px;
+        font-size: 13px;
+        font-family: $font_family;
     }
 }
