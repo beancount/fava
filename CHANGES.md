@@ -2,6 +2,14 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-25
+
+  - Moved Time filter suggestions to Help page, added placeholder to give some
+    hints. (Thanks to Jakob Schnitzler for the PR)
+
+  - Added new setting `editor-print-margin-column` to set the column for the
+    print margin in the Source editor (Issue #161).
+   
 2016-02-23
 
   - Added Help pages (Issue #149).
