@@ -46,44 +46,32 @@ ol.journal-table {
             cursor: pointer;
         }
 
-        &.has-metadata {
-            td.description {
-                padding-bottom: 0;
-                padding-right: 0;
+
+        dl.metadata {
+            padding: 3px 0 3px 8rem;
+            margin: 0;
+            font-size: 11px;
+
+            dt, dd {
+                margin-bottom:3px;
             }
 
-            dl.metadata {
-                margin-top: 0;
-                padding: 2px 0 3px 6px;
-                margin: 4px 0 0 -6px;
-                font-size: 11px;
+            dt {
+                width: auto;
+                min-width: 60px;
+                margin-right: 10px;
+                font-weight: normal;
+                font-style: italic;
+                color: $color_journaltable_metadata;
+            }
 
-                dt, dd {
-                    margin: 0 0 3px 0;
+            dd {
+                margin-left: 70px;
 
-                    &:last-child {
-                        margin: 0;
-                    }
-                }
-
-                dt {
-                    clear: left;
-                    width: auto;
-                    min-width: 60px;
-                    margin-right: 10px;
+                a {
                     font-weight: normal;
-                    font-style: italic;
-                    color: $color_journaltable_metadata;
-                }
 
-                dd {
-                    margin-left: 70px;
-
-                    a {
-                        font-weight: normal;
-
-                        &:hover { text-decoration: underline; }
-                    }
+                    &:hover { text-decoration: underline; }
                 }
             }
         }
