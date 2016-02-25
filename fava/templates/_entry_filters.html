@@ -18,12 +18,12 @@
                     {% endif %}
 
                     {% for time_ in api.active_years %}
-                    <li {% if time_|string == time_filter %}class="selected{% endif %}" data-filter="{{ time_ }}">
-                        {% if time_|string == time_filter %}
-                            <a href="{{ url_for_current(time=None) }}">{{ time_filter }}</a>
-                        {% else %}
-                            <a href="{{ url_for_current(time=time_) }}">{{ time_ }}</a>
-                        {% endif %}
+                    <li{% if time_|string == time_filter %} class="selected"{% endif %} data-filter="{{ time_ }}">
+                    {% if time_|string == time_filter %}
+                        <a href="{{ url_for_current(time=None) }}">{{ time_filter }}</a>
+                    {% else %}
+                        <a href="{{ url_for_current(time=time_) }}">{{ time_ }}</a>
+                    {% endif %}
                     </li>
                     {% endfor %}
                 </ul>
@@ -71,9 +71,9 @@
                     </li>
                     {% endif %}
                     {% for account in api.all_accounts %}
-                    <li {% if account == account_filter %}class="selected{% endif %}" data-filter="{{ account|lower }}">
+                    <li{% if account == account_filter %} class="selected"{% endif %} data-filter="{{ account|lower }}">
                         <a href="{{ url_for_current(account=account) }}" title="{{ account }}">
-                            {{ "–" * account|account_level }}&nbsp;{{ account|last_segment }}
+                            {{- "–" * account|account_level }}&nbsp;{{ account|last_segment -}}
                         </a>
                     </li>
                     {% endfor %}
