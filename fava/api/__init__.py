@@ -21,7 +21,7 @@ optimize for performance at all.
 
 import operator
 import os
-from datetime import date, timedelta
+from datetime import date
 
 from beancount import loader
 from beancount.core import compare, getters, realization, inventory
@@ -32,7 +32,6 @@ from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, posting_sortkey,
                                  Open, Close, Note, Document, Balance,
                                  Transaction, Event, Query)
-from beancount.core.number import ZERO
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
@@ -156,16 +155,12 @@ class BeancountReportAPI(object):
         in rendering tables.
         """
         return [{
-            'account': real_account.account,
-            'balances_children': self._total_balance(real_account),
-            'balances': serialize_inventory(real_account.balance, at_cost=True),
-            'is_leaf': len(real_account) == 0 or real_account.txn_postings,
-            'postings_count': len(real_account.txn_postings)
-        } for real_account in realization.iter_children(real_account)]
-
-    def _total_balance(self, real_account):
-        """Computes the total balance for real_account and its children."""
-        return serialize_inventory(realization.compute_balance(real_account), at_cost=True)
+            'account': ra.account,
+            'balances_children': serialize_inventory(realization.compute_balance(ra), at_cost=True),
+            'balances': serialize_inventory(ra.balance, at_cost=True),
+            'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
+            'postings_count': len(ra.txn_postings)
+        } for ra in realization.iter_children(real_account)]
 
     def _journal(self, postings, include_types=None, with_change_and_balance=False):
         journal = []
