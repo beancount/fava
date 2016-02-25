@@ -32,20 +32,14 @@
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
-    <div class="tables">
-        <div class="halfleft">
-            <div id="income">
-                {% with table_title="Income", table_data=income, totals=True %}
-                    {% include "_tree_table.html" %}
-                {% endwith %}
-            </div>
-        </div>
-        <div class="halfright">
-            <div id="expenses">
-                {% with table_title="Expenses", table_data=expenses, totals=True %}
-                    {% include "_tree_table.html" %}
-                {% endwith %}
-            </div>
-        </div>
+    <div class="halfleft">
+        {% with table_title="Income", table_data=income, totals=True %}
+            {% include "_tree_table.html" %}
+        {% endwith %}
+    </div>
+    <div class="halfright">
+        {% with table_title="Expenses", table_data=expenses, totals=True %}
+            {% include "_tree_table.html" %}
+        {% endwith %}
     </div>
 {% endblock %}

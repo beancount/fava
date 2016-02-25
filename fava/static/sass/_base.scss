@@ -623,15 +623,11 @@ table.sortable {
 @import "query";
 @import "editor";
 
-#assets, // TODO auch mit klassen
-#liabilities,
-#equity,
-#income,
-#expenses {
-    table {
-        width: 100%;
-    }
+.halfleft table,
+.halfright table {
+    width: 100%;
 }
+
 
 table.errors,
 table.holdings,
