@@ -138,7 +138,7 @@
                 <span class="description">{{ account_link(posting.account) }}</span>
                 <span class="position num">{{ posting.units or '' }}</span>
                 <span class="price num">{{ posting.price or '' }}</span>
-                <span class="cost num">{{ posting.cost or '' }}</span>
+                <span class="cost num">{{ posting.cost.number | format_currency }} {{ posting.cost.currency }}</span>
                 {% if show_change_and_balance %}
                 <span class="change num"></span>
                 <span class="balance num"></span>
