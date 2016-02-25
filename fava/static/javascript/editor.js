@@ -20,6 +20,11 @@ $(document).ready(function() {
         showFoldWidgets: false
     };
 
+    if ($('.editor').attr('data-print-margin-column')) {
+        defaultOptions['printMargin'] = true;
+        defaultOptions['printMarginColumn'] = parseInt($('.editor').attr('data-print-margin-column'));
+    }
+
     // Read-only editors
     $('.editor-wrapper .editor.editor-readonly').each(function() {
         var editorId = $(this).prop('id');

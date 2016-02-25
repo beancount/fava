@@ -49,7 +49,10 @@
         <input type="hidden" name="config-file-defaults" value="{{ config_file_defaults }}">
     </form>
     <div class="editor-wrapper editor-wrapper-source">
-        <div class="editor" id="editor-source"></div>
+        <div class="editor"
+             id="editor-source"
+             data-print-margin-column="{{ config.user.getint('editor-print-margin-column') }}">
+        </div>
     </div>
     <form class="editor-save" action="{{ url_for('source') }}" method="post">
         <input type="submit" value="Save">
