@@ -9,7 +9,7 @@
                 {{ time_filter or 'Time' }}
             </a>
             <div class="filter" id="filter-time">
-                <input type="search">
+                <input type="search" placeholder="eg. This Month, 2015-03, March 2015, Year to Date, ... ">
                 <ul>
                     {% if time_filter and time_filter|int not in api.active_years %}
                         <li class="selected" data-filter="{{ time_filter }}">
