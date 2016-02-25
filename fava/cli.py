@@ -5,7 +5,7 @@ import sys
 
 from livereload import Server
 
-from fava.application import app, load_user_settings
+from fava.application import app, load_settings
 
 
 def run(argv):
@@ -70,7 +70,7 @@ def run(argv):
     if args.debug:
         app.api.load_file(app.beancount_file)
         if args.settings:
-            load_user_settings(os.path.realpath(args.settings))
+            load_settings(os.path.realpath(args.settings))
 
         if args.profile:
             from werkzeug.contrib.profiler import ProfilerMiddleware
@@ -102,7 +102,7 @@ def reload_source_files(server):
 
 def reload_settings(server, settings_path):
     """Auto-reload the settings-file."""
-    load_user_settings(settings_path)
+    load_settings(settings_path)
     server.watch(settings_path, lambda: reload_settings(server, settings_path))
 
 def main():

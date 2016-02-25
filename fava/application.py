@@ -28,14 +28,28 @@ app.secret_key = '1234'
 
 app.api = BeancountReportAPI()
 
-app.config.raw = configparser.ConfigParser()
 defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'default-settings.conf')
-app.config_file = defaults_file
-app.config.raw.read(defaults_file)
-app.config.user = app.config.raw['fava']
-app.config.user['file_defaults'] = defaults_file
-app.config.user['file_user'] = ''
+
+def load_settings(user_settings_file_path=None):
+    app.config.raw = configparser.ConfigParser()
+    app.config.raw.read(defaults_file)
+
+    app.config.user = app.config.raw['fava']
+    app.config.user['file_defaults'] = defaults_file
+
+    if user_settings_file_path:
+        app.config.user['file_user'] = user_settings_file_path
+        app.config.raw.read(app.config.user['file_user'])
+    else:
+        app.config.user['file_user'] = ''
+
+    if app.config.user['file_user'] == '':
+        app.config_file = app.config.user['file_defaults']
+    else:
+        app.config_file = app.config.user['file_user']
+
+load_settings()
 
 app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
 
@@ -53,14 +67,6 @@ def list_help_pages():
 
 app.help_pages = list_help_pages()
 
-def load_user_settings(settings_file_path):
-    app.config.user['file_user'] = settings_file_path
-    app.config.raw.read(app.config.user['file_user'])
-
-    if app.config.user['file_user'] == '':
-        app.config_file = app.config.user['file_defaults']
-    else:
-        app.config_file = app.config.user['file_user']
 
 
 @app.route('/account/<name>/')
@@ -226,7 +232,7 @@ def source():
                                             source=source)
         if successful:
             app.api.load_file()
-            load_user_settings(app.config_file)
+            load_settings(app.config_file)
 
         return str(successful)
 
