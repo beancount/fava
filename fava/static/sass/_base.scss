@@ -23,9 +23,7 @@ html > body {
 }
 
 .hidden,
-.hidden-parent,
-.hidden-type,
-.hidden-parent-type {
+.hidden-type {
     display: none;
 }
 
@@ -257,17 +255,15 @@ header {
 
 div.main {
     position:absolute;
+    display: flex;
     width:100%;
     margin-top:-41px;
     padding-top:41px;
     min-height:100%;
-    overflow:hidden;
 
     aside {
-        padding-bottom: 100000px;
-        margin-bottom: -100000px;
+        flex-shrink: 0;
         width: 200px;
-        float: left;
         color: $color_sidebar_text;
         border-right: 1px solid darken($color_sidebar_background, 16);
         background-color: $color_sidebar_background;
@@ -339,9 +335,8 @@ div.main {
 }
 
 article {
-    @include clearfix;
-    margin-left: 200px;
-    padding: 20px 24px;
+    flex: 1;
+    padding: 20px;
 
     div.headerline {
         h3 {
@@ -628,15 +623,11 @@ table.sortable {
 @import "query";
 @import "editor";
 
-#assets, // TODO auch mit klassen
-#liabilities,
-#equity,
-#income,
-#expenses {
-    table {
-        width: 100%;
-    }
+.halfleft table,
+.halfright table {
+    width: 100%;
 }
+
 
 table.errors,
 table.holdings,

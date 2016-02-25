@@ -20,25 +20,17 @@
         {% include "charts/_chart_treemap.html" %}
     {% endwith %}
 
-    <div class="tables">
-        <div class="halfleft">
-            <div id="assets">
-                {% with table_title="Assets", table_data=assets, totals=True %}
-                    {% include "_tree_table.html" %}
-                {% endwith %}
-            </div>
-        </div>
-        <div class="halfright">
-            <div id="liabilities">
-                {% with table_title="Liabilities", table_data=liabilities, totals=True %}
-                    {% include "_tree_table.html" %}
-                {% endwith %}
-            </div>
-            <div id="equity">
-                {% with table_title="Equity", table_data=equity, totals=True %}
-                    {% include "_tree_table.html" %}
-                {% endwith %}
-            </div>
-        </div>
+    <div class="halfleft">
+        {% with table_title="Assets", table_data=assets, totals=True %}
+            {% include "_tree_table.html" %}
+        {% endwith %}
+    </div>
+    <div class="halfright">
+        {% with table_title="Liabilities", table_data=liabilities, totals=True %}
+            {% include "_tree_table.html" %}
+        {% endwith %}
+        {% with table_title="Equity", table_data=equity, totals=True %}
+            {% include "_tree_table.html" %}
+        {% endwith %}
     </div>
 {% endblock %}
