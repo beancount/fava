@@ -255,17 +255,15 @@ header {
 
 div.main {
     position:absolute;
+    display: flex;
     width:100%;
     margin-top:-41px;
     padding-top:41px;
     min-height:100%;
-    overflow:hidden;
 
     aside {
-        padding-bottom: 100000px;
-        margin-bottom: -100000px;
+        flex-shrink: 0;
         width: 200px;
-        float: left;
         color: $color_sidebar_text;
         border-right: 1px solid darken($color_sidebar_background, 16);
         background-color: $color_sidebar_background;
@@ -337,9 +335,8 @@ div.main {
 }
 
 article {
-    @include clearfix;
-    margin-left: 200px;
-    padding: 20px 24px;
+    flex: 1;
+    padding: 20px;
 
     div.headerline {
         h3 {
