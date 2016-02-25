@@ -103,7 +103,7 @@ def reload_source_files(server):
 def reload_settings(server, settings_path):
     """Auto-reload the settings-file."""
     load_user_settings(settings_path)
-    server.watch(settings_path, lambda: reload_settings(server))
+    server.watch(settings_path, lambda: reload_settings(server, settings_path))
 
 def main():
     run(sys.argv[1:])
