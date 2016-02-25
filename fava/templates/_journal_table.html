@@ -51,113 +51,115 @@
 <a href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>
 {%- endmacro %}
 
-
-  <table id="journal-table" class="journal-table">
-        <thead>
-            <tr>
-                <th class="datecell">Date</th>
-                <th class="flag">F</th>
-                <th class="description">Narration/Payee</th>
-                <th class="position">Position</th>
-                <th class="price">Price</th>
-                <th class="cost">Cost</th>
-                {% if show_change_and_balance %}
-                <th class="change">Change</th>
-                <th class="balance">Balance</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-        {% for entry in journal %}
-            {% set type = entry.meta.type %}
-            <tr class="{{ type }} {{ entry.transaction_type }}
-            {%- if not show_type[type] %} hidden{% endif -%}
-            {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden-type{% endif -%}
-            {%- if entry.diff_amount %} fail{% endif -%}
-            {%- if entry.metadata|length > 0 %} has-metadata{% endif -%}
-            " data-type="{{ type -}}
-            " data-hash="{{ entry.hash -}}
-            " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
-                <td class="datecell"><a href="{{ context_url.replace('REPLACEME', entry.hash) }}">{{ entry.date }}</a></td>
-                <td class="flag">{{ entry.flag }}</td>
-                <td class="description" colspan="4">
-                {% if type == 'open' %}
-                    Open {{ account_link(entry.account) }}
-                {% endif %}
-                {% if type == 'close' %}
-                    Close {{ account_link(entry.account) }}
-                {% endif %}
-                {% if type == 'note' %}
-                    Note: {{ entry.comment }}
-                {% endif %}
-                {% if type == 'query' %}
-                    Query: <a href="{{ url_for('query', query_hash=entry.hash) }}">{{ entry.name }}</a>
-                {% endif %}
-                {% if type == 'pad' %}
-                    Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
-                {% endif %}
-                {% if type == 'document' %}
-                    Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
-                {% endif %}
-                {% if type == 'balance' %}
-                    Balance {{ account_link(entry.account) }}
-                    {% if entry.diff_amount %} fails;
-                        expected = {{ entry.amount.number|format_currency }} {{ entry.amount.currency }}
-                        balance = {{ (entry.amount.number + entry.diff_amount.number)|format_currency }} {{ entry.amount.currency }}
-                        difference = {{ entry.diff_amount.number|format_currency }} {{ entry.diff_amount.currency }}
-                    {% else %}
-                        has {{ entry.amount }}
-                    {% endif %}
-                {% endif %}
-                {% if type == 'transaction' %}
-                    <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-                    {% for tag in entry.tags %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
-                {% endif %}
-                {% if entry.metadata %}
-                    <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
-                        {% for key, value in entry.metadata.items() %}
-                            <dt>{{ key }}</dt>
-                            <dd>
-                                {% if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif %}
-                                {{ value }}
-                                {% if key == 'statement' %}</a>{% endif %}
-                            </dd>
-                        {% endfor %}
-                    </dl>
-                {% endif %}
-                </td>
-                {% if show_change_and_balance %}
-                    <td class="change num">
-                    {% if entry.change %}
-                        {% for currency, number in entry.change.items() %}
-                            {{ number|format_currency }} {{ currency }}<br>
-                        {% endfor %}
-                    {% endif %}
-                    </td>
-                    <td class="balance num">
-                    {% if entry.balance %}
-                        {% for currency, number in entry.balance.items() %}
-                            {{ number|format_currency }} {{ currency }}<br>
-                        {% endfor %}
-                    {% endif %}
-                    </td>
-                {% endif %}
-            </tr>
+<ol id="journal-table" class="journal-table">
+    <li class="head">
+        <p>
+        <span class="datecell">Date</span>
+        <span class="flag">F</span>
+        <span class="description">Narration/Payee</span>
+        <span class="position">Position</span>
+        <span class="price">Price</span>
+        <span class="cost">Cost</span>
+        {% if show_change_and_balance %}
+        <span class="change">Change</span>
+        <span class="balance">Balance</span>
+        {% endif %}
+        </p>
+    </li>
+{% for entry in journal %}
+    {% set type = entry.meta.type %}
+    <li class="{{ type }} {{ entry.transaction_type }}
+    {%- if not show_type[type] %} hidden{% endif -%}
+    {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden-type{% endif -%}
+    {%- if entry.diff_amount %} fail{% endif -%}
+    {%- if entry.metadata|length > 0 %} has-metadata{% endif -%}
+    " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
+        <p>
+        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', entry.hash) }}">{{ entry.date }}</a></span>
+        <span class="flag">{{ entry.flag }}</span>
+        <span class="description">
+        {% if type == 'open' %}
+            Open {{ account_link(entry.account) }}
+        {% endif %}
+        {% if type == 'close' %}
+            Close {{ account_link(entry.account) }}
+        {% endif %}
+        {% if type == 'note' %}
+            Note: {{ entry.comment }}
+        {% endif %}
+        {% if type == 'query' %}
+            Query: <a href="{{ url_for('query', query_hash=entry.hash) }}">{{ entry.name }}</a>
+        {% endif %}
+        {% if type == 'pad' %}
+            Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
+        {% endif %}
+        {% if type == 'document' %}
+            Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
+        {% endif %}
+        {% if type == 'balance' %}
+            Balance {{ account_link(entry.account) }}
+            {% if entry.diff_amount %} fails;
+                expected = {{ entry.amount.number|format_currency }} {{ entry.amount.currency }}
+                balance = {{ (entry.amount.number + entry.diff_amount.number)|format_currency }} {{ entry.amount.currency }}
+                difference = {{ entry.diff_amount.number|format_currency }} {{ entry.diff_amount.currency }}
+            {% else %}
+                has {{ entry.amount }}
+            {% endif %}
+        {% endif %}
+        {% if type == 'transaction' %}
+            <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
+            {% for tag in entry.tags %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+        {% endif %}
+        {% if entry.metadata %}
+            <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
+                {% for key, value in entry.metadata.items() %}
+                    <dt>{{ key }}</dt>
+                    <dd>
+                        {% if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif %}
+                        {{ value }}
+                        {% if key == 'statement' %}</a>{% endif %}
+                    </dd>
+                {% endfor %}
+            </dl>
+        {% endif %}
+        </span>
+        {% if show_change_and_balance %}
+            <span class="change num">
+            {% if entry.change %}
+                {% for currency, number in entry.change.items() %}
+                    {{ number|format_currency }} {{ currency }}<br>
+                {% endfor %}
+            {% endif %}
+            </span>
+            <span class="balance num">
+            {% if entry.balance %}
+                {% for currency, number in entry.balance.items() %}
+                    {{ number|format_currency }} {{ currency }}<br>
+                {% endfor %}
+            {% endif %}
+            </span>
+        </p>
+        {% endif %}
+        {% if entry.postings %}
+        <ul>
         {% for leg in entry.postings %}
-        <tr class="posting posting-{{ entry.transaction_type }}{%- if not show_legs %} hidden{% endif -%}{%- if not show_type[type] %} hidden-parent{% endif -%}{%- if (type == 'transaction' and not show_transaction_type[entry.transaction_type]) %} hidden-parent-type{% endif -%}
-            " data-parent-hash="{{ entry.hash }}" data-type="posting">
-                <td class="datecell"></td>
-                <td class="flag"></td>
-                <td class="description">{{ account_link(leg.account) }}</td>
-                <td class="position num">{{ leg.units.number|format_currency }} {{ leg.units.currency }}</td>
-                <td class="price num">{{ leg.price.number|format_currency }} {{ leg.price.currency }}</td>
-                <td class="cost num">{{ leg.cost.number|format_currency }} {{ leg.cost.currency }}</td>
+        <li class="posting{%- if not show_legs %} hidden{% endif -%}">
+            <p>
+                <span class="datecell"></span>
+                <span class="flag"> </span>
+                <span class="description">{{ account_link(leg.account) }}</span>
+                <span class="position num">{{ leg.units or '' }}</span>
+                <span class="price num">{{ leg.price or '' }}</span>
+                <span class="cost num">{{ leg.cost or '' }}</span>
                 {% if show_change_and_balance %}
-                <td class="change num"></td>
-                <td class="balance num"></td>
+                <span class="change num"></span>
+                <span class="balance num"></span>
                 {% endif %}
-            </tr>
+            </p>
+        </li>
         {% endfor %}
-    {% endfor %}
-        </tbody>
-    </table>
+        </ul>
+        {% endif %}
+    </li>
+{% endfor %}
+</ol>
