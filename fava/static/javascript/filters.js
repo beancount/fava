@@ -1,4 +1,4 @@
-module.exports.initFilters = function(){
+module.exports.initFilters = function() {
     $('.filter input').keyup(function() {
         var $this = $(this);
         var value = $this.val();
