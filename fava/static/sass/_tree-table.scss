@@ -1,6 +1,11 @@
 // Collapsable trees
 
 table.tree-table {
+    &.fullwidth {
+        overflow-x: scroll;
+        max-width: 100%;
+        display: block;
+    }
 
     td.account a {
         position: relative;

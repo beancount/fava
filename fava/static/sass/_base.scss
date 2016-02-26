@@ -336,6 +336,9 @@ div.main {
 
 article {
     flex: 1;
+    position: absolute;
+    right: 0;
+    left: 200px;
     padding: 20px;
 
     div.headerline {
