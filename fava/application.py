@@ -58,7 +58,7 @@ def list_help_pages():
 
     for page in os.listdir(app.docs_dir):
         html = markdown2.markdown_path(os.path.join(app.docs_dir, page), extras=["metadata"])
-        slug = "help/%s" % (os.path.splitext(os.path.basename(page))[0])
+        slug = "help/{}".format(os.path.splitext(os.path.basename(page))[0])
         title = html.metadata['title']
 
         help_pages.append((slug, title, None))
@@ -120,7 +120,7 @@ def document():
                                       secure_filename(file.filename))
             file.save(filepath)
 
-        return "Uploaded to %s" % (filepath), 200
+        return "Uploaded to {}".format(filepath), 200
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
@@ -128,9 +128,9 @@ def context(ehash=None):
 
 def object_to_string(type, value):
     if str(type) == "<class 'beancount.core.inventory.Inventory'>":
-        return "/".join(["%s %s" % (position.units.number, position.units.currency) for position in value.cost()])
+        return "/".join(["{} {}".format(position.units.number, position.units.currency) for position in value.cost()])
     elif str(type) == "<class 'beancount.core.position.Position'>":
-        return "%s %s" % (value.units.number, value.units.currency)
+        return "{} {}".format(value.units.number, value.units.currency)
     else:
         return str(value)
 
@@ -157,7 +157,7 @@ def query(bql=None, query_hash=None, result_format='html'):
     if result_format != 'html':
         if query:
             if result:
-                result_array = [["%s" % (name) for name, type_ in result[0]]]
+                result_array = [["{}".format(name) for name, type_ in result[0]]]
                 for row in result[1]:
                     result_array.append([object_to_string(header[1], row[idx]) for idx, header in enumerate(result[0])])
             else:
@@ -179,7 +179,7 @@ def query(bql=None, query_hash=None, result_format='html'):
 
             respIO.seek(0)
             response = make_response(respIO.read())
-            response.headers["Content-Disposition"] = "attachment; filename=%s.%s" % (filename, result_format)
+            response.headers["Content-Disposition"] = "attachment; filename={}.{}".format(filename, result_format)
             return response
         else:
             return redirect(url_for('query'))
