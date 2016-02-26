@@ -135,7 +135,7 @@ $(document).ready(function() {
     Mousetrap.bind({
         '?': function() {
             $('#overlay-wrapper').show();
-            $('#overlay-wrapper, #overlay-wrapper a.close').click(function(e) {
+            $('#overlay-wrapper, #close-overlay').click(function(e) {
                 e.preventDefault();
                 $('#overlay-wrapper').hide();
             });

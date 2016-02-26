@@ -8,8 +8,6 @@
 
 * {
     box-sizing: border-box;
-    padding: 0;
-    margin: 0;
 }
 
 html,
@@ -30,12 +28,11 @@ html > body {
 }
 
 p, ol, ul, dl {
-    padding: 0;
     margin: .2em 0 .8em 0;
 }
 
 p {
-    line-height: 140%;
+    line-height: 1.5em;
 }
 
 h1, h2, h3, h4, h5 {
@@ -49,7 +46,7 @@ h2 { font-size: 1.33em; }
 h3 { font-size: 1.16em; }
 h4 { font-size: 1em; }
 h5 {
-    font-size: 10px;
+    font-size: 0.83em;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -63,18 +60,16 @@ em, i {
 }
 
 a {
-    text-decoration: underline;
+    text-decoration: none;
 
     &:hover,
     &:focus {
         color: darken($color_links, 40);
-        text-decoration: none;
     }
 
     &:link,
     &:visited {
         color: $color_links;
-        text-decoration: none;
     }
 
     &:active,
@@ -82,12 +77,6 @@ a {
     img {
         outline: none;
         border: none;
-    }
-
-    &.section:link,
-    &.section:visited {
-        color: white;  // TODO is this used?
-        text-decoration: none;
     }
 }
 
@@ -162,10 +151,6 @@ header {
         margin: 0;
         font-size: 14px;
         font-weight: normal;
-    }
-
-    a {
-        text-decoration: none;
     }
 
     nav {
@@ -513,10 +498,13 @@ table {
 
         &.num {
             color: $color_text;
-            padding-left: 10px;
-            font: 1.1em / 1.1em $font_family_monospaced;
+            font: 1.1rem $font_family_monospaced;
+            width: 8rem;
             text-align: right;
-            padding-right: 6px !important;
+        }
+
+        &.other {
+            width: 10rem;
         }
 
         a.account { font-weight: bold; }

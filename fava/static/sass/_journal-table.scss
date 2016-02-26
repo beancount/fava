@@ -90,7 +90,7 @@ ol.journal-table {
             border-left: 1px solid $color_journaltable_border;
         }
         &.num {
-            font: 1em / 1em $font_family_monospaced;
+            font: 1em $font_family_monospaced;
             color: $color_text;
             text-align: right;
         }
