@@ -6,7 +6,7 @@
 } %}
 
 {% macro indicator(account_name) %}
-{% if uptodate_eligible(account_name) %}
+{% if account_name and uptodate_eligible(account_name) %}
     {% set status=api.is_account_uptodate(account_name, look_back_days=config.user.getint('uptodate-indicator-grey-lookback-days')) %}
     {% if status %}
         <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}"></span>
@@ -15,9 +15,11 @@
 {% endmacro %}
 
 {% macro last_account_activity(account_name) %}
+{% if account_name and uptodate_eligible(account_name) %}
 {% set last_account_activity_in_days=api.last_account_activity_in_days(account_name) %}
 {% if last_account_activity_in_days > config.user.getint('uptodate-indicator-grey-lookback-days') %}
     <span class="status-indicator status-gray" title="{{ infotext['gray'] }} ({{ last_account_activity_in_days }} days ago)"></span>
+{% endif %}
 {% endif %}
 {% endmacro %}
 

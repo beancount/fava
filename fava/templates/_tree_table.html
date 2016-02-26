@@ -4,7 +4,7 @@
 {% endif %}
 
 {% set show_other_column = (operating_currencies|sort != options['commodities']|list|sort) %}
-<table class="fullwidth tree-table">
+<table class="tree-table">
     <thead>
         <tr>
             <th class="first">Account <a href="" class="expand-all" title="Expand all accounts">Expand all</a></th>
@@ -32,7 +32,7 @@
                 </td>
             {% endfor %}
             {% if show_other_column %}
-                <td class="num">
+                <td class="num other">
                 {% for currency in options['commodities'] %}
                     {% if currency not in operating_currencies %}
                         {% if currency in row.balances %}

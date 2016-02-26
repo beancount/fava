@@ -2,9 +2,20 @@
 
 table.tree-table {
     &.fullwidth {
-        overflow-x: scroll;
+        overflow-x: auto;
         max-width: 100%;
         display: block;
+    }
+
+    &:hover {
+        // class ".tree-balance-show" is added via JavaScript
+        tr.parent td.num,
+        tr td.num.tree-balance-show {
+            color: lighten($color_text, 75);
+        }
+        tr.hides td.num {
+            color: $color_text;
+        }
     }
 
     td.account a {
@@ -25,9 +36,33 @@ table.tree-table {
         }
     }
 
-    &:hover {
-        tr.hides td.num {
-            color: $color_text;
+    tr {
+        &.parent td.num,
+        td.num.tree-balance-show {
+            color: lighten($color_text, 90);
+        }
+
+        &.hides td.num {
+            span.tree-balance { display: block; }
+            span.balance { display: none; }
+        }
+
+        td {
+            &.num {
+                span.balance { display: block; }
+                span.tree-balance { display: none; }
+            }
+
+            &.num.tree-balance-show span.tree-balance { display: block; }
+
+            &:first-child { min-width: 200px; }
+            &.account-level-1 { padding-left: 8px; }
+
+            @for $i from 2 through 12 {
+                &.account-level-#{$i} {
+                    padding-left: -0.5em + $i * 1.3;
+                }
+            }
         }
     }
 
