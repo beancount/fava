@@ -2,7 +2,7 @@
 
 table.tree-table {
     &.fullwidth {
-        overflow-x: scroll;
+        overflow-x: auto;
         max-width: 100%;
         display: block;
     }
