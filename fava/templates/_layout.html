@@ -9,19 +9,20 @@
     ("Other", [
         ('holdings',         'Holdings',            'g h'),
         ('net_worth',        'Net Worth',           'g w'),
+        ('commodities',      'Commodities',         'g c'),
         ('documents',        'Documents',           'g d'),
         ('notes',            'Notes',               'g n'),
         ('events',           'Events',              'g e'),
-        ('commodities',      'Commodities',         'g c'),
     ]),
     ("Configuration", [
         ('source',           'Source',              'g s'),
+        ('errors',           'Errors',              'g r'),
         ('options',          'Options',             'g o'),
         ('statistics',       'Statistics',          'g x'),
-        ('errors',           'Errors',              'g r'),
         ('help',             'Help',                'g shift+h'),
     ])
 ] %}
+
 {% set all_pages = {
     'income_statement': 'Income Statement',
     'balance_sheet':    'Balance Sheet',
@@ -30,14 +31,15 @@
     'query':            'Custom Query',
     'holdings':         'Holdings',
     'net_worth':        'Net Worth',
+    'commodities':      'Commodities',
     'documents':        'Documents',
     'notes':            'Notes',
     'events':           'Events',
-    'commodities':      'Commodities',
     'source':           'Source',
+    'errors':           'Errors',
     'options':          'Options',
     'statistics':       'Statistics',
-    'errors':           'Errors',
+    'help':             'Help',
 } %}
 {% set active_page = active_page|default('journal') %}
 {% set show_filters = show_filters|default(True) %}
