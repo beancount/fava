@@ -62,10 +62,10 @@
         <div class="queryresults-wrapper">
             <p class="download">
                 Download as
-                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='csv') }}">CSV</a>,
-                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='xls') }}">XLS</a>,
-                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='xlsx') }}">XLSX</a> or
-                <a class="download-csv" href="{{ url_for('query', bql=query, result_format='ods') }}">ODS</a>
+                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='csv') }}">CSV</a>,
+                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='xls') }}">XLS</a>,
+                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='xlsx') }}">XLSX</a> or
+                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='ods') }}">ODS</a>
             </p>
             <table class="queryresults sortable">
                 <thead>

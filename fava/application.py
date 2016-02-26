@@ -173,9 +173,13 @@ def query(bql=None, query_hash=None, result_format='html'):
             else:
                 respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
 
+            filename = 'query_result'
+            if query_hash:
+                filename = secure_filename(app.api.queries(query_hash=query_hash)['name'].strip())
+
             respIO.seek(0)
             response = make_response(respIO.read())
-            response.headers["Content-Disposition"] = "attachment; filename=query_result.%s" % (result_format)
+            response.headers["Content-Disposition"] = "attachment; filename=%s.%s" % (filename, result_format)
             return response
         else:
             return redirect(url_for('query'))
