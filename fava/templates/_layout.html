@@ -106,7 +106,8 @@
             {% block content %}{% endblock %}
         </article>
     </div>
-    {% include "_keyboard_shortcuts.html" %}
+    {% include "overlays/_keyboard_shortcuts.html" %}
+    {% include "overlays/_documents_upload.html" %}
 
     <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
     <script>
@@ -129,6 +130,9 @@
             },
             {% endfor %}
         }, 'keyup');
+
+        window.documentsFolders = {{ options['documents']|tojson|safe }};
+        window.documentsUploadUrl = "{{ url_for('document', _method='POST') }}";
     </script>
     {% block javascript %}{% endblock %}
 </body>

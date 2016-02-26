@@ -1,6 +1,6 @@
 // Overlays
 
-div#overlay-wrapper {
+div.overlay-wrapper {
     display: none;
     position: fixed;
     top: 0; bottom: 0; left: 0; right: 0;
@@ -9,7 +9,7 @@ div#overlay-wrapper {
     text-align: center;
     cursor: pointer;
 
-    div#overlay {
+    div.overlay {
         background: $color_background;
         margin: 60px auto 0 auto;
         padding: 20px;
@@ -24,9 +24,24 @@ div#overlay-wrapper {
             margin: 6px 0 5px 0;
         }
 
-        a#close-overlay {
+        a.close-overlay {
             float: right;
             color: lighten($color_text, 67);
+        }
+    }
+
+    &#documents-upload {
+        label {
+            display: inline-block;
+            width: 180px;
+            margin-bottom: 12px;
+        }
+
+        input#document-name {
+            width: 576px;
+            font-size: 13px;
+            font-family: $font_family;
+            padding: 1px 3px;
         }
     }
 }

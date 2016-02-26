@@ -1,0 +1,19 @@
+<div id="documents-upload" class="overlay-wrapper">
+    <div class="overlay">
+        <a href="#" class="close-overlay">(close)</a>
+        <h1>Document upload</h1>
+        <form action="{{ url_for('document', _method='POST') }}" method="POST">
+            <label for="document-name" id="label-document-name">Document name:</label>
+            <input type="text" name="document-name" id="document-name">
+            <label for="documents-upload-folder" id="label-documents-upload-folder">Document upload base folder:</label>
+            <select name="document-upload-folder" id="document-upload-folder">
+                {% for document in options['documents'] %}
+                    <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ document }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+</div>
+

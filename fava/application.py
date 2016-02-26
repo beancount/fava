@@ -114,11 +114,14 @@ def document():
             #      doesn't start with one, so you don't need to rename the
             #      documents in advance.
 
+            target_folder_index = int(request.form['targetFolderIndex']);
+            target_folder = app.api.options['documents'][target_folder_index]
+
             filename = os.path.join(
                                 os.path.dirname(app.beancount_file),
-                                app.api.options['documents'][0],
+                                target_folder,
                                 request.form['account_name'].replace(':', '/').replace('..', ''),
-                                secure_filename(file.filename))
+                                secure_filename(request.form['filename']))
 
             filepath = os.path.dirname(filename)
             if not os.path.exists(filepath):
