@@ -14,9 +14,7 @@
         {% endwith %}
     {% endfor %}
 
-    <div class="halfleft">
-        {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance, totals=False %}
-            {% include "_tree_table.html" %}
-        {% endwith %}
-    </div>
+    {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance, totals=False %}
+        {% include "_tree_table.html" %}
+    {% endwith %}
 {% endblock %}
