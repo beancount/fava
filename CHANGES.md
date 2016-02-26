@@ -20,8 +20,8 @@
 
   - Changed behavior of the uptodate-status-indicator: Red/green/yellow work as
     always, but gray is now a separate circle and not shown on closed accounts.
-    The sorting in the Statistics view is now red->yellow->green->none (Issue
-    #35). (Thanks to redstreet for the suggestions)
+    The sorting in the Statistics view is now red->yellow->green->none 
+    (Issue #35). (Thanks to redstreet for the suggestions)
 
   - Uptodate-status-indicator is now shown everywhere by default (setting
     `uptodate-indicator-show-everywhere`), but only enabled for accounts that
