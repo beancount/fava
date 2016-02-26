@@ -483,18 +483,6 @@ article {
 
                     &:first-child { min-width: 200px; }
 
-                    &.num {
-                        color: $color_text;
-                        padding-left: 14px;
-                        font: 1.1em / 1.1em $font_family_monospaced;
-                        text-align: right;
-                        padding-right: 6px !important;
-                        vertical-align: top;
-
-                        span.balance { display: block; }
-                        span.tree-balance { display: none; }
-                    }
-
                     &.account-level-1 { padding-left: 8px; }
 
                     @for $i from 2 through 12 {
@@ -512,6 +500,21 @@ article {
 
                     a.account { font-weight: bold; }
                 }
+            }
+        }
+
+        tbody,
+        tfoot {
+            td.num {
+                color: $color_text;
+                padding-left: 14px;
+                font: 1.1em / 1.1em $font_family_monospaced;
+                text-align: right;
+                padding-right: 6px !important;
+                vertical-align: top;
+
+                span.balance { display: block; }
+                span.tree-balance { display: none; }
             }
         }
 
