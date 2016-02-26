@@ -18,7 +18,7 @@
         {% for row in table_data %}
             {% with account_level = row.account|account_level %}
             <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(row.account) %} class="hides"{% endif %}>
-                <td class="account account-level-{{ account_level }} droptarget" data-level="{{ account_level }}" data-account-name="{{ account_name }}">
+                <td class="account account-level-{{ account_level }} droptarget" data-level="{{ account_level }}" data-account-name="{{ row.account }}">
                     {{ account_macros.account_name(row.account, last_segment=True) }}
                 </td>
             {% for currency in operating_currencies %}

@@ -90,7 +90,6 @@ def account_with_interval_changes(name, interval):
 def index():
     return redirect(url_for('report', report_name='income_statement'))
 
-
 @app.route('/document/', methods=['GET'])
 @app.route('/document/add/', methods=['POST'])
 def document():
@@ -114,13 +113,20 @@ def document():
             # TOOD Probably it should ask to enter a date, if the document
             #      doesn't start with one, so you don't need to rename the
             #      documents in advance.
-            filepath = os.path.join(os.path.dirname(app.beancount_file),
-                                      app.api.options['documents'][0],
-                                      request.form['account_name'].replace(':', '/').replace('..', ''),
-                                      secure_filename(file.filename))
-            file.save(filepath)
 
-        return "Uploaded to {}".format(filepath), 200
+            filename = os.path.join(
+                                os.path.dirname(app.beancount_file),
+                                app.api.options['documents'][0],
+                                request.form['account_name'].replace(':', '/').replace('..', ''),
+                                secure_filename(file.filename))
+
+            filepath = os.path.dirname(filename)
+            if not os.path.exists(filepath):
+                os.makedirs(filepath, exist_ok=True)
+
+            file.save(filename)
+
+        return "Uploaded to {}".format(filename), 200
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
