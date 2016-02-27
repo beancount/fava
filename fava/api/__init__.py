@@ -547,7 +547,7 @@ class BeancountReportAPI(object):
         return is_present
 
     def query(self, bql_query_string, numberify=False):
-        return query.run_query(self.entries, self.options, bql_query_string, numberify=numberify)
+        return query.run_query(self.all_entries, self.options, bql_query_string, numberify=numberify)
 
     def _last_posting_for_account(self, account_name):
         """
