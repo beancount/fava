@@ -306,6 +306,11 @@ article {
     }
 
     h1 {
+        &.droptarget {
+            padding: 0.6em;
+            margin: -0.4em -0.6em .2em;
+        }
+
         a:link,
         a:visited {
             color: lighten($color_text, 20);
