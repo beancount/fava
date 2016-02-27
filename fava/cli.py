@@ -2,6 +2,7 @@
 import argparse
 import os
 import sys
+import errno
 
 from livereload import Server
 
@@ -90,7 +91,17 @@ def run(argv):
         if args.settings:
             reload_settings(server, os.path.realpath(args.settings))
 
-        server.serve(port=args.port, host=args.host, debug=args.debug)
+        try:
+            server.serve(port=args.port, host=args.host, debug=args.debug)
+        except OSError as e:
+            if e.errno == errno.EADDRINUSE:
+                print("Error: Can not start webserver because the port/address is already in use.")
+                print("Please choose another port with the '-p' option. ({})".format(e))
+            else:
+                raise
+        except:
+            print("Unexpected error:", e)
+            raise
 
 def reload_source_files(server):
     """Auto-reload the main beancount-file and all it's includes the documents-folder."""
