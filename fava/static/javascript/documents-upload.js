@@ -14,8 +14,8 @@ module.exports.initDocumentsUpload = function() {
             success: function(data) {
                 alert(data);
             },
-            error: function() {
-                alert("Error while uploading.")
+            error: function(data) {
+                alert("Error while uploading:\n\n" + data.responseText);
             }
         });
     }

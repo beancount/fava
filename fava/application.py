@@ -128,9 +128,12 @@ def document():
             if not os.path.exists(filepath):
                 os.makedirs(filepath, exist_ok=True)
 
-            file.save(filename)
+            if os.path.isfile(filename):
+                return "File \"{}\" already exists. Aborted document upload.".format(filename), 409
 
-        return "Uploaded to {}".format(filename), 200
+            file.save(filename)
+            return "Uploaded to {}".format(filename), 200
+        return "No file detected or no documents folder specified in options. Aborted document upload.", 424
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
