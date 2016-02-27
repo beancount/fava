@@ -33,7 +33,7 @@ function toLocaleStringSupportsOptions() {
   return !!(typeof Intl == 'object' && Intl && typeof Intl.NumberFormat == 'function');
 }
 
-if (toLocaleStringSupportsOptions() == false) {
+if (toLocaleStringSupportsOptions() === false) {
     Number.prototype.toLocaleString = function(locale, opts) {
         var x = this.valueOf();
         if (opts && opts.minimumFractionDigits) {

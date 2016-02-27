@@ -47,7 +47,7 @@ module.exports.initDocumentsUpload = function() {
                     var filename = files[i].name;
                     var filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}\.$/;
 
-                    if (filename.length < 11 || filenameRegex.test(filename.substring(0, 11)) == false) {
+                    if (filename.length < 11 || filenameRegex.test(filename.substring(0, 11)) === false) {
                         var today = new Date();
                         filename = today.toISOString().substring(0, 10) + '.' + filename;
                     }

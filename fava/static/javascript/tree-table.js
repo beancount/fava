@@ -1,4 +1,4 @@
-function initTreeTable() { 
+function initTreeTable() {
     // This fixes if there is a tree-balance, no balance and the row is not a parent.
     // Without this code the tree-balance would not be shown.
     $('table.tree-table tbody tr td:not(:first)').each(function(index, td) {
@@ -31,10 +31,10 @@ function initTreeTable() {
         row.toggleClass('hides', hide);
         row = row.next();
         while (row.length > 0 && getLevel(row) > level) {
-            if (hide == true) {
+            if (hide === true) {
                 row.toggleClass('hidden', hide);
                 row.find('span.expander').removeClass('toggled');
-            } else if (all == true) {
+            } else if (all === true) {
                 row.toggleClass('hidden', hide);
             } else {
                     if (getLevel(row) == (level + 1)) {
@@ -50,7 +50,7 @@ function initTreeTable() {
 
     $('table.tree-table span.expander').click(function(e) {
         var row = $(this).parents('tr');
-        var all = e.shiftKey == true;
+        var all = e.shiftKey === true;
         toggleTreeTableRow(row, !row.hasClass('hides'), all);
         $('table.tree-table a.expand-all').addClass('not-fully-expanded');
         return false;
