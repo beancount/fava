@@ -2,6 +2,7 @@
 import configparser
 import os
 from datetime import datetime
+from collections import OrderedDict
 import io
 
 import markdown2
@@ -173,10 +174,10 @@ def query(bql=None, query_hash=None, result_format='html'):
                 result_array = [[error]]
 
             if result_format in ('xls', 'xlsx', 'ods'):
-                book = pyexcel.Book({
-                    'Results': result_array,
-                    'Query':   [['Query'],[query]]
-                })
+                book = pyexcel.Book(OrderedDict([
+                    ('Results', result_array),
+                    ('Query',   [['Query'],[query]])
+                ]))
                 respIO = io.BytesIO()
                 book.save_to_memory(result_format, respIO)
             else:
