@@ -93,7 +93,7 @@
                     {% if id == "query" and user_queries|length > 0 %}
                         <ul class="navigation">
                         {% for query in user_queries %}
-                            <li><a href="{{ url_for('get_stored_query', stored_query_hash=query.hash) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
+                            <li{% if query.hash == query_hash %} class="selected"{% endif %}><a href="{{ url_for('get_stored_query', stored_query_hash=query.hash) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
                         {% endfor %}
                         </ul>
                     {% endif %}
