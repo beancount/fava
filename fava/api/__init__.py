@@ -94,7 +94,8 @@ class BeancountReportAPI(object):
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
 
-        self.root_account = realization.realize(self.all_entries, self.account_types)
+        self.all_root_account = realization.realize(self.all_entries,
+                                                    self.account_types)
         self.all_accounts = self._all_accounts()
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
@@ -144,7 +145,7 @@ class BeancountReportAPI(object):
         """Detailed list of all accounts."""
         accounts = [child_account.account
                     for child_account in
-                    realization.iter_children(self.root_account,
+                    realization.iter_children(self.all_root_account,
                                               leaf_only=leaf_only)]
 
         return accounts[1:]
@@ -553,13 +554,8 @@ class BeancountReportAPI(object):
         """
         Returns the last posting for an account (ignores Close)
         """
-        real_account = realization.get_or_create(self.root_account, account_name)
-
-        if not isinstance(real_account, RealAccount):
-            return None
-
-        if account_name and real_account.account != account_name:
-            return None
+        real_account = realization.get_or_create(self.all_root_account,
+                                                 account_name)
 
         last_posting = realization.find_last_active_posting(real_account.txn_postings)
 
@@ -593,13 +589,8 @@ class BeancountReportAPI(object):
             return None
 
     def last_account_activity_in_days(self, account_name):
-        real_account = realization.get_or_create(self.root_account, account_name)
-
-        if not isinstance(real_account, RealAccount):
-            return 0
-
-        if account_name and real_account.account != account_name:
-            return 0
+        real_account = realization.get_or_create(self.all_root_account,
+                                                 account_name)
 
         last_posting = realization.find_last_active_posting(
             real_account.txn_postings)
