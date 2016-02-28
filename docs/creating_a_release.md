@@ -8,7 +8,9 @@
 5. Update `AUTHORS.md`
 6. Search for old version number and replace with new one where appropriate
 7. Update version number in `fava/__init__.py`
-8. Run `make test` to ensure tests pass
-9. Upload to PyPI with `python setup.py sdist bdist_wheel upload`
-10. Make a Github release
-11. Update to newest version on http://fava.pythonanywhere.com
+8. Compile SCSS + JS with `make build-js`
+9. Run `make test` to ensure tests pass
+10. Commit changes
+11. Upload to PyPI with `python setup.py sdist bdist_wheel upload`
+12. Make a Github release
+13. Update to newest version on http://fava.pythonanywhere.com

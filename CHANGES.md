@@ -4,6 +4,9 @@
 
 2016-02-28
 
+  - Bumped version to 0.2.5 because there was unintentional draft code in the
+    release.
+
   - Bumped version to 0.2.4
 
 2016-02-25

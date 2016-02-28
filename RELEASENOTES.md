@@ -1,5 +1,12 @@
 # Release notes for `fava`
 
+## v0.2.5
+*2016-02-28*
+
+### Fixes
+
+- Removed unused draft code.
+
 ## v0.2.4
 *2016-02-28*
 
