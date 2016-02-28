@@ -2,6 +2,10 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-02-28
+
+  - Bumped version to 0.2.4
+
 2016-02-25
 
   - Moved Time filter suggestions to Help page, added placeholder to give some
