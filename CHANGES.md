@@ -9,10 +9,13 @@
 
   - Added new setting `editor-print-margin-column` to set the column for the
     print margin in the Source editor (Issue #161).
-   
+
 2016-02-23
 
   - Added Help pages (Issue #149).
+
+  - Files can be draggged and dropped over an Account name in the Account view
+    or in all tree-tables to upload the file (Issue #157).
 
 2016-02-22
 
@@ -20,7 +23,7 @@
 
   - Changed behavior of the uptodate-status-indicator: Red/green/yellow work as
     always, but gray is now a separate circle and not shown on closed accounts.
-    The sorting in the Statistics view is now red->yellow->green->none 
+    The sorting in the Statistics view is now red->yellow->green->none
     (Issue #35). (Thanks to redstreet for the suggestions)
 
   - Uptodate-status-indicator is now shown everywhere by default (setting
@@ -41,6 +44,12 @@
 
   - The user settings file is now editable in Source view (#136).
 
+  - Net worth calculation now more in line with Beancount's implementation.
+    (Thanks to Jakob Schnitzler for the PR)
+
+  - Only exclusive date ranges will be used in filters (like Beancount does).
+    (Thanks to Jakob Schnitzler for the PR)
+
 2016-02-18
 
   - Added the missing Holdings reports `bean-web` is offering. (Thanks to Jakob
@@ -50,6 +59,11 @@
     default, 5 queries are shown, which can be controlled (or entirely turned
     off) by specifying the `sidebar-show-queries`-key in the settings file
     (Issue #131). (Thanks to Daniel Bos for the PR)
+
+2016-02-16
+
+  - Journal can now be filtered by transaction type. (Thanks to Jakob
+    Schnitzler for the PR)
 
 2016-02-15
 
@@ -96,7 +110,8 @@
 
   - Filters were previously shown on all pages, even those where they didn't
     make sense or do anything. Now they got removed from pages such as `Custom
-    Query`, `Source`, `Options`, and `Errors` (Issue #97). (Thanks to Daniel Bos for the PR)
+    Query`, `Source`, `Options`, and `Errors` (Issue #97). (Thanks to Daniel Bos
+    for the PR)
 
 2016-01-09
 
