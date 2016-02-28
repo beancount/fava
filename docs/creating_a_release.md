@@ -11,3 +11,4 @@
 8. Run `make test` to ensure tests pass
 9. Upload to PyPI with `python setup.py sdist bdist_wheel upload`
 10. Make a Github release
+11. Update to newest version on http://fava.pythonanywhere.com
