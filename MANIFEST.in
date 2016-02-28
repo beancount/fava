@@ -1,4 +1,4 @@
-include CHANGES.md LICENSE README.md
+include CHANGES.md LICENSE README.rst RELEASENOTES.md AUTHORS.md
 
 recursive-include fava/docs *
 recursive-include fava/templates *
