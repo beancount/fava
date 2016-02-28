@@ -13,7 +13,7 @@ setup(
     name='beancount-fava',
     version=version,
     description=('A rich web interface for the CL-accounting tool beancount.'),
-    long_description=read_md('README.md'),
+    long_description=read_md('README.rst'),
     url=url,
     author=author,
     author_email=author_email,
