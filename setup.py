@@ -7,12 +7,7 @@ author_email  = __import__('fava').__author_email__
 url     = __import__('fava').__url__
 license = __import__('fava').__license__
 
-try:
-    from pypandoc import convert
-    read_md = lambda fname: convert(fname, 'rst', 'md')
-except ImportError:
-    print("warning: pypandoc module not found, could not convert Markdown to RST")
-    read_md = lambda fname: open(os.path.join(os.path.dirname(__file__), fname), 'r').read()
+read_md = lambda fname: open(os.path.join(os.path.dirname(__file__), fname), 'r').read()
 
 setup(
     name='beancount-fava',
