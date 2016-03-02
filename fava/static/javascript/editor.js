@@ -7,6 +7,7 @@ require('./ace-mode-beancount.js');
 require('ace-builds/src-min/mode-ini');
 require('ace-builds/src-min/mode-sql');
 require('ace-builds/src-min/theme-chrome');
+require('ace-builds/src-min/ext-whitespace')
 
 $(document).ready(function() {
     var defaultOptions = {
@@ -90,6 +91,7 @@ $(document).ready(function() {
 
         var editor = ace.edit("editor-source");
         var langTools = ace.require("ace/ext/language_tools");
+        var whitespace = ace.require("ace/ext/whitespace");
 
         editor.setOptions(defaultOptions);
 
@@ -175,6 +177,11 @@ $(document).ready(function() {
         $('form.editor-save input[type="submit"]').click(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
+
+            if (window.editorStripTrailingWhitespace) {
+                whitespace.trimTrailingSpace(editor.session, true);
+            }
+
             var $button = $(this);
             var fileName = $('form.editor-source select').val();
             $button.attr('disabled', 'disabled').attr('value', 'Saving to ' + fileName + '...');
