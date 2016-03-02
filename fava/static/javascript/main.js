@@ -51,14 +51,20 @@ $(document).ready(function() {
     // Jumping through charts
     if ($('#chart-labels').length) {
         Mousetrap.bind({
-            'shift+c': function() { $('#toggle-chart').click(); },
-            'c':       function() {
+            'ctrl+c': function() { $('#toggle-chart').click(); },
+            'c':      function() {
                 var next = $('#chart-labels label.selected').next();
                 $('#chart-labels label').removeClass('selected');
                 if (next.length) { next.click(); }
                 else             { $('#chart-labels label:first-child').click(); }
             },
+            'shift+c': function() {
+                var prev = $('#chart-labels label.selected').prev();
+                $('#chart-labels label').removeClass('selected');
 
+                if (prev.length) { prev.click(); }
+                else             { $('#chart-labels label:last-child').click(); }
+            }
         }, 'keyup');
     }
 
