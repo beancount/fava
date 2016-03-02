@@ -8,7 +8,7 @@ import io
 import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, make_response)
+                   redirect, send_from_directory, g, make_response, jsonify)
 from werkzeug import secure_filename
 
 import pyexcel
@@ -263,6 +263,9 @@ def event_details(event_type=None):
 def holdings_by(aggregation_key):
     return render_template('holdings.html', aggregation_key=aggregation_key)
 
+@app.route('/config.json')
+def user_config():
+    return jsonify(**dict(app.config.user))
 
 @app.route('/<report_name>/')
 def report(report_name):

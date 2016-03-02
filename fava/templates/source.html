@@ -1,6 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'source' %}
 {% set show_filters = False %}
+{% set source_files = api.source_files()+[config_file] %}
 
 {% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
@@ -15,7 +16,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for source_file in api.source_files() %}
+                {% for source_file in source_files %}
                 <tr>
                     {% with link=url_for_source(file_path=source_file) %}
                     <td><a class="source" href="#source-{{ loop.index }}" title="Show source {{ source_file }}">{{ source_file }}</a></td>
@@ -27,7 +28,7 @@
         </table>
 
         <h2>Source listing</h2>
-        {% for source_file in api.source_files() %}
+        {% for source_file in source_files %}
         <div>
             {% with link=url_for_source(file_path=source_file) %}
             <h3 id="source-{{ loop.index }}"><a class="source" href="{{ link }}" title="Show source {{ source_file }}">{{ source_file }}</a></h3>
@@ -42,7 +43,7 @@
     {% else %}
     <form class="editor-source" action="{{ url_for('source') }}" method="get">
         <select name="file_path">
-            {% for source_file in api.source_files()+[config_file] %}
+            {% for source_file in source_files %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
             {% endfor %}
         </select>
