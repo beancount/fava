@@ -6,7 +6,10 @@
 
     {% set commodity_pairs = api.commodity_pairs() %}
 
-    {% include "charts/_chart_skeleton.html" %}
+    {% with hide_interval_filter=True  %}
+        {% include "charts/_chart_skeleton.html" %}
+    {% endwith %}
+
     <script>
     {% for commodity in commodity_pairs %}
         window.chartData.push({

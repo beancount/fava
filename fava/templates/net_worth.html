@@ -1,12 +1,14 @@
 {% extends "_layout.html" %}
 {% set active_page = 'net_worth' %}
 
+{% import 'macros/_interval_macros.html' as interval_macros with context %}
+
 {% block content %}
     <h1>Net Worth</h1>
+    {% set net_worth = api.net_worth(interval=interval_macros.interval) %}
 
-    {% set net_worth = api.net_worth() %}
     {% include "charts/_chart_skeleton.html" %}
-    {% include "charts/_chart_monthly_net_worth.html" %}
+    {% include "charts/_chart_interval_net_worth.html" %}
 
     <table class="net_worth sortable">
         <thead>

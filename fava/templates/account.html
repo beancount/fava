@@ -1,68 +1,47 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
 
-{% import '_account_macros.html' as account_macros with context %}
+{% import 'macros/_account_macros.html' as account_macros with context %}
+{% import 'macros/_interval_macros.html' as interval_macros with context %}
 
 {% block title %}Account {{ account_name }}{% endblock %}
 
 {% block content %}
     {{ account_macros.account_name_header(account_name) }}
 
-    {% if not interval %}
+    {% include "charts/_chart_skeleton.html" %}
 
-        {% include "charts/_chart_skeleton.html" %}
+    {% with linechart_data=api.linechart_data(account_name) %}
+        {% include "charts/_chart_account_balance.html" %}
+    {% endwith %}
+    {% with label="Changes", interval_totals=api.interval_totals(interval_macros.interval, account_name) %}
+        {% include "charts/_chart_interval_totals.html" %}
+    {% endwith %}
 
-        {% with linechart_data = api.linechart_data(account_name) %}
-            {% include "charts/_chart_account_balance.html" %}
-        {% endwith %}
-
-        {% with label="Monthly Changes", monthly_totals=api.interval_totals('month' ,account_name) %}
-            {% include "charts/_chart_monthly_totals.html" %}
-        {% endwith %}
-
+    {% if not journal %}
         {% set treemap_data = api.treemap_data(account_name) %}
         {% with label=treemap_data.label, rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
             {% include "charts/_chart_treemap.html" %}
         {% endwith %}
-
-
-    {% elif interval == 'month' %}
-        {% set interval_format_str = "%b '%y" %}
-
-        {% include "charts/_chart_skeleton.html" %}
-        {% with label="Monthly Balances" if accumulate else "Monthly Changes", monthly_totals=api.interval_totals('month' ,account_name, accumulate) %}
-            {% include "charts/_chart_monthly_totals.html" %}
-        {% endwith %}
-    {% elif interval == 'year' %}
-        {% set interval_format_str = "%Y" %}
-
-        {% include "charts/_chart_skeleton.html" %}
-        {% with label="Yearly Balances" if accumulate else "Yearly Changes", yearly_totals=api.interval_totals('year', account_name, accumulate) %}
-            {% include "charts/_chart_yearly_totals.html" %}
-        {% endwith %}
     {% endif %}
 
-        <div class="headerline">
-            <h3>{% if interval %}<a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a>{% else %}Journal{% endif %}</h3>
-            <h3>{% if not (interval == 'year' and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval='year') }}">Yearly Balances</a>{% else %}Yearly Balances{% endif %}</h3>
-            <h3>{% if not (interval == 'month' and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval='month') }}">Monthly Balances</a>{% else %}Monthly Balances{% endif %}</h3>
-            <h3>{% if not (interval == 'year' and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval='year') }}">Yearly Changes</a>{% else %}Yearly Changes{% endif %}</h3>
-            <h3>{% if not (interval == 'month' and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval='month') }}">Monthly Changes</a>{% else %}Monthly Changes{% endif %}</h3>
-        </div>
+    <div class="headerline">
+        <h3>{% if not journal %}<a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a>{% else %}Journal{% endif %}</h3>
+        <h3>{% if not (not journal and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval=interval_macros.interval) }}">{{ interval_macros.interval_label }} Changes</a>{% else %}{{ interval_macros.interval_label }} Changes{% endif %}</h3>
+        <h3>{% if not (not journal and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval=interval_macros.interval) }}">{{ interval_macros.interval_label }} Balances</a>{% else %}{{ interval_macros.interval_label }} Balances{% endif %}</h3>
+    </div>
 
-    {% if not interval %}
+    {% if journal %}
         {% set journal = api.journal(account_name, with_change_and_balance=True, with_journal_children=config.user.getboolean('journal-show-childentries')) %}
         {% with show_tablefilter=True, show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
-    {% endif %}
-
-    {% if interval %}
-        {% set interval_balances, dates = api.interval_balances(interval, account_name, accumulate) %}
+    {% else %}
+        {% set interval_balances, dates = api.interval_balances(interval_macros.interval, account_name, accumulate) %}
 
         {% for begin_date, end_date in dates[-3:]|reverse %}
             {% with treemap_data = api.treemap_data(account_name, begin_date, end_date) %}
-            {% with label=end_date.strftime(interval_format_str), rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
+            {% with label=interval_macros.format_date(end_date), rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
                 {% include "charts/_chart_treemap.html" %}
             {% endwith %}
             {% endwith %}
@@ -72,7 +51,7 @@
                 <tr>
                     <th>Account <a href="" class="expand-all" title="Expand all accounts">Expand all</a></th>
                     {% for begin_date, _ in dates|reverse %}
-                        <th>{{ begin_date.strftime(interval_format_str) }}</th>
+                        <th>{{ interval_macros.format_date(begin_date) }}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -125,11 +104,5 @@
                 </tr>
             </tfoot>
         </table>
-    {% endif %}
-
-    {% if not journal and not interval %}
-        <p class="empty">
-            No entries for this account{% if entry_filters %} and the applied filters{% endif %}.
-        </p>
     {% endif %}
 {% endblock %}

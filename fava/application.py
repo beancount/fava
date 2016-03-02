@@ -69,20 +69,17 @@ app.help_pages = list_help_pages()
 
 @app.route('/account/<name>/')
 def account_with_journal(name=None):
-    return render_template('account.html', account_name=name)
+    return render_template('account.html', account_name=name, journal=True)
 
 
-@app.route('/account/<name>/<interval>ly_balances/')
-def account_with_interval_balances(name, interval):
-    return render_template('account.html', account_name=name,
-                           interval=interval, accumulate=True)
+@app.route('/account/<name>/balances/')
+def account_with_interval_balances(name):
+    return render_template('account.html', account_name=name, accumulate=True)
 
 
-@app.route('/account/<name>/<interval>ly_changes/')
-def account_with_interval_changes(name, interval):
-    return render_template('account.html', account_name=name,
-                           interval=interval, accumulate=False)
-
+@app.route('/account/<name>/changes/')
+def account_with_interval_changes(name):
+    return render_template('account.html', account_name=name, accumulate=False)
 
 @app.route('/')
 def index():

@@ -21,7 +21,9 @@ optimize for performance at all.
 
 import operator
 import os
-from datetime import date
+from datetime import datetime, date
+
+from dateutil.relativedelta import relativedelta
 
 from beancount import loader
 from beancount.core import compare, getters, realization, inventory
@@ -47,10 +49,18 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
 def get_next_interval(date_, interval):
     if interval == 'year':
         return date(date_.year + 1, 1, 1)
+    elif interval == 'quarter':
+        quarter = (date_.month - 1) // 3 + 1
+        return date(date_.year, (quarter - 1) * 3 + 1, 1) + relativedelta(months=3)
     elif interval == 'month':
         month = (date_.month % 12) + 1
         year = date_.year + (date_.month + 1 > 12)
         return date(year, month, 1)
+    elif interval == 'week':
+        week_start = datetime.strptime("{}-W{}-1".format(date_.year, int(date_.strftime('%W'))), "%Y-W%W-%w").date()
+        return week_start + relativedelta(weeks=1)
+    elif interval == 'day':
+        return date_ + relativedelta(days=1)
     else:
         raise NotImplementedError
 
@@ -409,13 +419,13 @@ class BeancountReportAPI(object):
                 holdings_list, operator.attrgetter(aggregation_key))
         return holdings_list
 
-    def _net_worth_in_periods(self):
-        month_tuples = self._interval_tuples('month', self.entries)
-        monthly_totals = []
-        end_dates = [p[1] for p in month_tuples]
+    def _net_worth_in_periods(self, interval):
+        interval_tuples = self._interval_tuples(interval, self.entries)
+        interval_totals = []
+        end_dates = [p[1] for p in interval_tuples]
 
         for (begin_date, end_date), holdings_list in \
-                zip(month_tuples,
+                zip(interval_tuples,
                     holdings_at_dates(self.entries, end_dates,
                                       self.price_map, self.options)):
             totals = {}
@@ -439,22 +449,22 @@ class BeancountReportAPI(object):
                 if holdings_list:
                     totals[currency] = holdings_list[0].market_value
 
-            monthly_totals.append({
+            interval_totals.append({
                 'begin_date': begin_date,
                 'end_date': end_date,
                 'totals': totals
             })
-        return monthly_totals
+        return interval_totals
 
-    def net_worth(self):
-        monthly_totals = self._net_worth_in_periods()
-        if monthly_totals:
-            current = monthly_totals[-1]['totals']
+    def net_worth(self, interval='month'):
+        interval_totals = self._net_worth_in_periods(interval)
+        if interval_totals:
+            current = interval_totals[-1]['totals']
         else:
             current = {}
         return {
             'net_worth': current,
-            'monthly_totals': monthly_totals
+            'interval_totals': interval_totals
         }
 
     def context(self, ehash):

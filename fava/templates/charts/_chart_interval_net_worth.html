@@ -1,10 +1,12 @@
+{% import 'macros/_interval_macros.html' as interval_macros with context %}
+
 <script>
 {% for currency in operating_currencies %}
     window.chartData.push({
-        label: "Net worth (in {{ currency }})",
+        label: "Net worth ({{ interval_macros.interval_label|lower }}, in {{ currency }})",
         type: "line",
         options: {
-            dateFormat: "MMM 'YY",
+            dateFormat: "{{ interval_macros.interval_format_str }}",
             axisY: {
                 offset: 60,
                 position: 'end',
@@ -17,7 +19,7 @@
             series: [{
                 name: '{{ currency }}',
                 data: [
-                    {% for row in net_worth.monthly_totals %}
+                    {% for row in net_worth.interval_totals %}
                         {
                             x: new Date({{ row.end_date.year }}, {{ row.end_date.month-1 }}, {{ row.end_date.day }}),
                             y: {{ row.totals[currency] or 0 }},

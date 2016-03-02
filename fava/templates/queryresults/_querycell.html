@@ -1,0 +1,34 @@
+{% import 'macros/_account_macros.html' as account_macros with context %}
+
+{% if type|string == "<class 'beancount.core.inventory.Inventory'>" %}
+    <td class="num">
+    {% for position in value.cost() %}
+        {% if position.units.number != 0 %}
+            {{ position.units.number|format_currency }} {{ position.units.currency }}<br>
+        {% endif %}
+    {% endfor %}
+    </td>
+{% elif type|string == "<class 'str'>" %}
+    <td>
+        {% if name == "account" %}
+            {{ account_macros.account_name(value) }}
+        {% else %}
+            {{value }}
+        {% endif %}
+        {# TODO do the same for payee(s) and tag(s) #}
+    </td>
+{% elif type|string == "<class 'decimal.Decimal'>" %}
+    <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
+{% elif type|string == "<class 'bool'>" %}
+    <td>{{ value|upper }}</td>
+{% elif type|string == "<class 'int'>" %}
+    <td class="num">{{ value }}</td>
+{% elif type|string == "<class 'set'>" %}
+    <td>{{ value|join(',') }}</td>
+{% elif type|string == "<class 'datetime.date'>" %}
+    <td>{{ value }}</td>
+{% elif type|string == "<class 'beancount.core.position.Position'>" %}
+    <td class="num">{{ value.units.number|format_currency }} {{value.units.currency }}</td>
+{% else %}
+    <td class="query-error" title="Type {{ type|string }} not recognized">{{ value }}</td>
+{% endif %}

@@ -186,7 +186,13 @@ module.exports.initCharts = function() {
     $('#toggle-chart').click(function() {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show charts');
-        $('#chart-container, #chart-labels').toggleClass('hidden', !shouldShow);
+        $('#chart-container, #chart-labels, #chart-interval').toggleClass('hidden', !shouldShow);
         $(this).val(shouldShow ? 'Hide charts' : 'Show charts');
     });
+
+    if ($('select#chart-interval').length) {
+        $('select#chart-interval').on('change', function() {
+            window.location = this.value;
+        });
+    }
 }

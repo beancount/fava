@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'holdings' %}
-{% import '_account_macros.html' as account_macros with context %}
+{% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% macro num_cell(value, currency) -%}
 <td class="num" data-sort-value="{{ value }}">{{ value|format_currency(currency) }}</td>

@@ -5,10 +5,10 @@
     <h1>Events</h1>
     {% set events = api.events(only_include_newest=True) %}
     {% if events %}
-        {% include "charts/_chart_skeleton.html" %}
-
+        {% with hide_interval_filter=True  %}
+            {% include "charts/_chart_skeleton.html" %}
+        {% endwith %}
         <script>
-
                 window.chartData.push({
                     label: "Events",
                     type: "line",

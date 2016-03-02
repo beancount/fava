@@ -1,9 +1,10 @@
+{% import 'macros/_interval_macros.html' as interval_macros with context %}
 <script>
     window.chartData.push({
-        label: "{{ label }}",
+        label: "{{ interval_macros.interval_label }} {{ label }}",
         type:  "bar",
         options: {
-            dateFormat: "MMM 'YY",
+            dateFormat: "{{ interval_macros.interval_format_str }}",
             axisY: {
                 offset: 60,
                 position: 'end',
@@ -14,7 +15,7 @@
         },
         data: {
             labels: [
-                {% for total in monthly_totals %}
+                {% for total in interval_totals %}
                 new Date({{ total.begin_date.year }}, {{ total.begin_date.month-1 }}, {{ total.begin_date.day }}),
                 {% endfor %}
             ],
@@ -23,10 +24,10 @@
                 {
                     name: "{{ currency }}",
                     data: [
-                        {% for total in monthly_totals %}
+                        {% for total in interval_totals %}
                             {
                                 y: {{ total.totals[currency] or 0 }},
-                                meta: "{{ total.totals[currency]|format_currency or 0.00 }} {{ currency }}<br><em>{{ total.begin_date.strftime('%b \'%y') }}</em>"
+                                meta: "{{ total.totals[currency]|format_currency or 0.00 }} {{ currency }}<br><em>{{ interval_macros.format_date(total.begin_date) }}</em>"
                             },
                         {% endfor %}
                     ],
