@@ -30,7 +30,7 @@ Installation
 ------------
 
 1. Prerequisites: An installed version of
-   `beancount <http://furius.ca/beancount/>`__ and Python >= 3.5
+   `beancount <http://furius.ca/beancount/>`__ and Python >= 3.4
 2. Install it from PyPI by running ``pip3 install beancount-fava``
 
 Usage
