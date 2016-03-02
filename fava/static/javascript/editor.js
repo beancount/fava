@@ -177,7 +177,10 @@ $(document).ready(function() {
         $('form.editor-save input[type="submit"]').click(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
-            whitespace.trimTrailingSpace(editor.session, true);
+
+            if (window.user_config["editor-strip-trailing-whitespace"] == "True") {
+                whitespace.trimTrailingSpace(editor.session, true);
+            }
 
             var $button = $(this);
             var fileName = $('form.editor-source select').val();

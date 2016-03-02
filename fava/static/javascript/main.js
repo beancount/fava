@@ -16,6 +16,20 @@ var documentsUpload = require('./documents-upload');
 window.$ = $
 
 $(document).ready(function() {
+    window.user_config = (function() {
+        var json = null;
+        $.ajax({
+            'async': false,
+            'global': false,
+            'url': '/config.json',
+            'dataType': 'json',
+            'success': function(data) {
+                json = data;
+            }
+        });
+        return json;
+    })();
+
     $("table.sortable").stupidtable();
 
     // Setup filters form
