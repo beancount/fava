@@ -1,16 +1,14 @@
 {% extends "_layout.html" %}
 {% set active_page = 'income_statement' %}
 
-{% import 'macros/_interval_macros.html' as interval_macros with context %}
-
 {% block content %}
     <h1>Income Statement</h1>
     {% set income = api.balances(options['name_income']) %}
     {% set expenses = api.balances(options['name_expenses']) %}
 
-    {% set income_monthly_totals = api.interval_totals(interval_macros.interval, options['name_income']) %}
-    {% set expenses_monthly_totals = api.interval_totals(interval_macros.interval, options['name_expenses']) %}
-    {% set ie_totals = api.interval_totals(interval_macros.interval, [options['name_income'], options['name_expenses']]) %}
+    {% set income_interval_totals = api.interval_totals(interval, options['name_income']) %}
+    {% set expenses_interval_totals = api.interval_totals(interval, options['name_expenses']) %}
+    {% set ie_totals = api.interval_totals(interval, [options['name_income'], options['name_expenses']]) %}
 
     {% include "charts/_chart_skeleton.html" %}
 
@@ -18,11 +16,11 @@
         {% include "charts/_chart_interval_totals.html" %}
     {% endwith %}
 
-    {% with label="income", interval_totals=income_monthly_totals %}
+    {% with label="income", interval_totals=income_interval_totals %}
         {% include "charts/_chart_interval_totals.html" %}
     {% endwith %}
 
-    {% with label="expenses", interval_totals=expenses_monthly_totals %}
+    {% with label="expenses", interval_totals=expenses_interval_totals %}
         {% include "charts/_chart_interval_totals.html" %}
     {% endwith %}
 

@@ -1,14 +1,12 @@
 {% extends "_layout.html" %}
 {% set active_page = 'balance_sheet' %}
 
-{% import 'macros/_interval_macros.html' as interval_macros with context %}
-
 {% block content %}
     <h1>Balance Sheet</h1>
     {% set assets = api.closing_balances(api.options['name_assets']) %}
     {% set liabilities = api.closing_balances(api.options['name_liabilities']) %}
     {% set equity = api.closing_balances(api.options['name_equity']) %}
-    {% set net_worth = api.net_worth(interval=interval_macros.interval) %}
+    {% set net_worth = api.net_worth(interval=interval) %}
 
     {% include "charts/_chart_skeleton.html" %}
     {% include "charts/_chart_interval_net_worth.html" %}

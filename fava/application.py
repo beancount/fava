@@ -343,7 +343,8 @@ def template_context():
                 config_file=app.config_file,
                 config_file_defaults=app.config.user['file_defaults'],
                 operating_currencies=app.api.options['operating_currency'],
-                today=datetime.now().strftime('%Y-%m-%d'))
+                today=datetime.now().strftime('%Y-%m-%d'),
+                interval=request.args.get('interval', app.config.user['default-interval']))
 
 
 def uniquify(seq):
