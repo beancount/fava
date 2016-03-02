@@ -11,8 +11,9 @@ to show an overview of the keyboard shortcuts described below.
     <div class="halfleft">
         <p>
             <strong>General:</strong><br>
-            <kbd>Shift</kbd> + <kbd>c</kbd>: show/hide chart<br>
+            <kbd>Ctrl</kbd> + <kbd>c</kbd>: show/hide chart<br>
             <kbd>c</kbd>: cycle through all the charts available<br>
+            <kbd>Shift</kbd> + <kbd>c</kbd>: cycle through all the charts available (backwards)
         </p>
         <p>
             <strong>Jumping to pages:</strong><br>
