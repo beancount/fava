@@ -101,7 +101,7 @@ $(document).ready(function() {
         var completionsCommodities = window.allCommodities.map(function (commodity) {
             return { name: commodity, value: commodity, score: 2, meta: "commodities" }
         });
-        var completionsDirectives = ['open', 'close', 'commodity', 'txn', 'balance', 'pad', 'note', 'document', 'price', 'event', 'option', 'plugin', 'include'].map(function (directive) {
+        var completionsDirectives = ['open', 'close', 'commodity', 'txn', 'balance', 'pad', 'note', 'document', 'price', 'event', 'option', 'plugin', 'include', 'query'].map(function (directive) {
             return { name: directive, value: directive, score: 3, meta: "directive" }
         });
         var completionsTags = window.allTags.map(function (tag) {
