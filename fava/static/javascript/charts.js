@@ -183,7 +183,7 @@ module.exports.initCharts = function() {
     labels.find('label:first-child').click();
 
     // Toggle chart by clicking on "Hide/Show chart"
-    $('#toggle-chart').click(function() {
+    $('#toggle-chart').click(function(event) {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show charts');
         $('#chart-container, #chart-labels, #chart-interval').toggleClass('hidden', !shouldShow);
