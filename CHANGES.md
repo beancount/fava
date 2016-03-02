@@ -2,6 +2,12 @@
 
 *Note: This file contains only user-facing changes in the 'master' branch.*
 
+2016-03-02
+
+  - Added new setting `editor-strip-trailing-whitespace` to enable trimming of
+    trailing whitespace in the Source editor. Default is False. (Issue #163).
+    (Thanks to Daniel Bos for the PR)
+
 2016-02-28
 
   - Bumped version to 0.2.5 because there was unintentional draft code in the
