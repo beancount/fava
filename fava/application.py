@@ -359,7 +359,7 @@ def uniquify(seq):
 def inject_filters(endpoint, values):
     if endpoint == 'static':
         return
-    for filter in ['time', 'account']:
+    for filter in ['time', 'account', 'interval']:
         if filter not in values:
             values[filter] = g.filters[filter]
     for list_filter in ['tag', 'payee']:
@@ -380,6 +380,7 @@ def perform_global_filters():
         'account': request.args.get('account', None),
         'tag': request.args.getlist('tag'),
         'payee': request.args.getlist('payee'),
+        'interval': request.args.get('interval', None),
     }
 
     try:
