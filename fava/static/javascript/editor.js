@@ -62,7 +62,8 @@ $(document).ready(function() {
             event.stopImmediatePropagation();
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
-            var nextUrl = $button.parents('form').attr('action') + "?bql=" + encodeURIComponent(editor.getValue());
+            var nextUrl = $button.parents('form').attr('action');
+            nextUrl = nextUrl + (nextUrl.split('?')[1] ? '&' : '?') + "bql=" + encodeURIComponent(editor.getValue());
             var storedQuerySelectedIndex = $('.stored-queries select').prop('selectedIndex');
             if (storedQuerySelectedIndex > 0) {
                 var storedQueryHash = $('.stored-queries select option:nth-child(' + (storedQuerySelectedIndex + 1) + ')').attr('data-stored-query-hash');
