@@ -67,16 +67,16 @@ def serialize_posting(posting):
 def _add_metadata(new_entry, entry):
     new_entry['meta'] = {
         'type': entry.__class__.__name__.lower(),
-        'filename': entry.meta['filename'],
-        'lineno': entry.meta['lineno'],
     }
-    new_entry.update({
-        'hash': compare.hash_entry(entry),
-        'metadata': entry.meta.copy()
-    })
+    new_entry['hash'] = compare.hash_entry(entry)
 
-    new_entry['metadata'].pop("__tolerances__", None)
-    new_entry['metadata'].pop("filename", None)
-    new_entry['metadata'].pop("lineno", None)
+    if entry.meta:
+        new_entry['meta']['filename'] = entry.meta['filename']
+        new_entry['meta']['lineno'] = entry.meta['lineno']
+
+        new_entry['metadata'] = entry.meta.copy()
+        new_entry['metadata'].pop("__tolerances__", None)
+        new_entry['metadata'].pop("filename", None)
+        new_entry['metadata'].pop("lineno", None)
 
     return new_entry
