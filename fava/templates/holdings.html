@@ -2,8 +2,8 @@
 {% set active_page = 'holdings' %}
 {% import '_account_macros.html' as account_macros with context %}
 
-{% macro num_cell(value) -%}
-<td class="num" data-sort-value="{{ value }}">{% if value %}{{ value|format_currency }}{% endif %}</td>
+{% macro num_cell(value, currency) -%}
+<td class="num" data-sort-value="{{ value }}">{{ value|format_currency(currency) }}</td>
 {%- endmacro %}
 
 {% block content %}
@@ -33,13 +33,13 @@
             {% for holding in holdings %}
             <tr>
                 <td>{{ account_macros.account_name(holding.account) }}</td>
-                {{ num_cell(holding.number) }}
+                {{ num_cell(holding.number, holding.currency) }}
                 <td>{{ holding.currency}}</td>
                 <td>{{ holding.cost_currency }}</td>
-                {{ num_cell(holding.cost_number) }}
-                {{ num_cell(holding.price_number) }}
-                {{ num_cell(holding.book_value) }}
-                {{ num_cell(holding.market_value) }}
+                {{ num_cell(holding.cost_number, holding.cost_currency) }}
+                {{ num_cell(holding.price_number, holding.cost_currency) }}
+                {{ num_cell(holding.book_value, holding.cost_currency) }}
+                {{ num_cell(holding.market_value, holding.cost_currency) }}
             </tr>
             {% endfor %}
         </tbody>

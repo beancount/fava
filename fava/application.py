@@ -285,10 +285,16 @@ def report(report_name):
 
 
 @app.template_filter()
-def format_currency(value, digits=2):
-    if value:
-        return ("{:,." + str(digits) + "f}").format(value)
-    return ''
+def format_currency(value, currency=None):
+    if not value:
+        return ''
+    return app.api.quantize(value, currency)
+
+
+@app.template_filter()
+def format_amount(amount):
+    return "{} {}".format(format_currency(amount.number, amount.currency),
+                          amount.currency)
 
 
 @app.template_filter()
