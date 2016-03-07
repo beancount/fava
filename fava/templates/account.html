@@ -71,8 +71,8 @@
             <thead>
                 <tr>
                     <th>Account <a href="" class="expand-all" title="Expand all accounts">Expand all</a></th>
-                    {% for _, end_date in dates|reverse %}
-                        <th>{{ end_date.strftime(interval_format_str) }}</th>
+                    {% for begin_date, _ in dates|reverse %}
+                        <th>{{ begin_date.strftime(interval_format_str) }}</th>
                     {% endfor %}
                 </tr>
             </thead>
