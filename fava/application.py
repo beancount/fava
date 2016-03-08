@@ -139,18 +139,55 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
-def object_to_pyexcel(type, value):
-    """ Convert objects to base types that are understood by pyexcel """
-    if str(type) == "<class 'beancount.core.inventory.Inventory'>":
-        return "/".join(["{} {}".format(position.units.number, position.units.currency) for position in value.cost()])
-    elif str(type) == "<class 'beancount.core.position.Position'>":
-        return "{} {}".format(value.units.number, value.units.currency)
-    elif str(type) == "<class 'decimal.Decimal'>":
-        return float(value)
-    elif str(type) == "<class 'int'>":
-        return value
-    else:
-        return str(value)
+def row_to_pyexcel(row, header):
+    result = []
+    for idx, column in enumerate(header):
+        type_ = column[1]
+        value = row[idx]
+        if str(type_) == "<class 'beancount.core.position.Position'>":
+            result.append(float(value.units.number))
+            result.append(value.units.currency)
+        elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
+            for position in value.cost():
+                result.append(float(position.units.number))
+                result.append(position.units.currency)
+        elif str(type_) == "<class 'decimal.Decimal'>":
+            result.append(float(value))
+        elif str(type_) == "<class 'int'>":
+            result.append(int(value))
+        else:
+            result.append(str(value))
+    return result
+
+def header_to_pyexcel(results):
+    result = []
+    for idx, column in enumerate(results[0]):
+        name, type_ = column
+        if str(type_) == "<class 'beancount.core.position.Position'>":
+            result.append("{} {}".format(name, "amount"))
+            result.append("{} {}".format(name, "currency"))
+        elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
+            # An Inventory may contain multiple Positions. Get the maximum number,
+            # so we can generate enough columns.
+            num_positions = 0
+            for row in results[1]:
+                if len(row[idx]) > num_positions:
+                    num_positions = len(row[idx])
+
+            for i in range(0, num_positions):
+                result.append("{} {}".format(name, "amount"))
+                result.append("{} {}".format(name, "currency"))
+        else:
+            result.append(name)
+    return result
+
+def results_to_pyexcel(result):
+    result_array = []
+    result_array.append(header_to_pyexcel(result))
+    for row in result[1]:
+        result_array.append(row_to_pyexcel(row, result[0]))
+    return result_array
+
 
 @app.route('/query/')
 def query(bql=None, query_hash=None, result_format='html'):
@@ -175,9 +212,7 @@ def query(bql=None, query_hash=None, result_format='html'):
     if result_format != 'html':
         if query:
             if result:
-                result_array = [["{}".format(name) for name, type_ in result[0]]]
-                for row in result[1]:
-                    result_array.append([object_to_pyexcel(header[1], row[idx]) for idx, header in enumerate(result[0])])
+                result_array = results_to_pyexcel(result)
             else:
                 result_array = [[error]]
 
