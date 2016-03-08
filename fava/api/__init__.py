@@ -29,9 +29,9 @@ from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
-from beancount.core.data import (get_entry, iter_entry_dates, posting_sortkey,
-                                 Open, Close, Note, Document, Balance,
-                                 Transaction, Event, Query)
+from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
+                                 Note, Document, Balance, Transaction, Event,
+                                 Query)
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
@@ -40,7 +40,8 @@ from beancount.utils import misc_utils
 
 from fava.util.dateparser import parse_date
 from fava.api.helpers import holdings_at_dates
-from fava.api.serialization import serialize_inventory, serialize_entry
+from fava.api.serialization import (serialize_inventory, serialize_entry,
+                                    serialize_entry_with)
 
 
 def get_next_interval(date_, interval):
@@ -163,30 +164,18 @@ class BeancountReportAPI(object):
             'postings_count': len(ra.txn_postings)
         } for ra in realization.iter_children(real_account)]
 
-    def _journal(self, postings, include_types=None, with_change_and_balance=False):
-        journal = []
+    def _journal(self, entries, include_types=None,
+                 with_change_and_balance=False):
+        if include_types:
+            entries = [entry for entry in entries
+                       if isinstance(entry, include_types)]
 
-        for posting, leg_postings, change, entry_balance in realization.iterate_with_balance(postings):
-
-            if include_types and not isinstance(posting, include_types):
-                continue
-
-            entry = serialize_entry(posting)
-
-            if with_change_and_balance:
-                if isinstance(posting, Balance):
-                    entry['change'] = {}
-                    if posting.diff_amount:
-                        entry['change'] = {posting.diff_amount.currency: posting.diff_amount.number}
-                    entry['balance'] = serialize_inventory(entry_balance)
-
-                if isinstance(posting, Transaction):
-                    entry['change'] = serialize_inventory(change)
-                    entry['balance'] = serialize_inventory(entry_balance)
-
-            journal.append(entry)
-
-        return journal
+        if not with_change_and_balance:
+            return [serialize_entry(entry) for entry in entries]
+        else:
+            return [serialize_entry_with(entry, change, balance)
+                    for entry, _, change, balance in
+                    realization.iterate_with_balance(entries)]
 
     def _interval_tuples(self, interval, entries):
         """
@@ -297,18 +286,18 @@ class BeancountReportAPI(object):
     def trial_balance(self):
         return self._table_tree(self.root_account)[1:]
 
-    def journal(self, account_name=None, with_change_and_balance=False, with_journal_children=True):
+    def journal(self, account_name=None, with_change_and_balance=False,
+                with_journal_children=True):
         if account_name:
-            real_account = realization.get_or_create(self.root_account, account_name)
+            real_account = realization.get_or_create(self.root_account,
+                                                     account_name)
 
             if with_journal_children:
                 postings = realization.get_postings(real_account)
             else:
-                postings = []
-                postings.extend(real_account.txn_postings)
-                postings.sort(key=posting_sortkey)
+                postings = real_account.txn_postings
 
-            return self._journal(postings, with_change_and_balance=with_change_and_balance)
+            return self._journal(postings, with_change_and_balance=True)
         else:
             return self._journal(self.entries, with_change_and_balance=with_change_and_balance)
 
