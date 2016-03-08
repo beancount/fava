@@ -139,23 +139,27 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
-def currencies_from_inventory(results, idx):
-    currencies = OrderedDict()
-    for row in results[1]:
-        for value in row[idx].cost():
-            currencies[value.units.currency] = None
-    return currencies.keys()
-
-def row_to_pyexcel(row, results):
-    result = []
+def currencies_from_inventory(results):
+    currencies = {}
     for idx, column in enumerate(results[0]):
+        if str(column[1]) == "<class 'beancount.core.inventory.Inventory'>":
+            currencies[idx] = OrderedDict()
+    for row in results[1]:
+        for idx in currencies.keys():
+            for value in row[idx].cost():
+                currencies[idx][value.units.currency] = None
+    return currencies
+
+def row_to_pyexcel(row, header, currencies):
+    result = []
+    for idx, column in enumerate(header):
         type_ = column[1]
         value = row[idx]
         if str(type_) == "<class 'beancount.core.position.Position'>":
             result.append(float(value.units.number))
             result.append(value.units.currency)
         elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
-            for currency in currencies_from_inventory(results, idx):
+            for currency in currencies[idx]:
                 number = 0.0
                 for position in value.cost():
                     if position.units.currency == currency:
@@ -170,7 +174,7 @@ def row_to_pyexcel(row, results):
             result.append(str(value))
     return result
 
-def header_to_pyexcel(results):
+def header_to_pyexcel(results, currencies):
     result = []
     for idx, column in enumerate(results[0]):
         name, type_ = column
@@ -178,7 +182,7 @@ def header_to_pyexcel(results):
             result.append("{} {}".format(name, "amount"))
             result.append("{} {}".format(name, "currency"))
         elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
-            for currency in currencies_from_inventory(results, idx):
+            for currency in currencies[idx]:
                 result.append("{} {}".format(name, "amount"))
                 result.append("{} {}".format(name, currency))
         else:
@@ -186,10 +190,11 @@ def header_to_pyexcel(results):
     return result
 
 def results_to_pyexcel(result):
+    currencies = currencies_from_inventory(result)
     result_array = []
-    result_array.append(header_to_pyexcel(result))
+    result_array.append(header_to_pyexcel(result, currencies))
     for row in result[1]:
-        result_array.append(row_to_pyexcel(row, result))
+        result_array.append(row_to_pyexcel(row, result[0], currencies))
     return result_array
 
 
