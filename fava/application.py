@@ -2,8 +2,6 @@
 import configparser
 import os
 from datetime import datetime
-from collections import OrderedDict
-import io
 
 import markdown2
 
@@ -11,13 +9,9 @@ from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
 from werkzeug import secure_filename
 
-import pyexcel
-import pyexcel.ext.xls
-import pyexcel.ext.xlsx
-import pyexcel.ext.ods3
-
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
+from fava.util.excel import FavaExcel
 
 
 app = Flask(__name__)
@@ -139,65 +133,6 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
-def currencies_from_inventory(results):
-    currencies = {}
-    for idx, column in enumerate(results[0]):
-        if str(column[1]) == "<class 'beancount.core.inventory.Inventory'>":
-            currencies[idx] = OrderedDict()
-    for row in results[1]:
-        for idx in currencies.keys():
-            for value in row[idx].cost():
-                currencies[idx][value.units.currency] = None
-    return currencies
-
-def row_to_pyexcel(row, header, currencies):
-    result = []
-    for idx, column in enumerate(header):
-        type_ = column[1]
-        value = row[idx]
-        if str(type_) == "<class 'beancount.core.position.Position'>":
-            result.append(float(value.units.number))
-            result.append(value.units.currency)
-        elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
-            for currency in currencies[idx]:
-                number = 0.0
-                for position in value.cost():
-                    if position.units.currency == currency:
-                        number = float(position.units.number)
-                result.append(float(number))
-                result.append(str(currency))
-        elif str(type_) == "<class 'decimal.Decimal'>":
-            result.append(float(value))
-        elif str(type_) == "<class 'int'>":
-            result.append(int(value))
-        else:
-            result.append(str(value))
-    return result
-
-def header_to_pyexcel(results, currencies):
-    result = []
-    for idx, column in enumerate(results[0]):
-        name, type_ = column
-        if str(type_) == "<class 'beancount.core.position.Position'>":
-            result.append("{} {}".format(name, "amount"))
-            result.append("{} {}".format(name, "currency"))
-        elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
-            for currency in currencies[idx]:
-                result.append("{} {}".format(name, "amount"))
-                result.append("{} {}".format(name, currency))
-        else:
-            result.append(name)
-    return result
-
-def results_to_pyexcel(result):
-    currencies = currencies_from_inventory(result)
-    result_array = []
-    result_array.append(header_to_pyexcel(result, currencies))
-    for row in result[1]:
-        result_array.append(row_to_pyexcel(row, result[0], currencies))
-    return result_array
-
-
 @app.route('/query/')
 def query(bql=None, query_hash=None, result_format='html'):
     query_hash = request.args.get('query_hash', None)
@@ -220,20 +155,8 @@ def query(bql=None, query_hash=None, result_format='html'):
 
     if result_format != 'html':
         if query:
-            if result:
-                result_array = results_to_pyexcel(result)
-            else:
-                result_array = [[error]]
-
-            if result_format in ('xls', 'xlsx', 'ods'):
-                book = pyexcel.Book(OrderedDict([
-                    ('Results', result_array),
-                    ('Query',   [['Query'],[query]])
-                ]))
-                respIO = io.BytesIO()
-                book.save_to_memory(result_format, respIO)
-            else:
-                respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+            book = FavaExcel(result, error)
+            respIO = book.save(result_format, query)
 
             filename = 'query_result'
             if query_hash:
