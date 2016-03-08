@@ -139,18 +139,29 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
-def row_to_pyexcel(row, header):
+def currencies_from_inventory(results, idx):
+    currencies = OrderedDict()
+    for row in results[1]:
+        for value in row[idx].cost():
+            currencies[value.units.currency] = None
+    return currencies.keys()
+
+def row_to_pyexcel(row, results):
     result = []
-    for idx, column in enumerate(header):
+    for idx, column in enumerate(results[0]):
         type_ = column[1]
         value = row[idx]
         if str(type_) == "<class 'beancount.core.position.Position'>":
             result.append(float(value.units.number))
             result.append(value.units.currency)
         elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
-            for position in value.cost():
-                result.append(float(position.units.number))
-                result.append(position.units.currency)
+            for currency in currencies_from_inventory(results, idx):
+                number = 0.0
+                for position in value.cost():
+                    if position.units.currency == currency:
+                        number = float(position.units.number)
+                result.append(float(number))
+                result.append(str(currency))
         elif str(type_) == "<class 'decimal.Decimal'>":
             result.append(float(value))
         elif str(type_) == "<class 'int'>":
@@ -167,16 +178,9 @@ def header_to_pyexcel(results):
             result.append("{} {}".format(name, "amount"))
             result.append("{} {}".format(name, "currency"))
         elif str(type_) == "<class 'beancount.core.inventory.Inventory'>":
-            # An Inventory may contain multiple Positions. Get the maximum number,
-            # so we can generate enough columns.
-            num_positions = 0
-            for row in results[1]:
-                if len(row[idx]) > num_positions:
-                    num_positions = len(row[idx])
-
-            for i in range(0, num_positions):
+            for currency in currencies_from_inventory(results, idx):
                 result.append("{} {}".format(name, "amount"))
-                result.append("{} {}".format(name, "currency"))
+                result.append("{} {}".format(name, currency))
         else:
             result.append(name)
     return result
@@ -185,7 +189,7 @@ def results_to_pyexcel(result):
     result_array = []
     result_array.append(header_to_pyexcel(result))
     for row in result[1]:
-        result_array.append(row_to_pyexcel(row, result[0]))
+        result_array.append(row_to_pyexcel(row, result))
     return result_array
 
 
