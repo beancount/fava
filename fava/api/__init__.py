@@ -77,19 +77,11 @@ class BeancountReportAPI(object):
         if beancount_file_path:
             self.beancount_file_path = beancount_file_path
 
-        self.all_entries, self._errors, self.options = loader.load_file(self.beancount_file_path)
+        self.all_entries, self.errors, self.options = loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
         self.account_types = options.get_account_types(self.options)
 
         self.title = self.options['title']
-
-        self.errors = []
-        for error in self._errors:
-            self.errors.append({
-                'file': error.source['filename'],
-                'line': error.source['lineno'],
-                'error': error.message
-            })
 
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))

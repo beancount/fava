@@ -16,10 +16,10 @@
             <tbody>
                 {% for error in api.errors %}
                 <tr>
-                    {% with link=url_for_source(file_path=error.file, line=error.line) %}
-                    <td><a class="source" href="{{ link }}" title="Show source {{ error.file }}:{{ error.line }}">{{ error.file }}</a></td>
-                    <td class="num"><a class="source" href="{{ link }}" title="Show source {{ error.file }}:{{ error.line }}">{{ error.line }}</a></td>
-                    <td>{{ error.error }}</td>
+                    {% with link=url_for_source(file_path=error.source['filename'], line=error.source['lineno']) %}
+                    <td><a class="source" href="{{ link }}" title="Show source {{ error.source['filename'] }}:{{ error.source['lineno'] }}">{{ error.source['filename'] }}</a></td>
+                    <td class="num"><a class="source" href="{{ link }}" title="Show source {{ error.source['filename'] }}:{{ error.source['lineno'] }}">{{ error.source['lineno'] }}</a></td>
+                    <td>{{ error.message }}</td>
                     {% endwith %}
                 </tr>
                 {% endfor %}
