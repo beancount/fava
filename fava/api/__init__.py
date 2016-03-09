@@ -81,6 +81,9 @@ class BeancountReportAPI(object):
         self.account_types = options.get_account_types(self.options)
 
         self.title = self.options['title']
+        self.format_string = '{:,f}' if self.options['render_commas'] else '{:f}'
+        self.default_format_string = '{:,.2f}' if self.options['render_commas'] else '{:.2f}'
+        self.dcontext = self.options['dcontext']
 
         self.errors = []
         for error in self._errors:
@@ -149,6 +152,12 @@ class BeancountReportAPI(object):
                                               leaf_only=leaf_only)]
 
         return accounts[1:]
+
+    def quantize(self, value, currency):
+        if not currency:
+            return self.default_format_string.format(value)
+        return self.format_string.format(self.dcontext.quantize(value,
+                                                                currency))
 
     def _table_tree(self, real_account):
         """

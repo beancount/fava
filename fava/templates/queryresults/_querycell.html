@@ -4,7 +4,7 @@
     <td class="num">
     {% for position in value.cost() %}
         {% if position.units.number != 0 %}
-            {{ position.units.number|format_currency }} {{ position.units.currency }}<br>
+            {{ position.units|format_amount }}<br>
         {% endif %}
     {% endfor %}
     </td>
@@ -28,7 +28,7 @@
 {% elif type|string == "<class 'datetime.date'>" %}
     <td>{{ value }}</td>
 {% elif type|string == "<class 'beancount.core.position.Position'>" %}
-    <td class="num">{{ value.units.number|format_currency }} {{value.units.currency }}</td>
+    <td class="num">{{ value.units|format_amount }}</td>
 {% else %}
     <td class="query-error" title="Type {{ type|string }} not recognized">{{ value }}</td>
 {% endif %}

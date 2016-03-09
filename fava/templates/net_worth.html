@@ -19,7 +19,7 @@
             {% for currency, number in net_worth.net_worth.items() %}
             <tr>
                <td>{{ currency }}</td>
-               <td class="num" data-sort-value="{{ number }}">{{ number|format_currency }}</td>
+               <td class="num" data-sort-value="{{ number }}">{{ number|format_currency(currency) }}</td>
             </tr>
             {% endfor %}
         </tbody>

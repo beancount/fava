@@ -24,10 +24,10 @@
             {% for currency in operating_currencies %}
                 <td class="num">
                 {% if currency in row.balances %}
-                    <span class="balance">{{ row.balances[currency]|format_currency }}</span>
+                    <span class="balance">{{ row.balances[currency]|format_currency(currency) }}</span>
                 {% endif %}
                 {% if currency in row.balances_children %}
-                    <span class="tree-balance">{{ row.balances_children[currency]|format_currency }}</span>
+                    <span class="tree-balance">{{ row.balances_children[currency]|format_currency(currency) }}</span>
                 {% endif %}
                 </td>
             {% endfor %}
@@ -36,10 +36,10 @@
                 {% for currency in options['commodities'] %}
                     {% if currency not in operating_currencies %}
                         {% if currency in row.balances %}
-                            <span class="balance">{{ row.balances[currency]|format_currency }} {{ currency }}</span>
+                            <span class="balance">{{ row.balances[currency]|format_currency(currency) }} {{ currency }}</span>
                         {% endif %}
                         {% if currency in row.balances_children %}
-                            <span class="tree-balance">{{ row.balances_children[currency]|format_currency }} {{ currency }}</span>
+                            <span class="tree-balance">{{ row.balances_children[currency]|format_currency(currency) }} {{ currency }}</span>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -54,13 +54,13 @@
             <tr>
                 <td>&nbsp;</td>
             {% for currency in operating_currencies %}
-                <td class="num">{{ table_data[0]['balances_children'][currency]|format_currency }}</td>
+                <td class="num">{{ table_data[0]['balances_children'][currency]|format_currency(currency) }}</td>
             {% endfor %}
             {% if show_other_column %}
                 <td class="num">
                     {% for currency in options['commodities'] %}
                         {% if currency not in  operating_currencies and table_data[0]['balances_children'][currency] %}
-                            {{ table_data[0]['balances_children'][currency]|format_currency }} {{ currency }}<br>
+                            {{ table_data[0]['balances_children'][currency]|format_currency(currency) }} {{ currency }}<br>
                         {% endif %}
                     {% endfor %}
                 </td>

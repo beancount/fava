@@ -86,20 +86,20 @@
 
                     {% for entry in row|reverse %}
                         <td class="num">
-                            {% if entry.balances|length > 0 %}
+                            {% if entry.balances %}
                                 <span class="balance">
                                 {% for currency, number in entry.balances.items() %}
                                     {% if number %}
-                                        {{ number|format_currency }} {{ currency }}<br>
+                                        {{ number|format_currency(currency) }} {{ currency }}<br>
                                     {% endif %}
                                 {% endfor %}
                                 </span>
                             {% endif %}
-                            {% if entry.balances_children|length > 0 %}
+                            {% if entry.balances_children %}
                                 <span class="tree-balance">
                                 {% for currency, number in entry.balances_children.items() %}
                                     {% if number %}
-                                        {{ number|format_currency }} {{ currency }}<br>
+                                        {{ number|format_currency(currency) }} {{ currency }}<br>
                                     {% endif %}
                                 {% endfor %}
                                 </span>
@@ -117,7 +117,7 @@
                     <td class="num">
                         {% for currency, number in entry.balances_children.items() %}
                             {% if number %}
-                                {{ number|format_currency }} {{ currency }}<br>
+                                {{ number|format_currency(currency) }} {{ currency }}<br>
                             {% endif %}
                         {% endfor %}
                     </td>

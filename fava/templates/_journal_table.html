@@ -54,7 +54,7 @@
 {% macro render_inventory(inv) -%}
 {% if inv %}
     {% for currency, number in inv.items() %}
-        {{ number|format_currency }} {{ currency }}<br>
+        {{ number|format_currency(currency) }} {{ currency }}<br>
     {% endfor %}
 {% endif %}
 {%- endmacro %}
@@ -100,9 +100,9 @@
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}
             {% if entry.diff_amount %} fails;
-                expected = {{ entry.amount.number|format_currency }} {{ entry.amount.currency }}
-                balance = {{ (entry.amount.number + entry.diff_amount.number)|format_currency }} {{ entry.amount.currency }}
-                difference = {{ entry.diff_amount.number|format_currency }} {{ entry.diff_amount.currency }}
+                expected = {{ entry.amount|format_amount }}
+                balance = {{ (entry.amount.number + entry.diff_amount.number)|format_currency(entry.amount.currency) }} {{ entry.amount.currency }}
+                difference = {{ entry.diff_amount|format_amount }}
             {% else %}
                 has {{ entry.amount }}
             {% endif %}
@@ -138,7 +138,7 @@
                 <span class="description">{{ account_link(posting.account) }}</span>
                 <span class="position num">{{ posting.units or '' }}</span>
                 <span class="price num">{{ posting.price or '' }}</span>
-                <span class="cost num">{{ posting.cost.number | format_currency }} {{ posting.cost.currency }}</span>
+                <span class="cost num">{{ posting.cost or '' }}</span>
                 {% if show_change_and_balance %}
                 <span class="change num"></span>
                 <span class="balance num"></span>
