@@ -2,8 +2,6 @@
 import configparser
 import os
 from datetime import datetime
-from collections import OrderedDict
-import io
 
 import markdown2
 
@@ -11,13 +9,9 @@ from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
 from werkzeug import secure_filename
 
-import pyexcel
-import pyexcel.ext.xls
-import pyexcel.ext.xlsx
-import pyexcel.ext.ods3
-
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
+from fava.util.excel import FavaExcel
 
 
 app = Flask(__name__)
@@ -139,14 +133,6 @@ def document():
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
-def object_to_string(type, value):
-    if str(type) == "<class 'beancount.core.inventory.Inventory'>":
-        return "/".join(["{} {}".format(position.units.number, position.units.currency) for position in value.cost()])
-    elif str(type) == "<class 'beancount.core.position.Position'>":
-        return "{} {}".format(value.units.number, value.units.currency)
-    else:
-        return str(value)
-
 @app.route('/query/')
 def query(bql=None, query_hash=None, result_format='html'):
     query_hash = request.args.get('query_hash', None)
@@ -169,22 +155,8 @@ def query(bql=None, query_hash=None, result_format='html'):
 
     if result_format != 'html':
         if query:
-            if result:
-                result_array = [["{}".format(name) for name, type_ in result[0]]]
-                for row in result[1]:
-                    result_array.append([object_to_string(header[1], row[idx]) for idx, header in enumerate(result[0])])
-            else:
-                result_array = [[error]]
-
-            if result_format in ('xls', 'xlsx', 'ods'):
-                book = pyexcel.Book(OrderedDict([
-                    ('Results', result_array),
-                    ('Query',   [['Query'],[query]])
-                ]))
-                respIO = io.BytesIO()
-                book.save_to_memory(result_format, respIO)
-            else:
-                respIO = pyexcel.save_as(array=result_array, dest_file_type=result_format)
+            book = FavaExcel(result, error)
+            respIO = book.save(result_format, query)
 
             filename = 'query_result'
             if query_hash:
