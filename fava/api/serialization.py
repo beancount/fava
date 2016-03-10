@@ -36,19 +36,7 @@ transaction_types = {
 
 def serialize_entry(entry):
     new_entry = entry._asdict()
-    new_entry['meta'] = {
-        'type': entry.__class__.__name__.lower(),
-        'filename': entry.meta['filename'],
-        'lineno': entry.meta['lineno'],
-    }
-    new_entry.update({
-        'hash': compare.hash_entry(entry),
-        'metadata': entry.meta.copy()
-    })
-
-    new_entry['metadata'].pop("__tolerances__", None)
-    new_entry['metadata'].pop("filename", None)
-    new_entry['metadata'].pop("lineno", None)
+    _add_metadata(new_entry, entry)
 
     if isinstance(entry, Transaction):
         if entry.flag in transaction_types:
@@ -86,6 +74,24 @@ def serialize_inventory(inventory, at_cost=False):
         inventory = inventory.units()
     return {p.units.currency: p.units.number for p in inventory if p.units.number != ZERO}
 
-
 def serialize_posting(posting):
-    return posting._asdict()
+    new_posting = posting._asdict()
+    _add_metadata(new_posting, posting)
+    return new_posting
+
+def _add_metadata(new_entry, entry):
+    new_entry['meta'] = {
+        'type': entry.__class__.__name__.lower(),
+    }
+    new_entry['hash'] = compare.hash_entry(entry)
+
+    if entry.meta:
+        new_entry['meta']['filename'] = entry.meta['filename']
+        new_entry['meta']['lineno'] = entry.meta['lineno']
+
+        new_entry['metadata'] = entry.meta.copy()
+        new_entry['metadata'].pop("__tolerances__", None)
+        new_entry['metadata'].pop("filename", None)
+        new_entry['metadata'].pop("lineno", None)
+
+    return new_entry
