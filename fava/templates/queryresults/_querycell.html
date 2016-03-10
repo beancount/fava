@@ -19,6 +19,8 @@
     </td>
 {% elif type|string == "<class 'decimal.Decimal'>" %}
     <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
+{% elif type|string == "<class 'cdecimal.Decimal'>" %}
+    <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
 {% elif type|string == "<class 'bool'>" %}
     <td>{{ value|upper }}</td>
 {% elif type|string == "<class 'int'>" %}
