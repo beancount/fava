@@ -20,4 +20,10 @@
         <div class="loading">Loading charts&hellip;</div>
     </div>
     <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
+
+    <script>
+        window.interval = "{{ interval_macros.interval }}";
+        {# window.intervalLabel = "{{ interval_macros.interval_label }}"; #}
+        {# window.intervalFormatStr = "{{ interval_macros.interval_format_str }}"; #}
+    </script>
 </div>

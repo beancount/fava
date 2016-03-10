@@ -2,6 +2,8 @@ import re
 import datetime
 import calendar
 
+# TODO Parse a week-string:     2016-W02  for the second week of 2016
+# TODO Parse a quarter-string:  2016-Q1   for the first quarter of 2016
 
 months = [m.lower() for m in calendar.month_name]
 months_abbr = [m.lower() for m in calendar.month_abbr]

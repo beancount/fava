@@ -110,10 +110,14 @@ module.exports.initCharts = function() {
 
                 $(chart.container).on('click', '.ct-bar', function() {
                     var date = chart.data.labels[$(event.target).index()];
-                    var dateString = '' + date.getFullYear() + '-' + (helpers.pad(date.getMonth()+1));
                     var e = $.Event('keyup');
                     e.which = 13;
-                    $("#filter-time input[type=search]").val(dateString).trigger(e);
+                    var formatStr = 'YYYY';
+                    if (window.interval == 'day')     { formatStr = 'YYYY-MM-DD'; }
+                    if (window.interval == 'week')    { formatStr = 'YYYY-Www'; }
+                    if (window.interval == 'month')   { formatStr = 'YYYY-MM'; }
+                    if (window.interval == 'quarter') { formatStr = 'YYYY-Qq'; }
+                    $("#filter-time input[type=search]").val(date.formatWithString(formatStr)).trigger(e);
                 });
 
                 break;
