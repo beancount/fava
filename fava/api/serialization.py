@@ -91,6 +91,7 @@ def _add_metadata(new_entry, entry):
 
         new_entry['metadata'] = entry.meta.copy()
         new_entry['metadata'].pop("__tolerances__", None)
+        new_entry['metadata'].pop("__automatic__", None)
         new_entry['metadata'].pop("filename", None)
         new_entry['metadata'].pop("lineno", None)
 
