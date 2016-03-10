@@ -59,6 +59,21 @@
 {% endif %}
 {%- endmacro %}
 
+{% macro render_metadata(metadata, show_metadata) -%}
+{% if metadata %}
+    <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
+        {% for key, value in metadata.items() %}
+            <dt>{{ key }}</dt>
+            <dd>
+                {%- if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
+                {{ value }}
+                {%- if key == 'statement' %}</a>{% endif -%}
+            </dd>
+        {% endfor %}
+    </dl>
+{% endif %}
+{%- endmacro %}
+
 <ol id="journal-table" class="journal-table">
     <li class="head">
         <p>
@@ -116,18 +131,7 @@
             <span class="balance num">{{ render_inventory(entry.balance) }}</span>
         </p>
         {% endif %}
-        {% if entry.metadata %}
-            <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
-                {% for key, value in entry.metadata.items() %}
-                    <dt>{{ key }}</dt>
-                    <dd>
-                        {%- if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
-                        {{ value }}
-                        {%- if key == 'statement' %}</a>{% endif -%}
-                    </dd>
-                {% endfor %}
-            </dl>
-        {% endif %}
+        {{ render_metadata(entry.metadata, show_metadata) }}
         {% if entry.postings %}
         <ul>
         {% for posting in entry.postings %}
@@ -144,18 +148,7 @@
                 <span class="balance num"></span>
                 {% endif %}
             </p>
-             {% if posting.metadata %}
-                 <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
-                     {% for key, value in posting.metadata.items() %}
-                         <dt>{{ key }}</dt>
-                         <dd>
-                             {%- if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
-                             {{ value }}
-                             {%- if key == 'statement' %}</a>{% endif -%}
-                         </dd>
-                     {% endfor %}
-                 </dl>
-             {% endif %}
+            {{ render_metadata(posting.metadata, show_metadata) }}
         </li>
         {% endfor %}
         </ul>
