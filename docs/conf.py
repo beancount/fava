@@ -20,7 +20,7 @@ extlinks = {
 
 extlinks = {
     'bug': ('https://github.com/aumayr/fava/issues/%s', '#'),
-    'user': ('https://github.com/%s', ''),
+    'user': ('https://github.com/%s', '@'),
 }
 
 # Options for HTML output
