@@ -9,6 +9,7 @@ import pyexcel.ext.xls
 import pyexcel.ext.xlsx
 import pyexcel.ext.ods3
 
+
 class FavaExcel:
     def __init__(self, results, error):
         if results:
@@ -19,7 +20,7 @@ class FavaExcel:
                 self.result_array.append(self.row_to_pyexcel(row, results[0]))
         else:
             self.result_array = [[error]]
-    
+
     def save(self, result_format, query):
         if result_format in ('xls', 'xlsx', 'ods'):
             book = pyexcel.Book(OrderedDict([
@@ -80,5 +81,3 @@ class FavaExcel:
             else:
                 result.append(name)
         return result
-
-

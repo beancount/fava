@@ -16,8 +16,8 @@ from .util.version import get_version
 
 VERSION = (0, 2, 5, '', 0)
 
-__url__             = "http://github.com/aumayr/fava"
-__version__         = get_version(VERSION)
-__license__         = "MIT"
-__author__          = "Dominik Aumayr"
-__author_email__    = "dominik@aumayr.name"
+__url__ = "http://github.com/aumayr/fava"
+__version__ = get_version(VERSION)
+__license__ = "MIT"
+__author__ = "Dominik Aumayr"
+__author_email__ = "dominik@aumayr.name"

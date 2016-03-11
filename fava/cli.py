@@ -11,7 +11,7 @@ from fava.application import app, load_settings
 
 def run(argv):
     parser = argparse.ArgumentParser(description=__doc__,
-                formatter_class=argparse.RawDescriptionHelpFormatter)
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-p', '--port',
                         action='store',
@@ -36,7 +36,7 @@ def run(argv):
                               webserver, and live-reloading of beancount-files is disabled.")
 
     parser.add_argument('--profile',
-                        action = 'store_true',
+                        action='store_true',
                         help="Turn on profiling.  Implies --debug.  Profiling \
                               information for each request will be printed to the \
                               log, unless --pstats-output is also specified.")
@@ -79,7 +79,8 @@ def run(argv):
             kwargs = {}
             if args.pstats_output is not None:
                 kwargs['profile_dir'] = args.pstats_output
-            app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[args.profile_restriction], **kwargs)
+            app.wsgi_app = ProfilerMiddleware(app.wsgi_app,
+                                              restrictions=[args.profile_restriction], **kwargs)
 
         app.config['ASSETS_CACHE'] = True
         app.config['ASSETS_DEBUG'] = True
@@ -103,18 +104,21 @@ def run(argv):
             print("Unexpected error:", e)
             raise
 
+
 def reload_source_files(server):
     """Auto-reload the main beancount-file and all it's includes the documents-folder."""
-    app.api.load_file( app.beancount_file)
+    app.api.load_file(app.beancount_file)
     server.watch(app.beancount_file, lambda: reload_source_files(server))
     include_path = os.path.dirname(app.beancount_file)
     for filename in app.api.options['include']+app.api.options['documents']:
         server.watch(os.path.join(include_path, filename), lambda: reload_source_files(server))
 
+
 def reload_settings(server, settings_path):
     """Auto-reload the settings-file."""
     load_settings(settings_path)
     server.watch(settings_path, lambda: reload_settings(server, settings_path))
+
 
 def main():
     run(sys.argv[1:])

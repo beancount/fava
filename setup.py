@@ -2,12 +2,15 @@ import os
 from setuptools import setup
 
 version = __import__('fava').__version__
-author  = __import__('fava').__author__
-author_email  = __import__('fava').__author_email__
-url     = __import__('fava').__url__
+author = __import__('fava').__author__
+author_email = __import__('fava').__author_email__
+url = __import__('fava').__url__
 license = __import__('fava').__license__
 
-read_md = lambda fname: open(os.path.join(os.path.dirname(__file__), fname), 'r').read()
+
+def read_md(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname), 'r').read()
+
 
 setup(
     name='beancount-fava',

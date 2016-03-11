@@ -28,7 +28,8 @@ class URLQueue:
         self.seen = set(self.stack)
 
     def append(self, endpoint, values, current):
-        if endpoint in ['source', 'document'] or 'REPLACEME' in values.values():
+        if endpoint in ['source', 'document'] or\
+                'REPLACEME' in values.values():
             return
         real_endpoint = endpoint
         if 'report_name' in values:

@@ -74,10 +74,12 @@ def serialize_inventory(inventory, at_cost=False):
         inventory = inventory.units()
     return {p.units.currency: p.units.number for p in inventory if p.units.number != ZERO}
 
+
 def serialize_posting(posting):
     new_posting = posting._asdict()
     _add_metadata(new_posting, posting)
     return new_posting
+
 
 def _add_metadata(new_entry, entry):
     new_entry['meta'] = {

@@ -159,7 +159,8 @@ class BeancountReportAPI(object):
         """
         return [{
             'account': ra.account,
-            'balances_children': serialize_inventory(realization.compute_balance(ra), at_cost=True),
+            'balances_children': serialize_inventory(realization.compute_balance(ra),
+                                                     at_cost=True),
             'balances': serialize_inventory(ra.balance, at_cost=True),
             'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
             'postings_count': len(ra.txn_postings)
@@ -206,7 +207,9 @@ class BeancountReportAPI(object):
         return interval_tuples
 
     def _balances_totals(self, names, begin_date, end_date):
-        totals = [realization.compute_balance(self._real_account(account_name, self.entries, begin_date, end_date)) for account_name in names]
+        totals = [realization.compute_balance(self._real_account(account_name, self.entries,
+                                                                 begin_date, end_date))
+                  for account_name in names]
         return serialize_inventory(sum(totals, inventory.Inventory()), at_cost=True)
 
     def interval_totals(self, interval, account_name, accumulate=False):
@@ -218,7 +221,8 @@ class BeancountReportAPI(object):
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
-            'totals': self._balances_totals(names, begin_date if not accumulate else date_first, end_date),
+            'totals': self._balances_totals(names, begin_date if not accumulate else date_first,
+                                            end_date),
         } for begin_date, end_date in interval_tuples]
 
     def _real_account(self, account_name, entries, begin_date=None,
@@ -260,7 +264,8 @@ class BeancountReportAPI(object):
               }, ...
           ]
         """
-        real_account = self._real_account(account_name, self.entries, begin_date, end_date, min_accounts)
+        real_account = self._real_account(account_name, self.entries, begin_date, end_date,
+                                          min_accounts)
 
         return self._table_tree(real_account)
 
@@ -315,7 +320,7 @@ class BeancountReportAPI(object):
             'query_string': ''
         }
         if query_hash:
-            return next( (x for x in res if x['hash'] == query_hash), no_query)
+            return next((x for x in res if x['hash'] == query_hash), no_query)
         else:
             return res
 
@@ -330,7 +335,7 @@ class BeancountReportAPI(object):
             for event in events:
                 if not event['type'] in seen_types:
                     seen_types.append(event['type'])
-            events = list({ event['type']: event for event in events }.values())
+            events = list({event['type']: event for event in events}.values())
 
         return events
 
@@ -433,9 +438,11 @@ class BeancountReportAPI(object):
 
     def source_files(self):
         # Make sure the included source files are sorted, behind the main source file
-        return [self.beancount_file_path] + sorted(filter(lambda x: x != self.beancount_file_path,
-                    [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
-                ))
+        return [self.beancount_file_path] + \
+            sorted(filter(lambda x: x != self.beancount_file_path,
+                          [os.path.join(os.path.dirname(self.beancount_file_path), filename)
+                           for filename in self.options['include']]
+                          ))
 
     def source(self, file_path=None):
         if file_path:
@@ -497,7 +504,7 @@ class BeancountReportAPI(object):
         else:
             # nb_entries_by_type
             entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
-            nb_entries_by_type = { name: len(entries) for name, entries in entries_by_type.items() }
+            nb_entries_by_type = {name: len(entries) for name, entries in entries_by_type.items()}
 
             all_postings = [posting
                             for entry in self.entries
@@ -506,7 +513,8 @@ class BeancountReportAPI(object):
 
             # nb_postings_by_account
             postings_by_account = misc_utils.groupby(lambda posting: posting.account, all_postings)
-            nb_postings_by_account = { key: len(postings) for key, postings in postings_by_account.items() }
+            nb_postings_by_account = {account: len(postings) for account, postings
+                                      in postings_by_account.items()}
 
             return {
                 'entries_by_type':           nb_entries_by_type,
@@ -515,7 +523,6 @@ class BeancountReportAPI(object):
                 'postings_by_account_total': sum(nb_postings_by_account.values()),
                 'activity_by_account':       self._activity_by_account()
             }
-
 
     def is_valid_document(self, file_path):
         """Check if the given file_path is present in one of the
@@ -538,7 +545,8 @@ class BeancountReportAPI(object):
         return is_present
 
     def query(self, bql_query_string, numberify=False):
-        return query.run_query(self.all_entries, self.options, bql_query_string, numberify=numberify)
+        return query.run_query(self.all_entries, self.options, bql_query_string,
+                               numberify=numberify)
 
     def _last_posting_for_account(self, account_name):
         """
