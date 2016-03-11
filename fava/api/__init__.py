@@ -59,14 +59,74 @@ class FilterException(Exception):
     pass
 
 
+class EntryFilter(object):
+    def __init__(self):
+        self.value = None
+
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        return True
+
+    def _include_entry(self, entry):
+        raise NotImplementedError
+
+    def _filter(self, entries, options):
+        return [entry for entry in entries if self._include_entry(entry)]
+
+    def apply(self, entries, options):
+        if self.value:
+            return self._filter(entries, options)
+        else:
+            return entries
+
+
+class DateFilter(EntryFilter):
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        if not self.value:
+            return True
+        try:
+            self.begin_date, self.end_date = parse_date(self.value)
+        except TypeError:
+            raise FilterException('Failed to parse date: {}'.format(self.value))
+        return True
+
+    def _filter(self, entries, options):
+        entries, _ = summarize.clamp_opt(entries, self.begin_date, self.end_date, options)
+        return entries
+
+
+class TagFilter(EntryFilter):
+    def _include_entry(self, entry):
+        return isinstance(entry, Transaction) and entry.tags and (entry.tags &
+                                                                  set(self.value))
+
+
+class AccountFilter(EntryFilter):
+    def _include_entry(self, entry):
+        return isinstance(entry, Transaction) and \
+               any(has_component(posting.account, self.value) for posting in entry.postings)
+
+
+class PayeeFilter(EntryFilter):
+    def _include_entry(self, entry):
+        return isinstance(entry, Transaction) and \
+               ((entry.payee and (entry.payee in self.value)) or
+                (not entry.payee and ('' in self.value)))
+
+
 class BeancountReportAPI(object):
     def __init__(self, beancount_file_path=None):
         self.beancount_file_path = beancount_file_path
         self.filters = {
-            'time': None,
-            'tag': set(),
-            'account': None,
-            'payee': set(),
+            'time': DateFilter(),
+            'tag': TagFilter(),
+            'account': AccountFilter(),
+            'payee': PayeeFilter(),
         }
         if self.beancount_file_path:
             self.load_file()
@@ -100,38 +160,15 @@ class BeancountReportAPI(object):
     def _apply_filters(self):
         self.entries = self.all_entries
 
-        if self.filters['time']:
-            try:
-                begin_date, end_date = parse_date(self.filters['time'])
-                self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
-            except TypeError:
-                raise FilterException('Failed to parse date string: {}'.format(self.filters['time']))
-
-        if self.filters['tag']:
-            self.entries = [entry
-                            for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filters['tag']))]
-
-        if self.filters['payee']:
-            self.entries = [entry
-                            for entry in self.entries
-                            if (isinstance(entry, Transaction) and entry.payee and (entry.payee in self.filters['payee']))
-                            or (isinstance(entry, Transaction) and not entry.payee and ('' in self.filters['payee']))]
-
-        if self.filters['account']:
-            self.entries = [entry
-                            for entry in self.entries
-                            if isinstance(entry, Transaction) and
-                                any(has_component(posting.account, self.filters['account'])
-                                    for posting in entry.postings)]
+        for filter in self.filters.values():
+            self.entries = filter.apply(self.entries, self.options)
 
         self.root_account = realization.realize(self.entries, self.account_types)
 
     def filter(self, **kwargs):
         changed = False
-        for filter, current_value in self.filters.items():
-            if filter in kwargs and kwargs[filter] != current_value:
-                self.filters[filter] = kwargs[filter]
+        for filter_name, filter in self.filters.items():
+            if filter.set(kwargs[filter_name]):
                 changed = True
 
         if changed:
