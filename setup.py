@@ -21,7 +21,8 @@ setup(
     author=author,
     author_email=author_email,
     license=license,
-    keywords='fava beancount beancount-fava beancount-web ledger ledger-cli cl-accounting',
+    keywords='fava beancount beancount-fava beancount-web'
+             'ledger ledger-cli cl-accounting',
     packages=['fava',
               'fava.util',
               'fava.api'],

@@ -30,13 +30,15 @@ class FavaExcel:
             respIO = io.BytesIO()
             book.save_to_memory(result_format, respIO)
         else:
-            respIO = pyexcel.save_as(array=self.result_array, dest_file_type=result_format)
+            respIO = pyexcel.save_as(array=self.result_array,
+                                     dest_file_type=result_format)
         return respIO
 
     def currencies_from_inventory(self, results):
         self.currencies = {}
         for idx, column in enumerate(results[0]):
-            if str(column[1]) == "<class 'beancount.core.inventory.Inventory'>":
+            if str(column[1]) == \
+                    "<class 'beancount.core.inventory.Inventory'>":
                 self.currencies[idx] = OrderedDict()
         for row in results[1]:
             for idx in self.currencies.keys():

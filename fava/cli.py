@@ -10,8 +10,9 @@ from fava.application import app, load_settings
 
 
 def run(argv):
-    parser = argparse.ArgumentParser(description=__doc__,
-                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument('-p', '--port',
                         action='store',
@@ -32,14 +33,16 @@ def run(argv):
 
     parser.add_argument('-d', '--debug',
                         action='store_true',
-                        help="Turn on debugging. This uses the built-in Flask \
-                              webserver, and live-reloading of beancount-files is disabled.")
+                        help="Turn on debugging. This uses the built-in Flask"
+                             "webserver, and live-reloading of beancount-files"
+                             "is disabled.")
 
     parser.add_argument('--profile',
                         action='store_true',
-                        help="Turn on profiling.  Implies --debug.  Profiling \
-                              information for each request will be printed to the \
-                              log, unless --pstats-output is also specified.")
+                        help="Turn on profiling.  Implies --debug.  Profiling"
+                             "information for each request will be printed to"
+                             "the log, unless --pstats-output is also"
+                             "specified.")
 
     parser.add_argument('--pstats-output',
                         type=str,
@@ -79,8 +82,9 @@ def run(argv):
             kwargs = {}
             if args.pstats_output is not None:
                 kwargs['profile_dir'] = args.pstats_output
-            app.wsgi_app = ProfilerMiddleware(app.wsgi_app,
-                                              restrictions=[args.profile_restriction], **kwargs)
+            app.wsgi_app = ProfilerMiddleware(
+                app.wsgi_app,
+                restrictions=[args.profile_restriction], **kwargs)
 
         app.config['ASSETS_CACHE'] = True
         app.config['ASSETS_DEBUG'] = True
@@ -96,8 +100,10 @@ def run(argv):
             server.serve(port=args.port, host=args.host, debug=args.debug)
         except OSError as e:
             if e.errno == errno.EADDRINUSE:
-                print("Error: Can not start webserver because the port/address is already in use.")
-                print("Please choose another port with the '-p' option. ({})".format(e))
+                print("Error: Can not start webserver because the port/address"
+                      "is already in use.")
+                print("Please choose another port with the '-p' option."
+                      "({})".format(e))
             else:
                 raise
         except:
@@ -106,12 +112,14 @@ def run(argv):
 
 
 def reload_source_files(server):
-    """Auto-reload the main beancount-file and all it's includes the documents-folder."""
+    """Auto-reload the main beancount-file and all its includes the
+    documents-folder."""
     app.api.load_file(app.beancount_file)
     server.watch(app.beancount_file, lambda: reload_source_files(server))
     include_path = os.path.dirname(app.beancount_file)
     for filename in app.api.options['include']+app.api.options['documents']:
-        server.watch(os.path.join(include_path, filename), lambda: reload_source_files(server))
+        server.watch(os.path.join(include_path, filename),
+                     lambda: reload_source_files(server))
 
 
 def reload_settings(server, settings_path):

@@ -47,14 +47,16 @@ def load_settings(user_settings_file_path=None):
 
 load_settings()
 
-app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
+app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                            'docs')
 
 
 def list_help_pages():
     help_pages = []
 
     for page in os.listdir(app.docs_dir):
-        html = markdown2.markdown_path(os.path.join(app.docs_dir, page), extras=["metadata"])
+        html = markdown2.markdown_path(os.path.join(app.docs_dir, page),
+                                       extras=["metadata"])
         slug = "help/{}".format(os.path.splitext(os.path.basename(page))[0])
         title = html.metadata['title']
 
@@ -117,21 +119,23 @@ def add_document():
         target_folder = app.api.options['documents'][target_folder_index]
 
         filename = os.path.join(
-                            os.path.dirname(app.beancount_file),
-                            target_folder,
-                            request.form['account_name'].replace(':', '/').replace('..', ''),
-                            secure_filename(request.form['filename']))
+            os.path.dirname(app.beancount_file),
+            target_folder,
+            request.form['account_name'].replace(':', '/').replace('..', ''),
+            secure_filename(request.form['filename']))
 
         filepath = os.path.dirname(filename)
         if not os.path.exists(filepath):
             os.makedirs(filepath, exist_ok=True)
 
         if os.path.isfile(filename):
-            return "File \"{}\" already exists. Aborted document upload.".format(filename), 409
+            return "File \"{}\" already exists." \
+                "Aborted document upload.".format(filename), 409
 
         file.save(filename)
         return "Uploaded to {}".format(filename), 200
-    return "No file detected or no documents folder specified in options. Aborted upload.", 424
+    return "No file detected or no documents folder specified in options." \
+           "Aborted document upload.", 424
 
 
 @app.route('/context/<ehash>/')
@@ -166,7 +170,8 @@ def query(bql=None, query_hash=None, result_format='html'):
 
             filename = 'query_result'
             if query_hash:
-                filename = secure_filename(app.api.queries(query_hash=query_hash)['name'].strip())
+                filename = secure_filename(
+                    app.api.queries(query_hash=query_hash)['name'].strip())
 
             respIO.seek(0)
             response = make_response(respIO.read())
@@ -193,8 +198,9 @@ def get_stored_query(stored_query_hash=None):
 @app.route('/help/')
 @app.route('/help/<string:page_slug>/')
 def help_page(page_slug='index'):
-    html = markdown2.markdown_path(os.path.join(app.docs_dir, page_slug + '.md'),
-                                   extras=["metadata", "fenced-code-blocks", "tables"])
+    html = markdown2.markdown_path(
+        os.path.join(app.docs_dir, page_slug + '.md'),
+        extras=["metadata", "fenced-code-blocks", "tables"])
     return render_template('help.html', help_html=html, page_slug=page_slug,
                            help_pages=app.help_pages)
 
@@ -216,9 +222,10 @@ def source():
             else:
                 return app.api.source(file_path=requested_file_path)
         else:
-            return render_template('source.html',
-                                   file_path=request.args.get('file_path',
-                                                              app.api.beancount_file_path))
+            return render_template(
+                'source.html',
+                file_path=request.args.get('file_path',
+                                           app.api.beancount_file_path))
 
     elif request.method == "POST":
         file_path = request.form['file_path']
@@ -325,7 +332,8 @@ def template_context():
             return False
 
     if 'collapse-accounts' in app.config.user:
-        collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")
+        collapse_accounts = \
+            app.config.user['collapse-accounts'].strip().split("\n")
 
     def should_collapse_account(account_name):
         if 'collapse-accounts' not in app.config.user:
