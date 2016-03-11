@@ -65,7 +65,7 @@
         </div>
     </form>
     <form class="editor-save editor-save-query" action="{{ url_for('query') }}" method="get">
-        <input type="submit" value="Submit Query">
+        <input id="submit-query" type="submit" value="Submit Query">
     </form>
 
     {% if not error and not result %}

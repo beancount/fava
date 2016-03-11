@@ -309,15 +309,16 @@ class BeancountReportAPI(object):
         return self._journal(self.entries, Note)
 
     def queries(self, query_hash=None):
-        res = self._journal(self.all_entries, Query)
-        no_query = {
-            'name': 'None',
-            'query_string': ''
-        }
-        if query_hash:
-            return next( (x for x in res if x['hash'] == query_hash), no_query)
-        else:
-            return res
+        if not query_hash:
+            return self._journal(self.all_entries, Query)
+        matching_entries = [entry for entry in self.all_entries
+                            if query_hash == compare.hash_entry(entry)]
+
+        if not matching_entries:
+            return
+
+        assert len(matching_entries) == 1
+        return serialize_entry(matching_entries[0])
 
     def events(self, event_type=None, only_include_newest=False):
         events = self._journal(self.entries, Event)
