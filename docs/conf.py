@@ -35,7 +35,7 @@ html_theme_options = {
         "Issue Tracker": 'https://github.com/aumayr/fava/issues',
     },
 }
-html_static_path = ['_static']
+# html_static_path = ['_static']
 html_sidebars = {
     '**': [
         'about.html',
