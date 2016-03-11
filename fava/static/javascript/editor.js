@@ -73,14 +73,23 @@ $(document).ready(function() {
         });
 
         $('.stored-queries select').change(function() {
+            var sourceElement = $('form.editor-save .source-link');
             var selected_id_url = $(this).val();
+            var source_link = $('option:selected', this).attr('data-source-link');
+
             if (selected_id_url != "") {
                 $.get(selected_id_url)
                 .done(function(data) {
                     editor.setValue(data, -1);
                 });
+                sourceElement
+                    .attr('href', source_link)
+                    .toggle(true);
             } else {
                 editor.setValue("", -1);
+                sourceElement
+                    .attr('href', '#')
+                    .toggle(false);
             }
         });
     };

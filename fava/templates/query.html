@@ -2,6 +2,11 @@
 {% set active_page = 'query' %}
 {% set show_filters = False %}
 
+{% macro source_link(ehash) -%}
+{% set context = api.context(ehash) %}
+{{ url_for_source(file_path=context.filename, line=context.line) }}
+{%- endmacro %}
+
 {% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
 {% block content %}
@@ -23,7 +28,7 @@
             <select id="stored-queries">
                 <option value=""></option>
                 {% for query in api.queries() %}
-                    <option value="{{ url_for('get_stored_query', stored_query_hash=query['hash']) }}" data-stored-query-hash="{{query['hash']}}"{% if query['hash'] == query_hash %} selected="selected"{% endif %}>{{ query['name'] }}</option>
+                    <option value="{{ url_for('get_stored_query', stored_query_hash=query['hash']) }}" data-stored-query-hash="{{query['hash']}}" data-source-link="{{source_link(query['hash'])}}"{% if query['hash'] == query_hash %} selected="selected"{% endif %}>{{ query['name'] }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -35,6 +40,7 @@
         </div>
     </form>
     <form class="editor-save editor-save-query" action="{{ url_for('query') }}" method="get">
+        <a href="{% if query_hash != None %}{{ source_link(query_hash) }}{% endif %}" class="source-link"{% if query_hash == None %} style="visibility: hidden"{% endif %}>Source</a>
         <input type="submit" value="Submit Query">
     </form>
 
