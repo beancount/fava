@@ -4,6 +4,7 @@ Welcome to fava!
 .. toctree::
     :hidden:
 
+    changelog
     screenshots
     development
 

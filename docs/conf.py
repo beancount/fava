@@ -1,4 +1,4 @@
-extensions = ['alabaster']
+extensions = ['sphinx.ext.extlinks']
 source_suffix = '.rst'
 master_doc = 'index'
 
@@ -16,6 +16,11 @@ pygments_style = 'sphinx'
 extlinks = {
     'bug': ('https://github.com/aumayr/fava/issues/%s', '#'),
     'user': ('https://github.com/%s', '@'),
+}
+
+extlinks = {
+    'bug': ('https://github.com/aumayr/fava/issues/%s', '#'),
+    'user': ('https://github.com/%s', ''),
 }
 
 # Options for HTML output
