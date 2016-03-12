@@ -11,7 +11,7 @@
 
 {% import '_account_macros.html' as account_macros with context %}
 
-{% macro querycell(value, type_) %}
+{% macro querycell(name, value, type_) %}
 {% set type = type_|string %}
 {% if type == "<class 'beancount.core.inventory.Inventory'>" %}
     <td class="num">
@@ -125,7 +125,7 @@
                     {% for row in result.1 %}
                         <tr>
                             {% for name, type in result.0 %}
-                                {{ querycell(row[name], type)  }}
+                                {{ querycell(name, row[name], type)  }}
                             {% endfor %}
                         </tr>
                     {% endfor %}
