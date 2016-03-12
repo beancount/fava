@@ -19,11 +19,9 @@ future, and therefore I only tried to get the numbers required, and did not
 optimize for performance at all.
 """
 
+import datetime
 import operator
 import os
-from datetime import datetime, date
-
-from dateutil.relativedelta import relativedelta
 
 from beancount import loader
 from beancount.core import compare, getters, realization, inventory
@@ -40,29 +38,10 @@ from beancount.query import query
 from beancount.reports import context
 from beancount.utils import misc_utils
 
-from fava.util.dateparser import parse_date
+from fava.util.date import parse_date, get_next_interval
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with)
-
-
-def get_next_interval(date_, interval):
-    if interval == 'year':
-        return date(date_.year + 1, 1, 1)
-    elif interval == 'quarter':
-        quarter = (date_.month - 1) // 3 + 1
-        return date(date_.year, (quarter - 1) * 3 + 1, 1) + relativedelta(months=3)
-    elif interval == 'month':
-        month = (date_.month % 12) + 1
-        year = date_.year + (date_.month + 1 > 12)
-        return date(year, month, 1)
-    elif interval == 'week':
-        week_start = datetime.strptime("{}-W{}-1".format(date_.year, int(date_.strftime('%W'))), "%Y-W%W-%w").date()
-        return week_start + relativedelta(weeks=1)
-    elif interval == 'day':
-        return date_ + relativedelta(days=1)
-    else:
-        raise NotImplementedError
 
 
 class FilterException(Exception):
@@ -683,7 +662,7 @@ class BeancountReportAPI(object):
 
         entry = get_entry(last_posting)
 
-        return (date.today() - entry.date).days
+        return (datetime.date.today() - entry.date).days
 
     def account_open_metadata(self, account_name):
         real_account = realization.get_or_create(self.root_account,

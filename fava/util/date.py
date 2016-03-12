@@ -2,8 +2,26 @@ import re
 import datetime
 import calendar
 
-# TODO Parse a week-string:     2016-W02  for the second week of 2016
-# TODO Parse a quarter-string:  2016-Q1   for the first quarter of 2016
+
+def get_next_interval(date, interval):
+    if interval == 'year':
+        return datetime.date(date.year + 1, 1, 1)
+    elif interval == 'quarter':
+        quarter = (date.month - 1) // 3 + 1
+        month = quarter * 3 + 1
+        year = date.year + (month > 12)
+        return datetime.date(year, month % 12, 1)
+    elif interval == 'month':
+        month = (date.month % 12) + 1
+        year = date.year + (date.month + 1 > 12)
+        return datetime.date(year, month, 1)
+    elif interval == 'week':
+        return date + datetime.timedelta(7 - date.weekday())
+    elif interval == 'day':
+        return date + datetime.timedelta(1)
+    else:
+        raise NotImplementedError
+
 
 months = [m.lower() for m in calendar.month_name]
 months_abbr = [m.lower() for m in calendar.month_abbr]
@@ -17,6 +35,12 @@ is_range_re = re.compile('(.*?)\s(?:-|to)\s(.*)')
 # this matches dates of the form 'year-month-day'
 # day or month and day may be omitted
 year_first_re = re.compile('^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$')
+
+# this matches a week like 2016-W02 for the second week of 2016
+week_re = re.compile('^(\d{4})-w(\d{2})$')
+
+# this matches a quarter like 2016-Q1 for the first quarter of 2016
+quarter_re = re.compile('^(\d{4})-q(\d)$')
 
 # this will match any date of the form "day month_name year".
 year_last_re = re.compile('^(?:{1} )?'
@@ -111,6 +135,20 @@ def parse_date(string):
         day = year_last.group(1) or year_last.group(3)
         return daterange(year, _parse_month(month), day)
 
+    week = week_re.match(string)
+    if week:
+        year, week = week.group(1, 2)
+        date_str = '{}{}1'.format(year, week)
+        first_week_day = datetime.datetime.strptime(date_str, '%Y%W%w').date()
+        return first_week_day, get_next_interval(first_week_day, 'week')
+
+    quarter = quarter_re.match(string)
+    if quarter:
+        year, quarter = map(int, quarter.group(1, 2))
+        quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
+        return quarter_first_day, get_next_interval(quarter_first_day,
+                                                    'quarter')
+
     mod_date = mod_date_re.match(string)
     if mod_date:
         today = datetime.date.today()
@@ -143,6 +181,8 @@ if __name__ == '__main__':
         'this november': daterange(today.year, 11),
         '2nd aug, 2010': daterange(2010, 8, 2),
         'august 3rd, 2012': daterange(2012, 8, 3),
+        '2015-W01': (datetime.date(2015, 1, 5), datetime.date(2015, 1, 12)),
+        '2015-Q2': (datetime.date(2015, 4, 1), datetime.date(2015, 7, 1)),
         '2014 to 2015': (daterange(2014)[0], daterange(2015)[1]),
         '2011-10 - 2015': (daterange(2011, 10)[0], daterange(2015)[1]),
     }

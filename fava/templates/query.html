@@ -9,7 +9,7 @@
 
 {% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
-{% import '_account_macros.html' as account_macros with context %}
+{% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% macro querycell(name, value, type_) %}
 {% set type = type_|string %}

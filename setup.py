@@ -44,7 +44,6 @@ setup(
         'pyexcel-ods3>=0.1.1',
         'pyexcel-xls>=0.1.0',
         'pyexcel-xlsx>=0.1.0',
-        'python-dateutil>=2.4.2'
     ],
     zip_safe=False,
     classifiers=[

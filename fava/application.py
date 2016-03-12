@@ -81,6 +81,7 @@ def account_with_interval_balances(name):
 def account_with_interval_changes(name):
     return render_template('account.html', account_name=name, accumulate=False)
 
+
 @app.route('/')
 def index():
     return redirect(url_for('report', report_name='income_statement'))
@@ -344,7 +345,8 @@ def template_context():
                 config_file_defaults=app.config.user['file_defaults'],
                 operating_currencies=app.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'),
-                interval=request.args.get('interval', app.config.user['default-interval']))
+                interval=request.args.get('interval',
+                                          app.config.user['default-interval']))
 
 
 def uniquify(seq):
