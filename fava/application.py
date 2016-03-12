@@ -149,7 +149,7 @@ def query(bql=None, query_hash=None, result_format='html'):
     result_format = request.args.get('result_format', 'html')
 
     if query_hash:
-        query = app.api.queries(query_hash=query_hash)['query_string'].strip()
+        query = app.api.queries(query_hash=query_hash)['query_string']
     else:
         query = request.args.get('bql', '')
     error = None
@@ -187,12 +187,9 @@ def query(bql=None, query_hash=None, result_format='html'):
 
 @app.route('/query/stored_queries/<string:stored_query_hash>')
 def get_stored_query(stored_query_hash=None):
-    bql = app.api.queries(query_hash=stored_query_hash)['query_string'].strip()
     if request.is_xhr:
-        return bql
-    else:
-        return redirect(url_for('query', bql=bql,
-                                query_hash=stored_query_hash))
+        return app.api.queries(query_hash=stored_query_hash)['query_string']
+
 
 
 @app.route('/help/')
