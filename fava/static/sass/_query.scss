@@ -28,9 +28,11 @@ article#page-query {
 
     div.stored-queries {
         color: lighten($color_text, 40);
-        font-size: 1px;
         float: right;
         margin-bottom: 10px;
+
+        label { margin-right: 8px; }
+        a { margin-left: 6px; }
     }
 
     div.editor-wrapper {

@@ -73,14 +73,23 @@ $(document).ready(function() {
         });
 
         $('.stored-queries select').change(function() {
-            var selected_id_url = $(this).val();
-            if (selected_id_url != "") {
-                $.get(selected_id_url)
+            var sourceElement = $('.stored-queries a.source-link');
+            var selectedIdUrl = $(this).val();
+            var sourceLink = $('option:selected', this).attr('data-source-link');
+
+            if (selectedIdUrl != "") {
+                $.get(selectedIdUrl)
                 .done(function(data) {
                     editor.setValue(data, -1);
                 });
+                sourceElement
+                    .attr('href', sourceLink)
+                    .toggle(true);
             } else {
                 editor.setValue("", -1);
+                sourceElement
+                    .attr('href', '#')
+                    .toggle(false);
             }
         });
     };
