@@ -57,18 +57,13 @@ $(document).ready(function() {
             mode: "ace/mode/sql",
         });
 
-        $('form.editor-save input[type="submit"]').click(function(event) {
+        $('#submit-query').click(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
             var nextUrl = $button.parents('form').attr('action');
             nextUrl = nextUrl + (nextUrl.split('?')[1] ? '&' : '?') + "bql=" + encodeURIComponent(editor.getValue());
-            var storedQuerySelectedIndex = $('.stored-queries select').prop('selectedIndex');
-            if (storedQuerySelectedIndex > 0) {
-                var storedQueryHash = $('.stored-queries select option:nth-child(' + (storedQuerySelectedIndex + 1) + ')').attr('data-stored-query-hash');
-                nextUrl = nextUrl + '&query_hash=' + storedQueryHash;
-            }
             window.location.href = nextUrl;
         });
 
