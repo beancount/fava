@@ -9,6 +9,7 @@ import pyexcel.ext.xls
 import pyexcel.ext.xlsx
 import pyexcel.ext.ods3
 
+
 class FavaExcel:
     def __init__(self, results, error):
         if results:
@@ -19,7 +20,7 @@ class FavaExcel:
                 self.result_array.append(self.row_to_pyexcel(row, results[0]))
         else:
             self.result_array = [[error]]
-    
+
     def save(self, result_format, query):
         if result_format in ('xls', 'xlsx', 'ods'):
             book = pyexcel.Book(OrderedDict([
@@ -29,13 +30,15 @@ class FavaExcel:
             respIO = io.BytesIO()
             book.save_to_memory(result_format, respIO)
         else:
-            respIO = pyexcel.save_as(array=self.result_array, dest_file_type=result_format)
+            respIO = pyexcel.save_as(array=self.result_array,
+                                     dest_file_type=result_format)
         return respIO
 
     def currencies_from_inventory(self, results):
         self.currencies = {}
         for idx, column in enumerate(results[0]):
-            if str(column[1]) == "<class 'beancount.core.inventory.Inventory'>":
+            if str(column[1]) == \
+                    "<class 'beancount.core.inventory.Inventory'>":
                 self.currencies[idx] = OrderedDict()
         for row in results[1]:
             for idx in self.currencies.keys():
@@ -80,5 +83,3 @@ class FavaExcel:
             else:
                 result.append(name)
         return result
-
-

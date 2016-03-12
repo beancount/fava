@@ -1,14 +1,24 @@
 language: python
-python:
-  - "3.3"
-  - "3.4"
-  - "3.5"
 
 install:
-  - pip install --editable .
+  - pip install tox
+  - pip install -e .
 
-script: make test
+script: tox -e $TOXENV
 
 matrix:
+  include:
+    - python: 3.3
+      os: linux
+      env: TOXENV=py33
+    - python: 3.4
+      os: linux
+      env: TOXENV=py34
+    - python: 3.5
+      os: linux
+      env: TOXENV=py35
+    - python: 3.5
+      os: linux
+      env: TOXENV=flake8
   allow_failures:
-    - python: "3.3"
+    - python: 3.3

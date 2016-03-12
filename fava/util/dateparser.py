@@ -41,7 +41,7 @@ def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
     year, month, day = map(lambda x: int(x) if x else None, (year, month, day))
     if not (year or month or day):
         start = datetime.date.today() + timedelta
-        end = start + datetime.timedelta(days = 1)
+        end = start + datetime.timedelta(days=1)
         return start, end
     elif (not year) or (day and not month):
         raise Exception
@@ -53,7 +53,7 @@ def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
         end = datetime.date(year + (month > 11), (month % 12) + 1, 1)
     else:  # ~= if (year and month and day)
         start = datetime.date(year, month, day)
-        end = start + datetime.timedelta(days = 1)
+        end = start + datetime.timedelta(days=1)
     return start, end
 
 
@@ -63,6 +63,7 @@ def _parse_month(month):
     month = months.index(month) if month in months[1:] else month
     month = months_abbr.index(month) if month in months_abbr[1:] else month
     return month
+
 
 def parse_date(string):
     """"Tries to parse the given string into two date objects marking the

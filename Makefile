@@ -7,4 +7,4 @@ clean:
 	rm -r fava/static/node_modules
 
 test:
-	cd tests; py.test .
+	tox

@@ -26,6 +26,7 @@ app.api = BeancountReportAPI()
 defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'default-settings.conf')
 
+
 def load_settings(user_settings_file_path=None):
     app.config.raw = configparser.ConfigParser()
     app.config.raw.read(defaults_file)
@@ -46,13 +47,16 @@ def load_settings(user_settings_file_path=None):
 
 load_settings()
 
-app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
+app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                            'docs')
+
 
 def list_help_pages():
     help_pages = []
 
     for page in os.listdir(app.docs_dir):
-        html = markdown2.markdown_path(os.path.join(app.docs_dir, page), extras=["metadata"])
+        html = markdown2.markdown_path(os.path.join(app.docs_dir, page),
+                                       extras=["metadata"])
         slug = "help/{}".format(os.path.splitext(os.path.basename(page))[0])
         title = html.metadata['title']
 
@@ -61,7 +65,6 @@ def list_help_pages():
     return sorted(help_pages, key=lambda x: x[1] == 'Index', reverse=True)
 
 app.help_pages = list_help_pages()
-
 
 
 @app.route('/account/<name>/')
@@ -85,53 +88,60 @@ def account_with_interval_changes(name, interval):
 def index():
     return redirect(url_for('report', report_name='income_statement'))
 
+
 @app.route('/document/', methods=['GET'])
-@app.route('/document/add/', methods=['POST'])
 def document():
-    if request.method == "GET":
-        document_path = request.args.get('file_path', None)
+    document_path = request.args.get('file_path', None)
 
-        if document_path and app.api.is_valid_document(document_path):
-            # metadata-statement-paths may be relative to the beancount-file
-            if not os.path.isabs(document_path):
-                document_path = os.path.join(os.path.dirname(
-                    os.path.realpath(app.beancount_file)), document_path)
+    if document_path and app.api.is_valid_document(document_path):
+        # metadata-statement-paths may be relative to the beancount-file
+        if not os.path.isabs(document_path):
+            document_path = os.path.join(os.path.dirname(
+                os.path.realpath(app.beancount_file)), document_path)
 
-            directory = os.path.dirname(document_path)
-            filename = os.path.basename(document_path)
-            return send_from_directory(directory, filename, as_attachment=True)
-        else:
-            return "File \"{}\" not found in entries.".format(document_path), 404
+        directory = os.path.dirname(document_path)
+        filename = os.path.basename(document_path)
+        return send_from_directory(directory, filename, as_attachment=True)
     else:
-        file = request.files['file']
-        if file and len(app.api.options['documents']) > 0: # and allowed_file(file.filename):
-            # TOOD Probably it should ask to enter a date, if the document
-            #      doesn't start with one, so you don't need to rename the
-            #      documents in advance.
+        return "File \"{}\" not found in entries.".format(document_path), 404
 
-            target_folder_index = int(request.form['targetFolderIndex']);
-            target_folder = app.api.options['documents'][target_folder_index]
 
-            filename = os.path.join(
-                                os.path.dirname(app.beancount_file),
-                                target_folder,
-                                request.form['account_name'].replace(':', '/').replace('..', ''),
-                                secure_filename(request.form['filename']))
+@app.route('/document/add/', methods=['POST'])
+def add_document():
+    file = request.files['file']
+    if file and len(app.api.options['documents']) > 0:
+        # and allowed_file(file.filename):
+        # TOOD Probably it should ask to enter a date, if the document
+        #      doesn't start with one, so you don't need to rename the
+        #      documents in advance.
 
-            filepath = os.path.dirname(filename)
-            if not os.path.exists(filepath):
-                os.makedirs(filepath, exist_ok=True)
+        target_folder_index = int(request.form['targetFolderIndex'])
+        target_folder = app.api.options['documents'][target_folder_index]
 
-            if os.path.isfile(filename):
-                return "File \"{}\" already exists. Aborted document upload.".format(filename), 409
+        filename = os.path.join(
+            os.path.dirname(app.beancount_file),
+            target_folder,
+            request.form['account_name'].replace(':', '/').replace('..', ''),
+            secure_filename(request.form['filename']))
 
-            file.save(filename)
-            return "Uploaded to {}".format(filename), 200
-        return "No file detected or no documents folder specified in options. Aborted document upload.", 424
+        filepath = os.path.dirname(filename)
+        if not os.path.exists(filepath):
+            os.makedirs(filepath, exist_ok=True)
+
+        if os.path.isfile(filename):
+            return "File \"{}\" already exists." \
+                "Aborted document upload.".format(filename), 409
+
+        file.save(filename)
+        return "Uploaded to {}".format(filename), 200
+    return "No file detected or no documents folder specified in options." \
+           "Aborted document upload.", 424
+
 
 @app.route('/context/<ehash>/')
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
+
 
 @app.route('/query/')
 def query(bql=None, query_hash=None, result_format='html'):
@@ -160,11 +170,13 @@ def query(bql=None, query_hash=None, result_format='html'):
 
             filename = 'query_result'
             if query_hash:
-                filename = secure_filename(app.api.queries(query_hash=query_hash)['name'].strip())
+                filename = secure_filename(
+                    app.api.queries(query_hash=query_hash)['name'].strip())
 
             respIO.seek(0)
             response = make_response(respIO.read())
-            response.headers["Content-Disposition"] = "attachment; filename={}.{}".format(filename, result_format)
+            response.headers["Content-Disposition"] =\
+                "attachment; filename={}.{}".format(filename, result_format)
             return response
         else:
             return redirect(url_for('query'))
@@ -182,11 +194,16 @@ def get_stored_query(stored_query_hash=None):
         return redirect(url_for('query', bql=bql,
                                 query_hash=stored_query_hash))
 
+
 @app.route('/help/')
 @app.route('/help/<string:page_slug>/')
 def help_page(page_slug='index'):
-    html = markdown2.markdown_path(os.path.join(app.docs_dir, page_slug + '.md'), extras=["metadata", "fenced-code-blocks", "tables"])
-    return render_template('help.html', help_html=html, page_slug=page_slug, help_pages=app.help_pages)
+    html = markdown2.markdown_path(
+        os.path.join(app.docs_dir, page_slug + '.md'),
+        extras=["metadata", "fenced-code-blocks", "tables"])
+    return render_template('help.html', help_html=html, page_slug=page_slug,
+                           help_pages=app.help_pages)
+
 
 @app.route('/journal/')
 def journal():
@@ -205,7 +222,10 @@ def source():
             else:
                 return app.api.source(file_path=requested_file_path)
         else:
-            return render_template('source.html', file_path=request.args.get('file_path', app.api.beancount_file_path))
+            return render_template(
+                'source.html',
+                file_path=request.args.get('file_path',
+                                           app.api.beancount_file_path))
 
     elif request.method == "POST":
         file_path = request.form['file_path']
@@ -312,7 +332,8 @@ def template_context():
             return False
 
     if 'collapse-accounts' in app.config.user:
-        collapse_accounts = app.config.user['collapse-accounts'].strip().split("\n")
+        collapse_accounts = \
+            app.config.user['collapse-accounts'].strip().split("\n")
 
     def should_collapse_account(account_name):
         if 'collapse-accounts' not in app.config.user:
