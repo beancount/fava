@@ -4,9 +4,11 @@ def get_version(version=None):
     """
 
     if version[4] > 0:  # 0.2.1-alpha.1
-        return "{}.{}.{}-{}.{}".format(version[0], version[1], version[2], version[3], version[4])
+        return "{}.{}.{}-{}.{}".format(version[0], version[1], version[2],
+                                       version[3], version[4])
     elif version[3] != '':  # 0.2.1-alpha
-        return "{}.{}.{}-{}".format(version[0], version[1], version[2], version[3])
+        return "{}.{}.{}-{}".format(version[0], version[1], version[2],
+                                    version[3])
     elif version[2] > 0:  # 0.2.1
         return "{}.{}.{}".format(version[0], version[1], version[2])
     else:  # 0.2

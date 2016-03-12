@@ -59,14 +59,77 @@ class FilterException(Exception):
     pass
 
 
+class EntryFilter(object):
+    def __init__(self):
+        self.value = None
+
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        return True
+
+    def _include_entry(self, entry):
+        raise NotImplementedError
+
+    def _filter(self, entries, options):
+        return [entry for entry in entries if self._include_entry(entry)]
+
+    def apply(self, entries, options):
+        if self.value:
+            return self._filter(entries, options)
+        else:
+            return entries
+
+
+class DateFilter(EntryFilter):
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        if not self.value:
+            return True
+        try:
+            self.begin_date, self.end_date = parse_date(self.value)
+        except TypeError:
+            raise FilterException('Failed to parse date: {}'
+                                  .format(self.value))
+        return True
+
+    def _filter(self, entries, options):
+        entries, _ = summarize.clamp_opt(entries, self.begin_date,
+                                         self.end_date, options)
+        return entries
+
+
+class TagFilter(EntryFilter):
+    def _include_entry(self, entry):
+        return isinstance(entry, Transaction) and \
+            entry.tags and (entry.tags & set(self.value))
+
+
+class AccountFilter(EntryFilter):
+    def _include_entry(self, entry):
+        return isinstance(entry, Transaction) and \
+            any(has_component(posting.account, self.value)
+                for posting in entry.postings)
+
+
+class PayeeFilter(EntryFilter):
+    def _include_entry(self, entry):
+        return isinstance(entry, Transaction) and \
+            ((entry.payee and (entry.payee in self.value)) or
+             (not entry.payee and ('' in self.value)))
+
+
 class BeancountReportAPI(object):
     def __init__(self, beancount_file_path=None):
         self.beancount_file_path = beancount_file_path
         self.filters = {
-            'time': None,
-            'tag': set(),
-            'account': None,
-            'payee': set(),
+            'time': DateFilter(),
+            'tag': TagFilter(),
+            'account': AccountFilter(),
+            'payee': PayeeFilter(),
         }
         if self.beancount_file_path:
             self.load_file()
@@ -77,13 +140,18 @@ class BeancountReportAPI(object):
         if beancount_file_path:
             self.beancount_file_path = beancount_file_path
 
-        self.all_entries, self.errors, self.options = loader.load_file(self.beancount_file_path)
+        self.all_entries, self.errors, self.options = \
+            loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
         self.account_types = options.get_account_types(self.options)
 
         self.title = self.options['title']
-        self.format_string = '{:,f}' if self.options['render_commas'] else '{:f}'
-        self.default_format_string = '{:,.2f}' if self.options['render_commas'] else '{:.2f}'
+        if self.options['render_commas']:
+            self.format_string = '{:,f}'
+            self.default_format_string = '{:,.2f}'
+        else:
+            self.format_string = '{:f}'
+            self.default_format_string = '{:.2f}'
         self.dcontext = self.options['dcontext']
 
         self.active_years = list(getters.get_active_years(self.all_entries))
@@ -100,38 +168,16 @@ class BeancountReportAPI(object):
     def _apply_filters(self):
         self.entries = self.all_entries
 
-        if self.filters['time']:
-            try:
-                begin_date, end_date = parse_date(self.filters['time'])
-                self.entries, _ = summarize.clamp_opt(self.entries, begin_date, end_date, self.options)
-            except TypeError:
-                raise FilterException('Failed to parse date string: {}'.format(self.filters['time']))
+        for filter in self.filters.values():
+            self.entries = filter.apply(self.entries, self.options)
 
-        if self.filters['tag']:
-            self.entries = [entry
-                            for entry in self.entries
-                            if isinstance(entry, Transaction) and entry.tags and (entry.tags & set(self.filters['tag']))]
-
-        if self.filters['payee']:
-            self.entries = [entry
-                            for entry in self.entries
-                            if (isinstance(entry, Transaction) and entry.payee and (entry.payee in self.filters['payee']))
-                            or (isinstance(entry, Transaction) and not entry.payee and ('' in self.filters['payee']))]
-
-        if self.filters['account']:
-            self.entries = [entry
-                            for entry in self.entries
-                            if isinstance(entry, Transaction) and
-                                any(has_component(posting.account, self.filters['account'])
-                                    for posting in entry.postings)]
-
-        self.root_account = realization.realize(self.entries, self.account_types)
+        self.root_account = realization.realize(self.entries,
+                                                self.account_types)
 
     def filter(self, **kwargs):
         changed = False
-        for filter, current_value in self.filters.items():
-            if filter in kwargs and kwargs[filter] != current_value:
-                self.filters[filter] = kwargs[filter]
+        for filter_name, filter in self.filters.items():
+            if filter.set(kwargs[filter_name]):
                 changed = True
 
         if changed:
@@ -159,7 +205,9 @@ class BeancountReportAPI(object):
         """
         return [{
             'account': ra.account,
-            'balances_children': serialize_inventory(realization.compute_balance(ra), at_cost=True),
+            'balances_children':
+                serialize_inventory(realization.compute_balance(ra),
+                                    at_cost=True),
             'balances': serialize_inventory(ra.balance, at_cost=True),
             'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
             'postings_count': len(ra.txn_postings)
@@ -180,8 +228,8 @@ class BeancountReportAPI(object):
 
     def _interval_tuples(self, interval, entries):
         """
-        Calculates tuples of (begin_date, end_date) of length interval for the period in
-        which entries contains Transactions.
+        Calculates tuples of (begin_date, end_date) of length interval for the
+        period in which entries contains Transactions.
 
         Args:
             interval: Either 'month' or 'year'
@@ -192,7 +240,8 @@ class BeancountReportAPI(object):
                 ...
             ]
         """
-        date_first, date_last = getters.get_min_max_dates(entries, (Transaction))
+        date_first, date_last = getters.get_min_max_dates(entries,
+                                                          (Transaction))
 
         if not date_first:
             return []
@@ -206,19 +255,27 @@ class BeancountReportAPI(object):
         return interval_tuples
 
     def _balances_totals(self, names, begin_date, end_date):
-        totals = [realization.compute_balance(self._real_account(account_name, self.entries, begin_date, end_date)) for account_name in names]
-        return serialize_inventory(sum(totals, inventory.Inventory()), at_cost=True)
+        totals = [realization.compute_balance(
+            self._real_account(account_name, self.entries, begin_date,
+                               end_date))
+                  for account_name in names]
+        return serialize_inventory(sum(totals, inventory.Inventory()),
+                                   at_cost=True)
 
     def interval_totals(self, interval, account_name, accumulate=False):
         """Renders totals for account (or accounts) in the intervals."""
-        names = [account_name] if isinstance(account_name, str) else account_name
+        if isinstance(account_name, str):
+            names = [account_name]
+        else:
+            names = account_name
 
         interval_tuples = self._interval_tuples(interval, self.entries)
         date_first, _ = getters.get_min_max_dates(self.entries, (Transaction))
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
-            'totals': self._balances_totals(names, begin_date if not accumulate else date_first, end_date),
+            'totals': self._balances_totals(
+                names, begin_date if not accumulate else date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
     def _real_account(self, account_name, entries, begin_date=None,
@@ -240,7 +297,8 @@ class BeancountReportAPI(object):
         return realization.get(realization.realize(entries, min_accounts),
                                account_name)
 
-    def balances(self, account_name, begin_date=None, end_date=None, min_accounts=None):
+    def balances(self, account_name, begin_date=None, end_date=None,
+                 min_accounts=None):
         """
         Renders account_name and it's children as a flat list to be used
         in rendering tables.
@@ -260,13 +318,15 @@ class BeancountReportAPI(object):
               }, ...
           ]
         """
-        real_account = self._real_account(account_name, self.entries, begin_date, end_date, min_accounts)
+        real_account = self._real_account(account_name, self.entries,
+                                          begin_date, end_date, min_accounts)
 
         return self._table_tree(real_account)
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
-        return self._table_tree(self._real_account(account_name, closing_entries))
+        return self._table_tree(self._real_account(account_name,
+                                                   closing_entries))
 
     def interval_balances(self, interval, account_name, accumulate=False):
         account_names = [account
@@ -275,11 +335,13 @@ class BeancountReportAPI(object):
 
         interval_tuples = self._interval_tuples(interval, self.entries)
         if accumulate:
-            interval_balances = [self.balances(account_name, interval_tuples[0][0], end_date,
+            interval_balances = [self.balances(account_name,
+                                               interval_tuples[0][0], end_date,
                                                min_accounts=account_names)
                                  for begin_date, end_date in interval_tuples]
         else:
-            interval_balances = [self.balances(account_name, begin_date, end_date,
+            interval_balances = [self.balances(account_name,
+                                               begin_date, end_date,
                                                min_accounts=account_names)
                                  for begin_date, end_date in interval_tuples]
         return list(zip(*interval_balances)), interval_tuples
@@ -300,7 +362,8 @@ class BeancountReportAPI(object):
 
             return self._journal(postings, with_change_and_balance=True)
         else:
-            return self._journal(self.entries, with_change_and_balance=with_change_and_balance)
+            return self._journal(
+                self.entries, with_change_and_balance=with_change_and_balance)
 
     def documents(self):
         return self._journal(self.entries, Document)
@@ -315,7 +378,7 @@ class BeancountReportAPI(object):
             'query_string': ''
         }
         if query_hash:
-            return next( (x for x in res if x['hash'] == query_hash), no_query)
+            return next((x for x in res if x['hash'] == query_hash), no_query)
         else:
             return res
 
@@ -330,18 +393,19 @@ class BeancountReportAPI(object):
             for event in events:
                 if not event['type'] in seen_types:
                     seen_types.append(event['type'])
-            events = list({ event['type']: event for event in events }.values())
+            events = list({event['type']: event for event in events}.values())
 
         return events
 
     def holdings(self, aggregation_key=None):
-        holdings_list = holdings.get_final_holdings(self.entries,
-                                                    (self.account_types.assets,
-                                                     self.account_types.liabilities),
-                                                    self.price_map)
+        holdings_list = holdings.get_final_holdings(
+            self.entries,
+            (self.account_types.assets, self.account_types.liabilities),
+            self.price_map)
+
         if aggregation_key:
-            holdings_list = holdings.aggregate_holdings_by(holdings_list,
-                                                           operator.attrgetter(aggregation_key))
+            holdings_list = holdings.aggregate_holdings_by(
+                holdings_list, operator.attrgetter(aggregation_key))
         return holdings_list
 
     def _net_worth_in_periods(self):
@@ -350,8 +414,9 @@ class BeancountReportAPI(object):
         end_dates = [p[1] for p in month_tuples]
 
         for (begin_date, end_date), holdings_list in \
-                zip(month_tuples, holdings_at_dates(self.entries, end_dates,
-                                                    self.price_map, self.options)):
+                zip(month_tuples,
+                    holdings_at_dates(self.entries, end_dates,
+                                      self.price_map, self.options)):
             totals = {}
             for currency in self.options['operating_currency']:
                 currency_holdings_list = \
@@ -361,14 +426,15 @@ class BeancountReportAPI(object):
                     continue
 
                 holdings_list = holdings.aggregate_holdings_by(
-                    currency_holdings_list, operator.attrgetter('cost_currency'))
+                    currency_holdings_list,
+                    operator.attrgetter('cost_currency'))
 
                 holdings_list = [holding
                                  for holding in holdings_list
                                  if holding.currency and holding.cost_currency]
 
-                # If after conversion there are no valid holdings, skip the currency
-                # altogether.
+                # If after conversion there are no valid holdings, skip the
+                # currency altogether.
                 if holdings_list:
                     totals[currency] = holdings_list[0].market_value
 
@@ -432,10 +498,14 @@ class BeancountReportAPI(object):
         } for journal_entry in journal if 'balance' in journal_entry.keys()]
 
     def source_files(self):
-        # Make sure the included source files are sorted, behind the main source file
-        return [self.beancount_file_path] + sorted(filter(lambda x: x != self.beancount_file_path,
-                    [os.path.join(os.path.dirname(self.beancount_file_path), filename) for filename in self.options['include']]
-                ))
+        # Make sure the included source files are sorted, behind the main
+        # source file
+        return [self.beancount_file_path] + \
+            sorted(filter(
+                lambda x: x != self.beancount_file_path,
+                [os.path.join(
+                    os.path.dirname(self.beancount_file_path), filename)
+                 for filename in self.options['include']]))
 
     def source(self, file_path=None):
         if file_path:
@@ -460,7 +530,8 @@ class BeancountReportAPI(object):
         return sorted(self.price_map.forward_pairs)
 
     def prices(self, base, quote):
-        return prices.get_all_prices(self.price_map, "{}/{}".format(base, quote))
+        return prices.get_all_prices(self.price_map,
+                                     "{}/{}".format(base, quote))
 
     def _activity_by_account(self, account_name=None):
         nb_activity_by_account = []
@@ -493,33 +564,41 @@ class BeancountReportAPI(object):
     def statistics(self, account_name=None):
         if account_name:
             activity_by_account = self._activity_by_account(account_name)
-            return activity_by_account[0] if len(activity_by_account) == 1 else None
-        else:
-            # nb_entries_by_type
-            entries_by_type = misc_utils.groupby(lambda entry: type(entry).__name__, self.entries)
-            nb_entries_by_type = { name: len(entries) for name, entries in entries_by_type.items() }
+            if len(activity_by_account) == 1:
+                return activity_by_account[0]
+            else:
+                return None
 
-            all_postings = [posting
-                            for entry in self.entries
-                            if isinstance(entry, Transaction)
-                            for posting in entry.postings]
+        # nb_entries_by_type
+        entries_by_type = misc_utils.groupby(
+            lambda entry: type(entry).__name__, self.entries)
+        nb_entries_by_type = {name: len(entries)
+                              for name, entries in entries_by_type.items()}
 
-            # nb_postings_by_account
-            postings_by_account = misc_utils.groupby(lambda posting: posting.account, all_postings)
-            nb_postings_by_account = { key: len(postings) for key, postings in postings_by_account.items() }
+        all_postings = [posting
+                        for entry in self.entries
+                        if isinstance(entry, Transaction)
+                        for posting in entry.postings]
 
-            return {
-                'entries_by_type':           nb_entries_by_type,
-                'entries_by_type_total':     sum(nb_entries_by_type.values()),
-                'postings_by_account':       nb_postings_by_account,
-                'postings_by_account_total': sum(nb_postings_by_account.values()),
-                'activity_by_account':       self._activity_by_account()
-            }
+        # nb_postings_by_account
+        postings_by_account = misc_utils.groupby(
+            lambda posting: posting.account, all_postings)
+        nb_postings_by_account = {account: len(postings)
+                                  for account, postings
+                                  in postings_by_account.items()}
 
+        return {
+            'entries_by_type':           nb_entries_by_type,
+            'entries_by_type_total':     sum(nb_entries_by_type.values()),
+            'postings_by_account':       nb_postings_by_account,
+            'postings_by_account_total': sum(nb_postings_by_account.values()),
+            'activity_by_account':       self._activity_by_account()
+        }
 
     def is_valid_document(self, file_path):
         """Check if the given file_path is present in one of the
-           Document entries or in a "statement"-metadata in a Transaction entry.
+           Document entries or in a "statement"-metadata in a Transaction
+           entry.
 
            :param file_path: A path to a file.
            :return: True when the file_path is refered to in a Document entry,
@@ -532,13 +611,15 @@ class BeancountReportAPI(object):
 
         if not is_present:
             for entry in misc_utils.filter_type(self.entries, Transaction):
-                if 'statement' in entry.meta and entry.meta['statement'] == file_path:
+                if 'statement' in entry.meta and \
+                        entry.meta['statement'] == file_path:
                     is_present = True
 
         return is_present
 
     def query(self, bql_query_string, numberify=False):
-        return query.run_query(self.all_entries, self.options, bql_query_string, numberify=numberify)
+        return query.run_query(self.all_entries, self.options,
+                               bql_query_string, numberify=numberify)
 
     def _last_posting_for_account(self, account_name):
         """
@@ -547,7 +628,8 @@ class BeancountReportAPI(object):
         real_account = realization.get_or_create(self.all_root_account,
                                                  account_name)
 
-        last_posting = realization.find_last_active_posting(real_account.txn_postings)
+        last_posting = realization.find_last_active_posting(
+            real_account.txn_postings)
 
         if not isinstance(last_posting, Close):
             return last_posting
@@ -560,9 +642,9 @@ class BeancountReportAPI(object):
 
     def is_account_uptodate(self, account_name, look_back_days=60):
         """
-        green:  if the latest posting is a balance check that passed (i.e., known-good)
-        red:    if the latest posting is a balance check that failed (i.e., known-bad)
-        yellow: if the latest posting is not a balance check (i.e., unknown)
+        green:  if the last entry is a balance check that passed
+        red:    if the last entry is a balance check that failed
+        yellow: if the last entry is not a balance check
         """
 
         last_posting = self._last_posting_for_account(account_name)
@@ -593,7 +675,8 @@ class BeancountReportAPI(object):
         return (date.today() - entry.date).days
 
     def account_open_metadata(self, account_name):
-        real_account = realization.get_or_create(self.root_account, account_name)
+        real_account = realization.get_or_create(self.root_account,
+                                                 account_name)
         postings = realization.get_postings(real_account)
         for posting in postings:
             if isinstance(posting, Open):

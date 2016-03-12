@@ -56,7 +56,8 @@ def serialize_entry_with(entry, change, balance):
     if isinstance(entry, Balance):
         new_entry['change'] = {}
         if entry.diff_amount:
-            new_entry['change'] = {entry.diff_amount.currency: entry.diff_amount.number}
+            new_entry['change'] = {entry.diff_amount.currency:
+                                   entry.diff_amount.number}
         new_entry['balance'] = serialize_inventory(balance)
 
     if isinstance(entry, Transaction):
@@ -72,12 +73,15 @@ def serialize_inventory(inventory, at_cost=False):
         inventory = inventory.cost()
     else:
         inventory = inventory.units()
-    return {p.units.currency: p.units.number for p in inventory if p.units.number != ZERO}
+    return {p.units.currency: p.units.number
+            for p in inventory if p.units.number != ZERO}
+
 
 def serialize_posting(posting):
     new_posting = posting._asdict()
     _add_metadata(new_posting, posting)
     return new_posting
+
 
 def _add_metadata(new_entry, entry):
     new_entry['meta'] = {
