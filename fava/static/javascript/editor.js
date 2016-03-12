@@ -73,17 +73,17 @@ $(document).ready(function() {
         });
 
         $('.stored-queries select').change(function() {
-            var sourceElement = $('form.editor-save .source-link');
-            var selected_id_url = $(this).val();
-            var source_link = $('option:selected', this).attr('data-source-link');
+            var sourceElement = $('.stored-queries a.source-link');
+            var selectedIdUrl = $(this).val();
+            var sourceLink = $('option:selected', this).attr('data-source-link');
 
-            if (selected_id_url != "") {
-                $.get(selected_id_url)
+            if (selectedIdUrl != "") {
+                $.get(selectedIdUrl)
                 .done(function(data) {
                     editor.setValue(data, -1);
                 });
                 sourceElement
-                    .attr('href', source_link)
+                    .attr('href', sourceLink)
                     .toggle(true);
             } else {
                 editor.setValue("", -1);
