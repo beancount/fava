@@ -11,8 +11,8 @@ Welcome to fava!
 fava is a web interface for the double-entry bookkeeping software `beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
 
-You can try out an online `demo <http://fava.pythonanywhere.com>`__ and there are some more
-screenshots :doc:`here <screenshots>`.
+You can try out an online `demo <http://fava.pythonanywhere.com>`__ and there
+are some more screenshots :doc:`here <screenshots>`.
 
 .. image:: screenshots/income-statement1.png
 
@@ -27,6 +27,8 @@ Start fava by running ::
 
     fava ledger.beancount
 
-pointing it to your beancount file -- and visit the web interface at `http://localhost:5000 <http://localhost:5000>`__.
+pointing it to your beancount file -- and visit the web interface at
+`http://localhost:5000 <http://localhost:5000>`__.
 
-(fava comes with Gmail-style keyboard shortcuts: Press ``?`` to show an overview)
+(fava comes with Gmail-style keyboard shortcuts: Press ``?`` to show an
+overview)

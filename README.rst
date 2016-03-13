@@ -14,36 +14,24 @@ fava
 .. image:: https://img.shields.io/travis/aumayr/fava.svg
    :target: https://travis-ci.org/aumayr/fava?branch=master
 
-Web interface for the double-entry bookkeeping software
-`beancount <http://furius.ca/beancount/>`__ with a focus on features and
-usability.
+fava is a web interface for the double-entry bookkeeping software `beancount
+<http://furius.ca/beancount/>`__ with a focus on features and usability.
 
-You can try out a demo here:
-`fava.pythonanywhere.com <http://fava.pythonanywhere.com>`__
+You can try out an online `demo <http://fava.pythonanywhere.com>`__ and there
+are some more screenshots `here
+<https://aumayr.github.io/fava/screenshots.html>`__.
 
-.. image:: https://raw.githubusercontent.com/aumayr/fava/master/util/screenshots/screenshot-01.png
+The `Getting Started
+<https://aumayr.github.io/fava/usage.html>`__ guide details the installation and
+how to get started with beancount.
 
-(More Screenshots here:
-`github.com/aumayr/fava/tree/master/util/screenshots <https://github.com/aumayr/fava/tree/master/util/screenshots>`__)
+If you are familiar with beancount, you can get started with fava::
 
-Installation
-------------
+    pip3 install beancount-fava
+    fava ledger.beancount
 
-1. Prerequisites: An installed version of
-   `beancount <http://furius.ca/beancount/>`__ and Python >= 3.4
-2. Install it from PyPI by running ``pip3 install beancount-fava``
-
-Usage
------
-
-1. Start ``fava`` by running ``fava    /Volumes/Ledger/example.ledger``
-   (substitute with the path to your own beancount-file) to run the
-   included web server.
-2. Point your browser at ``http://localhost:5000`` to view the web
-   interface.
-
-``fava`` comes with Gmail-style keyboard shortcuts: Press ? to show an
-overview of the keyboard shortcuts.
+and visit the web interface at `http://localhost:5000
+<http://localhost:5000>`__.
 
 Development
 -----------
