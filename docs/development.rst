@@ -15,3 +15,7 @@ If you want to hack on ``fava``, this will get you up and running:
 
 Note that you'll need to have the newest version of ``npm`` and
 ``NodeJS`` installed to build the JavaScript and CSS files.
+
+Contributions are very welcome, just open a PR on `Github <https://github.com/aumayr/fava/pulls>`__.
+
+fava is released under the `MIT License <https://github.com/aumayr/fava/blob/master/LICENSE>`__.
