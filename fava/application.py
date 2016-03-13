@@ -191,7 +191,6 @@ def get_stored_query(stored_query_hash=None):
         return app.api.queries(query_hash=stored_query_hash)['query_string']
 
 
-
 @app.route('/help/')
 @app.route('/help/<string:page_slug>/')
 def help_page(page_slug='index'):
