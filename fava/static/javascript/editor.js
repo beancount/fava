@@ -9,39 +9,6 @@ require('ace-builds/src-min/mode-sql');
 require('ace-builds/src-min/theme-chrome');
 require('ace-builds/src-min/ext-whitespace')
 
-// Lifted from LiveReload
-// (https://github.com/livereload/livereload-js/blob/master/dist/livereload.js#L178-L207)
-var CustomEvents = {
-    bind: function(element, eventName, handler) {
-      if (element.addEventListener) {
-        return element.addEventListener(eventName, handler, false);
-      } else if (element.attachEvent) {
-        element[eventName] = 1;
-        return element.attachEvent('onpropertychange', function(event) {
-          if (event.propertyName === eventName) {
-            return handler();
-          }
-        });
-      } else {
-        throw new Error("Attempt to attach custom event " + eventName + " to something which isn't a DOMElement");
-      }
-    },
-    fire: function(element, eventName) {
-      var event;
-      if (element.addEventListener) {
-        event = document.createEvent('HTMLEvents');
-        event.initEvent(eventName, true, true);
-        return document.dispatchEvent(event);
-      } else if (element.attachEvent) {
-        if (element[eventName]) {
-          return element[eventName]++;
-        }
-      } else {
-        throw new Error("Attempt to fire custom event " + eventName + " on something which isn't a DOMElement");
-      }
-    }
-};
-
 $(document).ready(function() {
     var defaultOptions = {
         theme: "ace/theme/chrome",
@@ -212,7 +179,7 @@ $(document).ready(function() {
             event.preventDefault();
             event.stopImmediatePropagation();
 
-            CustomEvents.fire(document, "LiveReloadShutDown");
+            $(document).trigger('LiveReloadShutDown');
 
             if (window.editorStripTrailingWhitespace) {
                 whitespace.trimTrailingSpace(editor.session, true);
