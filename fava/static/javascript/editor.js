@@ -183,6 +183,8 @@ $(document).ready(function() {
             event.preventDefault();
             event.stopImmediatePropagation();
 
+            $(document).trigger('LiveReloadShutDown');
+
             if (window.editorStripTrailingWhitespace) {
                 whitespace.trimTrailingSpace(editor.session, true);
             }
