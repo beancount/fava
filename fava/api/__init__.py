@@ -398,7 +398,7 @@ class BeancountReportAPI(object):
                 holdings_list, operator.attrgetter(aggregation_key))
         return holdings_list
 
-    def _net_worth_in_periods(self, interval):
+    def _net_worth_in_intervals(self, interval):
         interval_tuples = self._interval_tuples(interval, self.entries)
         interval_totals = []
         end_dates = [p[1] for p in interval_tuples]
@@ -415,18 +415,18 @@ class BeancountReportAPI(object):
                 if not currency_holdings_list:
                     continue
 
-                holdings_list = holdings.aggregate_holdings_by(
+                holdings_ = holdings.aggregate_holdings_by(
                     currency_holdings_list,
                     operator.attrgetter('cost_currency'))
 
-                holdings_list = [holding
-                                 for holding in holdings_list
-                                 if holding.currency and holding.cost_currency]
+                holdings_ = [holding
+                             for holding in holdings_
+                             if holding.currency and holding.cost_currency]
 
                 # If after conversion there are no valid holdings, skip the
                 # currency altogether.
-                if holdings_list:
-                    totals[currency] = holdings_list[0].market_value
+                if holdings_:
+                    totals[currency] = holdings_[0].market_value
 
             interval_totals.append({
                 'begin_date': begin_date,
@@ -436,7 +436,7 @@ class BeancountReportAPI(object):
         return interval_totals
 
     def net_worth(self, interval='month'):
-        interval_totals = self._net_worth_in_periods(interval)
+        interval_totals = self._net_worth_in_intervals(interval)
         if interval_totals:
             current = interval_totals[-1]['totals']
         else:
