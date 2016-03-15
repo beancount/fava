@@ -51,7 +51,7 @@
                         {% for price in prices %}
                             <tr>
                                 <td>{{ price.0 }}</td>
-                                <td class="num">{{ price.1 }}</td>
+                                <td class="num">{{ price.1|format_currency(commodity.1) }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
