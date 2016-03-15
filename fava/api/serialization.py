@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from beancount.core import compare, realization
-from beancount.core.data import Balance, Close, Transaction
+from beancount.core.data import Balance, Close, Transaction, TxnPosting
 from beancount.core.amount import Amount, decimal
 from beancount.core.position import Position
 from beancount.core.number import ZERO
@@ -91,8 +91,10 @@ def serialize_real_account(ra):
                                 at_cost=True),
         'balance': serialize_inventory(ra.balance, at_cost=True),
         'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
-        'closed': isinstance(realization.find_last_active_posting(
+        'is_closed': isinstance(realization.find_last_active_posting(
             ra.txn_postings), Close),
+        'has_transactions': any(isinstance(t, TxnPosting)
+                                for t in ra.txn_postings),
         'children': [serialize_real_account(a) for n, a in sorted(ra.items())],
     }
 

@@ -299,7 +299,15 @@ def show_account(account):
     if account['is_leaf']:
         show_this_account = True
         if not app.config.user.getboolean('show-closed-accounts') and \
-                account['closed']:
+                account['is_closed']:
+            show_this_account = False
+        if not app.config.user.getboolean(
+                'show-accounts-with-zero-balance') and \
+                not account['balance']:
+            show_this_account = False
+        if not app.config.user.getboolean(
+                'show-accounts-with-zero-transactions') and \
+                not account['has_transactions']:
             show_this_account = False
     return show_this_account or any(
         show_account(a) for a in account['children'])
