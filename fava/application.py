@@ -294,6 +294,18 @@ def account_level(account_full):
 
 
 @app.template_filter()
+def show_account(account):
+    show_this_account = False
+    if account['is_leaf']:
+        show_this_account = True
+        if not app.config.user.getboolean('show-closed-accounts') and \
+                account['closed']:
+            show_this_account = False
+    return show_this_account or any(
+        show_account(a) for a in account['children'])
+
+
+@app.template_filter()
 def basename(file_path):
     return os.path.basename(file_path)
 
