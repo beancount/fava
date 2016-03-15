@@ -484,7 +484,13 @@ class BeancountReportAPI(object):
             return False  # TODO raise
 
     def commodity_pairs(self):
-        return sorted(self.price_map.forward_pairs)
+        fw_pairs = self.price_map.forward_pairs
+        bw_pairs = []
+        for a, b in fw_pairs:
+            if (a in self.options['operating_currency'] and
+                    b in self.options['operating_currency']):
+                bw_pairs.append((b, a))
+        return sorted(fw_pairs + bw_pairs)
 
     def prices(self, base, quote):
         return prices.get_all_prices(self.price_map,
