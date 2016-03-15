@@ -235,13 +235,13 @@ oop.inherits(FoldMode, BaseFoldMode);
 }).call(FoldMode.prototype);
 
 });
+
 define("ace/mode/beancount",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/beancount_highlight_rules","ace/mode/folding/cstyle"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var TextMode = require("./text").Mode;
 var BeancountHighlightRules = require("./beancount_highlight_rules").BeancountHighlightRules;
-//var FoldMode = require("./folding/cstyle").FoldMode;
 var FoldMode = require("./folding/orgstyle").FoldMode;
 
 var Mode = function() {
