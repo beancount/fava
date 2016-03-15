@@ -57,6 +57,19 @@ $(document).ready(function() {
             mode: "ace/mode/sql",
         });
 
+        editor.commands.addCommand({  // for when the focus is inside the editor
+            name: "executeQuery",
+            bindKey: {win: "Ctrl-Enter", mac: "Command-Enter"},
+            exec: function(editor) {
+                $('#submit-query').click();
+            }
+        });
+
+        Mousetrap.bind(['ctrl+enter', 'meta+enter'], function(event) {  // for when the focus is outside the editor
+            event.preventDefault();
+            $('#submit-query').click();
+        });
+
         $('#submit-query').click(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -179,10 +192,7 @@ $(document).ready(function() {
 
         $('form.editor-source select[name="file_path"]').change();
 
-        $('form.editor-save input[type="submit"]').click(function(event) {
-            event.preventDefault();
-            event.stopImmediatePropagation();
-
+        function saveEditorContent() {
             $(document).trigger('LiveReloadShutDown');
 
             if (window.editorStripTrailingWhitespace) {
@@ -203,6 +213,25 @@ $(document).ready(function() {
                     alert("Writing to\n\n\t" + fileName + "\n\nwas not successful.");
                 }
             });
+        }
+
+        editor.commands.addCommand({  // for when the focus is inside the editor
+            name: "save",
+            bindKey: {win: "Ctrl-S", mac: "Command-S"},
+            exec: function(editor) {
+                saveEditorContent();
+            }
+        });
+
+        Mousetrap.bind(['ctrl+s', 'meta+s'], function(event) {  // for when the focus is outside the editor
+            event.preventDefault();
+            saveEditorContent();
+        });
+
+        $('form.editor-save input[type="submit"]').click(function(event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            saveEditorContent();
         });
     }
 });

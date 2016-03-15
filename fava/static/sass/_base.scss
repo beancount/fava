@@ -401,6 +401,7 @@ kbd {
     display: inline-block;
     min-width: 20px;
     text-align: center;
+    font: 1.1rem $font_family_kbd;
     padding: 3px 6px;
     color: lighten($color_text, 30);
     vertical-align: middle;

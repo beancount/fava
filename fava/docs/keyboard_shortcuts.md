@@ -38,6 +38,11 @@ to show an overview of the keyboard shortcuts described below.
             <kbd>g</kbd> then <kbd>r</kbd>: Go to Errors<br>
             <kbd>g</kbd> then <kbd>H</kbd>: Go to Help
         </p>
+        <p>
+            <strong>Source Editor:</strong><br>
+            <kbd>ctrl</kbd>+<kbd>s</kbd>: Save<br>
+            <kbd>cmd</kbd>+<kbd>s</kbd>: Save (Mac)
+        </p>
     </div>
     <div class="halfleft">
         <p>
@@ -66,6 +71,11 @@ to show an overview of the keyboard shortcuts described below.
             <kbd>t</kbd> then <kbd>s</kbd>: Summarize transactions<br>
             <kbd>t</kbd> then <kbd>t</kbd>: Transfer transactions<br>
             <kbd>t</kbd> then <kbd>o</kbd>: Other transactions<br>
+        </p>
+        <p>
+            <strong>Query Editor:</strong><br>
+            <kbd>ctrl</kbd>+<kbd>Enter</kbd>: Execute query<br>
+            <kbd>cmd</kbd>+<kbd>Enter</kbd>: Execute query (Mac)
         </p>
     </div>
 </div>
