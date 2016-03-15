@@ -3,6 +3,7 @@
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% import 'macros/_interval_macros.html' as interval_macros with context %}
+{% import "charts/_charts.html" as charts with context %}
 
 {% block title %}Account {{ account_name }}{% endblock %}
 
@@ -19,10 +20,7 @@
     {% endwith %}
 
     {% if not journal %}
-        {% set treemap_data = api.treemap_data(account_name) %}
-        {% with label=treemap_data.label, rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
-            {% include "charts/_chart_treemap.html" %}
-        {% endwith %}
+        {{ charts.treemap(account_name) }}
     {% endif %}
 
     <div class="headerline">
@@ -40,11 +38,7 @@
         {% set interval_balances, dates = api.interval_balances(interval, account_name, accumulate) %}
 
         {% for begin_date, end_date in dates[-3:]|reverse %}
-            {% with treemap_data = api.treemap_data(account_name, begin_date, end_date) %}
-            {% with label=interval_macros.format_date(end_date), rows=treemap_data.balances, modifier=treemap_data.modifier, level=account_name|account_level-1 %}
-                {% include "charts/_chart_treemap.html" %}
-            {% endwith %}
-            {% endwith %}
+            {{ charts.treemap(account_name, begin_date, end_date, label=interval_macros.format_date(end_date)) }}
         {% endfor %}
         <table class="fullwidth tree-table">
             <thead>
@@ -65,21 +59,17 @@
 
                     {% for entry in row|reverse %}
                         <td class="num">
-                            {% if entry.balances %}
+                            {% if entry.balance %}
                                 <span class="balance">
-                                {% for currency, number in entry.balances.items() %}
-                                    {% if number %}
-                                        {{ number|format_currency(currency) }} {{ currency }}<br>
-                                    {% endif %}
+                                {% for currency, number in entry.balance.items() %}
+                                    {{ number|format_currency(currency) }} {{ currency }}<br>
                                 {% endfor %}
                                 </span>
                             {% endif %}
-                            {% if entry.balances_children %}
+                            {% if entry.balance_children %}
                                 <span class="tree-balance">
-                                {% for currency, number in entry.balances_children.items() %}
-                                    {% if number %}
-                                        {{ number|format_currency(currency) }} {{ currency }}<br>
-                                    {% endif %}
+                                {% for currency, number in entry.balance_children.items() %}
+                                    {{ number|format_currency(currency) }} {{ currency }}<br>
                                 {% endfor %}
                                 </span>
                             {% endif %}
@@ -94,7 +84,7 @@
                     <td>&nbsp;</td>
                     {% for entry in interval_balances[0]|reverse %}
                     <td class="num">
-                        {% for currency, number in entry.balances_children.items() %}
+                        {% for currency, number in entry.balance_children.items() %}
                             {% if number %}
                                 {{ number|format_currency(currency) }} {{ currency }}<br>
                             {% endif %}

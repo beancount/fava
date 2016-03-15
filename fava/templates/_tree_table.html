@@ -15,19 +15,19 @@
         </tr>
     </thead>
     <tbody>
-        {% for row in table_data %}
-            {% with account_level = row.account|account_level %}
-            <tr data-level="{{ account_level }}" data-is-parent="{% if not row.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(row.account) %} class="hides"{% endif %}>
-                <td class="account account-level-{{ account_level }} droptarget" data-level="{{ account_level }}" data-account-name="{{ row.account }}">
-                    {{ account_macros.account_name(row.account, last_segment=True) }}
+        {% for account in real_accounts recursive %}
+            {% with account_level = loop.depth %}
+            <tr data-level="{{ account_level }}" data-is-parent="{% if not account.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(account.account) %} class="hides"{% endif %}>
+                <td class="account account-level-{{ account_level }} droptarget" data-level="{{ account_level }}" data-account-name="{{ account.account }}">
+                    {{ account_macros.account_name(account.account, last_segment=True) }}
                 </td>
             {% for currency in operating_currencies %}
                 <td class="num">
-                {% if currency in row.balances %}
-                    <span class="balance">{{ row.balances[currency]|format_currency(currency) }}</span>
+                {% if currency in account.balance %}
+                    <span class="balance">{{ account.balance[currency]|format_currency(currency) }}</span>
                 {% endif %}
-                {% if currency in row.balances_children %}
-                    <span class="tree-balance">{{ row.balances_children[currency]|format_currency(currency) }}</span>
+                {% if currency in account.balance_children %}
+                    <span class="tree-balance">{{ account.balance_children[currency]|format_currency(currency) }}</span>
                 {% endif %}
                 </td>
             {% endfor %}
@@ -35,11 +35,11 @@
                 <td class="num other">
                 {% for currency in options['commodities'] %}
                     {% if currency not in operating_currencies %}
-                        {% if currency in row.balances %}
-                            <span class="balance">{{ row.balances[currency]|format_currency(currency) }} {{ currency }}</span>
+                        {% if currency in account.balance %}
+                            <span class="balance">{{ account.balance[currency]|format_currency(currency) }} {{ currency }}</span>
                         {% endif %}
-                        {% if currency in row.balances_children %}
-                            <span class="tree-balance">{{ row.balances_children[currency]|format_currency(currency) }} {{ currency }}</span>
+                        {% if currency in account.balance_children %}
+                            <span class="tree-balance">{{ account.balance_children[currency]|format_currency(currency) }} {{ currency }}</span>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
@@ -47,6 +47,7 @@
             {% endif %}
             </tr>
             {% endwith %}
+            {{ loop(account.children) }}
         {% endfor %}
     </tbody>
     {% if totals %}
@@ -54,13 +55,13 @@
             <tr>
                 <td>&nbsp;</td>
             {% for currency in operating_currencies %}
-                <td class="num">{{ table_data[0]['balances_children'][currency]|format_currency(currency) }}</td>
+                <td class="num">{{ real_accounts[0].balance_children[currency]|format_currency(currency) }}</td>
             {% endfor %}
             {% if show_other_column %}
                 <td class="num">
                     {% for currency in options['commodities'] %}
-                        {% if currency not in  operating_currencies and table_data[0]['balances_children'][currency] %}
-                            {{ table_data[0]['balances_children'][currency]|format_currency(currency) }} {{ currency }}<br>
+                        {% if currency not in  operating_currencies and real_accounts[0].balance_children[currency] %}
+                            {{ real_accounts[0].balance_children[currency]|format_currency(currency) }} {{ currency }}<br>
                         {% endif %}
                     {% endfor %}
                 </td>

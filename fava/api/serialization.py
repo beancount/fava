@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
-from beancount.core import compare
-from beancount.core.data import Balance, Transaction
+from beancount.core import compare, realization
+from beancount.core.data import Balance, Close, Transaction
 from beancount.core.amount import Amount, decimal
 from beancount.core.position import Position
 from beancount.core.number import ZERO
@@ -81,6 +81,20 @@ def serialize_posting(posting):
     new_posting = posting._asdict()
     _add_metadata(new_posting, posting)
     return new_posting
+
+
+def serialize_real_account(ra):
+    return {
+        'account': ra.account,
+        'balance_children':
+            serialize_inventory(realization.compute_balance(ra),
+                                at_cost=True),
+        'balance': serialize_inventory(ra.balance, at_cost=True),
+        'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
+        'closed': isinstance(realization.find_last_active_posting(
+            ra.txn_postings), Close),
+        'children': [serialize_real_account(a) for n, a in sorted(ra.items())],
+    }
 
 
 def _add_metadata(new_entry, entry):

@@ -1,0 +1,39 @@
+{% macro treemap(account_name, begin_date=None, end_date=None, label=None) %}
+{% set treemap_data = api.treemap_data(account_name) %}
+{% set label=treemap_data.label if not label else label %}
+{% set level=account_name|account_level-1 %}
+<script>
+{% for currency in operating_currencies %}
+window.chartData.push({
+    label: "{{ label }} ({{ currency }})",
+    type:  "treemap",
+    options: {
+        dateFormat: "MMM 'YY",
+        treemapColorLevel: {{ level or 1 }}
+    },
+    data: [
+        {% for account in treemap_data.balances recursive %}
+            {% if account.is_leaf and currency in account.balance %}
+                {% set value = account.balance[currency] * (treemap_data.modifier or 1) %}
+                {% if value >= 0 or config.user.getboolean('treemaps-show-negative-numbers') %}
+                {
+                    {% if value < 0 %}
+                    label: '<a href="{{ url_for("account_with_journal", name=account.account) }}"><em>({{ account.account|last_segment }})</em></a>',
+                    value: {{ value|abs }},
+                    {% else %}
+                    label: '<a href="{{ url_for("account_with_journal", name=account.account) }}">{{ account.account|last_segment }}</a>',
+                    value: {{ value }},
+                    {% endif %}
+                    id: '{{ account.account }}-{{ currency }}',
+                    accountName: '{{ account.account }}',
+                    balance: '{{ account.balance[currency]|format_currency }} {{ currency }}'
+                },
+                {% endif %}
+            {% endif %}
+            {{ loop(account.children) }}
+        {% endfor %}
+    ]
+});
+{% endfor %}
+</script>
+{% endmacro %}

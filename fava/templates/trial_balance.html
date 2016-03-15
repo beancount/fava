@@ -1,22 +1,21 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
 
+{% import "charts/_charts.html" as charts with context %}
+
 {% block content %}
     <h1>Trial Balance</h1>
-    {% set trial_balance = api.trial_balance() %}
 
     {% with hide_interval_filter=True  %}
         {% include "charts/_chart_skeleton.html" %}
     {% endwith %}
 
     {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
-        {% set balance = api.treemap_data(options['name_{}'.format(base_account)]) %}
-        {% with label=balance.label, rows=balance.balances, modifier=balance.modifier %}
-            {% include "charts/_chart_treemap.html" %}
-        {% endwith %}
+        {{ charts.treemap(api.options['name_{}'.format(base_account)]) }}
     {% endfor %}
 
-    {% with table_title=None, currencies=trial_balance.currencies, table_data=trial_balance, totals=False %}
+    {% with table_title=None, real_accounts=api.trial_balance(), totals=False %}
         {% include "_tree_table.html" %}
     {% endwith %}
+
 {% endblock %}

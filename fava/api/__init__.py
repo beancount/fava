@@ -41,7 +41,8 @@ from beancount.utils import misc_utils
 from fava.util.date import parse_date, get_next_interval
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
-                                    serialize_entry_with)
+                                    serialize_entry_with,
+                                    serialize_real_account)
 
 
 class FilterException(Exception):
@@ -187,21 +188,6 @@ class BeancountReportAPI(object):
         return self.format_string.format(self.dcontext.quantize(value,
                                                                 currency))
 
-    def _table_tree(self, real_account):
-        """
-        Renders real_account and it's children as a flat list to be used
-        in rendering tables.
-        """
-        return [{
-            'account': ra.account,
-            'balances_children':
-                serialize_inventory(realization.compute_balance(ra),
-                                    at_cost=True),
-            'balances': serialize_inventory(ra.balance, at_cost=True),
-            'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
-            'postings_count': len(ra.txn_postings)
-        } for ra in realization.iter_children(real_account)]
-
     def _journal(self, entries, include_types=None,
                  with_change_and_balance=False):
         if include_types:
@@ -243,7 +229,7 @@ class BeancountReportAPI(object):
 
         return interval_tuples
 
-    def _balances_totals(self, names, begin_date, end_date):
+    def _total_balance(self, names, begin_date, end_date):
         totals = [realization.compute_balance(
             self._real_account(account_name, self.entries, begin_date,
                                end_date))
@@ -263,7 +249,7 @@ class BeancountReportAPI(object):
         return [{
             'begin_date': begin_date,
             'end_date': end_date,
-            'totals': self._balances_totals(
+            'totals': self._total_balance(
                 names, begin_date if not accumulate else date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
@@ -286,36 +272,21 @@ class BeancountReportAPI(object):
         return realization.get(realization.realize(entries, min_accounts),
                                account_name)
 
-    def balances(self, account_name, begin_date=None, end_date=None,
-                 min_accounts=None):
-        """
-        Renders account_name and it's children as a flat list to be used
-        in rendering tables.
-
-        Returns:
-          [
-              {
-                  'account': 'Expenses:Vacation',
-                  'balances_children': {
-                      'USD': 123.45, ...
-                  },
-                  'balances': {
-                      'USD': 123.45, ...
-                  },
-                  'is_leaf': True,
-                  'postings_count': 3
-              }, ...
-          ]
-        """
+    def balances(self, account_name, begin_date=None, end_date=None):
         real_account = self._real_account(account_name, self.entries,
-                                          begin_date, end_date, min_accounts)
-
-        return self._table_tree(real_account)
+                                          begin_date, end_date)
+        return [serialize_real_account(real_account)]
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
-        return self._table_tree(self._real_account(account_name,
-                                                   closing_entries))
+        return [serialize_real_account(self._real_account(account_name,
+                                                          closing_entries))]
+
+    def _flatten(self, serialized_real_account):
+        list_ = [serialized_real_account]
+        for ra in serialized_real_account['children']:
+            list_.extend(self._flatten(ra))
+        return list_
 
     def interval_balances(self, interval, account_name, accumulate=False):
         account_names = [account
@@ -323,20 +294,16 @@ class BeancountReportAPI(object):
                          if account.startswith(account_name)]
 
         interval_tuples = self._interval_tuples(interval, self.entries)
-        if accumulate:
-            interval_balances = [self.balances(account_name,
-                                               interval_tuples[0][0], end_date,
-                                               min_accounts=account_names)
-                                 for begin_date, end_date in interval_tuples]
-        else:
-            interval_balances = [self.balances(account_name,
-                                               begin_date, end_date,
-                                               min_accounts=account_names)
-                                 for begin_date, end_date in interval_tuples]
+        interval_balances = [self._flatten(serialize_real_account(
+            self._real_account(
+                account_name, self.entries,
+                interval_tuples[0][0] if accumulate else begin_date,
+                end_date, min_accounts=account_names)))
+            for begin_date, end_date in interval_tuples]
         return list(zip(*interval_balances)), interval_tuples
 
     def trial_balance(self):
-        return self._table_tree(self.root_account)[1:]
+        return serialize_real_account(self.root_account)['children']
 
     def journal(self, account_name=None, with_change_and_balance=False,
                 with_journal_children=True):
