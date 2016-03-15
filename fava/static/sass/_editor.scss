@@ -31,8 +31,18 @@ div.editor-wrapper {
     }
 
     .ace_gutter-cell {
-        padding: 0 6px;
+        padding: 0 13px;
     }
+
+    .ace_section {
+        color: $color_editor_comment;
+        font-weight: 700;
+        border: solid 1px $color_editor_comment;
+        border-radius: 2px;
+        padding-right: 10px;
+    }
+
+    .ace_line .ace_fold { border-color: transparent; }
 
     .ace_comment {
         color: $color_editor_comment;

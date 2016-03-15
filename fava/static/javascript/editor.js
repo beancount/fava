@@ -18,7 +18,7 @@ $(document).ready(function() {
         fontSize: "13px",
         fontFamily: "monospace",
         useSoftTabs: true,
-        showFoldWidgets: false
+        showFoldWidgets: true
     };
 
     if ($('.editor').attr('data-print-margin-column')) {
