@@ -9,13 +9,13 @@ Welcome to fava!
     changelog
     development
 
-fava is a web interface for the double-entry bookkeeping software `beancount
+fava is a web interface for the double-entry bookkeeping software `Beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
 
 You can try out an online `demo <http://fava.pythonanywhere.com>`__ and there
 are some more screenshots :doc:`here <screenshots>`.
 
-.. image:: screenshots/income-statement1.png
+.. image:: static/screenshots/income-statement1.png
 
 If you are new to fava and beancount, begin with the :doc:`usage` guide.
 
