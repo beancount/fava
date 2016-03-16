@@ -33,7 +33,7 @@ ol.journal-table {
         &.balance           { background-color: $color_journalentry_balance;         }
         &.balance.fail      { background-color: $color_journalentry_pending;         }
         &.posting           { background-color: $color_journalentry_open;            }
-        &.posting.warning   { background-color: $color_journalentry_postingwarning;  }
+        &.posting.pending   { background-color: $color_journalentry_postingwarning;  }
 
         &.document a:nth-child(1) { font-weight: normal; }
 
@@ -122,6 +122,21 @@ ol.journal-table {
                     }
                 }
             }
+        }
+
+        &.leg-indicator {
+            display: inline-block;
+            height: 6px;
+            width: 6px;
+            background: #C1D0D9;
+            border-radius: 3px;
+            padding: 0;
+            margin-right: 4px;
+            margin-top: 8px;
+
+            &:last-child { margin-right: 10px; }
+
+            &.leg-pending { background-color: $color_journalentry_postingwarning; }
         }
     }
 

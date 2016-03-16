@@ -79,6 +79,12 @@ def serialize_inventory(inventory, at_cost=False):
 
 def serialize_posting(posting):
     new_posting = posting._asdict()
+
+    if posting.flag in transaction_types:
+        new_posting['posting_type'] = transaction_types[posting.flag]
+    elif posting.flag:
+        new_posting['posting_type'] = 'other'
+
     _add_metadata(new_posting, posting)
     return new_posting
 

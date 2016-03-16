@@ -126,6 +126,11 @@
             {% for tag in entry.tags %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
         {% endif %}
         </span>
+        {% if type == 'transaction' %}
+            {% for posting in entry.postings %}
+                <span class="leg-indicator leg-{{ posting.posting_type }}"></span>
+            {% endfor %}
+        {% endif %}
         {% if show_change_and_balance %}
             <span class="change num">{{ render_inventory(entry.change) }}</span>
             <span class="balance num">{{ render_inventory(entry.balance) }}</span>
@@ -135,7 +140,7 @@
         {% if entry.postings %}
         <ul>
         {% for posting in entry.postings %}
-        <li class="posting{%- if not show_legs %} hidden{% endif -%}">
+        <li class="posting {{ posting.posting_type }}{%- if not show_legs %} hidden{% endif -%}">
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
