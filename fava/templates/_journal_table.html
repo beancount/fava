@@ -140,8 +140,10 @@
                 <span class="datecell"></span>
                 <span class="flag"> </span>
                 <span class="description">{{ account_link(posting.account) }}</span>
+                {# We want the output these amounts with the same precision as in the input file.
+                   For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="position num">{{ posting.units or '' }}</span>
-                <span class="price num">{{ posting.price or '' }}</span>
+                <span class="price num">{{ posting.price|format_amount }}</span>
                 <span class="cost num">{{ posting.cost or '' }}</span>
                 {% if show_change_and_balance %}
                 <span class="change num"></span>
