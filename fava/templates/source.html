@@ -55,7 +55,7 @@
     <div class="editor-wrapper editor-wrapper-source">
         <div class="editor"
              id="editor-source"
-             data-print-margin-column="{{ config.user.getint('editor-print-margin-column') }}">
+             data-print-margin-column="{{ config['editor-print-margin-column'] }}">
         </div>
     </div>
     <form class="editor-save" action="{{ url_for('source') }}" method="post">

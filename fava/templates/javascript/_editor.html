@@ -4,8 +4,8 @@
     window.allTags = {{ api.active_tags|tojson|safe }};
 
     window.editorStripTrailingWhitespace = {{ config['editor-strip-trailing-whitespace']|tojson|safe }};
-    {% if config.user.get('editor-insert-marker') %}
-        window.editorInsertMarker = "{{ config.user.get('editor-insert-marker') }}";
+    {% if config['editor-insert-marker'] %}
+        window.editorInsertMarker = "{{ config['editor-insert-marker'] }}";
     {% endif %}
 </script>
 <script type="text/javascript" src="{{ url_for('static', filename='gen/editor.js') }}"></script>

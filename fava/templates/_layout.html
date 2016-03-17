@@ -43,13 +43,13 @@
 } %}
 {% set active_page = active_page|default('journal') %}
 {% set show_filters = show_filters|default(True) %}
-{% set user_queries = api.queries()[:config.user.getint('sidebar-show-queries')] %}
+{% set user_queries = api.queries()[:config['sidebar-show-queries']] %}
 <!doctype html>
 <html>
 <head>
     {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='gen/theme_' + config.user.get('theme') + '.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='gen/theme_' + config['theme'] + '.css') }}">
     <title>{% block title %}{{ all_pages[active_page] }}{% endblock %} - {{ api.title }}</title>
     {% endblock %}
     <script>window.chartData = [];</script>

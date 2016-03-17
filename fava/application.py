@@ -44,8 +44,19 @@ def load_settings():
 
     for option in config.bool_options:
         app.config[option] = app.config.raw.getboolean('fava', option)
-
-    app.config.user = app.config.raw['fava']
+    for option in config.int_options:
+        app.config[option] = app.config.raw.getint('fava', option)
+    for option in config.list_options:
+        if app.config.raw.has_option('fava', option):
+            app.config[option] = \
+                app.config.get('fava', option).strip().split("\n")
+        else:
+            app.config[option] = None
+    for option in config.str_options:
+        if app.config.raw.has_option('fava', option):
+            app.config[option] = app.config.raw.get('fava', option)
+        else:
+            app.config[option] = None
 
 
 def list_help_pages():
@@ -342,15 +353,11 @@ def template_context():
         else:
             return False
 
-    if 'collapse-accounts' in app.config.user:
-        collapse_accounts = \
-            app.config.user['collapse-accounts'].strip().split("\n")
-
     def should_collapse_account(account_name):
-        if 'collapse-accounts' not in app.config.user:
+        if not app.config['collapse-accounts']:
             return False
 
-        return account_name in collapse_accounts
+        return account_name in app.config['collapse_accounts']
 
     return dict(url_for_current=url_for_current,
                 url_for_source=url_for_source,
@@ -361,7 +368,7 @@ def template_context():
                 operating_currencies=app.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',
-                                          app.config.user['default-interval']))
+                                          app.config['default-interval']))
 
 
 def uniquify(seq):
