@@ -279,6 +279,8 @@ def format_currency(value, currency=None):
 
 @app.template_filter()
 def format_amount(amount):
+    if not amount:
+        return ''
     return "{} {}".format(format_currency(amount.number, amount.currency),
                           amount.currency)
 
