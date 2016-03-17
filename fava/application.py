@@ -326,6 +326,23 @@ def basename(file_path):
     return os.path.basename(file_path)
 
 
+@app.template_filter()
+def should_collapse_account(account_name):
+    if not app.config['collapse-accounts']:
+        return False
+
+    return account_name in app.config['collapse_accounts']
+
+
+@app.template_filter()
+def uptodate_eligible(account_name):
+    key = 'fava-uptodate-indication'
+    if key in app.api.account_open_metadata(account_name):
+        return app.api.account_open_metadata(account_name)[key] == 'True'
+    else:
+        return False
+
+
 @app.context_processor
 def template_context():
     def url_for_current(**kwargs):
@@ -346,23 +363,8 @@ def template_context():
         else:
             return url_for('source', **args)
 
-    def uptodate_eligible(account_name):
-        key = 'fava-uptodate-indication'
-        if key in app.api.account_open_metadata(account_name):
-            return app.api.account_open_metadata(account_name)[key] == 'True'
-        else:
-            return False
-
-    def should_collapse_account(account_name):
-        if not app.config['collapse-accounts']:
-            return False
-
-        return account_name in app.config['collapse_accounts']
-
     return dict(url_for_current=url_for_current,
                 url_for_source=url_for_source,
-                uptodate_eligible=uptodate_eligible,
-                should_collapse_account=should_collapse_account,
                 api=app.api,
                 options=app.api.options,
                 operating_currencies=app.api.options['operating_currency'],

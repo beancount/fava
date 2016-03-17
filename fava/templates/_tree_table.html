@@ -18,7 +18,7 @@
         {% for account in real_accounts recursive %}
             {% if account|show_account %}
             {% with account_level = loop.depth %}
-            <tr data-level="{{ account_level }}" data-is-parent="{% if not account.is_leaf %}true{% else %}false{% endif %}"{% if should_collapse_account(account.account) %} class="hides"{% endif %}>
+            <tr data-level="{{ account_level }}" data-is-parent="{% if not account.is_leaf %}true{% else %}false{% endif %}"{% if account.account|should_collapse_account %} class="hides"{% endif %}>
                 <td class="account account-level-{{ account_level }} droptarget" data-level="{{ account_level }}" data-account-name="{{ account.account }}">
                     {{ account_macros.account_name(account.account, last_segment=True) }}
                 </td>

@@ -39,7 +39,7 @@
         <h3>Update Activity per Account<input type="submit" class="right" id="copy-balances" value="Copy balance directives" title="Click to copy balance directives for accounts (except green ones) to the clipboard:
 
         {% for activity in statistics.activity_by_account %}
-            {% if uptodate_eligible(activity.account) %}
+            {% if activity.account|uptodate_eligible %}
                 {% with status=api.is_account_uptodate(activity.account, look_back_days=config['uptodate-indicator-grey-lookback-days']) %}
                     {% if status != "green" %}
                         {% with account_inventory=api.inventory(activity.account) %}
@@ -64,7 +64,7 @@
                 {% for activity in statistics.activity_by_account %}
                     <tr>
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
-                        {% if uptodate_eligible(activity.account) %}
+                        {% if activity.account|uptodate_eligible %}
                             {% with status=api.is_account_uptodate(activity.account, look_back_days=config['uptodate-indicator-grey-lookback-days']) %}
                                 <td data-sort-value="{{ status_sortorder[status] }}" class="uptodate-indicator">
                                     {% with account_inventory=api.inventory(activity.account)  %}
