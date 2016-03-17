@@ -5,7 +5,7 @@ import errno
 import click
 from livereload import Server
 
-from fava.application import app, load_file, load_settings
+from fava.application import api, app, load_file, load_settings
 
 
 @click.command()
@@ -58,8 +58,7 @@ def main(filename, port, host, settings, debug, profile, profile_dir,
         def reload_source_files():
             load_file()
             include_path = os.path.dirname(app.config['BEANCOUNT_FILE'])
-            for filename in app.api.options['include'] + \
-                    app.api.options['documents']:
+            for filename in api.options['include'] + api.options['documents']:
                 server.watch(os.path.join(include_path, filename),
                              reload_source_files)
         reload_source_files()

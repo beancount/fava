@@ -5,7 +5,7 @@ from beancount.scripts.example import write_example_file
 from flask import url_for
 import pytest
 
-from fava.application import app
+from fava.application import api, app
 
 
 @pytest.fixture
@@ -17,7 +17,7 @@ def setup_app(tmpdir):
                            datetime.date(today.year - 3, 1, 1),
                            today, True, fd)
     app.beancount_filename = str(filename)
-    app.api.load_file(app.beancount_filename)
+    api.load_file(app.beancount_filename)
     app.testing = True
 
 

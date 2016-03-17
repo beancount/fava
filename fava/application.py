@@ -22,7 +22,7 @@ app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-app.api = BeancountReportAPI()
+api = BeancountReportAPI()
 
 app.config['DEFAULT_SETTINGS'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -33,7 +33,7 @@ app.config['HELP_PAGES'] = \
 
 
 def load_file():
-    app.api.load_file(app.config['BEANCOUNT_FILE'])
+    api.load_file(app.config['BEANCOUNT_FILE'])
 
 
 def load_settings():
@@ -101,7 +101,7 @@ def index():
 def document():
     document_path = request.args.get('file_path', None)
 
-    if document_path and app.api.is_valid_document(document_path):
+    if document_path and api.is_valid_document(document_path):
         # metadata-statement-paths may be relative to the beancount-file
         if not os.path.isabs(document_path):
             document_path = os.path.join(os.path.dirname(
@@ -117,14 +117,14 @@ def document():
 @app.route('/document/add/', methods=['POST'])
 def add_document():
     file = request.files['file']
-    if file and len(app.api.options['documents']) > 0:
+    if file and len(api.options['documents']) > 0:
         # and allowed_file(file.filename):
         # TOOD Probably it should ask to enter a date, if the document
         #      doesn't start with one, so you don't need to rename the
         #      documents in advance.
 
         target_folder_index = int(request.form['targetFolderIndex'])
-        target_folder = app.api.options['documents'][target_folder_index]
+        target_folder = api.options['documents'][target_folder_index]
 
         filename = os.path.join(
             os.path.dirname(app.beancount_file),
@@ -157,7 +157,7 @@ def query(bql=None, query_hash=None, result_format='html'):
     result_format = request.args.get('result_format', 'html')
 
     if query_hash:
-        query = app.api.queries(query_hash=query_hash)['query_string']
+        query = api.queries(query_hash=query_hash)['query_string']
     else:
         query = request.args.get('bql', '')
     error = None
@@ -166,7 +166,7 @@ def query(bql=None, query_hash=None, result_format='html'):
     if query:
         try:
             numberify = (request.path == '/query/result.csv')
-            result = app.api.query(query, numberify=numberify)
+            result = api.query(query, numberify=numberify)
         except Exception as e:
             result = None
             error = e
@@ -179,7 +179,7 @@ def query(bql=None, query_hash=None, result_format='html'):
             filename = 'query_result'
             if query_hash:
                 filename = secure_filename(
-                    app.api.queries(query_hash=query_hash)['name'].strip())
+                    api.queries(query_hash=query_hash)['name'].strip())
 
             respIO.seek(0)
             response = make_response(respIO.read())
@@ -196,7 +196,7 @@ def query(bql=None, query_hash=None, result_format='html'):
 @app.route('/query/stored_queries/<string:stored_query_hash>')
 def get_stored_query(stored_query_hash=None):
     if request.is_xhr:
-        return app.api.queries(query_hash=stored_query_hash)['query_string']
+        return api.queries(query_hash=stored_query_hash)['query_string']
 
 
 @app.route('/help/')
@@ -225,12 +225,12 @@ def source():
                     settings_file_content = f.read()
                 return settings_file_content
             else:
-                return app.api.source(file_path=requested_file_path)
+                return api.source(file_path=requested_file_path)
         else:
             return render_template(
                 'source.html',
                 file_path=request.args.get('file_path',
-                                           app.api.beancount_file_path))
+                                           api.beancount_file_path))
 
     elif request.method == "POST":
         file_path = request.form['file_path']
@@ -243,8 +243,7 @@ def source():
         if file_path == app.config['DEFAULT_SETTINGS']:
             successful = False
         else:
-            successful = app.api.set_source(file_path=file_path,
-                                            source=source)
+            successful = api.set_source(file_path=file_path, source=source)
         return str(successful)
 
 
@@ -282,7 +281,7 @@ def report(report_name):
 def format_currency(value, currency=None):
     if not value:
         return ''
-    return app.api.quantize(value, currency)
+    return api.quantize(value, currency)
 
 
 @app.template_filter()
@@ -337,8 +336,8 @@ def should_collapse_account(account_name):
 @app.template_filter()
 def uptodate_eligible(account_name):
     key = 'fava-uptodate-indication'
-    if key in app.api.account_open_metadata(account_name):
-        return app.api.account_open_metadata(account_name)[key] == 'True'
+    if key in api.account_open_metadata(account_name):
+        return api.account_open_metadata(account_name)[key] == 'True'
     else:
         return False
 
@@ -365,9 +364,9 @@ def template_context():
 
     return dict(url_for_current=url_for_current,
                 url_for_source=url_for_source,
-                api=app.api,
-                options=app.api.options,
-                operating_currencies=app.api.options['operating_currency'],
+                api=api,
+                options=api.options,
+                operating_currencies=api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',
                                           app.config['default-interval']))
@@ -410,7 +409,7 @@ def perform_global_filters():
     }
 
     try:
-        app.api.filter(**g.filters)
+        api.filter(**g.filters)
     except FilterException as e:
         g.filters['time'] = None
         flash(str(e))
