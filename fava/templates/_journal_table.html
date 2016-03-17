@@ -140,9 +140,9 @@
                 <span class="datecell"></span>
                 <span class="flag"> </span>
                 <span class="description">{{ account_link(posting.account) }}</span>
-                <span class="position num">{{ posting.units.number|format_currency(posting.units.currency) or '' }} {{ posting.units.currency }}</span>
-                <span class="price num">{{ posting.price.number|format_currency(posting.price.currency) or '' }} {{ posting.price.currency }}</span>
-                <span class="cost num">{{ posting.cost|format_currency(posting.cost.currency) or '' }} {{ posting.cost.currency }}</span>
+                <span class="position num">{{ posting.units or '' }}</span>
+                <span class="price num">{{ posting.price or '' }}</span>
+                <span class="cost num">{{ posting.cost or '' }}</span>
                 {% if show_change_and_balance %}
                 <span class="change num"></span>
                 <span class="balance num"></span>

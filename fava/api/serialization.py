@@ -76,17 +76,9 @@ def serialize_inventory(inventory, at_cost=False):
     return {p.units.currency: p.units.number
             for p in inventory if p.units.number != ZERO}
 
-def serialize_amount(amount):
-    """Renders an Amount to a dict."""
-    return {'currency': amount.currency, 'number': amount.number}
 
 def serialize_posting(posting):
     new_posting = posting._asdict()
-
-    for field in ['units', 'price', 'cost']:
-        if field in new_posting and new_posting[field]:
-            new_posting[field] = serialize_amount(new_posting[field])
-
     _add_metadata(new_posting, posting)
     return new_posting
 
