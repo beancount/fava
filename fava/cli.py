@@ -5,11 +5,11 @@ import errno
 import click
 from livereload import Server
 
-from fava.application import app, load_settings
+from fava.application import app, load_file, load_settings
 
 
 @click.command()
-@click.argument('filename', type=click.Path(exists=True))
+@click.argument('filename', type=click.Path(exists=True, resolve_path=True))
 @click.option('-p', '--port', type=int, default=5000,
               help='The port to listen on. (default: 5000)')
 @click.option('-H', '--host', type=str, default='localhost',
@@ -34,13 +34,13 @@ def main(filename, port, host, settings, debug, profile, profile_dir,
     if profile:
         debug = True
 
-    app.beancount_file = filename
+    app.config['BEANCOUNT_FILE'] = filename
+    app.config['USER_SETTINGS'] = settings
+
+    load_settings()
 
     if debug:
-        app.api.load_file(app.beancount_file)
-        if settings:
-            load_settings(settings)
-
+        load_file()
         if profile:
             from werkzeug.contrib.profiler import ProfilerMiddleware
             app.config['PROFILE'] = True
@@ -52,9 +52,17 @@ def main(filename, port, host, settings, debug, profile, profile_dir,
         app.run(host, port, debug)
     else:
         server = Server(app.wsgi_app)
-        reload_source_files(server)
         if settings:
-            reload_settings(server, settings)
+            server.watch(settings, load_settings)
+
+        def reload_source_files():
+            load_file()
+            include_path = os.path.dirname(app.config['BEANCOUNT_FILE'])
+            for filename in app.api.options['include'] + \
+                    app.api.options['documents']:
+                server.watch(os.path.join(include_path, filename),
+                             reload_source_files)
+        reload_source_files()
 
         try:
             server.serve(port=port, host=host, debug=debug)
@@ -68,20 +76,3 @@ def main(filename, port, host, settings, debug, profile, profile_dir,
         except:
             print("Unexpected error:", e)
             raise
-
-
-def reload_source_files(server):
-    """Auto-reload the main beancount-file and all its includes the
-    documents-folder."""
-    app.api.load_file(app.beancount_file)
-    server.watch(app.beancount_file, lambda: reload_source_files(server))
-    include_path = os.path.dirname(app.beancount_file)
-    for filename in app.api.options['include']+app.api.options['documents']:
-        server.watch(os.path.join(include_path, filename),
-                     lambda: reload_source_files(server))
-
-
-def reload_settings(server, settings_path):
-    """Auto-reload the settings-file."""
-    load_settings(settings_path)
-    server.watch(settings_path, lambda: reload_settings(server, settings_path))

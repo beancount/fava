@@ -23,40 +23,33 @@ app.secret_key = '1234'
 
 app.api = BeancountReportAPI()
 
-defaults_file = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                             'default-settings.conf')
+app.config['DEFAULT_SETTINGS'] = \
+    os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                 'default-settings.conf')
+app.config['USER_SETTINGS'] = None
+app.config['HELP_PAGES'] = \
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
 
 
-def load_settings(user_settings_file_path=None):
+def load_file():
+    app.api.load_file(app.config['BEANCOUNT_FILE'])
+
+
+def load_settings():
     app.config.raw = configparser.ConfigParser()
-    app.config.raw.read(defaults_file)
+    app.config.raw.read(app.config['DEFAULT_SETTINGS'])
+    if app.config['USER_SETTINGS']:
+        app.config.raw.read(app.config['USER_SETTINGS'])
 
     app.config.user = app.config.raw['fava']
-    app.config.user['file_defaults'] = defaults_file
-
-    if user_settings_file_path:
-        app.config.user['file_user'] = user_settings_file_path
-        app.config.raw.read(app.config.user['file_user'])
-    else:
-        app.config.user['file_user'] = ''
-
-    if app.config.user['file_user'] == '':
-        app.config_file = app.config.user['file_defaults']
-    else:
-        app.config_file = app.config.user['file_user']
-
-load_settings()
-
-app.docs_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                            'docs')
 
 
 def list_help_pages():
     help_pages = []
 
-    for page in os.listdir(app.docs_dir):
-        html = markdown2.markdown_path(os.path.join(app.docs_dir, page),
-                                       extras=["metadata"])
+    for page in os.listdir(app.config['HELP_PAGES']):
+        html = markdown2.markdown_path(
+            os.path.join(app.config['HELP_PAGES'], page), extras=["metadata"])
         slug = "help/{}".format(os.path.splitext(os.path.basename(page))[0])
         title = html.metadata['title']
 
@@ -64,7 +57,9 @@ def list_help_pages():
 
     return sorted(help_pages, key=lambda x: x[1] == 'Index', reverse=True)
 
-app.help_pages = list_help_pages()
+
+load_settings()
+help_pages = list_help_pages()
 
 
 @app.route('/account/<name>/')
@@ -193,10 +188,10 @@ def get_stored_query(stored_query_hash=None):
 @app.route('/help/<string:page_slug>/')
 def help_page(page_slug='index'):
     html = markdown2.markdown_path(
-        os.path.join(app.docs_dir, page_slug + '.md'),
+        os.path.join(app.config['HELP_PAGES'], page_slug + '.md'),
         extras=["metadata", "fenced-code-blocks", "tables"])
     return render_template('help.html', help_html=html, page_slug=page_slug,
-                           help_pages=app.help_pages)
+                           help_pages=help_pages)
 
 
 @app.route('/journal/')
@@ -209,7 +204,8 @@ def source():
     if request.method == "GET":
         if request.is_xhr:
             requested_file_path = request.args.get('file_path', None)
-            if requested_file_path == app.config_file:
+            if requested_file_path in [app.config['USER_SETTINGS'],
+                                       app.config['DEFAULT_SETTINGS']]:
                 with open(requested_file_path, 'r') as f:
                     settings_file_content = f.read()
                 return settings_file_content
@@ -225,18 +221,15 @@ def source():
         file_path = request.form['file_path']
         source = request.form['source']
 
-        if file_path == app.config_file:
-            if file_path != defaults_file:
-                with open(file_path, 'w+', encoding='utf8') as f:
-                    f.write(source)
+        if file_path == app.config['USER_SETTINGS']:
+            with open(file_path, 'w+', encoding='utf8') as f:
+                f.write(source)
             successful = True
+        if file_path == app.config['DEFAULT_SETTINGS']:
+            successful = False
         else:
             successful = app.api.set_source(file_path=file_path,
                                             source=source)
-        if successful:
-            app.api.load_file()
-            load_settings(app.config_file)
-
         return str(successful)
 
 
@@ -363,8 +356,6 @@ def template_context():
                 should_collapse_account=should_collapse_account,
                 api=app.api,
                 options=app.api.options,
-                config_file=app.config_file,
-                config_file_defaults=app.config.user['file_defaults'],
                 operating_currencies=app.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',
