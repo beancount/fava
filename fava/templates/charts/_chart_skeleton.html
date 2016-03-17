@@ -1,6 +1,6 @@
 {% import 'macros/_interval_macros.html' as interval_macros with context %}
 
-{% set show_charts = config.user.getboolean('charts-show') %}
+{% set show_charts = config['charts-show'] %}
 <div class="charts">
     <div class="chart-filter">
         <form>

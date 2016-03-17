@@ -3,7 +3,7 @@
     window.allCommodities = {{ options['commodities']|tojson|safe }};
     window.allTags = {{ api.active_tags|tojson|safe }};
 
-    window.editorStripTrailingWhitespace = {{ config.user.getboolean('editor-strip-trailing-whitespace')|tojson|safe }};
+    window.editorStripTrailingWhitespace = {{ config['editor-strip-trailing-whitespace']|tojson|safe }};
     {% if config.user.get('editor-insert-marker') %}
         window.editorInsertMarker = "{{ config.user.get('editor-insert-marker') }}";
     {% endif %}

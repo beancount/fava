@@ -9,6 +9,7 @@ from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, make_response)
 from werkzeug import secure_filename
 
+from fava import config
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
 from fava.util.excel import FavaExcel
@@ -40,6 +41,9 @@ def load_settings():
     app.config.raw.read(app.config['DEFAULT_SETTINGS'])
     if app.config['USER_SETTINGS']:
         app.config.raw.read(app.config['USER_SETTINGS'])
+
+    for option in config.bool_options:
+        app.config[option] = app.config.raw.getboolean('fava', option)
 
     app.config.user = app.config.raw['fava']
 
@@ -293,15 +297,13 @@ def show_account(account):
     show_this_account = False
     if account['is_leaf']:
         show_this_account = True
-        if not app.config.user.getboolean('show-closed-accounts') and \
+        if not app.config['show-closed-accounts'] and \
                 account['is_closed']:
             show_this_account = False
-        if not app.config.user.getboolean(
-                'show-accounts-with-zero-balance') and \
+        if not app.config['show-accounts-with-zero-balance'] and \
                 not account['balance']:
             show_this_account = False
-        if not app.config.user.getboolean(
-                'show-accounts-with-zero-transactions') and \
+        if not app.config['show-accounts-with-zero-transactions'] and \
                 not account['has_transactions']:
             show_this_account = False
     return show_this_account or any(
@@ -325,7 +327,7 @@ def template_context():
     def url_for_source(**kwargs):
         args = request.view_args.copy()
         args.update(kwargs)
-        if app.config.user.getboolean('use-external-editor'):
+        if app.config['use-external-editor']:
             if 'line' in args:
                 return "beancount://%(file_path)s?lineno=%(line)d" % args
             else:

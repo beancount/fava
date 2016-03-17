@@ -15,7 +15,7 @@ window.chartData.push({
         {% for account in treemap_data.balances recursive %}
             {% if account.is_leaf and currency in account.balance %}
                 {% set value = account.balance[currency] * (treemap_data.modifier or 1) %}
-                {% if value >= 0 or config.user.getboolean('treemaps-show-negative-numbers') %}
+                {% if value >= 0 or config['treemaps-show-negative-numbers'] %}
                 {
                     {% if value < 0 %}
                     label: '<a href="{{ url_for("account_with_journal", name=account.account) }}"><em>({{ account.account|last_segment }})</em></a>',

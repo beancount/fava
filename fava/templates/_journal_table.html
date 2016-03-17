@@ -1,26 +1,26 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
 {% set transaction_types = ['cleared', 'pending', 'padding', 'summarize', 'transfer', 'other'] %}
 {% set show_type = {
-    'open':        config.user.getboolean('journal-show-type-open'),
-    'close':       config.user.getboolean('journal-show-type-close'),
-    'transaction': config.user.getboolean('journal-show-type-transaction'),
-    'balance':     config.user.getboolean('journal-show-type-balance'),
-    'note':        config.user.getboolean('journal-show-type-note'),
-    'document':    config.user.getboolean('journal-show-type-document'),
-    'pad':         config.user.getboolean('journal-show-type-pad'),
-    'query':       config.user.getboolean('journal-show-type-query')
+    'open':        config['journal-show-type-open'],
+    'close':       config['journal-show-type-close'],
+    'transaction': config['journal-show-type-transaction'],
+    'balance':     config['journal-show-type-balance'],
+    'note':        config['journal-show-type-note'],
+    'document':    config['journal-show-type-document'],
+    'pad':         config['journal-show-type-pad'],
+    'query':       config['journal-show-type-query']
 } %}
 {% set show_transaction_type = {
-    'cleared':   config.user.getboolean('journal-show-transaction-cleared'),
-    'pending':   config.user.getboolean('journal-show-transaction-pending'),
-    'padding':   config.user.getboolean('journal-show-transaction-padding'),
-    'summarize': config.user.getboolean('journal-show-transaction-summarize'),
-    'transfer':  config.user.getboolean('journal-show-transaction-transfer'),
-    'other':     config.user.getboolean('journal-show-transaction-other'),
+    'cleared':   config['journal-show-transaction-cleared'],
+    'pending':   config['journal-show-transaction-pending'],
+    'padding':   config['journal-show-transaction-padding'],
+    'summarize': config['journal-show-transaction-summarize'],
+    'transfer':  config['journal-show-transaction-transfer'],
+    'other':     config['journal-show-transaction-other'],
 } %}
 
-{% set show_metadata = config.user.getboolean('journal-show-metadata') %}
-{% set show_legs = config.user.getboolean('journal-show-legs') %}
+{% set show_metadata = config['journal-show-metadata'] %}
+{% set show_legs = config['journal-show-legs'] %}
 
 {% if show_tablefilter %}
     <div id="entry-filters" class="table-filter">
