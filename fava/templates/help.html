@@ -7,8 +7,8 @@
         <div class="help-sidebar">
             <h4>Help pages</h4>
             <ul>
-                {% for link, title, _ in help_pages %}
-                    <li><a href="/{{ link }}"{% if link.endswith(page_slug) %} class="selected"{% endif %}>{{ title }}</a>
+                {% for slug, title in config['HELP_PAGES']|dictsort %}
+                    <li><a href="{{ url_for('help_page', page_slug=slug) }}"{% if slug == page_slug %} class="selected"{% endif %}>{{ title }}</a>
                 {% endfor %}
             </ul>
         </div>

@@ -28,7 +28,7 @@ app.config['DEFAULT_SETTINGS'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)),
                  'default-settings.conf')
 app.config['USER_SETTINGS'] = None
-app.config['HELP_PAGES'] = \
+app.config['HELP_DIR'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
 
 
@@ -59,22 +59,19 @@ def load_settings():
             app.config[option] = None
 
 
-def list_help_pages():
-    help_pages = []
-
-    for page in os.listdir(app.config['HELP_PAGES']):
+def discover_help_pages():
+    app.config['HELP_PAGES'] = {}
+    for page in os.listdir(app.config['HELP_DIR']):
         html = markdown2.markdown_path(
-            os.path.join(app.config['HELP_PAGES'], page), extras=["metadata"])
-        slug = "help/{}".format(os.path.splitext(os.path.basename(page))[0])
+            os.path.join(app.config['HELP_DIR'], page), extras=["metadata"])
+        slug = os.path.splitext(os.path.basename(page))[0]
         title = html.metadata['title']
 
-        help_pages.append((slug, title, None))
-
-    return sorted(help_pages, key=lambda x: x[1] == 'Index', reverse=True)
+        app.config['HELP_PAGES'][slug] = title
 
 
 load_settings()
-help_pages = list_help_pages()
+discover_help_pages()
 
 
 @app.route('/account/<name>/')
@@ -201,12 +198,13 @@ def get_stored_query(stored_query_hash=None):
 
 @app.route('/help/')
 @app.route('/help/<string:page_slug>/')
-def help_page(page_slug='index'):
+def help_page(page_slug='_index'):
+    if page_slug not in app.config['HELP_PAGES'].keys():
+        abort(404)
     html = markdown2.markdown_path(
-        os.path.join(app.config['HELP_PAGES'], page_slug + '.md'),
+        os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
         extras=["metadata", "fenced-code-blocks", "tables"])
-    return render_template('help.html', help_html=html, page_slug=page_slug,
-                           help_pages=help_pages)
+    return render_template('help.html', help_html=html, page_slug=page_slug)
 
 
 @app.route('/journal/')
