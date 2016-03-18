@@ -4,65 +4,42 @@ title: Running fava
 
 # Running fava
 
-The `fava`-webserver can be started with the `fava`-command:
+`fava` can be started with the `fava`-command. `fava --help` will show all the
+available command-line options.
 
-```bash
-$ fava
-usage: fava [-h] [-p PORT] [-H HOST] [-s SETTINGS] [-d] [--profile]
-            [--pstats-output PSTATS_OUTPUT]
-            [--profile-restriction PROFILE_RESTRICTION]
-            filename
 ```
+$ fava --help
+Usage: fava [OPTIONS] FILENAME
 
-It takes the following arguments:
+  Start fava for FILENAME on http://host:port.
 
-`-p PORT` or `--port PORT`:
-    Port on which the webserver should listen. Default is `5000`.
-
-`-H HOST` or `--host HOST`:
-    Host for the webserver. Default is `localhost`.
-
-`-s SETTINGS` or `--settings SETTINGS`:
-    Path to the settings file for `fava`.
-
-`-d` or `--debug`:
-    Turns on debugging. This uses the built-in Flask webserver, and disables
-    live-reloading of the Beancount-files, documents and settings- file.
-
-`--profile`:
-    Turn on profiling.  Implies `--debug`.  Profiling information for each
-    request will be printed to the log, unless `--pstats-output` is also
-    specified.
-
-`--pstats-output PSTATS_OUTPUT`:
-    Output directory for profiling pstats data. Implies --profile. If this is
-    specified, profiling information will be saved to the specified directly and
-    will not be printed to the log.
-
-`--profile-restriction PROFILE_RESTRICTION`:
-    Maximum number of functions to show in profile printed to the log. Default
-    is `30`.
-
-`filename`:
-    The path to the Beancount input file. This is required.
-
+Options:
+  -p, --port INTEGER             The port to listen on. (default: 5000)
+  -H, --host TEXT                The host to listen on. (default: localhost)
+  -s, --settings PATH            Settings file for fava.
+  -d, --debug                    Turn on debugging. Disables live-reloading.
+  --profile                      Turn on profiling. Implies --debug.
+  --profile-dir PATH             Output directory for profiling data.
+  --profile-restriction INTEGER  Number of functions to show in profile.
+  --help                         Show this message and exit.
+```
 
 ## Examples
 
-Run in normal mode with minimal configuration:
+Run with default configuration:
 
 ```bash
-fava /Volumes/Ledger/ledger-2015.beancount
+fava ledger.beancount
 ```
 
-Specify a settings file and enable Debug-mode:
+Specify a settings file and enable debug-mode:
 
 ```bash
-fava --settings /Volumes/Ledger/fava-settings.conf --debug /Volumes/Ledger/ledger-2016.beancount
+fava --debug --settings /Volumes/Ledger/fava-settings.conf /Volumes/Ledger/ledger.beancount
 ```
 
-Specify a different port and enable Debug-mode:
+Specify a different port and enable debug-mode:
 
 ```bash
-fava --port 8080 --debug /Volumes/Ledger/ledger-2016.beancount
+fava --port 8080 --debug /Volumes/Ledger/ledger.beancount
 ```
