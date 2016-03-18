@@ -64,6 +64,15 @@ var BeancountHighlightRules = function() {
             regex: /^(option)(\s*)(\".*\")(\s*)(\".*\")(\s*)/,
             comment: "Option directives"
         }, {
+            token: [
+                "support.function.directive.plugin.beancount",
+                "meta.directive.option.beancount",
+                "support.variable.language.plugin.beancount",
+                "meta.directive.option.beancount"
+            ],
+            regex: /^(plugin)(\s*)(\".*\")(\s*)/,
+            comment: "Plugin directives"
+        }, {
             token: "keyword.operator.directive.beancount",
             regex: /^(?:poptag|pushtag)\s/,
             comment: "Directives (no date)"
