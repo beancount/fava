@@ -2,6 +2,8 @@
 {% set active_page = page_slug %}
 {% set show_filters = False %}
 
+{% block title %}Help - {{ config['HELP_PAGES'][page_slug] }}{% endblock %}
+
 {% block content %}
     <div class="help">
         <div class="help-sidebar">
