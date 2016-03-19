@@ -1,45 +1,25 @@
 {% set navigation_bar = [
-    ("", [
-        ('income_statement', 'Income Statement',    'g i'),
-        ('balance_sheet',    'Balance Sheet',       'g b'),
-        ('trial_balance',    'Trial Balance',       'g t'),
-        ('journal',          'General Journal',     'g g'),
-        ('query',            'Query',               'g q'),
-    ]),
-    ("Other", [
-        ('holdings',         'Holdings',            'g h'),
-        ('net_worth',        'Net Worth',           'g w'),
-        ('commodities',      'Commodities',         'g c'),
-        ('documents',        'Documents',           'g d'),
-        ('notes',            'Notes',               'g n'),
-        ('events',           'Events',              'g e'),
-    ]),
-    ("Configuration", [
-        ('source',           'Source',              'g s'),
-        ('errors',           'Errors',              'g r'),
-        ('options',          'Options',             'g o'),
-        ('statistics',       'Statistics',          'g x'),
-        ('help',             'Help',                'g shift+h'),
-    ])
+    ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
+    ("Other",         [ 'holdings', 'net_worth', 'commodities', 'documents', 'notes', 'events']),
+    ("Configuration", [ 'source', 'errors', 'options', 'statistics', 'help'])
 ] %}
-
 {% set all_pages = {
-    'income_statement': 'Income Statement',
-    'balance_sheet':    'Balance Sheet',
-    'trial_balance':    'Trial Balance',
-    'journal':          'General Journal',
-    'query':            'Query',
-    'holdings':         'Holdings',
-    'net_worth':        'Net Worth',
-    'commodities':      'Commodities',
-    'documents':        'Documents',
-    'notes':            'Notes',
-    'events':           'Events',
-    'source':           'Source',
-    'errors':           'Errors',
-    'options':          'Options',
-    'statistics':       'Statistics',
-    'help':             'Help',
+    'income_statement': ('Income Statement', 'g i'),
+    'balance_sheet':    ('Balance Sheet',    'g b'),
+    'trial_balance':    ('Trial Balance',    'g t'),
+    'journal':          ('General Journal',  'g g'),
+    'query':            ('Query',            'g q'),
+    'holdings':         ('Holdings',         'g h'),
+    'net_worth':        ('Net Worth',        'g w'),
+    'commodities':      ('Commodities',      'g c'),
+    'documents':        ('Documents',        'g d'),
+    'notes':            ('Notes',            'g n'),
+    'events':           ('Events',           'g e'),
+    'source':           ('Source',           'g s'),
+    'errors':           ('Errors',           'g r'),
+    'options':          ('Options',          'g o'),
+    'statistics':       ('Statistics',       'g x'),
+    'help':             ('Help',             'g shift+h'),
 } %}
 {% set active_page = active_page|default('journal') %}
 {% set show_filters = show_filters|default(True) %}
@@ -50,7 +30,7 @@
     {% block head %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='gen/theme_' + config['theme'] + '.css') }}">
-    <title>{% block title %}{{ all_pages[active_page] }}{% endblock %} - {{ api.title }}</title>
+    <title>{% block title %}{{ all_pages[active_page].0 }}{% endblock %} - {{ api.title }}</title>
     {% endblock %}
     <script>window.chartData = [];</script>
 </head>
@@ -88,8 +68,8 @@
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
-                {% for id, caption, shortcut in menuitems %}
-                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ caption|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a>
+                {% for id in menuitems %}
+                    <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ all_pages[id].0|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a>
                     {% if id == "query" and user_queries|length > 0 %}
                         <ul class="navigation">
                         {% for query in user_queries %}
@@ -113,11 +93,8 @@
     <script>
         // Jumping to pages:
         Mousetrap.bind({
-            {% for title_, menuitems in navigation_bar %}
-                {% for id, caption, shortcut in menuitems %}
-            '{{ shortcut }}': function() { window.location = '{{ url_for('report', report_name=id) }}'; },
-                {% endfor %}
-
+            {% for key, value in all_pages|dictsort %}
+            '{{ value.1 }}': function() { window.location = '{{ url_for('report', report_name=key) }}'; },
             {% endfor %}
         }, 'keyup');
 
