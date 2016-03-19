@@ -98,16 +98,6 @@
             {% endfor %}
         }, 'keyup');
 
-        // Filtering:
-        Mousetrap.bind({
-            {% for shortcut in ['f t', 'f g', 'f c', 'f p'] %}
-            '{{ shortcut }}': function() {
-                $('ul.topmenu>li').removeClass('opened');
-                $('ul.topmenu>li:nth-child({{ loop.index }})').toggleClass('opened').find('input[type=search]').focus();
-            },
-            {% endfor %}
-        }, 'keyup');
-
         window.documentsFolders = {{ options['documents']|tojson|safe }};
         window.documentsUploadUrl = "{{ url_for('add_document') }}";
     </script>
