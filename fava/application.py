@@ -106,7 +106,7 @@ def document():
 
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
-        return send_from_directory(directory, filename, as_attachment=True)
+        return send_from_directory(directory, filename)
     else:
         return "File \"{}\" not found in entries.".format(document_path), 404
 
