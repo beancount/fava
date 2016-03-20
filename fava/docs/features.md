@@ -41,3 +41,5 @@ The colours have the following meaning.
 - green: The last entry for this account is a balance check that passed.
 - red: The last entry is a balance check that failed.
 - yellow: The last entry is not a balance check.
+- gray: The account has not been updated in a while, as set by the
+  `uptodate-indicator-grey-lookback-days` configuration variable.

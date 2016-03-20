@@ -1,8 +1,8 @@
 {% set infotext = {
-    'green':  "The latest posting is a balance check that passed (i.e., known-good)",
-    'red':    "The latest posting is a balance check that failed (i.e., known-bad)",
-    'yellow': "The latest posting is not a balance check (i.e., unknown)",
-    'gray':   "The account hasn't been updated in a while (as compared to the last available date in the file)",
+    'green':  "The last entry is a passing balance check.",
+    'red':    "The last entry is a failing balance check.",
+    'yellow': "The last entry is not a balance check.",
+    'gray':   "This account has not been updated in a while.",
 } %}
 
 {% macro indicator(account_name) %}
