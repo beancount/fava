@@ -9,8 +9,8 @@ fava
    :target: https://pypi.python.org/pypi/beancount-fava
 .. image:: https://img.shields.io/pypi/dm/beancount-fava.svg
    :target: https://pypi.python.org/pypi/beancount-fava
-.. image:: https://img.shields.io/github/commits-since/aumayr/fava/v0.2.5.svg
-   :target: https://github.com/aumayr/fava/compare/v0.2.5...master
+.. image:: https://img.shields.io/github/commits-since/aumayr/fava/v0.2.6.svg
+   :target: https://github.com/aumayr/fava/compare/v0.2.6...master
 .. image:: https://img.shields.io/travis/aumayr/fava.svg
    :target: https://travis-ci.org/aumayr/fava?branch=master
 
