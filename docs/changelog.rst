@@ -1,14 +1,53 @@
 Changelog
 =========
 
-v0.2.6 (in development)
+v0.2.6 (March 20th, 2016)
 ----------------------------
+
+Additions
+
+- There are now more interval options available for charts and the account
+  balances report. The interval can be selected from a dropdown next to the
+  charts. :bug:`175`
+- Show metadata for postings in the Journal. Thanks to :user:`corani`.
+  :bug:`185`
+- The editor now supports org-mode style folding. Thanks to :user:`corani`.
+  :bug:`209`
+- Show colored dots for all the postings of a transaction in the Journal
+  report. This way flagged postings can be quickly spotted. :bug:`195`
+- Add keyboard shortcuts for save to source editor. :bug:`199`
+
+Changes
+
+- Use beancount's DisplayContext to determine the correct precision at which to
+  render numbers. :bug:`188`
+- Improve the way that query results are serialized to XLS etc. Thanks to
+  :user:`corani`. :bug:`168`
+- Show inverse rates for pairs of operating currencies on the commodities
+  report. :bug:`139`
+- Use Click for the CLI and check if beancount file exists on startup.
+  :bug:`216`
+- Hide closed accounts in tree tables. Also see new configuration option below.
 
 New configuration options
 
 - ``editor-strip-trailing-whitespace`` to enable trimming of trailing
   whitespace in the Source editor (default: "false").  Thanks to
   :user:`corani`. :bug:`163`
+- ``show-closed-accounts`` to show closed accounts in tree tables, for example
+  on the balance sheet (default: "false"). :bug:`91`
+- ``show-accounts-with-zero-balance`` to show accounts with a balance of zero
+  in tree tables (default: "true"). :bug:`91`
+- ``show-accounts-with-zero-transactions`` to show accounts with no
+  transactions in tree tables (default: "true"). :bug:`91`
+
+Fixes
+
+- Fixed a bug where the months would be off by one for the interval reports.
+  :bug:`182`
+- Fix the net worth report for more than one currency. :bug:`207`
+- Some improvements to the help pages.
+- Many small bug fixes.
 
 v0.2.5 (February 28th, 2016)
 ----------------------------
