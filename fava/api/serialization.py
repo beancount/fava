@@ -112,8 +112,8 @@ def _add_metadata(new_entry, entry):
     new_entry['hash'] = compare.hash_entry(entry)
 
     if entry.meta:
-        new_entry['meta']['filename'] = entry.meta['filename']
-        new_entry['meta']['lineno'] = entry.meta['lineno']
+        new_entry['meta']['filename'] = getattr(entry.meta, 'filename', None)
+        new_entry['meta']['lineno'] = getattr(entry.meta, 'lineno', None)
 
         new_entry['metadata'] = entry.meta.copy()
         new_entry['metadata'].pop("__tolerances__", None)
