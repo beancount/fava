@@ -3,7 +3,7 @@
 <script>
 {% for currency in operating_currencies %}
     window.chartData.push({
-        label: "Net worth ({{ interval_macros.interval_label|lower }}, in {{ currency }})",
+        label: "Net Worth ({{ interval_macros.interval_label|lower }}, in {{ currency }})",
         type: "line",
         options: {
             dateFormat: "{{ interval_macros.interval_format_str }}",
@@ -21,9 +21,9 @@
                 data: [
                     {% for row in net_worth.interval_totals %}
                         {
-                            x: new Date({{ row.end_date.year }}, {{ row.end_date.month-1 }}, {{ row.end_date.day }}),
+                            x: new Date({{ row.date.year }}, {{ row.date.month-1 }}, {{ row.date.day }}),
                             y: {{ row.totals[currency] or 0 }},
-                            meta: "{{ row.totals[currency]|format_currency }} {{ currency }}<br><em>{{ interval_macros.format_date(row.end_date) }}</em>"
+                            meta: "{{ row.totals[currency]|format_currency }} {{ currency }}<br><em>{{ interval_macros.format_date(row.date) }}</em>"
                         },
                     {% endfor %}
                 ]

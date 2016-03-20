@@ -396,8 +396,7 @@ class BeancountReportAPI(object):
                     totals[currency] = holdings_[0].market_value
 
             interval_totals.append({
-                'begin_date': begin_date,
-                'end_date': end_date,
+                'date': end_date - datetime.timedelta(1),
                 'totals': totals
             })
         return interval_totals
