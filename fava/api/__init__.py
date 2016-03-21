@@ -24,14 +24,14 @@ import operator
 import os
 
 from beancount import loader
-from beancount.core import compare, getters, realization, inventory
+from beancount.core import compare, flags, getters, realization, inventory
 from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
-                                 Note, Document, Balance, Transaction, Event,
-                                 Query)
+                                 Note, Document, Balance, TxnPosting,
+                                 Transaction, Event, Query)
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
@@ -583,33 +583,26 @@ class BeancountReportAPI(object):
         return query.run_query(self.all_entries, self.options,
                                bql_query_string, numberify=numberify)
 
-    def _last_posting_for_account(self, account_name):
-        """
-        Returns the last posting for an account (ignores Close)
-        """
+    def _last_balance_or_transaction(self, account_name):
         real_account = realization.get_or_create(self.all_root_account,
                                                  account_name)
 
-        last_posting = realization.find_last_active_posting(
-            real_account.txn_postings)
+        for txn_posting in reversed(real_account.txn_postings):
+            if not isinstance(txn_posting, (TxnPosting, Balance)):
+                continue
 
-        if not isinstance(last_posting, Close):
-            return last_posting
+            if isinstance(txn_posting, TxnPosting) and \
+               txn_posting.txn.flag == flags.FLAG_UNREALIZED:
+                continue
+            return txn_posting
 
-        postings = realization.get_postings(real_account)
-        if len(postings) >= 2:
-            return postings[-2]
-
-        return None
-
-    def is_account_uptodate(self, account_name, look_back_days=60):
+    def is_account_uptodate(self, account_name):
         """
         green:  if the last entry is a balance check that passed
         red:    if the last entry is a balance check that failed
         yellow: if the last entry is not a balance check
         """
-
-        last_posting = self._last_posting_for_account(account_name)
+        last_posting = self._last_balance_or_transaction(account_name)
 
         if last_posting:
             if isinstance(last_posting, Balance):
@@ -619,8 +612,6 @@ class BeancountReportAPI(object):
                     return 'green'
             else:
                 return 'yellow'
-        else:
-            return None
 
     def last_account_activity_in_days(self, account_name):
         real_account = realization.get_or_create(self.all_root_account,

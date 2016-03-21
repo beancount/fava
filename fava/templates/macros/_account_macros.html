@@ -7,7 +7,7 @@
 
 {% macro indicator(account_name) %}
 {% if account_name and account_name|uptodate_eligible %}
-    {% set status=api.is_account_uptodate(account_name, look_back_days=config['uptodate-indicator-grey-lookback-days']) %}
+    {% set status=api.is_account_uptodate(account_name) %}
     {% if status %}
         <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}"></span>
     {% endif %}
