@@ -328,7 +328,7 @@ def should_collapse_account(account_name):
     if not app.config['collapse-accounts']:
         return False
 
-    return account_name in app.config['collapse_accounts']
+    return account_name in app.config['collapse-accounts']
 
 
 @app.template_filter()
