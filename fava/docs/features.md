@@ -36,10 +36,29 @@ matching both filters will be selected.
 fava offers colored indicators that can help you keep your accounts up-to-date.
 They are shown everywhere by default, but only enabled for accounts that have
 the metadata `fava-uptodate-indication: "True"` set on their Open directive.
-The colours have the following meaning.
+The colors have the following meaning:
 
 - green: The last entry for this account is a balance check that passed.
 - red: The last entry is a balance check that failed.
 - yellow: The last entry is not a balance check.
 - gray: The account has not been updated in a while, as set by the
   `uptodate-indicator-grey-lookback-days` configuration variable.
+
+## Displaying only relevant accounts
+
+To help display only the most relevant subset of accounts when managing a large number
+or a deep hierarchy of accounts, fava offers several configuration variables:
+
+- `show-closed-accounts` (self-explanatory)
+
+- `show-accounts-with-zero-balance` (self-explanatory)
+ 
+- `collapse-accounts` takes a list of accounts that are collapsed in the initial tree view
+
+## Custom editor
+
+fava can open up your source file in your favorite editor directly from the web
+interface using the `use-external-editor` configuration variable through the
+'beancount://' URI handler. See the https://github.com/aumayr/beancount_urlscheme
+project for pre-configured URI handlers for Mac OS and Cygwin.
+
