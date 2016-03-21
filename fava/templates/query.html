@@ -52,9 +52,9 @@
         <div class="stored-queries">
             <label for="stored-queries">Load stored query:</label>
             <select id="stored-queries">
-                <option value=""></option>
+                <option value="" data-source-link="#"></option>
                 {% for query in queries %}
-                    <option value="{{ url_for('get_stored_query', name=query.name) }}" data-source-link="{{ url_for_source(file_path=query['meta']['filename'], line=query['meta']['lineno'])}}"{% if query['name'] == name %} selected="selected"{% endif %}>{{ query.name }}</option>
+                    <option value="{{ query.query_string }}" data-source-link="{{ url_for_source(file_path=query['meta']['filename'], line=query['meta']['lineno'])}}"{% if query['name'] == name %} selected="selected"{% endif %}>{{ query.name }}</option>
                 {% endfor %}
             </select>
             <a href="{% if name %}{% set query_ = api.queries(name) %}{{ url_for_source(file_path=query_.meta.filename, line=query_.meta.lineno)}}{% endif %}" class="source-link{% if not name %} hidden{% endif %}">(Source)</a>

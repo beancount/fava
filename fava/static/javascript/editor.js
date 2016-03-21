@@ -82,23 +82,11 @@ $(document).ready(function() {
 
         $('.stored-queries select').change(function() {
             var sourceElement = $('.stored-queries a.source-link');
-            var selectedIdUrl = $(this).val();
+            var query = $(this).val();
             var sourceLink = $('option:selected', this).attr('data-source-link');
 
-            if (selectedIdUrl != "") {
-                $.get(selectedIdUrl)
-                .done(function(data) {
-                    editor.setValue(data, -1);
-                });
-                sourceElement
-                    .attr('href', sourceLink)
-                    .toggle(true);
-            } else {
-                editor.setValue("", -1);
-                sourceElement
-                    .attr('href', '#')
-                    .toggle(false);
-            }
+            editor.setValue(query, -1);
+            sourceElement.attr('href', sourceLink).toggle(query != "");
         });
     };
 
