@@ -39,8 +39,8 @@ $(document).ready(function() {
         keyboardShortcuts.journal();
     };
 
-    // Clipboard on statistics page
-    if ($('#copy-balances').length) {
+    // Clipboard
+    if ($('.status-indicator').length) {
         clipboard.initClipboard();
     };
 

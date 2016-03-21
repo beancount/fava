@@ -62,12 +62,8 @@
                         <td><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
                         {% if activity.account|uptodate_eligible %}
                             {% with status=api.is_account_uptodate(activity.account) or '' %}
-                                <td data-sort-value="{{ status_sortorder[status] }}" class="uptodate-indicator">
-                                    <span class="status-indicator status-{{ status }}" title="{{ account_macros.infotext[status] }}
-
-Click to copy the balance directives to the clipboard:
-
-                                        {{ account_macros.balance_directive(activity.account) }}" data-clipboard-text="{{ account_macros.balance_directive(activity.account) }}"></span>
+                                <td data-sort-value="{{ status_sortorder[api.is_account_uptodate(activity.account) or ''] }}" class="uptodate-indicator">
+                                    {{ account_macros.indicator(activity.account) }}
                                 </td>
                             {% endwith %}
                             <td class="uptodate-indicator">{{ account_macros.last_account_activity(activity.account) }}</td>

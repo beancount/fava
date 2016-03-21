@@ -5,21 +5,21 @@
     'gray':   "This account has not been updated in a while.",
 } %}
 
-{% macro indicator(account_name) %}
-{% if account_name and account_name|uptodate_eligible %}
-    {% set status=api.is_account_uptodate(account_name) %}
-    {% if status %}
-        <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}"></span>
-    {% endif %}
+{% macro indicator(account) %}
+{% set status=api.is_account_uptodate(account) %}
+{% if status %}
+    <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
+
+Click to copy the balance directives to the clipboard:
+
+{{ balance_directive(account) }}" data-clipboard-text="{{ balance_directive(account) }}"></span>
 {% endif %}
 {% endmacro %}
 
 {% macro last_account_activity(account_name) %}
-{% if account_name and account_name|uptodate_eligible %}
 {% set last_account_activity_in_days=api.last_account_activity_in_days(account_name) %}
 {% if last_account_activity_in_days > config['uptodate-indicator-grey-lookback-days'] %}
     <span class="status-indicator status-gray" title="{{ infotext['gray'] }} ({{ last_account_activity_in_days }} days ago)"></span>
-{% endif %}
 {% endif %}
 {% endmacro %}
 
@@ -35,8 +35,10 @@
 </a>
 
 {% if config['uptodate-indicator-show-everywhere'] %}
-    {{ last_account_activity(account_name) }}
+{% if account_name and account_name|uptodate_eligible %}
     {{ indicator(account_name) }}
+    {{ last_account_activity(account_name) }}
+{% endif %}
 {% endif %}
 {% endmacro %}
 
@@ -54,8 +56,10 @@
         {%- endif -%}
     {% endfor %}
 
+{% if account_name and account_name|uptodate_eligible %}
     {{ indicator(account_name) }}
     {{ last_account_activity(account_name) }}
+{% endif %}
 
     {% set activity = api.statistics(account_name=account_name) %}
     {% if activity %}
