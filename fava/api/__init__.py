@@ -188,6 +188,10 @@ class BeancountReportAPI(object):
         return self.format_string.format(self.dcontext.quantize(value,
                                                                 currency))
 
+    def _entries_filter_type(self, entries, include_types):
+        return [entry for entry in entries
+                if isinstance(entry, include_types)]
+
     def _journal(self, entries, include_types=None,
                  with_change_and_balance=False):
         if include_types:
@@ -327,17 +331,17 @@ class BeancountReportAPI(object):
     def notes(self):
         return self._journal(self.entries, Note)
 
-    def queries(self, query_hash=None):
-        if not query_hash:
-            return self._journal(self.all_entries, Query)
-        matching_entries = [entry for entry in self.all_entries
-                            if query_hash == compare.hash_entry(entry)]
+    def queries(self, name=None):
+        if not name:
+            return self._entries_filter_type(self.all_entries, Query)
+        matching_entries = [query for query in self.queries()
+                            if name == query.name]
 
         if not matching_entries:
             return
 
         assert len(matching_entries) == 1
-        return serialize_entry(matching_entries[0])
+        return matching_entries[0]
 
     def events(self, event_type=None, only_include_newest=False):
         events = self._journal(self.entries, Event)

@@ -2,11 +2,6 @@
 {% set active_page = 'query' %}
 {% set show_filters = False %}
 
-{% macro source_link(ehash) -%}
-{% set context = api.context(ehash) %}
-{{ url_for_source(file_path=context.filename, line=context.line) }}
-{%- endmacro %}
-
 {% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
@@ -52,16 +47,17 @@
 {% block content %}
     <h1>Query</h1>
 
-    {% if api.queries() %}
+    {% set queries = api.queries() %}
+    {% if queries %}
         <div class="stored-queries">
             <label for="stored-queries">Load stored query:</label>
             <select id="stored-queries">
                 <option value=""></option>
-                {% for query in api.queries() %}
-                    <option value="{{ url_for('get_stored_query', stored_query_hash=query['hash']) }}" data-stored-query-hash="{{query['hash']}}" data-source-link="{{source_link(query['hash'])}}"{% if query['hash'] == query_hash %} selected="selected"{% endif %}>{{ query['name'] }}</option>
+                {% for query in queries %}
+                    <option value="{{ url_for('get_stored_query', name=query.name) }}" data-source-link="{{ url_for_source(file_path=query['meta']['filename'], line=query['meta']['lineno'])}}"{% if query['name'] == name %} selected="selected"{% endif %}>{{ query.name }}</option>
                 {% endfor %}
             </select>
-            <a href="{% if query_hash %}{{ source_link(query_hash) }}{% endif %}" class="source-link{% if not query_hash %} hidden{% endif %}">(Source)</a>
+            <a href="{% if name %}{% set query_ = api.queries(name) %}{{ url_for_source(file_path=query_.meta.filename, line=query_.meta.lineno)}}{% endif %}" class="source-link{% if not name %} hidden{% endif %}">(Source)</a>
         </div>
     {% endif %}
 
@@ -76,11 +72,9 @@
 
     {% if not error and not result %}
     <p class="description">
-        You can run custom querys (BQL) like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.
-
-        Sample queries can be found <a href="http://aumayr.github.io/beancount-sql-queries/">here</a> (please submit your own queries if they might be useful for others).
+        You can run querys like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>.
     </p>
-    {% if not api.queries() %}
+    {% if not queries %}
         <p class="description">
             If you add <code>query</code>-Directives to your <a href="{{ url_for('source') }}">Source</a> these stored queries will be displayed as a dropdown to quickly select them.
         </p>
@@ -108,10 +102,10 @@
         <div class="queryresults-wrapper">
             <p class="download">
                 Download as
-                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='csv') }}">CSV</a>,
-                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='xls') }}">XLS</a>,
-                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='xlsx') }}">XLSX</a> or
-                <a class="download-csv" href="{{ url_for('query', bql=query, query_hash=query_hash, result_format='ods') }}">ODS</a>
+                <a class="download-csv" href="{{ url_for('query', bql=query, name=name, result_format='csv') }}">CSV</a>,
+                <a class="download-csv" href="{{ url_for('query', bql=query, name=name, result_format='xls') }}">XLS</a>,
+                <a class="download-csv" href="{{ url_for('query', bql=query, name=name, result_format='xlsx') }}">XLSX</a> or
+                <a class="download-csv" href="{{ url_for('query', bql=query, name=name, result_format='ods') }}">ODS</a>
             </p>
             <table class="queryresults sortable">
                 <thead>

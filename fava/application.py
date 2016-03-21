@@ -149,14 +149,11 @@ def context(ehash=None):
 
 
 @app.route('/query/')
-def query(bql=None, query_hash=None, result_format='html'):
-    query_hash = request.args.get('query_hash', None)
+def query(bql=None, result_format='html'):
+    name = request.args.get('name', None)
     result_format = request.args.get('result_format', 'html')
 
-    if query_hash:
-        query = api.queries(query_hash=query_hash)['query_string']
-    else:
-        query = request.args.get('bql', '')
+    query = request.args.get('bql', '')
     error = None
     result = None
 
@@ -174,9 +171,8 @@ def query(bql=None, query_hash=None, result_format='html'):
             respIO = book.save(result_format, query)
 
             filename = 'query_result'
-            if query_hash:
-                filename = secure_filename(
-                    api.queries(query_hash=query_hash)['name'].strip())
+            if name:
+                filename = secure_filename(name.strip())
 
             respIO.seek(0)
             response = make_response(respIO.read())
@@ -187,13 +183,13 @@ def query(bql=None, query_hash=None, result_format='html'):
             return redirect(url_for('query'))
 
     return render_template('query.html', query=query, result=result,
-                           query_hash=query_hash, error=error)
+                           name=name, error=error)
 
 
-@app.route('/query/stored_queries/<string:stored_query_hash>')
-def get_stored_query(stored_query_hash=None):
+@app.route('/query/stored_queries/<string:name>')
+def get_stored_query(name=None):
     if request.is_xhr:
-        return api.queries(query_hash=stored_query_hash)['query_string']
+        return api.queries(name)['query_string']
 
 
 @app.route('/help/')
