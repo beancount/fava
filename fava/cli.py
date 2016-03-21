@@ -46,7 +46,7 @@ def main(filename, port, host, settings, debug, profile, profile_dir,
             app.config['PROFILE'] = True
             app.wsgi_app = ProfilerMiddleware(
                 app.wsgi_app,
-                restrictions=(profile_restriction),
+                restrictions=(profile_restriction,),
                 profile_dir=profile_dir if profile_dir else None)
 
         app.run(host, port, debug)
