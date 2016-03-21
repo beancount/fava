@@ -186,12 +186,6 @@ def query(bql=None, result_format='html'):
                            name=name, error=error)
 
 
-@app.route('/query/stored_queries/<string:name>')
-def get_stored_query(name=None):
-    if request.is_xhr:
-        return api.queries(name)['query_string']
-
-
 @app.route('/help/')
 @app.route('/help/<string:page_slug>/')
 def help_page(page_slug='_index'):
