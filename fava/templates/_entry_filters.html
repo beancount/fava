@@ -17,7 +17,7 @@
                         </li>
                     {% endif %}
 
-                    {% for time_ in api.active_years %}
+                    {% for time_ in api.active_years|reverse %}
                     <li{% if time_|string == time_filter %} class="selected"{% endif %} data-filter="{{ time_ }}">
                     {% if time_|string == time_filter %}
                         <a href="{{ url_for_current(time=None) }}">{{ time_filter }}</a>
