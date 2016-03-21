@@ -1,3 +1,0 @@
-{% for position in account_inventory %}
-{{ today }} balance {{ activity.account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
-{% endfor %}

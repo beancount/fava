@@ -23,6 +23,12 @@
 {% endif %}
 {% endmacro %}
 
+{% macro balance_directive(account) %}
+{% for position in api.inventory(account) %}
+{{ today }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
+{% endfor %}
+{% endmacro %}
+
 {% macro account_name(account_name, last_segment=False) %}
 <a href="{{ url_for('account_with_journal', name=account_name) }}" class="account">
     {{ account_name|last_segment if last_segment else account_name }}
