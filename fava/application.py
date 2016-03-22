@@ -6,13 +6,13 @@ from datetime import datetime
 import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, make_response)
+                   redirect, send_from_directory, g, send_file)
 from werkzeug import secure_filename
 
 from fava import config
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
-from fava.util.excel import FavaExcel
+from fava.util.excel import to_csv, to_excel
 
 
 app = Flask(__name__)
@@ -150,39 +150,29 @@ def context(ehash=None):
 
 @app.route('/query/')
 def query():
-    name = request.args.get('name', None)
+    name = request.args.get('name', 'query_result')
     result_format = request.args.get('result_format', 'html')
     query_string = request.args.get('query_string', '')
+    numberify = bool(result_format != 'html')
 
-    error = None
-    result = None
+    if not query_string:
+        return render_template('query.html')
 
-    if query_string:
-        try:
-            numberify = (request.path == '/query/result.csv')
-            result = api.query(query_string, numberify=numberify)
-        except Exception as e:
-            result = None
-            error = e
+    try:
+        result = api.query(query_string, numberify)
+    except Exception as e:
+        return render_template('query.html', error=e)
 
-    if result_format != 'html':
-        if query_string:
-            book = FavaExcel(result, error)
-            respIO = book.save(result_format, query_string)
+    if result_format == 'html':
+        return render_template('query.html', result=result)
+    else:
+        filename = "{}.{}".format(secure_filename(name.strip()), result_format)
 
-            filename = 'query_result'
-            if name:
-                filename = secure_filename(name.strip())
-
-            respIO.seek(0)
-            response = make_response(respIO.read())
-            response.headers["Content-Disposition"] =\
-                "attachment; filename={}.{}".format(filename, result_format)
-            return response
+        if result_format == 'csv':
+            fd = to_csv(*result)
         else:
-            return redirect(url_for('query'))
-
-    return render_template('query.html', result=result, error=error)
+            fd = to_excel(*result, result_format, query_string)
+        return send_file(fd, as_attachment=True, attachment_filename=filename)
 
 
 @app.route('/help/')
