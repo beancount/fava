@@ -159,19 +159,20 @@ def query():
         return render_template('query.html')
 
     try:
-        result = api.query(query_string, numberify)
+        types, rows = api.query(query_string, numberify)
     except Exception as e:
         return render_template('query.html', error=e)
 
     if result_format == 'html':
-        return render_template('query.html', result=result)
+        return render_template('query.html', result_types=types,
+                               result_rows=rows)
     else:
         filename = "{}.{}".format(secure_filename(name.strip()), result_format)
 
         if result_format == 'csv':
-            fd = to_csv(*result)
+            fd = to_csv(types, rows)
         else:
-            fd = to_excel(*result, result_format, query_string)
+            fd = to_excel(types, rows, result_format, query_string)
         return send_file(fd, as_attachment=True, attachment_filename=filename)
 
 

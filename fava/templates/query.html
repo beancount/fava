@@ -72,7 +72,7 @@
         <input id="submit-query" type="submit" value="Submit Query">
     </form>
 
-    {% if not error and not result %}
+    {% if not error and not result_types %}
     <p class="description">
         You can run querys like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>.
     </p>
@@ -99,7 +99,7 @@
         </p>
     {% endif %}
 
-    {% if result %}
+    {% if result_types %}
         <h3>Result</h3>
         <div class="queryresults-wrapper">
             <p class="download">
@@ -112,15 +112,15 @@
             <table class="queryresults sortable">
                 <thead>
                     <tr>
-                        {% for name, type in result.0 %}
+                        {% for name, type in result_types %}
                             <th>{{ name }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    {% for row in result.1 %}
+                    {% for row in result_rows %}
                         <tr>
-                            {% for name, type in result.0 %}
+                            {% for name, type in result_types %}
                                 {{ querycell(name, row[name], type)  }}
                             {% endfor %}
                         </tr>
