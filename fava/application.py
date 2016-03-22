@@ -149,26 +149,26 @@ def context(ehash=None):
 
 
 @app.route('/query/')
-def query(bql=None, result_format='html'):
+def query():
     name = request.args.get('name', None)
     result_format = request.args.get('result_format', 'html')
+    query_string = request.args.get('query_string', '')
 
-    query = request.args.get('bql', '')
     error = None
     result = None
 
-    if query:
+    if query_string:
         try:
             numberify = (request.path == '/query/result.csv')
-            result = api.query(query, numberify=numberify)
+            result = api.query(query_string, numberify=numberify)
         except Exception as e:
             result = None
             error = e
 
     if result_format != 'html':
-        if query:
+        if query_string:
             book = FavaExcel(result, error)
-            respIO = book.save(result_format, query)
+            respIO = book.save(result_format, query_string)
 
             filename = 'query_result'
             if name:
@@ -182,8 +182,7 @@ def query(bql=None, result_format='html'):
         else:
             return redirect(url_for('query'))
 
-    return render_template('query.html', query=query, result=result,
-                           name=name, error=error)
+    return render_template('query.html', result=result, error=error)
 
 
 @app.route('/help/')

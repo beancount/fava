@@ -23,7 +23,7 @@
 } %}
 {% set active_page = active_page|default('journal') %}
 {% set show_filters = show_filters|default(True) %}
-{% set user_queries = api.queries()[:config['sidebar-show-queries']] %}
+{% set user_queries = api.queries[:config['sidebar-show-queries']] %}
 <!doctype html>
 <html>
 <head>
@@ -73,7 +73,7 @@
                     {% if id == "query" and user_queries|length > 0 %}
                         <ul class="navigation">
                         {% for query in user_queries %}
-                            <li{% if query.name == name %} class="selected"{% endif %}><a href="{{ url_for('query', bql=query.query_string, name=query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
+                            <li{% if query.name == name %} class="selected"{% endif %}><a href="{{ url_for('query', query_string=query.query_string, name=query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
                         {% endfor %}
                         </ul>
                     {% endif %}

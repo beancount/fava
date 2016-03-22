@@ -148,6 +148,8 @@ class BeancountReportAPI(object):
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
 
+        self.queries = self._entries_filter_type(self.all_entries, Query)
+
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
         self.all_accounts = self._all_accounts()
@@ -331,10 +333,8 @@ class BeancountReportAPI(object):
     def notes(self):
         return self._journal(self.entries, Note)
 
-    def queries(self, name=None):
-        if not name:
-            return self._entries_filter_type(self.all_entries, Query)
-        matching_entries = [query for query in self.queries()
+    def get_query(self, name):
+        matching_entries = [query for query in self.queries
                             if name == query.name]
 
         if not matching_entries:
@@ -583,9 +583,9 @@ class BeancountReportAPI(object):
 
         return is_present
 
-    def query(self, bql_query_string, numberify=False):
+    def query(self, query_string, numberify=False):
         return query.run_query(self.all_entries, self.options,
-                               bql_query_string, numberify=numberify)
+                               query_string, numberify=numberify)
 
     def _last_balance_or_transaction(self, account_name):
         real_account = realization.get_or_create(self.all_root_account,

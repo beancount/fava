@@ -76,7 +76,7 @@ $(document).ready(function() {
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
             var nextUrl = $button.parents('form').attr('action');
-            nextUrl = nextUrl + (nextUrl.split('?')[1] ? '&' : '?') + "bql=" + encodeURIComponent(editor.getValue());
+            nextUrl = nextUrl + (nextUrl.split('?')[1] ? '&' : '?') + "query_string=" + encodeURIComponent(editor.getValue());
             window.location.href = nextUrl;
         });
 
