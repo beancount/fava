@@ -12,7 +12,7 @@ from werkzeug import secure_filename
 from fava import config
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
-from fava.util.excel import to_csv, to_excel
+from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 
 app = Flask(__name__)
@@ -30,6 +30,7 @@ app.config['DEFAULT_SETTINGS'] = \
 app.config['USER_SETTINGS'] = None
 app.config['HELP_DIR'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
+app.config['HAVE_EXCEL'] = HAVE_EXCEL
 
 
 def load_file():
@@ -172,6 +173,8 @@ def query():
         if result_format == 'csv':
             fd = to_csv(types, rows)
         else:
+            if not config['HAVE_EXCEL']:
+                abort(501)
             fd = to_excel(types, rows, result_format, query_string)
         return send_file(fd, as_attachment=True, attachment_filename=filename)
 

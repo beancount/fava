@@ -43,3 +43,10 @@ The colours have the following meaning.
 - yellow: The last entry is not a balance check.
 - gray: The account has not been updated in a while, as set by the
   `uptodate-indicator-grey-lookback-days` configuration variable.
+
+## Query Export
+
+By default, fava only supports export to `csv` for query results. For support
+of `xls`, `xlsx` and `ods`, install fava with the `excel` feature:
+
+    pip3 install fava[excel]

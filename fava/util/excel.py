@@ -4,10 +4,14 @@ import csv
 from collections import OrderedDict
 import io
 
-import pyexcel
-import pyexcel.ext.xls
-import pyexcel.ext.xlsx
-import pyexcel.ext.ods3
+try:
+    import pyexcel
+    import pyexcel.ext.xls
+    import pyexcel.ext.xlsx
+    import pyexcel.ext.ods3
+    HAVE_EXCEL = True
+except ImportError:
+    HAVE_EXCEL = False
 
 
 def to_excel(types, rows, result_format, query_string):
