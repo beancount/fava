@@ -50,7 +50,7 @@ module.exports.initCharts = function() {
                         scaleMinSpace: 25,
                         labelInterpolationFnc: function(value, index) {
                             var val = helpers.isNumber(value) ? new Date(value) : value;
-                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
+                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
                         }
                     },
                     lineSmooth: Chartist.Interpolation.none()
@@ -79,7 +79,7 @@ module.exports.initCharts = function() {
                         labelInterpolationFnc: function(value, index) {
                             if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
                                 var val = helpers.isNumber(value) ? new Date(value) : value;
-                                return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM 'YY");
+                                return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
                             } else {
                                 return null;
                             }

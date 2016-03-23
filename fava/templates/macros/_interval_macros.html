@@ -1,7 +1,7 @@
 {% set interval = request.args.get('interval', config['default-interval']) %}
 {% if interval == 'day' %}    {% set interval_label = 'Daily' %}    {% set interval_format_str = "DD.MM.YY" %}{% endif %}
 {% if interval == 'week' %}   {% set interval_label = 'Weekly' %}   {% set interval_format_str = "YYYYWww" %}{% endif %}
-{% if interval == 'month' %}  {% set interval_label = 'Monthly' %}  {% set interval_format_str = "MMM 'YY" %}{% endif %}
+{% if interval == 'month' %}  {% set interval_label = 'Monthly' %}  {% set interval_format_str = "MMM YYYY" %}{% endif %}
 {% if interval == 'quarter' %}{% set interval_label = 'Quarterly' %}{% set interval_format_str = "YYYYQq" %}{% endif %}
 {% if interval == 'year' %}   {% set interval_label = 'Yearly' %}   {% set interval_format_str = "YYYY" %}{% endif %}
 
