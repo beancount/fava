@@ -1,5 +1,28 @@
 // Journal table
 
+#entry-filters {
+    input {
+        background-color: $color_header;
+        color: #eee;
+        border: none;
+        padding: 6px 8px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    input.inactive {
+        background: darken($color_background, 5);
+        color: lighten($color_text, 30);
+    }
+    input.txn-toggle {
+        margin-left:-2px;
+    }
+    input#toggle-metadata {
+        margin-left:9px;
+    }
+}
+
 ol.journal-table {
     width: 100%;
 

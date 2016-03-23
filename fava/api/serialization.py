@@ -28,9 +28,10 @@ class BeanJSONEncoder(JSONEncoder):
 transaction_types = {
     '*': 'cleared',
     '!': 'pending',
-    'P': 'padding',
-    'S': 'summarize',
-    'T': 'transfer',
+    'C': 'generated',
+    'P': 'generated',
+    'S': 'generated',
+    'T': 'generated',
 }
 
 
