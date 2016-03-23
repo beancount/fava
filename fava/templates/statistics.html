@@ -34,18 +34,22 @@
         </table>
     </div>
 
+    {% macro copy_balance_directives_text(activity_by_account) -%}
+            Click to copy balance directives for accounts (except green ones) to the clipboard:
+
+            {% for activity in activity_by_account -%}
+                {% if activity.account|uptodate_eligible %}
+                    {%- if api.is_account_uptodate(activity.account) != "green" -%}
+                        {{- account_macros.balance_directive(activity.account) }}
+                    {%- endif -%}
+                {% endif %}
+            {%- endfor -%}
+    {%- endmacro %}
+
+    {% set clipboard_text = copy_balance_directives_text(statistics.activity_by_account) %}
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
     <div class="left statistics">
-        <h3>Update Activity per Account<input type="submit" class="right" id="copy-balances" value="Copy balance directives" title="Click to copy balance directives for accounts (except green ones) to the clipboard:
-
-        {% for activity in statistics.activity_by_account %}
-            {% if activity.account|uptodate_eligible %}
-                {% if api.is_account_uptodate(activity.account) != "green" %}
-                    {{ account_macros.balance_directive(activity.account) }}
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-        "></h3>
+        <h3>Update Activity per Account<input type="submit" class="right" id="copy-balances" value="Copy balance directives" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}"></h3>
         <table class="statistics statistics-update-activity sortable">
             <thead>
                 <tr>
