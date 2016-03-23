@@ -4,7 +4,6 @@
 {% import "charts/_charts.html" as charts with context %}
 
 {% block content %}
-    <h1>Balance Sheet</h1>
     {% set net_worth = api.net_worth(interval=interval) %}
 
     {% include "charts/_chart_skeleton.html" %}

@@ -2,7 +2,7 @@
 {% set active_page = page_slug %}
 {% set show_filters = False %}
 
-{% block title %}Help - {{ config['HELP_PAGES'][page_slug] }}{% endblock %}
+{% set page_title="Help - " + config['HELP_PAGES'][page_slug] %}
 
 {% block content %}
     <div class="help">

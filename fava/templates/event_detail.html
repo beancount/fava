@@ -1,8 +1,8 @@
 {% extends "_layout.html" %}
 {% set active_page = 'events' %}
+{% set page_title = 'Event - ' +  event_type %}
 
 {% block content %}
-    <h1>Event: {{ event_type }}</h1>
 
     {% set events = api.events(event_type=event_type) %}
 

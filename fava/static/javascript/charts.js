@@ -138,8 +138,8 @@ module.exports.initCharts = function() {
                     centerLabelVertically: true,
                     itemMargin: 3,
                     mouseenter: function (node, event) {
-                        $(event.target).append('<div class="treetable-popover"></div>');
-                        var $popover = $('.treetable-popover');
+                        $(event.target).append('<div id="treemap-popover"></div>');
+                        var $popover = $('#treemap-popover');
                         $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><code>' + node.balance + '</code></dd></dl>').hide().fadeIn(200);
 
                         var windowWidth = $(window.window).width();
@@ -151,7 +151,7 @@ module.exports.initCharts = function() {
                         });
                     },
                     mouseleave: function (node, event) {
-                        $('.treetable-popover').remove();
+                        $('#treemap-popover').remove();
                     },
                     click: function (node, event) {
                         window.location = $(node.label).attr("href");

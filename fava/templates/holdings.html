@@ -7,7 +7,6 @@
 {%- endmacro %}
 
 {% block content %}
-    <h1>Holdings</h1>
     {% set holdings = api.holdings(aggregation_key) %}
     <div class="headerline">
         <h3>{% if aggregation_key %}<a href="{{ url_for('report', report_name='holdings') }}">Holdings</a>{% else %}Holdings{% endif %}</h3>

@@ -4,7 +4,6 @@
 {% import "charts/_charts.html" as charts with context %}
 
 {% block content %}
-    <h1>Income Statement</h1>
     {% include "charts/_chart_skeleton.html" %}
 
     {% with label="Changes (Income/Expenses)", interval_totals=api.interval_totals(interval, [options['name_income'], options['name_expenses']]) %}

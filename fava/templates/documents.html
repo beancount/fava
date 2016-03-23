@@ -2,7 +2,6 @@
 {% set active_page = 'documents' %}
 
 {% block content %}
-    <h1>Documents</h1>
     {% set documents = api.documents() %}
     {% if documents %}
         {% with journal=documents %}

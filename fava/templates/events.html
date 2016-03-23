@@ -2,7 +2,6 @@
 {% set active_page = 'events' %}
 
 {% block content %}
-    <h1>Events</h1>
     {% set events = api.events(only_include_newest=True) %}
     {% if events %}
         {% with hide_interval_filter=True  %}

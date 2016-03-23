@@ -3,6 +3,8 @@
 @import "~chartist/dist/scss/chartist";
 
 .charts {
+    min-height: 25px;
+
     .ct-label {
         font-size: 11px;
         font-weight: bold;
@@ -35,39 +37,24 @@
     }
 
     .chart-container {
+        clear:right;
         position: relative;
         height: 240px;
 
-        .loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            text-align: center;
-            margin-top: 90px;
-        }
     }
 
-    .ct-chart {
-        position: relative;
-
-        &.chart-no-data div {
-            font-style: italic;
-            color: lighten($color_text, 60);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            text-align: center;
-            margin-top: 90px;
-        }
-
-        .ct-bar { cursor: pointer; }
+    .chart-no-data div,
+    .loading {
+        padding-top: 100px;
+        text-align: center;
+        font-style: italic;
+        color: lighten($color_text, 60);
     }
+
+    .ct-bar { cursor: pointer; }
 
     .ct-legend {
+        float: left;
         position: absolute;
         z-index: 6;
         top: 0;
@@ -166,7 +153,7 @@
     }
 }
 
-.treetable-popover {
+#treemap-popover {
     z-index: 12;
     position: absolute;
     background: darken($color_background, 5);

@@ -2,7 +2,6 @@
 {% set active_page = 'notes' %}
 
 {% block content %}
-    <h1>Notes</h1>
     {% set notes = api.notes() %}
     {% if notes %}
         {% with journal=notes %}

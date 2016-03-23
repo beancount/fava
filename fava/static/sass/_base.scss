@@ -377,22 +377,13 @@ article {
         a { text-decoration: underline; }
     }
 
-    div.loading {
-        margin-top: 20px;
-        font-style: italic;
-        color: lighten($color_text, 60);
-    }
-
     div.table-filter,
     div.chart-filter {
         float: right;
-        clear: right;
         margin-bottom: 8px;
 
         input { margin-left: 10px; }
     }
-
-    div.chart-filter { margin-top: -20px; }
 
     .dragover { background: lighten($color_links, 50); }
 }

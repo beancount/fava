@@ -2,7 +2,6 @@
 {% set active_page = 'net_worth' %}
 
 {% block content %}
-    <h1>Net Worth</h1>
     {% set net_worth = api.net_worth(interval=interval) %}
 
     {% include "charts/_chart_skeleton.html" %}
