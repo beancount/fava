@@ -140,7 +140,7 @@ module.exports.initCharts = function() {
                     mouseenter: function (node, event) {
                         $(event.target).append('<div id="treemap-popover"></div>');
                         var $popover = $('#treemap-popover');
-                        $popover.html('<dl><dt>Account:</dt><dd>' + node.accountName + '</dd><dt>Balance:</dt><dd><code>' + node.balance + '</code></dd></dl>').hide().fadeIn(200);
+                        $popover.html(node.balance + '<em>' + node.accountName + '</em>').hide().fadeIn(200);
 
                         var windowWidth = $(window.window).width();
                         var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,

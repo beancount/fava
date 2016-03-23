@@ -99,24 +99,17 @@
     }
 }
 
-.chartist-tooltip {
+.chartist-tooltip,
+#treemap-popover {
     font-family: $font_family_monospaced;
     font-size: 13px;
     position: absolute;
-    display: inline-block;
-    opacity: 0;
-    min-width: 5em;
+    z-index: 12;
+    text-align: center;
     padding: .5em;
     background: darken($color_background, 5);
-    border: 1px solid #CCC;
+    border: 1px solid darken($color_background, 20);
     box-shadow: 0px 0px 5px darken($color_background, 6);
-    text-align: center;
-    pointer-events: none;
-    z-index: 1;
-    -webkit-transition: opacity .2s linear;
-    -moz-transition: opacity .2s linear;
-    -o-transition: opacity .2s linear;
-    transition: opacity .2s linear;
 
     &:before {
         content: "";
@@ -129,8 +122,6 @@
         border: 15px solid transparent;
         border-top-color: darken($color_background, 20);
     }
-
-    &.tooltip-show { opacity: 1; }
 
     em {
         font-family: $font_family;
@@ -141,7 +132,22 @@
     }
 }
 
-// Treemaps
+#treemap-popover {
+    min-width: 10em;
+}
+
+.chartist-tooltip {
+    display: inline-block;
+    min-width: 5em;
+    pointer-events: none;
+    opacity: 0;
+    -webkit-transition: opacity .2s linear;
+    -moz-transition: opacity .2s linear;
+    -o-transition: opacity .2s linear;
+    transition: opacity .2s linear;
+
+    &.tooltip-show { opacity: 1; }
+}
 
 .treemap-node .treemap-label {
     z-index: 8;
@@ -150,40 +156,5 @@
         color: $color_treemap_text;
 
         &:hover { text-decoration: underline; }
-    }
-}
-
-#treemap-popover {
-    z-index: 12;
-    position: absolute;
-    background: darken($color_background, 5);
-    border: 1px solid darken($color_background, 20);
-    box-shadow: 0px 0px 5px darken($color_background, 6);
-    padding: 10px 5px 0 15px;
-
-    &:before {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        margin-left: -15px;
-        border: 15px solid transparent;
-        border-top-color: darken($color_background, 20);
-    }
-
-    dl {
-        margin-top: 0;
-        min-width: 270px;
-    }
-
-    dt { width: 60px; }
-
-    dd { margin-bottom: 8px; }
-
-    dd code {
-        font-size: 13px;
-        line-height: 1em;
     }
 }
