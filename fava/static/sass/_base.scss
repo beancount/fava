@@ -379,9 +379,9 @@ article {
 
     div.table-filter,
     div.chart-filter {
-        clear: right;
-        float: right;
+        width: 100%;
         margin-bottom: 8px;
+        text-align: right;
 
         input { margin-left: 10px; }
     }
