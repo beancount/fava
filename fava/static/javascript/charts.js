@@ -153,6 +153,9 @@ module.exports.initCharts = function() {
                     mouseleave: function (node, event) {
                         $('.treetable-popover').remove();
                     },
+                    click: function (node, event) {
+                        window.location = $(node.label).attr("href");
+                    },
                     ready: function () {
                         if (chart.data.length == 0) {
                             $('div#' + chart.id).addClass('chart-no-data').html('<div>Chart is empty.</div>');
