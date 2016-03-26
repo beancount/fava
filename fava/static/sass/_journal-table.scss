@@ -35,6 +35,9 @@ ol.journal-table {
         display: flex;
         border-bottom: thin solid $color_journaltable_border;
     }
+    a {
+        text-decoration: none;
+    }
 
     >li {
         &:nth-child(2n) { background: darken($color_background, 2); }
@@ -47,13 +50,13 @@ ol.journal-table {
         &.note              { background-color: $color_journalentry_note;            }
         &.query             { background-color: $color_journalentry_note;            }
         &.pad               { background-color: $color_journalentry_pad;             }
-        &.padding           { background-color: $color_journalentry_padding;         }
-        &.summarize         { background-color: $color_journalentry_padding;         }
-        &.transfer          { background-color: $color_journalentry_padding;         }
-        &.pending           { background-color: $color_journalentry_pending;         }
         &.document          { background-color: $color_journalentry_document;        }
         &.balance           { background-color: $color_journalentry_balance;         }
         &.balance.fail      { background-color: $color_journalentry_pending;         }
+
+        &.generated         { background-color: $color_journalentry_padding;         }
+        &.pending           { background-color: $color_journalentry_pending;         }
+
         &.posting           { background-color: $color_journalentry_open;            }
         &.posting.pending   { background-color: $color_journalentry_postingwarning;  }
 
@@ -72,7 +75,7 @@ ol.journal-table {
         dl.metadata {
             padding: 3px 0 3px 8rem;
             margin: 0;
-            font-size: 11px;
+            font-size: 0.9em;
 
             dt, dd {
                 margin-bottom:3px;
@@ -100,7 +103,7 @@ ol.journal-table {
     }
 
     span {
-        padding: 3px 4px;
+        padding: 2px 4px;
         margin: 0;
 
         &.position,
@@ -167,7 +170,6 @@ ol.journal-table {
         font-weight: bold;
         background: $color_treetable_header_bg;
         span {
-            padding: 3px 4px;
             border: none;
         }
     }

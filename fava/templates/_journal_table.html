@@ -92,7 +92,7 @@
     {% set type = entry.meta.type %}
     <li class="{{ type }} {{ entry.transaction_type }}
     {%- if not show_type[type] %} hidden{% endif -%}
-    {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden-type{% endif -%}
+    {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden{% endif -%}
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
         <p>
