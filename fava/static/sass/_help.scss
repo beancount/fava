@@ -16,7 +16,15 @@
 
     div { margin-bottom: 1em; }
 
-    code, tt {
+    ul {
+        padding-left: 2em;
+    }
+
+    li {
+        list-style-type: disc;
+    }
+
+    code {
         padding: 0 5px;
         white-space: nowrap;
         border: 1px solid #eaeaea;
@@ -38,15 +46,6 @@
             padding: 0;
         }
     }
-
-    ul, ol {
-      padding-left: 2em;
-    }
-
-    li {
-        line-height: 1.5em;
-        list-style-type: disc;
-    }
 }
 
 .help-sidebar {
@@ -57,12 +56,7 @@
     border: 1px solid #eaeaea;
     background-color: #f8f8f8;
     border-radius: 1px;
-    font-size: 13px;
-
-    h4 {
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
+    font-size: 1.1em;
 
     a {
         text-decoration: none;
@@ -71,5 +65,7 @@
         &.selected { font-weight: bold; }
     }
 
-    ul li { line-height: 1.5em; }
+    li {
+        list-style-type: none;
+    }
 }

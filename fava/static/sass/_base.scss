@@ -350,7 +350,11 @@ article {
         }
     }
 
-    p.empty, p.description {
+    li {
+        line-height: 1.5em;
+    }
+
+    p {
         code {
             background: darken($color_background, 7);
             display: inline-block;
@@ -489,7 +493,8 @@ table {
             width: 10rem;
         }
 
-        a.account { font-weight: bold; }
+        a.account,
+        &.account a { font-weight: bold; }
     }
 
     thead th,
@@ -512,21 +517,10 @@ table {
 
 table.options_map,
 table.settings {
-    font-size: 12px;
-
-    td:nth-child(1) {
-        font-weight: bold;
-        text-align: left;
-        padding-left: 6px;
-    }
-
-    td:nth-child(2) {
-        white-space: normal;
-        text-align: left;
-        padding-left: 6px;
-
-        pre { font-size: 13px; }
-    }
+    td { text-align: left; }
+    td:nth-child(1) { font-weight: bold; }
+    td:nth-child(2) { white-space: normal; }
+    pre { margin: 0; }
 }
 
 table.commodity,
@@ -544,11 +538,7 @@ table.statistics-update-activity {
 
 // Statistics
 div.left.statistics {
-    margin-right: 30px;
-
-    table.statistics td:first-child a {
-        font-weight: bold;
-    }
+    margin-right: 20px;
 }
 
 table.tree-table td.account,

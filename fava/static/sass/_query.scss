@@ -34,21 +34,11 @@ article#page-query {
         float: right;
     }
 
-    div.sample {
-        h3, li, code { color: lighten($color_text, 67); }
-
-        ul {
-            margin-top: 10px;
-
-            li {
-                display: block;
-                margin-bottom: 5px;
-
-                &:before {
-                    content: "-";
-                    margin-right: 5px;
-                }
-            }
+    ul.sample {
+        padding-left: 2em;
+        code { color: lighten($color_text, 67); }
+        li {
+            list-style-type: disc;
         }
     }
 

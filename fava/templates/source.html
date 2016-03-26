@@ -9,7 +9,7 @@
 {% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
 {% block content %}
-    {% if True or config['use-external-editor'] %}
+    {% if config['use-external-editor'] %}
         <table class="errors sortable">
             <thead>
                 <tr>

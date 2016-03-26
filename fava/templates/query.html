@@ -48,7 +48,6 @@
 {% set query = request.args.get('query_string', '') %}
 
 {% block content %}
-
     {% if api.queries %}
         <form class="wide-form stored-queries">
             <label for="stored-queries">Load stored query:</label>
@@ -72,23 +71,21 @@
     </form>
 
     {% if not error and not result_types %}
-    <p class="description">
+    <p>
         You can run querys like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>.
     </p>
     {% if not api.queries %}
-        <p class="description">
+        <p>
             If you add <code>query</code>-Directives to your <a href="{{ url_for('source') }}">Source</a> these stored queries will be displayed as a dropdown to quickly select them.
         </p>
     {% endif %}
-        <div class="sample">
-            <h3>Sample Queries:</h3>
-            <ul>
-                <li><a href="{{ url_for('query', query_string="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>
-                <li><a href="{{ url_for('query', query_string="SELECT last(date) as last_date, cost(sum(position)) as cost;") }}"><code>SELECT last(date) as last_date, cost(sum(position)) as cost;</code></a></li>
-                <li><a href="{{ url_for('query', query_string="SELECT date, account, position, balance WHERE account ~ 'Travel';") }}"><code>SELECT date, account, position, balance WHERE account ~ 'Travel';</code></a></li>
-                <li><a href="http://aumayr.github.io/beancount-sql-queries/">More sample queries</a>
-            </ul>
-        </div>
+        <h3>Sample Queries</h3>
+        <ul class="sample">
+            <li><a href="{{ url_for('query', query_string="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>
+            <li><a href="{{ url_for('query', query_string="SELECT last(date) as last_date, cost(sum(position)) as cost;") }}"><code>SELECT last(date) as last_date, cost(sum(position)) as cost;</code></a></li>
+            <li><a href="{{ url_for('query', query_string="SELECT date, account, position, balance WHERE account ~ 'Travel';") }}"><code>SELECT date, account, position, balance WHERE account ~ 'Travel';</code></a></li>
+            <li><a href="http://aumayr.github.io/beancount-sql-queries/">More sample queries</a>
+        </ul>
     {% endif %}
 
     {% if error %}
