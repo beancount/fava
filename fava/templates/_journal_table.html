@@ -1,5 +1,5 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
-{% set transaction_types = ['cleared', 'pending', 'generated', 'other'] %}
+{% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set show_type = {
     'open':        config['journal-show-type-open'],
     'close':       config['journal-show-type-close'],
@@ -13,14 +13,12 @@
 {% set show_transaction_type = {
     'cleared':   config['journal-show-transaction-cleared'],
     'pending':   config['journal-show-transaction-pending'],
-    'generated': config['journal-show-transaction-generated'],
     'other':     config['journal-show-transaction-other'],
 } %}
 {% set transaction_type_buttons = {
     'cleared': ('*', 'Cleared Transactions'),
     'pending': ('!', 'Pending Transactions'),
-    'generated': ('g', 'Generated Transactions'),
-    'other': ('x', 'Other Transactions'),
+    'other':   ('x', 'Other Transactions'),
 }
 %}
 

@@ -12,7 +12,6 @@ bool_options = [
     'journal-show-type-query',
     'journal-show-transaction-cleared',
     'journal-show-transaction-pending',
-    'journal-show-transaction-generated',
     'journal-show-transaction-other',
     'journal-general-show-balances',
     'treemaps-show-negative-numbers',

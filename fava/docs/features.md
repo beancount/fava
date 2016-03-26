@@ -49,11 +49,8 @@ or a deep hierarchy of accounts, fava offers several configuration variables lis
 below. The first three are self-explanatory:
 
 - `show-closed-accounts`
-
 - `show-accounts-with-zero-balance`
-
 - `show-accounts-with-zero-transactions`
- 
 - `collapse-accounts` takes a list of accounts that are collapsed in the initial tree view
 
 ## Custom editor
