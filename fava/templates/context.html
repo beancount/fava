@@ -1,15 +1,13 @@
 {% extends "_layout.html" %}
 {% set active_page = 'context' %}
-
-{% block title %}Context{% endblock %}
+{% set page_title = "Context: " + ehash %}
 
 {% block javascript %}
     {% include "javascript/_editor.html" %}
 {% endblock %}
 
 {% block content %}
-    {% set context = api.context(ehash) %}
-    <h1>Context: <code>{{ ehash }}</code></h1>
+{% set context = api.context(ehash) %}
     {% if context %}
     <dl>
         <dt>Hash:</dt>

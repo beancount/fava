@@ -27,7 +27,7 @@ html > body {
     display: none;
 }
 
-p, ol, ul, dl {
+p, ol, ul, dl, table, pre {
     margin: 0 0 1em 0;
 }
 
@@ -80,9 +80,7 @@ pre,
 pre > code {
     font-family: $font_family_monospaced;
     white-space: pre;
-    margin: 0;
-    line-height: 1.2em;
-    font-size: 1.1em;
+    line-height: 1em;
 }
 
 pre {
@@ -205,6 +203,7 @@ div.main {
     min-height:100%;
 
     aside {
+        padding-top: 20px;
         flex-shrink: 0;
         width: 15em;
         color: $color_sidebar_text;
@@ -213,16 +212,13 @@ div.main {
 
         h3 {
             text-transform: uppercase;
-            margin-top: 30px;
             margin-left: 20px;
             font-size: 0.9em;
             color: darken($color_sidebar_text, 25);
         }
 
-        ul.navigation {
-            &:nth-child(1) {
-                padding-top: 20px;
-            }
+        > ul.navigation {
+            margin-bottom: 2em;
 
             li {
                 font-size: 1.1em;
@@ -281,13 +277,14 @@ div.main {
 article {
     flex: 1;
     width: 600px;
-    padding: 20px;
+    padding: 1.5em;
 
     div.headerline {
+        margin: 0 0 1.5em 0;
+
         h3 {
             display: inline-block;
-            margin: 0;
-            padding: 6px 16px 6px 0;
+            margin: 0 1.5em 0 0;
 
             a {
                 color: lighten($color_text, 67);
@@ -302,6 +299,7 @@ article {
 
     h1 {
         &.droptarget {
+            float: left;
             padding: 0.6em;
             margin: -0.4em -0.6em .2em;
         }
@@ -339,9 +337,6 @@ article {
     }
 
     dl {
-        margin-top: 20px;
-        font-size: 13px;
-
         dt {
             display: inline-block;
             width: 120px;
@@ -470,9 +465,6 @@ table.sortable {
 @import "editor";
 
 table {
-    margin-top: 20px;
-    margin-bottom: 20px;
-
     tbody tr:nth-child(2n) {
         background: darken($color_background, 3);
     }

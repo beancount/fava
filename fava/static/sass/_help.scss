@@ -11,37 +11,22 @@
 }
 
 .help-text {
-    h1 { font-size: 22px; }
-    h2 { font-size: 18px; }
-    h3 { font-size: 14px; }
-    h1, h2, h3 { margin: 1em 0 .5em 0; }
+    font-size: 1.1em;
+    font-family: $font_family_alternative;
 
-    p, blockquote, ul, ol, dl, li, table, pre {
-        font-family: $font_family_alternative;
-        margin: 15px 0;
-    }
-
-    p {
-        font-size: 14px;
-        line-height: 1.6em;
-        margin: 0 0 1em 0;
-    }
+    div { margin-bottom: 1em; }
 
     code, tt {
-        margin: 0 2px;
         padding: 0 5px;
         white-space: nowrap;
         border: 1px solid #eaeaea;
         background-color: #f8f8f8;
         border-radius: 2px;
-        font-size: 13px;
     }
 
     pre {
         background-color: #f8f8f8;
         border: 1px solid #cccccc;
-        font-size: 12px;
-        line-height: 19px;
         overflow: auto;
         padding: 6px 10px;
         border-radius: 1px;
@@ -55,19 +40,11 @@
     }
 
     ul, ol {
-      padding-left: 30px;
-      font-size: 14px;
-    }
-
-    ul :first-child, ol :first-child {
-      margin-top: 0;
-    }
-
-    ul :last-child, ol :last-child {
-      margin-bottom: 0;
+      padding-left: 2em;
     }
 
     li {
+        line-height: 1.5em;
         list-style-type: disc;
     }
 }
