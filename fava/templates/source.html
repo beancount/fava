@@ -9,7 +9,7 @@
 {% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
 
 {% block content %}
-    {% if config['use-external-editor'] %}
+    {% if True or config['use-external-editor'] %}
         <table class="errors sortable">
             <thead>
                 <tr>
@@ -43,7 +43,7 @@
         </div>
         {% endfor %}
     {% else %}
-    <form class="editor-source" action="{{ url_for('source') }}" method="get">
+    <form class="wide-form editor-source" action="{{ url_for('source') }}" method="get">
         <select name="file_path">
             {% for source_file in source_files %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
@@ -57,7 +57,7 @@
              data-print-margin-column="{{ config['editor-print-margin-column'] }}">
         </div>
     </div>
-    <form class="editor-save" action="{{ url_for('source') }}" method="post">
+    <form class="wide-form editor-save" action="{{ url_for('source') }}" method="post">
         <input type="submit" value="Save">
     </form>
     {% endif %}

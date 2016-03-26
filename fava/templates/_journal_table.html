@@ -28,24 +28,18 @@
 {% set show_legs = config['journal-show-legs'] %}
 
 {% if show_tablefilter %}
-    <div id="entry-filters" class="table-filter">
-        <form>
-            {% for type in entry_types %}
-                <input type="submit" value="{{ type|capitalize }}" data-type="li.{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>
-                {% if type == 'transaction' %}
-                {% for txn_type in transaction_types %}
-                <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="li.{{ txn_type }}" class="txn-toggle{% if not show_transaction_type[txn_type] %} inactive{% endif %}">
-                {% endfor %}
-                {% endif %}
-            {% endfor %}
-            <input type="submit" id="toggle-metadata" data-type="dl.metadata"{% if not show_metadata %} class="inactive"{% endif %} value="Metadata">
-            <input type="submit" data-type="li.posting"{% if not show_legs %} class="inactive"{% endif %} value="Postings">
-        </form>
-    </div>
-    <div id="transaction-filters" class="table-filter">
-        <form>
-        </form>
-    </div>
+<form id="entry-filters" class="wide-form">
+    {% for type in entry_types %}
+        <input type="submit" value="{{ type|capitalize }}" data-type="li.{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>
+        {% if type == 'transaction' %}
+        {% for txn_type in transaction_types %}
+        <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="li.{{ txn_type }}" class="txn-toggle{% if not show_transaction_type[txn_type] %} inactive{% endif %}">
+        {% endfor %}
+        {% endif %}
+    {% endfor %}
+    <input type="submit" id="toggle-metadata" data-type="dl.metadata"{% if not show_metadata %} class="inactive"{% endif %} value="Metadata">
+    <input type="submit" data-type="li.posting"{% if not show_legs %} class="inactive"{% endif %} value="Postings">
+</form>
 {% endif %}
 
 {% set context_url = url_for('context', ehash='REPLACEME') %}

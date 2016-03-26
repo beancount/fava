@@ -2,15 +2,13 @@
 title: Fava's features
 ---
 
-# Fava's features
-
 This is an overview that might help you use some of the more advanced features
 that fava offers.
 
 ## Keyboard Shortcuts
 
-`fava` comes with Gmail-style keyboard shortcuts: Press <kbd>?</kbd> on any page
-to show an overview of the keyboard shortcuts described below.
+`fava` comes with keyboard shortcuts: Press <kbd>?</kbd> on any page to show an
+overview.
 
 ## Filters
 

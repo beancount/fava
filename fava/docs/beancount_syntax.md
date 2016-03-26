@@ -2,8 +2,6 @@
 title: Beancount Syntax
 ---
 
-# Beancount Language Syntax
-
 Below is a short reference of the Beancount Language Syntax. For the official, full documentation see [furius.ca/beancount/doc/syntax](http://furius.ca/beancount/doc/syntax).
 
 There is also an official [Syntax Cheat Sheet](http://furius.ca/beancount/doc/cheatsheet).

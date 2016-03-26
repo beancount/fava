@@ -50,7 +50,7 @@
 {% block content %}
 
     {% if api.queries %}
-        <div class="stored-queries">
+        <form class="wide-form stored-queries">
             <label for="stored-queries">Load stored query:</label>
             <select id="stored-queries">
                 <option value="" data-source-link="#"></option>
@@ -59,7 +59,7 @@
                 {% endfor %}
             </select>
             <a href="{% if name %}{% set query_ = api.get_query(name) %}{{ url_for_source(file_path=query_.meta.filename, line=query_.meta.lineno)}}{% endif %}" class="source-link{% if not name %} hidden{% endif %}">(Source)</a>
-        </div>
+        </form>
     {% endif %}
 
     <form action="{{ url_for('query') }}" method="get">
@@ -99,7 +99,6 @@
     {% endif %}
 
     {% if result_types %}
-        <h3>Result</h3>
         <div class="queryresults-wrapper">
             <p class="download">
                 Download as
@@ -109,6 +108,7 @@
                 <a class="download-csv" href="{{ url_for('query', query_string=query, name=name, result_format='ods') }}">ODS</a>
             {% endif %}
             </p>
+            <h3>Result</h3>
             <table class="queryresults sortable">
                 <thead>
                     <tr>

@@ -1,11 +1,8 @@
 // Query View
 
 article#page-query {
-    h3 { margin-top: 25px; }
-
     div.queryresults-wrapper {
         display: inline-block;
-        margin-top: -2em;
 
         &, table { min-width: 400px; }
 
@@ -26,17 +23,15 @@ article#page-query {
         font-family: $font_family_monospaced;
     }
 
-    div.stored-queries {
+    form.stored-queries {
         color: lighten($color_text, 40);
-        float: right;
-        margin-bottom: 10px;
 
         label { margin-right: 8px; }
         a { margin-left: 6px; }
     }
 
-    div.editor-wrapper {
-        clear: right;
+    form.editor-save-query {
+        float: right;
     }
 
     div.sample {

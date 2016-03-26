@@ -28,7 +28,7 @@ html > body {
 }
 
 p, ol, ul, dl {
-    margin: .2em 0 .8em 0;
+    margin: 0 0 1em 0;
 }
 
 p {
@@ -38,18 +38,13 @@ p {
 h1, h2, h3, h4, h5 {
     font-weight: bold;
     color: $color_headings;
-    margin: .2em 0 .8em 0;
+    margin: 0 0 1em 0;
 }
 
 h1 { font-size: 1.5em; }
 h2 { font-size: 1.33em; }
 h3 { font-size: 1.16em; }
-h4 { font-size: 1em; }
-h5 {
-    font-size: 0.83em;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
+h4, h5 { font-size: 1em; }
 
 strong, b {
     font-weight: bold;
@@ -361,10 +356,6 @@ article {
     }
 
     p.empty, p.description {
-        margin-top: 20px;
-        line-height: 1.6em;
-        font-size: 13px;
-
         code {
             background: darken($color_background, 7);
             display: inline-block;
@@ -377,14 +368,12 @@ article {
         a { text-decoration: underline; }
     }
 
-    div.table-filter,
-    div.chart-filter {
+    form.wide-form {
         width: 100%;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         text-align: right;
-    }
-    div.chart-filter {
-        input { margin-left: 10px; }
+
+        &.chart-filter input { margin-left: 10px; }
     }
 
     .dragover { background: lighten($color_links, 50); }

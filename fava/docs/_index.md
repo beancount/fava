@@ -2,8 +2,6 @@
 title: Index
 ---
 
-# Help
-
 Welcome to the help pages for `fava`, a web interface for the
 double-entry bookkeeping software [Beancount](http://furius.ca/beancount/) with
 a focus on features and usability.

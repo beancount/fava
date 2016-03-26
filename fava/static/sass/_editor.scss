@@ -2,7 +2,7 @@
 
 div.editor-wrapper {
     position: relative;
-    margin-top: 20px;
+    margin-bottom: 10px;
 
     &.editor-wrapper-source {
         position: relative;
@@ -84,17 +84,5 @@ div.editor-wrapper {
     &.ace_autocomplete .ace_content {
         font-family: $font_family_monospaced;
         font-size: 13px;
-    }
-}
-
-form {
-    &.editor-source {
-        float: right;
-        margin-top: -20px;
-    }
-
-    &.editor-save {
-        float: right;
-        margin-top: 10px;
     }
 }
