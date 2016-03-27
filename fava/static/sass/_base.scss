@@ -287,7 +287,7 @@ article {
             margin: 0 1.5em 0 0;
 
             a {
-                color: lighten($color_text, 67);
+                color: lighten($color_text, 40);
 
                 &:hover {
                     color: lighten($color_text, 20);
@@ -306,7 +306,7 @@ article {
 
         a:link,
         a:visited {
-            color: lighten($color_text, 20);
+            color: lighten($color_text, 10);
 
             &:hover { text-decoration: underline; }
         }
@@ -474,7 +474,7 @@ table {
     }
 
     tbody td {
-        border: 1px solid lighten($color_text, 91);
+        border: 1px solid lighten($color_text, 60);
     }
 
     td, th {
@@ -502,11 +502,11 @@ table {
         border: 1px solid darken($color_background, 15);
         font-weight: bold;
         background: $color_treetable_header_bg;
-        color: lighten($color_text, 53);
+        color: lighten($color_text, 30);
     }
 
     tfoot td {
-        color: lighten($color_text, 40) !important;
+        color: lighten($color_text, 30) !important;
     }
 }
 

@@ -2,15 +2,17 @@
 title: Beancount Syntax
 ---
 
-Below is a short reference of the Beancount Language Syntax. For the official, full documentation see [furius.ca/beancount/doc/syntax](http://furius.ca/beancount/doc/syntax).
-
-There is also an official [Syntax Cheat Sheet](http://furius.ca/beancount/doc/cheatsheet).
+Below is a short reference of the Beancount Language Syntax. For the official,
+full documentation see
+[furius.ca/beancount/doc/syntax](http://furius.ca/beancount/doc/syntax).  There
+is also an official [Syntax Cheat
+Sheet](http://furius.ca/beancount/doc/cheatsheet).
 
 ## Introduction
 
-Beancount defines a language in which financial transactions are entered into a text-file (called input-file), which then can be processed by Beancount.
-
-There are a few building blocks that are important to understand the entirety of the Beancount Languange Syntax:
+Beancount defines a language in which financial transactions are entered into a
+text-file (called input-file), which then can be processed by Beancount.  There
+are a few building blocks that are important to understand Beancount's Syntax:
 
 - Currencies (`USD`, `EUR`, ...) and values
 - Accounts (`Assets:US:BofA:Checking`, ...)
@@ -18,8 +20,8 @@ There are a few building blocks that are important to understand the entirety of
 
 ## Commodities
 
-All in CAPS: `USD`, `EUR`, `CAD`, `AUD` `GOOG`, `AAPL`, `RBF1005` `HOME_MAYST`,
-`AIRMILES` `HOURS`
+All in CAPS: `USD`, `EUR`, `CAD`, `AUD` `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
+`AIRMILES`, `HOURS`.
 
 ## Account Types
 
@@ -36,9 +38,10 @@ Example Account Name: `Assets:US:BofA:Checking`
 
 ## Directives
 
-The basic building block are **directives** (also called **entries**).
-
-Most directives start with a date, then the type of the directive, and then directive-specific arguments. The ordering of directives in the input-file does not matter, because Beancount orders them based on the date of each directive.
+The basic building block are **directives** (also called **entries**).  Most
+directives start with a date, then the type of the directive, and then
+directive-specific arguments. The ordering of directives in the input-file does
+not matter, because Beancount orders them based on the date of each directive.
 
 General syntax: `YYYY-MM-DD <directive> <arguments...>`
 

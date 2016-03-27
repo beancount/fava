@@ -11,7 +11,7 @@ table.tree-table {
         // class ".tree-balance-show" is added via JavaScript
         tr.parent td.num,
         tr td.num.tree-balance-show {
-            color: lighten($color_text, 75);
+            color: lighten($color_text, 30);
         }
         tr.hides td.num {
             color: $color_text;
@@ -39,7 +39,7 @@ table.tree-table {
     tr {
         &.parent td.num,
         td.num.tree-balance-show {
-            color: lighten($color_text, 90);
+            color: lighten($color_text, 60);
         }
 
         &.hides td.num {
@@ -88,7 +88,7 @@ table.tree-table {
 
     a.expand-all {
        float: right;
-       color: lighten($color_text, 53);
+       color: lighten($color_text, 40);
        font-weight: normal;
        display: none;
 
