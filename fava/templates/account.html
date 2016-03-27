@@ -23,7 +23,7 @@
     {% endif %}
 
     <div class="headerline">
-        <h3>{% if not journal %}<a href="{{ url_for('account_with_journal', name=account_name) }}">Journal</a>{% else %}Journal{% endif %}</h3>
+        <h3>{% if not journal %}<a href="{{ url_for('account_with_journal', name=account_name) }}" title="Journal of all entries for this Account and Sub-Accounts">Account Journal</a>{% else %}Account Journal{% endif %}</h3>
         <h3>{% if not (not journal and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} Changes</a>{% else %}{{ interval_macros.interval_label }} Changes{% endif %}</h3>
         <h3>{% if not (not journal and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} Balances</a>{% else %}{{ interval_macros.interval_label }} Balances{% endif %}</h3>
     </div>
