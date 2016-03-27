@@ -9,17 +9,37 @@
         text-align: center;
         text-decoration: none;
         display: inline-block;
+        outline: 0;
+
+        &:hover {
+            background-color: darken($color_header, 4);
+            cursor: pointer;
+        }
+
+        &:active {
+            background-color: darken($color_header, 8);
+        }
     }
 
     input.inactive {
         background: darken($color_background, 5);
         color: lighten($color_text, 30);
+
+        &:hover {
+            background-color: darken($color_background, 9);
+        }
+
+        &:active {
+            background: darken($color_background, 14);
+        }
     }
+
     input.txn-toggle {
-        margin-left:-2px;
+        margin-left: -2px;
     }
+
     input#toggle-metadata {
-        margin-left:9px;
+        margin-left: 9px;
     }
 }
 
