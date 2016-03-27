@@ -11,7 +11,7 @@ div.overlay-wrapper {
 
     div.overlay {
         background: $color_background;
-        margin: 60px auto 0 auto;
+        margin: 20px auto 0 auto;
         padding: 20px;
         width: 800px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -44,4 +44,18 @@ div.overlay-wrapper {
             padding: 1px 3px;
         }
     }
+
+    dl {
+        dt {
+            display: inline-block;
+            width: 120px;
+            float: left;
+            line-height:2.3em;
+        }
+
+        dd {
+            line-height:2.3em;
+        }
+    }
+
 }
