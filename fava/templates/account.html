@@ -60,18 +60,14 @@
                     {% for entry in row|reverse %}
                         <td class="num">
                             {% if entry.balance %}
-                                <span class="balance">
                                 {% for currency, number in entry.balance.items() %}
-                                    {{ number|format_currency(currency) }} {{ currency }}<br>
+                                    {{ account_macros.balance_with_budget(currency, number, entry.budgets[currency], show_currency=True) }}
                                 {% endfor %}
-                                </span>
                             {% endif %}
                             {% if entry.balance_children %}
-                                <span class="tree-balance">
                                 {% for currency, number in entry.balance_children.items() %}
-                                    {{ number|format_currency(currency) }} {{ currency }}<br>
+                                    {{ account_macros.balance_with_budget(currency, number, entry.budgets[currency], show_currency=True, css_class="tree-balance") }}
                                 {% endfor %}
-                                </span>
                             {% endif %}
                         </td>
                     {% endfor %}
@@ -85,9 +81,7 @@
                     {% for entry in interval_balances[0]|reverse %}
                     <td class="num">
                         {% for currency, number in entry.balance_children.items() %}
-                            {% if number %}
-                                {{ number|format_currency(currency) }} {{ currency }}<br>
-                            {% endif %}
+                            {{ account_macros.balance_with_budget(currency, number, budget=None, show_currency=True) }}
                         {% endfor %}
                     </td>
                     {% endfor %}

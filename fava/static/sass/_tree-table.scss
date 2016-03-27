@@ -51,6 +51,12 @@ table.tree-table {
             &.num {
                 span.balance { display: block; }
                 span.tree-balance { display: none; }
+
+                span.balance,
+                span.tree-balance {
+                    display: flex;
+                    justify-content: space-between;
+                }
             }
 
             &.num.tree-balance-show span.tree-balance { display: block; }
@@ -93,5 +99,12 @@ table.tree-table {
        display: none;
 
        &.not-fully-expanded { display: inline; }
+    }
+
+    span.budget {
+        float: left;  // TODO necessary?
+
+        &.budget-negative { color: $color_budget_negative; }
+        &.budget-positive { color: $color_budget_positive; }
     }
 }

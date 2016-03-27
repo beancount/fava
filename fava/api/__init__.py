@@ -25,6 +25,7 @@ import os
 
 from beancount import loader
 from beancount.core import compare, flags, getters, realization, inventory
+from beancount.core.amount import decimal
 from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
@@ -156,6 +157,9 @@ class BeancountReportAPI(object):
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
         self._apply_filters()
+
+        from .budgets.budgets_metadata import init_budgets_from_metadata
+        self.budgets = init_budgets_from_metadata(self.root_account)
 
     def _apply_filters(self):
         self.entries = self.all_entries
@@ -304,7 +308,7 @@ class BeancountReportAPI(object):
             self._real_account(
                 account_name, self.entries,
                 interval_tuples[0][0] if accumulate else begin_date,
-                end_date, min_accounts=account_names)))
+                end_date, min_accounts=account_names)), begin_date, end_date)
             for begin_date, end_date in interval_tuples]
         return list(zip(*interval_balances)), interval_tuples
 
@@ -639,3 +643,17 @@ class BeancountReportAPI(object):
             if isinstance(posting, Open):
                 return posting.meta
         return {}
+
+
+
+    # # from .budgets.budgets_separate_file import Budgets
+    # # from .budgets.budgets_separate_file import init_budgets_from_file
+    # # budgets = init_budgets_from_file()
+
+    def _budget_for_account(self, account_name, currency_name, date_start, date_end):
+        if not self.budgets:
+            from .budgets.budgets_metadata import Budgets, init_budgets_from_metadata
+            budgets = init_budgets_from_metadata(self.all_root_account)
+
+        budget = self.budgets.budget(account_name, currency_name, date_start, date_end)
+        return budget

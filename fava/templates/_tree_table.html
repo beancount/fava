@@ -25,10 +25,10 @@
             {% for currency in operating_currencies %}
                 <td class="num">
                 {% if currency in account.balance %}
-                    <span class="balance">{{ account.balance[currency]|format_currency(currency) }}</span>
+                {{ account_macros.balance_with_budget(currency, account.balance[currency], account.budgets[currency]) }}
                 {% endif %}
                 {% if currency in account.balance_children %}
-                    <span class="tree-balance">{{ account.balance_children[currency]|format_currency(currency) }}</span>
+                    {{ account_macros.balance_with_budget(currency, account.balance_children[currency], account.budgets[currency], css_class="tree-balance") }}
                 {% endif %}
                 </td>
             {% endfor %}
@@ -37,10 +37,10 @@
                 {% for currency in options['commodities'] %}
                     {% if currency not in operating_currencies %}
                         {% if currency in account.balance %}
-                            <span class="balance">{{ account.balance[currency]|format_currency(currency) }} {{ currency }}</span>
+                        {{ account_macros.balance_with_budget(currency, account.balance[currency], account.budgets[currency], show_currency=True) }}
                         {% endif %}
                         {% if currency in account.balance_children %}
-                            <span class="tree-balance">{{ account.balance_children[currency]|format_currency(currency) }} {{ currency }}</span>
+                            {{ account_macros.balance_with_budget(currency, account.balance_children[currency], account.budgets[currency], show_currency=True, css_class="tree-balance") }}
                         {% endif %}
                     {% endif %}
                 {% endfor %}
