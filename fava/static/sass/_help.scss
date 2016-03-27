@@ -2,14 +2,6 @@
 
 @import "pygments";
 
-.help {
-    a {
-        text-decoration: underline;
-
-        &:hover { color: darken($color_links, 10); }
-    }
-}
-
 .help-text {
     font-size: 1.1em;
     font-family: $font_family_alternative;
@@ -22,29 +14,6 @@
 
     li {
         list-style-type: disc;
-    }
-
-    code {
-        padding: 0 5px;
-        white-space: nowrap;
-        border: 1px solid #eaeaea;
-        background-color: #f8f8f8;
-        border-radius: 2px;
-    }
-
-    pre {
-        background-color: #f8f8f8;
-        border: 1px solid #cccccc;
-        overflow: auto;
-        padding: 6px 10px;
-        border-radius: 1px;
-
-        code {
-            white-space: pre;
-            border: none;
-            margin: 0;
-            padding: 0;
-        }
     }
 }
 

@@ -10,21 +10,16 @@ article#page-query {
             color: #999;
             float: right;
         }
-
-        table { clear: right; }
     }
 
     p.error {
         color: $color_error;
-        margin: 20px 30px 0 30px;
-        font-size: 13px;
-        line-height: 1.3em;
         font-weight: bold;
         font-family: $font_family_monospaced;
     }
 
     form.stored-queries {
-        color: lighten($color_text, 40);
+        color: lighten($color_text, 30);
 
         label { margin-right: 8px; }
         a { margin-left: 6px; }
@@ -36,7 +31,7 @@ article#page-query {
 
     ul.sample {
         padding-left: 2em;
-        code { color: lighten($color_text, 67); }
+        code { color: lighten($color_text, 30); }
         li {
             list-style-type: disc;
         }

@@ -7,10 +7,9 @@ div.filter {
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     box-shadow: 0 3px 6px rgba($color_text, 0.2);
+    width: 400px;
     position: absolute;
     right: 0;
-    color: $color_text;
-    width: 400px;
     z-index: 10;
     top: 41px;
 
@@ -39,14 +38,12 @@ div.filter {
     }
 
     input {
-        margin: 5px 10px;
-        height: 26px;
+        font-size: 1.1em;
+        line-height: 1.5em;
+        margin: 5px;
         display: block;
-        border: 1px solid lighten($color_text, 80);
-        border-radius: 5px;
-        line-height: 26px;
-        width: 380px;
-        font-size: 13px;
-        font-family: $font_family;
+        border: 1px solid lighten($color_text, 60);
+        border-radius: 3px;
+        width: 390px;
     }
 }

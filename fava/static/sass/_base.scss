@@ -75,50 +75,6 @@ a {
     }
 }
 
-code,
-pre,
-pre > code {
-    font-family: $font_family_monospaced;
-    white-space: pre;
-    line-height: 1em;
-}
-
-pre {
-    // overflow-x: scroll;
-    white-space: pre;
-
-    &.debug {
-        word-wrap: break-word;
-    }
-}
-
-.halfleft,
-.halfright {
-    width: 50%;
-
-    h3 {
-        text-align: center;
-    }
-}
-
-.halfleft {
-    float: left;
-    padding-right: 10px;
-}
-
-.halfright {
-    float: right;
-    padding-left: 10px;
-}
-
-.left {
-    float: left;
-}
-
-.right {
-    float: right;
-}
-
 // Structural and generic elements
 
 header {
@@ -354,17 +310,38 @@ article {
         line-height: 1.5em;
     }
 
-    p {
-        code {
-            background: darken($color_background, 7);
-            display: inline-block;
-            font-size: 13px;
-            padding: 0 4px 2px 5px;
-            border-radius: 3px;
-            border: 1px solid darken($color_background, 13);
-        }
+    ul a,
+    p a {
+        text-decoration: underline;
 
-        a { text-decoration: underline; }
+        &:hover { color: darken($color_links, 10); }
+    }
+
+
+    code,
+    pre {
+        font-family: $font_family_monospaced;
+        white-space: pre;
+        line-height: 1em;
+
+        background-color: #f8f8f8;
+        border-radius: 3px;
+        border: 1px solid darken($color_background, 13);
+    }
+
+    code {
+        padding: 0 4px;
+    }
+
+    pre {
+        overflow: auto;
+        padding: 6px 10px;
+
+        code {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
     }
 
     form.wide-form {
@@ -380,11 +357,10 @@ article {
 
 kbd {
     display: inline-block;
-    min-width: 20px;
     text-align: center;
     font: 1.1rem $font_family_kbd;
     padding: 3px 6px;
-    color: lighten($color_text, 30);
+    color: lighten($color_text, 15);
     vertical-align: middle;
     background-color: darken($color_background, 1);
     border: solid 1px darken($color_background, 20);
@@ -404,6 +380,33 @@ kbd {
 @import "tree-table";
 @import "filter";
 @import "help";
+
+.halfleft,
+.halfright {
+    width: 50%;
+
+    h3 {
+        text-align: center;
+    }
+}
+
+.halfleft {
+    float: left;
+    padding-right: 10px;
+}
+
+.halfright {
+    float: right;
+    padding-left: 10px;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
 
 ul.warnings {
     margin: 0;
