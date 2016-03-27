@@ -43,7 +43,7 @@ Click to copy the balance directives to the clipboard:
 {% endmacro %}
 
 {% macro account_name_header(account_name) %}
-<h1 class="droptarget" data-account-name="{{ account_name }}">
+<span class="droptarget" data-account-name="{{ account_name }}">
     {% set levels = account_name|account_level %}
     {% for level in range(0, levels) %}
         {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] %}
@@ -63,9 +63,9 @@ Click to copy the balance directives to the clipboard:
 
     {% set activity = api.statistics(account_name=account_name) %}
     {% if activity %}
-    <div class="last-activity">
+    <span class="last-activity">
         (Last entry: <a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a>)
-    </div>
+    </span>
     {% endif %}
-</h1>
+</span>
 {% endmacro %}

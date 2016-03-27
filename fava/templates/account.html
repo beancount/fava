@@ -1,14 +1,14 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
-{% set page_title = 'Account ' + account_name %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% import 'macros/_interval_macros.html' as interval_macros with context %}
 {% import "charts/_charts.html" as charts with context %}
 
-{% block content %}
-    {{ account_macros.account_name_header(account_name) }}
+{% set page_title = account_macros.account_name_header(account_name) %}
+{% set short_title = account_name %}
 
+{% block content %}
     {% include "charts/_chart_skeleton.html" %}
 
     {% with linechart_data=api.linechart_data(account_name) %}
