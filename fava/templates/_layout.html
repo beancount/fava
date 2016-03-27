@@ -33,25 +33,6 @@
     <script>window.chartData = [];</script>
 </head>
 <body>
-    {% with messages = get_flashed_messages() %}
-    {% if not options['operating_currency'] or messages %}
-        <ul class="warnings">
-            {% if not options['operating_currency'] %}
-            <li class="error">
-                    No <code>operating_currency</code> specified.
-                    Add <code>option "operating_currency" "USD"</code> to your beancount file.
-            </li>
-            {% endif %}
-            {% if messages %}
-            {% for message in messages %}
-            <li class="error">
-                {{ message }}
-            </li>
-            {% endfor %}
-            {% endif %}
-        </ul>
-    {% endif %}
-    {% endwith %}
     <header>
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAsVBMVEUAAAD///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////+3mHKcAAAAOnRSTlMAAQMEBQYHCAwNDg8QExkaISImJzQ7RUZHSUtVZGtsb3FzdXd4f5WYm56jr7y+xcfP2tze4OLk6/X9+wsXVgAAAMJJREFUKFPFkWkTgiAYhDG1wy677VSzw0q6pKz3//+wBGRkGO2r+4ndZ9hhFoQq0AaXKZoiKFfE4Uzt82iKOWyrcJjDJU90N45dnZ/3HCbrPvfmE64YHkZ216MQi6rwPUBp0VF4GVrQowlAqwA6cN8xKJ4uwyDNGdz+g0EBnAvoFEALxjZC9gIsCd60zJy6ZqpRmFmNLfQ9NJirE7pWbDLTuYj5SI0Fhk+IzwdqfvLhJ0jRSvqVl/rRCYdnKNVG7atcP+gmOQsBuK8NAAAAAElFTkSuQmCC" alt="">
         <h1 class="site-name">{{ api.title or 'fava' }} - {{ page_title }}</h1>
@@ -81,6 +62,15 @@
             {% endfor %}
         </aside>
         <article id="page-{{ active_page }}">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="warnings">
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
             {% block content %}{% endblock %}
         </article>
     </div>

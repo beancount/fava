@@ -409,19 +409,12 @@ kbd {
 }
 
 ul.warnings {
-    margin: 0;
-    padding: 0;
-
     & > li {
         display: block;
         text-align: center;
         padding: 10px;
-        line-height: 1.4em;
-
-        &.error {
-            color: white;
-            background: $color_error;
-        }
+        color: white;
+        background: $color_error;
     }
 }
 

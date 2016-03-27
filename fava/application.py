@@ -381,6 +381,10 @@ def inject_filters(endpoint, values):
 
 @app.before_request
 def perform_global_filters():
+    if 'operating_currency' not in api.options:
+        flash('No operating currency specified. '
+              'Please add one to your beancount file.')
+
     g.filters = {
         'time': request.args.get('time', None),
         'account': request.args.get('account', None),
