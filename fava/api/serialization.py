@@ -102,6 +102,23 @@ def serialize_real_account(ra):
     }
 
 
+def zip_real_accounts(ra_list):
+    if not ra_list:
+        return
+    first = ra_list[0]
+    return {
+        'account': first.account,
+        'balance_and_balance_children':
+            [(serialize_inventory(ra.balance, at_cost=True),
+              serialize_inventory(realization.compute_balance(ra),
+                                  at_cost=True))
+             for ra in ra_list],
+        'children': [zip_real_accounts([realization.get(ra, n)
+                                        for ra in ra_list])
+                     for n, a in sorted(first.items())],
+    }
+
+
 def _add_metadata(new_entry, entry):
     new_entry['meta'] = {
         'type': entry.__class__.__name__.lower(),

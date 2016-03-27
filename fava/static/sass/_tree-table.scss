@@ -1,97 +1,107 @@
-// Collapsable trees
+// Collapsible trees
+//
+// some of the shared styles are in `_journal_table.scss`
 
-table.tree-table {
+ol.tree-table {
     &.fullwidth {
         overflow-x: auto;
         max-width: 100%;
         display: block;
     }
 
+    p { margin-top: -1px; }
+
+    .head span {
+        border: 1px solid $color_treetable_header_bg;
+        span {
+            flex-grow: 1;
+        }
+    }
+
+    p > span {
+        border: 1px solid $color_treetable_header_bg;
+        margin-right: -1px;
+        flex-shrink:0;
+
+        &.account {
+            flex: 1;
+            align-items: center;
+            display: flex;
+            min-width: 200px;
+
+            @for $i from 1 through 5 {
+                &.account-depth-#{$i} {
+                    min-width: 200px - $i * 20px;
+                    margin-left: $i * 20px;
+                }
+            }
+
+            &.has-children {
+                cursor: pointer;
+            }
+
+            a {
+                margin-left:15px;
+            }
+        }
+
+        &.num-header,
+        &.num { width: 8rem; }
+        &.other-header,
+        &.other { width: 10rem; }
+    }
+
     &:hover {
-        // class ".tree-balance-show" is added via JavaScript
-        tr.parent td.num,
-        tr td.num.tree-balance-show {
+        .balance-children {
             color: lighten($color_text, 30);
         }
-        tr.hides td.num {
-            color: $color_text;
-        }
     }
 
-    td.account a {
-        position: relative;
-        margin-left: 15px;
-    }
-
-    // td.account.leaf a { margin-left: 10px; }
-
-    tr.hides {
-        span.tree-balance {
+    .has-balance {
+        .balance {
             display: block;
-            color: $color_text;
         }
-
-        span.balance {
+        .balance-children {
             display: none;
         }
     }
 
-    tr {
-        &.parent td.num,
-        td.num.tree-balance-show {
-            color: lighten($color_text, 60);
+    .balance-children {
+        color: lighten($color_text, 60);
+    }
+
+    li.toggled {
+        ol { display:none; }
+
+        .balance {
+            display: none;
         }
 
-        &.hides td.num {
-            span.tree-balance { display: block; }
-            span.balance { display: none; }
-        }
-
-        td {
-            &.num {
-                span.balance { display: block; }
-                span.tree-balance { display: none; }
-            }
-
-            &.num.tree-balance-show span.tree-balance { display: block; }
-
-            &:first-child { min-width: 200px; }
-            &.account-level-1 { padding-left: 8px; }
-
-            @for $i from 2 through 12 {
-                &.account-level-#{$i} {
-                    padding-left: -0.5em + $i * 1.3;
-                }
-            }
+        .balance-children {
+            display: block;
+            color: $color_text;
         }
     }
 
     span.expander {
         width: 5px;
+        margin: 0 -10px 0 0;
         height: 5px;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
         border-top: 5px solid $color_treetable_expander;
-        position: absolute;
-        left: -15px;
-        top: 5px;
         cursor: pointer;
+    }
 
-        &.toggled {
-            border-top: 5px solid transparent;
-            border-bottom: 5px solid transparent;
-            border-left: 5px solid $color_treetable_expander;
-            left: -12px;
-            top: 2px;
-        }
+    .toggled span.expander {
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid $color_treetable_expander;
+        margin: 0 -13px 0 3px;
     }
 
     a.expand-all {
-       float: right;
        color: lighten($color_text, 40);
        font-weight: normal;
-       display: none;
-
-       &.not-fully-expanded { display: inline; }
     }
 }

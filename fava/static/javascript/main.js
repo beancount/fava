@@ -23,7 +23,7 @@ $(document).ready(function() {
     keyboardShortcuts.global();
 
     // Tree-expanding
-    if ($('table.tree-table').length) {
+    if ($('.tree-table').length) {
         treeTable.initTreeTable();
     };
 
@@ -45,7 +45,7 @@ $(document).ready(function() {
     };
 
     // Documents upload
-    if ($('table.tree-table').length || $('h1.droptarget').length) {
+    if ($('.tree-table').length || $('h1.droptarget').length) {
         documentsUpload.initDocumentsUpload();
     }
 

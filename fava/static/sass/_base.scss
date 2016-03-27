@@ -138,7 +138,7 @@ header {
             span.status-indicator {
                 border-radius: 10px;
                 height: 10px;
-                margin-left: 10px;
+                margin: 0 0 0 10px;
                 width: 10px;
 
                 &.status-gray { margin-left: 0; }
@@ -297,6 +297,8 @@ article {
         }
     }
 
+    td.account a,
+    a.account { font-weight: bold; }
 
     dl {
         dt {
@@ -317,7 +319,7 @@ article {
     }
 
     ul a,
-    p a {
+    p > a {
         text-decoration: underline;
 
         &:hover { color: darken($color_links, 10); }
@@ -426,6 +428,7 @@ ul.warnings {
 
 span.status-indicator {
     display: inline-block;
+    margin: 5px;
     width: 6px;
     height: 6px;
     border-radius: 6px;
@@ -495,8 +498,6 @@ table {
             width: 10rem;
         }
 
-        a.account,
-        &.account a { font-weight: bold; }
     }
 
     thead th,

@@ -42,7 +42,8 @@ from fava.util.date import parse_date, get_next_interval
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
-                                    serialize_real_account)
+                                    serialize_real_account,
+                                    zip_real_accounts)
 
 
 class FilterException(Exception):
@@ -288,25 +289,20 @@ class BeancountReportAPI(object):
         return [serialize_real_account(self._real_account(account_name,
                                                           closing_entries))]
 
-    def _flatten(self, serialized_real_account):
-        list_ = [serialized_real_account]
-        for ra in serialized_real_account['children']:
-            list_.extend(self._flatten(ra))
-        return list_
-
     def interval_balances(self, interval, account_name, accumulate=False):
         account_names = [account
                          for account in self.all_accounts
                          if account.startswith(account_name)]
 
         interval_tuples = self._interval_tuples(interval, self.entries)
-        interval_balances = [self._flatten(serialize_real_account(
+        interval_balances = [
             self._real_account(
                 account_name, self.entries,
                 interval_tuples[0][0] if accumulate else begin_date,
-                end_date, min_accounts=account_names)))
+                end_date, min_accounts=account_names)
             for begin_date, end_date in interval_tuples]
-        return list(zip(*interval_balances)), interval_tuples
+
+        return zip_real_accounts(interval_balances), interval_tuples
 
     def trial_balance(self):
         return serialize_real_account(self.root_account)['children']

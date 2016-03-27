@@ -35,63 +35,58 @@
         {% endwith %}
     {% else %}
         {% set interval_balances, dates = api.interval_balances(interval, account_name, accumulate) %}
+        {% if interval_balances %}
 
-        {% for begin_date, end_date in dates[-3:]|reverse %}
-            {{ charts.treemap(account_name, begin_date, end_date, label=interval_macros.format_date(end_date)) }}
-        {% endfor %}
-        <table class="fullwidth tree-table">
-            <thead>
-                <tr>
-                    <th>Account <a href="" class="expand-all" title="Expand all accounts">Expand all</a></th>
-                    {% for begin_date, _ in dates|reverse %}
-                        <th>{{ interval_macros.format_date(begin_date) }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-            {% for row in interval_balances %}
-                {% with account_level = row[0].account|account_level  %}
-                <tr data-level="{{ account_level }}" data-is-parent="{% if not row[0].is_leaf %}true{% else %}false{% endif %}">
-                    <td class="account account-level-{{ account_level }}" data-level="{{ account_level }}">
-                        <a href="{{ url_for('account_with_journal', name=row[0].account) }}" class="account">{{ row[0].account|last_segment }}</a>
-                    </td>
-
-                    {% for entry in row|reverse %}
-                        <td class="num">
-                            {% if entry.balance %}
-                                <span class="balance">
-                                {% for currency, number in entry.balance.items() %}
-                                    {{ number|format_currency(currency) }} {{ currency }}<br>
-                                {% endfor %}
-                                </span>
-                            {% endif %}
-                            {% if entry.balance_children %}
-                                <span class="tree-balance">
-                                {% for currency, number in entry.balance_children.items() %}
-                                    {{ number|format_currency(currency) }} {{ currency }}<br>
-                                {% endfor %}
-                                </span>
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                </tr>
-                {% endwith %}
+            {% for begin_date, end_date in dates[-3:]|reverse %}
+                {{ charts.treemap(account_name, begin_date, end_date, label=interval_macros.format_date(end_date)) }}
             {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>&nbsp;</td>
-                    {% for entry in interval_balances[0]|reverse %}
-                    <td class="num">
-                        {% for currency, number in entry.balance_children.items() %}
-                            {% if number %}
-                                {{ number|format_currency(currency) }} {{ currency }}<br>
-                            {% endif %}
-                        {% endfor %}
-                    </td>
+
+        <ol class="fullwidth tree-table">
+            <li class="head">
+                <p>
+                <span class="account"><span>Account</span><a href="" class="expand-all hidden" title="Expand all accounts">Expand all</a></span>
+                {% for begin_date, _ in dates|reverse %}
+                    <span class="other-header">{{ interval_macros.format_date(begin_date) }}</span>
+                {% endfor %}
+                </p>
+            </li>
+        {% for account in [interval_balances] recursive %}
+            <li>
+                <p>
+                <span class="account account-depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
+                    {% if account.children %}<span class="expander" title="Hold the Shift-key while clicking to expand all children"></span>{% endif %}
+                {{ account_macros.account_name(account.account, last_segment=True) }}</span>
+            {% for balance, balance_children in account.balance_and_balance_children|reverse %}
+                <span class="num other{{ ' has-balance' if balance else '' }}">
+                    {% for currency, number in balance.items() %}
+                        <span class="balance">{{ number|format_currency(currency) }} {{ currency }}</span>
                     {% endfor %}
-                </tr>
-            </tfoot>
-        </table>
+                    {% for currency, number in balance_children.items() %}
+                        <span class="balance-children">{{ number|format_currency(currency) }} {{ currency }}</span>
+                    {% endfor %}
+                </span>
+            {% endfor %}
+            </p>
+            <ol>
+            {{ loop(account.children) }}
+            </ol>
+            </li>
+        {% endfor %}
+            <li class="head">
+                <p>
+                <span class="account">&nbsp;</span>
+                {% for _, balance_children in interval_balances.balance_and_balance_children|reverse %}
+                <span class="num other-header">
+                    {% for currency, number in balance_children.items() %}
+                        {% if number %}
+                            {{ number|format_currency(currency) }} {{ currency }}<br>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                {% endfor %}
+                </p>
+            </li>
+        </ol>
+            {% endif %}
     {% endif %}
 {% endblock %}
