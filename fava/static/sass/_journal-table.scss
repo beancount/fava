@@ -12,12 +12,16 @@
         outline: 0;
 
         &:hover {
-            background-color: darken($color_header, 4);
+            @if type-of($color_header) == color {
+                background-color: darken($color_header, 4);
+            }
             cursor: pointer;
         }
 
         &:active {
-            background-color: darken($color_header, 8);
+            @if type-of($color_header) == color {
+                background-color: darken($color_header, 8);
+            }
         }
     }
 
