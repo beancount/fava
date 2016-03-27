@@ -100,6 +100,17 @@ header {
         margin: 0;
         font-size: 14px;
         font-weight: normal;
+
+        strong {
+            margin-left: 10px;
+
+            &:before {
+                content: "›";
+                margin-right: 10px;
+                font-weight: normal;
+                color: rgba($color_header_text, 0.5);
+            }
+        }
     }
 
     nav {
