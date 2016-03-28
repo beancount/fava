@@ -14,6 +14,15 @@ beancount, see the `Beancount Documentation
 <https://docs.google.com/document/d/1RaondTJCS_IUPBHFNdT8oqFKJjVJDsfsn6JEjBG04eA>`__
 page for an index of the available documentation.
 
+Requirements
+------------
+
+fava can run wherever a Python 3.4+ installation is available, and is
+known to run on Mac OSX, Linux, and Cygwin.
+
+Note that hacking on fava requires npm and NodeJS, both available on Mac OSX and Linux,
+but currently not on Cygwin.
+
 Installation
 ------------
 
@@ -24,6 +33,7 @@ Then you can use ``pip`` to install fava by running::
 
 which will also pull in all required dependencies including beancount, if you
 don't have it installed already.
+
 
 Starting fava
 -------------
