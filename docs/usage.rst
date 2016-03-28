@@ -4,7 +4,7 @@ Getting Started
 If you're new to beancount or double-entry accounting in general, we
 recommend `Command-line Accounting in Context
 <https://docs.google.com/document/d/1e4Vz3wZB_8-ZcAwIFde8X5CjzKshE4-OXtVVHm4RQ8s/>`__,
-a motivational document written by Martin Blais, the author of beancount. 
+a motivational document written by Martin Blais, the author of beancount.
 
 To learn how to create your beancount file, refer to `Getting Started with
 Beancount
@@ -20,8 +20,9 @@ Requirements
 fava can run wherever a Python 3.4+ installation is available, and is
 known to run on Mac OSX, Linux, and Cygwin.
 
-Note that hacking on fava requires npm and NodeJS, both available on Mac OSX and Linux,
-but currently not on Cygwin.
+Note that developing on fava requires npm and NodeJS, both available on Mac OSX
+and Linux, but currently not on Cygwin. See :doc:`development` for more
+information on how to get started developing on fava.
 
 Installation
 ------------
