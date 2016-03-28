@@ -2,7 +2,7 @@ module.exports.initFilters = function() {
     $('.filter input').keyup(function() {
         var $this = $(this);
         var value = $this.val();
-        $(this).parents('.filter').find('li.suggestion').toggle(value == '');
+        $(this).parents('.filter').find('li').toggle(value == '');
         $(this).parents('.filter').find("li[data-filter*='" + value.toLowerCase() + "']").show();
     });
 
