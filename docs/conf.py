@@ -18,11 +18,6 @@ extlinks = {
     'user': ('https://github.com/%s', '@'),
 }
 
-extlinks = {
-    'bug': ('https://github.com/aumayr/fava/issues/%s', '#'),
-    'user': ('https://github.com/%s', '@'),
-}
-
 # Options for HTML output
 html_theme = 'alabaster'
 html_static_path = ['static']
