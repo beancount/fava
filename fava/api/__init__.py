@@ -424,17 +424,12 @@ class BeancountReportAPI(object):
         entry = matching_entries[0]
         context_str = context.render_entry_context(self.all_entries,
                                                    self.options, entry)
-        ctx = context_str.split("\n", 2)
-        filenamelineno = ctx[1]
-        filename = filenamelineno.split(":")[1].strip()
-        lineno = int(filenamelineno.split(":")[2].strip())
-
         return {
             'hash': ehash,
-            'context': ctx[2],
-            'filename': filename,
-            'line': lineno,
-            'journal': self._journal(matching_entries)
+            'context': context_str.split("\n", 2)[2],
+            'filename': entry.meta['filename'],
+            'lineno': entry.meta['lineno'],
+            'journal': self._journal(matching_entries),
         }
 
     def treemap_data(self, account_name, begin_date=None, end_date=None):
