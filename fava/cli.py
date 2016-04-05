@@ -9,7 +9,8 @@ from fava.application import api, app, load_file, load_settings
 
 
 @click.command()
-@click.argument('filename', type=click.Path(exists=True, resolve_path=True))
+@click.argument('filename', envvar='BEANCOUNT_FILE',
+                type=click.Path(exists=True, resolve_path=True))
 @click.option('-p', '--port', type=int, default=5000,
               help='The port to listen on. (default: 5000)')
 @click.option('-H', '--host', type=str, default='localhost',
