@@ -103,7 +103,7 @@ def document():
         # metadata-statement-paths may be relative to the beancount-file
         if not os.path.isabs(document_path):
             document_path = os.path.join(os.path.dirname(
-                os.path.realpath(app.beancount_file)), document_path)
+                os.path.realpath(app.config['BEANCOUNT_FILE'])), document_path)
 
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
@@ -125,7 +125,7 @@ def add_document():
         target_folder = api.options['documents'][target_folder_index]
 
         filename = os.path.join(
-            os.path.dirname(app.beancount_file),
+            os.path.dirname(app.config['BEANCOUNT_FILE']),
             target_folder,
             request.form['account_name'].replace(':', '/').replace('..', ''),
             secure_filename(request.form['filename']))
