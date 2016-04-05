@@ -35,15 +35,13 @@
     }
 
     .chart-container {
-        clear:right;
         position: relative;
-        height: 240px;
-
+        min-height: 100px;
     }
 
-    .chart-no-data div,
+    .ct-chart > p,
     .loading {
-        padding-top: 100px;
+        padding-top: 30px;
         text-align: center;
         font-style: italic;
         color: lighten($color_text, 60);
@@ -97,10 +95,16 @@
     }
 }
 
+.treemap {
+    text {
+        fill: $color_text;
+        cursor: pointer;
+    }
+}
+
 .chartist-tooltip,
-#treemap-popover {
+#tooltip {
     font-family: $font_family_monospaced;
-    font-size: 13px;
     position: absolute;
     z-index: 12;
     text-align: center;
@@ -123,15 +127,16 @@
 
     em {
         font-family: $font_family;
-        font-size: 0.9em;
         display: block;
         margin-top: 5px;
         color: darken($color_background, 50);
     }
 }
 
-#treemap-popover {
-    min-width: 10em;
+#tooltip {
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
 }
 
 .chartist-tooltip {
@@ -145,14 +150,4 @@
     transition: opacity .2s linear;
 
     &.tooltip-show { opacity: 1; }
-}
-
-.treemap-node .treemap-label {
-    z-index: 8;
-
-    a {
-        color: $color_treemap_text;
-
-        &:hover { text-decoration: underline; }
-    }
 }

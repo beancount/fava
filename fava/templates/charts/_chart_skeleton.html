@@ -21,7 +21,6 @@
 
     <script>
         window.interval = "{{ interval_macros.interval }}";
-        {# window.intervalLabel = "{{ interval_macros.interval_label }}"; #}
-        {# window.intervalFormatStr = "{{ interval_macros.interval_format_str }}"; #}
+        window.operating_currencies = {{ operating_currencies|tojson|safe }};
     </script>
 </div>

@@ -3,7 +3,7 @@ require('chartist-plugin-legend');
 require('chartist-plugin-tooltip');
 require('./vendor/chartist-plugin-zoom');
 
-require('jquery-treemap/src/jquery-treemap');
+var d3 = require('d3');
 
 var helpers = require('./helpers');
 
@@ -29,144 +29,231 @@ var defaultOptions = {
     ]
 };
 
+var container;
+
+var colorScale = d3.scale.category20c();
+
+var addInternalNodesAsLeaves = function(node) {
+    $.each(node.children, function(i, o) {
+        addInternalNodesAsLeaves(o);
+    });
+    if (node.balance.length && node.children.length) {
+        var copy = $.extend({}, node)
+        copy.children = null;
+        node.children.push(copy);
+        node.balance = null
+    }
+};
+
+function treeMap(div, data, currency) {
+    var width = container.width();
+    var height = width / 2.5;
+    var x = d3.scale.linear();
+    var y = d3.scale.linear();
+    var modifier = data.modifier;
+    var root = data.balances[0];
+    addInternalNodesAsLeaves(root);
+    var treemap = d3.layout.treemap()
+        .size([width, height])
+        .value(function(d) { return d.balance[currency] * modifier; })
+        .nodes(root)
+
+    var svg, current_node, cells, leaves;
+
+    function tooltipText(d) { return d.value + ' ' + currency  + '<em>' + d.account + '</em>'; }
+
+    function draw() {
+        svg = div.append("svg")
+            .attr('width', width)
+            .attr('height', height)
+            .attr('class', 'treemap')
+
+        cells = svg.selectAll('g')
+            .data(treemap)
+          .enter().append('g')
+            .attr('class', 'cell')
+            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+            .on('click', function(d) { zoom(current_node == d.parent ? root : d.parent); d3.event.stopPropagation(); })
+            .on('mouseenter', function(d) { tooltip.style('opacity', 1).html(tooltipText(d)); })
+            .on('mousemove', function(d) { tooltip.style('left', d3.event.pageX  + 'px').style('top', (d3.event.pageY - 15 )+ 'px') })
+            .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
+
+        leaves = cells.filter(function(d) { return (d.value); })
+        if (leaves.empty()) { div.html('<p>Chart is empty.</p>'); };
+
+        leaves.append('rect')
+            .attr('fill', function(d) { return d.parent == root || !d.parent ? colorScale(d.account) : colorScale(d.parent.account) ;})
+            .attr('stroke', '#fff')
+
+        leaves.append("text")
+            .attr("dy", ".5em")
+            .attr("text-anchor", "middle")
+            .text(function(d) { return d.account.split(':').pop(); })
+            .style('opacity', 0)
+            .on('click', function(d) { console.log(d.account);d3.event.stopPropagation() })
+
+        zoom(root);
+
+        d3.select(window).on('resize.' + div.attr('id'), function() {
+            zoom(current_node);
+        })
+    }
+
+    function zoom(d) {
+        width = container.width()
+        height = width / 2.5
+        var kx =  width / d.dx,
+            ky = height / d.dy;
+        x.range([0, width]).domain([d.x, d.x + d.dx]);
+        y.range([0, height]).domain([d.y, d.y + d.dy]);
+        svg
+            .attr('width', width)
+            .attr('height', height)
+
+        var t = cells.transition()
+            .duration(200)
+            .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
+
+        t.select("rect")
+            .attr("width", function(d) { return kx * d.dx; })
+            .attr("height", function(d) { return ky * d.dy; })
+
+        t.select("text")
+            .attr("x", function(d) { return kx * d.dx / 2; })
+            .attr("y", function(d) { return ky * d.dy / 2; })
+            .style("opacity", function(d) { d.w = this.getComputedTextLength(); return (kx* d.dx > d.w && ky * d.dy > 14) ? 1 : 0; });
+
+        current_node = d;
+    }
+
+    draw();
+}
+
+function lineChart(chart) {
+    var options = {
+        axisX: {
+            type: Chartist.AutoScaleAxis,
+            scaleMinSpace: 25,
+            labelInterpolationFnc: function(value, index) {
+                var val = helpers.isNumber(value) ? new Date(value) : value;
+                return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
+            }
+        },
+        lineSmooth: Chartist.Interpolation.none()
+    };
+
+    defaultOptions.plugins.push(Chartist.plugins.zoom({
+        onZoom : function(chart, reset) {
+            var dateStart = new Date(chart.options.axisX.highLow.low);
+            var dateEnd = new Date(chart.options.axisX.highLow.high);
+
+            var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
+            var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
+            var e = $.Event('keyup');
+            e.which = 13;
+            $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
+        }
+    }));
+
+    window.chartData.charts[chart.id] = new Chartist.Line("#" + chart.id, chart.data,
+        $.extend({}, defaultOptions, options, chart.options)
+    );
+}
+
+function barChart(chart) {
+    var options = {
+        axisX: {
+            labelInterpolationFnc: function(value, index) {
+                if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
+                    var val = helpers.isNumber(value) ? new Date(value) : value;
+                    return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
+                } else {
+                    return null;
+                }
+            }
+        }
+    };
+
+    defaultOptions.plugins.push(Chartist.plugins.zoom({
+        onZoom : function(chart, reset, x1, x2, y1, y2) {
+            console.log(x1, x2, y1, y2);
+            var width = parseFloat($(chart.container).find('line.ct-bar:last-child').last().attr('x2'));
+            var pxPerBar = width / chart.data.labels.length;
+            var dateStart = new Date(chart.data.labels[Math.floor(x1 / pxPerBar)]);
+            var dateEnd = new Date(chart.data.labels[Math.floor(x2 / pxPerBar)]);
+
+            var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
+            var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
+            var e = $.Event('keyup');
+            e.which = 13;
+            $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
+        }
+    }));
+
+    window.chartData.charts[chart.id] = new Chartist.Bar("#" + chart.id, chart.data,
+        $.extend({}, defaultOptions, options, chart.options)
+    );
+    var chart = window.chartData.charts[chart.id];
+
+    $(chart.container).on('click', '.ct-bar', function() {
+        var date = chart.data.labels[$(event.target).index()];
+        var e = $.Event('keyup');
+        e.which = 13;
+        var formatStr = 'YYYY';
+        if (window.interval == 'day')     { formatStr = 'YYYY-MM-DD'; }
+        if (window.interval == 'week')    { formatStr = 'YYYY-Www'; }
+        if (window.interval == 'month')   { formatStr = 'YYYY-MM'; }
+        if (window.interval == 'quarter') { formatStr = 'YYYY-Qq'; }
+        $("#filter-time input[type=search]").val(date.formatWithString(formatStr)).trigger(e);
+    });
+}
+
+
 module.exports.initCharts = function() {
-    var container = $('#chart-container');
+    container = $('#chart-container');
+    var d3container = d3.select('#chart-container');
     var labels = $('#chart-labels');
+    var d3labels = d3.select('#chart-labels');
     container.html('');
     window.chartData.charts = {}
+    window.tooltip = d3.select('body').append('div').attr('id', 'tooltip')
+
+    function chartContainer(id, label) {
+        var div = d3container.append('div')
+            .attr('class', 'ct-chart')
+            .attr('id', id)
+
+        d3labels.append('label')
+            .attr('for', id)
+            .html(label)
+
+        return div;
+    }
+
 
     $.each(window.chartData, function(index, chart) {
-        chart.id = "chart-" + index;
-        chart.options = $.extend({}, chart.options);
-
-        container.append('<div class="ct-chart" id="' + chart.id + '"></div>');
-        labels.append('<label for="' + chart.id + '">' + chart.label + '</label>');
-
         switch(chart.type) {
             case 'line':
-                var options = {
-                    axisX: {
-                        type: Chartist.AutoScaleAxis,
-                        scaleMinSpace: 25,
-                        labelInterpolationFnc: function(value, index) {
-                            var val = helpers.isNumber(value) ? new Date(value) : value;
-                            return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
-                        }
-                    },
-                    lineSmooth: Chartist.Interpolation.none()
-                };
+                chart.id = "line-" + index;
+                chart.options = $.extend({}, chart.options);
+                chartContainer(chart.id, chart.label);
 
-                defaultOptions.plugins.push(Chartist.plugins.zoom({
-                    onZoom : function(chart, reset) {
-                        var dateStart = new Date(chart.options.axisX.highLow.low);
-                        var dateEnd = new Date(chart.options.axisX.highLow.high);
-
-                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
-                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
-                        var e = $.Event('keyup');
-                        e.which = 13;
-                        $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
-                    }
-                }));
-
-                window.chartData.charts[chart.id] = new Chartist.Line("#" + chart.id, chart.data,
-                    $.extend({}, defaultOptions, options, chart.options)
-                );
+                lineChart(chart);
                 break;
             case 'bar':
-                var options = {
-                    axisX: {
-                        labelInterpolationFnc: function(value, index) {
-                            if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
-                                var val = helpers.isNumber(value) ? new Date(value) : value;
-                                return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
-                            } else {
-                                return null;
-                            }
-                        }
-                    }
-                };
+                chart.id = "bar-" + index;
+                chart.options = $.extend({}, chart.options);
 
-                defaultOptions.plugins.push(Chartist.plugins.zoom({
-                    onZoom : function(chart, reset, x1, x2, y1, y2) {
-                        console.log(x1, x2, y1, y2);
-                        var width = parseFloat($(chart.container).find('line.ct-bar:last-child').last().attr('x2'));
-                        var pxPerBar = width / chart.data.labels.length;
-                        var dateStart = new Date(chart.data.labels[Math.floor(x1 / pxPerBar)]);
-                        var dateEnd = new Date(chart.data.labels[Math.floor(x2 / pxPerBar)]);
-
-                        var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
-                        var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
-                        var e = $.Event('keyup');
-                        e.which = 13;
-                        $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
-                    }
-                }));
-
-                window.chartData.charts[chart.id] = new Chartist.Bar("#" + chart.id, chart.data,
-                    $.extend({}, defaultOptions, options, chart.options)
-                );
-                var chart = window.chartData.charts[chart.id];
-
-                $(chart.container).on('click', '.ct-bar', function() {
-                    var date = chart.data.labels[$(event.target).index()];
-                    var e = $.Event('keyup');
-                    e.which = 13;
-                    var formatStr = 'YYYY';
-                    if (window.interval == 'day')     { formatStr = 'YYYY-MM-DD'; }
-                    if (window.interval == 'week')    { formatStr = 'YYYY-Www'; }
-                    if (window.interval == 'month')   { formatStr = 'YYYY-MM'; }
-                    if (window.interval == 'quarter') { formatStr = 'YYYY-Qq'; }
-                    $("#filter-time input[type=search]").val(date.formatWithString(formatStr)).trigger(e);
-                });
-
+                chartContainer(chart.id, chart.label);
+                barChart(chart);
                 break;
             case 'treemap': {
-                var colors = ['#990000', '#113861', '#777', '#1B9900', '#FF8800', '#59922b', '#0544d3', '#6b0392', '#f05b4f', '#dda458', '#eacf7d', '#86797d', '#b2c326', '#6188e2', '#a748ca'].reverse();
-                var backupColor = '#949494';
-                var colorsMap = {};
+                $.each(window.operating_currencies, function(i, currency) {
+                    chart.id = "treemap-" + chart.label + '-' + currency;
 
-                var options =     {
-                    backgroundColor: function ($box, node) {
-                        var parentName = node.accountName.split(':')[chart.options.treemapColorLevel ? chart.options.treemapColorLevel : 0];
-                        if (!(parentName in colorsMap)) { colorsMap[parentName] = colors.pop(); }
-                        if (colorsMap[parentName] == undefined) { return backupColor; }
-                        return colorsMap[parentName];
-                    },
-                    smallestFontSize: 6,
-                    startingFontSize: 15,
-                    centerLabelVertically: true,
-                    itemMargin: 3,
-                    mouseenter: function (node, event) {
-                        $(event.target).append('<div id="treemap-popover"></div>');
-                        var $popover = $('#treemap-popover');
-                        $popover.html(node.balance + '<em>' + node.accountName + '</em>').hide().fadeIn(200);
-
-                        var windowWidth = $(window.window).width();
-                        var left = node.bounds.width / 2 - ($popover.width() / 2) - 10,
-                        left = (left + $popover.width() > windowWidth) ? (windowWidth - $popover.width()) : left;
-                        $popover.css({
-                            left: left,
-                            top:  node.bounds.height / 2 - $popover.height() - 30
-                        });
-                    },
-                    mouseleave: function (node, event) {
-                        $('#treemap-popover').remove();
-                    },
-                    click: function (node, event) {
-                        window.location = $(node.label).attr("href");
-                    },
-                    ready: function () {
-                        if (chart.data.length == 0) {
-                            $('div#' + chart.id).addClass('chart-no-data').html('<div>Chart is empty.</div>');
-                        }
-                    }
-                };
-
-                $('div#' + chart.id).css('margin', '8px 0').append('<div id="' + chart.id + '-container" style="height: 230px; width: ' + $('div#' + chart.id).parent().width() + 'px;"></div>');
-                $('div#' + chart.id + '-container').treemap(chart.data,
-                    $.extend({}, options, chart.options)
-                );
+                    var div = chartContainer(chart.id, chart.label + ' (' + currency + ')');
+                    treeMap(div, chart.data, currency);
+                })
                 break;
             }
             default:

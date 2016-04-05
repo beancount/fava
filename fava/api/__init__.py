@@ -434,7 +434,6 @@ class BeancountReportAPI(object):
 
     def treemap_data(self, account_name, begin_date=None, end_date=None):
         return {
-            'label': account_name,
             'balances': self.balances(account_name, begin_date, end_date),
             'modifier': get_account_sign(account_name, self.account_types),
         }
