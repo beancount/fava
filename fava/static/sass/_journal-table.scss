@@ -166,10 +166,11 @@ ol.journal-table {
                 margin-right: 1em;
                 text-decoration: none;
             }
+
             a {
                 font-weight: bold;
 
-                .tag {
+                &.tag {
                     font-weight: normal;
                     display: inline-block;
                     margin-right: 8px;
