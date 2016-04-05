@@ -523,7 +523,14 @@ table.settings {
     td { text-align: left; }
     td:nth-child(1) { font-weight: bold; }
     td:nth-child(2) { white-space: normal; }
-    pre { margin: 0; }
+
+    pre {
+        margin: 0;
+        padding: 0;
+        overflow: inherit;
+        background-color: inherit;
+        border: none;
+    }
 }
 
 table.commodity,
