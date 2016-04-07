@@ -18,9 +18,9 @@
         <div class="loading">Loading charts&hellip;</div>
     </div>
     <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
-
-    <script>
-        window.interval = "{{ interval_macros.interval }}";
-        window.operating_currencies = {{ operating_currencies|tojson|safe }};
-    </script>
 </div>
+<script>
+    window.interval = "{{ interval_macros.interval }}";
+    window.operating_currencies = {{ operating_currencies|tojson|safe }};
+    window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";
+</script>

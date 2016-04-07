@@ -31,7 +31,7 @@ var container;
 
 var colorScale = d3.scale.category20c();
 
-var addInternalNodesAsLeaves = function(node) {
+function addInternalNodesAsLeaves(node) {
     $.each(node.children, function(i, o) {
         addInternalNodesAsLeaves(o);
     });
@@ -88,7 +88,10 @@ function treeMap(div, data, currency) {
             .attr("text-anchor", "middle")
             .text(function(d) { return d.account.split(':').pop(); })
             .style('opacity', 0)
-            .on('click', function(d) { console.log(d.account);d3.event.stopPropagation() })
+            .on('click', function(d) {
+                window.location = accountUrl.replace('REPLACEME', d.account);
+                d3.event.stopPropagation()
+            })
 
         zoom(root);
 
