@@ -5,13 +5,6 @@
         type:  "bar",
         options: {
             dateFormat: "{{ interval_macros.interval_format_str }}",
-            axisY: {
-                offset: 60,
-                position: 'end',
-                labelInterpolationFnc: function(value) {
-                    return formatCurrency(value)
-                }
-            }
         },
         data: {
             labels: [

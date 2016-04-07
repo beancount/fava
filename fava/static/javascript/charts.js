@@ -14,9 +14,7 @@ var defaultOptions = {
         onlyInteger: true,
         position: 'end',
         scaleMinSpace: 15,
-        labelInterpolationFnc: function(value) {
-            return value;
-        },
+        labelInterpolationFnc: helpers.formatCurrency,
         referenceValue: 0,
     },
     plugins: [

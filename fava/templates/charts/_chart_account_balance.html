@@ -2,15 +2,7 @@
     window.chartData.push({
         label: "Account balance",
         type: "line",
-        options: {
-            axisY: {
-                offset: 60,
-                position: 'end',
-                labelInterpolationFnc: function(value) {
-                    return formatCurrency(value)
-                }
-            }
-        },
+        options: {},
         data: {
             series: [
                 {% for currency in operating_currencies %}

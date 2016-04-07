@@ -53,7 +53,7 @@ if (toLocaleStringSupportsOptions() === false) {
 };
 
 // Formats the given number to two fixed decimals.
-window.formatCurrency = function (x) {
+module.exports.formatCurrency = function (x) {
     return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
 }
 
