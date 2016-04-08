@@ -50,13 +50,19 @@ function treeMap() {
     var transitionDelay = 200;
     var div, svg, root, current_node, cells, leaves, tooltipText;
 
-    function chart(div) {
+    function setSize() {
         width = parseInt(container.style('width'), 10);
-        height = width / 2.5;
-        svg = div.append("svg")
+        height = Math.min(width / 2.5, 400);
+        svg
             .attr('width', width)
             .attr('height', height)
+    }
+
+    function chart(div) {
+        svg = div.append("svg")
             .attr('class', 'treemap')
+
+        setSize();
 
         cells = svg.selectAll('g')
             .data(treemap.size([width, height]).nodes(root))
@@ -104,8 +110,7 @@ function treeMap() {
 
     chart.update = function() {
         transitionDelay = 0;
-        width = parseInt(container.style('width'), 10);
-        height = width / 2.5;
+        setSize();
         zoom(current_node);
         transitionDelay = 200;
     }
@@ -114,9 +119,6 @@ function treeMap() {
         kx =  width / d.dx, ky = height / d.dy;
         x.range([0, width]).domain([d.x, d.x + d.dx]);
         y.range([0, height]).domain([d.y, d.y + d.dy]);
-        svg
-            .attr('width', width)
-            .attr('height', height)
 
         var t = cells.transition()
             .duration(transitionDelay)
