@@ -96,6 +96,8 @@
 }
 
 .treemap {
+    shape-rendering: crispEdges;
+
     text {
         fill: $color_text;
         cursor: pointer;

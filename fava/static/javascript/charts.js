@@ -44,17 +44,14 @@ function addInternalNodesAsLeaves(node) {
 };
 
 function treeMap(div, data, currency) {
-    var width = container.width();
+    var width = parseInt(container.style('width'), 10);
     var height = width / 2.5;
     var x = d3.scale.linear();
     var y = d3.scale.linear();
     var modifier = data.modifier;
     var root = data.balances[0];
     addInternalNodesAsLeaves(root);
-    var treemap = d3.layout.treemap()
-        .size([width, height])
-        .value(function(d) { return d.balance[currency] * modifier; })
-        .nodes(root)
+    var treemap = d3.layout.treemap().value(function(d) { return d.balance[currency] * modifier; })
 
     var svg, current_node, cells, leaves;
 
@@ -66,8 +63,8 @@ function treeMap(div, data, currency) {
             .attr('height', height)
             .attr('class', 'treemap')
 
-        cells = svg.selectAll('g')
-            .data(treemap)
+        cells = svg.datum(root).selectAll('g')
+            .data(treemap.size([width, height]).nodes)
           .enter().append('g')
             .attr('class', 'cell')
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -101,7 +98,7 @@ function treeMap(div, data, currency) {
     }
 
     function zoom(d) {
-        width = container.width()
+        width = parseInt(container.style('width'), 10);
         height = width / 2.5
         var kx =  width / d.dx,
             ky = height / d.dy;
@@ -122,7 +119,7 @@ function treeMap(div, data, currency) {
         t.select("text")
             .attr("x", function(d) { return kx * d.dx / 2; })
             .attr("y", function(d) { return ky * d.dy / 2; })
-            .style("opacity", function(d) { d.w = this.getComputedTextLength(); return (kx* d.dx > d.w && ky * d.dy > 14) ? 1 : 0; });
+            .style("opacity", function(d) { d.w = this.getComputedTextLength(); return (kx* d.dx > d.w + 4 && ky * d.dy > 14) ? 1 : 0; });
 
         current_node = d;
     }
@@ -156,7 +153,7 @@ function lineChart(chart) {
         }
     }));
 
-    window.chartData.charts[chart.id] = new Chartist.Line("#" + chart.id, chart.data,
+    return new Chartist.Line("#" + chart.id, chart.data,
         $.extend({}, defaultOptions, options, chart.options)
     );
 }
@@ -191,10 +188,9 @@ function barChart(chart) {
         }
     }));
 
-    window.chartData.charts[chart.id] = new Chartist.Bar("#" + chart.id, chart.data,
+    var chart = new Chartist.Bar("#" + chart.id, chart.data,
         $.extend({}, defaultOptions, options, chart.options)
     );
-    var chart = window.chartData.charts[chart.id];
 
     $(chart.container).on('click', '.ct-bar', function() {
         var date = chart.data.labels[$(event.target).index()];
@@ -207,30 +203,29 @@ function barChart(chart) {
         if (window.interval == 'quarter') { formatStr = 'YYYY-Qq'; }
         $("#filter-time input[type=search]").val(date.formatWithString(formatStr)).trigger(e);
     });
+
+    return chart;
 }
 
 
 module.exports.initCharts = function() {
-    container = $('#chart-container');
-    var d3container = d3.select('#chart-container');
-    var labels = $('#chart-labels');
-    var d3labels = d3.select('#chart-labels');
+    container = d3.select('#chart-container');
     container.html('');
-    window.chartData.charts = {}
+    var labels = d3.select('#chart-labels');
+    window.charts = {}
     window.tooltip = d3.select('body').append('div').attr('id', 'tooltip')
 
     function chartContainer(id, label) {
-        var div = d3container.append('div')
+        var div = container.append('div')
             .attr('class', 'ct-chart')
             .attr('id', id)
 
-        d3labels.append('label')
+        labels.append('label')
             .attr('for', id)
             .html(label)
 
         return div;
     }
-
 
     $.each(window.chartData, function(index, chart) {
         switch(chart.type) {
@@ -239,14 +234,14 @@ module.exports.initCharts = function() {
                 chart.options = $.extend({}, chart.options);
                 chartContainer(chart.id, chart.label);
 
-                lineChart(chart);
+                window.charts[chart.id] = lineChart(chart);
                 break;
             case 'bar':
                 chart.id = "bar-" + index;
                 chart.options = $.extend({}, chart.options);
-
                 chartContainer(chart.id, chart.label);
-                barChart(chart);
+
+                window.charts[chart.id] = barChart(chart);
                 break;
             case 'treemap': {
                 $.each(window.operating_currencies, function(i, currency) {
@@ -262,22 +257,24 @@ module.exports.initCharts = function() {
         }
     });
 
-    // Toggle multiple charts
-    labels.find('label').click(function() {
+    var $labels = $('#chart-labels');
+
+    // Switch between charts
+    $labels.find('label').click(function() {
         var chartId = $(this).prop('for');
         $('.charts .ct-chart').addClass('hidden')
         $('.charts .ct-chart#' + chartId).removeClass('hidden');
 
-        labels.find('label').removeClass('selected');
+        $labels.find('label').removeClass('selected');
         $(this).addClass('selected');
 
-        if (window.chartData.charts[chartId] !== undefined) {
-            window.chartData.charts[chartId].update();
+        if (window.charts[chartId] !== undefined) {
+            window.charts[chartId].update();
         }
     });
-    labels.find('label:first-child').click();
+    $labels.find('label:first-child').click();
 
-    // Toggle chart by clicking on "Hide/Show chart"
+    // Toggle charts
     $('#toggle-chart').click(function(event) {
         event.preventDefault();
         var shouldShow = ($(this).val() == 'Show charts');
