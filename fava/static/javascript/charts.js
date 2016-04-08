@@ -43,28 +43,22 @@ function addInternalNodesAsLeaves(node) {
     }
 };
 
-function treeMap(div, data, currency) {
-    var width = parseInt(container.style('width'), 10);
-    var height = width / 2.5;
-    var x = d3.scale.linear();
-    var y = d3.scale.linear();
-    var modifier = data.modifier;
-    var root = data.balances[0];
-    addInternalNodesAsLeaves(root);
-    var treemap = d3.layout.treemap().value(function(d) { return d.balance[currency] * modifier; })
+function treeMap() {
+    var width, height;
+    var x = d3.scale.linear(), y = d3.scale.linear();
+    var treemap = d3.layout.treemap();
+    var div, svg, root, current_node, cells, leaves, tooltipText;
 
-    var svg, current_node, cells, leaves;
-
-    function tooltipText(d) { return d.value + ' ' + currency  + '<em>' + d.account + '</em>'; }
-
-    function draw() {
+    function chart(div) {
+        width = parseInt(container.style('width'), 10);
+        height = width / 2.5;
         svg = div.append("svg")
             .attr('width', width)
             .attr('height', height)
             .attr('class', 'treemap')
 
-        cells = svg.datum(root).selectAll('g')
-            .data(treemap.size([width, height]).nodes)
+        cells = svg.selectAll('g')
+            .data(treemap.size([width, height]).nodes(root))
           .enter().append('g')
             .attr('class', 'cell')
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -97,6 +91,21 @@ function treeMap(div, data, currency) {
         })
     }
 
+    chart.value = function(f) {
+        treemap.value(f);
+        return chart;
+    }
+
+    chart.tooltipText = function(f) {
+        tooltipText = f;
+        return chart;
+    }
+
+    chart.root = function(r) {
+        root = r;
+        return chart;
+    }
+
     function zoom(d) {
         width = parseInt(container.style('width'), 10);
         height = width / 2.5
@@ -124,7 +133,7 @@ function treeMap(div, data, currency) {
         current_node = d;
     }
 
-    draw();
+    return chart;
 }
 
 function lineChart(chart) {
@@ -248,7 +257,14 @@ module.exports.initCharts = function() {
                     chart.id = "treemap-" + chart.label + '-' + currency;
 
                     var div = chartContainer(chart.id, chart.label + ' (' + currency + ')');
-                    treeMap(div, chart.data, currency);
+                    addInternalNodesAsLeaves(chart.root);
+                    var tm = treeMap()
+                        .value(function(d) { return d.balance[currency] * chart.modifier; })
+                        .tooltipText(function(d) { return d.value + ' ' + currency  + '<em>' + d.account + '</em>'; })
+                        .root(chart.root)
+                    div
+                        .call(tm)
+
                 })
                 break;
             }

@@ -279,6 +279,9 @@ class BeancountReportAPI(object):
         return realization.get(realization.realize(entries, min_accounts),
                                account_name)
 
+    def get_account_sign(self, account_name):
+        return get_account_sign(account_name, self.account_types)
+
     def balances(self, account_name, begin_date=None, end_date=None):
         real_account = self._real_account(account_name, self.entries,
                                           begin_date, end_date)
@@ -430,12 +433,6 @@ class BeancountReportAPI(object):
             'filename': entry.meta['filename'],
             'lineno': entry.meta['lineno'],
             'journal': self._journal(matching_entries),
-        }
-
-    def treemap_data(self, account_name, begin_date=None, end_date=None):
-        return {
-            'balances': self.balances(account_name, begin_date, end_date),
-            'modifier': get_account_sign(account_name, self.account_types),
         }
 
     def linechart_data(self, account_name):

@@ -3,7 +3,8 @@
 window.chartData.push({
     type:  "treemap",
     label: "{{ account_name if not label else label }}",
-    data: {{ api.treemap_data(account_name, begin_date, end_date)|tojson|safe }}
+    modifier: {{ api.get_account_sign(account_name) }},
+    root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
 });
 </script>
 {% endmacro %}
