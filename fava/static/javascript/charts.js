@@ -64,6 +64,7 @@ function treeMap() {
 
         setSize();
 
+        root = div.datum()
         cells = svg.selectAll('g')
             .data(treemap.size([width, height]).nodes(root))
           .enter().append('g')
@@ -100,11 +101,6 @@ function treeMap() {
 
     chart.tooltipText = function(f) {
         tooltipText = f;
-        return chart;
-    }
-
-    chart.root = function(r) {
-        root = r;
         return chart;
     }
 
@@ -264,8 +260,8 @@ module.exports.initCharts = function() {
                     var tm = treeMap()
                         .value(function(d) { return d.balance[currency] * chart.modifier; })
                         .tooltipText(function(d) { return d.value + ' ' + currency  + '<em>' + d.account + '</em>'; })
-                        .root(chart.root)
                     div
+                        .datum(chart.root)
                         .call(tm)
                     window.charts[chart.id] = tm;
                 })
