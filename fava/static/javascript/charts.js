@@ -44,9 +44,10 @@ function addInternalNodesAsLeaves(node) {
 };
 
 function treeMap() {
-    var width, height;
+    var width, height, kx, ky;
     var x = d3.scale.linear(), y = d3.scale.linear();
     var treemap = d3.layout.treemap();
+    var transitionDelay = 200;
     var div, svg, root, current_node, cells, leaves, tooltipText;
 
     function chart(div) {
@@ -72,7 +73,6 @@ function treeMap() {
 
         leaves.append('rect')
             .attr('fill', function(d) { return d.parent == root || !d.parent ? colorScale(d.account) : colorScale(d.parent.account) ;})
-            .attr('stroke', '#fff')
 
         leaves.append("text")
             .attr("dy", ".5em")
@@ -85,10 +85,6 @@ function treeMap() {
             })
 
         zoom(root);
-
-        d3.select(window).on('resize.' + div.attr('id'), function() {
-            zoom(current_node);
-        })
     }
 
     chart.value = function(f) {
@@ -106,11 +102,16 @@ function treeMap() {
         return chart;
     }
 
-    function zoom(d) {
+    chart.update = function() {
+        transitionDelay = 0;
         width = parseInt(container.style('width'), 10);
-        height = width / 2.5
-        var kx =  width / d.dx,
-            ky = height / d.dy;
+        height = width / 2.5;
+        zoom(current_node);
+        transitionDelay = 200;
+    }
+
+    function zoom(d) {
+        kx =  width / d.dx, ky = height / d.dy;
         x.range([0, width]).domain([d.x, d.x + d.dx]);
         y.range([0, height]).domain([d.y, d.y + d.dy]);
         svg
@@ -118,7 +119,7 @@ function treeMap() {
             .attr('height', height)
 
         var t = cells.transition()
-            .duration(200)
+            .duration(transitionDelay)
             .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
         t.select("rect")
@@ -264,7 +265,7 @@ module.exports.initCharts = function() {
                         .root(chart.root)
                     div
                         .call(tm)
-
+                    window.charts[chart.id] = tm;
                 })
                 break;
             }
@@ -284,9 +285,11 @@ module.exports.initCharts = function() {
         $labels.find('label').removeClass('selected');
         $(this).addClass('selected');
 
-        if (window.charts[chartId] !== undefined) {
+        window.charts[chartId].update();
+
+        d3.select(window).on('resize', function() {
             window.charts[chartId].update();
-        }
+        })
     });
     $labels.find('label:first-child').click();
 
