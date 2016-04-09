@@ -101,6 +101,16 @@ header {
         font-size: 14px;
         font-weight: normal;
 
+        select {
+            border: none;
+            background: transparent;
+            color: white;
+            font-size: 14px;
+            -webkit-appearance: none;
+            cursor: pointer;
+            outline: none;
+        }
+
         strong {
             margin-left: 10px;
 

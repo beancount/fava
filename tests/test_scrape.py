@@ -5,7 +5,7 @@ from beancount.scripts.example import write_example_file
 from flask import url_for
 import pytest
 
-from fava.application import api, app
+from fava.application import app, load_file
 
 
 @pytest.fixture
@@ -16,15 +16,15 @@ def setup_app(tmpdir):
         write_example_file(datetime.date(1980, 5, 12),
                            datetime.date(today.year - 3, 1, 1),
                            today, True, fd)
-    app.beancount_filename = str(filename)
-    api.load_file(app.beancount_filename)
+    app.config['BEANCOUNT_FILES'] = [str(filename)]
+    load_file()
     app.testing = True
 
 
 class URLQueue:
     def __init__(self):
         self.seen_values = collections.defaultdict(set)
-        self.stack = ['/income_statement/']
+        self.stack = ['/']
         self.seen = set(self.stack)
 
     def append(self, endpoint, values, current):
@@ -64,5 +64,5 @@ def test_scrape(setup_app):
     while urls.stack:
         print(current)
         rv = test_app.get(current)
-        assert rv.status_code == 200
+        assert rv.status_code in [200, 302]
         current = urls.pop()
