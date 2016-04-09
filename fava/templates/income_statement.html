@@ -21,6 +21,9 @@
     {{ charts.treemap(api.options['name_income']) }}
     {{ charts.treemap(api.options['name_expenses']) }}
 
+    {{ charts.sunburst(api.options['name_expenses']) }}
+    {{ charts.sunburst(api.options['name_income']) }}
+
     <div class="halfleft">
         {% with table_title="Income", real_accounts=api.balances(options['name_income']), totals=True %}
             {% include "_tree_table.html" %}

@@ -8,3 +8,14 @@ window.chartData.push({
 });
 </script>
 {% endmacro %}
+
+{% macro sunburst(account_name, diameter=500, begin_date=None, end_date=None, label=None) %}
+<script>
+window.chartData.push({
+    type:  "sunburst",
+    label: "{{ account_name if not label else label }} (Sunburst)",
+    diameter: {{ diameter }},
+    data: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
+});
+</script>
+{% endmacro %}
