@@ -15,7 +15,7 @@ window.chartData.push({
     type:  "sunburst",
     label: "{{ account_name if not label else label }} (Sunburst)",
     diameter: {{ diameter }},
-    data: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
+    root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
 });
 </script>
 {% endmacro %}
