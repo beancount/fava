@@ -45,6 +45,8 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
                                     serialize_real_account)
 
+from fava.api.budgets.budgets_metadata import Budgets, init_budgets_from_metadata
+
 
 class FilterException(Exception):
     pass
@@ -156,10 +158,10 @@ class BeancountReportAPI(object):
         self.all_accounts = self._all_accounts()
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
+        self.budgets = init_budgets_from_metadata(self.all_root_account)
+
         self._apply_filters()
 
-        from .budgets.budgets_metadata import init_budgets_from_metadata
-        self.budgets = init_budgets_from_metadata(self.root_account)
 
     def _apply_filters(self):
         self.entries = self.all_entries
@@ -285,7 +287,7 @@ class BeancountReportAPI(object):
     def balances(self, account_name, begin_date=None, end_date=None):
         real_account = self._real_account(account_name, self.entries,
                                           begin_date, end_date)
-        return [serialize_real_account(real_account)]
+        return [serialize_real_account(real_account, self.budgets.budget)]
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
@@ -308,12 +310,12 @@ class BeancountReportAPI(object):
             self._real_account(
                 account_name, self.entries,
                 interval_tuples[0][0] if accumulate else begin_date,
-                end_date, min_accounts=account_names)), begin_date, end_date)
+                end_date, min_accounts=account_names), begin_date, end_date, self.budgets.budget))
             for begin_date, end_date in interval_tuples]
         return list(zip(*interval_balances)), interval_tuples
 
     def trial_balance(self):
-        return serialize_real_account(self.root_account)['children']
+        return serialize_real_account(self.root_account, self.budgets.budget)['children']
 
     def journal(self, account_name=None, with_change_and_balance=False,
                 with_journal_children=True):
@@ -643,17 +645,3 @@ class BeancountReportAPI(object):
             if isinstance(posting, Open):
                 return posting.meta
         return {}
-
-
-
-    # # from .budgets.budgets_separate_file import Budgets
-    # # from .budgets.budgets_separate_file import init_budgets_from_file
-    # # budgets = init_budgets_from_file()
-
-    def _budget_for_account(self, account_name, currency_name, date_start, date_end):
-        if not self.budgets:
-            from .budgets.budgets_metadata import Budgets, init_budgets_from_metadata
-            budgets = init_budgets_from_metadata(self.all_root_account)
-
-        budget = self.budgets.budget(account_name, currency_name, date_start, date_end)
-        return budget

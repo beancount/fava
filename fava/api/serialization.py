@@ -88,27 +88,31 @@ def serialize_posting(posting):
     _add_metadata(new_posting, posting)
     return new_posting
 
-
-def serialize_real_account(ra, begin_date=None, end_date=None):
+def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
 
     # for currency in currencies:
     #     account['budgets'][currency] =  self._budget_for_account(account['account'], currency, begin_date, end_date)
 
-    return {
+    serialized_account = {
         'account': ra.account,
         'balance_children':
             serialize_inventory(realization.compute_balance(ra),
                                 at_cost=True),
         'balance': serialize_inventory(ra.balance, at_cost=True),
+        'budgets': {},
         'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
-        'budgets': {p.units.currency: _budget_for_account(ra.account, p.units.currency, begin_date, end_date)
-                        for p in ra.balance.cost() if p.units.number != ZERO},
         'is_closed': isinstance(realization.find_last_active_posting(
             ra.txn_postings), Close),
         'has_transactions': any(isinstance(t, TxnPosting)
                                 for t in ra.txn_postings),
         'children': [serialize_real_account(a) for n, a in sorted(ra.items())],
     }
+
+    if budget_fn:
+        serialized_account['budgets'] ={ p.units.currency: budget_fn(ra.account, p.units.currency, begin_date, end_date)
+                                        for p in ra.balance.cost() if p.units.number != ZERO }
+
+    return serialized_account
 
 
 def _add_metadata(new_entry, entry):
