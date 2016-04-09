@@ -66,7 +66,12 @@ function treeMapChart() {
 
         root = div.datum()
         cells = svg.selectAll('g')
-            .data(treemap.size([width, height]).nodes(root))
+            .data(treemap
+                    .size([width, height])
+                    .sort(function(a,b) {
+                        return a.value - b.value;
+                    })
+                    .nodes(root))
           .enter().append('g')
             .attr('class', 'cell')
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
