@@ -21,6 +21,7 @@
 
     {% if not journal %}
         {{ charts.treemap(account_name) }}
+        {{ charts.sunburst(account_name) }}
     {% endif %}
 
     <div class="headerline">
@@ -41,7 +42,6 @@
             {% for begin_date, end_date in dates[-3:]|reverse %}
                 {{ charts.treemap(account_name, begin_date, end_date, label=interval_macros.format_date(begin_date)) }}
             {% endfor %}
-
         <ol class="fullwidth tree-table">
             <li class="head">
                 <p>
