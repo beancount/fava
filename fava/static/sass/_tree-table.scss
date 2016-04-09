@@ -102,7 +102,7 @@ table.tree-table {
     }
 
     span.budget {
-        float: left;  // TODO necessary?
+        margin-right: 8px;
 
         &.budget-negative { color: $color_budget_negative; }
         &.budget-positive { color: $color_budget_positive; }
