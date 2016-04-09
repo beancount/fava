@@ -13,6 +13,10 @@
     {{ charts.treemap(api.options['name_liabilities']) }}
     {{ charts.treemap(api.options['name_equity']) }}
 
+    {{ charts.sunburst(api.options['name_assets']) }}
+    {{ charts.sunburst(api.options['name_liabilities']) }}
+    {{ charts.sunburst(api.options['name_equity']) }}
+
     <div class="halfleft">
         {% with table_title="Assets", real_accounts=api.closing_balances(api.options['name_assets']), totals=True %}
             {% include "_tree_table.html" %}

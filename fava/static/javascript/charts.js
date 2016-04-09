@@ -135,6 +135,204 @@ function treeMap() {
     return chart;
 }
 
+var sunburstColorScale = d3.scale.category20c();
+
+function sunburstChart() {
+    var width, height;
+    var div, vis;
+    var label, account_label, balance_label, currency_label;
+
+    function addLabels(div) {
+        var div_id = div[0][0].id;
+
+        label = div.append('div')
+            .attr('class', 'chart-sunburst-label')
+            .attr('id', div_id + '-label')
+            .style('top', (height / 2) + 'px');
+
+        account_label = label.append('a')
+            .attr('class', 'chart-sunburst-account')
+            .attr('id', div_id + '-account');
+
+        balance_label = label.append('span')
+            .attr('class', 'chart-sunburst-balance')
+            .attr('id', div_id + '-balance');
+
+        currency_label = label.append('span')
+            .attr('class', 'chart-sunburst-currency')
+            .attr('id', div_id + '-currency');
+    }
+
+    function setSize() {
+        width = parseInt(div.style('width'), 10);
+        radius = Math.min(width, height) / 2;
+
+        vis.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+        div.select('svg').attr('width', width).attr('height', height);
+        // label.style('visibility', '');
+    }
+
+    function buildHierarchy(rootNode, currency) {
+        return {
+            'account': rootNode.account,
+            'currency': currency,
+            'balance': rootNode.balance_children[currency],
+            'children': rootNode.children.map(function(childNode) {
+                            return buildHierarchy(childNode, currency);
+                        })
+        }
+    }
+
+    function chart(div_, height_, rootNode, currency) {
+        div = div_;
+        height = height_;
+
+        vis = div.append('svg:svg').append('svg:g');
+        addLabels(div);
+        setSize();
+
+        var partition = d3.layout.partition()
+            .size([2 * Math.PI, radius * radius])
+            .value(function(d) { return d.balance; });
+
+        var arc = d3.svg.arc()
+            .startAngle(function(d) { return d.x; })
+            .endAngle(function(d) { return d.x + d.dx; })
+            .innerRadius(function(d) { return Math.sqrt(d.y); })
+            .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
+
+        // Bounding circle underneath the sunburst, to make it easier to detect
+        // when the mouse leaves the parent g.
+        vis.append('svg:circle')
+            .attr('r', radius)
+            .style('opacity', 0);
+
+        var data = buildHierarchy(rootNode, currency);
+
+        // For efficiency, filter nodes to keep only those large enough to see.
+        var nodes = partition.nodes(data)
+            .filter(function(d) {
+                return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
+            });
+
+        var path = vis.data([data]).selectAll('path')
+            .data(nodes)
+            .enter().append('svg:path')
+            .attr('display', function(d) { return d.depth ? null : 'none'; })
+            .attr('d', arc)
+            .attr('fill-rule', 'evenodd')
+            .attr('class', 'sunburst-segment')
+            .style('fill', function(d) { return sunburstColorScale(d.account); })
+            .style('opacity', 1)
+            .on('mouseover', mouseOver)
+            .on('click', function(d) {
+                window.location = accountUrl.replace('REPLACEME', d.account);
+                d3.event.stopPropagation()
+            });
+
+        // Add the mouseleave handler to the bounding circle.
+        div.on('mouseleave', mouseLeave);
+
+        return vis;
+    }
+
+    // Fade all but the current sequence
+    function mouseOver(d) {
+        balance_label.text(d.balance);
+        account_label.text(d.account)
+                     .attr('href', accountUrl.replace('REPLACEME', d.account));
+        currency_label.text(d.currency);
+
+        label
+            .style('visibility', '')
+            .style('left', (width / 2 - (label.node().offsetWidth / 2)) + 'px');
+
+        var sequenceArray = getAncestors(d);
+
+        // Fade all the segments.
+        vis.selectAll('path')
+            .style('opacity', 0.3);
+
+        // Then highlight only those that are an ancestor of the current segment.
+        vis.selectAll('path')
+           .filter(function(node) {
+                return (sequenceArray.indexOf(node) >= 0);
+            })
+           .style('opacity', 1);
+    }
+
+    // Restore everything to full opacity when moving off the visualization.
+    function mouseLeave(d) {
+        // Deactivate all segments during transition.
+        vis.selectAll('path').on('mouseover', null);
+
+        // Transition each segment to full opacity and then reactivate it.
+        vis.selectAll('path')
+            .transition()
+            .duration(1000)
+            .style('opacity', 1)
+            .each('end', function() {
+                d3.select(this).on('mouseover', mouseOver);
+            });
+
+        label.style('visibility', 'hidden');
+    }
+
+    // Given a node in a partition layout, return an array of all of its ancestor
+    // nodes, highest first, but excluding the root.
+    function getAncestors(node) {
+        var path = [];
+        var current = node;
+        while (current.parent) {
+            path.unshift(current);
+            current = current.parent;
+        }
+        return path;
+    }
+
+    chart.update = function() {
+        setSize();
+    }
+
+    return chart;
+}
+
+function sunburstChartContainer() {
+    var sunburstContainers = [];
+    var sunbursts = [];
+    var currencies;
+
+    function sunburstChartContainer(container, currencies_, diameter, data) {
+        currencies = currencies_;
+        $.each(currencies, function(i, currency) {
+            var id = container.node().id + '-' + currency;
+            var div = container.append('div')
+                .attr('id', id)
+                .style('width', container.node().offsetWidth / currencies.length + 'px')
+                .style('z-index', '1')
+                .style('float', 'left')
+                .style('position', 'relative');
+            var sunburst = sunburstChart();
+            sunburst(div, diameter, data, currency);
+
+            sunburstContainers.push(div);
+            sunbursts.push(sunburst);
+        });
+    }
+
+    sunburstChartContainer.update = function() {
+        $.each(sunburstContainers, function(i, div) {
+            div.style('width', container.node().offsetWidth / currencies.length + 'px')
+        });
+
+        $.each(sunbursts, function(i, chart) {
+            chart.update();
+        });
+    }
+
+    return sunburstChartContainer;
+}
+
 function lineChart(chart) {
     var options = {
         axisX: {
@@ -267,6 +465,14 @@ module.exports.initCharts = function() {
                 })
                 break;
             }
+            case 'sunburst':
+                chart.id = 'sunburst-' + Math.random().toString(36).substr(2, 5);
+                var container = chartContainer(chart.id, chart.label);
+
+                var scContainer = sunburstChartContainer();
+                scContainer(container, window.operating_currencies, chart.diameter, chart.data);
+                window.charts[chart.id] = scContainer;
+                break;
             default:
                 console.error('Chart-Type "' + chart.type + '" unknown.');
         }

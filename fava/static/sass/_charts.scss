@@ -108,6 +108,35 @@
     }
 }
 
+.chart-sunburst-label {
+    position: absolute;
+    text-align: center;
+    z-index: 2;
+
+    a.chart-sunburst-account {
+        display: block;
+        font-weight: 700;
+        font-size: 13px;
+        color: $color_text;
+        margin-bottom: 6px;
+    }
+
+    span.chart-sunburst-balance,
+    span.chart-sunburst-currency {
+        font-family: $font_family_monospaced;
+        font-size: 14px;
+    }
+
+    span.chart-sunburst-currency {
+        color: lighten($color_text, 40);
+        margin-left: 4px;
+    }
+}
+
+.sunburst-segment {
+    cursor: pointer;
+}
+
 .chartist-tooltip,
 #tooltip {
     font-family: $font_family_monospaced;

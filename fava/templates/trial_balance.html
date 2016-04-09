@@ -13,6 +13,10 @@
         {{ charts.treemap(api.options['name_{}'.format(base_account)]) }}
     {% endfor %}
 
+    {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
+        {{ charts.sunburst(api.options['name_{}'.format(base_account)]) }}
+    {% endfor %}
+
     <div class="halfleft">
     {% with table_title=None, real_accounts=api.trial_balance(), totals=False %}
         {% include "_tree_table.html" %}
