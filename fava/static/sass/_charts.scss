@@ -113,12 +113,12 @@
     text-align: center;
     z-index: 2;
 
-    span.chart-sunburst-account {
+    a.chart-sunburst-account {
         display: block;
         font-weight: 700;
         font-size: 13px;
         color: $color_text;
-        margin-bottom: 6px
+        margin-bottom: 6px;
     }
 
     span.chart-sunburst-balance,
@@ -131,6 +131,10 @@
         color: lighten($color_text, 40);
         margin-left: 4px;
     }
+}
+
+.sunburst-segment {
+    cursor: pointer;
 }
 
 .chartist-tooltip,

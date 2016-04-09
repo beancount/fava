@@ -135,6 +135,8 @@ function treeMap() {
     return chart;
 }
 
+var sunburstColorScale = d3.scale.category20c();
+
 function sunburstChart() {
     var width, height;
     var div, vis;
@@ -148,7 +150,7 @@ function sunburstChart() {
             .attr('id', div_id + '-label')
             .style('top', (height / 2) + 'px');
 
-        account_label = label.append('span')
+        account_label = label.append('a')
             .attr('class', 'chart-sunburst-account')
             .attr('id', div_id + '-account');
 
@@ -172,7 +174,7 @@ function sunburstChart() {
 
     function buildHierarchy(rootNode, currency) {
         return {
-            'name': rootNode.account,
+            'account': rootNode.account,
             'currency': currency,
             'balance': rootNode.balance_children[currency],
             'children': rootNode.children.map(function(childNode) {
@@ -219,9 +221,14 @@ function sunburstChart() {
             .attr('display', function(d) { return d.depth ? null : 'none'; })
             .attr('d', arc)
             .attr('fill-rule', 'evenodd')
-            .style('fill', function(d) { return colorScale(d.name); })
+            .attr('class', 'sunburst-segment')
+            .style('fill', function(d) { return sunburstColorScale(d.account); })
             .style('opacity', 1)
-            .on('mouseover', mouseOver);
+            .on('mouseover', mouseOver)
+            .on('click', function(d) {
+                window.location = accountUrl.replace('REPLACEME', d.account);
+                d3.event.stopPropagation()
+            });
 
         // Add the mouseleave handler to the bounding circle.
         div.on('mouseleave', mouseLeave);
@@ -232,7 +239,8 @@ function sunburstChart() {
     // Fade all but the current sequence
     function mouseOver(d) {
         balance_label.text(d.balance);
-        account_label.text(d.name);
+        account_label.text(d.account)
+                     .attr('href', accountUrl.replace('REPLACEME', d.account));
         currency_label.text(d.currency);
 
         label
