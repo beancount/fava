@@ -242,26 +242,22 @@ function sunburstChart() {
 
         // Only highlight segments that are ancestors of the current segment.
         paths
-           .style('opacity', 0.5)
-           .filter(function(node) {
+            .interrupt()
+            .style('opacity', 0.5)
+            .filter(function(node) {
                 return (sequenceArray.indexOf(node) >= 0);
             })
-           .style('opacity', 1);
+            .style('opacity', 1);
     }
 
     // Restore everything to full opacity when moving off the visualization.
     function mouseLeave(d) {
-        // Deactivate all segments during transition.
-        paths.on('mouseover', null);
 
         // Transition each segment to full opacity and then reactivate it.
         paths
             .transition()
             .duration(1000)
             .style('opacity', 1)
-            .each('end', function() {
-                d3.select(this).on('mouseover', mouseOver);
-            });
         setLabel(root);
     }
 
