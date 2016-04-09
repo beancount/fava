@@ -238,39 +238,25 @@ function sunburstChart() {
     // Fade all but the current sequence
     function mouseOver(d) {
         setLabel(d);
-        var sequenceArray = getAncestors(d);
 
         // Only highlight segments that are ancestors of the current segment.
         paths
             .interrupt()
             .style('opacity', 0.5)
             .filter(function(node) {
-                return (sequenceArray.indexOf(node) >= 0);
+                // check if d.account starts with node.account
+                return (d.account.lastIndexOf(node.account, 0) === 0);
             })
             .style('opacity', 1);
     }
 
     // Restore everything to full opacity when moving off the visualization.
     function mouseLeave(d) {
-
-        // Transition each segment to full opacity and then reactivate it.
         paths
             .transition()
             .duration(1000)
             .style('opacity', 1)
         setLabel(root);
-    }
-
-    // Given a node in a partition layout, return an array of all of its ancestor
-    // nodes, highest first, but excluding the root.
-    function getAncestors(node) {
-        var path = [];
-        var current = node;
-        while (current.parent) {
-            path.unshift(current);
-            current = current.parent;
-        }
-        return path;
     }
 
     chart.update = function() {
