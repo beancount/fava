@@ -6,7 +6,7 @@
 {% block content %}
     {% include "charts/_chart_skeleton.html" %}
 
-    {% with label="Changes (Income/Expenses)", interval_totals=api.interval_totals(interval, [options['name_income'], options['name_expenses']]) %}
+    {% with label="Net Profit", interval_totals=api.interval_totals(interval, [options['name_income'], options['name_expenses']]) %}
         {% include "charts/_chart_interval_totals.html" %}
     {% endwith %}
 
