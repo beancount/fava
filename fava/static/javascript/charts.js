@@ -164,7 +164,7 @@ function sunburstChart() {
     }
 
     function setSize() {
-        width = parseInt(container.style('width'), 10);
+        width = parseInt(div.style('width'), 10);
         radius = Math.min(width, height) / 2;
 
         vis.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
@@ -250,7 +250,7 @@ function sunburstChart() {
         var sequenceArray = getAncestors(d);
 
         // Fade all the segments.
-        d3.selectAll('path')
+        vis.selectAll('path')
             .style('opacity', 0.3);
 
         // Then highlight only those that are an ancestor of the current segment.
@@ -264,10 +264,10 @@ function sunburstChart() {
     // Restore everything to full opacity when moving off the visualization.
     function mouseLeave(d) {
         // Deactivate all segments during transition.
-        d3.selectAll('path').on('mouseover', null);
+        vis.selectAll('path').on('mouseover', null);
 
         // Transition each segment to full opacity and then reactivate it.
-        d3.selectAll('path')
+        vis.selectAll('path')
             .transition()
             .duration(1000)
             .style('opacity', 1)
@@ -295,6 +295,42 @@ function sunburstChart() {
     }
 
     return chart;
+}
+
+function sunburstChartContainer() {
+    var sunburstContainers = [];
+    var sunbursts = [];
+    var currencies;
+
+    function sunburstChartContainer(container, currencies_, diameter, data) {
+        currencies = currencies_;
+        $.each(currencies, function(i, currency) {
+            var id = container.node().id + '-' + currency;
+            var div = container.append('div')
+                .attr('id', id)
+                .style('width', container.node().offsetWidth / currencies.length + 'px')
+                .style('z-index', '1')
+                .style('float', 'left')
+                .style('position', 'relative');
+            var sunburst = sunburstChart();
+            sunburst(div, diameter, data, currency);
+
+            sunburstContainers.push(div);
+            sunbursts.push(sunburst);
+        });
+    }
+
+    sunburstChartContainer.update = function() {
+        $.each(sunburstContainers, function(i, div) {
+            div.style('width', container.node().offsetWidth / currencies.length + 'px')
+        });
+
+        $.each(sunbursts, function(i, chart) {
+            chart.update();
+        });
+    }
+
+    return sunburstChartContainer;
 }
 
 function lineChart(chart) {
@@ -430,13 +466,12 @@ module.exports.initCharts = function() {
                 break;
             }
             case 'sunburst':
-                $.each(window.operating_currencies, function(i, currency) {
-                    chart.id = 'sunburst-' + Math.random().toString(36).substr(2, 5) + '-' + currency;
-                    var div = chartContainer(chart.id, chart.label + ' (' + currency + ')');
-                    var sunburst = sunburstChart();
-                    sunburst(div, chart.diameter, chart.data, currency);
-                    window.charts[chart.id] = sunburst;
-                })
+                chart.id = 'sunburst-' + Math.random().toString(36).substr(2, 5);
+                var container = chartContainer(chart.id, chart.label);
+
+                var scContainer = sunburstChartContainer();
+                scContainer(container, window.operating_currencies, chart.diameter, chart.data);
+                window.charts[chart.id] = scContainer;
                 break;
             default:
                 console.error('Chart-Type "' + chart.type + '" unknown.');
