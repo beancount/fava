@@ -68,10 +68,10 @@ function treeMapChart() {
         cells = svg.selectAll('g')
             .data(treemap
                     .size([width, height])
-                    .nodes(root)
                     .sort(function(a,b) {
                         return a.value - b.value;
-                    }))
+                    })
+                    .nodes(root))
           .enter().append('g')
             .attr('class', 'cell')
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
