@@ -119,8 +119,8 @@
                 {%- if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}{% endif -%}
                 {%- if value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value.number|format_currency(value.value.currency) }} {{ value.value.currency }}</span>{% endif -%}
                 {%- if value.dtype|string == "<class 'str'>" %}"{{ value.value }}"{% endif -%}
-                {# TODO add type "bool" #}
-                {# TODO add type "date" #}
+                {%- if value.dtype|string == "<class 'bool'>" %}{{ value.value }}{% endif -%}
+                {%- if value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
             {% endfor %}
         {% elif type == 'budget' %}
             {%- if entry.period_type == 'D' %}Daily{% endif %}
