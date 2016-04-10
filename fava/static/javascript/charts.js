@@ -35,12 +35,12 @@ function addInternalNodesAsLeaves(node) {
     $.each(node.children, function(i, o) {
         addInternalNodesAsLeaves(o);
     });
-    if (node.children.length) {
+    if (node.children && node.children.length) {
         var copy = $.extend({}, node)
         copy.children = null;
         copy.dummy = true;
         node.children.push(copy);
-        node.balance = null
+        node.balance = {};
     }
 };
 
