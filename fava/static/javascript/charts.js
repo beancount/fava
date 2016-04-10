@@ -35,7 +35,7 @@ function addInternalNodesAsLeaves(node) {
     $.each(node.children, function(i, o) {
         addInternalNodesAsLeaves(o);
     });
-    if (node.balance.length && node.children.length) {
+    if (node.children.length) {
         var copy = $.extend({}, node)
         copy.children = null;
         node.children.push(copy);
