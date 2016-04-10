@@ -121,10 +121,10 @@
         font-size: 14px;
         fill: $color_text;
     }
-}
 
-.sunburst-segment {
-    cursor: pointer;
+    path {
+        cursor: pointer;
+    }
 }
 
 .chartist-tooltip,

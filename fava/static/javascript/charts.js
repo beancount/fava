@@ -44,12 +44,19 @@ function addInternalNodesAsLeaves(node) {
     }
 };
 
+function makeAccountLink(selection) {
+    selection
+        .on('click', function(d) {
+            window.location = accountUrl.replace('REPLACEME', d.account);
+            d3.event.stopPropagation()
+        })
+}
+
 function treeMapChart() {
     var width, height, kx, ky;
     var x = d3.scale.linear(), y = d3.scale.linear();
     var treemap = d3.layout.treemap()
         .sort(function(a,b) { return a.value - b.value; })
-    var transitionDelay = 200;
     var div, svg, root, current_node, cells, leaves, tooltipText;
 
     function setSize() {
@@ -62,18 +69,16 @@ function treeMapChart() {
     }
 
     function chart(div) {
-        svg = div.append("svg")
-            .attr('class', 'treemap')
-
+        svg = div.append("svg").attr('class', 'treemap')
         setSize();
-
         root = div.datum()
+
         cells = svg.selectAll('g')
             .data(treemap.nodes(root))
           .enter().append('g')
-            .attr('class', 'cell')
-            .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-            .on('click', function(d) { zoom(current_node == d.parent ? root : d.parent); d3.event.stopPropagation(); })
+            .on('click', function(d) {
+                zoom(current_node == d.parent ? root : d.parent, 200);
+            })
             .on('mouseenter', function(d) { tooltip.style('opacity', 1).html(tooltipText(d)); })
             .on('mousemove', function(d) { tooltip.style('left', d3.event.pageX  + 'px').style('top', (d3.event.pageY - 15 )+ 'px') })
             .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
@@ -82,19 +87,18 @@ function treeMapChart() {
         if (leaves.empty()) { div.html('<p>Chart is empty.</p>'); };
 
         leaves.append('rect')
-            .attr('fill', function(d) { return d.parent == root || !d.parent ? colorScale(d.account) : colorScale(d.parent.account) ;})
+            .attr('fill', function(d) {
+                return d.parent == root || !d.parent ? colorScale(d.account) : colorScale(d.parent.account);
+            })
 
         leaves.append("text")
             .attr("dy", ".5em")
             .attr("text-anchor", "middle")
             .text(function(d) { return d.account.split(':').pop(); })
             .style('opacity', 0)
-            .on('click', function(d) {
-                window.location = accountUrl.replace('REPLACEME', d.account);
-                d3.event.stopPropagation()
-            })
+            .call(makeAccountLink)
 
-        zoom(root);
+        zoom(root, 0);
     }
 
     chart.value = function(f) {
@@ -108,13 +112,11 @@ function treeMapChart() {
     }
 
     chart.update = function() {
-        transitionDelay = 0;
         setSize();
-        zoom(current_node);
-        transitionDelay = 200;
+        zoom(current_node, 0);
     }
 
-    function zoom(d) {
+    function zoom(d, duration) {
         treemap(root);
 
         kx =  width / d.dx, ky = height / d.dy;
@@ -122,7 +124,7 @@ function treeMapChart() {
         y.range([0, height]).domain([d.y, d.y + d.dy]);
 
         var t = cells.transition()
-            .duration(transitionDelay)
+            .duration(duration)
             .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
 
         t.select("rect")
@@ -146,7 +148,7 @@ function sunburstChart() {
     var width, height;
     var x = d3.scale.linear().range([0, 2 * Math.PI]);
     var y = d3.scale.sqrt();
-    var div, vis;
+    var div, svg;
     var partition = d3.layout.partition();
     var root, labels, account_label, balance_label, labelText, paths;
 
@@ -154,33 +156,34 @@ function sunburstChart() {
         width = parseInt(div.style('width'), 10);
         radius = Math.min(width, height) / 2;
 
-        vis.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+        svg.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
         div.select('svg')
             .attr('width', width)
             .attr('height', height);
 
         y.range([0, radius])
     }
+
     function chart(div_) {
         div = div_;
 
-        vis = div.append('svg').attr('class', 'sunburst').append('g');
+        svg = div.append('svg').attr('class', 'sunburst').append('g');
         setSize();
 
         // Bounding circle underneath the sunburst, to make it easier to detect
         // when the mouse leaves the parent g.
-        vis.append('circle')
+        svg.append('circle')
             .style('opacity', 0)
             .attr('r', radius)
 
-        account_label = vis.append('text')
+        account_label = svg.append('text')
             .attr('class', 'account')
             .attr('text-anchor', 'middle')
-        balance_label = vis.append('text')
+        balance_label = svg.append('text')
             .attr('class', 'balance')
             .attr('dy', '1.2em')
             .attr('text-anchor', 'middle')
-        labels = vis.selectAll('text')
+        labels = svg.selectAll('text')
 
         var arc = d3.svg.arc()
             .startAngle(function(d) { return x(d.x); })
@@ -189,29 +192,25 @@ function sunburstChart() {
             .outerRadius(function(d) { return y(d.y + d.dy); });
 
         // For efficiency, filter nodes to keep only those large enough to see.
+        // Also, ignore dummy nodes and root.
         root = div.datum()
         var nodes = partition.nodes(root)
             .filter(function(d) {
-                return (d.dx > 0.005 && !d.dummy); // 0.005 radians = 0.29 degrees
+                return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
             });
 
-        paths = vis.selectAll('path')
+        paths = svg.selectAll('path')
             .data(nodes)
           .enter().append('path')
-            .attr('display', function(d) { return d.depth ? null : 'none'; })
             .attr('d', arc)
             .attr('fill-rule', 'evenodd')
-            .attr('class', 'sunburst-segment')
             .style('fill', function(d) { return sunburstColorScale(d.account); })
             .on('mouseover', mouseOver)
-            .on('click', function(d) {
-                window.location = accountUrl.replace('REPLACEME', d.account);
-                d3.event.stopPropagation()
-            });
+            .call(makeAccountLink)
 
         setLabel(root);
         // Add the mouseleave handler to the bounding circle.
-        vis.on('mouseleave', mouseLeave);
+        svg.on('mouseleave', mouseLeave);
     }
 
     chart.labelText = function(f) {
@@ -233,10 +232,7 @@ function sunburstChart() {
         balance_label.text(labelText(d));
         account_label
             .text(d.account)
-            .on('click', function(d) {
-                window.location = accountUrl.replace('REPLACEME', d.account);
-                d3.event.stopPropagation()
-            });
+            .call(makeAccountLink)
     }
 
 
