@@ -38,6 +38,7 @@ function addInternalNodesAsLeaves(node) {
     if (node.children.length) {
         var copy = $.extend({}, node)
         copy.children = null;
+        copy.dummy = true;
         node.children.push(copy);
         node.balance = null
     }
@@ -191,7 +192,7 @@ function sunburstChart() {
         root = div.datum()
         var nodes = partition.nodes(root)
             .filter(function(d) {
-                return (d.dx > 0.005); // 0.005 radians = 0.29 degrees
+                return (d.dx > 0.005 && !d.dummy); // 0.005 radians = 0.29 degrees
             });
 
         paths = vis.selectAll('path')
@@ -275,7 +276,8 @@ function sunburstChartContainer() {
     var sunbursts = [];
     var currencies;
 
-    function sunburstChartContainer(container, currencies_, diameter, data) {
+    function sunburstChartContainer(container, currencies_, diameter, root) {
+        addInternalNodesAsLeaves(root);
         currencies = currencies_;
         $.each(currencies, function(i, currency) {
             var id = container.node().id + '-' + currency;
@@ -287,12 +289,12 @@ function sunburstChartContainer() {
                 .style('position', 'relative');
             var sunburst = sunburstChart()
                 .diameter(diameter)
-                .value(function(d) { return d.balance_children[currency]; })
+                .value(function(d) { return d.balance[currency]; })
                 .labelText(function(d) {
                     return helpers.formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
                 })
             div
-                .datum(data)
+                .datum(root)
                 .call(sunburst)
 
             sunburstContainers.push(div);
