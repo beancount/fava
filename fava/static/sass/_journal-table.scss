@@ -63,12 +63,12 @@ ol.journal-table {
     }
 
     p > span {
-        padding: 2px 4px;
+        padding: 2px 5px;
         margin: 0;
-        flex-shrink:0;
+        flex-shrink: 0;
 
         &.num {
-            font: 1em $font_family_monospaced;
+            font: 1em/18px $font_family_monospaced;
             color: $color_text;
             text-align: right;
         }
@@ -78,8 +78,14 @@ ol.journal-table {
         color: $color_journaltable_header;
         font-weight: bold;
         background: $color_treetable_header_bg;
+
         span {
             border: none;
+
+            &.flag,
+            &.description {
+                border-left: 1px solid $color_journaltable_border;
+            }
         }
     }
 }
@@ -109,6 +115,8 @@ ol.journal-table {
         &.posting {
             font-size: 0.9em;
             opacity: 0.6;
+
+            span.num { line-height: 16px; }
         }
 
         &.transaction { cursor: pointer; }
@@ -154,8 +162,8 @@ ol.journal-table {
             border-left: 1px solid $color_journaltable_border;
         }
 
-        &.datecell { width: 6rem; }
-        &.flag { width: 1rem; text-align: center; }
+        &.datecell { width: 6rem; padding-right: 0; }
+        &.flag { width: 1.6rem; text-align: center; }
         &.change { font-weight: bold; }
 
         &.description {
