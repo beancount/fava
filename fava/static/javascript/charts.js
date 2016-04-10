@@ -46,7 +46,8 @@ function addInternalNodesAsLeaves(node) {
 function treeMapChart() {
     var width, height, kx, ky;
     var x = d3.scale.linear(), y = d3.scale.linear();
-    var treemap = d3.layout.treemap();
+    var treemap = d3.layout.treemap()
+        .sort(function(a,b) { return a.value - b.value; })
     var transitionDelay = 200;
     var div, svg, root, current_node, cells, leaves, tooltipText;
 
@@ -56,6 +57,7 @@ function treeMapChart() {
         svg
             .attr('width', width)
             .attr('height', height)
+        treemap.size([width, height])
     }
 
     function chart(div) {
@@ -66,12 +68,7 @@ function treeMapChart() {
 
         root = div.datum()
         cells = svg.selectAll('g')
-            .data(treemap
-                    .size([width, height])
-                    .sort(function(a,b) {
-                        return a.value - b.value;
-                    })
-                    .nodes(root))
+            .data(treemap.nodes(root))
           .enter().append('g')
             .attr('class', 'cell')
             .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
@@ -117,6 +114,8 @@ function treeMapChart() {
     }
 
     function zoom(d) {
+        treemap(root);
+
         kx =  width / d.dx, ky = height / d.dy;
         x.range([0, width]).domain([d.x, d.x + d.dx]);
         y.range([0, height]).domain([d.y, d.y + d.dy]);
@@ -148,7 +147,7 @@ function sunburstChart() {
     var y = d3.scale.sqrt();
     var div, vis;
     var partition = d3.layout.partition();
-    var root, currency, labels, account_label, balance_label, paths;
+    var root, labels, account_label, balance_label, labelText, paths;
 
     function setSize() {
         width = parseInt(div.style('width'), 10);
@@ -214,8 +213,8 @@ function sunburstChart() {
         vis.on('mouseleave', mouseLeave);
     }
 
-    chart.currency = function(c) {
-        currency = c;
+    chart.labelText = function(f) {
+        labelText = f;
         return chart;
     }
 
@@ -230,7 +229,7 @@ function sunburstChart() {
     }
 
     function setLabel(d) {
-        balance_label.text(helpers.formatCurrency(d.value) + ' ' + currency);
+        balance_label.text(labelText(d));
         account_label
             .text(d.account)
             .on('click', function(d) {
@@ -287,9 +286,11 @@ function sunburstChartContainer() {
                 .style('float', 'left')
                 .style('position', 'relative');
             var sunburst = sunburstChart()
-                .currency(currency)
                 .diameter(diameter)
                 .value(function(d) { return d.balance_children[currency]; })
+                .labelText(function(d) {
+                    return helpers.formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
+                })
             div
                 .datum(data)
                 .call(sunburst)
@@ -436,7 +437,8 @@ module.exports.initCharts = function() {
                     addInternalNodesAsLeaves(chart.root);
                     var treemap = treeMapChart()
                         .value(function(d) { return d.balance[currency] * chart.modifier; })
-                        .tooltipText(function(d) { return d.value + ' ' + currency  + '<em>' + d.account + '</em>'; })
+                        .tooltipText(function(d) { return d.balance[currency] + ' ' + currency  + '<em>' + d.account + '</em>'; })
+
                     div
                         .datum(chart.root)
                         .call(treemap)
