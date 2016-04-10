@@ -51,6 +51,18 @@ If you want to hack on ``fava``, this will get you up and running:
 Note that you'll need to have the newest version of ``npm`` and
 ``NodeJS`` installed to build the JavaScript and CSS files.
 
+If you need a newer version of ``beancount`` than you can find on PyPi, you can run from source like so:
+
+.. code:: bash
+
+    hg clone https://bitbucket.org/blais/beancount
+    cd beancount
+    # activate the fava virtual environment
+    . venv/bin/activate
+    pip install --editable .
+
+More details at `Beancount Install <http://furius.ca/beancount/doc/install>`__
+
 --------------
 
 **Caution**: Consider this *beta*-software. Contributions are very
