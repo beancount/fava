@@ -10,6 +10,8 @@ bool_options = [
     'journal-show-type-document',
     'journal-show-type-pad',
     'journal-show-type-query',
+    'journal-show-type-custom',
+    'journal-show-type-budget',
     'journal-show-transaction-cleared',
     'journal-show-transaction-pending',
     'journal-show-transaction-padding',

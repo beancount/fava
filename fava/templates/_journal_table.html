@@ -1,4 +1,4 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
+{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
 {% set transaction_types = ['cleared', 'pending', 'padding', 'summarize', 'transfer', 'other'] %}
 {% set show_type = {
     'open':        config['journal-show-type-open'],
@@ -8,7 +8,9 @@
     'note':        config['journal-show-type-note'],
     'document':    config['journal-show-type-document'],
     'pad':         config['journal-show-type-pad'],
-    'query':       config['journal-show-type-query']
+    'query':       config['journal-show-type-query'],
+    'custom':      config['journal-show-type-custom'],
+    'budget':      config['journal-show-type-budget']
 } %}
 {% set show_transaction_type = {
     'cleared':   config['journal-show-transaction-cleared'],
@@ -110,6 +112,24 @@
             Query: <a href="{{ url_for('query', name=entry.name, bql=entry.query_string) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
             Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
+        {% elif type == 'custom' %}
+            Custom
+            {% for value in entry['values'] %}
+                &nbsp;
+                {%- if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}{% endif -%}
+                {%- if value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value.number|format_currency(value.value.currency) }} {{ value.value.currency }}</span>{% endif -%}
+                {%- if value.dtype|string == "<class 'str'>" %}"{{ value.value }}"{% endif -%}
+                {# TODO add type "bool" #}
+                {# TODO add type "date" #}
+            {% endfor %}
+        {% elif type == 'budget' %}
+            {%- if entry.period_type == 'D' %}Daily{% endif %}
+            {%- if entry.period_type == 'W' %}Weekly{% endif %}
+            {%- if entry.period_type == 'M' %}Monthly{% endif %}
+            {%- if entry.period_type == 'Q' %}Quarterly{% endif %}
+            {%- if entry.period_type == 'Y' %}Yearly{% endif %}
+            budget for {{ account_link(entry.account) }}
+            <span class="budget-value num">{{ entry.value.number|format_currency(entry.value.currency) }} {{ entry.value.currency }}</span>
         {% elif type == 'document' %}
             Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
         {% elif type == 'balance' %}

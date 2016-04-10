@@ -45,7 +45,8 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
                                     serialize_real_account)
 
-from fava.api.budgets.budgets_metadata import Budgets, init_budgets_from_metadata
+# from fava.api.budgets.budgets_metadata import Budgets, init_budgets_from_metadata
+from fava.api.budgets.budgets_custom_entries import Budgets, init_budgets_from_entries
 
 
 class FilterException(Exception):
@@ -158,9 +159,10 @@ class BeancountReportAPI(object):
         self.all_accounts = self._all_accounts()
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
-        self.budgets = init_budgets_from_metadata(self.all_root_account)
-
         self._apply_filters()
+
+        # self.budgets = init_budgets_from_metadata(self.all_root_account)
+        self.budgets = init_budgets_from_entries(self.entries)
 
 
     def _apply_filters(self):

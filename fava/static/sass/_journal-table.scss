@@ -34,6 +34,8 @@ ol.journal-table {
         &.balance.fail      { background-color: $color_journalentry_pending;         }
         &.posting           { background-color: $color_journalentry_open;            }
         &.posting.pending   { background-color: $color_journalentry_postingwarning;  }
+        &.custom            { background-color: $color_journalentry_custom;          }
+        &.budget            { background-color: $color_journalentry_budget;          }
 
         &.document a:nth-child(1) { font-weight: normal; }
 
@@ -107,6 +109,7 @@ ol.journal-table {
                 margin-right: 1em;
                 text-decoration: none;
             }
+
             a {
                 font-weight: bold;
 
@@ -137,6 +140,11 @@ ol.journal-table {
             &:last-child { margin-right: 10px; }
 
             &.leg-pending { background-color: $color_journalentry_postingwarning; }
+        }
+
+        &.budget-value {
+            float: right;
+            font-weight: bold;
         }
     }
 

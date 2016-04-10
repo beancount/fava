@@ -1,7 +1,7 @@
 from datetime import date, datetime
 
 from beancount.core import compare, realization
-from beancount.core.data import Balance, Close, Transaction, TxnPosting
+from beancount.core.data import Balance, Close, Transaction, TxnPosting, Custom
 from beancount.core.amount import Amount, decimal
 from beancount.core.position import Position
 from beancount.core.number import ZERO
@@ -48,8 +48,18 @@ def serialize_entry(entry):
         new_entry['links'] = entry.links or []
         new_entry['postings'] = [serialize_posting(p) for p in entry.postings]
 
+    if isinstance(entry, Custom):
+        if entry.type == 'budget':
+            new_entry['meta']['type'] = 'budget'
+            _serialize_budget_entry(new_entry, entry)
+
     return new_entry
 
+def _serialize_budget_entry(new_entry, entry):
+    # TODO validate budget entry
+    new_entry['account'] = entry.values[0].value
+    new_entry['period_type'] = entry.values[1].value
+    new_entry['value'] = entry.values[2].value
 
 def serialize_entry_with(entry, change, balance):
     new_entry = serialize_entry(entry)

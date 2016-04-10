@@ -62,7 +62,7 @@ class Dateline(object):
 
     def __init__(self, date_monday, period, value, currency):
         super(Dateline, self).__init__()
-        self.date_monday = date_monday
+        self.date_monday = date_monday  # TODO this is not really the date_monday, but the date where the budget-dateline starts
         self.period = period
         self.value = value
         self.currency = currency
