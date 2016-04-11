@@ -118,7 +118,7 @@ def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
         'children': [serialize_real_account(a, begin_date, end_date, budget_fn) for n, a in sorted(ra.items())],
     }
 
-    if budget_fn:
+    if budget_fn and begin_date and end_date:
         serialized_account['budgets'] ={ p.units.currency: budget_fn(ra.account, p.units.currency, begin_date, end_date)
                                         for p in ra.balance.cost() if p.units.number != ZERO }
 
