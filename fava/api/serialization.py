@@ -115,7 +115,7 @@ def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
             ra.txn_postings), Close),
         'has_transactions': any(isinstance(t, TxnPosting)
                                 for t in ra.txn_postings),
-        'children': [serialize_real_account(a) for n, a in sorted(ra.items())],
+        'children': [serialize_real_account(a, begin_date, end_date, budget_fn) for n, a in sorted(ra.items())],
     }
 
     if budget_fn:

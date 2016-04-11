@@ -303,6 +303,7 @@ class BeancountReportAPI(object):
         return list_
 
     def interval_balances(self, interval, account_name, accumulate=False):
+        """accumulate is False for /changes and True for /balances"""
         account_names = [account
                          for account in self.all_accounts
                          if account.startswith(account_name)]
@@ -312,7 +313,8 @@ class BeancountReportAPI(object):
             self._real_account(
                 account_name, self.entries,
                 interval_tuples[0][0] if accumulate else begin_date,
-                end_date, min_accounts=account_names), begin_date, end_date, self.budgets.budget))
+                end_date, min_accounts=account_names), begin_date, end_date,
+                None if accumulate else self.budgets.budget))
             for begin_date, end_date in interval_tuples]
         return list(zip(*interval_balances)), interval_tuples
 
