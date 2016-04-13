@@ -71,15 +71,18 @@ class Dateline(object):
 
     def _days(self, start_date, period):
         # TODO test this extensively, may be buggy
-        if period == 'D':
+
+        period = period.lower()
+
+        if period == 'd' or period == 'daily' or period == 'day':
             return 1
-        if period == 'W':
+        if period == 'w' or period == 'weekly' or period == 'week':
             return 7
-        if period == 'M':
+        if period == 'm' or period == 'monthly' or period == 'month':
             return ((start_date + relativedelta(months=1)) - start_date).days
-        if period == 'Q':
+        if period == 'q' or period == 'quarterly' or period == 'quarter':
             return ((start_date + relativedelta(months=3)) - start_date).days
-        if period == 'Y':
+        if period == 'y' or period == 'yearly' or period == 'year':
             return ((start_date + relativedelta(years=1)) - start_date).days
         raise Exception("Period unknown: {}".format(period))
 
