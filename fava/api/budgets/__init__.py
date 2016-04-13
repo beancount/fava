@@ -74,15 +74,15 @@ class Dateline(object):
 
         period = period.lower()
 
-        if period == 'd' or period == 'daily' or period == 'day':
+        if period == 'daily':
             return 1
-        if period == 'w' or period == 'weekly' or period == 'week':
+        if period == 'weekly':
             return 7
-        if period == 'm' or period == 'monthly' or period == 'month':
+        if period == 'monthly':
             return ((start_date + relativedelta(months=1)) - start_date).days
-        if period == 'q' or period == 'quarterly' or period == 'quarter':
+        if period == 'quarterly':
             return ((start_date + relativedelta(months=3)) - start_date).days
-        if period == 'y' or period == 'yearly' or period == 'year':
+        if period == 'yearly':
             return ((start_date + relativedelta(years=1)) - start_date).days
         raise Exception("Period unknown: {}".format(period))
 
