@@ -33,6 +33,10 @@ If you are familiar with beancount, you can get started with fava::
 and visit the web interface at `http://localhost:5000
 <http://localhost:5000>`__.
 
+If you also need to export query result to Microsoft Excel, use the following command to install:
+
+    pip3 install beancount-fava[excel]
+
 Development
 -----------
 
