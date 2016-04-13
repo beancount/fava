@@ -259,8 +259,8 @@ def report(report_name):
 
 
 @app.template_filter()
-def format_currency(value, currency=None):
-    if not value:
+def format_currency(value, currency=None, show_if_zero=False):
+    if not value and not show_if_zero:
         return ''
     return api.quantize(value, currency)
 

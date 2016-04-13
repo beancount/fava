@@ -106,5 +106,6 @@ table.tree-table {
 
         &.budget-negative { color: $color_budget_negative; }
         &.budget-positive { color: $color_budget_positive; }
+        &.budget-zero     { color: $color_budget_zero; }
     }
 }

@@ -74,8 +74,11 @@ Click to copy the balance directives to the clipboard:
 <span class="{{ css_class }}">
     {% if number %}
         {% if budget %}
-            {% set budget = budget - number %}
-            <span class="budget budget-{% if budget > 0 %}positive{% else %}negative{% endif %}">({{ budget|format_currency(currency) }})</span>
+            {% set budget = (budget - number)|round(10) %}
+            {% if budget == 0.0 %}
+                {% set budget = (budget - budget) %}  {# we have to round budget and use the weird (budget-budget) trick to make it really zero, not near zero #}
+            {% endif %}
+            <span class="budget budget-{% if budget > 0.0 %}positive{% else %}{% if budget < 0.0 %}negative{% else %}zero{% endif %}{% endif %}">({{ budget|format_currency(currency, show_if_zero=True) }})</span>
         {% else %}
             <span class="budget no-budget"></span>
         {% endif %}
