@@ -35,6 +35,11 @@ Then you can use ``pip`` to install fava by running::
 which will also pull in all required dependencies including beancount, if you
 don't have it installed already.
 
+If you also need to export query result to Microsoft Excel, use the following
+command to install::
+
+   pip3 install beancount-fava[excel]
+
 
 Starting fava
 -------------
