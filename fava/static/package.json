@@ -30,7 +30,6 @@
     "jquery-dragster": "github:catmanjan/jquery-dragster",
     "jquery-query-object": "^2.2.3",
     "jquery-stupid-table": "github:medsabir/Stupid-Table-Plugin#feat-npm-publish",
-    "mousetrap": "^1.5.3",
-    "webpack": "^1.12.15"
+    "mousetrap": "^1.5.3"
   }
 }
