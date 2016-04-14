@@ -3,9 +3,9 @@ require('chartist-plugin-legend');
 require('chartist-plugin-tooltip');
 require('./vendor/chartist-plugin-zoom');
 
-var d3 = require('d3');
-
-var helpers = require('./helpers');
+const d3 = require('d3');
+const helpers = require('./helpers');
+const URI = require('urijs');
 
 var defaultOptions = {
     height: 240,
@@ -28,8 +28,16 @@ var defaultOptions = {
 };
 
 var container;
-
-var colorScale = d3.scale.category20c();
+const treemapColorScale = d3.scale.category20c();
+const sunburstColorScale = d3.scale.category20c();
+const currencyColorScale = d3.scale.category10();
+const timeFilterFormatStrings = {
+      'year':    'YYYY',
+      'quarter': 'YYYY-Qq',
+      'day':     'YYYY-MM-DD',
+      'week':    'YYYY-Www',
+      'month':   'YYYY-MM',
+}
 
 function addInternalNodesAsLeaves(node) {
     $.each(node.children, function(i, o) {
@@ -50,6 +58,21 @@ function makeAccountLink(selection) {
             window.location = accountUrl.replace('REPLACEME', d.account);
             d3.event.stopPropagation()
         })
+}
+
+function addTooltip(selection, tooltipText) {
+    selection
+        .on('mouseenter', function(d) { tooltip.style('opacity', 1).html(tooltipText(d)); })
+        .on('mousemove', function(d) { tooltip.style('left', d3.event.pageX  + 'px').style('top', (d3.event.pageY - 15 )+ 'px') })
+        .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
+}
+
+function timeFilter(date) {
+    var e = $.Event('keyup');
+    e.which = 13;
+    $("#filter-time input[type=search]")
+        .val(date.formatWithString(timeFilterFormatStrings[window.interval]))
+        .trigger(e);
 }
 
 function treeMapChart() {
@@ -94,9 +117,7 @@ function treeMapChart() {
             .data(treemap.nodes(root))
           .enter().append('g')
             .call(zoomBehavior)
-            .on('mouseenter', function(d) { tooltip.style('opacity', 1).html(tooltipText(d)); })
-            .on('mousemove', function(d) { tooltip.style('left', d3.event.pageX  + 'px').style('top', (d3.event.pageY - 15 )+ 'px') })
-            .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
+            .call(addTooltip, tooltipText)
 
         leaves = cells.filter(function(d) { return (d.value); })
         if (leaves.empty()) { div.html('<p>Chart is empty.</p>'); };
@@ -104,7 +125,7 @@ function treeMapChart() {
         leaves.append('rect')
             .attr('fill', function(d) {
                 if (d.dummy) { var d = d.parent; }
-                return d.parent == root || !d.parent ? colorScale(d.account) : colorScale(d.parent.account);
+                return d.parent == root || !d.parent ? treemapColorScale(d.account) : treemapColorScale(d.parent.account);
             })
 
         leaves.append("text")
@@ -157,8 +178,6 @@ function treeMapChart() {
 
     return chart;
 }
-
-var sunburstColorScale = d3.scale.category20c();
 
 function sunburstChart() {
     var width, height;
@@ -358,55 +377,142 @@ function lineChart(chart) {
     );
 }
 
-function barChart(chart) {
-    var options = {
-        axisX: {
-            labelInterpolationFnc: function(value, index) {
-                if (chart.data.labels.length <= 25 || index % Math.ceil(chart.data.labels.length / 25) === 0) {
-                    var val = helpers.isNumber(value) ? new Date(value) : value;
-                    return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
-                } else {
-                    return null;
-                }
-            }
+function barChart() {
+    var margin = {top: 10, right: 10, bottom: 20, left: 30};
+    var width, height;
+    var x0 = d3.scale.ordinal();
+    var x1 = d3.scale.ordinal();
+    var y = d3.scale.linear();
+    var div, svg, tooltipText;
+    var selections = {};
+
+    var xAxis = d3.svg.axis()
+        .scale(x0)
+        .outerTickSize(0)
+        .orient('bottom');
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient('left')
+        .tickFormat(d3.format('.2s'));
+
+    function setSize() {
+        width = parseInt(container.style('width'), 10) - margin.left - margin.right,
+        height = 250 - margin.top - margin.bottom;
+
+        y.range([height, 0]);
+        x0.rangeRoundBands([0, width], .1);
+        x1.rangeRoundBands([0, x0.rangeBand()]);
+
+        div.select('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom);
+        svg.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        yAxis.tickSize(-width, 0)
+        selections.xAxis.attr('transform', 'translate(0,' + height + ')')
+    }
+
+    function setData(data) {
+        x0.domain(data.map(function(d) { return d.label; }));
+        x1.domain(data[0].values.map(function(d) { return d.name; }));
+        y.domain([
+            Math.min(0, d3.min(data, function(d) { return d3.min(d.values, function(d) { return d.value }); })),
+            Math.max(0, d3.max(data, function(d) { return d3.max(d.values, function(d) { return d.value }); }))
+        ]);
+    }
+
+    function filterTicks(domain) {
+        var labelsCount = width / 60;
+        if (domain.length <= labelsCount) {
+            return domain;
         }
-    };
+        var show_indices = Math.ceil(domain.length / labelsCount)
+        return domain.filter(function(d, i) {
+            return (i % show_indices) === 0; });
+    }
 
-    defaultOptions.plugins.push(Chartist.plugins.zoom({
-        onZoom : function(chart, reset, x1, x2, y1, y2) {
-            console.log(x1, x2, y1, y2);
-            var width = parseFloat($(chart.container).find('line.ct-bar:last-child').last().attr('x2'));
-            var pxPerBar = width / chart.data.labels.length;
-            var dateStart = new Date(chart.data.labels[Math.floor(x1 / pxPerBar)]);
-            var dateEnd = new Date(chart.data.labels[Math.floor(x2 / pxPerBar)]);
+    function resize() {
+        xAxis.tickValues(filterTicks(x0.domain()))
+        selections.xAxis.call(xAxis);
+        selections.yAxis.call(yAxis);
 
-            var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
-            var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
-            var e = $.Event('keyup');
-            e.which = 13;
-            $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
-        }
-    }));
+        selections.groups
+            .attr('transform', function(d) { return 'translate(' + x0(d.label) + ',0)'; })
 
-    var chart = new Chartist.Bar("#" + chart.id, chart.data,
-        $.extend({}, defaultOptions, options, chart.options)
-    );
+        selections.groupboxes
+            .attr('width', x0.rangeBand())
+            .attr('height', height)
 
-    $(chart.container).on('click', '.ct-bar', function() {
-        var date = chart.data.labels[$(event.target).index()];
-        var e = $.Event('keyup');
-        e.which = 13;
-        var formatStr = 'YYYY';
-        if (window.interval == 'day')     { formatStr = 'YYYY-MM-DD'; }
-        if (window.interval == 'week')    { formatStr = 'YYYY-Www'; }
-        if (window.interval == 'month')   { formatStr = 'YYYY-MM'; }
-        if (window.interval == 'quarter') { formatStr = 'YYYY-Qq'; }
-        $("#filter-time input[type=search]").val(date.formatWithString(formatStr)).trigger(e);
-    });
+        selections.bars = selections.groups.selectAll('.bar')
+            .attr('width', x1.rangeBand())
+            .attr('x', function(d ) { return x1(d.name); })
+            .attr('y', function(d) { return y(Math.max(0, d.value)); })
+            .attr('height', function(d) { return Math.abs(y(d.value) - y(0)); })
+
+        selections.legend
+            .attr('transform', function(d, i) { return 'translate(' + width + ',' + i * 20 + ')'; });
+    }
+
+
+    function chart(div_) {
+        div = div_;
+        svg = div.append('svg').attr('class', 'barchart').append('g')
+        selections.xAxis = svg.append('g').attr('class', 'x axis')
+        selections.yAxis = svg.append('g').attr('class', 'y axis')
+
+        setSize();
+        setData(div.datum());
+
+        selections.groups = svg.selectAll('.group')
+            .data(div.datum())
+          .enter().append('g')
+            .attr('class', 'group')
+            .call(addTooltip, tooltipText)
+            .on('click', function(d) { timeFilter(d.date) })
+
+        selections.groupboxes = selections.groups.append('rect')
+            .attr('class', 'group-box')
+
+        selections.bars = selections.groups.selectAll('.bar')
+            .data(function(d) { return d.values; })
+          .enter().append('rect')
+            .attr('class', 'bar')
+            .style('fill', function(d) { return currencyColorScale(d.name); })
+
+        selections.legend = svg.selectAll('.legend')
+            .data(x1.domain())
+          .enter().append('g')
+            .attr('class', 'legend')
+
+        selections.legend.append('rect')
+            .attr('x', -18)
+            .attr('width', 18)
+            .attr('height', 18)
+            .style('fill', function(d) { return currencyColorScale(d); });
+
+        selections.legend.append('text')
+            .attr('x', -24)
+            .attr('y', 9)
+            .attr('dy', '.35em')
+            .style('text-anchor', 'end')
+            .text(function(d) { return d; });
+
+        resize();
+    }
+
+    chart.tooltipText = function(f) {
+        tooltipText = f;
+        return chart;
+    }
+
+    chart.update = function() {
+        setSize();
+        resize();
+    }
 
     return chart;
 }
-
 
 module.exports.initCharts = function() {
     container = d3.select('#chart-container');
@@ -437,11 +543,31 @@ module.exports.initCharts = function() {
                 window.charts[chart.id] = lineChart(chart);
                 break;
             case 'bar':
-                chart.id = "bar-" + index;
-                chart.options = $.extend({}, chart.options);
-                chartContainer(chart.id, chart.label);
+                chart.id = 'bar-' + index;
 
-                window.charts[chart.id] = barChart(chart);
+                var div = chartContainer(chart.id, chart.label);
+                var barchart = barChart()
+                    .tooltipText(function(d) {
+                        var text = '';
+                        $.each(d.values, function(i, a) {
+                            text += a.value + ' ' +  a.name + '<br>';
+                        });
+                        text += '<em>' + d.label + '</em>';
+                        return text; })
+
+                chart.interval_totals.forEach(function(d) {
+                    d.values = operating_currencies.map(function(name) {
+                        return {name: name, value: +d.totals[name] || 0};
+                    });
+                    d.date = new Date(d.begin_date);
+                    d.label = d.date.formatWithString(chart.date_format)
+                });
+
+                div
+                    .datum(chart.interval_totals)
+                    .call(barchart)
+
+                window.charts[chart.id] = barchart;
                 break;
             case 'treemap': {
                 addInternalNodesAsLeaves(chart.root);
@@ -471,6 +597,7 @@ module.exports.initCharts = function() {
                 break;
             default:
                 console.error('Chart-Type "' + chart.type + '" unknown.');
+                console.log(chart);
         }
     });
 
@@ -503,7 +630,9 @@ module.exports.initCharts = function() {
 
     if ($('select#chart-interval').length) {
         $('select#chart-interval').on('change', function() {
-            window.location = this.value;
+            window.location = URI(window.location)
+                .setQuery('interval', this.value)
+                .toString();
         });
     }
 }

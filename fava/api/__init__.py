@@ -242,7 +242,6 @@ class BeancountReportAPI(object):
         date_first, _ = getters.get_min_max_dates(self.entries, (Transaction))
         return [{
             'begin_date': begin_date,
-            'end_date': end_date,
             'totals': self._total_balance(
                 names, begin_date if not accumulate else date_first, end_date),
         } for begin_date, end_date in interval_tuples]

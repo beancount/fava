@@ -95,6 +95,11 @@
     }
 }
 
+svg text {
+    fill: lighten($color_text, 10);
+}
+
+
 .treemap {
     shape-rendering: crispEdges;
 
@@ -104,7 +109,6 @@
     }
 
     text {
-        fill: $color_text;
         cursor: pointer;
     }
 }
@@ -113,18 +117,39 @@
     text.account {
         font-weight: 700;
         font-size: 13px;
-        fill: $color_text;
         cursor: pointer;
     }
 
     text.balance {
         font-family: $font_family_monospaced;
         font-size: 14px;
-        fill: $color_text;
     }
 
     path {
         cursor: pointer;
+    }
+}
+
+.barchart {
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #999;
+        shape-rendering: crispEdges;
+    }
+    .y.axis line {
+        stroke: #999;
+        stroke-dasharray: 2,2;
+    }
+    .group {
+        cursor: pointer;
+    }
+
+    .group-box {
+        opacity: 0;
+    }
+    .group:hover .group-box {
+        opacity: 0.1;
     }
 }
 
@@ -134,6 +159,7 @@
     position: absolute;
     z-index: 12;
     text-align: center;
+    min-width: 5em;
     padding: .5em;
     background: darken($color_background, 5);
     border: 1px solid darken($color_background, 20);
@@ -167,7 +193,6 @@
 
 .chartist-tooltip {
     display: inline-block;
-    min-width: 5em;
     pointer-events: none;
     opacity: 0;
     -webkit-transition: opacity .2s linear;

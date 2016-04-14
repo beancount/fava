@@ -15,9 +15,7 @@
     {% with linechart_data=api.linechart_data(account_name) %}
         {% include "charts/_chart_account_balance.html" %}
     {% endwith %}
-    {% with label="Changes", interval_totals=api.interval_totals(interval, account_name) %}
-        {% include "charts/_chart_interval_totals.html" %}
-    {% endwith %}
+    {{ charts.interval_totals(interval, account_name, label='Changes') }}
 
     {% if not journal %}
         {{ charts.treemap(account_name) }}

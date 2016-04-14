@@ -6,17 +6,9 @@
 {% block content %}
     {% include "charts/_chart_skeleton.html" %}
 
-    {% with label="Net Profit", interval_totals=api.interval_totals(interval, [options['name_income'], options['name_expenses']]) %}
-        {% include "charts/_chart_interval_totals.html" %}
-    {% endwith %}
-
-    {% with label="Income", interval_totals=api.interval_totals(interval, options['name_income']) %}
-        {% include "charts/_chart_interval_totals.html" %}
-    {% endwith %}
-
-    {% with label="Expenses", interval_totals=api.interval_totals(interval, options['name_expenses']) %}
-        {% include "charts/_chart_interval_totals.html" %}
-    {% endwith %}
+    {{ charts.interval_totals(interval, [options['name_income'], options['name_expenses']], label='Net Profit') }}
+    {{ charts.interval_totals(interval, options['name_income'], label='Income') }}
+    {{ charts.interval_totals(interval, options['name_expenses'], label='Expenses') }}
 
     {{ charts.treemap(api.options['name_income']) }}
     {{ charts.treemap(api.options['name_expenses']) }}

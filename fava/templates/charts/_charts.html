@@ -1,3 +1,5 @@
+{% import 'macros/_interval_macros.html' as interval_macros with context %}
+
 {% macro treemap(account_name, begin_date=None, end_date=None, label=None) %}
 <script>
 window.chartData.push({
@@ -16,6 +18,17 @@ window.chartData.push({
     label: "{{ account_name if not label else label }} (Sunburst)",
     diameter: {{ diameter }},
     root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
+});
+</script>
+{% endmacro %}
+
+{% macro interval_totals(interval, account_name, label=None) %}
+<script>
+window.chartData.push({
+    type:  "bar",
+    label: "{{ interval_macros.interval_label }} {{ account_name if not label else label }}",
+    interval_totals: {{ api.interval_totals(interval, account_name)|tojson|safe }},
+    date_format: "{{ interval_macros.interval_format_str }}"
 });
 </script>
 {% endmacro %}

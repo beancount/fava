@@ -4,11 +4,11 @@
 <form class="wide-form chart-filter">
     {% if not hide_interval_filter %}
         <select name="chart-interval" id="chart-interval">
-            <option value="{{ url_for_current(interval='day') }}"{% if interval_macros.interval == 'day' %} selected="selected"{% endif %}>Daily</option>
-            <option value="{{ url_for_current(interval='week') }}"{% if interval_macros.interval == 'week' %} selected="selected"{% endif %}>Weekly</option>
-            <option value="{{ url_for_current(interval='month') }}"{% if interval_macros.interval == 'month' %} selected="selected"{% endif %}>Monthly</option>
-            <option value="{{ url_for_current(interval='quarter') }}"{% if interval_macros.interval == 'quarter' %} selected="selected"{% endif %}>Quarterly</option>
-            <option value="{{ url_for_current(interval='year') }}"{% if interval_macros.interval == 'year' %} selected="selected"{% endif %}>Yearly</option>
+            <option value="day"{% if interval_macros.interval == 'day' %} selected="selected"{% endif %}>Daily</option>
+            <option value="week"{% if interval_macros.interval == 'week' %} selected="selected"{% endif %}>Weekly</option>
+            <option value="month"{% if interval_macros.interval == 'month' %} selected="selected"{% endif %}>Monthly</option>
+            <option value="quarter"{% if interval_macros.interval == 'quarter' %} selected="selected"{% endif %}>Quarterly</option>
+            <option value="year"{% if interval_macros.interval == 'year' %} selected="selected"{% endif %}>Yearly</option>
         </select>
     {% endif %}
     <input type="submit" id="toggle-chart" value="{% if show_charts %}Hide{% else %}Show{% endif %} charts">
