@@ -9,6 +9,12 @@ require('ace-builds/src-min/mode-sql');
 require('ace-builds/src-min/theme-chrome');
 require('ace-builds/src-min/ext-whitespace')
 
+function fireEvent(element, eventName) {
+    var event = document.createEvent('HTMLEvents');
+    event.initEvent(eventName, true, true);
+    return document.dispatchEvent(event);
+};
+
 $(document).ready(function() {
     var defaultOptions = {
         theme: "ace/theme/chrome",
@@ -51,6 +57,8 @@ $(document).ready(function() {
 
     // Query editor
     if ($('#editor-query').length) {
+        fireEvent(document, 'LiveReloadShutDown');
+
         var editor = ace.edit("editor-query");
         editor.setOptions(defaultOptions);
         editor.setOptions({
@@ -92,6 +100,8 @@ $(document).ready(function() {
 
     // The /source/ editor
     if ($('#editor-source').length) {
+        fireEvent(document, 'LiveReloadShutDown');
+
         var editorHeight = $(window).height() - $('header').outerHeight() - 110;
         $('.editor-wrapper').height(editorHeight);
 
@@ -181,8 +191,6 @@ $(document).ready(function() {
         $('form.editor-source select[name="file_path"]').change();
 
         function saveEditorContent() {
-            $(document).trigger('LiveReloadShutDown');
-
             if (window.editorStripTrailingWhitespace) {
                 whitespace.trimTrailingSpace(editor.session, true);
             }
