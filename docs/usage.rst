@@ -14,29 +14,21 @@ beancount, see the `Beancount Documentation
 <https://docs.google.com/document/d/1RaondTJCS_IUPBHFNdT8oqFKJjVJDsfsn6JEjBG04eA>`__
 page for an index of the available documentation.
 
-Requirements
-------------
-
-fava can run wherever a Python 3.4+ installation is available, and is
-known to run on Mac OSX, Linux, and Cygwin.
-
-Note that developing on fava requires npm and NodeJS, both available on Mac OSX
-and Linux, but currently not on Cygwin. See :doc:`development` for more
-information on how to get started developing on fava.
 
 Installation
 ------------
 
-You will need `Python 3 <https://www.python.org/downloads/>`__ (at least version 3.4).
-Then you can use ``pip`` to install fava by running::
+Fava is known to run on OS X, Linux, and Windows (with Cygwin).  You will need
+`Python 3 <https://www.python.org/downloads/>`__ (at least version 3.4).  Then
+you can use ``pip`` to install fava by running::
 
     pip3 install beancount-fava
 
 which will also pull in all required dependencies including beancount, if you
 don't have it installed already.
 
-If you also need to export query result to Microsoft Excel, use the following
-command to install::
+If you want to export query results to Microsoft Excel or LibreOffice Calc, use
+the following command to install the optional dependencies for this feature::
 
    pip3 install beancount-fava[excel]
 

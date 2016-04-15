@@ -1,7 +1,8 @@
 Development
 ===========
 
-If you want to hack on ``fava``, this will get you up and running:
+If you want to hack on fava or run the latest development version, this will
+get you up and running:
 
 .. code:: bash
 
@@ -13,9 +14,9 @@ If you want to hack on ``fava``, this will get you up and running:
     make build-js
     pip install --editable .
 
-Note that you'll need to have the newest version of ``npm`` and
-``NodeJS`` installed to build the JavaScript and CSS files.
+Note that a development installation fava requires recent versions of Node.js and
+npm, both available on OS X and Linux, but currently not on Cygwin.
 
 Contributions are very welcome, just open a PR on `Github <https://github.com/aumayr/fava/pulls>`__.
 
-fava is released under the `MIT License <https://github.com/aumayr/fava/blob/master/LICENSE>`__.
+Fava is released under the `MIT License <https://github.com/aumayr/fava/blob/master/LICENSE>`__.
