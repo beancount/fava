@@ -50,7 +50,7 @@ def load_settings():
     for option in config.list_options:
         if app.config.raw.has_option('fava', option):
             app.config[option] = \
-                app.config.get('fava', option).strip().split("\n")
+                app.config.raw.get('fava', option).strip().split("\n")
         else:
             app.config[option] = None
     for option in config.str_options:
