@@ -1,6 +1,6 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
-{% set show_type = {
+{% set default_show_type = {
     'open':        config['journal-show-type-open'],
     'close':       config['journal-show-type-close'],
     'transaction': config['journal-show-type-transaction'],
@@ -8,12 +8,29 @@
     'note':        config['journal-show-type-note'],
     'document':    config['journal-show-type-document'],
     'pad':         config['journal-show-type-pad'],
-    'query':       config['journal-show-type-query']
+    'query':       config['journal-show-type-query'],
+
+    'cleared':     config['journal-show-transaction-cleared'],
+    'pending':     config['journal-show-transaction-pending'],
+    'other':       config['journal-show-transaction-other'],
+
+    'metadata':    config['journal-show-metadata'],
+    'legs':        config['journal-show-legs'],
+} %}
+{% set show_type = {
+    'open':        request.args.get('journal-show-type-open', default_show_type['open'])|string|lower == 'true',
+    'close':       request.args.get('journal-show-type-close', default_show_type['close'])|string|lower == 'true',
+    'transaction': request.args.get('journal-show-type-transaction', default_show_type['transaction'])|string|lower == 'true',
+    'balance':     request.args.get('journal-show-type-balance', default_show_type['balance'])|string|lower == 'true',
+    'note':        request.args.get('journal-show-type-note', default_show_type['note'])|string|lower == 'true',
+    'document':    request.args.get('journal-show-type-document', default_show_type['document'])|string|lower == 'true',
+    'pad':         request.args.get('journal-show-type-pad', default_show_type['pad'])|string|lower == 'true',
+    'query':       request.args.get('journal-show-type-query', default_show_type['query'])|string|lower == 'true',
 } %}
 {% set show_transaction_type = {
-    'cleared':   config['journal-show-transaction-cleared'],
-    'pending':   config['journal-show-transaction-pending'],
-    'other':     config['journal-show-transaction-other'],
+    'cleared':   request.args.get('journal-show-transaction-cleared', default_show_type['cleared'])|string|lower == 'true',
+    'pending':   request.args.get('journal-show-transaction-pending', default_show_type['pending'])|string|lower == 'true',
+    'other':     request.args.get('journal-show-transaction-other', default_show_type['other'])|string|lower == 'true',
 } %}
 {% set transaction_type_buttons = {
     'cleared': ('*', 'Cleared Transactions'),
@@ -22,21 +39,21 @@
 }
 %}
 
-{% set show_metadata = config['journal-show-metadata'] %}
-{% set show_legs = config['journal-show-legs'] %}
+{% set show_metadata = request.args.get('journal-show-metadata', default_show_type['metadata'])|string|lower == 'true' %}
+{% set show_legs = request.args.get('journal-show-legs', default_show_type['legs'])|string|lower == 'true' %}
 
 {% if show_tablefilter %}
 <form id="entry-filters" class="wide-form">
     {% for type in entry_types %}
-        <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="li.{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>
+        <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="journal-show-type-{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
         {% if type == 'transaction' %}
         {% for txn_type in transaction_types %}
-        <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="li.{{ txn_type }}" class="txn-toggle{% if not show_transaction_type[txn_type] %} inactive{% endif %}">
+        <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="journal-show-transaction-{{ txn_type }}" data-selector="li.{{ txn_type }}" data-show-default="{{ default_show_type[txn_type]|lower }}" class="txn-toggle{% if not show_transaction_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
         {% endfor %}
         {% endif %}
     {% endfor %}
-    <input type="submit" id="toggle-metadata" title="{% if show_metadata %}Hide{% else %}Show{% endif %} metadata" data-type="dl.metadata"{% if not show_metadata %} class="inactive"{% endif %} value="Metadata">
-    <input type="submit" title="{% if show_legs %}Hide{% else %}Show{% endif %} legs" data-type="li.posting"{% if not show_legs %} class="inactive"{% endif %} value="Postings">
+    <input type="submit" id="toggle-metadata" title="{% if show_metadata %}Hide{% else %}Show{% endif %} metadata" data-type="journal-show-metadata" data-selector="dl.metadata" data-show-default="{{ default_show_type['metadata']|lower }}" {% if not show_metadata %} class="inactive"{% endif %} value="Metadata">
+    <input type="submit" title="{% if show_legs %}Hide{% else %}Show{% endif %} legs" data-type="journal-show-legs" data-selector="li.posting" data-show-default="{{ default_show_type['legs']|lower }}" {% if not show_legs %} class="inactive"{% endif %} value="Postings">
 </form>
 {% endif %}
 
