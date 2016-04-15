@@ -1,6 +1,6 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
-{% set show_type = {
+{% set default_show_type = {
     'open':        config['journal-show-type-open'],
     'close':       config['journal-show-type-close'],
     'transaction': config['journal-show-type-transaction'],
@@ -8,35 +8,70 @@
     'note':        config['journal-show-type-note'],
     'document':    config['journal-show-type-document'],
     'pad':         config['journal-show-type-pad'],
-    'query':       config['journal-show-type-query']
+    'query':       config['journal-show-type-query'],
+
+    'cleared':     config['journal-show-transaction-cleared'],
+    'pending':     config['journal-show-transaction-pending'],
+    'other':       config['journal-show-transaction-other'],
+
+    'metadata':    config['journal-show-metadata'],
+    'legs':        config['journal-show-legs'],
 } %}
-{% set show_transaction_type = {
-    'cleared':   config['journal-show-transaction-cleared'],
-    'pending':   config['journal-show-transaction-pending'],
-    'other':     config['journal-show-transaction-other'],
-} %}
+{% if request.args.get('show', False) %}
+    {% set show_type = {
+        'open':        'open' in request.args.getlist('show'),
+        'close':       'close' in request.args.getlist('show'),
+        'transaction': 'transaction' in request.args.getlist('show'),
+        'balance':     'balance' in request.args.getlist('show'),
+        'note':        'note' in request.args.getlist('show'),
+        'document':    'document' in request.args.getlist('show'),
+        'pad':         'pad' in request.args.getlist('show'),
+        'query':       'query' in request.args.getlist('show'),
+
+        'cleared':     'cleared' in request.args.getlist('show'),
+        'pending':     'pending' in request.args.getlist('show'),
+        'other':       'other' in request.args.getlist('show'),
+
+        'metadata':     'metadata' in request.args.getlist('show'),
+        'legs':         'legs' in request.args.getlist('show'),
+    } %}
+{% else %}
+    {% set show_type = {
+        'open':        default_show_type['open'],
+        'close':       default_show_type['close'],
+        'transaction': default_show_type['transaction'],
+        'balance':     default_show_type['balance'],
+        'note':        default_show_type['note'],
+        'document':    default_show_type['document'],
+        'pad':         default_show_type['pad'],
+        'query':       default_show_type['query'],
+
+        'cleared':     default_show_type['cleared'],
+        'pending':     default_show_type['pending'],
+        'other':       default_show_type['other'],
+
+        'metadata':     default_show_type['metadata'],
+        'legs':         default_show_type['legs'],
+    } %}
+{% endif %}
 {% set transaction_type_buttons = {
     'cleared': ('*', 'Cleared Transactions'),
     'pending': ('!', 'Pending Transactions'),
     'other':   ('x', 'Other Transactions'),
 }
 %}
-
-{% set show_metadata = config['journal-show-metadata'] %}
-{% set show_legs = config['journal-show-legs'] %}
-
 {% if show_tablefilter %}
 <form id="entry-filters" class="wide-form">
     {% for type in entry_types %}
-        <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="li.{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>
+        <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
         {% if type == 'transaction' %}
         {% for txn_type in transaction_types %}
-        <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="li.{{ txn_type }}" class="txn-toggle{% if not show_transaction_type[txn_type] %} inactive{% endif %}">
+        <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="{{ txn_type }}" data-selector="li.{{ txn_type }}" data-show-default="{{ default_show_type[txn_type]|lower }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
         {% endfor %}
         {% endif %}
     {% endfor %}
-    <input type="submit" id="toggle-metadata" title="{% if show_metadata %}Hide{% else %}Show{% endif %} metadata" data-type="dl.metadata"{% if not show_metadata %} class="inactive"{% endif %} value="Metadata">
-    <input type="submit" title="{% if show_legs %}Hide{% else %}Show{% endif %} legs" data-type="li.posting"{% if not show_legs %} class="inactive"{% endif %} value="Postings">
+    <input type="submit" id="toggle-metadata" title="{% if show_type['metadata'] %}Hide{% else %}Show{% endif %} metadata" data-type="metadata" data-selector="dl.metadata" data-show-default="{{ default_show_type['metadata']|lower }}" {% if not show_type['metadata'] %} class="inactive"{% endif %} value="Metadata">
+    <input type="submit" title="{% if show_type['legs'] %}Hide{% else %}Show{% endif %} legs" data-type="legs" data-selector="li.posting" data-show-default="{{ default_show_type['legs']|lower }}" {% if not show_type['legs'] %} class="inactive"{% endif %} value="Postings">
 </form>
 {% endif %}
 
@@ -90,7 +125,7 @@
     {% set type = entry.meta.type %}
     <li class="{{ type }} {{ entry.transaction_type }}
     {%- if not show_type[type] %} hidden{% endif -%}
-    {%- if (entry.transaction_type and not show_transaction_type[entry.transaction_type]) %} hidden{% endif -%}
+    {%- if (entry.transaction_type and not show_type[entry.transaction_type]) %} hidden{% endif -%}
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
         <p>
@@ -133,11 +168,11 @@
             <span class="balance num">{{ render_inventory(entry.balance) }}</span>
         </p>
         {% endif %}
-        {{ render_metadata(entry.metadata, show_metadata) }}
+        {{ render_metadata(entry.metadata, show_type['metadata']) }}
         {% if entry.postings %}
         <ul>
         {% for posting in entry.postings %}
-        <li class="posting {{ posting.posting_type }}{%- if not show_legs %} hidden{% endif -%}">
+        <li class="posting {{ posting.posting_type }}{%- if not show_type['legs'] %} hidden{% endif -%}">
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
@@ -154,7 +189,7 @@
                 <span class="balance num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.metadata, show_metadata) }}
+            {{ render_metadata(posting.metadata, show_type['metadata']) }}
         </li>
         {% endfor %}
         </ul>

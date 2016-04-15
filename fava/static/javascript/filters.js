@@ -1,3 +1,5 @@
+const URI = require('urijs');
+
 module.exports.initFilters = function() {
     $('.filter input').keyup(function() {
         var $this = $(this);
@@ -11,7 +13,7 @@ module.exports.initFilters = function() {
         var code = e.which;
         if (code == 13) {
             e.preventDefault();
-            window.location.href = location.pathname + ($.query.set('time', $this.val()));
+            window.location.href = URI(window.location).setQuery('time', $this.val()).toString();
         }
     });
 

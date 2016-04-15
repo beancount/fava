@@ -1,4 +1,4 @@
-require('jquery-query-object');
+const URI = require('urijs');
 
 require('ace-builds/src-min/ace');
 require('ace-builds/src-min/ext-searchbox');
@@ -83,9 +83,9 @@ $(document).ready(function() {
             event.stopImmediatePropagation();
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
-            var nextUrl = $button.parents('form').attr('action');
-            nextUrl = nextUrl + (nextUrl.split('?')[1] ? '&' : '?') + "query_string=" + encodeURIComponent(editor.getValue());
-            window.location.href = nextUrl;
+            var nextUrl = URI($button.parents('form').attr('action'));
+            nextUrl.addQuery('query_string', editor.getValue());
+            window.location.href = nextUrl.toString();
         });
 
         $('.stored-queries select').change(function() {
@@ -141,7 +141,7 @@ $(document).ready(function() {
         editor.$blockScrolling = Infinity;
         editor.focus();
 
-        var hlLine = $.query.get('line');
+        var hLine = URI(location.search).query('line');
         $('form.editor-source select[name="file_path"]').change(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -150,7 +150,7 @@ $(document).ready(function() {
             $filePath = $select.val();
             $.get($select.parents('form').attr('action'), { file_path: $filePath } )
             .done(function(data) {
-                if ($filePath != $.query.get('file_path')) {
+                if ($filePath != URI(location.search).query('file_path')) {
                     hlLine = 1;
                 }
                 editor.setValue(data, -1);
@@ -202,9 +202,10 @@ $(document).ready(function() {
             $.post(url, { file_path: fileName, source: editor.getValue() } )
             .done(function(data) {
                 if (data == "True") {
-                    window.location = $.query
-                                            .set('line', editor.getSelectionRange().start.row + 1)
-                                            .set('file_path', fileName);
+                    window.location = URI(window.location)
+                                            .setQuery('line', editor.getSelectionRange().start.row + 1)
+                                            .setQuery('file_path', fileName)
+                                            .toString();
                 } else {
                     alert("Writing to\n\n\t" + fileName + "\n\nwas not successful.");
                 }

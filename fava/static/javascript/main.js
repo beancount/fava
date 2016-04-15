@@ -1,14 +1,13 @@
-require('jquery-query-object');
 require('jquery-stupid-table/stupidtable');
 require('jquery-dragster');
 
-var charts = require('./charts');
-var clipboard = require('./clipboard');
-var filters = require('./filters');
-var keyboardShortcuts = require('./keyboard-shortcuts');
-var journal = require('./journal');
-var treeTable = require('./tree-table');
-var documentsUpload = require('./documents-upload');
+const charts = require('./charts');
+const clipboard = require('./clipboard');
+const filters = require('./filters');
+const keyboardShortcuts = require('./keyboard-shortcuts');
+const journal = require('./journal');
+const treeTable = require('./tree-table');
+const documentsUpload = require('./documents-upload');
 
 // expose jquery to global context
 window.$ = $
