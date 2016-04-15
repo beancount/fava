@@ -45,6 +45,16 @@
     </header>
     <div class="main">
         <aside>
+            {% if config['sidebar-custom-links'] %}
+                <h3>Custom Links</h3>
+                <ul class="navigation">
+                    {% for label_link in config['sidebar-custom-links'] %}
+                    {% set label, link = label_link.split(': ') %}
+                        <li><a href="{{ link }}">{{ label }}</a></li>
+                    {% endfor %}
+                </ul>
+                <h3>Reports</h3>
+            {% endif %}
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
