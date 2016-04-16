@@ -31,7 +31,6 @@ int_options = [
 
 list_options = [
     'collapse-accounts',
-    'sidebar-custom-links'
 ]
 
 str_options = [
