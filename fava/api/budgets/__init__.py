@@ -1,16 +1,12 @@
-import os
-import sys
-from datetime import datetime
-
 from dateutil.relativedelta import relativedelta
 
-class Budgets(object):
 
+class Budgets(object):
     def __init__(self, accounts):
         self.accounts = accounts
 
     def _daterange(self, start_date, end_date):
-        for n in range(int ((end_date - start_date).days)):
+        for n in range(int((end_date - start_date).days)):
             yield start_date + relativedelta(days=n)
 
     def budget(self, account_name, currency_name, date_from, date_to):
@@ -21,7 +17,7 @@ class Budgets(object):
                 account = account_
                 break
 
-        if account == None:
+        if account is None:
             # print("budget fails account", account_name)
             return None
 
@@ -43,12 +39,12 @@ class Budgets(object):
         budget = 0
         for single_day in self._daterange(date_from, date_to):
             matching_dateline = self._matching_dateline(datelines, single_day)
-            budget = budget + (matching_dateline.value / matching_dateline.days)
+            budget = budget + \
+                (matching_dateline.value / matching_dateline.days)
 
         return budget
 
     def _matching_dateline(self, datelines, date_):
-        daily_value = 0
         last_seen_dateline = datelines[0].date_monday
         for dateline in datelines:
             if dateline.date_monday <= date_:
@@ -62,7 +58,9 @@ class Dateline(object):
 
     def __init__(self, date_monday, period, value, currency):
         super(Dateline, self).__init__()
-        self.date_monday = date_monday  # TODO this is not really the date_monday, but the date where the budget-dateline starts
+        self.date_monday = date_monday
+        # TODO this is not really the date_monday, but the date where the
+        #      budget-dateline starts
         self.period = period
         self.value = value
         self.currency = currency
@@ -71,7 +69,6 @@ class Dateline(object):
 
     def _days(self, start_date, period):
         # TODO test this extensively, may be buggy
-
         period = period.lower()
 
         if period == 'daily':
@@ -87,7 +84,8 @@ class Dateline(object):
         raise Exception("Period unknown: {}".format(period))
 
     def __repr__(self):
-        return "Dateline ({}, {}, {}, {})".format(self.date_monday, self.period, self.value, self.currency)
+        return "Dateline ({}, {}, {}, {})" \
+            .format(self.date_monday, self.period, self.value, self.currency)
 
 
 class AccountEntry(object):

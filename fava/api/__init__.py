@@ -25,7 +25,6 @@ import os
 
 from beancount import loader
 from beancount.core import compare, flags, getters, realization, inventory
-from beancount.core.amount import decimal
 from beancount.core.realization import RealAccount
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account import has_component
@@ -45,8 +44,7 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
                                     serialize_real_account)
 
-# from fava.api.budgets.budgets_metadata import Budgets, init_budgets_from_metadata
-from fava.api.budgets.budgets_custom_entries import Budgets, init_budgets_from_entries
+from fava.api.budgets.budgets_custom_entries import init_budgets_from_entries
 
 
 class FilterException(Exception):
@@ -163,7 +161,6 @@ class BeancountReportAPI(object):
 
         # self.budgets = init_budgets_from_metadata(self.all_root_account)
         self.budgets = init_budgets_from_entries(self.entries)
-
 
     def _apply_filters(self):
         self.entries = self.all_entries
@@ -314,12 +311,13 @@ class BeancountReportAPI(object):
                 account_name, self.entries,
                 interval_tuples[0][0] if accumulate else begin_date,
                 end_date, min_accounts=account_names), begin_date, end_date,
-                None if accumulate else self.budgets.budget))
+                None if accumulate else self.budgets.budget))  # noqa
             for begin_date, end_date in interval_tuples]
         return list(zip(*interval_balances)), interval_tuples
 
     def trial_balance(self):
-        return serialize_real_account(self.root_account, self.budgets.budget)['children']
+        return serialize_real_account(self.root_account,
+                                      self.budgets.budget)['children']
 
     def journal(self, account_name=None, with_change_and_balance=False,
                 with_journal_children=True):

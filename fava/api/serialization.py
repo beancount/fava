@@ -55,11 +55,13 @@ def serialize_entry(entry):
 
     return new_entry
 
+
 def _serialize_budget_entry(new_entry, entry):
     # TODO validate budget entry
     new_entry['account'] = entry.values[0].value
     new_entry['period_type'] = entry.values[1].value
     new_entry['value'] = entry.values[2].value
+
 
 def serialize_entry_with(entry, change, balance):
     new_entry = serialize_entry(entry)
@@ -98,10 +100,13 @@ def serialize_posting(posting):
     _add_metadata(new_posting, posting)
     return new_posting
 
+
 def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
 
     # for currency in currencies:
-    #     account['budgets'][currency] =  self._budget_for_account(account['account'], currency, begin_date, end_date)
+    #     account['budgets'][currency] =
+    #         self._budget_for_account(account['account'], currency,
+    #                                  begin_date, end_date)
 
     serialized_account = {
         'account': ra.account,
@@ -115,12 +120,15 @@ def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
             ra.txn_postings), Close),
         'has_transactions': any(isinstance(t, TxnPosting)
                                 for t in ra.txn_postings),
-        'children': [serialize_real_account(a, begin_date, end_date, budget_fn) for n, a in sorted(ra.items())],
+        'children': [serialize_real_account(a, begin_date, end_date, budget_fn)
+                     for n, a in sorted(ra.items())],
     }
 
     if budget_fn and begin_date and end_date:
-        serialized_account['budgets'] ={ p.units.currency: budget_fn(ra.account, p.units.currency, begin_date, end_date)
-                                        for p in ra.balance.cost() if p.units.number != ZERO }
+        serialized_account['budgets'] = \
+            {p.units.currency: budget_fn(ra.account, p.units.currency,
+                                         begin_date, end_date)
+             for p in ra.balance.cost() if p.units.number != ZERO}
 
     return serialized_account
 
