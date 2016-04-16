@@ -164,6 +164,7 @@ class BeancountReportAPI(object):
         for filter in self.filters.values():
             self.entries = filter.apply(self.entries, self.options)
 
+        self.closing_entries = summarize.cap_opt(self.entries, self.options)
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
 
@@ -287,10 +288,10 @@ class BeancountReportAPI(object):
                                           begin_date, end_date)
         return [serialize_real_account(real_account)]
 
-    def closing_balances(self, account_name):
-        closing_entries = summarize.cap_opt(self.entries, self.options)
-        return [serialize_real_account(self._real_account(account_name,
-                                                          closing_entries))]
+    def closing_balances(self, account_name, begin_date=None, end_date=None):
+        return [serialize_real_account(
+            self._real_account(account_name, self.closing_entries,
+                               begin_date=None, end_date=None))]
 
     def interval_balances(self, interval, account_name, accumulate=False):
         account_names = [account
