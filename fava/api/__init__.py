@@ -603,6 +603,8 @@ class BeancountReportAPI(object):
         return {}
 
     def sidebar_links(self):
-        # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"
-        return [(entry.values[0].value, entry.values[1].value) for entry in self.entries
-                    if isinstance(entry, Custom) and entry.type == 'fava-sidebar-link']
+        # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
+        return [(entry.values[0].value, entry.values[1].value)
+                for entry in self.entries
+                if isinstance(entry, Custom) and
+                entry.type == 'fava-sidebar-link']
