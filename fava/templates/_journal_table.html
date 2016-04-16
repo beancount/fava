@@ -146,7 +146,9 @@
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="position num">{{ posting.units or '' }}</span>
                 <span class="price num">{{ posting.price|format_amount }}</span>
-                <span class="cost num">{{ posting.cost or '' }}</span>
+                <span class="cost num">{{ posting.cost.number }} {{ posting.cost.currency }}
+                    {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
+                    {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>
                 {% if show_change_and_balance %}
                 <span class="change num"></span>
                 <span class="balance num"></span>
