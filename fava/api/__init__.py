@@ -39,12 +39,11 @@ from beancount.reports import context
 from beancount.utils import misc_utils
 
 from fava.util.date import parse_date, get_next_interval
+from fava.api.budgets import Budgets
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
                                     serialize_real_account)
-
-from fava.api.budgets.budgets_custom_entries import init_budgets_from_entries
 
 
 class FilterException(Exception):
@@ -160,7 +159,7 @@ class BeancountReportAPI(object):
         self._apply_filters()
 
         # self.budgets = init_budgets_from_metadata(self.all_root_account)
-        self.budgets = init_budgets_from_entries(self.entries)
+        self.budgets = Budgets(self.entries)
 
     def _apply_filters(self):
         self.entries = self.all_entries
