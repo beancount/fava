@@ -4,7 +4,7 @@ window.chartData.push({
     type:  "treemap",
     label: "{{ account_name if not label else label }}",
     modifier: {{ api.get_account_sign(account_name) }},
-    root: {{ api.closing_balances(account_name, begin_date, end_date)[0]|tojson|safe }}
+    root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
 });
 </script>
 {% endmacro %}
@@ -15,7 +15,7 @@ window.chartData.push({
     type:  "sunburst",
     label: "{{ account_name if not label else label }} (Sunburst)",
     diameter: {{ diameter }},
-    root: {{ api.closing_balances(account_name, begin_date, end_date)[0]|tojson|safe }}
+    root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
 });
 </script>
 {% endmacro %}
