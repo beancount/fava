@@ -3,26 +3,6 @@ import datetime
 import calendar
 
 
-def get_next_interval(date, interval):
-    if interval == 'year':
-        return datetime.date(date.year + 1, 1, 1)
-    elif interval == 'quarter':
-        quarter = (date.month - 1) // 3 + 1
-        month = quarter * 3 + 1
-        year = date.year + (month > 12)
-        return datetime.date(year, month % 12, 1)
-    elif interval == 'month':
-        month = (date.month % 12) + 1
-        year = date.year + (date.month + 1 > 12)
-        return datetime.date(year, month, 1)
-    elif interval == 'week':
-        return date + datetime.timedelta(7 - date.weekday())
-    elif interval == 'day':
-        return date + datetime.timedelta(1)
-    else:
-        raise NotImplementedError
-
-
 months = [m.lower() for m in calendar.month_name]
 months_abbr = [m.lower() for m in calendar.month_abbr]
 all_months = months[1:] + months_abbr[1:]
@@ -56,44 +36,55 @@ mod_date_re = re.compile('(?:({}) )?({}) ({})'.format(
     '|'.join(all_months + ['month', 'year'])))
 
 
-def daterange(year=None, month=None, day=None, timedelta=datetime.timedelta()):
+def get_next_interval(date, interval):
+    if interval == 'year':
+        return datetime.date(date.year + 1, 1, 1)
+    elif interval == 'quarter':
+        quarter = (date.month - 1) // 3 + 1
+        month = quarter * 3 + 1
+        year = date.year + (month > 12)
+        return datetime.date(year, month % 12, 1)
+    elif interval == 'month':
+        month = (date.month % 12) + 1
+        year = date.year + (date.month + 1 > 12)
+        return datetime.date(year, month, 1)
+    elif interval == 'week':
+        return date + datetime.timedelta(7 - date.weekday())
+    elif interval == 'day':
+        return date + datetime.timedelta(1)
+    else:
+        raise NotImplementedError
+
+
+def daterange(year=None, month=None, day=None):
     """A helper function that returns a tuple with the starting and end date for
-    the given range of dates. If called with empty arguments it will return
-    the current day as start and beginning. Otherwise day or month and day may
-    be omitted to get the whole month or whole year respectively. Timedelta is
-    only used if all other arguments are none and if it is set the dates that
-    will be returned are both 'today + timedelta'
-    """
+    the given range of dates. Day or month and day may be omitted to get the
+    whole month or whole year respectively."""
     year, month, day = map(lambda x: int(x) if x else None, (year, month, day))
-    if not (year or month or day):
-        start = datetime.date.today() + timedelta
-        end = start + datetime.timedelta(days=1)
-        return start, end
-    elif (not year) or (day and not month):
-        raise Exception
-    elif (not day) and (not month):
+    if (not day) and (not month):
         start = datetime.date(year, 1, 1)
-        end = datetime.date(year + 1, 1, 1)
-    elif (not day) and month:
+        return start, get_next_interval(start, 'year')
+    if (not day) and month:
         start = datetime.date(year, month, 1)
-        end = datetime.date(year + (month > 11), (month % 12) + 1, 1)
-    else:  # ~= if (year and month and day)
+        return start, get_next_interval(start, 'month')
+    if (year and month and day):
         start = datetime.date(year, month, day)
-        end = start + datetime.timedelta(days=1)
-    return start, end
+        return start, get_next_interval(start, 'day')
 
 
 def _parse_month(month):
     """Parse the given month name (either the full name or its abbreviation)
     to a number"""
-    month = months.index(month) if month in months[1:] else month
-    month = months_abbr.index(month) if month in months_abbr[1:] else month
-    return month
+    if month in months[1:]:
+        return months.index(month)
+    if month in months_abbr[1:]:
+        return months_abbr.index(month)
 
 
 def parse_date(string):
     """"Tries to parse the given string into two date objects marking the
-    beginning and the end of the given period.
+    beginning and the end of the given period, where the end day is exclusive,
+    i.e. one day after the end of the period.
 
     Example of supported formats:
      - today, tomorrow, yesterday
@@ -108,20 +99,23 @@ def parse_date(string):
      - start to end
     where start and end look like one of the above examples
     """
-    if string.strip().lower() in ['year to date', 'ytd']:
-        return parse_date(str(datetime.date.today().year) + ' - today')
+    string = string.strip().lower()
+    if string in ['year to date', 'ytd']:
+        today = datetime.date.today()
+        return datetime.date(today.year, 1, 1), get_next_interval(today, 'day')
 
     is_range = is_range_re.match(string)
     if is_range:
         return (parse_date(is_range.group(1))[0],
                 parse_date(is_range.group(2))[1])
-    string = string.strip().lower()
+
     if string == '':
         return None, None
 
     # check first if it is either yesterday, today or tomorrow
     if string in rel_dates:
-        return daterange(timedelta=datetime.timedelta(days=rel_dates[string]))
+        start = datetime.date.today() + datetime.timedelta(rel_dates[string])
+        return start, get_next_interval(start, 'day')
 
     # try to match
     year_first = year_first_re.match(string)
@@ -162,30 +156,3 @@ def parse_date(string):
             return daterange(m.year, m.month)
         else:
             return daterange(today.year + modifier, _parse_month(identifier))
-
-
-if __name__ == '__main__':
-    today = datetime.date.today()
-    tests = {
-        'today': daterange(),
-        'yesterday': daterange(timedelta=datetime.timedelta(days=-1)),
-        'october 2010': daterange(2010, 10),
-        '2000': daterange(2000),
-        '1st february 2008': daterange(2008, 2, 1),
-        '2010-10': daterange(2010, 10),
-        '2000-01-03': daterange(2000, 1, 3),
-        'this year': daterange(today.year),
-        'august next year': daterange(today.year + 1, 8),
-        'this month': daterange(today.year, today.month),
-        'this december': daterange(today.year, 12),
-        'this november': daterange(today.year, 11),
-        '2nd aug, 2010': daterange(2010, 8, 2),
-        'august 3rd, 2012': daterange(2012, 8, 3),
-        '2015-W01': (datetime.date(2015, 1, 5), datetime.date(2015, 1, 12)),
-        '2015-Q2': (datetime.date(2015, 4, 1), datetime.date(2015, 7, 1)),
-        '2014 to 2015': (daterange(2014)[0], daterange(2015)[1]),
-        '2011-10 - 2015': (daterange(2011, 10)[0], daterange(2015)[1]),
-    }
-    for test, result in tests.items():
-        assert parse_date(test) == result
-    print("passed all {} tests".format(len(tests)))
