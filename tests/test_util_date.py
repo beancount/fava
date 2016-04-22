@@ -37,9 +37,10 @@ def test_parse_date():
     today = date.today()
     tests = {
         'year to date': (date(today.year, 1, 1), today + timedelta(1)),
+        '    ': (None, None),
         'today': (today, today + timedelta(1)),
         'YESTERDAY': (today - timedelta(1), today),
-        'october 2010': daterange(2010, 10),
+        'october 2010       ': daterange(2010, 10),
         '2000': daterange(2000),
         '1st february 2008': daterange(2008, 2, 1),
         '2010-10': daterange(2010, 10),

@@ -12,6 +12,7 @@ from werkzeug import secure_filename
 from fava import config
 from fava.api import BeancountReportAPI, FilterException
 from fava.api.serialization import BeanJSONEncoder
+from fava.util import uniquify
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 
@@ -351,14 +352,6 @@ def template_context():
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',
                                           app.config['default-interval']))
-
-
-def uniquify(seq):
-    """Removes duplicate items from a list whilst preserving order. """
-    seen = set()
-    if not seq:
-        return []
-    return [x for x in seq if x not in seen and not seen.add(x)]
 
 
 @app.url_defaults
