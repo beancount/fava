@@ -56,6 +56,19 @@ def get_next_interval(date, interval):
         raise NotImplementedError
 
 
+def interval_tuples(first, last, interval):
+    if not first:
+        return []
+
+    interval_tuples = []
+    while first <= last:
+        next_date = get_next_interval(first, interval)
+        interval_tuples.append((first, next_date))
+        first = next_date
+
+    return interval_tuples
+
+
 def daterange(year=None, month=None, day=None):
     """A helper function that returns a tuple with the starting and end date for
     the given range of dates. Day or month and day may be omitted to get the

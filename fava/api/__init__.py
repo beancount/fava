@@ -38,7 +38,7 @@ from beancount.query import query
 from beancount.reports import context
 from beancount.utils import misc_utils
 
-from fava.util.date import parse_date, get_next_interval
+from fava.util.date import parse_date, interval_tuples
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
@@ -166,6 +166,8 @@ class BeancountReportAPI(object):
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
+        self.date_first, self.date_last = \
+            getters.get_min_max_dates(self.entries, (Transaction))
 
     def filter(self, **kwargs):
         changed = False
@@ -208,33 +210,10 @@ class BeancountReportAPI(object):
                     for entry, _, change, balance in
                     realization.iterate_with_balance(entries)]
 
-    def _interval_tuples(self, interval, entries):
-        """
-        Calculates tuples of (begin_date, end_date) of length interval for the
-        period in which entries contains Transactions.
-
-        Args:
-            interval: Either 'month' or 'year'
-
-        Returns:
-            [
-                (begin_date, end_date),
-                ...
-            ]
-        """
-        date_first, date_last = getters.get_min_max_dates(entries,
-                                                          (Transaction))
-
-        if not date_first:
-            return []
-
-        interval_tuples = []
-        while date_first <= date_last:
-            next_date = get_next_interval(date_first, interval)
-            interval_tuples.append((date_first, next_date))
-            date_first = next_date
-
-        return interval_tuples
+    def _interval_tuples(self, interval):
+        """Calculates tuples of (begin_date, end_date) of length interval for the
+        period in which entries contains transactions.  """
+        return interval_tuples(self.date_first, self.date_last, interval)
 
     def _total_balance(self, names, begin_date, end_date):
         totals = [realization.compute_balance(
@@ -251,7 +230,7 @@ class BeancountReportAPI(object):
         else:
             names = account_name
 
-        interval_tuples = self._interval_tuples(interval, self.entries)
+        interval_tuples = self._interval_tuples(interval)
         date_first, _ = getters.get_min_max_dates(self.entries, (Transaction))
         return [{
             'begin_date': begin_date,
@@ -297,7 +276,7 @@ class BeancountReportAPI(object):
                          for account in self.all_accounts
                          if account.startswith(account_name)]
 
-        interval_tuples = self._interval_tuples(interval, self.entries)
+        interval_tuples = self._interval_tuples(interval)
         interval_balances = [
             self._real_account(
                 account_name, self.entries,
@@ -369,7 +348,7 @@ class BeancountReportAPI(object):
         return holdings_list
 
     def _net_worth_in_intervals(self, interval):
-        interval_tuples = self._interval_tuples(interval, self.entries)
+        interval_tuples = self._interval_tuples(interval)
         interval_totals = []
         end_dates = [p[1] for p in interval_tuples]
 

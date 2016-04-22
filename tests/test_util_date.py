@@ -3,7 +3,7 @@ from datetime import date, timedelta
 import pytest
 
 from fava.util.date import (_parse_month, parse_date, daterange,
-                            get_next_interval)
+                            get_next_interval, interval_tuples)
 
 
 def test_get_next_interval():
@@ -15,6 +15,18 @@ def test_get_next_interval():
     assert get_next_interval(date(2016, 4, 17), 'day') == date(2016, 4, 18)
     with pytest.raises(NotImplementedError):
         get_next_interval(date(2016, 4, 18), 'decade')
+
+
+def test_interval_tuples():
+    assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'month') == [
+        (date(2014, 3, 5), date(2014, 4, 1)),
+        (date(2014, 4, 1), date(2014, 5, 1)),
+        (date(2014, 5, 1), date(2014, 6, 1)),
+    ]
+    assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'year') == [
+        (date(2014, 3, 5), date(2015, 1, 1)),
+    ]
+    assert interval_tuples(None, None, None) == []
 
 
 def test_daterange():
