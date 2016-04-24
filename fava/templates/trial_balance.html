@@ -5,9 +5,7 @@
 
 {% block content %}
 
-    {% with hide_interval_filter=True  %}
-        {% include "charts/_chart_skeleton.html" %}
-    {% endwith %}
+    {{ charts.skeleton(hide_interval_filter=True) }}
 
     {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
         {{ charts.treemap(api.options['name_{}'.format(base_account)]) }}

@@ -1,10 +1,12 @@
 {% extends "_layout.html" %}
 {% set active_page = 'net_worth' %}
 
+{% import "charts/_charts.html" as charts with context %}
+
 {% block content %}
     {% set net_worth = api.net_worth(interval=interval) %}
 
-    {% include "charts/_chart_skeleton.html" %}
+    {{ charts.skeleton(hide_interval_filter=True) }}
     {% include "charts/_chart_interval_net_worth.html" %}
 
     <table class="net_worth sortable">

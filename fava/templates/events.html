@@ -1,12 +1,12 @@
 {% extends "_layout.html" %}
 {% set active_page = 'events' %}
 
+{% import "charts/_charts.html" as charts with context %}
+
 {% block content %}
     {% set events = api.events(only_include_newest=True) %}
     {% if events %}
-        {% with hide_interval_filter=True  %}
-            {% include "charts/_chart_skeleton.html" %}
-        {% endwith %}
+        {{ charts.skeleton(hide_interval_filter=True) }}
         <script>
                 window.chartData.push({
                     label: "Events",

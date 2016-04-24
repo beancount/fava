@@ -10,7 +10,7 @@
 
 {% block content %}
 <div class="droptarget">
-    {% include "charts/_chart_skeleton.html" %}
+    {{ charts.skeleton() }}
 
     {% with linechart_data=api.linechart_data(account_name) %}
         {% include "charts/_chart_account_balance.html" %}

@@ -2,12 +2,14 @@
 {% set active_page = 'events' %}
 {% set page_title = 'Event - ' +  event_type %}
 
+{% import "charts/_charts.html" as charts with context %}
+
 {% block content %}
 
     {% set events = api.events(event_type=event_type) %}
 
     {% if events %}
-        {% include "charts/_chart_skeleton.html" %}
+        {{ charts.skeleton() }}
         <script>
             window.chartData.push({
                 label: "Event: {{ event_type }}",

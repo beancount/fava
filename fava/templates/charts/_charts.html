@@ -32,3 +32,30 @@ window.chartData.push({
 });
 </script>
 {% endmacro %}
+
+{% macro skeleton(hide_interval_filter=False) %}
+{% set show_charts = config['charts-show'] %}
+<form class="wide-form chart-filter">
+    {% if not hide_interval_filter %}
+        <select name="chart-interval" id="chart-interval">
+            <option value="day"{% if interval_macros.interval == 'day' %} selected="selected"{% endif %}>Daily</option>
+            <option value="week"{% if interval_macros.interval == 'week' %} selected="selected"{% endif %}>Weekly</option>
+            <option value="month"{% if interval_macros.interval == 'month' %} selected="selected"{% endif %}>Monthly</option>
+            <option value="quarter"{% if interval_macros.interval == 'quarter' %} selected="selected"{% endif %}>Quarterly</option>
+            <option value="year"{% if interval_macros.interval == 'year' %} selected="selected"{% endif %}>Yearly</option>
+        </select>
+    {% endif %}
+    <input type="submit" id="toggle-chart" value="{% if show_charts %}Hide{% else %}Show{% endif %} charts">
+</form>
+<div class="charts">
+    <div id="chart-container" class="chart-container{% if not show_charts %} hidden{% endif %}">
+        <div class="loading">Loading charts&hellip;</div>
+    </div>
+    <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
+</div>
+<script>
+    window.interval = "{{ interval_macros.interval }}";
+    window.operating_currencies = {{ operating_currencies|tojson|safe }};
+    window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";
+</script>
+{% endmacro %}

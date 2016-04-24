@@ -4,7 +4,7 @@
 {% import "charts/_charts.html" as charts with context %}
 
 {% block content %}
-    {% include "charts/_chart_skeleton.html" %}
+    {{ charts.skeleton() }}
 
     {{ charts.interval_totals(interval, [options['name_income'], options['name_expenses']], label='Net Profit') }}
     {{ charts.interval_totals(interval, options['name_income'], label='Income') }}

@@ -1,13 +1,13 @@
 {% extends "_layout.html" %}
 {% set active_page = 'commodities' %}
 
+{% import "charts/_charts.html" as charts with context %}
+
 {% block content %}
 
     {% set commodity_pairs = api.commodity_pairs() %}
 
-    {% with hide_interval_filter=True  %}
-        {% include "charts/_chart_skeleton.html" %}
-    {% endwith %}
+    {{ charts.skeleton(hide_interval_filter=True) }}
 
     <script>
     {% for commodity in commodity_pairs %}
