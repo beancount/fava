@@ -61,7 +61,7 @@ def interval_tuples(first, last, interval):
         return []
 
     interval_tuples = []
-    while first <= last:
+    while first < last:
         next_date = get_next_interval(first, interval)
         interval_tuples.append((first, next_date))
         first = next_date

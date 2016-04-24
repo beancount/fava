@@ -26,6 +26,9 @@ def test_interval_tuples():
     assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'year') == [
         (date(2014, 3, 5), date(2015, 1, 1)),
     ]
+    assert interval_tuples(date(2014, 1, 1), date(2015, 1, 1), 'year') == [
+        (date(2014, 1, 1), date(2015, 1, 1)),
+    ]
     assert interval_tuples(None, None, None) == []
 
 

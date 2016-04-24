@@ -72,6 +72,9 @@ class EntryFilter(object):
         else:
             return entries
 
+    def __bool__(self):
+        return bool(self.value)
+
 
 class DateFilter(EntryFilter):
     def set(self, value):
@@ -166,8 +169,13 @@ class BeancountReportAPI(object):
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
+
         self.date_first, self.date_last = \
             getters.get_min_max_dates(self.entries, (Transaction))
+
+        if self.filters['time']:
+            self.date_first = self.filters['time'].begin_date
+            self.date_last = self.filters['time'].end_date
 
     def filter(self, **kwargs):
         changed = False
