@@ -10,31 +10,7 @@
 
     {% if events %}
         {{ charts.skeleton() }}
-        <script>
-            window.chartData.push({
-                label: "Event: {{ event_type }}",
-                type: "line",
-                options: {
-                    showLine: false,
-                    high: 2,
-                    low: 0
-                },
-                data: {
-                    series: [{
-                        name: '{{ event_type }}',
-                        data: [
-                            {% for event in events %}
-                                {
-                                    x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}),
-                                    y: 1,
-                                    meta: "{{ event.description }}<br><em>{{ event.date }}</em>"
-                                },
-                            {% endfor %}
-                        ]
-                    }]
-                }
-            });
-        </script>
+        {{ charts.events(event_type, label="Event: " + event_type) }}
 
         <h3>Entries</h3>
         <table class="events sortable">

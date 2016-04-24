@@ -31,6 +31,7 @@ var container;
 const treemapColorScale = d3.scale.category20c();
 const sunburstColorScale = d3.scale.category20c();
 const currencyColorScale = d3.scale.category10();
+const scatterColorScale = d3.scale.category10();
 const timeFilterFormatStrings = {
       'year':    'YYYY',
       'quarter': 'YYYY-Qq',
@@ -73,6 +74,28 @@ function timeFilter(date) {
     $("#filter-time input[type=search]")
         .val(date.formatWithString(timeFilterFormatStrings[window.interval]))
         .trigger(e);
+}
+
+function addLegend(svg, domain, colorScale) {
+    var legend = svg.selectAll('.legend')
+        .data(domain)
+      .enter().append('g')
+        .attr('class', 'legend')
+
+    legend.append('rect')
+        .attr('x', -18)
+        .attr('width', 18)
+        .attr('height', 18)
+        .style('fill', function(d) { return colorScale(d); });
+
+    legend.append('text')
+        .attr('x', -24)
+        .attr('y', 9)
+        .attr('dy', '.35em')
+        .style('text-anchor', 'end')
+        .text(function(d) { return d; });
+
+    return legend
 }
 
 function treeMapChart() {
@@ -480,23 +503,88 @@ function barChart() {
             .attr('class', 'bar')
             .style('fill', function(d) { return currencyColorScale(d.name); })
 
-        selections.legend = svg.selectAll('.legend')
-            .data(x1.domain())
-          .enter().append('g')
-            .attr('class', 'legend')
+        selections.legend = addLegend(svg, x1.domain(), currencyColorScale)
 
-        selections.legend.append('rect')
-            .attr('x', -18)
-            .attr('width', 18)
-            .attr('height', 18)
-            .style('fill', function(d) { return currencyColorScale(d); });
+        resize();
+    }
 
-        selections.legend.append('text')
-            .attr('x', -24)
-            .attr('y', 9)
-            .attr('dy', '.35em')
-            .style('text-anchor', 'end')
-            .text(function(d) { return d; });
+    chart.tooltipText = function(f) {
+        tooltipText = f;
+        return chart;
+    }
+
+    chart.update = function() {
+        setSize();
+        resize();
+    }
+
+    return chart;
+}
+
+function scatterPlot() {
+    var margin = {top: 10, right: 10, bottom: 20, left: 50};
+    var width, height;
+    var x = d3.time.scale();
+    var y = d3.scale.ordinal();
+    var div, svg, tooltipText;
+    var selections = {};
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .outerTickSize(0)
+        .orient('bottom');
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .tickPadding(6)
+        .orient('left')
+        .tickFormat(function(d) { return d; });
+
+    function setSize() {
+        width = parseInt(container.style('width'), 10) - margin.left - margin.right,
+        height = 250 - margin.top - margin.bottom;
+
+        y.rangePoints([height, 0], 1);
+        x.range([0, width]);
+
+        div.select('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom);
+        svg.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        yAxis.tickSize(-width, 0);
+        selections.xAxis.attr('transform', 'translate(0,' + height + ')')
+    }
+
+    function setData(data) {
+        x.domain(d3.extent(data, function(d) { return new Date(d.date); }));
+        y.domain(data.map(function(d) { return d.type; }));
+    }
+
+    function resize() {
+        selections.xAxis.call(xAxis);
+        selections.yAxis.call(yAxis);
+        selections.dots
+            .attr("cx", function(d) { return x(new Date(d.date)); })
+            .attr("cy", function(d) { return y(d.type); })
+    }
+
+    function chart(div_) {
+        div = div_;
+        svg = div.append('svg').attr('class', 'scatterplot').append('g')
+        selections.xAxis = svg.append('g').attr('class', 'x axis')
+        selections.yAxis = svg.append('g').attr('class', 'y axis')
+
+        setSize();
+        setData(div.datum());
+
+        selections.dots = svg.selectAll(".dot")
+            .data(div.datum())
+          .enter().append("circle")
+            .attr("class", "dot")
+            .attr("r", 5)
+            .style("fill", function(d) { return scatterColorScale(d.type);})
+            .call(addTooltip, tooltipText)
 
         resize();
     }
@@ -568,6 +656,19 @@ module.exports.initCharts = function() {
                     .call(barchart)
 
                 window.charts[chart.id] = barchart;
+                break;
+            case 'scatterplot':
+                chart.id = 'scatterplot-' + index;
+
+                var div = chartContainer(chart.id, chart.label);
+                var scatterplot = scatterPlot()
+                    .tooltipText(function(d) { return d.description + '<em>' + d.date + '</em>'; })
+
+                div
+                    .datum(chart.events)
+                    .call(scatterplot)
+
+                window.charts[chart.id] = scatterplot;
                 break;
             case 'treemap': {
                 addInternalNodesAsLeaves(chart.root);

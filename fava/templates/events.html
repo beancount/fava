@@ -7,38 +7,7 @@
     {% set events = api.events(only_include_newest=True) %}
     {% if events %}
         {{ charts.skeleton(hide_interval_filter=True) }}
-        <script>
-                window.chartData.push({
-                    label: "Events",
-                    type: "line",
-                    options: {
-                        showLine: false,
-                        high: {{ events|length + 1 }},
-                        low: 0
-                    },
-                    data: {
-                        series: [
-                            {% for event in events %}
-                                {% set outer_loop = loop %}
-                                {% set events_chart = api.events(event_type=event.type, only_include_newest=False) %}
-                                {
-                                    name: '{{ event.type }}',
-                                    data: [
-                                        {% for event in events_chart %}
-                                            {
-                                                x: new Date({{ event.date.year }}, {{ event.date.month-1 }}, {{ event.date.day }}),
-                                                y: {{ outer_loop.index }},
-                                                meta: "{{ event.description }}<br><em>{{ event.date }} - {{ event.type }}</em>"
-                                            },
-                                        {% endfor %}
-                                    ]
-                                },
-                        {% endfor %}
-                        ]
-                    }
-                });
-
-        </script>
+        {{ charts.events() }}
 
         <h3>Entries</h3>
         <table class="events sortable">

@@ -33,6 +33,16 @@ window.chartData.push({
 </script>
 {% endmacro %}
 
+{% macro events(event_type=None, label=None) %}
+<script>
+window.chartData.push({
+    type:  "scatterplot",
+    label: "{{ "Events" if not label else label }}",
+    events: {{ api.events(event_type)|tojson|safe }},
+});
+</script>
+{% endmacro %}
+
 {% macro skeleton(hide_interval_filter=False) %}
 {% set show_charts = config['charts-show'] %}
 <form class="wide-form chart-filter">
