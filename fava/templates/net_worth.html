@@ -6,7 +6,7 @@
 {% block content %}
     {% set net_worth = api.net_worth(interval=interval) %}
 
-    {{ charts.skeleton(hide_interval_filter=True) }}
+    {{ charts.skeleton() }}
     {% include "charts/_chart_interval_net_worth.html" %}
 
     <table class="net_worth sortable">

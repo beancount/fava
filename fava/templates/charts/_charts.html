@@ -1,46 +1,42 @@
 {% import 'macros/_interval_macros.html' as interval_macros with context %}
 
+{% macro add_chart(data) %}
+<script>window.chartData.push({{ data|tojson|safe }})</script>
+{% endmacro %}
+
 {% macro treemap(account_name, begin_date=None, end_date=None, label=None) %}
-<script>
-window.chartData.push({
-    type:  "treemap",
-    label: "{{ account_name if not label else label }}",
-    modifier: {{ api.get_account_sign(account_name) }},
-    root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
-});
-</script>
+{{ add_chart({
+    'type':  'treemap',
+    'label': account_name if not label else label,
+    'modifier': api.get_account_sign(account_name),
+    'root': api.balances(account_name, begin_date, end_date)[0],
+}) }}
 {% endmacro %}
 
 {% macro sunburst(account_name, diameter=500, begin_date=None, end_date=None, label=None) %}
-<script>
-window.chartData.push({
-    type:  "sunburst",
-    label: "{{ account_name if not label else label }} (Sunburst)",
-    diameter: {{ diameter }},
-    root: {{ api.balances(account_name, begin_date, end_date)[0]|tojson|safe }}
-});
-</script>
+{{ add_chart({
+    'type':  'sunburst',
+    'label': '{} (Sunburst)'.format(account_name if not label else label),
+    'diameter': diameter,
+    'root': api.balances(account_name, begin_date, end_date)[0],
+}) }}
 {% endmacro %}
 
 {% macro interval_totals(interval, account_name, label=None) %}
-<script>
-window.chartData.push({
-    type:  "bar",
-    label: "{{ interval_macros.interval_label }} {{ account_name if not label else label }}",
-    interval_totals: {{ api.interval_totals(interval, account_name)|tojson|safe }},
-    date_format: "{{ interval_macros.interval_format_str }}"
-});
-</script>
+{{ add_chart({
+    'type':  'bar',
+    'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
+    'interval_totals': api.interval_totals(interval, account_name),
+    'date_format': interval_macros.interval_format_str,
+}) }}
 {% endmacro %}
 
 {% macro events(event_type=None, label=None) %}
-<script>
-window.chartData.push({
-    type:  "scatterplot",
-    label: "{{ "Events" if not label else label }}",
-    events: {{ api.events(event_type)|tojson|safe }},
-});
-</script>
+{{ add_chart({
+    'type':  'scatterplot',
+    'label': 'Events' if not label else label,
+    'events': api.events(event_type),
+}) }}
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}

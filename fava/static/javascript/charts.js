@@ -446,7 +446,7 @@ function barChart() {
     }
 
     function filterTicks(domain) {
-        var labelsCount = width / 60;
+        var labelsCount = width / 70;
         if (domain.length <= labelsCount) {
             return domain;
         }
