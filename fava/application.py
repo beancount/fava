@@ -366,7 +366,6 @@ def template_context():
     return dict(url_for_current=url_for_current,
                 url_for_source=url_for_source,
                 api=g.api,
-                options=g.api.options,
                 operating_currencies=g.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',

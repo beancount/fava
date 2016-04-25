@@ -1,14 +1,14 @@
 {% extends "_layout.html" %}
 {% set active_page = 'income_statement' %}
 
-{% import "charts/_charts.html" as charts with context %}
+{% import "_charts.html" as charts with context %}
 
 {% block content %}
     {{ charts.skeleton() }}
 
-    {{ charts.interval_totals(interval, [options['name_income'], options['name_expenses']], label='Net Profit') }}
-    {{ charts.interval_totals(interval, options['name_income'], label='Income') }}
-    {{ charts.interval_totals(interval, options['name_expenses'], label='Expenses') }}
+    {{ charts.interval_totals(interval, [api.options['name_income'], api.options['name_expenses']], label='Net Profit') }}
+    {{ charts.interval_totals(interval, api.options['name_income'], label='Income') }}
+    {{ charts.interval_totals(interval, api.options['name_expenses'], label='Expenses') }}
 
     {{ charts.treemap(api.options['name_income']) }}
     {{ charts.treemap(api.options['name_expenses']) }}
@@ -17,12 +17,12 @@
     {{ charts.sunburst(api.options['name_income']) }}
 
     <div class="halfleft">
-        {% with table_title="Income", real_accounts=api.balances(options['name_income']), totals=True %}
+        {% with table_title="Income", real_accounts=api.balances(api.options['name_income']), totals=True %}
             {% include "_tree_table.html" %}
         {% endwith %}
     </div>
     <div class="halfright">
-        {% with table_title="Expenses", real_accounts=api.balances(options['name_expenses']), totals=True %}
+        {% with table_title="Expenses", real_accounts=api.balances(api.options['name_expenses']), totals=True %}
             {% include "_tree_table.html" %}
         {% endwith %}
     </div>

@@ -354,52 +354,42 @@ class BeancountReportAPI(object):
                 holdings_list, operator.attrgetter(aggregation_key))
         return holdings_list
 
-    def _net_worth_in_intervals(self, interval):
+    def _holdings_to_net_worth(self, holdings_list):
+        totals = {}
+        for currency in self.options['operating_currency']:
+            currency_holdings_list = \
+                holdings.convert_to_currency(self.price_map, currency,
+                                             holdings_list)
+            if not currency_holdings_list:
+                continue
+
+            holdings_ = holdings.aggregate_holdings_by(
+                currency_holdings_list,
+                operator.attrgetter('cost_currency'))
+
+            holdings_ = [holding
+                         for holding in holdings_
+                         if holding.currency and holding.cost_currency]
+
+            # If after conversion there are no valid holdings, skip the
+            # currency altogether.
+            if holdings_:
+                totals[currency] = holdings_[0].market_value
+        return totals
+
+    def net_worth_at_intervals(self, interval):
         interval_tuples = self._interval_tuples(interval)
-        interval_totals = []
-        end_dates = [p[1] for p in interval_tuples]
+        dates = [p[1] for p in interval_tuples]
 
-        for (begin_date, end_date), holdings_list in \
-                zip(interval_tuples,
-                    holdings_at_dates(self.entries, end_dates,
-                                      self.price_map, self.options)):
-            totals = {}
-            for currency in self.options['operating_currency']:
-                currency_holdings_list = \
-                    holdings.convert_to_currency(self.price_map, currency,
-                                                 holdings_list)
-                if not currency_holdings_list:
-                    continue
-
-                holdings_ = holdings.aggregate_holdings_by(
-                    currency_holdings_list,
-                    operator.attrgetter('cost_currency'))
-
-                holdings_ = [holding
-                             for holding in holdings_
-                             if holding.currency and holding.cost_currency]
-
-                # If after conversion there are no valid holdings, skip the
-                # currency altogether.
-                if holdings_:
-                    totals[currency] = holdings_[0].market_value
-
-            interval_totals.append({
-                'date': end_date - datetime.timedelta(1),
-                'totals': totals
-            })
-        return interval_totals
+        return [{
+            'date': date,
+            'balance': self._holdings_to_net_worth(holdings_list),
+        } for date, holdings_list in
+            zip(dates, holdings_at_dates(self.entries, dates,
+                                         self.price_map, self.options))]
 
     def net_worth(self, interval='month'):
-        interval_totals = self._net_worth_in_intervals(interval)
-        if interval_totals:
-            current = interval_totals[-1]['totals']
-        else:
-            current = {}
-        return {
-            'net_worth': current,
-            'interval_totals': interval_totals
-        }
+        return self._holdings_to_net_worth(self.holdings())
 
     def context(self, ehash):
         matching_entries = [entry for entry in self.all_entries
@@ -427,7 +417,6 @@ class BeancountReportAPI(object):
         return [{
             'date': journal_entry['date'],
             'balance': journal_entry['balance'],
-            'change': journal_entry['change'],
         } for journal_entry in journal if 'balance' in journal_entry.keys()]
 
     def source_files(self):

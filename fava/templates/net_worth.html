@@ -1,13 +1,11 @@
 {% extends "_layout.html" %}
 {% set active_page = 'net_worth' %}
 
-{% import "charts/_charts.html" as charts with context %}
+{% import "_charts.html" as charts with context %}
 
 {% block content %}
-    {% set net_worth = api.net_worth(interval=interval) %}
-
     {{ charts.skeleton() }}
-    {% include "charts/_chart_interval_net_worth.html" %}
+    {{ charts.net_worth(interval) }}
 
     <table class="net_worth sortable">
         <thead>
@@ -17,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for currency, number in net_worth.net_worth.items() %}
+            {% for currency, number in api.net_worth().items() %}
             <tr>
                <td>{{ currency }}</td>
                <td class="num" data-sort-value="{{ number }}">{{ number|format_currency(currency) }}</td>

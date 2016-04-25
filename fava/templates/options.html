@@ -44,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for key, value in options.items() | sort %}
+            {% for key, value in api.options.items() | sort %}
             <tr>
                <td class="num">{{ key }}</td>
                <td class="num"><pre>{{ value }}</pre></td>

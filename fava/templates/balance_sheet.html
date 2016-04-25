@@ -1,18 +1,14 @@
 {% extends "_layout.html" %}
 {% set active_page = 'balance_sheet' %}
 
-{% import "charts/_charts.html" as charts with context %}
+{% import "_charts.html" as charts with context %}
 
 {% block content %}
-    {% set net_worth = api.net_worth(interval=interval) %}
-
     {{ charts.skeleton() }}
-    {% include "charts/_chart_interval_net_worth.html" %}
-
+    {{ charts.net_worth(interval) }}
     {{ charts.treemap(api.options['name_assets']) }}
     {{ charts.treemap(api.options['name_liabilities']) }}
     {{ charts.treemap(api.options['name_equity']) }}
-
     {{ charts.sunburst(api.options['name_assets']) }}
     {{ charts.sunburst(api.options['name_liabilities']) }}
     {{ charts.sunburst(api.options['name_equity']) }}

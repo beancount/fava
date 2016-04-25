@@ -20,9 +20,6 @@
   },
   "dependencies": {
     "ace-builds": "^1.2.2",
-    "chartist": "^0.9.5",
-    "chartist-plugin-legend": "^0.2.1",
-    "chartist-plugin-tooltip": "github:globegitter/chartist-plugin-tooltip",
     "clipboard": "^1.5.8",
     "compass-mixins": "^0.12.7",
     "d3": "^3.5.16",

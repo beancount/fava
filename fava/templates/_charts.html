@@ -6,7 +6,7 @@
 
 {% macro treemap(account_name, begin_date=None, end_date=None, label=None) %}
 {{ add_chart({
-    'type':  'treemap',
+    'type': 'treemap',
     'label': account_name if not label else label,
     'modifier': api.get_account_sign(account_name),
     'root': api.balances(account_name, begin_date, end_date)[0],
@@ -15,7 +15,7 @@
 
 {% macro sunburst(account_name, diameter=500, begin_date=None, end_date=None, label=None) %}
 {{ add_chart({
-    'type':  'sunburst',
+    'type': 'sunburst',
     'label': '{} (Sunburst)'.format(account_name if not label else label),
     'diameter': diameter,
     'root': api.balances(account_name, begin_date, end_date)[0],
@@ -24,7 +24,7 @@
 
 {% macro interval_totals(interval, account_name, label=None) %}
 {{ add_chart({
-    'type':  'bar',
+    'type': 'bar',
     'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
     'interval_totals': api.interval_totals(interval, account_name),
     'date_format': interval_macros.interval_format_str,
@@ -33,10 +33,38 @@
 
 {% macro events(event_type=None, label=None) %}
 {{ add_chart({
-    'type':  'scatterplot',
+    'type': 'scatterplot',
     'label': 'Events' if not label else label,
     'events': api.events(event_type),
 }) }}
+{% endmacro %}
+
+{% macro net_worth(interval) %}
+{{ add_chart({
+    'type': 'balances',
+    'label': 'Net Worth ({})'.format(interval_macros.interval_label|lower),
+    'data': api.net_worth_at_intervals(interval),
+}) }}
+{% endmacro %}
+
+{% macro account_balance(account_name) %}
+{{ add_chart({
+    'type': 'balances',
+    'label': 'Account Balance',
+    'data': api.linechart_data(account_name),
+}) }}
+{% endmacro %}
+
+{% macro commodities() %}
+{% for pair in api.commodity_pairs() %}
+{{ add_chart({
+    'type': 'commodities',
+    'label': '{0[0]} / {0[1]}'.format(pair),
+    'prices': api.prices(pair[0], pair[1]),
+    'base': pair[0],
+    'quote': pair[1],
+}) }}
+{% endfor %}
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}
@@ -62,6 +90,7 @@
 <script>
     window.interval = "{{ interval_macros.interval }}";
     window.operating_currencies = {{ operating_currencies|tojson|safe }};
+    window.commodities = {{ api.options['commodities']|tojson|safe }};
     window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";
 </script>
 {% endmacro %}

@@ -3,7 +3,7 @@
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% import 'macros/_interval_macros.html' as interval_macros with context %}
-{% import "charts/_charts.html" as charts with context %}
+{% import "_charts.html" as charts with context %}
 
 {% set page_title = account_macros.account_name_header(account_name) %}
 {% set short_title = account_name %}
@@ -11,10 +11,7 @@
 {% block content %}
 <div class="droptarget">
     {{ charts.skeleton() }}
-
-    {% with linechart_data=api.linechart_data(account_name) %}
-        {% include "charts/_chart_account_balance.html" %}
-    {% endwith %}
+    {{ charts.account_balance(account_name) }}
     {{ charts.interval_totals(interval, account_name, label='Changes') }}
 
     {% if not journal %}

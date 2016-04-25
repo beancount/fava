@@ -3,7 +3,7 @@
     <h3>{{ table_title }}</h3>
 {% endif %}
 
-{% set show_other_column = (operating_currencies|sort != options['commodities']|list|sort) %}
+{% set show_other_column = (operating_currencies|sort != api.options['commodities']|list|sort) %}
 
 <ol class="tree-table">
     <li class="head">
@@ -34,7 +34,7 @@
     {% endfor %}
     {% if show_other_column %}
         <span class="num other{{ ' has-balance' if account.balance else '' }}">
-        {% for currency in options['commodities'] if currency not in operating_currencies %}
+        {% for currency in api.options['commodities'] if currency not in operating_currencies %}
             {% if currency in account.balance %}
                 <span class="balance">
                     {{- account.balance[currency]|format_currency(currency) }} {{ currency -}}
@@ -64,7 +64,7 @@
         {% endfor %}
         {% if show_other_column %}
             <span class="num other">
-                {% for currency in options['commodities'] %}
+                {% for currency in api.options['commodities'] %}
                     {% if currency not in  operating_currencies and real_accounts[0].balance_children[currency] %}
                         {{ real_accounts[0].balance_children[currency]|format_currency(currency) }} {{ currency }}<br>
                     {% endif %}

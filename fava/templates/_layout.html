@@ -97,7 +97,7 @@
             {% endfor %}
         }, 'keyup');
 
-        window.documentsFolders = {{ options['documents']|tojson|safe }};
+        window.documentsFolders = {{ api.options['documents']|tojson|safe }};
         window.documentsUploadUrl = "{{ url_for('add_document') }}";
     </script>
     {% block javascript %}{% endblock %}

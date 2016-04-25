@@ -7,7 +7,7 @@
             <input type="text" name="document-name" id="document-name">
             <label for="documents-upload-folder" id="label-documents-upload-folder">Document upload base folder:</label>
             <select name="document-upload-folder" id="document-upload-folder">
-                {% for document in options['documents'] %}
+                {% for document in api.options['documents'] %}
                     <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ document }}</option>
                 {% endfor %}
             </select>

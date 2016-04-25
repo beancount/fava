@@ -1,43 +1,15 @@
 {% extends "_layout.html" %}
 {% set active_page = 'commodities' %}
 
-{% import "charts/_charts.html" as charts with context %}
+{% import "_charts.html" as charts with context %}
 
 {% block content %}
 
-    {% set commodity_pairs = api.commodity_pairs() %}
-
     {{ charts.skeleton(hide_interval_filter=True) }}
-
-    <script>
-    {% for commodity in commodity_pairs %}
-        window.chartData.push({
-            label: "{{ commodity.0 }} / {{ commodity.1 }}",
-            type: "line",
-            options: {
-                dateFormat: "MMM YYYY"
-            },
-            data: {
-                series: [{
-                    name: '{{ commodity.0 }} /  {{ commodity.1 }}',
-                    data: [
-                        {% set prices = api.prices(commodity.0, commodity.1) %}
-                        {% for price in prices %}
-                            {
-                                x: new Date({{ price.0.year }}, {{ price.0.month-1 }}, {{ price.0.day }}),
-                                y: {{ price.1 }},
-                                meta: "1 {{ commodity.0 }} = {{ price.1 }} {{ commodity.1 }}<br><em>{{ price.0 }}</em>"
-                            },
-                        {% endfor %}
-                    ]
-                }]
-            }
-        });
-    {% endfor %}
-    </script>
+    {{ charts.commodities() }}
 
     <div class="commodities">
-        {% for commodity in commodity_pairs %}
+        {% for commodity in api.commodity_pairs() %}
             <div class="commodity-container commodity-{{ commodity.0 }}-{{ commodity.1 }}" style="float: left; margin-right: 20px; ">
                 <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
                 <table class="commodity sortable">

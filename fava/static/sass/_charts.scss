@@ -1,102 +1,62 @@
-// Chartist
+.chart-labels {
+    color: rgba($color_text, 0.2);
+    font-size: 11px;
+    line-height: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    margin-top: 8px;
 
-@import "~chartist/dist/scss/chartist";
+    label {
+        color: rgba($color_text, 0.3);
+        padding: 0 5px;
 
-.charts {
-    .ct-label {
-        font-size: 11px;
-        font-weight: bold;
-    }
-
-    .chart-labels {
-        color: rgba($color_text, 0.2);
-        font-size: 11px;
-        line-height: 14px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-        position: relative;
-        margin-top: 8px;
-
-        label {
-            color: rgba($color_text, 0.3);
-            padding: 0 5px;
-
-            &:hover {
-                text-decoration: underline;
-                color: rgba($color_text, 0.4);
-                cursor: pointer;
-            }
-
-            &.selected { color: rgba($color_text, 0.5); }
-        }
-
-        label+label { border-left: 1px solid rgba($color_text, 0.4) }
-    }
-
-    .chart-container {
-        position: relative;
-        min-height: 100px;
-    }
-
-    .ct-chart > p,
-    .loading {
-        padding-top: 30px;
-        text-align: center;
-        font-style: italic;
-        color: lighten($color_text, 60);
-    }
-
-    .ct-bar { cursor: pointer; }
-
-    .ct-legend {
-        float: left;
-        position: absolute;
-        z-index: 6;
-        top: 0;
-        left: 0;
-
-        li {
-            position: relative;
-            padding-left: 20px;
-            margin-bottom: 3px;
+        &:hover {
+            text-decoration: underline;
+            color: rgba($color_text, 0.4);
             cursor: pointer;
-
-            &:before {
-                width: 8px;
-                height: 7px;
-                position: absolute;
-                left: 0;
-                content: '';
-                border: 3px solid transparent;
-                top: -1px;
-            }
-
-            &.inactive:before { background: transparent; }
         }
 
-        &.ct-legend-inside {
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
-
-        @for $i from 0 to length($ct-series-colors) {
-            .ct-series-#{$i}:before {
-                background-color: nth($ct-series-colors, $i + 1);
-                border-color: nth($ct-series-colors, $i + 1);
-            }
-        }
+        &.selected { color: rgba($color_text, 0.5); }
     }
 
-    .ct-zoom-rect {
-        fill: rgba(200, 200, 200, 0.3);
-        stroke: #666;
-    }
+    label+label { border-left: 1px solid rgba($color_text, 0.4) }
 }
 
-svg text {
-    fill: lighten($color_text, 10);
+.chart-container {
+    position: relative;
+    min-height: 100px;
+}
+
+.chart > p,
+.loading {
+    padding-top: 30px;
+    text-align: center;
+    font-style: italic;
+    color: lighten($color_text, 60);
+}
+
+.charts svg {
+    text {
+        fill: lighten($color_text, 10);
+    }
+
+    .line {
+        fill: none;
+        stroke-width: 2px;
+    }
+
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #999;
+        shape-rendering: crispEdges;
+    }
+    .y.axis line {
+        stroke: #999;
+        stroke-dasharray: 2,2;
+    }
 }
 
 
@@ -130,18 +90,7 @@ svg text {
     }
 }
 
-.scatterplot,
 .barchart {
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #999;
-        shape-rendering: crispEdges;
-    }
-    .y.axis line {
-        stroke: #999;
-        stroke-dasharray: 2,2;
-    }
     .group {
         cursor: pointer;
     }
@@ -154,7 +103,6 @@ svg text {
     }
 }
 
-.chartist-tooltip,
 #tooltip {
     font-family: $font_family_monospaced;
     position: absolute;
@@ -162,6 +110,9 @@ svg text {
     text-align: center;
     min-width: 5em;
     padding: .5em;
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    pointer-events: none;
     background: darken($color_background, 5);
     border: 1px solid darken($color_background, 20);
     box-shadow: 0px 0px 5px darken($color_background, 6);
@@ -184,22 +135,4 @@ svg text {
         margin-top: 5px;
         color: darken($color_background, 50);
     }
-}
-
-#tooltip {
-    opacity: 0;
-    transform: translate(-50%, -100%);
-    pointer-events: none;
-}
-
-.chartist-tooltip {
-    display: inline-block;
-    pointer-events: none;
-    opacity: 0;
-    -webkit-transition: opacity .2s linear;
-    -moz-transition: opacity .2s linear;
-    -o-transition: opacity .2s linear;
-    transition: opacity .2s linear;
-
-    &.tooltip-show { opacity: 1; }
 }

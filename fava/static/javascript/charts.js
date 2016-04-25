@@ -1,31 +1,7 @@
-Chartist = require('chartist');
-require('chartist-plugin-legend');
-require('chartist-plugin-tooltip');
-require('./vendor/chartist-plugin-zoom');
-
 const d3 = require('d3');
-const helpers = require('./helpers');
 const URI = require('urijs');
 
-var defaultOptions = {
-    height: 240,
-    chartPadding: { left: 3 },
-    axisY: {
-        onlyInteger: true,
-        position: 'end',
-        scaleMinSpace: 15,
-        labelInterpolationFnc: helpers.formatCurrency,
-        referenceValue: 0,
-    },
-    plugins: [
-        Chartist.plugins.legend(),
-        Chartist.plugins.tooltip({
-            tooltipFnc: function(meta, value){
-                return decodeEntities(meta);
-            }
-        })
-    ]
-};
+const helpers = require('./helpers');
 
 var container;
 const treemapColorScale = d3.scale.category20c();
@@ -369,37 +345,6 @@ function sunburstChartContainer() {
     return sunburstChartContainer;
 }
 
-function lineChart(chart) {
-    var options = {
-        axisX: {
-            type: Chartist.AutoScaleAxis,
-            scaleMinSpace: 25,
-            labelInterpolationFnc: function(value, index) {
-                var val = helpers.isNumber(value) ? new Date(value) : value;
-                return val.formatWithString(chart.options.dateFormat ? chart.options.dateFormat : "MMM YYYY");
-            }
-        },
-        lineSmooth: Chartist.Interpolation.none()
-    };
-
-    defaultOptions.plugins.push(Chartist.plugins.zoom({
-        onZoom : function(chart, reset) {
-            var dateStart = new Date(chart.options.axisX.highLow.low);
-            var dateEnd = new Date(chart.options.axisX.highLow.high);
-
-            var dateStringStart = '' + dateStart.getFullYear() + '-' + (helpers.pad(dateStart.getMonth()+1));
-            var dateStringEnd = '' + dateEnd.getFullYear() + '-' + (helpers.pad(dateEnd.getMonth()+1));
-            var e = $.Event('keyup');
-            e.which = 13;
-            $("#filter-time input[type=search]").val(dateStringStart + ' - ' + dateStringEnd).trigger(e);
-        }
-    }));
-
-    return new Chartist.Line("#" + chart.id, chart.data,
-        $.extend({}, defaultOptions, options, chart.options)
-    );
-}
-
 function barChart() {
     var margin = {top: 10, right: 10, bottom: 20, left: 30};
     var width, height;
@@ -602,6 +547,108 @@ function scatterPlot() {
     return chart;
 }
 
+function lineChart() {
+    var margin = {top: 10, right: 10, bottom: 20, left: 30};
+    var width, height;
+    var x = d3.time.scale();
+    var y = d3.scale.linear();
+    var div, svg, tooltipText;
+    var selections = {};
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .outerTickSize(0)
+        .orient('bottom');
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .tickPadding(6)
+        .orient('left')
+        .tickFormat(d3.format('.2s'));
+
+    var line = d3.svg.line()
+        .x(function(d) { return x(new Date(d.date)); })
+        .y(function(d) { return y(d.value); });
+
+    function setSize() {
+        width = parseInt(container.style('width'), 10) - margin.left - margin.right,
+        height = 250 - margin.top - margin.bottom;
+
+        y.range([height, 0]);
+        x.range([0, width]);
+
+        div.select('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom);
+        svg.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        yAxis.tickSize(-width, 0);
+        selections.xAxis.attr('transform', 'translate(0,' + height + ')')
+    }
+
+    function setData(data) {
+        x.domain([
+            d3.min(data, function(s) { return new Date(s.values[0].date); }),
+            d3.max(data, function(s) { return new Date(s.values[s.values.length - 1].date); })
+        ]);
+        y.domain([
+            Math.min(0, d3.min(data, function(d) { return d3.min(d.values, function(d) { return d.value }); })),
+            Math.max(0, d3.max(data, function(d) { return d3.max(d.values, function(d) { return d.value }); }))
+        ]);
+    }
+
+    function resize() {
+        selections.xAxis.call(xAxis);
+        selections.yAxis.call(yAxis);
+        selections.dots
+            .attr('cx', function(d) { return x(new Date(d.date)); })
+            .attr('cy', function(d) { return y(d.value); })
+        selections.lines
+            .attr('d', function(d) { return line(d.values); })
+    }
+
+    function chart(div_) {
+        div = div_;
+        svg = div.append('svg').attr('class', 'linechart').append('g')
+        selections.xAxis = svg.append('g').attr('class', 'x axis')
+        selections.yAxis = svg.append('g').attr('class', 'y axis')
+
+        setSize();
+        var data = div.datum();
+        setData(data);
+
+        selections.lines = svg.selectAll('.line')
+            .data(data)
+          .enter().append('path')
+            .attr('class', 'line')
+            .style('stroke', function(d) { return scatterColorScale(d.name);})
+
+        selections.dots = svg.selectAll('g.dot')
+            .data(data)
+          .enter().append('g')
+            .attr('class', 'dot').selectAll('circle')
+            .data(function(d) { return d.values; })
+          .enter().append('circle')
+            .attr('r', 3)
+            .style('fill', function(d) { return scatterColorScale(d.name);})
+            .call(addTooltip, tooltipText)
+
+        resize();
+    }
+
+    chart.tooltipText = function(f) {
+        tooltipText = f;
+        return chart;
+    }
+
+    chart.update = function() {
+        setSize();
+        resize();
+    }
+
+    return chart;
+}
+
 module.exports.initCharts = function() {
     container = d3.select('#chart-container');
     container.html('');
@@ -611,7 +658,7 @@ module.exports.initCharts = function() {
 
     function chartContainer(id, label) {
         var div = container.append('div')
-            .attr('class', 'ct-chart')
+            .attr('class', 'chart')
             .attr('id', id)
 
         labels.append('label')
@@ -622,17 +669,56 @@ module.exports.initCharts = function() {
     }
 
     $.each(window.chartData, function(index, chart) {
+        chart.id = chart.type + '-' + index;
         switch(chart.type) {
-            case 'line':
-                chart.id = "line-" + index;
-                chart.options = $.extend({}, chart.options);
-                chartContainer(chart.id, chart.label);
+            case 'balances':
+                var div = chartContainer(chart.id, chart.label);
+                var linechart = lineChart()
+                    .tooltipText(function(d) {
+                        return d.value + ' ' + d.name  + '<em>' + d.date + '</em>'; })
 
-                window.charts[chart.id] = lineChart(chart);
+                var series = operating_currencies.map(function(c) {
+                    return {
+                        'name': c,
+                        'values': chart.data.filter(function(d) { return !(d.balance[c] === undefined); })
+                            .map(function(d) {
+                            return {
+                                'name': c,
+                                'date': d.date,
+                                'value': d.balance[c],
+                            };
+                        })
+                    }
+                });
+                div
+                    .datum(series)
+                    .call(linechart)
+
+                window.charts[chart.id] = linechart;
+                break;
+            case 'commodities':
+                var div = chartContainer(chart.id, chart.label);
+                var linechart = lineChart()
+                    .tooltipText(function(d) {
+                        return '1 ' + chart.base + ' =  ' + d.value + ' ' + chart.quote + '<em>' + d.date + '</em>'; })
+
+                var series = [{
+                    'name': chart.label,
+                    'values': chart.prices.map(function(d) {
+                        return {
+                            'name': chart.label,
+                            'date': d[0],
+                            'value': d[1],
+                        };
+                    })
+                }];
+                div
+                    .datum(series)
+                    .call(linechart)
+
+                window.charts[chart.id] = linechart;
                 break;
             case 'bar':
-                chart.id = 'bar-' + index;
-
                 var div = chartContainer(chart.id, chart.label);
                 var barchart = barChart()
                     .tooltipText(function(d) {
@@ -658,8 +744,6 @@ module.exports.initCharts = function() {
                 window.charts[chart.id] = barchart;
                 break;
             case 'scatterplot':
-                chart.id = 'scatterplot-' + index;
-
                 var div = chartContainer(chart.id, chart.label);
                 var scatterplot = scatterPlot()
                     .tooltipText(function(d) { return d.description + '<em>' + d.date + '</em>'; })
@@ -707,8 +791,8 @@ module.exports.initCharts = function() {
     // Switch between charts
     $labels.find('label').click(function() {
         var chartId = $(this).prop('for');
-        $('.charts .ct-chart').addClass('hidden')
-        $('.charts .ct-chart#' + chartId).removeClass('hidden');
+        $('.charts .chart').addClass('hidden')
+        $('.charts .chart#' + chartId).removeClass('hidden');
 
         $labels.find('label').removeClass('selected');
         $(this).addClass('selected');
