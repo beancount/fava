@@ -31,10 +31,10 @@ article#page-query {
 
     ul.sample {
         padding-left: 2em;
+
+        a { text-decoration: none; }
         code { color: lighten($color_text, 30); }
-        li {
-            list-style-type: disc;
-        }
+        li { list-style-type: disc; }
     }
 
     td.query-error {
