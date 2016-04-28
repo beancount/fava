@@ -56,7 +56,8 @@ function treeMapChart() {
     var width, height, kx, ky;
     var x = d3.scale.linear(), y = d3.scale.linear();
     var treemap = d3.layout.treemap()
-        .sort(function(a,b) { return a.value - b.value; })
+        .sort(function(a,b) { return a.value - b.value; });
+    var zoomBehavior = d3.behavior.zoom();
     var div, svg, root, current_node, cells, leaves, tooltipText;
 
     function setSize() {
@@ -71,14 +72,28 @@ function treeMapChart() {
     function chart(div) {
         svg = div.append("svg").attr('class', 'treemap')
         setSize();
-        root = div.datum()
+        root = div.datum();
+
+        zoomBehavior
+            .on('zoomend', function(d) {
+                var scale = d3.event.target.scale();
+                // click
+                if (scale == 1) {
+                    zoom(current_node == d.parent ? root : d.parent, 200);
+                // zoom in
+                } else if (scale > 1) {
+                    zoom(d.parent, 200);
+                // zoom out
+                } else if (scale < 1) {
+                    zoom(root, 200);
+                }
+                d3.event.target.scale(1);
+            })
 
         cells = svg.selectAll('g')
             .data(treemap.nodes(root))
           .enter().append('g')
-            .on('click', function(d) {
-                zoom(current_node == d.parent ? root : d.parent, 200);
-            })
+            .call(zoomBehavior)
             .on('mouseenter', function(d) { tooltip.style('opacity', 1).html(tooltipText(d)); })
             .on('mousemove', function(d) { tooltip.style('left', d3.event.pageX  + 'px').style('top', (d3.event.pageY - 15 )+ 'px') })
             .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
@@ -88,6 +103,7 @@ function treeMapChart() {
 
         leaves.append('rect')
             .attr('fill', function(d) {
+                if (d.dummy) { var d = d.parent; }
                 return d.parent == root || !d.parent ? colorScale(d.account) : colorScale(d.parent.account);
             })
 
@@ -428,11 +444,11 @@ module.exports.initCharts = function() {
                 window.charts[chart.id] = barChart(chart);
                 break;
             case 'treemap': {
+                addInternalNodesAsLeaves(chart.root);
                 $.each(window.operating_currencies, function(i, currency) {
                     chart.id = "treemap-" + index + '-' + currency;
 
                     var div = chartContainer(chart.id, chart.label + ' (' + currency + ')');
-                    addInternalNodesAsLeaves(chart.root);
                     var treemap = treeMapChart()
                         .value(function(d) { return d.balance[currency] * chart.modifier; })
                         .tooltipText(function(d) { return d.balance[currency] + ' ' + currency  + '<em>' + d.account + '</em>'; })
