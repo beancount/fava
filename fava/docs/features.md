@@ -66,3 +66,8 @@ By default, fava only supports export to `csv` for query results. For support
 of `xls`, `xlsx` and `ods`, install fava with the `excel` feature:
 
     pip3 install fava[excel]
+
+## Multiple Beancount files
+
+When you start fava specifying multiple Beancount files, you can click the
+Beancount file name on the top left to switch between the files.
