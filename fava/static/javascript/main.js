@@ -21,12 +21,6 @@ $(document).ready(function() {
     // Global keyboard shortcuts
     keyboardShortcuts.global();
 
-    // File switching
-    $('select#beancount_file').on('change', function(event) {
-        event.preventDefault();
-        window.location = $('select#beancount_file').val();
-    })
-
     // Tree-expanding
     if ($('.tree-table').length) {
         treeTable.initTreeTable();

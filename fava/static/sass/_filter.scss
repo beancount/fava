@@ -1,5 +1,6 @@
 // Filter
 
+div.beancount-files,
 div.filter {
     display: none;
     background-color: $color_background;
@@ -9,11 +10,11 @@ div.filter {
     box-shadow: 0 3px 6px rgba($color_text, 0.2);
     width: 400px;
     position: absolute;
-    right: 0;
     z-index: 10;
     top: 41px;
 
     & > ul {
+        margin-bottom: 0;
         max-height: 400px;
         overflow-y: auto;
 
@@ -45,5 +46,22 @@ div.filter {
         border: 1px solid lighten($color_text, 60);
         border-radius: 3px;
         width: 390px;
+    }
+}
+
+div.filter {
+    right: 0;
+}
+
+h1:hover div {
+    display:block;
+}
+
+div.beancount-files {
+    left: 0;
+    width: 15em;
+
+    & > ul li a {
+        padding: 8px 12px;
     }
 }
