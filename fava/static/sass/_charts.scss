@@ -60,6 +60,11 @@
 }
 
 
+.voronoi path {
+    pointer-events: all;
+    fill: none;
+}
+
 .treemap {
     shape-rendering: crispEdges;
 

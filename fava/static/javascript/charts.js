@@ -75,8 +75,9 @@ function addLegend(svg, domain, colorScale) {
 }
 
 function treeMapChart() {
-    var width, height, kx, ky;
-    var x = d3.scale.linear(), y = d3.scale.linear();
+    var width, height;
+    var x = d3.scale.linear();
+    var y = d3.scale.linear();
     var treemap = d3.layout.treemap()
         .sort(function(a,b) { return a.value - b.value; });
     var zoomBehavior = d3.behavior.zoom();
@@ -89,6 +90,8 @@ function treeMapChart() {
             .attr('width', width)
             .attr('height', height)
         treemap.size([width, height])
+        x.range([0, width]);
+        y.range([0, height]);
     }
 
     function chart(div) {
@@ -155,9 +158,10 @@ function treeMapChart() {
     function zoom(d, duration) {
         treemap(root);
 
-        kx =  width / d.dx, ky = height / d.dy;
-        x.range([0, width]).domain([d.x, d.x + d.dx]);
-        y.range([0, height]).domain([d.y, d.y + d.dy]);
+        var kx = width / d.dx,
+            ky = height / d.dy;
+        x.domain([d.x, d.x + d.dx]);
+        y.domain([d.y, d.y + d.dy]);
 
         var t = cells.transition()
             .duration(duration)
@@ -372,10 +376,10 @@ function barChart() {
         x0.rangeRoundBands([0, width], .1);
         x1.rangeRoundBands([0, x0.rangeBand()]);
 
-        div.select('svg')
+        svg
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
-        svg.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         yAxis.tickSize(-width, 0)
         selections.xAxis.attr('transform', 'translate(0,' + height + ')')
@@ -423,17 +427,17 @@ function barChart() {
     }
 
 
-    function chart(div_) {
-        div = div_;
-        svg = div.append('svg').attr('class', 'barchart').append('g')
-        selections.xAxis = svg.append('g').attr('class', 'x axis')
-        selections.yAxis = svg.append('g').attr('class', 'y axis')
+    function chart(svg_) {
+        svg = svg_;
+        canvas = svg.attr('class', 'barchart').append('g')
+        selections.xAxis = canvas.append('g').attr('class', 'x axis')
+        selections.yAxis = canvas.append('g').attr('class', 'y axis')
 
         setSize();
-        setData(div.datum());
+        setData(svg.datum());
 
-        selections.groups = svg.selectAll('.group')
-            .data(div.datum())
+        selections.groups = canvas.selectAll('.group')
+            .data(svg.datum())
           .enter().append('g')
             .attr('class', 'group')
             .call(addTooltip, tooltipText)
@@ -448,7 +452,7 @@ function barChart() {
             .attr('class', 'bar')
             .style('fill', function(d) { return currencyColorScale(d.name); })
 
-        selections.legend = addLegend(svg, x1.domain(), currencyColorScale)
+        selections.legend = addLegend(canvas, x1.domain(), currencyColorScale)
 
         resize();
     }
@@ -502,7 +506,7 @@ function scatterPlot() {
     }
 
     function setData(data) {
-        x.domain(d3.extent(data, function(d) { return new Date(d.date); }));
+        x.domain(d3.extent(data, function(d) { return d.date; }));
         y.domain(data.map(function(d) { return d.type; }));
     }
 
@@ -510,7 +514,7 @@ function scatterPlot() {
         selections.xAxis.call(xAxis);
         selections.yAxis.call(yAxis);
         selections.dots
-            .attr("cx", function(d) { return x(new Date(d.date)); })
+            .attr("cx", function(d) { return x(d.date); })
             .attr("cy", function(d) { return y(d.type); })
     }
 
@@ -549,10 +553,11 @@ function scatterPlot() {
 
 function lineChart() {
     var margin = {top: 10, right: 10, bottom: 20, left: 30};
-    var width, height;
+    var width = 500 - margin.left - margin.right,
+        height = 250 - margin.top - margin.bottom;
     var x = d3.time.scale();
     var y = d3.scale.linear();
-    var div, svg, tooltipText;
+    var canvas, tooltipText, matrix;
     var selections = {};
 
     var xAxis = d3.svg.axis()
@@ -567,20 +572,25 @@ function lineChart() {
         .tickFormat(d3.format('.2s'));
 
     var line = d3.svg.line()
-        .x(function(d) { return x(new Date(d.date)); })
+        .x(function(d) { return x(d.date); })
+        .y(function(d) { return y(d.value); });
+
+    var voronoi = d3.geom.voronoi()
+        .x(function(d) { return x(d.date); })
         .y(function(d) { return y(d.value); });
 
     function setSize() {
         width = parseInt(container.style('width'), 10) - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
 
+        matrix = canvas.node().getScreenCTM();
         y.range([height, 0]);
         x.range([0, width]);
+        voronoi.clipExtent([[0, 0], [width, height]])
 
-        div.select('svg')
+        svg
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
-        svg.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         yAxis.tickSize(-width, 0);
         selections.xAxis.attr('transform', 'translate(0,' + height + ')')
@@ -588,8 +598,8 @@ function lineChart() {
 
     function setData(data) {
         x.domain([
-            d3.min(data, function(s) { return new Date(s.values[0].date); }),
-            d3.max(data, function(s) { return new Date(s.values[s.values.length - 1].date); })
+            d3.min(data, function(s) { return s.values[0].date; }),
+            d3.max(data, function(s) { return s.values[s.values.length - 1].date; })
         ]);
         y.domain([
             Math.min(0, d3.min(data, function(d) { return d3.min(d.values, function(d) { return d.value }); })),
@@ -601,37 +611,56 @@ function lineChart() {
         selections.xAxis.call(xAxis);
         selections.yAxis.call(yAxis);
         selections.dots
-            .attr('cx', function(d) { return x(new Date(d.date)); })
+            .attr('cx', function(d) { return x(d.date); })
             .attr('cy', function(d) { return y(d.value); })
         selections.lines
             .attr('d', function(d) { return line(d.values); })
+
+        selections.voronoi.selectAll('path')
+            .data(voronoi(rollupData(svg.datum())))
+            .attr('d', function(d) { return "M" + d.join("L") + "Z"; })
     }
 
-    function chart(div_) {
-        div = div_;
-        svg = div.append('svg').attr('class', 'linechart').append('g')
-        selections.xAxis = svg.append('g').attr('class', 'x axis')
-        selections.yAxis = svg.append('g').attr('class', 'y axis')
+    function rollupData(data) {
+        return d3.nest()
+            .key(function(d) { return x(d.date) + ',' + y(d.value); })
+            .rollup(function(d) { return d[0]; })
+            .entries(d3.merge(data.map(function(d) { return d.values; })))
+            .map(function(d) { return d.values; } );
+    }
 
+    function chart(svg_) {
+        svg = svg_;
+        canvas = svg.attr('class', 'linechart').append('g')
+        selections.xAxis = canvas.append('g').attr('class', 'x axis')
+        selections.yAxis = canvas.append('g').attr('class', 'y axis')
+        selections.voronoi = canvas.append('g').attr('class', 'voronoi');
+
+        setData(svg.datum());
         setSize();
-        var data = div.datum();
-        setData(data);
 
-        selections.lines = svg.selectAll('.line')
-            .data(data)
+        selections.lines = canvas.selectAll('.line')
+            .data(svg.datum())
           .enter().append('path')
             .attr('class', 'line')
             .style('stroke', function(d) { return scatterColorScale(d.name);})
 
-        selections.dots = svg.selectAll('g.dot')
-            .data(data)
+        selections.dots = canvas.selectAll('g.dot')
+            .data(svg.datum())
           .enter().append('g')
             .attr('class', 'dot').selectAll('circle')
             .data(function(d) { return d.values; })
           .enter().append('circle')
             .attr('r', 3)
             .style('fill', function(d) { return scatterColorScale(d.name);})
-            .call(addTooltip, tooltipText)
+
+        selections.voronoi.selectAll('path')
+            .data(voronoi(rollupData(svg.datum())))
+           .enter().append('path')
+            .attr('d', function(d) { return "M" + d.join("L") + "Z"; })
+            .on('mouseenter', function(d) {  tooltip.style('opacity', 1).html(tooltipText(d.point)); })
+            .on('mousemove', function(d) { tooltip.style('left', (x(d.point.date) + matrix.e)  + 'px').style('top', (y(d.point.value) + matrix.f - 15 )+ 'px') })
+            .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
 
         resize();
     }
@@ -675,7 +704,7 @@ module.exports.initCharts = function() {
                 var div = chartContainer(chart.id, chart.label);
                 var linechart = lineChart()
                     .tooltipText(function(d) {
-                        return d.value + ' ' + d.name  + '<em>' + d.date + '</em>'; })
+                        return d.value + ' ' + d.name  + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
 
                 var series = operating_currencies.map(function(c) {
                     return {
@@ -684,13 +713,13 @@ module.exports.initCharts = function() {
                             .map(function(d) {
                             return {
                                 'name': c,
-                                'date': d.date,
+                                'date': new Date(d.date),
                                 'value': d.balance[c],
                             };
                         })
                     }
                 });
-                div
+                div.append('svg')
                     .datum(series)
                     .call(linechart)
 
@@ -700,19 +729,19 @@ module.exports.initCharts = function() {
                 var div = chartContainer(chart.id, chart.label);
                 var linechart = lineChart()
                     .tooltipText(function(d) {
-                        return '1 ' + chart.base + ' =  ' + d.value + ' ' + chart.quote + '<em>' + d.date + '</em>'; })
+                        return '1 ' + chart.base + ' =  ' + d.value + ' ' + chart.quote + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
 
                 var series = [{
                     'name': chart.label,
                     'values': chart.prices.map(function(d) {
                         return {
                             'name': chart.label,
-                            'date': d[0],
+                            'date': new Date(d[0]),
                             'value': d[1],
                         };
                     })
                 }];
-                div
+                div.append('svg')
                     .datum(series)
                     .call(linechart)
 
@@ -737,7 +766,7 @@ module.exports.initCharts = function() {
                     d.label = d.date.formatWithString(chart.date_format)
                 });
 
-                div
+                div.append('svg')
                     .datum(chart.interval_totals)
                     .call(barchart)
 
