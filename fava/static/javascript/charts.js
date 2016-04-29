@@ -81,7 +81,7 @@ function treeMapChart() {
     var treemap = d3.layout.treemap()
         .sort(function(a,b) { return a.value - b.value; });
     var zoomBehavior = d3.behavior.zoom();
-    var div, svg, root, current_node, cells, leaves, tooltipText;
+    var div, svg, root, current_node, cells, tooltipText;
 
     function setSize() {
         width = parseInt(container.style('width'), 10);
@@ -94,10 +94,11 @@ function treeMapChart() {
         y.range([0, height]);
     }
 
-    function chart(div) {
-        svg = div.append("svg").attr('class', 'treemap')
+    function chart(svg_) {
+        svg = svg_
+        canvas = svg.classed('treemap', true)
         setSize();
-        root = div.datum();
+        root = svg.datum();
 
         zoomBehavior
             .on('zoomend', function(d) {
@@ -116,21 +117,25 @@ function treeMapChart() {
             })
 
         cells = svg.selectAll('g')
-            .data(treemap.nodes(root))
+            .data(treemap.nodes(root).filter(function(d) { return (d.value); }))
           .enter().append('g')
             .call(zoomBehavior)
             .call(addTooltip, tooltipText)
 
-        leaves = cells.filter(function(d) { return (d.value); })
-        if (leaves.empty()) { div.html('<p>Chart is empty.</p>'); };
+        if (cells.empty()) {
+            canvas.append('text')
+                .attr('x', width / 2)
+                .attr('y', height / 2)
+                .text('Chart is empty.');
+        };
 
-        leaves.append('rect')
+        cells.append('rect')
             .attr('fill', function(d) {
                 if (d.dummy) { var d = d.parent; }
                 return d.parent == root || !d.parent ? treemapColorScale(d.account) : treemapColorScale(d.parent.account);
             })
 
-        leaves.append("text")
+        cells.append("text")
             .attr("dy", ".5em")
             .attr("text-anchor", "middle")
             .text(function(d) { return d.account.split(':').pop(); })
@@ -183,72 +188,81 @@ function treeMapChart() {
 }
 
 function sunburstChart() {
-    var width, height;
+    var margin = {top: 10, right: 10, bottom: 10, left: 10};
+    var width = 500, height = 250;
     var x = d3.scale.linear().range([0, 2 * Math.PI]);
     var y = d3.scale.sqrt();
-    var div, svg;
+    var svg, canvas;
     var partition = d3.layout.partition();
-    var root, labels, account_label, balance_label, labelText, paths;
+    var root, labels, labelText;
+    var selections = {};
+
+    var arc = d3.svg.arc()
+        .startAngle(function(d) { return x(d.x); })
+        .endAngle(function(d) { return x(d.x + d.dx); })
+        .innerRadius(function(d) { return y(d.y); })
+        .outerRadius(function(d) { return y(d.y + d.dy); });
 
     function setSize() {
-        width = parseInt(div.style('width'), 10);
         radius = Math.min(width, height) / 2;
 
-        svg.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
-        div.select('svg')
-            .attr('width', width)
-            .attr('height', height);
+        canvas.attr('transform', 'translate(' + (width / 2 + margin.left) + ',' + (height / 2 + margin.top) + ')');
+        svg
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.left);
 
         y.range([0, radius])
     }
 
-    function chart(div_) {
-        div = div_;
+    function resize() {
+        root = svg.datum()
+        var nodes = partition.nodes(root)
+            .filter(function(d) {
+                return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
+            });
+        selections.paths = canvas.selectAll('path')
+            .data(nodes)
+            .attr('d', arc)
+    }
 
-        svg = div.append('svg').attr('class', 'sunburst').append('g');
+    function chart(svg_) {
+        svg = svg_;
+        canvas = svg.attr('class', 'sunburst').append('g')
+            .on('mouseleave', mouseLeave);
+
         setSize();
 
-        // Bounding circle underneath the sunburst, to make it easier to detect
-        // when the mouse leaves the parent g.
-        svg.append('circle')
+        // Bounding circle underneath the sunburst
+        canvas.append('circle')
             .style('opacity', 0)
             .attr('r', radius)
 
-        account_label = svg.append('text')
+        selections.accountLabel = canvas.append('text')
             .attr('class', 'account')
             .attr('text-anchor', 'middle')
-        balance_label = svg.append('text')
+        selections.balanceLabel = canvas.append('text')
             .attr('class', 'balance')
             .attr('dy', '1.2em')
             .attr('text-anchor', 'middle')
-        labels = svg.selectAll('text')
-
-        var arc = d3.svg.arc()
-            .startAngle(function(d) { return x(d.x); })
-            .endAngle(function(d) { return x(d.x + d.dx); })
-            .innerRadius(function(d) { return y(d.y); })
-            .outerRadius(function(d) { return y(d.y + d.dy); });
 
         // For efficiency, filter nodes to keep only those large enough to see.
         // Also, ignore dummy nodes and root.
-        root = div.datum()
+        root = svg.datum()
         var nodes = partition.nodes(root)
             .filter(function(d) {
                 return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
             });
 
-        paths = svg.selectAll('path')
+        selections.paths = canvas.selectAll('path')
             .data(nodes)
           .enter().append('path')
-            .attr('d', arc)
             .attr('fill-rule', 'evenodd')
             .style('fill', function(d) { return sunburstColorScale(d.account); })
             .on('mouseover', mouseOver)
             .call(makeAccountLink)
 
+        resize();
         setLabel(root);
-        // Add the mouseleave handler to the bounding circle.
-        svg.on('mouseleave', mouseLeave);
     }
 
     chart.labelText = function(f) {
@@ -256,8 +270,13 @@ function sunburstChart() {
         return chart;
     }
 
-    chart.diameter = function(d) {
-        height = d;
+    chart.height = function(d) {
+        height = d - margin.top - margin.bottom;
+        return chart;
+    }
+
+    chart.width = function(d) {
+        width = d - margin.left - margin.right;
         return chart;
     }
 
@@ -267,10 +286,16 @@ function sunburstChart() {
     }
 
     function setLabel(d) {
-        balance_label.text(labelText(d));
-        account_label
-            .text(d.account)
-            .call(makeAccountLink)
+        if (selections.paths.empty()) {
+            selections.accountLabel
+                .text('Chart is empty.');
+        } else {
+            selections.balanceLabel
+                .text(labelText(d));
+            selections.accountLabel
+                .text(d.account)
+                .call(makeAccountLink)
+        }
     }
 
 
@@ -279,7 +304,7 @@ function sunburstChart() {
         setLabel(d);
 
         // Only highlight segments that are ancestors of the current segment.
-        paths
+        selections.paths
             .interrupt()
             .style('opacity', 0.5)
             .filter(function(node) {
@@ -291,7 +316,7 @@ function sunburstChart() {
 
     // Restore everything to full opacity when moving off the visualization.
     function mouseLeave(d) {
-        paths
+        selections.paths
             .transition()
             .duration(1000)
             .style('opacity', 1)
@@ -300,53 +325,66 @@ function sunburstChart() {
 
     chart.update = function() {
         setSize();
+        resize();
     }
 
     return chart;
 }
 
 function sunburstChartContainer() {
-    var sunburstContainers = [];
+    var width, height;
     var sunbursts = [];
+    var canvases = [];
     var currencies;
+    var svg;
 
-    function sunburstChartContainer(container, currencies_, diameter, root) {
-        addInternalNodesAsLeaves(root);
-        currencies = currencies_;
+    function setSize() {
+        width = container.node().offsetWidth
+        svg
+            .attr('width', width)
+            .attr('height', 500)
+    }
+
+    function chart(svg_) {
+        svg = svg_;
+        setSize();
+
         $.each(currencies, function(i, currency) {
-            var id = container.node().id + '-' + currency;
-            var div = container.append('div')
-                .attr('id', id)
-                .style('width', container.node().offsetWidth / currencies.length + 'px')
-                .style('z-index', '1')
-                .style('float', 'left')
-                .style('position', 'relative');
             var sunburst = sunburstChart()
-                .diameter(diameter)
+                .width(width / currencies.length)
+                .height(500)
                 .value(function(d) { return d.balance[currency]; })
                 .labelText(function(d) {
                     return helpers.formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
                 })
-            div
-                .datum(root)
-                .call(sunburst)
 
-            sunburstContainers.push(div);
+            canvases.push(svg.append('g')
+                .attr('transform', 'translate(' + width * i / currencies.length + ',0)')
+                .datum(svg.datum())
+                .call(sunburst))
+
             sunbursts.push(sunburst);
         });
     }
 
-    sunburstChartContainer.update = function() {
-        $.each(sunburstContainers, function(i, div) {
-            div.style('width', container.node().offsetWidth / currencies.length + 'px')
-        });
-
+    chart.update = function() {
+        setSize();
         $.each(sunbursts, function(i, chart) {
-            chart.update();
+            chart
+                .width(width / currencies.length)
+                .height(500)
+                .update();
+            canvases[i]
+                .attr('transform', 'translate(' + width * i / currencies.length + ',0)')
         });
     }
 
-    return sunburstChartContainer;
+    chart.currencies = function(f) {
+        currencies = f;
+        return chart;
+    }
+
+    return chart;
 }
 
 function barChart() {
@@ -355,7 +393,7 @@ function barChart() {
     var x0 = d3.scale.ordinal();
     var x1 = d3.scale.ordinal();
     var y = d3.scale.linear();
-    var div, svg, tooltipText;
+    var svg, canvas, tooltipText;
     var selections = {};
 
     var xAxis = d3.svg.axis()
@@ -429,7 +467,7 @@ function barChart() {
 
     function chart(svg_) {
         svg = svg_;
-        canvas = svg.attr('class', 'barchart').append('g')
+        canvas = svg.classed('barchart', true).append('g')
         selections.xAxis = canvas.append('g').attr('class', 'x axis')
         selections.yAxis = canvas.append('g').attr('class', 'y axis')
 
@@ -475,7 +513,7 @@ function scatterPlot() {
     var width, height;
     var x = d3.time.scale();
     var y = d3.scale.ordinal();
-    var div, svg, tooltipText;
+    var svg, canvas, tooltipText;
     var selections = {};
 
     var xAxis = d3.svg.axis()
@@ -496,10 +534,10 @@ function scatterPlot() {
         y.rangePoints([height, 0], 1);
         x.range([0, width]);
 
-        div.select('svg')
+        svg
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom);
-        svg.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         yAxis.tickSize(-width, 0);
         selections.xAxis.attr('transform', 'translate(0,' + height + ')')
@@ -518,17 +556,17 @@ function scatterPlot() {
             .attr("cy", function(d) { return y(d.type); })
     }
 
-    function chart(div_) {
-        div = div_;
-        svg = div.append('svg').attr('class', 'scatterplot').append('g')
-        selections.xAxis = svg.append('g').attr('class', 'x axis')
-        selections.yAxis = svg.append('g').attr('class', 'y axis')
+    function chart(svg_) {
+        svg = svg_;
+        canvas = svg.classed('scatterplot', true).append('g')
+        selections.xAxis = canvas.append('g').attr('class', 'x axis')
+        selections.yAxis = canvas.append('g').attr('class', 'y axis')
 
         setSize();
-        setData(div.datum());
+        setData(svg.datum());
 
-        selections.dots = svg.selectAll(".dot")
-            .data(div.datum())
+        selections.dots = canvas.selectAll(".dot")
+            .data(svg.datum())
           .enter().append("circle")
             .attr("class", "dot")
             .attr("r", 5)
@@ -631,7 +669,7 @@ function lineChart() {
 
     function chart(svg_) {
         svg = svg_;
-        canvas = svg.attr('class', 'linechart').append('g')
+        canvas = svg.classed('linechart', true).append('g')
         selections.xAxis = canvas.append('g').attr('class', 'x axis')
         selections.yAxis = canvas.append('g').attr('class', 'y axis')
         selections.voronoi = canvas.append('g').attr('class', 'voronoi');
@@ -686,7 +724,7 @@ module.exports.initCharts = function() {
     window.tooltip = d3.select('body').append('div').attr('id', 'tooltip')
 
     function chartContainer(id, label) {
-        var div = container.append('div')
+        var svg = container.append('svg')
             .attr('class', 'chart')
             .attr('id', id)
 
@@ -694,14 +732,13 @@ module.exports.initCharts = function() {
             .attr('for', id)
             .html(label)
 
-        return div;
+        return svg;
     }
 
     $.each(window.chartData, function(index, chart) {
         chart.id = chart.type + '-' + index;
         switch(chart.type) {
             case 'balances':
-                var div = chartContainer(chart.id, chart.label);
                 var linechart = lineChart()
                     .tooltipText(function(d) {
                         return d.value + ' ' + d.name  + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
@@ -719,14 +756,14 @@ module.exports.initCharts = function() {
                         })
                     }
                 });
-                div.append('svg')
+
+                chartContainer(chart.id, chart.label)
                     .datum(series)
                     .call(linechart)
 
                 window.charts[chart.id] = linechart;
                 break;
             case 'commodities':
-                var div = chartContainer(chart.id, chart.label);
                 var linechart = lineChart()
                     .tooltipText(function(d) {
                         return '1 ' + chart.base + ' =  ' + d.value + ' ' + chart.quote + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
@@ -741,14 +778,14 @@ module.exports.initCharts = function() {
                         };
                     })
                 }];
-                div.append('svg')
+
+                chartContainer(chart.id, chart.label)
                     .datum(series)
                     .call(linechart)
 
                 window.charts[chart.id] = linechart;
                 break;
             case 'bar':
-                var div = chartContainer(chart.id, chart.label);
                 var barchart = barChart()
                     .tooltipText(function(d) {
                         var text = '';
@@ -766,34 +803,33 @@ module.exports.initCharts = function() {
                     d.label = d.date.formatWithString(chart.date_format)
                 });
 
-                div.append('svg')
+                chartContainer(chart.id, chart.label)
                     .datum(chart.interval_totals)
                     .call(barchart)
 
                 window.charts[chart.id] = barchart;
                 break;
             case 'scatterplot':
-                var div = chartContainer(chart.id, chart.label);
                 var scatterplot = scatterPlot()
                     .tooltipText(function(d) { return d.description + '<em>' + d.date + '</em>'; })
 
-                div
-                    .datum(chart.events)
+                chartContainer(chart.id, chart.label)
+                    .datum(chart.events.map(function(d) { d.date = new Date(d.date); return d; }))
                     .call(scatterplot)
 
                 window.charts[chart.id] = scatterplot;
                 break;
             case 'treemap': {
                 addInternalNodesAsLeaves(chart.root);
+
                 $.each(window.operating_currencies, function(i, currency) {
                     chart.id = "treemap-" + index + '-' + currency;
 
-                    var div = chartContainer(chart.id, chart.label + ' (' + currency + ')');
                     var treemap = treeMapChart()
                         .value(function(d) { return d.balance[currency] * chart.modifier; })
                         .tooltipText(function(d) { return d.balance[currency] + ' ' + currency  + '<em>' + d.account + '</em>'; })
 
-                    div
+                    chartContainer(chart.id, chart.label + ' (' + currency + ')')
                         .datum(chart.root)
                         .call(treemap)
 
@@ -802,12 +838,16 @@ module.exports.initCharts = function() {
                 break;
             }
             case 'sunburst':
-                chart.id = 'sunburst-' + index;
-                var container = chartContainer(chart.id, chart.label);
+                addInternalNodesAsLeaves(chart.root);
 
-                var scContainer = sunburstChartContainer();
-                scContainer(container, window.operating_currencies, chart.diameter, chart.root);
-                window.charts[chart.id] = scContainer;
+                var sunburst = sunburstChartContainer()
+                    .currencies(window.operating_currencies)
+
+                chartContainer(chart.id, chart.label)
+                    .datum(chart.root)
+                    .call(sunburst);
+
+                window.charts[chart.id] = sunburst;
                 break;
             default:
                 console.error('Chart-Type "' + chart.type + '" unknown.');
@@ -842,11 +882,9 @@ module.exports.initCharts = function() {
         $(this).val(shouldShow ? 'Hide charts' : 'Show charts');
     });
 
-    if ($('select#chart-interval').length) {
-        $('select#chart-interval').on('change', function() {
-            window.location = URI(window.location)
-                .setQuery('interval', this.value)
-                .toString();
-        });
-    }
+    $('select#chart-interval').on('change', function() {
+        window.location = URI(window.location)
+            .setQuery('interval', this.value)
+            .toString();
+    });
 }
