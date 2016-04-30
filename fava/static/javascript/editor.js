@@ -141,7 +141,7 @@ $(document).ready(function() {
         editor.$blockScrolling = Infinity;
         editor.focus();
 
-        var hLine = URI(location.search).query('line');
+        var hlLine = URI(location.search).query(true).line;
         $('form.editor-source select[name="file_path"]').change(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -150,7 +150,7 @@ $(document).ready(function() {
             $filePath = $select.val();
             $.get($select.parents('form').attr('action'), { file_path: $filePath } )
             .done(function(data) {
-                if ($filePath != URI(location.search).query('file_path')) {
+                if ($filePath != URI(location.search).query(true).file_path) {
                     hlLine = 1;
                 }
                 editor.setValue(data, -1);
