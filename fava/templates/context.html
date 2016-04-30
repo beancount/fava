@@ -13,7 +13,7 @@
         <dt>Hash:</dt>
         <dd><code>{{ context.hash }}</code></dd>
         <dt>Location:</dt>
-        <dd><code><a href="{{ url_for_source(file_path=context.filename, line=context.lineno) }}" title="Show source {{ context.filename }}:{{ context.line }}">{{ context.filename }}:{{ context.line }}</a></code></dd>
+        <dd><code><a href="{{ url_for_source(file_path=context.filename, line=context.lineno) }}" title="Show source {{ context.filename }}:{{ context.lineno }}">{{ context.filename }}:{{ context.lineno }}</a></code></dd>
     </dl>
     <div class="editor-wrapper editor-wrapper-readonly">
         <div class="editor editor-readonly" id="editor-{{ context.hash }}">
