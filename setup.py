@@ -40,7 +40,6 @@ setup(
         'Flask>=0.10.1',
         'livereload>=2.4.1',
         'markdown2>=2.3.0',
-        'modgrammar>=0.10',
         'pygments>=2.1.1',
         'python-dateutil>=2.4.2',
     ],
