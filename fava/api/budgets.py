@@ -4,6 +4,7 @@ from beancount.core.amount import Amount
 from beancount.core.data import Custom
 from beancount.core.inventory import Inventory
 
+
 class Budgets(object):
 
     def __init__(self, entries):
@@ -39,7 +40,7 @@ class Budgets(object):
                                           dateline: dateline.date_start)
 
     def _daterange(self, start_date, end_date):
-        """Yields a datetime instance for every day in the specified interval."""
+        """Yields a datetime for every day in the specified interval."""
         for n in range(int((end_date - start_date).days)):
             yield start_date + relativedelta(days=n)
 
@@ -60,7 +61,7 @@ class Budgets(object):
         """
         inventory = Inventory()
 
-        if not account_name in self.datelines.keys():
+        if account_name not in self.datelines.keys():
             return inventory
 
         for single_day in self._daterange(date_from, date_to):

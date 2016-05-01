@@ -109,7 +109,9 @@ def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
             serialize_inventory(realization.compute_balance(ra),
                                 at_cost=True),
         'balance': serialize_inventory(ra.balance, at_cost=True),
-        'budgets': serialize_inventory(budget_fn(ra.account, begin_date, end_date)) if budget_fn else {},
+        'budgets': serialize_inventory(
+                       budget_fn(ra.account, begin_date, end_date)
+                   ) if budget_fn else {},
         'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
         'is_closed': isinstance(realization.find_last_active_posting(
             ra.txn_postings), Close),
