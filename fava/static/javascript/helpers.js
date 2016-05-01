@@ -54,7 +54,7 @@ if (toLocaleStringSupportsOptions() === false) {
 
 // Formats the given number to two fixed decimals.
 module.exports.formatCurrency = function (x) {
-    return parseFloat(x).toLocaleString(undefined, { minimumFractionDigits: 2 })
+    return x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 }
 
 // https://gist.github.com/dblock/1081513

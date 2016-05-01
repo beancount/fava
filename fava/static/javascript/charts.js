@@ -657,6 +657,9 @@ function lineChart() {
         selections.voronoi.selectAll('path')
             .data(voronoi(rollupData(svg.datum())))
             .attr('d', function(d) { return "M" + d.join("L") + "Z"; })
+
+        selections.legend
+            .attr('transform', function(d, i) { return 'translate(' + width + ',' + i * 20 + ')'; });
     }
 
     function rollupData(data) {
@@ -681,7 +684,7 @@ function lineChart() {
             .data(svg.datum())
           .enter().append('path')
             .attr('class', 'line')
-            .style('stroke', function(d) { return scatterColorScale(d.name);})
+            .style('stroke', function(d) { return currencyColorScale(d.name);})
 
         selections.dots = canvas.selectAll('g.dot')
             .data(svg.datum())
@@ -690,7 +693,7 @@ function lineChart() {
             .data(function(d) { return d.values; })
           .enter().append('circle')
             .attr('r', 3)
-            .style('fill', function(d) { return scatterColorScale(d.name);})
+            .style('fill', function(d) { return currencyColorScale(d.name);})
 
         selections.voronoi.selectAll('path')
             .data(voronoi(rollupData(svg.datum())))
@@ -699,6 +702,8 @@ function lineChart() {
             .on('mouseenter', function(d) {  tooltip.style('opacity', 1).html(tooltipText(d.point)); })
             .on('mousemove', function(d) { tooltip.style('left', (x(d.point.date) + matrix.e)  + 'px').style('top', (y(d.point.value) + matrix.f - 15 )+ 'px') })
             .on('mouseleave', function(d) { tooltip.style('opacity', 0); })
+
+        selections.legend = addLegend(canvas, svg.datum().map(function(d) { return d.name; }), currencyColorScale)
 
         resize();
     }
@@ -741,7 +746,7 @@ module.exports.initCharts = function() {
             case 'balances':
                 var linechart = lineChart()
                     .tooltipText(function(d) {
-                        return d.value + ' ' + d.name  + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
+                        return helpers.formatCurrency(d.value) + ' ' + d.name  + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
 
                 var series = operating_currencies.map(function(c) {
                     return {
@@ -766,7 +771,7 @@ module.exports.initCharts = function() {
             case 'commodities':
                 var linechart = lineChart()
                     .tooltipText(function(d) {
-                        return '1 ' + chart.base + ' =  ' + d.value + ' ' + chart.quote + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
+                        return '1 ' + chart.base + ' =  ' + helpers.formatCurrency(d.value) + ' ' + chart.quote + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
 
                 var series = [{
                     'name': chart.label,
@@ -790,7 +795,7 @@ module.exports.initCharts = function() {
                     .tooltipText(function(d) {
                         var text = '';
                         $.each(d.values, function(i, a) {
-                            text += a.value + ' ' +  a.name + '<br>';
+                            text += helpers.formatCurrency(a.value) + ' ' +  a.name + '<br>';
                         });
                         text += '<em>' + d.label + '</em>';
                         return text; })
@@ -827,7 +832,7 @@ module.exports.initCharts = function() {
 
                     var treemap = treeMapChart()
                         .value(function(d) { return d.balance[currency] * chart.modifier; })
-                        .tooltipText(function(d) { return d.balance[currency] + ' ' + currency  + '<em>' + d.account + '</em>'; })
+                        .tooltipText(function(d) { return helpers.formatCurrency(d.balance[currency]) + ' ' + currency  + '<em>' + d.account + '</em>'; })
 
                     chartContainer(chart.id, chart.label + ' (' + currency + ')')
                         .datum(chart.root)
