@@ -103,18 +103,13 @@ def serialize_posting(posting):
 
 def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
 
-    # for currency in currencies:
-    #     account['budgets'][currency] =
-    #         self._budget_for_account(account['account'], currency,
-    #                                  begin_date, end_date)
-
     serialized_account = {
         'account': ra.account,
         'balance_children':
             serialize_inventory(realization.compute_balance(ra),
                                 at_cost=True),
         'balance': serialize_inventory(ra.balance, at_cost=True),
-        'budgets': {},
+        'budgets': serialize_inventory(budget_fn(ra.account, begin_date, end_date)) if budget_fn else {},
         'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
         'is_closed': isinstance(realization.find_last_active_posting(
             ra.txn_postings), Close),
@@ -123,12 +118,6 @@ def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
         'children': [serialize_real_account(a, begin_date, end_date, budget_fn)
                      for n, a in sorted(ra.items())],
     }
-
-    if budget_fn and begin_date and end_date:
-        serialized_account['budgets'] = \
-            {p.units.currency: budget_fn(ra.account, p.units.currency,
-                                         begin_date, end_date)
-             for p in ra.balance.cost() if p.units.number != ZERO}
 
     return serialized_account
 
