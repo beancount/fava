@@ -159,6 +159,10 @@ class BeancountReportAPI(object):
         self.all_accounts = self._all_accounts()
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
 
+        self.sidebar_link_entries = [entry for entry in self.all_entries
+                                     if isinstance(entry, Custom) and
+                                     entry.type == 'fava-sidebar-link']
+
         self._apply_filters()
 
     def _apply_filters(self):
@@ -605,6 +609,4 @@ class BeancountReportAPI(object):
     def sidebar_links(self):
         # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
         return [(entry.values[0].value, entry.values[1].value)
-                for entry in self.entries
-                if isinstance(entry, Custom) and
-                entry.type == 'fava-sidebar-link']
+                for entry in self.sidebar_link_entries]
