@@ -1,10 +1,11 @@
 from datetime import date, datetime
 
 from beancount.core import compare, realization
-from beancount.core.data import Balance, Close, Transaction, TxnPosting, Custom
 from beancount.core.amount import Amount, decimal
-from beancount.core.position import Position
+from beancount.core.data import Balance, Close, Transaction, TxnPosting, Custom
+from beancount.core.inventory import Inventory
 from beancount.core.number import ZERO
+from beancount.core.position import Position
 from flask.json import JSONEncoder
 
 
@@ -101,17 +102,39 @@ def serialize_posting(posting):
     return new_posting
 
 
+def subtract_inventory_from_curr_dict(currency_dict, inventory, at_cost=False):
+    """Subtracts an inventory from a dictionary of currency => number."""
+    new_dict = {}
+
+    if at_cost:
+        inventory = inventory.cost()
+    else:
+        inventory = inventory.units()
+
+    for currency in currency_dict:
+        for q in inventory:
+            if currency == q.units.currency:
+                if currency not in new_dict:
+                    new_dict[currency] = decimal.Decimal(0.0)
+                # round to 10 decimal places to avoid representation issues
+                new_dict[currency] = round(
+                    currency_dict[currency] - q.units.number, 10)
+
+    return new_dict
+
+
 def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
+    budgets = budget_fn(ra.account, begin_date, end_date) if budget_fn else Inventory()
+    balance_children = realization.compute_balance(ra)
 
     serialized_account = {
         'account': ra.account,
-        'balance_children':
-            serialize_inventory(realization.compute_balance(ra),
-                                at_cost=True),
         'balance': serialize_inventory(ra.balance, at_cost=True),
-        'budgets': serialize_inventory(
-                       budget_fn(ra.account, begin_date, end_date)
-                   ) if budget_fn else {},
+        'balance_children': serialize_inventory(balance_children, at_cost=True),
+        'budget': subtract_inventory_from_curr_dict(
+            budgets, ra.balance, at_cost=True),
+        'budget_children': subtract_inventory_from_curr_dict(
+            budgets, balance_children, at_cost=True),
         'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
         'is_closed': isinstance(realization.find_last_active_posting(
             ra.txn_postings), Close),

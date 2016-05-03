@@ -61,12 +61,12 @@
                         <td class="num">
                             {% if entry.balance %}
                                 {% for currency, number in entry.balance.items() %}
-                                    {{ account_macros.balance_with_budget(currency, number, entry.budgets[currency], show_currency=True) }}
+                                    {{ account_macros.balance_with_budget(currency, number, entry.budget, show_currency=True) }}
                                 {% endfor %}
                             {% endif %}
                             {% if entry.balance_children %}
                                 {% for currency, number in entry.balance_children.items() %}
-                                    {{ account_macros.balance_with_budget(currency, number, entry.budgets[currency], show_currency=True, css_class="tree-balance") }}
+                                    {{ account_macros.balance_with_budget(currency, number, entry.budget_children, show_currency=True, css_class="tree-balance") }}
                                 {% endfor %}
                             {% endif %}
                         </td>

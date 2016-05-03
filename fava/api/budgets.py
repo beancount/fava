@@ -1,8 +1,8 @@
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from decimal import Decimal
 
-from beancount.core.amount import Amount
 from beancount.core.data import Custom
-from beancount.core.inventory import Inventory
 
 
 class Budgets(object):
@@ -28,7 +28,7 @@ class Budgets(object):
                 self.datelines[account_name].append(
                     Dateline(date_start=entry.date,
                              period=entry.values[1].value,
-                             value=entry.values[2].value.number,
+                             number=entry.values[2].value.number,
                              currency=entry.values[2].value.currency)
                 )
 
@@ -56,54 +56,61 @@ class Budgets(object):
 
     def budget(self, account_name, date_from, date_to):
         """
-        Returns a beancount.core.inventory.Inventory with the budget for the
+        Returns a dictionary (currency => number) with the budget for the
         specified account and period.
         """
-        inventory = Inventory()
+        currency_dict = {}
 
         if account_name not in self.datelines.keys():
-            return inventory
+            return currency_dict
 
         for single_day in self._daterange(date_from, date_to):
             matching_dateline = self._matching_dateline(
                 self.datelines[account_name], single_day)
 
             if matching_dateline:
-                inventory.add_amount(Amount(
-                    matching_dateline.value / matching_dateline.days,
-                    matching_dateline.currency
-                ))
+                if matching_dateline.currency not in currency_dict:
+                    currency_dict[matching_dateline.currency] = Decimal(0.0)
+                currency_dict[matching_dateline.currency] += matching_dateline.value(single_day)
 
-        return inventory
+        return currency_dict
 
 
 class Dateline(object):
 
-    def __init__(self, date_start, period, value, currency):
+    def __init__(self, date_start, period, number, currency):
         super(Dateline, self).__init__()
         self.date_start = date_start
-        self.period = period
-        self.value = value
+        self.period = period.lower()
+        self.number = number
         self.currency = currency
 
-        self.days = self._days(self.date_start, self.period)
+    def value(self, date_):
+        return self.number / self.days(date_)
 
-    def _days(self, start_date, period):
+    def days(self, date_):
+        """Returns the days in the specified date_ and self.period."""
         # TODO test this extensively, may be buggy
-        period = period.lower()
 
-        if period == 'daily':
+        if self.period == 'daily':
             return 1
-        if period == 'weekly':
+        if self.period == 'weekly':
             return 7
-        if period == 'monthly':
-            return ((start_date + relativedelta(months=1)) - start_date).days
-        if period == 'quarterly':
-            return ((start_date + relativedelta(months=3)) - start_date).days
-        if period == 'yearly':
-            return ((start_date + relativedelta(years=1)) - start_date).days
-        raise Exception("Period unknown: {}".format(period))
+        if self.period == 'monthly':
+            date_ = datetime(date_.year, date_.month, 1)
+            return ((date_ + relativedelta(months=1)) - date_).days
+        if self.period == 'quarterly':
+            quarter = (date_.month - 1) / 3 + 1
+            if quarter == 1: date_ = datetime(date_.year, 1, 1);
+            if quarter == 2: date_ = datetime(date_.year, 4, 1);
+            if quarter == 3: date_ = datetime(date_.year, 7, 1);
+            if quarter == 4: date_ = datetime(date_.year, 10, 1);
+            return ((date_ + relativedelta(months=3)) - date_).days
+        if self.period == 'yearly':
+            date_ = datetime(date_.year, 1, 1)
+            return ((date_ + relativedelta(years=1)) - date_).days
+        raise Exception("Period unknown: {}".format(self.period))
 
     def __repr__(self):
         return "Dateline ({}, {}, {}, {})" \
-            .format(self.date_start, self.period, self.value, self.currency)
+            .format(self.date_start, self.period, self.number, self.currency)
