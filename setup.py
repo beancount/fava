@@ -35,7 +35,7 @@ setup(
     },
     install_requires=[
         'beancount-pygments-lexer>=0.1.2',
-        'beancount>=2.0b6',
+        'beancount>=2.0b11',
         'click',
         'Flask>=0.10.1',
         'livereload>=2.4.1',
