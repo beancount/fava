@@ -25,6 +25,7 @@
 {% set short_title = page_title if not short_title else short_title %}
 {% set show_filters = show_filters|default(True) %}
 {% set user_queries = api.queries[:config['sidebar-show-queries']] %}
+{% set sidebar_links = api.sidebar_links() %}
 <!doctype html>
 <html>
 <head>
@@ -55,6 +56,15 @@
     </header>
     <div class="main">
         <aside>
+            {% if sidebar_links %}
+                <h3>Custom Links</h3>
+                <ul class="navigation">
+                    {% for label, link in sidebar_links %}
+                        <li><a href="{{ link }}">{{ label }}</a></li>
+                    {% endfor %}
+                </ul>
+                <h3>Reports</h3>
+            {% endif %}
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
                 <ul class="navigation">
