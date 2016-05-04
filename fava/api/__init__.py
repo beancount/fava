@@ -31,7 +31,7 @@ from beancount.core.account import has_component
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Note, Document, Balance, TxnPosting,
-                                 Transaction, Event, Query)
+                                 Transaction, Event, Query, Custom)
 from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
@@ -158,6 +158,10 @@ class BeancountReportAPI(object):
                                                     self.account_types)
         self.all_accounts = self._all_accounts()
         self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
+
+        self.sidebar_link_entries = [entry for entry in self.all_entries
+                                     if isinstance(entry, Custom) and
+                                     entry.type == 'fava-sidebar-link']
 
         self._apply_filters()
 
@@ -609,3 +613,8 @@ class BeancountReportAPI(object):
             if isinstance(posting, Open):
                 return posting.meta
         return {}
+
+    def sidebar_links(self):
+        # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
+        return [(entry.values[0].value, entry.values[1].value)
+                for entry in self.sidebar_link_entries]
