@@ -71,3 +71,16 @@ of `xls`, `xlsx` and `ods`, install fava with the `excel` feature:
 
 When you start fava specifying multiple Beancount files, you can click the
 Beancount file name on the top left to switch between the files.
+
+## Custom links in the sidebar
+
+If you regularly use certain views in fava with different filters, etc., you can
+put these permalinks in the sidebar. Custom links can be put in the beancount
+file, utilizing the `custom` directive:
+
+    2016-05-04 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"
+
+`"fava-sidebar-link"` specifies that this directive is for a custom sidebar
+link, followed by the title to display in the sidebar (`"Income 2014"` in this
+example), and finally the URL to link to. The URL can be relative, like in the
+example above, or absolute, even linking to an external site.
