@@ -54,14 +54,14 @@ div.filter {
 }
 
 h1:hover div {
-    display:block;
+    display: block;
 }
 
 div.beancount-files {
-    left: 0;
-    width: 15em;
+    left: 19px;
+    width: 20em;
 
     & > ul li a {
-        padding: 8px 12px;
+        padding: 8px 12px 8px 28px;
     }
 }
