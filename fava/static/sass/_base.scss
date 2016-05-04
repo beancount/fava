@@ -1,8 +1,4 @@
-@import "~compass-mixins/lib/compass/reset";
-@import "~compass-mixins/lib/compass/css3";
-@import "~compass-mixins/lib/compass/css3/user-interface";
-@import "~compass-mixins/lib/compass/css3/font-face";
-@import "~compass-mixins/lib/compass/utilities/general/clearfix";
+@import "~normalize.css/normalize.css";
 
 // Globals
 
@@ -11,8 +7,7 @@
 }
 
 html,
-body,
-html > body {
+body {
     font-family: $font_family;
     font-weight: 400;
     font-size: 12px;
@@ -22,13 +17,15 @@ html > body {
     background: $color_background;
 }
 
-.hidden,
-.hidden-type {
-    display: none;
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
 }
 
 p, ol, ul, dl, table, pre {
     margin: 0 0 1em 0;
+    padding: 0;
+    list-style: none;
 }
 
 p {
@@ -39,6 +36,7 @@ h1, h2, h3, h4, h5 {
     font-weight: bold;
     color: $color_headings;
     margin: 0 0 1em 0;
+    padding: 0;
 }
 
 h1 { font-size: 1.5em; }
@@ -72,6 +70,23 @@ a {
     img {
         outline: none;
         border: none;
+    }
+}
+
+.hidden,
+.hidden-type {
+    display: none;
+}
+
+%clearfix {
+    &::before,
+    &::after {
+        content: " ";
+        display: table;
+    }
+
+    &::after {
+        clear: both;
     }
 }
 
