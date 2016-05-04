@@ -65,13 +65,13 @@ class Budgets(object):
             return currency_dict
 
         for single_day in self._daterange(date_from, date_to):
-            matching_dateline = self._matching_dateline(
+            dateline = self._matching_dateline(
                 self.datelines[account_name], single_day)
 
-            if matching_dateline:
-                if matching_dateline.currency not in currency_dict:
-                    currency_dict[matching_dateline.currency] = Decimal(0.0)
-                currency_dict[matching_dateline.currency] += matching_dateline.value(single_day)
+            if dateline:
+                if dateline.currency not in currency_dict:
+                    currency_dict[dateline.currency] = Decimal(0.0)
+                currency_dict[dateline.currency] += dateline.value(single_day)
 
         return currency_dict
 
@@ -101,10 +101,14 @@ class Dateline(object):
             return ((date_ + relativedelta(months=1)) - date_).days
         if self.period == 'quarterly':
             quarter = (date_.month - 1) / 3 + 1
-            if quarter == 1: date_ = datetime(date_.year, 1, 1);
-            if quarter == 2: date_ = datetime(date_.year, 4, 1);
-            if quarter == 3: date_ = datetime(date_.year, 7, 1);
-            if quarter == 4: date_ = datetime(date_.year, 10, 1);
+            if quarter == 1:
+                date_ = datetime(date_.year, 1, 1)
+            if quarter == 2:
+                date_ = datetime(date_.year, 4, 1)
+            if quarter == 3:
+                date_ = datetime(date_.year, 7, 1)
+            if quarter == 4:
+                date_ = datetime(date_.year, 10, 1)
             return ((date_ + relativedelta(months=3)) - date_).days
         if self.period == 'yearly':
             date_ = datetime(date_.year, 1, 1)

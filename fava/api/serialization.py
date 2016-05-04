@@ -124,13 +124,15 @@ def subtract_inventory_from_curr_dict(currency_dict, inventory, at_cost=False):
 
 
 def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
-    budgets = budget_fn(ra.account, begin_date, end_date) if budget_fn else Inventory()
+    budgets = budget_fn(ra.account, begin_date, end_date) if budget_fn \
+                                                          else Inventory()
     balance_children = realization.compute_balance(ra)
 
     serialized_account = {
         'account': ra.account,
         'balance': serialize_inventory(ra.balance, at_cost=True),
-        'balance_children': serialize_inventory(balance_children, at_cost=True),
+        'balance_children': serialize_inventory(
+            balance_children, at_cost=True),
         'budget': subtract_inventory_from_curr_dict(
             budgets, ra.balance, at_cost=True),
         'budget_children': subtract_inventory_from_curr_dict(
