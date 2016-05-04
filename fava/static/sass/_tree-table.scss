@@ -11,11 +11,11 @@ ol.tree-table {
 
     p { margin-top: -1px; }
 
-    .head span {
-        border: 1px solid $color_treetable_header_bg;
-        span {
-            flex-grow: 1;
-        }
+    .head > p > span {
+        border-right: 1px solid $color_treetable_header_bg;
+        padding: 3px 5px 2px 8px;
+
+        span { flex-grow: 1; }
     }
 
     p > span {
