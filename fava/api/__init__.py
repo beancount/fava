@@ -444,6 +444,7 @@ class BeancountReportAPI(object):
         if file_path in self.source_files():
             with open(file_path, 'w+', encoding='utf8') as f:
                 f.write(source)
+            self.load_file()
             return True
         else:
             return False  # TODO raise
