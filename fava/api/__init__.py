@@ -459,8 +459,10 @@ class BeancountReportAPI(object):
         return sorted(fw_pairs + bw_pairs)
 
     def prices(self, base, quote):
-        return prices.get_all_prices(self.price_map,
-                                     "{}/{}".format(base, quote))
+        all_prices = prices.get_all_prices(self.price_map,
+                                           "{}/{}".format(base, quote))
+        return [(date, price) for date, price in all_prices
+                if date >= self.date_first and date < self.date_last]
 
     def _activity_by_account(self, account_name=None):
         nb_activity_by_account = []
