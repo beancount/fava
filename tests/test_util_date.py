@@ -30,6 +30,7 @@ def test_parse_date():
     for test, result in tests.items():
         assert parse_date(test) == result
 
+
 def test_number_of_days_in_period_daily():
     assert number_of_days_in_period('daily', dt(2016, 5, 1)) == 1
     assert number_of_days_in_period('daily', dt(2016, 5, 2)) == 1

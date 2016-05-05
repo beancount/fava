@@ -1,52 +1,63 @@
-from datetime import datetime as dt
+from datetime import date
+from decimal import Decimal
 
-from fava.api.budgets import Dateline
+from beancount.parser import parser
+
+from fava.api.budgets import Budgets
 from fava.util.date import number_of_days_in_period
 
-def test_budgets_dateline_daily():
-    BUDGET = 2.5
-    dl = Dateline(dt(2016, 5, 1), 'daily', BUDGET, 'EUR')
 
-    assert dl.value(dt(2016, 5, 1)) == BUDGET
-    assert dl.value(dt(2016, 9, 1)) == BUDGET
-    assert dl.value(dt(2018, 12, 31)) == BUDGET
+def get_budgets(beancount_string):
+    entries, errors, options_map = parser.parse_string(beancount_string,
+                                                       dedent=True)
+    return Budgets(entries)
+
+
+def test_budgets_dateline_daily():
+    BUDGET = Decimal(2.5)
+    budgets = get_budgets('2016-05-01 custom "budget" Expenses:Books "daily"  {} EUR'.format(BUDGET))  # noqa
+
+    assert budgets.budget('Expenses:Books', date(2016, 5, 1), date(2016, 5, 1))['EUR'] == BUDGET  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 5, 1), date(2016, 5, 2))['EUR'] == BUDGET * 2  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 9, 2), date(2016, 9, 2))['EUR'] == BUDGET  # noqa
+    assert budgets.budget('Expenses:Books', date(2018, 12, 31), date(2018, 12, 31))['EUR'] == BUDGET  # noqa
 
 
 def test_budgets_dateline_weekly():
-    BUDGET = 21
-    dl = Dateline(dt(2016, 5, 1), 'weekly', BUDGET, 'EUR')
+    BUDGET = Decimal(21)
+    budgets = get_budgets('2016-05-01 custom "budget" Expenses:Books "weekly"  {} EUR'.format(BUDGET))  # noqa
 
-    assert dl.value(dt(2016, 5, 1)) == BUDGET / number_of_days_in_period('weekly', dt(2016, 5, 1))
-    assert dl.value(dt(2016, 9, 1)) == BUDGET / number_of_days_in_period('weekly', dt(2016, 9, 1))
-    assert dl.value(dt(2018, 12, 31)) == BUDGET / number_of_days_in_period('weekly', dt(2018, 12, 31))
+    assert budgets.budget('Expenses:Books', date(2016, 5, 1), date(2016, 5, 1))['EUR'] == BUDGET / number_of_days_in_period('weekly', date(2016, 5, 1))  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 9, 1), date(2016, 9, 1))['EUR'] == BUDGET / number_of_days_in_period('weekly', date(2016, 9, 1))  # noqa
+    assert budgets.budget('Expenses:Books', date(2018, 12, 31), date(2018, 12, 31))['EUR'] == BUDGET / number_of_days_in_period('weekly', date(2018, 12, 31))  # noqa
 
 
 def test_budgets_dateline_monthly():
-    BUDGET = 100
-    dl = Dateline(dt(2016, 5, 1), 'monthly', BUDGET, 'EUR')
+    BUDGET = Decimal(100)
+    budgets = get_budgets('2014-05-01 custom "budget" Expenses:Books "monthly"  {} EUR'.format(BUDGET))  # noqa
 
-    assert dl.value(dt(2016, 1, 1)) == BUDGET / number_of_days_in_period('monthly', dt(2016, 1, 1))
-    assert dl.value(dt(2016, 2, 1)) == BUDGET / number_of_days_in_period('monthly', dt(2016, 2, 1))
-    assert dl.value(dt(2018, 3, 31)) == BUDGET / number_of_days_in_period('monthly', dt(2016, 3, 31))
+    assert budgets.budget('Expenses:Books', date(2016, 1, 1), date(2016, 1, 1))['EUR'] == BUDGET / number_of_days_in_period('monthly', date(2016, 1, 1))  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 2, 1), date(2016, 2, 1))['EUR'] == BUDGET / number_of_days_in_period('monthly', date(2016, 2, 1))  # noqa
+    assert budgets.budget('Expenses:Books', date(2018, 3, 31), date(2018, 3, 31))['EUR'] == BUDGET / number_of_days_in_period('monthly', date(2016, 3, 31))  # noqa
 
 
 def test_budgets_dateline_quarterly():
-    BUDGET = 123456.7
-    dl = Dateline(dt(2016, 1, 1), 'quarterly', BUDGET, 'EUR')
+    BUDGET = Decimal(123456.7)
+    budgets = get_budgets('2014-05-01 custom "budget" Expenses:Books "quarterly"  {} EUR'.format(BUDGET))  # noqa
 
-    assert dl.value(dt(2016, 2, 1)) == BUDGET / number_of_days_in_period('quarterly', dt(2016, 2, 1))
-    assert dl.value(dt(2016, 5, 30)) == BUDGET / number_of_days_in_period('quarterly', dt(2016, 5, 30))
-    assert dl.value(dt(2016, 8, 15)) == BUDGET / number_of_days_in_period('quarterly', dt(2016, 8, 15))
-    assert dl.value(dt(2016, 11, 15)) == BUDGET / number_of_days_in_period('quarterly', dt(2016, 11, 15))
+    assert budgets.budget('Expenses:Books', date(2016, 2, 1), date(2016, 2, 1))['EUR'] == BUDGET / number_of_days_in_period('quarterly', date(2016, 2, 1))  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 5, 30), date(2016, 5, 30))['EUR'] == BUDGET / number_of_days_in_period('quarterly', date(2016, 5, 30))  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 8, 15), date(2016, 8, 15))['EUR'] == BUDGET / number_of_days_in_period('quarterly', date(2016, 8, 15))  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 11, 15), date(2016, 11, 15))['EUR'] == BUDGET / number_of_days_in_period('quarterly', date(2016, 11, 15))  # noqa
 
 
 def test_budgets_dateline_yearly():
-    BUDGET = 99999.87
-    dl = Dateline(dt(2010, 1, 1), 'yearly', BUDGET, 'EUR')
+    BUDGET = Decimal(99999.87)
+    budgets = get_budgets('2010-01-01 custom "budget" Expenses:Books "yearly"  {} EUR'.format(BUDGET))  # noqa
 
-    assert dl.value(dt(2011, 2, 1)) == BUDGET / number_of_days_in_period('yearly', dt(2011, 2, 1))
-    assert dl.value(dt(2015, 5, 30)) == BUDGET / number_of_days_in_period('yearly', dt(2015, 5, 30))
-    assert dl.value(dt(2016, 8, 15)) == BUDGET / number_of_days_in_period('yearly', dt(2016, 8, 15))
+    assert budgets.budget('Expenses:Books', date(2011, 2, 1), date(2011, 2, 1))['EUR'] == BUDGET / number_of_days_in_period('yearly', date(2011, 2, 1))  # noqa
+    assert budgets.budget('Expenses:Books', date(2015, 5, 30), date(2015, 5, 30))['EUR'] == BUDGET / number_of_days_in_period('yearly', date(2015, 5, 30))  # noqa
+    assert budgets.budget('Expenses:Books', date(2016, 8, 15), date(2016, 8, 15))['EUR'] == BUDGET / number_of_days_in_period('yearly', date(2016, 8, 15))  # noqa
 
 
 # @pytest.fixture

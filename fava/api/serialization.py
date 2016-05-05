@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 
 from beancount.core import compare, realization
 from beancount.core.amount import Amount, decimal
@@ -124,8 +125,9 @@ def subtract_inventory_from_curr_dict(currency_dict, inventory, at_cost=False):
 
 
 def serialize_real_account(ra, begin_date=None, end_date=None, budget_fn=None):
-    budgets = budget_fn(ra.account, begin_date, end_date) if budget_fn \
-                                                          else Inventory()
+    budgets = Inventory()
+    if budget_fn:
+        budget_fn(ra.account, begin_date, end_date - relativedelta(days=1))
     balance_children = realization.compute_balance(ra)
 
     serialized_account = {

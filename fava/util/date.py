@@ -167,7 +167,7 @@ def parse_date(string):
 
 def days_in_daterange(start_date, end_date):
     """Yields a datetime for every day in the specified interval."""
-    for n in range(int((end_date - start_date).days)):
+    for n in range(int((end_date - start_date).days) + 1):
         yield start_date + relativedelta(days=n)
 
 
