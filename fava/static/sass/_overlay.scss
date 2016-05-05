@@ -17,7 +17,7 @@ div.overlay-wrapper {
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
         text-align: left;
         cursor: auto;
-        @include clearfix;
+        @extend %clearfix;
 
         strong {
             display: inline-block;
