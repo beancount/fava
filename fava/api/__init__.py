@@ -461,8 +461,12 @@ class BeancountReportAPI(object):
     def prices(self, base, quote):
         all_prices = prices.get_all_prices(self.price_map,
                                            "{}/{}".format(base, quote))
-        return [(date, price) for date, price in all_prices
-                if date >= self.date_first and date < self.date_last]
+
+        if self.date_first and self.date_last:
+            return [(date, price) for date, price in all_prices
+                    if date >= self.date_first and date < self.date_last]
+        else:
+            return all_prices
 
     def _activity_by_account(self, account_name=None):
         nb_activity_by_account = []
