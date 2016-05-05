@@ -1,6 +1,7 @@
 import re
 import datetime
 import calendar
+from dateutil.relativedelta import relativedelta
 
 
 def get_next_interval(date, interval):
@@ -164,28 +165,34 @@ def parse_date(string):
             return daterange(today.year + modifier, _parse_month(identifier))
 
 
-if __name__ == '__main__':
-    today = datetime.date.today()
-    tests = {
-        'today': daterange(),
-        'yesterday': daterange(timedelta=datetime.timedelta(days=-1)),
-        'october 2010': daterange(2010, 10),
-        '2000': daterange(2000),
-        '1st february 2008': daterange(2008, 2, 1),
-        '2010-10': daterange(2010, 10),
-        '2000-01-03': daterange(2000, 1, 3),
-        'this year': daterange(today.year),
-        'august next year': daterange(today.year + 1, 8),
-        'this month': daterange(today.year, today.month),
-        'this december': daterange(today.year, 12),
-        'this november': daterange(today.year, 11),
-        '2nd aug, 2010': daterange(2010, 8, 2),
-        'august 3rd, 2012': daterange(2012, 8, 3),
-        '2015-W01': (datetime.date(2015, 1, 5), datetime.date(2015, 1, 12)),
-        '2015-Q2': (datetime.date(2015, 4, 1), datetime.date(2015, 7, 1)),
-        '2014 to 2015': (daterange(2014)[0], daterange(2015)[1]),
-        '2011-10 - 2015': (daterange(2011, 10)[0], daterange(2015)[1]),
-    }
-    for test, result in tests.items():
-        assert parse_date(test) == result
-    print("passed all {} tests".format(len(tests)))
+def days_in_daterange(start_date, end_date):
+    """Yields a datetime for every day in the specified interval."""
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + relativedelta(days=n)
+
+
+def number_of_days_in_period(period, date_):
+    """Returns the days in the specified period and date_."""
+
+    if period == 'daily':
+        return 1
+    if period == 'weekly':
+        return 7
+    if period == 'monthly':
+        date_ = datetime.datetime(date_.year, date_.month, 1)
+        return ((date_ + relativedelta(months=1)) - date_).days
+    if period == 'quarterly':
+        quarter = (date_.month - 1) / 3 + 1
+        if quarter == 1:
+            date_ = datetime.datetime(date_.year, 1, 1)
+        if quarter == 2:
+            date_ = datetime.datetime(date_.year, 4, 1)
+        if quarter == 3:
+            date_ = datetime.datetime(date_.year, 7, 1)
+        if quarter == 4:
+            date_ = datetime.datetime(date_.year, 10, 1)
+        return ((date_ + relativedelta(months=3)) - date_).days
+    if period == 'yearly':
+        date_ = datetime.datetime(date_.year, 1, 1)
+        return ((date_ + relativedelta(years=1)) - date_).days
+    raise Exception("Period unknown: {}".format(period))
