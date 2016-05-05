@@ -239,11 +239,11 @@ class BeancountReportAPI(object):
             names = account_name
 
         interval_tuples = self._interval_tuples(interval)
-        date_first, _ = getters.get_min_max_dates(self.entries, (Transaction))
         return [{
             'begin_date': begin_date,
             'totals': self._total_balance(
-                names, begin_date if not accumulate else date_first, end_date),
+                names,
+                begin_date if not accumulate else self.date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
     def _real_account(self, account_name, entries, begin_date=None,
@@ -462,9 +462,10 @@ class BeancountReportAPI(object):
         all_prices = prices.get_all_prices(self.price_map,
                                            "{}/{}".format(base, quote))
 
-        if self.date_first and self.date_last:
+        if self.filters['time']:
             return [(date, price) for date, price in all_prices
-                    if date >= self.date_first and date < self.date_last]
+                    if (date >= self.filters['time'].begin_date and
+                        date < self.filters['time'].end_date)]
         else:
             return all_prices
 
