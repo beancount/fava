@@ -115,7 +115,7 @@
         {% elif type == 'pad' %}
             Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
         {% elif type == 'custom' %}
-            Custom
+            Custom <strong>{{ entry.type }}</strong>
             {% for value in entry['values'] %}
                 &nbsp;
                 {%- if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}{% endif -%}
@@ -125,11 +125,11 @@
                 {%- if value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
             {% endfor %}
         {% elif type == 'budget' %}
-            {%- if entry.period_type == 'D' %}Daily{% endif %}
-            {%- if entry.period_type == 'W' %}Weekly{% endif %}
-            {%- if entry.period_type == 'M' %}Monthly{% endif %}
-            {%- if entry.period_type == 'Q' %}Quarterly{% endif %}
-            {%- if entry.period_type == 'Y' %}Yearly{% endif %}
+            {%- if entry.period_type == 'daily' %}Daily{% endif %}
+            {%- if entry.period_type == 'weekly' %}Weekly{% endif %}
+            {%- if entry.period_type == 'monthly' %}Monthly{% endif %}
+            {%- if entry.period_type == 'quarterly' %}Quarterly{% endif %}
+            {%- if entry.period_type == 'yearly' %}Yearly{% endif %}
             budget for {{ account_link(entry.account) }}
             <span class="budget-value num">{{ entry.value.number|format_currency(entry.value.currency) }} {{ entry.value.currency }}</span>
         {% elif type == 'document' %}
