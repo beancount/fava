@@ -41,14 +41,21 @@ ol.tree-table {
             }
 
             a {
-                margin-left:15px;
+                margin-left: 15px;
             }
         }
 
         &.num-header,
-        &.num { width: 8rem; }
+        &.num {
+            width: 8rem;
+            a { color: inherit; }
+        }
+
         &.other-header,
-        &.other { width: 10rem; }
+        &.other {
+            width: 10rem;
+            a { color: inherit; }
+        }
     }
 
     &:hover {

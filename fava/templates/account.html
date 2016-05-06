@@ -41,8 +41,14 @@
             <li class="head">
                 <p>
                 <span class="account"><span>Account</span><a href="" class="expand-all hidden" title="Expand all accounts">Expand all</a></span>
-                {% for begin_date, _ in dates|reverse %}
-                    <span class="other-header">{{ interval_macros.format_date(begin_date) }}</span>
+                {% for begin_date, end_date in dates|reverse %}
+                    {% if accumulate %}
+                        {% set time_filter = dates[0][0]|string + ' - ' + end_date|string %}
+                    {% else %}
+                        {% set time_filter = begin_date|string + ' - ' + end_date|string %}
+                    {% endif %}
+
+                    <span class="other-header"><a href="{{ url_for('account_with_journal', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
                 {% endfor %}
                 </p>
             </li>
@@ -53,12 +59,16 @@
                     {% if account.children %}<span class="expander" title="Hold the Shift-key while clicking to expand all children"></span>{% endif %}
                 {{ account_macros.account_name(account.account, last_segment=True) }}</span>
             {% for balance, balance_children in account.balance_and_balance_children|reverse %}
+                {% set begin_date, end_date = dates[::-1][loop.index0] %}
+                {% if accumulate %}{% set begin_date = dates[0][0] %}{% endif %}
+                {% set number_link = url_for('account_with_journal', name=account.account, time=begin_date|string + ' - ' + end_date|string) %}
+
                 <span class="num other{{ ' has-balance' if balance else '' }}">
                     {% for currency, number in balance.items() %}
-                        <span class="balance">{{ number|format_currency(currency) }} {{ currency }}</span>
+                        <span class="balance"><a href="{{ number_link }}">{{ number|format_currency(currency) }} {{ currency }}</a></span>
                     {% endfor %}
                     {% for currency, number in balance_children.items() %}
-                        <span class="balance-children">{{ number|format_currency(currency) }} {{ currency }}</span>
+                        <span class="balance-children"><a href="{{ number_link }}">{{ number|format_currency(currency) }} {{ currency }}</a></span>
                     {% endfor %}
                 </span>
             {% endfor %}
