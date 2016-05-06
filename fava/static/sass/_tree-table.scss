@@ -67,11 +67,12 @@ ol.tree-table {
     }
 
     .balance-children {
+        display: block;
         color: lighten($color_text, 60);
     }
 
     li.toggled {
-        ol { display:none; }
+        ol { display: none; }
 
         .balance {
             display: none;
