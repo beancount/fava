@@ -13,30 +13,30 @@
         <table class="errors sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" class="sorting-asc">File</th>
-                    <th>External editor</th>
+                    <th data-sort="string" class="sorting-asc">{{ _('File') }}</th>
+                    <th>{{ _('External editor') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for source_file in source_files %}
                 <tr>
                     {% with link=url_for_source(file_path=source_file) %}
-                    <td><a class="source" href="#source-{{ loop.index }}" title="Show source {{ source_file }}">{{ source_file }}</a></td>
-                    <td><a class="source" href="{{ link }}" title="Open {{ source_file }} in external editor">Open in external editor</a></td>
+                    <td><a class="source" href="#source-{{ loop.index }}" title="{{ _('Show source %(file)s', file=source_file) }}">{{ source_file }}</a></td>
+                    <td><a class="source" href="{{ link }}" title="{{ _('Open %(file)s in external editor', file=source_file) }}">{{ _('Open in external editor') }}</a></td>
                     {% endwith %}
                  </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <h2>Source listing</h2>
+        <h2>{{ _('Source listing') }}</h2>
         {% for source_file in source_files %}
         <div>
             {% with link=url_for_source(file_path=source_file) %}
-            <h3 id="source-{{ loop.index }}"><a class="source" href="{{ link }}" title="Show source {{ source_file }}">{{ source_file }}</a></h3>
+            <h3 id="source-{{ loop.index }}"><a class="source" href="{{ link }}" title="{{ _('Show source for %(file)s', file=source_file) }}">{{ source_file }}</a></h3>
             <div class="editor-wrapper editor-wrapper-readonly">
                 <form action="{{ url_for('source') }}" method="get">
-                    <div class="editor editor-readonly editor-async" id="editor-{{ loop.index }}" data-file-path="{{ source_file }}"><pre><code>; Loading {{ source_file }} ...</code></pre></div>
+                    <div class="editor editor-readonly editor-async" id="editor-{{ loop.index }}" data-file-path="{{ source_file }}"><pre><code>{{ _('; Loading %(file)s ...', file=source_file) }}</code></pre></div>
                 </form>
             </div>
             {% endwith %}
@@ -58,7 +58,7 @@
         </div>
     </div>
     <form class="wide-form editor-save" action="{{ url_for('source') }}" method="post">
-        <input type="submit" value="Save">
+        <input type="submit" value="{{ _('Save') }}">
     </form>
     {% endif %}
 {% endblock %}

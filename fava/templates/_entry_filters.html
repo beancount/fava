@@ -6,10 +6,10 @@
     <ul class="topmenu">
         <li{% if time_filter %} class="selected"{% endif %}>
             <a href="{{ url_for_current(time=None) }}">
-                {{ time_filter or 'Time' }}
+                {{ time_filter or _('Time') }}
             </a>
             <div class="filter" id="filter-time">
-                <input type="search" placeholder="eg. This Month, 2015-03, March 2015, Year to Date, ... ">
+                <input type="search" placeholder="{{ _('eg. This Month, 2015-03, March 2015, Year to Date, ...') }}">
                 <ul>
                     {% if time_filter and time_filter|int not in api.active_years %}
                         <li class="selected" data-filter="{{ time_filter }}">
@@ -35,10 +35,10 @@
                     {% if tag_filter|length == 1 %}
                         # {{ tag_filter|first }}
                     {% else %}
-                        Multiple tags
+                        {{ _('Multiple tags') }}
                     {% endif %}
                 {% else %}
-                    Tag
+                    {{ _('Tag') }}
                 {% endif %}
             </a>
             <div class="filter">
@@ -60,7 +60,7 @@
         </li>
         <li{% if account_filter %} class="selected"{% endif %}>
             <a href="{{ url_for_current(account=None) }}">
-                {{ account_filter or 'Account' }}
+                {{ account_filter or _('Account') }}
             </a>
             <div class="filter">
                 <input type="search">
@@ -87,10 +87,10 @@
                     {% if payee_filter|length == 1 %}
                         {{ print_payee(payee_filter|first) }}
                     {% else %}
-                        Multiple payees
+                        {{ _('Multiple payees') }}
                     {% endif %}
                 {% else %}
-                    Payee
+                    {{ _('Payee') }}
                 {% endif %}
             </a>
             <div class="filter">

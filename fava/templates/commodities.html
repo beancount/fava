@@ -14,8 +14,8 @@
                 <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
                 <table class="commodity sortable">
                     <thead>
-                        <th data-sort="string" data-sort-default="desc" class="sorting-asc">Date</th>
-                        <th data-sort="float">Price</th>
+                        <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Date') }}</th>
+                        <th data-sort="float">{{ _('Price') }}</th>
                     </thead>
                     <tbody>
                         {% set prices = api.prices(commodity.0, commodity.1) %}

@@ -4,22 +4,22 @@
     ("Configuration", [ 'source', 'errors', 'options', 'statistics', 'help'])
 ] %}
 {% set all_pages = {
-    'income_statement': ('Income Statement', 'g i'),
-    'balance_sheet':    ('Balance Sheet',    'g b'),
-    'trial_balance':    ('Trial Balance',    'g t'),
-    'journal':          ('Journal',          'g j'),
-    'query':            ('Query',            'g q'),
-    'holdings':         ('Holdings',         'g h'),
-    'net_worth':        ('Net Worth',        'g w'),
-    'commodities':      ('Commodities',      'g c'),
-    'documents':        ('Documents',        'g d'),
-    'notes':            ('Notes',            'g n'),
-    'events':           ('Events',           'g e'),
-    'source':           ('Source',           'g s'),
-    'errors':           ('Errors',           'g r'),
-    'options':          ('Options',          'g o'),
-    'statistics':       ('Statistics',       'g x'),
-    'help':             ('Help',             'g shift+h'),
+    'income_statement': (_('Income Statement'), 'g i'),
+    'balance_sheet':    (_('Balance Sheet'),    'g b'),
+    'trial_balance':    (_('Trial Balance'),    'g t'),
+    'journal':          (_('Journal'),          'g j'),
+    'query':            (_('Query'),            'g q'),
+    'holdings':         (_('Holdings'),         'g h'),
+    'net_worth':        (_('Net Worth'),        'g w'),
+    'commodities':      (_('Commodities'),      'g c'),
+    'documents':        (_('Documents'),        'g d'),
+    'notes':            (_('Notes'),            'g n'),
+    'events':           (_('Events'),           'g e'),
+    'source':           (_('Source'),           'g s'),
+    'errors':           (_('Errors'),           'g r'),
+    'options':          (_('Options'),          'g o'),
+    'statistics':       (_('Statistics'),       'g x'),
+    'help':             (_('Help'),             'g shift+h'),
 } %}
 {% set page_title = all_pages[active_page].0 if not page_title else page_title %}
 {% set short_title = page_title if not short_title else short_title %}
@@ -57,13 +57,13 @@
     <div class="main">
         <aside>
             {% if sidebar_links %}
-                <h3>Custom Links</h3>
+                <h3>{{ _('Custom Links') }}</h3>
                 <ul class="navigation">
                     {% for label, link in sidebar_links %}
                         <li><a href="{{ link }}">{{ label }}</a></li>
                     {% endfor %}
                 </ul>
-                <h3>Reports</h3>
+                <h3>{{ _('Reports') }}</h3>
             {% endif %}
             {% for title_, menuitems in navigation_bar %}
                 {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}

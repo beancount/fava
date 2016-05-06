@@ -41,6 +41,7 @@ setup(
         'markdown2>=2.3.0',
         'Flask>=0.10.1',
         'livereload>=2.4.1',
+        'Flask-Babel>=0.10.0',
     ],
     extras_require={
         'excel': [

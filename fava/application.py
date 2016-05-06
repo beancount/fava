@@ -7,6 +7,7 @@ import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file)
+from flask.ext.babel import Babel
 from werkzeug import secure_filename
 
 from fava import config
@@ -22,6 +23,9 @@ app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
+
+# app.config.from_pyfile('babel.cfg')
+babel = Babel(app)
 
 app.config['DEFAULT_SETTINGS'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -79,6 +83,17 @@ def discover_help_pages():
 load_settings()
 discover_help_pages()
 
+@babel.localeselector
+def get_locale():
+    # if a user is logged in, use the locale from the user settings
+    # user = getattr(g, 'user', None)
+    # if user is not None:
+    #     return user.locale
+    # TODO if setting is present
+    # otherwise try to guess the language from the user accept
+    # header the browser transmits.  We support de/fr/en in this
+    # example.  The best match wins.
+    return request.accept_languages.best_match(['de', 'en'])
 
 @app.route('/')
 def root():

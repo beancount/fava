@@ -55,9 +55,9 @@
     } %}
 {% endif %}
 {% set transaction_type_buttons = {
-    'cleared': ('*', 'Cleared Transactions'),
-    'pending': ('!', 'Pending Transactions'),
-    'other':   ('x', 'Other Transactions'),
+    'cleared': ('*', _('Cleared Transactions')),
+    'pending': ('!', _('Pending Transactions')),
+    'other':   ('x', _('Other Transactions')),
 }
 %}
 {% if show_tablefilter %}
@@ -109,15 +109,15 @@
 <ol id="journal-table" class="journal-table">
     <li class="head">
         <p>
-        <span class="datecell">Date</span>
-        <span class="flag">F</span>
-        <span class="description">Narration/Payee</span>
-        <span class="position">Position</span>
-        <span class="price">Price</span>
-        <span class="cost">Cost</span>
+        <span class="datecell">{{ _('Date') }}</span>
+        <span class="flag">{{ _('F') }}</span>
+        <span class="description">{{ _('Narration/Payee') }}</span>
+        <span class="position">{{ _('Position') }}</span>
+        <span class="price">{{ _('Price') }}</span>
+        <span class="cost">{{ _('Cost') }}</span>
         {% if show_change_and_balance %}
-        <span class="change">Change</span>
-        <span class="balance">Balance</span>
+        <span class="change">{{ _('Change') }}</span>
+        <span class="balance">{{ _('Balance') }}</span>
         {% endif %}
         </p>
     </li>

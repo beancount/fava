@@ -10,10 +10,10 @@
 {% set context = api.context(ehash) %}
     {% if context %}
     <dl>
-        <dt>Hash:</dt>
+        <dt>{{ _('Hash:') }}</dt>
         <dd><code>{{ context.hash }}</code></dd>
-        <dt>Location:</dt>
-        <dd><code><a href="{{ url_for_source(file_path=context.filename, line=context.lineno) }}" title="Show source {{ context.filename }}:{{ context.lineno }}">{{ context.filename }}:{{ context.lineno }}</a></code></dd>
+        <dt>{{ _('Location:') }}</dt>
+        <dd><code><a href="{{ url_for_source(file_path=context.filename, line=context.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=context.filename, context.lineno) }}">{{ context.filename }}:{{ context.lineno }}</a></code></dd>
     </dl>
     <div class="editor-wrapper editor-wrapper-readonly">
         <div class="editor editor-readonly" id="editor-{{ context.hash }}">
@@ -21,13 +21,13 @@
         </div>
     </div>
 
-    <h3>Journal Entry</h3>
+    <h3>{{ _('Journal Entry') }}</h3>
     {% with journal=context.journal %}
         {% include "_journal_table.html" %}
     {% endwith %}
     {% else %}
     <p>
-    No entry matches the given hash.
+    {{ _('No entry matches the given hash.') }}
     </p>
     {% endif %}
 {% endblock %}

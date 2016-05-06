@@ -8,11 +8,11 @@
 <ol class="tree-table">
     <li class="head">
         <p>
-        <span class="account"><span>Account</span><a href="" class="expand-all hidden" title="Expand all accounts">Expand all</a></span>
+        <span class="account"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
         {% for currency in operating_currencies %}
             <span class="num-header">{{ currency }}</span>
         {% endfor %}
-            {% if show_other_column %}<span class="other">Other</span>{% endif %}
+            {% if show_other_column %}<span class="other">{{ _('Other') }}</span>{% endif %}
         </p>
     </li>
 {% for account in real_accounts recursive %}
@@ -20,7 +20,7 @@
         <li>
         <p>
         <span class="account account-depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
-            {% if account.children %}<span class="expander" title="Hold the Shift-key while clicking to expand all children"></span>{% endif %}
+            {% if account.children %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children') }}"></span>{% endif %}
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
         <span class="num{{ ' has-balance' if account.balance else '' }}">
