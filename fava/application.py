@@ -24,9 +24,6 @@ app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-# app.config.from_pyfile('babel.cfg')
-babel = Babel(app)
-
 app.config['DEFAULT_SETTINGS'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)),
                  'default-settings.conf')
@@ -35,7 +32,6 @@ app.config['HELP_DIR'] = \
     os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['APIS'] = {}
-
 
 def load_file(beancount_file_slug=None):
     for filepath in app.config['BEANCOUNT_FILES']:
@@ -83,16 +79,12 @@ def discover_help_pages():
 load_settings()
 discover_help_pages()
 
+babel = Babel(app)
+
 @babel.localeselector
 def get_locale():
-    # if a user is logged in, use the locale from the user settings
-    # user = getattr(g, 'user', None)
-    # if user is not None:
-    #     return user.locale
-    # TODO if setting is present
-    # otherwise try to guess the language from the user accept
-    # header the browser transmits.  We support de/fr/en in this
-    # example.  The best match wins.
+    if app.config['language']:
+        return app.config['language']
     return request.accept_languages.best_match(['de', 'en'])
 
 @app.route('/')
@@ -246,6 +238,7 @@ def source():
             with open(file_path, 'w+', encoding='utf8') as f:
                 f.write(source)
             successful = True
+            load_settings()
         if file_path == app.config['DEFAULT_SETTINGS']:
             successful = False
         else:
