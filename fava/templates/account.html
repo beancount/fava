@@ -61,15 +61,16 @@
             {% for balance, balance_children in account.balance_and_balance_children|reverse %}
                 {% set begin_date, end_date = dates[::-1][loop.index0] %}
                 {% if accumulate %}{% set begin_date = dates[0][0] %}{% endif %}
-                {% set number_link = url_for('account_with_journal', name=account.account, time=begin_date|string + ' - ' + end_date|string) %}
 
                 <span class="num other{{ ' has-balance' if balance else '' }}">
-                    {% for currency, number in balance.items() %}
-                        <span class="balance"><a href="{{ number_link }}">{{ number|format_currency(currency) }} {{ currency }}</a></span>
-                    {% endfor %}
-                    {% for currency, number in balance_children.items() %}
-                        <span class="balance-children"><a href="{{ number_link }}">{{ number|format_currency(currency) }} {{ currency }}</a></span>
-                    {% endfor %}
+                    <a href="{{ url_for('account_with_journal', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
+                        {% for currency, number in balance.items() %}
+                            <span class="balance">{{ number|format_currency(currency) }} {{ currency }}</span>
+                        {% endfor %}
+                        {% for currency, number in balance_children.items() %}
+                            <span class="balance-children">{{ number|format_currency(currency) }} {{ currency }}</span>
+                        {% endfor %}
+                    </a>
                 </span>
             {% endfor %}
             </p>

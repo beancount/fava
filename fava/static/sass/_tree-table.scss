@@ -48,13 +48,19 @@ ol.tree-table {
         &.num-header,
         &.num {
             width: 8rem;
-            a { color: inherit; }
+            a {
+                display: block;
+                color: inherit;
+            }
         }
 
         &.other-header,
         &.other {
             width: 10rem;
-            a { color: inherit; }
+            a {
+                display: block;
+                color: inherit;
+            }
         }
     }
 
