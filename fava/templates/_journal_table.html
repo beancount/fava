@@ -28,8 +28,10 @@
     <div id="entry-filters" class="table-filter">
         <form>
             {% for type in entry_types %}
-                <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if show_type[type] %} checked="checked"{% endif %}>
-                <label for="filter-{{ type }}">{{ type|capitalize }}</label>
+                {% if type != 'budget' or api.has_budgets() %}
+                    <input type="checkbox" value="{{ type }}" id="filter-{{ type }}" data-type="{{ type }}"{% if show_type[type] %} checked="checked"{% endif %}>
+                    <label for="filter-{{ type }}">{{ type|capitalize }}</label>
+                {% endif %}
             {% endfor %}
             <input type="submit" id="toggle-metadata" value="{% if show_metadata %}Hide{% else %}Show{% endif %} metadata">
             <input type="submit" id="toggle-legs" value="{% if show_legs %}Hide{% else %}Show{% endif %} legs">

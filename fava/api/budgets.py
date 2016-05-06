@@ -7,7 +7,7 @@ from fava.util.date import days_in_daterange, number_of_days_in_period
 
 
 class Budgets(object):
-    Budget = namedtuple('Person', 'date_start period number currency')
+    Budget = namedtuple('Budget', 'date_start period number currency')
 
     def __init__(self, entries):
         """
@@ -61,12 +61,13 @@ class Budgets(object):
         if account_name not in self.budgets.keys():
             return currency_dict
 
-        print(date_from, date_to)
         for single_day in days_in_daterange(date_from, date_to):
             budget = self._matching_budget(account_name, single_day)
             if budget:
                 currency_dict[budget.currency] += \
                     budget.number / number_of_days_in_period(budget.period,
                                                              single_day)
-
         return currency_dict
+
+    def has_budgets(self):
+        return len(self.budgets) > 0

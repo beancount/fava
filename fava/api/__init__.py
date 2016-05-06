@@ -646,3 +646,6 @@ class BeancountReportAPI(object):
             if isinstance(posting, Open):
                 return posting.meta
         return {}
+
+    def has_budgets(self):
+        return self.budgets.has_budgets()
