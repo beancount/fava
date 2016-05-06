@@ -33,6 +33,7 @@ app.config['HELP_DIR'] = \
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['APIS'] = {}
 
+
 def load_file(beancount_file_slug=None):
     for filepath in app.config['BEANCOUNT_FILES']:
         api = BeancountReportAPI()
@@ -81,11 +82,13 @@ discover_help_pages()
 
 babel = Babel(app)
 
+
 @babel.localeselector
 def get_locale():
     if app.config['language']:
         return app.config['language']
     return request.accept_languages.best_match(['de', 'en'])
+
 
 @app.route('/')
 def root():
