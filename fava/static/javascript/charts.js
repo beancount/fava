@@ -636,8 +636,8 @@ function lineChart() {
 
     function setData(data) {
         x.domain([
-            d3.min(data, function(s) { return s.values[0].date; }),
-            d3.max(data, function(s) { return s.values[s.values.length - 1].date; })
+            d3.min(data, function(s) { return s.values.length ? s.values[0].date : null; }),
+            d3.max(data, function(s) { return s.values.length ? s.values[s.values.length - 1].date : null; })
         ]);
         y.domain([
             Math.min(0, d3.min(data, function(d) { return d3.min(d.values, function(d) { return d.value }); })),
