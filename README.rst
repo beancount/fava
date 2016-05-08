@@ -67,6 +67,16 @@ If you need a newer version of ``beancount`` than you can find on PyPi, you can 
 
 More details at `Beancount Install <http://furius.ca/beancount/doc/install>`__
 
+If you would like to package fava once built from source, so you can install it on a
+different machine, after building fava as shown above, do:
+
+.. code:: bash
+    python3 setup.py bdist_egg
+    # cp dist/beancount_fava-<version>.egg to other machine, and do:
+    easy_install-3.4 beancount_fava-<version>.egg
+
+More details at `Setuptools <https://pythonhosted.org/setuptools/setuptools.html#bdist-egg-create-a-python-egg-for-the-project>`__.
+
 --------------
 
 **Caution**: Consider this *beta*-software. Contributions are very
