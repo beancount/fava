@@ -1,24 +1,8 @@
 import collections
-import datetime
 
-from beancount.scripts.example import write_example_file
 from flask import url_for
-import pytest
 
-from fava.application import app, load_file
-
-
-@pytest.fixture
-def setup_app(tmpdir):
-    filename = tmpdir.join('beancount.example')
-    with filename.open('w') as fd:
-        today = datetime.date.today()
-        write_example_file(datetime.date(1980, 5, 12),
-                           datetime.date(today.year - 3, 1, 1),
-                           today, True, fd)
-    app.config['BEANCOUNT_FILES'] = [str(filename)]
-    load_file()
-    app.testing = True
+from fava.application import app
 
 
 class URLQueue:

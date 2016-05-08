@@ -150,7 +150,6 @@ class BeancountReportAPI(object):
         else:
             self.format_string = '{:f}'
             self.default_format_string = '{:.2f}'
-        self.dcontext = self.options['dcontext']
 
         self.active_years = list(getters.get_active_years(self.all_entries))
         self.active_tags = list(getters.get_all_tags(self.all_entries))
@@ -208,8 +207,8 @@ class BeancountReportAPI(object):
     def quantize(self, value, currency):
         if not currency:
             return self.default_format_string.format(value)
-        return self.format_string.format(self.dcontext.quantize(value,
-                                                                currency))
+        return self.format_string.format(
+            self.options['dcontext'].quantize(value, currency))
 
     def _entries_filter_type(self, entries, include_types):
         return [entry for entry in entries
