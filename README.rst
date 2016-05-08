@@ -17,9 +17,7 @@ fava
 fava is a web interface for the double-entry bookkeeping software `beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
 
-You can try out an online `demo <http://fava.pythonanywhere.com>`__ and there
-are some more screenshots `here
-<https://aumayr.github.io/fava/screenshots.html>`__.
+You can try out an online `demo <http://fava.pythonanywhere.com>`__.
 
 The `Getting Started
 <https://aumayr.github.io/fava/usage.html>`__ guide details the installation and
@@ -33,39 +31,9 @@ If you are familiar with beancount, you can get started with fava::
 and visit the web interface at `http://localhost:5000
 <http://localhost:5000>`__.
 
-If you also need to export query result to Microsoft Excel, use the following command to install:
-
-    pip3 install beancount-fava[excel]
-
-Development
------------
-
-If you want to hack on ``fava``, this will get you up and running:
-
-.. code:: bash
-
-    git clone https://github.com/aumayr/fava.git
-    cd fava
-    # using a virtual environment is optional, but recommended
-    virtualenv -p python3 venv
-    . venv/bin/activate
-    make build-js
-    pip install --editable .
-
-Note that you'll need to have the newest version of ``npm`` and
-``NodeJS`` installed to build the JavaScript and CSS files.
-
-If you need a newer version of ``beancount`` than you can find on PyPi, you can run from source like so:
-
-.. code:: bash
-
-    hg clone https://bitbucket.org/blais/beancount
-    cd beancount
-    # activate the fava virtual environment
-    . venv/bin/activate
-    pip install --editable .
-
-More details at `Beancount Install <http://furius.ca/beancount/doc/install>`__
+If you want to hack on ``fava`` or run a development version, see the
+`Development <https://aumayr.github.io/fava/development.html>`__ page on the
+website for details.
 
 --------------
 
