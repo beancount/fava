@@ -748,7 +748,7 @@ module.exports.initCharts = function() {
                     .tooltipText(function(d) {
                         return helpers.formatCurrency(d.value) + ' ' + d.name  + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
 
-                var series = operating_currencies.map(function(c) {
+                var series = window.commodities.map(function(c) {
                     return {
                         'name': c,
                         'values': chart.data.filter(function(d) { return !(d.balance[c] === undefined); })
@@ -760,7 +760,7 @@ module.exports.initCharts = function() {
                             };
                         })
                     }
-                });
+                }).filter(function(d) { return d.values.length; });
 
                 chartContainer(chart.id, chart.label)
                     .datum(series)
@@ -801,7 +801,7 @@ module.exports.initCharts = function() {
                         return text; })
 
                 chart.interval_totals.forEach(function(d) {
-                    d.values = operating_currencies.map(function(name) {
+                    d.values = window.operating_currencies.map(function(name) {
                         return {name: name, value: +d.totals[name] || 0};
                     });
                     d.date = new Date(d.begin_date);
