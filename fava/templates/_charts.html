@@ -27,7 +27,6 @@
     'type': 'bar',
     'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
     'interval_totals': api.interval_totals(interval, account_name),
-    'date_format': interval_macros.interval_format_str,
 }) }}
 {% endmacro %}
 
@@ -72,11 +71,11 @@
 <form class="wide-form chart-filter">
     {% if not hide_interval_filter %}
         <select name="chart-interval" id="chart-interval">
-            <option value="day"{% if interval_macros.interval == 'day' %} selected="selected"{% endif %}>Daily</option>
-            <option value="week"{% if interval_macros.interval == 'week' %} selected="selected"{% endif %}>Weekly</option>
-            <option value="month"{% if interval_macros.interval == 'month' %} selected="selected"{% endif %}>Monthly</option>
-            <option value="quarter"{% if interval_macros.interval == 'quarter' %} selected="selected"{% endif %}>Quarterly</option>
-            <option value="year"{% if interval_macros.interval == 'year' %} selected="selected"{% endif %}>Yearly</option>
+            <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>Daily</option>
+            <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>Weekly</option>
+            <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>Monthly</option>
+            <option value="quarter"{% if interval == 'quarter' %} selected="selected"{% endif %}>Quarterly</option>
+            <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>Yearly</option>
         </select>
     {% endif %}
     <input type="submit" id="toggle-chart" value="{% if show_charts %}Hide{% else %}Show{% endif %} charts">
@@ -88,7 +87,7 @@
     <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
 </div>
 <script>
-    window.interval = "{{ interval_macros.interval }}";
+    window.interval = "{{ interval }}";
     window.operating_currencies = {{ operating_currencies|tojson|safe }};
     window.commodities = {{ api.options['commodities']|tojson|safe }};
     window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";

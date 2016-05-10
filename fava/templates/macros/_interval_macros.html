@@ -1,10 +1,17 @@
-{% set interval = request.args.get('interval', config['default-interval']) %}
-{% if interval == 'day' %}    {% set interval_label = 'Daily' %}    {% set interval_format_str = "DD.MM.YY" %}{% endif %}
-{% if interval == 'week' %}   {% set interval_label = 'Weekly' %}   {% set interval_format_str = "YYYYWww" %}{% endif %}
-{% if interval == 'month' %}  {% set interval_label = 'Monthly' %}  {% set interval_format_str = "MMM YYYY" %}{% endif %}
-{% if interval == 'quarter' %}{% set interval_label = 'Quarterly' %}{% set interval_format_str = "YYYYQq" %}{% endif %}
-{% if interval == 'year' %}   {% set interval_label = 'Yearly' %}   {% set interval_format_str = "YYYY" %}{% endif %}
+{% set interval_label = interval|capitalize + 'ly' %}
+{% set interval_format_strings = {
+    'year': '%Y',
+    'month': '%b %Y',
+    'week': '%YW%W',
+    'day': '%Y-%m-%d',
+} %}
 
-{%- macro format_date(date_) -%}
-    {{- interval_format_str.replace('YYYY', date_.strftime('%Y')).replace('YY', date_.strftime('%y')).replace('MMM', date_.strftime('%b')).replace('MM', date_.strftime('%m')).replace('DD', date_.strftime('%d')).replace('ww', date_.strftime('%W')).replace('q', ((date_.month-1)//3 + 1)|string) -}}
+{% if interval == 'quarter' %}
+{%- macro format_date(date) -%}
+{{- date.year|string + 'Q' +  ((date.month-1)//3 + 1)|string -}}
 {%- endmacro -%}
+{% else %}
+{%- macro format_date(date) -%}
+{{- date.strftime(interval_format_strings[interval]) -}}
+{%- endmacro -%}
+{% endif %}
