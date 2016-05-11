@@ -14,9 +14,9 @@ div.filter {
     top: 41px;
 
     & > a.clear-filter {
-        padding: 8px 10px;
+        padding: 6px 12px;
         display: block;
-        margin-bottom: -5px;
+        margin-top: -2px;
 
         &:hover {
             background-color: $color_links;
