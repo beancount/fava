@@ -170,7 +170,7 @@ header {
             margin: 0;
 
             & > li {
-                & > a {
+                & > span {
                     position: relative;
                     padding-right: 23px !important;
                     color: $color_header_text;
@@ -201,8 +201,8 @@ header {
                     display: block;
                 }
 
-                &.selected > a,
-                &.opened > a {
+                &.selected > span,
+                &.opened > span {
                     background-color: $color_links;
                 }
             }

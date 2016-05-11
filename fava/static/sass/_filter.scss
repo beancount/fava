@@ -13,6 +13,30 @@ div.filter {
     z-index: 10;
     top: 41px;
 
+    & > a.clear-filter {
+        padding: 6px 12px;
+        display: block;
+        margin-top: -2px;
+
+        &:hover {
+            background-color: $color_links;
+            color: lighten($color_text, 100);
+
+            svg {
+                fill: lighten($color_text, 100);
+            }
+        }
+
+        svg {
+            position: relative;
+            width: 12px;
+            height: 12px;
+            top: 2px;
+            left: -2px;
+            fill: $color_links;
+        }
+    }
+
     & > ul {
         margin-bottom: 0;
         max-height: 400px;
