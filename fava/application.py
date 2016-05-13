@@ -10,7 +10,8 @@ from flask import (abort, Flask, flash, render_template, url_for, request,
 from werkzeug import secure_filename
 
 from fava import config
-from fava.api import BeancountReportAPI, FilterException
+from fava.api import BeancountReportAPI
+from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
 from fava.util import slugify, uniquify
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
