@@ -3,6 +3,8 @@ import re
 from beancount.core import account
 from beancount.core.data import Transaction
 from beancount.ops import summarize
+from beancount.query import (
+    query_compile, query_env, query_execute, query_parser)
 from fava.util.date import parse_date
 
 
@@ -34,6 +36,33 @@ class EntryFilter(object):
 
     def __bool__(self):
         return bool(self.value)
+
+
+class FromFilter(EntryFilter):
+    def __init__(self):
+        self.value = None
+        self.parser = query_parser.Parser()
+        self.env_entries = query_env.FilterEntriesEnvironment()
+
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        if not self.value:
+            return True
+        try:
+            from_clause = self.parser.parse(
+                'select * from ' + value).from_clause
+            self.c_from = query_compile.compile_from(
+                from_clause, self.env_entries)
+        except Exception:
+            # TODO
+            raise FilterException('Failed to parse from clause: {}'
+                                  .format(self.value))
+        return True
+
+    def _filter(self, entries, options):
+        return query_execute.filter_entries(self.c_from, entries, options)
 
 
 class DateFilter(EntryFilter):

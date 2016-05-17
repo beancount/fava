@@ -2,7 +2,17 @@ import datetime
 
 from beancount.core import account
 from beancount.core.data import Transaction
-from fava.api.filters import AccountFilter, DateFilter, PayeeFilter, TagFilter
+from fava.api.filters import (
+    AccountFilter, DateFilter, FromFilter, PayeeFilter, TagFilter)
+
+
+def test_from_filter(example_api):
+    filter = FromFilter()
+
+    filter.set('has_account("Assets:US:ETrade")')
+    filtered_entries = filter.apply(
+        example_api.all_entries, example_api.options)
+    assert len(filtered_entries) == 53
 
 
 def test_account_filter(example_api):
