@@ -37,6 +37,7 @@ list_options = [
 
 str_options = [
     'theme',
+    'language',
     'default-interval',
     'editor-insert-marker',
 ]

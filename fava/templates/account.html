@@ -20,9 +20,9 @@
     {% endif %}
 
     <div class="headerline">
-        <h3>{% if not journal %}<a href="{{ url_for('account_with_journal', name=account_name) }}" title="Journal of all entries for this Account and Sub-Accounts">Account Journal</a>{% else %}Account Journal{% endif %}</h3>
-        <h3>{% if not (not journal and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} Changes</a>{% else %}{{ interval_macros.interval_label }} Changes{% endif %}</h3>
-        <h3>{% if not (not journal and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} Balances</a>{% else %}{{ interval_macros.interval_label }} Balances{% endif %}</h3>
+        <h3>{% if not journal %}<a href="{{ url_for('account_with_journal', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
+        <h3>{% if not (not journal and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} {{ _('Changes') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Changes') }}{% endif %}</h3>
+        <h3>{% if not (not journal and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} {{ _('Balances') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Balances') }}{% endif %}</h3>
     </div>
 
     {% if journal %}
@@ -39,7 +39,7 @@
         <ol class="fullwidth tree-table">
             <li class="head">
                 <p>
-                <span class="account"><span>Account</span><a href="" class="expand-all hidden" title="Expand all accounts">Expand all</a></span>
+                <span class="account"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
                 {% for begin_date, end_date in dates|reverse %}
                     {% if accumulate %}
                         {% set time_filter = dates[0][0]|string + ' - ' + end_date|string %}
@@ -55,7 +55,7 @@
             <li>
                 <p>
                 <span class="account account-depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
-                    {% if account.children %}<span class="expander" title="Hold the Shift-key while clicking to expand all children"></span>{% endif %}
+                    {% if account.children %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children') }}"></span>{% endif %}
                 {{ account_macros.account_name(account.account, last_segment=True) }}</span>
             {% for balance, balance_children, budget, budget_children in account.balance_and_balance_children|reverse %}
                 {% set begin_date, end_date = dates[::-1][loop.index0] %}

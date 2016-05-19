@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'events' %}
-{% set page_title = 'Event - ' +  event_type %}
+{% set page_title = _('Event') + ' - ' +  event_type %}
 
 {% import "_charts.html" as charts with context %}
 
@@ -10,15 +10,15 @@
 
     {% if events %}
         {{ charts.skeleton() }}
-        {{ charts.events(event_type, label="Event: " + event_type) }}
+        {{ charts.events(event_type, label=_('Event: %(type)s', type=event_type)) }}
 
-        <h3>Entries</h3>
+        <h3>{{ _('Entries') }}</h3>
         <table class="events sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" data-sort-default="desc" class="sorting-asc">Date</th>
-                    <th data-sort="string">Type</th>
-                    <th data-sort="string">Description</th>
+                    <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Date') }}</th>
+                    <th data-sort="string">{{ _('Type') }}</th>
+                    <th data-sort="string">{{ _('Description') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -35,7 +35,7 @@
         </table>
     {% else %}
     <p>
-        No events.
+        {{ _('No events.') }}
     </p>
     {% endif %}
 {% endblock %}

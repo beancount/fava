@@ -6,11 +6,13 @@ import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file)
+from flask.ext.babel import Babel
 from werkzeug import secure_filename
 from beancount.core.number import Decimal
 
 from fava import config
-from fava.api import BeancountReportAPI, FilterException
+from fava.api import BeancountReportAPI
+from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
 from fava.util import slugify, uniquify
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
@@ -78,6 +80,15 @@ def discover_help_pages():
 
 load_settings()
 discover_help_pages()
+
+babel = Babel(app)
+
+
+@babel.localeselector
+def get_locale():
+    if app.config['language']:
+        return app.config['language']
+    return request.accept_languages.best_match(['de', 'en'])
 
 
 @app.route('/')
@@ -225,6 +236,7 @@ def source():
             with open(file_path, 'w+', encoding='utf8') as f:
                 f.write(source)
             successful = True
+            load_settings()
         if file_path == app.config['DEFAULT_SETTINGS']:
             successful = False
         else:

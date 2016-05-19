@@ -5,13 +5,13 @@
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
         <li{% if time_filter %} class="selected"{% endif %}>
-            <span>{{ time_filter or 'Time' }}</span>
+            <span>{{ time_filter or _('Time') }}</span>
             <div class="filter" id="filter-time">
-                <input type="search" placeholder="eg. This Month, 2015-03, March 2015, Year to Date, ... ">
+               <input type="search" placeholder="{{ _('eg. This Month, 2015-03, March 2015, Year to Date, ...') }}">
                 {% if time_filter %}
                     <a class="clear-filter" href="{{ url_for_current(time=None) }}">
                         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        Clear time filter
+                        {{ _('Clear time filter') }}
                     </a>
                 {% endif %}
                 <ul>
@@ -39,10 +39,10 @@
                     {% if tag_filter|length == 1 %}
                         # {{ tag_filter|first }}
                     {% else %}
-                        Multiple tags
+                        {{ _('Multiple tags') }}
                     {% endif %}
                 {% else %}
-                    Tag
+                    {{ _('Tag') }}
                 {% endif %}
             </span>
             <div class="filter">
@@ -50,7 +50,7 @@
                 {% if tag_filter %}
                     <a class="clear-filter" href="{{ url_for_current(tag=[]) }}">
                         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        Clear tag filter
+                        {{ _('Clear tag filter') }}
                     </a>
                 {% endif %}
                 <ul>
@@ -69,13 +69,13 @@
             </div>
         </li>
         <li{% if account_filter %} class="selected"{% endif %}>
-            <span>{{ account_filter or 'Account' }}</span>
+            <span>{{ account_filter or _('Account') }}</span>
             <div class="filter">
                 <input type="search">
                 {% if account_filter %}
                     <a class="clear-filter" href="{{ url_for_current(account=None) }}">
                         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        Clear account filter
+                        {{ _('Clear account filter') }}
                     </a>
                 {% endif %}
                 <ul>
@@ -101,10 +101,10 @@
                     {% if payee_filter|length == 1 %}
                         {{ print_payee(payee_filter|first) }}
                     {% else %}
-                        Multiple payees
+                        {{ _('Multiple payees') }}
                     {% endif %}
                 {% else %}
-                    Payee
+                    {{ _('Payee') }}
                 {% endif %}
             </span>
             <div class="filter">
@@ -112,7 +112,7 @@
                 {% if payee_filter %}
                     <a class="clear-filter" href="{{ url_for_current(payee=[]) }}">
                         <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        Clear payee filter
+                        {{ _('Clear payee filter') }}
                     </a>
                 {% endif %}
                 <ul>

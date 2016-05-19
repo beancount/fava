@@ -2,7 +2,7 @@
 
 all: build-js
 
-build-js: 
+build-js:
 	cd fava/static; npm install; npm run build
 
 clean:
@@ -29,3 +29,15 @@ gh-pages:
 	git push --force git@github.com:aumayr/fava.git gh-pages:gh-pages
 	git checkout master
 	git branch -D gh-pages
+
+babel-extract:
+	# Extract the translation strings from the .py- and .html-files
+	pybabel extract -F fava/translations/babel.conf -k lazy_gettext -o fava/translations/messages.pot ./fava
+
+babel-merge:
+	# Merge existing .po-files with the new translation strings
+	pybabel update -i fava/translations/messages.pot -d fava/translations
+
+babel-compile:
+	# Compile .po-files to binary .mo-files
+	pybabel compile -d fava/translations
