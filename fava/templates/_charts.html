@@ -78,7 +78,7 @@
             <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>{{ _('Yearly') }}</option>
         </select>
     {% endif %}
-    <input type="submit" id="toggle-chart" value="{{ _('Toggle charts') }}">
+    <input type="submit" id="toggle-chart"{% if show_charts %} class="show-charts"{% endif %} value="{{ _('Toggle charts') }}">
 </form>
 <div class="charts">
     <div id="chart-container" class="chart-container{% if not show_charts %} hidden{% endif %}">

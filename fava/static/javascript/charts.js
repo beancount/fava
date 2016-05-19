@@ -890,7 +890,9 @@ module.exports.initCharts = function() {
     // Toggle charts
     $('#toggle-chart').click(function(event) {
         event.preventDefault();
+        var shouldShow = !$(this).hasClass('show-charts');
         $('#chart-container, #chart-labels, #chart-interval').toggleClass('hidden', !shouldShow);
+        $(this).toggleClass('show-charts', shouldShow);
     });
 
     $('select#chart-interval').on('change', function() {
