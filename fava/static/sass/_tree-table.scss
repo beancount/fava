@@ -47,7 +47,7 @@ ol.tree-table {
 
         &.num-header,
         &.num {
-            width: 8rem;
+            width: 10rem;
             a {
                 display: block;
                 color: inherit;
@@ -56,7 +56,8 @@ ol.tree-table {
 
         &.other-header,
         &.other {
-            width: 10rem;
+            width: 13rem;
+
             a {
                 display: block;
                 color: inherit;
@@ -72,7 +73,12 @@ ol.tree-table {
 
     .has-balance {
         .balance {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            & > span { white-space: nowrap; }
+            & > span.number { flex-grow: 1; }
         }
         .balance-children {
             display: none;
@@ -117,5 +123,13 @@ ol.tree-table {
     a.expand-all {
        color: lighten($color_text, 40);
        font-weight: normal;
+    }
+
+    span.budget {
+        margin-right: 4px;
+
+        &.budget-negative { color: $color_budget_negative; }
+        &.budget-positive { color: $color_budget_positive; }
+        &.budget-zero     { color: $color_budget_zero; }
     }
 }

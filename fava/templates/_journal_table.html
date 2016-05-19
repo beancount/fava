@@ -1,4 +1,4 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query'] %}
+{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set default_show_type = {
     'open':        config['journal-show-type-open'],
@@ -9,6 +9,8 @@
     'document':    config['journal-show-type-document'],
     'pad':         config['journal-show-type-pad'],
     'query':       config['journal-show-type-query'],
+    'custom':      config['journal-show-type-custom'],
+    'budget':      config['journal-show-type-budget'],
 
     'cleared':     config['journal-show-transaction-cleared'],
     'pending':     config['journal-show-transaction-pending'],
@@ -27,6 +29,8 @@
         'document':    'document' in request.args.getlist('show'),
         'pad':         'pad' in request.args.getlist('show'),
         'query':       'query' in request.args.getlist('show'),
+        'custom':      'custom' in request.args.getlist('show'),
+        'budget':      'budget' in request.args.getlist('show'),
 
         'cleared':     'cleared' in request.args.getlist('show'),
         'pending':     'pending' in request.args.getlist('show'),
@@ -45,6 +49,8 @@
         'document':    default_show_type['document'],
         'pad':         default_show_type['pad'],
         'query':       default_show_type['query'],
+        'custom':      default_show_type['custom'],
+        'budget':      default_show_type['budget'],
 
         'cleared':     default_show_type['cleared'],
         'pending':     default_show_type['pending'],
@@ -63,11 +69,13 @@
 {% if show_tablefilter %}
 <form id="entry-filters" class="wide-form">
     {% for type in entry_types %}
-        <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
-        {% if type == 'transaction' %}
-        {% for txn_type in transaction_types %}
-        <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="{{ txn_type }}" data-selector="li.{{ txn_type }}" data-show-default="{{ default_show_type[txn_type]|lower }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
-        {% endfor %}
+        {% if type != 'budget' or api.has_budgets() %}
+            <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
+            {% if type == 'transaction' %}
+                {% for txn_type in transaction_types %}
+                    <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="{{ txn_type }}" data-selector="li.{{ txn_type }}" data-show-default="{{ default_show_type[txn_type]|lower }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
+                {% endfor %}
+            {% endif %}
         {% endif %}
     {% endfor %}
     <input type="submit" id="toggle-metadata" title="{% if show_type['metadata'] %}Hide{% else %}Show{% endif %} metadata" data-type="metadata" data-selector="dl.metadata" data-show-default="{{ default_show_type['metadata']|lower }}" {% if not show_type['metadata'] %} class="inactive"{% endif %} value="Metadata">
@@ -142,6 +150,24 @@
             Query: <a href="{{ url_for('query', name=entry.name, bql=entry.query_string) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
             Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
+        {% elif type == 'custom' %}
+            Custom <strong>{{ entry.type }}</strong>
+            {% for value in entry['values'] %}
+                &nbsp;
+                {%- if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}{% endif -%}
+                {%- if value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value.number|format_currency(value.value.currency) }} {{ value.value.currency }}</span>{% endif -%}
+                {%- if value.dtype|string == "<class 'str'>" %}"{{ value.value }}"{% endif -%}
+                {%- if value.dtype|string == "<class 'bool'>" %}{{ value.value }}{% endif -%}
+                {%- if value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
+            {% endfor %}
+        {% elif type == 'budget' %}
+            {%- if entry.period_type == 'daily' %}Daily{% endif %}
+            {%- if entry.period_type == 'weekly' %}Weekly{% endif %}
+            {%- if entry.period_type == 'monthly' %}Monthly{% endif %}
+            {%- if entry.period_type == 'quarterly' %}Quarterly{% endif %}
+            {%- if entry.period_type == 'yearly' %}Yearly{% endif %}
+            budget for {{ account_link(entry.account) }}
+            <span class="budget-value num">{{ entry.value.number|format_currency(entry.value.currency) }} {{ entry.value.currency }}</span>
         {% elif type == 'document' %}
             Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
         {% elif type == 'balance' %}

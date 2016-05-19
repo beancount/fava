@@ -46,6 +46,8 @@ $color_journalentry_balance: #cfc;
 $color_journalentry_pad: #8ff;
 $color_journalentry_padding: #cff;
 $color_journalentry_postingwarning: #f66;
+$color_journalentry_custom: #fff3ab;
+$color_journalentry_budget: #ffddae;
 
 $color_journaltable_header: $color_text;
 $color_journaltable_border: white;
@@ -55,6 +57,10 @@ $color_journaltable_tag: #6aa2db;
 $color_treetable_header_bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
 
 $color_treetable_expander: #afc1d3;
+
+$color_budget_negative: #AF3D3D;
+$color_budget_positive: #3DAF46;
+$color_budget_zero: #FFB900;
 
 $color_treemap_text: white;
 
