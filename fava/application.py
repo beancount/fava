@@ -2,7 +2,7 @@
 import configparser
 import os
 from datetime import datetime
-
+from decimal import Decimal
 import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
@@ -263,9 +263,11 @@ def report(report_name):
 
 
 @app.template_filter()
-def format_currency(value, currency=None):
-    if not value:
+def format_currency(value, currency=None, show_if_zero=False):
+    if not value and not show_if_zero:
         return ''
+    if value == 0.0:
+        return g.api.quantize(Decimal(0.0), currency)
     return g.api.quantize(value, currency)
 
 

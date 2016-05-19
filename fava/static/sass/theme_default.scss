@@ -35,6 +35,8 @@ $color_journalentry_balance: #cfc;
 $color_journalentry_pad: #8ff;
 $color_journalentry_padding: #cff;
 $color_journalentry_postingwarning: #f66;
+$color_journalentry_custom: #fff3ab;
+$color_journalentry_budget: #ffddae;
 
 $color_journaltable_header: #888;
 $color_journaltable_border: #f5f5f5;
@@ -44,6 +46,10 @@ $color_journaltable_tag: #6aa2db;
 $color_treetable_header_bg: darken($color_background, 15);
 
 $color_treetable_expander: #afc1d3;
+
+$color_budget_negative: #AF3D3D;
+$color_budget_positive: #3DAF46;
+$color_budget_zero: #FFB900;
 
 $color_treemap_text: white;
 

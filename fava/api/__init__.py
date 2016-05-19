@@ -23,6 +23,9 @@ import datetime
 import operator
 import os
 
+from dateutil.relativedelta import relativedelta as rdelta
+from decimal import Decimal
+
 from beancount import loader
 from beancount.core import compare, flags, getters, realization, inventory
 from beancount.core.realization import RealAccount
@@ -39,6 +42,7 @@ from beancount.reports import context
 from beancount.utils import misc_utils
 
 from fava.util.date import parse_date, interval_tuples
+from fava.api.budgets import Budgets
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
@@ -165,6 +169,8 @@ class BeancountReportAPI(object):
 
         self._apply_filters()
 
+        self.budgets = Budgets(self.entries)
+
     def _apply_filters(self):
         self.entries = self.all_entries
 
@@ -283,6 +289,7 @@ class BeancountReportAPI(object):
                                                           closing_entries))]
 
     def interval_balances(self, interval, account_name, accumulate=False):
+        """accumulate is False for /changes and True for /balances"""
         account_names = [account
                          for account in self.all_accounts
                          if account.startswith(account_name)]
@@ -295,7 +302,33 @@ class BeancountReportAPI(object):
                 end_date, min_accounts=account_names)
             for begin_date, end_date in interval_tuples]
 
-        return zip_real_accounts(interval_balances), interval_tuples
+        return self.add_budgets(zip_real_accounts(interval_balances),
+                                interval_tuples, accumulate), interval_tuples
+
+    def add_budgets(self, zipped_interval_balances, interval_tuples, accumulate):  # noqa
+        """Add budgets data to zipped (recursive) interval balances."""
+        if not zipped_interval_balances:
+            return
+
+        interval_budgets = [self.budgets.budget(
+                zipped_interval_balances['account'],
+                interval_tuples[0][0] if accumulate else begin_date,
+                end_date - rdelta(days=1)
+            ) for begin_date, end_date in interval_tuples]
+
+        zipped_interval_balances['balance_and_balance_children'] = [(
+                balances[0],
+                balances[1],
+                {currency: value - (balances[0][curr] if curr in balances[0] else Decimal(0.0)) for curr, value in budget.items()},  # noqa
+                {currency: value - (balances[1][curr] if curr in balances[1] else Decimal(0.0)) for curr, value in budget.items()})  # noqa
+            for balances, budget in zip(zipped_interval_balances['balance_and_balance_children'], interval_budgets)  # noqa
+        ]
+
+        zipped_interval_balances['children'] = [self.add_budgets(
+            child, interval_tuples, accumulate)
+            for child in zipped_interval_balances['children']]
+
+        return zipped_interval_balances
 
     def trial_balance(self):
         return serialize_real_account(self.root_account)['children']
@@ -618,3 +651,6 @@ class BeancountReportAPI(object):
         # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
         return [(entry.values[0].value, entry.values[1].value)
                 for entry in self.sidebar_link_entries]
+
+    def has_budgets(self):
+        return self.budgets.has_budgets()
