@@ -6,9 +6,9 @@
 {% block content %}
     {{ charts.skeleton() }}
 
-    {{ charts.interval_totals(interval, [api.options['name_income'], api.options['name_expenses']], label='Net Profit') }}
-    {{ charts.interval_totals(interval, api.options['name_income'], label='Income') }}
-    {{ charts.interval_totals(interval, api.options['name_expenses'], label='Expenses') }}
+    {{ charts.interval_totals(interval, [api.options['name_income'], api.options['name_expenses']], label=_('Net Profit')) }}
+    {{ charts.interval_totals(interval, api.options['name_income'], label=_('Income')) }}
+    {{ charts.interval_totals(interval, api.options['name_expenses'], label=_('Expenses')) }}
 
     {{ charts.treemap(api.options['name_income']) }}
     {{ charts.treemap(api.options['name_expenses']) }}
@@ -17,12 +17,12 @@
     {{ charts.sunburst(api.options['name_income']) }}
 
     <div class="halfleft">
-        {% with table_title="Income", real_accounts=api.balances(api.options['name_income']), totals=True %}
+        {% with table_title=_('Income'), real_accounts=api.balances(api.options['name_income']), totals=True %}
             {% include "_tree_table.html" %}
         {% endwith %}
     </div>
     <div class="halfright">
-        {% with table_title="Expenses", real_accounts=api.balances(api.options['name_expenses']), totals=True %}
+        {% with table_title=_('Expenses'), real_accounts=api.balances(api.options['name_expenses']), totals=True %}
             {% include "_tree_table.html" %}
         {% endwith %}
     </div>

@@ -7,12 +7,12 @@
     {% set statistics = api.statistics() %}
 
     <div class="left statistics">
-        <h3>Postings per Account</h3>
+        <h3>{{ _('Postings per Account') }}</h3>
         <table class="statistics sortable">
             <thead>
                 <tr>
-                    <th data-sort="string">Type</th>
-                    <th data-sort="int" class="sorting-desc"># Entries</th>
+                    <th data-sort="string">{{ _('Type') }}</th>
+                    <th data-sort="int" class="sorting-desc">{{ _('# Entries') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total</td>
+                    <td>{{ _('Total') }}</td>
                     <td class="num">{{ statistics.postings_by_account_total }}</td>
                 </tr>
             </tfoot>
@@ -33,7 +33,7 @@
     </div>
 
     {% macro copy_balance_directives_text(activity_by_account) -%}
-            Click to copy balance directives for accounts (except green ones) to the clipboard:
+            {{ _('Click to copy balance directives for accounts (except green ones) to the clipboard:') }}
 
             {% for activity in activity_by_account -%}
                 {% if activity.account|uptodate_eligible %}
@@ -47,15 +47,15 @@
     {% set clipboard_text = copy_balance_directives_text(statistics.activity_by_account) %}
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
     <div class="left statistics">
-        <h3>Update Activity per Account<input type="submit" class="right" id="copy-balances" value="Copy balance directives" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}"></h3>
+        <h3>{{ _('Update Activity per Account') }}<input type="submit" class="right" id="copy-balances" value="{{ _('Copy balance directives') }}" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}"></h3>
         <table class="statistics statistics-update-activity sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" class="sorting-asc">Account</th>
+                    <th data-sort="string" class="sorting-asc">{{ _('Account') }}</th>
                     <th data-sort="float" data-sort-default="desc"></th>
                     <th data-sort="string" data-sort-default="desc"></th>
-                    <th data-sort="string">Last Entry</th>
-                    <th data-sort="float">Balance</th>
+                    <th data-sort="string">{{ _('Last Entry') }}</th>
+                    <th data-sort="float">{{ _('Balance') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -86,12 +86,12 @@
     </div>
 
     <div class="left statistics">
-        <h3>Directive Type</h3>
+        <h3>{{ _('Directive Type') }}</h3>
         <table class="statistics sortable">
             <thead>
                 <tr>
-                    <th data-sort="string">Type</th>
-                    <th data-sort="int" class="sorting-desc"># Entries</th>
+                    <th data-sort="string">{{ _('Type') }}</th>
+                    <th data-sort="int" class="sorting-desc">{{ _('# Entries') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -104,7 +104,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td>Total</td>
+                    <td>{{ _('Total') }}</td>
                     <td class="num">{{ statistics.entries_by_type_total }}</td>
                 </tr>
             </tfoot>

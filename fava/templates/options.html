@@ -3,23 +3,27 @@
 {% set show_filters = False %}
 
 {% block content %}
-    <h2>fava: settings</h2>
+    <h2>{{ _('fava: settings') }}</h2>
     <p>
-        You can use the <code>--settings [file]</code> option when starting <code>fava</code> to specify different settings. The settings will be merged with the default-settings, so the table below shows all possible settings-keys.
+        {{ _('You can use the <code>--settings [file]</code> option when starting <code>fava</code> to specify different settings. The settings will be merged with the default-settings, so the table below shows all possible settings-keys.') }}
     </p>
     <dl>
-        <dt>Default settings:</dt>
+        <dt>{{ _('Default settings:') }}</dt>
         <dd><a href="{{ url_for('source', file_path=config['DEFAULT_SETTINGS']) }}">{{ config['DEFAULT_SETTINGS'] }}</a></dd>
-        {% if config['USER_SETTINGS'] %}
-        <dt>User settings:</dt>
-        <dd><a href="{{ url_for('source', file_path=config['USER_SETTINGS']) }}">{{ config['USER_SETTINGS'] }}</a></dd>
-        {% endif %}
     </dl>
+    {% if config['USER_SETTINGS'] %}
+    <br>
+    <dl>
+        <dt>{{ _('User settings:') }}</dt>
+        <dd><a href="{{ url_for('source', file_path=config['USER_SETTINGS']) }}">{{ config['USER_SETTINGS'] }}</a></dd>
+    </dl>
+    {% endif %}
+    <br>
     <table class="settings sortable">
         <thead>
             <tr>
-                <th data-sort="string" data-sort-default="desc" class="sorting-asc">Key</th>
-                <th data-sort="string">Value</th>
+                <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Key') }}</th>
+                <th data-sort="string">{{ _('Value') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -32,15 +36,15 @@
         </tbody>
     </table>
     <br>
-    <h2>beancount: options</h2>
+    <h2>{{ _('beancount: options') }}</h2>
     <p>
-        For a detailed explanation of all possible <code>option</code>-values see the <a href="http://furius.ca/beancount/doc/options">Beancount Options Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.
+        {{ _('For a detailed explanation of all possible <code>option</code>-values see the <a href="http://furius.ca/beancount/doc/options">Beancount Options Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.') }}
     </p>
     <table class="options_map sortable">
         <thead>
             <tr>
-                <th data-sort="string" data-sort-default="desc" class="sorting-asc">Key</th>
-                <th data-sort="string">Value</th>
+                <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Key') }}</th>
+                <th data-sort="string">{{ _('Value') }}</th>
             </tr>
         </thead>
         <tbody>

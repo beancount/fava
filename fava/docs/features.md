@@ -84,3 +84,11 @@ file, utilizing the `custom` directive:
 link, followed by the title to display in the sidebar (`"Income 2014"` in this
 example), and finally the URL to link to. The URL can be relative, like in the
 example above, or absolute, even linking to an external site.
+
+## UI Language
+
+You can change the language of the UI by specifying the `language` setting. 
+Currently fava supports English (`en`) and German (`de`).
+
+If no setting is specified, fava tries to guess the language from your Browser-
+settings.

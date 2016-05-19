@@ -9,22 +9,22 @@
         {{ charts.skeleton(hide_interval_filter=True) }}
         {{ charts.events() }}
 
-        <h3>Entries</h3>
+        <h3>{{ _('Entries') }}</h3>
         <table class="events sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" data-sort-default="desc" class="sorting-asc">Date</th>
-                    <th data-sort="string">Type</th>
-                    <th data-sort="string">Description</th>
+                    <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Date') }}</th>
+                    <th data-sort="string">{{ _('Type') }}</th>
+                    <th data-sort="string">{{ _('Description') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for event in events %}
                     <tr>
                         <td>
-                            <a href="{{ url_for_source(file_path=event.meta.filename, line=event.meta.lineno) }}" title="Show source {{ event.meta.filename }}:{{ event.meta.lineno }}">{{ event.date }}</a>
+                            <a href="{{ url_for_source(file_path=event.meta.filename, line=event.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=event.meta.file, lineno=event.meta.lineno) }}">{{ event.date }}</a>
                         </td>
-                        <td><a href="{{ url_for('event_details', event_type=event.type) }}" title="Show events of type '{{ event.type }}'">{{ event.type }}</a></td>
+                        <td><a href="{{ url_for('event_details', event_type=event.type) }}" title="{{ _('Show events of type %(type)s', type=event.type) }}">{{ event.type }}</a></td>
                         <td>{{ event.description }}</td>
                     </tr>
                 {% endfor %}
@@ -32,7 +32,8 @@
         </table>
     {% else %}
     <p>
-        No events.
+        {{ _('No events.') }}
     </p>
     {% endif %}
 {% endblock %}
+

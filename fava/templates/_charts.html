@@ -71,18 +71,18 @@
 <form class="wide-form chart-filter">
     {% if not hide_interval_filter %}
         <select name="chart-interval" id="chart-interval">
-            <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>Daily</option>
-            <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>Weekly</option>
-            <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>Monthly</option>
-            <option value="quarter"{% if interval == 'quarter' %} selected="selected"{% endif %}>Quarterly</option>
-            <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>Yearly</option>
+            <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>{{ _('Daily') }}</option>
+            <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>{{ _('Weekly') }}</option>
+            <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>{{ _('Monthly') }}</option>
+            <option value="quarter"{% if interval == 'quarter' %} selected="selected"{% endif %}>{{ _('Quarterly') }}</option>
+            <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>{{ _('Yearly') }}</option>
         </select>
     {% endif %}
-    <input type="submit" id="toggle-chart" value="{% if show_charts %}Hide{% else %}Show{% endif %} charts">
+    <input type="submit" id="toggle-chart" value="{{ _('Toggle charts') }}">
 </form>
 <div class="charts">
     <div id="chart-container" class="chart-container{% if not show_charts %} hidden{% endif %}">
-        <div class="loading">Loading charts&hellip;</div>
+        <div class="loading">{{ _('Loading charts&hellip;') }}</div>
     </div>
     <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
 </div>

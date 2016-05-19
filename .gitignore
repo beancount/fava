@@ -12,3 +12,4 @@ TODO
 
 node_modules
 .cache/
+fava/translations/messages.pot
