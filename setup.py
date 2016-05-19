@@ -41,7 +41,6 @@ setup(
         'markdown2>=2.3.0',
         'Flask>=0.10.1',
         'livereload>=2.4.1',
-        'python-dateutil>=2.4.2',
     ],
     extras_require={
         'excel': [

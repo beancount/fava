@@ -1,7 +1,7 @@
 from collections import defaultdict, namedtuple
-from decimal import Decimal
 
 from beancount.core.data import Custom
+from beancount.core.number import Decimal
 
 from fava.util.date import days_in_daterange, number_of_days_in_period
 
@@ -54,7 +54,7 @@ class Budgets(object):
     def budget(self, account_name, date_from, date_to):
         """
         Returns a dictionary (currency => number) with the budget for the
-        specified account and period (including date_to).
+        specified account and period (excluding date_to).
         """
         currency_dict = defaultdict(lambda: Decimal(0.0))
 

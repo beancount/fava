@@ -1,7 +1,6 @@
 import re
 import datetime
 import calendar
-from dateutil.relativedelta import relativedelta
 
 
 months = [m.lower() for m in calendar.month_name]
@@ -173,9 +172,10 @@ def parse_date(string):
 
 
 def days_in_daterange(start_date, end_date):
-    """Yields a datetime for every day in the specified interval."""
-    for n in range(int((end_date - start_date).days) + 1):
-        yield start_date + relativedelta(days=n)
+    """Yields a datetime for every day in the specified interval, excluding
+    end_date."""
+    for n in range((end_date - start_date).days):
+        yield start_date + datetime.timedelta(n)
 
 
 def number_of_days_in_period(period, date_):
@@ -186,20 +186,13 @@ def number_of_days_in_period(period, date_):
     if period == 'weekly':
         return 7
     if period == 'monthly':
-        date_ = datetime.datetime(date_.year, date_.month, 1)
-        return ((date_ + relativedelta(months=1)) - date_).days
+        date_ = datetime.date(date_.year, date_.month, 1)
+        return (get_next_interval(date_, 'month') - date_).days
     if period == 'quarterly':
         quarter = (date_.month - 1) / 3 + 1
-        if quarter == 1:
-            date_ = datetime.datetime(date_.year, 1, 1)
-        if quarter == 2:
-            date_ = datetime.datetime(date_.year, 4, 1)
-        if quarter == 3:
-            date_ = datetime.datetime(date_.year, 7, 1)
-        if quarter == 4:
-            date_ = datetime.datetime(date_.year, 10, 1)
-        return ((date_ + relativedelta(months=3)) - date_).days
+        date_ = datetime.date(date_.year, int(quarter) * 3 - 2, 1)
+        return (get_next_interval(date_, 'quarter') - date_).days
     if period == 'yearly':
-        date_ = datetime.datetime(date_.year, 1, 1)
-        return ((date_ + relativedelta(years=1)) - date_).days
+        date_ = datetime.date(date_.year, 1, 1)
+        return (get_next_interval(date_, 'year') - date_).days
     raise Exception("Period unknown: {}".format(period))

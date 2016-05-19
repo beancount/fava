@@ -23,8 +23,7 @@ import datetime
 import operator
 import os
 
-from dateutil.relativedelta import relativedelta as rdelta
-from decimal import Decimal
+from beancount.core.number import Decimal
 
 from beancount import loader
 from beancount.core import compare, flags, getters, realization, inventory
@@ -313,14 +312,14 @@ class BeancountReportAPI(object):
         interval_budgets = [self.budgets.budget(
                 zipped_interval_balances['account'],
                 interval_tuples[0][0] if accumulate else begin_date,
-                end_date - rdelta(days=1)
+                end_date
             ) for begin_date, end_date in interval_tuples]
 
         zipped_interval_balances['balance_and_balance_children'] = [(
                 balances[0],
                 balances[1],
-                {currency: value - (balances[0][curr] if curr in balances[0] else Decimal(0.0)) for curr, value in budget.items()},  # noqa
-                {currency: value - (balances[1][curr] if curr in balances[1] else Decimal(0.0)) for curr, value in budget.items()})  # noqa
+                {curr: value - (balances[0][curr] if curr in balances[0] else Decimal(0.0)) for curr, value in budget.items()},  # noqa
+                {curr: value - (balances[1][curr] if curr in balances[1] else Decimal(0.0)) for curr, value in budget.items()})  # noqa
             for balances, budget in zip(zipped_interval_balances['balance_and_balance_children'], interval_budgets)  # noqa
         ]
 

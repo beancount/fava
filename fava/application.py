@@ -2,12 +2,12 @@
 import configparser
 import os
 from datetime import datetime
-from decimal import Decimal
 import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file)
 from werkzeug import secure_filename
+from beancount.core.number import Decimal
 
 from fava import config
 from fava.api import BeancountReportAPI, FilterException

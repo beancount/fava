@@ -109,10 +109,17 @@ def test_number_of_days_in_period_monthly():
 
 
 def test_number_of_days_in_period_quarterly():
-    assert number_of_days_in_period('quarterly', dt(2016, 2, 1)) == 90
-    assert number_of_days_in_period('quarterly', dt(2016, 5, 30)) == 92
+    # 2016 = leap year
+    assert number_of_days_in_period('quarterly', dt(2016, 2, 1)) == 91
+    assert number_of_days_in_period('quarterly', dt(2016, 5, 30)) == 91
     assert number_of_days_in_period('quarterly', dt(2016, 8, 15)) == 92
     assert number_of_days_in_period('quarterly', dt(2016, 11, 15)) == 92
+
+    # 2017 = not a leap year
+    assert number_of_days_in_period('quarterly', dt(2017, 2, 1)) == 90
+    assert number_of_days_in_period('quarterly', dt(2017, 5, 30)) == 91
+    assert number_of_days_in_period('quarterly', dt(2017, 8, 15)) == 92
+    assert number_of_days_in_period('quarterly', dt(2017, 11, 15)) == 92
 
 
 def test_number_of_days_in_period_yearly():
