@@ -10,11 +10,15 @@
     <dl>
         <dt>{{ _('Default settings:') }}</dt>
         <dd><a href="{{ url_for('source', file_path=config['DEFAULT_SETTINGS']) }}">{{ config['DEFAULT_SETTINGS'] }}</a></dd>
-        {% if config['USER_SETTINGS'] %}
+    </dl>
+    {% if config['USER_SETTINGS'] %}
+    <br>
+    <dl>
         <dt>{{ _('User settings:') }}</dt>
         <dd><a href="{{ url_for('source', file_path=config['USER_SETTINGS']) }}">{{ config['USER_SETTINGS'] }}</a></dd>
-        {% endif %}
     </dl>
+    {% endif %}
+    <br>
     <table class="settings sortable">
         <thead>
             <tr>
