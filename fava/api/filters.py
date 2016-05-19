@@ -55,9 +55,20 @@ class DateFilter(EntryFilter):
 
 
 class TagFilter(EntryFilter):
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        if not self.value:
+            return True
+        self.tags = [t.strip() for t in value.split(',')]
+        if '' in self.tags:
+            self.tags.remove('')
+        return True
+
     def _include_entry(self, entry):
         return isinstance(entry, Transaction) and \
-            entry.tags and (entry.tags & set(self.value))
+            entry.tags and (entry.tags & set(self.tags))
 
 
 class AccountFilter(EntryFilter):
@@ -68,7 +79,18 @@ class AccountFilter(EntryFilter):
 
 
 class PayeeFilter(EntryFilter):
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        if not self.value:
+            return True
+        self.payees = [p.strip() for p in value.split(',')]
+        if '' in self.payees and len(self.payees) == 1:
+            self.payees.remove('')
+        return True
+
     def _include_entry(self, entry):
         return isinstance(entry, Transaction) and \
-            ((entry.payee and (entry.payee in self.value)) or
-             (not entry.payee and ('' in self.value)))
+            ((entry.payee and (entry.payee in self.payees)) or
+             (not entry.payee and ('' in self.payees)))

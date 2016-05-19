@@ -45,7 +45,7 @@ def test_date_filter(example_api):
 def test_tag_filter(example_api):
     tag_filter = TagFilter()
 
-    tag_filter.set(['test'])
+    tag_filter.set('test')
     filtered_entries = tag_filter.apply(
         example_api.all_entries, example_api.options)
     assert all(map(
@@ -57,7 +57,7 @@ def test_tag_filter(example_api):
 def test_payee_filter(example_api):
     payee_filter = PayeeFilter()
 
-    payee_filter.set(['BayBook'])
+    payee_filter.set('BayBook')
     filtered_entries = payee_filter.apply(
         example_api.all_entries, example_api.options)
     assert all(map(
@@ -65,12 +65,12 @@ def test_payee_filter(example_api):
         filtered_entries))
     assert len(filtered_entries) == 62
 
-    payee_filter.set(['asdfasdfasdf', 'BayBook'])
+    payee_filter.set('asdfasdfasdf, BayBook')
     filtered_entries = payee_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 62
 
-    payee_filter.set(['asdfasdfasdvba'])
+    payee_filter.set('asdfasdfasdvba')
     filtered_entries = payee_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 0

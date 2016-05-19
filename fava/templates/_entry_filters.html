@@ -4,130 +4,44 @@
 {% set payee_filter = g.filters['payee'] %}
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
-        <li{% if time_filter %} class="selected"{% endif %}>
-            <span>{{ time_filter or _('Time') }}</span>
-            <div class="filter" id="filter-time">
-               <input type="search" placeholder="{{ _('eg. This Month, 2015-03, March 2015, Year to Date, ...') }}">
-                {% if time_filter %}
-                    <a class="clear-filter" href="{{ url_for_current(time=None) }}">
-                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        {{ _('Clear time filter') }}
-                    </a>
-                {% endif %}
-                <ul>
-                    {% if time_filter and time_filter|int not in api.active_years %}
-                        <li class="selected" data-filter="{{ time_filter }}">
-                            <a href="{{ url_for_current(time=None) }}">{{ time_filter }}</a>
-                        </li>
-                    {% endif %}
-
-                    {% for time_ in api.active_years|reverse %}
-                    <li{% if time_|string == time_filter %} class="selected"{% endif %} data-filter="{{ time_ }}">
-                    {% if time_|string == time_filter %}
-                        <a href="{{ url_for_current(time=None) }}">{{ time_filter }}</a>
-                    {% else %}
-                        <a href="{{ url_for_current(time=time_) }}">{{ time_ }}</a>
-                    {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <li>
+            <input name="time" type="text" list='years' value='{{ time_filter or '' }}' placeholder="{{ _('by time') }}">
+            <button type="button" tabindex="-1">x</button>
+            <datalist id="years">
+            {% for year in api.active_years|reverse %}
+                <option>{{ year }}</option>
+            {% endfor %}
+            </datalist>
         </li>
-        <li{% if tag_filter  %} class="selected"{% endif %}>
-            <span>
-                {% if tag_filter %}
-                    {% if tag_filter|length == 1 %}
-                        # {{ tag_filter|first }}
-                    {% else %}
-                        {{ _('Multiple tags') }}
-                    {% endif %}
-                {% else %}
-                    {{ _('Tag') }}
-                {% endif %}
-            </span>
-            <div class="filter">
-                <input type="search">
-                {% if tag_filter %}
-                    <a class="clear-filter" href="{{ url_for_current(tag=[]) }}">
-                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        {{ _('Clear tag filter') }}
-                    </a>
-                {% endif %}
-                <ul>
-                {% for tag in tag_filter %}
-                    <li class="selected" data-filter="{{ tag|lower }}">
-                        <a href="{{ url_for_current(pop=('tag',tag)) }}">{{ tag }}</a>
-                    </li>
-                {% endfor %}
-
-                {% for tag in api.active_tags if tag not in tag_filter %}
-                    <li data-filter="{{ tag|lower }}">
-                        <a href="{{ url_for_current(tag=[tag]+tag_filter) }}"># {{ tag }}</a>
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
+        <li>
+            <input name="tag" type="text" list='tags' value='{{ tag_filter or '' }}' placeholder="{{ _('by tag') }}">
+            <button type="button" tabindex="-1">x</button>
+            <datalist id="tags">
+            {% for tag in api.active_tags %}
+                <option>{{ tag }}</option>
+            {% endfor %}
+            </datalist>
         </li>
-        <li{% if account_filter %} class="selected"{% endif %}>
-            <span>{{ account_filter or _('Account') }}</span>
-            <div class="filter">
-                <input type="search">
-                {% if account_filter %}
-                    <a class="clear-filter" href="{{ url_for_current(account=None) }}">
-                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        {{ _('Clear account filter') }}
-                    </a>
-                {% endif %}
-                <ul>
-                    {% if account_filter %}
-                    <li class="selected" data-filter="{{ account_filter|lower }}">
-                        <a href="{{ url_for_current(account=None) }}" title="{{ account_filter }}">{{ account_filter }}</a>
-                    </li>
-                    {% endif %}
-                    {% for account in api.all_accounts %}
-                    <li{% if account == account_filter %} class="selected"{% endif %} data-filter="{{ account|lower }}">
-                        <a href="{{ url_for_current(account=account) }}" title="{{ account }}">
-                            {{- "–" * account|account_level }}&nbsp;{{ account|last_segment -}}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <li>
+            <input name="account" type="text" list='accounts' value='{{ account_filter or '' }}' placeholder="{{ _('by account') }}">
+            <button type="button" tabindex="-1">x</button>
+            <datalist id="accounts">
+            {% for account in api.all_accounts %}
+                <option>{{ account }}</option>
+            {% endfor %}
+            </datalist>
         </li>
-        <li{% if payee_filter  %} class="selected"{% endif %}>
-        {% macro print_payee(payee) %}{% if payee %}{{ payee }}{% else %}<em>{{ 'No payee' }}</em>{% endif %}{% endmacro %}
-            <span>
-                {% if payee_filter %}
-                    {% if payee_filter|length == 1 %}
-                        {{ print_payee(payee_filter|first) }}
-                    {% else %}
-                        {{ _('Multiple payees') }}
-                    {% endif %}
-                {% else %}
-                    {{ _('Payee') }}
-                {% endif %}
-            </span>
-            <div class="filter">
-                <input type="search">
-                {% if payee_filter %}
-                    <a class="clear-filter" href="{{ url_for_current(payee=[]) }}">
-                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-                        {{ _('Clear payee filter') }}
-                    </a>
-                {% endif %}
-                <ul>
-                {% for payee in payee_filter %}
-                    <li class="selected" data-filter="{{ payee|lower }}">
-                        <a href="{{ url_for_current(pop=('payee', payee)) }}">{{ print_payee(payee) }}</a>
-                    </li>
-                {% endfor %}
-                {% for payee in api.active_payees if payee not in payee_filter %}
-                    <li data-filter="{{ payee|lower }}">
-                        <a href="{{ url_for_current(payee=[payee]+payee_filter) }}">{{ print_payee(payee) }}</a>
-                    </li>
-                {% endfor %}
-                </ul>
-            </div>
+        <li>
+            <input name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('by payee') }}">
+            <button type="button" tabindex="-1">x</button>
+            <datalist id="payees">
+            {% for payee in api.active_payees %}
+                <option>{{ payee }}</option>
+            {% endfor %}
+            </datalist>
+        </li>
+        <li>
+            <input type="submit" value='filter'>
         </li>
     </ul>
 </form>

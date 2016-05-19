@@ -1,41 +1,94 @@
 // Filter
 
-div.beancount-files,
-div.filter {
+@import "~awesomplete/awesomplete.css";
+
+#filter-form {
+    ul li {
+        position: relative;
+    }
+
+    color: $color_text;
+
+    input {
+        padding: 0 25px 0 3px;
+        margin: 5px 5px 5px 0;
+        font-size: 1.1em;
+        line-height: 1.5em;
+        height: 30px;
+        width: 12em;
+        border: 1px solid lighten($color_text, 60);
+        border-radius: 5px;
+    }
+
+    input[type="submit"] {
+        width: auto;
+        color: #ddd;
+        padding: 0 5px;
+        background: lighten($color_header, 25);
+        border: none;
+    }
+
+    button {
+        display: none;
+        float: left;
+        position:absolute;
+        top: 9px;
+        right: 9px;
+        z-index: 1;
+        opacity: 0.8;
+        width: 22px;
+        height: 22px;
+        line-height: 10px;
+        background: #999;
+        padding: 5px;
+        border: none;
+        border-radius: 50%;
+        text-align: center;
+        color: #fff;
+    }
+
+    input:placeholder-shown {
+        color: #fff;
+        width: 9em;
+        background: lighten($color_header, 10);
+        border: none;
+    }
+
+    input.empty {
+        color: #fff;
+        width: 9em;
+        background: lighten($color_header, 10);
+        border: none;
+    }
+
+    input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        color: #ddd;
+        opacity: 1;
+    }
+
+    input::-moz-placeholder { /* Firefox 19+ */
+        color: #ddd;
+        opacity: 1;
+    }
+
+    // remove dropdown triangle
+    input::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+}
+
+div.beancount-files {
     display: none;
     background-color: $color_background;
     border: 1px solid darken($color_background, 20);
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
     box-shadow: 0 3px 6px rgba($color_text, 0.2);
-    width: 400px;
     position: absolute;
     z-index: 10;
     top: 41px;
-
-    & > a.clear-filter {
-        padding: 6px 12px;
-        display: block;
-        margin-top: -2px;
-
-        &:hover {
-            background-color: $color_links;
-            color: lighten($color_text, 100);
-
-            svg {
-                fill: lighten($color_text, 100);
-            }
-        }
-
-        svg {
-            position: relative;
-            width: 12px;
-            height: 12px;
-            top: 2px;
-            left: -2px;
-            fill: $color_links;
-        }
-    }
+    left: 19px;
+    width: 20em;
 
     & > ul {
         margin-bottom: 0;
@@ -45,7 +98,7 @@ div.filter {
         li {
             a {
                 display: block;
-                padding: 5px 10px;
+                padding: 8px 12px 8px 28px;
                 color: $color_links !important;
             }
 
@@ -61,31 +114,8 @@ div.filter {
             }
         }
     }
-
-    input {
-        font-size: 1.1em;
-        line-height: 1.5em;
-        margin: 5px;
-        display: block;
-        border: 1px solid lighten($color_text, 60);
-        border-radius: 3px;
-        width: 390px;
-    }
-}
-
-div.filter {
-    right: 0;
 }
 
 h1:hover div {
     display: block;
-}
-
-div.beancount-files {
-    left: 19px;
-    width: 20em;
-
-    & > ul li a {
-        padding: 8px 12px 8px 28px;
-    }
 }

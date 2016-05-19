@@ -14,7 +14,7 @@ from fava import config
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
-from fava.util import slugify, uniquify, resource_path
+from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 
@@ -389,18 +389,9 @@ def inject_filters(endpoint, values):
 
     if endpoint == 'static':
         return
-    for filter in ['time', 'account', 'interval']:
+    for filter in ['time', 'account', 'interval', 'tag', 'payee']:
         if filter not in values:
             values[filter] = g.filters[filter]
-    for list_filter in ['tag', 'payee']:
-        if list_filter in values:
-            values[list_filter] = uniquify(values[list_filter])
-        else:
-            values[list_filter] = uniquify(g.filters[list_filter])
-    if 'pop' in values:
-        key, value = values['pop']
-        values.pop('pop')
-        values[key] = [v for v in g.filters[key] if v != value]
 
 
 @app.before_request
@@ -410,11 +401,8 @@ def perform_global_filters():
               'Please add one to your beancount file.')
 
     g.filters = {
-        'time': request.args.get('time', None),
-        'account': request.args.get('account', None),
-        'tag': request.args.getlist('tag'),
-        'payee': request.args.getlist('payee'),
-        'interval': request.args.get('interval', None),
+        name: request.args.get(name, None)
+        for name in ['account', 'interval', 'payee', 'tag', 'time']
     }
 
     try:

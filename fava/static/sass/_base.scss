@@ -168,44 +168,6 @@ header {
         ul.topmenu {
             display: flex;
             margin: 0;
-
-            & > li {
-                & > span {
-                    position: relative;
-                    padding-right: 23px !important;
-                    color: $color_header_text;
-                    display: block;
-                    line-height: 41px;
-                    padding: 0 10px;
-
-                    &:hover { background-color: $color_links; }
-
-                    &::after {
-                        border: 4px solid transparent;
-                        border-top-color: $color_background;
-                        content: "";
-                        height: 0;
-                        margin-left: -18px;
-                        margin-top: -2px;
-                        opacity: .8;
-                        left: 100%;
-                        position: absolute;
-                        text-indent: -99999px;
-                        top: 50%;
-                        width: 0;
-                    }
-                }
-
-                &:hover > .filter,
-                &.opened > .filter {
-                    display: block;
-                }
-
-                &.selected > span,
-                &.opened > span {
-                    background-color: $color_links;
-                }
-            }
         }
     }
 }

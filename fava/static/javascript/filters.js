@@ -1,34 +1,42 @@
-const URI = require('urijs');
+require('awesomplete');
 
 module.exports.initFilters = function() {
-    $('.filter input').keyup(function() {
-        var $this = $(this);
-        var value = $this.val();
-        $(this).parents('.filter').find('li').toggle(value == '');
-        $(this).parents('.filter').find("li[data-filter*='" + value.toLowerCase() + "']").show();
+    $('#filter-form input').on('input', function() {
+        var isEmpty = !$(this).val();
+        $(this).parents('li').find('button').toggle(!isEmpty);
+        $(this).toggleClass('empty', isEmpty);
     });
 
-    $('.filter#filter-time input').keyup(function(e) {
-        var $this = $(this);
-        var code = e.which;
-        if (code == 13) {
-            e.preventDefault();
-            window.location.href = URI(window.location).setQuery('time', $this.val()).toString();
-        }
+    $('#filter-form input[type="text"]').each(function() {
+        var options = {
+            minChars: 0,
+            maxItems: 30,
+        };
+        if ($(this).attr('name') == 'tag' || $(this).attr('name') == 'payee') {
+            options = $.extend(options, {
+                filter: function(text, input) {
+                    return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
+                },
+                replace: function(text) {
+                    var before = this.input.value.match(/^.+,\s*|/)[0];
+                    this.input.value = before + text + ", ";
+                },
+            });
+        };
+
+        var completer = new Awesomplete(this, options);
+
+        var isEmpty = !$(this).val();
+        $(this).parents('li').find('button').toggle(!isEmpty);
+        $(this).toggleClass('empty', isEmpty);
+
+        $(this).focus(function() {
+            completer.evaluate();
+        });
     });
 
-    $("body").click(function(){
-        $("ul.topmenu li").removeClass("opened");
-    });
-
-    $("ul.topmenu li").click(function(e){
-        e.stopPropagation();
-    });
-
-    $('ul.topmenu input[type=search]').keyup(function(e) {
-        if (e.which == 27) {
-            $(this).blur();
-            $(this).parents('li').removeClass("opened");
-        }
+    $('#filter-form button').click(function() {
+        $(this).parents('li').find('input').val('');
+        $('#filter-form').submit();
     });
 };

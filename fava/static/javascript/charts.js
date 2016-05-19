@@ -53,11 +53,9 @@ function addTooltip(selection, tooltipText) {
 }
 
 function timeFilter(date) {
-    var e = $.Event('keyup');
-    e.which = 13;
-    $("#filter-time input[type=search]")
-        .val(timeFilterDateFormat[window.interval](date))
-        .trigger(e);
+    window.location = URI(window.location)
+        .setQuery('time', timeFilterDateFormat[window.interval](date))
+        .toString();
 }
 
 function addLegend(svg, domain, colorScale) {

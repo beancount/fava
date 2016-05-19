@@ -28,7 +28,7 @@ $color_sidebar_text: #dadad9;
 $color_sidebar_background: #DDD8D5;
 $color_sidebar_links: #36382e;
 
-$color_header: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
+$color_header: #D36455;
 $color_header_bottom: #2e3d54;
 $color_header_text: white;
 
@@ -100,7 +100,11 @@ $ct-series-colors: (
 
 // Overrides
 
-header { border-bottom: none; }
+
+header {
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
+    border-bottom: none;
+}
 
 header nav ul.topmenu>li {
     background: $color_background;
