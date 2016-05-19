@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-19 14:08+0200\n"
+"POT-Creation-Date: 2016-05-19 14:25+0200\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -18,107 +18,123 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: fava/templates/_charts.html:75 fava/templates/macros/_interval_macros.html:2
+#: fava/templates/_charts.html:74 fava/templates/macros/_interval_macros.html:1
 msgid "Daily"
 msgstr "Täglich"
 
-#: fava/templates/_charts.html:76 fava/templates/macros/_interval_macros.html:3
+#: fava/templates/_charts.html:75 fava/templates/macros/_interval_macros.html:2
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: fava/templates/_charts.html:77 fava/templates/macros/_interval_macros.html:4
+#: fava/templates/_charts.html:76 fava/templates/macros/_interval_macros.html:3
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: fava/templates/_charts.html:78 fava/templates/macros/_interval_macros.html:5
+#: fava/templates/_charts.html:77 fava/templates/macros/_interval_macros.html:4
 msgid "Quarterly"
 msgstr "Quartalsweise"
 
-#: fava/templates/_charts.html:79 fava/templates/macros/_interval_macros.html:6
+#: fava/templates/_charts.html:78 fava/templates/macros/_interval_macros.html:5
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: fava/templates/_charts.html:82
+#: fava/templates/_charts.html:81
 msgid "Toggle charts"
 msgstr "Graphen ein/aus"
 
-#: fava/templates/_charts.html:86
+#: fava/templates/_charts.html:85
 msgid "Loading charts&hellip;"
 msgstr "Lade Graphen&hellip;"
 
-#: fava/templates/_entry_filters.html:9
+#: fava/templates/_entry_filters.html:8
 msgid "Time"
 msgstr "Zeitraum"
 
-#: fava/templates/_entry_filters.html:12
+#: fava/templates/_entry_filters.html:10
 msgid "eg. This Month, 2015-03, March 2015, Year to Date, ..."
 msgstr "zB. This Month, 2015-03, March 2015, Year to Date, ..."
 
-#: fava/templates/_entry_filters.html:38
+#: fava/templates/_entry_filters.html:14
+msgid "Clear time filter"
+msgstr "Zeit-Filter entfernen"
+
+#: fava/templates/_entry_filters.html:42
 msgid "Multiple tags"
 msgstr "Mehrere Hashtags"
 
-#: fava/templates/_entry_filters.html:41
+#: fava/templates/_entry_filters.html:45
 msgid "Tag"
 msgstr "Hashtag"
 
-#: fava/templates/_entry_filters.html:63 fava/templates/_tree_table.html:11
-#: fava/templates/account.html:43 fava/templates/holdings.html:13
+#: fava/templates/_entry_filters.html:53
+msgid "Clear tag filter"
+msgstr "Tag-Filter entfernen"
+
+#: fava/templates/_entry_filters.html:72 fava/templates/_tree_table.html:11
+#: fava/templates/account.html:42 fava/templates/holdings.html:13
 #: fava/templates/holdings.html:21 fava/templates/statistics.html:54
 msgid "Account"
 msgstr "Konto"
 
-#: fava/templates/_entry_filters.html:90
+#: fava/templates/_entry_filters.html:78
+msgid "Clear account filter"
+msgstr "Account-Filter entfernen"
+
+#: fava/templates/_entry_filters.html:104
 msgid "Multiple payees"
 msgstr "Mehrere Empfänger"
 
-#: fava/templates/_entry_filters.html:93
+#: fava/templates/_entry_filters.html:107
 msgid "Payee"
 msgstr "Empfänger"
 
-#: fava/templates/_journal_table.html:58
+#: fava/templates/_entry_filters.html:115
+msgid "Clear payee filter"
+msgstr "Empfänger-Filter entfernen"
+
+#: fava/templates/_journal_table.html:64
 msgid "Cleared Transactions"
 msgstr "Freigegebene Transaktionen"
 
-#: fava/templates/_journal_table.html:59
+#: fava/templates/_journal_table.html:65
 msgid "Pending Transactions"
 msgstr "Anstehende Transaktionen"
 
-#: fava/templates/_journal_table.html:60
+#: fava/templates/_journal_table.html:66
 msgid "Other Transactions"
 msgstr "Andere Transaktionen"
 
-#: fava/templates/_journal_table.html:112 fava/templates/commodities.html:17
+#: fava/templates/_journal_table.html:120 fava/templates/commodities.html:17
 #: fava/templates/event_detail.html:19 fava/templates/events.html:16
 msgid "Date"
 msgstr "Datum"
 
-#: fava/templates/_journal_table.html:113
+#: fava/templates/_journal_table.html:121
 msgid "F"
 msgstr "M"
 
-#: fava/templates/_journal_table.html:114
+#: fava/templates/_journal_table.html:122
 msgid "Narration/Payee"
 msgstr "Beschreibung/Empfänger"
 
-#: fava/templates/_journal_table.html:115
+#: fava/templates/_journal_table.html:123
 msgid "Position"
 msgstr "Position"
 
-#: fava/templates/_journal_table.html:116 fava/templates/commodities.html:18
+#: fava/templates/_journal_table.html:124 fava/templates/commodities.html:18
 #: fava/templates/holdings.html:26
 msgid "Price"
 msgstr "Preis"
 
-#: fava/templates/_journal_table.html:117
+#: fava/templates/_journal_table.html:125
 msgid "Cost"
 msgstr "Kosten"
 
-#: fava/templates/_journal_table.html:119
+#: fava/templates/_journal_table.html:127
 msgid "Change"
 msgstr "Änderung"
 
-#: fava/templates/_journal_table.html:120 fava/templates/statistics.html:58
+#: fava/templates/_journal_table.html:128 fava/templates/statistics.html:58
 msgid "Balance"
 msgstr "Saldo"
 
@@ -194,11 +210,11 @@ msgstr "Eigene Links"
 msgid "Reports"
 msgstr "Berichte"
 
-#: fava/templates/_tree_table.html:11 fava/templates/account.html:43
+#: fava/templates/_tree_table.html:11 fava/templates/account.html:42
 msgid "Expand all accounts"
 msgstr "Alle Konten erweitern"
 
-#: fava/templates/_tree_table.html:11 fava/templates/account.html:43
+#: fava/templates/_tree_table.html:11 fava/templates/account.html:42
 msgid "Expand all"
 msgstr "Alle erweitern"
 
@@ -206,7 +222,7 @@ msgstr "Alle erweitern"
 msgid "Other"
 msgstr "Andere"
 
-#: fava/templates/_tree_table.html:23 fava/templates/account.html:53
+#: fava/templates/_tree_table.html:23 fava/templates/account.html:58
 msgid "Hold the Shift-key while clicking to expand all children"
 msgstr ""
 "Um alle Sub-Kontos zu erweitern halte die Umschalt-Taste während dem "
@@ -373,23 +389,23 @@ msgstr ""
 msgid "Default settings:"
 msgstr "Standard-Einstellungen:"
 
-#: fava/templates/options.html:14
+#: fava/templates/options.html:17
 msgid "User settings:"
 msgstr "Benutzer-Einstellungen:"
 
-#: fava/templates/options.html:21 fava/templates/options.html:42
+#: fava/templates/options.html:25 fava/templates/options.html:46
 msgid "Key"
 msgstr "Schlüssel"
 
-#: fava/templates/options.html:22 fava/templates/options.html:43
+#: fava/templates/options.html:26 fava/templates/options.html:47
 msgid "Value"
 msgstr "Wert"
 
-#: fava/templates/options.html:35
+#: fava/templates/options.html:39
 msgid "beancount: options"
 msgstr "beancount: Optionen"
 
-#: fava/templates/options.html:37
+#: fava/templates/options.html:41
 msgid ""
 "For a detailed explanation of all possible <code>option</code>-values see"
 " the <a href=\"http://furius.ca/beancount/doc/options\">Beancount Options"

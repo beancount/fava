@@ -41,14 +41,28 @@ ol.tree-table {
             }
 
             a {
-                margin-left:15px;
+                margin-left: 15px;
             }
         }
 
         &.num-header,
-        &.num { width: 8rem; }
+        &.num {
+            width: 10rem;
+            a {
+                display: block;
+                color: inherit;
+            }
+        }
+
         &.other-header,
-        &.other { width: 10rem; }
+        &.other {
+            width: 13rem;
+
+            a {
+                display: block;
+                color: inherit;
+            }
+        }
     }
 
     &:hover {
@@ -59,7 +73,12 @@ ol.tree-table {
 
     .has-balance {
         .balance {
-            display: block;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            & > span { white-space: nowrap; }
+            & > span.number { flex-grow: 1; }
         }
         .balance-children {
             display: none;
@@ -104,5 +123,13 @@ ol.tree-table {
     a.expand-all {
        color: lighten($color_text, 40);
        font-weight: normal;
+    }
+
+    span.budget {
+        margin-right: 4px;
+
+        &.budget-negative { color: $color_budget_negative; }
+        &.budget-positive { color: $color_budget_positive; }
+        &.budget-zero     { color: $color_budget_zero; }
     }
 }

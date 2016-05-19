@@ -5,11 +5,15 @@
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
         <li{% if time_filter %} class="selected"{% endif %}>
-            <a href="{{ url_for_current(time=None) }}">
-                {{ time_filter or _('Time') }}
-            </a>
+            <span>{{ time_filter or _('Time') }}</span>
             <div class="filter" id="filter-time">
-                <input type="search" placeholder="{{ _('eg. This Month, 2015-03, March 2015, Year to Date, ...') }}">
+               <input type="search" placeholder="{{ _('eg. This Month, 2015-03, March 2015, Year to Date, ...') }}">
+                {% if time_filter %}
+                    <a class="clear-filter" href="{{ url_for_current(time=None) }}">
+                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+                        {{ _('Clear time filter') }}
+                    </a>
+                {% endif %}
                 <ul>
                     {% if time_filter and time_filter|int not in api.active_years %}
                         <li class="selected" data-filter="{{ time_filter }}">
@@ -30,7 +34,7 @@
             </div>
         </li>
         <li{% if tag_filter  %} class="selected"{% endif %}>
-            <a href="{{ url_for_current(tag=[]) }}">
+            <span>
                 {% if tag_filter %}
                     {% if tag_filter|length == 1 %}
                         # {{ tag_filter|first }}
@@ -40,9 +44,15 @@
                 {% else %}
                     {{ _('Tag') }}
                 {% endif %}
-            </a>
+            </span>
             <div class="filter">
                 <input type="search">
+                {% if tag_filter %}
+                    <a class="clear-filter" href="{{ url_for_current(tag=[]) }}">
+                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+                        {{ _('Clear tag filter') }}
+                    </a>
+                {% endif %}
                 <ul>
                 {% for tag in tag_filter %}
                     <li class="selected" data-filter="{{ tag|lower }}">
@@ -59,11 +69,15 @@
             </div>
         </li>
         <li{% if account_filter %} class="selected"{% endif %}>
-            <a href="{{ url_for_current(account=None) }}">
-                {{ account_filter or _('Account') }}
-            </a>
+            <span>{{ account_filter or _('Account') }}</span>
             <div class="filter">
                 <input type="search">
+                {% if account_filter %}
+                    <a class="clear-filter" href="{{ url_for_current(account=None) }}">
+                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+                        {{ _('Clear account filter') }}
+                    </a>
+                {% endif %}
                 <ul>
                     {% if account_filter %}
                     <li class="selected" data-filter="{{ account_filter|lower }}">
@@ -82,7 +96,7 @@
         </li>
         <li{% if payee_filter  %} class="selected"{% endif %}>
         {% macro print_payee(payee) %}{% if payee %}{{ payee }}{% else %}<em>{{ 'No payee' }}</em>{% endif %}{% endmacro %}
-            <a href="{{ url_for_current(payee=[]) }}">
+            <span>
                 {% if payee_filter %}
                     {% if payee_filter|length == 1 %}
                         {{ print_payee(payee_filter|first) }}
@@ -92,9 +106,15 @@
                 {% else %}
                     {{ _('Payee') }}
                 {% endif %}
-            </a>
+            </span>
             <div class="filter">
                 <input type="search">
+                {% if payee_filter %}
+                    <a class="clear-filter" href="{{ url_for_current(payee=[]) }}">
+                        <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+                        {{ _('Clear payee filter') }}
+                    </a>
+                {% endif %}
                 <ul>
                 {% for payee in payee_filter %}
                     <li class="selected" data-filter="{{ payee|lower }}">

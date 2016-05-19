@@ -1,6 +1,7 @@
 import re
 import datetime
 import calendar
+from dateutil.relativedelta import relativedelta
 
 
 months = [m.lower() for m in calendar.month_name]
@@ -169,3 +170,36 @@ def parse_date(string):
             return daterange(m.year, m.month)
         else:
             return daterange(today.year + modifier, _parse_month(identifier))
+
+
+def days_in_daterange(start_date, end_date):
+    """Yields a datetime for every day in the specified interval."""
+    for n in range(int((end_date - start_date).days) + 1):
+        yield start_date + relativedelta(days=n)
+
+
+def number_of_days_in_period(period, date_):
+    """Returns the days in the specified period and date_."""
+
+    if period == 'daily':
+        return 1
+    if period == 'weekly':
+        return 7
+    if period == 'monthly':
+        date_ = datetime.datetime(date_.year, date_.month, 1)
+        return ((date_ + relativedelta(months=1)) - date_).days
+    if period == 'quarterly':
+        quarter = (date_.month - 1) / 3 + 1
+        if quarter == 1:
+            date_ = datetime.datetime(date_.year, 1, 1)
+        if quarter == 2:
+            date_ = datetime.datetime(date_.year, 4, 1)
+        if quarter == 3:
+            date_ = datetime.datetime(date_.year, 7, 1)
+        if quarter == 4:
+            date_ = datetime.datetime(date_.year, 10, 1)
+        return ((date_ + relativedelta(months=3)) - date_).days
+    if period == 'yearly':
+        date_ = datetime.datetime(date_.year, 1, 1)
+        return ((date_ + relativedelta(years=1)) - date_).days
+    raise Exception("Period unknown: {}".format(period))

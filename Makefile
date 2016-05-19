@@ -6,7 +6,10 @@ build-js:
 	cd fava/static; npm install; npm run build
 
 clean:
-	rm -r fava/static/node_modules
+	rm -rf .tox
+	rm -rf beancount_fava.egg-info
+	rm -rf build dist
+	rm -rf fava/static/node_modules
 
 test:
 	tox

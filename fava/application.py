@@ -2,7 +2,7 @@
 import configparser
 import os
 from datetime import datetime
-
+from decimal import Decimal
 import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
@@ -118,12 +118,11 @@ def account_with_interval_changes(name):
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
     document_path = request.args.get('file_path', None)
-
     if document_path and g.api.is_valid_document(document_path):
         # metadata-statement-paths may be relative to the beancount-file
         if not os.path.isabs(document_path):
             document_path = os.path.join(os.path.dirname(
-                os.path.realpath(app.config['BEANCOUNT_FILE'])), document_path)
+                os.path.realpath(g.api.beancount_file_path)), document_path)
 
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
@@ -136,16 +135,11 @@ def document():
 def add_document():
     file = request.files['file']
     if file and len(g.api.options['documents']) > 0:
-        # and allowed_file(file.filename):
-        # TOOD Probably it should ask to enter a date, if the document
-        #      doesn't start with one, so you don't need to rename the
-        #      documents in advance.
-
         target_folder_index = int(request.form['targetFolderIndex'])
         target_folder = g.api.options['documents'][target_folder_index]
 
         filename = os.path.join(
-            os.path.dirname(app.config['BEANCOUNT_FILE']),
+            os.path.dirname(g.api.beancount_file_path),
             target_folder,
             request.form['account_name'].replace(':', '/').replace('..', ''),
             secure_filename(request.form['filename']))
@@ -280,9 +274,11 @@ def report(report_name):
 
 
 @app.template_filter()
-def format_currency(value, currency=None):
-    if not value:
+def format_currency(value, currency=None, show_if_zero=False):
+    if not value and not show_if_zero:
         return ''
+    if value == 0.0:
+        return g.api.quantize(Decimal(0.0), currency)
     return g.api.quantize(value, currency)
 
 

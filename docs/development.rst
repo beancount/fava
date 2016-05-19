@@ -16,7 +16,24 @@ get you up and running:
 
 Note that a development installation fava requires recent versions of Node.js and
 npm, both available on OS X and Linux, but currently not on Cygwin.
+To package the development version, you can run ``python setup.py bdist_wheel``
+(make sure the ``wheel`` Python package is installed), which will produce a
+``.whl`` file in the ``dist`` directory which you can install with ``pip`` on a
+different machine.
 
-Contributions are very welcome, just open a PR on `Github <https://github.com/aumayr/fava/pulls>`__.
+If you need a newer version of ``beancount`` than you can find on PyPi, you can
+run from source like so (more details `here <http://furius.ca/beancount/doc/install>`__):
 
-Fava is released under the `MIT License <https://github.com/aumayr/fava/blob/master/LICENSE>`__.
+.. code:: bash
+
+    hg clone https://bitbucket.org/blais/beancount
+    cd beancount
+    # activate the fava virtual environment
+    . venv/bin/activate
+    pip install --editable .
+
+Contributions are very welcome, just open a PR on `Github
+<https://github.com/aumayr/fava/pulls>`__.
+
+Fava is released under the `MIT License
+<https://github.com/aumayr/fava/blob/master/LICENSE>`__.

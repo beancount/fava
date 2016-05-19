@@ -69,3 +69,21 @@ Click to copy the balance directives to the clipboard:
     {% endif %}
 </span>
 {% endmacro %}
+
+{% macro balance_with_budget(currency, number, budget=None, show_currency=False, css_class="balance") %}
+<span class="{{ css_class }}">
+    {% if number %}
+        {% if budget %}
+            {% set budget_curr = budget[currency] if currency in budget else None %}
+            {% if budget_curr != None %}
+                <span class="budget budget-{% if budget_curr > 0.0 %}positive{% else %}{% if budget_curr < 0.0 %}negative{% else %}zero{% endif %}{% endif %}">
+                    ({{ budget_curr|format_currency(currency, show_if_zero=True) }})
+                </span>
+            {% else %}
+                <span class="budget no-budget"></span>
+            {% endif %}
+        {% endif %}
+        <span class="number">{{ number|format_currency(currency) }}{% if show_currency %} {{ currency }}{% endif %}</span>
+    {% endif %}
+</span>
+{% endmacro %}

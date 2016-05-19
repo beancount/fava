@@ -33,7 +33,6 @@
     {% else %}
         {% set interval_balances, dates = api.interval_balances(interval, account_name, accumulate) %}
         {% if interval_balances %}
-
             {% for begin_date, end_date in dates[-3:]|reverse %}
                 {{ charts.treemap(account_name, begin_date, end_date, label=interval_macros.format_date(begin_date)) }}
             {% endfor %}
@@ -41,8 +40,14 @@
             <li class="head">
                 <p>
                 <span class="account"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
-                {% for begin_date, _ in dates|reverse %}
-                    <span class="other-header">{{ interval_macros.format_date(begin_date) }}</span>
+                {% for begin_date, end_date in dates|reverse %}
+                    {% if accumulate %}
+                        {% set time_filter = dates[0][0]|string + ' - ' + end_date|string %}
+                    {% else %}
+                        {% set time_filter = begin_date|string + ' - ' + end_date|string %}
+                    {% endif %}
+
+                    <span class="other-header"><a href="{{ url_for('account_with_journal', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
                 {% endfor %}
                 </p>
             </li>
@@ -52,14 +57,19 @@
                 <span class="account account-depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
                     {% if account.children %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children') }}"></span>{% endif %}
                 {{ account_macros.account_name(account.account, last_segment=True) }}</span>
-            {% for balance, balance_children in account.balance_and_balance_children|reverse %}
+            {% for balance, balance_children, budget, budget_children in account.balance_and_balance_children|reverse %}
+                {% set begin_date, end_date = dates[::-1][loop.index0] %}
+                {% if accumulate %}{% set begin_date = dates[0][0] %}{% endif %}
+
                 <span class="num other{{ ' has-balance' if balance else '' }}">
-                    {% for currency, number in balance.items() %}
-                        <span class="balance">{{ number|format_currency(currency) }} {{ currency }}</span>
-                    {% endfor %}
-                    {% for currency, number in balance_children.items() %}
-                        <span class="balance-children">{{ number|format_currency(currency) }} {{ currency }}</span>
-                    {% endfor %}
+                    <a href="{{ url_for('account_with_journal', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
+                        {% for currency, number in balance.items() %}
+                            {{ account_macros.balance_with_budget(currency, number, budget, show_currency=True) }}
+                        {% endfor %}
+                        {% for currency, number in balance_children.items() %}
+                            {{ account_macros.balance_with_budget(currency, number, budget_children, show_currency=True, css_class="balance-children") }}
+                        {% endfor %}
+                    </a>
                 </span>
             {% endfor %}
             </p>
@@ -71,7 +81,7 @@
             <li class="head">
                 <p>
                 <span class="account">&nbsp;</span>
-                {% for _, balance_children in interval_balances.balance_and_balance_children|reverse %}
+                {% for _, balance_children, _, _ in interval_balances.balance_and_balance_children|reverse %}
                 <span class="num other-header">
                     {% for currency, number in balance_children.items() %}
                         {% if number %}

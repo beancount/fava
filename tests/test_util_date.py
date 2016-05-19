@@ -1,9 +1,11 @@
 from datetime import date, timedelta
+from datetime import datetime as dt
 
 import pytest
 
 from fava.util.date import (_parse_month, parse_date, daterange,
-                            get_next_interval, interval_tuples)
+                            get_next_interval, interval_tuples,
+                            number_of_days_in_period)
 
 
 def test_get_next_interval():
@@ -74,3 +76,46 @@ def test_parse_date():
     }
     for test, result in tests.items():
         assert parse_date(test) == result
+
+
+def test_number_of_days_in_period_daily():
+    assert number_of_days_in_period('daily', dt(2016, 5, 1)) == 1
+    assert number_of_days_in_period('daily', dt(2016, 5, 2)) == 1
+    assert number_of_days_in_period('daily', dt(2016, 5, 31)) == 1
+
+
+def test_number_of_days_in_period_weekly():
+    assert number_of_days_in_period('weekly', dt(2016, 5, 1)) == 7
+    assert number_of_days_in_period('weekly', dt(2016, 5, 2)) == 7
+    assert number_of_days_in_period('weekly', dt(2016, 5, 31)) == 7
+
+
+def test_number_of_days_in_period_monthly():
+    assert number_of_days_in_period('monthly', dt(2016, 5, 1)) == 31
+    assert number_of_days_in_period('monthly', dt(2016, 5, 2)) == 31
+    assert number_of_days_in_period('monthly', dt(2016, 5, 31)) == 31
+
+    assert number_of_days_in_period('monthly', dt(2016, 6, 1)) == 30
+    assert number_of_days_in_period('monthly', dt(2016, 6, 15)) == 30
+    assert number_of_days_in_period('monthly', dt(2016, 6, 30)) == 30
+
+    assert number_of_days_in_period('monthly', dt(2016, 7, 1)) == 31
+    assert number_of_days_in_period('monthly', dt(2016, 7, 15)) == 31
+    assert number_of_days_in_period('monthly', dt(2016, 7, 31)) == 31
+
+    assert number_of_days_in_period('monthly', dt(2016, 1, 1)) == 31
+    assert number_of_days_in_period('monthly', dt(2016, 2, 1)) == 29
+    assert number_of_days_in_period('monthly', dt(2016, 3, 31)) == 31
+
+
+def test_number_of_days_in_period_quarterly():
+    assert number_of_days_in_period('quarterly', dt(2016, 2, 1)) == 90
+    assert number_of_days_in_period('quarterly', dt(2016, 5, 30)) == 92
+    assert number_of_days_in_period('quarterly', dt(2016, 8, 15)) == 92
+    assert number_of_days_in_period('quarterly', dt(2016, 11, 15)) == 92
+
+
+def test_number_of_days_in_period_yearly():
+    assert number_of_days_in_period('yearly', dt(2011, 2, 1)) == 365
+    assert number_of_days_in_period('yearly', dt(2015, 5, 30)) == 365
+    assert number_of_days_in_period('yearly', dt(2016, 8, 15)) == 366

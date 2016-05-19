@@ -25,10 +25,10 @@
     {% for currency in operating_currencies %}
         <span class="num{{ ' has-balance' if account.balance else '' }}">
         {% if currency in account.balance %}
-            <span class="balance">{{ account.balance[currency]|format_currency(currency) }}</span>
+            {{ account_macros.balance_with_budget(currency, account.balance[currency], account.budget) }}
         {% endif %}
         {% if currency in account.balance_children %}
-            <span class="balance-children">{{ account.balance_children[currency]|format_currency(currency) }}</span>
+        {{ account_macros.balance_with_budget(currency, account.balance_children[currency], account.budget_children, css_class="balance-children") }}
         {% endif %}
         </span>
     {% endfor %}
@@ -36,14 +36,10 @@
         <span class="num other{{ ' has-balance' if account.balance else '' }}">
         {% for currency in api.options['commodities'] if currency not in operating_currencies %}
             {% if currency in account.balance %}
-                <span class="balance">
-                    {{- account.balance[currency]|format_currency(currency) }} {{ currency -}}
-                </span>
+                {{ account_macros.balance_with_budget(currency, account.balance[currency], account.budget, show_currency=True) }}
             {% endif %}
             {% if currency in account.balance_children %}
-                <span class="balance-children">
-                    {{- account.balance_children[currency]|format_currency(currency) }} {{ currency -}}
-                </span>
+                {{ account_macros.balance_with_budget(currency, account.balance_children[currency], account.budget_children, show_currency=True, css_class="balance-children") }}
             {% endif %}
         {% endfor %}
         </span>

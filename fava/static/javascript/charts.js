@@ -1,19 +1,27 @@
 const d3 = require('d3');
 const URI = require('urijs');
 
-const helpers = require('./helpers');
-
 var container;
 const treemapColorScale = d3.scale.category20c();
 const sunburstColorScale = d3.scale.category20c();
 const currencyColorScale = d3.scale.category10();
 const scatterColorScale = d3.scale.category10();
-const timeFilterFormatStrings = {
-      'year':    'YYYY',
-      'quarter': 'YYYY-Qq',
-      'day':     'YYYY-MM-DD',
-      'week':    'YYYY-Www',
-      'month':   'YYYY-MM',
+
+const formatCurrency = d3.format('.2f')
+const dateFormat = {
+      'year':    d3.time.format.utc('%Y'),
+      'quarter': function(date) { return date.getUTCFullYear() + 'Q' + (Math.floor(date.getUTCMonth() / 3) + 1); } ,
+      'month':   d3.time.format.utc('%b %Y'),
+      'week':    d3.time.format.utc('%YW%W'),
+      'day':     d3.time.format.utc('%Y-%m-%d'),
+}
+
+const timeFilterDateFormat = {
+      'year':    d3.time.format.utc('%Y'),
+      'quarter': function(date) { return date.getUTCFullYear() + '-Q' + (Math.floor(date.getUTCMonth() / 3) + 1); } ,
+      'month':   d3.time.format.utc('%Y-%m'),
+      'week':    d3.time.format.utc('%Y-W%W'),
+      'day':     d3.time.format.utc('%Y-%m-%d'),
 }
 
 function addInternalNodesAsLeaves(node) {
@@ -48,7 +56,7 @@ function timeFilter(date) {
     var e = $.Event('keyup');
     e.which = 13;
     $("#filter-time input[type=search]")
-        .val(date.formatWithString(timeFilterFormatStrings[window.interval]))
+        .val(timeFilterDateFormat[window.interval](date))
         .trigger(e);
 }
 
@@ -355,7 +363,7 @@ function sunburstChartContainer() {
                 .height(500)
                 .value(function(d) { return d.balance[currency]; })
                 .labelText(function(d) {
-                    return helpers.formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
+                    return formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
                 })
 
             canvases.push(svg.append('g')
@@ -511,7 +519,7 @@ function barChart() {
 function scatterPlot() {
     var margin = {top: 10, right: 10, bottom: 20, left: 50};
     var width, height;
-    var x = d3.time.scale();
+    var x = d3.time.scale.utc();
     var y = d3.scale.ordinal();
     var svg, canvas, tooltipText;
     var selections = {};
@@ -593,7 +601,7 @@ function lineChart() {
     var margin = {top: 10, right: 10, bottom: 20, left: 40};
     var width = 500 - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom;
-    var x = d3.time.scale();
+    var x = d3.time.scale.utc();
     var y = d3.scale.linear();
     var canvas, tooltipText, matrix;
     var selections = {};
@@ -746,9 +754,9 @@ module.exports.initCharts = function() {
             case 'balances':
                 var linechart = lineChart()
                     .tooltipText(function(d) {
-                        return helpers.formatCurrency(d.value) + ' ' + d.name  + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
+                        return formatCurrency(d.value) + ' ' + d.name  + '<em>' + dateFormat['day'](d.date) + '</em>'; })
 
-                var series = operating_currencies.map(function(c) {
+                var series = window.commodities.map(function(c) {
                     return {
                         'name': c,
                         'values': chart.data.filter(function(d) { return !(d.balance[c] === undefined); })
@@ -760,7 +768,7 @@ module.exports.initCharts = function() {
                             };
                         })
                     }
-                });
+                }).filter(function(d) { return d.values.length; });
 
                 chartContainer(chart.id, chart.label)
                     .datum(series)
@@ -771,7 +779,7 @@ module.exports.initCharts = function() {
             case 'commodities':
                 var linechart = lineChart()
                     .tooltipText(function(d) {
-                        return '1 ' + chart.base + ' =  ' + helpers.formatCurrency(d.value) + ' ' + chart.quote + '<em>' + d.date.formatWithString('YYYY-MM-DD') + '</em>'; })
+                        return '1 ' + chart.base + ' =  ' + formatCurrency(d.value) + ' ' + chart.quote + '<em>' + dateFormat['day'](d.date) + '</em>'; })
 
                 var series = [{
                     'name': chart.label,
@@ -795,17 +803,17 @@ module.exports.initCharts = function() {
                     .tooltipText(function(d) {
                         var text = '';
                         $.each(d.values, function(i, a) {
-                            text += helpers.formatCurrency(a.value) + ' ' +  a.name + '<br>';
+                            text += formatCurrency(a.value) + ' ' +  a.name + '<br>';
                         });
                         text += '<em>' + d.label + '</em>';
                         return text; })
 
                 chart.interval_totals.forEach(function(d) {
-                    d.values = operating_currencies.map(function(name) {
+                    d.values = window.operating_currencies.map(function(name) {
                         return {name: name, value: +d.totals[name] || 0};
                     });
                     d.date = new Date(d.begin_date);
-                    d.label = d.date.formatWithString(chart.date_format)
+                    d.label = dateFormat[window.interval](d.date)
                 });
 
                 chartContainer(chart.id, chart.label)
@@ -816,7 +824,7 @@ module.exports.initCharts = function() {
                 break;
             case 'scatterplot':
                 var scatterplot = scatterPlot()
-                    .tooltipText(function(d) { return d.description + '<em>' + d.date + '</em>'; })
+                    .tooltipText(function(d) { return d.description + '<em>' + dateFormat['day'](d.date) + '</em>'; })
 
                 chartContainer(chart.id, chart.label)
                     .datum(chart.events.map(function(d) { d.date = new Date(d.date); return d; }))
@@ -832,7 +840,7 @@ module.exports.initCharts = function() {
 
                     var treemap = treeMapChart()
                         .value(function(d) { return d.balance[currency] * chart.modifier; })
-                        .tooltipText(function(d) { return helpers.formatCurrency(d.balance[currency]) + ' ' + currency  + '<em>' + d.account + '</em>'; })
+                        .tooltipText(function(d) { return formatCurrency(d.balance[currency]) + ' ' + currency  + '<em>' + d.account + '</em>'; })
 
                     chartContainer(chart.id, chart.label + ' (' + currency + ')')
                         .datum(chart.root)
