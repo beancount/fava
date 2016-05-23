@@ -1,8 +1,42 @@
 Changelog
 =========
 
+v0.3.0 (May 24th, 2016)
+-----------------------
+
+Additions
+
+- Support for switching between multiple beancount files. :bug:`213`
+- New sunburst charts. :bug:`198`
+- Add "Clear filter" button when filters are active. :bug:`290`
+- Simple budgeting functionality in the Account view. See help pages on how to
+  use budgets. :bug:`294`
+- German translation. :bug:`284`
+- The Beancount is now being reloaded when it is saved in the Source Editor.
+- New Journal filter controls. Thanks to :user:`yagebu`.
+- Tree-tables are now displayed in a hierachical way. Thanks to :user:`yagebu`.
+
+Changes
+
+- All charts are now rendered with d3.js. Thanks to :user:`yagebu`.
+- The title of a page is now shown in the header to save screen space.
+- Changed shortcut for Journal from ``g g`` to ``g j`` as the Journal was
+  renamed from "General Journal" to "Journal".
+
+New configuration options
+
+- ``language``: The language to use. Valid languages are ``"en"`` and
+  ``"de"`` (default: ``"en"``). :bug:`284`
+- ``treemaps-show-negative-numbers`` was removed.
+
+Fixes
+
+- Commodity prices are now filtered when a Time filter is enabled. :bug:`273`
+- Some improvements to the help pages.
+- Many small bug fixes. Thanks to :user:`yagebu`.
+
 v0.2.6 (March 20th, 2016)
-----------------------------
+-------------------------
 
 Additions
 
