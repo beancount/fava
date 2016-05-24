@@ -12,7 +12,7 @@
     limitations under the License.
 """
 __url__ = "http://github.com/aumayr/fava"
-__version__ = "0.2.7-dev"
+__version__ = "0.3.0"
 __license__ = "MIT"
 __author__ = "Dominik Aumayr"
 __author_email__ = "dominik@aumayr.name"
