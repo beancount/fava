@@ -87,3 +87,7 @@ def main(filenames, port, host, settings, debug, profile, profile_dir,
         except:
             print("Unexpected error:", e)
             raise
+
+
+if __name__ == "__main__":
+    main()

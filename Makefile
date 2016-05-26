@@ -41,3 +41,6 @@ babel-merge:
 babel-compile:
 	# Compile .po-files to binary .mo-files
 	pybabel compile -d fava/translations
+
+pyinstaller: build-js
+	pyinstaller --onefile contrib/pyinstaller.spec

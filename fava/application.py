@@ -2,11 +2,11 @@
 import configparser
 import os
 from datetime import datetime
-import markdown2
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file)
-from flask.ext.babel import Babel
+from flask_babel import Babel
+import markdown2
 from werkzeug import secure_filename
 from beancount.core.number import Decimal
 
@@ -14,23 +14,23 @@ from fava import config
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
-from fava.util import slugify, uniquify
+from fava.util import slugify, uniquify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 
-app = Flask(__name__)
+app = Flask(__name__,
+            template_folder=resource_path('templates'),
+            static_folder=resource_path('static'))
+
 app.json_encoder = BeanJSONEncoder
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-app.config['DEFAULT_SETTINGS'] = \
-    os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                 'default-settings.conf')
+app.config['DEFAULT_SETTINGS'] = resource_path('default-settings.conf')
 app.config['USER_SETTINGS'] = None
-app.config['HELP_DIR'] = \
-    os.path.join(os.path.dirname(os.path.realpath(__file__)), 'docs')
+app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['APIS'] = {}
 

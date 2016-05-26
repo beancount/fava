@@ -1,7 +1,20 @@
+import os
 import re
+import sys
 from unicodedata import normalize
 
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+
+if getattr(sys, 'frozen', False):
+    BASEPATH = sys._MEIPASS
+else:
+    BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    return os.path.join(BASEPATH, relative_path)
 
 
 def slugify(text):
