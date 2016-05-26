@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-19 14:25+0200\n"
+"POT-Creation-Date: 2016-05-26 20:53+0200\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -46,51 +46,27 @@ msgstr "Graphen ein/aus"
 msgid "Loading charts&hellip;"
 msgstr "Lade Graphen&hellip;"
 
-#: fava/templates/_entry_filters.html:8
+#: fava/templates/_entry_filters.html:14
 msgid "Time"
 msgstr "Zeitraum"
 
-#: fava/templates/_entry_filters.html:10
-msgid "eg. This Month, 2015-03, March 2015, Year to Date, ..."
-msgstr "zB. This Month, 2015-03, March 2015, Year to Date, ..."
-
-#: fava/templates/_entry_filters.html:14
-msgid "Clear time filter"
-msgstr "Zeit-Filter entfernen"
-
-#: fava/templates/_entry_filters.html:42
-msgid "Multiple tags"
-msgstr "Mehrere Hashtags"
-
-#: fava/templates/_entry_filters.html:45
+#: fava/templates/_entry_filters.html:24
 msgid "Tag"
 msgstr "Hashtag"
 
-#: fava/templates/_entry_filters.html:53
-msgid "Clear tag filter"
-msgstr "Tag-Filter entfernen"
-
-#: fava/templates/_entry_filters.html:72 fava/templates/_tree_table.html:11
+#: fava/templates/_entry_filters.html:34 fava/templates/_tree_table.html:11
 #: fava/templates/account.html:42 fava/templates/holdings.html:13
 #: fava/templates/holdings.html:21 fava/templates/statistics.html:54
 msgid "Account"
 msgstr "Konto"
 
-#: fava/templates/_entry_filters.html:78
-msgid "Clear account filter"
-msgstr "Account-Filter entfernen"
-
-#: fava/templates/_entry_filters.html:104
-msgid "Multiple payees"
-msgstr "Mehrere Empfänger"
-
-#: fava/templates/_entry_filters.html:107
+#: fava/templates/_entry_filters.html:44
 msgid "Payee"
 msgstr "Empfänger"
 
-#: fava/templates/_entry_filters.html:115
-msgid "Clear payee filter"
-msgstr "Empfänger-Filter entfernen"
+#: fava/templates/_entry_filters.html:54
+msgid "Filter"
+msgstr "Filtern"
 
 #: fava/templates/_journal_table.html:64
 msgid "Cleared Transactions"
@@ -534,4 +510,3 @@ msgstr "Letzter Eintrag"
 #: fava/templates/statistics.html:89
 msgid "Directive Type"
 msgstr "Eintrags-Typ"
-

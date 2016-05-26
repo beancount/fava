@@ -2,38 +2,48 @@
 {% set tag_filter = g.filters['tag'] %}
 {% set account_filter = g.filters['account'] %}
 {% set payee_filter = g.filters['payee'] %}
+{% macro close_icon() %}
+    <svg class="close-icon" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
+{% endmacro %}
+{% macro filter_icon() %}
+    <svg class="filter-icon" width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1595 295q17 41-14 70l-493 493v742q0 42-39 59-13 5-25 5-27 0-45-19l-256-256q-19-19-19-45v-486l-493-493q-31-29-14-70 17-39 59-39h1280q42 0 59 39z"/></svg>
+{% endmacro %}
 <form id="filter-form" action="{{ url_for_current() }}" method="GET">
     <ul class="topmenu">
-        <li>
-            <input name="time" type="text" list='years' value='{{ time_filter or '' }}' placeholder="{{ _('by time') }}">
-            <button type="button" tabindex="-1">x</button>
+        <li{% if not time_filter %} class="empty"{% endif %}>
+            <input name="time" type="text" list='years' value='{{ time_filter or '' }}' placeholder="{{ _('Time') }}" size="{{ (time_filter and time_filter|length) or _('Time')|length }}">
+            {{ filter_icon() }}
+            <button type="button" tabindex="-1">{{ close_icon() }}</button>
             <datalist id="years">
             {% for year in api.active_years|reverse %}
                 <option>{{ year }}</option>
             {% endfor %}
             </datalist>
         </li>
-        <li>
-            <input name="tag" type="text" list='tags' value='{{ tag_filter or '' }}' placeholder="{{ _('by tag') }}">
-            <button type="button" tabindex="-1">x</button>
+        <li{% if not tag_filter %} class="empty"{% endif %}>
+            <input name="tag" type="text" list='tags' value='{{ tag_filter or '' }}' placeholder="{{ _('Tag') }}" size="{{ (tag_filter and tag_filter|length) or _('Tag')|length }}">
+            {{ filter_icon() }}
+            <button type="button" tabindex="-1">{{ close_icon() }}</button>
             <datalist id="tags">
             {% for tag in api.active_tags %}
                 <option>{{ tag }}</option>
             {% endfor %}
             </datalist>
         </li>
-        <li>
-            <input name="account" type="text" list='accounts' value='{{ account_filter or '' }}' placeholder="{{ _('by account') }}">
-            <button type="button" tabindex="-1">x</button>
+        <li{% if not account_filter %} class="empty"{% endif %}>
+            <input name="account" type="text" list='accounts' value='{{ account_filter or '' }}' placeholder="{{ _('Account') }}" size="{{ (account_filter and account_filter|length) or _('Account')|length }}">
+            {{ filter_icon() }}
+            <button type="button" tabindex="-1">{{ close_icon() }}</button>
             <datalist id="accounts">
             {% for account in api.all_accounts %}
                 <option>{{ account }}</option>
             {% endfor %}
             </datalist>
         </li>
-        <li>
-            <input name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('by payee') }}">
-            <button type="button" tabindex="-1">x</button>
+        <li{% if not payee_filter %} class="empty"{% endif %}>
+            <input name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('Payee') }}" size="{{ (payee_filter and payee_filter|length) or _('Payee')|length }}">
+            {{ filter_icon() }}
+            <button type="button" tabindex="-1">{{ close_icon() }}</button>
             <datalist id="payees">
             {% for payee in api.active_payees %}
                 <option>{{ payee }}</option>
@@ -41,7 +51,7 @@
             </datalist>
         </li>
         <li>
-            <input type="submit" value='filter'>
+            <input type="submit" value="{{ _('Filter') }}">
         </li>
     </ul>
 </form>

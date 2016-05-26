@@ -1,10 +1,12 @@
 require('awesomplete');
 
 module.exports.initFilters = function() {
-    $('#filter-form input').on('input', function() {
+    $('#filter-form input').on('input awesomplete-selectcomplete', function() {
         var isEmpty = !$(this).val();
-        $(this).parents('li').find('button').toggle(!isEmpty);
-        $(this).toggleClass('empty', isEmpty);
+        $(this).attr('size', $(this).val().length > $(this).attr('placeholder').length ? $(this).val().length : $(this).attr('placeholder').length);
+        $(this).parents('li')
+            .toggleClass('empty', isEmpty)
+            .find('button').toggle(!isEmpty);
     });
 
     $('#filter-form input[type="text"]').each(function() {
@@ -27,8 +29,9 @@ module.exports.initFilters = function() {
         var completer = new Awesomplete(this, options);
 
         var isEmpty = !$(this).val();
-        $(this).parents('li').find('button').toggle(!isEmpty);
-        $(this).toggleClass('empty', isEmpty);
+        $(this).parents('li')
+            .toggleClass('empty', isEmpty)
+            .find('button').toggle(!isEmpty);
 
         $(this).focus(function() {
             completer.evaluate();
