@@ -11,7 +11,7 @@ div.overlay-wrapper {
 
     div.overlay {
         background: $color_background;
-        margin: 20px auto 0 auto;
+        margin: auto;
         padding: 20px;
         width: 800px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
@@ -50,11 +50,11 @@ div.overlay-wrapper {
             display: inline-block;
             width: 120px;
             float: left;
-            line-height:2.3em;
+            line-height:2em;
         }
 
         dd {
-            line-height:2.3em;
+            line-height:2em;
         }
     }
 
