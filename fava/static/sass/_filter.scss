@@ -10,61 +10,57 @@
         position: relative;
         margin-left: 10px;
 
-        &.empty {
-            input {
-                background: transparent;
-            }
-
-            svg.filter-icon {
-                display: block;
-            }
+        &.empty input {
+            background: lighten($color_header, 10);
         }
 
         input {
             font-size: 1.1em;
             line-height: 41px;
-            width: 100%;
             max-width: 15rem;
             height: 41px;
             padding: 0 25px 0 10px;
-            color: $color_background;
+            color: $color_text;
+            background: $color_background;
             border: none;
-            background: $color_links;
+
+            &[type='text'] {
+                outline: none;
+            }
 
             &[type='submit'] {
-                line-height: 27px;
                 width: auto;
-                height: 27px;
-                margin-top: 7px;
+                height: 31px;
+                line-height: 31px;
+                margin-top: 5px;
                 margin-right: 0;
                 padding: 0 7px;
                 color: $color_background;
-                border: none;
+                background: $color_links;
             }
 
             &[type='text']:focus {
                 color: $color_text;
-                background: $color_background !important;
+                background: $color_background;
             }
 
             &:placeholder-shown {
-                color: lighten($color_text, 60);
-                border: none;
+                color: lighten($color_text, 50);
             }
 
+            // Chrome/Opera/Safari
             &::-webkit-input-placeholder {
                 opacity: 1;
-                /* Chrome/Opera/Safari */
-                color: lighten($color_text, 60);
+                color: lighten($color_text, 50);
             }
 
+            // Firefox 19+
             &::-moz-placeholder {
                 opacity: 1;
-                /* Firefox 19+ */
-                color: lighten($color_text, 60);
+                color: lighten($color_text, 50);
             }
-            // remove dropdown triangle
 
+            // remove dropdown triangle
             &::-webkit-calendar-picker-indicator {
                 display: none;
             }
@@ -85,22 +81,9 @@
                 position: absolute;
                 top: -1px;
                 right: -5px;
-                width: 18px;
-                height: 18px;
 
                 fill: lighten($color_text, 50);
             }
-        }
-
-        svg.filter-icon {
-            position: absolute;
-            top: 14px;
-            right: 10px;
-            display: none;
-            width: 13px;
-            height: 13px;
-
-            fill: lighten($color_text, 50);
         }
     }
 
@@ -112,7 +95,7 @@
             border-radius: 0;
 
             li {
-                line-height: 2em;
+                line-height: 1.5em;
                 position: relative;
                 min-width: 8rem;
                 padding: 0 10px;

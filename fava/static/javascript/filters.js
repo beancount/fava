@@ -2,9 +2,16 @@ require('awesomplete');
 
 module.exports.initFilters = function() {
     $('#filter-form input').on('input awesomplete-selectcomplete', function() {
-        var isEmpty = !$(this).val();
-        $(this).attr('size', $(this).val().length > $(this).attr('placeholder').length ? $(this).val().length : $(this).attr('placeholder').length);
-        $(this).parents('li')
+        var $this = $(this)
+
+        if ($this.val().length > $this.attr('placeholder').length){
+            $this.attr('size', $this.val().length + 2);
+        } else {
+            $this.attr('size', $this.attr('placeholder').length + 2);
+        }
+
+        var isEmpty = !$this.val();
+        $this.parents('li')
             .toggleClass('empty', isEmpty)
             .find('button').toggle(!isEmpty);
     });
