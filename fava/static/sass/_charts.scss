@@ -1,24 +1,22 @@
 .chart-labels {
     color: rgba($color_text, 0.2);
-    font-size: 11px;
+    font-size: 1em;
     line-height: 14px;
-    font-weight: bold;
     text-align: center;
     margin-bottom: 20px;
     position: relative;
     margin-top: 8px;
 
     label {
-        color: rgba($color_text, 0.3);
+        color: lighten($color_text, 40);
         padding: 0 5px;
 
         &:hover {
-            text-decoration: underline;
-            color: rgba($color_text, 0.4);
+            color: lighten($color_text, 20);
             cursor: pointer;
         }
 
-        &.selected { color: rgba($color_text, 0.5); }
+        &.selected { color: lighten($color_text, 20); }
     }
 
     label+label { border-left: 1px solid rgba($color_text, 0.4) }

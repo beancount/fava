@@ -1,9 +1,30 @@
 // Fonts
 
-$font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
-$font_family_alternative: "Helvetica", "Lucida Grande", Verdana, sans-serif;
-$font_family_monospaced: monospace;
-$font_family_kbd: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+@font-face {
+    font-family: "Fira Mono";
+    src: url("~@typopro/web-fira-mono/TypoPRO-FiraMono-Regular.woff") format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Fira Sans";
+    src: url("~@typopro/web-fira-sans/TypoPRO-FiraSans-Regular.woff") format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Fira Sans";
+    src: url("~@typopro/web-fira-sans/TypoPRO-FiraSans-Medium.woff") format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+$font_family: "Fira Sans", sans-serif;
+$font_family_alternative: "Fira Sans", sans-serif;
+$font_family_monospaced: "Fira Mono", monospace;
+$font_family_kbd: "Fira Mono", monospace;
 
 // Colors
 

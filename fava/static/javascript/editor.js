@@ -22,7 +22,7 @@ $(document).ready(function() {
         wrap: true,
         printMargin: false,
         fontSize: "13px",
-        fontFamily: "monospace",
+        fontFamily: "Source Code Pro",
         useSoftTabs: true,
         showFoldWidgets: true
     };
@@ -83,9 +83,9 @@ $(document).ready(function() {
             event.stopImmediatePropagation();
             var $button = $(this);
             $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
-            var nextUrl = URI($button.parents('form').attr('action'));
-            nextUrl.addQuery('query_string', editor.getValue());
-            window.location.href = nextUrl.toString();
+            window.location.href = URI($button.parents('form').attr('action'))
+                .addQuery('query_string', editor.getValue())
+                .toString();
         });
 
         $('.stored-queries select').change(function() {

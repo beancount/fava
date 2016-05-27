@@ -394,7 +394,7 @@ function sunburstChartContainer() {
 }
 
 function barChart() {
-    var margin = {top: 10, right: 10, bottom: 20, left: 40};
+    var margin = {top: 10, right: 10, bottom: 30, left: 40};
     var width, height;
     var x0 = d3.scale.ordinal();
     var x1 = d3.scale.ordinal();
@@ -515,7 +515,7 @@ function barChart() {
 }
 
 function scatterPlot() {
-    var margin = {top: 10, right: 10, bottom: 20, left: 50};
+    var margin = {top: 10, right: 10, bottom: 30, left: 70};
     var width, height;
     var x = d3.time.scale.utc();
     var y = d3.scale.ordinal();
@@ -596,7 +596,7 @@ function scatterPlot() {
 }
 
 function lineChart() {
-    var margin = {top: 10, right: 10, bottom: 20, left: 40};
+    var margin = {top: 10, right: 10, bottom: 30, left: 40};
     var width = 500 - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom;
     var x = d3.time.scale.utc();

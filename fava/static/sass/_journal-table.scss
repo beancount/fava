@@ -59,12 +59,12 @@ ol.journal-table {
     }
 
     p > span {
-        padding: 2px 5px;
+        padding: 1px 5px;
         margin: 0;
         flex-shrink: 0;
 
         &.num {
-            font: 1em/18px $font_family_monospaced;
+            font: 1em $font_family_monospaced;
             color: $color_text;
             text-align: right;
         }
@@ -72,7 +72,7 @@ ol.journal-table {
 
     .head {
         color: $color_journaltable_header;
-        font-weight: bold;
+        font-weight: 500;
         background: $color_treetable_header_bg;
 
         span {
@@ -162,7 +162,7 @@ ol.journal-table {
 
         &.datecell { width: 6rem; padding-right: 0; }
         &.flag { width: 1.6rem; text-align: center; }
-        &.change { font-weight: bold; }
+        &.change { font-weight: 500; }
 
         &.description {
             flex: 1;
@@ -174,7 +174,7 @@ ol.journal-table {
             }
 
             a {
-                font-weight: bold;
+                font-weight: 500;
 
                 &.tag {
                     font-weight: normal;
@@ -207,7 +207,7 @@ ol.journal-table {
 
         &.budget-value {
             float: right;
-            font-weight: bold;
+            font-weight: 500;
         }
     }
 }

@@ -18,6 +18,9 @@
     "webpack": "^1.12.13"
   },
   "dependencies": {
+    "@typopro/web-fira-mono": "^3.4.4",
+    "@typopro/web-fira-sans": "^3.4.4",
+    "@typopro/web-source-code-pro": "^3.4.4",
     "ace-builds": "^1.2.2",
     "awesomplete": "^1.1.0",
     "clipboard": "^1.5.8",
