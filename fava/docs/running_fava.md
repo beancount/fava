@@ -1,8 +1,8 @@
 ---
-title: Running fava
+title: Running Fava
 ---
 
-`fava` can be started with the `fava`-command. `fava --help` will show all the
+Fava can be started with the `fava` command. `fava --help` will show all the
 available command-line options.
 
 ```

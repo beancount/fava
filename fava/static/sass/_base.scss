@@ -31,7 +31,7 @@ table {
 }
 
 p, ol, ul, dl, table, pre {
-    margin: 0 0 1em 0;
+    margin: 0 0 1rem 0;
     padding: 0;
     list-style: none;
 }
@@ -43,13 +43,13 @@ p {
 h1, h2, h3, h4, h5 {
     font-weight: 500;
     color: $color_headings;
-    margin: 0 0 1em 0;
+    margin: 0 0 1rem 0;
     padding: 0;
 }
 
 h1 { font-size: 1.5em; }
-h2 { font-size: 1.33em; }
-h3 { font-size: 1.16em; }
+h2 { font-size: 1.2857em; }
+h3 { font-size: 1.1429em; }
 h4, h5 { font-size: 1em; }
 
 b, strong {
@@ -182,7 +182,7 @@ div.main {
     aside {
         padding-top: 20px;
         flex-shrink: 0;
-        width: 12em;
+        width: 160px;
         color: $color_sidebar_text;
         border-right: 1px solid darken($color_sidebar_background, 16);
         background-color: $color_sidebar_background;

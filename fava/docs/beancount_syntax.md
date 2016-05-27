@@ -2,39 +2,47 @@
 title: Beancount Syntax
 ---
 
-Below is a short reference of the Beancount Language Syntax. For the official,
-full documentation see
-[furius.ca/beancount/doc/syntax](http://furius.ca/beancount/doc/syntax).  There
-is also an official [Syntax Cheat
-Sheet](http://furius.ca/beancount/doc/cheatsheet).
-
-## Introduction
+Below is a short reference of the Beancount language syntax. Also see the full
+[Syntax Documentation](http://furius.ca/beancount/doc/syntax) and the
+[Syntax Cheat Sheet](http://furius.ca/beancount/doc/cheatsheet).
 
 Beancount defines a language in which financial transactions are entered into a
-text-file (called input-file), which then can be processed by Beancount.  There
-are a few building blocks that are important to understand Beancount's Syntax:
+text-file, which then can be processed by Beancount. There are a few building
+blocks that are important to understand Beancount's syntax:
 
-- Currencies (`USD`, `EUR`, ...) and values
-- Accounts (`Assets:US:BofA:Checking`, ...)
-- Directives (`open`, `balance`, ...)
+- Commodities,
+- Accounts,
+- Directives.
 
 ## Commodities
 
-All in CAPS: `USD`, `EUR`, `CAD`, `AUD` `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
+All in CAPS: `USD`, `EUR`, `CAD`, `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
 `AIRMILES`, `HOURS`.
 
-## Account Types
+## Accounts
 
-Example Account Name: `Assets:US:BofA:Checking`
+Account are given by a colon-separated list of capitalized words. They must
+begin with one the five root accounts listed in the table below. The separation
+by colons defines an implicit hierarchy, for example we say that `Assets:Cash` is a
+sub-account of `Assets`.
 
-| Name          | Type | Contains                     | Examples                        | Option to change name                           |
-|---------------|------|------------------------------|---------------------------------|-------------------------------------------------|
-| `Assets`      | +    | Cash, Checking-Account, etc. | `Assets:Checking`         | `option "name_assets" "Vermoegen"`              |
-| `Liabilities` | -    | Credit Card, etc.            | `Liabilities:CreditCard`  | `option "name_liabilities" "Verbindlichkeiten"` |
-| `Income`      | -    | Salary, etc.                 | `Income:EmployerA`        | `option "name_income" "Einkommen"`              |
-| `Expenses`    | +    | Expense-Categories           | `Expenses:Fun:Cinema`     | `option "name_expenses" "Ausgaben"`             |
-| `Equity`      | -    | Almost always auto-generated | `Equity:Opening-Balances` | `option "name_equity" "Eigenkapital"`           |
+| Name          | Type | Contains                     | Examples                  |
+|---------------|------|------------------------------|---------------------------|
+| `Assets`      | +    | Cash, Checking-Account, etc. | `Assets:Checking`         |
+| `Liabilities` | -    | Credit Card, etc.            | `Liabilities:CreditCard`  |
+| `Income`      | -    | Salary, etc.                 | `Income:EmployerA`        |
+| `Expenses`    | +    | Expense categories           | `Expenses:Fun:Cinema`     |
+| `Equity`      | -    | Almost always auto-generated | `Equity:Opening-Balances` |
 
+The names of the five root accounts can be changes with the following options:
+
+```beancount
+option "name_assets"      "Vermoegen"
+option "name_liabilities" "Verbindlichkeiten"
+option "name_income"      "Einkommen"
+option "name_expenses"    "Ausgaben"
+option "name_equity"      "Eigenkapital"
+```
 
 ## Directives
 

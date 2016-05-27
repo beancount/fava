@@ -3,10 +3,18 @@
 @import "pygments";
 
 .help-text {
-    font-size: 1.1em;
-    font-family: $font_family_alternative;
+    width: 660px;
+    font: 16px $font_family_alternative;
+
+    h1, h2, h3, h4, h5 {
+        font-family: $font_family;
+    }
 
     div { margin-bottom: 1em; }
+
+    code {
+        font-size: 1rem;
+    }
 
     ul {
         padding-left: 2em;
@@ -18,7 +26,8 @@
 }
 
 .help-sidebar {
-    text-align: right;
+    position: fixed;
+    left: 850px;
     float: right;
     margin: 0 0 10px 10px;
     padding: 10px 10px 0 10px;

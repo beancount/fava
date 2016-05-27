@@ -2,17 +2,16 @@
 title: Fava's features
 ---
 
-This is an overview that might help you use some of the more advanced features
-that fava offers.
+This is an overview of some of the more advanced features that Fava has to offer.
 
 ## Keyboard Shortcuts
 
-`fava` comes with keyboard shortcuts: Press <kbd>?</kbd> on any page to show an
+Fava comes with keyboard shortcuts: Press <kbd>?</kbd> on any page to show an
 overview.
 
 ## Filters
 
-There are four filters available in `fava`:
+There are four filters available in Fava:
 
 - **Time**: Filter entries by their date. This filter does some free-text
   recognition, which means you can enter terms like `This Month`, `2015-03`,
@@ -31,7 +30,7 @@ matching both filters will be selected.
 
 ## Up-to-date indicators
 
-fava offers colored indicators that can help you keep your accounts up-to-date.
+Fava offers colored indicators that can help you keep your accounts up-to-date.
 They are shown everywhere by default, but only enabled for accounts that have
 the metadata `fava-uptodate-indication: "True"` set on their Open directive.
 The colors have the following meaning:
@@ -45,7 +44,7 @@ The colors have the following meaning:
 ## Displaying only relevant accounts
 
 To help display only the most relevant subset of accounts when managing a large number
-or a deep hierarchy of accounts, fava offers several configuration variables listed
+or a deep hierarchy of accounts, Fava offers several configuration variables listed
 below. The first three are self-explanatory:
 
 - `show-closed-accounts`
@@ -53,28 +52,29 @@ below. The first three are self-explanatory:
 - `show-accounts-with-zero-transactions`
 - `collapse-accounts` takes a list of accounts that are collapsed in the initial tree view
 
-## Custom editor
+## Opening an external editor
 
-fava can open up your source file in your favorite editor directly from the web
+Fava can open up your source file in your favorite editor directly from the web
 interface using the `use-external-editor` configuration variable through the
-'beancount://' URI handler. See the https://github.com/aumayr/beancount_urlscheme
-project for pre-configured URI handlers for Mac OS and Cygwin.
+`beancount://` URL handler. See the [beancount
+urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
+pre-configured URL handlers for OS X and Cygwin.
 
 ## Query Export
 
-By default, fava only supports export to `csv` for query results. For support
-of `xls`, `xlsx` and `ods`, install fava with the `excel` feature:
+By default, Fava only supports export to `csv` for query results. For support
+of `xls`, `xlsx` and `ods`, install Fava with the `excel` feature:
 
     pip3 install fava[excel]
 
 ## Multiple Beancount files
 
-When you start fava specifying multiple Beancount files, you can click the
+When you start Fava specifying multiple Beancount files, you can click the
 Beancount file name on the top left to switch between the files.
 
 ## Custom links in the sidebar
 
-If you regularly use certain views in fava with different filters, etc., you can
+If you regularly use certain views in Fava with different filters, etc., you can
 put these permalinks in the sidebar. Custom links can be put in the beancount
 file, utilizing the `custom` directive:
 
@@ -85,10 +85,10 @@ link, followed by the title to display in the sidebar (`"Income 2014"` in this
 example), and finally the URL to link to. The URL can be relative, like in the
 example above, or absolute, even linking to an external site.
 
-## UI Language
+## Language
 
-You can change the language of the UI by specifying the `language` setting. 
-Currently fava supports English (`en`) and German (`de`).
+You can change the language of the interface by specifying the `language` setting.
+Currently Fava supports English (`en`) and German (`de`).
 
-If no setting is specified, fava tries to guess the language from your Browser-
+If no setting is specified, Fava tries to guess the language from your browser
 settings.

@@ -2,22 +2,21 @@
 title: Index
 ---
 
-Welcome to the help pages for `fava`, a web interface for the
-double-entry bookkeeping software [Beancount](http://furius.ca/beancount/) with
-a focus on features and usability.
-The box on the right contains a list of the available help pages.
-If you want to contribute to this Help system, please file a
-[PR](https://github.com/aumayr/fava).
+Welcome to the help pages for Fava:
 
-### External help pages
+- [Beancount Syntax](../beancount_syntax/) - short overview of the syntax.
+- [Budgets](../budgets/) - how to use Fava's budgeting feature.
+- [Fava's Features](../features/) - the features in detail.
+- [Running Fava](../running_fava/) - available command-line options.
 
-- [Unofficial Beancount API documentation](http://aumayr.github.io/beancount-docs-static/)
-- [Official Beancount Documentation](http://furius.ca/beancount/doc/index)
-- Beancount [Mailing list](https://groups.google.com/forum/#!forum/beancount)
-- Beancount [Issues](https://bitbucket.org/blais/beancount/issues?status=new&status=open)
-- [plaintextaccounting.org](http://plaintextaccounting.org)
+If you discover bug in Fava, or have some ideas for improvement, please open a
+[bug report](https://github.com/aumayr/fava/issues).
 
-### Other plain text accounting systems
+### Related websites
 
-- [ledger](http://www.ledger-cli.org/) ([ledger Mailing list](https://groups.google.com/forum/#!forum/ledger-cli))
-- [hledger](http://hledger.org/) ([hledger Documentation](http://hledger.org/docs.html))
+- Fava [Website](https://aumayr.github.io/fava/),
+- Fava [Bug Tracker](https://github.com/aumayr/fava/issues),
+- Beancount [Documentation](http://furius.ca/beancount/doc/index),
+- Beancount [Mailing list](https://groups.google.com/forum/#!forum/beancount),
+- Beancount [Bug Tracker](https://bitbucket.org/blais/beancount/issues?status=new&status=open),
+- An overview of other implementations of command-line accounting: [Plain Text Accounting](http://plaintextaccounting.org).
