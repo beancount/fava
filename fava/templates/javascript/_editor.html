@@ -4,6 +4,8 @@
     window.allTags = {{ api.active_tags|tojson|safe }};
 
     window.editorStripTrailingWhitespace = {{ config['editor-strip-trailing-whitespace']|tojson|safe }};
+    window.editorPrintMarginColumn = {{ config['editor-print-margin-column']|tojson|safe }};
+    window.defaultSettingsFile = {{ config['DEFAULT_SETTINGS']|tojson|safe }};
     {% if config['editor-insert-marker'] %}
         window.editorInsertMarker = "{{ config['editor-insert-marker'] }}";
     {% endif %}

@@ -21,21 +21,13 @@ $(document).ready(function() {
         mode: "ace/mode/beancount",
         wrap: true,
         printMargin: false,
-        fontSize: "13px",
-        fontFamily: "Source Code Pro",
         useSoftTabs: true,
         showFoldWidgets: true
     };
 
-    if ($('.editor').attr('data-print-margin-column')) {
-        defaultOptions['printMargin'] = true;
-        defaultOptions['printMarginColumn'] = parseInt($('.editor').attr('data-print-margin-column'));
-    }
-
     // Read-only editors
     $('.editor-wrapper .editor.editor-readonly').each(function() {
-        var editorId = $(this).prop('id');
-        var editor = ace.edit(editorId);
+        var editor = ace.edit($(this).prop('id'));
         editor.setOptions(defaultOptions);
         editor.setOptions({
             maxLines: editor.session.getLength(),
@@ -65,7 +57,8 @@ $(document).ready(function() {
             mode: "ace/mode/sql",
         });
 
-        editor.commands.addCommand({  // for when the focus is inside the editor
+        // when the focus is inside the editor
+        editor.commands.addCommand({
             name: "executeQuery",
             bindKey: {win: "Ctrl-Enter", mac: "Command-Enter"},
             exec: function(editor) {
@@ -73,7 +66,8 @@ $(document).ready(function() {
             }
         });
 
-        Mousetrap.bind(['ctrl+enter', 'meta+enter'], function(event) {  // for when the focus is outside the editor
+        // when the focus is outside the editor
+        Mousetrap.bind(['ctrl+enter', 'meta+enter'], function(event) {
             event.preventDefault();
             $('#submit-query').click();
         });
@@ -101,9 +95,6 @@ $(document).ready(function() {
     // The /source/ editor
     if ($('#editor-source').length) {
         fireEvent(document, 'LiveReloadShutDown');
-
-        var editorHeight = $(window).height() - $('header').outerHeight() - 110;
-        $('.editor-wrapper').height(editorHeight);
 
         var editor = ace.edit("editor-source");
         var langTools = ace.require("ace/ext/language_tools");
@@ -136,7 +127,11 @@ $(document).ready(function() {
         }
 
         langTools.setCompleters([beancountCompleter]);
-        editor.setOptions({enableLiveAutocompletion: true});
+        editor.setOptions({
+            enableLiveAutocompletion: true,
+            printMargin: true,
+            printMarginColumn: window.editorPrintMarginColumn
+        });
 
         editor.$blockScrolling = Infinity;
         editor.focus();
@@ -147,25 +142,25 @@ $(document).ready(function() {
             event.stopImmediatePropagation();
             var $select = $(this);
             $select.attr('disabled', 'disabled');
-            $filePath = $select.val();
-            $.get($select.parents('form').attr('action'), { file_path: $filePath } )
+            var filePath = $select.val();
+            $.get($select.parents('form').attr('action'), { file_path: filePath } )
             .done(function(data) {
-                if ($filePath != URI(location.search).query(true).file_path) {
+                if (filePath != URI(location.search).query(true).file_path) {
                     hlLine = 1;
                 }
                 editor.setValue(data, -1);
                 editor.gotoLine(hlLine, 0, true);
                 $select.removeAttr('disabled');
 
-                if ($filePath.endsWith('.conf') || $filePath.endsWith('.settings') || $filePath.endsWith('.ini')) {
+                if (filePath.endsWith('.conf') || filePath.endsWith('.settings') || filePath.endsWith('.ini')) {
                     editor.setOptions({mode: "ace/mode/ini"});
-                    console.log($("input[name=config-file-defaults]").val());
-                    console.log($filePath);
+                    console.log(window.defaultSettingsFile);
+                    console.log(filePath);
                 } else {
                     editor.setOptions({mode: "ace/mode/beancount"});
                 }
 
-                $("form.editor-save").toggle($filePath != $("input[name=config-file-defaults]").val());
+                $("form.editor-save").toggle(filePath != window.defaultSettingsFile);
 
                 if (window.editorInsertMarker && hlLine == 1) {
                     var range = editor.find(window.editorInsertMarker, {
@@ -182,7 +177,7 @@ $(document).ready(function() {
                         editor.session.replace(range, "\n\n" + editor.session.getLine(range.start.row));
                         editor.gotoLine(range.start.row + 1, 0, true);
                     } else {
-                        console.info("editor-insert-marker '" + window.editorInsertMarker + "' not found in file " + $filePath);
+                        console.info("editor-insert-marker '" + window.editorInsertMarker + "' not found in file " + filePath);
                     }
                 }
             });
@@ -212,7 +207,8 @@ $(document).ready(function() {
             });
         }
 
-        editor.commands.addCommand({  // for when the focus is inside the editor
+        // when the focus is inside the editor
+        editor.commands.addCommand({
             name: "save",
             bindKey: {win: "Ctrl-S", mac: "Command-S"},
             exec: function(editor) {
@@ -220,12 +216,13 @@ $(document).ready(function() {
             }
         });
 
-        Mousetrap.bind(['ctrl+s', 'meta+s'], function(event) {  // for when the focus is outside the editor
+        // when the focus is outside the editor
+        Mousetrap.bind(['ctrl+s', 'meta+s'], function(event) {
             event.preventDefault();
             saveEditorContent();
         });
 
-        $('form.editor-save input[type="submit"]').click(function(event) {
+        $('form.editor-source input[type="submit"]').click(function(event) {
             event.preventDefault();
             event.stopImmediatePropagation();
             saveEditorContent();

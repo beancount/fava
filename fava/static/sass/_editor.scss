@@ -1,27 +1,45 @@
 // Editor
 
-div.editor-wrapper {
-    position: relative;
-    margin-bottom: 10px;
+article#page-source {
+    padding: 0;
 
-    &.editor-wrapper-source {
-        position: relative;
+    form {
+        height: 40px;
+        border-bottom: 2px solid darken($color_background, 5);
 
-        div.editor {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
+        input {
+            margin: 5px;
+            background: $color_header;
+            color: #fff;
+            padding: 4px 10px;
+            border: 1px solid darken($color_header, 9);
         }
     }
 
-    &.editor-wrapper-readonly { margin-bottom: 20px; }
-    &.editor-wrapper-query > div.editor { height: 180px; }
+    div.editor {
+        position: fixed;
+        left: $aside_width;
+        top: $header_height + 40px;
+        right: 0;
+        bottom: 0;
+    }
+}
+
+div.editor-wrapper {
+    &.editor-wrapper-readonly {
+        margin-bottom: 20px;
+        border: 1px solid darken($color_background, 9);
+    }
+
+    &.editor-wrapper-query > div.editor {
+        font-size: 16px;
+        height: 180px;
+        border: 1px solid darken($color_background, 9);
+    }
 }
 
 .ace_editor.ace-chrome {
-    border: 1px solid darken($color_background, 9);
+    font: 13px $font_family_editor;
 
     .ace_gutter {
         border-right: 1px solid darken($color_background, 9);
@@ -36,7 +54,7 @@ div.editor-wrapper {
 
     .ace_section {
         color: $color_editor_comment;
-        font-weight: 700;
+        font-weight: bold;
         border: solid 1px $color_editor_comment;
         border-radius: 2px;
         padding-right: 10px;
@@ -46,7 +64,6 @@ div.editor-wrapper {
 
     .ace_comment {
         color: $color_editor_comment;
-        font-style: italic;
     }
 
     .ace_directive {
@@ -79,10 +96,7 @@ div.editor-wrapper {
         background: transparent;
     }
 
-    // .ace_marker-layer .ace_active-line { background: $color_editor_activeline; }
-
     &.ace_autocomplete .ace_content {
-        font-family: $font_family_monospaced;
-        font-size: 13px;
+        font: 13px $font_family_editor;
     }
 }
