@@ -2,8 +2,9 @@ from datetime import date
 
 from beancount.core.number import Decimal
 from beancount.parser import parser
+import pytest
 
-from fava.api.budgets import Budgets
+from fava.api.budgets import Budgets, _parse_budget_entry
 from fava.util.date import number_of_days_in_period
 
 
@@ -11,6 +12,19 @@ def get_budgets(beancount_string):
     entries, errors, options_map = parser.parse_string(beancount_string,
                                                        dedent=True)
     return Budgets(entries)
+
+
+def test__parse_budget_entry(load_doc):
+    """
+    2016-05-01 custom "budget"
+    2016-05-01 custom "budget" "daily" 2.5 EUR
+    2016-05-01 custom "budget" Expenses:Books "daily" 2.5 EUR"""
+    entries, _, _ = load_doc
+    with pytest.raises(TypeError):
+        _parse_budget_entry(entries[0])
+    with pytest.raises(IndexError):
+        _parse_budget_entry(entries[1])
+    _parse_budget_entry(entries[2])
 
 
 def test_budgets_dateline_daily():
@@ -58,24 +72,3 @@ def test_budgets_dateline_yearly():
     assert budgets.budget('Expenses:Books', date(2011, 2, 1), date(2011, 2, 2))['EUR'] == BUDGET / number_of_days_in_period('yearly', date(2011, 2, 1))  # noqa
     assert budgets.budget('Expenses:Books', date(2015, 5, 30), date(2015, 5, 31))['EUR'] == BUDGET / number_of_days_in_period('yearly', date(2015, 5, 30))  # noqa
     assert budgets.budget('Expenses:Books', date(2016, 8, 15), date(2016, 8, 16))['EUR'] == BUDGET / number_of_days_in_period('yearly', date(2016, 8, 15))  # noqa
-
-
-# @pytest.fixture
-# def setup_app(tmpdir):
-#     filename = tmpdir.join('beancount_budget.example')
-#     with filename.open('w') as fd:
-#         today = dt.date.today()
-#         write_example_file(dt.date(1980, 5, 12),
-#                            dt.date(today.year - 3, 1, 1),
-#                            today, True, fd)
-#         write('2010-01-01 open Expenses:Books\n')
-#         write('2010-01-01 * "" ""\n  Expenses:Books  10.00 EUR\n  Assets:Cash\n')  # noqa
-#         write('2010-01-01 custom "budget" Expenses:Books "monthly"  20.00 EUR\n')  # noqa
-#         write('2014-05-01 * "" ""\n  Expenses:Books  10.00 EUR\n  Assets:Cash\n')  # noqa
-#         write('2014-06-01 custom "budget" Expenses:Books "daily"  3.00 EUR\n')     # noqa
-#     app.beancount_filename = str(filename)
-#     api.load_file(app.beancount_filename)
-#     app.testing = True
-#
-# def test_budget(setup_app):
-    # app.api.budgets.budget(self, account_name, date_from, date_to):

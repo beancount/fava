@@ -98,6 +98,7 @@ class BeancountReportAPI(object):
         self._apply_filters()
 
         self.budgets = Budgets(self.entries)
+        self.errors.extend(self.budgets.errors)
 
     def _apply_filters(self):
         self.entries = self.all_entries

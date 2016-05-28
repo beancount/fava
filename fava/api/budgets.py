@@ -5,9 +5,20 @@ from beancount.core.number import Decimal
 
 from fava.util.date import days_in_daterange, number_of_days_in_period
 
+Budget = namedtuple('Budget', 'account date_start period number currency')
+BudgetError = namedtuple('BudgetError', 'source message entry')
+
+
+def _parse_budget_entry(entry):
+    return Budget(
+        entry.values[0].value,
+        entry.date,
+        entry.values[1].value,
+        entry.values[2].value.number,
+        entry.values[2].value.currency)
+
 
 class Budgets(object):
-    Budget = namedtuple('Budget', 'date_start period number currency')
 
     def __init__(self, entries):
         """
@@ -18,20 +29,18 @@ class Budgets(object):
             2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
         """
         self.budgets = defaultdict(lambda: [])
-        self.currencies = set()
+        self.errors = []
 
         for entry in entries:
             if isinstance(entry, Custom) and entry.type == 'budget':
-                account_name = entry.values[0].value
-
-                self.budgets[account_name].append(
-                    Budgets.Budget(date_start=entry.date,
-                                   period=entry.values[1].value,
-                                   number=entry.values[2].value.number,
-                                   currency=entry.values[2].value.currency)
-                )
-
-                self.currencies.add(entry.values[2].value.currency)
+                try:
+                    budget = _parse_budget_entry(entry)
+                    self.budgets[budget.account].append(budget)
+                except:
+                    self.errors.append(BudgetError(
+                        entry.meta,
+                        'Failed to parse budget entry',
+                        entry))
 
         for name, account in self.budgets.items():
             self.budgets[name] = sorted(self.budgets[name],
