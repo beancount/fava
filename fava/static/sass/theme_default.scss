@@ -38,16 +38,16 @@ $font_family_kbd: "Fira Mono", monospace;
 
 $color_background: #fff;
 $color_text: #444;
-$color_links: #3572b0;
+$color_links: #0067A5;
 $color_headings: #333;
 $color_error: #990000;
 
 $color_sidebar_text: #dadada;
 $color_sidebar_background: #f5f5f5;
-$color_sidebar_links: #36382e;
+$color_sidebar_links: #444;
 
-$color_header: #205081;
-$color_header_bottom: #2e3d54;
+$color_header: #0067A5;
+$color_header_bottom: darken($color_header, 10);
 $color_header_text: white;
 
 $color_status_red: #990000;
@@ -73,7 +73,6 @@ $color_journaltable_metadata: #85aacf;
 $color_journaltable_tag: #6aa2db;
 
 $color_treetable_header_bg: darken($color_background, 15);
-
 $color_treetable_expander: #afc1d3;
 
 $color_budget_negative: #AF3D3D;
@@ -90,27 +89,6 @@ $color_editor_constant: #008080;
 $color_editor_account: #333;
 $color_editor_invalid: #333;
 $color_editor_activeline: #ffffcc;
-
-$ct-bar-width: 14px;
-$ct-line-width: 3px;
-$ct-point-size: 6px;
-$ct-series-colors: (
-    #990000,
-    #113861,
-    #777,
-    #1B9900,
-    #FF8800,
-    #59922b,
-    #0544d3,
-    #6b0392,
-    #f05b4f,
-    #dda458,
-    #eacf7d,
-    #86797d,
-    #b2c326,
-    #6188e2,
-    #a748ca
-);
 
 // Import everything
 

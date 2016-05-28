@@ -15,9 +15,9 @@
         }
 
         input {
-            line-height: 41px;
+            line-height: 36px;
             max-width: 15rem;
-            height: 41px;
+            height: 36px;
             padding: 0 25px 0 10px;
             color: $color_text;
             background: $color_background;
@@ -29,13 +29,12 @@
 
             &[type='submit'] {
                 width: auto;
-                height: 31px;
-                line-height: 31px;
-                margin-top: 5px;
+                height: 36px;
+                line-height: 36px;
                 margin-right: 0;
                 padding: 0 7px;
                 color: $color_background;
-                background: $color_links;
+                background: lighten($color_header, 5);
             }
 
             &[type='text']:focus {
@@ -67,7 +66,7 @@
 
         button {
             position: absolute;
-            top: 12px;
+            top: 10px;
             right: 10px;
             display: none;
             width: 18px;
