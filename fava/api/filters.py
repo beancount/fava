@@ -73,9 +73,11 @@ class TagFilter(EntryFilter):
 
 class AccountFilter(EntryFilter):
     def _include_entry(self, entry):
-        return isinstance(entry, Transaction) and \
-            any(account.has_component(posting.account, self.value)
-                for posting in entry.postings)
+        if isinstance(entry, Transaction):
+            return any(account.has_component(posting.account, self.value)
+                       for posting in entry.postings)
+        else:
+            return hasattr(entry, 'account') and entry.account == self.value
 
 
 class PayeeFilter(EntryFilter):
