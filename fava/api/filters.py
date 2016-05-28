@@ -77,7 +77,8 @@ class AccountFilter(EntryFilter):
             return any(account.has_component(posting.account, self.value)
                        for posting in entry.postings)
         else:
-            return hasattr(entry, 'account') and entry.account == self.value
+            return (hasattr(entry, 'account') and
+                    account.has_component(entry.account, self.value))
 
 
 class PayeeFilter(EntryFilter):
