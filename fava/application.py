@@ -343,7 +343,7 @@ def uptodate_eligible(account_name):
 
 @app.url_value_preprocessor
 def pull_beancount_file(endpoint, values):
-    g.beancount_file_slug = values.pop('bfile', None)
+    g.beancount_file_slug = values.pop('bfile', None) if values else None
     if not g.beancount_file_slug:
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
