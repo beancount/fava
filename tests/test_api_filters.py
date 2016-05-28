@@ -11,12 +11,10 @@ def test_account_filter(example_api):
     account_filter.set('Assets')
     filtered_entries = account_filter.apply(
         example_api.all_entries, example_api.options)
+    assert len(filtered_entries) == 537
     assert all(map(
-        lambda x: isinstance(x, Transaction),
-        filtered_entries))
-    assert len(filtered_entries) == 485
-    assert all(map(
-        lambda x: any(map(
+        lambda x: hasattr(x, 'account') and
+        account.has_component(x.account, 'Assets') or any(map(
             lambda p: account.has_component(p.account, 'Assets'), x.postings)),
         filtered_entries))
 
