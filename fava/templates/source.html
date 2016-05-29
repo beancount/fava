@@ -1,7 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'source' %}
 {% set show_filters = False %}
-{% set source_files = api.source_files() + [config['DEFAULT_SETTINGS']] %}
+{% set source_files = api.source_files() %}
 {% if config['USER_SETTINGS'] %}
     {% set source_files = source_files + [config['USER_SETTINGS']] %}
 {% endif %}

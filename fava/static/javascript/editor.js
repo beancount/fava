@@ -154,13 +154,10 @@ $(document).ready(function() {
 
                 if (filePath.endsWith('.conf') || filePath.endsWith('.settings') || filePath.endsWith('.ini')) {
                     editor.setOptions({mode: "ace/mode/ini"});
-                    console.log(window.defaultSettingsFile);
                     console.log(filePath);
                 } else {
                     editor.setOptions({mode: "ace/mode/beancount"});
                 }
-
-                $("form.editor-save").toggle(filePath != window.defaultSettingsFile);
 
                 if (window.editorInsertMarker && hlLine == 1) {
                     var range = editor.find(window.editorInsertMarker, {

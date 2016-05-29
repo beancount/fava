@@ -217,8 +217,7 @@ def source():
     if request.method == "GET":
         if request.is_xhr:
             requested_file_path = request.args.get('file_path', None)
-            if requested_file_path in [app.config['USER_SETTINGS'],
-                                       app.config['DEFAULT_SETTINGS']]:
+            if requested_file_path == app.config['USER_SETTINGS']:
                 with open(requested_file_path, 'r') as f:
                     settings_file_content = f.read()
                 return settings_file_content
@@ -239,8 +238,6 @@ def source():
                 f.write(source)
             successful = True
             load_settings()
-        if file_path == app.config['DEFAULT_SETTINGS']:
-            successful = False
         else:
             successful = g.api.set_source(file_path=file_path, source=source)
         return str(successful)

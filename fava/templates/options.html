@@ -5,15 +5,11 @@
 {% block content %}
     <h2>{{ _('fava: settings') }}</h2>
     <dl>
-        <dt>{{ _('Default settings:') }}</dt>
-        <dd><a href="{{ url_for('source', file_path=config['DEFAULT_SETTINGS']) }}">{{ config['DEFAULT_SETTINGS'] }}</a></dd>
-    </dl>
-    <dl>
         <dt>{{ _('User settings:') }}</dt>
     {% if config['USER_SETTINGS'] %}
         <dd><a href="{{ url_for('source', file_path=config['USER_SETTINGS']) }}">{{ config['USER_SETTINGS'] }}</a></dd>
     {% else %}
-        <dd>No user settings specified</dd>
+        <dd>No user settings file specified</dd>
     {% endif %}
     </dl>
     <table class="settings sortable">
