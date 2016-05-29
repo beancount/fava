@@ -67,7 +67,7 @@
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}
-{% set show_charts = config['charts-show'] %}
+{% set show_charts = config['charts'] %}
 <form class="wide-form chart-filter">
     {% if not hide_interval_filter %}
         <select name="chart-interval" id="chart-interval">
