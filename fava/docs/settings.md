@@ -122,3 +122,32 @@ Default: Not set
 
 If present the cursor will be positioned above the specified insert marker and
 two newlines will be inserted.
+
+---
+
+## `use-external-editor`
+
+Default: `False`
+
+If `True`, instead of using the internal editor, the `beancount://` URL scheme
+is used. See the
+[beancount_urlscheme](http://github.com/aumayr/beancount_urlscheme) project for
+details.
+
+---
+
+## `account-journal-include-children`
+
+Default: `True`
+
+This determines if the journal in the account report includes entries of
+sub-accounts.
+
+---
+
+## `uptodate-indicator-grey-lookback-days`
+
+Default: `60`
+
+If there has been no activity in given number of days since the last balance
+entry, then the grey uptodate-indicator is shown.

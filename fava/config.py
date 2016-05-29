@@ -1,5 +1,5 @@
 bool_options = [
-    'journal-show-childentries',
+    'account-journal-include-children',
     'charts',
     'editor-strip-trailing-whitespace',
     'use-external-editor',
