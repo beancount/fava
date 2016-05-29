@@ -1,6 +1,10 @@
 fava
 ====
 
+.. image:: https://badges.gitter.im/aumayr/fava.svg
+   :alt: Join the chat at https://gitter.im/aumayr/fava
+   :target: https://gitter.im/aumayr/fava?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
 .. image:: https://img.shields.io/badge/plaintextaccounting.org-beancount-red.svg
    :target: http://plaintextaccounting.org
 .. image:: https://img.shields.io/pypi/l/beancount-fava.svg
