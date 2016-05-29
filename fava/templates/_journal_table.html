@@ -1,23 +1,23 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set default_show_type = {
-    'open':        config['journal-show-type-open'],
-    'close':       config['journal-show-type-close'],
-    'transaction': config['journal-show-type-transaction'],
-    'balance':     config['journal-show-type-balance'],
-    'note':        config['journal-show-type-note'],
-    'document':    config['journal-show-type-document'],
-    'pad':         config['journal-show-type-pad'],
-    'query':       config['journal-show-type-query'],
-    'custom':      config['journal-show-type-custom'],
-    'budget':      config['journal-show-type-budget'],
+    'open':        'open' in config['journal-show'],
+    'close':       'close' in config['journal-show'],
+    'transaction': 'transaction' in config['journal-show'],
+    'balance':     'balance' in config['journal-show'],
+    'note':        'note' in config['journal-show'],
+    'document':    'document' in config['journal-show'],
+    'pad':         'pad' in config['journal-show'],
+    'query':       'query' in config['journal-show'],
+    'custom':      'custom' in config['journal-show'],
+    'budget':      'budget' in config['journal-show'],
 
-    'cleared':     config['journal-show-transaction-cleared'],
-    'pending':     config['journal-show-transaction-pending'],
-    'other':       config['journal-show-transaction-other'],
+    'cleared':     'cleared' in config['journal-show-transaction'],
+    'pending':     'pending' in config['journal-show-transaction'],
+    'other':       'other' in config['journal-show-transaction'],
 
-    'metadata':    config['journal-show-metadata'],
-    'legs':        config['journal-show-legs'],
+    'metadata':    'metadata' in config['journal-show'],
+    'legs':        'legs' in config['journal-show'],
 } %}
 {% if request.args.get('show', False) %}
     {% set show_type = {

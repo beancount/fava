@@ -59,7 +59,7 @@ def load_settings():
     for option in config.list_options:
         if app.config.raw.has_option('fava', option):
             app.config[option] = \
-                app.config.raw.get('fava', option).strip().split("\n")
+                app.config.raw.get('fava', option).strip().split(" ")
         else:
             app.config[option] = None
     for option in config.str_options:
@@ -328,10 +328,11 @@ def basename(file_path):
 
 @app.template_filter()
 def should_collapse_account(account_name):
-    if not app.config['collapse-accounts']:
+    key = 'fava-collapse-account'
+    if key in g.api.account_open_metadata(account_name):
+        return g.api.account_open_metadata(account_name)[key] == 'True'
+    else:
         return False
-
-    return account_name in app.config['collapse-accounts']
 
 
 @app.template_filter()

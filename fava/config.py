@@ -1,20 +1,5 @@
 bool_options = [
-    'journal-show-legs',
-    'journal-show-metadata',
     'journal-show-childentries',
-    'journal-show-type-open',
-    'journal-show-type-close',
-    'journal-show-type-transaction',
-    'journal-show-type-balance',
-    'journal-show-type-note',
-    'journal-show-type-document',
-    'journal-show-type-pad',
-    'journal-show-type-query',
-    'journal-show-type-custom',
-    'journal-show-type-budget',
-    'journal-show-transaction-cleared',
-    'journal-show-transaction-pending',
-    'journal-show-transaction-other',
     'charts-show',
     'uptodate-indicator-show-everywhere',
     'editor-strip-trailing-whitespace',
@@ -31,7 +16,8 @@ int_options = [
 ]
 
 list_options = [
-    'collapse-accounts',
+    'journal-show',
+    'journal-show-transaction',
 ]
 
 str_options = [
