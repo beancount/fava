@@ -15,7 +15,6 @@ bool_options = [
     'journal-show-transaction-cleared',
     'journal-show-transaction-pending',
     'journal-show-transaction-other',
-    'journal-general-show-balances',
     'charts-show',
     'uptodate-indicator-show-everywhere',
     'editor-strip-trailing-whitespace',
