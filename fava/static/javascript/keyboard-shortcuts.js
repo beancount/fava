@@ -10,20 +10,16 @@ module.exports.global = function() {
     // Filtering:
     Mousetrap.bind({
         'f t': function() {
-            $('ul.topmenu>li').removeClass('opened');
-            $('ul.topmenu>li:nth-child(1)').toggleClass('opened').find('input[type=search]').focus();
+            $('#time-filter').focus();
         },
         'f g': function() {
-            $('ul.topmenu>li').removeClass('opened');
-            $('ul.topmenu>li:nth-child(2)').toggleClass('opened').find('input[type=search]').focus();
+            $('#tag-filter').focus();
         },
-        'f c': function() {
-            $('ul.topmenu>li').removeClass('opened');
-            $('ul.topmenu>li:nth-child(3)').toggleClass('opened').find('input[type=search]').focus();
+        'f a': function() {
+            $('#account-filter').focus();
         },
         'f p': function() {
-            $('ul.topmenu>li').removeClass('opened');
-            $('ul.topmenu>li:nth-child(4)').toggleClass('opened').find('input[type=search]').focus();
+            $('#payee-filter').focus();
         },
     }, 'keyup');
 };
