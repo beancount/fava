@@ -1,9 +1,7 @@
 import os
 import re
 import sys
-from unicodedata import normalize
-
-_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+import unicodedata
 
 
 if getattr(sys, 'frozen', False):
@@ -17,14 +15,14 @@ def resource_path(relative_path):
     return os.path.join(BASEPATH, relative_path)
 
 
-def slugify(text):
-    """Generates an slightly worse ASCII-only slug."""
-    result = []
-    for word in _punct_re.split(text.lower()):
-        word = normalize('NFKD', word).encode('ascii', 'ignore')
-        if word:
-            result.append(word.decode('ascii'))
-    return str('-'.join(result))
+def slugify(string):
+    """A version of slugify that retains non-ascii characters."""
+    string = unicodedata.normalize('NFKC', string)
+    # remove all non-word characters (except '-')
+    string = re.sub(r'[^\s\w-]', '', string).strip().lower()
+    # replace spaces (or groups of spaces and dashes) with dashes
+    string = re.sub(r'[-\s]+', '-', string)
+    return string
 
 
 def uniquify(seq):

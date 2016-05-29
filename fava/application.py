@@ -40,6 +40,8 @@ def load_file(beancount_file_slug=None):
         api = BeancountReportAPI()
         api.load_file(filepath)
         slug = slugify(api.options['title'])
+        if not slug:
+            slug = slugify(filepath)
         app.config['APIS'][slug] = api
     app.config['FILE_SLUGS'] = list(app.config['APIS'].keys())
 
