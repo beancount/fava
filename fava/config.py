@@ -1,7 +1,6 @@
 bool_options = [
     'journal-show-childentries',
     'charts',
-    'uptodate-indicator-show-everywhere',
     'editor-strip-trailing-whitespace',
     'use-external-editor',
     'show-closed-accounts',

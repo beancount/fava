@@ -34,11 +34,9 @@ Click to copy the balance directives to the clipboard:
     {{ account_name|last_segment if last_segment else account_name }}
 </a>
 
-{% if config['uptodate-indicator-show-everywhere'] %}
 {% if account_name and account_name|uptodate_eligible %}
     {{ indicator(account_name) }}
     {{ last_account_activity(account_name) }}
-{% endif %}
 {% endif %}
 {% endmacro %}
 
