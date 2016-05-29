@@ -2,7 +2,19 @@
 title: Settings
 ---
 
-This is a list of all possible settings for Fava.
+To customize some of Fava's settings, pass the path to your settings file to
+Fava using `fava --settings [path]`.  The settings file follows a syntax
+similar to Windows INI files, like the following example:
+
+```
+[fava]
+interval = week
+journal-show = transaction balance note document
+show-closed-accounts = True
+sidebar-show-queries = 0
+```
+
+Below is a list of all possible settings for Fava.
 
 ---
 
