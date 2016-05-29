@@ -4,21 +4,18 @@
 
 {% block content %}
     <h2>{{ _('fava: settings') }}</h2>
-    <p>
-        {{ _('You can use the <code>--settings [file]</code> option when starting <code>fava</code> to specify different settings. The settings will be merged with the default-settings, so the table below shows all possible settings-keys.') }}
-    </p>
     <dl>
         <dt>{{ _('Default settings:') }}</dt>
         <dd><a href="{{ url_for('source', file_path=config['DEFAULT_SETTINGS']) }}">{{ config['DEFAULT_SETTINGS'] }}</a></dd>
     </dl>
-    {% if config['USER_SETTINGS'] %}
-    <br>
     <dl>
         <dt>{{ _('User settings:') }}</dt>
+    {% if config['USER_SETTINGS'] %}
         <dd><a href="{{ url_for('source', file_path=config['USER_SETTINGS']) }}">{{ config['USER_SETTINGS'] }}</a></dd>
-    </dl>
+    {% else %}
+        <dd>No user settings specified</dd>
     {% endif %}
-    <br>
+    </dl>
     <table class="settings sortable">
         <thead>
             <tr>
@@ -37,9 +34,6 @@
     </table>
     <br>
     <h2>{{ _('beancount: options') }}</h2>
-    <p>
-        {{ _('For a detailed explanation of all possible <code>option</code>-values see the <a href="http://furius.ca/beancount/doc/options">Beancount Options Reference</a>, or more generally, the <a href="http://furius.ca/beancount/doc/index">Beancount Documentation Overview</a>.') }}
-    </p>
     <table class="options_map sortable">
         <thead>
             <tr>

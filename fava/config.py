@@ -1,6 +1,6 @@
 bool_options = [
     'journal-show-childentries',
-    'charts-show',
+    'charts',
     'uptodate-indicator-show-everywhere',
     'editor-strip-trailing-whitespace',
     'use-external-editor',
@@ -23,6 +23,6 @@ list_options = [
 str_options = [
     'theme',
     'language',
-    'default-interval',
+    'interval',
     'editor-insert-marker',
 ]

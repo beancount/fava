@@ -380,7 +380,7 @@ def template_context():
                 operating_currencies=g.api.options['operating_currency'],
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',
-                                          app.config['default-interval']),)
+                                          app.config['interval']),)
 
 
 @app.url_defaults
