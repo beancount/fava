@@ -398,7 +398,7 @@ def inject_filters(endpoint, values):
 
 @app.before_request
 def perform_global_filters():
-    if 'operating_currency' not in g.api.options:
+    if not g.api.options['operating_currency']:
         flash('No operating currency specified. '
               'Please add one to your beancount file.')
 

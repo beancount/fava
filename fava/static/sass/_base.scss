@@ -191,7 +191,7 @@ aside {
     position: fixed;
     left: 0;
     height: 100%;
-    padding-top: 20px;
+    padding-top: 1em;
     flex-shrink: 0;
     width: $aside_width;
     color: $color_sidebar_text;
@@ -206,10 +206,9 @@ aside {
     }
 
     > ul.navigation {
-        margin-bottom: 2em;
+        margin-bottom: 1.5em;
 
         li {
-            font-size: 1em;
             display: block;
 
             &.selected, a:hover {
@@ -220,44 +219,28 @@ aside {
             a {
                 color: $color_sidebar_links;
                 display: block;
-                padding: 7px 10px 7px 20px;
-
-                span {
-                    float: right;
-                    margin-top: -2px;
-                    background: rgba(darken($color_sidebar_background, 95), 0.2);
-                    color: rgba(darken($color_sidebar_background, 80), 0.8);
-                    border-radius: 2em;
-                    font-size: 11px;
-                    font-weight: 700;
-                    line-height: .99;
-                    min-height: 1em;
-                    min-width: 1em;
-                    padding: 3px 8px 3px;
-                    position: relative;
-                    text-shadow: none;
-                    display: inline-block;
-                    text-decoration: none;
-                    text-align: center;
-                    text-transform: uppercase;
-                }
+                padding: 7px 20px;
             }
 
-            ul.navigation {
-                padding: 0;
-
-                li {
-                    &.selected, a:hover {
-                        background-color: darken($color_sidebar_background, 15);
-                    }
-
-                    font-size: 0.95em;
-                    line-height: 0.95em;
-
-                    a { padding-left: 35px; }
+            ul li {
+                &.selected, a:hover {
+                    background-color: darken($color_sidebar_background, 15);
                 }
+
+                font-size: 0.95em;
+                line-height: 0.95em;
+
+                a { padding-left: 35px; }
             }
         }
+    }
+
+    a.error {
+        background: $color_error;
+        color: #fff;
+        padding: 7px 20px;
+        width: 100%;
+        display: inline-block;
     }
 }
 

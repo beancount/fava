@@ -1,7 +1,7 @@
 {% set navigation_bar = [
     ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
     ("Other",         [ 'holdings', 'net_worth', 'commodities', 'documents', 'notes', 'events']),
-    ("Configuration", [ 'source', 'errors', 'options', 'statistics', 'help'])
+    ("Configuration", [ 'source', 'options', 'statistics', 'help'])
 ] %}
 {% set all_pages = {
     'income_statement': (_('Income Statement'), 'g i'),
@@ -16,7 +16,6 @@
     'notes':            (_('Notes'),            'g n'),
     'events':           (_('Events'),           'g e'),
     'source':           (_('Source'),           'g s'),
-    'errors':           (_('Errors'),           'g r'),
     'options':          (_('Options'),          'g o'),
     'statistics':       (_('Statistics'),       'g x'),
     'help':             (_('Help'),             'g shift+h'),
@@ -68,7 +67,7 @@
             {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
             <ul class="navigation">
             {% for id in menuitems %}
-                <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ all_pages[id].0|e }}{% if id == 'errors' and api.errors|length > 0 %}<span>{{ api.errors|length }}</span>{% endif %}</a>
+                <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ all_pages[id].0|e }}</a>
                 {% if id == "query" and user_queries|length > 0 %}
                     <ul class="navigation">
                     {% for query in user_queries %}
@@ -80,6 +79,11 @@
             {% endfor %}
             </ul>
         {% endfor %}
+        {% if api.errors|length > 0 %}
+            <a class="error" href="{{ url_for('report', report_name='errors') }}">
+            {{ _('Errors') }}: {{ api.errors|length }}
+            </a>
+        {% endif %}
     </aside>
     <article id="page-{{ active_page }}">
     {% with messages = get_flashed_messages() %}
