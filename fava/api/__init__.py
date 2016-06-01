@@ -63,16 +63,11 @@ def _list_accounts(root_account, leaf_only=False):
     return accounts[1:]
 
 
-def _journal(entries, include_types=None, with_change_and_balance=False):
+def _journal(entries, include_types=None):
     if include_types:
         entries = _filter_entries_by_type(entries, include_types)
 
-    if not with_change_and_balance:
-        return [serialize_entry(entry) for entry in entries]
-    else:
-        return [serialize_entry_with(entry, change, balance)
-                for entry, _, change, balance in
-                realization.iterate_with_balance(entries)]
+    return [serialize_entry(entry) for entry in entries]
 
 
 def _real_account(account_name, entries, begin_date=None, end_date=None,
@@ -272,21 +267,21 @@ class BeancountReportAPI(object):
     def trial_balance(self):
         return serialize_real_account(self.root_account)['children']
 
-    def journal(self, account_name=None, with_change_and_balance=False,
-                with_journal_children=True):
-        if account_name:
-            real_account = realization.get_or_create(self.root_account,
-                                                     account_name)
+    def account_journal(self, account_name, with_journal_children=False):
+        real_account = realization.get_or_create(self.root_account,
+                                                 account_name)
 
-            if with_journal_children:
-                postings = realization.get_postings(real_account)
-            else:
-                postings = real_account.txn_postings
-
-            return _journal(postings, with_change_and_balance=True)
+        if with_journal_children:
+            postings = realization.get_postings(real_account)
         else:
-            return _journal(
-                self.entries, with_change_and_balance=with_change_and_balance)
+            postings = real_account.txn_postings
+
+        return [serialize_entry_with(entry, change, balance)
+                for entry, _, change, balance in
+                realization.iterate_with_balance(postings)]
+
+    def journal(self):
+        return _journal(self.entries)
 
     def documents(self):
         return _journal(self.entries, Document)
@@ -388,7 +383,7 @@ class BeancountReportAPI(object):
         }
 
     def linechart_data(self, account_name):
-        journal = self.journal(account_name, with_change_and_balance=True)
+        journal = self.account_journal(account_name)
 
         return [{
             'date': journal_entry['date'],
