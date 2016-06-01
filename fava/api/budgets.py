@@ -42,10 +42,12 @@ class Budgets(object):
                         'Failed to parse budget entry',
                         entry))
 
-        for name, account in self.budgets.items():
+        for name in self.budgets.keys():
             self.budgets[name] = sorted(self.budgets[name],
-                                        key=lambda
-                                        budget: budget.date_start)
+                                        key=lambda budget: budget.date_start)
+
+    def __bool__(self):
+        return bool(self.budgets)
 
     def _matching_budget(self, account_name, date_active):
         """
@@ -77,6 +79,3 @@ class Budgets(object):
                     budget.number / number_of_days_in_period(budget.period,
                                                              single_day)
         return dict(currency_dict)
-
-    def has_budgets(self):
-        return len(self.budgets) > 0

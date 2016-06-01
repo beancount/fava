@@ -69,7 +69,7 @@
 {% if show_tablefilter %}
 <form id="entry-filters" class="wide-form">
     {% for type in entry_types %}
-        {% if type != 'budget' or api.has_budgets() %}
+        {% if type != 'budget' or api.budgets %}
             <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}

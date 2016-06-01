@@ -35,10 +35,9 @@ app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['APIS'] = {}
 
 
-def load_file(beancount_file_slug=None):
+def load_file():
     for filepath in app.config['BEANCOUNT_FILES']:
-        api = BeancountReportAPI()
-        api.load_file(filepath)
+        api = BeancountReportAPI(filepath)
         slug = slugify(api.options['title'])
         if not slug:
             slug = slugify(filepath)

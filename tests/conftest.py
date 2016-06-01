@@ -24,6 +24,4 @@ def load_doc(request):
 
 @pytest.fixture
 def example_api():
-    api = BeancountReportAPI()
-    api.load_file(EXAMPLE_FILE)
-    return api
+    return BeancountReportAPI(EXAMPLE_FILE)

@@ -65,7 +65,7 @@ def main(filenames, port, host, settings, debug, profile, profile_dir,
 
         def reload_source_files(api):
             filename = api.options['filename']
-            api.load_file(filename)
+            api.load_file()
             include_path = os.path.dirname(filename)
             for filename in api.options['include'] + \
                     api.options['documents']:
@@ -77,16 +77,13 @@ def main(filenames, port, host, settings, debug, profile, profile_dir,
 
         try:
             server.serve(port=port, host=host, debug=debug)
-        except OSError as e:
-            if e.errno == errno.EADDRINUSE:
+        except OSError as error:
+            if error.errno == errno.EADDRINUSE:
                 print("Error: Can not start webserver because the port/address"
                       "is already in use.")
                 print("Please choose another port with the '-p' option.")
             else:
                 raise
-        except:
-            print("Unexpected error:", e)
-            raise
 
 
 if __name__ == "__main__":

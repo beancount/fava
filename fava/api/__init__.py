@@ -39,7 +39,7 @@ from beancount.query import query
 from beancount.reports import context
 from beancount.utils import misc_utils
 
-from fava.util.date import interval_tuples
+from fava.util import date
 from fava.api.budgets import Budgets
 from fava.api.filters import AccountFilter, DateFilter, PayeeFilter, TagFilter
 from fava.api.helpers import holdings_at_dates
@@ -49,8 +49,63 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     zip_real_accounts)
 
 
+def _filter_entries_by_type(entries, include_types):
+    return [entry for entry in entries
+            if isinstance(entry, include_types)]
+
+
+def _list_accounts(root_account, leaf_only=False):
+    """List of all sub-accounts of the given root."""
+    accounts = [child_account.account
+                for child_account in
+                realization.iter_children(root_account, leaf_only)]
+
+    return accounts[1:]
+
+
+def _journal(entries, include_types=None, with_change_and_balance=False):
+    if include_types:
+        entries = _filter_entries_by_type(entries, include_types)
+
+    if not with_change_and_balance:
+        return [serialize_entry(entry) for entry in entries]
+    else:
+        return [serialize_entry_with(entry, change, balance)
+                for entry, _, change, balance in
+                realization.iterate_with_balance(entries)]
+
+
+def _real_account(account_name, entries, begin_date=None, end_date=None,
+                  min_accounts=None):
+    """
+    Returns the realization.RealAccount instances for account_name, and
+    their entries clamped by the optional begin_date and end_date.
+
+    Warning: For efficiency, the returned result does not include any added
+    postings to account for balances at 'begin_date'.
+
+    :return: realization.RealAccount instances
+    """
+    if begin_date:
+        entries = list(iter_entry_dates(entries, begin_date, end_date))
+    if not min_accounts:
+        min_accounts = [account_name]
+
+    return realization.get(realization.realize(entries, min_accounts),
+                           account_name)
+
+
+def _sidebar_links(entries):
+    # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
+    sidebar_link_entries = [entry for entry in entries
+                            if isinstance(entry, Custom) and
+                            entry.type == 'fava-sidebar-link']
+    return [(entry.values[0].value, entry.values[1].value)
+            for entry in sidebar_link_entries]
+
+
 class BeancountReportAPI(object):
-    def __init__(self, beancount_file_path=None):
+    def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
         self.filters = {
             'time': DateFilter(),
@@ -58,15 +113,12 @@ class BeancountReportAPI(object):
             'account': AccountFilter(),
             'payee': PayeeFilter(),
         }
-        if self.beancount_file_path:
-            self.load_file()
 
-    def load_file(self, beancount_file_path=None):
+        self.load_file()
+
+    def load_file(self):
         """Load self.beancount_file_path and compute things that are independent
         of how the entries might be filtered later"""
-        if beancount_file_path:
-            self.beancount_file_path = beancount_file_path
-
         self.all_entries, self.errors, self.options = \
             loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
@@ -84,16 +136,15 @@ class BeancountReportAPI(object):
         self.active_tags = list(getters.get_all_tags(self.all_entries))
         self.active_payees = list(getters.get_all_payees(self.all_entries))
 
-        self.queries = self._entries_filter_type(self.all_entries, Query)
+        self.queries = _filter_entries_by_type(self.all_entries, Query)
 
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
-        self.all_accounts = self._all_accounts()
-        self.all_accounts_leaf_only = self._all_accounts(leaf_only=True)
+        self.all_accounts = _list_accounts(self.all_root_account)
+        self.all_accounts_leaf_only = _list_accounts(
+            self.all_root_account, leaf_only=True)
 
-        self.sidebar_link_entries = [entry for entry in self.all_entries
-                                     if isinstance(entry, Custom) and
-                                     entry.type == 'fava-sidebar-link']
+        self.sidebar_link = _sidebar_links(self.all_entries)
 
         self._apply_filters()
 
@@ -103,8 +154,8 @@ class BeancountReportAPI(object):
     def _apply_filters(self):
         self.entries = self.all_entries
 
-        for filter in self.filters.values():
-            self.entries = filter.apply(self.entries, self.options)
+        for filter_class in self.filters.values():
+            self.entries = filter_class.apply(self.entries, self.options)
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
@@ -117,55 +168,31 @@ class BeancountReportAPI(object):
             self.date_last = self.filters['time'].end_date
 
     def filter(self, **kwargs):
+        """Set and apply (if necessary) filters."""
         changed = False
-        for filter_name, filter in self.filters.items():
-            if filter.set(kwargs[filter_name]):
+        for filter_name, filter_class in self.filters.items():
+            if filter_class.set(kwargs[filter_name]):
                 changed = True
 
         if changed:
             self._apply_filters()
 
-    def _all_accounts(self, leaf_only=False):
-        """Detailed list of all accounts."""
-        accounts = [child_account.account
-                    for child_account in
-                    realization.iter_children(self.all_root_account,
-                                              leaf_only=leaf_only)]
-
-        return accounts[1:]
-
     def quantize(self, value, currency):
+        """Use display context for the currency to quantize the given value to
+        the right number of decimal digits."""
         if not currency:
             return self.default_format_string.format(value)
         return self.format_string.format(
             self.options['dcontext'].quantize(value, currency))
 
-    def _entries_filter_type(self, entries, include_types):
-        return [entry for entry in entries
-                if isinstance(entry, include_types)]
-
-    def _journal(self, entries, include_types=None,
-                 with_change_and_balance=False):
-        if include_types:
-            entries = [entry for entry in entries
-                       if isinstance(entry, include_types)]
-
-        if not with_change_and_balance:
-            return [serialize_entry(entry) for entry in entries]
-        else:
-            return [serialize_entry_with(entry, change, balance)
-                    for entry, _, change, balance in
-                    realization.iterate_with_balance(entries)]
-
     def _interval_tuples(self, interval):
         """Calculates tuples of (begin_date, end_date) of length interval for the
         period in which entries contains transactions.  """
-        return interval_tuples(self.date_first, self.date_last, interval)
+        return date.interval_tuples(self.date_first, self.date_last, interval)
 
     def _total_balance(self, names, begin_date, end_date):
         totals = [realization.compute_balance(
-            self._real_account(account_name, self.entries, begin_date,
-                               end_date))
+            _real_account(account_name, self.entries, begin_date, end_date))
                   for account_name in names]
         return serialize_inventory(sum(totals, inventory.Inventory()),
                                    at_cost=True)
@@ -185,37 +212,18 @@ class BeancountReportAPI(object):
                 begin_date if not accumulate else self.date_first, end_date),
         } for begin_date, end_date in interval_tuples]
 
-    def _real_account(self, account_name, entries, begin_date=None,
-                      end_date=None, min_accounts=None):
-        """
-        Returns the realization.RealAccount instances for account_name, and
-        their entries clamped by the optional begin_date and end_date.
-
-        Warning: For efficiency, the returned result does not include any added
-        postings to account for balances at 'begin_date'.
-
-        :return: realization.RealAccount instances
-        """
-        if begin_date:
-            entries = list(iter_entry_dates(entries, begin_date, end_date))
-        if not min_accounts:
-            min_accounts = [account_name]
-
-        return realization.get(realization.realize(entries, min_accounts),
-                               account_name)
-
     def get_account_sign(self, account_name):
         return get_account_sign(account_name, self.account_types)
 
     def balances(self, account_name, begin_date=None, end_date=None):
-        real_account = self._real_account(account_name, self.entries,
-                                          begin_date, end_date)
+        real_account = _real_account(
+            account_name, self.entries, begin_date, end_date)
         return [serialize_real_account(real_account)]
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
-        return [serialize_real_account(self._real_account(account_name,
-                                                          closing_entries))]
+        return [serialize_real_account(
+            _real_account(account_name, closing_entries))]
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """accumulate is False for /changes and True for /balances"""
@@ -225,7 +233,7 @@ class BeancountReportAPI(object):
 
         interval_tuples = self._interval_tuples(interval)
         interval_balances = [
-            self._real_account(
+            _real_account(
                 account_name, self.entries,
                 interval_tuples[0][0] if accumulate else begin_date,
                 end_date, min_accounts=account_names)
@@ -234,22 +242,24 @@ class BeancountReportAPI(object):
         return self.add_budgets(zip_real_accounts(interval_balances),
                                 interval_tuples, accumulate), interval_tuples
 
-    def add_budgets(self, zipped_interval_balances, interval_tuples, accumulate):  # noqa
+    def add_budgets(self, zipped_interval_balances, interval_tuples,
+                    accumulate):
         """Add budgets data to zipped (recursive) interval balances."""
         if not zipped_interval_balances:
             return
 
-        interval_budgets = [self.budgets.budget(
+        interval_budgets = [
+            self.budgets.budget(
                 zipped_interval_balances['account'],
                 interval_tuples[0][0] if accumulate else begin_date,
                 end_date
             ) for begin_date, end_date in interval_tuples]
 
         zipped_interval_balances['balance_and_balance_children'] = [(
-                balances[0],
-                balances[1],
-                {curr: value - (balances[0][curr] if curr in balances[0] else Decimal(0.0)) for curr, value in budget.items()},  # noqa
-                {curr: value - (balances[1][curr] if curr in balances[1] else Decimal(0.0)) for curr, value in budget.items()})  # noqa
+            balances[0],
+            balances[1],
+            {curr: value - (balances[0][curr] if curr in balances[0] else Decimal(0.0)) for curr, value in budget.items()},  # noqa
+            {curr: value - (balances[1][curr] if curr in balances[1] else Decimal(0.0)) for curr, value in budget.items()})  # noqa
             for balances, budget in zip(zipped_interval_balances['balance_and_balance_children'], interval_budgets)  # noqa
         ]
 
@@ -273,16 +283,16 @@ class BeancountReportAPI(object):
             else:
                 postings = real_account.txn_postings
 
-            return self._journal(postings, with_change_and_balance=True)
+            return _journal(postings, with_change_and_balance=True)
         else:
-            return self._journal(
+            return _journal(
                 self.entries, with_change_and_balance=with_change_and_balance)
 
     def documents(self):
-        return self._journal(self.entries, Document)
+        return _journal(self.entries, Document)
 
     def notes(self):
-        return self._journal(self.entries, Note)
+        return _journal(self.entries, Note)
 
     def get_query(self, name):
         matching_entries = [query for query in self.queries
@@ -295,7 +305,7 @@ class BeancountReportAPI(object):
         return matching_entries[0]
 
     def events(self, event_type=None, only_include_newest=False):
-        events = self._journal(self.entries, Event)
+        events = _journal(self.entries, Event)
 
         if event_type:
             events = [event for event in events if event['type'] == event_type]
@@ -374,7 +384,7 @@ class BeancountReportAPI(object):
             'context': context_str.split("\n", 2)[2],
             'filename': entry.meta['filename'],
             'lineno': entry.meta['lineno'],
-            'journal': self._journal(matching_entries),
+            'journal': _journal(matching_entries),
         }
 
     def linechart_data(self, account_name):
@@ -403,8 +413,6 @@ class BeancountReportAPI(object):
                 return source_
             else:
                 return None  # TODO raise
-
-        return self._source
 
     def set_source(self, file_path, source):
         if file_path in self.source_files():
@@ -575,11 +583,3 @@ class BeancountReportAPI(object):
             if isinstance(posting, Open):
                 return posting.meta
         return {}
-
-    def sidebar_links(self):
-        # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
-        return [(entry.values[0].value, entry.values[1].value)
-                for entry in self.sidebar_link_entries]
-
-    def has_budgets(self):
-        return self.budgets.has_budgets()
