@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import csv
 from collections import OrderedDict
 import io
@@ -19,7 +17,7 @@ def to_excel(types, rows, result_format, query_string):
     respIO = io.BytesIO()
     book = pyexcel.Book(OrderedDict([
         ('Results', _result_array(types, rows)),
-        ('Query',   [['Query'], [query_string]])
+        ('Query', [['Query'], [query_string]])
     ]))
     book.save_to_memory(result_format, respIO)
     respIO.seek(0)

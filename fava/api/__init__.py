@@ -1,22 +1,5 @@
 """
-The rationale behind this API is the following:
-
-One day there will be a new module in beancount.report that returns all (for
-fava required) views as Python-dicts and -arrays, compatible with
-JSON (so no datetime, etc.). Right now beancount.report does return data to
-be displayed in a console, and HTML, and this (JSON) could be a third way of
-"rendering" the data. These methods should be highly optimized for performance
-and numerical correctness. If that one day really makes it's way into the
-beancount-repo, then api.py is redundant and will be removed.
-
-For the JSON-part: I want to keep all the returns in the API JSON-serializeable
-(although they are called directly right now), because then, with very little
-overhead, fava could run on an external server and call into a local
-bean-report.
-
-Right now this module it is just a hacky placeholder for what could be in the
-future, and therefore I only tried to get the numbers required, and did not
-optimize for performance at all.
+This module provides the data required by Fava's reports.
 """
 
 import datetime
@@ -99,7 +82,10 @@ def _sidebar_links(entries):
             for entry in sidebar_link_entries]
 
 
-class BeancountReportAPI(object):
+class BeancountReportAPI():
+    """An instance of this class provides methods to access and filter the
+    entries in the given beancount file."""
+
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
         self.filters = {
@@ -411,8 +397,8 @@ class BeancountReportAPI(object):
 
     def set_source(self, file_path, source):
         if file_path in self.source_files():
-            with open(file_path, 'w+', encoding='utf8') as f:
-                f.write(source)
+            with open(file_path, 'w+', encoding='utf8') as file:
+                file.write(source)
             self.load_file()
             return True
         else:

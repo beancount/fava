@@ -10,24 +10,24 @@ all_months = months[1:] + months_abbr[1:]
 rel_dates = {'yesterday': -1, 'today': 0, 'tomorrow': 1}
 modifiers = {'this': 0, 'next': 1, 'last': -1}
 
-is_range_re = re.compile('(.*?)\s(?:-|to)\s(.*)')
+is_range_re = re.compile(r'(.*?)\s(?:-|to)\s(.*)')
 
 # this matches dates of the form 'year-month-day'
 # day or month and day may be omitted
-year_first_re = re.compile('^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$')
+year_first_re = re.compile(r'^(\d{4})(?:-(\d{2}))?(?:-(\d{2}))?$')
 
 # this matches a week like 2016-W02 for the second week of 2016
-week_re = re.compile('^(\d{4})-w(\d{2})$')
+week_re = re.compile(r'^(\d{4})-w(\d{2})$')
 
 # this matches a quarter like 2016-Q1 for the first quarter of 2016
-quarter_re = re.compile('^(\d{4})-q(\d)$')
+quarter_re = re.compile(r'^(\d{4})-q(\d)$')
 
 # this will match any date of the form "day month_name year".
-year_last_re = re.compile('^(?:{1} )?'
-                          '({0})?(?: {1})?(?:,? )?'
-                          '(\d{{4}})$'.
+year_last_re = re.compile(r'^(?:{1} )?'
+                          r'({0})?(?: {1})?(?:,? )?'
+                          r'(\d{{4}})$'.
                           format('|'.join(all_months),
-                                 '(?:(\d{1,2})(?:st|nd|rd|th)?)'))
+                                 r'(?:(\d{1,2})(?:st|nd|rd|th)?)'))
 
 # 'month_name modifier year' or 'modifier month/year/month_name'
 mod_date_re = re.compile('(?:({}) )?({}) ({})'.format(
@@ -60,13 +60,13 @@ def interval_tuples(first, last, interval):
     if not first:
         return []
 
-    interval_tuples = []
+    intervals = []
     while first < last:
         next_date = get_next_interval(first, interval)
-        interval_tuples.append((first, next_date))
+        intervals.append((first, next_date))
         first = next_date
 
-    return interval_tuples
+    return intervals
 
 
 def daterange(year=None, month=None, day=None):
@@ -80,7 +80,7 @@ def daterange(year=None, month=None, day=None):
     if (not day) and month:
         start = datetime.date(year, month, 1)
         return start, get_next_interval(start, 'month')
-    if (year and month and day):
+    if year and month and day:
         start = datetime.date(year, month, day)
         return start, get_next_interval(start, 'day')
 
@@ -174,8 +174,8 @@ def parse_date(string):
 def days_in_daterange(start_date, end_date):
     """Yields a datetime for every day in the specified interval, excluding
     end_date."""
-    for n in range((end_date - start_date).days):
-        yield start_date + datetime.timedelta(n)
+    for diff in range((end_date - start_date).days):
+        yield start_date + datetime.timedelta(diff)
 
 
 def number_of_days_in_period(period, date_):

@@ -187,12 +187,13 @@ def query():
         filename = "{}.{}".format(secure_filename(name.strip()), result_format)
 
         if result_format == 'csv':
-            fd = to_csv(types, rows)
+            data = to_csv(types, rows)
         else:
-            if not config['HAVE_EXCEL']:
+            if not app.config['HAVE_EXCEL']:
                 abort(501)
-            fd = to_excel(types, rows, result_format, query_string)
-        return send_file(fd, as_attachment=True, attachment_filename=filename)
+            data = to_excel(types, rows, result_format, query_string)
+        return send_file(
+            data, as_attachment=True, attachment_filename=filename)
 
 
 @app.route('/<bfile>/help/')
@@ -217,8 +218,8 @@ def source():
         if request.is_xhr:
             requested_file_path = request.args.get('file_path', None)
             if requested_file_path == app.config['USER_SETTINGS']:
-                with open(requested_file_path, 'r') as f:
-                    settings_file_content = f.read()
+                with open(requested_file_path, 'r') as file:
+                    settings_file_content = file.read()
                 return settings_file_content
             else:
                 return g.api.source(file_path=requested_file_path)
@@ -233,8 +234,8 @@ def source():
         source = request.form['source']
 
         if file_path == app.config['USER_SETTINGS']:
-            with open(file_path, 'w+', encoding='utf8') as f:
-                f.write(source)
+            with open(file_path, 'w+', encoding='utf8') as file:
+                file.write(source)
             successful = True
             load_settings()
         else:
@@ -388,9 +389,9 @@ def inject_filters(endpoint, values):
 
     if endpoint == 'static':
         return
-    for filter in ['time', 'account', 'interval', 'tag', 'payee']:
-        if filter not in values:
-            values[filter] = g.filters[filter]
+    for filter_name in ['time', 'account', 'interval', 'tag', 'payee']:
+        if filter_name not in values:
+            values[filter_name] = g.filters[filter_name]
 
 
 @app.before_request
@@ -406,6 +407,6 @@ def perform_global_filters():
 
     try:
         g.api.filter(**g.filters)
-    except FilterException as e:
+    except FilterException as exception:
         g.filters['time'] = None
-        flash(str(e))
+        flash(str(exception))
