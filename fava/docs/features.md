@@ -85,6 +85,12 @@ link, followed by the title to display in the sidebar (`"Income 2014"` in this
 example), and finally the URL to link to. The URL can be relative, like in the
 example above, or absolute, even linking to an external site.
 
+There's a special URL handler `/jump` which can be used to jump to
+current page with given params. This is useful to limit the scope of
+current viewing page. E.g. `/jump?time=last+month+-+next+month` will
+show current page but limit to the last month, this month and the next
+month.
+
 ## Language
 
 You can change the language of the interface by specifying the `language` setting.
