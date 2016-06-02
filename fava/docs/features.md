@@ -85,6 +85,12 @@ link, followed by the title to display in the sidebar (`"Income 2014"` in this
 example), and finally the URL to link to. The URL can be relative, like in the
 example above, or absolute, even linking to an external site.
 
+Two frequently used custom links are for showing all Documents and all Notes 
+found in the journal:
+
+- For all Documents: `/<slug>/journal/?show=documents`
+- For all Notes: `/<slug>/journal/?show=notes`
+
 There's a special URL handler `/jump` which can be used to jump to
 current page with given params. This is useful to limit the scope of
 current viewing page. E.g. `/jump?time=last+month+-+next+month` will
