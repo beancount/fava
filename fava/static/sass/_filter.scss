@@ -25,6 +25,20 @@
 
             &[type='text'] {
                 outline: none;
+
+                @include placeholder {
+                    opacity: 1;
+                    color: lighten($color_header, 60);
+                }
+
+                &:focus {
+                    color: $color_text;
+                    background: $color_background;
+
+                    @include placeholder {
+                        color: lighten($color_text, 50);
+                    }
+                }
             }
 
             &[type='submit'] {
@@ -35,27 +49,6 @@
                 padding: 0 7px;
                 color: $color_background;
                 background: lighten($color_header, 5);
-            }
-
-            &[type='text']:focus {
-                color: $color_text;
-                background: $color_background;
-            }
-
-            &:placeholder-shown {
-                color: lighten($color_text, 50);
-            }
-
-            // Chrome/Opera/Safari
-            &::-webkit-input-placeholder {
-                opacity: 1;
-                color: lighten($color_text, 50);
-            }
-
-            // Firefox 19+
-            &::-moz-placeholder {
-                opacity: 1;
-                color: lighten($color_text, 50);
             }
 
             // remove dropdown triangle

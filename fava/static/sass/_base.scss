@@ -1,6 +1,7 @@
 @import "~normalize.css/normalize.css";
 
 // for the editor
+
 @font-face {
     font-family: "Source Code Pro";
     src: url("~@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Regular.woff") format('woff');
@@ -13,6 +14,16 @@
     src: url("~@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Bold.woff") format('woff');
     font-weight: 700;
     font-style: normal;
+}
+
+// Mixins
+
+@mixin placeholder {
+    &:placeholder-shown          {@content}
+    &::-webkit-input-placeholder {@content}
+    &:-moz-placeholder           {@content}
+    &::-moz-placeholder          {@content}
+    &:-ms-input-placeholder      {@content}
 }
 
 // Globals
