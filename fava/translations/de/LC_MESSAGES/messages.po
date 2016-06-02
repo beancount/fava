@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-05-26 20:53+0200\n"
+"POT-Creation-Date: 2016-06-02 14:57+0200\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -46,25 +46,25 @@ msgstr "Graphen ein/aus"
 msgid "Loading charts&hellip;"
 msgstr "Lade Graphen&hellip;"
 
-#: fava/templates/_entry_filters.html:14
+#: fava/templates/_entry_filters.html:11
 msgid "Time"
 msgstr "Zeitraum"
 
-#: fava/templates/_entry_filters.html:24
+#: fava/templates/_entry_filters.html:20
 msgid "Tag"
 msgstr "Hashtag"
 
-#: fava/templates/_entry_filters.html:34 fava/templates/_tree_table.html:11
+#: fava/templates/_entry_filters.html:29 fava/templates/_tree_table.html:11
 #: fava/templates/account.html:42 fava/templates/holdings.html:13
 #: fava/templates/holdings.html:21 fava/templates/statistics.html:54
 msgid "Account"
 msgstr "Konto"
 
-#: fava/templates/_entry_filters.html:44
+#: fava/templates/_entry_filters.html:38
 msgid "Payee"
 msgstr "Empfänger"
 
-#: fava/templates/_entry_filters.html:54
+#: fava/templates/_entry_filters.html:47
 msgid "Filter"
 msgstr "Filtern"
 
@@ -147,44 +147,36 @@ msgid "Commodities"
 msgstr "Währungen"
 
 #: fava/templates/_layout.html:15
-msgid "Documents"
-msgstr "Dokumente"
-
-#: fava/templates/_layout.html:16
-msgid "Notes"
-msgstr "Notizen"
-
-#: fava/templates/_layout.html:17
 msgid "Events"
 msgstr "Ereignisse"
 
-#: fava/templates/_layout.html:18
+#: fava/templates/_layout.html:16
 msgid "Source"
 msgstr "Quelldateien"
 
-#: fava/templates/_layout.html:19
-msgid "Errors"
-msgstr "Fehler"
-
-#: fava/templates/_layout.html:20
+#: fava/templates/_layout.html:17
 msgid "Options"
 msgstr "Optionen"
 
-#: fava/templates/_layout.html:21
+#: fava/templates/_layout.html:18
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: fava/templates/_layout.html:22
+#: fava/templates/_layout.html:19
 msgid "Help"
 msgstr "Hilfe"
 
-#: fava/templates/_layout.html:60
+#: fava/templates/_layout.html:55
 msgid "Custom Links"
 msgstr "Eigene Links"
 
-#: fava/templates/_layout.html:66
+#: fava/templates/_layout.html:61
 msgid "Reports"
 msgstr "Berichte"
+
+#: fava/templates/_layout.html:79 fava/templates/errors.html:5
+msgid "Errors"
+msgstr "Fehler"
 
 #: fava/templates/_tree_table.html:11 fava/templates/account.html:42
 msgid "Expand all accounts"
@@ -232,29 +224,41 @@ msgstr "Verpflichtungen"
 msgid "Equity"
 msgstr "Eigenkapital"
 
-#: fava/templates/documents.html:12
-msgid "No documents."
-msgstr "Keine Dokumente vorhanden."
+#: fava/templates/context.html:13
+msgid "Hash:"
+msgstr "Hash:"
 
-#: fava/templates/errors.html:10 fava/templates/source.html:16
-msgid "File"
-msgstr "Datei"
+#: fava/templates/context.html:15
+msgid "Location:"
+msgstr "Datei:"
 
-#: fava/templates/errors.html:11
-msgid "Line"
-msgstr "Zeile"
-
-#: fava/templates/errors.html:12
-msgid "Error"
-msgstr "Fehler"
-
-#: fava/templates/errors.html:19 fava/templates/errors.html:20
-#: fava/templates/events.html:25
+#: fava/templates/context.html:16 fava/templates/errors.html:21
+#: fava/templates/errors.html:22 fava/templates/events.html:25
 #, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Quelldatei anzeigen: %(file)s:%(lineno)s"
 
-#: fava/templates/errors.html:29
+#: fava/templates/context.html:23
+msgid "Journal Entry"
+msgstr "Journal Eintrag"
+
+#: fava/templates/context.html:29
+msgid "No entry matches the given hash."
+msgstr "Kein Eintrag für den angegebenen Hash gefunden."
+
+#: fava/templates/errors.html:12 fava/templates/source.html:16
+msgid "File"
+msgstr "Datei"
+
+#: fava/templates/errors.html:13
+msgid "Line"
+msgstr "Zeile"
+
+#: fava/templates/errors.html:14
+msgid "Error"
+msgstr "Fehler"
+
+#: fava/templates/errors.html:31
 msgid "No errors."
 msgstr "Keine Fehler."
 
@@ -341,60 +345,25 @@ msgstr "Einkommen"
 msgid "Expenses"
 msgstr "Ausgaben"
 
-#: fava/templates/notes.html:12
-msgid "No notes."
-msgstr "Keine Notizen."
-
 #: fava/templates/options.html:6
 msgid "fava: settings"
 msgstr "fava: Einstellungen"
 
 #: fava/templates/options.html:8
-msgid ""
-"You can use the <code>--settings [file]</code> option when starting "
-"<code>fava</code> to specify different settings. The settings will be "
-"merged with the default-settings, so the table below shows all possible "
-"settings-keys."
-msgstr ""
-"Du kannst <code>fava</code> mit der Option <code>--settings [file]</code>"
-" starten, um deine eigene Einstellungs-Datei zu benutzen. Die "
-"Einstellungen überschreiben die Standard-Einstellungen, daher zeigt diese"
-" Tabelle alle möglichen Einstellungen."
-
-#: fava/templates/options.html:11
-msgid "Default settings:"
-msgstr "Standard-Einstellungen:"
-
-#: fava/templates/options.html:17
 msgid "User settings:"
 msgstr "Benutzer-Einstellungen:"
 
-#: fava/templates/options.html:25 fava/templates/options.html:46
+#: fava/templates/options.html:18 fava/templates/options.html:36
 msgid "Key"
 msgstr "Schlüssel"
 
-#: fava/templates/options.html:26 fava/templates/options.html:47
+#: fava/templates/options.html:19 fava/templates/options.html:37
 msgid "Value"
 msgstr "Wert"
 
-#: fava/templates/options.html:39
+#: fava/templates/options.html:32
 msgid "beancount: options"
 msgstr "beancount: Optionen"
-
-#: fava/templates/options.html:41
-msgid ""
-"For a detailed explanation of all possible <code>option</code>-values see"
-" the <a href=\"http://furius.ca/beancount/doc/options\">Beancount Options"
-" Reference</a>, or more generally, the <a "
-"href=\"http://furius.ca/beancount/doc/index\">Beancount Documentation "
-"Overview</a>."
-msgstr ""
-"Für eine detaillierte Dokumentation aller <code>option</code>-Werte schau"
-" bitte in der <a "
-"href=\"http://furius.ca/beancount/doc/options\">Beancount Options "
-"Reference</a> nach, oder genereller, in der <a "
-"href=\"http://furius.ca/beancount/doc/index\">Beancount Documentation "
-"Overview</a>."
 
 #: fava/templates/query.html:53
 msgid "Load stored query:"
@@ -471,7 +440,7 @@ msgstr "Quelldatei für %(file)s anzeigen"
 msgid "; Loading %(file)s ..."
 msgstr "Lade %(file)s ..."
 
-#: fava/templates/source.html:61
+#: fava/templates/source.html:52
 msgid "Save"
 msgstr "Speichern"
 
