@@ -7,6 +7,7 @@ from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file)
 from flask_babel import Babel
 import markdown2
+import werkzeug.urls
 from werkzeug import secure_filename
 from beancount.core.number import Decimal
 
@@ -382,7 +383,7 @@ def template_context():
 
 @app.url_defaults
 def inject_filters(endpoint, values):
-    if 'bfile' in values or not g.beancount_file_slug:
+    if 'bfile' in values or not getattr(g, 'beancount_file_slug', None):
         return
     if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
         values['bfile'] = g.beancount_file_slug
@@ -410,3 +411,26 @@ def perform_global_filters():
     except FilterException as exception:
         g.filters['time'] = None
         flash(str(exception))
+
+
+@app.route('/jump')
+def jump():
+    """This view will redirect back to Referer: url, but replace the params
+    with received param.
+
+    E.g. on /example/page?param1=123&param2=456, when I click on a link to
+    /jump?param1=abc, this view should redirect to
+    /example/page?param1=abc&param2=456
+
+    This is useful to add links to sidebar, e.g. you can have a link
+    /jump?time=ytd to view the current page but show transactions that happen
+    since the beginning of this year.
+    """
+    url = werkzeug.urls.url_parse(request.referrer)
+    qs_dict = url.decode_query()
+    for key, values in request.args.lists():
+        qs_dict.setlist(key, values)
+
+    redirect_url = url.replace(query=werkzeug.urls.url_encode(qs_dict,
+                                                              sort=True))
+    return redirect(werkzeug.urls.url_unparse(redirect_url))
