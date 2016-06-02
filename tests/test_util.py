@@ -1,4 +1,4 @@
-from fava.util import uniquify, slugify
+from fava.util import slugify
 
 
 def test_slugify():
@@ -11,8 +11,3 @@ def test_slugify():
     assert slugify('söße') == 'söße'
     assert slugify('ASDF') == 'asdf'
     assert slugify('ASDF test test') == 'asdf-test-test'
-
-
-def test_uniquify():
-    assert uniquify([1, 1, 2, 3, 3]) == [1, 2, 3]
-    assert uniquify([5, 3, 4, 3, 3, 5]) == [5, 3, 4]
