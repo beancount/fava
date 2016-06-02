@@ -5,8 +5,8 @@ import pytest
 from unittest import mock
 
 from fava.util.date import (_parse_month, parse_date, daterange,
-                            get_next_interval, interval_tuples,
-                            number_of_days_in_period)
+                            get_next_interval, get_previous_interval,
+                            interval_tuples, number_of_days_in_period)
 
 
 @pytest.mark.parametrize('input_date_string,interval,expect', [
@@ -26,6 +26,26 @@ def test_get_next_interval(input_date_string, interval, expect):
     """Test for get_next_interval function."""
     input_date = dt.strptime(input_date_string, '%Y-%m-%d')
     get = get_next_interval(input_date, interval)
+    assert get.strftime('%Y-%m-%d') == expect
+
+
+@pytest.mark.parametrize('input_date_string,interval,expect', [
+    ('2016-01-01', 'day', '2016-01-01'),
+    ('2016-01-01', 'week', '2015-12-28'),
+    ('2016-01-01', 'month', '2016-01-01'),
+    ('2016-01-01', 'quarter', '2016-01-01'),
+    ('2016-01-01', 'year', '2016-01-01'),
+
+    ('2016-12-31', 'day', '2016-12-31'),
+    ('2016-12-31', 'week', '2016-12-26'),
+    ('2016-12-31', 'month', '2016-12-01'),
+    ('2016-12-31', 'quarter', '2016-10-01'),
+    ('2016-12-31', 'year', '2016-01-01'),
+])
+def test_get_previous_interval(input_date_string, interval, expect):
+    """Test for get_previous_interval function."""
+    input_date = dt.strptime(input_date_string, '%Y-%m-%d')
+    get = get_previous_interval(input_date, interval)
     assert get.strftime('%Y-%m-%d') == expect
 
 
@@ -75,7 +95,7 @@ def to_date(string):
     return dt.strptime(string, '%Y-%m-%d').date()
 
 
-@pytest.mark.parametrize("pseudo_today,expect_start,expect_end,text", [
+@pytest.mark.parametrize('pseudo_today,expect_start,expect_end,text', [
     (None, None, None, '    '),
     (None, '2010-10-01', '2010-11-01', 'october 2010       '),
     (None, '2000-01-01', '2001-01-01', '2000'),
@@ -100,6 +120,22 @@ def to_date(string):
     ('2016-03-25', '2016-02-01', '2016-03-01', 'last month'),
     ('2016-03-25', '2016-04-01', '2016-05-01', 'next month'),
     ('2016-03-25', '2016-02-01', '2016-05-01', 'last month - next month'),
+    ('2016-03-25', '2016-03-24', '2016-03-25', '1d ago'),
+    ('2016-03-25', '2016-03-24', '2016-03-25', '-1d'),
+    ('2016-03-25', '2016-03-24', '2016-03-25', '1 day ago'),
+    ('2016-03-25', '2016-03-26', '2016-03-27', '1 day later'),
+    ('2016-03-25', '2016-03-26', '2016-03-27', '+1d'),
+    ('2016-03-25', '2016-03-14', '2016-03-21', '1 week ago'),
+    ('2016-03-25', '2016-03-14', '2016-03-21', '-1 week'),
+    ('2016-03-25', '2016-03-28', '2016-04-04', '1 week later'),
+    ('2016-03-25', '2016-03-28', '2016-04-04', '+1 week'),
+    ('2016-03-25', '2015-10-01', '2016-01-01', '1 quarter ago'),
+    ('2016-03-25', '2016-04-01', '2016-07-01', '1 quarter later'),
+    ('2016-03-25', '2014-01-01', '2015-01-01', '2 years ago'),
+    ('2016-04-01', '2017-07-01', '2017-10-01', '5 quarters later'),
+    ('2016-12-01', '2017-01-01', '2018-01-01', '1 year later'),
+    # TODO: fix this case
+    ('2016-03-25', '2016-03-24', '2016-03-25', '1 dayssadfasdf ago'),
 ])
 def test_parse_date(pseudo_today, expect_start, expect_end, text):
     """Test for parse_date() function."""
@@ -111,7 +147,7 @@ def test_parse_date(pseudo_today, expect_start, expect_end, text):
         mock_date.side_effect = date
         got = parse_date(text)
     start, end = to_date(expect_start), to_date(expect_end)
-    assert got == (start, end), "parse_date(%s) == %s @ %s, want (%s, %s)" % (
+    assert got == (start, end), 'parse_date(%s) == %s @ %s, want (%s, %s)' % (
         text, got, pseudo_today, start, end)
 
 
