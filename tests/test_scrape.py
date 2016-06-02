@@ -2,14 +2,13 @@ import collections
 
 from flask import url_for
 
-from fava.application import app
-
 
 class URLQueue:
-    def __init__(self):
+    def __init__(self, app):
         self.seen_values = collections.defaultdict(set)
         self.stack = ['/']
         self.all = []
+        self.app = app
 
     def append(self, endpoint, values, current):
         if (endpoint in ['source', 'document', 'add_document'] or
@@ -24,8 +23,8 @@ class URLQueue:
 
         if value_keys not in self.seen_values[endpoint]:
             self.seen_values[endpoint].add(value_keys)
-            with app.test_request_context(current):
-                app.preprocess_request()
+            with self.app.test_request_context(current):
+                self.app.preprocess_request()
                 url = url_for(real_endpoint, loop=True, **values)
                 self.all.append((real_endpoint, values))
                 self.stack.append(url)
@@ -43,8 +42,8 @@ filter_combinations = [
 ]
 
 
-def test_scrape(setup_app):
-    urls = URLQueue()
+def test_scrape(app):
+    urls = URLQueue(app)
     current = urls.stack[0]
 
     @app.url_defaults

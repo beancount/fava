@@ -383,7 +383,7 @@ def template_context():
 
 @app.url_defaults
 def inject_filters(endpoint, values):
-    if 'bfile' in values or not g.beancount_file_slug:
+    if 'bfile' in values or not getattr(g, 'beancount_file_slug', None):
         return
     if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
         values['bfile'] = g.beancount_file_slug
@@ -431,5 +431,6 @@ def jump():
     for key, values in request.args.lists():
         qs_dict.setlist(key, values)
 
-    redirect_url = url.replace(query=werkzeug.urls.url_encode(qs_dict))
+    redirect_url = url.replace(query=werkzeug.urls.url_encode(qs_dict,
+                                                              sort=True))
     return redirect(werkzeug.urls.url_unparse(redirect_url))
