@@ -533,6 +533,11 @@ table.statistics-update-activity {
 // Statistics
 div.left.statistics {
     margin-right: 20px;
+
+    h3 input {
+        font-size: 1rem;
+        font-weight: normal;
+    }
 }
 
 table.tree-table td.account,
