@@ -1,6 +1,6 @@
 {% set navigation_bar = [
     ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
-    ("Other",         [ 'holdings', 'net_worth', 'commodities', 'documents', 'notes', 'events']),
+    ("Other",         [ 'holdings', 'net_worth', 'commodities', 'events']),
     ("Configuration", [ 'source', 'options', 'statistics', 'help'])
 ] %}
 {% set all_pages = {
@@ -12,8 +12,6 @@
     'holdings':         (_('Holdings'),         'g h'),
     'net_worth':        (_('Net Worth'),        'g w'),
     'commodities':      (_('Commodities'),      'g c'),
-    'documents':        (_('Documents'),        'g d'),
-    'notes':            (_('Notes'),            'g n'),
     'events':           (_('Events'),           'g e'),
     'source':           (_('Source'),           'g s'),
     'options':          (_('Options'),          'g o'),
@@ -75,14 +73,16 @@
                     </ul>
                 {% endif %}
                 </li>
+                {% if id == "source" and api.errors|length > 0 %}
+                    <li class="error">
+                        <a href="{{ url_for('report', report_name='errors') }}">
+                        {{ _('Errors') }} <span class="bubble">{{ api.errors|length }}</span>
+                        </a>
+                    </li>
+                {% endif %}
             {% endfor %}
             </ul>
         {% endfor %}
-        {% if api.errors|length > 0 %}
-            <a class="error" href="{{ url_for('report', report_name='errors') }}">
-            {{ _('Errors') }}: {{ api.errors|length }}
-            </a>
-        {% endif %}
     </aside>
     <article id="page-{{ active_page }}">
     {% with messages = get_flashed_messages() %}

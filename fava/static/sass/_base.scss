@@ -222,7 +222,8 @@ aside {
         li {
             display: block;
 
-            &.selected, a:hover {
+            &.selected,
+            a:hover {
                 background-color: darken($color_sidebar_background, 6);
                 color: $color_links;
             }
@@ -234,24 +235,43 @@ aside {
             }
 
             ul li {
-                &.selected, a:hover {
-                    background-color: darken($color_sidebar_background, 15);
-                }
-
                 font-size: 0.95em;
                 line-height: 0.95em;
 
+                &.selected,
+                a:hover {
+                    background-color: darken($color_sidebar_background, 15);
+                }
+
                 a { padding-left: 35px; }
             }
-        }
-    }
 
-    a.error {
-        background: $color_error;
-        color: #fff;
-        padding: 7px 20px;
-        width: 100%;
-        display: inline-block;
+            &.error {
+                position: relative;
+                background-color: $color_error;
+
+                &.selected,
+                a:hover {
+                    background-color: darken($color_error, 5);
+
+                    span.bubble { background: lighten($color_error, 57); }
+                }
+
+                a { color: $color_sidebar_background; }
+
+                span.bubble {
+                    font-size: 0.9em;
+                    display: block;
+                    position: absolute;
+                    right: 8px;
+                    top: 7px;
+                    background: lighten($color_error, 60);
+                    color: $color_sidebar_links;
+                    padding: 1px 8px;
+                    border-radius: 12px;
+                }
+            }
+        }
     }
 }
 
