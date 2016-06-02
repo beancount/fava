@@ -10,10 +10,12 @@
         font-family: $font_family;
     }
 
-    div { margin-bottom: 1em; }
+    div {
+        margin-bottom: 1em;
+    }
 
     code {
-        font-size: 1em;
+        font-size: 1rem;
     }
 
     hr {
