@@ -126,3 +126,8 @@ def test_number_of_days_in_period_yearly():
     assert number_of_days_in_period('yearly', dt(2011, 2, 1)) == 365
     assert number_of_days_in_period('yearly', dt(2015, 5, 30)) == 365
     assert number_of_days_in_period('yearly', dt(2016, 8, 15)) == 366
+
+
+def test_number_of_days_in_period_exception():
+    with pytest.raises(Exception):
+        number_of_days_in_period('test', dt(2011, 2, 1)) == 365

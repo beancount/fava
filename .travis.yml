@@ -9,8 +9,17 @@ script: tox -e $TOXENV
 matrix:
   include:
     - python: 3.4
-      env: TOXENV=py34
+      env: {TOXENV: py34}
     - python: 3.5
-      env: TOXENV=py35
+      env: {TOXENV: py35}
     - python: 3.5
-      env: TOXENV=flake8
+      env: {TOXENV: py35cov, COVERAGE: 1}
+    - python: 3.5
+      env: {TOXENV: flake8}
+
+before_install:
+    - "[ ! -z $COVERAGE ] && pip install codecov || true"
+after_success:
+    - "[ ! -z $COVERAGE ] && codecov || true"
+
+cache: pip
