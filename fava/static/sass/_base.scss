@@ -26,6 +26,27 @@
     &:-ms-input-placeholder      {@content}
 }
 
+@mixin scrollbar($size, $primary, $secondary: lighten($primary, 25%)) {
+    &::-webkit-scrollbar {
+        width:  $size;
+        height: $size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $primary;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $secondary;
+    }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $primary;
+    scrollbar-track-color: $secondary;
+  }
+}
+
 // Globals
 
 * {
@@ -200,14 +221,17 @@ header {
 
 aside {
     position: fixed;
+    top: 50px;
+    bottom: 0;
     left: 0;
-    height: 100%;
     padding-top: 1em;
     flex-shrink: 0;
     width: $aside_width;
     color: $color_sidebar_text;
     border-right: 1px solid darken($color_sidebar_background, 16);
     background-color: $color_sidebar_background;
+    overflow-y: auto;
+    @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
 
     h3 {
         text-transform: uppercase;
@@ -218,6 +242,8 @@ aside {
 
     > ul.navigation {
         margin-bottom: 1.5em;
+
+        &:last-child { margin-bottom: 0; }
 
         li {
             display: block;
