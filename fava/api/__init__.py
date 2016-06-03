@@ -125,7 +125,7 @@ class BeancountReportAPI():
         self.all_accounts_leaf_only = _list_accounts(
             self.all_root_account, leaf_only=True)
 
-        self.sidebar_link = _sidebar_links(self.all_entries)
+        self.sidebar_links = _sidebar_links(self.all_entries)
 
         self._apply_filters()
 
