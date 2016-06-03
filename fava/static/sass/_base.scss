@@ -26,6 +26,27 @@
     &:-ms-input-placeholder      {@content}
 }
 
+@mixin scrollbar($size, $primary, $secondary: lighten($primary, 25%)) {
+    &::-webkit-scrollbar {
+        width:  $size;
+        height: $size;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $primary;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $secondary;
+    }
+
+  // For Internet Explorer
+  body {
+    scrollbar-face-color: $primary;
+    scrollbar-track-color: $secondary;
+  }
+}
+
 // Globals
 
 * {
@@ -200,14 +221,17 @@ header {
 
 aside {
     position: fixed;
+    top: 50px;
+    bottom: 0;
     left: 0;
-    height: 100%;
     padding-top: 1em;
     flex-shrink: 0;
     width: $aside_width;
     color: $color_sidebar_text;
     border-right: 1px solid darken($color_sidebar_background, 16);
     background-color: $color_sidebar_background;
+    overflow-y: auto;
+    @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
 
     h3 {
         text-transform: uppercase;
@@ -219,10 +243,13 @@ aside {
     > ul.navigation {
         margin-bottom: 1.5em;
 
+        &:last-child { margin-bottom: 0; }
+
         li {
             display: block;
 
-            &.selected, a:hover {
+            &.selected,
+            a:hover {
                 background-color: darken($color_sidebar_background, 6);
                 color: $color_links;
             }
@@ -234,24 +261,43 @@ aside {
             }
 
             ul li {
-                &.selected, a:hover {
-                    background-color: darken($color_sidebar_background, 15);
-                }
-
                 font-size: 0.95em;
                 line-height: 0.95em;
 
+                &.selected,
+                a:hover {
+                    background-color: darken($color_sidebar_background, 15);
+                }
+
                 a { padding-left: 35px; }
             }
-        }
-    }
 
-    a.error {
-        background: $color_error;
-        color: #fff;
-        padding: 7px 20px;
-        width: 100%;
-        display: inline-block;
+            &.error {
+                position: relative;
+                background-color: $color_error;
+
+                &.selected,
+                a:hover {
+                    background-color: darken($color_error, 5);
+
+                    span.bubble { background: lighten($color_error, 57); }
+                }
+
+                a { color: $color_sidebar_background; }
+
+                span.bubble {
+                    font-size: 0.9em;
+                    display: block;
+                    position: absolute;
+                    right: 8px;
+                    top: 7px;
+                    background: lighten($color_error, 60);
+                    color: $color_sidebar_links;
+                    padding: 1px 8px;
+                    border-radius: 12px;
+                }
+            }
+        }
     }
 }
 
