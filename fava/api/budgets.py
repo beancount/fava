@@ -26,7 +26,7 @@ class Budgets(object):
 
         Example for a budget directive:
 
-            2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
+        2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
         """
         self.budgets = defaultdict(lambda: [])
         self.errors = []

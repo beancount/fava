@@ -43,8 +43,7 @@ def get_next_interval(date, interval):
         for i in [4, 7, 10]:
             if date.month < i:
                 return datetime.date(date.year, i, 1)
-        else:
-            return datetime.date(date.year + 1, 1, 1)
+        return datetime.date(date.year + 1, 1, 1)
     elif interval == 'month':
         month = (date.month % 12) + 1
         year = date.year + (date.month + 1 > 12)
@@ -74,7 +73,7 @@ def daterange(year=None, month=None, day=None):
     """A helper function that returns a tuple with the starting and end date for
     the given range of dates. Day or month and day may be omitted to get the
     whole month or whole year respectively."""
-    year, month, day = map(lambda x: int(x) if x else None, (year, month, day))
+    year, month, day = (int(x) if x else None for x in (year, month, day))
     if (not day) and (not month):
         start = datetime.date(year, 1, 1)
         return start, get_next_interval(start, 'year')
@@ -114,53 +113,52 @@ def parse_date(string):
     where start and end look like one of the above examples
     """
     string = string.strip().lower()
+    if not string:
+        return None, None
+
     if string in ['year to date', 'ytd']:
         today = datetime.date.today()
         return datetime.date(today.year, 1, 1), get_next_interval(today, 'day')
 
-    is_range = is_range_re.match(string)
-    if is_range:
-        return (parse_date(is_range.group(1))[0],
-                parse_date(is_range.group(2))[1])
+    match = is_range_re.match(string)
+    if match:
+        return (parse_date(match.group(1))[0],
+                parse_date(match.group(2))[1])
 
-    if string == '':
-        return None, None
-
-    # check first if it is either yesterday, today or tomorrow
+    # check if it is either yesterday, today or tomorrow
     if string in rel_dates:
         start = datetime.date.today() + datetime.timedelta(rel_dates[string])
         return start, get_next_interval(start, 'day')
 
-    # try to match
-    year_first = year_first_re.match(string)
-    if year_first:
-        year, month, day = year_first.group(1, 2, 3)
+    match = year_first_re.match(string)
+    if match:
+        year, month, day = match.group(1, 2, 3)
         return daterange(year, month, day)
 
-    year_last = year_last_re.match(string)
-    if year_last:
-        month, year = year_last.group(2, 4)
-        day = year_last.group(1) or year_last.group(3)
+    match = year_last_re.match(string)
+    if match:
+        month, year = match.group(2, 4)
+        day = match.group(1) or match.group(3)
         return daterange(year, _parse_month(month), day)
 
-    week = week_re.match(string)
-    if week:
-        year, week = week.group(1, 2)
+    match = week_re.match(string)
+    if match:
+        year, week = match.group(1, 2)
         date_str = '{}{}1'.format(year, week)
         first_week_day = datetime.datetime.strptime(date_str, '%Y%W%w').date()
         return first_week_day, get_next_interval(first_week_day, 'week')
 
-    quarter = quarter_re.match(string)
-    if quarter:
-        year, quarter = map(int, quarter.group(1, 2))
+    match = quarter_re.match(string)
+    if match:
+        year, quarter = map(int, match.group(1, 2))
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
         return quarter_first_day, get_next_interval(quarter_first_day,
                                                     'quarter')
 
-    mod_date = mod_date_re.match(string)
-    if mod_date:
+    match = mod_date_re.match(string)
+    if match:
         today = datetime.date.today()
-        month, modifier, identifier = mod_date.group(1, 2, 3)
+        month, modifier, identifier = match.group(1, 2, 3)
         modifier = modifiers[modifier]
         if identifier == 'year':
             month = _parse_month(month) if month else None

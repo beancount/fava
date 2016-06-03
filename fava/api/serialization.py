@@ -54,7 +54,6 @@ def serialize_entry(entry):
 
 
 def _serialize_budget_entry(new_entry, entry):
-    # TODO validate budget entry
     new_entry['account'] = entry.values[0].value
     new_entry['period_type'] = entry.values[1].value
     new_entry['value'] = entry.values[2].value

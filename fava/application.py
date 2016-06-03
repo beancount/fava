@@ -223,7 +223,7 @@ def source():
                     settings_file_content = file.read()
                 return settings_file_content
             else:
-                return g.api.source(file_path=requested_file_path)
+                return g.api.source(requested_file_path)
         else:
             return render_template(
                 'source.html',
@@ -237,15 +237,14 @@ def source():
         if file_path == app.config['USER_SETTINGS']:
             with open(file_path, 'w+', encoding='utf8') as file:
                 file.write(source)
-            successful = True
             load_settings()
         else:
-            successful = g.api.set_source(file_path=file_path, source=source)
-        return str(successful)
+            g.api.set_source(file_path, source)
+        return str(True)
 
 
 @app.route('/<bfile>/event/<event_type>/')
-def event_details(event_type=None):
+def event_details(event_type):
     return render_template('event_detail.html', event_type=event_type)
 
 

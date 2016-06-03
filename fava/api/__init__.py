@@ -32,6 +32,10 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     zip_real_accounts)
 
 
+class FavaAPIException(Exception):
+    pass
+
+
 def _filter_entries_by_type(entries, include_types):
     return [entry for entry in entries
             if isinstance(entry, include_types)]
@@ -74,10 +78,14 @@ def _real_account(account_name, entries, begin_date=None, end_date=None,
 
 
 def _sidebar_links(entries):
-    # 2016-04-01 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"  # noqa
-    sidebar_link_entries = [entry for entry in entries
-                            if isinstance(entry, Custom) and
-                            entry.type == 'fava-sidebar-link']
+    """ Parse custom entries for links. They have the following format:
+
+    2016-04-01 custom "fava-sidebar-link" "2014" "/income_statement/?time=2014"
+
+    """
+    sidebar_link_entries = [
+        entry for entry in _filter_entries_by_type(entries, Custom)
+        if entry.type == 'fava-sidebar-link']
     return [(entry.values[0].value, entry.values[1].value)
             for entry in sidebar_link_entries]
 
@@ -386,23 +394,21 @@ class BeancountReportAPI():
                     os.path.dirname(self.beancount_file_path), filename)
                  for filename in self.options['include']]))
 
-    def source(self, file_path=None):
-        if file_path:
-            if file_path in self.source_files():
-                with open(file_path, encoding='utf8') as f:
-                    source_ = f.read()
-                return source_
-            else:
-                return None  # TODO raise
+    def source(self, file_path):
+        if file_path not in self.source_files():
+            raise FavaAPIException('Trying to read a non-source file')
+
+        with open(file_path, encoding='utf8') as file:
+            source = file.read()
+        return source
 
     def set_source(self, file_path, source):
-        if file_path in self.source_files():
-            with open(file_path, 'w+', encoding='utf8') as file:
-                file.write(source)
-            self.load_file()
-            return True
-        else:
-            return False  # TODO raise
+        if file_path not in self.source_files():
+            raise FavaAPIException('Trying to write a non-source file')
+
+        with open(file_path, 'w+', encoding='utf8') as file:
+            file.write(source)
+        self.load_file()
 
     def commodity_pairs(self):
         fw_pairs = self.price_map.forward_pairs
@@ -460,30 +466,25 @@ class BeancountReportAPI():
             else:
                 return None
 
-        # nb_entries_by_type
-        entries_by_type = misc_utils.groupby(
-            lambda entry: type(entry).__name__, self.entries)
-        nb_entries_by_type = {name: len(entries)
-                              for name, entries in entries_by_type.items()}
+        grouped_entries = misc_utils.groupby(type, self.entries)
+        entries_by_type = {type.__name__: len(entries)
+                           for type, entries in grouped_entries.items()}
 
         all_postings = [posting
                         for entry in self.entries
                         if isinstance(entry, Transaction)
                         for posting in entry.postings]
 
-        # nb_postings_by_account
-        postings_by_account = misc_utils.groupby(
+        grouped_postings = misc_utils.groupby(
             lambda posting: posting.account, all_postings)
-        nb_postings_by_account = {account: len(postings)
-                                  for account, postings
-                                  in postings_by_account.items()}
+        postings_by_account = {account: len(postings)
+                               for account, postings
+                               in grouped_postings.items()}
 
         return {
-            'entries_by_type':           nb_entries_by_type,
-            'entries_by_type_total':     sum(nb_entries_by_type.values()),
-            'postings_by_account':       nb_postings_by_account,
-            'postings_by_account_total': sum(nb_postings_by_account.values()),
-            'activity_by_account':       self._activity_by_account()
+            'entries_by_type': entries_by_type,
+            'postings_by_account': postings_by_account,
+            'activity_by_account': self._activity_by_account()
         }
 
     def is_valid_document(self, file_path):
