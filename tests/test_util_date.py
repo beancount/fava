@@ -8,13 +8,27 @@ from fava.util.date import (_parse_month, parse_date, daterange,
                             number_of_days_in_period)
 
 
-def test_get_next_interval():
-    assert get_next_interval(date(2013, 12, 31), 'year') == date(2014, 1, 1)
-    assert get_next_interval(date(2013, 1, 1), 'year') == date(2014, 1, 1)
-    assert get_next_interval(date(2013, 1, 1), 'quarter') == date(2013, 4, 1)
-    assert get_next_interval(date(2013, 1, 1), 'month') == date(2013, 2, 1)
-    assert get_next_interval(date(2016, 4, 17), 'week') == date(2016, 4, 18)
-    assert get_next_interval(date(2016, 4, 17), 'day') == date(2016, 4, 18)
+@pytest.mark.parametrize('input_date_string,interval,expect', [
+    ('2016-01-01', 'day', '2016-01-02'),
+    ('2016-01-01', 'week', '2016-01-04'),
+    ('2016-01-01', 'month', '2016-02-01'),
+    ('2016-01-01', 'quarter', '2016-04-01'),
+    ('2016-01-01', 'year', '2017-01-01'),
+
+    ('2016-12-31', 'day', '2017-01-01'),
+    ('2016-12-31', 'week', '2017-01-02'),
+    ('2016-12-31', 'month', '2017-01-01'),
+    ('2016-12-31', 'quarter', '2017-01-01'),
+    ('2016-12-31', 'year', '2017-01-01'),
+])
+def test_get_next_interval(input_date_string, interval, expect):
+    """Test for get_next_interval function."""
+    input_date = dt.strptime(input_date_string, '%Y-%m-%d')
+    get = get_next_interval(input_date, interval)
+    assert get.strftime('%Y-%m-%d') == expect
+
+
+def test_get_next_interval_exception():
     with pytest.raises(NotImplementedError):
         get_next_interval(date(2016, 4, 18), 'decade')
 

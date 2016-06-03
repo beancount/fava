@@ -40,10 +40,11 @@ def get_next_interval(date, interval):
     if interval == 'year':
         return datetime.date(date.year + 1, 1, 1)
     elif interval == 'quarter':
-        quarter = (date.month - 1) // 3 + 1
-        month = quarter * 3 + 1
-        year = date.year + (month > 12)
-        return datetime.date(year, month % 12, 1)
+        for i in [4, 7, 10]:
+            if date.month < i:
+                return datetime.date(date.year, i, 1)
+        else:
+            return datetime.date(date.year + 1, 1, 1)
     elif interval == 'month':
         month = (date.month % 12) + 1
         year = date.year + (date.month + 1 > 12)
