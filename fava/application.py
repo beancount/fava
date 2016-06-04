@@ -428,6 +428,9 @@ def jump():
     url = werkzeug.urls.url_parse(request.referrer)
     qs_dict = url.decode_query()
     for key, values in request.args.lists():
+        if len(values) == 1 and values[0] == "":
+            del qs_dict[key]
+            continue
         qs_dict.setlist(key, values)
 
     redirect_url = url.replace(query=werkzeug.urls.url_encode(qs_dict,
