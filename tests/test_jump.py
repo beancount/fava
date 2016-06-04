@@ -15,6 +15,8 @@ import werkzeug.urls
     ('/?foo=bar', '/jump?baz=qux', '/?baz=qux&foo=bar'),
     ('/', '/jump?foo=bar&baz=qux', '/?baz=qux&foo=bar'),
     ('/', '/jump?baz=qux', '/?baz=qux'),
+    ('/?foo=bar', '/jump?foo=', '/'),
+    ('/?foo=bar', '/jump?foo=&foo=', '/?foo=&foo='),
 ])
 def test_jump_handler(app, referer, jump_link, expect):
     """Test /jump handler correctly redirect to the right location.
@@ -26,5 +28,8 @@ def test_jump_handler(app, referer, jump_link, expect):
     result = test_client.get(jump_link,
                              headers=[('Referer', referer)])
     with app.test_request_context():
-        assert (result.headers.get('Location', '') == werkzeug.urls.url_join(
-            flask.url_for('root', _external=True), expect))
+        get_url = result.headers.get('Location', '')
+        expect_url = werkzeug.urls.url_join(
+            flask.url_for('root', _external=True),
+            expect)
+        assert result.status_code == 302 and get_url == expect_url
