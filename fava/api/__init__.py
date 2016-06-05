@@ -381,8 +381,11 @@ class BeancountReportAPI():
 
         return [{
             'date': journal_entry['date'],
-            'balance': journal_entry['balance'],
-        } for journal_entry in journal if 'balance' in journal_entry.keys()]
+            'balance': journal_entry['balance'] if journal_entry['balance']
+            # when there's no holding, the balance would be an empty dict.
+            # Synthesize a zero balance based on the 'change' value
+            else {x: 0 for x in journal_entry['change']}
+        } for journal_entry in journal if 'balance' in journal_entry]
 
     def source_files(self):
         # Make sure the included source files are sorted, behind the main
