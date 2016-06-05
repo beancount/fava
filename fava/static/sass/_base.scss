@@ -59,7 +59,6 @@ body {
     font-weight: 400;
     font-size: 14px;
     height: 100%;
-    min-width: 1235px;
     color: $color_text;
     background: $color_background;
 }
@@ -448,21 +447,11 @@ kbd {
 
 .halfleft,
 .halfright {
-    width: 50%;
+    width: 100%;
 
     h3 {
         text-align: center;
     }
-}
-
-.halfleft {
-    float: left;
-    padding-right: 10px;
-}
-
-.halfright {
-    float: right;
-    padding-left: 10px;
 }
 
 .left {
@@ -637,3 +626,19 @@ table.queryresults {
     }
 }
 
+@media (min-width: 1280px) {
+    .halfleft,
+    .halfright {
+        width: 50%;
+    }
+
+    .halfleft {
+        float: left;
+        padding-right: 10px;
+    }
+
+    .halfright {
+        float: right;
+        padding-left: 10px;
+    }
+}
