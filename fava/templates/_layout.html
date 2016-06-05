@@ -25,6 +25,7 @@
 <!doctype html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='gen/theme_' + config['theme'] + '.css') }}">
     <title>{{ short_title }} - {{ api.title }}</title>
@@ -53,6 +54,9 @@
         </nav>
         {% endif %}
     </header>
+    <a href="#" id="aside_button">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+    </a>
     <aside>
         {% if api.sidebar_links %}
             <h3>{{ _('Custom Links') }}</h3>

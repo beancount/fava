@@ -18,7 +18,7 @@ article#page-source {
 
     div.editor {
         position: fixed;
-        left: $aside_width;
+        left: 0;
         top: $header_height + 40px;
         right: 0;
         bottom: 0;
@@ -99,4 +99,13 @@ div.editor-wrapper {
     &.ace_autocomplete .ace_content {
         font: 13px $font_family_editor;
     }
+}
+
+/* Modifications for ipad */
+@media (min-width: 768px) {
+article#page-source {
+    div.editor {
+        left: $aside_width;
+    }
+}
 }

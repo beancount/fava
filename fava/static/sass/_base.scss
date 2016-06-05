@@ -138,7 +138,7 @@ $header_height: 50px;
 $aside_width: 160px;
 
 body {
-    padding: $header_height 0 0 $aside_width;
+    padding: $header_height 0 0 0;
 }
 
 header {
@@ -218,12 +218,36 @@ header {
     }
 }
 
+#aside_button {
+    position: fixed;
+    top: $header_height;
+    left: 0px;
+    height: 32px;
+    width: 32px;
+    background-color: $color_sidebar_background;
+    border-style: solid;
+    border-color: darken($color_sidebar_background, 16);
+    border-width: 0 1px 1px 0;
+    z-index: 1000;
+    display: block;
+}
+
+#aside_button.active {
+    left: $aside_width;
+}
+
+#aside_button svg {
+    height: 100%;
+    width: 100%;
+}
+
 aside {
     position: fixed;
-    top: 50px;
+    top: $header_height;
     bottom: 0;
     left: 0;
     padding-top: 1em;
+    margin-left: -$aside_width;
     flex-shrink: 0;
     width: $aside_width;
     color: $color_sidebar_text;
@@ -231,6 +255,7 @@ aside {
     background-color: $color_sidebar_background;
     overflow-y: auto;
     @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
+    z-index: 1000;
 
     h3 {
         text-transform: uppercase;
@@ -298,6 +323,9 @@ aside {
             }
         }
     }
+}
+aside.active {
+    margin-left: 0;
 }
 
 
@@ -594,3 +622,18 @@ table.queryresults {
         margin-left: 3px;
     }
 }
+
+/* Modifications for ipad */
+@media (min-width: 768px) {
+    body {
+        padding: $header_height 0 0 $aside_width;
+    }
+
+    aside {
+        margin-left: 0;
+    }
+    #aside_button {
+        display: none;
+    }
+}
+
