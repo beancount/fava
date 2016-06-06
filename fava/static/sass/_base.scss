@@ -47,6 +47,16 @@
   }
 }
 
+$transitions: all 0.2s ease-out;
+
+@mixin smooth-transitions {
+    -webkit-transition: $transitions;
+    -moz-transition: $transitions;
+    -ms-transition: $transitions;
+    -o-transition: $transitions;
+    transition: $transitions;
+}
+
 // Globals
 
 * {
@@ -142,6 +152,7 @@ $safe_two_column: $min_width * 2 + $aside_width;
 
 body {
     padding: $header_height 0 0 0;
+    @include smooth-transitions;
 }
 
 header {
@@ -234,6 +245,7 @@ header {
     border-width: 0 1px 1px 0;
     z-index: 1000;
     display: block;
+    @include smooth-transitions;
 }
 
 #aside_button.active {
@@ -260,6 +272,7 @@ aside {
     overflow-y: auto;
     @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
     z-index: 1000;
+    @include smooth-transitions;
 
     h3 {
         text-transform: uppercase;
