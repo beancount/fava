@@ -53,13 +53,15 @@
     box-sizing: border-box;
 }
 
+$min_width: 560px;
+
 html,
 body {
     font-family: $font_family;
     font-weight: 400;
     font-size: 14px;
     height: 100%;
-    min-width: 560px;
+    min-width: $min_width;
     color: $color_text;
     background: $color_background;
 }
@@ -136,6 +138,7 @@ a {
 // Structural and generic elements
 $header_height: 50px;
 $aside_width: 160px;
+$safe_two_column: $min_width * 2 + $aside_width;
 
 body {
     padding: $header_height 0 0 0;
@@ -627,7 +630,9 @@ table.queryresults {
     }
 }
 
-@media (min-width: 1280px) {
+/* At twice min-width + aside_width, it's safe to make two columns */
+/* If min_width is 560px, $safe_two_column is 1280px */
+@media (min-width: $safe_two_column) {
     .halfleft,
     .halfright {
         width: 50%;
