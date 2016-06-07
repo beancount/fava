@@ -3,6 +3,8 @@
 // some of the shared styles are in `_journal_table.scss`
 
 ol.tree-table {
+    @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
+
     &.fullwidth {
         overflow-x: auto;
         max-width: 100%;
@@ -14,6 +16,7 @@ ol.tree-table {
     .head > p > span {
         border-right: 1px solid $color_treetable_header_bg;
         padding: 3px 5px 2px 8px;
+        background: $color_treetable_header_bg;
 
         span { flex-grow: 1; }
     }
