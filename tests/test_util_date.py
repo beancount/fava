@@ -92,6 +92,9 @@ def to_date(string):
     ('2016-03-25', '2016-03-01', '2016-04-01', 'this month'),
     ('2016-03-25', '2016-12-01', '2017-01-01', 'this december'),
     ('2016-03-25', '2016-11-01', '2016-12-01', 'this november'),
+    ('2016-03-25', '2016-02-01', '2016-03-01', 'last month'),
+    ('2016-03-25', '2016-04-01', '2016-05-01', 'next month'),
+    ('2016-03-25', '2016-02-01', '2016-05-01', 'last month - next month'),
 ])
 def test_parse_date(pseudo_today, expect_start, expect_end, text):
     today = to_date(pseudo_today)

@@ -124,8 +124,8 @@ def parse_date(string, today=None):
 
     match = is_range_re.match(string)
     if match:
-        return (parse_date(match.group(1))[0],
-                parse_date(match.group(2))[1])
+        return (parse_date(match.group(1), today=today)[0],
+                parse_date(match.group(2), today=today)[1])
 
     # check if it is either yesterday, today or tomorrow
     if string in rel_dates:
