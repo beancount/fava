@@ -429,7 +429,10 @@ def jump():
     qs_dict = url.decode_query()
     for key, values in request.args.lists():
         if len(values) == 1 and values[0] == "":
-            del qs_dict[key]
+            try:
+                del qs_dict[key]
+            except KeyError:
+                pass
             continue
         qs_dict.setlist(key, values)
 

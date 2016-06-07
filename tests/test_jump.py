@@ -17,6 +17,7 @@ import werkzeug.urls
     ('/', '/jump?baz=qux', '/?baz=qux'),
     ('/?foo=bar', '/jump?foo=', '/'),
     ('/?foo=bar', '/jump?foo=&foo=', '/?foo=&foo='),
+    ('/', '/jump?foo=', '/'),
 ])
 def test_jump_handler(app, referer, jump_link, expect):
     """Test /jump handler correctly redirect to the right location.
