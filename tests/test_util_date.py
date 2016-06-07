@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date
 from datetime import datetime as dt
 
 import pytest
@@ -64,32 +64,43 @@ def test___parse_month():
     assert not _parse_month('test')
 
 
-def test_parse_date():
-    today = date.today()
-    tests = {
-        'year to date': (date(today.year, 1, 1), today + timedelta(1)),
-        '    ': (None, None),
-        'today': (today, today + timedelta(1)),
-        'YESTERDAY': (today - timedelta(1), today),
-        'october 2010       ': daterange(2010, 10),
-        '2000': daterange(2000),
-        '1st february 2008': daterange(2008, 2, 1),
-        '2010-10': daterange(2010, 10),
-        '2000-01-03': daterange(2000, 1, 3),
-        'this year': daterange(today.year),
-        'august next year': daterange(today.year + 1, 8),
-        'this month': daterange(today.year, today.month),
-        'this december': daterange(today.year, 12),
-        'this november': daterange(today.year, 11),
-        '2nd aug, 2010': daterange(2010, 8, 2),
-        'august 3rd, 2012': daterange(2012, 8, 3),
-        '2015-W01': (date(2015, 1, 5), date(2015, 1, 12)),
-        '2015-Q2': (date(2015, 4, 1), date(2015, 7, 1)),
-        '2014 to 2015': (daterange(2014)[0], daterange(2015)[1]),
-        '2011-10 - 2015': (daterange(2011, 10)[0], daterange(2015)[1]),
-    }
-    for test, result in tests.items():
-        assert parse_date(test) == result
+def to_date(string):
+    if string is None:
+        return None
+    return dt.strptime(string, '%Y-%m-%d').date()
+
+
+@pytest.mark.parametrize("pseudo_today,expect_start,expect_end,text", [
+    (None, None, None, '    '),
+    (None, '2010-10-01', '2010-11-01', 'october 2010       '),
+    (None, '2000-01-01', '2001-01-01', '2000'),
+    (None, '2008-02-01', '2008-02-02', '1st february 2008'),
+    (None, '2010-10-01', '2010-11-01', '2010-10'),
+    (None, '2000-01-03', '2000-01-04', '2000-01-03'),
+    (None, '2010-08-02', '2010-08-03', '2nd aug, 2010'),
+    (None, '2012-08-03', '2012-08-04', 'august 3rd, 2012'),
+    (None, '2015-01-05', '2015-01-12', '2015-W01'),
+    (None, '2015-04-01', '2015-07-01', '2015-Q2'),
+    (None, '2014-01-01', '2016-01-01', '2014 to 2015'),
+    (None, '2011-10-01', '2016-01-01', '2011-10 - 2015'),
+    # use pseudo today
+    ('2016-03-25', '2016-01-01', '2016-03-26', 'year to date'),
+    ('2016-03-25', '2016-03-25', '2016-03-26', 'today'),
+    ('2016-03-25', '2016-03-24', '2016-03-25', 'YESTERDAY'),
+    ('2016-03-25', '2016-01-01', '2017-01-01', 'this year'),
+    ('2016-03-25', '2017-08-01', '2017-09-01', 'august next year'),
+    ('2016-03-25', '2016-03-01', '2016-04-01', 'this month'),
+    ('2016-03-25', '2016-12-01', '2017-01-01', 'this december'),
+    ('2016-03-25', '2016-11-01', '2016-12-01', 'this november'),
+])
+def test_parse_date(pseudo_today, expect_start, expect_end, text):
+    today = to_date(pseudo_today)
+    start, end = to_date(expect_start), to_date(expect_end)
+    got = parse_date(text, today=today)
+    assert got == (
+        start, end
+    ), "parse_date('%s', today=%s) == (%s, %s), want (%s, %s)" % (
+        text, pseudo_today, got[0], got[1], expect_start, expect_end)
 
 
 def test_number_of_days_in_period_daily():

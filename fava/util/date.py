@@ -94,7 +94,7 @@ def _parse_month(month):
         return months_abbr.index(month)
 
 
-def parse_date(string):
+def parse_date(string, today=None):
     """"Tries to parse the given string into two date objects marking the
     beginning and the end of the given period, where the end day is exclusive,
     i.e. one day after the end of the period.
@@ -116,8 +116,10 @@ def parse_date(string):
     if not string:
         return None, None
 
-    if string in ['year to date', 'ytd']:
+    if today is None:
         today = datetime.date.today()
+
+    if string in ['year to date', 'ytd']:
         return datetime.date(today.year, 1, 1), get_next_interval(today, 'day')
 
     match = is_range_re.match(string)
@@ -127,7 +129,7 @@ def parse_date(string):
 
     # check if it is either yesterday, today or tomorrow
     if string in rel_dates:
-        start = datetime.date.today() + datetime.timedelta(rel_dates[string])
+        start = today + datetime.timedelta(rel_dates[string])
         return start, get_next_interval(start, 'day')
 
     match = year_first_re.match(string)
@@ -157,7 +159,6 @@ def parse_date(string):
 
     match = mod_date_re.match(string)
     if match:
-        today = datetime.date.today()
         month, modifier, identifier = match.group(1, 2, 3)
         modifier = modifiers[modifier]
         if identifier == 'year':
