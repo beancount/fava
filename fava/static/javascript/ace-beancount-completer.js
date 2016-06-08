@@ -48,16 +48,6 @@ var customDirectiveCompleter = function(line, pos, callback) {
     callback(null, completions);
 };
 
-var optionDirectiveCompleter = function(line, pos, callback) {
-    // option "key" "value"
-    var parts = line.split(/\s+/);
-    var completions = [];
-    if (parts.length == 2) {
-        completions = completionsOptions;
-    }
-    callback(null, completions);
-};
-
 var datedDirectiveCompleter = function() {
     var completionsDirectives = ['open', 'close', 'commodity', '*', 'txn', '!', '?', 'balance', 'pad', 'note', 'document', 'price', 'event', 'query', 'custom'].map(function (directive) {
         return { name: directive, value: directive, score: 3, meta: "directive" }
@@ -113,7 +103,7 @@ var undatedDirectiveCompleter = function() {
         };
     };
     var completers = {
-        "option": optionDirectiveCompleter,
+        "option": completer([], completionsOptions),
     };
     return function(line, pos, callback) {
         var parts = line.split(/\s+/);
