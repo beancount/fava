@@ -102,29 +102,7 @@ $(document).ready(function() {
 
         editor.setOptions(defaultOptions);
 
-        var completionsAccounts = window.allAccounts.map(function (account) {
-            return { name: account, value: account, score: 1, meta: "accounts" }
-        });
-        var completionsCommodities = window.allCommodities.map(function (commodity) {
-            return { name: commodity, value: commodity, score: 2, meta: "commodities" }
-        });
-        var completionsDirectives = ['open', 'close', 'commodity', 'txn', 'balance', 'pad', 'note', 'document', 'price', 'event', 'option', 'plugin', 'include', 'query'].map(function (directive) {
-            return { name: directive, value: directive, score: 3, meta: "directive" }
-        });
-        var completionsTags = window.allTags.map(function (tag) {
-            return { name: '#' + tag, value: tag, score: 4, meta: "tags" }
-        });
-        var completions = completionsAccounts.concat(completionsCommodities, completionsDirectives);
-
-        var beancountCompleter = {
-            getCompletions: function(editor, session, pos, prefix, callback) {
-                if (prefix.length === 0) { callback(null, []); return }
-                if (prefix == '#') { callback(null, completionsTags); return }
-                if (editor.session.getLine(pos.row).indexOf('#') > -1) { callback(null, completionsTags); return }
-                if (editor.session.getLine(pos.row).indexOf('"') > -1) { callback(null, []); return }
-                callback(null, completions);
-            }
-        }
+        beancountCompleter = require("./ace-beancount-completer.js").beancountCompleter;
 
         langTools.setCompleters([beancountCompleter]);
         editor.setOptions({
