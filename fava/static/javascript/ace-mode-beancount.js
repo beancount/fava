@@ -73,6 +73,15 @@ var BeancountHighlightRules = function() {
             regex: /^(plugin)(\s*)(\".*\")(\s*)/,
             comment: "Plugin directives"
         }, {
+            token: [
+                "support.function.directive.include.beancount",
+                "meta.directive.include.beancount",
+                "support.variable.language.include.beancount",
+                "meta.directive.include.beancount"
+            ],
+            regex: /^(include)(\s+)(\".*\")(\s*)/,
+            comment: "Include directives"
+        }, {
             token: "keyword.operator.directive.beancount",
             regex: /^(?:poptag|pushtag)\s/,
             comment: "Directives (no date)"
@@ -80,6 +89,21 @@ var BeancountHighlightRules = function() {
             token: "variable.other.currency.beancount",
             regex: /\s[A-Z][A-Z0-9\'\.\_\-]{0,10}[A-Z0-9][\,?|\s]/,
             comment: "Currencies"
+        }, {
+            token: [
+                "constant.numeric.date.year.beancount",
+                "meta.directive.custom.beancount",
+                "constant.numeric.date.month.beancount",
+                "meta.directive.custom.beancount",
+                "constant.numeric.date.day.beancount",
+                "meta.directive.custom.beancount",
+                "support.function.directive.beancount",
+                "meta.directive.custom.beancount",
+                "support.variable.language.include.beancount",
+                "meta.directive.custom.beancount"
+            ],
+            regex: /([0-9]{4})(\-)([0-9]{2})(\-)([0-9]{2})(\s)(custom)(\s+)(\".*?\")(\s*)/,
+            comment: "Custom directives"
         }, {
             token: [
                 "constant.numeric.date.year.beancount",
