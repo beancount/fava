@@ -2,6 +2,7 @@ from datetime import date
 from datetime import datetime as dt
 
 import pytest
+from unittest import mock
 
 from fava.util.date import (_parse_month, parse_date, daterange,
                             get_next_interval, interval_tuples,
@@ -65,6 +66,10 @@ def test___parse_month():
 
 
 def to_date(string):
+    """to_date convert a string in %Y-%m-%d into a datetime.date object.
+
+    Return None if string is None.
+    """
     if string is None:
         return None
     return dt.strptime(string, '%Y-%m-%d').date()
@@ -97,13 +102,17 @@ def to_date(string):
     ('2016-03-25', '2016-02-01', '2016-05-01', 'last month - next month'),
 ])
 def test_parse_date(pseudo_today, expect_start, expect_end, text):
-    today = to_date(pseudo_today)
+    """Test for parse_date() function."""
+    # Mock the imported datetime.date in fava.util.date module
+    # Ref:
+    # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
+    with mock.patch('fava.util.date.datetime.date') as mock_date:
+        mock_date.today.return_value = to_date(pseudo_today) or date.today()
+        mock_date.side_effect = date
+        got = parse_date(text)
     start, end = to_date(expect_start), to_date(expect_end)
-    got = parse_date(text, today=today)
-    assert got == (
-        start, end
-    ), "parse_date('%s', today=%s) == (%s, %s), want (%s, %s)" % (
-        text, pseudo_today, got[0], got[1], expect_start, expect_end)
+    assert got == (start, end), "parse_date(%s) == %s @ %s, want (%s, %s)" % (
+        text, got, pseudo_today, start, end)
 
 
 def test_number_of_days_in_period_daily():
