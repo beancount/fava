@@ -7,7 +7,7 @@ const sunburstColorScale = d3.scale.category20c();
 const currencyColorScale = d3.scale.category10();
 const scatterColorScale = d3.scale.category10();
 
-const formatCurrency = d3.format('.2f')
+const formatCurrency = d3.format('.2f');
 const dateFormat = {
   year: d3.time.format.utc('%Y'),
   quarter: function(date) {
@@ -20,7 +20,7 @@ const dateFormat = {
 
 const timeFilterDateFormat = {
   year: d3.time.format.utc('%Y'),
-  quarter: function(date) {
+  quarter(date) {
     return date.getUTCFullYear() + '-Q' + (Math.floor(date.getUTCMonth() / 3) + 1);
   },
   month: d3.time.format.utc('%Y-%m'),
@@ -29,11 +29,11 @@ const timeFilterDateFormat = {
 };
 
 function addInternalNodesAsLeaves(node) {
-  $.each(node.children, function(i, o) {
+  $.each(node.children, (i, o) => {
     addInternalNodesAsLeaves(o);
   });
   if (node.children && node.children.length) {
-    var copy = $.extend({}, node)
+    const copy = $.extend({}, node);
     copy.children = null;
     copy.dummy = true;
     node.children.push(copy);
@@ -43,7 +43,7 @@ function addInternalNodesAsLeaves(node) {
 
 function makeAccountLink(selection) {
   selection
-    .on('click', function(d) {
+    .on('click', (d) => {
       window.location = window.accountUrl.replace('REPLACEME', d.account);
       d3.event.stopPropagation();
     });
@@ -51,15 +51,15 @@ function makeAccountLink(selection) {
 
 function addTooltip(selection, tooltipText) {
   selection
-    .on('mouseenter', function(d) {
+    .on('mouseenter', (d) => {
       window.tooltip.style('opacity', 1).html(tooltipText(d));
     })
-    .on('mousemove', function(d) {
+    .on('mousemove', () => {
       window.tooltip.style('left', d3.event.pageX + 'px').style('top', (d3.event.pageY - 15) + 'px')
     })
-    .on('mouseleave', function(d) {
+    .on('mouseleave', () => {
       window.tooltip.style('opacity', 0);
-    })
+    });
 }
 
 function timeFilter(date) {
@@ -69,7 +69,7 @@ function timeFilter(date) {
 }
 
 function addLegend(svg, domain, colorScale) {
-  var legend = svg.selectAll('.legend')
+  const legend = svg.selectAll('.legend')
     .data(domain)
     .enter()
     .append('g')
@@ -79,18 +79,14 @@ function addLegend(svg, domain, colorScale) {
     .attr('x', -18)
     .attr('width', 18)
     .attr('height', 18)
-    .style('fill', function (d) {
-      return colorScale(d);
-    });
+    .style('fill', (d) => colorScale(d));
 
   legend.append('text')
     .attr('x', -24)
     .attr('y', 9)
     .attr('dy', '.35em')
     .style('text-anchor', 'end')
-    .text(function(d) {
-      return d;
-    });
+    .text((d) => d);
 
   return legend;
 }
@@ -125,10 +121,10 @@ function treeMapChart() {
     root = svg.datum();
 
     zoomBehavior
-      .on('zoomend', function(d) {
-        var scale = d3.event.target.scale();
+      .on('zoomend', (d) => {
+        const scale = d3.event.target.scale();
         // click
-        if (scale == 1) {
+        if (scale === 1) {
           zoom(current_node == d.parent ? root : d.parent, 200);
           // zoom in
         } else if (scale > 1) {
@@ -138,22 +134,21 @@ function treeMapChart() {
           zoom(root, 200);
         }
         d3.event.target.scale(1);
-      })
+      });
 
     cells = svg.selectAll('g')
-      .data(treemap.nodes(root).filter(function(d) {
-        return (d.value);
-      }))
-      .enter().append('g')
+      .data(treemap.nodes(root).filter((d) => d.value))
+      .enter()
+      .append('g')
       .call(zoomBehavior)
-      .call(addTooltip, tooltipText)
+      .call(addTooltip, tooltipText);
 
     if (cells.empty()) {
       canvas.append('text')
         .attr('x', width / 2)
         .attr('y', height / 2)
         .text('Chart is empty.');
-    };
+    }
 
     cells.append('rect')
       .attr('fill', function(d) {
@@ -166,26 +161,24 @@ function treeMapChart() {
     cells.append('text')
       .attr('dy', '.5em')
       .attr('text-anchor', 'middle')
-      .text(function (d) {
-        return d.account.split(':').pop();
-      })
+      .text((d) => d.account.split(':').pop())
       .style('opacity', 0)
       .call(makeAccountLink);
 
     zoom(root, 0);
   }
 
-  chart.value = function(f) {
+  chart.value = (f) => {
     treemap.value(f);
     return chart;
   };
 
-  chart.tooltipText = function(f) {
+  chart.tooltipText = (f) => {
     tooltipText = f;
     return chart;
   };
 
-  chart.update = function() {
+  chart.update = () => {
     setSize();
     zoom(current_node, 0);
   };
@@ -193,32 +186,22 @@ function treeMapChart() {
   function zoom(d, duration) {
     treemap(root);
 
-    var kx = width / d.dx,
-      ky = height / d.dy;
+    const kx = width / d.dx;
+    const ky = height / d.dy;
     x.domain([d.x, d.x + d.dx]);
     y.domain([d.y, d.y + d.dy]);
 
-    var t = cells.transition()
+    const t = cells.transition()
       .duration(duration)
-      .attr('transform', function(d) {
-        return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
-      });
+      .attr('transform', (d) => 'translate(' + x(d.x) + ',' + y(d.y) + ')');
 
     t.select('rect')
-      .attr('width', function(d) {
-        return kx * d.dx;
-      })
-      .attr('height', function(d) {
-        return ky * d.dy;
-      });
+      .attr('width', (d) => kx * d.dx)
+      .attr('height', (d) => ky * d.dy);
 
     t.select('text')
-      .attr('x', function(d) {
-        return kx * d.dx / 2;
-      })
-      .attr('y', function(d) {
-        return ky * d.dy / 2;
-      })
+      .attr('x', (d) => kx * d.dx / 2)
+      .attr('y', (d) => ky * d.dy / 2)
       .style('opacity', function(d) {
         d.w = this.getComputedTextLength();
         return (kx * d.dx > d.w + 4 && ky * d.dy > 14) ? 1 : 0;
@@ -235,7 +218,7 @@ function sunburstChart() {
     top: 10,
     right: 10,
     bottom: 10,
-    left: 10
+    left: 10,
   };
   var width = 500,
     height = 250;

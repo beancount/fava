@@ -1,40 +1,40 @@
-var Mousetrap = require('mousetrap');
+const Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
-module.exports.global = function() {
+module.exports.global = function global() {
   Mousetrap.bind({
-    '?': function() {
+    '?'() {
       $('#keyboard-shortcuts.overlay-wrapper').show();
     },
-    'esc': function() {
+    esc() {
       $('.overlay-wrapper').hide();
-    }
+    },
   }, 'keyup');
 
   // Filtering:
   Mousetrap.bind({
-    'f t': function() {
+    'f t'() {
       $('#time-filter').focus();
     },
-    'f g': function() {
+    'f g'() {
       $('#tag-filter').focus();
     },
-    'f a': function() {
+    'f a'() {
       $('#account-filter').focus();
     },
-    'f p': function() {
+    'f p'() {
       $('#name-filter').focus();
     },
   }, 'keyup');
 };
 
-module.exports.charts = function() {
+module.exports.charts = function charts() {
   Mousetrap.bind({
-    'ctrl+c': function() {
+    'ctrl+c'() {
       $('#toggle-chart').click();
     },
-    'c': function() {
-      var next = $('#chart-labels label.selected').next();
+    c() {
+      const next = $('#chart-labels label.selected').next();
       $('#chart-labels label').removeClass('selected');
       if (next.length) {
         next.click();
@@ -42,8 +42,8 @@ module.exports.charts = function() {
         $('#chart-labels label:first-child').click();
       }
     },
-    'shift+c': function() {
-      var prev = $('#chart-labels label.selected').prev();
+    'shift+c'() {
+      const prev = $('#chart-labels label.selected').prev();
       $('#chart-labels label').removeClass('selected');
 
       if (prev.length) {
@@ -51,57 +51,57 @@ module.exports.charts = function() {
       } else {
         $('#chart-labels label:last-child').click();
       }
-    }
+    },
   }, 'keyup');
 };
 
-module.exports.journal = function() {
+module.exports.journal = function journal() {
   Mousetrap.bind({
-    'l': function() {
+    'l'() {
       $('#toggle-legs').click();
     },
-    'm': function() {
+    'm'() {
       $('#toggle-metadata').click();
     },
 
-    's o': function() {
+    's o'() {
       $('#filter-open').click();
     },
-    's c': function() {
+    's c'() {
       $('#filter-close').click();
     },
-    's t': function() {
+    's t'() {
       $('#filter-transaction').click();
     },
-    's b': function() {
+    's b'() {
       $('#filter-balance').click();
     },
-    's n': function() {
+    's n'() {
       $('#filter-note').click();
     },
-    's d': function() {
+    's d'() {
       $('#filter-document').click();
     },
-    's p': function() {
+    's p'() {
       $('#filter-pad').click();
     },
-    's q': function() {
+    's q'() {
       $('#filter-query').click();
     },
-    's shift+c': function() {
+    's shift+c'() {
       $('#filter-custom').click();
     },
-    's shift+b': function() {
+    's shift+b'() {
       $('#filter-budget').click();
     },
 
-    't c': function() {
+    't c'() {
       $('#filter-cleared').click();
     },
-    't p': function() {
+    't p'() {
       $('#filter-pending').click();
     },
-    't o': function() {
+    't o'() {
       $('#filter-other').click();
     },
   }, 'keyup');

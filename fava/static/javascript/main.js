@@ -12,7 +12,7 @@ const documentsUpload = require('./documents-upload');
 // expose jquery to global context
 window.$ = $;
 
-$(document).ready(function() {
+$(document).ready(() => {
   $('table.sortable').stupidtable();
 
   // Setup filters form
@@ -49,7 +49,7 @@ $(document).ready(function() {
   }
 
   // Overlays
-  $('.overlay-wrapper').click(function(e) {
+  $('.overlay-wrapper').click((e) => {
     e.preventDefault();
     if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close-overlay')) {
       $('.overlay-wrapper').hide();
