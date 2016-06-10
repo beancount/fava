@@ -11,6 +11,10 @@ clean:
 	rm -rf build dist
 	rm -rf fava/static/node_modules
 
+lint:
+	tox -e flake8
+	cd fava/static; npm install; npm run lint
+
 test:
 	tox
 

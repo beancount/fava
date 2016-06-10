@@ -2,7 +2,7 @@
 require('awesomplete');
 
 module.exports.initFilters = function initFilters() {
-  $('#filter-form input').on('input awesomplete-selectcomplete', () => {
+  $('#filter-form input').on('input awesomplete-selectcomplete', function() {
     const $this = $(this);
     const isEmpty = !$this.val();
 
@@ -18,7 +18,7 @@ module.exports.initFilters = function initFilters() {
         .toggle(!isEmpty);
   });
 
-  $('#filter-form input[type="text"]').each(() => {
+  $('#filter-form input[type="text"]').each(function() {
     let options = {
       minChars: 0,
       maxItems: 30,

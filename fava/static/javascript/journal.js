@@ -7,7 +7,7 @@ module.exports.initJournal = function initJournal() {
   });
 
   // Toggle entries with checkboxes
-  $('#entry-filters input').click(() => {
+  $('#entry-filters input').click(function() {
     event.preventDefault();
     const $this = $(this);
     const selector = $this.attr('data-selector');
@@ -24,7 +24,7 @@ module.exports.initJournal = function initJournal() {
     const url = new URI(window.location);
     let modified = false;
     const filterShow = [];
-    $('#entry-filters input').each(() => {
+    $('#entry-filters input').each(function() {
       const $this = $(this);
       const shouldShow = $this.hasClass('inactive');
       const defaultShow = $this.attr('data-show-default') === 'true';

@@ -136,7 +136,7 @@ function treeMapChart() {
     t.select('text')
       .attr('x', (d) => kx * d.dx / 2)
       .attr('y', (d) => ky * d.dy / 2)
-      .style('opacity', (d) => {
+      .style('opacity', function(d) {
         const length = this.getComputedTextLength();
         return (kx * d.dx > length + 4 && ky * d.dy > 14) ? 1 : 0;
       });
@@ -182,13 +182,11 @@ function treeMapChart() {
 
     cells.append('rect')
       .attr('fill', (d) => {
-        if (d.dummy) {
-          let d = d.parent;
+        const node = d.dummy ? d.parent : d;
+        if (node.parent === root || !node.parent) {
+          return treemapColorScale(node.account);
         }
-        if (d.parent === root || !d.parent) {
-          return treemapColorScale(d.account);
-        }
-        return treemapColorScale(d.parent.account);
+        return treemapColorScale(node.parent.account);
       });
 
     cells.append('text')
