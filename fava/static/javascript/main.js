@@ -13,46 +13,46 @@ const documentsUpload = require('./documents-upload');
 window.$ = $
 
 $(document).ready(function() {
-    $("table.sortable").stupidtable();
+  $("table.sortable").stupidtable();
 
-    // Setup filters form
-    filters.initFilters();
+  // Setup filters form
+  filters.initFilters();
 
-    // Global keyboard shortcuts
-    keyboardShortcuts.global();
+  // Global keyboard shortcuts
+  keyboardShortcuts.global();
 
-    // Tree-expanding
-    if ($('.tree-table').length) {
-        treeTable.initTreeTable();
-    };
+  // Tree-expanding
+  if ($('.tree-table').length) {
+    treeTable.initTreeTable();
+  };
 
-    // Charts
-    if ($('#chart-container').length) {
-        charts.initCharts();
-        keyboardShortcuts.charts();
-    };
+  // Charts
+  if ($('#chart-container').length) {
+    charts.initCharts();
+    keyboardShortcuts.charts();
+  };
 
-    // Journal
-    if ($('#journal-table').length) {
-        journal.initJournal();
-        keyboardShortcuts.journal();
-    };
+  // Journal
+  if ($('#journal-table').length) {
+    journal.initJournal();
+    keyboardShortcuts.journal();
+  };
 
-    // Clipboard
-    if ($('.status-indicator').length) {
-        clipboard.initClipboard();
-    };
+  // Clipboard
+  if ($('.status-indicator').length) {
+    clipboard.initClipboard();
+  };
 
-    // Documents upload
-    if ($('.tree-table').length || $('h1.droptarget').length) {
-        documentsUpload.initDocumentsUpload();
+  // Documents upload
+  if ($('.tree-table').length ||  $('h1.droptarget').length) {
+    documentsUpload.initDocumentsUpload();
+  }
+
+  // Overlays
+  $('.overlay-wrapper').click(function(e) {
+    e.preventDefault();
+    if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close-overlay')) {
+      $('.overlay-wrapper').hide();
     }
-
-    // Overlays
-    $('.overlay-wrapper').click(function(e) {
-        e.preventDefault();
-        if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close-overlay')) {
-            $('.overlay-wrapper').hide();
-        }
-    });
+  });
 });
