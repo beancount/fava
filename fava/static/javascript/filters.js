@@ -1,8 +1,10 @@
+/* global Awesomplete */
 require('awesomplete');
 
-module.exports.initFilters = function() {
-  $('#filter-form input').on('input awesomplete-selectcomplete', function() {
-    var $this = $(this)
+module.exports.initFilters = function initFilters() {
+  $('#filter-form input').on('input awesomplete-selectcomplete', () => {
+    const $this = $(this);
+    const isEmpty = !$this.val();
 
     if ($this.val().length > $this.attr('placeholder').length) {
       $this.attr('size', $this.val().length + 2);
@@ -10,43 +12,47 @@ module.exports.initFilters = function() {
       $this.attr('size', $this.attr('placeholder').length + 2);
     }
 
-    var isEmpty = !$this.val();
     $this.parents('li')
-      .toggleClass('empty', isEmpty)
-      .find('button').toggle(!isEmpty);
+        .toggleClass('empty', isEmpty)
+      .find('button')
+        .toggle(!isEmpty);
   });
 
-  $('#filter-form input[type="text"]').each(function() {
-    var options = {
+  $('#filter-form input[type="text"]').each(() => {
+    let options = {
       minChars: 0,
       maxItems: 30,
     };
-    if ($(this).attr('name') == 'tag' || $(this).attr('name') == 'payee') {
+
+    if ($(this).attr('name') === 'tag' || $(this).attr('name') === 'payee') {
       options = $.extend(options, {
-        filter: function(text, input) {
+        filter(text, input) {
           return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
         },
-        replace: function(text) {
-          var before = this.input.value.match(/^.+,\s*|/)[0];
+        replace(text) {
+          const before = this.input.value.match(/^.+,\s*|/)[0];
           this.input.value = before + text + ", ";
         },
       });
-    };
+    }
 
-    var completer = new Awesomplete(this, options);
+    const completer = new Awesomplete(this, options);
+    const isEmpty = !$(this).val();
 
-    var isEmpty = !$(this).val();
     $(this).parents('li')
-      .toggleClass('empty', isEmpty)
-      .find('button').toggle(!isEmpty);
+        .toggleClass('empty', isEmpty)
+      .find('button')
+        .toggle(!isEmpty);
 
-    $(this).focus(function() {
+    $(this).focus(() => {
       completer.evaluate();
     });
   });
 
-  $('#filter-form button').click(function() {
-    $(this).parents('li').find('input').val('');
+  $('#filter-form button').click(() => {
+    $(this).parents('li')
+      .find('input')
+        .val('');
     $('#filter-form').submit();
   });
 };

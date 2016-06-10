@@ -7,26 +7,26 @@ require('./ace-mode-beancount.js');
 require('ace-builds/src-min/mode-ini');
 require('ace-builds/src-min/mode-sql');
 require('ace-builds/src-min/theme-chrome');
-require('ace-builds/src-min/ext-whitespace')
+require('ace-builds/src-min/ext-whitespace');
 
 function fireEvent(element, eventName) {
-  var event = document.createEvent('HTMLEvents');
+  const event = document.createEvent('HTMLEvents');
   event.initEvent(eventName, true, true);
   return document.dispatchEvent(event);
-};
+}
 
-$(document).ready(function() {
-  var defaultOptions = {
-    theme: "ace/theme/chrome",
-    mode: "ace/mode/beancount",
+$(document).ready(() => {
+  const defaultOptions = {
+    theme: 'ace/theme/chrome',
+    mode: 'ace/mode/beancount',
     wrap: true,
     printMargin: false,
     useSoftTabs: true,
-    showFoldWidgets: true
+    showFoldWidgets: true,
   };
 
   // Read-only editors
-  $('.editor-wrapper .editor.editor-readonly').each(function() {
+  $('.editor-wrapper .editor.editor-readonly').each(() => {
     var editor = ace.edit($(this).prop('id'));
     editor.setOptions(defaultOptions);
     editor.setOptions({

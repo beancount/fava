@@ -1,19 +1,19 @@
 const URI = require('urijs');
 
-module.exports.initJournal = function() {
+module.exports.initJournal = function initJournal() {
   // Toggle legs by clicking on transaction/padding row
-  $('#journal-table li.transaction').click(function() {
-    $(this).find('.posting').toggleClass("hidden");
+  $('#journal-table li.transaction').click(() => {
+    $(this).find('.posting').toggleClass('hidden');
   });
 
   // Toggle entries with checkboxes
-  $('#entry-filters input').click(function() {
+  $('#entry-filters input').click(() => {
     event.preventDefault();
-    var $this = $(this);
-    var selector = $this.attr('data-selector');
-    var shouldShow = $this.hasClass('inactive');
+    const $this = $(this);
+    const selector = $this.attr('data-selector');
+    const shouldShow = $this.hasClass('inactive');
 
-    if ($this.val() == 'Transaction') {
+    if ($this.val() === 'Transaction') {
       $('#entry-filters .txn-toggle').toggleClass('inactive', !shouldShow);
     }
 
@@ -21,13 +21,13 @@ module.exports.initJournal = function() {
     $this.toggleClass('inactive', !shouldShow);
 
     // Modify get params
-    var url = URI(window.location);
-    var modified = false;
-    var filterShow = [];
-    $('#entry-filters input').each(function() {
-      var $this = $(this);
-      var shouldShow = $this.hasClass('inactive');
-      var defaultShow = $this.attr('data-show-default') === 'true';
+    const url = new URI(window.location);
+    let modified = false;
+    const filterShow = [];
+    $('#entry-filters input').each(() => {
+      const $this = $(this);
+      const shouldShow = $this.hasClass('inactive');
+      const defaultShow = $this.attr('data-show-default') === 'true';
       if (shouldShow === defaultShow) {
         modified = true;
       }
@@ -38,7 +38,7 @@ module.exports.initJournal = function() {
 
     if (modified) {
       url.setSearch({
-        show: filterShow
+        show: filterShow,
       });
     } else {
       url.removeSearch(['show']);
@@ -47,4 +47,4 @@ module.exports.initJournal = function() {
     window.history.pushState('', '', url.toString());
     return false;
   });
-}
+};
