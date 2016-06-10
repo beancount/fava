@@ -49,7 +49,7 @@ module.exports.initFilters = function initFilters() {
     });
   });
 
-  $('#filter-form button').click(() => {
+  $('#filter-form button').click(function() {
     $(this).parents('li')
       .find('input')
         .val('');
