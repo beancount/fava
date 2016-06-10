@@ -11,6 +11,7 @@ TODO.md
 fava/static/gen/
 TODO
 
+npm-debug.log
 node_modules
 .cache/
 fava/translations/messages.pot
