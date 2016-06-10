@@ -1,7 +1,7 @@
 const d3 = require('d3');
 const URI = require('urijs');
 
-var container;
+let container;
 const treemapColorScale = d3.scale.category20c();
 const sunburstColorScale = d3.scale.category20c();
 const currencyColorScale = d3.scale.category10();
@@ -10,7 +10,7 @@ const scatterColorScale = d3.scale.category10();
 const formatCurrency = d3.format('.2f');
 const dateFormat = {
   year: d3.time.format.utc('%Y'),
-  quarter: function(date) {
+  quarter(date) {
     return date.getUTCFullYear() + 'Q' + (Math.floor(date.getUTCMonth() / 3) + 1);
   },
   month: d3.time.format.utc('%b %Y'),
@@ -63,7 +63,7 @@ function addTooltip(selection, tooltipText) {
 }
 
 function timeFilter(date) {
-  window.location = URI(window.location)
+  window.location = new URI(window.location)
     .setQuery('time', timeFilterDateFormat[window.interval](date))
     .toString();
 }
@@ -92,16 +92,19 @@ function addLegend(svg, domain, colorScale) {
 }
 
 function treeMapChart() {
-  var width, height;
-  var x = d3.scale.linear();
-  var y = d3.scale.linear();
-  var treemap = d3.layout.treemap()
-    .sort(function(a, b) {
-      return a.value - b.value;
-    });
-  var zoomBehavior = d3.behavior.zoom();
-  var div, svg, root, current_node, cells, tooltipText;
-  var canvas;
+  let width;
+  let height;
+  const x = d3.scale.linear();
+  const y = d3.scale.linear();
+  const treemap = d3.layout.treemap()
+    .sort((a, b) => a.value - b.value);
+  const zoomBehavior = d3.behavior.zoom();
+  let svg;
+  let root;
+  let currentNode;
+  let cells;
+  let tooltipText;
+  let canvas;
 
   function setSize() {
     width = parseInt(container.style('width'), 10);
@@ -112,6 +115,33 @@ function treeMapChart() {
     treemap.size([width, height]);
     x.range([0, width]);
     y.range([0, height]);
+  }
+
+  function zoom(node, duration) {
+    treemap(root);
+
+    const kx = width / node.dx;
+    const ky = height / node.dy;
+    x.domain([node.x, node.x + node.dx]);
+    y.domain([node.y, node.y + node.dy]);
+
+    const t = cells.transition()
+      .duration(duration)
+      .attr('transform', (d) => 'translate(' + x(d.x) + ',' + y(d.y) + ')');
+
+    t.select('rect')
+      .attr('width', (d) => kx * d.dx)
+      .attr('height', (d) => ky * d.dy);
+
+    t.select('text')
+      .attr('x', (d) => kx * d.dx / 2)
+      .attr('y', (d) => ky * d.dy / 2)
+      .style('opacity', (d) => {
+        const length = this.getComputedTextLength();
+        return (kx * d.dx > length + 4 && ky * d.dy > 14) ? 1 : 0;
+      });
+
+    currentNode = node;
   }
 
   function chart(svg_) {
@@ -125,7 +155,7 @@ function treeMapChart() {
         const scale = d3.event.target.scale();
         // click
         if (scale === 1) {
-          zoom(current_node == d.parent ? root : d.parent, 200);
+          zoom(currentNode === d.parent ? root : d.parent, 200);
           // zoom in
         } else if (scale > 1) {
           zoom(d.parent, 200);
@@ -151,11 +181,14 @@ function treeMapChart() {
     }
 
     cells.append('rect')
-      .attr('fill', function(d) {
+      .attr('fill', (d) => {
         if (d.dummy) {
-          var d = d.parent;
+          let d = d.parent;
         }
-        return d.parent == root || !d.parent ? treemapColorScale(d.account) : treemapColorScale(d.parent.account);
+        if (d.parent === root || !d.parent) {
+          return treemapColorScale(d.account);
+        }
+        return treemapColorScale(d.parent.account);
       });
 
     cells.append('text')
@@ -180,69 +213,36 @@ function treeMapChart() {
 
   chart.update = () => {
     setSize();
-    zoom(current_node, 0);
+    zoom(currentNode, 0);
   };
-
-  function zoom(d, duration) {
-    treemap(root);
-
-    const kx = width / d.dx;
-    const ky = height / d.dy;
-    x.domain([d.x, d.x + d.dx]);
-    y.domain([d.y, d.y + d.dy]);
-
-    const t = cells.transition()
-      .duration(duration)
-      .attr('transform', (d) => 'translate(' + x(d.x) + ',' + y(d.y) + ')');
-
-    t.select('rect')
-      .attr('width', (d) => kx * d.dx)
-      .attr('height', (d) => ky * d.dy);
-
-    t.select('text')
-      .attr('x', (d) => kx * d.dx / 2)
-      .attr('y', (d) => ky * d.dy / 2)
-      .style('opacity', function(d) {
-        d.w = this.getComputedTextLength();
-        return (kx * d.dx > d.w + 4 && ky * d.dy > 14) ? 1 : 0;
-      });
-
-    current_node = d;
-  }
 
   return chart;
 }
 
 function sunburstChart() {
-  var margin = {
+  const margin = {
     top: 10,
     right: 10,
     bottom: 10,
     left: 10,
   };
-  var width = 500,
-    height = 250;
-  var x = d3.scale.linear().range([0, 2 * Math.PI]);
-  var y = d3.scale.sqrt();
-  var svg, canvas;
-  var partition = d3.layout.partition();
-  var root, labels, labelText;
-  var selections = {};
-  var radius;
+  let width = 500;
+  let height = 250;
+  const x = d3.scale.linear().range([0, 2 * Math.PI]);
+  const y = d3.scale.sqrt();
+  const partition = d3.layout.partition();
+  let svg;
+  let canvas;
+  let root;
+  let labelText;
+  const selections = {};
+  let radius;
 
-  var arc = d3.svg.arc()
-    .startAngle(function(d) {
-      return x(d.x);
-    })
-    .endAngle(function(d) {
-      return x(d.x + d.dx);
-    })
-    .innerRadius(function(d) {
-      return y(d.y);
-    })
-    .outerRadius(function(d) {
-      return y(d.y + d.dy);
-    });
+  const arc = d3.svg.arc()
+    .startAngle((d) => x(d.x))
+    .endAngle((d) => x(d.x + d.dx))
+    .innerRadius((d) => y(d.y))
+    .outerRadius((d) => y(d.y + d.dy));
 
   function setSize() {
     radius = Math.min(width, height) / 2;
@@ -257,10 +257,11 @@ function sunburstChart() {
 
   function resize() {
     root = svg.datum();
-    var nodes = partition.nodes(root)
-      .filter(function(d) {
-        return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
-      });
+
+    // 0.005 radians = 0.29 degrees
+    const nodes = partition.nodes(root)
+      .filter((d) => (d.dx > 0.005 && !d.dummy && d.depth));
+
     selections.paths = canvas.selectAll('path')
       .data(nodes)
       .attr('d', arc);
@@ -289,44 +290,41 @@ function sunburstChart() {
     // For efficiency, filter nodes to keep only those large enough to see.
     // Also, ignore dummy nodes and root.
     root = svg.datum();
-    var nodes = partition.nodes(root)
-      .filter(function(d) {
-        return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
-      });
+    const nodes = partition.nodes(root)
+      .filter((d) => (d.dx > 0.005 && !d.dummy && d.depth));
 
     selections.paths = canvas.selectAll('path')
-      .data(nodes)
-      .enter().append('path')
-      .attr('fill-rule', 'evenodd')
-      .style('fill', function(d) {
-        return sunburstColorScale(d.account);
-      })
-      .on('mouseover', mouseOver)
-      .call(makeAccountLink);
+        .data(nodes)
+        .enter()
+      .append('path')
+        .attr('fill-rule', 'evenodd')
+        .style('fill', (d) => sunburstColorScale(d.account))
+        .on('mouseover', mouseOver)
+        .call(makeAccountLink);
 
     resize();
     setLabel(root);
   }
 
-  chart.labelText = function(f) {
+  chart.labelText = (f) => {
     labelText = f;
     return chart;
-  }
+  };
 
-  chart.height = function(d) {
+  chart.height = (d) => {
     height = d - margin.top - margin.bottom;
     return chart;
-  }
+  };
 
-  chart.width = function(d) {
+  chart.width = (d) => {
     width = d - margin.left - margin.right;
     return chart;
-  }
+  };
 
-  chart.value = function(f) {
+  chart.value = (f) => {
     partition.value(f);
     return chart;
-  }
+  };
 
   function setLabel(d) {
     if (selections.paths.empty()) {
@@ -337,7 +335,7 @@ function sunburstChart() {
         .text(labelText(d));
       selections.accountLabel
         .text(d.account)
-        .call(makeAccountLink)
+        .call(makeAccountLink);
     }
   }
 
@@ -350,42 +348,40 @@ function sunburstChart() {
     selections.paths
       .interrupt()
       .style('opacity', 0.5)
-      .filter(function(node) {
-        // check if d.account starts with node.account
-        return (d.account.lastIndexOf(node.account, 0) === 0);
-      })
+      // check if d.account starts with node.account
+      .filter((node) => (d.account.lastIndexOf(node.account, 0) === 0))
       .style('opacity', 1);
   }
 
   // Restore everything to full opacity when moving off the visualization.
-  function mouseLeave(d) {
+  function mouseLeave() {
     selections.paths
       .transition()
       .duration(1000)
-      .style('opacity', 1)
+      .style('opacity', 1);
     setLabel(root);
   }
 
-  chart.update = function() {
+  chart.update = () => {
     setSize();
     resize();
-  }
+  };
 
   return chart;
 }
 
 function sunburstChartContainer() {
-  var width, height;
-  var sunbursts = [];
-  var canvases = [];
-  var currencies;
-  var svg;
+  let width;
+  const sunbursts = [];
+  const canvases = [];
+  let currencies;
+  let svg;
 
   function setSize() {
-    width = container.node().offsetWidth
+    width = container.node().offsetWidth;
     svg
       .attr('width', width)
-      .attr('height', 500)
+      .attr('height', 500);
   }
 
   function chart(svg_) {
@@ -396,9 +392,7 @@ function sunburstChartContainer() {
       var sunburst = sunburstChart()
         .width(width / currencies.length)
         .height(500)
-        .value(function(d) {
-          return d.balance[currency];
-        })
+        .value((d) => d.balance[currency])
         .labelText(function(d) {
           return formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
         })
@@ -406,15 +400,15 @@ function sunburstChartContainer() {
       canvases.push(svg.append('g')
         .attr('transform', 'translate(' + width * i / currencies.length + ',0)')
         .datum(svg.datum())
-        .call(sunburst))
+        .call(sunburst));
 
       sunbursts.push(sunburst);
     });
   }
 
-  chart.update = function() {
+  chart.update = () => {
     setSize();
-    $.each(sunbursts, function(i, chart) {
+    $.each(sunbursts, (i, chart) => {
       chart
         .width(width / currencies.length)
         .height(500)
@@ -422,46 +416,49 @@ function sunburstChartContainer() {
       canvases[i]
         .attr('transform', 'translate(' + width * i / currencies.length + ',0)')
     });
-  }
+  };
 
-  chart.currencies = function(f) {
+  chart.currencies = (f) => {
     currencies = f;
     return chart;
-  }
+  };
 
   return chart;
 }
 
 function barChart() {
-  var margin = {
+  const margin = {
     top: 10,
     right: 10,
     bottom: 30,
-    left: 40
+    left: 40,
   };
-  var width, height;
-  var x0 = d3.scale.ordinal();
-  var x1 = d3.scale.ordinal();
-  var y = d3.scale.linear();
-  var svg, canvas, tooltipText;
-  var selections = {};
+  let width;
+  let height;
+  const x0 = d3.scale.ordinal();
+  const x1 = d3.scale.ordinal();
+  const y = d3.scale.linear();
+  let svg;
+  let canvas;
+  let tooltipText;
+  const selections = {};
 
-  var xAxis = d3.svg.axis()
+  const xAxis = d3.svg.axis()
     .scale(x0)
     .outerTickSize(0)
     .orient('bottom');
 
-  var yAxis = d3.svg.axis()
+  const yAxis = d3.svg.axis()
     .scale(y)
     .orient('left')
     .tickFormat(d3.format('.2s'));
 
   function setSize() {
-    width = parseInt(container.style('width'), 10) - margin.left - margin.right,
-      height = 250 - margin.top - margin.bottom;
+    width = parseInt(container.style('width'), 10) - margin.left - margin.right;
+    height = 250 - margin.top - margin.bottom;
 
     y.range([height, 0]);
-    x0.rangeRoundBands([0, width], .1);
+    x0.rangeRoundBands([0, width], 0.1);
     x1.rangeRoundBands([0, x0.rangeBand()]);
 
     svg
@@ -469,153 +466,128 @@ function barChart() {
       .attr('height', height + margin.top + margin.bottom);
     canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    yAxis.tickSize(-width, 0)
+    yAxis.tickSize(-width, 0);
     selections.xAxis.attr('transform', 'translate(0,' + height + ')')
   }
 
   function setData(data) {
-    x0.domain(data.map(function(d) {
-      return d.label;
-    }));
-    x1.domain(data[0].values.map(function(d) {
-      return d.name;
-    }));
+    x0.domain(data.map((d) => d.label));
+    x1.domain(data[0].values.map((d) => d.name));
     y.domain([
-      Math.min(0, d3.min(data, function(d) {
-        return d3.min(d.values, function(d) {
-          return d.value
-        });
-      })),
-      Math.max(0, d3.max(data, function(d) {
-        return d3.max(d.values, function(d) {
-          return d.value
-        });
-      }))
+      Math.min(0, d3.min(data, (d) => d3.min(d.values, (e) => e.value))),
+      Math.max(0, d3.max(data, (d) => d3.max(d.values, (e) => e.value))),
     ]);
   }
 
   function filterTicks(domain) {
-    var labelsCount = width / 70;
+    const labelsCount = width / 70;
     if (domain.length <= labelsCount) {
       return domain;
     }
-    var show_indices = Math.ceil(domain.length / labelsCount)
-    return domain.filter(function(d, i) {
-      return (i % show_indices) === 0;
-    });
+    const showIndices = Math.ceil(domain.length / labelsCount);
+    return domain.filter((d, i) => (i % showIndices) === 0);
   }
 
   function resize() {
-    xAxis.tickValues(filterTicks(x0.domain()))
+    xAxis.tickValues(filterTicks(x0.domain()));
     selections.xAxis.call(xAxis);
     selections.yAxis.call(yAxis);
 
     selections.groups
-      .attr('transform', function(d) {
-        return 'translate(' + x0(d.label) + ',0)';
-      })
+      .attr('transform', (d) => 'translate(' + x0(d.label) + ',0)');
 
     selections.groupboxes
       .attr('width', x0.rangeBand())
-      .attr('height', height)
+      .attr('height', height);
 
     selections.bars = selections.groups.selectAll('.bar')
       .attr('width', x1.rangeBand())
-      .attr('x', function(d) {
-        return x1(d.name);
-      })
-      .attr('y', function(d) {
-        return y(Math.max(0, d.value));
-      })
-      .attr('height', function(d) {
-        return Math.abs(y(d.value) - y(0));
-      })
+      .attr('x', (d) => x1(d.name))
+      .attr('y', (d) => y(Math.max(0, d.value)))
+      .attr('height', (d) => Math.abs(y(d.value) - y(0)));
 
     selections.legend
-      .attr('transform', function(d, i) {
-        return 'translate(' + width + ',' + i * 20 + ')';
-      });
+      .attr('transform', (d, i) => 'translate(' + width + ',' + i * 20 + ')');
   }
 
 
   function chart(svg_) {
     svg = svg_;
-    canvas = svg.classed('barchart', true).append('g')
-    selections.xAxis = canvas.append('g').attr('class', 'x axis')
-    selections.yAxis = canvas.append('g').attr('class', 'y axis')
+    canvas = svg.classed('barchart', true).append('g');
+    selections.xAxis = canvas.append('g').attr('class', 'x axis');
+    selections.yAxis = canvas.append('g').attr('class', 'y axis');
 
     setSize();
     setData(svg.datum());
 
     selections.groups = canvas.selectAll('.group')
-      .data(svg.datum())
-      .enter().append('g')
-      .attr('class', 'group')
-      .call(addTooltip, tooltipText)
-      .on('click', function(d) {
-        timeFilter(d.date)
-      })
+        .data(svg.datum())
+      .enter()
+      .append('g')
+        .attr('class', 'group')
+        .call(addTooltip, tooltipText)
+        .on('click', (d) => {
+          timeFilter(d.date);
+        });
 
     selections.groupboxes = selections.groups.append('rect')
-      .attr('class', 'group-box')
+      .attr('class', 'group-box');
 
     selections.bars = selections.groups.selectAll('.bar')
-      .data(function(d) {
-        return d.values;
-      })
-      .enter().append('rect')
-      .attr('class', 'bar')
-      .style('fill', function(d) {
-        return currencyColorScale(d.name);
-      })
+        .data((d) => d.values)
+        .enter()
+      .append('rect')
+        .attr('class', 'bar')
+        .style('fill', (d) => currencyColorScale(d.name));
 
-    selections.legend = addLegend(canvas, x1.domain(), currencyColorScale)
+    selections.legend = addLegend(canvas, x1.domain(), currencyColorScale);
 
     resize();
   }
 
-  chart.tooltipText = function(f) {
+  chart.tooltipText = (f) => {
     tooltipText = f;
     return chart;
-  }
+  };
 
-  chart.update = function() {
+  chart.update = () => {
     setSize();
     resize();
-  }
+  };
 
   return chart;
 }
 
 function scatterPlot() {
-  var margin = {
+  const margin = {
     top: 10,
     right: 10,
     bottom: 30,
-    left: 70
+    left: 70,
   };
-  var width, height;
-  var x = d3.time.scale.utc();
-  var y = d3.scale.ordinal();
-  var svg, canvas, tooltipText;
-  var selections = {};
+  let width;
+  let height;
+  const x = d3.time.scale.utc();
+  const y = d3.scale.ordinal();
+  let svg;
+  let canvas;
+  let tooltipText;
+  const selections = {};
 
-  var xAxis = d3.svg.axis()
+  const xAxis = d3.svg.axis()
     .scale(x)
     .outerTickSize(0)
     .orient('bottom');
 
-  var yAxis = d3.svg.axis()
+  const yAxis = d3.svg.axis()
     .scale(y)
     .tickPadding(6)
     .orient('left')
-    .tickFormat(function(d) {
-      return d;
-    });
+    .tickFormat((d) => d);
 
   function setSize() {
-    width = parseInt(container.style('width'), 10) - margin.left - margin.right,
-      height = 250 - margin.top - margin.bottom;
+    width = parseInt(container.style('width'), 10) - margin.left - margin.right;
+    height = 250 - margin.top - margin.bottom;
 
     y.rangePoints([height, 0], 1);
     x.range([0, width]);
@@ -630,113 +602,98 @@ function scatterPlot() {
   }
 
   function setData(data) {
-    x.domain(d3.extent(data, function(d) {
-      return d.date;
-    }));
-    y.domain(data.map(function(d) {
-      return d.type;
-    }));
+    x.domain(d3.extent(data, (d) => d.date));
+    y.domain(data.map((d) => d.type));
   }
 
   function resize() {
     selections.xAxis.call(xAxis);
     selections.yAxis.call(yAxis);
     selections.dots
-      .attr("cx", function(d) {
-        return x(d.date);
-      })
-      .attr("cy", function(d) {
-        return y(d.type);
-      })
+      .attr('cx', (d) => x(d.date))
+      .attr('cy', (d) => y(d.type));
   }
 
   function chart(svg_) {
     svg = svg_;
-    canvas = svg.classed('scatterplot', true).append('g')
-    selections.xAxis = canvas.append('g').attr('class', 'x axis')
-    selections.yAxis = canvas.append('g').attr('class', 'y axis')
+    canvas = svg.classed('scatterplot', true).append('g');
+    selections.xAxis = canvas.append('g').attr('class', 'x axis');
+    selections.yAxis = canvas.append('g').attr('class', 'y axis');
 
     setSize();
     setData(svg.datum());
 
-    selections.dots = canvas.selectAll(".dot")
-      .data(svg.datum())
-      .enter().append("circle")
-      .attr("class", "dot")
-      .attr("r", 5)
-      .style("fill", function(d) {
-        return scatterColorScale(d.type);
-      })
-      .call(addTooltip, tooltipText)
+    selections.dots = canvas.selectAll('.dot')
+        .data(svg.datum())
+      .enter()
+      .append('circle')
+        .attr('class', 'dot')
+        .attr('r', 5)
+        .style('fill', (d) => scatterColorScale(d.type))
+        .call(addTooltip, tooltipText);
 
     resize();
   }
 
-  chart.tooltipText = function(f) {
+  chart.tooltipText = (f) => {
     tooltipText = f;
     return chart;
-  }
+  };
 
-  chart.update = function() {
+  chart.update = () => {
     setSize();
     resize();
-  }
+  };
 
   return chart;
 }
 
 function lineChart() {
-  var margin = {
+  const margin = {
     top: 10,
     right: 10,
     bottom: 30,
-    left: 40
+    left: 40,
   };
-  var width = 500 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
-  var x = d3.time.scale.utc();
-  var y = d3.scale.linear();
-  var canvas, tooltipText, matrix;
-  var svg;
-  var selections = {};
+  let width = 500 - margin.left - margin.right;
+  const height = 250 - margin.top - margin.bottom;
+  const x = d3.time.scale.utc();
+  const y = d3.scale.linear();
+  let canvas;
+  let tooltipText;
+  let matrix;
+  let svg;
+  const selections = {};
 
-  var xAxis = d3.svg.axis()
+  const xAxis = d3.svg.axis()
     .scale(x)
     .outerTickSize(0)
     .orient('bottom');
 
-  var yAxis = d3.svg.axis()
+  const yAxis = d3.svg.axis()
     .scale(y)
     .tickPadding(6)
     .orient('left')
     .tickFormat(d3.format('.2s'));
 
-  var line = d3.svg.line()
-    .x(function(d) {
-      return x(d.date);
-    })
-    .y(function(d) {
-      return y(d.value);
-    });
+  const line = d3.svg.line()
+    .x((d) => x(d.date))
+    .y((d) => y(d.value));
 
-  var voronoi = d3.geom.voronoi()
-    .x(function(d) {
-      return x(d.date);
-    })
-    .y(function(d) {
-      return y(d.value);
-    });
+  const voronoi = d3.geom.voronoi()
+    .x((d) => x(d.date))
+    .y((d) => y(d.value));
 
   function setSize() {
-    width = parseInt(container.style('width'), 10) - margin.left - margin.right,
+    width = parseInt(container.style('width'), 10) - margin.left - margin.right;
+    matrix = canvas.node().getScreenCTM();
 
-      matrix = canvas.node().getScreenCTM();
     y.range([height, 0]);
     x.range([0, width]);
     voronoi.clipExtent([
       [0, 0],
-      [width, height]
-    ])
+      [width, height],
+    ]);
 
     svg
       .attr('width', width + margin.left + margin.right)
@@ -749,24 +706,12 @@ function lineChart() {
 
   function setData(data) {
     x.domain([
-      d3.min(data, function(s) {
-        return s.values[0].date;
-      }),
-      d3.max(data, function(s) {
-        return s.values[s.values.length - 1].date;
-      })
+      d3.min(data, (s) => s.values[0].date),
+      d3.max(data, (s) => s.values[s.values.length - 1].date),
     ]);
     y.domain([
-      Math.min(0, d3.min(data, function(d) {
-        return d3.min(d.values, function(d) {
-          return d.value
-        });
-      })),
-      Math.max(0, d3.max(data, function(d) {
-        return d3.max(d.values, function(d) {
-          return d.value
-        });
-      }))
+      Math.min(0, d3.min(data, (d) => d3.min(d.values, (e) => e.value))),
+      Math.max(0, d3.max(data, (d) => d3.max(d.values, (e) => e.value))),
     ]);
   }
 
@@ -799,83 +744,71 @@ function lineChart() {
 
   function rollupData(data) {
     return d3.nest()
-      .key(function(d) {
-        return x(d.date) + ',' + y(d.value);
-      })
-      .rollup(function(d) {
-        return d[0];
-      })
-      .entries(d3.merge(data.map(function(d) {
-        return d.values;
-      })))
-      .map(function(d) {
-        return d.values;
-      });
+      .key((d) => x(d.date) + ',' + y(d.value))
+      .rollup((d) => d[0])
+      .entries(d3.merge(data.map((d) => d.values)))
+      .map((d) => d.values);
   }
 
   function chart(svg_) {
     svg = svg_;
-    canvas = svg.classed('linechart', true).append('g')
-    selections.xAxis = canvas.append('g').attr('class', 'x axis')
-    selections.yAxis = canvas.append('g').attr('class', 'y axis')
+    canvas = svg.classed('linechart', true).append('g');
+    selections.xAxis = canvas.append('g').attr('class', 'x axis');
+    selections.yAxis = canvas.append('g').attr('class', 'y axis');
     selections.voronoi = canvas.append('g').attr('class', 'voronoi');
 
     setData(svg.datum());
     setSize();
 
     selections.lines = canvas.selectAll('.line')
-      .data(svg.datum())
-      .enter().append('path')
-      .attr('class', 'line')
-      .style('stroke', function(d) {
-        return currencyColorScale(d.name);
-      })
+        .data(svg.datum())
+      .enter()
+      .append('path')
+        .attr('class', 'line')
+        .style('stroke', (d) => currencyColorScale(d.name));
 
     selections.dots = canvas.selectAll('g.dot')
-      .data(svg.datum())
-      .enter().append('g')
-      .attr('class', 'dot').selectAll('circle')
-      .data(function(d) {
-        return d.values;
-      })
-      .enter().append('circle')
-      .attr('r', 3)
-      .style('fill', function(d) {
-        return currencyColorScale(d.name);
-      })
+        .data(svg.datum())
+      .enter()
+      .append('g')
+        .attr('class', 'dot').selectAll('circle')
+        .data((d) => d.values)
+      .enter()
+      .append('circle')
+        .attr('r', 3)
+        .style('fill', (d) => currencyColorScale(d.name));
 
     selections.voronoi.selectAll('path')
-      .data(voronoi(rollupData(svg.datum())))
-      .enter().append('path')
-      .attr('d', function(d) {
-        return "M" + d.join("L") + "Z";
-      })
-      .on('mouseenter', function(d) {
-        window.tooltip.style('opacity', 1).html(tooltipText(d.point));
-      })
-      .on('mousemove', function(d) {
-        window.tooltip.style('left', (x(d.point.date) + matrix.e) + 'px').style('top', (y(d.point.value) + matrix.f - 15) + 'px')
-      })
-      .on('mouseleave', function(d) {
-        window.tooltip.style('opacity', 0);
-      })
+        .data(voronoi(rollupData(svg.datum())))
+      .enter()
+      .append('path')
+        .attr('d', (d) => "M" + d.join("L") + "Z")
+        .on('mouseenter', (d) => {
+          window.tooltip.style('opacity', 1).html(tooltipText(d.point));
+        })
+        .on('mousemove', (d) => {
+          window.tooltip
+              .style('left', (x(d.point.date) + matrix.e) + 'px')
+              .style('top', (y(d.point.value) + matrix.f - 15) + 'px');
+        })
+        .on('mouseleave', () => {
+          window.tooltip.style('opacity', 0);
+        });
 
-    selections.legend = addLegend(canvas, svg.datum().map(function(d) {
-      return d.name;
-    }), currencyColorScale)
+    selections.legend = addLegend(canvas, svg.datum().map((d) => d.name), currencyColorScale);
 
     resize();
   }
 
-  chart.tooltipText = function(f) {
+  chart.tooltipText = (f) => {
     tooltipText = f;
     return chart;
-  }
+  };
 
-  chart.update = function() {
+  chart.update = () => {
     setSize();
     resize();
-  }
+  };
 
   return chart;
 }
