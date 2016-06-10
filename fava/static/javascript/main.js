@@ -10,10 +10,10 @@ const treeTable = require('./tree-table');
 const documentsUpload = require('./documents-upload');
 
 // expose jquery to global context
-window.$ = $
+window.$ = $;
 
 $(document).ready(function() {
-  $("table.sortable").stupidtable();
+  $('table.sortable').stupidtable();
 
   // Setup filters form
   filters.initFilters();
@@ -24,27 +24,27 @@ $(document).ready(function() {
   // Tree-expanding
   if ($('.tree-table').length) {
     treeTable.initTreeTable();
-  };
+  }
 
   // Charts
   if ($('#chart-container').length) {
     charts.initCharts();
     keyboardShortcuts.charts();
-  };
+  }
 
   // Journal
   if ($('#journal-table').length) {
     journal.initJournal();
     keyboardShortcuts.journal();
-  };
+  }
 
   // Clipboard
   if ($('.status-indicator').length) {
     clipboard.initClipboard();
-  };
+  }
 
   // Documents upload
-  if ($('.tree-table').length ||  $('h1.droptarget').length) {
+  if ($('.tree-table').length || $('h1.droptarget').length) {
     documentsUpload.initDocumentsUpload();
   }
 

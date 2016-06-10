@@ -9,24 +9,24 @@ const scatterColorScale = d3.scale.category10();
 
 const formatCurrency = d3.format('.2f')
 const dateFormat = {
-  'year': d3.time.format.utc('%Y'),
-  'quarter': function(date) {
+  year: d3.time.format.utc('%Y'),
+  quarter: function(date) {
     return date.getUTCFullYear() + 'Q' + (Math.floor(date.getUTCMonth() / 3) + 1);
   },
-  'month': d3.time.format.utc('%b %Y'),
-  'week': d3.time.format.utc('%YW%W'),
-  'day': d3.time.format.utc('%Y-%m-%d'),
-}
+  month: d3.time.format.utc('%b %Y'),
+  week: d3.time.format.utc('%YW%W'),
+  day: d3.time.format.utc('%Y-%m-%d'),
+};
 
 const timeFilterDateFormat = {
-  'year': d3.time.format.utc('%Y'),
-  'quarter': function(date) {
+  year: d3.time.format.utc('%Y'),
+  quarter: function(date) {
     return date.getUTCFullYear() + '-Q' + (Math.floor(date.getUTCMonth() / 3) + 1);
   },
-  'month': d3.time.format.utc('%Y-%m'),
-  'week': d3.time.format.utc('%Y-W%W'),
-  'day': d3.time.format.utc('%Y-%m-%d'),
-}
+  month: d3.time.format.utc('%Y-%m'),
+  week: d3.time.format.utc('%Y-W%W'),
+  day: d3.time.format.utc('%Y-%m-%d'),
+};
 
 function addInternalNodesAsLeaves(node) {
   $.each(node.children, function(i, o) {
@@ -39,26 +39,26 @@ function addInternalNodesAsLeaves(node) {
     node.children.push(copy);
     node.balance = {};
   }
-};
+}
 
 function makeAccountLink(selection) {
   selection
     .on('click', function(d) {
-      window.location = accountUrl.replace('REPLACEME', d.account);
-      d3.event.stopPropagation()
-    })
+      window.location = window.accountUrl.replace('REPLACEME', d.account);
+      d3.event.stopPropagation();
+    });
 }
 
 function addTooltip(selection, tooltipText) {
   selection
     .on('mouseenter', function(d) {
-      tooltip.style('opacity', 1).html(tooltipText(d));
+      window.tooltip.style('opacity', 1).html(tooltipText(d));
     })
     .on('mousemove', function(d) {
-      tooltip.style('left', d3.event.pageX + 'px').style('top', (d3.event.pageY - 15) + 'px')
+      window.tooltip.style('left', d3.event.pageX + 'px').style('top', (d3.event.pageY - 15) + 'px')
     })
     .on('mouseleave', function(d) {
-      tooltip.style('opacity', 0);
+      window.tooltip.style('opacity', 0);
     })
 }
 
@@ -71,14 +71,15 @@ function timeFilter(date) {
 function addLegend(svg, domain, colorScale) {
   var legend = svg.selectAll('.legend')
     .data(domain)
-    .enter().append('g')
-    .attr('class', 'legend')
+    .enter()
+    .append('g')
+    .attr('class', 'legend');
 
   legend.append('rect')
     .attr('x', -18)
     .attr('width', 18)
     .attr('height', 18)
-    .style('fill', function(d) {
+    .style('fill', function (d) {
       return colorScale(d);
     });
 
@@ -91,7 +92,7 @@ function addLegend(svg, domain, colorScale) {
       return d;
     });
 
-  return legend
+  return legend;
 }
 
 function treeMapChart() {
@@ -104,21 +105,22 @@ function treeMapChart() {
     });
   var zoomBehavior = d3.behavior.zoom();
   var div, svg, root, current_node, cells, tooltipText;
+  var canvas;
 
   function setSize() {
     width = parseInt(container.style('width'), 10);
     height = Math.min(width / 2.5, 400);
     svg
-      .attr('width', width)
-      .attr('height', height)
-    treemap.size([width, height])
+        .attr('width', width)
+        .attr('height', height);
+    treemap.size([width, height]);
     x.range([0, width]);
     y.range([0, height]);
   }
 
   function chart(svg_) {
-    svg = svg_
-    canvas = svg.classed('treemap', true)
+    svg = svg_;
+    canvas = svg.classed('treemap', true);
     setSize();
     root = svg.datum();
 
@@ -159,16 +161,16 @@ function treeMapChart() {
           var d = d.parent;
         }
         return d.parent == root || !d.parent ? treemapColorScale(d.account) : treemapColorScale(d.parent.account);
-      })
+      });
 
-    cells.append("text")
-      .attr("dy", ".5em")
-      .attr("text-anchor", "middle")
-      .text(function(d) {
+    cells.append('text')
+      .attr('dy', '.5em')
+      .attr('text-anchor', 'middle')
+      .text(function (d) {
         return d.account.split(':').pop();
       })
       .style('opacity', 0)
-      .call(makeAccountLink)
+      .call(makeAccountLink);
 
     zoom(root, 0);
   }
@@ -176,17 +178,17 @@ function treeMapChart() {
   chart.value = function(f) {
     treemap.value(f);
     return chart;
-  }
+  };
 
   chart.tooltipText = function(f) {
     tooltipText = f;
     return chart;
-  }
+  };
 
   chart.update = function() {
     setSize();
     zoom(current_node, 0);
-  }
+  };
 
   function zoom(d, duration) {
     treemap(root);
@@ -198,26 +200,26 @@ function treeMapChart() {
 
     var t = cells.transition()
       .duration(duration)
-      .attr("transform", function(d) {
-        return "translate(" + x(d.x) + "," + y(d.y) + ")";
+      .attr('transform', function(d) {
+        return 'translate(' + x(d.x) + ',' + y(d.y) + ')';
       });
 
-    t.select("rect")
-      .attr("width", function(d) {
+    t.select('rect')
+      .attr('width', function(d) {
         return kx * d.dx;
       })
-      .attr("height", function(d) {
+      .attr('height', function(d) {
         return ky * d.dy;
-      })
+      });
 
-    t.select("text")
-      .attr("x", function(d) {
+    t.select('text')
+      .attr('x', function(d) {
         return kx * d.dx / 2;
       })
-      .attr("y", function(d) {
+      .attr('y', function(d) {
         return ky * d.dy / 2;
       })
-      .style("opacity", function(d) {
+      .style('opacity', function(d) {
         d.w = this.getComputedTextLength();
         return (kx * d.dx > d.w + 4 && ky * d.dy > 14) ? 1 : 0;
       });
@@ -243,6 +245,7 @@ function sunburstChart() {
   var partition = d3.layout.partition();
   var root, labels, labelText;
   var selections = {};
+  var radius;
 
   var arc = d3.svg.arc()
     .startAngle(function(d) {
@@ -266,18 +269,18 @@ function sunburstChart() {
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.left);
 
-    y.range([0, radius])
+    y.range([0, radius]);
   }
 
   function resize() {
-    root = svg.datum()
+    root = svg.datum();
     var nodes = partition.nodes(root)
       .filter(function(d) {
         return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
       });
     selections.paths = canvas.selectAll('path')
       .data(nodes)
-      .attr('d', arc)
+      .attr('d', arc);
   }
 
   function chart(svg_) {
@@ -290,19 +293,19 @@ function sunburstChart() {
     // Bounding circle underneath the sunburst
     canvas.append('circle')
       .style('opacity', 0)
-      .attr('r', radius)
+      .attr('r', radius);
 
     selections.accountLabel = canvas.append('text')
       .attr('class', 'account')
-      .attr('text-anchor', 'middle')
+      .attr('text-anchor', 'middle');
     selections.balanceLabel = canvas.append('text')
       .attr('class', 'balance')
       .attr('dy', '1.2em')
-      .attr('text-anchor', 'middle')
+      .attr('text-anchor', 'middle');
 
     // For efficiency, filter nodes to keep only those large enough to see.
     // Also, ignore dummy nodes and root.
-    root = svg.datum()
+    root = svg.datum();
     var nodes = partition.nodes(root)
       .filter(function(d) {
         return (d.dx > 0.005 && !d.dummy && d.depth); // 0.005 radians = 0.29 degrees
@@ -316,7 +319,7 @@ function sunburstChart() {
         return sunburstColorScale(d.account);
       })
       .on('mouseover', mouseOver)
-      .call(makeAccountLink)
+      .call(makeAccountLink);
 
     resize();
     setLabel(root);
@@ -711,6 +714,7 @@ function lineChart() {
   var x = d3.time.scale.utc();
   var y = d3.scale.linear();
   var canvas, tooltipText, matrix;
+  var svg;
   var selections = {};
 
   var xAxis = d3.svg.axis()
@@ -864,13 +868,13 @@ function lineChart() {
         return "M" + d.join("L") + "Z";
       })
       .on('mouseenter', function(d) {
-        tooltip.style('opacity', 1).html(tooltipText(d.point));
+        window.tooltip.style('opacity', 1).html(tooltipText(d.point));
       })
       .on('mousemove', function(d) {
-        tooltip.style('left', (x(d.point.date) + matrix.e) + 'px').style('top', (y(d.point.value) + matrix.f - 15) + 'px')
+        window.tooltip.style('left', (x(d.point.date) + matrix.e) + 'px').style('top', (y(d.point.value) + matrix.f - 15) + 'px')
       })
       .on('mouseleave', function(d) {
-        tooltip.style('opacity', 0);
+        window.tooltip.style('opacity', 0);
       })
 
     selections.legend = addLegend(canvas, svg.datum().map(function(d) {
