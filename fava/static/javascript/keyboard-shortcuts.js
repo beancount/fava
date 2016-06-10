@@ -19,7 +19,7 @@ module.exports.global = function() {
             $('#account-filter').focus();
         },
         'f p': function() {
-            $('#payee-filter').focus();
+            $('#name-filter').focus();
         },
     }, 'keyup');
 };
@@ -55,12 +55,12 @@ module.exports.journal = function() {
         's n': function() { $('#filter-note').click(); },
         's d': function() { $('#filter-document').click(); },
         's p': function() { $('#filter-pad').click(); },
+        's q': function() { $('#filter-query').click(); },
+        's shift+c': function() { $('#filter-custom').click(); },
+        's shift+b': function() { $('#filter-budget').click(); },
 
         't c': function() { $('#filter-cleared').click(); },
         't p': function() { $('#filter-pending').click(); },
-        't shift+p': function() { $('#filter-padding').click(); },
-        't s': function() { $('#filter-summarize').click(); },
-        't t': function() { $('#filter-transfer').click(); },
         't o': function() { $('#filter-other').click(); },
     }, 'keyup');
 };

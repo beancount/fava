@@ -43,5 +43,6 @@ module.exports.initJournal = function() {
         }
 
         window.history.pushState('', '', url.toString());
+        return false;
     });
 }

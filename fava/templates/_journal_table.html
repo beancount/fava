@@ -70,16 +70,16 @@
 <form id="entry-filters" class="wide-form">
     {% for type in entry_types %}
         {% if type != 'budget' or api.budgets %}
-            <input type="submit" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
+            <input type="submit" id="filter-{{ type }}" value="{{ type|capitalize }}" title="{% if show_type[type] %}Hide{% else %}Show{% endif %} {{ type|capitalize }} entries" data-type="{{ type }}" data-selector="li.{{ type }}" data-show-default="{{ default_show_type[type]|lower }}"{% if not show_type[type] %} class="inactive"{% endif %}>
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}
-                    <input type="submit" title="{{ transaction_type_buttons[txn_type].1 }}" value="{{ transaction_type_buttons[txn_type].0 }}" data-type="{{ txn_type }}" data-selector="li.{{ txn_type }}" data-show-default="{{ default_show_type[txn_type]|lower }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
+                    <input type="submit" id="filter-{{ txn_type }}" value="{{ transaction_type_buttons[txn_type].0 }}" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" data-selector="li.{{ txn_type }}" data-show-default="{{ default_show_type[txn_type]|lower }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
                 {% endfor %}
             {% endif %}
         {% endif %}
     {% endfor %}
-    <input type="submit" id="toggle-metadata" title="{% if show_type['metadata'] %}Hide{% else %}Show{% endif %} metadata" data-type="metadata" data-selector="dl.metadata" data-show-default="{{ default_show_type['metadata']|lower }}" {% if not show_type['metadata'] %} class="inactive"{% endif %} value="Metadata">
-    <input type="submit" title="{% if show_type['legs'] %}Hide{% else %}Show{% endif %} legs" data-type="legs" data-selector="li.posting" data-show-default="{{ default_show_type['legs']|lower }}" {% if not show_type['legs'] %} class="inactive"{% endif %} value="Postings">
+    <input type="submit" id="toggle-metadata" value="Metadata" title="{% if show_type['metadata'] %}Hide{% else %}Show{% endif %} metadata" data-type="metadata" data-selector="dl.metadata" data-show-default="{{ default_show_type['metadata']|lower }}" {% if not show_type['metadata'] %} class="inactive"{% endif %}>
+    <input type="submit" id="toggle-legs" value="Postings" title="{% if show_type['legs'] %}Hide{% else %}Show{% endif %} legs" data-type="legs" data-selector="li.posting" data-show-default="{{ default_show_type['legs']|lower }}" {% if not show_type['legs'] %} class="inactive"{% endif %}>
 </form>
 {% endif %}
 
