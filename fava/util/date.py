@@ -36,23 +36,12 @@ mod_date_re = re.compile('(?:({}) )?({}) ({})'.format(
     '|'.join(all_months + ['month', 'year'])))
 
 rel_date_re = re.compile(
-    # optional space, to support "10d ago" and "10 days ago"
-    r'(\d+)[ ]?'
-    # w, week weeks
-    # d, day, days
-    # q, quarter, quaters
-    # y, year, years
-    r'(d(?=ays?)?|w(?=eeks?)?|q(?=uarters?)?|y(?=ears?)?)[^ ]*'
-    r'[ ](ago|later)')
-
-alternative_rel_date_re = re.compile(
-    # optional space, to support "+10d" and "-10 days"
-    r'([+-]\d+)[ ]?'
-    # w, week weeks
-    # d, day, days
-    # q, quarter, quaters
-    # y, year, years
-    r'(d(?=ays?)?|w(?=eeks?)?|q(?=uarters?)?|y(?=ears?)?)[^ ]*'
+    # d, day
+    # w, week
+    # m, month
+    # q, quarter
+    # y, year
+    r'(d|day|w|week|m|month|q|quarter|y|year)([+-]\d+)'
 )
 
 
@@ -216,17 +205,9 @@ def parse_date(string):
 
     match = rel_date_re.match(string)
     if match:
-        number, unit, rel = match.group(1, 2, 3)
-        if rel in {'ago'}:
-            number = -int(number)
-        else:
-            number = int(number)
-        return _relative_date(today, number, unit)
-
-    match = alternative_rel_date_re.match(string)
-    if match:
-        number, unit = match.group(1, 2)
+        unit, number = match.group(1, 2)
         number = int(number)
+        unit = unit[:1]
         return _relative_date(today, number, unit)
 
 
@@ -245,9 +226,21 @@ def _relative_date(today, number, unit):
         if result_month == 0:
             result_month = 12
             year_delta -= 1
-        date = today.replace(year=today.year + year_delta, month=result_month)
+        date = today.replace(year=today.year + year_delta,
+                             month=result_month,
+                             day=1)
         return (get_previous_interval(date, 'quarter'),
                 get_next_interval(date, 'quarter'))
+    elif unit == 'm':
+        year_delta, result_month = divmod(today.month + number, 12)
+        if result_month == 0:
+            result_month = 12
+            year_delta -= 1
+        date = today.replace(year=today.year + year_delta,
+                             month=result_month,
+                             day=1)
+        return (get_previous_interval(date, 'month'),
+                get_next_interval(date, 'month'))
     elif unit == 'y':
         date = today.replace(year=today.year + number)
         return (get_previous_interval(date, 'year'),
