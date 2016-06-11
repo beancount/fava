@@ -103,7 +103,7 @@
 div.beancount-files {
     position: absolute;
     z-index: 10;
-    top: 41px;
+    top: $header_height;
     left: 19px;
     display: none;
     width: 20em;
