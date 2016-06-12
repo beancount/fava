@@ -165,7 +165,7 @@ header {
     color: $color_header_text;
     padding: 0 10px;
     height: $header_height;
-    z-index: 2;
+    z-index: 10;
     display: flex;
     align-items: center;
 
@@ -243,7 +243,7 @@ header {
     border-style: solid;
     border-color: darken($color_sidebar_background, 16);
     border-width: 0 1px 1px 0;
-    z-index: 1000;
+    z-index: 9;
     display: block;
     @include smooth-transitions;
 }
@@ -271,7 +271,7 @@ aside {
     background-color: $color_sidebar_background;
     overflow-y: auto;
     @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
-    z-index: 1000;
+    z-index: 9;
     @include smooth-transitions;
 
     h3 {
