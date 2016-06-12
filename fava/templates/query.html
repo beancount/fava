@@ -67,14 +67,6 @@
     </form>
 
     {% if not error and not result_types %}
-    <p>
-        {{ _('You can run querys like with the <code>bean-query</code> tool. For a detailed explanation of how queries can be created see the <a href="http://furius.ca/beancount/doc/query">Beancount Query Lanugage Reference</a>.') }}
-    </p>
-    {% if not api.queries %}
-        <p>
-            {{ _('If you add <code>query</code>-Directives to your <a href="%(url)s">Source</a> these stored queries will be displayed as a dropdown to quickly select them.', url=url_for('source')) }}
-        </p>
-    {% endif %}
         <h3>Sample Queries</h3>
         <ul class="sample">
             <li><a href="{{ url_for('query', query_string="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>

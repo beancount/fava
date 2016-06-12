@@ -28,6 +28,21 @@ There are four filters available in Fava:
 If you select multiple filters (like *Tags* and *Time*), the subset of entries
 matching both filters will be selected.
 
+## Queries
+
+On the Query report you can execute queriess like with the `bean-query`
+command-line tool. For an explanation of how these queries work see
+the [Beancount Query Lanugage Reference](http://furius.ca/beancount/doc/query).
+
+If you add `query` directives to your beancount file, there'll be a dropdown on
+the Query report to quickly select them.
+
+Fava supports downloading the result of these queries in various file formats.
+By default, only exporting to `csv` is supported. For support of `xls`, `xlsx`
+and `ods`, install Fava with the `excel` feature:
+
+    pip3 install fava[excel]
+
 ## Up-to-date indicators
 
 Fava offers colored indicators that can help you keep your accounts up-to-date.
@@ -59,13 +74,6 @@ interface using the `use-external-editor` configuration variable through the
 `beancount://` URL handler. See the [beancount
 urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
 pre-configured URL handlers for OS X and Cygwin.
-
-## Query Export
-
-By default, Fava only supports export to `csv` for query results. For support
-of `xls`, `xlsx` and `ods`, install Fava with the `excel` feature:
-
-    pip3 install fava[excel]
 
 ## Multiple Beancount files
 
