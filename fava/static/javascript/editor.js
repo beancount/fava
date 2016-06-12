@@ -9,6 +9,9 @@ require('ace-builds/src-min/mode-sql');
 require('ace-builds/src-min/theme-chrome');
 require('ace-builds/src-min/ext-whitespace');
 
+const Codemirror = require('codemirror/lib/codemirror');
+require('codemirror/mode/sql/sql');
+
 function fireEvent(element, eventName) {
   const event = document.createEvent('HTMLEvents');
   event.initEvent(eventName, true, true);
@@ -52,52 +55,37 @@ $(document).ready(() => {
   });
 
   // Query editor
-  if ($('#editor-query').length) {
+  if ($('#query-editor').length) {
     fireEvent(document, 'LiveReloadShutDown');
 
-    var editor = ace.edit("editor-query");
-    editor.setOptions(defaultOptions);
-    editor.setOptions({
-      mode: "ace/mode/sql",
-    });
-
-    // when the focus is inside the editor
-    editor.commands.addCommand({
-      name: "executeQuery",
-      bindKey: {
-        win: "Ctrl-Enter",
-        mac: "Command-Enter"
+    const editor = Codemirror.fromTextArea(document.getElementById('query-editor'), {
+      mode: 'text/x-sql',
+      lineNumbers: true,
+      extraKeys: {
+        'Ctrl-Enter': () => {
+          $('#submit-query').click();
+        },
+        'Cmd-Enter': () => {
+          $('#submit-query').click();
+        },
       },
-      exec: function(editor) {
-        $('#submit-query').click();
-      }
     });
 
     // when the focus is outside the editor
-    Mousetrap.bind(['ctrl+enter', 'meta+enter'], function(event) {
+    Mousetrap.bind(['ctrl+enter', 'meta+enter'], (event) => {
       event.preventDefault();
       $('#submit-query').click();
     });
 
-    $('#submit-query').click(function(event) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      var $button = $(this);
-      $button.attr('disabled', 'disabled').attr('value', 'Submitting query...');
-      window.location.href = URI($button.parents('form').attr('action'))
-        .addQuery('query_string', editor.getValue())
-        .toString();
-    });
-
     $('.stored-queries select').change(function() {
-      var sourceElement = $('.stored-queries a.source-link');
-      var query = $(this).val();
-      var sourceLink = $('option:selected', this).attr('data-source-link');
+      const sourceElement = $('.stored-queries a.source-link');
+      const query = $(this).val();
+      const sourceLink = $('option:selected', this).attr('data-source-link');
 
-      editor.setValue(query, -1);
-      sourceElement.attr('href', sourceLink).toggle(query != "");
+      editor.setValue(query);
+      sourceElement.attr('href', sourceLink).toggle(query !== '');
     });
-  };
+  }
 
   // The /source/ editor
   if ($('#editor-source').length) {

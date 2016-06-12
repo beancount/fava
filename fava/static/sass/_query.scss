@@ -25,8 +25,21 @@ article#page-query {
         a { margin-left: 6px; }
     }
 
-    form.editor-save-query {
-        float: right;
+    form {
+        #submit-query {
+            float: right;
+        }
+
+        .CodeMirror,
+        textarea {
+            margin-bottom: 1em;
+            font-family: $font_family_editor;
+            font-size: 16px;
+            border: 1px solid darken($color_background, 9);
+            width: 100%;
+            height: 180px;
+        }
+
     }
 
     ul.sample {
