@@ -1,3 +1,4 @@
+/* global ace, Mousetrap */
 const URI = require('urijs');
 
 require('ace-builds/src-min/ace');
@@ -29,26 +30,26 @@ $(document).ready(() => {
   };
 
   // Read-only editors
-  $('.editor-wrapper .editor.editor-readonly').each(() => {
-    var editor = ace.edit($(this).prop('id'));
+  $('.editor-wrapper .editor.editor-readonly').each((i, el) => {
+    const editor = ace.edit($(el).prop('id'));
     editor.setOptions(defaultOptions);
     editor.setOptions({
       maxLines: editor.session.getLength(),
       readOnly: true,
       highlightActiveLine: false,
-      highlightGutterLine: false
+      highlightGutterLine: false,
     });
 
     editor.renderer.$cursorLayer.element.style.opacity = 0;
 
-    if ($(this).hasClass('editor-async')) {
-      $.get($(this).parents('form').attr('action'), {
-          file_path: $(this).attr('data-file-path')
-        })
-        .done(function(data) {
+    if ($(el).hasClass('editor-async')) {
+      $.get($(el).parents('form').attr('action'), {
+        file_path: $(el).attr('data-file-path'),
+      })
+        .done((data) => {
           editor.setValue(data, -1);
           editor.setOptions({
-            maxLines: editor.session.getLength()
+            maxLines: editor.session.getLength(),
           });
         });
     }
@@ -77,10 +78,10 @@ $(document).ready(() => {
       $('#submit-query').click();
     });
 
-    $('.stored-queries select').change(function() {
+    $('.stored-queries select').change((event) => {
       const sourceElement = $('.stored-queries a.source-link');
-      const query = $(this).val();
-      const sourceLink = $('option:selected', this).attr('data-source-link');
+      const query = $(event.currentTarget).val();
+      const sourceLink = $('option:selected', event.currentTarget).attr('data-source-link');
 
       editor.setValue(query);
       sourceElement.attr('href', sourceLink).toggle(query !== '');
