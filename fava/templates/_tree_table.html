@@ -5,7 +5,7 @@
 
 {% set show_other_column = (operating_currencies|sort != api.options['commodities']|list|sort) %}
 
-<ol class="tree-table currencies{{ num_currencies }}">
+<ol class="tree-table currencies{{ operating_currencies|length }}">
     <li class="head">
         <p>
         <span class="account"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>

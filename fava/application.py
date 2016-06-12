@@ -375,7 +375,6 @@ def template_context():
                 url_for_source=url_for_source,
                 api=g.api,
                 operating_currencies=g.api.options['operating_currency'],
-                num_currencies=len(g.api.options['operating_currency']),
                 today=datetime.now().strftime('%Y-%m-%d'),
                 interval=request.args.get('interval',
                                           app.config['interval']),)
