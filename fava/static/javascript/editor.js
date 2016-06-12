@@ -1,17 +1,36 @@
-/* global ace, Mousetrap */
+/* global Mousetrap */
+
+// TODO:
+//
+// - soft tabs ?
+// - trim trailing whitespace (plus highlighting)
+//
+//
 const URI = require('urijs');
 
-require('ace-builds/src-min/ace');
-require('ace-builds/src-min/ext-searchbox');
-require('ace-builds/src-min/ext-language_tools');
-require('./ace-mode-beancount.js');
-require('ace-builds/src-min/mode-ini');
-require('ace-builds/src-min/mode-sql');
-require('ace-builds/src-min/theme-chrome');
-require('ace-builds/src-min/ext-whitespace');
+const CodeMirror = require('codemirror/lib/codemirror');
 
-const Codemirror = require('codemirror/lib/codemirror');
 require('codemirror/mode/sql/sql');
+require('codemirror/addon/mode/simple');
+
+// search
+require('codemirror/addon/dialog/dialog');
+require('codemirror/addon/search/searchcursor');
+require('codemirror/addon/search/search');
+
+// print margin
+require('codemirror/addon/display/rulers');
+
+// folding
+require('codemirror/addon/fold/foldcode');
+require('codemirror/addon/fold/foldgutter');
+require('./codemirror-fold-beancount.js');
+
+// auto-complete
+require('codemirror/addon/hint/show-hint');
+require('./codemirror-hint-beancount.js');
+
+require('./codemirror-mode-beancount.js');
 
 function fireEvent(element, eventName) {
   const event = document.createEvent('HTMLEvents');
@@ -19,58 +38,84 @@ function fireEvent(element, eventName) {
   return document.dispatchEvent(event);
 }
 
+function saveEditorContent(cm) {
+  // trim trailing whitespace here
+
+  const $button = $('#source-editor-submit');
+  const fileName = $('#source-editor-select').val();
+  $button
+      .attr('disabled', 'disabled')
+      .attr('value', `Saving to ${fileName}...`);
+  const url = $button.parents('form').attr('action');
+  $.post(url, {
+    file_path: fileName,
+    source: cm.getValue(),
+  })
+    .done((data) => {
+      if (data !== 'True') {
+        alert(`Writing to\n\n\t${fileName}\n\nwas not successful.`);
+      } else {
+        $button
+            .removeAttr('disabled')
+            .attr('value', 'Save');
+      }
+    });
+}
+
 $(document).ready(() => {
+  const rulers = [];
+  if (window.editorPrintMarginColumn) {
+    rulers.push({
+      column: window.editorPrintMarginColumn,
+      lineStyle: 'dotted',
+    });
+  }
+
   const defaultOptions = {
-    theme: 'ace/theme/chrome',
-    mode: 'ace/mode/beancount',
-    wrap: true,
-    printMargin: false,
-    useSoftTabs: true,
-    showFoldWidgets: true,
+    mode: 'beancount',
+    lineNumbers: true,
+    rulers,
+    foldGutter: true,
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+    extraKeys: {
+      'Ctrl-Space': 'autocomplete',
+      'Ctrl-S': (cm) => {
+        saveEditorContent(cm);
+      },
+      'Cmd-S': (cm) => {
+        saveEditorContent(cm);
+      },
+    },
+  };
+
+  const readOnlyOptions = {
+    mode: 'beancount',
+    readOnly: true,
+  };
+
+  const queryOptions = {
+    mode: 'text/x-sql',
+    lineNumbers: true,
+    extraKeys: {
+      'Ctrl-Enter': () => {
+        $('#submit-query').click();
+      },
+      'Cmd-Enter': () => {
+        $('#submit-query').click();
+      },
+    },
   };
 
   // Read-only editors
-  $('.editor-wrapper .editor.editor-readonly').each((i, el) => {
-    const editor = ace.edit($(el).prop('id'));
-    editor.setOptions(defaultOptions);
-    editor.setOptions({
-      maxLines: editor.session.getLength(),
-      readOnly: true,
-      highlightActiveLine: false,
-      highlightGutterLine: false,
-    });
-
-    editor.renderer.$cursorLayer.element.style.opacity = 0;
-
-    if ($(el).hasClass('editor-async')) {
-      $.get($(el).parents('form').attr('action'), {
-        file_path: $(el).attr('data-file-path'),
-      })
-        .done((data) => {
-          editor.setValue(data, -1);
-          editor.setOptions({
-            maxLines: editor.session.getLength(),
-          });
-        });
-    }
+  $('.editor-readonly').each((i, el) => {
+    CodeMirror.fromTextArea(el, readOnlyOptions);
   });
 
   // Query editor
   if ($('#query-editor').length) {
     fireEvent(document, 'LiveReloadShutDown');
 
-    const editor = Codemirror.fromTextArea(document.getElementById('query-editor'), {
-      mode: 'text/x-sql',
-      lineNumbers: true,
-      extraKeys: {
-        'Ctrl-Enter': () => {
-          $('#submit-query').click();
-        },
-        'Cmd-Enter': () => {
-          $('#submit-query').click();
-        },
-      },
-    });
+    const editor = CodeMirror.fromTextArea(document.getElementById('query-editor'), queryOptions);
 
     // when the focus is outside the editor
     Mousetrap.bind(['ctrl+enter', 'meta+enter'], (event) => {
@@ -89,180 +134,66 @@ $(document).ready(() => {
   }
 
   // The /source/ editor
-  if ($('#editor-source').length) {
+  if ($('#source-editor').length) {
     fireEvent(document, 'LiveReloadShutDown');
 
-    var editor = ace.edit("editor-source");
-    var langTools = ace.require("ace/ext/language_tools");
-    var whitespace = ace.require("ace/ext/whitespace");
+    const el = document.getElementById('source-editor');
+    const editor = CodeMirror.fromTextArea(el, defaultOptions);
 
-    editor.setOptions(defaultOptions);
-
-    var completionsAccounts = window.allAccounts.map(function(account) {
-      return {
-        name: account,
-        value: account,
-        score: 1,
-        meta: "accounts"
+    editor.on('keyup', (cm, event) => {
+      if (!cm.state.completionActive && event.keyCode !== 13) {
+        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
       }
     });
-    var completionsCommodities = window.allCommodities.map(function(commodity) {
-      return {
-        name: commodity,
-        value: commodity,
-        score: 2,
-        meta: "commodities"
-      }
-    });
-    var completionsDirectives = ['open', 'close', 'commodity', 'txn', 'balance', 'pad', 'note', 'document', 'price', 'event', 'option', 'plugin', 'include', 'query'].map(function(directive) {
-      return {
-        name: directive,
-        value: directive,
-        score: 3,
-        meta: "directive"
-      }
-    });
-    var completionsTags = window.allTags.map(function(tag) {
-      return {
-        name: '#' + tag,
-        value: tag,
-        score: 4,
-        meta: "tags"
-      }
-    });
-    var completions = completionsAccounts.concat(completionsCommodities, completionsDirectives);
-
-    var beancountCompleter = {
-      getCompletions: function(editor, session, pos, prefix, callback) {
-        if (prefix.length === 0) {
-          callback(null, []);
-          return
-        }
-        if (prefix == '#') {
-          callback(null, completionsTags);
-          return
-        }
-        if (editor.session.getLine(pos.row).indexOf('#') > -1) {
-          callback(null, completionsTags);
-          return
-        }
-        if (editor.session.getLine(pos.row).indexOf('"') > -1) {
-          callback(null, []);
-          return
-        }
-        callback(null, completions);
-      }
+    const line = parseInt(new URI(location.search).query(true).line, 10);
+    if (line > 0) {
+      editor.setCursor(line - 1, 0);
     }
 
-    langTools.setCompleters([beancountCompleter]);
-    editor.setOptions({
-      enableLiveAutocompletion: true,
-      printMargin: true,
-      printMarginColumn: window.editorPrintMarginColumn
-    });
-
-    editor.$blockScrolling = Infinity;
-    editor.focus();
-
-    var hlLine = URI(location.search).query(true).line;
-    $('form.editor-source select[name="file_path"]').change(function(event)  {
+    $('#source-editor-select').change((event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
-      var $select = $(this);
+      const $select = $(event.currentTarget);
       $select.attr('disabled', 'disabled');
-      var filePath = $select.val();
+      const filePath = $select.val();
       $.get($select.parents('form').attr('action'), {
-          file_path: filePath
-        })
-        .done(function(data) {
-          if (filePath != URI(location.search).query(true).file_path) {
-            hlLine = 1;
-          }
-          editor.setValue(data, -1);
-          editor.gotoLine(hlLine, 0, true);
+        file_path: filePath,
+      })
+        .done((data) => {
+          editor.setValue(data);
+          editor.setCursor(0, 0);
           $select.removeAttr('disabled');
 
-          if (filePath.endsWith('.conf') ||  filePath.endsWith('.settings') || filePath.endsWith('.ini')) {
-            editor.setOptions({
-              mode: "ace/mode/ini"
-            });
-            console.log(filePath);
+          if (filePath.endsWith('.conf') ||
+              filePath.endsWith('.settings') ||
+              filePath.endsWith('.ini')) {
+            editor.setOption('mode', 'text/x-ini');
           } else {
-            editor.setOptions({
-              mode: "ace/mode/beancount"
-            });
+            editor.setOption('mode', 'beancount');
           }
 
-          if (window.editorInsertMarker && hlLine == 1) {
-            var range = editor.find(window.editorInsertMarker, {
-              wrap: true,
-              caseSensitive: false,
-              wholeWord: false,
-              regExp: false,
-              preventScroll: true // do not change selection
-            });
+          if (window.editorInsertMarker) {
+            const cursor = editor.getSearchCursor(window.editorInsertMarker);
 
-            if (range) {
-              range.start.column = 0;
-              range.end.column = Number.MAX_VALUE;
-              editor.session.replace(range, "\n\n" + editor.session.getLine(range.start.row));
-              editor.gotoLine(range.start.row + 1, 0, true);
-            } else {
-              console.info("editor-insert-marker '" + window.editorInsertMarker + "' not found in file " + filePath);
+            if (cursor.findNext()) {
+              editor.focus();
+              editor.setCursor(cursor.pos.from);
+              editor.execCommand('goLineUp');
             }
           }
         });
     });
 
-    $('form.editor-source select[name="file_path"]').change();
-
-    function saveEditorContent() {
-      if (window.editorStripTrailingWhitespace) {
-        whitespace.trimTrailingSpace(editor.session, true);
-      }
-
-      var $button = $(this);
-      var fileName = $('form.editor-source select').val();
-      $button.attr('disabled', 'disabled').attr('value', 'Saving to ' + fileName + '...');
-      var url = $button.parents('form').attr('action');
-      $.post(url, {
-          file_path: fileName,
-          source: editor.getValue()
-        })
-        .done(function(data) {
-          if (data == "True") {
-            window.location = URI(window.location)
-              .setQuery('line', editor.getSelectionRange().start.row + 1)
-              .setQuery('file_path', fileName)
-              .toString();
-          } else {
-            alert("Writing to\n\n\t" + fileName + "\n\nwas not successful.");
-          }
-        });
-    }
-
-    // when the focus is inside the editor
-    editor.commands.addCommand({
-      name: "save",
-      bindKey: {
-        win: "Ctrl-S",
-        mac: "Command-S"
-      },
-      exec: function(editor) {
-        saveEditorContent();
-      }
-    });
-
-    // when the focus is outside the editor
-    Mousetrap.bind(['ctrl+s', 'meta+s'], function(event) {
+    // keybindings when the focus is outside the editor
+    Mousetrap.bind(['ctrl+s', 'meta+s'], (event) => {
       event.preventDefault();
-      saveEditorContent();
+      saveEditorContent(editor);
     });
 
-    $('form.editor-source input[type="submit"]').click(function(event) {
+    $('#source-editor-submit').click((event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
-      saveEditorContent();
+      saveEditorContent(editor);
     });
   }
 });

@@ -653,6 +653,10 @@ table.queryresults {
     #aside_button {
         display: block;
     }
+
+    article#page-source form div#source-editor-wrapper {
+        left: 0;
+    }
 }
 
 /* Between 768px and twice min-width + aside_width, make each table fill the

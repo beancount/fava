@@ -12,7 +12,7 @@ module.exports = {
     theme_alternative: './sass/theme_alternative.scss',
   },
   output: {
-    path: __dirname + '/gen',
+    path: `${__dirname}/gen`,
     filename: '[name].js',
   },
   module: {
@@ -24,10 +24,6 @@ module.exports = {
       {
         test: /theme_alternative\.scss$/,
         loader: extractAlternative.extract('style-loader', 'css-loader!sass-loader'),
-      },
-      {
-        test: [/ace-builds.*/, /.*ace-mode-beancount.*/],
-        loader: 'script-loader',
       },
       {
         test: /\.(ttf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,

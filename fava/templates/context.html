@@ -15,11 +15,7 @@
         <dt>{{ _('Location:') }}</dt>
         <dd><code><a href="{{ url_for_source(file_path=context.filename, line=context.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=context.filename, lineno=context.lineno) }}">{{ context.filename }}:{{ context.lineno }}</a></code></dd>
     </dl>
-    <div class="editor-wrapper editor-wrapper-readonly">
-        <div class="editor editor-readonly" id="editor-{{ context.hash }}">
-            <pre><code>{{ context.context|safe }}</code></pre>
-        </div>
-    </div>
+    <textarea class="editor editor-readonly" readonly>{{ context.context|safe }}</textarea>
     <h3>{{ _('Journal Entry') }}</h3>
     {% with journal=context.journal %}
         {% include "_journal_table.html" %}

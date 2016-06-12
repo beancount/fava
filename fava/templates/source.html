@@ -10,48 +10,40 @@
 
 {% block content %}
     {% if config['use-external-editor'] %}
-        <table class="errors sortable">
+        <div id="source-readonly">
+        <table class="sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" class="sorting-asc">{{ _('File') }}</th>
-                    <th>{{ _('External editor') }}</th>
+                    <th data-sort="string" class="sorting-asc" colspan=2>{{ _('File') }}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for source_file in source_files %}
                 <tr>
-                    {% with link=url_for_source(file_path=source_file) %}
-                    <td><a class="source" href="#source-{{ loop.index }}" title="{{ _('Show source %(file)s', file=source_file) }}">{{ source_file }}</a></td>
-                    <td><a class="source" href="{{ link }}" title="{{ _('Open %(file)s in external editor', file=source_file) }}">{{ _('Open in external editor') }}</a></td>
-                    {% endwith %}
+                    <td>{{ source_file }}</td>
+                    <td><a href="{{ url_for_source(file_path=source_file) }}">{{ _('Open in external editor') }}</a></td>
                  </tr>
                 {% endfor %}
             </tbody>
         </table>
 
-        <h2>{{ _('Source listing') }}</h2>
         {% for source_file in source_files %}
-        <div>
-            {% with link=url_for_source(file_path=source_file) %}
-            <h3 id="source-{{ loop.index }}"><a class="source" href="{{ link }}" title="{{ _('Show source for %(file)s', file=source_file) }}">{{ source_file }}</a></h3>
-            <div class="editor-wrapper editor-wrapper-readonly">
-                <form action="{{ url_for('source') }}" method="get">
-                    <div class="editor editor-readonly editor-async" id="editor-{{ loop.index }}" data-file-path="{{ source_file }}"><pre><code>{{ _('; Loading %(file)s ...', file=source_file) }}</code></pre></div>
-                </form>
-            </div>
-            {% endwith %}
-        </div>
+            <h3>{{ source_file }}</h3>
+            <textarea class="editor-readonly">{{ api.source(source_file) }}</textarea>
         {% endfor %}
+        </div>
     {% else %}
-    <form class="wide-form editor-source" action="{{ url_for('source') }}" method="get">
-        <select name="file_path">
+    <form action="{{ url_for('source') }}" method="POST">
+        <select id="source-editor-select" name="file_path">
             {% for source_file in source_files %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
             {% endfor %}
         </select>
-        <input type="submit" value="{{ _('Save') }}">
+        <input id="source-editor-submit" type="submit" value="{{ _('Save') }}">
+        <div id="source-editor-wrapper">
+            <textarea id="source-editor" name="source" autofocus>{{ api.source(file_path) or '' }}</textarea>
+        </div>
     </form>
-    <div class="editor" id="editor-source">
     </div>
     {% endif %}
 {% endblock %}

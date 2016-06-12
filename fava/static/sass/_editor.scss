@@ -1,54 +1,65 @@
 // Editor
 
 @import '~codemirror/lib/codemirror.css';
+@import '~codemirror/addon/dialog/dialog.css';
+@import '~codemirror/addon/fold/foldgutter.css';
+@import '~codemirror/addon/hint/show-hint.css';
 
 article#page-source {
     padding: 0;
 
     form {
-        height: 40px;
-        border-bottom: 2px solid darken($color_background, 5);
+        background: lighten($color_sidebar_background, 2);
 
-        input {
+        > select {
+            margin: 5px 10px;
+        }
+
+        > input {
             margin: 5px;
             background: $color_header;
             color: #fff;
             padding: 4px 10px;
             border: 1px solid darken($color_header, 9);
         }
+
+        div#source-editor-wrapper {
+            position: fixed;
+            top: $header_height + 37px;
+            right: 0;
+            bottom: 0;
+            left: $aside_width;
+        }
+
+        .CodeMirror,
+        textarea {
+            border: none;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+
+            .CodeMirror-lines {
+                border-top: 1px solid darken($color_sidebar_background, 10);
+            }
+        }
     }
 
-    div.editor {
-        position: fixed;
-        left: 0;
-        top: $header_height + 40px;
-        right: 0;
-        bottom: 0;
+    div#source-readonly {
+        padding: 1.5em;
     }
 }
 
-div.editor-wrapper {
-    &.editor-wrapper-readonly {
-        margin-bottom: 20px;
-        border: 1px solid darken($color_background, 9);
-    }
+.CodeMirror-gutters {
+    background: lighten($color_sidebar_background, 2);
+    border-right: 1px solid darken($color_sidebar_background, 10);
 }
 
-.ace_editor.ace-chrome {
+.CodeMirror {
     font: 13px $font_family_editor;
+    border: 1px solid darken($color_background, 9);
+    margin-bottom: 1em;
 
-    .ace_gutter {
-        border-right: 1px solid darken($color_background, 9);
-        background: white;
-        color: lighten($color_text, 65);
-        font-weight: normal;
-    }
-
-    .ace_gutter-cell {
-        padding: 0 13px;
-    }
-
-    .ace_section {
+    .cm-section {
         color: $color_editor_comment;
         font-weight: bold;
         border: solid 1px $color_editor_comment;
@@ -56,52 +67,28 @@ div.editor-wrapper {
         padding-right: 10px;
     }
 
-    .ace_line .ace_fold { border-color: transparent; }
-
-    .ace_comment {
+    .cm-comment {
         color: $color_editor_comment;
     }
 
-    .ace_directive {
+    .cm-date {
+        color: $color_editor_date;
+    }
+
+    .cm-directive {
         color: $color_editor_directive;
         font-weight: bold;
     }
 
-    .ace_class,
-    .ace_double,
-    .ace_triple {
+    .cm-option {
         color: $color_editor_class;
     }
 
-    .ace_constant.ace_numeric.ace_date {
-        color: $color_editor_date;
-    }
-
-    .ace_constant,
-    .ace_constant.ace_language,
-    .ace_tag {
-        color: $color_editor_constant;
-    }
-
-    .ace_account {
+    .cm-account {
         color: $color_editor_account;
     }
 
-    .ace_invalid {
+    .cm-invalid {
         color: $color_editor_invalid;
-        background: transparent;
     }
-
-    &.ace_autocomplete .ace_content {
-        font: 13px $font_family_editor;
-    }
-}
-
-/* Modifications for ipad */
-@media (min-width: 768px) {
-article#page-source {
-    div.editor {
-        left: $aside_width;
-    }
-}
 }
