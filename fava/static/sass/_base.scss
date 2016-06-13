@@ -47,11 +47,23 @@
   }
 }
 
+$transitions: all 0.2s ease-out;
+
+@mixin smooth-transitions {
+    -webkit-transition: $transitions;
+    -moz-transition: $transitions;
+    -ms-transition: $transitions;
+    -o-transition: $transitions;
+    transition: $transitions;
+}
+
 // Globals
 
 * {
     box-sizing: border-box;
 }
+
+$min_width: 560px;
 
 html,
 body {
@@ -59,7 +71,7 @@ body {
     font-weight: 400;
     font-size: 14px;
     height: 100%;
-    min-width: 1235px;
+    min-width: $min_width;
     color: $color_text;
     background: $color_background;
 }
@@ -136,9 +148,11 @@ a {
 // Structural and generic elements
 $header_height: 50px;
 $aside_width: 160px;
+$safe_two_column: $min_width * 2 + $aside_width;
 
 body {
     padding: $header_height 0 0 $aside_width;
+    @include smooth-transitions;
 }
 
 header {
@@ -151,7 +165,7 @@ header {
     color: $color_header_text;
     padding: 0 10px;
     height: $header_height;
-    z-index: 2;
+    z-index: 10;
     display: flex;
     align-items: center;
 
@@ -164,6 +178,7 @@ header {
         margin: 0;
         font-size: 16px;
         font-weight: normal;
+        overflow: hidden;
 
         strong {
             margin-left: 10px;
@@ -218,12 +233,37 @@ header {
     }
 }
 
+#aside_button {
+    position: fixed;
+    top: $header_height;
+    left: 0px;
+    height: 32px;
+    width: 32px;
+    background-color: $color_sidebar_background;
+    border-style: solid;
+    border-color: darken($color_sidebar_background, 16);
+    border-width: 0 1px 1px 0;
+    z-index: 9;
+    display: none;
+    @include smooth-transitions;
+}
+
+#aside_button.active {
+    left: $aside_width;
+}
+
+#aside_button svg {
+    height: 100%;
+    width: 100%;
+}
+
 aside {
     position: fixed;
-    top: 50px;
+    top: $header_height;
     bottom: 0;
     left: 0;
     padding-top: 1em;
+    margin-left: 0;
     flex-shrink: 0;
     width: $aside_width;
     color: $color_sidebar_text;
@@ -231,6 +271,8 @@ aside {
     background-color: $color_sidebar_background;
     overflow-y: auto;
     @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
+    z-index: 9;
+    @include smooth-transitions;
 
     h3 {
         text-transform: uppercase;
@@ -298,6 +340,9 @@ aside {
             }
         }
     }
+}
+aside.active {
+    margin-left: 0;
 }
 
 
@@ -592,5 +637,39 @@ table.queryresults {
         float: right;
         margin-top: 3px;
         margin-left: 3px;
+    }
+}
+
+/* At resolutions smaller than 768px, hide the aside menu.
+   This means that ipads and larger will show the side menu. */
+@media (max-width: 767px) {
+    body {
+        padding: $header_height 0 0 0;
+    }
+
+    aside {
+        margin-left: -$aside_width;
+    }
+    #aside_button {
+        display: block;
+    }
+}
+
+/* Between 768px and twice min-width + aside_width, make each table fill the
+   entire screen. If min_width is 560px, $safe_two_column is 1280px. */
+@media (max-width: $safe_two_column - 1) {
+    .halfleft,
+    .halfright {
+        width: 100%;
+    }
+
+    .halfleft {
+        float: none;
+        padding-right: 0;
+    }
+
+    .halfright {
+        float: none;
+        padding-left: 0;
     }
 }

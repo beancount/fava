@@ -55,4 +55,11 @@ $(document).ready(() => {
       $('.overlay-wrapper').hide();
     }
   });
+
+  $('#aside_button').click((e) => {
+    e.preventDefault();
+    $("aside").toggleClass("active");
+    $("#aside_button").toggleClass("active");
+    return false;
+  });
 });

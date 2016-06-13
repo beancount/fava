@@ -136,3 +136,21 @@ ol.tree-table {
         &.budget-zero     { color: $color_budget_zero; }
     }
 }
+
+@for $i from 1 through 5 {
+    $num_fraction: 1rem * (1-(($i - 1)/10));
+    ol.tree-table.currencies#{$i} {
+       p > span {
+            &.num-header,
+            &.num {
+                width: 20rem / ($i+1);
+                font-size: $num_fraction;
+            }
+            &.other-header,
+            &.other {
+                width: 20rem / ($i+1) + 3rem;
+                font-size: $num_fraction;
+            }
+       }
+    }
+}
