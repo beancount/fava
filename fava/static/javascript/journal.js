@@ -2,8 +2,8 @@ const URI = require('urijs');
 
 module.exports.initJournal = function initJournal() {
   // Toggle legs by clicking on transaction/padding row
-  $('#journal-table li.transaction').click(() => {
-    $(this).find('.posting').toggleClass('hidden');
+  $('#journal-table li.transaction').click((event) => {
+    $(event.currentTarget).find('.posting').toggleClass('hidden');
   });
 
   // Toggle entries with checkboxes
