@@ -40,6 +40,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
   const currentCharacter = line[cursor.ch - 1];
   const currentWord = getCurrentWord(cursor, line);
 
+  // If '#' has just been typed, there won't be a tag token yet
   if (currentCharacter === '#') {
     return {
       list: completionSources.tags,
@@ -66,24 +67,35 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
   }
 
   const lineTokens = cm.getLineTokens(cursor.line);
-  if (lineTokens.length > 0 && lineTokens[0].type === 'date') {
+
+  if (lineTokens.length > 0) {
     const startCurrentWord = cursor.ch - currentWord.length;
     const previousTokens = lineTokens.filter((d) => d.end <= startCurrentWord);
 
-    // date whitespace -> complete directives
-    if (previousTokens.length === 2) {
-      return {
-        list: completionSources.datedDirectives.filter((d) => d.startsWith(currentWord)),
-        from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
-        to: cursor,
-      };
+    // complete accounts for indented lines
+    if (lineTokens[0].type === 'whitespace') {
+      if (previousTokens.length === 1) {
+        return substringMatch(cursor, currentWord, completionSources.accounts);
+      }
     }
 
-    if (previousTokens.length % 2 === 0) {
-      const directiveType = previousTokens[2].string;
-      if (directiveType in directiveCompletions) {
-        const completionType = directiveCompletions[directiveType][previousTokens.length / 2 - 2];
-        return substringMatch(cursor, currentWord, completionSources[completionType]);
+    // dated directives
+    if (lineTokens[0].type === 'date') {
+      // date whitespace -> complete directives
+      if (previousTokens.length === 2) {
+        return {
+          list: completionSources.datedDirectives.filter((d) => d.startsWith(currentWord)),
+          from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
+          to: cursor,
+        };
+      }
+
+      if (previousTokens.length % 2 === 0) {
+        const directiveType = previousTokens[2].string;
+        if (directiveType in directiveCompletions) {
+          const completionType = directiveCompletions[directiveType][previousTokens.length / 2 - 2];
+          return substringMatch(cursor, currentWord, completionSources[completionType]);
+        }
       }
     }
   }
