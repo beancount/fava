@@ -2,10 +2,9 @@ from datetime import date
 from datetime import datetime as dt
 
 import pytest
-from unittest import mock
+# from unittest import mock
 
-from fava.util.date import (_parse_month, parse_date, daterange,
-                            get_next_interval, interval_tuples,
+from fava.util.date import (parse_date, get_next_interval, interval_tuples,
                             number_of_days_in_period)
 
 
@@ -49,22 +48,6 @@ def test_interval_tuples():
     assert interval_tuples(None, None, None) == []
 
 
-def test_daterange():
-    assert daterange('2014') == daterange(2014)
-    assert daterange(2014, 10, 3) == daterange('2014', '10', '3')
-    assert daterange('2014') == (date(2014, 1, 1), date(2015, 1, 1))
-    assert daterange('2014', 10) == (date(2014, 10, 1), date(2014, 11, 1))
-    assert daterange('2014', 10, 3) == (date(2014, 10, 3), date(2014, 10, 4))
-    assert not daterange(None, 10, 10)
-
-
-def test___parse_month():
-    assert _parse_month('april') == 4
-    assert _parse_month('apr') == 4
-    assert _parse_month('october') == 10
-    assert not _parse_month('test')
-
-
 def to_date(string):
     """to_date convert a string in %Y-%m-%d into a datetime.date object.
 
@@ -75,44 +58,35 @@ def to_date(string):
     return dt.strptime(string, '%Y-%m-%d').date()
 
 
-@pytest.mark.parametrize("pseudo_today,expect_start,expect_end,text", [
-    (None, None, None, '    '),
-    (None, '2010-10-01', '2010-11-01', 'october 2010       '),
-    (None, '2000-01-01', '2001-01-01', '2000'),
-    (None, '2008-02-01', '2008-02-02', '1st february 2008'),
-    (None, '2010-10-01', '2010-11-01', '2010-10'),
-    (None, '2000-01-03', '2000-01-04', '2000-01-03'),
-    (None, '2010-08-02', '2010-08-03', '2nd aug, 2010'),
-    (None, '2012-08-03', '2012-08-04', 'august 3rd, 2012'),
-    (None, '2015-01-05', '2015-01-12', '2015-W01'),
-    (None, '2015-04-01', '2015-07-01', '2015-Q2'),
-    (None, '2014-01-01', '2016-01-01', '2014 to 2015'),
-    (None, '2011-10-01', '2016-01-01', '2011-10 - 2015'),
-    # use pseudo today
-    ('2016-03-25', '2016-01-01', '2016-03-26', 'year to date'),
-    ('2016-03-25', '2016-03-25', '2016-03-26', 'today'),
-    ('2016-03-25', '2016-03-24', '2016-03-25', 'YESTERDAY'),
-    ('2016-03-25', '2016-01-01', '2017-01-01', 'this year'),
-    ('2016-03-25', '2017-08-01', '2017-09-01', 'august next year'),
-    ('2016-03-25', '2016-03-01', '2016-04-01', 'this month'),
-    ('2016-03-25', '2016-12-01', '2017-01-01', 'this december'),
-    ('2016-03-25', '2016-11-01', '2016-12-01', 'this november'),
-    ('2016-03-25', '2016-02-01', '2016-03-01', 'last month'),
-    ('2016-03-25', '2016-04-01', '2016-05-01', 'next month'),
-    ('2016-03-25', '2016-02-01', '2016-05-01', 'last month - next month'),
+@pytest.mark.parametrize("expect_start,expect_end,text", [
+    (None, None, '    '),
+    ('2000-01-01', '2001-01-01', '   2000   '),
+    ('2010-10-01', '2010-11-01', '2010-10'),
+    ('2000-01-03', '2000-01-04', '2000-01-03'),
+    ('2015-01-05', '2015-01-12', '2015-W01'),
+    ('2015-04-01', '2015-07-01', '2015-Q2'),
+    ('2014-01-01', '2016-01-01', '2014 to 2015'),
+    ('2014-01-01', '2016-01-01', '2014-2015'),
+    ('2011-10-01', '2016-01-01', '2011-10 - 2015'),
 ])
-def test_parse_date(pseudo_today, expect_start, expect_end, text):
+def test_parse_date(expect_start, expect_end, text):
     """Test for parse_date() function."""
-    # Mock the imported datetime.date in fava.util.date module
-    # Ref:
-    # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
-    with mock.patch('fava.util.date.datetime.date') as mock_date:
-        mock_date.today.return_value = to_date(pseudo_today) or date.today()
-        mock_date.side_effect = date
-        got = parse_date(text)
     start, end = to_date(expect_start), to_date(expect_end)
-    assert got == (start, end), "parse_date(%s) == %s @ %s, want (%s, %s)" % (
-        text, got, pseudo_today, start, end)
+    assert parse_date(text) == (start, end)
+
+
+# def test_parse_date_relative(pseudo_today, expect_start, expect_end, text):
+#     """Test for parse_date() function."""
+#     # Mock the imported datetime.date in fava.util.date module
+#     # Ref:
+#     # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
+#     with mock.patch('fava.util.date.datetime.date') as mock_date:
+#         mock_date.today.return_value = to_date(pseudo_today) or date.today()
+#         mock_date.side_effect = date
+#         got = parse_date(text)
+#     start, end = to_date(expect_start), to_date(expect_end)
+#     assert got == (start, end), "parse_date(%s) == %s @ %s, want (%s, %s)" % (
+#         text, got, pseudo_today, start, end)
 
 
 def test_number_of_days_in_period_daily():
