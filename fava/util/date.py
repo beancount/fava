@@ -35,25 +35,59 @@ mod_date_re = re.compile('(?:({}) )?({}) ({})'.format(
     '|'.join(list(modifiers.keys())),
     '|'.join(all_months + ['month', 'year'])))
 
+rel_date_re = re.compile(
+    # d, day
+    # w, week
+    # m, month
+    # q, quarter
+    # y, year
+    r'(d|day|w|week|m|month|q|quarter|y|year)([+-]\d+)'
+)
 
-def get_next_interval(date, interval):
+
+def get_interval(date, interval, is_next):
+    """Get the closest interval based on given date.
+
+    Intervals are defined as (relative to given date):
+        - day: today/tomorrow
+        - week: previous/next Monday
+        - quarter: the first day of current/next quarter
+        - month: the first day of current/next month
+        - year: the first day of curren/next year
+    """
     if interval == 'year':
-        return datetime.date(date.year + 1, 1, 1)
+        return datetime.date(date.year + is_next, 1, 1)
     elif interval == 'quarter':
-        for i in [4, 7, 10]:
-            if date.month < i:
-                return datetime.date(date.year, i, 1)
-        return datetime.date(date.year + 1, 1, 1)
+        if is_next:
+            for i in [4, 7, 10]:
+                if date.month < i:
+                    return datetime.date(date.year, i, 1)
+            return datetime.date(date.year + 1, 1, 1)
+        else:
+            for i in [10, 7, 4, 1]:
+                if date.month >= i:
+                    return datetime.date(date.year, i, 1)
     elif interval == 'month':
-        month = (date.month % 12) + 1
-        year = date.year + (date.month + 1 > 12)
-        return datetime.date(year, month, 1)
+        if is_next:
+            month = date.month % 12 + 1
+            year = date.year + (month < date.month)
+            return datetime.date(year, month, 1)
+        else:
+            return date.replace(day=1)
     elif interval == 'week':
-        return date + datetime.timedelta(7 - date.weekday())
+        return date + datetime.timedelta(7 * is_next - date.weekday())
     elif interval == 'day':
-        return date + datetime.timedelta(1)
+        return date + datetime.timedelta(1) * is_next
     else:
         raise NotImplementedError
+
+
+def get_next_interval(date, interval):
+    return get_interval(date, interval, is_next=True)
+
+
+def get_previous_interval(date, interval):
+    return get_interval(date, interval, is_next=False)
 
 
 def interval_tuples(first, last, interval):
@@ -168,6 +202,49 @@ def parse_date(string):
             return daterange(m.year, m.month)
         else:
             return daterange(today.year + modifier, _parse_month(identifier))
+
+    match = rel_date_re.match(string)
+    if match:
+        unit, number = match.group(1, 2)
+        number = int(number)
+        unit = unit[:1]
+        return _relative_date(today, number, unit)
+
+
+def _relative_date(today, number, unit):
+    if unit == 'd':
+        date = today + datetime.timedelta(days=1) * number
+        return (get_previous_interval(date, 'day'),
+                get_next_interval(date, 'day'))
+    elif unit == 'w':
+        date = today + datetime.timedelta(days=7) * number
+        return (get_previous_interval(date, 'week'),
+                get_next_interval(date, 'week'))
+    elif unit == 'q':
+        delta_months = 3 * number
+        year_delta, result_month = divmod(today.month + delta_months, 12)
+        if result_month == 0:
+            result_month = 12
+            year_delta -= 1
+        date = today.replace(year=today.year + year_delta,
+                             month=result_month,
+                             day=1)
+        return (get_previous_interval(date, 'quarter'),
+                get_next_interval(date, 'quarter'))
+    elif unit == 'm':
+        year_delta, result_month = divmod(today.month + number, 12)
+        if result_month == 0:
+            result_month = 12
+            year_delta -= 1
+        date = today.replace(year=today.year + year_delta,
+                             month=result_month,
+                             day=1)
+        return (get_previous_interval(date, 'month'),
+                get_next_interval(date, 'month'))
+    elif unit == 'y':
+        date = today.replace(year=today.year + number)
+        return (get_previous_interval(date, 'year'),
+                get_next_interval(date, 'year'))
 
 
 def days_in_daterange(start_date, end_date):
