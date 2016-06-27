@@ -15,6 +15,8 @@ week_re = re.compile(r'^(\d{4})-w(\d{2})$')
 # this matches a quarter like 2016-Q1 for the first quarter of 2016
 quarter_re = re.compile(r'^(\d{4})-q(\d)$')
 
+variable_re = re.compile(r'\(?(year|quarter|month|week|day)(?:([-+])(\d+))?\)?')
+
 
 def get_next_interval(date, interval):
     if interval == 'year':
@@ -47,6 +49,42 @@ def interval_tuples(first, last, interval):
         first = next_date
 
     return intervals
+
+
+def substitute(string):
+    """Replaces variables referring to the current day in some format, like
+    'year' or 'week' by the corresponding string understood by `parse_date`.
+    Can compute addition and subtraction.
+    """
+    today = datetime.date.today()
+
+    for match in variable_re.finditer(string):
+        complete_match, interval, pm, mod = match.group(0, 1, 2, 3)
+        mod = int(mod) if mod else 0
+        pm = 1 if pm == '+' else -1
+        if interval == 'year':
+            year = today.year + pm * mod
+            string = string.replace(complete_match, str(year))
+        if interval == 'quarter':
+            quarter_today = (today.month - 1) // 3 + 1
+            year = today.year + (quarter_today + pm * mod - 1) // 4
+            quarter = (quarter_today + pm * mod - 1) % 4 + 1
+            string = string.replace(
+                complete_match, '{}-Q{}'.format(year, quarter))
+        if interval == 'month':
+            year = today.year + (today.month + pm * mod - 1) // 12
+            month = (today.month + pm * mod - 1) % 12 + 1
+            string = string.replace(
+                complete_match, '{}-{:02}'.format(year, month))
+        if interval == 'week':
+            delta = datetime.timedelta(pm * mod * 7)
+            string = string.replace(
+                complete_match, (today + delta).strftime('%Y-W%W'))
+        if interval == 'day':
+            delta = datetime.timedelta(pm * mod)
+            string = string.replace(
+                complete_match, (today + delta).isoformat())
+    return string
 
 
 def parse_date(string):

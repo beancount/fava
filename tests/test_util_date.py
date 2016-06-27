@@ -2,10 +2,15 @@ from datetime import date
 from datetime import datetime as dt
 
 import pytest
-# from unittest import mock
+from unittest import mock
 
 from fava.util.date import (parse_date, get_next_interval, interval_tuples,
-                            number_of_days_in_period)
+                            substitute, number_of_days_in_period)
+
+
+def _to_date(string):
+    """Convert a string in ISO 8601 format into a datetime.date object."""
+    return dt.strptime(string, '%Y-%m-%d').date() if string else None
 
 
 @pytest.mark.parametrize('input_date_string,interval,expect', [
@@ -48,14 +53,34 @@ def test_interval_tuples():
     assert interval_tuples(None, None, None) == []
 
 
-def to_date(string):
-    """to_date convert a string in %Y-%m-%d into a datetime.date object.
-
-    Return None if string is None.
-    """
-    if string is None:
-        return None
-    return dt.strptime(string, '%Y-%m-%d').date()
+@pytest.mark.parametrize("input,output", [
+    ('year', '2016'),
+    ('(year-1)', '2015'),
+    ('year-1-2', '2015-2'),
+    ('(year)-1-2', '2016-1-2'),
+    ('(year+3)', '2019'),
+    ('(year+3)month', '20192016-06'),
+    ('(year-1000)', '1016'),
+    ('quarter', '2016-Q2'),
+    ('quarter+2', '2016-Q4'),
+    ('quarter+20', '2021-Q2'),
+    ('(month)', '2016-06'),
+    ('month+6', '2016-12'),
+    ('(month+24)', '2018-06'),
+    ('week', '2016-W25'),
+    ('week+20', '2016-W45'),
+    ('week+2000', '2054-W42'),
+    ('day', '2016-06-24'),
+    ('day+20', '2016-07-14'),
+])
+def test_substitute(input, output):
+    # Mock the imported datetime.date in fava.util.date module
+    # Ref:
+    # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
+    with mock.patch('fava.util.date.datetime.date') as mock_date:
+        mock_date.today.return_value = _to_date('2016-06-24')
+        mock_date.side_effect = date
+        assert substitute(input) == output
 
 
 @pytest.mark.parametrize("expect_start,expect_end,text", [
@@ -70,23 +95,8 @@ def to_date(string):
     ('2011-10-01', '2016-01-01', '2011-10 - 2015'),
 ])
 def test_parse_date(expect_start, expect_end, text):
-    """Test for parse_date() function."""
-    start, end = to_date(expect_start), to_date(expect_end)
+    start, end = _to_date(expect_start), _to_date(expect_end)
     assert parse_date(text) == (start, end)
-
-
-# def test_parse_date_relative(pseudo_today, expect_start, expect_end, text):
-#     """Test for parse_date() function."""
-#     # Mock the imported datetime.date in fava.util.date module
-#     # Ref:
-#     # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
-#     with mock.patch('fava.util.date.datetime.date') as mock_date:
-#         mock_date.today.return_value = to_date(pseudo_today) or date.today()
-#         mock_date.side_effect = date
-#         got = parse_date(text)
-#     start, end = to_date(expect_start), to_date(expect_end)
-#     assert got == (start, end), "parse_date(%s) == %s @ %s, want (%s, %s)" % (
-#         text, got, pseudo_today, start, end)
 
 
 def test_number_of_days_in_period_daily():
