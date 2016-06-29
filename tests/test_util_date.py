@@ -1,5 +1,4 @@
-from datetime import date
-from datetime import datetime as dt
+from datetime import date, datetime
 
 import pytest
 from unittest import mock
@@ -10,7 +9,7 @@ from fava.util.date import (parse_date, get_next_interval, interval_tuples,
 
 def _to_date(string):
     """Convert a string in ISO 8601 format into a datetime.date object."""
-    return dt.strptime(string, '%Y-%m-%d').date() if string else None
+    return datetime.strptime(string, '%Y-%m-%d').date() if string else None
 
 
 @pytest.mark.parametrize('input_date_string,interval,expect', [
@@ -27,10 +26,8 @@ def _to_date(string):
     ('2016-12-31', 'year', '2017-01-01'),
 ])
 def test_get_next_interval(input_date_string, interval, expect):
-    """Test for get_next_interval function."""
-    input_date = dt.strptime(input_date_string, '%Y-%m-%d')
-    get = get_next_interval(input_date, interval)
-    assert get.strftime('%Y-%m-%d') == expect
+    get = get_next_interval(_to_date(input_date_string), interval)
+    assert get == _to_date(expect)
 
 
 def test_get_next_interval_exception():
@@ -99,56 +96,41 @@ def test_parse_date(expect_start, expect_end, text):
     assert parse_date(text) == (start, end)
 
 
-def test_number_of_days_in_period_daily():
-    assert number_of_days_in_period('daily', dt(2016, 5, 1)) == 1
-    assert number_of_days_in_period('daily', dt(2016, 5, 2)) == 1
-    assert number_of_days_in_period('daily', dt(2016, 5, 31)) == 1
+@pytest.mark.parametrize("expect_start,expect_end,text", [
+    ('2014-01-01', '2016-06-27', 'year-2-day+2'),
+    ('2016-01-01', '2016-06-25', 'year-day'),
+])
+def test_parse_date_relative(expect_start, expect_end, text):
+    start, end = _to_date(expect_start), _to_date(expect_end)
+    with mock.patch('fava.util.date.datetime.date') as mock_date:
+        mock_date.today.return_value = _to_date('2016-06-24')
+        mock_date.side_effect = date
+        assert parse_date(text) == (start, end)
 
 
-def test_number_of_days_in_period_weekly():
-    assert number_of_days_in_period('weekly', dt(2016, 5, 1)) == 7
-    assert number_of_days_in_period('weekly', dt(2016, 5, 2)) == 7
-    assert number_of_days_in_period('weekly', dt(2016, 5, 31)) == 7
-
-
-def test_number_of_days_in_period_monthly():
-    assert number_of_days_in_period('monthly', dt(2016, 5, 1)) == 31
-    assert number_of_days_in_period('monthly', dt(2016, 5, 2)) == 31
-    assert number_of_days_in_period('monthly', dt(2016, 5, 31)) == 31
-
-    assert number_of_days_in_period('monthly', dt(2016, 6, 1)) == 30
-    assert number_of_days_in_period('monthly', dt(2016, 6, 15)) == 30
-    assert number_of_days_in_period('monthly', dt(2016, 6, 30)) == 30
-
-    assert number_of_days_in_period('monthly', dt(2016, 7, 1)) == 31
-    assert number_of_days_in_period('monthly', dt(2016, 7, 15)) == 31
-    assert number_of_days_in_period('monthly', dt(2016, 7, 31)) == 31
-
-    assert number_of_days_in_period('monthly', dt(2016, 1, 1)) == 31
-    assert number_of_days_in_period('monthly', dt(2016, 2, 1)) == 29
-    assert number_of_days_in_period('monthly', dt(2016, 3, 31)) == 31
-
-
-def test_number_of_days_in_period_quarterly():
-    # 2016 = leap year
-    assert number_of_days_in_period('quarterly', dt(2016, 2, 1)) == 91
-    assert number_of_days_in_period('quarterly', dt(2016, 5, 30)) == 91
-    assert number_of_days_in_period('quarterly', dt(2016, 8, 15)) == 92
-    assert number_of_days_in_period('quarterly', dt(2016, 11, 15)) == 92
-
-    # 2017 = not a leap year
-    assert number_of_days_in_period('quarterly', dt(2017, 2, 1)) == 90
-    assert number_of_days_in_period('quarterly', dt(2017, 5, 30)) == 91
-    assert number_of_days_in_period('quarterly', dt(2017, 8, 15)) == 92
-    assert number_of_days_in_period('quarterly', dt(2017, 11, 15)) == 92
-
-
-def test_number_of_days_in_period_yearly():
-    assert number_of_days_in_period('yearly', dt(2011, 2, 1)) == 365
-    assert number_of_days_in_period('yearly', dt(2015, 5, 30)) == 365
-    assert number_of_days_in_period('yearly', dt(2016, 8, 15)) == 366
+@pytest.mark.parametrize("interval,date,expect", [
+    ('daily', '2016-05-01', 1),
+    ('daily', '2016-05-31', 1),
+    ('weekly', '2016-05-01', 7),
+    ('weekly', '2016-05-31', 7),
+    ('monthly', '2016-05-02', 31),
+    ('monthly', '2016-05-31', 31),
+    ('monthly', '2016-06-11', 30),
+    ('monthly', '2016-07-31', 31),
+    ('monthly', '2016-02-01', 29),
+    ('monthly', '2015-02-01', 28),
+    ('monthly', '2016-01-01', 31),
+    ('quarterly', '2015-02-01', 90),
+    ('quarterly', '2015-05-01', 91),
+    ('quarterly', '2016-02-01', 91),
+    ('quarterly', '2016-12-01', 92),
+    ('yearly', '2015-02-01', 365),
+    ('yearly', '2016-01-01', 366),
+])
+def test_number_of_days_in_period(interval, date, expect):
+    assert number_of_days_in_period(interval, _to_date(date)) == expect
 
 
 def test_number_of_days_in_period_exception():
-    with pytest.raises(Exception):
-        number_of_days_in_period('test', dt(2011, 2, 1)) == 365
+    with pytest.raises(NotImplementedError):
+        number_of_days_in_period('test', date(2011, 2, 1))

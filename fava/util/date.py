@@ -15,7 +15,8 @@ week_re = re.compile(r'^(\d{4})-w(\d{2})$')
 # this matches a quarter like 2016-Q1 for the first quarter of 2016
 quarter_re = re.compile(r'^(\d{4})-q(\d)$')
 
-variable_re = re.compile(r'\(?(year|quarter|month|week|day)(?:([-+])(\d+))?\)?')
+variable_re = re.compile(
+    r'\(?(year|quarter|month|week|day)(?:([-+])(\d+))?\)?')
 
 
 def get_next_interval(date, interval):
@@ -105,6 +106,8 @@ def parse_date(string):
     if not string:
         return None, None
 
+    string = substitute(string)
+
     match = is_range_re.match(string)
     if match:
         return (parse_date(match.group(1))[0],
@@ -167,4 +170,5 @@ def number_of_days_in_period(period, date_):
     if period == 'yearly':
         date_ = datetime.date(date_.year, 1, 1)
         return (get_next_interval(date_, 'year') - date_).days
-    raise Exception("Period unknown: {}".format(period))
+    else:
+        raise NotImplementedError
