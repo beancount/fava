@@ -34,8 +34,8 @@
     "codemirror": "^5.15.2",
     "d3": "^3.5.16",
     "jquery": "^2.2.0",
-    "jquery-dragster": "github:catmanjan/jquery-dragster",
-    "jquery-stupid-table": "github:medsabir/Stupid-Table-Plugin#feat-npm-publish",
+    "jquery-dragster": "catmanjan/jquery-dragster",
+    "jquery-stupid-table": "medsabir/Stupid-Table-Plugin#feat-npm-publish",
     "mousetrap": "^1.5.3",
     "normalize.css": "^4.1.1",
     "urijs": "^1.18.0"
