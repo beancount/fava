@@ -1,4 +1,5 @@
 const CodeMirror = require('codemirror/lib/codemirror');
+const fuzzy = require('fuzzyjs');
 
 function getCurrentWord(cursor, line) {
   return line.slice(0, cursor.ch).match(/(\S*)$/)[0];
@@ -7,7 +8,7 @@ function getCurrentWord(cursor, line) {
 function substringMatch(cursor, currentWord, completions) {
   const search = currentWord.toLowerCase();
   return {
-    list: completions.filter((d) => d.toLowerCase().indexOf(search) !== -1),
+    list: fuzzy.filter(search, completions, {}),
     from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
     to: cursor,
   };
