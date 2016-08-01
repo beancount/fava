@@ -14,6 +14,10 @@ CodeMirror.defineSimpleMode('beancount', {
       sol: true,
     },
     {
+      regex: /;.*/,
+      token: 'comment',
+    },
+    {
       regex: /(query)(\s*)("[^"]*")(\s*)(")/,
       token: ['directive', null, 'string', null, 'string'],
       mode: {
