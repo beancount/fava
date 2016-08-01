@@ -92,3 +92,7 @@ article#page-source {
         color: $color_editor_invalid;
     }
 }
+
+.CodeMirror-hint {
+    max-width: 600px;
+}
