@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-06-02 14:57+0200\n"
+"POT-Creation-Date: 2016-08-02 11:03+0200\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -166,15 +166,15 @@ msgstr "Statistiken"
 msgid "Help"
 msgstr "Hilfe"
 
-#: fava/templates/_layout.html:55
+#: fava/templates/_layout.html:62
 msgid "Custom Links"
 msgstr "Eigene Links"
 
-#: fava/templates/_layout.html:61
+#: fava/templates/_layout.html:68
 msgid "Reports"
 msgstr "Berichte"
 
-#: fava/templates/_layout.html:79 fava/templates/errors.html:5
+#: fava/templates/_layout.html:86 fava/templates/errors.html:5
 msgid "Errors"
 msgstr "Fehler"
 
@@ -238,15 +238,15 @@ msgstr "Datei:"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Quelldatei anzeigen: %(file)s:%(lineno)s"
 
-#: fava/templates/context.html:23
+#: fava/templates/context.html:19
 msgid "Journal Entry"
 msgstr "Journal Eintrag"
 
-#: fava/templates/context.html:29
+#: fava/templates/context.html:25
 msgid "No entry matches the given hash."
 msgstr "Kein Eintrag für den angegebenen Hash gefunden."
 
-#: fava/templates/errors.html:12 fava/templates/source.html:16
+#: fava/templates/errors.html:12 fava/templates/source.html:17
 msgid "File"
 msgstr "Datei"
 
@@ -374,75 +374,28 @@ msgid "(Source)"
 msgstr "(Quelldatei)"
 
 #: fava/templates/query.html:75
-msgid ""
-"You can run querys like with the <code>bean-query</code> tool. For a "
-"detailed explanation of how queries can be created see the <a "
-"href=\"http://furius.ca/beancount/doc/query\">Beancount Query Lanugage "
-"Reference</a>."
-msgstr ""
-"Du kannst hier Abfragen wie mit dem <code>bean-query</code>-Tool "
-"ausführen. Für Dokumentation wie man Abfragen erstellt schau bitte in der"
-" <a href=\"http://furius.ca/beancount/doc/query\">Beancount Query "
-"Lanugage Reference</a> nach."
-
-#: fava/templates/query.html:79
-#, python-format
-msgid ""
-"If you add <code>query</code>-Directives to your <a "
-"href=\"%(url)s\">Source</a> these stored queries will be displayed as a "
-"dropdown to quickly select them."
-msgstr ""
-"Wenn du <code>query</code>-Einträge in deine <a "
-"href=\"%(url)s\">Quelldatei</a> einfügst werden diese hier im Dropdown "
-"angezeigt."
-
-#: fava/templates/query.html:87
 msgid "More sample queries"
 msgstr "Mehr Beispiel-Abfragen"
 
-#: fava/templates/query.html:92 fava/templates/query.html:108
+#: fava/templates/query.html:80 fava/templates/query.html:96
 msgid "Result"
 msgstr "Ergebnis"
 
-#: fava/templates/query.html:101
+#: fava/templates/query.html:89
 msgid "Download as"
 msgstr "Downloaden als"
 
-#: fava/templates/source.html:17
-msgid "External editor"
-msgstr "Externer Editor"
-
 #: fava/templates/source.html:24
-#, python-format
-msgid "Show source %(file)s"
-msgstr "Quelldatei anzeigen: %(file)s"
-
-#: fava/templates/source.html:25
-#, python-format
-msgid "Open %(file)s in external editor"
-msgstr "%(file)s in externem Editor öffnen"
-
-#: fava/templates/source.html:25
 msgid "Open in external editor"
 msgstr "In externem Editor öffnen"
 
-#: fava/templates/source.html:32
-msgid "Source listing"
-msgstr "Quelldatei"
-
-#: fava/templates/source.html:36
-#, python-format
-msgid "Show source for %(file)s"
-msgstr "Quelldatei für %(file)s anzeigen"
-
-#: fava/templates/source.html:39
-#, python-format
-msgid "; Loading %(file)s ..."
-msgstr "Lade %(file)s ..."
-
-#: fava/templates/source.html:52
+#: fava/templates/source.html:42
 msgid "Save"
 msgstr "Speichern"
+
+#: fava/templates/source.html:43
+msgid "Format"
+msgstr "Formatieren"
 
 #: fava/templates/statistics.html:10
 msgid "Postings per Account"
