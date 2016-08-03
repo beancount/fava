@@ -344,7 +344,10 @@ class BeancountReportAPI():
 
     def net_worth_at_intervals(self, interval):
         interval_tuples = self._interval_tuples(interval)
-        dates = [p[1] for p in interval_tuples]
+        if interval_tuples:
+            dates = [interval_tuples[0][0]] + [p[1] for p in interval_tuples]
+        else:
+            dates = []
 
         return [{
             'date': date,

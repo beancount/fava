@@ -46,7 +46,10 @@ def interval_tuples(first, last, interval):
     intervals = []
     while first < last:
         next_date = get_next_interval(first, interval)
-        intervals.append((first, next_date))
+        if next_date < last:
+            intervals.append((first, next_date))
+        else:
+            intervals.append((first, last))
         first = next_date
 
     return intervals

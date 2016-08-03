@@ -39,10 +39,16 @@ def test_interval_tuples():
     assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'month') == [
         (date(2014, 3, 5), date(2014, 4, 1)),
         (date(2014, 4, 1), date(2014, 5, 1)),
-        (date(2014, 5, 1), date(2014, 6, 1)),
+        (date(2014, 5, 1), date(2014, 5, 5)),
+    ]
+    assert interval_tuples(date(2014, 1, 1), date(2014, 5, 1), 'month') == [
+        (date(2014, 1, 1), date(2014, 2, 1)),
+        (date(2014, 2, 1), date(2014, 3, 1)),
+        (date(2014, 3, 1), date(2014, 4, 1)),
+        (date(2014, 4, 1), date(2014, 5, 1)),
     ]
     assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'year') == [
-        (date(2014, 3, 5), date(2015, 1, 1)),
+        (date(2014, 3, 5), date(2014, 5, 5)),
     ]
     assert interval_tuples(date(2014, 1, 1), date(2015, 1, 1), 'year') == [
         (date(2014, 1, 1), date(2015, 1, 1)),
@@ -99,6 +105,7 @@ def test_parse_date(expect_start, expect_end, text):
 @pytest.mark.parametrize("expect_start,expect_end,text", [
     ('2014-01-01', '2016-06-27', 'year-2-day+2'),
     ('2016-01-01', '2016-06-25', 'year-day'),
+    ('2015-01-01', '2017-01-01', '2015-year'),
 ])
 def test_parse_date_relative(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
