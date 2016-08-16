@@ -243,6 +243,17 @@ def source():
         return str(True)
 
 
+@app.route('/<bfile>/source/format/', methods=['POST'])
+def source_format():
+    source = request.form['source']
+    try:
+        formatted_source = g.api.format(source)
+        return formatted_source
+    except Exception as e:
+        print(e)
+        return str(False)
+
+
 @app.route('/<bfile>/event/<event_type>/')
 def event_details(event_type):
     return render_template('event_detail.html', event_type=event_type)

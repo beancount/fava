@@ -62,6 +62,27 @@ function saveEditorContent(cm) {
     });
 }
 
+function formatEditorContent(cm) {
+  const $button = $('#source-editor-format');
+  const fileName = $('#source-editor-select').val();
+  const scrollPosition = cm.getScrollInfo().top;
+
+  $button.attr('disabled', 'disabled')
+  const url = $button.attr('data-url');
+  $.post(url, {
+    source: cm.getValue()
+  })
+    .done((data) => {
+      if (data !== 'False') {
+        cm.setValue(data)
+        cm.scrollTo(null, scrollPosition)
+      } else {
+        alert('There was an error formatting the file ${fileName} with bean-format.')
+      }
+      $button.removeAttr('disabled');
+    });
+}
+
 $(document).ready(() => {
   const rulers = [];
   if (window.editorPrintMarginColumn) {
@@ -84,6 +105,12 @@ $(document).ready(() => {
       },
       'Cmd-S': (cm) => {
         saveEditorContent(cm);
+      },
+      'Ctrl-D': (cm) => {
+        formatEditorContent(cm);
+      },
+      'Cmd-D': (cm) => {
+        formatEditorContent(cm);
       },
     },
   };
@@ -190,10 +217,21 @@ $(document).ready(() => {
       saveEditorContent(editor);
     });
 
+    Mousetrap.bind(['ctrl+d', 'meta+d'], (event) => {
+      event.preventDefault();
+      formatEditorContent(editor);
+    });
+
     $('#source-editor-submit').click((event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
       saveEditorContent(editor);
+    });
+
+    $('#source-editor-format').click((event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      formatEditorContent(editor);
     });
   }
 });

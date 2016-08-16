@@ -21,6 +21,7 @@ from beancount.parser import options
 from beancount.query import query
 from beancount.reports import context
 from beancount.utils import misc_utils
+from beancount.scripts.format import align_beancount
 
 from fava.util import date
 from fava.api.budgets import Budgets
@@ -571,3 +572,6 @@ class BeancountReportAPI():
             if isinstance(posting, Open):
                 return posting.meta
         return {}
+
+    def format(self, file_contents):
+        return align_beancount(file_contents)

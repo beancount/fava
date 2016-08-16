@@ -11,7 +11,7 @@ class URLQueue:
         self.app = app
 
     def append(self, endpoint, values, current):
-        if (endpoint in ['source', 'document', 'add_document'] or
+        if (endpoint in ['source', 'source_format', 'document', 'add_document'] or  # noqa
                 'REPLACEME' in values.values()):
             return
         real_endpoint = endpoint
