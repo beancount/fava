@@ -5,7 +5,7 @@ function getCurrentWord(cursor, line) {
   return line.slice(0, cursor.ch).match(/(\S*)$/)[0];
 }
 
-function substringMatch(cursor, currentWord, completions) {
+function fuzzyMatch(cursor, currentWord, completions) {
   const search = currentWord.toLowerCase();
   return {
     list: fuzzy.filter(search, completions, {}),
@@ -76,7 +76,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
     // complete accounts for indented lines
     if (lineTokens[0].type === 'whitespace') {
       if (previousTokens.length === 1) {
-        return substringMatch(cursor, currentWord, completionSources.accounts);
+        return fuzzyMatch(cursor, currentWord, completionSources.accounts);
       }
     }
 
@@ -95,7 +95,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
         const directiveType = previousTokens[2].string;
         if (directiveType in directiveCompletions) {
           const completionType = directiveCompletions[directiveType][previousTokens.length / 2 - 2];
-          return substringMatch(cursor, currentWord, completionSources[completionType]);
+          return fuzzyMatch(cursor, currentWord, completionSources[completionType]);
         }
       }
     }
