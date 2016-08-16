@@ -7,8 +7,18 @@ function getCurrentWord(cursor, line) {
 
 function fuzzyMatch(cursor, currentWord, completions) {
   const search = currentWord.toLowerCase();
+  const results = fuzzy.filter(search, completions, { before: '<span class="highlight">', after: '</span>' });
   return {
-    list: fuzzy.filter(search, completions, {}),
+    list: results.map(function(result) {
+      return {
+        string: result,
+        render: function(elt, data, cur) {
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = result;
+          elt.appendChild(wrapper);
+        }
+      }
+    }),
     from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
     to: cursor,
   };
