@@ -242,6 +242,7 @@ def source():
             g.api.set_source(file_path, source)
         return str(True)
 
+
 @app.route('/<bfile>/source/format/', methods=['POST'])
 def source_format():
     source = request.form['source']
