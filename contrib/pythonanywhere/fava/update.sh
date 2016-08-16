@@ -17,6 +17,8 @@ name="option \"title\" \"Example beancount-fava @ $version ($date) [$site]\""
 bean-example | sed "7s#.*#$name#" > test1.bean
 name="option \"title\" \"Example (2) beancount-fava @ $version ($date) [$site]\""
 bean-example | sed "7s#.*#$name#" > test2.bean
+name="option \"title\" \"Example (3)\""
+bean-example | sed "7s#.*#$name#" > test3.bean
 
 # Reload web page
 touch /var/www/fava_pythonanywhere_com_wsgi.py
