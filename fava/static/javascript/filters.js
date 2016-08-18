@@ -2,8 +2,8 @@
 require('awesomplete');
 
 module.exports.initFilters = function initFilters() {
-  $('#filter-form input').on('input awesomplete-selectcomplete', function() {
-    const $this = $(this);
+  $('#filter-form input').on('input awesomplete-selectcomplete', event => {
+    const $this = $(event.currentTarget);
     const isEmpty = !$this.val();
 
     if ($this.val().length > $this.attr('placeholder').length) {
@@ -18,39 +18,40 @@ module.exports.initFilters = function initFilters() {
         .toggle(!isEmpty);
   });
 
-  $('#filter-form input[type="text"]').each(function() {
+  $('#filter-form input[type="text"]').each((_, el) => {
     let options = {
       minChars: 0,
       maxItems: 30,
     };
+    const $el = $(el);
 
-    if ($(this).attr('name') === 'tag' || $(this).attr('name') === 'payee') {
+    if ($el.attr('name') === 'tag' || $el.attr('name') === 'payee') {
       options = $.extend(options, {
         filter(text, input) {
-          return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]);
+          return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len
         },
         replace(text) {
           const before = this.input.value.match(/^.+,\s*|/)[0];
-          this.input.value = before + text + ', ';
+          this.input.value = `${before}${text}, `;
         },
       });
     }
 
-    const completer = new Awesomplete(this, options);
-    const isEmpty = !$(this).val();
+    const completer = new Awesomplete(el, options);
+    const isEmpty = !$el.val();
 
-    $(this).parents('li')
+    $el.parents('li')
         .toggleClass('empty', isEmpty)
       .find('button')
         .toggle(!isEmpty);
 
-    $(this).focus(() => {
+    $el.focus(() => {
       completer.evaluate();
     });
   });
 
-  $('#filter-form button').click(function() {
-    $(this).parents('li')
+  $('#filter-form button').click(event => {
+    $(event.currentTarget).parents('li')
       .find('input')
         .val('');
     $('#filter-form').submit();

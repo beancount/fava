@@ -58,8 +58,8 @@ $(document).ready(() => {
 
   $('#aside_button').click((e) => {
     e.preventDefault();
-    $("aside").toggleClass("active");
-    $("#aside_button").toggleClass("active");
+    $('aside').toggleClass('active');
+    $('#aside_button').toggleClass('active');
     return false;
   });
 });

@@ -16,10 +16,16 @@ matrix:
       env: {TOXENV: py35cov, COVERAGE: 1}
     - python: 3.5
       env: {TOXENV: flake8}
+    - language: node_js
+      install: "cd fava/static; npm install"
+      script: "cd fava/static; npm run lint"
 
 before_install:
     - "[ ! -z $COVERAGE ] && pip install codecov || true"
 after_success:
     - "[ ! -z $COVERAGE ] && codecov || true"
 
-cache: pip
+cache:
+    pip: true
+    directories:
+        - fava/static/node_modules

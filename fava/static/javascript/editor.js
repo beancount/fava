@@ -64,20 +64,19 @@ function saveEditorContent(cm) {
 
 function formatEditorContent(cm) {
   const $button = $('#source-editor-format');
-  const fileName = $('#source-editor-select').val();
   const scrollPosition = cm.getScrollInfo().top;
 
-  $button.attr('disabled', 'disabled')
+  $button.attr('disabled', 'disabled');
   const url = $button.attr('data-url');
   $.post(url, {
-    source: cm.getValue()
+    source: cm.getValue(),
   })
     .done((data) => {
       if (data !== 'False') {
-        cm.setValue(data)
-        cm.scrollTo(null, scrollPosition)
+        cm.setValue(data);
+        cm.scrollTo(null, scrollPosition);
       } else {
-        alert('There was an error formatting the file ${fileName} with bean-format.')
+        alert('There was an error formatting the file ${fileName} with bean-format.');
       }
       $button.removeAttr('disabled');
     });

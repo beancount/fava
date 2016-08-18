@@ -7,9 +7,9 @@ module.exports.initJournal = function initJournal() {
   });
 
   // Toggle entries with checkboxes
-  $('#entry-filters input').click(function() {
+  $('#entry-filters input').click((event) => {
     event.preventDefault();
-    const $this = $(this);
+    const $this = $(event.currentTarget);
     const selector = $this.attr('data-selector');
     const shouldShow = $this.hasClass('inactive');
 
@@ -17,33 +17,20 @@ module.exports.initJournal = function initJournal() {
       $('#entry-filters .txn-toggle').toggleClass('inactive', !shouldShow);
     }
 
-    $('#journal-table ' + selector).toggleClass('hidden', !shouldShow);
+    $(`#journal-table ${selector}`).toggleClass('hidden', !shouldShow);
     $this.toggleClass('inactive', !shouldShow);
 
     // Modify get params
-    const url = new URI(window.location);
-    let modified = false;
     const filterShow = [];
-    $('#entry-filters input').each(function() {
-      const $this = $(this);
-      const shouldShow = $this.hasClass('inactive');
-      const defaultShow = $this.attr('data-show-default') === 'true';
-      if (shouldShow === defaultShow) {
-        modified = true;
-      }
-      if (!shouldShow) {
-        filterShow.push($this.attr('data-type'));
+    $('#entry-filters input').each((_, el) => {
+      const $el = $(el);
+      if (!$el.hasClass('inactive')) {
+        filterShow.push($el.attr('data-type'));
       }
     });
 
-    if (modified) {
-      url.setSearch({
-        show: filterShow,
-      });
-    } else {
-      url.removeSearch(['show']);
-    }
-
+    const url = new URI(window.location)
+      .setSearch({ show: filterShow });
     window.history.pushState('', '', url.toString());
     return false;
   });

@@ -38,7 +38,7 @@ function addInternalNodesAsLeaves(node) {
     copy.children = null;
     copy.dummy = true;
     node.children.push(copy);
-    node.balance = {};
+    node.balance = {}; // eslint-disable-line no-param-reassign
   }
 }
 
@@ -56,7 +56,7 @@ function addTooltip(selection, tooltipText) {
       window.tooltip.style('opacity', 1).html(tooltipText(d));
     })
     .on('mousemove', () => {
-      window.tooltip.style('left', d3.event.pageX + 'px').style('top', (d3.event.pageY - 15) + 'px')
+      window.tooltip.style('left', `${d3.event.pageX}px`).style('top', `${d3.event.pageY - 15}px`);
     })
     .on('mouseleave', () => {
       window.tooltip.style('opacity', 0);
@@ -126,6 +126,11 @@ function treeMapChart() {
     x.domain([node.x0, node.x1]);
     y.domain([node.y0, node.y1]);
 
+    function labelOpacity(d) {
+      const length = this.getComputedTextLength();
+      return (kx * (d.x1 - d.x0) > length + 4 && ky * (d.y1 - d.y0) > 14) ? 1 : 0;
+    }
+
     const t = cells.transition()
       .duration(duration)
       .attr('transform', (d) => `translate(${x(d.x0)},${y(d.y0)})`);
@@ -137,10 +142,7 @@ function treeMapChart() {
     t.select('text')
       .attr('x', (d) => kx * (d.x1 - d.x0) / 2)
       .attr('y', (d) => ky * (d.y1 - d.y0) / 2)
-      .style('opacity', function(d) {
-        const length = this.getComputedTextLength();
-        return (kx * (d.x1 - d.x0) > length + 4 && ky * (d.y1 - d.y0) > 14) ? 1 : 0;
-      });
+      .style('opacity', labelOpacity);
 
     currentNode = node;
   }
@@ -155,7 +157,7 @@ function treeMapChart() {
     } else if (scale < 1) {
       zoom(root, 200);
     }
-    this.__zoom = d3.zoomIdentity;
+    this.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
   }
 
   function chart(svg_) {
@@ -791,7 +793,7 @@ module.exports.initCharts = function initCharts() {
     switch (chart.type) {
       case 'balances': {
         const linechart = lineChart()
-          .tooltipText(d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`);
+          .tooltipText(d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`); // eslint-disable-line max-len
 
         const series = window.commodities
             .map(c => ({
@@ -815,7 +817,7 @@ module.exports.initCharts = function initCharts() {
       }
       case 'commodities': {
         const linechart = lineChart()
-          .tooltipText(d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`);
+          .tooltipText(d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`); // eslint-disable-line max-len
 
         const series = [{
           name: chart.label,
@@ -888,7 +890,7 @@ module.exports.initCharts = function initCharts() {
             .sort((a, b) => b.value - a.value);
 
           const treemap = treeMapChart()
-            .tooltipText((d) => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`);
+            .tooltipText((d) => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`); // eslint-disable-line max-len
 
           chartContainer(id, `${chart.label} (${currency})`)
             .datum(root)
@@ -912,8 +914,7 @@ module.exports.initCharts = function initCharts() {
         break;
       }
       default:
-        console.error(`Chart-Type "${chart.type}" unknown.`);
-        console.log(chart);
+        break;
     }
   });
 
