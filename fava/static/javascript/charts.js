@@ -2,30 +2,30 @@ const d3 = require('d3');
 const URI = require('urijs');
 
 let container;
-const treemapColorScale = d3.scale.category20c();
-const sunburstColorScale = d3.scale.category20c();
-const currencyColorScale = d3.scale.category10();
-const scatterColorScale = d3.scale.category10();
+const treemapColorScale = d3.scaleOrdinal(d3.schemeCategory20);
+const sunburstColorScale = d3.scaleOrdinal(d3.schemeCategory20c);
+const currencyColorScale = d3.scaleOrdinal(d3.schemeCategory10);
+const scatterColorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
 const formatCurrency = d3.format('.2f');
 const dateFormat = {
-  year: d3.time.format.utc('%Y'),
+  year: d3.utcFormat('%Y'),
   quarter(date) {
-    return date.getUTCFullYear() + 'Q' + (Math.floor(date.getUTCMonth() / 3) + 1);
+    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
-  month: d3.time.format.utc('%b %Y'),
-  week: d3.time.format.utc('%YW%W'),
-  day: d3.time.format.utc('%Y-%m-%d'),
+  month: d3.utcFormat('%b %Y'),
+  week: d3.utcFormat('%YW%W'),
+  day: d3.utcFormat('%Y-%m-%d'),
 };
 
 const timeFilterDateFormat = {
-  year: d3.time.format.utc('%Y'),
+  year: d3.utcFormat('%Y'),
   quarter(date) {
-    return date.getUTCFullYear() + '-Q' + (Math.floor(date.getUTCMonth() / 3) + 1);
+    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
-  month: d3.time.format.utc('%Y-%m'),
-  week: d3.time.format.utc('%Y-W%W'),
-  day: d3.time.format.utc('%Y-%m-%d'),
+  month: d3.utcFormat('%Y-%m'),
+  week: d3.utcFormat('%Y-W%W'),
+  day: d3.utcFormat('%Y-%m-%d'),
 };
 
 function addInternalNodesAsLeaves(node) {
@@ -44,7 +44,7 @@ function addInternalNodesAsLeaves(node) {
 function makeAccountLink(selection) {
   selection
     .on('click', (d) => {
-      window.location = window.accountUrl.replace('REPLACEME', d.account);
+      window.location = window.accountUrl.replace('REPLACEME', d.data.account);
       d3.event.stopPropagation();
     });
 }
@@ -92,13 +92,13 @@ function addLegend(svg, domain, colorScale) {
 }
 
 function treeMapChart() {
+  const x = d3.scaleLinear();
+  const y = d3.scaleLinear();
+  const treemap = d3.treemap();
+  const zoomBehavior = d3.zoom();
+
   let width;
   let height;
-  const x = d3.scale.linear();
-  const y = d3.scale.linear();
-  const treemap = d3.layout.treemap()
-    .sort((a, b) => a.value - b.value);
-  const zoomBehavior = d3.behavior.zoom();
   let svg;
   let root;
   let currentNode;
@@ -120,28 +120,41 @@ function treeMapChart() {
   function zoom(node, duration) {
     treemap(root);
 
-    const kx = width / node.dx;
-    const ky = height / node.dy;
-    x.domain([node.x, node.x + node.dx]);
-    y.domain([node.y, node.y + node.dy]);
+    const kx = width / (node.x1 - node.x0);
+    const ky = height / (node.y1 - node.y0);
+    x.domain([node.x0, node.x1]);
+    y.domain([node.y0, node.y1]);
 
     const t = cells.transition()
       .duration(duration)
-      .attr('transform', (d) => 'translate(' + x(d.x) + ',' + y(d.y) + ')');
+      .attr('transform', (d) => `translate(${x(d.x0)},${y(d.y0)})`);
 
     t.select('rect')
-      .attr('width', (d) => kx * d.dx)
-      .attr('height', (d) => ky * d.dy);
+      .attr('width', (d) => kx * (d.x1 - d.x0))
+      .attr('height', (d) => ky * (d.y1 - d.y0));
 
     t.select('text')
-      .attr('x', (d) => kx * d.dx / 2)
-      .attr('y', (d) => ky * d.dy / 2)
+      .attr('x', (d) => kx * (d.x1 - d.x0) / 2)
+      .attr('y', (d) => ky * (d.y1 - d.y0) / 2)
       .style('opacity', function(d) {
         const length = this.getComputedTextLength();
-        return (kx * d.dx > length + 4 && ky * d.dy > 14) ? 1 : 0;
+        return (kx * (d.x1 - d.x0) > length + 4 && ky * (d.y1 - d.y0) > 14) ? 1 : 0;
       });
 
     currentNode = node;
+  }
+
+  function onZoom(d) {
+    const scale = d3.event.transform.k;
+    // click
+    if (scale === 1) {
+      zoom(currentNode === d.parent ? root : d.parent, 200);
+    } else if (scale > 1) {
+      zoom(d.parent, 200);
+    } else if (scale < 1) {
+      zoom(root, 200);
+    }
+    this.__zoom = d3.zoomIdentity;
   }
 
   function chart(svg_) {
@@ -149,25 +162,13 @@ function treeMapChart() {
     canvas = svg.classed('treemap', true);
     setSize();
     root = svg.datum();
+    treemap(root);
 
     zoomBehavior
-      .on('zoomend', (d) => {
-        const scale = d3.event.target.scale();
-        // click
-        if (scale === 1) {
-          zoom(currentNode === d.parent ? root : d.parent, 200);
-          // zoom in
-        } else if (scale > 1) {
-          zoom(d.parent, 200);
-          // zoom out
-        } else if (scale < 1) {
-          zoom(root, 200);
-        }
-        d3.event.target.scale(1);
-      });
+      .on('end', onZoom);
 
     cells = svg.selectAll('g')
-      .data(treemap.nodes(root).filter((d) => d.value))
+      .data(root.leaves())
       .enter()
       .append('g')
       .call(zoomBehavior)
@@ -182,27 +183,22 @@ function treeMapChart() {
 
     cells.append('rect')
       .attr('fill', (d) => {
-        const node = d.dummy ? d.parent : d;
+        const node = d.data.dummy ? d.parent : d;
         if (node.parent === root || !node.parent) {
-          return treemapColorScale(node.account);
+          return treemapColorScale(node.data.account);
         }
-        return treemapColorScale(node.parent.account);
+        return treemapColorScale(node.parent.data.account);
       });
 
     cells.append('text')
       .attr('dy', '.5em')
       .attr('text-anchor', 'middle')
-      .text((d) => d.account.split(':').pop())
+      .text((d) => d.data.account.split(':').pop())
       .style('opacity', 0)
       .call(makeAccountLink);
 
     zoom(root, 0);
   }
-
-  chart.value = (f) => {
-    treemap.value(f);
-    return chart;
-  };
 
   chart.tooltipText = (f) => {
     tooltipText = f;
@@ -224,28 +220,28 @@ function sunburstChart() {
     bottom: 10,
     left: 10,
   };
+  const x = d3.scaleLinear().range([0, 2 * Math.PI]);
+  const y = d3.scaleSqrt();
+  const partition = d3.partition();
+  const arc = d3.arc()
+    .startAngle((d) => x(d.x0))
+    .endAngle((d) => x(d.x1))
+    .innerRadius((d) => y(d.y0))
+    .outerRadius((d) => y(d.y1));
+
+  const selections = {};
   let width = 500;
   let height = 250;
-  const x = d3.scale.linear().range([0, 2 * Math.PI]);
-  const y = d3.scale.sqrt();
-  const partition = d3.layout.partition();
   let svg;
   let canvas;
   let root;
   let labelText;
-  const selections = {};
   let radius;
-
-  const arc = d3.svg.arc()
-    .startAngle((d) => x(d.x))
-    .endAngle((d) => x(d.x + d.dx))
-    .innerRadius((d) => y(d.y))
-    .outerRadius((d) => y(d.y + d.dy));
 
   function setSize() {
     radius = Math.min(width, height) / 2;
 
-    canvas.attr('transform', 'translate(' + (width / 2 + margin.left) + ',' + (height / 2 + margin.top) + ')');
+    canvas.attr('transform', `translate(${width / 2 + margin.left},${height / 2 + margin.top})`);
     svg
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.left);
@@ -254,15 +250,44 @@ function sunburstChart() {
   }
 
   function resize() {
-    root = svg.datum();
-
-    // 0.005 radians = 0.29 degrees
-    const nodes = partition.nodes(root)
-      .filter((d) => (d.dx > 0.005 && !d.dummy && d.depth));
-
     selections.paths = canvas.selectAll('path')
-      .data(nodes)
+      .filter((d) => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
       .attr('d', arc);
+  }
+
+  function setLabel(d) {
+    if (selections.paths.empty()) {
+      selections.accountLabel
+        .text('Chart is empty.');
+    } else {
+      selections.balanceLabel
+        .text(labelText(d));
+      selections.accountLabel
+        .text(d.data.account)
+        .call(makeAccountLink);
+    }
+  }
+
+  // Fade all but the current sequence
+  function mouseOver(d) {
+    setLabel(d);
+
+    // Only highlight segments that are ancestors of the current segment.
+    selections.paths
+      .interrupt()
+      .style('opacity', 0.5)
+      // check if d.account starts with node.account
+      .filter((node) => (d.data.account.lastIndexOf(node.data.account, 0) === 0))
+      .style('opacity', 1);
+  }
+
+  // Restore everything to full opacity when moving off the visualization.
+  function mouseLeave() {
+    selections.paths
+      .transition()
+      .duration(1000)
+      .style('opacity', 1);
+    setLabel(root);
   }
 
   function chart(svg_) {
@@ -285,18 +310,16 @@ function sunburstChart() {
       .attr('dy', '1.2em')
       .attr('text-anchor', 'middle');
 
-    // For efficiency, filter nodes to keep only those large enough to see.
-    // Also, ignore dummy nodes and root.
     root = svg.datum();
-    const nodes = partition.nodes(root)
-      .filter((d) => (d.dx > 0.005 && !d.dummy && d.depth));
+    partition(root);
 
     selections.paths = canvas.selectAll('path')
-        .data(nodes)
+        .data(root.descendants())
         .enter()
+        .filter((d) => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
       .append('path')
         .attr('fill-rule', 'evenodd')
-        .style('fill', (d) => sunburstColorScale(d.account))
+        .style('fill', (d) => sunburstColorScale(d.data.account))
         .on('mouseover', mouseOver)
         .call(makeAccountLink);
 
@@ -318,47 +341,6 @@ function sunburstChart() {
     width = d - margin.left - margin.right;
     return chart;
   };
-
-  chart.value = (f) => {
-    partition.value(f);
-    return chart;
-  };
-
-  function setLabel(d) {
-    if (selections.paths.empty()) {
-      selections.accountLabel
-        .text('Chart is empty.');
-    } else {
-      selections.balanceLabel
-        .text(labelText(d));
-      selections.accountLabel
-        .text(d.account)
-        .call(makeAccountLink);
-    }
-  }
-
-
-  // Fade all but the current sequence
-  function mouseOver(d) {
-    setLabel(d);
-
-    // Only highlight segments that are ancestors of the current segment.
-    selections.paths
-      .interrupt()
-      .style('opacity', 0.5)
-      // check if d.account starts with node.account
-      .filter((node) => (d.account.lastIndexOf(node.account, 0) === 0))
-      .style('opacity', 1);
-  }
-
-  // Restore everything to full opacity when moving off the visualization.
-  function mouseLeave() {
-    selections.paths
-      .transition()
-      .duration(1000)
-      .style('opacity', 1);
-    setLabel(root);
-  }
 
   chart.update = () => {
     setSize();
@@ -386,18 +368,19 @@ function sunburstChartContainer() {
     svg = svg_;
     setSize();
 
-    $.each(currencies, function(i, currency) {
-      var sunburst = sunburstChart()
+    $.each(currencies, (i, currency) => {
+      const sunburst = sunburstChart()
         .width(width / currencies.length)
         .height(500)
-        .value((d) => d.balance[currency])
-        .labelText(function(d) {
-          return formatCurrency(d.balance_children[currency] || 0) + ' ' + currency;
-        })
+        .labelText((d) => `${formatCurrency(d.data.balance_children[currency] || 0)} ${currency}`);
+
+      const root = d3.hierarchy(svg.datum())
+        .sum(d => d.balance[currency])
+        .sort((a, b) => a.value - b.value);
 
       canvases.push(svg.append('g')
-        .attr('transform', 'translate(' + width * i / currencies.length + ',0)')
-        .datum(svg.datum())
+        .attr('transform', `translate(${width * i / currencies.length},0)`)
+        .datum(root)
         .call(sunburst));
 
       sunbursts.push(sunburst);
@@ -406,13 +389,13 @@ function sunburstChartContainer() {
 
   chart.update = () => {
     setSize();
-    $.each(sunbursts, (i, chart) => {
-      chart
+    $.each(sunbursts, (i, singleChart) => {
+      singleChart
         .width(width / currencies.length)
         .height(500)
         .update();
       canvases[i]
-        .attr('transform', 'translate(' + width * i / currencies.length + ',0)')
+        .attr('transform', `translate(${width * i / currencies.length},0)`);
     });
   };
 
@@ -433,22 +416,18 @@ function barChart() {
   };
   let width;
   let height;
-  const x0 = d3.scale.ordinal();
-  const x1 = d3.scale.ordinal();
-  const y = d3.scale.linear();
+  const x0 = d3.scaleBand().padding(0.1);
+  const x1 = d3.scaleBand();
+  const y = d3.scaleLinear();
   let svg;
   let canvas;
   let tooltipText;
   const selections = {};
 
-  const xAxis = d3.svg.axis()
-    .scale(x0)
-    .outerTickSize(0)
-    .orient('bottom');
+  const xAxis = d3.axisBottom(x0)
+    .tickSizeOuter(0);
 
-  const yAxis = d3.svg.axis()
-    .scale(y)
-    .orient('left')
+  const yAxis = d3.axisLeft(y)
     .tickFormat(d3.format('.2s'));
 
   function setSize() {
@@ -456,21 +435,22 @@ function barChart() {
     height = 250 - margin.top - margin.bottom;
 
     y.range([height, 0]);
-    x0.rangeRoundBands([0, width], 0.1);
-    x1.rangeRoundBands([0, x0.rangeBand()]);
+    x0.range([0, width], 0.1);
 
     svg
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
-    canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    canvas.attr('transform', `translate(${margin.left},${margin.top})`);
 
     yAxis.tickSize(-width, 0);
-    selections.xAxis.attr('transform', 'translate(0,' + height + ')')
+    selections.xAxis.attr('transform', `translate(0,${height})`);
   }
 
   function setData(data) {
     x0.domain(data.map((d) => d.label));
     x1.domain(data[0].values.map((d) => d.name));
+    x1.range([0, x0.bandwidth()]);
+
     y.domain([
       Math.min(0, d3.min(data, (d) => d3.min(d.values, (e) => e.value))),
       Math.max(0, d3.max(data, (d) => d3.max(d.values, (e) => e.value))),
@@ -492,22 +472,21 @@ function barChart() {
     selections.yAxis.call(yAxis);
 
     selections.groups
-      .attr('transform', (d) => 'translate(' + x0(d.label) + ',0)');
+      .attr('transform', d => `translate(${x0(d.label)},0)`);
 
     selections.groupboxes
-      .attr('width', x0.rangeBand())
+      .attr('width', x0.bandwidth())
       .attr('height', height);
 
     selections.bars = selections.groups.selectAll('.bar')
-      .attr('width', x1.rangeBand())
+      .attr('width', x1.bandwidth())
       .attr('x', (d) => x1(d.name))
       .attr('y', (d) => y(Math.max(0, d.value)))
       .attr('height', (d) => Math.abs(y(d.value) - y(0)));
 
     selections.legend
-      .attr('transform', (d, i) => 'translate(' + width + ',' + i * 20 + ')');
+      .attr('transform', (d, i) => `translate(${width},${i * 20})`);
   }
-
 
   function chart(svg_) {
     svg = svg_;
@@ -565,38 +544,34 @@ function scatterPlot() {
   };
   let width;
   let height;
-  const x = d3.time.scale.utc();
-  const y = d3.scale.ordinal();
+  const x = d3.scaleUtc();
+  const y = d3.scalePoint().padding(1);
   let svg;
   let canvas;
   let tooltipText;
   const selections = {};
 
-  const xAxis = d3.svg.axis()
-    .scale(x)
-    .outerTickSize(0)
-    .orient('bottom');
+  const xAxis = d3.axisBottom(x)
+    .tickSizeOuter(0);
 
-  const yAxis = d3.svg.axis()
-    .scale(y)
+  const yAxis = d3.axisLeft(y)
     .tickPadding(6)
-    .orient('left')
     .tickFormat((d) => d);
 
   function setSize() {
     width = parseInt(container.style('width'), 10) - margin.left - margin.right;
     height = 250 - margin.top - margin.bottom;
 
-    y.rangePoints([height, 0], 1);
+    y.range([height, 0]);
     x.range([0, width]);
 
     svg
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
-    canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    canvas.attr('transform', `translate(${margin.left},${margin.top})`);
 
     yAxis.tickSize(-width, 0);
-    selections.xAxis.attr('transform', 'translate(0,' + height + ')')
+    selections.xAxis.attr('transform', `translate(0,${height})`);
   }
 
   function setData(data) {
@@ -655,30 +630,26 @@ function lineChart() {
   };
   let width = 500 - margin.left - margin.right;
   const height = 250 - margin.top - margin.bottom;
-  const x = d3.time.scale.utc();
-  const y = d3.scale.linear();
+  const x = d3.scaleUtc();
+  const y = d3.scaleLinear();
   let canvas;
   let tooltipText;
   let matrix;
   let svg;
   const selections = {};
 
-  const xAxis = d3.svg.axis()
-    .scale(x)
-    .outerTickSize(0)
-    .orient('bottom');
+  const xAxis = d3.axisBottom(x)
+    .tickSizeOuter(0);
 
-  const yAxis = d3.svg.axis()
-    .scale(y)
+  const yAxis = d3.axisLeft(y)
     .tickPadding(6)
-    .orient('left')
     .tickFormat(d3.format('.2s'));
 
-  const line = d3.svg.line()
+  const line = d3.line()
     .x((d) => x(d.date))
     .y((d) => y(d.value));
 
-  const voronoi = d3.geom.voronoi()
+  const voronoi = d3.voronoi()
     .x((d) => x(d.date))
     .y((d) => y(d.value));
 
@@ -688,7 +659,7 @@ function lineChart() {
 
     y.range([height, 0]);
     x.range([0, width]);
-    voronoi.clipExtent([
+    voronoi.extent([
       [0, 0],
       [width, height],
     ]);
@@ -696,10 +667,10 @@ function lineChart() {
     svg
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.bottom);
-    canvas.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    canvas.attr('transform', `translate(${margin.left},${margin.top})`);
 
     yAxis.tickSize(-width, 0);
-    selections.xAxis.attr('transform', 'translate(0,' + height + ')')
+    selections.xAxis.attr('transform', `translate(0,${height})`);
   }
 
   function setData(data) {
@@ -717,35 +688,17 @@ function lineChart() {
     selections.xAxis.call(xAxis);
     selections.yAxis.call(yAxis);
     selections.dots
-      .attr('cx', function(d) {
-        return x(d.date);
-      })
-      .attr('cy', function(d) {
-        return y(d.value);
-      })
+      .attr('cx', d => x(d.date))
+      .attr('cy', d => y(d.value));
     selections.lines
-      .attr('d', function(d) {
-        return line(d.values);
-      })
+      .attr('d', d => line(d.values));
 
     selections.voronoi.selectAll('path')
-      .data(voronoi(rollupData(svg.datum())))
-      .attr('d', function(d) {
-        return "M" + d.join("L") + "Z";
-      })
+      .data(voronoi.polygons(d3.merge(svg.datum().map(d => d.values))))
+      .attr('d', d => `M${d.join('L')}Z`);
 
     selections.legend
-      .attr('transform', function(d, i) {
-        return 'translate(' + width + ',' + i * 20 + ')';
-      });
-  }
-
-  function rollupData(data) {
-    return d3.nest()
-      .key((d) => x(d.date) + ',' + y(d.value))
-      .rollup((d) => d[0])
-      .entries(d3.merge(data.map((d) => d.values)))
-      .map((d) => d.values);
+      .attr('transform', (d, i) => `translate(${width},${i * 20})`);
   }
 
   function chart(svg_) {
@@ -755,39 +708,41 @@ function lineChart() {
     selections.yAxis = canvas.append('g').attr('class', 'y axis');
     selections.voronoi = canvas.append('g').attr('class', 'voronoi');
 
-    setData(svg.datum());
+    const data = svg.datum();
+    setData(data);
     setSize();
 
     selections.lines = canvas.selectAll('.line')
-        .data(svg.datum())
+        .data(data)
       .enter()
       .append('path')
         .attr('class', 'line')
         .style('stroke', (d) => currencyColorScale(d.name));
 
     selections.dots = canvas.selectAll('g.dot')
-        .data(svg.datum())
-      .enter()
+        .data(data)
+        .enter()
       .append('g')
-        .attr('class', 'dot').selectAll('circle')
+        .attr('class', 'dot')
+      .selectAll('circle')
         .data((d) => d.values)
-      .enter()
+        .enter()
       .append('circle')
         .attr('r', 3)
         .style('fill', (d) => currencyColorScale(d.name));
 
     selections.voronoi.selectAll('path')
-        .data(voronoi(rollupData(svg.datum())))
-      .enter()
+        .data(voronoi.polygons(d3.merge(data.map(d => d.values))))
+        .enter()
       .append('path')
-        .attr('d', (d) => "M" + d.join("L") + "Z")
+        .attr('d', d => `M${d.join('L')}Z`)
         .on('mouseenter', (d) => {
-          window.tooltip.style('opacity', 1).html(tooltipText(d.point));
+          window.tooltip.style('opacity', 1).html(tooltipText(d.data));
         })
         .on('mousemove', (d) => {
           window.tooltip
-              .style('left', (x(d.point.date) + matrix.e) + 'px')
-              .style('top', (y(d.point.value) + matrix.f - 15) + 'px');
+              .style('left', `${x(d.data.date) + matrix.e}px`)
+              .style('top', `${y(d.data.value) + matrix.f - 15}px`);
         })
         .on('mouseleave', () => {
           window.tooltip.style('opacity', 0);
@@ -811,195 +766,185 @@ function lineChart() {
   return chart;
 }
 
-module.exports.initCharts = function() {
+module.exports.initCharts = function initCharts() {
   container = d3.select('#chart-container');
   container.html('');
-  var labels = d3.select('#chart-labels');
-  window.charts = {}
-  window.tooltip = d3.select('body').append('div').attr('id', 'tooltip')
+  const labels = d3.select('#chart-labels');
+  window.charts = {};
+  window.tooltip = d3.select('body').append('div').attr('id', 'tooltip');
 
   function chartContainer(id, label) {
-    var svg = container.append('svg')
+    const svg = container.append('svg')
       .attr('class', 'chart')
-      .attr('id', id)
+      .attr('id', id);
 
     labels.append('label')
       .attr('for', id)
-      .html(label)
+      .html(label);
 
     return svg;
   }
 
-  $.each(window.chartData, function(index, chart) {
-    chart.id = chart.type + '-' + index;
+  $.each(window.chartData, (index, chart) => {
+    const chartId = `${chart.type}-${index}`;
     switch (chart.type) {
-      case 'balances':
-        var linechart = lineChart()
-          .tooltipText(function(d) {
-            return formatCurrency(d.value) + ' ' + d.name + '<em>' + dateFormat['day'](d.date) + '</em>';
-          })
+      case 'balances': {
+        const linechart = lineChart()
+          .tooltipText(d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`);
 
-        var series = window.commodities.map(function(c) {
-          return {
-            'name': c,
-            'values': chart.data.filter(function(d) {
-                return !(d.balance[c] === undefined);
-              })
-              .map(function(d) {
-                return {
-                  'name': c,
-                  'date': new Date(d.date),
-                  'value': d.balance[c],
-                };
-              })
-          }
-        }).filter(function(d) {
-          return d.values.length;
-        });
+        const series = window.commodities
+            .map(c => ({
+              name: c,
+              values: chart.data
+                  .filter(d => !(d.balance[c] === undefined))
+                  .map(d => ({
+                    name: c,
+                    date: new Date(d.date),
+                    value: d.balance[c],
+                  })),
+            }))
+            .filter(d => d.values.length);
 
-        chartContainer(chart.id, chart.label)
+        chartContainer(chartId, chart.label)
           .datum(series)
-          .call(linechart)
+          .call(linechart);
 
-        window.charts[chart.id] = linechart;
+        window.charts[chartId] = linechart;
         break;
-      case 'commodities':
-        var linechart = lineChart()
-          .tooltipText(function(d) {
-            return '1 ' + chart.base + ' =  ' + formatCurrency(d.value) + ' ' + chart.quote + '<em>' + dateFormat['day'](d.date) + '</em>';
-          })
+      }
+      case 'commodities': {
+        const linechart = lineChart()
+          .tooltipText(d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`);
 
-        var series = [{
-          'name': chart.label,
-          'values': chart.prices.map(function(d) {
-            return {
-              'name': chart.label,
-              'date': new Date(d[0]),
-              'value': d[1],
-            };
-          })
+        const series = [{
+          name: chart.label,
+          values: chart.prices.map(d => ({
+            name: chart.label,
+            date: new Date(d[0]),
+            value: d[1],
+          })),
         }];
 
-        chartContainer(chart.id, chart.label)
+        chartContainer(chartId, chart.label)
           .datum(series)
-          .call(linechart)
+          .call(linechart);
 
-        window.charts[chart.id] = linechart;
+        window.charts[chartId] = linechart;
         break;
-      case 'bar':
-        var barchart = barChart()
-          .tooltipText(function(d) {
-            var text = '';
-            $.each(d.values, function(i, a) {
-              text += formatCurrency(a.value) + ' ' + a.name + '<br>';
+      }
+      case 'bar': {
+        const barchart = barChart()
+          .tooltipText(d => {
+            let text = '';
+            $.each(d.values, (i, a) => {
+              text += `${formatCurrency(a.value)} ${a.name}<br>`;
             });
-            text += '<em>' + d.label + '</em>';
+            text += `<em>${d.label}</em>`;
             return text;
-          })
-
-        chart.interval_totals.forEach(function(d) {
-          d.values = window.operating_currencies.map(function(name) {
-            return {
-              name: name,
-              value: +d.totals[name] || 0
-            };
           });
-          d.date = new Date(d.begin_date);
-          d.label = dateFormat[window.interval](d.date)
-        });
 
-        chartContainer(chart.id, chart.label)
-          .datum(chart.interval_totals)
-          .call(barchart)
+        const series = chart.interval_totals.map(d => ({
+          values: window.operating_currencies.map(name => ({
+            name,
+            value: +d.totals[name] || 0,
+          })),
+          date: new Date(d.begin_date),
+          label: dateFormat[window.interval](new Date(d.begin_date)),
+        }));
 
-        window.charts[chart.id] = barchart;
+        chartContainer(chartId, chart.label)
+          .datum(series)
+          .call(barchart);
+
+        window.charts[chartId] = barchart;
         break;
-      case 'scatterplot':
-        var scatterplot = scatterPlot()
-          .tooltipText(function(d) {
-            return d.description + '<em>' + dateFormat['day'](d.date) + '</em>';
-          })
+      }
+      case 'scatterplot': {
+        const scatterplot = scatterPlot()
+          .tooltipText(d => `${d.description}<em>${dateFormat.day(d.date)}</em>`);
 
-        chartContainer(chart.id, chart.label)
-          .datum(chart.events.map(function(d) {
-            d.date = new Date(d.date);
-            return d;
-          }))
-          .call(scatterplot)
+        const series = chart.events.map(d => ({
+          type: d.type,
+          date: new Date(d.date),
+          description: d.description,
+        }));
 
-        window.charts[chart.id] = scatterplot;
+        chartContainer(chartId, chart.label)
+          .datum(series)
+          .call(scatterplot);
+
+        window.charts[chartId] = scatterplot;
         break;
-      case 'treemap':
-        {
-          addInternalNodesAsLeaves(chart.root);
-
-          $.each(window.operating_currencies, function(i, currency) {
-            chart.id = "treemap-" + index + '-' + currency;
-
-            var treemap = treeMapChart()
-              .value(function(d) {
-                return d.balance[currency] * chart.modifier;
-              })
-              .tooltipText(function(d) {
-                return formatCurrency(d.balance[currency]) + ' ' + currency + '<em>' + d.account + '</em>';
-              })
-
-            chartContainer(chart.id, chart.label + ' (' + currency + ')')
-              .datum(chart.root)
-              .call(treemap)
-
-            window.charts[chart.id] = treemap;
-          })
-          break;
-        }
-      case 'sunburst':
+      }
+      case 'treemap': {
         addInternalNodesAsLeaves(chart.root);
 
-        var sunburst = sunburstChartContainer()
-          .currencies(window.operating_currencies)
+        $.each(window.operating_currencies, (i, currency) => {
+          const id = `treemap-${index}-${currency}`;
 
-        chartContainer(chart.id, chart.label)
+          const root = d3.hierarchy(chart.root)
+            .sum(d => d.balance[currency] * chart.modifier)
+            .sort((a, b) => b.value - a.value);
+
+          const treemap = treeMapChart()
+            .tooltipText((d) => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`);
+
+          chartContainer(id, `${chart.label} (${currency})`)
+            .datum(root)
+            .call(treemap);
+
+          window.charts[id] = treemap;
+        });
+        break;
+      }
+      case 'sunburst': {
+        addInternalNodesAsLeaves(chart.root);
+
+        const sunburst = sunburstChartContainer()
+          .currencies(window.operating_currencies);
+
+        chartContainer(chartId, chart.label)
           .datum(chart.root)
           .call(sunburst);
 
-        window.charts[chart.id] = sunburst;
+        window.charts[chartId] = sunburst;
         break;
+      }
       default:
-        console.error('Chart-Type "' + chart.type + '" unknown.');
+        console.error(`Chart-Type "${chart.type}" unknown.`);
         console.log(chart);
     }
   });
 
-  var $labels = $('#chart-labels');
+  const $labels = $('#chart-labels');
 
   // Switch between charts
-  $labels.find('label').click(function() {
-    var chartId = $(this).prop('for');
-    $('.charts .chart').addClass('hidden')
-    $('.charts .chart#' + chartId).removeClass('hidden');
+  $labels.find('label').click((event) => {
+    const chartId = $(event.currentTarget).prop('for');
+    $('.charts .chart').addClass('hidden');
+    $(`.charts .chart#${chartId}`).removeClass('hidden');
 
     $labels.find('label').removeClass('selected');
-    $(this).addClass('selected');
+    $(event.currentTarget).addClass('selected');
 
     window.charts[chartId].update();
 
-    d3.select(window).on('resize', function() {
+    d3.select(window).on('resize', () => {
       window.charts[chartId].update();
-    })
+    });
   });
   $labels.find('label:first-child').click();
 
-  // Toggle charts
-  $('#toggle-chart').click(function(event) {
+  $('#toggle-chart').click((event) => {
     event.preventDefault();
-    var shouldShow = !$(this).hasClass('show-charts');
+    const shouldShow = !$(event.currentTarget).hasClass('show-charts');
     $('#chart-container, #chart-labels, #chart-interval').toggleClass('hidden', !shouldShow);
-    $(this).toggleClass('show-charts', shouldShow);
+    $(event.currentTarget).toggleClass('show-charts', shouldShow);
   });
 
-  $('select#chart-interval').on('change', function() {
-    window.location = URI(window.location)
-      .setQuery('interval', this.value)
+  $('select#chart-interval').on('change', (event) => {
+    window.location = new URI(window.location)
+      .setQuery('interval', event.currentTarget.value)
       .toString();
   });
-}
+};

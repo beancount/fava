@@ -32,7 +32,7 @@
     "awesomplete": "^1.1.0",
     "clipboard": "^1.5.8",
     "codemirror": "^5.15.2",
-    "d3": "^3.5.16",
+    "d3": "^4.2.2",
     "fuzzyjs": "^2.1.2",
     "jquery": "^2.2.0",
     "jquery-dragster": "catmanjan/jquery-dragster",
