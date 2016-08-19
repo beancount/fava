@@ -6,12 +6,9 @@
 {% block content %}
     {{ charts.skeleton() }}
     {{ charts.net_worth(interval) }}
-    {{ charts.treemap(api.options['name_assets']) }}
-    {{ charts.treemap(api.options['name_liabilities']) }}
-    {{ charts.treemap(api.options['name_equity']) }}
-    {{ charts.sunburst(api.options['name_assets']) }}
-    {{ charts.sunburst(api.options['name_liabilities']) }}
-    {{ charts.sunburst(api.options['name_equity']) }}
+    {{ charts.hierarchy(api.options['name_assets']) }}
+    {{ charts.hierarchy(api.options['name_liabilities']) }}
+    {{ charts.hierarchy(api.options['name_equity']) }}
 
     <div class="halfleft">
         {% with table_title=_('Assets'), real_accounts=api.closing_balances(api.options['name_assets']), totals=True %}

@@ -4,20 +4,11 @@
 <script>window.chartData.push({{ data|tojson|safe }})</script>
 {% endmacro %}
 
-{% macro treemap(account_name, begin_date=None, end_date=None, label=None) %}
+{% macro hierarchy(account_name, begin_date=None, end_date=None, label=None) %}
 {{ add_chart({
-    'type': 'treemap',
+    'type': 'hierarchy',
     'label': account_name if not label else label,
     'modifier': api.get_account_sign(account_name),
-    'root': api.balances(account_name, begin_date, end_date)[0],
-}) }}
-{% endmacro %}
-
-{% macro sunburst(account_name, diameter=500, begin_date=None, end_date=None, label=None) %}
-{{ add_chart({
-    'type': 'sunburst',
-    'label': '{} (Sunburst)'.format(account_name if not label else label),
-    'diameter': diameter,
     'root': api.balances(account_name, begin_date, end_date)[0],
 }) }}
 {% endmacro %}
@@ -68,7 +59,16 @@
 
 {% macro skeleton(hide_interval_filter=False) %}
 {% set show_charts = config['charts'] %}
-<form class="wide-form chart-filter">
+<form class="wide-form chart-filter" id="chart-form">
+    <select name="chart-currency" id="chart-currency" class="hidden">
+    {% for currency in operating_currencies %}
+        <option value="{{ currency }}">{{ currency }}</option>
+    {% endfor %}
+    </select>
+    <span id="chart-mode" class="hidden">
+    <input name="mode" type="radio" value="treemap" id="mode-treemap" checked> <label for="mode-treemap">{{ _('Treemap') }}</label>
+    <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
+    </span>
     {% if not hide_interval_filter %}
         <select name="chart-interval" id="chart-interval">
             <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>{{ _('Daily') }}</option>

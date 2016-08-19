@@ -8,11 +8,7 @@
     {{ charts.skeleton(hide_interval_filter=True) }}
 
     {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
-        {{ charts.treemap(api.options['name_{}'.format(base_account)]) }}
-    {% endfor %}
-
-    {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
-        {{ charts.sunburst(api.options['name_{}'.format(base_account)]) }}
+        {{ charts.hierarchy(api.options['name_{}'.format(base_account)]) }}
     {% endfor %}
 
     <div class="halfleft">

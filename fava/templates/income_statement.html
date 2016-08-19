@@ -10,11 +10,8 @@
     {{ charts.interval_totals(interval, api.options['name_income'], label=_('Income')) }}
     {{ charts.interval_totals(interval, api.options['name_expenses'], label=_('Expenses')) }}
 
-    {{ charts.treemap(api.options['name_income']) }}
-    {{ charts.treemap(api.options['name_expenses']) }}
-
-    {{ charts.sunburst(api.options['name_expenses']) }}
-    {{ charts.sunburst(api.options['name_income']) }}
+    {{ charts.hierarchy(api.options['name_expenses']) }}
+    {{ charts.hierarchy(api.options['name_income']) }}
 
     <div class="halfleft">
         {% with table_title=_('Income'), real_accounts=api.balances(api.options['name_income']), totals=True %}

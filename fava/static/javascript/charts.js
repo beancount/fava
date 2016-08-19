@@ -353,63 +353,6 @@ function sunburstChart() {
   return chart;
 }
 
-function sunburstChartContainer() {
-  let width;
-  const sunbursts = [];
-  const canvases = [];
-  let currencies;
-  let svg;
-
-  function setSize() {
-    width = container.node().offsetWidth;
-    svg
-      .attr('width', width)
-      .attr('height', 500);
-  }
-
-  function chart(svg_) {
-    svg = svg_;
-    setSize();
-
-    $.each(currencies, (i, currency) => {
-      const sunburst = sunburstChart()
-        .width(width / currencies.length)
-        .height(500)
-        .labelText((d) => `${formatCurrency(d.data.balance_children[currency] || 0)} ${currency}`);
-
-      const root = d3.hierarchy(svg.datum())
-        .sum(d => d.balance[currency])
-        .sort((a, b) => a.value - b.value);
-
-      canvases.push(svg.append('g')
-        .attr('transform', `translate(${width * i / currencies.length},0)`)
-        .datum(root)
-        .call(sunburst));
-
-      sunbursts.push(sunburst);
-    });
-  }
-
-  chart.update = () => {
-    setSize();
-    $.each(sunbursts, (i, singleChart) => {
-      singleChart
-        .width(width / currencies.length)
-        .height(500)
-        .update();
-      canvases[i]
-        .attr('transform', `translate(${width * i / currencies.length},0)`);
-    });
-  };
-
-  chart.currencies = (f) => {
-    currencies = f;
-    return chart;
-  };
-
-  return chart;
-}
-
 function barChart() {
   const margin = {
     top: 10,
@@ -769,7 +712,135 @@ function lineChart() {
   return chart;
 }
 
+function sunburstChartContainer() {
+  let width;
+  const sunbursts = [];
+  const canvases = [];
+  let currencies;
+  let svg;
+
+  function setSize() {
+    width = container.node().offsetWidth;
+    svg
+      .attr('width', width)
+      .attr('height', 500);
+  }
+
+  function chart(svg_) {
+    svg = svg_;
+    svg.attr('class', 'sunburst');
+    setSize();
+
+    $.each(currencies, (i, currency) => {
+      const sunburst = sunburstChart()
+        .width(width / currencies.length)
+        .height(500)
+        .labelText((d) => `${formatCurrency(d.data.balance_children[currency] || 0)} ${currency}`);
+
+      canvases.push(svg.append('g')
+        .attr('transform', `translate(${width * i / currencies.length},0)`)
+        .datum(svg.datum()[currency])
+        .call(sunburst));
+
+      sunbursts.push(sunburst);
+    });
+  }
+
+  chart.update = () => {
+    setSize();
+    $.each(sunbursts, (i, singleChart) => {
+      singleChart
+        .width(width / currencies.length)
+        .height(500)
+        .update();
+      canvases[i]
+        .attr('transform', `translate(${width * i / currencies.length},0)`);
+    });
+  };
+
+  chart.currencies = (f) => {
+    currencies = f;
+    return chart;
+  };
+
+  return chart;
+}
+
+function hierarchyContainer() {
+  let width;
+  let svg;
+  let canvas;
+  let currentChart;
+  let currentCurrency = '';
+  let currentMode = '';
+  let currencies;
+
+  function setSize() {
+    width = container.node().offsetWidth;
+    svg
+      .attr('width', width);
+  }
+
+  function chart(svg_) {
+    svg = svg_;
+    setSize();
+
+    canvas = svg.append('g');
+  }
+
+  function drawChart() {
+    const mode = d3.select('#chart-form input[name=mode]:checked').property('value');
+    const currency = d3.select('#chart-currency').property('value');
+
+    if (mode === 'treemap' && (mode !== currentMode || currency !== currentCurrency)) {
+      currentChart = treeMapChart()
+        .tooltipText((d) => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`); // eslint-disable-line max-len
+
+      canvas
+          .html('')
+          .datum(svg.datum()[currency])
+          .call(currentChart);
+
+      chart.has_currency_setting = true;
+      currentCurrency = currency;
+      $('#chart-currency').show();
+    }
+
+    if (mode === 'sunburst' && mode !== currentMode) {
+      currentChart = sunburstChartContainer()
+          .currencies(currencies);
+
+      canvas
+          .html('')
+          .datum(svg.datum())
+          .call(currentChart);
+
+      chart.has_currency_setting = false;
+      $('#chart-currency').hide();
+    }
+    chart.has_mode_setting = true;
+    currentMode = mode;
+
+    svg
+      .attr('height', canvas.attr('height'));
+  }
+
+  chart.update = () => {
+    setSize();
+    drawChart();
+    currentChart.update();
+  };
+
+  chart.currencies = (f) => {
+    currencies = f;
+    return chart;
+  };
+
+  return chart;
+}
+
 module.exports.initCharts = function initCharts() {
+  let currentChart;
   container = d3.select('#chart-container');
   container.html('');
   const labels = d3.select('#chart-labels');
@@ -879,6 +950,26 @@ module.exports.initCharts = function initCharts() {
         window.charts[chartId] = scatterplot;
         break;
       }
+      case 'hierarchy': {
+        addInternalNodesAsLeaves(chart.root);
+        const roots = {};
+
+        $.each(window.operating_currencies, (i, currency) => {
+          roots[currency] = d3.hierarchy(chart.root)
+            .sum(d => d.balance[currency] * chart.modifier)
+            .sort((a, b) => b.value - a.value);
+        });
+
+        const hierarchy = hierarchyContainer()
+            .currencies(window.operating_currencies);
+
+        chartContainer(chartId, `${chart.label}`)
+          .datum(roots)
+          .call(hierarchy);
+
+        window.charts[chartId] = hierarchy;
+        break;
+      }
       case 'treemap': {
         addInternalNodesAsLeaves(chart.root);
 
@@ -900,19 +991,6 @@ module.exports.initCharts = function initCharts() {
         });
         break;
       }
-      case 'sunburst': {
-        addInternalNodesAsLeaves(chart.root);
-
-        const sunburst = sunburstChartContainer()
-          .currencies(window.operating_currencies);
-
-        chartContainer(chartId, chart.label)
-          .datum(chart.root)
-          .call(sunburst);
-
-        window.charts[chartId] = sunburst;
-        break;
-      }
       default:
         break;
     }
@@ -929,11 +1007,15 @@ module.exports.initCharts = function initCharts() {
     $labels.find('label').removeClass('selected');
     $(event.currentTarget).addClass('selected');
 
-    window.charts[chartId].update();
+    currentChart = window.charts[chartId];
+    currentChart.update();
 
-    d3.select(window).on('resize', () => {
-      window.charts[chartId].update();
-    });
+    d3.selectAll('#chart-form input[name=mode]').on('change', () => { currentChart.update(); });
+    d3.select('#chart-currency').on('change', () => { currentChart.update(); });
+    d3.select(window).on('resize', () => { currentChart.update(); });
+
+    $('#chart-currency').toggle(!!currentChart.has_currency_setting);
+    $('#chart-mode').toggle(!!currentChart.has_mode_setting);
   });
   $labels.find('label:first-child').click();
 
