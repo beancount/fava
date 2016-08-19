@@ -28,8 +28,11 @@ There are four filters available in Fava:
 - **Tags**: Filter entries to the ones having the tags selected. This filter is
   inclusive, meaning that if you select multiple tags entries with any of those
   tags will be filtered.
-- **Account**: Filter entries by account, matching any entry where this account
-  is part of.
+- **Account**: Filter entries by account, matching any entry this account
+  is part of. The filter can simply be an account name or a regular expression,
+  e.g. `.*:Company:.*` to filter for all that contain `Company` as a component
+  in the account name. If a regular expression is given, it must match the
+  whole account name.
 - **Payee**: Filter entries by payee. This filter is, like the *Tags*-filter,
   inclusive.
 

@@ -18,6 +18,11 @@ def test_account_filter(example_api):
             lambda p: account.has_component(p.account, 'Assets'), x.postings)),
         filtered_entries))
 
+    account_filter.set('.*US:State')
+    filtered_entries = account_filter.apply(
+        example_api.all_entries, example_api.options)
+    assert len(filtered_entries) == 67
+
 
 def test_date_filter(example_api):
     date_filter = DateFilter()

@@ -1,3 +1,5 @@
+import re
+
 from beancount.core import account
 from beancount.core.data import Transaction
 from beancount.ops import summarize
@@ -71,14 +73,21 @@ class TagFilter(EntryFilter):
             entry.tags and (entry.tags & set(self.tags))
 
 
+def _match_account(name, filter):
+    if filter == '.*' and not re.match(filter, name):
+        print(name)
+    return (account.has_component(name, filter) or
+            re.match(filter, name))
+
+
 class AccountFilter(EntryFilter):
     def _include_entry(self, entry):
         if isinstance(entry, Transaction):
-            return any(account.has_component(posting.account, self.value)
+            return any(_match_account(posting.account, self.value)
                        for posting in entry.postings)
         else:
             return (hasattr(entry, 'account') and
-                    account.has_component(entry.account, self.value))
+                    _match_account(entry.account, self.value))
 
 
 class PayeeFilter(EntryFilter):
