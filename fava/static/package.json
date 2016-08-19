@@ -33,6 +33,7 @@
     "clipboard": "^1.5.8",
     "codemirror": "^5.15.2",
     "d3": "^4.2.2",
+    "d3-scale-chromatic": "^1.0.2",
     "fuzzyjs": "^2.1.2",
     "jquery": "^2.2.0",
     "jquery-dragster": "catmanjan/jquery-dragster",

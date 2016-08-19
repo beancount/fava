@@ -1,8 +1,9 @@
 const d3 = require('d3');
+import { schemeSet3 } from 'd3-scale-chromatic';
 const URI = require('urijs');
 
 let container;
-const treemapColorScale = d3.scaleOrdinal(d3.schemeCategory20);
+const treemapColorScale = d3.scaleOrdinal(schemeSet3);
 const sunburstColorScale = d3.scaleOrdinal(d3.schemeCategory20c);
 const currencyColorScale = d3.scaleOrdinal(d3.schemeCategory10);
 const scatterColorScale = d3.scaleOrdinal(d3.schemeCategory10);
