@@ -61,7 +61,7 @@ CodeMirror.defineSimpleMode('beancount', {
       token: 'date',
     },
     {
-      regex: /(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]+)+/,
+      regex: /(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+/,
       token: 'account',
     },
     {
