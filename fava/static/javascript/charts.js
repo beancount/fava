@@ -970,27 +970,6 @@ module.exports.initCharts = function initCharts() {
         window.charts[chartId] = hierarchy;
         break;
       }
-      case 'treemap': {
-        addInternalNodesAsLeaves(chart.root);
-
-        $.each(window.operating_currencies, (i, currency) => {
-          const id = `treemap-${index}-${currency}`;
-
-          const root = d3.hierarchy(chart.root)
-            .sum(d => d.balance[currency] * chart.modifier)
-            .sort((a, b) => b.value - a.value);
-
-          const treemap = treeMapChart()
-            .tooltipText((d) => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`); // eslint-disable-line max-len
-
-          chartContainer(id, `${chart.label} (${currency})`)
-            .datum(root)
-            .call(treemap);
-
-          window.charts[id] = treemap;
-        });
-        break;
-      }
       default:
         break;
     }
