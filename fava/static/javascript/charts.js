@@ -382,6 +382,7 @@ function barChart() {
 
     y.range([height, 0]);
     x0.range([0, width], 0.1);
+    x1.range([0, x0.bandwidth()]);
 
     svg
       .attr('width', width + margin.left + margin.right)
@@ -395,7 +396,6 @@ function barChart() {
   function setData(data) {
     x0.domain(data.map((d) => d.label));
     x1.domain(data[0].values.map((d) => d.name));
-    x1.range([0, x0.bandwidth()]);
 
     y.domain([
       Math.min(0, d3.min(data, (d) => d3.min(d.values, (e) => e.value))),
