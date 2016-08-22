@@ -1,3 +1,4 @@
+{% import "_charts.html" as charts with context %}
 {% set navigation_bar = [
     ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
     ("Other",         [ 'holdings', 'net_worth', 'commodities', 'events']),
@@ -29,7 +30,6 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='gen/theme_' + config['theme'] + '.css') }}">
     <title>{{ short_title }} - {{ api.title }}</title>
-    <script>window.chartData = [];</script>
 </head>
 <body>
     <header>
@@ -115,9 +115,29 @@
             {% endfor %}
         }, 'keyup');
 
+        // documents upload
         window.documentsFolders = {{ api.options['documents']|tojson|safe }};
         window.documentsUploadUrl = "{{ url_for('add_document') }}";
+
+        // editor
+        window.allAccounts = {{ api.all_accounts_leaf_only|tojson|safe }};
+        window.allCommodities = {{ api.options['commodities']|tojson|safe }};
+        window.allTags = {{ api.active_tags|tojson|safe }};
+
+        window.editorStripTrailingWhitespace = {{ config['editor-strip-trailing-whitespace']|tojson|safe }};
+        window.editorPrintMarginColumn = {{ config['editor-print-margin-column']|tojson|safe }};
+        {% if config['editor-insert-marker'] %}
+            window.editorInsertMarker = "{{ config['editor-insert-marker'] }}";
+        {% endif %}
+
+        // charts
+        window.interval = "{{ interval }}";
+        window.operating_currencies = {{ operating_currencies|tojson|safe }};
+        window.commodities = {{ api.options['commodities']|tojson|safe }};
+        window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";
+
+        window.chartData = {{ charts.chart_data|tojson|safe }};
     </script>
-    {% block javascript %}{% endblock %}
+    <script type="text/javascript" src="{{ url_for('static', filename='gen/editor.js') }}"></script>
 </body>
 </html>

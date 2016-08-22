@@ -2,10 +2,7 @@
 {% set active_page = 'events' %}
 {% set page_title = _('Event') + ' - ' +  event_type %}
 
-{% import "_charts.html" as charts with context %}
-
 {% block content %}
-
     {% set events = api.events(event_type=event_type) %}
 
     {% if events %}

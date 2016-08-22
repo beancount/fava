@@ -1,10 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
 
-{% import "_charts.html" as charts with context %}
-
 {% block content %}
-
     {{ charts.skeleton(hide_interval_filter=True) }}
 
     {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
@@ -16,5 +13,4 @@
         {% include "_tree_table.html" %}
     {% endwith %}
     </div>
-
 {% endblock %}

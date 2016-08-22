@@ -2,10 +2,6 @@
 {% set active_page = 'context' %}
 {% set page_title = "Context: " + ehash %}
 
-{% block javascript %}
-    {% include "javascript/_editor.html" %}
-{% endblock %}
-
 {% block content %}
 {% set context = api.context(ehash) %}
     {% if context %}

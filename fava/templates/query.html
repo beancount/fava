@@ -2,8 +2,6 @@
 {% set active_page = 'query' %}
 {% set show_filters = False %}
 
-{% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
-
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% macro querycell(name, value, type_) %}

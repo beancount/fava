@@ -26,6 +26,7 @@ app = Flask(__name__,
 app.json_encoder = BeanJSONEncoder
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
+app.jinja_env.add_extension('jinja2.ext.do')
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 

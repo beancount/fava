@@ -6,8 +6,6 @@
     {% set source_files = source_files + [config['USER_SETTINGS']] %}
 {% endif %}
 
-{% block javascript %}{% include "javascript/_editor.html" %}{% endblock %}
-
 {% block content %}
     {% if config['use-external-editor'] %}
         <div id="source-readonly">

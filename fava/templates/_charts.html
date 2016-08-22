@@ -1,59 +1,57 @@
 {% import 'macros/_interval_macros.html' as interval_macros with context %}
 
-{% macro add_chart(data) %}
-<script>window.chartData.push({{ data|tojson|safe }})</script>
-{% endmacro %}
+{% set chart_data = [] %}
 
 {% macro hierarchy(account_name, begin_date=None, end_date=None, label=None) %}
-{{ add_chart({
+{% do chart_data.append({
     'type': 'hierarchy',
     'label': account_name if not label else label,
     'modifier': api.get_account_sign(account_name),
     'root': api.balances(account_name, begin_date, end_date)[0],
-}) }}
+}) %}
 {% endmacro %}
 
 {% macro interval_totals(interval, account_name, label=None) %}
-{{ add_chart({
+{% do chart_data.append({
     'type': 'bar',
     'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
     'interval_totals': api.interval_totals(interval, account_name),
-}) }}
+}) %}
 {% endmacro %}
 
 {% macro events(event_type=None, label=None) %}
-{{ add_chart({
+{% do chart_data.append({
     'type': 'scatterplot',
     'label': 'Events' if not label else label,
     'events': api.events(event_type),
-}) }}
+}) %}
 {% endmacro %}
 
 {% macro net_worth(interval) %}
-{{ add_chart({
+{% do chart_data.append({
     'type': 'balances',
     'label': 'Net Worth ({})'.format(interval_macros.interval_label|lower),
     'data': api.net_worth_at_intervals(interval),
-}) }}
+}) %}
 {% endmacro %}
 
 {% macro account_balance(account_name) %}
-{{ add_chart({
+{% do chart_data.append({
     'type': 'balances',
     'label': 'Account Balance',
     'data': api.linechart_data(account_name),
-}) }}
+}) %}
 {% endmacro %}
 
 {% macro commodities() %}
 {% for pair in api.commodity_pairs() %}
-{{ add_chart({
+{% do chart_data.append({
     'type': 'commodities',
     'label': '{0[0]} / {0[1]}'.format(pair),
     'prices': api.prices(pair[0], pair[1]),
     'base': pair[0],
     'quote': pair[1],
-}) }}
+}) %}
 {% endfor %}
 {% endmacro %}
 
@@ -86,10 +84,4 @@
     </div>
     <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
 </div>
-<script>
-    window.interval = "{{ interval }}";
-    window.operating_currencies = {{ operating_currencies|tojson|safe }};
-    window.commodities = {{ api.options['commodities']|tojson|safe }};
-    window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";
-</script>
 {% endmacro %}

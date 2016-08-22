@@ -1,10 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'commodities' %}
 
-{% import "_charts.html" as charts with context %}
-
 {% block content %}
-
     {{ charts.skeleton(hide_interval_filter=True) }}
     {{ charts.commodities() }}
 

@@ -1,8 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'net_worth' %}
 
-{% import "_charts.html" as charts with context %}
-
 {% block content %}
     {{ charts.skeleton() }}
     {{ charts.net_worth(interval) }}
