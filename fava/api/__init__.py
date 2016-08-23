@@ -379,7 +379,7 @@ class BeancountReportAPI():
         }
 
     def linechart_data(self, account_name):
-        journal = self.account_journal(account_name)
+        journal = self.account_journal(account_name, True)
 
         return [{
             'date': journal_entry['date'],

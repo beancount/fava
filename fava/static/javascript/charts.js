@@ -605,10 +605,7 @@ function lineChart() {
 
     y.range([height, 0]);
     x.range([0, width]);
-    voronoi.extent([
-      [0, 0],
-      [width, height],
-    ]);
+    voronoi.size([width, height]);
 
     svg
       .attr('width', width + margin.left + margin.right)
@@ -640,11 +637,9 @@ function lineChart() {
       .attr('d', d => line(d.values));
 
     selections.voronoi.selectAll('path')
-      .data(voronoi.polygons(d3.merge(svg.datum().map(d => d.values))))
-      .attr('d', d => `M${d.join('L')}Z`);
-
-    selections.legend
-      .attr('transform', (d, i) => `translate(${width},${i * 20})`);
+        .data(voronoi.polygons(d3.merge(svg.datum().map(d => d.values))))
+        .filter(d => d !== undefined)
+        .attr('d', d => `M${d.join('L')}Z`);
   }
 
   function chart(svg_) {
@@ -681,6 +676,7 @@ function lineChart() {
         .data(voronoi.polygons(d3.merge(data.map(d => d.values))))
         .enter()
       .append('path')
+        .filter(d => d !== undefined)
         .attr('d', d => `M${d.join('L')}Z`)
         .on('mouseenter', (d) => {
           window.tooltip.style('opacity', 1).html(tooltipText(d.data));
