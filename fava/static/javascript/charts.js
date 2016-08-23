@@ -69,25 +69,20 @@ function timeFilter(date) {
     .toString();
 }
 
-function addLegend(svg, domain, colorScale) {
-  const legend = svg.selectAll('.legend')
+function addLegend(domain, colorScale) {
+  const legend = d3.select('#chart-legend').selectAll('span.legend')
     .data(domain)
     .enter()
-    .append('g')
+    .append('span')
     .attr('class', 'legend');
 
-  legend.append('rect')
-    .attr('x', -18)
-    .attr('width', 18)
-    .attr('height', 18)
-    .style('fill', (d) => colorScale(d));
+  legend.append('span')
+    .attr('class', 'color')
+    .style('background', d => colorScale(d));
 
-  legend.append('text')
-    .attr('x', -24)
-    .attr('y', 9)
-    .attr('dy', '.35em')
-    .style('text-anchor', 'end')
-    .text((d) => d);
+  legend.append('span')
+    .attr('class', 'name')
+    .html(d => d);
 
   return legend;
 }
@@ -429,9 +424,6 @@ function barChart() {
       .attr('x', (d) => x1(d.name))
       .attr('y', (d) => y(Math.max(0, d.value)))
       .attr('height', (d) => Math.abs(y(d.value) - y(0)));
-
-    selections.legend
-      .attr('transform', (d, i) => `translate(${width},${i * 20})`);
   }
 
   function chart(svg_) {
@@ -463,8 +455,6 @@ function barChart() {
         .attr('class', 'bar')
         .style('fill', (d) => currencyColorScale(d.name));
 
-    selections.legend = addLegend(canvas, x1.domain(), currencyColorScale);
-
     resize();
   }
 
@@ -476,6 +466,7 @@ function barChart() {
   chart.update = () => {
     setSize();
     resize();
+    addLegend(x1.domain(), currencyColorScale);
   };
 
   return chart;
@@ -690,8 +681,6 @@ function lineChart() {
           window.tooltip.style('opacity', 0);
         });
 
-    selections.legend = addLegend(canvas, svg.datum().map((d) => d.name), currencyColorScale);
-
     resize();
   }
 
@@ -703,6 +692,7 @@ function lineChart() {
   chart.update = () => {
     setSize();
     resize();
+    addLegend(svg.datum().map((d) => d.name), currencyColorScale);
   };
 
   return chart;
@@ -972,6 +962,7 @@ module.exports.initCharts = function initCharts() {
   });
 
   const $labels = $('#chart-labels');
+  const $toggleChart = $('#toggle-chart');
 
   // Switch between charts
   $labels.find('label').click((event) => {
@@ -981,6 +972,8 @@ module.exports.initCharts = function initCharts() {
 
     $labels.find('label').removeClass('selected');
     $(event.currentTarget).addClass('selected');
+
+    $('#chart-legend').html('');
 
     currentChart = window.charts[chartId];
     currentChart.update();
@@ -994,11 +987,11 @@ module.exports.initCharts = function initCharts() {
   });
   $labels.find('label:first-child').click();
 
-  $('#toggle-chart').click((event) => {
-    event.preventDefault();
-    const shouldShow = !$(event.currentTarget).hasClass('show-charts');
-    $('#chart-container, #chart-labels, #chart-interval').toggleClass('hidden', !shouldShow);
-    $(event.currentTarget).toggleClass('show-charts', shouldShow);
+  $toggleChart.click(() => {
+    $toggleChart.toggleClass('hide-charts');
+    $('#charts')
+        .toggleClass('hidden', $toggleChart.hasClass('hide-charts'));
+    currentChart.update();
   });
 
   $('select#chart-interval').on('change', (event) => {

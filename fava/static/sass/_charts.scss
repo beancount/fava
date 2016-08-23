@@ -1,4 +1,4 @@
-.chart-labels {
+#chart-labels {
     color: rgba($color_text, 0.2);
     font-size: 1em;
     line-height: 14px;
@@ -22,9 +22,66 @@
     label+label { border-left: 1px solid rgba($color_text, 0.4) }
 }
 
-.chart-container {
+#toggle-chart-container {
+    position: absolute;
+    top: $header_height + 19px;
+    right: 19px;
+    padding: 4px;
+    background-color: $color_header;
+}
+
+#toggle-chart {
+    display: block;
+    padding: 0;
+    width: 0;
+    height: 0;
+    background-color: $color_header;
+    border: none;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 13px solid #eee;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &.hide-charts {
+        border: none;
+        border-left: 9px solid transparent;
+        border-right: 9px solid transparent;
+        border-bottom: 13px solid #eee;
+    }
+}
+
+#chart-form {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 35px;
+    display: flex;
+
+    > span, > select {
+        margin-right: 10px;
+    }
+}
+
+#chart-container {
     position: relative;
     min-height: 100px;
+}
+
+#chart-legend {
+    flex-grow: 1;
+
+    .color {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+    }
+
+    .name {
+        margin: 0 6px 0 3px;
+    }
 }
 
 .chart > p,

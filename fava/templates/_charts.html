@@ -57,31 +57,34 @@
 
 {% macro skeleton(hide_interval_filter=False) %}
 {% set show_charts = config['charts'] %}
-<form class="wide-form chart-filter" id="chart-form">
-    <select name="chart-currency" id="chart-currency" class="hidden">
-    {% for currency in operating_currencies %}
-        <option value="{{ currency }}">{{ currency }}</option>
-    {% endfor %}
-    </select>
-    <span id="chart-mode" class="hidden">
-    <input name="mode" type="radio" value="treemap" id="mode-treemap" checked> <label for="mode-treemap">{{ _('Treemap') }}</label>
-    <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
-    </span>
-    {% if not hide_interval_filter %}
-        <select name="chart-interval" id="chart-interval">
-            <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>{{ _('Daily') }}</option>
-            <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>{{ _('Weekly') }}</option>
-            <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>{{ _('Monthly') }}</option>
-            <option value="quarter"{% if interval == 'quarter' %} selected="selected"{% endif %}>{{ _('Quarterly') }}</option>
-            <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>{{ _('Yearly') }}</option>
+<div id="toggle-chart-container">
+    <span id="toggle-chart"{% if not show_charts %} class="hide-charts"{% endif %}></span>
+</div>
+<div id="charts" class="charts {% if not show_charts %} hidden{% endif %}">
+    <form id="chart-form">
+        <span id="chart-legend"></span>
+        <select name="chart-currency" id="chart-currency" class="hidden">
+        {% for currency in operating_currencies %}
+            <option value="{{ currency }}">{{ currency }}</option>
+        {% endfor %}
         </select>
-    {% endif %}
-    <input type="submit" id="toggle-chart"{% if show_charts %} class="show-charts"{% endif %} value="{{ _('Toggle charts') }}">
-</form>
-<div class="charts">
-    <div id="chart-container" class="chart-container{% if not show_charts %} hidden{% endif %}">
+        <span id="chart-mode" class="hidden">
+            <input name="mode" type="radio" value="treemap" id="mode-treemap" checked> <label for="mode-treemap">{{ _('Treemap') }}</label>
+            <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
+        </span>
+        {% if not hide_interval_filter %}
+            <select name="chart-interval" id="chart-interval">
+                <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>{{ _('Daily') }}</option>
+                <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>{{ _('Weekly') }}</option>
+                <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>{{ _('Monthly') }}</option>
+                <option value="quarter"{% if interval == 'quarter' %} selected="selected"{% endif %}>{{ _('Quarterly') }}</option>
+                <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>{{ _('Yearly') }}</option>
+            </select>
+        {% endif %}
+    </form>
+    <div id="chart-container">
         <div class="loading">{{ _('Loading charts&hellip;') }}</div>
     </div>
-    <div id="chart-labels" class="chart-labels{% if not show_charts %} hidden{% endif %}"> </div>
+    <div id="chart-labels" ></div>
 </div>
 {% endmacro %}
