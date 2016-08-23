@@ -13,6 +13,8 @@ overview.
 
 There are four filters available in Fava:
 
+- **FROM** Filter entries using a `FROM` expression as supported by the
+  Beancount Query Language.
 - **Time**: Filter entries by their date. You can specify dates and intervals
   like years, quarters, months, weeks, and days (for example `2015`, `2012-Q1`,
   `2010-10`, `2016-W12`, or `2015-06-12`). You can specify a range of dates

@@ -3,7 +3,7 @@ import datetime
 from beancount.core import account
 from beancount.core.data import Transaction
 from fava.api.filters import (
-    AccountFilter, DateFilter, FromFilter, PayeeFilter, TagFilter)
+    AccountFilter, FromFilter, PayeeFilter, TagFilter, TimeFilter)
 
 
 def test_from_filter(example_api):
@@ -34,23 +34,23 @@ def test_account_filter(example_api):
     assert len(filtered_entries) == 67
 
 
-def test_date_filter(example_api):
-    date_filter = DateFilter()
+def test_time_filter(example_api):
+    time_filter = TimeFilter()
 
-    date_filter.set('2017')
-    assert date_filter.begin_date == datetime.date(2017, 1, 1)
-    assert date_filter.end_date == datetime.date(2018, 1, 1)
-    filtered_entries = date_filter.apply(
+    time_filter.set('2017')
+    assert time_filter.begin_date == datetime.date(2017, 1, 1)
+    assert time_filter.end_date == datetime.date(2018, 1, 1)
+    filtered_entries = time_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 81
 
-    date_filter.set('1000')
-    filtered_entries = date_filter.apply(
+    time_filter.set('1000')
+    filtered_entries = time_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 0
 
-    date_filter.set(None)
-    filtered_entries = date_filter.apply(
+    time_filter.set(None)
+    filtered_entries = time_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == len(example_api.all_entries)
 

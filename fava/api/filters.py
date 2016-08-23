@@ -9,7 +9,12 @@ from fava.util.date import parse_date
 
 
 class FilterException(Exception):
-    pass
+    def __init__(self, filter_type, msg):
+        self.filter_type = filter_type
+        self.msg = msg
+
+    def __str__(self):
+        return self.msg
 
 
 class EntryFilter(object):
@@ -55,17 +60,16 @@ class FromFilter(EntryFilter):
                 'select * from ' + value).from_clause
             self.c_from = query_compile.compile_from(
                 from_clause, self.env_entries)
-        except Exception:
-            # TODO
-            raise FilterException('Failed to parse from clause: {}'
-                                  .format(self.value))
+        except (query_compile.CompilationError,
+                query_parser.ParseError) as exception:
+            raise FilterException('from', str(exception))
         return True
 
     def _filter(self, entries, options):
         return query_execute.filter_entries(self.c_from, entries, options)
 
 
-class DateFilter(EntryFilter):
+class TimeFilter(EntryFilter):
     def set(self, value):
         if value == self.value:
             return False
@@ -75,7 +79,7 @@ class DateFilter(EntryFilter):
         try:
             self.begin_date, self.end_date = parse_date(self.value)
         except TypeError:
-            raise FilterException('Failed to parse date: {}'
+            raise FilterException('time', 'Failed to parse date: {}'
                                   .format(self.value))
         return True
 

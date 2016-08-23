@@ -401,7 +401,7 @@ def inject_filters(endpoint, values):
 
     if endpoint == 'static':
         return
-    for filter_name in ['time', 'account', 'interval', 'tag', 'payee']:
+    for filter_name in ['account', 'from', 'interval', 'payee', 'tag', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
 
@@ -414,13 +414,13 @@ def perform_global_filters():
 
     g.filters = {
         name: request.args.get(name, None)
-        for name in ['account', 'interval', 'payee', 'tag', 'time']
+        for name in ['account', 'from', 'interval', 'payee', 'tag', 'time']
     }
 
     try:
         g.api.filter(**g.filters)
     except FilterException as exception:
-        g.filters['time'] = None
+        g.filters[exception.filter_type] = None
         flash(str(exception))
 
 

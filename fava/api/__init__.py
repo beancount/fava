@@ -25,7 +25,8 @@ from beancount.scripts.format import align_beancount
 
 from fava.util import date
 from fava.api.budgets import Budgets
-from fava.api.filters import AccountFilter, DateFilter, PayeeFilter, TagFilter
+from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
+                              TagFilter, TimeFilter)
 from fava.api.helpers import holdings_at_dates
 from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
@@ -98,10 +99,11 @@ class BeancountReportAPI():
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
         self.filters = {
-            'time': DateFilter(),
-            'tag': TagFilter(),
             'account': AccountFilter(),
+            'from': FromFilter(),
             'payee': PayeeFilter(),
+            'tag': TagFilter(),
+            'time': TimeFilter(),
         }
 
         self.load_file()
