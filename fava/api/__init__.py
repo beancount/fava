@@ -43,11 +43,12 @@ def _filter_entries_by_type(entries, include_types):
             if isinstance(entry, include_types)]
 
 
-def _list_accounts(root_account, leaf_only=False):
+def _list_accounts(root_account, active_only=False):
     """List of all sub-accounts of the given root."""
     accounts = [child_account.account
                 for child_account in
-                realization.iter_children(root_account, leaf_only)]
+                realization.iter_children(root_account)
+                if not active_only or child_account.txn_postings]
 
     return accounts[1:]
 
@@ -133,8 +134,8 @@ class BeancountReportAPI():
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
         self.all_accounts = _list_accounts(self.all_root_account)
-        self.all_accounts_leaf_only = _list_accounts(
-            self.all_root_account, leaf_only=True)
+        self.all_accounts_active = _list_accounts(
+            self.all_root_account, active_only=True)
 
         self.sidebar_links = _sidebar_links(self.all_entries)
 

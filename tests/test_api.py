@@ -1,7 +1,7 @@
 def test_accounts(example_api):
     assert len(example_api.all_accounts) == 91
-    assert len(example_api.all_accounts_leaf_only) == 54
-    assert 'Assets' not in example_api.all_accounts_leaf_only
+    assert len(example_api.all_accounts_active) == 59
+    assert 'Assets' not in example_api.all_accounts_active
 
 
 def test_linechart_data(example_api):
