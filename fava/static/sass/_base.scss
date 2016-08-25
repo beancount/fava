@@ -642,3 +642,27 @@ table.statistics-update-activity {
     padding-left: 0;
   }
 }
+
+@media print {
+  body {
+    padding: 0;
+  }
+
+  header {
+    position: relative;
+  }
+
+  header > * {
+    display: none;
+  }
+
+  header h1 {
+    display: block;
+  }
+
+  aside,
+  .aside-button,
+  .toggle-chart-container {
+    display: none;
+  }
+}
