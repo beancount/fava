@@ -50,7 +50,7 @@ def _list_accounts(root_account, active_only=False):
                 realization.iter_children(root_account)
                 if not active_only or child_account.txn_postings]
 
-    return accounts[1:]
+    return accounts if active_only else accounts[1:]
 
 
 def _journal(entries, include_types=None):
