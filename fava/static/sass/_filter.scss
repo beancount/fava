@@ -90,6 +90,7 @@
                 position: relative;
                 min-width: 8rem;
                 padding: 0 10px;
+                white-space: nowrap;
 
                 &:hover {
                     color: $color_background;
