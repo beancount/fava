@@ -5796,6 +5796,18 @@ option "operating_currency" "USD"
 2016-05-06 price VHT                               108.25 USD
 2016-05-06 price GLD                               107.36 USD
 
+2000-01-01 open Assets:Testing:MultipleCommodities
+2000-01-01 *
+  Assets:Testing:MultipleCommodities                  100 USD
+  Equity:Opening-Balances
+
+2000-01-02 *
+  Assets:Testing:MultipleCommodities                    1 XYZ {50 USD}
+  Assets:Testing:MultipleCommodities                  -50 USD
+
+2000-01-03 *
+  Assets:Testing:MultipleCommodities                    1 ABC {50 USD}
+  Assets:Testing:MultipleCommodities                  -50 USD
 
 
 * Cash

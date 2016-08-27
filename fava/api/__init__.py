@@ -386,10 +386,12 @@ class BeancountReportAPI():
 
         return [{
             'date': journal_entry['date'],
-            'balance': journal_entry['balance'] if journal_entry['balance']
-            # when there's no holding, the balance would be an empty dict.
-            # Synthesize a zero balance based on the 'change' value
-            else {x: 0 for x in journal_entry['change']}
+            # when there's no holding for a commodity, it will be missing from
+            # 'balance' field but appear in 'change' field. Use 0 for those
+            # commodities.
+            'balance': {x: journal_entry['balance'].get(x, 0) for x in
+                        journal_entry['change'].keys() |
+                        journal_entry['balance'].keys()}
         } for journal_entry in journal if 'balance' in journal_entry]
 
     def source_files(self):

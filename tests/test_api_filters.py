@@ -21,7 +21,7 @@ def test_account_filter(example_api):
     account_filter.set('Assets')
     filtered_entries = account_filter.apply(
         example_api.all_entries, example_api.options)
-    assert len(filtered_entries) == 537
+    assert len(filtered_entries) == 541
     assert all(map(
         lambda x: hasattr(x, 'account') and
         account.has_component(x.account, 'Assets') or any(map(
@@ -42,7 +42,7 @@ def test_time_filter(example_api):
     assert time_filter.end_date == datetime.date(2018, 1, 1)
     filtered_entries = time_filter.apply(
         example_api.all_entries, example_api.options)
-    assert len(filtered_entries) == 81
+    assert len(filtered_entries) == 83
 
     time_filter.set('1000')
     filtered_entries = time_filter.apply(
