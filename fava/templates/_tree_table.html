@@ -20,7 +20,7 @@
         <li>
         <p>
         <span class="account account-depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
-            {% if account.children %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children') }}"></span>{% endif %}
+            {% if account.children %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children \nHold the CTRL-key while clicking to expand one level') }}"></span>{% endif %}
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
         <span class="num{{ ' has-balance' if account.balance else '' }}">
