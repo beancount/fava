@@ -1,8 +1,11 @@
 module.exports.initTreeTable = function initTreeTable() {
   $('ol.tree-table span.has-children').click((event) => {
     const row = $(event.currentTarget).parents('li').first();
-    if (event.shiftKey === true) {
+    if (event.shiftKey) {
       row.find('li').toggleClass('toggled', !row.hasClass('toggled'));
+    }
+    if (event.ctrlKey || event.metaKey) {
+      row.find('li').toggleClass('toggled', row.hasClass('toggled'));
     }
     row.toggleClass('toggled');
     row.parents('ol').find('a.expand-all')
