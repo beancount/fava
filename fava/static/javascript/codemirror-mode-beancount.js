@@ -38,7 +38,7 @@ CodeMirror.defineSimpleMode('beancount', {
       token: 'whitespace',
     },
     {
-      regex: /[*!&#?%PSTCURM]|txn/,
+      regex: /[*!&?%PSTCURM]|txn/,
       token: 'directive transaction',
     },
     // other dated directives
