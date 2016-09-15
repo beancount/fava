@@ -146,13 +146,13 @@
       &.num-header,
       &.num {
         font-size: $num-fraction;
-        width: 20rem / ($i+1);
+        width: 20rem / ($i + 1);
       }
 
       &.other-header,
       &.other {
         font-size: $num-fraction;
-        width: 20rem / ($i+1) + 3rem;
+        width: 20rem / ($i + 1) + 3rem;
       }
     }
   }

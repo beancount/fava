@@ -26,13 +26,13 @@
         outline: none;
 
         @include placeholder {
-          opacity: 1;
           color: lighten($color-header, 60);
+          opacity: 1;
         }
 
         &:focus {
-          color: $color-text;
           background: $color-background;
+          color: $color-text;
 
           @include placeholder {
             color: lighten($color-text, 50);
@@ -78,21 +78,21 @@
 
   div.awesomplete {
     ul {
+      border-radius: 0;
+      opacity: 1;
       padding: 2px 0;
       transition: none;
-      opacity: 1;
-      border-radius: 0;
 
       li {
         line-height: 1.5em;
-        position: relative;
         min-width: 8rem;
         padding: 0 10px;
+        position: relative;
         white-space: nowrap;
 
         &:hover {
-          color: $color-background;
           background: $color-links;
+          color: $color-background;
         }
       }
     }
@@ -100,39 +100,39 @@
 }
 
 div.beancount-files {
-  position: absolute;
-  z-index: 10;
-  top: $header-height;
-  left: 19px;
-  display: none;
-  width: 20em;
-  border: 1px solid darken($color-background, 20);
-  border-bottom-right-radius: 3px;
-  border-bottom-left-radius: 3px;
   background-color: $color-background;
+  border: 1px solid darken($color-background, 20);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
   box-shadow: 0 3px 6px rgba($color-text, .2);
+  display: none;
+  left: 19px;
+  position: absolute;
+  top: $header-height;
+  width: 20em;
+  z-index: 10;
 
   & > ul {
-    overflow-y: auto;
-    max-height: 400px;
     margin-bottom: 0;
+    max-height: 400px;
+    overflow-y: auto;
 
     li {
       a {
+        color: $color-links !important;
         display: block;
         padding: 8px 12px 8px 28px;
-        color: $color-links !important;
       }
 
       &.selected a,
       a:hover {
-        color: lighten($color-text, 100) !important;
         background-color: $color-links !important;
+        color: lighten($color-text, 100) !important;
       }
 
       &.selected a {
-        padding-left: 28px;
         background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
+        padding-left: 28px;
       }
     }
   }
