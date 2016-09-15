@@ -57,12 +57,12 @@
 
 {% macro skeleton(hide_interval_filter=False) %}
 {% set show_charts = config['charts'] %}
-<div id="toggle-chart-container">
+<div class="toggle-chart-container">
     <span id="toggle-chart"{% if not show_charts %} class="hide-charts"{% endif %}></span>
 </div>
 <div id="charts" class="charts {% if not show_charts %} hidden{% endif %}">
     <form id="chart-form">
-        <span id="chart-legend"></span>
+        <span id="chart-legend" class="chart-legend"></span>
         <select name="chart-currency" id="chart-currency" class="hidden">
         {% for currency in operating_currencies %}
             <option value="{{ currency }}">{{ currency }}</option>
@@ -82,9 +82,9 @@
             </select>
         {% endif %}
     </form>
-    <div id="chart-container">
+    <div id="chart-container" class="chart-container">
         <div class="loading">{{ _('Loading charts&hellip;') }}</div>
     </div>
-    <div id="chart-labels" ></div>
+    <div id="chart-labels" class="chart-labels"></div>
 </div>
 {% endmacro %}

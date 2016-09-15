@@ -1,58 +1,58 @@
 // Query View
 
-article#page-query {
-    div.queryresults-wrapper {
-        display: inline-block;
+.queryresults-wrapper {
+  display: inline-block;
 
-        &, table { min-width: 400px; }
+  &,
+  table {
+    min-width: 400px;
+  }
 
-        p.download {
-            color: #999;
-            float: right;
-        }
-    }
+  .download {
+    color: $color-text-lighter;
+    float: right;
+  }
+}
 
-    p.error {
-        color: $color_error;
-        font-weight: bold;
-        font-family: $font_family_monospaced;
-    }
+.stored-queries {
+  color: $color-text-lighter;
 
-    form.stored-queries {
-        color: lighten($color_text, 30);
+  label { margin-right: 8px; }
+  a { margin-left: 6px; }
+}
 
-        label { margin-right: 8px; }
-        a { margin-left: 6px; }
-    }
+.query-box {
+  input {
+    float: right;
+  }
 
-    form {
-        #submit-query {
-            float: right;
-        }
+  .CodeMirror,
+  textarea {
+    border: 1px solid darken($color-background, 9);
+    font-family: $font-family-editor;
+    font-size: 16px;
+    height: 180px;
+    margin-bottom: 1em;
+    width: 100%;
+  }
+}
 
-        .CodeMirror,
-        textarea {
-            margin-bottom: 1em;
-            font-family: $font_family_editor;
-            font-size: 16px;
-            border: 1px solid darken($color_background, 9);
-            width: 100%;
-            height: 180px;
-        }
+.sample-queries {
+  padding-left: 2em;
 
-    }
+  a { text-decoration: none; }
+  code { color: lighten($color-text, 30); }
+  li { list-style-type: disc; }
+}
 
-    ul.sample {
-        padding-left: 2em;
+.query-error {
+  background: $color-error;
+  color: $color-background;
+  font-family: $font-family-monospaced;
+}
 
-        a { text-decoration: none; }
-        code { color: lighten($color_text, 30); }
-        li { list-style-type: disc; }
-    }
-
-    td.query-error {
-        background: $color_error;
-        color: lighten($color_text, 100);
-        font-family: $font_family_monospaced;
-    }
+.query-syntax-error {
+  color: $color-error;
+  font-family: $font-family-monospaced;
+  font-weight: bold;
 }

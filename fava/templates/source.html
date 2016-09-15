@@ -39,7 +39,7 @@
         </select>
         <input id="source-editor-submit" type="submit" value="{{ _('Save') }}">
         <input id="source-editor-format" type="submit" data-url="{{ url_for('source_format') }}" value="{{ _('Format') }}">
-        <div id="source-editor-wrapper">
+        <div id="source-editor-wrapper" class="source-editor-wrapper">
             <textarea id="source-editor" name="source" autofocus>{{ api.source(file_path) or '' }}</textarea>
         </div>
     </form>

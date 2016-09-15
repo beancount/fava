@@ -6,97 +6,97 @@
 @import '~codemirror/addon/hint/show-hint.css';
 
 article#page-source {
-    padding: 0;
+  padding: 0;
 
-    form {
-        background: lighten($color_sidebar_background, 2);
+  form {
+    background: lighten($color-sidebar-background, 2);
 
-        > select {
-            margin: 5px 10px;
-        }
-
-        > input {
-            margin: 5px;
-            background: $color_header;
-            color: #fff;
-            padding: 4px 10px;
-            border: 1px solid darken($color_header, 9);
-        }
-
-        div#source-editor-wrapper {
-            position: fixed;
-            top: $header_height + 37px;
-            right: 0;
-            bottom: 0;
-            left: $aside_width;
-        }
-
-        .CodeMirror,
-        textarea {
-            border: none;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-
-            .CodeMirror-lines {
-                border-top: 1px solid darken($color_sidebar_background, 10);
-            }
-        }
+    > select {
+      margin: 5px 10px;
     }
 
-    div#source-readonly {
-        padding: 1.5em;
+    > input {
+      background: $color-header;
+      border: 1px solid darken($color-header, 9);
+      color: #fff;
+      margin: 5px;
+      padding: 4px 10px;
     }
+
+    div#source-editor-wrapper {
+      bottom: 0;
+      left: $aside-width;
+      position: fixed;
+      right: 0;
+      top: $header-height + 37px;
+    }
+
+    .CodeMirror,
+    textarea {
+      border: 0;
+      height: 100%;
+      margin: 0;
+      width: 100%;
+
+      .CodeMirror-lines {
+        border-top: 1px solid darken($color-sidebar-background, 10);
+      }
+    }
+  }
+
+  div#source-readonly {
+    padding: 1.5em;
+  }
 }
 
 .CodeMirror-gutters {
-    background: lighten($color_sidebar_background, 2);
-    border-right: 1px solid darken($color_sidebar_background, 10);
+  background: lighten($color-sidebar-background, 2);
+  border-right: 1px solid darken($color-sidebar-background, 10);
 }
 
 .CodeMirror {
-    font: 13px $font_family_editor;
-    border: 1px solid darken($color_background, 9);
-    margin-bottom: 1em;
+  border: 1px solid darken($color-background, 9);
+  font: 13px $font-family-editor;
+  margin-bottom: 1em;
 
-    .cm-section {
-        color: $color_editor_comment;
-        font-weight: bold;
-        border: solid 1px $color_editor_comment;
-        border-radius: 2px;
-        padding-right: 10px;
-    }
+  .cm-section {
+    border: solid 1px $color-editor-comment;
+    border-radius: 2px;
+    color: $color-editor-comment;
+    font-weight: bold;
+    padding-right: 10px;
+  }
 
-    .cm-comment {
-        color: $color_editor_comment;
-    }
+  .cm-comment {
+    color: $color-editor-comment;
+  }
 
-    .cm-date {
-        color: $color_editor_date;
-    }
+  .cm-date {
+    color: $color-editor-date;
+  }
 
-    .cm-directive {
-        color: $color_editor_directive;
-        font-weight: bold;
-    }
+  .cm-directive {
+    color: $color-editor-directive;
+    font-weight: bold;
+  }
 
-    .cm-option {
-        color: $color_editor_class;
-    }
+  .cm-option {
+    color: $color-editor-class;
+  }
 
-    .cm-account {
-        color: $color_editor_account;
-    }
+  .cm-account {
+    color: $color-editor-account;
+  }
 
-    .cm-invalid {
-        color: $color_editor_invalid;
-    }
+  .cm-invalid {
+    color: $color-editor-invalid;
+  }
 }
 
 .CodeMirror-hint {
-    max-width: 600px;
+  max-width: 600px;
 
-    span.highlight {
-        font-weight: bold;
-    }
+  .highlight {
+    font-weight: bold;
+  }
 }

@@ -1,102 +1,104 @@
 // Fonts
-
 @font-face {
-    font-family: "Fira Mono";
-    src: url("~@typopro/web-fira-mono/TypoPRO-FiraMono-Regular.woff") format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Fira Mono';
+  font-style: normal;
+  font-weight: normal;
+  src: url('~@typopro/web-fira-mono/TypoPRO-FiraMono-Regular.woff') format('woff');
 }
 
 @font-face {
-    font-family: "Fira Sans";
-    src: url("~@typopro/web-fira-sans/TypoPRO-FiraSans-Regular.woff") format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('~@typopro/web-fira-sans/TypoPRO-FiraSans-Regular.woff') format('woff');
 }
 
 @font-face {
-    font-family: "Fira Sans";
-    src: url("~@typopro/web-fira-sans/TypoPRO-FiraSans-Medium.woff") format('woff');
-    font-weight: 500;
-    font-style: normal;
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: url('~@typopro/web-fira-sans/TypoPRO-FiraSans-Medium.woff') format('woff');
 }
 
 @font-face {
-    font-family: "Source Serif Pro";
-    src: url("~@typopro/web-source-serif-pro/TypoPRO-SourceSerifPro-Regular.woff") format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'Source Serif Pro';
+  font-style: normal;
+  font-weight: normal;
+  src: url('~@typopro/web-source-serif-pro/TypoPRO-SourceSerifPro-Regular.woff') format('woff');
 }
 
 @font-face {
-    font-family: "Source Serif Pro";
-    src: url("~@typopro/web-source-serif-pro/TypoPRO-SourceSerifPro-Semibold.woff") format('woff');
-    font-weight: 500;
-    font-style: normal;
+  font-family: 'Source Serif Pro';
+  font-style: normal;
+  font-weight: 500;
+  src: url('~@typopro/web-source-serif-pro/TypoPRO-SourceSerifPro-Semibold.woff') format('woff');
 }
 
-$font_family: "Fira Sans", sans-serif;
-$font_family_alternative: "Source Serif Pro", sans-serif;
-$font_family_monospaced: "Fira Mono", monospace;
-$font_family_editor: "Source Code Pro", monospace;
-$font_family_kbd: "Fira Mono", monospace;
+$font-family: 'Fira Sans', sans-serif;
+$font-family-alternative: 'Source Serif Pro', sans-serif;
+$font-family-monospaced: 'Fira Mono', monospace;
+$font-family-editor: 'Source Code Pro', monospace;
 
 // Colors
+$color-background: #fff;
+$color-background-darker: darken($color-background, 20);
+$color-text: #444;
+$color-text-lighter: lighten($color-text, 20);
 
-$color_background: #fff;
-$color_text: #444;
-$color_links: #0067A5;
-$color_headings: #333;
-$color_error: #990000;
+$color-links: #0067a5;
+$color-headings: #333;
+$color-error: #900;
+$color-code-background: #f8f8f8;
 
-$color_sidebar_text: #dadada;
-$color_sidebar_background: #f5f5f5;
-$color_sidebar_links: #444;
+$color-sidebar-text: #dadada;
+$color-sidebar-background: #f5f5f5;
+$color-sidebar-border: darken($color-sidebar-background, 12);
+$color-sidebar-links: #444;
 
-$color_header: #0067A5;
-$color_header_bottom: darken($color_header, 10);
-$color_header_text: white;
+$color-header: #0067a5;
+$color-header-bottom: darken($color-header, 10);
+$color-header-text: #fff;
 
-$color_status_red: #990000;
-$color_status_yellow: #edd42f;
-$color_status_green: #007f41;
-$color_status_gray: #aaa;
+$color-status-red: #900;
+$color-status-yellow: #edd42f;
+$color-status-green: #007f41;
+$color-status-gray: #aaa;
 
-$color_journalentry_close: #888;
-$color_journalentry_pending: #f8a;
-$color_journalentry_open: #e8e8e8;
-$color_journalentry_note: #aad0ff;
-$color_journalentry_document: #ffc8ff;
-$color_journalentry_balance: #cfc;
-$color_journalentry_pad: #8ff;
-$color_journalentry_padding: #cff;
-$color_journalentry_postingwarning: #f66;
-$color_journalentry_custom: #fff3ab;
-$color_journalentry_budget: #ffddae;
+$color-journalentry-close: #888;
+$color-journalentry-pending: #f8a;
+$color-journalentry-open: #e8e8e8;
+$color-journalentry-note: #aad0ff;
+$color-journalentry-document: #ffc8ff;
+$color-journalentry-balance: #cfc;
+$color-journalentry-pad: #8ff;
+$color-journalentry-padding: #cff;
+$color-journalentry-postingwarning: #f66;
+$color-journalentry-custom: #fff3ab;
+$color-journalentry-budget: #ffddae;
 
-$color_journaltable_header: #888;
-$color_journaltable_border: #f5f5f5;
-$color_journaltable_metadata: #85aacf;
-$color_journaltable_tag: #6aa2db;
+$color-journaltable-header: #888;
+$color-journaltable-border: #f5f5f5;
+$color-journaltable-metadata: #85aacf;
+$color-journaltable-tag: #6aa2db;
 
-$color_treetable_header_bg: darken($color_background, 15);
-$color_treetable_expander: #afc1d3;
+$color-treetable-header-bg: darken($color-background, 15);
+$color-treetable-expander: #afc1d3;
 
-$color_budget_negative: #AF3D3D;
-$color_budget_positive: #3DAF46;
-$color_budget_zero: #FFB900;
+$color-budget-negative: #af3d3d;
+$color-budget-positive: #3daf46;
+$color-budget-zero: #ffb900;
 
-$color_treemap_text: white;
+$color-treemap-text: #fff;
+$color-chart-axis: #999;
 
-$color_editor_comment: #999988;
-$color_editor_directive: #333;
-$color_editor_class: #bb8844;
-$color_editor_date: #009999;
-$color_editor_constant: #008080;
-$color_editor_account: $color_links;
-$color_editor_invalid: #333;
-$color_editor_activeline: #ffffcc;
+$color-editor-comment: #998;
+$color-editor-directive: #333;
+$color-editor-class: #b84;
+$color-editor-date: #099;
+$color-editor-constant: #008080;
+$color-editor-account: $color-links;
+$color-editor-invalid: #333;
+$color-editor-activeline: #ffc;
 
 // Import everything
-
-@import "base"
+@import 'base';

@@ -5,94 +5,98 @@
 
 // Tipografía Share Tech Mono http://www.fontsquirrel.com/fonts/share-regular
 @font-face {
-    font-family: ShareTechMono;
-    src: url("../fonts/Share-TechMono-webfont.woff") format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: ShareTechMono;
+  src: url("../fonts/Share-TechMono-webfont.woff") format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
 
-$font_family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
-$font_family_alternative: "Helvetica", "Lucida Grande", Verdana, sans-serif;
-$font_family_monospaced: ShareTechMono, serif;
-$font_family_editor: "Source Code Pro", monospace;
-$font_family_kbd: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+$font-family: "Arial", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, sans-serif;
+$font-family-alternative: "Helvetica", "Lucida Grande", Verdana, sans-serif;
+$font-family-monospaced: ShareTechMono, serif;
+$font-family-editor: "Source Code Pro", monospace;
+$font-family-kbd: Consolas, "Liberation Mono", Menlo, Courier, monospace;
 
 // Colors
+$color-background: #D1C7C5;
+$color-background-darker: darken($color-background, 20);
+$color-text: #725858;
+$color-text-lighter: lighten($color-text, 30);
+$color-links: #D36455;
+$color-headings: #333;
+$color-error: #990000;
+$color-code-background: #f8f8f8;
 
-$color_background: #D1C7C5;
-$color_text: #725858;
-$color_links: #D36455;
-$color_headings: #333;
-$color_error: #990000;
+$color-sidebar-text: #dadad9;
+$color-sidebar-background: #DDD8D5;
+$color-sidebar-border: darken($color-sidebar-background, 20);
+$color-sidebar-links: #36382e;
 
-$color_sidebar_text: #dadad9;
-$color_sidebar_background: #DDD8D5;
-$color_sidebar_links: #36382e;
+$color-header: #D36455;
+$color-header-bottom: #2e3d54;
+$color-header-text: white;
 
-$color_header: #D36455;
-$color_header_bottom: #2e3d54;
-$color_header_text: white;
+$color-status-red: #990000;
+$color-status-yellow: #edd42f;
+$color-status-green: #007f41;
+$color-status-gray: #aaa;
 
-$color_status_red: #990000;
-$color_status_yellow: #edd42f;
-$color_status_green: #007f41;
-$color_status_gray: #aaa;
+$color-journalentry-close: #888;
+$color-journalentry-pending: #f8a;
+$color-journalentry-open: #e8e8e8;
+$color-journalentry-note: #aad0ff;
+$color-journalentry-document: #ffc8ff;
+$color-journalentry-balance: #cfc;
+$color-journalentry-pad: #8ff;
+$color-journalentry-padding: #cff;
+$color-journalentry-postingwarning: #f66;
+$color-journalentry-custom: #fff3ab;
+$color-journalentry-budget: #ffddae;
 
-$color_journalentry_close: #888;
-$color_journalentry_pending: #f8a;
-$color_journalentry_open: #e8e8e8;
-$color_journalentry_note: #aad0ff;
-$color_journalentry_document: #ffc8ff;
-$color_journalentry_balance: #cfc;
-$color_journalentry_pad: #8ff;
-$color_journalentry_padding: #cff;
-$color_journalentry_postingwarning: #f66;
-$color_journalentry_custom: #fff3ab;
-$color_journalentry_budget: #ffddae;
+$color-journaltable-header: $color-text;
+$color-journaltable-border: white;
+$color-journaltable-metadata: #85aacf;
+$color-journaltable-tag: #6aa2db;
 
-$color_journaltable_header: $color_text;
-$color_journaltable_border: white;
-$color_journaltable_metadata: #85aacf;
-$color_journaltable_tag: #6aa2db;
+$color-treetable-header-bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
 
-$color_treetable_header_bg: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
+$color-treetable-expander: #afc1d3;
 
-$color_treetable_expander: #afc1d3;
+$color-budget-negative: #AF3D3D;
+$color-budget-positive: #3DAF46;
+$color-budget-zero: #FFB900;
 
-$color_budget_negative: #AF3D3D;
-$color_budget_positive: #3DAF46;
-$color_budget_zero: #FFB900;
+$color-treemap-text: white;
+$color-chart-axis: #999;
 
-$color_treemap_text: white;
-
-$color_editor_comment: #999988;
-$color_editor_directive: #333;
-$color_editor_class: #bb8844;
-$color_editor_date: #009999;
-$color_editor_constant: #008080;
-$color_editor_account: #333;
-$color_editor_invalid: #333;
-$color_editor_activeline: #ffffcc;
+$color-editor-comment: #999988;
+$color-editor-directive: #333;
+$color-editor-class: #bb8844;
+$color-editor-date: #009999;
+$color-editor-constant: #008080;
+$color-editor-account: #333;
+$color-editor-invalid: #333;
+$color-editor-activeline: #ffffcc;
 
 $ct-bar-width: 14px;
 $ct-line-width: 3px;
 $ct-point-size: 6px;
 $ct-series-colors: (
-    $color_links,
-    darken($color_background, 40),
-    #777,
-    #1B9900,
-    #FF8800,
-    #59922b,
-    #0544d3,
-    #6b0392,
-    #f05b4f,
-    #dda458,
-    #eacf7d,
-    #86797d,
-    #b2c326,
-    #6188e2,
-    #a748ca
+$color-links,
+darken($color-background, 40),
+#777,
+#1B9900,
+#FF8800,
+#59922b,
+#0544d3,
+#6b0392,
+#f05b4f,
+#dda458,
+#eacf7d,
+#86797d,
+#b2c326,
+#6188e2,
+#a748ca
 );
 
 // Import everything
@@ -103,76 +107,76 @@ $ct-series-colors: (
 
 
 header {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
-    border-bottom: none;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAKklEQVQIW2O8ePzofwYokJ+ew8AIEwBxHmZOgQjAOCCFjB/iDP+DZGAAAB8CFZc7Z2mFAAAAAElFTkSuQmCC) repeat;
+  border-bottom: none;
 }
 
 header nav ul.topmenu>li {
-    background: $color_background;
-    margin-top: 5px;
+  background: $color-background;
+  margin-top: 5px;
 }
 
 header nav ul.topmenu>li>a {
-    color: $color_text;
-    line-height: 36px;
+  color: $color-text;
+  line-height: 36px;
 }
 
-header nav ul.topmenu>li>a:after { border-top-color: $color_text; }
-div.filter>ul>li.info a { color: $color_text; }
+header nav ul.topmenu>li>a:after { border-top-color: $color-text; }
+div.filter>ul>li.info a { color: $color-text; }
 div.filter { background: white; }
-div.filter>ul>li.info { color: lighten($color_text, 20); }
-div.filter div.inputcontainer input { border-color: $color_background; }
+div.filter>ul>li.info { color: lighten($color-text, 20); }
+div.filter div.inputcontainer input { border-color: $color-background; }
 
 div.main aside { border-right: none; }
 
 div.main aside ul.navigation li.selected,
 div.main aside ul.navigation li a:hover {
-    background: $color_background;
+  background: $color-background;
 }
 
-.ace_editor.ace-chrome .ace_gutter { color: $color_text; }
+.ace_editor.ace-chrome .ace_gutter { color: $color-text; }
 
 article table tbody tr td,
 article table thead tr th,
 table.journal-table td {
-    border-left: none; border-right: none;
+  border-left: none; border-right: none;
 }
 
 article table tfoot tr td {
-    border: none;
-    background: #DDD8D5;
-    color: $color_text;
-    font-family: $font_family_monospaced;
+  border: none;
+  background: #DDD8D5;
+  color: $color-text;
+  font-family: $font-family-monospaced;
 }
 
 article table tr td.num {
-    font-size: 14px !important;
-    text-align: right;
+  font-size: 14px !important;
+  text-align: right;
 }
 
-table.tree-table span.expander { border-top-color: darken($color_links, 5); }
-table.tree-table span.expander.toggled { border-left-color: darken($color_links, 5); }
+table.tree-table span.expander { border-top-color: darken($color-links, 5); }
+table.tree-table span.expander.toggled { border-left-color: darken($color-links, 5); }
 
 input#toggle-chart,
 input#toggle-metadata,
 input#toggle-legs {
-    border: 1px solid $color_links;
-    color: $color_links;
-    background: transparent;
-    border-radius: 6px;
+  border: 1px solid $color-links;
+  color: $color-links;
+  background: transparent;
+  border-radius: 6px;
 }
 
-article div.headerline h3 a { color: lighten($color_text, 55); }
+article div.headerline h3 a { color: lighten($color-text, 55); }
 article h1 a:link, article h1 a:visited { color: black; }
 article table tbody tr td.change.num { background: #DED7D6; }
 
 table.journal-table td a.tag {
-    background: #4C6684;
-    border-radius: 4px;
-    padding: 1px 5px;
-    font-weight: normal;
-    margin-right: 5px;
-    color: lighten(#748496, 20);
+  background: #4C6684;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-weight: normal;
+  margin-right: 5px;
+  color: lighten(#748496, 20);
 
-    span { color: #748496; }
+  span { color: #748496; }
 }

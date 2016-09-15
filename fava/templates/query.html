@@ -59,14 +59,14 @@
         </form>
     {% endif %}
 
-    <form action="{{ url_for('query') }}" method="get">
+    <form class="query-box" action="{{ url_for('query') }}" method="get">
         <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
         <input id="submit-query" type="submit" value="Submit Query">
     </form>
 
     {% if not error and not result_types %}
         <h3>Sample Queries</h3>
-        <ul class="sample">
+        <ul class="sample-queries">
             <li><a href="{{ url_for('query', query_string="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>
             <li><a href="{{ url_for('query', query_string="SELECT last(date) as last_date, cost(sum(position)) as cost;") }}"><code>SELECT last(date) as last_date, cost(sum(position)) as cost;</code></a></li>
             <li><a href="{{ url_for('query', query_string="SELECT date, account, position, balance WHERE account ~ 'Travel';") }}"><code>SELECT date, account, position, balance WHERE account ~ 'Travel';</code></a></li>
@@ -76,7 +76,7 @@
 
     {% if error %}
         <h3>{{ _('Result') }}</h3>
-        <p class="error">
+        <p class="query-syntax-error">
             {{ error }}
         </p>
     {% endif %}

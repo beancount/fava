@@ -3,143 +3,141 @@
 @import '~awesomplete/awesomplete.css';
 
 #filter-form {
+  color: $color-text;
 
-    color: $color_text;
+  > ul > li {
+    margin-left: 10px;
+    position: relative;
 
-    & > ul > li {
+    &.empty input {
+      background: lighten($color-header, 10);
+    }
+
+    input {
+      background: $color-background;
+      border: 0;
+      color: $color-text;
+      height: 36px;
+      line-height: 36px;
+      max-width: 15rem;
+      padding: 0 25px 0 10px;
+
+      &[type='text'] {
+        outline: none;
+
+        @include placeholder {
+          opacity: 1;
+          color: lighten($color-header, 60);
+        }
+
+        &:focus {
+          color: $color-text;
+          background: $color-background;
+
+          @include placeholder {
+            color: lighten($color-text, 50);
+          }
+        }
+      }
+
+      &[type='submit'] {
+        background: lighten($color-header, 5);
+        color: $color-background;
+        height: 36px;
+        line-height: 36px;
+        margin-right: 0;
+        padding: 0 7px;
+        width: auto;
+      }
+
+      // remove dropdown triangle
+      &::-webkit-calendar-picker-indicator {
+        display: none;
+      }
+    }
+
+    button {
+      background: transparent;
+      border: 0;
+      display: none;
+      height: 18px;
+      padding: 0;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 18px;
+
+      svg.close-icon {
+        fill: lighten($color-text, 50);
+        position: absolute;
+        right: -5px;
+        top: -1px;
+      }
+    }
+  }
+
+  div.awesomplete {
+    ul {
+      padding: 2px 0;
+      transition: none;
+      opacity: 1;
+      border-radius: 0;
+
+      li {
+        line-height: 1.5em;
         position: relative;
-        margin-left: 10px;
+        min-width: 8rem;
+        padding: 0 10px;
+        white-space: nowrap;
 
-        &.empty input {
-            background: lighten($color_header, 10);
+        &:hover {
+          color: $color-background;
+          background: $color-links;
         }
-
-        input {
-            line-height: 36px;
-            max-width: 15rem;
-            height: 36px;
-            padding: 0 25px 0 10px;
-            color: $color_text;
-            background: $color_background;
-            border: none;
-
-            &[type='text'] {
-                outline: none;
-
-                @include placeholder {
-                    opacity: 1;
-                    color: lighten($color_header, 60);
-                }
-
-                &:focus {
-                    color: $color_text;
-                    background: $color_background;
-
-                    @include placeholder {
-                        color: lighten($color_text, 50);
-                    }
-                }
-            }
-
-            &[type='submit'] {
-                width: auto;
-                height: 36px;
-                line-height: 36px;
-                margin-right: 0;
-                padding: 0 7px;
-                color: $color_background;
-                background: lighten($color_header, 5);
-            }
-
-            // remove dropdown triangle
-            &::-webkit-calendar-picker-indicator {
-                display: none;
-            }
-        }
-
-        button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: none;
-            width: 18px;
-            height: 18px;
-            padding: 0;
-            border: none;
-            background: transparent;
-
-            svg.close-icon {
-                position: absolute;
-                top: -1px;
-                right: -5px;
-
-                fill: lighten($color_text, 50);
-            }
-        }
+      }
     }
-
-    div.awesomplete {
-        ul {
-            padding: 2px 0;
-            transition: none;
-            opacity: 1;
-            border-radius: 0;
-
-            li {
-                line-height: 1.5em;
-                position: relative;
-                min-width: 8rem;
-                padding: 0 10px;
-                white-space: nowrap;
-
-                &:hover {
-                    color: $color_background;
-                    background: $color_links;
-                }
-            }
-        }
-    }
+  }
 }
 
 div.beancount-files {
-    position: absolute;
-    z-index: 10;
-    top: $header_height;
-    left: 19px;
-    display: none;
-    width: 20em;
-    border: 1px solid darken($color_background, 20);
-    border-bottom-right-radius: 3px;
-    border-bottom-left-radius: 3px;
-    background-color: $color_background;
-    box-shadow: 0 3px 6px rgba($color_text, .2);
+  position: absolute;
+  z-index: 10;
+  top: $header-height;
+  left: 19px;
+  display: none;
+  width: 20em;
+  border: 1px solid darken($color-background, 20);
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background-color: $color-background;
+  box-shadow: 0 3px 6px rgba($color-text, .2);
 
-    & > ul {
-        overflow-y: auto;
-        max-height: 400px;
-        margin-bottom: 0;
+  & > ul {
+    overflow-y: auto;
+    max-height: 400px;
+    margin-bottom: 0;
 
-        li {
-            a {
-                display: block;
-                padding: 8px 12px 8px 28px;
-                color: $color_links !important;
-            }
+    li {
+      a {
+        display: block;
+        padding: 8px 12px 8px 28px;
+        color: $color-links !important;
+      }
 
-            &.selected a,
-            a:hover {
-                color: lighten($color_text, 100) !important;
-                background-color: $color_links !important;
-            }
+      &.selected a,
+      a:hover {
+        color: lighten($color-text, 100) !important;
+        background-color: $color-links !important;
+      }
 
-            &.selected a {
-                padding-left: 28px;
-                background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
-            }
-        }
+      &.selected a {
+        padding-left: 28px;
+        background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=) no-repeat 9px center;
+      }
     }
+  }
 }
 
 h1:hover div {
-    display: block;
+  display: block;
 }

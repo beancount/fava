@@ -1,198 +1,201 @@
-#chart-labels {
-    color: rgba($color_text, 0.2);
-    font-size: 1em;
-    line-height: 14px;
-    text-align: center;
-    margin-bottom: 20px;
-    position: relative;
-    margin-top: 8px;
+.chart-labels {
+  color: rgba($color-text, .2);
+  font-size: 1em;
+  line-height: 14px;
+  margin-bottom: 20px;
+  margin-top: 8px;
+  position: relative;
+  text-align: center;
 
-    label {
-        color: lighten($color_text, 40);
-        padding: 0 5px;
-
-        &:hover {
-            color: lighten($color_text, 20);
-            cursor: pointer;
-        }
-
-        &.selected { color: lighten($color_text, 20); }
-    }
-
-    label+label { border-left: 1px solid rgba($color_text, 0.4) }
-}
-
-#toggle-chart-container {
-    position: absolute;
-    top: 19px;
-    right: 19px;
-    padding: 4px;
-    background-color: $color_header;
-}
-
-#toggle-chart {
-    display: block;
-    padding: 0;
-    width: 0;
-    height: 0;
-    background-color: $color_header;
-    border: none;
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
-    border-top: 13px solid #eee;
+  label {
+    color: lighten($color-text, 40);
+    padding: 0 5px;
 
     &:hover {
-        cursor: pointer;
+      color: $color-text-lighter;
+      cursor: pointer;
+    }
+
+    &.selected { color: $color-text-lighter; }
+  }
+
+  label+label { border-left: 1px solid rgba($color-text, .4); }
+}
+
+.toggle-chart-container {
+  background-color: $color-header;
+  padding: 4px;
+  position: absolute;
+  right: 19px;
+  top: 19px;
+
+  span {
+    background-color: $color-header;
+    border: 0;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 13px solid $color-background-darker;
+    display: block;
+    height: 0;
+    padding: 0;
+    width: 0;
+
+    &:hover {
+      cursor: pointer;
     }
 
     &.hide-charts {
-        border: none;
-        border-left: 9px solid transparent;
-        border-right: 9px solid transparent;
-        border-bottom: 13px solid #eee;
+      border: 0;
+      border-bottom: 13px solid $color-background-darker;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
     }
+  }
 }
 
-#chart-form {
-    margin-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 35px;
-    display: flex;
+.charts form {
+  display: flex;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 35px;
 
-    > span, > select {
-        margin-right: 10px;
-    }
+  > span,
+  > select {
+    margin-right: 10px;
+  }
 }
 
-#chart-container {
-    position: relative;
-    min-height: 100px;
+.chart-container {
+  min-height: 100px;
+  position: relative;
 }
 
-#chart-legend {
-    flex-grow: 1;
+.chart-legend {
+  flex-grow: 1;
 
-    .color {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        border-radius: 10px;
-    }
+  .color {
+    border-radius: 10px;
+    display: inline-block;
+    height: 10px;
+    width: 10px;
+  }
 
-    .name {
-        margin: 0 6px 0 3px;
-    }
+  .name {
+    margin: 0 6px 0 3px;
+  }
 }
 
 .chart > p,
 .loading {
-    padding-top: 30px;
-    text-align: center;
-    font-style: italic;
-    color: lighten($color_text, 60);
+  color: lighten($color-text, 60);
+  font-style: italic;
+  padding-top: 30px;
+  text-align: center;
 }
 
-.charts svg {
-    text {
-        fill: lighten($color_text, 10);
-    }
+svg {
+  text {
+    fill: lighten($color-text, 10);
+  }
 
-    .line {
-        fill: none;
-        stroke-width: 2px;
-    }
+  .line {
+    fill: none;
+    stroke-width: 2px;
+  }
 
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #999;
-        shape-rendering: crispEdges;
-    }
-    .y.axis line {
-        stroke: #999;
-        stroke-dasharray: 2,2;
-    }
+  .axis path,
+  .axis line {
+    fill: none;
+    shape-rendering: crispEdges;
+    stroke: $color-chart-axis;
+  }
+
+  .y.axis line {
+    stroke: $color-chart-axis;
+    stroke-dasharray: 2,2;
+  }
 }
 
 
 .voronoi path {
-    pointer-events: all;
-    fill: none;
+  fill: none;
+  pointer-events: all;
 }
 
 .treemap {
-    shape-rendering: crispEdges;
+  shape-rendering: crispEdges;
 
-    rect {
-        stroke: #fff;
-        stroke-width: 2px;
-    }
+  rect {
+    stroke: $color-treemap-text;
+    stroke-width: 2px;
+  }
 
-    text {
-        cursor: pointer;
-    }
+  text {
+    cursor: pointer;
+  }
 }
 
 .sunburst {
-    text.account {
-        font-weight: 700;
-        font-size: 13px;
-        cursor: pointer;
-    }
+  .account {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+  }
 
-    text.balance {
-        font-family: $font_family_monospaced;
-        font-size: 14px;
-    }
+  .balance {
+    font-family: $font-family-monospaced;
+    font-size: 14px;
+  }
 
-    path {
-        cursor: pointer;
-    }
+  path {
+    cursor: pointer;
+  }
 }
 
 .barchart {
-    .group {
-        cursor: pointer;
-    }
+  .group {
+    cursor: pointer;
+  }
 
-    .group-box {
-        opacity: 0;
-    }
-    .group:hover .group-box {
-        opacity: 0.1;
-    }
+  .group-box {
+    opacity: 0;
+  }
+
+  .group:hover .group-box {
+    opacity: .1;
+  }
 }
 
-#tooltip {
-    font-family: $font_family_monospaced;
+[id="tooltip"] {
+  background: darken($color-background, 5);
+  border: 1px solid darken($color-background, 20);
+  box-shadow: 0 0 5px darken($color-background, 6);
+  font-family: $font-family-monospaced;
+  min-width: 5em;
+  opacity: 0;
+  padding: .5em;
+  pointer-events: none;
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, -100%);
+  z-index: 12;
+
+  &:before {
+    border: 15px solid transparent;
+    border-top-color: darken($color-background, 20);
+    content: '';
+    height: 0;
+    left: 50%;
+    margin-left: -15px;
     position: absolute;
-    z-index: 12;
-    text-align: center;
-    min-width: 5em;
-    padding: .5em;
-    opacity: 0;
-    transform: translate(-50%, -100%);
-    pointer-events: none;
-    background: darken($color_background, 5);
-    border: 1px solid darken($color_background, 20);
-    box-shadow: 0px 0px 5px darken($color_background, 6);
+    top: 100%;
+    width: 0;
+  }
 
-    &:before {
-        content: "";
-        position: absolute;
-        top: 100%;
-        left: 50%;
-        width: 0;
-        height: 0;
-        margin-left: -15px;
-        border: 15px solid transparent;
-        border-top-color: darken($color_background, 20);
-    }
-
-    em {
-        font-family: $font_family;
-        display: block;
-        margin-top: 5px;
-        color: darken($color_background, 50);
-    }
+  em {
+    color: darken($color-background, 50);
+    display: block;
+    font-family: $font-family;
+    margin-top: 5px;
+  }
 }

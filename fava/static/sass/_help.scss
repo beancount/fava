@@ -1,55 +1,60 @@
 // Help Pages
+@import 'pygments';
 
-@import "pygments";
+$color-help-sidebar: #f8f8f8;
+$color-help-sidebar-border: #eaeaea;
 
 .help-text {
-    width: 660px;
-    font: 16px $font_family_alternative;
+  font: 16px $font-family-alternative;
+  width: 660px;
 
-    h1, h2, h3, h4, h5 {
-        font-family: $font_family;
-    }
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: $font-family;
+  }
 
-    div {
-        margin-bottom: 1em;
-    }
+  div {
+    margin-bottom: 1em;
+  }
 
-    code {
-        font-size: 1rem;
-    }
+  code {
+    font-size: 1rem;
+  }
 
-    hr {
-        border: 1px solid darken($color_background, 20);
-    }
+  hr {
+    border: 1px solid darken($color-background, 20);
+  }
 
-    ul {
-        padding-left: 2em;
-    }
+  ul {
+    padding-left: 2em;
+  }
 
-    li {
-        list-style-type: disc;
-    }
+  li {
+    list-style-type: disc;
+  }
 }
 
 .help-sidebar {
-    position: fixed;
-    left: 850px;
-    float: right;
-    margin: 0 0 10px 10px;
-    padding: 10px 10px 0 10px;
-    border: 1px solid #eaeaea;
-    background-color: #f8f8f8;
-    border-radius: 1px;
-    font-size: 1.1em;
+  background-color: $color-help-sidebar;
+  border: 1px solid $color-help-sidebar-border;
+  border-radius: 1px;
+  float: right;
+  font-size: 1.1em;
+  left: 850px;
+  margin: 0 0 10px 10px;
+  padding: 10px 10px 0;
+  position: fixed;
 
-    a {
-        text-decoration: none;
+  a {
+    text-decoration: none;
 
-        &:hover { text-decoration: underline; }
-        &.selected { font-weight: 500; }
-    }
+    &:hover { text-decoration: underline; }
+    &.selected { font-weight: 500; }
+  }
 
-    li {
-        list-style-type: none;
-    }
+  li {
+    list-style-type: none;
+  }
 }

@@ -56,10 +56,10 @@ $(document).ready(() => {
     }
   });
 
-  $('#aside_button').click((e) => {
+  $('#aside-button').click((e) => {
     e.preventDefault();
     $('aside').toggleClass('active');
-    $('#aside_button').toggleClass('active');
+    $('#aside-button').toggleClass('active');
     return false;
   });
 });

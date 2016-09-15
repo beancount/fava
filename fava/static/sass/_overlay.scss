@@ -1,61 +1,64 @@
 // Overlays
 
-div.overlay-wrapper {
-    display: none;
-    position: fixed;
-    top: 0; bottom: 0; left: 0; right: 0;
-    z-index: 99;
-    background: rgba(darken($color_background, 100), 0.6);
-    text-align: center;
-    cursor: pointer;
+.overlay-wrapper {
+  background: rgba(0, 0, 0, .5);
+  bottom: 0;
+  cursor: pointer;
+  display: none;
+  left: 0;
+  position: fixed;
+  right: 0;
+  text-align: center;
+  top: 0;
+  z-index: 99;
 
-    div.overlay {
-        background: $color_background;
-        margin: auto;
-        padding: 20px;
-        width: 800px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-        text-align: left;
-        cursor: auto;
-        @extend %clearfix;
+  .overlay {
+    @extend %clearfix;
+    background: $color-background;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+    cursor: auto;
+    margin: auto;
+    padding: 20px;
+    text-align: left;
+    width: 800px;
 
-        strong {
-            display: inline-block;
-            margin: 6px 0 5px 0;
-        }
-
-        a.close-overlay {
-            float: right;
-            color: lighten($color_text, 30);
-        }
+    strong {
+      display: inline-block;
+      margin: 6px 0 5px;
     }
 
-    &#documents-upload {
-        label {
-            display: inline-block;
-            width: 180px;
-            margin-bottom: 12px;
-        }
+    .close-overlay {
+      color: $color-text-lighter;
+      float: right;
+    }
+  }
 
-        input#document-name {
-            width: 576px;
-            font-size: 13px;
-            font-family: $font_family;
-            padding: 1px 3px;
-        }
+  &#documents-upload {
+    label {
+      display: inline-block;
+      margin-bottom: 12px;
+      width: 180px;
     }
 
-    dl {
-        dt {
-            display: inline-block;
-            width: 120px;
-            float: left;
-            line-height:2em;
-        }
-
-        dd {
-            line-height:2em;
-        }
+    input#document-name {
+      font-family: $font-family;
+      font-size: 13px;
+      padding: 1px 3px;
+      width: 576px;
     }
+  }
+
+  dl {
+    dt {
+      display: inline-block;
+      float: left;
+      line-height: 2em;
+      width: 120px;
+    }
+
+    dd {
+      line-height: 2em;
+    }
+  }
 
 }

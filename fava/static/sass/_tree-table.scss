@@ -2,155 +2,158 @@
 //
 // some of the shared styles are in `_journal_table.scss`
 
-ol.tree-table {
-    @include scrollbar(.5em, darken($color_sidebar_background, 30), transparent);
+.tree-table {
+  @include scrollbar(.5em, darken($color-sidebar-background, 30), transparent);
 
-    &.fullwidth {
-        overflow-x: auto;
-        max-width: 100%;
+  &.fullwidth {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  p { margin-top: -1px; }
+
+  .head > p > span {
+    background: $color-treetable-header-bg;
+    border-right: 1px solid $color-treetable-header-bg;
+    padding: 3px 5px 2px 8px;
+
+    span { flex-grow: 1; }
+  }
+
+  p > span {
+    border: 1px solid $color-treetable-header-bg;
+    flex-shrink: 0;
+    margin-right: -1px;
+
+    &.account {
+      align-items: center;
+      display: flex;
+      flex: 1;
+      min-width: 200px;
+
+      @for $i from 1 through 5 {
+        &.account-depth-#{$i} {
+          margin-left: $i * 20px;
+          min-width: 200px - $i * 20px;
+        }
+      }
+
+      &.has-children {
+        cursor: pointer;
+      }
+
+      a {
+        margin-left: 15px;
+      }
+    }
+
+    &.num-header,
+    &.num {
+      width: 10rem;
+      a {
+        color: inherit;
         display: block;
+      }
     }
 
-    p { margin-top: -1px; }
+    &.other-header,
+    &.other {
+      width: 13rem;
 
-    .head > p > span {
-        border-right: 1px solid $color_treetable_header_bg;
-        padding: 3px 5px 2px 8px;
-        background: $color_treetable_header_bg;
-
-        span { flex-grow: 1; }
+      a {
+        color: inherit;
+        display: block;
+      }
     }
+  }
 
-    p > span {
-        border: 1px solid $color_treetable_header_bg;
-        margin-right: -1px;
-        flex-shrink:0;
-
-        &.account {
-            flex: 1;
-            align-items: center;
-            display: flex;
-            min-width: 200px;
-
-            @for $i from 1 through 5 {
-                &.account-depth-#{$i} {
-                    min-width: 200px - $i * 20px;
-                    margin-left: $i * 20px;
-                }
-            }
-
-            &.has-children {
-                cursor: pointer;
-            }
-
-            a {
-                margin-left: 15px;
-            }
-        }
-
-        &.num-header,
-        &.num {
-            width: 10rem;
-            a {
-                display: block;
-                color: inherit;
-            }
-        }
-
-        &.other-header,
-        &.other {
-            width: 13rem;
-
-            a {
-                display: block;
-                color: inherit;
-            }
-        }
+  &:hover {
+    .balance-children {
+      color: lighten($color-text, 30);
     }
+  }
 
-    &:hover {
-        .balance-children {
-            color: lighten($color_text, 30);
-        }
-    }
+  .has-balance {
+    .balance {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
 
-    .has-balance {
-        .balance {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-
-            & > span { white-space: nowrap; }
-            & > span.number { flex-grow: 1; }
-        }
-        .balance-children {
-            display: none;
-        }
+      > span { white-space: nowrap; }
+      > span.number { flex-grow: 1; }
     }
 
     .balance-children {
-        display: block;
-        color: lighten($color_text, 60);
+      display: none;
+    }
+  }
+
+  .balance-children {
+    color: lighten($color-text, 60);
+    display: block;
+  }
+
+  li.toggled {
+    ol { display: none; }
+
+    .balance {
+      display: none;
     }
 
-    li.toggled {
-        ol { display: none; }
-
-        .balance {
-            display: none;
-        }
-
-        .balance-children {
-            display: block;
-            color: $color_text;
-        }
+    .balance-children {
+      color: $color-text;
+      display: block;
     }
+  }
 
-    span.expander {
-        width: 5px;
-        margin: 0 -10px 0 0;
-        height: 5px;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid $color_treetable_expander;
-        cursor: pointer;
-    }
+  span.expander {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid $color-treetable-expander;
+    cursor: pointer;
+    height: 5px;
+    margin: 0 -10px 0 0;
+    width: 5px;
+  }
 
-    .toggled span.expander {
-        border-top: 5px solid transparent;
-        border-bottom: 5px solid transparent;
-        border-left: 5px solid $color_treetable_expander;
-        margin: 0 -13px 0 3px;
-    }
+  .toggled span.expander {
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid $color-treetable-expander;
+    border-top: 5px solid transparent;
+    margin: 0 -13px 0 3px;
+  }
 
-    a.expand-all {
-       color: lighten($color_text, 40);
-       font-weight: normal;
-    }
+  a.expand-all {
+    color: lighten($color-text, 40);
+    font-weight: normal;
+  }
 
-    span.budget {
-        margin-right: 4px;
+  span.budget {
+    margin-right: 4px;
 
-        &.budget-negative { color: $color_budget_negative; }
-        &.budget-positive { color: $color_budget_positive; }
-        &.budget-zero     { color: $color_budget_zero; }
-    }
+    &.budget-negative { color: $color-budget-negative; }
+    &.budget-positive { color: $color-budget-positive; }
+    &.budget-zero { color: $color-budget-zero; }
+  }
 }
 
 @for $i from 1 through 5 {
-    $num_fraction: 1rem * (1-(($i - 1)/10));
-    ol.tree-table.currencies#{$i} {
-       p > span {
-            &.num-header,
-            &.num {
-                width: 20rem / ($i+1);
-                font-size: $num_fraction;
-            }
-            &.other-header,
-            &.other {
-                width: 20rem / ($i+1) + 3rem;
-                font-size: $num_fraction;
-            }
-       }
+  $num-fraction: 1rem * (1-(($i - 1)/10));
+
+  .tree-table.currencies#{$i} {
+    p > span {
+      &.num-header,
+      &.num {
+        font-size: $num-fraction;
+        width: 20rem / ($i+1);
+      }
+
+      &.other-header,
+      &.other {
+        font-size: $num-fraction;
+        width: 20rem / ($i+1) + 3rem;
+      }
     }
+  }
 }
