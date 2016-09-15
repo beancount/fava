@@ -9,9 +9,19 @@ from fava.util.date import number_of_days_in_period
 
 
 def get_budgets(beancount_string):
-    entries, errors, options_map = parser.parse_string(beancount_string,
-                                                       dedent=True)
+    entries, _, _ = parser.parse_string(beancount_string, dedent=True)
     return Budgets(entries)
+
+
+def test_budgets(load_doc):
+    """
+    2016-01-01 custom "budget" Expenses:Groceries "weekly" 100.00 CNY
+    2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR"""
+    entries, _, _ = load_doc
+    budget = Budgets(entries)
+    budgets = budget.budget('Expenses:Groceries', date(2016, 6, 1), date(2016, 6, 8))
+    assert budgets['CNY'] == Decimal(100)
+    assert budgets['EUR'] == Decimal(10)
 
 
 def test__parse_budget_entry(load_doc):

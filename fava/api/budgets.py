@@ -28,7 +28,7 @@ class Budgets(object):
 
         2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
         """
-        self.budgets = defaultdict(lambda: [])
+        self.budgets = defaultdict(list)
         self.errors = []
 
         for entry in entries:
@@ -36,31 +36,27 @@ class Budgets(object):
                 try:
                     budget = _parse_budget_entry(entry)
                     self.budgets[budget.account].append(budget)
-                except:
+                except (IndexError, TypeError):
                     self.errors.append(BudgetError(
                         entry.meta,
                         'Failed to parse budget entry',
                         entry))
 
-        for name in self.budgets.keys():
-            self.budgets[name] = sorted(self.budgets[name],
-                                        key=lambda budget: budget.date_start)
-
     def __bool__(self):
         return bool(self.budgets)
 
-    def _matching_budget(self, account_name, date_active):
+    def _matching_budgets(self, account_name, date_active):
         """
         Returns the budget that is active on the specifed date for the
         specified account.
         """
-        last_seen_budget = None
+        last_seen_budgets = {}
         for budget in self.budgets[account_name]:
             if budget.date_start <= date_active:
-                last_seen_budget = budget
+                last_seen_budgets[budget.currency] = budget
             else:
                 break
-        return last_seen_budget
+        return last_seen_budgets
 
     def budget(self, account_name, date_from, date_to):
         """
@@ -73,8 +69,8 @@ class Budgets(object):
             return currency_dict
 
         for single_day in days_in_daterange(date_from, date_to):
-            budget = self._matching_budget(account_name, single_day)
-            if budget:
+            budgets = self._matching_budgets(account_name, single_day)
+            for budget in budgets.values():
                 currency_dict[budget.currency] += \
                     budget.number / number_of_days_in_period(budget.period,
                                                              single_day)
