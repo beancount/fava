@@ -36,13 +36,12 @@ sub-account of `Assets`.
 
 The names of the five root accounts can be changes with the following options:
 
-```beancount
+<pre><textarea class="editor-readonly">
 option "name_assets"      "Vermoegen"
 option "name_liabilities" "Verbindlichkeiten"
 option "name_income"      "Einkommen"
 option "name_expenses"    "Ausgaben"
-option "name_equity"      "Eigenkapital"
-```
+option "name_equity"      "Eigenkapital"</textarea></pre>
 
 ## Directives
 
@@ -57,46 +56,41 @@ General syntax: `YYYY-MM-DD <directive> <arguments...>`
 
 To open or close an account use the `open` and `close` directives:
 
-```beancount
+<pre><textarea class="editor-readonly">
 2015-05-29 open Expenses:Restaurant
 2015-05-29 open Assets:Checking     USD,EUR  ; Currency constraints
 ; ...
-2016-02-23 close Assets:Checking
-```
+2016-02-23 close Assets:Checking</textarea></pre>
 
 ### Commodities
 
 Declaring commodities is optional. Use this if you want to attach metadata by currency.
 
-```beancount
+<pre><textarea class="editor-readonly">
 1998-07-22 commodity AAPL
-  name: "Apple Computer Inc."
-```
+  name: "Apple Computer Inc."</textarea></pre>
 
 ### Prices
 
 You can use this directive to fill historical price database:
 
-```beancount
+<pre><textarea class="editor-readonly">
 2015-04-30 price AAPL   125.15 USD
-2015-05-30 price AAPL   130.28 USD
-```
+2015-05-30 price AAPL   130.28 USD</textarea></pre>
 
 ### Notes
 
-```beancount
-2013-03-20 note Assets:Checking "Called to ask about rebate"
-```
+<pre><textarea class="editor-readonly">
+2013-03-20 note Assets:Checking "Called to ask about rebate"</textarea></pre>
 
 ### Documents
 
-```beancount
-2013-03-20 document Assets:Checking "path/to/statement.pdf"
-```
+<pre><textarea class="editor-readonly">
+2013-03-20 document Assets:Checking "path/to/statement.pdf"</textarea></pre>
 
 ### Transactions
 
-```beancount
+<pre><textarea class="editor-readonly">
 2015-05-30 * "Some narration about this transaction"
   Liabilities:CreditCard   -101.23 USD
   Expenses:Restaurant       101.23 USD
@@ -104,59 +98,51 @@ You can use this directive to fill historical price database:
 2015-05-30 ! "Cable Co" "Phone Bill" #tag ˆlink
   id: "TW378743437"               ; Meta-data
   Expenses:Home:Phone  87.45 USD
-  Assets:Checking                 ; You may leave one amount out
-```
+  Assets:Checking                 ; You may leave one amount out</textarea></pre>
 
 ### Postings
 
-```beancount
+<pre><textarea class="editor-readonly">
 ...    123.45 USD                             ; simple
 ...        10 GOOG {502.12 USD}               ; with cost
 ...   1000.00 USD   @ 1.10 CAD                ; with price
 ...        10 GOOG {502.12 USD} @ 1.10 CAD    ; with cost & price
 ...        10 GOOG {502.12 USD / 2014-05-12}  ; with date
-! ...   123.45 USD ...                        ; with flag
-```
+! ...   123.45 USD ...                        ; with flag</textarea></pre>
 
 ### Balance Assertions and Padding
 
 Asserts the amount for only the given currency:
 
-```beancount
-2015-06-01 balance Liabilities:CreditCard  -634.30 USD
-```
+<pre><textarea class="editor-readonly">
+2015-06-01 balance Liabilities:CreditCard  -634.30 USD</textarea></pre>
 
 Automatic insertion of transaction to fulfill the following assertion:
 
-```beancount
-2015-06-01 pad Assets:Checking Equity:Opening-Balances
-```
+<pre><textarea class="editor-readonly">
+2015-06-01 pad Assets:Checking Equity:Opening-Balances</textarea></pre>
 
 ### Events
 
-```beancount
+<pre><textarea class="editor-readonly">
 2015-06-01 event "location" "New York, USA"
-2015-06-01 event "address" "123 May Street"
-```
+2015-06-01 event "address" "123 May Street"</textarea></pre>
 
 ### Options
 
 See the [Beancount Options Reference](http://furius.ca/beancount/doc/options)
 for the full list of supported options.
 
-```beancount
-option "title" "My Personal Ledger"
-```
+<pre><textarea class="editor-readonly">
+option "title" "My Personal Ledger"</textarea></pre>
 
 ### Other
 
-```beancount
+<pre><textarea class="editor-readonly">
 pushtag #trip-to-peru
 ...
-poptag  #trip-to-peru
-```
+poptag  #trip-to-peru</textarea></pre>
 
-```beancount
+<pre><textarea class="editor-readonly">
 ; inline comments begin with a semi-colon
-* any line not starting with a valid directive is also ignored silently
-```
+* any line not starting with a valid directive is also ignored silently</textarea></pre>

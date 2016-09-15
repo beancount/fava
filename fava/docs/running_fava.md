@@ -26,18 +26,18 @@ Options:
 
 Run with default configuration:
 
-```bash
+```
 fava ledger.beancount
 ```
 
 Specify a settings file and enable debug-mode:
 
-```bash
+```
 fava --debug --settings /Volumes/Ledger/fava-settings.conf /Volumes/Ledger/ledger.beancount
 ```
 
 Specify a different port and enable debug-mode:
 
-```bash
+```
 fava --port 8080 --debug /Volumes/Ledger/ledger.beancount
 ```

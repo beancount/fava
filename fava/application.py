@@ -205,7 +205,7 @@ def help_page(page_slug='_index'):
         abort(404)
     html = markdown2.markdown_path(
         os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
-        extras=["metadata", "fenced-code-blocks", "tables"])
+        extras=['metadata', 'fenced-code-blocks', 'tables'])
     return render_template('help.html', help_html=html, page_slug=page_slug)
 
 

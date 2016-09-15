@@ -1,5 +1,4 @@
 // Help Pages
-@import 'pygments';
 
 $color-help-sidebar: #f8f8f8;
 $color-help-sidebar-border: #eaeaea;
@@ -15,8 +14,16 @@ $color-help-sidebar-border: #eaeaea;
     font-family: $font-family;
   }
 
-  div {
+  > div {
     margin-bottom: 1em;
+  }
+
+  .CodeMirror {
+    background-color: $color-code-background;
+    border: 0;
+    height: auto;
+    margin: 0;
+    padding: 0;
   }
 
   code {
