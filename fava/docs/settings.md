@@ -18,19 +18,11 @@ Below is a list of all possible settings for Fava.
 
 ---
 
-## `theme`
-
-Default: `default`
-
-Fava currently ships two themes: "default" and "alternative".
-
----
-
 ## `language`
 
 Default: Not set
 
-Fava has an English (`en`) and a German (`de`) translation currently. If
+Fava currently has an English (`en`) and a German (`de`) translation. If
 this setting is not specified, Fava will try to guess the language from your
 browser settings.
 

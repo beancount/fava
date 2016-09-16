@@ -1,3 +1,2 @@
 files:
   include: 'sass/*.scss'
-  ignore: 'sass/theme_alternative.scss'
