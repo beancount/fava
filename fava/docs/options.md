@@ -1,16 +1,13 @@
-To customize some of Fava's settings, pass the path to your settings file to
-Fava using `fava --settings [path]`.  The settings file follows a syntax
-similar to Windows INI files, like the following example:
+To customize some of Fava's behaviour, you can add custom entries like the
+following to your Beancount file.
 
-```
-[fava]
-interval = week
-journal-show = transaction balance note document
-show-closed-accounts = True
-sidebar-show-queries = 0
-```
+<pre><textarea class="editor-readonly">
+2016-06-14 custom "fava-option" "interval" "week"
+2016-04-14 custom "fava-option" "charts" FALSE
+2016-04-14 custom "fava-option" "journal-show" "transaction open"
+2016-04-14 custom "fava-option" "editor-print-margin-column" 10 </textarea></pre>
 
-Below is a list of all possible settings for Fava.
+Below is a list of all possible options for Fava.
 
 ---
 
@@ -26,7 +23,7 @@ browser settings.
 
 ## `interval`
 
-Default: `month`
+Default: `"month"`
 
 The default interval that charts and the account reports by interval use.
 The possible options are `day`, `week`, `month`, `quarter`, and `year`.
@@ -35,16 +32,16 @@ The possible options are `day`, `week`, `month`, `quarter`, and `year`.
 
 ## `charts`
 
-Default: `True`
+Default: `TRUE`
 
-Set this to `False` to hide the charts. In any case, they can be hidden/shown
+Set this to `FALSE` to hide the charts. In any case, they can be hidden/shown
 using the "Toggle Charts" button.
 
 ---
 
 ## `journal-show`
 
-Default: `transaction balance note document custom budget`
+Default: `"transaction balance note document custom budget"`
 
 The entry types given in this list will be shown in the Journal report.
 All other types will be hidden and can be toggled using the buttons.
@@ -53,7 +50,7 @@ All other types will be hidden and can be toggled using the buttons.
 
 ## `journal-show-transaction`
 
-Default: `cleared pending`
+Default: `"cleared pending"`
 
 Similarly to the `journal-show` setting, this determines the transaction types
 that will be shown in the Journal report. The "transaction types" correspond to
@@ -76,7 +73,7 @@ Set this value to `0` to hide the links altogether.
 
 ## `show-closed-accounts`
 
-Default: `False`
+Default: `FALSE`
 
 This and the next two options specify which accounts (not) to show in the
 account trees, like on the income statement.
@@ -85,7 +82,7 @@ account trees, like on the income statement.
 
 ## `show-accounts-with-zero-transactions`
 
-Default: `True`
+Default: `TRUE`
 
 Like `show-closed-accounts`.
 
@@ -93,7 +90,7 @@ Like `show-closed-accounts`.
 
 ## `show-accounts-with-zero-balance`
 
-Default: `True`
+Default: `TRUE`
 
 Like `show-closed-accounts`.
 
@@ -110,7 +107,7 @@ Can be used to keep decimal points aligned for example.
 
 ## `editor-strip-trailing-whitespace`
 
-Default: `False`
+Default: `FALSE`
 
 If set, strip all trailing whitespace when saving in Fava's editor.
 
@@ -126,9 +123,9 @@ If present the cursor will be positioned above the specified insert marker.
 
 ## `use-external-editor`
 
-Default: `False`
+Default: `FALSE`
 
-If `True`, instead of using the internal editor, the `beancount://` URL scheme
+If `TRUE`, instead of using the internal editor, the `beancount://` URL scheme
 is used. See the
 [beancount_urlscheme](http://github.com/aumayr/beancount_urlscheme) project for
 details.
@@ -137,7 +134,7 @@ details.
 
 ## `account-journal-include-children`
 
-Default: `True`
+Default: `TRUE`
 
 This determines if the journal in the account report includes entries of
 sub-accounts.

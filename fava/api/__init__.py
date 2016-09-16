@@ -32,6 +32,7 @@ from fava.api.serialization import (serialize_inventory, serialize_entry,
                                     serialize_entry_with,
                                     serialize_real_account,
                                     zip_real_accounts)
+from fava.api.fava_options import parse_options
 
 
 class FavaAPIException(Exception):
@@ -80,14 +81,13 @@ def _real_account(account_name, entries, begin_date=None, end_date=None,
                            account_name)
 
 
-def _sidebar_links(entries):
-    """ Parse custom entries for links. They have the following format:
+def _sidebar_links(custom_entries):
+    """Parse custom entries for links. They have the following format:
 
     2016-04-01 custom "fava-sidebar-link" "2014" "/income_statement/?time=2014"
-
     """
     sidebar_link_entries = [
-        entry for entry in _filter_entries_by_type(entries, Custom)
+        entry for entry in custom_entries
         if entry.type == 'fava-sidebar-link']
     return [(entry.values[0].value, entry.values[1].value)
             for entry in sidebar_link_entries]
@@ -130,6 +130,7 @@ class BeancountReportAPI():
         self.active_payees = list(getters.get_all_payees(self.all_entries))
 
         self.queries = _filter_entries_by_type(self.all_entries, Query)
+        self.custom_entries = _filter_entries_by_type(self.all_entries, Custom)
 
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
@@ -137,12 +138,15 @@ class BeancountReportAPI():
         self.all_accounts_active = _list_accounts(
             self.all_root_account, active_only=True)
 
-        self.sidebar_links = _sidebar_links(self.all_entries)
+        self.sidebar_links = _sidebar_links(self.custom_entries)
+
+        self.fava_options, errors = parse_options(self.custom_entries)
+        self.errors.extend(errors)
+
+        self.budgets = Budgets(self.custom_entries)
+        self.errors.extend(self.budgets.errors)
 
         self._apply_filters()
-
-        self.budgets = Budgets(self.entries)
-        self.errors.extend(self.budgets.errors)
 
     def _apply_filters(self):
         self.entries = self.all_entries

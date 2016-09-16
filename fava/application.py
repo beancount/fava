@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import configparser
 import os
 from datetime import datetime
 
@@ -11,7 +10,6 @@ import werkzeug.urls
 from werkzeug import secure_filename
 from beancount.core.number import Decimal
 
-from fava import config
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -31,8 +29,6 @@ app.jinja_env.add_extension('jinja2.ext.do')
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-app.config['DEFAULT_SETTINGS'] = resource_path('default-settings.conf')
-app.config['USER_SETTINGS'] = None
 app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
@@ -49,30 +45,6 @@ def load_file():
     app.config['FILE_SLUGS'] = list(app.config['APIS'].keys())
 
 
-def load_settings():
-    app.config.raw = configparser.ConfigParser()
-    app.config.raw.read(app.config['DEFAULT_SETTINGS'])
-    if app.config['USER_SETTINGS']:
-        app.config.raw.read(app.config['USER_SETTINGS'])
-
-    for option in config.bool_options:
-        app.config[option] = app.config.raw.getboolean('fava', option)
-    for option in config.int_options:
-        app.config[option] = app.config.raw.getint('fava', option)
-    for option in config.list_options:
-        if app.config.raw.has_option('fava', option):
-            app.config[option] = \
-                app.config.raw.get('fava', option).strip().split(" ")
-        else:
-            app.config[option] = None
-    for option in config.str_options:
-        if app.config.raw.has_option('fava', option):
-            app.config[option] = app.config.raw.get('fava', option)
-        else:
-            app.config[option] = None
-
-
-load_settings()
 babel = Babel(app)
 
 
@@ -208,12 +180,7 @@ def source():
     if request.method == "GET":
         if request.is_xhr:
             requested_file_path = request.args.get('file_path', None)
-            if requested_file_path == app.config['USER_SETTINGS']:
-                with open(requested_file_path, 'r') as file:
-                    settings_file_content = file.read()
-                return settings_file_content
-            else:
-                return g.api.source(requested_file_path)
+            return g.api.source(requested_file_path)
         else:
             return render_template(
                 'source.html',
@@ -224,12 +191,7 @@ def source():
         file_path = request.form['file_path']
         source = request.form['source']
 
-        if file_path == app.config['USER_SETTINGS']:
-            with open(file_path, 'w+', encoding='utf8') as file:
-                file.write(source)
-            load_settings()
-        else:
-            g.api.set_source(file_path, source)
+        g.api.set_source(file_path, source)
         return str(True)
 
 
@@ -350,6 +312,7 @@ def pull_beancount_file(endpoint, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.api = app.config['APIS'][g.beancount_file_slug]
+    app.config.update(app.config['APIS'][g.beancount_file_slug].fava_options)
 
 
 @app.context_processor

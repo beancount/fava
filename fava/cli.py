@@ -5,7 +5,7 @@ import errno
 import click
 from livereload import Server
 
-from fava.application import app, load_file, load_settings
+from fava.application import app, load_file
 
 
 @click.command()
@@ -15,9 +15,6 @@ from fava.application import app, load_file, load_settings
               help='The port to listen on. (default: 5000)')
 @click.option('-H', '--host', type=str, default='localhost',
               help='The host to listen on. (default: localhost)')
-@click.option('-s', '--settings',
-              type=click.Path(exists=True, resolve_path=True),
-              help='Settings file for fava.')
 @click.option('-d', '--debug', is_flag=True,
               help='Turn on debugging. Disables live-reloading.')
 @click.option('--profile', is_flag=True,
@@ -26,7 +23,7 @@ from fava.application import app, load_file, load_settings
               help='Output directory for profiling data.')
 @click.option('--profile-restriction', type=int, default=30,
               help='Number of functions to show in profile.')
-def main(filenames, port, host, settings, debug, profile, profile_dir,
+def main(filenames, port, host, debug, profile, profile_dir,
          profile_restriction):
     """Start fava for FILENAMES on http://host:port."""
 
@@ -43,9 +40,7 @@ def main(filenames, port, host, settings, debug, profile, profile_dir,
         raise click.UsageError('No file specified')
 
     app.config['BEANCOUNT_FILES'] = filenames
-    app.config['USER_SETTINGS'] = settings
 
-    load_settings()
     load_file()
 
     if debug:
@@ -60,8 +55,6 @@ def main(filenames, port, host, settings, debug, profile, profile_dir,
         app.run(host, port, debug)
     else:
         server = Server(app.wsgi_app)
-        if settings:
-            server.watch(settings, load_settings)
 
         def reload_source_files(api):
             filename = api.options['filename']

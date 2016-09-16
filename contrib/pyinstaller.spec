@@ -19,7 +19,6 @@ block_cipher = None
 livereload_js_path = os.path.join(os.path.dirname(livereload.__file__), 'vendors/livereload.js')
 
 data_files = [
-    ('../fava/default-settings.conf', '.'),
     ('../fava/docs', 'docs'),
     ('../fava/static/gen', 'static/gen'),
     ('../fava/templates', 'templates'),

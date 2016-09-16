@@ -190,14 +190,6 @@ $(document).ready(() => {
           editor.setCursor(0, 0);
           $select.removeAttr('disabled');
 
-          if (filePath.endsWith('.conf') ||
-              filePath.endsWith('.settings') ||
-              filePath.endsWith('.ini')) {
-            editor.setOption('mode', 'text/x-ini');
-          } else {
-            editor.setOption('mode', 'beancount');
-          }
-
           if (window.editorInsertMarker) {
             const cursor = editor.getSearchCursor(window.editorInsertMarker);
 

@@ -1,6 +1,5 @@
 from collections import defaultdict, namedtuple
 
-from beancount.core.data import Custom
 from beancount.core.number import Decimal
 
 from fava.util.date import days_in_daterange, number_of_days_in_period
@@ -20,9 +19,9 @@ def _parse_budget_entry(entry):
 
 class Budgets(object):
 
-    def __init__(self, entries):
+    def __init__(self, custom_entries):
         """
-        Reads budget directives from the specified list of beancount entries.
+        Reads budget directives from custom entries.
 
         Example for a budget directive:
 
@@ -31,8 +30,8 @@ class Budgets(object):
         self.budgets = defaultdict(list)
         self.errors = []
 
-        for entry in entries:
-            if isinstance(entry, Custom) and entry.type == 'budget':
+        for entry in custom_entries:
+            if entry.type == 'budget':
                 try:
                     budget = _parse_budget_entry(entry)
                     self.budgets[budget.account].append(budget)

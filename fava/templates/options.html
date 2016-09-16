@@ -3,15 +3,7 @@
 {% set show_filters = False %}
 
 {% block content %}
-    <h2>{{ _('fava: settings') }}</h2>
-    <dl>
-        <dt>{{ _('User settings:') }}</dt>
-    {% if config['USER_SETTINGS'] %}
-        <dd><a href="{{ url_for('source', file_path=config['USER_SETTINGS']) }}">{{ config['USER_SETTINGS'] }}</a></dd>
-    {% else %}
-        <dd>No user settings file specified</dd>
-    {% endif %}
-    </dl>
+    <h2>{{ _('fava: options') }}</h2>
     <table class="options sortable">
         <thead>
             <tr>
@@ -20,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for key, value in config.raw.items('fava') | sort %}
+            {% for key, value in api.fava_options|dictsort %}
             <tr>
                 <td>{{ key }}</td>
                 <td><pre>{{ value }}</pre></td>
@@ -38,7 +30,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for key, value in api.options.items() | sort %}
+            {% for key, value in api.options|dictsort %}
             <tr>
                <td>{{ key }}</td>
                <td><pre>{{ value }}</pre></td>
