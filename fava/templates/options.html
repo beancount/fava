@@ -40,8 +40,8 @@
         <tbody>
             {% for key, value in api.options.items() | sort %}
             <tr>
-               <td class="num">{{ key }}</td>
-               <td class="num"><pre>{{ value }}</pre></td>
+               <td>{{ key }}</td>
+               <td><pre>{{ value }}</pre></td>
             </tr>
             {% endfor %}
         </tbody>

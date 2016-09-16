@@ -107,8 +107,6 @@ class TagFilter(EntryFilter):
 
 
 def _match_account(name, filter):
-    if filter == '.*' and not re.match(filter, name):
-        print(name)
     return (account.has_component(name, filter) or
             re.match(filter, name))
 
