@@ -11,66 +11,69 @@
     overflow-x: auto;
   }
 
-  p { margin-top: -1px; }
+  &:hover {
+    .balance-children {
+      color: $color-text-lighter;
+    }
+  }
+
+  p {
+    margin-top: -1px;
+
+    > span {
+      border: 1px solid $color-treetable-header-bg;
+      flex-shrink: 0;
+      margin-right: -1px;
+    }
+  }
 
   .head > p > span {
-    background: $color-treetable-header-bg;
-    border-right: 1px solid $color-treetable-header-bg;
+    border: 1px solid $color-treetable-header-bg;
     padding: 3px 5px 2px 8px;
 
     span { flex-grow: 1; }
   }
 
-  p > span {
-    border: 1px solid $color-treetable-header-bg;
-    flex-shrink: 0;
-    margin-right: -1px;
+  // table cells
+  .account {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    min-width: 200px;
 
-    &.account {
-      align-items: center;
-      display: flex;
-      flex: 1;
-      min-width: 200px;
-
-      @for $i from 1 through 5 {
-        &.account-depth-#{$i} {
-          margin-left: $i * 20px;
-          min-width: 200px - $i * 20px;
-        }
-      }
-
-      &.has-children {
-        cursor: pointer;
-      }
-
-      a {
-        margin-left: 15px;
+    @for $i from 1 through 5 {
+      &.account-depth-#{$i} {
+        margin-left: $i * 20px;
+        min-width: 200px - $i * 20px;
       }
     }
 
-    &.num-header,
-    &.num {
-      width: 10rem;
-      a {
-        color: inherit;
-        display: block;
-      }
+    &.has-children {
+      cursor: pointer;
     }
 
-    &.other-header,
-    &.other {
-      width: 13rem;
-
-      a {
-        color: inherit;
-        display: block;
-      }
+    a {
+      margin-left: 15px;
     }
   }
 
-  &:hover {
-    .balance-children {
-      color: lighten($color-text, 30);
+  .num-header,
+  .num {
+    width: 10rem;
+
+    a {
+      color: inherit;
+      display: block;
+    }
+  }
+
+  .other-header,
+  .other {
+    width: 13rem;
+
+    a {
+      color: inherit;
+      display: block;
     }
   }
 
@@ -81,7 +84,7 @@
       justify-content: space-between;
 
       > span { white-space: nowrap; }
-      > span.number { flex-grow: 1; }
+      > .number { flex-grow: 1; }
     }
 
     .balance-children {
@@ -94,7 +97,7 @@
     display: block;
   }
 
-  li.toggled {
+  .toggled {
     ol { display: none; }
 
     .balance {
@@ -105,9 +108,16 @@
       color: $color-text;
       display: block;
     }
+
+    .expander {
+      border-bottom: 5px solid transparent;
+      border-left: 5px solid $color-treetable-expander;
+      border-top: 5px solid transparent;
+      margin: 0 -13px 0 3px;
+    }
   }
 
-  span.expander {
+  .expander {
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 5px solid $color-treetable-expander;
@@ -117,19 +127,12 @@
     width: 5px;
   }
 
-  .toggled span.expander {
-    border-bottom: 5px solid transparent;
-    border-left: 5px solid $color-treetable-expander;
-    border-top: 5px solid transparent;
-    margin: 0 -13px 0 3px;
-  }
-
-  a.expand-all {
+  .expand-all {
     color: lighten($color-text, 40);
     font-weight: normal;
   }
 
-  span.budget {
+  .budget {
     margin-right: 4px;
 
     &.budget-negative { color: $color-budget-negative; }
@@ -139,9 +142,9 @@
 }
 
 @for $i from 1 through 5 {
-  $num-fraction: 1rem * (1-(($i - 1)/10));
+  $num-fraction: 1rem * (1 - (($i - 1)/10));
 
-  .tree-table.currencies#{$i} {
+  .#{$i}-currencies {
     p > span {
       &.num-header,
       &.num {

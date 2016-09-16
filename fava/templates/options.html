@@ -12,7 +12,7 @@
         <dd>No user settings file specified</dd>
     {% endif %}
     </dl>
-    <table class="settings sortable">
+    <table class="options sortable">
         <thead>
             <tr>
                 <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Key') }}</th>
@@ -22,15 +22,15 @@
         <tbody>
             {% for key, value in config.raw.items('fava') | sort %}
             <tr>
-                <td class="num">{{ key }}</td>
-                <td class="num"><pre>{{ value|trim }}</pre></td>
+                <td>{{ key }}</td>
+                <td><pre>{{ value }}</pre></td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <br>
     <h2>{{ _('beancount: options') }}</h2>
-    <table class="options_map sortable">
+    <table class="options sortable">
         <thead>
             <tr>
                 <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Key') }}</th>

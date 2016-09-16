@@ -41,19 +41,20 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 
-  tbody tr:nth-child(2n) {
-    background: darken($color-background, 3);
-  }
+  tbody {
+    tr:nth-child(2n) {
+      background: darken($color-background, 3);
+    }
 
-  tbody td {
-    border: 1px solid lighten($color-text, 60);
+    td {
+      border: 1px solid lighten($color-text, 60);
+    }
   }
 
   td,
   th {
     padding: 3px 6px;
     white-space: nowrap;
-
 
     &.num {
       color: $color-text;
@@ -237,7 +238,7 @@ h1 {
   margin: 0;
   max-height: $header-height;
   overflow: hidden;
-  padding: 0 10px;
+  padding: ($header-height - 16px) / 2 10px;
 
   strong {
     margin-left: 10px;
@@ -258,7 +259,6 @@ h1 {
   a:link,
   a:visited {
     color: darken($color-header-text, 15);
-
   }
 
   a:hover {
@@ -551,11 +551,13 @@ kbd {
   width: 100%;
 }
 
-table.options_map,
-table.settings {
-  td { text-align: left; }
-  td:nth-child(1) { font-weight: bold; }
-  td:nth-child(2) { white-space: normal; }
+.options {
+  td {
+    text-align: left;
+
+    &:nth-child(1) { font-weight: bold; }
+    &:nth-child(2) { white-space: normal; }
+  }
 
   pre {
     background-color: inherit;
@@ -566,19 +568,12 @@ table.settings {
   }
 }
 
-table.commodity,
-table.events {
-  td:first-child {
-    min-width: inherit;
-  }
-}
-
-table.statistics-update-activity {
+.statistics-update-activity {
   thead th:nth-child(2),
   thead th:nth-child(3) { padding-left: 0; }
 
-  tbody td.uptodate-indicator { text-align: center; }
-  span.status-indicator { margin: 0 auto; }
+  .uptodate-indicator { text-align: center; }
+  .status-indicator { margin: 0 auto; }
 }
 
 .left.statistics {
@@ -590,14 +585,10 @@ table.statistics-update-activity {
   }
 }
 
-.tree-table .account,
-.holdings,
-.queryresults {
-  .status-indicator {
-    float: right;
-    margin-left: 3px;
-    margin-top: 3px;
-  }
+td .status-indicator {
+  float: right;
+  margin-left: 3px;
+  margin-top: 3px;
 }
 
 // At resolutions smaller than 768px, hide the aside menu.
@@ -650,14 +641,14 @@ table.statistics-update-activity {
 
   header {
     position: relative;
-  }
 
-  header > * {
-    display: none;
-  }
+    > * {
+      display: none;
+    }
 
-  header h1 {
-    display: block;
+    h1 {
+      display: block;
+    }
   }
 
   aside,
