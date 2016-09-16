@@ -15,6 +15,7 @@ from fava import config
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
+from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
@@ -34,6 +35,7 @@ app.config['DEFAULT_SETTINGS'] = resource_path('default-settings.conf')
 app.config['USER_SETTINGS'] = None
 app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
+app.config['HELP_PAGES'] = HELP_PAGES
 app.config['APIS'] = {}
 
 
@@ -70,20 +72,7 @@ def load_settings():
             app.config[option] = None
 
 
-def discover_help_pages():
-    app.config['HELP_PAGES'] = {}
-    for page in os.listdir(app.config['HELP_DIR']):
-        html = markdown2.markdown_path(
-            os.path.join(app.config['HELP_DIR'], page), extras=["metadata"])
-        slug = os.path.splitext(os.path.basename(page))[0]
-        title = html.metadata['title']
-
-        app.config['HELP_PAGES'][slug] = title
-
-
 load_settings()
-discover_help_pages()
-
 babel = Babel(app)
 
 
@@ -201,11 +190,11 @@ def query():
 @app.route('/<bfile>/help/')
 @app.route('/<bfile>/help/<string:page_slug>/')
 def help_page(page_slug='_index'):
-    if page_slug not in app.config['HELP_PAGES'].keys():
+    if page_slug not in app.config['HELP_PAGES']:
         abort(404)
     html = markdown2.markdown_path(
         os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
-        extras=['metadata', 'fenced-code-blocks', 'tables'])
+        extras=['fenced-code-blocks', 'tables'])
     return render_template('help.html', help_html=html, page_slug=page_slug)
 
 

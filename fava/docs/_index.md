@@ -1,7 +1,3 @@
----
-title: Index
----
-
 Welcome to the help pages for Fava:
 
 - [Beancount Syntax](beancount_syntax/) - short overview of the syntax.

@@ -1,7 +1,3 @@
----
-title: Settings
----
-
 To customize some of Fava's settings, pass the path to your settings file to
 Fava using `fava --settings [path]`.  The settings file follows a syntax
 similar to Windows INI files, like the following example:

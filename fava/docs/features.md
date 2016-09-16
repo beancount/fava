@@ -1,7 +1,3 @@
----
-title: Fava's features
----
-
 This is an overview of some of the more advanced features that Fava has to offer.
 
 ## Keyboard Shortcuts

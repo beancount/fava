@@ -1,7 +1,3 @@
----
-title: Running Fava
----
-
 Fava can be started with the `fava` command. `fava --help` will show all the
 available command-line options.
 
