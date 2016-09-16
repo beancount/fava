@@ -124,13 +124,13 @@
     padding: 8px 12px 8px 28px;
   }
 
-  .selected a,
+  .active a,
   a:hover {
     background-color: $color-links;
     color: $color-background;
   }
 
-  .selected a {
+  .active a {
     background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=') no-repeat 9px center;
   }
 }

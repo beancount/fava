@@ -1,6 +1,5 @@
 {% extends "_layout.html" %}
 {% set active_page = 'source' %}
-{% set show_filters = False %}
 {% set source_files = api.source_files() %}
 {% set file_path = request.args.get('file_path', api.beancount_file_path) %}
 

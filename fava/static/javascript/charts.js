@@ -832,7 +832,9 @@ module.exports.initCharts = function initCharts() {
   container.html('');
   const labels = d3.select('#chart-labels');
   window.charts = {};
-  window.tooltip = d3.select('body').append('div').attr('id', 'tooltip');
+  if (!window.tooltip) {
+    window.tooltip = d3.select('body').append('div').attr('id', 'tooltip');
+  }
 
   function chartContainer(id, label) {
     const svg = container.append('svg')
