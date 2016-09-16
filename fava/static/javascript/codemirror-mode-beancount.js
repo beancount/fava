@@ -38,6 +38,10 @@ CodeMirror.defineSimpleMode('beancount', {
       token: 'whitespace',
     },
     {
+      regex: /#[A-Za-z0-9\-_\/.]+/,
+      token: 'tag',
+    },
+    {
       regex: /[*!&#?%PSTCURM]|txn/,
       token: 'directive transaction',
     },
@@ -71,10 +75,6 @@ CodeMirror.defineSimpleMode('beancount', {
     {
       regex: /(?:[0-9]+|[0-9][0-9,]+[0-9])(?:\.[0-9]*)?/,
       token: 'number',
-    },
-    {
-      regex: /#[A-Za-z0-9\-_\/.]+/,
-      token: 'tag',
     },
     {
       regex: /\^[A-Za-z0-9\-_\/.]+/,
