@@ -106,14 +106,13 @@
     {% include "overlays/_keyboard_shortcuts.html" %}
     {% include "overlays/_documents_upload.html" %}
 
-    <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
     <script>
-        // Jumping to pages:
-        Mousetrap.bind({
+        // Jumping to pages
+        window.keyBindings = {
             {% for key, value in all_pages|dictsort %}
             '{{ value.1 }}': function() { window.location = '{{ url_for('report', report_name=key) }}'; },
             {% endfor %}
-        }, 'keyup');
+        };
 
         // documents upload
         window.documentsFolders = {{ api.options['documents']|tojson|safe }};
@@ -138,6 +137,6 @@
 
         window.chartData = {{ charts.chart_data|tojson|safe }};
     </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='gen/editor.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
 </body>
 </html>

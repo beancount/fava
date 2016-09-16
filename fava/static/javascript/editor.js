@@ -82,7 +82,7 @@ function formatEditorContent(cm) {
     });
 }
 
-$(document).ready(() => {
+module.exports.initEditor = function initEditor() {
   const rulers = [];
   if (window.editorPrintMarginColumn) {
     rulers.push({
@@ -225,4 +225,4 @@ $(document).ready(() => {
       formatEditorContent(editor);
     });
   }
-});
+};

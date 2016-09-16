@@ -3,6 +3,7 @@ require('jquery-dragster');
 
 const charts = require('./charts');
 const clipboard = require('./clipboard');
+const editor = require('./editor');
 const filters = require('./filters');
 const keyboardShortcuts = require('./keyboard-shortcuts');
 const journal = require('./journal');
@@ -31,6 +32,9 @@ $(document).ready(() => {
     charts.initCharts();
     keyboardShortcuts.charts();
   }
+
+  // Charts
+  editor.initEditor();
 
   // Journal
   if ($('#journal-table').length) {

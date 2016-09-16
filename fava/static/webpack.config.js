@@ -6,7 +6,6 @@ const extractDefault = new ExtractTextPlugin('theme_default.css', { allChunks: t
 module.exports = {
   entry: {
     app: './javascript/main.js',
-    editor: './javascript/editor.js',
     theme_default: './sass/theme_default.scss',
   },
   output: {

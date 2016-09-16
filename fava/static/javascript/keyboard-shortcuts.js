@@ -26,6 +26,8 @@ module.exports.global = function global() {
       $('#name-filter').focus();
     },
   }, 'keyup');
+
+  Mousetrap.bind(window.keyBindings, 'keyup');
 };
 
 module.exports.charts = function charts() {
