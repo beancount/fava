@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 import os
-from datetime import datetime
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file)
+                   redirect, send_from_directory, g, send_file, jsonify)
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
@@ -55,6 +55,46 @@ def get_locale():
     return request.accept_languages.best_match(['de', 'en'])
 
 
+@app.before_request
+def csrf_protect():
+    if request.method == "POST":
+        if not request.is_xhr:
+            abort(403)
+
+
+def url_for_current(**kwargs):
+    if not kwargs:
+        return url_for(request.endpoint, **request.view_args)
+    args = request.view_args.copy()
+    args.update(kwargs)
+    return url_for(request.endpoint, **args)
+
+
+def url_for_source(**kwargs):
+    args = request.view_args.copy()
+    args.update(kwargs)
+    if app.config['use-external-editor']:
+        if 'line' in args:
+            return "beancount://%(file_path)s?lineno=%(line)d" % args
+        else:
+            return "beancount://%(file_path)s" % args
+    else:
+        args['report_name'] = 'source'
+        return url_for('report', **args)
+
+
+@app.context_processor
+def template_context():
+    return {
+        'url_for_current': url_for_current,
+        'url_for_source': url_for_source,
+        'api': g.api,
+        'operating_currencies': g.api.options['operating_currency'],
+        'today': datetime.datetime.now().strftime('%Y-%m-%d'),
+        'interval': request.args.get('interval', app.config['interval']),
+    }
+
+
 @app.route('/')
 def root():
     return redirect(url_for('index', bfile=app.config['FILE_SLUGS'][0]))
@@ -96,114 +136,9 @@ def document():
         return "File \"{}\" not found in entries.".format(document_path), 404
 
 
-@app.route('/<bfile>/document/add/', methods=['POST'])
-def add_document():
-    file = request.files['file']
-    if file and len(g.api.options['documents']) > 0:
-        target_folder_index = int(request.form['targetFolderIndex'])
-        target_folder = g.api.options['documents'][target_folder_index]
-
-        filename = os.path.join(
-            os.path.dirname(g.api.beancount_file_path),
-            target_folder,
-            request.form['account_name'].replace(':', '/').replace('..', ''),
-            secure_filename(request.form['filename']))
-
-        filepath = os.path.dirname(filename)
-        if not os.path.exists(filepath):
-            os.makedirs(filepath, exist_ok=True)
-
-        if os.path.isfile(filename):
-            return "File \"{}\" already exists." \
-                "Aborted document upload.".format(filename), 409
-
-        file.save(filename)
-        return "Uploaded to {}".format(filename), 200
-    return "No file detected or no documents folder specified in options." \
-           "Aborted document upload.", 424
-
-
 @app.route('/<bfile>/context/<ehash>/')
 def context(ehash=None):
     return render_template('context.html', ehash=ehash)
-
-
-@app.route('/<bfile>/query/')
-def query():
-    name = request.args.get('name', 'query_result')
-    result_format = request.args.get('result_format', 'html')
-    query_string = request.args.get('query_string', '')
-    numberify = bool(result_format != 'html')
-
-    if not query_string:
-        return render_template('query.html')
-
-    try:
-        types, rows = g.api.query(query_string, numberify)
-    except Exception as e:
-        return render_template('query.html', error=e)
-
-    if result_format == 'html':
-        return render_template('query.html', result_types=types,
-                               result_rows=rows)
-    else:
-        filename = "{}.{}".format(secure_filename(name.strip()), result_format)
-
-        if result_format == 'csv':
-            data = to_csv(types, rows)
-        else:
-            if not app.config['HAVE_EXCEL']:
-                abort(501)
-            data = to_excel(types, rows, result_format, query_string)
-        return send_file(
-            data, as_attachment=True, attachment_filename=filename)
-
-
-@app.route('/<bfile>/help/')
-@app.route('/<bfile>/help/<string:page_slug>/')
-def help_page(page_slug='_index'):
-    if page_slug not in app.config['HELP_PAGES']:
-        abort(404)
-    html = markdown2.markdown_path(
-        os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
-        extras=['fenced-code-blocks', 'tables'])
-    return render_template('help.html', help_html=html, page_slug=page_slug)
-
-
-@app.route('/<bfile>/journal/')
-def journal():
-    return render_template('journal.html')
-
-
-@app.route('/<bfile>/source/', methods=['GET', 'POST'])
-def source():
-    if request.method == "GET":
-        if request.is_xhr:
-            requested_file_path = request.args.get('file_path', None)
-            return g.api.source(requested_file_path)
-        else:
-            return render_template(
-                'source.html',
-                file_path=request.args.get('file_path',
-                                           g.api.beancount_file_path))
-
-    elif request.method == "POST":
-        file_path = request.form['file_path']
-        source = request.form['source']
-
-        g.api.set_source(file_path, source)
-        return str(True)
-
-
-@app.route('/<bfile>/source/format/', methods=['POST'])
-def source_format():
-    source = request.form['source']
-    try:
-        formatted_source = g.api.format(source)
-        return formatted_source
-    except Exception as e:
-        print(e)
-        return str(False)
 
 
 @app.route('/<bfile>/event/<event_type>/')
@@ -224,16 +159,109 @@ def report(report_name):
             'notes',
             'events',
             'errors',
-            'income_statement',
             'holdings',
+            'income_statement',
+            'journal',
             'options',
             'statistics',
             'commodities',
             'net_worth',
+            'source',
             'trial_balance',
     ]:
         return render_template('{}.html'.format(report_name))
     abort(404)
+
+
+@app.route('/<bfile>/query/')
+def query():
+    query_string = request.args.get('query_string', '')
+
+    if not query_string:
+        return render_template('query.html')
+
+    try:
+        types, rows = g.api.query(query_string)
+    except Exception as e:
+        return render_template('query.html', error=e)
+
+    return render_template('query.html', result_types=types, result_rows=rows)
+
+
+@app.route('/<bfile>/download-query/query_result.<result_format>')
+@app.route('/<bfile>/download-query/<name>.<result_format>')
+def download_query(result_format, name='query_result'):
+    query_string = request.args.get('query_string', '')
+
+    try:
+        types, rows = g.api.query(query_string, numberify=True)
+    except Exception as e:
+        return render_template('query.html', error=e)
+
+    filename = "{}.{}".format(secure_filename(name.strip()), result_format)
+
+    if result_format == 'csv':
+        data = to_csv(types, rows)
+    else:
+        if not app.config['HAVE_EXCEL']:
+            abort(501)
+        data = to_excel(types, rows, result_format, query_string)
+    return send_file(data, as_attachment=True, attachment_filename=filename)
+
+
+@app.route('/<bfile>/help/')
+@app.route('/<bfile>/help/<string:page_slug>/')
+def help_page(page_slug='_index'):
+    if page_slug not in app.config['HELP_PAGES']:
+        abort(404)
+    html = markdown2.markdown_path(
+        os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
+        extras=['fenced-code-blocks', 'tables'])
+    return render_template('help.html', help_html=html, page_slug=page_slug)
+
+
+@app.route('/<bfile>/api/source/', methods=['GET', 'POST'])
+def api_source():
+    if request.method == "GET":
+        return g.api.source(request.args.get('file_path', None))
+    elif request.method == "POST":
+        g.api.set_source(request.form['file_path'], request.form['source'])
+        return jsonify({'success': True})
+
+
+@app.route('/<bfile>/api/format-source/', methods=['POST'])
+def api_format_source():
+    try:
+        formatted_source = g.api.format(request.form['source'])
+        return jsonify({'success': True, 'payload': formatted_source})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+
+@app.route('/<bfile>/api/add-document/', methods=['POST'])
+def api_add_document():
+    file = request.files['file']
+    if file and len(g.api.options['documents']) > 0:
+        target_folder_index = int(request.form['targetFolderIndex'])
+
+        filename = os.path.join(
+            os.path.dirname(g.api.beancount_file_path),
+            g.api.options['documents'][target_folder_index],
+            request.form['account_name'].replace(':', '/').replace('..', ''),
+            secure_filename(request.form['filename']))
+
+        filepath = os.path.dirname(filename)
+        if not os.path.exists(filepath):
+            os.makedirs(filepath, exist_ok=True)
+
+        if os.path.isfile(filename):
+            return "File \"{}\" already exists." \
+                "Aborted document upload.".format(filename), 409
+
+        file.save(filename)
+        return "Uploaded to {}".format(filename), 200
+    return "No file detected or no documents folder specified in options." \
+           "Aborted document upload.", 424
 
 
 @app.template_filter()
@@ -313,35 +341,6 @@ def pull_beancount_file(endpoint, values):
         abort(404)
     g.api = app.config['APIS'][g.beancount_file_slug]
     app.config.update(app.config['APIS'][g.beancount_file_slug].fava_options)
-
-
-@app.context_processor
-def template_context():
-    def url_for_current(**kwargs):
-        if not kwargs:
-            return url_for(request.endpoint, **request.view_args)
-        args = request.view_args.copy()
-        args.update(kwargs)
-        return url_for(request.endpoint, **args)
-
-    def url_for_source(**kwargs):
-        args = request.view_args.copy()
-        args.update(kwargs)
-        if app.config['use-external-editor']:
-            if 'line' in args:
-                return "beancount://%(file_path)s?lineno=%(line)d" % args
-            else:
-                return "beancount://%(file_path)s" % args
-        else:
-            return url_for('source', **args)
-
-    return dict(url_for_current=url_for_current,
-                url_for_source=url_for_source,
-                api=g.api,
-                operating_currencies=g.api.options['operating_currency'],
-                today=datetime.now().strftime('%Y-%m-%d'),
-                interval=request.args.get('interval',
-                                          app.config['interval']),)
 
 
 @app.url_defaults

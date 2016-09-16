@@ -10,9 +10,7 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
       url: window.documentsUploadUrl,
       data: formData,
       contentType: false,
-      cache: false,
       processData: false,
-      async: false,
       success(data) {
         alert(data);
       },
@@ -41,7 +39,6 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
 
         for (let i = 0; i < files.length; i++) {
           const formData = new FormData();
-          console.log(files[i]);
           formData.append('file', files[i]);
           formData.append('account_name', $(this).attr('data-account-name'));
 

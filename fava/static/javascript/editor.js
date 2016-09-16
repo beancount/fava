@@ -52,7 +52,7 @@ function saveEditorContent(cm) {
     source: cm.getValue(),
   })
     .done((data) => {
-      if (data !== 'True') {
+      if (!data.success) {
         alert(`Writing to\n\n\t${fileName}\n\nwas not successful.`);
       } else {
         $button
@@ -72,8 +72,8 @@ function formatEditorContent(cm) {
     source: cm.getValue(),
   })
     .done((data) => {
-      if (data !== 'False') {
-        cm.setValue(data);
+      if (data.success) {
+        cm.setValue(data.payload);
         cm.scrollTo(null, scrollPosition);
       } else {
         alert('There was an error formatting the file ${fileName} with bean-format.');

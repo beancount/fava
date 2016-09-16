@@ -2,7 +2,7 @@
     <div class="overlay">
         <a href="#" class="close-overlay">(close)</a>
         <h2>Document upload</h2>
-        <form action="{{ url_for('add_document') }}" method="POST">
+        <form action="{{ url_for('api_add_document') }}" method="POST">
             <label for="document-name" id="label-document-name">Document name:</label>
             <input type="text" name="document-name" id="document-name">
             <label for="documents-upload-folder" id="label-documents-upload-folder">Document upload base folder:</label>
