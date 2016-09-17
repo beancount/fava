@@ -4,9 +4,6 @@ import io
 
 try:
     import pyexcel
-    import pyexcel.ext.xls
-    import pyexcel.ext.xlsx
-    import pyexcel.ext.ods3
     HAVE_EXCEL = True
 except ImportError:
     HAVE_EXCEL = False
