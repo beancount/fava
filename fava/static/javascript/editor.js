@@ -76,7 +76,7 @@ function formatEditorContent(cm) {
         cm.setValue(data.payload);
         cm.scrollTo(null, scrollPosition);
       } else {
-        alert('There was an error formatting the file ${fileName} with bean-format.');
+        alert('There was an error formatting the file with bean-format.');
       }
       $button.removeAttr('disabled');
     });

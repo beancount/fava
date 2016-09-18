@@ -37,7 +37,7 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
         const files = e.originalEvent.dataTransfer.files;
         const today = new Date();
 
-        for (let i = 0; i < files.length; i++) {
+        for (let i = 0; i < files.length; i += 1) {
           const formData = new FormData();
           formData.append('file', files[i]);
           formData.append('account_name', $(this).attr('data-account-name'));

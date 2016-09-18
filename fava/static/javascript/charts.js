@@ -1,5 +1,6 @@
-const d3 = require('d3');
 import { schemeSet3 } from 'd3-scale-chromatic';
+
+const d3 = require('d3');
 const URI = require('urijs');
 
 let container;
@@ -128,15 +129,15 @@ function treeMapChart() {
 
     const t = cells.transition()
       .duration(duration)
-      .attr('transform', (d) => `translate(${x(d.x0)},${y(d.y0)})`);
+      .attr('transform', d => `translate(${x(d.x0)},${y(d.y0)})`);
 
     t.select('rect')
-      .attr('width', (d) => kx * (d.x1 - d.x0))
-      .attr('height', (d) => ky * (d.y1 - d.y0));
+      .attr('width', d => kx * (d.x1 - d.x0))
+      .attr('height', d => ky * (d.y1 - d.y0));
 
     t.select('text')
-      .attr('x', (d) => kx * (d.x1 - d.x0) / 2)
-      .attr('y', (d) => ky * (d.y1 - d.y0) / 2)
+      .attr('x', d => (kx * (d.x1 - d.x0)) / 2)
+      .attr('y', d => (ky * (d.y1 - d.y0)) / 2)
       .style('opacity', labelOpacity);
 
     currentNode = node;
@@ -191,7 +192,7 @@ function treeMapChart() {
     cells.append('text')
       .attr('dy', '.5em')
       .attr('text-anchor', 'middle')
-      .text((d) => d.data.account.split(':').pop())
+      .text(d => d.data.account.split(':').pop())
       .style('opacity', 0)
       .call(makeAccountLink);
 
@@ -222,10 +223,10 @@ function sunburstChart() {
   const y = d3.scaleSqrt();
   const partition = d3.partition();
   const arc = d3.arc()
-    .startAngle((d) => x(d.x0))
-    .endAngle((d) => x(d.x1))
-    .innerRadius((d) => y(d.y0))
-    .outerRadius((d) => y(d.y1));
+    .startAngle(d => x(d.x0))
+    .endAngle(d => x(d.x1))
+    .innerRadius(d => y(d.y0))
+    .outerRadius(d => y(d.y1));
 
   const selections = {};
   let width = 500;
@@ -239,7 +240,7 @@ function sunburstChart() {
   function setSize() {
     radius = Math.min(width, height) / 2;
 
-    canvas.attr('transform', `translate(${width / 2 + margin.left},${height / 2 + margin.top})`);
+    canvas.attr('transform', `translate(${(width / 2) + margin.left},${(height / 2) + margin.top})`);
     svg
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + margin.top + margin.left);
@@ -249,7 +250,7 @@ function sunburstChart() {
 
   function resize() {
     selections.paths = canvas.selectAll('path')
-      .filter((d) => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
+      .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
       .attr('d', arc);
   }
 
@@ -275,7 +276,7 @@ function sunburstChart() {
       .interrupt()
       .style('opacity', 0.5)
       // check if d.account starts with node.account
-      .filter((node) => (d.data.account.lastIndexOf(node.data.account, 0) === 0))
+      .filter(node => (d.data.account.lastIndexOf(node.data.account, 0) === 0))
       .style('opacity', 1);
   }
 
@@ -314,10 +315,10 @@ function sunburstChart() {
     selections.paths = canvas.selectAll('path')
         .data(root.descendants())
         .enter()
-        .filter((d) => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
+        .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
       .append('path')
         .attr('fill-rule', 'evenodd')
-        .style('fill', (d) => sunburstColorScale(d.data.account))
+        .style('fill', d => sunburstColorScale(d.data.account))
         .on('mouseover', mouseOver)
         .call(makeAccountLink);
 
@@ -389,12 +390,12 @@ function barChart() {
   }
 
   function setData(data) {
-    x0.domain(data.map((d) => d.label));
-    x1.domain(data[0].values.map((d) => d.name));
+    x0.domain(data.map(d => d.label));
+    x1.domain(data[0].values.map(d => d.name));
 
     y.domain([
-      Math.min(0, d3.min(data, (d) => d3.min(d.values, (e) => e.value))),
-      Math.max(0, d3.max(data, (d) => d3.max(d.values, (e) => e.value))),
+      Math.min(0, d3.min(data, d => d3.min(d.values, e => e.value))),
+      Math.max(0, d3.max(data, d => d3.max(d.values, e => e.value))),
     ]);
   }
 
@@ -421,9 +422,9 @@ function barChart() {
 
     selections.bars = selections.groups.selectAll('.bar')
       .attr('width', x1.bandwidth())
-      .attr('x', (d) => x1(d.name))
-      .attr('y', (d) => y(Math.max(0, d.value)))
-      .attr('height', (d) => Math.abs(y(d.value) - y(0)));
+      .attr('x', d => x1(d.name))
+      .attr('y', d => y(Math.max(0, d.value)))
+      .attr('height', d => Math.abs(y(d.value) - y(0)));
   }
 
   function chart(svg_) {
@@ -449,11 +450,11 @@ function barChart() {
       .attr('class', 'group-box');
 
     selections.bars = selections.groups.selectAll('.bar')
-        .data((d) => d.values)
+        .data(d => d.values)
         .enter()
       .append('rect')
         .attr('class', 'bar')
-        .style('fill', (d) => currencyColorScale(d.name));
+        .style('fill', d => currencyColorScale(d.name));
 
     resize();
   }
@@ -493,7 +494,7 @@ function scatterPlot() {
 
   const yAxis = d3.axisLeft(y)
     .tickPadding(6)
-    .tickFormat((d) => d);
+    .tickFormat(d => d);
 
   function setSize() {
     width = parseInt(container.style('width'), 10) - margin.left - margin.right;
@@ -512,16 +513,16 @@ function scatterPlot() {
   }
 
   function setData(data) {
-    x.domain(d3.extent(data, (d) => d.date));
-    y.domain(data.map((d) => d.type));
+    x.domain(d3.extent(data, d => d.date));
+    y.domain(data.map(d => d.type));
   }
 
   function resize() {
     selections.xAxis.call(xAxis);
     selections.yAxis.call(yAxis);
     selections.dots
-      .attr('cx', (d) => x(d.date))
-      .attr('cy', (d) => y(d.type));
+      .attr('cx', d => x(d.date))
+      .attr('cy', d => y(d.type));
   }
 
   function chart(svg_) {
@@ -539,7 +540,7 @@ function scatterPlot() {
       .append('circle')
         .attr('class', 'dot')
         .attr('r', 5)
-        .style('fill', (d) => scatterColorScale(d.type))
+        .style('fill', d => scatterColorScale(d.type))
         .call(addTooltip, tooltipText);
 
     resize();
@@ -583,12 +584,12 @@ function lineChart() {
     .tickFormat(d3.format('.2s'));
 
   const line = d3.line()
-    .x((d) => x(d.date))
-    .y((d) => y(d.value));
+    .x(d => x(d.date))
+    .y(d => y(d.value));
 
   const voronoi = d3.voronoi()
-    .x((d) => x(d.date))
-    .y((d) => y(d.value));
+    .x(d => x(d.date))
+    .y(d => y(d.value));
 
   function setSize() {
     width = parseInt(container.style('width'), 10) - margin.left - margin.right;
@@ -609,12 +610,12 @@ function lineChart() {
 
   function setData(data) {
     x.domain([
-      d3.min(data, (s) => s.values[0].date),
-      d3.max(data, (s) => s.values[s.values.length - 1].date),
+      d3.min(data, s => s.values[0].date),
+      d3.max(data, s => s.values[s.values.length - 1].date),
     ]);
     y.domain([
-      Math.min(0, d3.min(data, (d) => d3.min(d.values, (e) => e.value))),
-      Math.max(0, d3.max(data, (d) => d3.max(d.values, (e) => e.value))),
+      Math.min(0, d3.min(data, d => d3.min(d.values, e => e.value))),
+      Math.max(0, d3.max(data, d => d3.max(d.values, e => e.value))),
     ]);
   }
 
@@ -649,7 +650,7 @@ function lineChart() {
       .enter()
       .append('path')
         .attr('class', 'line')
-        .style('stroke', (d) => currencyColorScale(d.name));
+        .style('stroke', d => currencyColorScale(d.name));
 
     selections.dots = canvas.selectAll('g.dot')
         .data(data)
@@ -657,11 +658,11 @@ function lineChart() {
       .append('g')
         .attr('class', 'dot')
       .selectAll('circle')
-        .data((d) => d.values)
+        .data(d => d.values)
         .enter()
       .append('circle')
         .attr('r', 3)
-        .style('fill', (d) => currencyColorScale(d.name));
+        .style('fill', d => currencyColorScale(d.name));
 
     selections.voronoi.selectAll('path')
         .data(voronoi.polygons(d3.merge(data.map(d => d.values))))
@@ -675,7 +676,7 @@ function lineChart() {
         .on('mousemove', (d) => {
           window.tooltip
               .style('left', `${x(d.data.date) + matrix.e}px`)
-              .style('top', `${y(d.data.value) + matrix.f - 15}px`);
+              .style('top', `${y(d.data.value) + matrix.f + -15}px`);
         })
         .on('mouseleave', () => {
           window.tooltip.style('opacity', 0);
@@ -692,7 +693,7 @@ function lineChart() {
   chart.update = () => {
     setSize();
     resize();
-    addLegend(svg.datum().map((d) => d.name), currencyColorScale);
+    addLegend(svg.datum().map(d => d.name), currencyColorScale);
   };
 
   return chart;
@@ -721,10 +722,10 @@ function sunburstChartContainer() {
       const sunburst = sunburstChart()
         .width(width / currencies.length)
         .height(500)
-        .labelText((d) => `${formatCurrency(d.data.balance_children[currency] || 0)} ${currency}`);
+        .labelText(d => `${formatCurrency(d.data.balance_children[currency] || 0)} ${currency}`);
 
       canvases.push(svg.append('g')
-        .attr('transform', `translate(${width * i / currencies.length},0)`)
+        .attr('transform', `translate(${(width * i) / currencies.length},0)`)
         .datum(svg.datum()[currency])
         .call(sunburst));
 
@@ -740,7 +741,7 @@ function sunburstChartContainer() {
         .height(500)
         .update();
       canvases[i]
-        .attr('transform', `translate(${width * i / currencies.length},0)`);
+        .attr('transform', `translate(${(width * i) / currencies.length},0)`);
     });
   };
 
@@ -780,7 +781,7 @@ function hierarchyContainer() {
 
     if (mode === 'treemap' && (mode !== currentMode || currency !== currentCurrency)) {
       currentChart = treeMapChart()
-        .tooltipText((d) => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`); // eslint-disable-line max-len
+        .tooltipText(d => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`); // eslint-disable-line max-len
 
       canvas
           .html('')
@@ -894,7 +895,7 @@ module.exports.initCharts = function initCharts() {
       }
       case 'bar': {
         const barchart = barChart()
-          .tooltipText(d => {
+          .tooltipText((d) => {
             let text = '';
             $.each(d.values, (i, a) => {
               text += `${formatCurrency(a.value)} ${a.name}<br>`;

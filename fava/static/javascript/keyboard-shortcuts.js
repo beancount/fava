@@ -3,7 +3,7 @@ require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
 module.exports.global = function global() {
   Mousetrap.bind({
-    '?'() {
+    '?': () => {
       $('#keyboard-shortcuts.overlay-wrapper').show();
     },
     esc() {
@@ -13,16 +13,16 @@ module.exports.global = function global() {
 
   // Filtering:
   Mousetrap.bind({
-    'f t'() {
+    'f t': () => {
       $('#time-filter').focus();
     },
-    'f g'() {
+    'f g': () => {
       $('#tag-filter').focus();
     },
-    'f a'() {
+    'f a': () => {
       $('#account-filter').focus();
     },
-    'f p'() {
+    'f p': () => {
       $('#name-filter').focus();
     },
   }, 'keyup');
@@ -30,7 +30,7 @@ module.exports.global = function global() {
 
 module.exports.charts = function charts() {
   Mousetrap.bind({
-    'ctrl+c'() {
+    'ctrl+c': () => {
       $('#toggle-chart').click();
     },
     c() {
@@ -42,7 +42,7 @@ module.exports.charts = function charts() {
         $('#chart-labels label:first-child').click();
       }
     },
-    'shift+c'() {
+    'shift+c': () => {
       const prev = $('#chart-labels label.selected').prev();
       $('#chart-labels label').removeClass('selected');
 
@@ -57,51 +57,51 @@ module.exports.charts = function charts() {
 
 module.exports.journal = function journal() {
   Mousetrap.bind({
-    'l'() {
+    l() {
       $('#toggle-legs').click();
     },
-    'm'() {
+    m() {
       $('#toggle-metadata').click();
     },
 
-    's o'() {
+    's o': () => {
       $('#filter-open').click();
     },
-    's c'() {
+    's c': () => {
       $('#filter-close').click();
     },
-    's t'() {
+    's t': () => {
       $('#filter-transaction').click();
     },
-    's b'() {
+    's b': () => {
       $('#filter-balance').click();
     },
-    's n'() {
+    's n': () => {
       $('#filter-note').click();
     },
-    's d'() {
+    's d': () => {
       $('#filter-document').click();
     },
-    's p'() {
+    's p': () => {
       $('#filter-pad').click();
     },
-    's q'() {
+    's q': () => {
       $('#filter-query').click();
     },
-    's shift+c'() {
+    's shift+c': () => {
       $('#filter-custom').click();
     },
-    's shift+b'() {
+    's shift+b': () => {
       $('#filter-budget').click();
     },
 
-    't c'() {
+    't c': () => {
       $('#filter-cleared').click();
     },
-    't p'() {
+    't p': () => {
       $('#filter-pending').click();
     },
-    't o'() {
+    't o': () => {
       $('#filter-other').click();
     },
   }, 'keyup');

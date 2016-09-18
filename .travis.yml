@@ -17,6 +17,7 @@ matrix:
     - python: 3.5
       env: {TOXENV: flake8}
     - language: node_js
+      node_js: "node"
       install: "cd fava/static; npm install"
       script: "cd fava/static; npm run lint"
 

@@ -52,7 +52,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
 
   if (token.type === 'tag') {
     return {
-      list: completionSources.tags.filter((d) => d.startsWith(currentWord.slice(1))),
+      list: completionSources.tags.filter(d => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
       to: new CodeMirror.Pos(cursor.line, token.end),
     };
@@ -61,7 +61,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
   // directives at the start of the line
   if (currentWord === line && line.length > 0) {
     return {
-      list: completionSources.undatedDirectives.filter((d) => d.startsWith(currentWord)),
+      list: completionSources.undatedDirectives.filter(d => d.startsWith(currentWord)),
       from: new CodeMirror.Pos(cursor.line, 0),
       to: cursor,
     };
@@ -71,7 +71,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
 
   if (lineTokens.length > 0) {
     const startCurrentWord = cursor.ch - currentWord.length;
-    const previousTokens = lineTokens.filter((d) => d.end <= startCurrentWord);
+    const previousTokens = lineTokens.filter(d => d.end <= startCurrentWord);
 
     // complete accounts for indented lines
     if (lineTokens[0].type === 'whitespace') {
@@ -85,7 +85,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
       // date whitespace -> complete directives
       if (previousTokens.length === 2) {
         return {
-          list: completionSources.datedDirectives.filter((d) => d.startsWith(currentWord)),
+          list: completionSources.datedDirectives.filter(d => d.startsWith(currentWord)),
           from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
           to: cursor,
         };
@@ -94,8 +94,8 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
       if (previousTokens.length % 2 === 0) {
         const directiveType = previousTokens[2].string;
         if (directiveType in directiveCompletions) {
-          const completionType = directiveCompletions[directiveType][previousTokens.length / 2 - 2];
-          return fuzzyMatch(cursor, currentWord, completionSources[completionType]);
+          const complType = directiveCompletions[directiveType][(previousTokens.length / 2) - 2];
+          return fuzzyMatch(cursor, currentWord, completionSources[complType]);
         }
       }
     }

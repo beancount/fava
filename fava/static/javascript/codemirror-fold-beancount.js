@@ -30,7 +30,7 @@ CodeMirror.registerHelper('fold', 'beancount', (cm, start) => {
     if (headerLevel(end + 1) <= level) {
       break;
     }
-    ++end;
+    end += end;
   }
 
   return {

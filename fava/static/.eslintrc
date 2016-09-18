@@ -3,5 +3,10 @@
   // We inject jquery as a global in webpack
   "globals": {
     "$": false,
+    "alert": true,
+    "document": true,
+    "FormData": true,
+    "location": true,
+    "window": true,
   },
 }

@@ -2,7 +2,7 @@
 require('awesomplete');
 
 module.exports.initFilters = function initFilters() {
-  $('#filter-form input').on('input awesomplete-selectcomplete', event => {
+  $('#filter-form input').on('input awesomplete-selectcomplete', (event) => {
     const $this = $(event.currentTarget);
     const isEmpty = !$this.val();
 
@@ -50,7 +50,7 @@ module.exports.initFilters = function initFilters() {
     });
   });
 
-  $('#filter-form button').click(event => {
+  $('#filter-form button').click((event) => {
     $(event.currentTarget).parents('li')
       .find('input')
         .val('');
