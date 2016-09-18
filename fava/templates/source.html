@@ -28,6 +28,7 @@
         {% endfor %}
         </div>
     {% else %}
+    <div class="source-page">
     <form action="{{ url_for('api_source') }}" method="POST">
         <select id="source-editor-select" name="file_path">
             {% for source_file in source_files %}

@@ -5,8 +5,8 @@
 @import '~codemirror/addon/fold/foldgutter.css';
 @import '~codemirror/addon/hint/show-hint.css';
 
-article#page-source {
-  padding: 0;
+.source-page {
+  margin: -1.5em;
 
   form {
     background: lighten($color-sidebar-background, 2);
@@ -23,7 +23,7 @@ article#page-source {
       padding: 4px 10px;
     }
 
-    div#source-editor-wrapper {
+    .source-editor-wrapper {
       bottom: 0;
       left: $aside-width;
       position: fixed;
@@ -37,10 +37,10 @@ article#page-source {
       height: 100%;
       margin: 0;
       width: 100%;
+    }
 
-      .CodeMirror-lines {
-        border-top: 1px solid darken($color-sidebar-background, 10);
-      }
+    .CodeMirror-lines {
+      border-top: 1px solid darken($color-sidebar-background, 10);
     }
   }
 
