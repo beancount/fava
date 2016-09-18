@@ -53,14 +53,15 @@ def _parse_option_entry(entry):
     key = entry.values[0].value
     value = entry.values[1].value
 
+    assert key in DEFAULTS.keys()
+    assert isinstance(value, str)
+
     if key in BOOL_OPTS:
-        assert isinstance(value, bool)
+        value = value.lower() == 'true'
     if key in INT_OPTS:
         value = int(value)
     if key in LIST_OPTS:
-        value = str(value).strip().split(" ")
-    if key in STR_OPTS:
-        assert isinstance(value, str)
+        value = str(value).strip().split(' ')
 
     return key, value
 
@@ -68,7 +69,7 @@ def _parse_option_entry(entry):
 def parse_options(custom_entries):
     """ Parse custom entries for fava options. They have the following format:
 
-    2016-04-01 custom "fava-option" "[setting_name]" [setting_value]
+    2016-04-01 custom "fava-option" "[setting_name]" "[setting_value]"
     """
 
     options = DEFAULTS.copy()
