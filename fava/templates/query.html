@@ -85,10 +85,10 @@
         <div class="queryresults-wrapper">
             <p class="download">
                 {{ _('Download as') }}
-                <a class="download-csv" href="{{ url_for('query', query_string=query, name=name, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
-                <a class="download-csv" href="{{ url_for('query', query_string=query, name=name, result_format='xls') }}">XLS</a>,
-                <a class="download-csv" href="{{ url_for('query', query_string=query, name=name, result_format='xlsx') }}">XLSX</a> or
-                <a class="download-csv" href="{{ url_for('query', query_string=query, name=name, result_format='ods') }}">ODS</a>
+                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xls') }}">XLS</a>,
+                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xlsx') }}">XLSX</a> or
+                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='ods') }}">ODS</a>
             {% endif %}
             </p>
             <h3>{{ _('Result') }}</h3>

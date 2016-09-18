@@ -117,7 +117,7 @@
 
         // documents upload
         window.documentsFolders = {{ api.options['documents']|tojson|safe }};
-        window.documentsUploadUrl = "{{ url_for('add_document') }}";
+        window.documentsUploadUrl = "{{ url_for('api_add_document') }}";
 
         // editor
         window.allAccounts = {{ api.all_accounts_active|tojson|safe }};

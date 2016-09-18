@@ -11,12 +11,12 @@ class URLQueue:
         self.app = app
 
     def append(self, endpoint, values, current):
-        if (endpoint in ['source', 'source_format', 'document', 'add_document'] or  # noqa
-                'REPLACEME' in values.values()):
-            return
         real_endpoint = endpoint
         if 'report_name' in values:
             endpoint = values['report_name']
+        if endpoint in ['document', 'source'] or endpoint.startswith('api_') \
+                or 'REPLACEME' in values.values():
+            return
         filters = ['account', 'interval', 'payee', 'tag', 'time']
         value_keys = frozenset([key for key, value in values.items()
                                 if value and key not in filters])
