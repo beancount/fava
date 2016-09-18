@@ -996,10 +996,4 @@ module.exports.initCharts = function initCharts() {
         .toggleClass('hidden', $toggleChart.hasClass('hide-charts'));
     currentChart.update();
   });
-
-  $('select#chart-interval').on('change', (event) => {
-    window.location = new URI(window.location)
-      .setQuery('interval', event.currentTarget.value)
-      .toString();
-  });
 };

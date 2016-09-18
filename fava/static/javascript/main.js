@@ -1,6 +1,7 @@
 require('jquery-stupid-table/stupidtable');
 require('jquery-dragster');
 const Backbone = require('backbone');
+const URI = require('urijs');
 
 const charts = require('./charts');
 const clipboard = require('./clipboard');
@@ -83,6 +84,13 @@ const Router = Backbone.Router.extend({
 
 const app = new Router();
 
+function cleanURL(url) {
+  const newURL = new URI(url)
+    .search($('#filter-form').serialize())
+    .setSearch('interval', $('#chart-interval').val());
+  return newURL.toString();
+}
+
 function initRouter() {
   Backbone.history.start({ pushState: true });
 
@@ -98,8 +106,19 @@ function initRouter() {
       $('.selected').removeClass('selected');
       $link.addClass('selected');
 
-      app.navigate(href, { trigger: true });
+      cleanURL(href);
+      app.navigate(cleanURL(href), { trigger: true });
     }
+  });
+
+  $(document).on('submit', '#filter-form', (event) => {
+    event.preventDefault();
+    app.navigate(cleanURL(Backbone.history.location.pathname), { trigger: true });
+  });
+
+  $(document).on('change', '#chart-interval', (event) => {
+    event.preventDefault();
+    app.navigate(cleanURL(Backbone.history.location.pathname), { trigger: true });
   });
 }
 
