@@ -78,6 +78,7 @@ const Router = Backbone.Router.extend({
     $.get(`/${Backbone.history.fragment}`, { partial: true }, (data) => {
       $('article').html(data);
       initPage();
+      $('h1').html(window.h1Html);
     });
   },
 });
@@ -86,8 +87,11 @@ const app = new Router();
 
 function cleanURL(url) {
   const newURL = new URI(url)
-    .search($('#filter-form').serialize())
-    .setSearch('interval', $('#chart-interval').val());
+    .search($('#filter-form').serialize());
+  if ($('#chart-interval').length) {
+    newURL
+      .setSearch('interval', $('#chart-interval').val());
+  }
   return newURL.toString();
 }
 
