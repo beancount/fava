@@ -161,7 +161,6 @@ module.exports.initEditor = function initEditor() {
 
   // The /source/ editor
   if ($('#source-editor').length) {
-    console.log('asdfasdf');
     fireEvent(document, 'LiveReloadShutDown');
 
     const el = document.getElementById('source-editor');

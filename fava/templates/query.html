@@ -43,8 +43,10 @@
 
 {% set name = request.args.get('name', None) %}
 {% set query = request.args.get('query_string', '') %}
+{% set result_only = request.args.get('result_only', False) %}
 
 {% block content %}
+    {% if not result_only %}
     {% if api.queries %}
         <form class="wide-form stored-queries">
             <label for="stored-queries">{{ _('Load stored query:') }}</label>
@@ -58,11 +60,12 @@
         </form>
     {% endif %}
 
-    <form class="query-box" action="{{ url_for('query') }}" method="get">
+    <form id="query-form" class="query-box" action="{{ url_for('query') }}" method="get">
         <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
         <input id="submit-query" type="submit" value="Submit Query">
     </form>
-
+    <div id="query-container">
+    {% endif %}
     {% if not error and not result_types %}
         <h3>Sample Queries</h3>
         <ul class="sample-queries">
@@ -110,5 +113,8 @@
                 </tbody>
             </table>
         </div>
+    {% endif %}
+    {% if not result_only %}
+    </div>
     {% endif %}
 {% endblock %}

@@ -73,7 +73,7 @@
             <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
         </span>
         {% if not hide_interval_filter %}
-            <select name="chart-interval" id="chart-interval">
+            <select name="chart-interval" id="chart-interval" data-default="{{ config['interval'] }}">
                 <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>{{ _('Daily') }}</option>
                 <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>{{ _('Weekly') }}</option>
                 <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>{{ _('Monthly') }}</option>

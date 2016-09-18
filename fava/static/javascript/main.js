@@ -78,19 +78,26 @@ const Router = Backbone.Router.extend({
     $.get(`/${Backbone.history.fragment}`, { partial: true }, (data) => {
       $('article').html(data);
       initPage();
-      $('h1').html(window.h1Html);
+      $('h1 strong').html(window.pageTitle);
     });
   },
 });
 
 const app = new Router();
 
-function cleanURL(url) {
-  const newURL = new URI(url)
-    .search($('#filter-form').serialize());
-  if ($('#chart-interval').length) {
-    newURL
-      .setSearch('interval', $('#chart-interval').val());
+function updateURL(url) {
+  const newURL = new URI(url);
+  $.each(['account', 'from', 'payee', 'tag', 'time'], (_, filter) => {
+    if ($(`#${filter}-filter`).val()) {
+      newURL.setSearch(filter, $(`#${filter}-filter`).val());
+    }
+  });
+  const $interval = $('#chart-interval');
+  if ($interval.length) {
+    newURL.setSearch('interval', $interval.val());
+    if ($interval.val() === $interval.data('default')) {
+      newURL.removeSearch('interval');
+    }
   }
   return newURL.toString();
 }
@@ -105,24 +112,38 @@ function initRouter() {
     const isHttp = $link.prop('protocol').indexOf('http') === 0;
     const format = getFormatFromUrl(href);
 
-    if (!event.isDefaultPrevented() && isHttp && format === 'html') {
+    const isRemote = $link.data('remote');
+
+    if (!event.isDefaultPrevented() && !isRemote && isHttp && format === 'html') {
       event.preventDefault();
       $('.selected').removeClass('selected');
       $link.addClass('selected');
 
-      cleanURL(href);
-      app.navigate(cleanURL(href), { trigger: true });
+      if (!$link.data('no-update')) {
+        updateURL(href);
+      }
+      app.navigate(updateURL(href), { trigger: true });
     }
   });
 
   $(document).on('submit', '#filter-form', (event) => {
     event.preventDefault();
-    app.navigate(cleanURL(Backbone.history.location.pathname), { trigger: true });
+    app.navigate(updateURL(Backbone.history.location.pathname), { trigger: true });
+  });
+
+  $(document).on('submit', '#query-form', (event) => {
+    event.preventDefault();
+    const url = new URI(`/${Backbone.history.fragment}`)
+      .setSearch('query_string', $('#query-editor').val())
+      .toString();
+    $.get(url, { partial: true, result_only: true }, (data) => {
+      $('#query-container').html(data);
+    });
   });
 
   $(document).on('change', '#chart-interval', (event) => {
     event.preventDefault();
-    app.navigate(cleanURL(Backbone.history.location.pathname), { trigger: true });
+    app.navigate(updateURL(Backbone.history.location.pathname), { trigger: true });
   });
 }
 
