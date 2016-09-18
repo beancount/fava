@@ -112,8 +112,9 @@ class BeancountReportAPI():
     def load_file(self):
         """Load self.beancount_file_path and compute things that are independent
         of how the entries might be filtered later"""
+        # use the internal function to disable cache
         self.all_entries, self.errors, self.options = \
-            loader.load_file(self.beancount_file_path)
+            loader._load([(self.beancount_file_path, True)], None, None, None)
         self.price_map = prices.build_price_map(self.all_entries)
         self.account_types = options.get_account_types(self.options)
 
