@@ -79,7 +79,7 @@ def parse_options(custom_entries):
             try:
                 key, value = _parse_option_entry(entry)
                 options[key] = value
-            except (IndexError, TypeError):
+            except (IndexError, TypeError, AssertionError):
                 errors.append(OptionError(
                     entry.meta,
                     'Failed to parse fava-option entry',
