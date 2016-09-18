@@ -56,17 +56,19 @@ def main(filenames, port, host, debug, profile, profile_dir,
     else:
         server = Server(app.wsgi_app)
 
-        def reload_source_files(api):
-            filename = api.options['filename']
-            api.load_file()
-            include_path = os.path.dirname(filename)
-            for filename in api.options['include'] + \
-                    api.options['documents']:
-                server.watch(os.path.join(include_path, filename),
+        def reload_source_files(api, startup=False):
+            if not startup:
+                api.load_file()
+            include_path = os.path.dirname(api.beancount_file_path)
+            paths = api.options['include'] + api.options['documents']
+            if api.beancount_file_path not in paths:
+                paths.append(api.beancount_file_path)
+            for path in paths:
+                server.watch(os.path.join(include_path, path),
                              lambda: reload_source_files(api))
 
         for api in app.config['APIS'].values():
-            reload_source_files(api)
+            reload_source_files(api, True)
 
         try:
             server.serve(port=port, host=host, debug=debug)
