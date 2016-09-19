@@ -4,7 +4,7 @@ import sys
 import unicodedata
 
 
-if getattr(sys, 'frozen', False):
+if getattr(sys, 'frozen', False):  # pragma: no cover
     BASEPATH = sys._MEIPASS
 else:
     BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))

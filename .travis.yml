@@ -13,7 +13,7 @@ matrix:
     - python: 3.5
       env: {TOXENV: py35}
     - python: 3.5
-      env: {TOXENV: py35cov, COVERAGE: 1}
+      env: {TOXENV: coverage, COVERAGE: 1}
     - python: 3.5
       env: {TOXENV: flake8}
     - language: node_js

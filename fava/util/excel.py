@@ -1,5 +1,7 @@
 import csv
 from collections import OrderedDict
+import datetime
+import decimal
 import io
 
 try:
@@ -43,10 +45,13 @@ def _row_to_pyexcel(row, header):
             result.append(value)
             continue
         type_ = column[1]
-        if str(type_) == "<class 'decimal.Decimal'>":
+        if type_ == decimal.Decimal:
             result.append(float(value))
-        elif str(type_) == "<class 'int'>":
-            result.append(int(value))
-        else:
+        elif type_ == int:
+            result.append(value)
+        elif type_ == datetime.date:
             result.append(str(value))
+        else:
+            assert isinstance(value, str)
+            result.append(value)
     return result
