@@ -1,13 +1,14 @@
 import csv
 from collections import OrderedDict
 import datetime
-import decimal
 import io
+
+from beancount.core.number import Decimal
 
 try:
     import pyexcel
     HAVE_EXCEL = True
-except ImportError:
+except ImportError:  # pragma: no cover
     HAVE_EXCEL = False
 
 
@@ -45,10 +46,12 @@ def _row_to_pyexcel(row, header):
             result.append(value)
             continue
         type_ = column[1]
-        if type_ == decimal.Decimal:
+        if type_ == Decimal:
             result.append(float(value))
         elif type_ == int:
             result.append(value)
+        elif type_ == set:
+            result.append(' '.join(value))
         elif type_ == datetime.date:
             result.append(str(value))
         else:
