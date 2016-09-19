@@ -27,9 +27,9 @@ def main(filenames, port, host, debug, profile, profile_dir,
          profile_restriction):
     """Start fava for FILENAMES on http://host:port."""
 
-    if profile_dir:
+    if profile_dir:  # pragma: no cover
         profile = True
-    if profile:
+    if profile:  # pragma: no cover
         debug = True
 
     env_filename = os.environ.get('BEANCOUNT_FILE', None)
@@ -43,7 +43,7 @@ def main(filenames, port, host, debug, profile, profile_dir,
 
     load_file()
 
-    if debug:
+    if debug:  # pragma: no cover
         if profile:
             from werkzeug.contrib.profiler import ProfilerMiddleware
             app.config['PROFILE'] = True
@@ -78,12 +78,8 @@ def main(filenames, port, host, debug, profile, profile_dir,
                 app.run(host, port)
         except OSError as error:
             if error.errno == errno.EADDRINUSE:
-                print("Error: Can not start webserver because the port/address"
-                      "is already in use.")
-                print("Please choose another port with the '-p' option.")
-            else:
+                raise click.UsageError(
+                    "Can not start webserver because the port is already in "
+                    "use. Please choose another port with the '-p' option.")
+            else:  # pragma: no cover
                 raise
-
-
-if __name__ == "__main__":
-    main()
