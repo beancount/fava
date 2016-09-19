@@ -60,6 +60,12 @@ def csrf_protect():
     if request.method == "POST":
         if not request.is_xhr:
             abort(403)
+        if request.headers.get('X-Forwarded-Host', None):
+            host = request.headers['X-Forwarded-Host']
+        else:
+            host = request.headers['Host']
+        if not request.headers.get('Origin', '').endswith(host):
+            abort(403)
 
 
 def url_for_current(**kwargs):
