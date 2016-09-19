@@ -20,7 +20,7 @@ from beancount.ops import prices, holdings, summarize
 from beancount.parser import options
 from beancount.query import query
 from beancount.reports import context
-from beancount.utils import misc_utils
+from beancount.utils import encryption, misc_utils
 from beancount.scripts.format import align_beancount
 
 from fava.util import date
@@ -99,6 +99,7 @@ class BeancountReportAPI():
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
+        self.is_encrypted = encryption.is_encrypted_file(beancount_file_path)
         self.filters = {
             'account': AccountFilter(),
             'from': FromFilter(),
@@ -113,8 +114,13 @@ class BeancountReportAPI():
         """Load self.beancount_file_path and compute things that are independent
         of how the entries might be filtered later"""
         # use the internal function to disable cache
-        self.all_entries, self.errors, self.options = \
-            loader._load([(self.beancount_file_path, True)], None, None, None)
+        if not self.is_encrypted:
+            self.all_entries, self.errors, self.options = \
+                loader._load([(self.beancount_file_path, True)],
+                             None, None, None)
+        else:
+            self.all_entries, self.errors, self.options = \
+                loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
         self.account_types = options.get_account_types(self.options)
 

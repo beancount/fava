@@ -55,23 +55,27 @@ def main(filenames, port, host, debug, profile, profile_dir,
         app.run(host, port, debug)
     else:
         server = Server(app.wsgi_app)
+        use_reloader = False
 
         def reload_source_files(api, startup=False):
             if not startup:
                 api.load_file()
             include_path = os.path.dirname(api.beancount_file_path)
             paths = api.options['include'] + api.options['documents']
-            if api.beancount_file_path not in paths:
-                paths.append(api.beancount_file_path)
             for path in paths:
                 server.watch(os.path.join(include_path, path),
                              lambda: reload_source_files(api))
 
         for api in app.config['APIS'].values():
-            reload_source_files(api, True)
+            if not api.is_encrypted:
+                reload_source_files(api, True)
+                use_reloader = True
 
         try:
-            server.serve(port=port, host=host, debug=debug)
+            if use_reloader:
+                server.serve(port=port, host=host)
+            else:
+                app.run(host, port)
         except OSError as error:
             if error.errno == errno.EADDRINUSE:
                 print("Error: Can not start webserver because the port/address"
