@@ -96,14 +96,14 @@ class TagFilter(EntryFilter):
         self.value = value
         if not self.value:
             return True
-        self.tags = [t.strip() for t in value.split(',')]
+        self.tags = set([t.strip() for t in value.split(',')])
         if '' in self.tags:
             self.tags.remove('')
         return True
 
     def _include_entry(self, entry):
         return isinstance(entry, Transaction) and \
-            entry.tags and (entry.tags & set(self.tags))
+            entry.tags and (entry.tags & self.tags)
 
 
 def _match_account(name, filter):

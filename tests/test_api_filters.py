@@ -2,8 +2,11 @@ import datetime
 
 from beancount.core import account
 from beancount.core.data import Transaction
+import pytest
+
 from fava.api.filters import (
-    AccountFilter, FromFilter, PayeeFilter, TagFilter, TimeFilter)
+    FilterException, AccountFilter, FromFilter, PayeeFilter, TagFilter,
+    TimeFilter)
 
 
 def test_from_filter(example_api):
@@ -13,6 +16,14 @@ def test_from_filter(example_api):
     filtered_entries = filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 53
+
+    with pytest.raises(FilterException):
+        filter.set('invalid')
+
+    filter.set('')
+    filtered_entries = filter.apply(
+        example_api.all_entries, example_api.options)
+    assert len(filtered_entries) == len(example_api.all_entries)
 
 
 def test_account_filter(example_api):
@@ -54,17 +65,25 @@ def test_time_filter(example_api):
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == len(example_api.all_entries)
 
+    with pytest.raises(FilterException):
+        time_filter.set('no_date')
+
 
 def test_tag_filter(example_api):
     tag_filter = TagFilter()
 
-    tag_filter.set('test')
+    tag_filter.set('test, ,')
     filtered_entries = tag_filter.apply(
         example_api.all_entries, example_api.options)
     assert all(map(
         lambda x: isinstance(x, Transaction),
         filtered_entries))
     assert len(filtered_entries) == 0
+
+    assert tag_filter.set('')
+    filtered_entries = tag_filter.apply(
+        example_api.all_entries, example_api.options)
+    assert len(filtered_entries) == len(example_api.all_entries)
 
 
 def test_payee_filter(example_api):
@@ -87,3 +106,8 @@ def test_payee_filter(example_api):
     filtered_entries = payee_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 0
+
+    payee_filter.set('')
+    filtered_entries = payee_filter.apply(
+        example_api.all_entries, example_api.options)
+    assert len(filtered_entries) == len(example_api.all_entries)
