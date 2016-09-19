@@ -4,6 +4,9 @@ module.exports.initTreeTable = function initTreeTable() {
     if (event.shiftKey === true) {
       row.find('li').toggleClass('toggled', !row.hasClass('toggled'));
     }
+    if (event.ctrlKey === true) {
+      row.find('li').toggleClass('toggled', row.hasClass('toggled'));
+    }
     row.toggleClass('toggled');
     row.parents('ol').find('a.expand-all')
       .toggleClass('hidden', row.parents('ol').find('li.toggled'));
