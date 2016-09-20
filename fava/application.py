@@ -58,19 +58,6 @@ def get_locale():
     return request.accept_languages.best_match(['de', 'en'])
 
 
-@app.before_request
-def csrf_protect():
-    if request.method == "POST":
-        if not request.is_xhr:
-            abort(403)
-        if request.headers.get('X-Forwarded-Host', None):
-            host = request.headers['X-Forwarded-Host']
-        else:
-            host = request.headers['Host']
-        if not request.headers.get('Origin', '').endswith(host):
-            abort(403)
-
-
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
     app.add_template_filter(function)
 
@@ -106,6 +93,62 @@ def template_context():
         'today': datetime.datetime.now().strftime('%Y-%m-%d'),
         'interval': request.args.get('interval', app.config['interval']),
     }
+
+
+@app.before_request
+def csrf_protect():
+    if request.method == "POST":
+        if not request.is_xhr:
+            abort(403)
+        if request.headers.get('X-Forwarded-Host', None):
+            host = request.headers['X-Forwarded-Host']
+        else:
+            host = request.headers['Host']
+        if not request.headers.get('Origin', '').endswith(host):
+            abort(403)
+
+
+@app.before_request
+def perform_global_filters():
+    if not g.api.options['operating_currency']:
+        flash('No operating currency specified. '
+              'Please add one to your beancount file.')
+
+    g.filters = {
+        name: request.args.get(name, None)
+        for name in ['account', 'from', 'interval', 'payee', 'tag', 'time']
+    }
+
+    try:
+        g.api.filter(**g.filters)
+    except FilterException as exception:
+        g.filters[exception.filter_type] = None
+        flash(str(exception))
+
+
+@app.url_defaults
+def inject_filters(endpoint, values):
+    if 'bfile' in values or not getattr(g, 'beancount_file_slug', None):
+        return
+    if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
+        values['bfile'] = g.beancount_file_slug
+
+    if endpoint == 'static':
+        return
+    for filter_name in ['account', 'from', 'interval', 'payee', 'tag', 'time']:
+        if filter_name not in values:
+            values[filter_name] = g.filters[filter_name]
+
+
+@app.url_value_preprocessor
+def pull_beancount_file(_, values):
+    g.beancount_file_slug = values.pop('bfile', None) if values else None
+    if not g.beancount_file_slug:
+        g.beancount_file_slug = app.config['FILE_SLUGS'][0]
+    if g.beancount_file_slug not in app.config['FILE_SLUGS']:
+        abort(404)
+    g.api = app.config['APIS'][g.beancount_file_slug]
+    app.config.update(app.config['APIS'][g.beancount_file_slug].fava_options)
 
 
 @app.route('/')
@@ -274,49 +317,6 @@ def api_add_document():
         return "Uploaded to {}".format(filename), 200
     return "No file detected or no documents folder specified in options." \
            "Aborted document upload.", 424
-
-
-@app.url_value_preprocessor
-def pull_beancount_file(_, values):
-    g.beancount_file_slug = values.pop('bfile', None) if values else None
-    if not g.beancount_file_slug:
-        g.beancount_file_slug = app.config['FILE_SLUGS'][0]
-    if g.beancount_file_slug not in app.config['FILE_SLUGS']:
-        abort(404)
-    g.api = app.config['APIS'][g.beancount_file_slug]
-    app.config.update(app.config['APIS'][g.beancount_file_slug].fava_options)
-
-
-@app.url_defaults
-def inject_filters(endpoint, values):
-    if 'bfile' in values or not getattr(g, 'beancount_file_slug', None):
-        return
-    if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
-        values['bfile'] = g.beancount_file_slug
-
-    if endpoint == 'static':
-        return
-    for filter_name in ['account', 'from', 'interval', 'payee', 'tag', 'time']:
-        if filter_name not in values:
-            values[filter_name] = g.filters[filter_name]
-
-
-@app.before_request
-def perform_global_filters():
-    if not g.api.options['operating_currency']:
-        flash('No operating currency specified. '
-              'Please add one to your beancount file.')
-
-    g.filters = {
-        name: request.args.get(name, None)
-        for name in ['account', 'from', 'interval', 'payee', 'tag', 'time']
-    }
-
-    try:
-        g.api.filter(**g.filters)
-    except FilterException as exception:
-        g.filters[exception.filter_type] = None
-        flash(str(exception))
 
 
 @app.route('/jump')
