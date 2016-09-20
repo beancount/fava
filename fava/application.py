@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime
+import inspect
 import os
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
@@ -8,10 +9,10 @@ from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
-from beancount.core.number import Decimal
 from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
+from fava import template_filters
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
 from fava.api.serialization import BeanJSONEncoder
@@ -68,6 +69,10 @@ def csrf_protect():
             host = request.headers['Host']
         if not request.headers.get('Origin', '').endswith(host):
             abort(403)
+
+
+for _, function in inspect.getmembers(template_filters, inspect.isfunction):
+    app.add_template_filter(function)
 
 
 @app.template_global()
@@ -269,74 +274,6 @@ def api_add_document():
         return "Uploaded to {}".format(filename), 200
     return "No file detected or no documents folder specified in options." \
            "Aborted document upload.", 424
-
-
-@app.template_filter()
-def format_currency(value, currency=None, show_if_zero=False):
-    if not value and not show_if_zero:
-        return ''
-    if value == 0.0:
-        return g.api.quantize(Decimal(0.0), currency)
-    return g.api.quantize(value, currency)
-
-
-@app.template_filter()
-def format_amount(amount):
-    if not amount:
-        return ''
-    return "{} {}".format(format_currency(amount.number, amount.currency),
-                          amount.currency)
-
-
-@app.template_filter()
-def last_segment(account):
-    return account.split(':')[-1]
-
-
-@app.template_filter()
-def account_level(account_full):
-    return account_full.count(":")+1
-
-
-@app.template_filter()
-def show_account(account):
-    show_this_account = False
-    if account['is_leaf']:
-        show_this_account = True
-        if not app.config['show-closed-accounts'] and \
-                account['is_closed']:
-            show_this_account = False
-        if not app.config['show-accounts-with-zero-balance'] and \
-                not account['balance']:
-            show_this_account = False
-        if not app.config['show-accounts-with-zero-transactions'] and \
-                not account['has_transactions']:
-            show_this_account = False
-    return show_this_account or any(
-        show_account(a) for a in account['children'])
-
-
-@app.template_filter()
-def basename(file_path):
-    return os.path.basename(file_path)
-
-
-@app.template_filter()
-def should_collapse_account(account_name):
-    key = 'fava-collapse-account'
-    if key in g.api.account_open_metadata(account_name):
-        return g.api.account_open_metadata(account_name)[key] == 'True'
-    else:
-        return False
-
-
-@app.template_filter()
-def uptodate_eligible(account_name):
-    key = 'fava-uptodate-indication'
-    if key in g.api.account_open_metadata(account_name):
-        return g.api.account_open_metadata(account_name)[key] == 'True'
-    else:
-        return False
 
 
 @app.url_value_preprocessor
