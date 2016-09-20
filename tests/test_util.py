@@ -1,4 +1,14 @@
-from fava.util import slugify
+from werkzeug.test import Client
+from werkzeug.wrappers import BaseResponse
+
+from fava.util import simple_wsgi, slugify
+
+
+def test_simple_wsgi():
+    c = Client(simple_wsgi, BaseResponse)
+    resp = c.get('/any_path')
+    assert resp.status_code == 200
+    assert resp.data == b''
 
 
 def test_slugify():

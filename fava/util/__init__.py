@@ -23,3 +23,8 @@ def slugify(string):
     # replace spaces (or groups of spaces and dashes) with dashes
     string = re.sub(r'[-\s]+', '-', string)
     return string
+
+
+def simple_wsgi(env, start_response):
+    start_response('200 OK', [('Content-Type', 'text/html')])
+    return [b'']

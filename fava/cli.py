@@ -4,8 +4,10 @@ import errno
 
 import click
 from livereload import Server
+from werkzeug.wsgi import DispatcherMiddleware
 
 from fava.application import app, load_file
+from fava.util import simple_wsgi
 
 
 @click.command()
@@ -15,6 +17,8 @@ from fava.application import app, load_file
               help='The port to listen on. (default: 5000)')
 @click.option('-H', '--host', type=str, default='localhost',
               help='The host to listen on. (default: localhost)')
+@click.option('--prefix', type=str,
+              help='Set an URL prefix. (for reverse proxy)')
 @click.option('-d', '--debug', is_flag=True,
               help='Turn on debugging. Disables live-reloading.')
 @click.option('--profile', is_flag=True,
@@ -23,7 +27,7 @@ from fava.application import app, load_file
               help='Output directory for profiling data.')
 @click.option('--profile-restriction', type=int, default=30,
               help='Number of functions to show in profile.')
-def main(filenames, port, host, debug, profile, profile_dir,
+def main(filenames, port, host, prefix, debug, profile, profile_dir,
          profile_restriction):
     """Start fava for FILENAMES on http://host:port."""
 
@@ -42,6 +46,10 @@ def main(filenames, port, host, debug, profile, profile_dir,
     app.config['BEANCOUNT_FILES'] = filenames
 
     load_file()
+
+    if prefix:
+        app.wsgi_app = DispatcherMiddleware(simple_wsgi,
+                                            {prefix: app.wsgi_app})
 
     if debug:  # pragma: no cover
         if profile:

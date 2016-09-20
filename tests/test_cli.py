@@ -48,6 +48,14 @@ def test_cli_basic():
     process.wait()
 
 
+def test_cli_prefix():
+    args = (EXAMPLE_FILE, '-p', str(_get_port()), '--prefix', '/test')
+    process = _run_fava(args)
+    _wait_for_output(process, 'Serving on', 20)
+    process.send_signal(signal.SIGINT)
+    process.wait()
+
+
 def test_cli_empty():
     process = _run_fava()
     process.wait()
