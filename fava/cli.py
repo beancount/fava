@@ -91,3 +91,8 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
                     "use. Please choose another port with the '-p' option.")
             else:  # pragma: no cover
                 raise
+
+
+# needed for pyinstaller:
+if __name__ == '__main__':  # pragma: no cover
+    main()
