@@ -7,8 +7,10 @@ from flask import (abort, Flask, flash, render_template, url_for, request,
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
-from werkzeug import secure_filename
+from werkzeug.utils import secure_filename
 from beancount.core.number import Decimal
+from beancount.query import query_compile, query_parser
+from beancount.scripts.format import align_beancount
 
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
@@ -23,9 +25,9 @@ app = Flask(__name__,
             static_folder=resource_path('static'))
 
 app.json_encoder = BeanJSONEncoder
+app.jinja_options['extensions'].append('jinja2.ext.do')
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
-app.jinja_env.add_extension('jinja2.ext.do')
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
@@ -68,6 +70,7 @@ def csrf_protect():
             abort(403)
 
 
+@app.template_global()
 def url_for_current(**kwargs):
     if not kwargs:
         return url_for(request.endpoint, **request.view_args)
@@ -76,6 +79,7 @@ def url_for_current(**kwargs):
     return url_for(request.endpoint, **args)
 
 
+@app.template_global()
 def url_for_source(**kwargs):
     args = request.view_args.copy()
     args.update(kwargs)
@@ -92,8 +96,6 @@ def url_for_source(**kwargs):
 @app.context_processor
 def template_context():
     return {
-        'url_for_current': url_for_current,
-        'url_for_source': url_for_source,
         'api': g.api,
         'operating_currencies': g.api.options['operating_currency'],
         'today': datetime.datetime.now().strftime('%Y-%m-%d'),
@@ -188,8 +190,9 @@ def query():
 
     try:
         types, rows = g.api.query(query_string)
-    except Exception as e:
-        return render_template('query.html', error=e)
+    except (query_compile.CompilationError,
+            query_parser.ParseError) as error:
+        return render_template('query.html', error=error)
 
     return render_template('query.html', result_types=types, result_rows=rows)
 
@@ -201,8 +204,9 @@ def download_query(result_format, name='query_result'):
 
     try:
         types, rows = g.api.query(query_string, numberify=True)
-    except Exception as e:
-        return render_template('query.html', error=e)
+    except (query_compile.CompilationError,
+            query_parser.ParseError):
+        abort(400)
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)
 
@@ -237,11 +241,8 @@ def api_source():
 
 @app.route('/<bfile>/api/format-source/', methods=['POST'])
 def api_format_source():
-    try:
-        formatted_source = g.api.format(request.form['source'])
-        return jsonify({'success': True, 'payload': formatted_source})
-    except Exception as e:
-        return jsonify({'success': False, 'message': str(e)})
+    return jsonify({'success': True,
+                    'payload': align_beancount(request.form['source'])})
 
 
 @app.route('/<bfile>/api/add-document/', methods=['POST'])
@@ -339,7 +340,7 @@ def uptodate_eligible(account_name):
 
 
 @app.url_value_preprocessor
-def pull_beancount_file(endpoint, values):
+def pull_beancount_file(_, values):
     g.beancount_file_slug = values.pop('bfile', None) if values else None
     if not g.beancount_file_slug:
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]

@@ -3,11 +3,10 @@ import re
 import sys
 import unicodedata
 
-
-if getattr(sys, 'frozen', False):  # pragma: no cover
-    BASEPATH = sys._MEIPASS
-else:
-    BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+# get correct path when compiled with PyInstaller
+BASEPATH = getattr(sys, '_MEIPASS',
+                   os.path.realpath(
+                       os.path.join(os.path.dirname(__file__), '..')))
 
 
 def resource_path(relative_path):
@@ -25,6 +24,7 @@ def slugify(string):
     return string
 
 
-def simple_wsgi(env, start_response):
+def simple_wsgi(_, start_response):
+    """A simple wsgi app that always returns an empty response."""
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [b'']

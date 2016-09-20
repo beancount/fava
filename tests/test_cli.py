@@ -4,7 +4,7 @@ import socket
 import subprocess
 import time
 
-from conftest import EXAMPLE_FILE
+from .conftest import EXAMPLE_FILE
 
 HOST = '0.0.0.0'
 FAVA = ('fava',)

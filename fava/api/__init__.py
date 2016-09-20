@@ -21,7 +21,6 @@ from beancount.parser import options
 from beancount.query import query
 from beancount.reports import context
 from beancount.utils import encryption, misc_utils
-from beancount.scripts.format import align_beancount
 
 from fava.util import date
 from fava.api.budgets import Budgets
@@ -434,10 +433,10 @@ class BeancountReportAPI():
     def commodity_pairs(self):
         fw_pairs = self.price_map.forward_pairs
         bw_pairs = []
-        for a, b in fw_pairs:
-            if (a in self.options['operating_currency'] and
-                    b in self.options['operating_currency']):
-                bw_pairs.append((b, a))
+        for currency_a, currency_b in fw_pairs:
+            if (currency_a in self.options['operating_currency'] and
+                    currency_b in self.options['operating_currency']):
+                bw_pairs.append((currency_b, currency_a))
         return sorted(fw_pairs + bw_pairs)
 
     def prices(self, base, quote):
@@ -586,6 +585,3 @@ class BeancountReportAPI():
             if isinstance(posting, Open):
                 return posting.meta
         return {}
-
-    def format(self, file_contents):
-        return align_beancount(file_contents)

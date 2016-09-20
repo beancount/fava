@@ -9,7 +9,7 @@ from flask.json import JSONEncoder
 
 
 class BeanJSONEncoder(JSONEncoder):
-    def default(self, o):
+    def default(self, o):  # pylint: disable=E0202
         if isinstance(o, datetime):
             return o.strftime('%Y-%m-%dT%H:%M:%SZ')
         elif isinstance(o, date):
@@ -25,7 +25,7 @@ class BeanJSONEncoder(JSONEncoder):
         return JSONEncoder.default(self, o)
 
 
-transaction_types = {
+TRANSACTION_TYPES = {
     '*': 'cleared',
     '!': 'pending',
 }
@@ -36,8 +36,8 @@ def serialize_entry(entry):
     _add_metadata(new_entry, entry)
 
     if isinstance(entry, Transaction):
-        if entry.flag in transaction_types:
-            new_entry['transaction_type'] = transaction_types[entry.flag]
+        if entry.flag in TRANSACTION_TYPES:
+            new_entry['transaction_type'] = TRANSACTION_TYPES[entry.flag]
         else:
             new_entry['transaction_type'] = 'other'
 
@@ -88,8 +88,8 @@ def serialize_inventory(inventory, at_cost=False):
 def serialize_posting(posting):
     new_posting = posting._asdict()
 
-    if posting.flag in transaction_types:
-        new_posting['posting_type'] = transaction_types[posting.flag]
+    if posting.flag in TRANSACTION_TYPES:
+        new_posting['posting_type'] = TRANSACTION_TYPES[posting.flag]
     elif posting.flag:
         new_posting['posting_type'] = 'other'
 
@@ -97,19 +97,20 @@ def serialize_posting(posting):
     return new_posting
 
 
-def serialize_real_account(ra):
+def serialize_real_account(real_account):
     return {
-        'account': ra.account,
+        'account': real_account.account,
         'balance_children':
-            serialize_inventory(realization.compute_balance(ra),
+            serialize_inventory(realization.compute_balance(real_account),
                                 at_cost=True),
-        'balance': serialize_inventory(ra.balance, at_cost=True),
-        'is_leaf': len(ra) == 0 or bool(ra.txn_postings),
+        'balance': serialize_inventory(real_account.balance, at_cost=True),
+        'is_leaf': len(real_account) == 0 or bool(real_account.txn_postings),
         'is_closed': isinstance(realization.find_last_active_posting(
-            ra.txn_postings), Close),
+            real_account.txn_postings), Close),
         'has_transactions': any(isinstance(t, TxnPosting)
-                                for t in ra.txn_postings),
-        'children': [serialize_real_account(a) for n, a in sorted(ra.items())],
+                                for t in real_account.txn_postings),
+        'children': [serialize_real_account(a)
+                     for n, a in sorted(real_account.items())],
     }
 
 

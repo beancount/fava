@@ -10,6 +10,7 @@ from fava.util.date import parse_date
 
 class FilterException(Exception):
     def __init__(self, filter_type, msg):
+        super().__init__()
         self.filter_type = filter_type
         self.msg = msg
 
@@ -30,7 +31,7 @@ class EntryFilter(object):
     def _include_entry(self, entry):
         raise NotImplementedError
 
-    def _filter(self, entries, options):
+    def _filter(self, entries, _):
         return [entry for entry in entries if self._include_entry(entry)]
 
     def apply(self, entries, options):
@@ -45,7 +46,7 @@ class EntryFilter(object):
 
 class FromFilter(EntryFilter):
     def __init__(self):
-        self.value = None
+        super().__init__()
         self.parser = query_parser.Parser()
         self.env_entries = query_env.FilterEntriesEnvironment()
 
@@ -65,6 +66,9 @@ class FromFilter(EntryFilter):
             raise FilterException('from', str(exception))
         return True
 
+    def _include_entry(self, entry):
+        pass
+
     def _filter(self, entries, options):
         return query_execute.filter_entries(self.c_from, entries, options)
 
@@ -82,6 +86,9 @@ class TimeFilter(EntryFilter):
             raise FilterException('time', 'Failed to parse date: {}'
                                   .format(self.value))
         return True
+
+    def _include_entry(self, entry):
+        pass
 
     def _filter(self, entries, options):
         entries, _ = summarize.clamp_opt(entries, self.begin_date,
@@ -106,9 +113,9 @@ class TagFilter(EntryFilter):
             entry.tags and (entry.tags & self.tags)
 
 
-def _match_account(name, filter):
-    return (account.has_component(name, filter) or
-            re.match(filter, name))
+def _match_account(name, search):
+    return (account.has_component(name, search) or
+            re.match(search, name))
 
 
 class AccountFilter(EntryFilter):

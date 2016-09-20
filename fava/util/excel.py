@@ -14,21 +14,21 @@ except ImportError:  # pragma: no cover
 
 def to_excel(types, rows, result_format, query_string):
     assert result_format in ('xls', 'xlsx', 'ods')
-    respIO = io.BytesIO()
+    resp = io.BytesIO()
     book = pyexcel.Book(OrderedDict([
         ('Results', _result_array(types, rows)),
         ('Query', [['Query'], [query_string]])
     ]))
-    book.save_to_memory(result_format, respIO)
-    respIO.seek(0)
-    return respIO
+    book.save_to_memory(result_format, resp)
+    resp.seek(0)
+    return resp
 
 
 def to_csv(types, rows):
-    respIO = io.StringIO()
+    resp = io.StringIO()
     result_array = _result_array(types, rows)
-    csv.writer(respIO).writerows(result_array)
-    return io.BytesIO(respIO.getvalue().encode('utf-8'))
+    csv.writer(resp).writerows(result_array)
+    return io.BytesIO(resp.getvalue().encode('utf-8'))
 
 
 def _result_array(types, rows):
