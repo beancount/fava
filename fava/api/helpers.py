@@ -1,96 +1,189 @@
-from beancount.core import flags, account_types
-from beancount.ops.holdings import Holding
-from beancount.core.data import Transaction
+import operator
+
+from beancount.core import account, flags, account_types, realization
+from beancount.core.number import ZERO
+from beancount.ops import prices
+from beancount.core.data import Posting, Transaction
+from beancount.core.amount import Amount
+from beancount.core.position import Cost
 from beancount.core.inventory import Inventory
 from beancount.parser import options
-from beancount.ops import prices
+from beancount.utils import misc_utils
 
 
-# This really belongs in beancount:src/python/beancount/ops/holdings.py
-def get_holding_from_position(position, price_map=None, date=None):
-    """Compute a Holding corresponding to the specified position 'pos'.
+# Nearly the same as the function of the same name in
+# beancount:src/python/beancount/ops/holdings.py but using Postings instead.
+def get_final_holdings(entries, included_account_types=None, price_map=None,
+                       date=None):
+    """Get a list of holdings by account (as Postings)."""
 
-    :param position: A Position object.
-    :param price_map: A dict of prices, as built by prices.build_price_map().
-    :param date: A datetime.date instance, the date at which to price the
-        holdings.  If left unspecified, we use the latest price information.
+    simple_entries = [entry for entry in entries
+                      if (not isinstance(entry, Transaction) or
+                          entry.flag != flags.FLAG_UNREALIZED)]
 
-    :return: A Holding object.
-    """
-    if position.cost is not None:
-        # Get price information if we have a price_map.
-        market_value = None
-        if price_map is not None:
-            base_quote = (position.units.currency, position.cost.currency)
-            price_date, price_number = prices.get_price(price_map,
-                                                        base_quote, date)
-            if price_number is not None:
-                market_value = position.units.number * price_number
+    root_account = realization.realize(simple_entries)
+
+    holdings = []
+
+    for real_account in sorted(list(realization.iter_children(root_account)),
+                               key=lambda ra: ra.account):
+        account_type = account_types.get_account_type(real_account.account)
+        if (included_account_types and
+                account_type not in included_account_types):
+            continue
+        for pos in real_account.balance:
+            price = None
+            if pos.cost and price_map:
+                base_quote = (pos.units.currency, pos.cost.currency)
+                _, price = prices.get_price(price_map, base_quote, date)
+            holdings.append(Posting(real_account.account,
+                                    pos.units,
+                                    pos.cost,
+                                    price, None, None))
+
+    return holdings
+
+
+# Nearly the same as the function of the same name in
+# beancount:src/python/beancount/ops/holdings.py but using Postings instead.
+def aggregate_holdings_list(holdings):
+    if not holdings:
+        return None
+
+    units, total_book_value, total_market_value = ZERO, ZERO, ZERO
+    accounts = set()
+    currencies = set()
+    cost_currencies = set()
+    for pos in holdings:
+        units += pos.units.number
+        accounts.add(pos.account)
+        currencies.add(pos.units.currency)
+        cost_currencies.add(
+            pos.cost.currency if pos.cost else pos.units.currency)
+
+        if pos.cost:
+            total_book_value += pos.units.number * pos.cost.number
         else:
-            price_date, price_number = None, None
+            total_book_value += pos.units.number
 
-        return Holding(None,
-                       position.units.number,
-                       position.units.currency,
-                       position.cost.number,
-                       position.cost.currency,
-                       position.units.number * position.cost.number,
-                       market_value,
-                       price_number,
-                       price_date)
+        if pos.price is not None:
+            total_market_value += pos.units.number * pos.price
+        else:
+            total_market_value += \
+                pos.units.number * (pos.cost.number if pos.cost else 1)
+
+    assert len(cost_currencies) == 1
+
+    avg_cost = total_book_value / units if units else None
+    avg_price = total_market_value / units if units else None
+
+    currency = currencies.pop() if len(currencies) == 1 else '*'
+    cost_currency = cost_currencies.pop()
+    account_ = (accounts.pop() if len(accounts) == 1
+                else account.commonprefix(accounts))
+    show_cost = bool(avg_cost) and cost_currency != currency
+
+    return Posting(
+        account_,
+        Amount(units, currency),
+        Cost(avg_cost, cost_currency, None, None) if show_cost else None,
+        avg_price if show_cost else None,
+        None,
+        None
+    )
+
+
+def aggregate_holdings_by(holdings, aggregation_key):
+    """Aggregate holdings by the given key.
+
+    They are always grouped by cost currency.
+    """
+
+    if aggregation_key == 'currency':
+        def key(pos):
+            return (pos.units.currency,
+                    pos.cost.currency if pos.cost else pos.units.currency)
+    elif aggregation_key == 'account':
+        def key(pos):
+            return (pos.account,
+                    pos.cost.currency if pos.cost else pos.units.currency)
     else:
-        return Holding(None,
-                       position.units.number,
-                       position.units.currency,
-                       None,
-                       position.units.currency,
-                       position.units.number,
-                       position.units.number,
-                       None,
-                       None)
+        def key(pos):
+            return pos.cost.currency if pos.cost else pos.units.currency
+
+    aggregated_holdings = [aggregate_holdings_list(holdings)
+                           for _, holdings in
+                           misc_utils.groupby(key, holdings).items()]
+
+    return sorted(aggregated_holdings,
+                  key=operator.attrgetter('account', 'units.currency'))
 
 
 def inventory_at_dates(transactions, dates, posting_predicate):
     """Generator that yields the aggregate inventory at the specified dates.
 
-    The inventory for a specified date includes all matching postings PRIOR to
-    it.
+    The inventory for a date includes all matching postings PRIOR to it.
 
-    :param transactions: list of transactions, sorted by date.
-    :param dates: iterator of dates
-    :param posting_predicate: predicate with the Transaction and Posting to
+    Args:
+      transactions: list of transactions, sorted by date.
+      dates: iterator of dates
+      posting_predicate: predicate with the Transaction and Posting to
         decide whether to include the posting in the inventory.
     """
-    index = 0
-    length = len(transactions)
+    if not transactions:
+        return
 
-    # inventory maps lot to amount
+    iterator = iter(transactions)
+    txn = next(iterator)
+
     inventory = Inventory()
-    prev_date = None
+
     for date in dates:
-        assert prev_date is None or date > prev_date
-        prev_date = date
-        while index < length and transactions[index].date < date:
-            entry = transactions[index]
-            index += 1
-            for posting in entry.postings:
+        while txn.date < date:
+            for posting in txn.postings:
                 if posting_predicate(posting):
                     inventory.add_position(posting)
-        yield inventory
+            try:
+                txn = next(iterator)
+            except StopIteration:
+                break
+        yield inventory.get_positions()
 
 
-def holdings_at_dates(entries, dates, price_map, options_map):
-    """Computes aggregate holdings at mulitple dates.
+def convert_inventory(price_map, target_currency, inventory, date):
+    """Convert and sum an inventory to a common currency.
 
-    Yields for each date the list of Holding objects.  The holdings are
-    aggregated across accounts; the Holding objects will have the account field
-    set to None.
-
-    :param entries: The list of entries.
-    :param dates: The list of dates.
-    :param price_map: A dict of prices, as built by prices.build_price_map().
-    :param options_map: The account options.
+    Returns:
+      A Decimal, the sum of all positions that could be converted.
     """
+
+    total = ZERO
+
+    for pos in inventory:
+        # Fetch the price in the cost currency if there is one.
+        if pos.cost:
+            base_quote = (pos.units.currency, pos.cost.currency)
+            _, cost_number = prices.get_price(price_map, base_quote, date)
+            if cost_number is None:
+                cost_number = pos.cost.number
+            currency = pos.cost.currency
+        # Otherwise, price it in its own currency.
+        else:
+            cost_number = 1
+            currency = pos.units.currency
+        if currency == target_currency:
+            total += pos.units.number * cost_number
+        else:
+            base_quote = (currency, target_currency)
+
+            # Get the conversion rate.
+            _, price = prices.get_price(price_map, base_quote, date)
+            if price is not None:
+                total += pos.units.number * cost_number * price
+    return total
+
+
+def net_worth_at_dates(entries, dates, price_map, options_map):
     transactions = [entry for entry in entries
                     if (isinstance(entry, Transaction) and
                         entry.flag != flags.FLAG_UNREALIZED)]
@@ -102,8 +195,12 @@ def holdings_at_dates(entries, dates, price_map, options_map):
         if account_type in (types.assets, types.liabilities):
             return True
 
-    for date, inventory in zip(dates,
-                               inventory_at_dates(transactions, dates,
-                                                  posting_predicate)):
-        yield [get_holding_from_position(position, price_map, date)
-               for position in inventory]
+    inventories = inventory_at_dates(transactions, dates, posting_predicate)
+
+    return [{
+        'date': date,
+        'balance': {
+            currency: convert_inventory(price_map, currency, inv, date)
+            for currency in options_map['operating_currency']
+        }
+    } for date, inv in zip(dates, inventories)]

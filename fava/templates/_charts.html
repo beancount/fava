@@ -31,7 +31,7 @@
 {% do chart_data.append({
     'type': 'balances',
     'label': 'Net Worth ({})'.format(interval_macros.interval_label|lower),
-    'data': api.net_worth_at_intervals(interval),
+    'data': api.net_worth_at_dates(interval),
 }) %}
 {% endmacro %}
 
