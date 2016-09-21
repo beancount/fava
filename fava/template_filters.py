@@ -55,15 +55,15 @@ def basename(file_path):
 
 def should_collapse_account(account_name):
     key = 'fava-collapse-account'
-    if key in g.api.account_open_metadata(account_name):
-        return g.api.account_open_metadata(account_name)[key] == 'True'
+    if key in g.api.account_metadata(account_name):
+        return g.api.account_metadata(account_name)[key] == 'True'
     else:
         return False
 
 
 def uptodate_eligible(account_name):
     key = 'fava-uptodate-indication'
-    if key in g.api.account_open_metadata(account_name):
-        return g.api.account_open_metadata(account_name)[key] == 'True'
+    if key in g.api.account_metadata(account_name):
+        return g.api.account_metadata(account_name)[key] == 'True'
     else:
         return False

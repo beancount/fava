@@ -60,6 +60,7 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
                 restrictions=(profile_restriction,),
                 profile_dir=profile_dir if profile_dir else None)
 
+        app.jinja_env.auto_reload = True
         app.run(host, port, debug)
     else:
         server = Server(app.wsgi_app)

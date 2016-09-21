@@ -2,32 +2,35 @@
 {% set active_page = 'events' %}
 
 {% block content %}
-    {% set events = api.events(only_include_newest=True) %}
+    {% set events = api.events() %}
     {% if events %}
         {{ charts.skeleton(hide_interval_filter=True) }}
         {{ charts.events() }}
 
-        <h3>{{ _('Entries') }}</h3>
-        <table class="events sortable">
+    {% for group in events|groupby('type') %}
+    <div class="left">
+        {{ charts.events(group.grouper) }}
+        <h3>{{ _('Event: %(type)s', type=group.grouper) }}</h3>
+        <table class="sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" data-sort-default="desc" class="sorting-asc">{{ _('Date') }}</th>
-                    <th data-sort="string">{{ _('Type') }}</th>
+                    <th data-sort="string" class="sorting-asc">{{ _('Date') }}</th>
                     <th data-sort="string">{{ _('Description') }}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for event in events %}
+                {% for event in group.list %}
                     <tr>
                         <td>
                             <a href="{{ url_for_source(file_path=event.meta.filename, line=event.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=event.meta.file, lineno=event.meta.lineno) }}">{{ event.date }}</a>
                         </td>
-                        <td><a href="{{ url_for('event_details', event_type=event.type) }}" title="{{ _('Show events of type %(type)s', type=event.type) }}">{{ event.type }}</a></td>
                         <td>{{ event.description }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+    {% endfor %}
     {% else %}
     <p>
         {{ _('No events.') }}

@@ -90,7 +90,7 @@ def template_context():
     return {
         'api': g.api,
         'operating_currencies': g.api.options['operating_currency'],
-        'today': datetime.datetime.now().strftime('%Y-%m-%d'),
+        'datetime': datetime,
         'interval': request.args.get('interval', app.config['interval']),
     }
 
@@ -197,11 +197,6 @@ def context(ehash=None):
     return render_template('context.html', ehash=ehash)
 
 
-@app.route('/<bfile>/event/<event_type>/')
-def event_details(event_type):
-    return render_template('event_detail.html', event_type=event_type)
-
-
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')
 def holdings_by(aggregation_key):
     return render_template('holdings.html', aggregation_key=aggregation_key)
@@ -238,8 +233,7 @@ def query():
 
     try:
         types, rows = g.api.query(query_string)
-    except (query_compile.CompilationError,
-            query_parser.ParseError) as error:
+    except (query_compile.CompilationError, query_parser.ParseError) as error:
         return render_template('query.html', error=error)
 
     return render_template('query.html', result_types=types, result_rows=rows)
@@ -252,8 +246,7 @@ def download_query(result_format, name='query_result'):
 
     try:
         types, rows = g.api.query(query_string, numberify=True)
-    except (query_compile.CompilationError,
-            query_parser.ParseError):
+    except (query_compile.CompilationError, query_parser.ParseError):
         abort(400)
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)

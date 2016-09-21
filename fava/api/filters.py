@@ -23,6 +23,10 @@ class EntryFilter(object):
         self.value = None
 
     def set(self, value):
+        """Set the filter.
+
+        Subclasses should check for validity of the value in this method.
+        """
         if value == self.value:
             return False
         self.value = value
@@ -49,6 +53,7 @@ class FromFilter(EntryFilter):
         super().__init__()
         self.parser = query_parser.Parser()
         self.env_entries = query_env.FilterEntriesEnvironment()
+        self.c_from = None
 
     def set(self, value):
         if value == self.value:
@@ -74,6 +79,11 @@ class FromFilter(EntryFilter):
 
 
 class TimeFilter(EntryFilter):
+    def __init__(self):
+        super().__init__()
+        self.begin_date = None
+        self.end_date = None
+
     def set(self, value):
         if value == self.value:
             return False
@@ -97,6 +107,10 @@ class TimeFilter(EntryFilter):
 
 
 class TagFilter(EntryFilter):
+    def __init__(self):
+        super().__init__()
+        self.tags = set()
+
     def set(self, value):
         if value == self.value:
             return False
@@ -129,6 +143,10 @@ class AccountFilter(EntryFilter):
 
 
 class PayeeFilter(EntryFilter):
+    def __init__(self):
+        super().__init__()
+        self.payees = []
+
     def set(self, value):
         if value == self.value:
             return False

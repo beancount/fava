@@ -2722,6 +2722,7 @@ option "operating_currency" "USD"
   Liabilities:US:Chase:Slate                       -25.30 USD
   Expenses:Food:Restaurant                          25.30 USD
 
+2016-05-19 balance Liabilities:US:Chase:Slate    -2935.65 USD
 
 
 * Taxable Investments

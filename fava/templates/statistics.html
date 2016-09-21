@@ -4,19 +4,19 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% block content %}
-    {% set statistics = api.statistics() %}
+    {% set postings_by_account = api.postings_by_account() %}
 
-    <div class="left statistics">
+    <div class="left">
         <h3>{{ _('Postings per Account') }}</h3>
-        <table class="statistics sortable">
+        <table class="sortable">
             <thead>
                 <tr>
-                    <th data-sort="string">{{ _('Type') }}</th>
-                    <th data-sort="int" class="sorting-desc">{{ _('# Entries') }}</th>
+                    <th data-sort="string">{{ _('Account') }}</th>
+                    <th data-sort="int" class="sorting-desc">{{ _('# Postings') }}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for account_name, num in statistics.postings_by_account|dictsort(false, 'value')|reverse %}
+                {% for account_name, num in postings_by_account|dictsort(false, 'value')|reverse %}
                     <tr>
                         <td class="account"><a href="{{ url_for('account_with_journal', name=account_name) }}">{{ account_name }}</a></td>
                         <td class="num">{{ num }}</td>
@@ -26,29 +26,29 @@
             <tfoot>
                 <tr>
                     <td>{{ _('Total') }}</td>
-                    <td class="num">{{ statistics.postings_by_account.values()|sum }}</td>
+                    <td class="num">{{ postings_by_account.values()|sum }}</td>
                 </tr>
             </tfoot>
         </table>
     </div>
 
-    {% macro copy_balance_directives_text(activity_by_account) -%}
+    {% macro copy_balance_directives_text() -%}
             {{ _('Click to copy balance directives for accounts (except green ones) to the clipboard:') }}
 
-            {% for activity in activity_by_account -%}
-                {% if activity.account|uptodate_eligible %}
-                    {%- if api.is_account_uptodate(activity.account) != "green" -%}
-                        {{- account_macros.balance_directive(activity.account) }}
+            {% for account in api.all_accounts_active -%}
+                {% if account|uptodate_eligible %}
+                    {%- if api.account_uptodate_status(account) != "green" -%}
+                        {{- account_macros.balance_directive(account) }}
                     {%- endif -%}
                 {% endif %}
             {%- endfor -%}
     {%- endmacro %}
 
-    {% set clipboard_text = copy_balance_directives_text(statistics.activity_by_account) %}
+    {% set clipboard_text = copy_balance_directives_text() %}
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
-    <div class="left statistics">
+    <div class="left">
         <h3>{{ _('Update Activity per Account') }}<input type="submit" class="right" id="copy-balances" value="{{ _('Copy balance directives') }}" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}"></h3>
-        <table class="statistics statistics-update-activity sortable">
+        <table class="statistics-update-activity sortable">
             <thead>
                 <tr>
                     <th data-sort="string" class="sorting-asc">{{ _('Account') }}</th>
@@ -59,53 +59,52 @@
                 </tr>
             </thead>
             <tbody>
-                {% for activity in statistics.activity_by_account %}
+                {% for account in api.all_accounts_active %}
+                    {% set last_entry = api.last_entry(account) %}
+                    {% if last_entry %}
                     <tr>
-                        <td class="account"><a href="{{ url_for('account_with_journal', name=activity.account) }}">{{ activity.account }}</a></td>
-                        {% if activity.account|uptodate_eligible %}
-                            {% with status=api.is_account_uptodate(activity.account) or '' %}
-                                <td data-sort-value="{{ status_sortorder[api.is_account_uptodate(activity.account) or ''] }}" class="uptodate-indicator">
-                                    {{ account_macros.indicator(activity.account) }}
-                                </td>
-                            {% endwith %}
-                            <td class="uptodate-indicator">{{ account_macros.last_account_activity(activity.account) }}</td>
+                        <td class="account"><a href="{{ url_for('account_with_journal', name=account) }}">{{ account }}</a></td>
+                        {% if account|uptodate_eligible %}
+                            <td data-sort-value="{{ status_sortorder[api.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
+                            <td class="uptodate-indicator">{{ account_macros.last_account_activity(account) }}</td>
                         {% else %}
-                        <td data-sort-value="0" class="uptodate-indicator"></td>
-                        <td class="uptodate-indicator"></td>
+                            <td data-sort-value="0" class="uptodate-indicator"></td>
+                            <td class="uptodate-indicator"></td>
                         {% endif %}
-                        <td><a href="{{ url_for_source(file_path=activity.last_posting_filename, line=activity.last_posting_lineno) }}" title="Show source {{ activity.last_posting_filename }}:{{ activity.last_posting_lineno }}">{{ activity.last_posting_date }}</a></td>
+                        <td><a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a></td>
                         <td class="num">
-                            {%- for position in api.inventory(activity.account) -%}
+                            {%- for position in api.inventory(account) -%}
                                 {{ position.units|format_amount }}<br>
                             {% endfor -%}
                         </td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
-    <div class="left statistics">
-        <h3>{{ _('Directive Type') }}</h3>
-        <table class="statistics sortable">
+    <div class="left">
+        <h3>{{ _('Entries per Type') }}</h3>
+        <table class="sortable">
             <thead>
                 <tr>
                     <th data-sort="string">{{ _('Type') }}</th>
-                    <th data-sort="int" class="sorting-desc">{{ _('# Entries') }}</th>
+                    <th data-sort="int">{{ _('# Entries') }}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for type, num in statistics.entries_by_type|dictsort(false, 'value')|reverse %}
-                    <tr>
-                        <td>{{ type }}</td>
-                        <td class="num">{{ num }}</td>
-                    </tr>
+                {% for group in api.entries|groupby('__class__.__name__') %}
+                <tr>
+                    <td>{{ group.grouper }}</td>
+                    <td class="num">{{ group.list|length }}</td>
+                </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
                     <td>{{ _('Total') }}</td>
-                    <td class="num">{{ statistics.entries_by_type.values()|sum }}</td>
+                    <td class="num">{{ api.entries|length }}</td>
                 </tr>
             </tfoot>
         </table>

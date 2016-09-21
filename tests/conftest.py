@@ -9,6 +9,7 @@ from fava.application import app as fava_app
 
 
 EXAMPLE_FILE = os.path.join(os.path.dirname(__file__), 'example.beancount')
+API = BeancountReportAPI(EXAMPLE_FILE)
 
 
 @pytest.fixture
@@ -26,4 +27,5 @@ def load_doc(request):
 
 @pytest.fixture
 def example_api():
-    return BeancountReportAPI(EXAMPLE_FILE)
+    yield API
+    API.filter(**{name: None for name in API.filters.keys()})

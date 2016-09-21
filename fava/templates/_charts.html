@@ -19,10 +19,10 @@
 }) %}
 {% endmacro %}
 
-{% macro events(event_type=None, label=None) %}
+{% macro events(event_type=None) %}
 {% do chart_data.append({
     'type': 'scatterplot',
-    'label': 'Events' if not label else label,
+    'label': 'Events' if not event_type else 'Event: {}'.format(event_type),
     'events': api.events(event_type),
 }) %}
 {% endmacro %}

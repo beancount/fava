@@ -105,7 +105,14 @@ h5 {
 }
 
 h2 { font-size: 1.2857em; }
-h3 { font-size: 1.1429em; }
+h3 {
+  font-size: 1.1429em;
+
+  input {
+    font-size: 1rem;
+    font-weight: normal;
+  }
+}
 h4,
 h5 { font-size: 1em; }
 
@@ -485,6 +492,7 @@ kbd {
 
 .left {
   float: left;
+  margin-right: 20px;
 }
 
 .right {
@@ -574,15 +582,6 @@ kbd {
 
   .uptodate-indicator { text-align: center; }
   .status-indicator { margin: 0 auto; }
-}
-
-.left.statistics {
-  margin-right: 20px;
-
-  h3 input {
-    font-size: 1rem;
-    font-weight: normal;
-  }
 }
 
 td .status-indicator {

@@ -8,3 +8,24 @@ def test_linechart_data(example_api):
     data = example_api.linechart_data('Assets:Testing:MultipleCommodities')
     assert data[1]['balance'].get('USD', None) == 50
     assert data[2]['balance'].get('USD', None) == 0
+
+
+def test_account_metadata(example_api):
+    data = example_api.account_metadata('Assets:US:BofA')
+    assert data['address'] == "123 America Street, LargeTown, USA"
+    assert data['institution'] == "Bank of America"
+
+    assert not example_api.account_metadata('Assets')
+
+    assert not example_api.account_metadata('NOACCOUNT')
+
+
+def test_account_uptodate_status(example_api):
+    status = example_api.account_uptodate_status('Assets:US:BofA')
+    assert not status
+
+    status = example_api.account_uptodate_status('Assets:US:BofA:Checking')
+    assert status == 'yellow'
+
+    status = example_api.account_uptodate_status('Liabilities:US:Chase:Slate')
+    assert status == 'green'
