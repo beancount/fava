@@ -206,8 +206,6 @@ def holdings_by(aggregation_key):
 def report(report_name):
     if report_name in [
             'balance_sheet',
-            'documents',
-            'notes',
             'events',
             'errors',
             'holdings',
@@ -216,7 +214,6 @@ def report(report_name):
             'options',
             'statistics',
             'commodities',
-            'net_worth',
             'source',
             'trial_balance',
     ]:

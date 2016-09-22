@@ -348,9 +348,6 @@ class BeancountReportAPI():
             zip(dates, holdings_at_dates(self.entries, dates,
                                          self.price_map, self.options))]
 
-    def net_worth(self):
-        return self._holdings_to_net_worth(self.holdings())
-
     def context(self, ehash):
         matching_entries = [entry for entry in self.all_entries
                             if ehash == compare.hash_entry(entry)]

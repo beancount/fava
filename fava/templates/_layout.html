@@ -2,7 +2,7 @@
 {% set partial = request.args.get('partial', False) %}
 {% set navigation_bar = [
     ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
-    ("Other",         [ 'holdings', 'net_worth', 'commodities', 'events']),
+    ("Other",         [ 'holdings', 'commodities', 'events']),
     ("Configuration", [ 'source', 'options', 'statistics', 'help'])
 ] %}
 {% set all_pages = {
@@ -12,7 +12,6 @@
     'journal':          (_('Journal'),          'g j'),
     'query':            (_('Query'),            'g q'),
     'holdings':         (_('Holdings'),         'g h'),
-    'net_worth':        (_('Net Worth'),        'g w'),
     'commodities':      (_('Commodities'),      'g c'),
     'events':           (_('Events'),           'g e'),
     'source':           (_('Source'),           'g s'),
