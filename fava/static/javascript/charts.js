@@ -1,7 +1,6 @@
 import { schemeSet3 } from 'd3-scale-chromatic';
 
 const d3 = require('d3');
-const URI = require('urijs');
 
 let container;
 const treemapColorScale = d3.scaleOrdinal(schemeSet3);
@@ -65,9 +64,8 @@ function addTooltip(selection, tooltipText) {
 }
 
 function timeFilter(date) {
-  window.location = new URI(window.location)
-    .setQuery('time', timeFilterDateFormat[window.interval](date))
-    .toString();
+  $('#time-filter').val(timeFilterDateFormat[window.interval](date));
+  $('#filter-form').submit();
 }
 
 function addLegend(domain, colorScale) {
