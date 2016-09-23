@@ -133,7 +133,7 @@
         window.interval = "{{ interval }}";
         window.operating_currencies = {{ operating_currencies|tojson|safe }};
         window.commodities = {{ api.options['commodities']|tojson|safe }};
-        window.accountUrl = "{{ url_for('account_with_journal', name='REPLACEME') }}";
+        window.accountUrl = "{{ url_for('account', name='REPLACEME') }}";
 
         window.chartData = {{ charts.chart_data|tojson|safe }};
     </script>

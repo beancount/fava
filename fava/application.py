@@ -176,18 +176,11 @@ def index():
 
 
 @app.route('/<bfile>/account/<name>/')
-def account_with_journal(name=None):
-    return render_template('account.html', account_name=name, journal=True)
-
-
-@app.route('/<bfile>/account/<name>/balances/')
-def account_with_interval_balances(name):
-    return render_template('account.html', account_name=name, accumulate=True)
-
-
-@app.route('/<bfile>/account/<name>/changes/')
-def account_with_interval_changes(name):
-    return render_template('account.html', account_name=name, accumulate=False)
+@app.route('/<bfile>/account/<name>/<subreport>/')
+def account(name, subreport='journal'):
+    assert subreport in ['journal', 'balances', 'changes']
+    return render_template('account.html', account_name=name,
+                           subreport=subreport)
 
 
 @app.route('/<bfile>/document/', methods=['GET'])
@@ -207,7 +200,7 @@ def document():
 
 
 @app.route('/<bfile>/context/<ehash>/')
-def context(ehash=None):
+def context(ehash):
     return render_template('context.html', ehash=ehash)
 
 

@@ -30,7 +30,7 @@ Click to copy the balance directives to the clipboard:
 {% endmacro %}
 
 {% macro account_name(account_name, last_segment=False) %}
-<a href="{{ url_for('account_with_journal', name=account_name) }}" class="account">
+<a href="{{ url_for('account', name=account_name) }}" class="account">
     {{ account_name|last_segment if last_segment else account_name }}
 </a>
 
@@ -50,7 +50,7 @@ Click to copy the balance directives to the clipboard:
         {%- if loop.last -%}
             {{ subaccount_part }}
         {%- else -%}
-            <a href="{{ url_for('account_with_journal', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>
+            <a href="{{ url_for('account', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>
         {%- endif -%}
     {% endfor %}
 

@@ -18,7 +18,7 @@
             <tbody>
                 {% for account_name, num in postings_by_account|dictsort(false, 'value')|reverse %}
                     <tr>
-                        <td class="account"><a href="{{ url_for('account_with_journal', name=account_name) }}">{{ account_name }}</a></td>
+                        <td class="account"><a href="{{ url_for('account', name=account_name) }}">{{ account_name }}</a></td>
                         <td class="num">{{ num }}</td>
                     </tr>
                 {% endfor %}
@@ -63,7 +63,7 @@
                     {% set last_entry = api.last_entry(account) %}
                     {% if last_entry %}
                     <tr>
-                        <td class="account"><a href="{{ url_for('account_with_journal', name=account) }}">{{ account }}</a></td>
+                        <td class="account"><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
                         {% if account|uptodate_eligible %}
                             <td data-sort-value="{{ status_sortorder[api.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
                             <td class="uptodate-indicator">{{ account_macros.last_account_activity(account) }}</td>

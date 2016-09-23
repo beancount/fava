@@ -7,6 +7,8 @@
 {% set page_title = account_macros.account_name_header(account_name) %}
 {% set short_title = account_name %}
 
+{% set journal = subreport == 'journal' %}
+
 {% block content %}
 <div class="droptarget">
     {{ charts.skeleton() }}
@@ -18,9 +20,9 @@
     {% endif %}
 
     <div class="headerline">
-        <h3>{% if not journal %}<a href="{{ url_for('account_with_journal', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
-        <h3>{% if not (not journal and not accumulate) %}<a href="{{ url_for('account_with_interval_changes', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} {{ _('Changes') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Changes') }}{% endif %}</h3>
-        <h3>{% if not (not journal and accumulate) %}<a href="{{ url_for('account_with_interval_balances', name=account_name, interval=interval) }}">{{ interval_macros.interval_label }} {{ _('Balances') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Balances') }}{% endif %}</h3>
+        <h3>{% if not journal %}<a href="{{ url_for('account', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
+        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ interval_macros.interval_label }} {{ _('Changes') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Changes') }}{% endif %}</h3>
+        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ interval_macros.interval_label }} {{ _('Balances') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Balances') }}{% endif %}</h3>
     </div>
 
     {% if journal %}
@@ -29,6 +31,7 @@
             {% include "_journal_table.html" %}
         {% endwith %}
     {% else %}
+        {% set accumulate = subreport == 'balances' %}
         {% set interval_balances, dates = api.interval_balances(interval, account_name, accumulate) %}
         {% if interval_balances %}
             {% for begin_date, end_date in dates[-3:]|reverse %}
@@ -45,7 +48,7 @@
                         {% set time_filter = begin_date|string + ' - ' + end_date|string %}
                     {% endif %}
 
-                    <span class="other-header"><a href="{{ url_for('account_with_journal', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
+                    <span class="other-header"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
                 {% endfor %}
                 </p>
             </li>
@@ -60,7 +63,7 @@
                 {% if accumulate %}{% set begin_date = dates[0][0] %}{% endif %}
 
                 <span class="num other{{ ' has-balance' if balance else '' }}">
-                    <a href="{{ url_for('account_with_journal', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
+                    <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
                         {% for currency, number in balance.items() %}
                             {{ account_macros.balance_with_budget(currency, number, budget, show_currency=True) }}
                         {% endfor %}
