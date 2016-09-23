@@ -37,6 +37,20 @@ app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 app.config['APIS'] = {}
 
+REPORTS = [
+    'balance_sheet',
+    'events',
+    'errors',
+    'holdings',
+    'income_statement',
+    'journal',
+    'options',
+    'statistics',
+    'commodities',
+    'source',
+    'trial_balance',
+]
+
 
 def load_file():
     for filepath in app.config['BEANCOUNT_FILES']:
@@ -202,25 +216,6 @@ def holdings_by(aggregation_key):
     return render_template('holdings.html', aggregation_key=aggregation_key)
 
 
-@app.route('/<bfile>/<report_name>/')
-def report(report_name):
-    if report_name in [
-            'balance_sheet',
-            'events',
-            'errors',
-            'holdings',
-            'income_statement',
-            'journal',
-            'options',
-            'statistics',
-            'commodities',
-            'source',
-            'trial_balance',
-    ]:
-        return render_template('{}.html'.format(report_name))
-    abort(404)
-
-
 @app.route('/<bfile>/query/')
 def query():
     query_string = request.args.get('query_string', '')
@@ -234,6 +229,13 @@ def query():
         return render_template('query.html', error=error)
 
     return render_template('query.html', result_types=types, result_rows=rows)
+
+
+@app.route('/<bfile>/<report_name>/')
+def report(report_name):
+    if report_name in REPORTS:
+        return render_template('{}.html'.format(report_name))
+    abort(404)
 
 
 @app.route('/<bfile>/download-query/query_result.<result_format>')
