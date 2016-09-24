@@ -43,7 +43,7 @@ def test_cli_basic():
     port = _get_port()
     args = (EXAMPLE_FILE, '-p', str(port))
     process = _run_fava(args)
-    _wait_for_output(process, 'Serving on', 20)
+    _wait_for_output(process, 'Running on', 20)
     process.send_signal(signal.SIGINT)
     process.wait()
 
@@ -51,7 +51,7 @@ def test_cli_basic():
 def test_cli_prefix():
     args = (EXAMPLE_FILE, '-p', str(_get_port()), '--prefix', '/test')
     process = _run_fava(args)
-    _wait_for_output(process, 'Serving on', 20)
+    _wait_for_output(process, 'Running on', 20)
     process.send_signal(signal.SIGINT)
     process.wait()
 
@@ -66,7 +66,7 @@ def test_cli_empty():
 def test_cli_addrinuse():
     args = (EXAMPLE_FILE, '-p', str(_get_port()))
     process = _run_fava(args)
-    _wait_for_output(process, 'Serving on', 20)
+    _wait_for_output(process, 'Running on', 20)
     process2 = _run_fava(args)
     process2.wait()
     process.send_signal(signal.SIGINT)

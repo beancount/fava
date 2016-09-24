@@ -3,7 +3,6 @@ import os
 import errno
 
 import click
-from livereload import Server
 from werkzeug.wsgi import DispatcherMiddleware
 
 from fava.application import app, load_file
@@ -61,37 +60,16 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
                 profile_dir=profile_dir if profile_dir else None)
 
         app.jinja_env.auto_reload = True
+
+    try:
         app.run(host, port, debug)
-    else:
-        server = Server(app.wsgi_app)
-        use_reloader = False
-
-        def reload_source_files(api, startup=False):
-            if not startup:
-                api.load_file()
-            include_path = os.path.dirname(api.beancount_file_path)
-            paths = api.options['include'] + api.options['documents']
-            for path in paths:
-                server.watch(os.path.join(include_path, path),
-                             lambda: reload_source_files(api))
-
-        for api in app.config['APIS'].values():
-            if not api.is_encrypted:
-                reload_source_files(api, True)
-                use_reloader = True
-
-        try:
-            if use_reloader:
-                server.serve(port=port, host=host)
-            else:
-                app.run(host, port)
-        except OSError as error:
-            if error.errno == errno.EADDRINUSE:
-                raise click.UsageError(
-                    "Can not start webserver because the port is already in "
-                    "use. Please choose another port with the '-p' option.")
-            else:  # pragma: no cover
-                raise
+    except OSError as error:
+        if error.errno == errno.EADDRINUSE:
+            raise click.UsageError(
+                "Can not start webserver because the port is already in "
+                "use. Please choose another port with the '-p' option.")
+        else:  # pragma: no cover
+            raise
 
 
 # needed for pyinstaller:

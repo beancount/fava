@@ -32,12 +32,6 @@ require('./codemirror-hint-beancount.js');
 
 require('./codemirror-mode-beancount.js');
 
-function fireEvent(element, eventName) {
-  const event = document.createEvent('HTMLEvents');
-  event.initEvent(eventName, true, true);
-  return document.dispatchEvent(event);
-}
-
 function saveEditorContent(cm) {
   // trim trailing whitespace here
 
@@ -139,8 +133,6 @@ module.exports.initEditor = function initEditor() {
 
   // Query editor
   if ($('#query-editor').length) {
-    fireEvent(document, 'LiveReloadShutDown');
-
     const editor = CodeMirror.fromTextArea(document.getElementById('query-editor'), queryOptions);
 
     // when the focus is outside the editor
@@ -161,8 +153,6 @@ module.exports.initEditor = function initEditor() {
 
   // The /source/ editor
   if ($('#source-editor').length) {
-    fireEvent(document, 'LiveReloadShutDown');
-
     const el = document.getElementById('source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
 

@@ -258,6 +258,16 @@ h1 {
     }
   }
 
+  .reload {
+    color: $color-reload-active;
+    margin-left: 5px;
+
+    &:link,
+    &:visited {
+      color: $color-reload-active;
+    }
+  }
+
   .droptarget {
     margin-left: -.6em;
     padding: .6em;
@@ -270,7 +280,6 @@ h1 {
 
   a:hover {
     color: $color-header-text;
-    text-decoration: underline;
   }
 
   .last-activity {

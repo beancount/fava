@@ -39,6 +39,7 @@
         </svg>
         <h1>
             {{ api.title or 'fava' }}{{ ' ▾' if config['APIS']|length > 1 else '' }}<strong>{{ page_title }}</strong>
+            <a href="#" id="reload-page" class="reload hidden">&#8635;</a>
             {% if config['APIS']|length > 1 %}
             <div class="beancount-files">
                 <ul>
@@ -106,6 +107,7 @@
 
     <script>
         window.pageTitle = {{ page_title|tojson|safe }};
+        window.changedUrl = {{ url_for('api_changed')|tojson|safe }};
 
         // Jumping to pages
         window.keyBindings = {

@@ -263,6 +263,11 @@ def help_page(page_slug='_index'):
     return render_template('help.html', help_html=html, page_slug=page_slug)
 
 
+@app.route('/<bfile>/api/changed/')
+def api_changed():
+    return jsonify({'success': True, 'changed': g.api.changed()})
+
+
 @app.route('/<bfile>/api/source/', methods=['GET', 'POST'])
 def api_source():
     if request.method == "GET":

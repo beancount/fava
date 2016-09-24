@@ -126,6 +126,12 @@ function initRouter() {
     }
   });
 
+  $('#reload-page').click((event) => {
+    event.preventDefault();
+    Backbone.history.loadUrl(Backbone.history.fragment);
+    $('#reload-page').toggleClass('hidden', true);
+  });
+
   $(document).on('submit', '#filter-form', (event) => {
     event.preventDefault();
     app.navigate(updateURL(Backbone.history.location.pathname), { trigger: true });
@@ -147,7 +153,18 @@ function initRouter() {
   });
 }
 
+function doPoll() {
+  $.get(window.changedUrl, (data) => {
+    if (data.success && data.changed) {
+      $('#reload-page').toggleClass('hidden', false);
+      $('aside').load(`/${Backbone.history.fragment} aside`);
+    }
+  })
+    .always(() => { setTimeout(doPoll, 5000); });
+}
+
 $(document).ready(() => {
   initPage();
   initRouter();
+  doPoll();
 });

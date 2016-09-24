@@ -22,6 +22,7 @@ from beancount.utils import encryption, misc_utils
 
 from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
+from fava.api.watcher import Watcher
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import holdings_at_dates
@@ -99,6 +100,7 @@ class BeancountReportAPI():
             'time': TimeFilter(),
         }
 
+        self.watcher = Watcher()
         self.load_file()
 
     def load_file(self):
@@ -109,6 +111,10 @@ class BeancountReportAPI():
             self.all_entries, self.errors, self.options = \
                 loader._load([(self.beancount_file_path, True)],
                              None, None, None)
+            include_path = os.path.dirname(self.beancount_file_path)
+            self.watcher.update(self.options['include'], [
+                os.path.join(include_path, path)
+                for path in self.options['documents']])
         else:
             self.all_entries, self.errors, self.options = \
                 loader.load_file(self.beancount_file_path)
@@ -171,6 +177,16 @@ class BeancountReportAPI():
 
         if changed:
             self._apply_filters()
+
+    def changed(self):
+        """Check if the file needs to be reloaded. """
+        # We can't reload an encrypted file, so act like it never changes.
+        if self.is_encrypted:
+            return False
+        changed = self.watcher.check()
+        if changed:
+            self.load_file()
+        return changed
 
     def quantize(self, value, currency):
         """Quantize the value to the right number of decimal digits.

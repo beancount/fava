@@ -47,9 +47,19 @@ def test_query(app, test_client, query_string, result_str):
     ('/asdfasdf/', 404),
     ('/asdfasdf/asdfasdf/', 404),
 ])
-def test_urls(app, url, return_code):
-    result = app.test_client().get(url)
+def test_urls(test_client, url, return_code):
+    result = test_client.get(url)
     assert result.status_code == return_code
+
+
+def test_json_api(app, test_client):
+    with app.test_request_context():
+        app.preprocess_request()
+        url = flask.url_for('api_changed')
+
+    result = test_client.get(url)
+    data = flask.json.loads(result.get_data(True))
+    assert data == {'changed': False, 'success': True}
 
 
 @pytest.mark.parametrize('referer,jump_link,expect', [
@@ -61,13 +71,11 @@ def test_urls(app, url, return_code):
     ('/?foo=bar', '/jump?foo=&foo=', '/?foo=&foo='),
     ('/', '/jump?foo=', '/'),
 ])
-def test_jump_handler(app, referer, jump_link, expect):
+def test_jump_handler(app, test_client, referer, jump_link, expect):
     """Test /jump handler correctly redirect to the right location.
 
     Note: according to RFC 2616, Location: header should use an absolute URL.
     """
-    test_client = app.test_client()
-
     result = test_client.get(jump_link,
                              headers=[('Referer', referer)])
     with app.test_request_context():
