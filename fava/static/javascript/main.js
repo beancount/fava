@@ -88,6 +88,7 @@ const app = new Router();
 function updateURL(url) {
   const newURL = new URI(url);
   $.each(['account', 'from', 'payee', 'tag', 'time'], (_, filter) => {
+    newURL.removeSearch(filter);
     if ($(`#${filter}-filter`).val()) {
       newURL.setSearch(filter, $(`#${filter}-filter`).val());
     }
