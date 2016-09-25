@@ -61,10 +61,10 @@ def calculate_budget(budgets, account_name, date_from, date_to):
     Returns a dictionary (currency => number) with the budget for the
     specified account and period (excluding date_to).
     """
-    currency_dict = defaultdict(lambda: Decimal(0.0))
-
     if account_name not in budgets.keys():
-        return currency_dict
+        return {}
+
+    currency_dict = defaultdict(Decimal)
 
     for single_day in days_in_daterange(date_from, date_to):
         matches = _matching_budgets(budgets, account_name, single_day)

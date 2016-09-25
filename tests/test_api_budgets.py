@@ -1,7 +1,6 @@
 from datetime import date
 
-from beancount.core.number import Decimal
-from beancount.parser import parser
+from beancount.core.number import D
 import pytest
 
 from fava.api.budgets import (_parse_budget_entry, parse_budgets,
@@ -15,20 +14,25 @@ def budgets_doc(load_doc):
     return budgets
 
 
-def _get_budgets(beancount_string):
-    entries, _, _ = parser.parse_string(beancount_string, dedent=True)
-    budgets, _ = parse_budgets(entries)
-    return budgets
-
-
-def test_budgets(budgets_doc):
+def test_budgets(load_doc):
     """
     2016-01-01 custom "budget" Expenses:Groceries "weekly" 100.00 CNY
-    2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR"""
-    budgets = calculate_budget(budgets_doc, 'Expenses:Groceries',
+    2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR
+    2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
+    """
+    entries, _, _ = load_doc
+    budgets, errors = parse_budgets(entries)
+
+    assert len(errors) == 1
+
+    assert calculate_budget(budgets, 'Expenses', date(2016, 6, 1),
+                            date(2016, 6, 8)) == {}
+
+    budgets = calculate_budget(budgets, 'Expenses:Groceries',
                                date(2016, 6, 1), date(2016, 6, 8))
-    assert budgets['CNY'] == Decimal(100)
-    assert budgets['EUR'] == Decimal(10)
+
+    assert budgets['CNY'] == D(100)
+    assert budgets['EUR'] == D(10)
 
 
 def test__parse_budget_entry(load_doc):
@@ -47,8 +51,10 @@ def test__parse_budget_entry(load_doc):
 def test_budgets_daily(budgets_doc):
     """
     2016-05-01 custom "budget" Expenses:Books "daily" 2.5 EUR"""
-    BUDGET = Decimal(2.5)
+    BUDGET = D(2.5)
 
+    assert 'EUR' not in calculate_budget(budgets_doc, 'Expenses:Books',
+                                         date(2010, 2, 1), date(2010, 2, 2))
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2016, 5, 1),
                             date(2016, 5, 2))['EUR'] == BUDGET
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2016, 5, 1),
@@ -62,7 +68,7 @@ def test_budgets_daily(budgets_doc):
 def test_budgets_weekly(budgets_doc):
     """
     2016-05-01 custom "budget" Expenses:Books "weekly" 21 EUR"""
-    BUDGET = Decimal(21)
+    BUDGET = D(21)
 
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2016, 5, 1),
                             date(2016, 5, 2))['EUR'] == BUDGET / 7
@@ -73,7 +79,7 @@ def test_budgets_weekly(budgets_doc):
 def test_budgets_monthly(budgets_doc):
     """
     2014-05-01 custom "budget" Expenses:Books "monthly" 100 EUR"""
-    BUDGET = Decimal(100)
+    BUDGET = D(100)
 
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2016, 1, 1),
                             date(2016, 1, 2))['EUR'] == BUDGET / 31
@@ -86,7 +92,7 @@ def test_budgets_monthly(budgets_doc):
 def test_budgets_doc_quarterly(budgets_doc):
     """
     2014-05-01 custom "budget" Expenses:Books "quarterly" 123456.7 EUR"""
-    BUDGET = Decimal("123456.7")
+    BUDGET = D("123456.7")
 
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2016, 2, 1),
                             date(2016, 2, 2))['EUR'] == BUDGET / 91
@@ -97,7 +103,7 @@ def test_budgets_doc_quarterly(budgets_doc):
 def test_budgets_doc_yearly(budgets_doc):
     """
     2010-01-01 custom "budget" Expenses:Books "yearly" 99999.87 EUR"""
-    BUDGET = Decimal("99999.87")
+    BUDGET = D("99999.87")
 
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2011, 2, 1),
                             date(2011, 2, 2))['EUR'] == BUDGET / 365

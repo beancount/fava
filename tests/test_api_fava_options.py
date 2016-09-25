@@ -7,10 +7,13 @@ def test_fava_options(load_doc):
     2016-04-14 custom "fava-option" "show-closed-accounts" "true"
     2016-04-14 custom "fava-option" "journal-show" "transaction open"
     2016-04-14 custom "fava-option" "editor-print-margin-column" "10"
+    2016-04-14 custom "fava-option" "invalid"
     """
 
     entries, _, _ = load_doc
-    options, _ = parse_options(entries)
+    options, errors = parse_options(entries)
+
+    assert len(errors) == 1
 
     assert options['interval'] == 'week'
     assert options['charts']
