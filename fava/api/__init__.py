@@ -21,7 +21,7 @@ from beancount.reports import context
 from beancount.utils import encryption, misc_utils
 
 from fava.util import date
-from fava.api.budgets import Budgets
+from fava.api.budgets import parse_budgets, calculate_budget
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import holdings_at_dates
@@ -141,8 +141,8 @@ class BeancountReportAPI():
         self.fava_options, errors = parse_options(self.custom_entries)
         self.errors.extend(errors)
 
-        self.budgets = Budgets(self.custom_entries)
-        self.errors.extend(self.budgets.errors)
+        self.budgets, errors = parse_budgets(self.custom_entries)
+        self.errors.extend(errors)
 
         self._apply_filters()
 
@@ -245,7 +245,8 @@ class BeancountReportAPI():
             return
 
         interval_budgets = [
-            self.budgets.budget(
+            calculate_budget(
+                self.budgets,
                 zipped_interval_balances['account'],
                 interval_tuples[0][0] if accumulate else begin_date,
                 end_date
