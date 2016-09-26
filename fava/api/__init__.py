@@ -209,7 +209,7 @@ class BeancountReportAPI():
         return serialize_inventory(sum(totals, inventory.Inventory()),
                                    at_cost=True)
 
-    def interval_totals(self, interval, account_name, accumulate=False):
+    def interval_totals(self, interval, account_name):
         """Renders totals for account (or accounts) in the intervals."""
         if isinstance(account_name, str):
             names = [account_name]
@@ -221,7 +221,7 @@ class BeancountReportAPI():
             'begin_date': begin_date,
             'totals': self._total_balance(
                 names,
-                begin_date if not accumulate else self.date_first, end_date),
+                begin_date, end_date),
         } for begin_date, end_date in interval_tuples]
 
     def get_account_sign(self, account_name):

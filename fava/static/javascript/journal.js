@@ -10,14 +10,14 @@ module.exports.initJournal = function initJournal() {
   $('#entry-filters input').click((event) => {
     event.preventDefault();
     const $this = $(event.currentTarget);
-    const selector = $this.attr('data-selector');
+    const type = $this.data('type');
     const shouldShow = $this.hasClass('inactive');
 
     if ($this.val() === 'Transaction') {
       $('#entry-filters .txn-toggle').toggleClass('inactive', !shouldShow);
     }
 
-    $(`#journal-table ${selector}`).toggleClass('hidden', !shouldShow);
+    $(`#journal-table .${type}`).toggleClass('hidden', !shouldShow);
     $this.toggleClass('inactive', !shouldShow);
 
     // Modify get params
@@ -25,13 +25,12 @@ module.exports.initJournal = function initJournal() {
     $('#entry-filters input').each((_, el) => {
       const $el = $(el);
       if (!$el.hasClass('inactive')) {
-        filterShow.push($el.attr('data-type'));
+        filterShow.push($el.data('type'));
       }
     });
 
     const url = new URI(window.location)
       .setSearch({ show: filterShow });
     window.history.pushState('', '', url.toString());
-    return false;
   });
 };
