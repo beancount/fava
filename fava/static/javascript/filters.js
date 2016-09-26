@@ -1,5 +1,6 @@
 /* global Awesomplete */
 require('awesomplete');
+const URI = require('urijs');
 
 function updateInput(input) {
   const isEmpty = !input.val();
@@ -16,8 +17,17 @@ function updateInput(input) {
       .toggle(!isEmpty);
 }
 
+module.exports.update = function update() {
+  $.each(['account', 'from', 'payee', 'tag', 'time'], (_, filter) => {
+    const value = new URI(window.location).search(true)[filter];
+    if (value) {
+      $(`#${filter}-filter`).val(value);
+      updateInput($(`#${filter}-filter`));
+    }
+  });
+};
 
-module.exports.initFilters = function initFilters() {
+module.exports.init = function init() {
   $('#filter-form input').on('input awesomplete-selectcomplete', (event) => {
     updateInput($(event.currentTarget));
   });

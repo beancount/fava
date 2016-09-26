@@ -4,7 +4,8 @@ import inspect
 import os
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file, jsonify)
+                   redirect, send_from_directory, g, send_file, jsonify,
+                   render_template_string)
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
@@ -162,7 +163,7 @@ def pull_beancount_file(_, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.api = app.config['APIS'][g.beancount_file_slug]
-    app.config.update(app.config['APIS'][g.beancount_file_slug].fava_options)
+    app.config.update(g.api.fava_options)
 
 
 @app.route('/')
@@ -260,7 +261,8 @@ def help_page(page_slug='_index'):
     html = markdown2.markdown_path(
         os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
         extras=['fenced-code-blocks', 'tables'])
-    return render_template('help.html', help_html=html, page_slug=page_slug)
+    return render_template('help.html', page_slug=page_slug,
+                           help_html=render_template_string(html))
 
 
 @app.route('/<bfile>/api/changed/')

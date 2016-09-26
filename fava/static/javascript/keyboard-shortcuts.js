@@ -1,7 +1,7 @@
 const Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
-module.exports.global = function global() {
+module.exports.init = function init() {
   Mousetrap.bind({
     '?': () => {
       $('#keyboard-shortcuts.overlay-wrapper').show();
@@ -28,9 +28,8 @@ module.exports.global = function global() {
   }, 'keyup');
 
   Mousetrap.bind(window.keyBindings, 'keyup');
-};
 
-module.exports.charts = function charts() {
+  // Charts
   Mousetrap.bind({
     'ctrl+c': () => {
       $('#toggle-chart').click();
@@ -55,9 +54,8 @@ module.exports.charts = function charts() {
       }
     },
   }, 'keyup');
-};
 
-module.exports.journal = function journal() {
+  // Journal
   Mousetrap.bind({
     l() {
       $('#toggle-legs').click();

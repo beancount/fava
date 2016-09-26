@@ -63,7 +63,7 @@
             <h3>{{ _('Custom Links') }}</h3>
             <ul class="navigation">
                 {% for label, link in api.sidebar_links %}
-                    <li><a href="{{ link }}" {% if link.startswith('/') %}data-no-update=true{% else %}data-remote=true{% endif %}>{{ label }}</a></li>
+                    <li><a href="{{ link }}" data-no-update=true>{{ label }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -106,6 +106,7 @@
     {% block content %}{% endblock %}
 
     <script>
+        window.documentTitle = {{ '{} - {}'.format(short_title, api.title) |tojson|safe }};
         window.pageTitle = {{ page_title|tojson|safe }};
         window.changedUrl = {{ url_for('api_changed')|tojson|safe }};
 

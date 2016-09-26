@@ -1,9 +1,9 @@
 Welcome to the help pages for Fava:
 
-- [Beancount Syntax](beancount_syntax/) - short overview of the syntax.
-- [Budgets](budgets/) - how to use Fava's budgeting feature.
-- [Fava's Features](features/) - the features in detail.
-- [Running Fava](running_fava/) - available command-line options.
+- [Beancount Syntax]({{ url_for('help_page', page_slug='beancount_syntax') }}) - short overview of the syntax.
+- [Budgets]({{ url_for('help_page', page_slug='budgets') }}) - how to use Fava's budgeting feature.
+- [Fava's Features]({{ url_for('help_page', page_slug='features') }}) - the features in detail.
+- [Running Fava]({{ url_for('help_page', page_slug='running_fava') }}) - available command-line options.
 
 If you discover bug in Fava, or have some ideas for improvement, please open a
 [bug report](https://github.com/aumayr/fava/issues).

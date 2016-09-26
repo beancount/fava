@@ -2,7 +2,6 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 
 const d3 = require('d3');
 
-let container;
 const treemapColorScale = d3.scaleOrdinal(schemeSet3);
 const sunburstColorScale = d3.scaleOrdinal(d3.schemeCategory20c);
 const currencyColorScale = d3.scaleOrdinal(d3.schemeCategory10);
@@ -18,6 +17,10 @@ const dateFormat = {
   week: d3.utcFormat('%YW%W'),
   day: d3.utcFormat('%Y-%m-%d'),
 };
+
+let container;
+let tooltip;
+let charts;
 
 const timeFilterDateFormat = {
   year: d3.utcFormat('%Y'),
@@ -53,13 +56,13 @@ function makeAccountLink(selection) {
 function addTooltip(selection, tooltipText) {
   selection
     .on('mouseenter', (d) => {
-      window.tooltip.style('opacity', 1).html(tooltipText(d));
+      tooltip.style('opacity', 1).html(tooltipText(d));
     })
     .on('mousemove', () => {
-      window.tooltip.style('left', `${d3.event.pageX}px`).style('top', `${d3.event.pageY - 15}px`);
+      tooltip.style('left', `${d3.event.pageX}px`).style('top', `${d3.event.pageY - 15}px`);
     })
     .on('mouseleave', () => {
-      window.tooltip.style('opacity', 0);
+      tooltip.style('opacity', 0);
     });
 }
 
@@ -669,15 +672,15 @@ function lineChart() {
         .filter(d => d !== undefined)
         .attr('d', d => `M${d.join('L')}Z`)
         .on('mouseenter', (d) => {
-          window.tooltip.style('opacity', 1).html(tooltipText(d.data));
+          tooltip.style('opacity', 1).html(tooltipText(d.data));
         })
         .on('mousemove', (d) => {
-          window.tooltip
+          tooltip
               .style('left', `${x(d.data.date) + matrix.e}px`)
               .style('top', `${y(d.data.value) + matrix.f + -15}px`);
         })
         .on('mouseleave', () => {
-          window.tooltip.style('opacity', 0);
+          tooltip.style('opacity', 0);
         });
 
     resize();
@@ -829,9 +832,9 @@ module.exports.initCharts = function initCharts() {
   container = d3.select('#chart-container');
   container.html('');
   const labels = d3.select('#chart-labels');
-  window.charts = {};
-  if (!window.tooltip) {
-    window.tooltip = d3.select('body').append('div').attr('id', 'tooltip');
+  charts = {};
+  if (!tooltip) {
+    tooltip = d3.select('body').append('div').attr('id', 'tooltip');
   }
 
   function chartContainer(id, label) {
@@ -870,7 +873,7 @@ module.exports.initCharts = function initCharts() {
           .datum(series)
           .call(linechart);
 
-        window.charts[chartId] = linechart;
+        charts[chartId] = linechart;
         break;
       }
       case 'commodities': {
@@ -890,7 +893,7 @@ module.exports.initCharts = function initCharts() {
           .datum(series)
           .call(linechart);
 
-        window.charts[chartId] = linechart;
+        charts[chartId] = linechart;
         break;
       }
       case 'bar': {
@@ -917,7 +920,7 @@ module.exports.initCharts = function initCharts() {
           .datum(series)
           .call(barchart);
 
-        window.charts[chartId] = barchart;
+        charts[chartId] = barchart;
         break;
       }
       case 'scatterplot': {
@@ -934,7 +937,7 @@ module.exports.initCharts = function initCharts() {
           .datum(series)
           .call(scatterplot);
 
-        window.charts[chartId] = scatterplot;
+        charts[chartId] = scatterplot;
         break;
       }
       case 'hierarchy': {
@@ -954,7 +957,7 @@ module.exports.initCharts = function initCharts() {
           .datum(roots)
           .call(hierarchy);
 
-        window.charts[chartId] = hierarchy;
+        charts[chartId] = hierarchy;
         break;
       }
       default:
@@ -965,6 +968,11 @@ module.exports.initCharts = function initCharts() {
   const $labels = $('#chart-labels');
   const $toggleChart = $('#toggle-chart');
 
+  function updateChart() {
+    if ($('#chart-container svg:visible').length) {
+      currentChart.update();
+    }
+  }
   // Switch between charts
   $labels.find('label').click((event) => {
     const chartId = $(event.currentTarget).prop('for');
@@ -976,12 +984,12 @@ module.exports.initCharts = function initCharts() {
 
     $('#chart-legend').html('');
 
-    currentChart = window.charts[chartId];
+    currentChart = charts[chartId];
     currentChart.update();
 
-    d3.selectAll('#chart-form input[name=mode]').on('change', () => { currentChart.update(); });
-    d3.select('#chart-currency').on('change', () => { currentChart.update(); });
-    d3.select(window).on('resize', () => { currentChart.update(); });
+    d3.selectAll('#chart-form input[name=mode]').on('change', () => { updateChart(); });
+    d3.select('#chart-currency').on('change', () => { updateChart(); });
+    d3.select(window).on('resize', () => { updateChart(); });
 
     $('#chart-currency').toggle(!!currentChart.has_currency_setting);
     $('#chart-mode').toggle(!!currentChart.has_mode_setting);
@@ -992,6 +1000,6 @@ module.exports.initCharts = function initCharts() {
     $toggleChart.toggleClass('hide-charts');
     $('#charts')
         .toggleClass('hidden', $toggleChart.hasClass('hide-charts'));
-    currentChart.update();
+    updateChart();
   });
 };

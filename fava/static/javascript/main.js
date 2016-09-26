@@ -12,40 +12,11 @@ const journal = require('./journal');
 const treeTable = require('./tree-table');
 const documentsUpload = require('./documents-upload');
 
-function getFormatFromUrl(url) {
-  const dotIndex = url.indexOf('.');
-  return (dotIndex > 0) ? url.slice(dotIndex + 1) : 'html';
-}
-
+// These parts of the page should not change.
+// So they only need to be initialized once.
 function initPage() {
-  $('table.sortable').stupidtable();
-
-  filters.initFilters();
-  keyboardShortcuts.global();
-
-  if ($('.tree-table').length) {
-    treeTable.initTreeTable();
-  }
-
-  if ($('#chart-container').length) {
-    charts.initCharts();
-    keyboardShortcuts.charts();
-  }
-
-  editor.initEditor();
-
-  if ($('#journal-table').length) {
-    journal.initJournal();
-    keyboardShortcuts.journal();
-  }
-
-  if ($('.status-indicator').length) {
-    clipboard.initClipboard();
-  }
-
-  if ($('.tree-table').length || $('h1.droptarget').length) {
-    documentsUpload.initDocumentsUpload();
-  }
+  filters.init();
+  keyboardShortcuts.init();
 
   $('.overlay-wrapper').click((e) => {
     e.preventDefault();
@@ -58,8 +29,32 @@ function initPage() {
     e.preventDefault();
     $('aside').toggleClass('active');
     $('#aside-button').toggleClass('active');
-    return false;
   });
+}
+
+function updatePage() {
+  filters.update();
+  $('table.sortable').stupidtable();
+
+  treeTable.initTreeTable();
+
+  if ($('#chart-container').length) {
+    charts.initCharts();
+  }
+
+  editor.initEditor();
+
+  if ($('#journal-table').length) {
+    journal.initJournal();
+  }
+
+  if ($('.status-indicator').length) {
+    clipboard.initClipboard();
+  }
+
+  if ($('.tree-table').length || $('h1.droptarget').length) {
+    documentsUpload.initDocumentsUpload();
+  }
 }
 
 const Router = Backbone.Router.extend({
@@ -77,7 +72,8 @@ const Router = Backbone.Router.extend({
 
     $.get(`/${Backbone.history.fragment}`, { partial: true }, (data) => {
       $('article').html(data);
-      initPage();
+      updatePage();
+      document.title = window.documentTitle;
       $('h1 strong').html(window.pageTitle);
     });
   },
@@ -108,11 +104,10 @@ function initRouter() {
 
   $(document).on('click', 'a', (event) => {
     const $link = $(event.currentTarget);
-    const href = $link.attr('href');
+    let href = $link.attr('href');
 
     const isHttp = $link.prop('protocol').indexOf('http') === 0;
-    const format = getFormatFromUrl(href);
-
+    const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
     const isRemote = $link.data('remote');
 
     if (!event.isDefaultPrevented() && !isRemote && isHttp && format === 'html') {
@@ -120,10 +115,11 @@ function initRouter() {
       $('.selected').removeClass('selected');
       $link.addClass('selected');
 
-      if (!$link.data('no-update')) {
-        updateURL(href);
+      // update sidebar links
+      if (!$link.data('no-update') && $link.parents()[2].tagName === 'ASIDE') {
+        href = updateURL(href);
       }
-      app.navigate(updateURL(href), { trigger: true });
+      app.navigate(href, { trigger: true });
     }
   });
 
@@ -166,6 +162,7 @@ function doPoll() {
 
 $(document).ready(() => {
   initPage();
+  updatePage();
   initRouter();
-  doPoll();
+  setTimeout(doPoll, 5000);
 });
