@@ -27,7 +27,7 @@
 
     {% if journal %}
         {% set journal = api.account_journal(account_name, with_journal_children=config['account-journal-include-children']) %}
-        {% with show_tablefilter=True, show_change_and_balance=True %}
+        {% with show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
     {% else %}

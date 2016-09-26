@@ -26,10 +26,8 @@ from fava.api.watcher import Watcher
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import holdings_at_dates
-from fava.api.serialization import (serialize_inventory, serialize_entry,
-                                    serialize_entry_with,
-                                    serialize_real_account,
-                                    zip_real_accounts)
+from fava.api.serialization import (serialize_inventory,
+                                    serialize_real_account, zip_real_accounts)
 from fava.api.fava_options import parse_options
 
 
@@ -178,6 +176,9 @@ class BeancountReportAPI():
         if changed:
             self._apply_filters()
 
+    def hash_entry(self, entry):
+        return compare.hash_entry(entry)
+
     def changed(self):
         """Check if the file needs to be reloaded. """
         # We can't reload an encrypted file, so act like it never changes.
@@ -294,12 +295,7 @@ class BeancountReportAPI():
         else:
             postings = real_account.txn_postings
 
-        return [serialize_entry_with(entry, change, balance)
-                for entry, _, change, balance in
-                realization.iterate_with_balance(postings)]
-
-    def journal(self):
-        return [serialize_entry(entry) for entry in self.entries]
+        return realization.iterate_with_balance(postings)
 
     def get_query(self, name):
         matching_entries = [query for query in self.queries
@@ -382,21 +378,20 @@ class BeancountReportAPI():
             'context': context_str.split("\n", 2)[2],
             'filename': entry.meta['filename'],
             'lineno': entry.meta['lineno'],
-            'journal': [serialize_entry(entry) for entry in matching_entries],
+            'journal': matching_entries,
         }
 
     def linechart_data(self, account_name):
         journal = self.account_journal(account_name, True)
 
         return [{
-            'date': journal_entry['date'],
+            'date': entry.date,
             # when there's no holding for a commodity, it will be missing from
             # 'balance' field but appear in 'change' field. Use 0 for those
             # commodities.
-            'balance': {x: journal_entry['balance'].get(x, 0) for x in
-                        journal_entry['change'].keys() |
-                        journal_entry['balance'].keys()}
-        } for journal_entry in journal if 'balance' in journal_entry]
+            'balance': dict({curr: 0 for curr in list(change.currencies())},
+                            **serialize_inventory(balance)),
+        } for entry, _, change, balance in journal if len(change)]
 
     def source_files(self):
         # Make sure the included source files are sorted, behind the main

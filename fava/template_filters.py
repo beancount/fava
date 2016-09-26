@@ -9,6 +9,13 @@ from flask import g
 from beancount.core.number import Decimal
 
 
+def remove_keys(_dict, keys):
+    new = dict(_dict)
+    for key in keys:
+        new.pop(key, None)
+    return new
+
+
 def format_currency(value, currency=None, show_if_zero=False):
     if not value and not show_if_zero:
         return ''

@@ -2,7 +2,7 @@
 {% set active_page = 'journal' %}
 
 {% block content %}
-    {% with journal = api.journal(), show_tablefilter=True  %}
+    {% with journal = api.entries %}
         {% include "_journal_table.html" %}
     {% endwith %}
 {% endblock %}

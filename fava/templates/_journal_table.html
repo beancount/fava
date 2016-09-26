@@ -1,5 +1,6 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
+{% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
 {% set default_show_type = {
     'open':        'open' in config['journal-show'],
     'close':       'close' in config['journal-show'],
@@ -49,7 +50,6 @@
     'other':   ('x', _('Other Transactions')),
 }
 %}
-{% if show_tablefilter %}
 <form id="entry-filters" class="journal-entry-filters wide-form">
     {% for type in entry_types %}
         {% if type != 'budget' or api.budgets %}
@@ -64,7 +64,6 @@
     <input type="submit" id="toggle-metadata" value="Metadata" title="Toggle metadata" data-type="metadata"{% if not show_type['metadata'] %} class="inactive"{% endif %}>
     <input type="submit" id="toggle-legs" value="Postings" title="Toggle postings" data-type="legs" {% if not show_type['legs'] %} class="inactive"{% endif %}>
 </form>
-{% endif %}
 
 {% set context_url = url_for('context', ehash='REPLACEME') %}
 {% set account_url = url_for('account', name='REPLACEME') %}
@@ -75,11 +74,9 @@
 {%- endmacro %}
 
 {% macro render_inventory(inv) -%}
-{% if inv %}
-    {% for currency, number in inv.items() %}
-        {{ number|format_currency(currency) }} {{ currency }}<br>
+    {% for pos in inv %}
+        {{ pos.units.number|format_currency(pos.units.currency) }} {{ pos.units.currency }}<br>
     {% endfor %}
-{% endif %}
 {%- endmacro %}
 
 {% macro render_metadata(metadata, show_metadata) -%}
@@ -113,14 +110,19 @@
         </p>
     </li>
 {% for entry in journal %}
-    {% set type = entry.type %}
-    <li class="{{ type }} {{ entry.transaction_type }}
+    {% if show_change_and_balance %}
+        {% set entry, _, change, balance = entry %}
+    {% endif %}
+    {% set type = entry.__class__.__name__.lower() %}
+    <li class="{{ type }}
+    {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
+        {%- if not show_type[flags_to_types.get(entry.flag, 'other')] %} hidden{% endif -%}
+    {% endif -%}
     {%- if not show_type[type] %} hidden{% endif -%}
-    {%- if (entry.transaction_type and not show_type[entry.transaction_type]) %} hidden{% endif -%}
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
         <p>
-        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', entry.hash) }}">{{ entry.date }}</a></span>
+        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', api.hash_entry(entry)) }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
         <span class="description">
         {% if type == 'open' %}
@@ -134,6 +136,18 @@
         {% elif type == 'pad' %}
             Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
         {% elif type == 'custom' %}
+          {% if entry.type == 'budget' %}
+            {% set account = entry.values[0].value %}
+            {% set period_type = entry.values[1].value %}
+            {% set value = entry.values[2].value %}
+            {%- if period_type == 'daily' %}Daily{% endif %}
+            {%- if period_type == 'weekly' %}Weekly{% endif %}
+            {%- if period_type == 'monthly' %}Monthly{% endif %}
+            {%- if period_type == 'quarterly' %}Quarterly{% endif %}
+            {%- if period_type == 'yearly' %}Yearly{% endif %}
+            Budget for {{ account_link(account) }}
+            <span class="budget-value num">{{ value.number|format_currency(value.currency) }} {{ value.currency }}</span>
+          {% else %}
             Custom <strong>{{ entry.type }}</strong>
             {% for value in entry['values'] %}
                 &nbsp;
@@ -143,14 +157,8 @@
                 {%- if value.dtype|string == "<class 'bool'>" %}{{ value.value }}{% endif -%}
                 {%- if value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
             {% endfor %}
+          {% endif %}
         {% elif type == 'budget' %}
-            {%- if entry.period_type == 'daily' %}Daily{% endif %}
-            {%- if entry.period_type == 'weekly' %}Weekly{% endif %}
-            {%- if entry.period_type == 'monthly' %}Monthly{% endif %}
-            {%- if entry.period_type == 'quarterly' %}Quarterly{% endif %}
-            {%- if entry.period_type == 'yearly' %}Yearly{% endif %}
-            budget for {{ account_link(entry.account) }}
-            <span class="budget-value num">{{ entry.value.number|format_currency(entry.value.currency) }} {{ entry.value.currency }}</span>
         {% elif type == 'document' %}
             Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
         {% elif type == 'balance' %}
@@ -164,24 +172,26 @@
             {% endif %}
         {% elif type == 'transaction' %}
             <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-            {% for tag in entry.tags %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+            {% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
         {% endif %}
         </span>
         {% if type == 'transaction' %}
             {% for posting in entry.postings %}
-                <span class="leg-indicator leg-{{ posting.posting_type }}"></span>
+                <span class="leg-indicator{% if posting.flag %} leg-{{ flags_to_types.get(posting.flag, 'other') }}{% endif %}"></span>
             {% endfor %}
         {% endif %}
         {% if show_change_and_balance %}
-            <span class="change num">{{ render_inventory(entry.change) }}</span>
-            <span class="balance num">{{ render_inventory(entry.balance) }}</span>
+            <span class="change num">{{ render_inventory(change) }}</span>
+            <span class="balance num">{{ render_inventory(balance) }}</span>
         </p>
         {% endif %}
-        {{ render_metadata(entry.metadata, show_type['metadata']) }}
+        {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata']) }}
         {% if entry.postings %}
         <ul>
         {% for posting in entry.postings %}
-        <li class="legs posting {{ posting.posting_type }}{%- if not show_type['legs'] %} hidden{% endif -%}">
+        <li class="legs posting
+        {%- if posting.flag %} {{ flags_to_types.get(posting.flag, 'other') }}{% endif %}
+        {%- if not show_type['legs'] %} hidden{% endif %}">
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
@@ -198,7 +208,7 @@
                 <span class="balance num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.metadata, show_type['metadata']) }}
+            {{ render_metadata(posting.meta, show_type['metadata']) }}
         </li>
         {% endfor %}
         </ul>

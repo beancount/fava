@@ -13,7 +13,7 @@ module.exports.initJournal = function initJournal() {
     const type = $this.data('type');
     const shouldShow = $this.hasClass('inactive');
 
-    if ($this.val() === 'Transaction') {
+    if (type === 'transaction') {
       $('#entry-filters .txn-toggle').toggleClass('inactive', !shouldShow);
     }
 
