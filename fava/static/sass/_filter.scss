@@ -5,11 +5,16 @@
 .filter-form {
   color: $color-text;
 
+  span {
+    position: relative;
+  }
+
   input {
     background: $color-background;
     border: 0;
     height: 36px;
     line-height: 36px;
+    margin-right: 4px;
     max-width: 15rem;
     padding: 0 25px 0 10px;
 
@@ -31,34 +36,28 @@
       }
     }
 
-    &[type='submit'] {
-      background: lighten($color-header, 5);
-      color: $color-background;
-      height: 36px;
-      line-height: 36px;
-      margin-right: 0;
-      padding: 0 7px;
-      width: auto;
-    }
-
     // remove dropdown triangle
     &::-webkit-calendar-picker-indicator {
       display: none;
     }
   }
 
+  [type='submit'] {
+    background: lighten($color-header, 5);
+  }
+
   .empty input {
     background: lighten($color-header, 10);
   }
 
-  button {
+  .close {
     background: transparent;
     border: 0;
     display: none;
     height: 18px;
     padding: 0;
     position: absolute;
-    right: 10px;
+    right: 14px;
     top: 10px;
     width: 18px;
 
@@ -68,12 +67,6 @@
       right: -5px;
       top: -1px;
     }
-  }
-
-  > ul > li {
-    margin-left: 10px;
-    position: relative;
-
   }
 
   .awesomplete {

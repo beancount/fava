@@ -240,11 +240,9 @@ header {
   width: 100%;
   z-index: 10;
 
-  nav {
-    .topmenu {
-      display: flex;
-      margin: 0;
-    }
+  form {
+    display: flex;
+    margin: 0;
   }
 }
 
@@ -321,20 +319,14 @@ h1 {
   border-style: solid;
   border-width: 0 1px 1px 0;
   display: none;
-  height: 32px;
   left: 0;
+  padding: 4px;
   position: fixed;
   top: $header-height;
-  width: 32px;
-  z-index: 9;
+  z-index: 1;
 
   &.active {
     left: $aside-width;
-  }
-
-  svg {
-    height: 100%;
-    width: 100%;
   }
 }
 

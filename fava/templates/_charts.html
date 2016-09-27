@@ -57,9 +57,9 @@
 
 {% macro skeleton(hide_interval_filter=False) %}
 {% set show_charts = config['charts'] %}
-<div class="toggle-chart-container">
-    <span id="toggle-chart"{% if not show_charts %} class="hide-charts"{% endif %}></span>
-</div>
+<button type="button" id="toggle-chart" class="toggle-chart{% if not show_charts %} hide-charts{% endif %}">
+    <span></span>
+</button>
 <div id="charts" class="charts {% if not show_charts %} hidden{% endif %}">
     <form id="chart-form">
         <span id="chart-legend" class="chart-legend"></span>

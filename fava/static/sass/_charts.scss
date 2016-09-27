@@ -22,34 +22,25 @@
   label+label { border-left: 1px solid rgba($color-text, .4); }
 }
 
-.toggle-chart-container {
-  background-color: $color-header;
-  padding: 4px;
+.toggle-chart {
+  padding: 4px 6px;
   position: absolute;
   right: 19px;
   top: 19px;
 
   span {
-    background-color: $color-header;
     border: 0;
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
-    border-top: 13px solid $color-background-darker;
+    border-top: 13px solid $color-background;
     display: block;
-    height: 0;
-    padding: 0;
-    width: 0;
+  }
 
-    &:hover {
-      cursor: pointer;
-    }
-
-    &.hide-charts {
-      border: 0;
-      border-bottom: 13px solid $color-background-darker;
-      border-left: 9px solid transparent;
-      border-right: 9px solid transparent;
-    }
+  &.hide-charts span {
+    border: 0;
+    border-bottom: 13px solid $color-background;
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
   }
 }
 

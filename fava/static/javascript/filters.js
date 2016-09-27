@@ -11,7 +11,7 @@ function updateInput(input) {
     input.attr('size', input.attr('placeholder').length + 2);
   }
 
-  input.parents('li')
+  input.parents('span')
       .toggleClass('empty', isEmpty)
     .find('button')
       .toggle(!isEmpty);
@@ -54,7 +54,7 @@ module.exports.init = function init() {
     const completer = new Awesomplete(el, options);
     const isEmpty = !$el.val();
 
-    $el.parents('li')
+    $el.parents('span')
         .toggleClass('empty', isEmpty)
       .find('button')
         .toggle(!isEmpty);
@@ -65,7 +65,7 @@ module.exports.init = function init() {
   });
 
   $('#filter-form button').click((event) => {
-    $(event.currentTarget).parents('li')
+    $(event.currentTarget).parents('span')
       .find('input')
         .val('')
         .each((_, el) => { updateInput($(el)); });
