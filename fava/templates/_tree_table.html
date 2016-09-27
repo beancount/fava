@@ -8,7 +8,7 @@
 <ol class="tree-table {{ operating_currencies|length }}-currencies">
     <li class="head">
         <p>
-        <span class="account"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
+        <span class="account-cell"><span>{{ _('Account') }}</span><a href="#" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
         {% for currency in operating_currencies %}
             <span class="num-header">{{ currency }}</span>
         {% endfor %}
@@ -19,7 +19,7 @@
     {% if account|show_account %}
         <li>
         <p>
-        <span class="account account-depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
+        <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ '' if not account.children else ' has-children'}}{% if account.account|should_collapse_account %} toggled{% endif %}" data-account-name="{{ account.account }}">
             {% if account.children %}<span class="expander" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}"></span>{% endif %}
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
@@ -45,16 +45,18 @@
         </span>
     {% endif %}
     </p>
+    {% if account.children %}
     <ol>
     {{ loop(account.children) }}
     </ol>
+    {% endif %}
     </li>
     {% endif %}
 {% endfor %}
 {% if totals %}
         <li class="head">
             <p>
-            <span class="account">&nbsp;</span>
+            <span class="account-cell">&nbsp;</span>
         {% for currency in operating_currencies %}
             <span class="num">{{ real_accounts[0].balance_children[currency]|format_currency(currency) }}</span>
         {% endfor %}

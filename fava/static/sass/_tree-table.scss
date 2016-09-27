@@ -35,14 +35,14 @@
   }
 
   // table cells
-  .account {
+  .account-cell {
     align-items: center;
     display: flex;
     flex: 1;
     min-width: 200px;
 
     @for $i from 1 through 5 {
-      &.account-depth-#{$i} {
+      &.depth-#{$i} {
         margin-left: $i * 20px;
         min-width: 200px - $i * 20px;
       }
