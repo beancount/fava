@@ -53,16 +53,16 @@
 <form id="entry-filters" class="journal-entry-filters wide-form">
     {% for type in entry_types %}
         {% if type != 'budget' or api.budgets %}
-            <input type="submit" id="filter-{{ type }}" value="{{ type|capitalize }}" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>
+    <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}
-                    <input type="submit" id="filter-{{ txn_type }}" value="{{ transaction_type_buttons[txn_type].0 }}" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">
+    <button type="button" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">{{ transaction_type_buttons[txn_type].0 }}</button>
                 {% endfor %}
             {% endif %}
         {% endif %}
     {% endfor %}
-    <input type="submit" id="toggle-metadata" value="Metadata" title="Toggle metadata" data-type="metadata"{% if not show_type['metadata'] %} class="inactive"{% endif %}>
-    <input type="submit" id="toggle-legs" value="Postings" title="Toggle postings" data-type="legs" {% if not show_type['legs'] %} class="inactive"{% endif %}>
+    <button type="button" title="Toggle metadata" data-type="metadata"{% if not show_type['metadata'] %} class="inactive"{% endif %}>Metadata</button>
+    <button type="button" title="Toggle postings" data-type="legs" {% if not show_type['legs'] %} class="inactive"{% endif %}>Postings</button>
 </form>
 
 {% set context_url = url_for('context', ehash='REPLACEME') %}
@@ -208,7 +208,7 @@
                 <span class="balance num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.meta, show_type['metadata']) }}
+            {{ render_metadata(posting.meta|remove_keys(['lineno', 'filename']), show_type['metadata']) }}
         </li>
         {% endfor %}
         </ul>

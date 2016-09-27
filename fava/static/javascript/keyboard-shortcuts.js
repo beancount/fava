@@ -58,51 +58,51 @@ module.exports.init = function init() {
   // Journal
   Mousetrap.bind({
     l() {
-      $('#toggle-legs').click();
+      $('#entry-filters button[data-type=legs]').click();
     },
     m() {
-      $('#toggle-metadata').click();
+      $('#entry-filters button[data-type=metadata]').click();
     },
 
     's o': () => {
-      $('#filter-open').click();
+      $('#entry-filters button[data-type=open]').click();
     },
     's c': () => {
-      $('#filter-close').click();
+      $('#entry-filters button[data-type=close]').click();
     },
     's t': () => {
-      $('#filter-transaction').click();
+      $('#entry-filters button[data-type=transaction]').click();
     },
     's b': () => {
-      $('#filter-balance').click();
+      $('#entry-filters button[data-type=balance]').click();
     },
     's n': () => {
-      $('#filter-note').click();
+      $('#entry-filters button[data-type=note]').click();
     },
     's d': () => {
-      $('#filter-document').click();
+      $('#entry-filters button[data-type=document]').click();
     },
     's p': () => {
-      $('#filter-pad').click();
+      $('#entry-filters button[data-type=pad]').click();
     },
     's q': () => {
-      $('#filter-query').click();
+      $('#entry-filters button[data-type=query]').click();
     },
     's shift+c': () => {
-      $('#filter-custom').click();
+      $('#entry-filters button[data-type=custom]').click();
     },
     's shift+b': () => {
-      $('#filter-budget').click();
+      $('#entry-filters button[data-type=budget]').click();
     },
 
     't c': () => {
-      $('#filter-cleared').click();
+      $('#entry-filters button[data-type=cleared]').click();
     },
     't p': () => {
-      $('#filter-pending').click();
+      $('#entry-filters button[data-type=pending]').click();
     },
     't o': () => {
-      $('#filter-other').click();
+      $('#entry-filters button[data-type=other]').click();
     },
   }, 'keyup');
 };

@@ -35,8 +35,8 @@
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
             {% endfor %}
         </select>
-        <input id="source-editor-submit" type="submit" value="{{ _('Save') }}">
-        <input id="source-editor-format" type="submit" data-url="{{ url_for('api_format_source') }}" value="{{ _('Format') }}">
+        <button id="source-editor-submit" type="submit">{{ _('Save') }}</button>
+        <button id="source-editor-format" type="submit" data-url="{{ url_for('api_format_source') }}">{{ _('Format') }}</button>
         <div id="source-editor-wrapper" class="source-editor-wrapper">
             <textarea id="source-editor" name="source" autofocus>{{ api.source(file_path) or '' }}</textarea>
         </div>

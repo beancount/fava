@@ -108,9 +108,10 @@ h2 { font-size: 1.2857em; }
 h3 {
   font-size: 1.1429em;
 
-  input {
+  button {
     font-size: 1rem;
     font-weight: normal;
+    padding: 4px 8px;
   }
 }
 h4,
@@ -185,8 +186,21 @@ pre {
   }
 }
 
-.hidden,
-.hidden-type {
+button {
+  background-color: $color-header;
+  border: 0;
+  color: $color-background;
+  cursor: pointer;
+  outline: 0;
+  padding: 8px 10px;
+
+  &:active,
+  &:hover {
+    background-color: darken($color-header, 10);
+  }
+}
+
+.hidden {
   display: none;
 }
 

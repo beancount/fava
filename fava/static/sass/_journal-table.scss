@@ -1,36 +1,13 @@
 // Journal table
 
 .journal-entry-filters {
-  input {
-    background-color: $color-header;
-    border: 0;
-    color: $color-background;
-    display: inline-block;
-    outline: 0;
-    padding: 6px 8px;
-    text-align: center;
-    text-decoration: none;
-
-    &:hover {
-      background-color: darken($color-header, 5);
-      cursor: pointer;
-    }
-
-    &:active {
-      background-color: darken($color-header, 10);
-    }
-  }
-
   .inactive {
     background: $color-background-darker;
     color: $color-text-lighter;
 
+    &:active,
     &:hover {
       background-color: darken($color-background-darker, 5);
-    }
-
-    &:active {
-      background: darken($color-background-darker, 10);
     }
   }
 

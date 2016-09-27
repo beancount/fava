@@ -47,7 +47,7 @@
     {% set clipboard_text = copy_balance_directives_text() %}
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
     <div class="left">
-        <h3>{{ _('Update Activity per Account') }}<input type="submit" class="right" id="copy-balances" value="{{ _('Copy balance directives') }}" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}"></h3>
+        <h3>{{ _('Update Activity per Account') }}<button type="button" class="right" id="copy-balances" value="" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}">{{ _('Copy balance directives') }}</button></h3>
         <table class="statistics-update-activity sortable">
             <thead>
                 <tr>

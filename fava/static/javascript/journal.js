@@ -7,7 +7,7 @@ module.exports.initJournal = function initJournal() {
   });
 
   // Toggle entries with checkboxes
-  $('#entry-filters input').click((event) => {
+  $('#entry-filters button').click((event) => {
     event.preventDefault();
     const $this = $(event.currentTarget);
     const type = $this.data('type');
@@ -22,7 +22,7 @@ module.exports.initJournal = function initJournal() {
 
     // Modify get params
     const filterShow = [];
-    $('#entry-filters input').each((_, el) => {
+    $('#entry-filters button').each((_, el) => {
       const $el = $(el);
       if (!$el.hasClass('inactive')) {
         filterShow.push($el.data('type'));

@@ -62,7 +62,7 @@
 
     <form id="query-form" class="query-box" action="{{ url_for('query') }}" method="get">
         <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
-        <input id="submit-query" type="submit" value="Submit Query">
+        <button id="submit-query" type="submit">Submit Query</button>
     </form>
     <div id="query-container">
     {% endif %}

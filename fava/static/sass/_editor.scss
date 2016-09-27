@@ -10,17 +10,10 @@
 
   form {
     background: lighten($color-sidebar-background, 2);
+    padding: 5px 10px;
 
     > select {
       margin: 5px 10px;
-    }
-
-    > input {
-      background: $color-header;
-      border: 1px solid darken($color-header, 9);
-      color: #fff;
-      margin: 5px;
-      padding: 4px 10px;
     }
 
     .source-editor-wrapper {
@@ -28,7 +21,7 @@
       left: $aside-width;
       position: fixed;
       right: 0;
-      top: $header-height + 37px;
+      top: $header-height + 42px;
     }
 
     .CodeMirror,

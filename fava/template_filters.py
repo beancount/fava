@@ -10,6 +10,8 @@ from beancount.core.number import Decimal
 
 
 def remove_keys(_dict, keys):
+    if not _dict:
+        return None
     new = dict(_dict)
     for key in keys:
         new.pop(key, None)
