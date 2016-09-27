@@ -1,3 +1,5 @@
+"""A simple file and folder watcher. """
+
 import os
 import time
 
@@ -11,9 +13,9 @@ class Watcher(object):
 
     __slots__ = ['files', 'folders', 'last_checked']
 
-    def __init__(self, files=[], folders=[]):
-        self.files = [path for path in files]
-        self.folders = [path for path in folders]
+    def __init__(self):
+        self.files = []
+        self.folders = []
         self.last_checked = time.time()
 
     def update(self, files, folders):
@@ -29,7 +31,7 @@ class Watcher(object):
                 self.last_checked = time.time()
                 return True
         for path in self.folders:
-            for dirpath, dirnames, filenames in os.walk(path):
+            for dirpath, _, _ in os.walk(path):
                 if os.stat(dirpath).st_mtime > self.last_checked:
                     self.last_checked = time.time()
                     return True

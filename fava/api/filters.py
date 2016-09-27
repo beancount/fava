@@ -19,6 +19,8 @@ class FilterException(Exception):
 
 
 class EntryFilter(object):
+    """Filters a list of entries. """
+
     def __init__(self):
         self.value = None
 
@@ -49,6 +51,7 @@ class EntryFilter(object):
 
 
 class FromFilter(EntryFilter):
+    """Filter by a FROM expression in the Beancount Query Language. """
     def __init__(self):
         super().__init__()
         self.parser = query_parser.Parser()
@@ -71,14 +74,13 @@ class FromFilter(EntryFilter):
             raise FilterException('from', str(exception))
         return True
 
-    def _include_entry(self, entry):
-        pass
-
     def _filter(self, entries, options):
         return query_execute.filter_entries(self.c_from, entries, options)
 
 
 class TimeFilter(EntryFilter):
+    """Filter by dates. """
+
     def __init__(self):
         super().__init__()
         self.begin_date = None
@@ -97,9 +99,6 @@ class TimeFilter(EntryFilter):
                                   .format(self.value))
         return True
 
-    def _include_entry(self, entry):
-        pass
-
     def _filter(self, entries, options):
         entries, _ = summarize.clamp_opt(entries, self.begin_date,
                                          self.end_date, options)
@@ -107,6 +106,11 @@ class TimeFilter(EntryFilter):
 
 
 class TagFilter(EntryFilter):
+    """Filter by tags.
+
+    Only keeps entries that might have tags (transactions only).
+    """
+
     def __init__(self):
         super().__init__()
         self.tags = set()
@@ -133,6 +137,11 @@ def _match_account(name, search):
 
 
 class AccountFilter(EntryFilter):
+    """Filter by account.
+
+    The filter string can either a regular expression or a parent account.
+    """
+
     def _include_entry(self, entry):
         if isinstance(entry, Transaction):
             return any(_match_account(posting.account, self.value)
@@ -143,6 +152,8 @@ class AccountFilter(EntryFilter):
 
 
 class PayeeFilter(EntryFilter):
+    """Filter by payee. """
+
     def __init__(self):
         super().__init__()
         self.payees = []

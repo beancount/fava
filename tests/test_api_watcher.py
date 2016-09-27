@@ -9,7 +9,8 @@ def test_watcher_file(tmpdir):
     foo.write('test')
     bar.write('test')
 
-    watcher = Watcher([str(foo), str(bar)])
+    watcher = Watcher()
+    watcher.update([str(foo), str(bar)], [])
     assert not watcher.check()
 
     # time.time is too precise
@@ -24,7 +25,8 @@ def test_watcher_folder(tmpdir):
     foo = tmpdir.mkdir('foo')
     foo.mkdir('bar')
 
-    watcher = Watcher([], [str(foo)])
+    watcher = Watcher()
+    watcher.update([], [str(foo)])
     assert not watcher.check()
 
     # time.time is too precise
