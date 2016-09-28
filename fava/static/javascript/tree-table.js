@@ -1,5 +1,5 @@
 module.exports.initTreeTable = function initTreeTable() {
-  $('.tree-table span.has-children').click((event) => {
+  $('.tree-table').on('click', 'span.has-children', (event) => {
     const row = $(event.currentTarget).parents('li').first();
     if (event.shiftKey) {
       row.find('li').toggleClass('toggled', !row.hasClass('toggled'));

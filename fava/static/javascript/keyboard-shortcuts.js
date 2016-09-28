@@ -4,7 +4,7 @@ require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 module.exports.init = function init() {
   Mousetrap.bind({
     '?': () => {
-      $('#keyboard-shortcuts.overlay-wrapper').show();
+      $('#keyboard-shortcuts').show();
     },
     esc() {
       $('.overlay-wrapper').hide();

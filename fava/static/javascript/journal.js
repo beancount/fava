@@ -2,7 +2,7 @@ const URI = require('urijs');
 
 module.exports.initJournal = function initJournal() {
   // Toggle postings by clicking on transaction row.
-  $('#journal-table li.transaction').click((event) => {
+  $('#journal-table').on('click', '.transaction', (event) => {
     $(event.currentTarget).find('.postings').toggleClass('hidden');
   });
 
