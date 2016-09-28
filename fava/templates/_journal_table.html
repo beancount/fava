@@ -100,12 +100,12 @@
         <span class="datecell">{{ _('Date') }}</span>
         <span class="flag">{{ _('F') }}</span>
         <span class="description">{{ _('Narration/Payee') }}</span>
-        <span class="position">{{ _('Position') }}</span>
-        <span class="price">{{ _('Price') }}</span>
-        <span class="cost">{{ _('Cost') }}</span>
+        <span class="num">{{ _('Position') }}</span>
+        <span class="num">{{ _('Price') }}</span>
+        <span class="num">{{ _('Cost') }}</span>
         {% if show_change_and_balance %}
-        <span class="change">{{ _('Change') }}</span>
-        <span class="balance">{{ _('Balance') }}</span>
+        <span class="num">{{ _('Change') }}</span>
+        <span class="num">{{ _('Balance') }}</span>
         {% endif %}
         </p>
     </li>
@@ -177,7 +177,7 @@
         {% endif %}
         {% if show_change_and_balance %}
             <span class="change num">{{ render_inventory(change) }}</span>
-            <span class="balance num">{{ render_inventory(balance) }}</span>
+            <span class="num">{{ render_inventory(balance) }}</span>
         </p>
         {% endif %}
         {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata']) }}

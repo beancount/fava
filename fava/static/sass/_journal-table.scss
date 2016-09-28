@@ -36,13 +36,7 @@
     > span {
       flex-shrink: 0;
       margin: 0;
-      padding: 1px 5px;
-    }
-
-    > .num {
-      color: $color-text;
-      font: 1em $font-family-monospaced;
-      text-align: right;
+      padding: 2px 5px;
     }
   }
 
@@ -50,18 +44,37 @@
     text-decoration: none;
   }
 
-  .head {
+  .num {
+    color: $color-text;
+    font-family: $font-family-monospaced;
+    text-align: right;
+  }
+
+  %head {
     background: $color-treetable-header-bg;
     color: $color-journaltable-header;
     font-weight: 500;
+  }
 
-    span {
-      border: 0;
+  .head {
+    @extend %head;
 
-      &.flag,
-      &.description {
-        border-left: 1px solid $color-journaltable-border;
-      }
+    > span {
+      padding: 3px 5px;
+    }
+
+    .num {
+      @extend %head;
+      font-family: $font-family;
+      text-align: inherit;
+    }
+  }
+
+  .totals {
+    @extend %head;
+
+    .num {
+      @extend %head;
     }
   }
 }
@@ -75,12 +88,7 @@
   .note { background-color: $color-journalentry-note; }
   .query { background-color: $color-journalentry-note; }
   .pad { background-color: $color-journalentry-pad; }
-
-  .document {
-    background-color: $color-journalentry-document;
-
-    a:nth-child(1) { font-weight: normal; }
-  }
+  .document { background-color: $color-journalentry-document; }
 
   .balance {
     background-color: $color-journalentry-balance;
@@ -94,7 +102,7 @@
   .postings {
     background-color: $color-journalentry-open;
     font-size: .9em;
-    opacity: .6;
+    opacity: .8;
 
     .num { line-height: 16px; }
 
@@ -164,12 +172,9 @@
       text-decoration: none;
     }
 
-    a { font-weight: 500; }
-
     .tag {
       color: $color-journaltable-tag;
       display: inline-block;
-      font-weight: normal;
       margin-right: 8px;
 
       &:hover {
