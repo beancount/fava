@@ -18,7 +18,7 @@
     'other':       'other' in config['journal-show-transaction'],
 
     'metadata':    'metadata' in config['journal-show'],
-    'legs':        'legs' in config['journal-show'],
+    'postings':    'postings' in config['journal-show'],
 } %}
 {% if request.args.get('show', False) %}
     {% set _list = request.args.getlist('show') %}
@@ -39,7 +39,7 @@
         'other':       'other' in _list,
 
         'metadata':     'metadata' in _list,
-        'legs':         'legs' in _list,
+        'postings':         'postings' in _list,
     } %}
 {% else %}
     {% set show_type = default_show_type %}
@@ -62,7 +62,7 @@
         {% endif %}
     {% endfor %}
     <button type="button" title="Toggle metadata" data-type="metadata"{% if not show_type['metadata'] %} class="inactive"{% endif %}>Metadata</button>
-    <button type="button" title="Toggle postings" data-type="legs" {% if not show_type['legs'] %} class="inactive"{% endif %}>Postings</button>
+    <button type="button" title="Toggle postings" data-type="postings" {% if not show_type['postings'] %} class="inactive"{% endif %}>Postings</button>
 </form>
 
 {% set context_url = url_for('context', ehash='REPLACEME') %}
@@ -140,12 +140,7 @@
             {% set account = entry.values[0].value %}
             {% set period_type = entry.values[1].value %}
             {% set value = entry.values[2].value %}
-            {%- if period_type == 'daily' %}Daily{% endif %}
-            {%- if period_type == 'weekly' %}Weekly{% endif %}
-            {%- if period_type == 'monthly' %}Monthly{% endif %}
-            {%- if period_type == 'quarterly' %}Quarterly{% endif %}
-            {%- if period_type == 'yearly' %}Yearly{% endif %}
-            Budget for {{ account_link(account) }}
+            {{ period_type|capitalize }} budget for {{ account_link(account) }}
             <span class="budget-value num">{{ value.number|format_currency(value.currency) }} {{ value.currency }}</span>
           {% else %}
             Custom <strong>{{ entry.type }}</strong>
@@ -187,25 +182,23 @@
         {% endif %}
         {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata']) }}
         {% if entry.postings %}
-        <ul>
+        <ul class="postings{% if not show_type['postings'] %} hidden{% endif %}">
         {% for posting in entry.postings %}
-        <li class="legs posting
-        {%- if posting.flag %} {{ flags_to_types.get(posting.flag, 'other') }}{% endif %}
-        {%- if not show_type['legs'] %} hidden{% endif %}">
+        <li{% if posting.flag %} class="{{ flags_to_types.get(posting.flag, 'other') }}"{% endif %}>
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
                 <span class="description">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
-                <span class="position num">{{ posting.units or '' }}</span>
-                <span class="price num">{{ posting.price|format_amount }}</span>
-                <span class="cost num">{{ posting.cost.number }} {{ posting.cost.currency }}
+                <span class="num">{{ posting.units or '' }}</span>
+                <span class="num">{{ posting.price|format_amount }}</span>
+                <span class="num">{{ posting.cost.number }} {{ posting.cost.currency }}
                     {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
                     {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>
                 {% if show_change_and_balance %}
                 <span class="change num"></span>
-                <span class="balance num"></span>
+                <span class="num"></span>
                 {% endif %}
             </p>
             {{ render_metadata(posting.meta|remove_keys(['lineno', 'filename']), show_type['metadata']) }}

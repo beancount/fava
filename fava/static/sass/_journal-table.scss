@@ -91,14 +91,14 @@
   .other { background-color: $color-journalentry-padding; }
   .pending { background-color: $color-journalentry-pending; }
 
-  .posting {
+  .postings {
     background-color: $color-journalentry-open;
     font-size: .9em;
     opacity: .6;
 
     .num { line-height: 16px; }
 
-    &.pending { background-color: $color-journalentry-postingwarning; }
+    .pending { background-color: $color-journalentry-postingwarning; }
   }
 
   .custom { background-color: $color-journalentry-custom; }
@@ -138,11 +138,7 @@
   }
 
   // Table cells (span)
-  .position,
-  .price,
-  .cost,
-  .change,
-  li .balance {
+  .num {
     border-left: 1px solid $color-journaltable-border;
     width: 9rem;
   }

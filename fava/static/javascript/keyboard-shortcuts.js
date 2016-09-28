@@ -58,7 +58,7 @@ module.exports.init = function init() {
   // Journal
   Mousetrap.bind({
     l() {
-      $('#entry-filters button[data-type=legs]').click();
+      $('#entry-filters button[data-type=postings]').click();
     },
     m() {
       $('#entry-filters button[data-type=metadata]').click();
