@@ -56,7 +56,7 @@
     border: solid 1px $color-editor-comment;
     border-radius: 2px;
     color: $color-editor-comment;
-    font-weight: bold;
+    font-weight: 500;
     padding-right: 10px;
   }
 
@@ -70,7 +70,7 @@
 
   .cm-directive {
     color: $color-editor-directive;
-    font-weight: bold;
+    font-weight: 500;
   }
 
   .cm-option {
@@ -90,6 +90,6 @@
   max-width: 600px;
 
   .highlight {
-    font-weight: bold;
+    font-weight: 500;
   }
 }

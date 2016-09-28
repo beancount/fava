@@ -28,7 +28,12 @@ module.exports.update = function update() {
 };
 
 module.exports.init = function init() {
-  $('#filter-form input').on('input awesomplete-selectcomplete', (event) => {
+  $('#filter-form input').on('awesomplete-selectcomplete', (event) => {
+    updateInput($(event.currentTarget));
+    $('#filter-form').submit();
+  });
+
+  $('#filter-form input').on('input', (event) => {
     updateInput($(event.currentTarget));
   });
 
