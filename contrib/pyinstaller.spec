@@ -2,7 +2,6 @@
 import os
 import pkgutil
 
-import livereload
 import beancount.ops
 import beancount.plugins
 
@@ -16,13 +15,10 @@ for _, name, __ in pkgutil.iter_modules(beancount.ops.__path__):
 
 block_cipher = None
 
-livereload_js_path = os.path.join(os.path.dirname(livereload.__file__), 'vendors/livereload.js')
-
 data_files = [
     ('../fava/docs', 'docs'),
     ('../fava/static/gen', 'static/gen'),
     ('../fava/templates', 'templates'),
-    (livereload_js_path, 'livereload/vendors'),
 ]
 
 a = Analysis(['../fava/cli.py'],
