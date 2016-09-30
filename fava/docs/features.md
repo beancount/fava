@@ -121,3 +121,20 @@ Currently Fava supports English (`en`) and German (`de`).
 
 If no setting is specified, Fava tries to guess the language from your browser
 settings.
+
+## File upload
+
+To store a document in a specific account, just drag and drop the file on the
+account name in a tree-table. 
+
+While still dragging, the background-color of the 
+account name will switch to blue, indicating that you can drop a file there. 
+
+Once dropped, a popup will be shown where you can rename the file before storing. 
+If the filename does not already start with a date (`YYYY-MM-DD`), the current 
+date will be added as a prefix automatically.
+
+The file will be then stored in your Beancount documents folder, in a sub-folder 
+named after the account. You can set the path to the Beancount documents folder 
+by specifying the `option "documents" "/User/test/invoices"`-option (absolute 
+or relative to your Beancount file) in your Beancount file.
