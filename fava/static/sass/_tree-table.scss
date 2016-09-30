@@ -77,6 +77,11 @@
     }
   }
 
+  .other-header {
+    background: $color-treetable-header-bg;
+    text-align: right;
+  }
+
   .has-balance {
     .balance {
       display: flex;

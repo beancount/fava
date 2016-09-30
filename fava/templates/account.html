@@ -79,11 +79,11 @@
             </ol>
             </li>
         {% endfor %}
-            <li class="head">
+            <li class="totals">
                 <p>
-                <span class="account">&nbsp;</span>
+                <span class="account-cell">&nbsp;</span>
                 {% for _, balance_children, _, _ in interval_balances.balance_and_balance_children|reverse %}
-                <span class="num other-header">
+                <span class="num other">
                     {% for currency, number in balance_children.items() %}
                         {% if number %}
                             {{ number|format_currency(currency) }} {{ currency }}<br>
