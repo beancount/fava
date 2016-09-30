@@ -93,7 +93,6 @@ function treeMapChart() {
   const x = d3.scaleLinear();
   const y = d3.scaleLinear();
   const treemap = d3.treemap();
-  const zoomBehavior = d3.zoom();
 
   let width;
   let height;
@@ -144,19 +143,6 @@ function treeMapChart() {
     currentNode = node;
   }
 
-  function onZoom(d) {
-    const scale = d3.event.transform.k;
-    // click
-    if (scale === 1) {
-      zoom(currentNode === d.parent ? root : d.parent, 200);
-    } else if (scale > 1) {
-      zoom(d.parent, 200);
-    } else if (scale < 1) {
-      zoom(root, 200);
-    }
-    this.__zoom = d3.zoomIdentity; // eslint-disable-line no-underscore-dangle
-  }
-
   function chart(svg_) {
     svg = svg_;
     canvas = svg.classed('treemap', true);
@@ -164,14 +150,10 @@ function treeMapChart() {
     root = svg.datum();
     treemap(root);
 
-    zoomBehavior
-      .on('end', onZoom);
-
     cells = svg.selectAll('g')
       .data(root.leaves())
       .enter()
       .append('g')
-      .call(zoomBehavior)
       .call(addTooltip, tooltipText);
 
     if (cells.empty()) {
@@ -182,6 +164,9 @@ function treeMapChart() {
     }
 
     cells.append('rect')
+      .on('click', (d) => {
+        zoom(currentNode === d.parent ? root : d.parent, 200);
+      })
       .attr('fill', (d) => {
         const node = d.data.dummy ? d.parent : d;
         if (node.parent === root || !node.parent) {
