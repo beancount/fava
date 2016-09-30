@@ -26,3 +26,6 @@ indent_size = 2
 
 [*.js]
 indent_size = 2
+
+[*.scss]
+indent_size = 2
