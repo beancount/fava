@@ -17,6 +17,9 @@ Options:
   --help                         Show this message and exit.
 ```
 
+If the `BEANCOUNT_FILE` environment variable is set, Fava will use the file
+specified there as the Beancount file.
+
 ## Examples
 
 Run with default configuration:
