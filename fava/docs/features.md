@@ -122,7 +122,7 @@ Currently Fava supports English (`en`) and German (`de`).
 If no setting is specified, Fava tries to guess the language from your browser
 settings.
 
-## File upload
+## Documents upload
 
 To store a document in a specific account, just drag and drop the file on the
 account name in a tree-table. 
