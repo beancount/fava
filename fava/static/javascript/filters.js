@@ -38,11 +38,16 @@ module.exports.init = function init() {
   });
 
   $('#filter-form input[type="text"]').each((_, el) => {
+    const $el = $(el);
+
     let options = {
       minChars: 0,
       maxItems: 30,
+      sort(text, input) {
+        const order = $el.attr('name') === 'time' ? -1 : 1;
+        return text.value.localeCompare(input.value) * order;
+      }
     };
-    const $el = $(el);
 
     if ($el.attr('name') === 'tag' || $el.attr('name') === 'payee') {
       options = $.extend(options, {
