@@ -46,7 +46,7 @@ module.exports.init = function init() {
       sort(text, input) {
         const order = $el.attr('name') === 'time' ? -1 : 1;
         return text.value.localeCompare(input.value) * order;
-      }
+      },
     };
 
     if ($el.attr('name') === 'tag' || $el.attr('name') === 'payee') {
