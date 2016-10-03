@@ -1,5 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'trial_balance' %}
+{% import '_tree_table.html' as tree_table with context %}
 
 {% block content %}
     {{ charts.skeleton(hide_interval_filter=True) }}
@@ -9,8 +10,6 @@
     {% endfor %}
 
     <div class="halfleft">
-    {% with table_title=None, real_accounts=api.trial_balance(), totals=False %}
-        {% include "_tree_table.html" %}
-    {% endwith %}
+    {{ tree_table.tree(api.root_account, totals=False) }}
     </div>
 {% endblock %}

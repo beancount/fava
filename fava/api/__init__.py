@@ -221,7 +221,7 @@ class BeancountReportAPI():
         return serialize_inventory(sum(totals, inventory.Inventory()),
                                    at_cost=True)
 
-    def interval_totals(self, interval, account_name):
+    def chart_interval_totals(self, interval, account_name):
         """Renders totals for account (or accounts) in the intervals."""
         if isinstance(account_name, str):
             names = [account_name]
@@ -239,15 +239,17 @@ class BeancountReportAPI():
     def get_account_sign(self, account_name):
         return get_account_sign(account_name, self.account_types)
 
-    def balances(self, account_name, begin_date=None, end_date=None):
+    def balances(self, account_name):
+        return _real_account(account_name, self.entries)
+
+    def chart_balances(self, account_name, begin_date=None, end_date=None):
         real_account = _real_account(
             account_name, self.entries, begin_date, end_date)
-        return [serialize_real_account(real_account)]
+        return serialize_real_account(real_account)
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
-        return [serialize_real_account(
-            _real_account(account_name, closing_entries))]
+        return _real_account(account_name, closing_entries)
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """accumulate is False for /changes and True for /balances"""
@@ -293,9 +295,6 @@ class BeancountReportAPI():
             for child in zipped_interval_balances['children']]
 
         return zipped_interval_balances
-
-    def trial_balance(self):
-        return serialize_real_account(self.root_account)['children']
 
     def account_journal(self, account_name, with_journal_children=False):
         real_account = realization.get_or_create(self.root_account,

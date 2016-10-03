@@ -1,5 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'balance_sheet' %}
+{% import '_tree_table.html' as tree_table with context %}
 
 {% block content %}
     {{ charts.skeleton() }}
@@ -9,16 +10,13 @@
     {{ charts.hierarchy(api.options['name_equity']) }}
 
     <div class="halfleft">
-        {% with table_title=_('Assets'), real_accounts=api.closing_balances(api.options['name_assets']), totals=True %}
-            {% include "_tree_table.html" %}
-        {% endwith %}
+        <h3>{{ api.options['name_assets'] }}</h3>
+        {{ tree_table.tree(api.closing_balances(api.options['name_assets'])) }}
     </div>
     <div class="halfright">
-        {% with table_title=_('Liabilities'), real_accounts=api.closing_balances(api.options['name_liabilities']), totals=True %}
-            {% include "_tree_table.html" %}
-        {% endwith %}
-        {% with table_title=_('Equity'), real_accounts=api.closing_balances(api.options['name_equity']), totals=True %}
-            {% include "_tree_table.html" %}
-        {% endwith %}
+        <h3>{{ api.options['name_liabilities'] }}</h3>
+        {{ tree_table.tree(api.closing_balances(api.options['name_liabilities'])) }}
+        <h3>{{ api.options['name_equity'] }}</h3>
+        {{ tree_table.tree(api.closing_balances(api.options['name_equity'])) }}
     </div>
 {% endblock %}

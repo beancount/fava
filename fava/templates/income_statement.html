@@ -1,5 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'income_statement' %}
+{% import '_tree_table.html' as tree_table with context %}
 
 {% block content %}
     {{ charts.skeleton() }}
@@ -12,13 +13,11 @@
     {{ charts.hierarchy(api.options['name_income']) }}
 
     <div class="halfleft">
-        {% with table_title=_('Income'), real_accounts=api.balances(api.options['name_income']), totals=True %}
-            {% include "_tree_table.html" %}
-        {% endwith %}
+        <h3>{{ api.options['name_income'] }}</h3>
+        {{ tree_table.tree(api.balances(api.options['name_income'])) }}
     </div>
     <div class="halfright">
-        {% with table_title=_('Expenses'), real_accounts=api.balances(api.options['name_expenses']), totals=True %}
-            {% include "_tree_table.html" %}
-        {% endwith %}
+        <h3>{{ api.options['name_expenses'] }}</h3>
+        {{ tree_table.tree(api.balances(api.options['name_expenses'])) }}
     </div>
 {% endblock %}

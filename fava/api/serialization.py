@@ -2,7 +2,6 @@ from datetime import date, datetime
 
 from beancount.core import realization
 from beancount.core.amount import Amount, decimal
-from beancount.core.data import Close, TxnPosting
 from beancount.core.position import Position
 from flask.json import JSONEncoder
 
@@ -40,11 +39,6 @@ def serialize_real_account(real_account):
             serialize_inventory(realization.compute_balance(real_account),
                                 at_cost=True),
         'balance': serialize_inventory(real_account.balance, at_cost=True),
-        'is_leaf': len(real_account) == 0 or bool(real_account.txn_postings),
-        'is_closed': isinstance(realization.find_last_active_posting(
-            real_account.txn_postings), Close),
-        'has_transactions': any(isinstance(t, TxnPosting)
-                                for t in real_account.txn_postings),
         'children': [serialize_real_account(a)
                      for n, a in sorted(real_account.items())],
     }

@@ -6,6 +6,8 @@ All functions in this module will be automatically added as template filters.
 import os
 
 from flask import g
+from beancount.core import realization
+from beancount.core.data import Close, TxnPosting
 from beancount.core.number import Decimal
 
 
@@ -41,21 +43,28 @@ def account_level(account_name):
     return account_name.count(":")+1
 
 
-def show_account(account):
+def balance_children(account):
+    return realization.compute_balance(account)
+
+
+def should_show(account):
     show_this_account = False
-    if account['is_leaf']:
+    # check if it's a leaf account
+    if len(account) == 0 or bool(account.txn_postings):
         show_this_account = True
         if not g.api.fava_options['show-closed-accounts'] and \
-                account['is_closed']:
+                isinstance(realization.find_last_active_posting(
+                        account.txn_postings), Close):
             show_this_account = False
         if not g.api.fava_options['show-accounts-with-zero-balance'] and \
-                not account['balance']:
+                not account.balance.is_empty():
             show_this_account = False
         if not g.api.fava_options['show-accounts-with-zero-transactions'] and \
-                not account['has_transactions']:
+                not any(isinstance(t, TxnPosting)
+                        for t in account.txn_postings):
             show_this_account = False
     return show_this_account or any(
-        show_account(a) for a in account['children'])
+        should_show(a) for a in account.values())
 
 
 def basename(file_path):

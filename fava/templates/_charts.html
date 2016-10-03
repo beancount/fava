@@ -7,7 +7,7 @@
     'type': 'hierarchy',
     'label': account_name if not label else label,
     'modifier': api.get_account_sign(account_name),
-    'root': api.balances(account_name, begin_date, end_date)[0],
+    'root': api.chart_balances(account_name, begin_date, end_date),
 }) %}
 {% endmacro %}
 
@@ -15,7 +15,7 @@
 {% do chart_data.append({
     'type': 'bar',
     'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
-    'interval_totals': api.interval_totals(interval, account_name),
+    'interval_totals': api.chart_interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
 
