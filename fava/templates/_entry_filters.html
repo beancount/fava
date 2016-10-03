@@ -39,7 +39,7 @@
         </datalist>
     </span>
     <span{% if not payee_filter %} class="empty"{% endif %}>
-        <input id="name-filter" name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('Payee') }}" size="{{ (payee_filter and payee_filter|length+2) or _('Payee')|length+2 }}">
+        <input id="payee-filter" name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('Payee') }}" size="{{ (payee_filter and payee_filter|length+2) or _('Payee')|length+2 }}">
         <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
         <datalist id="payees">
         {% for payee in api.active_payees %}
