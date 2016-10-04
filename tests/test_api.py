@@ -4,12 +4,6 @@ def test_accounts(example_api):
     assert 'Assets' not in example_api.all_accounts_active
 
 
-def test_linechart_data(example_api):
-    data = example_api.linechart_data('Assets:Testing:MultipleCommodities')
-    assert data[1]['balance']['USD'] == 50
-    assert data[2]['balance']['USD'] == 0
-
-
 def test_account_metadata(example_api):
     data = example_api.account_metadata('Assets:US:BofA')
     assert data['address'] == "123 America Street, LargeTown, USA"

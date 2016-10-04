@@ -32,18 +32,6 @@ def serialize_inventory(inventory, at_cost=False):
     return {p.units.currency: p.units.number for p in inventory}
 
 
-def serialize_real_account(real_account):
-    return {
-        'account': real_account.account,
-        'balance_children':
-            serialize_inventory(realization.compute_balance(real_account),
-                                at_cost=True),
-        'balance': serialize_inventory(real_account.balance, at_cost=True),
-        'children': [serialize_real_account(a)
-                     for n, a in sorted(real_account.items())],
-    }
-
-
 def zip_real_accounts(ra_list):
     if not ra_list:
         return

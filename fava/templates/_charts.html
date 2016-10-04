@@ -7,7 +7,7 @@
     'type': 'hierarchy',
     'label': account_name if not label else label,
     'modifier': api.get_account_sign(account_name),
-    'root': api.chart_balances(account_name, begin_date, end_date),
+    'root': api.charts.hierarchy(account_name, begin_date, end_date),
 }) %}
 {% endmacro %}
 
@@ -15,7 +15,7 @@
 {% do chart_data.append({
     'type': 'bar',
     'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
-    'interval_totals': api.chart_interval_totals(interval, account_name),
+    'interval_totals': api.charts.interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
 
@@ -31,7 +31,7 @@
 {% do chart_data.append({
     'type': 'balances',
     'label': 'Net Worth ({})'.format(interval_macros.interval_label|lower),
-    'data': api.net_worth_at_dates(interval),
+    'data': api.charts.net_worth_at_dates(interval),
 }) %}
 {% endmacro %}
 
@@ -39,7 +39,7 @@
 {% do chart_data.append({
     'type': 'balances',
     'label': 'Account Balance',
-    'data': api.linechart_data(account_name),
+    'data': api.charts.linechart(account_name),
 }) %}
 {% endmacro %}
 

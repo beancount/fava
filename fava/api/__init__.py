@@ -7,7 +7,7 @@ import os
 
 from beancount.core.number import Decimal
 from beancount import loader
-from beancount.core import compare, flags, getters, realization, inventory
+from beancount.core import compare, flags, getters, realization
 from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
@@ -21,13 +21,12 @@ from beancount.utils import encryption, misc_utils
 
 from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
+from fava.api.charts import Charts
 from fava.api.watcher import Watcher
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
-from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
-                              net_worth_at_dates)
-from fava.api.serialization import (serialize_inventory,
-                                    serialize_real_account, zip_real_accounts)
+from fava.api.helpers import get_final_holdings, aggregate_holdings_by
+from fava.api.serialization import zip_real_accounts
 from fava.api.fava_options import parse_options
 
 
@@ -91,10 +90,11 @@ class BeancountReportAPI():
         '_default_format_string', '_format_string',
         'account_types', 'active_payees', 'active_tags', 'active_years',
         'all_accounts', 'all_accounts_active', 'all_entries',
-        'all_root_account', 'beancount_file_path', 'budgets', 'custom_entries',
-        'date_first', 'date_last', 'entries', 'errors', 'fava_options',
-        'filters', 'is_encrypted', 'options', 'price_map', 'queries',
-        'root_account', 'sidebar_links', 'title', 'watcher']
+        'all_root_account', 'beancount_file_path', 'budgets',
+        'charts', 'custom_entries', 'date_first', 'date_last', 'entries',
+        'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
+        'price_map', 'queries', 'root_account', 'sidebar_links', 'title',
+        'watcher']
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
@@ -107,6 +107,7 @@ class BeancountReportAPI():
             'time': TimeFilter(),
         }
 
+        self.charts = Charts(self)
         self.watcher = Watcher()
         self.load_file()
 
@@ -214,42 +215,16 @@ class BeancountReportAPI():
         period in which entries contains transactions.  """
         return date.interval_tuples(self.date_first, self.date_last, interval)
 
-    def _total_balance(self, names, begin_date, end_date):
-        totals = [realization.compute_balance(
-            _real_account(account_name, self.entries, begin_date, end_date))
-                  for account_name in names]
-        return serialize_inventory(sum(totals, inventory.Inventory()),
-                                   at_cost=True)
-
-    def chart_interval_totals(self, interval, account_name):
-        """Renders totals for account (or accounts) in the intervals."""
-        if isinstance(account_name, str):
-            names = [account_name]
-        else:
-            names = account_name
-
-        interval_tuples = self._interval_tuples(interval)
-        return [{
-            'begin_date': begin_date,
-            'totals': self._total_balance(
-                names,
-                begin_date, end_date),
-        } for begin_date, end_date in interval_tuples]
-
     def get_account_sign(self, account_name):
         return get_account_sign(account_name, self.account_types)
 
     def balances(self, account_name):
-        return _real_account(account_name, self.entries)
-
-    def chart_balances(self, account_name, begin_date=None, end_date=None):
-        real_account = _real_account(
-            account_name, self.entries, begin_date, end_date)
-        return serialize_real_account(real_account)
+        return realization.get_or_create(self.root_account, account_name)
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
-        return _real_account(account_name, closing_entries)
+        return realization.get_or_create(realization.realize(closing_entries),
+                                         account_name)
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """accumulate is False for /changes and True for /balances"""
@@ -338,16 +313,6 @@ class BeancountReportAPI():
                                                   aggregation_key)
         return holdings_list
 
-    def net_worth_at_dates(self, interval):
-        interval_tuples = self._interval_tuples(interval)
-        if not interval_tuples:
-            return []
-
-        dates = [interval_tuples[0][0]] + [p[1] for p in interval_tuples]
-
-        return net_worth_at_dates(self.entries, dates, self.price_map,
-                                  self.options)
-
     def context(self, ehash):
         matching_entries = [entry for entry in self.all_entries
                             if ehash == compare.hash_entry(entry)]
@@ -367,18 +332,6 @@ class BeancountReportAPI():
             'lineno': entry.meta['lineno'],
             'journal': matching_entries,
         }
-
-    def linechart_data(self, account_name):
-        journal = self.account_journal(account_name, True)
-
-        return [{
-            'date': entry.date,
-            # when there's no holding for a commodity, it will be missing from
-            # 'balance' field but appear in 'change' field. Use 0 for those
-            # commodities.
-            'balance': dict({curr: 0 for curr in list(change.currencies())},
-                            **serialize_inventory(balance)),
-        } for entry, _, change, balance in journal if len(change)]
 
     def source_files(self):
         # Make sure the included source files are sorted, behind the main
