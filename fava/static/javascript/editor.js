@@ -76,6 +76,19 @@ function formatEditorContent(cm) {
     });
 }
 
+function jumpToMarker(editor) {
+  if (!window.editorInsertMarker) {
+    return;
+  }
+  const cursor = editor.getSearchCursor(window.editorInsertMarker);
+
+  if (cursor.findNext()) {
+    editor.focus();
+    editor.setCursor(cursor.pos.from);
+    editor.execCommand('goLineUp');
+  }
+}
+
 module.exports.initEditor = function initEditor() {
   const rulers = [];
   if (window.editorPrintMarginColumn) {
@@ -155,6 +168,7 @@ module.exports.initEditor = function initEditor() {
   if ($('#source-editor').length) {
     const el = document.getElementById('source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
+    jumpToMarker(editor);
 
     editor.on('keyup', (cm, event) => {
       if (!cm.state.completionActive && event.keyCode !== 13) {
@@ -179,16 +193,7 @@ module.exports.initEditor = function initEditor() {
           editor.setValue(data);
           editor.setCursor(0, 0);
           $select.removeAttr('disabled');
-
-          if (window.editorInsertMarker) {
-            const cursor = editor.getSearchCursor(window.editorInsertMarker);
-
-            if (cursor.findNext()) {
-              editor.focus();
-              editor.setCursor(cursor.pos.from);
-              editor.execCommand('goLineUp');
-            }
-          }
+          jumpToMarker(editor);
         });
     });
 
