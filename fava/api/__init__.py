@@ -5,7 +5,6 @@ This module provides the data required by Fava's reports.
 import datetime
 import os
 
-from beancount.core.number import Decimal
 from beancount import loader
 from beancount.core import compare, flags, getters, realization
 from beancount.core.interpolate import compute_entries_balance
@@ -26,7 +25,6 @@ from fava.api.watcher import Watcher
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import get_final_holdings, aggregate_holdings_by
-from fava.api.serialization import zip_real_accounts
 from fava.api.fava_options import parse_options
 
 
@@ -46,26 +44,6 @@ def _list_accounts(root_account, active_only=False):
                 if not active_only or child_account.txn_postings]
 
     return accounts if active_only else accounts[1:]
-
-
-def _real_account(account_name, entries, begin_date=None, end_date=None,
-                  min_accounts=None):
-    """
-    Returns the realization.RealAccount instances for account_name, and
-    their entries clamped by the optional begin_date and end_date.
-
-    Warning: For efficiency, the returned result does not include any added
-    postings to account for balances at 'begin_date'.
-
-    :return: realization.RealAccount instances
-    """
-    if begin_date:
-        entries = list(iter_entry_dates(entries, begin_date, end_date))
-    if not min_accounts:
-        min_accounts = [account_name]
-
-    return realization.get(realization.realize(entries, min_accounts),
-                           account_name)
 
 
 def _sidebar_links(custom_entries):
@@ -228,48 +206,24 @@ class BeancountReportAPI():
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """accumulate is False for /changes and True for /balances"""
-        account_names = [account
-                         for account in self.all_accounts
-                         if account.startswith(account_name)]
+        min_accounts = [account
+                        for account in self.all_accounts
+                        if account.startswith(account_name)]
 
-        interval_tuples = self._interval_tuples(interval)
+        interval_tuples = list(reversed(self._interval_tuples(interval)))
+
         interval_balances = [
-            _real_account(
-                account_name, self.entries,
-                interval_tuples[0][0] if accumulate else begin_date,
-                end_date, min_accounts=account_names)
+            realization.realize(list(iter_entry_dates(
+                self.entries,
+                self.date_first if accumulate else begin_date,
+                end_date)), min_accounts)
             for begin_date, end_date in interval_tuples]
 
-        return self.add_budgets(zip_real_accounts(interval_balances),
-                                interval_tuples, accumulate), interval_tuples
+        return interval_balances, interval_tuples
 
-    def add_budgets(self, zipped_interval_balances, interval_tuples,
-                    accumulate):
-        """Add budgets data to zipped (recursive) interval balances."""
-        if not zipped_interval_balances:
-            return
-
-        interval_budgets = [
-            calculate_budget(
-                self.budgets,
-                zipped_interval_balances['account'],
-                interval_tuples[0][0] if accumulate else begin_date,
-                end_date
-            ) for begin_date, end_date in interval_tuples]
-
-        zipped_interval_balances['balance_and_balance_children'] = [(
-            balances[0],
-            balances[1],
-            {curr: value - (balances[0][curr] if curr in balances[0] else Decimal(0.0)) for curr, value in budget.items()},  # noqa
-            {curr: value - (balances[1][curr] if curr in balances[1] else Decimal(0.0)) for curr, value in budget.items()})  # noqa
-            for balances, budget in zip(zipped_interval_balances['balance_and_balance_children'], interval_budgets)  # noqa
-        ]
-
-        zipped_interval_balances['children'] = [self.add_budgets(
-            child, interval_tuples, accumulate)
-            for child in zipped_interval_balances['children']]
-
-        return zipped_interval_balances
+    def calculate_budget(self, account_name, begin_date, end_date):
+        return calculate_budget(self.budgets, account_name, begin_date,
+                                end_date)
 
     def account_journal(self, account_name, with_journal_children=False):
         real_account = realization.get_or_create(self.root_account,

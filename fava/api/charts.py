@@ -1,10 +1,39 @@
 """Provide data suitable for Fava's charts. """
+from datetime import date, datetime
 
+from beancount.core.amount import Amount, decimal
+from beancount.core.position import Position
 from beancount.core import inventory, realization
 from beancount.core.data import iter_entry_dates
+from flask.json import JSONEncoder
 
 from fava.api.helpers import net_worth_at_dates
-from fava.api.serialization import serialize_inventory
+
+
+class BeanJSONEncoder(JSONEncoder):
+    def default(self, o):  # pylint: disable=E0202
+        if isinstance(o, datetime):
+            return o.strftime('%Y-%m-%dT%H:%M:%SZ')
+        elif isinstance(o, date):
+            return o.strftime('%Y-%m-%d')
+        elif isinstance(o, decimal.Decimal):
+            return float(o)
+        elif isinstance(o, Amount):
+            return str(o)
+        elif isinstance(o, Position):
+            return str(o)
+        elif isinstance(o, (set, frozenset)):
+            return list(o)
+        return JSONEncoder.default(self, o)
+
+
+def serialize_inventory(inventory, at_cost=False):
+    """Renders an Inventory to a currency -> amount dict."""
+    if at_cost:
+        inventory = inventory.cost()
+    else:
+        inventory = inventory.units()
+    return {p.units.currency: p.units.number for p in inventory}
 
 
 def _real_account(account_name, entries, begin_date, end_date):

@@ -7,7 +7,7 @@
         <p>
         <span class="account-cell"><span>{{ _('Account') }}</span><a href="#" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
         {% for currency in operating_currencies %}
-            <span class="num-header">{{ currency }}</span>
+            <span class="num">{{ currency }}</span>
         {% endfor %}
         {% if show_other_column %}
             <span class="other">{{ _('Other') }}</span>
@@ -82,5 +82,88 @@
             </p>
         </li>
 {% endif %}
+</ol>
+{% endmacro %}
+
+{% macro balance_with_budget(amount, budget) %}
+{% if budget %}
+    {% set diff = (budget[currency] - amount.number)  if currency in budget else None %}
+    {% if diff != None %}
+        <span class="budget budget-{% if diff > 0.0 %}positive{% else %}{% if diff < 0.0 %}negative{% else %}zero{% endif %}{% endif %}">
+            ({{ diff|format_currency(currency, show_if_zero=True) }})
+        </span>
+    {% else %}
+        <span class="budget no-budget"></span>
+    {% endif %}
+{% endif %}
+<span class="number">{{ amount|format_amount }}</span>
+{% endmacro %}
+
+{% macro account_tree(account_name, interval_balances, dates, accumulate) %}
+<ol class="fullwidth tree-table">
+    <li class="head">
+        <p>
+        <span class="account-cell"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
+        {% for begin_date, end_date in dates %}
+            {% if accumulate %}
+                {% set time_filter = dates[0][0]|string + ' - ' + end_date|string %}
+            {% else %}
+                {% set time_filter = begin_date|string + ' - ' + end_date|string %}
+            {% endif %}
+
+            <span class="other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
+        {% endfor %}
+        </p>
+    </li>
+{% for account in [interval_balances[0]|get_or_create(account_name)] recursive %}
+    <li>
+        <p>
+        <span class="account-cell depth-{{ loop.depth0 }} droptarget
+        {{- '' if not account|length else ' has-children'}}
+        {%- if account.account|should_collapse_account %} toggled{% endif %}
+        " data-account-name="{{ account.account }}">
+            {% if account|length %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children') }}"></span>{% endif %}
+        {{ account_macros.account_name(account.account, last_segment=True) }}</span>
+    {% for begin_date, end_date in dates %}
+        {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
+        {% set budget = api.calculate_budget(account_name, begin_date, end_date) %}
+        {% set current_account = interval_balances[loop.index0]|get_or_create(account.account) %}
+        {% set balance = current_account.balance.cost() %}
+        {% set balance_children = (current_account|balance_children).cost() %}
+        <span class="num other{{ ' has-balance' if not balance.is_empty() else '' }}">
+            <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
+            {% for pos in balance %}
+                <span class="balance">
+                    {{ balance_with_budget(pos.units, budget) }}
+                </span>
+            {% endfor %}
+            {% for pos in balance_children %}
+                <span class="balance-children">
+                    {{ balance_with_budget(pos.units, budget) }}
+                </span>
+            {% endfor %}
+            </a>
+        </span>
+    {% endfor %}
+    </p>
+    <ol>
+    {{ loop(account.values()) }}
+    </ol>
+    </li>
+{% endfor %}
+    <li class="totals">
+        <p>
+        <span class="account-cell">&nbsp;</span>
+    {% for begin_date, end_date in dates %}
+        {% set current_account = interval_balances[loop.index0]|get_or_create(account_name) %}
+        {% set balance_children = (current_account|balance_children).cost() %}
+        <span class="num other">
+            {% for pos in balance_children %}
+                {{ pos.units.number|format_currency(pos.units.currency) }} {{ pos.units.currency }}<br>
+            {% endfor %}
+        </span>
+        {% endfor %}
+        </p>
+    </li>
 </ol>
 {% endmacro %}

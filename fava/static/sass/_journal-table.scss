@@ -59,7 +59,8 @@
   .head {
     @extend %head;
 
-    > span {
+    p > span {
+      background: $color-treetable-header-bg;
       padding: 3px 5px;
     }
 

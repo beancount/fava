@@ -27,13 +27,6 @@
     }
   }
 
-  .head > p > span {
-    border: 1px solid $color-treetable-header-bg;
-    padding: 3px 5px 2px 8px;
-
-    span { flex-grow: 1; }
-  }
-
   // table cells
   .account-cell {
     align-items: center;
@@ -57,7 +50,6 @@
     }
   }
 
-  .num-header,
   .num {
     width: 10rem;
 
@@ -67,7 +59,6 @@
     }
   }
 
-  .other-header,
   .other {
     width: 13rem;
 
@@ -75,11 +66,6 @@
       color: inherit;
       display: block;
     }
-  }
-
-  .other-header {
-    background: $color-treetable-header-bg;
-    text-align: right;
   }
 
   .has-balance {
@@ -151,13 +137,11 @@
 
   .#{$i}-currencies {
     p > span {
-      &.num-header,
       &.num {
         font-size: $num-fraction;
         width: 20rem / ($i + 1);
       }
 
-      &.other-header,
       &.other {
         font-size: $num-fraction;
         width: 20rem / ($i + 1) + 3rem;

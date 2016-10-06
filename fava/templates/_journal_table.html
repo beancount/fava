@@ -75,7 +75,7 @@
 
 {% macro render_inventory(inv) -%}
     {% for pos in inv %}
-        {{ pos.units.number|format_currency(pos.units.currency) }} {{ pos.units.currency }}<br>
+        {{ pos.units|format_amount }}<br>
     {% endfor %}
 {%- endmacro %}
 
@@ -147,7 +147,7 @@
             {% for value in entry['values'] %}
                 &nbsp;
                 {%- if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}{% endif -%}
-                {%- if value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value.number|format_currency(value.value.currency) }} {{ value.value.currency }}</span>{% endif -%}
+                {%- if value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value|format_amount }}</span>{% endif -%}
                 {%- if value.dtype|string == "<class 'str'>" %}"{{ value.value }}"{% endif -%}
                 {%- if value.dtype|string == "<class 'bool'>" %}{{ value.value }}{% endif -%}
                 {%- if value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}

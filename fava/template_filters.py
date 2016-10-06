@@ -47,6 +47,12 @@ def balance_children(account):
     return realization.compute_balance(account)
 
 
+def get_or_create(account, account_name):
+    if account.account == account_name:
+        return account
+    return realization.get_or_create(account, account_name)
+
+
 def should_show(account):
     show_this_account = False
     # check if it's a leaf account

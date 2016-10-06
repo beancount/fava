@@ -16,7 +16,7 @@ from beancount.scripts.format import align_beancount
 from fava import template_filters
 from fava.api import BeancountReportAPI
 from fava.api.filters import FilterException
-from fava.api.serialization import BeanJSONEncoder
+from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
