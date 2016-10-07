@@ -105,14 +105,6 @@ Can be used to keep decimal points aligned for example.
 
 ---
 
-## `editor-strip-trailing-whitespace`
-
-Default: `false`
-
-If set, strip all trailing whitespace when saving in Fava's editor.
-
----
-
 ## `use-external-editor`
 
 Default: `false`

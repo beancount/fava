@@ -3,7 +3,6 @@
 // TODO:
 //
 // - soft tabs ?
-// - trim trailing whitespace (plus highlighting)
 //
 //
 const URI = require('urijs');
@@ -21,6 +20,9 @@ require('codemirror/addon/search/search');
 // print margin
 require('codemirror/addon/display/rulers');
 
+// trailing whitespace
+require('codemirror/addon/edit/trailingspace');
+
 // folding
 require('codemirror/addon/fold/foldcode');
 require('codemirror/addon/fold/foldgutter');
@@ -33,8 +35,6 @@ require('./codemirror-hint-beancount.js');
 require('./codemirror-mode-beancount.js');
 
 function saveEditorContent(cm) {
-  // trim trailing whitespace here
-
   const $button = $('#source-editor-submit');
   const fileName = $('#source-editor-select').val();
   $button
@@ -110,6 +110,7 @@ module.exports.initEditor = function initEditor() {
     lineNumbers: true,
     rulers,
     foldGutter: true,
+    showTrailingSpace: true,
     gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
     extraKeys: {
       'Ctrl-Space': 'autocomplete',

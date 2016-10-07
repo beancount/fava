@@ -5,7 +5,6 @@ OptionError = namedtuple('OptionError', 'source message entry')
 DEFAULTS = {
     'account-journal-include-children': True,
     'charts': True,
-    'editor-strip-trailing-whitespace': False,
     'use-external-editor': False,
     'show-closed-accounts': False,
     'show-accounts-with-zero-balance': True,
@@ -23,7 +22,6 @@ DEFAULTS = {
 BOOL_OPTS = [
     'account-journal-include-children',
     'charts',
-    'editor-strip-trailing-whitespace',
     'use-external-editor',
     'show-closed-accounts',
     'show-accounts-with-zero-balance',

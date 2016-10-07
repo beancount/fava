@@ -52,6 +52,10 @@
   font: 13px $font-family-editor;
   margin-bottom: 1em;
 
+  .cm-trailingspace {
+    background-color: $color-editor-trailing-whitespace;
+  }
+
   .cm-section {
     border: solid 1px $color-editor-comment;
     border-radius: 2px;

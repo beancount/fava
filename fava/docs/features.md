@@ -44,6 +44,9 @@ provides a convenient way to edit the source file. The cursor will jump to the
 bottom of the file by default, or if the string `FAVA-INSERT-MARKER` is found
 in the file, to the line above it.
 
+The editor supports auto-completion for account names and tags. Trailing
+whitespace is highlighted in red.
+
 ## Queries
 
 On the Query report you can execute queries like with the `bean-query`
