@@ -126,9 +126,6 @@
 
         window.editorStripTrailingWhitespace = {{ config['editor-strip-trailing-whitespace']|tojson|safe }};
         window.editorPrintMarginColumn = {{ config['editor-print-margin-column']|tojson|safe }};
-        {% if config['editor-insert-marker'] %}
-            window.editorInsertMarker = "{{ config['editor-insert-marker'] }}";
-        {% endif %}
 
         // charts
         window.interval = "{{ interval }}";

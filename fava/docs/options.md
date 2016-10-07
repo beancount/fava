@@ -113,14 +113,6 @@ If set, strip all trailing whitespace when saving in Fava's editor.
 
 ---
 
-## `editor-insert-marker`
-
-Default: Not set
-
-If present the cursor will be positioned above the specified insert marker.
-
----
-
 ## `use-external-editor`
 
 Default: `false`

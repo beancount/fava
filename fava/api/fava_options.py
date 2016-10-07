@@ -18,7 +18,6 @@ DEFAULTS = {
     'journal-show-transaction': ['cleared', 'pending'],
     'language': None,
     'interval': 'month',
-    'editor-insert-marker': None,
 }
 
 BOOL_OPTS = [
@@ -45,7 +44,6 @@ LIST_OPTS = [
 STR_OPTS = [
     'language',
     'interval',
-    'editor-insert-marker',
 ]
 
 

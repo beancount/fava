@@ -37,6 +37,13 @@ There are four filters available in Fava:
 If you select multiple filters (like *Tags* and *Time*), the subset of entries
 matching both filters will be selected.
 
+## Source Editor
+
+The editor on the [Source]({{ url_for('report', report_name='source') }}) page
+provides a convenient way to edit the source file. The cursor will jump to the
+bottom of the file by default, or if the string `FAVA-INSERT-MARKER` is found
+in the file, to the line above it.
+
 ## Queries
 
 On the Query report you can execute queriess like with the `bean-query`

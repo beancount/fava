@@ -76,18 +76,25 @@ function formatEditorContent(cm) {
     });
 }
 
+function centerCursor(editor) {
+  const top = editor.cursorCoords(true, 'local').top;
+  const height = editor.getScrollInfo().clientHeight;
+  editor.scrollTo(null, top - (height / 2));
+}
+
 function jumpToMarker(editor) {
-  if (!window.editorInsertMarker) {
-    return;
-  }
-  const cursor = editor.getSearchCursor(window.editorInsertMarker);
+  const cursor = editor.getSearchCursor('FAVA-INSERT-MARKER');
 
   if (cursor.findNext()) {
     editor.focus();
     editor.setCursor(cursor.pos.from);
     editor.execCommand('goLineUp');
+    centerCursor(editor);
+  } else {
+    editor.setCursor(editor.lastLine(), 0);
   }
 }
+
 
 module.exports.initEditor = function initEditor() {
   const rulers = [];
@@ -168,7 +175,6 @@ module.exports.initEditor = function initEditor() {
   if ($('#source-editor').length) {
     const el = document.getElementById('source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
-    jumpToMarker(editor);
 
     editor.on('keyup', (cm, event) => {
       if (!cm.state.completionActive && event.keyCode !== 13) {
@@ -178,6 +184,9 @@ module.exports.initEditor = function initEditor() {
     const line = parseInt(new URI(location.search).query(true).line, 10);
     if (line > 0) {
       editor.setCursor(line - 1, 0);
+      centerCursor(editor);
+    } else {
+      jumpToMarker(editor);
     }
 
     $('#source-editor-select').change((event) => {
