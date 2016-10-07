@@ -74,7 +74,7 @@
                         {% endif %}
                         <td><a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a></td>
                         <td class="num">
-                            {%- for position in api.inventory(account) -%}
+                            {%- for position in (api.root_account|get_or_create(account)).balance -%}
                                 {{ position.units|format_amount }}<br>
                             {% endfor -%}
                         </td>

@@ -7,7 +7,6 @@ import os
 
 from beancount import loader
 from beancount.core import compare, flags, getters, realization
-from beancount.core.interpolate import compute_entries_balance
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
@@ -345,9 +344,6 @@ class BeancountReportAPI():
             return
 
         return get_entry(last)
-
-    def inventory(self, account_name):
-        return compute_entries_balance(self.entries, prefix=account_name)
 
     def postings_by_account(self):
         all_postings = [posting
