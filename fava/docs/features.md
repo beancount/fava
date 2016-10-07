@@ -46,9 +46,9 @@ in the file, to the line above it.
 
 ## Queries
 
-On the Query report you can execute queriess like with the `bean-query`
+On the Query report you can execute queries like with the `bean-query`
 command-line tool. For an explanation of how these queries work see
-the [Beancount Query Lanugage Reference](http://furius.ca/beancount/doc/query).
+the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
 If you add `query` directives to your beancount file, there'll be a dropdown on
 the Query report to quickly select them.
@@ -62,26 +62,28 @@ and `ods`, install Fava with the `excel` feature:
 ## Up-to-date indicators
 
 Fava offers colored indicators that can help you keep your accounts up-to-date.
-They are shown everywhere by default, but only enabled for accounts that have
-the metadata `fava-uptodate-indication: "True"` set on their Open directive.
-The colors have the following meaning:
+They are shown next to accounts that have the metadata
+`fava-uptodate-indication: "True"` set on their Open directive.  The colors
+have the following meaning:
 
 - green: The last entry for this account is a balance check that passed.
 - red: The last entry is a balance check that failed.
 - yellow: The last entry is not a balance check.
-- gray: The account has not been updated in a while, as set by the
-  `uptodate-indicator-grey-lookback-days` configuration variable.
+
+In addition, a grey dot will be shown if the account has not been updated in a
+while, as configured by the `uptodate-indicator-grey-lookback-days` option.
 
 ## Displaying only relevant accounts
 
 To help display only the most relevant subset of accounts when managing a large number
-or a deep hierarchy of accounts, Fava offers several configuration variables listed
-below. The first three are self-explanatory:
+or a deep hierarchy of accounts, Fava offers the following options:
 
 - `show-closed-accounts`
 - `show-accounts-with-zero-balance`
 - `show-accounts-with-zero-transactions`
-- `collapse-accounts` takes a list of accounts that are collapsed in the initial tree view
+
+Additionally, accounts that have the metadata `fava-collapse-account` set to
+`"True"` on their Open directive will be collapsed in the account trees.
 
 ## Opening an external editor
 

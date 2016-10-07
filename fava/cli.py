@@ -28,7 +28,11 @@ from fava.util import simple_wsgi
               help='Number of functions to show in profile.')
 def main(filenames, port, host, prefix, debug, profile, profile_dir,
          profile_restriction):
-    """Start fava for FILENAMES on http://host:port."""
+    """Start Fava for FILENAMES on http://host:port.
+
+    If the `BEANCOUNT_FILE` environment variable is set, Fava will use the file
+    specified there in addition to FILENAMES.
+    """
 
     if profile_dir:  # pragma: no cover
         profile = True

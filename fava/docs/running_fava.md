@@ -5,7 +5,10 @@ available command-line options.
 $ fava --help
 Usage: fava [OPTIONS] [FILENAMES]...
 
-  Start fava for FILENAMES on http://host:port.
+  Start Fava for FILENAMES on http://host:port.
+
+  If the `BEANCOUNT_FILE` environment variable is set, Fava will use the
+  file specified there in addition to FILENAMES.
 
 Options:
   -p, --port INTEGER             The port to listen on. (default: 5000)
@@ -16,9 +19,6 @@ Options:
   --profile-restriction INTEGER  Number of functions to show in profile.
   --help                         Show this message and exit.
 ```
-
-If the `BEANCOUNT_FILE` environment variable is set, Fava will use the file
-specified there as the Beancount file.
 
 ## Examples
 
