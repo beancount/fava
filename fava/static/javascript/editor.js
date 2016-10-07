@@ -1,10 +1,4 @@
 /* global Mousetrap */
-
-// TODO:
-//
-// - soft tabs ?
-//
-//
 const URI = require('urijs');
 
 const CodeMirror = require('codemirror/lib/codemirror');
@@ -76,22 +70,22 @@ function formatEditorContent(cm) {
     });
 }
 
-function centerCursor(editor) {
-  const top = editor.cursorCoords(true, 'local').top;
-  const height = editor.getScrollInfo().clientHeight;
-  editor.scrollTo(null, top - (height / 2));
+function centerCursor(cm) {
+  const top = cm.cursorCoords(true, 'local').top;
+  const height = cm.getScrollInfo().clientHeight;
+  cm.scrollTo(null, top - (height / 2));
 }
 
-function jumpToMarker(editor) {
-  const cursor = editor.getSearchCursor('FAVA-INSERT-MARKER');
+function jumpToMarker(cm) {
+  const cursor = cm.getSearchCursor('FAVA-INSERT-MARKER');
 
   if (cursor.findNext()) {
-    editor.focus();
-    editor.setCursor(cursor.pos.from);
-    editor.execCommand('goLineUp');
-    centerCursor(editor);
+    cm.focus();
+    cm.setCursor(cursor.pos.from);
+    cm.execCommand('goLineUp');
+    centerCursor(cm);
   } else {
-    editor.setCursor(editor.lastLine(), 0);
+    cm.setCursor(cm.lastLine(), 0);
   }
 }
 
@@ -107,6 +101,7 @@ module.exports.initEditor = function initEditor() {
 
   const defaultOptions = {
     mode: 'beancount',
+    indentUnit: 4,
     lineNumbers: true,
     rulers,
     foldGutter: true,
@@ -125,6 +120,13 @@ module.exports.initEditor = function initEditor() {
       },
       'Cmd-D': (cm) => {
         formatEditorContent(cm);
+      },
+      Tab: (cm) => {
+        if (cm.somethingSelected()) {
+          cm.indentSelection('add');
+        } else {
+          cm.execCommand('insertSoftTab');
+        }
       },
     },
   };
