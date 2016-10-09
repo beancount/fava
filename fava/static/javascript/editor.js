@@ -33,7 +33,7 @@ function saveEditorContent(cm) {
   const fileName = $('#source-editor-select').val();
   $button
       .attr('disabled', 'disabled')
-      .text(`Saving to ${fileName}...`);
+      .text('Saving...');
   const url = $button.parents('form').attr('action');
   $.post(url, {
     file_path: fileName,
@@ -46,6 +46,7 @@ function saveEditorContent(cm) {
         $button
             .removeAttr('disabled')
             .text('Save');
+        cm.focus();
       }
     });
 }
