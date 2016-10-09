@@ -1,7 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'source' %}
 {% set source_files = api.source_files() %}
-{% set file_path = request.args.get('file_path', api.beancount_file_path) %}
+{% set file_path = request.args.get('file_path', config['default-file'] or api.beancount_file_path) %}
 
 {% block content %}
     {% if config['use-external-editor'] %}

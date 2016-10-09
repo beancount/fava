@@ -2,6 +2,7 @@ To customize some of Fava's behaviour, you can add custom entries like the
 following to your Beancount file.
 
 <pre><textarea class="editor-readonly">
+2016-06-14 custom "fava-option" "default-file"
 2016-06-14 custom "fava-option" "interval" "week"
 2016-04-14 custom "fava-option" "charts" "false"
 2016-04-14 custom "fava-option" "journal-show" "transaction open"
@@ -18,6 +19,14 @@ Default: Not set
 Fava currently has an English (`en`) and a German (`de`) translation. If
 this setting is not specified, Fava will try to guess the language from your
 browser settings.
+
+---
+
+## `default-file`
+
+Use this option to specify a default file for the editor to open.  This option
+takes no value, the file the custom entry is in will be used as the default.
+If this option is not specified, Fava opens the main file by default.
 
 ---
 
