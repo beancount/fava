@@ -44,15 +44,17 @@
   }
 }
 
-.charts form {
-  display: flex;
-  margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 35px;
+.charts {
+  form {
+    display: flex;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 35px;
 
-  > span,
-  > select {
-    margin-right: 10px;
+    > span,
+    > select {
+      margin-right: 10px;
+    }
   }
 }
 
@@ -94,23 +96,29 @@ svg {
     stroke-width: 2px;
   }
 
-  .axis path,
-  .axis line {
-    fill: none;
-    shape-rendering: crispEdges;
-    stroke: $color-chart-axis;
-  }
+  .axis {
+    path,
+    line {
+      fill: none;
+      shape-rendering: crispEdges;
+      stroke: $color-chart-axis;
+    }
 
-  .y.axis line {
-    stroke: $color-chart-axis;
-    stroke-dasharray: 2,2;
+    &.y {
+      line {
+        stroke: $color-chart-axis;
+        stroke-dasharray: 2, 2;
+      }
+    }
   }
 }
 
 
-.voronoi path {
-  fill: none;
-  pointer-events: all;
+.voronoi {
+  path {
+    fill: none;
+    pointer-events: all;
+  }
 }
 
 .treemap {
@@ -146,18 +154,21 @@ svg {
 .barchart {
   .group {
     cursor: pointer;
+
+    &:hover {
+      .group-box {
+        opacity: .1;
+      }
+    }
   }
 
   .group-box {
     opacity: 0;
   }
 
-  .group:hover .group-box {
-    opacity: .1;
-  }
 }
 
-[id="tooltip"] {
+[id='tooltip'] {
   background: darken($color-background, 5);
   border: 1px solid darken($color-background, 20);
   box-shadow: 0 0 5px darken($color-background, 6);
@@ -171,7 +182,7 @@ svg {
   transform: translate(-50%, -100%);
   z-index: 12;
 
-  &:before {
+  &::before {
     border: 15px solid transparent;
     border-top-color: darken($color-background, 20);
     content: '';
