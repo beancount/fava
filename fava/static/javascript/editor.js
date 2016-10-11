@@ -41,7 +41,7 @@ function saveEditorContent(cm) {
     data: {
       file_path: fileName,
       source: cm.getValue(),
-    }
+    },
   })
     .done((data) => {
       if (!data.success) {
