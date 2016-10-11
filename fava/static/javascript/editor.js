@@ -34,10 +34,14 @@ function saveEditorContent(cm) {
   $button
       .attr('disabled', 'disabled')
       .text('Saving...');
-  const url = $button.parents('form').attr('action');
-  $.post(url, {
-    file_path: fileName,
-    source: cm.getValue(),
+
+  $.ajax({
+    type: 'PUT',
+    url: $button.data('url'),
+    data: {
+      file_path: fileName,
+      source: cm.getValue(),
+    }
   })
     .done((data) => {
       if (!data.success) {

@@ -6,7 +6,7 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
     formData.append('targetFolderIndex', targetFolderIndex);
 
     $.ajax({
-      type: 'POST',
+      type: 'PUT',
       url: window.documentsUploadUrl,
       data: formData,
       contentType: false,
