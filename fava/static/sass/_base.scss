@@ -294,27 +294,29 @@ aside {
     color: $color-sidebar-links;
     display: block;
     padding: 5px 20px;
+
+    &.selected,
+    &:hover {
+      background-color: $color-sidebar-border;
+      color: $color-links;
+    }
   }
 
   li {
     display: block;
   }
 
-  .selected,
-  a:hover {
-    background-color: $color-sidebar-border;
-    color: $color-links;
-  }
-
   .error {
     background-color: $color-error;
 
-    &.selected,
-    a:hover {
-      background-color: darken($color-error, 5);
-    }
+    a {
+      color: $color-sidebar-background;
 
-    a { color: $color-sidebar-background; }
+      &.selected,
+      &:hover {
+        background-color: darken($color-error, 5);
+      }
+    }
 
     .bubble {
       background: lighten($color-error, 60);
@@ -331,14 +333,16 @@ aside {
   li {
     font-size: .95em;
     line-height: .95em;
+  }
+
+  a {
+    padding-left: 35px;
 
     &.selected,
-    a:hover {
+    &:hover {
       background-color: darken($color-sidebar-background, 15);
     }
   }
-
-  a { padding-left: 35px; }
 }
 
 article {
@@ -469,8 +473,8 @@ kbd {
     padding-right: 18px;
     position: relative;
 
-    &.sorting-asc:after,
-    &.sorting-desc:after {
+    &.sorting-asc::after,
+    &.sorting-desc::after {
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-top: 5px solid darken($color-background, 47);
@@ -481,7 +485,7 @@ kbd {
       top: 8px;
     }
 
-    &.sorting-asc:after {
+    &.sorting-asc::after {
       border-bottom: 5px solid darken($color-background, 47);
       border-top: 0;
       top: 6px;
@@ -492,11 +496,6 @@ kbd {
 ////////////////////////////////////////////////////////////////////////////////
 // View-specific and tables/////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-.halfleft table,
-.halfright table {
-  width: 100%;
-}
 
 .options {
   td {

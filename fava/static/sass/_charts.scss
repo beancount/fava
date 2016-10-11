@@ -1,5 +1,5 @@
 .chart-labels {
-  color: rgba($color-text, .2);
+  color: lighten($color-text, 40);
   font-size: 1em;
   line-height: 14px;
   margin-bottom: 20px;
@@ -8,7 +8,6 @@
   text-align: center;
 
   label {
-    color: lighten($color-text, 40);
     padding: 0 5px;
 
     &:hover {
@@ -19,7 +18,7 @@
     &.selected { color: $color-text-lighter; }
   }
 
-  label+label { border-left: 1px solid rgba($color-text, .4); }
+  label+label { border-left: 1px solid lighten($color-text, 40); }
 }
 
 .toggle-chart {
