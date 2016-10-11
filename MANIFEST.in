@@ -1,4 +1,4 @@
-include CHANGES.md LICENSE README.rst RELEASENOTES.md AUTHORS.md
+include CHANGES LICENSE README.rst AUTHORS
 
 recursive-include fava/docs *
 recursive-include fava/templates *
@@ -9,7 +9,6 @@ recursive-exclude fava/static/sass *
 recursive-exclude fava/static/node_modules *
 exclude fava/static/package.json
 exclude fava/static/webpack.config.js
-include fava/default-settings.conf
 
 # Be sure this is last
 global-exclude *.pyc .gitignore *.orig

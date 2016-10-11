@@ -11,8 +11,5 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-__url__ = "http://github.com/aumayr/fava"
-__version__ = "0.3.1-dev"
-__license__ = "MIT"
-__author__ = "Dominik Aumayr"
-__author_email__ = "dominik@aumayr.name"
+
+__version__ = '1.0-dev'
