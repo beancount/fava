@@ -121,6 +121,9 @@ def perform_global_filters():
         for name in ['account', 'from', 'interval', 'payee', 'tag', 'time']
     }
 
+    # check (and possibly reload) source file
+    g.api.changed()
+
     try:
         g.api.filter(**g.filters)
     except FilterException as exception:

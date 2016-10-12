@@ -61,7 +61,7 @@
             <h3>{{ _('Custom Links') }}</h3>
             <ul class="navigation">
                 {% for label, link in api.sidebar_links %}
-                    <li><a href="{{ link }}" data-no-update=true>{{ label }}</a></li>
+                    <li><a href="{{ link }}" data-remote=true>{{ label }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}

@@ -1,5 +1,6 @@
 /* global Mousetrap */
 const URI = require('urijs');
+const Backbone = require('backbone');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 
@@ -51,6 +52,7 @@ function saveEditorContent(cm) {
             .removeAttr('disabled')
             .text('Save');
         cm.focus();
+        Backbone.trigger('file-modified');
       }
     });
 }
