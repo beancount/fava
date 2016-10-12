@@ -1,7 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'source' %}
 {% set source_files = api.source_files() %}
-{% set file_path = request.args.get('file_path', api.beancount_file_path) %}
+{% set file_path = request.args.get('file_path', config['default-file'] or api.beancount_file_path) %}
 
 {% block content %}
     {% if config['use-external-editor'] %}
@@ -28,19 +28,19 @@
         {% endfor %}
         </div>
     {% else %}
-    <div class="source-page">
-    <form action="{{ url_for('api_source') }}" method="POST">
-        <select id="source-editor-select" name="file_path">
-            {% for source_file in source_files %}
-                <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
-            {% endfor %}
-        </select>
-        <button id="source-editor-submit" type="submit">{{ _('Save') }}</button>
-        <button id="source-editor-format" type="submit" data-url="{{ url_for('api_format_source') }}">{{ _('Format') }}</button>
+    <form class="source-form">
+        <fieldset>
+            <select id="source-editor-select" name="file_path">
+                {% for source_file in source_files %}
+                    <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
+                {% endfor %}
+            </select>
+            <button id="source-editor-submit" type="submit" data-url="{{ url_for('api_source') }}">{{ _('Save') }}</button>
+            <button id="source-editor-format" type="submit" data-url="{{ url_for('api_format_source') }}">{{ _('Format') }}</button>
+        </fieldset>
         <div id="source-editor-wrapper" class="source-editor-wrapper">
             <textarea id="source-editor" name="source" autofocus>{{ api.source(file_path) or '' }}</textarea>
         </div>
     </form>
-    </div>
     {% endif %}
 {% endblock %}

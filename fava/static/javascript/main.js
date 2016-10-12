@@ -60,6 +60,9 @@ function updatePage() {
 const Router = Backbone.Router.extend({
   initialize() {
     this.isFirstRoute = true;
+    this.listenTo(Backbone, 'file-modified', () => {
+      $('aside').load(`/${Backbone.history.fragment} aside`);
+    });
   },
   routes: {
     '*path': 'replaceArticle',
@@ -75,6 +78,7 @@ const Router = Backbone.Router.extend({
       updatePage();
       document.title = window.documentTitle;
       $('h1 strong').html(window.pageTitle);
+      $('#reload-page').addClass('hidden');
     });
   },
 });
@@ -125,8 +129,7 @@ function initRouter() {
 
   $('#reload-page').click((event) => {
     event.preventDefault();
-    Backbone.history.loadUrl(Backbone.history.fragment);
-    $('#reload-page').toggleClass('hidden', true);
+    app.replaceArticle();
   });
 
   $(document).on('submit', '#filter-form', (event) => {
@@ -153,8 +156,8 @@ function initRouter() {
 function doPoll() {
   $.get(window.changedUrl, (data) => {
     if (data.success && data.changed) {
-      $('#reload-page').toggleClass('hidden', false);
-      $('aside').load(`/${Backbone.history.fragment} aside`);
+      $('#reload-page').removeClass('hidden');
+      Backbone.trigger('file-modified');
     }
   })
     .always(() => { setTimeout(doPoll, 5000); });

@@ -111,19 +111,6 @@ def template_context():
 
 
 @app.before_request
-def csrf_protect():
-    if request.method == "POST":
-        if not request.is_xhr:
-            abort(403)
-        if request.headers.get('X-Forwarded-Host', None):
-            host = request.headers['X-Forwarded-Host']
-        else:
-            host = request.headers['Host']
-        if not request.headers.get('Origin', '').endswith(host):
-            abort(403)
-
-
-@app.before_request
 def perform_global_filters():
     if not g.api.options['operating_currency']:
         flash('No operating currency specified. '
@@ -133,6 +120,9 @@ def perform_global_filters():
         name: request.args.get(name, None)
         for name in ['account', 'from', 'interval', 'payee', 'tag', 'time']
     }
+
+    # check (and possibly reload) source file
+    g.api.changed()
 
     try:
         g.api.filter(**g.filters)
@@ -270,11 +260,11 @@ def api_changed():
     return jsonify({'success': True, 'changed': g.api.changed()})
 
 
-@app.route('/<bfile>/api/source/', methods=['GET', 'POST'])
+@app.route('/<bfile>/api/source/', methods=['GET', 'PUT'])
 def api_source():
-    if request.method == "GET":
+    if request.method == 'GET':
         return g.api.source(request.args.get('file_path', None))
-    elif request.method == "POST":
+    elif request.method == 'PUT':
         g.api.set_source(request.form['file_path'], request.form['source'])
         return jsonify({'success': True})
 
@@ -285,7 +275,7 @@ def api_format_source():
                     'payload': align_beancount(request.form['source'])})
 
 
-@app.route('/<bfile>/api/add-document/', methods=['POST'])
+@app.route('/<bfile>/api/add-document/', methods=['PUT'])
 def api_add_document():
     file = request.files['file']
     if file and len(g.api.options['documents']) > 0:

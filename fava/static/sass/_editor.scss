@@ -5,40 +5,42 @@
 @import '~codemirror/addon/fold/foldgutter.css';
 @import '~codemirror/addon/hint/show-hint.css';
 
-.source-page {
-  margin: -1.5em;
+.source-form {
+  background: lighten($color-sidebar-background, 2);
+  bottom: 0;
+  left: $aside-width;
+  position: fixed;
+  right: 0;
+  top: $header-height;
 
-  form {
-    background: lighten($color-sidebar-background, 2);
-    padding: 5px 10px;
-
-    > select {
-      margin: 5px 10px;
-    }
-
-    .source-editor-wrapper {
-      bottom: 0;
-      left: $aside-width;
-      position: fixed;
-      right: 0;
-      top: $header-height + 42px;
-    }
-
-    .CodeMirror,
-    textarea {
-      border: 0;
-      height: 100%;
-      margin: 0;
-      width: 100%;
-    }
-
-    .CodeMirror-lines {
-      border-top: 1px solid darken($color-sidebar-background, 10);
-    }
+  > select {
+    margin: 5px 10px;
   }
 
-  div#source-readonly {
-    padding: 1.5em;
+  fieldset {
+    border: 0;
+    margin: 0;
+    padding: 5px 10px;
+  }
+
+  .source-editor-wrapper {
+    bottom: 0;
+    left: $aside-width;
+    position: fixed;
+    right: 0;
+    top: $header-height + 42px;
+  }
+
+  .CodeMirror,
+  textarea {
+    border: 0;
+    height: 100%;
+    margin: 0;
+    width: 100%;
+  }
+
+  .CodeMirror-lines {
+    border-top: 1px solid darken($color-sidebar-background, 10);
   }
 }
 

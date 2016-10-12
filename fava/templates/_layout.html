@@ -44,8 +44,8 @@
             <div class="beancount-files">
                 <ul>
                 {% for file_slug, file_api in config['APIS'].items() %}
-                    <li{% if file_slug == g.beancount_file_slug %} class="active"{% endif %}>
-                    <a href="{{ url_for('report', report_name='income_statement', bfile=file_slug) }}" data-remote=true>{{ file_api.title or 'fava' }}</a>
+                    <li>
+                    <a{% if file_slug == g.beancount_file_slug %} class="active"{% endif %} href="{{ url_for('report', report_name='income_statement', bfile=file_slug) }}" data-remote=true>{{ file_api.title or 'fava' }}</a>
                     </li>
                 {% endfor %}
                 </ul>
@@ -53,15 +53,15 @@
         </h1>
         {% include "_entry_filters.html" %}
     </header>
-    <button type="button" id="aside-button" class="aside-button">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-    </button>
     <aside>
+        <button type="button" id="aside-button" class="aside-button">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+        </button>
         {% if api.sidebar_links %}
             <h3>{{ _('Custom Links') }}</h3>
             <ul class="navigation">
                 {% for label, link in api.sidebar_links %}
-                    <li><a href="{{ link }}" data-no-update=true>{{ label }}</a></li>
+                    <li><a href="{{ link }}" data-remote=true>{{ label }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -70,11 +70,11 @@
             {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
             <ul class="navigation">
             {% for id in menuitems %}
-                <li{% if id == active_page %} class="selected"{% endif %}><a href="{{ url_for('report', report_name=id) }}">{{ all_pages[id].0|e }}</a>
+                <li><a{% if id == active_page %} class="selected"{% endif %} href="{{ url_for('report', report_name=id) }}">{{ all_pages[id].0|e }}</a>
                 {% if id == "query" and user_queries|length > 0 %}
                     <ul class="submenu">
                     {% for query in user_queries %}
-                        <li{% if query.name == name %} class="selected"{% endif %}><a href="{{ url_for('query', query_string=query.query_string, name=query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
+                        <li><a{% if query.name == name %} class="selected"{% endif %} href="{{ url_for('query', query_string=query.query_string, name=query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
                     {% endfor %}
                     </ul>
                 {% endif %}

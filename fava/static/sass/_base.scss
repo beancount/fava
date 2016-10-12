@@ -100,6 +100,7 @@ h5 {
 }
 
 h2 { font-size: 1.2857em; }
+
 h3 {
   font-size: 1.1429em;
 
@@ -109,8 +110,11 @@ h3 {
     padding: 4px 8px;
   }
 }
+
 h4,
-h5 { font-size: 1em; }
+h5 {
+  font-size: 1em;
+}
 
 b,
 strong {
@@ -234,78 +238,9 @@ header {
   top: 0;
   width: 100%;
   z-index: 10;
-
-  form {
-    display: flex;
-    margin: 0;
-  }
 }
 
-h1 {
-  align-items: center;
-  color: $color-header-text;
-  display: block;
-  flex: 1;
-  font-size: 16px;
-  font-weight: normal;
-  line-height: 1;
-  margin: 0;
-  max-height: $header-height;
-  overflow: hidden;
-  padding: ($header-height - 16px) / 2 10px;
-
-  strong {
-    margin-left: 10px;
-
-    &:before {
-      color: rgba($color-header-text, .5);
-      content: '›';
-      font-weight: normal;
-      margin-right: 10px;
-    }
-  }
-
-  .reload {
-    color: $color-reload-active;
-    margin-left: 5px;
-
-    &:link,
-    &:visited {
-      color: $color-reload-active;
-    }
-  }
-
-  .droptarget {
-    margin-left: -.6em;
-    padding: .6em;
-  }
-
-  a:link,
-  a:visited {
-    color: darken($color-header-text, 15);
-  }
-
-  a:hover {
-    color: $color-header-text;
-  }
-
-  .last-activity {
-    color: darken($color-header-text, 15);
-    display: inline-block;
-    font-size: 12px;
-    font-weight: normal;
-    margin-left: 10px;
-  }
-
-  .status-indicator {
-    border-radius: 10px;
-    height: 10px;
-    margin: 0 0 0 10px;
-    width: 10px;
-
-    &.status-gray { margin-left: 0; }
-  }
-}
+@import 'header';
 
 .aside-button {
   @include smooth-transitions;
@@ -359,27 +294,29 @@ aside {
     color: $color-sidebar-links;
     display: block;
     padding: 5px 20px;
+
+    &.selected,
+    &:hover {
+      background-color: $color-sidebar-border;
+      color: $color-links;
+    }
   }
 
   li {
     display: block;
   }
 
-  .selected,
-  a:hover {
-    background-color: $color-sidebar-border;
-    color: $color-links;
-  }
-
   .error {
     background-color: $color-error;
 
-    &.selected,
-    a:hover {
-      background-color: darken($color-error, 5);
-    }
+    a {
+      color: $color-sidebar-background;
 
-    a { color: $color-sidebar-background; }
+      &.selected,
+      &:hover {
+        background-color: darken($color-error, 5);
+      }
+    }
 
     .bubble {
       background: lighten($color-error, 60);
@@ -396,14 +333,16 @@ aside {
   li {
     font-size: .95em;
     line-height: .95em;
+  }
+
+  a {
+    padding-left: 35px;
 
     &.selected,
-    a:hover {
+    &:hover {
       background-color: darken($color-sidebar-background, 15);
     }
   }
-
-  a { padding-left: 35px; }
 }
 
 article {
@@ -471,7 +410,6 @@ kbd {
 @import 'overlay';
 @import 'journal-table';
 @import 'tree-table';
-@import 'filter';
 @import 'help';
 @import 'query';
 @import 'editor';
@@ -535,8 +473,8 @@ kbd {
     padding-right: 18px;
     position: relative;
 
-    &.sorting-asc:after,
-    &.sorting-desc:after {
+    &.sorting-asc::after,
+    &.sorting-desc::after {
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-top: 5px solid darken($color-background, 47);
@@ -547,7 +485,7 @@ kbd {
       top: 8px;
     }
 
-    &.sorting-asc:after {
+    &.sorting-asc::after {
       border-bottom: 5px solid darken($color-background, 47);
       border-top: 0;
       top: 6px;
@@ -558,11 +496,6 @@ kbd {
 ////////////////////////////////////////////////////////////////////////////////
 // View-specific and tables/////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-
-.halfleft table,
-.halfright table {
-  width: 100%;
-}
 
 .options {
   td {

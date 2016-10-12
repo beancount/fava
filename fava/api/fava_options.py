@@ -3,6 +3,7 @@ from collections import namedtuple
 OptionError = namedtuple('OptionError', 'source message entry')
 
 DEFAULTS = {
+    'default-file': None,
     'account-journal-include-children': True,
     'charts': True,
     'use-external-editor': False,
@@ -47,10 +48,13 @@ STR_OPTS = [
 
 def _parse_option_entry(entry):
     key = entry.values[0].value
-    value = entry.values[1].value
-
     assert key in DEFAULTS.keys()
-    assert isinstance(value, str)
+
+    if key == 'default-file':
+        value = entry.meta['filename']
+    else:
+        value = entry.values[1].value
+        assert isinstance(value, str)
 
     if key in BOOL_OPTS:
         value = value.lower() == 'true'

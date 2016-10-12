@@ -1,0 +1,204 @@
+h1 {
+  align-items: center;
+  color: $color-header-text;
+  display: block;
+  flex: 1;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 1;
+  margin: 0;
+  max-height: $header-height;
+  overflow: hidden;
+  padding: ($header-height - 16px) / 2 10px;
+
+  strong {
+    margin-left: 10px;
+
+    &::before {
+      color: rgba($color-header-text, .5);
+      content: '›';
+      font-weight: normal;
+      margin-right: 10px;
+    }
+  }
+
+  .reload {
+    color: $color-reload-active;
+    margin-left: 5px;
+
+    &:link,
+    &:visited {
+      color: $color-reload-active;
+    }
+  }
+
+  .droptarget {
+    margin-left: -.6em;
+    padding: .6em;
+  }
+
+  a {
+    &:link,
+    &:visited {
+      color: darken($color-header-text, 15);
+    }
+
+    &:hover {
+      color: $color-header-text;
+    }
+  }
+
+  .last-activity {
+    color: darken($color-header-text, 15);
+    display: inline-block;
+    font-size: 12px;
+    font-weight: normal;
+    margin-left: 10px;
+  }
+
+  .status-indicator {
+    border-radius: 10px;
+    height: 10px;
+    margin: 0 0 0 10px;
+    width: 10px;
+
+    &.status-gray { margin-left: 0; }
+  }
+
+  &:hover {
+    .beancount-files {
+      display: block;
+    }
+  }
+}
+
+.beancount-files {
+  background-color: $color-background;
+  border: 1px solid darken($color-background, 20);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  box-shadow: 0 3px 6px rgba($color-text, .2);
+  display: none;
+  left: 19px;
+  position: absolute;
+  top: $header-height;
+  width: 20em;
+  z-index: 10;
+
+  ul {
+    margin-bottom: 0;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+
+  a {
+    color: $color-links;
+    display: block;
+    padding: 8px 12px 8px 28px;
+
+    &.active,
+    &:hover {
+      background-color: $color-links;
+      color: $color-background;
+    }
+
+    &.active {
+      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=') no-repeat 9px center;
+    }
+  }
+}
+
+// Filters
+@import '~awesomplete/awesomplete.css';
+
+.filter-form {
+  color: $color-text;
+  display: flex;
+  margin: 0;
+
+  > span {
+    position: relative;
+  }
+
+  input {
+    background: $color-background;
+    border: 0;
+    height: 36px;
+    line-height: 36px;
+    margin-right: 4px;
+    max-width: 15rem;
+    padding: 0 25px 0 10px;
+
+    &[type='text'] {
+      @include placeholder {
+        color: lighten($color-header, 50);
+        opacity: 1;
+      }
+      outline: none;
+
+      &:focus {
+        @include placeholder {
+          color: lighten($color-text, 50);
+        }
+        background: $color-background;
+        color: $color-text;
+      }
+    }
+
+    // remove dropdown triangle
+    &::-webkit-calendar-picker-indicator {
+      display: none;
+    }
+  }
+
+  [type='submit'] {
+    background: lighten($color-header, 5);
+  }
+
+  .empty {
+    input {
+      background: lighten($color-header, 10);
+    }
+  }
+
+  .close {
+    background: transparent;
+    border: 0;
+    display: none;
+    height: 18px;
+    padding: 0;
+    position: absolute;
+    right: 14px;
+    top: 10px;
+    width: 18px;
+
+    .close-icon {
+      fill: lighten($color-text, 50);
+      position: absolute;
+      right: -5px;
+      top: -1px;
+    }
+  }
+
+  .awesomplete {
+    ul {
+      border-radius: 0;
+      opacity: 1;
+      padding: 2px 0;
+      transition: none;
+    }
+
+    li {
+      line-height: 1.5em;
+      min-width: 8rem;
+      padding: 0 10px;
+      position: relative;
+      white-space: nowrap;
+
+      &:hover {
+        background: $color-links;
+        color: $color-background;
+      }
+    }
+  }
+}

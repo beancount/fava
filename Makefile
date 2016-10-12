@@ -7,7 +7,6 @@ build-js:
 
 clean:
 	rm -rf .tox
-	rm -rf beancount_fava.egg-info
 	rm -rf build dist
 	rm -rf fava/static/node_modules
 

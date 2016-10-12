@@ -767,7 +767,7 @@ function hierarchyContainer() {
 
     if (mode === 'treemap' && (mode !== currentMode || currency !== currentCurrency)) {
       currentChart = treeMapChart()
-        .tooltipText(d => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`); // eslint-disable-line max-len
+        .tooltipText(d => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`);
 
       canvas
           .html('')
@@ -839,7 +839,7 @@ module.exports.initCharts = function initCharts() {
     switch (chart.type) {
       case 'balances': {
         const linechart = lineChart()
-          .tooltipText(d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`); // eslint-disable-line max-len
+          .tooltipText(d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`);
 
         const series = window.commodities
             .map(c => ({
@@ -863,7 +863,7 @@ module.exports.initCharts = function initCharts() {
       }
       case 'commodities': {
         const linechart = lineChart()
-          .tooltipText(d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`); // eslint-disable-line max-len
+          .tooltipText(d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`);
 
         const series = [{
           name: chart.label,

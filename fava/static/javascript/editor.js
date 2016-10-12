@@ -1,5 +1,6 @@
 /* global Mousetrap */
 const URI = require('urijs');
+const Backbone = require('backbone');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 
@@ -33,11 +34,15 @@ function saveEditorContent(cm) {
   const fileName = $('#source-editor-select').val();
   $button
       .attr('disabled', 'disabled')
-      .text(`Saving to ${fileName}...`);
-  const url = $button.parents('form').attr('action');
-  $.post(url, {
-    file_path: fileName,
-    source: cm.getValue(),
+      .text('Saving...');
+
+  $.ajax({
+    type: 'PUT',
+    url: $button.data('url'),
+    data: {
+      file_path: fileName,
+      source: cm.getValue(),
+    },
   })
     .done((data) => {
       if (!data.success) {
@@ -46,6 +51,8 @@ function saveEditorContent(cm) {
         $button
             .removeAttr('disabled')
             .text('Save');
+        cm.focus();
+        Backbone.trigger('file-modified');
       }
     });
 }
