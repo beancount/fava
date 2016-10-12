@@ -1,4 +1,4 @@
-const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}\.$/;
+const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 module.exports.initDocumentsUpload = function initDocumentsUpload() {
   function uploadDocuments(formData, filename, targetFolderIndex) {
@@ -44,7 +44,7 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
 
           let filename = files[i].name;
 
-          if (filename.length < 11 || filenameRegex.test(filename.substring(0, 11)) === false) {
+          if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
             filename = `${today.toISOString().substring(0, 10)}.${filename}`;
           }
 
