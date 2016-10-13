@@ -40,37 +40,39 @@ body {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+}
 
-  tbody {
-    tr:nth-child(2n) {
+tbody {
+  tr {
+    &:nth-child(2n) {
       background: darken($color-background, 2);
     }
-
-    td {
-      border: 1px solid darken($color-background, 10);
-    }
   }
 
-  td,
-  th {
-    padding: 3px 6px;
-    white-space: nowrap;
-
-    &.num {
-      color: $color-text;
-      font-family: $font-family-monospaced;
-      text-align: right;
-      width: 7rem;
-    }
+  td {
+    border: 1px solid darken($color-background, 10);
   }
+}
 
-  thead th,
-  tfoot td {
-    background: $color-treetable-header-bg;
-    border: 1px solid darken($color-background, 15);
-    color: lighten($color-text, 30);
-    font-weight: 500;
+td,
+th {
+  padding: 3px 6px;
+  white-space: nowrap;
+
+  &.num {
+    color: $color-text;
+    font-family: $font-family-monospaced;
+    text-align: right;
+    width: 7rem;
   }
+}
+
+thead th,
+tfoot td {
+  background: $color-treetable-header-bg;
+  border: 1px solid darken($color-background, 15);
+  color: lighten($color-text, 30);
+  font-weight: 500;
 }
 
 p,
@@ -220,9 +222,11 @@ $header-height: 50px;
 $aside-width: 160px;
 $safe-two-column: $min-width * 2 + $aside-width;
 
+$transitions: all .2s ease-out;
+
 body {
-  @include smooth-transitions;
   padding: $header-height 0 0 $aside-width;
+  transition: $transitions;
 }
 
 header {
@@ -243,7 +247,6 @@ header {
 @import 'header';
 
 .aside-button {
-  @include smooth-transitions;
   background-color: $color-sidebar-background;
   border-color: $color-sidebar-border;
   border-style: solid;
@@ -253,6 +256,7 @@ header {
   padding: 4px;
   position: fixed;
   top: $header-height;
+  transition: $transitions;
   z-index: 1;
 
   &.active {
@@ -262,7 +266,6 @@ header {
 
 aside {
   @include scrollbar(.5em, darken($color-sidebar-background, 30), transparent);
-  @include smooth-transitions;
   background-color: $color-sidebar-background;
   border-right: 1px solid $color-sidebar-border;
   bottom: 0;
@@ -274,6 +277,7 @@ aside {
   padding-top: 1em;
   position: fixed;
   top: $header-height;
+  transition: $transitions;
   width: $aside-width;
   z-index: 9;
 
@@ -472,24 +476,28 @@ kbd {
     cursor: pointer;
     padding-right: 18px;
     position: relative;
+  }
 
-    &.sorting-asc::after,
-    &.sorting-desc::after {
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid darken($color-background, 47);
-      content: '';
-      display: block;
-      position: absolute;
-      right: 4px;
-      top: 8px;
-    }
+  %sorting-triangle {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    content: '';
+    display: block;
+    position: absolute;
+    right: 4px;
+    top: 8px;
+  }
 
-    &.sorting-asc::after {
-      border-bottom: 5px solid darken($color-background, 47);
-      border-top: 0;
-      top: 6px;
-    }
+  &.sorting-desc::after {
+    @extend %sorting-triangle;
+    border-top: 5px solid darken($color-background, 47);
+    top: 8px;
+  }
+
+  &.sorting-asc::after {
+    @extend %sorting-triangle;
+    border-bottom: 5px solid darken($color-background, 47);
+    top: 6px;
   }
 }
 

@@ -814,13 +814,11 @@ function hierarchyContainer() {
 
 module.exports.initCharts = function initCharts() {
   let currentChart;
+  tooltip = d3.select('#tooltip');
   container = d3.select('#chart-container');
   container.html('');
   const labels = d3.select('#chart-labels');
   charts = {};
-  if (!tooltip) {
-    tooltip = d3.select('body').append('div').attr('id', 'tooltip');
-  }
 
   function chartContainer(id, label) {
     const svg = container.append('svg')

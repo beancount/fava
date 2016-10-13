@@ -167,7 +167,7 @@ svg {
 
 }
 
-[id='tooltip'] {
+.tooltip {
   background: darken($color-background, 5);
   border: 1px solid darken($color-background, 20);
   box-shadow: 0 0 5px darken($color-background, 6);

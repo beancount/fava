@@ -26,13 +26,3 @@
     scrollbar-track-color: $secondary;
   }
 }
-
-$transitions: all .2s ease-out;
-
-@mixin smooth-transitions {
-  -webkit-transition: $transitions;
-  -moz-transition: $transitions;
-  -ms-transition: $transitions;
-  -o-transition: $transitions;
-  transition: $transitions;
-}
