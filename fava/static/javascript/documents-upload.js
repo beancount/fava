@@ -68,8 +68,8 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
     }
 
     // upload files on submit
-    $('#document-upload-submit').one('click', (event) => {
-      event.preventDefault();
+    $('#document-upload-submit').one('click', (e) => {
+      e.preventDefault();
 
       $('#document-names input').each((index, element) => {
         const formData = new FormData();
@@ -87,7 +87,7 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
     if (folders.length > 1 || changedFilename) {
       $('#documents-upload').addClass('shown');
     } else {
-      $('#document-upload-submit').trigger('click')
+      $('#document-upload-submit').trigger('click');
     }
   });
 };
