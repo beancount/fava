@@ -17,17 +17,21 @@ function initPage() {
   filters.init();
   keyboardShortcuts.init();
 
-  $('.overlay-wrapper').click((e) => {
-    e.preventDefault();
-    if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close-overlay')) {
+  $('.overlay-wrapper').click((event) => {
+    event.preventDefault();
+    if ($(event.target).hasClass('overlay-wrapper') || $(event.target).hasClass('close-overlay')) {
       $('.overlay-wrapper').removeClass('shown');
     }
   });
 
-  $('#aside-button').click((e) => {
-    e.preventDefault();
+  $('#aside-button').click((event) => {
+    event.preventDefault();
     $('aside').toggleClass('active');
     $('#aside-button').toggleClass('active');
+  });
+
+  $('#notifications').on('click', 'li', (event) => {
+    $(event.currentTarget).remove();
   });
 }
 
@@ -55,6 +59,15 @@ function updatePage() {
     documentsUpload.initDocumentsUpload();
   }
 }
+
+// Notifications
+Backbone.on('info', (msg) => {
+  $('#notifications').append(`<li>${msg}</li>`);
+});
+
+Backbone.on('error', (msg) => {
+  $('#notifications').append(`<li class="error">${msg}</li>`);
+});
 
 const Router = Backbone.Router.extend({
   initialize() {

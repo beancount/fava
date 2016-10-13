@@ -46,7 +46,7 @@ function saveEditorContent(cm) {
   })
     .done((data) => {
       if (!data.success) {
-        alert(`Writing to\n\n\t${fileName}\n\nwas not successful.`);
+        Backbone.trigger('error', `Saving ${fileName} failed.`);
       } else {
         $button
             .removeAttr('disabled')
@@ -71,7 +71,7 @@ function formatEditorContent(cm) {
         cm.setValue(data.payload);
         cm.scrollTo(null, scrollPosition);
       } else {
-        alert('There was an error formatting the file with bean-format.');
+        Backbone.trigger('error', 'Formatting the file with bean-format failed.');
       }
       $button.removeAttr('disabled');
     });

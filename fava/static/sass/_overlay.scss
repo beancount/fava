@@ -65,3 +65,23 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     margin-bottom: .5em;
   }
 }
+
+.notifications {
+  position: fixed;
+  right: 10px;
+  top: $header-height + 10px;
+  width: 400px;
+
+  li {
+    background: $color-notification-info;
+    color: $color-notification;
+    display: block;
+    margin-bottom: .5em;
+    padding: 5px 10px;
+    width: 100%;
+  }
+
+  .error {
+    background: $color-notification-error;
+  }
+}

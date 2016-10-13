@@ -1,3 +1,5 @@
+const Backbone = require('backbone');
+
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 function uploadDocument(formData) {
@@ -14,10 +16,10 @@ function uploadDocument(formData) {
     contentType: false,
     processData: false,
     success(data) {
-      alert(data);
+      Backbone.trigger('info', data);
     },
     error(data) {
-      alert(`Error while uploading:\n\n${data.responseText}`);
+      Backbone.trigger('error', `Upload error: ${data.responseText}`);
     },
   });
 }
@@ -41,7 +43,7 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
 
     const folders = $('#document-upload-folder option');
     if (!folders.length) {
-      alert('You need to set the "documents" Beancount option to enable file uploads.');
+      Backbone.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
       return;
     }
 

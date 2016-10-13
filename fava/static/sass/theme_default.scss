@@ -72,6 +72,10 @@ $color-status-yellow: #edd42f;
 $color-status-green: #007f41;
 $color-status-gray: #aaa;
 
+$color-notification: #fff;
+$color-notification-info: rgba($color-status-green, .7);
+$color-notification-error: rgba($color-error, .7);
+
 $color-journalentry-close: #888;
 $color-journalentry-pending: #f8a;
 $color-journalentry-open: #e8e8e8;

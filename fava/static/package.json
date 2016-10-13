@@ -5,7 +5,7 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack --watch",
-    "lint": "eslint javascript --ext .js --max-warnings 5 && sass-lint -v"
+    "lint": "eslint javascript --ext .js && sass-lint -v"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",
