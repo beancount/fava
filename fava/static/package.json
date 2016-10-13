@@ -38,7 +38,6 @@
     "d3-scale-chromatic": "^1.0.2",
     "fuzzyjs": "^2.1.2",
     "jquery": "^3.1.0",
-    "jquery-dragster": "github:catmanjan/jquery-dragster",
     "jquery-stupid-table": "github:medsabir/Stupid-Table-Plugin#feat-npm-publish",
     "mousetrap": "^1.5.3",
     "normalize.css": "^4.1.1",

@@ -1,25 +1,31 @@
 // Overlays
 
+$overlay-wrapper-background: rgba(0, 0, 0, .5);
+
 .overlay-wrapper {
-  background: rgba(0, 0, 0, .5);
+  align-items: center;
+  background: $overlay-wrapper-background;
   bottom: 0;
   cursor: pointer;
   display: none;
+  justify-content: center;
   left: 0;
   position: fixed;
   right: 0;
-  text-align: center;
   top: 0;
   z-index: 99;
 
+  &.shown {
+    display: flex;
+  }
+
   .overlay {
-    @extend %clearfix;
     background: $color-background;
-    box-shadow: 0 0 20px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 20px lighten($overlay-wrapper-background, 50);
     cursor: auto;
-    margin: auto;
+    height: 100%;
+    overflow: scroll;
     padding: 20px;
-    text-align: left;
     width: 800px;
 
     strong {
@@ -30,21 +36,6 @@
     .close-overlay {
       color: $color-text-lighter;
       float: right;
-    }
-  }
-
-  &#documents-upload {
-    label {
-      display: inline-block;
-      margin-bottom: 12px;
-      width: 180px;
-    }
-
-    input#document-name {
-      font-family: $font-family;
-      font-size: 13px;
-      padding: 1px 3px;
-      width: 576px;
     }
   }
 
@@ -60,5 +51,17 @@
       line-height: 2em;
     }
   }
+}
 
+.documents-upload {
+  input {
+    margin-bottom: .5em;
+    padding: 4px 8px;
+    width: 100%;
+  }
+
+  label {
+    display: inline-block;
+    margin-bottom: .5em;
+  }
 }

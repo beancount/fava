@@ -1,90 +1,78 @@
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
+function uploadDocument(formData) {
+  const documentFolderIndex = $('#document-upload-folder').val();
+  const filename = $('#document-name').val();
+
+  formData.append('filename', filename);
+  formData.append('targetFolderIndex', documentFolderIndex);
+
+  $.ajax({
+    type: 'PUT',
+    url: $('#document-upload-submit').data('url'),
+    data: formData,
+    contentType: false,
+    processData: false,
+    success(data) {
+      alert(data);
+    },
+    error(data) {
+      alert(`Error while uploading:\n\n${data.responseText}`);
+    },
+  });
+}
+
+// File uploads via Drag and Drop on elements with class "droptarget" and
+// attribute "data-account-name"
 module.exports.initDocumentsUpload = function initDocumentsUpload() {
-  function uploadDocuments(formData, filename, targetFolderIndex) {
-    formData.append('filename', filename);
-    formData.append('targetFolderIndex', targetFolderIndex);
+  $('.droptarget').on('dragenter dragover', (event) => {
+    $(event.currentTarget).addClass('dragover');
+    event.preventDefault();
+  });
 
-    $.ajax({
-      type: 'PUT',
-      url: window.documentsUploadUrl,
-      data: formData,
-      contentType: false,
-      processData: false,
-      success(data) {
-        alert(data);
-      },
-      error(data) {
-        alert(`Error while uploading:\n\n${data.responseText}`);
-      },
-    });
-  }
+  $('.droptarget').on('dragleave', (event) => {
+    $(event.currentTarget).removeClass('dragover');
+    event.preventDefault();
+  });
 
-  // File uploads via Drag and Drop on elements with class "droptarget" and
-  // attribute "data-account-name"
-  if (window.documentsFolders.length > 0) {
-    $('.droptarget').bind({
-      dragenter(e) {
-        e.stopPropagation();
+  $('.droptarget').on('drop', (event) => {
+    $(event.currentTarget).removeClass('dragover');
+    event.preventDefault();
+
+    const folders = $('#document-upload-folder option');
+    if (!folders.length) {
+      alert('You need to set the "documents" Beancount option to enable file uploads.');
+      return;
+    }
+
+    const files = event.originalEvent.dataTransfer.files;
+    const now = new Date();
+
+    for (let i = 0; i < files.length; i += 1) {
+      const formData = new FormData();
+      const file = files[i];
+      formData.append('file', file);
+      formData.append('account_name', $(event.currentTarget).data('account-name'));
+
+      let filename = file.name;
+
+      if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
+        filename = `${now.toISOString().substring(0, 10)} ${filename}`;
+      }
+
+      $('#document-name').val(filename);
+
+      $('#document-upload-submit').click((e) => {
         e.preventDefault();
-      },
-      dragover(e) {
-        e.stopPropagation();
-        e.preventDefault();
-      },
-      drop(e) {
-        e.preventDefault();
-        const files = e.originalEvent.dataTransfer.files;
-        const today = new Date();
+        uploadDocument(formData);
+        $('#documents-upload').removeClass('shown');
+      });
 
-        for (let i = 0; i < files.length; i += 1) {
-          const formData = new FormData();
-          formData.append('file', files[i]);
-          formData.append('account_name', $(this).attr('data-account-name'));
-
-          let filename = files[i].name;
-
-          if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
-            filename = `${today.toISOString().substring(0, 10)}.${filename}`;
-          }
-
-          $('#documents-upload input#document-name').val(filename);
-          $('#documents-upload input[type="submit"]').click((event) => {
-            event.preventDefault();
-            const documentFolderIndex = $('#documents-upload select#document-upload-folder').val();
-            uploadDocuments(formData, filename, documentFolderIndex);
-            $('.overlay-wrapper').hide();
-          });
-
-          if (window.documentsFolders.length <= 1) {
-            $('#documents-upload select#document-upload-folder').hide();
-            $('#documents-upload label#label-documents-upload-folder').hide();
-          }
-
-          if (filename === files[i].name) {
-            $('#documents-upload input#document-name').hide();
-            $('#documents-upload label#label-document-name').hide();
-          }
-
-          if (window.documentsFolders.length > 1 || filename !== files[i].name) {
-            $('#documents-upload').show();
-          } else {
-            uploadDocuments(formData, filename, 0);
-          }
-        }
-      },
-    });
-  }
-
-  $('.droptarget').dragster({
-    enter() {
-      $(this).addClass('dragover');
-    },
-    leave() {
-      $(this).removeClass('dragover');
-    },
-    drop() {
-      $(this).removeClass('dragover');
-    },
+      if (folders.length > 1 || filename !== file.name) {
+        $('#documents-upload').addClass('shown');
+      } else {
+        uploadDocument(formData);
+      }
+    }
   });
 };

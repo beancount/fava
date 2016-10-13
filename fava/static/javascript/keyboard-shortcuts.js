@@ -4,10 +4,10 @@ require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 module.exports.init = function init() {
   Mousetrap.bind({
     '?': () => {
-      $('#keyboard-shortcuts').show();
+      $('#keyboard-shortcuts').addClass('shown');
     },
     esc() {
-      $('.overlay-wrapper').hide();
+      $('.overlay-wrapper').removeClass('shown');
     },
   }, 'keyup');
 

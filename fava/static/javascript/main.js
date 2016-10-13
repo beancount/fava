@@ -1,5 +1,4 @@
 require('jquery-stupid-table/stupidtable');
-require('jquery-dragster');
 const Backbone = require('backbone');
 const URI = require('urijs');
 
@@ -21,7 +20,7 @@ function initPage() {
   $('.overlay-wrapper').click((e) => {
     e.preventDefault();
     if ($(e.target).hasClass('overlay-wrapper') || $(e.target).hasClass('close-overlay')) {
-      $('.overlay-wrapper').hide();
+      $('.overlay-wrapper').removeClass('shown');
     }
   });
 

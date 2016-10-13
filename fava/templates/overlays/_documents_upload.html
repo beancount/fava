@@ -1,18 +1,18 @@
-<div id="documents-upload" class="overlay-wrapper">
+<div id="documents-upload" class="documents-upload overlay-wrapper">
     <div class="overlay">
         <a href="#" class="close-overlay">(close)</a>
-        <h2>Document upload</h2>
-        <form action="{{ url_for('api_add_document') }}" method="POST">
-            <label for="document-name" id="label-document-name">Document name:</label>
+        <form>
+            <h3>Upload file:</h3>
             <input type="text" name="document-name" id="document-name">
-            <label for="documents-upload-folder" id="label-documents-upload-folder">Document upload base folder:</label>
+            <label>Documents folder
             <select name="document-upload-folder" id="document-upload-folder">
-                {% for document in api.options['documents'] %}
-                    <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ document }}</option>
-                {% endfor %}
+            {% for folder in api.options['documents'] %}
+                <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ folder }}</option>
+            {% endfor %}
             </select>
+            </label>
             <br>
-            <input type="submit" value="Upload">
+            <button type="submit" id="document-upload-submit" data-url="{{ url_for('api_add_document') }}">Upload</button>
         </form>
     </div>
 </div>
