@@ -187,6 +187,12 @@ pre {
   }
 }
 
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 5px 10px;
+}
+
 button {
   background-color: $color-header;
   border: 0;

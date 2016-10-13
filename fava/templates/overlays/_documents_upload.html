@@ -2,8 +2,8 @@
     <div class="overlay">
         <a href="#" class="close-overlay">(close)</a>
         <form>
-            <h3>Upload file:</h3>
-            <input type="text" name="document-name" id="document-name">
+            <h3>Upload file(s):</h3>
+            <fieldset id="document-names"></fieldset>
             <label>Documents folder
             <select name="document-upload-folder" id="document-upload-folder">
             {% for folder in api.options['documents'] %}

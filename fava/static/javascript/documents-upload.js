@@ -2,9 +2,8 @@ const Backbone = require('backbone');
 
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
-function uploadDocument(formData) {
+function uploadDocument(formData, filename) {
   const documentFolderIndex = $('#document-upload-folder').val();
-  const filename = $('#document-name').val();
 
   formData.append('filename', filename);
   formData.append('targetFolderIndex', documentFolderIndex);
@@ -16,10 +15,14 @@ function uploadDocument(formData) {
     contentType: false,
     processData: false,
     success(data) {
-      Backbone.trigger('info', data);
+      if (data.success) {
+        Backbone.trigger('info', data.message);
+      } else {
+        Backbone.trigger('error', `Upload error: ${data.error}`);
+      }
     },
-    error(data) {
-      Backbone.trigger('error', `Upload error: ${data.responseText}`);
+    error() {
+      Backbone.trigger('error', 'Unknown upload error');
     },
   });
 }
@@ -41,40 +44,50 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
     $(event.currentTarget).removeClass('dragover');
     event.preventDefault();
 
+    const accountName = $(event.currentTarget).data('account-name');
     const folders = $('#document-upload-folder option');
+    const files = event.originalEvent.dataTransfer.files;
+    const now = new Date();
+    let changedFilename = false;
+
     if (!folders.length) {
       Backbone.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
       return;
     }
 
-    const files = event.originalEvent.dataTransfer.files;
-    const now = new Date();
-
+    // add input elements for files
     for (let i = 0; i < files.length; i += 1) {
-      const formData = new FormData();
-      const file = files[i];
-      formData.append('file', file);
-      formData.append('account_name', $(event.currentTarget).data('account-name'));
-
-      let filename = file.name;
+      let filename = files[i].name;
 
       if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
         filename = `${now.toISOString().substring(0, 10)} ${filename}`;
+        changedFilename = true;
       }
 
-      $('#document-name').val(filename);
+      $('#document-names').append(`<input type="text" value="${filename}" data-index="${i}">`);
+    }
 
-      $('#document-upload-submit').click((e) => {
-        e.preventDefault();
-        uploadDocument(formData);
-        $('#documents-upload').removeClass('shown');
+    // upload files on submit
+    $('#document-upload-submit').one('click', (event) => {
+      event.preventDefault();
+
+      $('#document-names input').each((index, element) => {
+        const formData = new FormData();
+        const file = files[$(element).data('index')];
+        formData.append('file', file);
+        formData.append('account_name', accountName);
+
+        uploadDocument(formData, $(element).val());
       });
 
-      if (folders.length > 1 || filename !== file.name) {
-        $('#documents-upload').addClass('shown');
-      } else {
-        uploadDocument(formData);
-      }
+      $('#documents-upload').removeClass('shown');
+      $('#document-names').empty();
+    });
+
+    if (folders.length > 1 || changedFilename) {
+      $('#documents-upload').addClass('shown');
+    } else {
+      $('#document-upload-submit').trigger('click')
     }
   });
 };

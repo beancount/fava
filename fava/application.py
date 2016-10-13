@@ -255,6 +255,15 @@ def help_page(page_slug='_index'):
                            help_html=render_template_string(html))
 
 
+def api_error(message=''):
+    return jsonify({'success': False, 'error': message})
+
+
+def api_success(**kwargs):
+    kwargs['success'] = True
+    return jsonify(kwargs)
+
+
 @app.route('/<bfile>/api/changed/')
 def api_changed():
     return jsonify({'success': True, 'changed': g.api.changed()})
@@ -263,16 +272,15 @@ def api_changed():
 @app.route('/<bfile>/api/source/', methods=['GET', 'PUT'])
 def api_source():
     if request.method == 'GET':
-        return g.api.source(request.args.get('file_path', None))
+        return g.api.source(request.args.get('file_path'))
     elif request.method == 'PUT':
         g.api.set_source(request.form['file_path'], request.form['source'])
-        return jsonify({'success': True})
+        return api_success()
 
 
 @app.route('/<bfile>/api/format-source/', methods=['POST'])
 def api_format_source():
-    return jsonify({'success': True,
-                    'payload': align_beancount(request.form['source'])})
+    return api_success(payload=align_beancount(request.form['source']))
 
 
 @app.route('/<bfile>/api/add-document/', methods=['PUT'])
@@ -281,24 +289,22 @@ def api_add_document():
     if file and len(g.api.options['documents']) > 0:
         target_folder_index = int(request.form['targetFolderIndex'])
 
-        filename = os.path.join(
+        filepath = os.path.normpath(os.path.join(
             os.path.dirname(g.api.beancount_file_path),
             g.api.options['documents'][target_folder_index],
-            request.form['account_name'].replace(':', '/').replace('..', ''),
-            secure_filename(request.form['filename']))
+            request.form['account_name'].replace(':', '/'),
+            secure_filename(request.form['filename']).replace('_', ' ')))
 
-        filepath = os.path.dirname(filename)
-        if not os.path.exists(filepath):
-            os.makedirs(filepath, exist_ok=True)
+        directory = os.path.dirname(filepath)
+        if not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
 
-        if os.path.isfile(filename):
-            return "File \"{}\" already exists." \
-                "Aborted document upload.".format(filename), 409
+        if os.path.isfile(filepath):
+            return api_error('{} already exists.'.format(filepath))
 
-        file.save(filename)
-        return "Uploaded to {}".format(filename), 200
-    return "No file detected or no documents folder specified in options." \
-           "Aborted document upload.", 424
+        file.save(filepath)
+        return api_success(message='Uploaded to {}'.format(filepath))
+    return 'No file uploaded or no documents folder in options', 400
 
 
 @app.route('/jump')
