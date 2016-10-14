@@ -2,8 +2,8 @@
 {% set partial = request.args.get('partial', False) %}
 {% set navigation_bar = [
     ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
-    ("Other",         [ 'holdings', 'commodities', 'events']),
-    ("Configuration", [ 'source', 'options', 'statistics', 'help'])
+    ("Other",         [ 'holdings', 'commodities', 'events', 'statistics']),
+    ("Configuration", [ 'editor', 'options','help'])
 ] %}
 {% set all_pages = {
     'income_statement': (_('Income Statement'), 'g i'),
@@ -13,8 +13,8 @@
     'query':            (_('Query'),            'g q'),
     'holdings':         (_('Holdings'),         'g h'),
     'commodities':      (_('Commodities'),      'g c'),
-    'events':           (_('Events'),           'g e'),
-    'source':           (_('Source'),           'g s'),
+    'events':           (_('Events'),           'g E'),
+    'editor':           (_('Editor'),           'g e'),
     'options':          (_('Options'),          'g o'),
     'statistics':       (_('Statistics'),       'g x'),
     'help':             (_('Help'),             'g shift+h'),
@@ -79,7 +79,7 @@
                     </ul>
                 {% endif %}
                 </li>
-                {% if id == "source" and api.errors|length > 0 %}
+                {% if id == "editor" and api.errors|length > 0 %}
                     <li class="error">
                         <a href="{{ url_for('report', report_name='errors') }}">
                         {{ _('Errors') }} <span class="bubble">{{ api.errors|length }}</span>

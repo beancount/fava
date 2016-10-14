@@ -48,7 +48,7 @@ REPORTS = [
     'options',
     'statistics',
     'commodities',
-    'source',
+    'editor',
     'trial_balance',
 ]
 
@@ -96,7 +96,7 @@ def url_for_source(**kwargs):
         else:
             return "beancount://%(file_path)s" % args
     else:
-        args['report_name'] = 'source'
+        args['report_name'] = 'editor'
         return url_for('report', **args)
 
 
