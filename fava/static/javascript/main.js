@@ -38,6 +38,7 @@ function initPage() {
 function updatePage() {
   filters.update();
   $('table.sortable').stupidtable();
+  keyboardShortcuts.update();
 
   treeTable.initTreeTable();
 

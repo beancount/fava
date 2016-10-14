@@ -1,6 +1,18 @@
 const Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
+module.exports.update = function update() {
+  // Change page
+  $('aside a').each((index, element) => {
+    const key = $(element).data('key');
+    if (key !== undefined) {
+      Mousetrap.bind(key, () => {
+        $(element).click();
+      });
+    }
+  });
+};
+
 module.exports.init = function init() {
   Mousetrap.bind({
     '?': () => {
@@ -29,8 +41,6 @@ module.exports.init = function init() {
       $('#name-filter').focus();
     },
   }, 'keyup');
-
-  Mousetrap.bind(window.keyBindings, 'keyup');
 
   // Charts
   Mousetrap.bind({
