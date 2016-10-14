@@ -211,18 +211,6 @@ button {
   display: none;
 }
 
-%clearfix {
-  &::before,
-  &::after {
-    content: ' ';
-    display: table;
-  }
-
-  &::after {
-    clear: both;
-  }
-}
-
 // Structural and generic elements
 $header-height: 50px;
 $aside-width: 160px;
@@ -406,10 +394,8 @@ kbd {
   color: lighten($color-text, 15);
   display: inline-block;
   font: 1rem $font-family-monospaced;
-  margin: 0 1px 3px 0;
+  margin: 0 1px;
   padding: 3px 6px;
-  text-align: center;
-  vertical-align: middle;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

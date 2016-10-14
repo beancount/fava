@@ -13,6 +13,9 @@ module.exports.init = function init() {
 
   // Filtering:
   Mousetrap.bind({
+    'f f': () => {
+      $('#from-filter').focus();
+    },
     'f t': () => {
       $('#time-filter').focus();
     },
@@ -35,8 +38,8 @@ module.exports.init = function init() {
       $('#toggle-chart').click();
     },
     c() {
-      const next = $('#chart-labels label.selected').next();
-      $('#chart-labels label').removeClass('selected');
+      const next = $('#chart-labels .selected').next();
+
       if (next.length) {
         next.click();
       } else {
@@ -44,8 +47,7 @@ module.exports.init = function init() {
       }
     },
     'shift+c': () => {
-      const prev = $('#chart-labels label.selected').prev();
-      $('#chart-labels label').removeClass('selected');
+      const prev = $('#chart-labels .selected').prev();
 
       if (prev.length) {
         prev.click();

@@ -26,6 +26,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     max-height: 100%;
     overflow: scroll;
     padding: 20px;
+    position: relative;
     width: 800px;
 
     strong {
@@ -35,20 +36,29 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
     .close-overlay {
       color: $color-text-lighter;
-      float: right;
+      position: absolute;
+      right: 10px;
+      top: 10px;
     }
+  }
+
+  kbd {
+    font-size: .9em;
   }
 
   dl {
     dt {
       display: inline-block;
       float: left;
-      line-height: 2em;
-      width: 120px;
+      font-weight: normal;
+      line-height: 1.8em;
+      padding-right: 10px;
+      text-align: right;
+      width: 170px;
     }
 
     dd {
-      line-height: 2em;
+      line-height: 1.8em;
     }
   }
 }
