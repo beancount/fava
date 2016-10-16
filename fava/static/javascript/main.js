@@ -1,8 +1,10 @@
-require('jquery-stupid-table/stupidtable');
-const Backbone = require('backbone');
-const URI = require('urijs');
+import Backbone from 'backbone';
+import URI from 'urijs';
 
-const charts = require('./charts');
+import initCharts from './charts';
+
+require('jquery-stupid-table/stupidtable');
+
 const clipboard = require('./clipboard');
 const editor = require('./editor');
 const filters = require('./filters');
@@ -43,7 +45,7 @@ function updatePage() {
   treeTable.initTreeTable();
 
   if ($('#chart-container').length) {
-    charts.initCharts();
+    initCharts();
   }
 
   editor.initEditor();
