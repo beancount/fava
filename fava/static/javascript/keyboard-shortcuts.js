@@ -1,7 +1,7 @@
 const Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 
-module.exports.update = function update() {
+export function updateKeyboardShortcuts() {
   // Change page
   $('aside a').each((index, element) => {
     const key = $(element).data('key');
@@ -11,9 +11,9 @@ module.exports.update = function update() {
       });
     }
   });
-};
+}
 
-module.exports.init = function init() {
+export function initKeyboardShortcuts() {
   Mousetrap.bind({
     '?': () => {
       $('#keyboard-shortcuts').addClass('shown');
@@ -117,4 +117,4 @@ module.exports.init = function init() {
       $('#entry-filters button[data-type=other]').click();
     },
   }, 'keyup');
-};
+}

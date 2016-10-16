@@ -29,18 +29,20 @@ function uploadDocument(formData, filename) {
 
 // File uploads via Drag and Drop on elements with class "droptarget" and
 // attribute "data-account-name"
-module.exports.initDocumentsUpload = function initDocumentsUpload() {
-  $('.droptarget').on('dragenter dragover', (event) => {
+export default function initDocumentsUpload() {
+  const $droptarget = $('.droptarget');
+
+  $droptarget.on('dragenter dragover', (event) => {
     $(event.currentTarget).addClass('dragover');
     event.preventDefault();
   });
 
-  $('.droptarget').on('dragleave', (event) => {
+  $droptarget.on('dragleave', (event) => {
     $(event.currentTarget).removeClass('dragover');
     event.preventDefault();
   });
 
-  $('.droptarget').on('drop', (event) => {
+  $droptarget.on('drop', (event) => {
     $(event.currentTarget).removeClass('dragover');
     event.preventDefault();
 
@@ -90,4 +92,4 @@ module.exports.initDocumentsUpload = function initDocumentsUpload() {
       $('#document-upload-submit').trigger('click');
     }
   });
-};
+}

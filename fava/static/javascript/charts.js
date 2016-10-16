@@ -712,6 +712,10 @@ class HierarchyContainer extends BaseChart {
 }
 
 export default function initCharts() {
+  if (!$('#charts').length) {
+    return;
+  }
+
   let currentChart;
   tooltip = d3.select('#tooltip');
   container = d3.select('#chart-container');

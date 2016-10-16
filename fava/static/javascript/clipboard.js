@@ -1,6 +1,10 @@
-const Clipboard = require('clipboard');
+import Clipboard from 'clipboard';
 
-module.exports.initClipboard = function initClipboard() {
+export default function initClipboard() {
+  if (!$('.status-indicator').length) {
+    return;
+  }
+
   new Clipboard('.status-indicator'); // eslint-disable-line no-new
   new Clipboard('#copy-balances', { // eslint-disable-line no-new
     text(trigger) {
@@ -9,4 +13,4 @@ module.exports.initClipboard = function initClipboard() {
       return text.join('\n').trim();
     },
   });
-};
+}

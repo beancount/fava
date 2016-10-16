@@ -1,23 +1,21 @@
 import Backbone from 'backbone';
 import URI from 'urijs';
+import 'jquery-stupid-table/stupidtable';
 
 import initCharts from './charts';
-
-require('jquery-stupid-table/stupidtable');
-
-const clipboard = require('./clipboard');
-const editor = require('./editor');
-const filters = require('./filters');
-const keyboardShortcuts = require('./keyboard-shortcuts');
-const journal = require('./journal');
-const treeTable = require('./tree-table');
-const documentsUpload = require('./documents-upload');
+import initClipboard from './clipboard';
+import initDocumentsUpload from './documents-upload';
+import initEditor from './editor';
+import { initFilters, updateFilters } from './filters';
+import initJournal from './journal';
+import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
+import initTreeTable from './tree-table';
 
 // These parts of the page should not change.
 // So they only need to be initialized once.
 function initPage() {
-  filters.init();
-  keyboardShortcuts.init();
+  initFilters();
+  initKeyboardShortcuts();
 
   $('.overlay-wrapper').click((event) => {
     event.preventDefault();
@@ -38,29 +36,16 @@ function initPage() {
 }
 
 function updatePage() {
-  filters.update();
+  updateFilters();
   $('table.sortable').stupidtable();
-  keyboardShortcuts.update();
+  updateKeyboardShortcuts();
 
-  treeTable.initTreeTable();
-
-  if ($('#chart-container').length) {
-    initCharts();
-  }
-
-  editor.initEditor();
-
-  if ($('#journal-table').length) {
-    journal.initJournal();
-  }
-
-  if ($('.status-indicator').length) {
-    clipboard.initClipboard();
-  }
-
-  if ($('.tree-table').length || $('h1.droptarget').length) {
-    documentsUpload.initDocumentsUpload();
-  }
+  initCharts();
+  initClipboard();
+  initDocumentsUpload();
+  initEditor();
+  initJournal();
+  initTreeTable();
 }
 
 // Notifications

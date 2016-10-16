@@ -1,4 +1,4 @@
-module.exports.initTreeTable = function initTreeTable() {
+export default function initTreeTable() {
   $('.tree-table').on('click', 'span.has-children', (event) => {
     const row = $(event.currentTarget).parents('li').first();
     if (event.shiftKey) {
@@ -18,4 +18,4 @@ module.exports.initTreeTable = function initTreeTable() {
     $this.parents('ol').find('li.toggled').removeClass('toggled');
     $this.addClass('hidden');
   });
-};
+}

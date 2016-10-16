@@ -97,7 +97,7 @@ function jumpToMarker(cm) {
 }
 
 
-module.exports.initEditor = function initEditor() {
+export default function initEditor() {
   const rulers = [];
   if (window.editorPrintMarginColumn) {
     rulers.push({
@@ -239,4 +239,4 @@ module.exports.initEditor = function initEditor() {
       formatEditorContent(editor);
     });
   }
-};
+}

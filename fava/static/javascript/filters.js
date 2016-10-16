@@ -17,7 +17,7 @@ function updateInput(input) {
       .toggle(!isEmpty);
 }
 
-module.exports.update = function update() {
+export function updateFilters() {
   $.each(['account', 'from', 'payee', 'tag', 'time'], (_, filter) => {
     const value = new URI(window.location).search(true)[filter];
     if (value) {
@@ -25,9 +25,9 @@ module.exports.update = function update() {
       updateInput($(`#${filter}-filter`));
     }
   });
-};
+}
 
-module.exports.init = function init() {
+export function initFilters() {
   $('#filter-form input').on('awesomplete-selectcomplete', (event) => {
     updateInput($(event.currentTarget));
     $('#filter-form').submit();
@@ -82,4 +82,4 @@ module.exports.init = function init() {
 
     $('#filter-form').submit();
   });
-};
+}

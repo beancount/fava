@@ -1,6 +1,6 @@
 const URI = require('urijs');
 
-module.exports.initJournal = function initJournal() {
+export default function initJournal() {
   // Toggle postings by clicking on transaction row.
   $('#journal-table').on('click', '.transaction', (event) => {
     $(event.currentTarget).find('.postings').toggleClass('hidden');
@@ -33,4 +33,4 @@ module.exports.initJournal = function initJournal() {
       .setSearch({ show: filterShow });
     window.history.pushState('', '', url.toString());
   });
-};
+}
