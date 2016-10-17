@@ -2,7 +2,7 @@
 {% set show_other_column = (operating_currencies|sort != api.options['commodities']|list|sort) %}
 
 {% macro tree(real_account, totals=True) %}
-<ol class="tree-table {{ operating_currencies|length }}-currencies">
+<ol class="tree-table currencies-{{ operating_currencies|length }}">
     <li class="head">
         <p>
         <span class="account-cell"><span>{{ _('Account') }}</span><a href="#" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
