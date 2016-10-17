@@ -4,10 +4,10 @@ import re
 from setuptools import setup
 
 
-with open('fava/__init__.py') as f:
+with open('fava/__init__.py', 'rb') as f:
     version = str(ast.literal_eval(re.search(
         r'__version__\s+=\s+(.*)',
-        f.read()).group(1)))
+        f.read().decode('utf-8')).group(1)))
 
 
 def _read(fname):
