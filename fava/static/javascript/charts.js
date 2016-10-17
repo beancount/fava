@@ -32,7 +32,7 @@ const timeFilterDateFormat = {
 };
 
 function addInternalNodesAsLeaves(node) {
-  $.each(node.children, (i, o) => {
+  node.children.forEach((o) => {
     addInternalNodesAsLeaves(o);
   });
   if (node.children && node.children.length) {
@@ -611,7 +611,7 @@ class SunburstChartContainer extends BaseChart {
   draw(data) {
     this.setSize();
 
-    $.each(this.currencies, (i, currency) => {
+    this.currencies.forEach((currency, i) => {
       const canvas = this.svg.append('g')
         .attr('transform', `translate(${(this.width * i) / this.currencies.length},0)`);
 
@@ -637,7 +637,7 @@ class SunburstChartContainer extends BaseChart {
 
   update() {
     this.setSize();
-    $.each(this.sunbursts, (i, singleChart) => {
+    this.sunbursts.forEach((singleChart, i) => {
       singleChart
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
@@ -735,7 +735,7 @@ export default function initCharts() {
     return svg;
   }
 
-  $.each(window.chartData, (index, chart) => {
+  window.chartData.forEach((chart, index) => {
     const chartId = `${chart.type}-${index}`;
     switch (chart.type) {
       case 'balances': {
@@ -787,7 +787,7 @@ export default function initCharts() {
         charts[chartId] = new BarChart(chartContainer(chartId, chart.label))
           .set('tooltipText', (d) => {
             let text = '';
-            $.each(d.values, (i, a) => {
+            d.values.forEach((a) => {
               text += `${formatCurrency(a.value)} ${a.name}<br>`;
             });
             text += `<em>${d.label}</em>`;
@@ -813,7 +813,7 @@ export default function initCharts() {
         addInternalNodesAsLeaves(chart.root);
         const roots = {};
 
-        $.each(window.operating_currencies, (i, currency) => {
+        window.operating_currencies.forEach((currency) => {
           roots[currency] = d3.hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
@@ -831,21 +831,21 @@ export default function initCharts() {
   });
 
   const $labels = $('#chart-labels');
-  const $toggleChart = $('#toggle-chart');
 
   function updateChart() {
     if ($('#chart-container svg:visible').length) {
       currentChart.update();
     }
   }
+
   // Switch between charts
   $labels.find('label').click((event) => {
-    const chartId = $(event.currentTarget).prop('for');
+    const chartId = event.currentTarget.getAttribute('for');
     $('.charts .chart').addClass('hidden');
     $(`.charts .chart#${chartId}`).removeClass('hidden');
 
     $labels.find('label').removeClass('selected');
-    $(event.currentTarget).addClass('selected');
+    event.currentTarget.classList.add('selected');
 
     $('#chart-legend').html('');
 
@@ -861,10 +861,11 @@ export default function initCharts() {
   });
   $labels.find('label:first-child').click();
 
-  $toggleChart.click(() => {
-    $toggleChart.toggleClass('hide-charts');
-    $('#charts')
-        .toggleClass('hidden', $toggleChart.hasClass('hide-charts'));
+  const toggleChart = document.getElementById('toggle-chart');
+  toggleChart.addEventListener('click', () => {
+    toggleChart.classList.toggle('hide-charts');
+    document.getElementById('charts')
+        .classList.toggle('hidden', toggleChart.classList.contains('hide-charts'));
     updateChart();
   });
 }

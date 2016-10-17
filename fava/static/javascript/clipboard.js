@@ -1,10 +1,6 @@
 import Clipboard from 'clipboard';
 
 export default function initClipboard() {
-  if (!$('.status-indicator').length) {
-    return;
-  }
-
   new Clipboard('.status-indicator'); // eslint-disable-line no-new
   new Clipboard('#copy-balances', { // eslint-disable-line no-new
     text(trigger) {

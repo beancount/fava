@@ -1,55 +1,51 @@
-/* global Awesomplete */
-require('awesomplete');
+const Awesomplete = require('awesomplete');
 const URI = require('urijs');
 
 function updateInput(input) {
-  const isEmpty = !input.val();
+  const isEmpty = !input.value;
 
-  if (input.val().length > input.attr('placeholder').length) {
-    input.attr('size', input.val().length + 2);
+  if (input.value.length > input.getAttribute('placeholder').length) {
+    input.setAttribute('size', input.value.length + 2);
   } else {
-    input.attr('size', input.attr('placeholder').length + 2);
+    input.setAttribute('size', input.getAttribute('placeholder').length + 2);
   }
 
-  input.parents('span')
-      .toggleClass('empty', isEmpty)
-    .find('button')
-      .toggle(!isEmpty);
+  $(input).parents('span')
+      .toggleClass('empty', isEmpty);
 }
 
 export function updateFilters() {
-  $.each(['account', 'from', 'payee', 'tag', 'time'], (_, filter) => {
+  ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
     const value = new URI(window.location).search(true)[filter];
     if (value) {
-      $(`#${filter}-filter`).val(value);
-      updateInput($(`#${filter}-filter`));
+      const el = document.getElementById(`${filter}-filter`);
+      el.value = value;
+      updateInput(el);
     }
   });
 }
 
 export function initFilters() {
   $('#filter-form input').on('awesomplete-selectcomplete', (event) => {
-    updateInput($(event.currentTarget));
+    updateInput(event.currentTarget);
     $('#filter-form').submit();
   });
 
   $('#filter-form input').on('input', (event) => {
-    updateInput($(event.currentTarget));
+    updateInput(event.currentTarget);
   });
 
   $('#filter-form input[type="text"]').each((_, el) => {
-    const $el = $(el);
-
     let options = {
       minChars: 0,
       maxItems: 30,
       sort(text, input) {
-        const order = $el.attr('name') === 'time' ? -1 : 1;
+        const order = el.getAttribute('name') === 'time' ? -1 : 1;
         return text.value.localeCompare(input.value) * order;
       },
     };
 
-    if ($el.attr('name') === 'tag' || $el.attr('name') === 'payee') {
+    if (el.getAttribute('name') === 'tag' || el.getAttribute('name') === 'payee') {
       options = $.extend(options, {
         filter(text, input) {
           return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len
@@ -62,14 +58,12 @@ export function initFilters() {
     }
 
     const completer = new Awesomplete(el, options);
-    const isEmpty = !$el.val();
+    const isEmpty = !el.value;
 
-    $el.parents('span')
-        .toggleClass('empty', isEmpty)
-      .find('button')
-        .toggle(!isEmpty);
+    $(el).parents('span')
+        .toggleClass('empty', isEmpty);
 
-    $el.focus(() => {
+    $(el).focus(() => {
       completer.evaluate();
     });
   });
@@ -78,7 +72,7 @@ export function initFilters() {
     $(event.currentTarget).parents('span')
       .find('input')
         .val('')
-        .each((_, el) => { updateInput($(el)); });
+        .each((_, el) => { updateInput(el); });
 
     $('#filter-form').submit();
   });

@@ -33,17 +33,17 @@ export default function initDocumentsUpload() {
   const $droptarget = $('.droptarget');
 
   $droptarget.on('dragenter dragover', (event) => {
-    $(event.currentTarget).addClass('dragover');
+    event.currentTarget.classList.add('dragover');
     event.preventDefault();
   });
 
   $droptarget.on('dragleave', (event) => {
-    $(event.currentTarget).removeClass('dragover');
+    event.currentTarget.classList.remove('dragover');
     event.preventDefault();
   });
 
   $droptarget.on('drop', (event) => {
-    $(event.currentTarget).removeClass('dragover');
+    event.currentTarget.classList.remove('dragover');
     event.preventDefault();
 
     const accountName = $(event.currentTarget).data('account-name');

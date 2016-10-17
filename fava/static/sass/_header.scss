@@ -159,12 +159,16 @@ h1 {
     input {
       background: lighten($color-header, 10);
     }
+
+    .close {
+      display: none;
+    }
   }
 
   .close {
     background: transparent;
     border: 0;
-    display: none;
+    display: block;
     height: 18px;
     padding: 0;
     position: absolute;

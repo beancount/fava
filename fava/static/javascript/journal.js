@@ -9,16 +9,15 @@ export default function initJournal() {
   // Toggle entries with buttons.
   $('#entry-filters button').click((event) => {
     event.preventDefault();
-    const $this = $(event.currentTarget);
-    const type = $this.data('type');
-    const shouldShow = $this.hasClass('inactive');
+    const type = event.currentTarget.dataset.type;
+    const shouldShow = event.currentTarget.classList.contains('inactive');
 
     if (type === 'transaction') {
       $('#entry-filters .txn-toggle').toggleClass('inactive', !shouldShow);
     }
 
     $(`#journal-table .${type}`).toggleClass('hidden', !shouldShow);
-    $this.toggleClass('inactive', !shouldShow);
+    event.currentTarget.classList.toggle('inactive', !shouldShow);
 
     // Modify get params
     const filterShow = [];

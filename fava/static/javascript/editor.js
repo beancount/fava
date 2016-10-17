@@ -30,27 +30,26 @@ require('./codemirror-hint-beancount.js');
 require('./codemirror-mode-beancount.js');
 
 function saveEditorContent(cm) {
-  const $button = $('#source-editor-submit');
-  const fileName = $('#source-editor-select').val();
-  $button
-      .attr('disabled', 'disabled')
-      .text('Saving...');
+  const button = document.getElementById('source-editor-submit');
+  const fileName = document.getElementById('source-editor-select').value;
+
+  button.disabled = true;
+  button.textContent = 'Saving...';
 
   $.ajax({
     type: 'PUT',
-    url: $button.data('url'),
+    url: button.dataset.url,
     data: {
       file_path: fileName,
       source: cm.getValue(),
     },
   })
     .done((data) => {
+      button.disabled = false;
+      button.textContent = 'Save';
       if (!data.success) {
         Backbone.trigger('error', `Saving ${fileName} failed.`);
       } else {
-        $button
-            .removeAttr('disabled')
-            .text('Save');
         cm.focus();
         Backbone.trigger('file-modified');
       }
@@ -58,12 +57,11 @@ function saveEditorContent(cm) {
 }
 
 function formatEditorContent(cm) {
-  const $button = $('#source-editor-format');
+  const button = document.getElementById('source-editor-format');
   const scrollPosition = cm.getScrollInfo().top;
+  button.disabled = true;
 
-  $button.attr('disabled', 'disabled');
-  const url = $button.attr('data-url');
-  $.post(url, {
+  $.post(button.dataset.url, {
     source: cm.getValue(),
   })
     .done((data) => {
@@ -73,7 +71,7 @@ function formatEditorContent(cm) {
       } else {
         Backbone.trigger('error', 'Formatting the file with bean-format failed.');
       }
-      $button.removeAttr('disabled');
+      button.disabled = false;
     });
 }
 
@@ -95,7 +93,6 @@ function jumpToMarker(cm) {
     cm.setCursor(cm.lastLine(), 0);
   }
 }
-
 
 export default function initEditor() {
   const rulers = [];
@@ -173,8 +170,8 @@ export default function initEditor() {
 
     $('.stored-queries select').change((event) => {
       const sourceElement = $('.stored-queries a.source-link');
-      const query = $(event.currentTarget).val();
-      const sourceLink = $('option:selected', event.currentTarget).attr('data-source-link');
+      const query = event.currentTarget.value;
+      const sourceLink = $('option:selected', event.currentTarget).data('source-link');
 
       editor.setValue(query);
       sourceElement.attr('href', sourceLink).toggle(query !== '');
@@ -202,16 +199,16 @@ export default function initEditor() {
     $('#source-editor-select').change((event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
-      const $select = $(event.currentTarget);
-      $select.attr('disabled', 'disabled');
-      const filePath = $select.val();
+      const select = event.currentTarget;
+      select.disabled = true;
+      const filePath = select.value;
       $.get(document.getElementById('source-editor-submit').dataset.url, {
         file_path: filePath,
       })
         .done((data) => {
           editor.setValue(data);
           editor.setCursor(0, 0);
-          $select.removeAttr('disabled');
+          select.disabled = false;
           jumpToMarker(editor);
         });
     });

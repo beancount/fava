@@ -4,10 +4,10 @@ require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
 export function updateKeyboardShortcuts() {
   // Change page
   $('aside a').each((index, element) => {
-    const key = $(element).data('key');
+    const key = element.dataset.key;
     if (key !== undefined) {
       Mousetrap.bind(key, () => {
-        $(element).click();
+        element.click();
       });
     }
   });
@@ -16,7 +16,7 @@ export function updateKeyboardShortcuts() {
 export function initKeyboardShortcuts() {
   Mousetrap.bind({
     '?': () => {
-      $('#keyboard-shortcuts').addClass('shown');
+      document.getElementById('keyboard-shortcuts').classList.add('shown');
     },
     esc() {
       $('.overlay-wrapper').removeClass('shown');
@@ -26,26 +26,26 @@ export function initKeyboardShortcuts() {
   // Filtering:
   Mousetrap.bind({
     'f f': () => {
-      $('#from-filter').focus();
+      document.getElementById('from-filter').focus();
     },
     'f t': () => {
-      $('#time-filter').focus();
+      document.getElementById('time-filter').focus();
     },
     'f g': () => {
-      $('#tag-filter').focus();
+      document.getElementById('tag-filter').focus();
     },
     'f a': () => {
-      $('#account-filter').focus();
+      document.getElementById('account-filter').focus();
     },
     'f p': () => {
-      $('#name-filter').focus();
+      document.getElementById('payee-filter').focus();
     },
   }, 'keyup');
 
   // Charts
   Mousetrap.bind({
     'ctrl+c': () => {
-      $('#toggle-chart').click();
+      document.getElementById('toggle-chart').click();
     },
     c() {
       const next = $('#chart-labels .selected').next();

@@ -19,7 +19,8 @@ function initPage() {
 
   $('.overlay-wrapper').click((event) => {
     event.preventDefault();
-    if ($(event.target).hasClass('overlay-wrapper') || $(event.target).hasClass('close-overlay')) {
+    if (event.target.classList.contains('overlay-wrapper') ||
+        event.target.classList.contains('close-overlay')) {
       $('.overlay-wrapper').removeClass('shown');
     }
   });
@@ -31,7 +32,7 @@ function initPage() {
   });
 
   $('#notifications').on('click', 'li', (event) => {
-    $(event.currentTarget).remove();
+    event.currentTarget.remove();
   });
 }
 
@@ -87,16 +88,17 @@ const app = new Router();
 
 function updateURL(url) {
   const newURL = new URI(url);
-  $.each(['account', 'from', 'payee', 'tag', 'time'], (_, filter) => {
+  ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
     newURL.removeSearch(filter);
-    if ($(`#${filter}-filter`).val()) {
-      newURL.setSearch(filter, $(`#${filter}-filter`).val());
+    const el = document.getElementById(`${filter}-filter`);
+    if (el.value) {
+      newURL.setSearch(filter, el.value);
     }
   });
-  const $interval = $('#chart-interval');
-  if ($interval.length) {
-    newURL.setSearch('interval', $interval.val());
-    if ($interval.val() === $interval.data('default')) {
+  const interval = document.getElementById('chart-interval');
+  if (interval) {
+    newURL.setSearch('interval', interval.value);
+    if (interval.value === interval.dataset.default) {
       newURL.removeSearch('interval');
     }
   }
@@ -110,20 +112,20 @@ function initRouter() {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
       return;
     }
-    const $link = $(event.currentTarget);
-    let href = $link.attr('href');
+    const link = event.currentTarget;
+    let href = link.getAttribute('href');
 
-    const isHttp = $link.prop('protocol').indexOf('http') === 0;
+    const isHttp = link.protocol.indexOf('http') === 0;
     const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
-    const isRemote = $link.data('remote');
+    const isRemote = link.dataset.remote;
 
     if (!event.isDefaultPrevented() && !isRemote && isHttp && format === 'html') {
       event.preventDefault();
       $('.selected').removeClass('selected');
-      $link.addClass('selected');
+      link.classList.add('selected');
 
       // update sidebar links
-      if (!$link.data('no-update') && $link.parents()[2].tagName === 'ASIDE') {
+      if (link.parentNode.parentNode.parentNode.tagName === 'ASIDE') {
         href = updateURL(href);
       }
       app.navigate(href, { trigger: true });
