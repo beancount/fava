@@ -122,7 +122,8 @@ def perform_global_filters():
     }
 
     # check (and possibly reload) source file
-    g.api.changed()
+    if request.endpoint != 'api_changed':
+        g.api.changed()
 
     try:
         g.api.filter(**g.filters)
