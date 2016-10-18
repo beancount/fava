@@ -120,6 +120,9 @@ function initRouter() {
   Backbone.history.start({ pushState: true });
 
   $(document).on('click', 'a', (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+      return;
+    }
     const $link = $(event.currentTarget);
     let href = $link.attr('href');
 
