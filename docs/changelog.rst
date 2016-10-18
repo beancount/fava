@@ -1,6 +1,28 @@
 Changelog
 =========
 
+v1.0 (in development)
+---------------------
+
+This is a major new release that includes too many improvements and changes to
+list. Some highlights:
+
+- The layout has been tweaked and we use some nicer fonts.
+- Fava looks and works much better on smaller screens.
+- Fava loads most pages asynchronously, so navigating Fava is much faster and
+  responsive.
+
+Fava's configuration is not read from a configuration file anymore but can
+rather be specified using custom entries in the Beancount file. Some options
+have also been removed or renamed, so check Fava's help page on the available
+options when upgrading from v0.3.0.
+
+There have been many changes under the hood to improve Fava's codebase and a
+lot of bugs have been squashed.
+
+Thanks to :user:`adamgibbins`, :user:`davidastephens`, :user:`xentac`, and
+:user:`yegle` for their contributions.
+
 v0.3.0 (May 24th, 2016)
 -----------------------
 
