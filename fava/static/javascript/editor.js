@@ -205,7 +205,7 @@ module.exports.initEditor = function initEditor() {
       const $select = $(event.currentTarget);
       $select.attr('disabled', 'disabled');
       const filePath = $select.val();
-      $.get($select.parents('form').attr('action'), {
+      $.get(document.getElementById('source-editor-submit').dataset.url, {
         file_path: filePath,
       })
         .done((data) => {
