@@ -1,6 +1,7 @@
+import e from './events';
+
 /* global Mousetrap */
 const URI = require('urijs');
-const Backbone = require('backbone');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 
@@ -48,10 +49,10 @@ function saveEditorContent(cm) {
       button.disabled = false;
       button.textContent = 'Save';
       if (!data.success) {
-        Backbone.trigger('error', `Saving ${fileName} failed.`);
+        e.trigger('error', `Saving ${fileName} failed.`);
       } else {
         cm.focus();
-        Backbone.trigger('file-modified');
+        e.trigger('file-modified');
       }
     });
 }
@@ -69,7 +70,7 @@ function formatEditorContent(cm) {
         cm.setValue(data.payload);
         cm.scrollTo(null, scrollPosition);
       } else {
-        Backbone.trigger('error', 'Formatting the file with bean-format failed.');
+        e.trigger('error', 'Formatting the file with bean-format failed.');
       }
       button.disabled = false;
     });
@@ -92,6 +93,10 @@ function jumpToMarker(cm) {
   } else {
     cm.setCursor(cm.lastLine(), 0);
   }
+}
+
+function submitQuery() {
+  document.getElementById('submit-query').click();
 }
 
 export default function initEditor() {
@@ -145,10 +150,10 @@ export default function initEditor() {
     lineNumbers: true,
     extraKeys: {
       'Ctrl-Enter': () => {
-        $('#submit-query').click();
+        submitQuery();
       },
       'Cmd-Enter': () => {
-        $('#submit-query').click();
+        submitQuery();
       },
     },
   };
@@ -159,13 +164,13 @@ export default function initEditor() {
   });
 
   // Query editor
-  if ($('#query-editor').length) {
+  if (document.getElementById('query-editor')) {
     const editor = CodeMirror.fromTextArea(document.getElementById('query-editor'), queryOptions);
 
     // when the focus is outside the editor
     Mousetrap.bind(['ctrl+enter', 'meta+enter'], (event) => {
       event.preventDefault();
-      $('#submit-query').click();
+      submitQuery();
     });
 
     $('.stored-queries select').change((event) => {
@@ -179,7 +184,7 @@ export default function initEditor() {
   }
 
   // The /source/ editor
-  if ($('#source-editor').length) {
+  if (document.getElementById('source-editor')) {
     const el = document.getElementById('source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
 

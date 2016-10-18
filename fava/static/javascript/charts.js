@@ -712,7 +712,7 @@ class HierarchyContainer extends BaseChart {
 }
 
 export default function initCharts() {
-  if (!$('#charts').length) {
+  if (!document.getElementById('charts')) {
     return;
   }
 

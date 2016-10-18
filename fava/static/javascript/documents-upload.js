@@ -1,4 +1,4 @@
-const Backbone = require('backbone');
+import e from './events';
 
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
@@ -16,13 +16,13 @@ function uploadDocument(formData, filename) {
     processData: false,
     success(data) {
       if (data.success) {
-        Backbone.trigger('info', data.message);
+        e.trigger('info', data.message);
       } else {
-        Backbone.trigger('error', `Upload error: ${data.error}`);
+        e.trigger('error', `Upload error: ${data.error}`);
       }
     },
     error() {
-      Backbone.trigger('error', 'Unknown upload error');
+      e.trigger('error', 'Unknown upload error');
     },
   });
 }
@@ -53,7 +53,7 @@ export default function initDocumentsUpload() {
     let changedFilename = false;
 
     if (!folders.length) {
-      Backbone.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
+      e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
       return;
     }
 
@@ -70,8 +70,8 @@ export default function initDocumentsUpload() {
     }
 
     // upload files on submit
-    $('#document-upload-submit').one('click', (e) => {
-      e.preventDefault();
+    $('#document-upload-submit').one('click', (event_) => {
+      event_.preventDefault();
 
       $('#document-names input').each((index, element) => {
         const formData = new FormData();

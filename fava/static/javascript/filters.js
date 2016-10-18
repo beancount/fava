@@ -1,5 +1,6 @@
 const Awesomplete = require('awesomplete');
 const URI = require('urijs');
+const $ = require('jquery');
 
 function updateInput(input) {
   const isEmpty = !input.value;
