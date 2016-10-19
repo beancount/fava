@@ -3,6 +3,16 @@
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
+{% macro copy_balance_directives_text() -%}
+    {% for account in api.all_accounts_active -%}
+        {% if account|uptodate_eligible %}
+            {%- if api.account_uptodate_status(account) != "green" -%}
+                {{- account_macros.balance_directive(account) }}
+            {%- endif -%}
+        {% endif %}
+    {%- endfor -%}
+{%- endmacro %}
+
 {% block content %}
     {% set postings_by_account = api.postings_by_account() %}
 
@@ -32,22 +42,11 @@
         </table>
     </div>
 
-    {% macro copy_balance_directives_text() -%}
-            {{ _('Click to copy balance directives for accounts (except green ones) to the clipboard:') }}
-
-            {% for account in api.all_accounts_active -%}
-                {% if account|uptodate_eligible %}
-                    {%- if api.account_uptodate_status(account) != "green" -%}
-                        {{- account_macros.balance_directive(account) }}
-                    {%- endif -%}
-                {% endif %}
-            {%- endfor -%}
-    {%- endmacro %}
-
-    {% set clipboard_text = copy_balance_directives_text() %}
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
     <div class="left">
-        <h3>{{ _('Update Activity') }}<button type="button" class="right" id="copy-balances" value="" title="{{ clipboard_text }}" data-clipboard-text="{{ clipboard_text }}">{{ _('Copy balance directives') }}</button></h3>
+        <h3>{{ _('Update Activity') }}<button type="button" class="right" id="copy-balances" value="" title="
+        {{- _('Click to copy balance directives for accounts (except green ones) to the clipboard.') -}}
+        " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</button></h3>
         <table class="statistics-update-activity sortable">
             <thead>
                 <tr>

@@ -37,7 +37,7 @@ function initPage() {
   });
 }
 
-function updatePage() {
+e.on('page-loaded', () => {
   updateFilters();
   $('table.sortable').each((_, el) => {
     makeSortable(el);
@@ -50,10 +50,6 @@ function updatePage() {
   initEditor();
   initJournal();
   initTreeTable();
-}
-
-e.on('page-loaded', () => {
-  updatePage();
 
   document.title = window.documentTitle;
   $('h1 strong').html(window.pageTitle);
@@ -92,7 +88,7 @@ function doPoll() {
 
 $(document).ready(() => {
   initPage();
-  updatePage();
   initRouter();
+  e.trigger('page-loaded');
   setTimeout(doPoll, 5000);
 });

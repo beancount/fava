@@ -61,28 +61,30 @@ export default function initRouter() {
     }
   });
 
-  $('#reload-page').click((event) => {
+  $('#reload-page').on('click', (event) => {
     event.preventDefault();
     loadURL(window.location.pathname);
   });
 
-  $(document).on('submit', '#filter-form', (event) => {
+  $('#filter-form').on('submit', (event) => {
     event.preventDefault();
     loadURL(updateURL(window.location.pathname));
   });
 
-  $(document).on('submit', '#query-form', (event) => {
-    event.preventDefault();
-    const url = new URI(window.location.pathname)
-      .setSearch('query_string', $('#query-editor').val())
-      .toString();
-    $.get(url, { partial: true, result_only: true }, (data) => {
-      $('#query-container').html(data);
+  // These elements might be added asynchronously, so rebind them on page-load.
+  e.on('page-loaded', () => {
+    $('#query-form').on('submit', (event) => {
+      event.preventDefault();
+      const url = new URI(window.location.pathname)
+        .setSearch('query_string', $('#query-editor').val())
+        .toString();
+      $.get(url, { partial: true, result_only: true }, (data) => {
+        $('#query-container').html(data);
+      });
     });
-  });
 
-  $(document).on('change', '#chart-interval', (event) => {
-    event.preventDefault();
-    loadURL(updateURL(window.location.pathname));
+    $('#chart-interval').on('change', () => {
+      loadURL(updateURL(window.location.pathname));
+    });
   });
 }

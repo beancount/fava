@@ -19,5 +19,7 @@ class Events {
   }
 }
 
+// This global event handler is used by separate parts of the UI to
+// communicate.
 const e = new Events();
 export default e;
