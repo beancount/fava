@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.0 (in development)
----------------------
+v1.0 (October 19th, 2016)
+-------------------------
 
 This is a major new release that includes too many improvements and changes to
 list. Some highlights:
