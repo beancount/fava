@@ -23,7 +23,7 @@
 {% do chart_data.append({
     'type': 'scatterplot',
     'label': 'Events' if not event_type else 'Event: {}'.format(event_type),
-    'events': api.events(event_type),
+    'events': api.charts.events(event_type),
 }) %}
 {% endmacro %}
 

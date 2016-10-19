@@ -70,6 +70,13 @@ class Charts(object):
         return serialize_inventory(sum(totals, inventory.Inventory()),
                                    at_cost=True)
 
+    def events(self, event_type):
+        return [{
+            'type': entry.type,
+            'date': entry.date,
+            'description': entry.description
+        } for entry in self.api.events(event_type)]
+
     def hierarchy(self, account_name, begin_date=None, end_date=None):
         real_account = _real_account(
             account_name, self.api.entries, begin_date, end_date)
