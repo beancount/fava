@@ -1,5 +1,3 @@
-import 'jquery-stupid-table/stupidtable';
-
 import e from './events';
 import initCharts from './charts';
 import initClipboard from './clipboard';
@@ -9,7 +7,10 @@ import { initFilters, updateFilters } from './filters';
 import initJournal from './journal';
 import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
 import initRouter from './router';
+import makeSortable from './sort';
 import initTreeTable from './tree-table';
+
+const $ = require('jquery');
 
 // These parts of the page should not change.
 // So they only need to be initialized once.
@@ -17,7 +18,7 @@ function initPage() {
   initFilters();
   initKeyboardShortcuts();
 
-  $('.overlay-wrapper').click((event) => {
+  $('.overlay-wrapper').on('click', (event) => {
     event.preventDefault();
     if (event.target.classList.contains('overlay-wrapper') ||
         event.target.classList.contains('close-overlay')) {
@@ -25,7 +26,7 @@ function initPage() {
     }
   });
 
-  $('#aside-button').click((event) => {
+  $('#aside-button').on('click', (event) => {
     event.preventDefault();
     $('aside').toggleClass('active');
     $('#aside-button').toggleClass('active');
@@ -38,7 +39,9 @@ function initPage() {
 
 function updatePage() {
   updateFilters();
-  $('table.sortable').stupidtable();
+  $('table.sortable').each((_, el) => {
+    makeSortable(el);
+  });
   updateKeyboardShortcuts();
 
   initCharts();

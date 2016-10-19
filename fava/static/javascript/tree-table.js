@@ -1,3 +1,5 @@
+const $ = require('jquery');
+
 export default function initTreeTable() {
   $('.tree-table').on('click', 'span.has-children', (event) => {
     const row = event.currentTarget.parentNode.parentNode;

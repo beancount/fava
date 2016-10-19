@@ -2,6 +2,7 @@ import e from './events';
 
 /* global Mousetrap */
 const URI = require('urijs');
+const $ = require('jquery');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 

@@ -2,6 +2,8 @@ import URI from 'urijs';
 
 import e from './events';
 
+const $ = require('jquery');
+
 function loadURL(url, noHistoryState) {
   $.get(url, { partial: true })
     .done((data) => {
@@ -28,7 +30,7 @@ function updateURL(url) {
   const interval = document.getElementById('chart-interval');
   if (interval) {
     newURL.setSearch('interval', interval.value);
-    if (interval.value === interval.dataset.default) {
+    if (interval.value === interval.getAttribute('data-default')) {
       newURL.removeSearch('interval');
     }
   }
@@ -46,7 +48,7 @@ export default function initRouter() {
 
     const isHttp = link.protocol.indexOf('http') === 0;
     const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
-    const isRemote = link.dataset.remote;
+    const isRemote = link.getAttribute('data-remote');
 
     if (!event.isDefaultPrevented() && !isRemote && isHttp && format === 'html') {
       event.preventDefault();

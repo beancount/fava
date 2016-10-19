@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const extractDefault = new ExtractTextPlugin('theme_default.css', { allChunks: true });
@@ -30,10 +29,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-    }),
     extractDefault,
   ],
 };

@@ -484,16 +484,20 @@ kbd {
     top: 8px;
   }
 
-  .sorting-desc::after {
-    @extend %sorting-triangle;
-    border-top: 5px solid darken($color-background, 47);
-    top: 8px;
+  [data-order='desc'] {
+    &::after {
+      @extend %sorting-triangle;
+      border-top: 5px solid darken($color-background, 47);
+      top: 8px;
+    }
   }
 
-  .sorting-asc::after {
-    @extend %sorting-triangle;
-    border-bottom: 5px solid darken($color-background, 47);
-    top: 6px;
+  [data-order='asc'] {
+    &::after {
+      @extend %sorting-triangle;
+      border-bottom: 5px solid darken($color-background, 47);
+      top: 6px;
+    }
   }
 }
 

@@ -1,6 +1,8 @@
 import * as d3 from 'd3';
 import { schemeSet3 } from 'd3-scale-chromatic';
 
+const $ = require('jquery');
+
 const treemapColorScale = d3.scaleOrdinal(schemeSet3);
 const sunburstColorScale = d3.scaleOrdinal(d3.schemeCategory20c);
 const currencyColorScale = d3.scaleOrdinal(d3.schemeCategory10);

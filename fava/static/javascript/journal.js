@@ -1,4 +1,5 @@
 const URI = require('urijs');
+const $ = require('jquery');
 
 export default function initJournal() {
   // Toggle postings by clicking on transaction row.

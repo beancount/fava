@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th data-sort="string">{{ _('Account') }}</th>
-                    <th data-sort="int" class="sorting-desc">{{ _('# Postings') }}</th>
+                    <th data-sort="int" data-order="desc">{{ _('# Postings') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,7 +51,7 @@
         <table class="statistics-update-activity sortable">
             <thead>
                 <tr>
-                    <th data-sort="string" class="sorting-asc">{{ _('Account') }}</th>
+                    <th data-sort="string" data-order="asc">{{ _('Account') }}</th>
                     <th data-sort="float" data-sort-default="desc"></th>
                     <th data-sort="string" data-sort-default="desc"></th>
                     <th data-sort="string">{{ _('Last Entry') }}</th>

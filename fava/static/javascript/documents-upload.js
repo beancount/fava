@@ -1,5 +1,7 @@
 import e from './events';
 
+const $ = require('jquery');
+
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 function uploadDocument(formData, filename) {

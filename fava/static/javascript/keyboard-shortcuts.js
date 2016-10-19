@@ -1,5 +1,6 @@
 const Mousetrap = require('mousetrap');
 require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
+const $ = require('jquery');
 
 export function updateKeyboardShortcuts() {
   // Change page
