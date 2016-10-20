@@ -86,6 +86,7 @@ export default function initDocumentsUpload() {
 
       $('#documents-upload').removeClass('shown');
       $('#document-names').empty();
+      e.trigger('reload');
     });
 
     if (folders.length > 1 || changedFilename) {

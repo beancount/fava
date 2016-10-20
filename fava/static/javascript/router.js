@@ -37,6 +37,10 @@ function updateURL(url) {
   return newURL.toString();
 }
 
+e.on('reload', () => {
+  loadURL(window.location.pathname);
+});
+
 export default function initRouter() {
   window.addEventListener('popstate', () => {
     loadURL(window.location.pathname, true);
@@ -63,7 +67,7 @@ export default function initRouter() {
 
   $('#reload-page').on('click', (event) => {
     event.preventDefault();
-    loadURL(window.location.pathname);
+    e.trigger('reload');
   });
 
   $('#filter-form').on('submit', (event) => {
