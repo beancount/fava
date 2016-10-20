@@ -55,7 +55,7 @@
     </p>
     {% if account|length %}
     <ol>
-    {{ loop(account.values()) }}
+    {{ loop(account.values()|sort(attribute='account')) }}
     </ol>
     {% endif %}
     </li>
@@ -147,7 +147,7 @@
     {% endfor %}
     </p>
     <ol>
-    {{ loop(account.values()) }}
+    {{ loop(account.values()|sort(attribute='account')) }}
     </ol>
     </li>
 {% endfor %}
