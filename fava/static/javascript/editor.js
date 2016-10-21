@@ -1,8 +1,9 @@
+import { $, $$ } from './helpers';
 import e from './events';
 
 /* global Mousetrap */
 const URI = require('urijs');
-const $ = require('jquery');
+const jQuery = require('jquery');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 
@@ -32,15 +33,15 @@ require('./codemirror-hint-beancount.js');
 require('./codemirror-mode-beancount.js');
 
 function saveEditorContent(cm) {
-  const button = document.getElementById('source-editor-submit');
-  const fileName = document.getElementById('source-editor-select').value;
+  const button = $('#source-editor-submit');
+  const fileName = $('#source-editor-select').value;
 
   button.disabled = true;
   button.textContent = 'Saving...';
 
-  $.ajax({
+  jQuery.ajax({
     type: 'PUT',
-    url: button.dataset.url,
+    url: button.getAttribute('data-url'),
     data: {
       file_path: fileName,
       source: cm.getValue(),
@@ -59,11 +60,11 @@ function saveEditorContent(cm) {
 }
 
 function formatEditorContent(cm) {
-  const button = document.getElementById('source-editor-format');
+  const button = $('#source-editor-format');
   const scrollPosition = cm.getScrollInfo().top;
   button.disabled = true;
 
-  $.post(button.dataset.url, {
+  jQuery.post(button.getAttribute('data-url'), {
     source: cm.getValue(),
   })
     .done((data) => {
@@ -97,7 +98,7 @@ function jumpToMarker(cm) {
 }
 
 function submitQuery() {
-  document.getElementById('submit-query').click();
+  $('#submit-query').click();
 }
 
 export default function initEditor() {
@@ -160,13 +161,13 @@ export default function initEditor() {
   };
 
   // Read-only editors
-  $('.editor-readonly').each((i, el) => {
+  $$('.editor-readonly').forEach((el) => {
     CodeMirror.fromTextArea(el, readOnlyOptions);
   });
 
   // Query editor
-  if (document.getElementById('query-editor')) {
-    const editor = CodeMirror.fromTextArea(document.getElementById('query-editor'), queryOptions);
+  if ($('#query-editor')) {
+    const editor = CodeMirror.fromTextArea($('#query-editor'), queryOptions);
 
     // when the focus is outside the editor
     Mousetrap.bind(['ctrl+enter', 'meta+enter'], (event) => {
@@ -174,19 +175,20 @@ export default function initEditor() {
       submitQuery();
     });
 
-    $('.stored-queries select').change((event) => {
+    const select = $('.stored-queries select');
+    select.addEventListener('change', () => {
       const sourceElement = $('.stored-queries a.source-link');
-      const query = event.currentTarget.value;
-      const sourceLink = $('option:selected', event.currentTarget).data('source-link');
+      const sourceLink = select.options[select.selectedIndex].getAttribute('data-source-link');
 
-      editor.setValue(query);
-      sourceElement.attr('href', sourceLink).toggle(query !== '');
+      editor.setValue(select.value);
+      sourceElement.setAttribute('href', sourceLink);
+      sourceElement.classList.toggle('hidden', select.value === '');
     });
   }
 
   // The /source/ editor
-  if (document.getElementById('source-editor')) {
-    const el = document.getElementById('source-editor');
+  if ($('#source-editor')) {
+    const el = $('#source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
 
     editor.on('keyup', (cm, event) => {
@@ -202,13 +204,13 @@ export default function initEditor() {
       jumpToMarker(editor);
     }
 
-    $('#source-editor-select').change((event) => {
+    $('#source-editor-select').addEventListener('change', (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
       const select = event.currentTarget;
       select.disabled = true;
       const filePath = select.value;
-      $.get(document.getElementById('source-editor-submit').dataset.url, {
+      jQuery.get($('#source-editor-submit').getAttribute('data-url'), {
         file_path: filePath,
       })
         .done((data) => {
@@ -230,13 +232,13 @@ export default function initEditor() {
       formatEditorContent(editor);
     });
 
-    $('#source-editor-submit').click((event) => {
+    $('#source-editor-submit').addEventListener('click', (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
       saveEditorContent(editor);
     });
 
-    $('#source-editor-format').click((event) => {
+    $('#source-editor-format').addEventListener('click', (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
       formatEditorContent(editor);

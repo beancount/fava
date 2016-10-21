@@ -102,7 +102,6 @@
     {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
-
     <script>
         window.documentTitle = {{ '{} - {}'.format(short_title, api.title) |tojson|safe }};
         window.pageTitle = {{ page_title|tojson|safe }};
@@ -116,7 +115,6 @@
         window.editorPrintMarginColumn = {{ config['editor-print-margin-column']|tojson|safe }};
 
         // charts
-        window.interval = "{{ interval }}";
         window.operating_currencies = {{ operating_currencies|tojson|safe }};
         window.commodities = {{ api.options['commodities']|tojson|safe }};
         window.accountUrl = "{{ url_for('account', name='REPLACEME') }}";

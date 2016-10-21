@@ -1,36 +1,41 @@
+import { $, $$ } from './helpers';
+
 const URI = require('urijs');
-const $ = require('jquery');
 
 export default function initJournal() {
+  const journal = $('#journal-table');
+  if (!journal) return;
+
   // Toggle postings by clicking on transaction row.
-  $('#journal-table').on('click', '.transaction', (event) => {
-    $(event.currentTarget).find('.postings').toggleClass('hidden');
+  $.delegate(journal, 'click', '.transaction', (event) => {
+    $('.postings', event.target.closest('.transaction')).classList.toggle('hidden');
   });
 
   // Toggle entries with buttons.
-  $('#entry-filters button').click((event) => {
-    event.preventDefault();
-    const type = event.currentTarget.dataset.type;
-    const shouldShow = event.currentTarget.classList.contains('inactive');
+  $$('#entry-filters button').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      const type = button.getAttribute('data-type');
+      const shouldShow = button.classList.contains('inactive');
 
-    if (type === 'transaction') {
-      $('#entry-filters .txn-toggle').toggleClass('inactive', !shouldShow);
-    }
-
-    $(`#journal-table .${type}`).toggleClass('hidden', !shouldShow);
-    event.currentTarget.classList.toggle('inactive', !shouldShow);
-
-    // Modify get params
-    const filterShow = [];
-    $('#entry-filters button').each((_, el) => {
-      const $el = $(el);
-      if (!$el.hasClass('inactive')) {
-        filterShow.push($el.data('type'));
+      button.classList.toggle('inactive', !shouldShow);
+      if (type === 'transaction') {
+        $$('#entry-filters .txn-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
       }
-    });
 
-    const url = new URI(window.location)
-      .setSearch({ show: filterShow });
-    window.history.pushState('', '', url.toString());
+      $$(`#journal-table .${type}`).forEach((el) => { el.classList.toggle('hidden', !shouldShow); });
+
+      // Modify get params
+      const filterShow = [];
+      $$('#entry-filters button').forEach((el) => {
+        if (!el.classList.contains('inactive')) {
+          filterShow.push(el.getAttribute('data-type'));
+        }
+      });
+
+      const url = new URI(window.location)
+        .setSearch({ show: filterShow });
+      window.history.pushState(null, null, url.toString());
+    });
   });
 }

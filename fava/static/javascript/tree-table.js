@@ -1,23 +1,26 @@
-const $ = require('jquery');
+import { $, $$ } from './helpers';
 
 export default function initTreeTable() {
-  $('.tree-table').on('click', 'span.has-children', (event) => {
-    const row = event.currentTarget.parentNode.parentNode;
-    const $row = $(row);
-    if (event.shiftKey) {
-      $row.find('li').toggleClass('toggled', !row.classList.contains('toggled'));
-    }
-    if (event.ctrlKey || event.metaKey) {
-      $row.find('li').toggleClass('toggled', row.classList.contains('toggled'));
-    }
-    row.classList.toggle('toggled');
-    $row.parents('ol').find('a.expand-all')
-      .toggleClass('hidden', $row.parents('ol').find('li.toggled'));
-  });
+  $$('.tree-table').forEach((table) => {
+    $.delegate(table, 'click', 'span.has-children', (event) => {
+      const row = event.target.parentNode.parentNode;
+      const willShow = row.classList.contains('toggled');
+      if (event.shiftKey) {
+        $$('li', row).forEach((el) => { el.classList.toggle('toggled', !willShow); });
+      }
+      if (event.ctrlKey || event.metaKey) {
+        $$('li', row).forEach((el) => { el.classList.toggle('toggled', willShow); });
+      }
+      row.classList.toggle('toggled');
 
-  $('.tree-table').on('click', 'a.expand-all', (event) => {
-    event.preventDefault();
-    event.target.classList.add('hidden');
-    $(event.target).parents('ol').find('li.toggled').removeClass('toggled');
+      $('a.expand-all', table)
+        .classList.toggle('hidden', !$$('.toggled', table).length);
+    });
+
+    $.delegate(table, 'click', 'a.expand-all', (event) => {
+      event.preventDefault();
+      event.target.classList.add('hidden');
+      $$('.toggled', table).forEach((el) => { el.classList.remove('toggled'); });
+    });
   });
 }

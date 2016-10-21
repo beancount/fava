@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { schemeSet3 } from 'd3-scale-chromatic';
 
-const $ = require('jquery');
+import { $, $$ } from './helpers';
 
 const treemapColorScale = d3.scaleOrdinal(schemeSet3);
 const sunburstColorScale = d3.scaleOrdinal(d3.schemeCategory20c);
@@ -38,7 +38,7 @@ function addInternalNodesAsLeaves(node) {
     addInternalNodesAsLeaves(o);
   });
   if (node.children && node.children.length) {
-    const copy = $.extend({}, node);
+    const copy = $.extend(node);
     copy.children = null;
     copy.dummy = true;
     node.children.push(copy);
@@ -68,8 +68,8 @@ function addTooltip(selection, tooltipText) {
 }
 
 function timeFilter(date) {
-  $('#time-filter').val(timeFilterDateFormat[window.interval](date));
-  $('#filter-form').submit();
+  $('#time-filter').value = timeFilterDateFormat[$('#chart-interval').value](date);
+  $('#filter-form').dispatchEvent(new Event('submit'));
 }
 
 function addLegend(domain, colorScale) {
@@ -678,7 +678,7 @@ class HierarchyContainer extends BaseChart {
 
       this.has_currency_setting = true;
       this.currentCurrency = currency;
-      $('#chart-currency').show();
+      $('#chart-currency').classList.remove('hidden');
     }
 
     if (mode === 'sunburst' && mode !== this.currentMode) {
@@ -690,7 +690,7 @@ class HierarchyContainer extends BaseChart {
           .draw(data);
 
       this.has_currency_setting = false;
-      $('#chart-currency').hide();
+      $('#chart-currency').classList.add('hidden');
     }
     this.currentMode = mode;
 
@@ -714,15 +714,16 @@ class HierarchyContainer extends BaseChart {
 }
 
 export default function initCharts() {
-  if (!document.getElementById('charts')) {
+  tooltip = d3.select('#tooltip');
+  tooltip.style('opacity', 0);
+
+  if (!$('#charts')) {
     return;
   }
 
   let currentChart;
-  tooltip = d3.select('#tooltip');
   container = d3.select('#chart-container');
   container.html('');
-  const labels = d3.select('#chart-labels');
   charts = {};
 
   function chartContainer(id, label) {
@@ -730,7 +731,7 @@ export default function initCharts() {
       .attr('class', 'chart')
       .attr('id', id);
 
-    labels.append('label')
+    d3.select('#chart-labels').append('label')
       .attr('for', id)
       .html(label);
 
@@ -783,7 +784,7 @@ export default function initCharts() {
             value: +d.totals[name] || 0,
           })),
           date: new Date(d.begin_date),
-          label: dateFormat[window.interval](new Date(d.begin_date)),
+          label: dateFormat[$('#chart-interval').value](new Date(d.begin_date)),
         }));
 
         charts[chartId] = new BarChart(chartContainer(chartId, chart.label))
@@ -832,42 +833,43 @@ export default function initCharts() {
     }
   });
 
-  const $labels = $('#chart-labels');
+  const labels = $('#chart-labels');
 
   function updateChart() {
-    if ($('#chart-container svg:visible').length) {
+    if (!$('#charts').classList.contains('hidden')) {
       currentChart.update();
     }
   }
 
   // Switch between charts
-  $labels.find('label').click((event) => {
-    const chartId = event.currentTarget.getAttribute('for');
-    $('.charts .chart').addClass('hidden');
-    $(`.charts .chart#${chartId}`).removeClass('hidden');
+  $$('label', labels).forEach((label) => {
+    label.addEventListener('click', () => {
+      const chartId = label.getAttribute('for');
+      $$('.charts .chart').forEach((el) => { el.classList.add('hidden'); });
+      $(`#${chartId}`).classList.remove('hidden');
 
-    $labels.find('label').removeClass('selected');
-    event.currentTarget.classList.add('selected');
+      $$('.selected', labels).forEach((el) => { el.classList.remove('selected'); });
+      label.classList.add('selected');
 
-    $('#chart-legend').html('');
+      $('#chart-legend').innerHTML = '';
 
-    currentChart = charts[chartId];
-    currentChart.update();
+      currentChart = charts[chartId];
+      currentChart.update();
 
-    d3.selectAll('#chart-form input[name=mode]').on('change', () => { updateChart(); });
-    d3.select('#chart-currency').on('change', () => { updateChart(); });
-    d3.select(window).on('resize', () => { updateChart(); });
+      d3.selectAll('#chart-form input[name=mode]').on('change', () => { updateChart(); });
+      d3.select('#chart-currency').on('change', () => { updateChart(); });
+      d3.select(window).on('resize', () => { updateChart(); });
 
-    $('#chart-currency').toggle(!!currentChart.has_currency_setting);
-    $('#chart-mode').toggle(!!currentChart.has_mode_setting);
+      $('#chart-currency').classList.toggle('hidden', !currentChart.has_currency_setting);
+      $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);
+    });
   });
-  $labels.find('label:first-child').click();
+  $('label:first-child', labels).click();
 
-  const toggleChart = document.getElementById('toggle-chart');
+  const toggleChart = $('#toggle-chart');
   toggleChart.addEventListener('click', () => {
     toggleChart.classList.toggle('hide-charts');
-    document.getElementById('charts')
-        .classList.toggle('hidden', toggleChart.classList.contains('hide-charts'));
+    $('#charts').classList.toggle('hidden', toggleChart.classList.contains('hide-charts'));
     updateChart();
   });
 }

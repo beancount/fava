@@ -1,6 +1,7 @@
+import { $, $$ } from './helpers';
+
 const Awesomplete = require('awesomplete');
 const URI = require('urijs');
-const $ = require('jquery');
 
 function updateInput(input) {
   const isEmpty = !input.value;
@@ -11,8 +12,7 @@ function updateInput(input) {
     input.setAttribute('size', input.getAttribute('placeholder').length + 2);
   }
 
-  $(input).parents('span')
-      .toggleClass('empty', isEmpty);
+  input.closest('span').classList.toggle('empty', isEmpty);
 }
 
 export function updateFilters() {
@@ -27,16 +27,18 @@ export function updateFilters() {
 }
 
 export function initFilters() {
-  $('#filter-form input').on('awesomplete-selectcomplete', (event) => {
-    updateInput(event.currentTarget);
-    $('#filter-form').submit();
+  $$('#filter-form input').forEach((input) => {
+    input.addEventListener('awesomplete-selectcomplete', () => {
+      updateInput(input);
+      $('#filter-form').dispatchEvent(new Event('submit'));
+    });
+
+    input.addEventListener('input', () => {
+      updateInput(input);
+    });
   });
 
-  $('#filter-form input').on('input', (event) => {
-    updateInput(event.currentTarget);
-  });
-
-  $('#filter-form input[type="text"]').each((_, el) => {
+  $$('#filter-form input[type="text"]').forEach((el) => {
     let options = {
       minChars: 0,
       maxItems: 30,
@@ -61,20 +63,20 @@ export function initFilters() {
     const completer = new Awesomplete(el, options);
     const isEmpty = !el.value;
 
-    $(el).parents('span')
-        .toggleClass('empty', isEmpty);
+    el.closest('span').classList.toggle('empty', isEmpty);
 
-    $(el).focus(() => {
+    el.addEventListener('focus', () => {
       completer.evaluate();
     });
   });
 
-  $('#filter-form button').click((event) => {
-    $(event.currentTarget).parents('span')
-      .find('input')
-        .val('')
-        .each((_, el) => { updateInput(el); });
+  $$('#filter-form button[type="button"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const input = $('input', button.closest('span'));
+      input.value = '';
+      updateInput(input);
 
-    $('#filter-form').submit();
+      $('#filter-form').dispatchEvent(new Event('submit'));
+    });
   });
 }

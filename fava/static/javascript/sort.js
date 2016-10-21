@@ -1,8 +1,10 @@
+import { $, $$ } from './helpers';
+
 const tinysort = require('tinysort');
 
-export default function makeSortable(table) {
-  const tableHead = table.querySelector('thead');
-  const tableHeaders = tableHead.querySelectorAll('th');
+function makeSortable(table) {
+  const tableHead = $('thead', table);
+  const tableHeaders = $$('th', tableHead);
 
   tableHead.addEventListener('click', (event) => {
     let tableHeader = event.target;
@@ -10,8 +12,6 @@ export default function makeSortable(table) {
     while (tableHeader.nodeName !== 'TH') {
       tableHeader = tableHeader.parentNode;
     }
-
-    const index = Array.prototype.indexOf.call(tableHeaders, tableHeader);
 
     let order;
     if (!tableHeader.getAttribute('data-order')) {
@@ -25,8 +25,14 @@ export default function makeSortable(table) {
     tableHeader.setAttribute('data-order', order);
 
     tinysort(table.querySelector('tbody').querySelectorAll('tr'), {
-      selector: `td:nth-child(${index + 1})`,
+      selector: `td:nth-child(${tableHeaders.indexOf(tableHeader) + 1})`,
       order,
     });
+  });
+}
+
+export default function initSort() {
+  $$('table.sortable').forEach((el) => {
+    makeSortable(el);
   });
 }

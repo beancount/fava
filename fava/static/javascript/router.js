@@ -1,16 +1,17 @@
 import URI from 'urijs';
 
+import { $ } from './helpers';
 import e from './events';
 
-const $ = require('jquery');
+const jQuery = require('jquery');
 
 function loadURL(url, noHistoryState) {
-  $.get(url, { partial: true })
+  jQuery.get(url, { partial: true })
     .done((data) => {
       if (!noHistoryState) {
         window.history.pushState(null, null, url);
       }
-      $('article').html(data);
+      jQuery('article').html(data);
       e.trigger('page-loaded');
     })
     .fail(() => {
@@ -46,15 +47,15 @@ export default function initRouter() {
     loadURL(window.location.pathname, true);
   });
 
-  $(document).on('click', 'a', (event) => {
-    const link = event.currentTarget;
+  $.delegate(document, 'click', 'a', (event) => {
+    const link = event.target.closest('a');
     let href = link.getAttribute('href');
 
     const isHttp = link.protocol.indexOf('http') === 0;
     const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
     const isRemote = link.getAttribute('data-remote');
 
-    if (!event.isDefaultPrevented() && !isRemote && isHttp && format === 'html') {
+    if (!event.defaultPrevented && !isRemote && isHttp && format === 'html') {
       event.preventDefault();
 
       // update sidebar links
@@ -65,30 +66,34 @@ export default function initRouter() {
     }
   });
 
-  $('#reload-page').on('click', (event) => {
+  $('#reload-page').addEventListener('click', (event) => {
     event.preventDefault();
     e.trigger('reload');
   });
 
-  $('#filter-form').on('submit', (event) => {
+  $('#filter-form').addEventListener('submit', (event) => {
     event.preventDefault();
     loadURL(updateURL(window.location.pathname));
   });
 
   // These elements might be added asynchronously, so rebind them on page-load.
   e.on('page-loaded', () => {
-    $('#query-form').on('submit', (event) => {
-      event.preventDefault();
-      const url = new URI(window.location.pathname)
-        .setSearch('query_string', $('#query-editor').val())
-        .toString();
-      $.get(url, { partial: true, result_only: true }, (data) => {
-        $('#query-container').html(data);
+    if ($('#query-form')) {
+      $('#query-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const url = new URI(window.location.pathname)
+          .setSearch('query_string', $('#query-editor').value)
+          .toString();
+        jQuery.get(url, { partial: true, result_only: true }, (data) => {
+          jQuery('#query-container').html(data);
+        });
       });
-    });
+    }
 
-    $('#chart-interval').on('change', () => {
-      loadURL(updateURL(window.location.pathname));
-    });
+    if ($('#chart-interval')) {
+      $('#chart-interval').addEventListener('change', () => {
+        loadURL(updateURL(window.location.pathname));
+      });
+    }
   });
 }

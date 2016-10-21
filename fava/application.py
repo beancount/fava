@@ -293,7 +293,7 @@ def api_add_document():
         filepath = os.path.normpath(os.path.join(
             os.path.dirname(g.api.beancount_file_path),
             g.api.options['documents'][target_folder_index],
-            request.form['account_name'].replace(':', '/'),
+            request.form['account'].replace(':', '/'),
             secure_filename(request.form['filename']).replace('_', ' ')))
 
         directory = os.path.dirname(filepath)
