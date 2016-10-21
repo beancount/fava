@@ -74,7 +74,7 @@ export function initKeyboardShortcuts() {
   // Journal
   if ($('#entry-filters')) {
     Mousetrap.bind({
-      l() {
+      p() {
         $('#entry-filters button[data-type=postings]').click();
       },
       m() {
