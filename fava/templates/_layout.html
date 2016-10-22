@@ -1,27 +1,8 @@
 {% import "_charts.html" as charts with context %}
+{% import "_globals.html" as globals %}
 {% set partial = request.args.get('partial', False) %}
-{% set navigation_bar = [
-    ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
-    ("Other",         [ 'holdings', 'commodities', 'events', 'statistics']),
-    ("Configuration", [ 'editor', 'options','help'])
-] %}
-{% set all_pages = {
-    'income_statement': (_('Income Statement'), 'g i'),
-    'balance_sheet':    (_('Balance Sheet'),    'g b'),
-    'trial_balance':    (_('Trial Balance'),    'g t'),
-    'journal':          (_('Journal'),          'g j'),
-    'query':            (_('Query'),            'g q'),
-    'holdings':         (_('Holdings'),         'g h'),
-    'commodities':      (_('Commodities'),      'g c'),
-    'events':           (_('Events'),           'g E'),
-    'editor':           (_('Editor'),           'g e'),
-    'options':          (_('Options'),          'g o'),
-    'statistics':       (_('Statistics'),       'g x'),
-    'help':             (_('Help'),             'g shift+h'),
-} %}
-{% set page_title = all_pages[active_page].0 if not page_title else page_title %}
+{% set page_title = globals.all_pages[active_page].0 if not page_title else page_title %}
 {% set short_title = page_title if not short_title else short_title %}
-{% set user_queries = api.queries[:config['sidebar-show-queries']] %}
 {% if not partial %}
 <!doctype html>
 <html>
@@ -53,43 +34,7 @@
         </h1>
         {% include "_entry_filters.html" %}
     </header>
-    <aside>
-        <button type="button" id="aside-button" class="aside-button">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-        </button>
-        {% if api.sidebar_links %}
-            <h3>{{ _('Custom Links') }}</h3>
-            <ul class="navigation">
-                {% for label, link in api.sidebar_links %}
-                    <li><a href="{{ link }}" data-remote=true>{{ label }}</a></li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-            <h3>{{ _('Reports') }}</h3>
-        {% for title_, menuitems in navigation_bar %}
-            {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
-            <ul class="navigation">
-            {% for id in menuitems %}
-                <li><a{% if id == active_page %} class="selected"{% endif %} data-key="{{ all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">{{ all_pages[id].0 }}</a>
-                {% if id == "query" and user_queries|length > 0 %}
-                    <ul class="submenu">
-                    {% for query in user_queries %}
-                        <li><a{% if query.name == name %} class="selected"{% endif %} href="{{ url_for('query', query_string=query.query_string, name=query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-                </li>
-                {% if id == "editor" and api.errors|length > 0 %}
-                    <li class="error">
-                        <a href="{{ url_for('report', report_name='errors') }}">
-                        {{ _('Errors') }} <span class="bubble">{{ api.errors|length }}</span>
-                        </a>
-                    </li>
-                {% endif %}
-            {% endfor %}
-            </ul>
-        {% endfor %}
-    </aside>
+    <aside>{% include "_aside.html" %}</aside>
     <article>
 {%- endif %}
     {% with messages = get_flashed_messages() %}
@@ -105,7 +50,7 @@
     <script>
         window.documentTitle = {{ '{} - {}'.format(short_title, api.title) |tojson|safe }};
         window.pageTitle = {{ page_title|tojson|safe }};
-        window.changedUrl = {{ url_for('api_changed')|tojson|safe }};
+        window.baseURL = {{ url_for('index')|tojson|safe }};
 
         // editor
         window.allAccounts = {{ api.all_accounts_active|tojson|safe }};

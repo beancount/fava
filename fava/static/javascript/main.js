@@ -66,7 +66,13 @@ e.on('page-loaded', () => {
 });
 
 e.on('file-modified', () => {
-  jQuery('aside').load(`${window.location.pathname} aside`);
+  fetch(`${window.baseURL}_aside/`)
+    .then((response) => {
+      response.text()
+        .then((html) => {
+          $('aside').innerHTML = html;
+        });
+    });
 });
 
 // Notifications
@@ -79,7 +85,7 @@ e.on('error', (msg) => {
 });
 
 function doPoll() {
-  jQuery.get(window.changedUrl, (data) => {
+  jQuery.get(`${window.baseURL}api/changed/`, (data) => {
     if (data.success && data.changed) {
       $('#reload-page').classList.remove('hidden');
       e.trigger('file-modified');

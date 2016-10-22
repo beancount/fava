@@ -39,6 +39,7 @@ app.config['HELP_PAGES'] = HELP_PAGES
 app.config['APIS'] = {}
 
 REPORTS = [
+    '_aside',
     'balance_sheet',
     'events',
     'errors',
@@ -139,7 +140,7 @@ def inject_filters(endpoint, values):
     if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
         values['bfile'] = g.beancount_file_slug
 
-    if endpoint == 'static':
+    if endpoint in ['static', 'index']:
         return
     for filter_name in ['account', 'from', 'interval', 'payee', 'tag', 'time']:
         if filter_name not in values:
