@@ -47,25 +47,20 @@
     {% endif %}
     {% endwith %}
     {% block content %}{% endblock %}
-    <script>
-        window.documentTitle = {{ '{} - {}'.format(short_title, api.title) |tojson|safe }};
-        window.pageTitle = {{ page_title|tojson|safe }};
-        window.baseURL = {{ url_for('index')|tojson|safe }};
-
-        // editor
-        window.allAccounts = {{ api.all_accounts_active|tojson|safe }};
-        window.allCommodities = {{ api.options['commodities']|tojson|safe }};
-        window.allTags = {{ api.active_tags|tojson|safe }};
-
-        window.editorPrintMarginColumn = {{ config['editor-print-margin-column']|tojson|safe }};
-
-        // charts
-        window.operating_currencies = {{ operating_currencies|tojson|safe }};
-        window.commodities = {{ api.options['commodities']|tojson|safe }};
-        window.accountUrl = "{{ url_for('account', name='REPLACEME') }}";
-
-        window.chartData = {{ charts.chart_data|tojson|safe }};
-    </script>
+    <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
+    <script type="application/json" id="page-data">{{ {
+        'documentTitle': '{} - {}'.format(short_title, api.title),
+        'pageTitle': page_title,
+        'accountURL': url_for('account', name='REPLACEME'),
+    }|tojson|safe }}</script>
+    <script type="application/json" id="api-data">{{ {
+        'baseURL': url_for('index'),
+        'accounts': api.all_accounts_active,
+        'commodities': api.options['commodities'],
+        'operating_currencies': operating_currencies,
+        'tags': api.active_tags,
+        'editor-print-margin-column': config['editor-print-margin-column'],
+    }|tojson|safe }}</script>
 {%- if not partial %}
     </article>
     {% include "overlays/_keyboard_shortcuts.html" %}

@@ -15,9 +15,6 @@ function fuzzyMatch(cursor, currentWord, completions) {
 }
 
 const completionSources = {
-  accounts: window.allAccounts,
-  commodities: window.allCommodities,
-  tags: window.allTags,
   undatedDirectives: ['option', 'plugin', 'include'],
   datedDirectives: ['open', 'close', 'commodity', 'balance', 'pad', 'note', 'document', 'price',
                     'event', 'query'],
@@ -44,7 +41,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
   // If '#' has just been typed, there won't be a tag token yet
   if (currentCharacter === '#') {
     return {
-      list: completionSources.tags,
+      list: window.favaAPI.tags,
       from: cursor,
       to: cursor,
     };
@@ -52,7 +49,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
 
   if (token.type === 'tag') {
     return {
-      list: completionSources.tags.filter(d => d.startsWith(currentWord.slice(1))),
+      list: window.favaAPI.tags.filter(d => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
       to: new CodeMirror.Pos(cursor.line, token.end),
     };
@@ -76,7 +73,7 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
     // complete accounts for indented lines
     if (lineTokens[0].type === 'whitespace') {
       if (previousTokens.length === 1) {
-        return fuzzyMatch(cursor, currentWord, completionSources.accounts);
+        return fuzzyMatch(cursor, currentWord, window.favaAPI.accounts);
       }
     }
 

@@ -113,9 +113,9 @@ function submitQuery() {
 
 export default function initEditor() {
   const rulers = [];
-  if (window.editorPrintMarginColumn) {
+  if (window.favaAPI['editor-print-margin-column']) {
     rulers.push({
-      column: window.editorPrintMarginColumn,
+      column: window.favaAPI['editor-print-margin-column'],
       lineStyle: 'dotted',
     });
   }

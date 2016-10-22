@@ -1,4 +1,4 @@
-import { $, $$ } from './helpers';
+import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
 import initCharts from './charts';
@@ -11,8 +11,6 @@ import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-short
 import initRouter from './router';
 import initSort from './sort';
 import initTreeTable from './tree-table';
-
-const jQuery = require('jquery');
 
 // These parts of the page should not change.
 // So they only need to be initialized once.
@@ -41,7 +39,10 @@ function initPage() {
   });
 }
 
+let pageData;
+
 e.on('page-loaded', () => {
+  window.favaAPI = JSON.parse($('#api-data').innerHTML);
   updateFilters();
   updateKeyboardShortcuts();
 
@@ -53,8 +54,9 @@ e.on('page-loaded', () => {
   initSort();
   initTreeTable();
 
-  document.title = window.documentTitle;
-  $('h1 strong').innerHTML = window.pageTitle;
+  pageData = JSON.parse($('#page-data').innerHTML);
+  document.title = pageData.documentTitle;
+  $('h1 strong').innerHTML = pageData.pageTitle;
   $('#reload-page').classList.add('hidden');
 
   $$('aside a').forEach((el) => {
@@ -66,12 +68,10 @@ e.on('page-loaded', () => {
 });
 
 e.on('file-modified', () => {
-  fetch(`${window.baseURL}_aside/`)
-    .then((response) => {
-      response.text()
-        .then((html) => {
-          $('aside').innerHTML = html;
-        });
+  fetch(`${window.favaAPI.baseURL}_aside/`)
+    .then(response => response.text())
+    .then((html) => {
+      $('aside').innerHTML = html;
     });
 });
 
@@ -85,13 +85,17 @@ e.on('error', (msg) => {
 });
 
 function doPoll() {
-  jQuery.get(`${window.baseURL}api/changed/`, (data) => {
-    if (data.success && data.changed) {
-      $('#reload-page').classList.remove('hidden');
-      e.trigger('file-modified');
-    }
-  })
-    .always(() => { setTimeout(doPoll, 5000); });
+  fetch(`${window.favaAPI.baseURL}api/changed/`)
+    .then(handleJSON)
+    .then((data) => {
+      if (data.changed) {
+        $('#reload-page').classList.remove('hidden');
+        e.trigger('file-modified');
+      }
+    }, () => {})
+    .then(() => {
+      setTimeout(doPoll, 5000);
+    });
 }
 
 $.ready().then(() => {

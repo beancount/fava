@@ -3,18 +3,20 @@ import URI from 'urijs';
 import { $ } from './helpers';
 import e from './events';
 
-const jQuery = require('jquery');
-
 function loadURL(url, noHistoryState) {
-  jQuery.get(url, { partial: true })
-    .done((data) => {
+  const getUrl = new URI(url)
+    .setSearch('partial', true)
+    .toString();
+
+  fetch(getUrl)
+    .then(response => response.text())
+    .then((data) => {
       if (!noHistoryState) {
         window.history.pushState(null, null, url);
       }
-      jQuery('article').html(data);
+      $('article').innerHTML = data;
       e.trigger('page-loaded');
-    })
-    .fail(() => {
+    }, () => {
       e.trigger('error', `Loading ${url} failed.`);
     });
 }
@@ -88,11 +90,9 @@ export default function initRouter() {
           .toString();
 
         fetch(url)
-          .then((response) => {
-            response.text()
-              .then((data) => {
-                $('#query-container').innerHTML = data;
-              });
+          .then(response => response.text())
+          .then((data) => {
+            $('#query-container').innerHTML = data;
           });
       });
     }

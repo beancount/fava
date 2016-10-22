@@ -738,11 +738,12 @@ export default function initCharts() {
     return svg;
   }
 
-  window.chartData.forEach((chart, index) => {
+  const chartData = JSON.parse($('#chart-data').innerHTML);
+  chartData.forEach((chart, index) => {
     const chartId = `${chart.type}-${index}`;
     switch (chart.type) {
       case 'balances': {
-        const series = window.commodities
+        const series = window.favaAPI.commodities
             .map(c => ({
               name: c,
               values: chart.data
@@ -779,7 +780,7 @@ export default function initCharts() {
       }
       case 'bar': {
         const series = chart.interval_totals.map(d => ({
-          values: window.operating_currencies.map(name => ({
+          values: window.favaAPI.operating_currencies.map(name => ({
             name,
             value: +d.totals[name] || 0,
           })),
@@ -816,14 +817,14 @@ export default function initCharts() {
         addInternalNodesAsLeaves(chart.root);
         const roots = {};
 
-        window.operating_currencies.forEach((currency) => {
+        window.favaAPI.operating_currencies.forEach((currency) => {
           roots[currency] = d3.hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
         });
 
         charts[chartId] = new HierarchyContainer(chartContainer(chartId, chart.label))
-            .set('currencies', window.operating_currencies)
+            .set('currencies', window.favaAPI.operating_currencies)
             .draw(roots);
 
         break;
