@@ -50,3 +50,18 @@ $.ready = function ready() {
     }
   });
 };
+
+// Handles JSON content for a Promise returned by fetch, also handling an HTTP
+// error status.
+export function handleJSON(response) {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
+  }
+  return response.json()
+    .then((data) => {
+      if (!data.success) {
+        return Promise.reject(data.error);
+      }
+      return data;
+    });
+}

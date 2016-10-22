@@ -1,7 +1,5 @@
-import { $, $$ } from './helpers';
+import { $, $$, handleJSON } from './helpers';
 import e from './events';
-
-const jQuery = require('jquery');
 
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
@@ -9,23 +7,16 @@ function uploadDocument(formData) {
   const documentFolderIndex = $('#document-upload-folder').value;
   formData.append('targetFolderIndex', documentFolderIndex);
 
-  jQuery.ajax({
-    type: 'PUT',
-    url: $('#document-upload-submit').getAttribute('data-url'),
-    data: formData,
-    contentType: false,
-    processData: false,
-    success(data) {
-      if (data.success) {
-        e.trigger('info', data.message);
-      } else {
-        e.trigger('error', `Upload error: ${data.error}`);
-      }
-    },
-    error() {
-      e.trigger('error', 'Unknown upload error');
-    },
-  });
+  fetch($('#document-upload-submit').getAttribute('data-url'), {
+    method: 'PUT',
+    body: formData,
+  })
+    .then(handleJSON)
+    .then((data) => {
+      e.trigger('info', data.message);
+    }, (error) => {
+      e.trigger('error', `Upload error: ${error}`);
+    });
 }
 
 // File uploads via Drag and Drop on elements with class "droptarget" and

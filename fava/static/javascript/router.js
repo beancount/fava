@@ -83,10 +83,17 @@ export default function initRouter() {
         event.preventDefault();
         const url = new URI(window.location.pathname)
           .setSearch('query_string', $('#query-editor').value)
+          .setSearch('partial', true)
+          .setSearch('result_only', true)
           .toString();
-        jQuery.get(url, { partial: true, result_only: true }, (data) => {
-          $('#query-container').innerHTML = data;
-        });
+
+        fetch(url)
+          .then((response) => {
+            response.text()
+              .then((data) => {
+                $('#query-container').innerHTML = data;
+              });
+          });
       });
     }
 

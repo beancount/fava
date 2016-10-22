@@ -273,15 +273,18 @@ def api_changed():
 @app.route('/<bfile>/api/source/', methods=['GET', 'PUT'])
 def api_source():
     if request.method == 'GET':
-        return g.api.source(request.args.get('file_path'))
+        data = g.api.source(request.args.get('file_path'))
+        return api_success(payload=data)
     elif request.method == 'PUT':
-        g.api.set_source(request.form['file_path'], request.form['source'])
+        request.get_json()
+        g.api.set_source(request.json['file_path'], request.json['source'])
         return api_success()
 
 
 @app.route('/<bfile>/api/format-source/', methods=['POST'])
 def api_format_source():
-    return api_success(payload=align_beancount(request.form['source']))
+    request.get_json()
+    return api_success(payload=align_beancount(request.json['source']))
 
 
 @app.route('/<bfile>/api/add-document/', methods=['PUT'])

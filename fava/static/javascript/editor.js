@@ -1,9 +1,8 @@
-import { $, $$ } from './helpers';
+import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
 /* global Mousetrap */
 const URI = require('urijs');
-const jQuery = require('jquery');
 
 const CodeMirror = require('codemirror/lib/codemirror');
 
@@ -35,27 +34,31 @@ require('./codemirror-mode-beancount.js');
 function saveEditorContent(cm) {
   const button = $('#source-editor-submit');
   const fileName = $('#source-editor-select').value;
+  const url = button.getAttribute('data-url');
 
   button.disabled = true;
   button.textContent = 'Saving...';
 
-  jQuery.ajax({
-    type: 'PUT',
-    url: button.getAttribute('data-url'),
-    data: {
+  fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
       file_path: fileName,
       source: cm.getValue(),
-    },
+    }),
   })
-    .done((data) => {
+    .then(handleJSON)
+    .then(() => {
+      cm.focus();
+      e.trigger('file-modified');
+    }, () => {
+      e.trigger('error', `Saving ${fileName} failed.`);
+    })
+    .then(() => {
       button.disabled = false;
       button.textContent = 'Save';
-      if (!data.success) {
-        e.trigger('error', `Saving ${fileName} failed.`);
-      } else {
-        cm.focus();
-        e.trigger('file-modified');
-      }
     });
 }
 
@@ -64,16 +67,23 @@ function formatEditorContent(cm) {
   const scrollPosition = cm.getScrollInfo().top;
   button.disabled = true;
 
-  jQuery.post(button.getAttribute('data-url'), {
-    source: cm.getValue(),
+  fetch(button.getAttribute('data-url'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      source: cm.getValue(),
+    }),
   })
-    .done((data) => {
-      if (data.success) {
-        cm.setValue(data.payload);
-        cm.scrollTo(null, scrollPosition);
-      } else {
-        e.trigger('error', 'Formatting the file with bean-format failed.');
-      }
+    .then(handleJSON)
+    .then((data) => {
+      cm.setValue(data.payload);
+      cm.scrollTo(null, scrollPosition);
+    }, () => {
+      e.trigger('error', 'Formatting the file with bean-format failed.');
+    })
+    .then(() => {
       button.disabled = false;
     });
 }
@@ -210,14 +220,22 @@ export default function initEditor() {
       const select = event.currentTarget;
       select.disabled = true;
       const filePath = select.value;
-      jQuery.get($('#source-editor-submit').getAttribute('data-url'), {
-        file_path: filePath,
-      })
-        .done((data) => {
-          editor.setValue(data);
+
+      const url = new URI($('#source-editor-submit').getAttribute('data-url'))
+        .setSearch('file_path', filePath)
+        .toString();
+
+      fetch(url)
+        .then(handleJSON)
+        .then((data) => {
+          editor.setValue(data.payload);
           editor.setCursor(0, 0);
-          select.disabled = false;
           jumpToMarker(editor);
+        }, () => {
+          e.trigger('error', `Loading ${filePath} failed.`);
+        })
+        .then(() => {
+          select.disabled = false;
         });
     });
 
