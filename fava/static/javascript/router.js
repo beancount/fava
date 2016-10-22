@@ -85,7 +85,7 @@ export default function initRouter() {
           .setSearch('query_string', $('#query-editor').value)
           .toString();
         jQuery.get(url, { partial: true, result_only: true }, (data) => {
-          jQuery('#query-container').html(data);
+          $('#query-container').innerHTML = data;
         });
       });
     }

@@ -666,8 +666,8 @@ class HierarchyContainer extends BaseChart {
     this.data = data;
     this.setSize();
 
-    const mode = d3.select('#chart-form input[name=mode]:checked').property('value');
-    const currency = d3.select('#chart-currency').property('value');
+    const mode = $('#chart-form input[name=mode]:checked').value;
+    const currency = $('#chart-currency').value;
 
     if (mode === 'treemap' && (mode !== this.currentMode || currency !== this.currentCurrency)) {
       this.canvas.html('');
@@ -856,9 +856,9 @@ export default function initCharts() {
       currentChart = charts[chartId];
       currentChart.update();
 
-      d3.selectAll('#chart-form input[name=mode]').on('change', () => { updateChart(); });
-      d3.select('#chart-currency').on('change', () => { updateChart(); });
-      d3.select(window).on('resize', () => { updateChart(); });
+      $$('#chart-form input[name=mode]').forEach((el) => { el.addEventListener('change', updateChart); });
+      $('#chart-currency').addEventListener('change', updateChart);
+      window.addEventListener('resize', updateChart);
 
       $('#chart-currency').classList.toggle('hidden', !currentChart.has_currency_setting);
       $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);

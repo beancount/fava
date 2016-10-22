@@ -12,11 +12,6 @@ import initRouter from './router';
 import initSort from './sort';
 import initTreeTable from './tree-table';
 
-// Polyfill element.closest
-require('element-closest');
-// Polyfill element.classList
-require('classlist.js');
-
 const jQuery = require('jquery');
 
 // These parts of the page should not change.
@@ -93,7 +88,7 @@ function doPoll() {
     .always(() => { setTimeout(doPoll, 5000); });
 }
 
-jQuery(document).ready(() => {
+$.ready().then(() => {
   initPage();
   initRouter();
   e.trigger('page-loaded');

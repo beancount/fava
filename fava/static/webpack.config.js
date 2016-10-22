@@ -4,7 +4,7 @@ const extractDefault = new ExtractTextPlugin('theme_default.css', { allChunks: t
 
 module.exports = {
   entry: {
-    app: './javascript/main.js',
+    app: ['classlist.js', 'element-closest', 'es6-promise', 'whatwg-fetch', './javascript/main.js'],
     theme_default: './sass/theme_default.scss',
   },
   output: {

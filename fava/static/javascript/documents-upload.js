@@ -75,7 +75,7 @@ export default function initDocumentsUpload() {
       }
 
       // upload files on submit
-      jQuery('#document-upload-submit').one('click', (event_) => {
+      $.once($('#document-upload-submit'), 'click', (event_) => {
         event_.preventDefault();
 
         $$('#document-names input').forEach((element) => {
