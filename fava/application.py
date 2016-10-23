@@ -14,7 +14,7 @@ from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters
-from fava.api import BeancountReportAPI
+from fava.api import BeancountReportAPI, FavaAPIException
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
@@ -274,8 +274,11 @@ def api_changed():
 @app.route('/<bfile>/api/source/', methods=['GET', 'PUT'])
 def api_source():
     if request.method == 'GET':
-        data = g.api.source(request.args.get('file_path'))
-        return api_success(payload=data)
+        try:
+            data = g.api.source(request.args.get('file_path'))
+            return api_success(payload=data)
+        except FavaAPIException as exception:
+            return api_error(exception.message)
     elif request.method == 'PUT':
         request.get_json()
         g.api.set_source(request.json['file_path'], request.json['source'])

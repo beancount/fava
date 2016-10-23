@@ -9,13 +9,13 @@ from fava.util.date import parse_date
 
 
 class FilterException(Exception):
-    def __init__(self, filter_type, msg):
+    def __init__(self, filter_type, message):
         super().__init__()
         self.filter_type = filter_type
-        self.msg = msg
+        self.message = message
 
     def __str__(self):
-        return self.msg
+        return self.message
 
 
 class EntryFilter(object):

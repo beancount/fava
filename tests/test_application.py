@@ -52,16 +52,6 @@ def test_urls(test_client, url, return_code):
     assert result.status_code == return_code
 
 
-def test_json_api(app, test_client):
-    with app.test_request_context():
-        app.preprocess_request()
-        url = flask.url_for('api_changed')
-
-    result = test_client.get(url)
-    data = flask.json.loads(result.get_data(True))
-    assert data == {'changed': False, 'success': True}
-
-
 @pytest.mark.parametrize('referer,jump_link,expect', [
     ('/?foo=bar', '/jump?foo=baz', '/?foo=baz'),
     ('/?foo=bar', '/jump?baz=qux', '/?baz=qux&foo=bar'),

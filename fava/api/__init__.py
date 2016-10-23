@@ -28,7 +28,12 @@ from fava.api.fava_options import parse_options
 
 
 class FavaAPIException(Exception):
-    pass
+    def __init__(self, message):
+        super().__init__()
+        self.message = message
+
+    def __str__(self):
+        return self.message
 
 
 def _filter_entries_by_type(entries, include_types):
