@@ -1,3 +1,16 @@
+import pytest
+
+from fava.api import FavaAPIException
+
+
+def test_apiexception():
+    with pytest.raises(FavaAPIException) as exception:
+        raise FavaAPIException('error')
+    exception = exception.value
+    assert str(exception) == 'error'
+    assert str(exception) == exception.message
+
+
 def test_accounts(example_api):
     assert len(example_api.all_accounts) == 93
     assert len(example_api.all_accounts_active) == 61

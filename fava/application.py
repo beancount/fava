@@ -1,4 +1,8 @@
-# -*- coding: utf-8 -*-
+"""Fava's main WSGI application.
+
+when using Fava's WSGI app, make sure to set app.config['BEANCOUNT_FILES']
+and call load_file before starting the server.
+"""
 import datetime
 import inspect
 import os
@@ -55,6 +59,7 @@ REPORTS = [
 
 
 def load_file():
+    """Load Beancount files. """
     for filepath in app.config['BEANCOUNT_FILES']:
         api = BeancountReportAPI(filepath)
         slug = slugify(api.options['title'])
@@ -281,6 +286,8 @@ def api_source():
             return api_error(exception.message)
     elif request.method == 'PUT':
         request.get_json()
+        if request.json is None:
+            abort(400)
         g.api.set_source(request.json['file_path'], request.json['source'])
         return api_success()
 
@@ -288,6 +295,8 @@ def api_source():
 @app.route('/<bfile>/api/format-source/', methods=['POST'])
 def api_format_source():
     request.get_json()
+    if request.json is None:
+        abort(400)
     return api_success(payload=align_beancount(request.json['source']))
 
 

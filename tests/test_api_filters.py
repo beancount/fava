@@ -9,6 +9,14 @@ from fava.api.filters import (
     TimeFilter)
 
 
+def test_filterexception():
+    with pytest.raises(FilterException) as exception:
+        raise FilterException('type', 'error')
+    exception = exception.value
+    assert str(exception) == 'error'
+    assert str(exception) == exception.message
+
+
 def test_from_filter(example_api):
     filter = FromFilter()
 
