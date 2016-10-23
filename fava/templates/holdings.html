@@ -3,7 +3,7 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% macro num_cell(value, currency) -%}
-<td class="num" data-sort-value="{{ value }}">{{ value|format_currency(currency) }}</td>
+<td class="num">{{ value|format_currency(currency) }}</td>
 {%- endmacro %}
 
 {% block content %}

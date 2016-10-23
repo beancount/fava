@@ -713,15 +713,22 @@ class HierarchyContainer extends BaseChart {
   }
 }
 
+let currentChart;
+function updateChart() {
+  if (!$('#charts').classList.contains('hidden')) {
+    currentChart.update();
+  }
+}
+
 export default function initCharts() {
   tooltip = d3.select('#tooltip');
   tooltip.style('opacity', 0);
 
+  window.removeEventListener('resize', updateChart);
   if (!$('#charts')) {
     return;
   }
 
-  let currentChart;
   container = d3.select('#chart-container');
   container.html('');
   charts = {};
@@ -836,11 +843,6 @@ export default function initCharts() {
 
   const labels = $('#chart-labels');
 
-  function updateChart() {
-    if (!$('#charts').classList.contains('hidden')) {
-      currentChart.update();
-    }
-  }
 
   // Switch between charts
   $$('label', labels).forEach((label) => {
