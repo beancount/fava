@@ -13,36 +13,6 @@ export function updateKeyboardShortcuts() {
       });
     }
   });
-}
-
-export function initKeyboardShortcuts() {
-  Mousetrap.bind({
-    '?': () => {
-      $('#keyboard-shortcuts').classList.add('shown');
-    },
-    esc() {
-      $$('.overlay-wrapper').forEach((el) => { el.classList.remove('shown'); });
-    },
-  }, 'keyup');
-
-  // Filtering:
-  Mousetrap.bind({
-    'f f': () => {
-      $('#from-filter').focus();
-    },
-    'f t': () => {
-      $('#time-filter').focus();
-    },
-    'f g': () => {
-      $('#tag-filter').focus();
-    },
-    'f a': () => {
-      $('#account-filter').focus();
-    },
-    'f p': () => {
-      $('#payee-filter').focus();
-    },
-  }, 'keyup');
 
   // Charts
   if ($('#charts')) {
@@ -123,4 +93,34 @@ export function initKeyboardShortcuts() {
       },
     }, 'keyup');
   }
+}
+
+export function initKeyboardShortcuts() {
+  Mousetrap.bind({
+    '?': () => {
+      $('#keyboard-shortcuts').classList.add('shown');
+    },
+    esc() {
+      $$('.overlay-wrapper').forEach((el) => { el.classList.remove('shown'); });
+    },
+  }, 'keyup');
+
+  // Filtering:
+  Mousetrap.bind({
+    'f f': () => {
+      $('#from-filter').focus();
+    },
+    'f t': () => {
+      $('#time-filter').focus();
+    },
+    'f g': () => {
+      $('#tag-filter').focus();
+    },
+    'f a': () => {
+      $('#account-filter').focus();
+    },
+    'f p': () => {
+      $('#payee-filter').focus();
+    },
+  }, 'keyup');
 }
