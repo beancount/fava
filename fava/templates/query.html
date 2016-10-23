@@ -3,6 +3,12 @@
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
+{% set sort_type = {
+    "<class 'decimal.Decimal'>": 'data',
+    "<class 'cdecimal.Decimal'>": 'data',
+    "<class 'datetime.date'>": 'date',
+} %}
+
 {% macro querycell(name, value, type_) %}
 {% set type = type_|string %}
 {% if type == "<class 'beancount.core.inventory.Inventory'>" %}
@@ -22,9 +28,7 @@
         {% endif %}
         {# TODO do the same for payee(s) and tag(s) #}
     </td>
-{% elif type == "<class 'decimal.Decimal'>" %}
-    <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
-{% elif type == "<class 'cdecimal.Decimal'>" %}
+{% elif type == "<class 'decimal.Decimal'>" or type == "<class 'cdecimal.Decimal'>" %}
     <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
 {% elif type == "<class 'bool'>" %}
     <td>{{ value|upper }}</td>
@@ -98,7 +102,7 @@
                 <thead>
                     <tr>
                         {% for name, type in result_types %}
-                            <th data-sort="string">{{ name }}</th>
+                            <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
                         {% endfor %}
                     </tr>
                 </thead>

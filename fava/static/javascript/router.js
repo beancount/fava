@@ -2,6 +2,7 @@ import URI from 'urijs';
 
 import { $ } from './helpers';
 import e from './events';
+import initSort from './sort';
 
 function loadURL(url, noHistoryState) {
   const getUrl = new URI(url)
@@ -84,15 +85,21 @@ export default function initRouter() {
       $('#query-form').addEventListener('submit', (event) => {
         event.preventDefault();
         const url = new URI(window.location.pathname)
-          .setSearch('query_string', $('#query-editor').value)
+          .setSearch('query_string', $('#query-editor').value);
+
+        const pageURL = url.toString();
+
+        const fetchURL = url
           .setSearch('partial', true)
           .setSearch('result_only', true)
           .toString();
 
-        fetch(url)
+        fetch(fetchURL)
           .then(response => response.text())
           .then((data) => {
             $('#query-container').innerHTML = data;
+            initSort();
+            window.history.replaceState(null, null, pageURL);
           });
       });
     }
