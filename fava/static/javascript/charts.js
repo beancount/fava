@@ -1,22 +1,32 @@
-import * as d3 from 'd3';
+import { extent, max, merge, min } from 'd3-array';
+import { axisLeft, axisBottom } from 'd3-axis';
+import { format } from 'd3-format';
+import { utcFormat } from 'd3-time-format';
+import { hierarchy, partition, treemap } from 'd3-hierarchy';
+import { scaleBand, scaleLinear, scaleOrdinal, scalePoint,
+  scaleSqrt, scaleUtc, schemeCategory10, schemeCategory20c } from 'd3-scale';
+import { event, select } from 'd3-selection';
+import { arc, line } from 'd3-shape';
 import { schemeSet3 } from 'd3-scale-chromatic';
+import { voronoi } from 'd3-voronoi';
+import 'd3-transition';
 
 import { $, $$ } from './helpers';
 
-const treemapColorScale = d3.scaleOrdinal(schemeSet3);
-const sunburstColorScale = d3.scaleOrdinal(d3.schemeCategory20c);
-const currencyColorScale = d3.scaleOrdinal(d3.schemeCategory10);
-const scatterColorScale = d3.scaleOrdinal(d3.schemeCategory10);
+const treemapColorScale = scaleOrdinal(schemeSet3);
+const sunburstColorScale = scaleOrdinal(schemeCategory20c);
+const currencyColorScale = scaleOrdinal(schemeCategory10);
+const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrency = d3.format('.2f');
+const formatCurrency = format('.2f');
 const dateFormat = {
-  year: d3.utcFormat('%Y'),
+  year: utcFormat('%Y'),
   quarter(date) {
     return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
-  month: d3.utcFormat('%b %Y'),
-  week: d3.utcFormat('%YW%W'),
-  day: d3.utcFormat('%Y-%m-%d'),
+  month: utcFormat('%b %Y'),
+  week: utcFormat('%YW%W'),
+  day: utcFormat('%Y-%m-%d'),
 };
 
 let container;
@@ -24,13 +34,13 @@ let tooltip;
 let charts;
 
 const timeFilterDateFormat = {
-  year: d3.utcFormat('%Y'),
+  year: utcFormat('%Y'),
   quarter(date) {
     return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
-  month: d3.utcFormat('%Y-%m'),
-  week: d3.utcFormat('%Y-W%W'),
-  day: d3.utcFormat('%Y-%m-%d'),
+  month: utcFormat('%Y-%m'),
+  week: utcFormat('%Y-W%W'),
+  day: utcFormat('%Y-%m-%d'),
 };
 
 function addInternalNodesAsLeaves(node) {
@@ -50,7 +60,7 @@ function makeAccountLink(selection) {
   selection
     .on('click', (d) => {
       window.location = window.accountUrl.replace('REPLACEME', d.data.account);
-      d3.event.stopPropagation();
+      event.stopPropagation();
     });
 }
 
@@ -60,7 +70,7 @@ function addTooltip(selection, tooltipText) {
       tooltip.style('opacity', 1).html(tooltipText(d));
     })
     .on('mousemove', () => {
-      tooltip.style('left', `${d3.event.pageX}px`).style('top', `${d3.event.pageY - 15}px`);
+      tooltip.style('left', `${event.pageX}px`).style('top', `${event.pageY - 15}px`);
     })
     .on('mouseleave', () => {
       tooltip.style('opacity', 0);
@@ -73,7 +83,7 @@ function timeFilter(date) {
 }
 
 function addLegend(domain, colorScale) {
-  const legend = d3.select('#chart-legend').selectAll('span.legend')
+  const legend = select('#chart-legend').selectAll('span.legend')
     .data(domain)
     .enter()
     .append('span')
@@ -123,9 +133,9 @@ class TreeMapChart extends BaseChart {
     super();
     this.svg = svg;
 
-    this.x = d3.scaleLinear();
-    this.y = d3.scaleLinear();
-    this.treemap = d3.treemap();
+    this.x = scaleLinear();
+    this.y = scaleLinear();
+    this.treemap = treemap();
 
     this.canvas = svg.classed('treemap', true);
   }
@@ -224,10 +234,10 @@ class SunburstChart extends BaseChart {
     this.svg = svg;
     this.margin.left = 10;
 
-    this.x = d3.scaleLinear().range([0, 2 * Math.PI]);
-    this.y = d3.scaleSqrt();
-    this.partition = d3.partition();
-    this.arc = d3.arc()
+    this.x = scaleLinear().range([0, 2 * Math.PI]);
+    this.y = scaleSqrt();
+    this.partition = partition();
+    this.arc = arc()
       .startAngle(d => this.x(d.x0))
       .endAngle(d => this.x(d.x1))
       .innerRadius(d => this.y(d.y0))
@@ -329,16 +339,16 @@ class BarChart extends BaseChart {
     super();
     this.svg = svg;
 
-    this.x0 = d3.scaleBand().padding(0.1);
-    this.x1 = d3.scaleBand();
-    this.y = d3.scaleLinear();
+    this.x0 = scaleBand().padding(0.1);
+    this.x1 = scaleBand();
+    this.y = scaleLinear();
     this.selections = {};
 
-    this.xAxis = d3.axisBottom(this.x0)
+    this.xAxis = axisBottom(this.x0)
       .tickSizeOuter(0);
 
-    this.yAxis = d3.axisLeft(this.y)
-      .tickFormat(d3.format('.2s'));
+    this.yAxis = axisLeft(this.y)
+      .tickFormat(format('.2s'));
 
     this.canvas = this.svg.classed('barchart', true).append('g');
     this.selections.xAxis = this.canvas.append('g').attr('class', 'x axis');
@@ -350,8 +360,8 @@ class BarChart extends BaseChart {
     this.x1.domain(data[0].values.map(d => d.name));
 
     this.y.domain([
-      Math.min(0, d3.min(data, d => d3.min(d.values, e => e.value))),
-      Math.max(0, d3.max(data, d => d3.max(d.values, e => e.value))),
+      Math.min(0, min(data, d => min(d.values, e => e.value))),
+      Math.max(0, max(data, d => max(d.values, e => e.value))),
     ]);
 
     this.selections.groups = this.canvas.selectAll('.group')
@@ -430,20 +440,20 @@ class ScatterPlot extends BaseChart {
     this.svg = svg;
     this.margin.left = 70;
 
-    this.x = d3.scaleUtc();
-    this.y = d3.scalePoint().padding(1);
+    this.x = scaleUtc();
+    this.y = scalePoint().padding(1);
 
-    this.xAxis = d3.axisBottom(this.x)
+    this.xAxis = axisBottom(this.x)
       .tickSizeOuter(0);
 
-    this.yAxis = d3.axisLeft(this.y)
+    this.yAxis = axisLeft(this.y)
       .tickPadding(6)
       .tickFormat(d => d);
   }
 
   draw(data) {
     this.data = data;
-    this.x.domain(d3.extent(data, d => d.date));
+    this.x.domain(extent(data, d => d.date));
     this.y.domain(data.map(d => d.type));
 
     this.canvas = this.svg.classed('scatterplot', true).append('g');
@@ -491,21 +501,21 @@ class LineChart extends BaseChart {
     super();
     this.svg = svg;
 
-    this.x = d3.scaleUtc();
-    this.y = d3.scaleLinear();
+    this.x = scaleUtc();
+    this.y = scaleLinear();
 
-    this.xAxis = d3.axisBottom(this.x)
+    this.xAxis = axisBottom(this.x)
       .tickSizeOuter(0);
 
-    this.yAxis = d3.axisLeft(this.y)
+    this.yAxis = axisLeft(this.y)
       .tickPadding(6)
-      .tickFormat(d3.format('.2s'));
+      .tickFormat(format('.2s'));
 
-    this.line = d3.line()
+    this.line = line()
       .x(d => this.x(d.date))
       .y(d => this.y(d.value));
 
-    this.voronoi = d3.voronoi()
+    this.voronoi = voronoi()
       .x(d => this.x(d.date))
       .y(d => this.y(d.value));
 
@@ -518,12 +528,12 @@ class LineChart extends BaseChart {
   draw(data) {
     this.data = data;
     this.x.domain([
-      d3.min(this.data, s => s.values[0].date),
-      d3.max(this.data, s => s.values[s.values.length - 1].date),
+      min(this.data, s => s.values[0].date),
+      max(this.data, s => s.values[s.values.length - 1].date),
     ]);
     this.y.domain([
-      Math.min(0, d3.min(this.data, d => d3.min(d.values, e => e.value))),
-      Math.max(0, d3.max(this.data, d => d3.max(d.values, e => e.value))),
+      Math.min(0, min(this.data, d => min(d.values, e => e.value))),
+      Math.max(0, max(this.data, d => max(d.values, e => e.value))),
     ]);
 
     this.selections.lines = this.canvas.selectAll('.line')
@@ -546,7 +556,7 @@ class LineChart extends BaseChart {
         .style('fill', d => currencyColorScale(d.name));
 
     this.selections.voronoi.selectAll('path')
-        .data(this.voronoi.polygons(d3.merge(data.map(d => d.values))))
+        .data(this.voronoi.polygons(merge(data.map(d => d.values))))
         .enter()
       .append('path')
         .filter(d => d !== undefined)
@@ -592,7 +602,7 @@ class LineChart extends BaseChart {
       .attr('d', d => this.line(d.values));
 
     this.selections.voronoi.selectAll('path')
-        .data(this.voronoi.polygons(d3.merge(this.data.map(d => d.values))))
+        .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
         .filter(d => d !== undefined)
         .attr('d', d => `M${d.join('L')}Z`);
 
@@ -721,7 +731,7 @@ function updateChart() {
 }
 
 export default function initCharts() {
-  tooltip = d3.select('#tooltip');
+  tooltip = select('#tooltip');
   tooltip.style('opacity', 0);
 
   window.removeEventListener('resize', updateChart);
@@ -729,7 +739,7 @@ export default function initCharts() {
     return;
   }
 
-  container = d3.select('#chart-container');
+  container = select('#chart-container');
   container.html('');
   charts = {};
 
@@ -738,7 +748,7 @@ export default function initCharts() {
       .attr('class', 'chart')
       .attr('id', id);
 
-    d3.select('#chart-labels').append('label')
+    select('#chart-labels').append('label')
       .attr('for', id)
       .html(label);
 
@@ -825,7 +835,7 @@ export default function initCharts() {
         const roots = {};
 
         window.favaAPI.operating_currencies.forEach((currency) => {
-          roots[currency] = d3.hierarchy(chart.root)
+          roots[currency] = hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
         });

@@ -1,6 +1,6 @@
+/* global tinysort */
+import 'tinysort';
 import { $, $$ } from './helpers';
-
-const tinysort = require('tinysort');
 
 // Enable sorting of tables and the journal.
 //

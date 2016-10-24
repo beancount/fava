@@ -1,4 +1,4 @@
-const CodeMirror = require('codemirror/lib/codemirror');
+import CodeMirror from 'codemirror';
 
 CodeMirror.registerHelper('fold', 'beancount', (cm, start) => {
   const maxDepth = 100;

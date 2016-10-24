@@ -1,9 +1,9 @@
 // Editor
 
-@import '~codemirror/lib/codemirror.css';
-@import '~codemirror/addon/dialog/dialog.css';
-@import '~codemirror/addon/fold/foldgutter.css';
-@import '~codemirror/addon/hint/show-hint.css';
+@import 'codemirror/lib/codemirror';
+@import 'codemirror/addon/dialog/dialog';
+@import 'codemirror/addon/fold/foldgutter';
+@import 'codemirror/addon/hint/show-hint';
 
 .source-form {
   background: lighten($color-sidebar-background, 2);
