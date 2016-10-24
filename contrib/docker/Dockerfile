@@ -13,8 +13,9 @@ RUN cd /root \
         && python3 -mpip install ./beancount \
         && git clone https://github.com/aumayr/fava.git \
         && (cd fava && git log -1) \
-        && make -C fava build-js \
-        && rm -rf fava/fava/static/node_modules \
+        && make -C fava \
+        && make -C fava clean \
+        && rm fava/CHANGES \
         && python3 -mpip install ./fava \
         && python3 -mpip uninstall --yes pip \
         && find /usr/local/lib/python3.5/site-packages -name *.so -print0|xargs -0 strip -v \
