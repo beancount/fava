@@ -1,7 +1,7 @@
-import { $, $$ } from './helpers';
+import Awesomplete from 'awesomplete';
+import URI from 'urijs';
 
-const Awesomplete = require('awesomplete');
-const URI = require('urijs');
+import { $, $$ } from './helpers';
 
 function updateInput(input) {
   const isEmpty = !input.value;

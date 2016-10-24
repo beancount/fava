@@ -1,4 +1,4 @@
-@import '~normalize.css/normalize.css';
+@import 'normalize.css/normalize';
 @import 'mixins';
 
 // for the editor
@@ -7,14 +7,14 @@
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: normal;
-  src: url('~@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Regular.woff') format('woff');
+  src: url('../node_modules/@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Regular.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
   font-weight: 500;
-  src: url('~@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Semibold.woff') format('woff');
+  src: url('../node_modules/@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Semibold.woff') format('woff');
 }
 
 

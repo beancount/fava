@@ -1,35 +1,34 @@
-import { $, $$, handleJSON } from './helpers';
-import e from './events';
+import CodeMirror from 'codemirror';
+import URI from 'urijs';
+import Mousetrap from 'mousetrap';
 
-/* global Mousetrap */
-const URI = require('urijs');
-
-const CodeMirror = require('codemirror/lib/codemirror');
-
-require('codemirror/mode/sql/sql');
-require('codemirror/addon/mode/simple');
+import 'codemirror/mode/sql/sql';
+import 'codemirror/addon/mode/simple';
 
 // search
-require('codemirror/addon/dialog/dialog');
-require('codemirror/addon/search/searchcursor');
-require('codemirror/addon/search/search');
+import 'codemirror/addon/dialog/dialog';
+import 'codemirror/addon/search/searchcursor';
+import 'codemirror/addon/search/search';
 
 // print margin
-require('codemirror/addon/display/rulers');
+import 'codemirror/addon/display/rulers';
 
 // trailing whitespace
-require('codemirror/addon/edit/trailingspace');
+import 'codemirror/addon/edit/trailingspace';
 
 // folding
-require('codemirror/addon/fold/foldcode');
-require('codemirror/addon/fold/foldgutter');
-require('./codemirror-fold-beancount.js');
+import 'codemirror/addon/fold/foldcode';
+import 'codemirror/addon/fold/foldgutter';
 
 // auto-complete
-require('codemirror/addon/hint/show-hint');
-require('./codemirror-hint-beancount.js');
+import 'codemirror/addon/hint/show-hint';
 
-require('./codemirror-mode-beancount.js');
+import './codemirror-fold-beancount';
+import './codemirror-hint-beancount';
+import './codemirror-mode-beancount';
+
+import { $, $$, handleJSON } from './helpers';
+import e from './events';
 
 function saveEditorContent(cm) {
   const button = $('#source-editor-submit');

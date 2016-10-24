@@ -1,5 +1,5 @@
-const CodeMirror = require('codemirror/lib/codemirror');
-const fuzzy = require('fuzzyjs');
+import CodeMirror from 'codemirror/lib/codemirror';
+import fuzzy from 'fuzzyjs';
 
 function getCurrentWord(cursor, line) {
   return line.slice(0, cursor.ch).match(/(\S*)$/)[0];

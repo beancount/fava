@@ -1,4 +1,4 @@
-const CodeMirror = require('codemirror/lib/codemirror');
+import CodeMirror from 'codemirror/lib/codemirror';
 
 // The rules should mirror `parser/lexel.l` in beancount
 CodeMirror.defineSimpleMode('beancount', {

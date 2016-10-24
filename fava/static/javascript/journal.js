@@ -1,6 +1,6 @@
-import { $, $$ } from './helpers';
+import URI from 'urijs';
 
-const URI = require('urijs');
+import { $, $$ } from './helpers';
 
 export default function initJournal() {
   const journal = $('#journal-table');

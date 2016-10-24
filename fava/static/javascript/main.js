@@ -1,5 +1,11 @@
+import 'es6-promise';
+import 'whatwg-fetch';
+import 'classlist.js';
+import 'element-closest';
+
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
+import './../sass/theme_default.scss';
 
 import initCharts from './charts';
 import initClipboard from './clipboard';

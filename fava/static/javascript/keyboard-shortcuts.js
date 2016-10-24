@@ -1,7 +1,7 @@
-import { $, $$ } from './helpers';
+import Mousetrap from 'mousetrap';
+import 'mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary';
 
-const Mousetrap = require('mousetrap');
-require('mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary');
+import { $, $$ } from './helpers';
 
 export function updateKeyboardShortcuts() {
   // Change page
