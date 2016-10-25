@@ -6,7 +6,7 @@ get you up and running:
 
 .. code:: bash
 
-    git clone https://github.com/aumayr/fava.git
+    git clone https://github.com/beancount/fava.git
     cd fava
     # using a virtual environment is optional, but recommended
     virtualenv -p python3 venv
@@ -33,7 +33,7 @@ run from source like so (more details `here <http://furius.ca/beancount/doc/inst
     pip install --editable .
 
 Contributions are very welcome, just open a PR on `Github
-<https://github.com/aumayr/fava/pulls>`__.
+<https://github.com/beancount/fava/pulls>`__.
 
 Fava is released under the `MIT License
-<https://github.com/aumayr/fava/blob/master/LICENSE>`__.
+<https://github.com/beancount/fava/blob/master/LICENSE>`__.

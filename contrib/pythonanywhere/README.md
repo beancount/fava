@@ -7,7 +7,7 @@
   current version available on PyPI (`pip3 install beancount-fava`)
 - [favadev.pythonanywhere.com](http://favadev.pythonanywhere.com), which
   tracks the HEAD of the Github repo
-  ([github.com/aumayr/fava](http://github.com/aumayr/fava))
+  ([github.com/beancount/fava](http://github.com/beancount/fava))
 
 There are four parts to both instances:
 1. '/home/$USER/update.sh' does install `fava` and all dependencies and
