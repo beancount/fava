@@ -21,7 +21,6 @@ export default {
   dest: 'gen/app.js',
   format: 'iife',
   moduleContext: {
-    'node_modules/tinysort/dist/tinysort.js': 'window',
     'node_modules/whatwg-fetch/fetch.js': 'window',
   },
   plugins: [

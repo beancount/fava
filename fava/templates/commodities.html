@@ -11,7 +11,7 @@
             <table class="sortable">
                 <thead>
                     <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Date') }}</th>
-                    <th data-sort="float">{{ _('Price') }}</th>
+                    <th data-sort="num">{{ _('Price') }}</th>
                 </thead>
                 <tbody>
                     {% set prices = api.prices(commodity.0, commodity.1) %}

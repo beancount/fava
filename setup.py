@@ -5,7 +5,7 @@ from setuptools import setup
 
 
 with open('fava/__init__.py', 'rb') as f:
-    version = str(ast.literal_eval(re.search(
+    VERSION = str(ast.literal_eval(re.search(
         r'__version__\s+=\s+(.*)',
         f.read().decode('utf-8')).group(1)))
 
@@ -17,7 +17,7 @@ def _read(fname):
 
 setup(
     name='beancount-fava',
-    version=version,
+    version=VERSION,
     description=('A rich web interface for the CL-accounting tool beancount.'),
     long_description=_read('README.rst'),
     url='https://beancount.github.io/fava/',

@@ -3,7 +3,7 @@
 all: build-js
 
 build-js:
-	cd fava/static; npm install; npm run build
+	cd fava/static; npm update; npm run build
 
 clean:
 	rm -rf .tox
@@ -11,8 +11,8 @@ clean:
 	rm -rf fava/static/node_modules
 
 lint:
-	tox -e flake8
-	cd fava/static; npm install; npm run lint
+	tox -e lint
+	cd fava/static; npm update; npm run lint
 
 test:
 	tox

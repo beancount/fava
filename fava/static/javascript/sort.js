@@ -1,13 +1,51 @@
-/* global tinysort */
-import 'tinysort';
 import { $, $$ } from './helpers';
 
 // Enable sorting of tables and the journal.
 //
 // Only clicking on headers that have a data-sort attribute will have an
-// effect. Usually tinysort is smart enough to correctly sort the lists.  For
-// dates, set data-sort="date" and if data-sort-value on the individual items
-// should be used for sorting, set data-sort="data".
+// effect. The currently supported values for `data-sort` are:
+//
+//  - 'string': Case-insensitive string comparison.
+//  - 'num': Clean and parse to float.
+//
+
+function parseNumber(num) {
+  const cleaned = num.replace(/[^\-?0-9.]/g, '');
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n;
+}
+
+const sorters = {
+  string(A, B) {
+    const a = A.toLowerCase();
+    const b = B.toLowerCase();
+
+    if (a === b) return 0;
+    if (a < b) return -1;
+    return 1;
+  },
+  num(a, b) {
+    return parseNumber(a) - parseNumber(b);
+  },
+};
+
+function getValue(el) {
+  return el.getAttribute('data-sort-value') || el.textContent || el.innerText;
+}
+
+function sortElements(options) {
+  function sortFunction(a, b) {
+    return (options.order === 'asc' ? 1 : -1) * sorters[options.type](
+        getValue(options.selector(a)),
+        getValue(options.selector(b)));
+  }
+
+  const fragment = document.createDocumentFragment();
+  options.elements.sort(sortFunction).forEach((el) => {
+    fragment.appendChild(el);
+  });
+  options.parent.appendChild(fragment);
+}
 
 function getSortOrder(headerElement) {
   if (!headerElement.getAttribute('data-order')) {
@@ -26,22 +64,27 @@ function sortableJournal(ol) {
       return;
     }
     const order = getSortOrder(header);
+    const type = header.getAttribute('data-sort');
     const headerClass = header.classList[0];
 
     // update sort order
     headers.forEach((el) => { el.removeAttribute('data-order'); });
     header.setAttribute('data-order', order);
 
-    tinysort([].slice.call(ol.children, 1), {
-      selector: `span.${headerClass}`,
+    sortElements({
+      parent: ol,
+      elements: [].slice.call(ol.children, 1),
+      selector(li) {
+        return li.querySelector(`.${headerClass}`);
+      },
       order,
-      ignoreDashes: header.getAttribute('data-sort') === 'date',
+      type,
     });
   });
 }
 
 function sortableTable(table) {
-  const head = $('thead', table);
+  const head = table.tHead;
   const headers = $$('th[data-sort]', head);
 
   head.addEventListener('click', (event) => {
@@ -50,16 +93,21 @@ function sortableTable(table) {
       return;
     }
     const order = getSortOrder(header);
+    const type = header.getAttribute('data-sort');
+    const index = headers.indexOf(header);
 
     // update sort order
     headers.forEach((el) => { el.removeAttribute('data-order'); });
     header.setAttribute('data-order', order);
 
-    tinysort(table.querySelector('tbody').querySelectorAll('tr'), {
-      selector: `td:nth-child(${headers.indexOf(header) + 1})`,
+    sortElements({
+      parent: table.querySelector('tbody'),
+      elements: $$('tr', table.querySelector('tbody')),
+      selector(tr) {
+        return tr.cells.item(index);
+      },
       order,
-      data: header.getAttribute('data-sort') === 'data' ? 'sort-value' : null,
-      ignoreDashes: header.getAttribute('data-sort') === 'date',
+      type,
     });
   });
 }
