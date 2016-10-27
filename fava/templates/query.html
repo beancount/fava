@@ -4,9 +4,9 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% set sort_type = {
-    "<class 'decimal.Decimal'>": 'data',
-    "<class 'cdecimal.Decimal'>": 'data',
-    "<class 'datetime.date'>": 'date',
+    "<class 'decimal.Decimal'>": 'num',
+    "<class 'cdecimal.Decimal'>": 'num',
+    "<class 'int'>": 'num',
 } %}
 
 {% macro querycell(name, value, type_) %}

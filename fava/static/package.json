@@ -46,7 +46,6 @@
     "fuzzyjs": "^2.1.2",
     "mousetrap": "^1.5.3",
     "normalize.css": "^5.0.0",
-    "tinysort": "^2.3.6",
     "urijs": "^1.18.0",
     "whatwg-fetch": "^1.0.0"
   }
