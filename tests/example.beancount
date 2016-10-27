@@ -7,6 +7,8 @@
 option "title" "Example Beancount file"
 option "operating_currency" "USD"
 
+2016-01-01 custom "fava-option" "show-accounts-with-zero-balance" "False"
+
 
 
 
@@ -745,6 +747,7 @@ option "operating_currency" "USD"
 * Credit-Cards
 
 1980-05-12 open Liabilities:US:Chase:Slate                      USD
+    fava-uptodate-indication: "True"
 
 2014-01-04 * "Kin Soy" | "Eating out with Joe"
   Liabilities:US:Chase:Slate                       -38.48 USD
@@ -2734,6 +2737,7 @@ option "operating_currency" "USD"
 2014-01-01 open Assets:US:ETrade:GLD                       GLD
 2014-01-01 open Income:US:ETrade:Gains                      USD
 2014-01-01 open Income:US:ETrade:Dividends                  USD
+    fava-collapse-account: "True"
 
 2014-09-18 * "Dividends on portfolio"
   Assets:US:ETrade:Cash                              0.00 USD

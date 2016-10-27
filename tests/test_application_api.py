@@ -1,3 +1,6 @@
+from io import BytesIO
+import os
+
 from beancount.scripts.format import align_beancount
 import flask
 
@@ -10,6 +13,41 @@ def test_api_changed(app, test_client):
     result = test_client.get(url)
     data = flask.json.loads(result.get_data(True))
     assert data == {'changed': False, 'success': True}
+
+
+def test_api_add_document(app, test_client, tmpdir):
+    with app.test_request_context():
+        app.preprocess_request()
+        old_documents = flask.g.api.options['documents']
+        flask.g.api.options['documents'] = [str(tmpdir)]
+        data = {
+            'targetFolderIndex': '0',
+            'account': 'Test',
+            'filename': '2015-12-12_test',
+            'file': (BytesIO(b'asdfasdf'), 'test'),
+        }
+        url = flask.url_for('api_add_document')
+
+        response = test_client.put(url)
+        assert response.status_code == 400
+
+        filename = '{}/{}/{}'.format(
+            str(tmpdir), 'Test', data['filename'].replace('_', ' '))
+
+        response = test_client.put(url, data=data)
+        assert flask.json.loads(response.get_data(True)) == {
+            'success': True,
+            'message': 'Uploaded to {}'.format(filename),
+        }
+        assert os.path.isfile(filename)
+
+        data['file'] = (BytesIO(b'asdfasdf'), 'test')
+        response = test_client.put(url, data=data)
+        assert flask.json.loads(response.get_data(True)) == {
+            'success': False,
+            'error': '{} already exists.'.format(filename),
+        }
+        flask.g.api.options['documents'] = old_documents
 
 
 def test_api_source_get(app, test_client):

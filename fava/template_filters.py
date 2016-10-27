@@ -63,7 +63,7 @@ def should_show(account):
                         account.txn_postings), Close):
             show_this_account = False
         if not g.api.fava_options['show-accounts-with-zero-balance'] and \
-                not account.balance.is_empty():
+                account.balance.is_empty():
             show_this_account = False
         if not g.api.fava_options['show-accounts-with-zero-transactions'] and \
                 not any(isinstance(t, TxnPosting)
