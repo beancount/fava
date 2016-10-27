@@ -1,8 +1,5 @@
 {% import "_globals.html" as globals %}
 {% set user_queries = api.queries[:config['sidebar-show-queries']] %}
-<button type="button" id="aside-button" class="aside-button">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24" xml:space="preserve"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-</button>
 {% if api.sidebar_links %}
     <h3>{{ _('Custom Links') }}</h3>
     <ul class="navigation">
