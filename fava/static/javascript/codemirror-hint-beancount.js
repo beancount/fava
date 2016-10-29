@@ -17,7 +17,7 @@ function fuzzyMatch(cursor, currentWord, completions) {
 const completionSources = {
   undatedDirectives: ['option', 'plugin', 'include'],
   datedDirectives: ['open', 'close', 'commodity', 'balance', 'pad', 'note', 'document', 'price',
-                    'event', 'query'],
+    'event', 'query'],
 };
 
 const directiveCompletions = {

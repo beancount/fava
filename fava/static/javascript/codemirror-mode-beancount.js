@@ -1,3 +1,7 @@
+/* eslint-disable no-useless-escape */
+// To keep the regular expressions in sync with Beancount, they might contain
+// some superfluous escape characters.
+
 import CodeMirror from 'codemirror/lib/codemirror';
 
 // The rules should mirror `parser/lexel.l` in beancount
