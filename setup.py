@@ -20,7 +20,7 @@ setup(
     version=VERSION,
     description=('A rich web interface for the CL-accounting tool beancount.'),
     long_description=_read('README.rst'),
-    url='https://aumayr.github.io/fava/',
+    url='https://beancount.github.io/fava/',
     author='Dominik Aumayr',
     author_email='dominik@aumayr.name',
     license='MIT',

@@ -1,7 +1,7 @@
 # Steps to create a release
 
 1. Compare changes to last release, eg.
-   https://github.com/aumayr/fava/compare/v0.2.2...master
+   https://github.com/beancount/fava/compare/v0.2.2...master
 3. Update `CHANGES`
 4. Update `README.rst` (search and replace old version number)
 5. Update `AUTHORS`

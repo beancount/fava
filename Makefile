@@ -29,7 +29,7 @@ gh-pages:
 	touch .nojekyll
 	git add -A
 	git commit -m 'Update gh-pages'
-	git push --force git@github.com:aumayr/fava.git gh-pages:gh-pages
+	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
 	git checkout master
 	git branch -D gh-pages
 

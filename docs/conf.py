@@ -14,7 +14,7 @@ exclude_patterns = ['_build']
 pygments_style = 'sphinx'
 
 extlinks = {
-    'bug': ('https://github.com/aumayr/fava/issues/%s', '#'),
+    'bug': ('https://github.com/beancount/fava/issues/%s', '#'),
     'user': ('https://github.com/%s', '@'),
 }
 
@@ -27,13 +27,13 @@ html_theme_options = {
     'logo_text_align': 'center',
     'description': """Web interface for <a href=\"http://furius.ca/beancount/\"
 title=\"Double-entry bookkeeping software Beancount\">Beancount</a>""",
-    'github_user': 'aumayr',
+    'github_user': 'beancount',
     'github_repo': 'fava',
     'github_button': 'false',
     'show_powered_by': 'false',
     'extra_nav_links': {
-        "fava @ Github": 'https://github.com/aumayr/fava',
-        "Issue Tracker": 'https://github.com/aumayr/fava/issues',
+        "fava @ Github": 'https://github.com/beancount/fava',
+        "Issue Tracker": 'https://github.com/beancount/fava/issues',
     },
     'link': '#3572b0',
     'link_hover': '#1A2F59',

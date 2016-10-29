@@ -24,7 +24,7 @@ cp ~/fava/fava/default-settings.conf /home/favadev/
 
 # Generate fresh example
 date=`date +%Y-%m-%d`
-site='github.com/aumayr/fava'
+site='github.com/beancount/fava'
 name="option \"title\" \"Example beancount-fava @ $version ($date) [$site]\""
 bean-example | sed "7s#.*#$name#" > test.bean
 

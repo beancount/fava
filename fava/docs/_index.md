@@ -6,12 +6,12 @@ Welcome to the help pages for Fava:
 - [Running Fava]({{ url_for('help_page', page_slug='running_fava') }}) - available command-line options.
 
 If you discover bug in Fava, or have some ideas for improvement, please open a
-[bug report](https://github.com/aumayr/fava/issues).
+[bug report](https://github.com/beancount/fava/issues).
 
 ### Related websites
 
-- Fava [Website](https://aumayr.github.io/fava/),
-- Fava [Bug Tracker](https://github.com/aumayr/fava/issues),
+- Fava [Website](https://beancount.github.io/fava/),
+- Fava [Bug Tracker](https://github.com/beancount/fava/issues),
 - Beancount [Documentation](http://furius.ca/beancount/doc/index),
 - Beancount [Mailing list](https://groups.google.com/forum/#!forum/beancount),
 - Beancount [Bug Tracker](https://bitbucket.org/blais/beancount/issues?status=new&status=open),
