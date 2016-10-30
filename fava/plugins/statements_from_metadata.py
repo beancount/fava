@@ -44,14 +44,14 @@ def statements_from_metadata(entries, options_map):
             for key in entry.meta.keys():
                 if key.startswith('statement'):
                     statements.append(
-                        (entry.meta['statement'], entry.postings[0].account))
+                        (entry.meta[key], entry.postings[0].account))
 
             for posting in entry.postings:
                 if posting.meta:
                     for key in posting.meta.keys():
                         if key.startswith('statement'):
                             statements.append(
-                                (posting.meta['statement'], posting.account))
+                                (posting.meta[key], posting.account))
 
             for path, account in statements:
                 account_path = account.replace(':', '/')
