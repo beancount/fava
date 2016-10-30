@@ -212,7 +212,7 @@
                 <span class="num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.meta|remove_keys(['lineno', 'filename']), show_type['metadata']) }}
+            {{ render_metadata(posting.meta|remove_keys(['__automatic__', 'lineno', 'filename']), show_type['metadata']) }}
         </li>
         {% endfor %}
         </ul>
