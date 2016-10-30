@@ -222,6 +222,10 @@ def query():
     return render_template('query.html', result_types=types, result_rows=rows)
 
 
+@app.route('/<bfile>/journal/<link>/')
+def journal_link(link):
+    return render_template('journal.html', link=link)
+
 @app.route('/<bfile>/<report_name>/')
 def report(report_name):
     if report_name in REPORTS:
