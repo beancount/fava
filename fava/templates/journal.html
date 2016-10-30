@@ -2,7 +2,11 @@
 {% set active_page = 'journal' %}
 
 {% block content %}
-    {% with journal = api.entries %}
-        {% include "_journal_table.html" %}
-    {% endwith %}
+    {% if link %}
+        {% set journal=api.entries_for_link(link) %}
+    {% else %}
+        {% set journal=api.entries %}
+    {% endif %}
+
+    {% include "_journal_table.html" %}
 {% endblock %}
