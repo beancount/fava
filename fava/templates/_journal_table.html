@@ -1,4 +1,9 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% if link %}
+    {% set entry_types = ['transaction', 'document'] %}
+    <h3 class="link-title">Link ^{{ link }}</h3>
+{% else %}
+    {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% endif %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
 {% set default_show_type = {
@@ -96,7 +101,7 @@
 
 {% macro render_tags_links(entry) -%}
 {% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
-{% for link in entry.links or [] %}<a class="link"><span>^</span>{{ link }}</a>{% endfor %}
+{% for link_ in entry.links or [] %}<a class="link" href="{{ url_for('journal_link', link=link_) }}"><span>^</span>{{ link_ }}</a>{% endfor %}
 {%- endmacro %}
 
 <ol id="journal-table" class="journal-table">

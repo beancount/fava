@@ -1,5 +1,12 @@
 // Journal table
 
+h3.link-title {
+  float: left;
+  padding: 0 10px 0 0;
+  line-height: 32px;
+  margin: 0;
+}
+
 .journal-entry-filters {
   .inactive {
     background: $color-background-darker;
