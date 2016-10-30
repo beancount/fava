@@ -10,6 +10,7 @@ function uploadDocument(formData) {
   fetch($('#document-upload-submit').getAttribute('data-url'), {
     method: 'PUT',
     body: formData,
+    credentials: 'include',
   })
     .then(handleJSON)
     .then((data) => {
