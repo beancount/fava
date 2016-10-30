@@ -47,6 +47,7 @@ function saveEditorContent(cm) {
       file_path: fileName,
       source: cm.getValue(),
     }),
+    credentials: 'include',
   })
     .then(handleJSON)
     .then(() => {
@@ -74,6 +75,7 @@ function formatEditorContent(cm) {
     body: JSON.stringify({
       source: cm.getValue(),
     }),
+    credentials: 'include',
   })
     .then(handleJSON)
     .then((data) => {
@@ -224,7 +226,9 @@ export default function initEditor() {
         .setSearch('file_path', filePath)
         .toString();
 
-      fetch(url)
+      fetch(url, {
+        credentials: 'include',
+      })
         .then(handleJSON)
         .then((data) => {
           editor.setValue(data.payload);

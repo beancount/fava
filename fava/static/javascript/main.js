@@ -74,7 +74,9 @@ e.on('page-loaded', () => {
 });
 
 e.on('file-modified', () => {
-  fetch(`${window.favaAPI.baseURL}_aside/`)
+  fetch(`${window.favaAPI.baseURL}_aside/`, {
+    credentials: 'include',
+  })
     .then(response => response.text())
     .then((html) => {
       $('aside').innerHTML = html;
@@ -91,7 +93,9 @@ e.on('error', (msg) => {
 });
 
 function doPoll() {
-  fetch(`${window.favaAPI.baseURL}api/changed/`)
+  fetch(`${window.favaAPI.baseURL}api/changed/`, {
+    credentials: 'include',
+  })
     .then(handleJSON)
     .then((data) => {
       if (data.changed) {

@@ -9,7 +9,9 @@ function loadURL(url, noHistoryState) {
     .setSearch('partial', true)
     .toString();
 
-  fetch(getUrl)
+  fetch(getUrl, {
+    credentials: 'include',
+  })
     .then(response => response.text())
     .then((data) => {
       if (!noHistoryState) {
@@ -94,7 +96,9 @@ export default function initRouter() {
           .setSearch('result_only', true)
           .toString();
 
-        fetch(fetchURL)
+        fetch(fetchURL, {
+          credentials: 'include',
+        })
           .then(response => response.text())
           .then((data) => {
             $('#query-container').innerHTML = data;
