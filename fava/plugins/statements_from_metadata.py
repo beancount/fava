@@ -18,7 +18,6 @@ __plugins__ = ['statements_from_metadata']
 
 def statements_from_metadata(entries, options_map):
     errors = []
-    key = 'statement'
 
     if 'documents' not in options_map or len(options_map['documents']) == 0:
         return entries, errors
@@ -41,12 +40,17 @@ def statements_from_metadata(entries, options_map):
 
             # If the `statement` metadata key is set on the transaction, assume
             # it belongs to the first posting
-            if key in entry.meta:
-                statements.append((entry.meta[key], entry.postings[0].account))
+            for key in entry.meta.keys():
+                if key.startswith('statement'):
+                    statements.append(
+                        (entry.meta['statement'], entry.postings[0].account))
 
             for posting in entry.postings:
-                if posting.meta and key in posting.meta:
-                    statements.append((posting.meta[key], posting.account))
+                if posting.meta:
+                    for key in posting.meta.keys():
+                        if key.startswith('statement'):
+                            statements.append(
+                                (posting.meta['statement'], posting.account))
 
             for path, account in statements:
                 account_path = account.replace(':', '/')

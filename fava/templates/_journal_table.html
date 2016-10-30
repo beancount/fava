@@ -85,9 +85,9 @@
         {% for key, value in metadata.items() %}
             <dt>{{ key }}</dt>
             <dd>
-                {%- if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
+                {%- if key.startswith('statement') %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
                 {{ value }}
-                {%- if key == 'statement' %}</a>{% endif -%}
+                {%- if key.startswith('statement') %}</a>{% endif -%}
             </dd>
         {% endfor %}
     </dl>
