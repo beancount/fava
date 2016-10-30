@@ -9,6 +9,7 @@ The file specified in the `statement`-metadata-value will be searched
 import collections
 from os.path import join, dirname, isfile
 from beancount.core import data
+from beancount.core.compare import hash_entry
 
 StatementDocumentError = collections.namedtuple('StatementDocumentError',
                                                 'source message entry')
@@ -26,7 +27,7 @@ def statements_from_metadata(entries, options_map):
         d_str = date.strftime("%Y-%m-%d")
         return [name, '{} {}'.format(d_str, name), '{}.{}'.format(d_str, name)]
 
-    for entry in entries:
+    for i, entry in enumerate(entries):
         type = entry.__class__.__name__.lower()
 
         if type != 'transaction':
@@ -66,9 +67,12 @@ def statements_from_metadata(entries, options_map):
         found = False
         for account, path in paths:
             if isfile(path):
-                # TODO link the Document entry with the Transaction
+                _hash = hash_entry(entry)
+                links = set(entry.links) if entry.links else set()
+                links.add(_hash)
+                entries[i] = entry._replace(links=links)
                 meta = data.new_metadata('<fava_statements_plugin>', 0)
-                entries.append(data.Document(meta, entry.date, account, path))
+                entries.append(data.Document(meta, entry.date, account, path, None, set([_hash])))
                 found = True
 
         if not found:
