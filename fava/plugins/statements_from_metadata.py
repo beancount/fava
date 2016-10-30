@@ -72,7 +72,8 @@ def statements_from_metadata(entries, options_map):
                 links.add(_hash)
                 entries[i] = entry._replace(links=links)
                 meta = data.new_metadata('<fava_statements_plugin>', 0)
-                entries.append(data.Document(meta, entry.date, account, path, None, set([_hash])))
+                entries.append(data.Document(meta, entry.date, account, path,
+                                             set(['test']), set([_hash])))
                 found = True
 
         if not found:

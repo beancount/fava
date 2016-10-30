@@ -94,6 +94,11 @@
 {% endif %}
 {%- endmacro %}
 
+{% macro render_tags_links(entry) -%}
+{% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+{% for link in entry.links or [] %}<a class="link"><span>^</span>{{ link }}</a>{% endfor %}
+{%- endmacro %}
+
 <ol id="journal-table" class="journal-table">
     <li class="head">
         <p>
@@ -156,6 +161,7 @@
         {% elif type == 'budget' %}
         {% elif type == 'document' %}
             Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
+            {{ render_tags_links(entry) }}
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}
             {% if entry.diff_amount %} fails;
@@ -167,7 +173,7 @@
             {% endif %}
         {% elif type == 'transaction' %}
             <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-            {% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+            {{ render_tags_links(entry) }}
         {% endif %}
         </span>
         {% if type == 'transaction' %}
