@@ -11,7 +11,7 @@ RUN cd /root \
         && hg clone --config hostfingerprints.bitbucket.org=$FINGERPRINT https://bitbucket.org/blais/beancount \
         && (cd beancount && hg log -l1) \
         && python3 -mpip install ./beancount \
-        && git clone https://github.com/aumayr/fava.git \
+        && git clone https://github.com/beancount/fava.git \
         && (cd fava && git log -1) \
         && make -C fava \
         && make -C fava clean \
