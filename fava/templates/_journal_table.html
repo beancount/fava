@@ -1,4 +1,9 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% if link %}
+    {% set entry_types = ['transaction', 'document'] %}
+    <h3 class="link-title">Link ^{{ link }}</h3>
+{% else %}
+    {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% endif %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
 {% set default_show_type = {
@@ -85,13 +90,18 @@
         {% for key, value in metadata.items() %}
             <dt>{{ key }}</dt>
             <dd>
-                {%- if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
+                {%- if key.startswith('statement') %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
                 {{ value }}
-                {%- if key == 'statement' %}</a>{% endif -%}
+                {%- if key.startswith('statement') %}</a>{% endif -%}
             </dd>
         {% endfor %}
     </dl>
 {% endif %}
+{%- endmacro %}
+
+{% macro render_tags_links(entry) -%}
+{% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+{% for link_ in entry.links or [] %}<a class="link" href="{{ url_for('journal_link', link=link_) }}"><span>^</span>{{ link_ }}</a>{% endfor %}
 {%- endmacro %}
 
 <ol id="journal-table" class="journal-table">
@@ -156,6 +166,7 @@
         {% elif type == 'budget' %}
         {% elif type == 'document' %}
             Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
+            {{ render_tags_links(entry) }}
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}
             {% if entry.diff_amount %} fails;
@@ -167,7 +178,7 @@
             {% endif %}
         {% elif type == 'transaction' %}
             <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-            {% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+            {{ render_tags_links(entry) }}
         {% endif %}
         </span>
         {% if type == 'transaction' %}
@@ -201,7 +212,7 @@
                 <span class="num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.meta|remove_keys(['lineno', 'filename']), show_type['metadata']) }}
+            {{ render_metadata(posting.meta|remove_keys(['__automatic__', 'lineno', 'filename']), show_type['metadata']) }}
         </li>
         {% endfor %}
         </ul>

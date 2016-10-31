@@ -1,5 +1,12 @@
 // Journal table
 
+h3.link-title {
+  float: left;
+  padding: 0 10px 0 0;
+  line-height: 32px;
+  margin: 0;
+}
+
 .journal-entry-filters {
   .inactive {
     background: $color-background-darker;
@@ -167,13 +174,7 @@
   .description {
     flex: 1;
 
-    .links {
-      margin-left: 1em;
-      margin-right: 1em;
-      text-decoration: none;
-    }
-
-    .tag {
+    .tag, .link {
       color: $color-journaltable-tag;
       display: inline-block;
       margin-right: 8px;
@@ -182,6 +183,26 @@
         color: darken($color-journaltable-tag, 30%);
         text-decoration: underline;
       }
+    }
+
+    .link {
+      color: $color-journaltable-link;
+
+      &:hover { color: darken($color-journaltable-link, 30%); }
+    }
+  }
+
+  .document .description {
+    .tag {
+      color: $color-journaltable-tag-document;
+
+      &:hover { color: darken($color-journaltable-tag-document, 30%); }
+    }
+
+    .link {
+      color: $color-journaltable-link-document;
+
+      &:hover { color: darken($color-journaltable-link-document, 30%); }
     }
   }
 

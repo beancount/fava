@@ -424,3 +424,9 @@ class BeancountReportAPI():
             if isinstance(posting, Open):
                 return posting.meta
         return {}
+
+    def entries_for_link(self, link):
+        """Entries with the specified link."""
+        return [entry for entry in self.entries
+                if isinstance(entry, (Transaction, Document)) and
+                entry.links and link in entry.links]
