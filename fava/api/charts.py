@@ -1,7 +1,8 @@
 """Provide data suitable for Fava's charts. """
 from datetime import date, datetime
 
-from beancount.core.amount import Amount, decimal
+from beancount.core.amount import Amount
+from beancount.core.number import Decimal
 from beancount.core.position import Position
 from beancount.core import inventory, realization
 from beancount.core.data import iter_entry_dates
@@ -16,7 +17,7 @@ class BeanJSONEncoder(JSONEncoder):
             return o.strftime('%Y-%m-%dT%H:%M:%SZ')
         elif isinstance(o, date):
             return o.strftime('%Y-%m-%d')
-        elif isinstance(o, decimal.Decimal):
+        elif isinstance(o, Decimal):
             return float(o)
         elif isinstance(o, Amount):
             return str(o)
