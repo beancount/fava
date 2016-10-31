@@ -425,7 +425,6 @@ class BeancountReportAPI():
                 return posting.meta
         return {}
 
-
     def entries_for_link(self, link):
         """Entries with the specified link."""
         return [entry for entry in self.entries

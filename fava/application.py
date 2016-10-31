@@ -22,7 +22,7 @@ from fava.api import BeancountReportAPI, FavaAPIException
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
-from fava.util import slugify, resource_path, next_statement_key
+from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 from fava.util.file import insert_line_in_file
 
@@ -330,7 +330,9 @@ def api_add_document():
         if request.form.get('bfilename', None):
             # TODO use next_statement_key to calculate the metadata key to
             # support multiple statement keys
-            relpath = os.path.relpath(filepath, os.path.dirname(request.form['bfilename']))
+            relpath = os.path.relpath(
+                filepath,
+                os.path.dirname(request.form['bfilename']))
             insert_line_in_file(
                 request.form['bfilename'],
                 int(request.form['blineno'])-1,

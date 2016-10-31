@@ -22,6 +22,7 @@ def test_slugify():
     assert slugify('ASDF') == 'asdf'
     assert slugify('ASDF test test') == 'asdf-test-test'
 
+
 def test_next_statement_key():
     assert next_statement_key([]) == 'statement'
     assert next_statement_key(['foo']) == 'statement'

@@ -29,6 +29,7 @@ def simple_wsgi(_, start_response):
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [b'']
 
+
 def next_statement_key(keys):
     """Returns the next unused key for `statement` in the supplied array.
 
@@ -36,7 +37,7 @@ def next_statement_key(keys):
     until a free one is found.
     """
     basekey = 'statement'
-    if not basekey in keys:
+    if basekey not in keys:
         return basekey
     i = 2
     while '{}-{}'.format(basekey, i) in keys:
