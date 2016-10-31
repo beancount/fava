@@ -13,10 +13,10 @@ from beancount.core.compare import hash_entry
 StatementDocumentError = collections.namedtuple('StatementDocumentError',
                                                 'source message entry')
 
-__plugins__ = ['tag_statement_documents']
+__plugins__ = ['link_statements']
 
 
-def tag_statement_documents(entries, options_map):
+def link_statements(entries, options_map):
     errors = []
 
     if 'documents' not in options_map or len(options_map['documents']) == 0:
