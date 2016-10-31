@@ -173,12 +173,12 @@ class BeancountReportAPI():
     def hash_entry(self, entry):
         return compare.hash_entry(entry)
 
-    def changed(self):
+    def changed(self, force=False):
         """Check if the file needs to be reloaded. """
         # We can't reload an encrypted file, so act like it never changes.
         if self.is_encrypted:
             return False
-        changed = self.watcher.check()
+        changed = True if force else self.watcher.check()
         if changed:
             self.load_file()
         return changed

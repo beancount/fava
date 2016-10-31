@@ -28,3 +28,17 @@ def simple_wsgi(_, start_response):
     """A simple wsgi app that always returns an empty response."""
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [b'']
+
+def next_statement_key(keys):
+    """Returns the next unused key for `statement` in the supplied array.
+
+    The first try is `statement`, followed by `statement-2`, `statement-3`, etc
+    until a free one is found.
+    """
+    basekey = 'statement'
+    if not basekey in keys:
+        return basekey
+    i = 2
+    while '{}-{}'.format(basekey, i) in keys:
+        i = i + 1
+    return '{}-{}'.format(basekey, i)

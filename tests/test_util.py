@@ -1,7 +1,7 @@
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
-from fava.util import simple_wsgi, slugify
+from fava.util import simple_wsgi, slugify, next_statement_key
 
 
 def test_simple_wsgi():
@@ -21,3 +21,9 @@ def test_slugify():
     assert slugify('söße') == 'söße'
     assert slugify('ASDF') == 'asdf'
     assert slugify('ASDF test test') == 'asdf-test-test'
+
+def test_next_statement_key():
+    assert next_statement_key([]) == 'statement'
+    assert next_statement_key(['foo']) == 'statement'
+    assert next_statement_key(['foo', 'statement']) == 'statement-2'
+    assert next_statement_key(['statement', 'statement-2']) == 'statement-3'

@@ -48,6 +48,9 @@ export default function initDocumentsUpload() {
       const now = new Date();
       let changedFilename = false;
 
+      const bfilename = target.getAttribute('data-filename')
+      const blineno = target.getAttribute('data-lineno')
+
       if (!folders.length) {
         e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
         return;
@@ -75,6 +78,11 @@ export default function initDocumentsUpload() {
           formData.append('file', file);
           formData.append('account', accountName);
           formData.append('filename', element.value);
+
+          if (bfilename) {  // statement upload (add adding it to metadata)
+            formData.append('bfilename', bfilename);
+            formData.append('blineno', blineno);
+          }
 
           uploadDocument(formData);
         });
