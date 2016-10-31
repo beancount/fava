@@ -338,7 +338,6 @@ def api_add_document():
                 int(request.form['blineno'])-1,
                 'statement: "{}"'.format(relpath))
 
-        g.api.changed(force=True)
         return api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
 
