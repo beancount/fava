@@ -1,13 +1,12 @@
 from textwrap import dedent
-from fava.api.file import (next_statement_key, leading_space,
-                           insert_line_in_file)
+from fava.api.file import next_key, leading_space, insert_line_in_file
 
 
-def test_next_statement_key():
-    assert next_statement_key([]) == 'statement'
-    assert next_statement_key(['foo']) == 'statement'
-    assert next_statement_key(['foo', 'statement']) == 'statement-2'
-    assert next_statement_key(['statement', 'statement-2']) == 'statement-3'
+def test_next_key():
+    assert next_key('statement', []) == 'statement'
+    assert next_key('statement', ['foo']) == 'statement'
+    assert next_key('statement', ['foo', 'statement']) == 'statement-2'
+    assert next_key('statement', ['statement', 'statement-2']) == 'statement-3'
 
 
 def test_leading_space():

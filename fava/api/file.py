@@ -1,10 +1,9 @@
-def next_statement_key(keys):
-    """Returns the next unused key for `statement` in the supplied array.
+def next_key(basekey, keys):
+    """Returns the next unused key for basekey in the supplied array.
 
-    The first try is `statement`, followed by `statement-2`, `statement-3`, etc
+    The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc
     until a free one is found.
     """
-    basekey = 'statement'
     if basekey not in keys:
         return basekey
     i = 2
