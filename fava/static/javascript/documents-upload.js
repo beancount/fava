@@ -26,21 +26,25 @@ export default function initDocumentsUpload() {
     target.addEventListener('dragenter', (event) => {
       target.classList.add('dragover');
       event.preventDefault();
+      event.stopPropagation();
     });
 
     target.addEventListener('dragover', (event) => {
       target.classList.add('dragover');
       event.preventDefault();
+      event.stopPropagation();
     });
 
     target.addEventListener('dragleave', (event) => {
       target.classList.remove('dragover');
       event.preventDefault();
+      event.stopPropagation();
     });
 
     target.addEventListener('drop', (event) => {
       target.classList.remove('dragover');
       event.preventDefault();
+      event.stopPropagation();
 
       const accountName = target.getAttribute('data-account-name');
       const folders = $$('#document-upload-folder option');
