@@ -51,6 +51,9 @@ export default function initRouter() {
   });
 
   $.delegate(document, 'click', 'a', (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+      return;
+    }
     const link = event.target.closest('a');
     let href = link.getAttribute('href');
 
