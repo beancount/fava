@@ -330,11 +330,13 @@ def api_add_document():
                 filepath,
                 os.path.dirname(request.form['bfilename']))
 
-            g.api.insert_metadata(request.form['bfilename'],
-                                  int(request.form['blineno']),
-                                  'statement',
-                                  relpath)
-
+            try:
+                g.api.insert_metadata(request.form['bfilename'],
+                                      int(request.form['blineno']),
+                                      'statement',
+                                      relpath)
+            except FavaAPIException as exception:
+                return api_error(exception.message)
         return api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
 

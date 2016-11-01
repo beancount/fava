@@ -436,7 +436,6 @@ class BeancountReportAPI():
     def insert_metadata(self, filepath, lineno, basekey, value):
         """Insert metadata into a file at lineno. Also, prevent duplicate
         keys."""
-
         key = None
         for entry in self.entries:
             if isinstance(entry, Transaction):
@@ -445,5 +444,9 @@ class BeancountReportAPI():
                     key = next_key(basekey, entry.meta)
                     break
 
-        assert key is not None
+        if not key:
+            raise FavaAPIException(
+                'No transaction entry in file {} at line {}'.format(
+                    filepath, lineno))
+
         insert_line_in_file(filepath, lineno-1, '{}: "{}"'.format(key, value))
