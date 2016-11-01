@@ -24,11 +24,8 @@ def insert_line_in_file(filename, lineno, content):
     with open(filename, "r") as file:
         contents = file.readlines()
 
-    # this is beancount-specific: if the line has no whitespace in front of it,
     # use the whitespace of the following line, else use double the whitespace
-    indention = leading_space(contents[lineno]) * 2 \
-        if len(leading_space(contents[lineno])) > 0 \
-        else leading_space(contents[lineno + 1])
+    indention = leading_space(contents[lineno + 1])
 
     contents.insert(lineno + 1, '{}{}\n'.format(indention, content))
 

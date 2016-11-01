@@ -230,7 +230,7 @@
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
-                <span class="description droptarget" data-filename="{{ posting.meta.filename }}" data-lineno="{{ posting.meta.lineno }}" data-account-name="{{ posting.account }}">{{ account_link(posting.account) }}</span>
+                <span class="description droptarget" data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ posting.account }}">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>

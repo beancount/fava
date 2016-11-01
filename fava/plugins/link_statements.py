@@ -32,13 +32,7 @@ def link_statements(entries, options_map):
         statements = [value for key, value in entry.meta.items()
                       if key.startswith('statement')]
 
-        for posting in entry.postings:
-            if posting.meta:
-                statements.extend([value for key, value in posting.meta.items()
-                                   if key.startswith('statement')])
-
-        _hash = hash_entry(entry)
-
+        _hash = hash_entry(entry)[:8]
         for statement in statements:
             statement_p = normpath(join(dirname(entry.meta['filename']),
                                         statement))

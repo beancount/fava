@@ -30,52 +30,19 @@ def test_insert_line_in_file(tmpdir):
     assert samplefile.read() == dedent(file_content)
     assert len(tmpdir.listdir()) == 1
 
-    insert_line_in_file(str(samplefile), 1, 'metadata: test1')
+    insert_line_in_file(str(samplefile), 1, 'metadata: "test1"')
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
-            metadata: test1
+            metadata: "test1"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
     """)
 
-    insert_line_in_file(str(samplefile), 1, 'metadata: test2')
+    insert_line_in_file(str(samplefile), 1, 'metadata: "test2"')
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
-            metadata: test2
-            metadata: test1
+            metadata: "test2"
+            metadata: "test1"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
-    """)
-
-    insert_line_in_file(str(samplefile), 4, 'metadata: test3')
-    assert samplefile.read() == dedent("""
-        2016-02-26 * "Uncle Boons" "Eating out alone"
-            metadata: test2
-            metadata: test1
-            Liabilities:US:Chase:Slate                       -24.84 USD
-                metadata: test3
-            Expenses:Food:Restaurant                          24.84 USD
-    """)
-
-    insert_line_in_file(str(samplefile), 4, 'metadata: test4')
-    assert samplefile.read() == dedent("""
-        2016-02-26 * "Uncle Boons" "Eating out alone"
-            metadata: test2
-            metadata: test1
-            Liabilities:US:Chase:Slate                       -24.84 USD
-                metadata: test4
-                metadata: test3
-            Expenses:Food:Restaurant                          24.84 USD
-    """)
-
-    insert_line_in_file(str(samplefile), 7, 'metadata: test5')
-    assert samplefile.read() == dedent("""
-        2016-02-26 * "Uncle Boons" "Eating out alone"
-            metadata: test2
-            metadata: test1
-            Liabilities:US:Chase:Slate                       -24.84 USD
-                metadata: test4
-                metadata: test3
-            Expenses:Food:Restaurant                          24.84 USD
-                metadata: test5
     """)

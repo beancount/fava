@@ -366,7 +366,7 @@ class BeancountReportAPI():
         """Check if file_path is the path to a document.
 
         It should either occur in one of the Document entries or in a
-        "statement"-metadata in a Transaction entry or one of it's Postings.
+        "statement"-metadata in a Transaction entry.
         """
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
@@ -377,13 +377,6 @@ class BeancountReportAPI():
                 if key.startswith('statement') and \
                         entry.meta[key] == file_path:
                     return True
-
-            for posting in entry.postings:
-                if posting.meta:
-                    for key in posting.meta:
-                        if key.startswith('statement') and \
-                                entry.meta[key] == file_path:
-                            return True
 
         return False
 
@@ -451,11 +444,6 @@ class BeancountReportAPI():
                    entry.meta['lineno'] == lineno:
                     key = next_key(basekey, entry.meta)
                     break
-                for pos in entry.postings:
-                    if pos.meta and pos.meta['filename'] == filepath and \
-                       pos.meta['lineno'] == lineno:
-                        key = next_key(basekey, pos.meta if pos.meta else [])
-                        break
 
-        assert key != None
+        assert key is not None
         insert_line_in_file(filepath, lineno-1, '{}: "{}"'.format(key, value))
