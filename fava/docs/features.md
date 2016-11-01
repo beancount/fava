@@ -1,4 +1,5 @@
-This is an overview of some of the more advanced features that Fava has to offer.
+This is an overview of some of the more advanced features that Fava has to
+offer.
 
 ## Keyboard Shortcuts
 
@@ -13,9 +14,9 @@ There are four filters available in Fava:
   Beancount Query Language.
 - **Time**: Filter entries by their date. You can specify dates and intervals
   like years, quarters, months, weeks, and days (for example `2015`, `2012-Q1`,
-  `2010-10`, `2016-W12`, or `2015-06-12`). You can specify a range of dates
-  like `2010 - 2012-10` which will display all entries between the start of 2010
-  and the end of October 2012.
+  `2010-10`, `2016-W12`, or `2015-06-12`). You can specify a range of dates like
+  `2010 - 2012-10` which will display all entries between the start of 2010 and
+  the end of October 2012.
   To refer to dates relative to the current day, you can use the variables
   `year`, `quarter`, `month`, `week`, and `day`. These will be substituted with
   the current date expressed in the respective format, and support addition and
@@ -26,11 +27,11 @@ There are four filters available in Fava:
 - **Tags**: Filter entries to the ones having the tags selected. This filter is
   inclusive, meaning that if you select multiple tags entries with any of those
   tags will be filtered.
-- **Account**: Filter entries by account, matching any entry this account
-  is part of. The filter can simply be an account name or a regular expression,
+- **Account**: Filter entries by account, matching any entry this account is
+  part of. The filter can simply be an account name or a regular expression,
   e.g. `.*:Company:.*` to filter for all that contain `Company` as a component
-  in the account name. If a regular expression is given, it must match the
-  whole account name.
+  in the account name. If a regular expression is given, it must match the whole
+  account name.
 - **Payee**: Filter entries by payee. This filter is, like the *Tags*-filter,
   inclusive.
 
@@ -79,8 +80,8 @@ while, as configured by the `uptodate-indicator-grey-lookback-days` option.
 
 ## Displaying only relevant accounts
 
-To help display only the most relevant subset of accounts when managing a large number
-or a deep hierarchy of accounts, Fava offers the following options:
+To help display only the most relevant subset of accounts when managing a large
+number or a deep hierarchy of accounts, Fava offers the following options:
 
 - `show-closed-accounts`
 - `show-accounts-with-zero-balance`
@@ -121,33 +122,61 @@ found in the journal:
 - For all Documents: `/<slug>/journal/?show=documents`
 - For all Notes: `/<slug>/journal/?show=notes`
 
-There's a special URL handler `/jump` which can be used to jump to
-current page with given params. This is useful to limit the scope of
-current viewing page. E.g. `/jump?time=last+month+-+next+month` will
-show current page but limit to the last month, this month and the next
-month.
+There's a special URL handler `/jump` which can be used to jump to current page
+with given params. This is useful to limit the scope of current viewing page.
+E.g. `/jump?time=last+month+-+next+month` will show current page but limit to
+the last month, this month and the next month.
 
 ## Language
 
-You can change the language of the interface by specifying the `language` setting.
-Currently Fava supports English (`en`) and German (`de`).
+You can change the language of the interface by specifying the `language`
+setting. Currently Fava supports English (`en`) and German (`de`).
 
 If no setting is specified, Fava tries to guess the language from your browser
 settings.
 
 ## Documents upload
 
+### Uploading normal documents
+
 To store a document in a specific account, just drag and drop the file on the
-account name in a tree-table. 
+account name in a tree-table.
 
-While still dragging, the background-color of the 
-account name will switch to blue, indicating that you can drop a file there. 
+While still dragging, the background-color of the account name will switch to
+blue, indicating that you can drop a file there.
 
-Once dropped, a popup will be shown where you can rename the file before storing. 
-If the filename does not already start with a date (`YYYY-MM-DD`), the current 
-date will be added as a prefix automatically.
+Once dropped, a popup will be shown where you can rename the file before
+storing. If the filename does not already start with a date (`YYYY-MM-DD`), the
+current date will be added as a prefix automatically.
 
-The file will be then stored in your Beancount documents folder, in a sub-folder 
-named after the account. You can set the path to the Beancount documents folder 
-by specifying the `option "documents" "/User/test/invoices"`-option (absolute 
+The file will be then stored in your Beancount documents folder, in a sub-folder
+named after the account. You can set the path to the Beancount documents folder
+by specifying the `option "documents" "/Users/test/invoices"`-option (absolute
 or relative to your Beancount file) in your Beancount file.
+
+Beancount will automatically discover files in your `"documents"`-folders and
+emmit corresponding Document entries.
+
+When enabling the `tag_discovered_documents`-plugin, these Document entries will
+be tagged with `#discovered` and can be filtered in the Journal:
+
+    plugin "fava.plugins.tag_discovered_documents"
+
+### Uploading statements
+
+When dropping a file on a transaction in the Journal, the file will be uploaded
+as described above, and a `statement`-metadata-entry inserted for the
+transaction in your Beancount file.
+
+When dropped on the description, the metadata-entry will be added to the
+transaction and the file will be uploaded to a subfolder corresponding to the
+first posting. When dropped on one of the postings, the metadata-entry will be
+added to that posting, and the file uploaded to the corresponding subfolder.
+
+**Note**: Uploading statements modifies your Beancount file!
+
+When enabling the `link_statements`-plugin, the Document entries created by
+Beancount (see above) will be tagged with `#statement`, linked to the
+corresponding transaction and can be filtered in the Journal:
+
+    plugin "fava.plugins.link_statements"
