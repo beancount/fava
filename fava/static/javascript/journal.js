@@ -23,6 +23,10 @@ export default function initJournal() {
         $$('#entry-filters .txn-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
       }
 
+      if (type === 'document') {
+        $$('#entry-filters .doc-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
+      }
+
       $$(`#journal-table .${type}`).forEach((el) => { el.classList.toggle('hidden', !shouldShow); });
 
       // Modify get params

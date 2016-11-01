@@ -6,21 +6,25 @@
 {% endif %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
+{% set document_types = ['discovered', 'statement'] %}
 {% set default_show_type = {
     'open':        'open' in config['journal-show'],
     'close':       'close' in config['journal-show'],
-    'transaction': 'transaction' in config['journal-show'],
     'balance':     'balance' in config['journal-show'],
     'note':        'note' in config['journal-show'],
-    'document':    'document' in config['journal-show'],
     'pad':         'pad' in config['journal-show'],
     'query':       'query' in config['journal-show'],
     'custom':      'custom' in config['journal-show'],
     'budget':      'budget' in config['journal-show'],
 
+    'transaction': 'transaction' in config['journal-show'],
     'cleared':     'cleared' in config['journal-show-transaction'],
     'pending':     'pending' in config['journal-show-transaction'],
     'other':       'other' in config['journal-show-transaction'],
+
+    'document':    'document' in config['journal-show'],
+    'discovered':  'discovered' in config['journal-show-document'],
+    'statement':   'statement' in config['journal-show-document'],
 
     'metadata':    'metadata' in config['journal-show'],
     'postings':    'postings' in config['journal-show'],
@@ -30,18 +34,21 @@
     {% set show_type = {
         'open':        'open' in _list,
         'close':       'close' in _list,
-        'transaction': 'transaction' in _list,
         'balance':     'balance' in _list,
         'note':        'note' in _list,
-        'document':    'document' in _list,
         'pad':         'pad' in _list,
         'query':       'query' in _list,
         'custom':      'custom' in _list,
         'budget':      'budget' in _list,
 
+        'transaction': 'transaction' in _list,
         'cleared':     'cleared' in _list,
         'pending':     'pending' in _list,
         'other':       'other' in _list,
+
+        'document':    'document' in _list,
+        'discovered':  'discovered' in _list,
+        'statement':   'statement' in _list,
 
         'metadata':     'metadata' in _list,
         'postings':         'postings' in _list,
@@ -55,6 +62,11 @@
     'other':   ('x', _('Other Transactions')),
 }
 %}
+{% set document_type_buttons = {
+    'discovered': ('D', _('Documents discovered by beancount')),
+    'statement': ('S', _('Statements from metadata'))
+}
+%}
 <form id="entry-filters" class="journal-entry-filters wide-form">
     {% for type in entry_types %}
         {% if type != 'budget' or api.budgets %}
@@ -62,6 +74,11 @@
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}
     <button type="button" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">{{ transaction_type_buttons[txn_type].0 }}</button>
+                {% endfor %}
+            {% endif %}
+            {% if type == 'document' %}
+                {% for doc_type in document_types %}
+    <button type="button" title="{{ document_type_buttons[doc_type].1 }}" data-type="{{ doc_type }}" class="doc-toggle{% if not show_type[doc_type] or not show_type['document'] %} inactive{% endif %}">{{ document_type_buttons[doc_type].0 }}</button>
                 {% endfor %}
             {% endif %}
         {% endif %}
@@ -128,6 +145,8 @@
     {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
         {%- if not show_type[flags_to_types.get(entry.flag, 'other')] %} hidden{% endif -%}
     {% endif -%}
+    {%- if entry.tags and 'statement' in entry.tags %} statement{% endif -%}
+    {%- if entry.tags and 'discovered' in entry.tags %} discovered{% endif -%}
     {%- if not show_type[type] %} hidden{% endif -%}
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">

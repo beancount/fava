@@ -18,11 +18,11 @@ h3.link-title {
     }
   }
 
-  .txn-toggle {
+  .txn-toggle, .doc-toggle {
     margin-left: -2px;
   }
 
-  [id='toggle-metadata'] {
+  [data-type='metadata'] {
     margin-left: 9px;
   }
 }

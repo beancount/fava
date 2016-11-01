@@ -54,7 +54,8 @@ def link_statements(entries, options_map):
                 continue
 
             for j, document in documents:
-                tags = set(document.tags).union(['statement']) \
+                tags = set(document.tags).union(
+                    ['statement']).difference(['discovered']) \
                     if document.tags else set(['statement'])
                 links = set(document.links).union([_hash]) \
                     if document.links else set([_hash])

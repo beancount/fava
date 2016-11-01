@@ -16,6 +16,7 @@ DEFAULTS = {
     'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
                      'budget'],
     'journal-show-transaction': ['cleared', 'pending'],
+    'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
 }
