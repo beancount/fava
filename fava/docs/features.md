@@ -137,6 +137,9 @@ settings.
 
 ## Documents upload
 
+One or more documents can be uploaded by drag and drop on account names or
+Journal rows.
+
 ### Uploading normal documents
 
 To store a document in a specific account, just drag and drop the file on the

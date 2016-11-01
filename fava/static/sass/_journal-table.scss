@@ -88,7 +88,7 @@ h3.link-title {
 }
 
 .journal-table {
-  p { border-bottom: thin solid $color-journaltable-border; }
+  p, dl { border-bottom: thin solid $color-journaltable-border; }
 
   // Journal entry types (li)
   .open { background-color: $color-journalentry-open; }

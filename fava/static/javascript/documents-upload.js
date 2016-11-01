@@ -61,6 +61,7 @@ export default function initDocumentsUpload() {
       }
 
       // add input elements for files
+      $('#document-names').innerHTML = '';
       for (let i = 0; i < files.length; i += 1) {
         let filename = files[i].name;
 
