@@ -366,16 +366,24 @@ class BeancountReportAPI():
         """Check if file_path is the path to a document.
 
         It should either occur in one of the Document entries or in a
-        "statement"-metadata in a Transaction entry.
+        "statement"-metadata in a Transaction entry or one of it's Postings.
         """
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
                 return True
 
         for entry in misc_utils.filter_type(self.entries, Transaction):
-            if 'statement' in entry.meta and \
-                    entry.meta['statement'] == file_path:
-                return True
+            for key in entry.meta:
+                if key.startswith('statement') and \
+                        entry.meta[key] == file_path:
+                    return True
+
+            for posting in entry.postings:
+                if posting.meta:
+                    for key in posting.meta:
+                        if key.startswith('statement') and \
+                                entry.meta[key] == file_path:
+                            return True
 
         return False
 
