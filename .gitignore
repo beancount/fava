@@ -1,4 +1,5 @@
 .coverage
+htmlcov/
 .tox
 docs/_build
 *.pyc

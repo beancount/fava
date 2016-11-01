@@ -1,4 +1,8 @@
-from beancount.loader import load_file
+from textwrap import dedent
+from beancount.loader import load_file, load_string
+from fava.plugins.link_statements import (StatementDocumentError,
+                                          LinkStatementError)
+
 
 def test_plugins(tmpdir):
     sample_folder = tmpdir.mkdir('fava_plugins')
@@ -20,30 +24,30 @@ def test_plugins(tmpdir):
     sample_statement5.write('Hello World 5')
 
     beancount_file = sample_folder.join('example.beancount')
-    beancount_file.write("""
-option "title" "Test"
-option "operating_currency" "EUR"
-option "documents" "{}"
+    beancount_file.write(dedent("""
+        option "title" "Test"
+        option "operating_currency" "EUR"
+        option "documents" "{}"
 
-plugin "fava.plugins.link_statements"
-plugin "fava.plugins.tag_discovered_documents"
+        plugin "fava.plugins.link_statements"
+        plugin "fava.plugins.tag_discovered_documents"
 
-2016-10-31 open Expenses:Foo
-2016-10-31 open Assets:Cash
+        2016-10-31 open Expenses:Foo
+        2016-10-31 open Assets:Cash
 
-2016-11-01 * "Foo" "Bar"
-    statement: "{}"
-    Expenses:Foo                100 EUR
-    Assets:Cash
+        2016-11-01 * "Foo" "Bar"
+            statement: "{}"
+            Expenses:Foo                100 EUR
+            Assets:Cash
 
-2016-11-02 * "Foo" "Bar"
-    statement: "documents/Expenses/Foo/2016-11-01 Test 1.pdf"
-    statement-2: "documents/Assets/Cash/2016-11-01 Test 4.pdf"
-    Expenses:Foo        100 EUR
-    Assets:Cash
+        2016-11-02 * "Foo" "Bar"
+            statement: "documents/Expenses/Foo/2016-11-01 Test 1.pdf"
+            statement-2: "documents/Assets/Cash/2016-11-01 Test 4.pdf"
+            Expenses:Foo        100 EUR
+            Assets:Cash
 
-2016-11-02 document Assets:Cash "documents/Assets/Cash/Test 5.pdf"
-    """.format(documents_folder, sample_statement2))
+        2016-11-02 document Assets:Cash "documents/Assets/Cash/Test 5.pdf"
+    """.format(documents_folder, sample_statement2)))
 
     entries, errors, options = load_file(str(beancount_file))
 
@@ -59,3 +63,45 @@ plugin "fava.plugins.tag_discovered_documents"
 
     assert 'discovered' in entries[6].tags
     assert entries[8].tags == None
+
+
+def test_link_statements_no_documents(load_doc):
+    """
+    plugin "fava.plugins.link_statements"
+
+    2016-10-31 open Expenses:Foo
+    2016-10-31 open Assets:Cash
+
+    2016-11-01 * "Foo" "Bar"
+        statement: "{}"
+        Expenses:Foo                100 EUR
+        Assets:Cash
+    """
+    entries, errors, _ = load_doc
+
+    assert len(errors) == 1
+    assert isinstance(errors[0], LinkStatementError)
+    assert len(entries) == 3
+
+
+def test_link_statements_missing(tmpdir):
+    sample_folder = tmpdir.mkdir('fava_plugins').mkdir('documents')
+
+    bfile = dedent("""
+        option "documents" "{}"
+        plugin "fava.plugins.link_statements"
+
+        2016-10-31 open Expenses:Foo
+        2016-10-31 open Assets:Cash
+
+        2016-11-01 * "Foo" "Bar"
+            statement: "test/Foobar.pdf"
+            Expenses:Foo                100 EUR
+            Assets:Cash
+    """.format(sample_folder))
+
+    entries, errors, _ = load_string(bfile)
+
+    assert len(errors) == 1
+    assert isinstance(errors[0], StatementDocumentError)
+    assert len(entries) == 3
