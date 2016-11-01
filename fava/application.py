@@ -24,8 +24,6 @@ from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
-from fava.util.file import insert_line_in_file
-
 
 app = Flask(__name__,
             template_folder=resource_path('templates'),
@@ -328,15 +326,14 @@ def api_add_document():
         file.save(filepath)
 
         if request.form.get('bfilename', None):
-            # TODO use next_statement_key to calculate the metadata key to
-            # support multiple statement keys
             relpath = os.path.relpath(
                 filepath,
                 os.path.dirname(request.form['bfilename']))
-            insert_line_in_file(
-                request.form['bfilename'],
-                int(request.form['blineno'])-1,
-                'statement: "{}"'.format(relpath))
+
+            g.api.insert_metadata(request.form['bfilename'],
+                                  int(request.form['blineno']),
+                                  'statement',
+                                  relpath)
 
         return api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400

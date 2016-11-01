@@ -21,6 +21,7 @@ from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
 from fava.api.charts import Charts
 from fava.api.watcher import Watcher
+from fava.api.file import insert_line_in_file
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import get_final_holdings, aggregate_holdings_by
@@ -430,3 +431,11 @@ class BeancountReportAPI():
         return [entry for entry in self.entries
                 if isinstance(entry, (Transaction, Document)) and
                 entry.links and link in entry.links]
+
+    def insert_metadata(self, filepath, lineno, key, value):
+        """Insert metadata into a file at lineno."""
+
+        # TODO use next_statement_key to calculate the metadata key to
+        # support multiple statement keys
+
+        insert_line_in_file(filepath, lineno-1, '{}: {}'.format(key, value))

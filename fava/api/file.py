@@ -1,3 +1,18 @@
+def next_statement_key(keys):
+    """Returns the next unused key for `statement` in the supplied array.
+
+    The first try is `statement`, followed by `statement-2`, `statement-3`, etc
+    until a free one is found.
+    """
+    basekey = 'statement'
+    if basekey not in keys:
+        return basekey
+    i = 2
+    while '{}-{}'.format(basekey, i) in keys:
+        i = i + 1
+    return '{}-{}'.format(basekey, i)
+
+
 def leading_space(line_content):
     """Returns a string representing the leading whitespace for the specified
     string."""
