@@ -3,6 +3,13 @@ import 'mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary';
 
 import { $, $$ } from './helpers';
 
+function click(selector) {
+  const element = $(selector);
+  if (element) {
+    element.click();
+  }
+}
+
 export function updateKeyboardShortcuts() {
   // Change page
   $$('aside a').forEach((element) => {
@@ -13,86 +20,6 @@ export function updateKeyboardShortcuts() {
       });
     }
   });
-
-  // Charts
-  if ($('#charts')) {
-    Mousetrap.bind({
-      'ctrl+c': () => {
-        $('#toggle-chart').click();
-      },
-      c() {
-        const next = $('#chart-labels .selected').nextElementSibling;
-
-        if (next) {
-          next.click();
-        } else {
-          $('#chart-labels label:first-child').click();
-        }
-      },
-      'shift+c': () => {
-        const prev = $('#chart-labels .selected').previousElementSibling;
-
-        if (prev) {
-          prev.click();
-        } else {
-          $('#chart-labels label:last-child').click();
-        }
-      },
-    }, 'keyup');
-  }
-
-  // Journal
-  if ($('#entry-filters')) {
-    Mousetrap.bind({
-      p() {
-        $('#entry-filters button[data-type=postings]').click();
-      },
-      m() {
-        $('#entry-filters button[data-type=metadata]').click();
-      },
-
-      's o': () => {
-        $('#entry-filters button[data-type=open]').click();
-      },
-      's c': () => {
-        $('#entry-filters button[data-type=close]').click();
-      },
-      's t': () => {
-        $('#entry-filters button[data-type=transaction]').click();
-      },
-      's b': () => {
-        $('#entry-filters button[data-type=balance]').click();
-      },
-      's n': () => {
-        $('#entry-filters button[data-type=note]').click();
-      },
-      's d': () => {
-        $('#entry-filters button[data-type=document]').click();
-      },
-      's p': () => {
-        $('#entry-filters button[data-type=pad]').click();
-      },
-      's q': () => {
-        $('#entry-filters button[data-type=query]').click();
-      },
-      's shift+c': () => {
-        $('#entry-filters button[data-type=custom]').click();
-      },
-      's shift+b': () => {
-        $('#entry-filters button[data-type=budget]').click();
-      },
-
-      't c': () => {
-        $('#entry-filters button[data-type=cleared]').click();
-      },
-      't p': () => {
-        $('#entry-filters button[data-type=pending]').click();
-      },
-      't o': () => {
-        $('#entry-filters button[data-type=other]').click();
-      },
-    }, 'keyup');
-  }
 }
 
 export function initKeyboardShortcuts() {
@@ -101,7 +28,9 @@ export function initKeyboardShortcuts() {
       $('#keyboard-shortcuts').classList.add('shown');
     },
     esc() {
-      $$('.overlay-wrapper').forEach((el) => { el.classList.remove('shown'); });
+      $$('.overlay-wrapper').forEach((el) => {
+        el.classList.remove('shown');
+      });
     },
   }, 'keyup');
 
@@ -121,6 +50,82 @@ export function initKeyboardShortcuts() {
     },
     'f p': () => {
       $('#payee-filter').focus();
+    },
+  }, 'keyup');
+
+  // Charts
+  Mousetrap.bind({
+    'ctrl+c': () => {
+      click('#toggle-chart');
+    },
+    c() {
+      const selected = $('#chart-labels .selected');
+
+      if (selected && selected.nextElementSibling) {
+        selected.nextElementSibling.click();
+      } else {
+        click('#chart-labels label:first-child');
+      }
+    },
+    'shift+c': () => {
+      const selected = $('#chart-labels .selected');
+
+      if (selected && selected.previousElementSibling) {
+        selected.previousElementSibling.click();
+      } else {
+        click('#chart-labels label:last-child');
+      }
+    },
+  }, 'keyup');
+
+  // Journal
+  Mousetrap.bind({
+    p() {
+      click('#entry-filters button[data-type=postings]');
+    },
+    m() {
+      click('#entry-filters button[data-type=metadata]');
+    },
+
+    's o': () => {
+      click('#entry-filters button[data-type=open]');
+    },
+    's c': () => {
+      click('#entry-filters button[data-type=close]');
+    },
+    's t': () => {
+      click('#entry-filters button[data-type=transaction]');
+    },
+    's b': () => {
+      click('#entry-filters button[data-type=balance]');
+    },
+    's n': () => {
+      click('#entry-filters button[data-type=note]');
+    },
+    's d': () => {
+      click('#entry-filters button[data-type=document]');
+    },
+    's p': () => {
+      click('#entry-filters button[data-type=pad]');
+    },
+    's q': () => {
+      click('#entry-filters button[data-type=query]');
+    },
+    's shift+c': () => {
+      click('#entry-filters button[data-type=custom]');
+    },
+    's shift+b': () => {
+      click('#entry-filters button[data-type=budget]');
+    },
+
+    't c': () => {
+      click('#entry-filters button[data-type=cleared]');
+    },
+    't p': () => {
+      click('#entry-filters button[data-type=pending]');
+    },
+    't o': () => {
+      click('#entry-filters button[data-type=other]');
     },
   }, 'keyup');
 }

@@ -853,7 +853,6 @@ export default function initCharts() {
 
   const labels = $('#chart-labels');
 
-
   // Switch between charts
   $$('label', labels).forEach((label) => {
     label.addEventListener('click', () => {
@@ -877,7 +876,9 @@ export default function initCharts() {
       $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);
     });
   });
-  $('label:first-child', labels).click();
+  if ($('label:first-child', labels)) {
+    $('label:first-child', labels).click();
+  }
 
   const toggleChart = $('#toggle-chart');
   toggleChart.addEventListener('click', () => {
