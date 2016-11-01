@@ -92,7 +92,19 @@
 {% set tag_url = url_for_current(tag='REPLACEME,'+(g.filters['tag'] or '')) %}
 
 {% macro account_link(name) -%}
-<a href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>
+<a class="account-link" href="{{ account_url.replace('REPLACEME', name) }}">
+    {% set levels = name|account_level %}
+    {%- for level in range(0, levels) -%}
+        {% set subaccount_name = name.rsplit(':', maxsplit=levels-loop.index)[0] %}
+        {% set subaccount_part = name.split(':')[level] %}
+
+        {%- if loop.last -%}
+            <span>{{ subaccount_part }}</span>
+        {%- else -%}
+            {{ subaccount_part }}:
+        {%- endif -%}
+    {%- endfor -%}
+</a>
 {%- endmacro %}
 
 {% macro render_inventory(inv) -%}
@@ -159,7 +171,7 @@
         {% elif type == 'close' %}
             Close {{ account_link(entry.account) }}
         {% elif type == 'note' %}
-            Note: {{ entry.comment }}
+            <label>Note:</label> {{ entry.comment }}
         {% elif type == 'query' %}
             Query: <a href="{{ url_for('query', name=entry.name, bql=entry.query_string) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
@@ -184,7 +196,7 @@
           {% endif %}
         {% elif type == 'budget' %}
         {% elif type == 'document' %}
-            Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
+            Document for {{ account_link(entry.account) }} <a class="filename" href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
             {{ render_tags_links(entry) }}
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}
@@ -196,7 +208,7 @@
                 has {{ entry.amount }}
             {% endif %}
         {% elif type == 'transaction' %}
-            <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
+            <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %}<span class="separator"></span> {% endif %}{{ entry.narration or '' }}
             {{ render_tags_links(entry) }}
         {% endif %}
         </span>
