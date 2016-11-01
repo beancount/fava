@@ -140,7 +140,7 @@ settings.
 One or more documents can be uploaded by drag and drop on account names or
 Journal rows.
 
-### Uploading normal documents
+### Uploading documents
 
 To store a document in a specific account, just drag and drop the file on the
 account name in a tree-table.
@@ -158,7 +158,7 @@ by specifying the `option "documents" "/Users/test/invoices"`-option (absolute
 or relative to your Beancount file) in your Beancount file.
 
 Beancount will automatically discover files in your `"documents"`-folders and
-emmit corresponding Document entries.
+generate Document entries for them.
 
 When enabling the `tag_discovered_documents`-plugin, these Document entries will
 be tagged with `#discovered` and can be filtered in the Journal:
