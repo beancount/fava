@@ -42,12 +42,12 @@ function updateURL(url) {
 }
 
 e.on('reload', () => {
-  loadURL(window.location.pathname);
+  loadURL(window.location.href);
 });
 
 export default function initRouter() {
   window.addEventListener('popstate', () => {
-    loadURL(window.location.pathname, true);
+    loadURL(window.location.href, true);
   });
 
   $.delegate(document, 'click', 'a', (event) => {
@@ -76,7 +76,7 @@ export default function initRouter() {
 
   $('#filter-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    loadURL(updateURL(window.location.pathname));
+    loadURL(updateURL(window.location.href));
   });
 
   // These elements might be added asynchronously, so rebind them on page-load.
@@ -84,7 +84,7 @@ export default function initRouter() {
     if ($('#query-form')) {
       $('#query-form').addEventListener('submit', (event) => {
         event.preventDefault();
-        const url = new URI(window.location.pathname)
+        const url = new URI(window.location.href)
           .setSearch('query_string', $('#query-editor').value);
 
         const pageURL = url.toString();
@@ -106,7 +106,7 @@ export default function initRouter() {
 
     if ($('#chart-interval')) {
       $('#chart-interval').addEventListener('change', () => {
-        loadURL(updateURL(window.location.pathname));
+        loadURL(updateURL(window.location.href));
       });
     }
   });
