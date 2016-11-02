@@ -225,7 +225,7 @@
             <span class="num">{{ render_inventory(balance) }}</span>
         </p>
         {% endif %}
-        {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata'], entry.postings[0].account) }}
+        {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata'], entry.postings[0].account if type == 'transaction') }}
         {% if entry.postings %}
         <ul class="postings{% if not show_type['postings'] %} hidden{% endif %}">
         {% for posting in entry.postings %}

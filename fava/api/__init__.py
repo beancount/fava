@@ -399,7 +399,8 @@ class BeancountReportAPI():
                         entry.meta[key])]
 
                     # Also, include all specified documents directories.
-                    paths.append([os.path.join(document,
+                    paths.append([os.path.join(
+                        document,
                         entry.postings[0].account.replace(':', '/'),
                         entry.meta[key])
                         for document in self.options['documents']])
@@ -409,7 +410,6 @@ class BeancountReportAPI():
                             return path
 
         raise FavaFileNotFoundException()
-
 
     def query(self, query_string, numberify=False):
         return query.run_query(self.all_entries, self.options,
