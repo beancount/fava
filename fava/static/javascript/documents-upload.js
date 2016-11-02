@@ -52,8 +52,8 @@ export default function initDocumentsUpload() {
       const now = new Date();
       let changedFilename = false;
 
-      const bfilename = target.getAttribute('data-filename')
-      const blineno = target.getAttribute('data-lineno')
+      const bfilename = target.getAttribute('data-filename');
+      const blineno = target.getAttribute('data-lineno');
 
       if (!folders.length) {
         e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
