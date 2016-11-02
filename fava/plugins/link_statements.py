@@ -37,8 +37,7 @@ def link_statements(entries, options_map):
             statement_p = normpath(join(dirname(entry.meta['filename']),
                                         statement))
             documents = [(j, document) for j, document in all_documents
-                         if (document.filename == statement_p and
-                             document.meta['lineno'] == 0) or
+                         if (document.filename == statement_p) or
                             (document.account in
                                 [pos.account for pos in entry.postings] and
                              basename(document.filename) == statement)]
