@@ -18,7 +18,8 @@ from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters
-from fava.api import BeancountReportAPI, FavaAPIException
+from fava.api import (BeancountReportAPI, FavaAPIException,
+                      FavaFileNotFoundException)
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
@@ -183,16 +184,12 @@ def account(name, subreport='journal'):
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
     document_path = request.args.get('file_path', None)
-    if document_path and g.api.is_valid_document(document_path):
-        # metadata-statement-paths may be relative to the beancount-file
-        if not os.path.isabs(document_path):
-            document_path = os.path.join(os.path.dirname(
-                os.path.realpath(g.api.beancount_file_path)), document_path)
-
+    try:
+        document_path = g.api.valid_document_path(document_path)
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
         return send_from_directory(directory, filename)
-    else:
+    except FavaFileNotFoundException:
         return "File \"{}\" not found in entries.".format(document_path), 404
 
 

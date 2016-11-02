@@ -37,6 +37,10 @@ class FavaAPIException(Exception):
         return self.message
 
 
+class FavaFileNotFoundException(Exception):
+    pass
+
+
 def _filter_entries_by_type(entries, include_types):
     return [entry for entry in entries if isinstance(entry, include_types)]
 
@@ -362,23 +366,50 @@ class BeancountReportAPI():
         return {account: len(postings) for account, postings
                 in grouped_postings.items()}
 
-    def is_valid_document(self, file_path):
-        """Check if file_path is the path to a document.
+    def abs_path(self, file_path):
+        """Make a path absolute if it is relative, assuming it is relative to
+        the directory of the beancount file."""
+        if not os.path.isabs(file_path):
+            return os.path.join(os.path.dirname(
+                os.path.realpath(self.beancount_file_path)), file_path)
+        return file_path
+
+    def valid_document_path(self, file_path):
+        """Check if file_path is the path to a document and the absolute
+        path if valid. Throws if the path is not valid.
 
         It should either occur in one of the Document entries or in a
         "statement"-metadata in a Transaction entry.
         """
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
-                return True
+                return self.abs_path(file_path)
 
         for entry in misc_utils.filter_type(self.entries, Transaction):
             for key in entry.meta:
-                if key.startswith('statement') and \
-                        entry.meta[key] == file_path:
-                    return True
+                if key.startswith('statement'):
+                    if entry.meta[key] == file_path:
+                        return self.abs_path(file_path)
 
-        return False
+                    # If the file_path is just a filename, try to fuzzy-match
+                    # all possible paths based on the account name of the
+                    # first posting.
+                    paths = [os.path.join(
+                        entry.postings[0].account.replace(':', '/'),
+                        entry.meta[key])]
+
+                    # Also, include all specified documents directories.
+                    paths.append([os.path.join(document,
+                        entry.postings[0].account.replace(':', '/'),
+                        entry.meta[key])
+                        for document in self.options['documents']])
+
+                    for path in [self.abs_path(p) for p in paths]:
+                        if os.path.isfile(path):
+                            return path
+
+        raise FavaFileNotFoundException()
+
 
     def query(self, query_string, numberify=False):
         return query.run_query(self.all_entries, self.options,
