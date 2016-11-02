@@ -1,7 +1,6 @@
 from textwrap import dedent
 from beancount.loader import load_file, load_string
-from fava.plugins.link_statements import (StatementDocumentError,
-                                          LinkStatementError)
+from fava.plugins.link_statements import StatementDocumentError
 
 
 def test_plugins(tmpdir):
@@ -79,8 +78,7 @@ def test_link_statements_no_documents(load_doc):
     """
     entries, errors, _ = load_doc
 
-    assert len(errors) == 1
-    assert isinstance(errors[0], LinkStatementError)
+    assert len(errors) == 0
     assert len(entries) == 3
 
 

@@ -10,8 +10,6 @@ from os.path import join, dirname, normpath, basename
 from beancount.core import data
 from beancount.core.compare import hash_entry
 
-LinkStatementError = collections.namedtuple('LinkStatementError', 'message')
-
 StatementDocumentError = collections.namedtuple('StatementDocumentError',
                                                 'source message entry')
 
@@ -22,8 +20,6 @@ def link_statements(entries, options_map):
     errors = []
 
     if 'documents' not in options_map or len(options_map['documents']) == 0:
-        errors.append(LinkStatementError(
-            'link_statements requires "documents" option to be set'))
         return entries, errors
 
     all_documents = [(i, entry) for i, entry in enumerate(entries)
