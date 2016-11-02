@@ -6,7 +6,7 @@ It then adds a link to the transaction and the Document, and the tag
 "#statement" to the Document.
 """
 import collections
-from os.path import join, dirname, normpath
+from os.path import join, dirname, normpath, basename
 from beancount.core import data
 from beancount.core.compare import hash_entry
 
@@ -41,14 +41,17 @@ def link_statements(entries, options_map):
             statement_p = normpath(join(dirname(entry.meta['filename']),
                                         statement))
             documents = [(j, document) for j, document in all_documents
-                         if document.filename == statement_p and
-                         document.meta['lineno'] == 0]
+                         if (document.filename == statement_p and
+                             document.meta['lineno'] == 0) or
+                            (document.account in
+                                [pos.account for pos in entry.postings] and
+                             basename(document.filename) == statement)]
 
             if (len(documents) == 0):
                 errors.append(
                     StatementDocumentError(
                         entry.meta,
-                        "Statement Document not found: {}".format(statement_p),
+                        "Statement Document not found: {}".format(statement),
                         entry))
                 continue
 

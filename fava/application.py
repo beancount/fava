@@ -326,15 +326,11 @@ def api_add_document():
         file.save(filepath)
 
         if request.form.get('bfilename', None):
-            relpath = os.path.relpath(
-                filepath,
-                os.path.dirname(request.form['bfilename']))
-
             try:
                 g.api.insert_metadata(request.form['bfilename'],
                                       int(request.form['blineno']),
                                       'statement',
-                                      relpath)
+                                      os.path.basename(filepath))
             except FavaAPIException as exception:
                 return api_error(exception.message)
         return api_success(message='Uploaded to {}'.format(filepath))
