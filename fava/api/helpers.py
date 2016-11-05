@@ -11,6 +11,15 @@ from beancount.parser import options
 from beancount.utils import misc_utils
 
 
+class FavaAPIException(Exception):
+    def __init__(self, message):
+        super().__init__()
+        self.message = message
+
+    def __str__(self):
+        return self.message
+
+
 # Nearly the same as the function of the same name in
 # beancount:src/python/beancount/ops/holdings.py but using Postings instead.
 def get_final_holdings(entries, included_account_types=None, price_map=None,
@@ -204,3 +213,17 @@ def net_worth_at_dates(entries, dates, price_map, options_map):
             for currency in options_map['operating_currency']
         }
     } for date, inv in zip(dates, inventories)]
+
+
+def entry_at_lineno(entries, filename, lineno, type=None):
+    """Returns the entry in filename at lineno."""
+    for entry in entries:
+        if type and not isinstance(entry, type):
+            continue
+
+        if entry.meta['filename'] == filename and \
+           entry.meta['lineno'] == lineno:
+            return entry
+
+    raise FavaAPIException('No entry in file {} at line {}'.format(
+        filename, lineno))

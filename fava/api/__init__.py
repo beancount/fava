@@ -24,17 +24,9 @@ from fava.api.watcher import Watcher
 from fava.api.file import insert_line_in_file, next_key
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
-from fava.api.helpers import get_final_holdings, aggregate_holdings_by
+from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
+                              entry_at_lineno, FavaAPIException)
 from fava.api.fava_options import parse_options
-
-
-class FavaAPIException(Exception):
-    def __init__(self, message):
-        super().__init__()
-        self.message = message
-
-    def __str__(self):
-        return self.message
 
 
 class FavaFileNotFoundException(Exception):
@@ -374,40 +366,36 @@ class BeancountReportAPI():
                 os.path.realpath(self.beancount_file_path)), file_path)
         return file_path
 
-    def valid_document_path(self, file_path):
+    def statement_path(self, filename, lineno, metadata_key):
+        """Returns the path for a statement found in the specified entry."""
+        entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
+        value = entry.meta[metadata_key]
+
+        paths = [value]
+        paths.extend([os.path.join(posting.account.replace(':', '/'), value)
+                      for posting in entry.postings])
+        paths.extend([os.path.join(
+                      document_root,
+                      posting.account.replace(':', '/'),
+                      value)
+                for posting in entry.postings
+            for document_root in self.options['documents']])
+
+        for path in [self.abs_path(p) for p in paths]:
+            if os.path.isfile(path):
+                return path
+
+        raise FavaFileNotFoundException()
+
+    def document_path(self, file_path):
         """Check if file_path is the path to a document and the absolute
         path if valid. Throws if the path is not valid.
 
-        It should either occur in one of the Document entries or in a
-        "statement"-metadata in a Transaction entry.
+        It should occur in one of the Document entries.
         """
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
                 return self.abs_path(file_path)
-
-        for entry in misc_utils.filter_type(self.entries, Transaction):
-            for key in entry.meta:
-                if key.startswith('statement'):
-                    if entry.meta[key] == file_path:
-                        return self.abs_path(file_path)
-
-                    # If the file_path is just a filename, try to fuzzy-match
-                    # all possible paths based on the account name of the
-                    # first posting.
-                    paths = [os.path.join(
-                        entry.postings[0].account.replace(':', '/'),
-                        entry.meta[key])]
-
-                    # Also, include all specified documents directories.
-                    paths.append([os.path.join(
-                        document,
-                        entry.postings[0].account.replace(':', '/'),
-                        entry.meta[key])
-                        for document in self.options['documents']])
-
-                    for path in [self.abs_path(p) for p in paths]:
-                        if os.path.isfile(path):
-                            return path
 
         raise FavaFileNotFoundException()
 
@@ -464,20 +452,9 @@ class BeancountReportAPI():
                 if isinstance(entry, (Transaction, Document)) and
                 entry.links and link in entry.links]
 
-    def insert_metadata(self, filepath, lineno, basekey, value):
+    def insert_metadata(self, filename, lineno, basekey, value):
         """Insert metadata into a file at lineno. Also, prevent duplicate
         keys."""
-        key = None
-        for entry in self.entries:
-            if isinstance(entry, Transaction):
-                if entry.meta['filename'] == filepath and \
-                   entry.meta['lineno'] == lineno:
-                    key = next_key(basekey, entry.meta)
-                    break
-
-        if not key:
-            raise FavaAPIException(
-                'No transaction entry in file {} at line {}'.format(
-                    filepath, lineno))
-
-        insert_line_in_file(filepath, lineno-1, '{}: "{}"'.format(key, value))
+        entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
+        key = next_key(basekey, entry.meta)
+        insert_line_in_file(filename, lineno-1, '{}: "{}"'.format(key, value))

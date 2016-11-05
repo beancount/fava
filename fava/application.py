@@ -183,14 +183,30 @@ def account(name, subreport='journal'):
 
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
-    document_path = request.args.get('file_path', None)
+    file_path = request.args.get('file_path', None)
     try:
-        document_path = g.api.valid_document_path(document_path)
+        document_path = g.api.document_path(file_path)
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
         return send_from_directory(directory, filename)
     except FavaFileNotFoundException:
-        return "File \"{}\" not found in entries.".format(document_path), 404
+        return "File \"{}\" not found in entries.".format(file_path), 404
+
+
+@app.route('/<bfile>/statement/', methods=['GET'])
+def statement():
+    filename = request.args.get('filename', None)
+    lineno = int(request.args.get('lineno', -1))
+    key = request.args.get('key', None)
+    try:
+        document_path = g.api.statement_path(filename, lineno, key)
+        directory = os.path.dirname(document_path)
+        filename = os.path.basename(document_path)
+        return send_from_directory(directory, filename)
+    except FavaAPIException:
+        return "Statement not found in entries.", 404
+    except FavaFileNotFoundException as e:
+        return "File not found.", 404
 
 
 @app.route('/<bfile>/context/<ehash>/')
