@@ -51,6 +51,16 @@ $.ready = function ready() {
   });
 };
 
+$.fetch = function fetch(input, init) {
+  let def = {
+    credentials: 'same-origin',
+  };
+  if (init) {
+    def = $.extend(def, init);
+  }
+  return window.fetch(input, def);
+};
+
 // Handles JSON content for a Promise returned by fetch, also handling an HTTP
 // error status.
 export function handleJSON(response) {

@@ -38,7 +38,7 @@ function saveEditorContent(cm) {
   button.disabled = true;
   button.textContent = 'Saving...';
 
-  fetch(url, {
+  $.fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ function formatEditorContent(cm) {
   const scrollPosition = cm.getScrollInfo().top;
   button.disabled = true;
 
-  fetch(button.getAttribute('data-url'), {
+  $.fetch(button.getAttribute('data-url'), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ export default function initEditor() {
         .setSearch('file_path', filePath)
         .toString();
 
-      fetch(url)
+      $.fetch(url)
         .then(handleJSON)
         .then((data) => {
           editor.setValue(data.payload);
