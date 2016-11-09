@@ -7,7 +7,7 @@ function uploadDocument(formData) {
   const documentFolderIndex = $('#document-upload-folder').value;
   formData.append('targetFolderIndex', documentFolderIndex);
 
-  fetch($('#document-upload-submit').getAttribute('data-url'), {
+  $.fetch($('#document-upload-submit').getAttribute('data-url'), {
     method: 'PUT',
     body: formData,
   })
