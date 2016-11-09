@@ -375,11 +375,11 @@ class BeancountReportAPI():
         paths.extend([os.path.join(posting.account.replace(':', '/'), value)
                       for posting in entry.postings])
         paths.extend([os.path.join(
-                      document_root,
-                      posting.account.replace(':', '/'),
-                      value)
-                for posting in entry.postings
-            for document_root in self.options['documents']])
+                          document_root,
+                          posting.account.replace(':', '/'),
+                          value)
+                      for posting in entry.postings
+                      for document_root in self.options['documents']])
 
         for path in [self.abs_path(p) for p in paths]:
             if os.path.isfile(path):
