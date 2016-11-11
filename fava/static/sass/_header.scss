@@ -70,40 +70,40 @@ h1 {
       display: block;
     }
   }
-}
 
-.beancount-files {
-  background-color: $color-background;
-  border: 1px solid darken($color-background, 20);
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  box-shadow: 0 3px 6px rgba($color-text, .2);
-  display: none;
-  left: 19px;
-  position: absolute;
-  top: $header-height;
-  width: 20em;
-  z-index: 10;
+  .beancount-files {
+    background-color: $color-background;
+    border: 1px solid darken($color-background, 20);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-shadow: 0 3px 6px rgba($color-text, .2);
+    display: none;
+    left: 19px;
+    position: absolute;
+    top: $header-height;
+    width: 20em;
+    z-index: 10;
 
-  ul {
-    margin-bottom: 0;
-    max-height: 400px;
-    overflow-y: auto;
-  }
-
-  a {
-    color: $color-links;
-    display: block;
-    padding: 8px 12px 8px 28px;
-
-    &.active,
-    &:hover {
-      background-color: $color-links;
-      color: $color-background;
+    ul {
+      margin-bottom: 0;
+      max-height: 400px;
+      overflow-y: auto;
     }
 
-    &.active {
-      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=') no-repeat 9px center;
+    a {
+      color: $color-links;
+      display: block;
+      padding: 8px 12px 8px 28px;
+
+      &.active,
+      &:hover {
+        background-color: $color-links;
+        color: $color-background;
+      }
+
+      &.active {
+        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=') no-repeat 9px center;
+      }
     }
   }
 }

@@ -20,14 +20,18 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   }
 
   .overlay {
+    display: flex;
     background: $color-background;
     box-shadow: 0 0 20px lighten($overlay-wrapper-background, 50);
     cursor: auto;
     max-height: 100%;
-    overflow: scroll;
     padding: 20px;
     position: relative;
     width: 800px;
+
+    form {
+      width: 100%;
+    }
 
     strong {
       display: inline-block;
@@ -64,15 +68,33 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 }
 
 .documents-upload {
+  fieldset {
+    padding: 0;
+    margin: 1rem 0px;
+  }
+
   input {
     margin-bottom: .5em;
     padding: 4px 8px;
     width: 100%;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   label {
     display: inline-block;
-    margin-bottom: .5em;
+    width: 150px;
+  }
+
+  select {
+    font-size: 16px;
+  }
+
+  button[type='submit'] {
+    display: block;
+    margin-top: 1rem;
   }
 }
 

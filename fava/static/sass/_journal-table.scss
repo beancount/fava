@@ -1,4 +1,11 @@
-// Journal table
+ // Journal table
+
+h3.link-title {
+  float: left;
+  padding: 0 10px 0 0;
+  line-height: 32px;
+  margin: 0;
+}
 
 .journal-entry-filters {
   .inactive {
@@ -11,11 +18,11 @@
     }
   }
 
-  .txn-toggle {
+  .txn-toggle, .doc-toggle {
     margin-left: -2px;
   }
 
-  [id='toggle-metadata'] {
+  [data-type='metadata'] {
     margin-left: 9px;
   }
 }
@@ -81,7 +88,7 @@
 }
 
 .journal-table {
-  p { border-bottom: thin solid $color-journaltable-border; }
+  p, dl { border-bottom: thin solid $color-journaltable-border; }
 
   // Journal entry types (li)
   .open { background-color: $color-journalentry-open; }
@@ -119,11 +126,11 @@
   dl {
     font-size: .9em;
     margin: 0;
-    padding: 3px 0 3px 8rem;
+    padding: 2px 0 2px 8rem;
 
     dt,
     dd {
-      margin-bottom: 3px;
+      margin-bottom: 0;
     }
 
     dt {
@@ -131,17 +138,16 @@
       font-style: italic;
       font-weight: normal;
       margin-right: 10px;
-      min-width: 60px;
+      min-width: 80px;
       width: auto;
     }
 
     dd {
-      margin-left: 70px;
+      margin-left: 80px;
     }
 
     a {
       font-weight: normal;
-
       &:hover { text-decoration: underline; }
     }
   }
@@ -167,13 +173,23 @@
   .description {
     flex: 1;
 
-    .links {
-      margin-left: 1em;
-      margin-right: 1em;
-      text-decoration: none;
+    a.account-link {
+      color: transparentize($color-links, 0.15);
+
+      span {
+        color: $color-links;
+      }
     }
 
-    .tag {
+    .separator {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: rgba($color-text, 0.3);
+      margin: 0 2px 2px 6px;
+    }
+
+    .tag, .link {
       color: $color-journaltable-tag;
       display: inline-block;
       margin-right: 8px;
@@ -183,6 +199,39 @@
         text-decoration: underline;
       }
     }
+
+    .link {
+      color: $color-journaltable-link;
+      &:hover { color: darken($color-journaltable-link, 30%); }
+    }
+  }
+
+  .document .description {
+    a.account-link {
+      color: darken($color-journaltable-tag-document, 20%);
+
+      span {
+        color: darken($color-journaltable-tag-document, 25%);
+      }
+    }
+
+    a.filename {
+      margin-left: .3em;
+    }
+
+    .tag {
+      color: $color-journaltable-tag-document;
+      &:hover { color: darken($color-journaltable-tag-document, 30%); }
+    }
+
+    .link {
+      color: $color-journaltable-link-document;
+      &:hover { color: darken($color-journaltable-link-document, 30%); }
+    }
+  }
+
+  .note label {
+    color: darken($color-journalentry-note, 55%);
   }
 
   .leg-indicator {

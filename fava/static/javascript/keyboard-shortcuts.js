@@ -127,5 +127,11 @@ export function initKeyboardShortcuts() {
     't o': () => {
       click('#entry-filters button[data-type=other]');
     },
+    'd d': () => {
+      click('#entry-filters button[data-type=discovered]');
+    },
+    'd s': () => {
+      click('#entry-filters button[data-type=statement]');
+    },
   }, 'keyup');
 }

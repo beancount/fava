@@ -1,21 +1,30 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% if link %}
+    {% set entry_types = ['transaction', 'document'] %}
+    <h3 class="link-title">Link ^{{ link }}</h3>
+{% else %}
+    {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% endif %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
+{% set document_types = ['discovered', 'statement'] %}
 {% set default_show_type = {
     'open':        'open' in config['journal-show'],
     'close':       'close' in config['journal-show'],
-    'transaction': 'transaction' in config['journal-show'],
     'balance':     'balance' in config['journal-show'],
     'note':        'note' in config['journal-show'],
-    'document':    'document' in config['journal-show'],
     'pad':         'pad' in config['journal-show'],
     'query':       'query' in config['journal-show'],
     'custom':      'custom' in config['journal-show'],
     'budget':      'budget' in config['journal-show'],
 
+    'transaction': 'transaction' in config['journal-show'],
     'cleared':     'cleared' in config['journal-show-transaction'],
     'pending':     'pending' in config['journal-show-transaction'],
     'other':       'other' in config['journal-show-transaction'],
+
+    'document':    'document' in config['journal-show'],
+    'discovered':  'discovered' in config['journal-show-document'],
+    'statement':   'statement' in config['journal-show-document'],
 
     'metadata':    'metadata' in config['journal-show'],
     'postings':    'postings' in config['journal-show'],
@@ -25,18 +34,21 @@
     {% set show_type = {
         'open':        'open' in _list,
         'close':       'close' in _list,
-        'transaction': 'transaction' in _list,
         'balance':     'balance' in _list,
         'note':        'note' in _list,
-        'document':    'document' in _list,
         'pad':         'pad' in _list,
         'query':       'query' in _list,
         'custom':      'custom' in _list,
         'budget':      'budget' in _list,
 
+        'transaction': 'transaction' in _list,
         'cleared':     'cleared' in _list,
         'pending':     'pending' in _list,
         'other':       'other' in _list,
+
+        'document':    'document' in _list,
+        'discovered':  'discovered' in _list,
+        'statement':   'statement' in _list,
 
         'metadata':     'metadata' in _list,
         'postings':         'postings' in _list,
@@ -50,6 +62,11 @@
     'other':   ('x', _('Other Transactions')),
 }
 %}
+{% set document_type_buttons = {
+    'discovered': ('D', _('Documents discovered by beancount')),
+    'statement': ('S', _('Statements from metadata'))
+}
+%}
 <form id="entry-filters" class="journal-entry-filters wide-form">
     {% for type in entry_types %}
         {% if type != 'budget' or api.budgets %}
@@ -57,6 +74,11 @@
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}
     <button type="button" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">{{ transaction_type_buttons[txn_type].0 }}</button>
+                {% endfor %}
+            {% endif %}
+            {% if type == 'document' %}
+                {% for doc_type in document_types %}
+    <button type="button" title="{{ document_type_buttons[doc_type].1 }}" data-type="{{ doc_type }}" class="doc-toggle{% if not show_type[doc_type] or not show_type['document'] %} inactive{% endif %}">{{ document_type_buttons[doc_type].0 }}</button>
                 {% endfor %}
             {% endif %}
         {% endif %}
@@ -70,7 +92,19 @@
 {% set tag_url = url_for_current(tag='REPLACEME,'+(g.filters['tag'] or '')) %}
 
 {% macro account_link(name) -%}
-<a href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>
+<a class="account-link" href="{{ account_url.replace('REPLACEME', name) }}">
+    {% set levels = name|account_level %}
+    {%- for level in range(0, levels) -%}
+        {% set subaccount_name = name.rsplit(':', maxsplit=levels-loop.index)[0] %}
+        {% set subaccount_part = name.split(':')[level] %}
+
+        {%- if loop.last -%}
+            <span>{{ subaccount_part }}</span>
+        {%- else -%}
+            {{ subaccount_part }}:
+        {%- endif -%}
+    {%- endfor -%}
+</a>
 {%- endmacro %}
 
 {% macro render_inventory(inv) -%}
@@ -79,19 +113,26 @@
     {% endfor %}
 {%- endmacro %}
 
-{% macro render_metadata(metadata, show_metadata) -%}
+{% macro render_metadata(metadata, show_metadata, entry=None) -%}
 {% if metadata %}
     <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
         {% for key, value in metadata.items() %}
             <dt>{{ key }}</dt>
             <dd>
-                {%- if key == 'statement' %}<a href="{{ url_for('document', file_path=value)  }}">{% endif -%}
+                {%- if key.startswith('statement') %}
+                    <a href="{{ url_for('statement', filename=entry.meta.filename, lineno=entry.meta.lineno, key=key) }}">
+                {% endif -%}
                 {{ value }}
-                {%- if key == 'statement' %}</a>{% endif -%}
+                {%- if key.startswith('statement') %}</a>{% endif -%}
             </dd>
         {% endfor %}
     </dl>
 {% endif %}
+{%- endmacro %}
+
+{% macro render_tags_links(entry) -%}
+{% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+{% for link_ in entry.links or [] %}<a class="link" href="{{ url_for('journal_link', link=link_) }}"><span>^</span>{{ link_ }}</a>{% endfor %}
 {%- endmacro %}
 
 <ol id="journal-table" class="journal-table">
@@ -118,19 +159,21 @@
     {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
         {%- if not show_type[flags_to_types.get(entry.flag, 'other')] %} hidden{% endif -%}
     {% endif -%}
+    {%- if entry.tags and 'statement' in entry.tags %} statement{% endif -%}
+    {%- if entry.tags and 'discovered' in entry.tags %} discovered{% endif -%}
     {%- if not show_type[type] %} hidden{% endif -%}
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
         <p>
         <span class="datecell"><a href="{{ context_url.replace('REPLACEME', api.hash_entry(entry)) }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
-        <span class="description">
+        <span class="description{%- if type == 'transaction' %} droptarget{% endif -%}"{%- if type == 'transaction' %} data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account }}"{% endif -%}>
         {% if type == 'open' %}
             Open {{ account_link(entry.account) }}
         {% elif type == 'close' %}
             Close {{ account_link(entry.account) }}
         {% elif type == 'note' %}
-            Note: {{ entry.comment }}
+            <label>Note:</label> {{ entry.comment }}
         {% elif type == 'query' %}
             Query: <a href="{{ url_for('query', name=entry.name, bql=entry.query_string) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
@@ -155,7 +198,8 @@
           {% endif %}
         {% elif type == 'budget' %}
         {% elif type == 'document' %}
-            Document for {{ account_link(entry.account) }}: <a href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
+            Document for {{ account_link(entry.account) }} <a class="filename" href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
+            {{ render_tags_links(entry) }}
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}
             {% if entry.diff_amount %} fails;
@@ -166,8 +210,8 @@
                 has {{ entry.amount }}
             {% endif %}
         {% elif type == 'transaction' %}
-            <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %} | {% endif %}{{ entry.narration or '' }}
-            {% for tag in entry.tags or [] %}<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}" title="Filter for tag #{{ tag }}"><span>#</span>{{ tag }}</a>{% endfor %}
+            <strong>{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %}<span class="separator"></span> {% endif %}{{ entry.narration or '' }}
+            {{ render_tags_links(entry) }}
         {% endif %}
         </span>
         {% if type == 'transaction' %}
@@ -180,7 +224,7 @@
             <span class="num">{{ render_inventory(balance) }}</span>
         </p>
         {% endif %}
-        {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata']) }}
+        {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata'], entry) }}
         {% if entry.postings %}
         <ul class="postings{% if not show_type['postings'] %} hidden{% endif %}">
         {% for posting in entry.postings %}
@@ -188,7 +232,7 @@
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
-                <span class="description">{{ account_link(posting.account) }}</span>
+                <span class="description droptarget" data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ posting.account }}">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>
@@ -201,7 +245,7 @@
                 <span class="num"></span>
                 {% endif %}
             </p>
-            {{ render_metadata(posting.meta|remove_keys(['lineno', 'filename']), show_type['metadata']) }}
+            {{ render_metadata(posting.meta|remove_keys(['__automatic__', 'lineno', 'filename']), show_type['metadata']) }}
         </li>
         {% endfor %}
         </ul>

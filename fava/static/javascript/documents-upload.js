@@ -26,21 +26,25 @@ export default function initDocumentsUpload() {
     target.addEventListener('dragenter', (event) => {
       target.classList.add('dragover');
       event.preventDefault();
+      event.stopPropagation();
     });
 
     target.addEventListener('dragover', (event) => {
       target.classList.add('dragover');
       event.preventDefault();
+      event.stopPropagation();
     });
 
     target.addEventListener('dragleave', (event) => {
       target.classList.remove('dragover');
       event.preventDefault();
+      event.stopPropagation();
     });
 
     target.addEventListener('drop', (event) => {
       target.classList.remove('dragover');
       event.preventDefault();
+      event.stopPropagation();
 
       const accountName = target.getAttribute('data-account-name');
       const folders = $$('#document-upload-folder option');
@@ -48,12 +52,16 @@ export default function initDocumentsUpload() {
       const now = new Date();
       let changedFilename = false;
 
+      const bfilename = target.getAttribute('data-filename');
+      const blineno = target.getAttribute('data-lineno');
+
       if (!folders.length) {
         e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
         return;
       }
 
       // add input elements for files
+      $('#document-names').innerHTML = '';
       for (let i = 0; i < files.length; i += 1) {
         let filename = files[i].name;
 
@@ -75,6 +83,11 @@ export default function initDocumentsUpload() {
           formData.append('file', file);
           formData.append('account', accountName);
           formData.append('filename', element.value);
+
+          if (bfilename) {  // statement upload (add adding it to metadata)
+            formData.append('bfilename', bfilename);
+            formData.append('blineno', blineno);
+          }
 
           uploadDocument(formData);
         });

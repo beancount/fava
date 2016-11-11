@@ -18,13 +18,13 @@ from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters
-from fava.api import BeancountReportAPI, FavaAPIException
+from fava.api import (BeancountReportAPI, FavaAPIException,
+                      FavaFileNotFoundException)
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
-
 
 app = Flask(__name__,
             template_folder=resource_path('templates'),
@@ -183,18 +183,30 @@ def account(name, subreport='journal'):
 
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
-    document_path = request.args.get('file_path', None)
-    if document_path and g.api.is_valid_document(document_path):
-        # metadata-statement-paths may be relative to the beancount-file
-        if not os.path.isabs(document_path):
-            document_path = os.path.join(os.path.dirname(
-                os.path.realpath(g.api.beancount_file_path)), document_path)
-
+    file_path = request.args.get('file_path', None)
+    try:
+        document_path = g.api.document_path(file_path)
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
         return send_from_directory(directory, filename)
-    else:
-        return "File \"{}\" not found in entries.".format(document_path), 404
+    except FavaFileNotFoundException:
+        return "File \"{}\" not found in entries.".format(file_path), 404
+
+
+@app.route('/<bfile>/statement/', methods=['GET'])
+def statement():
+    filename = request.args.get('filename', None)
+    lineno = int(request.args.get('lineno', -1))
+    key = request.args.get('key', None)
+    try:
+        document_path = g.api.statement_path(filename, lineno, key)
+        directory = os.path.dirname(document_path)
+        filename = os.path.basename(document_path)
+        return send_from_directory(directory, filename)
+    except FavaAPIException:
+        return "Statement not found in entries.", 404
+    except FavaFileNotFoundException as e:
+        return "File not found.", 404
 
 
 @app.route('/<bfile>/context/<ehash>/')
@@ -220,6 +232,11 @@ def query():
         return render_template('query.html', error=error)
 
     return render_template('query.html', result_types=types, result_rows=rows)
+
+
+@app.route('/<bfile>/journal/<link>/')
+def journal_link(link):
+    return render_template('journal.html', link=link)
 
 
 @app.route('/<bfile>/<report_name>/')
@@ -320,6 +337,15 @@ def api_add_document():
             return api_error('{} already exists.'.format(filepath))
 
         file.save(filepath)
+
+        if request.form.get('bfilename', None):
+            try:
+                g.api.insert_metadata(request.form['bfilename'],
+                                      int(request.form['blineno']),
+                                      'statement',
+                                      os.path.basename(filepath))
+            except FavaAPIException as exception:
+                return api_error(exception.message)
         return api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
 

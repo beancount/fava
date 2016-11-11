@@ -1,4 +1,5 @@
 import datetime
+import pytest
 
 from beancount.core.data import Posting, Transaction
 from beancount.core.amount import A, Amount
@@ -6,8 +7,10 @@ from beancount.core.number import D
 from beancount.core.position import Cost
 from beancount.ops import prices
 
+from fava.api import FavaAPIException
 from fava.api.helpers import (inventory_at_dates, get_final_holdings,
-                              aggregate_holdings_list, aggregate_holdings_by)
+                              aggregate_holdings_list, aggregate_holdings_by,
+                              entry_at_lineno)
 
 
 def test_get_final_holdings(load_doc):
@@ -216,3 +219,25 @@ def test_inventory_at_dates(load_doc):
     number_of_positions = list(
         map(len, list(inventory_at_dates(transactions, dates, predicate))))
     assert number_of_positions == [0, 1, 2, 3]
+
+
+def test_entry_at_lineno(load_doc):
+    """
+    plugin "auto_accounts"
+
+    2016-01-01 * "Test" "Test"
+      Equity:Unknown
+      Assets:Cash           5000 USD
+    """
+    entries, _, _ = load_doc
+    assert entries[0] == entry_at_lineno(entries, '<string>', 4)
+    assert entries[0] == entry_at_lineno(entries, '<string>', 4, Transaction)
+
+    with pytest.raises(FavaAPIException):
+        entry_at_lineno(entries, '<string>', 1)
+
+    with pytest.raises(FavaAPIException):
+        entry_at_lineno(entries, 'foo', 4)
+
+    with pytest.raises(FavaAPIException):
+        entry_at_lineno(entries, '<string>', 4, Posting)

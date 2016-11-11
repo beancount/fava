@@ -21,19 +21,16 @@ from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
 from fava.api.charts import Charts
 from fava.api.watcher import Watcher
+from fava.api.file import insert_line_in_file, next_key
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
-from fava.api.helpers import get_final_holdings, aggregate_holdings_by
+from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
+                              entry_at_lineno, FavaAPIException)
 from fava.api.fava_options import parse_options
 
 
-class FavaAPIException(Exception):
-    def __init__(self, message):
-        super().__init__()
-        self.message = message
-
-    def __str__(self):
-        return self.message
+class FavaFileNotFoundException(Exception):
+    pass
 
 
 def _filter_entries_by_type(entries, include_types):
@@ -361,22 +358,46 @@ class BeancountReportAPI():
         return {account: len(postings) for account, postings
                 in grouped_postings.items()}
 
-    def is_valid_document(self, file_path):
-        """Check if file_path is the path to a document.
+    def abs_path(self, file_path):
+        """Make a path absolute if it is relative, assuming it is relative to
+        the directory of the beancount file."""
+        if not os.path.isabs(file_path):
+            return os.path.join(os.path.dirname(
+                os.path.realpath(self.beancount_file_path)), file_path)
+        return file_path
 
-        It should either occur in one of the Document entries or in a
-        "statement"-metadata in a Transaction entry.
+    def statement_path(self, filename, lineno, metadata_key):
+        """Returns the path for a statement found in the specified entry."""
+        entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
+        value = entry.meta[metadata_key]
+
+        paths = [value]
+        paths.extend([os.path.join(posting.account.replace(':', '/'), value)
+                      for posting in entry.postings])
+        paths.extend([os.path.join(
+                          document_root,
+                          posting.account.replace(':', '/'),
+                          value)
+                      for posting in entry.postings
+                      for document_root in self.options['documents']])
+
+        for path in [self.abs_path(p) for p in paths]:
+            if os.path.isfile(path):
+                return path
+
+        raise FavaFileNotFoundException()
+
+    def document_path(self, file_path):
+        """Check if file_path is the path to a document and the absolute
+        path if valid. Throws if the path is not valid.
+
+        It should occur in one of the Document entries.
         """
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
-                return True
+                return self.abs_path(file_path)
 
-        for entry in misc_utils.filter_type(self.entries, Transaction):
-            if 'statement' in entry.meta and \
-                    entry.meta['statement'] == file_path:
-                return True
-
-        return False
+        raise FavaFileNotFoundException()
 
     def query(self, query_string, numberify=False):
         return query.run_query(self.all_entries, self.options,
@@ -424,3 +445,16 @@ class BeancountReportAPI():
             if isinstance(posting, Open):
                 return posting.meta
         return {}
+
+    def entries_for_link(self, link):
+        """Entries with the specified link."""
+        return [entry for entry in self.entries
+                if isinstance(entry, (Transaction, Document)) and
+                entry.links and link in entry.links]
+
+    def insert_metadata(self, filename, lineno, basekey, value):
+        """Insert metadata into a file at lineno. Also, prevent duplicate
+        keys."""
+        entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
+        key = next_key(basekey, entry.meta)
+        insert_line_in_file(filename, lineno-1, '{}: "{}"'.format(key, value))
