@@ -87,9 +87,9 @@
 
 {% macro balance_with_budget(amount, budget) %}
 {% if budget %}
-    {% set diff = (budget[currency] - amount.number)  if currency in budget else None %}
-    {% if diff != None %}
-        <span class="budget budget-{% if diff > 0.0 %}positive{% else %}{% if diff < 0.0 %}negative{% else %}zero{% endif %}{% endif %}">
+    {% if amount.currency in budget %}
+        {% set diff = budget[amount.currency] - amount.number %}
+        <span class="budget budget-{% if diff > 0 %}positive{% else %}{% if diff < 0 %}negative{% else %}zero{% endif %}{% endif %}">
             ({{ diff|format_currency(currency, show_if_zero=True) }})
         </span>
     {% else %}
@@ -159,7 +159,7 @@
         {% set balance_children = (current_account|balance_children).cost() %}
         <span class="num other">
             {% for pos in balance_children %}
-                {{ pos.units.number|format_currency(pos.units.currency) }} {{ pos.units.currency }}<br>
+                {{ pos.units|format_amount }}<br>
             {% endfor %}
         </span>
         {% endfor %}
