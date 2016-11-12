@@ -126,7 +126,7 @@
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for begin_date, end_date in dates %}
         {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
-        {% set budget = api.calculate_budget(account_name, begin_date, end_date) %}
+        {% set budget = api.calculate_budget(account.account, begin_date, end_date) %}
         {% set current_account = interval_balances[loop.index0]|get_or_create(account.account) %}
         {% set balance = current_account.balance.cost() %}
         {% set balance_children = (current_account|balance_children).cost() %}
