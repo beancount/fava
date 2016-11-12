@@ -64,6 +64,14 @@
         'tags': api.active_tags,
         'editor-print-margin-column': config['editor-print-margin-column'],
     }|tojson|safe }}</script>
+    <script type="application/json" id="tranlsations">{{ {
+        'save': _('Save'),
+        'saving': _('Saving...'),
+        'savingFailed': _('Saving $FILENAME failed.'),
+        'beanFormatFailed': _('Formatting the file with bean-format failed.'),
+        'loadFailed': _('Loading $FILENAME failed.'),
+        'chartEmpty': _('Chart is empty.'),
+    }|tojson|safe }}</script>
 {%- if not partial %}
     </article>
     {% include "overlays/_keyboard_shortcuts.html" %}

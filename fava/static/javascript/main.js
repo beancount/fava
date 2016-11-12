@@ -49,6 +49,7 @@ let pageData;
 
 e.on('page-loaded', () => {
   window.favaAPI = JSON.parse($('#api-data').innerHTML);
+  window.favaTranslations = JSON.parse($('#tranlsations').innerHTML);
   updateFilters();
   updateKeyboardShortcuts();
 

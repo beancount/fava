@@ -152,7 +152,7 @@ class TreeMapChart extends BaseChart {
 
     if (this.selections.cells.empty()) {
       this.selections.empty = this.canvas.append('text')
-        .text('Chart is empty.');
+        .text(window.favaTranslations.chartEmpty);
     }
 
     this.selections.cells.append('rect')
@@ -301,7 +301,7 @@ class SunburstChart extends BaseChart {
   setLabel(d) {
     if (this.selections.paths.empty()) {
       this.selections.accountLabel
-        .text('Chart is empty.');
+        .text(window.favaTranslations.chartEmpty);
     } else {
       this.selections.balanceLabel
         .text(this.labelText(d));
