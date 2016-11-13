@@ -384,6 +384,12 @@ class BarChart extends BaseChart {
         .attr('class', 'bar')
         .style('fill', d => currencyColorScale(d.name));
 
+    this.selections.budgets = this.selections.groups.selectAll('.budget')
+        .data(d => d.values)
+        .enter()
+      .append('rect')
+        .attr('class', 'budget');
+
     this.update();
     return this;
   }
@@ -414,6 +420,12 @@ class BarChart extends BaseChart {
     this.selections.groupboxes
       .attr('width', this.x0.bandwidth())
       .attr('height', this.height);
+
+    this.selections.budgets
+      .attr('width', this.x1.bandwidth())
+      .attr('x', d => this.x1(d.name))
+      .attr('y', d => this.y(Math.max(0, d.budget)))
+      .attr('height', d => Math.abs(this.y(d.budget) - this.y(0)));
 
     this.selections.bars
       .attr('width', this.x1.bandwidth())
@@ -800,6 +812,7 @@ export default function initCharts() {
           values: window.favaAPI.operating_currencies.map(name => ({
             name,
             value: +d.totals[name] || 0,
+            budget: +d.budgets[name] || 0,
           })),
           date: new Date(d.begin_date),
           label: dateFormat[$('#chart-interval').value](new Date(d.begin_date)),
