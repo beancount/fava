@@ -8,6 +8,7 @@ from beancount.core import inventory, realization
 from beancount.core.data import iter_entry_dates
 from flask.json import JSONEncoder
 
+from fava.api.budgets import calculate_budget
 from fava.api.helpers import net_worth_at_dates
 
 
@@ -96,6 +97,8 @@ class Charts(object):
             'totals': self._total_balance(
                 names,
                 begin_date, end_date),
+            'budgets': calculate_budget(self.api.budgets, names[0],
+                                        begin_date, end_date),
         } for begin_date, end_date in interval_tuples]
 
     def linechart(self, account_name):
