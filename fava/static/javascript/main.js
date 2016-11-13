@@ -47,6 +47,15 @@ function initPage() {
 
 let pageData;
 
+function setSelectedLink() {
+  $$('aside a').forEach((el) => {
+    el.classList.remove('selected');
+    if (el.getAttribute('href').startsWith(window.location.pathname)) {
+      el.classList.add('selected');
+    }
+  });
+}
+
 e.on('page-loaded', () => {
   window.favaAPI = JSON.parse($('#api-data').innerHTML);
   updateFilters();
@@ -64,13 +73,7 @@ e.on('page-loaded', () => {
   document.title = pageData.documentTitle;
   $('h1 strong').innerHTML = pageData.pageTitle;
   $('#reload-page').classList.add('hidden');
-
-  $$('aside a').forEach((el) => {
-    el.classList.remove('selected');
-    if (el.getAttribute('href').startsWith(window.location.pathname)) {
-      el.classList.add('selected');
-    }
-  });
+  setSelectedLink();
 });
 
 e.on('file-modified', () => {
@@ -78,6 +81,7 @@ e.on('file-modified', () => {
     .then(response => response.text())
     .then((html) => {
       $('aside').innerHTML = html;
+      setSelectedLink();
     });
 });
 
