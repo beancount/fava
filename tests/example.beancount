@@ -9,6 +9,7 @@ option "operating_currency" "USD"
 
 2016-01-01 custom "fava-option" "show-accounts-with-zero-balance" "False"
 
+2016-01-01 query "fava" "journal"
 
 
 

@@ -238,14 +238,8 @@ class BeancountReportAPI():
         return realization.iterate_with_balance(postings)
 
     def get_query(self, name):
-        matching_entries = [query for query in self.queries
-                            if name == query.name]
-
-        if not matching_entries:
-            return
-
-        assert len(matching_entries) == 1
-        return matching_entries[0]
+        return next((query for query in self.queries if name == query.name),
+                    None)
 
     def events(self, event_type=None):
         events = _filter_entries_by_type(self.entries, Event)
@@ -269,23 +263,17 @@ class BeancountReportAPI():
         return holdings_list
 
     def context(self, ehash):
-        matching_entries = [entry for entry in self.all_entries
-                            if ehash == compare.hash_entry(entry)]
-
-        if not matching_entries:
+        try:
+            entry = next(entry for entry in self.all_entries
+                         if ehash == compare.hash_entry(entry))
+        except StopIteration:
             return
 
-        # the hash should uniquely identify the entry
-        assert len(matching_entries) == 1
-        entry = matching_entries[0]
         context_str = context.render_entry_context(self.all_entries,
                                                    self.options, entry)
         return {
-            'hash': ehash,
             'context': context_str.split("\n", 2)[2],
-            'filename': entry.meta['filename'],
-            'lineno': entry.meta['lineno'],
-            'journal': matching_entries,
+            'entry': entry,
         }
 
     def source_files(self):
