@@ -1,6 +1,7 @@
 .coverage
 htmlcov/
 .tox
+.vagrant
 docs/_build
 *.pyc
 /dist/

@@ -20,7 +20,20 @@ test:
 docs:
 	sphinx-build -b html docs docs/_build
 
+# This requires Vagrant (with vagrant-scp plugin) and Virtualbox (with
+# Extension Pack) to be installed. This might take quite some time -
+# especially on the first run, when the VM images have to be downloaded.
+binaries: build-js
+	vagrant up centos
+	vagrant scp centos:/vagrant/fava/dist/fava dist/fava-linux-x64
+	vagrant halt centos
+	vagrant up darwin
+	vagrant scp darwin:/vagrant/fava/dist/fava dist/fava-macos-x64
+	vagrant halt darwin
+
+# Build and upload the website.
 gh-pages:
+	git checkout master
 	git checkout --orphan gh-pages
 	sphinx-build -b html docs _build
 	ls | grep -v '_build' | xargs rm -r
@@ -33,17 +46,17 @@ gh-pages:
 	git checkout master
 	git branch -D gh-pages
 
+# Extract the translation strings from the .py- and .html-files
 babel-extract:
-	# Extract the translation strings from the .py- and .html-files
 	pybabel extract -F fava/translations/babel.conf -k lazy_gettext -o fava/translations/messages.pot ./fava
 
+# Merge existing .po-files with the new translation strings
 babel-merge:
-	# Merge existing .po-files with the new translation strings
 	pybabel update -i fava/translations/messages.pot -d fava/translations
 
+# Compile .po-files to binary .mo-files
 babel-compile:
-	# Compile .po-files to binary .mo-files
 	pybabel compile -d fava/translations
 
-pyinstaller: build-js
-	pyinstaller --onefile contrib/pyinstaller.spec
+pyinstaller:
+	pyinstaller --clean --onefile contrib/pyinstaller.spec
