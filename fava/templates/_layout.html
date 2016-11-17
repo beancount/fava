@@ -64,13 +64,13 @@
         'tags': api.active_tags,
         'editor-print-margin-column': config['editor-print-margin-column'],
     }|tojson|safe }}</script>
-    <script type="application/json" id="tranlsations">{{ {
-        'save': _('Save'),
-        'saving': _('Saving...'),
-        'savingFailed': _('Saving $FILENAME failed.'),
-        'beanFormatFailed': _('Formatting the file with bean-format failed.'),
-        'loadFailed': _('Loading $FILENAME failed.'),
-        'chartEmpty': _('Chart is empty.'),
+    <script type="application/json" id="translations">{{ {
+        'Save': _('Save'),
+        'Saving...': _('Saving...'),
+        'Saving ${fileName} failed.': _('Saving ${fileName} failed.'),
+        'Formatting the file with bean-format failed.': _('Formatting the file with bean-format failed.'),
+        'Loading ${filePath} failed.': _('Loading ${filePath} failed.'),
+        'Chart is empty.': _('Chart is empty.'),
     }|tojson|safe }}</script>
 {%- if not partial %}
     </article>

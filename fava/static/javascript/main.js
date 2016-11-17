@@ -21,6 +21,7 @@ import initTreeTable from './tree-table';
 // These parts of the page should not change.
 // So they only need to be initialized once.
 function initPage() {
+  window.favaTranslations = JSON.parse($('#translations').innerHTML);
   initFilters();
   initKeyboardShortcuts();
 
@@ -49,7 +50,6 @@ let pageData;
 
 e.on('page-loaded', () => {
   window.favaAPI = JSON.parse($('#api-data').innerHTML);
-  window.favaTranslations = JSON.parse($('#tranlsations').innerHTML);
   updateFilters();
   updateKeyboardShortcuts();
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-12 12:33+0100\n"
+"POT-Creation-Date: 2016-11-17 08:07+0100\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -168,16 +168,16 @@ msgid "Saving..."
 msgstr "Speichern"
 
 #: fava/templates/_layout.html:70
-msgid "Saving $FILENAME failed."
-msgstr "Speichern von $FILENAME fehlgeschlagen."
+msgid "Saving ${fileName} failed."
+msgstr "Speichern von ${fileName} fehlgeschlagen."
 
 #: fava/templates/_layout.html:71
 msgid "Formatting the file with bean-format failed."
 msgstr "Formatieren mit bean-format fehlgeschlagen."
 
 #: fava/templates/_layout.html:72
-msgid "Loading $FILENAME failed."
-msgstr "Laden von $FILENAME fehlgeschlagen."
+msgid "Loading ${filePath} failed."
+msgstr "Laden von ${filePath} fehlgeschlagen."
 
 #: fava/templates/_layout.html:73
 msgid "Chart is empty."

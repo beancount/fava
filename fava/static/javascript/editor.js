@@ -27,7 +27,7 @@ import './codemirror-fold-beancount';
 import './codemirror-hint-beancount';
 import './codemirror-mode-beancount';
 
-import { $, $$, handleJSON } from './helpers';
+import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
 
 function saveEditorContent(cm) {
@@ -36,7 +36,7 @@ function saveEditorContent(cm) {
   const url = button.getAttribute('data-url');
 
   button.disabled = true;
-  button.textContent = window.favaTranslations.saving;
+  button.textContent = _('Saving...');
 
   $.fetch(url, {
     method: 'PUT',
@@ -53,11 +53,11 @@ function saveEditorContent(cm) {
       cm.focus();
       e.trigger('file-modified');
     }, () => {
-      e.trigger('error', window.favaTranslations.savingFailed.replace('$FILENAME', fileName));
+      e.trigger('error', _('Saving ${fileName} failed.', { fileName }));  // eslint-disable-line no-template-curly-in-string
     })
     .then(() => {
       button.disabled = false;
-      button.textContent = window.favaTranslations.save;
+      button.textContent = _('Save');
     });
 }
 
@@ -80,7 +80,7 @@ function formatEditorContent(cm) {
       cm.setValue(data.payload);
       cm.scrollTo(null, scrollPosition);
     }, () => {
-      e.trigger('error', window.favaTranslations.beanFormatFailed);
+      e.trigger('error', _('Formatting the file with bean-format failed.'));
     })
     .then(() => {
       button.disabled = false;
@@ -231,7 +231,7 @@ export default function initEditor() {
           editor.setCursor(0, 0);
           jumpToMarker(editor);
         }, () => {
-          e.trigger('error', window.favaTranslations.loadFailed.replace('$FILENAME', filePath));
+          e.trigger('error', _('Loading ${filePath} failed.', { filePath }));  // eslint-disable-line no-template-curly-in-string
         })
         .then(() => {
           select.disabled = false;
