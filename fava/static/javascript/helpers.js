@@ -75,3 +75,9 @@ export function handleJSON(response) {
       return data;
     });
 }
+
+// Translates the given string via `window.favaTranslations`.
+export function _(string, vars = {}) {
+  const translation = window.favaTranslations[string] || string;
+  return translation.replace(/\${([a-z]+)}/gi, (match, v) => vars[v] || v);
+}
