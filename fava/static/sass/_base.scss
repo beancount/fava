@@ -258,7 +258,12 @@ header {
   transition: $transitions;
   z-index: 1;
 
+  &:hover {
+    background-color: $color-sidebar-background;
+  }
+
   &.active {
+    background-color: $color-sidebar-background;
     left: $aside-width;
   }
 }
