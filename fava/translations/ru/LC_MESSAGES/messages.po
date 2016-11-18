@@ -1,0 +1,434 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2016-11-18 13:43+0300\n"
+"PO-Revision-Date: 2016-11-18 13:19+0300\n"
+"Last-Translator: Igor Fokusov <igor@fokusov.com>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: fava/templates/_aside.html:4
+msgid "Custom Links"
+msgstr "Настраиваемые ссылки"
+
+#: fava/templates/_aside.html:11
+msgid "Reports"
+msgstr "Отчеты"
+
+#: fava/templates/_aside.html:28 fava/templates/errors.html:4
+msgid "Errors"
+msgstr "Ошибки"
+
+#: fava/templates/_entry_filters.html:11
+msgid "FROM"
+msgstr "ОТ"
+
+#: fava/templates/_entry_filters.html:15
+msgid "Time"
+msgstr "Время"
+
+#: fava/templates/_entry_filters.html:24
+msgid "Tag"
+msgstr "Тег"
+
+#: fava/templates/_entry_filters.html:33 fava/templates/_tree_table.html:8
+#: fava/templates/_tree_table.html:106 fava/templates/holdings.html:12
+#: fava/templates/holdings.html:21 fava/templates/statistics.html:24
+#: fava/templates/statistics.html:53
+msgid "Account"
+msgstr "Счёт"
+
+#: fava/templates/_entry_filters.html:42
+msgid "Payee"
+msgstr "Контрагент"
+
+#: fava/templates/_entry_filters.html:50
+msgid "Filter"
+msgstr "Фильтр"
+
+#: fava/templates/_globals.html:2
+msgid "Income Statement"
+msgstr "Справка о доходах"
+
+#: fava/templates/_globals.html:3
+msgid "Balance Sheet"
+msgstr "Баланс"
+
+#: fava/templates/_globals.html:4
+msgid "Trial Balance"
+msgstr "Предбаланс"
+
+#: fava/templates/_globals.html:5
+msgid "Journal"
+msgstr "Журнал"
+
+#: fava/templates/_globals.html:6
+msgid "Query"
+msgstr "Запрос"
+
+#: fava/templates/_globals.html:7 fava/templates/holdings.html:11
+msgid "Holdings"
+msgstr "Вклады"
+
+#: fava/templates/_globals.html:8
+msgid "Commodities"
+msgstr "Коммодити"
+
+#: fava/templates/_globals.html:9
+msgid "Events"
+msgstr "События"
+
+#: fava/templates/_globals.html:10
+msgid "Editor"
+msgstr "Редактор"
+
+#: fava/templates/_globals.html:11
+msgid "Options"
+msgstr "Параметры"
+
+#: fava/templates/_globals.html:12
+msgid "Statistics"
+msgstr "Статистика"
+
+#: fava/templates/_globals.html:13
+msgid "Help"
+msgstr "Помощь"
+
+#: fava/templates/_journal_table.html:60
+msgid "Cleared Transactions"
+msgstr "Сверенные транзакции"
+
+#: fava/templates/_journal_table.html:61
+msgid "Pending Transactions"
+msgstr "Незавершенные транзакции"
+
+#: fava/templates/_journal_table.html:62
+msgid "Other Transactions"
+msgstr "Прочие транзакции"
+
+#: fava/templates/_journal_table.html:66
+msgid "Documents discovered by beancount"
+msgstr "Документы, открытые в beancount"
+
+#: fava/templates/_journal_table.html:67
+msgid "Statements from metadata"
+msgstr "Ведомость из метаданных"
+
+#: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
+#: fava/templates/events.html:17
+msgid "Date"
+msgstr "Дата"
+
+#: fava/templates/_journal_table.html:142
+msgid "F"
+msgstr "Ф"
+
+#: fava/templates/_journal_table.html:143
+msgid "Narration/Payee"
+msgstr "Описание/Контрагент"
+
+#: fava/templates/_journal_table.html:144
+msgid "Position"
+msgstr "Позиция"
+
+#: fava/templates/_journal_table.html:145 fava/templates/commodities.html:14
+#: fava/templates/holdings.html:26
+msgid "Price"
+msgstr "Цена"
+
+#: fava/templates/_journal_table.html:146
+msgid "Cost"
+msgstr "Стоимость"
+
+#: fava/templates/_journal_table.html:148
+msgid "Change"
+msgstr "Изменение"
+
+#: fava/templates/_journal_table.html:149 fava/templates/statistics.html:57
+msgid "Balance"
+msgstr "Баланс"
+
+#: fava/templates/_layout.html:68 fava/templates/editor.html:14
+msgid "Save"
+msgstr "Сохранить"
+
+#: fava/templates/_layout.html:69
+msgid "Saving..."
+msgstr "Сохраняю..."
+
+#: fava/templates/_layout.html:70
+msgid "Saving ${fileName} failed."
+msgstr "Не удалось сохранить ${fileName}."
+
+#: fava/templates/_layout.html:71
+msgid "Formatting the file with bean-format failed."
+msgstr "Не удалось отформатировать файл в bean-формат."
+
+#: fava/templates/_layout.html:72
+msgid "Loading ${filePath} failed."
+msgstr "Загрузка ${filePath} не удалась."
+
+#: fava/templates/_layout.html:73
+msgid "Chart is empty."
+msgstr "Диаграмма пуста"
+
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
+msgid "Expand all accounts"
+msgstr "Раскрыть все счета"
+
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
+msgid "Expand all"
+msgstr "Раскрыть всё"
+
+#: fava/templates/_tree_table.html:13
+msgid "Other"
+msgstr "Прочее"
+
+#: fava/templates/_tree_table.html:27
+msgid ""
+"Hold Shift while clicking to expand all children \n"
+"Hold Ctrl or Cmd while clicking to expand one level"
+msgstr ""
+"Зажмите Shift с кликом для раскрытия всех дочерних \n"
+"Зажмите Ctrl или Cmd с кликом для раскрытия одного уровня"
+
+#: fava/templates/_tree_table.html:125
+msgid "Hold the Shift-key while clicking to expand all children"
+msgstr "Зажмите Shift с кликом для раскрытия всех дочерних"
+
+#: fava/templates/account.html:23
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr "Журнал всех записей по этому Счёту и Субсчетам"
+
+#: fava/templates/account.html:23
+msgid "Account Journal"
+msgstr "Журнал счёта"
+
+#: fava/templates/account.html:24
+msgid "Changes"
+msgstr "Изменения"
+
+#: fava/templates/account.html:25
+msgid "Balances"
+msgstr "Баланс"
+
+#: fava/templates/context.html:9
+msgid "Hash:"
+msgstr "Хеш:"
+
+#: fava/templates/context.html:11
+msgid "Location:"
+msgstr "Место:"
+
+#: fava/templates/context.html:12 fava/templates/errors.html:20
+#: fava/templates/errors.html:21 fava/templates/events.html:25
+#, python-format
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "Перейти к файлу %(file)s:%(lineno)s"
+
+#: fava/templates/context.html:15
+msgid "Journal Entry"
+msgstr "Запись Журнала"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Ни одна запись не соответствует заданному хешу."
+
+#: fava/templates/editor.html:15
+msgid "Format"
+msgstr "Форматировать"
+
+#: fava/templates/errors.html:11
+msgid "File"
+msgstr "Файл"
+
+#: fava/templates/errors.html:12
+msgid "Line"
+msgstr "Строка"
+
+#: fava/templates/errors.html:13
+msgid "Error"
+msgstr "Ошибка"
+
+#: fava/templates/errors.html:30
+msgid "No errors."
+msgstr "Ошибок не обнаружено."
+
+#: fava/templates/events.html:13
+#, python-format
+msgid "Event: %(type)s"
+msgstr "Событие: %(type)s"
+
+#: fava/templates/events.html:18
+msgid "Description"
+msgstr "Комментарий"
+
+#: fava/templates/events.html:36
+msgid "No events."
+msgstr "События отстутствуют."
+
+#: fava/templates/help.html:4
+#, python-format
+msgid "Help - %(title)s"
+msgstr "Помощь - %(title)s"
+
+#: fava/templates/help.html:9
+msgid "Help pages"
+msgstr "Страницы помощи"
+
+#: fava/templates/holdings.html:12 fava/templates/holdings.html:23
+msgid "Currency"
+msgstr "Валюта"
+
+#: fava/templates/holdings.html:12 fava/templates/holdings.html:24
+msgid "Cost currency"
+msgstr "Валюта (стоим.)"
+
+#: fava/templates/holdings.html:13
+msgid "Holdings by"
+msgstr "Вклады по: "
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Единиц"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Средняя стоимость"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "Бух. стоимость"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Рыночная стоимость"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "Дата приобретения"
+
+#: fava/templates/income_statement.html:8
+msgid "Net Profit"
+msgstr "Чистый доход"
+
+#: fava/templates/income_statement.html:9
+msgid "Income"
+msgstr "Доход"
+
+#: fava/templates/income_statement.html:10
+msgid "Expenses"
+msgstr "Расходы"
+
+#: fava/templates/options.html:5
+msgid "fava: options"
+msgstr "Настройки fava"
+
+#: fava/templates/options.html:9 fava/templates/options.html:26
+msgid "Key"
+msgstr "Ключ"
+
+#: fava/templates/options.html:10 fava/templates/options.html:27
+msgid "Value"
+msgstr "Значение"
+
+#: fava/templates/options.html:22
+msgid "beancount: options"
+msgstr "Настройки beancount"
+
+#: fava/templates/query.html:55
+msgid "Load stored query:"
+msgstr "Загрузить сохранённый запрос:"
+
+#: fava/templates/query.html:62
+msgid "(Source)"
+msgstr "(Источник)"
+
+#: fava/templates/query.html:77
+msgid "More sample queries"
+msgstr "Ещё примеры запросов"
+
+#: fava/templates/query.html:82 fava/templates/query.html:98
+msgid "Result"
+msgstr "Результат"
+
+#: fava/templates/query.html:91
+msgid "Download as"
+msgstr "Скачать как"
+
+#: fava/templates/statistics.html:20
+msgid "Postings per Account"
+msgstr "Проводки по Счетам"
+
+#: fava/templates/statistics.html:25
+msgid "# Postings"
+msgstr "# Проводок"
+
+#: fava/templates/statistics.html:38 fava/templates/statistics.html:107
+msgid "Total"
+msgstr "Всего"
+
+#: fava/templates/statistics.html:47
+msgid "Update Activity"
+msgstr "Обновления"
+
+#: fava/templates/statistics.html:48
+msgid ""
+"Click to copy balance directives for accounts (except green ones) to the "
+"clipboard."
+msgstr ""
+"Кликните, чтобы скопировать строки баланса по счетам (за исключением зелёных) в "
+"буфер обмена."
+
+#: fava/templates/statistics.html:49
+msgid "Copy balance directives"
+msgstr "Скопировать строки баланса"
+
+#: fava/templates/statistics.html:56
+msgid "Last Entry"
+msgstr "Последняя запись"
+
+#: fava/templates/statistics.html:89
+msgid "Entries per Type"
+msgstr "Записей по Типу"
+
+#: fava/templates/statistics.html:93
+msgid "Type"
+msgstr "Тип"
+
+#: fava/templates/statistics.html:94
+msgid "# Entries"
+msgstr "Записи"
+
+#: fava/templates/macros/_interval_macros.html:1
+msgid "Daily"
+msgstr "Ежедневно"
+
+#: fava/templates/macros/_interval_macros.html:2
+msgid "Weekly"
+msgstr "Еженедельно"
+
+#: fava/templates/macros/_interval_macros.html:3
+msgid "Monthly"
+msgstr "Ежемесячно"
+
+#: fava/templates/macros/_interval_macros.html:4
+msgid "Quarterly"
+msgstr "Ежеквартально"
+
+#: fava/templates/macros/_interval_macros.html:5
+msgid "Yearly"
+msgstr "Ежегодно"
+
