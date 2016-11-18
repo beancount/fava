@@ -159,8 +159,8 @@
     {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
         {%- if not show_type[flags_to_types.get(entry.flag, 'other')] %} hidden{% endif -%}
     {% endif -%}
-    {%- if entry.tags and 'statement' in entry.tags %} statement{% endif -%}
-    {%- if entry.tags and 'discovered' in entry.tags %} discovered{% endif -%}
+    {%- if entry.tags and 'statement' in entry.tags %}{% if not show_type['statement'] %} hidden{% endif %} statement{% endif -%}
+    {%- if entry.tags and 'discovered' in entry.tags %}{% if not show_type['discovered'] %} hidden{% endif %} discovered{% endif -%}
     {%- if not show_type[type] %} hidden{% endif -%}
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
