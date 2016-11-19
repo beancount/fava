@@ -6,7 +6,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'fava'
+project = 'Fava'
 copyright = '2016, Dominik Aumayr'
 author = 'Dominik Aumayr'
 
