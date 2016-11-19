@@ -120,7 +120,7 @@ Default: `false`
 
 If `true`, instead of using the internal editor, the `beancount://` URL scheme
 is used. See the
-[beancount_urlscheme](http://github.com/aumayr/beancount_urlscheme) project for
+[Beancount urlscheme](http://github.com/aumayr/beancount_urlscheme) project for
 details.
 
 ---

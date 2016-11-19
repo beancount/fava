@@ -55,7 +55,7 @@ On the Query report you can execute queries like with the `bean-query`
 command-line tool. For an explanation of how these queries work see
 the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
-If you add `query` directives to your beancount file, there'll be a dropdown on
+If you add `query` directives to your Beancount file, there'll be a dropdown on
 the Query report to quickly select them.
 
 Fava supports downloading the result of these queries in various file formats.
@@ -94,7 +94,7 @@ Additionally, accounts that have the metadata `fava-collapse-account` set to
 
 Fava can open up your source file in your favorite editor directly from the web
 interface using the `use-external-editor` configuration variable through the
-`beancount://` URL handler. See the [beancount
+`beancount://` URL handler. See the [Beancount
 urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
 pre-configured URL handlers for OS X and Cygwin.
 
@@ -106,7 +106,7 @@ Beancount file name on the top left to switch between the files.
 ## Custom links in the sidebar
 
 If you regularly use certain views in Fava with different filters, etc., you can
-put these permalinks in the sidebar. Custom links can be put in the beancount
+put these permalinks in the sidebar. Custom links can be put in the Beancount
 file, utilizing the `custom` directive:
 
     2016-05-04 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"

@@ -1,5 +1,5 @@
 Budgets on a per-account basis can be added via `custom` directives in the
-beancount-file:
+Beancount file:
 
 <pre><textarea class="editor-readonly">
 2012-01-01 custom "budget" Expenses:Coffee       "daily"         4.00 EUR
