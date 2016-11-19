@@ -4,14 +4,14 @@ Changelog
 v1.1 (in development)
 ---------------------
 
-You can now possible to upload documents by dropping them onto transactions, which
-will also add the file path as `statement` metadata to the transaction. Fava
-also ships with a plugin to link these transactions with the generated
-documents. See the help pages for details.
+You can now upload documents by dropping them onto transactions, which will
+also add the file path as `statement` metadata to the transaction. Fava also
+ships with a plugin to link these transactions with the generated documents.
+See the help pages for details.
 
-This is the first release for which we will provide compiled binaries (for
-macOS and Linux). These do not have any dependencies and can simply be executed
-from the terminal.
+This is the first release for which we provide compiled binaries (for macOS and
+Linux). These do not have any dependencies and can simply be executed from the
+terminal.
 
 Other changes:
 
