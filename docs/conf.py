@@ -1,3 +1,6 @@
+import ast
+import re
+
 extensions = ['sphinx.ext.extlinks']
 source_suffix = '.rst'
 master_doc = 'index'
@@ -7,7 +10,10 @@ project = 'fava'
 copyright = '2016, Dominik Aumayr'
 author = 'Dominik Aumayr'
 
-version = __import__('fava').__version__
+with open('../fava/__init__.py', 'rb') as f:
+    version = str(ast.literal_eval(re.search(
+        r'__version__\s+=\s+(.*)',
+        f.read().decode('utf-8')).group(1)))
 release = version
 
 exclude_patterns = ['_build']
