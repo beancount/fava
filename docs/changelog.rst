@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.1 (in development)
----------------------
+v1.1 (November 19th, 2016)
+--------------------------
 
 You can now upload documents by dropping them onto transactions, which will
 also add the file path as `statement` metadata to the transaction. Fava also
