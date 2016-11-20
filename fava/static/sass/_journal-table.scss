@@ -1,12 +1,5 @@
  // Journal table
 
-h3.link-title {
-  float: left;
-  padding: 0 10px 0 0;
-  line-height: 32px;
-  margin: 0;
-}
-
 .journal-entry-filters {
   .inactive {
     background: $color-background-darker;
@@ -18,7 +11,8 @@ h3.link-title {
     }
   }
 
-  .txn-toggle, .doc-toggle {
+  .txn-toggle,
+  .doc-toggle {
     margin-left: -2px;
   }
 
@@ -174,7 +168,7 @@ h3.link-title {
     flex: 1;
 
     a.account-link {
-      color: transparentize($color-links, 0.15);
+      color: transparentize($color-links, .15);
 
       span {
         color: $color-links;
@@ -182,14 +176,15 @@ h3.link-title {
     }
 
     .separator {
-      display: inline-block;
-      width: 4px;
-      height: 4px;
       background: rgba($color-text, 0.3);
+      display: inline-block;
+      height: 4px;
       margin: 0 2px 2px 6px;
+      width: 4px;
     }
 
-    .tag, .link {
+    .tag,
+    .link {
       color: $color-journaltable-tag;
       display: inline-block;
       margin-right: 8px;
@@ -207,7 +202,7 @@ h3.link-title {
   }
 
   .document .description {
-    a.account-link {
+    .account-link {
       color: darken($color-journaltable-tag-document, 20%);
 
       span {
@@ -215,7 +210,7 @@ h3.link-title {
       }
     }
 
-    a.filename {
+    .filename {
       margin-left: .3em;
     }
 

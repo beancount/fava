@@ -106,14 +106,15 @@ class TimeFilter(EntryFilter):
 
 
 class TagFilter(EntryFilter):
-    """Filter by tags.
+    """Filter by tags and links.
 
-    Only keeps entries that might have tags (transactions only).
+    Only keeps entries that can have tags and links.
     """
 
     def __init__(self):
         super().__init__()
         self.tags = set()
+        self.links = set()
 
     def set(self, value):
         if value == self.value:
@@ -121,14 +122,20 @@ class TagFilter(EntryFilter):
         self.value = value
         if not self.value:
             return True
-        self.tags = set([t.strip() for t in value.split(',')])
-        if '' in self.tags:
-            self.tags.remove('')
+        self.tags = set()
+        self.links = set()
+        for tag_or_link in [t.strip() for t in value.split(',')]:
+            if tag_or_link.startswith('#'):
+                self.tags.add(tag_or_link[1:])
+            if tag_or_link.startswith('^'):
+                self.links.add(tag_or_link[1:])
         return True
 
     def _include_entry(self, entry):
-        return isinstance(entry, Transaction) and \
-            entry.tags and (entry.tags & self.tags)
+        return hasattr(entry, 'tags') and (
+            ((entry.tags if entry.tags else set()) & self.tags) or
+            ((entry.links if entry.links else set()) & self.links)
+        )
 
 
 def _match_account(name, search):

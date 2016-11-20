@@ -24,9 +24,9 @@ There are four filters available in Fava:
   current year up to today, or `year-1 - year` for all entries of the last and
   current year. To prevent subtraction, use parentheses: `(month)-10` refers to
   the 10th of this month, whereas `month-10` would be 10 months ago.
-- **Tags**: Filter entries to the ones having the tags selected. This filter is
-  inclusive, meaning that if you select multiple tags entries with any of those
-  tags will be filtered.
+- **Tags**: Filter entries to the ones having the tags or links selected. This
+  filter is inclusive, meaning that if you select multiple tags entries with
+  any of those tags will be filtered.
 - **Account**: Filter entries by account, matching any entry this account is
   part of. The filter can simply be an account name or a regular expression,
   e.g. `.*:Company:.*` to filter for all that contain `Company` as a component

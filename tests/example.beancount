@@ -2740,11 +2740,11 @@ option "operating_currency" "USD"
 2014-01-01 open Income:US:ETrade:Dividends                  USD
     fava-collapse-account: "True"
 
-2014-09-18 * "Dividends on portfolio"
+2014-09-18 * "Dividends on portfolio" #test
   Assets:US:ETrade:Cash                              0.00 USD
   Income:US:ETrade:Dividends                         0.00 USD
 
-2014-09-25 * "Buy shares of GLD"
+2014-09-25 * "Buy shares of GLD" #test
   Assets:US:ETrade:Cash                          -4908.79 USD
   Assets:US:ETrade:GLD                                 44 GLD {111.36 USD}
   Expenses:Financial:Commissions                     8.95 USD

@@ -80,13 +80,29 @@ def test_time_filter(example_api):
 def test_tag_filter(example_api):
     tag_filter = TagFilter()
 
-    tag_filter.set('test, ,')
+    tag_filter.set('#nomatch, ,')
     filtered_entries = tag_filter.apply(
         example_api.all_entries, example_api.options)
     assert all(map(
         lambda x: isinstance(x, Transaction),
         filtered_entries))
     assert len(filtered_entries) == 0
+
+    tag_filter.set('#test')
+    filtered_entries = tag_filter.apply(
+        example_api.all_entries, example_api.options)
+    assert all(map(
+        lambda x: isinstance(x, Transaction),
+        filtered_entries))
+    assert len(filtered_entries) == 2
+
+    tag_filter.set('#test,#nomatch')
+    filtered_entries = tag_filter.apply(
+        example_api.all_entries, example_api.options)
+    assert all(map(
+        lambda x: isinstance(x, Transaction),
+        filtered_entries))
+    assert len(filtered_entries) == 2
 
     assert tag_filter.set('')
     filtered_entries = tag_filter.apply(

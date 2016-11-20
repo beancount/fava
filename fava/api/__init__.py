@@ -452,12 +452,6 @@ class BeancountReportAPI():
                 return posting.meta
         return {}
 
-    def entries_for_link(self, link):
-        """Entries with the specified link."""
-        return [entry for entry in self.entries
-                if isinstance(entry, (Transaction, Document)) and
-                entry.links and link in entry.links]
-
     def insert_metadata(self, filename, lineno, basekey, value):
         """Insert metadata into a file at lineno. Also, prevent duplicate
         keys."""
