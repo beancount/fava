@@ -16,9 +16,9 @@ Below is a list of all possible options for Fava.
 
 Default: Not set
 
-Fava currently has an English (`en`) and a German (`de`) translation. If
-this setting is not specified, Fava will try to guess the language from your
-browser settings.
+Fava currently has an English (`en`), a German (`de`), and a Russian (`ru`)
+translation. If this setting is not specified, Fava will try to guess the
+language from your browser settings.
 
 ---
 
@@ -120,7 +120,7 @@ Default: `false`
 
 If `true`, instead of using the internal editor, the `beancount://` URL scheme
 is used. See the
-[beancount_urlscheme](http://github.com/aumayr/beancount_urlscheme) project for
+[Beancount urlscheme](http://github.com/aumayr/beancount_urlscheme) project for
 details.
 
 ---

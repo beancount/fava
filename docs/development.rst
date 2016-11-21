@@ -1,7 +1,7 @@
 Development
 ===========
 
-If you want to hack on fava or run the latest development version, this will
+If you want to hack on Fava or run the latest development version, this will
 get you up and running:
 
 .. code:: bash
@@ -14,7 +14,7 @@ get you up and running:
     make build-js
     pip install --editable .
 
-Note that a development installation fava requires recent versions of Node.js and
+Note that a development installation Fava requires recent versions of Node.js and
 npm, both available on OS X and Linux, but currently not on Cygwin.
 To package the development version, you can run ``python setup.py bdist_wheel``
 (make sure the ``wheel`` Python package is installed), which will produce a
