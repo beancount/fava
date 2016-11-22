@@ -62,17 +62,17 @@ def _sidebar_links(custom_entries):
 
 
 def _upcoming_events(entries):
-    """ Parse all entries for upcoming events 
+    """Parse all entries for upcoming events
     """
     today = datetime.date.today()
     upcoming_events = []
-    all_events = _filter_entries_by_type(entries, Event) 
+    all_events = _filter_entries_by_type(entries, Event)
 
     for event in all_events:
         delta = event.date - today
         if delta.days >= 0 and delta.days <= 4:
             upcoming_events.append(event)
-    
+
     return upcoming_events
 
 
@@ -145,7 +145,7 @@ class BeancountReportAPI():
             self.all_root_account, active_only=True)
 
         self.sidebar_links = _sidebar_links(self.custom_entries)
-        
+
         self.upcoming_events = _upcoming_events(self.all_entries)
 
         self.fava_options, errors = parse_options(self.custom_entries)
