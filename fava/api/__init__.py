@@ -61,6 +61,21 @@ def _sidebar_links(custom_entries):
             for entry in sidebar_link_entries]
 
 
+def _upcoming_events(entries):
+    """ Parse all entries for upcoming events 
+    """
+    today = datetime.date.today()
+    upcoming_events = []
+    all_events = _filter_entries_by_type(entries, Event) 
+
+    for event in all_events:
+        delta = event.date - today
+        if delta.days >= 0 and delta.days <= 4:
+            upcoming_events.append(event)
+    
+    return upcoming_events
+
+
 class BeancountReportAPI():
     """Provides methods to access and filter beancount entries.
     """
@@ -73,7 +88,7 @@ class BeancountReportAPI():
         'charts', 'custom_entries', 'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
         'price_map', 'queries', 'root_account', 'sidebar_links', 'title',
-        'watcher', 'upcoming_events']
+        'upcoming_events', 'watcher']
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
@@ -130,6 +145,8 @@ class BeancountReportAPI():
             self.all_root_account, active_only=True)
 
         self.sidebar_links = _sidebar_links(self.custom_entries)
+        
+        self.upcoming_events = _upcoming_events(self.all_entries)
 
         self.fava_options, errors = parse_options(self.custom_entries)
         self.errors.extend(errors)
@@ -156,15 +173,6 @@ class BeancountReportAPI():
         if self.filters['time']:
             self.date_first = self.filters['time'].begin_date
             self.date_last = self.filters['time'].end_date
-
-        self.upcoming_events = []
-        today = datetime.date.today()
-        
-        for entry in self.entries:
-            if isinstance(entry, Event):
-                delta = entry.date - today
-                if delta.days >= 0 and delta.days <= 4:
-                    self.upcoming_events.append(entry)
 
     def filter(self, **kwargs):
         """Set and apply (if necessary) filters."""
