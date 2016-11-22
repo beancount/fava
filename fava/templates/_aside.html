@@ -13,7 +13,11 @@
     {% if title_ %}<h3>{{ title_ }}</h3>{% endif %}
     <ul class="navigation">
     {% for id in menuitems %}
-        <li><a{% if id == active_page %} class="selected"{% endif %} data-key="{{ globals.all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">{{ globals.all_pages[id].0 }}</a>
+        <li><a{% if id == active_page %} class="selected"{% endif %} data-key="{{ globals.all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">{{ globals.all_pages[id].0 }}
+            {% if id == "events" and api.upcoming_events|length > 0 %}
+                <span class="bubble">{{ api.upcoming_events|length }}</span>
+            {% endif %}
+        </a>
         {% if id == "query" and user_queries|length > 0 %}
             <ul class="submenu">
             {% for query in user_queries %}

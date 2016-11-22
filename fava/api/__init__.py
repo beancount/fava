@@ -73,7 +73,7 @@ class BeancountReportAPI():
         'charts', 'custom_entries', 'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
         'price_map', 'queries', 'root_account', 'sidebar_links', 'title',
-        'watcher']
+        'watcher', 'upcoming_events']
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
@@ -156,6 +156,15 @@ class BeancountReportAPI():
         if self.filters['time']:
             self.date_first = self.filters['time'].begin_date
             self.date_last = self.filters['time'].end_date
+
+        self.upcoming_events = []
+        today = datetime.date.today()
+        
+        for entry in self.entries:
+            if isinstance(entry, Event):
+                delta = entry.date - today
+                if delta.days >= 0 and delta.days <= 4:
+                    self.upcoming_events.append(entry)
 
     def filter(self, **kwargs):
         """Set and apply (if necessary) filters."""
