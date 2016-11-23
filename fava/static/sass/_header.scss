@@ -46,7 +46,7 @@ h1 {
 
   .reload {
     color: $color-header-text;
-    background: lighten($color-header, 5);
+    background: $color-warning;
     padding: 8px 12px;
     margin-left: 2em;
 

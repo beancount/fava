@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 import 'classlist.js';
 import 'element-closest';
 
-import { $, $$, handleJSON } from './helpers';
+import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
 import './../sass/style.scss';
 
@@ -91,6 +91,10 @@ e.on('info', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li>${msg}</li>`);
 });
 
+e.on('warning', (msg) => {
+  $('#notifications').insertAdjacentHTML('beforeend', `<li class="warning">${msg}</li>`);
+});
+
 e.on('error', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li class="error">${msg}</li>`);
 });
@@ -102,6 +106,7 @@ function doPoll() {
       if (data.changed) {
         $('#reload-page').classList.remove('hidden');
         e.trigger('file-modified');
+        e.trigger('warning', _('Beancount file changed outside of Fava. Reload is required.'));
       }
     }, () => {})
     .then(() => {
