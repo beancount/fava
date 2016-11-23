@@ -326,15 +326,16 @@ aside {
       }
     }
 
-    .bubble {
-      background: lighten($color-error, 60);
-      border-radius: 12px;
-      color: $color-sidebar-links;
-      float: right;
-      font-size: .9em;
-      padding: 1px 8px;
-    }
   }
+
+  .bubble {
+    background: lighten($color-error, 60);
+    border-radius: 12px;
+    color: $color-sidebar-links;
+    float: right;
+    font-size: .9em;
+    padding: 1px 8px;
+  }  
 }
 
 .submenu {
