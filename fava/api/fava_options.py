@@ -11,6 +11,7 @@ DEFAULTS = {
     'show-accounts-with-zero-balance': True,
     'show-accounts-with-zero-transactions': True,
     'uptodate-indicator-grey-lookback-days': 60,
+    'upcoming-events': 7,
     'sidebar-show-queries': 5,
     'editor-print-margin-column': 60,
     'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
@@ -34,6 +35,7 @@ INT_OPTS = [
     'editor-print-margin-column',
     'sidebar-show-queries',
     'uptodate-indicator-grey-lookback-days',
+    'upcoming-events',
 ]
 
 LIST_OPTS = [

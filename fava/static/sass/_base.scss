@@ -326,16 +326,19 @@ aside {
       }
     }
 
+    .bubble {
+      background-color: lighten($color-error, 60);
+    }
   }
 
   .bubble {
-    background: lighten($color-error, 60);
+    background-color: $color-sidebar-border;
     border-radius: 12px;
     color: $color-sidebar-links;
     float: right;
     font-size: .9em;
     padding: 1px 8px;
-  }  
+  }
 }
 
 .submenu {

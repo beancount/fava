@@ -80,6 +80,16 @@ Set this value to `0` to hide the links altogether.
 
 ---
 
+## `upcoming-events`
+
+Default: `7`
+
+Show a notification bubble in the sidebar displaying the number of events less
+than `upcoming-events` days away.
+Set this value to `0` to disable this feature.
+
+---
+
 ## `show-closed-accounts`
 
 Default: `false`
