@@ -241,13 +241,27 @@
     display: inline-block;
     height: 6px;
     margin-right: 4px;
-    margin-top: 8px;
+    margin-top: 10px;
     padding: 0;
     width: 6px;
 
     &:last-child { margin-right: 10px; }
 
     &.leg-pending { background-color: $color-journalentry-postingwarning; }
+  }
+
+  .metadata-indicator {
+    font-size: 10px;
+    background: $color-journal-leg-indicator;
+    margin-right: 4px;
+    margin-top: 5px;
+    border-radius: 20px;
+    height: 16px;
+    line-height: 16px;
+    padding: 0 8px;
+    color: darken($color-journal-leg-indicator, 35%); // #617079;
+
+    &:last-child { margin-right: 10px; }
   }
 
   .budget-value {
