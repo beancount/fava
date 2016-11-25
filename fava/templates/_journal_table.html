@@ -155,6 +155,7 @@
         {% set entry, _, change, balance = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
+    {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
     <li class="{{ type }}
     {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
         {%- if not show_type[flags_to_types.get(entry.flag, 'other')] %} hidden{% endif -%}
@@ -214,6 +215,9 @@
             {{ render_tags_links(entry) }}
         {% endif %}
         </span>
+        {% for key, _ in metadata.items() %}
+            <span class="metadata-indicator">{{ key[:2] }}</span>
+        {% endfor %}
         {% if type == 'transaction' %}
             {% for posting in entry.postings %}
                 <span class="leg-indicator{% if posting.flag %} leg-{{ flags_to_types.get(posting.flag, 'other') }}{% endif %}"></span>
@@ -224,7 +228,7 @@
             <span class="num">{{ render_inventory(balance) }}</span>
         </p>
         {% endif %}
-        {{ render_metadata(entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']), show_type['metadata'], entry) }}
+        {{ render_metadata(metadata, show_type['metadata'], entry) }}
         {% if entry.postings %}
         <ul class="postings{% if not show_type['postings'] %} hidden{% endif %}">
         {% for posting in entry.postings %}
