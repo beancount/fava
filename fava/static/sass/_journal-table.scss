@@ -251,15 +251,16 @@
   }
 
   .metadata-indicator {
-    font-size: 10px;
     background: $color-journal-leg-indicator;
-    margin-right: 4px;
-    margin-top: 5px;
     border-radius: 20px;
+    color: darken($color-journal-leg-indicator, 35%);
+    font-size: 10px;
     height: 16px;
     line-height: 16px;
+    margin-right: 4px;
+    margin-top: 5px;
     padding: 0 8px;
-    color: darken($color-journal-leg-indicator, 35%); // #617079;
+    text-transform: lowercase;
 
     &:last-child { margin-right: 10px; }
   }
