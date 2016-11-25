@@ -116,4 +116,8 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   .error {
     background: $color-notification-error;
   }
+
+  .warning {
+    background: $color-notification-warning;
+  }
 }

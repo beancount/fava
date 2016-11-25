@@ -55,6 +55,7 @@ $color-text-lighter: lighten($color-text, 20);
 $color-links: #0067a5;
 $color-headings: #333;
 $color-error: #900;
+$color-warning: #edd42f;
 $color-code-background: #f8f8f8;
 
 $color-sidebar-text: #dadada;
@@ -65,7 +66,6 @@ $color-sidebar-links: #444;
 $color-header: #0067a5;
 $color-header-bottom: darken($color-header, 10);
 $color-header-text: #fff;
-$color-reload-active: #0f0;
 
 $color-status-red: #900;
 $color-status-yellow: #edd42f;
@@ -75,6 +75,7 @@ $color-status-gray: #aaa;
 $color-notification: #fff;
 $color-notification-info: rgba($color-status-green, .7);
 $color-notification-error: rgba($color-error, .7);
+$color-notification-warning: rgba($color-warning, .7);
 
 $color-journalentry-close: #888;
 $color-journalentry-pending: #f8a;

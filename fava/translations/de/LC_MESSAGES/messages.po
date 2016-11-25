@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-17 10:45+0100\n"
+"POT-Creation-Date: 2016-11-25 09:35+0100\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -182,6 +182,10 @@ msgstr "Laden von ${filePath} fehlgeschlagen."
 #: fava/templates/_layout.html:73
 msgid "Chart is empty."
 msgstr "Diagramm ist leer."
+
+#: fava/templates/_layout.html:74
+msgid "File change detected. Click to reload."
+msgstr "Änderung in Quelldatei entdeckt. Klicken um neu zu laden."
 
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
 msgid "Expand all accounts"

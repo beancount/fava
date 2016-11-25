@@ -45,12 +45,14 @@ h1 {
   }
 
   .reload {
-    color: $color-reload-active;
-    margin-left: 5px;
+    background: $color-warning;
+    color: $color-header-text;
+    margin-left: 2em;
+    padding: 8px 12px;
 
     &:link,
     &:visited {
-      color: $color-reload-active;
+      color: $color-header-text;
     }
   }
 

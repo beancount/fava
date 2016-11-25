@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 import 'classlist.js';
 import 'element-closest';
 
-import { $, $$, handleJSON } from './helpers';
+import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
 import './../sass/style.scss';
 
@@ -91,6 +91,19 @@ e.on('info', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li>${msg}</li>`);
 });
 
+e.on('reload-warning', (msg) => {
+  $('#notifications').insertAdjacentHTML('beforeend', `<li class="warning">${msg}</li>`);
+  const warning = $('#notifications').lastChild;
+  warning.addEventListener('click', (event) => {
+    event.preventDefault();
+    warning.remove();
+    e.trigger('reload');
+  });
+  setTimeout(() => {
+    warning.remove();
+  }, 5000);
+});
+
 e.on('error', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li class="error">${msg}</li>`);
 });
@@ -102,6 +115,7 @@ function doPoll() {
       if (data.changed) {
         $('#reload-page').classList.remove('hidden');
         e.trigger('file-modified');
+        e.trigger('reload-warning', _('File change detected. Click to reload.'));
       }
     }, () => {})
     .then(() => {
