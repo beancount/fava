@@ -91,8 +91,17 @@ e.on('info', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li>${msg}</li>`);
 });
 
-e.on('warning', (msg) => {
+e.on('reload-warning', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li class="warning">${msg}</li>`);
+  const warning = $('#notifications').lastChild;
+  warning.addEventListener('click', (event) => {
+    event.preventDefault();
+    warning.remove();
+    e.trigger('reload');
+  });
+  setTimeout(() => {
+    warning.remove();
+  }, 5000);
 });
 
 e.on('error', (msg) => {
@@ -106,7 +115,7 @@ function doPoll() {
       if (data.changed) {
         $('#reload-page').classList.remove('hidden');
         e.trigger('file-modified');
-        e.trigger('warning', _('Beancount file changed outside of Fava. Reload is required.'));
+        e.trigger('reload-warning', _('File change detected. Click to reload.'));
       }
     }, () => {})
     .then(() => {

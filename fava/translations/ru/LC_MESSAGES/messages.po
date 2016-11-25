@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-18 13:43+0300\n"
+"POT-Creation-Date: 2016-11-25 09:35+0100\n"
 "PO-Revision-Date: 2016-11-18 13:19+0300\n"
 "Last-Translator: Igor Fokusov <igor@fokusov.com>\n"
 "Language: ru\n"
@@ -183,6 +183,10 @@ msgstr "Загрузка ${filePath} не удалась."
 #: fava/templates/_layout.html:73
 msgid "Chart is empty."
 msgstr "Диаграмма пуста"
+
+#: fava/templates/_layout.html:74
+msgid "File change detected. Click to reload."
+msgstr ""
 
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
 msgid "Expand all accounts"
@@ -389,8 +393,8 @@ msgid ""
 "Click to copy balance directives for accounts (except green ones) to the "
 "clipboard."
 msgstr ""
-"Кликните, чтобы скопировать строки баланса по счетам (за исключением зелёных) в "
-"буфер обмена."
+"Кликните, чтобы скопировать строки баланса по счетам (за исключением "
+"зелёных) в буфер обмена."
 
 #: fava/templates/statistics.html:49
 msgid "Copy balance directives"
