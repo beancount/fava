@@ -26,7 +26,7 @@
     float: right;
   }
 
-  .CodeMirror,
+  .CodeMirror, // sass-lint:disable-line class-name-format
   textarea {
     border: 1px solid darken($color-background, 9);
     font-family: $font-family-editor;

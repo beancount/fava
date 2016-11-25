@@ -67,8 +67,8 @@ th {
   }
 }
 
-thead th,
-tfoot td {
+thead th, // sass-lint:disable-line force-element-nesting
+tfoot td { // sass-lint:disable-line force-element-nesting
   background: $color-treetable-header-bg;
   border: 1px solid darken($color-background, 15);
   color: $color-text-lighter;
@@ -363,7 +363,7 @@ article {
   position: relative;
   width: 100%;
 
-  ul a,
+  ul a, // sass-lint:disable-line force-element-nesting
   p > a {
     text-decoration: underline;
 
@@ -376,7 +376,9 @@ article {
   text-align: right;
   width: 100%;
 
-  &.chart-filter input { margin-left: 10px; }
+  &.chart-filter {
+    input { margin-left: 10px; }
+  }
 }
 
 .dragover { background: lighten($color-links, 50); }
@@ -530,17 +532,18 @@ kbd {
 }
 
 .statistics-update-activity {
-  thead th:nth-child(2),
-  thead th:nth-child(3) { padding-left: 0; }
+  .indicator-header { padding-left: 0; }
 
   .uptodate-indicator { text-align: center; }
   .status-indicator { margin: 0 auto; }
 }
 
-td .status-indicator {
-  float: right;
-  margin-left: 3px;
-  margin-top: 3px;
+td {
+  .status-indicator {
+    float: right;
+    margin-left: 3px;
+    margin-top: 3px;
+  }
 }
 
 // At resolutions smaller than 768px, hide the aside menu.

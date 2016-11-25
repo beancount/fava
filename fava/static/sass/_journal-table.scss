@@ -82,15 +82,25 @@
 }
 
 .journal-table {
-  p, dl { border-bottom: thin solid $color-journaltable-border; }
+  p,
+  dl {
+    border-bottom: thin solid $color-journaltable-border;
+  }
 
   // Journal entry types (li)
   .open { background-color: $color-journalentry-open; }
   .close { background-color: $color-journalentry-close; }
-  .note { background-color: $color-journalentry-note; }
   .query { background-color: $color-journalentry-note; }
   .pad { background-color: $color-journalentry-pad; }
   .document { background-color: $color-journalentry-document; }
+
+  .note {
+    background-color: $color-journalentry-note;
+
+    label {
+      color: darken($color-journalentry-note, 55%);
+    }
+  }
 
   .balance {
     background-color: $color-journalentry-balance;
@@ -167,7 +177,7 @@
   .description {
     flex: 1;
 
-    a.account-link {
+    .account-link {
       color: transparentize($color-links, .15);
 
       span {
@@ -176,7 +186,7 @@
     }
 
     .separator {
-      background: rgba($color-text, 0.3);
+      background: $color-text-lighter;
       display: inline-block;
       height: 4px;
       margin: 0 2px 2px 6px;
@@ -201,7 +211,7 @@
     }
   }
 
-  .document .description {
+  .document { // sass-lint:disable-line no-mergeable-selectors
     .account-link {
       color: darken($color-journaltable-tag-document, 20%);
 
@@ -223,10 +233,6 @@
       color: $color-journaltable-link-document;
       &:hover { color: darken($color-journaltable-link-document, 30%); }
     }
-  }
-
-  .note label {
-    color: darken($color-journalentry-note, 55%);
   }
 
   .leg-indicator {

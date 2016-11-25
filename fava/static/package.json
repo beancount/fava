@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "lint": "eslint javascript --ext .js && sass-lint -v"
+    "lint": "eslint javascript --ext .js && sass-lint -v --max-warnings 0"
   },
   "devDependencies": {
     "eslint": "^3.5.0",

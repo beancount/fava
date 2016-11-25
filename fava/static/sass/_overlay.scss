@@ -20,10 +20,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   }
 
   .overlay {
-    display: flex;
     background: $color-background;
     box-shadow: 0 0 20px lighten($overlay-wrapper-background, 50);
     cursor: auto;
+    display: flex;
     max-height: 100%;
     padding: 20px;
     position: relative;
@@ -69,8 +69,8 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
 .documents-upload {
   fieldset {
+    margin: 1rem 0;
     padding: 0;
-    margin: 1rem 0px;
   }
 
   input {
@@ -92,7 +92,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     font-size: 16px;
   }
 
-  button[type='submit'] {
+  [type='submit'] {
     display: block;
     margin-top: 1rem;
   }

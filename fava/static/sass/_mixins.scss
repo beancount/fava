@@ -1,3 +1,5 @@
+// sass-lint:disable no-vendor-prefixes
+
 @mixin placeholder {
   &:placeholder-shown {@content}
   &::-webkit-input-placeholder {@content}
@@ -22,6 +24,7 @@
 
   // For Internet Explorer
   body {
+    // sass-lint:disable-block no-misspelled-properties
     scrollbar-face-color: $primary;
     scrollbar-track-color: $secondary;
   }

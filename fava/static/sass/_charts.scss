@@ -35,11 +35,13 @@
     display: block;
   }
 
-  &.hide-charts span {
-    border: 0;
-    border-bottom: 13px solid $color-background;
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
+  &.hide-charts {
+    span {
+      border: 0;
+      border-bottom: 13px solid $color-background;
+      border-left: 9px solid transparent;
+      border-right: 9px solid transparent;
+    }
   }
 }
 
@@ -151,6 +153,7 @@ svg {
 }
 
 .barchart {
+  // sass-lint:disable-block nesting-depth
   .group {
     cursor: pointer;
 

@@ -18,7 +18,7 @@ $color-help-sidebar-border: #eaeaea;
     margin-bottom: 1em;
   }
 
-  .CodeMirror {
+  .CodeMirror { // sass-lint:disable-line class-name-format
     background-color: $color-code-background;
     border: 0;
     height: auto;

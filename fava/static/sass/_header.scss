@@ -1,3 +1,6 @@
+$color-header-text-half: rgba($color-header-text, .5);
+$color-text-transparent: rgba($color-text, .2);
+
 h1 {
   align-items: center;
   color: $color-header-text;
@@ -15,7 +18,7 @@ h1 {
     margin-left: 10px;
 
     &::before {
-      color: rgba($color-header-text, .5);
+      color: $color-header-text-half;
       content: '›';
       font-weight: normal;
       margin-right: 10px;
@@ -76,7 +79,7 @@ h1 {
     border: 1px solid darken($color-background, 20);
     border-bottom-left-radius: 3px;
     border-bottom-right-radius: 3px;
-    box-shadow: 0 3px 6px rgba($color-text, .2);
+    box-shadow: 0 3px 6px $color-text-transparent;
     display: none;
     left: 19px;
     position: absolute;
@@ -146,7 +149,7 @@ h1 {
     }
 
     // remove dropdown triangle
-    &::-webkit-calendar-picker-indicator {
+    &::-webkit-calendar-picker-indicator { // sass-lint:disable-line no-vendor-prefixes
       display: none;
     }
   }
