@@ -9,15 +9,20 @@ function loadURL(url, noHistoryState) {
     .setSearch('partial', true)
     .toString();
 
+  const svg = $('header svg');
+  svg.classList.add('loading');
+
   $.fetch(getUrl)
     .then(response => response.text())
     .then((data) => {
+      svg.classList.remove('loading');
       if (!noHistoryState) {
         window.history.pushState(null, null, url);
       }
       $('article').innerHTML = data;
       e.trigger('page-loaded');
     }, () => {
+      svg.classList.remove('loading');
       e.trigger('error', `Loading ${url} failed.`);
     });
 }
