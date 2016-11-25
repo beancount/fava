@@ -186,7 +186,7 @@ msgstr "Диаграмма пуста"
 
 #: fava/templates/_layout.html:74
 msgid "File change detected. Click to reload."
-msgstr ""
+msgstr "Содержимое файла изменилось. Нажмите, чтобы перезагрузить."
 
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
 msgid "Expand all accounts"
