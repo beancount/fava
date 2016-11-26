@@ -23,6 +23,9 @@ import 'codemirror/addon/fold/foldgutter';
 // auto-complete
 import 'codemirror/addon/hint/show-hint';
 
+// commenting
+import 'codemirror/addon/comment/comment';
+
 import './codemirror-fold-beancount';
 import './codemirror-hint-beancount';
 import './codemirror-mode-beancount';
@@ -87,6 +90,13 @@ function formatEditorContent(cm) {
     });
 }
 
+function toggleComment(cm) {
+  const args = { from: cm.getCursor(true), to: cm.getCursor(false), options: { lineComment: ';' } };
+  if (!cm.uncomment(args.from, args.to, args.options)) {
+    cm.lineComment(args.from, args.to, args.options);
+  }
+}
+
 function centerCursor(cm) {
   const top = cm.cursorCoords(true, 'local').top;
   const height = cm.getScrollInfo().clientHeight;
@@ -140,6 +150,12 @@ export default function initEditor() {
       },
       'Cmd-D': (cm) => {
         formatEditorContent(cm);
+      },
+      'Ctrl-Y': (cm) => {
+        toggleComment(cm);
+      },
+      'Cmd-Y': (cm) => {
+        toggleComment(cm);
       },
       Tab: (cm) => {
         if (cm.somethingSelected()) {
