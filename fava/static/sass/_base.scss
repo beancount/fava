@@ -210,6 +210,16 @@ button {
   &:hover {
     background-color: darken($color-header, 10);
   }
+
+  &.secondary {
+    background-color: darken($color-header-text, 20);
+    color: $color-text;
+
+    &:active,
+    &:hover {
+      background-color: darken($color-header-text, 30);
+    }
+  }
 }
 
 .hidden {

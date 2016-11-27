@@ -1,0 +1,38 @@
+<div id="transactions-form" class="transactions-form overlay-wrapper shown">
+    <div class="overlay">
+        <a href="#" class="close-overlay">(close)</a>
+        <form>
+            <h3>New transaction:</h3>
+            <div class="field-control date-line">
+                <input type="date" />
+                <label for="payee">Payee:</label>
+                <input type="text" name="payee" />
+                <label for="payee">Description:</label>
+                <input type="text" name="description" />
+            </div>
+            <div class="field-control account-line">
+                <label for="account-1">Account 1:</label>
+                <input type="text" />
+                <input type="number" step="0.01" class="currency" />
+                <select name="account-1" id="account-1">
+                {% for folder in api.options['documents'] %}
+                    <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>EUR</option>
+                {% endfor %}
+                </select>
+            </div>
+            <div class="field-control account-line">
+                <label for="account-1">Account 2:</label>
+                <input type="text" />
+                <input type="number" step="0.01" class="currency" />
+                <select name="account-1" id="account-1">
+                {% for folder in api.options['documents'] %}
+                    <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>EUR</option>
+                {% endfor %}
+                </select>
+            </div>
+            <button type="submit" id="transaction-form-submit" data-url="{{ url_for('api_add_document') }}">Save</button>
+            <button type="submit" class="secondary" id="transaction-form-submit-and-new" data-url="{{ url_for('api_add_document') }}">Save and add new</button>
+        </form>
+    </div>
+</div>
+
