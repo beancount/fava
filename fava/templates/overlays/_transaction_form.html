@@ -4,6 +4,7 @@
         <form>
             <h3>New transaction:</h3>
             <div class="field-control date-line">
+                <label for="date">Date:</label>
                 <input type="date" />
                 <label for="payee">Payee:</label>
                 <input type="text" name="payee" />
@@ -12,7 +13,7 @@
             </div>
             <div class="field-control account-line">
                 <label for="account-1">Account 1:</label>
-                <input type="text" />
+                <input type="text" class="account" />
                 <input type="number" step="0.01" class="currency" />
                 <select name="account-1" id="account-1">
                 {% for folder in api.options['documents'] %}
@@ -22,7 +23,7 @@
             </div>
             <div class="field-control account-line">
                 <label for="account-1">Account 2:</label>
-                <input type="text" />
+                <input type="text" class="account" />
                 <input type="number" step="0.01" class="currency" />
                 <select name="account-1" id="account-1">
                 {% for folder in api.options['documents'] %}

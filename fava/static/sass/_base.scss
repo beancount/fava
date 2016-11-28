@@ -34,7 +34,7 @@ body {
   font-size: 14px;
   font-weight: 400;
   height: 100%;
-  min-width: $min-width;
+  width: 100vw;
 }
 
 table {
@@ -372,6 +372,7 @@ article {
   padding: 1.5em;
   position: relative;
   width: 100%;
+  min-width: $min-width;
 
   ul a, // sass-lint:disable-line force-element-nesting
   p > a {

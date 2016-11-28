@@ -27,7 +27,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     max-height: 100%;
     padding: 20px;
     position: relative;
-    width: 800px;
+    width: 767px;
 
     form {
       width: 100%;
@@ -133,6 +133,10 @@ form .field-control {
     label {
       width: auto;
       padding: 0 8px;
+
+      &[for='date'] {
+        display: none;
+      }
     }
   }
 
@@ -165,5 +169,51 @@ form .field-control {
 
   .warning {
     background: $color-notification-warning;
+  }
+}
+
+@media (max-width: 767px) {
+  .transactions-form {
+    overflow: scroll;
+
+    .overlay {
+      width: calc(100vw - 20px);
+      max-height: initial;
+      // min-height: calc(100vh - 20px);
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      margin-bottom: 10px;
+    }
+
+    .field-control {
+      display: block;
+
+      label {
+        padding-left: 0;
+        width: 100%;
+
+        &[for='date'] {
+          display: block;
+        }
+      }
+
+      input {
+        width: 100px;
+        border: 1px solid #ccc;
+
+        &[name='description'],
+        &[name='payee'],
+        &.account {
+          width: 100%;
+          margin-bottom: .5em;
+        }
+      }
+    }
+
+    button {
+      margin-top: 2em;
+    }
   }
 }
