@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "watch-js": "rollup -c -w",
+    "watch-sass": "node-sass -w --include-path 'node_modules' -o 'gen' sass/style.scss",
     "lint": "eslint javascript --ext .js && sass-lint -v --max-warnings 0"
   },
   "devDependencies": {

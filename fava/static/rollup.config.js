@@ -29,7 +29,7 @@ export default {
       exclude: 'sass/**',
     }),
     sass({
-      output: true,
+      output: 'gen/style.css',
       options: {
         includePaths: ['node_modules/'],
       },
