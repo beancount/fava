@@ -32,8 +32,8 @@ There are four filters available in Fava:
   e.g. `.*:Company:.*` to filter for all that contain `Company` as a component
   in the account name. If a regular expression is given, it must match the whole
   account name.
-- **Payee**: Filter entries by payee. This filter is, like the *Tags*-filter,
-  inclusive.
+- **Payee**: Filter entries by payee. Like the account filter, this can either
+  be a full payee name or a regular expression.
 
 If you select multiple filters (like *Tags* and *Time*), the subset of entries
 matching both filters will be selected.

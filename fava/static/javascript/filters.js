@@ -48,7 +48,7 @@ export function initFilters() {
       },
     };
 
-    if (el.getAttribute('name') === 'tag' || el.getAttribute('name') === 'payee') {
+    if (el.getAttribute('name') === 'tag') {
       options = $.extend(options, {
         filter(text, input) {
           return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len

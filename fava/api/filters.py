@@ -138,9 +138,16 @@ class TagFilter(EntryFilter):
         )
 
 
+def _match(search, string):
+    try:
+        return re.match(search, string) or search == string
+    except re.error:
+        return search == string
+
+
 def _match_account(name, search):
     return (account.has_component(name, search) or
-            re.match(search, name))
+            _match(search, name))
 
 
 class AccountFilter(EntryFilter):
@@ -161,22 +168,6 @@ class AccountFilter(EntryFilter):
 class PayeeFilter(EntryFilter):
     """Filter by payee. """
 
-    def __init__(self):
-        super().__init__()
-        self.payees = []
-
-    def set(self, value):
-        if value == self.value:
-            return False
-        self.value = value
-        if not self.value:
-            return True
-        self.payees = [p.strip() for p in value.split(',')]
-        if '' in self.payees and len(self.payees) == 1:
-            self.payees.remove('')
-        return True
-
     def _include_entry(self, entry):
         return isinstance(entry, Transaction) and \
-            ((entry.payee and (entry.payee in self.payees)) or
-             (not entry.payee and ('' in self.payees)))
+            _match(self.value, entry.payee or '')
