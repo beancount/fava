@@ -121,7 +121,7 @@ def test_payee_filter(example_api):
         filtered_entries))
     assert len(filtered_entries) == 62
 
-    payee_filter.set('asdfasdfasdf, BayBook')
+    payee_filter.set('BayBo.*')
     filtered_entries = payee_filter.apply(
         example_api.all_entries, example_api.options)
     assert len(filtered_entries) == 62
