@@ -16,6 +16,7 @@ import initJournal from './journal';
 import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
 import initRouter from './router';
 import initSort from './sort';
+import initTransactionForm from './transaction-form';
 import initTreeTable from './tree-table';
 
 // These parts of the page should not change.
@@ -68,6 +69,7 @@ e.on('page-loaded', () => {
   initEditor();
   initJournal();
   initSort();
+  initTransactionForm();
   initTreeTable();
 
   pageData = JSON.parse($('#page-data').innerHTML);
