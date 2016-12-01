@@ -117,8 +117,13 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
 .transaction-form {
   input {
-    &[type='date'] {
+    &[name='date'] {
       width: 150px;
+    }
+
+    &[name='flag'] {
+      padding: 0 2px;
+      width: 1.5em;
     }
 
     &[name='payee'] {
@@ -136,7 +141,6 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
   .number,
   .currency {
-    margin-left: .5em;
     width: 100px;
   }
 

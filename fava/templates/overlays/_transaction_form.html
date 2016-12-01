@@ -1,4 +1,4 @@
-<div id="transaction" class="shown transaction-form overlay-wrapper">
+<div id="transaction" class="transaction-form overlay-wrapper">
     <div class="overlay">
         <a href="#" class="close-overlay">(close)</a>
         <form id="transaction-form" action="{{ url_for('api_add_transaction') }}">
@@ -6,6 +6,7 @@
             <div class="field-control date-line">
                 <label for="date">Date:</label>
                 <input type="date" name="date" value="{{ datetime.datetime.now().strftime('%Y-%m-%d') }}" />
+                <input type="text" name="flag" value="*">
                 <label for="payee">Payee:</label>
                 <input type="text" name="payee" placeholder="Payee" list="payees" />
                 <label for="payee">Narration:</label>

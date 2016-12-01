@@ -352,7 +352,7 @@ def api_add_transaction():
         postings = '\n'.join([
             '  {account}  {number} {currency}'.format(**posting)
             for posting in request.get_json()['postings']])
-        transaction = '{date} * "{payee}" "{description}"\n{p}\n'.format(
+        transaction = '{date} {flag} "{payee}" "{description}"\n{p}\n'.format(
             p=postings, **request.get_json())
         g.api.insert_transaction(transaction)
     except FavaAPIException as exception:

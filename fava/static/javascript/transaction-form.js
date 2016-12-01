@@ -7,6 +7,7 @@ import e from './events';
 function submitTransactionForm(successCallback) {
   const jsonData = {
     date: $('input[name="date"]').value,
+    flag: $('input[name="flag"]').value,
     payee: $('input[name="payee"]').value,
     narration: $('input[name="narration"]').value,
     postings: [],
