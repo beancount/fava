@@ -369,10 +369,10 @@ aside {
 
 article {
   height: 100%;
+  min-width: $min-width;
   padding: 1.5em;
   position: relative;
   width: 100%;
-  min-width: $min-width;
 
   ul a, // sass-lint:disable-line force-element-nesting
   p > a {

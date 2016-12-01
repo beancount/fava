@@ -300,7 +300,8 @@ def api_source():
         request.get_json()
         if request.get_json() is None:
             abort(400)
-        g.api.set_source(request.get_json()['file_path'], request.get_json()['source'])
+        g.api.set_source(request.get_json()['file_path'],
+                         request.get_json()['source'])
         return api_success()
 
 
@@ -348,8 +349,11 @@ def api_add_document():
 @app.route('/<bfile>/api/add-transaction/', methods=['PUT'])
 def api_add_transaction():
     try:
-        postings = '\n'.join(['  {account}  {value} {currency}'.format(**posting) for posting in request.get_json()['postings']])
-        transaction = '{date} * "{payee}" "{description}"\n{p}\n'.format(p=postings, **request.get_json())
+        postings = '\n'.join([
+            '  {account}  {value} {currency}'.format(**posting)
+            for posting in request.get_json()['postings']])
+        transaction = '{date} * "{payee}" "{description}"\n{p}\n'.format(
+            p=postings, **request.get_json())
         g.api.insert_transaction(transaction)
     except FavaAPIException as exception:
         return api_error(exception.message)

@@ -4,11 +4,11 @@ import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
 function submitTransactionForm(successCallback) {
-  let jsonData = {
+  const jsonData = {
     date: $('input[name="date"]').value,
     payee: $('input[name="payee"]').value,
     description: $('input[name="description"]').value,
-    postings: []
+    postings: [],
   };
 
   $$('.posting').forEach((posting) => {
@@ -20,7 +20,7 @@ function submitTransactionForm(successCallback) {
       jsonData.postings.push({
         account,
         value,
-        currency: value ? currency : ''
+        currency: value ? currency : '',
       });
     }
   });
@@ -29,14 +29,16 @@ function submitTransactionForm(successCallback) {
   $.fetch(form.getAttribute('action'), {
     method: 'PUT',
     body: JSON.stringify(jsonData),
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json' },
   })
     .then(handleJSON)
     .then((data) => {
       form.reset();
       e.trigger('reload');
       e.trigger('info', data.message);
-      successCallback && successCallback();
+      if (successCallback) {
+        successCallback();
+      }
     }, (error) => {
       e.trigger('error', `Save error: ${error}`);
     });
@@ -45,33 +47,33 @@ function submitTransactionForm(successCallback) {
 export default function initTransactionForm() {
   const payeeInput = $('#transaction-form input[name="payee"]');
 
-  let options = {
+  const payeeOptions = {
     autoFirst: true,
     minChars: 0,
     maxItems: 30,
     filter(text, input) {
       return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len
-    }
+    },
   };
-  const completer = new Awesomplete(payeeInput, options);
+  const payeeCompleter = new Awesomplete(payeeInput, payeeOptions);
 
   payeeInput.addEventListener('focus', () => {
-    completer.evaluate();
+    payeeCompleter.evaluate();
   });
 
-  $$('input[name="account"]').forEach((input) => {
-    let options = {
+  $$('input[name="account"]').forEach((inputEl) => {
+    const accountOptions = {
       autoFirst: true,
       minChars: 0,
       maxItems: 30,
       filter(text, input) {
         return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len
-      }
+      },
     };
-    const completer = new Awesomplete(input, options);
+    const accountCompleter = new Awesomplete(inputEl, accountOptions);
 
-    input.addEventListener('focus', () => {
-      completer.evaluate();
+    inputEl.addEventListener('focus', () => {
+      accountCompleter.evaluate();
     });
   });
 

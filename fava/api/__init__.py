@@ -458,7 +458,9 @@ class BeancountReportAPI():
         keys."""
         entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
         key = next_key(basekey, entry.meta)
-        insert_metadata_in_file(filename, lineno-1, '{}: "{}"'.format(key, value))
+        insert_metadata_in_file(filename,
+                                lineno-1,
+                                '{}: "{}"'.format(key, value))
 
     def insert_transaction(self, transaction):
         """Insert a transaction to the file with the insert marker."""

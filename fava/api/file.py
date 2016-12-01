@@ -39,7 +39,7 @@ def insert_transaction_in_file(filename, lineno, content):
     with open(filename, "r") as file:
         contents = file.readlines()
 
-    contents.insert(lineno , '{}\n'.format(content))
+    contents.insert(lineno, '{}\n'.format(content))
 
     with open(filename, "w") as file:
         contents = "".join(contents)

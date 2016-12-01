@@ -71,7 +71,8 @@ def test_find_insert_marker(tmpdir):
     assert filename == str(samplefile)
     assert lineno == 5
 
-    filename, lineno = find_insert_marker([str(samplefile_nomarker), str(samplefile)])
+    filename, lineno = find_insert_marker(
+        [str(samplefile_nomarker), str(samplefile)])
     assert filename == str(samplefile)
     assert lineno == 5
 

@@ -67,14 +67,14 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   }
 }
 
-form .field-control {
+.field-control {
   display: flex;
 
   input {
+    height: 33px;
     margin-bottom: .5em;
     padding: 4px 8px;
     width: 100%;
-    height: 33px;
 
     &:last-child {
       margin-bottom: 0;
@@ -83,13 +83,13 @@ form .field-control {
 
   label {
     display: inline-block;
-    width: 150px;
     line-height: 33px;
+    width: 150px;
   }
 
   select {
-    height: 33px;
     font-size: 16px;
+    height: 33px;
   }
 
   [type='submit'] {
@@ -108,7 +108,7 @@ form .field-control {
       padding: 4px 8px;
       width: 100%;
 
-      &:last-child {
+      &:last-child {  // sass-lint:disable-line nesting-depth
         margin-bottom: 0;
       }
     }
@@ -116,23 +116,25 @@ form .field-control {
 }
 
 .transaction-form {
-  .date-line {
-    input[type='date'] {
+  input {
+    &[type='date'] {
       width: 150px;
     }
 
-    input[name='payee'] {
+    &[name='payee'] {
       width: 110px;
     }
 
-    input[name='description'] {
-      width: auto;
+    &[name='description'] {
       flex-grow: 1;
-    }
-
-    label {
       width: auto;
+    }
+  }
+
+  .date-line {
+    label {
       padding: 0 8px;
+      width: auto;
 
       &[for='date'] {
         display: none;
@@ -150,7 +152,7 @@ form .field-control {
       width: 100px;
     }
 
-    input.currency {
+    .currency {
       margin: 0 10px 0 30px;
       width: 100px;
     }
@@ -186,14 +188,14 @@ form .field-control {
     overflow: scroll;
 
     .overlay {
-      width: calc(100vw - 20px);
+      left: 10px;
+      margin-bottom: 10px;
       max-height: initial;
       // min-height: calc(100vh - 20px);
       position: absolute;
-      top: 10px;
-      left: 10px;
       right: 10px;
-      margin-bottom: 10px;
+      top: 10px;
+      width: calc(100vw - 20px);
     }
 
     .field-control {
@@ -209,19 +211,21 @@ form .field-control {
       }
 
       input {
+        border: 1px solid $color-text-lighter;
         width: 100px;
-        border: 1px solid #ccc;
 
         &[name='description'],
         &[name='payee'] {
-          width: 100%;
           margin-bottom: .5em;
+          width: 100%;
         }
       }
 
-      &.posting .awesomplete {
-        width: 100%;
-        margin-bottom: .5em;
+      &.posting {
+        .awesomplete {
+          margin-bottom: .5em;
+          width: 100%;
+        }
       }
     }
 
