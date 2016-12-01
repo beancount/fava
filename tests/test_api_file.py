@@ -31,7 +31,7 @@ def test_insert_metadata_in_file(tmpdir):
     assert samplefile.read() == dedent(file_content)
     assert len(tmpdir.listdir()) == 1
 
-    insert_metadata_in_file(str(samplefile), 1, 'metadata: "test1"')
+    insert_metadata_in_file(str(samplefile), 1, 'metadata', 'test1')
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test1"
@@ -39,7 +39,7 @@ def test_insert_metadata_in_file(tmpdir):
             Expenses:Food:Restaurant                          24.84 USD
     """)
 
-    insert_metadata_in_file(str(samplefile), 1, 'metadata: "test2"')
+    insert_metadata_in_file(str(samplefile), 1, 'metadata', 'test2')
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test2"
