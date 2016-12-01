@@ -1,3 +1,6 @@
+from beancount.parser import printer
+
+
 def next_key(basekey, keys):
     """Returns the next unused key for basekey in the supplied array.
 
@@ -12,10 +15,10 @@ def next_key(basekey, keys):
     return '{}-{}'.format(basekey, i)
 
 
-def leading_space(line_content):
+def leading_space(line):
     """Returns a string representing the leading whitespace for the specified
     string."""
-    return line_content[:len(line_content) - len(line_content.lstrip())]
+    return line[:len(line) - len(line.lstrip())]
 
 
 def insert_metadata_in_file(filename, lineno, key, value):
@@ -44,6 +47,20 @@ def insert_transaction_in_file(filename, lineno, content):
     with open(filename, "w") as file:
         contents = "".join(contents)
         file.write(contents)
+
+
+def insert_transaction(filenames, transaction):
+    """Inserts the transaction one of the files."""
+    filename, lineno = find_insert_marker(filenames)
+    content = printer.format_entry(transaction)
+
+    with open(filename, "r") as file:
+        contents = file.readlines()
+
+    contents.insert(lineno, '\n' + content)
+
+    with open(filename, "w") as file:
+        file.writelines(contents)
 
 
 def find_insert_marker(filenames):

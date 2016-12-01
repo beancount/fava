@@ -6,17 +6,17 @@ import e from './events';
 
 function submitTransactionForm(successCallback) {
   const jsonData = {
-    date: $('input[name="date"]').value,
-    flag: $('input[name="flag"]').value,
-    payee: $('input[name="payee"]').value,
-    narration: $('input[name="narration"]').value,
+    date: $('#transaction-form input[name=date]').value,
+    flag: $('#transaction-form input[name=flag]').value,
+    payee: $('#transaction-form input[name=payee]').value,
+    narration: $('#transaction-form input[name=narration]').value,
     postings: [],
   };
 
   $$('.posting').forEach((posting) => {
-    const account = posting.querySelector('input[name="account"]').value;
-    const number = posting.querySelector('input[name="number"]').value;
-    const currency = posting.querySelector('input[name="currency"]').value;
+    const account = posting.querySelector('input[name=account]').value;
+    const number = posting.querySelector('input[name=number]').value;
+    const currency = posting.querySelector('input[name=currency]').value;
 
     if (account) {
       jsonData.postings.push({

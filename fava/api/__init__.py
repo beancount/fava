@@ -2,7 +2,6 @@
 This module provides the data required by Fava's reports.
 """
 
-import copy
 import datetime
 import os
 
@@ -23,7 +22,7 @@ from fava.api.budgets import parse_budgets, calculate_budget
 from fava.api.charts import Charts
 from fava.api.watcher import Watcher
 from fava.api.file import (insert_metadata_in_file, next_key,
-                           find_insert_marker, insert_transaction_in_file)
+                           insert_transaction)
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
@@ -464,8 +463,7 @@ class BeancountReportAPI():
     def validate_and_insert_transaction(self, transaction):
         """Insert a transaction to the file with the insert marker."""
 
-        entries, errors = booking.book([copy.deepcopy(transaction)],
-                                       self.options)
+        entries, errors = booking.book([transaction], self.options)
         if errors:
             raise FavaAPIException(errors[0].message)
         errors = validation.validate_check_transaction_balances(entries,
@@ -473,6 +471,4 @@ class BeancountReportAPI():
         if errors:
             raise FavaAPIException(errors[0].message)
 
-        filename, lineno = find_insert_marker(self.source_files())
-
-        # insert_transaction_in_file(filename, lineno, transaction)
+        insert_transaction(self.options['include'], entries[0])
