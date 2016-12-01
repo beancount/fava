@@ -2,6 +2,7 @@
 This module provides the data required by Fava's reports.
 """
 
+import copy
 import datetime
 import os
 
@@ -11,8 +12,8 @@ from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Query, Custom)
-from beancount.ops import prices, summarize
-from beancount.parser import options
+from beancount.ops import prices, summarize, validation
+from beancount.parser import booking, options
 from beancount.query import query
 from beancount.reports import context
 from beancount.utils import encryption, misc_utils
@@ -460,7 +461,18 @@ class BeancountReportAPI():
         key = next_key(basekey, entry.meta)
         insert_metadata_in_file(filename, lineno-1, key, value)
 
-    def insert_transaction(self, transaction):
+    def validate_and_insert_transaction(self, transaction):
         """Insert a transaction to the file with the insert marker."""
+
+        entries, errors = booking.book([copy.deepcopy(transaction)],
+                                       self.options)
+        if errors:
+            raise FavaAPIException(errors[0].message)
+        errors = validation.validate_check_transaction_balances(entries,
+                                                                self.options)
+        if errors:
+            raise FavaAPIException(errors[0].message)
+
         filename, lineno = find_insert_marker(self.source_files())
-        insert_transaction_in_file(filename, lineno, transaction)
+
+        # insert_transaction_in_file(filename, lineno, transaction)

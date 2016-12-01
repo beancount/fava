@@ -42,7 +42,7 @@ function submitTransactionForm(successCallback) {
         successCallback();
       }
     }, (error) => {
-      e.trigger('error', `Save error: ${error}`);
+      e.trigger('error', `Adding transcation failed: ${error}`);
     });
 }
 

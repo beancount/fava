@@ -25,6 +25,7 @@ function initPage() {
   window.favaTranslations = JSON.parse($('#translations').innerHTML);
   initFilters();
   initKeyboardShortcuts();
+  initTransactionForm();
 
   $$('.overlay-wrapper').forEach((el) => {
     el.addEventListener('click', (event) => {
@@ -69,7 +70,6 @@ e.on('page-loaded', () => {
   initEditor();
   initJournal();
   initSort();
-  initTransactionForm();
   initTreeTable();
 
   pageData = JSON.parse($('#page-data').innerHTML);

@@ -14,10 +14,12 @@ from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
+from beancount.core import amount, data
+from beancount.core.number import D
 from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
-from fava import template_filters
+from fava import template_filters, util
 from fava.api import (BeancountReportAPI, FavaAPIException,
                       FavaFileNotFoundException)
 from fava.api.filters import FilterException
@@ -348,13 +350,24 @@ def api_add_document():
 
 @app.route('/<bfile>/api/add-transaction/', methods=['PUT'])
 def api_add_transaction():
+    json = request.get_json()
+    postings = [
+        data.Posting(p['account'],
+                     amount.Amount(D(p['number']), p['currency']),
+                     None, None, None, None)
+        for p in json['postings']
+    ]
+    if not postings:
+        return api_error('Transaction contains no postings.')
+
+    date = util.date.parse_date(json['date'])[0]
+    transaction = data.Transaction(
+        None, date, json['flag'], json['payee'],
+        json['narration'], None, None, postings)
+
     try:
-        postings = '\n'.join([
-            '  {account}  {number} {currency}'.format(**posting)
-            for posting in request.get_json()['postings']])
-        transaction = '{date} {flag} "{payee}" "{description}"\n{p}\n'.format(
-            p=postings, **request.get_json())
-        g.api.insert_transaction(transaction)
+        g.api.validate_and_insert_transaction(transaction)
+        return api_error('SAVING NOT IMPLEMENTED YET.')
     except FavaAPIException as exception:
         return api_error(exception.message)
     return api_success(message='Stored transaction.')
