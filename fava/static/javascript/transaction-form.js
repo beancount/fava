@@ -1,4 +1,5 @@
 import Awesomplete from 'awesomplete';
+import fuzzy from 'fuzzyjs';
 
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
@@ -45,35 +46,23 @@ function submitTransactionForm(successCallback) {
 }
 
 export default function initTransactionForm() {
-  const payeeInput = $('#transaction-form input[name="payee"]');
+  $$('#transaction-form input').forEach((input) => {
+    if (!input.getAttribute('list')) {
+      return;
+    }
 
-  const payeeOptions = {
-    autoFirst: true,
-    minChars: 0,
-    maxItems: 30,
-    filter(text, input) {
-      return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len
-    },
-  };
-  const payeeCompleter = new Awesomplete(payeeInput, payeeOptions);
-
-  payeeInput.addEventListener('focus', () => {
-    payeeCompleter.evaluate();
-  });
-
-  $$('input[name="account"]').forEach((inputEl) => {
-    const accountOptions = {
+    const options = {
       autoFirst: true,
       minChars: 0,
       maxItems: 30,
-      filter(text, input) {
-        return Awesomplete.FILTER_CONTAINS(text, input.match(/[^,]*$/)[0]); // eslint-disable-line new-cap, max-len
+      filter(suggestion, search) {
+        return fuzzy.test(search, suggestion.value);
       },
     };
-    const accountCompleter = new Awesomplete(inputEl, accountOptions);
+    const completer = new Awesomplete(input, options);
 
-    inputEl.addEventListener('focus', () => {
-      accountCompleter.evaluate();
+    input.addEventListener('focus', () => {
+      completer.evaluate();
     });
   });
 

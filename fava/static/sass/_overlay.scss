@@ -144,10 +144,13 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     display: flex;
     padding-left: 4em;
 
-    .awesomplete,
-    .account {
+    .awesomplete {
       flex-grow: 1;
       padding-right: .5em;
+
+      &:last-child {
+        flex-grow: 0;
+      }
     }
   }
 }

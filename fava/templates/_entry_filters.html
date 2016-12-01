@@ -14,38 +14,37 @@
     <span{% if not time_filter %} class="empty"{% endif %}>
         <input id="time-filter" name="time" type="text" list='years' value='{{ time_filter or '' }}' placeholder="{{ _('Time') }}" size="{{ (time_filter and time_filter|length+2) or _('Time')|length+2 }}">
         <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-        <datalist id="years">
-        {% for year in api.active_years|reverse %}
-            <option>{{ year }}</option>
-        {% endfor %}
-        </datalist>
     </span>
     <span{% if not tag_filter %} class="empty"{% endif %}>
         <input id="tag-filter" name="tag" type="text" list='tags' value='{{ tag_filter or '' }}' placeholder="{{ _('Tag') }}" size="{{ (tag_filter and tag_filter|length+2) or _('Tag')|length+2 }}">
         <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-        <datalist id="tags">
-        {% for tag in api.active_tags %}
-            <option>#{{ tag }}</option>
-        {% endfor %}
-        </datalist>
     </span>
     <span{% if not account_filter %} class="empty"{% endif %}>
         <input id="account-filter" name="account" type="text" list='accounts' value='{{ account_filter or '' }}' placeholder="{{ _('Account') }}" size="{{ (account_filter and account_filter|length+2) or _('Account')|length+2 }}">
         <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-        <datalist id="accounts">
-        {% for account in api.all_accounts %}
-            <option>{{ account }}</option>
-        {% endfor %}
-        </datalist>
     </span>
     <span{% if not payee_filter %} class="empty"{% endif %}>
         <input id="payee-filter" name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('Payee') }}" size="{{ (payee_filter and payee_filter|length+2) or _('Payee')|length+2 }}">
         <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-        <datalist id="payees">
-        {% for payee in api.active_payees %}
-            <option>{{ payee }}</option>
-        {% endfor %}
-        </datalist>
     </span>
     <button type="submit">{{ _('Filter') }}</button>
 </form>
+
+{% macro datalist(name, list) %}
+    <datalist id="{{ name }}">
+        {% for value in list %}
+            <option>{{ value }}</option>
+        {% endfor %}
+    </datalist>
+{% endmacro %}
+
+{{ datalist('years', api.active_years|reverse) }}
+{{ datalist('payees', api.active_payees) }}
+{{ datalist('accounts', api.all_accounts) }}
+{{ datalist('active-accounts', api.all_accounts_active) }}
+{{ datalist('currencies', api.options['commodities']) }}
+<datalist id="tags">
+{% for tag in api.active_tags %}
+    <option>#{{ tag }}</option>
+{% endfor %}
+</datalist>
