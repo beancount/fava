@@ -18,7 +18,7 @@ def leading_space(line_content):
     return line_content[:len(line_content) - len(line_content.lstrip())]
 
 
-def insert_line_in_file(filename, lineno, content):
+def insert_metadata_in_file(filename, lineno, content):
     """Inserts the specified content in the file below lineno, taking into
     account the whitespace in front of the line that lineno."""
     with open(filename, "r") as file:
@@ -32,3 +32,30 @@ def insert_line_in_file(filename, lineno, content):
     with open(filename, "w") as file:
         contents = "".join(contents)
         file.write(contents)
+
+
+def insert_transaction_in_file(filename, lineno, content):
+    """Inserts the specified transaction in the file below lineno."""
+    with open(filename, "r") as file:
+        contents = file.readlines()
+
+    contents.insert(lineno , '{}\n'.format(content))
+
+    with open(filename, "w") as file:
+        contents = "".join(contents)
+        file.write(contents)
+
+
+def find_insert_marker(filenames):
+    """Searches for the insert marker and returns (filename, lineno).
+    Defaults to the first file and last line if not found.
+    """
+    marker = 'FAVA-INSERT-MARKER'
+
+    for filename in filenames:
+        with open(filename, "r") as file:
+            for lineno, linetext in enumerate(file):
+                if marker in linetext:
+                    return filename, lineno
+
+    return filenames[0], len(open(filenames[0]).read().splitlines())+1

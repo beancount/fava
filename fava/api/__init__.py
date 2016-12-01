@@ -21,7 +21,8 @@ from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
 from fava.api.charts import Charts
 from fava.api.watcher import Watcher
-from fava.api.file import insert_line_in_file, next_key
+from fava.api.file import (insert_metadata_in_file, next_key,
+                           find_insert_marker, insert_transaction_in_file)
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
@@ -457,4 +458,9 @@ class BeancountReportAPI():
         keys."""
         entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
         key = next_key(basekey, entry.meta)
-        insert_line_in_file(filename, lineno-1, '{}: "{}"'.format(key, value))
+        insert_metadata_in_file(filename, lineno-1, '{}: "{}"'.format(key, value))
+
+    def insert_transaction(self, transaction):
+        """Insert a transaction to the file with the insert marker."""
+        filename, lineno = find_insert_marker(self.source_files())
+        insert_transaction_in_file(filename, lineno, transaction)

@@ -115,7 +115,7 @@ form .field-control {
   }
 }
 
-.transactions-form {
+.transaction-form {
   .date-line {
     input[type='date'] {
       width: 150px;
@@ -140,7 +140,16 @@ form .field-control {
     }
   }
 
-  .account-line {
+  .posting {
+    .awesomplete {
+      display: flex;
+      flex-grow: 1;
+    }
+
+    label {
+      width: 100px;
+    }
+
     input.currency {
       margin: 0 10px 0 30px;
       width: 100px;
@@ -173,7 +182,7 @@ form .field-control {
 }
 
 @media (max-width: 767px) {
-  .transactions-form {
+  .transaction-form {
     overflow: scroll;
 
     .overlay {
@@ -204,11 +213,15 @@ form .field-control {
         border: 1px solid #ccc;
 
         &[name='description'],
-        &[name='payee'],
-        &.account {
+        &[name='payee'] {
           width: 100%;
           margin-bottom: .5em;
         }
+      }
+
+      &.posting .awesomplete {
+        width: 100%;
+        margin-bottom: .5em;
       }
     }
 

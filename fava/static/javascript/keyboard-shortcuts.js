@@ -134,4 +134,12 @@ export function initKeyboardShortcuts() {
       click('#entry-filters button[data-type=statement]');
     },
   }, 'keyup');
+
+  // Transaction input
+  Mousetrap.bind({
+    n() {
+      $('#transaction').classList.add('shown');
+      $('input[name="date"]').focus();
+    },
+  }, 'keyup');
 }

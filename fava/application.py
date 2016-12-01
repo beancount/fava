@@ -298,18 +298,18 @@ def api_source():
             return api_error(exception.message)
     elif request.method == 'PUT':
         request.get_json()
-        if request.json is None:
+        if request.get_json() is None:
             abort(400)
-        g.api.set_source(request.json['file_path'], request.json['source'])
+        g.api.set_source(request.get_json()['file_path'], request.get_json()['source'])
         return api_success()
 
 
 @app.route('/<bfile>/api/format-source/', methods=['POST'])
 def api_format_source():
     request.get_json()
-    if request.json is None:
+    if request.get_json() is None:
         abort(400)
-    return api_success(payload=align_beancount(request.json['source']))
+    return api_success(payload=align_beancount(request.get_json()['source']))
 
 
 @app.route('/<bfile>/api/add-document/', methods=['PUT'])
@@ -343,6 +343,17 @@ def api_add_document():
                 return api_error(exception.message)
         return api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
+
+
+@app.route('/<bfile>/api/add-transaction/', methods=['PUT'])
+def api_add_transaction():
+    try:
+        postings = '\n'.join(['  {account}  {value} {currency}'.format(**posting) for posting in request.get_json()['postings']])
+        transaction = '{date} * "{payee}" "{description}"\n{p}\n'.format(p=postings, **request.get_json())
+        g.api.insert_transaction(transaction)
+    except FavaAPIException as exception:
+        return api_error(exception.message)
+    return api_success(message='Stored transaction.')
 
 
 @app.route('/jump')
