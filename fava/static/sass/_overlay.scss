@@ -122,39 +122,32 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     }
 
     &[name='payee'] {
-      width: 110px;
+      width: 180px;
     }
 
-    &[name='description'] {
+    &[name='narration'] {
       flex-grow: 1;
-      width: auto;
     }
   }
 
-  .date-line {
-    label {
-      padding: 0 8px;
-      width: auto;
+  label {
+    display: none;
+  }
 
-      &[for='date'] {
-        display: none;
-      }
-    }
+  .number,
+  .currency {
+    margin-left: .5em;
+    width: 100px;
   }
 
   .posting {
-    .awesomplete {
-      display: flex;
+    display: flex;
+    padding-left: 4em;
+
+    .awesomplete,
+    .account {
       flex-grow: 1;
-    }
-
-    label {
-      width: 100px;
-    }
-
-    .currency {
-      margin: 0 10px 0 30px;
-      width: 100px;
+      padding-right: .5em;
     }
   }
 }
@@ -198,34 +191,33 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       width: calc(100vw - 20px);
     }
 
+    label {
+      display: block;
+      padding-left: 0;
+      width: 100%;
+    }
+
     .field-control {
       display: block;
-
-      label {
-        padding-left: 0;
-        width: 100%;
-
-        &[for='date'] {
-          display: block;
-        }
-      }
 
       input {
         border: 1px solid $color-text-lighter;
         width: 100px;
 
-        &[name='description'],
+        &[name='narration'],
         &[name='payee'] {
           margin-bottom: .5em;
           width: 100%;
         }
       }
+    }
 
-      &.posting {
-        .awesomplete {
-          margin-bottom: .5em;
-          width: 100%;
-        }
+    .posting {
+      padding-left: 0;
+
+      .awesomplete {
+        margin-bottom: .5em;
+        width: 100%;
       }
     }
 

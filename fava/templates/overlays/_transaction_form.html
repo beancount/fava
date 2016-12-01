@@ -7,29 +7,21 @@
                 <label for="date">Date:</label>
                 <input type="date" name="date" value="{{ datetime.datetime.now().strftime('%Y-%m-%d') }}" />
                 <label for="payee">Payee:</label>
-                <input type="text" name="payee" list="payees" />
-                <label for="payee">Description:</label>
-                <input type="text" name="description" />
+                <input type="text" name="payee" placeholder="Payee" list="payees" />
+                <label for="payee">Narration:</label>
+                <input type="text" name="narration" placeholder="Narration" />
             </div>
             <div class="field-control posting">
-                <label for="account">Account 1:</label>
-                <input type="text" class="account" name="account" list="accounts" />
-                <input type="number" step="0.01" class="currency" name="value" />
-                <select name="currency">
-                {% for currency in api.options['operating_currency'] %}
-                    <option value="{{ currency }}"{% if loop.first %} selected="selected"{% endif %}>{{ currency }}</option>
-                {% endfor %}
-                </select>
+                <label for="account">Account:</label>
+                <input type="text" class="account" name="account" placeholder="Account" list="accounts" />
+                <input type="number" step="0.01" class="number" name="number" placeholder="Number" />
+                <input type="text" class="currency" name="currency" placeholder="Currency" list="currencies" />
             </div>
             <div class="field-control posting">
-                <label for="account">Account 2:</label>
-                <input type="text" class="account" name="account" list="accounts" />
-                <input type="number" step="0.01" class="currency" name="value" />
-                <select name="currency">
-                {% for currency in api.options['operating_currency'] %}
-                    <option value="{{ currency }}"{% if loop.first %} selected="selected"{% endif %}>{{ currency }}</option>
-                {% endfor %}
-                </select>
+                <label for="account">Account:</label>
+                <input type="text" class="account" name="account" placeholder="Account" list="accounts" />
+                <input type="number" step="0.01" class="number" name="number" placeholder="Number" />
+                <input type="text" class="currency" name="currency" placeholder="Currency" list="currencies" />
             </div>
             <button type="submit" id="transaction-form-submit" data-url="{{ url_for('api_add_document') }}">Save</button>
             <button type="submit" class="secondary" id="transaction-form-submit-and-new" data-url="{{ url_for('api_add_document') }}">Save and add new</button>

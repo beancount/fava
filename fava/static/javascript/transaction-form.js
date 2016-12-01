@@ -7,20 +7,20 @@ function submitTransactionForm(successCallback) {
   const jsonData = {
     date: $('input[name="date"]').value,
     payee: $('input[name="payee"]').value,
-    description: $('input[name="description"]').value,
+    narration: $('input[name="narration"]').value,
     postings: [],
   };
 
   $$('.posting').forEach((posting) => {
     const account = posting.querySelector('input[name="account"]').value;
-    const value = posting.querySelector('input[name="value"]').value;
+    const number = posting.querySelector('input[name="number"]').value;
     const currency = posting.querySelector('select[name="currency"]').value;
 
     if (account) {
       jsonData.postings.push({
         account,
-        value,
-        currency: value ? currency : '',
+        number,
+        currency: number ? currency : '',
       });
     }
   });

@@ -350,7 +350,7 @@ def api_add_document():
 def api_add_transaction():
     try:
         postings = '\n'.join([
-            '  {account}  {value} {currency}'.format(**posting)
+            '  {account}  {number} {currency}'.format(**posting)
             for posting in request.get_json()['postings']])
         transaction = '{date} * "{payee}" "{description}"\n{p}\n'.format(
             p=postings, **request.get_json())

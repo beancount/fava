@@ -196,6 +196,14 @@ fieldset {
 input,
 button  {
   font: inherit;
+  margin: 0 0 0 .5em;
+
+  &[type='text'] {
+    // remove dropdown triangle
+    &::-webkit-calendar-picker-indicator { // sass-lint:disable-line no-vendor-prefixes
+      display: none;
+    }
+  }
 }
 
 button {
