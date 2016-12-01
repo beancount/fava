@@ -16,7 +16,7 @@ function submitTransactionForm(successCallback) {
   $$('.posting').forEach((posting) => {
     const account = posting.querySelector('input[name="account"]').value;
     const number = posting.querySelector('input[name="number"]').value;
-    const currency = posting.querySelector('select[name="currency"]').value;
+    const currency = posting.querySelector('input[name="currency"]').value;
 
     if (account) {
       jsonData.postings.push({

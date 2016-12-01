@@ -3,7 +3,7 @@
         <a href="#" class="close-overlay">(close)</a>
         <form id="transaction-form" action="{{ url_for('api_add_transaction') }}">
             <h3>New transaction:</h3>
-            <div class="field-control date-line">
+            <div class="field-control">
                 <label for="date">Date:</label>
                 <input type="date" name="date" value="{{ datetime.datetime.now().strftime('%Y-%m-%d') }}" />
                 <input type="text" name="flag" value="*">
