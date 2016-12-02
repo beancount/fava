@@ -95,6 +95,14 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   [type='submit'] {
     display: block;
     margin-top: 1rem;
+
+    &:focus {
+      box-shadow: 0 0 5px $color-header;
+    }
+
+    &.secondary:focus {
+      box-shadow: 0 0 5px darken($color-header-text, 20);
+    }
   }
 }
 
@@ -123,6 +131,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
     &[name='flag'] {
       padding: 0 2px;
+      text-align: center;
       width: 1.5em;
     }
 
@@ -148,12 +157,54 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     display: flex;
     padding-left: 4em;
 
+    &.hidden {
+      display: none;
+    }
+
     .awesomplete {
       flex-grow: 1;
       padding-right: .5em;
 
-      &:last-child {
+      &:nth-child(4) {
         flex-grow: 0;
+        width: 100px;
+      }
+    }
+
+    .add-posting {
+      background: darken($color-header-text, 20);
+      border-radius: 15px;
+      display: inline-block;
+      height: 14px;
+      line-height: 15px;
+      margin: 10px 0 0 15px;
+      padding: 0;
+      text-align: center;
+      width: 14px;
+
+      &:focus {
+        background: darken($color-header-text, 30);
+        box-shadow: 0 0 5px 1px $color-header;
+      }
+
+      &:active {
+        background: darken($color-header-text, 45);
+        box-shadow: none;
+      }
+    }
+
+    &:not(.last-visible) {
+      .add-posting {
+        visibility: hidden;
+        margin-right: -22px;
+      }
+    }
+
+    &.last-visible {
+      .awesomplete:nth-child(4) {
+        &, input {
+          width: 78px;
+        }
       }
     }
   }

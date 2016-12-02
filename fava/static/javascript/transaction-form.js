@@ -78,4 +78,20 @@ export default function initTransactionForm() {
     event.preventDefault();
     submitTransactionForm();
   });
+
+  $$('#transaction-form .add-posting').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      $$('#transaction-form .posting').every((posting) => {
+        posting.classList.remove('last-visible');
+        if (posting.classList.contains('hidden')) {
+          posting.classList.remove('hidden');
+          posting.classList.add('last-visible');
+          posting.querySelector(':nth-child(2) input').focus();
+          return false;
+        }
+        return true;
+      });
+    });
+  });
 }
