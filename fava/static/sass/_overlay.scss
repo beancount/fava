@@ -18,32 +18,32 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   &.shown {
     display: flex;
   }
+}
 
-  .overlay {
-    background: $color-background;
-    box-shadow: 0 0 20px lighten($overlay-wrapper-background, 50);
-    cursor: auto;
-    display: flex;
-    max-height: 100%;
-    padding: 20px;
-    position: relative;
-    width: 767px;
+.close-overlay {
+  color: $color-text-lighter;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
 
-    form {
-      width: 100%;
-    }
+.overlay {
+  background: $color-background;
+  box-shadow: 0 0 20px lighten($overlay-wrapper-background, 50);
+  cursor: auto;
+  display: flex;
+  max-height: 100%;
+  padding: 20px;
+  position: relative;
+  width: 767px;
 
-    strong {
-      display: inline-block;
-      margin: 6px 0 5px;
-    }
+  form {
+    width: 100%;
+  }
 
-    .close-overlay {
-      color: $color-text-lighter;
-      position: absolute;
-      right: 10px;
-      top: 10px;
-    }
+  strong {
+    display: inline-block;
+    margin: 6px 0 5px;
   }
 
   kbd {
@@ -100,8 +100,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       box-shadow: 0 0 5px $color-header;
     }
 
-    &.secondary:focus {
-      box-shadow: 0 0 5px darken($color-header-text, 20);
+    &.secondary {
+      &:focus {
+        box-shadow: 0 0 5px darken($color-header-text, 20);
+      }
     }
   }
 }
@@ -154,7 +156,6 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   }
 
   .posting {
-    display: flex;
     padding-left: 4em;
 
     &.hidden {
@@ -171,41 +172,44 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       }
     }
 
-    .add-posting {
-      background: darken($color-header-text, 20);
-      border-radius: 15px;
-      display: inline-block;
-      height: 14px;
-      line-height: 15px;
-      margin: 10px 0 0 15px;
-      padding: 0;
-      text-align: center;
-      width: 14px;
-
-      &:focus {
-        background: darken($color-header-text, 30);
-        box-shadow: 0 0 5px 1px $color-header;
-      }
-
-      &:active {
-        background: darken($color-header-text, 45);
-        box-shadow: none;
-      }
-    }
-
-    &:not(.last-visible) {
+    &:last-child {
       .add-posting {
-        visibility: hidden;
-        margin-right: -22px;
+        margin-right: 0;
+        visibility: visible;
       }
-    }
 
-    &.last-visible {
-      .awesomplete:nth-child(4) {
-        &, input {
+      .awesomplete {
+        &:nth-child(4) {
           width: 78px;
         }
       }
+
+      .currency {
+        width: 78px;
+      }
+    }
+  }
+
+  .add-posting {
+    background: darken($color-header-text, 20);
+    border-radius: 15px;
+    display: inline-block;
+    height: 14px;
+    line-height: 15px;
+    margin: 10px -22px 0 15px;
+    padding: 0;
+    text-align: center;
+    visibility: hidden;
+    width: 14px;
+
+    &:focus {
+      background: darken($color-header-text, 30);
+      box-shadow: 0 0 5px 1px $color-header;
+    }
+
+    &:active {
+      background: darken($color-header-text, 45);
+      box-shadow: none;
     }
   }
 }

@@ -36,6 +36,11 @@ function submitTransactionForm(successCallback) {
     .then(handleJSON)
     .then((data) => {
       form.reset();
+      $$('#transaction-form .posting').forEach((el, index) => {
+        if (index > 1) {
+          el.remove();
+        }
+      });
       e.trigger('reload');
       e.trigger('info', data.message);
       if (successCallback) {
@@ -79,19 +84,13 @@ export default function initTransactionForm() {
     submitTransactionForm();
   });
 
-  $$('#transaction-form .add-posting').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.preventDefault();
-      $$('#transaction-form .posting').every((posting) => {
-        posting.classList.remove('last-visible');
-        if (posting.classList.contains('hidden')) {
-          posting.classList.remove('hidden');
-          posting.classList.add('last-visible');
-          posting.querySelector(':nth-child(2) input').focus();
-          return false;
-        }
-        return true;
-      });
+  $.delegate($('#transaction-form'), 'click', '.add-posting', (event) => {
+    event.preventDefault();
+    const newPosting = $('#transaction-form .posting').cloneNode(true);
+    newPosting.querySelectorAll('input').forEach((element) => {
+      element.value = ''; // eslint-disable-line no-param-reassign
     });
+    $('#transaction-form .postings').appendChild(newPosting);
+    newPosting.querySelector('.account').focus();
   });
 }
