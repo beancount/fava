@@ -65,62 +65,31 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       line-height: 1.8em;
     }
   }
-}
 
-.field-control {
-  display: flex;
-
-  input {
-    height: 33px;
+  fieldset {
+    display: flex;
     margin-bottom: .5em;
-    padding: 4px 8px;
-    width: 100%;
+    padding: 0;
 
-    &:last-child {
-      margin-bottom: 0;
+    label {
+      line-height: 33px;
+      width: 150px;
     }
   }
 
-  label {
-    display: inline-block;
-    line-height: 33px;
-    width: 150px;
-  }
-
-  select {
-    font-size: 16px;
-    height: 33px;
-  }
-
-  [type='submit'] {
-    display: block;
-    margin-top: 1rem;
-
-    &:focus {
-      box-shadow: 0 0 5px $color-header;
-    }
-
-    &.secondary {
-      &:focus {
-        box-shadow: 0 0 5px darken($color-header-text, 20);
-      }
+  .awesomplete {
+    input {
+      width: 100%;
     }
   }
 }
 
 .documents-upload {
   fieldset {
-    margin: 1rem 0;
-    padding: 0;
+    display: block;
 
     input {
       margin-bottom: .5em;
-      padding: 4px 8px;
-      width: 100%;
-
-      &:last-child {  // sass-lint:disable-line nesting-depth
-        margin-bottom: 0;
-      }
     }
   }
 }
@@ -174,43 +143,31 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
     &:last-child {
       .add-posting {
-        margin-right: 0;
-        visibility: visible;
+        display: inline-block;
       }
 
       .awesomplete {
         &:nth-child(4) {
-          width: 78px;
+          width: 83px;
         }
       }
 
+      .number,
       .currency {
-        width: 78px;
+        width: 83px;
       }
     }
   }
 
   .add-posting {
-    background: darken($color-header-text, 20);
     border-radius: 15px;
-    display: inline-block;
-    height: 14px;
-    line-height: 15px;
-    margin: 10px -22px 0 15px;
+    display: none;
+    height: 1.5em;;
+    line-height: 1.5em;
+    margin: 7px 0 0 12px;
     padding: 0;
     text-align: center;
-    visibility: hidden;
-    width: 14px;
-
-    &:focus {
-      background: darken($color-header-text, 30);
-      box-shadow: 0 0 5px 1px $color-header;
-    }
-
-    &:active {
-      background: darken($color-header-text, 45);
-      box-shadow: none;
-    }
+    width: 1.5em;
   }
 }
 
@@ -259,7 +216,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       width: 100%;
     }
 
-    .field-control {
+    fieldset {
       display: block;
 
       input {

@@ -4,14 +4,14 @@
         <form>
             <h3>Upload file(s):</h3>
             <fieldset id="document-names"></fieldset>
-            <div class="field-control">
+            <fieldset>
                 <label for="document-upload-folder">Documents folder:</label>
                 <select name="document-upload-folder" id="document-upload-folder">
                 {% for folder in api.options['documents'] %}
                     <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ folder }}</option>
                 {% endfor %}
                 </select>
-            </div>
+            </fieldset>
             <button type="submit" id="document-upload-submit" data-url="{{ url_for('api_add_document') }}">Upload</button>
         </form>
     </div>

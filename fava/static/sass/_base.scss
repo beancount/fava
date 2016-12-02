@@ -197,8 +197,13 @@ input,
 button  {
   font: inherit;
   margin: 0 0 0 .5em;
+  padding: 4px 8px;
+}
 
+input {
   &[type='text'] {
+    height: 2.5em;
+
     // remove dropdown triangle
     &::-webkit-calendar-picker-indicator { // sass-lint:disable-line no-vendor-prefixes
       display: none;
@@ -217,15 +222,17 @@ button {
   &:active,
   &:hover {
     background-color: darken($color-header, 10);
+    box-shadow: 0 0 5px $color-header;
   }
 
-  &.secondary {
+  &.muted {
     background-color: darken($color-header-text, 20);
     color: $color-text;
 
     &:active,
     &:hover {
       background-color: darken($color-header-text, 30);
+      box-shadow: 0 0 5px darken($color-header-text, 20);
     }
   }
 }
