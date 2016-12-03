@@ -219,6 +219,7 @@ button {
   outline: 0;
   padding: 8px 10px;
 
+  &:focus,
   &:active,
   &:hover {
     background-color: darken($color-header, 10);
@@ -229,6 +230,7 @@ button {
     background-color: darken($color-header-text, 20);
     color: $color-text;
 
+    &:focus,
     &:active,
     &:hover {
       background-color: darken($color-header-text, 30);
