@@ -85,6 +85,15 @@ def _upcoming_events(entries, max_delta):
 
 class BeancountReportAPI():
     """Provides methods to access and filter beancount entries.
+
+    Attributes:
+        account_types: The names for the five base accounts.
+        active_payees: All payees found in the file.
+        active_tags: All tags found in the file.
+        active_years: All years that contain some entry.
+        all_accounts: A list of all account names.
+        all_accounts_active: A list of all active account names.
+
     """
 
     __slots__ = [
@@ -326,7 +335,7 @@ class BeancountReportAPI():
 
         Raises:
             FavaAPIException: If the file at `file_path` is not one of the
-            source files.
+                source files.
 
         """
         if file_path not in self.source_files():
@@ -345,7 +354,7 @@ class BeancountReportAPI():
 
         Raises:
             FavaAPIException: If the file at `file_path` is not one of the
-            source files.
+                source files.
 
         """
         if file_path not in self.source_files():
@@ -356,11 +365,11 @@ class BeancountReportAPI():
         self.load_file()
 
     def commodity_pairs(self):
-        """"List pairs of commodities.
+        """List pairs of commodities.
 
         Returns:
-            A list of pairs of commodities. Those between operating currencies
-            will be given in both directions not just in the one found in file.
+            A list of pairs of commodities. Pairs of operating currencies will
+            be given in both directions not just in the one found in file.
 
         """
         fw_pairs = self.price_map.forward_pairs
@@ -448,10 +457,15 @@ class BeancountReportAPI():
         raise FavaFileNotFoundException()
 
     def document_path(self, file_path):
-        """Check if file_path is the path to a document and the absolute
-        path if valid. Throws if the path is not valid.
+        """Get absolute path of a document.
 
-        It should occur in one of the Document entries.
+        Returns:
+            The absolute path of `file_path` if it points to a document.
+
+        Raises:
+            FavaFileNotFoundException: If `path` is not the path to one of the
+                documents.
+
         """
         for entry in misc_utils.filter_type(self.entries, Document):
             if entry.filename == file_path:
@@ -477,15 +491,17 @@ class BeancountReportAPI():
             return txn_posting
 
     def account_uptodate_status(self, account_name):
-        """Status representing the last balance or transaction.
+        """Status of the last balance or transaction.
 
         Args:
             account_name: An account name.
 
         Returns:
-            'green':  A balance check that passed.
-            'red':    A balance check that failed.
-            'yellow': Not a balance check.
+            A status string for the last balance or transaction of the account.
+
+            - 'green':  A balance check that passed.
+            - 'red':    A balance check that failed.
+            - 'yellow': Not a balance check.
         """
         last_posting = self._last_balance_or_transaction(account_name)
 

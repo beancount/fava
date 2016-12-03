@@ -64,7 +64,7 @@ def calculate_budget(budgets, account_name, date_from, date_to):
     """Calculate budget for an account.
 
     Args:
-        budgets: A list of Budget entries.
+        budgets: A list of :class:`Budget` entries.
         account_name: An account name.
         date_from: Starting date.
         date_to: End date (exclusive).

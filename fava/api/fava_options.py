@@ -80,6 +80,10 @@ def _parse_option_entry(entry):
 def parse_options(custom_entries):
     """Parse custom entries for Fava options.
 
+    The format for option entries is the following:
+
+        2016-04-01 custom "fava-option" "[name]" "[value]"
+
     Args:
         custom_entries: A list of Custom entries.
 
@@ -87,10 +91,6 @@ def parse_options(custom_entries):
         A tuple (options, errors) where options is a dictionary of all options
         to values, and errors contains possible parsing errors.
 
-    Example:
-        The format for option entries is the following:
-
-        2016-04-01 custom "fava-option" "[setting_name]" "[setting_value]"
     """
 
     options = DEFAULTS.copy()

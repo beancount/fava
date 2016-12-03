@@ -26,7 +26,7 @@ from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
-app = Flask(__name__,
+app = Flask(__name__,  # pylint: disable=invalid-name
             template_folder=resource_path('templates'),
             static_folder=resource_path('static'))
 
@@ -69,11 +69,18 @@ def load_file():
     app.config['FILE_SLUGS'] = list(app.config['APIS'].keys())
 
 
-babel = Babel(app)
+BABEL = Babel(app)
 
 
-@babel.localeselector
+@BABEL.localeselector
 def get_locale():
+    """Get locale.
+
+    Returns:
+        The locale that should be used for Babel. If not given as an option to
+        Fava, guess from browser.
+
+    """
     if app.config['language']:
         return app.config['language']
     return request.accept_languages.best_match(['de', 'en'])
@@ -108,6 +115,7 @@ def url_for_source(**kwargs):
 
 @app.context_processor
 def template_context():
+    """Inject variables into the global request context."""
     return {
         'api': g.api,
         'operating_currencies': g.api.options['operating_currency'],
@@ -165,11 +173,13 @@ def pull_beancount_file(_, values):
 
 @app.route('/')
 def root():
+    """Redirect to the index page for the first Beancount file."""
     return redirect(url_for('index', bfile=app.config['FILE_SLUGS'][0]))
 
 
 @app.route('/<bfile>/')
 def index():
+    """Redirect to the Income Statement."""
     return redirect(url_for('report', report_name='income_statement'))
 
 
@@ -195,6 +205,7 @@ def document():
 
 @app.route('/<bfile>/statement/', methods=['GET'])
 def statement():
+    """Download a statement file."""
     filename = request.args.get('filename', None)
     lineno = int(request.args.get('lineno', -1))
     key = request.args.get('key', None)
@@ -205,7 +216,7 @@ def statement():
         return send_from_directory(directory, filename)
     except FavaAPIException:
         return "Statement not found in entries.", 404
-    except FavaFileNotFoundException as e:
+    except FavaFileNotFoundException:
         return "File not found.", 404
 
 
@@ -347,16 +358,15 @@ def api_add_document():
 
 @app.route('/jump')
 def jump():
-    """This view will redirect back to Referer: url, but replace the params
-    with received param.
+    """Redirect back to the referer, replacing some parameters.
 
-    E.g. on /example/page?param1=123&param2=456, when I click on a link to
-    /jump?param1=abc, this view should redirect to
-    /example/page?param1=abc&param2=456
+    This is useful for sidebar links, e.g. a link `/jump?time=year`
+    would set the time filter to `year` on the current page.
 
-    This is useful to add links to sidebar, e.g. you can have a link
-    /jump?time=ytd to view the current page but show transactions that happen
-    since the beginning of this year.
+    When accessing `/jump?param1=abc` from
+    `/example/page?param1=123&param2=456`, this view should redirect to
+    `/example/page?param1=abc&param2=456`
+
     """
     url = werkzeug.urls.url_parse(request.referrer)
     qs_dict = url.decode_query()
