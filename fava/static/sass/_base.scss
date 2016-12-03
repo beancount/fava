@@ -187,9 +187,8 @@ pre {
   }
 }
 
-fieldset {
-  border: 0;
-  margin: 0;
+// fake fieldsets to work around browser bugs with <fieldset>
+.fieldset {
   padding: 5px 10px;
 }
 

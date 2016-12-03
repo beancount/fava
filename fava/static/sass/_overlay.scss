@@ -66,7 +66,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     }
   }
 
-  fieldset {
+  .fieldset {
     display: flex;
     margin-bottom: .5em;
     padding: 0;
@@ -85,7 +85,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 }
 
 .documents-upload {
-  fieldset {
+  .fieldset {
     display: block;
 
     input {
@@ -216,7 +216,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       width: 100%;
     }
 
-    fieldset {
+    .fieldset {
       display: block;
 
       input {
