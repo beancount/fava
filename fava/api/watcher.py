@@ -1,4 +1,4 @@
-"""A simple file and folder watcher. """
+"""A simple file and folder watcher."""
 
 import os
 
@@ -18,13 +18,25 @@ class Watcher(object):
         self.last_checked = 0
 
     def update(self, files, folders):
-        """Update the folders/files to watch. """
+        """Update the folders/files to watch.
+
+        Args:
+            files: A list of file paths.
+            folders: A list of paths to folders.
+
+        """
         self.files = [path for path in files]
         self.folders = [path for path in folders]
         self.check()
 
     def check(self):
-        """Checks for changes. """
+        """Check for changes.
+
+        Returns:
+            `True` if there was a file change in one of the files or folders,
+            `False` otherwise.
+
+        """
         latest_mtime = 0
         for path in self.files:
             mtime = os.stat(path).st_mtime_ns

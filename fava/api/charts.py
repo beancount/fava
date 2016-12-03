@@ -4,7 +4,8 @@ from datetime import date, datetime
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
 from beancount.core.position import Position
-from beancount.core import inventory, realization
+from beancount.core.inventory import Inventory
+from beancount.core import realization
 from beancount.core.data import iter_entry_dates
 from flask.json import JSONEncoder
 
@@ -29,7 +30,7 @@ class BeanJSONEncoder(JSONEncoder):
         return JSONEncoder.default(self, o)
 
 
-def serialize_inventory(inventory, at_cost=False):
+def _serialize_inventory(inventory, at_cost=False):
     """Renders an Inventory to a currency -> amount dict."""
     if at_cost:
         inventory = inventory.cost()
@@ -46,14 +47,14 @@ def _real_account(account_name, entries, begin_date, end_date):
                                      account_name)
 
 
-def serialize_real_account(real_account):
+def _serialize_real_account(real_account):
     return {
         'account': real_account.account,
         'balance_children':
-            serialize_inventory(realization.compute_balance(real_account),
-                                at_cost=True),
-        'balance': serialize_inventory(real_account.balance, at_cost=True),
-        'children': [serialize_real_account(a)
+            _serialize_inventory(realization.compute_balance(real_account),
+                                 at_cost=True),
+        'balance': _serialize_inventory(real_account.balance, at_cost=True),
+        'children': [_serialize_real_account(a)
                      for n, a in sorted(real_account.items())],
     }
 
@@ -69,8 +70,8 @@ class Charts(object):
             _real_account(account_name, self.api.entries, begin_date,
                           end_date))
                   for account_name in names]
-        return serialize_inventory(sum(totals, inventory.Inventory()),
-                                   at_cost=True)
+        return _serialize_inventory(sum(totals, Inventory()),
+                                    at_cost=True)
 
     def events(self, event_type):
         return [{
@@ -82,7 +83,7 @@ class Charts(object):
     def hierarchy(self, account_name, begin_date=None, end_date=None):
         real_account = _real_account(
             account_name, self.api.entries, begin_date, end_date)
-        return serialize_real_account(real_account)
+        return _serialize_real_account(real_account)
 
     def interval_totals(self, interval, account_name):
         """Renders totals for account (or accounts) in the intervals."""
@@ -113,7 +114,7 @@ class Charts(object):
             # 'balance' field but appear in 'change' field. Use 0 for those
             # commodities.
             'balance': dict({curr: 0 for curr in list(change.currencies())},
-                            **serialize_inventory(balance)),
+                            **_serialize_inventory(balance)),
         } for entry, _, change, balance in journal if len(change)]
 
     def net_worth_at_dates(self, interval):

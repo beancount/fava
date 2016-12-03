@@ -1,6 +1,4 @@
-"""
-This module provides the data required by Fava's reports.
-"""
+"""This module provides the data required by Fava's reports."""
 
 import datetime
 import os
@@ -62,7 +60,16 @@ def _sidebar_links(custom_entries):
 
 
 def _upcoming_events(entries, max_delta):
-    """Parse all entries for upcoming events
+    """Parse entries for upcoming events.
+
+    Args:
+        entries: A list of entries.
+        max_delta: Number of days that should be considered.
+
+    Returns:
+        A list of the Events in entries that are less than `max_delta` days
+        away.
+
     """
     today = datetime.date.today()
     upcoming_events = []
@@ -295,8 +302,12 @@ class BeancountReportAPI():
         }
 
     def source_files(self):
-        # Make sure the included source files are sorted, behind the main
-        # source file
+        """List source files.
+
+        Returns:
+            A list of all sources files, with the main file listed first.
+
+        """
         return [self.beancount_file_path] + \
             sorted(filter(
                 lambda x: x != self.beancount_file_path,
@@ -305,6 +316,19 @@ class BeancountReportAPI():
                  for filename in self.options['include']]))
 
     def source(self, file_path):
+        """Get source files.
+
+        Args:
+            file_path: The path of the file.
+
+        Returns:
+            A string with the file contents.
+
+        Raises:
+            FavaAPIException: If the file at `file_path` is not one of the
+            source files.
+
+        """
         if file_path not in self.source_files():
             raise FavaAPIException('Trying to read a non-source file')
 
@@ -313,6 +337,17 @@ class BeancountReportAPI():
         return source
 
     def set_source(self, file_path, source):
+        """Write to source file.
+
+        Args:
+            file_path: The path of the file.
+            source: A string with the file contents.
+
+        Raises:
+            FavaAPIException: If the file at `file_path` is not one of the
+            source files.
+
+        """
         if file_path not in self.source_files():
             raise FavaAPIException('Trying to write a non-source file')
 
@@ -321,6 +356,13 @@ class BeancountReportAPI():
         self.load_file()
 
     def commodity_pairs(self):
+        """"List pairs of commodities.
+
+        Returns:
+            A list of pairs of commodities. Those between operating currencies
+            will be given in both directions not just in the one found in file.
+
+        """
         fw_pairs = self.price_map.forward_pairs
         bw_pairs = []
         for currency_a, currency_b in fw_pairs:
@@ -341,7 +383,13 @@ class BeancountReportAPI():
             return all_prices
 
     def last_entry(self, account_name):
-        """The last entry of the account if it is not a Close entry.
+        """Get last entry of an account.
+
+        Args:
+            account_name: An account name.
+
+        Returns:
+            The last entry of the account if it is not a Close entry.
         """
         account = realization.get_or_create(self.all_root_account,
                                             account_name)
@@ -365,8 +413,16 @@ class BeancountReportAPI():
                 in grouped_postings.items()}
 
     def abs_path(self, file_path):
-        """Make a path absolute if it is relative, assuming it is relative to
-        the directory of the beancount file."""
+        """Make a path absolute.
+
+        Args:
+            file_path: A file path.
+
+        Returns:
+            The absolute path of `file_path`, assuming it is relative to
+            the directory of the beancount file.
+
+        """
         if not os.path.isabs(file_path):
             return os.path.join(os.path.dirname(
                 os.path.realpath(self.beancount_file_path)), file_path)
@@ -380,10 +436,8 @@ class BeancountReportAPI():
         paths = [value]
         paths.extend([os.path.join(posting.account.replace(':', '/'), value)
                       for posting in entry.postings])
-        paths.extend([os.path.join(
-                          document_root,
-                          posting.account.replace(':', '/'),
-                          value)
+        paths.extend([os.path.join(document_root,
+                                   posting.account.replace(':', '/'), value)
                       for posting in entry.postings
                       for document_root in self.options['documents']])
 
@@ -425,9 +479,13 @@ class BeancountReportAPI():
     def account_uptodate_status(self, account_name):
         """Status representing the last balance or transaction.
 
-        green:  A balance check that passed.
-        red:    A balance check that failed.
-        yellow: Not a balance check.
+        Args:
+            account_name: An account name.
+
+        Returns:
+            'green':  A balance check that passed.
+            'red':    A balance check that failed.
+            'yellow': Not a balance check.
         """
         last_posting = self._last_balance_or_transaction(account_name)
 
@@ -443,7 +501,11 @@ class BeancountReportAPI():
     def account_metadata(self, account_name):
         """Metadata of the account.
 
-        This is read from the Open entry of the account.
+        Args:
+            account_name: An account name.
+
+        Returns:
+            Metadata of the Open entry of the account.
         """
         real_account = realization.get_or_create(self.root_account,
                                                  account_name)
