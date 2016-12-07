@@ -91,6 +91,11 @@ fava.api.watcher
 
 .. automodule:: fava.api.watcher
 
+fava.template_filters
+~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.template_filters
+
 fava.util
 ~~~~~~~~~
 

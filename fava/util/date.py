@@ -30,7 +30,7 @@ def get_next_interval(date, interval):
     """Get the start date of the next interval.
 
     Args:
-        date: A datetime.date.
+        date: A date.
         interval: A string specifying the interval.
 
     Returns:
@@ -88,7 +88,7 @@ def substitute(string):
     """Replace variables referring to the current day.
 
     Args:
-        string: A string, possibly containing 'variables' for today.
+        string: A string, possibly containing variables for today.
 
     Returns:
         A string, where variables referring to the current day, like 'year' or
@@ -200,7 +200,7 @@ def days_in_daterange(start_date, end_date):
         end_date: An end date (exclusive).
 
     Returns:
-        An iterator yielding all days between start_date to end_date.
+        An iterator yielding all days between `start_date` to `end_date`.
 
     """
     for diff in range((end_date - start_date).days):

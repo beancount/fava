@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+"""The command-line interface for Fava."""
+
 import os
 import errno
 
@@ -9,6 +10,7 @@ from fava.application import app, load_file
 from fava.util import simple_wsgi
 
 
+# pylint: disable=too-many-arguments
 @click.command()
 @click.argument('filenames', nargs=-1,
                 type=click.Path(exists=True, resolve_path=True))
@@ -78,4 +80,4 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
 
 # needed for pyinstaller:
 if __name__ == '__main__':  # pragma: no cover
-    main()
+    main()  # pylint: disable=no-value-for-parameter

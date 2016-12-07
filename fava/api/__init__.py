@@ -531,8 +531,10 @@ class BeancountReportAPI():
         return {}
 
     def insert_metadata(self, filename, lineno, basekey, value):
-        """Insert metadata into a file at lineno. Also, prevent duplicate
-        keys."""
+        """Insert metadata into a file at lineno.
+
+        Also, prevent duplicate keys.
+        """
         entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
         key = next_key(basekey, entry.meta)
         insert_line_in_file(filename, lineno-1, '{}: "{}"'.format(key, value))

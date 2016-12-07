@@ -109,20 +109,20 @@ def aggregate_holdings_by(holdings, aggregation_key):
     """
 
     if aggregation_key == 'currency':
-        def key(pos):
+        def _key(pos):
             return (pos.units.currency,
                     pos.cost.currency if pos.cost else pos.units.currency)
     elif aggregation_key == 'account':
-        def key(pos):
+        def _key(pos):
             return (pos.account,
                     pos.cost.currency if pos.cost else pos.units.currency)
     else:
-        def key(pos):
+        def _key(pos):
             return pos.cost.currency if pos.cost else pos.units.currency
 
     aggregated_holdings = [aggregate_holdings_list(holdings)
                            for _, holdings in
-                           misc_utils.groupby(key, holdings).items()]
+                           misc_utils.groupby(_key, holdings).items()]
 
     return sorted(aggregated_holdings,
                   key=operator.attrgetter('account', 'units.currency'))
@@ -199,12 +199,12 @@ def net_worth_at_dates(entries, dates, price_map, options_map):
 
     types = options.get_account_types(options_map)
 
-    def posting_predicate(posting):
+    def _posting_predicate(posting):
         account_type = account_types.get_account_type(posting.account)
         if account_type in (types.assets, types.liabilities):
             return True
 
-    inventories = inventory_at_dates(transactions, dates, posting_predicate)
+    inventories = inventory_at_dates(transactions, dates, _posting_predicate)
 
     return [{
         'date': date,
@@ -215,10 +215,10 @@ def net_worth_at_dates(entries, dates, price_map, options_map):
     } for date, inv in zip(dates, inventories)]
 
 
-def entry_at_lineno(entries, filename, lineno, type=None):
+def entry_at_lineno(entries, filename, lineno, type_=None):
     """Returns the entry in filename at lineno."""
     for entry in entries:
-        if type and not isinstance(entry, type):
+        if type_ and not isinstance(entry, type_):
             continue
 
         if entry.meta['filename'] == filename and \

@@ -1,7 +1,17 @@
 """Fava's main WSGI application.
 
-when using Fava's WSGI app, make sure to set app.config['BEANCOUNT_FILES']
-and call load_file before starting the server.
+when using Fava's WSGI app, make sure to set ``app.config['BEANCOUNT_FILES']``
+and call :func:`load_file` before starting the server.  To start a simple
+server::
+
+    from fava.application import app, load_file
+    app.config['BEANCOUNT_FILES'] = ['/path/to/file.beancount']
+    load_file()
+    app.run('localhost', 5000)
+
+Attributes:
+    app: An instance of :class:`flask.Flask`, this is Fava's WSGI application.
+
 """
 import datetime
 import inspect
@@ -92,6 +102,7 @@ for _, function in inspect.getmembers(template_filters, inspect.isfunction):
 
 @app.template_global()
 def url_for_current(**kwargs):
+    """URL for current page with updated request args."""
     if not kwargs:
         return url_for(request.endpoint, **request.view_args)
     args = request.view_args.copy()
@@ -101,6 +112,7 @@ def url_for_current(**kwargs):
 
 @app.template_global()
 def url_for_source(**kwargs):
+    """URL to source file (possibly link to external editor)."""
     args = request.view_args.copy()
     args.update(kwargs)
     if app.config['use-external-editor']:
@@ -114,7 +126,7 @@ def url_for_source(**kwargs):
 
 
 @app.context_processor
-def template_context():
+def _template_context():
     """Inject variables into the global request context."""
     return {
         'api': g.api,
@@ -125,7 +137,7 @@ def template_context():
 
 
 @app.before_request
-def perform_global_filters():
+def _perform_global_filters():
     if not g.api.options['operating_currency']:
         flash('No operating currency specified. '
               'Please add one to your beancount file.')
@@ -147,7 +159,7 @@ def perform_global_filters():
 
 
 @app.url_defaults
-def inject_filters(endpoint, values):
+def _inject_filters(endpoint, values):
     if 'bfile' in values or not getattr(g, 'beancount_file_slug', None):
         return
     if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
@@ -161,7 +173,7 @@ def inject_filters(endpoint, values):
 
 
 @app.url_value_preprocessor
-def pull_beancount_file(_, values):
+def _pull_beancount_file(_, values):
     g.beancount_file_slug = values.pop('bfile', None) if values else None
     if not g.beancount_file_slug:
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]
@@ -186,6 +198,7 @@ def index():
 @app.route('/<bfile>/account/<name>/')
 @app.route('/<bfile>/account/<name>/<subreport>/')
 def account(name, subreport='journal'):
+    """The account report."""
     assert subreport in ['journal', 'balances', 'changes']
     return render_template('account.html', account_name=name,
                            subreport=subreport)
@@ -193,6 +206,7 @@ def account(name, subreport='journal'):
 
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
+    """Download a document."""
     file_path = request.args.get('file_path', None)
     try:
         document_path = g.api.document_path(file_path)
@@ -222,16 +236,19 @@ def statement():
 
 @app.route('/<bfile>/context/<ehash>/')
 def context(ehash):
+    """Show entry context."""
     return render_template('context.html', ehash=ehash)
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')
 def holdings_by(aggregation_key):
+    """The holdings report."""
     return render_template('holdings.html', aggregation_key=aggregation_key)
 
 
 @app.route('/<bfile>/query/')
 def query():
+    """Run a query."""
     query_string = request.args.get('query_string', '')
 
     if not query_string:
@@ -247,6 +264,7 @@ def query():
 
 @app.route('/<bfile>/<report_name>/')
 def report(report_name):
+    """Endpoint for most reports."""
     if report_name in REPORTS:
         return render_template('{}.html'.format(report_name))
     abort(404)
@@ -255,6 +273,7 @@ def report(report_name):
 @app.route('/<bfile>/download-query/query_result.<result_format>')
 @app.route('/<bfile>/download-query/<name>.<result_format>')
 def download_query(result_format, name='query_result'):
+    """Download a query result."""
     query_string = request.args.get('query_string', '')
 
     try:
@@ -276,6 +295,7 @@ def download_query(result_format, name='query_result'):
 @app.route('/<bfile>/help/')
 @app.route('/<bfile>/help/<string:page_slug>/')
 def help_page(page_slug='_index'):
+    """Fava's included documentation."""
     if page_slug not in app.config['HELP_PAGES']:
         abort(404)
     html = markdown2.markdown_path(
@@ -285,46 +305,50 @@ def help_page(page_slug='_index'):
                            help_html=render_template_string(html))
 
 
-def api_error(message=''):
+def _api_error(message=''):
     return jsonify({'success': False, 'error': message})
 
 
-def api_success(**kwargs):
+def _api_success(**kwargs):
     kwargs['success'] = True
     return jsonify(kwargs)
 
 
 @app.route('/<bfile>/api/changed/')
 def api_changed():
+    """Check for file changes."""
     return jsonify({'success': True, 'changed': g.api.changed()})
 
 
 @app.route('/<bfile>/api/source/', methods=['GET', 'PUT'])
 def api_source():
+    """Read/write one of the source files."""
     if request.method == 'GET':
         try:
             data = g.api.source(request.args.get('file_path'))
-            return api_success(payload=data)
+            return _api_success(payload=data)
         except FavaAPIException as exception:
-            return api_error(exception.message)
+            return _api_error(exception.message)
     elif request.method == 'PUT':
         request.get_json()
         if request.json is None:
             abort(400)
         g.api.set_source(request.json['file_path'], request.json['source'])
-        return api_success()
+        return _api_success()
 
 
 @app.route('/<bfile>/api/format-source/', methods=['POST'])
 def api_format_source():
+    """Format beancount file."""
     request.get_json()
     if request.json is None:
         abort(400)
-    return api_success(payload=align_beancount(request.json['source']))
+    return _api_success(payload=align_beancount(request.json['source']))
 
 
 @app.route('/<bfile>/api/add-document/', methods=['PUT'])
 def api_add_document():
+    """Upload a document."""
     file = request.files['file']
     if file and len(g.api.options['documents']) > 0:
         target_folder_index = int(request.form['targetFolderIndex'])
@@ -340,7 +364,7 @@ def api_add_document():
             os.makedirs(directory, exist_ok=True)
 
         if os.path.isfile(filepath):
-            return api_error('{} already exists.'.format(filepath))
+            return _api_error('{} already exists.'.format(filepath))
 
         file.save(filepath)
 
@@ -351,8 +375,8 @@ def api_add_document():
                                       'statement',
                                       os.path.basename(filepath))
             except FavaAPIException as exception:
-                return api_error(exception.message)
-        return api_success(message='Uploaded to {}'.format(filepath))
+                return _api_error(exception.message)
+        return _api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
 
 
@@ -360,12 +384,12 @@ def api_add_document():
 def jump():
     """Redirect back to the referer, replacing some parameters.
 
-    This is useful for sidebar links, e.g. a link `/jump?time=year`
+    This is useful for sidebar links, e.g. a link ``/jump?time=year``
     would set the time filter to `year` on the current page.
 
-    When accessing `/jump?param1=abc` from
-    `/example/page?param1=123&param2=456`, this view should redirect to
-    `/example/page?param1=abc&param2=456`
+    When accessing ``/jump?param1=abc`` from
+    ``/example/page?param1=123&param2=456``, this view should redirect to
+    ``/example/page?param1=abc&param2=456``.
 
     """
     url = werkzeug.urls.url_parse(request.referrer)
