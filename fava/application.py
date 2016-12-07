@@ -391,7 +391,8 @@ def api_add_transaction():
     postings = []
     for posting in json['postings']:
         if posting['account'] not in g.api.all_accounts_active:
-            return api_error('Unknown account: {}.'.format(posting['account']))
+            return _api_error('Unknown account: {}.'
+                              .format(posting['account']))
         if posting['number']:
             amount_ = amount.Amount(D(posting['number']), posting['currency'])
         else:
@@ -400,7 +401,7 @@ def api_add_transaction():
                                      None, None, None, None))
 
     if not postings:
-        return api_error('Transaction contains no postings.')
+        return _api_error('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
     transaction = data.Transaction(
@@ -408,7 +409,7 @@ def api_add_transaction():
         json['narration'], None, None, postings)
 
     insert_transaction(transaction, g.api.source_files())
-    return api_success(message='Stored transaction.')
+    return _api_success(message='Stored transaction.')
 
 
 @app.route('/jump')
