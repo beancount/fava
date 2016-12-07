@@ -1,7 +1,7 @@
 import ast
 import re
 
-extensions = ['sphinx.ext.extlinks']
+extensions = ['sphinx.ext.extlinks', 'sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 source_suffix = '.rst'
 master_doc = 'index'
 
@@ -23,6 +23,8 @@ extlinks = {
     'bug': ('https://github.com/beancount/fava/issues/%s', '#'),
     'user': ('https://github.com/%s', '@'),
 }
+
+autodoc_default_flags = ['members', 'undoc-members']
 
 # Options for HTML output
 html_theme = 'alabaster'

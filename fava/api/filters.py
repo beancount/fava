@@ -1,3 +1,5 @@
+"""Entry filters."""
+
 import re
 
 from beancount.core import account
@@ -9,6 +11,8 @@ from fava.util.date import parse_date
 
 
 class FilterException(Exception):
+    """Filter exception."""
+
     def __init__(self, filter_type, message):
         super().__init__()
         self.filter_type = filter_type
@@ -41,6 +45,16 @@ class EntryFilter(object):
         return [entry for entry in entries if self._include_entry(entry)]
 
     def apply(self, entries, options):
+        """Apply filter.
+
+        Args:
+            entries: a list of entries.
+            options: an options_map.
+
+        Returns:
+            A list of filtered entries.
+
+        """
         if self.value:
             return self._filter(entries, options)
         else:
@@ -50,8 +64,9 @@ class EntryFilter(object):
         return bool(self.value)
 
 
-class FromFilter(EntryFilter):
-    """Filter by a FROM expression in the Beancount Query Language. """
+class FromFilter(EntryFilter):  # pylint: disable=abstract-method
+    """Filter by a FROM expression in the Beancount Query Language."""
+
     def __init__(self):
         super().__init__()
         self.parser = query_parser.Parser()
@@ -78,8 +93,8 @@ class FromFilter(EntryFilter):
         return query_execute.filter_entries(self.c_from, entries, options)
 
 
-class TimeFilter(EntryFilter):
-    """Filter by dates. """
+class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
+    """Filter by dates."""
 
     def __init__(self):
         super().__init__()
@@ -166,7 +181,10 @@ class AccountFilter(EntryFilter):
 
 
 class PayeeFilter(EntryFilter):
-    """Filter by payee. """
+    """Filter by payee.
+
+    The filter string can either a regular expression or a full payee name.
+    """
 
     def _include_entry(self, entry):
         return isinstance(entry, Transaction) and \

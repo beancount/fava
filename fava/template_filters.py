@@ -12,6 +12,7 @@ from beancount.core.number import Decimal
 
 
 def remove_keys(_dict, keys):
+    """Remove keys from a dictionary."""
     if not _dict:
         return None
     new = dict(_dict)
@@ -21,6 +22,7 @@ def remove_keys(_dict, keys):
 
 
 def format_currency(value, currency=None, show_if_zero=False):
+    """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ''
     if value == 0.0:
@@ -29,6 +31,7 @@ def format_currency(value, currency=None, show_if_zero=False):
 
 
 def format_amount(amount):
+    """Format an amount to string using the DisplayContext."""
     if not amount:
         return ''
     return "{} {}".format(format_currency(amount.number, amount.currency),
@@ -36,24 +39,29 @@ def format_amount(amount):
 
 
 def last_segment(account_name):
+    """Get the last segment of an account."""
     return account_name.split(':')[-1]
 
 
 def account_level(account_name):
+    """Get the depth of an account."""
     return account_name.count(":")+1
 
 
 def balance_children(account):
+    """Compute the total balance of an account."""
     return realization.compute_balance(account)
 
 
 def get_or_create(account, account_name):
+    """Get or create a child account."""
     if account.account == account_name:
         return account
     return realization.get_or_create(account, account_name)
 
 
 def should_show(account):
+    """Determine whether the account should be shown."""
     show_this_account = False
     # check if it's a leaf account
     if len(account) == 0 or bool(account.txn_postings):
@@ -74,10 +82,12 @@ def should_show(account):
 
 
 def basename(file_path):
+    """Return the basename of a filepath."""
     return os.path.basename(file_path)
 
 
 def should_collapse_account(account_name):
+    """Determine whether the children of an account should be hidden."""
     key = 'fava-collapse-account'
     if key in g.api.account_metadata(account_name):
         return g.api.account_metadata(account_name)[key] == 'True'
@@ -86,6 +96,7 @@ def should_collapse_account(account_name):
 
 
 def uptodate_eligible(account_name):
+    """Determine whether uptodate-indicators should be shown for an account."""
     key = 'fava-uptodate-indication'
     if key in g.api.account_metadata(account_name):
         return g.api.account_metadata(account_name)[key] == 'True'

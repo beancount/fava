@@ -18,11 +18,13 @@ def _parse_budget_entry(entry):
 
 
 def parse_budgets(custom_entries):
-    """Reads budget directives from custom entries.
+    """Parse budget directives from custom entries.
 
-    Example for a budget directive:
+    Returns:
+        A tuple of Budget entries and possible parsing errors.
 
-    2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
+    Example:
+        2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
     """
 
     budgets = defaultdict(list)
@@ -43,9 +45,11 @@ def parse_budgets(custom_entries):
 
 
 def _matching_budgets(budgets, account_name, date_active):
-    """
-    Returns the budget that is active on the specifed date for the
-    specified account.
+    """Find matching budgets.
+
+    Returns:
+        The budget that is active on the specifed date for the
+        specified account.
     """
     last_seen_budgets = {}
     for budget in budgets[account_name]:
@@ -57,9 +61,17 @@ def _matching_budgets(budgets, account_name, date_active):
 
 
 def calculate_budget(budgets, account_name, date_from, date_to):
-    """
-    Returns a dictionary (currency => number) with the budget for the
-    specified account and period (excluding date_to).
+    """Calculate budget for an account.
+
+    Args:
+        budgets: A list of :class:`Budget` entries.
+        account_name: An account name.
+        date_from: Starting date.
+        date_to: End date (exclusive).
+
+    Returns:
+        A dictionary of currency to Decimal with the budget for the
+        specified account and period.
     """
     if account_name not in budgets.keys():
         return {}

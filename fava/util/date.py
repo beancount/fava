@@ -1,3 +1,10 @@
+"""Date-related functionality.
+
+Note:
+    Date ranges are always tuples (start, end) from the (inclusive) start date
+    to the (exclusive) end date.
+"""
+
 import re
 import datetime
 
@@ -20,6 +27,16 @@ VARIABLE_RE = re.compile(
 
 
 def get_next_interval(date, interval):
+    """Get the start date of the next interval.
+
+    Args:
+        date: A date.
+        interval: A string specifying the interval.
+
+    Returns:
+        The start date of the next `interval` after `date`.
+
+    """
     if interval == 'year':
         return datetime.date(date.year + 1, 1, 1)
     elif interval == 'quarter':
@@ -40,6 +57,18 @@ def get_next_interval(date, interval):
 
 
 def interval_tuples(first, last, interval):
+    """List intervals.
+
+    Args:
+        first: A datetime.date.
+        last: A datetime.date.
+        interval: A string specifying the interval.
+
+    Returns:
+        A list of (start, end) dates corresponding to intervals between `first`
+        and `last`.
+
+    """
     if not first:
         return []
 
@@ -56,9 +85,15 @@ def interval_tuples(first, last, interval):
 
 
 def substitute(string):
-    """Replaces variables referring to the current day in some format, like
-    'year' or 'week' by the corresponding string understood by `parse_date`.
-    Can compute addition and subtraction.
+    """Replace variables referring to the current day.
+
+    Args:
+        string: A string, possibly containing variables for today.
+
+    Returns:
+        A string, where variables referring to the current day, like 'year' or
+        'week' have been replaced by the corresponding string understood by
+        :func:`parse_date`.  Can compute addition and subtraction.
     """
     today = datetime.date.today()
 
@@ -91,19 +126,27 @@ def substitute(string):
     return string
 
 
-def parse_date(string):
-    """"Tries to parse the given string into two date objects marking the
-    beginning and the end of the given period, where the end day is exclusive,
-    i.e. one day after the end of the period.
+def parse_date(string):  # pylint: disable=too-many-return-statements
+    """Parse a date.
 
     Example of supported formats:
-     - 2010-03-15, 2010-03, 2010
-     - 2010-W01, 2010-Q3
+
+    - 2010-03-15, 2010-03, 2010
+    - 2010-W01, 2010-Q3
 
     Ranges of dates can be expressed in the following forms:
-     - start - end
-     - start to end
+
+    - start - end
+    - start to end
+
     where start and end look like one of the above examples
+
+    Args:
+        string: A date(range) in our custom format.
+
+    Returns:
+        A tuple (start, end) of dates.
+
     """
     string = string.strip().lower()
     if not string:
@@ -150,14 +193,22 @@ def parse_date(string):
 
 
 def days_in_daterange(start_date, end_date):
-    """Yields a datetime for every day in the specified interval, excluding
-    end_date."""
+    """Yield a datetime for every day in the specified interval.
+
+    Args:
+        start_date: A start date.
+        end_date: An end date (exclusive).
+
+    Returns:
+        An iterator yielding all days between `start_date` to `end_date`.
+
+    """
     for diff in range((end_date - start_date).days):
         yield start_date + datetime.timedelta(diff)
 
 
 def number_of_days_in_period(period, date_):
-    """Returns the days in the specified period and date_."""
+    """Returns the days in the specified `period` and `date_`."""
 
     if period == 'daily':
         return 1

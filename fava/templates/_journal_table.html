@@ -168,7 +168,7 @@
         <p>
         <span class="datecell"><a href="{{ context_url.replace('REPLACEME', api.hash_entry(entry)) }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
-        <span class="description{%- if type == 'transaction' %} droptarget{% endif -%}"{%- if type == 'transaction' %} data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account }}"{% endif -%}>
+        <span class="description{%- if type == 'transaction' %} droptarget{% endif -%}"{%- if type == 'transaction' %} data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif -%}>
         {% if type == 'open' %}
             Open {{ account_link(entry.account) }}
         {% elif type == 'close' %}

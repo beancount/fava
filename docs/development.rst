@@ -1,6 +1,9 @@
 Development
 ===========
 
+Setting up a development environment
+------------------------------------
+
 If you want to hack on Fava or run the latest development version, this will
 get you up and running:
 
@@ -37,3 +40,73 @@ Contributions are very welcome, just open a PR on `Github
 
 Fava is released under the `MIT License
 <https://github.com/beancount/fava/blob/master/LICENSE>`__.
+
+API Documentation
+-----------------
+
+.. note:: There's no stability guarantee as this is just for internal purposes currently.
+
+fava.application
+~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.application
+
+fava.api
+~~~~~~~~~
+
+.. automodule:: fava.api
+
+fava.api.budgets
+~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.api.budgets
+
+fava.api.charts
+~~~~~~~~~~~~~~~
+
+.. automodule:: fava.api.charts
+
+fava.api.fava_options
+~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.api.fava_options
+
+fava.api.file
+~~~~~~~~~~~~~
+
+.. automodule:: fava.api.file
+
+fava.api.filters
+~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.api.filters
+
+fava.api.helpers
+~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.api.helpers
+
+fava.api.watcher
+~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.api.watcher
+
+fava.template_filters
+~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.template_filters
+
+fava.util
+~~~~~~~~~
+
+.. automodule:: fava.util
+
+fava.util.date
+~~~~~~~~~~~~~~
+
+.. automodule:: fava.util.date
+
+fava.util.excel
+~~~~~~~~~~~~~~~
+
+.. automodule:: fava.util.excel

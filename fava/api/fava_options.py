@@ -1,3 +1,11 @@
+"""Fava's options.
+
+Options for Fava can be specified through Custom entries in the Beancount file.
+This module contains a list of possible options, the defaults and the code for
+parsing the options.
+
+"""
+
 from collections import namedtuple
 
 OptionError = namedtuple('OptionError', 'source message entry')
@@ -70,9 +78,19 @@ def _parse_option_entry(entry):
 
 
 def parse_options(custom_entries):
-    """ Parse custom entries for fava options. They have the following format:
+    """Parse custom entries for Fava options.
 
-    2016-04-01 custom "fava-option" "[setting_name]" "[setting_value]"
+    The format for option entries is the following:
+
+        2016-04-01 custom "fava-option" "[name]" "[value]"
+
+    Args:
+        custom_entries: A list of Custom entries.
+
+    Returns:
+        A tuple (options, errors) where options is a dictionary of all options
+        to values, and errors contains possible parsing errors.
+
     """
 
     options = DEFAULTS.copy()
