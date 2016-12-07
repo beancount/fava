@@ -9,8 +9,8 @@ from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Query, Custom)
-from beancount.ops import prices, summarize, validation
-from beancount.parser import booking, options
+from beancount.ops import prices, summarize
+from beancount.parser import options
 from beancount.query import query
 from beancount.reports import context
 from beancount.utils import encryption, misc_utils
@@ -19,8 +19,7 @@ from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
 from fava.api.charts import Charts
 from fava.api.watcher import Watcher
-from fava.api.file import (insert_metadata_in_file, next_key,
-                           insert_transaction)
+from fava.api.file import insert_metadata_in_file, next_key
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
