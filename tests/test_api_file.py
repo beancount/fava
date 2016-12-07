@@ -1,6 +1,11 @@
+import datetime
 from textwrap import dedent
+
+from beancount.core import data, amount
+from beancount.core.number import D
+
 from fava.api.file import (next_key, leading_space, insert_metadata_in_file,
-                           find_insert_marker, insert_transaction_in_file)
+                           find_insert_marker, insert_transaction)
 
 
 def test_next_key():
@@ -81,23 +86,52 @@ def test_find_insert_marker(tmpdir):
     assert lineno == 2
 
 
-def test_insert_transaction_in_file(tmpdir):
+def test_insert_transaction(tmpdir):
     file_content = dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
+        ; FAVA-INSERT-MARKER
     """)
     samplefile = tmpdir.mkdir('fava_util_file3').join('example.beancount')
     samplefile.write(file_content)
 
-    assert samplefile.read() == dedent(file_content)
-    assert len(tmpdir.listdir()) == 1
+    transaction = data.Transaction(
+        None, datetime.date(2016, 1, 1), '*', 'payee', 'narr', None, None, [])
 
-    insert_transaction_in_file(str(samplefile), 1, 'Test\n')
+    insert_transaction(transaction, [str(samplefile)])
     assert samplefile.read() == dedent("""
-        Test
-
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "payee" | "narr"
+        ; FAVA-INSERT-MARKER
+    """)
+
+    postings = [
+        data.Posting('Liabilities:US:Chase:Slate',
+                     amount.Amount(D('-10.00'), 'USD'),
+                     None, None, None, None),
+        data.Posting('Expenses:Food',
+                     amount.Amount(D('10.00'), 'USD'),
+                     None, None, None, None),
+    ]
+
+    transaction = data.Transaction(
+        None, datetime.date(2016, 1, 1), '*',
+        'new payee', 'narr', None, None, postings)
+
+    insert_transaction(transaction, [str(samplefile)])
+    assert samplefile.read() == dedent("""
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "payee" | "narr"
+
+        2016-01-01 * "new payee" | "narr"
+          Liabilities:US:Chase:Slate  -10.00 USD
+          Expenses:Food                10.00 USD
+        ; FAVA-INSERT-MARKER
     """)

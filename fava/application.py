@@ -22,6 +22,7 @@ from beancount.scripts.format import align_beancount
 from fava import template_filters, util
 from fava.api import (BeancountReportAPI, FavaAPIException,
                       FavaFileNotFoundException)
+from fava.api.file import insert_transaction
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
@@ -354,6 +355,8 @@ def api_add_transaction():
 
     postings = []
     for posting in json['postings']:
+        if posting['account'] not in g.api.all_accounts_active:
+            return api_error('Unknown account: {}.'.format(posting['account']))
         if posting['number']:
             amount_ = amount.Amount(D(posting['number']), posting['currency'])
         else:
@@ -369,10 +372,7 @@ def api_add_transaction():
         None, date, json['flag'], json['payee'],
         json['narration'], None, None, postings)
 
-    try:
-        g.api.validate_and_insert_transaction(transaction)
-    except FavaAPIException as exception:
-        return api_error(exception.message)
+    insert_transaction(transaction, g.api.source_files())
     return api_success(message='Stored transaction.')
 
 

@@ -37,20 +37,14 @@ def insert_metadata_in_file(filename, lineno, key, value):
         file.write(contents)
 
 
-def insert_transaction_in_file(filename, lineno, content):
-    """Inserts the specified transaction in the file below lineno."""
-    with open(filename, "r") as file:
-        contents = file.readlines()
+def insert_transaction(transaction, filenames):
+    """Insert a transaction.
 
-    contents.insert(lineno, '{}\n'.format(content))
+    Args:
+        transaction: A Transaction.
+        filenames: List of filenames.
 
-    with open(filename, "w") as file:
-        contents = "".join(contents)
-        file.write(contents)
-
-
-def insert_transaction(filenames, transaction):
-    """Inserts the transaction one of the files."""
+    """
     filename, lineno = find_insert_marker(filenames)
     content = printer.format_entry(transaction)
 
@@ -75,4 +69,4 @@ def find_insert_marker(filenames):
                 if marker in linetext:
                     return filename, lineno
 
-    return filenames[0], len(open(filenames[0]).read().splitlines())+1
+    return filenames[0], len(open(filenames[0]).readlines())+1

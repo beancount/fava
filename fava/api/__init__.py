@@ -459,16 +459,3 @@ class BeancountReportAPI():
         entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
         key = next_key(basekey, entry.meta)
         insert_metadata_in_file(filename, lineno-1, key, value)
-
-    def validate_and_insert_transaction(self, transaction):
-        """Insert a transaction to the file with the insert marker."""
-
-        entries, errors = booking.book([transaction], self.options)
-        if errors:
-            raise FavaAPIException(errors[0].message)
-        errors = validation.validate_check_transaction_balances(entries,
-                                                                self.options)
-        if errors:
-            raise FavaAPIException(errors[0].message)
-
-        insert_transaction(self.options['include'], entries[0])
