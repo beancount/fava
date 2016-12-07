@@ -77,6 +77,11 @@ e.on('page-loaded', () => {
   $('h1 strong').innerHTML = pageData.pageTitle;
   $('#reload-page').classList.add('hidden');
   setSelectedLink();
+
+  $('#add-transaction-button').addEventListener('click', () => {
+    $('#transaction').classList.add('shown');
+    $('input[name="date"]').focus();
+  });
 });
 
 e.on('file-modified', () => {
