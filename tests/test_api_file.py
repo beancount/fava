@@ -5,7 +5,8 @@ from beancount.core import data, amount
 from beancount.core.number import D
 
 from fava.api.file import (next_key, leading_space, insert_metadata_in_file,
-                           find_insert_marker, insert_transaction)
+                           find_insert_marker, insert_transaction,
+                           _render_transaction)
 
 
 def test_next_key():
@@ -105,7 +106,7 @@ def test_insert_transaction(tmpdir):
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
-        2016-01-01 * "payee" | "narr"
+        2016-01-01 * "payee" "narr"
         ; FAVA-INSERT-MARKER
     """)
 
@@ -128,10 +129,49 @@ def test_insert_transaction(tmpdir):
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
-        2016-01-01 * "payee" | "narr"
+        2016-01-01 * "payee" "narr"
 
-        2016-01-01 * "new payee" | "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
         ; FAVA-INSERT-MARKER
     """)
+
+
+def test__render_transaction():
+    postings = [
+        data.Posting('Liabilities:US:Chase:Slate',
+                     amount.Amount(D('-10.00'), 'USD'),
+                     None, None, None, None),
+        data.Posting('Expenses:Food',
+                     amount.Amount(None, None),
+                     None, None, None, None),
+    ]
+
+    transaction = data.Transaction(
+        None, datetime.date(2016, 1, 1), '*',
+        'new payee', 'narr', None, None, postings)
+
+    assert '\n' + _render_transaction(transaction) == dedent("""
+    2016-01-01 * "new payee" "narr"
+        Liabilities:US:Chase:Slate                    -10.00 USD
+        Expenses:Food""")
+
+    postings = [
+        data.Posting('Liabilities:US:Chase:Slate',
+                     amount.Amount(D('-10.00'), 'USD'),
+                     None, None, None, None),
+        data.Posting('Expenses:Food',
+                     amount.Amount(D('10.00'), 'USD'),
+                     None, None, None, None),
+    ]
+
+    transaction = data.Transaction(
+        None, datetime.date(2016, 1, 1), '*',
+        'new payee', 'narr', None, None, postings)
+
+    print(_render_transaction(transaction))
+    assert '\n' + _render_transaction(transaction) == dedent("""
+    2016-01-01 * "new payee" "narr"
+        Liabilities:US:Chase:Slate                    -10.00 USD
+        Expenses:Food                                  10.00 USD""")

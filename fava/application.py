@@ -393,10 +393,8 @@ def api_add_transaction():
         if posting['account'] not in g.api.all_accounts_active:
             return _api_error('Unknown account: {}.'
                               .format(posting['account']))
-        if posting['number']:
-            amount_ = amount.Amount(D(posting['number']), posting['currency'])
-        else:
-            amount_ = amount.Amount(number.MISSING, number.MISSING)
+        number_ = D(posting['number']) if posting['number'] else None
+        amount_ = amount.Amount(number_, posting.get('currency'))
         postings.append(data.Posting(posting['account'], amount_,
                                      None, None, None, None))
 
