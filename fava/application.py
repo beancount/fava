@@ -24,7 +24,7 @@ from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
-from beancount.core import amount, data, number
+from beancount.core import amount, data
 from beancount.core.number import D
 from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount

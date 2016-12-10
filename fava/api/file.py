@@ -80,7 +80,6 @@ def _render_transaction(transaction):
     return '\n'.join(lines)
 
 
-
 def find_insert_marker(filenames):
     """Searches for the insert marker and returns (filename, lineno).
     Defaults to the first file and last line if not found.

@@ -13,7 +13,7 @@ function submitTransactionForm(successCallback) {
     postings: [],
   };
 
-  $$('.posting').forEach((posting) => {
+  $$('.posting:not(.template)').forEach((posting) => {
     const account = posting.querySelector('input[name=account]').value;
     const number = posting.querySelector('input[name=number]').value;
     const currency = posting.querySelector('input[name=currency]').value;
@@ -36,7 +36,7 @@ function submitTransactionForm(successCallback) {
     .then(handleJSON)
     .then((data) => {
       form.reset();
-      $$('#transaction-form .posting').forEach((el, index) => {
+      $$('#transaction-form .posting:not(.template)').forEach((el, index) => {
         if (index > 1) {
           el.remove();
         }
@@ -51,25 +51,29 @@ function submitTransactionForm(successCallback) {
     });
 }
 
+function initInput(input) {
+  if (!input.getAttribute('list')) {
+    return;
+  }
+
+  const options = {
+    autoFirst: true,
+    minChars: 0,
+    maxItems: 30,
+    filter(suggestion, search) {
+      return fuzzy.test(search, suggestion.value);
+    },
+  };
+  const completer = new Awesomplete(input, options);
+
+  input.addEventListener('focus', () => {
+    completer.evaluate();
+  });
+}
+
 export default function initTransactionForm() {
-  $$('#transaction-form input').forEach((input) => {
-    if (!input.getAttribute('list')) {
-      return;
-    }
-
-    const options = {
-      autoFirst: true,
-      minChars: 0,
-      maxItems: 30,
-      filter(suggestion, search) {
-        return fuzzy.test(search, suggestion.value);
-      },
-    };
-    const completer = new Awesomplete(input, options);
-
-    input.addEventListener('focus', () => {
-      completer.evaluate();
-    });
+  $$('#transaction-form .fieldset:not(.template) input').forEach((input) => {
+    initInput(input);
   });
 
   $('#transaction-form-submit').addEventListener('click', (event) => {
@@ -86,11 +90,13 @@ export default function initTransactionForm() {
 
   $.delegate($('#transaction-form'), 'click', '.add-posting', (event) => {
     event.preventDefault();
-    const newPosting = $('#transaction-form .posting').cloneNode(true);
-    newPosting.querySelectorAll('input').forEach((element) => {
-      element.value = ''; // eslint-disable-line no-param-reassign
+    const newPosting = $('#transaction-form .posting.template').cloneNode(true);
+    newPosting.querySelectorAll('input').forEach((input) => {
+      input.value = ''; // eslint-disable-line no-param-reassign
+      initInput(input);
     });
     $('#transaction-form .postings').appendChild(newPosting);
+    newPosting.classList.remove('template');
     newPosting.querySelector('.account').focus();
   });
 }

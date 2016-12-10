@@ -13,8 +13,8 @@
                 <input type="text" name="narration" placeholder="Narration" />
             </div>
             <div class="postings">
-            {% for i in range(2) %}
-                <div class="fieldset posting">
+            {% for i in range(3) %}
+                <div class="fieldset posting{% if i == 0 %} template{% endif %}">
                     <label for="account">Account:</label>
                     <input type="text" class="account" name="account" placeholder="Account" list="active-accounts" />
                     <input type="number" step="0.01" class="number" name="number" placeholder="Number" />
