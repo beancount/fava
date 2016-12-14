@@ -25,6 +25,9 @@
             {% endfor %}
             </ul>
         {% endif %}
+        {% if id == "editor" %}
+            <button id="add-transaction-button" class="add-transaction-button">+</button>
+        {% endif %}
         </li>
         {% if id == "editor" and api.errors %}
             <li class="error">
@@ -36,6 +39,3 @@
     {% endfor %}
     </ul>
 {% endfor %}
-    <div class="controls">
-        <button id="add-transaction-button" class="muted">+</button>
-    </div>

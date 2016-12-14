@@ -222,7 +222,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
       input {
         height: 35px;
-        margin: 0 0.5em 0 0;
+        margin: 0 .5em 0 0;
         width: 120px;
 
         &[name='flag'] {
@@ -250,13 +250,13 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
     button {
       &[type='submit'] {
-        margin: 2em 0.5em 0 0;
+        margin: 2em .5em 0 0;
       }
 
       &.add-posting {
+        font-size: 1.2em;
         position: absolute;
         right: 20px;
-        font-size: 1.2em;
       }
     }
   }

@@ -278,7 +278,7 @@ header {
   border-width: 0 1px 1px 0;
   display: none;
   left: 0;
-  padding: 4px;
+  padding: 6px 4px 2px;
   position: fixed;
   top: $header-height;
   transition: $transitions;
@@ -290,7 +290,30 @@ header {
 
   &.active {
     background-color: $color-sidebar-background;
+    box-shadow: none;
     left: $aside-width;
+  }
+}
+
+.add-transaction-button {
+  background-color: $color-sidebar-background;
+  color: $color-journaltable-header;
+  float: right;
+  font-size: 28px;
+  height: 31px;
+  line-height: 31px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+  width: 31px;
+
+  &:hover {
+    background-color: $color-sidebar-border;
+    box-shadow: none;
+    color: $color-sidebar-links;
   }
 }
 
@@ -326,7 +349,7 @@ aside {
   a {
     color: $color-sidebar-links;
     display: block;
-    padding: 5px 20px;
+    padding: 5px 5px 5px 20px;
 
     &.selected,
     &:hover {
@@ -337,6 +360,7 @@ aside {
 
   li {
     display: block;
+    position: relative;
   }
 
   .error {
@@ -362,7 +386,7 @@ aside {
     color: $color-sidebar-links;
     float: right;
     font-size: .9em;
-    padding: 1px 8px;
+    padding: 0 8px;
   }
 }
 
@@ -584,12 +608,28 @@ td {
 
     &.active {
       margin-left: 0;
+
+      .add-transaction-button {
+        left: 160px;
+      }
     }
   }
 
   .aside-button {
     display: block;
     margin-left: 0;
+  }
+
+  .add-transaction-button {
+    border: 1px solid $color-sidebar-border;
+    border-left: 0;
+    border-top: 0;
+    color: $color-mobile-button-text;
+    height: 41px;
+    left: 0;
+    position: fixed;
+    top: 95px;
+    width: 41px;
   }
 
   .source-editor-wrapper {
