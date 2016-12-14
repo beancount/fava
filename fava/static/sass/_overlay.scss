@@ -75,6 +75,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       line-height: 33px;
       width: 150px;
     }
+
+    input {
+      border: 1px solid lighten($color-text, 50);
+    }
   }
 
   .awesomplete {
@@ -207,19 +211,27 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
     label {
       display: block;
+      margin-top: 0;
       padding-left: 0;
       width: 100%;
     }
 
     .fieldset {
       display: block;
+      margin-bottom: 0;
 
       input {
-        border: 1px solid $color-text-lighter;
-        width: 100px;
+        height: 35px;
+        margin: 0 0.5em 0 0;
+        width: 120px;
+
+        &[name='flag'] {
+          width: 1.5em;
+        }
 
         &[name='narration'],
-        &[name='payee'] {
+        &[name='payee'],
+        &[name='account'] {
           margin-bottom: .5em;
           width: 100%;
         }
@@ -230,13 +242,22 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       padding-left: 0;
 
       .awesomplete {
-        margin-bottom: .5em;
+        margin-bottom: 0;
+        padding-right: 0;
         width: 100%;
       }
     }
 
     button {
-      margin-top: 2em;
+      &[type='submit'] {
+        margin: 2em 0.5em 0 0;
+      }
+
+      &.add-posting {
+        position: absolute;
+        right: 20px;
+        font-size: 1.2em;
+      }
     }
   }
 }
