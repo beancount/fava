@@ -36,6 +36,7 @@ function submitTransactionForm(successCallback) {
     .then(handleJSON)
     .then((data) => {
       form.reset();
+      $('#transaction-form input[name=date]').value = jsonData.date;
       $$('#transaction-form .posting:not(.template)').forEach((el, index) => {
         if (index > 1) {
           el.remove();
