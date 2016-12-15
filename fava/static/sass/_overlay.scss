@@ -128,12 +128,12 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     width: 100px;
   }
 
+  [id='posting-template'] {
+    display: none;
+  }
+
   .posting {
     padding-left: 4em;
-
-    &.template {
-      display: none;
-    }
 
     .awesomplete {
       flex-grow: 1;

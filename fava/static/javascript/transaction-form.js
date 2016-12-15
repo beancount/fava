@@ -4,6 +4,36 @@ import fuzzy from 'fuzzyjs';
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
+function initInput(input) {
+  if (!input.getAttribute('list')) {
+    return;
+  }
+
+  const options = {
+    autoFirst: true,
+    minChars: 0,
+    maxItems: 30,
+    filter(suggestion, search) {
+      return fuzzy.test(search, suggestion.value);
+    },
+  };
+  const completer = new Awesomplete(input, options);
+
+  input.addEventListener('focus', () => {
+    completer.evaluate();
+  });
+}
+
+function addPostingRow() {
+  const newPosting = $('#posting-template').cloneNode(true);
+  newPosting.querySelectorAll('input').forEach((input) => {
+    initInput(input);
+  });
+  $('#transaction-form .postings').appendChild(newPosting);
+  newPosting.setAttribute('id', '');
+  return newPosting;
+}
+
 function submitTransactionForm(successCallback) {
   const jsonData = {
     date: $('#transaction-form input[name=date]').value,
@@ -13,7 +43,7 @@ function submitTransactionForm(successCallback) {
     postings: [],
   };
 
-  $$('.posting:not(.template)').forEach((posting) => {
+  $$('#transaction-form .posting').forEach((posting) => {
     const account = posting.querySelector('input[name=account]').value;
     const number = posting.querySelector('input[name=number]').value;
     const currency = posting.querySelector('input[name=currency]').value;
@@ -35,13 +65,12 @@ function submitTransactionForm(successCallback) {
   })
     .then(handleJSON)
     .then((data) => {
-      form.reset();
-      $('#transaction-form input[name=date]').value = jsonData.date;
-      $$('#transaction-form .posting:not(.template)').forEach((el, index) => {
-        if (index > 1) {
-          el.remove();
-        }
+      $$('#transaction-form .posting').forEach((el) => {
+        el.remove();
       });
+      addPostingRow();
+      addPostingRow();
+      $('input[name="date"]').focus();
       e.trigger('reload');
       e.trigger('info', data.message);
       if (successCallback) {
@@ -52,29 +81,20 @@ function submitTransactionForm(successCallback) {
     });
 }
 
-function initInput(input) {
-  if (!input.getAttribute('list')) {
-    return;
-  }
-
-  const options = {
-    autoFirst: true,
-    minChars: 0,
-    maxItems: 30,
-    filter(suggestion, search) {
-      return fuzzy.test(search, suggestion.value);
-    },
-  };
-  const completer = new Awesomplete(input, options);
-
-  input.addEventListener('focus', () => {
-    completer.evaluate();
-  });
-}
-
 export default function initTransactionForm() {
-  $$('#transaction-form .fieldset:not(.template) input').forEach((input) => {
-    initInput(input);
+  let initialized = false;
+
+  $('#add-transaction-button').addEventListener('click', () => {
+    if (!initialized) {
+      $$('#transaction-form input').forEach((input) => {
+        initInput(input);
+      });
+      addPostingRow();
+      addPostingRow();
+      initialized = true;
+    }
+    $('#transaction').classList.add('shown');
+    $('input[name="date"]').focus();
   });
 
   $('#transaction-form-submit').addEventListener('click', (event) => {
@@ -91,13 +111,7 @@ export default function initTransactionForm() {
 
   $.delegate($('#transaction-form'), 'click', '.add-posting', (event) => {
     event.preventDefault();
-    const newPosting = $('#transaction-form .posting.template').cloneNode(true);
-    newPosting.querySelectorAll('input').forEach((input) => {
-      input.value = ''; // eslint-disable-line no-param-reassign
-      initInput(input);
-    });
-    $('#transaction-form .postings').appendChild(newPosting);
-    newPosting.classList.remove('template');
+    const newPosting = addPostingRow();
     newPosting.querySelector('.account').focus();
   });
 }

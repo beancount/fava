@@ -13,21 +13,18 @@
                 <input type="text" name="narration" placeholder="Narration" />
             </div>
             <div class="postings">
-            {% for i in range(3) %}
-                <div class="fieldset posting{% if i == 0 %} template{% endif %}">
-                    <label for="account">Account:</label>
-                    <input type="text" class="account" name="account" placeholder="Account" list="active-accounts" />
-                    <input type="number" step="0.01" class="number" name="number" placeholder="Number" />
-                    <input type="text" class="currency" name="currency" placeholder="Currency" list="currencies" />
-                    <button class="muted add-posting" title="Add posting">+</button>
-                </div>
-            {% endfor %}
             </div>
             <div class="fieldset">
                 <button type="submit" id="transaction-form-submit" data-url="{{ url_for('api_add_document') }}">Save</button>
                 <button type="submit" class="muted" id="transaction-form-submit-and-new" data-url="{{ url_for('api_add_document') }}">Save and add new</button>
             </div>
         </form>
+        <div id="posting-template" class="fieldset posting">
+            <label for="account">Account:</label>
+            <input type="text" class="account" name="account" placeholder="Account" list="active-accounts" />
+            <input type="number" step="0.01" class="number" name="number" placeholder="Number" />
+            <input type="text" class="currency" name="currency" placeholder="Currency" list="currencies" />
+            <button class="muted add-posting" title="Add posting">+</button>
+        </div>
     </div>
 </div>
-
