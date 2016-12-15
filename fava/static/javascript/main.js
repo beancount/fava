@@ -26,8 +26,7 @@ function initPage() {
   initKeyboardShortcuts();
 
   $$('.overlay-wrapper').forEach((el) => {
-    el.addEventListener('click', (event) => {
-      event.preventDefault();
+    el.addEventListener('mousedown', (event) => {
       if (event.target.classList.contains('overlay-wrapper') ||
           event.target.classList.contains('close-overlay')) {
         el.classList.remove('shown');

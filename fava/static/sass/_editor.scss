@@ -7,6 +7,14 @@
 @import 'codemirror/addon/fold/foldgutter';
 @import 'codemirror/addon/hint/show-hint';
 
+.source-editor-wrapper {
+  bottom: 0;
+  left: $aside-width;
+  position: fixed;
+  right: 0;
+  top: $header-height + 42px;
+}
+
 .source-form {
   background: lighten($color-sidebar-background, 2);
   bottom: 0;
@@ -17,14 +25,6 @@
 
   > select {
     margin: 5px 10px;
-  }
-
-  .source-editor-wrapper {
-    bottom: 0;
-    left: $aside-width;
-    position: fixed;
-    right: 0;
-    top: $header-height + 42px;
   }
 
   .CodeMirror,
