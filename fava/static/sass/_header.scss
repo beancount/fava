@@ -149,7 +149,7 @@ h1 {
     border: 0;
     height: 36px;
     line-height: 36px;
-    margin-right: 4px;
+    margin-left: 4px;
     max-width: 15rem;
     padding: 0 25px 0 10px;
 
@@ -168,15 +168,11 @@ h1 {
         color: $color-text;
       }
     }
-
-    // remove dropdown triangle
-    &::-webkit-calendar-picker-indicator { // sass-lint:disable-line no-vendor-prefixes
-      display: none;
-    }
   }
 
   [type='submit'] {
     background: lighten($color-header, 5);
+    margin-left: 4px;
   }
 
   .empty {

@@ -16,6 +16,7 @@ import initJournal from './journal';
 import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
 import initRouter from './router';
 import initSort from './sort';
+import initTransactionForm from './transaction-form';
 import initTreeTable from './tree-table';
 
 // These parts of the page should not change.
@@ -24,6 +25,7 @@ function initPage() {
   window.favaTranslations = JSON.parse($('#translations').innerHTML);
   initFilters();
   initKeyboardShortcuts();
+  initTransactionForm();
 
   $$('.overlay-wrapper').forEach((el) => {
     el.addEventListener('mousedown', (event) => {

@@ -58,10 +58,10 @@ $color-error: #900;
 $color-warning: #edd42f;
 $color-code-background: #f8f8f8;
 
-$color-sidebar-text: #dadada;
+$color-sidebar-text: #444;
+$color-sidebar-text-hover: $color-links;
 $color-sidebar-background: #f5f5f5;
 $color-sidebar-border: darken($color-sidebar-background, 12);
-$color-sidebar-links: #444;
 
 $color-header: #0067a5;
 $color-header-bottom: darken($color-header, 10);
@@ -118,6 +118,8 @@ $color-editor-constant: #008080;
 $color-editor-account: $color-links;
 $color-editor-invalid: #333;
 $color-editor-activeline: #ffc;
+
+$color-mobile-button-text: #000;
 
 // Import everything
 @import 'base';

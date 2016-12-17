@@ -24,12 +24,15 @@ from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
+from beancount.core import amount, data
+from beancount.core.number import D
 from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
-from fava import template_filters
+from fava import template_filters, util
 from fava.api import (BeancountReportAPI, FavaAPIException,
                       FavaFileNotFoundException)
+from fava.api.file import insert_transaction
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
@@ -331,9 +334,10 @@ def api_source():
             return _api_error(exception.message)
     elif request.method == 'PUT':
         request.get_json()
-        if request.json is None:
+        if request.get_json() is None:
             abort(400)
-        g.api.set_source(request.json['file_path'], request.json['source'])
+        g.api.set_source(request.get_json()['file_path'],
+                         request.get_json()['source'])
         return _api_success()
 
 
@@ -341,9 +345,9 @@ def api_source():
 def api_format_source():
     """Format beancount file."""
     request.get_json()
-    if request.json is None:
+    if request.get_json() is None:
         abort(400)
-    return _api_success(payload=align_beancount(request.json['source']))
+    return _api_success(payload=align_beancount(request.get_json()['source']))
 
 
 @app.route('/<bfile>/api/add-document/', methods=['PUT'])
@@ -378,6 +382,32 @@ def api_add_document():
                 return _api_error(exception.message)
         return _api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
+
+
+@app.route('/<bfile>/api/add-transaction/', methods=['PUT'])
+def api_add_transaction():
+    json = request.get_json()
+
+    postings = []
+    for posting in json['postings']:
+        if posting['account'] not in g.api.all_accounts_active:
+            return _api_error('Unknown account: {}.'
+                              .format(posting['account']))
+        number_ = D(posting['number']) if posting['number'] else None
+        amount_ = amount.Amount(number_, posting.get('currency'))
+        postings.append(data.Posting(posting['account'], amount_,
+                                     None, None, None, None))
+
+    if not postings:
+        return _api_error('Transaction contains no postings.')
+
+    date = util.date.parse_date(json['date'])[0]
+    transaction = data.Transaction(
+        None, date, json['flag'], json['payee'],
+        json['narration'], None, None, postings)
+
+    insert_transaction(transaction, g.api.source_files())
+    return _api_success(message='Stored transaction.')
 
 
 @app.route('/jump')

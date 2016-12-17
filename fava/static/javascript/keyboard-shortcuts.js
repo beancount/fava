@@ -32,6 +32,9 @@ export function initKeyboardShortcuts() {
         el.classList.remove('shown');
       });
     },
+    n() {
+      $('#add-transaction-button').click();
+    },
   }, 'keyup');
 
   // Filtering:

@@ -5,7 +5,7 @@
 
 {% block content %}
 <form class="source-form">
-    <fieldset>
+    <div class="fieldset">
         <select id="source-editor-select" name="file_path">
             {% for source_file in source_files %}
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
@@ -13,7 +13,7 @@
         </select>
         <button id="source-editor-submit" type="submit" data-url="{{ url_for('api_source') }}">{{ _('Save') }}</button>
         <button id="source-editor-format" type="submit" data-url="{{ url_for('api_format_source') }}">{{ _('Format') }}</button>
-    </fieldset>
+    </div>
     <div id="source-editor-wrapper" class="source-editor-wrapper">
         <textarea id="source-editor" name="source" autofocus>{{ api.source(file_path) or '' }}</textarea>
     </div>
