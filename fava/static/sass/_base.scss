@@ -257,7 +257,6 @@ body {
 header {
   align-items: center;
   background: $color-header;
-  border-bottom: 1px solid $color-header-bottom;
   color: $color-header-text;
   display: flex;
   height: $header-height;
@@ -273,47 +272,32 @@ header {
 
 .aside-button {
   background-color: $color-sidebar-background;
-  border-color: $color-sidebar-border;
-  border-style: solid;
-  border-width: 0 1px 1px 0;
   display: none;
-  left: 0;
-  padding: 6px 4px 2px;
-  position: fixed;
-  top: $header-height;
   transition: $transitions;
   z-index: 1;
 
   &:hover {
     background-color: $color-sidebar-background;
   }
-
-  &.active {
-    background-color: $color-sidebar-background;
-    box-shadow: none;
-    left: $aside-width;
-  }
 }
 
 .add-transaction-button {
   background-color: $color-sidebar-background;
-  color: $color-journaltable-header;
-  float: right;
-  font-size: 28px;
-  height: 31px;
-  line-height: 31px;
+  color: inherit;
+  font-size: 25px;
+  height: 100%;
   margin: 0;
-  padding: 0;
+  padding-right: 8px;
   position: absolute;
   right: 0;
   text-align: center;
   top: 0;
-  width: 31px;
+  transition: $transitions;
 
   &:hover {
     background-color: $color-sidebar-border;
     box-shadow: none;
-    color: $color-sidebar-links;
+    color: $color-sidebar-text-hover;
   }
 }
 
@@ -323,7 +307,6 @@ aside {
   border-right: 1px solid $color-sidebar-border;
   bottom: 0;
   color: $color-sidebar-text;
-  flex-shrink: 0;
   left: 0;
   margin-left: 0;
   overflow-y: auto;
@@ -334,7 +317,7 @@ aside {
   z-index: 9;
 
   h3 {
-    color: darken($color-sidebar-text, 25);
+    color: lighten($color-sidebar-text, 25);
     font-size: .9em;
     margin: 1em 0 1em 20px;
     text-transform: uppercase;
@@ -347,14 +330,14 @@ aside {
   &:last-child { margin-bottom: 0; }
 
   a {
-    color: $color-sidebar-links;
+    color: inherit;
     display: block;
     padding: 5px 5px 5px 20px;
 
     &.selected,
     &:hover {
       background-color: $color-sidebar-border;
-      color: $color-links;
+      color: $color-sidebar-text-hover;
     }
   }
 
@@ -383,7 +366,7 @@ aside {
   .bubble {
     background-color: $color-sidebar-border;
     border-radius: 12px;
-    color: $color-sidebar-links;
+    color: $color-sidebar-text;
     float: right;
     font-size: .9em;
     padding: 0 8px;
@@ -610,26 +593,39 @@ td {
       margin-left: 0;
 
       .add-transaction-button {
-        left: 160px;
+        left: $aside-width;
       }
     }
+  }
+
+  .aside-button,
+  .add-transaction-button {
+    border-color: $color-sidebar-border;
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    height: 42px;
+    left: 0;
+    padding: 6px 4px;
+    position: fixed;
+    width: 42px;
   }
 
   .aside-button {
     display: block;
     margin-left: 0;
+    top: $header-height;
+
+    &.active {
+      background-color: $color-sidebar-background;
+      box-shadow: none;
+      left: $aside-width;
+    }
   }
 
   .add-transaction-button {
-    border: 1px solid $color-sidebar-border;
-    border-left: 0;
-    border-top: 0;
     color: $color-mobile-button-text;
-    height: 41px;
-    left: 0;
-    position: fixed;
-    top: 95px;
-    width: 41px;
+    font-size: 30px;
+    top: $header-height + 42px;
   }
 
   .source-form,
