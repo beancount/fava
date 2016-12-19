@@ -591,6 +591,8 @@ class LineChart extends BaseChart {
   update() {
     this.width = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
     this.height = 250 - this.margin.top - this.margin.bottom;
+
+    addLegend(this.data.map(d => d.name), currencyColorScale);
     this.matrix = this.canvas.node().getScreenCTM();
 
     this.y.range([this.height, 0]);
@@ -617,8 +619,6 @@ class LineChart extends BaseChart {
         .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
         .filter(d => d !== undefined)
         .attr('d', d => `M${d.join('L')}Z`);
-
-    addLegend(this.data.map(d => d.name), currencyColorScale);
   }
 }
 

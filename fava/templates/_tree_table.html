@@ -20,11 +20,10 @@
     {% set balance_children = (account|balance_children).cost() %}
     <li>
         <p{% if not balance.is_empty() %} class='has-balance'{% endif %}>
-        <span class="account-cell depth-{{ loop.depth0 }} droptarget
+        <span title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}" class="account-cell depth-{{ loop.depth0 }} droptarget
         {{- '' if not account|length else ' has-children'}}
         {%- if account.account|should_collapse_account %} toggled{% endif %}
         " data-account-name="{{ account.account }}">
-            {% if account|length %}<span class="expander" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}"></span>{% endif %}
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
         <span class="num">

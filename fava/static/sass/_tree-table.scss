@@ -41,12 +41,20 @@
       }
     }
 
-    &.has-children {
-      cursor: pointer;
-    }
-
     a {
       margin-left: 15px;
+    }
+  }
+
+  .has-children {
+    cursor: pointer;
+
+    &::before {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid $color-treetable-expander;
+      content: '';
+      margin: 0 -10px 0 0;
     }
   }
 
@@ -100,22 +108,14 @@
       display: block;
     }
 
-    .expander {
-      border-bottom: 5px solid transparent;
-      border-left: 5px solid $color-treetable-expander;
-      border-top: 5px solid transparent;
-      margin: 0 -13px 0 3px;
+    .has-children {
+      &::before {
+        border-bottom: 5px solid transparent;
+        border-left: 5px solid $color-treetable-expander;
+        border-top: 5px solid transparent;
+        margin: 0 -13px 0 3px;
+      }
     }
-  }
-
-  .expander {
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid $color-treetable-expander;
-    cursor: pointer;
-    height: 5px;
-    margin: 0 -10px 0 0;
-    width: 5px;
   }
 
   .expand-all {
