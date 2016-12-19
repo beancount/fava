@@ -226,9 +226,8 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       width: 100%;
     }
 
-    .fieldset {
+    .fieldset:not(#posting-template) {
       display: block;
-      margin-bottom: 0;
 
       input {
         height: 35px;
