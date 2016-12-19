@@ -1,6 +1,10 @@
  // Journal table
 
 .journal-entry-filters {
+  button {
+    margin-bottom: 5px;
+  }
+
   .inactive {
     background: $color-background-darker;
     color: $color-text-lighter;

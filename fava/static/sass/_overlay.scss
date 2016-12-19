@@ -79,6 +79,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     input {
       border: 1px solid lighten($color-text, 50);
     }
+
+    button[type='submit'] {
+      margin: 0.5em .5em -.5em 0;
+    }
   }
 
   .awesomplete {
@@ -93,7 +97,12 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     display: block;
 
     input {
-      margin-bottom: .5em;
+      margin: 0 0 .5em 0;
+      width: 100%;
+    }
+
+    select {
+      margin-left: .5em;
     }
   }
 }
@@ -101,6 +110,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 .transaction-form {
   input {
     &[name='date'] {
+      margin-left: 0;
       width: 150px;
     }
 

@@ -12,7 +12,9 @@
                 {% endfor %}
                 </select>
             </div>
-            <button type="submit" id="document-upload-submit" data-url="{{ url_for('api_add_document') }}">Upload</button>
+            <div class="fieldset">
+                <button type="submit" id="document-upload-submit" data-url="{{ url_for('api_add_document') }}">Upload</button>
+            </div>
         </form>
     </div>
 </div>

@@ -261,7 +261,7 @@ header {
   display: flex;
   height: $header-height;
   left: 0;
-  padding: 0 10px;
+  padding: 0 7px 0 10px;
   position: fixed;
   top: 0;
   width: 100%;
@@ -405,7 +405,7 @@ article {
 }
 
 .wide-form {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   text-align: right;
   width: 100%;
 
