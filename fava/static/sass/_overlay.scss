@@ -50,20 +50,18 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     font-size: .9em;
   }
 
-  dl {
-    dt {
-      display: inline-block;
-      float: left;
-      font-weight: normal;
-      line-height: 1.8em;
-      padding-right: 10px;
-      text-align: right;
-      width: 170px;
-    }
+  dt {
+    display: inline-block;
+    float: left;
+    font-weight: normal;
+    line-height: 1.8em;
+    padding-right: 10px;
+    text-align: right;
+    width: 170px;
+  }
 
-    dd {
-      line-height: 1.8em;
-    }
+  dd {
+    line-height: 1.8em;
   }
 
   .fieldset {
@@ -80,8 +78,8 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       border: 1px solid lighten($color-text, 50);
     }
 
-    button[type='submit'] {
-      margin: 0.5em .5em -.5em 0;
+    [type='submit'] {
+      margin: .5em .5em -.5em 0;
     }
   }
 
@@ -97,7 +95,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     display: block;
 
     input {
-      margin: 0 0 .5em 0;
+      margin: 0 0 .5em;
       width: 100%;
     }
 
@@ -138,10 +136,6 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     width: 100px;
   }
 
-  [id='posting-template'] {
-    display: none;
-  }
-
   .posting {
     padding-left: 4em;
 
@@ -180,6 +174,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   }
 }
 
+[id='posting-template'] {
+  display: none;
+}
+
 .notifications {
   position: fixed;
   right: 10px;
@@ -205,7 +203,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 }
 
 @media (max-width: 767px) {
-  .transaction-form {
+  .transaction-overlay {
     overflow: scroll;
 
     .overlay {
@@ -226,7 +224,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       width: 100%;
     }
 
-    .fieldset:not(#posting-template) {
+    .fieldset {
       display: block;
 
       input {
@@ -257,16 +255,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
       }
     }
 
-    button {
-      &[type='submit'] {
-        margin: 2em .5em 0 0;
-      }
-
-      &.add-posting {
-        font-size: 1.2em;
-        position: absolute;
-        right: 20px;
-      }
+    .add-posting {
+      font-size: 1.2em;
+      position: absolute;
+      right: 20px;
     }
   }
 }
