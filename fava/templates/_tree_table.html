@@ -2,7 +2,7 @@
 {% set show_other_column = (operating_currencies|sort != api.options['commodities']|list|sort) %}
 
 {% macro tree(real_account, totals=True) %}
-<ol class="tree-table currencies-{{ operating_currencies|length }}">
+<ol class="tree-table currencies-{{ operating_currencies|length }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
     <li class="head">
         <p>
         <span class="account-cell"><span>{{ _('Account') }}</span><a href="#" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
@@ -20,35 +20,33 @@
     {% set balance_children = (account|balance_children).cost() %}
     <li>
         <p{% if not balance.is_empty() %} class='has-balance'{% endif %}>
-        <span title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}" class="account-cell depth-{{ loop.depth0 }} droptarget
+        <span class="account-cell depth-{{ loop.depth0 }} droptarget
         {{- '' if not account|length else ' has-children'}}
         {%- if account.account|should_collapse_account %} toggled{% endif %}
         " data-account-name="{{ account.account }}">
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
         <span class="num">
-            <span class="balance">
-                <span class="number">{{ balance.get_units(currency).number|format_currency(currency) }}</span>
-            </span>
-            <span class="balance-children">
-                <span class="number">{{ balance_children.get_units(currency).number|format_currency(currency) }}</span>
-            </span>
+            <span class="balance">{{ balance.get_units(currency).number|format_currency(currency) }}</span>
+            <span class="balance-children">{{ balance_children.get_units(currency).number|format_currency(currency) }}</span>
         </span>
     {% endfor %}
     {% if show_other_column %}
         <span class="num other">
-        {% for currency in api.options['commodities'] if currency not in operating_currencies %}
-            {% if currency in balance.currencies() %}
             <span class="balance">
-                <span class="number">{{ balance.get_units(currency).number|format_currency(currency) }} {{ currency }}</span>
+                {% for currency in api.options['commodities'] if currency not in operating_currencies %}
+                    {% if currency in balance.currencies() %}
+                        {{ balance.get_units(currency).number|format_currency(currency) }} {{ currency }}<br>
+                    {% endif %}
+                {% endfor %}
             </span>
-            {% endif %}
-            {% if currency in balance_children.currencies() %}
             <span class="balance-children">
-                <span class="number">{{ balance_children.get_units(currency).number|format_currency(currency) }} {{ currency }}</span>
+                {% for currency in api.options['commodities'] if currency not in operating_currencies %}
+                    {% if currency in balance_children.currencies() %}
+                        {{ balance_children.get_units(currency).number|format_currency(currency) }} {{ currency }}<br>
+                    {% endif %}
+                {% endfor %}
             </span>
-            {% endif %}
-        {% endfor %}
         </span>
     {% endif %}
     </p>
@@ -66,8 +64,7 @@
             <p>
             <span class="account-cell">&nbsp;</span>
         {% for currency in operating_currencies %}
-            <span class="num">
-        {{ balance.get_units(currency).number|format_currency(currency) }}</span>
+            <span class="num">{{ balance.get_units(currency).number|format_currency(currency) }}</span>
         {% endfor %}
         {% if show_other_column %}
             <span class="num other">

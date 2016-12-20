@@ -27,6 +27,8 @@
     }
   }
 
+  $tree-indent: 15px;
+
   // table cells
   .account-cell {
     align-items: center;
@@ -36,8 +38,8 @@
 
     @for $i from 1 through 5 {
       &.depth-#{$i} {
-        margin-left: $i * 20px;
-        min-width: 200px - $i * 20px;
+        margin-left: $i * $tree-indent;
+        min-width: 200px - $i * $tree-indent;
       }
     }
 
@@ -78,12 +80,7 @@
 
   .has-balance {
     .balance {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-
-      > span { white-space: nowrap; }
-      > .number { flex-grow: 1; }
+      display: block;
     }
 
     .balance-children {
