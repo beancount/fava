@@ -29,3 +29,7 @@
     scrollbar-track-color: $secondary;
   }
 }
+
+%scrollbar {
+  @include scrollbar(.5em, $color-scrollbar, transparent);
+}

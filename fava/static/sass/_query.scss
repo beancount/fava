@@ -41,7 +41,7 @@
   padding-left: 2em;
 
   a { text-decoration: none; }
-  code { color: lighten($color-text, 30); }
+  code { color: $color-text-lighter; }
   li { list-style-type: disc; }
 }
 

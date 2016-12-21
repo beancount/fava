@@ -576,9 +576,10 @@ class LineChart extends BaseChart {
           tooltip.style('opacity', 1).html(this.tooltipText(d.data));
         })
         .on('mousemove', (d) => {
+          const matrix = this.canvas.node().getScreenCTM();
           tooltip
-              .style('left', `${this.x(d.data.date) + this.matrix.e}px`)
-              .style('top', `${this.y(d.data.value) + this.matrix.f + -15}px`);
+              .style('left', `${this.x(d.data.date) + matrix.e}px`)
+              .style('top', `${this.y(d.data.value) + matrix.f + -15}px`);
         })
         .on('mouseleave', () => {
           tooltip.style('opacity', 0);
@@ -591,9 +592,6 @@ class LineChart extends BaseChart {
   update() {
     this.width = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
     this.height = 250 - this.margin.top - this.margin.bottom;
-
-    addLegend(this.data.map(d => d.name), currencyColorScale);
-    this.matrix = this.canvas.node().getScreenCTM();
 
     this.y.range([this.height, 0]);
     this.x.range([0, this.width]);
@@ -619,6 +617,8 @@ class LineChart extends BaseChart {
         .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
         .filter(d => d !== undefined)
         .attr('d', d => `M${d.join('L')}Z`);
+
+    addLegend(this.data.map(d => d.name), currencyColorScale);
   }
 }
 

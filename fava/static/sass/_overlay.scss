@@ -29,7 +29,7 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 
 .overlay {
   background: $color-background;
-  box-shadow: 0 0 20px lighten($overlay-wrapper-background, 50);
+  box-shadow: 0 0 20px $overlay-wrapper-background;
   cursor: auto;
   display: flex;
   max-height: 100%;

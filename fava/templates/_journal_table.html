@@ -168,7 +168,7 @@
         <p>
         <span class="datecell"><a href="{{ context_url.replace('REPLACEME', api.hash_entry(entry)) }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
-        <span class="description{%- if type == 'transaction' %} droptarget{% endif -%}"{%- if type == 'transaction' %} data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif -%}>
+    <span class="description{%- if type != 'transaction' %}"{% else %} droptarget" data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif -%}>
         {% if type == 'open' %}
             Open {{ account_link(entry.account) }}
         {% elif type == 'close' %}
@@ -220,7 +220,7 @@
         {% endfor %}
         {% if type == 'transaction' %}
             {% for posting in entry.postings %}
-                <span class="leg-indicator{% if posting.flag %} leg-{{ flags_to_types.get(posting.flag, 'other') }}{% endif %}"></span>
+                <span class="posting-indicator{% if posting.flag %} {{ flags_to_types.get(posting.flag, 'other') }}{% endif %}"></span>
             {% endfor %}
         {% endif %}
         {% if show_change_and_balance %}

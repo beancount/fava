@@ -50,7 +50,7 @@ tbody {
   }
 
   td {
-    border: 1px solid darken($color-background, 10);
+    border: 1px solid $color-table-border;
   }
 }
 
@@ -69,9 +69,9 @@ th {
 
 thead th, // sass-lint:disable-line force-element-nesting
 tfoot td { // sass-lint:disable-line force-element-nesting
-  background: $color-treetable-header-bg;
-  border: 1px solid darken($color-background, 15);
-  color: $color-text-lighter;
+  background: $color-table-header-background;
+  border: 1px solid $color-table-header-background;
+  color: $color-table-header-text;
   font-weight: 500;
 }
 
@@ -116,6 +116,10 @@ h3 {
 h4,
 h5 {
   font-size: 1em;
+}
+
+hr {
+  border: 1px solid darken($color-background, 20);
 }
 
 b,
@@ -302,7 +306,7 @@ header {
 }
 
 aside {
-  @include scrollbar(.5em, darken($color-sidebar-background, 30), transparent);
+  @extend %scrollbar;
   background-color: $color-sidebar-background;
   border-right: 1px solid $color-sidebar-border;
   bottom: 0;
@@ -317,9 +321,9 @@ aside {
   z-index: 9;
 
   h3 {
-    color: lighten($color-sidebar-text, 25);
     font-size: .9em;
     margin: 1em 0 1em 20px;
+    opacity: .6;
     text-transform: uppercase;
   }
 }

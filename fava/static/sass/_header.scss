@@ -62,12 +62,9 @@ h1 {
   }
 
   a {
+    &:hover,
     &:link,
     &:visited {
-      color: darken($color-header-text, 15);
-    }
-
-    &:hover {
       color: $color-header-text;
     }
   }

@@ -12,11 +12,11 @@
   left: $aside-width;
   position: fixed;
   right: 0;
-  top: $header-height + 42px;
+  top: $header-height + 43px;
 }
 
 .source-form {
-  background: lighten($color-sidebar-background, 2);
+  background: $color-sidebar-background;
   bottom: 0;
   left: $aside-width;
   position: fixed;
@@ -25,6 +25,10 @@
 
   > select {
     margin: 5px 10px;
+  }
+
+  .fieldset {
+    border-bottom: 1px solid $color-sidebar-border;
   }
 
   .CodeMirror,
@@ -36,17 +40,17 @@
   }
 
   .CodeMirror-lines {
-    border-top: 1px solid darken($color-sidebar-background, 10);
+    border-top: 1px solid $color-sidebar-border;
   }
 }
 
 .CodeMirror-gutters {
-  background: lighten($color-sidebar-background, 2);
-  border-right: 1px solid darken($color-sidebar-background, 10);
+  background: $color-sidebar-background;
+  border-right: 1px solid $color-sidebar-border;
 }
 
 .CodeMirror {
-  border: 1px solid darken($color-background, 9);
+  border: 1px solid $color-sidebar-border;
   font: 13px $font-family-editor;
   margin-bottom: 1em;
 

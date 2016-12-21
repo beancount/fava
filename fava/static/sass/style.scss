@@ -63,6 +63,8 @@ $color-sidebar-text-hover: $color-links;
 $color-sidebar-background: #f5f5f5;
 $color-sidebar-border: darken($color-sidebar-background, 12);
 
+$color-scrollbar: darken($color-sidebar-background, 30);
+
 $color-header: #0067a5;
 $color-header-bottom: darken($color-header, 10);
 $color-header-text: #fff;
@@ -77,29 +79,29 @@ $color-notification-info: rgba($color-status-green, .7);
 $color-notification-error: rgba($color-error, .7);
 $color-notification-warning: rgba($color-warning, .7);
 
-$color-journalentry-close: #888;
-$color-journalentry-pending: #f8a;
-$color-journalentry-open: #e8e8e8;
-$color-journalentry-note: #aad0ff;
-$color-journalentry-document: #ffc8ff;
-$color-journalentry-balance: #cfc;
-$color-journalentry-pad: #8ff;
-$color-journalentry-padding: #cff;
-$color-journalentry-postingwarning: #f66;
-$color-journalentry-custom: #fff3ab;
-$color-journalentry-budget: #ffddae;
+$color-table-header-text: #888;
+$color-table-header-background: darken($color-background, 10%);
+$color-table-border: darken($color-background, 5%);
 
-$color-journaltable-header: #888;
-$color-journaltable-border: #f5f5f5;
-$color-journaltable-metadata: #85aacf;
-$color-journaltable-tag: #6aa2db;
-$color-journaltable-tag-document: #bb7ebb;
-$color-journaltable-link: #cbdde8;
-$color-journaltable-link-document: #c79cc7;
-$color-journal-leg-indicator: #c1d0d9;
-$color-journal-metadata-indicator: #c1d0d9;
+$color-journal-entry-open: #e8e8e8;
+$color-journal-entry-close: #888;
+$color-journal-entry-txn-other: #cff;
+$color-journal-entry-txn-pending: #f8a;
+$color-journal-entry-balance: #cfc;
+$color-journal-entry-note: #aad0ff;
+$color-journal-entry-document: #ffc8ff;
+$color-journal-entry-pad: #8ff;
+$color-journal-entry-postingwarning: #f66;
+$color-journal-entry-custom: #fff3ab;
+$color-journal-entry-budget: #ffddae;
 
-$color-treetable-header-bg: darken($color-background, 15);
+$color-journal-metadata: #85aacf;
+$color-journal-tag: #6aa2db;
+$color-journal-tag-document: #bb7ebb;
+$color-journal-link: #cbdde8;
+$color-journal-link-document: #c79cc7;
+$color-journal-indicator: #c1d0d9;
+
 $color-treetable-expander: #afc1d3;
 
 $color-budget-negative: #af3d3d;

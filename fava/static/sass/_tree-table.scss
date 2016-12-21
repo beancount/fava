@@ -3,7 +3,7 @@
 // some of the shared styles are in `_journal_table.scss`
 
 .tree-table {
-  @include scrollbar(.5em, darken($color-sidebar-background, 30), transparent);
+  @extend %scrollbar;
 
   &.fullwidth {
     display: block;
@@ -13,7 +13,7 @@
 
   &:hover {
     .balance-children {
-      color: $color-text-lighter;
+      opacity: .8;
     }
   }
 
@@ -21,7 +21,7 @@
     margin-top: -1px;
 
     > span {
-      border: 1px solid $color-treetable-header-bg;
+      border: 1px solid $color-table-header-background;
       flex-shrink: 0;
       margin-right: -1px;
     }
@@ -89,8 +89,8 @@
   }
 
   .balance-children {
-    color: lighten($color-text, 60);
     display: block;
+    opacity: .6;
   }
 
   .toggled {
@@ -116,8 +116,9 @@
   }
 
   .expand-all {
-    color: lighten($color-text, 40);
+    color: inherit;
     font-weight: normal;
+    opacity: .5;
   }
 
   .budget {
