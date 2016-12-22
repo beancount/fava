@@ -28,7 +28,7 @@ $min-width: 560px;
 
 html,
 body {
-  background: $color-background;
+  background-color: $color-background;
   color: $color-text;
   font-family: $font-family;
   font-size: 14px;
@@ -45,7 +45,7 @@ table {
 tbody {
   tr {
     &:nth-child(2n) {
-      background: darken($color-background, 2);
+      background-color: darken($color-background, 2);
     }
   }
 
@@ -69,7 +69,7 @@ th {
 
 thead th, // sass-lint:disable-line force-element-nesting
 tfoot td { // sass-lint:disable-line force-element-nesting
-  background: $color-table-header-background;
+  background-color: $color-table-header-background;
   border: 1px solid $color-table-header-background;
   color: $color-table-header-text;
   font-weight: 500;
@@ -229,6 +229,7 @@ button {
     box-shadow: 0 0 5px $color-header;
   }
 
+  &.inactive,
   &.muted {
     background-color: darken($color-header-text, 20);
     color: $color-text;
@@ -260,7 +261,7 @@ body {
 
 header {
   align-items: center;
-  background: $color-header;
+  background-color: $color-header;
   color: $color-header-text;
   display: flex;
   height: $header-height;
@@ -400,7 +401,6 @@ article {
   position: relative;
   width: 100%;
 
-  ul a, // sass-lint:disable-line force-element-nesting
   p > a {
     text-decoration: underline;
 
@@ -418,7 +418,7 @@ article {
   }
 }
 
-.dragover { background: lighten($color-links, 50); }
+.dragover { background-color: lighten($color-links, 50); }
 
 .headerline {
   margin: 0 0 1.5em;
@@ -492,7 +492,7 @@ kbd {
 
 .warnings {
   li {
-    background: $color-error;
+    background-color: $color-error;
     color: $color-background;
     display: block;
     padding: 10px;
@@ -509,10 +509,10 @@ kbd {
 
   &:hover { cursor: pointer; }
 
-  &.status-red { background: $color-status-red; }
-  &.status-yellow { background: $color-status-yellow; }
-  &.status-green { background: $color-status-green; }
-  &.status-gray { background: $color-status-gray; }
+  &.status-red { background-color: $color-status-red; }
+  &.status-yellow { background-color: $color-status-yellow; }
+  &.status-green { background-color: $color-status-green; }
+  &.status-gray { background-color: $color-status-gray; }
 }
 
 [data-sort] {

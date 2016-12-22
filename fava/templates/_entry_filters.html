@@ -1,35 +1,16 @@
-{% set from_filter = g.filters['from'] %}
-{% set time_filter = g.filters['time'] %}
-{% set tag_filter = g.filters['tag'] %}
-{% set account_filter = g.filters['account'] %}
-{% set payee_filter = g.filters['payee'] %}
-{% macro close_icon() %}
-<svg class="close-icon" width="18px" height="18px" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"/></svg>
-{% endmacro %}
-<form id="filter-form" class="filter-form" action="{{ url_for_current() }}" method="GET">
-    <span{% if not from_filter %} class="empty"{% endif %}>
-        <input id="from-filter" name="from" type="text" value='{{ from_filter or '' }}' placeholder="{{ _('FROM') }}" size="{{ (from_filter and from_filter|length+2) or _('FROM')|length+2 }}">
-        <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-    </span>
-    <span{% if not time_filter %} class="empty"{% endif %}>
-        <input id="time-filter" name="time" type="text" list='years' value='{{ time_filter or '' }}' placeholder="{{ _('Time') }}" size="{{ (time_filter and time_filter|length+2) or _('Time')|length+2 }}">
-        <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-    </span>
-    <span{% if not tag_filter %} class="empty"{% endif %}>
-        <input id="tag-filter" name="tag" type="text" list='tags' value='{{ tag_filter or '' }}' placeholder="{{ _('Tag') }}" size="{{ (tag_filter and tag_filter|length+2) or _('Tag')|length+2 }}">
-        <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-    </span>
-    <span{% if not account_filter %} class="empty"{% endif %}>
-        <input id="account-filter" name="account" type="text" list='accounts' value='{{ account_filter or '' }}' placeholder="{{ _('Account') }}" size="{{ (account_filter and account_filter|length+2) or _('Account')|length+2 }}">
-        <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-    </span>
-    <span{% if not payee_filter %} class="empty"{% endif %}>
-        <input id="payee-filter" name="payee" type="text" list='payees' value='{{ payee_filter or '' }}' placeholder="{{ _('Payee') }}" size="{{ (payee_filter and payee_filter|length+2) or _('Payee')|length+2 }}">
-        <button type="button" tabindex="-1" class="close">{{ close_icon() }}</button>
-    </span>
-    <button type="submit">{{ _('Filter') }}</button>
-</form>
-
+{% set placeholders = {
+    'from': _('FROM'),
+    'time': _('Time'),
+    'tag': _('Tag'),
+    'account': _('Account'),
+    'payee': _('Payee'),
+} %}
+{% set lists = {
+    'time': 'years',
+    'tag': 'tags',
+    'account': 'accounts',
+    'payee': 'payees',
+} %}
 {% macro datalist(name, list) %}
     <datalist id="{{ name }}">
         {% for value in list %}
@@ -37,7 +18,21 @@
         {% endfor %}
     </datalist>
 {% endmacro %}
-
+{% macro filter_input(name) %}
+    {% set filter_value = g.filters[name] %}
+    {% set placeholder = placeholders[name] %}
+    {% set list = 'list={}'.format(lists[name]) if name in lists else '' %}
+    <span{% if not filter_value %} class="empty"{% endif %}>
+        <input id="{{ name }}-filter" name="{{ name }}" type="text"{{ list }} value="{{ filter_value or '' }}" placeholder="{{ placeholder }}" size="{{ (filter_value or placeholder)|length+2 }}">
+        <button type="button" tabindex="-1" class="close">&times;</button>
+    </span>
+{% endmacro %}
+<form id="filter-form" class="filter-form" action="{{ url_for_current() }}" method="GET">
+    {% for name in ['from', 'time', 'tag', 'account', 'payee'] %}
+        {{ filter_input(name) }}
+    {% endfor %}
+    <button type="submit">{{ _('Filter') }}</button>
+</form>
 {{ datalist('years', api.active_years|reverse) }}
 {{ datalist('payees', api.active_payees) }}
 {{ datalist('accounts', api.all_accounts) }}
