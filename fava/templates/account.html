@@ -13,7 +13,7 @@
 <div class="droptarget" data-account-name="{{ account_name }}">
     {{ charts.skeleton() }}
     {{ charts.account_balance(account_name) }}
-    {{ charts.interval_totals(interval, account_name, label='Changes') }}
+    {{ charts.interval_totals(interval, account_name, label=_('Changes')) }}
 
     {% if not journal %}
         {{ charts.hierarchy(account_name) }}
@@ -21,8 +21,8 @@
 
     <div class="headerline">
         <h3>{% if not journal %}<a href="{{ url_for('account', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
-        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ interval_macros.interval_label }} {{ _('Changes') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Changes') }}{% endif %}</h3>
-        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ interval_macros.interval_label }} {{ _('Balances') }}</a>{% else %}{{ interval_macros.interval_label }} {{ _('Balances') }}{% endif %}</h3>
+        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Changes') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
+        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Balances') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
     </div>
 
     {% if journal %}

@@ -1,8 +1,11 @@
-{% if interval == 'day' %}    {% set interval_label = _('Daily') %}    {% endif %}
-{% if interval == 'week' %}   {% set interval_label = _('Weekly') %}   {% endif %}
-{% if interval == 'month' %}  {% set interval_label = _('Monthly') %}  {% endif %}
-{% if interval == 'quarter' %}{% set interval_label = _('Quarterly') %}{% endif %}
-{% if interval == 'year' %}   {% set interval_label = _('Yearly') %}   {% endif %}
+{% set interval_labels = {
+    'day': _('Daily'),
+    'week': _('Weekly'),
+    'month': _('Monthly'),
+    'quarter': _('Quarterly'),
+    'year': _('Yearly'),
+} %}
+{% set interval_label = interval_labels[interval] %}
 {% set interval_format_strings = {
     'year': '%Y',
     'month': '%b %Y',

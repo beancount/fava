@@ -14,7 +14,7 @@
 {% macro interval_totals(interval, account_name, label=None) %}
 {% do chart_data.append({
     'type': 'bar',
-    'label': '{} {}'.format(interval_macros.interval_label, account_name if not label else label),
+    'label': account_name if not label else label,
     'interval_totals': api.charts.interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
@@ -22,7 +22,7 @@
 {% macro events(event_type=None) %}
 {% do chart_data.append({
     'type': 'scatterplot',
-    'label': 'Events' if not event_type else 'Event: {}'.format(event_type),
+    'label': _('Events') if not event_type else _('Event: {}').format(event_type),
     'events': api.charts.events(event_type),
 }) %}
 {% endmacro %}
@@ -30,7 +30,7 @@
 {% macro net_worth(interval) %}
 {% do chart_data.append({
     'type': 'balances',
-    'label': 'Net Worth ({})'.format(interval_macros.interval_label|lower),
+    'label': _('Net Worth'),
     'data': api.charts.net_worth_at_dates(interval),
 }) %}
 {% endmacro %}
@@ -38,7 +38,7 @@
 {% macro account_balance(account_name) %}
 {% do chart_data.append({
     'type': 'balances',
-    'label': 'Account Balance',
+    'label': _('Account Balance'),
     'data': api.charts.linechart(account_name),
 }) %}
 {% endmacro %}
@@ -74,11 +74,9 @@
         </span>
         {% if not hide_interval_filter %}
             <select name="chart-interval" id="chart-interval" data-default="{{ config['interval'] }}">
-                <option value="day"{% if interval == 'day' %} selected="selected"{% endif %}>{{ _('Daily') }}</option>
-                <option value="week"{% if interval == 'week' %} selected="selected"{% endif %}>{{ _('Weekly') }}</option>
-                <option value="month"{% if interval == 'month' %} selected="selected"{% endif %}>{{ _('Monthly') }}</option>
-                <option value="quarter"{% if interval == 'quarter' %} selected="selected"{% endif %}>{{ _('Quarterly') }}</option>
-                <option value="year"{% if interval == 'year' %} selected="selected"{% endif %}>{{ _('Yearly') }}</option>
+                {% for interval_ in ['day', 'week', 'month', 'quarter', 'year'] %}
+                    <option value="{{ interval_ }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_macros.interval_labels[interval_] }}</option>
+                {% endfor %}
             </select>
         {% endif %}
     </form>
