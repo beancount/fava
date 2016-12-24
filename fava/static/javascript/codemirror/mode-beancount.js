@@ -25,7 +25,7 @@ CodeMirror.defineSimpleMode('beancount', {
       regex: /(query)(\s*)("[^"]*")(\s*)(")/,
       token: ['directive', null, 'string', null, 'string'],
       mode: {
-        spec: 'text/x-sql',
+        spec: 'beancount-query',
         end: /"/,
       },
     },

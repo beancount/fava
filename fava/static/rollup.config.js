@@ -1,5 +1,6 @@
 import buble from 'rollup-plugin-buble';
 import commonjs from 'rollup-plugin-commonjs';
+import json from 'rollup-plugin-json';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import sass from 'rollup-plugin-sass';
 
@@ -25,6 +26,7 @@ export default {
   },
   plugins: [
     nodeResolve(),
+    json(),
     buble({
       exclude: 'sass/**',
     }),

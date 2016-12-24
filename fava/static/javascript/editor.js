@@ -2,7 +2,6 @@ import CodeMirror from 'codemirror';
 import URI from 'urijs';
 import Mousetrap from 'mousetrap';
 
-import 'codemirror/mode/sql/sql';
 import 'codemirror/addon/mode/simple';
 
 // search
@@ -26,9 +25,11 @@ import 'codemirror/addon/hint/show-hint';
 // commenting
 import 'codemirror/addon/comment/comment';
 
-import './codemirror-fold-beancount';
-import './codemirror-hint-beancount';
-import './codemirror-mode-beancount';
+import './codemirror/fold-beancount';
+import './codemirror/hint-beancount';
+import './codemirror/mode-beancount';
+
+import './codemirror/mode-query';
 
 import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
@@ -173,8 +174,7 @@ export default function initEditor() {
   };
 
   const queryOptions = {
-    mode: 'text/x-sql',
-    lineNumbers: true,
+    mode: 'beancount-query',
     extraKeys: {
       'Ctrl-Enter': () => {
         submitQuery();
