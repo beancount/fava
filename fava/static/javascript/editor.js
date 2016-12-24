@@ -29,6 +29,7 @@ import './codemirror/fold-beancount';
 import './codemirror/hint-beancount';
 import './codemirror/mode-beancount';
 
+import './codemirror/hint-query';
 import './codemirror/mode-query';
 
 import { $, $$, _, handleJSON } from './helpers';
@@ -176,10 +177,7 @@ export default function initEditor() {
   const queryOptions = {
     mode: 'beancount-query',
     extraKeys: {
-      'Ctrl-Enter': () => {
-        submitQuery();
-      },
-      'Cmd-Enter': () => {
+      Enter: () => {
         submitQuery();
       },
     },
@@ -194,10 +192,13 @@ export default function initEditor() {
   if ($('#query-editor')) {
     const editor = CodeMirror.fromTextArea($('#query-editor'), queryOptions);
 
-    // when the focus is outside the editor
-    Mousetrap.bind(['ctrl+enter', 'meta+enter'], (event) => {
-      event.preventDefault();
-      submitQuery();
+    editor.on('keyup', (cm, event) => {
+      if (!cm.state.completionActive && event.keyCode !== 13) {
+        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+      }
+    });
+    $.delegate($('article'), 'click', '.queryresults-header', (event) => {
+      event.target.closest('.queryresults-wrapper').classList.toggle('toggled');
     });
 
     const select = $('.stored-queries select');

@@ -1,17 +1,56 @@
 // Query View
 
 .queryresults-wrapper {
-  display: inline-block;
+  border: 1px solid $color-table-border;
+  display: block;
+  margin-bottom: .5em;
 
   &,
   table {
     min-width: 400px;
   }
 
+  &.error {
+    .queryresults-header {
+      background-color: $color-error;
+    }
+  }
+
+  &.toggled {
+    .queryresults-body {
+      display: none;
+    }
+  }
+}
+
+.queryresults-header {
+  background-color: $color-sidebar-background;
+  cursor: pointer;
+  display: flex;
+  padding: .5em;
+
+  &::before {
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid $color-treetable-expander;
+    border-right: 0;
+    border-top: 8px solid transparent;
+    content: '';
+    height: 0;
+    margin-right: 10px;
+  }
+
+  h3 {
+    flex-grow: 1;
+    margin-bottom: 0;
+  }
+
   .download {
     color: $color-text-lighter;
-    float: right;
   }
+}
+
+.queryresults-body {
+  padding: .5em;
 }
 
 .stored-queries {
@@ -22,16 +61,20 @@
 }
 
 .query-box {
+  display: flex;
+
   button {
-    float: right;
+    height: 30px;
+    margin-bottom: .5em;
   }
 
   .CodeMirror, // sass-lint:disable-line class-name-format
   textarea {
     border: 1px solid darken($color-background, 9);
+    flex-grow: 1;
     font-family: $font-family-editor;
     font-size: 16px;
-    height: 180px;
+    height: auto;
     margin-bottom: 1em;
     width: 100%;
   }

@@ -105,7 +105,7 @@ export default function initRouter() {
         $.fetch(fetchURL)
           .then(response => response.text())
           .then((data) => {
-            $('#query-container').innerHTML = data;
+            $('#query-container').insertAdjacentHTML('afterbegin', data);
             initSort();
             window.history.replaceState(null, null, pageURL);
           });

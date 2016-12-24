@@ -1,18 +1,6 @@
 import CodeMirror from 'codemirror/lib/codemirror';
-import fuzzy from 'fuzzyjs';
 
-function getCurrentWord(cursor, line) {
-  return line.slice(0, cursor.ch).match(/(\S*)$/)[0];
-}
-
-function fuzzyMatch(cursor, currentWord, completions) {
-  const search = currentWord.toLowerCase();
-  return {
-    list: fuzzy.filter(search, completions, {}),
-    from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
-    to: cursor,
-  };
-}
+import { fuzzyMatch, getCurrentWord } from './helpers';
 
 const completionSources = {
   undatedDirectives: ['option', 'plugin', 'include'],

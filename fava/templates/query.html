@@ -30,6 +30,8 @@
     </td>
 {% elif type == "<class 'decimal.Decimal'>" or type == "<class 'cdecimal.Decimal'>" %}
     <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
+{% elif type == "<class 'beancount.core.amount.Amount'>" %}
+    <td class="num">{{ value|format_amount }}</td>
 {% elif type == "<class 'bool'>" %}
     <td>{{ value|upper }}</td>
 {% elif type == "<class 'int'>" %}
@@ -64,38 +66,31 @@
 
     <form id="query-form" class="query-box" action="{{ url_for('query') }}" method="get">
         <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
-        <button id="submit-query" type="submit">Submit Query</button>
+        <button id="submit-query" type="submit">Submit</button>
     </form>
     <div id="query-container">
     {% endif %}
-    {% if not error and not result_types %}
-        <h3>Sample Queries</h3>
-        <ul class="sample-queries">
-            <li><a href="{{ url_for('query', query_string="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>
-            <li><a href="{{ url_for('query', query_string="SELECT last(date) as last_date, cost(sum(position)) as cost;") }}"><code>SELECT last(date) as last_date, cost(sum(position)) as cost;</code></a></li>
-            <li><a href="{{ url_for('query', query_string="SELECT date, account, position, balance WHERE account ~ 'Travel';") }}"><code>SELECT date, account, position, balance WHERE account ~ 'Travel';</code></a></li>
-            <li><a href="http://aumayr.github.io/beancount-sql-queries/">{{ _('More sample queries') }}</a>
-        </ul>
-    {% endif %}
-
-    {% if error %}
-        <h3>{{ _('Result') }}</h3>
-        <p class="query-syntax-error">
-            {{ error }}
-        </p>
-    {% endif %}
-
-    {% if result_types %}
-        <div class="queryresults-wrapper">
-            <p class="download">
-                {{ _('Download as') }}
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+    {% if error or result_types %}
+        <div class="queryresults-wrapper{{ ' error' if error else '' }}">
+        <div class="queryresults-header">
+        <h3><code>{{ query }}</code></h3>
+        {% if result_types %}
+            <span class="download">
+            {{ _('Download as') }}
+            <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
                 <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xls') }}">XLS</a>,
                 <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xlsx') }}">XLSX</a> or
                 <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='ods') }}">ODS</a>
             {% endif %}
+            </span>
+        {% endif %}
+        </div>
+        <div class="queryresults-body">
+        {% if error %}
+            <p class="query-syntax-error">
+            {{ error }}
             </p>
-            <h3>{{ _('Result') }}</h3>
+        {% elif result_types %}
             <table class="queryresults sortable">
                 <thead>
                     <tr>
@@ -114,7 +109,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+        {% endif %}
         </div>
+    </div>
     {% endif %}
     {% if not result_only %}
     </div>
