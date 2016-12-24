@@ -1,6 +1,6 @@
 import URI from 'urijs';
 
-import { $ } from './helpers';
+import { $, $$ } from './helpers';
 import e from './events';
 import initSort from './sort';
 
@@ -92,19 +92,26 @@ export default function initRouter() {
     if ($('#query-form')) {
       $('#query-form').addEventListener('submit', (event) => {
         event.preventDefault();
+        const queryString = $('#query-editor').value;
+        if (queryString.trim() === '') {
+          return;
+        }
+
         const url = new URI(window.location.href)
-          .setSearch('query_string', $('#query-editor').value);
+          .setSearch('query_string', queryString);
 
         const pageURL = url.toString();
 
         const fetchURL = url
-          .setSearch('partial', true)
           .setSearch('result_only', true)
           .toString();
 
         $.fetch(fetchURL)
           .then(response => response.text())
           .then((data) => {
+            $$('.queryresults-wrapper').forEach((element) => {
+              element.classList.add('toggled');
+            });
             $('#query-container').insertAdjacentHTML('afterbegin', data);
             initSort();
             window.history.replaceState(null, null, pageURL);

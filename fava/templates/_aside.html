@@ -21,7 +21,7 @@
         {% if id == "query" and user_queries %}
             <ul class="submenu">
             {% for query in user_queries %}
-                <li><a{% if query.name == name %} class="selected"{% endif %} href="{{ url_for('query', query_string=query.query_string, name=query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
+                <li><a{% if query.name == name %} class="selected"{% endif %} href="{{ url_for('report', report_name='query', query_string='run '+query.name) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
             {% endfor %}
             </ul>
         {% endif %}

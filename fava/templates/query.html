@@ -1,4 +1,4 @@
-{% extends "_layout.html" %}
+{% set result_only = request.args.get('result_only', False) %}{% if not result_only %}{% extends "_layout.html" %}{% endif %}
 {% set active_page = 'query' %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
@@ -47,49 +47,39 @@
 {% endif %}
 {% endmacro %}
 
-{% set name = request.args.get('name', None) %}
 {% set query = request.args.get('query_string', '') %}
-{% set result_only = request.args.get('result_only', False) %}
+{% set query_shell_history = api.query_shell.get_history(20)|reverse %}
+{% set contents, result_types, result_rows = g.api.query_shell.execute_query(query) %}
 
 {% block content %}
     {% if not result_only %}
-    <form class="wide-form stored-queries">
-        <label for="stored-queries">{{ _('Load stored query:') }}</label>
-        <select id="stored-queries">
-            <option value="" data-source-link="#"></option>
-            {% for query in api.queries %}
-                <option value="{{ query.query_string }}" data-source-link="{{ url_for_source(file_path=query.meta.filename, line=query.meta.lineno)}}"{% if query.name == name %} selected="selected"{% endif %}>{{ query.name }}</option>
-            {% endfor %}
-        </select>
-        <a href="{% if name %}{% set query_ = api.get_query(name) %}{{ url_for_source(file_path=query_.meta.filename, line=query_.meta.lineno)}}{% endif %}" class="source-link{% if not name %} hidden{% endif %}">{{ _('(Source)') }}</a>
-    </form>
-
-    <form id="query-form" class="query-box" action="{{ url_for('query') }}" method="get">
+    <form id="query-form" class="query-box" action="{{ url_for('report', report_name='query') }}" method="get">
         <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
         <button id="submit-query" type="submit">Submit</button>
     </form>
     <div id="query-container">
     {% endif %}
-    {% if error or result_types %}
+    {% if query %}
+        {% set error = contents and 'ERROR' in contents %}
         <div class="queryresults-wrapper{{ ' error' if error else '' }}">
         <div class="queryresults-header">
         <h3><code>{{ query }}</code></h3>
         {% if result_types %}
             <span class="download">
             {{ _('Download as') }}
-            <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xls') }}">XLS</a>,
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xlsx') }}">XLSX</a> or
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='ods') }}">ODS</a>
+            <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+                <a href="{{ url_for('download_query', query_string=query, result_format='xls') }}">XLS</a>,
+                <a href="{{ url_for('download_query', query_string=query, result_format='xlsx') }}">XLSX</a> or
+                <a href="{{ url_for('download_query', query_string=query, result_format='ods') }}">ODS</a>
             {% endif %}
             </span>
         {% endif %}
         </div>
+    {% endif %}
+    {% if contents or result_types %}
         <div class="queryresults-body">
-        {% if error %}
-            <p class="query-syntax-error">
-            {{ error }}
-            </p>
+        {% if contents %}
+           <pre><code>{{ contents }}</code></pre>
         {% elif result_types %}
             <table class="queryresults sortable">
                 <thead>
@@ -111,9 +101,16 @@
             </table>
         {% endif %}
         </div>
-    </div>
     {% endif %}
+    </div>
     {% if not result_only %}
+    {% for history_item in query_shell_history %}
+        <div class="queryresults-wrapper toggled inactive">
+        <div class="queryresults-header">
+        <h3><code>{{ history_item }}</code></h3>
+        </div>
+        </div>
+    {% endfor %}
     </div>
     {% endif %}
 {% endblock %}

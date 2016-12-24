@@ -177,7 +177,10 @@ export default function initEditor() {
   const queryOptions = {
     mode: 'beancount-query',
     extraKeys: {
-      Enter: () => {
+      'Ctrl-Enter': () => {
+        submitQuery();
+      },
+      'Cmd-Enter': () => {
         submitQuery();
       },
     },
@@ -197,18 +200,15 @@ export default function initEditor() {
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
       }
     });
-    $.delegate($('article'), 'click', '.queryresults-header', (event) => {
-      event.target.closest('.queryresults-wrapper').classList.toggle('toggled');
-    });
 
-    const select = $('.stored-queries select');
-    select.addEventListener('change', () => {
-      const sourceElement = $('.stored-queries a.source-link');
-      const sourceLink = select.options[select.selectedIndex].getAttribute('data-source-link');
-
-      editor.setValue(select.value);
-      sourceElement.setAttribute('href', sourceLink);
-      sourceElement.classList.toggle('hidden', select.value === '');
+    $.delegate($('#query-container'), 'click', '.queryresults-header', (event) => {
+      const wrapper = event.target.closest('.queryresults-wrapper');
+      if (wrapper.classList.contains('inactive')) {
+        editor.setValue(wrapper.querySelector('code').innerHTML);
+        $('#query-form').dispatchEvent(new Event('submit'));
+        return;
+      }
+      wrapper.classList.toggle('toggled');
     });
   }
 

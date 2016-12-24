@@ -68,6 +68,7 @@ REPORTS = [
     'commodities',
     'editor',
     'trial_balance',
+    'query',
 ]
 
 
@@ -249,22 +250,6 @@ def holdings_by(aggregation_key):
     return render_template('holdings.html', aggregation_key=aggregation_key)
 
 
-@app.route('/<bfile>/query/')
-def query():
-    """Run a query."""
-    query_string = request.args.get('query_string', '')
-
-    if not query_string:
-        return render_template('query.html')
-
-    try:
-        types, rows = g.api.query(query_string)
-    except (query_compile.CompilationError, query_parser.ParseError) as error:
-        return render_template('query.html', error=error)
-
-    return render_template('query.html', result_types=types, result_rows=rows)
-
-
 @app.route('/<bfile>/<report_name>/')
 def report(report_name):
     """Endpoint for most reports."""
@@ -278,6 +263,10 @@ def report(report_name):
 def download_query(result_format, name='query_result'):
     """Download a query result."""
     query_string = request.args.get('query_string', '')
+
+    if query_string[:3] == 'run':
+        name = query_string[4:]
+        query_string = g.api.get_query(query_string[4:]).query_string
 
     try:
         types, rows = g.api.query(query_string, numberify=True)

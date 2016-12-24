@@ -25,6 +25,7 @@ from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
                               entry_at_lineno, FavaAPIException)
 from fava.api.fava_options import parse_options
+from fava.api.query_shell import QueryShell
 
 
 class FavaFileNotFoundException(Exception):
@@ -103,8 +104,8 @@ class BeancountReportAPI():
         'all_root_account', 'beancount_file_path', 'budgets',
         'charts', 'custom_entries', 'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
-        'price_map', 'queries', 'root_account', 'sidebar_links', 'title',
-        'upcoming_events', 'watcher']
+        'price_map', 'queries', 'query_shell', 'root_account', 'sidebar_links',
+        'title', 'upcoming_events', 'watcher']
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
@@ -119,6 +120,7 @@ class BeancountReportAPI():
 
         self.charts = Charts(self)
         self.watcher = Watcher()
+        self.query_shell = QueryShell(self)
         self.load_file()
 
     def load_file(self):
