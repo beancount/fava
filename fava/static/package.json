@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "eslint": "^3.5.0",
-    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.0.1",
     "postcss": "^5.2.5",
-    "postcss-copy": "^5.3.0",
-    "rollup": "^0.36.3",
-    "rollup-plugin-buble": "^0.14.0",
-    "rollup-plugin-commonjs": "^5.0.5",
+    "postcss-copy": "^6.2.1",
+    "rollup": "^0.38.0",
+    "rollup-plugin-buble": "^0.15.0",
+    "rollup-plugin-commonjs": "^6.0.1",
     "rollup-plugin-node-resolve": "^2.0.0",
     "rollup-plugin-sass": "^0.4.3",
     "rollup-watch": "^2.5.0",
@@ -48,6 +48,6 @@
     "mousetrap": "^1.5.3",
     "normalize.css": "^5.0.0",
     "urijs": "^1.18.0",
-    "whatwg-fetch": "^1.0.0"
+    "whatwg-fetch": "^2.0.1"
   }
 }
