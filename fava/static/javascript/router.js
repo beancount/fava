@@ -92,8 +92,8 @@ export default function initRouter() {
     if ($('#query-form')) {
       $('#query-form').addEventListener('submit', (event) => {
         event.preventDefault();
-        const queryString = $('#query-editor').value;
-        if (queryString.trim() === '') {
+        const queryString = $('#query-editor').value.trim();
+        if (queryString === '') {
           return;
         }
 

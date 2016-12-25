@@ -11,7 +11,6 @@ from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Event, Query, Custom)
 from beancount.ops import prices, summarize
 from beancount.parser import options
-from beancount.query import query
 from beancount.reports import context
 from beancount.utils import encryption, misc_utils
 
@@ -102,7 +101,7 @@ class BeancountReportAPI():
         'account_types', 'active_payees', 'active_tags', 'active_years',
         'all_accounts', 'all_accounts_active', 'all_entries',
         'all_root_account', 'beancount_file_path', 'budgets',
-        'charts', 'custom_entries', 'date_first', 'date_last', 'entries',
+        'charts', 'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
         'price_map', 'queries', 'query_shell', 'root_account', 'sidebar_links',
         'title', 'upcoming_events', 'watcher']
@@ -154,7 +153,7 @@ class BeancountReportAPI():
         self.active_payees = list(getters.get_all_payees(self.all_entries))
 
         self.queries = _filter_entries_by_type(self.all_entries, Query)
-        self.custom_entries = _filter_entries_by_type(self.all_entries, Custom)
+        custom_entries = _filter_entries_by_type(self.all_entries, Custom)
 
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
@@ -162,15 +161,15 @@ class BeancountReportAPI():
         self.all_accounts_active = _list_accounts(
             self.all_root_account, active_only=True)
 
-        self.fava_options, errors = parse_options(self.custom_entries)
+        self.fava_options, errors = parse_options(custom_entries)
         self.errors.extend(errors)
 
-        self.sidebar_links = _sidebar_links(self.custom_entries)
+        self.sidebar_links = _sidebar_links(custom_entries)
 
         self.upcoming_events = _upcoming_events(
             self.all_entries, self.fava_options['upcoming-events'])
 
-        self.budgets, errors = parse_budgets(self.custom_entries)
+        self.budgets, errors = parse_budgets(custom_entries)
         self.errors.extend(errors)
 
         self._apply_filters()
@@ -267,10 +266,6 @@ class BeancountReportAPI():
             postings = real_account.txn_postings
 
         return realization.iterate_with_balance(postings)
-
-    def get_query(self, name):
-        return next((query for query in self.queries if name == query.name),
-                    None)
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
@@ -379,6 +374,7 @@ class BeancountReportAPI():
         return sorted(fw_pairs + bw_pairs)
 
     def prices(self, base, quote):
+        """List all prices."""
         all_prices = prices.get_all_prices(self.price_map,
                                            "{}/{}".format(base, quote))
 
@@ -470,10 +466,6 @@ class BeancountReportAPI():
                 return self.abs_path(file_path)
 
         raise FavaFileNotFoundException()
-
-    def query(self, query_string, numberify=False):
-        return query.run_query(self.all_entries, self.options,
-                               query_string, numberify=numberify)
 
     def _last_balance_or_transaction(self, account_name):
         real_account = realization.get_or_create(self.all_root_account,

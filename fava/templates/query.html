@@ -24,9 +24,8 @@
         {% if name == "account" %}
             {{ account_macros.account_name(value) }}
         {% else %}
-            {{value }}
+            {{ value }}
         {% endif %}
-        {# TODO do the same for payee(s) and tag(s) #}
     </td>
 {% elif type == "<class 'decimal.Decimal'>" or type == "<class 'cdecimal.Decimal'>" %}
     <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
@@ -52,65 +51,62 @@
 {% set contents, result_types, result_rows = g.api.query_shell.execute_query(query) %}
 
 {% block content %}
-    {% if not result_only %}
+  {% if not result_only %}
     <form id="query-form" class="query-box" action="{{ url_for('report', report_name='query') }}" method="get">
-        <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
-        <button id="submit-query" type="submit">Submit</button>
+      <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
+      <button id="submit-query" type="submit">Submit</button>
     </form>
     <div id="query-container">
-    {% endif %}
-    {% if query %}
-        {% set error = contents and 'ERROR' in contents %}
-        <div class="queryresults-wrapper{{ ' error' if error else '' }}">
-        <div class="queryresults-header">
-        <h3><code>{{ query }}</code></h3>
-        {% if result_types %}
+  {% endif %}
+  {% if query %}
+      <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
+        <div class="queryresults-header"><h3><code>{{ query }}</code></h3>
+          {% if result_types %}
             <span class="download">
-            {{ _('Download as') }}
-            <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+              {{ _('Download as') }}
+              <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
                 <a href="{{ url_for('download_query', query_string=query, result_format='xls') }}">XLS</a>,
                 <a href="{{ url_for('download_query', query_string=query, result_format='xlsx') }}">XLSX</a> or
                 <a href="{{ url_for('download_query', query_string=query, result_format='ods') }}">ODS</a>
-            {% endif %}
+              {% endif %}
             </span>
-        {% endif %}
+          {% endif %}
         </div>
-    {% endif %}
-    {% if contents or result_types %}
+      {% endif %}
+      {% if contents or result_types %}
         <div class="queryresults-body">
-        {% if contents %}
-           <pre><code>{{ contents }}</code></pre>
-        {% elif result_types %}
+          {% if contents %}
+            <pre><code>{{ contents }}</code></pre>
+          {% elif result_types %}
             <table class="queryresults sortable">
-                <thead>
-                    <tr>
-                        {% for name, type in result_types %}
-                            <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in result_rows %}
-                        <tr>
-                            {% for name, type in result_types %}
-                                {{ querycell(name, row[name], type)  }}
-                            {% endfor %}
-                        </tr>
+              <thead>
+                <tr>
+                  {% for name, type in result_types %}
+                    <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in result_rows %}
+                  <tr>
+                    {% for name, type in result_types %}
+                      {{ querycell(name, row[name], type)  }}
                     {% endfor %}
-                </tbody>
+                  </tr>
+                {% endfor %}
+              </tbody>
             </table>
-        {% endif %}
+          {% endif %}
         </div>
-    {% endif %}
-    </div>
-    {% if not result_only %}
-    {% for history_item in query_shell_history %}
+      {% endif %}
+  {% if not result_only %}
+      {% for history_item in query_shell_history %}
         <div class="queryresults-wrapper toggled inactive">
-        <div class="queryresults-header">
-        <h3><code>{{ history_item }}</code></h3>
+          <div class="queryresults-header">
+            <h3><code>{{ history_item }}</code></h3>
+          </div>
         </div>
-        </div>
-    {% endfor %}
+      {% endfor %}
     </div>
-    {% endif %}
+  {% endif %}
 {% endblock %}

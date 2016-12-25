@@ -26,7 +26,6 @@ import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.core import amount, data
 from beancount.core.number import D
-from beancount.query import query_compile, query_parser
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters, util
@@ -37,7 +36,7 @@ from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
-from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
+from fava.util.excel import HAVE_EXCEL
 
 app = Flask(__name__,  # pylint: disable=invalid-name
             template_folder=resource_path('templates'),
@@ -259,28 +258,15 @@ def report(report_name):
 
 
 @app.route('/<bfile>/download-query/query_result.<result_format>')
-@app.route('/<bfile>/download-query/<name>.<result_format>')
-def download_query(result_format, name='query_result'):
+def download_query(result_format):
     """Download a query result."""
-    query_string = request.args.get('query_string', '')
-
-    if query_string[:3] == 'run':
-        name = query_string[4:]
-        query_string = g.api.get_query(query_string[4:]).query_string
-
     try:
-        types, rows = g.api.query(query_string, numberify=True)
-    except (query_compile.CompilationError, query_parser.ParseError):
+        name, data = g.api.query_shell.query_to_file(
+            request.args.get('query_string', ''), result_format)
+    except FavaAPIException:
         abort(400)
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)
-
-    if result_format == 'csv':
-        data = to_csv(types, rows)
-    else:
-        if not app.config['HAVE_EXCEL']:
-            abort(501)
-        data = to_excel(types, rows, result_format, query_string)
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
 
