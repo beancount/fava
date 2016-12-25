@@ -1,15 +1,12 @@
 # Steps to create a release
 
-1. Compare changes to last release, eg.
-   https://github.com/beancount/fava/compare/v0.2.2...master
-3. Update `CHANGES`
-4. Update `README.rst` (search and replace old version number)
-5. Update `AUTHORS`
-6. Search for old version number and replace with new one where appropriate
-7. Update version number in `fava/__init__.py`
-8. Compile SCSS + JS with `make build-js`
-9. Run `make test` to ensure tests pass
-10. Commit changes
-11. Upload to PyPI with `python setup.py sdist bdist_wheel upload`
-12. Make a Github release
-13. Update to newest version on http://fava.pythonanywhere.com
+1. Compare changes to last release, e.g.
+   https://github.com/beancount/fava/compare/v1.1...master
+1. Update `CHANGES`.
+1. Update `AUTHORS`.
+1. Ensure tests pass.
+1. Update version number in `fava/__init__.py`
+1. Compile SCSS + JS with `make build-js`
+1. Upload to PyPI with `python setup.py sdist bdist_wheel upload`
+1. Make a Github release
+1. Update to newest version on http://fava.pythonanywhere.com

@@ -1,6 +1,25 @@
 Changelog
 =========
 
+v1.2 (in development)
+---------------------
+
+You can now add transactions from within Fava. The form supports autocompletion
+for most fields.
+
+Fava will now show a little bubble in the sidebar for the number of events in
+the next week. This can be configured with the ``upcoming-events`` option.
+
+Other changes:
+
+- The payee filter can filter by regular expression.
+- The tag filter can filter for links, too.
+- There's a nice spinning indicator during asynchronous page loads.
+- The Journal shows little indicators for metadata.
+- As always, several bugs have been fixed.
+
+Thanks to :user:`fokusov` for their contributions.
+
 v1.1 (November 19th, 2016)
 --------------------------
 
