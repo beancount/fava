@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.2 (in development)
----------------------
+v1.2 (December 25th, 2016)
+--------------------------
 
 You can now add transactions from within Fava. The form supports autocompletion
 for most fields.
