@@ -35,8 +35,7 @@
 </form>
 {{ datalist('years', api.active_years|reverse) }}
 {{ datalist('payees', api.active_payees) }}
-{{ datalist('accounts', api.all_accounts) }}
-{{ datalist('active-accounts', api.all_accounts_active) }}
+{{ datalist('accounts', api.all_accounts_active) }}
 {{ datalist('currencies', api.options['commodities']) }}
 <datalist id="tags">
 {% for tag in api.active_tags %}

@@ -99,7 +99,7 @@ class BeancountReportAPI():
     __slots__ = [
         '_default_format_string', '_format_string',
         'account_types', 'active_payees', 'active_tags', 'active_years',
-        'all_accounts', 'all_accounts_active', 'all_entries',
+        'all_accounts_active', 'all_entries',
         'all_root_account', 'beancount_file_path', 'budgets',
         'charts', 'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
@@ -139,8 +139,8 @@ class BeancountReportAPI():
                 loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
         self.account_types = options.get_account_types(self.options)
-
-        self.title = self.options['title']
+        self.all_root_account = realization.realize(self.all_entries,
+                                                    self.account_types)
         if self.options['render_commas']:
             self._format_string = '{:,f}'
             self._default_format_string = '{:,.2f}'
@@ -149,15 +149,12 @@ class BeancountReportAPI():
             self._default_format_string = '{:.2f}'
 
         self.active_years = list(getters.get_active_years(self.all_entries))
-        self.active_tags = list(getters.get_all_tags(self.all_entries))
-        self.active_payees = list(getters.get_all_payees(self.all_entries))
+        self.active_tags = getters.get_all_tags(self.all_entries)
+        self.active_payees = getters.get_all_payees(self.all_entries)
 
         self.queries = _filter_entries_by_type(self.all_entries, Query)
         custom_entries = _filter_entries_by_type(self.all_entries, Custom)
 
-        self.all_root_account = realization.realize(self.all_entries,
-                                                    self.account_types)
-        self.all_accounts = _list_accounts(self.all_root_account)
         self.all_accounts_active = _list_accounts(
             self.all_root_account, active_only=True)
 
@@ -238,7 +235,7 @@ class BeancountReportAPI():
     def interval_balances(self, interval, account_name, accumulate=False):
         """accumulate is False for /changes and True for /balances"""
         min_accounts = [account
-                        for account in self.all_accounts
+                        for account in _list_accounts(self.all_root_account)
                         if account.startswith(account_name)]
 
         interval_tuples = list(reversed(self._interval_tuples(interval)))
