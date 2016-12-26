@@ -6,7 +6,7 @@ All functions in this module will be automatically added as template filters.
 import os
 
 from flask import g
-from beancount.core import realization
+from beancount.core import compare, realization
 from beancount.core.data import Close, TxnPosting
 from beancount.core.number import Decimal
 
@@ -36,6 +36,11 @@ def format_amount(amount):
         return ''
     return "{} {}".format(format_currency(amount.number, amount.currency),
                           amount.currency)
+
+
+def hash_entry(entry):
+    """Hash an entry."""
+    return compare.hash_entry(entry)
 
 
 def last_segment(account_name):

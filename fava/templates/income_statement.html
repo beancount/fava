@@ -14,10 +14,10 @@
 
     <div class="halfleft">
         <h3>{{ api.options['name_income'] }}</h3>
-        {{ tree_table.tree(api.balances(api.options['name_income'])) }}
+        {{ tree_table.tree(api.root_account|get_or_create(api.options['name_income'])) }}
     </div>
     <div class="halfright">
         <h3>{{ api.options['name_expenses'] }}</h3>
-        {{ tree_table.tree(api.balances(api.options['name_expenses'])) }}
+        {{ tree_table.tree(api.root_account|get_or_create(api.options['name_expenses'])) }}
     </div>
 {% endblock %}

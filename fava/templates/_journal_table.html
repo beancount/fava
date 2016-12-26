@@ -166,7 +166,7 @@
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
         <p>
-        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', api.hash_entry(entry)) }}">{{ entry.date }}</a></span>
+        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', entry|hash_entry) }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
     <span class="description{%- if type != 'transaction' %}"{% else %} droptarget" data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif -%}>
         {% if type == 'open' %}

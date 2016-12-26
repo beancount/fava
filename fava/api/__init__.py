@@ -201,9 +201,6 @@ class BeancountReportAPI():
         if changed:
             self._apply_filters()
 
-    def hash_entry(self, entry):
-        return compare.hash_entry(entry)
-
     def changed(self):
         """Check if the file needs to be reloaded. """
         # We can't reload an encrypted file, so act like it never changes.
@@ -229,10 +226,8 @@ class BeancountReportAPI():
         return date.interval_tuples(self.date_first, self.date_last, interval)
 
     def get_account_sign(self, account_name):
+        """Get account sign."""
         return get_account_sign(account_name, self.account_types)
-
-    def balances(self, account_name):
-        return realization.get_or_create(self.root_account, account_name)
 
     def closing_balances(self, account_name):
         closing_entries = summarize.cap_opt(self.entries, self.options)
@@ -276,10 +271,11 @@ class BeancountReportAPI():
                     None)
 
     def events(self, event_type=None):
+        """List events (possibly filtered by type)."""
         events = _filter_entries_by_type(self.entries, Event)
 
         if event_type:
-            return [event for event in events if event.type == event_type]
+            return filter(lambda e: e.type == event_type, events)
 
         return events
 
