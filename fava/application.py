@@ -36,7 +36,6 @@ from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
-from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 from fava.util.excel import HAVE_EXCEL
 from fava.api.hooks import (post_api_add_transaction,
                             post_api_add_document_metadata)

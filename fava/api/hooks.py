@@ -3,6 +3,7 @@ import sys
 import importlib
 from flask import g
 
+
 def get_hooks():
     '''
     Attempts to import the specified script name and return the functions
@@ -20,10 +21,12 @@ def get_hooks():
             directory = os.getcwd()
         sys.path.insert(0, directory)
         module = importlib.import_module(script_name)
-        retval = [module.__dict__[f] for f in dir(module) if not f.startswith('__')]
+        retval = [module.__dict__[f] for f in dir(module)
+                  if not f.startswith('__')]
         sys.path.pop(0)
         return retval
     return []
+
 
 def post_api_add_transaction(transaction):
     hooks = get_hooks()
@@ -33,6 +36,7 @@ def post_api_add_transaction(transaction):
                 h(transaction)
             except:
                 pass  # No point in handling exceptions from hooks?
+
 
 def post_api_add_document_metadata(bfilename, blineno, filepath):
     hooks = get_hooks()
