@@ -28,6 +28,7 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
+    'post-add-hooks': None,
 }
 
 BOOL_OPTS = [
@@ -54,6 +55,7 @@ LIST_OPTS = [
 STR_OPTS = [
     'language',
     'interval',
+    'post-add-hooks',
 ]
 
 
