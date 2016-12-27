@@ -72,13 +72,13 @@ def test_link_statements_no_documents(load_doc):
     2016-10-31 open Assets:Cash
 
     2016-11-01 * "Foo" "Bar"
-        statement: "{}"
+        statement: "asdf"
         Expenses:Foo                100 EUR
         Assets:Cash
     """
     entries, errors, _ = load_doc
 
-    assert len(errors) == 0
+    assert len(errors) == 1
     assert len(entries) == 3
 
 

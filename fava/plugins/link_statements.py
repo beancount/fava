@@ -1,12 +1,13 @@
-"""Plugin that looks through all transactions and their postings for the
-`statement`-metadata-key, and if found it looks for corresponding Document
-entries that were added by beancount automatically through file discovery.
+"""Beancount plugin to link statements to documents.
 
-It then adds a link to the transaction and the Document, and the tag
-"#statement" to the Document.
+It goes through all transactions with a `statement` metadata-key, and tries to
+match them to Document entries. It then adds a link to the transaction and the
+document, and the tag "#statement" to the document.
 """
+
 import collections
 from os.path import join, dirname, normpath, basename
+
 from beancount.core import data
 from beancount.core.compare import hash_entry
 
@@ -16,33 +17,30 @@ StatementDocumentError = collections.namedtuple('StatementDocumentError',
 __plugins__ = ['link_statements']
 
 
-def link_statements(entries, options_map):
+def link_statements(entries, _):
     errors = []
 
-    if 'documents' not in options_map or len(options_map['documents']) == 0:
-        return entries, errors
-
-    all_documents = [(i, entry) for i, entry in enumerate(entries)
+    all_documents = [(index, entry) for index, entry in enumerate(entries)
                      if isinstance(entry, data.Document)]
 
-    all_transactions = [(i, entry) for i, entry in enumerate(entries)
-                        if isinstance(entry, data.Transaction)]
+    transactions = [(index, entry) for index, entry in enumerate(entries)
+                    if isinstance(entry, data.Transaction)]
 
-    for i, entry in all_transactions:
+    for index, entry in transactions:
         statements = [value for key, value in entry.meta.items()
                       if key.startswith('statement')]
 
         _hash = hash_entry(entry)[:8]
         for statement in statements:
-            statement_p = normpath(join(dirname(entry.meta['filename']),
-                                        statement))
+            statement_path = normpath(join(dirname(entry.meta['filename']),
+                                           statement))
             documents = [(j, document) for j, document in all_documents
-                         if (document.filename == statement_p) or
-                            (document.account in
-                                [pos.account for pos in entry.postings] and
-                             basename(document.filename) == statement)]
+                         if (document.filename == statement_path) or
+                         (document.account in
+                          [pos.account for pos in entry.postings] and
+                          basename(document.filename) == statement)]
 
-            if (len(documents) == 0):
+            if not documents:
                 errors.append(
                     StatementDocumentError(
                         entry.meta,
@@ -60,6 +58,6 @@ def link_statements(entries, options_map):
 
             links = set(entry.links).union([_hash]) \
                 if entry.links else set([_hash])
-            entries[i] = entry._replace(links=links)
+            entries[index] = entry._replace(links=links)
 
     return entries, errors

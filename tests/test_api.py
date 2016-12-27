@@ -20,7 +20,6 @@ def test_apiexception():
 
 
 def test_accounts(example_api):
-    assert len(example_api.all_accounts) == 93
     assert len(example_api.all_accounts_active) == 61
     assert 'Assets' not in example_api.all_accounts_active
 
