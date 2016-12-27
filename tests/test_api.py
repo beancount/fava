@@ -4,11 +4,6 @@ import pytest
 from fava.api import FavaAPIException
 
 
-def test_get_query(example_api):
-    assert example_api.get_query('asdfasdf') is None
-    assert example_api.get_query('fava').query_string == "journal"
-
-
 def test_context(example_api):
     assert example_api.context('NOHASH') is None
     ctx = example_api.context('4c452a1810af2dc53f644cdc558c4832')

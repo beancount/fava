@@ -1,4 +1,4 @@
-{% extends "_layout.html" %}
+{% set result_only = request.args.get('result_only', False) %}{% if not result_only %}{% extends "_layout.html" %}{% endif %}
 {% set active_page = 'query' %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
@@ -24,12 +24,13 @@
         {% if name == "account" %}
             {{ account_macros.account_name(value) }}
         {% else %}
-            {{value }}
+            {{ value }}
         {% endif %}
-        {# TODO do the same for payee(s) and tag(s) #}
     </td>
 {% elif type == "<class 'decimal.Decimal'>" or type == "<class 'cdecimal.Decimal'>" %}
     <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
+{% elif type == "<class 'beancount.core.amount.Amount'>" %}
+    <td class="num">{{ value|format_amount }}</td>
 {% elif type == "<class 'bool'>" %}
     <td>{{ value|upper }}</td>
 {% elif type == "<class 'int'>" %}
@@ -45,78 +46,67 @@
 {% endif %}
 {% endmacro %}
 
-{% set name = request.args.get('name', None) %}
 {% set query = request.args.get('query_string', '') %}
-{% set result_only = request.args.get('result_only', False) %}
+{% set query_shell_history = api.query_shell.get_history(20)|reverse %}
+{% set contents, result_types, result_rows = g.api.query_shell.execute_query(query) %}
 
 {% block content %}
-    {% if not result_only %}
-    <form class="wide-form stored-queries">
-        <label for="stored-queries">{{ _('Load stored query:') }}</label>
-        <select id="stored-queries">
-            <option value="" data-source-link="#"></option>
-            {% for query in api.queries %}
-                <option value="{{ query.query_string }}" data-source-link="{{ url_for_source(file_path=query.meta.filename, line=query.meta.lineno)}}"{% if query.name == name %} selected="selected"{% endif %}>{{ query.name }}</option>
-            {% endfor %}
-        </select>
-        <a href="{% if name %}{% set query_ = api.get_query(name) %}{{ url_for_source(file_path=query_.meta.filename, line=query_.meta.lineno)}}{% endif %}" class="source-link{% if not name %} hidden{% endif %}">{{ _('(Source)') }}</a>
-    </form>
-
-    <form id="query-form" class="query-box" action="{{ url_for('query') }}" method="get">
-        <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
-        <button id="submit-query" type="submit">Submit Query</button>
+  {% if not result_only %}
+    <form id="query-form" class="query-box" action="{{ url_for('report', report_name='query') }}" method="get">
+      <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
+      <button id="submit-query" type="submit">Submit</button>
     </form>
     <div id="query-container">
-    {% endif %}
-    {% if not error and not result_types %}
-        <h3>Sample Queries</h3>
-        <ul class="sample-queries">
-            <li><a href="{{ url_for('query', query_string="balances from year = 2014") }}"><code>balances from year = 2014</code></a></li>
-            <li><a href="{{ url_for('query', query_string="SELECT last(date) as last_date, cost(sum(position)) as cost;") }}"><code>SELECT last(date) as last_date, cost(sum(position)) as cost;</code></a></li>
-            <li><a href="{{ url_for('query', query_string="SELECT date, account, position, balance WHERE account ~ 'Travel';") }}"><code>SELECT date, account, position, balance WHERE account ~ 'Travel';</code></a></li>
-            <li><a href="http://aumayr.github.io/beancount-sql-queries/">{{ _('More sample queries') }}</a>
-        </ul>
-    {% endif %}
-
-    {% if error %}
-        <h3>{{ _('Result') }}</h3>
-        <p class="query-syntax-error">
-            {{ error }}
-        </p>
-    {% endif %}
-
-    {% if result_types %}
-        <div class="queryresults-wrapper">
-            <p class="download">
-                {{ _('Download as') }}
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xls') }}">XLS</a>,
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='xlsx') }}">XLSX</a> or
-                <a class="download-csv" href="{{ url_for('download_query', query_string=query, name=name, result_format='ods') }}">ODS</a>
-            {% endif %}
-            </p>
-            <h3>{{ _('Result') }}</h3>
-            <table class="queryresults sortable">
-                <thead>
-                    <tr>
-                        {% for name, type in result_types %}
-                            <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
-                        {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in result_rows %}
-                        <tr>
-                            {% for name, type in result_types %}
-                                {{ querycell(name, row[name], type)  }}
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+  {% endif %}
+  {% if query %}
+      <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
+        <div class="queryresults-header"><h3><code>{{ query }}</code></h3>
+          {% if result_types %}
+            <span class="download">
+              {{ _('Download as') }}
+              <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+                <a href="{{ url_for('download_query', query_string=query, result_format='xls') }}">XLS</a>,
+                <a href="{{ url_for('download_query', query_string=query, result_format='xlsx') }}">XLSX</a> or
+                <a href="{{ url_for('download_query', query_string=query, result_format='ods') }}">ODS</a>
+              {% endif %}
+            </span>
+          {% endif %}
         </div>
-    {% endif %}
-    {% if not result_only %}
+      {% endif %}
+      {% if contents or result_types %}
+        <div class="queryresults-body">
+          {% if contents %}
+            <pre><code>{{ contents }}</code></pre>
+          {% elif result_types %}
+            <table class="queryresults sortable">
+              <thead>
+                <tr>
+                  {% for name, type in result_types %}
+                    <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in result_rows %}
+                  <tr>
+                    {% for name, type in result_types %}
+                      {{ querycell(name, row[name], type)  }}
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endif %}
+        </div>
+      {% endif %}
+  {% if not result_only %}
+      {% for history_item in query_shell_history %}
+        <div class="queryresults-wrapper toggled inactive">
+          <div class="queryresults-header">
+            <h3><code>{{ history_item }}</code></h3>
+          </div>
+        </div>
+      {% endfor %}
     </div>
-    {% endif %}
+  {% endif %}
 {% endblock %}

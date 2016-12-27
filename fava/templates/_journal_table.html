@@ -176,7 +176,7 @@
         {% elif type == 'note' %}
             <label>Note:</label> {{ entry.comment }}
         {% elif type == 'query' %}
-            Query: <a href="{{ url_for('query', name=entry.name, bql=entry.query_string) }}">{{ entry.name }}</a>
+            Query: <a href="{{ url_for('report', report_name='query', query_string='run '+entry.name) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
             Pad {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
         {% elif type == 'custom' %}

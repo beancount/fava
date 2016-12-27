@@ -2,7 +2,6 @@ import CodeMirror from 'codemirror';
 import URI from 'urijs';
 import Mousetrap from 'mousetrap';
 
-import 'codemirror/mode/sql/sql';
 import 'codemirror/addon/mode/simple';
 
 // search
@@ -26,9 +25,12 @@ import 'codemirror/addon/hint/show-hint';
 // commenting
 import 'codemirror/addon/comment/comment';
 
-import './codemirror-fold-beancount';
-import './codemirror-hint-beancount';
-import './codemirror-mode-beancount';
+import './codemirror/fold-beancount';
+import './codemirror/hint-beancount';
+import './codemirror/mode-beancount';
+
+import './codemirror/hint-query';
+import './codemirror/mode-query';
 
 import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
@@ -173,8 +175,7 @@ export default function initEditor() {
   };
 
   const queryOptions = {
-    mode: 'text/x-sql',
-    lineNumbers: true,
+    mode: 'beancount-query',
     extraKeys: {
       'Ctrl-Enter': () => {
         submitQuery();
@@ -194,20 +195,20 @@ export default function initEditor() {
   if ($('#query-editor')) {
     const editor = CodeMirror.fromTextArea($('#query-editor'), queryOptions);
 
-    // when the focus is outside the editor
-    Mousetrap.bind(['ctrl+enter', 'meta+enter'], (event) => {
-      event.preventDefault();
-      submitQuery();
+    editor.on('keyup', (cm, event) => {
+      if (!cm.state.completionActive && event.keyCode !== 13) {
+        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+      }
     });
 
-    const select = $('.stored-queries select');
-    select.addEventListener('change', () => {
-      const sourceElement = $('.stored-queries a.source-link');
-      const sourceLink = select.options[select.selectedIndex].getAttribute('data-source-link');
-
-      editor.setValue(select.value);
-      sourceElement.setAttribute('href', sourceLink);
-      sourceElement.classList.toggle('hidden', select.value === '');
+    $.delegate($('#query-container'), 'click', '.queryresults-header', (event) => {
+      const wrapper = event.target.closest('.queryresults-wrapper');
+      if (wrapper.classList.contains('inactive')) {
+        editor.setValue(wrapper.querySelector('code').innerHTML);
+        $('#query-form').dispatchEvent(new Event('submit'));
+        return;
+      }
+      wrapper.classList.toggle('toggled');
     });
   }
 

@@ -172,11 +172,11 @@ pre {
   border: 1px solid $color-background-darker;
   border-radius: 3px;
   font-family: $font-family-monospaced;
-  line-height: 1em;
   white-space: pre;
 }
 
 code {
+  line-height: 1em;
   padding: 0 4px;
 }
 
@@ -186,6 +186,7 @@ pre {
 
   code {
     border: 0;
+    line-height: inherit;
     margin: 0;
     padding: 0;
   }
