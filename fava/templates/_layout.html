@@ -62,7 +62,7 @@
         'commodities': api.options['commodities'],
         'operating_currencies': operating_currencies,
         'tags': api.active_tags,
-        'editor-print-margin-column': config['editor-print-margin-column'],
+        'editor-print-margin-column': api.fava_options['editor-print-margin-column'],
     }|tojson|safe }}</script>
     <script type="application/json" id="translations">{{ {
         'Save': _('Save'),

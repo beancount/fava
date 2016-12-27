@@ -12,6 +12,7 @@ from beancount.utils import misc_utils
 
 
 class FavaAPIException(Exception):
+
     def __init__(self, message):
         super().__init__()
         self.message = message

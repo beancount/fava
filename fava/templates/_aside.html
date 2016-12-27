@@ -1,5 +1,5 @@
 {% import "_globals.html" as globals with context %}
-{% set user_queries = api.queries[:config['sidebar-show-queries']] %}
+{% set user_queries = api.queries[:api.fava_options['sidebar-show-queries']] %}
 {% if api.sidebar_links %}
     <h3>{{ _('Custom Links') }}</h3>
     <ul class="navigation">

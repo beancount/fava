@@ -3,26 +3,26 @@
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
 {% set document_types = ['discovered', 'statement'] %}
 {% set default_show_type = {
-    'open':        'open' in config['journal-show'],
-    'close':       'close' in config['journal-show'],
-    'balance':     'balance' in config['journal-show'],
-    'note':        'note' in config['journal-show'],
-    'pad':         'pad' in config['journal-show'],
-    'query':       'query' in config['journal-show'],
-    'custom':      'custom' in config['journal-show'],
-    'budget':      'budget' in config['journal-show'],
+    'open':        'open' in api.fava_options['journal-show'],
+    'close':       'close' in api.fava_options['journal-show'],
+    'balance':     'balance' in api.fava_options['journal-show'],
+    'note':        'note' in api.fava_options['journal-show'],
+    'pad':         'pad' in api.fava_options['journal-show'],
+    'query':       'query' in api.fava_options['journal-show'],
+    'custom':      'custom' in api.fava_options['journal-show'],
+    'budget':      'budget' in api.fava_options['journal-show'],
 
-    'transaction': 'transaction' in config['journal-show'],
-    'cleared':     'cleared' in config['journal-show-transaction'],
-    'pending':     'pending' in config['journal-show-transaction'],
-    'other':       'other' in config['journal-show-transaction'],
+    'transaction': 'transaction' in api.fava_options['journal-show'],
+    'cleared':     'cleared' in api.fava_options['journal-show-transaction'],
+    'pending':     'pending' in api.fava_options['journal-show-transaction'],
+    'other':       'other' in api.fava_options['journal-show-transaction'],
 
-    'document':    'document' in config['journal-show'],
-    'discovered':  'discovered' in config['journal-show-document'],
-    'statement':   'statement' in config['journal-show-document'],
+    'document':    'document' in api.fava_options['journal-show'],
+    'discovered':  'discovered' in api.fava_options['journal-show-document'],
+    'statement':   'statement' in api.fava_options['journal-show-document'],
 
-    'metadata':    'metadata' in config['journal-show'],
-    'postings':    'postings' in config['journal-show'],
+    'metadata':    'metadata' in api.fava_options['journal-show'],
+    'postings':    'postings' in api.fava_options['journal-show'],
 } %}
 {% if request.args.get('show', False) %}
     {% set _list = request.args.getlist('show') %}

@@ -56,7 +56,7 @@
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}
-{% set show_charts = config['charts'] %}
+{% set show_charts = api.fava_options['charts'] %}
 <button type="button" id="toggle-chart" class="toggle-chart{% if not show_charts %} hide-charts{% endif %}">
     <span></span>
 </button>
@@ -73,7 +73,7 @@
             <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
         </span>
         {% if not hide_interval_filter %}
-            <select name="chart-interval" id="chart-interval" data-default="{{ config['interval'] }}">
+            <select name="chart-interval" id="chart-interval" data-default="{{ api.fava_options['interval'] }}">
                 {% for interval_ in ['day', 'week', 'month', 'quarter', 'year'] %}
                     <option value="{{ interval_ }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_macros.interval_labels[interval_] }}</option>
                 {% endfor %}

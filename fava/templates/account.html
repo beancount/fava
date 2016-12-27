@@ -26,7 +26,7 @@
     </div>
 
     {% if journal %}
-        {% set journal = api.account_journal(account_name, with_journal_children=config['account-journal-include-children']) %}
+        {% set journal = api.account_journal(account_name, with_journal_children=api.fava_options['account-journal-include-children']) %}
         {% with show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}

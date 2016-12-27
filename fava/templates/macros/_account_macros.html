@@ -18,7 +18,7 @@ Click to copy the balance directives to the clipboard:
 {% macro last_account_activity(account_name) %}
 {% set last_entry = api.last_entry(account_name) %}
 {% set last_account_activity = (datetime.date.today() - last_entry.date).days if last_entry else 0 %}
-{% if last_account_activity > config['uptodate-indicator-grey-lookback-days'] %}
+{% if last_account_activity > api.fava_options['uptodate-indicator-grey-lookback-days'] %}
     <span class="status-indicator status-gray" title="This account has not been updated in a while. ({{ last_account_activity }} days ago)"></span>
 {% endif %}
 {% endmacro %}

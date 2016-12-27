@@ -94,8 +94,8 @@ def get_locale():
         Fava, guess from browser.
 
     """
-    if app.config['language']:
-        return app.config['language']
+    if g.api.fava_options['language']:
+        return g.api.fava_options['language']
     return request.accept_languages.best_match(['de', 'en'])
 
 
@@ -118,7 +118,7 @@ def url_for_source(**kwargs):
     """URL to source file (possibly link to external editor)."""
     args = request.view_args.copy()
     args.update(kwargs)
-    if app.config['use-external-editor']:
+    if g.api.fava_options['use-external-editor']:
         if 'line' in args:
             return "beancount://%(file_path)s?lineno=%(line)d" % args
         else:
@@ -135,7 +135,8 @@ def _template_context():
         'api': g.api,
         'operating_currencies': g.api.options['operating_currency'],
         'datetime': datetime,
-        'interval': request.args.get('interval', app.config['interval']),
+        'interval': request.args.get('interval',
+                                     g.api.fava_options['interval']),
     }
 
 
@@ -183,7 +184,6 @@ def _pull_beancount_file(_, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.api = app.config['APIS'][g.beancount_file_slug]
-    app.config.update(g.api.fava_options)
 
 
 @app.route('/')

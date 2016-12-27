@@ -14,6 +14,7 @@ from fava.api.helpers import net_worth_at_dates
 
 
 class BeanJSONEncoder(JSONEncoder):
+
     def default(self, o):  # pylint: disable=E0202
         if isinstance(o, datetime):
             return o.strftime('%Y-%m-%dT%H:%M:%SZ')
