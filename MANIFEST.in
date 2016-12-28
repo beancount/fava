@@ -1,14 +1,8 @@
 include CHANGES LICENSE README.rst AUTHORS
 
-recursive-include fava/docs *
-recursive-include fava/templates *
-recursive-include fava/static/gen *
-recursive-include fava/static/images *
-recursive-exclude fava/static/javascript *
-recursive-exclude fava/static/sass *
-recursive-exclude fava/static/node_modules *
-exclude fava/static/package.json
-exclude fava/static/webpack.config.js
+graft fava
+prune fava/static
+graft fava/static/gen
+graft fava/static/images
 
-# Be sure this is last
-global-exclude *.pyc .gitignore *.orig
+global-exclude *.py[co] *.orig __pycache__ .DS_Store
