@@ -140,23 +140,18 @@ def inventory_at_dates(transactions, dates, posting_predicate):
       posting_predicate: predicate with the Transaction and Posting to
         decide whether to include the posting in the inventory.
     """
-    if not transactions:
-        return
 
     iterator = iter(transactions)
-    txn = next(iterator)
+    txn = next(iterator, None)
 
     inventory = Inventory()
 
     for date in dates:
-        while txn.date < date:
+        while txn and txn.date < date:
             for posting in txn.postings:
                 if posting_predicate(posting):
                     inventory.add_position(posting)
-            try:
-                txn = next(iterator)
-            except StopIteration:
-                break
+            txn = next(iterator, None)
         yield inventory.get_positions()
 
 

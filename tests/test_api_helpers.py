@@ -203,6 +203,8 @@ def test_inventory_at_dates(load_doc):
         datetime.date(2016, 1, 2),
         datetime.date(2016, 1, 3),
         datetime.date(2016, 1, 4),
+        datetime.date(2016, 1, 5),
+        datetime.date(2016, 1, 6),
     ]
 
     transactions = [
@@ -212,13 +214,13 @@ def test_inventory_at_dates(load_doc):
         return True
     number_of_positions = list(
         map(len, list(inventory_at_dates(transactions, dates, predicate))))
-    assert number_of_positions == [0, 0, 2, 3]
+    assert number_of_positions == [0, 0, 2, 3, 3, 3]
 
     def predicate(posting):
         return posting.account.startswith('Assets')
     number_of_positions = list(
         map(len, list(inventory_at_dates(transactions, dates, predicate))))
-    assert number_of_positions == [0, 1, 2, 3]
+    assert number_of_positions == [0, 1, 2, 3, 3, 3]
 
 
 def test_entry_at_lineno(load_doc):
