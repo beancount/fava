@@ -12,7 +12,8 @@ from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
 from beancount.ops import prices, summarize
 from beancount.parser import options
 from beancount.reports import context
-from beancount.utils import encryption, misc_utils
+from beancount.utils import encryption
+from beancount.utils.misc_utils import filter_type
 
 from fava.util import date
 from fava.api.budgets import parse_budgets, calculate_budget
@@ -29,10 +30,6 @@ from fava.api.query_shell import QueryShell
 
 class FavaFileNotFoundException(Exception):
     pass
-
-
-def _filter_entries_by_type(entries, include_types):
-    return [entry for entry in entries if isinstance(entry, include_types)]
 
 
 def _list_accounts(root_account, active_only=False):
@@ -73,9 +70,8 @@ def _upcoming_events(entries, max_delta):
     """
     today = datetime.date.today()
     upcoming_events = []
-    all_events = _filter_entries_by_type(entries, Event)
 
-    for event in all_events:
+    for event in filter_type(entries, Event):
         delta = event.date - today
         if delta.days >= 0 and delta.days < max_delta:
             upcoming_events.append(event)
@@ -152,8 +148,8 @@ class BeancountReportAPI():
         self.active_tags = getters.get_all_tags(self.all_entries)
         self.active_payees = getters.get_all_payees(self.all_entries)
 
-        self.queries = _filter_entries_by_type(self.all_entries, Query)
-        custom_entries = _filter_entries_by_type(self.all_entries, Custom)
+        self.queries = list(filter_type(self.all_entries, Query))
+        custom_entries = list(filter_type(self.all_entries, Custom))
 
         self.all_accounts_active = _list_accounts(
             self.all_root_account, active_only=True)
@@ -266,7 +262,7 @@ class BeancountReportAPI():
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
-        events = _filter_entries_by_type(self.entries, Event)
+        events = list(filter_type(self.entries, Event))
 
         if event_type:
             return filter(lambda e: e.type == event_type, events)
@@ -286,19 +282,26 @@ class BeancountReportAPI():
                                                   aggregation_key)
         return holdings_list
 
-    def context(self, ehash):
+    def context(self, entry_hash):
+        """Context for an entry.
+
+        Arguments:
+            entry_hash: Hash of entry.
+
+        Returns:
+            A tuple ``(entry, context)`` of the (unique) entry with the given
+            ``entry_hash`` and its context.
+
+        """
         try:
             entry = next(entry for entry in self.all_entries
-                         if ehash == compare.hash_entry(entry))
+                         if entry_hash == compare.hash_entry(entry))
         except StopIteration:
-            return
+            return None, None
 
         context_str = context.render_entry_context(self.all_entries,
                                                    self.options, entry)
-        return {
-            'context': context_str.split("\n", 2)[2],
-            'entry': entry,
-        }
+        return entry, context_str.split("\n", 2)[2]
 
     def source_files(self):
         """List source files.
@@ -401,16 +404,11 @@ class BeancountReportAPI():
 
         return get_entry(last)
 
-    def postings_by_account(self):
-        all_postings = [posting
-                        for entry in self.entries
-                        if isinstance(entry, Transaction)
-                        for posting in entry.postings]
-
-        grouped_postings = misc_utils.groupby(
-            lambda posting: posting.account, all_postings)
-        return {account: len(postings) for account, postings
-                in grouped_postings.items()}
+    @property
+    def postings(self):
+        """All postings contained in some transaction."""
+        return [posting for entry in filter_type(self.entries, Transaction)
+                for posting in entry.postings]
 
     def abs_path(self, file_path):
         """Make a path absolute.
@@ -458,7 +456,7 @@ class BeancountReportAPI():
                 documents.
 
         """
-        for entry in misc_utils.filter_type(self.entries, Document):
+        for entry in filter_type(self.entries, Document):
             if entry.filename == file_path:
                 return self.abs_path(file_path)
 

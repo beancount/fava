@@ -37,7 +37,8 @@ class QueryShell(shell.BQLShell):
                         textwrap.dedent(fun.__doc__).strip(),
                         file=self.outfile))
 
-    def get_history(self, max_entries):
+    @staticmethod
+    def get_history(max_entries):
         """Get the most recently used shell commands."""
         num_entries = readline.get_current_history_length()
         return [readline.get_history_item(index+1) for

@@ -3,17 +3,17 @@
 {% set page_title = "Context: " + ehash %}
 
 {% block content %}
-{% set context = api.context(ehash) %}
+{% set entry, context = api.context(ehash) %}
     {% if context %}
     <dl>
         <dt>{{ _('Hash:') }}</dt>
         <dd><code>{{ ehash }}</code></dd>
         <dt>{{ _('Location:') }}</dt>
-        <dd><code><a href="{{ url_for_source(file_path=context.entry.meta.filename, line=context.entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=context.entry.meta.filename, lineno=context.entry.meta.lineno) }}">{{ context.entry.meta.filename }}:{{ context.entry.meta.lineno }}</a></code></dd>
+        <dd><code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code></dd>
     </dl>
-    <textarea class="editor editor-readonly" readonly>{{ context.context|safe }}</textarea>
+    <textarea class="editor editor-readonly" readonly>{{ context|safe }}</textarea>
     <h3>{{ _('Journal Entry') }}</h3>
-    {% with journal = [context.entry] %}
+    {% with journal = [entry] %}
         {% include "_journal_table.html" %}
     {% endwith %}
     {% else %}

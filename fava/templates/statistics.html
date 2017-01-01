@@ -14,7 +14,7 @@
 {%- endmacro %}
 
 {% block content %}
-    {% set postings_by_account = api.postings_by_account() %}
+    {% set postings = api.postings %}
 
     <div class="left">
         <h3>{{ _('Postings per Account') }}</h3>
@@ -22,21 +22,21 @@
             <thead>
                 <tr>
                     <th data-sort="string">{{ _('Account') }}</th>
-                    <th data-sort="num" data-order="desc">{{ _('# Postings') }}</th>
+                    <th data-sort="num">{{ _('# Postings') }}</th>
                 </tr>
             </thead>
             <tbody>
-                {% for account_name, num in postings_by_account|dictsort(false, 'value')|reverse %}
+                {% for group in postings|groupby('account') %}
                     <tr>
-                        <td class="account"><a href="{{ url_for('account', name=account_name) }}">{{ account_name }}</a></td>
-                        <td class="num">{{ num }}</td>
+                        <td class="account"><a href="{{ url_for('account', name=group.grouper) }}">{{ group.grouper }}</a></td>
+                        <td class="num">{{ group.list|length }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
                     <td>{{ _('Total') }}</td>
-                    <td class="num">{{ postings_by_account.values()|sum }}</td>
+                    <td class="num">{{ postings|length }}</td>
                 </tr>
             </tfoot>
         </table>

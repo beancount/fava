@@ -5,10 +5,10 @@ from fava.api import FavaAPIException
 
 
 def test_context(example_api):
-    assert example_api.context('NOHASH') is None
-    ctx = example_api.context('4c452a1810af2dc53f644cdc558c4832')
-    assert ctx['entry'].narration == "Allowed contributions for one year"
-    assert ctx['entry'].date == datetime.date(2014, 1, 1)
+    assert example_api.context('NOHASH') == (None, None)
+    entry, _ = example_api.context('4c452a1810af2dc53f644cdc558c4832')
+    assert entry.narration == "Allowed contributions for one year"
+    assert entry.date == datetime.date(2014, 1, 1)
 
 
 def test_apiexception():
