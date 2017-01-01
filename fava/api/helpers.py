@@ -21,6 +21,14 @@ class FavaAPIException(Exception):
         return self.message
 
 
+class FavaModule(object):
+    def __init__(self, api):
+        self.api = api
+
+    def load_file(self):
+        pass
+
+
 # Nearly the same as the function of the same name in
 # beancount:src/python/beancount/ops/holdings.py but using Postings instead.
 def get_final_holdings(entries, included_account_types=None, price_map=None,

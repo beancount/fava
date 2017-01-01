@@ -8,7 +8,7 @@ from beancount.core import compare, flags, getters, realization
 from beancount.core.account_types import get_account_sign
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
-                                 Event, Query, Custom)
+                                 Event, Custom)
 from beancount.ops import prices, summarize
 from beancount.parser import options
 from beancount.reports import context
@@ -16,7 +16,7 @@ from beancount.utils import encryption
 from beancount.utils.misc_utils import filter_type
 
 from fava.util import date
-from fava.api.budgets import parse_budgets, calculate_budget
+from fava.api.budgets import FavaBudgets
 from fava.api.charts import Charts
 from fava.api.watcher import Watcher
 from fava.api.file import insert_metadata_in_file, next_key
@@ -25,6 +25,7 @@ from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
                               entry_at_lineno, FavaAPIException)
 from fava.api.fava_options import parse_options
+from fava.api.misc import FavaMisc
 from fava.api.query_shell import QueryShell
 
 
@@ -42,41 +43,14 @@ def _list_accounts(root_account, active_only=False):
     return accounts if active_only else accounts[1:]
 
 
-def _sidebar_links(custom_entries):
-    """Parse custom entries for links.
+MODULES = {
+    'budgets': FavaBudgets,
+    'charts': Charts,
+    'misc': FavaMisc,
+    'query_shell': QueryShell,
+}
 
-    They have the following format:
-
-    2016-04-01 custom "fava-sidebar-link" "2014" "/income_statement/?time=2014"
-    """
-    sidebar_link_entries = [
-        entry for entry in custom_entries
-        if entry.type == 'fava-sidebar-link']
-    return [(entry.values[0].value, entry.values[1].value)
-            for entry in sidebar_link_entries]
-
-
-def _upcoming_events(entries, max_delta):
-    """Parse entries for upcoming events.
-
-    Args:
-        entries: A list of entries.
-        max_delta: Number of days that should be considered.
-
-    Returns:
-        A list of the Events in entries that are less than `max_delta` days
-        away.
-
-    """
-    today = datetime.date.today()
-    upcoming_events = []
-
-    for event in filter_type(entries, Event):
-        delta = event.date - today
-        if delta.days >= 0 and delta.days < max_delta:
-            upcoming_events.append(event)
-
-    return upcoming_events
+MODULE_NAMES = list(MODULES.keys())
 
 
 class BeancountReportAPI():
@@ -96,11 +70,11 @@ class BeancountReportAPI():
         '_default_format_string', '_format_string',
         'account_types', 'active_payees', 'active_tags', 'active_years',
         'all_accounts_active', 'all_entries',
-        'all_root_account', 'beancount_file_path', 'budgets',
-        'charts', 'date_first', 'date_last', 'entries',
+        'all_root_account', 'beancount_file_path',
+        'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
-        'price_map', 'queries', 'query_shell', 'root_account', 'sidebar_links',
-        'title', 'upcoming_events', 'watcher']
+        'price_map', 'root_account',
+        'title', 'watcher'] + MODULE_NAMES
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
@@ -113,9 +87,10 @@ class BeancountReportAPI():
             'time': TimeFilter(),
         }
 
-        self.charts = Charts(self)
+        for name, mod in MODULES.items():
+            setattr(self, name, mod(self))
+
         self.watcher = Watcher()
-        self.query_shell = QueryShell(self)
         self.load_file()
 
     def load_file(self):
@@ -148,22 +123,15 @@ class BeancountReportAPI():
         self.active_tags = getters.get_all_tags(self.all_entries)
         self.active_payees = getters.get_all_payees(self.all_entries)
 
-        self.queries = list(filter_type(self.all_entries, Query))
-        custom_entries = list(filter_type(self.all_entries, Custom))
-
         self.all_accounts_active = _list_accounts(
             self.all_root_account, active_only=True)
 
-        self.fava_options, errors = parse_options(custom_entries)
+        self.fava_options, errors = parse_options(
+            filter_type(self.all_entries, Custom))
         self.errors.extend(errors)
 
-        self.sidebar_links = _sidebar_links(custom_entries)
-
-        self.upcoming_events = _upcoming_events(
-            self.all_entries, self.fava_options['upcoming-events'])
-
-        self.budgets, errors = parse_budgets(custom_entries)
-        self.errors.extend(errors)
+        for mod in MODULE_NAMES:
+            getattr(self, mod).load_file()
 
         self._apply_filters()
 
@@ -244,10 +212,6 @@ class BeancountReportAPI():
             for begin_date, end_date in interval_tuples]
 
         return interval_balances, interval_tuples
-
-    def calculate_budget(self, account_name, begin_date, end_date):
-        return calculate_budget(self.budgets, account_name, begin_date,
-                                end_date)
 
     def account_journal(self, account_name, with_journal_children=False):
         real_account = realization.get_or_create(self.root_account,

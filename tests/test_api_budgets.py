@@ -3,8 +3,7 @@ from datetime import date
 from beancount.core.number import D
 import pytest
 
-from fava.api.budgets import (_parse_budget_entry, parse_budgets,
-                              calculate_budget)
+from fava.api.budgets import parse_budgets, calculate_budget
 
 
 @pytest.fixture
@@ -33,19 +32,6 @@ def test_budgets(load_doc):
 
     assert budgets['CNY'] == D(100)
     assert budgets['EUR'] == D(10)
-
-
-def test__parse_budget_entry(load_doc):
-    """
-    2016-05-01 custom "budget"
-    2016-05-01 custom "budget" "daily" 2.5 EUR
-    2016-05-01 custom "budget" Expenses:Books "daily" 2.5 EUR"""
-    entries, _, _ = load_doc
-    with pytest.raises(TypeError):
-        _parse_budget_entry(entries[0])
-    with pytest.raises(IndexError):
-        _parse_budget_entry(entries[1])
-    _parse_budget_entry(entries[2])
 
 
 def test_budgets_daily(budgets_doc):

@@ -5,15 +5,17 @@ import io
 import readline
 import textwrap
 
+from beancount.core.data import Query
 from beancount.query import query_compile, query_execute, query_parser, shell
 from beancount.query.query import run_query
 from beancount.utils import pager
+from beancount.utils.misc_utils import filter_type
 
-from fava.api.helpers import FavaAPIException
+from fava.api.helpers import FavaAPIException, FavaModule
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 
-class QueryShell(shell.BQLShell):
+class QueryShell(shell.BQLShell, FavaModule):
     """A light wrapper around Beancount's shell."""
 
     def __init__(self, api):
@@ -25,6 +27,10 @@ class QueryShell(shell.BQLShell):
         self.entries = None
         self.errors = None
         self.options_map = None
+        self.queries = []
+
+    def load_file(self):
+        self.queries = list(filter_type(self.api.all_entries, Query))
 
     def add_help(self):
         "Attach help functions for each of the parsed token handlers."
@@ -133,7 +139,7 @@ class QueryShell(shell.BQLShell):
             name = statement.query_name
 
             try:
-                query = next((query for query in self.api.queries
+                query = next((query for query in self.queries
                               if query.name == name))
             except StopIteration:
                 raise FavaAPIException('Query "{}" not found.'.format(name))
