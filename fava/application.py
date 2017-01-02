@@ -29,11 +29,10 @@ from beancount.core.number import D
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters, util
-from fava.api import (BeancountReportAPI, FavaAPIException,
-                      FavaFileNotFoundException)
+from fava.api import BeancountReportAPI, FavaAPIException
 from fava.api.file import insert_transaction
 from fava.api.filters import FilterException
-from fava.api.charts import BeanJSONEncoder
+from fava.api.charts import FavaJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import HAVE_EXCEL
@@ -42,7 +41,7 @@ app = Flask(__name__,  # pylint: disable=invalid-name
             template_folder=resource_path('templates'),
             static_folder=resource_path('static'))
 
-app.json_encoder = BeanJSONEncoder
+app.json_encoder = FavaJSONEncoder
 app.jinja_options['extensions'].append('jinja2.ext.do')
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
@@ -148,7 +147,7 @@ def _perform_global_filters():
 
     g.filters = {
         name: request.args.get(name, None)
-        for name in ['account', 'from', 'interval', 'payee', 'tag', 'time']
+        for name in ['account', 'from', 'payee', 'tag', 'time']
     }
 
     # check (and possibly reload) source file
@@ -171,7 +170,9 @@ def _inject_filters(endpoint, values):
 
     if endpoint in ['static', 'index']:
         return
-    for filter_name in ['account', 'from', 'interval', 'payee', 'tag', 'time']:
+    if 'interval' not in values:
+        values['interval'] = request.args.get('interval')
+    for filter_name in ['account', 'from', 'payee', 'tag', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
 
@@ -216,8 +217,8 @@ def document():
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
         return send_from_directory(directory, filename)
-    except FavaFileNotFoundException:
-        return "File \"{}\" not found in entries.".format(file_path), 404
+    except FavaAPIException as exception:
+        return str(exception), 404
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])
@@ -231,10 +232,8 @@ def statement():
         directory = os.path.dirname(document_path)
         filename = os.path.basename(document_path)
         return send_from_directory(directory, filename)
-    except FavaAPIException:
-        return "Statement not found in entries.", 404
-    except FavaFileNotFoundException:
-        return "File not found.", 404
+    except FavaAPIException as exception:
+        return str(exception), 404
 
 
 @app.route('/<bfile>/context/<ehash>/')
@@ -363,6 +362,7 @@ def api_add_document():
 
 @app.route('/<bfile>/api/add-transaction/', methods=['PUT'])
 def api_add_transaction():
+    """Add a transaction."""
     json = request.get_json()
 
     postings = []

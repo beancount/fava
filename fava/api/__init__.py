@@ -4,8 +4,10 @@ import datetime
 import os
 
 from beancount import loader
-from beancount.core import compare, flags, getters, realization
+from beancount.core import getters, realization
+from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
+from beancount.core.compare import hash_entry
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Custom)
@@ -27,10 +29,6 @@ from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
 from fava.api.fava_options import parse_options
 from fava.api.misc import FavaMisc
 from fava.api.query_shell import QueryShell
-
-
-class FavaFileNotFoundException(Exception):
-    pass
 
 
 def _list_accounts(root_account, active_only=False):
@@ -133,9 +131,19 @@ class BeancountReportAPI():
         for mod in MODULE_NAMES:
             getattr(self, mod).load_file()
 
-        self._apply_filters()
+        self.filter(True)
 
-    def _apply_filters(self):
+    # pylint: disable=attribute-defined-outside-init
+    def filter(self, force=False, **kwargs):
+        """Set and apply (if necessary) filters."""
+        changed = False
+        for filter_name, value in kwargs.items():
+            if self.filters[filter_name].set(value):
+                changed = True
+
+        if not (changed or force):
+            return
+
         self.entries = self.all_entries
 
         for filter_class in self.filters.values():
@@ -152,16 +160,6 @@ class BeancountReportAPI():
         if self.filters['time']:
             self.date_first = self.filters['time'].begin_date
             self.date_last = self.filters['time'].end_date
-
-    def filter(self, **kwargs):
-        """Set and apply (if necessary) filters."""
-        changed = False
-        for filter_name, filter_class in self.filters.items():
-            if filter_class.set(kwargs[filter_name]):
-                changed = True
-
-        if changed:
-            self._apply_filters()
 
     def changed(self):
         """Check if the file needs to be reloaded. """
@@ -191,10 +189,10 @@ class BeancountReportAPI():
         """Get account sign."""
         return get_account_sign(account_name, self.account_types)
 
-    def closing_balances(self, account_name):
+    @property
+    def root_account_closed(self):
         closing_entries = summarize.cap_opt(self.entries, self.options)
-        return realization.get_or_create(realization.realize(closing_entries),
-                                         account_name)
+        return realization.realize(closing_entries)
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """accumulate is False for /changes and True for /balances"""
@@ -259,7 +257,7 @@ class BeancountReportAPI():
         """
         try:
             entry = next(entry for entry in self.all_entries
-                         if entry_hash == compare.hash_entry(entry))
+                         if entry_hash == hash_entry(entry))
         except StopIteration:
             return None, None
 
@@ -407,24 +405,25 @@ class BeancountReportAPI():
             if os.path.isfile(path):
                 return path
 
-        raise FavaFileNotFoundException()
+        raise FavaAPIException('Statement not found.')
 
-    def document_path(self, file_path):
+    def document_path(self, path):
         """Get absolute path of a document.
 
         Returns:
-            The absolute path of `file_path` if it points to a document.
+            The absolute path of ``path`` if it points to a document.
 
         Raises:
-            FavaFileNotFoundException: If `path` is not the path to one of the
+            FavaAPIException: If ``path`` is not the path of one of the
                 documents.
 
         """
         for entry in filter_type(self.entries, Document):
-            if entry.filename == file_path:
-                return self.abs_path(file_path)
+            if entry.filename == path:
+                return self.abs_path(path)
 
-        raise FavaFileNotFoundException()
+        raise FavaAPIException(
+            'File "{}" not found in document entries.'.format(path))
 
     def _last_balance_or_transaction(self, account_name):
         real_account = realization.get_or_create(self.all_root_account,
@@ -435,7 +434,7 @@ class BeancountReportAPI():
                 continue
 
             if isinstance(txn_posting, TxnPosting) and \
-               txn_posting.txn.flag == flags.FLAG_UNREALIZED:
+               txn_posting.txn.flag == FLAG_UNREALIZED:
                 continue
             return txn_posting
 

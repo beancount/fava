@@ -12,7 +12,7 @@ from flask.json import JSONEncoder
 from fava.api.helpers import net_worth_at_dates, FavaModule
 
 
-class BeanJSONEncoder(JSONEncoder):
+class FavaJSONEncoder(JSONEncoder):
 
     def default(self, o):  # pylint: disable=E0202
         if isinstance(o, datetime):
