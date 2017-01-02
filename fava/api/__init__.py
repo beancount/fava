@@ -42,6 +42,7 @@ def _list_accounts(root_account, active_only=False):
     return accounts if active_only else accounts[1:]
 
 
+# pylint: disable=too-few-public-methods
 class AttributesModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
@@ -74,6 +75,7 @@ MODULES = {
 MODULE_NAMES = list(MODULES.keys())
 
 
+# pylint: disable=too-many-instance-attributes
 class BeancountReportAPI():
     """Create an interface for a Beancount ledger.
 
@@ -117,6 +119,7 @@ class BeancountReportAPI():
         """
         # use the internal function to disable cache
         if not self.is_encrypted:
+            # pylint: disable=protected-access
             self.all_entries, self.errors, self.options = \
                 loader._load([(self.beancount_file_path, True)],
                              None, None, None)
@@ -205,6 +208,7 @@ class BeancountReportAPI():
 
     @property
     def root_account_closed(self):
+        """A root account where closing entries have been generated."""
         closing_entries = summarize.cap_opt(self.entries, self.options)
         return realization.realize(closing_entries)
 
@@ -226,6 +230,7 @@ class BeancountReportAPI():
         return interval_balances, interval_tuples
 
     def account_journal(self, account_name, with_journal_children=False):
+        """Journal for an account."""
         real_account = realization.get_or_create(self.root_account,
                                                  account_name)
 
@@ -246,6 +251,7 @@ class BeancountReportAPI():
         return events
 
     def holdings(self, aggregation_key=None):
+        """List all holdings (possibly aggregated)."""
         holdings_list = get_final_holdings(
             self.entries,
             (self.account_types.assets, self.account_types.liabilities),
@@ -331,36 +337,19 @@ class BeancountReportAPI():
         return [posting for entry in filter_type(self.entries, Transaction)
                 for posting in entry.postings]
 
-    def abs_path(self, path):
-        """Make a path absolute.
-
-        Args:
-            path: A file path.
-
-        Returns:
-            The absolute path of `path`, assuming it is relative to
-            the directory of the beancount file.
-
-        """
-        if not os.path.isabs(path):
-            return os.path.join(os.path.dirname(
-                os.path.realpath(self.beancount_file_path)), path)
-        return path
-
     def statement_path(self, filename, lineno, metadata_key):
         """Returns the path for a statement found in the specified entry."""
         entry = entry_at_lineno(self.all_entries, filename, lineno)
         value = entry.meta[metadata_key]
 
-        paths = [value]
-        paths.extend([os.path.join(posting.account.replace(':', '/'), value)
-                      for posting in entry.postings])
+        paths = [os.path.join(os.path.dirname(self.beancount_file_path),
+                              value)]
         paths.extend([os.path.join(document_root,
                                    posting.account.replace(':', '/'), value)
                       for posting in entry.postings
                       for document_root in self.options['documents']])
 
-        for path in [self.abs_path(p) for p in paths]:
+        for path in paths:
             if os.path.isfile(path):
                 return path
 
@@ -379,23 +368,10 @@ class BeancountReportAPI():
         """
         for entry in filter_type(self.entries, Document):
             if entry.filename == path:
-                return self.abs_path(path)
+                return path
 
         raise FavaAPIException(
             'File "{}" not found in document entries.'.format(path))
-
-    def _last_balance_or_transaction(self, account_name):
-        real_account = realization.get_or_create(self.all_root_account,
-                                                 account_name)
-
-        for txn_posting in reversed(real_account.txn_postings):
-            if not isinstance(txn_posting, (TxnPosting, Balance)):
-                continue
-
-            if isinstance(txn_posting, TxnPosting) and \
-               txn_posting.txn.flag == FLAG_UNREALIZED:
-                continue
-            return txn_posting
 
     def account_uptodate_status(self, account_name):
         """Status of the last balance or transaction.
@@ -410,15 +386,18 @@ class BeancountReportAPI():
             - 'red':    A balance check that failed.
             - 'yellow': Not a balance check.
         """
-        last_posting = self._last_balance_or_transaction(account_name)
 
-        if last_posting:
-            if isinstance(last_posting, Balance):
-                if last_posting.diff_amount:
+        real_account = realization.get_or_create(self.all_root_account,
+                                                 account_name)
+
+        for txn_posting in reversed(real_account.txn_postings):
+            if isinstance(txn_posting, Balance):
+                if txn_posting.diff_amount:
                     return 'red'
                 else:
                     return 'green'
-            else:
+            if isinstance(txn_posting, TxnPosting) and \
+                    txn_posting.txn.flag != FLAG_UNREALIZED:
                 return 'yellow'
 
     def account_metadata(self, account_name):

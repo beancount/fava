@@ -23,7 +23,6 @@ class QueryShell(shell.BQLShell, FavaModule):
         self.buffer = io.StringIO()
         self.result = None
         super().__init__(True, None, self.buffer)
-        self.stdout = self.buffer
         self.entries = None
         self.errors = None
         self.options_map = None
