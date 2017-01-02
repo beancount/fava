@@ -1,3 +1,5 @@
+"""Reading/writing Beancount files."""
+
 import os
 
 from fava.api.helpers import FavaAPIException, FavaModule, entry_at_lineno

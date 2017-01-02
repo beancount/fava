@@ -1,3 +1,5 @@
+"""Some miscellaneous reports."""
+
 import datetime
 
 from beancount.core.data import Custom, Event
@@ -6,7 +8,10 @@ from beancount.utils.misc_utils import filter_type
 from fava.api.helpers import FavaModule
 
 
+# pylint: disable=too-few-public-methods
 class FavaMisc(FavaModule):
+    """Provides access to some miscellaneous reports."""
+
     def __init__(self, api):
         super().__init__(api)
         self.sidebar_links = None

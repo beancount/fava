@@ -213,7 +213,18 @@ class BeancountReportAPI():
         return realization.realize(closing_entries)
 
     def interval_balances(self, interval, account_name, accumulate=False):
-        """accumulate is False for /changes and True for /balances"""
+        """Balances by interval.
+
+        Arguments:
+            interval: An interval.
+            account_name: An account name.
+            accumulate: A boolean, ``True`` if the balances for an interval
+                should include all entries up to the end of the interval.
+
+        Returns:
+            A list of RealAccount instances for all the intervals.
+
+        """
         min_accounts = [account
                         for account in _list_accounts(self.all_root_account)
                         if account.startswith(account_name)]
