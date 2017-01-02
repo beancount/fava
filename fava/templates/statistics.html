@@ -4,7 +4,7 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% macro copy_balance_directives_text() -%}
-    {% for account in api.all_accounts_active -%}
+    {% for account in api.attributes.accounts -%}
         {% if account|uptodate_eligible %}
             {%- if api.account_uptodate_status(account) != "green" -%}
                 {{- account_macros.balance_directive(account) }}
@@ -58,7 +58,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for account in api.all_accounts_active %}
+                {% for account in api.attributes.accounts %}
                     {% if account.startswith(api.options['name_assets']) or account.startswith(api.options['name_liabilities']) %}
                     {% set last_entry = api.last_entry(account) %}
                     {% if last_entry %}

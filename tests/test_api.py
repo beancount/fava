@@ -19,9 +19,9 @@ def test_apiexception():
     assert str(exception) == exception.message
 
 
-def test_accounts(example_api):
-    assert len(example_api.all_accounts_active) == 61
-    assert 'Assets' not in example_api.all_accounts_active
+def test_attributes(example_api):
+    assert len(example_api.attributes.accounts) == 61
+    assert 'Assets' not in example_api.attributes.accounts
 
 
 def test_account_metadata(example_api):

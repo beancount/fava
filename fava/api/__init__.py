@@ -25,7 +25,8 @@ from fava.api.file import FileModule
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
-                              entry_at_lineno, FavaAPIException)
+                              entry_at_lineno, FavaAPIException,
+                              FavaModule)
 from fava.api.fava_options import parse_options
 from fava.api.misc import FavaMisc
 from fava.api.query_shell import QueryShell
@@ -41,7 +42,28 @@ def _list_accounts(root_account, active_only=False):
     return accounts if active_only else accounts[1:]
 
 
+class AttributesModule(FavaModule):
+    """Some attributes of the ledger (mostly for auto-completion)."""
+
+    def __init__(self, api):
+        super().__init__(api)
+        self.accounts = None
+        self.payees = None
+        self.tags = None
+        self.years = None
+
+    def load_file(self):
+        all_entries = self.api.all_entries
+        self.payees = getters.get_all_payees(all_entries)
+        self.tags = getters.get_all_tags(all_entries)
+        self.years = list(getters.get_active_years(all_entries))
+
+        self.accounts = _list_accounts(self.api.all_root_account,
+                                       active_only=True)
+
+
 MODULES = {
+    'attributes': AttributesModule,
     'budgets': BudgetModule,
     'charts': ChartModule,
     'file': FileModule,
@@ -53,30 +75,26 @@ MODULE_NAMES = list(MODULES.keys())
 
 
 class BeancountReportAPI():
-    """Provides methods to access and filter beancount entries.
+    """Create an interface for a Beancount ledger.
+
+    Arguments:
+        path: Path to the main Beancount file.
 
     Attributes:
         account_types: The names for the five base accounts.
-        active_payees: All payees found in the file.
-        active_tags: All tags found in the file.
-        active_years: All years that contain some entry.
-        all_accounts: A list of all account names.
-        all_accounts_active: A list of all active account names.
 
     """
 
     __slots__ = [
-        '_default_format_string', '_format_string',
-        'account_types', 'active_payees', 'active_tags', 'active_years',
-        'all_accounts_active', 'all_entries',
-        'all_root_account', 'beancount_file_path',
-        'date_first', 'date_last', 'entries',
-        'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
-        'price_map', 'root_account', 'watcher'] + MODULE_NAMES
+        '_default_format_string', '_format_string', 'account_types',
+        'all_entries', 'all_root_account', 'beancount_file_path',
+        'date_first', 'date_last', 'entries', 'errors', 'fava_options',
+        'filters', 'is_encrypted', 'options', 'price_map', 'root_account',
+        'watcher'] + MODULE_NAMES
 
-    def __init__(self, beancount_file_path):
-        self.beancount_file_path = beancount_file_path
-        self.is_encrypted = is_encrypted_file(beancount_file_path)
+    def __init__(self, path):
+        self.beancount_file_path = path
+        self.is_encrypted = is_encrypted_file(path)
         self.filters = {
             'account': AccountFilter(),
             'from': FromFilter(),
@@ -92,8 +110,11 @@ class BeancountReportAPI():
         self.load_file()
 
     def load_file(self):
-        """Load self.beancount_file_path and compute things that are independent
-        of how the entries might be filtered later"""
+        """Load file.
+
+        Load the main file and all included files and set attributes.
+
+        """
         # use the internal function to disable cache
         if not self.is_encrypted:
             self.all_entries, self.errors, self.options = \
@@ -116,13 +137,6 @@ class BeancountReportAPI():
         else:
             self._format_string = '{:f}'
             self._default_format_string = '{:.2f}'
-
-        self.active_years = list(getters.get_active_years(self.all_entries))
-        self.active_tags = getters.get_all_tags(self.all_entries)
-        self.active_payees = getters.get_all_payees(self.all_entries)
-
-        self.all_accounts_active = _list_accounts(
-            self.all_root_account, active_only=True)
 
         self.fava_options, errors = parse_options(
             filter_type(self.all_entries, Custom))
@@ -317,21 +331,21 @@ class BeancountReportAPI():
         return [posting for entry in filter_type(self.entries, Transaction)
                 for posting in entry.postings]
 
-    def abs_path(self, file_path):
+    def abs_path(self, path):
         """Make a path absolute.
 
         Args:
-            file_path: A file path.
+            path: A file path.
 
         Returns:
-            The absolute path of `file_path`, assuming it is relative to
+            The absolute path of `path`, assuming it is relative to
             the directory of the beancount file.
 
         """
-        if not os.path.isabs(file_path):
+        if not os.path.isabs(path):
             return os.path.join(os.path.dirname(
-                os.path.realpath(self.beancount_file_path)), file_path)
-        return file_path
+                os.path.realpath(self.beancount_file_path)), path)
+        return path
 
     def statement_path(self, filename, lineno, metadata_key):
         """Returns the path for a statement found in the specified entry."""

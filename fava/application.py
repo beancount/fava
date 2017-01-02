@@ -367,7 +367,7 @@ def api_add_transaction():
 
     postings = []
     for posting in json['postings']:
-        if posting['account'] not in g.api.all_accounts_active:
+        if posting['account'] not in g.api.attributes.accounts:
             return _api_error('Unknown account: {}.'
                               .format(posting['account']))
         number = D(posting['number']) if posting['number'] else None

@@ -58,10 +58,10 @@
     }|tojson|safe }}</script>
     <script type="application/json" id="api-data">{{ {
         'baseURL': url_for('index'),
-        'accounts': api.all_accounts_active,
+        'accounts': api.attributes.accounts,
         'commodities': api.options['commodities'],
         'operating_currencies': operating_currencies,
-        'tags': api.active_tags,
+        'tags': api.attributes.tags,
         'editor-print-margin-column': api.fava_options['editor-print-margin-column'],
     }|tojson|safe }}</script>
     <script type="application/json" id="translations">{{ {
