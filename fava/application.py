@@ -24,13 +24,13 @@ from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
-from beancount.core import amount, data
+from beancount.core import data
+from beancount.core.amount import Amount
 from beancount.core.number import D
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters, util
 from fava.api import BeancountReportAPI, FavaAPIException
-from fava.api.file import insert_transaction
 from fava.api.filters import FilterException
 from fava.api.charts import FavaJSONEncoder
 from fava.docs import HELP_PAGES
@@ -304,7 +304,7 @@ def api_source():
     """Read/write one of the source files."""
     if request.method == 'GET':
         try:
-            data = g.api.source(request.args.get('file_path'))
+            data = g.api.file.get_source(request.args.get('file_path'))
             return _api_success(payload=data)
         except FavaAPIException as exception:
             return _api_error(exception.message)
@@ -312,8 +312,8 @@ def api_source():
         request.get_json()
         if request.get_json() is None:
             abort(400)
-        g.api.set_source(request.get_json()['file_path'],
-                         request.get_json()['source'])
+        g.api.file.set_source(request.get_json()['file_path'],
+                              request.get_json()['source'])
         return _api_success()
 
 
@@ -350,10 +350,10 @@ def api_add_document():
 
         if request.form.get('bfilename', None):
             try:
-                g.api.insert_metadata(request.form['bfilename'],
-                                      int(request.form['blineno']),
-                                      'statement',
-                                      os.path.basename(filepath))
+                g.api.file.insert_metadata(request.form['bfilename'],
+                                           int(request.form['blineno']),
+                                           'statement',
+                                           os.path.basename(filepath))
             except FavaAPIException as exception:
                 return _api_error(exception.message)
         return _api_success(message='Uploaded to {}'.format(filepath))
@@ -370,9 +370,9 @@ def api_add_transaction():
         if posting['account'] not in g.api.all_accounts_active:
             return _api_error('Unknown account: {}.'
                               .format(posting['account']))
-        number_ = D(posting['number']) if posting['number'] else None
-        amount_ = amount.Amount(number_, posting.get('currency'))
-        postings.append(data.Posting(posting['account'], amount_,
+        number = D(posting['number']) if posting['number'] else None
+        amount = Amount(number, posting.get('currency'))
+        postings.append(data.Posting(posting['account'], amount,
                                      None, None, None, None))
 
     if not postings:
@@ -383,7 +383,7 @@ def api_add_transaction():
         None, date, json['flag'], json['payee'],
         json['narration'], None, None, postings)
 
-    insert_transaction(transaction, g.api.source_files())
+    g.api.file.insert_transaction(transaction)
     return _api_success(message='Stored transaction.')
 
 

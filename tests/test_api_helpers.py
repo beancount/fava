@@ -233,13 +233,9 @@ def test_entry_at_lineno(load_doc):
     """
     entries, _, _ = load_doc
     assert entries[0] == entry_at_lineno(entries, '<string>', 4)
-    assert entries[0] == entry_at_lineno(entries, '<string>', 4, Transaction)
 
     with pytest.raises(FavaAPIException):
         entry_at_lineno(entries, '<string>', 1)
 
     with pytest.raises(FavaAPIException):
         entry_at_lineno(entries, 'foo', 4)
-
-    with pytest.raises(FavaAPIException):
-        entry_at_lineno(entries, '<string>', 4, Posting)

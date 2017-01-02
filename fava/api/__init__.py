@@ -12,16 +12,16 @@ from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Custom)
 from beancount.ops import prices, summarize
-from beancount.parser import options
-from beancount.reports import context
-from beancount.utils import encryption
+from beancount.parser.options import get_account_types
+from beancount.reports.context import render_entry_context
+from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
 
 from fava.util import date
-from fava.api.budgets import FavaBudgets
-from fava.api.charts import Charts
+from fava.api.budgets import BudgetModule
+from fava.api.charts import ChartModule
 from fava.api.watcher import Watcher
-from fava.api.file import insert_metadata_in_file, next_key
+from fava.api.file import FileModule
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
 from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
@@ -42,8 +42,9 @@ def _list_accounts(root_account, active_only=False):
 
 
 MODULES = {
-    'budgets': FavaBudgets,
-    'charts': Charts,
+    'budgets': BudgetModule,
+    'charts': ChartModule,
+    'file': FileModule,
     'misc': FavaMisc,
     'query_shell': QueryShell,
 }
@@ -71,12 +72,11 @@ class BeancountReportAPI():
         'all_root_account', 'beancount_file_path',
         'date_first', 'date_last', 'entries',
         'errors', 'fava_options', 'filters', 'is_encrypted', 'options',
-        'price_map', 'root_account',
-        'title', 'watcher'] + MODULE_NAMES
+        'price_map', 'root_account', 'watcher'] + MODULE_NAMES
 
     def __init__(self, beancount_file_path):
         self.beancount_file_path = beancount_file_path
-        self.is_encrypted = encryption.is_encrypted_file(beancount_file_path)
+        self.is_encrypted = is_encrypted_file(beancount_file_path)
         self.filters = {
             'account': AccountFilter(),
             'from': FromFilter(),
@@ -107,7 +107,7 @@ class BeancountReportAPI():
             self.all_entries, self.errors, self.options = \
                 loader.load_file(self.beancount_file_path)
         self.price_map = prices.build_price_map(self.all_entries)
-        self.account_types = options.get_account_types(self.options)
+        self.account_types = get_account_types(self.options)
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
         if self.options['render_commas']:
@@ -261,63 +261,8 @@ class BeancountReportAPI():
         except StopIteration:
             return None, None
 
-        context_str = context.render_entry_context(self.all_entries,
-                                                   self.options, entry)
-        return entry, context_str.split("\n", 2)[2]
-
-    def source_files(self):
-        """List source files.
-
-        Returns:
-            A list of all sources files, with the main file listed first.
-
-        """
-        return [self.beancount_file_path] + \
-            sorted(filter(
-                lambda x: x != self.beancount_file_path,
-                [os.path.join(
-                    os.path.dirname(self.beancount_file_path), filename)
-                 for filename in self.options['include']]))
-
-    def source(self, file_path):
-        """Get source files.
-
-        Args:
-            file_path: The path of the file.
-
-        Returns:
-            A string with the file contents.
-
-        Raises:
-            FavaAPIException: If the file at `file_path` is not one of the
-                source files.
-
-        """
-        if file_path not in self.source_files():
-            raise FavaAPIException('Trying to read a non-source file')
-
-        with open(file_path, encoding='utf8') as file:
-            source = file.read()
-        return source
-
-    def set_source(self, file_path, source):
-        """Write to source file.
-
-        Args:
-            file_path: The path of the file.
-            source: A string with the file contents.
-
-        Raises:
-            FavaAPIException: If the file at `file_path` is not one of the
-                source files.
-
-        """
-        if file_path not in self.source_files():
-            raise FavaAPIException('Trying to write a non-source file')
-
-        with open(file_path, 'w+', encoding='utf8') as file:
-            file.write(source)
-        self.load_file()
+        ctx = render_entry_context(self.all_entries, self.options, entry)
+        return entry, ctx.split("\n", 2)[2]
 
     def commodity_pairs(self):
         """List pairs of commodities.
@@ -390,7 +335,7 @@ class BeancountReportAPI():
 
     def statement_path(self, filename, lineno, metadata_key):
         """Returns the path for a statement found in the specified entry."""
-        entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
+        entry = entry_at_lineno(self.all_entries, filename, lineno)
         value = entry.meta[metadata_key]
 
         paths = [value]
@@ -477,12 +422,3 @@ class BeancountReportAPI():
             if isinstance(posting, Open):
                 return posting.meta
         return {}
-
-    def insert_metadata(self, filename, lineno, basekey, value):
-        """Insert metadata into a file at lineno.
-
-        Also, prevent duplicate keys.
-        """
-        entry = entry_at_lineno(self.entries, filename, lineno, Transaction)
-        key = next_key(basekey, entry.meta)
-        insert_metadata_in_file(filename, lineno-1, key, value)

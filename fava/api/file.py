@@ -1,3 +1,85 @@
+import os
+
+from fava.api.helpers import FavaAPIException, FavaModule, entry_at_lineno
+
+
+class FileModule(FavaModule):
+    """Functions related to reading/writing to Beancount files."""
+
+    def list_sources(self):
+        """List source files.
+
+        Returns:
+            A list of all sources files, with the main file listed first.
+
+        """
+        main_file = self.api.beancount_file_path
+        return [main_file] + \
+            sorted(filter(
+                lambda x: x != main_file,
+                [os.path.join(
+                    os.path.dirname(main_file), filename)
+                 for filename in self.api.options['include']]))
+
+    def get_source(self, path):
+        """Get source files.
+
+        Args:
+            path: The path of the file.
+
+        Returns:
+            A string with the file contents.
+
+        Raises:
+            FavaAPIException: If the file at `path` is not one of the
+                source files.
+
+        """
+        if path not in self.list_sources():
+            raise FavaAPIException('Trying to read a non-source file')
+
+        with open(path, encoding='utf8') as file:
+            source = file.read()
+        return source
+
+    def set_source(self, path, source):
+        """Write to source file.
+
+        Args:
+            path: The path of the file.
+            source: A string with the file contents.
+
+        Raises:
+            FavaAPIException: If the file at `path` is not one of the
+                source files.
+
+        """
+        if path not in self.list_sources():
+            raise FavaAPIException('Trying to write a non-source file')
+
+        with open(path, 'w+', encoding='utf8') as file:
+            file.write(source)
+        self.load_file()
+
+    def insert_metadata(self, filename, lineno, basekey, value):
+        """Insert metadata into a file at lineno.
+
+        Also, prevent duplicate keys.
+        """
+        entry = entry_at_lineno(self.api.all_entries, filename, lineno)
+        key = next_key(basekey, entry.meta)
+        insert_metadata_in_file(filename, lineno-1, key, value)
+
+    def insert_transaction(self, transaction):
+        """Insert a transaction.
+
+        Args:
+            transaction: A Transaction.
+
+        """
+        insert_transaction(transaction, self.list_sources())
+
+
 def next_key(basekey, keys):
     """Returns the next unused key for basekey in the supplied array.
 

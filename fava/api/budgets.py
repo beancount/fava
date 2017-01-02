@@ -11,7 +11,7 @@ Budget = namedtuple('Budget', 'account date_start period number currency')
 BudgetError = namedtuple('BudgetError', 'source message entry')
 
 
-class FavaBudgets(FavaModule):
+class BudgetModule(FavaModule):
     def __init__(self, api):
         super().__init__(api)
         self.budget_entries = None

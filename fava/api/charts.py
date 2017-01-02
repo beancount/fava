@@ -59,7 +59,7 @@ def _serialize_real_account(real_account):
     }
 
 
-class Charts(FavaModule):
+class ChartModule(FavaModule):
     __slots__ = ['api']
 
     def _total_balance(self, names, begin_date, end_date):

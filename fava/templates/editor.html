@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'editor' %}
-{% set source_files = api.source_files() %}
+{% set source_files = api.file.list_sources() %}
 {% set file_path = request.args.get('file_path', api.fava_options['default-file'] or api.beancount_file_path) %}
 
 {% block content %}
@@ -15,7 +15,7 @@
         <button id="source-editor-format" type="submit" data-url="{{ url_for('api_format_source') }}">{{ _('Format') }}</button>
     </div>
     <div id="source-editor-wrapper" class="source-editor-wrapper">
-        <textarea id="source-editor" name="source" autofocus>{{ api.source(file_path) or '' }}</textarea>
+        <textarea id="source-editor" name="source" autofocus>{{ api.file.get_source(file_path) or '' }}</textarea>
     </div>
 </form>
 {% endblock %}

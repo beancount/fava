@@ -219,12 +219,9 @@ def net_worth_at_dates(entries, dates, price_map, options_map):
     } for date, inv in zip(dates, inventories)]
 
 
-def entry_at_lineno(entries, filename, lineno, type_=None):
+def entry_at_lineno(entries, filename, lineno):
     """Returns the entry in filename at lineno."""
     for entry in entries:
-        if type_ and not isinstance(entry, type_):
-            continue
-
         if entry.meta['filename'] == filename and \
            entry.meta['lineno'] == lineno:
             return entry
