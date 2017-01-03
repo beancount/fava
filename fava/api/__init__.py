@@ -20,16 +20,15 @@ from beancount.utils.misc_utils import filter_type
 from fava.util import date
 from fava.api.budgets import BudgetModule
 from fava.api.charts import ChartModule
-from fava.api.watcher import Watcher
+from fava.api.fava_options import parse_options
 from fava.api.file import FileModule
 from fava.api.filters import (AccountFilter, FromFilter, PayeeFilter,
                               TagFilter, TimeFilter)
-from fava.api.helpers import (get_final_holdings, aggregate_holdings_by,
-                              entry_at_lineno, FavaAPIException,
-                              FavaModule)
-from fava.api.fava_options import parse_options
+from fava.api.helpers import FavaAPIException, FavaModule, entry_at_lineno
+from fava.api.holdings import get_final_holdings, aggregate_holdings_by
 from fava.api.misc import FavaMisc
 from fava.api.query_shell import QueryShell
+from fava.api.watcher import Watcher
 
 
 def _list_accounts(root_account, active_only=False):

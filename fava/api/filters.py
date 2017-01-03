@@ -7,19 +7,9 @@ from beancount.core.data import Transaction
 from beancount.ops import summarize
 from beancount.query import (
     query_compile, query_env, query_execute, query_parser)
+
 from fava.util.date import parse_date
-
-
-class FilterException(Exception):
-    """Filter exception."""
-
-    def __init__(self, filter_type, message):
-        super().__init__()
-        self.filter_type = filter_type
-        self.message = message
-
-    def __str__(self):
-        return self.message
+from fava.api.helpers import FilterException
 
 
 class EntryFilter(object):

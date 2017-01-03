@@ -9,7 +9,8 @@ from beancount.core import realization
 from beancount.core.data import iter_entry_dates
 from flask.json import JSONEncoder
 
-from fava.api.helpers import net_worth_at_dates, FavaModule
+from fava.api.helpers import FavaModule
+from fava.api.holdings import net_worth_at_dates
 
 
 class FavaJSONEncoder(JSONEncoder):
