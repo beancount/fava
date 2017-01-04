@@ -1,3 +1,5 @@
+import { format } from 'd3-format';
+
 // Select a single element.
 export function $(expr, con = document) {
   return con.querySelector(expr);
@@ -80,4 +82,12 @@ export function handleJSON(response) {
 export function _(string, vars = {}) {
   const translation = window.favaTranslations[string] || string;
   return translation.replace(/\${([a-z]+)}/gi, (match, v) => vars[v] || v);
+}
+
+// Format a currency
+export function formatCurrency(num, fstr = '.2f') {
+  if (window.favaAPI.incognito) {
+    return format(fstr)(num).replace(/[0-9]/g, 'X');
+  }
+  return format(fstr)(num);
 }
