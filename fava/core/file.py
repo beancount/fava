@@ -2,7 +2,7 @@
 
 import os
 
-from fava.api.helpers import FavaAPIException, FavaModule, entry_at_lineno
+from fava.core.helpers import FavaAPIException, FavaModule, entry_at_lineno
 
 
 class FileModule(FavaModule):

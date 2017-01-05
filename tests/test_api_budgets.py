@@ -3,7 +3,7 @@ from datetime import date
 from beancount.core.number import D
 import pytest
 
-from fava.api.budgets import parse_budgets, calculate_budget
+from fava.core.budgets import parse_budgets, calculate_budget
 
 
 @pytest.fixture

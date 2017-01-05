@@ -1,7 +1,7 @@
 import datetime
 import pytest
 
-from fava.api import FavaAPIException
+from fava.core import FavaAPIException
 
 
 def test_context(example_api):

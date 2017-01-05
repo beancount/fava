@@ -9,7 +9,7 @@ from beancount.query import (
     query_compile, query_env, query_execute, query_parser)
 
 from fava.util.date import parse_date
-from fava.api.helpers import FilterException
+from fava.core.helpers import FilterException
 
 
 class EntryFilter(object):

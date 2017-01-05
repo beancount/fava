@@ -4,7 +4,7 @@ from beancount.core import account
 from beancount.core.data import Transaction
 import pytest
 
-from fava.api.filters import (
+from fava.core.filters import (
     FilterException, AccountFilter, FromFilter, PayeeFilter, TagFilter,
     TimeFilter)
 

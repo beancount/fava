@@ -3,8 +3,8 @@ import os
 from beancount.query import query
 import pytest
 
-from fava.api.helpers import FavaAPIException
-from fava.api.query_shell import QueryShell
+from fava.core.helpers import FavaAPIException
+from fava.core.query_shell import QueryShell
 
 
 def test_execute_query(example_api):

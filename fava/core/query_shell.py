@@ -11,7 +11,7 @@ from beancount.query.query import run_query
 from beancount.utils import pager
 from beancount.utils.misc_utils import filter_type
 
-from fava.api.helpers import FavaAPIException, FavaModule
+from fava.core.helpers import FavaAPIException, FavaModule
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 

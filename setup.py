@@ -26,9 +26,7 @@ setup(
     license='MIT',
     keywords='fava beancount beancount-fava beancount-web'
              'ledger ledger-cli cl-accounting',
-    packages=['fava',
-              'fava.util',
-              'fava.api'],
+    packages=['fava'],
     include_package_data=True,
     entry_points={
         'console_scripts': [

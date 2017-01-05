@@ -1,7 +1,7 @@
 import pytest
 
-from fava.api import FavaAPIException
-from fava.api.helpers import entry_at_lineno
+from fava.core import FavaAPIException
+from fava.core.helpers import entry_at_lineno
 
 
 def test_entry_at_lineno(load_doc):

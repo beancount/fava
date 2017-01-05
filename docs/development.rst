@@ -51,45 +51,45 @@ fava.application
 
 .. automodule:: fava.application
 
-fava.api
+fava.core
 ~~~~~~~~~
 
-.. automodule:: fava.api
+.. automodule:: fava.core
 
-fava.api.budgets
+fava.core.budgets
+~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.budgets
+
+fava.core.charts
 ~~~~~~~~~~~~~~~~
 
-.. automodule:: fava.api.budgets
+.. automodule:: fava.core.charts
 
-fava.api.charts
-~~~~~~~~~~~~~~~
+fava.core.fava_options
+~~~~~~~~~~~~~~~~~~~~~~
 
-.. automodule:: fava.api.charts
+.. automodule:: fava.core.fava_options
 
-fava.api.fava_options
-~~~~~~~~~~~~~~~~~~~~~
+fava.core.file
+~~~~~~~~~~~~~~
 
-.. automodule:: fava.api.fava_options
+.. automodule:: fava.core.file
 
-fava.api.file
-~~~~~~~~~~~~~
+fava.core.filters
+~~~~~~~~~~~~~~~~~
 
-.. automodule:: fava.api.file
+.. automodule:: fava.core.filters
 
-fava.api.filters
-~~~~~~~~~~~~~~~~
+fava.core.helpers
+~~~~~~~~~~~~~~~~~
 
-.. automodule:: fava.api.filters
+.. automodule:: fava.core.helpers
 
-fava.api.helpers
-~~~~~~~~~~~~~~~~
+fava.core.watcher
+~~~~~~~~~~~~~~~~~
 
-.. automodule:: fava.api.helpers
-
-fava.api.watcher
-~~~~~~~~~~~~~~~~
-
-.. automodule:: fava.api.watcher
+.. automodule:: fava.core.watcher
 
 fava.template_filters
 ~~~~~~~~~~~~~~~~~~~~~

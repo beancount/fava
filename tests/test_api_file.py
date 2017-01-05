@@ -4,9 +4,9 @@ from textwrap import dedent
 from beancount.core import data, amount
 from beancount.core.number import D
 
-from fava.api.file import (next_key, leading_space, insert_metadata_in_file,
-                           find_insert_marker, insert_transaction,
-                           _render_transaction)
+from fava.core.file import (next_key, leading_space, insert_metadata_in_file,
+                            find_insert_marker, insert_transaction,
+                            _render_transaction)
 
 
 def test_next_key():

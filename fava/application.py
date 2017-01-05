@@ -30,9 +30,9 @@ from beancount.core.number import D
 from beancount.scripts.format import align_beancount
 
 from fava import template_filters, util
-from fava.api import BeancountReportAPI
-from fava.api.charts import FavaJSONEncoder
-from fava.api.helpers import FavaAPIException, FilterException
+from fava.core import BeancountReportAPI
+from fava.core.charts import FavaJSONEncoder
+from fava.core.helpers import FavaAPIException, FilterException
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import HAVE_EXCEL

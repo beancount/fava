@@ -6,8 +6,8 @@ from beancount.core.number import D
 from beancount.core.position import Cost
 from beancount.ops import prices
 
-from fava.api.holdings import (inventory_at_dates, get_final_holdings,
-                               aggregate_holdings_list, aggregate_holdings_by)
+from fava.core.holdings import (inventory_at_dates, get_final_holdings,
+                                aggregate_holdings_list, aggregate_holdings_by)
 
 
 def test_get_final_holdings(load_doc):

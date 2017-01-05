@@ -1,6 +1,6 @@
 import time
 
-from fava.api.watcher import Watcher
+from fava.core.watcher import Watcher
 
 
 def test_watcher_file(tmpdir):

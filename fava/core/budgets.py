@@ -5,7 +5,7 @@ from beancount.core.number import Decimal
 from beancount.utils.misc_utils import filter_type
 
 from fava.util.date import days_in_daterange, number_of_days_in_period
-from fava.api.helpers import FavaModule
+from fava.core.helpers import FavaModule
 
 Budget = namedtuple('Budget', 'account date_start period number currency')
 BudgetError = namedtuple('BudgetError', 'source message entry')

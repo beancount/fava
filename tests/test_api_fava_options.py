@@ -1,4 +1,4 @@
-from fava.api.fava_options import parse_options
+from fava.core.fava_options import parse_options
 
 
 def test_fava_options(load_doc):

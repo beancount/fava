@@ -3,7 +3,7 @@ import os
 import pytest
 
 from beancount.loader import load_string
-from fava.api import BeancountReportAPI
+from fava.core import BeancountReportAPI
 from fava.application import load_file
 from fava.application import app as fava_app
 
