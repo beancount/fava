@@ -123,12 +123,17 @@ class QueryShell(shell.BQLShell):
         """
         name = 'query_result'
 
-        if query_string[:3] == 'run':
-            name = query_string[4:]
+        try:
+            statement = self.parser.parse(query_string)
+        except query_parser.ParseError as exception:
+            raise FavaAPIException(str(exception))
+
+        if statement.__class__.__name__ == 'RunCustom':
+            name = statement.query_name
 
             try:
                 query = next((query for query in self.api.queries
-                              if query.name == query_string[4:]))
+                              if query.name == name))
             except StopIteration:
                 raise FavaAPIException('Query "{}" not found.'.format(name))
             query_string = query.query_string

@@ -257,14 +257,16 @@ def report(report_name):
     abort(404)
 
 
+@app.errorhandler(FavaAPIException)
+def fava_api_exception(error):
+    return error.message, 400
+
+
 @app.route('/<bfile>/download-query/query_result.<result_format>')
 def download_query(result_format):
     """Download a query result."""
-    try:
-        name, data = g.api.query_shell.query_to_file(
-            request.args.get('query_string', ''), result_format)
-    except FavaAPIException:
-        abort(400)
+    name, data = g.api.query_shell.query_to_file(
+        request.args.get('query_string', ''), result_format)
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)
     return send_file(data, as_attachment=True, attachment_filename=filename)
