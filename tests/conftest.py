@@ -36,4 +36,4 @@ def load_doc(request):
 @pytest.fixture
 def example_api():
     yield API
-    API.filter(**{name: None for name in API.filters.keys()})
+    API.filter(**{name: None for name in API._filters.keys()})

@@ -62,16 +62,7 @@ class AttributesModule(FavaModule):
                                        active_only=True)
 
 
-MODULES = {
-    'attributes': AttributesModule,
-    'budgets': BudgetModule,
-    'charts': ChartModule,
-    'file': FileModule,
-    'misc': FavaMisc,
-    'query_shell': QueryShell,
-}
-
-MODULE_NAMES = list(MODULES.keys())
+MODULES = ['attributes', 'budgets', 'charts', 'file', 'misc', 'query_shell']
 
 
 # pylint: disable=too-many-instance-attributes
@@ -81,22 +72,20 @@ class BeancountReportAPI():
     Arguments:
         path: Path to the main Beancount file.
 
-    Attributes:
-        account_types: The names for the five base accounts.
-
     """
 
     __slots__ = [
         '_default_format_string', '_format_string', 'account_types',
         'all_entries', 'all_root_account', 'beancount_file_path',
-        'date_first', 'date_last', 'entries', 'errors', 'fava_options',
-        'filters', 'is_encrypted', 'options', 'price_map', 'root_account',
-        'watcher'] + MODULE_NAMES
+        '_date_first', '_date_last', 'entries', 'errors', 'fava_options',
+        '_filters', '_is_encrypted', 'options', 'price_map', 'root_account',
+        '_watcher'] + MODULES
 
     def __init__(self, path):
+        #: The path to the main Beancount file.
         self.beancount_file_path = path
-        self.is_encrypted = is_encrypted_file(path)
-        self.filters = {
+        self._is_encrypted = is_encrypted_file(path)
+        self._filters = {
             'account': AccountFilter(),
             'from': FromFilter(),
             'payee': PayeeFilter(),
@@ -104,26 +93,53 @@ class BeancountReportAPI():
             'time': TimeFilter(),
         }
 
-        for name, mod in MODULES.items():
-            setattr(self, name, mod(self))
+        #: An :class:`AttributesModule` instance.
+        self.attributes = AttributesModule(self)
 
-        self.watcher = Watcher()
+        #: A :class:`.BudgetModule` instance.
+        self.budgets = BudgetModule(self)
+
+        #: A :class:`.ChartModule` instance.
+        self.charts = ChartModule(self)
+
+        #: A :class:`.FileModule` instance.
+        self.file = FileModule(self)
+
+        #: A :class:`.FavaMisc` instance.
+        self.misc = FavaMisc(self)
+
+        #: A :class:`.QueryShell` instance.
+        self.query_shell = QueryShell(self)
+
+        self._watcher = Watcher()
+
+        #: List of all (unfiltered) entries.
+        self.all_entries = None
+
+        #: A list of all errors reported by Beancount.
+        self.errors = None
+
+        #: A Beancount options map.
+        self.options = None
+
+        #: A Namedtuple containing the names of the five base accounts.
+        self.account_types = None
+
+        #: A dict with all of Fava's option values.
+        self.fava_options = None
+
         self.load_file()
 
     def load_file(self):
-        """Load file.
-
-        Load the main file and all included files and set attributes.
-
-        """
+        """Load the main file and all included files and set attributes."""
         # use the internal function to disable cache
-        if not self.is_encrypted:
+        if not self._is_encrypted:
             # pylint: disable=protected-access
             self.all_entries, self.errors, self.options = \
                 loader._load([(self.beancount_file_path, True)],
                              None, None, None)
             include_path = os.path.dirname(self.beancount_file_path)
-            self.watcher.update(self.options['include'], [
+            self._watcher.update(self.options['include'], [
                 os.path.join(include_path, path)
                 for path in self.options['documents']])
         else:
@@ -144,7 +160,7 @@ class BeancountReportAPI():
             filter_type(self.all_entries, Custom))
         self.errors.extend(errors)
 
-        for mod in MODULE_NAMES:
+        for mod in MODULES:
             getattr(self, mod).load_file()
 
         self.filter(True)
@@ -154,7 +170,7 @@ class BeancountReportAPI():
         """Set and apply (if necessary) filters."""
         changed = False
         for filter_name, value in kwargs.items():
-            if self.filters[filter_name].set(value):
+            if self._filters[filter_name].set(value):
                 changed = True
 
         if not (changed or force):
@@ -162,27 +178,33 @@ class BeancountReportAPI():
 
         self.entries = self.all_entries
 
-        for filter_class in self.filters.values():
+        for filter_class in self._filters.values():
             self.entries = filter_class.apply(self.entries, self.options)
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
 
-        self.date_first, self.date_last = \
+        self._date_first, self._date_last = \
             getters.get_min_max_dates(self.entries, (Transaction))
-        if self.date_last:
-            self.date_last = self.date_last + datetime.timedelta(1)
+        if self._date_last:
+            self._date_last = self._date_last + datetime.timedelta(1)
 
-        if self.filters['time']:
-            self.date_first = self.filters['time'].begin_date
-            self.date_last = self.filters['time'].end_date
+        if self._filters['time']:
+            self._date_first = self._filters['time'].begin_date
+            self._date_last = self._filters['time'].end_date
 
     def changed(self):
-        """Check if the file needs to be reloaded. """
+        """Check if the file needs to be reloaded.
+
+        Returns:
+            True if a change in one of the included files or a change in a
+            document folder was detected and the file has been reloaded.
+
+        """
         # We can't reload an encrypted file, so act like it never changes.
-        if self.is_encrypted:
+        if self._is_encrypted:
             return False
-        changed = self.watcher.check()
+        changed = self._watcher.check()
         if changed:
             self.load_file()
         return changed
@@ -199,7 +221,8 @@ class BeancountReportAPI():
     def _interval_tuples(self, interval):
         """Calculates tuples of (begin_date, end_date) of length interval for the
         period in which entries contains transactions.  """
-        return date.interval_tuples(self.date_first, self.date_last, interval)
+        return date.interval_tuples(self._date_first, self._date_last,
+                                    interval)
 
     def get_account_sign(self, account_name):
         """Get account sign."""
@@ -233,14 +256,24 @@ class BeancountReportAPI():
         interval_balances = [
             realization.realize(list(iter_entry_dates(
                 self.entries,
-                self.date_first if accumulate else begin_date,
+                self._date_first if accumulate else begin_date,
                 end_date)), min_accounts)
             for begin_date, end_date in interval_tuples]
 
         return interval_balances, interval_tuples
 
     def account_journal(self, account_name, with_journal_children=False):
-        """Journal for an account."""
+        """Journal for an account.
+
+        Args:
+            account_name: An account name.
+            with_journal_children: Whether to include postings of subaccounts
+                of the given account.
+
+        Returns:
+            A list of tuples ``(entry, postings, change, balance)``.
+
+        """
         real_account = realization.get_or_create(self.root_account,
                                                  account_name)
 
@@ -266,7 +299,7 @@ class BeancountReportAPI():
             self.entries,
             (self.account_types.assets, self.account_types.liabilities),
             self.price_map,
-            self.date_last
+            self._date_last
         )
 
         if aggregation_key:
@@ -315,10 +348,10 @@ class BeancountReportAPI():
         all_prices = prices.get_all_prices(self.price_map,
                                            "{}/{}".format(base, quote))
 
-        if self.filters['time']:
+        if self._filters['time']:
             return [(date, price) for date, price in all_prices
-                    if (date >= self.filters['time'].begin_date and
-                        date < self.filters['time'].end_date)]
+                    if (date >= self._filters['time'].begin_date and
+                        date < self._filters['time'].end_date)]
         else:
             return all_prices
 
