@@ -21,8 +21,8 @@ class FilterException(FavaAPIException):
 
 
 class FavaModule(object):
-    def __init__(self, api):
-        self.api = api
+    def __init__(self, ledger):
+        self.ledger = ledger
 
     def load_file(self):
         pass

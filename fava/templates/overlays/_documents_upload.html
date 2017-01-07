@@ -7,7 +7,7 @@
             <div class="fieldset">
                 <label for="document-upload-folder">Documents folder:</label>
                 <select name="document-upload-folder" id="document-upload-folder">
-                {% for folder in api.options['documents'] %}
+                {% for folder in ledger.options['documents'] %}
                     <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ folder }}</option>
                 {% endfor %}
                 </select>

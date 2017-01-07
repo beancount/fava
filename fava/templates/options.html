@@ -11,7 +11,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for key, value in api.fava_options|dictsort %}
+            {% for key, value in ledger.fava_options|dictsort %}
             <tr>
                 <td>{{ key }}</td>
                 <td><pre>{{ value }}</pre></td>
@@ -28,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for key, value in api.options|dictsort %}
+            {% for key, value in ledger.options|dictsort %}
             <tr>
                <td>{{ key }}</td>
                <td><pre>{{ value }}</pre></td>

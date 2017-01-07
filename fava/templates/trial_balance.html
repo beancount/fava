@@ -6,10 +6,10 @@
     {{ charts.skeleton(hide_interval_filter=True) }}
 
     {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
-        {{ charts.hierarchy(api.options['name_{}'.format(base_account)]) }}
+        {{ charts.hierarchy(ledger.options['name_{}'.format(base_account)]) }}
     {% endfor %}
 
     <div class="halfleft">
-    {{ tree_table.tree(api.root_account, totals=False) }}
+    {{ tree_table.tree(ledger.root_account, totals=False) }}
     </div>
 {% endblock %}

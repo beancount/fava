@@ -5,7 +5,7 @@
 } %}
 
 {% macro indicator(account) %}
-{% set status=api.account_uptodate_status(account) %}
+{% set status=ledger.account_uptodate_status(account) %}
 {% if status %}
 <span class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
 
@@ -16,15 +16,15 @@ Click to copy the balance directives to the clipboard:
 {% endmacro %}
 
 {% macro last_account_activity(account_name) %}
-{% set last_entry = api.last_entry(account_name) %}
+{% set last_entry = ledger.last_entry(account_name) %}
 {% set last_account_activity = (datetime.date.today() - last_entry.date).days if last_entry else 0 %}
-{% if last_account_activity > api.fava_options['uptodate-indicator-grey-lookback-days'] %}
+{% if last_account_activity > ledger.fava_options['uptodate-indicator-grey-lookback-days'] %}
     <span class="status-indicator status-gray" title="This account has not been updated in a while. ({{ last_account_activity }} days ago)"></span>
 {% endif %}
 {% endmacro %}
 
 {% macro balance_directive(account) %}
-{% for position in (api.all_root_account|get_or_create(account)).balance %}
+{% for position in (ledger.all_root_account|get_or_create(account)).balance %}
 {{ datetime.date.today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
 {% endfor %}
 {% endmacro %}
@@ -59,7 +59,7 @@ Click to copy the balance directives to the clipboard:
     {{ last_account_activity(account_name) }}
 {% endif %}
 
-    {% set last_entry = api.last_entry(account_name) %}
+    {% set last_entry = ledger.last_entry(account_name) %}
     {% if last_entry %}
     <span class="last-activity">
         (Last entry: <a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a>)

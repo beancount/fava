@@ -6,8 +6,8 @@
 {% do chart_data.append({
     'type': 'hierarchy',
     'label': account_name if not label else label,
-    'modifier': api.get_account_sign(account_name),
-    'root': api.charts.hierarchy(account_name, begin_date, end_date),
+    'modifier': ledger.get_account_sign(account_name),
+    'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
 }) %}
 {% endmacro %}
 
@@ -15,7 +15,7 @@
 {% do chart_data.append({
     'type': 'bar',
     'label': account_name if not label else label,
-    'interval_totals': api.charts.interval_totals(interval, account_name),
+    'interval_totals': ledger.charts.interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
 
@@ -23,7 +23,7 @@
 {% do chart_data.append({
     'type': 'scatterplot',
     'label': _('Events') if not event_type else _('Event: {}').format(event_type),
-    'events': api.charts.events(event_type),
+    'events': ledger.charts.events(event_type),
 }) %}
 {% endmacro %}
 
@@ -31,7 +31,7 @@
 {% do chart_data.append({
     'type': 'balances',
     'label': _('Net Worth'),
-    'data': api.charts.net_worth_at_dates(interval),
+    'data': ledger.charts.net_worth_at_dates(interval),
 }) %}
 {% endmacro %}
 
@@ -39,16 +39,16 @@
 {% do chart_data.append({
     'type': 'balances',
     'label': _('Account Balance'),
-    'data': api.charts.linechart(account_name),
+    'data': ledger.charts.linechart(account_name),
 }) %}
 {% endmacro %}
 
 {% macro commodities() %}
-{% for pair in api.commodity_pairs() %}
+{% for pair in ledger.commodity_pairs() %}
 {% do chart_data.append({
     'type': 'commodities',
     'label': '{0[0]} / {0[1]}'.format(pair),
-    'prices': api.prices(pair[0], pair[1]),
+    'prices': ledger.prices(pair[0], pair[1]),
     'base': pair[0],
     'quote': pair[1],
 }) %}
@@ -56,7 +56,7 @@
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}
-{% set show_charts = api.fava_options['charts'] %}
+{% set show_charts = ledger.fava_options['charts'] %}
 <button type="button" id="toggle-chart" class="toggle-chart{% if not show_charts %} hide-charts{% endif %}">
     <span></span>
 </button>
@@ -73,7 +73,7 @@
             <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
         </span>
         {% if not hide_interval_filter %}
-            <select name="chart-interval" id="chart-interval" data-default="{{ api.fava_options['interval'] }}">
+            <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
                 {% for interval_ in ['day', 'week', 'month', 'quarter', 'year'] %}
                     <option value="{{ interval_ }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_macros.interval_labels[interval_] }}</option>
                 {% endfor %}

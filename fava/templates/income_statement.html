@@ -5,19 +5,19 @@
 {% block content %}
     {{ charts.skeleton() }}
 
-    {{ charts.interval_totals(interval, [api.options['name_income'], api.options['name_expenses']], label=_('Net Profit')) }}
-    {{ charts.interval_totals(interval, api.options['name_income'], label=_('Income')) }}
-    {{ charts.interval_totals(interval, api.options['name_expenses'], label=_('Expenses')) }}
+    {{ charts.interval_totals(interval, [ledger.options['name_income'], ledger.options['name_expenses']], label=_('Net Profit')) }}
+    {{ charts.interval_totals(interval, ledger.options['name_income'], label=_('Income')) }}
+    {{ charts.interval_totals(interval, ledger.options['name_expenses'], label=_('Expenses')) }}
 
-    {{ charts.hierarchy(api.options['name_expenses']) }}
-    {{ charts.hierarchy(api.options['name_income']) }}
+    {{ charts.hierarchy(ledger.options['name_expenses']) }}
+    {{ charts.hierarchy(ledger.options['name_income']) }}
 
     <div class="halfleft">
-        <h3>{{ api.options['name_income'] }}</h3>
-        {{ tree_table.tree(api.root_account|get_or_create(api.options['name_income'])) }}
+        <h3>{{ ledger.options['name_income'] }}</h3>
+        {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_income'])) }}
     </div>
     <div class="halfright">
-        <h3>{{ api.options['name_expenses'] }}</h3>
-        {{ tree_table.tree(api.root_account|get_or_create(api.options['name_expenses'])) }}
+        <h3>{{ ledger.options['name_expenses'] }}</h3>
+        {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_expenses'])) }}
     </div>
 {% endblock %}

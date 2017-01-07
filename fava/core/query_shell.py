@@ -18,8 +18,8 @@ from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 class QueryShell(shell.BQLShell, FavaModule):
     """A light wrapper around Beancount's shell."""
 
-    def __init__(self, api):
-        self.api = api
+    def __init__(self, ledger):
+        self.ledger = ledger
         self.buffer = io.StringIO()
         self.result = None
         super().__init__(True, None, self.buffer)
@@ -30,7 +30,7 @@ class QueryShell(shell.BQLShell, FavaModule):
         self.queries = []
 
     def load_file(self):
-        self.queries = list(filter_type(self.api.all_entries, Query))
+        self.queries = list(filter_type(self.ledger.all_entries, Query))
 
     def add_help(self):
         "Attach help functions for each of the parsed token handlers."
@@ -52,9 +52,9 @@ class QueryShell(shell.BQLShell, FavaModule):
                                num_entries)]
 
     def _loadfun(self):
-        self.entries = self.api.all_entries
-        self.errors = self.api.errors
-        self.options_map = self.api.options
+        self.entries = self.ledger.all_entries
+        self.errors = self.ledger.errors
+        self.options_map = self.ledger.options
 
     def get_pager(self):
         """No real pager, just a wrapper that doesn't close self.buffer."""
@@ -146,7 +146,8 @@ class QueryShell(shell.BQLShell, FavaModule):
             query_string = query.query_string
 
         try:
-            types, rows = run_query(self.api.all_entries, self.api.options,
+            types, rows = run_query(self.ledger.all_entries,
+                                    self.ledger.options,
                                     query_string, numberify=True)
         except (query_compile.CompilationError,
                 query_parser.ParseError) as exception:

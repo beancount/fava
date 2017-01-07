@@ -1,9 +1,9 @@
 {% import "_globals.html" as globals with context %}
-{% set user_queries = api.query_shell.queries[:api.fava_options['sidebar-show-queries']] %}
-{% if api.misc.sidebar_links %}
+{% set user_queries = ledger.query_shell.queries[:ledger.fava_options['sidebar-show-queries']] %}
+{% if ledger.misc.sidebar_links %}
     <h3>{{ _('Custom Links') }}</h3>
     <ul class="navigation">
-        {% for label, link in api.misc.sidebar_links %}
+        {% for label, link in ledger.misc.sidebar_links %}
             <li><a href="{{ link }}" data-remote=true>{{ label }}</a></li>
         {% endfor %}
     </ul>
@@ -14,8 +14,8 @@
     <ul class="navigation">
     {% for id in menuitems %}
         <li><a{% if id == active_page %} class="selected"{% endif %} data-key="{{ globals.all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">{{ globals.all_pages[id].0 }}
-            {% if id == "events" and api.misc.upcoming_events %}
-                <span class="bubble">{{ api.misc.upcoming_events|length }}</span>
+            {% if id == "events" and ledger.misc.upcoming_events %}
+                <span class="bubble">{{ ledger.misc.upcoming_events|length }}</span>
             {% endif %}
         </a>
         {% if id == "query" and user_queries %}
@@ -29,10 +29,10 @@
             <button id="add-transaction-button" class="add-transaction-button">+</button>
         {% endif %}
         </li>
-        {% if id == "editor" and api.errors %}
+        {% if id == "editor" and ledger.errors %}
             <li class="error">
                 <a href="{{ url_for('report', report_name='errors') }}">
-                {{ _('Errors') }} <span class="bubble">{{ api.errors|length }}</span>
+                {{ _('Errors') }} <span class="bubble">{{ ledger.errors|length }}</span>
                 </a>
             </li>
         {% endif %}

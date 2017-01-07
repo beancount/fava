@@ -26,8 +26,8 @@ def format_currency(value, currency=None, show_if_zero=False):
     if not value and not show_if_zero:
         return ''
     if value == 0.0:
-        return g.api.quantize(Decimal(0.0), currency)
-    return g.api.quantize(value, currency)
+        return g.ledger.quantize(Decimal(0.0), currency)
+    return g.ledger.quantize(value, currency)
 
 
 def format_amount(amount):
@@ -71,14 +71,15 @@ def should_show(account):
     # check if it's a leaf account
     if len(account) == 0 or bool(account.txn_postings):
         show_this_account = True
-        if not g.api.fava_options['show-closed-accounts'] and \
+        if not g.ledger.fava_options['show-closed-accounts'] and \
                 isinstance(realization.find_last_active_posting(
                         account.txn_postings), Close):
             show_this_account = False
-        if not g.api.fava_options['show-accounts-with-zero-balance'] and \
+        if not g.ledger.fava_options['show-accounts-with-zero-balance'] and \
                 account.balance.is_empty():
             show_this_account = False
-        if not g.api.fava_options['show-accounts-with-zero-transactions'] and \
+        if not g.ledger.fava_options['show-accounts-with-zero-transactions'] \
+                and \
                 not any(isinstance(t, TxnPosting)
                         for t in account.txn_postings):
             show_this_account = False
@@ -94,8 +95,8 @@ def basename(file_path):
 def should_collapse_account(account_name):
     """Determine whether the children of an account should be hidden."""
     key = 'fava-collapse-account'
-    if key in g.api.account_metadata(account_name):
-        return g.api.account_metadata(account_name)[key] == 'True'
+    if key in g.ledger.account_metadata(account_name):
+        return g.ledger.account_metadata(account_name)[key] == 'True'
     else:
         return False
 
@@ -103,7 +104,7 @@ def should_collapse_account(account_name):
 def uptodate_eligible(account_name):
     """Determine whether uptodate-indicators should be shown for an account."""
     key = 'fava-uptodate-indication'
-    if key in g.api.account_metadata(account_name):
-        return g.api.account_metadata(account_name)[key] == 'True'
+    if key in g.ledger.account_metadata(account_name):
+        return g.ledger.account_metadata(account_name)[key] == 'True'
     else:
         return False

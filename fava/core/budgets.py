@@ -12,14 +12,14 @@ BudgetError = namedtuple('BudgetError', 'source message entry')
 
 
 class BudgetModule(FavaModule):
-    def __init__(self, api):
-        super().__init__(api)
+    def __init__(self, ledger):
+        super().__init__(ledger)
         self.budget_entries = None
 
     def load_file(self):
         self.budget_entries, errors = parse_budgets(
-            filter_type(self.api.all_entries, Custom))
-        self.api.errors.extend(errors)
+            filter_type(self.ledger.all_entries, Custom))
+        self.ledger.errors.extend(errors)
 
     def calculate(self, account_name, begin_date, end_date):
         """Calculate the budget for an account in an interval."""

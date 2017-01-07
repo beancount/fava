@@ -61,11 +61,11 @@ def _serialize_real_account(real_account):
 
 
 class ChartModule(FavaModule):
-    __slots__ = ['api']
+    __slots__ = ['ledger']
 
     def _total_balance(self, names, begin_date, end_date):
         totals = [realization.compute_balance(
-            _real_account(account_name, self.api.entries, begin_date,
+            _real_account(account_name, self.ledger.entries, begin_date,
                           end_date))
                   for account_name in names]
         return _serialize_inventory(sum(totals, Inventory()),
@@ -76,11 +76,11 @@ class ChartModule(FavaModule):
             'type': entry.type,
             'date': entry.date,
             'description': entry.description
-        } for entry in self.api.events(event_type)]
+        } for entry in self.ledger.events(event_type)]
 
     def hierarchy(self, account_name, begin_date=None, end_date=None):
         real_account = _real_account(
-            account_name, self.api.entries, begin_date, end_date)
+            account_name, self.ledger.entries, begin_date, end_date)
         return _serialize_real_account(real_account)
 
     def interval_totals(self, interval, account_name):
@@ -90,18 +90,18 @@ class ChartModule(FavaModule):
         else:
             names = account_name
 
-        interval_tuples = self.api._interval_tuples(interval)
+        interval_tuples = self.ledger._interval_tuples(interval)
         return [{
             'begin_date': begin_date,
             'totals': self._total_balance(
                 names,
                 begin_date, end_date),
-            'budgets': self.api.budgets.calculate(names[0], begin_date,
-                                                  end_date),
+            'budgets': self.ledger.budgets.calculate(names[0], begin_date,
+                                                     end_date),
         } for begin_date, end_date in interval_tuples]
 
     def linechart(self, account_name):
-        real_account = realization.get_or_create(self.api.root_account,
+        real_account = realization.get_or_create(self.ledger.root_account,
                                                  account_name)
         postings = realization.get_postings(real_account)
         journal = realization.iterate_with_balance(postings)
@@ -116,11 +116,12 @@ class ChartModule(FavaModule):
         } for entry, _, change, balance in journal if len(change)]
 
     def net_worth_at_dates(self, interval):
-        interval_tuples = self.api._interval_tuples(interval)
+        interval_tuples = self.ledger._interval_tuples(interval)
         if not interval_tuples:
             return []
 
         dates = [interval_tuples[0][0]] + [p[1] for p in interval_tuples]
 
-        return net_worth_at_dates(self.api.entries, dates, self.api.price_map,
-                                  self.api.options)
+        return net_worth_at_dates(self.ledger.entries, dates,
+                                  self.ledger.price_map,
+                                  self.ledger.options)

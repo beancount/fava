@@ -33,12 +33,12 @@
     {% endfor %}
     <button type="submit">{{ _('Filter') }}</button>
 </form>
-{{ datalist('years', api.attributes.years|reverse) }}
-{{ datalist('payees', api.attributes.payees) }}
-{{ datalist('accounts', api.attributes.accounts) }}
-{{ datalist('currencies', api.options['commodities']) }}
+{{ datalist('years', ledger.attributes.years|reverse) }}
+{{ datalist('payees', ledger.attributes.payees) }}
+{{ datalist('accounts', ledger.attributes.accounts) }}
+{{ datalist('currencies', ledger.options['commodities']) }}
 <datalist id="tags">
-{% for tag in api.attributes.tags %}
+{% for tag in ledger.attributes.tags %}
     <option>#{{ tag }}</option>
 {% endfor %}
 </datalist>

@@ -33,20 +33,20 @@ def _json_api_exception(error):
 @json_api.route('/changed/')
 def changed():
     """Check for file changes."""
-    return jsonify({'success': True, 'changed': g.api.changed()})
+    return jsonify({'success': True, 'changed': g.ledger.changed()})
 
 
 @json_api.route('/source/', methods=['GET', 'PUT'])
 def source():
     """Read/write one of the source files."""
     if request.method == 'GET':
-        data = g.api.file.get_source(request.args.get('file_path'))
+        data = g.ledger.file.get_source(request.args.get('file_path'))
         return _api_success(payload=data)
     elif request.method == 'PUT':
         if request.get_json() is None:
             abort(400)
-        g.api.file.set_source(request.get_json()['file_path'],
-                              request.get_json()['source'])
+        g.ledger.file.set_source(request.get_json()['file_path'],
+                                 request.get_json()['source'])
         return _api_success()
 
 
@@ -62,12 +62,12 @@ def format_source():
 def add_document():
     """Upload a document."""
     file = request.files['file']
-    if file and len(g.api.options['documents']) > 0:
+    if file and len(g.ledger.options['documents']) > 0:
         target_folder_index = int(request.form['targetFolderIndex'])
 
         filepath = os.path.normpath(os.path.join(
-            os.path.dirname(g.api.beancount_file_path),
-            g.api.options['documents'][target_folder_index],
+            os.path.dirname(g.ledger.beancount_file_path),
+            g.ledger.options['documents'][target_folder_index],
             request.form['account'].replace(':', '/'),
             secure_filename(request.form['filename']).replace('_', ' ')))
 
@@ -81,10 +81,10 @@ def add_document():
         file.save(filepath)
 
         if request.form.get('bfilename', None):
-            g.api.file.insert_metadata(request.form['bfilename'],
-                                       int(request.form['blineno']),
-                                       'statement',
-                                       os.path.basename(filepath))
+            g.ledger.file.insert_metadata(request.form['bfilename'],
+                                          int(request.form['blineno']),
+                                          'statement',
+                                          os.path.basename(filepath))
         return _api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
 
@@ -96,7 +96,7 @@ def add_transaction():
 
     postings = []
     for posting in json['postings']:
-        if posting['account'] not in g.api.attributes.accounts:
+        if posting['account'] not in g.ledger.attributes.accounts:
             return _api_error('Unknown account: {}.'
                               .format(posting['account']))
         number = D(posting['number']) if posting['number'] else None
@@ -112,5 +112,5 @@ def add_transaction():
         None, date, json['flag'], json['payee'],
         json['narration'], None, None, postings)
 
-    g.api.file.insert_transaction(transaction)
+    g.ledger.file.insert_transaction(transaction)
     return _api_success(message='Stored transaction.')

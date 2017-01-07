@@ -15,13 +15,13 @@ class FileModule(FavaModule):
             A list of all sources files, with the main file listed first.
 
         """
-        main_file = self.api.beancount_file_path
+        main_file = self.ledger.beancount_file_path
         return [main_file] + \
             sorted(filter(
                 lambda x: x != main_file,
                 [os.path.join(
                     os.path.dirname(main_file), filename)
-                 for filename in self.api.options['include']]))
+                 for filename in self.ledger.options['include']]))
 
     def get_source(self, path):
         """Get source files.
@@ -68,7 +68,7 @@ class FileModule(FavaModule):
 
         Also, prevent duplicate keys.
         """
-        entry = entry_at_lineno(self.api.all_entries, filename, lineno)
+        entry = entry_at_lineno(self.ledger.all_entries, filename, lineno)
         key = next_key(basekey, entry.meta)
         insert_metadata_in_file(filename, lineno-1, key, value)
 

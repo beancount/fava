@@ -18,8 +18,8 @@ def test_api_changed(app, test_client):
 def test_api_add_document(app, test_client, tmpdir):
     with app.test_request_context():
         app.preprocess_request()
-        old_documents = flask.g.api.options['documents']
-        flask.g.api.options['documents'] = [str(tmpdir)]
+        old_documents = flask.g.ledger.options['documents']
+        flask.g.ledger.options['documents'] = [str(tmpdir)]
         data = {
             'targetFolderIndex': '0',
             'account': 'Test',
@@ -47,7 +47,7 @@ def test_api_add_document(app, test_client, tmpdir):
             'success': False,
             'error': '{} already exists.'.format(filename),
         }
-        flask.g.api.options['documents'] = old_documents
+        flask.g.ledger.options['documents'] = old_documents
 
 
 def test_api_source_get(app, test_client):

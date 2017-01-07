@@ -45,20 +45,20 @@ def _list_accounts(root_account, active_only=False):
 class AttributesModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
-    def __init__(self, api):
-        super().__init__(api)
+    def __init__(self, ledger):
+        super().__init__(ledger)
         self.accounts = None
         self.payees = None
         self.tags = None
         self.years = None
 
     def load_file(self):
-        all_entries = self.api.all_entries
+        all_entries = self.ledger.all_entries
         self.payees = getters.get_all_payees(all_entries)
         self.tags = getters.get_all_tags(all_entries)
         self.years = list(getters.get_active_years(all_entries))
 
-        self.accounts = _list_accounts(self.api.all_root_account,
+        self.accounts = _list_accounts(self.ledger.all_root_account,
                                        active_only=True)
 
 
@@ -66,7 +66,7 @@ MODULES = ['attributes', 'budgets', 'charts', 'file', 'misc', 'query_shell']
 
 
 # pylint: disable=too-many-instance-attributes
-class BeancountReportAPI():
+class FavaLedger():
     """Create an interface for a Beancount ledger.
 
     Arguments:

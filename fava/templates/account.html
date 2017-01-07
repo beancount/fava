@@ -26,13 +26,13 @@
     </div>
 
     {% if journal %}
-        {% set journal = api.account_journal(account_name, with_journal_children=api.fava_options['account-journal-include-children']) %}
+        {% set journal = ledger.account_journal(account_name, with_journal_children=ledger.fava_options['account-journal-include-children']) %}
         {% with show_change_and_balance=True %}
             {% include "_journal_table.html" %}
         {% endwith %}
     {% else %}
         {% set accumulate = subreport == 'balances' %}
-        {% set interval_balances, dates = api.interval_balances(interval, account_name, accumulate) %}
+        {% set interval_balances, dates = ledger.interval_balances(interval, account_name, accumulate) %}
         {% if interval_balances %}
             {% for begin_date, end_date in dates[:3] %}
                 {{ charts.hierarchy(account_name, begin_date, end_date, label=interval_macros.format_date(begin_date)) }}

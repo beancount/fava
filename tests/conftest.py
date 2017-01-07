@@ -3,13 +3,13 @@ import os
 import pytest
 
 from beancount.loader import load_string
-from fava.core import BeancountReportAPI
+from fava.core import FavaLedger
 from fava.application import load_file
 from fava.application import app as fava_app
 
 
 EXAMPLE_FILE = os.path.join(os.path.dirname(__file__), 'example.beancount')
-API = BeancountReportAPI(EXAMPLE_FILE)
+API = FavaLedger(EXAMPLE_FILE)
 
 
 fava_app.testing = True
@@ -34,6 +34,6 @@ def load_doc(request):
 
 
 @pytest.fixture
-def example_api():
+def example_ledger():
     yield API
     API.filter(**{name: None for name in API._filters.keys()})

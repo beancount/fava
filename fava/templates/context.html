@@ -3,7 +3,7 @@
 {% set page_title = "Context: " + ehash %}
 
 {% block content %}
-{% set entry, context = api.context(ehash) %}
+{% set entry, context = ledger.context(ehash) %}
     {% if context %}
     <dl>
         <dt>{{ _('Hash:') }}</dt>

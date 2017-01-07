@@ -14,7 +14,7 @@
         {% endfor %}
     </div>
 
-    {% set holdings = api.holdings(aggregation_key) %}
+    {% set holdings = ledger.holdings(aggregation_key) %}
     <table class="sortable">
         <thead>
             <tr>

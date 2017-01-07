@@ -59,7 +59,7 @@ function setSelectedLink() {
 }
 
 e.on('page-loaded', () => {
-  window.favaAPI = JSON.parse($('#api-data').innerHTML);
+  window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
   updateFilters();
   updateKeyboardShortcuts();
 

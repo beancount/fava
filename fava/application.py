@@ -26,7 +26,7 @@ import werkzeug.urls
 from werkzeug.utils import secure_filename
 
 from fava import template_filters
-from fava.core import BeancountReportAPI
+from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException, FilterException
 from fava.docs import HELP_PAGES
@@ -49,7 +49,7 @@ app.secret_key = '1234'
 app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
-app.config['APIS'] = {}
+app.config['LEDGERS'] = {}
 
 REPORTS = [
     '_aside',
@@ -71,12 +71,12 @@ REPORTS = [
 def load_file():
     """Load Beancount files. """
     for filepath in app.config['BEANCOUNT_FILES']:
-        api = BeancountReportAPI(filepath)
-        slug = slugify(api.options['title'])
+        ledger = FavaLedger(filepath)
+        slug = slugify(ledger.options['title'])
         if not slug:
             slug = slugify(filepath)
-        app.config['APIS'][slug] = api
-    app.config['FILE_SLUGS'] = list(app.config['APIS'].keys())
+        app.config['LEDGERS'][slug] = ledger
+    app.config['FILE_SLUGS'] = list(app.config['LEDGERS'].keys())
 
 
 BABEL = Babel(app)
@@ -91,8 +91,8 @@ def get_locale():
         Fava, guess from browser.
 
     """
-    if g.api.fava_options['language']:
-        return g.api.fava_options['language']
+    if g.ledger.fava_options['language']:
+        return g.ledger.fava_options['language']
     return request.accept_languages.best_match(['de', 'en'])
 
 
@@ -115,7 +115,7 @@ def url_for_source(**kwargs):
     """URL to source file (possibly link to external editor)."""
     args = request.view_args.copy()
     args.update(kwargs)
-    if g.api.fava_options['use-external-editor']:
+    if g.ledger.fava_options['use-external-editor']:
         if 'line' in args:
             return "beancount://%(file_path)s?lineno=%(line)d" % args
         else:
@@ -129,17 +129,17 @@ def url_for_source(**kwargs):
 def _template_context():
     """Inject variables into the global request context."""
     return {
-        'api': g.api,
-        'operating_currencies': g.api.options['operating_currency'],
+        'ledger': g.ledger,
+        'operating_currencies': g.ledger.options['operating_currency'],
         'datetime': datetime,
         'interval': request.args.get('interval',
-                                     g.api.fava_options['interval']),
+                                     g.ledger.fava_options['interval']),
     }
 
 
 @app.before_request
 def _perform_global_filters():
-    if not g.api.options['operating_currency']:
+    if not g.ledger.options['operating_currency']:
         flash('No operating currency specified. '
               'Please add one to your beancount file.')
 
@@ -150,10 +150,10 @@ def _perform_global_filters():
 
     # check (and possibly reload) source file
     if request.blueprint != 'json_api':
-        g.api.changed()
+        g.ledger.changed()
 
     try:
-        g.api.filter(**g.filters)
+        g.ledger.filter(**g.filters)
     except FilterException as exception:
         g.filters[exception.filter_type] = None
         flash(str(exception))
@@ -182,7 +182,7 @@ def _pull_beancount_file(_, values):
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
-    g.api = app.config['APIS'][g.beancount_file_slug]
+    g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
 
 
 @app.errorhandler(FavaAPIException)
@@ -215,7 +215,7 @@ def account(name, subreport='journal'):
 def document():
     """Download a document."""
     file_path = request.args.get('file_path', None)
-    document_path = g.api.document_path(file_path)
+    document_path = g.ledger.document_path(file_path)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
     return send_from_directory(directory, filename)
@@ -227,7 +227,7 @@ def statement():
     filename = request.args.get('filename', None)
     lineno = int(request.args.get('lineno', -1))
     key = request.args.get('key', None)
-    document_path = g.api.statement_path(filename, lineno, key)
+    document_path = g.ledger.statement_path(filename, lineno, key)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
     return send_from_directory(directory, filename)
@@ -256,7 +256,7 @@ def report(report_name):
 @app.route('/<bfile>/download-query/query_result.<result_format>')
 def download_query(result_format):
     """Download a query result."""
-    name, data = g.api.query_shell.query_to_file(
+    name, data = g.ledger.query_shell.query_to_file(
         request.args.get('query_string', ''), result_format)
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)

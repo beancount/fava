@@ -3,26 +3,26 @@
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
 {% set document_types = ['discovered', 'statement'] %}
 {% set default_show_type = {
-    'open':        'open' in api.fava_options['journal-show'],
-    'close':       'close' in api.fava_options['journal-show'],
-    'balance':     'balance' in api.fava_options['journal-show'],
-    'note':        'note' in api.fava_options['journal-show'],
-    'pad':         'pad' in api.fava_options['journal-show'],
-    'query':       'query' in api.fava_options['journal-show'],
-    'custom':      'custom' in api.fava_options['journal-show'],
-    'budget':      'budget' in api.fava_options['journal-show'],
+    'open':        'open' in ledger.fava_options['journal-show'],
+    'close':       'close' in ledger.fava_options['journal-show'],
+    'balance':     'balance' in ledger.fava_options['journal-show'],
+    'note':        'note' in ledger.fava_options['journal-show'],
+    'pad':         'pad' in ledger.fava_options['journal-show'],
+    'query':       'query' in ledger.fava_options['journal-show'],
+    'custom':      'custom' in ledger.fava_options['journal-show'],
+    'budget':      'budget' in ledger.fava_options['journal-show'],
 
-    'transaction': 'transaction' in api.fava_options['journal-show'],
-    'cleared':     'cleared' in api.fava_options['journal-show-transaction'],
-    'pending':     'pending' in api.fava_options['journal-show-transaction'],
-    'other':       'other' in api.fava_options['journal-show-transaction'],
+    'transaction': 'transaction' in ledger.fava_options['journal-show'],
+    'cleared':     'cleared' in ledger.fava_options['journal-show-transaction'],
+    'pending':     'pending' in ledger.fava_options['journal-show-transaction'],
+    'other':       'other' in ledger.fava_options['journal-show-transaction'],
 
-    'document':    'document' in api.fava_options['journal-show'],
-    'discovered':  'discovered' in api.fava_options['journal-show-document'],
-    'statement':   'statement' in api.fava_options['journal-show-document'],
+    'document':    'document' in ledger.fava_options['journal-show'],
+    'discovered':  'discovered' in ledger.fava_options['journal-show-document'],
+    'statement':   'statement' in ledger.fava_options['journal-show-document'],
 
-    'metadata':    'metadata' in api.fava_options['journal-show'],
-    'postings':    'postings' in api.fava_options['journal-show'],
+    'metadata':    'metadata' in ledger.fava_options['journal-show'],
+    'postings':    'postings' in ledger.fava_options['journal-show'],
 } %}
 {% if request.args.get('show', False) %}
     {% set _list = request.args.getlist('show') %}
@@ -64,7 +64,7 @@
 %}
 <form id="entry-filters" class="journal-entry-filters wide-form">
     {% for type in entry_types %}
-        {% if type != 'budget' or api.budgets %}
+        {% if type != 'budget' or ledger.budgets %}
     <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}

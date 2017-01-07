@@ -12,17 +12,18 @@ from fava.core.helpers import FavaModule
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
-    def __init__(self, api):
-        super().__init__(api)
+    def __init__(self, ledger):
+        super().__init__(ledger)
         self.sidebar_links = None
         self.upcoming_events = None
 
     def load_file(self):
-        custom_entries = list(filter_type(self.api.all_entries, Custom))
+        custom_entries = list(filter_type(self.ledger.all_entries, Custom))
         self.sidebar_links = _sidebar_links(custom_entries)
 
         self.upcoming_events = _upcoming_events(
-            self.api.all_entries, self.api.fava_options['upcoming-events'])
+            self.ledger.all_entries,
+            self.ledger.fava_options['upcoming-events'])
 
 
 def _sidebar_links(custom_entries):

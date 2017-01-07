@@ -4,9 +4,9 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
 {% macro copy_balance_directives_text() -%}
-    {% for account in api.attributes.accounts -%}
+    {% for account in ledger.attributes.accounts -%}
         {% if account|uptodate_eligible %}
-            {%- if api.account_uptodate_status(account) != "green" -%}
+            {%- if ledger.account_uptodate_status(account) != "green" -%}
                 {{- account_macros.balance_directive(account) }}
             {%- endif -%}
         {% endif %}
@@ -14,7 +14,7 @@
 {%- endmacro %}
 
 {% block content %}
-    {% set postings = api.postings %}
+    {% set postings = ledger.postings %}
 
     <div class="left">
         <h3>{{ _('Postings per Account') }}</h3>
@@ -58,14 +58,14 @@
                 </tr>
             </thead>
             <tbody>
-                {% for account in api.attributes.accounts %}
-                    {% if account.startswith(api.options['name_assets']) or account.startswith(api.options['name_liabilities']) %}
-                    {% set last_entry = api.last_entry(account) %}
+                {% for account in ledger.attributes.accounts %}
+                    {% if account.startswith(ledger.options['name_assets']) or account.startswith(ledger.options['name_liabilities']) %}
+                    {% set last_entry = ledger.last_entry(account) %}
                     {% if last_entry %}
                     <tr>
                         <td class="account"><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
                         {% if account|uptodate_eligible %}
-                            <td data-sort-value="{{ status_sortorder[api.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
+                            <td data-sort-value="{{ status_sortorder[ledger.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
                             <td class="uptodate-indicator">{{ account_macros.last_account_activity(account) }}</td>
                         {% else %}
                             <td data-sort-value="0" class="uptodate-indicator"></td>
@@ -73,7 +73,7 @@
                         {% endif %}
                         <td><a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a></td>
                         <td class="num">
-                            {%- for position in (api.root_account|get_or_create(account)).balance -%}
+                            {%- for position in (ledger.root_account|get_or_create(account)).balance -%}
                                 {{ position.units|format_amount }}<br>
                             {% endfor -%}
                         </td>
@@ -95,7 +95,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for group in api.entries|groupby('__class__.__name__') %}
+                {% for group in ledger.entries|groupby('__class__.__name__') %}
                 <tr>
                     <td>{{ group.grouper }}</td>
                     <td class="num">{{ group.list|length }}</td>
@@ -105,7 +105,7 @@
             <tfoot>
                 <tr>
                     <td>{{ _('Total') }}</td>
-                    <td class="num">{{ api.entries|length }}</td>
+                    <td class="num">{{ ledger.entries|length }}</td>
                 </tr>
             </tfoot>
         </table>

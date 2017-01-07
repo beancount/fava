@@ -2,7 +2,7 @@
 {% set active_page = 'events' %}
 
 {% block content %}
-    {% set events = api.events() %}
+    {% set events = ledger.events() %}
     {% if events %}
         {{ charts.skeleton(hide_interval_filter=True) }}
         {{ charts.events() }}

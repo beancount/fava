@@ -5,7 +5,7 @@
     {{ charts.skeleton(hide_interval_filter=True) }}
     {{ charts.commodities() }}
 
-    {% for commodity in api.commodity_pairs() %}
+    {% for commodity in ledger.commodity_pairs() %}
         <div class="left">
             <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
             <table class="sortable">
@@ -14,7 +14,7 @@
                     <th data-sort="num">{{ _('Price') }}</th>
                 </thead>
                 <tbody>
-                    {% set prices = api.prices(commodity.0, commodity.1) %}
+                    {% set prices = ledger.prices(commodity.0, commodity.1) %}
                     {% for price in prices %}
                         <tr>
                             <td>{{ price.0 }}</td>
