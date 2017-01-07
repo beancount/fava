@@ -1,6 +1,5 @@
 import { extent, max, merge, min } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
-import { format } from 'd3-format';
 import { utcFormat } from 'd3-time-format';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
 import { scaleBand, scaleLinear, scaleOrdinal, scalePoint,
@@ -11,14 +10,13 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
 
-import { $, $$, _ } from './helpers';
+import { $, $$, _, formatCurrency } from './helpers';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
 const sunburstColorScale = scaleOrdinal(schemeCategory20c);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrency = format('.2f');
 const dateFormat = {
   year: utcFormat('%Y'),
   quarter(date) {
@@ -348,7 +346,7 @@ class BarChart extends BaseChart {
       .tickSizeOuter(0);
 
     this.yAxis = axisLeft(this.y)
-      .tickFormat(format('.2s'));
+      .tickFormat(num => formatCurrency(num, '.2s'));
 
     this.canvas = this.svg.classed('barchart', true).append('g');
     this.selections.xAxis = this.canvas.append('g').attr('class', 'x axis');
@@ -521,7 +519,7 @@ class LineChart extends BaseChart {
 
     this.yAxis = axisLeft(this.y)
       .tickPadding(6)
-      .tickFormat(format('.2s'));
+      .tickFormat(num => formatCurrency(num, '.2s'));
 
     this.line = line()
       .x(d => this.x(d.date))

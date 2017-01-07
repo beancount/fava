@@ -28,15 +28,17 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
+    'incognito': False
 }
 
 BOOL_OPTS = [
     'account-journal-include-children',
     'charts',
-    'use-external-editor',
-    'show-closed-accounts',
+    'incognito',
     'show-accounts-with-zero-balance',
     'show-accounts-with-zero-transactions',
+    'show-closed-accounts',
+    'use-external-editor',
 ]
 
 INT_OPTS = [

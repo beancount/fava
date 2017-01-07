@@ -150,3 +150,11 @@ Default: `60`
 
 If there has been no activity in given number of days since the last balance
 entry, then the grey uptodate-indicator is shown.
+
+---
+
+## `incognito`
+
+Default: `false`
+
+If set to `true` all digits will be replaced with "X".

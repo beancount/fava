@@ -4,6 +4,7 @@ All functions in this module will be automatically added as template filters.
 """
 
 import os
+import re
 
 from flask import g
 from beancount.core import compare, realization
@@ -25,9 +26,16 @@ def format_currency(value, currency=None, show_if_zero=False):
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ''
+
     if value == 0.0:
-        return g.api.quantize(Decimal(0.0), currency)
-    return g.api.quantize(value, currency)
+        string = g.api.quantize(Decimal(0.0), currency)
+    else:
+        string = g.api.quantize(value, currency)
+
+    if g.api.fava_options['incognito']:
+        return re.sub("\d", "X", string)
+
+    return string
 
 
 def format_amount(amount):
