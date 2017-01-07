@@ -37,6 +37,8 @@ from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
 from fava.util import slugify, resource_path
 from fava.util.excel import HAVE_EXCEL
+from fava.api.hooks import (post_api_add_transaction,
+                            post_api_add_document_metadata)
 
 app = Flask(__name__,  # pylint: disable=invalid-name
             template_folder=resource_path('templates'),
@@ -357,6 +359,9 @@ def api_add_document():
                                       os.path.basename(filepath))
             except FavaAPIException as exception:
                 return _api_error(exception.message)
+            post_api_add_document_metadata(request.form['bfilename'],
+                                           int(request.form['blineno']),
+                                           filepath)
         return _api_success(message='Uploaded to {}'.format(filepath))
     return 'No file uploaded or no documents folder in options', 400
 
@@ -384,6 +389,7 @@ def api_add_transaction():
         json['narration'], None, None, postings)
 
     insert_transaction(transaction, g.api.source_files())
+    post_api_add_transaction(transaction)
     return _api_success(message='Stored transaction.')
 
 
