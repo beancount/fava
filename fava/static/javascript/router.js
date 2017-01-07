@@ -51,6 +51,12 @@ e.on('reload', () => {
 });
 
 export default function initRouter() {
+  // Allow for a bookmark to show the transaction form.
+  if (window.location.hash === '#add-transaction') {
+    $('#add-transaction-button').click();
+    window.location.hash = '';
+  }
+
   window.addEventListener('popstate', () => {
     loadURL(window.location.href, true);
   });
