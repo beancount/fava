@@ -18,28 +18,26 @@ import inspect
 import os
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file, jsonify,
+                   redirect, send_from_directory, g, send_file,
                    render_template_string)
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
-from beancount.core import data
-from beancount.core.amount import Amount
-from beancount.core.number import D
-from beancount.scripts.format import align_beancount
 
-from fava import template_filters, util
+from fava import template_filters
 from fava.core import BeancountReportAPI
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException, FilterException
 from fava.docs import HELP_PAGES
+from fava.json_api import json_api
 from fava.util import slugify, resource_path
 from fava.util.excel import HAVE_EXCEL
 
 app = Flask(__name__,  # pylint: disable=invalid-name
             template_folder=resource_path('templates'),
             static_folder=resource_path('static'))
+app.register_blueprint(json_api, url_prefix='/<bfile>/api')
 
 app.json_encoder = FavaJSONEncoder
 app.jinja_options['extensions'].append('jinja2.ext.do')
@@ -151,7 +149,7 @@ def _perform_global_filters():
     }
 
     # check (and possibly reload) source file
-    if request.endpoint != 'api_changed' and request.method == 'GET':
+    if request.blueprint != 'json_api':
         g.api.changed()
 
     try:
@@ -187,6 +185,11 @@ def _pull_beancount_file(_, values):
     g.api = app.config['APIS'][g.beancount_file_slug]
 
 
+@app.errorhandler(FavaAPIException)
+def fava_api_exception(error):
+    return error.message, 400
+
+
 @app.route('/')
 def root():
     """Redirect to the index page for the first Beancount file."""
@@ -212,13 +215,10 @@ def account(name, subreport='journal'):
 def document():
     """Download a document."""
     file_path = request.args.get('file_path', None)
-    try:
-        document_path = g.api.document_path(file_path)
-        directory = os.path.dirname(document_path)
-        filename = os.path.basename(document_path)
-        return send_from_directory(directory, filename)
-    except FavaAPIException as exception:
-        return str(exception), 404
+    document_path = g.api.document_path(file_path)
+    directory = os.path.dirname(document_path)
+    filename = os.path.basename(document_path)
+    return send_from_directory(directory, filename)
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])
@@ -227,13 +227,10 @@ def statement():
     filename = request.args.get('filename', None)
     lineno = int(request.args.get('lineno', -1))
     key = request.args.get('key', None)
-    try:
-        document_path = g.api.statement_path(filename, lineno, key)
-        directory = os.path.dirname(document_path)
-        filename = os.path.basename(document_path)
-        return send_from_directory(directory, filename)
-    except FavaAPIException as exception:
-        return str(exception), 404
+    document_path = g.api.statement_path(filename, lineno, key)
+    directory = os.path.dirname(document_path)
+    filename = os.path.basename(document_path)
+    return send_from_directory(directory, filename)
 
 
 @app.route('/<bfile>/context/<ehash>/')
@@ -254,11 +251,6 @@ def report(report_name):
     if report_name in REPORTS:
         return render_template('{}.html'.format(report_name))
     abort(404)
-
-
-@app.errorhandler(FavaAPIException)
-def fava_api_exception(error):
-    return error.message, 400
 
 
 @app.route('/<bfile>/download-query/query_result.<result_format>')
@@ -282,109 +274,6 @@ def help_page(page_slug='_index'):
         extras=['fenced-code-blocks', 'tables'])
     return render_template('help.html', page_slug=page_slug,
                            help_html=render_template_string(html))
-
-
-def _api_error(message=''):
-    return jsonify({'success': False, 'error': message})
-
-
-def _api_success(**kwargs):
-    kwargs['success'] = True
-    return jsonify(kwargs)
-
-
-@app.route('/<bfile>/api/changed/')
-def api_changed():
-    """Check for file changes."""
-    return jsonify({'success': True, 'changed': g.api.changed()})
-
-
-@app.route('/<bfile>/api/source/', methods=['GET', 'PUT'])
-def api_source():
-    """Read/write one of the source files."""
-    if request.method == 'GET':
-        try:
-            data = g.api.file.get_source(request.args.get('file_path'))
-            return _api_success(payload=data)
-        except FavaAPIException as exception:
-            return _api_error(exception.message)
-    elif request.method == 'PUT':
-        request.get_json()
-        if request.get_json() is None:
-            abort(400)
-        g.api.file.set_source(request.get_json()['file_path'],
-                              request.get_json()['source'])
-        return _api_success()
-
-
-@app.route('/<bfile>/api/format-source/', methods=['POST'])
-def api_format_source():
-    """Format beancount file."""
-    request.get_json()
-    if request.get_json() is None:
-        abort(400)
-    return _api_success(payload=align_beancount(request.get_json()['source']))
-
-
-@app.route('/<bfile>/api/add-document/', methods=['PUT'])
-def api_add_document():
-    """Upload a document."""
-    file = request.files['file']
-    if file and len(g.api.options['documents']) > 0:
-        target_folder_index = int(request.form['targetFolderIndex'])
-
-        filepath = os.path.normpath(os.path.join(
-            os.path.dirname(g.api.beancount_file_path),
-            g.api.options['documents'][target_folder_index],
-            request.form['account'].replace(':', '/'),
-            secure_filename(request.form['filename']).replace('_', ' ')))
-
-        directory = os.path.dirname(filepath)
-        if not os.path.exists(directory):
-            os.makedirs(directory, exist_ok=True)
-
-        if os.path.isfile(filepath):
-            return _api_error('{} already exists.'.format(filepath))
-
-        file.save(filepath)
-
-        if request.form.get('bfilename', None):
-            try:
-                g.api.file.insert_metadata(request.form['bfilename'],
-                                           int(request.form['blineno']),
-                                           'statement',
-                                           os.path.basename(filepath))
-            except FavaAPIException as exception:
-                return _api_error(exception.message)
-        return _api_success(message='Uploaded to {}'.format(filepath))
-    return 'No file uploaded or no documents folder in options', 400
-
-
-@app.route('/<bfile>/api/add-transaction/', methods=['PUT'])
-def api_add_transaction():
-    """Add a transaction."""
-    json = request.get_json()
-
-    postings = []
-    for posting in json['postings']:
-        if posting['account'] not in g.api.attributes.accounts:
-            return _api_error('Unknown account: {}.'
-                              .format(posting['account']))
-        number = D(posting['number']) if posting['number'] else None
-        amount = Amount(number, posting.get('currency'))
-        postings.append(data.Posting(posting['account'], amount,
-                                     None, None, None, None))
-
-    if not postings:
-        return _api_error('Transaction contains no postings.')
-
-    date = util.date.parse_date(json['date'])[0]
-    transaction = data.Transaction(
-        None, date, json['flag'], json['payee'],
-        json['narration'], None, None, postings)
-
-    g.api.file.insert_transaction(transaction)
-    return _api_success(message='Stored transaction.')
 
 
 @app.route('/jump')

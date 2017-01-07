@@ -8,7 +8,7 @@ import flask
 def test_api_changed(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('api_changed')
+        url = flask.url_for('json_api.changed')
 
     result = test_client.get(url)
     data = flask.json.loads(result.get_data(True))
@@ -26,7 +26,7 @@ def test_api_add_document(app, test_client, tmpdir):
             'filename': '2015-12-12_test',
             'file': (BytesIO(b'asdfasdf'), 'test'),
         }
-        url = flask.url_for('api_add_document')
+        url = flask.url_for('json_api.add_document')
 
         response = test_client.put(url)
         assert response.status_code == 400
@@ -53,7 +53,7 @@ def test_api_add_document(app, test_client, tmpdir):
 def test_api_source_get(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('api_source')
+        url = flask.url_for('json_api.source')
 
     result = test_client.get(url)
     data = flask.json.loads(result.get_data(True))
@@ -63,7 +63,7 @@ def test_api_source_get(app, test_client):
     path = app.config['BEANCOUNT_FILES'][0]
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('api_source', file_path=path)
+        url = flask.url_for('json_api.source', file_path=path)
 
     result = test_client.get(url)
     data = flask.json.loads(result.get_data(True))
@@ -74,7 +74,7 @@ def test_api_source_get(app, test_client):
 def test_api_source_put(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('api_source')
+        url = flask.url_for('json_api.source')
 
     # test bad request
     response = test_client.put(url)
@@ -107,7 +107,7 @@ def test_api_source_put(app, test_client):
 def test_api_format_source(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('api_format_source')
+        url = flask.url_for('json_api.format_source')
 
     path = app.config['BEANCOUNT_FILES'][0]
     payload = open(path).read()
