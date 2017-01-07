@@ -9,4 +9,5 @@ HELP_PAGES = {
     'beancount_syntax': 'Beancount Syntax',
     'running_fava': 'Running Fava',
     'features': "Fava's features",
+    'extensions': "Extensions",
 }

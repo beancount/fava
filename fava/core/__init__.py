@@ -30,6 +30,7 @@ from fava.core.holdings import get_final_holdings, aggregate_holdings_by
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
 from fava.core.watcher import Watcher
+from fava.ext import find_extensions
 
 
 def _list_accounts(root_account, active_only=False):
@@ -63,7 +64,34 @@ class AttributesModule(FavaModule):
                                        active_only=True)
 
 
-MODULES = ['attributes', 'budgets', 'charts', 'file', 'misc', 'query_shell']
+# pylint: disable=too-few-public-methods
+class ExtensionModule(FavaModule):
+    """Some attributes of the ledger (mostly for auto-completion)."""
+
+    def __init__(self, ledger):
+        super().__init__(ledger)
+        self._extensions = None
+        self._instances = {}
+
+    def load_file(self):
+        self._extensions = []
+        for extension in self.ledger.fava_options['extensions']:
+            extensions, errors = find_extensions(
+                os.path.dirname(self.ledger.beancount_file_path), extension)
+            self._extensions.extend(extensions)
+            self.ledger.errors.extend(errors)
+
+        for cls in self._extensions:
+            if cls not in self._instances:
+                self._instances[cls] = cls(self.ledger)
+
+    def run_hook(self, event, *args):
+        for ext in self._instances.values():
+            ext.run_hook(event, *args)
+
+
+MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'misc',
+           'query_shell']
 
 
 # pylint: disable=too-many-instance-attributes
@@ -78,9 +106,9 @@ class FavaLedger():
     __slots__ = [
         '_default_format_string', '_format_string', 'account_types',
         'all_entries', 'all_root_account', 'beancount_file_path',
-        '_date_first', '_date_last', 'entries', 'errors', 'fava_options',
-        '_filters', '_is_encrypted', 'options', 'price_map', 'root_account',
-        '_watcher'] + MODULES
+        '_date_first', '_date_last', 'entries', 'errors',
+        'fava_options', '_filters', '_is_encrypted', 'options', 'price_map',
+        'root_account', '_watcher'] + MODULES
 
     def __init__(self, path):
         #: The path to the main Beancount file.
@@ -102,6 +130,9 @@ class FavaLedger():
 
         #: A :class:`.ChartModule` instance.
         self.charts = ChartModule(self)
+
+        #: A :class:`.ExtensionModule` instance.
+        self.extensions = ExtensionModule(self)
 
         #: A :class:`.FileModule` instance.
         self.file = FileModule(self)

@@ -22,6 +22,7 @@ DEFAULTS = {
     'upcoming-events': 7,
     'sidebar-show-queries': 5,
     'editor-print-margin-column': 60,
+    'extensions': [],
     'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
                      'budget'],
     'journal-show-transaction': ['cleared', 'pending'],
@@ -49,7 +50,9 @@ INT_OPTS = [
 ]
 
 LIST_OPTS = [
+    'extensions',
     'journal-show',
+    'journal-show-document',
     'journal-show-transaction',
 ]
 

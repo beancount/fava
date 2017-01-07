@@ -61,6 +61,7 @@ class FileModule(FavaModule):
 
         with open(path, 'w+', encoding='utf8') as file:
             file.write(source)
+        self.ledger.extensions.run_hook('after_write_source', path, source)
         self.load_file()
 
     def insert_metadata(self, entry_hash, basekey, value):
@@ -72,6 +73,8 @@ class FileModule(FavaModule):
         key = next_key(basekey, entry.meta)
         insert_metadata_in_file(entry.meta['filename'], entry.meta['lineno']-1,
                                 key, value)
+        self.ledger.extensions.run_hook('after_insert_metadata', entry, key,
+                                        value)
 
     def insert_transaction(self, transaction):
         """Insert a transaction.
@@ -81,6 +84,8 @@ class FileModule(FavaModule):
 
         """
         insert_transaction(transaction, self.list_sources())
+        self.ledger.extensions.run_hook('after_insert_transaction',
+                                        transaction)
 
 
 def next_key(basekey, keys):
