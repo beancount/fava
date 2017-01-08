@@ -18,7 +18,8 @@ const sunburstColorScale = scaleOrdinal(schemeCategory20c);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrency = format('.2f');
+const formatCurrency = format(',.2f');
+const formatCurrencyShort = format('.2s');
 const dateFormat = {
   year: utcFormat('%Y'),
   quarter(date) {
@@ -348,7 +349,7 @@ class BarChart extends BaseChart {
       .tickSizeOuter(0);
 
     this.yAxis = axisLeft(this.y)
-      .tickFormat(format('.2s'));
+      .tickFormat(formatCurrencyShort);
 
     this.canvas = this.svg.classed('barchart', true).append('g');
     this.selections.xAxis = this.canvas.append('g').attr('class', 'x axis');
@@ -521,7 +522,7 @@ class LineChart extends BaseChart {
 
     this.yAxis = axisLeft(this.y)
       .tickPadding(6)
-      .tickFormat(format('.2s'));
+      .tickFormat(formatCurrencyShort);
 
     this.line = line()
       .x(d => this.x(d.date))
