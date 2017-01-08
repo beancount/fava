@@ -295,11 +295,16 @@ class FavaLedger():
 
     def holdings(self, aggregation_key=None):
         """List all holdings (possibly aggregated)."""
+
+        # Get latest price unless there's an active time filter.
+        price_date = self._filters['time'].end_date \
+            if self._filters['time'] else None
+
         holdings_list = get_final_holdings(
             self.entries,
             (self.account_types.assets, self.account_types.liabilities),
             self.price_map,
-            self._date_last
+            price_date
         )
 
         if aggregation_key:
