@@ -138,7 +138,7 @@
 <ol id="journal-table" class="journal-table">
     <li class="head">
         <p>
-        <span class="datecell" data-sort="string" data-order="asc">{{ _('Date') }}</span>
+        <span class="datecell" data-sort="string" data-order="desc">{{ _('Date') }}</span>
         <span class="flag" data-sort="string">{{ _('F') }}</span>
         <span class="description" data-sort="string">{{ _('Narration/Payee') }}</span>
         <span class="num">{{ _('Position') }}</span>
@@ -150,7 +150,7 @@
         {% endif %}
         </p>
     </li>
-{% for entry in journal %}
+{% for entry in journal|reverse %}
     {% if show_change_and_balance %}
         {% set entry, _, change, balance = entry %}
     {% endif %}
