@@ -10,9 +10,6 @@ If you discover bug in Fava, or have some ideas for improvement, please open a
 
 ### Related websites
 
-- Fava [Website](https://beancount.github.io/fava/),
-- Fava [Bug Tracker](https://github.com/beancount/fava/issues),
-- Beancount [Documentation](http://furius.ca/beancount/doc/index),
-- Beancount [Mailing list](https://groups.google.com/forum/#!forum/beancount),
-- Beancount [Bug Tracker](https://bitbucket.org/blais/beancount/issues?status=new&status=open),
+- Fava's [Website](https://beancount.github.io/fava/) and [Bug Tracker](https://github.com/beancount/fava/issues),
+- Beancount's [Documentation](http://furius.ca/beancount/doc/index), [Mailing list](https://groups.google.com/forum/#!forum/beancount), and [Bug Tracker](https://bitbucket.org/blais/beancount/issues?status=new&status=open),
 - An overview of other implementations of command-line accounting: [Plain Text Accounting](http://plaintextaccounting.org).

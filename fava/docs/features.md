@@ -55,14 +55,19 @@ On the Query report you can execute queries like with the `bean-query`
 command-line tool. For an explanation of how these queries work see
 the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
-If you add `query` directives to your Beancount file, there'll be a dropdown on
-the Query report to quickly select them.
-
 Fava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xls`, `xlsx`
 and `ods`, install Fava with the `excel` feature:
 
     pip3 install fava[excel]
+
+## Adding Transactions
+
+By clicking the `+` button or using the `n` keyboard shortcut you can open a
+form to insert a transaction to your Beancount file. This transaction will be
+inserted at the end of your file or where the first `FAVA-INSERT-MARKER` is
+found. If you want to set a bookmark to this form, adding `#add-transaction` to
+any URL in Fava will open it on load.
 
 ## Up-to-date indicators
 
