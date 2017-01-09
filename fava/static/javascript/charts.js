@@ -18,7 +18,15 @@ const sunburstColorScale = scaleOrdinal(schemeCategory20c);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrency = format(',.2f');
+const formatCurrencyWithComma = format(',.2f');
+const formatCurrencyWithoutComma = format('.2f');
+function formatCurrency(number) {
+  if (window.favaAPI.render_commas) {
+    return formatCurrencyWithComma(number);
+  }
+  return formatCurrencyWithoutComma(number);
+}
+
 const formatCurrencyShort = format('.2s');
 const dateFormat = {
   year: utcFormat('%Y'),
