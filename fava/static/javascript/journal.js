@@ -9,6 +9,9 @@ export default function initJournal() {
   // Toggle postings by clicking on transaction row.
   $.delegate(journal, 'click', '.transaction', (event) => {
     $('.postings', event.target.closest('.transaction')).classList.toggle('hidden');
+    if ($('.metadata', event.target.closest('.transaction'))) {
+      $('.metadata', event.target.closest('.transaction')).classList.toggle('hidden');
+    }
   });
 
   // Toggle entries with buttons.
