@@ -390,9 +390,10 @@ class FavaLedger():
         entry = entry_at_lineno(self.all_entries, filename, lineno)
         value = entry.meta[metadata_key]
 
-        paths = [os.path.join(os.path.dirname(self.beancount_file_path),
+        beancount_dir = os.path.dirname(self.beancount_file_path)
+        paths = [os.path.join(beancount_dir,
                               value)]
-        paths.extend([os.path.join(document_root,
+        paths.extend([os.path.join(beancount_dir, document_root,
                                    posting.account.replace(':', '/'), value)
                       for posting in entry.postings
                       for document_root in self.options['documents']])
