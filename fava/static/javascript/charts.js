@@ -21,7 +21,7 @@ const scatterColorScale = scaleOrdinal(schemeCategory10);
 const formatCurrencyWithComma = format(',.2f');
 const formatCurrencyWithoutComma = format('.2f');
 function formatCurrency(number) {
-  if (window.favaAPI.render_commas) {
+  if (window.favaAPI.options.render_commas) {
     return formatCurrencyWithComma(number);
   }
   return formatCurrencyWithoutComma(number);
@@ -781,7 +781,7 @@ export default function initCharts() {
     const chartId = `${chart.type}-${index}`;
     switch (chart.type) {
       case 'balances': {
-        const series = window.favaAPI.commodities
+        const series = window.favaAPI.options.commodities
             .map(c => ({
               name: c,
               values: chart.data
@@ -818,7 +818,7 @@ export default function initCharts() {
       }
       case 'bar': {
         const series = chart.interval_totals.map(d => ({
-          values: window.favaAPI.operating_currencies.map(name => ({
+          values: window.favaAPI.options.operating_currency.map(name => ({
             name,
             value: +d.totals[name] || 0,
             budget: +d.budgets[name] || 0,
@@ -856,14 +856,14 @@ export default function initCharts() {
         addInternalNodesAsLeaves(chart.root);
         const roots = {};
 
-        window.favaAPI.operating_currencies.forEach((currency) => {
+        window.favaAPI.options.operating_currency.forEach((currency) => {
           roots[currency] = hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
         });
 
         charts[chartId] = new HierarchyContainer(chartContainer(chartId, chart.label))
-            .set('currencies', window.favaAPI.operating_currencies)
+            .set('currencies', window.favaAPI.options.operating_currency)
             .draw(roots);
 
         break;

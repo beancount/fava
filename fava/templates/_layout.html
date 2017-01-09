@@ -59,8 +59,7 @@
     <script type="application/json" id="ledger-data">{{ {
         'baseURL': url_for('index'),
         'accounts': ledger.attributes.accounts,
-        'commodities': ledger.options['commodities'],
-        'operating_currencies': operating_currencies,
+        'options': ledger.options,
         'tags': ledger.attributes.tags,
         'editor-print-margin-column': ledger.fava_options['editor-print-margin-column'],
     }|tojson|safe }}</script>

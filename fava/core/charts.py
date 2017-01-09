@@ -28,7 +28,10 @@ class FavaJSONEncoder(JSONEncoder):
             return str(o)
         elif isinstance(o, (set, frozenset)):
             return list(o)
-        return JSONEncoder.default(self, o)
+        try:
+            return JSONEncoder.default(self, o)
+        except TypeError:
+            return str(o)
 
 
 def _serialize_inventory(inventory, at_cost=False):
