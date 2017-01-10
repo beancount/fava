@@ -33,8 +33,6 @@ body {
   font-family: $font-family;
   font-size: 14px;
   font-weight: 400;
-  height: 100%;
-  width: 100vw;
 }
 
 table {
@@ -251,7 +249,6 @@ button {
 // Structural and generic elements
 $header-height: 50px;
 $aside-width: 160px;
-$safe-two-column: $min-width * 2 + $aside-width;
 
 $transitions: all .2s ease-out;
 
@@ -463,23 +460,19 @@ kbd {
 @import 'query';
 @import 'editor';
 
-.halfleft,
-.halfright {
-  width: 50%;
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -10px;
+}
+
+.column {
+  flex: 1;
+  padding: 10px;
 
   h3 {
     text-align: center;
   }
-}
-
-.halfleft {
-  float: left;
-  padding-right: 10px;
-}
-
-.halfright {
-  float: right;
-  padding-left: 10px;
 }
 
 .left {
@@ -636,25 +629,6 @@ td {
   .source-form,
   .source-editor-wrapper {
     left: 0;
-  }
-}
-
-// Between 768px and twice min-width + aside_width, make each table fill the
-// entire screen. If min_width is 560px, $safe-two-column is 1280px.
-@media (max-width: $safe-two-column - 1) {
-  .halfleft,
-  .halfright {
-    width: 100%;
-  }
-
-  .halfleft {
-    float: none;
-    padding-right: 0;
-  }
-
-  .halfright {
-    float: none;
-    padding-left: 0;
   }
 }
 

@@ -34,11 +34,13 @@
     align-items: center;
     display: flex;
     flex: 1;
+    max-width: 400px;
     min-width: 200px;
 
     @for $i from 1 through 5 {
       &.depth-#{$i} {
         margin-left: $i * $tree-indent;
+        max-width: 400px - $i * $tree-indent;
         min-width: 200px - $i * $tree-indent;
       }
     }

@@ -10,14 +10,17 @@
     {{ charts.hierarchy(ledger.options['name_equity']) }}
 
     {% set root_account_closed = ledger.root_account_closed %}
-    <div class="halfleft">
-        <h3>{{ ledger.options['name_assets'] }}</h3>
-        {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_assets'])) }}
-    </div>
-    <div class="halfright">
-        <h3>{{ ledger.options['name_liabilities'] }}</h3>
-        {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities'])) }}
-        <h3>{{ ledger.options['name_equity'] }}</h3>
-        {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_equity'])) }}
+
+    <div class="row">
+        <div class="column">
+            <h3>{{ ledger.options['name_assets'] }}</h3>
+            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_assets'])) }}
+        </div>
+        <div class="column">
+            <h3>{{ ledger.options['name_liabilities'] }}</h3>
+            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities'])) }}
+            <h3>{{ ledger.options['name_equity'] }}</h3>
+            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_equity'])) }}
+        </div>
     </div>
 {% endblock %}

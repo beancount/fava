@@ -9,7 +9,5 @@
         {{ charts.hierarchy(ledger.options['name_{}'.format(base_account)]) }}
     {% endfor %}
 
-    <div class="halfleft">
     {{ tree_table.tree(ledger.root_account, totals=False) }}
-    </div>
 {% endblock %}

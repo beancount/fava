@@ -12,12 +12,14 @@
     {{ charts.hierarchy(ledger.options['name_expenses']) }}
     {{ charts.hierarchy(ledger.options['name_income']) }}
 
-    <div class="halfleft">
-        <h3>{{ ledger.options['name_income'] }}</h3>
-        {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_income'])) }}
-    </div>
-    <div class="halfright">
-        <h3>{{ ledger.options['name_expenses'] }}</h3>
-        {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_expenses'])) }}
+    <div class="row">
+        <div class="column">
+            <h3>{{ ledger.options['name_income'] }}</h3>
+            {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_income'])) }}
+        </div>
+        <div class="column">
+            <h3>{{ ledger.options['name_expenses'] }}</h3>
+            {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_expenses'])) }}
+        </div>
     </div>
 {% endblock %}

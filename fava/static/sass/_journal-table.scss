@@ -52,9 +52,8 @@
   }
 
   .head {
-    @extend %head;
-
     p > span {
+      @extend %head;
       background-color: $color-table-header-background;
       padding: 3px 5px;
     }
@@ -67,9 +66,7 @@
   }
 
   .totals {
-    @extend %head;
-
-    .num {
+    p > span {
       @extend %head;
     }
   }
