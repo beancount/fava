@@ -180,8 +180,7 @@ def convert_inventory(price_map, target_currency, inventory, date):
 
 def net_worth_at_dates(entries, dates, price_map, options_map):
     transactions = [entry for entry in entries
-                    if (isinstance(entry, Transaction) and
-                        entry.flag != flags.FLAG_UNREALIZED)]
+                    if isinstance(entry, Transaction)]
 
     types = options.get_account_types(options_map)
 
