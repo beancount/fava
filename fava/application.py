@@ -35,7 +35,7 @@ from fava.api.file import insert_transaction
 from fava.api.filters import FilterException
 from fava.api.charts import BeanJSONEncoder
 from fava.docs import HELP_PAGES
-from fava.util import slugify, resource_path
+from fava.util import slugify, resource_path, replace_numbers
 from fava.util.excel import HAVE_EXCEL
 
 app = Flask(__name__,  # pylint: disable=invalid-name
@@ -53,6 +53,7 @@ app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 app.config['APIS'] = {}
+
 
 REPORTS = [
     '_aside',
@@ -160,6 +161,15 @@ def _perform_global_filters():
     except FilterException as exception:
         g.filters[exception.filter_type] = None
         flash(str(exception))
+
+
+@app.after_request
+def _incognito(response):
+    """Replace all numbers with 'X'."""
+    if g.api.fava_options['incognito']:
+        original_text = response.get_data(as_text=True)
+        response.set_data(replace_numbers(original_text))
+    return response
 
 
 @app.url_defaults

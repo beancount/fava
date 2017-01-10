@@ -5,6 +5,8 @@ import re
 import sys
 import unicodedata
 
+from beancount.utils.text_utils import replace_numbers
+
 # get correct path when compiled with PyInstaller
 BASEPATH = getattr(sys, '_MEIPASS',
                    os.path.realpath(
