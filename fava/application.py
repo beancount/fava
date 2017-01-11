@@ -207,7 +207,7 @@ def index():
 @app.route('/<bfile>/account/<name>/<subreport>/')
 def account(name, subreport='journal'):
     """The account report."""
-    assert subreport in ['journal', 'balances', 'changes']
+    assert subreport in ['journal', 'balances', 'changes', 'balances_market']
     return render_template('account.html', account_name=name,
                            subreport=subreport)
 

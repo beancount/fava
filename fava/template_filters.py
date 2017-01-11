@@ -111,8 +111,11 @@ def uptodate_eligible(account_name):
         return False
 
 
-def cost_or_market(account_balance, conversion):
+def cost_or_market(account_balance, conversion, date=None):
+    """Convert inventory to market value at date if conversion is 'market'."""
+    if not date:
+        date = g.ledger.filter_end_date
     if conversion == 'market':
         return get_inventory_market_value(
-            account_balance, g.ledger.filter_end_date, g.ledger.price_map)
+            account_balance, date, g.ledger.price_map)
     return account_balance
