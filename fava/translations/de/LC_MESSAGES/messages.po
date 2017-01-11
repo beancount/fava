@@ -1,11 +1,22 @@
+# German translations for PROJECT.
+# Copyright (C) 2016 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
+#
 msgid ""
 msgstr ""
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
-"Project-Id-Version: Fava\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-01-11 08:36+0100\n"
+"PO-Revision-Date: 2016-05-06 10:26+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
 
 #: fava/templates/_aside.html:4
 msgid "Custom Links"
@@ -176,6 +187,15 @@ msgstr "Diagramm ist leer."
 msgid "File change detected. Click to reload."
 msgstr "Änderung in Quelldatei entdeckt. Klicken um neu zu laden."
 
+#: fava/templates/_tree_table.html:5
+msgid ""
+"Hold Shift while clicking to expand all children \n"
+"Hold Ctrl or Cmd while clicking to expand one level"
+msgstr ""
+"Um alle Sub-Kontos zu erweitern halte die Umschalt-Taste während dem "
+"Klicken gedrückt. Um nur eine Ebene zu erweitern halte die Strg- oder "
+"Cmd-Taste gedrückt."
+
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
 msgid "Expand all accounts"
 msgstr "Alle Konten erweitern"
@@ -188,14 +208,15 @@ msgstr "Alle erweitern"
 msgid "Other"
 msgstr "Andere"
 
-#: fava/templates/_tree_table.html:5
-msgid "Hold Shift while clicking to expand all children \n"
-"Hold Ctrl or Cmd while clicking to expand one level"
-msgstr "Um alle Sub-Kontos zu erweitern halte die Umschalt-Taste während dem Klicken gedrückt. Um nur eine Ebene zu erweitern halte die Strg- oder Cmd-Taste gedrückt."
-
 #: fava/templates/_tree_table.html:121
 msgid "Hold the Shift-key while clicking to expand all children"
-msgstr "Um alle Sub-Kontos zu erweitern halte die Umschalt-Taste während dem Klicken gedrückt."
+msgstr ""
+"Um alle Sub-Kontos zu erweitern halte die Umschalt-Taste während dem "
+"Klicken gedrückt."
+
+#: fava/templates/account.html:16 fava/templates/account.html:24
+msgid "Changes"
+msgstr "Änderungen"
 
 #: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
@@ -204,10 +225,6 @@ msgstr "Journal aller Einträge dieses Kontos und aller Sub-Kontos"
 #: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "Konto Journal"
-
-#: fava/templates/account.html:16 fava/templates/account.html:24
-msgid "Changes"
-msgstr "Änderungen"
 
 #: fava/templates/account.html:25
 msgid "Balances"
@@ -223,6 +240,7 @@ msgstr "Datei:"
 
 #: fava/templates/context.html:12 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
+#, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Quelldatei anzeigen: %(file)s:%(lineno)s"
 
@@ -255,6 +273,7 @@ msgid "No errors."
 msgstr "Keine Fehler."
 
 #: fava/templates/events.html:13
+#, python-format
 msgid "Event: %(type)s"
 msgstr "Ereignis: %(type)s"
 
@@ -267,6 +286,7 @@ msgid "No events."
 msgstr "Keine Ereignisse."
 
 #: fava/templates/help.html:4
+#, python-format
 msgid "Help - %(title)s"
 msgstr "Hilfe - %(title)s"
 
@@ -355,8 +375,12 @@ msgid "Update Activity"
 msgstr "Aktualisierungs-Aktivität"
 
 #: fava/templates/statistics.html:48
-msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
-msgstr "Balance Einträge für dieses Konto (ausser grüne) in die Zwischenablage kopieren:"
+msgid ""
+"Click to copy balance directives for accounts (except green ones) to the "
+"clipboard."
+msgstr ""
+"Balance Einträge für dieses Konto (ausser grüne) in die Zwischenablage "
+"kopieren:"
 
 #: fava/templates/statistics.html:49
 msgid "Copy balance directives"
@@ -398,28 +422,66 @@ msgstr "Quartalsweise"
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: fava/templates/overlays/_transaction_form.html:3
-msgid "close"
-msgstr "Schliessen"
+#~ msgid "Toggle charts"
+#~ msgstr "Graphen ein/aus"
 
-#: fava/templates/overlays/_transaction_form.html:5
-msgid "New transaction"
-msgstr "Neue Transaktion"
+#~ msgid "Loading charts&hellip;"
+#~ msgstr "Lade Graphen&hellip;"
 
-#: fava/templates/overlays/_transaction_form.html:12
-#: fava/templates/overlays/_transaction_form.html:13
-msgid "Narration"
-msgstr "Beschreibung"
+#~ msgid "Net Worth"
+#~ msgstr "Reinvermögen"
 
-#: fava/templates/overlays/_transaction_form.html:19
-msgid "Save and add new"
-msgstr "Speichern und neu"
+#~ msgid "Event"
+#~ msgstr "Ereignis"
 
-#: fava/templates/overlays/_transaction_form.html:27
-msgid "Number"
-msgstr "Zahl"
+#~ msgid "Entries"
+#~ msgstr "Einträge"
 
-#: fava/templates/overlays/_transaction_form.html:29
-msgid "Add posting"
-msgstr "Eintrag hinzufügen "
+#~ msgid "Show events of type %(type)s"
+#~ msgstr "Zeige Ereignisse des Typs %(type)s"
+
+#~ msgid "Help - %(slug)s"
+#~ msgstr "Hilfe - %(slug)s"
+
+#~ msgid "fava: settings"
+#~ msgstr "fava: Einstellungen"
+
+#~ msgid "User settings:"
+#~ msgstr "Benutzer-Einstellungen:"
+
+#~ msgid "Update Activity per Account"
+#~ msgstr "Aktualisierungs-Aktivität pro Konto"
+
+#~ msgid "Directive Type"
+#~ msgstr "Eintrags-Typ"
+
+#~ msgid "Source"
+#~ msgstr "Quelldateien"
+
+#~ msgid "Assets"
+#~ msgstr "Vermögen"
+
+#~ msgid "Liabilities"
+#~ msgstr "Verpflichtungen"
+
+#~ msgid "Equity"
+#~ msgstr "Eigenkapital"
+
+#~ msgid "Open in external editor"
+#~ msgstr "In externem Editor öffnen"
+
+#~ msgid ""
+#~ msgstr ""
+
+#~ msgid "Load stored query:"
+#~ msgstr "Gespeicherte Abfrage laden:"
+
+#~ msgid "(Source)"
+#~ msgstr "(Quelldatei)"
+
+#~ msgid "More sample queries"
+#~ msgstr "Mehr Beispiel-Abfragen"
+
+#~ msgid "Result"
+#~ msgstr "Ergebnis"
 
