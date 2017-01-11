@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
-{% set active_page = 'balance_sheet' %}
-{% set conversion = 'cost' %}
+{% set active_page = 'market_sheet' %}
+{% set conversion = 'market' %}
 {% import '_tree_table.html' as tree_table with context %}
 
 {% block content %}
@@ -8,7 +8,6 @@
     {{ charts.net_worth(interval) }}
     {{ charts.hierarchy(ledger.options['name_assets']) }}
     {{ charts.hierarchy(ledger.options['name_liabilities']) }}
-    {{ charts.hierarchy(ledger.options['name_equity']) }}
 
     {% set root_account_closed = ledger.root_account_closed %}
     <div class="halfleft">
@@ -18,7 +17,5 @@
     <div class="halfright">
         <h3>{{ ledger.options['name_liabilities'] }}</h3>
         {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities'])) }}
-        <h3>{{ ledger.options['name_equity'] }}</h3>
-        {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_equity'])) }}
     </div>
 {% endblock %}

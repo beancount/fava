@@ -16,8 +16,8 @@
     </li>
 {% for account in ([real_account] if real_account.account else real_account.values()) recursive %}
     {% if account|should_show %}
-    {% set balance = account.balance.cost() %}
-    {% set balance_children = (account|balance_children).cost() %}
+    {% set balance = (account.balance|cost_or_market(conversion)).cost() %}
+    {% set balance_children = (account|balance_children|cost_or_market(conversion)).cost() %}
     <li>
         <p{% if not balance.is_empty() %} class='has-balance'{% endif %}>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
@@ -59,7 +59,7 @@
     {% endif %}
 {% endfor %}
 {% if totals %}
-    {% set balance = (real_account|balance_children).cost() %}
+    {% set balance = (real_account|balance_children|cost_or_market(conversion)).cost() %}
         <li class="totals">
             <p>
             <span class="account-cell">&nbsp;</span>

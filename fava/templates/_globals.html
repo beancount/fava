@@ -1,6 +1,7 @@
 {% set all_pages = {
     'income_statement': (_('Income Statement'), 'g i'),
     'balance_sheet':    (_('Balance Sheet'),    'g b'),
+    'market_sheet':     (_('Market Sheet'),     'g m'),
     'trial_balance':    (_('Trial Balance'),    'g t'),
     'journal':          (_('Journal'),          'g j'),
     'query':            (_('Query'),            'g q'),
@@ -13,7 +14,7 @@
     'help':             (_('Help'),             'g shift+h'),
 } %}
 {% set navigation_bar = [
-    ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
+    ("",              ['income_statement', 'balance_sheet', 'market_sheet', 'trial_balance', 'journal', 'query']),
     ("Other",         [ 'holdings', 'commodities', 'events', 'statistics']),
     ("Configuration", [ 'editor', 'options','help'])
 ] %}
