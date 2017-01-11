@@ -6,8 +6,8 @@
 {% block content %}
     {{ charts.skeleton() }}
     {{ charts.net_worth(interval) }}
-    {{ charts.hierarchy(ledger.options['name_assets']) }}
-    {{ charts.hierarchy(ledger.options['name_liabilities']) }}
+    {{ charts.hierarchy(ledger.options['name_assets'], conversion=conversion) }}
+    {{ charts.hierarchy(ledger.options['name_liabilities'], conversion=conversion) }}
 
     {% set root_account_closed = ledger.root_account_closed %}
     <div class="halfleft">
