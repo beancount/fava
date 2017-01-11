@@ -1,23 +1,11 @@
-# Russian translations for PROJECT.
-# Copyright (C) 2016 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2016.
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2017-01-11 13:26+0100\n"
-"PO-Revision-Date: 2016-11-18 13:19+0300\n"
-"Last-Translator: Igor Fokusov <igor@fokusov.com>\n"
-"Language: ru\n"
-"Language-Team: ru <LL@li.org>\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fava\n"
+"Language: ru\n"
 
 #: fava/templates/_aside.html:4
 msgid "Custom Links"
@@ -72,7 +60,7 @@ msgstr "Баланс"
 
 #: fava/templates/_globals.html:4
 msgid "Trial Balance"
-msgstr "Предбаланс"
+msgstr "Предв. баланс"
 
 #: fava/templates/_globals.html:5
 msgid "Journal"
@@ -88,7 +76,7 @@ msgstr "Вклады"
 
 #: fava/templates/_globals.html:8
 msgid "Commodities"
-msgstr "Коммодити"
+msgstr "Ценности"
 
 #: fava/templates/_globals.html:9
 msgid "Events"
@@ -194,14 +182,6 @@ msgstr "Диаграмма пуста"
 msgid "File change detected. Click to reload."
 msgstr "Содержимое файла изменилось. Нажмите, чтобы перезагрузить."
 
-#: fava/templates/_tree_table.html:5
-msgid ""
-"Hold Shift while clicking to expand all children \n"
-"Hold Ctrl or Cmd while clicking to expand one level"
-msgstr ""
-"Зажмите Shift с кликом для раскрытия всех дочерних \n"
-"Зажмите Ctrl или Cmd с кликом для раскрытия одного уровня"
-
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
 msgid "Expand all accounts"
 msgstr "Раскрыть все счета"
@@ -214,13 +194,15 @@ msgstr "Раскрыть всё"
 msgid "Other"
 msgstr "Прочее"
 
+#: fava/templates/_tree_table.html:5
+msgid "Hold Shift while clicking to expand all children \n"
+"Hold Ctrl or Cmd while clicking to expand one level"
+msgstr "Зажмите Shift с кликом для раскрытия всех дочерних \n"
+"Зажмите Ctrl или Cmd с кликом для раскрытия одного уровня"
+
 #: fava/templates/_tree_table.html:121
 msgid "Hold the Shift-key while clicking to expand all children"
 msgstr "Зажмите Shift с кликом для раскрытия всех дочерних"
-
-#: fava/templates/account.html:16 fava/templates/account.html:24
-msgid "Changes"
-msgstr "Изменения"
 
 #: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
@@ -229,6 +211,10 @@ msgstr "Журнал всех записей по этому Счёту и Су�
 #: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "Журнал счёта"
+
+#: fava/templates/account.html:16 fava/templates/account.html:24
+msgid "Changes"
+msgstr "Изменения"
 
 #: fava/templates/account.html:25
 msgid "Balances"
@@ -244,7 +230,6 @@ msgstr "Место:"
 
 #: fava/templates/context.html:12 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
-#, python-format
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Перейти к файлу %(file)s:%(lineno)s"
 
@@ -277,7 +262,6 @@ msgid "No errors."
 msgstr "Ошибок не обнаружено."
 
 #: fava/templates/events.html:13
-#, python-format
 msgid "Event: %(type)s"
 msgstr "Событие: %(type)s"
 
@@ -290,7 +274,6 @@ msgid "No events."
 msgstr "События отстутствуют."
 
 #: fava/templates/help.html:4
-#, python-format
 msgid "Help - %(title)s"
 msgstr "Помощь - %(title)s"
 
@@ -380,12 +363,8 @@ msgid "Update Activity"
 msgstr "Обновления"
 
 #: fava/templates/statistics.html:48
-msgid ""
-"Click to copy balance directives for accounts (except green ones) to the "
-"clipboard."
-msgstr ""
-"Кликните, чтобы скопировать строки баланса по счетам (за исключением "
-"зелёных) в буфер обмена."
+msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
+msgstr "Кликните, чтобы скопировать строки баланса по счетам (за исключением зелёных) в буфер обмена."
 
 #: fava/templates/statistics.html:49
 msgid "Copy balance directives"
@@ -429,38 +408,26 @@ msgstr "Ежегодно"
 
 #: fava/templates/overlays/_transaction_form.html:3
 msgid "close"
-msgstr ""
+msgstr "закрыть"
 
 #: fava/templates/overlays/_transaction_form.html:5
 msgid "New transaction"
-msgstr ""
+msgstr "Новая транзакция"
 
 #: fava/templates/overlays/_transaction_form.html:12
 #: fava/templates/overlays/_transaction_form.html:13
 msgid "Narration"
-msgstr ""
+msgstr "Описание"
 
 #: fava/templates/overlays/_transaction_form.html:19
 msgid "Save and add new"
-msgstr ""
+msgstr "Записать и добавить новую"
 
 #: fava/templates/overlays/_transaction_form.html:27
 msgid "Number"
-msgstr ""
+msgstr "Количество"
 
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
-msgstr ""
-
-#~ msgid "Load stored query:"
-#~ msgstr "Загрузить сохранённый запрос:"
-
-#~ msgid "(Source)"
-#~ msgstr "(Источник)"
-
-#~ msgid "More sample queries"
-#~ msgstr "Ещё примеры запросов"
-
-#~ msgid "Result"
-#~ msgstr "Результат"
+msgstr "Добавить проводку"
 
