@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-11-25 09:35+0100\n"
+"POT-Creation-Date: 2017-01-11 12:59+0100\n"
 "PO-Revision-Date: 2016-05-06 10:26+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -26,34 +26,38 @@ msgstr "Eigene Links"
 msgid "Reports"
 msgstr "Berichte"
 
-#: fava/templates/_aside.html:28 fava/templates/errors.html:4
+#: fava/templates/_aside.html:35 fava/templates/errors.html:4
 msgid "Errors"
 msgstr "Fehler"
 
-#: fava/templates/_entry_filters.html:11
+#: fava/templates/_entry_filters.html:2
 msgid "FROM"
 msgstr "FROM"
 
-#: fava/templates/_entry_filters.html:15
+#: fava/templates/_entry_filters.html:3
 msgid "Time"
 msgstr "Zeitraum"
 
-#: fava/templates/_entry_filters.html:24
+#: fava/templates/_entry_filters.html:4
 msgid "Tag"
 msgstr "Hashtag"
 
-#: fava/templates/_entry_filters.html:33 fava/templates/_tree_table.html:8
-#: fava/templates/_tree_table.html:106 fava/templates/holdings.html:12
-#: fava/templates/holdings.html:21 fava/templates/statistics.html:24
-#: fava/templates/statistics.html:53
+#: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:8
+#: fava/templates/_tree_table.html:102 fava/templates/holdings.html:12
+#: fava/templates/holdings.html:21
+#: fava/templates/overlays/_transaction_form.html:25
+#: fava/templates/overlays/_transaction_form.html:26
+#: fava/templates/statistics.html:24 fava/templates/statistics.html:53
 msgid "Account"
 msgstr "Konto"
 
-#: fava/templates/_entry_filters.html:42
+#: fava/templates/_entry_filters.html:6
+#: fava/templates/overlays/_transaction_form.html:10
+#: fava/templates/overlays/_transaction_form.html:11
 msgid "Payee"
 msgstr "Empfänger"
 
-#: fava/templates/_entry_filters.html:50
+#: fava/templates/_entry_filters.html:34
 msgid "Filter"
 msgstr "Filtern"
 
@@ -105,28 +109,29 @@ msgstr "Statistiken"
 msgid "Help"
 msgstr "Hilfe"
 
-#: fava/templates/_journal_table.html:60
+#: fava/templates/_journal_table.html:55
 msgid "Cleared Transactions"
 msgstr "Freigegebene Transaktionen"
 
-#: fava/templates/_journal_table.html:61
+#: fava/templates/_journal_table.html:56
 msgid "Pending Transactions"
 msgstr "Anstehende Transaktionen"
 
-#: fava/templates/_journal_table.html:62
+#: fava/templates/_journal_table.html:57
 msgid "Other Transactions"
 msgstr "Andere Transaktionen"
 
-#: fava/templates/_journal_table.html:66
+#: fava/templates/_journal_table.html:61
 msgid "Documents discovered by beancount"
 msgstr "Dokumente, die von Beancount entdeckt wurden"
 
-#: fava/templates/_journal_table.html:67
+#: fava/templates/_journal_table.html:62
 msgid "Statements from metadata"
 msgstr "Belege aus Metadaten"
 
 #: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
 #: fava/templates/events.html:17
+#: fava/templates/overlays/_transaction_form.html:7
 msgid "Date"
 msgstr "Datum"
 
@@ -159,47 +164,36 @@ msgstr "Änderung"
 msgid "Balance"
 msgstr "Saldo"
 
-#: fava/templates/_layout.html:68 fava/templates/editor.html:14
+#: fava/templates/_layout.html:67 fava/templates/editor.html:14
+#: fava/templates/overlays/_transaction_form.html:18
 msgid "Save"
 msgstr "Speichern"
 
-#: fava/templates/_layout.html:69
+#: fava/templates/_layout.html:68
 msgid "Saving..."
 msgstr "Speichern"
 
-#: fava/templates/_layout.html:70
+#: fava/templates/_layout.html:69
 msgid "Saving ${fileName} failed."
 msgstr "Speichern von ${fileName} fehlgeschlagen."
 
-#: fava/templates/_layout.html:71
+#: fava/templates/_layout.html:70
 msgid "Formatting the file with bean-format failed."
 msgstr "Formatieren mit bean-format fehlgeschlagen."
 
-#: fava/templates/_layout.html:72
+#: fava/templates/_layout.html:71
 msgid "Loading ${filePath} failed."
 msgstr "Laden von ${filePath} fehlgeschlagen."
 
-#: fava/templates/_layout.html:73
+#: fava/templates/_layout.html:72
 msgid "Chart is empty."
 msgstr "Diagramm ist leer."
 
-#: fava/templates/_layout.html:74
+#: fava/templates/_layout.html:73
 msgid "File change detected. Click to reload."
 msgstr "Änderung in Quelldatei entdeckt. Klicken um neu zu laden."
 
-#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
-msgid "Expand all accounts"
-msgstr "Alle Konten erweitern"
-
-#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:106
-msgid "Expand all"
-msgstr "Alle erweitern"
-
-#: fava/templates/_tree_table.html:13
-msgid "Other"
-msgstr "Andere"
-
-#: fava/templates/_tree_table.html:27
+#: fava/templates/_tree_table.html:5
 msgid ""
 "Hold Shift while clicking to expand all children \n"
 "Hold Ctrl or Cmd while clicking to expand one level"
@@ -208,11 +202,27 @@ msgstr ""
 "Klicken gedrückt. Um nur eine Ebene zu erweitern halte die Strg- oder "
 "Cmd-Taste gedrückt."
 
-#: fava/templates/_tree_table.html:125
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
+msgid "Expand all accounts"
+msgstr "Alle Konten erweitern"
+
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
+msgid "Expand all"
+msgstr "Alle erweitern"
+
+#: fava/templates/_tree_table.html:13
+msgid "Other"
+msgstr "Andere"
+
+#: fava/templates/_tree_table.html:121
 msgid "Hold the Shift-key while clicking to expand all children"
 msgstr ""
 "Um alle Sub-Kontos zu erweitern halte die Umschalt-Taste während dem "
 "Klicken gedrückt."
+
+#: fava/templates/account.html:16 fava/templates/account.html:24
+msgid "Changes"
+msgstr "Änderungen"
 
 #: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
@@ -221,10 +231,6 @@ msgstr "Journal aller Einträge dieses Kontos und aller Sub-Kontos"
 #: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "Konto Journal"
-
-#: fava/templates/account.html:24
-msgid "Changes"
-msgstr "Änderungen"
 
 #: fava/templates/account.html:25
 msgid "Balances"
@@ -295,6 +301,7 @@ msgid "Help pages"
 msgstr "Hilfeseiten"
 
 #: fava/templates/holdings.html:12 fava/templates/holdings.html:23
+#: fava/templates/overlays/_transaction_form.html:28
 msgid "Currency"
 msgstr "Währung"
 
@@ -354,23 +361,7 @@ msgstr "Wert"
 msgid "beancount: options"
 msgstr "beancount: Optionen"
 
-#: fava/templates/query.html:55
-msgid "Load stored query:"
-msgstr "Gespeicherte Abfrage laden:"
-
-#: fava/templates/query.html:62
-msgid "(Source)"
-msgstr "(Quelldatei)"
-
-#: fava/templates/query.html:77
-msgid "More sample queries"
-msgstr "Mehr Beispiel-Abfragen"
-
-#: fava/templates/query.html:82 fava/templates/query.html:98
-msgid "Result"
-msgstr "Ergebnis"
-
-#: fava/templates/query.html:91
+#: fava/templates/query.html:66
 msgid "Download as"
 msgstr "Downloaden als"
 
@@ -418,25 +409,50 @@ msgstr "Typ"
 msgid "# Entries"
 msgstr "Anzahl Einträge"
 
-#: fava/templates/macros/_interval_macros.html:1
+#: fava/templates/macros/_interval_macros.html:2
 msgid "Daily"
 msgstr "Täglich"
 
-#: fava/templates/macros/_interval_macros.html:2
+#: fava/templates/macros/_interval_macros.html:3
 msgid "Weekly"
 msgstr "Wöchentlich"
 
-#: fava/templates/macros/_interval_macros.html:3
+#: fava/templates/macros/_interval_macros.html:4
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: fava/templates/macros/_interval_macros.html:4
+#: fava/templates/macros/_interval_macros.html:5
 msgid "Quarterly"
 msgstr "Quartalsweise"
 
-#: fava/templates/macros/_interval_macros.html:5
+#: fava/templates/macros/_interval_macros.html:6
 msgid "Yearly"
 msgstr "Jährlich"
+
+#: fava/templates/overlays/_transaction_form.html:3
+msgid "close"
+msgstr "Schliessen"
+
+#: fava/templates/overlays/_transaction_form.html:5
+msgid "New transaction"
+msgstr "Neue Transaktion"
+
+#: fava/templates/overlays/_transaction_form.html:12
+#: fava/templates/overlays/_transaction_form.html:13
+msgid "Narration"
+msgstr "Beschreibung"
+
+#: fava/templates/overlays/_transaction_form.html:19
+msgid "Save and add new"
+msgstr "Speichern und neu"
+
+#: fava/templates/overlays/_transaction_form.html:27
+msgid "Number"
+msgstr "Zahl"
+
+#: fava/templates/overlays/_transaction_form.html:29
+msgid "Add posting"
+msgstr "Eintrag hinzufügen "
 
 #~ msgid "Toggle charts"
 #~ msgstr "Graphen ein/aus"
@@ -488,4 +504,16 @@ msgstr "Jährlich"
 
 #~ msgid ""
 #~ msgstr ""
+
+#~ msgid "Load stored query:"
+#~ msgstr "Gespeicherte Abfrage laden:"
+
+#~ msgid "(Source)"
+#~ msgstr "(Quelldatei)"
+
+#~ msgid "More sample queries"
+#~ msgstr "Mehr Beispiel-Abfragen"
+
+#~ msgid "Result"
+#~ msgstr "Ergebnis"
 
