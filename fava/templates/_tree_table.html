@@ -2,7 +2,7 @@
 {% set show_other_column = (operating_currencies|sort != ledger.options['commodities']|list|sort) %}
 
 {% macro tree(real_account, totals=True) %}
-<ol class="tree-table currencies-{{ operating_currencies|length }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
+    <ol class="tree-table{{ ' two-currencies' if operating_currencies|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
     <li class="head">
         <p>
         <span class="account-cell"><span>{{ _('Account') }}</span><a href="#" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>

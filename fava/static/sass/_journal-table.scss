@@ -121,7 +121,7 @@
   dl {
     font-size: .9em;
     margin: 0;
-    padding: 2px 0 2px 8rem;
+    padding: 2px 0 2px 8em;
 
     dt,
     dd {
@@ -150,17 +150,17 @@
   // Table cells (span)
   .num {
     border-left: 1px solid $color-table-border;
-    width: 9rem;
+    width: 9em;
   }
 
   .datecell {
     padding-right: 0;
-    width: 6rem;
+    width: 6em;
   }
 
   .flag {
     text-align: center;
-    width: 1.6rem;
+    width: 1.6em;
   }
 
   .change { font-weight: 500; }
