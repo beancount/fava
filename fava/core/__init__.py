@@ -1,5 +1,6 @@
 """This module provides the data required by Fava's reports."""
 
+import copy
 import datetime
 import os
 
@@ -282,7 +283,9 @@ class FavaLedger():
         else:
             postings = real_account.txn_postings
 
-        return realization.iterate_with_balance(postings)
+        return [(entry, postings, change, copy.copy(balance)) for
+                (entry, postings, change, balance) in
+                realization.iterate_with_balance(postings)]
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
