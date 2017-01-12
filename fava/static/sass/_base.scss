@@ -463,12 +463,13 @@ kbd {
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin: -10px;
+  margin: -10px -20px;
+  padding: 5px;
 }
 
 .column {
   flex: 1;
-  padding: 10px;
+  margin: 5px;
 
   h3 {
     text-align: center;

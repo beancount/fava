@@ -27,26 +27,26 @@
     }
   }
 
-  $tree-indent: 15px;
+  $tree-indent: 1em;
 
   // table cells
   .account-cell {
     align-items: center;
     display: flex;
     flex: 1;
-    max-width: 400px;
-    min-width: 200px;
+    max-width: 30em;
+    min-width: 14em;
 
     @for $i from 1 through 5 {
       &.depth-#{$i} {
         margin-left: $i * $tree-indent;
-        max-width: 400px - $i * $tree-indent;
-        min-width: 200px - $i * $tree-indent;
+        max-width: 30em - $i * $tree-indent;
+        min-width: 14em - $i * $tree-indent;
       }
     }
 
     a {
-      margin-left: 15px;
+      margin-left: 1em;
     }
   }
 
@@ -63,7 +63,7 @@
   }
 
   .num {
-    width: 10rem;
+    width: 10em;
 
     a {
       color: inherit;
@@ -72,7 +72,7 @@
   }
 
   .other {
-    width: 13rem;
+    width: 13em;
 
     a {
       color: inherit;
@@ -109,10 +109,7 @@
 
     .has-children {
       &::before {
-        border-bottom: 5px solid transparent;
-        border-left: 5px solid $color-treetable-expander;
-        border-top: 5px solid transparent;
-        margin: 0 -13px 0 3px;
+        transform: rotate(270deg);
       }
     }
   }
@@ -132,19 +129,19 @@
   }
 }
 
-@for $i from 1 through 5 {
-  $num-fraction: 1rem * (1 - (($i - 1)/10));
+@for $i from 2 through 5 {
+  $num-fraction: 1em * (1 - (($i - 1)/10));
 
   .currencies-#{$i} {
+    font-size: $num-fraction;
+
     p > span {
       &.num {
-        font-size: $num-fraction;
-        width: 20rem / ($i + 1);
+        width: 20em / ($i + 1);
       }
 
       &.other {
-        font-size: $num-fraction;
-        width: 20rem / ($i + 1) + 3rem;
+        width: 20em / ($i + 1) + 3em;
       }
     }
   }
