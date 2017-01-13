@@ -215,8 +215,8 @@
             {{ render_tags_links(entry) }}
         {% endif %}
         </span>
-        {% for key, _ in metadata.items() %}
-            <span class="metadata-indicator">{{ key[:2] }}</span>
+        {% for key, value in metadata.items() %}
+            <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
         {% endfor %}
         {% if type == 'transaction' %}
             {% for posting in entry.postings %}
