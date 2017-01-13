@@ -26,14 +26,3 @@ class FavaModule(object):
 
     def load_file(self):
         pass
-
-
-def entry_at_lineno(entries, filename, lineno):
-    """Returns the entry in filename at lineno."""
-    for entry in entries:
-        if entry.meta['filename'] == filename and \
-           entry.meta['lineno'] == lineno:
-            return entry
-
-    raise FavaAPIException('No entry in file {} at line {}'.format(
-        filename, lineno))

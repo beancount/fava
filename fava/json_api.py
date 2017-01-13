@@ -61,32 +61,38 @@ def format_source():
 @json_api.route('/add-document/', methods=['PUT'])
 def add_document():
     """Upload a document."""
+    if not g.ledger.options['documents']:
+        raise FavaAPIException('You need to set a documents folder.')
+
     file = request.files['file']
-    if file and len(g.ledger.options['documents']) > 0:
-        target_folder_index = int(request.form['targetFolderIndex'])
+    if not file:
+        raise FavaAPIException('No file uploaded.')
 
-        filepath = os.path.normpath(os.path.join(
-            os.path.dirname(g.ledger.beancount_file_path),
-            g.ledger.options['documents'][target_folder_index],
-            request.form['account'].replace(':', '/'),
-            secure_filename(request.form['filename']).replace('_', ' ')))
+    documents_folder = request.form['folder']
+    if documents_folder not in g.ledger.options['documents']:
+        raise FavaAPIException('Not a documents folder: {}.'
+                               .format(documents_folder))
 
-        directory = os.path.dirname(filepath)
-        if not os.path.exists(directory):
-            os.makedirs(directory, exist_ok=True)
+    filepath = os.path.normpath(os.path.join(
+        os.path.dirname(g.ledger.beancount_file_path),
+        documents_folder,
+        request.form['account'].replace(':', '/'),
+        secure_filename(request.form['filename']).replace('_', ' ')))
 
-        if os.path.isfile(filepath):
-            return _api_error('{} already exists.'.format(filepath))
+    directory = os.path.dirname(filepath)
+    if not os.path.exists(directory):
+        os.makedirs(directory, exist_ok=True)
 
-        file.save(filepath)
+    if os.path.isfile(filepath):
+        raise FavaAPIException('{} already exists.'.format(filepath))
 
-        if request.form.get('bfilename', None):
-            g.ledger.file.insert_metadata(request.form['bfilename'],
-                                          int(request.form['blineno']),
-                                          'statement',
-                                          os.path.basename(filepath))
-        return _api_success(message='Uploaded to {}'.format(filepath))
-    return 'No file uploaded or no documents folder in options', 400
+    file.save(filepath)
+
+    if request.form.get('entry_hash', None):
+        g.ledger.file.insert_metadata(request.form['entry_hash'],
+                                      'statement',
+                                      os.path.basename(filepath))
+    return _api_success(message='Uploaded to {}'.format(filepath))
 
 
 @json_api.route('/add-transaction/', methods=['PUT'])

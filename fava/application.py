@@ -224,10 +224,9 @@ def document():
 @app.route('/<bfile>/statement/', methods=['GET'])
 def statement():
     """Download a statement file."""
-    filename = request.args.get('filename', None)
-    lineno = int(request.args.get('lineno', -1))
+    entry_hash = request.args.get('entry_hash', None)
     key = request.args.get('key', None)
-    document_path = g.ledger.statement_path(filename, lineno, key)
+    document_path = g.ledger.statement_path(entry_hash, key)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
     return send_from_directory(directory, filename)

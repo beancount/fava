@@ -8,7 +8,7 @@
                 <label for="document-upload-folder">Documents folder:</label>
                 <select name="document-upload-folder" id="document-upload-folder">
                 {% for folder in ledger.options['documents'] %}
-                    <option value="{{ loop.index0 }}"{% if loop.first %} selected="selected"{% endif %}>{{ folder }}</option>
+                    <option value="{{ folder }}"{% if loop.first %} selected{% endif %}>{{ folder }}</option>
                 {% endfor %}
                 </select>
             </div>

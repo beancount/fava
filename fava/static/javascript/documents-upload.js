@@ -4,8 +4,8 @@ import e from './events';
 const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 function uploadDocument(formData) {
-  const documentFolderIndex = $('#document-upload-folder').value;
-  formData.append('targetFolderIndex', documentFolderIndex);
+  const documentFolder = $('#document-upload-folder').value;
+  formData.append('folder', documentFolder);
 
   $.fetch($('#document-upload-submit').getAttribute('data-url'), {
     method: 'PUT',
@@ -52,8 +52,7 @@ export default function initDocumentsUpload() {
       const now = new Date();
       let changedFilename = false;
 
-      const bfilename = target.getAttribute('data-filename');
-      const blineno = target.getAttribute('data-lineno');
+      const entryHash = target.getAttribute('data-entry');
 
       if (!folders.length) {
         e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
@@ -84,9 +83,8 @@ export default function initDocumentsUpload() {
           formData.append('account', accountName);
           formData.append('filename', element.value);
 
-          if (bfilename) {  // statement upload (add adding it to metadata)
-            formData.append('bfilename', bfilename);
-            formData.append('blineno', blineno);
+          if (entryHash) {  // statement upload (add adding it to metadata)
+            formData.append('entry_hash', entryHash);
           }
 
           uploadDocument(formData);

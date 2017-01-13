@@ -25,7 +25,7 @@ from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
 from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
                                TagFilter, TimeFilter)
-from fava.core.helpers import FavaAPIException, FavaModule, entry_at_lineno
+from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.holdings import get_final_holdings, aggregate_holdings_by
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
@@ -315,6 +315,25 @@ class FavaLedger():
                                                   aggregation_key)
         return holdings_list
 
+    def get_entry(self, entry_hash):
+        """Find an entry.
+
+        Arguments:
+            entry_hash: Hash of the entry.
+
+        Returns:
+            The entry with the given hash.
+        Raises:
+            FavaAPIException: If there is no entry for the given hash.
+
+        """
+        try:
+            return next(entry for entry in self.all_entries
+                        if entry_hash == hash_entry(entry))
+        except StopIteration:
+            raise FavaAPIException('No entry found for hash "{}"'
+                                   .format(entry_hash))
+
     def context(self, entry_hash):
         """Context for an entry.
 
@@ -326,12 +345,7 @@ class FavaLedger():
             ``entry_hash`` and its context.
 
         """
-        try:
-            entry = next(entry for entry in self.all_entries
-                         if entry_hash == hash_entry(entry))
-        except StopIteration:
-            return None, None
-
+        entry = self.get_entry(entry_hash)
         ctx = render_entry_context(self.all_entries, self.options, entry)
         return entry, ctx.split("\n", 2)[2]
 
@@ -388,9 +402,9 @@ class FavaLedger():
         return [posting for entry in filter_type(self.entries, Transaction)
                 for posting in entry.postings]
 
-    def statement_path(self, filename, lineno, metadata_key):
+    def statement_path(self, entry_hash, metadata_key):
         """Returns the path for a statement found in the specified entry."""
-        entry = entry_at_lineno(self.all_entries, filename, lineno)
+        entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
 
         beancount_dir = os.path.dirname(self.beancount_file_path)

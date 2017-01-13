@@ -107,14 +107,14 @@
     {% endfor %}
 {%- endmacro %}
 
-{% macro render_metadata(metadata, show_metadata, entry=None) -%}
+{% macro render_metadata(metadata, show_metadata, entry_hash=None) -%}
 {% if metadata %}
     <dl class="metadata{% if not show_metadata %} hidden{% endif %}">
         {% for key, value in metadata.items() %}
             <dt>{{ key }}</dt>
             <dd>
                 {%- if key.startswith('statement') %}
-                    <a href="{{ url_for('statement', filename=entry.meta.filename, lineno=entry.meta.lineno, key=key) }}">
+                    <a href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">
                 {% endif -%}
                 {{ value }}
                 {%- if key.startswith('statement') %}</a>{% endif -%}
@@ -155,6 +155,7 @@
         {% set entry, _, change, balance = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
+    {% set entry_hash = entry|hash_entry %}
     {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
     <li class="{{ type }}
     {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
@@ -166,9 +167,9 @@
     {%- if entry.diff_amount %} fail{% endif -%}
     " title="{{ entry.meta.filename }}:{{ entry.meta.lineno }}">
         <p>
-        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', entry|hash_entry) }}">{{ entry.date }}</a></span>
+        <span class="datecell"><a href="{{ context_url.replace('REPLACEME', entry_hash) }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
-    <span class="description{%- if type != 'transaction' %}"{% else %} droptarget" data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif -%}>
+    <span class="description{%- if type != 'transaction' %}"{% else %} droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif -%}>
         {% if type == 'open' %}
             Open {{ account_link(entry.account) }}
         {% elif type == 'close' %}
@@ -228,7 +229,7 @@
             <span class="num">{{ render_inventory(balance) }}</span>
         </p>
         {% endif %}
-        {{ render_metadata(metadata, show_type['metadata'], entry) }}
+        {{ render_metadata(metadata, show_type['metadata'], entry_hash) }}
         {% if entry.postings %}
         <ul class="postings{% if not show_type['postings'] %} hidden{% endif %}">
         {% for posting in entry.postings %}
@@ -236,7 +237,7 @@
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
-                <span class="description droptarget" data-filename="{{ entry.meta.filename }}" data-lineno="{{ entry.meta.lineno }}" data-account-name="{{ posting.account }}">{{ account_link(posting.account) }}</span>
+                <span class="description droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ posting.account }}">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>

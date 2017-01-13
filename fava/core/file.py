@@ -2,7 +2,7 @@
 
 import os
 
-from fava.core.helpers import FavaAPIException, FavaModule, entry_at_lineno
+from fava.core.helpers import FavaAPIException, FavaModule
 
 
 class FileModule(FavaModule):
@@ -63,14 +63,15 @@ class FileModule(FavaModule):
             file.write(source)
         self.load_file()
 
-    def insert_metadata(self, filename, lineno, basekey, value):
+    def insert_metadata(self, entry_hash, basekey, value):
         """Insert metadata into a file at lineno.
 
         Also, prevent duplicate keys.
         """
-        entry = entry_at_lineno(self.ledger.all_entries, filename, lineno)
+        entry = self.ledger.get_entry(entry_hash)
         key = next_key(basekey, entry.meta)
-        insert_metadata_in_file(filename, lineno-1, key, value)
+        insert_metadata_in_file(entry.meta['filename'], entry.meta['lineno']-1,
+                                key, value)
 
     def insert_transaction(self, transaction):
         """Insert a transaction.

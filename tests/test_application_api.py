@@ -21,7 +21,7 @@ def test_api_add_document(app, test_client, tmpdir):
         old_documents = flask.g.ledger.options['documents']
         flask.g.ledger.options['documents'] = [str(tmpdir)]
         data = {
-            'targetFolderIndex': '0',
+            'folder': str(tmpdir),
             'account': 'Test',
             'filename': '2015-12-12_test',
             'file': (BytesIO(b'asdfasdf'), 'test'),
