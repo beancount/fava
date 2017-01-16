@@ -58,7 +58,7 @@
     </form>
     <div id="query-container">
   {% endif %}
-  {% if query %}
+    {% if query %}
       <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
         <div class="queryresults-header"><h3><code>{{ query }}</code></h3>
           {% if result_types %}
@@ -72,34 +72,34 @@
             </span>
           {% endif %}
         </div>
-      {% endif %}
-      {% if contents or result_types %}
-        <div class="queryresults-body">
-          {% if contents %}
-            <pre><code>{{ contents }}</code></pre>
-          {% elif result_types %}
-            <table class="queryresults sortable">
-              <thead>
-                <tr>
-                  {% for name, type in result_types %}
-                    <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
-                  {% endfor %}
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in result_rows %}
+        {% if contents or result_types %}
+          <div class="queryresults-body">
+            {% if contents %}
+              <pre><code>{{ contents }}</code></pre>
+            {% elif result_types %}
+              <table class="queryresults sortable">
+                <thead>
                   <tr>
                     {% for name, type in result_types %}
-                      {{ querycell(name, row[name], type)  }}
+                      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
                     {% endfor %}
                   </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% endif %}
-        </div>
-      {% endif %}
-    </div>
+                </thead>
+                <tbody>
+                  {% for row in result_rows %}
+                    <tr>
+                      {% for name, type in result_types %}
+                        {{ querycell(name, row[name], type)  }}
+                      {% endfor %}
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
   {% if not result_only %}
       {% for history_item in query_shell_history %}
         <div class="queryresults-wrapper toggled inactive">
