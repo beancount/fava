@@ -21,13 +21,27 @@ const scatterColorScale = scaleOrdinal(schemeCategory10);
 const formatCurrencyWithComma = format(',.2f');
 const formatCurrencyWithoutComma = format('.2f');
 function formatCurrency(number) {
+  var str = '';
   if (window.favaAPI.options.render_commas) {
-    return formatCurrencyWithComma(number);
+    str = formatCurrencyWithComma(number);
+  } else {
+    str = formatCurrencyWithoutComma(number);
   }
-  return formatCurrencyWithoutComma(number);
+  if (window.favaAPI.incognito) {
+    str = str.replace(/[0-9]/g, 'X');
+  }
+  return str;
 }
 
-const formatCurrencyShort = format('.2s');
+const formatCurrencyShortDefault = format('.2s');
+function formatCurrencyShort(number) {
+  var str = formatCurrencyShortDefault(number);
+  if (window.favaAPI.incognito) {
+    str = str.replace(/[0-9]/g, 'X');
+  }
+  return str;
+}
+
 const dateFormat = {
   year: utcFormat('%Y'),
   quarter(date) {
