@@ -31,7 +31,11 @@ class FavaJSONEncoder(JSONEncoder):
         try:
             return JSONEncoder.default(self, o)
         except TypeError:
-            return str(o)
+            # workaround for #472
+            try:
+                return str(o)
+            except TypeError:
+                return ''
 
 
 def _serialize_inventory(inventory, at_cost=False):
