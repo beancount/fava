@@ -1,7 +1,7 @@
 import ast
 import os
 import re
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 with open('fava/__init__.py', 'rb') as f:
@@ -26,7 +26,7 @@ setup(
     license='MIT',
     keywords='fava beancount beancount-fava beancount-web'
              'ledger ledger-cli cl-accounting',
-    packages=['fava'],
+    packages=find_packages(exclude=['tests']),
     include_package_data=True,
     entry_points={
         'console_scripts': [
