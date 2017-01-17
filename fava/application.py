@@ -159,16 +159,19 @@ def _perform_global_filters():
         g.filters[exception.filter_type] = None
         flash(str(exception))
 
+
 @app.after_request
 def _incognito(response):
     """Replace all numbers with 'X'."""
     if (g.ledger.fava_options['incognito'] and
-       response.content_type.startswith('text/html') and
-       not (request.endpoint == 'report' and
-            request.view_args['report_name'] == 'editor')):
-        original_text = response.get_data(as_text=True)
-        response.set_data(replace_numbers(original_text))
+       response.content_type.startswith('text/html')):
+        is_editor = (request.endpoint == 'report' and
+                     request.view_args['report_name'] == 'editor')
+        if not is_editor:
+            original_text = response.get_data(as_text=True)
+            response.set_data(replace_numbers(original_text))
     return response
+
 
 @app.url_defaults
 def _inject_filters(endpoint, values):

@@ -21,7 +21,7 @@ const scatterColorScale = scaleOrdinal(schemeCategory10);
 const formatCurrencyWithComma = format(',.2f');
 const formatCurrencyWithoutComma = format('.2f');
 function formatCurrency(number) {
-  var str = '';
+  let str = '';
   if (window.favaAPI.options.render_commas) {
     str = formatCurrencyWithComma(number);
   } else {
@@ -35,7 +35,7 @@ function formatCurrency(number) {
 
 const formatCurrencyShortDefault = format('.2s');
 function formatCurrencyShort(number) {
-  var str = formatCurrencyShortDefault(number);
+  let str = formatCurrencyShortDefault(number);
   if (window.favaAPI.incognito) {
     str = str.replace(/[0-9]/g, 'X');
   }
