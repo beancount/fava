@@ -163,7 +163,8 @@ def _perform_global_filters():
 @app.after_request
 def _incognito(response):
     """Replace all numbers with 'X'."""
-    if (g.ledger.fava_options['incognito'] and
+    ledger = getattr(g, 'ledger', None)
+    if (ledger and ledger.fava_options['incognito'] and
        response.content_type.startswith('text/html')):
         is_editor = (request.endpoint == 'report' and
                      request.view_args['report_name'] == 'editor')
