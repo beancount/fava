@@ -87,3 +87,7 @@ def test_incognito(app, test_client):
     result = test_client.get(url)
     assert result.status_code == 200
     assert 'XXX' in result.get_data(True)
+
+    with app.test_request_context():
+        app.preprocess_request()
+        flask.g.ledger.fava_options['incognito'] = False
