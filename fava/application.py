@@ -24,6 +24,7 @@ from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
+from beancount.utils.text_utils import replace_numbers
 
 from fava import template_filters
 from fava.core import FavaLedger
@@ -157,6 +158,20 @@ def _perform_global_filters():
     except FilterException as exception:
         g.filters[exception.filter_type] = None
         flash(str(exception))
+
+
+@app.after_request
+def _incognito(response):
+    """Replace all numbers with 'X'."""
+    ledger = getattr(g, 'ledger', None)
+    if (ledger and ledger.fava_options['incognito'] and
+       response.content_type.startswith('text/html')):
+        is_editor = (request.endpoint == 'report' and
+                     request.view_args['report_name'] == 'editor')
+        if not is_editor:
+            original_text = response.get_data(as_text=True)
+            response.set_data(replace_numbers(original_text))
+    return response
 
 
 @app.url_defaults
