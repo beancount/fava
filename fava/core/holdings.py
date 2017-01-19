@@ -1,8 +1,8 @@
 import operator
 
-from beancount.core import account, flags, account_types, realization
+from beancount.core import convert, flags, account_types, prices, realization
+from beancount.core.account import commonprefix
 from beancount.core.number import ZERO
-from beancount.ops import prices
 from beancount.core.data import Posting, Transaction
 from beancount.core.amount import Amount
 from beancount.core.position import Cost
@@ -80,7 +80,7 @@ def aggregate_holdings_list(holdings):
     currency = currencies.pop() if len(currencies) == 1 else '*'
     cost_currency = cost_currencies.pop()
     account_ = (accounts.pop() if len(accounts) == 1
-                else account.commonprefix(accounts))
+                else commonprefix(accounts))
     show_cost = bool(avg_cost) and cost_currency != currency
 
     return Posting(
@@ -138,44 +138,10 @@ def inventory_at_dates(transactions, dates, posting_predicate):
 
     for date in dates:
         while txn and txn.date < date:
-            for posting in txn.postings:
-                if posting_predicate(posting):
-                    inventory.add_position(posting)
+            for posting in filter(posting_predicate, txn.postings):
+                inventory.add_position(posting)
             txn = next(iterator, None)
-        yield inventory.get_positions()
-
-
-def convert_inventory(price_map, target_currency, inventory, date):
-    """Convert and sum an inventory to a common currency.
-
-    Returns:
-      A Decimal, the sum of all positions that could be converted.
-    """
-
-    total = ZERO
-
-    for pos in inventory:
-        # Fetch the price in the cost currency if there is one.
-        if pos.cost:
-            base_quote = (pos.units.currency, pos.cost.currency)
-            _, cost_number = prices.get_price(price_map, base_quote, date)
-            if cost_number is None:
-                cost_number = pos.cost.number
-            currency = pos.cost.currency
-        # Otherwise, price it in its own currency.
-        else:
-            cost_number = 1
-            currency = pos.units.currency
-        if currency == target_currency:
-            total += pos.units.number * cost_number
-        else:
-            base_quote = (currency, target_currency)
-
-            # Get the conversion rate.
-            _, price = prices.get_price(price_map, base_quote, date)
-            if price is not None:
-                total += pos.units.number * cost_number * price
-    return total
+        yield inventory
 
 
 def net_worth_at_dates(entries, dates, price_map, options_map):
@@ -195,7 +161,8 @@ def net_worth_at_dates(entries, dates, price_map, options_map):
     return [{
         'date': date,
         'balance': {
-            currency: convert_inventory(price_map, currency, inv, date)
+            currency: inv.reduce(convert.convert_position, currency, price_map,
+                                 date).get_currency_units(currency).number
             for currency in options_map['operating_currency']
         }
     } for date, inv in zip(dates, inventories)]

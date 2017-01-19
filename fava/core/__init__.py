@@ -5,14 +5,14 @@ import datetime
 import os
 
 from beancount import loader
-from beancount.core import getters, realization
+from beancount.core import getters, prices, realization
 from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Custom)
-from beancount.ops import prices, summarize
+from beancount.ops import summarize
 from beancount.parser.options import get_account_types
 from beancount.reports.context import render_entry_context
 from beancount.utils.encryption import is_encrypted_file

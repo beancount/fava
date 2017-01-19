@@ -13,8 +13,8 @@
 {% set type = type_|string %}
 {% if type == "<class 'beancount.core.inventory.Inventory'>" %}
     <td class="num">
-    {% for position in value.cost() %}
-        {% if position.units.number != 0 %}
+    {% for position in value|cost %}
+        {% if position.units.number %}
             {{ position.units|format_amount }}<br>
         {% endif %}
     {% endfor %}
