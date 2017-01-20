@@ -186,6 +186,8 @@ def _inject_filters(endpoint, values):
         return
     if 'interval' not in values:
         values['interval'] = request.args.get('interval')
+    if 'conversion' not in values:
+        values['conversion'] = request.args.get('conversion')
     for filter_name in ['account', 'from', 'payee', 'tag', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
@@ -199,6 +201,7 @@ def _pull_beancount_file(_, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
+    g.at_value = request.args.get('conversion') == 'at_value'
 
 
 @app.errorhandler(FavaAPIException)

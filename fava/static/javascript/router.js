@@ -43,6 +43,13 @@ function updateURL(url) {
       newURL.removeSearch('interval');
     }
   }
+  const conversion = document.getElementById('conversion');
+  if (conversion) {
+    newURL.setSearch('conversion', conversion.value);
+    if (conversion.value === 'at_cost') {
+      newURL.removeSearch('conversion');
+    }
+  }
   return newURL.toString();
 }
 
@@ -127,6 +134,12 @@ export default function initRouter() {
 
     if ($('#chart-interval')) {
       $('#chart-interval').addEventListener('change', () => {
+        loadURL(updateURL(window.location.href));
+      });
+    }
+
+    if ($('#conversion')) {
+      $('#conversion').addEventListener('change', () => {
         loadURL(updateURL(window.location.href));
       });
     }

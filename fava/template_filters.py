@@ -31,6 +31,13 @@ def cost(inventory):
     return inventory.reduce(convert.get_cost)
 
 
+def cost_or_value(inventory, date=None):
+    """Get the cost or value of an inventory."""
+    if g.at_value:
+        return inventory.reduce(convert.get_value, g.ledger.price_map, date)
+    return inventory.reduce(convert.get_cost)
+
+
 def format_currency(value, currency=None, show_if_zero=False):
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
