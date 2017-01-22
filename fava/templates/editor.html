@@ -11,7 +11,7 @@
                 <option{% if source_file == file_path %} selected="selected"{% endif %}>{{ source_file }}</option>
             {% endfor %}
         </select>
-        <button id="source-editor-submit" type="submit" data-url="{{ url_for('json_api.source') }}">{{ _('Save') }}</button>
+        <button id="source-editor-submit" type="submit" disabled data-url="{{ url_for('json_api.source') }}">{{ _('Save') }}</button>
         <button id="source-editor-format" type="submit" data-url="{{ url_for('json_api.format_source') }}">{{ _('Format') }}</button>
     </div>
     <div id="source-editor-wrapper" class="source-editor-wrapper">

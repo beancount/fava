@@ -228,6 +228,7 @@ button {
     box-shadow: 0 0 5px $color-header;
   }
 
+  &:disabled,
   &.inactive,
   &.muted {
     background-color: darken($color-header-text, 20);

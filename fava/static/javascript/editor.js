@@ -61,7 +61,7 @@ function saveEditorContent(cm) {
       e.trigger('error', _('Saving ${fileName} failed.', { fileName }));  // eslint-disable-line no-template-curly-in-string
     })
     .then(() => {
-      button.disabled = false;
+      cm.markClean();
       button.textContent = _('Save');
     });
 }
@@ -216,6 +216,11 @@ export default function initEditor() {
   if ($('#source-editor')) {
     const el = $('#source-editor');
     const editor = CodeMirror.fromTextArea(el, defaultOptions);
+    const saveButton = $('#source-editor-submit');
+
+    editor.on('changes', (cm) => {
+      saveButton.disabled = cm.isClean();
+    });
 
     editor.on('keyup', (cm, event) => {
       if (!cm.state.completionActive && event.keyCode !== 13) {
@@ -237,7 +242,7 @@ export default function initEditor() {
       select.disabled = true;
       const filePath = select.value;
 
-      const url = new URI($('#source-editor-submit').getAttribute('data-url'))
+      const url = new URI(saveButton.getAttribute('data-url'))
         .setSearch('file_path', filePath)
         .toString();
 
@@ -266,7 +271,7 @@ export default function initEditor() {
       formatEditorContent(editor);
     });
 
-    $('#source-editor-submit').addEventListener('click', (event) => {
+    saveButton.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
       saveEditorContent(editor);
