@@ -240,6 +240,19 @@ button {
       box-shadow: 0 0 5px darken($color-header-text, 20);
     }
   }
+
+  &.link {
+    background: none;
+    color: $color-links;
+
+    &:focus,
+    &:active,
+    &:hover {
+      box-shadow: none;
+      color: darken($color-links, 10);
+      text-decoration: underline;
+    }
+  }
 }
 
 .hidden {
