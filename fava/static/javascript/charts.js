@@ -892,6 +892,11 @@ export default function initCharts() {
   // Switch between charts
   $$('label', labels).forEach((label) => {
     label.addEventListener('click', () => {
+      // Don't do anything if the charts aren't shown.
+      if ($('#charts').classList.contains('hidden')) {
+        return;
+      }
+
       const chartId = label.getAttribute('for');
       $$('.charts .chart').forEach((el) => { el.classList.add('hidden'); });
       $(`#${chartId}`).classList.remove('hidden');
