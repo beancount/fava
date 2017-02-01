@@ -1,8 +1,8 @@
 .PHONY: docs
 
-all: build-js
+all: fava/static/gen/app.js
 
-build-js:
+fava/static/gen/app.js: fava/static/sass/* fava/static/javascript/*
 	cd fava/static; npm update; npm run build
 
 clean:
@@ -23,10 +23,12 @@ docs:
 # This requires Vagrant (with vagrant-scp plugin) and Virtualbox (with
 # Extension Pack) to be installed. This might take quite some time -
 # especially on the first run, when the VM images have to be downloaded.
-binaries: build-js
+binaries: dist/fava-linux-x64 dist/fava-macos-x64
+dist/fava-linux-x64: fava fava/static/gen/app.js
 	vagrant up centos
 	vagrant scp centos:/vagrant/fava/dist/fava dist/fava-linux-x64
 	vagrant halt centos
+dist/fava-macos-x64: fava fava/static/gen/app.js
 	vagrant up darwin
 	vagrant scp darwin:/vagrant/fava/dist/fava dist/fava-macos-x64
 	vagrant halt darwin
