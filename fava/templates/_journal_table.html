@@ -1,4 +1,4 @@
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom', 'budget'] %}
+{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom'] %}
 {% set transaction_types = ['cleared', 'pending', 'other'] %}
 {% set flags_to_types = {'*': 'cleared', '!': 'pending'} %}
 {% set document_types = ['discovered', 'statement'] %}
@@ -68,12 +68,15 @@
     <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}"{% if not show_type[type] %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
             {% if type == 'transaction' %}
                 {% for txn_type in transaction_types %}
-    <button type="button" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" class="txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">{{ transaction_type_buttons[txn_type].0 }}</button>
+    <button type="button" title="{{ transaction_type_buttons[txn_type].1 }}" data-type="{{ txn_type }}" class="small txn-toggle{% if not show_type[txn_type] or not show_type['transaction'] %} inactive{% endif %}">{{ transaction_type_buttons[txn_type].0 }}</button>
                 {% endfor %}
+            {% endif %}
+            {% if type == 'custom' %}
+    <button type="button" title="{{ _('Budget entries') }}" data-type="budget" class="small custom-toggle{% if not show_type['budget'] or not show_type['custom'] %} inactive{% endif %}">B</button>
             {% endif %}
             {% if type == 'document' %}
                 {% for doc_type in document_types %}
-    <button type="button" title="{{ document_type_buttons[doc_type].1 }}" data-type="{{ doc_type }}" class="doc-toggle{% if not show_type[doc_type] or not show_type['document'] %} inactive{% endif %}">{{ document_type_buttons[doc_type].0 }}</button>
+    <button type="button" title="{{ document_type_buttons[doc_type].1 }}" data-type="{{ doc_type }}" class="small doc-toggle{% if not show_type[doc_type] or not show_type['document'] %} inactive{% endif %}">{{ document_type_buttons[doc_type].0 }}</button>
                 {% endfor %}
             {% endif %}
         {% endif %}
@@ -157,7 +160,7 @@
     {% set type = entry.__class__.__name__.lower() %}
     {% set entry_hash = entry|hash_entry %}
     {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
-    <li class="{{ type }}
+    <li class="{{ type }} {{ entry.type or '' }}
     {%- if entry.flag %} {{ flags_to_types.get(entry.flag, 'other') }}
         {%- if not show_type[flags_to_types.get(entry.flag, 'other')] %} hidden{% endif -%}
     {% endif -%}
@@ -198,7 +201,6 @@
                 {%- if value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
             {% endfor %}
           {% endif %}
-        {% elif type == 'budget' %}
         {% elif type == 'document' %}
             Document for {{ account_link(entry.account) }} <a class="filename" href="{{ url_for('document', file_path=entry.filename) }}">{{ entry.filename|basename }}</a>
             {{ render_tags_links(entry) }}

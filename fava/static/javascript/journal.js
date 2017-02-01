@@ -26,6 +26,10 @@ export default function initJournal() {
         $$('#entry-filters .txn-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
       }
 
+      if (type === 'custom') {
+        $$('#entry-filters .custom-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
+      }
+
       if (type === 'document') {
         $$('#entry-filters .doc-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
       }
