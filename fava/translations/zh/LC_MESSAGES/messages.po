@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2017-01-11 13:26+0100\n"
-"PO-Revision-Date: 2017-01-31 16:13-0500\n"
-"Last-Translator: Linghein He tichai@fastmail.fm\n"
+"PO-Revision-Date: 2017-01-31 21:59-0500\n"
+"Last-Translator: Linghein He <ticmoei@gmail.com>\n"
 "Language: zh\n"
 "Language-Team: zh <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -25,7 +25,7 @@ msgstr "个性化链接"
 
 #: fava/templates/_aside.html:11
 msgid "Reports"
-msgstr "报告"
+msgstr "报表"
 
 #: fava/templates/_aside.html:35 fava/templates/errors.html:4
 msgid "Errors"
@@ -33,7 +33,7 @@ msgstr "错误"
 
 #: fava/templates/_entry_filters.html:2
 msgid "FROM"
-msgstr ""
+msgstr "FROM"
 
 #: fava/templates/_entry_filters.html:3
 msgid "Time"
@@ -56,7 +56,7 @@ msgstr "账户"
 #: fava/templates/overlays/_transaction_form.html:10
 #: fava/templates/overlays/_transaction_form.html:11
 msgid "Payee"
-msgstr "受款人"
+msgstr "收款人"
 
 #: fava/templates/_entry_filters.html:34
 msgid "Filter"
@@ -64,7 +64,7 @@ msgstr "筛选"
 
 #: fava/templates/_globals.html:2
 msgid "Income Statement"
-msgstr "利润表"
+msgstr "损益表"
 
 #: fava/templates/_globals.html:3
 msgid "Balance Sheet"
@@ -72,11 +72,11 @@ msgstr "资产负债表"
 
 #: fava/templates/_globals.html:4
 msgid "Trial Balance"
-msgstr "试算平衡表"
+msgstr "试算表"
 
 #: fava/templates/_globals.html:5
 msgid "Journal"
-msgstr "日记簿"
+msgstr "日记账"
 
 #: fava/templates/_globals.html:6
 msgid "Query"
@@ -88,7 +88,7 @@ msgstr "资产"
 
 #: fava/templates/_globals.html:8
 msgid "Commodities"
-msgstr "商品"
+msgstr "货币"
 
 #: fava/templates/_globals.html:9
 msgid "Events"
@@ -112,23 +112,23 @@ msgstr "帮助"
 
 #: fava/templates/_journal_table.html:55
 msgid "Cleared Transactions"
-msgstr "已出账交易"
+msgstr "已结清交易"
 
 #: fava/templates/_journal_table.html:56
 msgid "Pending Transactions"
-msgstr "预授权交易"
+msgstr "未结清交易"
 
 #: fava/templates/_journal_table.html:57
 msgid "Other Transactions"
-msgstr "其他往来"
+msgstr "其他交易"
 
 #: fava/templates/_journal_table.html:61
 msgid "Documents discovered by beancount"
-msgstr "由beancount发现的文档"
+msgstr "由 beancount 发现的文档"
 
 #: fava/templates/_journal_table.html:62
 msgid "Statements from metadata"
-msgstr "元数据中的帐单"
+msgstr "元数据中的账单"
 
 #: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
 #: fava/templates/events.html:17
@@ -138,15 +138,15 @@ msgstr "日期"
 
 #: fava/templates/_journal_table.html:142
 msgid "F"
-msgstr ""
+msgstr "F"
 
 #: fava/templates/_journal_table.html:143
 msgid "Narration/Payee"
-msgstr "摘要/受款人"
+msgstr "摘要/收款人"
 
 #: fava/templates/_journal_table.html:144
 msgid "Position"
-msgstr "状况"
+msgstr "头寸"
 
 #: fava/templates/_journal_table.html:145 fava/templates/commodities.html:14
 #: fava/templates/holdings.html:26
@@ -172,35 +172,35 @@ msgstr "保存"
 
 #: fava/templates/_layout.html:68
 msgid "Saving..."
-msgstr "保存中"
+msgstr "保存中…"
 
 #: fava/templates/_layout.html:69
 msgid "Saving ${fileName} failed."
-msgstr "保存 ${fileName}  失败"
+msgstr "保存 ${fileName} 失败"
 
 #: fava/templates/_layout.html:70
 msgid "Formatting the file with bean-format failed."
-msgstr "使用 bean-format 编排格式失败。"
+msgstr "使用 bean-format 排版失败。"
 
 #: fava/templates/_layout.html:71
 msgid "Loading ${filePath} failed."
-msgstr "加载 ${filePath} 失败"
+msgstr "加载 ${filePath} 失败。"
 
 #: fava/templates/_layout.html:72
 msgid "Chart is empty."
-msgstr "图表为空"
+msgstr "图表为空。"
 
 #: fava/templates/_layout.html:73
 msgid "File change detected. Click to reload."
-msgstr "检测到文件发生，点击此处重新整理。"
+msgstr "检测到文件发生变化，点击此处刷新。"
 
 #: fava/templates/_tree_table.html:5
 msgid ""
 "Hold Shift while clicking to expand all children \n"
 "Hold Ctrl or Cmd while clicking to expand one level"
 msgstr ""
-"按住Shift单击以展开所有子账户 \n"
-"按住Ctrl或Cmd点单击以展开单级"
+"按住 Shift 单击来展开所有子账户\n"
+"按住 Ctrl 或 Cmd 单击来展开一层"
 
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
 msgid "Expand all accounts"
@@ -216,19 +216,19 @@ msgstr "其他"
 
 #: fava/templates/_tree_table.html:121
 msgid "Hold the Shift-key while clicking to expand all children"
-msgstr "按住 Shift 键点击以展开所有子目录"
+msgstr "按住 Shift 键单击来展开所有子对象"
 
 #: fava/templates/account.html:16 fava/templates/account.html:24
 msgid "Changes"
-msgstr "变帐"
+msgstr "变更"
 
 #: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "此账户及其子账户的日记簿"
+msgstr "此账户及其子账户的日记账"
 
 #: fava/templates/account.html:23
 msgid "Account Journal"
-msgstr "账户日记簿"
+msgstr "账户日记账"
 
 #: fava/templates/account.html:25
 msgid "Balances"
@@ -236,11 +236,11 @@ msgstr "余额"
 
 #: fava/templates/context.html:9
 msgid "Hash:"
-msgstr "哈希值"
+msgstr "哈希："
 
 #: fava/templates/context.html:11
 msgid "Location:"
-msgstr "位置"
+msgstr "位置："
 
 #: fava/templates/context.html:12 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
@@ -250,15 +250,15 @@ msgstr "源文件 %(file)s:%(lineno)s"
 
 #: fava/templates/context.html:15
 msgid "Journal Entry"
-msgstr "日记簿入账"
+msgstr "日记账项目"
 
 #: fava/templates/context.html:21
 msgid "No entry matches the given hash."
-msgstr "无与所提供条件相符的入账"
+msgstr "不存在符合指定哈希的项目。"
 
 #: fava/templates/editor.html:15
 msgid "Format"
-msgstr "格式"
+msgstr "排版"
 
 #: fava/templates/errors.html:11
 msgid "File"
@@ -274,7 +274,7 @@ msgstr "错误"
 
 #: fava/templates/errors.html:30
 msgid "No errors."
-msgstr "无错误"
+msgstr "没有错误。"
 
 #: fava/templates/events.html:13
 #, python-format
@@ -287,7 +287,7 @@ msgstr "描述"
 
 #: fava/templates/events.html:36
 msgid "No events."
-msgstr "无事件"
+msgstr "没有事件。"
 
 #: fava/templates/help.html:4
 #, python-format
@@ -309,11 +309,11 @@ msgstr "成本货币"
 
 #: fava/templates/holdings.html:13
 msgid "Holdings by"
-msgstr "持有"
+msgstr "按"
 
 #: fava/templates/holdings.html:22
 msgid "Units"
-msgstr "单位"
+msgstr "数量"
 
 #: fava/templates/holdings.html:25
 msgid "Average Cost"
@@ -345,7 +345,7 @@ msgstr "支出"
 
 #: fava/templates/options.html:5
 msgid "fava: options"
-msgstr "fava 选项"
+msgstr "fava：选项"
 
 #: fava/templates/options.html:9 fava/templates/options.html:26
 msgid "Key"
@@ -357,7 +357,7 @@ msgstr "值"
 
 #: fava/templates/options.html:22
 msgid "beancount: options"
-msgstr "beancount 选项"
+msgstr "beancount：选项"
 
 #: fava/templates/query.html:66
 msgid "Download as"
@@ -365,11 +365,11 @@ msgstr "下载为"
 
 #: fava/templates/statistics.html:20
 msgid "Postings per Account"
-msgstr "过账账户"
+msgstr "每账户记录数"
 
 #: fava/templates/statistics.html:25
 msgid "# Postings"
-msgstr "# 过账"
+msgstr "# 记录"
 
 #: fava/templates/statistics.html:38 fava/templates/statistics.html:107
 msgid "Total"
@@ -377,25 +377,25 @@ msgstr "合计"
 
 #: fava/templates/statistics.html:47
 msgid "Update Activity"
-msgstr "最后动帐"
+msgstr "变更动态"
 
 #: fava/templates/statistics.html:48
 msgid ""
 "Click to copy balance directives for accounts (except green ones) to the "
 "clipboard."
-msgstr ""
+msgstr "单击来复制账户（绿色除外）对应的 balance 指令到剪贴板。"
 
 #: fava/templates/statistics.html:49
 msgid "Copy balance directives"
-msgstr ""
+msgstr "复制 balance 指令"
 
 #: fava/templates/statistics.html:56
 msgid "Last Entry"
-msgstr "最后入账"
+msgstr "最新项目"
 
 #: fava/templates/statistics.html:89
 msgid "Entries per Type"
-msgstr "入账类型"
+msgstr "每类型项目数"
 
 #: fava/templates/statistics.html:93
 msgid "Type"
@@ -403,27 +403,27 @@ msgstr "类型"
 
 #: fava/templates/statistics.html:94
 msgid "# Entries"
-msgstr "# 入账"
+msgstr "# 项目"
 
 #: fava/templates/macros/_interval_macros.html:2
 msgid "Daily"
-msgstr "每日"
+msgstr "按日"
 
 #: fava/templates/macros/_interval_macros.html:3
 msgid "Weekly"
-msgstr "每周"
+msgstr "按周"
 
 #: fava/templates/macros/_interval_macros.html:4
 msgid "Monthly"
-msgstr "每月"
+msgstr "按月"
 
 #: fava/templates/macros/_interval_macros.html:5
 msgid "Quarterly"
-msgstr "每季度"
+msgstr "按季"
 
 #: fava/templates/macros/_interval_macros.html:6
 msgid "Yearly"
-msgstr "每年"
+msgstr "按年"
 
 #: fava/templates/overlays/_transaction_form.html:3
 msgid "close"
@@ -448,4 +448,4 @@ msgstr "数额"
 
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
-msgstr "新增过账"
+msgstr "添加记录"
