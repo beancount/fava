@@ -36,7 +36,7 @@
     max-width: 30em;
     min-width: 14em;
 
-    @for $i from 1 through 5 {
+    @for $i from 1 through 10 {
       &.depth-#{$i} {
         margin-left: $i * $tree-indent;
         max-width: 30em - $i * $tree-indent;
