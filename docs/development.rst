@@ -14,6 +14,7 @@ get you up and running:
     # using a virtual environment is optional, but recommended
     virtualenv -p python3 venv
     . venv/bin/activate
+    make
     pip install --editable .
 
 Note that a development installation Fava requires recent versions of Node.js and
