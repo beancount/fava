@@ -10,6 +10,10 @@
 # - CentOS 7 - build for 64bit Linux
 # - OS X Yosemite (10.11) - build for 64bit MacOS
 
+unless Vagrant.has_plugin?("vagrant-scp")
+  raise 'Please run `vagrant plugin install vagrant-scp` to use this Vagrantfile.'
+end
+
 centos_install = <<-SHELL
     yum install -y https://centos7.iuscommunity.org/ius-release.rpm epel-release
     yum update -y
@@ -23,7 +27,8 @@ darwin_install = <<-SHELL
 SHELL
 
 build = <<-SHELL
-    pip3.5 install pyinstaller /vagrant/fava
+    pip3 install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+    pip3 install /vagrant/fava
     make -C /vagrant/fava pyinstaller
 SHELL
 
@@ -38,8 +43,9 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.define "darwin" do |b|
-        b.vm.box = "jhcook/osx-elcapitan-10.11"
+        b.vm.box = "jhcook/osx-elcapitan-10.11" # using old version to make binaries compatible
+        b.vm.provision "Fix shared folder permissions", type: "shell", inline: "chown -R vagrant /vagrant"
         b.vm.provision "Install dependencies", type: "shell", privileged: false, inline: darwin_install
-        b.vm.provision "Build binary", type: "shell", inline: build, run: "always"
+        b.vm.provision "Build binary", type: "shell", privileged: false, inline: build, run: "always"
     end
 end
