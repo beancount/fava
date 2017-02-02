@@ -38,13 +38,13 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "centos" do |b|
         b.vm.box = "centos/7"
-        b.vm.provision "Fix shared folder permissions", type: "shell", inline: "chown -R vagrant /vagrant"
         b.vm.provision "Install dependencies", type: "shell", inline: centos_install
         b.vm.provision "Build binary", type: "shell", inline: build, run: "always"
     end
 
     config.vm.define "darwin" do |b|
         b.vm.box = "jhcook/osx-elcapitan-10.11" # using old version to make binaries compatible
+        b.vm.provision "Fix shared folder permissions", type: "shell", inline: "chown -R vagrant /vagrant"
         b.vm.provision "Install dependencies", type: "shell", privileged: false, inline: darwin_install
         b.vm.provision "Build binary", type: "shell", privileged: false, inline: build, run: "always"
     end
