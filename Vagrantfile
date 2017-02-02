@@ -23,16 +23,12 @@ SHELL
 darwin_install = <<-SHELL
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew update
-    brew install pyenv
-    env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.5.3
-    pyenv global 3.5.3
-    pyenv init
-    echo 'eval "$(pyenv init -)"' >> ~/.profile
+    brew install python3
 SHELL
 
 build = <<-SHELL
-    source ~/.profile
-    pip3 install pyinstaller /vagrant/fava
+    pip3 install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+    pip3 install /vagrant/fava
     make -C /vagrant/fava pyinstaller
 SHELL
 
@@ -48,7 +44,7 @@ Vagrant.configure("2") do |config|
     end
 
     config.vm.define "darwin" do |b|
-        b.vm.box = "jhcook/macos-sierra"
+        b.vm.box = "jhcook/osx-elcapitan-10.11" # using old version to make binaries compatible
         b.vm.provision "Install dependencies", type: "shell", privileged: false, inline: darwin_install
         b.vm.provision "Build binary", type: "shell", privileged: false, inline: build, run: "always"
     end
