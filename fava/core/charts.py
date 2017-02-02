@@ -11,6 +11,7 @@ from flask.json import JSONEncoder
 
 from fava.core.helpers import FavaModule
 from fava.core.holdings import net_worth_at_dates
+from beancount.ops.prices import get_inventory_market_value
 
 
 class FavaJSONEncoder(JSONEncoder):
@@ -38,10 +39,13 @@ class FavaJSONEncoder(JSONEncoder):
                 return ''
 
 
-def _serialize_inventory(inventory, at_cost=False):
+def _serialize_inventory(inventory, at_cost=False, at_market=False, date=None,
+                         price_map=None):
     """Renders an Inventory to a currency -> amount dict."""
     if at_cost:
         inventory = inventory.cost()
+    elif at_market:
+        inventory = get_inventory_market_value(inventory, date, price_map)
     else:
         inventory = inventory.units()
     return {p.units.currency: p.units.number for p in inventory}
@@ -55,14 +59,19 @@ def _real_account(account_name, entries, begin_date, end_date):
                                      account_name)
 
 
-def _serialize_real_account(real_account):
+def _serialize_real_account(real_account, conversion, date, price_map):
+    at_cost = (conversion == 'cost')
+    at_market = (conversion == 'market')
     return {
         'account': real_account.account,
         'balance_children':
-            _serialize_inventory(realization.compute_balance(real_account),
-                                 at_cost=True),
-        'balance': _serialize_inventory(real_account.balance, at_cost=True),
-        'children': [_serialize_real_account(a)
+            _serialize_inventory(
+                realization.compute_balance(real_account), at_cost=at_cost,
+                at_market=at_market, date=date, price_map=price_map),
+        'balance': _serialize_inventory(
+            real_account.balance, at_cost=at_cost, at_market=at_market,
+            date=date, price_map=price_map),
+        'children': [_serialize_real_account(a, conversion, date, price_map)
                      for n, a in sorted(real_account.items())],
     }
 
@@ -85,10 +94,13 @@ class ChartModule(FavaModule):
             'description': entry.description
         } for entry in self.ledger.events(event_type)]
 
-    def hierarchy(self, account_name, begin_date=None, end_date=None):
+    def hierarchy(self, account_name, begin_date=None, end_date=None,
+                  conversion='cost'):
         real_account = _real_account(
             account_name, self.ledger.entries, begin_date, end_date)
-        return _serialize_real_account(real_account)
+        return _serialize_real_account(
+            real_account, conversion, self.ledger.filter_end_date,
+            self.ledger.price_map)
 
     def interval_totals(self, interval, account_name):
         """Renders totals for account (or accounts) in the intervals."""

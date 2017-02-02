@@ -1,0 +1,21 @@
+{% extends "_layout.html" %}
+{% set active_page = 'market_sheet' %}
+{% set conversion = 'market' %}
+{% import '_tree_table.html' as tree_table with context %}
+
+{% block content %}
+    {{ charts.skeleton() }}
+    {{ charts.net_worth(interval) }}
+    {{ charts.hierarchy(ledger.options['name_assets'], conversion=conversion) }}
+    {{ charts.hierarchy(ledger.options['name_liabilities'], conversion=conversion) }}
+
+    {% set root_account_closed = ledger.root_account_closed %}
+    <div class="halfleft">
+        <h3>{{ ledger.options['name_assets'] }}</h3>
+        {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_assets'])) }}
+    </div>
+    <div class="halfright">
+        <h3>{{ ledger.options['name_liabilities'] }}</h3>
+        {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities'])) }}
+    </div>
+{% endblock %}

@@ -2,12 +2,12 @@
 
 {% set chart_data = [] %}
 
-{% macro hierarchy(account_name, begin_date=None, end_date=None, label=None) %}
+{% macro hierarchy(account_name, begin_date=None, end_date=None, label=None, conversion='cost') %}
 {% do chart_data.append({
     'type': 'hierarchy',
     'label': account_name if not label else label,
     'modifier': ledger.get_account_sign(account_name),
-    'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
+    'root': ledger.charts.hierarchy(account_name, begin_date, end_date, conversion=conversion),
 }) %}
 {% endmacro %}
 

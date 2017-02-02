@@ -23,6 +23,7 @@
         <h3>{% if not journal %}<a href="{{ url_for('account', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
         <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Changes') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
         <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Balances') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
+        <h3>{% if subreport != 'balances_market' %}<a href="{{ url_for('account', name=account_name, subreport='balances_market') }}">{{ _('Market Balances') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Market Balances') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
     </div>
 
     {% if journal %}
@@ -31,13 +32,14 @@
             {% include "_journal_table.html" %}
         {% endwith %}
     {% else %}
-        {% set accumulate = subreport == 'balances' %}
+        {% set accumulate = subreport.startswith('balances') %}
+        {% set conversion = 'market' if subreport.endswith('market') else 'cost' %}
         {% set interval_balances, dates = ledger.interval_balances(interval, account_name, accumulate) %}
         {% if interval_balances %}
             {% for begin_date, end_date in dates[:3] %}
                 {{ charts.hierarchy(account_name, begin_date, end_date, label=interval_macros.format_date(begin_date)) }}
             {% endfor %}
-            {{ tree_table.account_tree(account_name, interval_balances, dates, accumulate) }}
+            {{ tree_table.account_tree(account_name, interval_balances, dates, accumulate, conversion) }}
         {% endif %}
     {% endif %}
 </div>

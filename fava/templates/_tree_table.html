@@ -16,8 +16,8 @@
     </li>
 {% for account in ([real_account] if real_account.account else real_account.values()) recursive %}
     {% if account|should_show %}
-    {% set balance = account.balance.cost() %}
-    {% set balance_children = (account|balance_children).cost() %}
+    {% set balance = (account.balance|cost_or_market(conversion)).cost() %}
+    {% set balance_children = (account|balance_children|cost_or_market(conversion)).cost() %}
     <li>
         <p{% if not balance.is_empty() %} class='has-balance'{% endif %}>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
@@ -59,7 +59,7 @@
     {% endif %}
 {% endfor %}
 {% if totals %}
-    {% set balance = (real_account|balance_children).cost() %}
+    {% set balance = (real_account|balance_children|cost_or_market(conversion)).cost() %}
         <li class="totals">
             <p>
             <span class="account-cell">&nbsp;</span>
@@ -95,7 +95,7 @@
 <span class="number">{{ amount|format_amount }}</span>
 {% endmacro %}
 
-{% macro account_tree(account_name, interval_balances, dates, accumulate) %}
+{% macro account_tree(account_name, interval_balances, dates, accumulate, conversion) %}
 <ol class="fullwidth tree-table">
     <li class="head">
         <p>
@@ -124,8 +124,8 @@
         {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
         {% set budget = ledger.budgets.calculate(account.account, begin_date, end_date) %}
         {% set current_account = interval_balances[loop.index0]|get_or_create(account.account) %}
-        {% set balance = current_account.balance.cost() %}
-        {% set balance_children = (current_account|balance_children).cost() %}
+        {% set balance = (current_account.balance|cost_or_market(conversion, end_date)).cost() %}
+        {% set balance_children = (current_account|balance_children|cost_or_market(conversion, end_date)).cost() %}
         <span class="num other{{ ' has-balance' if not balance.is_empty() else '' }}">
             <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
             {% for pos in balance %}
@@ -152,7 +152,7 @@
         <span class="account-cell">&nbsp;</span>
     {% for begin_date, end_date in dates %}
         {% set current_account = interval_balances[loop.index0]|get_or_create(account_name) %}
-        {% set balance_children = (current_account|balance_children).cost() %}
+        {% set balance_children = (current_account|balance_children|cost_or_market(conversion, end_date)).cost() %}
         <span class="num other">
             {% for pos in balance_children %}
                 {{ pos.units|format_amount }}<br>

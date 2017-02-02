@@ -9,6 +9,7 @@ from flask import g
 from beancount.core import compare, realization
 from beancount.core.data import Close, TxnPosting
 from beancount.core.number import Decimal
+from beancount.ops.prices import get_inventory_market_value
 
 
 def remove_keys(_dict, keys):
@@ -108,3 +109,13 @@ def uptodate_eligible(account_name):
         return g.ledger.account_metadata(account_name)[key] == 'True'
     else:
         return False
+
+
+def cost_or_market(account_balance, conversion, date=None):
+    """Convert inventory to market value at date if conversion is 'market'."""
+    if not date:
+        date = g.ledger.filter_end_date
+    if conversion == 'market':
+        return get_inventory_market_value(
+            account_balance, date, g.ledger.price_map)
+    return account_balance

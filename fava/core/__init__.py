@@ -225,6 +225,11 @@ class FavaLedger():
             self._date_first = self._filters['time'].begin_date
             self._date_last = self._filters['time'].end_date
 
+    @property
+    def filter_end_date(self):
+        return self._filters['time'].end_date \
+            if self._filters['time'] else None
+
     def changed(self):
         """Check if the file needs to be reloaded.
 
@@ -330,15 +335,11 @@ class FavaLedger():
     def holdings(self, aggregation_key=None):
         """List all holdings (possibly aggregated)."""
 
-        # Get latest price unless there's an active time filter.
-        price_date = self._filters['time'].end_date \
-            if self._filters['time'] else None
-
         holdings_list = get_final_holdings(
             self.entries,
             (self.account_types.assets, self.account_types.liabilities),
             self.price_map,
-            price_date
+            self.filter_end_date
         )
 
         if aggregation_key:
