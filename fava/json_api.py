@@ -115,7 +115,7 @@ def add_transaction():
 
     date = util.date.parse_date(json['date'])[0]
     transaction = Transaction(
-        None, date, json['flag'], json['payee'],
+        json['metadata'], date, json['flag'], json['payee'],
         json['narration'], None, None, postings)
 
     g.ledger.file.insert_transaction(transaction)

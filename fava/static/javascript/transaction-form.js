@@ -34,14 +34,34 @@ function addPostingRow() {
   return newPosting;
 }
 
+function addMetadataRow() {
+  const newMetadata = $('#metadata-template').cloneNode(true);
+  newMetadata.querySelectorAll('input').forEach((input) => {
+    initInput(input);
+  });
+  $('#transaction-form .metadatas').appendChild(newMetadata);
+  newMetadata.setAttribute('id', '');
+  return newMetadata;
+}
+
 function submitTransactionForm(successCallback) {
   const jsonData = {
     date: $('#transaction-form input[name=date]').value,
     flag: $('#transaction-form input[name=flag]').value,
     payee: $('#transaction-form input[name=payee]').value,
     narration: $('#transaction-form input[name=narration]').value,
+    metadata: {},
     postings: [],
   };
+
+  $$('#transaction-form .metadata').forEach((metadata) => {
+    const key = metadata.querySelector('input[name=metadata-key]').value;
+    const value = metadata.querySelector('input[name=metadata-value]').value;
+
+    if (key) {
+      jsonData.metadata[key] = value;
+    }
+  });
 
   $$('#transaction-form .posting').forEach((posting) => {
     const account = posting.querySelector('input[name=account]').value;
@@ -65,6 +85,9 @@ function submitTransactionForm(successCallback) {
   })
     .then(handleJSON)
     .then((data) => {
+      $$('#transaction-form .metadata').forEach((el) => {
+        el.remove();
+      });
       $$('#transaction-form .posting').forEach((el) => {
         el.remove();
       });
@@ -113,5 +136,17 @@ export default function initTransactionForm() {
     event.preventDefault();
     const newPosting = addPostingRow();
     newPosting.querySelector('.account').focus();
+  });
+
+  $('#add-metadata').addEventListener('click', (event) => {
+    event.preventDefault();
+    const newMetadata = addMetadataRow();
+    newMetadata.querySelector('.metadata-key').focus();
+  });
+
+  $.delegate($('#transaction-form'), 'click', '.add-metadata', (event) => {
+    event.preventDefault();
+    const newMetadata = addMetadataRow();
+    newMetadata.querySelector('.metadata-key').focus();
   });
 }

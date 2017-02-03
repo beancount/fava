@@ -12,19 +12,30 @@
                 <label for="payee">{{ _('Narration') }}:</label>
                 <input type="text" name="narration" placeholder="{{ _('Narration') }}" />
             </div>
+            <div class="metadatas">
+            </div>
             <div class="postings">
             </div>
             <div class="fieldset">
                 <button type="submit" id="transaction-form-submit" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save') }}</button>
                 <button type="submit" class="muted" id="transaction-form-submit-and-new" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save and add new') }}</button>
+                <button id="add-metadata" class="link add-metadata-link">{{ _('Add Metadata') }}</a>
             </div>
         </form>
     </div>
 </div>
-<div id="posting-template" class="fieldset posting">
-    <label for="account">{{ _('Account') }}:</label>
-    <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" />
-    <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" />
-    <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" />
-    <button class="muted add-posting" title="{{ _('Add posting') }}">+</button>
+<div id="posting-template" class=" posting">
+    <div class="fieldset">
+        <label for="account">{{ _('Account') }}:</label>
+        <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" />
+        <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" />
+        <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" />
+        <button class="muted add-posting" title="{{ _('Add posting') }}">+</button>
+    </div>
+</div>
+<div id="metadata-template" class="fieldset metadata">
+    <label for="account">{{ _('Metadata') }}:</label>
+    <input type="text" class="metadata-key" name="metadata-key" placeholder="{{ _('Key') }}" />
+    <input type="text" class="metadata-value" name="metadata-value" placeholder="{{ _('Value') }}" />
+    <button class="muted add-metadata" title="{{ _('Add metadata') }}">+</button>
 </div>

@@ -158,6 +158,10 @@ def _render_transaction(transaction):
         transaction.date, transaction.flag, transaction.payee,
         transaction.narration)]
 
+    if transaction.meta and len(transaction.meta.keys()) > 0:
+        for key, value in transaction.meta.items():
+            lines.append('    {}: "{}"'.format(key, value))
+
     for posting in transaction.postings:
         line = '    {}'.format(posting.account)
         if posting.units.number or posting.units.currency:

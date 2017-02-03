@@ -170,8 +170,17 @@ def test__render_transaction():
         None, datetime.date(2016, 1, 1), '*',
         'new payee', 'narr', None, None, postings)
 
-    print(_render_transaction(transaction))
     assert '\n' + _render_transaction(transaction) == dedent("""
     2016-01-01 * "new payee" "narr"
+        Liabilities:US:Chase:Slate                    -10.00 USD
+        Expenses:Food                                  10.00 USD""")
+
+    transaction = data.Transaction(
+        {'foo': 'bar'}, datetime.date(2016, 1, 1), '*',
+        'new payee', 'narr', None, None, postings)
+
+    assert '\n' + _render_transaction(transaction) == dedent("""
+    2016-01-01 * "new payee" "narr"
+        foo: "bar"
         Liabilities:US:Chase:Slate                    -10.00 USD
         Expenses:Food                                  10.00 USD""")

@@ -165,16 +165,61 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   .add-posting {
     border-radius: 15px;
     display: none;
-    height: 1.5em;;
+    height: 1.5em;
     line-height: 1.5em;
-    margin: 7px 0 0 12px;
+    margin: 7px 0 0 10px;
     padding: 0;
     text-align: center;
     width: 1.5em;
   }
+
+  .metadatas {
+    padding-left: 4em;
+
+    input {
+      font-size: .8em;
+    }
+
+    .metadata-key {
+      width: 10em;
+    }
+
+    .metadata-value {
+      flex-grow: 1;
+    }
+
+    .fieldset {
+      width: 50%;
+
+      &:last-child {
+        .add-metadata {
+          display: inline-block;
+        }
+      }
+    }
+  }
+
+  .add-metadata {
+    border-radius: 3px;
+    display: none;
+    height: 1em;
+    line-height: 1em;
+    margin: 7px 0 0 12px;
+    padding: 0;
+    text-align: center;
+    width: 1em;
+  }
+
+  .add-metadata-link {
+    bottom: 20px;
+    font-size: .9em;
+    position: absolute;
+    right: 20px;
+  }
 }
 
-[id='posting-template'] {
+[id='posting-template'],
+[id='metadata-template'] {
   display: none;
 }
 
