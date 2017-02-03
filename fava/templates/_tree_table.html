@@ -18,11 +18,10 @@
     {% if account|should_show %}
     {% set balance = account.balance.cost() %}
     {% set balance_children = (account|balance_children).cost() %}
-    <li>
+    <li{% if account.account|should_collapse_account %} class="toggled"{% endif %}>
         <p{% if not balance.is_empty() %} class='has-balance'{% endif %}>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
         {{- '' if not account|length else ' has-children'}}
-        {%- if account.account|should_collapse_account %} toggled{% endif %}
         " data-account-name="{{ account.account }}">
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
@@ -112,11 +111,10 @@
         </p>
     </li>
 {% for account in [interval_balances[0]|get_or_create(account_name)] recursive %}
-    <li>
+    <li{% if account.account|should_collapse_account %} class="toggled"{% endif %}>
         <p>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
         {{- '' if not account|length else ' has-children'}}
-        {%- if account.account|should_collapse_account %} toggled{% endif %}
         " data-account-name="{{ account.account }}">
             {% if account|length %}<span class="expander" title="{{ _('Hold the Shift-key while clicking to expand all children') }}"></span>{% endif %}
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
