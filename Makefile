@@ -1,14 +1,19 @@
-.PHONY: docs
+.PHONY: docs test lint binaries gh-pages
 
 all: fava/static/gen/app.js
 
 fava/static/gen/app.js: fava/static/sass/* fava/static/javascript/*
 	cd fava/static; npm update; npm run build
 
-clean:
-	rm -rf .tox
+clean: mostlyclean
 	rm -rf build dist
+	rm -rf fava/static/gen
+
+mostlyclean:
+	rm -rf .tox
 	rm -rf fava/static/node_modules
+	find . -type f -name '*.py[c0]' -delete
+	find . -type d -name "__pycache__" -delete
 
 lint:
 	tox -e lint
