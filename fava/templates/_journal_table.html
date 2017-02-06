@@ -223,7 +223,11 @@
         {% endfor %}
         {% if type == 'transaction' %}
             {% for posting in entry.postings %}
+                {% if loop.index0 < 20 %}
                 <span class="posting-indicator{% if posting.flag %} {{ flags_to_types.get(posting.flag, 'other') }}{% endif %}"></span>
+                {% elif loop.index0 == 20 %}
+                <span>...</span>
+                {% endif%}
             {% endfor %}
         {% endif %}
         {% if show_change_and_balance %}
