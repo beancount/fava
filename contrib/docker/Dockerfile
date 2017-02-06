@@ -1,4 +1,4 @@
-FROM python:3.5.1-alpine
+FROM python:3.6.0-alpine
 
 ENV BEANCOUNT_INPUT_FILE ""
 ENV FAVA_OPTIONS "-H 0.0.0.0"
@@ -14,15 +14,15 @@ RUN cd /root \
         && git clone https://github.com/beancount/fava.git \
         && (cd fava && git log -1) \
         && make -C fava \
-        && make -C fava clean \
+        && make -C fava mostlyclean \
         && rm fava/CHANGES \
         && python3 -mpip install ./fava \
         && python3 -mpip uninstall --yes pip \
-        && find /usr/local/lib/python3.5/site-packages -name *.so -print0|xargs -0 strip -v \
+        && find /usr/local/lib/python3.6/site-packages -name *.so -print0|xargs -0 strip -v \
         && apk del $BUILDDEPS \
-        && rm -rf /var/cache/apk /tmp /root \
-        && find /usr/local/lib/python3.5 -name __pycache__ -print0|xargs -0 rm -rf \
-        && find /usr/local/lib/python3.5 -name *.pyc -print0|xargs -0 rm -f
+        && rm -rf /var/cache/apk/{*,.[!.]*} /tmp/{*,.[!.]*} /root/{*,.[!.]*} \
+        && find /usr/local/lib/python3.6 -name __pycache__ -print0|xargs -0 rm -rf \
+        && find /usr/local/lib/python3.6 -name *.pyc -print0|xargs -0 rm -f
 
 
 # Default fava port number
