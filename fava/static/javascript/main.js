@@ -102,7 +102,7 @@ e.on('reload-warning', (msg) => {
   });
   setTimeout(() => {
     warning.remove();
-  }, 5000);
+  }, 30000);
 });
 
 e.on('error', (msg) => {
@@ -120,7 +120,7 @@ function doPoll() {
       }
     }, () => {})
     .then(() => {
-      setTimeout(doPoll, 5000);
+      setTimeout(doPoll, 30000);
     });
 }
 
@@ -128,5 +128,5 @@ $.ready().then(() => {
   initPage();
   initRouter();
   e.trigger('page-loaded');
-  setTimeout(doPoll, 5000);
+  setTimeout(doPoll, 30000);
 });
