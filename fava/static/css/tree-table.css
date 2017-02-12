@@ -1,0 +1,164 @@
+/* Collapsible trees
+ *
+ * some of the shared styles are in `_journal_table.scss`
+ */
+
+.tree-table {
+  &.fullwidth {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  &:hover .balance-children {
+    opacity: .8;
+  }
+
+  & p {
+    margin-top: -1px;
+
+    & > span {
+      border: 1px solid var(--color-table-header-background);
+      margin-right: -1px;
+    }
+  }
+
+  & .account-cell {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    max-width: 30em;
+    min-width: 14em;
+
+    &.depth-1 {
+      margin-left: 1em;
+      max-width: 29em;
+      min-width: 13em;
+    }
+    &.depth-2 {
+      margin-left: 2em;
+      max-width: 28em;
+      min-width: 12em;
+    }
+    &.depth-3 {
+      margin-left: 3em;
+      max-width: 27em;
+      min-width: 11em;
+    }
+    &.depth-4 {
+      margin-left: 4em;
+      max-width: 26em;
+      min-width: 10em;
+    }
+    &.depth-5 {
+      margin-left: 5em;
+      max-width: 25em;
+      min-width: 9em;
+    }
+    &.depth-6 {
+      margin-left: 6em;
+      max-width: 24em;
+      min-width: 8em;
+    }
+    &.depth-7 {
+      margin-left: 7em;
+      max-width: 23em;
+      min-width: 7em;
+    }
+
+    & a {
+      margin-left: 1em;
+    }
+  }
+
+  & .has-children {
+    cursor: pointer;
+
+    &::before {
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--color-treetable-expander);
+      content: '';
+      margin: 0 -10px 0 0;
+    }
+  }
+
+  & .num {
+    width: 10em;
+
+    & a {
+      color: inherit;
+      display: block;
+    }
+  }
+
+  & .other {
+    width: 13em;
+
+    & a {
+      color: inherit;
+      display: block;
+    }
+  }
+
+  & .has-balance {
+    & .balance {
+      display: block;
+    }
+
+    & .balance-children {
+      display: none;
+    }
+  }
+
+  & .balance-children {
+    display: block;
+    opacity: .6;
+  }
+
+  & .toggled {
+    & ol { display: none; }
+
+    & .balance {
+      display: none;
+    }
+
+    & .balance-children {
+      color: var(--color-text);
+      display: block;
+    }
+
+    & .has-children {
+      &::before {
+        transform: rotate(270deg);
+      }
+    }
+  }
+
+  & .expand-all {
+    color: inherit;
+    font-weight: normal;
+    opacity: .5;
+  }
+
+  & .budget {
+    margin-right: 4px;
+
+    &.budget-negative { color: var(--color-budget-negative); }
+    &.budget-positive { color: var(--color-budget-positive); }
+    &.budget-zero { color: var(--color-budget-zero); }
+  }
+}
+
+/* For two or more operating currencies, set a slightly smaller size. */
+.two-currencies {
+  font-size: .9em;
+
+  & .num {
+    width: 8em;
+  }
+
+  & .other {
+    width: 11em;
+  }
+}

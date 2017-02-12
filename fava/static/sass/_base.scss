@@ -303,7 +303,6 @@ header {
 }
 
 aside {
-  @extend %scrollbar;
   background-color: $color-sidebar-background;
   border-right: 1px solid $color-sidebar-border;
   bottom: 0;
@@ -450,9 +449,7 @@ kbd {
 // Components //////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
-@import 'charts';
 @import 'journal-table';
-@import 'tree-table';
 
 .row {
   display: flex;
