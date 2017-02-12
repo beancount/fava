@@ -7,7 +7,6 @@ import postcss from 'rollup-plugin-postcss-export';
 import postcssCopy from 'postcss-copy';
 import postcssImport from 'postcss-import';
 import postcssCssnext from 'postcss-cssnext';
-import stylelint from 'stylelint';
 
 export default {
   entry: 'javascript/main.js',
@@ -22,9 +21,6 @@ export default {
     buble({ exclude: 'css/**' }),
     postcss({
       plugins: [
-        stylelint({
-          config: { extends: 'stylelint-config-standard' },
-        }),
         postcssImport(),
         postcssCopy({
           src: ['css', 'node_modules'],

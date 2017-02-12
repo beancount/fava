@@ -172,7 +172,7 @@ pre {
 }
 
 input,
-button  {
+button {
   font: inherit;
   margin: 0 0 0 .5em;
   padding: 4px 8px;
@@ -340,11 +340,11 @@ aside {
 
     & a {
       color: var(--color-sidebar-background);
+    }
 
-      &.selected,
-      &:hover {
-        background-color: color(var(--color-error) shade(5%));
-      }
+    & a.selected,
+    & a:hover {
+      background-color: color(var(--color-error) shade(5%));
     }
 
     & .bubble {
@@ -429,7 +429,7 @@ kbd {
   box-shadow: inset 0 -1px 0 var(--color-background-darkest);
   color: var(--color-text-lighter);
   display: inline-block;
-  font: 1rem var(--font-family-monospaced);
+  font: 1em var(--font-family-monospaced);
   margin: 0 1px;
   padding: 3px 6px;
 }

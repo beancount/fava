@@ -1,5 +1,4 @@
 @import 'base.css';
-
 @import 'charts.css';
 @import 'editor.css';
 @import 'fonts.css';
@@ -7,7 +6,6 @@
 @import 'help.css';
 @import 'overlay.css';
 @import 'query.css';
-
 @import 'journal-table.css';
 @import 'tree-table.css';
 
@@ -49,7 +47,7 @@ body {
   --color-code-background: #f8f8f8;
 
   --color-sidebar-text: #444;
-  --color-sidebar-text-hover: $color-links;
+  --color-sidebar-text-hover: var(--color-links);
   --color-sidebar-background: #f5f5f5;
   --color-sidebar-border: color(var(--color-sidebar-background) shade(10%));
 

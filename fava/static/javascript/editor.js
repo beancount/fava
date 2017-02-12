@@ -227,7 +227,7 @@ export default function initEditor() {
         CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
       }
     });
-    const line = parseInt(new URI(location.search).query(true).line, 10);
+    const line = parseInt(new URI(window.location.search).query(true).line, 10);
     if (line > 0) {
       editor.setCursor(line - 1, 0);
       centerCursor(editor);

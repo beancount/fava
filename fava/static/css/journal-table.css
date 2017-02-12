@@ -47,15 +47,14 @@
       background-color: var(--color-table-header-background);
       color: var(--color-table-header-text);
       font-weight: 500;
-      background-color: var(--color-table-header-background);
       padding: 3px 5px;
     }
 
     & .num {
       background-color: var(--color-table-header-background);
       color: var(--color-table-header-text);
-      font-weight: 500;
       font-family: var(--font-family);
+      font-weight: 500;
       text-align: inherit;
     }
   }
@@ -80,19 +79,11 @@
   & .pad { background-color: var(--color-journal-entry-pad); }
   & .document { background-color: var(--color-journal-entry-document); }
 
-  & .note {
-    background-color: var(--color-journal-entry-note);
+  & .note { background-color: var(--color-journal-entry-note); }
+  & .note label { color: color(var(--color-journal-entry-note) shade(50%)); }
 
-    & label {
-      color: color(var(--color-journal-entry-note) shade(50%));
-    }
-  }
-
-  & .balance {
-    background-color: var(--color-journal-entry-balance);
-
-    &.fail { background-color: var(--color-journal-entry-txn-pending); }
-  }
+  & .balance { background-color: var(--color-journal-entry-balance); }
+  & .balance.fail { background-color: var(--color-journal-entry-txn-pending); }
 
   & .other { background-color: var(--color-journal-entry-txn-other); }
   & .pending { background-color: var(--color-journal-entry-txn-pending); }

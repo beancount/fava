@@ -35,31 +35,37 @@
       max-width: 29em;
       min-width: 13em;
     }
+
     &.depth-2 {
       margin-left: 2em;
       max-width: 28em;
       min-width: 12em;
     }
+
     &.depth-3 {
       margin-left: 3em;
       max-width: 27em;
       min-width: 11em;
     }
+
     &.depth-4 {
       margin-left: 4em;
       max-width: 26em;
       min-width: 10em;
     }
+
     &.depth-5 {
       margin-left: 5em;
       max-width: 25em;
       min-width: 9em;
     }
+
     &.depth-6 {
       margin-left: 6em;
       max-width: 24em;
       min-width: 8em;
     }
+
     &.depth-7 {
       margin-left: 7em;
       max-width: 23em;
@@ -128,10 +134,8 @@
       display: block;
     }
 
-    & .has-children {
-      &::before {
-        transform: rotate(270deg);
-      }
+    & .has-children::before {
+      transform: rotate(270deg);
     }
   }
 

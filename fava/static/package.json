@@ -5,14 +5,26 @@
   "scripts": {
     "build": "rollup -c",
     "watch-js": "rollup -c -w",
-    "watch-sass": "node-sass -w --include-path 'node_modules' -o 'gen' sass/style.scss",
-    "lint": "eslint javascript --ext .js && sass-lint -v --max-warnings 0"
+    "watch-css": "postcss -lw -u 'postcss-import' -u 'postcss-cssnext' -o 'gen/style.css' css/style.css",
+    "lint": "eslint javascript --ext .js && stylelint 'css/*.css'"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard",
+    "plugins": [
+      "stylelint-order"
+    ],
+    "rules": {
+      "number-leading-zero": "never",
+      "custom-property-empty-line-before": null,
+      "order/declaration-block-properties-alphabetical-order": true
+    }
   },
   "devDependencies": {
     "eslint": "^3.5.0",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.0.1",
     "postcss": "^5.2.5",
+    "postcss-cli": "^2.6.0",
     "postcss-copy": "^6.2.1",
     "postcss-cssnext": "^2.9.0",
     "postcss-import": "^9.1.0",
@@ -24,7 +36,8 @@
     "rollup-plugin-postcss-export": "^0.3.2",
     "rollup-watch": "^3.2.2",
     "stylelint": "^7.8.0",
-    "stylelint-config-standard": "^16.0.0"
+    "stylelint-config-standard": "^16.0.0",
+    "stylelint-order": "^0.2.2"
   },
   "dependencies": {
     "@typopro/web-fira-mono": "^3.4.4",

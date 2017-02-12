@@ -124,7 +124,6 @@ h1 {
   }
 }
 
-
 .filter-form {
   color: var(--color-text);
   display: flex;
@@ -142,23 +141,25 @@ h1 {
     margin-left: 4px;
     max-width: 15rem;
     padding: 0 25px 0 10px;
+  }
 
-    &[type='text'] {
+  & [type='text'] {
+    &:placeholder-shown,
+    &::placeholder {
+      color: color(var(--color-header) tint(50%));
+      opacity: 1;
+    }
+
+    outline: none;
+
+    &:focus {
       &:placeholder-shown,
       &::placeholder {
         color: color(var(--color-header) tint(50%));
-        opacity: 1;
       }
-      outline: none;
 
-      &:focus {
-        &:placeholder-shown,
-        &::placeholder {
-          color: color(var(--color-header) tint(50%));
-        }
-        background-color: var(--color-background);
-        color: var(--color-text);
-      }
+      background-color: var(--color-background);
+      color: var(--color-text);
     }
   }
 
@@ -178,7 +179,7 @@ h1 {
   }
 
   & .close {
-    background-color: var(--color-text-darkest);
+    background-color: var(--color-background-darkest);
     border-radius: 9px;
     display: block;
     font-size: 18px;

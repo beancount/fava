@@ -12,10 +12,8 @@
     opacity: .5;
   }
 
-  &.error {
-    .queryresults-header {
-      background-color: var(--color-error);
-    }
+  &.error .queryresults-header {
+    background-color: var(--color-error);
   }
 }
 
@@ -24,10 +22,8 @@
     display: none;
   }
 
-  & .queryresults-header {
-    &::before {
-      transform: rotate(270deg);
-    }
+  & .queryresults-header::before {
+    transform: rotate(270deg);
   }
 }
 

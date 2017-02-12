@@ -39,17 +39,14 @@
   position: relative;
   width: 767px;
 
-  & form {
+  & form,
+  & div {
     width: 100%;
   }
 
   & strong {
     display: inline-block;
     margin: 6px 0 5px;
-  }
-
-  & kbd {
-    font-size: .9em;
   }
 
   & dt {
@@ -101,7 +98,6 @@
   & select {
     margin-left: .5em;
   }
-
 }
 
 .transaction-form {
@@ -274,17 +270,17 @@
         height: 35px;
         margin: 0 .5em 0 0;
         width: 120px;
+      }
 
-        &[name='flag'] {
-          width: 1.5em;
-        }
+      & [name='flag'] {
+        width: 1.5em;
+      }
 
-        &[name='narration'],
-        &[name='payee'],
-        &[name='account'] {
-          margin-bottom: .5em;
-          width: 100%;
-        }
+      & [name='narration'],
+      & [name='payee'],
+      & [name='account'] {
+        margin-bottom: .5em;
+        width: 100%;
       }
     }
 

@@ -1,6 +1,5 @@
 {
   "extends": ["airbnb-base"],
-  // We inject jquery as a global in webpack
   "env": {
     "browser": true
   }
