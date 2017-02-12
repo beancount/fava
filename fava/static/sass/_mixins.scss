@@ -1,9 +1,0 @@
-// sass-lint:disable no-vendor-prefixes
-
-@mixin placeholder {
-  &:placeholder-shown {@content}
-  &::-webkit-input-placeholder {@content}
-  &:-moz-placeholder {@content}
-  &::-moz-placeholder {@content}
-  &:-ms-input-placeholder {@content}
-}

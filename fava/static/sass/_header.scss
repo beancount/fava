@@ -1,3 +1,13 @@
+// sass-lint:disable no-vendor-prefixes
+
+@mixin placeholder {
+  &:placeholder-shown {@content}
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder {@content}
+  &::-moz-placeholder {@content}
+  &:-ms-input-placeholder {@content}
+}
+
 $color-header-text-half: rgba($color-header-text, .5);
 $color-text-transparent: rgba($color-text, .2);
 
