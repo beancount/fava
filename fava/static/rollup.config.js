@@ -3,11 +3,11 @@ import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss-export';
-import sass from 'rollup-plugin-sass';
 
 import postcssCopy from 'postcss-copy';
 import postcssImport from 'postcss-import';
 import postcssCssnext from 'postcss-cssnext';
+import stylelint from 'stylelint';
 
 export default {
   entry: 'javascript/main.js',
@@ -19,11 +19,12 @@ export default {
   plugins: [
     nodeResolve(),
     json(),
-    buble({
-      exclude: ['css/**', 'sass/**'],
-    }),
+    buble({ exclude: 'css/**' }),
     postcss({
       plugins: [
+        stylelint({
+          config: { extends: 'stylelint-config-standard' },
+        }),
         postcssImport(),
         postcssCopy({
           src: ['css', 'node_modules'],
@@ -31,13 +32,7 @@ export default {
         }),
         postcssCssnext(),
       ],
-      output: 'gen/css.css',
-    }),
-    sass({
       output: 'gen/style.css',
-      options: {
-        includePaths: ['node_modules/'],
-      },
     }),
     commonjs({
       include: 'node_modules/**',

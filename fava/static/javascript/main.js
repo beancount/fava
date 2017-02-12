@@ -5,7 +5,6 @@ import 'element-closest';
 
 import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
-import './../sass/style.scss';
 import './../css/style.css';
 
 import initCharts from './charts';

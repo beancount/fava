@@ -77,7 +77,7 @@
     }
 
     & input {
-      border: 1px solid color(var(--color-text) shade(50%));
+      border: 1px solid color(var(--color-text) tint(50%));
     }
 
     &[type='submit'] {
@@ -225,7 +225,7 @@
 .notifications {
   position: fixed;
   right: 10px;
-  top: var(--header-height + 10px);
+  top: calc(var(--header-height) + 10px);
   width: 400px;
 
   & li {

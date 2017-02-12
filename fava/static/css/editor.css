@@ -10,7 +10,7 @@
   left: var(--aside-width);
   position: fixed;
   right: 0;
-  top: var(--header-height + 43px);
+  top: calc(var(--header-height) + 43px);
 }
 
 .source-form {
