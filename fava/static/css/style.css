@@ -2,6 +2,7 @@
 @import 'fonts.css';
 @import 'help.css';
 @import 'overlay.css';
+@import 'query.css';
 
 :root {
   --font-family: 'Fira Sans', sans-serif;

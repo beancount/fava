@@ -1,12 +1,10 @@
-// Query View
-
 .queryresults-wrapper {
-  border: 1px solid $color-table-border;
+  border: 1px solid var(--color-table-border);
   display: block;
   margin-bottom: .5em;
+  min-width: 400px;
 
-  &,
-  table {
+  & table {
     min-width: 400px;
   }
 
@@ -16,17 +14,17 @@
 
   &.error {
     .queryresults-header {
-      background-color: $color-error;
+      background-color: var(--color-error);
     }
   }
 }
 
 .toggled {
-  .queryresults-body {
+  & .queryresults-body {
     display: none;
   }
 
-  .queryresults-header {
+  & .queryresults-header {
     &::before {
       transform: rotate(270deg);
     }
@@ -35,7 +33,7 @@
 
 .queryresults-header {
   align-items: center;
-  background-color: $color-sidebar-background;
+  background-color: var(--color-sidebar-background);
   cursor: pointer;
   display: flex;
   padding: .5em;
@@ -43,18 +41,18 @@
   &::before {
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-top: 12px solid $color-treetable-expander;
+    border-top: 12px solid var(--color-treetable-expander);
     content: '';
     margin-right: .5em;
   }
 
-  h3 {
+  & h3 {
     flex-grow: 1;
     margin-bottom: 0;
   }
 
-  .download {
-    color: $color-text-lighter;
+  & .download {
+    color: var(--color-text-lighter);
   }
 }
 
@@ -63,25 +61,25 @@
 }
 
 .stored-queries {
-  color: $color-text-lighter;
+  color: var(--color-text-lighter);
 
-  label { margin-right: 8px; }
-  a { margin-left: 6px; }
+  & label { margin-right: 8px; }
+  & a { margin-left: 6px; }
 }
 
 .query-box {
   display: flex;
 
-  button {
+  & button {
     height: 30px;
     margin-bottom: .5em;
   }
 
-  .CodeMirror, // sass-lint:disable-line class-name-format
-  textarea {
-    border: 1px solid darken($color-background, 9);
+  & .CodeMirror,
+  & textarea {
+    border: 1px solid darken(var(--color-background, 9));
     flex-grow: 1;
-    font-family: $font-family-editor;
+    font-family: var(--font-family-editor);
     font-size: 16px;
     height: auto;
     margin-bottom: 1em;
@@ -92,18 +90,18 @@
 .sample-queries {
   padding-left: 2em;
 
-  a { text-decoration: none; }
-  code { color: $color-text-lighter; }
-  li { list-style-type: disc; }
+  & a { text-decoration: none; }
+  & code { color: var(--color-text-lighter); }
+  & li { list-style-type: disc; }
 }
 
 .query-error {
-  background: $color-error;
-  color: $color-background;
-  font-family: $font-family-monospaced;
+  background: var(--color-error);
+  color: var(--color-background);
+  font-family: var(--font-family-monospaced);
 }
 
 .query-syntax-error {
-  color: $color-error;
-  font-family: $font-family-monospaced;
+  color: var(--color-error);
+  font-family: var(--font-family-monospaced);
 }
