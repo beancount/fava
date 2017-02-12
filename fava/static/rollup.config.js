@@ -2,20 +2,12 @@ import buble from 'rollup-plugin-buble';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import nodeResolve from 'rollup-plugin-node-resolve';
+import postcss from 'rollup-plugin-postcss-export';
 import sass from 'rollup-plugin-sass';
 
-import postcss from 'postcss';
-import copy from 'postcss-copy';
-
-const postcssPlugins = [
-  copy({
-    src: ['sass', 'node_modules'],
-    dest: 'gen',
-    inputPath() {
-      return 'sass';
-    },
-  }),
-];
+import postcssCopy from 'postcss-copy';
+import postcssImport from 'postcss-import';
+import postcssCssnext from 'postcss-cssnext';
 
 export default {
   entry: 'javascript/main.js',
@@ -28,17 +20,23 @@ export default {
     nodeResolve(),
     json(),
     buble({
-      exclude: 'sass/**',
+      exclude: ['css/**', 'sass/**'],
+    }),
+    postcss({
+      plugins: [
+        postcssImport(),
+        postcssCopy({
+          src: ['css', 'node_modules'],
+          dest: 'gen',
+        }),
+        postcssCssnext(),
+      ],
+      output: 'gen/css.css',
     }),
     sass({
       output: 'gen/style.css',
       options: {
         includePaths: ['node_modules/'],
-      },
-      processor(style) {
-        return postcss(postcssPlugins)
-          .process(style)
-          .then(result => result);
       },
     }),
     commonjs({

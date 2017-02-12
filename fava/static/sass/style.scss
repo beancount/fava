@@ -1,45 +1,4 @@
-// Fonts
-@font-face {
-  font-family: 'Fira Mono';
-  font-style: normal;
-  font-weight: normal;
-  src: url('../node_modules/@typopro/web-fira-mono/TypoPRO-FiraMono-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Fira Mono';
-  font-style: normal;
-  font-weight: 500;
-  src: url('../node_modules/@typopro/web-fira-mono/TypoPRO-FiraMono-Medium.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Fira Sans';
-  font-style: normal;
-  font-weight: normal;
-  src: url('../node_modules/@typopro/web-fira-sans/TypoPRO-FiraSans-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Fira Sans';
-  font-style: normal;
-  font-weight: 500;
-  src: url('../node_modules/@typopro/web-fira-sans/TypoPRO-FiraSans-Medium.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Source Serif Pro';
-  font-style: normal;
-  font-weight: normal;
-  src: url('../node_modules/@typopro/web-source-serif-pro/TypoPRO-SourceSerifPro-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Source Serif Pro';
-  font-style: normal;
-  font-weight: 500;
-  src: url('../node_modules/@typopro/web-source-serif-pro/TypoPRO-SourceSerifPro-Semibold.woff') format('woff');
-}
+@import 'style.css';
 
 $font-family: 'Fira Sans', sans-serif;
 $font-family-alternative: 'Source Serif Pro', sans-serif;

@@ -1,22 +1,4 @@
-@import 'normalize.css/normalize';
 @import 'mixins';
-
-// for the editor
-
-@font-face {
-  font-family: 'Source Code Pro';
-  font-style: normal;
-  font-weight: normal;
-  src: url('../node_modules/@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Regular.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'Source Code Pro';
-  font-style: normal;
-  font-weight: 500;
-  src: url('../node_modules/@typopro/web-source-code-pro/TypoPRO-SourceCodePro-Semibold.woff') format('woff');
-}
-
 
 // Globals
 
@@ -33,6 +15,8 @@ body {
   font-family: $font-family;
   font-size: 14px;
   font-weight: 400;
+  margin: 0;
+  padding: 0;
 }
 
 table {
@@ -467,10 +451,8 @@ kbd {
 ////////////////////////////////////////////////////////////////////////////////
 
 @import 'charts';
-@import 'overlay';
 @import 'journal-table';
 @import 'tree-table';
-@import 'help';
 @import 'query';
 @import 'editor';
 
