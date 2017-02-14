@@ -106,6 +106,12 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 }
 
 .transaction-form {
+  .awesomplete {
+    input {
+      width: 100%;
+    }
+  }
+
   input {
     &[name='date'] {
       margin-left: 0;

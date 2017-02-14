@@ -95,12 +95,9 @@ def add_document():
     return _api_success(message='Uploaded to {}'.format(filepath))
 
 
-@json_api.route('/add-transaction/', methods=['PUT'])
-def add_transaction():
-    """Add a transaction."""
-    json = request.get_json()
-
+def _add_transaction(json):
     postings = []
+
     for posting in json['postings']:
         if posting['account'] not in g.ledger.attributes.accounts:
             return _api_error('Unknown account: {}.'
@@ -119,4 +116,28 @@ def add_transaction():
         json['narration'], None, None, postings)
 
     g.ledger.file.insert_transaction(transaction)
+
+
+@json_api.route('/add-transaction/', methods=['PUT'])
+def add_transaction():
+    """Add a transaction."""
+    json = request.get_json()
+
+    result = _add_transaction(json)
+    if result:
+        return result
     return _api_success(message='Stored transaction.')
+
+
+@json_api.route('/add-entries/', methods=['PUT'])
+def add_entries():
+    """Add many entries."""
+    json = request.get_json()
+
+    for entry in json['entries']:
+        result = _add_transaction(entry)
+        if result:
+            return result
+
+    return _api_success(
+        message='Stored {} entries.'.format(len(json['entries'])))

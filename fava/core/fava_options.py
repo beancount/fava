@@ -29,7 +29,8 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
-    'incognito': False
+    'incognito': False,
+    'ingesters': [],
 }
 
 BOOL_OPTS = [
@@ -51,6 +52,7 @@ INT_OPTS = [
 
 LIST_OPTS = [
     'extensions',
+    'ingesters',
     'journal-show',
     'journal-show-document',
     'journal-show-transaction',

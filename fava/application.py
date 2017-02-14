@@ -16,6 +16,7 @@ Attributes:
 import datetime
 import inspect
 import os
+import io
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file,
@@ -288,6 +289,22 @@ def help_page(page_slug='_index'):
         extras=['fenced-code-blocks', 'tables'])
     return render_template('help.html', page_slug=page_slug,
                            help_html=render_template_string(html))
+
+
+@app.route('/<bfile>/ingest/', methods=['GET', 'POST'])
+def ingest():
+    """Ingest new entries."""
+    filecontent = []
+    entries = None
+    if request.method == 'POST':
+        file = request.files['file']
+        stream = io.StringIO(file.stream.read().decode("latin-1"))
+        entries = g.ledger.ingest.run_ingest(stream)
+        if not entries:
+            entries = []
+
+    return render_template('ingest.html', filecontent=filecontent,
+                           entries=entries)
 
 
 @app.route('/jump')

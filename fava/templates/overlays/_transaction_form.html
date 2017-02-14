@@ -1,21 +1,53 @@
+{% macro posting(posting=None, id=None) %}
+    <div class="posting"{% if id %} id="{{ id }}"{% endif %}>
+        <div class="fieldset">
+            <label for="account">{{ _('Account') }}:</label>
+            <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" {% if posting %}value="{{ posting.account }}"{% endif %}/>
+            <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" {% if posting %}value="{{ posting.units.number }}"{% endif %}/>
+            <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" {% if posting %}value="{{ posting.units.currency }}"{% endif %}/>
+            <button class="muted add-posting" title="{{ _('Add posting') }}">+</button>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro metadata(key=None, value=None, id=None) %}
+    <div class="fieldset metadata"{% if id %} id="{{ id }}"{% endif %}>
+        <label for="account">{{ _('Metadata') }}:</label>
+        <input type="text" class="metadata-key" name="metadata-key" placeholder="{{ _('Key') }}" {% if key %}value="{{ key }}"{% endif %}/>
+        <input type="text" class="metadata-value" name="metadata-value" placeholder="{{ _('Value') }}" {% if value %}value="{{ value }}"{% endif %}/>
+        <button class="muted add-metadata" title="{{ _('Add metadata') }}">+</button>
+    </div>
+{% endmacro %}
+
+{% macro transaction_form(transaction=None) %}
+    <div class="transaction-form">
+        <div class="fieldset">
+            <label for="date">{{ _('Date') }}:</label>
+            <input type="date" name="date" value="{% if transaction %}{{ transaction.date.strftime('%Y-%m-%d') }}{% else %}{{ datetime.datetime.now().strftime('%Y-%m-%d') }}{% endif %}" />
+            <input type="text" name="flag" value="{% if transaction %}{{ transaction.flag }}{% else %}*{% endif %}">
+            <label for="payee">{{ _('Payee') }}:</label>
+            <input type="text" name="payee" placeholder="{{ _('Payee') }}" list="payees" {% if transaction %}value="{{ transaction.payee }}"{% endif %}/>
+            <label for="payee">{{ _('Narration') }}:</label>
+            <input type="text" name="narration" placeholder="{{ _('Narration') }}" {% if transaction %}value="{{ transaction.narration }}"{% endif %}/>
+        </div>
+        <div class="metadatas">
+        </div>
+        <div class="postings">
+            {% if transaction %}
+                {% for p in transaction.postings %}
+                    {{ posting(posting=p) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
 <div id="transaction" class="transaction-overlay overlay-wrapper">
     <div class="overlay">
         <a href="#" class="close-overlay">({{ _('close') }})</a>
-        <form id="transaction-form" class="transaction-form" action="{{ url_for('json_api.add_transaction') }}">
+        <form id="transaction-form" action="{{ url_for('json_api.add_transaction') }}">
             <h3>{{ _('New transaction') }}:</h3>
-            <div class="fieldset">
-                <label for="date">{{ _('Date') }}:</label>
-                <input type="date" name="date" value="{{ datetime.datetime.now().strftime('%Y-%m-%d') }}" />
-                <input type="text" name="flag" value="*">
-                <label for="payee">{{ _('Payee') }}:</label>
-                <input type="text" name="payee" placeholder="{{ _('Payee') }}" list="payees" />
-                <label for="payee">{{ _('Narration') }}:</label>
-                <input type="text" name="narration" placeholder="{{ _('Narration') }}" />
-            </div>
-            <div class="metadatas">
-            </div>
-            <div class="postings">
-            </div>
+            {{ transaction_form() }}
             <div class="fieldset">
                 <button type="submit" id="transaction-form-submit" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save') }}</button>
                 <button type="submit" class="muted" id="transaction-form-submit-and-new" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save and add new') }}</button>
@@ -24,18 +56,5 @@
         </form>
     </div>
 </div>
-<div id="posting-template" class=" posting">
-    <div class="fieldset">
-        <label for="account">{{ _('Account') }}:</label>
-        <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" />
-        <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" />
-        <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" />
-        <button class="muted add-posting" title="{{ _('Add posting') }}">+</button>
-    </div>
-</div>
-<div id="metadata-template" class="fieldset metadata">
-    <label for="account">{{ _('Metadata') }}:</label>
-    <input type="text" class="metadata-key" name="metadata-key" placeholder="{{ _('Key') }}" />
-    <input type="text" class="metadata-value" name="metadata-value" placeholder="{{ _('Value') }}" />
-    <button class="muted add-metadata" title="{{ _('Add metadata') }}">+</button>
-</div>
+{{ posting(id="posting-template") }}
+{{ metadata(id="metadata-template") }}
