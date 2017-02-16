@@ -495,7 +495,7 @@ kbd {
 [data-order='desc']::after {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid darken(var(--color-background, 47));
+  border-top: 5px solid color(var(--color-background) shade(50%));
   content: '';
   display: block;
   position: absolute;
@@ -504,7 +504,7 @@ kbd {
 }
 
 [data-order='asc']::after {
-  border-bottom: 5px solid darken(var(--color-background, 47));
+  border-bottom: 5px solid color(var(--color-background) shade(50%));
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   content: '';

@@ -73,7 +73,7 @@
 
   & .CodeMirror,
   & textarea {
-    border: 1px solid darken(var(--color-background, 9));
+    border: 1px solid var(--color-background-darker);
     flex-grow: 1;
     font-family: var(--font-family-editor);
     font-size: 16px;
