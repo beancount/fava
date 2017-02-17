@@ -1,0 +1,72 @@
+/*
+ * At resolutions smaller than 768px, hide the aside menu.
+ * This means that ipads and larger will show the side menu.
+ */
+@media (max-width: 767px) {
+  body {
+    padding: 0;
+  }
+
+  header {
+    flex-wrap: wrap;
+    height: auto;
+    padding-left: 46px;
+    position: inherit;
+  }
+
+  h1 {
+    padding: 8px;
+  }
+
+  .filter-form {
+    flex-wrap: wrap;
+  }
+
+  aside {
+    margin-left: -var(--aside-width);
+    top: 0;
+
+    &.active {
+      margin-left: 0;
+
+      & .add-transaction-button {
+        left: var(--aside-width);
+      }
+    }
+  }
+
+  .aside-button,
+  .add-transaction-button {
+    border-color: var(--color-sidebar-border);
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    height: 42px;
+    left: 0;
+    padding: 6px 4px;
+    position: fixed;
+    width: 42px;
+  }
+
+  .aside-button {
+    display: block;
+    margin-left: 0;
+    top: 0;
+
+    &.active {
+      background-color: var(--color-sidebar-background);
+      box-shadow: none;
+      left: var(--aside-width);
+    }
+  }
+
+  .add-transaction-button {
+    color: var(--color-mobile-button-text);
+    font-size: 30px;
+    top: 42px;
+  }
+
+  .source-form,
+  .source-editor-wrapper {
+    left: 0;
+  }
+}

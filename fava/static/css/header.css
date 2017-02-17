@@ -128,8 +128,11 @@ h1 {
   color: var(--color-text);
   display: flex;
   margin: 0;
+  padding-bottom: 2px;
 
   & > span {
+    margin-bottom: 3px;
+    margin-top: 3px;
     position: relative;
   }
 

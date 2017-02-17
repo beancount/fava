@@ -8,6 +8,8 @@
 @import 'query.css';
 @import 'journal-table.css';
 @import 'tree-table.css';
+@import 'media-mobile.css';
+@import 'media-print.css';
 
 ::-webkit-scrollbar {
   height: .5em;

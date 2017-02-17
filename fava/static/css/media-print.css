@@ -1,0 +1,27 @@
+@media print {
+  body {
+    padding: 0;
+  }
+
+  header {
+    position: relative;
+
+    & > * {
+      display: none;
+    }
+
+    & h1 {
+      display: block;
+    }
+  }
+
+  .filter-form {
+    display: none;
+  }
+
+  aside,
+  .aside-button,
+  .toggle-chart-container {
+    display: none;
+  }
+}
