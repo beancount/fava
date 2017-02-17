@@ -60,7 +60,8 @@
   {% endif %}
     {% if query %}
       <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
-        <div class="queryresults-header"><h3><code>{{ query }}</code></h3>
+        <div class="queryresults-header"><pre><code>{{ query }}</code></pre>
+          <span class="spacer"></span>
           {% if result_types %}
             <span class="download">
               {{ _('Download as') }}
@@ -104,7 +105,7 @@
       {% for history_item in query_shell_history %}
         <div class="queryresults-wrapper toggled inactive">
           <div class="queryresults-header">
-            <h3><code>{{ history_item }}</code></h3>
+            <pre><code>{{ history_item }}</code></pre>
           </div>
         </div>
       {% endfor %}

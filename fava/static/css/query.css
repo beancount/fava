@@ -32,7 +32,7 @@
   background-color: var(--color-sidebar-background);
   cursor: pointer;
   display: flex;
-  padding: .5em;
+  padding: 4px 8px;
 
   &::before {
     border-left: 8px solid transparent;
@@ -42,9 +42,10 @@
     margin-right: .5em;
   }
 
-  & h3 {
-    flex-grow: 1;
-    margin-bottom: 0;
+  & pre {
+    display: inline-block;
+    margin: 0;
+    padding: 3px 6px;
   }
 
   & .download {
