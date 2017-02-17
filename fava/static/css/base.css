@@ -568,8 +568,8 @@ td .status-indicator {
     }
   }
 
-  & .aside-button,
-  & .add-transaction-button {
+  .aside-button,
+  .add-transaction-button {
     border-color: var(--color-sidebar-border);
     border-style: solid;
     border-width: 0 1px 1px 0;
@@ -580,7 +580,7 @@ td .status-indicator {
     width: 42px;
   }
 
-  & .aside-button {
+  .aside-button {
     display: block;
     margin-left: 0;
     top: var(--header-height);
@@ -592,14 +592,14 @@ td .status-indicator {
     }
   }
 
-  & .add-transaction-button {
+  .add-transaction-button {
     color: var(--color-mobile-button-text);
     font-size: 30px;
     top: calc(var(--header-height) + 42px);
   }
 
-  & .source-form,
-  & .source-editor-wrapper {
+  .source-form,
+  .source-editor-wrapper {
     left: 0;
   }
 }
@@ -621,9 +621,9 @@ td .status-indicator {
     }
   }
 
-  & aside,
-  & .aside-button,
-  & .toggle-chart-container {
+  aside,
+  .aside-button,
+  .toggle-chart-container {
     display: none;
   }
 }
