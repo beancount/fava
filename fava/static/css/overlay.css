@@ -40,7 +40,7 @@
   width: 767px;
 
   & form,
-  & div {
+  & > div {
     width: 100%;
   }
 

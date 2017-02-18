@@ -38,7 +38,7 @@
 {% elif type == "<class 'set'>" %}
     <td>{{ value|join(',') }}</td>
 {% elif type == "<class 'datetime.date'>" %}
-    <td>{{ value }}</td>
+    <td>{{ value or '' }}</td>
 {% elif type == "<class 'beancount.core.position.Position'>" %}
     <td class="num">{{ value.units|format_amount }}</td>
 {% else %}
