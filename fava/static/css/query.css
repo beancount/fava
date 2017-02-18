@@ -84,13 +84,7 @@
   }
 }
 
-.sample-queries {
-  padding-left: 2em;
-
-  & a { text-decoration: none; }
-  & code { color: var(--color-text-lighter); }
-  & li { list-style-type: disc; }
-}
+.CodeMirror .CodeMirror-placeholder { color: #999; }
 
 .query-error {
   background: var(--color-error);

@@ -25,6 +25,9 @@ import 'codemirror/addon/hint/show-hint';
 // commenting
 import 'codemirror/addon/comment/comment';
 
+// placeholder
+import 'codemirror/addon/display/placeholder';
+
 import './codemirror/fold-beancount';
 import './codemirror/hint-beancount';
 import './codemirror/mode-beancount';
@@ -174,26 +177,27 @@ export default function initEditor() {
     readOnly: true,
   };
 
-  const queryOptions = {
-    mode: 'beancount-query',
-    extraKeys: {
-      'Ctrl-Enter': () => {
-        submitQuery();
-      },
-      'Cmd-Enter': () => {
-        submitQuery();
-      },
-    },
-  };
-
   // Read-only editors
   $$('.editor-readonly').forEach((el) => {
     CodeMirror.fromTextArea(el, readOnlyOptions);
   });
 
   // Query editor
-  if ($('#query-editor')) {
-    const editor = CodeMirror.fromTextArea($('#query-editor'), queryOptions);
+  const queryEditorTextarea = $('#query-editor');
+  if (queryEditorTextarea) {
+    const queryOptions = {
+      mode: 'beancount-query',
+      extraKeys: {
+        'Ctrl-Enter': () => {
+          submitQuery();
+        },
+        'Cmd-Enter': () => {
+          submitQuery();
+        },
+      },
+      placeholder: queryEditorTextarea.getAttribute('placeholder'),
+    };
+    const editor = CodeMirror.fromTextArea(queryEditorTextarea, queryOptions);
 
     editor.on('keyup', (cm, event) => {
       if (!cm.state.completionActive && event.keyCode !== 13) {
