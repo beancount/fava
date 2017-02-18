@@ -5,7 +5,7 @@
             <h3>{{ _('New transaction') }}:</h3>
             <div class="fieldset">
                 <label for="date">{{ _('Date') }}:</label>
-                <input type="date" name="date" value="{{ datetime.datetime.now().strftime('%Y-%m-%d') }}" />
+                <input type="date" name="date" value="{{ datetime.date.today() }}" />
                 <input type="text" name="flag" value="*">
                 <label for="payee">{{ _('Payee') }}:</label>
                 <input type="text" name="payee" placeholder="{{ _('Payee') }}" list="payees" />

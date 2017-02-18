@@ -98,3 +98,12 @@ class AttributesModule(FavaModule):
                     if not active_only or child_account.txn_postings]
 
         return accounts if active_only else accounts[1:]
+
+    def payee_accounts(self, payee):
+        """Rank accounts for the given payee."""
+        account_ranker = ExponentialDecayRanker(self.accounts)
+        for txn in filter_type(self.ledger.all_entries, Transaction):
+            if txn.payee == payee:
+                for posting in txn.postings:
+                    account_ranker.update(posting.account, txn.date)
+        return account_ranker.sort()
