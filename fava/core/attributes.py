@@ -60,6 +60,7 @@ class AttributesModule(FavaModule):
     def __init__(self, ledger):
         super().__init__(ledger)
         self.accounts = None
+        self.currencies = None
         self.payees = None
         self.tags = None
         self.years = None
@@ -67,10 +68,12 @@ class AttributesModule(FavaModule):
     def load_file(self):
         all_entries = self.ledger.all_entries
         self.tags = getters.get_all_tags(all_entries)
-        self.years = list(getters.get_active_years(all_entries))
+        self.years = list(getters.get_active_years(all_entries))[::-1]
 
         account_ranker = ExponentialDecayRanker(
             self.list_accounts(active_only=True))
+        currency_ranker = ExponentialDecayRanker(
+            self.ledger.options['commodities'])
         payee_ranker = ExponentialDecayRanker(
             getters.get_all_payees(all_entries))
 
@@ -79,9 +82,13 @@ class AttributesModule(FavaModule):
                 payee_ranker.update(txn.payee, txn.date)
             for posting in txn.postings:
                 account_ranker.update(posting.account, txn.date)
+                currency_ranker.update(posting.units.currency, txn.date)
+                if posting.cost:
+                    currency_ranker.update(posting.cost.currency, txn.date)
 
-        self.payees = payee_ranker.sort()
         self.accounts = account_ranker.sort()
+        self.currencies = currency_ranker.sort()
+        self.payees = payee_ranker.sort()
 
     def list_accounts(self, active_only=False):
         """List all sub-accounts of the root account."""
