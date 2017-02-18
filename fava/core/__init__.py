@@ -19,6 +19,7 @@ from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
 
 from fava.util import date
+from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.fava_options import parse_options
@@ -31,37 +32,6 @@ from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
 from fava.core.watcher import Watcher
 from fava.ext import find_extensions
-
-
-def _list_accounts(root_account, active_only=False):
-    """List of all sub-accounts of the given root."""
-    accounts = [child_account.account
-                for child_account in
-                realization.iter_children(root_account)
-                if not active_only or child_account.txn_postings]
-
-    return accounts if active_only else accounts[1:]
-
-
-# pylint: disable=too-few-public-methods
-class AttributesModule(FavaModule):
-    """Some attributes of the ledger (mostly for auto-completion)."""
-
-    def __init__(self, ledger):
-        super().__init__(ledger)
-        self.accounts = None
-        self.payees = None
-        self.tags = None
-        self.years = None
-
-    def load_file(self):
-        all_entries = self.ledger.all_entries
-        self.payees = getters.get_all_payees(all_entries)
-        self.tags = getters.get_all_tags(all_entries)
-        self.years = list(getters.get_active_years(all_entries))
-
-        self.accounts = _list_accounts(self.ledger.all_root_account,
-                                       active_only=True)
 
 
 # pylint: disable=too-few-public-methods
@@ -279,9 +249,10 @@ class FavaLedger():
             A list of RealAccount instances for all the intervals.
 
         """
-        min_accounts = [account
-                        for account in _list_accounts(self.all_root_account)
-                        if account.startswith(account_name)]
+        min_accounts = [
+            account for account in
+            self.attributes.list_accounts(self.all_root_account)
+            if account.startswith(account_name)]
 
         interval_tuples = list(reversed(self._interval_tuples(interval)))
 

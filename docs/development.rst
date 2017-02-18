@@ -56,6 +56,11 @@ fava.core
 
 .. automodule:: fava.core
 
+fava.core.attributes
+~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.attributes
+
 fava.core.budgets
 ~~~~~~~~~~~~~~~~~
 

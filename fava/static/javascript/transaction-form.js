@@ -16,6 +16,7 @@ function initInput(input) {
     filter(suggestion, search) {
       return fuzzy.test(search, suggestion.value);
     },
+    sort: false,
   };
   const completer = new Awesomplete(input, options);
 
