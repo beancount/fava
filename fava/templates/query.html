@@ -5,7 +5,7 @@
 
 {% set query = request.args.get('query_string', '') %}
 {% set query_shell_history = ledger.query_shell.get_history(20)|reverse %}
-{% set contents, result_types, result_rows = ledger.query_shell.execute_query(query) %}
+{% set contents, result_types, result_rows = ledger.query_shell.execute_query(query, add_to_history=True) %}
 
 {% block content %}
   {% if not result_only %}

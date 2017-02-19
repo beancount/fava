@@ -90,7 +90,7 @@ class QueryShell(shell.BQLShell, FavaModule):
 
         self.result = rtypes, rrows
 
-    def execute_query(self, query):
+    def execute_query(self, query, add_to_history=False):
         """Run a query.
 
         Arguments:
@@ -105,7 +105,7 @@ class QueryShell(shell.BQLShell, FavaModule):
         self._loadfun()
         with contextlib.redirect_stdout(self.buffer):
             self.onecmd(query)
-        if query:
+        if query and add_to_history:
             readline.add_history(query.replace('\n', ' '))
         contents = self.buffer.getvalue()
         self.buffer.truncate(0)
