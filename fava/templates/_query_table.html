@@ -43,7 +43,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro querytable(types, rows, filter_empty=False) %}
+{% macro querytable(types, rows, filter_empty=None) %}
   <table class="queryresults sortable">
     <thead>
       <tr>
@@ -53,7 +53,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for row in rows if filter_empty == False or not row[filter_empty].is_empty() %}
+      {% for row in rows if filter_empty == None or not row[filter_empty].is_empty() %}
         <tr>
           {% for name, type in types %}
             {{ querycell(name, row[name], type)  }}
