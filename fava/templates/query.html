@@ -46,6 +46,27 @@
 {% endif %}
 {% endmacro %}
 
+{% macro querytable(types, rows) %}
+  <table class="queryresults sortable">
+    <thead>
+      <tr>
+        {% for name, type in types %}
+          <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+        <tr>
+          {% for name, type in types %}
+            {{ querycell(name, row[name], type)  }}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
+
 {% set query = request.args.get('query_string', '') %}
 {% set query_shell_history = ledger.query_shell.get_history(20)|reverse %}
 {% set contents, result_types, result_rows = ledger.query_shell.execute_query(query) %}
@@ -78,24 +99,7 @@
             {% if contents %}
               <pre><code>{{ contents }}</code></pre>
             {% elif result_types %}
-              <table class="queryresults sortable">
-                <thead>
-                  <tr>
-                    {% for name, type in result_types %}
-                      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
-                    {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in result_rows %}
-                    <tr>
-                      {% for name, type in result_types %}
-                        {{ querycell(name, row[name], type)  }}
-                      {% endfor %}
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+              {{ querytable(result_types, result_rows) }}
             {% endif %}
           </div>
         {% endif %}
