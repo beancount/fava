@@ -7,7 +7,8 @@
 <td class="num">{{ value|format_currency(currency) }}</td>
 {%- endmacro %}
 
-{% set holdings_query = 'SELECT account,
+{% set holdings_by = {
+'none': 'SELECT account,
     units(sum(position)) as units,
     cost_number as cost,
     first(price(currency, cost_currency)) as price,
@@ -16,9 +17,7 @@
     cost_date as acquision_date
   WHERE account_sortkey(account) ~ "^[01]"
   GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
-  ORDER BY account_sortkey(account)' %}
-
-{% set holdings_by = {
+  ORDER BY account_sortkey(account)',
 'account': 'SELECT account,
     units(sum(position)) as units,
     sum(cost_number)/count(cost_number) as average_cost,
@@ -48,6 +47,13 @@
   ORDER BY cost_currency',
 } %}
 
+{% set units_column = {
+  'none': 1,
+  'account': 1,
+  'currency': 0,
+  'cost_currency': 0,
+} %}
+
 {% block content %}
     <div class="headerline">
         <h3>{% if aggregation_key %}<a href="{{ url_for('report', report_name='holdings') }}">{{ _('Holdings') }}</a>{% else %}{{ _('Holdings') }}{% endif %}</h3>
@@ -56,17 +62,7 @@
         {% endfor %}
     </div>
 
-    {% if not aggregation_key %}
-      {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_query) %}
-      {{ querytable.querytable(result_types, result_rows, filter_empty=1) }}
-    {% elif aggregation_key == 'account' %}
-      {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
-      {{ querytable.querytable(result_types, result_rows, filter_empty=1) }}
-    {% elif aggregation_key == 'currency' %}
-      {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
-      {{ querytable.querytable(result_types, result_rows, filter_empty=0) }}
-    {% elif aggregation_key == 'cost_currency' %}
-      {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
-      {{ querytable.querytable(result_types, result_rows, filter_empty=0) }}
-    {% endif %}
+    {% if not aggregation_key %}{% set aggregation_key = 'none' %}{% endif %}
+    {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
+    {{ querytable.querytable(result_types, result_rows, filter_empty=units_column[aggregation_key]) }}
 {% endblock %}

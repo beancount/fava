@@ -27,7 +27,6 @@ from fava.core.file import FileModule
 from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
                                TagFilter, TimeFilter)
 from fava.core.helpers import FavaAPIException, FavaModule
-from fava.core.holdings import get_final_holdings, aggregate_holdings_by
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
 from fava.core.watcher import Watcher
@@ -297,25 +296,6 @@ class FavaLedger():
             return filter(lambda e: e.type == event_type, events)
 
         return events
-
-    def holdings(self, aggregation_key=None):
-        """List all holdings (possibly aggregated)."""
-
-        # Get latest price unless there's an active time filter.
-        price_date = self._filters['time'].end_date \
-            if self._filters['time'] else None
-
-        holdings_list = get_final_holdings(
-            self.entries,
-            (self.account_types.assets, self.account_types.liabilities),
-            self.price_map,
-            price_date
-        )
-
-        if aggregation_key:
-            holdings_list = aggregate_holdings_by(holdings_list,
-                                                  aggregation_key)
-        return holdings_list
 
     def get_entry(self, entry_hash):
         """Find an entry.
