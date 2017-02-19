@@ -114,9 +114,13 @@ function doPoll() {
     .then(handleJSON)
     .then((data) => {
       if (data.changed) {
-        $('#reload-page').classList.remove('hidden');
-        e.trigger('file-modified');
-        e.trigger('reload-warning', _('File change detected. Click to reload.'));
+        if (window.favaAPI.favaOptions['auto-reload']) {
+          e.trigger('reload');
+        } else {
+          $('#reload-page').classList.remove('hidden');
+          e.trigger('file-modified');
+          e.trigger('reload-warning', _('File change detected. Click to reload.'));
+        }
       }
     }, () => {})
     .then(() => {

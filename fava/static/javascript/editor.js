@@ -127,9 +127,9 @@ function submitQuery() {
 
 export default function initEditor() {
   const rulers = [];
-  if (window.favaAPI['editor-print-margin-column']) {
+  if (window.favaAPI.favaOptions['editor-print-margin-column']) {
     rulers.push({
-      column: window.favaAPI['editor-print-margin-column'],
+      column: window.favaAPI.favaOptions['editor-print-margin-column'],
       lineStyle: 'dotted',
     });
   }

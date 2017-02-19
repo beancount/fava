@@ -60,9 +60,8 @@
         'baseURL': url_for('index'),
         'accounts': ledger.attributes.accounts,
         'options': ledger.options,
-        'incognito': ledger.fava_options['incognito'],
+        'favaOptions': ledger.fava_options,
         'tags': ledger.attributes.tags,
-        'editor-print-margin-column': ledger.fava_options['editor-print-margin-column'],
     }|tojson|safe }}</script>
     <script type="application/json" id="translations">{{ {
         'Save': _('Save'),

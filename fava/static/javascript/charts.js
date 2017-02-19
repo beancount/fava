@@ -27,7 +27,7 @@ function formatCurrency(number) {
   } else {
     str = formatCurrencyWithoutComma(number);
   }
-  if (window.favaAPI.incognito) {
+  if (window.favaAPI.favaOptions.incognito) {
     str = str.replace(/[0-9]/g, 'X');
   }
   return str;
@@ -36,7 +36,7 @@ function formatCurrency(number) {
 const formatCurrencyShortDefault = format('.2s');
 function formatCurrencyShort(number) {
   let str = formatCurrencyShortDefault(number);
-  if (window.favaAPI.incognito) {
+  if (window.favaAPI.favaOptions.incognito) {
     str = str.replace(/[0-9]/g, 'X');
   }
   return str;
