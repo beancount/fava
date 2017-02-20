@@ -21,6 +21,7 @@ function submitIngestForm() {
       narration: transaction.querySelector('input[name=narration]').value,
       metadata: {},
       postings: [],
+      type: 'transaction',
     };
 
     transaction.querySelectorAll('.posting').forEach((posting) => {
@@ -38,6 +39,31 @@ function submitIngestForm() {
     });
 
     jsonData.entries.push(transactionData);
+  });
+
+  form.querySelectorAll('.ingest-row.import .balance-form').forEach((balance) => {
+    const balanceData = {
+      date: balance.querySelector('input[name=date]').value,
+      account: balance.querySelector('input[name=account]').value,
+      number: balance.querySelector('input[name=number]').value,
+      currency: balance.querySelector('input[name=currency]').value,
+      metadata: {},
+      type: 'balance',
+    };
+
+    jsonData.entries.push(balanceData);
+  });
+
+  form.querySelectorAll('.ingest-row.import .note-form').forEach((balance) => {
+    const noteData = {
+      date: balance.querySelector('input[name=date]').value,
+      account: balance.querySelector('input[name=account]').value,
+      comment: balance.querySelector('textarea[name=comment]').value,
+      metadata: {},
+      type: 'note',
+    };
+
+    jsonData.entries.push(noteData);
   });
 
   $.fetch(form.getAttribute('action'), {

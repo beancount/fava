@@ -26,6 +26,6 @@ Called after metadata (`key: value`)  has been added to an `entry`.
 
 ---
 
-### `after_insert_transaction(transaction)`
+### `after_insert_entry(entry)`
 
-Called after a `transaction` has been inserted.
+Called after an `entry` has been inserted.

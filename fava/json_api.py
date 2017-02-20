@@ -4,7 +4,7 @@ import os
 
 from flask import abort, Blueprint, jsonify, g, request
 from werkzeug.utils import secure_filename
-from beancount.core.data import Posting, Transaction
+from beancount.core import data
 from beancount.core.amount import Amount
 from beancount.core.number import D
 from beancount.scripts.format import align_beancount
@@ -104,38 +104,68 @@ def _add_transaction(json):
                               .format(posting['account']))
         number = D(posting['number']) if posting['number'] else None
         amount = Amount(number, posting.get('currency'))
-        postings.append(Posting(posting['account'], amount,
-                                None, None, None, None))
+        postings.append(data.Posting(posting['account'], amount,
+                        None, None, None, None))
 
     if not postings:
         return _api_error('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
-    transaction = Transaction(
+    transaction = data.Transaction(
         json['metadata'], date, json['flag'], json['payee'],
         json['narration'], None, None, postings)
 
-    g.ledger.file.insert_transaction(transaction)
+    g.ledger.file.insert_entry(transaction)
 
 
-@json_api.route('/add-transaction/', methods=['PUT'])
+def _add_balance(json):
+    if json['account'] not in g.ledger.attributes.accounts:
+        return _api_error('Unknown account: {}.'.format(json['account']))
+    number = D(json['number'])
+    amount = Amount(number, json.get('currency'))
+    date = util.date.parse_date(json['date'])[0]
+
+    balance = data.Balance(json['metadata'], date, json['account'], amount,
+                           None, None)
+    g.ledger.file.insert_entry(balance)
+
+
+def _add_note(json):
+    if json['account'] not in g.ledger.attributes.accounts:
+        return _api_error('Unknown account: {}.'.format(json['account']))
+
+    if '"' in json['comment']:
+        return _api_error('Note contains double-quotes (")')
+    date = util.date.parse_date(json['date'])[0]
+
+    note = data.Note(json['metadata'], date, json['account'], json['comment'])
+    g.ledger.file.insert_entry(note)
+
+
+@json_api.route('/add/transaction/', methods=['PUT'])
 def add_transaction():
     """Add a transaction."""
     json = request.get_json()
-
     result = _add_transaction(json)
     if result:
         return result
     return _api_success(message='Stored transaction.')
 
 
-@json_api.route('/add-entries/', methods=['PUT'])
+@json_api.route('/add/entries/', methods=['PUT'])
 def add_entries():
     """Add many entries."""
     json = request.get_json()
 
     for entry in json['entries']:
-        result = _add_transaction(entry)
+        result = None
+        if entry['type'] == 'transaction':
+            result = _add_transaction(entry)
+        if entry['type'] == 'balance':
+            result = _add_balance(entry)
+        if entry['type'] == 'note':
+            result = _add_note(entry)
+
         if result:
             return result
 

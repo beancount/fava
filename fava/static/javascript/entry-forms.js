@@ -4,7 +4,7 @@ import fuzzy from 'fuzzyjs';
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
-function initInput(input) {
+export function initInput(input) {
   if (!input.getAttribute('list')) {
     return;
   }
@@ -24,7 +24,7 @@ function initInput(input) {
   });
 }
 
-function addPostingRow(form) {
+export function addPostingRow(form) {
   const newPosting = $('#posting-template').cloneNode(true);
   newPosting.querySelectorAll('input').forEach((input) => {
     initInput(input);
@@ -34,7 +34,7 @@ function addPostingRow(form) {
   return newPosting;
 }
 
-function addMetadataRow(form) {
+export function addMetadataRow(form) {
   const newMetadata = $('#metadata-template').cloneNode(true);
   newMetadata.querySelectorAll('input').forEach((input) => {
     initInput(input);
@@ -44,7 +44,7 @@ function addMetadataRow(form) {
   return newMetadata;
 }
 
-function submitTransactionForm(form, successCallback) {
+export function submitTransactionForm(form, successCallback) {
   const jsonData = {
     date: form.querySelector('input[name=date]').value,
     flag: form.querySelector('input[name=flag]').value,
@@ -52,6 +52,7 @@ function submitTransactionForm(form, successCallback) {
     narration: form.querySelector('input[name=narration]').value,
     metadata: {},
     postings: [],
+    type: 'transaction',
   };
 
   form.querySelectorAll('.metadata').forEach((metadata) => {
@@ -103,44 +104,6 @@ function submitTransactionForm(form, successCallback) {
     });
 }
 
-function initTransactionOverlay() {
-  const form = $('#transaction #transaction-form');
-  let initialized = false;
-
-  // TODO
-  $('#add-transaction-button').addEventListener('click', () => {
-    if (!initialized) {
-      form.querySelectorAll('input').forEach((input) => {
-        initInput(input);
-      });
-      addPostingRow(form);
-      addPostingRow(form);
-      initialized = true;
-    }
-    $('#transaction').classList.add('shown');
-    form.querySelector('input[name="date"]').focus();
-  });
-
-  form.querySelector('#transaction-form-submit').addEventListener('click', (event) => {
-    event.preventDefault();
-    submitTransactionForm(form, () => {
-      // TODO
-      form.querySelector('.transaction-form').classList.remove('shown');
-    });
-  });
-
-  form.querySelector('#transaction-form-submit-and-new').addEventListener('click', (event) => {
-    event.preventDefault();
-    submitTransactionForm(form);
-  });
-
-  form.querySelector('#add-metadata').addEventListener('click', (event) => {
-    event.preventDefault();
-    const newMetadata = addMetadataRow(form);
-    newMetadata.querySelector('.metadata-key').focus();
-  });
-}
-
 function initTransactionForm(form) {
   form.querySelectorAll('input').forEach((input) => {
     initInput(input);
@@ -159,9 +122,28 @@ function initTransactionForm(form) {
   });
 }
 
-export default function initTransactionForms() {
-  initTransactionOverlay();
+function initBalanceForm(form) {
+  form.querySelectorAll('input').forEach((input) => {
+    initInput(input);
+  });
+}
+
+function initNoteForm(form) {
+  form.querySelectorAll('input').forEach((input) => {
+    initInput(input);
+  });
+}
+
+export default function initEntryForms() {
   $$('.transaction-form').forEach((el) => {
     initTransactionForm(el);
+  });
+
+  $$('.balance-form').forEach((el) => {
+    initBalanceForm(el);
+  });
+
+  $$('.note-form').forEach((el) => {
+    initNoteForm(el);
   });
 }

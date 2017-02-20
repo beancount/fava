@@ -2,7 +2,7 @@
 {% set active_page = 'ingest' %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% import 'overlays/_transaction_form.html' as tform with context %}
+{% import 'macros/_entry_forms.html' as forms with context %}
 
 {% block content %}
     <h3>{{ _('Ingest') }}{% if filename %} {{ filename }}{% endif %}</h3>
@@ -56,11 +56,20 @@
                 <div class="actions">Actions</div>
             </div>
         {% for entry in entries %}
+            {% set type = entry.__class__.__name__.lower() %}
             <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
-                <div class="line">{{ entry.meta.lineno }}</div>
+                <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
                 <div class="source"><pre>{{ entry.meta.__ingest_source__ }}</pre></div>
                 <div class="form">
-                    {{ tform.transaction_form(transaction=entry) }}
+                    {% if type == 'transaction' %}
+                        {{ forms.transaction(entry=entry) }}
+                    {% endif %}
+                    {% if type == 'balance' %}
+                        {{ forms.balance(entry=entry) }}
+                    {% endif %}
+                    {% if type == 'note' %}
+                        {{ forms.note(entry=entry) }}
+                    {% endif %}
                 </div>
                 <div class="actions">
                     <div class="inner">

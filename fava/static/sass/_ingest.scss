@@ -16,6 +16,10 @@
   display: flex;
   padding: 10px 0;
 
+  &:not(.header) {
+    min-height: 90px;
+  }
+
   .line {
     line-height: 28px;
     min-width: 40px;
