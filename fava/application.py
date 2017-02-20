@@ -16,7 +16,7 @@ Attributes:
 import datetime
 import inspect
 import os
-import io
+import runpy
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file,
@@ -26,6 +26,8 @@ import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.utils.text_utils import replace_numbers
+from beancount import ingest
+from beancount.core import data
 
 from fava import template_filters
 from fava.core import FavaLedger
@@ -291,20 +293,59 @@ def help_page(page_slug='_index'):
                            help_html=render_template_string(html))
 
 
-@app.route('/<bfile>/ingest/', methods=['GET', 'POST'])
-def ingest():
-    """Ingest new entries."""
-    filecontent = []
-    entries = None
-    if request.method == 'POST':
-        file = request.files['file']
-        stream = io.StringIO(file.stream.read().decode("latin-1"))
-        entries = g.ledger.ingest.run_ingest(stream)
-        if not entries:
-            entries = []
+def _load_ingest_config(configpath):
+    # Check the existence of the config.
+    if not os.path.exists(configpath) or os.path.isdir(configpath):
+        raise "File does not exist: '{}'".format(configpath)
 
-    return render_template('ingest.html', filecontent=filecontent,
-                           entries=entries)
+    # Import the configuration.
+    mod = runpy.run_path(configpath)
+    return mod['CONFIG']
+
+
+@app.route('/<bfile>/ingest/')
+def ingest_identify():
+    """Identify files to ingest."""
+    data = None
+    if g.ledger.fava_options['ingest-config']:
+        config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
+        dirs = g.ledger.fava_options['ingest-dirs']
+
+        files = ingest.identify.find_imports(config, dirs)
+        data = []
+        for filename, importers in files:
+            file = ingest.cache.get_file(filename)
+            if len(importers):
+                data.append({
+                    'filename': filename,
+                    'importers': [{
+                        'name': importer.name(),
+                        'account': importer.file_account(file)
+                    } if importer else '-' for importer in importers]
+                })
+
+    return render_template('ingest.html', files=data)
+
+
+@app.route('/<bfile>/ingest/extract/')
+def ingest_extract():
+    """Extract entries to ingest."""
+    config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
+    filename = request.args.get('filename')
+    importer = next(
+        imp for imp in config if imp.name() == request.args.get('importer'))
+
+    new_entries, duplicate_entries = ingest.extract.extract_from_file(
+        filename,
+        importer,
+        existing_entries=g.ledger.entries,
+        min_date=None,
+        allow_none_for_tags_and_links=False)
+
+    entries = new_entries + duplicate_entries
+    entries.sort(key=data.entry_sortkey)
+
+    return render_template('ingest.html', entries=entries, filename=filename)
 
 
 @app.route('/jump')

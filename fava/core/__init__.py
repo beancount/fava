@@ -31,7 +31,6 @@ from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
 from fava.core.watcher import Watcher
 from fava.ext import find_extensions
-from fava.ingest import find_ingesters
 
 
 def _list_accounts(root_account, active_only=False):
@@ -91,40 +90,8 @@ class ExtensionModule(FavaModule):
             ext.run_hook(event, *args)
 
 
-# pylint: disable=too-few-public-methods
-class IngestModule(FavaModule):
-    """Some attributes of the ledger (mostly for auto-completion)."""
-
-    def __init__(self, ledger):
-        super().__init__(ledger)
-        self._ingesters = None
-        self._instances = {}
-
-    def load_file(self):
-        self._ingesters = []
-        for ingester in self.ledger.fava_options['ingesters']:
-            ingesters, errors = find_ingesters(
-                os.path.dirname(self.ledger.beancount_file_path), ingester)
-            self._ingesters.extend(ingesters)
-            self.ledger.errors.extend(errors)
-
-        for cls in self._ingesters:
-            if cls not in self._instances:
-                self._instances[cls] = cls(self.ledger)
-
-    def run_ingest(self, file, *args):
-        root_path = os.path.dirname(self.ledger.beancount_file_path)
-
-        for ext in self._instances.values():
-            ret = ext.run_ingest(file, self.ledger.all_entries,
-                                 self.ledger.attributes.payees, root_path,
-                                 *args)
-            if isinstance(ret, list):
-                return ret
-
-
-MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'ingest',
-           'misc', 'query_shell']
+MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'misc',
+           'query_shell']
 
 
 # pylint: disable=too-many-instance-attributes
@@ -166,9 +133,6 @@ class FavaLedger():
 
         #: A :class:`.ExtensionModule` instance.
         self.extensions = ExtensionModule(self)
-
-        #: A :class:`.IngestModule` instance.
-        self.ingest = IngestModule(self)
 
         #: A :class:`.FileModule` instance.
         self.file = FileModule(self)

@@ -1,3 +1,16 @@
+.ingest-files {
+  pre {
+    font-size: .9em;
+    margin: 0;
+  }
+
+  button {
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
 .ingest-row {
   border-bottom: thin solid $color-table-header-background;
   display: flex;
@@ -23,15 +36,15 @@
   .form {
     min-width: 600px;
 
-    // input[type="date"]::-webkit-clear-button {
-    //   -webkit-appearance: none;
-    //   display: none;
-    // }
+    input[type="date"]::-webkit-clear-button {
+      -webkit-appearance: none;
+      display: none;
+    }
 
-    // input[type=date]::-webkit-inner-spin-button {
-    //   -webkit-appearance: none;
-    //   display: none;
-    // }
+    input[type=date]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      display: none;
+    }
 
     input {
       &[name='date'] {

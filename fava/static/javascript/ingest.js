@@ -10,7 +10,7 @@ function initRow(row) {
 }
 
 function submitIngestForm() {
-  const form = $('#ingest-form');
+  const form = $('.ingest-extract');
   const jsonData = { entries: [] };
 
   form.querySelectorAll('.ingest-row.import .transaction-form').forEach((transaction) => {
@@ -54,16 +54,33 @@ function submitIngestForm() {
     });
 }
 
-export default function initIngest() {
-  const ingest = $('#ingest-form');
+function initIdentify() {
+  const files = $$('.ingest-files button');
+  if (!files) return;
+
+  files.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.location = button.getAttribute('href');
+    });
+  });
+}
+
+function initExtract() {
+  const ingest = $('.ingest-extract');
   if (!ingest) return;
 
   $$('.ingest-row').forEach((row) => {
     initRow(row);
   });
 
-  ingest.querySelector('#ingest-form-submit').addEventListener('click', (event) => {
+  ingest.querySelector('.ingest-form-submit').addEventListener('click', (event) => {
     event.preventDefault();
     submitIngestForm();
   });
+}
+
+export default function initIngest() {
+  initIdentify();
+  initExtract();
 }

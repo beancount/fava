@@ -5,45 +5,74 @@
 {% import 'overlays/_transaction_form.html' as tform with context %}
 
 {% block content %}
-    <h3>{{ _('Import') }}</h3>
-    {% if not entries %}
-        <form action="{{ url_for('ingest') }}" method="post" enctype="multipart/form-data">
+    <h3>{{ _('Ingest') }}{% if filename %} {{ filename }}{% endif %}</h3>
+    {% if not ledger.fava_options['ingest-config'] %}
+        <p>
+            No importers configured. See <a href="{{ url_for('help_page', page_slug='options') }}">Help (Options)</a> for more information.
+        </p>
+    {% endif %}
+
+    {% if files %}
+        {# <form action="{{ url_for('ingest_identify') }}" method="post" enctype="multipart/form-data">
             <input type="file" name="file">
             <button type="submit">Upload and process</button>
-        </form>
-    {% else %}
-        {# <form id="entry-filters" class="journal-entry-filters wide-form">
-            <button type="button" title="Toggle Open entries" data-type="open">Import</button>
-            <button type="button" title="Toggle Close entries" data-type="close" class="inactive">Duplicate</button>
-            <button type="button" title="Toggle Close entries" data-type="close">Ignore</button>
         </form> #}
-        <form id="ingest-form" action="{{ url_for('json_api.add_entries') }}">
+        <form action="{{ url_for('ingest_extract') }}" method="post" enctype="multipart/form-data">
+            <table class="ingest-files">
+                <thead>
+                    <tr>
+                        <th>File</th>
+                        <th>Importer</th>
+                        <th>Account</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in files %}
+                        {% for importer in file.importers %}
+                            <tr>
+                                <td>
+                                    <pre title="{{ file.filename }}">{{ file.filename|basename }}</pre>
+                                    <input type="hidden" name="filename" value="{{ file.filename }}">
+                                </td>
+                                <td>{{ importer.name }}</td>
+                                <td>{{ account_macros.account_name(importer.account) }}</td>
+                                <td>
+                                    <button type="button" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    {% endif %}
+    {% if entries %}
+        <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
             <div class="ingest-row header">
                 <div class="line">Line</div>
                 <div class="source">Source</div>
-                <div class="form">
-                    Transaction
-                </div>
+                <div class="form">Entry</div>
                 <div class="actions">Actions</div>
             </div>
         {% for entry in entries %}
-            <div class="ingest-row {{ entry.type.name|lower }}">
-                <div class="line">{{ entry.line }}</div>
-                <div class="source"><pre>{{ entry.source }}</pre></div>
+            <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
+                <div class="line">{{ entry.meta.lineno }}</div>
+                <div class="source"><pre>{{ entry.meta.__ingest_source__ }}</pre></div>
                 <div class="form">
-                    {{ tform.transaction_form(transaction=entry.entry) }}
+                    {{ tform.transaction_form(transaction=entry) }}
                 </div>
                 <div class="actions">
                     <div class="inner">
-                        <div class="action"><label><input name="action-{{ entry.line }}" type="radio" value="ignore"{% if entry.type.name == 'IGNORE' %} checked{% endif %}>Ignore</label></div>
-                        <div class="action"><label><input name="action-{{ entry.line }}" type="radio" value="duplicate"{% if entry.type.name == 'DUPLICATE' %} checked{% endif %}>Duplicate</label></div>
-                        <div class="action"><label><input name="action-{{ entry.line }}" type="radio" value="import"{% if entry.type.name == 'IMPORT' and loop.index != 4 %} checked{% endif %}>Import</label></div>
+                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="ignore">Ignore</label></div>
+                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>Duplicate</label></div>
+                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>Import</label></div>
                     </div>
                 </div>
             </div>
         {% endfor %}
             <div class="fieldset ingest-footer">
-                <button type="submit" id="ingest-form-submit" data-url="{{ url_for('ingest') }}">Import transactions</button>
+                <button type="submit" class="ingest-form-submit" data-url="{{ url_for('ingest_identify') }}">Import transactions</button>
             </div>
         </form>
     {% endif %}

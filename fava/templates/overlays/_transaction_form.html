@@ -31,6 +31,12 @@
             <input type="text" name="narration" placeholder="{{ _('Narration') }}" {% if transaction %}value="{{ transaction.narration }}"{% endif %}/>
         </div>
         <div class="metadatas">
+            {% if transaction %}
+                {% set meta = transaction.meta|remove_keys(['__duplicate__', '__ingest_source__', 'filename', 'lineno']) %}
+                {% for key, value in meta.items() %}
+                    {{ metadata(key=key, value=value) }}
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="postings">
             {% if transaction %}

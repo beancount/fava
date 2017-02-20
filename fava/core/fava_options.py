@@ -30,7 +30,8 @@ DEFAULTS = {
     'language': None,
     'interval': 'month',
     'incognito': False,
-    'ingesters': [],
+    'ingest-config': None,
+    'ingest-dirs': []
 }
 
 BOOL_OPTS = [
@@ -52,15 +53,16 @@ INT_OPTS = [
 
 LIST_OPTS = [
     'extensions',
-    'ingesters',
     'journal-show',
     'journal-show-document',
     'journal-show-transaction',
+    'ingest-dirs'
 ]
 
 STR_OPTS = [
     'language',
     'interval',
+    'ingest-config'
 ]
 
 
