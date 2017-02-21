@@ -61,7 +61,7 @@ def test_time_filter(example_ledger):
     assert time_filter.end_date == datetime.date(2018, 1, 1)
     filtered_entries = time_filter.apply(
         example_ledger.all_entries, example_ledger.options)
-    assert len(filtered_entries) == 83
+    assert len(filtered_entries) == 82
 
     time_filter.set('1000')
     filtered_entries = time_filter.apply(

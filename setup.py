@@ -34,7 +34,7 @@ setup(
         ]
     },
     install_requires=[
-        'beancount>=2.0b12',
+        'beancount>=2.0b15',
         'click',
         'markdown2>=2.3.0',
         'Flask>=0.10.1',

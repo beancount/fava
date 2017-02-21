@@ -46,14 +46,18 @@ def test_get_final_holdings(load_doc):
     holdings = sorted(map(tuple, holdings))
 
     assert holdings == [
-        ('Assets:Account1', A('10 HOOL'), Cost(D('523.46'), 'USD', None, None),
-         None, None, None),
-        ('Assets:Account1', A('11 HOOL'), Cost(D('518.73'), 'USD', None, None),
-         None, None, None),
-        ('Assets:Account2', A('20 ITOT'), Cost(D('85.195'), 'USD', None, None),
-         None, None, None),
-        ('Assets:Account3', A('50 HOOL'), Cost(D('540.00'), 'USD', None, None),
-         None, None, None),
+        ('Assets:Account1', A('10 HOOL'),
+         Cost(D('523.46'), 'USD', datetime.date(2013, 4, 2), None), None, None,
+         None),
+        ('Assets:Account1', A('11 HOOL'),
+         Cost(D('518.73'), 'USD', datetime.date(2013, 4, 1), None), None, None,
+         None),
+        ('Assets:Account2', A('20 ITOT'),
+         Cost(D('85.195'), 'USD', datetime.date(2013, 4, 2), None), None, None,
+         None),
+        ('Assets:Account3', A('50 HOOL'),
+         Cost(D('540.00'), 'USD', datetime.date(2013, 4, 3), None), None, None,
+         None),
         ('Assets:Cash', A('15466.470 USD'), None, None, None, None),
         ('Equity:Unknown', A('-50000 USD'), None, None, None, None),
         ('Liabilities:Loan', A('-5111 USD'), None, None, None, None),
@@ -63,14 +67,18 @@ def test_get_final_holdings(load_doc):
     holdings = sorted(map(tuple, holdings))
 
     assert holdings == [
-        ('Assets:Account1', A('10 HOOL'), Cost(D('523.46'), 'USD', None, None),
-         None, None, None),
-        ('Assets:Account1', A('11 HOOL'), Cost(D('518.73'), 'USD', None, None),
-         None, None, None),
-        ('Assets:Account2', A('20 ITOT'), Cost(D('85.195'), 'USD', None, None),
-         None, None, None),
-        ('Assets:Account3', A('50 HOOL'), Cost(D('540.00'), 'USD', None, None),
-         None, None, None),
+        ('Assets:Account1', A('10 HOOL'),
+         Cost(D('523.46'), 'USD', datetime.date(2013, 4, 2), None), None, None,
+         None),
+        ('Assets:Account1', A('11 HOOL'),
+         Cost(D('518.73'), 'USD', datetime.date(2013, 4, 1), None), None, None,
+         None),
+        ('Assets:Account2', A('20 ITOT'),
+         Cost(D('85.195'), 'USD', datetime.date(2013, 4, 2), None), None, None,
+         None),
+        ('Assets:Account3', A('50 HOOL'),
+         Cost(D('540.00'), 'USD', datetime.date(2013, 4, 3), None), None, None,
+         None),
         ('Assets:Cash', A('15466.470 USD'), None, None, None, None),
     ]
 
@@ -95,7 +103,8 @@ def test_holdings_with_prices(load_doc):
     holdings = sorted(map(tuple, holdings))
 
     assert holdings == [
-        ('Assets:Account1', A('15 HOOL'), Cost(D('518.73'), 'USD', None, None),
+        ('Assets:Account1', A('15 HOOL'),
+         Cost(D('518.73'), 'USD', datetime.date(2013, 4, 1), None),
          D('578.02'), None, None),
         ('Assets:Cash', A('42219.05 USD'), None, None, None, None),
     ]
@@ -138,8 +147,9 @@ def test_aggregate_holdings_list_simple():
 def test_aggregate_holdings_list_with_cost():
     holdings = [
         Posting('Assets', A('10 HOOL'), None, None, None, None),
-        Posting('Assets', A('14 TEST'), Cost(D('10'), 'HOOL', None, None),
-                None, None, None),
+        Posting('Assets',
+                A('14 TEST'),
+                Cost(D('10'), 'HOOL', None, None), None, None, None),
     ]
     assert aggregate_holdings_list(holdings) == \
         Posting('Assets', Amount(D('24'), '*'),
@@ -150,8 +160,9 @@ def test_aggregate_holdings_list_with_cost():
 def test_aggregate_holdings_list_with_price():
     holdings = [
         Posting('Assets', A('10 HOOL'), None, None, None, None),
-        Posting('Assets', A('14 TEST'), Cost(D('10'), 'HOOL', None, None),
-                D('12'), None, None),
+        Posting('Assets',
+                A('14 TEST'),
+                Cost(D('10'), 'HOOL', None, None), D('12'), None, None),
     ]
     assert aggregate_holdings_list(holdings) == \
         Posting('Assets', Amount(D('24'), '*'),
@@ -205,16 +216,21 @@ def test_inventory_at_dates(load_doc):
     ]
 
     transactions = [
-        entry for entry in entries if isinstance(entry, Transaction)]
+        entry for entry in entries if isinstance(entry, Transaction)
+    ]
 
     def predicate(posting):
         return True
-    number_of_positions = list(
-        map(len, list(inventory_at_dates(transactions, dates, predicate))))
+
+    number_of_positions = [
+        len(inv) for inv in inventory_at_dates(transactions, dates, predicate)
+    ]
     assert number_of_positions == [0, 0, 2, 3, 3, 3]
 
     def predicate(posting):
         return posting.account.startswith('Assets')
-    number_of_positions = list(
-        map(len, list(inventory_at_dates(transactions, dates, predicate))))
+
+    number_of_positions = [
+        len(inv) for inv in inventory_at_dates(transactions, dates, predicate)
+    ]
     assert number_of_positions == [0, 1, 2, 3, 3, 3]
