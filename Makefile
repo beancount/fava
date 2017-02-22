@@ -2,7 +2,7 @@
 
 all: fava/static/gen/app.js
 
-fava/static/gen/app.js: fava/static/sass/* fava/static/javascript/*
+fava/static/gen/app.js: fava/static/css/* fava/static/javascript/*
 	cd fava/static; npm update; npm run build
 
 clean: mostlyclean

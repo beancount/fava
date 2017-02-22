@@ -1,10 +1,58 @@
 {% extends "_layout.html" %}
 {% set active_page = 'holdings' %}
 {% import 'macros/_account_macros.html' as account_macros with context %}
+{% import '_query_table.html' as querytable with context %}
 
 {% macro num_cell(value, currency) -%}
 <td class="num">{{ value|format_currency(currency) }}</td>
 {%- endmacro %}
+
+{% set holdings_by = {
+'none': 'SELECT account,
+    units(sum(position)) as units,
+    cost_number as cost,
+    first(price(currency, cost_currency)) as price,
+    cost(sum(position)) as book_value,
+    value(sum(position)) as market_value,
+    cost_date as acquision_date
+  WHERE account_sortkey(account) ~ "^[01]"
+  GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
+  ORDER BY account_sortkey(account)',
+'account': 'SELECT account,
+    units(sum(position)) as units,
+    sum(cost_number)/count(cost_number) as average_cost,
+    sum(price(currency, cost_currency))/count(cost_currency) as average_price,
+    cost(sum(position)) as book_value,
+    value(sum(position)) as market_value
+  WHERE account_sortkey(account) ~ "^[01]"
+  GROUP BY account, cost_currency, account_sortkey(account)
+  ORDER BY account_sortkey(account)',
+'currency': 'SELECT
+    units(sum(position)) as units,
+    sum(cost_number)/count(cost_number) as average_cost,
+    sum(price(currency, cost_currency))/count(cost_currency) as average_price,
+    cost(sum(position)) as book_value,
+    value(sum(position)) as market_value
+  WHERE account_sortkey(account) ~ "^[01]"
+  GROUP BY currency, cost_currency
+  ORDER BY currency, cost_currency',
+'cost_currency': 'SELECT
+    units(sum(position)) as units,
+    sum(cost_number)/count(cost_number) as average_cost,
+    sum(price(currency, cost_currency))/count(cost_currency) as average_price,
+    cost(sum(position)) as book_value,
+    value(sum(position)) as market_value
+  WHERE account_sortkey(account) ~ "^[01]"
+  GROUP BY cost_currency
+  ORDER BY cost_currency',
+} %}
+
+{% set units_column = {
+  'none': 1,
+  'account': 1,
+  'currency': 0,
+  'cost_currency': 0,
+} %}
 
 {% block content %}
     <div class="headerline">
@@ -14,36 +62,19 @@
         {% endfor %}
     </div>
 
-    {% set holdings = ledger.holdings(aggregation_key) %}
-    <table class="sortable">
-        <thead>
-            <tr>
-                <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Account') }}</th>
-                <th data-sort="num" data-sort-default="desc">{{ _('Units') }}</th>
-                <th data-sort="string">{{ _('Currency') }}</th>
-                <th data-sort="string">{{ _('Cost currency') }}</th>
-                <th data-sort="num" data-sort-default="desc">{{ _('Average Cost') }}</th>
-                <th data-sort="num" data-sort-default="desc">{{ _('Price') }}</th>
-                <th data-sort="num" data-sort-default="desc">{{ _('Book Value') }}</th>
-                <th data-sort="num" data-sort-default="desc">{{ _('Market Value') }}</th>
-                <th data-sort="string" data-sort-default="desc">{{ _('Acquisition Date') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for posting in holdings %}
-            <tr>
-                {% set cost_currency = posting.cost.currency if posting.cost else posting.units.currency %}
-                <td>{{ account_macros.account_name(posting.account) }}</td>
-                {{ num_cell(posting.units.number if posting.units.currency != '*' else None, posting.units.currency) }}
-                <td>{{ posting.units.currency}}</td>
-                <td>{{ cost_currency }}</td>
-                {{ num_cell(posting.cost.number, cost_currency) }}
-                {{ num_cell(posting.price, cost_currency) }}
-                {{ num_cell(posting.units.number * posting.cost.number if posting.cost else posting.units.number, cost_currency) }}
-                {{ num_cell(posting.units.number * posting.price if posting.price  else None, cost_currency) }}
-                <td>{{ posting.cost.date or ''  if posting.cost else '' }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% if not aggregation_key %}{% set aggregation_key = 'none' %}{% endif %}
+    {% set query = holdings_by[aggregation_key] %}
+    <p>
+      <a href={{ url_for('report', report_name='query', query_string=holdings_by[aggregation_key]) }}>Query</a>
+      <span class="download">
+        ({{ _('Download as') }}
+        <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+          <a href="{{ url_for('download_query', query_string=query, result_format='xls') }}">XLS</a>,
+          <a href="{{ url_for('download_query', query_string=query, result_format='xlsx') }}">XLSX</a> or
+          <a href="{{ url_for('download_query', query_string=query, result_format='ods') }}">ODS</a>
+        {% endif %})
+      </span>
+    </p>
+    {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
+    {{ querytable.querytable(result_types, result_rows, filter_empty=units_column[aggregation_key]) }}
 {% endblock %}

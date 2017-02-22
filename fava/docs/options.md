@@ -61,6 +61,18 @@ files that have different extensions of the same name).
 
 ---
 
+## `auto-reload`
+
+Default: `false`.
+
+Set this to `true` to make Fava automatically reload the page whenever a file
+changes is detected. By default only a notification is shown which you can
+click to reload the page.  If the file change is due to user interaction, e.g.,
+uploading a document or adding a transaction, Fava will always reload the page
+automatically.
+
+---
+
 ## `journal-show`
 
 Default: `transaction balance note document custom budget`

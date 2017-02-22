@@ -27,7 +27,7 @@ function formatCurrency(number) {
   } else {
     str = formatCurrencyWithoutComma(number);
   }
-  if (window.favaAPI.incognito) {
+  if (window.favaAPI.favaOptions.incognito) {
     str = str.replace(/[0-9]/g, 'X');
   }
   return str;
@@ -36,7 +36,7 @@ function formatCurrency(number) {
 const formatCurrencyShortDefault = format('.2s');
 function formatCurrencyShort(number) {
   let str = formatCurrencyShortDefault(number);
-  if (window.favaAPI.incognito) {
+  if (window.favaAPI.favaOptions.incognito) {
     str = str.replace(/[0-9]/g, 'X');
   }
   return str;
@@ -845,7 +845,11 @@ export default function initCharts() {
           .set('tooltipText', (d) => {
             let text = '';
             d.values.forEach((a) => {
-              text += `${formatCurrency(a.value)} ${a.name}<br>`;
+              text += `${formatCurrency(a.value)} ${a.name}`;
+              if (a.budget) {
+                text += ` / ${formatCurrency(a.budget)} ${a.name}`;
+              }
+              text += '<br>';
             });
             text += `<em>${d.label}</em>`;
             return text;

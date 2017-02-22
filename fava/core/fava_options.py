@@ -13,6 +13,7 @@ OptionError = namedtuple('OptionError', 'source message entry')
 DEFAULTS = {
     'default-file': None,
     'account-journal-include-children': True,
+    'auto-reload': False,
     'charts': True,
     'use-external-editor': False,
     'show-closed-accounts': False,
@@ -34,6 +35,7 @@ DEFAULTS = {
 
 BOOL_OPTS = [
     'account-journal-include-children',
+    'auto-reload',
     'charts',
     'incognito',
     'show-accounts-with-zero-balance',

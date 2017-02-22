@@ -58,6 +58,13 @@ def format_source():
     return _api_success(payload=align_beancount(request.get_json()['source']))
 
 
+@json_api.route('/payee-accounts/', methods=['GET'])
+def payee_accounts():
+    """Rank accounts for the given payee."""
+    return _api_success(
+        payload=g.ledger.attributes.payee_accounts(request.args.get('payee')))
+
+
 @json_api.route('/add-document/', methods=['PUT'])
 def add_document():
     """Upload a document."""

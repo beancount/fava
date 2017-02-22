@@ -1,66 +1,24 @@
 {% set result_only = request.args.get('result_only', False) %}{% if not result_only %}{% extends "_layout.html" %}{% endif %}
 {% set active_page = 'query' %}
 
-{% import 'macros/_account_macros.html' as account_macros with context %}
-
-{% set sort_type = {
-    "<class 'decimal.Decimal'>": 'num',
-    "<class 'cdecimal.Decimal'>": 'num',
-    "<class 'int'>": 'num',
-} %}
-
-{% macro querycell(name, value, type_) %}
-{% set type = type_|string %}
-{% if type == "<class 'beancount.core.inventory.Inventory'>" %}
-    <td class="num">
-    {% for position in value.cost() %}
-        {% if position.units.number != 0 %}
-            {{ position.units|format_amount }}<br>
-        {% endif %}
-    {% endfor %}
-    </td>
-{% elif type == "<class 'str'>" %}
-    <td>
-        {% if name == "account" %}
-            {{ account_macros.account_name(value) }}
-        {% else %}
-            {{ value }}
-        {% endif %}
-    </td>
-{% elif type == "<class 'decimal.Decimal'>" or type == "<class 'cdecimal.Decimal'>" %}
-    <td class="num" data-sort-value="{{ value }}">{{ value|format_currency }}</td>
-{% elif type == "<class 'beancount.core.amount.Amount'>" %}
-    <td class="num">{{ value|format_amount }}</td>
-{% elif type == "<class 'bool'>" %}
-    <td>{{ value|upper }}</td>
-{% elif type == "<class 'int'>" %}
-    <td class="num">{{ value }}</td>
-{% elif type == "<class 'set'>" %}
-    <td>{{ value|join(',') }}</td>
-{% elif type == "<class 'datetime.date'>" %}
-    <td>{{ value }}</td>
-{% elif type == "<class 'beancount.core.position.Position'>" %}
-    <td class="num">{{ value.units|format_amount }}</td>
-{% else %}
-    <td class="query-error" title="Type {{ type|string }} not recognized">{{ value }}</td>
-{% endif %}
-{% endmacro %}
+{% import '_query_table.html' as querytable with context %}
 
 {% set query = request.args.get('query_string', '') %}
 {% set query_shell_history = ledger.query_shell.get_history(20)|reverse %}
-{% set contents, result_types, result_rows = ledger.query_shell.execute_query(query) %}
+{% set contents, result_types, result_rows = ledger.query_shell.execute_query(query, add_to_history=True) %}
 
 {% block content %}
   {% if not result_only %}
     <form id="query-form" class="query-box" action="{{ url_for('report', report_name='query') }}" method="get">
-      <textarea id="query-editor" name="query_string">{{ query or '' }}</textarea>
+      <textarea id="query-editor" name="query_string" placeholder="{{ _('...enter a BQL query. \'help\' to list available commands.') }}">{{ query or '' }}</textarea>
       <button id="submit-query" type="submit">Submit</button>
     </form>
     <div id="query-container">
   {% endif %}
     {% if query %}
       <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
-        <div class="queryresults-header"><h3><code>{{ query }}</code></h3>
+        <div class="queryresults-header"><pre><code>{{ query }}</code></pre>
+          <span class="spacer"></span>
           {% if result_types %}
             <span class="download">
               {{ _('Download as') }}
@@ -77,24 +35,7 @@
             {% if contents %}
               <pre><code>{{ contents }}</code></pre>
             {% elif result_types %}
-              <table class="queryresults sortable">
-                <thead>
-                  <tr>
-                    {% for name, type in result_types %}
-                      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
-                    {% endfor %}
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for row in result_rows %}
-                    <tr>
-                      {% for name, type in result_types %}
-                        {{ querycell(name, row[name], type)  }}
-                      {% endfor %}
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
+              {{ querytable.querytable(result_types, result_rows) }}
             {% endif %}
           </div>
         {% endif %}
@@ -104,7 +45,7 @@
       {% for history_item in query_shell_history %}
         <div class="queryresults-wrapper toggled inactive">
           <div class="queryresults-header">
-            <h3><code>{{ history_item }}</code></h3>
+            <pre><code>{{ history_item }}</code></pre>
           </div>
         </div>
       {% endfor %}

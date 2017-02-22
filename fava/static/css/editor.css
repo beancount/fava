@@ -1,0 +1,99 @@
+/* Editor */
+
+@import 'codemirror/lib/codemirror';
+@import 'codemirror/addon/dialog/dialog';
+@import 'codemirror/addon/fold/foldgutter';
+@import 'codemirror/addon/hint/show-hint';
+
+.source-editor-wrapper {
+  bottom: 0;
+  left: var(--aside-width);
+  position: fixed;
+  right: 0;
+  top: calc(var(--header-height) + 43px);
+}
+
+.source-form {
+  background: var(--color-sidebar-background);
+  bottom: 0;
+  left: var(--aside-width);
+  position: fixed;
+  right: 0;
+  top: var(--header-height);
+
+  & > select {
+    margin: 5px 10px;
+  }
+
+  & .fieldset {
+    border-bottom: 1px solid var(--color-sidebar-border);
+  }
+
+  & .CodeMirror,
+  & textarea {
+    border: 0;
+    height: 100%;
+    margin: 0;
+    width: 100%;
+  }
+
+  & .CodeMirror-lines {
+    border-top: 1px solid var(--color-sidebar-border);
+  }
+}
+
+.CodeMirror-gutters {
+  background: var(--color-sidebar-background);
+  border-right: 1px solid var(--color-sidebar-border);
+}
+
+.CodeMirror {
+  border: 1px solid var(--color-sidebar-border);
+  font: 13px var(--font-family-editor);
+  margin-bottom: 1em;
+}
+
+.cm-trailingspace {
+  background-color: var(--color-editor-trailing-whitespace);
+}
+
+.cm-section {
+  border: solid 1px var(--color-editor-comment);
+  border-radius: 2px;
+  color: var(--color-editor-comment);
+  font-weight: 500;
+  padding-right: 10px;
+}
+
+.cm-comment {
+  color: var(--color-editor-comment);
+}
+
+.cm-date {
+  color: var(--color-editor-date);
+}
+
+.cm-directive {
+  color: var(--color-editor-directive);
+  font-weight: 500;
+}
+
+.cm-option {
+  color: var(--color-editor-class);
+}
+
+.cm-account {
+  color: var(--color-editor-account);
+}
+
+.cm-invalid {
+  color: var(--color-editor-invalid);
+}
+
+.CodeMirror-hint {
+  max-width: 600px;
+
+  & .highlight {
+    font-weight: 500;
+  }
+}

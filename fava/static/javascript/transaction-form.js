@@ -4,8 +4,22 @@ import fuzzy from 'fuzzyjs';
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
+// These will be updated once a payee is set.
+const accountCompleters = [];
+
+function updateAccountCompleters(payee) {
+  $.fetch(`${window.favaAPI.baseURL}api/payee-accounts/?payee=${payee}`)
+    .then(handleJSON)
+    .then((data) => {
+      accountCompleters.forEach((completer) => {
+        completer.list = data.payload; // eslint-disable-line no-param-reassign
+      });
+    });
+}
+
 function initInput(input) {
-  if (!input.getAttribute('list')) {
+  const listAttribute = input.getAttribute('list');
+  if (!listAttribute) {
     return;
   }
 
@@ -16,8 +30,19 @@ function initInput(input) {
     filter(suggestion, search) {
       return fuzzy.test(search, suggestion.value);
     },
+    sort: false,
   };
   const completer = new Awesomplete(input, options);
+
+  if (listAttribute === 'accounts') {
+    accountCompleters.push(completer);
+  }
+
+  if (listAttribute === 'payees') {
+    input.addEventListener('blur', () => {
+      updateAccountCompleters(input.value);
+    });
+  }
 
   input.addEventListener('focus', () => {
     completer.evaluate();

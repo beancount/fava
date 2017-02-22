@@ -61,7 +61,7 @@ def test_plugins(tmpdir):
     assert entries[7].links == entries[3].links == entries[4].links
 
     assert 'discovered' in entries[6].tags
-    assert entries[8].tags is None
+    assert not entries[8].tags
 
 
 def test_link_statements_no_documents(load_doc):

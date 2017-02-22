@@ -34,7 +34,7 @@ setup(
         ]
     },
     install_requires=[
-        'beancount>=2.0b12',
+        'beancount>=2.0b15',
         'click',
         'markdown2>=2.3.0',
         'Flask>=0.10.1',
@@ -46,7 +46,10 @@ setup(
             'pyexcel-ods3>=0.1.1',
             'pyexcel-xls>=0.1.0',
             'pyexcel-xlsx>=0.1.0',
-        ]
+        ],
+        ':sys_platform == "win32"': [
+            'pyreadline'
+        ],
     },
     zip_safe=False,
     classifiers=[

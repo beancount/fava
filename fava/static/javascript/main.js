@@ -5,7 +5,7 @@ import 'element-closest';
 
 import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
-import './../sass/style.scss';
+import './../css/style.css';
 
 import initCharts from './charts';
 import initClipboard from './clipboard';
@@ -114,9 +114,13 @@ function doPoll() {
     .then(handleJSON)
     .then((data) => {
       if (data.changed) {
-        $('#reload-page').classList.remove('hidden');
-        e.trigger('file-modified');
-        e.trigger('reload-warning', _('File change detected. Click to reload.'));
+        if (window.favaAPI.favaOptions['auto-reload']) {
+          e.trigger('reload');
+        } else {
+          $('#reload-page').classList.remove('hidden');
+          e.trigger('file-modified');
+          e.trigger('reload-warning', _('File change detected. Click to reload.'));
+        }
       }
     }, () => {})
     .then(() => {
