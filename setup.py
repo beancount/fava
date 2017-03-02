@@ -46,7 +46,10 @@ setup(
             'pyexcel-ods3>=0.1.1',
             'pyexcel-xls>=0.1.0',
             'pyexcel-xlsx>=0.1.0',
-        ]
+        ],
+        ':sys_platform == "win32"': [
+            'pyreadline'
+        ],
     },
     zip_safe=False,
     classifiers=[

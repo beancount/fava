@@ -15,6 +15,9 @@ from fava.core.helpers import FavaAPIException, FavaModule
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
 
+readline.set_history_length(1000)
+
+
 class QueryShell(shell.BQLShell, FavaModule):
     """A light wrapper around Beancount's shell."""
 
@@ -103,7 +106,7 @@ class QueryShell(shell.BQLShell, FavaModule):
         with contextlib.redirect_stdout(self.buffer):
             self.onecmd(query)
         if query:
-            readline.add_history(query)
+            readline.add_history(query.replace('\n', ' '))
         contents = self.buffer.getvalue()
         self.buffer.truncate(0)
         if not self.result:
