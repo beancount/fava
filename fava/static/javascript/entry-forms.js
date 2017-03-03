@@ -78,7 +78,7 @@ export function submitTransactionForm(form, successCallback) {
     }
   });
 
-  $.fetch(form.parentNode.getAttribute('action'), {
+  $.fetch(form.getAttribute('action'), {
     method: 'PUT',
     body: JSON.stringify(jsonData),
     headers: { 'Content-Type': 'application/json' },
