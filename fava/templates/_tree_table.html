@@ -84,7 +84,7 @@
   {% if budget %}
     {% if currency in budget %}
       {% set diff = budget[currency] - number %}
-      <span class="budget budget-{% if diff > 0 %}positive{% else %}{% if diff < 0 %}negative{% else %}zero{% endif %}{% endif %}">
+      <span class="budget budget-{% if diff > 0 %}positive{% else %}{% if diff < 0 %}negative{% else %}zero{% endif %}{% endif %}" title="{{ budget[currency]|format_currency(currency) }} {{ currency }}">
         ({{ diff|format_currency(currency, show_if_zero=True) }}{{ ' '+currency if not number else '' }})
       </span>
     {% else %}

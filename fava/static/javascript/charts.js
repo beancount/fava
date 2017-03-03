@@ -845,7 +845,11 @@ export default function initCharts() {
           .set('tooltipText', (d) => {
             let text = '';
             d.values.forEach((a) => {
-              text += `${formatCurrency(a.value)} ${a.name}<br>`;
+              text += `${formatCurrency(a.value)} ${a.name}`;
+              if (a.budget) {
+                text += ` / ${formatCurrency(a.budget)} ${a.name}`;
+              }
+              text += '<br>';
             });
             text += `<em>${d.label}</em>`;
             return text;
