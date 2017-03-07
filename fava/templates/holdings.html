@@ -63,6 +63,18 @@
     </div>
 
     {% if not aggregation_key %}{% set aggregation_key = 'none' %}{% endif %}
+    {% set query = holdings_by[aggregation_key] %}
+    <p>
+      <a href={{ url_for('report', report_name='query', query_string=holdings_by[aggregation_key]) }}>Query</a>
+      <span class="download">
+        ({{ _('Download as') }}
+        <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
+          <a href="{{ url_for('download_query', query_string=query, result_format='xls') }}">XLS</a>,
+          <a href="{{ url_for('download_query', query_string=query, result_format='xlsx') }}">XLSX</a> or
+          <a href="{{ url_for('download_query', query_string=query, result_format='ods') }}">ODS</a>
+        {% endif %})
+      </span>
+    </p>
     {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
     {{ querytable.querytable(result_types, result_rows, filter_empty=units_column[aggregation_key]) }}
 {% endblock %}
