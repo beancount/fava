@@ -55,7 +55,7 @@ class QueryShell(shell.BQLShell, FavaModule):
                                num_entries)]
 
     def _loadfun(self):
-        self.entries = self.ledger.all_entries
+        self.entries = self.ledger.entries
         self.errors = self.ledger.errors
         self.options_map = self.ledger.options
 
