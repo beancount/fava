@@ -41,7 +41,7 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
     if profile:  # pragma: no cover
         debug = True
 
-    env_filename = os.environ.get('BEANCOUNT_FILE', None)
+    env_filename = os.environ.get('BEANCOUNT_FILE')
     if env_filename:
         filenames = filenames + (env_filename,)
 

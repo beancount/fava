@@ -95,7 +95,7 @@ def add_document():
 
     file.save(filepath)
 
-    if request.form.get('entry_hash', None):
+    if request.form.get('entry_hash'):
         g.ledger.file.insert_metadata(request.form['entry_hash'],
                                       'statement',
                                       os.path.basename(filepath))

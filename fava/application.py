@@ -145,7 +145,7 @@ def _perform_global_filters():
               'Please add one to your beancount file.')
 
     g.filters = {
-        name: request.args.get(name, None)
+        name: request.args.get(name)
         for name in ['account', 'from', 'payee', 'tag', 'time']
     }
 
@@ -229,7 +229,7 @@ def account(name, subreport='journal'):
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
     """Download a document."""
-    file_path = request.args.get('file_path', None)
+    file_path = request.args.get('file_path')
     document_path = g.ledger.document_path(file_path)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
@@ -239,8 +239,8 @@ def document():
 @app.route('/<bfile>/statement/', methods=['GET'])
 def statement():
     """Download a statement file."""
-    entry_hash = request.args.get('entry_hash', None)
-    key = request.args.get('key', None)
+    entry_hash = request.args.get('entry_hash')
+    key = request.args.get('key')
     document_path = g.ledger.statement_path(entry_hash, key)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
