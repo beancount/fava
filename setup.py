@@ -16,7 +16,7 @@ def _read(fname):
 
 
 setup(
-    name='beancount-fava',
+    name='fava',
     version=VERSION,
     description=('A rich web interface for the CL-accounting tool beancount.'),
     long_description=_read('README.rst'),
@@ -63,8 +63,8 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: JavaScript',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Office/Business :: Financial :: Accounting',

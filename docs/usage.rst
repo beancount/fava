@@ -22,7 +22,7 @@ Fava is known to run on OS X, Linux, and Windows (with Cygwin).  You will need
 `Python 3 <https://www.python.org/downloads/>`__ (at least version 3.4).  Then
 you can use ``pip`` to install Fava by running::
 
-    pip3 install beancount-fava
+    pip3 install fava
 
 which will also pull in all required dependencies including Beancount, if you
 don't have it installed already.
@@ -30,7 +30,7 @@ don't have it installed already.
 If you want to export query results to Microsoft Excel or LibreOffice Calc, use
 the following command to install the optional dependencies for this feature::
 
-   pip3 install beancount-fava[excel]
+   pip3 install fava[excel]
 
 
 Starting Fava

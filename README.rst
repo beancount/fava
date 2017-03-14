@@ -19,7 +19,7 @@ The `Getting Started
 and how to get started with beancount.  If you are already familiar with
 beancount, you can get started with Fava::
 
-    pip3 install beancount-fava
+    pip3 install fava
     fava ledger.beancount
 
 and visit the web interface at `http://localhost:5000
