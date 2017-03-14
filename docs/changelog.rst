@@ -1,6 +1,35 @@
 Changelog
 =========
 
+v1.3 (in development)
+---------------------
+
+The translations of Fava are now on `POEditor.com
+<https://poeditor.com/projects/view?id=90283>`__, which has helped us get
+translations in five more languages: Chinese (simplified), Dutch, French,
+Portuguese, and Spanish. A big thank you to the new translators!
+
+The transaction form has been improved, it now supports adding metadata and the
+suggestions will be ranked by how often and recently they occur (using
+exponential decay).
+
+The Query page supports all commands of the ``bean-query`` shell and shares its
+history of recently used queries.
+
+Fava has gained a basic extension mechanism. Extensions allow you to run hooks
+at various points, e.g., after adding a transaction. They are specified using
+the ``extensions`` option and for an example, see the ``fava.ext.auto_commit``
+extension.
+
+Other changes:
+
+- The default sort order in journals has been reversed so that the most recent
+  entries come first.
+- The new ``incognito`` option can be used to obscure all numbers.
+- As always, several bugs have been fixed.
+
+Thanks to :user:`johannesharms` and :user:`xentac` for their contributions.
+
 v1.2 (December 25th, 2016)
 --------------------------
 
