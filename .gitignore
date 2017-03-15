@@ -6,6 +6,8 @@ docs/_build
 *.pyc
 /dist/
 /build/
+/gui/bin
+/gui/dist
 /*.egg-info
 *sass-cache*/
 *.css.map

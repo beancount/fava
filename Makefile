@@ -8,6 +8,7 @@ fava/static/gen/app.js: fava/static/css/* fava/static/javascript/*
 clean: mostlyclean
 	rm -rf build dist
 	rm -rf fava/static/gen
+	make -C gui clean
 
 mostlyclean:
 	rm -rf .tox
@@ -18,6 +19,7 @@ mostlyclean:
 lint:
 	tox -e lint
 	cd fava/static; npm update; npm run lint
+	make -C gui lint
 
 test:
 	tox
