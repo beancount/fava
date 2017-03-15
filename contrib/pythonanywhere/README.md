@@ -4,7 +4,7 @@
 [pythonanywhere.com](http://pythonanywhere.com):
 
 - [fava.pythonanywhere.com](http://fava.pythonanywhere.com), which tracks the
-  current version available on PyPI (`pip3 install beancount-fava`)
+  current version available on PyPI (`pip3 install fava`)
 - [favadev.pythonanywhere.com](http://favadev.pythonanywhere.com), which
   tracks the HEAD of the Github repo
   ([github.com/beancount/fava](http://github.com/beancount/fava))

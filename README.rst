@@ -1,10 +1,10 @@
 .. image:: https://badges.gitter.im/beancount/fava.svg
    :alt: Join the chat at https://gitter.im/beancount/fava
    :target: https://gitter.im/beancount/fava
-.. image:: https://img.shields.io/pypi/l/beancount-fava.svg
-   :target: https://pypi.python.org/pypi/beancount-fava
-.. image:: https://img.shields.io/pypi/v/beancount-fava.svg
-   :target: https://pypi.python.org/pypi/beancount-fava
+.. image:: https://img.shields.io/pypi/l/fava.svg
+   :target: https://pypi.python.org/pypi/fava
+.. image:: https://img.shields.io/pypi/v/fava.svg
+   :target: https://pypi.python.org/pypi/fava
 .. image:: https://img.shields.io/travis/beancount/fava.svg
    :target: https://travis-ci.org/beancount/fava?branch=master
 
