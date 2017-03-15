@@ -17,8 +17,9 @@ Below is a list of all possible options for Fava.
 Default: Not set
 
 Fava currently has an English (`en`), a German (`de`), a Russian (`ru`), a
-Spanish (`es`) and a Chinese (`zh`) translation. If this setting is not
-specified, Fava will try to guess the language from your browser settings.
+Spanish (`es`), a Chinese (`zh`), a French (`fr`), a Dutch (`nl`) and a
+Portuguese (`pt`) translation. If this setting is not specified, Fava will try
+to guess the language from your browser settings.
 
 ---
 

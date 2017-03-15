@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.3 (in development)
----------------------
+v1.3 (March 15th, 2017)
+-----------------------
 
 The translations of Fava are now on `POEditor.com
 <https://poeditor.com/projects/view?id=90283>`__, which has helped us get
