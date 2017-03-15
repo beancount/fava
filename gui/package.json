@@ -2,7 +2,7 @@
   "name": "fava-electron",
   "productName": "Fava",
   "description": "Interface for Beancount",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "main": "src/main.js",
   "author": "Dominik Aumayr <dominik@aumayr.name>",
   "license": "MIT",

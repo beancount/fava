@@ -3,26 +3,53 @@ language: python
 install:
   - pip install tox
 
-script: tox -e $TOXENV
+script: tox -e $TRAVIS_BUILD
 
 matrix:
   include:
     - python: 3.5
-      env: {TOXENV: py35}
+      env: {TRAVIS_BUILD: py35}
     - python: 3.5
-      env: {TOXENV: coverage, COVERAGE: 1}
-      before_install:
-        - "pip install codecov"
-      after_success:
-        - "codecov"
+      env: {TRAVIS_BUILD: coverage}
+      before_install: "pip install codecov"
+      after_success: "codecov"
     - python: 3.5
-      env: {TOXENV: lint}
-    - language: node_js
-      node_js: "node"
-      install: "cd fava/static; npm install"
-      script: "cd fava/static; npm run lint"
+      dist: trusty
+      sudo: false
+      env: {TRAVIS_BUILD: lint}
+      before_install: "nvm use stable"
+      script: "make lint"
+    - python: 3.5
+      dist: trusty
+      sudo: required
+      before_install: "sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils"
+      install: |
+        pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+        . $HOME/.nvm/nvm.sh
+        nvm install stable
+        nvm use stable
+        pip install -e .
+      script: |
+        make
+        make pyinstaller
+        make -C gui dist
+      env: {TRAVIS_BUILD: deploy}
+    - language: node
+      node_js: node
+      os: osx
+      install: |
+        brew install python3
+        pip3 install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+        pip3 install -e .
+      script: |
+        make
+        make pyinstaller
+        make -C gui dist
+      env: {TRAVIS_BUILD: deploy}
 
 cache:
   directories:
     - $HOME/.cache/pip
+    - $HOME/Library/Caches
     - fava/static/node_modules
+    - gui/node_modules

@@ -1,6 +1,6 @@
 .PHONY: node_modules
 
-all: node_modules bin/fava icons
+all: node_modules bin/fava
 
 node_modules:
 	npm update
@@ -15,10 +15,10 @@ clean:
 	rm -rf bin dist
 	rm -rf node_modules
 
-lint:
+lint: node_modules
 	`npm bin`/eslint src/main.js
 
-dist: node_modules bin/fava icons
+dist: node_modules bin/fava
 	`npm bin`/build
 
 # Requires imagemagick's convert
