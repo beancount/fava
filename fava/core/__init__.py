@@ -258,7 +258,7 @@ class FavaLedger():
         interval_balances = [
             realization.realize(list(iter_entry_dates(
                 self.entries,
-                self._date_first if accumulate else begin_date,
+                datetime.date.min if accumulate else begin_date,
                 end_date)), min_accounts)
             for begin_date, end_date in interval_tuples]
 
