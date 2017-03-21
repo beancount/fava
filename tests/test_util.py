@@ -1,7 +1,15 @@
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
-from fava.util import simple_wsgi, slugify, pairwise
+from fava.util import simple_wsgi, slugify, pairwise, listify
+
+
+def test_listify():
+    @listify
+    def fun():
+        for i in [1, 2, 3]:
+            yield i
+    assert fun() == [1, 2, 3]
 
 
 def test_pairwise():

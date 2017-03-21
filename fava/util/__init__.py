@@ -1,10 +1,12 @@
 """Some small utility functions."""
 
+import functools
 import itertools
 import os
 import re
 import sys
 import unicodedata
+import time
 
 # get correct path when compiled with PyInstaller
 BASEPATH = getattr(sys, '_MEIPASS',
@@ -15,6 +17,26 @@ BASEPATH = getattr(sys, '_MEIPASS',
 def resource_path(relative_path):
     """Get absolute path to resource, necessary for PyInstaller."""
     return os.path.join(BASEPATH, relative_path)
+
+
+def listify(func):
+    """Decorator to make generator function return a list."""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        return list(func(*args, **kwargs))
+    return wrapper
+
+
+def timefunc(func):
+    """Decorator to time function for debugging."""
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        t1 = time.time()
+        result = func(*args, **kwargs)
+        t2 = time.time()
+        print('Ran {} in {}'.format(func.__name__, t2-t1))
+        return result
+    return wrapper
 
 
 def pairwise(iterable):
