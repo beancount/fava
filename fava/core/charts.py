@@ -123,11 +123,9 @@ class ChartModule(FavaModule):
         } for entry, _, change, balance in journal if len(change)]
 
     def net_worth_at_dates(self, interval):
-        transactions = [
-            entry for entry in self.ledger.entries
-            if (isinstance(entry, Transaction) and entry.flag !=
-                flags.FLAG_UNREALIZED)
-        ]
+        transactions = (entry for entry in self.ledger.entries
+                        if (isinstance(entry, Transaction) and entry.flag !=
+                            flags.FLAG_UNREALIZED))
 
         types = options.get_account_types(self.ledger.options)
 
@@ -136,7 +134,7 @@ class ChartModule(FavaModule):
             if account_type in (types.assets, types.liabilities):
                 return True
 
-        dates = self.ledger.interval_ends(interval)
+        dates = list(self.ledger.interval_ends(interval))
         inventories = inventory_at_dates(transactions, dates,
                                          _posting_predicate)
 
