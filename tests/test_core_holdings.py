@@ -31,9 +31,8 @@ def test_inventory_at_dates(load_doc):
         datetime.date(2016, 1, 6),
     ]
 
-    transactions = [
-        entry for entry in entries if isinstance(entry, Transaction)
-    ]
+    transactions = (entry for entry in entries
+                    if isinstance(entry, Transaction))
 
     number_of_positions = [
         len(inv)
@@ -41,6 +40,8 @@ def test_inventory_at_dates(load_doc):
     ]
     assert number_of_positions == [0, 0, 2, 3, 3, 3]
 
+    transactions = (entry for entry in entries
+                    if isinstance(entry, Transaction))
     number_of_positions = [
         len(inv)
         for inv in inventory_at_dates(transactions, dates,
