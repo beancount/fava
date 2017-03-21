@@ -1,7 +1,12 @@
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
-from fava.util import simple_wsgi, slugify
+from fava.util import simple_wsgi, slugify, pairwise
+
+
+def test_pairwise():
+    assert list(pairwise([1, 2, 3])) == [(1, 2), (2, 3)]
+    assert list(pairwise([])) == []
 
 
 def test_simple_wsgi():

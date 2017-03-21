@@ -1,5 +1,6 @@
 """Some small utility functions."""
 
+import itertools
 import os
 import re
 import sys
@@ -14,6 +15,13 @@ BASEPATH = getattr(sys, '_MEIPASS',
 def resource_path(relative_path):
     """Get absolute path to resource, necessary for PyInstaller."""
     return os.path.join(BASEPATH, relative_path)
+
+
+def pairwise(iterable):
+    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    left, right = itertools.tee(iterable)
+    next(right, None)
+    return zip(left, right)
 
 
 def slugify(string):

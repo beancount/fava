@@ -18,7 +18,7 @@ from beancount.reports.context import render_entry_context
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
 
-from fava.util import date
+from fava.util import date, pairwise
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
@@ -219,11 +219,11 @@ class FavaLedger():
         return self._format_string.format(
             self.options['dcontext'].quantize(value, currency))
 
-    def _interval_tuples(self, interval):
-        """Calculates tuples of (begin_date, end_date) of length interval for the
-        period in which entries contains transactions.  """
-        return date.interval_tuples(self._date_first, self._date_last,
-                                    interval)
+    def interval_ends(self, interval):
+        """Generator yielding dates corresponding to interval boundaries."""
+        if not self._date_first:
+            return []
+        return date.interval_ends(self._date_first, self._date_last, interval)
 
     def get_account_sign(self, account_name):
         """Get account sign."""
@@ -253,7 +253,9 @@ class FavaLedger():
             self.attributes.list_accounts(self.all_root_account)
             if account.startswith(account_name)]
 
-        interval_tuples = list(reversed(self._interval_tuples(interval)))
+        interval_tuples = list(
+            pairwise(reversed(self.interval_ends(interval)))
+        )
 
         interval_balances = [
             realization.realize(list(iter_entry_dates(
