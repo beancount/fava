@@ -4,12 +4,14 @@ import datetime
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
 from beancount.core.data import Transaction
-from beancount.core.number import Decimal
+from beancount.core.display_context import DisplayContext
+from beancount.core.number import Decimal, MISSING
 from beancount.core.position import Position
 from beancount.core.inventory import Inventory
 from beancount.core.data import iter_entry_dates
 from beancount.utils.misc_utils import filter_type
 from flask.json import JSONEncoder
+from flask import g
 
 from fava.util import listify, pairwise
 from fava.core.helpers import FavaModule
@@ -17,6 +19,7 @@ from fava.core.helpers import FavaModule
 
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
+
     def default(self, o):  # pylint: disable=E0202
         if isinstance(o, Decimal):
             return float(o)
@@ -28,29 +31,39 @@ class FavaJSONEncoder(JSONEncoder):
             return JSONEncoder.default(self, o)
         except TypeError:
             # workaround for #472
-            try:
-                return str(o)
-            except TypeError:
-                return ''
+            if isinstance(o, DisplayContext):
+                o.ccontexts.pop(MISSING, None)
+            return str(o)
 
 
-def _serialize_inventory(inventory, at_cost=False):
-    """Renders an Inventory to a currency -> amount dict."""
-    if at_cost:
-        inventory = inventory.reduce(convert.get_cost)
+def _inventory_units(inventory):
+    """Renders an the units in an inventory to a currency -> amount dict."""
+    return {
+        p.units.currency: p.units.number
+        for p in inventory.reduce(convert.get_units)
+    }
+
+
+def _inventory_cost_or_value(inventory, date=None):
+    """Renders an inventory at cost or value to a currency -> amount dict."""
+    if g.at_value:
+        inventory = inventory.reduce(convert.get_value, g.ledger.price_map,
+                                     date)
     else:
-        inventory = inventory.reduce(convert.get_units)
+        inventory = inventory.reduce(convert.get_cost)
     return {p.units.currency: p.units.number for p in inventory}
 
 
-def _serialize_real_account(real_account):
+def _serialize_real_account(real_account, date):
     return {
         'account': real_account.account,
-        'balance_children': _serialize_inventory(
-            realization.compute_balance(real_account), at_cost=True),
-        'balance': _serialize_inventory(real_account.balance, at_cost=True),
-        'children':
-        [_serialize_real_account(a) for n, a in sorted(real_account.items())],
+        'balance_children': _inventory_cost_or_value(
+            realization.compute_balance(real_account), date),
+        'balance': _inventory_cost_or_value(real_account.balance, date),
+        'children': [
+            _serialize_real_account(account, date)
+            for _, account in sorted(real_account.items())
+        ],
     }
 
 
@@ -74,7 +87,7 @@ class ChartModule(FavaModule):
         else:
             root_account = self.ledger.root_account
         return _serialize_real_account(
-            realization.get_or_create(root_account, account_name))
+            realization.get_or_create(root_account, account_name), end)
 
     @listify
     def interval_totals(self, interval, accounts):
@@ -94,7 +107,7 @@ class ChartModule(FavaModule):
 
             yield {
                 'begin_date': begin,
-                'totals': _serialize_inventory(inventory, at_cost=True),
+                'totals': _inventory_cost_or_value(inventory, end),
                 'budgets':
                 self.ledger.budgets.calculate(accounts[0], begin, end),
             }
@@ -122,7 +135,7 @@ class ChartModule(FavaModule):
             'date': entry.date,
             'balance': dict({curr: 0
                              for curr in list(change.currencies())},
-                            **_serialize_inventory(balance)),
+                            **_inventory_units(balance)),
         } for entry, _, change, balance in journal if len(change)]
 
     @listify
