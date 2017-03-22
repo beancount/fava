@@ -254,7 +254,7 @@ class FavaLedger():
             if account.startswith(account_name)]
 
         interval_tuples = list(
-            pairwise(reversed(self.interval_ends(interval)))
+            reversed(list(pairwise(self.interval_ends(interval))))
         )
 
         interval_balances = [
