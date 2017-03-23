@@ -1,4 +1,3 @@
-import collections
 import math
 
 from beancount.core import getters, realization
@@ -6,6 +5,9 @@ from beancount.core.data import Transaction
 from beancount.utils.misc_utils import filter_type
 
 from fava.core.helpers import FavaModule
+
+
+ZERO = float()
 
 
 class ExponentialDecayRanker(object):
@@ -25,21 +27,26 @@ class ExponentialDecayRanker(object):
         s = Σ exp(RATE * l)
 
     To avoid huge numbers, we actually compute and store the logarithm of that
-    sum. The rate is set so that a 'like' from a year ago will count half as
-    much as one from today.
+    sum.
 
     Args:
         list_: If given, this list is ranked is by ``.sort()`` otherwise all
-               items with at least one 'like' will be ranked.
+            items with at least one 'like' will be ranked.
+        rate: This sets the rate of decay. ``1/rate`` will be the time (in
+            days) that it takes for the value of a 'like' to decrease by
+            ``1/e``. The default rate is set to ``math.log(2) * 1/365`` so
+            that a 'like' from a year ago will count half as much as one from
+            today.
     """
 
-    _RATE = math.log(2) * 1/365
+    __slots__ = ['list', 'rate', 'scores']
 
-    def __init__(self, list_=None):
+    def __init__(self, list_=None, rate=math.log(2) * 1/365):
         self.list = list_
+        self.rate = rate
         # We don't need to start with float('-inf') here as only the relative
         # scores matter.
-        self.scores = collections.defaultdict(float)
+        self.scores = dict()
 
     def update(self, item, date):
         """Add 'like' for item.
@@ -48,20 +55,21 @@ class ExponentialDecayRanker(object):
             item: An item in the list that is being ranked.
             date: The date on which the item has been liked.
         """
-        score = self.scores[item]
-        time_ = date.toordinal()
-        higher = max(score, time_ * self._RATE)
-        lower = min(score, time_ * self._RATE)
+        score = self.get(item)
+        time = date.toordinal()
+        higher = max(score, time * self.rate)
+        lower = min(score, time * self.rate)
         self.scores[item] = higher + math.log1p(math.exp(lower-higher))
 
-    def _key(self, item):
-        return self.scores.get(item, float())
+    def get(self, item):
+        """Get the current score for an item, or zero."""
+        return self.scores.get(item, ZERO)
 
     def sort(self):
         """Return items sorted by rank."""
         if self.list is None:
-            return sorted(self.scores.keys(), key=self._key, reverse=True)
-        return sorted(self.list, key=self._key, reverse=True)
+            return sorted(self.scores.keys(), key=self.get, reverse=True)
+        return sorted(self.list, key=self.get, reverse=True)
 
 
 class AttributesModule(FavaModule):
