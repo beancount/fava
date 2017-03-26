@@ -35,9 +35,10 @@ from fava.json_api import json_api
 from fava.util import slugify, resource_path
 from fava.util.excel import HAVE_EXCEL
 
-app = Flask(__name__,  # pylint: disable=invalid-name
-            template_folder=resource_path('templates'),
-            static_folder=resource_path('static'))
+app = Flask(  # pylint: disable=invalid-name
+    __name__,
+    template_folder=resource_path('templates'),
+    static_folder=resource_path('static'))
 app.register_blueprint(json_api, url_prefix='/<bfile>/api')
 
 app.json_encoder = FavaJSONEncoder
@@ -166,7 +167,7 @@ def _incognito(response):
     """Replace all numbers with 'X'."""
     ledger = getattr(g, 'ledger', None)
     if (ledger and ledger.fava_options['incognito'] and
-       response.content_type.startswith('text/html')):
+            response.content_type.startswith('text/html')):
         is_editor = (request.endpoint == 'report' and
                      request.view_args['report_name'] == 'editor')
         if not is_editor:
@@ -206,6 +207,7 @@ def _pull_beancount_file(_, values):
 
 @app.errorhandler(FavaAPIException)
 def fava_api_exception(error):
+    """Handle API errors."""
     return error.message, 400
 
 
@@ -226,8 +228,8 @@ def index():
 def account(name, subreport='journal'):
     """The account report."""
     assert subreport in ['journal', 'balances', 'changes']
-    return render_template('account.html', account_name=name,
-                           subreport=subreport)
+    return render_template(
+        'account.html', account_name=name, subreport=subreport)
 
 
 @app.route('/<bfile>/document/', methods=['GET'])
@@ -290,8 +292,10 @@ def help_page(page_slug='_index'):
     html = markdown2.markdown_path(
         os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
         extras=['fenced-code-blocks', 'tables'])
-    return render_template('help.html', page_slug=page_slug,
-                           help_html=render_template_string(html))
+    return render_template(
+        'help.html',
+        page_slug=page_slug,
+        help_html=render_template_string(html))
 
 
 @app.route('/jump')
@@ -317,6 +321,6 @@ def jump():
             continue
         qs_dict.setlist(key, values)
 
-    redirect_url = url.replace(query=werkzeug.urls.url_encode(qs_dict,
-                                                              sort=True))
+    redirect_url = url.replace(query=werkzeug.urls.url_encode(
+        qs_dict, sort=True))
     return redirect(werkzeug.urls.url_unparse(redirect_url))

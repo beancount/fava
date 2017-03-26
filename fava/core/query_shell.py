@@ -20,6 +20,7 @@ readline.set_history_length(1000)
 
 class QueryShell(shell.BQLShell, FavaModule):
     """A light wrapper around Beancount's shell."""
+    # pylint: disable=too-many-instance-attributes
 
     def __init__(self, ledger):
         self.ledger = ledger

@@ -15,6 +15,8 @@ class FavaExtensionBase(object):
     Any extension should inherit from this class. :func:`find_extension` will
     discover all subclasses of this class in the specified modules.
     """
+    # pylint: disable=too-few-public-methods
+
     def __init__(self, ledger):
         self.ledger = ledger
 

@@ -23,6 +23,7 @@ def listify(func):
     """Decorator to make generator function return a list."""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
+        # pylint: disable=missing-docstring
         return list(func(*args, **kwargs))
     return wrapper
 
@@ -31,10 +32,11 @@ def timefunc(func):
     """Decorator to time function for debugging."""
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        t1 = time.time()
+        # pylint: disable=missing-docstring
+        start = time.time()
         result = func(*args, **kwargs)
-        t2 = time.time()
-        print('Ran {} in {}'.format(func.__name__, t2-t1))
+        end = time.time()
+        print('Ran {} in {}'.format(func.__name__, end-start))
         return result
     return wrapper
 

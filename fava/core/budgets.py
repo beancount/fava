@@ -1,3 +1,5 @@
+"""Parsing and computing budgets."""
+
 from collections import defaultdict, namedtuple
 
 from beancount.core.data import Custom
@@ -12,6 +14,8 @@ BudgetError = namedtuple('BudgetError', 'source message entry')
 
 
 class BudgetModule(FavaModule):
+    """Parses budget entries."""
+
     def __init__(self, ledger):
         super().__init__(ledger)
         self.budget_entries = None

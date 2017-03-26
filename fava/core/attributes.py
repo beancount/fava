@@ -1,3 +1,5 @@
+"""Attributes for auto-completion."""
+
 from beancount.core import getters, realization
 from beancount.core.data import Transaction
 from beancount.utils.misc_utils import filter_type
