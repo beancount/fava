@@ -33,8 +33,11 @@ def cost(inventory):
 
 def cost_or_value(inventory, date=None):
     """Get the cost or value of an inventory."""
-    if g.at_value:
+    if g.conversion == 'at_value':
         return inventory.reduce(convert.get_value, g.ledger.price_map, date)
+    if g.conversion:
+        return inventory.reduce(convert.convert_position, g.conversion,
+                                g.ledger.price_map, date)
     return inventory.reduce(convert.get_cost)
 
 

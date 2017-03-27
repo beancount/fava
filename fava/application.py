@@ -196,7 +196,7 @@ def _pull_beancount_file(_, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
-    g.at_value = request.args.get('conversion') == 'at_value'
+    g.conversion = request.args.get('conversion')
 
 
 @app.errorhandler(FavaAPIException)

@@ -73,8 +73,14 @@
             <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
         </span>
         <select name="conversion" id="conversion">
-          <option value="at_cost"{{ ' selected' if request.args.get('conversion') == 'at_cost' }} >At Cost</option>
-          <option value="at_value"{{ ' selected' if request.args.get('conversion') == 'at_value' }}>At Market Value</option>
+          <option value="at_cost"{{ ' selected' if not request.args.get('conversion') }} >{{ _('At Cost') }}</option>
+          <option value="at_value"{{ ' selected' if request.args.get('conversion') == 'at_value' }}>{{ _('At Market Value') }}</option>
+          {% for currency in operating_currencies %}
+            <option value="{{ currency }}"{{ ' selected' if request.args.get('conversion') == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
+          {% endfor %}
+          {% for currency in ledger.options.commodities|sort if currency not in operating_currencies %}
+            <option value="{{ currency }}"{{ ' selected' if request.args.get('conversion') == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
+          {% endfor %}
         </select>
         {% if not hide_interval_filter %}
             <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
