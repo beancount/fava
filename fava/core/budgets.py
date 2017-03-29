@@ -70,7 +70,7 @@ def _matching_budgets(budgets, account_name, date_active):
     """Find matching budgets.
 
     Returns:
-        The budget that is active on the specifed date for the
+        The budget that is active on the specified date for the
         specified account.
     """
     last_seen_budgets = {}
