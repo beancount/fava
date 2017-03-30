@@ -1,7 +1,8 @@
 """Parsing and computing budgets."""
 
-from collections import defaultdict, namedtuple
+from collections import defaultdict, namedtuple, Counter
 
+from beancount.core import realization
 from beancount.core.data import Custom
 from beancount.core.number import Decimal
 from beancount.utils.misc_utils import filter_type
@@ -29,6 +30,14 @@ class BudgetModule(FavaModule):
         """Calculate the budget for an account in an interval."""
         return calculate_budget(self.budget_entries, account_name, begin_date,
                                 end_date)
+
+    def calculate_children(self, account_name, begin_date, end_date):
+        """Calculate the budget for an account including budgets of its
+        children"""
+        real_account = realization.get_or_create(self.ledger.root_account,
+            account_name)
+        return calculate_budget_children(self.budget_entries,
+                real_account,begin_date, end_date)
 
     def __bool__(self):
         return bool(self.budget_entries)
@@ -106,4 +115,28 @@ def calculate_budget(budgets, account_name, date_from, date_to):
             currency_dict[budget.currency] += \
                 budget.number / number_of_days_in_period(budget.period,
                                                          single_day)
+    return dict(currency_dict)
+
+def calculate_budget_children(budgets, real_account, date_from, date_to):
+    """Calculate budget for an account including budgets of its children
+
+    Args:
+        budgets: A list of :class:`Budget` entries.
+        real_account: A RealAccount instance.
+        date_from: Starting date.
+        date_to: End date (exclusive).
+
+    Returns:
+        A dictionary of currency to Decimal with the budget for the
+        specified account and period.
+    """
+    if real_account.account not in budgets.keys():
+        return {}
+
+    currency_dict = Counter()
+
+    for child_account in realization.iter_children(real_account):
+        currency_dict += \
+                Counter(calculate_budget(budgets,
+                    child_account.account, date_from, date_to))
     return dict(currency_dict)
