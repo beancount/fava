@@ -1,5 +1,6 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% set show_other_column = (operating_currencies|length < ledger.options['commodities']|length) %}
+{% set budget_children = ledger.fava_options['budget-children'] %}
 
 {% macro tree(real_account, totals=True) %}
     <ol class="tree-table{{ ' two-currencies' if operating_currencies|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
@@ -126,11 +127,20 @@
                 </span>
             {% endfor %}
             {% if budget %}
-              {% for currency, number in budget.items() if currency not in balance.currencies() %}
-                {{ render_budget(budget, currency) }}
-              {% endfor %}
+              {% if budget_children %}
+                {% for currency, number in budget.items() if currency not in balance_children.currencies() %}
+                  {{ render_budget(budget, currency) }}
+                {% endfor %}
+              {% else %}
+                {% for currency, number in budget.items() if currency not in balance.currencies() %}
+                  {{ render_budget(budget, currency) }}
+                {% endfor %}
+              {% endif %}
             {% endif %}
             {% for pos in balance_children %}
+                {% if budget_children %}
+                  {{ render_budget(budget, pos.units.currency, pos.units.number) }}
+                {% endif %}
                 <span class="balance-children">
                     <span class="number">{{ pos.units|format_amount }}</span>
                 </span>

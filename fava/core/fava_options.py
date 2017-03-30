@@ -30,7 +30,8 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
-    'incognito': False
+    'incognito': False,
+    'budget-children': False
 }
 
 BOOL_OPTS = [
@@ -42,6 +43,7 @@ BOOL_OPTS = [
     'show-accounts-with-zero-transactions',
     'show-closed-accounts',
     'use-external-editor',
+    'budget-children',
 ]
 
 INT_OPTS = [
