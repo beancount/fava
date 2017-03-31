@@ -139,5 +139,6 @@ def calculate_budget_children(budgets, real_account, date_from, date_to):
     for child_account in realization.iter_children(real_account):
         currency_dict += \
             Counter(calculate_budget(budgets,
-                                     child_account.account, date_from, date_to))
+                                     child_account.account, date_from,
+                                     date_to))
     return dict(currency_dict)
