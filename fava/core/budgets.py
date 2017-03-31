@@ -35,9 +35,9 @@ class BudgetModule(FavaModule):
         """Calculate the budget for an account including budgets of its
         children"""
         real_account = realization.get_or_create(self.ledger.root_account,
-            account_name)
+                                                 account_name)
         return calculate_budget_children(self.budget_entries,
-                real_account,begin_date, end_date)
+                                         real_account, begin_date, end_date)
 
     def __bool__(self):
         return bool(self.budget_entries)
@@ -117,6 +117,7 @@ def calculate_budget(budgets, account_name, date_from, date_to):
                                                          single_day)
     return dict(currency_dict)
 
+
 def calculate_budget_children(budgets, real_account, date_from, date_to):
     """Calculate budget for an account including budgets of its children
 
@@ -137,6 +138,6 @@ def calculate_budget_children(budgets, real_account, date_from, date_to):
 
     for child_account in realization.iter_children(real_account):
         currency_dict += \
-                Counter(calculate_budget(budgets,
+            Counter(calculate_budget(budgets,
                     child_account.account, date_from, date_to))
     return dict(currency_dict)
