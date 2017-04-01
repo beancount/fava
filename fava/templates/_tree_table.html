@@ -126,12 +126,15 @@
                 </span>
             {% endfor %}
             {% if budget %}
-              {% for currency, number in budget.items() if currency not in balance.currencies() %}
-                {{ render_budget(budget, currency) }}
+              {% for currency, number in budget.items() if currency not in balance_children.currencies() %}
+                <span class="balance-children">
+                  {{ render_budget(budget, currency) }}
+                </span>
               {% endfor %}
             {% endif %}
             {% for pos in balance_children %}
                 <span class="balance-children">
+                    {{ render_budget(budget, pos.units.currency, pos.units.number) }}
                     <span class="number">{{ pos.units|format_amount }}</span>
                 </span>
             {% endfor %}
