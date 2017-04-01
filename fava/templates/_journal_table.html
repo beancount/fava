@@ -218,14 +218,16 @@
             {{ render_tags_links(entry) }}
         {% endif %}
         </span>
+        <span class="indicators">
         {% for key, value in metadata.items() %}
-            <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
+          <span class="metadata" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
         {% endfor %}
         {% if type == 'transaction' %}
-            {% for posting in entry.postings %}
-                <span class="posting-indicator{% if posting.flag %} {{ flags_to_types.get(posting.flag, 'other') }}{% endif %}"></span>
-            {% endfor %}
+          {% for posting in entry.postings %}
+            <span{% if posting.flag %} class="{{ flags_to_types.get(posting.flag, 'other') }}"{% endif %}></span>
+          {% endfor %}
         {% endif %}
+        </span>
         {% if show_change_and_balance %}
             <span class="change num">{{ render_inventory(change) }}</span>
             <span class="num">{{ render_inventory(balance) }}</span>
