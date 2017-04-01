@@ -46,11 +46,14 @@ class BudgetModule(FavaModule):
 def parse_budgets(custom_entries):
     """Parse budget directives from custom entries.
 
+    Args:
+        custom_entries: the Custom entries to parse budgets from.
+
     Returns:
-        A tuple of Budget entries and possible parsing errors.
+        A dict of accounts to lists of budgets.
 
     Example:
-        2015-04-09 custom "budget" Expenses:Books "monthly"  20.00 EUR
+        2015-04-09 custom "budget" Expenses:Books "monthly" 20.00 EUR
     """
 
     budgets = defaultdict(list)
