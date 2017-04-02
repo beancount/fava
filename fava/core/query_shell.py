@@ -14,12 +14,12 @@ from beancount.utils.misc_utils import filter_type
 from fava.core.helpers import FavaAPIException, FavaModule
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
 
-
 readline.set_history_length(1000)
 
 
 class QueryShell(shell.BQLShell, FavaModule):
     """A light wrapper around Beancount's shell."""
+
     # pylint: disable=too-many-instance-attributes
 
     def __init__(self, ledger):
@@ -51,9 +51,10 @@ class QueryShell(shell.BQLShell, FavaModule):
     def get_history(max_entries):
         """Get the most recently used shell commands."""
         num_entries = readline.get_current_history_length()
-        return [readline.get_history_item(index+1) for
-                index in range(max(num_entries-max_entries, 0),
-                               num_entries)]
+        return [
+            readline.get_history_item(index + 1)
+            for index in range(max(num_entries - max_entries, 0), num_entries)
+        ]
 
     def _loadfun(self):
         self.entries = self.ledger.entries
@@ -75,15 +76,13 @@ class QueryShell(shell.BQLShell, FavaModule):
 
     def on_Select(self, statement):  # pylint: disable=invalid-name
         try:
-            c_query = query_compile.compile(statement,
-                                            self.env_targets,
+            c_query = query_compile.compile(statement, self.env_targets,
                                             self.env_postings,
                                             self.env_entries)
         except query_compile.CompilationError as exc:
             print('ERROR: {}.'.format(str(exc).rstrip('.')), file=self.outfile)
             return
-        rtypes, rrows = query_execute.execute_query(c_query,
-                                                    self.entries,
+        rtypes, rrows = query_execute.execute_query(c_query, self.entries,
                                                     self.options_map)
 
         if not rrows:
@@ -115,6 +114,23 @@ class QueryShell(shell.BQLShell, FavaModule):
         types, rows = self.result
         self.result = None
         return (None, types, rows)
+
+    def on_RunCustom(self, run_stmt):
+        """Run a custom query."""
+        name = run_stmt.query_name
+        if name is None:
+            # List the available queries.
+            for query in self.queries:
+                print(query.name)
+        else:
+            try:
+                query = next((query for query in self.queries
+                              if query.name == name))
+            except StopIteration:
+                print("ERROR: Query '{}' not found".format(name))
+            else:
+                statement = self.parser.parse(query.query_string)
+                self.dispatch(statement)
 
     def query_to_file(self, query_string, result_format):
         """Get query result as file.
@@ -150,9 +166,11 @@ class QueryShell(shell.BQLShell, FavaModule):
             query_string = query.query_string
 
         try:
-            types, rows = run_query(self.ledger.all_entries,
-                                    self.ledger.options,
-                                    query_string, numberify=True)
+            types, rows = run_query(
+                self.ledger.all_entries,
+                self.ledger.options,
+                query_string,
+                numberify=True)
         except (query_compile.CompilationError,
                 query_parser.ParseError) as exception:
             raise FavaAPIException(str(exception))
