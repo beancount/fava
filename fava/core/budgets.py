@@ -2,7 +2,6 @@
 
 from collections import defaultdict, namedtuple, Counter
 
-from beancount.core import realization
 from beancount.core.data import Custom
 from beancount.core.number import Decimal
 from beancount.utils.misc_utils import filter_type
@@ -32,12 +31,9 @@ class BudgetModule(FavaModule):
                                 end_date)
 
     def calculate_children(self, account_name, begin_date, end_date):
-        """Calculate the budget for an account including budgets of its
-        children"""
-        real_account = realization.get_or_create(self.ledger.root_account,
-                                                 account_name)
-        return calculate_budget_children(self.budget_entries,
-                                         real_account, begin_date, end_date)
+        """Calculate the budget for an account including its children."""
+        return calculate_budget_children(self.budget_entries, account_name,
+                                         begin_date, end_date)
 
     def __bool__(self):
         return bool(self.budget_entries)
@@ -62,18 +58,15 @@ def parse_budgets(custom_entries):
     for entry in custom_entries:
         if entry.type == 'budget':
             try:
-                budget = Budget(
-                    entry.values[0].value,
-                    entry.date,
-                    entry.values[1].value,
-                    entry.values[2].value.number,
-                    entry.values[2].value.currency)
+                budget = Budget(entry.values[0].value, entry.date,
+                                entry.values[1].value,
+                                entry.values[2].value.number,
+                                entry.values[2].value.currency)
                 budgets[budget.account].append(budget)
             except (IndexError, TypeError):
-                errors.append(BudgetError(
-                    entry.meta,
-                    'Failed to parse budget entry',
-                    entry))
+                errors.append(
+                    BudgetError(entry.meta, 'Failed to parse budget entry',
+                                entry))
 
     return dict(budgets), errors
 
@@ -121,12 +114,12 @@ def calculate_budget(budgets, account_name, date_from, date_to):
     return dict(currency_dict)
 
 
-def calculate_budget_children(budgets, real_account, date_from, date_to):
-    """Calculate budget for an account including budgets of its children
+def calculate_budget_children(budgets, account_name, date_from, date_to):
+    """Calculate budget for an account including budgets of its children.
 
     Args:
         budgets: A list of :class:`Budget` entries.
-        real_account: A RealAccount instance.
+        account_name: An account name.
         date_from: Starting date.
         date_to: End date (exclusive).
 
@@ -134,14 +127,10 @@ def calculate_budget_children(budgets, real_account, date_from, date_to):
         A dictionary of currency to Decimal with the budget for the
         specified account and period.
     """
-    if real_account.account not in budgets.keys():
-        return {}
-
     currency_dict = Counter()
 
-    for child_account in realization.iter_children(real_account):
-        currency_dict += \
-            Counter(calculate_budget(budgets,
-                                     child_account.account, date_from,
-                                     date_to))
+    for account in budgets.keys():
+        if account.startswith(account_name):
+            currency_dict += Counter(
+                calculate_budget(budgets, account, date_from, date_to))
     return dict(currency_dict)
