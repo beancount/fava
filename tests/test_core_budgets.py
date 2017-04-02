@@ -1,9 +1,11 @@
 from datetime import date
 
+from beancount.core import realization
 from beancount.core.number import D
 import pytest
 
-from fava.core.budgets import parse_budgets, calculate_budget
+from fava.core.budgets import (parse_budgets, calculate_budget,
+                               calculate_budget_children)
 
 
 @pytest.fixture
@@ -93,3 +95,28 @@ def test_budgets_doc_yearly(budgets_doc):
 
     assert calculate_budget(budgets_doc, 'Expenses:Books', date(2011, 2, 1),
                             date(2011, 2, 2))['EUR'] == BUDGET / 365
+
+
+def test_budgets_children(budgets_doc):
+    """
+    2017-01-01 custom "budget" Expenses:Books "daily" 10.00 USD
+    2017-01-01 custom "budget" Expenses:Books:Notebooks "daily" 2.00 USD"""
+    BUDGET1 = D("10.00")
+    BUDGET2 = D("2.00")
+
+    ACCT1 = "Expenses:Books"
+    SUBACCT1 = "Expenses:Books:Notebooks"
+
+    real_root = realization.RealAccount('')
+
+    account_1 = realization.get_or_create(real_root, ACCT1)
+    subaccount_1 = realization.get_or_create(real_root, SUBACCT1)
+
+    assert calculate_budget_children(budgets_doc, account_1,
+                                     date(2017, 1, 1),
+                                     date(2017, 1, 2))['USD'] == \
+        BUDGET1+BUDGET2
+
+    assert calculate_budget_children(budgets_doc, subaccount_1,
+                                     date(2017, 1, 1),
+                                     date(2017, 1, 2))['USD'] == BUDGET2
