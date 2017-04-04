@@ -26,7 +26,7 @@ import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.utils.text_utils import replace_numbers
-from beancount import ingest
+from beancount.ingest import identify, extract, cache
 from beancount.core import data
 
 from fava import template_filters
@@ -310,11 +310,10 @@ def ingest_identify():
     if g.ledger.fava_options['ingest-config']:
         config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
         dirs = g.ledger.fava_options['ingest-dirs']
-
-        files = ingest.identify.find_imports(config, dirs)
+        files = identify.find_imports(config, dirs)
         data = []
         for filename, importers in files:
-            file = ingest.cache.get_file(filename)
+            file = cache.get_file(filename)
             if len(importers):
                 data.append({
                     'filename': filename,
@@ -335,7 +334,7 @@ def ingest_extract():
     importer = next(
         imp for imp in config if imp.name() == request.args.get('importer'))
 
-    new_entries, duplicate_entries = ingest.extract.extract_from_file(
+    new_entries, duplicate_entries = extract.extract_from_file(
         filename,
         importer,
         existing_entries=g.ledger.entries,
