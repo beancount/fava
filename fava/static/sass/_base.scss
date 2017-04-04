@@ -213,7 +213,8 @@ input {
   }
 }
 
-button {
+button,
+a.button {
   background-color: $color-header;
   border: 0;
   color: $color-background;

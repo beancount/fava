@@ -11,6 +11,12 @@
   }
 }
 
+.ingest-actions {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+
 .ingest-row {
   border-bottom: thin solid $color-table-header-background;
   display: flex;
@@ -104,7 +110,7 @@
 
   &.duplicate,
   &.ignore {
-    opacity: .3;
+    opacity: .5;
   }
 
   &.duplicate,

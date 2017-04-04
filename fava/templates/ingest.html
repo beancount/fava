@@ -38,7 +38,7 @@
                                 <td>{{ importer.name }}</td>
                                 <td>{{ account_macros.account_name(importer.account) }}</td>
                                 <td>
-                                    <button type="button" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</button>
+                                    <a class="button" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</a>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -47,7 +47,11 @@
             </table>
         </form>
     {% endif %}
+
     {% if entries %}
+        <form id="ingest-actions" class="ingest-actions">
+            <button type="button" id="toggle-ignore" title="Toggle ignore">Toggle ignore</button>
+        </form>
         <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
             <div class="ingest-row header">
                 <div class="line">Line</div>

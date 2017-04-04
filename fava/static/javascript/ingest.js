@@ -104,6 +104,13 @@ function initExtract() {
     event.preventDefault();
     submitIngestForm();
   });
+
+  $('#toggle-ignore').addEventListener('click', (event) => {
+    $$('.ingest-row input[value=ignore]').forEach((input) => {
+      input.click();
+    });
+    event.target.className='inactive';
+  });
 }
 
 export default function initIngest() {
