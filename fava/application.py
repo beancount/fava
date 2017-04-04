@@ -17,9 +17,10 @@ import datetime
 import inspect
 import os
 import runpy
+import tempfile
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file,
+                   redirect, send_from_directory, g, send_file, session,
                    render_template_string)
 from flask_babel import Babel
 import markdown2
@@ -303,27 +304,63 @@ def _load_ingest_config(configpath):
     return mod['CONFIG']
 
 
+def _identify_importers(config, file_or_dir):
+    identified = list()
+    files = identify.find_imports(config, file_or_dir)
+    for filename, importers in files:
+        file = cache.get_file(filename)
+        if len(importers):
+            identified.append({
+                'filename': filename,
+                'importers': [{
+                    'name': importer.name(),
+                    'account': importer.file_account(file)
+                } if importer else '-' for importer in importers]
+            })
+
+    return identified
+
+
+@app.route('/<bfile>/ingest/upload', methods=['POST'])
+def ingest_upload():
+    """Upload a file to ingest."""
+    if 'file' not in request.files:
+        raise FavaAPIException('No file uploaded.')
+    if not 'INGEST_UPLOADS' in session:
+        session['INGEST_UPLOADS'] = list()
+
+    file = request.files['file']
+    new_file = os.path.join(tempfile.mkdtemp(), file.filename)
+    file.save(new_file)
+    session['INGEST_UPLOADS'].append(new_file)
+    return redirect(url_for('ingest_identify'))
+
+
+@app.route('/<bfile>/ingest/upload/delete')
+def ingest_delete():
+    """Delete an uploaded file."""
+    file = request.args.get('filename', None)
+    if 'INGEST_UPLOADS' in session and file in session['INGEST_UPLOADS']:
+        os.remove(file)
+        session['INGEST_UPLOADS'].remove(file)
+    return redirect(url_for('ingest_identify'))
+
+
 @app.route('/<bfile>/ingest/')
 def ingest_identify():
     """Identify files to ingest."""
-    data = None
+    identified = list()
+    uploaded = list()
     if g.ledger.fava_options['ingest-config']:
         config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
-        dirs = g.ledger.fava_options['ingest-dirs']
-        files = identify.find_imports(config, dirs)
-        data = []
-        for filename, importers in files:
-            file = cache.get_file(filename)
-            if len(importers):
-                data.append({
-                    'filename': filename,
-                    'importers': [{
-                        'name': importer.name(),
-                        'account': importer.file_account(file)
-                    } if importer else '-' for importer in importers]
-                })
+        for directory in g.ledger.fava_options['ingest-dirs']:
+            identified.append((directory, _identify_importers(config, directory)))
 
-    return render_template('ingest.html', files=data)
+        if 'INGEST_UPLOADS' in session:
+            for filename in session['INGEST_UPLOADS']:
+                uploaded.extend(_identify_importers(config, filename))
+
+    return render_template('ingest.html', identified_files=identified, uploaded_files=uploaded)
 
 
 @app.route('/<bfile>/ingest/extract/')
