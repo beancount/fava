@@ -52,7 +52,7 @@
             </div>
         </form>
     {% else %}
-        {% for directory, files in identified_files %}
+        {% for directory, files in identified %}
             <h3>{{ directory }}</h3>
             <table class="ingest-files">
                 <thead>
@@ -94,7 +94,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for file in uploaded_files %}
+                    {% for file in uploaded %}
                         {% for importer in file.importers %}
                             <tr>
                                 <td>

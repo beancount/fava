@@ -56,13 +56,13 @@ LIST_OPTS = [
     'journal-show',
     'journal-show-document',
     'journal-show-transaction',
-    'ingest-dirs'
+    'ingest-dirs',
 ]
 
 STR_OPTS = [
     'language',
     'interval',
-    'ingest-config'
+    'ingest-config',
 ]
 
 

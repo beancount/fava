@@ -16,8 +16,7 @@ Attributes:
 import datetime
 import inspect
 import os
-import runpy
-import tempfile
+import uuid
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file, session,
@@ -27,8 +26,6 @@ import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.utils.text_utils import replace_numbers
-from beancount.ingest import identify, extract, cache
-from beancount.core import data
 
 from fava import template_filters
 from fava.core import FavaLedger
@@ -294,45 +291,14 @@ def help_page(page_slug='_index'):
                            help_html=render_template_string(html))
 
 
-def _load_ingest_config(configpath):
-    # Check the existence of the config.
-    if not os.path.exists(configpath) or os.path.isdir(configpath):
-        raise "File does not exist: '{}'".format(configpath)
-
-    # Import the configuration.
-    mod = runpy.run_path(configpath)
-    return mod['CONFIG']
-
-
-def _identify_importers(config, file_or_dir):
-    identified = list()
-    files = identify.find_imports(config, file_or_dir)
-    for filename, importers in files:
-        file = cache.get_file(filename)
-        if len(importers):
-            identified.append({
-                'filename': filename,
-                'importers': [{
-                    'name': importer.name(),
-                    'account': importer.file_account(file)
-                } if importer else '-' for importer in importers]
-            })
-
-    return identified
-
-
 @app.route('/<bfile>/ingest/upload', methods=['POST'])
 def ingest_upload():
     """Upload a file to ingest."""
-    if 'file' not in request.files:
-        raise FavaAPIException('No file uploaded.')
-    if 'INGEST_UPLOADS' not in session:
-        session['INGEST_UPLOADS'] = list()
-
-    file = request.files['file']
-    new_file = os.path.join(tempfile.mkdtemp(), file.filename)
-    file.save(new_file)
-    session['INGEST_UPLOADS'].append(new_file)
+    if 'file' in request.files:
+        if 'sid' not in session:
+            session['sid'] = uuid.uuid4()
+        file = request.files['file']
+        g.ledger.ingest.add_upload(session['sid'], file)
     return redirect(url_for('ingest_identify'))
 
 
@@ -340,49 +306,26 @@ def ingest_upload():
 def ingest_delete():
     """Delete an uploaded file."""
     file = request.args.get('filename', None)
-    if 'INGEST_UPLOADS' in session and file in session['INGEST_UPLOADS']:
-        os.remove(file)
-        session['INGEST_UPLOADS'].remove(file)
+    session_id = session['sid'] if 'sid' in session else None
+    g.ledger.ingest.remove_upload(session_id, file)
     return redirect(url_for('ingest_identify'))
 
 
 @app.route('/<bfile>/ingest/')
 def ingest_identify():
     """Identify files to ingest."""
-    identified = list()
-    uploaded = list()
-    if g.ledger.fava_options['ingest-config']:
-        config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
-        for dir_ in g.ledger.fava_options['ingest-dirs']:
-            identified.append((dir_, _identify_importers(config, dir_)))
-
-        if 'INGEST_UPLOADS' in session:
-            for filename in session['INGEST_UPLOADS']:
-                uploaded.extend(_identify_importers(config, filename))
-
+    sid = session['sid'] if 'sid' in session else None
     return render_template('ingest.html',
-                           identified_files=identified,
-                           uploaded_files=uploaded)
+                           identified=g.ledger.ingest.dirs_importers(),
+                           uploaded=g.ledger.ingest.uploads_importers(sid))
 
 
 @app.route('/<bfile>/ingest/extract/')
 def ingest_extract():
     """Extract entries to ingest."""
-    config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
     filename = request.args.get('filename')
-    importer = next(
-        imp for imp in config if imp.name() == request.args.get('importer'))
-
-    new_entries, duplicate_entries = extract.extract_from_file(
-        filename,
-        importer,
-        existing_entries=g.ledger.entries,
-        min_date=None,
-        allow_none_for_tags_and_links=False)
-
-    entries = new_entries + duplicate_entries
-    entries.sort(key=data.entry_sortkey)
-
+    importer_name = request.args.get('importer')
+    entries = g.ledger.ingest.extract(filename, importer_name)
     return render_template('ingest.html', entries=entries, filename=filename)
 
 
