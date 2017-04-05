@@ -326,7 +326,7 @@ def ingest_upload():
     """Upload a file to ingest."""
     if 'file' not in request.files:
         raise FavaAPIException('No file uploaded.')
-    if not 'INGEST_UPLOADS' in session:
+    if 'INGEST_UPLOADS' not in session:
         session['INGEST_UPLOADS'] = list()
 
     file = request.files['file']
@@ -353,14 +353,16 @@ def ingest_identify():
     uploaded = list()
     if g.ledger.fava_options['ingest-config']:
         config = _load_ingest_config(g.ledger.fava_options['ingest-config'])
-        for directory in g.ledger.fava_options['ingest-dirs']:
-            identified.append((directory, _identify_importers(config, directory)))
+        for dir_ in g.ledger.fava_options['ingest-dirs']:
+            identified.append((dir_, _identify_importers(config, dir_)))
 
         if 'INGEST_UPLOADS' in session:
             for filename in session['INGEST_UPLOADS']:
                 uploaded.extend(_identify_importers(config, filename))
 
-    return render_template('ingest.html', identified_files=identified, uploaded_files=uploaded)
+    return render_template('ingest.html',
+                           identified_files=identified,
+                           uploaded_files=uploaded)
 
 
 @app.route('/<bfile>/ingest/extract/')

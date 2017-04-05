@@ -109,7 +109,8 @@ function initExtract() {
     $$('.ingest-row input[value=ignore]').forEach((input) => {
       input.click();
     });
-    event.target.className='inactive';
+    const button = event.target;
+    button.className = 'inactive';
   });
 }
 

@@ -46,17 +46,19 @@
   .form {
     min-width: 600px;
 
-    input[type="date"]::-webkit-clear-button {
-      -webkit-appearance: none;
-      display: none;
-    }
-
-    input[type=date]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      display: none;
-    }
-
     input {
+      &[type='date'] {
+        &::-webkit-clear-button { // sass-lint:disable-line no-vendor-prefixes nesting-depth
+          -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+          display: none;
+        }
+
+        &::-webkit-inner-spin-button { // sass-lint:disable-line no-vendor-prefixes nesting-depth
+          -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+          display: none;
+        }
+      }
+
       &[name='date'] {
         width: 110px;
       }
