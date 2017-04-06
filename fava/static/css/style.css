@@ -1,0 +1,119 @@
+@import 'base.css';
+@import 'charts.css';
+@import 'editor.css';
+@import 'fonts.css';
+@import 'header.css';
+@import 'help.css';
+@import 'overlay.css';
+@import 'query.css';
+@import 'journal-table.css';
+@import 'tree-table.css';
+@import 'ingest.css';
+@import 'entry-forms.css';
+@import 'media-mobile.css';
+@import 'media-print.css';
+
+::-webkit-scrollbar {
+  height: .5em;
+  width: .5em;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body {
+  scrollbar-face-color: var(--color-scrollbar);
+  scrollbar-track-color: transparent;
+}
+
+:root {
+  --font-family: 'Fira Sans', sans-serif;
+  --font-family-alternative: 'Source Serif Pro', sans-serif;
+  --font-family-monospaced: 'Fira Mono', monospace;
+  --font-family-editor: 'Source Code Pro', monospace;
+
+  --color-background: #fff;
+  --color-background-darker: #d9d9d9;
+  --color-background-darkest: #ccc;
+  --color-text: #444;
+  --color-text-lighter: #555;
+  --color-text-lightest: #777;
+
+  --color-links: #0067a5;
+  --color-headings: #333;
+  --color-error: #900;
+  --color-warning: #edd42f;
+  --color-code-background: #f8f8f8;
+
+  --color-sidebar-text: #444;
+  --color-sidebar-text-hover: var(--color-links);
+  --color-sidebar-background: #f5f5f5;
+  --color-sidebar-border: color(var(--color-sidebar-background) shade(10%));
+
+  --color-scrollbar: color(var(--color-sidebar-background) shade(30%));
+
+  --color-header: #0067a5;
+  --color-header-bottom: color(var(--color-header) shade(10%));
+  --color-header-text: #fff;
+
+  --color-status-red: #900;
+  --color-status-yellow: #edd42f;
+  --color-status-green: #007f41;
+  --color-status-gray: #aaa;
+
+  --color-notification: #fff;
+  --color-notification-info: color(var(--color-status-green) alpha(70%));
+  --color-notification-error: color(var(--color-error) alpha(70%));
+  --color-notification-warning: color(var(--color-warning) alpha(70%));
+
+  --color-table-header-text: #888;
+  --color-table-header-background: #e6e6e6;
+  --color-table-border: #f2f2f2;
+
+  --color-journal-entry-open: #e8e8e8;
+  --color-journal-entry-close: #888;
+  --color-journal-entry-txn-other: #cff;
+  --color-journal-entry-txn-pending: #f8a;
+  --color-journal-entry-balance: #cfc;
+  --color-journal-entry-note: #aad0ff;
+  --color-journal-entry-document: #ffc8ff;
+  --color-journal-entry-pad: #8ff;
+  --color-journal-entry-postingwarning: #f66;
+  --color-journal-entry-custom: #fff3ab;
+  --color-journal-entry-budget: #ffddae;
+
+  --color-journal-metadata: #85aacf;
+  --color-journal-tag: #6aa2db;
+  --color-journal-tag-document: #bb7ebb;
+  --color-journal-link: #cbdde8;
+  --color-journal-link-document: #c79cc7;
+  --color-journal-indicator: #c1d0d9;
+
+  --color-treetable-expander: #afc1d3;
+
+  --color-budget-negative: #af3d3d;
+  --color-budget-positive: #3daf46;
+  --color-budget-zero: #ffb900;
+
+  --color-treemap-text: #fff;
+  --color-chart-axis: #999;
+
+  --color-editor-comment: #998;
+  --color-editor-trailing-whitespace: rgba(255, 199, 199, .5);
+  --color-editor-directive: #333;
+  --color-editor-class: #b84;
+  --color-editor-date: #099;
+  --color-editor-constant: #008080;
+  --color-editor-account: var(--color-links);
+  --color-editor-invalid: #333;
+  --color-editor-activeline: #ffc;
+
+  --color-mobile-button-text: #000;
+
+  --color-ingest: #cefac1;
+}

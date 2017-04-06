@@ -74,7 +74,7 @@
                                 <td>{{ importer.name }}</td>
                                 <td>{{ account_macros.account_name(importer.account) }}</td>
                                 <td>
-                                    <a class="button" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</a>
+                                    <button class="a" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -83,7 +83,7 @@
             </table>
         {% endfor %}
         <h3>{{ _('Upload file') }}</h3>
-        {% if uploaded_files|length > 0 %}
+        {% if uploaded|length > 0 %}
             <table class="ingest-files">
                 <thead>
                     <tr>
@@ -104,8 +104,8 @@
                                 <td>{{ importer.name }}</td>
                                 <td>{{ account_macros.account_name(importer.account) }}</td>
                                 <td>
-                                    <a class="button inactive" title="Delete {{ file.filename }}" href="{{ url_for('ingest_delete') }}?filename={{ file.filename|e }}">Delete</a>
-                                    <a class="button" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</a>
+                                    <button class="a inactive" title="Delete {{ file.filename }}" href="{{ url_for('ingest_delete') }}?filename={{ file.filename|e }}">Delete</button>
+                                    <button class="a" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</button>
                                 </td>
                             </tr>
                         {% endfor %}

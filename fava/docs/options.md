@@ -17,8 +17,9 @@ Below is a list of all possible options for Fava.
 Default: Not set
 
 Fava currently has an English (`en`), a German (`de`), a Russian (`ru`), a
-Spanish (`es`) and a Chinese (`zh`) translation. If this setting is not
-specified, Fava will try to guess the language from your browser settings.
+Spanish (`es`), a Chinese (`zh`), a French (`fr`), a Dutch (`nl`) and a
+Portuguese (`pt`) translation. If this setting is not specified, Fava will try
+to guess the language from your browser settings.
 
 ---
 
@@ -58,6 +59,18 @@ right next to it could be used by giving `my_extension`. Note that Python has a
 global namespace for currently loaded modules, so try avoiding simple names
 that might coincide with some Python library (as well as running Fava on two
 files that have different extensions of the same name).
+
+---
+
+## `auto-reload`
+
+Default: `false`.
+
+Set this to `true` to make Fava automatically reload the page whenever a file
+changes is detected. By default only a notification is shown which you can
+click to reload the page.  If the file change is due to user interaction, e.g.,
+uploading a document or adding a transaction, Fava will always reload the page
+automatically.
 
 ---
 

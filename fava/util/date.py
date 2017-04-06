@@ -56,7 +56,7 @@ def get_next_interval(date, interval):
         raise NotImplementedError
 
 
-def interval_tuples(first, last, interval):
+def interval_ends(first, last, interval):
     """List intervals.
 
     Args:
@@ -64,24 +64,15 @@ def interval_tuples(first, last, interval):
         last: A datetime.date.
         interval: A string specifying the interval.
 
-    Returns:
-        A list of (start, end) dates corresponding to intervals between `first`
-        and `last`.
-
+    Yields:
+        Dates corresponding to the starts/ends of intervals between `first` and
+        `last`.
     """
-    if not first:
-        return []
-
-    intervals = []
     while first < last:
-        next_date = get_next_interval(first, interval)
-        if next_date < last:
-            intervals.append((first, next_date))
-        else:
-            intervals.append((first, last))
-        first = next_date
+        yield first
+        first = get_next_interval(first, interval)
 
-    return intervals
+    yield last
 
 
 def substitute(string):

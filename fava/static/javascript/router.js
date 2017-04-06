@@ -43,6 +43,13 @@ function updateURL(url) {
       newURL.removeSearch('interval');
     }
   }
+  const conversion = document.getElementById('conversion');
+  if (conversion) {
+    newURL.setSearch('conversion', conversion.value);
+    if (conversion.value === 'at_cost') {
+      newURL.removeSearch('conversion');
+    }
+  }
   return newURL.toString();
 }
 
@@ -61,14 +68,14 @@ export default function initRouter() {
     loadURL(window.location.href, true);
   });
 
-  $.delegate(document, 'click', 'a', (event) => {
+  $.delegate(document, 'click', 'a, button.a', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
       return;
     }
-    const link = event.target.closest('a');
+    const link = event.target.closest('a, .a');
     let href = link.getAttribute('href');
 
-    const isHttp = link.protocol.indexOf('http') === 0;
+    const isHttp = href.indexOf('http') === 0;
     const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
     const isRemote = link.getAttribute('data-remote');
 
@@ -127,6 +134,12 @@ export default function initRouter() {
 
     if ($('#chart-interval')) {
       $('#chart-interval').addEventListener('change', () => {
+        loadURL(updateURL(window.location.href));
+      });
+    }
+
+    if ($('#conversion')) {
+      $('#conversion').addEventListener('change', () => {
         loadURL(updateURL(window.location.href));
       });
     }

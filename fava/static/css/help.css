@@ -1,47 +1,49 @@
-// Help Pages
+/* Help Pages */
 
-$color-help-sidebar: #f8f8f8;
-$color-help-sidebar-border: #eaeaea;
+:root {
+  --color-help-sidebar: #f8f8f8;
+  --color-help-sidebar-border: #eaeaea;
+}
 
 .help-text {
-  font: 16px $font-family-alternative;
+  font: 16px var(--font-family-alternative);
   width: 660px;
 
-  h2,
-  h3,
-  h4,
-  h5 {
-    font-family: $font-family;
+  & h2,
+  & h3,
+  & h4,
+  & h5 {
+    font-family: var(--font-family);
   }
 
-  > div {
+  & > div {
     margin-bottom: 1em;
   }
 
-  .CodeMirror { // sass-lint:disable-line class-name-format
-    background-color: $color-code-background;
+  & .CodeMirror {
+    background-color: var(--color-code-background);
     border: 0;
     height: auto;
     margin: 0;
     padding: 0;
   }
 
-  code {
+  & code {
     font-size: .9em;
   }
 
-  ul {
+  & ul {
     padding-left: 2em;
   }
 
-  li {
+  & li {
     list-style-type: disc;
   }
 }
 
 .help-sidebar {
-  background-color: $color-help-sidebar;
-  border: 1px solid $color-help-sidebar-border;
+  background-color: var(--color-help-sidebar);
+  border: 1px solid var(--color-help-sidebar-border);
   border-radius: 1px;
   float: right;
   font-size: 1.1em;
@@ -50,14 +52,14 @@ $color-help-sidebar-border: #eaeaea;
   padding: 10px 10px 0;
   position: fixed;
 
-  a {
+  & a {
     text-decoration: none;
 
     &:hover { text-decoration: underline; }
     &.selected { font-weight: 500; }
   }
 
-  li {
+  & li {
     list-style-type: none;
   }
 }

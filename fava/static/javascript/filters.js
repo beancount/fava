@@ -42,10 +42,7 @@ export function initFilters() {
     let options = {
       minChars: 0,
       maxItems: 30,
-      sort(text, input) {
-        const order = el.getAttribute('name') === 'time' ? -1 : 1;
-        return text.value.localeCompare(input.value) * order;
-      },
+      sort: false,
     };
 
     if (el.getAttribute('name') === 'tag') {

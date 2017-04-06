@@ -1,10 +1,10 @@
 .. image:: https://badges.gitter.im/beancount/fava.svg
    :alt: Join the chat at https://gitter.im/beancount/fava
    :target: https://gitter.im/beancount/fava
-.. image:: https://img.shields.io/pypi/l/beancount-fava.svg
-   :target: https://pypi.python.org/pypi/beancount-fava
-.. image:: https://img.shields.io/pypi/v/beancount-fava.svg
-   :target: https://pypi.python.org/pypi/beancount-fava
+.. image:: https://img.shields.io/pypi/l/fava.svg
+   :target: https://pypi.python.org/pypi/fava
+.. image:: https://img.shields.io/pypi/v/fava.svg
+   :target: https://pypi.python.org/pypi/fava
 .. image:: https://img.shields.io/travis/beancount/fava.svg
    :target: https://travis-ci.org/beancount/fava?branch=master
 
@@ -19,7 +19,7 @@ The `Getting Started
 and how to get started with beancount.  If you are already familiar with
 beancount, you can get started with Fava::
 
-    pip3 install beancount-fava
+    pip3 install fava
     fava ledger.beancount
 
 and visit the web interface at `http://localhost:5000

@@ -3,7 +3,7 @@ from datetime import date, datetime
 import pytest
 from unittest import mock
 
-from fava.util.date import (parse_date, get_next_interval, interval_tuples,
+from fava.util.date import (parse_date, get_next_interval, interval_ends,
                             substitute, number_of_days_in_period)
 
 
@@ -18,7 +18,6 @@ def _to_date(string):
     ('2016-01-01', 'month', '2016-02-01'),
     ('2016-01-01', 'quarter', '2016-04-01'),
     ('2016-01-01', 'year', '2017-01-01'),
-
     ('2016-12-31', 'day', '2017-01-01'),
     ('2016-12-31', 'week', '2017-01-02'),
     ('2016-12-31', 'month', '2017-01-01'),
@@ -36,24 +35,29 @@ def test_get_next_interval_exception():
 
 
 def test_interval_tuples():
-    assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'month') == [
-        (date(2014, 3, 5), date(2014, 4, 1)),
-        (date(2014, 4, 1), date(2014, 5, 1)),
-        (date(2014, 5, 1), date(2014, 5, 5)),
+    assert list(
+        interval_ends(date(2014, 3, 5), date(2014, 5, 5), 'month')) == [
+            date(2014, 3, 5),
+            date(2014, 4, 1),
+            date(2014, 5, 1),
+            date(2014, 5, 5),
+        ]
+    assert list(
+        interval_ends(date(2014, 1, 1), date(2014, 5, 1), 'month')) == [
+            date(2014, 1, 1),
+            date(2014, 2, 1),
+            date(2014, 3, 1),
+            date(2014, 4, 1),
+            date(2014, 5, 1),
+        ]
+    assert list(interval_ends(date(2014, 3, 5), date(2014, 5, 5), 'year')) == [
+        date(2014, 3, 5),
+        date(2014, 5, 5),
     ]
-    assert interval_tuples(date(2014, 1, 1), date(2014, 5, 1), 'month') == [
-        (date(2014, 1, 1), date(2014, 2, 1)),
-        (date(2014, 2, 1), date(2014, 3, 1)),
-        (date(2014, 3, 1), date(2014, 4, 1)),
-        (date(2014, 4, 1), date(2014, 5, 1)),
+    assert list(interval_ends(date(2014, 1, 1), date(2015, 1, 1), 'year')) == [
+        date(2014, 1, 1),
+        date(2015, 1, 1),
     ]
-    assert interval_tuples(date(2014, 3, 5), date(2014, 5, 5), 'year') == [
-        (date(2014, 3, 5), date(2014, 5, 5)),
-    ]
-    assert interval_tuples(date(2014, 1, 1), date(2015, 1, 1), 'year') == [
-        (date(2014, 1, 1), date(2015, 1, 1)),
-    ]
-    assert interval_tuples(None, None, None) == []
 
 
 @pytest.mark.parametrize("input,output", [

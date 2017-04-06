@@ -1,0 +1,436 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fava\n"
+"Language: pt\n"
+
+#: fava/templates/_aside.html:4
+msgid "Custom Links"
+msgstr "links personalizados"
+
+#: fava/templates/_aside.html:11
+msgid "Reports"
+msgstr "Relatórios"
+
+#: fava/templates/_aside.html:35 fava/templates/errors.html:4
+msgid "Errors"
+msgstr "Erros"
+
+#. Dont think this should be translated
+#: fava/templates/_entry_filters.html:2
+msgid "FROM"
+msgstr "FROM"
+
+#: fava/templates/_entry_filters.html:3
+msgid "Time"
+msgstr "Data"
+
+#. Etiqueta or just leave like Tag
+#: fava/templates/_entry_filters.html:4
+msgid "Tag"
+msgstr "Tag"
+
+#: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:8
+#: fava/templates/_tree_table.html:102 fava/templates/holdings.html:12
+#: fava/templates/holdings.html:21
+#: fava/templates/overlays/_transaction_form.html:25
+#: fava/templates/overlays/_transaction_form.html:26
+#: fava/templates/statistics.html:24 fava/templates/statistics.html:53
+msgid "Account"
+msgstr "Conta"
+
+#: fava/templates/_entry_filters.html:6
+#: fava/templates/overlays/_transaction_form.html:10
+#: fava/templates/overlays/_transaction_form.html:11
+msgid "Payee"
+msgstr "Beneficiário"
+
+#: fava/templates/_entry_filters.html:34
+msgid "Filter"
+msgstr "Filtro"
+
+#: fava/templates/_globals.html:2
+msgid "Income Statement"
+msgstr "Declaração de Rendimentos"
+
+#: fava/templates/_globals.html:3
+msgid "Balance Sheet"
+msgstr "Balanço"
+
+#: fava/templates/_globals.html:4
+msgid "Trial Balance"
+msgstr "Balancete"
+
+#. Movimentos or Lançamentos...
+#: fava/templates/_globals.html:5
+msgid "Journal"
+msgstr "Movimentos"
+
+#: fava/templates/_globals.html:6
+msgid "Query"
+msgstr "Consulta"
+
+#: fava/templates/_globals.html:7 fava/templates/holdings.html:11
+msgid "Holdings"
+msgstr "Património"
+
+#: fava/templates/_globals.html:8
+msgid "Commodities"
+msgstr "Mercados"
+
+#: fava/templates/_globals.html:9
+msgid "Events"
+msgstr "Eventos"
+
+#: fava/templates/_globals.html:10
+msgid "Editor"
+msgstr "Editor"
+
+#: fava/templates/_globals.html:11
+msgid "Options"
+msgstr "Opções"
+
+#: fava/templates/_globals.html:12
+msgid "Statistics"
+msgstr "Estatísticas"
+
+#: fava/templates/_globals.html:13
+msgid "Help"
+msgstr "Ajuda"
+
+#: fava/templates/_journal_table.html:55
+msgid "Cleared Transactions"
+msgstr "Transações Verificadas"
+
+#: fava/templates/_journal_table.html:56
+msgid "Pending Transactions"
+msgstr "Transações Pendentes"
+
+#: fava/templates/_journal_table.html:57
+msgid "Other Transactions"
+msgstr "Outras Transações"
+
+#: fava/templates/_journal_table.html:61
+msgid "Documents discovered by beancount"
+msgstr "Documentos encontrados pelo beancount"
+
+#: fava/templates/_journal_table.html:62
+msgid "Statements from metadata"
+msgstr "Extratos dos metadados"
+
+#: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
+#: fava/templates/events.html:17
+#: fava/templates/overlays/_transaction_form.html:7
+msgid "Date"
+msgstr "Data"
+
+#: fava/templates/_journal_table.html:142
+msgid "F"
+msgstr "F"
+
+#: fava/templates/_journal_table.html:143
+msgid "Narration/Payee"
+msgstr "Descritivo / Beneficiário"
+
+#: fava/templates/_journal_table.html:144
+msgid "Position"
+msgstr "Posição"
+
+#: fava/templates/_journal_table.html:145 fava/templates/commodities.html:14
+#: fava/templates/holdings.html:26
+msgid "Price"
+msgstr "Preço"
+
+#: fava/templates/_journal_table.html:146
+msgid "Cost"
+msgstr "Custo"
+
+#: fava/templates/_journal_table.html:148
+msgid "Change"
+msgstr "Alterar"
+
+#: fava/templates/_journal_table.html:149 fava/templates/statistics.html:57
+msgid "Balance"
+msgstr "Saldo"
+
+#: fava/templates/_layout.html:67 fava/templates/editor.html:14
+#: fava/templates/overlays/_transaction_form.html:18
+msgid "Save"
+msgstr "Guardar"
+
+#: fava/templates/_layout.html:68
+msgid "Saving..."
+msgstr "A guardar..."
+
+#: fava/templates/_layout.html:69
+msgid "Saving ${fileName} failed."
+msgstr "Falha ao guardar $ {nome}."
+
+#: fava/templates/_layout.html:70
+msgid "Formatting the file with bean-format failed."
+msgstr "A formatação com o bean-format falhou."
+
+#: fava/templates/_layout.html:71
+msgid "Loading ${filePath} failed."
+msgstr "Falha ao abrir $ {FilePath}"
+
+#: fava/templates/_layout.html:72
+msgid "Chart is empty."
+msgstr "Gráfico vazio."
+
+#: fava/templates/_layout.html:73
+msgid "File change detected. Click to reload."
+msgstr "Ficheiro alterado. Clique para atualizar."
+
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
+msgid "Expand all accounts"
+msgstr "Expandir todas as contas"
+
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
+msgid "Expand all"
+msgstr "Expandir tudo"
+
+#: fava/templates/_tree_table.html:13
+msgid "Other"
+msgstr "Outros"
+
+#: fava/templates/_tree_table.html:5
+msgid "Hold Shift while clicking to expand all children \n"
+"Hold Ctrl or Cmd while clicking to expand one level"
+msgstr "Segure a tecla Shift enquanto clica para expandir todos os nós\n"
+"Segure Ctrl ou Cmd enquanto clica para expandir um nível"
+
+#: fava/templates/_tree_table.html:121
+msgid "Hold the Shift-key while clicking to expand all children"
+msgstr "Segure a tecla Shift enquanto clica para expandir todos os nós"
+
+#: fava/templates/account.html:23
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr "Todos os movimentos para esta conta e Sub-Contas"
+
+#: fava/templates/account.html:23
+msgid "Account Journal"
+msgstr "Movimentos de Conta"
+
+#: fava/templates/account.html:16 fava/templates/account.html:24
+msgid "Changes"
+msgstr "Alterações"
+
+#: fava/templates/account.html:25
+msgid "Balances"
+msgstr "Saldos"
+
+#: fava/templates/context.html:9
+msgid "Hash:"
+msgstr "Hash:"
+
+#: fava/templates/context.html:11
+msgid "Location:"
+msgstr "Localização:"
+
+#: fava/templates/context.html:12 fava/templates/errors.html:20
+#: fava/templates/errors.html:21 fava/templates/events.html:25
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "Mostrar fonte % (arquivo) s:% (lineno) s"
+
+#: fava/templates/context.html:15
+msgid "Journal Entry"
+msgstr "Inserir Movimento"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Nenhuma entrada corresponde ao hash dado."
+
+#: fava/templates/editor.html:15
+msgid "Format"
+msgstr "Formato"
+
+#: fava/templates/errors.html:11
+msgid "File"
+msgstr "Ficheiro"
+
+#: fava/templates/errors.html:12
+msgid "Line"
+msgstr "Linha"
+
+#: fava/templates/errors.html:13
+msgid "Error"
+msgstr "Erro"
+
+#: fava/templates/errors.html:30
+msgid "No errors."
+msgstr "Sem erros."
+
+#: fava/templates/events.html:13
+msgid "Event: %(type)s"
+msgstr "Evento:% (tipo) s"
+
+#: fava/templates/events.html:18
+msgid "Description"
+msgstr "Descrição"
+
+#: fava/templates/events.html:36
+msgid "No events."
+msgstr "Sem eventos"
+
+#: fava/templates/help.html:4
+msgid "Help - %(title)s"
+msgstr "Ajuda -% (título) s"
+
+#: fava/templates/help.html:9
+msgid "Help pages"
+msgstr "Páginas de ajuda"
+
+#: fava/templates/holdings.html:12 fava/templates/holdings.html:23
+#: fava/templates/overlays/_transaction_form.html:28
+msgid "Currency"
+msgstr "Moeda"
+
+#: fava/templates/holdings.html:12 fava/templates/holdings.html:24
+msgid "Cost currency"
+msgstr "Moeda de custo"
+
+#: fava/templates/holdings.html:13
+msgid "Holdings by"
+msgstr "Património por"
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Unidades"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Custo médio"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "Valor contabilístico"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Valor de mercado"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "data de aquisição"
+
+#: fava/templates/income_statement.html:8
+msgid "Net Profit"
+msgstr "Lucro líquido"
+
+#: fava/templates/income_statement.html:9
+msgid "Income"
+msgstr "Rendimento"
+
+#: fava/templates/income_statement.html:10
+msgid "Expenses"
+msgstr "despesas"
+
+#: fava/templates/options.html:5
+msgid "fava: options"
+msgstr "fava: opções"
+
+#: fava/templates/options.html:9 fava/templates/options.html:26
+msgid "Key"
+msgstr "Chave"
+
+#: fava/templates/options.html:10 fava/templates/options.html:27
+msgid "Value"
+msgstr "Valor"
+
+#: fava/templates/options.html:22
+msgid "beancount: options"
+msgstr "beancount: opções"
+
+#: fava/templates/query.html:66
+msgid "Download as"
+msgstr "Guardar como"
+
+#: fava/templates/statistics.html:20
+msgid "Postings per Account"
+msgstr "Lançamentos por Conta"
+
+#: fava/templates/statistics.html:25
+msgid "# Postings"
+msgstr "# Lançamentos"
+
+#: fava/templates/statistics.html:38 fava/templates/statistics.html:107
+msgid "Total"
+msgstr "Total"
+
+#: fava/templates/statistics.html:47
+msgid "Update Activity"
+msgstr "Atualizações "
+
+#: fava/templates/statistics.html:48
+msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
+msgstr "Clique para copiar os saldos de conta (exceto os verdes) para a área de transferência."
+
+#: fava/templates/statistics.html:49
+msgid "Copy balance directives"
+msgstr "Copiar saldos de conta"
+
+#: fava/templates/statistics.html:56
+msgid "Last Entry"
+msgstr "Última Entrada"
+
+#: fava/templates/statistics.html:89
+msgid "Entries per Type"
+msgstr "Entradas por Tipo"
+
+#: fava/templates/statistics.html:93
+msgid "Type"
+msgstr "Tipo"
+
+#: fava/templates/statistics.html:94
+msgid "# Entries"
+msgstr "# entradas"
+
+#: fava/templates/macros/_interval_macros.html:2
+msgid "Daily"
+msgstr "Diariamente"
+
+#: fava/templates/macros/_interval_macros.html:3
+msgid "Weekly"
+msgstr "Semanal"
+
+#: fava/templates/macros/_interval_macros.html:4
+msgid "Monthly"
+msgstr "Mensal"
+
+#: fava/templates/macros/_interval_macros.html:5
+msgid "Quarterly"
+msgstr "Trimestral"
+
+#: fava/templates/macros/_interval_macros.html:6
+msgid "Yearly"
+msgstr "Anual"
+
+#: fava/templates/overlays/_transaction_form.html:3
+msgid "close"
+msgstr "fechar"
+
+#: fava/templates/overlays/_transaction_form.html:5
+msgid "New transaction"
+msgstr "Nova transação"
+
+#: fava/templates/overlays/_transaction_form.html:12
+#: fava/templates/overlays/_transaction_form.html:13
+msgid "Narration"
+msgstr "Descrição"
+
+#: fava/templates/overlays/_transaction_form.html:19
+msgid "Save and add new"
+msgstr "Salvar e adicionar novo"
+
+#: fava/templates/overlays/_transaction_form.html:27
+msgid "Number"
+msgstr "Número"
+
+#: fava/templates/overlays/_transaction_form.html:29
+msgid "Add posting"
+msgstr "Inserir movimento"
+

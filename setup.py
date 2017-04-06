@@ -16,7 +16,7 @@ def _read(fname):
 
 
 setup(
-    name='beancount-fava',
+    name='fava',
     version=VERSION,
     description=('A rich web interface for the CL-accounting tool beancount.'),
     long_description=_read('README.rst'),
@@ -34,7 +34,7 @@ setup(
         ]
     },
     install_requires=[
-        'beancount>=2.0b12',
+        'beancount>=2.0b15',
         'click',
         'markdown2>=2.3.0',
         'Flask>=0.10.1',
@@ -46,7 +46,10 @@ setup(
             'pyexcel-ods3>=0.1.1',
             'pyexcel-xls>=0.1.0',
             'pyexcel-xlsx>=0.1.0',
-        ]
+        ],
+        ':sys_platform == "win32"': [
+            'pyreadline'
+        ],
     },
     zip_safe=False,
     classifiers=[
@@ -60,8 +63,8 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: JavaScript',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3 :: Only',
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
         'Topic :: Office/Business :: Financial :: Accounting',

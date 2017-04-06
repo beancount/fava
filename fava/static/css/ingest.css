@@ -1,10 +1,10 @@
 .ingest-files {
-  pre {
+  & pre {
     font-size: .9em;
     margin: 0;
   }
 
-  button {
+  & button {
     &:first-child {
       margin-left: 0;
     }
@@ -18,7 +18,7 @@
 }
 
 .ingest-row {
-  border-bottom: thin solid $color-table-header-background;
+  border-bottom: thin solid var(--color-table-header-background);
   display: flex;
   padding: 10px 0;
 
@@ -26,35 +26,35 @@
     min-height: 90px;
   }
 
-  .line {
+  & .line {
     line-height: 28px;
     min-width: 40px;
     text-align: center;
   }
 
-  .source {
+  & .source {
     flex-grow: 1;
     overflow: auto;
 
-    pre {
+    & pre {
       font-size: .9em;
       // white-space: pre-wrap;
       // word-break: break-all;
     }
   }
 
-  .form {
+  & .form {
     min-width: 600px;
 
-    input {
+    & input {
       &[type='date'] {
-        &::-webkit-clear-button { // sass-lint:disable-line no-vendor-prefixes nesting-depth
-          -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+        &::-webkit-clear-button {
+          -webkit-appearance: none;
           display: none;
         }
 
-        &::-webkit-inner-spin-button { // sass-lint:disable-line no-vendor-prefixes nesting-depth
-          -webkit-appearance: none; // sass-lint:disable-line no-vendor-prefixes
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
           display: none;
         }
       }
@@ -68,35 +68,35 @@
       }
     }
 
-    .fieldset {
+    & .fieldset {
       display: flex;
       padding: 0 10px 10px;
     }
   }
 
-  .actions {
+  & .actions {
     min-width: 60px;
 
-    .inner {
+    & .inner {
       min-width: 100px;
       text-align: left;
       transform: rotate(90deg);
       transform-origin: 30% 50%;
     }
 
-    label {
+    & label {
       display: inline-block;
       font-size: .8em;
     }
 
-    input {
+    & input {
       margin-right: 6px;
     }
   }
 
   &.header {
-    background: $color-table-header-background;
-    color: $color-table-header-text;
+    background: var(--color-table-header-background);
+    color: var(--color-table-header-text);
     font-weight: 500;
     line-height: 1.5em;
     padding: 0;
@@ -105,7 +105,7 @@
       padding: 3px 5px;
     }
 
-    .line {
+    & .line {
       line-height: inherit;
     }
   }
@@ -117,7 +117,7 @@
 
   &.duplicate,
   &.import {
-    background: $color-ingest;
+    background: var(--color-ingest);
   }
 }
 
@@ -125,7 +125,7 @@
   margin-top: 10px;
   padding-left: 0;
 
-  button {
+  & button {
     margin-left: 0;
   }
 }

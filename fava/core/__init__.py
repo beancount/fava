@@ -5,20 +5,21 @@ import datetime
 import os
 
 from beancount import loader
-from beancount.core import getters, realization
+from beancount.core import getters, prices, realization
 from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Custom)
-from beancount.ops import prices, summarize
+from beancount.ops import summarize
 from beancount.parser.options import get_account_types
 from beancount.reports.context import render_entry_context
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
 
-from fava.util import date
+from fava.util import date, pairwise
+from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.fava_options import parse_options
@@ -26,43 +27,11 @@ from fava.core.file import FileModule
 from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
                                TagFilter, TimeFilter)
 from fava.core.helpers import FavaAPIException, FavaModule
-from fava.core.holdings import get_final_holdings, aggregate_holdings_by
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
 from fava.core.watcher import Watcher
 from fava.ext import find_extensions
-
-
-def _list_accounts(root_account, active_only=False):
-    """List of all sub-accounts of the given root."""
-    accounts = [child_account.account
-                for child_account in
-                realization.iter_children(root_account)
-                if not active_only or child_account.txn_postings]
-
-    return accounts if active_only else accounts[1:]
-
-
-# pylint: disable=too-few-public-methods
-class AttributesModule(FavaModule):
-    """Some attributes of the ledger (mostly for auto-completion)."""
-
-    def __init__(self, ledger):
-        super().__init__(ledger)
-        self.accounts = None
-        self.payees = None
-        self.tags = None
-        self.years = None
-
-    def load_file(self):
-        all_entries = self.ledger.all_entries
-        self.payees = getters.get_all_payees(all_entries)
-        self.tags = getters.get_all_tags(all_entries)
-        self.years = list(getters.get_active_years(all_entries))
-
-        self.accounts = _list_accounts(self.ledger.all_root_account,
-                                       active_only=True)
 
 
 # pylint: disable=too-few-public-methods
@@ -254,11 +223,11 @@ class FavaLedger():
         return self._format_string.format(
             self.options['dcontext'].quantize(value, currency))
 
-    def _interval_tuples(self, interval):
-        """Calculates tuples of (begin_date, end_date) of length interval for the
-        period in which entries contains transactions.  """
-        return date.interval_tuples(self._date_first, self._date_last,
-                                    interval)
+    def interval_ends(self, interval):
+        """Generator yielding dates corresponding to interval boundaries."""
+        if not self._date_first:
+            return []
+        return date.interval_ends(self._date_first, self._date_last, interval)
 
     def get_account_sign(self, account_name):
         """Get account sign."""
@@ -283,16 +252,19 @@ class FavaLedger():
             A list of RealAccount instances for all the intervals.
 
         """
-        min_accounts = [account
-                        for account in _list_accounts(self.all_root_account)
-                        if account.startswith(account_name)]
+        min_accounts = [
+            account for account in
+            self.attributes.list_accounts(self.all_root_account)
+            if account.startswith(account_name)]
 
-        interval_tuples = list(reversed(self._interval_tuples(interval)))
+        interval_tuples = list(
+            reversed(list(pairwise(self.interval_ends(interval))))
+        )
 
         interval_balances = [
             realization.realize(list(iter_entry_dates(
                 self.entries,
-                self._date_first if accumulate else begin_date,
+                datetime.date.min if accumulate else begin_date,
                 end_date)), min_accounts)
             for begin_date, end_date in interval_tuples]
 
@@ -330,25 +302,6 @@ class FavaLedger():
             return filter(lambda e: e.type == event_type, events)
 
         return events
-
-    def holdings(self, aggregation_key=None):
-        """List all holdings (possibly aggregated)."""
-
-        # Get latest price unless there's an active time filter.
-        price_date = self._filters['time'].end_date \
-            if self._filters['time'] else None
-
-        holdings_list = get_final_holdings(
-            self.entries,
-            (self.account_types.assets, self.account_types.liabilities),
-            self.price_map,
-            price_date
-        )
-
-        if aggregation_key:
-            holdings_list = aggregate_holdings_by(holdings_list,
-                                                  aggregation_key)
-        return holdings_list
 
     def get_entry(self, entry_hash):
         """Find an entry.

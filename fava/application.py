@@ -95,7 +95,8 @@ def get_locale():
     """
     if g.ledger.fava_options['language']:
         return g.ledger.fava_options['language']
-    return request.accept_languages.best_match(['de', 'en', 'es', 'zh'])
+    return request.accept_languages.best_match(
+        ['de', 'en', 'es', 'zh', 'nl', 'fr', 'pt'])
 
 
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
@@ -146,7 +147,7 @@ def _perform_global_filters():
               'Please add one to your beancount file.')
 
     g.filters = {
-        name: request.args.get(name, None)
+        name: request.args.get(name)
         for name in ['account', 'from', 'payee', 'tag', 'time']
     }
 
@@ -159,6 +160,12 @@ def _perform_global_filters():
     except FilterException as exception:
         g.filters[exception.filter_type] = None
         flash(str(exception))
+
+
+@app.before_request
+def _generate_session_id():
+    if 'sid' not in session:
+        session['sid'] = str(uuid.uuid4())
 
 
 @app.after_request
@@ -186,6 +193,8 @@ def _inject_filters(endpoint, values):
         return
     if 'interval' not in values:
         values['interval'] = request.args.get('interval')
+    if 'conversion' not in values:
+        values['conversion'] = request.args.get('conversion')
     for filter_name in ['account', 'from', 'payee', 'tag', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
@@ -199,6 +208,7 @@ def _pull_beancount_file(_, values):
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
         abort(404)
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
+    g.at_value = request.args.get('conversion') == 'at_value'
 
 
 @app.errorhandler(FavaAPIException)
@@ -230,7 +240,7 @@ def account(name, subreport='journal'):
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
     """Download a document."""
-    file_path = request.args.get('file_path', None)
+    file_path = request.args.get('file_path')
     document_path = g.ledger.document_path(file_path)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
@@ -240,8 +250,8 @@ def document():
 @app.route('/<bfile>/statement/', methods=['GET'])
 def statement():
     """Download a statement file."""
-    entry_hash = request.args.get('entry_hash', None)
-    key = request.args.get('key', None)
+    entry_hash = request.args.get('entry_hash')
+    key = request.args.get('key')
     document_path = g.ledger.statement_path(entry_hash, key)
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
@@ -294,9 +304,7 @@ def help_page(page_slug='_index'):
 @app.route('/<bfile>/ingest/upload', methods=['POST'])
 def ingest_upload():
     """Upload a file to ingest."""
-    if 'file' in request.files:
-        if 'sid' not in session:
-            session['sid'] = uuid.uuid4()
+    if 'file' in request.files and request.files['file']:
         file = request.files['file']
         g.ledger.ingest.add_upload(session['sid'], file)
     return redirect(url_for('ingest_identify'))

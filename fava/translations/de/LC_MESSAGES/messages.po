@@ -33,12 +33,16 @@ msgstr "Hashtag"
 
 #: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:8
 #: fava/templates/_tree_table.html:102 fava/templates/holdings.html:12
-#: fava/templates/holdings.html:21 fava/templates/statistics.html:24
-#: fava/templates/statistics.html:53
+#: fava/templates/holdings.html:21
+#: fava/templates/overlays/_transaction_form.html:25
+#: fava/templates/overlays/_transaction_form.html:26
+#: fava/templates/statistics.html:24 fava/templates/statistics.html:53
 msgid "Account"
 msgstr "Konto"
 
 #: fava/templates/_entry_filters.html:6
+#: fava/templates/overlays/_transaction_form.html:10
+#: fava/templates/overlays/_transaction_form.html:11
 msgid "Payee"
 msgstr "Empfänger"
 
@@ -116,6 +120,7 @@ msgstr "Belege aus Metadaten"
 
 #: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
 #: fava/templates/events.html:17
+#: fava/templates/overlays/_transaction_form.html:7
 msgid "Date"
 msgstr "Datum"
 
@@ -149,6 +154,7 @@ msgid "Balance"
 msgstr "Saldo"
 
 #: fava/templates/_layout.html:67 fava/templates/editor.html:14
+#: fava/templates/overlays/_transaction_form.html:18
 msgid "Save"
 msgstr "Speichern"
 
@@ -275,6 +281,7 @@ msgid "Help pages"
 msgstr "Hilfeseiten"
 
 #: fava/templates/holdings.html:12 fava/templates/holdings.html:23
+#: fava/templates/overlays/_transaction_form.html:28
 msgid "Currency"
 msgstr "Währung"
 

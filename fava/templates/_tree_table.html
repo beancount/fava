@@ -1,5 +1,5 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% set show_other_column = (operating_currencies|sort != ledger.options['commodities']|list|sort) %}
+{% set show_other_column = (operating_currencies|length < ledger.options['commodities']|length) %}
 
 {% macro tree(real_account, totals=True) %}
     <ol class="tree-table{{ ' two-currencies' if operating_currencies|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
@@ -16,8 +16,8 @@
     </li>
 {% for account in ([real_account] if real_account.account else real_account.values()) recursive %}
     {% if account|should_show %}
-    {% set balance = account.balance.cost() %}
-    {% set balance_children = (account|balance_children).cost() %}
+    {% set balance = account.balance|cost_or_value %}
+    {% set balance_children = account|balance_children|cost_or_value %}
     <li{% if account.account|should_collapse_account %} class="toggled"{% endif %}>
         <p{% if not balance.is_empty() %} class='has-balance'{% endif %}>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
@@ -26,24 +26,20 @@
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
         <span class="num">
-            <span class="balance">{{ balance.get_units(currency).number|format_currency(currency) }}</span>
-            <span class="balance-children">{{ balance_children.get_units(currency).number|format_currency(currency) }}</span>
+            <span class="balance">{{ balance.get_currency_units(currency).number|format_currency(currency) }}</span>
+            <span class="balance-children">{{ balance_children.get_currency_units(currency).number|format_currency(currency) }}</span>
         </span>
     {% endfor %}
     {% if show_other_column %}
         <span class="num other">
             <span class="balance">
-                {% for currency in ledger.options['commodities'] if currency not in operating_currencies %}
-                    {% if currency in balance.currencies() %}
-                        {{ balance.get_units(currency).number|format_currency(currency) }} {{ currency }}<br>
-                    {% endif %}
+                {% for pos in balance|sort(attribute='units.currency') if pos.units.currency not in operating_currencies %}
+                    {{ pos.units|format_amount }}<br>
                 {% endfor %}
             </span>
             <span class="balance-children">
-                {% for currency in ledger.options['commodities'] if currency not in operating_currencies %}
-                    {% if currency in balance_children.currencies() %}
-                        {{ balance_children.get_units(currency).number|format_currency(currency) }} {{ currency }}<br>
-                    {% endif %}
+                {% for pos in balance_children|sort(attribute='units.currency') if pos.units.currency not in operating_currencies %}
+                    {{ pos.units|format_amount }}<br>
                 {% endfor %}
             </span>
         </span>
@@ -58,19 +54,17 @@
     {% endif %}
 {% endfor %}
 {% if totals %}
-    {% set balance = (real_account|balance_children).cost() %}
+    {% set balance = real_account|balance_children|cost_or_value %}
         <li class="totals">
             <p>
             <span class="account-cell">&nbsp;</span>
         {% for currency in operating_currencies %}
-            <span class="num">{{ balance.get_units(currency).number|format_currency(currency) }}</span>
+            <span class="num">{{ balance.get_currency_units(currency).number|format_currency(currency) }}</span>
         {% endfor %}
         {% if show_other_column %}
             <span class="num other">
-                {% for currency in ledger.options['commodities'] if currency not in operating_currencies%}
-                    {% if currency in balance.currencies() %}
-                        {{ balance.get_units(currency).number|format_currency(currency) }} {{ currency }}<br>
-                    {% endif %}
+                {% for pos in balance|sort(attribute='units.currency') if pos.units.currency not in operating_currencies %}
+                    {{ pos.units|format_amount }}<br>
                 {% endfor %}
             </span>
         {% endif %}
@@ -80,18 +74,17 @@
 </ol>
 {% endmacro %}
 
-{% macro balance_with_budget(amount, budget) %}
-{% if budget %}
-    {% if amount.currency in budget %}
-        {% set diff = budget[amount.currency] - amount.number %}
-        <span class="budget budget-{% if diff > 0 %}positive{% else %}{% if diff < 0 %}negative{% else %}zero{% endif %}{% endif %}">
-            ({{ diff|format_currency(currency, show_if_zero=True) }})
-        </span>
+{% macro render_budget(budget, currency, number=0) %}
+  {% if budget %}
+    {% if currency in budget %}
+      {% set diff = budget[currency] - number %}
+      <span class="budget budget-{% if diff > 0 %}positive{% else %}{% if diff < 0 %}negative{% else %}zero{% endif %}{% endif %}" title="{{ budget[currency]|format_currency(currency) }} {{ currency }}">
+        ({{ diff|format_currency(currency, show_if_zero=True) }}{{ ' '+currency if not number else '' }})
+      </span>
     {% else %}
-        <span class="budget no-budget"></span>
+      <span class="budget no-budget"></span>
     {% endif %}
-{% endif %}
-<span class="number">{{ amount|format_amount }}</span>
+  {% endif %}
 {% endmacro %}
 
 {% macro account_tree(account_name, interval_balances, dates, accumulate) %}
@@ -122,18 +115,24 @@
         {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
         {% set budget = ledger.budgets.calculate(account.account, begin_date, end_date) %}
         {% set current_account = interval_balances[loop.index0]|get_or_create(account.account) %}
-        {% set balance = current_account.balance.cost() %}
-        {% set balance_children = (current_account|balance_children).cost() %}
+        {% set balance = current_account.balance|cost_or_value(end_date) %}
+        {% set balance_children = current_account|balance_children|cost_or_value(end_date) %}
         <span class="num other{{ ' has-balance' if not balance.is_empty() else '' }}">
             <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
             {% for pos in balance %}
                 <span class="balance">
-                    {{ balance_with_budget(pos.units, budget) }}
+                    {{ render_budget(budget, pos.units.currency, pos.units.number) }}
+                    <span class="number">{{ pos.units|format_amount }}</span>
                 </span>
             {% endfor %}
+            {% if budget %}
+              {% for currency, number in budget.items() if currency not in balance.currencies() %}
+                {{ render_budget(budget, currency) }}
+              {% endfor %}
+            {% endif %}
             {% for pos in balance_children %}
                 <span class="balance-children">
-                    {{ balance_with_budget(pos.units, budget) }}
+                    <span class="number">{{ pos.units|format_amount }}</span>
                 </span>
             {% endfor %}
             </a>
@@ -150,7 +149,7 @@
         <span class="account-cell">&nbsp;</span>
     {% for begin_date, end_date in dates %}
         {% set current_account = interval_balances[loop.index0]|get_or_create(account_name) %}
-        {% set balance_children = (current_account|balance_children).cost() %}
+        {% set balance_children = current_account|balance_children|cost_or_value(end_date) %}
         <span class="num other">
             {% for pos in balance_children %}
                 {{ pos.units|format_amount }}<br>

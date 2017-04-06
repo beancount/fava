@@ -2,12 +2,13 @@
 
 all: fava/static/gen/app.js
 
-fava/static/gen/app.js: fava/static/sass/* fava/static/javascript/*
+fava/static/gen/app.js: fava/static/css/* fava/static/javascript/*
 	cd fava/static; npm update; npm run build
 
 clean: mostlyclean
 	rm -rf build dist
 	rm -rf fava/static/gen
+	make -C gui clean
 
 mostlyclean:
 	rm -rf .tox
@@ -18,6 +19,7 @@ mostlyclean:
 lint:
 	tox -e lint
 	cd fava/static; npm update; npm run lint
+	make -C gui lint
 
 test:
 	tox
@@ -65,5 +67,6 @@ babel-merge:
 babel-compile:
 	pybabel compile -d fava/translations
 
-pyinstaller:
+pyinstaller: dist/fava
+dist/fava: fava
 	pyinstaller --clean --onefile contrib/pyinstaller.spec

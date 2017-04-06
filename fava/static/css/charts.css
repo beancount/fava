@@ -1,5 +1,5 @@
 .chart-labels {
-  color: lighten($color-text, 40);
+  color: var(--color-text-lightest);
   font-size: 1em;
   line-height: 14px;
   margin-bottom: 20px;
@@ -7,18 +7,18 @@
   position: relative;
   text-align: center;
 
-  label {
+  & label {
     padding: 0 5px;
 
     &:hover {
-      color: $color-text-lighter;
+      color: var(--color-text-lighter);
       cursor: pointer;
     }
 
-    &.selected { color: $color-text-lighter; }
+    &.selected { color: var(--color-text-lighter); }
   }
 
-  label+label { border-left: 1px solid lighten($color-text, 40); }
+  & label + label { border-left: 1px solid var(--color-text-lighter); }
 }
 
 .toggle-chart {
@@ -27,35 +27,31 @@
   right: 19px;
   top: 19px;
 
-  span {
+  & span {
     border: 0;
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
-    border-top: 13px solid $color-background;
+    border-top: 13px solid var(--color-background);
     display: block;
   }
 
-  &.hide-charts {
-    span {
-      border: 0;
-      border-bottom: 13px solid $color-background;
-      border-left: 9px solid transparent;
-      border-right: 9px solid transparent;
-    }
+  &.hide-charts span {
+    border: 0;
+    border-bottom: 13px solid var(--color-background);
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
   }
 }
 
-.charts {
-  form {
-    display: flex;
-    margin-bottom: 10px;
-    padding-left: 10px;
-    padding-right: 35px;
+.charts form {
+  display: flex;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 35px;
 
-    > span,
-    > select {
-      margin-right: 10px;
-    }
+  & > span,
+  & > select {
+    margin-right: 10px;
   }
 }
 
@@ -67,56 +63,53 @@
 .chart-legend {
   flex-grow: 1;
 
-  .color {
+  & .color {
     border-radius: 10px;
     display: inline-block;
     height: 10px;
     width: 10px;
   }
 
-  .name {
+  & .name {
     margin: 0 6px 0 3px;
   }
 }
 
 .chart > p,
 .loading {
-  color: lighten($color-text, 60);
+  color: var(--color-text-lightest);
   font-style: italic;
   padding-top: 30px;
   text-align: center;
 }
 
 svg {
-  text {
-    fill: lighten($color-text, 10);
+  & text {
+    fill: var(--color-text-lightest);
   }
 
-  .line {
+  & .line {
     fill: none;
     stroke-width: 2px;
   }
 
-  .axis {
-    path,
-    line {
+  & .axis {
+    & path,
+    & line {
       fill: none;
       shape-rendering: crispEdges;
-      stroke: $color-chart-axis;
+      stroke: var(--color-chart-axis);
     }
 
-    &.y {
-      line {
-        stroke: $color-chart-axis;
-        stroke-dasharray: 2, 2;
-      }
+    &.y line {
+      stroke: var(--color-chart-axis);
+      stroke-dasharray: 2, 2;
     }
   }
 }
 
-
 .voronoi {
-  path {
+  & path {
     fill: none;
     pointer-events: all;
   }
@@ -125,59 +118,56 @@ svg {
 .treemap {
   shape-rendering: crispEdges;
 
-  rect {
-    stroke: $color-treemap-text;
+  & rect {
+    stroke: var(--color-treemap-text);
     stroke-width: 2px;
   }
 
-  text {
+  & text {
     cursor: pointer;
   }
 }
 
 .sunburst {
-  .account {
+  & .account {
     cursor: pointer;
     font-size: 13px;
     font-weight: 700;
   }
 
-  .balance {
-    font-family: $font-family-monospaced;
+  & .balance {
+    font-family: var(--font-family-monospaced);
     font-size: 14px;
   }
 
-  path {
+  & path {
     cursor: pointer;
   }
 }
 
 .barchart {
-  // sass-lint:disable-block nesting-depth
-  .group {
+  & .group {
     cursor: pointer;
 
-    &:hover {
-      .group-box {
-        opacity: .1;
-      }
+    &:hover .group-box {
+      opacity: .1;
     }
   }
 
-  .group-box {
+  & .group-box {
     opacity: 0;
   }
 
-  .budget {
+  & .budget {
     opacity: .3;
   }
 }
 
 .tooltip {
-  background: darken($color-background, 5);
-  border: 1px solid darken($color-background, 20);
-  box-shadow: 0 0 5px darken($color-background, 6);
-  font-family: $font-family-monospaced;
+  background: var(--color-background);
+  border: 1px solid var(--color-background-darkest);
+  box-shadow: 0 0 5px var(--color-background-darker);
+  font-family: var(--font-family-monospaced);
   min-width: 5em;
   opacity: 0;
   padding: .5em;
@@ -189,7 +179,7 @@ svg {
 
   &::before {
     border: 15px solid transparent;
-    border-top-color: darken($color-background, 20);
+    border-top-color: var(--color-background-darkest);
     content: '';
     height: 0;
     left: 50%;
@@ -199,10 +189,10 @@ svg {
     width: 0;
   }
 
-  em {
-    color: darken($color-background, 50);
+  & em {
+    color: var(--color-text-lightest);
     display: block;
-    font-family: $font-family;
+    font-family: var(--font-family);
     margin-top: 5px;
   }
 }

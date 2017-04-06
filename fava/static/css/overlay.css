@@ -1,10 +1,12 @@
-// Overlays
+/* Overlays */
 
-$overlay-wrapper-background: rgba(0, 0, 0, .5);
+:root {
+  --overlay-wrapper-background: rgba(0, 0, 0, .5);
+}
 
 .overlay-wrapper {
   align-items: center;
-  background: $overlay-wrapper-background;
+  background: var(--overlay-wrapper-background);
   bottom: 0;
   cursor: pointer;
   display: none;
@@ -21,15 +23,15 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
 }
 
 .close-overlay {
-  color: $color-text-lighter;
+  color: var(--color-text-lighter);
   position: absolute;
   right: 10px;
   top: 10px;
 }
 
 .overlay {
-  background: $color-background;
-  box-shadow: 0 0 20px $overlay-wrapper-background;
+  background: var(--color-background);
+  box-shadow: 0 0 20px var(--overlay-wrapper-background);
   cursor: auto;
   display: flex;
   max-height: 100%;
@@ -37,20 +39,17 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   position: relative;
   width: 767px;
 
-  form {
+  & form,
+  & > div {
     width: 100%;
   }
 
-  strong {
+  & strong {
     display: inline-block;
     margin: 6px 0 5px;
   }
 
-  kbd {
-    font-size: .9em;
-  }
-
-  dt {
+  & dt {
     display: inline-block;
     float: left;
     font-weight: normal;
@@ -60,72 +59,68 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
     width: 170px;
   }
 
-  dd {
+  & dd {
     line-height: 1.8em;
   }
 
-  .fieldset {
+  & .fieldset {
     display: flex;
     margin-bottom: .5em;
     padding: 0;
 
-    label {
+    & label {
       line-height: 33px;
       width: 150px;
     }
 
-    input {
-      border: 1px solid lighten($color-text, 50);
+    & input {
+      border: 1px solid color(var(--color-text) tint(50%));
     }
 
-    [type='submit'] {
+    &[type='submit'] {
       margin: .5em .5em -.5em 0;
     }
   }
 
-  .awesomplete {
-    input {
-      width: 100%;
-    }
+  & .awesomplete input {
+    width: 100%;
   }
 }
 
-.documents-upload {
-  .fieldset {
-    display: block;
+.documents-upload .fieldset {
+  display: block;
 
-    input {
-      margin: 0 0 .5em;
-      width: 100%;
-    }
+  & input {
+    margin: 0 0 .5em;
+    width: 100%;
+  }
 
-    select {
-      margin-left: .5em;
-    }
+  & select {
+    margin-left: .5em;
   }
 }
 
 .notifications {
   position: fixed;
   right: 10px;
-  top: $header-height + 10px;
+  top: calc(var(--header-height) + 10px);
   width: 400px;
 
-  li {
-    background: $color-notification-info;
-    color: $color-notification;
+  & li {
+    background: var(--color-notification-info);
+    color: var(--color-notification);
     display: block;
     margin-bottom: .5em;
     padding: 5px 10px;
     width: 100%;
   }
 
-  .error {
-    background: $color-notification-error;
+  & .error {
+    background: var(--color-notification-error);
   }
 
-  .warning {
-    background: $color-notification-warning;
+  & .warning {
+    background: var(--color-notification-warning);
   }
 }
 
@@ -133,11 +128,10 @@ $overlay-wrapper-background: rgba(0, 0, 0, .5);
   .transaction-overlay {
     overflow: scroll;
 
-    .overlay {
+    & .overlay {
       left: 10px;
       margin-bottom: 10px;
       max-height: initial;
-      // min-height: calc(100vh - 20px);
       position: absolute;
       right: 10px;
       top: 10px;

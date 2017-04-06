@@ -6,7 +6,7 @@ All functions in this module will be automatically added as template filters.
 import os
 
 from flask import g
-from beancount.core import compare, realization
+from beancount.core import convert, compare, realization
 from beancount.core.data import Close, TxnPosting
 from beancount.core.number import Decimal
 
@@ -19,6 +19,23 @@ def remove_keys(_dict, keys):
     for key in keys:
         new.pop(key, None)
     return new
+
+
+def units(inventory):
+    """Get the units of an inventory."""
+    return inventory.reduce(convert.get_units)
+
+
+def cost(inventory):
+    """Get the cost of an inventory."""
+    return inventory.reduce(convert.get_cost)
+
+
+def cost_or_value(inventory, date=None):
+    """Get the cost or value of an inventory."""
+    if g.at_value:
+        return inventory.reduce(convert.get_value, g.ledger.price_map, date)
+    return inventory.reduce(convert.get_cost)
 
 
 def format_currency(value, currency=None, show_if_zero=False):

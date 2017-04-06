@@ -138,8 +138,8 @@ class TagFilter(EntryFilter):
 
     def _include_entry(self, entry):
         return hasattr(entry, 'tags') and (
-            ((entry.tags if entry.tags else set()) & self.tags) or
-            ((entry.links if entry.links else set()) & self.links)
+            (entry.tags & self.tags) or
+            (entry.links & self.links)
         )
 
 
