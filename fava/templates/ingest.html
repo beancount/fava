@@ -13,14 +13,14 @@
     {% if entries %}
         <h3>{{ _('Ingest') }}{% if filename %} {{ filename }}{% endif %}</h3>
         <form id="ingest-actions" class="ingest-actions">
-            <button type="button" id="toggle-ignore" title="Toggle ignore">Toggle ignore</button>
+            <button type="button" id="toggle-ignore" title="{{ _('Toggle ignore">{{ _('Toggle ignore') }}</button>
         </form>
         <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
             <div class="ingest-row header">
-                <div class="line">Line</div>
-                <div class="source">Source</div>
-                <div class="form">Entry</div>
-                <div class="actions">Actions</div>
+                <div class="line">{{ _('Line') }}</div>
+                <div class="source">{{ _('Source') }}</div>
+                <div class="form">{{ _('Entry') }}</div>
+                <div class="actions">{{ _('Actions') }}</div>
             </div>
         {% for entry in entries %}
             {% set type = entry.__class__.__name__.lower() %}
@@ -40,15 +40,15 @@
                 </div>
                 <div class="actions">
                     <div class="inner">
-                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="ignore">Ignore</label></div>
-                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>Duplicate</label></div>
-                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>Import</label></div>
+                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="ignore">{{ _('Ignore') }}</label></div>
+                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label></div>
+                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label></div>
                     </div>
                 </div>
             </div>
         {% endfor %}
             <div class="fieldset ingest-footer">
-                <button type="submit" class="ingest-form-submit" data-url="{{ url_for('ingest_identify') }}">Import transactions</button>
+                <button type="submit" class="ingest-form-submit" data-url="{{ url_for('ingest_identify') }}">{{ _('Import transactions') }}</button>
             </div>
         </form>
     {% else %}
@@ -57,10 +57,10 @@
             <table class="ingest-files">
                 <thead>
                     <tr>
-                        <th>File</th>
-                        <th>Importer</th>
-                        <th>Account</th>
-                        <th>Action</th>
+                        <th>{{ _('File') }}</th>
+                        <th>{{ _('Importer') }}</th>
+                        <th>{{ _('Account') }}</th>
+                        <th>{{ _('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@
                                 <td>{{ importer.name }}</td>
                                 <td>{{ account_macros.account_name(importer.account) }}</td>
                                 <td>
-                                    <button class="a" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</button>
+                                    <button class="a" title="{{ _('Ingest') }} {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">{{ _('Extract') }}</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -87,10 +87,10 @@
             <table class="ingest-files">
                 <thead>
                     <tr>
-                        <th>File</th>
-                        <th>Importer</th>
-                        <th>Account</th>
-                        <th>Actions</th>
+                        <th>{{ _('File') }}</th>
+                        <th>{{ _('Importer') }}</th>
+                        <th>{{ _('Account') }}</th>
+                        <th>{{ _('Actions') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,8 +104,8 @@
                                 <td>{{ importer.name }}</td>
                                 <td>{{ account_macros.account_name(importer.account) }}</td>
                                 <td>
-                                    <button class="a inactive" title="Delete {{ file.filename }}" href="{{ url_for('ingest_delete') }}?filename={{ file.filename|e }}">Delete</button>
-                                    <button class="a" title="Ingest {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">Extract</button>
+                                    <button class="a inactive" title="{{ _('Delete') }} {{ file.filename }}" href="{{ url_for('ingest_delete') }}?filename={{ file.filename|e }}">{{ _('Delete') }}</button>
+                                    <button class="a" title="{{ _('Ingest') }} {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">{{ _('Extract') }}</button>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -115,7 +115,7 @@
         {% endif %}
         <form action="{{ url_for('ingest_upload') }}" method="post" enctype="multipart/form-data">
             <input type="file" name="file">
-            <button type="submit">Upload and identify</button>
+            <button type="submit">{{ _('Upload and identify') }}</button>
         </form>
     {% endif %}
 {% endblock %}
