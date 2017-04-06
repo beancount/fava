@@ -3,7 +3,7 @@
 import os
 import runpy
 import tempfile
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 
 from beancount.core import data
 from beancount.ingest import identify, cache, extract
@@ -13,7 +13,6 @@ from fava.core.helpers import FavaModule
 IngestError = namedtuple('IngestError', 'source message entry')
 
 
-# pylint: disable=too-few-public-methods
 class IngestModule(FavaModule):
     """Exposes ingest functionality."""
 
@@ -21,7 +20,7 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = None
         self.ingest_dirs = []
-        self.uploaded_files = defaultdict(list)
+        self.uploaded_files = []
 
     def load_file(self):
         configpath = self.ledger.fava_options['ingest-config']
@@ -56,26 +55,29 @@ class IngestModule(FavaModule):
 
         return identified
 
-    def add_upload(self, session_id, file):
+    def add_upload(self, file):
+        """Store the file in a temporary directory."""
         new_file = os.path.join(tempfile.mkdtemp(), file.filename)
         file.save(new_file)
-        self.uploaded_files[session_id].append(new_file)
+        self.uploaded_files.append(new_file)
 
-    def remove_upload(self, session_id, filepath):
-        if filepath in self.uploaded_files[session_id]:
+    def remove_upload(self, filepath):
+        """Remove filepath from disk."""
+        if filepath in self.uploaded_files:
             os.remove(filepath)
-            self.uploaded_files[session_id].remove(filepath)
+            self.uploaded_files.remove(filepath)
 
     def dirs_importers(self):
+        """Return identified files and importers, grouped by directory."""
         return [(dir_, self._identify_importers(dir_))
                 for dir_ in self.ingest_dirs]
 
-    def uploads_importers(self, session_id):
-        if session_id in self.uploaded_files:
-            return self._identify_importers(self.uploaded_files[session_id])
-        return []
+    def uploads_importers(self):
+        """Return identified files and importers from uploads."""
+        return self._identify_importers(self.uploaded_files)
 
     def extract(self, filepath, importer_name):
+        """Extract entries from filepath with the specified importer."""
         importer = next(
             imp for imp in self.config if imp.name() == importer_name)
 

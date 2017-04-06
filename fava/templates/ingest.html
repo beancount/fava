@@ -48,10 +48,11 @@
             </div>
         {% endfor %}
             <div class="fieldset ingest-footer">
-                <button type="submit" class="ingest-form-submit" data-url="{{ url_for('ingest_identify') }}">{{ _('Import transactions') }}</button>
+                <button type="submit" class="ingest-form-submit" data-url="{{ url_for('report', report_name='ingest') }}">{{ _('Import transactions') }}</button>
             </div>
         </form>
     {% else %}
+        {% set identified = ledger.ingest.dirs_importers() %}
         {% for directory, files in identified %}
             <h3>{{ directory }}</h3>
             <table class="ingest-files">
@@ -83,6 +84,7 @@
             </table>
         {% endfor %}
         <h3>{{ _('Upload file') }}</h3>
+        {% set uploaded = ledger.ingest.uploads_importers() %}
         {% if uploaded|length > 0 %}
             <table class="ingest-files">
                 <thead>

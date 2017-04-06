@@ -19,7 +19,7 @@ import os
 import uuid
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file, session,
+                   redirect, send_from_directory, g, send_file,
                    render_template_string)
 from flask_babel import Babel
 import markdown2
@@ -67,6 +67,7 @@ REPORTS = [
     'editor',
     'trial_balance',
     'query',
+    'ingest',
 ]
 
 
@@ -160,12 +161,6 @@ def _perform_global_filters():
     except FilterException as exception:
         g.filters[exception.filter_type] = None
         flash(str(exception))
-
-
-@app.before_request
-def _generate_session_id():
-    if 'sid' not in session:
-        session['sid'] = str(uuid.uuid4())
 
 
 @app.after_request
@@ -306,27 +301,16 @@ def ingest_upload():
     """Upload a file to ingest."""
     if 'file' in request.files and request.files['file']:
         file = request.files['file']
-        g.ledger.ingest.add_upload(session['sid'], file)
-    return redirect(url_for('ingest_identify'))
+        g.ledger.ingest.add_upload(file)
+    return redirect(url_for('report', report_name='ingest'))
 
 
 @app.route('/<bfile>/ingest/upload/delete')
 def ingest_delete():
     """Delete an uploaded file."""
     file = request.args.get('filename', None)
-    session_id = session['sid'] if 'sid' in session else None
-    g.ledger.ingest.remove_upload(session_id, file)
-    return redirect(url_for('ingest_identify'))
-
-
-@app.route('/<bfile>/ingest/')
-def ingest_identify():
-    """Identify files to ingest."""
-    sid = session['sid'] if 'sid' in session else None
-    return render_template('ingest.html',
-                           identified=g.ledger.ingest.dirs_importers(),
-                           uploaded=g.ledger.ingest.uploads_importers(sid))
-
+    g.ledger.ingest.remove_upload(file)
+    return redirect(url_for('report', report_name='ingest'))
 
 @app.route('/<bfile>/ingest/extract/')
 def ingest_extract():
