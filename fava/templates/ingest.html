@@ -13,7 +13,7 @@
     {% if entries %}
         <h3>{{ _('Ingest') }}{% if filename %} {{ filename }}{% endif %}</h3>
         <form id="ingest-actions" class="ingest-actions">
-            <button type="button" id="toggle-ignore" title="{{ _('Toggle ignore">{{ _('Toggle ignore') }}</button>
+            <button type="button" id="toggle-ignore" title="{{ _('Toggle ignore') }}">{{ _('Toggle ignore') }}</button>
         </form>
         <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
             <div class="ingest-row header">
