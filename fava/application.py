@@ -16,7 +16,6 @@ Attributes:
 import datetime
 import inspect
 import os
-import uuid
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, send_from_directory, g, send_file,
@@ -311,6 +310,7 @@ def ingest_delete():
     file = request.args.get('filename', None)
     g.ledger.ingest.remove_upload(file)
     return redirect(url_for('report', report_name='ingest'))
+
 
 @app.route('/<bfile>/ingest/extract/')
 def ingest_extract():
