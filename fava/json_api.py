@@ -100,7 +100,7 @@ def add_document():
     return _api_success(message='Uploaded to {}'.format(filepath))
 
 
-def _add_transaction(json):
+def json_to_transaction(json):
     postings = []
 
     for posting in json['postings']:
@@ -116,59 +116,58 @@ def _add_transaction(json):
         raise FavaAPIException('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
-    transaction = data.Transaction(json['metadata'], date, json['flag'],
-                                   json['payee'], json['narration'], None,
-                                   None, postings)
-
-    g.ledger.file.insert_entry(transaction)
+    return data.Transaction(json['metadata'], date, json['flag'],
+                            json['payee'], json['narration'], None, None,
+                            postings)
 
 
-def _add_balance(json):
-    if json['account'] not in g.ledger.attributes.accounts:
-        raise FavaAPIException('Unknown account: {}.'.format(json['account']))
-    number = D(json['number'])
-    amount = Amount(number, json.get('currency'))
-    date = util.date.parse_date(json['date'])[0]
+def json_to_entry(json_entry):
+    """Parse JSON to a Beancount entry."""
+    if json_entry['type'] == 'transaction':
+        return json_to_transaction(json_entry)
+    elif json_entry['type'] == 'balance':
+        if json_entry['account'] not in g.ledger.attributes.accounts:
+            raise FavaAPIException(
+                'Unknown account: {}.'.format(json_entry['account']))
+        number = D(json_entry['number'])
+        amount = Amount(number, json_entry.get('currency'))
+        date = util.date.parse_date(json_entry['date'])[0]
 
-    balance = data.Balance(json['metadata'], date, json['account'], amount,
-                           None, None)
-    g.ledger.file.insert_entry(balance)
+        return data.Balance(json_entry['metadata'], date,
+                            json_entry['account'], amount, None, None)
+    elif json_entry['type'] == 'note':
+        if json_entry['account'] not in g.ledger.attributes.accounts:
+            raise FavaAPIException(
+                'Unknown account: {}.'.format(json_entry['account']))
+
+        if '"' in json_entry['comment']:
+            raise FavaAPIException('Note contains double-quotes (")')
+        date = util.date.parse_date(json_entry['date'])[0]
+
+        return data.Note(json_entry['metadata'], date, json_entry['account'],
+                         json_entry['comment'])
+    else:
+        raise FavaAPIException('Unsupported entry type.')
 
 
-def _add_note(json):
-    if json['account'] not in g.ledger.attributes.accounts:
-        raise FavaAPIException('Unknown account: {}.'.format(json['account']))
-
-    if '"' in json['comment']:
-        raise FavaAPIException('Note contains double-quotes (")')
-    date = util.date.parse_date(json['date'])[0]
-
-    note = data.Note(json['metadata'], date, json['account'], json['comment'])
-    g.ledger.file.insert_entry(note)
-
-
-@json_api.route('/add/transaction/', methods=['PUT'])
+@json_api.route('/add-transaction/', methods=['PUT'])
 def add_transaction():
     """Add a transaction."""
     json = request.get_json()
-    _add_transaction(json)
+    entry = json_to_transaction(json)
+    g.ledger.file.insert_entry(entry)
     return _api_success(message='Stored transaction.')
 
 
-@json_api.route('/add/entries/', methods=['PUT'])
+@json_api.route('/add-entries/', methods=['PUT'])
 def add_entries():
-    """Add many entries."""
+    """Add multiple entries."""
     json = request.get_json()
 
-    for entry in json['entries']:
-        if entry['type'] == 'transaction':
-            _add_transaction(entry)
-        elif entry['type'] == 'balance':
-            _add_balance(entry)
-        elif entry['type'] == 'note':
-            _add_note(entry)
-        else:
-            raise FavaAPIException('Unsupported entry type.')
+    entries = map(json_to_entry, json['entries'])
+
+    for entry in entries:
+        g.ledger.file.insert_entry(entry)
 
     return _api_success(
         message='Stored {} entries.'.format(len(json['entries'])))
