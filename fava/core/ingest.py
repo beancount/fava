@@ -2,7 +2,6 @@
 
 import os
 import runpy
-import tempfile
 from collections import namedtuple
 
 from beancount.core import data

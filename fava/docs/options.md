@@ -178,19 +178,19 @@ If there has been no activity in given number of days since the last balance
 entry, then the grey uptodate-indicator is shown.
 
 ---
- 
+
 ## `incognito`
- 
+
 Default: `false`
- 
+
 If set to `true` all digits will be replaced with "X".
 
 ---
- 
+
 ## `ingest-config`
- 
+
 Default: Not set
- 
+
 Path to a Beancount import configuration file. See the [Import]({{
 url_for('help_page', page_slug='import') }}) help page for details.
 

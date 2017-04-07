@@ -12,7 +12,6 @@ from beancount.scripts.format import align_beancount
 from fava import util
 from fava.core.helpers import FavaAPIException
 
-
 json_api = Blueprint('json_api', __name__)  # pylint: disable=invalid-name
 
 
@@ -80,11 +79,11 @@ def add_document():
         raise FavaAPIException('Not a documents folder: {}.'
                                .format(documents_folder))
 
-    filepath = os.path.normpath(os.path.join(
-        os.path.dirname(g.ledger.beancount_file_path),
-        documents_folder,
-        request.form['account'].replace(':', '/'),
-        secure_filename(request.form['filename']).replace('_', ' ')))
+    filepath = os.path.normpath(
+        os.path.join(
+            os.path.dirname(g.ledger.beancount_file_path), documents_folder,
+            request.form['account'].replace(':', '/'),
+            secure_filename(request.form['filename']).replace('_', ' ')))
 
     directory = os.path.dirname(filepath)
     if not os.path.exists(directory):
@@ -96,8 +95,7 @@ def add_document():
     file.save(filepath)
 
     if request.form.get('entry_hash'):
-        g.ledger.file.insert_metadata(request.form['entry_hash'],
-                                      'statement',
+        g.ledger.file.insert_metadata(request.form['entry_hash'], 'statement',
                                       os.path.basename(filepath))
     return _api_success(message='Uploaded to {}'.format(filepath))
 
@@ -111,16 +109,16 @@ def _add_transaction(json):
                               .format(posting['account']))
         number = D(posting['number']) if posting['number'] else None
         amount = Amount(number, posting.get('currency'))
-        postings.append(data.Posting(posting['account'], amount,
-                        None, None, None, None))
+        postings.append(
+            data.Posting(posting['account'], amount, None, None, None, None))
 
     if not postings:
         return _api_error('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
-    transaction = data.Transaction(
-        json['metadata'], date, json['flag'], json['payee'],
-        json['narration'], None, None, postings)
+    transaction = data.Transaction(json['metadata'], date, json['flag'],
+                                   json['payee'], json['narration'], None,
+                                   None, postings)
 
     g.ledger.file.insert_entry(transaction)
 
