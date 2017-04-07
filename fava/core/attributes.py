@@ -1,67 +1,11 @@
-import collections
-import math
+"""Attributes for auto-completion."""
 
 from beancount.core import getters, realization
 from beancount.core.data import Transaction
 from beancount.utils.misc_utils import filter_type
 
 from fava.core.helpers import FavaModule
-
-
-class ExponentialDecayRanker(object):
-    """Rank a list by exponential decay.
-
-    Maintains scores for the items in a list. We can think of this as the sum
-    of all 'likes', where the value of a 'like' starts at 1 and decays
-    exponentially. So the current score would be given by (where `t` is the
-    current time and `l` is the time of the 'like')
-
-        s = Σ exp(-RATE * (t - l))
-
-    As only the relative order on the items is relevant, we can multiply all
-    scores by exp(RATE * t) and so we need to compute the following
-    score:
-
-        s = Σ exp(RATE * l)
-
-    To avoid huge numbers, we actually compute and store the logarithm of that
-    sum. The rate is set so that a 'like' from a year ago will count half as
-    much as one from today.
-
-    Args:
-        list_: If given, this list is ranked is by ``.sort()`` otherwise all
-               items with at least one 'like' will be ranked.
-    """
-
-    _RATE = math.log(2) * 1/365
-
-    def __init__(self, list_=None):
-        self.list = list_
-        # We don't need to start with float('-inf') here as only the relative
-        # scores matter.
-        self.scores = collections.defaultdict(float)
-
-    def update(self, item, date):
-        """Add 'like' for item.
-
-        Args:
-            item: An item in the list that is being ranked.
-            date: The date on which the item has been liked.
-        """
-        score = self.scores[item]
-        time_ = date.toordinal()
-        higher = max(score, time_ * self._RATE)
-        lower = min(score, time_ * self._RATE)
-        self.scores[item] = higher + math.log1p(math.exp(lower-higher))
-
-    def _key(self, item):
-        return self.scores.get(item, float())
-
-    def sort(self):
-        """Return items sorted by rank."""
-        if self.list is None:
-            return sorted(self.scores.keys(), key=self._key, reverse=True)
-        return sorted(self.list, key=self._key, reverse=True)
+from fava.util.ranking import ExponentialDecayRanker
 
 
 class AttributesModule(FavaModule):

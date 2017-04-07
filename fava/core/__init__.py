@@ -34,9 +34,9 @@ from fava.core.watcher import Watcher
 from fava.ext import find_extensions
 
 
-# pylint: disable=too-few-public-methods
 class ExtensionModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
+    # pylint: disable=too-few-public-methods, missing-docstring
 
     def __init__(self, ledger):
         super().__init__(ledger)
@@ -286,6 +286,7 @@ class FavaLedger():
                                                  account_name)
 
         if with_journal_children:
+            # pylint: disable=unused-variable
             postings = realization.get_postings(real_account)
         else:
             postings = real_account.txn_postings

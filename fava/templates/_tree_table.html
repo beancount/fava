@@ -114,10 +114,11 @@
     {% for begin_date, end_date in dates %}
         {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
         {% set budget = ledger.budgets.calculate(account.account, begin_date, end_date) %}
+        {% set budget_children = ledger.budgets.calculate_children(account.account, begin_date, end_date) %}
         {% set current_account = interval_balances[loop.index0]|get_or_create(account.account) %}
         {% set balance = current_account.balance|cost_or_value(end_date) %}
         {% set balance_children = current_account|balance_children|cost_or_value(end_date) %}
-        <span class="num other{{ ' has-balance' if not balance.is_empty() else '' }}">
+        <span class="num other{{ ' has-balance' if (budget or not balance.is_empty()) else '' }}">
             <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
             {% for pos in balance %}
                 <span class="balance">
@@ -127,14 +128,24 @@
             {% endfor %}
             {% if budget %}
               {% for currency, number in budget.items() if currency not in balance.currencies() %}
+                <span class="balance">
                 {{ render_budget(budget, currency) }}
+                </span>
               {% endfor %}
             {% endif %}
             {% for pos in balance_children %}
                 <span class="balance-children">
+                    {{ render_budget(budget_children, pos.units.currency, pos.units.number) }}
                     <span class="number">{{ pos.units|format_amount }}</span>
                 </span>
             {% endfor %}
+            {% if budget_children %}
+              {% for currency, number in budget_children.items() if currency not in balance_children.currencies() %}
+                <span class="balance-children">
+                {{ render_budget(budget_children, currency) }}
+                </span>
+              {% endfor %}
+            {% endif %}
             </a>
         </span>
     {% endfor %}

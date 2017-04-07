@@ -1,3 +1,6 @@
+"""Exceptions and module base class."""
+
+
 class FavaAPIException(Exception):
     """Fava's base exception class."""
 
@@ -20,9 +23,12 @@ class FilterException(FavaAPIException):
         return self.message
 
 
-class FavaModule(object):
+class FavaModule(object):  # pylint: disable=too-few-public-methods
+    """Base class for the "modules" of FavaLedger."""
+
     def __init__(self, ledger):
         self.ledger = ledger
 
     def load_file(self):
+        """Get's called when the file has been (re)loaded."""
         pass

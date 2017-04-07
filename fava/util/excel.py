@@ -1,3 +1,5 @@
+"""Writing query results to CSV and spreadsheet documents."""
+
 import csv
 from collections import OrderedDict
 import datetime
@@ -13,6 +15,17 @@ except ImportError:  # pragma: no cover
 
 
 def to_excel(types, rows, result_format, query_string):
+    """Save result to spreadsheet document.
+
+    Args:
+        types: query result_types.
+        rows: query result_rows.
+        result_format: One of 'xls', 'xlsx', or 'ods'.
+        query_string: The query string (is written to the document).
+
+    Returns:
+        The (binary) file contents.
+    """
     assert result_format in ('xls', 'xlsx', 'ods')
     resp = io.BytesIO()
     book = pyexcel.Book(OrderedDict([
@@ -25,6 +38,15 @@ def to_excel(types, rows, result_format, query_string):
 
 
 def to_csv(types, rows):
+    """Save result to CSV.
+
+    Args:
+        types: query result_types.
+        rows: query result_rows.
+
+    Returns:
+        The (binary) file contents.
+    """
     resp = io.StringIO()
     result_array = _result_array(types, rows)
     csv.writer(resp).writerows(result_array)

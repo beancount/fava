@@ -1,6 +1,6 @@
 from datetime import date
 
-from fava.core.attributes import ExponentialDecayRanker
+from fava.util.ranking import ExponentialDecayRanker
 
 
 def test_ranker():
