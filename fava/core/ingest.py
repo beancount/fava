@@ -20,7 +20,6 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = None
         self.ingest_dirs = []
-        self.uploaded_files = []
 
     def load_file(self):
         configpath = self.ledger.fava_options['ingest-config']
@@ -55,26 +54,10 @@ class IngestModule(FavaModule):
 
         return identified
 
-    def add_upload(self, file):
-        """Store the file in a temporary directory."""
-        new_file = os.path.join(tempfile.mkdtemp(), file.filename)
-        file.save(new_file)
-        self.uploaded_files.append(new_file)
-
-    def remove_upload(self, filepath):
-        """Remove filepath from disk."""
-        if filepath in self.uploaded_files:
-            os.remove(filepath)
-            self.uploaded_files.remove(filepath)
-
     def dirs_importers(self):
         """Return identified files and importers, grouped by directory."""
         return [(dir_, self._identify_importers(dir_))
                 for dir_ in self.ingest_dirs]
-
-    def uploads_importers(self):
-        """Return identified files and importers from uploads."""
-        return self._identify_importers(self.uploaded_files)
 
     def extract(self, filepath, importer_name):
         """Extract entries from filepath with the specified importer."""
@@ -84,7 +67,7 @@ class IngestModule(FavaModule):
         new_entries, duplicate_entries = extract.extract_from_file(
             filepath,
             importer,
-            existing_entries=self.ledger.entries,
+            existing_entries=self.ledger.all_entries,
             min_date=None,
             allow_none_for_tags_and_links=False)
 

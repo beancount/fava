@@ -295,23 +295,6 @@ def help_page(page_slug='_index'):
                            help_html=render_template_string(html))
 
 
-@app.route('/<bfile>/ingest/upload', methods=['POST'])
-def ingest_upload():
-    """Upload a file to ingest."""
-    if 'file' in request.files and request.files['file']:
-        file = request.files['file']
-        g.ledger.ingest.add_upload(file)
-    return redirect(url_for('report', report_name='ingest'))
-
-
-@app.route('/<bfile>/ingest/upload/delete')
-def ingest_delete():
-    """Delete an uploaded file."""
-    file = request.args.get('filename', None)
-    g.ledger.ingest.remove_upload(file)
-    return redirect(url_for('report', report_name='ingest'))
-
-
 @app.route('/<bfile>/ingest/extract/')
 def ingest_extract():
     """Extract entries to ingest."""

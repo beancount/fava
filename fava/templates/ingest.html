@@ -52,8 +52,7 @@
             </div>
         </form>
     {% else %}
-        {% set identified = ledger.ingest.dirs_importers() %}
-        {% for directory, files in identified %}
+        {% for directory, files in ledger.ingest.dirs_importers() %}
             <h3>{{ directory }}</h3>
             <table class="ingest-files">
                 <thead>
@@ -83,41 +82,5 @@
                 </tbody>
             </table>
         {% endfor %}
-        <h3>{{ _('Upload file') }}</h3>
-        {% set uploaded = ledger.ingest.uploads_importers() %}
-        {% if uploaded|length > 0 %}
-            <table class="ingest-files">
-                <thead>
-                    <tr>
-                        <th>{{ _('File') }}</th>
-                        <th>{{ _('Importer') }}</th>
-                        <th>{{ _('Account') }}</th>
-                        <th>{{ _('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for file in uploaded %}
-                        {% for importer in file.importers %}
-                            <tr>
-                                <td>
-                                    <pre title="{{ file.filename }}">{{ file.filename|basename }}</pre>
-                                    <input type="hidden" name="filename" value="{{ file.filename }}">
-                                </td>
-                                <td>{{ importer.name }}</td>
-                                <td>{{ account_macros.account_name(importer.account) }}</td>
-                                <td>
-                                    <button class="a inactive" title="{{ _('Delete') }} {{ file.filename }}" href="{{ url_for('ingest_delete') }}?filename={{ file.filename|e }}">{{ _('Delete') }}</button>
-                                    <button class="a" title="{{ _('Ingest') }} {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">{{ _('Extract') }}</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-        <form action="{{ url_for('ingest_upload') }}" method="post" enctype="multipart/form-data">
-            <input type="file" name="file">
-            <button type="submit">{{ _('Upload and identify') }}</button>
-        </form>
     {% endif %}
 {% endblock %}
