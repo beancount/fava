@@ -164,7 +164,7 @@ def add_entries():
     """Add multiple entries."""
     json = request.get_json()
 
-    entries = map(json_to_entry, json['entries'])
+    entries = list(map(json_to_entry, json['entries']))
 
     for entry in entries:
         g.ledger.file.insert_entry(entry)
