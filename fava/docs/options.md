@@ -191,17 +191,13 @@ If set to `true` all digits will be replaced with "X".
  
 Default: Not set
  
-Path to a Beancount ingest configuration file. See ["Importing External Data in
-Beancount"](http://furius.ca/beancount/doc/ingest) for more information on how
-to write importers.
+Path to a Beancount import configuration file. See the [Import]({{
+url_for('help_page', page_slug='import') }}) help page for details.
 
-Fava currently only supports entries of type `Transaction` and `Balance`. Set
-the special metadata key `__ingest_source__` to display the corresponding text
-(CSV-row, XML-fragment, etc.) for the entry in the list of entries to ingest.
+---
 
 ## `ingest-dirs`
 
 Default: Not set
 
-Set the directories to be scanned by the Beancount ingest mechanism. Used in
-concunction with `ingest-config`.
+Set the directories to be scanned by the Beancount import mechanism.
