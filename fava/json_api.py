@@ -105,15 +105,15 @@ def _add_transaction(json):
 
     for posting in json['postings']:
         if posting['account'] not in g.ledger.attributes.accounts:
-            return _api_error('Unknown account: {}.'
-                              .format(posting['account']))
+            raise FavaAPIException('Unknown account: {}.'
+                                   .format(posting['account']))
         number = D(posting['number']) if posting['number'] else None
         amount = Amount(number, posting.get('currency'))
         postings.append(
             data.Posting(posting['account'], amount, None, None, None, None))
 
     if not postings:
-        return _api_error('Transaction contains no postings.')
+        raise FavaAPIException('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
     transaction = data.Transaction(json['metadata'], date, json['flag'],
@@ -125,7 +125,7 @@ def _add_transaction(json):
 
 def _add_balance(json):
     if json['account'] not in g.ledger.attributes.accounts:
-        return _api_error('Unknown account: {}.'.format(json['account']))
+        raise FavaAPIException('Unknown account: {}.'.format(json['account']))
     number = D(json['number'])
     amount = Amount(number, json.get('currency'))
     date = util.date.parse_date(json['date'])[0]
@@ -137,10 +137,10 @@ def _add_balance(json):
 
 def _add_note(json):
     if json['account'] not in g.ledger.attributes.accounts:
-        return _api_error('Unknown account: {}.'.format(json['account']))
+        raise FavaAPIException('Unknown account: {}.'.format(json['account']))
 
     if '"' in json['comment']:
-        return _api_error('Note contains double-quotes (")')
+        raise FavaAPIException('Note contains double-quotes (")')
     date = util.date.parse_date(json['date'])[0]
 
     note = data.Note(json['metadata'], date, json['account'], json['comment'])
@@ -151,9 +151,7 @@ def _add_note(json):
 def add_transaction():
     """Add a transaction."""
     json = request.get_json()
-    result = _add_transaction(json)
-    if result:
-        return result
+    _add_transaction(json)
     return _api_success(message='Stored transaction.')
 
 
@@ -163,16 +161,14 @@ def add_entries():
     json = request.get_json()
 
     for entry in json['entries']:
-        result = None
         if entry['type'] == 'transaction':
-            result = _add_transaction(entry)
-        if entry['type'] == 'balance':
-            result = _add_balance(entry)
-        if entry['type'] == 'note':
-            result = _add_note(entry)
-
-        if result:
-            return result
+            _add_transaction(entry)
+        elif entry['type'] == 'balance':
+            _add_balance(entry)
+        elif entry['type'] == 'note':
+            _add_note(entry)
+        else:
+            raise FavaAPIException('Unsupported entry type.')
 
     return _api_success(
         message='Stored {} entries.'.format(len(json['entries'])))
