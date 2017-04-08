@@ -39,8 +39,8 @@ def changed():
 def source():
     """Read/write one of the source files."""
     if request.method == 'GET':
-        data = g.ledger.file.get_source(request.args.get('file_path'))
-        return _api_success(payload=data)
+        response = g.ledger.file.get_source(request.args.get('file_path'))
+        return _api_success(payload=response)
     elif request.method == 'PUT':
         if request.get_json() is None:
             abort(400)
@@ -101,6 +101,7 @@ def add_document():
 
 
 def json_to_transaction(json):
+    """Parse JSON to a Beancount transaction."""
     postings = []
 
     for posting in json['postings']:

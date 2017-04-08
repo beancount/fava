@@ -68,14 +68,14 @@ export default function initRouter() {
     loadURL(window.location.href, true);
   });
 
-  $.delegate(document, 'click', 'a, button.a', (event) => {
+  $.delegate(document, 'click', 'a', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
       return;
     }
-    const link = event.target.closest('a, .a');
+    const link = event.target.closest('a');
     let href = link.getAttribute('href');
 
-    const isHttp = href.indexOf('http') === 0;
+    const isHttp = link.protocol.indexOf('http') === 0;
     const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
     const isRemote = link.getAttribute('data-remote');
 

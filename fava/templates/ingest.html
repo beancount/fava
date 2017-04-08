@@ -74,7 +74,7 @@
                                 <td>{{ importer.name }}</td>
                                 <td>{{ account_macros.account_name(importer.account) }}</td>
                                 <td>
-                                    <button class="a" title="{{ _('Ingest') }} {{ file.filename }}" href="{{ url_for('ingest_extract') }}?filename={{ file.filename|e }}&importer={{ importer.name|e }}">{{ _('Extract') }}</button>
+                                    <a class="button" title="{{ _('Extract') }} {{ file.filename }}" href="{{ url_for('ingest_extract', filename=file.filename, importer=importer.name) }}">{{ _('Extract') }}</button>
                                 </td>
                             </tr>
                         {% endfor %}

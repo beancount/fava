@@ -187,7 +187,8 @@ input[type='text'] {
   }
 }
 
-button {
+button,
+.button {
   background-color: var(--color-header);
   border: 0;
   color: var(--color-background);
@@ -229,6 +230,12 @@ button {
     }
   }
 }
+
+.button:link,
+.button:visited {
+  color: var(--color-background);
+}
+
 
 .hidden {
   display: none;

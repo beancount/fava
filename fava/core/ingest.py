@@ -63,14 +63,9 @@ class IngestModule(FavaModule):
         importer = next(
             imp for imp in self.config if imp.name() == importer_name)
 
-        new_entries, duplicate_entries = extract.extract_from_file(
+        new_entries, _ = extract.extract_from_file(
             filepath,
             importer,
-            existing_entries=self.ledger.all_entries,
-            min_date=None,
-            allow_none_for_tags_and_links=False)
+            existing_entries=self.ledger.all_entries)
 
-        entries = new_entries + duplicate_entries
-        # TODO mark duplicates
-        entries.sort(key=data.entry_sortkey)
-        return entries
+        return new_entries
