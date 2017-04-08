@@ -1,9 +1,6 @@
 .entry-form {
-  & input {
-    &[name='date'] {
-      margin-left: 0;
-      width: 150px;
-    }
+  & input[name='date'] {
+    margin-left: 0;
   }
 
   & textarea {

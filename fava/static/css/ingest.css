@@ -3,12 +3,6 @@
     font-size: .9em;
     margin: 0;
   }
-
-  & button {
-    &:first-child {
-      margin-left: 0;
-    }
-  }
 }
 
 .ingest-actions {
@@ -43,37 +37,19 @@
 
   & .form {
     min-width: 600px;
+  }
 
-    & input {
-      &[type='date'] {
-        &::-webkit-clear-button {
-          -webkit-appearance: none;
-          display: none;
-        }
+  & .fieldset {
+    display: flex;
+    padding: 0 10px 10px;
+  }
 
-        &::-webkit-inner-spin-button {
-          -webkit-appearance: none;
-          display: none;
-        }
-      }
-
-      &[name='date'] {
-        width: 110px;
-      }
-
-      &[name='payee'] {
-        width: 140px;
-      }
-    }
-
-    & .fieldset {
-      display: flex;
-      padding: 0 10px 10px;
-    }
+  & input[name='payee'] {
+    width: 140px;
   }
 
   & .actions {
-    min-width: 60px;
+    width: 60px;
 
     & .inner {
       min-width: 100px;
@@ -85,10 +61,6 @@
     & label {
       display: inline-block;
       font-size: .8em;
-    }
-
-    & input {
-      margin-right: 6px;
     }
   }
 

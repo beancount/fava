@@ -187,6 +187,20 @@ input[type='text'] {
   }
 }
 
+input[type='radio'] {
+  margin-right: 5px;
+}
+
+input[type='date'] {
+  width: 120px;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-clear-button {
+    -webkit-appearance: none;
+    display: none;
+  }
+}
+
 button,
 .button {
   background-color: var(--color-header);

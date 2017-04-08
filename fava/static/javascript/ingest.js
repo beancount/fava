@@ -100,6 +100,13 @@ function initExtract() {
     });
     event.target.classList.toggle('inactive');
   });
+
+  $('#toggle-source').addEventListener('click', () => {
+    $$('.ingest-row .source').forEach((element) => {
+      element.classList.toggle('hidden');
+    });
+    event.target.classList.toggle('inactive');
+  });
 }
 
 export default function initIngest() {

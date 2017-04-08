@@ -58,6 +58,7 @@ REPORTS = [
     'balance_sheet',
     'events',
     'errors',
+    'extract',
     'holdings',
     'income_statement',
     'journal',
@@ -297,15 +298,6 @@ def help_page(page_slug='_index'):
         'help.html',
         page_slug=page_slug,
         help_html=render_template_string(html))
-
-
-@app.route('/<bfile>/ingest/extract/')
-def ingest_extract():
-    """Extract entries to ingest."""
-    filename = request.args.get('filename')
-    importer_name = request.args.get('importer')
-    entries = g.ledger.ingest.extract(filename, importer_name)
-    return render_template('ingest.html', entries=entries, filename=filename)
 
 
 @app.route('/jump')

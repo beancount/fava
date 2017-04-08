@@ -5,82 +5,39 @@
 {% import 'macros/_entry_forms.html' as forms with context %}
 
 {% block content %}
-    {% if not ledger.fava_options['ingest-config'] %}
-        <p>
-            No importers configured. See <a href="{{ url_for('help_page', page_slug='options') }}">Help (Options)</a> for more information.
-        </p>
-    {% endif %}
-    {% if entries %}
-        <h3>{{ _('Ingest') }}{% if filename %} {{ filename }}{% endif %}</h3>
-        <form id="ingest-actions" class="ingest-actions">
-            <button type="button" id="toggle-ignore" title="{{ _('Toggle ignore') }}">{{ _('Toggle ignore') }}</button>
-        </form>
-        <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
-            <div class="ingest-row header">
-                <div class="line">{{ _('Line') }}</div>
-                <div class="source">{{ _('Source') }}</div>
-                <div class="form">{{ _('Entry') }}</div>
-                <div class="actions">{{ _('Actions') }}</div>
-            </div>
-        {% for entry in entries %}
-            {% set type = entry.__class__.__name__.lower() %}
-            <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
-                <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
-                <div class="source"><pre>{{ entry.meta.__ingest_source__ }}</pre></div>
-                <div class="form">
-                    {% if type == 'transaction' %}
-                        {{ forms.transaction(entry=entry) }}
-                    {% endif %}
-                    {% if type == 'balance' %}
-                        {{ forms.balance(entry=entry) }}
-                    {% endif %}
-                    {% if type == 'note' %}
-                        {{ forms.note(entry=entry) }}
-                    {% endif %}
-                </div>
-                <div class="actions">
-                    <div class="inner">
-                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="ignore">{{ _('Ignore') }}</label></div>
-                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label></div>
-                        <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label></div>
-                    </div>
-                </div>
-            </div>
+  {% if not ledger.fava_options['ingest-config'] %}
+    <p>
+    No importers configured. See <a href="{{ url_for('help_page', page_slug='options') }}">Help (Options)</a> for more information.
+    </p>
+  {% endif %}
+  {% for directory, files in ledger.ingest.dirs_importers() %}
+    <h3>{{ directory }}</h3>
+    <table class="ingest-files">
+      <thead>
+        <tr>
+          <th>{{ _('File') }}</th>
+          <th>{{ _('Importer') }}</th>
+          <th>{{ _('Account') }}</th>
+          <th>{{ _('Action') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in files %}
+          {% for importer in file.importers %}
+            <tr>
+              <td>
+                <pre title="{{ file.filename }}">{{ file.filename|basename }}</pre>
+                <input type="hidden" name="filename" value="{{ file.filename }}">
+              </td>
+              <td>{{ importer.name }}</td>
+              <td>{{ account_macros.account_name(importer.account) }}</td>
+              <td>
+                <a class="button" title="{{ _('Extract') }} {{ file.filename }}" href="{{ url_for('report', report_name='extract', filename=file.filename, importer=importer.name) }}">{{ _('Extract') }}</button>
+              </td>
+            </tr>
+          {% endfor %}
         {% endfor %}
-            <div class="fieldset ingest-footer">
-                <button type="submit" class="ingest-form-submit" data-url="{{ url_for('report', report_name='ingest') }}">{{ _('Import transactions') }}</button>
-            </div>
-        </form>
-    {% else %}
-        {% for directory, files in ledger.ingest.dirs_importers() %}
-            <h3>{{ directory }}</h3>
-            <table class="ingest-files">
-                <thead>
-                    <tr>
-                        <th>{{ _('File') }}</th>
-                        <th>{{ _('Importer') }}</th>
-                        <th>{{ _('Account') }}</th>
-                        <th>{{ _('Action') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for file in files %}
-                        {% for importer in file.importers %}
-                            <tr>
-                                <td>
-                                    <pre title="{{ file.filename }}">{{ file.filename|basename }}</pre>
-                                    <input type="hidden" name="filename" value="{{ file.filename }}">
-                                </td>
-                                <td>{{ importer.name }}</td>
-                                <td>{{ account_macros.account_name(importer.account) }}</td>
-                                <td>
-                                    <a class="button" title="{{ _('Extract') }} {{ file.filename }}" href="{{ url_for('ingest_extract', filename=file.filename, importer=importer.name) }}">{{ _('Extract') }}</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
-    {% endif %}
+      </tbody>
+    </table>
+  {% endfor %}
 {% endblock %}
