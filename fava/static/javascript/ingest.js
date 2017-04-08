@@ -80,18 +80,6 @@ function submitIngestForm() {
     });
 }
 
-function initIdentify() {
-  const files = $$('.ingest-files button');
-  if (!files) return;
-
-  files.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.preventDefault();
-      window.location = button.getAttribute('href');
-    });
-  });
-}
-
 function initExtract() {
   const ingest = $('.ingest-extract');
   if (!ingest) return;
@@ -106,15 +94,14 @@ function initExtract() {
   });
 
   $('#toggle-ignore').addEventListener('click', (event) => {
-    $$('.ingest-row input[value=ignore]').forEach((input) => {
+    const value = event.target.classList.contains('inactive') ? 'import' : 'ignore';
+    $$(`.ingest-row input[value=${value}]`).forEach((input) => {
       input.click();
     });
-    const button = event.target;
-    button.className = 'inactive';
+    event.target.classList.toggle('inactive');
   });
 }
 
 export default function initIngest() {
-  initIdentify();
   initExtract();
 }
