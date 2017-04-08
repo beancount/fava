@@ -151,15 +151,6 @@ def json_to_entry(json_entry):
         raise FavaAPIException('Unsupported entry type.')
 
 
-@json_api.route('/add-transaction/', methods=['PUT'])
-def add_transaction():
-    """Add a transaction."""
-    json = request.get_json()
-    entry = json_to_transaction(json)
-    g.ledger.file.insert_entry(entry)
-    return _api_success(message='Stored transaction.')
-
-
 @json_api.route('/add-entries/', methods=['PUT'])
 def add_entries():
     """Add multiple entries."""

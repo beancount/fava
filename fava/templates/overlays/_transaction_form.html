@@ -3,7 +3,7 @@
 <div id="transaction" class="transaction-overlay overlay-wrapper">
     <div class="overlay">
         <a href="#" class="close-overlay">({{ _('close') }})</a>
-        <form id="transaction-form" action="{{ url_for('json_api.add_transaction') }}">
+        <form id="transaction-form" action="{{ url_for('json_api.add_entries') }}">
             <h3>{{ _('New transaction') }}:</h3>
             {{ forms.transaction() }}
             <div class="fieldset">

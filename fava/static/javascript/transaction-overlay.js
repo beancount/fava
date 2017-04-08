@@ -3,7 +3,11 @@ import { $, handleJSON } from './helpers';
 import { initInput, addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
 
 function submitTransactionForm(form, successCallback) {
-  const jsonData = entryFormToJSON(form.querySelector('.entry-form'));
+  const jsonData = {
+    entries: [
+      entryFormToJSON(form.querySelector('.entry-form')),
+    ],
+  };
 
   $.fetch(form.getAttribute('action'), {
     method: 'PUT',
