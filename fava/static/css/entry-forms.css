@@ -131,7 +131,7 @@
   display: none;
 }
 
-.note-form {
+.entry-form.note {
   & label {
     &[for='comment'] {
       display: block;
@@ -145,7 +145,7 @@
   }
 }
 
-.balance-form {
+.entry-form.balance {
   & label {
     &[for='account'] {
       display: block;
@@ -155,8 +155,8 @@
   }
 }
 
-.balance-form,
-.note-form {
+.entry-form.balance,
+.entry-form.note {
   & .awesomplete {
     flex-grow: 1;
   }
