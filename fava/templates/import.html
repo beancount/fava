@@ -5,9 +5,9 @@
 {% import 'macros/_entry_forms.html' as forms with context %}
 
 {% block content %}
-  {% if not ledger.fava_options['ingest-config'] %}
+  {% if not ledger.fava_options['import-config'] %}
     <p>
-    No importers configured. See <a href="{{ url_for('help_page', page_slug='options') }}">Help (Options)</a> for more information.
+    No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
     </p>
   {% endif %}
   {% for directory, files in ledger.ingest.dirs_importers() %}

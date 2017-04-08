@@ -32,7 +32,7 @@
         </div>
         <div class="metadatas">
             {% if entry %}
-                {% set meta = entry.meta|remove_keys(['__duplicate__', '__ingest_source__', 'filename', 'lineno']) %}
+                {% set meta = entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno']) %}
                 {% for key, value in meta.items() %}
                     {{ metadata(key=key, value=value) }}
                 {% endfor %}
@@ -60,7 +60,7 @@
         </div>
         <div class="metadatas">
             {% if entry %}
-                {% set meta = entry.meta|remove_keys(['__duplicate__', '__ingest_source__', 'filename', 'lineno']) %}
+                {% set meta = entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno']) %}
                 {% for key, value in meta.items() %}
                     {{ metadata(key=key, value=value) }}
                 {% endfor %}
@@ -82,7 +82,7 @@
         </div>
         <div class="metadatas">
             {% if entry %}
-                {% set meta = entry.meta|remove_keys(['__duplicate__', '__ingest_source__', 'filename', 'lineno']) %}
+                {% set meta = entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno']) %}
                 {% for key, value in meta.items() %}
                     {{ metadata(key=key, value=value) }}
                 {% endfor %}

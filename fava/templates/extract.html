@@ -21,7 +21,7 @@
       {% set type = entry.__class__.__name__.lower() %}
       <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
         <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
-        <div class="source"><pre>{{ entry.meta['__ingest_source__'] }}</pre></div>
+        <div class="source"><pre>{{ entry.meta['__source__'] }}</pre></div>
         <div class="form">
           {% if type == 'transaction' %}
             {{ forms.transaction(entry=entry) }}

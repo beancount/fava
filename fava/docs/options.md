@@ -187,7 +187,7 @@ If set to `true` all digits will be replaced with "X".
 
 ---
 
-## `ingest-config`
+## `import-config`
 
 Default: Not set
 
@@ -196,7 +196,7 @@ url_for('help_page', page_slug='import') }}) help page for details.
 
 ---
 
-## `ingest-dirs`
+## `import-dirs`
 
 Default: Not set
 

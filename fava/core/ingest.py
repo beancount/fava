@@ -20,9 +20,9 @@ class IngestModule(FavaModule):
         self.ingest_dirs = []
 
     def load_file(self):
-        configpath = self.ledger.fava_options['ingest-config']
+        configpath = self.ledger.fava_options['import-config']
         if configpath:
-            self.ingest_dirs = self.ledger.fava_options['ingest-dirs']
+            self.ingest_dirs = self.ledger.fava_options['import-dirs']
 
             if not os.path.exists(configpath) or os.path.isdir(configpath):
                 error = IngestError(None, "File does not exist: '{}'".format(

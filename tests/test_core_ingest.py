@@ -10,8 +10,8 @@ def ingest_module(tmpdir):
     ingest_config.write('CONFIG = []')
 
     bcontent = """
-2017-01-01 custom "fava-option" "ingest-config" "{}"
-2017-01-01 custom "fava-option" "ingest-dirs" "{}"
+2017-01-01 custom "fava-option" "import-config" "{}"
+2017-01-01 custom "fava-option" "import-dirs" "{}"
     """.format(ingest_config, ingest_dirs)
     bfile = tmpdir.join('example_ingest.beancount')
     bfile.write(bcontent)

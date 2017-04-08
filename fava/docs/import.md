@@ -3,10 +3,10 @@ into your Beancount ledger. See [Importing External Data in
 Beancount](http://furius.ca/beancount/doc/ingest) for more information on how
 to write importers.
 
-Set the `ingest-config` option to point to your import config and set
-`ingest-dirs` to the directories that contain the files that you want to
+Set the `import-config` option to point to your import config and set
+`import-dirs` to the directories that contain the files that you want to
 import.
 
 Fava currently only supports entries of type `Transaction` and `Balance`. Set
-the special metadata key `__ingest_source__` to display the corresponding text
-(CSV-row, XML-fragment, etc.) for the entry in the list of entries to ingest.
+the special metadata key `__source__` to display the corresponding text
+(CSV-row, XML-fragment, etc.) for the entry in the list of entries to import.
