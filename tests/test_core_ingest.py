@@ -7,7 +7,7 @@ from fava.core import FavaLedger
 def ingest_module(tmpdir):
     ingest_dirs = tmpdir.mkdir('downloads')
     ingest_config = tmpdir.mkdir('importers').join('ingest.config')
-    ingest_config.write('CONFIG = []')
+    ingest_config.write('CONFIG = ["test"]')
 
     bcontent = """
 2017-01-01 custom "fava-option" "import-config" "{}"
@@ -21,8 +21,8 @@ def ingest_module(tmpdir):
 
 
 def test_ingest_config(ingest_module):
-    assert ingest_module.config is not None
+    assert ingest_module.config
 
 
 def test_ingest_noconfig(example_ledger):
-    assert example_ledger.ingest.config is None
+    assert not example_ledger.ingest.config

@@ -16,7 +16,7 @@ class IngestModule(FavaModule):
 
     def __init__(self, ledger):
         super().__init__(ledger)
-        self.config = None
+        self.config = []
         self.ingest_dirs = []
 
     def load_file(self):
