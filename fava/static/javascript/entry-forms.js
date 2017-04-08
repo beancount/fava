@@ -2,7 +2,6 @@ import Awesomplete from 'awesomplete';
 import fuzzy from 'fuzzyjs';
 
 import { $, $$, handleJSON } from './helpers';
-import e from './events';
 
 // These will be updated once a payee is set.
 const accountCompleters = [];
@@ -69,64 +68,38 @@ export function addMetadataRow(form) {
   return newMetadata;
 }
 
-export function submitTransactionForm(form, successCallback) {
-  const jsonData = {
-    date: form.querySelector('input[name=date]').value,
-    flag: form.querySelector('input[name=flag]').value,
-    payee: form.querySelector('input[name=payee]').value,
-    narration: form.querySelector('input[name=narration]').value,
-    metadata: {},
-    postings: [],
-    type: 'transaction',
-  };
+export function entryFormToJSON(form) {
+  const entryData = {};
+  entryData.type = form.getAttribute('data-type');
 
+  form.querySelector('.fieldset').querySelectorAll('input').forEach((input) => {
+    entryData[input.name] = input.value;
+  });
+
+  entryData.metadata = {};
   form.querySelectorAll('.metadata').forEach((metadata) => {
     const key = metadata.querySelector('input[name=metadata-key]').value;
-    const value = metadata.querySelector('input[name=metadata-value]').value;
-
     if (key) {
-      jsonData.metadata[key] = value;
+      entryData.metadata[key] = metadata.querySelector('input[name=metadata-value]').value;
     }
   });
 
-  form.querySelectorAll('.posting').forEach((posting) => {
-    const account = posting.querySelector('input[name=account]').value;
-    const number = posting.querySelector('input[name=number]').value;
-    const currency = posting.querySelector('input[name=currency]').value;
+  if (entryData.type === 'transaction') {
+    entryData.postings = [];
+    form.querySelectorAll('.posting').forEach((posting) => {
+      const account = posting.querySelector('input[name=account]').value;
 
-    if (account) {
-      jsonData.postings.push({
-        account,
-        number,
-        currency: number ? currency : '',
-      });
-    }
-  });
-
-  $.fetch(form.getAttribute('action'), {
-    method: 'PUT',
-    body: JSON.stringify(jsonData),
-    headers: { 'Content-Type': 'application/json' },
-  })
-    .then(handleJSON)
-    .then((data) => {
-      form.querySelectorAll('.metadata').forEach((el) => {
-        el.remove();
-      });
-      form.querySelectorAll('.posting').forEach((el) => {
-        el.remove();
-      });
-      addPostingRow(form);
-      addPostingRow(form);
-      form.querySelector('input[name="date"]').focus();
-      e.trigger('reload');
-      e.trigger('info', data.message);
-      if (successCallback) {
-        successCallback();
+      if (account) {
+        entryData.postings.push({
+          account,
+          number: posting.querySelector('input[name=number]').value,
+          currency: posting.querySelector('input[name=currency]').value,
+        });
       }
-    }, (error) => {
-      e.trigger('error', `Adding transcation failed: ${error}`);
     });
+  }
+
+  return entryData;
 }
 
 export default function initEntryForms() {

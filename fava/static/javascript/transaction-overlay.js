@@ -1,11 +1,40 @@
-import { $ } from './helpers';
-import { initInput, addPostingRow, addMetadataRow, submitTransactionForm } from './entry-forms';
+import e from './events';
+import { $, handleJSON } from './helpers';
+import { initInput, addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
+
+function submitTransactionForm(form, successCallback) {
+  const jsonData = entryFormToJSON(form.querySelector('.entry-form'));
+
+  $.fetch(form.getAttribute('action'), {
+    method: 'PUT',
+    body: JSON.stringify(jsonData),
+    headers: { 'Content-Type': 'application/json' },
+  })
+    .then(handleJSON)
+    .then((data) => {
+      form.querySelectorAll('.metadata').forEach((el) => {
+        el.remove();
+      });
+      form.querySelectorAll('.posting').forEach((el) => {
+        el.remove();
+      });
+      addPostingRow(form);
+      addPostingRow(form);
+      form.querySelector('input[name="date"]').focus();
+      e.trigger('reload');
+      e.trigger('info', data.message);
+      if (successCallback) {
+        successCallback();
+      }
+    }, (error) => {
+      e.trigger('error', `Adding transcation failed: ${error}`);
+    });
+}
 
 export default function initTransactionOverlay() {
   const form = $('#transaction #transaction-form');
   let initialized = false;
 
-  // TODO
   $('#add-transaction-button').addEventListener('click', () => {
     if (!initialized) {
       form.querySelectorAll('input').forEach((input) => {
@@ -22,8 +51,7 @@ export default function initTransactionOverlay() {
   form.querySelector('#transaction-form-submit').addEventListener('click', (event) => {
     event.preventDefault();
     submitTransactionForm(form, () => {
-      // TODO
-      form.querySelector('.transaction-form').classList.remove('shown');
+      $('#transaction').classList.remove('shown');
     });
   });
 
