@@ -125,5 +125,5 @@ def add_transaction():
         json['metadata'], date, json['flag'], json['payee'],
         json['narration'], None, None, postings)
 
-    g.ledger.file.insert_transaction(transaction)
+    g.ledger.file.insert_entry(transaction)
     return _api_success(message='Stored transaction.')

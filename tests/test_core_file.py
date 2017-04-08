@@ -5,8 +5,7 @@ from beancount.core import data, amount
 from beancount.core.number import D
 
 from fava.core.file import (next_key, leading_space, insert_metadata_in_file,
-                            find_insert_marker, insert_transaction,
-                            _render_transaction)
+                            find_insert_marker, insert_entry, _render_entry)
 
 
 def test_next_key():
@@ -87,7 +86,7 @@ def test_find_insert_marker(tmpdir):
     assert lineno == 2
 
 
-def test_insert_transaction(tmpdir):
+def test_insert_entry_transaction(tmpdir):
     file_content = dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
@@ -97,10 +96,11 @@ def test_insert_transaction(tmpdir):
     samplefile = tmpdir.mkdir('fava_util_file3').join('example.beancount')
     samplefile.write(file_content)
 
-    transaction = data.Transaction(
-        None, datetime.date(2016, 1, 1), '*', 'payee', 'narr', None, None, [])
+    transaction = data.Transaction(None,
+                                   datetime.date(2016, 1, 1), '*', 'payee',
+                                   'narr', None, None, [])
 
-    insert_transaction(transaction, [str(samplefile)])
+    insert_entry(transaction, [str(samplefile)])
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
@@ -112,18 +112,17 @@ def test_insert_transaction(tmpdir):
 
     postings = [
         data.Posting('Liabilities:US:Chase:Slate',
-                     amount.Amount(D('-10.00'), 'USD'),
-                     None, None, None, None),
+                     amount.Amount(D('-10.00'), 'USD'), None, None, None,
+                     None),
         data.Posting('Expenses:Food',
-                     amount.Amount(D('10.00'), 'USD'),
-                     None, None, None, None),
+                     amount.Amount(D('10.00'), 'USD'), None, None, None, None),
     ]
 
-    transaction = data.Transaction(
-        None, datetime.date(2016, 1, 1), '*',
-        'new payee', 'narr', None, None, postings)
+    transaction = data.Transaction(None,
+                                   datetime.date(2016, 1, 1), '*', 'new payee',
+                                   'narr', None, None, postings)
 
-    insert_transaction(transaction, [str(samplefile)])
+    insert_entry(transaction, [str(samplefile)])
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
@@ -138,49 +137,68 @@ def test_insert_transaction(tmpdir):
     """)
 
 
-def test__render_transaction():
+def test__render_entry_transaction():
     postings = [
         data.Posting('Liabilities:US:Chase:Slate',
-                     amount.Amount(D('-10.00'), 'USD'),
-                     None, None, None, None),
+                     amount.Amount(D('-10.00'), 'USD'), None, None, None,
+                     None),
         data.Posting('Expenses:Food',
-                     amount.Amount(None, None),
-                     None, None, None, None),
+                     amount.Amount(None, None), None, None, None, None),
     ]
 
-    transaction = data.Transaction(
-        None, datetime.date(2016, 1, 1), '*',
-        'new payee', 'narr', None, None, postings)
+    transaction = data.Transaction(None,
+                                   datetime.date(2016, 1, 1), '*', 'new payee',
+                                   'narr', None, None, postings)
 
-    assert '\n' + _render_transaction(transaction) == dedent("""
+    assert '\n' + _render_entry(transaction) == dedent("""
     2016-01-01 * "new payee" "narr"
         Liabilities:US:Chase:Slate                    -10.00 USD
         Expenses:Food""")
 
     postings = [
         data.Posting('Liabilities:US:Chase:Slate',
-                     amount.Amount(D('-10.00'), 'USD'),
-                     None, None, None, None),
+                     amount.Amount(D('-10.00'), 'USD'), None, None, None,
+                     None),
         data.Posting('Expenses:Food',
-                     amount.Amount(D('10.00'), 'USD'),
-                     None, None, None, None),
+                     amount.Amount(D('10.00'), 'USD'), None, None, None, None),
     ]
 
-    transaction = data.Transaction(
-        None, datetime.date(2016, 1, 1), '*',
-        'new payee', 'narr', None, None, postings)
+    transaction = data.Transaction(None,
+                                   datetime.date(2016, 1, 1), '*', 'new payee',
+                                   'narr', None, None, postings)
 
-    assert '\n' + _render_transaction(transaction) == dedent("""
+    assert '\n' + _render_entry(transaction) == dedent("""
     2016-01-01 * "new payee" "narr"
         Liabilities:US:Chase:Slate                    -10.00 USD
         Expenses:Food                                  10.00 USD""")
 
-    transaction = data.Transaction(
-        {'foo': 'bar'}, datetime.date(2016, 1, 1), '*',
-        'new payee', 'narr', None, None, postings)
+    transaction = data.Transaction({
+        'foo': 'bar'
+    },
+                                   datetime.date(2016, 1, 1), '*', 'new payee',
+                                   'narr', None, None, postings)
 
-    assert '\n' + _render_transaction(transaction) == dedent("""
+    assert '\n' + _render_entry(transaction) == dedent("""
     2016-01-01 * "new payee" "narr"
         foo: "bar"
         Liabilities:US:Chase:Slate                    -10.00 USD
         Expenses:Food                                  10.00 USD""")
+
+
+def test__render_balance():
+    balance = data.Balance(None,
+                           datetime.date(2016, 1, 1),
+                           'Liabilities:US:Chase:Slate',
+                           amount.Amount(D('-10.00'), 'USD'), None, None)
+
+    assert _render_entry(
+        balance) == '2016-01-01 balance Liabilities:US:Chase:Slate -10.00 USD'
+
+
+def test__render_note():
+    note = data.Note(None,
+                     datetime.date(2016, 1, 1), 'Liabilities:US:Chase:Slate',
+                     'Hello World')
+
+    assert _render_entry(
+        note) == '2016-01-01 note Liabilities:US:Chase:Slate "Hello World"'

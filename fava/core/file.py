@@ -2,6 +2,8 @@
 
 import os
 
+from beancount.core import data
+
 from fava.core.helpers import FavaAPIException, FavaModule
 
 
@@ -76,16 +78,15 @@ class FileModule(FavaModule):
         self.ledger.extensions.run_hook('after_insert_metadata', entry, key,
                                         value)
 
-    def insert_transaction(self, transaction):
-        """Insert a transaction.
+    def insert_entry(self, entry):
+        """Insert an entry.
 
         Args:
-            transaction: A Transaction.
+            transaction: An entry.
 
         """
-        insert_transaction(transaction, self.list_sources())
-        self.ledger.extensions.run_hook('after_insert_transaction',
-                                        transaction)
+        insert_entry(entry, self.list_sources())
+        self.ledger.extensions.run_hook('after_insert_entry', entry)
 
 
 def next_key(basekey, keys):
@@ -124,16 +125,16 @@ def insert_metadata_in_file(filename, lineno, key, value):
         file.write(contents)
 
 
-def insert_transaction(transaction, filenames):
-    """Insert a transaction.
+def insert_entry(entry, filenames):
+    """Insert an entry
 
     Args:
-        transaction: A Transaction.
+        entry: An entry.
         filenames: List of filenames.
 
     """
     filename, lineno = find_insert_marker(filenames)
-    content = _render_transaction(transaction)
+    content = _render_entry(entry)
 
     with open(filename, "r") as file:
         contents = file.readlines()
@@ -144,34 +145,53 @@ def insert_transaction(transaction, filenames):
         file.writelines(contents)
 
 
-def _render_transaction(transaction):
-    """Render out a transaction as string.
+def _render_entry(entry):
+    """Render out an entry as string.
+
+    Currently supported are Transaction, Balance and Note.
 
     Args:
-        transaction: A Transaction.
+        entry: An entry.
 
     Returns:
-        A string containing the transaction in Beancount's format.
+        A string containing the entry in Beancount's format.
 
+    Raises:
+        FavaAPIException: If the type of entry is not one of Transaction,
+            Balance or Note.
     """
-    lines = ['{} {} "{}" "{}"'.format(
-        transaction.date, transaction.flag, transaction.payee,
-        transaction.narration)]
+    if isinstance(entry, data.Transaction):
+        lines = ['{} {} "{}" "{}"'.format(
+            entry.date, entry.flag, entry.payee,
+            entry.narration)]
 
-    if transaction.meta and len(transaction.meta.keys()) > 0:
-        for key, value in transaction.meta.items():
-            lines.append('    {}: "{}"'.format(key, value))
+        if entry.meta and len(entry.meta.keys()) > 0:
+            for key, value in entry.meta.items():
+                lines.append('    {}: "{}"'.format(key, value))
 
-    for posting in transaction.postings:
-        line = '    {}'.format(posting.account)
-        if posting.units.number or posting.units.currency:
-            number_length = str(posting.units.number).find('.')
-            line += ' ' * max(49 - len(posting.account) - number_length, 2)
-            line += '{} {}'.format(posting.units.number or '',
-                                   posting.units.currency or '')
-        lines.append(line)
+        for posting in entry.postings:
+            line = '    {}'.format(posting.account)
+            if posting.units.number or posting.units.currency:
+                number_length = str(posting.units.number).find('.')
+                line += ' ' * max(49 - len(posting.account) - number_length, 2)
+                line += '{} {}'.format(posting.units.number or '',
+                                       posting.units.currency or '')
+            lines.append(line)
 
-    return '\n'.join(lines)
+        return '\n'.join(lines)
+
+    if isinstance(entry, data.Balance):
+        return '{} balance {} {} {}'.format(
+            entry.date, entry.account, entry.amount.number,
+            entry.amount.currency)
+
+    if isinstance(entry, data.Note):
+        return '{} note {} "{}"'.format(
+            entry.date, entry.account, entry.comment)
+
+    raise FavaAPIException(
+        'Rendering entries of type {} is not implemented.'.format(
+            entry.__class__.__name__))
 
 
 def find_insert_marker(filenames):
