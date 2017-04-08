@@ -129,46 +129,24 @@ export function submitTransactionForm(form, successCallback) {
     });
 }
 
-function initTransactionForm(form) {
-  form.querySelectorAll('input').forEach((input) => {
-    initInput(input);
-  });
-
-  $.delegate(form, 'click', '.add-posting', (event) => {
-    event.preventDefault();
-    const newPosting = addPostingRow(form);
-    newPosting.querySelector('.account').focus();
-  });
-
-  $.delegate(form, 'click', '.add-metadata', (event) => {
-    event.preventDefault();
-    const newMetadata = addMetadataRow(form);
-    newMetadata.querySelector('.metadata-key').focus();
-  });
-}
-
-function initBalanceForm(form) {
-  form.querySelectorAll('input').forEach((input) => {
-    initInput(input);
-  });
-}
-
-function initNoteForm(form) {
-  form.querySelectorAll('input').forEach((input) => {
-    initInput(input);
-  });
-}
-
 export default function initEntryForms() {
-  $$('.transaction-form').forEach((el) => {
-    initTransactionForm(el);
-  });
+  $$('.entry-form').forEach((form) => {
+    form.querySelectorAll('input').forEach((input) => {
+      initInput(input);
+    });
 
-  $$('.balance-form').forEach((el) => {
-    initBalanceForm(el);
-  });
+    if (form.classList.contains('transaction')) {
+      $.delegate(form, 'click', '.add-posting', (event) => {
+        event.preventDefault();
+        const newPosting = addPostingRow(form);
+        newPosting.querySelector('.account').focus();
+      });
 
-  $$('.note-form').forEach((el) => {
-    initNoteForm(el);
+      $.delegate(form, 'click', '.add-metadata', (event) => {
+        event.preventDefault();
+        const newMetadata = addMetadataRow(form);
+        newMetadata.querySelector('.metadata-key').focus();
+      });
+    }
   });
 }

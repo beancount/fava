@@ -31,13 +31,13 @@
             {{ forms.note(entry=entry) }}
           {% endif %}
         </div>
-        <div class="actions">
-          <div class="inner">
-            <label><input type="radio" value="ignore">{{ _('Ignore') }}</label>
-            <label><input type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label>
-            <label><input type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label>
+          <div class="actions">
+            <div class="inner">
+              <label><input name="action-{{ loop.index }}" type="radio" value="ignore">{{ _('Ignore') }}</label>
+              <label><input name="action-{{ loop.index }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label>
+              <label><input name="action-{{ loop.index }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label>
+            </div>
           </div>
-        </div>
       </div>
     {% endfor %}
     <div class="fieldset ingest-footer">

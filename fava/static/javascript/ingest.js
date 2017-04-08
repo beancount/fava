@@ -1,19 +1,11 @@
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
-function initRow(row) {
-  row.querySelectorAll('.action input').forEach((el) => {
-    el.addEventListener('click', () => {
-      row.className = `ingest-row ${el.value}`; // eslint-disable-line no-param-reassign
-    });
-  });
-}
-
 function submitIngestForm() {
   const form = $('.ingest-extract');
   const jsonData = { entries: [] };
 
-  form.querySelectorAll('.ingest-row.import .transaction-form').forEach((transaction) => {
+  form.querySelectorAll('.ingest-row.import .entry-form.transaction').forEach((transaction) => {
     const transactionData = {
       date: transaction.querySelector('input[name=date]').value,
       flag: transaction.querySelector('input[name=flag]').value,
@@ -41,7 +33,7 @@ function submitIngestForm() {
     jsonData.entries.push(transactionData);
   });
 
-  form.querySelectorAll('.ingest-row.import .balance-form').forEach((balance) => {
+  form.querySelectorAll('.ingest-row.import .entry-form.balance').forEach((balance) => {
     const balanceData = {
       date: balance.querySelector('input[name=date]').value,
       account: balance.querySelector('input[name=account]').value,
@@ -54,7 +46,7 @@ function submitIngestForm() {
     jsonData.entries.push(balanceData);
   });
 
-  form.querySelectorAll('.ingest-row.import .note-form').forEach((balance) => {
+  form.querySelectorAll('.ingest-row.import .entry-form.note').forEach((balance) => {
     const noteData = {
       date: balance.querySelector('input[name=date]').value,
       account: balance.querySelector('input[name=account]').value,
@@ -84,8 +76,9 @@ function initExtract() {
   const ingest = $('.ingest-extract');
   if (!ingest) return;
 
-  $$('.ingest-row').forEach((row) => {
-    initRow(row);
+  $.delegate(ingest, 'click', '.actions input', (event) => {
+    const input = event.target;
+    input.closest('.ingest-row').className = `ingest-row ${input.value}`;
   });
 
   ingest.querySelector('.ingest-form-submit').addEventListener('click', (event) => {

@@ -19,7 +19,7 @@
   }
 }
 
-.transaction-form {
+.entry-form.transaction {
   & .awesomplete {
     & input {
       width: 100%;
@@ -169,7 +169,7 @@
 }
 
 @media (max-width: 767px) {
-  .transaction-form {
+  .entry-form.transaction {
     & label {
       display: block;
       margin-top: 0;
