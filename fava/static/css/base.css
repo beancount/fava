@@ -168,6 +168,7 @@ pre {
 
 /* fake fieldsets to work around browser bugs with <fieldset> */
 .fieldset {
+  display: flex;
   padding: 5px 10px;
 }
 

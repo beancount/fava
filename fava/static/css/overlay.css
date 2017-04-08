@@ -64,7 +64,6 @@
   }
 
   & .fieldset {
-    display: flex;
     margin-bottom: .5em;
     padding: 0;
 

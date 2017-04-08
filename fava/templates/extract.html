@@ -1,17 +1,15 @@
 {% extends "_layout.html" %}
-{% set active_page = 'ingest' %}
+{% set active_page = 'import' %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% import 'macros/_entry_forms.html' as forms with context %}
 
-{% set entries = g.ledger.ingest.extract(request.args.get('filename'), request.args.get('importer')) %}
-
 {% block content %}
-  <h3>{{ _('Ingest') }} {{ request.args.get('filename') }}</h3>
-  <form id="ingest-actions" class="ingest-actions">
-    <button type="button" id="toggle-source" title="{{ _('Toggle source') }}">{{ _('Toggle source') }}</button>
-    <button type="button" id="toggle-ignore" title="{{ _('Toggle ignore') }}">{{ _('Toggle ignore') }}</button>
-  </form>
+  <h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
+  <div class="ingest-actions">
+    <button type="button" id="toggle-source">{{ _('Toggle source') }}</button>
+    <button type="button" id="toggle-ignore">{{ _('Toggle ignore') }}</button>
+  </div>
   <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
     <div class="ingest-row header">
       <div class="line">{{ _('Line') }}</div>
@@ -19,29 +17,27 @@
       <div class="form">{{ _('Entry') }}</div>
       <div class="actions">{{ _('Actions') }}</div>
     </div>
-    {% for entry in entries %}
+    {% for entry in g.ledger.ingest.extract(request.args.get('filename'), request.args.get('importer')) %}
       {% set type = entry.__class__.__name__.lower() %}
       <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
         <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
-        <div class="source"><pre>{{ entry.meta.__ingest_source__ }}</pre></div>
-          <div class="form">
-            {% if type == 'transaction' %}
-              {{ forms.transaction(entry=entry) }}
-            {% endif %}
-            {% if type == 'balance' %}
-              {{ forms.balance(entry=entry) }}
-            {% endif %}
-            {% if type == 'note' %}
-              {{ forms.note(entry=entry) }}
-            {% endif %}
+        <div class="source"><pre>{{ entry.meta['__ingest_source__'] }}</pre></div>
+        <div class="form">
+          {% if type == 'transaction' %}
+            {{ forms.transaction(entry=entry) }}
+          {% elif type == 'balance' %}
+            {{ forms.balance(entry=entry) }}
+          {% elif type == 'note' %}
+            {{ forms.note(entry=entry) }}
+          {% endif %}
+        </div>
+        <div class="actions">
+          <div class="inner">
+            <label><input type="radio" value="ignore">{{ _('Ignore') }}</label>
+            <label><input type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label>
+            <label><input type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label>
           </div>
-          <div class="actions">
-            <div class="inner">
-              <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="ignore">{{ _('Ignore') }}</label></div>
-              <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label></div>
-              <div class="action"><label><input name="action-{{ entry.meta.lineno }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label></div>
-            </div>
-          </div>
+        </div>
       </div>
     {% endfor %}
     <div class="fieldset ingest-footer">

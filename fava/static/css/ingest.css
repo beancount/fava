@@ -16,10 +16,6 @@
   display: flex;
   padding: 10px 0;
 
-  &:not(.header) {
-    min-height: 90px;
-  }
-
   & .line {
     line-height: 28px;
     min-width: 40px;
@@ -36,11 +32,11 @@
   }
 
   & .form {
+    flex-shrink: 0;
     min-width: 600px;
   }
 
   & .fieldset {
-    display: flex;
     padding: 0 10px 10px;
   }
 
@@ -93,9 +89,4 @@
 
 .ingest-footer {
   margin-top: 10px;
-  padding-left: 0;
-
-  & button {
-    margin-left: 0;
-  }
 }

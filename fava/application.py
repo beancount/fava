@@ -56,19 +56,19 @@ app.config['LEDGERS'] = {}
 REPORTS = [
     '_aside',
     'balance_sheet',
+    'commodities',
     'events',
+    'editor',
     'errors',
     'extract',
     'holdings',
+    'import',
     'income_statement',
     'journal',
     'options',
-    'statistics',
-    'commodities',
-    'editor',
-    'trial_balance',
     'query',
-    'ingest',
+    'statistics',
+    'trial_balance',
 ]
 
 
