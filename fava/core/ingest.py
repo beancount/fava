@@ -4,7 +4,6 @@ import os
 import runpy
 from collections import namedtuple
 
-from beancount.core import data
 from beancount.ingest import identify, cache, extract
 
 from fava.core.helpers import FavaModule
