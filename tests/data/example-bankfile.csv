@@ -1,0 +1,3 @@
+IBAN;Auszugsnummer;Buchungsdatum;Valutadatum;Umsatzzeit;Zahlungsreferenz;Waehrung;Betrag;Buchungstext;Umsatztext
+ATXYZ123400000;1;2017-02-14;2017-02-14;2017-02-14-11.57.44.235044;"";EUR;-100,00;"Bankomat";" BANKOMAT  00000483 K2 UM 11:56"
+ATXYZ123400000;1;2017-02-13;2017-02-13;2017-02-13-11.12.14.754647;"";EUR;-50,00;"SEPA-Lastschrift";"Payment to Company XYZ REF: 31000161205-6944556-0000463"
