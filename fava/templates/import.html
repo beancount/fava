@@ -10,7 +10,7 @@
     No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
     </p>
   {% endif %}
-  {% for directory, files in ledger.ingest.dirs_importers() %}
+  {% for directory in ledger.fava_options['import-dirs'] %}
     <h3>{{ directory }}</h3>
     <table class="ingest-files">
       <thead>
@@ -22,17 +22,17 @@
         </tr>
       </thead>
       <tbody>
-        {% for file in files %}
-          {% for importer in file.importers %}
+        {% for filename, importers in ledger.ingest.identify_directory(directory) %}
+          {% for importer  in importers %}
             <tr>
               <td>
-                <pre title="{{ file.filename }}">{{ file.filename|basename }}</pre>
-                <input type="hidden" name="filename" value="{{ file.filename }}">
+                <pre title="{{ filename }}">{{ filename|basename }}</pre>
+                <input type="hidden" name="filename" value="{{ filename }}">
               </td>
-              <td>{{ importer.name }}</td>
-              <td>{{ account_macros.account_name(importer.account) }}</td>
+              <td>{{ importer.name() }}</td>
+              <td>{{ account_macros.account_name(importer.file_account(filename)) }}</td>
               <td>
-                <a class="button" title="{{ _('Extract') }} {{ file.filename }}" href="{{ url_for('report', report_name='extract', filename=file.filename, importer=importer.name) }}">{{ _('Extract') }}</button>
+                <a class="button" title="{{ _('Extract') }} {{ filename }}" href="{{ url_for('report', report_name='extract', filename=filename, importer=importer.name()) }}">{{ _('Extract') }}</button>
               </td>
             </tr>
           {% endfor %}

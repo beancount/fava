@@ -1,10 +1,11 @@
 """Ingest helper functions."""
 
+import operator
 import os
 import runpy
 from collections import namedtuple
 
-from beancount.ingest import identify, cache, extract
+from beancount.ingest import identify, extract
 
 from fava.core.helpers import FavaModule
 
@@ -17,54 +18,49 @@ class IngestModule(FavaModule):
     def __init__(self, ledger):
         super().__init__(ledger)
         self.config = []
-        self.ingest_dirs = []
 
     def load_file(self):
-        configpath = self.ledger.fava_options['import-config']
-        if configpath:
-            self.ingest_dirs = self.ledger.fava_options['import-dirs']
+        if self.ledger.fava_options['import-config']:
+            full_path = os.path.normpath(
+                os.path.join(
+                    os.path.dirname(self.ledger.beancount_file_path),
+                    self.ledger.fava_options['import-config']))
 
-            if not os.path.exists(configpath) or os.path.isdir(configpath):
-                error = IngestError(None, "File does not exist: '{}'".format(
-                    configpath), None)
+            if not os.path.exists(full_path) or os.path.isdir(full_path):
+                error = IngestError(
+                    None, "File does not exist: '{}'".format(full_path), None)
                 self.ledger.errors.append(error)
+            else:
+                mod = runpy.run_path(full_path)
+                self.config = mod['CONFIG']
 
-            mod = runpy.run_path(configpath)
-            self.config = mod['CONFIG']
+    def identify_directory(self, directory):
+        """Identify files and importers for a given directory.
 
-    def _identify_importers(self, file_or_dir):
-        """Identify possible importers for the specified file or directory."""
+        Args:
+            directory: The directory to search (relative to Beancount file).
+
+        Returns:
+            Tuples of filenames and lists of matching importers.
+        """
         if not self.config:
             return []
 
-        identified = []
-        files = identify.find_imports(self.config, file_or_dir)
-        for filename, importers in files:
-            file = cache.get_file(filename)
-            if len(importers):
-                identified.append({
-                    'filename': filename,
-                    'importers': [{
-                        'name': importer.name(),
-                        'account': importer.file_account(file)
-                    } if importer else '-' for importer in importers]
-                })
+        full_path = os.path.normpath(
+            os.path.join(
+                os.path.dirname(self.ledger.beancount_file_path),
+                directory))
 
-        return identified
-
-    def dirs_importers(self):
-        """Return identified files and importers, grouped by directory."""
-        return [(dir_, self._identify_importers(dir_))
-                for dir_ in self.ingest_dirs]
+        return filter(
+            operator.itemgetter(1),
+            identify.find_imports(self.config, full_path))
 
     def extract(self, filepath, importer_name):
         """Extract entries from filepath with the specified importer."""
-        importer = next(
-            imp for imp in self.config if imp.name() == importer_name)
+        importer = next(imp for imp in self.config
+                        if imp.name() == importer_name)
 
         new_entries, _ = extract.extract_from_file(
-            filepath,
-            importer,
-            existing_entries=self.ledger.all_entries)
+            filepath, importer, existing_entries=self.ledger.all_entries)
 
         return new_entries
