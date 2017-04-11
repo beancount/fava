@@ -7,16 +7,16 @@ Example:
     plugin "fava.plugins.settlement_date" "Assets:Savings:Transfer"
 
     2017-04-01 * "" ""
-        Assets:Savings:US    -100.00 USD
-            settle: 2017-04-03
+        Assets:Savings:US       -100.00 USD
         Assets:Savings:JP
+            settle: 2017-04-03
 
     ; becomes
 
     2017-04-01 * "" "Doing some saving transfers" ^settle-43be1c
-        Assets:Savings:US    -100.00 USD
-            settle: 2017-04-03
+        Assets:Savings:US       -100.00 USD
         Assets:Savings:Transfer
+            settle: 2017-04-03
 
     2017-04-03 * "" "Settle: Doing some saving transfers" ^settle-43be1c
         Assets:Savings:Transfer -100.00 USD
