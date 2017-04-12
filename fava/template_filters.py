@@ -38,21 +38,24 @@ def cost_or_value(inventory, date=None):
     return inventory.reduce(convert.get_cost)
 
 
-def format_currency(value, currency=None, show_if_zero=False):
+def format_currency(value, currency=None, show_if_zero=False, invert=False):
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ''
     if value == 0.0:
         return g.ledger.quantize(Decimal(0.0), currency)
+    if invert:
+        value = value * -1
     return g.ledger.quantize(value, currency)
 
 
-def format_amount(amount):
+def format_amount(amount, invert=False):
     """Format an amount to string using the DisplayContext."""
     if not amount:
         return ''
-    return "{} {}".format(format_currency(amount.number, amount.currency),
-                          amount.currency)
+    return "{} {}".format(
+        format_currency(amount.number, amount.currency, invert=invert),
+        amount.currency)
 
 
 def hash_entry(entry):

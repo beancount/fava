@@ -30,7 +30,8 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
-    'incognito': False
+    'incognito': False,
+    'invert-balance-sheet': False,
 }
 
 BOOL_OPTS = [
@@ -42,6 +43,7 @@ BOOL_OPTS = [
     'show-accounts-with-zero-transactions',
     'show-closed-accounts',
     'use-external-editor',
+    'invert-balance-sheet',
 ]
 
 INT_OPTS = [
