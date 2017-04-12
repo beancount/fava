@@ -456,10 +456,10 @@ kbd {
     text-align: center;
 
     & .byline {
-        color: var(--color-background-darkest);
-        font-size: .9em;
-        font-weight: normal;
-        margin-left: .2em;
+      color: var(--color-background-darkest);
+      font-size: .9em;
+      font-weight: normal;
+      margin-left: .2em;
     }
   }
 }
