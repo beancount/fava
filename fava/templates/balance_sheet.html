@@ -10,17 +10,18 @@
     {{ charts.hierarchy(ledger.options['name_equity']) }}
 
     {% set root_account_closed = ledger.root_account_closed %}
+    {% set invert = ledger.fava_options['invert-balance-sheet'] %}
 
     <div class="row">
         <div class="column">
-            <h3>{{ ledger.options['name_assets'] }}</h3>
-            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_assets'])) }}
+            <h3>{{ ledger.options['name_assets'] }}{% if invert %} <span class="byline">{{ _('inverted') }}</span>{% endif %}</h3>
+            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_assets']), invert=invert) }}
         </div>
         <div class="column">
-            <h3>{{ ledger.options['name_liabilities'] }}</h3>
-            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities'])) }}
-            <h3>{{ ledger.options['name_equity'] }}</h3>
-            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_equity'])) }}
+            <h3>{{ ledger.options['name_liabilities'] }}{% if invert %} <span class="byline">{{ _('inverted') }}</span>{% endif %}</h3>
+            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities']), invert=invert) }}
+            <h3>{{ ledger.options['name_equity'] }}{% if invert %} <span class="byline">{{ _('inverted') }}</span>{% endif %}</h3>
+            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_equity']), invert=invert) }}
         </div>
     </div>
 {% endblock %}

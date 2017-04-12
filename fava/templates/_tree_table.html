@@ -1,7 +1,7 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% set show_other_column = (operating_currencies|length < ledger.options['commodities']|length) %}
 
-{% macro tree(real_account, totals=True) %}
+{% macro tree(real_account, totals=True, invert=False) %}
     <ol class="tree-table{{ ' two-currencies' if operating_currencies|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
     <li class="head">
         <p>
@@ -26,20 +26,20 @@
         {{ account_macros.account_name(account.account, last_segment=True) }}</span>
     {% for currency in operating_currencies %}
         <span class="num">
-            <span class="balance">{{ balance.get_currency_units(currency).number|format_currency(currency) }}</span>
-            <span class="balance-children">{{ balance_children.get_currency_units(currency).number|format_currency(currency) }}</span>
+            <span class="balance">{{ balance.get_currency_units(currency).number|format_currency(currency, invert=invert) }}</span>
+            <span class="balance-children">{{ balance_children.get_currency_units(currency).number|format_currency(currency, invert=invert) }}</span>
         </span>
     {% endfor %}
     {% if show_other_column %}
         <span class="num other">
             <span class="balance">
                 {% for pos in balance|sort(attribute='units.currency') if pos.units.currency not in operating_currencies %}
-                    {{ pos.units|format_amount }}<br>
+                    {{ pos.units|format_amount(invert=invert) }}<br>
                 {% endfor %}
             </span>
             <span class="balance-children">
                 {% for pos in balance_children|sort(attribute='units.currency') if pos.units.currency not in operating_currencies %}
-                    {{ pos.units|format_amount }}<br>
+                    {{ pos.units|format_amount(invert=invert) }}<br>
                 {% endfor %}
             </span>
         </span>
@@ -59,12 +59,12 @@
             <p>
             <span class="account-cell">&nbsp;</span>
         {% for currency in operating_currencies %}
-            <span class="num">{{ balance.get_currency_units(currency).number|format_currency(currency) }}</span>
+            <span class="num">{{ balance.get_currency_units(currency).number|format_currency(currency, invert=invert) }}</span>
         {% endfor %}
         {% if show_other_column %}
             <span class="num other">
                 {% for pos in balance|sort(attribute='units.currency') if pos.units.currency not in operating_currencies %}
-                    {{ pos.units|format_amount }}<br>
+                    {{ pos.units|format_amount(invert=invert) }}<br>
                 {% endfor %}
             </span>
         {% endif %}
