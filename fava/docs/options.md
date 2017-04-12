@@ -184,3 +184,11 @@ entry, then the grey uptodate-indicator is shown.
 Default: `false`
  
 If set to `true` all digits will be replaced with "X".
+
+---
+ 
+## `invert-balance-sheet`
+ 
+Default: `false`
+ 
+If set to `true` all numbers on the balance sheet screen will be inverted.
