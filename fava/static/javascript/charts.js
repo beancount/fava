@@ -366,6 +366,7 @@ class BarChart extends BaseChart {
     this.x1 = scaleBand();
     this.y = scaleLinear();
     this.selections = {};
+    this.maxColumnWidth = 100;
 
     this.xAxis = axisBottom(this.x0)
       .tickSizeOuter(0);
@@ -418,7 +419,9 @@ class BarChart extends BaseChart {
   }
 
   update() {
-    this.width = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    this.width = Math.min(
+        parseInt(container.style('width'), 10) - this.margin.left - this.margin.right,
+        this.selections.groups.size() * this.maxColumnWidth);
     this.height = 250 - this.margin.top - this.margin.bottom;
 
     this.y.range([this.height, 0]);
