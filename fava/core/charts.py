@@ -108,8 +108,7 @@ class ChartModule(FavaModule):
             yield {
                 'begin_date': begin,
                 'totals': _inventory_cost_or_value(inventory, end),
-                'budgets':
-                self.ledger.budgets.calculate(accounts[0], begin, end),
+                'budgets': self.ledger.budgets.calculate(accounts, begin, end),
             }
 
     def linechart(self, account_name):
