@@ -47,8 +47,7 @@ class EntryFilter(object):
         """
         if self.value:
             return self._filter(entries, options)
-        else:
-            return entries
+        return entries
 
     def __bool__(self):
         return bool(self.value)
@@ -165,9 +164,8 @@ class AccountFilter(EntryFilter):
         if isinstance(entry, Transaction):
             return any(_match_account(posting.account, self.value)
                        for posting in entry.postings)
-        else:
-            return (hasattr(entry, 'account') and
-                    _match_account(entry.account, self.value))
+        return (hasattr(entry, 'account') and
+                _match_account(entry.account, self.value))
 
 
 class PayeeFilter(EntryFilter):

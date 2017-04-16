@@ -105,6 +105,7 @@ def add_document():
 @json_api.route('/add-transaction/', methods=['PUT'])
 def add_transaction():
     """Add a transaction."""
+    # pylint: disable=not-callable
     json = request.get_json()
 
     postings = []

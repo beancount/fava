@@ -116,16 +116,10 @@ def url_for_current(**kwargs):
 @app.template_global()
 def url_for_source(**kwargs):
     """URL to source file (possibly link to external editor)."""
-    args = request.view_args.copy()
-    args.update(kwargs)
     if g.ledger.fava_options['use-external-editor']:
-        if 'line' in args:
-            return "beancount://%(file_path)s?lineno=%(line)d" % args
-        else:
-            return "beancount://%(file_path)s" % args
-    else:
-        args['report_name'] = 'editor'
-        return url_for('report', **args)
+        return "beancount://{}?lineno={}".format(
+            kwargs.get('file_path'), kwargs.get('line', 1))
+    return url_for('report', report_name='editor', **kwargs)
 
 
 @app.context_processor

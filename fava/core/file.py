@@ -165,7 +165,7 @@ def _render_entry(entry):
             entry.date, entry.flag, entry.payee,
             entry.narration)]
 
-        if entry.meta and len(entry.meta.keys()) > 0:
+        if entry.meta:
             for key, value in entry.meta.items():
                 lines.append('    {}: "{}"'.format(key, value))
 
