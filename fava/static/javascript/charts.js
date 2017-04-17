@@ -82,7 +82,7 @@ function addInternalNodesAsLeaves(node) {
 function makeAccountLink(selection) {
   selection
     .on('click', (d) => {
-      window.location = window.accountUrl.replace('REPLACEME', d.data.account);
+      window.location = window.favaAPI.accountURL.replace('REPLACEME', d.data.account);
       event.stopPropagation();
     });
 }
