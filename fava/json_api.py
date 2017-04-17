@@ -122,9 +122,12 @@ def add_transaction():
         return _api_error('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
-    transaction = Transaction(
-        json['metadata'], date, json['flag'], json['payee'],
-        json['narration'], None, None, postings)
+    try:
+        transaction = Transaction(
+            json['metadata'], date, json['flag'], json['payee'],
+            json['narration'], None, None, postings)
+    except KeyError:
+        raise FavaAPIException('Transaction missing fields.')
 
     g.ledger.file.insert_entry(transaction)
     return _api_success(message='Stored transaction.')
