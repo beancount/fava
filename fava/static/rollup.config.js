@@ -2,7 +2,7 @@ import buble from 'rollup-plugin-buble';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import postcss from 'rollup-plugin-postcss-export';
+import postcss from 'rollup-plugin-postcss';
 
 import postcssCopy from 'postcss-copy';
 import postcssImport from 'postcss-import';
@@ -28,7 +28,7 @@ export default {
         }),
         postcssCssnext(),
       ],
-      output: 'gen/style.css',
+      extract: 'gen/style.css',
     }),
     commonjs({
       include: 'node_modules/**',
