@@ -135,11 +135,11 @@ def insert_entry(entry, filenames, insert_options):
 
     """
     if isinstance(entry, data.Transaction):
-        account = entry.postings[-1].account
+        accounts = reversed([p.account for p in entry.postings])
     else:
-        account = entry.account
+        accounts = entry.account
     filename, lineno = find_insert_position(
-        account, entry.date, insert_options, filenames)
+        accounts, entry.date, insert_options, filenames)
     content = _render_entry(entry)
 
     with open(filename, "r") as file:
@@ -200,21 +200,25 @@ def _render_entry(entry):
             entry.__class__.__name__))
 
 
-def find_insert_position(account, date, insert_options, filenames):
+def find_insert_position(accounts, date, insert_options, filenames):
     """Find insert position for an account.
 
     Args:
-        account: An account name.
+        accounts: An account name (str) or a iterable of accounts.
         date: A date. Only InsertOptions before this date will be considered.
         insert_options: A list of InsertOption.
         filenames: List of Beancount files.
     """
     position = None
-    for insert_option in insert_options:
-        if insert_option.date >= date:
-            break
-        if insert_option.re.match(account):
-            position = (insert_option.filename, insert_option.lineno-1)
+    if isinstance(accounts, str):
+        accounts = [accounts]
+
+    for account in accounts:
+        for insert_option in insert_options:
+            if insert_option.date >= date:
+                break
+            if insert_option.re.match(account):
+                position = (insert_option.filename, insert_option.lineno-1)
 
     if not position:
         position = filenames[0], len(open(filenames[0]).readlines())+1

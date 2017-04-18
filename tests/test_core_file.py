@@ -1,11 +1,13 @@
 import datetime
 from textwrap import dedent
+import re
 
 from beancount.core import data, amount
 from beancount.core.number import D
 
 from fava.core.file import (next_key, leading_space, insert_metadata_in_file,
                             insert_entry, _render_entry)
+from fava.core.fava_options import InsertEntryOption
 
 
 def test_next_key():
@@ -78,6 +80,33 @@ def test_insert_entry_transaction(tmpdir):
 
     insert_entry(transaction, [str(samplefile)], [])
     assert samplefile.read() == dedent("""
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
+    """)
+
+    options = [
+        InsertEntryOption(
+            datetime.date(2015, 1, 1),
+            re.compile('.*:Food'), str(samplefile), 2),
+        InsertEntryOption(
+            datetime.date(2015, 1, 2),
+            re.compile('.*:FOOO'), str(samplefile), 2),
+        InsertEntryOption(
+            datetime.date(2017, 1, 1),
+            re.compile('.*:Food'), str(samplefile), 6),
+    ]
+    insert_entry(transaction, [str(samplefile)], options)
+    assert samplefile.read() == dedent("""
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
