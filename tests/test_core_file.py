@@ -117,6 +117,34 @@ def test_insert_entry_transaction(tmpdir):
 
     """)
 
+    options = [
+        InsertEntryOption(
+            datetime.date(2015, 1, 1),
+            re.compile('.*:Slate'), str(samplefile), 5),
+        InsertEntryOption(
+            datetime.date(2015, 1, 2),
+            re.compile('.*:FOOO'), str(samplefile), 2),
+    ]
+    insert_entry(transaction, [str(samplefile)], options)
+    assert samplefile.read() == dedent("""
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
+
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
+    """)
+
 
 def test__render_entry_transaction():
     postings = [
