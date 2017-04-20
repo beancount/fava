@@ -419,9 +419,9 @@ class BarChart extends BaseChart {
   }
 
   update() {
-    let screenWidth = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
-    let maxWidth = this.selections.groups.size() * this.maxColumnWidth;
-    let offset = this.margin.left + Math.max(0, screenWidth - maxWidth)/2;
+    const screenWidth = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    const maxWidth = this.selections.groups.size() * this.maxColumnWidth;
+    const offset = this.margin.left + (Math.max(0, screenWidth - maxWidth) / 2);
 
     this.width = Math.min(screenWidth, maxWidth);
     this.height = 250 - this.margin.top - this.margin.bottom;
