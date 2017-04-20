@@ -366,6 +366,7 @@ class BarChart extends BaseChart {
     this.x1 = scaleBand();
     this.y = scaleLinear();
     this.selections = {};
+    this.maxColumnWidth = 100;
 
     this.xAxis = axisBottom(this.x0)
       .tickSizeOuter(0);
@@ -418,7 +419,11 @@ class BarChart extends BaseChart {
   }
 
   update() {
-    this.width = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    const screenWidth = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    const maxWidth = this.selections.groups.size() * this.maxColumnWidth;
+    const offset = this.margin.left + (Math.max(0, screenWidth - maxWidth) / 2);
+
+    this.width = Math.min(screenWidth, maxWidth);
     this.height = 250 - this.margin.top - this.margin.bottom;
 
     this.y.range([this.height, 0]);
@@ -426,9 +431,9 @@ class BarChart extends BaseChart {
     this.x1.range([0, this.x0.bandwidth()]);
 
     this.svg
-      .attr('width', this.width + this.margin.left + this.margin.right)
+      .attr('width', screenWidth + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom);
-    this.canvas.attr('transform', `translate(${this.margin.left},${this.margin.top})`);
+    this.canvas.attr('transform', `translate(${offset},${this.margin.top})`);
 
     this.yAxis.tickSize(-this.width, 0);
     this.selections.xAxis.attr('transform', `translate(0,${this.height})`);
