@@ -11,9 +11,9 @@ from beancount.core.inventory import Inventory
 from beancount.core.data import iter_entry_dates
 from beancount.utils.misc_utils import filter_type
 from flask.json import JSONEncoder
-from flask import g
 
 from fava.util import listify, pairwise
+from fava.template_filters import cost_or_value
 from fava.core.helpers import FavaModule
 
 
@@ -44,13 +44,9 @@ def _inventory_units(inventory):
     }
 
 
-def _inventory_cost_or_value(inventory, date=None):
+def _inventory_cost_or_value(inventory, date):
     """Renders an inventory at cost or value to a currency -> amount dict."""
-    if g.at_value:
-        inventory = inventory.reduce(convert.get_value, g.ledger.price_map,
-                                     date)
-    else:
-        inventory = inventory.reduce(convert.get_cost)
+    inventory = cost_or_value(inventory, date)
     return {p.units.currency: p.units.number for p in inventory}
 
 
@@ -109,7 +105,7 @@ class ChartModule(FavaModule):
                 'begin_date': begin,
                 'totals': _inventory_cost_or_value(inventory, end),
                 'budgets':
-                self.ledger.budgets.calculate(accounts[0], begin, end),
+                self.ledger.budgets.calculate_children(accounts, begin, end),
             }
 
     def linechart(self, account_name):

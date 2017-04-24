@@ -62,6 +62,23 @@ files that have different extensions of the same name).
 
 ---
 
+## `insert-entry`
+
+Default: Not set.
+
+This option can be used to specify where entries are inserted. The argument to
+this option should be a regular expression matching account names. This option
+can be given multiple times. When adding an entry, the account of the entry
+(for a transaction, the account of the last posting is used) is matched against
+all `insert-entry` options and the entry will be inserted before the datewise
+latest of the matching options. If the entry is a Transaction and no
+`insert-entry` option matches the account of the last posting the account of
+the second to last posting and so on will be tried. If no `insert-entry` option
+matches or none is given, the entry will be inserted at the end of the main
+file.
+
+---
+
 ## `auto-reload`
 
 Default: `false`.

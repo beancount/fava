@@ -85,7 +85,8 @@ class FileModule(FavaModule):
             transaction: An entry.
 
         """
-        insert_entry(entry, self.list_sources())
+        insert_entry(entry, self.list_sources(),
+                     self.ledger.fava_options['insert-entry'])
         self.ledger.extensions.run_hook('after_insert_entry', entry)
 
 
@@ -125,7 +126,7 @@ def insert_metadata_in_file(filename, lineno, key, value):
         file.write(contents)
 
 
-def insert_entry(entry, filenames):
+def insert_entry(entry, filenames, insert_options):
     """Insert an entry
 
     Args:
@@ -133,13 +134,18 @@ def insert_entry(entry, filenames):
         filenames: List of filenames.
 
     """
-    filename, lineno = find_insert_marker(filenames)
+    if isinstance(entry, data.Transaction):
+        accounts = reversed([p.account for p in entry.postings])
+    else:
+        accounts = entry.account
+    filename, lineno = find_insert_position(
+        accounts, entry.date, insert_options, filenames)
     content = _render_entry(entry)
 
     with open(filename, "r") as file:
         contents = file.readlines()
 
-    contents.insert(lineno, '\n' + content + '\n')
+    contents.insert(lineno, content + '\n\n')
 
     with open(filename, "w") as file:
         file.writelines(contents)
@@ -165,7 +171,7 @@ def _render_entry(entry):
             entry.date, entry.flag, entry.payee,
             entry.narration)]
 
-        if entry.meta and len(entry.meta.keys()) > 0:
+        if entry.meta:
             for key, value in entry.meta.items():
                 lines.append('    {}: "{}"'.format(key, value))
 
@@ -194,16 +200,27 @@ def _render_entry(entry):
             entry.__class__.__name__))
 
 
-def find_insert_marker(filenames):
-    """Searches for the insert marker and returns (filename, lineno).
-    Defaults to the first file and last line if not found.
+def find_insert_position(accounts, date, insert_options, filenames):
+    """Find insert position for an account.
+
+    Args:
+        accounts: An account name (str) or a iterable of accounts.
+        date: A date. Only InsertOptions before this date will be considered.
+        insert_options: A list of InsertOption.
+        filenames: List of Beancount files.
     """
-    marker = 'FAVA-INSERT-MARKER'
+    position = None
+    if isinstance(accounts, str):
+        accounts = [accounts]
 
-    for filename in filenames:
-        with open(filename, "r") as file:
-            for lineno, linetext in enumerate(file):
-                if marker in linetext:
-                    return filename, lineno
+    for account in accounts:
+        for insert_option in insert_options:
+            if insert_option.date >= date:
+                break
+            if insert_option.re.match(account):
+                position = (insert_option.filename, insert_option.lineno-1)
 
-    return filenames[0], len(open(filenames[0]).readlines())+1
+    if not position:
+        position = filenames[0], len(open(filenames[0]).readlines())+1
+
+    return position

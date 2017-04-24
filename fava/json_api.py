@@ -117,9 +117,12 @@ def json_to_transaction(json):
         raise FavaAPIException('Transaction contains no postings.')
 
     date = util.date.parse_date(json['date'])[0]
-    return data.Transaction(json['metadata'], date, json['flag'],
-                            json['payee'], json['narration'], None, None,
-                            postings)
+    try:
+        return data.Transaction(
+            json['metadata'], date, json['flag'], json['payee'],
+            json['narration'], None, None, postings)
+    except KeyError:
+        raise FavaAPIException('Transaction missing fields.')
 
 
 def json_to_entry(json_entry):

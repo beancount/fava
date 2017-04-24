@@ -52,7 +52,7 @@ def find_extensions(base_path, name):
     except ImportError:
         return [], [FavaExtensionError(
             None, 'Importing module "{}" failed.'.format(name), None)]
-    for name, obj in inspect.getmembers(module, inspect.isclass):
+    for _, obj in inspect.getmembers(module, inspect.isclass):
         if issubclass(obj, FavaExtensionBase) and obj != FavaExtensionBase:
             classes.append(obj)
     sys.path.pop(0)

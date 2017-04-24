@@ -363,8 +363,7 @@ class FavaLedger():
             return [(date, price) for date, price in all_prices
                     if (date >= self._filters['time'].begin_date and
                         date < self._filters['time'].end_date)]
-        else:
-            return all_prices
+        return all_prices
 
     def last_entry(self, account_name):
         """Get last entry of an account.
@@ -449,8 +448,7 @@ class FavaLedger():
             if isinstance(txn_posting, Balance):
                 if txn_posting.diff_amount:
                     return 'red'
-                else:
-                    return 'green'
+                return 'green'
             if isinstance(txn_posting, TxnPosting) and \
                     txn_posting.txn.flag != FLAG_UNREALIZED:
                 return 'yellow'

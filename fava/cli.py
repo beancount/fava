@@ -58,7 +58,6 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
 
     if debug:  # pragma: no cover
         if profile:
-            # pylint: disable=redefined-variable-type
             from werkzeug.contrib.profiler import ProfilerMiddleware
             app.config['PROFILE'] = True
             app.wsgi_app = ProfilerMiddleware(

@@ -1,11 +1,13 @@
 import datetime
 from textwrap import dedent
+import re
 
 from beancount.core import data, amount
 from beancount.core.number import D
 
 from fava.core.file import (next_key, leading_space, insert_metadata_in_file,
-                            find_insert_marker, insert_entry, _render_entry)
+                            insert_entry, _render_entry)
+from fava.core.fava_options import InsertEntryOption
 
 
 def test_next_key():
@@ -54,61 +56,15 @@ def test_insert_metadata_in_file(tmpdir):
     """)
 
 
-def test_find_insert_marker(tmpdir):
-    file_content = dedent("""
-        2016-02-26 * "Uncle Boons" "Eating out alone"
-            Liabilities:US:Chase:Slate                       -24.84 USD
-            Expenses:Food:Restaurant                          24.84 USD
-
-        ; FAVA-INSERT-MARKER
-        ; Hello World
-    """)
-    testdir = tmpdir.mkdir('fava_util_file2')
-    samplefile = testdir.join('example2.beancount')
-    samplefile.write(file_content)
-    samplefile_nomarker = testdir.join('example3.beancount')
-    samplefile_nomarker.write("Hello World!")
-
-    assert samplefile.read() == dedent(file_content)
-    assert len(tmpdir.listdir()) == 1
-
-    filename, lineno = find_insert_marker([str(samplefile)])
-    assert filename == str(samplefile)
-    assert lineno == 5
-
-    filename, lineno = find_insert_marker(
-        [str(samplefile_nomarker), str(samplefile)])
-    assert filename == str(samplefile)
-    assert lineno == 5
-
-    filename, lineno = find_insert_marker([str(samplefile_nomarker)])
-    assert filename == str(samplefile_nomarker)
-    assert lineno == 2
-
-
 def test_insert_entry_transaction(tmpdir):
     file_content = dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
-        ; FAVA-INSERT-MARKER
+
     """)
     samplefile = tmpdir.mkdir('fava_util_file3').join('example.beancount')
     samplefile.write(file_content)
-
-    transaction = data.Transaction(None,
-                                   datetime.date(2016, 1, 1), '*', 'payee',
-                                   'narr', None, None, [])
-
-    insert_entry(transaction, [str(samplefile)])
-    assert samplefile.read() == dedent("""
-        2016-02-26 * "Uncle Boons" "Eating out alone"
-            Liabilities:US:Chase:Slate                       -24.84 USD
-            Expenses:Food:Restaurant                          24.84 USD
-
-        2016-01-01 * "payee" "narr"
-        ; FAVA-INSERT-MARKER
-    """)
 
     postings = [
         data.Posting('Liabilities:US:Chase:Slate',
@@ -122,18 +78,71 @@ def test_insert_entry_transaction(tmpdir):
                                    datetime.date(2016, 1, 1), '*', 'new payee',
                                    'narr', None, None, postings)
 
-    insert_entry(transaction, [str(samplefile)])
+    insert_entry(transaction, [str(samplefile)], [])
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
-        2016-01-01 * "payee" "narr"
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
+    """)
+
+    options = [
+        InsertEntryOption(
+            datetime.date(2015, 1, 1),
+            re.compile('.*:Food'), str(samplefile), 2),
+        InsertEntryOption(
+            datetime.date(2015, 1, 2),
+            re.compile('.*:FOOO'), str(samplefile), 2),
+        InsertEntryOption(
+            datetime.date(2017, 1, 1),
+            re.compile('.*:Food'), str(samplefile), 6),
+    ]
+    insert_entry(transaction, [str(samplefile)], options)
+    assert samplefile.read() == dedent("""
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
             Liabilities:US:Chase:Slate                    -10.00 USD
             Expenses:Food                                  10.00 USD
-        ; FAVA-INSERT-MARKER
+
+    """)
+
+    options = [
+        InsertEntryOption(
+            datetime.date(2015, 1, 1),
+            re.compile('.*:Slate'), str(samplefile), 5),
+        InsertEntryOption(
+            datetime.date(2015, 1, 2),
+            re.compile('.*:FOOO'), str(samplefile), 2),
+    ]
+    insert_entry(transaction, [str(samplefile)], options)
+    assert samplefile.read() == dedent("""
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
+
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "new payee" "narr"
+            Liabilities:US:Chase:Slate                    -10.00 USD
+            Expenses:Food                                  10.00 USD
+
     """)
 
 

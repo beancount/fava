@@ -64,10 +64,10 @@ and `ods`, install Fava with the `excel` feature:
 ## Adding Transactions
 
 By clicking the `+` button or using the `n` keyboard shortcut you can open a
-form to insert a transaction to your Beancount file. This transaction will be
-inserted at the end of your file or where the first `FAVA-INSERT-MARKER` is
-found. If you want to set a bookmark to this form, adding `#add-transaction` to
-any URL in Fava will open it on load.
+form to insert a transaction to your Beancount file. The position that
+transactions are inserted at can be specified in a flexible way using the
+`insert-entry` option.  If you want to set a bookmark to this form, adding
+`#add-transaction` to any URL in Fava will open it on load.
 
 ## Up-to-date indicators
 
