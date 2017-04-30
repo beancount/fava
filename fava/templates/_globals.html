@@ -14,7 +14,7 @@
     'help':             (_('Help'),             'g shift+h'),
 } %}
 {% set navigation_bar = [
-    ("",              ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
-    ("Other",         [ 'holdings', 'commodities', 'events', 'statistics']),
-    ("Configuration", [ 'editor', 'import', 'options', 'help'])
+    (_('Reports'),       ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query']),
+    (_("Other"),         ['holdings', 'commodities', 'events', 'statistics']),
+    (_("Configuration"), ['editor', 'import', 'options', 'help'])
 ] %}
