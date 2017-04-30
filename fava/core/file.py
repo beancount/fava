@@ -177,7 +177,7 @@ def _render_entry(entry):
 
         for posting in entry.postings:
             line = '    {}'.format(posting.account)
-            if posting.units.number or posting.units.currency:
+            if posting.units:
                 number_length = str(posting.units.number).find('.')
                 line += ' ' * max(49 - len(posting.account) - number_length, 2)
                 line += '{} {}'.format(posting.units.number or '',
