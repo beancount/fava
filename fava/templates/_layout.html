@@ -54,6 +54,7 @@
     <script type="application/json" id="page-data">{{ {
         'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
         'pageTitle': page_title,
+        'errors': ledger.errors|length,
     }|tojson|safe }}</script>
     <script type="application/json" id="ledger-data">{{ {
         'accountURL': url_for('account', name='REPLACEME'),

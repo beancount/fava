@@ -230,7 +230,7 @@ button {
   }
 }
 
-.hidden {
+.hidden.hidden {
   display: none;
 }
 

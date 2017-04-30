@@ -36,6 +36,12 @@ def changed():
     return jsonify({'success': True, 'changed': g.ledger.changed()})
 
 
+@json_api.route('/errors/')
+def errors():
+    """Number of errors."""
+    return jsonify({'success': True, 'errors': len(g.ledger.errors)})
+
+
 @json_api.route('/source/', methods=['GET', 'PUT'])
 def source():
     """Read/write one of the source files."""
