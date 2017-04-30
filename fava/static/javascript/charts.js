@@ -18,8 +18,8 @@ const sunburstColorScale = scaleOrdinal(schemeCategory20c);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrencyWithComma = format(',.2f');
-const formatCurrencyWithoutComma = format('.2f');
+const formatCurrencyWithComma = format(',.3f');
+const formatCurrencyWithoutComma = format('.3f');
 function formatCurrency(number) {
   let str = '';
   if (window.favaAPI.options.render_commas) {
@@ -33,7 +33,7 @@ function formatCurrency(number) {
   return str;
 }
 
-const formatCurrencyShortDefault = format('.2s');
+const formatCurrencyShortDefault = format('.3s');
 function formatCurrencyShort(number) {
   let str = formatCurrencyShortDefault(number);
   if (window.favaAPI.favaOptions.incognito) {
@@ -572,8 +572,8 @@ class LineChart extends BaseChart {
       max(this.data, s => s.values[s.values.length - 1].date),
     ]);
     this.y.domain([
-      Math.min(0, min(this.data, d => min(d.values, e => e.value))),
-      Math.max(0, max(this.data, d => max(d.values, e => e.value))),
+      min(this.data, d => min(d.values, e => e.value)),
+      max(this.data, d => max(d.values, e => e.value)),
     ]);
 
     this.selections.lines = this.canvas.selectAll('.line')

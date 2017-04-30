@@ -72,6 +72,18 @@
       min-width: 7em;
     }
 
+    &.depth-8 {
+      margin-left: 8em;
+      max-width: 22em;
+      min-width: 6em;
+    }
+
+    &.depth-9 {
+      margin-left: 9em;
+      max-width: 21em;
+      min-width: 5em;
+    }
+
     & a {
       margin-left: 1em;
     }
