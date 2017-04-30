@@ -1,0 +1,92 @@
+{% macro posting(posting=None, id=None) %}
+    <div class="posting"{% if id %} id="{{ id }}"{% endif %}>
+        <div class="fieldset">
+            <label for="account">{{ _('Account') }}:</label>
+            <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" {% if posting %}value="{{ posting.account }}"{% endif %}/>
+            <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" {% if posting %}value="{{ posting.units.number }}"{% endif %}/>
+            <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" {% if posting %}value="{{ posting.units.currency }}"{% endif %}/>
+            <button class="muted add-posting" title="{{ _('Add posting') }}">+</button>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro metadata(key=None, value=None, id=None) %}
+    <div class="fieldset metadata"{% if id %} id="{{ id }}"{% endif %}>
+        <label for="account">{{ _('Metadata') }}:</label>
+        <input type="text" class="metadata-key" name="metadata-key" placeholder="{{ _('Key') }}" {% if key %}value="{{ key }}"{% endif %}/>
+        <input type="text" class="metadata-value" name="metadata-value" placeholder="{{ _('Value') }}" {% if value %}value="{{ value }}"{% endif %}/>
+        <button class="muted add-metadata" title="{{ _('Add metadata') }}">+</button>
+    </div>
+{% endmacro %}
+
+{% macro transaction(entry=None) %}
+    <div class="entry-form transaction" data-type="transaction">
+        <div class="fieldset">
+            <label for="date">{{ _('Date') }}:</label>
+            <input type="date" name="date" value="{% if entry %}{{ entry.date.strftime('%Y-%m-%d') }}{% else %}{{ datetime.datetime.now().strftime('%Y-%m-%d') }}{% endif %}" />
+            <input type="text" name="flag" value="{% if entry %}{{ entry.flag }}{% else %}*{% endif %}">
+            <label for="payee">{{ _('Payee') }}:</label>
+            <input type="text" name="payee" placeholder="{{ _('Payee') }}" list="payees" {% if entry %}value="{{ entry.payee }}"{% endif %}/>
+            <label for="payee">{{ _('Narration') }}:</label>
+            <input type="text" name="narration" placeholder="{{ _('Narration') }}" {% if entry %}value="{{ entry.narration }}"{% endif %}/>
+        </div>
+        <div class="metadatas">
+            {% if entry %}
+                {% set meta = entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno']) %}
+                {% for key, value in meta.items() %}
+                    {{ metadata(key=key, value=value) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="postings">
+            {% if entry %}
+                {% for p in entry.postings %}
+                    {{ posting(posting=p) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro balance(entry=None) %}
+    <div class="entry-form balance" data-type="balance">
+        <div class="fieldset">
+            <label for="date">{{ _('Date') }}:</label>
+            <input type="date" name="date" value="{% if entry %}{{ entry.date.strftime('%Y-%m-%d') }}{% else %}{{ datetime.datetime.now().strftime('%Y-%m-%d') }}{% endif %}" />
+            <label for="account">{{ _('Balance') }}:</label>
+            <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" {% if entry %}value="{{ entry.account }}"{% endif %}/>
+            <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" {% if entry %}value="{{ entry.amount.number }}"{% endif %}/>
+            <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" {% if entry %}value="{{ entry.amount.currency }}"{% endif %}/>
+        </div>
+        <div class="metadatas">
+            {% if entry %}
+                {% set meta = entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno']) %}
+                {% for key, value in meta.items() %}
+                    {{ metadata(key=key, value=value) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro note(entry=None) %}
+    <div class="entry-form note" data-type="note">
+        <div class="fieldset">
+            <label for="date">{{ _('Date') }}:</label>
+            <input type="date" name="date" value="{% if entry %}{{ entry.date.strftime('%Y-%m-%d') }}{% else %}{{ datetime.datetime.now().strftime('%Y-%m-%d') }}{% endif %}" />
+            <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" {% if entry %}value="{{ entry.account }}"{% endif %}/>
+        </div>
+        <div class="fieldset">
+            <label for="comment">{{ _('Note') }}:</label>
+            <textarea name="comment" rows="2">{% if entry %}{{ entry.comment }}{% endif %}</textarea>
+        </div>
+        <div class="metadatas">
+            {% if entry %}
+                {% set meta = entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno']) %}
+                {% for key, value in meta.items() %}
+                    {{ metadata(key=key, value=value) }}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}

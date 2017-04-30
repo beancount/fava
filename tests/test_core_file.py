@@ -151,8 +151,7 @@ def test__render_entry_transaction():
         data.Posting('Liabilities:US:Chase:Slate',
                      amount.Amount(D('-10.00'), 'USD'), None, None, None,
                      None),
-        data.Posting('Expenses:Food',
-                     amount.Amount(None, None), None, None, None, None),
+        data.Posting('Expenses:Food', None, None, None, None, None),
     ]
 
     transaction = data.Transaction(None,

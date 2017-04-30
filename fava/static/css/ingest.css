@@ -1,0 +1,92 @@
+.ingest-files {
+  & pre {
+    font-size: .9em;
+    margin: 0;
+  }
+}
+
+.ingest-actions {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+
+.ingest-row {
+  border-bottom: thin solid var(--color-table-header-background);
+  display: flex;
+  padding: 10px 0;
+
+  & .line {
+    line-height: 28px;
+    min-width: 40px;
+    text-align: center;
+  }
+
+  & .source {
+    flex-grow: 1;
+    overflow: auto;
+
+    & pre {
+      font-size: .9em;
+    }
+  }
+
+  & .form {
+    flex-shrink: 0;
+    min-width: 600px;
+  }
+
+  & .fieldset {
+    padding: 0 10px 10px;
+  }
+
+  & input[name='payee'] {
+    width: 140px;
+  }
+
+  & .actions {
+    width: 60px;
+
+    & .inner {
+      min-width: 100px;
+      text-align: left;
+      transform: rotate(90deg);
+      transform-origin: 30% 50%;
+    }
+
+    & label {
+      display: inline-block;
+      font-size: .8em;
+    }
+  }
+
+  &.header {
+    background: var(--color-table-header-background);
+    color: var(--color-table-header-text);
+    font-weight: 500;
+    line-height: 1.5em;
+    padding: 0;
+
+    & > div {
+      padding: 3px 5px;
+    }
+
+    & .line {
+      line-height: inherit;
+    }
+  }
+
+  &.duplicate,
+  &.ignore {
+    opacity: .5;
+  }
+
+  &.duplicate,
+  &.import {
+    background: var(--color-ingest);
+  }
+}
+
+.ingest-footer {
+  margin-top: 10px;
+}

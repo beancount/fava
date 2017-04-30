@@ -1,0 +1,43 @@
+{% extends "_layout.html" %}
+{% set active_page = 'import' %}
+
+{% import 'macros/_account_macros.html' as account_macros with context %}
+{% import 'macros/_entry_forms.html' as forms with context %}
+
+{% block content %}
+  {% if not ledger.fava_options['import-config'] %}
+    <p>
+    No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
+    </p>
+  {% endif %}
+  {% for directory in ledger.fava_options['import-dirs'] %}
+    <h3>{{ directory }}</h3>
+    <table class="ingest-files">
+      <thead>
+        <tr>
+          <th>{{ _('File') }}</th>
+          <th>{{ _('Importer') }}</th>
+          <th>{{ _('Account') }}</th>
+          <th>{{ _('Action') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for filename, importers in ledger.ingest.identify_directory(directory) %}
+          {% for importer  in importers %}
+            <tr>
+              <td>
+                <pre title="{{ filename }}">{{ filename|basename }}</pre>
+                <input type="hidden" name="filename" value="{{ filename }}">
+              </td>
+              <td>{{ importer.name() }}</td>
+              <td>{{ account_macros.account_name(importer.file_account(filename)) }}</td>
+              <td>
+                <a class="button" title="{{ _('Extract') }} {{ filename }}" href="{{ url_for('report', report_name='extract', filename=filename, importer=importer.name()) }}">{{ _('Extract') }}</button>
+              </td>
+            </tr>
+          {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endfor %}
+{% endblock %}

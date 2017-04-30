@@ -201,3 +201,20 @@ entry, then the grey uptodate-indicator is shown.
 Default: `false`
 
 If set to `true` all digits will be replaced with "X".
+
+---
+
+## `import-config`
+
+Default: Not set
+
+Path to a Beancount import configuration file. See the [Import]({{
+url_for('help_page', page_slug='import') }}) help page for details.
+
+---
+
+## `import-dirs`
+
+Default: Not set
+
+Set the directories to be scanned by the Beancount import mechanism.

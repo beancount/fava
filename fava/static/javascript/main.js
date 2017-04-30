@@ -12,12 +12,14 @@ import initClipboard from './clipboard';
 import initDocumentsUpload from './documents-upload';
 import initEditor from './editor';
 import { initFilters, updateFilters } from './filters';
+import initIngest from './ingest';
 import initJournal from './journal';
 import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
 import initRouter from './router';
 import initSort from './sort';
-import initTransactionForm from './transaction-form';
+import initTransactionOverlay from './transaction-overlay';
 import initTreeTable from './tree-table';
+import initEntryForms from './entry-forms';
 
 // These parts of the page should not change.
 // So they only need to be initialized once.
@@ -25,7 +27,9 @@ function initPage() {
   window.favaTranslations = JSON.parse($('#translations').innerHTML);
   initFilters();
   initKeyboardShortcuts();
-  initTransactionForm();
+  initTransactionOverlay();
+  initIngest();
+  initEntryForms();
 
   $$('.overlay-wrapper').forEach((el) => {
     el.addEventListener('mousedown', (event) => {

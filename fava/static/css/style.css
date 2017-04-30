@@ -8,6 +8,8 @@
 @import 'query.css';
 @import 'journal-table.css';
 @import 'tree-table.css';
+@import 'ingest.css';
+@import 'entry-forms.css';
 @import 'media-mobile.css';
 @import 'media-print.css';
 
@@ -112,4 +114,6 @@ body {
   --color-editor-activeline: #ffc;
 
   --color-mobile-button-text: #000;
+
+  --color-ingest: #cefac1;
 }

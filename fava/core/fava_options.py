@@ -32,8 +32,10 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'language': None,
     'interval': 'month',
+    'incognito': False,
     'insert-entry': [],
-    'incognito': False
+    'import-config': None,
+    'import-dirs': [],
 }
 
 BOOL_OPTS = [
@@ -59,11 +61,13 @@ LIST_OPTS = [
     'journal-show',
     'journal-show-document',
     'journal-show-transaction',
+    'import-dirs',
 ]
 
 STR_OPTS = [
     'language',
     'interval',
+    'import-config',
 ]
 
 

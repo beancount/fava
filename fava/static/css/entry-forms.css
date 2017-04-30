@@ -1,0 +1,217 @@
+.entry-form {
+  & input[name='date'] {
+    margin-left: 0;
+  }
+
+  & textarea {
+    border: 1px solid color(var(--color-text) tint(50%));
+    font: inherit;
+    padding: 8px;
+  }
+
+  & label {
+    display: none;
+  }
+
+  & .number,
+  & .currency {
+    width: 100px;
+  }
+}
+
+.entry-form.transaction {
+  & .awesomplete {
+    & input {
+      width: 100%;
+    }
+  }
+
+  & input {
+    &[name='flag'] {
+      padding: 0 2px;
+      text-align: center;
+      width: 1.5em;
+    }
+
+    &[name='payee'] {
+      width: 180px;
+    }
+
+    &[name='narration'] {
+      flex-grow: 1;
+    }
+  }
+
+  & .posting {
+    padding-left: 4em;
+
+    & .awesomplete {
+      flex-grow: 1;
+      padding-right: .5em;
+
+      &:nth-child(4) {
+        flex-grow: 0;
+        width: 100px;
+      }
+    }
+
+    &:last-child {
+      & .add-posting {
+        display: inline-block;
+      }
+
+      & .awesomplete {
+        &:nth-child(4) {
+          width: 67px;
+        }
+      }
+    }
+  }
+
+  & .add-posting {
+    border-radius: 15px;
+    display: none;
+    height: 1.5em;
+    line-height: 1.5em;
+    margin: 7px 0 0 10px;
+    padding: 0;
+    text-align: center;
+    width: 1.5em;
+  }
+
+  & .metadatas {
+    padding-left: 4em;
+
+    & input {
+      font-size: .8em;
+    }
+
+    & .metadata-key {
+      width: 10em;
+    }
+
+    & .metadata-value {
+      flex-grow: 1;
+    }
+
+    & .fieldset {
+      width: 50%;
+
+      &:last-child {
+        & .add-metadata {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+.transaction-overlay {
+  & .add-metadata {
+    border-radius: 3px;
+    display: none;
+    height: 1em;
+    line-height: 1em;
+    margin: 7px 0 0 12px;
+    padding: 0;
+    text-align: center;
+    width: 1em;
+  }
+
+  & .add-metadata-link {
+    bottom: 20px;
+    font-size: .9em;
+    position: absolute;
+    right: 20px;
+  }
+}
+
+[id='posting-template'],
+[id='metadata-template'] {
+  display: none;
+}
+
+.entry-form.note {
+  & label {
+    &[for='comment'] {
+      display: block;
+      line-height: 35px;
+      margin: 0 .5em 0 0;
+    }
+  }
+
+  & textarea {
+    flex-grow: 1;
+  }
+}
+
+.entry-form.balance {
+  & label {
+    &[for='account'] {
+      display: block;
+      line-height: 35px;
+      margin: 0 .5em 0 1.5em;
+    }
+  }
+}
+
+.entry-form.balance,
+.entry-form.note {
+  & .awesomplete {
+    flex-grow: 1;
+  }
+
+  & input {
+    &[name='account'] {
+      flex-grow: 1;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .entry-form.transaction {
+    & label {
+      display: block;
+      margin-top: 0;
+      padding-left: 0;
+      width: 100%;
+    }
+
+    & .fieldset {
+      display: block;
+
+      & input {
+        height: 35px;
+        margin: 0 .5em 0 0;
+        width: 120px;
+
+        &[name='flag'] {
+          width: 1.5em;
+        }
+
+        &[name='narration'],
+        &[name='payee'],
+        &[name='account'] {
+          margin-bottom: .5em;
+          width: 100%;
+        }
+      }
+    }
+
+    & .posting {
+      padding-left: 0;
+
+      & .awesomplete {
+        margin-bottom: 0;
+        padding-right: 0;
+        width: 100%;
+      }
+    }
+
+    & .add-posting {
+      font-size: 1.2em;
+      position: absolute;
+      right: 20px;
+    }
+  }
+}

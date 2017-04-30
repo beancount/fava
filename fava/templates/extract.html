@@ -1,0 +1,47 @@
+{% extends "_layout.html" %}
+{% set active_page = 'import' %}
+
+{% import 'macros/_account_macros.html' as account_macros with context %}
+{% import 'macros/_entry_forms.html' as forms with context %}
+
+{% block content %}
+  <h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
+  <div class="ingest-actions">
+    <button type="button" id="toggle-source">{{ _('Toggle source') }}</button>
+    <button type="button" id="toggle-ignore">{{ _('Toggle ignore') }}</button>
+  </div>
+  <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
+    <div class="ingest-row header">
+      <div class="line">{{ _('Line') }}</div>
+      <div class="source">{{ _('Source') }}</div>
+      <div class="form">{{ _('Entry') }}</div>
+      <div class="actions">{{ _('Actions') }}</div>
+    </div>
+    {% for entry in g.ledger.ingest.extract(request.args.get('filename'), request.args.get('importer')) %}
+      {% set type = entry.__class__.__name__.lower() %}
+      <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
+        <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
+        <div class="source"><pre>{{ entry.meta['__source__'] }}</pre></div>
+        <div class="form">
+          {% if type == 'transaction' %}
+            {{ forms.transaction(entry=entry) }}
+          {% elif type == 'balance' %}
+            {{ forms.balance(entry=entry) }}
+          {% elif type == 'note' %}
+            {{ forms.note(entry=entry) }}
+          {% endif %}
+        </div>
+          <div class="actions">
+            <div class="inner">
+              <label><input name="action-{{ loop.index }}" type="radio" value="ignore">{{ _('Ignore') }}</label>
+              <label><input name="action-{{ loop.index }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label>
+              <label><input name="action-{{ loop.index }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label>
+            </div>
+          </div>
+      </div>
+    {% endfor %}
+    <div class="fieldset ingest-footer">
+      <button type="submit" class="ingest-form-submit" data-url="{{ url_for('report', report_name='ingest') }}">{{ _('Import transactions') }}</button>
+    </div>
+  </form>
+{% endblock %}

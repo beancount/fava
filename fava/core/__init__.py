@@ -27,6 +27,7 @@ from fava.core.file import FileModule
 from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
                                TagFilter, TimeFilter)
 from fava.core.helpers import FavaAPIException, FavaModule
+from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
 from fava.core.watcher import Watcher
@@ -60,7 +61,7 @@ class ExtensionModule(FavaModule):
 
 
 MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'misc',
-           'query_shell']
+           'query_shell', 'ingest']
 
 
 # pylint: disable=too-many-instance-attributes
@@ -105,6 +106,9 @@ class FavaLedger():
 
         #: A :class:`.FileModule` instance.
         self.file = FileModule(self)
+
+        #: A :class:`.IngestModule` instance.
+        self.ingest = IngestModule(self)
 
         #: A :class:`.FavaMisc` instance.
         self.misc = FavaMisc(self)

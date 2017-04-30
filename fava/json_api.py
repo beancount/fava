@@ -4,14 +4,13 @@ import os
 
 from flask import abort, Blueprint, jsonify, g, request
 from werkzeug.utils import secure_filename
-from beancount.core.data import Posting, Transaction
+from beancount.core import data
 from beancount.core.amount import Amount
 from beancount.core.number import D
 from beancount.scripts.format import align_beancount
 
 from fava import util
 from fava.core.helpers import FavaAPIException
-
 
 json_api = Blueprint('json_api', __name__)  # pylint: disable=invalid-name
 
@@ -46,8 +45,8 @@ def errors():
 def source():
     """Read/write one of the source files."""
     if request.method == 'GET':
-        data = g.ledger.file.get_source(request.args.get('file_path'))
-        return _api_success(payload=data)
+        response = g.ledger.file.get_source(request.args.get('file_path'))
+        return _api_success(payload=response)
     elif request.method == 'PUT':
         if request.get_json() is None:
             abort(400)
@@ -86,11 +85,11 @@ def add_document():
         raise FavaAPIException('Not a documents folder: {}.'
                                .format(documents_folder))
 
-    filepath = os.path.normpath(os.path.join(
-        os.path.dirname(g.ledger.beancount_file_path),
-        documents_folder,
-        request.form['account'].replace(':', '/'),
-        secure_filename(request.form['filename']).replace('_', ' ')))
+    filepath = os.path.normpath(
+        os.path.join(
+            os.path.dirname(g.ledger.beancount_file_path), documents_folder,
+            request.form['account'].replace(':', '/'),
+            secure_filename(request.form['filename']).replace('_', ' ')))
 
     directory = os.path.dirname(filepath)
     if not os.path.exists(directory):
@@ -102,38 +101,87 @@ def add_document():
     file.save(filepath)
 
     if request.form.get('entry_hash'):
-        g.ledger.file.insert_metadata(request.form['entry_hash'],
-                                      'statement',
+        g.ledger.file.insert_metadata(request.form['entry_hash'], 'statement',
                                       os.path.basename(filepath))
     return _api_success(message='Uploaded to {}'.format(filepath))
 
 
-@json_api.route('/add-transaction/', methods=['PUT'])
-def add_transaction():
-    """Add a transaction."""
+def _json_to_transaction(json, valid_accounts):
+    """Parse JSON to a Beancount transaction."""
     # pylint: disable=not-callable
-    json = request.get_json()
 
-    postings = []
-    for posting in json['postings']:
-        if posting['account'] not in g.ledger.attributes.accounts:
-            return _api_error('Unknown account: {}.'
-                              .format(posting['account']))
-        number = D(posting['number']) if posting['number'] else None
-        amount = Amount(number, posting.get('currency'))
-        postings.append(Posting(posting['account'], amount,
-                                None, None, None, None))
-
-    if not postings:
-        return _api_error('Transaction contains no postings.')
-
-    date = util.date.parse_date(json['date'])[0]
     try:
-        transaction = Transaction(
-            json['metadata'], date, json['flag'], json['payee'],
-            json['narration'], None, None, postings)
+        date = util.date.parse_date(json['date'])[0]
+        txn = data.Transaction(json['metadata'], date, json['flag'],
+                               json['payee'], json['narration'], None, None,
+                               [])
     except KeyError:
         raise FavaAPIException('Transaction missing fields.')
 
-    g.ledger.file.insert_entry(transaction)
-    return _api_success(message='Stored transaction.')
+    if not json.get('postings'):
+        raise FavaAPIException('Transaction contains no postings.')
+
+    for posting in json['postings']:
+        if posting['account'] not in valid_accounts:
+            raise FavaAPIException('Unknown account: {}.'
+                                   .format(posting['account']))
+        data.create_simple_posting(txn, posting['account'],
+                                   posting.get('number'),
+                                   posting.get('currency'))
+
+    return txn
+
+
+def json_to_entry(json_entry, valid_accounts):
+    """Parse JSON to a Beancount entry."""
+    # pylint: disable=not-callable
+    if json_entry['type'] == 'transaction':
+        return _json_to_transaction(json_entry, valid_accounts)
+    elif json_entry['type'] == 'balance':
+        if json_entry['account'] not in valid_accounts:
+            raise FavaAPIException(
+                'Unknown account: {}.'.format(json_entry['account']))
+        number = D(json_entry['number'])
+        amount = Amount(number, json_entry.get('currency'))
+        date = util.date.parse_date(json_entry['date'])[0]
+
+        return data.Balance(json_entry['metadata'], date,
+                            json_entry['account'], amount, None, None)
+    elif json_entry['type'] == 'note':
+        if json_entry['account'] not in valid_accounts:
+            raise FavaAPIException(
+                'Unknown account: {}.'.format(json_entry['account']))
+
+        if '"' in json_entry['comment']:
+            raise FavaAPIException('Note contains double-quotes (")')
+        date = util.date.parse_date(json_entry['date'])[0]
+
+        return data.Note(json_entry['metadata'], date, json_entry['account'],
+                         json_entry['comment'])
+    else:
+        raise FavaAPIException('Unsupported entry type.')
+
+
+def incomplete_sortkey(entry):
+    """Sortkey for entries that might have incomplete metadata."""
+    return (entry.date, data.SORT_ORDER.get(type(entry), 0))
+
+
+@json_api.route('/add-entries/', methods=['PUT'])
+def add_entries():
+    """Add multiple entries."""
+    json = request.get_json()
+
+    try:
+        entries = [
+            json_to_entry(entry, g.ledger.attributes.accounts)
+            for entry in json['entries']
+        ]
+    except KeyError as error:
+        raise FavaAPIException('KeyError: {}'.format(str(error)))
+
+    for entry in sorted(entries, key=incomplete_sortkey):
+        g.ledger.file.insert_entry(entry)
+
+    return _api_success(
+        message='Stored {} entries.'.format(len(json['entries'])))

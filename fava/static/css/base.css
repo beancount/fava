@@ -168,6 +168,7 @@ pre {
 
 /* fake fieldsets to work around browser bugs with <fieldset> */
 .fieldset {
+  display: flex;
   padding: 5px 10px;
 }
 
@@ -187,7 +188,22 @@ input[type='text'] {
   }
 }
 
-button {
+input[type='radio'] {
+  margin-right: 5px;
+}
+
+input[type='date'] {
+  width: 120px;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-clear-button {
+    -webkit-appearance: none;
+    display: none;
+  }
+}
+
+button,
+.button {
   background-color: var(--color-header);
   border: 0;
   color: var(--color-background);
@@ -228,6 +244,11 @@ button {
       text-decoration: underline;
     }
   }
+}
+
+.button:link,
+.button:visited {
+  color: var(--color-background);
 }
 
 .hidden.hidden {
