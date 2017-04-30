@@ -53,13 +53,15 @@ function initPage() {
 
 let pageData;
 
-function setSelectedLink() {
+function initSidebar() {
   $$('aside a').forEach((el) => {
     el.classList.remove('selected');
     if (el.getAttribute('href').startsWith(window.location.pathname)) {
       el.classList.add('selected');
     }
   });
+  $('aside li.error').classList.toggle('hidden', pageData.errors === 0);
+  $('aside li.error span').innerHTML = pageData.errors;
 }
 
 e.on('page-loaded', () => {
@@ -79,15 +81,15 @@ e.on('page-loaded', () => {
   document.title = pageData.documentTitle;
   $('h1 strong').innerHTML = pageData.pageTitle;
   $('#reload-page').classList.add('hidden');
-  setSelectedLink();
+  initSidebar();
 });
 
 e.on('file-modified', () => {
-  $.fetch(`${window.favaAPI.baseURL}_aside/`)
-    .then(response => response.text())
-    .then((html) => {
-      $('aside').innerHTML = html;
-      setSelectedLink();
+  $.fetch(`${window.favaAPI.baseURL}api/errors/`)
+    .then(handleJSON)
+    .then((data) => {
+      pageData.errors = data.errors;
+      initSidebar();
     });
 });
 
@@ -118,11 +120,11 @@ function doPoll() {
     .then(handleJSON)
     .then((data) => {
       if (data.changed) {
-        e.trigger('file-modified');
         if (window.favaAPI.favaOptions['auto-reload']) {
           e.trigger('reload');
         } else {
           $('#reload-page').classList.remove('hidden');
+          e.trigger('file-modified');
           e.trigger('reload-warning', _('File change detected. Click to reload.'));
         }
       }

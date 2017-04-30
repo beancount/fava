@@ -54,7 +54,6 @@ app.config['HELP_PAGES'] = HELP_PAGES
 app.config['LEDGERS'] = {}
 
 REPORTS = [
-    '_aside',
     'balance_sheet',
     'commodities',
     'events',

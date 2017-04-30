@@ -10,14 +10,6 @@ const darwin = (process.platform === 'darwin');
 const port = 8899;
 const mainAddr = `http://localhost:${port}`;
 
-settings.defaults({
-  bounds: {
-    width: 1260,
-    height: 800,
-  },
-  'beancount-file': [],
-});
-
 let splashScreenWindow;
 let mainWindow;
 let subprocess;
@@ -27,11 +19,11 @@ function chooseFilename() {
   if (fileNames === undefined) {
     return false;
   }
-  let values = settings.getSync('beancount-file');
+  let values = settings.get('beancount-file');
   if (!values) {
     values = [];
   }
-  settings.setSync('beancount-file', values.concat(fileNames));
+  settings.set('beancount-file', values.concat(fileNames));
   return true;
 }
 
@@ -39,7 +31,7 @@ function startFava() {
   const args = [
     '-p',
     port,
-  ].concat(settings.getSync('beancount-file'));
+  ].concat(settings.get('beancount-file', []));
 
   let favaPath;
   if (__dirname.match('app.asar')) {
@@ -62,7 +54,10 @@ function startFava() {
 function loadMainPage() {
   rq(mainAddr)
     .then(() => {
-      mainWindow.setBounds(settings.getSync('bounds'));
+      mainWindow.setBounds(settings.get('bounds', {
+        width: 1260,
+        height: 800,
+      }));
       mainWindow.loadURL(mainAddr);
     })
   .catch(() => {
@@ -80,7 +75,7 @@ function openBeancountFile() {
 }
 
 function resetFiles() {
-  settings.setSync('beancount-file', []);
+  settings.set('beancount-file', []);
   openBeancountFile();
 }
 
@@ -247,7 +242,7 @@ app.on('quit', () => {
 app.on('ready', () => {
   Menu.setApplicationMenu(menu);
 
-  const files = settings.getSync('beancount-file');
+  const files = settings.get('beancount-file');
   if (!files || !files.length) {
     chooseFilename();
   }

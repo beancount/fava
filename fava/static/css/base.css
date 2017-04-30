@@ -251,7 +251,7 @@ button,
   color: var(--color-background);
 }
 
-.hidden {
+.hidden.hidden {
   display: none;
 }
 

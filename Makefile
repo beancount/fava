@@ -67,6 +67,6 @@ babel-merge:
 babel-compile:
 	pybabel compile -d fava/translations
 
-pyinstaller: dist/fava
+pyinstaller: dist/fava fava/static/gen/app.js
 dist/fava: fava
 	pyinstaller --clean --onefile contrib/pyinstaller.spec
