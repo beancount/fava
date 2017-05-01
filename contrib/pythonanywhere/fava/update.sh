@@ -1,11 +1,14 @@
 #!/bin/bash
 
+# Start virtualenv
+source /home/fava/.virtualenvs/fava/bin/activate
+
 # Add user bin
 export PATH=$PATH:/home/fava/.local/bin
 
 # Updade fava
-pip3 install --user fava --upgrade
-version=`python3 -c "import fava; print(fava.__version__)"`
+pip install fava --upgrade
+version=`python -c "import fava; print(fava.__version__)"`
 
 # Update default config
 cp ~/fava/fava/default-settings.conf /home/fava/
