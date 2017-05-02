@@ -2,7 +2,7 @@ import datetime
 from io import BytesIO
 import os
 
-from beancount.core import data
+from beancount.core.data import Transaction, create_simple_posting
 from beancount.scripts.format import align_beancount
 import flask
 
@@ -15,8 +15,8 @@ def test_api_changed(app, test_client):
         url = flask.url_for('json_api.changed')
 
     result = test_client.get(url)
-    data = flask.json.loads(result.get_data(True))
-    assert data == {'changed': False, 'success': True}
+    response_data = flask.json.loads(result.get_data(True))
+    assert response_data == {'changed': False, 'success': True}
 
 
 def test_api_add_document(app, test_client, tmpdir):
@@ -24,7 +24,7 @@ def test_api_add_document(app, test_client, tmpdir):
         app.preprocess_request()
         old_documents = flask.g.ledger.options['documents']
         flask.g.ledger.options['documents'] = [str(tmpdir)]
-        data = {
+        request_data = {
             'folder': str(tmpdir),
             'account': 'Test',
             'filename': '2015-12-12_test',
@@ -36,17 +36,17 @@ def test_api_add_document(app, test_client, tmpdir):
         assert response.status_code == 400
 
         filename = '{}/{}/{}'.format(
-            str(tmpdir), 'Test', data['filename'].replace('_', ' '))
+            str(tmpdir), 'Test', request_data['filename'].replace('_', ' '))
 
-        response = test_client.put(url, data=data)
+        response = test_client.put(url, data=request_data)
         assert flask.json.loads(response.get_data(True)) == {
             'success': True,
             'message': 'Uploaded to {}'.format(filename),
         }
         assert os.path.isfile(filename)
 
-        data['file'] = (BytesIO(b'asdfasdf'), 'test')
-        response = test_client.put(url, data=data)
+        request_data['file'] = (BytesIO(b'asdfasdf'), 'test')
+        response = test_client.put(url, data=request_data)
         assert flask.json.loads(response.get_data(True)) == {
             'success': False,
             'error': '{} already exists.'.format(filename),
@@ -60,9 +60,11 @@ def test_api_source_get(app, test_client):
         url = flask.url_for('json_api.source')
 
     result = test_client.get(url)
-    data = flask.json.loads(result.get_data(True))
-    assert data == {'error': 'Trying to read a non-source file',
-                    'success': False}
+    response_data = flask.json.loads(result.get_data(True))
+    assert response_data == {
+        'error': 'Trying to read a non-source file',
+        'success': False
+    }
 
     path = app.config['BEANCOUNT_FILES'][0]
     with app.test_request_context():
@@ -70,9 +72,9 @@ def test_api_source_get(app, test_client):
         url = flask.url_for('json_api.source', file_path=path)
 
     result = test_client.get(url)
-    data = flask.json.loads(result.get_data(True))
+    response_data = flask.json.loads(result.get_data(True))
     payload = open(path).read()
-    assert data == {'payload': payload, 'success': True}
+    assert response_data == {'payload': payload, 'success': True}
 
 
 def test_api_source_put(app, test_client):
@@ -82,7 +84,12 @@ def test_api_source_put(app, test_client):
 
     # test bad request
     response = test_client.put(url)
-    assert response.status_code == 400
+    response_data = flask.json.loads(response.get_data(True))
+    assert response_data == {
+        'error': 'Invalid JSON request.',
+        'success': False
+    }
+    assert response.status_code == 200
 
     path = app.config['BEANCOUNT_FILES'][0]
     payload = open(path).read()
@@ -93,8 +100,8 @@ def test_api_source_put(app, test_client):
         'file_path': path,
     }), content_type='application/json')
     assert result.status_code == 200
-    data = flask.json.loads(result.get_data(True))
-    assert data == {'success': True}
+    response_data = flask.json.loads(result.get_data(True))
+    assert response_data == {'success': True}
 
     # check if the file has been written
     assert open(path).read() == 'asdf' + payload
@@ -122,10 +129,6 @@ def test_api_format_source(app, test_client):
     assert data == {'payload': align_beancount(payload),
                     'success': True}
 
-    # test bad request
-    response = test_client.post(url)
-    assert response.status_code == 400
-
 
 def test_json_to_entry():
     valid_accounts = ['Assets:US:ETrade:Cash', 'Assets:US:ETrade:GLD']
@@ -148,10 +151,10 @@ def test_json_to_entry():
         ],
     }
 
-    txn = data.Transaction({}, datetime.date(2017, 12, 12), '*', 'Test3', '',
-                           None, None, [])
-    data.create_simple_posting(txn, 'Assets:US:ETrade:Cash', '100', 'USD')
-    data.create_simple_posting(txn, 'Assets:US:ETrade:GLD', None, None)
+    txn = Transaction({}, datetime.date(2017, 12, 12), '*', 'Test3', '',
+                      None, None, [])
+    create_simple_posting(txn, 'Assets:US:ETrade:Cash', '100', 'USD')
+    create_simple_posting(txn, 'Assets:US:ETrade:GLD', None, None)
     assert json_to_entry(json_txn, valid_accounts) == txn
 
 

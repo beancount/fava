@@ -18,8 +18,8 @@ def test_pairwise():
 
 
 def test_simple_wsgi():
-    c = Client(simple_wsgi, BaseResponse)
-    resp = c.get('/any_path')
+    client = Client(simple_wsgi, BaseResponse)
+    resp = client.get('/any_path')
     assert resp.status_code == 200
     assert resp.data == b''
 

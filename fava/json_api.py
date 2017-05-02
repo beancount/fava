@@ -2,7 +2,7 @@
 
 import os
 
-from flask import abort, Blueprint, jsonify, g, request
+from flask import Blueprint, jsonify, g, request
 from werkzeug.utils import secure_filename
 from beancount.core import data
 from beancount.core.amount import Amount
@@ -15,10 +15,6 @@ from fava.core.helpers import FavaAPIException
 json_api = Blueprint('json_api', __name__)  # pylint: disable=invalid-name
 
 
-def _api_error(message=''):
-    return jsonify({'success': False, 'error': message})
-
-
 def _api_success(**kwargs):
     kwargs['success'] = True
     return jsonify(kwargs)
@@ -26,7 +22,7 @@ def _api_success(**kwargs):
 
 @json_api.errorhandler(FavaAPIException)
 def _json_api_exception(error):
-    return _api_error(error.message)
+    return jsonify({'success': False, 'error': error.message})
 
 
 @json_api.route('/changed/')
@@ -48,19 +44,21 @@ def source():
         response = g.ledger.file.get_source(request.args.get('file_path'))
         return _api_success(payload=response)
     elif request.method == 'PUT':
-        if request.get_json() is None:
-            abort(400)
-        g.ledger.file.set_source(request.get_json()['file_path'],
-                                 request.get_json()['source'])
+        request_data = request.get_json()
+        if request_data is None:
+            raise FavaAPIException('Invalid JSON request.')
+        g.ledger.file.set_source(request_data['file_path'],
+                                 request_data['source'])
         return _api_success()
 
 
 @json_api.route('/format-source/', methods=['POST'])
 def format_source():
     """Format beancount file."""
-    if request.get_json() is None:
-        abort(400)
-    return _api_success(payload=align_beancount(request.get_json()['source']))
+    request_data = request.get_json()
+    if request_data is None:
+        raise FavaAPIException('Invalid JSON request.')
+    return _api_success(payload=align_beancount(request_data['source']))
 
 
 @json_api.route('/payee-accounts/', methods=['GET'])
@@ -170,12 +168,14 @@ def incomplete_sortkey(entry):
 @json_api.route('/add-entries/', methods=['PUT'])
 def add_entries():
     """Add multiple entries."""
-    json = request.get_json()
+    request_data = request.get_json()
+    if request_data is None:
+        raise FavaAPIException('Invalid JSON request.')
 
     try:
         entries = [
             json_to_entry(entry, g.ledger.attributes.accounts)
-            for entry in json['entries']
+            for entry in request_data['entries']
         ]
     except KeyError as error:
         raise FavaAPIException('KeyError: {}'.format(str(error)))
@@ -184,4 +184,4 @@ def add_entries():
         g.ledger.file.insert_entry(entry)
 
     return _api_success(
-        message='Stored {} entries.'.format(len(json['entries'])))
+        message='Stored {} entries.'.format(len(entries)))

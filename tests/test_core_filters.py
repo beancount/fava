@@ -18,18 +18,18 @@ def test_filterexception():
 
 
 def test_from_filter(example_ledger):
-    filter = FromFilter()
+    from_filter = FromFilter()
 
-    filter.set('has_account("Assets:US:ETrade")')
-    filtered_entries = filter.apply(
+    from_filter.set('has_account("Assets:US:ETrade")')
+    filtered_entries = from_filter.apply(
         example_ledger.all_entries, example_ledger.options)
     assert len(filtered_entries) == 53
 
     with pytest.raises(FilterException):
-        filter.set('invalid')
+        from_filter.set('invalid')
 
-    filter.set('')
-    filtered_entries = filter.apply(
+    from_filter.set('')
+    filtered_entries = from_filter.apply(
         example_ledger.all_entries, example_ledger.options)
     assert len(filtered_entries) == len(example_ledger.all_entries)
 
@@ -66,7 +66,7 @@ def test_time_filter(example_ledger):
     time_filter.set('1000')
     filtered_entries = time_filter.apply(
         example_ledger.all_entries, example_ledger.options)
-    assert len(filtered_entries) == 0
+    assert not filtered_entries
 
     time_filter.set(None)
     filtered_entries = time_filter.apply(
@@ -86,7 +86,7 @@ def test_tag_filter(example_ledger):
     assert all(map(
         lambda x: isinstance(x, Transaction),
         filtered_entries))
-    assert len(filtered_entries) == 0
+    assert not filtered_entries
 
     tag_filter.set('#test')
     filtered_entries = tag_filter.apply(
@@ -129,7 +129,7 @@ def test_payee_filter(example_ledger):
     payee_filter.set('asdfasdfasdvba')
     filtered_entries = payee_filter.apply(
         example_ledger.all_entries, example_ledger.options)
-    assert len(filtered_entries) == 0
+    assert not filtered_entries
 
     payee_filter.set('')
     filtered_entries = payee_filter.apply(

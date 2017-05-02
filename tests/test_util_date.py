@@ -1,7 +1,7 @@
 from datetime import date, datetime
+from unittest import mock
 
 import pytest
-from unittest import mock
 
 from fava.util.date import (parse_date, get_next_interval, interval_ends,
                             substitute, number_of_days_in_period)
@@ -29,7 +29,7 @@ def test_get_next_interval(input_date_string, interval, expect):
     assert get == _to_date(expect)
 
 
-def test_get_next_interval_exception():
+def test_get_next_intervalfail2():
     with pytest.raises(NotImplementedError):
         get_next_interval(date(2016, 4, 18), 'decade')
 
@@ -60,7 +60,7 @@ def test_interval_tuples():
     ]
 
 
-@pytest.mark.parametrize("input,output", [
+@pytest.mark.parametrize("string,output", [
     ('year', '2016'),
     ('(year-1)', '2015'),
     ('year-1-2', '2015-2'),
@@ -80,14 +80,14 @@ def test_interval_tuples():
     ('day', '2016-06-24'),
     ('day+20', '2016-07-14'),
 ])
-def test_substitute(input, output):
+def test_substitute(string, output):
     # Mock the imported datetime.date in fava.util.date module
     # Ref:
     # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
     with mock.patch('fava.util.date.datetime.date') as mock_date:
         mock_date.today.return_value = _to_date('2016-06-24')
         mock_date.side_effect = date
-        assert substitute(input) == output
+        assert substitute(string) == output
 
 
 @pytest.mark.parametrize("expect_start,expect_end,text", [
@@ -119,7 +119,7 @@ def test_parse_date_relative(expect_start, expect_end, text):
         assert parse_date(text) == (start, end)
 
 
-@pytest.mark.parametrize("interval,date,expect", [
+@pytest.mark.parametrize("interval,date_str,expect", [
     ('daily', '2016-05-01', 1),
     ('daily', '2016-05-31', 1),
     ('weekly', '2016-05-01', 7),
@@ -138,10 +138,10 @@ def test_parse_date_relative(expect_start, expect_end, text):
     ('yearly', '2015-02-01', 365),
     ('yearly', '2016-01-01', 366),
 ])
-def test_number_of_days_in_period(interval, date, expect):
-    assert number_of_days_in_period(interval, _to_date(date)) == expect
+def test_number_of_days_in_period(interval, date_str, expect):
+    assert number_of_days_in_period(interval, _to_date(date_str)) == expect
 
 
-def test_number_of_days_in_period_exception():
+def test_number_of_days_in_period2():
     with pytest.raises(NotImplementedError):
         number_of_days_in_period('test', date(2011, 2, 1))

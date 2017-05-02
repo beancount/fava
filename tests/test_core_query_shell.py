@@ -23,7 +23,7 @@ def test_execute_query(example_ledger):
     assert query_shell.get_history(1) == ['balances']
 
 
-def test_query_to_file(example_ledger, tmpdir):
+def test_query_to_file(example_ledger):
     query_shell = QueryShell(example_ledger)
 
     name, data = query_shell.query_to_file('balances', 'csv')
@@ -37,8 +37,3 @@ def test_query_to_file(example_ledger, tmpdir):
 
     with pytest.raises(FavaAPIException):
         query_shell.query_to_file('run testsetest', 'csv')
-
-    # name, data1 = query_shell.query_to_file('run fava', 'csv')
-    # _, data2 = query_shell.query_to_file('journal', 'csv')
-    # assert name == 'fava'
-    # assert data1.getvalue() == data2.getvalue()

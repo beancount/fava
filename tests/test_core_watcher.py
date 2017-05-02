@@ -4,34 +4,34 @@ from fava.core.watcher import Watcher
 
 
 def test_watcher_file(tmpdir):
-    foo = tmpdir.join('foo')
-    bar = tmpdir.join('bar')
-    foo.write('test')
-    bar.write('test')
+    file1 = tmpdir.join('file1')
+    file2 = tmpdir.join('file2')
+    file1.write('test')
+    file2.write('test')
 
     watcher = Watcher()
-    watcher.update([str(foo), str(bar)], [])
+    watcher.update([str(file1), str(file2)], [])
     assert not watcher.check()
 
     # time.time is too precise
     time.sleep(1)
 
-    foo.write('test2')
+    file1.write('test2')
 
     assert watcher.check()
 
 
 def test_watcher_folder(tmpdir):
-    foo = tmpdir.mkdir('foo')
-    foo.mkdir('bar')
+    folder = tmpdir.mkdir('folder')
+    folder.mkdir('bar')
 
     watcher = Watcher()
-    watcher.update([], [str(foo)])
+    watcher.update([], [str(folder)])
     assert not watcher.check()
 
     # time.time is too precise
     time.sleep(1)
 
-    foo.mkdir('bar2')
+    folder.mkdir('bar2')
 
     assert watcher.check()

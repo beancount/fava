@@ -48,9 +48,9 @@ def test_plugins(tmpdir):
         2016-11-02 document Assets:Cash "documents/Assets/Cash/Test 5.pdf"
     """.format(documents_folder, sample_statement2)))
 
-    entries, errors, options = load_file(str(beancount_file))
+    entries, errors, _ = load_file(str(beancount_file))
 
-    assert len(errors) == 0
+    assert not errors
     assert len(entries) == 9
 
     assert 'statement' in entries[3].tags

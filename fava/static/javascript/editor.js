@@ -121,10 +121,6 @@ function jumpToMarker(cm) {
   }
 }
 
-function submitQuery() {
-  $('#submit-query').click();
-}
-
 export default function initEditor() {
   const rulers = [];
   if (window.favaAPI.favaOptions['editor-print-margin-column']) {
@@ -189,10 +185,10 @@ export default function initEditor() {
       mode: 'beancount-query',
       extraKeys: {
         'Ctrl-Enter': () => {
-          submitQuery();
+          $('#submit-query').click();
         },
         'Cmd-Enter': () => {
-          submitQuery();
+          $('#submit-query').click();
         },
       },
       placeholder: queryEditorTextarea.getAttribute('placeholder'),
