@@ -147,11 +147,14 @@ svg {
 
 .barchart {
   & .group {
-    cursor: pointer;
-
     &:hover .group-box {
       opacity: .1;
     }
+  }
+
+  & .axis-group-box {
+    cursor: pointer;
+    opacity: 0;
   }
 
   & .group-box {
