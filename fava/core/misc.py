@@ -1,6 +1,7 @@
 """Some miscellaneous reports."""
 
 import datetime
+import re
 
 from beancount.core.data import Custom, Event
 from beancount.utils.misc_utils import filter_type
@@ -8,9 +9,9 @@ from beancount.utils.misc_utils import filter_type
 from fava.core.helpers import FavaModule
 
 
-# pylint: disable=too-few-public-methods
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
+    # pylint: disable=too-few-public-methods
 
     def __init__(self, ledger):
         super().__init__(ledger)
@@ -50,7 +51,6 @@ def _upcoming_events(entries, max_delta):
     Returns:
         A list of the Events in entries that are less than `max_delta` days
         away.
-
     """
     today = datetime.date.today()
     upcoming_events = []
@@ -61,3 +61,22 @@ def _upcoming_events(entries, max_delta):
             upcoming_events.append(event)
 
     return upcoming_events
+
+
+def extract_tags_links(string):
+    """Extract tags and links from a (narration) string.
+
+    Args:
+        string: A string, possibly containing tags (`#tag`) and links
+        (`^link`).
+
+    Returns:
+        A triple (new_string, tags, links) where `new_string` is `string`
+        stripped of tags and links.
+    """
+
+    tags = re.findall(r'(?:^|\s)#(\w+)', string)
+    links = re.findall(r'(?:^|\s)\^(\w+)', string)
+    new_string = re.sub(r'(?:^|\s)[#^](\w+)', '', string).strip()
+
+    return new_string, frozenset(tags), frozenset(links)

@@ -11,6 +11,7 @@ from beancount.scripts.format import align_beancount
 
 from fava import util
 from fava.core.helpers import FavaAPIException
+from fava.core.misc import extract_tags_links
 
 json_api = Blueprint('json_api', __name__)  # pylint: disable=invalid-name
 
@@ -109,9 +110,10 @@ def json_to_entry(json_entry, valid_accounts):
     # pylint: disable=not-callable
     date = util.date.parse_date(json_entry['date'])[0]
     if json_entry['type'] == 'transaction':
+        narration, tags, links = extract_tags_links(json_entry['narration'])
         txn = data.Transaction(json_entry['metadata'], date,
                                json_entry['flag'], json_entry['payee'],
-                               json_entry['narration'], None, None, [])
+                               narration, tags, links, [])
 
         if not json_entry.get('postings'):
             raise FavaAPIException('Transaction contains no postings.')
