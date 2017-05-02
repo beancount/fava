@@ -104,44 +104,33 @@ def add_document():
     return _api_success(message='Uploaded to {}'.format(filepath))
 
 
-def _json_to_transaction(json, valid_accounts):
-    """Parse JSON to a Beancount transaction."""
-    # pylint: disable=not-callable
-
-    try:
-        date = util.date.parse_date(json['date'])[0]
-        txn = data.Transaction(json['metadata'], date, json['flag'],
-                               json['payee'], json['narration'], None, None,
-                               [])
-    except KeyError:
-        raise FavaAPIException('Transaction missing fields.')
-
-    if not json.get('postings'):
-        raise FavaAPIException('Transaction contains no postings.')
-
-    for posting in json['postings']:
-        if posting['account'] not in valid_accounts:
-            raise FavaAPIException('Unknown account: {}.'
-                                   .format(posting['account']))
-        data.create_simple_posting(txn, posting['account'],
-                                   posting.get('number'),
-                                   posting.get('currency'))
-
-    return txn
-
-
 def json_to_entry(json_entry, valid_accounts):
     """Parse JSON to a Beancount entry."""
     # pylint: disable=not-callable
+    date = util.date.parse_date(json_entry['date'])[0]
     if json_entry['type'] == 'transaction':
-        return _json_to_transaction(json_entry, valid_accounts)
+        txn = data.Transaction(json_entry['metadata'], date,
+                               json_entry['flag'], json_entry['payee'],
+                               json_entry['narration'], None, None, [])
+
+        if not json_entry.get('postings'):
+            raise FavaAPIException('Transaction contains no postings.')
+
+        for posting in json_entry['postings']:
+            if posting['account'] not in valid_accounts:
+                raise FavaAPIException('Unknown account: {}.'
+                                       .format(posting['account']))
+            data.create_simple_posting(txn, posting['account'],
+                                       posting.get('number'),
+                                       posting.get('currency'))
+
+        return txn
     elif json_entry['type'] == 'balance':
         if json_entry['account'] not in valid_accounts:
             raise FavaAPIException(
                 'Unknown account: {}.'.format(json_entry['account']))
         number = D(json_entry['number'])
         amount = Amount(number, json_entry.get('currency'))
-        date = util.date.parse_date(json_entry['date'])[0]
 
         return data.Balance(json_entry['metadata'], date,
                             json_entry['account'], amount, None, None)
@@ -152,7 +141,6 @@ def json_to_entry(json_entry, valid_accounts):
 
         if '"' in json_entry['comment']:
             raise FavaAPIException('Note contains double-quotes (")')
-        date = util.date.parse_date(json_entry['date'])[0]
 
         return data.Note(json_entry['metadata'], date, json_entry['account'],
                          json_entry['comment'])
@@ -183,5 +171,4 @@ def add_entries():
     for entry in sorted(entries, key=incomplete_sortkey):
         g.ledger.file.insert_entry(entry)
 
-    return _api_success(
-        message='Stored {} entries.'.format(len(entries)))
+    return _api_success(message='Stored {} entries.'.format(len(entries)))
