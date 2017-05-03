@@ -3,6 +3,7 @@
 import os
 
 from beancount.core import data
+from beancount.parser.printer import format_entry
 
 from fava.core.helpers import FavaAPIException, FavaModule
 
@@ -140,64 +141,21 @@ def insert_entry(entry, filenames, insert_options):
         accounts = entry.account
     filename, lineno = find_insert_position(
         accounts, entry.date, insert_options, filenames)
-    content = _render_entry(entry)
+    content = _format_entry(entry)
 
     with open(filename, "r") as file:
         contents = file.readlines()
 
-    contents.insert(lineno, content + '\n\n')
+    contents.insert(lineno, content + '\n')
 
     with open(filename, "w") as file:
         file.writelines(contents)
 
 
-def _render_entry(entry):
-    """Render out an entry as string.
-
-    Currently supported are Transaction, Balance and Note.
-
-    Args:
-        entry: An entry.
-
-    Returns:
-        A string containing the entry in Beancount's format.
-
-    Raises:
-        FavaAPIException: If the type of entry is not one of Transaction,
-            Balance or Note.
-    """
-    if isinstance(entry, data.Transaction):
-        lines = ['{} {} "{}" "{}"'.format(
-            entry.date, entry.flag, entry.payee,
-            entry.narration)]
-
-        if entry.meta:
-            for key, value in entry.meta.items():
-                lines.append('    {}: "{}"'.format(key, value))
-
-        for posting in entry.postings:
-            line = '    {}'.format(posting.account)
-            if posting.units:
-                number_length = str(posting.units.number).find('.')
-                line += ' ' * max(49 - len(posting.account) - number_length, 2)
-                line += '{} {}'.format(posting.units.number or '',
-                                       posting.units.currency or '')
-            lines.append(line)
-
-        return '\n'.join(lines)
-
-    if isinstance(entry, data.Balance):
-        return '{} balance {} {} {}'.format(
-            entry.date, entry.account, entry.amount.number,
-            entry.amount.currency)
-
-    if isinstance(entry, data.Note):
-        return '{} note {} "{}"'.format(
-            entry.date, entry.account, entry.comment)
-
-    raise FavaAPIException(
-        'Rendering entries of type {} is not implemented.'.format(
-            entry.__class__.__name__))
+def _format_entry(entry):
+    """Wrapper that strips unnecessary whitespace from format_entry."""
+    string = format_entry(entry)
+    return '\n'.join((line.rstrip() for line in string.split('\n')))
 
 
 def find_insert_position(accounts, date, insert_options, filenames):

@@ -152,7 +152,7 @@ def test_json_to_entry():
     }
 
     txn = Transaction({}, datetime.date(2017, 12, 12), '*', 'Test3', '',
-                      None, None, [])
+                      frozenset(), frozenset(), [])
     create_simple_posting(txn, 'Assets:US:ETrade:Cash', '100', 'USD')
     create_simple_posting(txn, 'Assets:US:ETrade:GLD', None, None)
     assert json_to_entry(json_txn, valid_accounts) == txn
@@ -234,16 +234,16 @@ def test_api_add_entries(app, test_client, tmpdir):
         }
 
         assert test_file.read_text('utf-8') == """2017-01-12 * "Test1" ""
-    Assets:US:ETrade:Cash                             100 USD
-    Assets:US:ETrade:GLD
+  Assets:US:ETrade:Cash  100 USD
+  Assets:US:ETrade:GLD
 
 2017-02-12 * "Test" "Test"
-    Assets:US:ETrade:Cash                             100 USD
-    Assets:US:ETrade:GLD
+  Assets:US:ETrade:Cash  100 USD
+  Assets:US:ETrade:GLD
 
 2017-12-12 * "Test3" ""
-    Assets:US:ETrade:Cash                             100 USD
-    Assets:US:ETrade:GLD
+  Assets:US:ETrade:Cash  100 USD
+  Assets:US:ETrade:GLD
 
 """
 

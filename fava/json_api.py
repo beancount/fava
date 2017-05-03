@@ -123,7 +123,7 @@ def json_to_entry(json_entry, valid_accounts):
                 raise FavaAPIException('Unknown account: {}.'
                                        .format(posting['account']))
             data.create_simple_posting(txn, posting['account'],
-                                       posting.get('number'),
+                                       posting.get('number') or None,
                                        posting.get('currency'))
 
         return txn
