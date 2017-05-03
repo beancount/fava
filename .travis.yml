@@ -1,22 +1,22 @@
 language: python
-
-install:
-  - pip install tox
-
-script: tox -e $TRAVIS_BUILD
+install: "pip install tox"
+script: "tox -e $TRAVIS_BUILD"
+python: 3.5
+env: TRAVIS_BUILD=py35
 
 matrix:
+  allow_failures:
+    - env: TRAVIS_BUILD=deploy
+  fast_finish: true
   include:
     - python: 3.5
-      env: {TRAVIS_BUILD: py35}
-    - python: 3.5
-      env: {TRAVIS_BUILD: coverage}
+      env: TRAVIS_BUILD=coverage
       before_install: "pip install codecov"
       after_success: "codecov"
     - python: 3.5
       dist: trusty
       sudo: false
-      env: {TRAVIS_BUILD: lint}
+      env: TRAVIS_BUILD=lint
       before_install: "nvm use stable"
       script: "make lint"
     - python: 3.5
@@ -33,7 +33,7 @@ matrix:
         make
         make pyinstaller
         make -C gui dist
-      env: {TRAVIS_BUILD: deploy}
+      env: TRAVIS_BUILD=deploy
     - language: node
       node_js: node
       os: osx
@@ -45,7 +45,7 @@ matrix:
         make
         make pyinstaller
         make -C gui dist
-      env: {TRAVIS_BUILD: deploy}
+      env: TRAVIS_BUILD=deploy
 
 cache:
   directories:
