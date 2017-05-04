@@ -135,8 +135,8 @@ function doPoll() {
 }
 
 $.ready().then(() => {
-  initPage();
   initRouter();
+  initPage();
   e.trigger('page-loaded');
   setTimeout(doPoll, 5000);
 });

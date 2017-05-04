@@ -38,15 +38,14 @@ import './codemirror/mode-query';
 import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
 
-function saveEditorContent(cm) {
+CodeMirror.commands.favaSave = (cm) => {
   const button = $('#source-editor-submit');
-  const fileName = $('#source-editor-select').value;
-  const url = button.getAttribute('data-url');
+  const fileName = button.getAttribute('data-filename');
 
   button.disabled = true;
   button.textContent = _('Saving...');
 
-  $.fetch(url, {
+  $.fetch(`${window.favaAPI.baseURL}api/source/`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -67,14 +66,10 @@ function saveEditorContent(cm) {
       cm.markClean();
       button.textContent = _('Save');
     });
-}
+};
 
-function formatEditorContent(cm) {
-  const button = $('#source-editor-format');
-  const scrollPosition = cm.getScrollInfo().top;
-  button.disabled = true;
-
-  $.fetch(button.getAttribute('data-url'), {
+CodeMirror.commands.favaFormat = (cm) => {
+  $.fetch(`${window.favaAPI.baseURL}api/format-source/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -85,43 +80,93 @@ function formatEditorContent(cm) {
   })
     .then(handleJSON)
     .then((data) => {
+      const scrollPosition = cm.getScrollInfo().top;
       cm.setValue(data.payload);
       cm.scrollTo(null, scrollPosition);
     }, () => {
       e.trigger('error', _('Formatting the file with bean-format failed.'));
-    })
-    .then(() => {
-      button.disabled = false;
     });
-}
+};
 
-function toggleComment(cm) {
+CodeMirror.commands.favaToggleComment = (cm) => {
   const args = { from: cm.getCursor(true), to: cm.getCursor(false), options: { lineComment: ';' } };
   if (!cm.uncomment(args.from, args.to, args.options)) {
     cm.lineComment(args.from, args.to, args.options);
   }
-}
+};
 
-function centerCursor(cm) {
+CodeMirror.commands.favaCenterCursor = (cm) => {
   const top = cm.cursorCoords(true, 'local').top;
   const height = cm.getScrollInfo().clientHeight;
   cm.scrollTo(null, top - (height / 2));
-}
+};
 
-function jumpToMarker(cm) {
+CodeMirror.commands.favaJumpToMarker = (cm) => {
   const cursor = cm.getSearchCursor('FAVA-INSERT-MARKER');
 
   if (cursor.findNext()) {
     cm.focus();
     cm.setCursor(cursor.pos.from);
     cm.execCommand('goLineUp');
-    centerCursor(cm);
+    cm.execCommand('favaCenterCursor');
   } else {
     cm.setCursor(cm.lastLine(), 0);
   }
+};
+
+// Initialize the query editor
+function initQueryEditor() {
+  const queryEditorTextarea = $('#query-editor');
+  if (!queryEditorTextarea) { return; }
+
+  const queryOptions = {
+    mode: 'beancount-query',
+    extraKeys: {
+      'Ctrl-Enter': () => {
+        $('#submit-query').click();
+      },
+      'Cmd-Enter': () => {
+        $('#submit-query').click();
+      },
+    },
+    placeholder: queryEditorTextarea.getAttribute('placeholder'),
+  };
+  const editor = CodeMirror.fromTextArea(queryEditorTextarea, queryOptions);
+
+  editor.on('keyup', (cm, event) => {
+    if (!cm.state.completionActive && event.keyCode !== 13) {
+      CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+    }
+  });
+
+  $.delegate($('#query-container'), 'click', '.queryresults-header', (event) => {
+    const wrapper = event.target.closest('.queryresults-wrapper');
+    if (wrapper.classList.contains('inactive')) {
+      editor.setValue(wrapper.querySelector('code').innerHTML);
+      $('#query-form').dispatchEvent(new Event('submit'));
+      return;
+    }
+    wrapper.classList.toggle('toggled');
+  });
+}
+
+// Initialize read-only editors
+function initReadOnlyEditors() {
+  $$('.editor-readonly').forEach((el) => {
+    CodeMirror.fromTextArea(el, {
+      mode: 'beancount',
+      readOnly: true,
+    });
+  });
 }
 
 export default function initEditor() {
+  initQueryEditor();
+  initReadOnlyEditors();
+
+  const sourceEditorTextarea = $('#source-editor');
+  if (!sourceEditorTextarea) { return; }
+
   const rulers = [];
   if (window.favaAPI.favaOptions['editor-print-margin-column']) {
     rulers.push({
@@ -130,7 +175,7 @@ export default function initEditor() {
     });
   }
 
-  const defaultOptions = {
+  const options = {
     mode: 'beancount',
     indentUnit: 4,
     lineNumbers: true,
@@ -140,24 +185,12 @@ export default function initEditor() {
     gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
     extraKeys: {
       'Ctrl-Space': 'autocomplete',
-      'Ctrl-S': (cm) => {
-        saveEditorContent(cm);
-      },
-      'Cmd-S': (cm) => {
-        saveEditorContent(cm);
-      },
-      'Ctrl-D': (cm) => {
-        formatEditorContent(cm);
-      },
-      'Cmd-D': (cm) => {
-        formatEditorContent(cm);
-      },
-      'Ctrl-Y': (cm) => {
-        toggleComment(cm);
-      },
-      'Cmd-Y': (cm) => {
-        toggleComment(cm);
-      },
+      'Ctrl-S': 'favaSave',
+      'Cmd-S': 'favaSave',
+      'Ctrl-D': 'favaFormat',
+      'Cmd-D': 'favaFormat',
+      'Ctrl-Y': 'favaToggleComment',
+      'Cmd-Y': 'favaToggleComment',
       Tab: (cm) => {
         if (cm.somethingSelected()) {
           cm.indentSelection('add');
@@ -168,119 +201,46 @@ export default function initEditor() {
     },
   };
 
-  const readOnlyOptions = {
-    mode: 'beancount',
-    readOnly: true,
-  };
+  const editor = CodeMirror.fromTextArea(sourceEditorTextarea, options);
+  const saveButton = $('#source-editor-submit');
 
-  // Read-only editors
-  $$('.editor-readonly').forEach((el) => {
-    CodeMirror.fromTextArea(el, readOnlyOptions);
+  editor.on('changes', (cm) => {
+    saveButton.disabled = cm.isClean();
   });
 
-  // Query editor
-  const queryEditorTextarea = $('#query-editor');
-  if (queryEditorTextarea) {
-    const queryOptions = {
-      mode: 'beancount-query',
-      extraKeys: {
-        'Ctrl-Enter': () => {
-          $('#submit-query').click();
-        },
-        'Cmd-Enter': () => {
-          $('#submit-query').click();
-        },
-      },
-      placeholder: queryEditorTextarea.getAttribute('placeholder'),
-    };
-    const editor = CodeMirror.fromTextArea(queryEditorTextarea, queryOptions);
-
-    editor.on('keyup', (cm, event) => {
-      if (!cm.state.completionActive && event.keyCode !== 13) {
-        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
-      }
-    });
-
-    $.delegate($('#query-container'), 'click', '.queryresults-header', (event) => {
-      const wrapper = event.target.closest('.queryresults-wrapper');
-      if (wrapper.classList.contains('inactive')) {
-        editor.setValue(wrapper.querySelector('code').innerHTML);
-        $('#query-form').dispatchEvent(new Event('submit'));
-        return;
-      }
-      wrapper.classList.toggle('toggled');
-    });
-  }
-
-  // The /source/ editor
-  if ($('#source-editor')) {
-    const el = $('#source-editor');
-    const editor = CodeMirror.fromTextArea(el, defaultOptions);
-    const saveButton = $('#source-editor-submit');
-
-    editor.on('changes', (cm) => {
-      saveButton.disabled = cm.isClean();
-    });
-
-    editor.on('keyup', (cm, event) => {
-      if (!cm.state.completionActive && event.keyCode !== 13) {
-        CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
-      }
-    });
-    const line = parseInt(new URI(window.location.search).query(true).line, 10);
-    if (line > 0) {
-      editor.setCursor(line - 1, 0);
-      centerCursor(editor);
-    } else {
-      jumpToMarker(editor);
+  editor.on('keyup', (cm, event) => {
+    if (!cm.state.completionActive && event.keyCode !== 13) {
+      CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
-
-    $('#source-editor-select').addEventListener('change', (event) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      const select = event.currentTarget;
-      select.disabled = true;
-      const filePath = select.value;
-
-      const url = new URI(saveButton.getAttribute('data-url'))
-        .setSearch('file_path', filePath)
-        .toString();
-
-      $.fetch(url)
-        .then(handleJSON)
-        .then((data) => {
-          editor.setValue(data.payload);
-          editor.setCursor(0, 0);
-          jumpToMarker(editor);
-        }, () => {
-          e.trigger('error', _('Loading ${filePath} failed.', { filePath }));  // eslint-disable-line no-template-curly-in-string
-        })
-        .then(() => {
-          select.disabled = false;
-        });
-    });
-
-    // keybindings when the focus is outside the editor
-    Mousetrap.bind(['ctrl+s', 'meta+s'], (event) => {
-      event.preventDefault();
-      saveEditorContent(editor);
-    });
-
-    Mousetrap.bind(['ctrl+d', 'meta+d'], (event) => {
-      event.preventDefault();
-      formatEditorContent(editor);
-    });
-
-    saveButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      saveEditorContent(editor);
-    });
-
-    $('#source-editor-format').addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      formatEditorContent(editor);
-    });
+  });
+  const line = parseInt(new URI(window.location.search).query(true).line, 10);
+  if (line > 0) {
+    editor.setCursor(line - 1, 0);
+    editor.execCommand('favaCenterCursor');
+  } else {
+    editor.execCommand('favaJumpToMarker');
   }
+
+  // keybindings when the focus is outside the editor
+  Mousetrap.bind(['ctrl+s', 'meta+s'], (event) => {
+    event.preventDefault();
+    editor.execCommand('favaSave');
+  });
+
+  Mousetrap.bind(['ctrl+d', 'meta+d'], (event) => {
+    event.preventDefault();
+    editor.execCommand('favaFormat');
+  });
+
+  // Run editor commands with buttons in editor menu.
+  $$('#source-form button').forEach((button) => {
+    const command = button.getAttribute('data-command');
+    if (command) {
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        editor.execCommand(command);
+      });
+    }
+  });
 }

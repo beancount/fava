@@ -409,20 +409,16 @@ class FavaLedger():
 
         raise FavaAPIException('Statement not found.')
 
-    def document_path(self, path):
-        """Get absolute path of a document.
-
-        Returns:
-            The absolute path of ``path`` if it points to a document.
+    def is_document_path(self, path):
+        """Check if file at path is a document.
 
         Raises:
             FavaAPIException: If ``path`` is not the path of one of the
                 documents.
-
         """
         for entry in filter_type(self.entries, Document):
             if entry.filename == path:
-                return path
+                return
 
         raise FavaAPIException(
             'File "{}" not found in document entries.'.format(path))

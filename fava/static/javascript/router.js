@@ -76,10 +76,10 @@ export default function initRouter() {
     let href = link.getAttribute('href');
 
     const isHttp = link.protocol.indexOf('http') === 0;
-    const format = (href.indexOf('.') > 0) ? href.slice(href.indexOf('.') + 1) : 'html';
+    const suffix = URI(href).suffix();
     const isRemote = link.getAttribute('data-remote');
 
-    if (!event.defaultPrevented && !isRemote && isHttp && format === 'html') {
+    if (!event.defaultPrevented && !isRemote && isHttp && (!suffix || suffix === 'html')) {
       event.preventDefault();
 
       // update sidebar links

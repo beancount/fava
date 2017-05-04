@@ -226,11 +226,11 @@ def account(name, subreport='journal'):
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
     """Download a document."""
-    file_path = request.args.get('file_path')
-    document_path = g.ledger.document_path(file_path)
-    directory = os.path.dirname(document_path)
-    filename = os.path.basename(document_path)
-    return send_from_directory(directory, filename)
+    filename = request.args.get('filename')
+    g.ledger.is_document_path(filename)
+    directory = os.path.dirname(filename)
+    basename = os.path.basename(filename)
+    return send_from_directory(directory, basename)
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])

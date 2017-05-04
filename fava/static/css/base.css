@@ -235,6 +235,8 @@ button,
   &.link {
     background: none;
     color: var(--color-links);
+    margin: 0;
+    padding: 0;
 
     &:focus,
     &:active,

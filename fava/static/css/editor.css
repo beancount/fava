@@ -5,12 +5,65 @@
 @import 'codemirror/addon/fold/foldgutter';
 @import 'codemirror/addon/hint/show-hint';
 
+:root {
+  --source-editor-fieldset-height: 44px;
+}
+
 .source-editor-wrapper {
   bottom: 0;
   left: var(--aside-width);
   position: fixed;
   right: 0;
-  top: calc(var(--header-height) + 43px);
+  top: calc(var(--header-height) + var(--source-editor-fieldset-height));
+}
+
+.dropdown {
+  display: flex;
+  height: 100%;
+  margin: 0;
+
+  & .selected::before {
+    content: '›';
+  }
+
+  & > li {
+    cursor: default;
+    height: var(--source-editor-fieldset-height);
+    line-height: var(--source-editor-fieldset-height);
+    margin-right: 10px;
+    margin-top: -5px;
+    position: relative;
+  }
+
+  & button {
+    color: inherit;
+  }
+
+  & > li > ul {
+    background-color: var(--color-background);
+    border: 1px solid var(--color-background-darker);
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    box-shadow: 0 3px 6px var(--color-text-transparent);
+    display: none;
+    margin-left: -10px;
+    position: absolute;
+    top: var(--source-editor-fieldset-height);
+    width: 500px;
+    z-index: 1;
+  }
+
+  & > li > ul > li {
+    padding: 4px 10px;
+  }
+
+  & > li > ul > li span {
+    float: right;
+  }
+
+  & li:hover > ul {
+    display: block;
+  }
 }
 
 .source-form {
@@ -27,6 +80,7 @@
 
   & .fieldset {
     border-bottom: 1px solid var(--color-sidebar-border);
+    height: var(--source-editor-fieldset-height);
   }
 
   & .CodeMirror,
