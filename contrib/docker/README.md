@@ -44,8 +44,17 @@ Going to http://localhost:5000/ will display your fava instance.
 
 ## Advanced
 
-### Commit hashes
+Hosting a local docker instance is nice and all, but what we really want is a
+globally available, authenticated, secure deployment of fava.  To do that we
+need two other parts: oauth proxy and letsencrypt.
 
 ### Oauth proxy
+
+Oauth is an authentication standard that makes it easy to authenticate using a
+third party account.  Using oauth means we can limit access to our site without
+requiring mobile users to enter complicated passwords.
+
+We will be using bitly's [oauth2\_proxy](https://github.com/bitly/oauth2_proxy)
+to manage access to our site.
 
 ### Letsencrypt
