@@ -6,6 +6,7 @@ parsing the options.
 
 """
 
+import copy
 from collections import namedtuple
 import re
 
@@ -87,7 +88,7 @@ def parse_options(custom_entries):
 
     """
 
-    options = DEFAULTS.copy()
+    options = copy.deepcopy(DEFAULTS)
     errors = []
 
     for entry in custom_entries:

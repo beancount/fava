@@ -14,7 +14,7 @@
             {% for key, value in ledger.fava_options|dictsort %}
             <tr>
                 <td>{{ key }}</td>
-                <td><pre>{{ value }}</pre></td>
+                <td><pre>{{ value|pprint }}</pre></td>
             </tr>
             {% endfor %}
         </tbody>

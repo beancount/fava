@@ -150,11 +150,6 @@ def json_to_entry(json_entry, valid_accounts):
         raise FavaAPIException('Unsupported entry type.')
 
 
-def incomplete_sortkey(entry):
-    """Sortkey for entries that might have incomplete metadata."""
-    return (entry.date, data.SORT_ORDER.get(type(entry), 0))
-
-
 @json_api.route('/add-entries/', methods=['PUT'])
 def add_entries():
     """Add multiple entries."""
@@ -170,7 +165,6 @@ def add_entries():
     except KeyError as error:
         raise FavaAPIException('KeyError: {}'.format(str(error)))
 
-    for entry in sorted(entries, key=incomplete_sortkey):
-        g.ledger.file.insert_entry(entry)
+    g.ledger.file.insert_entries(entries)
 
     return _api_success(message='Stored {} entries.'.format(len(entries)))

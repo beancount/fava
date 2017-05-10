@@ -72,23 +72,32 @@ class FileModule(FavaModule):
 
         Also, prevent duplicate keys.
         """
+        self.ledger.changed()
         entry = self.ledger.get_entry(entry_hash)
         key = next_key(basekey, entry.meta)
-        insert_metadata_in_file(entry.meta['filename'], entry.meta['lineno']-1,
-                                key, value)
+        insert_metadata_in_file(entry.meta['filename'],
+                                entry.meta['lineno'] - 1, key, value)
         self.ledger.extensions.run_hook('after_insert_metadata', entry, key,
                                         value)
 
-    def insert_entry(self, entry):
-        """Insert an entry.
+    def insert_entries(self, entries):
+        """Insert entries.
 
         Args:
-            transaction: An entry.
+            entries: A list of entries.
 
         """
-        insert_entry(entry, self.list_sources(),
-                     self.ledger.fava_options['insert-entry'])
-        self.ledger.extensions.run_hook('after_insert_entry', entry)
+        self.ledger.changed()
+        for entry in sorted(entries, key=incomplete_sortkey):
+            insert_entry(entry,
+                         self.list_sources(),
+                         self.ledger.fava_options['insert-entry'])
+            self.ledger.extensions.run_hook('after_insert_entry', entry)
+
+
+def incomplete_sortkey(entry):
+    """Sortkey for entries that might have incomplete metadata."""
+    return (entry.date, data.SORT_ORDER.get(type(entry), 0))
 
 
 def next_key(basekey, keys):
@@ -128,28 +137,35 @@ def insert_metadata_in_file(filename, lineno, key, value):
 
 
 def insert_entry(entry, filenames, insert_options):
-    """Insert an entry
+    """Insert an entry.
 
     Args:
         entry: An entry.
         filenames: List of filenames.
+        insert_options: List of InsertOption. Note that the line numbers of the
+            options might be updated.
 
     """
     if isinstance(entry, data.Transaction):
         accounts = reversed([p.account for p in entry.postings])
     else:
-        accounts = entry.account
-    filename, lineno = find_insert_position(
-        accounts, entry.date, insert_options, filenames)
-    content = _format_entry(entry)
+        accounts = [entry.account]
+    filename, lineno = find_insert_position(accounts, entry.date,
+                                            insert_options, filenames)
+    content = _format_entry(entry) + '\n'
 
     with open(filename, "r") as file:
         contents = file.readlines()
 
-    contents.insert(lineno, content + '\n')
+    contents.insert(lineno, content)
 
     with open(filename, "w") as file:
         file.writelines(contents)
+
+    for index, option in enumerate(insert_options):
+        if option.filename == filename and option.lineno > lineno:
+            insert_options[index] = option._replace(
+                lineno=lineno + content.count('\n') + 1)
 
 
 def _format_entry(entry):
@@ -162,23 +178,21 @@ def find_insert_position(accounts, date, insert_options, filenames):
     """Find insert position for an account.
 
     Args:
-        accounts: An account name (str) or a iterable of accounts.
+        accounts: A list of accounts.
         date: A date. Only InsertOptions before this date will be considered.
         insert_options: A list of InsertOption.
         filenames: List of Beancount files.
     """
     position = None
-    if isinstance(accounts, str):
-        accounts = [accounts]
 
     for account in accounts:
         for insert_option in insert_options:
             if insert_option.date >= date:
                 break
             if insert_option.re.match(account):
-                position = (insert_option.filename, insert_option.lineno-1)
+                position = (insert_option.filename, insert_option.lineno - 1)
 
     if not position:
-        position = filenames[0], len(open(filenames[0]).readlines())+1
+        position = filenames[0], len(open(filenames[0]).readlines()) + 1
 
     return position
