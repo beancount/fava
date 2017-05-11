@@ -96,6 +96,7 @@ function updateCheck() {
       }
     });
   });
+  request.on('error', () => {});
   request.end();
 }
 
