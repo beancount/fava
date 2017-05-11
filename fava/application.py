@@ -137,10 +137,6 @@ def _template_context():
 
 @app.before_request
 def _perform_global_filters():
-    if not g.ledger.options['operating_currency']:
-        flash('No operating currency specified. '
-              'Please add one to your beancount file.')
-
     g.filters = {
         name: request.args.get(name)
         for name in ['account', 'from', 'payee', 'tag', 'time']

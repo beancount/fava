@@ -1,5 +1,6 @@
 """Some miscellaneous reports."""
 
+from collections import namedtuple
 import datetime
 import re
 
@@ -8,9 +9,12 @@ from beancount.utils.misc_utils import filter_type
 
 from fava.core.helpers import FavaModule
 
+FavaError = namedtuple('FavaError', 'source message entry')
+
 
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
+
     # pylint: disable=too-few-public-methods
 
     def __init__(self, ledger):
@@ -26,6 +30,11 @@ class FavaMisc(FavaModule):
             self.ledger.all_entries,
             self.ledger.fava_options['upcoming-events'])
 
+        if not self.ledger.options['operating_currency']:
+            self.ledger.errors.append(
+                FavaError(None, 'No operating currency specified. '
+                          'Please add one to your beancount file.', None))
+
 
 def _sidebar_links(custom_entries):
     """Parse custom entries for links.
@@ -35,8 +44,8 @@ def _sidebar_links(custom_entries):
     2016-04-01 custom "fava-sidebar-link" "2014" "/income_statement/?time=2014"
     """
     sidebar_link_entries = [
-        entry for entry in custom_entries
-        if entry.type == 'fava-sidebar-link']
+        entry for entry in custom_entries if entry.type == 'fava-sidebar-link'
+    ]
     return [(entry.values[0].value, entry.values[1].value)
             for entry in sidebar_link_entries]
 
