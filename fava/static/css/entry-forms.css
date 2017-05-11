@@ -17,13 +17,23 @@
   & .currency {
     width: 100px;
   }
-}
 
-.entry-form.transaction {
   & .awesomplete {
+    margin-right: .5em;
+
     & input {
       width: 100%;
     }
+  }
+
+  & .add-posting,
+  & .add-metadata {
+    display: none;
+  }
+
+  & .add-metadata-link {
+    position: absolute;
+    right: 20px;
   }
 
   & input {
@@ -37,17 +47,21 @@
       width: 180px;
     }
 
-    &[name='narration'] {
+    &[name='narration'],
+    &[name='metadata-value'] {
       flex-grow: 1;
+    }
+
+    &[name='metadata-key'] {
+      width: 10em;
     }
   }
 
   & .posting {
-    padding-left: 4em;
+    padding-left: 60px;
 
     & .awesomplete {
       flex-grow: 1;
-      padding-right: .5em;
 
       &:nth-child(4) {
         flex-grow: 0;
@@ -60,39 +74,15 @@
         display: inline-block;
       }
 
-      & .awesomplete {
-        &:nth-child(4) {
-          width: 67px;
-        }
+      & .awesomplete:nth-child(4) {
+        width: 67px;
       }
     }
   }
 
-  & .add-posting {
-    border-radius: 15px;
-    display: none;
-    height: 1.5em;
-    line-height: 1.5em;
-    margin: 7px 0 0 10px;
-    padding: 0;
-    text-align: center;
-    width: 1.5em;
-  }
-
-  & .metadatas {
-    padding-left: 4em;
-
-    & input {
-      font-size: .8em;
-    }
-
-    & .metadata-key {
-      width: 10em;
-    }
-
-    & .metadata-value {
-      flex-grow: 1;
-    }
+  & .metadata {
+    font-size: .8em;
+    padding-left: 60px;
 
     & .fieldset {
       width: 50%;
@@ -106,53 +96,9 @@
   }
 }
 
-.transaction-overlay {
-  & .add-metadata {
-    border-radius: 3px;
-    display: none;
-    height: 1em;
-    line-height: 1em;
-    margin: 7px 0 0 12px;
-    padding: 0;
-    text-align: center;
-    width: 1em;
-  }
-
-  & .add-metadata-link {
-    bottom: 20px;
-    font-size: .9em;
-    position: absolute;
-    right: 20px;
-  }
-}
-
 [id='posting-template'],
 [id='metadata-template'] {
   display: none;
-}
-
-.entry-form.note {
-  & label {
-    &[for='comment'] {
-      display: block;
-      line-height: 35px;
-      margin: 0 .5em 0 0;
-    }
-  }
-
-  & textarea {
-    flex-grow: 1;
-  }
-}
-
-.entry-form.balance {
-  & label {
-    &[for='account'] {
-      display: block;
-      line-height: 35px;
-      margin: 0 .5em 0 1.5em;
-    }
-  }
 }
 
 .entry-form.balance,
@@ -165,6 +111,10 @@
     &[name='account'] {
       flex-grow: 1;
     }
+  }
+
+  & textarea {
+    flex-grow: 1;
   }
 }
 
@@ -182,7 +132,7 @@
 
       & input {
         height: 35px;
-        margin: 0 .5em 0 0;
+        margin: 0 .5em .5em 0;
         width: 120px;
 
         &[name='flag'] {
@@ -192,7 +142,6 @@
         &[name='narration'],
         &[name='payee'],
         &[name='account'] {
-          margin-bottom: .5em;
           width: 100%;
         }
       }

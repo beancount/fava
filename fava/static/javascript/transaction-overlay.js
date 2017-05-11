@@ -31,7 +31,7 @@ function submitTransactionForm(form, successCallback) {
         successCallback();
       }
     }, (error) => {
-      e.trigger('error', `Adding transcation failed: ${error}`);
+      e.trigger('error', `Adding transaction failed: ${error}`);
     });
 }
 

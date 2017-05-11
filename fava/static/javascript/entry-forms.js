@@ -63,7 +63,7 @@ export function addMetadataRow(form) {
   $$('input', newMetadata).forEach((input) => {
     initInput(input);
   });
-  form.querySelector('.metadatas').appendChild(newMetadata);
+  form.querySelector('.metadata').appendChild(newMetadata);
   newMetadata.setAttribute('id', '');
   return newMetadata;
 }
@@ -77,7 +77,7 @@ export function entryFormToJSON(form) {
   });
 
   entryData.metadata = {};
-  $$('.metadata', form).forEach((metadata) => {
+  $$('.metadata-row', form).forEach((metadata) => {
     const key = metadata.querySelector('input[name=metadata-key]').value;
     if (key) {
       entryData.metadata[key] = metadata.querySelector('input[name=metadata-value]').value;

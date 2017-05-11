@@ -244,6 +244,14 @@ button,
       text-decoration: underline;
     }
   }
+
+  &.round {
+    border-radius: 15px;
+    height: 1.5em;
+    line-height: 1.5em;
+    margin: 7px 0 0 10px;
+    padding: 0 .5em;
+  }
 }
 
 .button:link,
