@@ -14,11 +14,20 @@ Beancount, see the `Beancount Documentation
 <https://docs.google.com/document/d/1RaondTJCS_IUPBHFNdT8oqFKJjVJDsfsn6JEjBG04eA>`__
 page for an index of the available documentation.
 
-
 Installation
 ------------
 
-Fava is known to run on OS X, Linux, and Windows (with Cygwin).  You will need
+There are two ways to run Fava. You can start the Fava process in a terminal
+and access it with you default web browser. Alternatively there is a GUI
+version which bundles Fava with a browser basically.  If you know your way
+around the terminal, installation via ``pip`` (see below) is recommended,
+otherwise, head to the `Releases
+<https://github.com/beancount/fava/releases>`__ page on Github and download the
+latest GUI version for your platform: ``AppImage`` on Linux (the file needs to
+be made executable after downloading) or ``dmg`` for MacOS. There is currently no
+build of the GUI for Windows.
+
+Fava is known to run on MacOS, Linux, and Windows (with Cygwin).  You will need
 `Python 3 <https://www.python.org/downloads/>`__ (at least version 3.4).  Then
 you can use ``pip`` to install Fava by running::
 
@@ -36,7 +45,7 @@ the following command to install the optional dependencies for this feature::
 Starting Fava
 -------------
 
-Start Fava by running::
+If you installed Fava using ``pip``, start it by running::
 
     fava ledger.beancount
 
