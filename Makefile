@@ -25,7 +25,7 @@ test:
 	tox
 
 docs:
-	sphinx-build -b html docs docs/_build
+	sphinx-build -b html docs build/docs
 
 # Extract the translation strings from the .py- and .html-files
 babel-extract:
