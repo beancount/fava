@@ -759,6 +759,17 @@ function updateChart() {
   }
 }
 
+function getOperatingCurrencies() {
+  const conversion = $('#conversion').value;
+  if (conversion && conversion !== 'at_cost' && conversion !== 'at_value'
+      && window.favaAPI.options.operating_currency.indexOf(conversion) === -1) {
+    const currencies = window.favaAPI.options.operating_currency.slice();
+    currencies.push(conversion);
+    return currencies;
+  }
+  return window.favaAPI.options.operating_currency;
+}
+
 export default function initCharts() {
   tooltip = select('#tooltip');
   tooltip.style('opacity', 0);
@@ -826,7 +837,7 @@ export default function initCharts() {
       }
       case 'bar': {
         const series = chart.interval_totals.map(d => ({
-          values: window.favaAPI.options.operating_currency.map(name => ({
+          values: getOperatingCurrencies().map(name => ({
             name,
             value: +d.totals[name] || 0,
             budget: +d.budgets[name] || 0,
@@ -868,14 +879,15 @@ export default function initCharts() {
         addInternalNodesAsLeaves(chart.root);
         const roots = {};
 
-        window.favaAPI.options.operating_currency.forEach((currency) => {
+        const operatingCurrencies = getOperatingCurrencies();
+        operatingCurrencies.forEach((currency) => {
           roots[currency] = hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
         });
 
         charts[chartId] = new HierarchyContainer(chartContainer(chartId, chart.label))
-            .set('currencies', window.favaAPI.options.operating_currency)
+            .set('currencies', operatingCurrencies)
             .draw(roots);
 
         break;

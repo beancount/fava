@@ -10,10 +10,6 @@
     overflow-x: auto;
   }
 
-  &:hover .balance-children {
-    opacity: .8;
-  }
-
   & p {
     margin-top: -1px;
 
@@ -131,7 +127,7 @@
 
   & .balance-children {
     display: block;
-    opacity: .6;
+    opacity: .7;
   }
 
   & .toggled {
