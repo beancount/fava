@@ -2,18 +2,12 @@
 import os
 import pkgutil
 
-import beancount.ops
-import beancount.plugins
+import beancount
 
-hidden_import = []
-for _, name, __ in pkgutil.iter_modules(beancount.plugins.__path__):
+hidden_imports = []
+for _, name, __ in pkgutil.walk_packages(beancount.__path__, beancount.__name__ + '.'):
     if 'test' not in name:
-        hidden_import.append('beancount.plugins.' + name)
-for _, name, __ in pkgutil.iter_modules(beancount.ops.__path__):
-    if 'test' not in name:
-        hidden_import.append('beancount.ops.' + name)
-
-block_cipher = None
+        hidden_imports.append(name)
 
 data_files = [
     ('../fava/docs', 'docs'),
@@ -25,15 +19,15 @@ a = Analysis(['../fava/cli.py'],
              pathex=['.'],
              binaries=None,
              datas=data_files,
-             hiddenimports=hidden_import,
+             hiddenimports=hidden_imports,
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
-             cipher=block_cipher)
+             cipher=None)
 pyz = PYZ(a.pure, a.zipped_data,
-             cipher=block_cipher)
+             cipher=None)
 exe = EXE(pyz,
           a.scripts,
           a.binaries,
