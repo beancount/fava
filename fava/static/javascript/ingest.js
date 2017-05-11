@@ -6,7 +6,7 @@ function submitIngestForm() {
   const form = $('.ingest-extract');
   const jsonData = { entries: [] };
 
-  form.querySelectorAll('.ingest-row.import .entry-form').forEach((entryForm) => {
+  $$('.ingest-row.import .entry-form', form).forEach((entryForm) => {
     jsonData.entries.push(entryFormToJSON(entryForm));
   });
 

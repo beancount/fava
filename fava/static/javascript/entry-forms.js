@@ -50,7 +50,7 @@ export function initInput(input) {
 
 export function addPostingRow(form) {
   const newPosting = $('#posting-template').cloneNode(true);
-  newPosting.querySelectorAll('input').forEach((input) => {
+  $$('input', newPosting).forEach((input) => {
     initInput(input);
   });
   form.querySelector('.postings').appendChild(newPosting);
@@ -60,7 +60,7 @@ export function addPostingRow(form) {
 
 export function addMetadataRow(form) {
   const newMetadata = $('#metadata-template').cloneNode(true);
-  newMetadata.querySelectorAll('input').forEach((input) => {
+  $$('input', newMetadata).forEach((input) => {
     initInput(input);
   });
   form.querySelector('.metadatas').appendChild(newMetadata);
@@ -72,12 +72,12 @@ export function entryFormToJSON(form) {
   const entryData = {};
   entryData.type = form.getAttribute('data-type');
 
-  form.querySelector('.fieldset').querySelectorAll('input').forEach((input) => {
+  $$('input', form.querySelector('.fieldset')).forEach((input) => {
     entryData[input.name] = input.value;
   });
 
   entryData.metadata = {};
-  form.querySelectorAll('.metadata').forEach((metadata) => {
+  $$('.metadata', form).forEach((metadata) => {
     const key = metadata.querySelector('input[name=metadata-key]').value;
     if (key) {
       entryData.metadata[key] = metadata.querySelector('input[name=metadata-value]').value;
@@ -86,7 +86,7 @@ export function entryFormToJSON(form) {
 
   if (entryData.type === 'transaction') {
     entryData.postings = [];
-    form.querySelectorAll('.posting').forEach((posting) => {
+    $$('.posting', form).forEach((posting) => {
       const account = posting.querySelector('input[name=account]').value;
 
       if (account) {
@@ -104,7 +104,7 @@ export function entryFormToJSON(form) {
 
 export default function initEntryForms() {
   $$('.entry-form').forEach((form) => {
-    form.querySelectorAll('input').forEach((input) => {
+    $$('input', form).forEach((input) => {
       initInput(input);
     });
 

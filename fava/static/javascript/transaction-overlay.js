@@ -1,5 +1,5 @@
 import e from './events';
-import { $, handleJSON } from './helpers';
+import { $, $$, handleJSON } from './helpers';
 import { initInput, addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
 
 function submitTransactionForm(form, successCallback) {
@@ -16,10 +16,10 @@ function submitTransactionForm(form, successCallback) {
   })
     .then(handleJSON)
     .then((data) => {
-      form.querySelectorAll('.metadata').forEach((el) => {
+      $$('.metadata', form).forEach((el) => {
         el.remove();
       });
-      form.querySelectorAll('.posting').forEach((el) => {
+      $$('.posting', form).forEach((el) => {
         el.remove();
       });
       addPostingRow(form);
@@ -41,7 +41,7 @@ export default function initTransactionOverlay() {
 
   $('#add-transaction-button').addEventListener('click', () => {
     if (!initialized) {
-      form.querySelectorAll('input').forEach((input) => {
+      $$('input', form).forEach((input) => {
         initInput(input);
       });
       addPostingRow(form);
