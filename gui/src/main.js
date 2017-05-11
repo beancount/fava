@@ -1,4 +1,4 @@
-const { app, dialog, BrowserWindow, Menu } = require('electron'); // eslint-disable-line import/no-extraneous-dependencies
+const { app, dialog, BrowserWindow, Menu, net } = require('electron'); // eslint-disable-line import/no-extraneous-dependencies
 const childProcess = require('child_process');
 const path = require('path');
 const rq = require('request-promise');
@@ -72,6 +72,31 @@ function openBeancountFile() {
   subprocess.kill('SIGTERM');
   subprocess = startFava();
   loadMainPage();
+}
+
+const currentVersion = 'v1.4';
+const updateURL = 'https://api.github.com/repos/beancount/fava/releases/latest';
+
+function updateCheck() {
+  const request = net.request(updateURL);
+  request.on('response', (response) => {
+    let responseData = '';
+    response.on('data', (chunk) => {
+      responseData += chunk;
+    });
+    response.on('end', () => {
+      const latestVersion = JSON.parse(responseData).name;
+      if (latestVersion.length !== currentVersion.length
+          || (+latestVersion.slice(-1) > +currentVersion.slice(-1)
+              || +latestVersion.slice(-3) > +currentVersion.slice(-3))) {
+        dialog.showMessageBox({
+          message: `An update is available online: ${latestVersion} (you have ${currentVersion})`,
+          callback: () => {},
+        });
+      }
+    });
+  });
+  request.end();
 }
 
 function resetFiles() {
@@ -240,6 +265,7 @@ app.on('quit', () => {
 });
 
 app.on('ready', () => {
+  updateCheck();
   Menu.setApplicationMenu(menu);
 
   const files = settings.get('beancount-file');
