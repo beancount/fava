@@ -1,6 +1,28 @@
 Changelog
 =========
 
+v1.4 (in development)
+---------------------
+
+Fava now provides an interface for Beancount's import system that allows you to
+import transactions from your bank for example.
+
+Fava can now show your balances at market value or convert them to a single
+currency if your file contains the necessary price information.
+
+We now also provide a compiled GUI version of Fava for Linux and MacOS. This
+version might still be a bit buggy so any feedback/help on it is very welcome.
+
+Other changes:
+
+- The ``insert-entry`` option can be used to control where transactions are
+  inserted.
+- The transaction form now accepts tags and links in the narration field.
+- Budgets are now accumulated over all children where appropriate.
+- As always, several bugs have been fixed.
+
+Thanks to :user:`TZdyrski` and :user:`Akuukis` for their contributions.
+
 v1.3 (March 15th, 2017)
 -----------------------
 
