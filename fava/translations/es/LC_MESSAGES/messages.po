@@ -239,10 +239,6 @@ msgstr "Mostrar origen %(file)s:%(lineno)s"
 msgid "Journal Entry"
 msgstr "Entrada de diario"
 
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "Ninguna entrada coincide con el hash dado."
-
 #: fava/templates/editor.html:15
 msgid "Format"
 msgstr "Formato"
@@ -295,27 +291,6 @@ msgstr "Divisa de costo"
 #: fava/templates/holdings.html:13
 msgid "Holdings by"
 msgstr "Participaciones por parte de"
-
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "Unidades"
-
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "Coste medio"
-
-#: fava/templates/holdings.html:27
-#, fuzzy
-msgid "Book Value"
-msgstr "Valor en libros"
-
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "Valor de mercado"
-
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "Fecha de Adquisición"
 
 #: fava/templates/income_statement.html:8
 msgid "Net Profit"
@@ -434,4 +409,29 @@ msgstr "Número"
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
 msgstr "Añadir asiento"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Ninguna entrada coincide con el hash dado."
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Unidades"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Coste medio"
+
+#: fava/templates/holdings.html:27
+#, fuzzy
+msgid "Book Value"
+msgstr "Valor en libros"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Valor de mercado"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "Fecha de Adquisición"
 
