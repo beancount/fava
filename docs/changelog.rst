@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.4 (in development)
+v1.4 (May 14th, 2017)
 ---------------------
 
 Fava now provides an interface for Beancount's import system that allows you to
