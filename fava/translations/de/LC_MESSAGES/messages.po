@@ -236,10 +236,6 @@ msgstr "Quelldatei anzeigen: %(file)s:%(lineno)s"
 msgid "Journal Entry"
 msgstr "Journal Eintrag"
 
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "Kein Eintrag für den angegebenen Hash gefunden."
-
 #: fava/templates/editor.html:15
 msgid "Format"
 msgstr "Formatieren"
@@ -292,26 +288,6 @@ msgstr "Kostenwährung"
 #: fava/templates/holdings.html:13
 msgid "Holdings by"
 msgstr "Bestände nach"
-
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "Einheiten"
-
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "Durchschnittskosten"
-
-#: fava/templates/holdings.html:27
-msgid "Book Value"
-msgstr "Buchwert"
-
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "Marktwert"
-
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "Kaufdatum"
 
 #: fava/templates/income_statement.html:8
 msgid "Net Profit"
@@ -429,4 +405,28 @@ msgstr "Zahl"
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
 msgstr "Eintrag hinzufügen "
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Kein Eintrag für den angegebenen Hash gefunden."
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Einheiten"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Durchschnittskosten"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "Buchwert"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Marktwert"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "Kaufdatum"
 
