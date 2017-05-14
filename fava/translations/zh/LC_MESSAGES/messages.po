@@ -34,12 +34,16 @@ msgstr "标签"
 
 #: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:8
 #: fava/templates/_tree_table.html:102 fava/templates/holdings.html:12
-#: fava/templates/holdings.html:21 fava/templates/statistics.html:24
-#: fava/templates/statistics.html:53
+#: fava/templates/holdings.html:21
+#: fava/templates/overlays/_transaction_form.html:25
+#: fava/templates/overlays/_transaction_form.html:26
+#: fava/templates/statistics.html:24 fava/templates/statistics.html:53
 msgid "Account"
 msgstr "帐户"
 
 #: fava/templates/_entry_filters.html:6
+#: fava/templates/overlays/_transaction_form.html:10
+#: fava/templates/overlays/_transaction_form.html:11
 msgid "Payee"
 msgstr "收款人"
 
@@ -117,6 +121,7 @@ msgstr "元数据中的账单"
 
 #: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
 #: fava/templates/events.html:17
+#: fava/templates/overlays/_transaction_form.html:7
 msgid "Date"
 msgstr "日期"
 
@@ -150,6 +155,7 @@ msgid "Balance"
 msgstr "余额"
 
 #: fava/templates/_layout.html:67 fava/templates/editor.html:14
+#: fava/templates/overlays/_transaction_form.html:18
 msgid "Save"
 msgstr "保存"
 
@@ -232,10 +238,6 @@ msgstr "源文件 %(file)s:%(lineno)s"
 msgid "Journal Entry"
 msgstr "日记账项目"
 
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "不存在符合指定哈希的项目。"
-
 #: fava/templates/editor.html:15
 msgid "Format"
 msgstr "排版"
@@ -277,6 +279,7 @@ msgid "Help pages"
 msgstr "帮助页"
 
 #: fava/templates/holdings.html:12 fava/templates/holdings.html:23
+#: fava/templates/overlays/_transaction_form.html:28
 msgid "Currency"
 msgstr "货币"
 
@@ -287,26 +290,6 @@ msgstr "成本货币"
 #: fava/templates/holdings.html:13
 msgid "Holdings by"
 msgstr "按"
-
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "数量"
-
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "平均成本"
-
-#: fava/templates/holdings.html:27
-msgid "Book Value"
-msgstr "账面价值"
-
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "市面价值"
-
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "买入日期"
 
 #: fava/templates/income_statement.html:8
 msgid "Net Profit"
@@ -424,4 +407,28 @@ msgstr "数额"
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
 msgstr "添加记录"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "不存在符合指定哈希的项目。"
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "数量"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "平均成本"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "账面价值"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "市面价值"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "买入日期"
 
