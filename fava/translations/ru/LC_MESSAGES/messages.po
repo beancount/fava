@@ -237,10 +237,6 @@ msgstr "Перейти к файлу %(file)s:%(lineno)s"
 msgid "Journal Entry"
 msgstr "Запись Журнала"
 
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "Ни одна запись не соответствует заданному хешу."
-
 #: fava/templates/editor.html:15
 msgid "Format"
 msgstr "Форматировать"
@@ -293,26 +289,6 @@ msgstr "Валюта (стоим.)"
 #: fava/templates/holdings.html:13
 msgid "Holdings by"
 msgstr "Вклады по: "
-
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "Единиц"
-
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "Средняя стоимость"
-
-#: fava/templates/holdings.html:27
-msgid "Book Value"
-msgstr "Бух. стоимость"
-
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "Рыночная стоимость"
-
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "Дата приобретения"
 
 #: fava/templates/income_statement.html:8
 msgid "Net Profit"
@@ -430,4 +406,28 @@ msgstr "Количество"
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
 msgstr "Добавить проводку"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Ни одна запись не соответствует заданному хешу."
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Единиц"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Средняя стоимость"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "Бух. стоимость"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Рыночная стоимость"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "Дата приобретения"
 
