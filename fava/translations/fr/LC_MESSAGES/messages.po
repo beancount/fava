@@ -60,7 +60,7 @@ msgstr "Bilan"
 
 #: fava/templates/_globals.html:4
 msgid "Trial Balance"
-msgstr "balance"
+msgstr "Balance générale"
 
 #: fava/templates/_globals.html:5
 msgid "Journal"
@@ -76,7 +76,7 @@ msgstr "fonds"
 
 #: fava/templates/_globals.html:8
 msgid "Commodities"
-msgstr "Unité de compte"
+msgstr "Unités de compte"
 
 #: fava/templates/_globals.html:9
 msgid "Events"
@@ -147,11 +147,11 @@ msgstr "Coût"
 
 #: fava/templates/_journal_table.html:148
 msgid "Change"
-msgstr "Changement"
+msgstr "Opération"
 
 #: fava/templates/_journal_table.html:149 fava/templates/statistics.html:57
 msgid "Balance"
-msgstr "Équilibre"
+msgstr "Solde"
 
 #: fava/templates/_layout.html:67 fava/templates/editor.html:14
 #: fava/templates/overlays/_transaction_form.html:18
@@ -180,7 +180,7 @@ msgstr "Le graphique est vide."
 
 #: fava/templates/_layout.html:73
 msgid "File change detected. Click to reload."
-msgstr "changement de fichiers détectés. Cliquez pour recharger."
+msgstr "Changement de fichiers détectés. Cliquez pour recharger."
 
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
 msgid "Expand all accounts"
@@ -231,15 +231,11 @@ msgstr "Emplacement:"
 #: fava/templates/context.html:12 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
 msgid "Show source %(file)s:%(lineno)s"
-msgstr "Afficher la source %(fichier)s:%(lineno)s"
+msgstr "Afficher la source %(file)s:%(lineno)s"
 
 #: fava/templates/context.html:15
 msgid "Journal Entry"
 msgstr "Entrée du journal"
-
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "Pas d'entrée correspondant au hachage donné."
 
 #: fava/templates/editor.html:15
 msgid "Format"
@@ -294,26 +290,6 @@ msgstr "Devise pour les coûts"
 msgid "Holdings by"
 msgstr "Fonds par"
 
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "Unités"
-
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "Coût moyen"
-
-#: fava/templates/holdings.html:27
-msgid "Book Value"
-msgstr "Valeur comptable"
-
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "Valeur de marché"
-
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "Date d'achat"
-
 #: fava/templates/income_statement.html:8
 msgid "Net Profit"
 msgstr "Bénéfice net"
@@ -328,7 +304,7 @@ msgstr "Dépenses"
 
 #: fava/templates/options.html:5
 msgid "fava: options"
-msgstr "fava: Options"
+msgstr "Options de Fava"
 
 #: fava/templates/options.html:9 fava/templates/options.html:26
 msgid "Key"
@@ -340,7 +316,7 @@ msgstr "Valeur"
 
 #: fava/templates/options.html:22
 msgid "beancount: options"
-msgstr "Beancount: Options"
+msgstr "Options de Beancount"
 
 #: fava/templates/query.html:66
 msgid "Download as"
@@ -430,4 +406,28 @@ msgstr "Nombre"
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
 msgstr "Ajouter Enregistrement"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Aucune entrée ne correspond à ce hash donné "
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Unités"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Coût moyen"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "Coût historique "
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Valeur de marché "
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "Date d'acquisition "
 
