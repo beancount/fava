@@ -9,7 +9,7 @@ msgstr ""
 
 #: fava/templates/_aside.html:4
 msgid "Custom Links"
-msgstr "links personalizados"
+msgstr "Links personalizados"
 
 #: fava/templates/_aside.html:11
 msgid "Reports"
@@ -165,9 +165,10 @@ msgstr "Guardar"
 msgid "Saving..."
 msgstr "A guardar..."
 
+#. Should the variable name be translated?
 #: fava/templates/_layout.html:69
 msgid "Saving ${fileName} failed."
-msgstr "Falha ao guardar $ {nome}."
+msgstr "Falha ao guardar ${fileName}."
 
 #: fava/templates/_layout.html:70
 msgid "Formatting the file with bean-format failed."
@@ -175,15 +176,16 @@ msgstr "A formatação com o bean-format falhou."
 
 #: fava/templates/_layout.html:71
 msgid "Loading ${filePath} failed."
-msgstr "Falha ao abrir $ {FilePath}"
+msgstr "Falha ao abrir ${filePath}"
 
 #: fava/templates/_layout.html:72
 msgid "Chart is empty."
 msgstr "Gráfico vazio."
 
+#. Wouldn't "arquivo" be better than "ficheiro"?
 #: fava/templates/_layout.html:73
 msgid "File change detected. Click to reload."
-msgstr "Ficheiro alterado. Clique para atualizar."
+msgstr "Arquivo alterado. Clique para atualizar."
 
 #: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
 msgid "Expand all accounts"
@@ -231,26 +233,24 @@ msgstr "Hash:"
 msgid "Location:"
 msgstr "Localização:"
 
+#. Should variable names file and lineno be translated?
 #: fava/templates/context.html:12 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
 msgid "Show source %(file)s:%(lineno)s"
-msgstr "Mostrar fonte % (arquivo) s:% (lineno) s"
+msgstr "Mostrar fonte %(file)s:%(lineno)s"
 
 #: fava/templates/context.html:15
 msgid "Journal Entry"
 msgstr "Inserir Movimento"
 
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "Nenhuma entrada corresponde ao hash dado."
-
 #: fava/templates/editor.html:15
 msgid "Format"
 msgstr "Formato"
 
+#. Isn't "arquivo" better than "ficheiro"?
 #: fava/templates/errors.html:11
 msgid "File"
-msgstr "Ficheiro"
+msgstr "Arquivo"
 
 #: fava/templates/errors.html:12
 msgid "Line"
@@ -266,7 +266,7 @@ msgstr "Sem erros."
 
 #: fava/templates/events.html:13
 msgid "Event: %(type)s"
-msgstr "Evento:% (tipo) s"
+msgstr "Evento:%(type)s"
 
 #: fava/templates/events.html:18
 msgid "Description"
@@ -278,7 +278,7 @@ msgstr "Sem eventos"
 
 #: fava/templates/help.html:4
 msgid "Help - %(title)s"
-msgstr "Ajuda -% (título) s"
+msgstr "Ajuda - %(title)s"
 
 #: fava/templates/help.html:9
 msgid "Help pages"
@@ -295,27 +295,7 @@ msgstr "Moeda de custo"
 
 #: fava/templates/holdings.html:13
 msgid "Holdings by"
-msgstr "Património por"
-
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "Unidades"
-
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "Custo médio"
-
-#: fava/templates/holdings.html:27
-msgid "Book Value"
-msgstr "Valor contabilístico"
-
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "Valor de mercado"
-
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "data de aquisição"
+msgstr "Patrimônio por"
 
 #: fava/templates/income_statement.html:8
 msgid "Net Profit"
@@ -327,11 +307,12 @@ msgstr "Rendimento"
 
 #: fava/templates/income_statement.html:10
 msgid "Expenses"
-msgstr "despesas"
+msgstr "Despesas"
 
+#. Modified from 'fava: opções'. This seem to be a variable name. The line in the code is enclosed on double curly brackets: <h2>{{ _('fava: options') }}</h2>
 #: fava/templates/options.html:5
 msgid "fava: options"
-msgstr "fava: opções"
+msgstr "fava: options"
 
 #: fava/templates/options.html:9 fava/templates/options.html:26
 msgid "Key"
@@ -363,11 +344,11 @@ msgstr "Total"
 
 #: fava/templates/statistics.html:47
 msgid "Update Activity"
-msgstr "Atualizações "
+msgstr "Atualizações"
 
 #: fava/templates/statistics.html:48
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
-msgstr "Clique para copiar os saldos de conta (exceto os verdes) para a área de transferência."
+msgstr "Clique para copiar os saldos de conta (exceto aqueles em verde) para a área de transferência."
 
 #: fava/templates/statistics.html:49
 msgid "Copy balance directives"
@@ -387,7 +368,7 @@ msgstr "Tipo"
 
 #: fava/templates/statistics.html:94
 msgid "# Entries"
-msgstr "# entradas"
+msgstr "# Entradas"
 
 #: fava/templates/macros/_interval_macros.html:2
 msgid "Daily"
@@ -433,4 +414,28 @@ msgstr "Número"
 #: fava/templates/overlays/_transaction_form.html:29
 msgid "Add posting"
 msgstr "Inserir movimento"
+
+#: fava/templates/context.html:21
+msgid "No entry matches the given hash."
+msgstr "Nenhum registro corresponde ao valor fornecido."
+
+#: fava/templates/holdings.html:22
+msgid "Units"
+msgstr "Unidades"
+
+#: fava/templates/holdings.html:25
+msgid "Average Cost"
+msgstr "Custo médio"
+
+#: fava/templates/holdings.html:27
+msgid "Book Value"
+msgstr "Valor contábil"
+
+#: fava/templates/holdings.html:28
+msgid "Market Value"
+msgstr "Valor de mercado"
+
+#: fava/templates/holdings.html:29
+msgid "Acquisition Date"
+msgstr "Data de aquisição"
 
