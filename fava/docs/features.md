@@ -112,11 +112,11 @@ Beancount file name on the top left to switch between the files.
 
 ## Custom links in the sidebar
 
-If you regularly use certain views in Fava with different filters, etc., you can
-put these permalinks in the sidebar. Custom links can be put in the Beancount
-file, utilizing the `custom` directive:
+If you regularly use certain views in Fava with different filters, you can put
+links to them in the sidebar. Custom links can be put in the Beancount file,
+utilizing the `custom` directive:
 
-    2016-05-04 custom "fava-sidebar-link" "Income 2014" "/income_statement?time=2014"
+    2016-05-04 custom "fava-sidebar-link" "Income 2014" "../income_statement?time=2014"
 
 `"fava-sidebar-link"` specifies that this directive is for a custom sidebar
 link, followed by the title to display in the sidebar (`"Income 2014"` in this
@@ -129,10 +129,9 @@ found in the journal:
 - For all Documents: `/<slug>/journal/?show=documents`
 - For all Notes: `/<slug>/journal/?show=notes`
 
-There's a special URL handler `/jump` which can be used to jump to current page
-with given params. This is useful to limit the scope of current viewing page.
-E.g. `/jump?time=last+month+-+next+month` will show current page but limit to
-the last month, this month and the next month.
+There is a special URL handler `/jump` which can be used to jump to the current
+page with given URL parameters. For example, `/jump?time=month` will show the
+current page but change the time filter to the current month.
 
 ## Language
 
