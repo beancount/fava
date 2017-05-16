@@ -27,17 +27,18 @@ test:
 docs:
 	sphinx-build -b html docs build/docs
 
-# Extract the translation strings from the .py- and .html-files
-babel-extract:
+# Extract translation strings and upload them to POEditor.com.
+# Requires the environment variable POEDITOR_TOKEN to be set to an API token
+# for POEditor.
+translations-push:
 	pybabel extract -F fava/translations/babel.conf -k lazy_gettext -o fava/translations/messages.pot ./fava
+	contrib/scripts.py upload_translations
 
-# Merge existing .po-files with the new translation strings
-babel-merge:
-	pybabel update -i fava/translations/messages.pot -d fava/translations
-
-# Compile .po-files to binary .mo-files
-babel-compile:
-	pybabel compile -d fava/translations
+# Extract translation strings and upload them to POEditor.com
+# Requires the environment variable POEDITOR_TOKEN to be set to an API token
+# for POEditor.
+translations-fetch:
+	contrib/scripts.py download_translations
 
 pyinstaller: dist/fava fava/static/gen/app.js
 dist/fava: fava
