@@ -19,15 +19,11 @@ CodeMirror.defineSimpleMode('beancount-query', {
       token: 'string',
     },
     {
-      regex: /(\#(\"[^\"]*\"|\'[^\']*\')|\d\d\d\d-\d\d-\d\d)/,
+      regex: /(?:\#(?:\"[^\"]*\"|\'[^\']*\')|\d\d\d\d-\d\d-\d\d)/,
       token: 'date',
     },
     {
       regex: /[-+]?([0-9]+\.[0-9]*|[0-9]*\.[0-9]+)/,
-      token: 'number',
-    },
-    {
-      regex: /[-+]?[0-9]+/,
       token: 'number',
     },
     {
