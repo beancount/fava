@@ -11,17 +11,17 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Liens personnalisés"
 
-#: fava/templates/_aside.html:11
+#: fava/templates/_globals.html:17
 msgid "Reports"
 msgstr "Rapports"
 
-#: fava/templates/_aside.html:35 fava/templates/errors.html:4
+#: fava/templates/_aside.html:34 fava/templates/errors.html:4
 msgid "Errors"
 msgstr "les erreurs"
 
 #: fava/templates/_entry_filters.html:2
 msgid "FROM"
-msgstr "DE"
+msgstr "FROM"
 
 #: fava/templates/_entry_filters.html:3
 msgid "Time"
@@ -32,17 +32,19 @@ msgid "Tag"
 msgstr "Étiquette"
 
 #: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:8
-#: fava/templates/_tree_table.html:102 fava/templates/holdings.html:12
-#: fava/templates/holdings.html:21
-#: fava/templates/overlays/_transaction_form.html:25
-#: fava/templates/overlays/_transaction_form.html:26
-#: fava/templates/statistics.html:24 fava/templates/statistics.html:53
+#: fava/templates/_tree_table.html:94 fava/templates/holdings.html:60
+#: fava/templates/import.html:20 fava/templates/macros/_entry_forms.html:4
+#: fava/templates/macros/_entry_forms.html:5
+#: fava/templates/macros/_entry_forms.html:57
+#: fava/templates/macros/_entry_forms.html:58
+#: fava/templates/macros/_entry_forms.html:79 fava/templates/statistics.html:24
+#: fava/templates/statistics.html:53
 msgid "Account"
 msgstr "Compte"
 
 #: fava/templates/_entry_filters.html:6
-#: fava/templates/overlays/_transaction_form.html:10
-#: fava/templates/overlays/_transaction_form.html:11
+#: fava/templates/macros/_entry_forms.html:28
+#: fava/templates/macros/_entry_forms.html:29
 msgid "Payee"
 msgstr "Bénéficiaire"
 
@@ -70,7 +72,7 @@ msgstr "Journal"
 msgid "Query"
 msgstr "Requête"
 
-#: fava/templates/_globals.html:7 fava/templates/holdings.html:11
+#: fava/templates/_globals.html:7 fava/templates/holdings.html:59
 msgid "Holdings"
 msgstr "fonds"
 
@@ -86,15 +88,15 @@ msgstr "Événements"
 msgid "Editor"
 msgstr "Editeur"
 
-#: fava/templates/_globals.html:11
+#: fava/templates/_globals.html:12
 msgid "Options"
 msgstr "Options"
 
-#: fava/templates/_globals.html:12
+#: fava/templates/_globals.html:13
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: fava/templates/_globals.html:13
+#: fava/templates/_globals.html:14
 msgid "Help"
 msgstr "Aide"
 
@@ -118,79 +120,80 @@ msgstr "Documents découverts par Beancount"
 msgid "Statements from metadata"
 msgstr "Déclarations a partir de métadonnées"
 
-#: fava/templates/_journal_table.html:141 fava/templates/commodities.html:13
-#: fava/templates/events.html:17
-#: fava/templates/overlays/_transaction_form.html:7
+#: fava/templates/_journal_table.html:144 fava/templates/commodities.html:13
+#: fava/templates/events.html:17 fava/templates/macros/_entry_forms.html:25
+#: fava/templates/macros/_entry_forms.html:55
+#: fava/templates/macros/_entry_forms.html:77
 msgid "Date"
 msgstr "date"
 
-#: fava/templates/_journal_table.html:142
+#: fava/templates/_journal_table.html:145
 msgid "F"
 msgstr "F"
 
-#: fava/templates/_journal_table.html:143
+#: fava/templates/_journal_table.html:146
 msgid "Narration/Payee"
 msgstr "descriptif / Payeur"
 
-#: fava/templates/_journal_table.html:144
+#: fava/templates/_journal_table.html:147
 msgid "Position"
 msgstr "Position"
 
-#: fava/templates/_journal_table.html:145 fava/templates/commodities.html:14
-#: fava/templates/holdings.html:26
+#: fava/templates/_journal_table.html:148 fava/templates/commodities.html:14
 msgid "Price"
 msgstr "Prix"
 
-#: fava/templates/_journal_table.html:146
+#: fava/templates/_journal_table.html:149
 msgid "Cost"
 msgstr "Coût"
 
-#: fava/templates/_journal_table.html:148
+#: fava/templates/_journal_table.html:151
 msgid "Change"
 msgstr "Opération"
 
-#: fava/templates/_journal_table.html:149 fava/templates/statistics.html:57
+#: fava/templates/_journal_table.html:152
+#: fava/templates/macros/_entry_forms.html:53 fava/templates/statistics.html:57
 msgid "Balance"
 msgstr "Solde"
 
-#: fava/templates/_layout.html:67 fava/templates/editor.html:14
-#: fava/templates/overlays/_transaction_form.html:18
+#: fava/templates/_layout.html:68 fava/templates/editor.html:14
+#: fava/templates/overlays/_transaction_form.html:10
 msgid "Save"
 msgstr "sauvegarder"
 
-#: fava/templates/_layout.html:68
+#: fava/templates/_layout.html:69
 msgid "Saving..."
 msgstr "Sauvegarde"
 
-#: fava/templates/_layout.html:69
+#: fava/templates/_layout.html:70
 msgid "Saving ${fileName} failed."
 msgstr "La sauvegarde de ${filename} a échoué."
 
-#: fava/templates/_layout.html:70
+#: fava/templates/_layout.html:71
 msgid "Formatting the file with bean-format failed."
 msgstr "Le formatage du fichier avec bean-format a échoué."
 
-#: fava/templates/_layout.html:71
+#: fava/templates/_layout.html:72
 msgid "Loading ${filePath} failed."
 msgstr "Le chargement de ${filePath} a échoué."
 
-#: fava/templates/_layout.html:72
+#: fava/templates/_layout.html:73
 msgid "Chart is empty."
 msgstr "Le graphique est vide."
 
-#: fava/templates/_layout.html:73
+#: fava/templates/_layout.html:74
 msgid "File change detected. Click to reload."
 msgstr "Changement de fichiers détectés. Cliquez pour recharger."
 
-#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:94
 msgid "Expand all accounts"
 msgstr "Développer tous les comptes"
 
-#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:102
+#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:94
 msgid "Expand all"
 msgstr "Développer tout"
 
-#: fava/templates/_tree_table.html:13
+#: fava/templates/_globals.html:18 fava/templates/_tree_table.html:13
 msgid "Other"
 msgstr "Autre"
 
@@ -200,7 +203,7 @@ msgid "Hold Shift while clicking to expand all children \n"
 msgstr "Maintenez la touche Maj enfoncée tout en cliquant pour développer tous les niveaux inferieurs\n"
 "Maintenez la touche Ctrl/Cmd tout en cliquant pour développer un niveau"
 
-#: fava/templates/_tree_table.html:121
+#: fava/templates/_tree_table.html:112
 msgid "Hold the Shift-key while clicking to expand all children"
 msgstr "Maintenez la touche Maj enfoncée tout en cliquant pour développer tous les niveaux inferieurs"
 
@@ -220,20 +223,20 @@ msgstr "Changements"
 msgid "Balances"
 msgstr "Balances"
 
-#: fava/templates/context.html:9
+#: fava/templates/context.html:8
 msgid "Hash:"
 msgstr "Hachage:"
 
-#: fava/templates/context.html:11
+#: fava/templates/context.html:10
 msgid "Location:"
 msgstr "Emplacement:"
 
-#: fava/templates/context.html:12 fava/templates/errors.html:20
+#: fava/templates/context.html:11 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Afficher la source %(file)s:%(lineno)s"
 
-#: fava/templates/context.html:15
+#: fava/templates/context.html:14
 msgid "Journal Entry"
 msgstr "Entrée du journal"
 
@@ -241,11 +244,11 @@ msgstr "Entrée du journal"
 msgid "Format"
 msgstr "Format"
 
-#: fava/templates/errors.html:11
+#: fava/templates/errors.html:11 fava/templates/import.html:18
 msgid "File"
 msgstr "Fichier"
 
-#: fava/templates/errors.html:12
+#: fava/templates/errors.html:12 fava/templates/extract.html:15
 msgid "Line"
 msgstr "Ligne"
 
@@ -271,22 +274,22 @@ msgstr "Aucun événement."
 
 #: fava/templates/help.html:4
 msgid "Help - %(title)s"
-msgstr "Aide - %(titre)s"
+msgstr "Aide - %(title)s"
 
 #: fava/templates/help.html:9
 msgid "Help pages"
 msgstr "pages d'Aide"
 
-#: fava/templates/holdings.html:12 fava/templates/holdings.html:23
-#: fava/templates/overlays/_transaction_form.html:28
+#: fava/templates/holdings.html:60 fava/templates/macros/_entry_forms.html:7
+#: fava/templates/macros/_entry_forms.html:60
 msgid "Currency"
 msgstr "Devise"
 
-#: fava/templates/holdings.html:12 fava/templates/holdings.html:24
+#: fava/templates/holdings.html:60
 msgid "Cost currency"
 msgstr "Devise pour les coûts"
 
-#: fava/templates/holdings.html:13
+#: fava/templates/holdings.html:61
 msgid "Holdings by"
 msgstr "Fonds par"
 
@@ -306,11 +309,13 @@ msgstr "Dépenses"
 msgid "fava: options"
 msgstr "Options de Fava"
 
-#: fava/templates/options.html:9 fava/templates/options.html:26
+#: fava/templates/macros/_entry_forms.html:16 fava/templates/options.html:9
+#: fava/templates/options.html:26
 msgid "Key"
 msgstr "Clé"
 
-#: fava/templates/options.html:10 fava/templates/options.html:27
+#: fava/templates/macros/_entry_forms.html:17 fava/templates/options.html:10
+#: fava/templates/options.html:27
 msgid "Value"
 msgstr "Valeur"
 
@@ -318,7 +323,7 @@ msgstr "Valeur"
 msgid "beancount: options"
 msgstr "Options de Beancount"
 
-#: fava/templates/query.html:66
+#: fava/templates/holdings.html:70 fava/templates/query.html:24
 msgid "Download as"
 msgstr "Télécharger en tant que"
 
@@ -382,52 +387,110 @@ msgstr "Trimestriel"
 msgid "Yearly"
 msgstr "Annuel"
 
-#: fava/templates/overlays/_transaction_form.html:3
+#: fava/templates/overlays/_transaction_form.html:5
 msgid "close"
 msgstr "Fermer"
 
-#: fava/templates/overlays/_transaction_form.html:5
+#: fava/templates/overlays/_transaction_form.html:7
 msgid "New transaction"
 msgstr "Nouvelle transaction"
 
-#: fava/templates/overlays/_transaction_form.html:12
-#: fava/templates/overlays/_transaction_form.html:13
+#: fava/templates/macros/_entry_forms.html:30
+#: fava/templates/macros/_entry_forms.html:31
 msgid "Narration"
 msgstr "Narration"
 
-#: fava/templates/overlays/_transaction_form.html:19
+#: fava/templates/overlays/_transaction_form.html:11
 msgid "Save and add new"
 msgstr "Enregistrer et ajouter 1 nouvelle"
 
-#: fava/templates/overlays/_transaction_form.html:27
+#: fava/templates/macros/_entry_forms.html:6
+#: fava/templates/macros/_entry_forms.html:59
 msgid "Number"
 msgstr "Nombre"
 
-#: fava/templates/overlays/_transaction_form.html:29
+#: fava/templates/macros/_entry_forms.html:8
 msgid "Add posting"
 msgstr "Ajouter Enregistrement"
 
-#: fava/templates/context.html:21
-msgid "No entry matches the given hash."
-msgstr "Aucune entrée ne correspond à ce hash donné "
+#: fava/templates/_globals.html:11 fava/templates/extract.html:8
+#: fava/templates/extract.html:38
+msgid "Import"
+msgstr ""
 
-#: fava/templates/holdings.html:22
-msgid "Units"
-msgstr "Unités"
+#: fava/templates/_globals.html:19
+msgid "Configuration"
+msgstr ""
 
-#: fava/templates/holdings.html:25
-msgid "Average Cost"
-msgstr "Coût moyen"
+#: fava/templates/_journal_table.html:75
+msgid "Budget entries"
+msgstr ""
 
-#: fava/templates/holdings.html:27
-msgid "Book Value"
-msgstr "Coût historique "
+#: fava/templates/extract.html:10
+msgid "Toggle source"
+msgstr ""
 
-#: fava/templates/holdings.html:28
-msgid "Market Value"
-msgstr "Valeur de marché "
+#: fava/templates/extract.html:11
+msgid "Toggle ignore"
+msgstr ""
 
-#: fava/templates/holdings.html:29
-msgid "Acquisition Date"
-msgstr "Date d'acquisition "
+#: fava/templates/extract.html:16
+msgid "Source"
+msgstr ""
+
+#: fava/templates/extract.html:17
+msgid "Entry"
+msgstr ""
+
+#: fava/templates/extract.html:18
+msgid "Actions"
+msgstr ""
+
+#: fava/templates/extract.html:36
+msgid "Ignore"
+msgstr ""
+
+#: fava/templates/extract.html:37
+msgid "Duplicate"
+msgstr ""
+
+#: fava/templates/extract.html:44
+msgid "Import transactions"
+msgstr ""
+
+#: fava/templates/import.html:19
+msgid "Importer"
+msgstr ""
+
+#: fava/templates/import.html:21
+msgid "Action"
+msgstr ""
+
+#: fava/templates/import.html:35
+msgid "Extract"
+msgstr ""
+
+#: fava/templates/query.html:13
+msgid "...enter a BQL query. 'help' to list available commands."
+msgstr ""
+
+#: fava/templates/macros/_entry_forms.html:15
+msgid "Metadata"
+msgstr ""
+
+#: fava/templates/macros/_entry_forms.html:18
+msgid "Add metadata"
+msgstr ""
+
+#: fava/templates/macros/_entry_forms.html:75
+msgid "Note"
+msgstr ""
+
+#: fava/templates/macros/_entry_forms.html:82
+msgid "Comment"
+msgstr ""
+
+#: fava/templates/overlays/_transaction_form.html:13
+msgid "Add Metadata"
+msgstr ""
 
