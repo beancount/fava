@@ -11,7 +11,7 @@
 'none': 'SELECT account,
     units(sum(position)) as units,
     cost_number as cost,
-    first(price(currency, cost_currency)) as price,
+    first(getprice(currency, cost_currency)) as price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value,
     cost_date as acquision_date
@@ -21,7 +21,7 @@
 'account': 'SELECT account,
     units(sum(position)) as units,
     sum(cost_number)/count(cost_number) as average_cost,
-    sum(price(currency, cost_currency))/count(cost_currency) as average_price,
+    sum(getprice(currency, cost_currency))/count(cost_currency) as average_price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
@@ -30,7 +30,7 @@
 'currency': 'SELECT
     units(sum(position)) as units,
     sum(cost_number)/count(cost_number) as average_cost,
-    sum(price(currency, cost_currency))/count(cost_currency) as average_price,
+    sum(getprice(currency, cost_currency))/count(cost_currency) as average_price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
@@ -39,7 +39,7 @@
 'cost_currency': 'SELECT
     units(sum(position)) as units,
     sum(cost_number)/count(cost_number) as average_cost,
-    sum(price(currency, cost_currency))/count(cost_currency) as average_price,
+    sum(getprice(currency, cost_currency))/count(cost_currency) as average_price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
