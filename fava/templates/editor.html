@@ -24,6 +24,12 @@
               </span>
             </li>
             <li>
+              <button data-command="favaToggleComment" type="button" class="link">{{ _('Toggle Comment (selection)') }}</button>
+              <span>
+                <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>y</kbd>
+              </span>
+            </li>
+            <li>
               <button data-command="unfoldAll" type="button" class="link">{{ _('Open all folds') }}</button>
             </li>
             <li>
@@ -32,7 +38,7 @@
           </ul>
         </li>
       </ul>
-      <button id="source-editor-submit" type="button" disabled data-command="favaSave" data-filename="{{ file_path }}">{{ _('Save') }}</button>
+      <button id="source-editor-submit" type="button" disabled data-command="favaSave" data-filename="{{ file_path }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>
     </div>
     <div class="source-editor-wrapper">
       <textarea id="source-editor" name="source" autofocus spellcheck="false">{{ ledger.file.get_source(file_path) or '' }}</textarea>
