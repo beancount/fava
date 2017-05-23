@@ -1,5 +1,4 @@
 import Mousetrap from 'mousetrap';
-import 'mousetrap/plugins/bind-dictionary/mousetrap-bind-dictionary';
 
 import { $, $$ } from './helpers';
 
@@ -11,130 +10,82 @@ function click(selector) {
 }
 
 export function updateKeyboardShortcuts() {
-  // Change page
-  $$('aside a').forEach((element) => {
+  $$('[data-key]').forEach((element) => {
     const key = element.getAttribute('data-key');
     if (key !== undefined) {
       Mousetrap.bind(key, () => {
-        element.click();
-      });
+        const tag = element.tagName;
+        if (tag === 'BUTTON' || tag === 'A') {
+          element.click();
+        } else if (tag === 'INPUT') {
+          element.focus();
+        }
+      }, 'keyup');
     }
   });
 }
 
-export function initKeyboardShortcuts() {
-  Mousetrap.bind({
-    '?': () => {
-      $('#keyboard-shortcuts').classList.add('shown');
-    },
-    esc() {
-      $$('.overlay-wrapper').forEach((el) => {
-        el.classList.remove('shown');
-      });
-    },
-    n() {
-      $('#add-transaction-button').click();
-    },
-  }, 'keyup');
+// Add a tooltip showing the keyboard shortcut over the target element.
+function showTooltip(target) {
+  const tooltip = document.createElement('div');
+  tooltip.className = 'keyboard-tooltip';
+  tooltip.innerHTML = target.getAttribute('data-key');
+  document.body.appendChild(tooltip);
+  const parentCoords = target.getBoundingClientRect();
+  // Padded 10px to the left if there is space or centered otherwise
+  const left = parentCoords.left + Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10);
+  const top = parentCoords.top + ((target.offsetHeight - tooltip.offsetHeight) / 2);
+  tooltip.style.left = `${parseInt(left, 10)}px`;
+  tooltip.style.top = `${parseInt(top, 10) + window.pageYOffset}px`;
+}
 
-  // Filtering:
-  Mousetrap.bind({
-    'f f': () => {
-      $('#from-filter').focus();
-    },
-    'f t': () => {
-      $('#time-filter').focus();
-    },
-    'f g': () => {
-      $('#tag-filter').focus();
-    },
-    'f a': () => {
-      $('#account-filter').focus();
-    },
-    'f p': () => {
-      $('#payee-filter').focus();
-    },
-  }, 'keyup');
+// Show all keyboard shortcut tooltips.
+function showTooltips() {
+  $$('[data-key]').forEach((el) => {
+    showTooltip(el);
+  });
+}
+
+// Remove all keyboard shortcut tooltips.
+function removeTooltips() {
+  $$('.keyboard-tooltip').forEach((tooltip) => {
+    tooltip.remove();
+  });
+}
+
+export function initKeyboardShortcuts() {
+  Mousetrap.bind('?', () => {
+    removeTooltips();
+    showTooltips();
+    $.once(document, 'mousedown', () => {
+      removeTooltips();
+    });
+  });
+
+  Mousetrap.bind('esc', () => {
+    $$('.overlay-wrapper').forEach((el) => {
+      el.classList.remove('shown');
+    });
+    removeTooltips();
+  });
 
   // Charts
-  Mousetrap.bind({
-    'ctrl+c': () => {
-      click('#toggle-chart');
-    },
-    c() {
-      const selected = $('#chart-labels .selected');
+  Mousetrap.bind('c', () => {
+    const selected = $('#chart-labels .selected');
 
-      if (selected && selected.nextElementSibling) {
-        selected.nextElementSibling.click();
-      } else {
-        click('#chart-labels label:first-child');
-      }
-    },
-    'shift+c': () => {
-      const selected = $('#chart-labels .selected');
+    if (selected && selected.nextElementSibling) {
+      selected.nextElementSibling.click();
+    } else {
+      click('#chart-labels label:first-child');
+    }
+  });
+  Mousetrap.bind('C', () => {
+    const selected = $('#chart-labels .selected');
 
-      if (selected && selected.previousElementSibling) {
-        selected.previousElementSibling.click();
-      } else {
-        click('#chart-labels label:last-child');
-      }
-    },
-  }, 'keyup');
-
-  // Journal
-  Mousetrap.bind({
-    p() {
-      click('#entry-filters button[data-type=postings]');
-    },
-    m() {
-      click('#entry-filters button[data-type=metadata]');
-    },
-
-    's o': () => {
-      click('#entry-filters button[data-type=open]');
-    },
-    's c': () => {
-      click('#entry-filters button[data-type=close]');
-    },
-    's t': () => {
-      click('#entry-filters button[data-type=transaction]');
-    },
-    's b': () => {
-      click('#entry-filters button[data-type=balance]');
-    },
-    's n': () => {
-      click('#entry-filters button[data-type=note]');
-    },
-    's d': () => {
-      click('#entry-filters button[data-type=document]');
-    },
-    's p': () => {
-      click('#entry-filters button[data-type=pad]');
-    },
-    's q': () => {
-      click('#entry-filters button[data-type=query]');
-    },
-    's shift+c': () => {
-      click('#entry-filters button[data-type=custom]');
-    },
-    's shift+b': () => {
-      click('#entry-filters button[data-type=budget]');
-    },
-
-    't c': () => {
-      click('#entry-filters button[data-type=cleared]');
-    },
-    't p': () => {
-      click('#entry-filters button[data-type=pending]');
-    },
-    't o': () => {
-      click('#entry-filters button[data-type=other]');
-    },
-    'd d': () => {
-      click('#entry-filters button[data-type=discovered]');
-    },
-    'd s': () => {
-      click('#entry-filters button[data-type=statement]');
-    },
-  }, 'keyup');
+    if (selected && selected.previousElementSibling) {
+      selected.previousElementSibling.click();
+    } else {
+      click('#chart-labels label:last-child');
+    }
+  });
 }

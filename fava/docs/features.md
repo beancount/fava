@@ -1,11 +1,6 @@
 This is an overview of some of the more advanced features that Fava has to
 offer.
 
-## Keyboard Shortcuts
-
-Fava comes with keyboard shortcuts: Press <kbd>?</kbd> on any page to show an
-overview.
-
 ## Filters
 
 There are four filters available in Fava:

@@ -57,7 +57,7 @@
 
 {% macro skeleton(hide_interval_filter=False) %}
 {% set show_charts = ledger.fava_options['charts'] %}
-<button type="button" id="toggle-chart" class="toggle-chart{% if not show_charts %} hide-charts{% endif %}">
+<button type="button" id="toggle-chart" data-key="ctrl+c" class="toggle-chart{% if not show_charts %} hide-charts{% endif %}">
     <span></span>
 </button>
 <div id="charts" class="charts {% if not show_charts %} hidden{% endif %}">

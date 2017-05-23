@@ -11,7 +11,7 @@
   {% if not result_only %}
     <form id="query-form" class="query-box" action="{{ url_for('report', report_name='query') }}" method="get">
       <textarea id="query-editor" name="query_string" placeholder="{{ _('...enter a BQL query. \'help\' to list available commands.') }}">{{ query or '' }}</textarea>
-      <button id="submit-query" type="submit">Submit</button>
+      <button id="submit-query" type="submit" data-key="Ctrl/Cmd+Enter">{{ _('Submit') }}</button>
     </form>
     <div id="query-container">
   {% endif %}
