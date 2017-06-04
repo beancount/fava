@@ -118,7 +118,9 @@ class TagFilter(EntryFilter):
     def __init__(self):
         super().__init__()
         self.tags = set()
+        self.exclude_tags = set()
         self.links = set()
+        self.exclude_links = set()
 
     def set(self, value):
         if value == self.value:
@@ -127,19 +129,32 @@ class TagFilter(EntryFilter):
         if not self.value:
             return True
         self.tags = set()
+        self.exclude_tags = set()
         self.links = set()
+        self.exclude_links = set()
         for tag_or_link in [t.strip() for t in value.split(',')]:
             if tag_or_link.startswith('#'):
                 self.tags.add(tag_or_link[1:])
+            if tag_or_link.startswith('-#'):
+                self.exclude_tags.add(tag_or_link[2:])
             if tag_or_link.startswith('^'):
                 self.links.add(tag_or_link[1:])
+            if tag_or_link.startswith('-^'):
+                self.exclude_links.add(tag_or_link[2:])
         return True
 
     def _include_entry(self, entry):
-        return hasattr(entry, 'tags') and (
+        include = hasattr(entry, 'tags') and (
             (entry.tags & self.tags) or
             (entry.links & self.links)
-        )
+        ) if self.tags else True
+
+        include = hasattr(entry, 'tags') and (
+            not (entry.tags & self.exclude_tags) and
+            not (entry.links & self.exclude_links)
+        ) if self.exclude_tags else include
+
+        return include
 
 
 def _match(search, string):
