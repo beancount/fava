@@ -28,7 +28,6 @@ function initPage() {
   initFilters();
   initKeyboardShortcuts();
   initTransactionOverlay();
-  initIngest();
   initEntryForms();
 
   $$('.overlay-wrapper').forEach((el) => {
@@ -76,6 +75,7 @@ e.on('page-loaded', () => {
   initJournal();
   initSort();
   initTreeTable();
+  initIngest();
 
   pageData = JSON.parse($('#page-data').innerHTML);
   document.title = pageData.documentTitle;
