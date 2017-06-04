@@ -117,7 +117,7 @@
             <dt>{{ key }}</dt>
             <dd>
                 {%- if key.startswith('statement') %}
-                    <a href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">
+                    <a href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}" class="external">
                 {% endif -%}
                 {{ value }}
                 {%- if key.startswith('statement') %}</a>{% endif -%}
