@@ -219,7 +219,7 @@
       background-color: var(--color-journal-entry-postingwarning);
     }
 
-    & .metadata {
+    & .metadata-indicator {
       border-radius: 20px;
       color: color(var(--color-journal-indicator) shade(30%));
       font-size: 10px;

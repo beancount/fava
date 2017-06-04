@@ -220,7 +220,7 @@
         </span>
         <span class="indicators">
         {% for key, value in metadata.items() %}
-          <span class="metadata" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
+          <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
         {% endfor %}
         {% if type == 'transaction' %}
           {% for posting in entry.postings %}
