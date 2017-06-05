@@ -149,12 +149,12 @@ class TagFilter(EntryFilter):
             (entry.links & self.links)
         ) if self.tags else True
 
-        include = hasattr(entry, 'tags') and (
-            not (entry.tags & self.exclude_tags) and
-            not (entry.links & self.exclude_links)
-        ) if self.exclude_tags else include
+        exclude = hasattr(entry, 'tags') and (
+            (entry.tags & self.exclude_tags) or
+            (entry.links & self.exclude_links)
+        )
 
-        return include
+        return include and not exclude
 
 
 def _match(search, string):

@@ -78,9 +78,6 @@ def test_time_filter(example_ledger):
 
 
 def test_tag_filter(example_ledger):
-    len_all_transactions = sum(map(
-        lambda x: isinstance(x, Transaction),
-        example_ledger.all_entries))
     tag_filter = TagFilter()
 
     tag_filter.set('#nomatch, ,')
@@ -115,15 +112,12 @@ def test_tag_filter(example_ledger):
     assert tag_filter.set('-#nomatch')
     filtered_entries = tag_filter.apply(
         example_ledger.all_entries, example_ledger.options)
-    assert len(filtered_entries) == len_all_transactions
+    assert len(filtered_entries) == len(example_ledger.all_entries)
 
     tag_filter.set('-#test')
     filtered_entries = tag_filter.apply(
         example_ledger.all_entries, example_ledger.options)
-    assert all(map(
-        lambda x: isinstance(x, Transaction),
-        filtered_entries))
-    assert len(filtered_entries) == len_all_transactions - 2
+    assert len(filtered_entries) == len(example_ledger.all_entries) - 2
 
 
 def test_payee_filter(example_ledger):
