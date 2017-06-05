@@ -68,7 +68,7 @@ export default function initRouter() {
     loadURL(window.location.href, true);
   });
 
-  $.delegate(document, 'click', 'a:not(.external)', (event) => {
+  $.delegate(document, 'click', 'a', (event) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
       return;
     }
