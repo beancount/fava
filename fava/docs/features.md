@@ -25,8 +25,10 @@ There are four filters available in Fava:
   current year. To prevent subtraction, use parentheses: `(month)-10` refers to
   the 10th of this month, whereas `month-10` would be 10 months ago.
 - **Tags**: Filter entries to the ones having the tags or links selected. This
-  filter is inclusive, meaning that if you select multiple tags entries with
-  any of those tags will be filtered.
+  filter is inclusive, meaning that if you select multiple tags entries with any
+  of those tags will be filtered. This filter also allows for negative filtering
+  by prepending a `-`, e.g. `-#tag` or `-^link`, to exclude entries with the
+  given tag or link.
 - **Account**: Filter entries by account, matching any entry this account is
   part of. The filter can simply be an account name or a regular expression,
   e.g. `.*:Company:.*` to filter for all that contain `Company` as a component
@@ -35,7 +37,7 @@ There are four filters available in Fava:
 - **Payee**: Filter entries by payee. Like the account filter, this can either
   be a full payee name or a regular expression.
 
-If you select multiple filters (like *Tags* and *Time*), the subset of entries
+If you use multiple filters (like *Tags* and *Time*), the subset of entries
 matching both filters will be selected.
 
 ## Editor

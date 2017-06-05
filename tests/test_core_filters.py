@@ -109,6 +109,16 @@ def test_tag_filter(example_ledger):
         example_ledger.all_entries, example_ledger.options)
     assert len(filtered_entries) == len(example_ledger.all_entries)
 
+    assert tag_filter.set('-#nomatch')
+    filtered_entries = tag_filter.apply(
+        example_ledger.all_entries, example_ledger.options)
+    assert len(filtered_entries) == len(example_ledger.all_entries)
+
+    tag_filter.set('-#test')
+    filtered_entries = tag_filter.apply(
+        example_ledger.all_entries, example_ledger.options)
+    assert len(filtered_entries) == len(example_ledger.all_entries) - 2
+
 
 def test_payee_filter(example_ledger):
     payee_filter = PayeeFilter()
