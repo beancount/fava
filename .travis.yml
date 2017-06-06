@@ -18,7 +18,7 @@ matrix:
       sudo: false
       env: TRAVIS_BUILD=lint
       before_install: "nvm use stable"
-      script: "make lint"
+      script: "make && make lint"
     - python: 3.5
       dist: trusty
       sudo: required

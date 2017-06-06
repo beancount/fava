@@ -3,7 +3,7 @@
 all: fava/static/gen/app.js
 
 fava/static/gen/app.js: fava/static/css/* fava/static/javascript/*
-	cd fava/static; npm update; npm run build
+	cd fava/static; npm install; npm run build
 
 clean: mostlyclean
 	rm -rf build dist
@@ -18,7 +18,7 @@ mostlyclean:
 
 lint:
 	tox -e lint
-	cd fava/static; npm update; npm run lint
+	cd fava/static; npm install; npm run lint
 	make -C gui lint
 
 test:
