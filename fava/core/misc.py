@@ -84,8 +84,8 @@ def extract_tags_links(string):
         stripped of tags and links.
     """
 
-    tags = re.findall(r'(?:^|\s)#(\w+)', string)
-    links = re.findall(r'(?:^|\s)\^(\w+)', string)
-    new_string = re.sub(r'(?:^|\s)[#^](\w+)', '', string).strip()
+    tags = re.findall(r'(?:^|\s)#([A-Za-z0-9\-_/.]+)', string)
+    links = re.findall(r'(?:^|\s)\^([A-Za-z0-9\-_/.]+)', string)
+    new_string = re.sub(r'(?:^|\s)[#^]([A-Za-z0-9\-_/.]+)', '', string).strip()
 
     return new_string, frozenset(tags), frozenset(links)
