@@ -41,6 +41,7 @@ function showTooltip(target) {
 
 // Show all keyboard shortcut tooltips.
 function showTooltips() {
+  $('#reload-page').classList.remove('hidden');
   $$('[data-key]').forEach((el) => {
     showTooltip(el);
   });
@@ -48,6 +49,7 @@ function showTooltips() {
 
 // Remove all keyboard shortcut tooltips.
 function removeTooltips() {
+  $('#reload-page').classList.add('hidden');
   $$('.keyboard-tooltip').forEach((tooltip) => {
     tooltip.remove();
   });
