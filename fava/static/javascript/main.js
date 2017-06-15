@@ -17,7 +17,7 @@ import initJournal from './journal';
 import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
 import initRouter from './router';
 import initSort from './sort';
-import initTransactionOverlay from './transaction-overlay';
+import { initTransactionOverlay } from './transaction-overlay';
 import initTreeTable from './tree-table';
 import initEntryForms from './entry-forms';
 
@@ -35,6 +35,7 @@ function initPage() {
       if (event.target.classList.contains('overlay-wrapper') ||
           event.target.classList.contains('close-overlay')) {
         el.classList.remove('shown');
+        window.location.hash = '';
       }
     });
   });
@@ -135,6 +136,7 @@ function doPoll() {
 }
 
 $.ready().then(() => {
+  window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
   initRouter();
   initPage();
   e.trigger('page-loaded');

@@ -20,7 +20,7 @@
         </svg>
         <h1>
             {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-            <a href="#" id="reload-page" class="reload-page hidden" data-key="r">&#8635;</a>
+            <button type=button id="reload-page" class="reload-page hidden" data-key="r">&#8635;</button>
             {% if config['LEDGERS']|length > 1 %}
             <div class="beancount-files">
                 <ul>
@@ -75,8 +75,7 @@
     }|tojson|safe }}</script>
 {%- if not partial %}
     </article>
-    {% include "overlays/_documents_upload.html" %}
-    {% include "overlays/_transaction_form.html" %}
+    {% include "_overlays.html" %}
     <ul id="notifications" class="notifications"></ul>
     <div id="tooltip" class="tooltip"></div>
     <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>

@@ -35,22 +35,23 @@ function submitTransactionForm(form, successCallback) {
     });
 }
 
-export default function initTransactionOverlay() {
+let initialized = false;
+export function showTransactionOverlay() {
   const form = $('#transaction #transaction-form');
-  let initialized = false;
+  if (!initialized) {
+    $$('input', form).forEach((input) => {
+      initInput(input);
+    });
+    addPostingRow(form);
+    addPostingRow(form);
+    initialized = true;
+  }
+  $('#transaction').classList.add('shown');
+  form.querySelector('input[name="date"]').focus();
+}
 
-  $('#add-transaction-button').addEventListener('click', () => {
-    if (!initialized) {
-      $$('input', form).forEach((input) => {
-        initInput(input);
-      });
-      addPostingRow(form);
-      addPostingRow(form);
-      initialized = true;
-    }
-    $('#transaction').classList.add('shown');
-    form.querySelector('input[name="date"]').focus();
-  });
+export function initTransactionOverlay() {
+  const form = $('#transaction #transaction-form');
 
   form.querySelector('#transaction-form-submit').addEventListener('click', (event) => {
     event.preventDefault();

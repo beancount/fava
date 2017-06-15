@@ -54,6 +54,7 @@ app.config['HELP_PAGES'] = HELP_PAGES
 app.config['LEDGERS'] = {}
 
 REPORTS = [
+    '_context',
     'balance_sheet',
     'commodities',
     'events',
@@ -242,12 +243,6 @@ def statement():
     directory = os.path.dirname(document_path)
     filename = os.path.basename(document_path)
     return send_from_directory(directory, filename)
-
-
-@app.route('/<bfile>/context/<ehash>/')
-def context(ehash):
-    """Show entry context."""
-    return render_template('context.html', ehash=ehash)
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')

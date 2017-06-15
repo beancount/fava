@@ -1,0 +1,45 @@
+{% import 'macros/_entry_forms.html' as forms with context %}
+
+<div id="documents-upload" class="documents-upload overlay-wrapper">
+  <div class="overlay">
+    <button type=button class="link close-overlay">({{ _('close') }})</button>
+    <form>
+      <h3>{{ _('Upload file(s)') }}:</h3>
+      <div id="document-names" class="fieldset"></div>
+      <div class="fieldset">
+        <label for="document-upload-folder">{{ _('Documents folder') }}:</label>
+        <select name="document-upload-folder" id="document-upload-folder">
+          {% for folder in ledger.options['documents'] %}
+            <option value="{{ folder }}"{% if loop.first %} selected{% endif %}>{{ folder }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="fieldset">
+        <button type="submit" id="document-upload-submit" data-url="{{ url_for('json_api.add_document') }}">{{ _('Upload') }}</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="transaction" class="transaction-overlay overlay-wrapper">
+  <div class="overlay">
+    <button type=button class="link close-overlay">({{ _('close') }})</button>
+    <form id="transaction-form" action="{{ url_for('json_api.add_entries') }}">
+      <h3>{{ _('New transaction') }}:</h3>
+      {{ forms.transaction() }}
+      <div class="fieldset">
+        <button type="submit" id="transaction-form-submit" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save') }}</button>
+        <button type="submit" class="muted" id="transaction-form-submit-and-new" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save and add new') }}</button>
+        <span class="spacer"></span>
+        <button id="add-metadata" class="link add-metadata-link">{{ _('Add metadata') }}</a>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="context-overlay" class="overlay-wrapper">
+  <div class="overlay">
+    <button type=button class="link close-overlay">({{ _('close') }})</button>
+    <div class="content"></div>
+  </div>
+</div>
+{{ forms.posting(id="posting-template") }}
+{{ forms.metadata(id="metadata-template") }}

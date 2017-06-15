@@ -19,6 +19,9 @@ FILTER_COMBINATIONS = [
     (report, filters) for report in REPORTS for filters in FILTER_COMBINATIONS
 ])
 def test_reports(app, test_client, report, filters):
+    if report.startswith('_'):
+        return
+
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for('report', report_name=report, **filters)
