@@ -2,6 +2,7 @@ import Awesomplete from 'awesomplete';
 import URI from 'urijs';
 
 import { $, $$ } from './helpers';
+import e from './events';
 
 function updateInput(input) {
   const isEmpty = !input.value;
@@ -15,7 +16,7 @@ function updateInput(input) {
   input.closest('span').classList.toggle('empty', isEmpty);
 }
 
-export function updateFilters() {
+e.on('page-loaded', () => {
   ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
     const value = new URI(window.location).search(true)[filter];
     if (value) {
@@ -24,9 +25,9 @@ export function updateFilters() {
       updateInput(el);
     }
   });
-}
+});
 
-export function initFilters() {
+e.on('page-init', () => {
   $$('#filter-form input').forEach((input) => {
     input.addEventListener('awesomplete-selectcomplete', () => {
       updateInput(input);
@@ -76,4 +77,4 @@ export function initFilters() {
       $('#filter-form').dispatchEvent(new Event('submit'));
     });
   });
-}
+});

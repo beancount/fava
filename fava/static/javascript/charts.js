@@ -12,6 +12,7 @@ import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
 
 import { $, $$, _ } from './helpers';
+import e from './events';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
 const sunburstColorScale = scaleOrdinal(schemeCategory20c);
@@ -770,7 +771,7 @@ function getOperatingCurrencies() {
   return window.favaAPI.options.operating_currency;
 }
 
-export default function initCharts() {
+e.on('page-loaded', () => {
   tooltip = select('#tooltip');
   tooltip.style('opacity', 0);
 
@@ -937,4 +938,4 @@ export default function initCharts() {
     $('#charts').classList.toggle('hidden', toggleChart.classList.contains('hide-charts'));
     updateChart();
   });
-}
+});

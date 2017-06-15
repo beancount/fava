@@ -40,22 +40,11 @@
     <aside>{% include "_aside.html" %}</aside>
     <article>
 {%- endif %}
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class="warnings">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
     {% block content %}{% endblock %}
+    <input type="hidden" id="data-document-title" value="{{ '{} - {}'.format(short_title, ledger.options.title) }}">
+    <input type="hidden" id="data-error-count" value="{{ ledger.errors|length }}">
+    <input type="hidden" id="data-page-title" value="{{ page_title }}">
     <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
-    <script type="application/json" id="page-data">{{ {
-        'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
-        'pageTitle': page_title,
-        'errors': ledger.errors|length,
-    }|tojson|safe }}</script>
     <script type="application/json" id="ledger-data">{{ {
         'accountURL': url_for('account', name='REPLACEME'),
         'baseURL': url_for('index'),
@@ -76,7 +65,13 @@
 {%- if not partial %}
     </article>
     {% include "_overlays.html" %}
-    <ul id="notifications" class="notifications"></ul>
+    {% with messages = get_flashed_messages() %}
+    <ul id="notifications" class="notifications">
+        {% for message in messages %}
+        <li class="error">{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endwith %}
     <div id="tooltip" class="tooltip"></div>
     <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
 </body>

@@ -151,7 +151,7 @@ function initQueryEditor() {
 }
 
 // Initialize read-only editors
-function initReadOnlyEditors() {
+export default function initReadOnlyEditors() {
   $$('.editor-readonly').forEach((el) => {
     CodeMirror.fromTextArea(el, {
       mode: 'beancount',
@@ -160,7 +160,7 @@ function initReadOnlyEditors() {
   });
 }
 
-export default function initEditor() {
+e.on('page-loaded', () => {
   initQueryEditor();
   initReadOnlyEditors();
 
@@ -243,4 +243,4 @@ export default function initEditor() {
       });
     }
   });
-}
+});

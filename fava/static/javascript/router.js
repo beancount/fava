@@ -7,9 +7,9 @@ import URI from 'urijs';
 
 import { $, $$ } from './helpers';
 import e from './events';
-import initEditor from './editor';
+import initReadOnlyEditors from './editor';
 import initSort from './sort';
-import { showTransactionOverlay } from './transaction-overlay';
+import showTransactionOverlay from './transaction-overlay';
 
 // Replace <article> contents with the page at `url`. If `noHistoryState` is
 // true, do not create a history state.
@@ -75,7 +75,7 @@ function handleHash() {
       .then(response => response.text())
       .then((data) => {
         $('#context-overlay .content').innerHTML = data;
-        initEditor();
+        initReadOnlyEditors();
       }, () => {
         e.trigger('error', 'Loading context failed.');
       });

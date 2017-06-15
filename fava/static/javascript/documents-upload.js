@@ -21,7 +21,7 @@ function uploadDocument(formData) {
 
 // File uploads via Drag and Drop on elements with class "droptarget" and
 // attribute "data-account-name"
-export default function initDocumentsUpload() {
+e.on('page-loaded', () => {
   $$('.droptarget').forEach((target) => {
     target.addEventListener('dragenter', (event) => {
       target.classList.add('dragover');
@@ -102,4 +102,4 @@ export default function initDocumentsUpload() {
       }
     });
   });
-}
+});

@@ -36,7 +36,7 @@ function submitTransactionForm(form, successCallback) {
 }
 
 let initialized = false;
-export function showTransactionOverlay() {
+export default function showTransactionOverlay() {
   const form = $('#transaction #transaction-form');
   if (!initialized) {
     $$('input', form).forEach((input) => {
@@ -50,7 +50,7 @@ export function showTransactionOverlay() {
   form.querySelector('input[name="date"]').focus();
 }
 
-export function initTransactionOverlay() {
+e.on('page-init', () => {
   const form = $('#transaction #transaction-form');
 
   form.querySelector('#transaction-form-submit').addEventListener('click', (event) => {
@@ -70,4 +70,4 @@ export function initTransactionOverlay() {
     const newMetadata = addMetadataRow(form);
     newMetadata.querySelector('.metadata-key').focus();
   });
-}
+});

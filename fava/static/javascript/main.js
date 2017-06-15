@@ -1,3 +1,32 @@
+// Fava's main Javascript entry point.
+//
+// The code for Fava's UI is split into several modules that are all imported
+// below. The different modules can listen to and register events to
+// communicate and to register DOM event handlers for example.
+//
+// The events currently in use in Fava:
+//
+// error, info, reload-warning:
+//    Trigger with a single message argument to display notifications of the
+//    given type in the top right corner of the page.
+//
+// file-modified:
+//    Fetch and update the error count in the sidebar.
+//
+// page-init:
+//    Run once the page is initialized, i.e., when the DOM is ready. Use this
+//    for JS code and parts of the UI that are independent of the current
+//    contents of <article>.
+//
+// page-loaded:
+//    After a new page has been loaded asynchronously. Use this to bind to
+//    elements in the page.
+//
+// reload:
+//    This triggers a reload of the page.
+//
+
+// Polyfills
 import 'es6-promise';
 import 'whatwg-fetch';
 import 'classlist.js';
@@ -5,30 +34,25 @@ import 'element-closest';
 
 import { $, $$, _, handleJSON } from './helpers';
 import e from './events';
+import initRouter from './router';
 import './../css/style.css';
 
-import initCharts from './charts';
-import initClipboard from './clipboard';
-import initDocumentsUpload from './documents-upload';
-import initEditor from './editor';
-import { initFilters, updateFilters } from './filters';
-import initIngest from './ingest';
-import initJournal from './journal';
-import { initKeyboardShortcuts, updateKeyboardShortcuts } from './keyboard-shortcuts';
-import initRouter from './router';
-import initSort from './sort';
-import { initTransactionOverlay } from './transaction-overlay';
-import initTreeTable from './tree-table';
-import initEntryForms from './entry-forms';
+import './charts';
+import './clipboard';
+import './documents-upload';
+import './editor';
+import './entry-forms';
+import './filters';
+import './ingest';
+import './journal';
+import './keyboard-shortcuts';
+import './sidebar';
+import './sort';
+import './transaction-overlay';
+import './tree-table';
 
-// These parts of the page should not change.
-// So they only need to be initialized once.
-function initPage() {
+e.on('page-init', () => {
   window.favaTranslations = JSON.parse($('#translations').innerHTML);
-  initFilters();
-  initKeyboardShortcuts();
-  initTransactionOverlay();
-  initEntryForms();
 
   $$('.overlay-wrapper').forEach((el) => {
     el.addEventListener('mousedown', (event) => {
@@ -40,58 +64,16 @@ function initPage() {
     });
   });
 
-  $('#aside-button').addEventListener('click', (event) => {
-    event.preventDefault();
-    $('aside').classList.toggle('active');
-    $('#aside-button').classList.toggle('active');
-  });
-
   $.delegate($('#notifications'), 'click', 'li', (event) => {
     event.target.closest('li').remove();
   });
-}
-
-let pageData;
-
-function initSidebar() {
-  $$('aside a').forEach((el) => {
-    el.classList.remove('selected');
-    if (el.getAttribute('href').startsWith(window.location.pathname)) {
-      el.classList.add('selected');
-    }
-  });
-  $('aside li.error').classList.toggle('hidden', pageData.errors === 0);
-  $('aside li.error span').innerHTML = pageData.errors;
-}
+});
 
 e.on('page-loaded', () => {
   window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
-  updateFilters();
-  updateKeyboardShortcuts();
-
-  initCharts();
-  initClipboard();
-  initDocumentsUpload();
-  initEditor();
-  initJournal();
-  initSort();
-  initTreeTable();
-  initIngest();
-
-  pageData = JSON.parse($('#page-data').innerHTML);
-  document.title = pageData.documentTitle;
-  $('h1 strong').innerHTML = pageData.pageTitle;
+  document.title = $('#data-document-title').value;
+  $('h1 strong').innerHTML = $('#data-page-title').value;
   $('#reload-page').classList.add('hidden');
-  initSidebar();
-});
-
-e.on('file-modified', () => {
-  $.fetch(`${window.favaAPI.baseURL}api/errors/`)
-    .then(handleJSON)
-    .then((data) => {
-      pageData.errors = data.errors;
-      initSidebar();
-    });
 });
 
 // Notifications
@@ -116,6 +98,8 @@ e.on('error', (msg) => {
   $('#notifications').insertAdjacentHTML('beforeend', `<li class="error">${msg}</li>`);
 });
 
+// Check the `changed` API endpoint every 5 seconds and fire the appropriate
+// events if some file changed.
 function doPoll() {
   $.fetch(`${window.favaAPI.baseURL}api/changed/`)
     .then(handleJSON)
@@ -138,7 +122,7 @@ function doPoll() {
 $.ready().then(() => {
   window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
   initRouter();
-  initPage();
+  e.trigger('page-init');
   e.trigger('page-loaded');
   setTimeout(doPoll, 5000);
 });

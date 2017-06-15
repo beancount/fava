@@ -24,7 +24,7 @@ function submitIngestForm() {
     });
 }
 
-export default function initExtract() {
+e.on('page-loaded', () => {
   const ingest = $('.ingest-extract');
   if (!ingest) return;
 
@@ -52,4 +52,4 @@ export default function initExtract() {
     });
     event.target.classList.toggle('inactive');
   });
-}
+});

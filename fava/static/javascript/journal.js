@@ -1,8 +1,9 @@
 import URI from 'urijs';
 
 import { $, $$ } from './helpers';
+import e from './events';
 
-export default function initJournal() {
+e.on('page-loaded', () => {
   const journal = $('#journal-table');
   if (!journal) return;
 
@@ -49,4 +50,4 @@ export default function initJournal() {
       window.history.pushState(null, null, url.toString());
     });
   });
-}
+});

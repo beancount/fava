@@ -510,14 +510,6 @@ kbd {
   float: right;
 }
 
-.warnings li {
-  background-color: var(--color-error);
-  color: var(--color-background);
-  display: block;
-  padding: 10px;
-  text-align: center;
-}
-
 .status-indicator {
   border-radius: 6px;
   display: inline-block;

@@ -2,6 +2,7 @@ import Awesomplete from 'awesomplete';
 import fuzzy from 'fuzzyjs';
 
 import { $, $$, handleJSON } from './helpers';
+import e from './events';
 
 // These will be updated once a payee is set.
 const accountCompleters = [];
@@ -102,7 +103,7 @@ export function entryFormToJSON(form) {
   return entryData;
 }
 
-export default function initEntryForms() {
+e.on('page-init', () => {
   $$('.entry-form').forEach((form) => {
     $$('input', form).forEach((input) => {
       initInput(input);
@@ -122,4 +123,4 @@ export default function initEntryForms() {
       });
     }
   });
-}
+});

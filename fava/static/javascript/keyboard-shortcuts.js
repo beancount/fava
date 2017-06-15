@@ -1,6 +1,7 @@
 import Mousetrap from 'mousetrap';
 
 import { $, $$ } from './helpers';
+import e from './events';
 
 function click(selector) {
   const element = $(selector);
@@ -9,7 +10,7 @@ function click(selector) {
   }
 }
 
-export function updateKeyboardShortcuts() {
+e.on('page-loaded', () => {
   $$('[data-key]').forEach((element) => {
     const key = element.getAttribute('data-key');
     if (key !== undefined) {
@@ -23,7 +24,7 @@ export function updateKeyboardShortcuts() {
       }, 'keyup');
     }
   });
-}
+});
 
 // Add a tooltip showing the keyboard shortcut over the target element.
 function showTooltip(target) {
@@ -55,7 +56,7 @@ function removeTooltips() {
   });
 }
 
-export function initKeyboardShortcuts() {
+e.on('page-init', () => {
   Mousetrap.bind('?', () => {
     removeTooltips();
     showTooltips();
@@ -90,4 +91,4 @@ export function initKeyboardShortcuts() {
       click('#chart-labels label:last-child');
     }
   });
-}
+});
