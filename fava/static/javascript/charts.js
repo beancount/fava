@@ -366,8 +366,8 @@ class BarChart extends BaseChart {
     this.x1.domain(data[0].values.map(d => d.name));
 
     this.y.domain([
-      Math.min(0, min(data, d => min(d.values, e => e.value))),
-      Math.max(0, max(data, d => max(d.values, e => e.value))),
+      Math.min(0, min(data, d => min(d.values, x => x.value))),
+      Math.max(0, max(data, d => max(d.values, x => x.value))),
     ]);
 
     this.selections.groups = this.canvas.selectAll('.group')
@@ -562,8 +562,8 @@ class LineChart extends BaseChart {
       max(this.data, s => s.values[s.values.length - 1].date),
     ]);
     this.y.domain([
-      Math.min(0, min(this.data, d => min(d.values, e => e.value))),
-      Math.max(0, max(this.data, d => max(d.values, e => e.value))),
+      Math.min(0, min(this.data, d => min(d.values, x => x.value))),
+      Math.max(0, max(this.data, d => max(d.values, x => x.value))),
     ]);
 
     this.selections.lines = this.canvas.selectAll('.line')
