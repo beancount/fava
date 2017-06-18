@@ -81,7 +81,8 @@ h1 {
 .reload-page {
   background-color: var(--color-warning);
   color: var(--color-header-text);
-  margin-left: 2em;
+  margin-left: 20px;
+  margin-top: -8px;
   padding: 8px 12px;
 }
 
