@@ -3,7 +3,7 @@
 all: node_modules bin/fava
 
 node_modules:
-	npm update
+	npm install
 
 bin/fava:
 	make -C ..

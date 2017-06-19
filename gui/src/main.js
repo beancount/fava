@@ -60,9 +60,9 @@ function loadMainPage() {
       }));
       mainWindow.loadURL(mainAddr);
     })
-  .catch(() => {
-    loadMainPage();
-  });
+    .catch(() => {
+      loadMainPage();
+    });
 }
 
 function openBeancountFile() {
