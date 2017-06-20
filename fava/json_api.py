@@ -38,19 +38,16 @@ def errors():
     return jsonify({'success': True, 'errors': len(g.ledger.errors)})
 
 
-@json_api.route('/source/', methods=['GET', 'PUT'])
+@json_api.route('/source/', methods=['PUT'])
 def source():
     """Read/write one of the source files."""
-    if request.method == 'GET':
-        response = g.ledger.file.get_source(request.args.get('file_path'))
-        return _api_success(payload=response)
-    elif request.method == 'PUT':
-        request_data = request.get_json()
-        if request_data is None:
-            raise FavaAPIException('Invalid JSON request.')
-        g.ledger.file.set_source(request_data['file_path'],
-                                 request_data['source'])
-        return _api_success()
+    request_data = request.get_json()
+    if request_data is None:
+        raise FavaAPIException('Invalid JSON request.')
+    sha256sum = g.ledger.file.set_source(request_data['file_path'],
+                                         request_data['source'],
+                                         request_data['sha256sum'])
+    return _api_success(sha256sum=sha256sum)
 
 
 @json_api.route('/format-source/', methods=['POST'])

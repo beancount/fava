@@ -38,10 +38,11 @@
           </ul>
         </li>
       </ul>
-      <button id="source-editor-submit" type="button" disabled data-command="favaSave" data-filename="{{ file_path }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>
+      <button id="source-editor-submit" type="button" disabled data-command="favaSave" data-filename="{{ file_path }}" data-progress-content="{{ _('Saving...') }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>
     </div>
     <div class="source-editor-wrapper">
-      <textarea id="source-editor" name="source" autofocus spellcheck="false">{{ ledger.file.get_source(file_path) or '' }}</textarea>
+      {% set source, sha256sum = ledger.file.get_source(file_path) %}
+      <textarea id="source-editor" name="source" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ source or '' }}</textarea>
     </div>
   </form>
 {% endblock %}

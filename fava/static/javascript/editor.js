@@ -35,15 +35,16 @@ import './codemirror/mode-beancount';
 import './codemirror/hint-query';
 import './codemirror/mode-query';
 
-import { $, $$, _, handleJSON } from './helpers';
+import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
 CodeMirror.commands.favaSave = (cm) => {
   const button = $('#source-editor-submit');
   const fileName = button.getAttribute('data-filename');
 
+  const buttonText = button.textContent;
   button.disabled = true;
-  button.textContent = _('Saving...');
+  button.textContent = button.getAttribute('data-progress-content');
 
   $.fetch(`${window.favaAPI.baseURL}api/source/`, {
     method: 'PUT',
@@ -53,18 +54,20 @@ CodeMirror.commands.favaSave = (cm) => {
     body: JSON.stringify({
       file_path: fileName,
       source: cm.getValue(),
+      sha256sum: $('#source-editor').getAttribute('data-sha256sum'),
     }),
   })
     .then(handleJSON)
-    .then(() => {
+    .then((data) => {
       cm.focus();
+      $('#source-editor').setAttribute('data-sha256sum', data.sha256sum);
       e.trigger('file-modified');
-    }, () => {
-      e.trigger('error', _('Saving ${fileName} failed.', { fileName }));  // eslint-disable-line no-template-curly-in-string
+    }, (error) => {
+      e.trigger('error', error);
     })
     .then(() => {
       cm.markClean();
-      button.textContent = _('Save');
+      button.textContent = buttonText;
     });
 };
 
@@ -83,8 +86,8 @@ CodeMirror.commands.favaFormat = (cm) => {
       const scrollPosition = cm.getScrollInfo().top;
       cm.setValue(data.payload);
       cm.scrollTo(null, scrollPosition);
-    }, () => {
-      e.trigger('error', _('Formatting the file with bean-format failed.'));
+    }, (error) => {
+      e.trigger('error', error);
     });
 };
 

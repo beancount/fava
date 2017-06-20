@@ -1,5 +1,7 @@
 """Reading/writing Beancount files."""
 
+import codecs
+from hashlib import sha256
 import os
 
 from beancount.core import data
@@ -43,29 +45,39 @@ class FileModule(FavaModule):
         if path not in self.list_sources():
             raise FavaAPIException('Trying to read a non-source file')
 
-        with open(path, encoding='utf8') as file:
-            source = file.read()
-        return source
+        with open(path, mode='rb') as file:
+            contents = file.read()
 
-    def set_source(self, path, source):
+        sha256sum = sha256(contents).hexdigest()
+        source = codecs.decode(contents)
+
+        return source, sha256sum
+
+    def set_source(self, path, source, sha256sum):
         """Write to source file.
 
         Args:
             path: The path of the file.
             source: A string with the file contents.
+            sha256sum: Hash of the file.
 
         Raises:
             FavaAPIException: If the file at `path` is not one of the
-                source files.
+                source files or if the file was changed externally.
 
         """
-        if path not in self.list_sources():
-            raise FavaAPIException('Trying to write a non-source file')
+        _, original_sha256sum = self.get_source(path)
+        if original_sha256sum != sha256sum:
+            raise FavaAPIException('The file changed externally.')
 
-        with open(path, 'w+', encoding='utf8') as file:
-            file.write(source)
+        contents = codecs.encode(source)
+        with open(path, 'w+b') as file:
+            file.write(contents)
+
         self.ledger.extensions.run_hook('after_write_source', path, source)
-        self.load_file()
+        self.ledger.load_file()
+
+        return sha256(contents).hexdigest()
 
     def insert_metadata(self, entry_hash, basekey, value):
         """Insert metadata into a file at lineno.

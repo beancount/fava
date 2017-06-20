@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 from io import BytesIO
 import os
 
@@ -54,29 +55,6 @@ def test_api_add_document(app, test_client, tmpdir):
         flask.g.ledger.options['documents'] = old_documents
 
 
-def test_api_source_get(app, test_client):
-    with app.test_request_context():
-        app.preprocess_request()
-        url = flask.url_for('json_api.source')
-
-    result = test_client.get(url)
-    response_data = flask.json.loads(result.get_data(True))
-    assert response_data == {
-        'error': 'Trying to read a non-source file',
-        'success': False
-    }
-
-    path = app.config['BEANCOUNT_FILES'][0]
-    with app.test_request_context():
-        app.preprocess_request()
-        url = flask.url_for('json_api.source', file_path=path)
-
-    result = test_client.get(url)
-    response_data = flask.json.loads(result.get_data(True))
-    payload = open(path).read()
-    assert response_data == {'payload': payload, 'success': True}
-
-
 def test_api_source_put(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
@@ -93,15 +71,18 @@ def test_api_source_put(app, test_client):
 
     path = app.config['BEANCOUNT_FILES'][0]
     payload = open(path).read()
+    sha256sum = hashlib.sha256(open(path, mode='rb').read()).hexdigest()
 
     # change source
     result = test_client.put(url, data=flask.json.dumps({
         'source': 'asdf' + payload,
+        'sha256sum': sha256sum,
         'file_path': path,
     }), content_type='application/json')
     assert result.status_code == 200
     response_data = flask.json.loads(result.get_data(True))
-    assert response_data == {'success': True}
+    sha256sum = hashlib.sha256(open(path, mode='rb').read()).hexdigest()
+    assert response_data == {'success': True, 'sha256sum': sha256sum}
 
     # check if the file has been written
     assert open(path).read() == 'asdf' + payload
@@ -109,6 +90,7 @@ def test_api_source_put(app, test_client):
     # write original source file
     result = test_client.put(url, data=flask.json.dumps({
         'source': payload,
+        'sha256sum': sha256sum,
         'file_path': path,
     }), content_type='application/json')
     assert result.status_code == 200
