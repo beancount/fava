@@ -20,7 +20,7 @@
         </svg>
         <h1>
             {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-            <button type=button id="reload-page" class="reload-page hidden" data-key="r">&#8635;</button>
+            <button type=button id="reload-page" class="reload-page hidden" data-key="r" data-reload-text="{{ _('File change detected. Click to reload.') }}">&#8635;</button>
             {% if config['LEDGERS']|length > 1 %}
             <div class="beancount-files">
                 <ul>
@@ -52,10 +52,6 @@
         'options': ledger.options,
         'favaOptions': ledger.fava_options,
         'tags': ledger.attributes.tags,
-    }|tojson|safe }}</script>
-    <script type="application/json" id="translations">{{ {
-        'Chart is empty.': _('Chart is empty.'),
-        'File change detected. Click to reload.': _('File change detected. Click to reload.'),
     }|tojson|safe }}</script>
 {%- if not partial %}
     </article>

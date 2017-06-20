@@ -11,7 +11,7 @@ import { schemeSet3 } from 'd3-scale-chromatic';
 import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
 
-import { $, $$, _ } from './helpers';
+import { $, $$ } from './helpers';
 import e from './events';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
@@ -173,7 +173,7 @@ class TreeMapChart extends BaseChart {
 
     if (this.selections.cells.empty()) {
       this.selections.empty = this.canvas.append('text')
-        .text(_('Chart is empty.'));
+        .text('Chart is empty.');
     }
 
     this.selections.cells.append('rect')
@@ -306,7 +306,7 @@ class SunburstChart extends BaseChart {
   setLabel(d) {
     if (this.selections.paths.empty()) {
       this.selections.accountLabel
-        .text(_('Chart is empty.'));
+        .text('Chart is empty.');
     } else {
       this.selections.balanceLabel
         .text(this.labelText(d));

@@ -32,7 +32,7 @@ import 'whatwg-fetch';
 import 'classlist.js';
 import 'element-closest';
 
-import { $, $$, _, handleJSON } from './helpers';
+import { $, $$, handleJSON } from './helpers';
 import e from './events';
 import initRouter from './router';
 import './../css/style.css';
@@ -52,8 +52,6 @@ import './transaction-overlay';
 import './tree-table';
 
 e.on('page-init', () => {
-  window.favaTranslations = JSON.parse($('#translations').innerHTML);
-
   $$('.overlay-wrapper').forEach((el) => {
     el.addEventListener('mousedown', (event) => {
       if (event.target.classList.contains('overlay-wrapper') ||
@@ -110,7 +108,7 @@ function doPoll() {
         } else {
           $('#reload-page').classList.remove('hidden');
           e.trigger('file-modified');
-          e.trigger('reload-warning', _('File change detected. Click to reload.'));
+          e.trigger('reload-warning', $('#reload-page').getAttribute('data-reload-text'));
         }
       }
     }, () => {})
