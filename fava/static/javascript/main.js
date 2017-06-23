@@ -72,7 +72,7 @@ e.on('page-init', () => {
 e.on('page-loaded', () => {
   window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
   document.title = $('#data-document-title').value;
-  $('h1 strong').innerHTML = $('#data-page-title').value;
+  $('h1 strong').innerHTML = $('#data-page-title').innerHTML;
   $('#reload-page').classList.add('hidden');
 });
 

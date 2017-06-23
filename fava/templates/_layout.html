@@ -43,7 +43,7 @@
     {% block content %}{% endblock %}
     <input type="hidden" id="data-document-title" value="{{ '{} - {}'.format(short_title, ledger.options.title) }}">
     <input type="hidden" id="data-error-count" value="{{ ledger.errors|length }}">
-    <input type="hidden" id="data-page-title" value="{{ page_title }}">
+    <script type="text/html" id="data-page-title">{{ page_title }}</script>
     <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
     <script type="application/json" id="ledger-data">{{ {
         'accountURL': url_for('account', name='REPLACEME'),
