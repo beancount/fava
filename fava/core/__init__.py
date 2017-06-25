@@ -23,7 +23,7 @@ from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.fava_options import parse_options
-from fava.core.file import FileModule
+from fava.core.file import FileModule, get_entry_slice
 from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
                                TagFilter, TimeFilter)
 from fava.core.helpers import FavaAPIException, FavaModule
@@ -336,7 +336,8 @@ class FavaLedger():
         """
         entry = self.get_entry(entry_hash)
         ctx = render_entry_context(self.all_entries, self.options, entry)
-        return entry, ctx.split("\n", 2)[2]
+        source_slice, sha256sum = get_entry_slice(entry)
+        return entry, ctx.split("\n", 2)[2], source_slice, sha256sum
 
     def commodity_pairs(self):
         """List pairs of commodities.

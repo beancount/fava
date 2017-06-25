@@ -7,7 +7,7 @@ import URI from 'urijs';
 
 import { $, $$ } from './helpers';
 import e from './events';
-import initReadOnlyEditors from './editor';
+import initSourceEditor from './editor';
 import initSort from './sort';
 import showTransactionOverlay from './transaction-overlay';
 
@@ -75,7 +75,7 @@ function handleHash() {
       .then(response => response.text())
       .then((data) => {
         $('#context-overlay .content').innerHTML = data;
-        initReadOnlyEditors();
+        initSourceEditor('#source-slice-editor');
       }, () => {
         e.trigger('error', 'Loading context failed.');
       });

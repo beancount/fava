@@ -3,7 +3,7 @@
 {% set file_path = request.args.get('file_path', ledger.fava_options['default-file'] or ledger.beancount_file_path) %}
 
 {% block content %}
-  <form id="source-form" class="source-form">
+  <form id="source-editor-form" class="source-form">
     <div class="fieldset">
       <ul class="dropdown">
         <li>File▾

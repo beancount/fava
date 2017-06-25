@@ -6,8 +6,17 @@ from beancount.core import data, amount
 from beancount.core.number import D
 
 from fava.core.file import (next_key, leading_space, insert_metadata_in_file,
-                            insert_entry)
+                            insert_entry, get_entry_slice)
 from fava.core.fava_options import InsertEntryOption
+
+
+def test_get_entry_slice(example_ledger):
+    entry = example_ledger.get_entry('d4a067d229bfda57c8c984d1615da699')
+    assert get_entry_slice(entry) == (
+        """2016-05-03 * "Chichipotle" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -21.70 USD
+  Expenses:Food:Restaurant                          21.70 USD""",
+        'd60da810c0c7b8a57ae16be409c5e17a640a837c1ac29719ebe9f43930463477')
 
 
 def test_next_key():

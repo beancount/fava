@@ -3,6 +3,7 @@
 import codecs
 from hashlib import sha256
 import os
+import re
 
 from beancount.core import data
 from beancount.parser.printer import format_entry
@@ -35,7 +36,7 @@ class FileModule(FavaModule):
             path: The path of the file.
 
         Returns:
-            A string with the file contents.
+            A string with the file contents and the `sha256sum` of the file.
 
         Raises:
             FavaAPIException: If the file at `path` is not one of the
@@ -60,6 +61,9 @@ class FileModule(FavaModule):
             path: The path of the file.
             source: A string with the file contents.
             sha256sum: Hash of the file.
+
+        Returns:
+            The `sha256sum` of the updated file.
 
         Raises:
             FavaAPIException: If the file at `path` is not one of the
@@ -148,6 +152,79 @@ def insert_metadata_in_file(filename, lineno, key, value):
         file.write(contents)
 
 
+def find_entry_lines(lines, lineno):
+    """Lines of entry starting at lineno."""
+    entry_lines = [lines[lineno]]
+    while True:
+        lineno += 1
+        line = lines[lineno]
+        if not line.strip() or re.match('[0-9a-z]', line[0]):
+            break
+        entry_lines.append(line)
+    return entry_lines
+
+
+def get_entry_slice(entry):
+    """Get slice of the source file for an entry.
+
+    Args:
+        entry: An entry.
+
+    Returns:
+        A string containing the lines of the entry and the `sha256sum` of
+        these lines.
+
+    Raises:
+        FavaAPIException: If the file at `path` is not one of the
+            source files.
+
+    """
+    with open(entry.meta['filename'], mode='r') as file:
+        lines = file.readlines()
+
+    entry_lines = find_entry_lines(lines, entry.meta['lineno'] - 1)
+    entry_source = ''.join(entry_lines).rstrip('\n')
+    sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
+
+    return entry_source, sha256sum
+
+
+def save_entry_slice(entry, source_slice, sha256sum):
+    """Save slice of the source file for an entry.
+
+    Args:
+        entry: An entry.
+        source_slice: The lines that the entry should be replaced with.
+        sha256sum: The sha256sum of the current lines of the entry.
+
+    Returns:
+        The `sha256sum` of the new lines of the entry.
+
+    Raises:
+        FavaAPIException: If the file at `path` is not one of the
+            source files.
+
+    """
+
+    with open(entry.meta['filename'], 'r') as file:
+        lines = file.readlines()
+
+    first_entry_line = entry.meta['lineno'] - 1
+    entry_lines = find_entry_lines(lines, first_entry_line)
+    entry_source = ''.join(entry_lines).rstrip('\n')
+    original_sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
+    if original_sha256sum != sha256sum:
+        raise FavaAPIException('The file changed externally.')
+
+    lines = (lines[:first_entry_line]
+             + [source_slice + '\n']
+             + lines[first_entry_line + len(entry_lines):])
+    with open(entry.meta['filename'], "w") as file:
+        file.writelines(lines)
+
+    return sha256(codecs.encode(source_slice)).hexdigest()
+
+
 def insert_entry(entry, filenames, insert_options):
     """Insert an entry.
 
@@ -175,9 +252,10 @@ def insert_entry(entry, filenames, insert_options):
         file.writelines(contents)
 
     for index, option in enumerate(insert_options):
+        added_lines = content.count('\n') + 1
         if option.filename == filename and option.lineno > lineno:
             insert_options[index] = option._replace(
-                lineno=lineno + content.count('\n') + 1)
+                lineno=lineno + added_lines)
 
 
 def _format_entry(entry):

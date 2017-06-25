@@ -10,6 +10,7 @@ from beancount.core.number import D
 from beancount.scripts.format import align_beancount
 
 from fava import util
+from fava.core.file import save_entry_slice
 from fava.core.helpers import FavaAPIException
 from fava.core.misc import extract_tags_links
 
@@ -44,9 +45,15 @@ def source():
     request_data = request.get_json()
     if request_data is None:
         raise FavaAPIException('Invalid JSON request.')
-    sha256sum = g.ledger.file.set_source(request_data['file_path'],
-                                         request_data['source'],
-                                         request_data['sha256sum'])
+    if request_data.get('file_path'):
+        sha256sum = g.ledger.file.set_source(
+            request_data.get('file_path'),
+            request_data.get('source'), request_data.get('sha256sum'))
+    else:
+        entry = g.ledger.get_entry(request_data.get('entry_hash'))
+        sha256sum = save_entry_slice(entry,
+                                     request_data.get('source'),
+                                     request_data.get('sha256sum'))
     return _api_success(sha256sum=sha256sum)
 
 

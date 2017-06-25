@@ -39,8 +39,7 @@ import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
 CodeMirror.commands.favaSave = (cm) => {
-  const button = $('#source-editor-submit');
-  const fileName = button.getAttribute('data-filename');
+  const button = cm.getOption('favaSaveButton');
 
   const buttonText = button.textContent;
   button.disabled = true;
@@ -52,16 +51,21 @@ CodeMirror.commands.favaSave = (cm) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      file_path: fileName,
+      file_path: button.getAttribute('data-filename'),
+      entry_hash: button.getAttribute('data-entry-hash'),
       source: cm.getValue(),
-      sha256sum: $('#source-editor').getAttribute('data-sha256sum'),
+      sha256sum: cm.getTextArea().getAttribute('data-sha256sum'),
     }),
   })
     .then(handleJSON)
     .then((data) => {
       cm.focus();
-      $('#source-editor').setAttribute('data-sha256sum', data.sha256sum);
+      cm.getTextArea().setAttribute('data-sha256sum', data.sha256sum);
       e.trigger('file-modified');
+      // Reload the page if an entry was changed.
+      if (button.getAttribute('data-entry-hash')) {
+        e.trigger('reload');
+      }
     }, (error) => {
       e.trigger('error', error);
     })
@@ -154,7 +158,7 @@ function initQueryEditor() {
 }
 
 // Initialize read-only editors
-export default function initReadOnlyEditors() {
+function initReadOnlyEditors() {
   $$('.editor-readonly').forEach((el) => {
     CodeMirror.fromTextArea(el, {
       mode: 'beancount',
@@ -163,49 +167,47 @@ export default function initReadOnlyEditors() {
   });
 }
 
-e.on('page-loaded', () => {
-  initQueryEditor();
-  initReadOnlyEditors();
+const sourceEditorOptions = {
+  mode: 'beancount',
+  indentUnit: 4,
+  lineNumbers: true,
+  foldGutter: true,
+  showTrailingSpace: true,
+  gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+  extraKeys: {
+    'Ctrl-Space': 'autocomplete',
+    'Ctrl-S': 'favaSave',
+    'Cmd-S': 'favaSave',
+    'Ctrl-D': 'favaFormat',
+    'Cmd-D': 'favaFormat',
+    'Ctrl-Y': 'favaToggleComment',
+    'Cmd-Y': 'favaToggleComment',
+    Tab: (cm) => {
+      if (cm.somethingSelected()) {
+        cm.indentSelection('add');
+      } else {
+        cm.execCommand('insertSoftTab');
+      }
+    },
+  },
+};
 
-  const sourceEditorTextarea = $('#source-editor');
-  if (!sourceEditorTextarea) { return; }
-
-  const rulers = [];
+// Init source editor.
+export default function initSourceEditor(name) {
+  sourceEditorOptions.rulers = [];
   if (window.favaAPI.favaOptions['editor-print-margin-column']) {
-    rulers.push({
+    sourceEditorOptions.rulers.push({
       column: window.favaAPI.favaOptions['editor-print-margin-column'],
       lineStyle: 'dotted',
     });
   }
 
-  const options = {
-    mode: 'beancount',
-    indentUnit: 4,
-    lineNumbers: true,
-    rulers,
-    foldGutter: true,
-    showTrailingSpace: true,
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
-    extraKeys: {
-      'Ctrl-Space': 'autocomplete',
-      'Ctrl-S': 'favaSave',
-      'Cmd-S': 'favaSave',
-      'Ctrl-D': 'favaFormat',
-      'Cmd-D': 'favaFormat',
-      'Ctrl-Y': 'favaToggleComment',
-      'Cmd-Y': 'favaToggleComment',
-      Tab: (cm) => {
-        if (cm.somethingSelected()) {
-          cm.indentSelection('add');
-        } else {
-          cm.execCommand('insertSoftTab');
-        }
-      },
-    },
-  };
+  const sourceEditorTextarea = $(name);
+  if (!sourceEditorTextarea) { return; }
 
-  const editor = CodeMirror.fromTextArea(sourceEditorTextarea, options);
-  const saveButton = $('#source-editor-submit');
+  const editor = CodeMirror.fromTextArea(sourceEditorTextarea, sourceEditorOptions);
+  const saveButton = $(`${name}-submit`);
+  editor.setOption('favaSaveButton', saveButton);
 
   editor.on('changes', (cm) => {
     saveButton.disabled = cm.isClean();
@@ -236,7 +238,7 @@ e.on('page-loaded', () => {
   });
 
   // Run editor commands with buttons in editor menu.
-  $$('#source-form button').forEach((button) => {
+  $$(`${name}-form button`).forEach((button) => {
     const command = button.getAttribute('data-command');
     if (command) {
       button.addEventListener('click', (event) => {
@@ -246,4 +248,10 @@ e.on('page-loaded', () => {
       });
     }
   });
+}
+
+e.on('page-loaded', () => {
+  initQueryEditor();
+  initReadOnlyEditors();
+  initSourceEditor('#source-editor');
 });

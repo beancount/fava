@@ -1,16 +1,6 @@
-import datetime
 import pytest
 
 from fava.core import FavaAPIException
-
-
-def test_context(example_ledger):
-    entry, _ = example_ledger.context('153a5f344a16db030dd723f7966becc7')
-    assert entry.narration == "Allowed contributions for one year"
-    assert entry.date == datetime.date(2014, 1, 1)
-
-    with pytest.raises(FavaAPIException):
-        example_ledger.context('NOHASH')
 
 
 def test_apiexception():
