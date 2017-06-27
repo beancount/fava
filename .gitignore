@@ -15,6 +15,7 @@ TODO.md
 fava/static/gen/
 TODO
 
+package-lock.json
 npm-debug.log
 node_modules
 .cache/
