@@ -46,6 +46,7 @@ import './filters';
 import './ingest';
 import './journal';
 import './keyboard-shortcuts';
+import './notifications';
 import './sidebar';
 import './sort';
 import './transaction-overlay';
@@ -61,10 +62,6 @@ e.on('page-init', () => {
       }
     });
   });
-
-  $.delegate($('#notifications'), 'click', 'li', (event) => {
-    event.target.closest('li').remove();
-  });
 });
 
 e.on('page-loaded', () => {
@@ -72,28 +69,6 @@ e.on('page-loaded', () => {
   document.title = $('#data-document-title').value;
   $('h1 strong').innerHTML = $('#data-page-title').innerHTML;
   $('#reload-page').classList.add('hidden');
-});
-
-// Notifications
-e.on('info', (msg) => {
-  $('#notifications').insertAdjacentHTML('beforeend', `<li>${msg}</li>`);
-});
-
-e.on('reload-warning', (msg) => {
-  $('#notifications').insertAdjacentHTML('beforeend', `<li class="warning">${msg}</li>`);
-  const warning = $('#notifications').lastChild;
-  warning.addEventListener('click', (event) => {
-    event.preventDefault();
-    warning.remove();
-    e.trigger('reload');
-  });
-  setTimeout(() => {
-    warning.remove();
-  }, 5000);
-});
-
-e.on('error', (msg) => {
-  $('#notifications').insertAdjacentHTML('beforeend', `<li class="error">${msg}</li>`);
 });
 
 // Check the `changed` API endpoint every 5 seconds and fire the appropriate

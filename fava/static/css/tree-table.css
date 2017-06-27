@@ -150,6 +150,7 @@
   & .expand-all {
     color: inherit;
     font-weight: normal;
+    margin-left: 15px;
     opacity: .5;
   }
 

@@ -5,7 +5,7 @@
     <ol class="tree-table{{ ' two-currencies' if operating_currencies|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children \nHold Ctrl or Cmd while clicking to expand one level') }}">
     <li class="head">
         <p>
-        <span class="account-cell"><span>{{ _('Account') }}</span><a href="#" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
+        <span class="account-cell"><span>{{ _('Account') }}</span><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
         {% for currency in operating_currencies %}
             <span class="num">{{ currency }}</span>
         {% endfor %}
@@ -91,7 +91,7 @@
 <ol class="fullwidth tree-table">
     <li class="head">
         <p>
-        <span class="account-cell"><span>{{ _('Account') }}</span><a href="" class="expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</a></span>
+        <span class="account-cell"><span>{{ _('Account') }}</span><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
         {% for begin_date, end_date in dates %}
             {% if accumulate %}
                 {% set time_filter = dates[0][0]|string + ' - ' + end_date|string %}

@@ -8,6 +8,9 @@ import e from './events';
 e.on('page-loaded', () => {
   $$('.tree-table').forEach((table) => {
     $.delegate(table, 'click', 'span.has-children', (event) => {
+      if (event.target.tagName === 'A') {
+        return;
+      }
       const row = event.target.closest('li');
       const willShow = row.classList.contains('toggled');
       if (event.shiftKey) {
@@ -18,12 +21,11 @@ e.on('page-loaded', () => {
       }
       row.classList.toggle('toggled');
 
-      $('a.expand-all', table)
+      $('.expand-all', table)
         .classList.toggle('hidden', !$$('.toggled', table).length);
     });
 
-    $.delegate(table, 'click', 'a.expand-all', (event) => {
-      event.preventDefault();
+    $.delegate(table, 'click', '.expand-all', (event) => {
       event.target.classList.add('hidden');
       $$('.toggled', table).forEach((el) => { el.classList.remove('toggled'); });
     });

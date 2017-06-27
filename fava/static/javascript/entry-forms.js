@@ -110,14 +110,12 @@ e.on('page-init', () => {
     });
 
     if (form.classList.contains('transaction')) {
-      $.delegate(form, 'click', '.add-posting', (event) => {
-        event.preventDefault();
+      $.delegate(form, 'click', '.add-posting', () => {
         const newPosting = addPostingRow(form);
         newPosting.querySelector('.account').focus();
       });
 
-      $.delegate(form, 'click', '.add-metadata', (event) => {
-        event.preventDefault();
+      $.delegate(form, 'click', '.add-metadata', () => {
         const newMetadata = addMetadataRow(form);
         newMetadata.querySelector('.metadata-key').focus();
       });

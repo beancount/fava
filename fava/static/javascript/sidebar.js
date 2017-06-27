@@ -17,8 +17,7 @@ function initSidebar() {
 }
 
 e.on('page-init', () => {
-  $('#aside-button').addEventListener('click', (event) => {
-    event.preventDefault();
+  $('#aside-button').addEventListener('click', () => {
     $('aside').classList.toggle('active');
     $('#aside-button').classList.toggle('active');
   });

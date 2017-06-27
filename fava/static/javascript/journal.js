@@ -9,6 +9,9 @@ e.on('page-loaded', () => {
 
   // Toggle postings by clicking on transaction row.
   $.delegate(journal, 'click', '.transaction', (event) => {
+    if (event.target.tagName === 'A') {
+      return;
+    }
     $('.postings', event.target.closest('.transaction')).classList.toggle('hidden');
     if ($('.metadata', event.target.closest('.transaction'))) {
       $('.metadata', event.target.closest('.transaction')).classList.toggle('hidden');
@@ -17,8 +20,7 @@ e.on('page-loaded', () => {
 
   // Toggle entries with buttons.
   $$('#entry-filters button').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.preventDefault();
+    button.addEventListener('click', () => {
       const type = button.getAttribute('data-type');
       const shouldShow = button.classList.contains('inactive');
 

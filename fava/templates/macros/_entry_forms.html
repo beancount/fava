@@ -5,7 +5,7 @@
       <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ posting.account if posting else '' }}"/>
       <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" value="{{ posting.units.number if posting else '' }}"/>
       <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ posting.units.currency if posting else '' }}"/>
-      <button class="muted round add-posting" title="{{ _('Add posting') }}">+</button>
+      <button class="muted round add-posting" type="button" title="{{ _('Add posting') }}">+</button>
     </div>
   </div>
 {% endmacro %}
@@ -15,7 +15,7 @@
     <label for="account">{{ _('Metadata') }}:</label>
     <input type="text" class="metadata-key" name="metadata-key" placeholder="{{ _('Key') }}" {% if key %}value="{{ key }}"{% endif %}/>
     <input type="text" class="metadata-value" name="metadata-value" placeholder="{{ _('Value') }}" {% if value %}value="{{ value }}"{% endif %}/>
-    <button class="muted round add-metadata" title="{{ _('Add metadata') }}">+</button>
+    <button class="muted round add-metadata" type="button" title="{{ _('Add metadata') }}">+</button>
   </div>
 {% endmacro %}
 
