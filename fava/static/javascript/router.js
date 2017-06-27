@@ -76,6 +76,10 @@ function handleHash() {
       .then((data) => {
         $('#context-overlay .content').innerHTML = data;
         initReadOnlyEditors();
+        $('#context-overlay code a').addEventListener('click', () => {
+          $('#context-overlay .content').innerHTML = '';
+          $('#context-overlay').classList.remove('shown');
+        });
       }, () => {
         e.trigger('error', 'Loading context failed.');
       });
