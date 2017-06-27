@@ -32,7 +32,7 @@ import 'whatwg-fetch';
 import 'classlist.js';
 import 'element-closest';
 
-import { $, $$, handleJSON } from './helpers';
+import { $, handleJSON } from './helpers';
 import e from './events';
 import initRouter from './router';
 import './../css/style.css';
@@ -47,22 +47,11 @@ import './ingest';
 import './journal';
 import './keyboard-shortcuts';
 import './notifications';
+import './overlays';
 import './sidebar';
 import './sort';
 import './transaction-overlay';
 import './tree-table';
-
-e.on('page-init', () => {
-  $$('.overlay-wrapper').forEach((el) => {
-    el.addEventListener('mousedown', (event) => {
-      if (event.target.classList.contains('overlay-wrapper') ||
-          event.target.classList.contains('close-overlay')) {
-        el.classList.remove('shown');
-        window.location.hash = '';
-      }
-    });
-  });
-});
 
 e.on('page-loaded', () => {
   window.favaAPI = JSON.parse($('#ledger-data').innerHTML);

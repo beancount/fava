@@ -7,9 +7,8 @@ import URI from 'urijs';
 
 import { $, $$ } from './helpers';
 import e from './events';
-import initSourceEditor from './editor';
 import initSort from './sort';
-import showTransactionOverlay from './transaction-overlay';
+import handleHash from './overlays';
 
 // Replace <article> contents with the page at `url`. If `noHistoryState` is
 // true, do not create a history state.
@@ -30,6 +29,7 @@ function loadURL(url, noHistoryState) {
       }
       $('article').innerHTML = data;
       e.trigger('page-loaded');
+      handleHash();
     }, () => {
       svg.classList.remove('loading');
       e.trigger('error', `Loading ${url} failed.`);
@@ -64,27 +64,8 @@ function updateURL(url) {
   return newURL.toString();
 }
 
-// Show various overlays depending on the hash.
-function handleHash() {
-  const hash = window.location.hash;
-  if (hash === '#add-transaction') {
-    showTransactionOverlay();
-  }
-  if (hash.startsWith('#context')) {
-    $.fetch(`${window.favaAPI.baseURL}_context/?entry_hash=${hash.slice(9)}`)
-      .then(response => response.text())
-      .then((data) => {
-        $('#context-overlay .content').innerHTML = data;
-        initSourceEditor('#source-slice-editor');
-      }, () => {
-        e.trigger('error', 'Loading context failed.');
-      });
-    $('#context-overlay').classList.add('shown');
-  }
-}
-
 e.on('reload', () => {
-  loadURL(window.location.href);
+  loadURL(window.location.href, true);
 });
 
 // These elements might be added asynchronously, so rebind them on page-load.
@@ -137,20 +118,21 @@ export default function initRouter() {
     handleHash();
   }
 
-  let currentHref = window.location.href;
   let currentHash = window.location.hash;
+  let currentPath = window.location.pathname;
+  let currentSearch = window.location.search;
 
   window.addEventListener('popstate', () => {
-    if (window.location.href === currentHref) {
-      return;
-    }
-    currentHref = window.location.href;
-    if (window.location.hash !== currentHash) {
-      currentHash = window.location.hash;
+    if (window.location.hash !== currentHash
+        && window.location.pathname === currentPath
+        && window.location.search === currentSearch) {
       handleHash();
     } else {
       loadURL(window.location.href, true);
     }
+    currentHash = window.location.hash;
+    currentPath = window.location.pathname;
+    currentSearch = window.location.search;
   });
 
   $.delegate(document, 'click', 'a', (event) => {
