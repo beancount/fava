@@ -6,7 +6,9 @@ import postcss from 'rollup-plugin-postcss';
 
 import postcssCopy from 'postcss-copy';
 import postcssImport from 'postcss-import';
-import postcssCssnext from 'postcss-cssnext';
+import postcssColorFunction from 'postcss-color-function';
+import postcssCustomProperties from 'postcss-custom-properties';
+import postcssNesting from 'postcss-nesting';
 
 export default {
   entry: 'javascript/main.js',
@@ -26,7 +28,9 @@ export default {
           src: ['css', 'node_modules'],
           dest: 'gen',
         }),
-        postcssCssnext(),
+        postcssCustomProperties(),
+        postcssColorFunction(),
+        postcssNesting(),
       ],
       extract: 'gen/style.css',
     }),
