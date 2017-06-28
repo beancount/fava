@@ -288,14 +288,14 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10;
+  z-index: var(--z-index-header);
 }
 
 .aside-button {
   background-color: var(--color-sidebar-background);
   display: none;
   transition: var(--transitions);
-  z-index: 1;
+  z-index: var(--z-index-floating-ui);
 
   &:hover {
     background-color: var(--color-sidebar-background);
@@ -334,7 +334,7 @@ aside {
   top: var(--header-height);
   transition: var(--transitions);
   width: var(--aside-width);
-  z-index: 9;
+  z-index: var(--z-index-floating-ui);
 
   & h3 {
     font-size: .9em;
@@ -474,7 +474,7 @@ kbd {
   padding: .5em;
   position: absolute;
   text-align: center;
-  z-index: 99;
+  z-index: var(--z-index-keyboard-overlays);
 }
 
 /*

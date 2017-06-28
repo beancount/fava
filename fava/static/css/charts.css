@@ -178,7 +178,7 @@ svg {
   position: absolute;
   text-align: center;
   transform: translate(-50%, -100%);
-  z-index: 12;
+  z-index: var(--z-index-floating-ui);
 
   &::before {
     border: 15px solid transparent;

@@ -15,7 +15,7 @@
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 99;
+  z-index: var(--z-index-overlay);
 
   &.shown {
     display: flex;

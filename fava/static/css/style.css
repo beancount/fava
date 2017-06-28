@@ -37,6 +37,11 @@ body {
   --font-family-monospaced: 'Fira Mono', monospace;
   --font-family-editor: 'Source Code Pro', monospace;
 
+  --z-index-header: 1;
+  --z-index-floating-ui: 2;
+  --z-index-keyboard-overlays: 10;
+  --z-index-overlay: 3;
+
   --color-background: #fff;
   --color-background-darker: #d9d9d9;
   --color-background-darkest: #ccc;
