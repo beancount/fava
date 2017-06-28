@@ -38,6 +38,9 @@ import './codemirror/mode-query';
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
+import { closeOverlay } from './overlays';
+
+// This handles saving in both the main and the overlayed entry editors.
 CodeMirror.commands.favaSave = (cm) => {
   const button = cm.getOption('favaSaveButton');
 
@@ -65,6 +68,7 @@ CodeMirror.commands.favaSave = (cm) => {
       // Reload the page if an entry was changed.
       if (button.getAttribute('data-entry-hash')) {
         e.trigger('reload');
+        closeOverlay();
       }
     }, (error) => {
       e.trigger('error', error);

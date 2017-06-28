@@ -4,7 +4,7 @@ import e from './events';
 import initSourceEditor from './editor';
 import showTransactionOverlay from './transaction-overlay';
 
-function closeOverlay() {
+export function closeOverlay() {
   $('#context-overlay .content').innerHTML = '';
   $$('.overlay-wrapper').forEach((el) => {
     el.classList.remove('shown');
@@ -13,7 +13,7 @@ function closeOverlay() {
 }
 
 // Show various overlays depending on the hash.
-export default function handleHash() {
+export function handleHash() {
   const hash = window.location.hash;
   if (!hash) {
     closeOverlay();

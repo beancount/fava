@@ -8,7 +8,7 @@ import URI from 'urijs';
 import { $, $$ } from './helpers';
 import e from './events';
 import initSort from './sort';
-import handleHash from './overlays';
+import { handleHash } from './overlays';
 
 // Replace <article> contents with the page at `url`. If `noHistoryState` is
 // true, do not create a history state.
