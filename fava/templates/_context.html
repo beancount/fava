@@ -1,14 +1,54 @@
 {% set entry_hash = request.args.get('entry_hash') %}
-{% set entry, context, slice, sha256sum = ledger.context(entry_hash) %}
+{% set entry, balances, slice, sha256sum = ledger.context(entry_hash) %}
 <dl>
-  <dt>{{ _('Hash') }}:</dt>
-  <dd><code>{{ entry_hash }}</code></dd>
   <dt>{{ _('Location') }}:</dt>
   <dd><code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code></dd>
 </dl>
-{#
-<textarea class="editor">{{ context|safe }}</textarea>
-#}
+{% if balances %}
+  <div class="context-box toggled">
+    <h4>{{ _('Context') }}</h4>
+    <div class="context-box-content">
+      <dl>
+        <dt>{{ _('Hash') }}:</dt>
+        <dd><code>{{ entry_hash }}</code></dd>
+      </dl>
+      <table>
+        <thead>
+          <tr colspan=2>
+            <th>{{ _('Balances before entry') }}<th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for account, inventory in  balances[0].items() %}
+            <tr>
+              <td>{{ account }}</td>
+              <td>
+                {% for position in inventory %}{{ position }}{{ ', ' if not loop.last else ''}}{% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <table>
+        <thead>
+          <tr colspan=2>
+            <th>{{ _('Balances after entry') }}<th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for account, inventory in  balances[1].items() %}
+            <tr>
+              <td>{{ account }}</td>
+              <td>
+                {% for position in inventory %}{{ position }}{{ ', ' if not loop.last else ''}}{% endfor %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endif %}
 <form id="source-slice-editor-form" class="source-slice-editor-form">
   <textarea id="source-slice-editor" name="source-slice" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ slice or '' }}</textarea>
   <button id="source-slice-editor-submit" type="button" disabled data-command="favaSave" data-entry-hash="{{ entry_hash }}" data-progress-content="{{ _('Saving...') }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>

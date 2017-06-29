@@ -48,7 +48,7 @@ tfoot td {
   background-color: var(--color-table-header-background);
   border: 1px solid var(--color-table-header-background);
   color: var(--color-table-header-text);
-  font-weight: 500;
+  font-weight: 400;
 }
 
 p,

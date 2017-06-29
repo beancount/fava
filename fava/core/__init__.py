@@ -5,7 +5,7 @@ import datetime
 import os
 
 from beancount import loader
-from beancount.core import getters, prices, realization
+from beancount.core import getters, interpolate, prices, realization
 from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
@@ -14,7 +14,6 @@ from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Event, Custom)
 from beancount.ops import summarize
 from beancount.parser.options import get_account_types
-from beancount.reports.context import render_entry_context
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
 
@@ -330,14 +329,18 @@ class FavaLedger():
             entry_hash: Hash of entry.
 
         Returns:
-            A tuple ``(entry, context)`` of the (unique) entry with the given
-            ``entry_hash`` and its context.
-
+            A tuple ``(entry, balances, source_slice, sha256sum)`` of the
+            (unique) entry with the given ``entry_hash``. If the entry is a
+            Balance or Transaction then ``balances`` is a 2-tuple containing
+            the balances before and after the entry of the affected accounts.
         """
         entry = self.get_entry(entry_hash)
-        ctx = render_entry_context(self.all_entries, self.options, entry)
+        balances = None
+        if isinstance(entry, (Balance, Transaction)):
+            balances = interpolate.compute_entry_context(
+                self.all_entries, entry)
         source_slice, sha256sum = get_entry_slice(entry)
-        return entry, ctx.split("\n", 2)[2], source_slice, sha256sum
+        return entry, balances, source_slice, sha256sum
 
     def commodity_pairs(self):
         """List pairs of commodities.
@@ -345,7 +348,6 @@ class FavaLedger():
         Returns:
             A list of pairs of commodities. Pairs of operating currencies will
             be given in both directions not just in the one found in file.
-
         """
         fw_pairs = self.price_map.forward_pairs
         bw_pairs = []

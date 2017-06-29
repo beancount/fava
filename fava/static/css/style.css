@@ -76,7 +76,7 @@ body {
   --color-notification-error: color(var(--color-error) alpha(70%));
   --color-notification-warning: color(var(--color-warning) alpha(70%));
 
-  --color-table-header-text: #888;
+  --color-table-header-text: #666;
   --color-table-header-background: #e6e6e6;
   --color-table-border: #f2f2f2;
 

@@ -29,6 +29,31 @@
   top: 10px;
 }
 
+.context-box.toggled {
+  & .context-box-content {
+    display: none;
+  }
+
+  & h4::before {
+    transform: rotate(270deg);
+  }
+}
+
+.context-box h4 {
+  background-color: var(--color-sidebar-background);
+  cursor: pointer;
+  display: flex;
+  padding: 4px 8px;
+
+  &::before {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 9px solid var(--color-treetable-expander);
+    content: '';
+    margin-right: .5em;
+  }
+}
+
 .overlay {
   background: var(--color-background);
   box-shadow: 0 0 20px var(--overlay-wrapper-background);
@@ -47,6 +72,11 @@
   & strong {
     display: inline-block;
     margin: 6px 0 5px;
+  }
+
+  & table {
+    margin-left: auto;
+    margin-right: auto;
   }
 
   & dt {

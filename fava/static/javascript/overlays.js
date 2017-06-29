@@ -41,5 +41,8 @@ e.on('page-init', () => {
       }
     });
   });
+  $.delegate($('#context-overlay'), 'click', '.context-box h4', (event) => {
+    event.target.closest('.context-box').classList.toggle('toggled');
+  });
 });
 
