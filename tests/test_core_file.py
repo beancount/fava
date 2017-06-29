@@ -4,9 +4,11 @@ import re
 
 from beancount.core import data, amount
 from beancount.core.number import D
+import pytest
 
+from fava.core.helpers import FavaAPIException
 from fava.core.file import (next_key, leading_space, insert_metadata_in_file,
-                            insert_entry, get_entry_slice)
+                            insert_entry, get_entry_slice, save_entry_slice)
 from fava.core.fava_options import InsertEntryOption
 
 
@@ -17,6 +19,24 @@ def test_get_entry_slice(example_ledger):
   Liabilities:US:Chase:Slate                       -21.70 USD
   Expenses:Food:Restaurant                          21.70 USD""",
         'd60da810c0c7b8a57ae16be409c5e17a640a837c1ac29719ebe9f43930463477')
+
+
+def test_save_entry_slice(example_ledger):
+    entry = example_ledger.get_entry('d4a067d229bfda57c8c984d1615da699')
+    entry_source, sha256sum = get_entry_slice(entry)
+    new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
+  Expenses:Food:Restaurant                          21.70 USD"""
+    filename = entry.meta['filename']
+    contents = open(filename).read()
+
+    with pytest.raises(FavaAPIException):
+        save_entry_slice(entry, new_source, 'wrong hash')
+        assert open(filename).read() == contents
+
+    new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
+    assert open(filename).read() != contents
+    sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
+    assert open(filename).read() == contents
 
 
 def test_next_key():
