@@ -20,6 +20,8 @@ from fava.util import simple_wsgi
               help='The host to listen on. (default: localhost)')
 @click.option('--prefix', type=str,
               help='Set an URL prefix. (for reverse proxy)')
+@click.option('--incognito', is_flag=True,
+              help='Run in incognito mode (obscure all numbers).')
 @click.option('-d', '--debug', is_flag=True,
               help='Turn on debugging. Disables live-reloading.')
 @click.option('--profile', is_flag=True,
@@ -28,7 +30,7 @@ from fava.util import simple_wsgi
               help='Output directory for profiling data.')
 @click.option('--profile-restriction', type=int, default=30,
               help='Number of functions to show in profile.')
-def main(filenames, port, host, prefix, debug, profile, profile_dir,
+def main(filenames, port, host, prefix, incognito, debug, profile, profile_dir,
          profile_restriction):
     """Start Fava for FILENAMES on http://host:port.
 
@@ -49,8 +51,8 @@ def main(filenames, port, host, prefix, debug, profile, profile_dir,
         raise click.UsageError('No file specified')
 
     app.config['BEANCOUNT_FILES'] = filenames
-
     load_file()
+    app.config['INCOGNITO'] = incognito
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(simple_wsgi,

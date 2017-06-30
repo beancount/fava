@@ -196,14 +196,6 @@ entry, then the grey uptodate-indicator is shown.
 
 ---
 
-## `incognito`
-
-Default: `false`
-
-If set to `true` all digits will be replaced with "X".
-
----
-
 ## `import-config`
 
 Default: Not set

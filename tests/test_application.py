@@ -84,7 +84,7 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 def test_incognito(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
-        flask.g.ledger.fava_options['incognito'] = True
+        app.config['INCOGNITO'] = True
         url = flask.url_for('report', report_name='balance_sheet')
 
     result = test_client.get(url)
@@ -93,4 +93,4 @@ def test_incognito(app, test_client):
 
     with app.test_request_context():
         app.preprocess_request()
-        flask.g.ledger.fava_options['incognito'] = False
+        app.config['INCOGNITO'] = False
