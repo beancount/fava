@@ -135,7 +135,7 @@
             <dt>{{ key }}</dt>
             <dd>
                 {%- if key.startswith('statement') %}
-                    <a data-remote=true href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">
+                    <a data-remote href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">
                 {% endif -%}
                 {{ value }}
                 {%- if key.startswith('statement') %}</a>{% endif -%}
@@ -220,7 +220,7 @@
             {% endfor %}
           {% endif %}
         {% elif type == 'document' %}
-            Document for {{ account_link(entry.account) }} <a class="filename" data-remote=true href="{{ url_for('document', filename=entry.filename) }}">{{ entry.filename|basename }}</a>
+            Document for {{ account_link(entry.account) }} <a class="filename" data-remote href="{{ url_for('document', filename=entry.filename) }}">{{ entry.filename|basename }}</a>
             {{ render_tags_links(entry) }}
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}

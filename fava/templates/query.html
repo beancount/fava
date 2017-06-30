@@ -19,16 +19,7 @@
       <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
         <div class="queryresults-header"><pre><code>{{ query }}</code></pre>
           <span class="spacer"></span>
-          {% if result_types %}
-            <span class="download">
-              {{ _('Download as') }}
-              <a href="{{ url_for('download_query', query_string=query, result_format='csv') }}">CSV</a>{% if config['HAVE_EXCEL'] %},
-                <a href="{{ url_for('download_query', query_string=query, result_format='xls') }}">XLS</a>,
-                <a href="{{ url_for('download_query', query_string=query, result_format='xlsx') }}">XLSX</a> or
-                <a href="{{ url_for('download_query', query_string=query, result_format='ods') }}">ODS</a>
-              {% endif %}
-            </span>
-          {% endif %}
+          {{ querytable.download_links(query) if result_types else '' }}
         </div>
         {% if contents or result_types %}
           <div class="queryresults-body">

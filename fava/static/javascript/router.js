@@ -107,39 +107,31 @@ class Router {
     };
   }
 
+  // Intercept all clicks on links (<a>) and .navigate() to the link instead.
+  // Doesn't intercept if
+  //  - a modifier key is pressed,
+  //  - the link starts with a hash '#', or
+  //  - the link has a `data-remote` attribute.
   takeOverLinks() {
     $.delegate(window.document, 'click', 'a', (event) => {
       if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
         return;
       }
       const link = event.target.closest('a');
-      let href = link.getAttribute('href');
-      if (href.charAt(0) === '#') {
-        return;
-      }
+      if (link.href.charAt(0) === '#') return;
 
-      const isHttp = link.protocol.indexOf('http') === 0;
-      const suffix = URI(href).suffix();
-      const isRemote = link.getAttribute('data-remote');
-
-      if (!event.defaultPrevented && !isRemote && isHttp && (!suffix || suffix === 'html')) {
+      if (!event.defaultPrevented
+          && !link.hasAttribute('data-remote')
+          && link.protocol.indexOf('http') === 0) {
         event.preventDefault();
 
         // update sidebar links
         if (link.parentNode.parentNode.parentNode.tagName === 'ASIDE') {
-          href = updateURL(href);
+          this.navigate(updateURL(link.href));
+        } else {
+          this.navigate(link.href);
         }
-        this.navigate(href);
       }
-    });
-
-    $('#reload-page').addEventListener('click', () => {
-      e.trigger('reload');
-    });
-
-    $('#filter-form').addEventListener('submit', (event) => {
-      event.preventDefault();
-      this.navigate(updateURL(window.location.href));
     });
   }
 }
@@ -149,6 +141,17 @@ export default router;
 
 e.on('reload', () => {
   router.loadURL(window.location.href, false);
+});
+
+e.on('page-init', () => {
+  $('#reload-page').addEventListener('click', () => {
+    e.trigger('reload');
+  });
+
+  $('#filter-form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    router.navigate(updateURL(window.location.href));
+  });
 });
 
 // These elements might be added asynchronously, so rebind them on page-load.
