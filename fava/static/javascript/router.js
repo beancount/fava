@@ -118,7 +118,7 @@ class Router {
         return;
       }
       const link = event.target.closest('a');
-      if (link.href.charAt(0) === '#') return;
+      if (link.getAttribute('href').charAt(0) === '#') return;
 
       if (!event.defaultPrevented
           && !link.hasAttribute('data-remote')
