@@ -3,15 +3,10 @@ import CodeMirror from 'codemirror';
 CodeMirror.registerHelper('fold', 'beancount', (cm, start) => {
   const maxDepth = 100;
 
-  function isHeader(lineNo) {
-    const tokentype = cm.getTokenTypeAt(new CodeMirror.Pos(lineNo, 0));
-    return tokentype && /\bsection\b/.test(tokentype);
-  }
-
   function headerLevel(lineNo) {
     const line = cm.getLine(lineNo);
     const match = line && line.match(/^\*+/);
-    if (match && isHeader(lineNo)) {
+    if (match) {
       return match[0].length;
     }
     return maxDepth;
