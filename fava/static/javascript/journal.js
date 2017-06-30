@@ -2,6 +2,7 @@ import URI from 'urijs';
 
 import { $, $$ } from './helpers';
 import e from './events';
+import router from './router';
 
 e.on('page-loaded', () => {
   const journal = $('#journal-table');
@@ -12,9 +13,10 @@ e.on('page-loaded', () => {
     if (event.target.tagName === 'A') {
       return;
     }
-    $('.postings', event.target.closest('.transaction')).classList.toggle('hidden');
-    if ($('.metadata', event.target.closest('.transaction'))) {
-      $('.metadata', event.target.closest('.transaction')).classList.toggle('hidden');
+    const clickedTransaction = event.target.closest('.transaction');
+    $('.postings', clickedTransaction).classList.toggle('hidden');
+    if ($('.metadata', clickedTransaction)) {
+      $('.metadata', clickedTransaction).classList.toggle('hidden');
     }
   });
 
@@ -49,7 +51,7 @@ e.on('page-loaded', () => {
 
       const url = new URI(window.location)
         .setSearch({ show: filterShow });
-      window.history.pushState(null, null, url.toString());
+      router.navigate(url.toString(), false);
     });
   });
 });

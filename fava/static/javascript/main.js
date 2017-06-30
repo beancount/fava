@@ -34,7 +34,7 @@ import 'element-closest';
 
 import { $, handleJSON } from './helpers';
 import e from './events';
-import initRouter from './router';
+import router from './router';
 import './../css/style.css';
 
 import './charts';
@@ -83,7 +83,7 @@ function doPoll() {
 
 $.ready().then(() => {
   window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
-  initRouter();
+  router.init();
   e.trigger('page-init');
   e.trigger('page-loaded');
   setTimeout(doPoll, 5000);
