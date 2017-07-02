@@ -308,7 +308,7 @@ header {
   font-size: 25px;
   height: 100%;
   margin: 0;
-  padding-right: 8px;
+  padding: 5px 8px 5px 10px !important;
   position: absolute;
   right: 0;
   text-align: center;
@@ -539,7 +539,7 @@ kbd {
   display: block;
   position: absolute;
   right: 4px;
-  top: 8px;
+  top: 12px;
 }
 
 [data-order='asc']::after {
@@ -550,7 +550,7 @@ kbd {
   display: block;
   position: absolute;
   right: 4px;
-  top: 6px;
+  top: 10px;
 }
 
 /*
