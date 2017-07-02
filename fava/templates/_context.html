@@ -21,9 +21,12 @@
         <tbody>
           {% for account, inventory in  balances[0].items() %}
             <tr>
-              <td>{{ account }}</td>
+              <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
               <td>
-                {% for position in inventory %}{{ position }}{{ ', ' if not loop.last else ''}}{% endfor %}
+                {% for position in inventory %}
+                  <span class="num">{{ position.units|format_amount }}</span>
+                  {% if not loop.last %}<br>{% endif %}
+                {% endfor %}
               </td>
             </tr>
           {% endfor %}
@@ -38,9 +41,12 @@
         <tbody>
           {% for account, inventory in  balances[1].items() %}
             <tr>
-              <td>{{ account }}</td>
+              <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
               <td>
-                {% for position in inventory %}{{ position }}{{ ', ' if not loop.last else ''}}{% endfor %}
+                {% for position in inventory %}
+                  <span class="num">{{ position.units|format_amount }}</span>
+                  {% if not loop.last %}<br>{% endif %}
+                {% endfor %}
               </td>
             </tr>
           {% endfor %}
