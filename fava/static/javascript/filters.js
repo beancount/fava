@@ -1,5 +1,4 @@
 import Awesomplete from 'awesomplete';
-import URI from 'urijs';
 
 import { $, $$ } from './helpers';
 import e from './events';
@@ -18,7 +17,7 @@ function updateInput(input) {
 
 e.on('page-loaded', () => {
   ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
-    const value = new URI(window.location).search(true)[filter];
+    const value = new URLSearchParams(window.location.search).get(filter);
     if (value) {
       const el = document.getElementById(`${filter}-filter`);
       el.value = value;

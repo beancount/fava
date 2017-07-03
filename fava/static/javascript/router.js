@@ -3,8 +3,6 @@
 // Fava intercepts all clicks on links and will in most cases asynchronously
 // load the content of the page and replace the <article> contents with them.
 
-import URI from 'urijs';
-
 import { $, $$ } from './helpers';
 import e from './events';
 import initSort from './sort';
@@ -13,26 +11,26 @@ import { handleHash } from './overlays';
 // Set the query string to match the filter inputs and the interval and
 // conversion <select>'s.
 function updateURL(url) {
-  const newURL = new URI(url);
+  const newURL = new URL(url);
   ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
-    newURL.removeSearch(filter);
+    newURL.searchParams.delete(filter);
     const el = $(`#${filter}-filter`);
     if (el.value) {
-      newURL.setSearch(filter, el.value);
+      newURL.searchParams.set(filter, el.value);
     }
   });
   const interval = $('#chart-interval');
   if (interval) {
-    newURL.setSearch('interval', interval.value);
+    newURL.searchParams.set('interval', interval.value);
     if (interval.value === interval.getAttribute('data-default')) {
-      newURL.removeSearch('interval');
+      newURL.searchParams.delete('interval');
     }
   }
   const conversion = $('#conversion');
   if (conversion) {
-    newURL.setSearch('conversion', conversion.value);
+    newURL.searchParams.set('conversion', conversion.value);
     if (conversion.value === 'at_cost') {
-      newURL.removeSearch('conversion');
+      newURL.searchParams.delete('conversion');
     }
   }
   return newURL.toString();
@@ -73,14 +71,13 @@ class Router {
   // Replace <article> contents with the page at `url`. If `historyState` is
   // false, do not create a history state.
   loadURL(url, historyState = true) {
-    const getUrl = new URI(url)
-      .setSearch('partial', true)
-      .toString();
+    const getUrl = new URL(url);
+    getUrl.searchParams.set('partial', true);
 
     const svg = $('header svg');
     svg.classList.add('loading');
 
-    $.fetch(getUrl)
+    $.fetch(getUrl.toString())
       .then(response => response.text())
       .then((data) => {
         svg.classList.remove('loading');
@@ -164,16 +161,13 @@ e.on('page-loaded', () => {
         return;
       }
 
-      const url = new URI(window.location.href)
-        .setSearch('query_string', queryString);
+      const url = new URL(window.location);
+      url.searchParams.set('query_string', queryString);
 
       const pageURL = url.toString();
+      url.searchParams.set('result_only', true);
 
-      const fetchURL = url
-        .setSearch('result_only', true)
-        .toString();
-
-      $.fetch(fetchURL)
+      $.fetch(url.toString())
         .then(response => response.text())
         .then((data) => {
           $$('.queryresults-wrapper').forEach((element) => {

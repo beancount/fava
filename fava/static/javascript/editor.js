@@ -1,5 +1,4 @@
 import CodeMirror from 'codemirror';
-import URI from 'urijs';
 import Mousetrap from 'mousetrap';
 
 import 'codemirror/addon/mode/simple';
@@ -222,7 +221,7 @@ export default function initSourceEditor(name) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
-  const line = parseInt(new URI(window.location.search).query(true).line, 10);
+  const line = parseInt(new URLSearchParams(window.location.search).get('line'), 10);
   if (line > 0) {
     editor.setCursor(line - 1, 0);
     editor.execCommand('favaCenterCursor');

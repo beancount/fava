@@ -1,5 +1,3 @@
-import URI from 'urijs';
-
 import { $, $$ } from './helpers';
 import e from './events';
 import router from './router';
@@ -49,8 +47,11 @@ e.on('page-loaded', () => {
         }
       });
 
-      const url = new URI(window.location)
-        .setSearch({ show: filterShow });
+      const url = new URL(window.location);
+      url.searchParams.delete('show');
+      filterShow.forEach((filter) => {
+        url.searchParams.append('show', filter);
+      });
       router.navigate(url.toString(), false);
     });
   });

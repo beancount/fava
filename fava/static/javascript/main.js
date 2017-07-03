@@ -31,6 +31,7 @@ import 'es6-promise';
 import 'whatwg-fetch';
 import 'classlist.js';
 import 'element-closest';
+import 'url-search-params';
 
 import { $, handleJSON } from './helpers';
 import e from './events';
