@@ -5,13 +5,11 @@
   <dd><code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code></dd>
 </dl>
 {% if balances %}
-  <div class="context-box toggled">
-    <h4>{{ _('Context') }}</h4>
-    <div class="context-box-content">
-      <dl>
-        <dt>{{ _('Hash') }}:</dt>
-        <dd><code>{{ entry_hash }}</code></dd>
-      </dl>
+  <div class="toggle-box toggled">
+    <div class="toggle-box-header">
+      <span>{{ _('Context') }}</span>
+    </div>
+    <div class="toggle-box-content">
       <table>
         <thead>
           <tr colspan=2>

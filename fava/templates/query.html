@@ -16,13 +16,13 @@
     <div id="query-container">
   {% endif %}
     {% if query %}
-      <div class="queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
-        <div class="queryresults-header"><pre><code>{{ query }}</code></pre>
+      <div class="toggle-box queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
+        <div class="toggle-box-header"><pre><code>{{ query }}</code></pre>
           <span class="spacer"></span>
           {{ querytable.download_links(query) if result_types else '' }}
         </div>
         {% if contents or result_types %}
-          <div class="queryresults-body">
+          <div class="toggle-box-content">
             {% if contents %}
               <pre><code>{{ contents }}</code></pre>
             {% elif result_types %}
@@ -34,8 +34,8 @@
     {% endif %}
   {% if not result_only %}
       {% for history_item in query_shell_history %}
-        <div class="queryresults-wrapper toggled inactive">
-          <div class="queryresults-header">
+        <div class="toggle-box queryresults-wrapper toggled inactive">
+          <div class="toggle-box-header">
             <pre><code>{{ history_item }}</code></pre>
           </div>
         </div>

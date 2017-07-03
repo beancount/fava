@@ -46,7 +46,6 @@
     & p > span {
       background-color: var(--color-table-header-background);
       color: var(--color-table-header-text);
-      font-weight: 500;
       padding: 3px 5px;
     }
 
@@ -54,7 +53,6 @@
       background-color: var(--color-table-header-background);
       color: var(--color-table-header-text);
       font-family: var(--font-family);
-      font-weight: 500;
       text-align: inherit;
     }
   }
@@ -62,7 +60,6 @@
   & .totals p > span {
     background-color: var(--color-table-header-background);
     color: var(--color-table-header-text);
-    font-weight: 500;
   }
 }
 
@@ -116,8 +113,6 @@
 
     & dt {
       color: var(--color-journal-metadata);
-      font-style: italic;
-      font-weight: normal;
       margin-right: 10px;
       min-width: 80px;
       width: auto;

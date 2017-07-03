@@ -63,7 +63,6 @@
   &.header {
     background: var(--color-table-header-background);
     color: var(--color-table-header-text);
-    font-weight: 500;
     line-height: 1.5em;
     padding: 0;
 

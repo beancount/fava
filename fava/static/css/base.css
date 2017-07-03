@@ -58,7 +58,7 @@ dl,
 table,
 pre,
 hr {
-  list-style: none;
+  list-style-type: none;
   margin: 0 0 1rem;
   padding: 0;
 }
@@ -127,7 +127,6 @@ a {
 dt {
   display: inline-block;
   float: left;
-  font-weight: 500;
   width: 120px;
 }
 
@@ -243,7 +242,6 @@ button,
     &:hover {
       box-shadow: none;
       color: color(var(--color-links) shade(10%));
-      text-decoration: underline;
     }
   }
 
@@ -414,12 +412,6 @@ article {
   padding: 1.5em;
   position: relative;
   width: 100%;
-
-  & p > a {
-    text-decoration: underline;
-
-    &:hover { color: color(var(--color-links) shade(10%)); }
-  }
 }
 
 .wide-form {
