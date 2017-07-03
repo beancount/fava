@@ -29,7 +29,7 @@ If you want to hack on Fava or run a development version, see the
 `Development <https://beancount.github.io/fava/development.html>`__ page on the
 website for details. Contributions are very welcome!
 
-.. image:: https://raw.githubusercontent.com/beancount/fava/master/docs/static/screenshot.png
+.. image:: https://i.imgbox.com/rfb9I7Zw.png
     :alt: Fava Screenshot
     :width: 100%
     :align: center

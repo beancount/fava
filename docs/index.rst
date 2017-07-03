@@ -13,7 +13,7 @@ Fava is a web interface for the double-entry bookkeeping software `Beancount
 
 You can try out an online `demo <http://fava.pythonanywhere.com>`__.
 
-.. image:: static/screenshot.png
+.. image:: https://i.imgbox.com/rfb9I7Zw.png
 
 If you are new to Fava and Beancount, begin with the :doc:`usage` guide.
 
