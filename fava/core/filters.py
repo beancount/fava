@@ -3,7 +3,7 @@
 import re
 
 from beancount.core import account
-from beancount.core.data import Transaction
+from beancount.core.data import Custom, Transaction
 from beancount.ops import summarize
 from beancount.query import (
     query_compile, query_env, query_execute, query_parser)
@@ -164,9 +164,23 @@ def _match(search, string):
         return search == string
 
 
-def _match_account(name, search):
-    return (account.has_component(name, search) or
-            _match(search, name))
+def entry_account_predicate(entry, predicate):
+    """Predicate for filtering by account.
+
+    Args:
+        entry: An entry.
+        predicate: A predicate for account names.
+
+    Returns:
+        True if predicate is True for any account of the entry.
+    """
+
+    if isinstance(entry, Transaction):
+        return any(predicate(posting.account) for posting in entry.postings)
+    if isinstance(entry, Custom):
+        return any(predicate(val.value)
+                   for val in entry.values if val.dtype == account.TYPE)
+    return hasattr(entry, 'account') and predicate(entry.account)
 
 
 class AccountFilter(EntryFilter):
@@ -175,12 +189,12 @@ class AccountFilter(EntryFilter):
     The filter string can either a regular expression or a parent account.
     """
 
+    def _account_predicate(self, name):
+        return (account.has_component(name, self.value) or
+                _match(self.value, name))
+
     def _include_entry(self, entry):
-        if isinstance(entry, Transaction):
-            return any(_match_account(posting.account, self.value)
-                       for posting in entry.postings)
-        return (hasattr(entry, 'account') and
-                _match_account(entry.account, self.value))
+        return entry_account_predicate(entry, self._account_predicate)
 
 
 class PayeeFilter(EntryFilter):

@@ -24,7 +24,7 @@ from fava.core.charts import ChartModule
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule, get_entry_slice
 from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
-                               TagFilter, TimeFilter)
+                               TagFilter, TimeFilter, entry_account_predicate)
 from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
@@ -281,18 +281,19 @@ class FavaLedger():
             A list of tuples ``(entry, postings, change, balance)``.
 
         """
-        real_account = realization.get_or_create(self.root_account,
-                                                 account_name)
 
         if with_journal_children:
-            # pylint: disable=unused-variable
-            postings = realization.get_postings(real_account)
+            def _predicate(account):
+                return account.startswith(account_name)
         else:
-            postings = real_account.txn_postings
+            def _predicate(account):
+                return account == account_name
 
         return [(entry, postings, change, copy.copy(balance)) for
                 (entry, postings, change, balance) in
-                realization.iterate_with_balance(postings)]
+                realization.iterate_with_balance(
+                    (entry for entry in self.entries
+                     if entry_account_predicate(entry, _predicate)))]
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
@@ -461,7 +462,7 @@ class FavaLedger():
         Returns:
             Metadata of the Open entry of the account.
         """
-        real_account = realization.get_or_create(self.root_account,
+        real_account = realization.get_or_create(self.all_root_account,
                                                  account_name)
         for posting in real_account.txn_postings:
             if isinstance(posting, Open):
