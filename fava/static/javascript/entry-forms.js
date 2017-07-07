@@ -103,22 +103,28 @@ export function entryFormToJSON(form) {
   return entryData;
 }
 
-e.on('page-init', () => {
-  $$('.entry-form').forEach((form) => {
-    $$('input', form).forEach((input) => {
-      initInput(input);
+function initEntryForm(div) {
+  $$('input', div).forEach((input) => {
+    initInput(input);
+  });
+
+  if (div.classList.contains('transaction')) {
+    $.delegate(div, 'click', '.add-posting', () => {
+      const newPosting = addPostingRow(div);
+      newPosting.querySelector('.account').focus();
     });
 
-    if (form.classList.contains('transaction')) {
-      $.delegate(form, 'click', '.add-posting', () => {
-        const newPosting = addPostingRow(form);
-        newPosting.querySelector('.account').focus();
-      });
+    $.delegate(div, 'click', '.add-metadata', () => {
+      const newMetadata = addMetadataRow(div);
+      newMetadata.querySelector('.metadata-key').focus();
+    });
+  }
+}
 
-      $.delegate(form, 'click', '.add-metadata', () => {
-        const newMetadata = addMetadataRow(form);
-        newMetadata.querySelector('.metadata-key').focus();
-      });
-    }
-  });
+e.on('page-init', () => {
+  $$('#transaction-form .entry-form').forEach(initEntryForm);
+});
+
+e.on('page-loaded', () => {
+  $$('article .entry-form').forEach(initEntryForm);
 });
