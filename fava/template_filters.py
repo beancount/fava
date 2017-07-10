@@ -5,7 +5,7 @@ All functions in this module will be automatically added as template filters.
 
 import os
 
-from flask import g, request
+from flask import g
 from beancount.core import convert, compare, realization
 from beancount.core import data
 from beancount.core.number import Decimal
