@@ -5,9 +5,9 @@ All functions in this module will be automatically added as template filters.
 
 import os
 
-from flask import g
+from flask import g, request
 from beancount.core import convert, compare, realization
-from beancount.core.data import Close, TxnPosting
+from beancount.core import data
 from beancount.core.number import Decimal
 
 
@@ -85,6 +85,30 @@ def get_or_create(account, account_name):
     return realization.get_or_create(account, account_name)
 
 
+FLAGS_TO_TYPES = {'*': 'cleared', '!': 'pending'}
+
+
+def flag_to_type(flag):
+    """Names for entry flags."""
+    return FLAGS_TO_TYPES.get(flag, 'other')
+
+
+def show_journal_entry(entry):
+    """Determine whether the entry is shown in the journal."""
+    if isinstance(entry, data.Transaction):
+        if flag_to_type(entry.flag) not in g.journal_show:
+            return False
+    if isinstance(entry, data.Document):
+        if 'statement' in entry.tags and 'statement' not in g.journal_show:
+            return False
+        if 'discovered' in entry.tags and 'discovered' not in g.journal_show:
+            return False
+    entry_type = entry.__class__.__name__.lower()
+    if entry_type not in g.journal_show:
+        return False
+    return True
+
+
 def should_show(account):
     """Determine whether the account should be shown."""
     show_this_account = False
@@ -93,14 +117,15 @@ def should_show(account):
         show_this_account = True
         if (not g.ledger.fava_options['show-closed-accounts'] and isinstance(
                 realization.find_last_active_posting(account.txn_postings),
-                Close)):
+                data.Close)):
             show_this_account = False
         if (not g.ledger.fava_options['show-accounts-with-zero-balance'] and
                 account.balance.is_empty()):
             show_this_account = False
         if (not g.ledger.fava_options['show-accounts-with-zero-transactions']
                 and not any(
-                    isinstance(t, TxnPosting) for t in account.txn_postings)):
+                    isinstance(t, data.TxnPosting)
+                    for t in account.txn_postings)):
             show_this_account = False
     return show_this_account or any(should_show(a) for a in account.values())
 

@@ -194,6 +194,13 @@ def _pull_beancount_file(_, values):
         abort(404)
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
     g.conversion = request.args.get('conversion')
+    if not request.args.get('show'):
+        g.journal_show = set(
+            g.ledger.fava_options['journal-show'] +
+            g.ledger.fava_options['journal-show-transaction'] +
+            g.ledger.fava_options['journal-show-document'])
+    else:
+        g.journal_show = set(request.args.getlist('show'))
 
 
 @app.errorhandler(FavaAPIException)
