@@ -276,7 +276,7 @@ v0.2.0 (February 11th, 2016 - first release of `fava`)
 
 - Renamed the project from "beancount-web" to "fava". :bug:`85`
 - Moved ``beancount-urlscheme``-command to it's own `project
-  <http://github.com/aumayr/beancount_urlscheme>`__.
+  <https://github.com/aumayr/beancount_urlscheme>`__.
 - 2016-01-30 - Include today in the ``Year to Date`` filter. Thanks to
   :user:`corani`.
 - 2016-01-30 - Legs now collapse correctly in the Journal view. Thanks to

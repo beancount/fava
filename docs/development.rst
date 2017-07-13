@@ -3,7 +3,7 @@ Development
 
 If you want to try out the current `master`-version of Fava and see what we are
 working on, check out the online `dev-demo
-<http://favadev.pythonanywhere.com>`__ (updated every midnight UTC).
+<https://favadev.pythonanywhere.com>`__ (updated every midnight UTC).
 
 Setting up a development environment
 ------------------------------------

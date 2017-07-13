@@ -11,7 +11,7 @@ Welcome to Fava!
 Fava is a web interface for the double-entry bookkeeping software `Beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
 
-You can try out an online `demo <http://fava.pythonanywhere.com>`__.
+You can try out an online `demo <https://fava.pythonanywhere.com>`__.
 
 .. image:: https://i.imgbox.com/rfb9I7Zw.png
 
