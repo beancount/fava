@@ -60,7 +60,7 @@
     {% endfor %}
 {%- endmacro %}
 
-{% macro render_metadata(metadata, show_metadata, entry_hash=None) -%}
+{% macro render_metadata(metadata, entry_hash=None) -%}
   {% if metadata %}
     <dl class="metadata{{ ' hidden' if 'metadata' not in g.journal_show else ''}}">
       {% for key, value in metadata.items() %}
