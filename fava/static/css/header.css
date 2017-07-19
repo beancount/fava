@@ -98,7 +98,6 @@ h1 {
   position: absolute;
   top: var(--header-height);
   width: 20em;
-  z-index: var(--z-index-floating-ui);
 
   & ul {
     margin-bottom: 0;

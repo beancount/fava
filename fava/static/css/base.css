@@ -332,7 +332,7 @@ aside {
   top: var(--header-height);
   transition: var(--transitions);
   width: var(--aside-width);
-  z-index: var(--z-index-floating-ui);
+  z-index: var(--z-index-aside);
 
   & h3 {
     font-size: .9em;
