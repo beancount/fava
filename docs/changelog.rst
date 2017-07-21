@@ -1,6 +1,23 @@
 Changelog
 =========
 
+v1.5 (in development)
+---------------------
+
+Fava now has an interface to edit single entries. Clicking on the entry date in
+the Journal will open an overlay that shows the entry context and allows
+editing just the lines of that entry.
+
+Other changes:
+
+- The source editor now has a menu that gives access to editor commands like
+  "fold all".
+- Entries with matching tags or links can now be excluded with ``-#tag``.
+- The keyboard shortcuts are now displayed in-place.
+- The ``incognito`` option has been removed and replaced with a ``--incognito``
+  command line switch.
+- As always, several bugs have been fixed.
+
 v1.4 (May 14th, 2017)
 ---------------------
 
