@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.5 (in development)
----------------------
+v1.5 (July 23rd, 2017)
+----------------------
 
 Fava now has an interface to edit single entries. Clicking on the entry date in
 the Journal will open an overlay that shows the entry context and allows
