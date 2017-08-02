@@ -8,6 +8,7 @@ from werkzeug.wsgi import DispatcherMiddleware
 
 from fava.application import app, load_file
 from fava.util import simple_wsgi
+from fava import __version__
 
 
 # pylint: disable=too-many-arguments
@@ -30,6 +31,7 @@ from fava.util import simple_wsgi
               help='Output directory for profiling data.')
 @click.option('--profile-restriction', type=int, default=30,
               help='Number of functions to show in profile.')
+@click.version_option(version=__version__, prog_name='fava')
 def main(filenames, port, host, prefix, incognito, debug, profile, profile_dir,
          profile_restriction):
     """Start Fava for FILENAMES on http://host:port.
