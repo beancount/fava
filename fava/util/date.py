@@ -19,8 +19,14 @@ DAY_RE = re.compile(r'^(\d{4})-(\d{2})-(\d{2})$')
 # this matches a week like 2016-W02 for the second week of 2016
 WEEK_RE = re.compile(r'^(\d{4})-w(\d{2})$')
 
+# this matches a week like W02 for the second week of current year
+CURYEAR_WEEK_RE = re.compile(r'^w(\d{2})$')
+
 # this matches a quarter like 2016-Q1 for the first quarter of 2016
 QUARTER_RE = re.compile(r'^(\d{4})-q(\d)$')
+
+# this matches a quarter like Q1 for the first quarter of current year
+CURYEAR_QUARTER_RE = re.compile(r'^q(\d)$')
 
 VARIABLE_RE = re.compile(
     r'\(?(year|quarter|month|week|day)(?:([-+])(\d+))?\)?')
@@ -168,19 +174,35 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
         start = datetime.date(year, month, day)
         return start, get_next_interval(start, 'day')
 
-    match = WEEK_RE.match(string)
-    if match:
-        year, week = match.group(1, 2)
+    def by_year_and_week(year, week):
         date_str = '{}{}1'.format(year, week)
         first_week_day = datetime.datetime.strptime(date_str, '%Y%W%w').date()
         return first_week_day, get_next_interval(first_week_day, 'week')
 
-    match = QUARTER_RE.match(string)
-    if match:
-        year, quarter = map(int, match.group(1, 2))
+    def by_year_and_quarter(year, quarter):
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
         return quarter_first_day, get_next_interval(quarter_first_day,
                                                     'quarter')
+
+    match = CURYEAR_WEEK_RE.match(string)
+    if match:
+        week = match.group(1)
+        return by_year_and_week(datetime.datetime.now().year, week)
+
+    match = WEEK_RE.match(string)
+    if match:
+        year, week = match.group(1, 2)
+        return by_year_and_week(year, week)
+
+    match = CURYEAR_QUARTER_RE.match(string)
+    if match:
+        quarter = int(match.group(1))
+        return by_year_and_quarter(datetime.datetime.now().year, quarter)
+
+    match = QUARTER_RE.match(string)
+    if match:
+        year, quarter = map(int, match.group(1, 2))
+        return by_year_and_quarter(year, quarter)
 
 
 def days_in_daterange(start_date, end_date):
