@@ -175,11 +175,13 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
         return start, get_next_interval(start, 'day')
 
     def by_year_and_week(year, week):
+        """ Date period by specified year and week """
         date_str = '{}{}1'.format(year, week)
         first_week_day = datetime.datetime.strptime(date_str, '%Y%W%w').date()
         return first_week_day, get_next_interval(first_week_day, 'week')
 
     def by_year_and_quarter(year, quarter):
+        """ Date period by specified year and quarter """
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
         return quarter_first_day, get_next_interval(quarter_first_day,
                                                     'quarter')
