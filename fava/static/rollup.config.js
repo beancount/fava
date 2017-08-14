@@ -11,9 +11,11 @@ import postcssCustomProperties from 'postcss-custom-properties';
 import postcssNesting from 'postcss-nesting';
 
 export default {
-  entry: 'javascript/main.js',
-  dest: 'gen/app.js',
-  format: 'iife',
+  input: 'javascript/main.js',
+  output: {
+    file: 'gen/app.js',
+    format: 'iife',
+  },
   moduleContext: {
     'node_modules/whatwg-fetch/fetch.js': 'window',
   },

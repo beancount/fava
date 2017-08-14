@@ -83,7 +83,8 @@ e.on('page-loaded', () => {
           formData.append('account', accountName);
           formData.append('filename', element.value);
 
-          if (entryHash) {  // statement upload (add adding it to metadata)
+          if (entryHash) {
+            // statement upload (add adding it to metadata)
             formData.append('entry_hash', entryHash);
           }
 

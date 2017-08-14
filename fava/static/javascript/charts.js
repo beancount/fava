@@ -200,14 +200,14 @@ class TreeMapChart extends BaseChart {
     this.width = parseInt(container.style('width'), 10);
     this.height = Math.min(this.width / 2.5, 400);
     this.svg
-        .attr('width', this.width)
-        .attr('height', this.height);
+      .attr('width', this.width)
+      .attr('height', this.height);
     this.treemap.size([this.width, this.height]);
 
     if (this.selections.empty) {
       this.selections.empty
-          .attr('x', this.width / 2)
-          .attr('y', this.height / 2);
+        .attr('x', this.width / 2)
+        .attr('y', this.height / 2);
     }
 
     this.treemap(this.root);
@@ -272,14 +272,14 @@ class SunburstChart extends BaseChart {
     this.partition(this.root);
 
     this.selections.paths = this.canvas.selectAll('path')
-        .data(this.root.descendants())
-        .enter()
-        .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
+      .data(this.root.descendants())
+      .enter()
+      .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
       .append('path')
-        .attr('fill-rule', 'evenodd')
-        .style('fill', d => sunburstColorScale(d.data.account))
-        .on('mouseover', d => this.mouseOver(d))
-        .call(makeAccountLink);
+      .attr('fill-rule', 'evenodd')
+      .style('fill', d => sunburstColorScale(d.data.account))
+      .on('mouseover', d => this.mouseOver(d))
+      .call(makeAccountLink);
 
     this.update();
     this.setLabel(this.root);
@@ -371,11 +371,11 @@ class BarChart extends BaseChart {
     ]);
 
     this.selections.groups = this.canvas.selectAll('.group')
-        .data(data)
+      .data(data)
       .enter()
       .append('g')
-        .attr('class', 'group')
-        .call(addTooltip, this.tooltipText);
+      .attr('class', 'group')
+      .call(addTooltip, this.tooltipText);
 
     this.selections.groupboxes = this.selections.groups.append('rect')
       .attr('class', 'group-box');
@@ -387,17 +387,17 @@ class BarChart extends BaseChart {
       .attr('class', 'axis-group-box');
 
     this.selections.bars = this.selections.groups.selectAll('.bar')
-        .data(d => d.values)
-        .enter()
+      .data(d => d.values)
+      .enter()
       .append('rect')
-        .attr('class', 'bar')
-        .style('fill', d => currencyColorScale(d.name));
+      .attr('class', 'bar')
+      .style('fill', d => currencyColorScale(d.name));
 
     this.selections.budgets = this.selections.groups.selectAll('.budget')
-        .data(d => d.values)
-        .enter()
+      .data(d => d.values)
+      .enter()
       .append('rect')
-        .attr('class', 'budget');
+      .attr('class', 'budget');
 
     this.update();
     return this;
@@ -491,13 +491,13 @@ class ScatterPlot extends BaseChart {
     this.selections.yAxis = this.canvas.append('g').attr('class', 'y axis');
 
     this.selections.dots = this.canvas.selectAll('.dot')
-        .data(this.data)
+      .data(this.data)
       .enter()
       .append('circle')
-        .attr('class', 'dot')
-        .attr('r', 5)
-        .style('fill', d => scatterColorScale(d.type))
-        .call(addTooltip, this.tooltipText);
+      .attr('class', 'dot')
+      .attr('r', 5)
+      .style('fill', d => scatterColorScale(d.type))
+      .call(addTooltip, this.tooltipText);
 
     this.update();
     return this;
@@ -567,41 +567,41 @@ class LineChart extends BaseChart {
     ]);
 
     this.selections.lines = this.canvas.selectAll('.line')
-        .data(data)
+      .data(data)
       .enter()
       .append('path')
-        .attr('class', 'line')
-        .style('stroke', d => currencyColorScale(d.name));
+      .attr('class', 'line')
+      .style('stroke', d => currencyColorScale(d.name));
 
     this.selections.dots = this.canvas.selectAll('g.dot')
-        .data(data)
-        .enter()
+      .data(data)
+      .enter()
       .append('g')
-        .attr('class', 'dot')
+      .attr('class', 'dot')
       .selectAll('circle')
-        .data(d => d.values)
-        .enter()
+      .data(d => d.values)
+      .enter()
       .append('circle')
-        .attr('r', 3)
-        .style('fill', d => currencyColorScale(d.name));
+      .attr('r', 3)
+      .style('fill', d => currencyColorScale(d.name));
 
     this.selections.voronoi.selectAll('path')
-        .data(this.voronoi.polygons(merge(data.map(d => d.values))))
-        .enter()
+      .data(this.voronoi.polygons(merge(data.map(d => d.values))))
+      .enter()
       .append('path')
-        .filter(d => d !== undefined)
-        .on('mouseenter', (d) => {
-          tooltip.style('opacity', 1).html(this.tooltipText(d.data));
-        })
-        .on('mousemove', (d) => {
-          const matrix = this.canvas.node().getScreenCTM();
-          tooltip
-              .style('left', `${this.x(d.data.date) + matrix.e}px`)
-              .style('top', `${this.y(d.data.value) + matrix.f + -15}px`);
-        })
-        .on('mouseleave', () => {
-          tooltip.style('opacity', 0);
-        });
+      .filter(d => d !== undefined)
+      .on('mouseenter', (d) => {
+        tooltip.style('opacity', 1).html(this.tooltipText(d.data));
+      })
+      .on('mousemove', (d) => {
+        const matrix = this.canvas.node().getScreenCTM();
+        tooltip
+          .style('left', `${this.x(d.data.date) + matrix.e}px`)
+          .style('top', `${this.y(d.data.value) + matrix.f + -15}px`);
+      })
+      .on('mouseleave', () => {
+        tooltip.style('opacity', 0);
+      });
 
     this.update();
     return this;
@@ -632,9 +632,9 @@ class LineChart extends BaseChart {
       .attr('d', d => this.line(d.values));
 
     this.selections.voronoi.selectAll('path')
-        .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
-        .filter(d => d !== undefined)
-        .attr('d', d => `M${d.join('L')}Z`);
+      .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
+      .filter(d => d !== undefined)
+      .attr('d', d => `M${d.join('L')}Z`);
 
     addLegend(this.data.map(d => d.name), currencyColorScale);
   }
@@ -723,11 +723,11 @@ class HierarchyContainer extends BaseChart {
 
     if (mode === 'sunburst' && mode !== this.currentMode) {
       this.canvas
-          .html('');
+        .html('');
 
       this.currentChart = new SunburstChartContainer(this.canvas)
-          .set('currencies', this.currencies)
-          .draw(data);
+        .set('currencies', this.currencies)
+        .draw(data);
 
       this.has_currency_setting = false;
       $('#chart-currency').classList.add('hidden');
@@ -802,17 +802,17 @@ e.on('page-loaded', () => {
     switch (chart.type) {
       case 'balances': {
         const series = window.favaAPI.options.commodities
-            .map(c => ({
-              name: c,
-              values: chart.data
-                  .filter(d => !(d.balance[c] === undefined))
-                  .map(d => ({
-                    name: c,
-                    date: new Date(d.date),
-                    value: d.balance[c],
-                  })),
-            }))
-            .filter(d => d.values.length);
+          .map(c => ({
+            name: c,
+            values: chart.data
+              .filter(d => !(d.balance[c] === undefined))
+              .map(d => ({
+                name: c,
+                date: new Date(d.date),
+                value: d.balance[c],
+              })),
+          }))
+          .filter(d => d.values.length);
 
         charts[chartId] = new LineChart(chartContainer(chartId, chart.label))
           .set('tooltipText', d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`)
@@ -888,8 +888,8 @@ e.on('page-loaded', () => {
         });
 
         charts[chartId] = new HierarchyContainer(chartContainer(chartId, chart.label))
-            .set('currencies', operatingCurrencies)
-            .draw(roots);
+          .set('currencies', operatingCurrencies)
+          .draw(roots);
 
         break;
       }

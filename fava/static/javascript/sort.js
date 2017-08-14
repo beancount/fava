@@ -36,8 +36,8 @@ function getValue(el) {
 function sortElements(options) {
   function sortFunction(a, b) {
     return (options.order === 'asc' ? 1 : -1) * sorters[options.type](
-        getValue(options.selector(a)),
-        getValue(options.selector(b)));
+      getValue(options.selector(a)),
+      getValue(options.selector(b)));
   }
 
   const fragment = document.createDocumentFragment();
