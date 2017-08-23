@@ -109,9 +109,7 @@ const menu = Menu.buildFromTemplate([
   {
     label: 'Fava',
     submenu: [
-      {
-        role: 'quit',
-      },
+      { role: 'quit' },
     ],
   },
   {
@@ -126,6 +124,18 @@ const menu = Menu.buildFromTemplate([
         label: 'Reset files',
         click: resetFiles,
       },
+    ],
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+      { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+      { type: 'separator' },
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+      { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+      { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' },
     ],
   },
   {
@@ -145,35 +155,19 @@ const menu = Menu.buildFromTemplate([
           if (focusedWindow) focusedWindow.webContents.toggleDevTools();
         },
       },
-      {
-        type: 'separator',
-      },
-      {
-        role: 'resetzoom',
-      },
-      {
-        role: 'zoomin',
-      },
-      {
-        role: 'zoomout',
-      },
-      {
-        type: 'separator',
-      },
-      {
-        role: 'togglefullscreen',
-      },
+      { type: 'separator' },
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' },
     ],
   },
   {
     role: 'window',
     submenu: [
-      {
-        role: 'minimize',
-      },
-      {
-        role: 'close',
-      },
+      { role: 'minimize' },
+      { role: 'close' },
     ],
   },
 ]);
