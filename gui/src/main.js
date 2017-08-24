@@ -155,6 +155,25 @@ const menu = Menu.buildFromTemplate([
     ],
   },
   {
+    label: 'History',
+    submenu: [
+      {
+        label: 'Back',
+        accelerator: darwin ? 'Command+Left' : 'Alt-Left',
+        click(item, focusedWindow) {
+          if (focusedWindow) focusedWindow.webContents.goBack();
+        },
+      },
+      {
+        label: 'Forward',
+        accelerator: darwin ? 'Command+Right' : 'Alt-Right',
+        click(item, focusedWindow) {
+          if (focusedWindow) focusedWindow.webContents.goForward();
+        },
+      },
+    ],
+  },
+  {
     role: 'window',
     submenu: [
       { role: 'minimize' },
