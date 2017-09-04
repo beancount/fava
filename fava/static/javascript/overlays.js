@@ -14,7 +14,7 @@ export function closeOverlay() {
 
 // Show various overlays depending on the hash.
 export function handleHash() {
-  const hash = window.location.hash;
+  const { hash } = window.location;
   if (!hash) {
     closeOverlay();
   } else if (hash === '#add-transaction') {

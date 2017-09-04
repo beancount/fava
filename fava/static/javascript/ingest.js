@@ -46,7 +46,7 @@ e.on('page-loaded', () => {
     event.target.classList.toggle('inactive');
   });
 
-  $('#toggle-source').addEventListener('click', () => {
+  $('#toggle-source').addEventListener('click', (event) => {
     $$('.ingest-row .source').forEach((element) => {
       element.classList.toggle('hidden');
     });

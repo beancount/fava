@@ -106,7 +106,7 @@ CodeMirror.commands.favaToggleComment = (cm) => {
 };
 
 CodeMirror.commands.favaCenterCursor = (cm) => {
-  const top = cm.cursorCoords(true, 'local').top;
+  const { top } = cm.cursorCoords(true, 'local');
   const height = cm.getScrollInfo().clientHeight;
   cm.scrollTo(null, top - (height / 2));
 };

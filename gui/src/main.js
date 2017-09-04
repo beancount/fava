@@ -1,4 +1,10 @@
-const { app, dialog, BrowserWindow, Menu, net } = require('electron'); // eslint-disable-line import/no-extraneous-dependencies
+const {
+  app,
+  dialog,
+  BrowserWindow,
+  Menu,
+  net,
+} = require('electron'); // eslint-disable-line import/no-extraneous-dependencies
 const childProcess = require('child_process');
 const path = require('path');
 const rq = require('request-promise');

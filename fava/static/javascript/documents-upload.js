@@ -48,7 +48,7 @@ e.on('page-loaded', () => {
 
       const accountName = target.getAttribute('data-account-name');
       const folders = $$('#document-upload-folder option');
-      const files = event.dataTransfer.files;
+      const { files } = event.dataTransfer;
       const now = new Date();
       let changedFilename = false;
 

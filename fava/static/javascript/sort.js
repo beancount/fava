@@ -12,7 +12,7 @@ import e from './events';
 function parseNumber(num) {
   const cleaned = num.replace(/[^\-?0-9.]/g, '');
   const n = parseFloat(cleaned);
-  return isNaN(n) ? 0 : n;
+  return Number.isNaN(n) ? 0 : n;
 }
 
 const sorters = {
@@ -35,9 +35,8 @@ function getValue(el) {
 
 function sortElements(options) {
   function sortFunction(a, b) {
-    return (options.order === 'asc' ? 1 : -1) * sorters[options.type](
-      getValue(options.selector(a)),
-      getValue(options.selector(b)));
+    return (options.order === 'asc' ? 1 : -1) *
+      sorters[options.type](getValue(options.selector(a)), getValue(options.selector(b)));
   }
 
   const fragment = document.createDocumentFragment();
