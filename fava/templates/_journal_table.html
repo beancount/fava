@@ -55,7 +55,7 @@
 {%- endmacro %}
 
 {% macro render_inventory(inv) -%}
-    {% for pos in inv|units %}
+    {% for pos in inv %}
         {{ pos.units|format_amount }}<br>
     {% endfor %}
 {%- endmacro %}
