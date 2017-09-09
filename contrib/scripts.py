@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
+"""Various utilities."""
+
+import json
 import os
 
+from beancount.query import query_env
+from beancount.query import query_parser
 import click
 import requests
 
@@ -13,6 +18,37 @@ LANGUAGES = ['de', 'es', 'fr', 'nl', 'pt', 'ru', 'zh-CN']
 def cli():
     """Various utilities."""
     pass
+
+
+def _env_to_list(attributes):
+    result = []
+    for name in attributes.keys():
+        if isinstance(name, tuple):
+            name = name[0]
+        result.append(name)
+    return result
+
+
+@cli.command()
+def generate_bql_grammar_json():
+    """Generate a JSON file with BQL grammar attributes.
+
+    The online code editor needs to have the list of available columns,
+    functions, and keywords for syntax highlighting and completion.
+
+    Should be run whenever the BQL changes."""
+
+    target_env = query_env.TargetsEnvironment()
+    data = {
+        'columns': sorted(_env_to_list(target_env.columns)),
+        'functions': sorted(_env_to_list(target_env.functions)),
+        'keywords': sorted([kw.lower() for kw in query_parser.Lexer.keywords]),
+    }
+    path = os.path.join(
+        os.path.dirname(__file__),
+        '../fava/static/javascript/codemirror/bql-grammar.json')
+    with open(path, 'w') as json_file:
+        json.dump(data, json_file)
 
 
 @cli.command()
@@ -34,9 +70,7 @@ def upload_translations():
     if not token:
         raise click.UsageError(
             'The POEDITOR_TOKEN environment variable needs to be set.')
-    path = os.path.join(
-        BASE_PATH,
-        f'translations/messages.pot')
+    path = os.path.join(BASE_PATH, f'translations/messages.pot')
     click.echo(f'Uploading message catalog: {path}')
     data = {
         'api_token': token,
