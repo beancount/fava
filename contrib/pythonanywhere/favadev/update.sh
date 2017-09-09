@@ -1,16 +1,15 @@
 #!/bin/bash
 
-cd
-cd fava
+cd ~/fava || exit
 
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")
 BASE=$(git merge-base @ "$UPSTREAM")
 
-if [ $LOCAL = $REMOTE ]; then
+if [ "$LOCAL" = "$REMOTE" ]; then
     echo "Up-to-date"
-elif [ $LOCAL = $BASE ]; then
+elif [ "$LOCAL" = "$BASE" ]; then
     # Start virtualenv
     source /home/favadev/.virtualenvs/fava/bin/activate
 
@@ -21,21 +20,17 @@ elif [ $LOCAL = $BASE ]; then
     export PATH=$PATH:/home/fava/.local/bin
 
     # Update fava
-    cd
-    cd fava
+    cd ~/fava || exit
     git pull
 
     pwd
     make
 
-    cd
-    cd fava
     pip install -e .
-    version=`python -c "import fava; print(fava.__version__)"`
+    version=$(python -c "import fava; print(fava.__version__)")
 
     # Generate fresh example
-    cd
-    date=`date +%Y-%m-%d`
+    date=$(date +%Y-%m-%d)
     site='PyPI'
     name="option \"title\" \"Example fava @ $version ($date) [$site]\""
     bean-example | sed "7s#.*#$name#" > test1.bean
@@ -44,9 +39,11 @@ elif [ $LOCAL = $BASE ]; then
     name="option \"title\" \"Example (3)\""
     bean-example | sed "7s#.*#$name#" > test3.bean
 
+    chmod 400 test1.bean test2.bean test3.bean
+
     # Reload web page
     touch /var/www/favadev_pythonanywhere_com_wsgi.py
-elif [ $REMOTE = $BASE ]; then
+elif [ "$REMOTE" = "$BASE" ]; then
     echo "Need to push"
 else
     echo "Diverged"
