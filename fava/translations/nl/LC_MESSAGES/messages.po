@@ -96,7 +96,7 @@ msgstr "Statistieken"
 msgid "Help"
 msgstr "Hulp"
 
-#: fava/templates/_journal_table.html:162 fava/templates/commodities.html:13
+#: fava/templates/_journal_table.html:95 fava/templates/commodities.html:13
 #: fava/templates/events.html:17 fava/templates/macros/_entry_forms.html:25
 #: fava/templates/macros/_entry_forms.html:55
 #: fava/templates/macros/_entry_forms.html:77
@@ -104,41 +104,41 @@ msgid "Date"
 msgstr "Datum"
 
 #. I'm understanding is header as "Status"
-#: fava/templates/_journal_table.html:163
+#: fava/templates/_journal_table.html:96
 msgid "F"
 msgstr "V"
 
-#: fava/templates/_journal_table.html:164
+#: fava/templates/_journal_table.html:97
 msgid "Narration/Payee"
 msgstr "Omschrijving/Begunstigde"
 
-#: fava/templates/_journal_table.html:165
+#: fava/templates/_journal_table.html:98
 msgid "Position"
 msgstr "Positie"
 
-#: fava/templates/_journal_table.html:166 fava/templates/commodities.html:14
+#: fava/templates/_journal_table.html:99 fava/templates/commodities.html:14
 msgid "Price"
 msgstr "Prijs"
 
-#: fava/templates/_journal_table.html:167
+#: fava/templates/_journal_table.html:100
 msgid "Cost"
 msgstr "Kosten"
 
-#: fava/templates/_journal_table.html:169
+#: fava/templates/_journal_table.html:102
 msgid "Change"
 msgstr "Verschil"
 
-#: fava/templates/_journal_table.html:170
+#: fava/templates/_journal_table.html:103
 #: fava/templates/macros/_entry_forms.html:53 fava/templates/statistics.html:57
 msgid "Balance"
 msgstr "Balans"
 
-#: fava/templates/_context.html:54 fava/templates/_overlays.html:30
+#: fava/templates/_context.html:58 fava/templates/_overlays.html:30
 #: fava/templates/editor.html:41
 msgid "Save"
 msgstr "Opslaan"
 
-#: fava/templates/_context.html:54 fava/templates/editor.html:41
+#: fava/templates/_context.html:58 fava/templates/editor.html:41
 msgid "Saving..."
 msgstr "Bezig met opslaan..."
 
@@ -360,7 +360,7 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-#: fava/templates/_journal_table.html:94
+#: fava/templates/_journal_table.html:40
 msgid "Budget entries"
 msgstr ""
 
@@ -412,7 +412,7 @@ msgstr ""
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr ""
 
-#: fava/templates/_journal_table.html:103
+#: fava/templates/_journal_table.html:47
 #: fava/templates/macros/_entry_forms.html:15
 msgid "Metadata"
 msgstr ""
@@ -433,43 +433,39 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: fava/templates/_context.html:9
+#: fava/templates/_context.html:10
 msgid "Context"
 msgstr ""
 
-#: fava/templates/_context.html:12
-msgid "Hash"
-msgstr ""
-
-#: fava/templates/_context.html:18
+#: fava/templates/_context.html:16
 msgid "Balances before entry"
 msgstr ""
 
-#: fava/templates/_context.html:35
+#: fava/templates/_context.html:36
 msgid "Balances after entry"
 msgstr ""
 
-#: fava/templates/_journal_table.html:55
+#: fava/templates/_journal_table.html:3
 msgid "Cleared transactions"
 msgstr ""
 
-#: fava/templates/_journal_table.html:56
+#: fava/templates/_journal_table.html:4
 msgid "Pending transactions"
 msgstr ""
 
-#: fava/templates/_journal_table.html:57
+#: fava/templates/_journal_table.html:5
 msgid "Other transactions"
 msgstr ""
 
-#: fava/templates/_journal_table.html:61
+#: fava/templates/_journal_table.html:9
 msgid "Documents with a #discovered tag"
 msgstr ""
 
-#: fava/templates/_journal_table.html:62
+#: fava/templates/_journal_table.html:10
 msgid "Documents with a #statement tag"
 msgstr ""
 
-#: fava/templates/_journal_table.html:104
+#: fava/templates/_journal_table.html:48
 msgid "Postings"
 msgstr ""
 

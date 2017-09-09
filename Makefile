@@ -1,4 +1,4 @@
-.PHONY: docs test lint binaries gh-pages
+.PHONY: docs test lint binaries gh-pages translations-push translations-fetch before-release release
 
 all: fava/static/gen/app.js
 
@@ -28,6 +28,19 @@ test:
 docs:
 	sphinx-build -b html docs build/docs
 
+before-release: translations-push translations-fetch
+	contrib/scripts.py generate_bql_grammar_json
+
+# Before making a release, CHANGES needs to be updated and version number in
+# fava/__init__.py should be set to the release version.
+# A tag and Github release should be created too.
+#
+# After the release, the version number should be bumped in fava/__init__.py
+# (with '-dev') and gui/src/main.js and fava.pythonanywhere.com should be
+# updated.
+release: fava/static/gen/app.js before-release
+	python setup.py sdist bdist_wheel upload
+
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token
 # for POEditor.
@@ -35,9 +48,7 @@ translations-push:
 	pybabel extract -F fava/translations/babel.conf -k lazy_gettext -o fava/translations/messages.pot ./fava
 	contrib/scripts.py upload_translations
 
-# Extract translation strings and upload them to POEditor.com
-# Requires the environment variable POEDITOR_TOKEN to be set to an API token
-# for POEditor.
+# Download translations from POEditor.com. (also requires POEDITOR_TOKEN)
 translations-fetch:
 	contrib/scripts.py download_translations
 
