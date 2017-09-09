@@ -15,10 +15,15 @@
   },
   "devDependencies": {
     "electron": "^1.8.0",
-    "electron-builder": "^19.27.7",
+    "electron-builder": "^19.28.1",
     "eslint": "^4.5.0",
     "eslint-config-airbnb-base": "^12.0.0",
     "eslint-plugin-import": "^2.7.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "airbnb-base"
+    ]
   },
   "build": {
     "appId": "com.fava-electron",
