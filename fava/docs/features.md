@@ -9,9 +9,9 @@ There are four filters available in Fava:
   Beancount Query Language.
 - **Time**: Filter entries by their date. You can specify dates and intervals
   like years, quarters, months, weeks, and days (for example `2015`, `2012-Q1`,
-  `2010-10`, `2016-W12`, or `2015-06-12`). You can specify a range of dates like
-  `2010 - 2012-10` which will display all entries between the start of 2010 and
-  the end of October 2012.
+  `Q1`, `2010-10`, `2016-W12`, `W12`, or `2015-06-12`). You can specify a range
+  of dates like `2010 - 2012-10` which will display all entries between the
+  start of 2010 and the end of October 2012.
   To refer to dates relative to the current day, you can use the variables
   `year`, `quarter`, `month`, `week`, and `day`. These will be substituted with
   the current date expressed in the respective format, and support addition and
