@@ -27,6 +27,11 @@ def _json_api_exception(error):
     return jsonify({'success': False, 'error': error.message})
 
 
+@json_api.errorhandler(OSError)
+def _json_api_oserror(error):
+    return jsonify({'success': False, 'error': error.strerror})
+
+
 @json_api.route('/changed/')
 def changed():
     """Check for file changes."""
