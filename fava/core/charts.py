@@ -50,16 +50,25 @@ def _inventory_cost_or_value(inventory, date):
     return {p.units.currency: p.units.number for p in inventory}
 
 
+def _inventory_combine(inv1, inv2):
+    """Combine two inventory dicts adding numbers together -> amount dict."""
+    keys = set(inv1.keys()) | set(inv2.keys())
+    return {currency: inv1.get(currency, 0) + inv2.get(currency, 0)
+            for currency in keys}
+
+
 def _serialize_real_account(real_account, date):
+    children = [_serialize_real_account(account, date)
+                for _, account in sorted(real_account.items())]
+    balance_children = _inventory_cost_or_value(real_account.balance, date)
+    for child in children:
+        balance_children = _inventory_combine(balance_children,
+                                              child['balance_children'])
     return {
         'account': real_account.account,
-        'balance_children': _inventory_cost_or_value(
-            realization.compute_balance(real_account), date),
+        'balance_children': balance_children,
         'balance': _inventory_cost_or_value(real_account.balance, date),
-        'children': [
-            _serialize_real_account(account, date)
-            for _, account in sorted(real_account.items())
-        ],
+        'children': children,
     }
 
 
