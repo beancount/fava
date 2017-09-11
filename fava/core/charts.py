@@ -3,7 +3,7 @@ import datetime
 
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
-from beancount.core.data import Transaction
+from beancount.core.data import Transaction, Cost
 from beancount.core.display_context import DisplayContext
 from beancount.core.number import Decimal, MISSING
 from beancount.core.position import Position
@@ -165,11 +165,16 @@ class ChartModule(FavaModule):
         txn = next(transactions, None)
         inventory = Inventory()
 
+        today = datetime.datetime.today().replace(
+            hour=0, minute=0, second=0, microsecond=0)
         for date in self.ledger.interval_ends(interval):
             while txn and txn.date < date:
                 for posting in filter(lambda p: p.account.startswith(types),
                                       txn.postings):
-                    inventory.add_position(posting)
+                    inventory.add_amount(
+                        posting.units,
+                        Cost(0, posting.cost.currency, today, None)
+                        if posting.cost else None)
                 txn = next(transactions, None)
             yield {
                 'date': date,
