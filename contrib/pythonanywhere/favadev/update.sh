@@ -22,24 +22,17 @@ elif [ "$LOCAL" = "$BASE" ]; then
     # Update fava
     cd ~/fava || exit
     git pull
-
-    pwd
     make
 
-    pip install -e .
-    version=$(python -c "import fava; print(fava.__version__)")
+    pip install -e ~/fava
 
-    # Generate fresh example
-    date=$(date +%Y-%m-%d)
-    site='PyPI'
-    name="option \"title\" \"Example fava @ $version ($date) [$site]\""
-    bean-example | sed "7s#.*#$name#" > test1.bean
-    name="option \"title\" \"Example (2) fava @ $version ($date) [$site]\""
-    bean-example | sed "7s#.*#$name#" > test2.bean
-    name="option \"title\" \"Example (3)\""
-    bean-example | sed "7s#.*#$name#" > test3.bean
+    cp ~/fava/contrib/examples/example.beancount ~/example.beancount
+    cp ~/fava/contrib/examples/budgets-example.beancount ~/budgets-example.beancount
+    cp ~/fava/contrib/examples/huge-example.beancount ~/huge-example.beancount
 
-    chmod 400 test1.bean test2.bean test3.bean
+    chmod 400 ~/example.beancount
+    chmod 400 ~/budgets-example.beancount
+    chmod 400 ~/huge-example.beancount
 
     # Reload web page
     touch /var/www/favadev_pythonanywhere_com_wsgi.py

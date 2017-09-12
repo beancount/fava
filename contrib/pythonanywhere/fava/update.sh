@@ -1,26 +1,21 @@
 #!/bin/bash
 
 # Start virtualenv
-source /home/fava/.virtualenvs/fava/bin/activate
+source ~/.virtualenvs/fava/bin/activate
 
 # Add user bin
-export PATH=$PATH:/home/fava/.local/bin
+export PATH=$PATH:~/.local/bin
 
-# Updade fava
+# Update fava
 pip install fava --upgrade
-version=$(python -c "import fava; print(fava.__version__)")
 
-# Generate fresh example
-date=$(date +%Y-%m-%d)
-site='PyPI'
-name="option \"title\" \"Example fava @ $version ($date) [$site]\""
-bean-example | sed "7s#.*#$name#" > test1.bean
-name="option \"title\" \"Example (2) fava @ $version ($date) [$site]\""
-bean-example | sed "7s#.*#$name#" > test2.bean
-name="option \"title\" \"Example (3)\""
-bean-example | sed "7s#.*#$name#" > test3.bean
+curl -o ~/example.beancount https://raw.githubusercontent.com/beancount/fava/master/contrib/examples/example.beancount
+curl -o ~/budgets-example.beancount https://raw.githubusercontent.com/beancount/fava/master/contrib/examples/budgets-example.beancount
+curl -o ~/huge-example.beancount https://raw.githubusercontent.com/beancount/fava/master/contrib/examples/huge-example.beancount
 
-chmod 400 test1.bean test2.bean test3.bean
+chmod 400 ~/example.beancount
+chmod 400 ~/budgets-example.beancount
+chmod 400 ~/huge-example.beancount
 
 # Reload web page
 touch /var/www/fava_pythonanywhere_com_wsgi.py
