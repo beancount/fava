@@ -1,11 +1,12 @@
 """Provide data suitable for Fava's charts. """
 import datetime
+import collections
 
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
 from beancount.core.data import Transaction, Cost
 from beancount.core.display_context import DisplayContext
-from beancount.core.number import Decimal, MISSING
+from beancount.core.number import Decimal, MISSING, ZERO
 from beancount.core.position import Position
 from beancount.core.inventory import Inventory
 from beancount.core.data import iter_entry_dates
@@ -50,20 +51,13 @@ def _inventory_cost_or_value(inventory, date):
     return {p.units.currency: p.units.number for p in inventory}
 
 
-def _inventory_combine(inv1, inv2):
-    """Combine two inventory dicts adding numbers together -> amount dict."""
-    keys = set(inv1.keys()) | set(inv2.keys())
-    return {currency: inv1.get(currency, 0) + inv2.get(currency, 0)
-            for currency in keys}
-
-
 def _serialize_real_account(real_account, date):
     children = [_serialize_real_account(account, date)
                 for _, account in sorted(real_account.items())]
-    balance_children = _inventory_cost_or_value(real_account.balance, date)
+    balance_children = collections.Counter(_inventory_cost_or_value(
+        real_account.balance, date))
     for child in children:
-        balance_children = _inventory_combine(balance_children,
-                                              child['balance_children'])
+        balance_children.update(child['balance_children'])
     return {
         'account': real_account.account,
         'balance_children': balance_children,
@@ -165,16 +159,19 @@ class ChartModule(FavaModule):
         txn = next(transactions, None)
         inventory = Inventory()
 
-        today = datetime.datetime.today().replace(
-            hour=0, minute=0, second=0, microsecond=0)
         for date in self.ledger.interval_ends(interval):
             while txn and txn.date < date:
                 for posting in filter(lambda p: p.account.startswith(types),
                                       txn.postings):
+                    # Since we will be reducing the inventory to the operating
+                    # currencies, pre-aggregate the postitions to reduce the
+                    # number of elements in the inventory. Saves significant
+                    # computation. Don't use this inventory for calculating
+                    # average costs or gains.
                     inventory.add_amount(
                         posting.units,
-                        Cost(0, posting.cost.currency, today, None)
-                        if posting.cost else None)
+                        Cost(ZERO, posting.cost.currency, datetime.date.min,
+                             None) if posting.cost else None)
                 txn = next(transactions, None)
             yield {
                 'date': date,
