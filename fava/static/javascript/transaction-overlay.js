@@ -1,6 +1,7 @@
 import e from './events';
 import { $, $$, handleJSON } from './helpers';
 import { initInput, addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
+import { closeOverlay } from './overlays';
 
 function submitTransactionForm(form, successCallback) {
   const jsonData = {
@@ -55,9 +56,7 @@ e.on('page-init', () => {
 
   form.querySelector('#transaction-form-submit').addEventListener('click', (event) => {
     event.preventDefault();
-    submitTransactionForm(form, () => {
-      $('#transaction').classList.remove('shown');
-    });
+    submitTransactionForm(form, closeOverlay);
   });
 
   form.querySelector('#transaction-form-submit-and-new').addEventListener('click', (event) => {
