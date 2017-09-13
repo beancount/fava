@@ -1,11 +1,12 @@
 """Provide data suitable for Fava's charts. """
 import datetime
+import collections
 
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
-from beancount.core.data import Transaction
+from beancount.core.data import Transaction, Cost
 from beancount.core.display_context import DisplayContext
-from beancount.core.number import Decimal, MISSING
+from beancount.core.number import Decimal, MISSING, ZERO
 from beancount.core.position import Position
 from beancount.core.inventory import Inventory
 from beancount.core.data import iter_entry_dates
@@ -51,15 +52,17 @@ def _inventory_cost_or_value(inventory, date):
 
 
 def _serialize_real_account(real_account, date):
+    children = [_serialize_real_account(account, date)
+                for _, account in sorted(real_account.items())]
+    balance_children = collections.Counter(_inventory_cost_or_value(
+        real_account.balance, date))
+    for child in children:
+        balance_children.update(child['balance_children'])
     return {
         'account': real_account.account,
-        'balance_children': _inventory_cost_or_value(
-            realization.compute_balance(real_account), date),
+        'balance_children': balance_children,
         'balance': _inventory_cost_or_value(real_account.balance, date),
-        'children': [
-            _serialize_real_account(account, date)
-            for _, account in sorted(real_account.items())
-        ],
+        'children': children,
     }
 
 
@@ -160,7 +163,15 @@ class ChartModule(FavaModule):
             while txn and txn.date < date:
                 for posting in filter(lambda p: p.account.startswith(types),
                                       txn.postings):
-                    inventory.add_position(posting)
+                    # Since we will be reducing the inventory to the operating
+                    # currencies, pre-aggregate the postitions to reduce the
+                    # number of elements in the inventory. Saves significant
+                    # computation. Don't use this inventory for calculating
+                    # average costs or gains.
+                    inventory.add_amount(
+                        posting.units,
+                        Cost(ZERO, posting.cost.currency, datetime.date.min,
+                             None) if posting.cost else None)
                 txn = next(transactions, None)
             yield {
                 'date': date,
