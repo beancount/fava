@@ -1,43 +1,27 @@
 #!/bin/bash
 
 cd ~/fava || exit
+git fetch
+git reset --hard origin/master
 
-UPSTREAM=${1:-'@{u}'}
-LOCAL=$(git rev-parse @)
-REMOTE=$(git rev-parse "$UPSTREAM")
-BASE=$(git merge-base @ "$UPSTREAM")
+# Start virtualenv
+source /home/favadev/.virtualenvs/fava/bin/activate
 
-if [ "$LOCAL" = "$REMOTE" ]; then
-    echo "Up-to-date"
-elif [ "$LOCAL" = "$BASE" ]; then
-    # Start virtualenv
-    source /home/favadev/.virtualenvs/fava/bin/activate
+# source ~/nvm/nvm.sh
+# nvm alias default v6.6
 
-    # source ~/nvm/nvm.sh
-    # nvm alias default v6.6
+# Install Fava.
+make
+pip install -e .
 
-    # Add user bin
-    export PATH=$PATH:/home/fava/.local/bin
+# Copy example files.
+cp contrib/examples/example.beancount ~/example.beancount
+cp contrib/examples/budgets-example.beancount ~/budgets-example.beancount
+cp contrib/examples/huge-example.beancount ~/huge-example.beancount
 
-    # Update fava
-    cd ~/fava || exit
-    git pull
-    make
+chmod 400 ~/example.beancount
+chmod 400 ~/budgets-example.beancount
+chmod 400 ~/huge-example.beancount
 
-    pip install -e ~/fava
-
-    cp ~/fava/contrib/examples/example.beancount ~/example.beancount
-    cp ~/fava/contrib/examples/budgets-example.beancount ~/budgets-example.beancount
-    cp ~/fava/contrib/examples/huge-example.beancount ~/huge-example.beancount
-
-    chmod 400 ~/example.beancount
-    chmod 400 ~/budgets-example.beancount
-    chmod 400 ~/huge-example.beancount
-
-    # Reload web page
-    touch /var/www/favadev_pythonanywhere_com_wsgi.py
-elif [ "$REMOTE" = "$BASE" ]; then
-    echo "Need to push"
-else
-    echo "Diverged"
-fi
+# Reload web page
+touch /var/www/favadev_pythonanywhere_com_wsgi.py

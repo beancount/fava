@@ -3,9 +3,6 @@
 # Start virtualenv
 source ~/.virtualenvs/fava/bin/activate
 
-# Add user bin
-export PATH=$PATH:~/.local/bin
-
 # Update fava
 pip install fava --upgrade
 
