@@ -62,7 +62,7 @@ MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'misc',
            'query_shell', 'ingest']
 
 
-# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes,too-many-public-methods
 class FavaLedger():
     """Create an interface for a Beancount ledger.
 

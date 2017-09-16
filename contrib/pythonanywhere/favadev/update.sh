@@ -4,24 +4,18 @@ cd ~/fava || exit
 git fetch
 git reset --hard origin/master
 
-# Start virtualenv
 source /home/favadev/.virtualenvs/fava/bin/activate
 
-# source ~/nvm/nvm.sh
-# nvm alias default v6.6
-
-# Install Fava.
+# Update fava
 make
-pip install -e .
+pip install -e ~/fava
 
-# Copy example files.
+# Copy example files
+rm -f ~/example.beancount ~/budgets-example.beancount ~/huge-example.beancount
 cp contrib/examples/example.beancount ~/example.beancount
 cp contrib/examples/budgets-example.beancount ~/budgets-example.beancount
 cp contrib/examples/huge-example.beancount ~/huge-example.beancount
-
-chmod 400 ~/example.beancount
-chmod 400 ~/budgets-example.beancount
-chmod 400 ~/huge-example.beancount
+chmod 400 ~/example.beancount ~/budgets-example.beancount ~/huge-example.beancount
 
 # Reload web page
 touch /var/www/favadev_pythonanywhere_com_wsgi.py

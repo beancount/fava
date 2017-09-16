@@ -68,7 +68,7 @@ def parse_budgets(custom_entries):
                     BudgetError(entry.meta, 'Failed to parse budget entry',
                                 entry))
 
-    return dict(budgets), errors
+    return budgets, errors
 
 
 def _matching_budgets(budgets, account_name, date_active):
@@ -111,7 +111,7 @@ def calculate_budget(budgets, account_name, date_from, date_to):
             currency_dict[budget.currency] += \
                 budget.number / number_of_days_in_period(budget.period,
                                                          single_day)
-    return dict(currency_dict)
+    return currency_dict
 
 
 def calculate_budget_children(budgets, account_name, date_from, date_to):
@@ -131,6 +131,6 @@ def calculate_budget_children(budgets, account_name, date_from, date_to):
 
     for account in budgets.keys():
         if account.startswith(account_name):
-            currency_dict += Counter(
+            currency_dict.update(
                 calculate_budget(budgets, account, date_from, date_to))
-    return dict(currency_dict)
+    return currency_dict
