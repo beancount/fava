@@ -141,15 +141,13 @@ class FavaLedger():
             self.all_entries, self.errors, self.options = \
                 loader._load([(self.beancount_file_path, True)],
                              None, None, None)
-            include_path = os.path.dirname(self.beancount_file_path)
-            self._watcher.update(self.options['include'], [
-                os.path.join(include_path, path)
-                for path in self.options['documents']])
+            self.account_types = get_account_types(self.options)
+            self._watcher.update(*self.paths_to_watch())
         else:
             self.all_entries, self.errors, self.options = \
                 loader.load_file(self.beancount_file_path)
+            self.account_types = get_account_types(self.options)
         self.price_map = prices.build_price_map(self.all_entries)
-        self.account_types = get_account_types(self.options)
         self.all_root_account = realization.realize(self.all_entries,
                                                     self.account_types)
         if self.options['render_commas']:
@@ -195,6 +193,19 @@ class FavaLedger():
         if self._filters['time']:
             self._date_first = self._filters['time'].begin_date
             self._date_last = self._filters['time'].end_date
+
+    def paths_to_watch(self):
+        """The paths to included files and document directories.
+
+        Returns:
+            A tuple (files, directories).
+        """
+        include_path = os.path.dirname(self.beancount_file_path)
+        return self.options['include'], [
+            os.path.normpath(os.path.join(include_path, path, account))
+            for account in self.account_types
+            for path in self.options['documents']
+        ]
 
     def changed(self):
         """Check if the file needs to be reloaded.

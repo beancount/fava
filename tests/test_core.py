@@ -1,3 +1,4 @@
+import os
 import pytest
 
 from fava.core import FavaAPIException
@@ -14,6 +15,26 @@ def test_apiexception():
 def test_attributes(example_ledger):
     assert len(example_ledger.attributes.accounts) == 61
     assert 'Assets' not in example_ledger.attributes.accounts
+
+
+def test_paths_to_watch(example_ledger):
+    assert example_ledger.paths_to_watch() == (
+        [example_ledger.beancount_file_path], []
+    )
+    documents = example_ledger.options['documents']
+    example_ledger.options['documents'] = ['folder']
+    base = os.path.dirname(example_ledger.beancount_file_path) + '/folder'
+    assert example_ledger.paths_to_watch() == (
+        [example_ledger.beancount_file_path],
+        [
+            base + '/Assets',
+            base + '/Liabilities',
+            base + '/Equity',
+            base + '/Income',
+            base + '/Expenses',
+        ]
+    )
+    example_ledger.options['documents'] = documents
 
 
 def test_account_metadata(example_ledger):
