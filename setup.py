@@ -34,6 +34,7 @@ setup(
         ]
     },
     install_requires=[
+        'Babel<2.5.0',
         'beancount>=2.0b15',
         'click',
         'markdown2>=2.3.0',

@@ -52,7 +52,7 @@ translations-push:
 translations-fetch:
 	contrib/scripts.py download_translations
 
-pyinstaller: dist/fava fava/static/gen/app.js
+pyinstaller: fava/static/gen/app.js dist/fava
 dist/fava: fava
 	pyinstaller --clean --onefile contrib/pyinstaller.spec
 

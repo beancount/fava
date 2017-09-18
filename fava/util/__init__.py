@@ -5,14 +5,10 @@ import itertools
 import logging
 import os
 import re
-import sys
 import unicodedata
 import time
 
-# get correct path when compiled with PyInstaller
-BASEPATH = getattr(sys, '_MEIPASS',
-                   os.path.realpath(
-                       os.path.join(os.path.dirname(__file__), '..')))
+BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 
 def filter_api_changed(record):
@@ -30,7 +26,7 @@ def setup_logging():
 
 
 def resource_path(relative_path):
-    """Get absolute path to resource, necessary for PyInstaller."""
+    """Get absolute path to resource."""
     return os.path.join(BASEPATH, relative_path)
 
 

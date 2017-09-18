@@ -10,10 +10,12 @@ for _, name, __ in pkgutil.walk_packages(beancount.__path__, beancount.__name__ 
         hidden_imports.append(name)
 
 data_files = [
-    ('../fava/docs', 'docs'),
-    ('../fava/static/gen', 'static/gen'),
-    ('../fava/templates', 'templates'),
+    ('../fava/docs', 'fava/docs'),
+    ('../fava/static/gen', 'fava/static/gen'),
+    ('../fava/templates', 'fava/templates'),
+    ('../fava/translations', 'fava/translations'),
 ]
+
 
 a = Analysis(['../fava/cli.py'],
              pathex=['.'],
