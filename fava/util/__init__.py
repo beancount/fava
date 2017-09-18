@@ -2,6 +2,7 @@
 
 import functools
 import itertools
+import logging
 import os
 import re
 import sys
@@ -12,6 +13,20 @@ import time
 BASEPATH = getattr(sys, '_MEIPASS',
                    os.path.realpath(
                        os.path.join(os.path.dirname(__file__), '..')))
+
+
+def filter_api_changed(record):
+    """Filter out LogRecords for requests that poll for changes."""
+    return not record.msg.endswith('api/changed/ HTTP/1.1" 200 -')
+
+
+def setup_logging():
+    """Setup logging for Fava."""
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(message)s',
+    )
+    logging.getLogger('werkzeug').addFilter(filter_api_changed)
 
 
 def resource_path(relative_path):

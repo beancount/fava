@@ -32,9 +32,11 @@ from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException, FilterException
 from fava.docs import HELP_PAGES
 from fava.json_api import json_api
-from fava.util import slugify, resource_path
+from fava.util import slugify, resource_path, setup_logging
 from fava.util.excel import HAVE_EXCEL
 
+
+setup_logging()
 app = Flask(  # pylint: disable=invalid-name
     __name__,
     template_folder=resource_path('templates'),
