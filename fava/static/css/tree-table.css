@@ -156,10 +156,10 @@
 
   & .budget {
     margin-right: 4px;
+    color: var(--color-budget-zero);
 
-    &.budget-negative { color: var(--color-budget-negative); }
-    &.budget-positive { color: var(--color-budget-positive); }
-    &.budget-zero { color: var(--color-budget-zero); }
+    &.negative { color: var(--color-budget-negative); }
+    &.positive { color: var(--color-budget-positive); }
   }
 }
 

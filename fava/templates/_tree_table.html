@@ -75,15 +75,11 @@
 {% endmacro %}
 
 {% macro render_budget(budget, currency, number=0) %}
-  {% if budget %}
-    {% if currency in budget %}
-      {% set diff = budget[currency] - number %}
-      <span class="budget budget-{% if diff > 0 %}positive{% else %}{% if diff < 0 %}negative{% else %}zero{% endif %}{% endif %}" title="{{ budget[currency]|format_currency(currency) }} {{ currency }}">
-        ({{ diff|format_currency(currency, show_if_zero=True) }}{{ ' '+currency if not number else '' }})
-      </span>
-    {% else %}
-      <span class="budget no-budget"></span>
-    {% endif %}
+  {% if currency in budget %}
+    {% set diff = budget[currency] - number %}
+    <span class="budget {% if diff > 0 %}positive{% elif diff < 0 %}negative{% endif %}" title="{{ budget[currency]|format_currency(currency) }} {{ currency }}">
+      ({{ diff|format_currency(currency, show_if_zero=True) }}{{ ' '+currency if not number else '' }})
+    </span>
   {% endif %}
 {% endmacro %}
 
@@ -126,26 +122,22 @@
                     <span class="number">{{ pos.units|format_amount }}</span>
                 </span>
             {% endfor %}
-            {% if budget %}
-              {% for currency, number in budget.items() if currency not in balance.currencies() %}
-                <span class="balance">
-                {{ render_budget(budget, currency) }}
-                </span>
-              {% endfor %}
-            {% endif %}
+            {% for currency, number in budget.items() if currency not in balance.currencies() %}
+              <span class="balance">
+              {{ render_budget(budget, currency) }}
+              </span>
+            {% endfor %}
             {% for pos in balance_children %}
                 <span class="balance-children">
                     {{ render_budget(budget_children, pos.units.currency, pos.units.number) }}
                     <span class="number">{{ pos.units|format_amount }}</span>
                 </span>
             {% endfor %}
-            {% if budget_children %}
-              {% for currency, number in budget_children.items() if currency not in balance_children.currencies() %}
-                <span class="balance-children">
-                {{ render_budget(budget_children, currency) }}
-                </span>
-              {% endfor %}
-            {% endif %}
+            {% for currency, number in budget_children.items() if currency not in balance_children.currencies() %}
+              <span class="balance-children">
+              {{ render_budget(budget_children, currency) }}
+              </span>
+            {% endfor %}
             </a>
         </span>
     {% endfor %}
