@@ -22,3 +22,5 @@ node_modules
 fava/translations/messages.pot
 
 .DS_Store
+venv
+.vscode
