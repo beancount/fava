@@ -39,6 +39,12 @@ run from source like so (more details `here <http://furius.ca/beancount/doc/inst
     . venv/bin/activate
     pip install --editable .
 
+If you want to start the server as you would normally you can use `python fava/cli.py $BEANCOUNT_FILES`.
+
+You can run the test suite using `make test`.
+Note that this requires `tox` to be installed in your virtualenv. You can set it up with `pip install tox`.
+
+
 Contributions are very welcome, just open a PR on `Github
 <https://github.com/beancount/fava/pulls>`__.
 
