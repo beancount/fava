@@ -367,6 +367,9 @@ class FavaLedger():
            - Render all types of entries
            - Take into account the Journal view filters
         """
+        currencies = ['"operating_currency" "{}"'.format(currency)
+                      for currency in self.options['operating_currency']]
+
         return """;; -*- mode: org; mode: beancount; -*-
 
 option "title" "{title} - Journal Export - {date}"
@@ -380,20 +383,18 @@ plugin "beancount.plugins.auto_accounts"
 
 {entries}
 
-""".format(
-    title=self.options['title'],
-    date=datetime.datetime.now(),
-    currencies="\n".join(['"operating_currency" "{}"'.format(currency)
-            for currency in self.options['operating_currency']]),
-    name_assets=self.options["name_assets"],
-    name_liabilities=self.options["name_liabilities"],
-    name_equity=self.options["name_equity"],
-    name_income=self.options["name_income"],
-    name_expenses=self.options["name_expenses"],
-    entries='\n\n'.join([get_entry_slice(entry)[0]
-                         for entry in self.entries
-                             if isinstance(entry, (Balance, Transaction))
-                             and entry.meta['filename'] != '<summarize>']))
+""".format(title=self.options['title'],
+           date=datetime.datetime.now(),
+           currencies="\n".join(currencies),
+           name_assets=self.options["name_assets"],
+           name_liabilities=self.options["name_liabilities"],
+           name_equity=self.options["name_equity"],
+           name_income=self.options["name_income"],
+           name_expenses=self.options["name_expenses"],
+           entries='\n\n'.join([get_entry_slice(entry)[0]
+                                for entry in self.entries
+                                if isinstance(entry, (Balance, Transaction))
+                                and entry.meta['filename'] != '<summarize>']))
 
     def commodity_pairs(self):
         """List pairs of commodities.

@@ -30,7 +30,6 @@ from beancount.utils.text_utils import replace_numbers
 from fava import template_filters
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
-from fava.core.file import get_entry_slice
 from fava.core.helpers import FavaAPIException, FilterException
 from fava.docs import HELP_PAGES
 from fava.json_api import json_api
@@ -278,12 +277,14 @@ def download_query(result_format):
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
+
 @app.route('/<bfile>/download-journal/')
 def download_journal():
     """Download a Journal file."""
     filename = "journal_{}.beancount".format(datetime.datetime.now())
     data = BytesIO(bytes(g.ledger.render_journal(), 'utf8'))
     return send_file(data, as_attachment=True, attachment_filename=filename)
+
 
 @app.route('/<bfile>/help/')
 @app.route('/<bfile>/help/<string:page_slug>/')
