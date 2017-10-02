@@ -355,6 +355,46 @@ class FavaLedger():
         source_slice, sha256sum = get_entry_slice(entry)
         return entry, balances, source_slice, sha256sum
 
+    def render_journal(self):
+        """Beancount file for the current filtered entries.
+
+        Returns:
+           A string with the rendered beancount file for the current set of
+           entries. The file includes basic options and Balance and Transaction
+           entries, so it can be used as a "standalone" Beancount file.
+
+        TODO:
+           - Render all types of entries
+           - Take into account the Journal view filters
+        """
+        return """;; -*- mode: org; mode: beancount; -*-
+
+option "title" "{title} - Journal Export - {date}"
+{currencies}
+option "name_assets" "{name_assets}"
+option "name_liabilities" "{name_liabilities}"
+option "name_equity" "{name_equity}"
+option "name_income" "{name_income}"
+option "name_expenses" "{name_expenses}"
+plugin "beancount.plugins.auto_accounts"
+
+{entries}
+
+""".format(
+    title=self.options['title'],
+    date=datetime.datetime.now(),
+    currencies="\n".join(['"operating_currency" "{}"'.format(currency)
+            for currency in self.options['operating_currency']]),
+    name_assets=self.options["name_assets"],
+    name_liabilities=self.options["name_liabilities"],
+    name_equity=self.options["name_equity"],
+    name_income=self.options["name_income"],
+    name_expenses=self.options["name_expenses"],
+    entries='\n\n'.join([get_entry_slice(entry)[0]
+                         for entry in self.entries
+                             if isinstance(entry, (Balance, Transaction))
+                             and entry.meta['filename'] != '<summarize>']))
+
     def commodity_pairs(self):
         """List pairs of commodities.
 

@@ -29,24 +29,32 @@
   'discovered': 'd d',
   'statement': 'd s',
 } %}
-<form id="entry-filters" class="journal-entry-filters wide-form">
-  {% for type in entry_types %}
-    <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
-    {% if type == 'transaction' %}
-      {% for txn_type in transaction_type_buttons %}
-        <button type="button" title="{{ txn_type.2 }}" data-type="{{ txn_type.0 }}" data-key="{{ keyboard_shortcuts[txn_type.0] }}" class="small txn-toggle{% if txn_type.0 not in g.journal_show or 'transaction' not in g.journal_show %} inactive{% endif %}">{{ txn_type.1 }}</button>
-      {% endfor %}
-    {% elif type == 'custom' %}
-      <button type="button" title="{{ _('Budget entries') }}" data-type="budget" data-key="{{ keyboard_shortcuts['budget'] }}" class="small custom-toggle{% if 'budget' not in g.journal_show or 'custom' not in g.journal_show %} inactive{% endif %}">B</button>
-    {% elif type == 'document' %}
-      {% for doc_type in document_type_buttons %}
-        <button type="button" title="{{ doc_type.2 }}" data-type="{{ doc_type.0 }}" data-key="{{ keyboard_shortcuts[doc_type.0] }}" class="small doc-toggle{% if doc_type not in g.journal_show or 'document' not in g.journal_show %} inactive{% endif %}">{{ doc_type.1 }}</button>
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-  <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
-  <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
-</form>
+<div class="journal-menu">
+  <form action="{{ url_for('download_journal') }}">
+    <button type="submit" title="Export">Export</button>
+    {% for arg in request.args %}
+      <input type="hidden" name="{{ arg }}" value="{{ request.args.get(arg) }}" />
+    {% endfor %}
+  </form>
+  <form id="entry-filters" class="journal-entry-filters wide-form">
+    {% for type in entry_types %}
+      <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
+      {% if type == 'transaction' %}
+        {% for txn_type in transaction_type_buttons %}
+          <button type="button" title="{{ txn_type.2 }}" data-type="{{ txn_type.0 }}" data-key="{{ keyboard_shortcuts[txn_type.0] }}" class="small txn-toggle{% if txn_type.0 not in g.journal_show or 'transaction' not in g.journal_show %} inactive{% endif %}">{{ txn_type.1 }}</button>
+        {% endfor %}
+      {% elif type == 'custom' %}
+        <button type="button" title="{{ _('Budget entries') }}" data-type="budget" data-key="{{ keyboard_shortcuts['budget'] }}" class="small custom-toggle{% if 'budget' not in g.journal_show or 'custom' not in g.journal_show %} inactive{% endif %}">B</button>
+      {% elif type == 'document' %}
+        {% for doc_type in document_type_buttons %}
+          <button type="button" title="{{ doc_type.2 }}" data-type="{{ doc_type.0 }}" data-key="{{ keyboard_shortcuts[doc_type.0] }}" class="small doc-toggle{% if doc_type not in g.journal_show or 'document' not in g.journal_show %} inactive{% endif %}">{{ doc_type.1 }}</button>
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+    <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
+    <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
+  </form>
+</div>
 
 {% set account_url = url_for('account', name='REPLACEME') %}
 

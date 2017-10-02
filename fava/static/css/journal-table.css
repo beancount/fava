@@ -1,3 +1,11 @@
+.journal-menu {
+  display: flex;
+
+  & button:first-child {
+    margin-left: 0;
+  }
+}
+
 .journal-entry-filters {
   & button {
     margin-bottom: 5px;
