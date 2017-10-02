@@ -24,10 +24,10 @@ matrix:
       sudo: required
       before_install: "sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils"
       install: |
-        pip install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
         . $HOME/.nvm/nvm.sh
         nvm install stable
         nvm use stable
+        pip install pyinstaller
         pip install -e .
       script: |
         make
@@ -39,7 +39,7 @@ matrix:
       os: osx
       install: |
         brew install python3
-        pip3 install https://github.com/pyinstaller/pyinstaller/archive/develop.zip
+        pip3 install pyinstaller
         pip3 install -e .
       script: |
         make
