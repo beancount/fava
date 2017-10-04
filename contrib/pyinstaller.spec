@@ -12,7 +12,6 @@ data_files = [
     ('../fava/translations', 'fava/translations'),
 ]
 
-
 a = Analysis(
     ['../fava/cli.py'],
     pathex=['.'],
@@ -31,12 +30,20 @@ pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 exe = EXE(
     pyz,
     a.scripts,
-    a.binaries,
-    a.zipfiles,
-    a.datas,
-    name='fava',
+    exclude_binaries=True,
+    name='cli',
     debug=False,
     strip=False,
     upx=True,
     console=True,
+)
+
+coll = COLLECT(
+    exe,
+    a.binaries,
+    a.zipfiles,
+    a.datas,
+    strip=False,
+    upx=True,
+    name='fava',
 )

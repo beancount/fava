@@ -54,7 +54,7 @@ translations-fetch:
 
 pyinstaller: fava/static/gen/app.js dist/fava
 dist/fava: fava
-	pyinstaller --clean --onefile contrib/pyinstaller.spec
+	pyinstaller --clean contrib/pyinstaller.spec
 
 # Build and upload the website.
 gh-pages:
