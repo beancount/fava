@@ -3,6 +3,8 @@ import os.path
 from beancount.core import realization
 from flask import g
 
+from fava.core.inventory import CounterInventory
+from fava.core.tree import TreeNode
 from fava.template_filters import (account_level, basename, get_or_create,
                                    last_segment, uptodate_eligible,
                                    should_show, should_collapse_account)
@@ -34,15 +36,18 @@ def test_get_or_create(example_ledger):
 def test_should_show(app):
     with app.test_request_context('/'):
         app.preprocess_request()
-        assert should_show(g.ledger.root_account) is True
+        assert should_show(g.ledger.root_tree.get('')) is True
+        assert should_show(g.ledger.root_tree.get('Expenses')) is True
 
-        assert should_show(g.ledger.root_account) is True
+        account = TreeNode('name')
+        assert should_show(account) is False
+        account.balance_children = CounterInventory({('USD', None): 9})
+        assert should_show(account) is True
     with app.test_request_context('/?time=2100'):
         app.preprocess_request()
         assert not g.ledger.fava_options['show-accounts-with-zero-balance']
-        assert should_show(g.ledger.root_account) is True
-        empty_account = realization.get(g.ledger.root_account, 'Expenses')
-        assert should_show(empty_account) is False
+        assert should_show(g.ledger.root_tree.get('')) is True
+        assert should_show(g.ledger.root_tree.get('Expenses')) is False
 
 
 def test_uptodate_eligible(app):

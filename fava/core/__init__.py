@@ -12,7 +12,6 @@ from beancount.core.compare import hash_entry
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
                                  Document, Balance, TxnPosting, Transaction,
                                  Event, Custom)
-from beancount.ops import summarize
 from beancount.parser.options import get_account_types
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
@@ -29,6 +28,7 @@ from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
+from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.ext import find_extensions
 
@@ -94,7 +94,7 @@ class FavaLedger():
         'all_entries', 'all_root_account', 'beancount_file_path',
         '_date_first', '_date_last', 'entries', 'errors',
         'fava_options', '_filters', '_is_encrypted', 'options', 'price_map',
-        'root_account', '_watcher'] + MODULES
+        'root_account', 'root_tree', '_watcher'] + MODULES
 
     def __init__(self, path):
         #: The path to the main Beancount file.
@@ -211,6 +211,7 @@ class FavaLedger():
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
+        self.root_tree = Tree(self.entries)
 
         self._date_first, self._date_last = \
             getters.get_min_max_dates(self.entries, (Transaction))
@@ -270,10 +271,11 @@ class FavaLedger():
         return get_account_sign(account_name, self.account_types)
 
     @property
-    def root_account_closed(self):
-        """A root account where closing entries have been generated."""
-        closing_entries = summarize.cap_opt(self.entries, self.options)
-        return realization.realize(closing_entries)
+    def root_tree_closed(self):
+        """A root tree for the balance sheet."""
+        tree = Tree(self.entries)
+        tree.cap(self.options, 'Unrealized')
+        return tree
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """Balances by interval.

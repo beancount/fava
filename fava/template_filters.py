@@ -86,8 +86,10 @@ def format_amount(amount):
     """Format an amount to string using the DisplayContext."""
     if not amount:
         return ''
-    return "{} {}".format(
-        format_currency(amount.number, amount.currency), amount.currency)
+    number, currency = amount
+    if not number:
+        return ''
+    return "{} {}".format(format_currency(number, currency), currency)
 
 
 def hash_entry(entry):
@@ -143,22 +145,21 @@ def show_journal_entry(entry):
 
 def should_show(account):
     """Determine whether the account should be shown."""
-    show_this_account = False
-    # check if it's a leaf account
-    if not account or account.txn_postings:
-        show_this_account = True
-        if (not g.ledger.fava_options['show-closed-accounts'] and
-                g.ledger.account_is_closed(account.account)):
-            show_this_account = False
-        if (not g.ledger.fava_options['show-accounts-with-zero-balance'] and
-                account.balance.is_empty()):
-            show_this_account = False
-        if (not g.ledger.fava_options['show-accounts-with-zero-transactions']
-                and not any(
-                    isinstance(t, data.TxnPosting)
-                    for t in account.txn_postings)):
-            show_this_account = False
-    return show_this_account or any(should_show(a) for a in account.values())
+    if (not account.balance_children.is_empty()
+            or any(should_show(a) for a in account.children)):
+        return True
+    if account.name not in g.ledger.accounts:
+        return False
+    if (not g.ledger.fava_options['show-closed-accounts']
+            and g.ledger.account_is_closed(account.name)):
+        return False
+    if (not g.ledger.fava_options['show-accounts-with-zero-balance']
+            and account.balance.is_empty()):
+        return False
+    if (not g.ledger.fava_options['show-accounts-with-zero-transactions']
+            and not account.has_txns):
+        return False
+    return True
 
 
 def basename(file_path):

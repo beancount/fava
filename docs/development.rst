@@ -95,6 +95,31 @@ fava.core.helpers
 
 .. automodule:: fava.core.helpers
 
+fava.core.ingest
+~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.ingest
+
+fava.core.inventory
+~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.inventory
+
+fava.core.misc
+~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.misc
+
+fava.core.query_shell
+~~~~~~~~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.query_shell
+
+fava.core.tree
+~~~~~~~~~~~~~~
+
+.. automodule:: fava.core.tree
+
 fava.core.watcher
 ~~~~~~~~~~~~~~~~~
 

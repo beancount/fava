@@ -9,5 +9,5 @@
         {{ charts.hierarchy(ledger.options['name_{}'.format(base_account)]) }}
     {% endfor %}
 
-    {{ tree_table.tree(ledger.root_account, totals=False) }}
+    {{ tree_table.tree(ledger.root_tree.get(''), totals=False) }}
 {% endblock %}

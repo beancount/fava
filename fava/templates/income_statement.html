@@ -15,11 +15,11 @@
     <div class="row">
         <div class="column">
             <h3>{{ ledger.options['name_income'] }}</h3>
-            {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_income'])) }}
+            {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_income'])) }}
         </div>
         <div class="column">
             <h3>{{ ledger.options['name_expenses'] }}</h3>
-            {{ tree_table.tree(ledger.root_account|get_or_create(ledger.options['name_expenses'])) }}
+            {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_expenses'])) }}
         </div>
     </div>
 {% endblock %}
