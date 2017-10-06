@@ -184,3 +184,8 @@ Beancount (see above) will be tagged with `#statement`, linked to the
 corresponding transaction and can be filtered in the Journal:
 
     plugin "fava.plugins.link_statements"
+
+### Exporting a Journal view
+
+When displaying a Journal, including a filtered Journal, the entries displayed
+can be downloaded in Beancount format by clicking the `Export` button.
