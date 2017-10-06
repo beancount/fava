@@ -257,6 +257,7 @@ button,
 .button:link,
 .button:visited {
   color: var(--color-background);
+  height: 100%;
 }
 
 .hidden.hidden {

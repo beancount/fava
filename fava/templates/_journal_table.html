@@ -30,12 +30,7 @@
   'statement': 'd s',
 } %}
 <div class="journal-menu">
-  <form action="{{ url_for('download_journal') }}">
-    <button type="submit" title="Export">Export</button>
-    {% for arg in request.args %}
-      <input type="hidden" name="{{ arg }}" value="{{ request.args.get(arg) }}" />
-    {% endfor %}
-  </form>
+  <a href="{{ url_for('download_journal') }}" class="button" title="{{ _('Export Journal as a Beancount file') }}" data-remote>{{ _('Export') }}</a>
   <form id="entry-filters" class="journal-entry-filters wide-form">
     {% for type in entry_types %}
       <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
