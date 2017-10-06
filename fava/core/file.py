@@ -110,6 +110,24 @@ class FileModule(FavaModule):
                          self.ledger.fava_options['insert-entry'])
             self.ledger.extensions.run_hook('after_insert_entry', entry)
 
+    def render_entries(self, entries):
+        """Return entries in Beancount format.
+
+        Only renders entries that are in the original Beancount file(s).
+
+        Args:
+            entries: A list of entries.
+
+        Returns:
+            A string representing the entries rendered in Beancount format.
+
+        """
+        entries = [get_entry_slice(entry)[0] for entry in entries
+                   if isinstance(entry, (data.Balance, data.Transaction))
+                   and entry in self.ledger.all_entries]
+
+        return "\n\n".join(entries) + "\n"
+
 
 def incomplete_sortkey(entry):
     """Sortkey for entries that might have incomplete metadata."""

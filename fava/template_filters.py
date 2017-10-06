@@ -145,12 +145,3 @@ def uptodate_eligible(account_name):
     """Determine whether uptodate-indicators should be shown for an account."""
     return g.ledger.account_metadata(account_name).get(
         'fava-uptodate-indication') == 'True'
-
-
-def rendered_entries(entries):
-    """Render the entries provided."""
-    from fava.core.file import get_entry_slice
-
-    return [get_entry_slice(entry)[0] for entry in entries
-            if isinstance(entry, (data.Balance, data.Transaction))
-            and entry.meta['filename'] != '<summarize>']

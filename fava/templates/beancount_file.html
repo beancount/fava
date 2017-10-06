@@ -13,7 +13,4 @@ option "name_income" "{{ ledger.options.name_income }}"
 option "name_expenses" "{{ ledger.options.name_expenses }}"
 plugin "beancount.plugins.auto_accounts"
 
-{% for entry in ledger.entries|rendered_entries %}
-{{ entry|safe }}
-
-{% endfor %}
+{{ ledger.file.render_entries(ledger.entries)|safe }}
