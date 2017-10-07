@@ -173,3 +173,20 @@ def test_insert_entry_transaction(tmpdir):
           Expenses:Food                10.00 USD
 
     """)
+
+
+def test_render_entries(example_ledger):
+    entry1 = example_ledger.get_entry('4af0865b1371c1b5576e9ff7f7d20dc9')
+    entry2 = example_ledger.get_entry('85f3ba57bf52dc1bd6c77ef3510223ae')
+
+    file_content = dedent("""\
+        2016-04-09 * "Uncle Boons" "" #trip-new-york-2016
+          Liabilities:US:Chase:Slate                       -52.22 USD
+          Expenses:Food:Restaurant                          52.22 USD
+
+        2016-05-04 * "BANK FEES" "Monthly bank fee"
+          Assets:US:BofA:Checking                           -4.00 USD
+          Expenses:Financial:Fees                            4.00 USD
+    """)
+
+    assert file_content == example_ledger.file.render_entries([entry1, entry2])
