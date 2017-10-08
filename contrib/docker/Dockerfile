@@ -10,6 +10,7 @@ RUN cd /root \
         && apk add --update $BUILDDEPS $RUNDEPS \
         && hg clone --config hostfingerprints.bitbucket.org=$FINGERPRINT https://bitbucket.org/blais/beancount \
         && (cd beancount && hg log -l1) \
+        && rm -rf ./beancount/.hg \
         && python3 -mpip install ./beancount \
         && git clone https://github.com/beancount/fava.git \
         && (cd fava && git log -1) \
