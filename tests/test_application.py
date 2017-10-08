@@ -115,6 +115,7 @@ def test_download_journal(app, test_client):
         2016-05-07 * "Jewel of Morroco" "Eating out alone"
           Liabilities:US:Chase:Slate                       -25.30 USD
           Expenses:Food:Restaurant                          25.30 USD
+
     """)
 
     with app.test_request_context():
