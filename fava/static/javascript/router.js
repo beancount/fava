@@ -49,7 +49,8 @@ class Router {
           && window.location.search === this.state.search) {
         handleHash();
         this.updateState();
-      } else {
+      } else if (window.location.pathname !== this.state.pathname
+                || window.location.search !== this.state.search) {
         this.loadURL(window.location.href, false);
       }
     });
