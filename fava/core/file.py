@@ -126,7 +126,7 @@ class FileModule(FavaModule):
                    if isinstance(entry, (data.Balance, data.Transaction))
                    and entry in self.ledger.all_entries]
 
-        return "\n\n".join(entries) + "\n"
+        return "\n\n".join(entries) + "\n\n"
 
 
 def incomplete_sortkey(entry):
