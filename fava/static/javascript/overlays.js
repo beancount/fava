@@ -9,7 +9,9 @@ export function closeOverlay() {
   $$('.overlay-wrapper').forEach((el) => {
     el.classList.remove('shown');
   });
-  window.location.hash = '';
+  if (window.location.hash) {
+    window.location.hash = '';
+  }
 }
 
 // Show various overlays depending on the hash.
