@@ -155,8 +155,8 @@
   }
 
   & .budget {
-    margin-right: 4px;
     color: var(--color-budget-zero);
+    margin-right: 4px;
 
     &.negative { color: var(--color-budget-negative); }
     &.positive { color: var(--color-budget-positive); }
