@@ -147,9 +147,8 @@ def should_show(account):
     # check if it's a leaf account
     if not account or account.txn_postings:
         show_this_account = True
-        if (not g.ledger.fava_options['show-closed-accounts'] and isinstance(
-                realization.find_last_active_posting(account.txn_postings),
-                data.Close)):
+        if (not g.ledger.fava_options['show-closed-accounts'] and
+                g.ledger.account_is_closed(account.account)):
             show_this_account = False
         if (not g.ledger.fava_options['show-accounts-with-zero-balance'] and
                 account.balance.is_empty()):
@@ -169,11 +168,11 @@ def basename(file_path):
 
 def should_collapse_account(account_name):
     """Determine whether the children of an account should be hidden."""
-    return g.ledger.account_metadata(account_name).get(
+    return g.ledger.accounts[account_name].meta.get(
         'fava-collapse-account') == 'True'
 
 
 def uptodate_eligible(account_name):
     """Determine whether uptodate-indicators should be shown for an account."""
-    return g.ledger.account_metadata(account_name).get(
+    return g.ledger.accounts[account_name].meta.get(
         'fava-uptodate-indication') == 'True'

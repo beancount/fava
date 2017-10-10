@@ -1,5 +1,6 @@
 """This module provides the data required by Fava's reports."""
 
+import collections
 import datetime
 import os
 
@@ -32,9 +33,25 @@ from fava.core.watcher import Watcher
 from fava.ext import find_extensions
 
 
+MAXDATE = datetime.date.max
+
+
+# pylint: disable=too-few-public-methods
+class AccountData(object):
+    """Holds information about an account."""
+    __slots__ = ('meta', 'close_date')
+
+    def __init__(self):
+        #: The date on which this account is closed (or datetime.date.max).
+        self.close_date = MAXDATE
+
+        #: The metadata of the Open entry of this account.
+        self.meta = {}
+
+
+# pylint: disable=too-few-public-methods, missing-docstring
 class ExtensionModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
-    # pylint: disable=too-few-public-methods, missing-docstring
 
     def __init__(self, ledger):
         super().__init__(ledger)
@@ -73,6 +90,7 @@ class FavaLedger():
 
     __slots__ = [
         '_default_format_string', '_format_string', 'account_types',
+        'accounts',
         'all_entries', 'all_root_account', 'beancount_file_path',
         '_date_first', '_date_last', 'entries', 'errors',
         'fava_options', '_filters', '_is_encrypted', 'options', 'price_map',
@@ -128,6 +146,9 @@ class FavaLedger():
         #: A Namedtuple containing the names of the five base accounts.
         self.account_types = None
 
+        #: A dict containing information about the accounts.
+        self.accounts = collections.defaultdict(AccountData)
+
         #: A dict with all of Fava's option values.
         self.fava_options = None
 
@@ -156,6 +177,12 @@ class FavaLedger():
         else:
             self._format_string = '{:f}'
             self._default_format_string = '{:.2f}'
+
+        for entry in self.all_entries:
+            if isinstance(entry, Open):
+                self.accounts[entry.account].meta = entry.meta
+            if isinstance(entry, Close):
+                self.accounts[entry.account].close_date = entry.date
 
         self.fava_options, errors = parse_options(
             filter_type(self.all_entries, Custom))
@@ -465,18 +492,16 @@ class FavaLedger():
                     txn_posting.txn.flag != FLAG_UNREALIZED:
                 return 'yellow'
 
-    def account_metadata(self, account_name):
-        """Metadata of the account.
+    def account_is_closed(self, account_name):
+        """Check if the account is closed.
 
         Args:
             account_name: An account name.
 
         Returns:
-            Metadata of the Open entry of the account.
+            True if the account is closed before the end date of the current
+            time filter.
         """
-        real_account = realization.get_or_create(self.all_root_account,
-                                                 account_name)
-        for posting in real_account.txn_postings:
-            if isinstance(posting, Open):
-                return posting.meta
-        return {}
+        if self._filters['time']:
+            return self.accounts[account_name].close_date < self._date_last
+        return self.accounts[account_name].close_date is not MAXDATE

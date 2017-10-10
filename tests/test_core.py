@@ -38,13 +38,12 @@ def test_paths_to_watch(example_ledger):
 
 
 def test_account_metadata(example_ledger):
-    data = example_ledger.account_metadata('Assets:US:BofA')
+    data = example_ledger.accounts['Assets:US:BofA'].meta
     assert data['address'] == "123 America Street, LargeTown, USA"
     assert data['institution'] == "Bank of America"
 
-    assert not example_ledger.account_metadata('Assets')
-
-    assert not example_ledger.account_metadata('NOACCOUNT')
+    assert not example_ledger.accounts['Assets'].meta
+    assert not example_ledger.accounts['NOACCOUNT'].meta
 
 
 def test_account_uptodate_status(example_ledger):
