@@ -35,7 +35,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
   {% set balance_children = account.balance_children|cost_or_value %}
   {% set cost = account.balance|cost if g.conversion == 'at_value' else {} %}
   {% set cost_children = account.balance_children|cost if g.conversion == 'at_value' else {} %}
-  <li{{ ' class=toggled' if account.name|should_collapse_account else '' }}>
+  <li{{ ' class=toggled' if ledger.accounts[account.name].meta.get('fava-collapse-account') else '' }}>
     <p{{ ' class=has-balance' if not balance.is_empty() else '' }}>
     <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ ' has-children' if account.children else '' }}" data-account-name="{{ account.name }}">
       {{ account_macros.account_name(account.name, last_segment=True) }}
@@ -115,7 +115,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
         </p>
     </li>
 {% for account in [interval_balances[0]|get_or_create(account_name)] recursive %}
-    <li{% if account.account|should_collapse_account %} class="toggled"{% endif %}>
+    <li{{ ' class=toggled' if ledger.accounts[account.name].meta.get('fava-collapse-account') else '' }}>
         <p>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
         {{- '' if not account|length else ' has-children'}}

@@ -227,9 +227,10 @@ def index():
 @app.route('/<bfile>/account/<name>/<subreport>/')
 def account(name, subreport='journal'):
     """The account report."""
-    assert subreport in ['journal', 'balances', 'changes']
-    return render_template(
-        'account.html', account_name=name, subreport=subreport)
+    if subreport in ['journal', 'balances', 'changes']:
+        return render_template(
+            'account.html', account_name=name, subreport=subreport)
+    abort(404)
 
 
 @app.route('/<bfile>/document/', methods=['GET'])
@@ -256,7 +257,10 @@ def statement():
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')
 def holdings_by(aggregation_key):
     """The holdings report."""
-    return render_template('holdings.html', aggregation_key=aggregation_key)
+    if aggregation_key in ['account', 'currency', 'cost_currency']:
+        return render_template(
+            'holdings.html', aggregation_key=aggregation_key)
+    abort(404)
 
 
 @app.route('/<bfile>/<report_name>/')

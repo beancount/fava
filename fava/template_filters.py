@@ -97,16 +97,6 @@ def hash_entry(entry):
     return compare.hash_entry(entry)
 
 
-def last_segment(account_name):
-    """Get the last segment of an account."""
-    return account_name.split(':')[-1]
-
-
-def account_level(account_name):
-    """Get the depth of an account."""
-    return account_name.count(":") + 1
-
-
 def balance_children(account):
     """Compute the total balance of an account."""
     return realization.compute_balance(account)
@@ -165,15 +155,3 @@ def should_show(account):
 def basename(file_path):
     """Return the basename of a filepath."""
     return os.path.basename(file_path)
-
-
-def should_collapse_account(account_name):
-    """Determine whether the children of an account should be hidden."""
-    return g.ledger.accounts[account_name].meta.get(
-        'fava-collapse-account') == 'True'
-
-
-def uptodate_eligible(account_name):
-    """Determine whether uptodate-indicators should be shown for an account."""
-    return g.ledger.accounts[account_name].meta.get(
-        'fava-uptodate-indication') == 'True'

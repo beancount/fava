@@ -31,39 +31,37 @@ Click to copy the balance directives to the clipboard:
 
 {% macro account_name(account_name, last_segment=False) %}
 <a href="{{ url_for('account', name=account_name) }}" class="account">
-    {{ account_name|last_segment if last_segment else account_name }}
+  {{ account_name.split(':')[-1] if last_segment else account_name }}
 </a>
 
-{% if account_name and account_name|uptodate_eligible %}
-    {{ indicator(account_name) }}
-    {{ last_account_activity(account_name) }}
+{% if account_name and ledger.accounts[account_name].meta.get('fava-uptodate-indication') %}
+{{ indicator(account_name) }}
+{{ last_account_activity(account_name) }}
 {% endif %}
 {% endmacro %}
 
 {% macro account_name_header(account_name) %}
 <span class="droptarget" data-account-name="{{ account_name }}">
-    {% set levels = account_name|account_level %}
-    {% for level in range(0, levels) %}
-        {% set subaccount_name = account_name.rsplit(':', maxsplit=levels-loop.index)[0] %}
-        {% set subaccount_part = account_name.split(':')[level] %}
+  {% set parts = account_name.split(':') %}
+  {% for part in parts %}
+  {%- if loop.last -%}
+  {{ part }}
+  {%- else -%}
+  {%- set name = ':'.join(parts[:loop.index]) -%}
+  <a href="{{ url_for('account', name=name) }}" title="{{ name }}">{{ part }}</a>:
+  {%- endif -%}
+  {% endfor %}
 
-        {%- if loop.last -%}
-            {{ subaccount_part }}
-        {%- else -%}
-            <a href="{{ url_for('account', name=subaccount_name) }}" title="{{ subaccount_name }}">{{ subaccount_part }}</a><span class="separator">:</span>
-        {%- endif -%}
-    {% endfor %}
+  {% if account_name and ledger.accounts[account_name].meta.get('fava-uptodate-indication') %}
+  {{ indicator(account_name) }}
+  {{ last_account_activity(account_name) }}
+  {% endif %}
 
-{% if account_name and account_name|uptodate_eligible %}
-    {{ indicator(account_name) }}
-    {{ last_account_activity(account_name) }}
-{% endif %}
-
-    {% set last_entry = ledger.last_entry(account_name) %}
-    {% if last_entry %}
-    <span class="last-activity">
-        (Last entry: <a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a>)
-    </span>
-    {% endif %}
+  {% set last_entry = ledger.last_entry(account_name) %}
+  {% if last_entry %}
+  <span class="last-activity">
+    (Last entry: <a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a>)
+  </span>
+  {% endif %}
 </span>
 {% endmacro %}

@@ -5,7 +5,7 @@
 
 {% macro copy_balance_directives_text() -%}
     {% for account in ledger.attributes.accounts -%}
-        {% if account|uptodate_eligible %}
+        {% if ledger.accounts[account].meta.get('fava-uptodate-indication') %}
             {%- if ledger.account_uptodate_status(account) != "green" -%}
                 {{- account_macros.balance_directive(account) }}
             {%- endif -%}
@@ -64,7 +64,7 @@
                     {% if last_entry %}
                     <tr>
                         <td class="account"><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
-                        {% if account|uptodate_eligible %}
+                        {% if ledger.accounts[account].meta.get('fava-uptodate-indication') %}
                             <td data-sort-value="{{ status_sortorder[ledger.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
                             <td class="uptodate-indicator">{{ account_macros.last_account_activity(account) }}</td>
                         {% else %}
