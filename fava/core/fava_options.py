@@ -14,28 +14,28 @@ OptionError = namedtuple('OptionError', 'source message entry')
 InsertEntryOption = namedtuple('InsertEntryOption', 'date re filename lineno')
 
 DEFAULTS = {
-    'default-file': None,
     'account-journal-include-children': True,
     'auto-reload': False,
     'charts': True,
-    'use-external-editor': False,
-    'show-closed-accounts': False,
-    'show-accounts-with-zero-balance': True,
-    'show-accounts-with-zero-transactions': True,
-    'uptodate-indicator-grey-lookback-days': 60,
-    'upcoming-events': 7,
-    'sidebar-show-queries': 5,
+    'default-file': None,
     'editor-print-margin-column': 60,
     'extensions': [],
-    'journal-show':
-    ['transaction', 'balance', 'note', 'document', 'custom', 'budget'],
-    'journal-show-transaction': ['cleared', 'pending'],
-    'journal-show-document': ['discovered', 'statement'],
-    'language': None,
-    'interval': 'month',
-    'insert-entry': [],
     'import-config': None,
     'import-dirs': [],
+    'insert-entry': [],
+    'interval': 'month',
+    'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
+                     'budget'],
+    'journal-show-document': ['discovered', 'statement'],
+    'journal-show-transaction': ['cleared', 'pending'],
+    'language': None,
+    'show-accounts-with-zero-balance': True,
+    'show-accounts-with-zero-transactions': True,
+    'show-closed-accounts': False,
+    'sidebar-show-queries': 5,
+    'upcoming-events': 7,
+    'uptodate-indicator-grey-lookback-days': 60,
+    'use-external-editor': False,
 }
 
 BOOL_OPTS = [
@@ -50,23 +50,23 @@ BOOL_OPTS = [
 
 INT_OPTS = [
     'editor-print-margin-column',
-    'sidebar-show-queries',
-    'uptodate-indicator-grey-lookback-days',
     'upcoming-events',
+    'uptodate-indicator-grey-lookback-days',
+    'sidebar-show-queries',
 ]
 
 LIST_OPTS = [
     'extensions',
+    'import-dirs',
     'journal-show',
     'journal-show-document',
     'journal-show-transaction',
-    'import-dirs',
 ]
 
 STR_OPTS = [
-    'language',
-    'interval',
     'import-config',
+    'interval',
+    'language',
 ]
 
 
