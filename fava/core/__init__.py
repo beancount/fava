@@ -274,7 +274,7 @@ class FavaLedger():
     def root_tree_closed(self):
         """A root tree for the balance sheet."""
         tree = Tree(self.entries)
-        tree.cap(self.options, 'Unrealized')
+        tree.cap(self.options, self.fava_options['unrealized'])
         return tree
 
     def interval_balances(self, interval, account_name, accumulate=False):

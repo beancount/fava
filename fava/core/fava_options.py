@@ -33,6 +33,7 @@ DEFAULTS = {
     'show-accounts-with-zero-transactions': True,
     'show-closed-accounts': False,
     'sidebar-show-queries': 5,
+    'unrealized': 'Unrealized',
     'upcoming-events': 7,
     'uptodate-indicator-grey-lookback-days': 60,
     'use-external-editor': False,
@@ -67,6 +68,7 @@ STR_OPTS = [
     'import-config',
     'interval',
     'language',
+    'unrealized',
 ]
 
 
