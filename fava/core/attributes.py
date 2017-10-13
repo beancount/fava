@@ -1,6 +1,6 @@
 """Attributes for auto-completion."""
 
-from beancount.core import getters, realization
+from beancount.core import getters
 from beancount.core.data import Transaction
 from beancount.utils.misc_utils import filter_type
 
@@ -25,7 +25,7 @@ class AttributesModule(FavaModule):
         self.years = list(getters.get_active_years(all_entries))[::-1]
 
         account_ranker = ExponentialDecayRanker(
-            self.list_accounts(active_only=True))
+            sorted(self.ledger.accounts.keys()))
         currency_ranker = ExponentialDecayRanker(
             self.ledger.options['commodities'])
         payee_ranker = ExponentialDecayRanker()
@@ -42,15 +42,6 @@ class AttributesModule(FavaModule):
         self.accounts = account_ranker.sort()
         self.currencies = currency_ranker.sort()
         self.payees = payee_ranker.sort()
-
-    def list_accounts(self, active_only=False):
-        """List all sub-accounts of the root account."""
-        accounts = [child_account.account
-                    for child_account in
-                    realization.iter_children(self.ledger.all_root_account)
-                    if not active_only or child_account.txn_postings]
-
-        return accounts if active_only else accounts[1:]
 
     def payee_accounts(self, payee):
         """Rank accounts for the given payee."""

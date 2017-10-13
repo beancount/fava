@@ -292,7 +292,7 @@ class FavaLedger():
         """
         min_accounts = [
             account for account in
-            self.attributes.list_accounts(self.all_root_account)
+            self.accounts.keys()
             if account.startswith(account_name)]
 
         interval_tuples = list(
