@@ -8,22 +8,24 @@
 .. image:: https://img.shields.io/travis/beancount/fava.svg
    :target: https://travis-ci.org/beancount/fava?branch=master
 
-Fava is a web interface for the double-entry bookkeeping software `beancount
+Fava is a web interface for the double-entry bookkeeping software `Beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
 
 Check out the online `demo <https://fava.pythonanywhere.com>`__ and learn more
-about Fava on the `Web Site <https://beancount.github.io/fava/>`__.
+about Fava on the `website <https://beancount.github.io/fava/>`__.
 
 The `Getting Started
 <https://beancount.github.io/fava/usage.html>`__ guide details the installation
-and how to get started with beancount.  If you are already familiar with
-beancount, you can get started with Fava::
+and how to get started with Beancount.  If you are already familiar with
+Beancount, you can get started with Fava::
 
     pip3 install fava
     fava ledger.beancount
 
 and visit the web interface at `http://localhost:5000
-<http://localhost:5000>`__.
+<http://localhost:5000>`__.  Alternatively, for the GUI version of Fava, head
+to the `Releases <https://github.com/beancount/fava/releases>`__ page on Github
+to download the latest release for your platform.
 
 If you want to hack on Fava or run a development version, see the
 `Development <https://beancount.github.io/fava/development.html>`__ page on the
