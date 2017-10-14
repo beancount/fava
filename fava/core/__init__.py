@@ -1,6 +1,5 @@
 """This module provides the data required by Fava's reports."""
 
-import collections
 import datetime
 import os
 
@@ -47,6 +46,19 @@ class AccountData(object):
 
         #: The metadata of the Open entry of this account.
         self.meta = {}
+
+
+class _AccountDict(dict):
+    """Account info dictionary."""
+    EMPTY = AccountData()
+
+    def __missing__(self, key):
+        return self.EMPTY
+
+    def setdefault(self, key):
+        if key not in self:
+            self[key] = AccountData()
+        return self[key]
 
 
 # pylint: disable=too-few-public-methods, missing-docstring
@@ -147,7 +159,7 @@ class FavaLedger():
         self.account_types = None
 
         #: A dict containing information about the accounts.
-        self.accounts = collections.defaultdict(AccountData)
+        self.accounts = _AccountDict()
 
         #: A dict with all of Fava's option values.
         self.fava_options = None
@@ -180,9 +192,9 @@ class FavaLedger():
 
         for entry in self.all_entries:
             if isinstance(entry, Open):
-                self.accounts[entry.account].meta = entry.meta
+                self.accounts.setdefault(entry.account).meta = entry.meta
             if isinstance(entry, Close):
-                self.accounts[entry.account].close_date = entry.date
+                self.accounts.setdefault(entry.account).close_date = entry.date
 
         self.fava_options, errors = parse_options(
             filter_type(self.all_entries, Custom))
