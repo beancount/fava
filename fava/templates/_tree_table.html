@@ -115,7 +115,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
         </p>
     </li>
 {% for account in [interval_balances[0]|get_or_create(account_name)] recursive %}
-    <li{{ ' class=toggled' if ledger.accounts[account.name].meta.get('fava-collapse-account') else '' }}>
+    <li{{ ' class=toggled' if ledger.accounts[account.account].meta.get('fava-collapse-account') else '' }}>
         <p>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
         {{- '' if not account|length else ' has-children'}}
