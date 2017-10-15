@@ -2,7 +2,6 @@
 
 from beancount.core import getters
 from beancount.core.data import Transaction
-from beancount.utils.misc_utils import filter_type
 
 from fava.core.helpers import FavaModule
 from fava.util.ranking import ExponentialDecayRanker
@@ -30,7 +29,8 @@ class AttributesModule(FavaModule):
             self.ledger.options['commodities'])
         payee_ranker = ExponentialDecayRanker()
 
-        for txn in filter_type(all_entries, Transaction):
+        transactions = self.ledger.all_entries_by_type[Transaction]
+        for txn in transactions:
             if txn.payee:
                 payee_ranker.update(txn.payee, txn.date)
             for posting in txn.postings:
@@ -46,7 +46,8 @@ class AttributesModule(FavaModule):
     def payee_accounts(self, payee):
         """Rank accounts for the given payee."""
         account_ranker = ExponentialDecayRanker(self.accounts)
-        for txn in filter_type(self.ledger.all_entries, Transaction):
+        transactions = self.ledger.all_entries_by_type[Transaction]
+        for txn in transactions:
             if txn.payee == payee:
                 for posting in txn.postings:
                     account_ranker.update(posting.account, txn.date)

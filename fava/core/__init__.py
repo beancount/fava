@@ -1,5 +1,6 @@
 """This module provides the data required by Fava's reports."""
 
+import collections
 import datetime
 import os
 
@@ -102,8 +103,8 @@ class FavaLedger():
 
     __slots__ = [
         '_default_format_string', '_format_string', 'account_types',
-        'accounts',
-        'all_entries', 'all_root_account', 'beancount_file_path',
+        'accounts', 'all_entries', 'all_entries_by_type',
+        'all_root_account', 'beancount_file_path',
         '_date_first', '_date_last', 'entries', 'errors',
         'fava_options', '_filters', '_is_encrypted', 'options', 'price_map',
         'root_account', 'root_tree', '_watcher'] + MODULES
@@ -149,6 +150,9 @@ class FavaLedger():
         #: List of all (unfiltered) entries.
         self.all_entries = None
 
+        #: Dict of list of all (unfiltered) entries by type.
+        self.all_entries_by_type = None
+
         #: A list of all errors reported by Beancount.
         self.errors = None
 
@@ -190,14 +194,18 @@ class FavaLedger():
             self._format_string = '{:f}'
             self._default_format_string = '{:.2f}'
 
+        entries_by_type = collections.defaultdict(list)
         for entry in self.all_entries:
-            if isinstance(entry, Open):
-                self.accounts.setdefault(entry.account).meta = entry.meta
-            if isinstance(entry, Close):
-                self.accounts.setdefault(entry.account).close_date = entry.date
+            entries_by_type[type(entry)].append(entry)
+        self.all_entries_by_type = entries_by_type
 
-        self.fava_options, errors = parse_options(
-            filter_type(self.all_entries, Custom))
+        self.accounts = _AccountDict()
+        for entry in entries_by_type[Open]:
+            self.accounts.setdefault(entry.account).meta = entry.meta
+        for entry in entries_by_type[Close]:
+            self.accounts.setdefault(entry.account).close_date = entry.date
+
+        self.fava_options, errors = parse_options(entries_by_type[Custom])
         self.errors.extend(errors)
 
         for mod in MODULES:
@@ -413,8 +421,7 @@ class FavaLedger():
 
     def prices(self, base, quote):
         """List all prices."""
-        all_prices = prices.get_all_prices(self.price_map,
-                                           "{}/{}".format(base, quote))
+        all_prices = prices.get_all_prices(self.price_map, (base, quote))
 
         if self._filters['time']:
             return [(date, price) for date, price in all_prices
@@ -473,8 +480,8 @@ class FavaLedger():
             FavaAPIException: If ``path`` is not the path of one of the
                 documents.
         """
-        for entry in filter_type(self.entries, Document):
-            if entry.filename == path:
+        for document in self.all_entries_by_type[Document]:
+            if document.filename == path:
                 return
 
         raise FavaAPIException(

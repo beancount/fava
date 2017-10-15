@@ -5,7 +5,6 @@ import datetime
 import re
 
 from beancount.core.data import Custom, Event
-from beancount.utils.misc_utils import filter_type
 
 from fava.core.helpers import FavaModule
 
@@ -23,11 +22,11 @@ class FavaMisc(FavaModule):
         self.upcoming_events = None
 
     def load_file(self):
-        custom_entries = list(filter_type(self.ledger.all_entries, Custom))
+        custom_entries = self.ledger.all_entries_by_type[Custom]
         self.sidebar_links = _sidebar_links(custom_entries)
 
         self.upcoming_events = _upcoming_events(
-            self.ledger.all_entries,
+            self.ledger.all_entries_by_type[Event],
             self.ledger.fava_options['upcoming-events'])
 
         if not self.ledger.options['operating_currency']:
@@ -50,11 +49,11 @@ def _sidebar_links(custom_entries):
             for entry in sidebar_link_entries]
 
 
-def _upcoming_events(entries, max_delta):
+def _upcoming_events(events, max_delta):
     """Parse entries for upcoming events.
 
     Args:
-        entries: A list of entries.
+        events: A list of events.
         max_delta: Number of days that should be considered.
 
     Returns:
@@ -64,7 +63,7 @@ def _upcoming_events(entries, max_delta):
     today = datetime.date.today()
     upcoming_events = []
 
-    for event in filter_type(entries, Event):
+    for event in events:
         delta = event.date - today
         if delta.days >= 0 and delta.days < max_delta:
             upcoming_events.append(event)
