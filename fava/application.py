@@ -30,7 +30,7 @@ from fava import template_filters
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException, FilterException
-from fava.docs import HELP_PAGES
+from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.util import slugify, resource_path, setup_logging
 from fava.util.excel import HAVE_EXCEL
@@ -50,7 +50,7 @@ app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-app.config['HELP_DIR'] = resource_path('docs')
+app.config['HELP_DIR'] = resource_path('help')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 app.config['LEDGERS'] = {}
