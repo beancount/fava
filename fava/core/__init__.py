@@ -10,7 +10,7 @@ from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
-                                 Document, Balance, TxnPosting, Transaction,
+                                 Balance, TxnPosting, Transaction,
                                  Event, Custom)
 from beancount.parser.options import get_account_types
 from beancount.utils.encryption import is_encrypted_file
@@ -460,10 +460,9 @@ class FavaLedger():
         value = entry.meta[metadata_key]
 
         beancount_dir = os.path.dirname(self.beancount_file_path)
-        paths = [os.path.join(beancount_dir,
-                              value)]
+        paths = [os.path.join(beancount_dir, value)]
         paths.extend([os.path.join(beancount_dir, document_root,
-                                   posting.account.replace(':', '/'), value)
+                                   *posting.account.split(':'), value)
                       for posting in entry.postings
                       for document_root in self.options['documents']])
 
@@ -472,20 +471,6 @@ class FavaLedger():
                 return path
 
         raise FavaAPIException('Statement not found.')
-
-    def is_document_path(self, path):
-        """Check if file at path is a document.
-
-        Raises:
-            FavaAPIException: If ``path`` is not the path of one of the
-                documents.
-        """
-        for document in self.all_entries_by_type[Document]:
-            if document.filename == path:
-                return
-
-        raise FavaAPIException(
-            'File "{}" not found in document entries.'.format(path))
 
     def account_uptodate_status(self, account_name):
         """Status of the last balance or transaction.

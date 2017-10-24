@@ -25,6 +25,7 @@ import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.utils.text_utils import replace_numbers
+from beancount.core.data import Document
 
 from fava import template_filters
 from fava.core import FavaLedger
@@ -50,7 +51,6 @@ app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-app.config['HELP_DIR'] = resource_path('help')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 app.config['LEDGERS'] = {}
@@ -237,7 +237,9 @@ def account(name, subreport='journal'):
 def document():
     """Download a document."""
     filename = request.args.get('filename')
-    g.ledger.is_document_path(filename)
+    if not any((filename == document.filename for document in
+                g.ledger.all_entries_by_type[Document])):
+        abort(404)
     directory = os.path.dirname(filename)
     basename = os.path.basename(filename)
     return send_from_directory(directory, basename)
@@ -288,7 +290,7 @@ def help_page(page_slug='_index'):
     if page_slug not in app.config['HELP_PAGES']:
         abort(404)
     html = markdown2.markdown_path(
-        os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
+        os.path.join(resource_path('help'), page_slug + '.md'),
         extras=['fenced-code-blocks', 'tables'])
     return render_template(
         'help.html',
