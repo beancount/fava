@@ -99,7 +99,7 @@ def add_document():
             filename = filename.replace(sep, ' ')
 
     if not os.path.supports_unicode_filenames:
-        filename = secure_filename(filename).replace('_', ' ')
+        filename = secure_filename(filename)
 
     directory = os.path.normpath(
         os.path.join(
