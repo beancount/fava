@@ -4,6 +4,7 @@ All functions in this module will be automatically added as template filters.
 """
 
 import os
+import unicodedata
 
 from flask import g
 from beancount.core import compare
@@ -154,4 +155,4 @@ def should_show(account):
 
 def basename(file_path):
     """Return the basename of a filepath."""
-    return os.path.basename(file_path)
+    return unicodedata.normalize('NFC', os.path.basename(file_path))
