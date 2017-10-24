@@ -46,13 +46,9 @@ e.on('page-loaded', () => {
       event.preventDefault();
       event.stopPropagation();
 
-      const accountName = target.getAttribute('data-account-name');
       const folders = $$('#document-upload-folder option');
       const { files } = event.dataTransfer;
-      const now = new Date();
       let changedFilename = false;
-
-      const entryHash = target.getAttribute('data-entry');
 
       if (!folders.length) {
         e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
@@ -65,7 +61,7 @@ e.on('page-loaded', () => {
         let filename = files[i].name;
 
         if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
-          filename = `${now.toISOString().substring(0, 10)} ${filename}`;
+          filename = `${new Date().toISOString().substring(0, 10)} ${filename}`;
           changedFilename = true;
         }
 
@@ -79,9 +75,10 @@ e.on('page-loaded', () => {
         $$('#document-names input').forEach((element) => {
           const formData = new FormData();
           const file = files[element.getAttribute('data-index')];
-          formData.append('file', file);
+          const accountName = target.getAttribute('data-account-name');
+          const entryHash = target.getAttribute('data-entry');
+          formData.append('file', file, element.value);
           formData.append('account', accountName);
-          formData.append('filename', element.value);
 
           if (entryHash) {
             // statement upload (add adding it to metadata)

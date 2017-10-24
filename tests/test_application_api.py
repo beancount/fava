@@ -28,8 +28,7 @@ def test_api_add_document(app, test_client, tmpdir):
         request_data = {
             'folder': str(tmpdir),
             'account': 'Test',
-            'filename': '2015-12-12_test',
-            'file': (BytesIO(b'asdfasdf'), 'test'),
+            'file': (BytesIO(b'asdfasdf'), '2015-12-12_test'),
         }
         url = flask.url_for('json_api.add_document')
 
@@ -37,7 +36,7 @@ def test_api_add_document(app, test_client, tmpdir):
         assert response.status_code == 400
 
         filename = '{}/{}/{}'.format(
-            str(tmpdir), 'Test', request_data['filename'].replace('_', ' '))
+            str(tmpdir), 'Test', '2015-12-12_test')
 
         response = test_client.put(url, data=request_data)
         assert flask.json.loads(response.get_data(True)) == {
@@ -46,7 +45,7 @@ def test_api_add_document(app, test_client, tmpdir):
         }
         assert os.path.isfile(filename)
 
-        request_data['file'] = (BytesIO(b'asdfasdf'), 'test')
+        request_data['file'] = (BytesIO(b'asdfasdf'), '2015-12-12_test')
         response = test_client.put(url, data=request_data)
         assert flask.json.loads(response.get_data(True)) == {
             'success': False,

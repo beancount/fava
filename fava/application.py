@@ -18,8 +18,7 @@ import inspect
 import os
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file,
-                   render_template_string)
+                   redirect, g, send_file, render_template_string)
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
@@ -240,9 +239,7 @@ def document():
     if not any((filename == document.filename for document in
                 g.ledger.all_entries_by_type[Document])):
         abort(404)
-    directory = os.path.dirname(filename)
-    basename = os.path.basename(filename)
-    return send_from_directory(directory, basename)
+    return send_file(filename)
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])
@@ -251,9 +248,7 @@ def statement():
     entry_hash = request.args.get('entry_hash')
     key = request.args.get('key')
     document_path = g.ledger.statement_path(entry_hash, key)
-    directory = os.path.dirname(document_path)
-    filename = os.path.basename(document_path)
-    return send_from_directory(directory, filename)
+    return send_file(document_path)
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')

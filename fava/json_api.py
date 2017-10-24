@@ -84,8 +84,8 @@ def add_document():
     if not g.ledger.options['documents']:
         raise FavaAPIException('You need to set a documents folder.')
 
-    file = request.files['file']
-    if not file:
+    upload = request.files['file']
+    if not upload:
         raise FavaAPIException('No file uploaded.')
 
     documents_folder = request.form['folder']
@@ -93,24 +93,32 @@ def add_document():
         raise FavaAPIException('Not a documents folder: {}.'
                                .format(documents_folder))
 
-    filepath = os.path.normpath(
+    filename = upload.filename
+    for sep in os.path.sep, os.path.altsep:
+        if sep:
+            filename = filename.replace(sep, ' ')
+
+    if not os.path.supports_unicode_filenames:
+        filename = secure_filename(filename).replace('_', ' ')
+
+    directory = os.path.normpath(
         os.path.join(
             os.path.dirname(g.ledger.beancount_file_path), documents_folder,
-            request.form['account'].replace(':', '/'),
-            secure_filename(request.form['filename']).replace('_', ' ')))
+            *request.form['account'].split(':')
+        ))
+    filepath = os.path.join(directory, filename)
 
-    directory = os.path.dirname(filepath)
+    if os.path.exists(filepath):
+        raise FavaAPIException('{} already exists.'.format(filepath))
+
     if not os.path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
-    if os.path.isfile(filepath):
-        raise FavaAPIException('{} already exists.'.format(filepath))
-
-    file.save(filepath)
+    upload.save(filepath)
 
     if request.form.get('entry_hash'):
         g.ledger.file.insert_metadata(request.form['entry_hash'], 'statement',
-                                      os.path.basename(filepath))
+                                      filename)
     return _api_success(message='Uploaded to {}'.format(filepath))
 
 
