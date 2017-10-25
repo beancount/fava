@@ -113,20 +113,23 @@ class FileModule(FavaModule):
     def render_entries(self, entries):
         """Return entries in Beancount format.
 
-        Only renders entries that are in the original Beancount file(s).
+        Only renders Balances and Transactions.
 
         Args:
             entries: A list of entries.
 
-        Returns:
-            A string representing the entries rendered in Beancount format.
+        Yields:
+            The entries rendered in Beancount format.
 
         """
-        entries = [get_entry_slice(entry)[0] for entry in entries
-                   if isinstance(entry, (data.Balance, data.Transaction))
-                   and entry in self.ledger.all_entries]
-
-        return "\n\n".join(entries) + "\n\n"
+        for entry in entries:
+            if isinstance(entry, (data.Balance, data.Transaction)):
+                if isinstance(entry, data.Transaction) and entry.flag == 'S':
+                    continue
+                try:
+                    yield get_entry_slice(entry)[0] + '\n'
+                except FileNotFoundError as e:
+                    yield _format_entry(entry)
 
 
 def incomplete_sortkey(entry):
