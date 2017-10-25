@@ -38,6 +38,7 @@ matrix:
     - language: node
       node_js: node
       os: osx
+      osx_image: xcode9.1
       install: |
         brew install python3
         pip3 install pyinstaller
