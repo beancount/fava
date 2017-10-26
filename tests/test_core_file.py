@@ -187,7 +187,7 @@ def test_render_entries(example_ledger):
         2016-05-04 * "BANK FEES" "Monthly bank fee"
           Assets:US:BofA:Checking                           -4.00 USD
           Expenses:Financial:Fees                            4.00 USD
-
     """)
 
-    assert file_content == example_ledger.file.render_entries([entry1, entry2])
+    assert file_content == "\n".join(
+        example_ledger.file.render_entries([entry1, entry2]))
