@@ -110,6 +110,7 @@ class FileModule(FavaModule):
                          self.ledger.fava_options['insert-entry'])
             self.ledger.extensions.run_hook('after_insert_entry', entry)
 
+    # pylint: disable=R0201
     def render_entries(self, entries):
         """Return entries in Beancount format.
 
@@ -128,7 +129,7 @@ class FileModule(FavaModule):
                     continue
                 try:
                     yield get_entry_slice(entry)[0] + '\n'
-                except FileNotFoundError as e:
+                except FileNotFoundError:
                     yield _format_entry(entry)
 
 
