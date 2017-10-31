@@ -136,7 +136,7 @@ class FileModule(FavaModule):
         for entry in entries:
             if isinstance(entry, (data.Balance, data.Transaction)):
                 if isinstance(entry, data.Transaction) and \
-                    entry.flag in excl_flags:
+                   entry.flag in excl_flags:
                     continue
                 try:
                     yield get_entry_slice(entry)[0] + '\n'
