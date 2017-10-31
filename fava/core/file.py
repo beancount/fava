@@ -5,7 +5,7 @@ from hashlib import sha256
 import os
 import re
 
-from beancount.core import data
+from beancount.core import data, flags
 from beancount.parser.printer import format_entry
 
 from fava.core.helpers import FavaAPIException, FavaModule
@@ -123,9 +123,20 @@ class FileModule(FavaModule):
             The entries rendered in Beancount format.
 
         """
+        excl_flags = [
+            flags.FLAG_PADDING,      # P
+            flags.FLAG_SUMMARIZE,    # S
+            flags.FLAG_TRANSFER,     # T
+            flags.FLAG_CONVERSIONS,  # C
+            flags.FLAG_UNREALIZED,   # U
+            flags.FLAG_RETURNS,      # R
+            flags.FLAG_MERGING,      # M
+        ]
+
         for entry in entries:
             if isinstance(entry, (data.Balance, data.Transaction)):
-                if isinstance(entry, data.Transaction) and entry.flag == 'S':
+                if isinstance(entry, data.Transaction) and \
+                    entry.flag in excl_flags:
                     continue
                 try:
                     yield get_entry_slice(entry)[0] + '\n'
