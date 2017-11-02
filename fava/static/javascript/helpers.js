@@ -61,6 +61,43 @@ $.fetch = function fetch(input, init) {
   return window.fetch(input, def);
 };
 
+// Fuzzy match a pattern against a string.
+//
+// Returns true if all characters of `pattern` can be found in order in
+// `string`. For lowercase characters in `pattern` match both lower and upper
+// case, for uppercase only an exact match counts.
+export function fuzzytest(pattern, string) {
+  let pindex = 0;
+  for (let index = 0; index < string.length; index += 1) {
+    const char = string[index];
+    const search = pattern[pindex];
+    if (char === search || char.toLowerCase() === search) {
+      pindex += 1;
+    }
+  }
+  return pindex === pattern.length;
+}
+
+// Wrap fuzzy matched characters.
+//
+// Wrap all occurences of characters of `pattern` (in order) in `string` in
+// <span> tags.
+export function fuzzywrap(pattern, string) {
+  let pindex = 0;
+  const result = [];
+  for (let index = 0; index < string.length; index += 1) {
+    const char = string[index];
+    const search = pattern[pindex];
+    if (char === search || char.toLowerCase() === search) {
+      result.push(`<span>${char}</span>`);
+      pindex += 1;
+    } else {
+      result.push(char);
+    }
+  }
+  return result.join('');
+}
+
 // Handles JSON content for a Promise returned by fetch, also handling an HTTP
 // error status.
 export function handleJSON(response) {

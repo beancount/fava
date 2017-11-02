@@ -1,6 +1,6 @@
 import e from './events';
 import { $, $$, handleJSON } from './helpers';
-import { initInput, addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
+import { addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
 import { closeOverlay } from './overlays';
 
 function submitTransactionForm(form, successCallback) {
@@ -40,9 +40,6 @@ let initialized = false;
 export default function showTransactionOverlay() {
   const form = $('#transaction #transaction-form');
   if (!initialized) {
-    $$('input', form).forEach((input) => {
-      initInput(input);
-    });
     addPostingRow(form);
     addPostingRow(form);
     initialized = true;

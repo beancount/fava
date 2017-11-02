@@ -1,5 +1,3 @@
-@import 'awesomplete/awesomplete';
-
 :root {
   --color-header-text-half: color(var(--color-header-text) alpha(50%)));
   --color-text-transparent: color(var(--color-text) alpha(20%));
@@ -193,27 +191,5 @@ h1 {
     right: 7px;
     top: 9px;
     width: 18px;
-  }
-
-  & .awesomplete {
-    & ul {
-      border-radius: 0;
-      opacity: 1;
-      padding: 2px 0;
-      transition: none;
-    }
-
-    & li {
-      line-height: 1.5em;
-      min-width: 8rem;
-      padding: 0 10px;
-      position: relative;
-      white-space: nowrap;
-
-      &:hover {
-        background-color: var(--color-links);
-        color: var(--color-background);
-      }
-    }
   }
 }

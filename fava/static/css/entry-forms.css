@@ -18,22 +18,9 @@
     width: 100px;
   }
 
-  & .awesomplete {
-    margin-right: .5em;
-
-    & input {
-      width: 100%;
-    }
-  }
-
   & .add-posting,
   & .add-metadata {
     display: none;
-  }
-
-  & .add-metadata-link {
-    position: absolute;
-    right: 20px;
   }
 
   & input {
@@ -43,11 +30,9 @@
       width: 1.5em;
     }
 
-    &[name='payee'] {
-      width: 180px;
-    }
-
+    &[name='account'],
     &[name='narration'],
+    &[name='payee'],
     &[name='metadata-value'] {
       flex-grow: 1;
     }
@@ -60,22 +45,13 @@
   & .posting {
     padding-left: 60px;
 
-    & .awesomplete {
-      flex-grow: 1;
-
-      &:nth-child(4) {
-        flex-grow: 0;
-        width: 100px;
-      }
-    }
-
     &:last-child {
       & .add-posting {
         display: inline-block;
       }
 
-      & .awesomplete:nth-child(4) {
-        width: 67px;
+      & input.currency {
+        width: 69px;
       }
     }
   }
@@ -103,10 +79,6 @@
 
 .entry-form.balance,
 .entry-form.note {
-  & .awesomplete {
-    flex-grow: 1;
-  }
-
   & input {
     &[name='account'] {
       flex-grow: 1;
@@ -149,12 +121,6 @@
 
     & .posting {
       padding-left: 0;
-
-      & .awesomplete {
-        margin-bottom: 0;
-        padding-right: 0;
-        width: 100%;
-      }
     }
 
     & .add-posting {

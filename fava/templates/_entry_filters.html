@@ -18,19 +18,11 @@
     'account': 'f a',
     'payee': 'f p',
 } %}
-{% macro datalist(name, list) %}
-    <datalist id="{{ name }}">
-        {% for value in list %}
-            <option>{{ value }}</option>
-        {% endfor %}
-    </datalist>
-{% endmacro %}
 {% macro filter_input(name) %}
     {% set filter_value = g.filters[name] %}
     {% set placeholder = placeholders[name] %}
-    {% set list = 'list={}'.format(lists[name]) if name in lists else '' %}
     <span{% if not filter_value %} class="empty"{% endif %}>
-      <input id="{{ name }}-filter" data-key="{{ keys[name] }}" name="{{ name }}" type="text" {{ list }} value="{{ filter_value or '' }}" placeholder="{{ placeholder }}" size="{{ (filter_value or placeholder)|length+2 }}">
+      <input id="{{ name }}-filter" data-key="{{ keys[name] }}" name="{{ name }}" type="text" {{ 'list={} '.format(lists[name]) if name in lists else '' }}value="{{ filter_value or '' }}" placeholder="{{ placeholder }}" size="{{ (filter_value or placeholder)|length+2 }}">
         <button type="button" tabindex="-1" class="close">&times;</button>
     </span>
 {% endmacro %}
@@ -40,12 +32,3 @@
     {% endfor %}
     <button type="submit">{{ _('Filter') }}</button>
 </form>
-{{ datalist('years', ledger.attributes.years) }}
-{{ datalist('payees', ledger.attributes.payees) }}
-{{ datalist('accounts', ledger.attributes.accounts) }}
-{{ datalist('currencies', ledger.attributes.currencies) }}
-<datalist id="tags">
-{% for tag in ledger.attributes.tags %}
-    <option>#{{ tag }}</option>
-{% endfor %}
-</datalist>

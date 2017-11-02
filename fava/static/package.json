@@ -54,7 +54,6 @@
     "@typopro/web-fira-sans": "^3.7.5",
     "@typopro/web-source-code-pro": "^3.7.5",
     "@typopro/web-source-serif-pro": "^3.7.5",
-    "awesomplete": "^1.1.2",
     "classlist.js": "^1.1.20150312",
     "clipboard": "^1.7.1",
     "codemirror": "^5.31.0",

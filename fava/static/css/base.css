@@ -192,8 +192,6 @@ input[type='radio'] {
 }
 
 input[type='date'] {
-  width: 120px;
-
   &::-webkit-inner-spin-button,
   &::-webkit-clear-button {
     -webkit-appearance: none;
@@ -582,4 +580,35 @@ td .status-indicator {
   float: right;
   margin-left: 3px;
   margin-top: 3px;
+}
+
+.autocomplete {
+  background: var(--color-background);
+  border: 1px solid var(--color-background-darkest);
+  box-shadow: 0 3px 3px var(--color-background-darker);
+  max-height: 60%;
+  overflow: auto;
+  z-index: var(--z-index-autocomplete);
+
+  & li {
+    cursor: pointer;
+    line-height: 1.6em;
+    min-width: 8rem;
+    padding: 0 .5em;
+    white-space: nowrap;
+
+    &.selected,
+    &:hover {
+      background-color: var(--color-links);
+      color: var(--color-background);
+    }
+
+    & span {
+      background-color: var(--color-warning);
+    }
+  }
+
+  &:empty {
+    display: none;
+  }
 }

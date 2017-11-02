@@ -85,10 +85,6 @@
       margin: .5em .5em -.5em 0;
     }
   }
-
-  & .awesomplete input {
-    width: 100%;
-  }
 }
 
 .documents-upload .fieldset {

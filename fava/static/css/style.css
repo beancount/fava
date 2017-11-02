@@ -42,6 +42,7 @@ body {
   --z-index-header: 2;
   --z-index-floating-ui: 3;
   --z-index-keyboard-overlays: 10;
+  --z-index-autocomplete: 8;
   --z-index-overlay: 4;
 
   --color-background: #fff;

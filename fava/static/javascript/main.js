@@ -38,6 +38,7 @@ import e from './events';
 import router from './router';
 import './../css/style.css';
 
+import './autocomplete';
 import './charts';
 import './clipboard';
 import './documents-upload';
