@@ -70,7 +70,6 @@
     "d3-voronoi": "^1.1.2",
     "element-closest": "^2.0.2",
     "es6-promise": "^4.1.1",
-    "fuzzyjs": "^2.1.2",
     "mousetrap": "^1.6.1",
     "url-search-params": "^0.10.0",
     "whatwg-fetch": "^2.0.3"
