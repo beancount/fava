@@ -4,7 +4,6 @@ from collections import defaultdict, namedtuple, Counter
 
 from beancount.core.data import Custom
 from beancount.core.number import Decimal
-from beancount.utils.misc_utils import filter_type
 
 from fava.util.date import days_in_daterange, number_of_days_in_period
 from fava.core.helpers import FavaModule
@@ -22,7 +21,7 @@ class BudgetModule(FavaModule):
 
     def load_file(self):
         self.budget_entries, errors = parse_budgets(
-            filter_type(self.ledger.all_entries, Custom))
+            self.ledger.all_entries_by_type[Custom])
         self.ledger.errors.extend(errors)
 
     def calculate(self, account_name, begin_date, end_date):

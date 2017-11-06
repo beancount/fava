@@ -91,6 +91,15 @@ automatically.
 
 ---
 
+## `unrealized`
+
+Default: `Unrealized`
+
+The subaccount of the Equity account to post unrealized gains to if the account
+trees are shown at market value.
+
+---
+
 ## `journal-show`
 
 Default: `transaction balance note document custom budget`

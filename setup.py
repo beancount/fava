@@ -1,31 +1,28 @@
 import ast
-import os
+from os import path
 import re
 from setuptools import find_packages, setup
 
 
-with open('fava/__init__.py', 'rb') as f:
+with open(path.join(path.dirname(__file__), 'fava', '__init__.py'), 'rb') as f:
     VERSION = str(ast.literal_eval(re.search(
         r'__version__\s+=\s+(.*)',
         f.read().decode('utf-8')).group(1)))
 
-
-def _read(fname):
-    path = os.path.join(os.path.dirname(__file__), fname)
-    return open(path).read()
+with open(path.join(path.dirname(__file__), 'README.rst')) as readme:
+    LONG_DESCRIPTION = readme.read()
 
 
 setup(
     name='fava',
     version=VERSION,
-    description=('A rich web interface for the CL-accounting tool beancount.'),
-    long_description=_read('README.rst'),
+    description='Web interface for the accounting tool Beancount.',
+    long_description=LONG_DESCRIPTION,
     url='https://beancount.github.io/fava/',
     author='Dominik Aumayr',
     author_email='dominik@aumayr.name',
     license='MIT',
-    keywords='fava beancount beancount-fava beancount-web'
-             'ledger ledger-cli cl-accounting',
+    keywords='fava beancount accounting',
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     entry_points={
@@ -34,7 +31,6 @@ setup(
         ]
     },
     install_requires=[
-        'Babel<2.5.0',
         'beancount>=2.0b15',
         'click',
         'markdown2>=2.3.0',

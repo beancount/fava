@@ -4,11 +4,44 @@ All functions in this module will be automatically added as template filters.
 """
 
 import os
+import unicodedata
 
 from flask import g
-from beancount.core import convert, compare, realization
+from beancount.core import compare
+from beancount.core import convert
 from beancount.core import data
+from beancount.core import prices
+from beancount.core import realization
+from beancount.core.amount import Amount
 from beancount.core.number import Decimal
+
+
+def get_market_value(pos, price_map, date=None):
+    """Get the market value of a Position.
+
+    This differs from the convert.get_value function in Beancount by returning
+    the cost value if no price can be found.
+
+    Args:
+        pos: A Position.
+        price_map: A dict of prices, as built by prices.build_price_map().
+        date: A datetime.date instance to evaluate the value at, or None.
+
+    Returns:
+        An Amount, with value converted or if the conversion failed just the
+        cost value (or the units if the position has no cost).
+    """
+    units_ = pos.units
+    cost_ = pos.cost
+    value_currency = cost_.currency if cost_ else None
+
+    if value_currency:
+        base_quote = (units_.currency, value_currency)
+        _, price_number = prices.get_price(price_map, base_quote, date)
+        if price_number is not None:
+            return Amount(units_.number * price_number, value_currency)
+        return Amount(units_.number * cost_.number, value_currency)
+    return units_
 
 
 def remove_keys(_dict, keys):
@@ -34,7 +67,7 @@ def cost(inventory):
 def cost_or_value(inventory, date=None):
     """Get the cost or value of an inventory."""
     if g.conversion == 'at_value':
-        return inventory.reduce(convert.get_value, g.ledger.price_map, date)
+        return inventory.reduce(get_market_value, g.ledger.price_map, date)
     if g.conversion:
         return inventory.reduce(convert.convert_position, g.conversion,
                                 g.ledger.price_map, date)
@@ -54,23 +87,15 @@ def format_amount(amount):
     """Format an amount to string using the DisplayContext."""
     if not amount:
         return ''
-    return "{} {}".format(
-        format_currency(amount.number, amount.currency), amount.currency)
+    number, currency = amount
+    if not number:
+        return ''
+    return "{} {}".format(format_currency(number, currency), currency)
 
 
 def hash_entry(entry):
     """Hash an entry."""
     return compare.hash_entry(entry)
-
-
-def last_segment(account_name):
-    """Get the last segment of an account."""
-    return account_name.split(':')[-1]
-
-
-def account_level(account_name):
-    """Get the depth of an account."""
-    return account_name.count(":") + 1
 
 
 def balance_children(account):
@@ -111,37 +136,23 @@ def show_journal_entry(entry):
 
 def should_show(account):
     """Determine whether the account should be shown."""
-    show_this_account = False
-    # check if it's a leaf account
-    if not account or account.txn_postings:
-        show_this_account = True
-        if (not g.ledger.fava_options['show-closed-accounts'] and isinstance(
-                realization.find_last_active_posting(account.txn_postings),
-                data.Close)):
-            show_this_account = False
-        if (not g.ledger.fava_options['show-accounts-with-zero-balance'] and
-                account.balance.is_empty()):
-            show_this_account = False
-        if (not g.ledger.fava_options['show-accounts-with-zero-transactions']
-                and not any(
-                    isinstance(t, data.TxnPosting)
-                    for t in account.txn_postings)):
-            show_this_account = False
-    return show_this_account or any(should_show(a) for a in account.values())
+    if (not account.balance_children.is_empty()
+            or any(should_show(a) for a in account.children)):
+        return True
+    if account.name not in g.ledger.accounts:
+        return False
+    if (not g.ledger.fava_options['show-closed-accounts']
+            and g.ledger.account_is_closed(account.name)):
+        return False
+    if (not g.ledger.fava_options['show-accounts-with-zero-balance']
+            and account.balance.is_empty()):
+        return False
+    if (not g.ledger.fava_options['show-accounts-with-zero-transactions']
+            and not account.has_txns):
+        return False
+    return True
 
 
 def basename(file_path):
     """Return the basename of a filepath."""
-    return os.path.basename(file_path)
-
-
-def should_collapse_account(account_name):
-    """Determine whether the children of an account should be hidden."""
-    return g.ledger.account_metadata(account_name).get(
-        'fava-collapse-account') == 'True'
-
-
-def uptodate_eligible(account_name):
-    """Determine whether uptodate-indicators should be shown for an account."""
-    return g.ledger.account_metadata(account_name).get(
-        'fava-uptodate-indication') == 'True'
+    return unicodedata.normalize('NFC', os.path.basename(file_path))

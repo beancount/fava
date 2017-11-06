@@ -72,8 +72,8 @@ field, e.g., `narration #tag ^somelink`.
 
 Fava offers colored indicators that can help you keep your accounts up-to-date.
 They are shown next to accounts that have the metadata
-`fava-uptodate-indication: "True"` set on their Open directive.  The colors
-have the following meaning:
+`fava-uptodate-indication: TRUE` set on their Open directive.  The colors have
+the following meaning:
 
 - green: The last entry for this account is a balance check that passed.
 - red: The last entry is a balance check that failed.
@@ -92,7 +92,7 @@ number or a deep hierarchy of accounts, Fava offers the following options:
 - `show-accounts-with-zero-transactions`
 
 Additionally, accounts that have the metadata `fava-collapse-account` set to
-`"True"` on their Open directive will be collapsed in the account trees.
+`TRUE` on their Open directive will be collapsed in the account trees.
 
 ## Opening an external editor
 

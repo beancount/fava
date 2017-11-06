@@ -9,18 +9,18 @@
     {{ charts.hierarchy(ledger.options['name_liabilities']) }}
     {{ charts.hierarchy(ledger.options['name_equity']) }}
 
-    {% set root_account_closed = ledger.root_account_closed %}
+    {% set root_tree_closed = ledger.root_tree_closed %}
 
     <div class="row">
         <div class="column">
             <h3>{{ ledger.options['name_assets'] }}</h3>
-            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_assets'])) }}
+            {{ tree_table.tree(root_tree_closed.get(ledger.options['name_assets'])) }}
         </div>
         <div class="column">
             <h3>{{ ledger.options['name_liabilities'] }}</h3>
-            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_liabilities'])) }}
+            {{ tree_table.tree(root_tree_closed.get(ledger.options['name_liabilities'])) }}
             <h3>{{ ledger.options['name_equity'] }}</h3>
-            {{ tree_table.tree(root_account_closed|get_or_create(ledger.options['name_equity'])) }}
+            {{ tree_table.tree(root_tree_closed.get(ledger.options['name_equity'])) }}
         </div>
     </div>
 {% endblock %}

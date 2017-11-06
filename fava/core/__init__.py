@@ -1,5 +1,6 @@
 """This module provides the data required by Fava's reports."""
 
+import collections
 import datetime
 import os
 
@@ -9,9 +10,8 @@ from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
-                                 Document, Balance, TxnPosting, Transaction,
+                                 Balance, TxnPosting, Transaction,
                                  Event, Custom)
-from beancount.ops import summarize
 from beancount.parser.options import get_account_types
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
@@ -28,13 +28,43 @@ from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.query_shell import QueryShell
+from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.ext import find_extensions
 
 
+MAXDATE = datetime.date.max
+
+
+# pylint: disable=too-few-public-methods
+class AccountData(object):
+    """Holds information about an account."""
+    __slots__ = ('meta', 'close_date')
+
+    def __init__(self):
+        #: The date on which this account is closed (or datetime.date.max).
+        self.close_date = MAXDATE
+
+        #: The metadata of the Open entry of this account.
+        self.meta = {}
+
+
+class _AccountDict(dict):
+    """Account info dictionary."""
+    EMPTY = AccountData()
+
+    def __missing__(self, key):
+        return self.EMPTY
+
+    def setdefault(self, key):
+        if key not in self:
+            self[key] = AccountData()
+        return self[key]
+
+
+# pylint: disable=too-few-public-methods, missing-docstring
 class ExtensionModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
-    # pylint: disable=too-few-public-methods, missing-docstring
 
     def __init__(self, ledger):
         super().__init__(ledger)
@@ -73,10 +103,11 @@ class FavaLedger():
 
     __slots__ = [
         '_default_format_string', '_format_string', 'account_types',
-        'all_entries', 'all_root_account', 'beancount_file_path',
+        'accounts', 'all_entries', 'all_entries_by_type',
+        'all_root_account', 'beancount_file_path',
         '_date_first', '_date_last', 'entries', 'errors',
         'fava_options', '_filters', '_is_encrypted', 'options', 'price_map',
-        'root_account', '_watcher'] + MODULES
+        'root_account', 'root_tree', '_watcher'] + MODULES
 
     def __init__(self, path):
         #: The path to the main Beancount file.
@@ -119,6 +150,9 @@ class FavaLedger():
         #: List of all (unfiltered) entries.
         self.all_entries = None
 
+        #: Dict of list of all (unfiltered) entries by type.
+        self.all_entries_by_type = None
+
         #: A list of all errors reported by Beancount.
         self.errors = None
 
@@ -127,6 +161,9 @@ class FavaLedger():
 
         #: A Namedtuple containing the names of the five base accounts.
         self.account_types = None
+
+        #: A dict containing information about the accounts.
+        self.accounts = _AccountDict()
 
         #: A dict with all of Fava's option values.
         self.fava_options = None
@@ -157,8 +194,18 @@ class FavaLedger():
             self._format_string = '{:f}'
             self._default_format_string = '{:.2f}'
 
-        self.fava_options, errors = parse_options(
-            filter_type(self.all_entries, Custom))
+        entries_by_type = collections.defaultdict(list)
+        for entry in self.all_entries:
+            entries_by_type[type(entry)].append(entry)
+        self.all_entries_by_type = entries_by_type
+
+        self.accounts = _AccountDict()
+        for entry in entries_by_type[Open]:
+            self.accounts.setdefault(entry.account).meta = entry.meta
+        for entry in entries_by_type[Close]:
+            self.accounts.setdefault(entry.account).close_date = entry.date
+
+        self.fava_options, errors = parse_options(entries_by_type[Custom])
         self.errors.extend(errors)
 
         for mod in MODULES:
@@ -184,6 +231,7 @@ class FavaLedger():
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
+        self.root_tree = Tree(self.entries)
 
         self._date_first, self._date_last = \
             getters.get_min_max_dates(self.entries, (Transaction))
@@ -243,10 +291,11 @@ class FavaLedger():
         return get_account_sign(account_name, self.account_types)
 
     @property
-    def root_account_closed(self):
-        """A root account where closing entries have been generated."""
-        closing_entries = summarize.cap_opt(self.entries, self.options)
-        return realization.realize(closing_entries)
+    def root_tree_closed(self):
+        """A root tree for the balance sheet."""
+        tree = Tree(self.entries)
+        tree.cap(self.options, self.fava_options['unrealized'])
+        return tree
 
     def interval_balances(self, interval, account_name, accumulate=False):
         """Balances by interval.
@@ -263,7 +312,7 @@ class FavaLedger():
         """
         min_accounts = [
             account for account in
-            self.attributes.list_accounts(self.all_root_account)
+            self.accounts.keys()
             if account.startswith(account_name)]
 
         interval_tuples = list(
@@ -372,8 +421,7 @@ class FavaLedger():
 
     def prices(self, base, quote):
         """List all prices."""
-        all_prices = prices.get_all_prices(self.price_map,
-                                           "{}/{}".format(base, quote))
+        all_prices = prices.get_all_prices(self.price_map, (base, quote))
 
         if self._filters['time']:
             return [(date, price) for date, price in all_prices
@@ -412,10 +460,9 @@ class FavaLedger():
         value = entry.meta[metadata_key]
 
         beancount_dir = os.path.dirname(self.beancount_file_path)
-        paths = [os.path.join(beancount_dir,
-                              value)]
+        paths = [os.path.join(beancount_dir, value)]
         paths.extend([os.path.join(beancount_dir, document_root,
-                                   posting.account.replace(':', '/'), value)
+                                   *posting.account.split(':'), value)
                       for posting in entry.postings
                       for document_root in self.options['documents']])
 
@@ -424,20 +471,6 @@ class FavaLedger():
                 return path
 
         raise FavaAPIException('Statement not found.')
-
-    def is_document_path(self, path):
-        """Check if file at path is a document.
-
-        Raises:
-            FavaAPIException: If ``path`` is not the path of one of the
-                documents.
-        """
-        for entry in filter_type(self.entries, Document):
-            if entry.filename == path:
-                return
-
-        raise FavaAPIException(
-            'File "{}" not found in document entries.'.format(path))
 
     def account_uptodate_status(self, account_name):
         """Status of the last balance or transaction.
@@ -465,18 +498,16 @@ class FavaLedger():
                     txn_posting.txn.flag != FLAG_UNREALIZED:
                 return 'yellow'
 
-    def account_metadata(self, account_name):
-        """Metadata of the account.
+    def account_is_closed(self, account_name):
+        """Check if the account is closed.
 
         Args:
             account_name: An account name.
 
         Returns:
-            Metadata of the Open entry of the account.
+            True if the account is closed before the end date of the current
+            time filter.
         """
-        real_account = realization.get_or_create(self.all_root_account,
-                                                 account_name)
-        for posting in real_account.txn_postings:
-            if isinstance(posting, Open):
-                return posting.meta
-        return {}
+        if self._filters['time']:
+            return self.accounts[account_name].close_date < self._date_last
+        return self.accounts[account_name].close_date is not MAXDATE

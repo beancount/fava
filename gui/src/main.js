@@ -41,9 +41,9 @@ function startFava() {
 
   let favaPath;
   if (__dirname.match('app.asar')) {
-    favaPath = `${app.getAppPath()}/bin/fava`.replace('app.asar', 'app.asar.unpacked');
+    favaPath = `${app.getAppPath()}/bin/fava/cli`.replace('app.asar', 'app.asar.unpacked');
   } else {
-    favaPath = path.join(__dirname, '../bin/fava');
+    favaPath = path.join(__dirname, '../bin/fava/cli');
   }
 
   // click aborts if the locale is not set

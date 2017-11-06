@@ -9,8 +9,9 @@ node_modules:
 bin/fava:
 	make -C ..
 	make -C .. pyinstaller
+	rm -rf bin
 	mkdir -p bin
-	cp ../dist/fava bin/fava
+	cp -r ../dist/fava bin/fava
 
 clean:
 	rm -rf bin dist

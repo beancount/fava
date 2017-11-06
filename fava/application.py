@@ -19,19 +19,19 @@ import os
 from io import BytesIO
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
-                   redirect, send_from_directory, g, send_file,
-                   render_template_string)
+                   redirect, g, send_file, render_template_string)
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.utils.text_utils import replace_numbers
+from beancount.core.data import Document
 
 from fava import template_filters
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException, FilterException
-from fava.docs import HELP_PAGES
+from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.util import slugify, resource_path, setup_logging
 from fava.util.excel import HAVE_EXCEL
@@ -51,7 +51,6 @@ app.jinja_env.lstrip_blocks = True
 # the key is currently only required to flash messages
 app.secret_key = '1234'
 
-app.config['HELP_DIR'] = resource_path('docs')
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 app.config['LEDGERS'] = {}
@@ -228,19 +227,20 @@ def index():
 @app.route('/<bfile>/account/<name>/<subreport>/')
 def account(name, subreport='journal'):
     """The account report."""
-    assert subreport in ['journal', 'balances', 'changes']
-    return render_template(
-        'account.html', account_name=name, subreport=subreport)
+    if subreport in ['journal', 'balances', 'changes']:
+        return render_template(
+            'account.html', account_name=name, subreport=subreport)
+    abort(404)
 
 
 @app.route('/<bfile>/document/', methods=['GET'])
 def document():
     """Download a document."""
     filename = request.args.get('filename')
-    g.ledger.is_document_path(filename)
-    directory = os.path.dirname(filename)
-    basename = os.path.basename(filename)
-    return send_from_directory(directory, basename)
+    if not any((filename == document.filename for document in
+                g.ledger.all_entries_by_type[Document])):
+        abort(404)
+    return send_file(filename)
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])
@@ -249,15 +249,16 @@ def statement():
     entry_hash = request.args.get('entry_hash')
     key = request.args.get('key')
     document_path = g.ledger.statement_path(entry_hash, key)
-    directory = os.path.dirname(document_path)
-    filename = os.path.basename(document_path)
-    return send_from_directory(directory, filename)
+    return send_file(document_path)
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')
 def holdings_by(aggregation_key):
     """The holdings report."""
-    return render_template('holdings.html', aggregation_key=aggregation_key)
+    if aggregation_key in ['account', 'currency', 'cost_currency']:
+        return render_template(
+            'holdings.html', aggregation_key=aggregation_key)
+    abort(404)
 
 
 @app.route('/<bfile>/<report_name>/')
@@ -293,7 +294,7 @@ def help_page(page_slug='_index'):
     if page_slug not in app.config['HELP_PAGES']:
         abort(404)
     html = markdown2.markdown_path(
-        os.path.join(app.config['HELP_DIR'], page_slug + '.md'),
+        os.path.join(resource_path('help'), page_slug + '.md'),
         extras=['fenced-code-blocks', 'tables'])
     return render_template(
         'help.html',

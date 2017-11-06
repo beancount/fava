@@ -154,12 +154,13 @@
     opacity: .5;
   }
 
-  & .budget {
-    margin-right: 4px;
+  & .diff {
+    color: var(--color-budget-zero);
+    font-size: .9em;
+    margin-right: 3px;
 
-    &.budget-negative { color: var(--color-budget-negative); }
-    &.budget-positive { color: var(--color-budget-positive); }
-    &.budget-zero { color: var(--color-budget-zero); }
+    &.negative { color: var(--color-budget-negative); }
+    &.positive { color: var(--color-budget-positive); }
   }
 }
 

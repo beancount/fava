@@ -103,7 +103,7 @@ function addTooltip(selection, tooltipText) {
 
 function timeFilter(date) {
   $('#time-filter').value = timeFilterDateFormat[$('#chart-interval').value](date);
-  $('#filter-form').dispatchEvent(new Event('submit'));
+  $('#filter-form [type=submit]').click();
 }
 
 function addLegend(domain, colorScale) {

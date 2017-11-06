@@ -3,9 +3,9 @@ Welcome to the help pages for Fava! There are pages for the following topics:
 - [Beancount Syntax]({{ url_for('help_page', page_slug='beancount_syntax') }}) - short overview of the syntax.
 - [Budgets]({{ url_for('help_page', page_slug='budgets') }}) - how to use Fava's budgeting feature.
 - [Fava's Features]({{ url_for('help_page', page_slug='features') }}) - the features in detail.
-- [Extensions]({{ url_for('help_page', page_slug='import') }}) - how Fava can be extended.
+- [Extensions]({{ url_for('help_page', page_slug='extensions') }}) - how Fava can be extended.
 - [Import]({{ url_for('help_page', page_slug='import') }}) - the import system.
-- [Options]({{ url_for('help_page', page_slug='import') }}) - the available options.
+- [Options]({{ url_for('help_page', page_slug='options') }}) - the available options.
 
 Fava comes with keyboard shortcuts - press <kbd>?</kbd> on any page to see the
 available ones. When charts are visible,  <kbd>c</kbd> and <kbd>C</kbd> will
