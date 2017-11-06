@@ -1,6 +1,19 @@
 Changelog
 =========
 
+v1.6 (November 6th, 2017)
+-------------------------
+
+This is a release with various small changes and mainly some speed
+improvements to the Balance Sheet and the net worth calculation. Also, if 'At
+Value' is selected, the current unrealized gain is shown in parentheses in the
+Balance Sheet.
+
+Other changes:
+
+- The currently filtered entries can now be exported from the Journal page.
+- The CLI now has a ``--version`` flag.
+
 v1.5 (July 23rd, 2017)
 ----------------------
 

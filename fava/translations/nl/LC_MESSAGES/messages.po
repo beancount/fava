@@ -27,9 +27,9 @@ msgstr "Periode"
 msgid "Tag"
 msgstr "Label"
 
-#: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:8
-#: fava/templates/_tree_table.html:94 fava/templates/holdings.html:60
-#: fava/templates/import.html:20 fava/templates/macros/_entry_forms.html:4
+#: fava/templates/_entry_filters.html:5 fava/templates/_tree_table.html:24
+#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:60
+#: fava/templates/import.html:19 fava/templates/macros/_entry_forms.html:4
 #: fava/templates/macros/_entry_forms.html:5
 #: fava/templates/macros/_entry_forms.html:57
 #: fava/templates/macros/_entry_forms.html:58
@@ -96,7 +96,7 @@ msgstr "Statistieken"
 msgid "Help"
 msgstr "Hulp"
 
-#: fava/templates/_journal_table.html:95 fava/templates/commodities.html:13
+#: fava/templates/_journal_table.html:94 fava/templates/commodities.html:13
 #: fava/templates/events.html:17 fava/templates/macros/_entry_forms.html:25
 #: fava/templates/macros/_entry_forms.html:55
 #: fava/templates/macros/_entry_forms.html:77
@@ -104,31 +104,31 @@ msgid "Date"
 msgstr "Datum"
 
 #. I'm understanding is header as "Status"
-#: fava/templates/_journal_table.html:96
+#: fava/templates/_journal_table.html:95
 msgid "F"
 msgstr "V"
 
-#: fava/templates/_journal_table.html:97
+#: fava/templates/_journal_table.html:96
 msgid "Narration/Payee"
 msgstr "Omschrijving/Begunstigde"
 
-#: fava/templates/_journal_table.html:98
+#: fava/templates/_journal_table.html:97
 msgid "Position"
 msgstr "Positie"
 
-#: fava/templates/_journal_table.html:99 fava/templates/commodities.html:14
+#: fava/templates/_journal_table.html:98 fava/templates/commodities.html:14
 msgid "Price"
 msgstr "Prijs"
 
-#: fava/templates/_journal_table.html:100
+#: fava/templates/_journal_table.html:99
 msgid "Cost"
 msgstr "Kosten"
 
-#: fava/templates/_journal_table.html:102
+#: fava/templates/_journal_table.html:101
 msgid "Change"
 msgstr "Verschil"
 
-#: fava/templates/_journal_table.html:103
+#: fava/templates/_journal_table.html:102
 #: fava/templates/macros/_entry_forms.html:53 fava/templates/statistics.html:57
 msgid "Balance"
 msgstr "Balans"
@@ -146,27 +146,17 @@ msgstr "Bezig met opslaan..."
 msgid "File change detected. Click to reload."
 msgstr "Bestand is gewijzigd. Klik om te herladen."
 
-#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:94
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:105
 msgid "Expand all accounts"
 msgstr "Alle rekeningen uitvouwen"
 
-#: fava/templates/_tree_table.html:8 fava/templates/_tree_table.html:94
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:105
 msgid "Expand all"
 msgstr "Alles uitvouwen"
 
-#: fava/templates/_globals.html:18 fava/templates/_tree_table.html:13
+#: fava/templates/_globals.html:18 fava/templates/_tree_table.html:29
 msgid "Other"
 msgstr "Anderen"
-
-#: fava/templates/_tree_table.html:5
-msgid "Hold Shift while clicking to expand all children \n"
-"Hold Ctrl or Cmd while clicking to expand one level"
-msgstr "Houd Shift ingedrukt en klik om sub-rekeningen uit te vouwen\n"
-"Houd Ctrl of Cmd ingedrukt en klik om één niveau uit te vouwen"
-
-#: fava/templates/_tree_table.html:112
-msgid "Hold the Shift-key while clicking to expand all children"
-msgstr "Houd Shift ingedrukt en klik om sub-rekeningen uit te vouwen"
 
 #: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
@@ -189,7 +179,7 @@ msgstr "Balansen"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Bekijk bronbestand %(file)s:%(lineno)s"
 
-#: fava/templates/errors.html:11 fava/templates/import.html:18
+#: fava/templates/errors.html:11 fava/templates/import.html:17
 msgid "File"
 msgstr "Bestand"
 
@@ -360,7 +350,7 @@ msgstr ""
 msgid "Configuration"
 msgstr ""
 
-#: fava/templates/_journal_table.html:40
+#: fava/templates/_journal_table.html:4
 msgid "Budget entries"
 msgstr ""
 
@@ -396,15 +386,11 @@ msgstr ""
 msgid "Import transactions"
 msgstr ""
 
-#: fava/templates/import.html:19
+#: fava/templates/import.html:18
 msgid "Importer"
 msgstr ""
 
-#: fava/templates/import.html:21
-msgid "Action"
-msgstr ""
-
-#: fava/templates/import.html:35
+#: fava/templates/import.html:33
 msgid "Extract"
 msgstr ""
 
@@ -412,7 +398,7 @@ msgstr ""
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr ""
 
-#: fava/templates/_journal_table.html:47
+#: fava/templates/_journal_table.html:46
 #: fava/templates/macros/_entry_forms.html:15
 msgid "Metadata"
 msgstr ""
@@ -445,27 +431,27 @@ msgstr ""
 msgid "Balances after entry"
 msgstr ""
 
-#: fava/templates/_journal_table.html:3
+#: fava/templates/_journal_table.html:11
 msgid "Cleared transactions"
 msgstr ""
 
-#: fava/templates/_journal_table.html:4
+#: fava/templates/_journal_table.html:12
 msgid "Pending transactions"
 msgstr ""
 
-#: fava/templates/_journal_table.html:5
+#: fava/templates/_journal_table.html:13
 msgid "Other transactions"
 msgstr ""
 
-#: fava/templates/_journal_table.html:9
+#: fava/templates/_journal_table.html:7
 msgid "Documents with a #discovered tag"
 msgstr ""
 
-#: fava/templates/_journal_table.html:10
+#: fava/templates/_journal_table.html:8
 msgid "Documents with a #statement tag"
 msgstr ""
 
-#: fava/templates/_journal_table.html:48
+#: fava/templates/_journal_table.html:47
 msgid "Postings"
 msgstr ""
 
@@ -511,5 +497,18 @@ msgstr ""
 
 #: fava/templates/query.html:14
 msgid "Submit"
+msgstr ""
+
+#: fava/templates/_tree_table.html:3
+msgid "Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr ""
+
+#: fava/templates/_journal_table.html:36
+msgid "Export Journal as a Beancount file"
+msgstr ""
+
+#: fava/templates/_journal_table.html:36
+msgid "Export"
 msgstr ""
 
