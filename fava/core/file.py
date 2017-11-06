@@ -110,8 +110,8 @@ class FileModule(FavaModule):
                          self.ledger.fava_options['insert-entry'])
             self.ledger.extensions.run_hook('after_insert_entry', entry)
 
-    # pylint: disable=R0201
-    def render_entries(self, entries):
+    @staticmethod
+    def render_entries(entries):
         """Return entries in Beancount format.
 
         Only renders Balances and Transactions.
