@@ -25,19 +25,15 @@ e.on('page-loaded', () => {
       const shouldShow = button.classList.contains('inactive');
 
       button.classList.toggle('inactive', !shouldShow);
-      if (type === 'transaction') {
-        $$('#entry-filters .txn-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
+      if (type === 'transaction' || type === 'custom' || type === 'document') {
+        $$(`#entry-filters .${type}-toggle`).forEach((el) => {
+          el.classList.toggle('inactive', !shouldShow);
+        });
       }
 
-      if (type === 'custom') {
-        $$('#entry-filters .custom-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
-      }
-
-      if (type === 'document') {
-        $$('#entry-filters .doc-toggle').forEach((el) => { el.classList.toggle('inactive', !shouldShow); });
-      }
-
-      $$(`#journal-table .${type}`).forEach((el) => { el.classList.toggle('hidden', !shouldShow); });
+      $$(`#journal-table .${type}`).forEach((el) => {
+        el.classList.toggle('hidden', !shouldShow);
+      });
 
       // Modify get params
       const filterShow = [];

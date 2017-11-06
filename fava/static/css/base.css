@@ -416,12 +416,17 @@ article {
 }
 
 .wide-form {
+  display: flex;
+  flex-wrap: wrap;
   margin-bottom: 5px;
-  text-align: right;
   width: 100%;
 
-  &.chart-filter {
-    input { margin-left: 10px; }
+  & button {
+    margin-bottom: 5px;
+  }
+
+  & .small {
+    margin-left: 3px;
   }
 }
 
