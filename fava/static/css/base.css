@@ -16,6 +16,14 @@ body {
 table {
   border-collapse: collapse;
   border-spacing: 0;
+
+  & pre {
+    background-color: inherit;
+    border: 0;
+    margin: 0;
+    overflow: inherit;
+    padding: 0;
+  }
 }
 
 tbody {
@@ -559,14 +567,6 @@ kbd {
 
     &:nth-child(1) { font-weight: 500; }
     &:nth-child(2) { white-space: normal; }
-  }
-
-  & pre {
-    background-color: inherit;
-    border: 0;
-    margin: 0;
-    overflow: inherit;
-    padding: 0;
   }
 }
 

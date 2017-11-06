@@ -5,43 +5,46 @@
 {% import 'macros/_entry_forms.html' as forms with context %}
 
 {% block content %}
-  <h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
-  <div class="ingest-actions">
-    <button type="button" id="toggle-source">{{ _('Toggle source') }}</button>
-    <button type="button" id="toggle-ignore">{{ _('Toggle ignore') }}</button>
+<h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
+<div class="ingest-actions">
+  <button type="button" id="toggle-source">{{ _('Toggle source') }}</button>
+  <button type="button" id="toggle-ignore">{{ _('Toggle ignore') }}</button>
+</div>
+<form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
+  <div class="ingest-row header">
+    <div class="line">{{ _('Line') }}</div>
+    <div class="source">{{ _('Source') }}</div>
+    <div class="entry-form">{{ _('Entry') }}</div>
+    <div class="actions">{{ _('Actions') }}</div>
   </div>
-  <form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
-    <div class="ingest-row header">
-      <div class="line">{{ _('Line') }}</div>
-      <div class="source">{{ _('Source') }}</div>
-      <div class="form">{{ _('Entry') }}</div>
-      <div class="actions">{{ _('Actions') }}</div>
+  {% for entry in g.ledger.ingest.extract(request.args.get('filename'), request.args.get('importer')) %}
+  {% set type = entry.__class__.__name__.lower() %}
+  {% set duplicate = '__duplicate__' in entry.meta %}
+  <div class="ingest-row{{ ' duplicate' if duplicate else ' import' }}">
+    <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
+    <div class="source">
+      {% if entry.meta['__source__'] %}
+      <pre>{{ entry.meta['__source__'] }}</pre>
+      {% endif %}
     </div>
-    {% for entry in g.ledger.ingest.extract(request.args.get('filename'), request.args.get('importer')) %}
-      {% set type = entry.__class__.__name__.lower() %}
-      <div class="ingest-row {% if '__duplicate__' in entry.meta %}duplicate{% else %}import{% endif %}">
-        <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
-        <div class="source"><pre>{{ entry.meta['__source__'] }}</pre></div>
-        <div class="form">
-          {% if type == 'transaction' %}
-            {{ forms.transaction(entry=entry) }}
-          {% elif type == 'balance' %}
-            {{ forms.balance(entry=entry) }}
-          {% elif type == 'note' %}
-            {{ forms.note(entry=entry) }}
-          {% endif %}
-        </div>
-          <div class="actions">
-            <div class="inner">
-              <label><input name="action-{{ loop.index }}" type="radio" value="ignore">{{ _('Ignore') }}</label>
-              <label><input name="action-{{ loop.index }}" type="radio" value="duplicate"{% if '__duplicate__' in entry.meta %} checked{% endif %}>{{ _('Duplicate') }}</label>
-              <label><input name="action-{{ loop.index }}" type="radio" value="import"{% if '__duplicate__' not in entry.meta %} checked{% endif %}>{{ _('Import') }}</label>
-            </div>
-          </div>
+    {% if type == 'transaction' %}
+    {{ forms.transaction(entry=entry) }}
+    {% elif type == 'balance' %}
+    {{ forms.balance(entry=entry) }}
+    {% elif type == 'note' %}
+    {{ forms.note(entry=entry) }}
+    {% endif %}
+    <div class="actions">
+      <div class="inner">
+        <label><input name="action-{{ loop.index }}" type="radio" value="ignore">{{ _('Ignore') }}</label>
+        <label><input name="action-{{ loop.index }}" type="radio" value="duplicate"{{ ' checked' if duplicate else '' }}>{{ _('Duplicate') }}</label>
+        <label><input name="action-{{ loop.index }}" type="radio" value="import"{{ ' checked' if not duplicate else '' }}>{{ _('Import') }}</label>
       </div>
-    {% endfor %}
-    <div class="fieldset ingest-footer">
-      <button type="submit" class="ingest-form-submit" data-url="{{ url_for('report', report_name='ingest') }}">{{ _('Import transactions') }}</button>
     </div>
-  </form>
+  </div>
+  {% endfor %}
+  <div class="fieldset ingest-footer">
+    <button type="submit" class="ingest-form-submit">{{ _('Import transactions') }}</button>
+  </div>
+</form>
 {% endblock %}

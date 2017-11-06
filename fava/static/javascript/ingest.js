@@ -39,8 +39,9 @@ e.on('page-loaded', () => {
   });
 
   $('#toggle-ignore').addEventListener('click', (event) => {
-    const value = event.target.classList.contains('inactive') ? 'import' : 'ignore';
-    $$(`.ingest-row input[value=${value}]`).forEach((input) => {
+    const toImport = event.target.classList.contains('inactive');
+    const value = toImport ? 'import' : 'ignore';
+    $$(`.ingest-row.${toImport ? 'ignore' : 'import'} input[value=${value}]`).forEach((input) => {
       input.click();
     });
     event.target.classList.toggle('inactive');
