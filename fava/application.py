@@ -283,7 +283,7 @@ def download_query(result_format):
 def download_journal():
     """Download a Journal file."""
     filename = "journal_{}.beancount".format(datetime.datetime.now())
-    data = BytesIO(bytes(render_template('beancount_file.html'), 'utf8'))
+    data = BytesIO(bytes(render_template('beancount_file'), 'utf8'))
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
 
