@@ -350,10 +350,10 @@ class FavaLedger():
         else:
             postings = real_account.txn_postings
 
-        return [(entry, postings,
+        return [(entry, postings_,
                  change.reduce(convert.get_units),
                  balance.reduce(convert.get_units)) for
-                (entry, postings, change, balance) in
+                (entry, postings_, change, balance) in
                 realization.iterate_with_balance(postings)]
 
     def events(self, event_type=None):

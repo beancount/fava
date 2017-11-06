@@ -1,0 +1,18 @@
+;; -*- mode: org; mode: beancount; -*-
+
+option "title" "{{ ledger.options.title }} - Journal Export"
+
+{% for currency in ledger.options.operating_currency -%}
+option "operating_currency" "{{ currency }}"
+{% endfor -%}
+
+option "name_assets" "{{ ledger.options.name_assets }}"
+option "name_liabilities" "{{ ledger.options.name_liabilities }}"
+option "name_equity" "{{ ledger.options.name_equity }}"
+option "name_income" "{{ ledger.options.name_income }}"
+option "name_expenses" "{{ ledger.options.name_expenses }}"
+plugin "beancount.plugins.auto_accounts"
+
+{% for rendered_entry in ledger.file.render_entries(ledger.entries) %}
+{{ rendered_entry|safe }}
+{% endfor %}

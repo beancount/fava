@@ -1,15 +1,18 @@
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom'] %}
-{% set transaction_type_buttons = (
-  ('cleared', '*', _('Cleared transactions')),
-  ('pending', '!', _('Pending transactions')),
-  ('other', 'x', _('Other transactions')),
-)
-%}
-{% set document_type_buttons = (
-  ('discovered', 'D', _('Documents with a #discovered tag')),
-  ('statement', 'S', _('Documents with a #statement tag')),
-)
-%}
+{% set sub_types = {
+  'custom': (
+    ('budget', 'B', _('Budget entries')),
+  ),
+  'document': (
+    ('discovered', 'D', _('Documents with a #discovered tag')),
+    ('statement', 'S', _('Documents with a #statement tag')),
+  ),
+  'transaction': (
+    ('cleared', '*', _('Cleared transactions')),
+    ('pending', '!', _('Pending transactions')),
+    ('other', 'x', _('Other transactions')),
+  ),
+} %}
 {% set keyboard_shortcuts = {
   'open': 's o',
   'close': 's c',
@@ -29,20 +32,16 @@
   'discovered': 'd d',
   'statement': 'd s',
 } %}
-<form id="entry-filters" class="journal-entry-filters wide-form">
+<form id="entry-filters" class="wide-form">
+  <a href="{{ url_for('download_journal', account=account_name) if account_name else url_for('download_journal') }}" class="button" title="{{ _('Export Journal as a Beancount file') }}" data-remote>{{ _('Export') }}</a>
+  <span class="spacer"></span>
   {% for type in entry_types %}
-    <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
-    {% if type == 'transaction' %}
-      {% for txn_type in transaction_type_buttons %}
-        <button type="button" title="{{ txn_type.2 }}" data-type="{{ txn_type.0 }}" data-key="{{ keyboard_shortcuts[txn_type.0] }}" class="small txn-toggle{% if txn_type.0 not in g.journal_show or 'transaction' not in g.journal_show %} inactive{% endif %}">{{ txn_type.1 }}</button>
-      {% endfor %}
-    {% elif type == 'custom' %}
-      <button type="button" title="{{ _('Budget entries') }}" data-type="budget" data-key="{{ keyboard_shortcuts['budget'] }}" class="small custom-toggle{% if 'budget' not in g.journal_show or 'custom' not in g.journal_show %} inactive{% endif %}">B</button>
-    {% elif type == 'document' %}
-      {% for doc_type in document_type_buttons %}
-        <button type="button" title="{{ doc_type.2 }}" data-type="{{ doc_type.0 }}" data-key="{{ keyboard_shortcuts[doc_type.0] }}" class="small doc-toggle{% if doc_type not in g.journal_show or 'document' not in g.journal_show %} inactive{% endif %}">{{ doc_type.1 }}</button>
-      {% endfor %}
-    {% endif %}
+  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
+  {% if type in sub_types.keys() %}
+  {% for sub_type in sub_types[type] %}
+  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-key="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in g.journal_show or type not in g.journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
+  {% endfor %}
+  {% endif %}
   {% endfor %}
   <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
   <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>

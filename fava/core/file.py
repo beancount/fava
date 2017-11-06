@@ -5,7 +5,7 @@ from hashlib import sha256
 import os
 import re
 
-from beancount.core import data
+from beancount.core import data, flags
 from beancount.parser.printer import format_entry
 
 from fava.core.helpers import FavaAPIException, FavaModule
@@ -109,6 +109,39 @@ class FileModule(FavaModule):
                          self.list_sources(),
                          self.ledger.fava_options['insert-entry'])
             self.ledger.extensions.run_hook('after_insert_entry', entry)
+
+    @staticmethod
+    def render_entries(entries):
+        """Return entries in Beancount format.
+
+        Only renders Balances and Transactions.
+
+        Args:
+            entries: A list of entries.
+
+        Yields:
+            The entries rendered in Beancount format.
+
+        """
+        excl_flags = [
+            flags.FLAG_PADDING,      # P
+            flags.FLAG_SUMMARIZE,    # S
+            flags.FLAG_TRANSFER,     # T
+            flags.FLAG_CONVERSIONS,  # C
+            flags.FLAG_UNREALIZED,   # U
+            flags.FLAG_RETURNS,      # R
+            flags.FLAG_MERGING,      # M
+        ]
+
+        for entry in entries:
+            if isinstance(entry, (data.Balance, data.Transaction)):
+                if isinstance(entry, data.Transaction) and \
+                   entry.flag in excl_flags:
+                    continue
+                try:
+                    yield get_entry_slice(entry)[0] + '\n'
+                except FileNotFoundError:
+                    yield _format_entry(entry)
 
 
 def incomplete_sortkey(entry):

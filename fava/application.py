@@ -16,6 +16,7 @@ Attributes:
 import datetime
 import inspect
 import os
+from io import BytesIO
 
 from flask import (abort, Flask, flash, render_template, url_for, request,
                    redirect, g, send_file, render_template_string)
@@ -275,6 +276,14 @@ def download_query(result_format):
         request.args.get('query_string', ''), result_format)
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)
+    return send_file(data, as_attachment=True, attachment_filename=filename)
+
+
+@app.route('/<bfile>/download-journal/')
+def download_journal():
+    """Download a Journal file."""
+    filename = "journal_{}.beancount".format(datetime.datetime.now())
+    data = BytesIO(bytes(render_template('beancount_file'), 'utf8'))
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
 
