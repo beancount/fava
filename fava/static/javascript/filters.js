@@ -30,7 +30,7 @@ e.on('page-init', () => {
   $$('#filter-form input').forEach((input) => {
     input.addEventListener('awesomplete-selectcomplete', () => {
       updateInput(input);
-      $('#filter-form').dispatchEvent(new Event('submit'));
+      $('#filter-form [type=submit]').click();
     });
 
     input.addEventListener('input', () => {
@@ -72,8 +72,7 @@ e.on('page-init', () => {
       const input = $('input', button.closest('span'));
       input.value = '';
       updateInput(input);
-
-      $('#filter-form').dispatchEvent(new Event('submit'));
+      $('#filter-form [type=submit]').click();
     });
   });
 });
