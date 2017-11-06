@@ -830,10 +830,11 @@ e.on('page-loaded', () => {
           })),
         }];
 
-        charts[chartId] = new LineChart(chartContainer(chartId, chart.label))
-          .set('tooltipText', d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`)
-          .draw(series);
-
+        if (series[0].values.length) {
+          charts[chartId] = new LineChart(chartContainer(chartId, chart.label))
+            .set('tooltipText', d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`)
+            .draw(series);
+        }
         break;
       }
       case 'bar': {

@@ -2,27 +2,29 @@
 {% set active_page = 'commodities' %}
 
 {% block content %}
-    {{ charts.skeleton(hide_interval_filter=True) }}
-    {{ charts.commodities() }}
+{{ charts.skeleton(hide_interval_filter=True) }}
+{{ charts.commodities() }}
 
-    {% for commodity in ledger.commodity_pairs() %}
-        <div class="left">
-            <h3>{{ commodity.0 }} / {{ commodity.1 }}</h3>
-            <table class="sortable">
-                <thead>
-                    <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Date') }}</th>
-                    <th data-sort="num">{{ _('Price') }}</th>
-                </thead>
-                <tbody>
-                    {% set prices = ledger.prices(commodity.0, commodity.1) %}
-                    {% for price in prices %}
-                        <tr>
-                            <td>{{ price.0 }}</td>
-                            <td class="num">{{ price.1|format_currency(commodity.1) }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% endfor %}
+{% for commodity_pair in ledger.commodity_pairs() %}
+{% set prices = ledger.prices(*commodity_pair) %}
+{% if prices %}
+<div class="left">
+  <h3>{{ commodity_pair.0 }} / {{ commodity_pair.1 }}</h3>
+  <table class="sortable">
+    <thead>
+      <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Date') }}</th>
+      <th data-sort="num">{{ _('Price') }}</th>
+    </thead>
+    <tbody>
+      {% for price in prices %}
+      <tr>
+        <td>{{ price.0 }}</td>
+        <td class="num">{{ price.1|format_currency(commodity_pair.1) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endfor %}
 {% endblock %}
