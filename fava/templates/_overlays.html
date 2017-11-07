@@ -1,4 +1,4 @@
-{% import 'macros/_entry_forms.html' as forms with context %}
+{% import '_entry_forms.html' as forms with context %}
 
 <div id="documents-upload" class="documents-upload overlay-wrapper">
   <div class="overlay">
@@ -27,10 +27,8 @@
       <h3>{{ _('New transaction') }}:</h3>
       {{ forms.transaction() }}
       <div class="fieldset">
-        <button type="submit" id="transaction-form-submit" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save') }}</button>
-        <button type="submit" class="muted" id="transaction-form-submit-and-new" data-url="{{ url_for('json_api.add_document') }}">{{ _('Save and add new') }}</button>
-        <span class="spacer"></span>
-        <button type="button" id="add-metadata" class="link add-metadata-link">{{ _('Add metadata') }}</a>
+        <button type="submit" id="transaction-form-submit">{{ _('Save') }}</button>
+        <button type="submit" class="muted" id="transaction-form-submit-and-new">{{ _('Save and add new') }}</button>
       </div>
     </form>
   </div>
@@ -41,5 +39,5 @@
     <div class="content"></div>
   </div>
 </div>
-{{ forms.posting(id="posting-template") }}
-{{ forms.metadata(id="metadata-template") }}
+<div class="hidden" id="posting-template">{{ forms.posting() }}</div>
+<div class="hidden" id="metadata-template">{{ forms.metadata() }}</div>

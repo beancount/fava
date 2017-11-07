@@ -1,12 +1,9 @@
 .entry-form {
-  & input[name='date'] {
-    margin-left: 0;
-  }
-
   & textarea {
-    border: 1px solid color(var(--color-text) tint(50%));
+    flex-grow: 1;
     font: inherit;
     padding: 8px;
+    width: 100%;
   }
 
   & label {
@@ -18,115 +15,86 @@
     width: 100px;
   }
 
-  & .add-posting,
-  & .add-metadata {
-    display: none;
-  }
-
   & input {
     &[name='flag'] {
-      padding: 0 2px;
+      padding-left: 2px;
+      padding-right: 2px;
       text-align: center;
       width: 1.5em;
     }
 
-    &[name='account'],
+    &.account,
     &[name='narration'],
-    &[name='payee'],
-    &[name='metadata-value'] {
+    &[name='payee'] {
       flex-grow: 1;
+      min-width: 15em;
     }
 
-    &[name='metadata-key'] {
+    &.metadata-value {
+      flex-grow: 1;
+      max-width: 15em;
+    }
+
+    &.metadata-key {
       width: 10em;
     }
   }
 
+  & .remove-fieldset {
+    opacity: 0;
+  }
+
+  & .fieldset:hover .remove-fieldset {
+    opacity: 1;
+  }
+
   & .posting {
-    padding-left: 60px;
+    padding-left: 50px;
+
+    & .add-posting {
+      display: none;
+    }
 
     &:last-child {
       & .add-posting {
         display: inline-block;
       }
 
-      & input.currency {
-        width: 69px;
+      & .currency {
+        width: 72px;
       }
     }
   }
 
   & .metadata {
     font-size: .8em;
-    padding-left: 60px;
+    padding-left: 56px;
 
-    & .fieldset {
-      width: 50%;
-
-      &:last-child {
-        & .add-metadata {
-          display: inline-block;
-        }
-      }
+    & .add-metadata {
+      display: none;
     }
-  }
-}
 
-[id='posting-template'],
-[id='metadata-template'] {
-  display: none;
-}
-
-.entry-form.balance,
-.entry-form.note {
-  & input {
-    &[name='account'] {
-      flex-grow: 1;
+    & .fieldset:last-child .add-metadata {
+      display: inline-block;
     }
-  }
-
-  & textarea {
-    flex-grow: 1;
   }
 }
 
 @media (max-width: 767px) {
   .entry-form.transaction {
     & label {
-      display: block;
-      margin-top: 0;
-      padding-left: 0;
+      display: initial;
       width: 100%;
     }
 
-    & .fieldset {
-      display: block;
-
-      & input {
-        height: 35px;
-        margin: 0 .5em .5em 0;
-        width: 120px;
-
-        &[name='flag'] {
-          width: 1.5em;
-        }
-
-        &[name='narration'],
-        &[name='payee'],
-        &[name='account'] {
-          width: 100%;
-        }
-      }
+    & .fieldset input {
+      height: 35px;
+      margin: 0 .5em .5em 0;
     }
 
+    & .metadata,
     & .posting {
       padding-left: 0;
-    }
-
-    & .add-posting {
-      font-size: 1.2em;
-      position: absolute;
-      right: 20px;
     }
   }
 }

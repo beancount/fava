@@ -23,7 +23,7 @@
     {% set placeholder = placeholders[name] %}
     <span{% if not filter_value %} class="empty"{% endif %}>
       <input id="{{ name }}-filter" data-key="{{ keys[name] }}" name="{{ name }}" type="text" {{ 'list={} '.format(lists[name]) if name in lists else '' }}value="{{ filter_value or '' }}" placeholder="{{ placeholder }}" size="{{ (filter_value or placeholder)|length+2 }}">
-        <button type="button" tabindex="-1" class="close">&times;</button>
+        <button type="button" tabindex="-1" class="close muted round">&times;</button>
     </span>
 {% endmacro %}
 <form id="filter-form" class="filter-form" action="{{ url_for_current() }}" method="GET">

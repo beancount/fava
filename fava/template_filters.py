@@ -47,7 +47,7 @@ def get_market_value(pos, price_map, date=None):
 def remove_keys(_dict, keys):
     """Remove keys from a dictionary."""
     if not _dict:
-        return None
+        return {}
     new = dict(_dict)
     for key in keys:
         new.pop(key, None)

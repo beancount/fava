@@ -72,7 +72,7 @@ hr {
 }
 
 p {
-  line-height: 1.5em;
+  line-height: 1.5;
 }
 
 h2,
@@ -144,7 +144,7 @@ dd {
 }
 
 li {
-  line-height: 1.5em;
+  line-height: 1.5;
 }
 
 code,
@@ -157,7 +157,7 @@ pre {
 }
 
 code {
-  line-height: 1em;
+  line-height: 1;
   padding: 0 4px;
 }
 
@@ -175,35 +175,41 @@ pre {
 
 /* fake fieldsets to work around browser bugs with <fieldset> */
 .fieldset {
+  align-items: center;
   display: flex;
-  padding: 5px 10px;
+  flex-wrap: wrap;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  line-height: 1.5;
+  margin: 0 .5em .5em 0;
 }
 
 input,
-button {
-  font: inherit;
-  margin: 0 0 0 .5em;
-  padding: 4px 8px;
+textarea {
+  border: 1px solid color(var(--color-background-darkest));
+  padding: 6px 10px;
 }
 
-input[type='text'] {
-  height: 2.5em;
+select {
+  margin: 0 .5em .5em 0;
+}
 
+input {
   /* remove dropdown triangle */
-  &::-webkit-calendar-picker-indicator {
+  &[type='text']::-webkit-calendar-picker-indicator {
     display: none;
   }
-}
 
-input[type='radio'] {
-  margin-right: 5px;
-}
-
-input[type='date'] {
-  &::-webkit-inner-spin-button,
-  &::-webkit-clear-button {
-    -webkit-appearance: none;
-    display: none;
+  &[type='date'] {
+    &::-webkit-inner-spin-button,
+    &::-webkit-clear-button {
+      -webkit-appearance: none;
+      display: none;
+    }
   }
 }
 
@@ -214,7 +220,7 @@ button,
   color: var(--color-background);
   cursor: pointer;
   outline: 0;
-  padding: 8px 10px;
+  padding: 6px 10px;
 
   &:focus,
   &:active,
@@ -254,8 +260,7 @@ button,
   &.round {
     border-radius: 15px;
     height: 1.5em;
-    line-height: 1.5em;
-    margin: 7px 0 0 10px;
+    line-height: 1.5;
     padding: 0 .5em;
   }
 }
@@ -312,6 +317,7 @@ header {
   color: inherit;
   font-size: 25px;
   height: 100%;
+  line-height: 1;
   margin: 0;
   padding: 5px 8px 5px 10px !important;
   position: absolute;
@@ -439,7 +445,10 @@ article {
 .dragover { background-color: color(var(--color-links) tint(50%)); }
 
 .headerline {
-  margin: 0 0 1.5em;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 1em;
 
   & h3 {
     display: inline-block;

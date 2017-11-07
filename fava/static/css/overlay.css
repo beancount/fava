@@ -69,16 +69,11 @@
   }
 
   & .fieldset {
-    margin-bottom: .5em;
     padding: 0;
 
     & label {
       line-height: 33px;
       width: 150px;
-    }
-
-    & input {
-      border: 1px solid color(var(--color-text) tint(50%));
     }
 
     &[type='submit'] {
@@ -91,12 +86,11 @@
   display: block;
 
   & input {
-    margin: 0 0 .5em;
     width: 100%;
   }
 
-  & select {
-    margin-left: .5em;
+  & label {
+    margin-right: .5em;
   }
 }
 

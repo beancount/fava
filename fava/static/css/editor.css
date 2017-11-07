@@ -20,7 +20,7 @@
 .dropdown {
   display: flex;
   height: 100%;
-  margin: 0;
+  padding-left: .5em;
 
   & .selected::before {
     content: '›';
@@ -31,7 +31,6 @@
     height: var(--source-editor-fieldset-height);
     line-height: var(--source-editor-fieldset-height);
     margin-right: 10px;
-    margin-top: -5px;
     position: relative;
   }
 
@@ -73,10 +72,6 @@
   position: fixed;
   right: 0;
   top: var(--header-height);
-
-  & > select {
-    margin: 5px 10px;
-  }
 
   & .fieldset {
     border-bottom: 1px solid var(--color-sidebar-border);

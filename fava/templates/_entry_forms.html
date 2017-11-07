@@ -1,0 +1,87 @@
+{% macro posting(posting=None) %}
+<div class="fieldset posting">
+  <label for="account">{{ _('Posting') }}:</label>
+  <button class="muted round remove-fieldset" type="button" tabindex="-1">×</button>
+  <input type="text" class="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ posting.account or '' }}"/>
+  <input type="number" step="0.01" class="number" placeholder="{{ _('Number') }}" value="{{ posting.units.number if posting else '' }}"/>
+  <input type="text" class="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ posting.units.currency if posting else '' }}"/>
+  <button class="muted round add-posting" type="button" title="{{ _('Add posting') }}">+</button>
+</div>
+{% endmacro %}
+
+{% macro metadata(key=None, value=None) %}
+<div class="fieldset metadata-row">
+  <label for="account">{{ _('Metadata') }}:</label>
+  <button class="muted round remove-fieldset" type="button" tabindex="-1">×</button>
+  <input type="text" class="metadata-key" placeholder="{{ _('Key') }}" value="{{ key or '' }}"/>
+  <input type="text" class="metadata-value" placeholder="{{ _('Value') }}" value="{{ value or '' }}"/>
+  <button class="muted round add-metadata" type="button" title="{{ _('Add metadata') }}">+</button>
+</div>
+{% endmacro %}
+
+{% macro transaction(entry=None) %}
+<div class="entry-form transaction" data-type="transaction">
+  <div class="fieldset">
+    <label for="date">{{ _('Date') }}:</label>
+    <input type="date" name="date" value="{{ entry.date or datetime.date.today() }}" />
+    <input type="text" name="flag" value="{{ entry.flag or '*' }}">
+    <label for="payee">{{ _('Payee') }}:</label>
+    <input type="text" name="payee" placeholder="{{ _('Payee') }}" list="payees" value="{{ entry.payee or '' }}"/>
+    <label for="payee">{{ _('Narration') }}:</label>
+    <input type="text" name="narration" placeholder="{{ _('Narration') }}" value="{{ entry.narration or '' }}"/>
+    <button class="muted round add-metadata" type="button" title="{{ _('Add metadata') }}">m</button>
+    <button class="muted round add-posting" type="button" title="{{ _('Add posting') }}">p</button>
+  </div>
+  <div class="metadata">
+    {% for key, value in entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
+    {{ metadata(key=key, value=value) }}
+    {% endfor %}
+  </div>
+  <div class="postings">
+    {% for p in (entry.postings or []) %}
+    {{ posting(posting=p) }}
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro balance(entry=None) %}
+<div class="entry-form balance" data-type="balance">
+  <h4>{{ _('Balance') }}</h4>
+  <div class="fieldset">
+    <label for="date">{{ _('Date') }}:</label>
+    <input type="date" name="date" value="{{ entry.date or datetime.date.today() }}" />
+    <label for="account">{{ _('Account') }}:</label>
+    <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ entry.account or '' }}"/>
+    <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" value="{{ entry.amount.number if entry.amount else '' }}"/>
+    <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ entry.amount.currency if entry.amount else '' }}"/>
+    <button class="muted round add-metadata" type="button" title="{{ _('Add metadata') }}">m</button>
+  </div>
+  <div class="metadata">
+    {% for key, value in entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
+    {{ metadata(key=key, value=value) }}
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro note(entry=None) %}
+<div class="entry-form note" data-type="note">
+  <h4>{{ _('Note') }}</h4>
+  <div class="fieldset">
+    <label for="date">{{ _('Date') }}:</label>
+    <input type="date" name="date" value="{{ entry.date or datetime.date.today() }}" />
+    <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ entry.account or '' }}"/>
+    <label for="comment">{{ _('Comment') }}:</label>
+    <button class="muted round add-metadata" type="button" title="{{ _('Add metadata') }}">m</button>
+  </div>
+  <div class="fieldset">
+    <textarea name="comment" rows="2">{{ entry.comment or '' }}</textarea>
+  </div>
+  <div class="metadata">
+    {% for key, value in entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
+    {{ metadata(key=key, value=value) }}
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}

@@ -126,22 +126,19 @@ h1 {
   color: var(--color-text);
   display: flex;
   margin: 0;
-  padding-bottom: 2px;
+  padding-top: 7px;
 
   & > span {
-    margin-bottom: 3px;
-    margin-top: 3px;
+    margin: 0 4px 6px 0;
     position: relative;
   }
 
   & input {
     background-color: var(--color-background);
     border: 0;
-    height: 36px;
-    line-height: 36px;
-    margin-left: 4px;
-    max-width: 15rem;
-    padding: 0 25px 0 10px;
+    margin: 0;
+    max-width: 18rem;
+    padding: 8px 25px 8px 10px;
   }
 
   & [type='text'] {
@@ -166,7 +163,6 @@ h1 {
 
   & [type='submit'] {
     background-color: color(var(--color-header) tint(10%));
-    margin-left: 4px;
   }
 
   & .empty {
@@ -180,16 +176,9 @@ h1 {
   }
 
   & .close {
-    background-color: var(--color-background-darkest);
-    border-radius: 9px;
     display: block;
-    font-size: 18px;
-    height: 18px;
-    line-height: 18px;
-    padding: 0;
     position: absolute;
-    right: 7px;
+    right: 0;
     top: 9px;
-    width: 18px;
   }
 }

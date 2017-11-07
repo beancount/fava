@@ -2,11 +2,12 @@
 {% set active_page = 'import' %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% import 'macros/_entry_forms.html' as forms with context %}
+{% import '_entry_forms.html' as forms with context %}
 
 {% block content %}
-<h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
-<div class="ingest-actions">
+<div class="headerline">
+  <h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
+  <span class="spacer"></span>
   <button type="button" id="toggle-source">{{ _('Toggle source') }}</button>
   <button type="button" id="toggle-ignore">{{ _('Toggle ignore') }}</button>
 </div>

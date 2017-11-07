@@ -76,6 +76,7 @@ class CompletionList {
   highlight(index) {
     const { children } = this.ul;
     if (children.length === 0) {
+      this.index = -1;
       return;
     }
 

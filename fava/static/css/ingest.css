@@ -1,9 +1,3 @@
-.ingest-actions {
-  position: absolute;
-  right: 20px;
-  top: 10px;
-}
-
 .ingest-row {
   border-bottom: thin solid var(--color-table-header-background);
   display: flex;
@@ -17,6 +11,7 @@
 
   & .source {
     flex-grow: 1;
+    margin-right: .5em;
     overflow: auto;
 
     & pre {
@@ -29,15 +24,12 @@
     min-width: 600px;
   }
 
-  & .fieldset {
-    padding: 0 10px 10px;
-  }
-
   & input[name='payee'] {
     width: 140px;
   }
 
   & .actions {
+    font-size: .8em;
     width: 60px;
 
     & .inner {
@@ -49,7 +41,6 @@
 
     & label {
       display: inline-block;
-      font-size: .8em;
     }
   }
 

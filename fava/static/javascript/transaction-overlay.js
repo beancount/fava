@@ -1,6 +1,6 @@
 import e from './events';
 import { $, $$, handleJSON } from './helpers';
-import { addPostingRow, addMetadataRow, entryFormToJSON } from './entry-forms';
+import { addPostingRow, entryFormToJSON } from './entry-forms';
 import { closeOverlay } from './overlays';
 
 function submitTransactionForm(form, successCallback) {
@@ -38,14 +38,14 @@ function submitTransactionForm(form, successCallback) {
 
 let initialized = false;
 export default function showTransactionOverlay() {
-  const form = $('#transaction #transaction-form');
+  const form = $('#transaction-form');
   if (!initialized) {
     addPostingRow(form);
     addPostingRow(form);
     initialized = true;
   }
   $('#transaction').classList.add('shown');
-  form.querySelector('input[name="date"]').focus();
+  form.focus();
 }
 
 e.on('page-init', () => {
@@ -59,11 +59,5 @@ e.on('page-init', () => {
   form.querySelector('#transaction-form-submit-and-new').addEventListener('click', (event) => {
     event.preventDefault();
     submitTransactionForm(form);
-  });
-
-  form.querySelector('#add-metadata').addEventListener('click', (event) => {
-    event.preventDefault();
-    const newMetadata = addMetadataRow(form);
-    newMetadata.querySelector('.metadata-key').focus();
   });
 });
