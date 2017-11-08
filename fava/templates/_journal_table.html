@@ -118,7 +118,7 @@
         <p>
         <span class="datecell" data-sort-value=-{{ loop.index }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
         <span class="flag">{{ entry.flag }}</span>
-    <span class="description{% if type != 'transaction' %}"{% else %} droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif %}>
+        <span class="description{% if type != 'transaction' %}"{% else %} droptarget" data-entry="{{ entry_hash }}" data-entry-date="{{ entry.date }}" data-account-name="{{ entry.postings[0].account if entry.postings else "" }}"{% endif %}>
         {% if type == 'open' %}
             Open {{ account_link(entry.account) }}
         {% elif type == 'close' %}
@@ -178,7 +178,7 @@
             <p>
                 <span class="datecell"></span>
                 <span class="flag"> </span>
-                <span class="description droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ posting.account }}">{{ account_link(posting.account) }}</span>
+                <span class="description droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ posting.account }}" data-entry-date="{{ entry.date }}">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>
