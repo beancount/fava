@@ -48,8 +48,8 @@ e.on('page-loaded', () => {
 
       const folders = $$('#document-upload-folder option');
       const { files } = event.dataTransfer;
-      var entryDate = new Date();
-      var entryDateString = target.getAttribute('data-entry-date');
+      let entryDate = new Date();
+      let entryDateString = target.getAttribute('data-entry-date');
       if (entryDateString) {
         entryDate = new Date(entryDateString);
       }
