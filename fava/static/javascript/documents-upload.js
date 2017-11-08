@@ -48,6 +48,11 @@ e.on('page-loaded', () => {
 
       const folders = $$('#document-upload-folder option');
       const { files } = event.dataTransfer;
+      let entryDate = new Date();
+      const entryDateString = target.getAttribute('data-entry-date');
+      if (entryDateString) {
+        entryDate = new Date(entryDateString);
+      }
       let changedFilename = false;
 
       if (!folders.length) {
@@ -61,7 +66,7 @@ e.on('page-loaded', () => {
         let filename = files[i].name;
 
         if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
-          filename = `${new Date().toISOString().substring(0, 10)} ${filename}`;
+          filename = `${entryDate.toISOString().substring(0, 10)} ${filename}`;
           changedFilename = true;
         }
 
