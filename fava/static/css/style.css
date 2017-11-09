@@ -64,6 +64,7 @@ body {
   --color-sidebar-border: color(var(--color-sidebar-background) shade(10%));
 
   --color-scrollbar: color(var(--color-sidebar-background) shade(30%));
+  --color-autocomplete-match: orange;
 
   --color-header: #0067a5;
   --color-header-bottom: color(var(--color-header) shade(10%));

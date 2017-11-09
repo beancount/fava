@@ -23,7 +23,7 @@
 <div class="entry-form transaction" data-type="transaction">
   <div class="fieldset">
     <label for="date">{{ _('Date') }}:</label>
-    <input type="date" name="date" value="{{ entry.date or datetime.date.today() }}" />
+    <input type="date" name="date" value="{{ entry.date or today() }}" />
     <input type="text" name="flag" value="{{ entry.flag or '*' }}">
     <label for="payee">{{ _('Payee') }}:</label>
     <input type="text" name="payee" placeholder="{{ _('Payee') }}" list="payees" value="{{ entry.payee or '' }}"/>
@@ -50,7 +50,7 @@
   <h4>{{ _('Balance') }}</h4>
   <div class="fieldset">
     <label for="date">{{ _('Date') }}:</label>
-    <input type="date" name="date" value="{{ entry.date or datetime.date.today() }}" />
+    <input type="date" name="date" value="{{ entry.date or today() }}" />
     <label for="account">{{ _('Account') }}:</label>
     <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ entry.account or '' }}"/>
     <input type="number" step="0.01" class="number" name="number" placeholder="{{ _('Number') }}" value="{{ entry.amount.number if entry.amount else '' }}"/>
@@ -70,7 +70,7 @@
   <h4>{{ _('Note') }}</h4>
   <div class="fieldset">
     <label for="date">{{ _('Date') }}:</label>
-    <input type="date" name="date" value="{{ entry.date or datetime.date.today() }}" />
+    <input type="date" name="date" value="{{ entry.date or today() }}" />
     <input type="text" class="account" name="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ entry.account or '' }}"/>
     <label for="comment">{{ _('Comment') }}:</label>
     <button class="muted round add-metadata" type="button" title="{{ _('Add metadata') }}">m</button>

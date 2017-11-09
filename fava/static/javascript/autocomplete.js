@@ -36,7 +36,7 @@ class CompletionList {
           event.preventDefault();
           this.select(ul.children[this.index]);
         } else if (event.keyCode === 27) { // ESC
-          ul.classList.add('hidden');
+          this.close();
         } else if (event.keyCode === 38) { // UP
           event.preventDefault();
           this.highlight(this.index === 0 ? ul.children.length - 1 : this.index - 1);
@@ -80,25 +80,17 @@ class CompletionList {
       return;
     }
 
-    if (this.index > -1) {
+    if (children[this.index]) {
       children[this.index].classList.remove('selected');
     }
 
     const item = children[index];
     item.classList.add('selected');
-    this.ul.scrollTop = (item.offsetTop - this.ul.clientHeight) + item.clientHeight;
     this.index = index;
-    this.highlighted = item;
   }
 
   // Position list and fill with suggestions.
   evaluate() {
-    const absolutePosition = this.input.closest('article');
-    const coords = this.input.getBoundingClientRect();
-    this.ul.style.left = `${parseInt(coords.left, 10)}px`;
-    this.ul.style.top = `${parseInt(coords.top + coords.height, 10) + (absolutePosition ? window.pageYOffset : 0)}px`;
-    this.ul.style.position = absolutePosition ? 'absolute' : 'fixed';
-
     this.ul.innerHTML = '';
     this.suggestions()
       .then((allSuggestions) => {
@@ -110,7 +102,17 @@ class CompletionList {
             this.ul.appendChild(li);
           });
         this.highlight(0);
+        this.position();
       });
+  }
+
+  // Position the list.
+  position() {
+    const absolutePosition = this.input.closest('article');
+    const coords = this.input.getBoundingClientRect();
+    this.ul.style.position = absolutePosition ? 'absolute' : 'fixed';
+    this.ul.style.top = `${Math.ceil(coords.top + coords.height) + (absolutePosition ? window.pageYOffset : 0)}px`;
+    this.ul.style.left = `${Math.floor(Math.min(coords.left, document.body.clientWidth - this.ul.offsetWidth))}px`;
   }
 
   // Filter suggestions.
@@ -125,6 +127,7 @@ class CompletionList {
     return suggestions
       .map(suggestion => String(suggestion))
       .filter(suggestion => fuzzytest(value, suggestion))
+      .slice(0, 30)
       .map(suggestion => ({
         value: suggestion,
         innerHTML: fuzzywrap(value, suggestion),
@@ -164,6 +167,7 @@ class CompletionList {
       this.input.value = value;
     }
     this.input.dispatchEvent(new Event('autocomplete-select'));
+    this.close();
   }
 }
 

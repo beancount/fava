@@ -106,6 +106,8 @@ def get_locale():
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
     app.add_template_filter(function)
 
+app.add_template_global(datetime.date.today, 'today')
+
 
 @app.template_global()
 def url_for_current(**kwargs):
@@ -132,7 +134,6 @@ def _template_context():
     return {
         'ledger': g.ledger,
         'operating_currencies': g.ledger.options['operating_currency'],
-        'datetime': datetime,
         'interval': request.args.get('interval',
                                      g.ledger.fava_options['interval']),
     }

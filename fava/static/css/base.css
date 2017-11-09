@@ -595,8 +595,8 @@ td .status-indicator {
   background: var(--color-background);
   border: 1px solid var(--color-background-darkest);
   box-shadow: 0 3px 3px var(--color-background-darker);
-  max-height: 60%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   z-index: var(--z-index-autocomplete);
 
   & li {
@@ -613,7 +613,7 @@ td .status-indicator {
     }
 
     & span {
-      background-color: var(--color-warning);
+      background-color: var(--color-autocomplete-match);
     }
   }
 

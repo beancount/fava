@@ -17,7 +17,7 @@ Click to copy the balance directives to the clipboard:
 
 {% macro last_account_activity(account_name) %}
 {% set last_entry = ledger.last_entry(account_name) %}
-{% set last_account_activity = (datetime.date.today() - last_entry.date).days if last_entry else 0 %}
+{% set last_account_activity = (today() - last_entry.date).days if last_entry else 0 %}
 {% if last_account_activity > ledger.fava_options['uptodate-indicator-grey-lookback-days'] %}
     <span class="status-indicator status-gray" title="This account has not been updated in a while. ({{ last_account_activity }} days ago)"></span>
 {% endif %}
@@ -25,7 +25,7 @@ Click to copy the balance directives to the clipboard:
 
 {% macro balance_directive(account) %}
 {% for position in (ledger.all_root_account|get_or_create(account)).balance|units %}
-{{ datetime.date.today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
+{{ today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
 {% endfor %}
 {% endmacro %}
 

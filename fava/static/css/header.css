@@ -138,6 +138,7 @@ h1 {
     border: 0;
     margin: 0;
     max-width: 18rem;
+    outline: none;
     padding: 8px 25px 8px 10px;
   }
 
@@ -147,8 +148,6 @@ h1 {
       color: color(var(--color-header) tint(50%));
       opacity: 1;
     }
-
-    outline: none;
 
     &:focus {
       &:placeholder-shown,
@@ -162,7 +161,7 @@ h1 {
   }
 
   & [type='submit'] {
-    background-color: color(var(--color-header) tint(10%));
+    display: none;
   }
 
   & .empty {
@@ -179,6 +178,6 @@ h1 {
     display: block;
     position: absolute;
     right: 0;
-    top: 9px;
+    top: 8px;
   }
 }

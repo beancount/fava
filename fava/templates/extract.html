@@ -1,8 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'import' %}
-
-{% import 'macros/_account_macros.html' as account_macros with context %}
-{% import '_entry_forms.html' as forms with context %}
+{% import '_entry_forms.html' as forms %}
 
 {% block content %}
 <div class="headerline">
@@ -45,7 +43,7 @@
   </div>
   {% endfor %}
   <div class="fieldset ingest-footer">
-    <button type="submit" class="ingest-form-submit">{{ _('Import transactions') }}</button>
+    <button type="button" id="ingest-form-submit">{{ _('Import transactions') }}</button>
   </div>
 </form>
 {% endblock %}

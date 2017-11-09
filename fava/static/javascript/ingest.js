@@ -33,8 +33,7 @@ e.on('page-loaded', () => {
     input.closest('.ingest-row').className = `ingest-row ${input.value}`;
   });
 
-  ingest.querySelector('.ingest-form-submit').addEventListener('click', (event) => {
-    event.preventDefault();
+  $('#ingest-form-submit').addEventListener('click', () => {
     submitIngestForm();
   });
 
