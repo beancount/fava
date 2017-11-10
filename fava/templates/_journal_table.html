@@ -32,6 +32,37 @@
   'discovered': 'd d',
   'statement': 'd s',
 } %}
+
+{% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
+
+{% macro render_metadata(metadata, entry_hash=None) -%}
+{% if metadata %}
+<dl class="metadata{{ ' hidden' if 'metadata' not in g.journal_show else ''}}">
+  {% for key, value in metadata.items() %}
+  <dt>{{ key }}</dt>
+  <dd>
+  {%- if key.startswith('statement') %}<a data-remote href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{% endif -%}
+    {{ value }}
+    {%- if key.startswith('statement') %}</a>{% endif -%}
+  </dd>
+  {% endfor %}
+</dl>
+{% endif %}
+{%- endmacro %}
+
+{% set tag_url = url_for_current(tag='#REPLACEME,'+(g.filters['tag'] or '')) %}
+{% set link_url = url_for_current(tag='^REPLACEME,'+(g.filters['tag'] or '')) %}
+{% macro render_tags_links(entry) -%}
+{% for tag in entry.tags %}
+<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}">#{{ tag }}</a>
+{% endfor %}
+{% for link_ in entry.links %}
+<a class="link" href="{{ link_url.replace('REPLACEME', link_) }}">^{{ link_ }}</a>
+{% endfor %}
+{%- endmacro %}
+
+{% macro journal_table(entries, show_change_and_balance=False) %}
+{% autoescape false %}
 <form id="entry-filters" class="wide-form">
   <a href="{{ url_for('download_journal', account=account_name) if account_name else url_for('download_journal') }}" class="button" title="{{ _('Export Journal as a Beancount file') }}" data-remote>{{ _('Export') }}</a>
   <span class="spacer"></span>
@@ -46,38 +77,6 @@
   <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
   <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
 </form>
-
-{% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
-
-{% macro render_metadata(metadata, entry_hash=None) -%}
-  {% if metadata %}
-    <dl class="metadata{{ ' hidden' if 'metadata' not in g.journal_show else ''}}">
-      {% for key, value in metadata.items() %}
-        <dt>{{ key }}</dt>
-        <dd>
-        {%- if key.startswith('statement') %}
-        <a data-remote href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">
-        {% endif -%}
-        {{ value }}
-      {%- if key.startswith('statement') %}</a>{% endif -%}
-        </dd>
-      {% endfor %}
-    </dl>
-  {% endif %}
-{%- endmacro %}
-
-{% set tag_url = url_for_current(tag='#REPLACEME,'+(g.filters['tag'] or '')) %}
-{% set link_url = url_for_current(tag='^REPLACEME,'+(g.filters['tag'] or '')) %}
-{% macro render_tags_links(entry) -%}
-{% for tag in entry.tags %}
-<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}">#{{ tag }}</a>
-{% endfor %}
-{% for link_ in entry.links %}
-<a class="link" href="{{ link_url.replace('REPLACEME', link_) }}">^{{ link_ }}</a>
-{% endfor %}
-{%- endmacro %}
-
-{% autoescape false %}
 <ol id="journal-table" class="journal-table">
     <li class="head">
         <p>
@@ -93,7 +92,7 @@
         {% endif %}
         </p>
     </li>
-{% for entry in journal|reverse %}
+{% for entry in entries|reverse %}
     {% if show_change_and_balance %}
         {% set entry, _, change, balance = entry %}
     {% endif %}
@@ -190,3 +189,4 @@
 {% endfor %}
 </ol>
 {% endautoescape %}
+{%- endmacro %}

@@ -1,8 +1,7 @@
 {% extends "_layout.html" %}
 {% set active_page = 'journal' %}
+{% import '_journal_table.html' as journal_table with context %}
 
 {% block content %}
-    {% set journal=ledger.entries %}
-
-    {% include "_journal_table.html" %}
+{{ journal_table.journal_table(ledger.entries) }}
 {% endblock %}
