@@ -1,15 +1,15 @@
 {% extends "_layout.html" %}
 {% set active_page = 'import' %}
-{% import '_entry_forms.html' as forms %}
+{% import '_entry_forms.html' as entry_forms %}
 
 {% block content %}
 <div class="headerline">
   <h3>{{ _('Import') }} <code>{{ request.args.get('filename') }}</code></h3>
   <span class="spacer"></span>
-  <button type="button" id="toggle-source">{{ _('Toggle source') }}</button>
-  <button type="button" id="toggle-ignore">{{ _('Toggle ignore') }}</button>
+  <button type="button" data-event="extract-toggle-source">{{ _('Toggle source') }}</button>
+  <button type="button" data-event="extract-toggle-ignore">{{ _('Toggle ignore') }}</button>
 </div>
-<form class="ingest-extract" action="{{ url_for('json_api.add_entries') }}">
+<form class="ingest-extract">
   <div class="ingest-row header">
     <div class="line">{{ _('Line') }}</div>
     <div class="source">{{ _('Source') }}</div>
@@ -26,13 +26,7 @@
       <pre>{{ entry.meta['__source__'] }}</pre>
       {% endif %}
     </div>
-    {% if type == 'transaction' %}
-    {{ forms.transaction(entry=entry) }}
-    {% elif type == 'balance' %}
-    {{ forms.balance(entry=entry) }}
-    {% elif type == 'note' %}
-    {{ forms.note(entry=entry) }}
-    {% endif %}
+    {{ entry_forms[type](entry) if type in ['balance', 'note', 'transaction'] else '' }}
     <div class="actions">
       <div class="inner">
         <label><input name="action-{{ loop.index }}" type="radio" value="ignore">{{ _('Ignore') }}</label>
@@ -43,7 +37,7 @@
   </div>
   {% endfor %}
   <div class="fieldset ingest-footer">
-    <button type="button" id="ingest-form-submit">{{ _('Import transactions') }}</button>
+    <button type="button" data-event="extract-submit" data-url="{{ url_for('json_api.add_entries') }}">{{ _('Import transactions') }}</button>
   </div>
 </form>
 {% endblock %}

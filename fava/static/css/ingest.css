@@ -1,7 +1,7 @@
 .ingest-row {
   border-bottom: thin solid var(--color-table-header-background);
   display: flex;
-  padding: 10px 0;
+  padding-top: .5em;
 
   & .line {
     line-height: 28px;

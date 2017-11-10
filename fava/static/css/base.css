@@ -430,12 +430,8 @@ article {
 .wide-form {
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 5px;
+  margin-bottom: .5em;
   width: 100%;
-
-  & button {
-    margin-bottom: 5px;
-  }
 
   & .small {
     margin-left: 3px;

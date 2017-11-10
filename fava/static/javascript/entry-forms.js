@@ -16,14 +16,15 @@ function addMetadataRow(form) {
 }
 
 export function entryFormToJSON(form) {
-  const entryData = {};
-  entryData.type = form.getAttribute('data-type');
+  const entryData = {
+    type: form.getAttribute('data-type'),
+    metadata: {},
+  };
 
   $$('[name]', form).forEach((input) => {
     entryData[input.name] = input.value;
   });
 
-  entryData.metadata = {};
   $$('.metadata-row', form).forEach((metadata) => {
     const key = metadata.querySelector('.metadata-key').value;
     if (key) {
@@ -49,26 +50,18 @@ export function entryFormToJSON(form) {
   return entryData;
 }
 
-function initEntryForm(div) {
-  $.delegate(div, 'click', '.add-posting', () => {
-    const newPosting = addPostingRow(div);
-    newPosting.querySelector('input').focus();
-  });
-
-  $.delegate(div, 'click', '.add-metadata', () => {
-    const newMetadata = addMetadataRow(div);
-    newMetadata.querySelector('input').focus();
-  });
-
-  $.delegate(div, 'click', '.remove-fieldset', (event) => {
-    event.target.closest('.fieldset').remove();
-  });
-}
-
-e.on('page-init', () => {
-  $$('#transaction-form .entry-form').forEach(initEntryForm);
+e.on('button-click-remove-fieldset', (button) => {
+  button.closest('.fieldset').remove();
 });
 
-e.on('page-loaded', () => {
-  $$('article .entry-form').forEach(initEntryForm);
+e.on('button-click-add-metadata', (button) => {
+  addMetadataRow(button.closest('.entry-form'))
+    .querySelector('input')
+    .focus();
+});
+
+e.on('button-click-add-posting', (button) => {
+  addPostingRow(button.closest('.entry-form'))
+    .querySelector('input')
+    .focus();
 });

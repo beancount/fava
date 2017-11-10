@@ -25,8 +25,15 @@
 // reload:
 //    This triggers a reload of the page.
 //
+// button-click-*:
+//    For <button>s that have a `data-event` attribute, the event
+//    `button-click-${data-event}` will be triggered.
+//
 
-// Polyfills
+// Polyfills:
+//
+// We try to support modern browsers only really, these polyfills should add
+// support for IE though.
 import 'es6-promise';
 import 'whatwg-fetch';
 import 'classlist.js';
@@ -60,6 +67,17 @@ e.on('page-loaded', () => {
   document.title = $('#data-document-title').value;
   $('h1 strong').innerHTML = $('#data-page-title').innerHTML;
   $('#reload-page').classList.add('hidden');
+});
+
+// Watch for all clicks on <button>s and fire the appropriate events.
+e.on('page-init', () => {
+  $.delegate(document.body, 'click', 'button', (event) => {
+    const button = event.target.closest('button');
+    const type = button.getAttribute('data-event');
+    if (type) {
+      e.trigger(`button-click-${type}`, button);
+    }
+  });
 });
 
 // Check the `changed` API endpoint every 5 seconds and fire the appropriate

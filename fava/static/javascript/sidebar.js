@@ -16,11 +16,9 @@ function initSidebar() {
   $('aside li.error span').innerHTML = errors;
 }
 
-e.on('page-init', () => {
-  $('#aside-button').addEventListener('click', () => {
-    $('aside').classList.toggle('active');
-    $('#aside-button').classList.toggle('active');
-  });
+e.on('button-click-toggle-aside', (button) => {
+  $('aside').classList.toggle('active');
+  button.classList.toggle('active');
 });
 
 e.on('page-loaded', () => {

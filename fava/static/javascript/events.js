@@ -14,7 +14,7 @@ class Events {
       return;
     }
     this.events[event].forEach((callback) => {
-      callback(args);
+      callback(...args);
     });
   }
 }

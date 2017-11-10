@@ -2,7 +2,8 @@ import { $, $$, handleJSON } from './helpers';
 import { entryFormToJSON } from './entry-forms';
 import e from './events';
 
-function submitIngestForm() {
+e.on('button-click-extract-submit', (button) => {
+  const url = button.getAttribute('data-url');
   const form = $('.ingest-extract');
   const jsonData = { entries: [] };
 
@@ -10,7 +11,7 @@ function submitIngestForm() {
     jsonData.entries.push(entryFormToJSON(entryForm));
   });
 
-  $.fetch(form.getAttribute('action'), {
+  $.fetch(url, {
     method: 'PUT',
     body: JSON.stringify(jsonData),
     headers: { 'Content-Type': 'application/json' },
@@ -22,7 +23,23 @@ function submitIngestForm() {
     }, (error) => {
       e.trigger('error', `Importing failed: ${error}`);
     });
-}
+});
+
+e.on('button-click-extract-toggle-ignore', (button) => {
+  const toImport = button.classList.contains('inactive');
+  const value = toImport ? 'import' : 'ignore';
+  $$(`.ingest-row.${toImport ? 'ignore' : 'import'} input[value=${value}]`).forEach((input) => {
+    input.click();
+  });
+  button.classList.toggle('inactive');
+});
+
+e.on('button-click-extract-toggle-source', (button) => {
+  $$('.ingest-row .source').forEach((element) => {
+    element.classList.toggle('hidden');
+  });
+  button.classList.toggle('inactive');
+});
 
 e.on('page-loaded', () => {
   const ingest = $('.ingest-extract');
@@ -31,25 +48,5 @@ e.on('page-loaded', () => {
   $.delegate(ingest, 'click', '.actions input', (event) => {
     const input = event.target;
     input.closest('.ingest-row').className = `ingest-row ${input.value}`;
-  });
-
-  $('#ingest-form-submit').addEventListener('click', () => {
-    submitIngestForm();
-  });
-
-  $('#toggle-ignore').addEventListener('click', (event) => {
-    const toImport = event.target.classList.contains('inactive');
-    const value = toImport ? 'import' : 'ignore';
-    $$(`.ingest-row.${toImport ? 'ignore' : 'import'} input[value=${value}]`).forEach((input) => {
-      input.click();
-    });
-    event.target.classList.toggle('inactive');
-  });
-
-  $('#toggle-source').addEventListener('click', (event) => {
-    $$('.ingest-row .source').forEach((element) => {
-      element.classList.toggle('hidden');
-    });
-    event.target.classList.toggle('inactive');
   });
 });

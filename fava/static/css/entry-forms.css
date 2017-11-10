@@ -48,35 +48,28 @@
     opacity: 1;
   }
 
+  & .metadata,
   & .posting {
-    padding-left: 50px;
-
-    & .add-posting {
+    & .add-row {
       display: none;
     }
 
-    &:last-child {
-      & .add-posting {
-        display: inline-block;
-      }
+    &:last-child .add-row {
+      display: initial;
+    }
+  }
 
-      & .currency {
-        width: 72px;
-      }
+  & .posting {
+    padding-left: 50px;
+
+    &:last-child .currency {
+      width: 72px;
     }
   }
 
   & .metadata {
     font-size: .8em;
     padding-left: 56px;
-
-    & .add-metadata {
-      display: none;
-    }
-
-    & .fieldset:last-child .add-metadata {
-      display: inline-block;
-    }
   }
 }
 
