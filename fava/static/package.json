@@ -38,7 +38,7 @@
     "postcss-custom-properties": "^6.2.0",
     "postcss-import": "^11.0.0",
     "postcss-nesting": "^4.2.1",
-    "rollup": "^0.50.0",
+    "rollup": "^0.51.3",
     "rollup-plugin-buble": "^0.16.0",
     "rollup-plugin-commonjs": "^8.2.4",
     "rollup-plugin-json": "^2.3.0",
