@@ -19,8 +19,9 @@ import inspect
 import os
 from io import BytesIO
 
-from flask import (abort, Flask, flash, render_template, url_for, request,
+from flask import (abort, Flask, flash, render_template, request,
                    redirect, g, send_file, render_template_string)
+import flask
 from flask_babel import Babel
 import markdown2
 import werkzeug.urls
@@ -107,8 +108,31 @@ def get_locale():
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
     app.add_template_filter(function)
 
+
+def _inject_filters(endpoint, values):
+    if ('bfile' not in values
+            and app.url_map.is_endpoint_expecting(endpoint, 'bfile')):
+        values['bfile'] = g.beancount_file_slug
+    if endpoint in ['static', 'index']:
+        return
+    if 'interval' not in values:
+        values['interval'] = request.args.get('interval')
+    if 'conversion' not in values:
+        values['conversion'] = request.args.get('conversion')
+    for filter_name in ['account', 'from', 'payee', 'tag', 'time']:
+        if filter_name not in values:
+            values[filter_name] = g.filters[filter_name]
+
+
 app.add_template_global(datetime.date.today, 'today')
-app.add_template_global(functools.lru_cache(2000)(url_for), 'url_for')
+CACHED_URL_FOR = functools.lru_cache(2000)(flask.url_for)
+
+
+@app.template_global()
+def url_for(endpoint, **values):
+    """A wrapper around flask.url_for that uses a cache."""
+    _inject_filters(endpoint, values)
+    return CACHED_URL_FOR(endpoint, **values)
 
 
 @app.template_global()
@@ -170,24 +194,6 @@ def _incognito(response):
             original_text = response.get_data(as_text=True)
             response.set_data(replace_numbers(original_text))
     return response
-
-
-@app.url_defaults
-def _inject_filters(endpoint, values):
-    if 'bfile' in values or not getattr(g, 'beancount_file_slug', None):
-        return
-    if app.url_map.is_endpoint_expecting(endpoint, 'bfile'):
-        values['bfile'] = g.beancount_file_slug
-
-    if endpoint in ['static', 'index']:
-        return
-    if 'interval' not in values:
-        values['interval'] = request.args.get('interval')
-    if 'conversion' not in values:
-        values['conversion'] = request.args.get('conversion')
-    for filter_name in ['account', 'from', 'payee', 'tag', 'time']:
-        if filter_name not in values:
-            values[filter_name] = g.filters[filter_name]
 
 
 @app.url_value_preprocessor
