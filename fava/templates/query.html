@@ -1,7 +1,7 @@
 {% set result_only = request.args.get('result_only', False) %}{% if not result_only %}{% extends "_layout.html" %}{% endif %}
 {% set active_page = 'query' %}
 
-{% import '_query_table.html' as querytable with context %}
+{% import '_query_table.html' as querytable %}
 
 {% set query = request.args.get('query_string', '') %}
 {% set query_shell_history = ledger.query_shell.get_history(20)|reverse %}

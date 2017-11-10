@@ -47,17 +47,7 @@
   <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
 </form>
 
-{% set account_url = url_for('account', name='REPLACEME') %}
-
-{% macro account_link(name) -%}
-<a class="account-link" href="{{ account_url.replace('REPLACEME', name) }}">{{ name }}</a>
-{%- endmacro %}
-
-{% macro render_inventory(inv) -%}
-    {% for pos in inv %}
-        {{ pos.units|format_amount }}<br>
-    {% endfor %}
-{%- endmacro %}
+{% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
 
 {% macro render_metadata(metadata, entry_hash=None) -%}
   {% if metadata %}
@@ -79,12 +69,12 @@
 {% set tag_url = url_for_current(tag='#REPLACEME,'+(g.filters['tag'] or '')) %}
 {% set link_url = url_for_current(tag='^REPLACEME,'+(g.filters['tag'] or '')) %}
 {% macro render_tags_links(entry) -%}
-    {% for tag in entry.tags %}
+{% for tag in entry.tags %}
 <a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}">#{{ tag }}</a>
-    {% endfor %}
-    {% for link_ in entry.links %}
+{% endfor %}
+{% for link_ in entry.links %}
 <a class="link" href="{{ link_url.replace('REPLACEME', link_) }}">^{{ link_ }}</a>
-    {% endfor %}
+{% endfor %}
 {%- endmacro %}
 
 {% autoescape false %}
@@ -166,8 +156,8 @@
         {% endif %}
         </span>
         {% if show_change_and_balance %}
-            <span class="change num">{{ render_inventory(change) }}</span>
-            <span class="num">{{ render_inventory(balance) }}</span>
+            <span class="change num">{% for pos in change %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
+            <span class="num">{% for pos in balance %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
         </p>
         {% endif %}
         {{ render_metadata(metadata, entry_hash) }}

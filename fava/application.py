@@ -14,6 +14,7 @@ Attributes:
 
 """
 import datetime
+import functools
 import inspect
 import os
 from io import BytesIO
@@ -107,6 +108,7 @@ for _, function in inspect.getmembers(template_filters, inspect.isfunction):
     app.add_template_filter(function)
 
 app.add_template_global(datetime.date.today, 'today')
+app.add_template_global(functools.lru_cache(2000)(url_for), 'url_for')
 
 
 @app.template_global()

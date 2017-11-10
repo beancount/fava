@@ -1,6 +1,6 @@
 {% extends "_layout.html" %}
 {% set active_page = 'holdings' %}
-{% import '_query_table.html' as querytable with context %}
+{% import '_query_table.html' as querytable %}
 
 {% macro num_cell(value, currency) -%}
 <td class="num">{{ value|format_currency(currency) }}</td>
