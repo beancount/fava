@@ -35,7 +35,7 @@
   cursor: auto;
   display: flex;
   max-height: 100%;
-  padding: 20px;
+  padding: 1.5em;
   position: relative;
   width: 767px;
 
@@ -69,8 +69,6 @@
   }
 
   & .fieldset {
-    padding: 0;
-
     & label {
       line-height: 33px;
       width: 150px;

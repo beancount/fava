@@ -20,7 +20,7 @@
 .dropdown {
   display: flex;
   height: 100%;
-  padding-left: .5em;
+  margin: 0;
 
   & .selected::before {
     content: '›';
@@ -76,6 +76,11 @@
   & .fieldset {
     border-bottom: 1px solid var(--color-sidebar-border);
     height: var(--source-editor-fieldset-height);
+    padding-left: .5em;
+
+    & > button {
+      margin: 0;
+    }
   }
 
   & .CodeMirror,

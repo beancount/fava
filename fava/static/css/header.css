@@ -28,11 +28,10 @@ h1 {
   flex: 1;
   font-size: 16px;
   font-weight: normal;
-  line-height: 1;
   margin: 0;
   max-height: var(--header-height);
   overflow: hidden;
-  padding: calc((var(--header-height) - 16px) / 2) 10px;
+  padding: calc((var(--header-height) - 24px) / 2) 10px;
 
   & .droptarget {
     margin-left: -.6em;
@@ -78,10 +77,10 @@ h1 {
 
 .reload-page {
   background-color: var(--color-warning);
-  color: var(--color-header-text);
   margin-left: 20px;
   margin-top: -8px;
-  padding: 8px 12px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .beancount-files {

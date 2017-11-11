@@ -1,6 +1,7 @@
 /* Globals */
 * {
   box-sizing: border-box;
+  line-height: 1.5;
 }
 
 html,
@@ -71,10 +72,6 @@ hr {
   padding: 0;
 }
 
-p {
-  line-height: 1.5;
-}
-
 h2,
 h3,
 h4,
@@ -143,10 +140,6 @@ dd {
   margin-bottom: 3px;
 }
 
-li {
-  line-height: 1.5;
-}
-
 code,
 pre {
   background-color: var(--color-code-background);
@@ -184,7 +177,6 @@ button,
 input,
 textarea {
   font: inherit;
-  line-height: 1.5;
   margin: 0 .5em .5em 0;
 }
 
@@ -260,7 +252,6 @@ button,
   &.round {
     border-radius: 15px;
     height: 1.5em;
-    line-height: 1.5;
     padding: 0 .5em;
   }
 }
@@ -339,7 +330,7 @@ aside {
   bottom: 0;
   color: var(--color-sidebar-text);
   left: 0;
-  margin-left: 0;
+  margin: 0;
   overflow-y: auto;
   position: fixed;
   top: var(--header-height);
@@ -356,14 +347,12 @@ aside {
 }
 
 .navigation {
-  margin: 1em 0;
-
   &:last-child { margin-bottom: 0; }
 
   & a {
     color: inherit;
     display: block;
-    padding: 5px 5px 5px 20px;
+    padding: 4px 5px 4px 20px;
 
     &.selected,
     &:hover {
@@ -434,7 +423,7 @@ article {
   width: 100%;
 
   & .small {
-    margin-left: 3px;
+    margin-left: -3px;
   }
 }
 
@@ -597,7 +586,6 @@ td .status-indicator {
 
   & li {
     cursor: pointer;
-    line-height: 1.6em;
     min-width: 8rem;
     padding: 0 .5em;
     white-space: nowrap;
