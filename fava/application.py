@@ -109,6 +109,7 @@ for _, function in inspect.getmembers(template_filters, inspect.isfunction):
     app.add_template_filter(function)
 
 
+@app.url_defaults
 def _inject_filters(endpoint, values):
     if ('bfile' not in values
             and app.url_map.is_endpoint_expecting(endpoint, 'bfile')):

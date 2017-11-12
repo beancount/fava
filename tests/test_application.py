@@ -77,7 +77,7 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
     with app.test_request_context():
         get_url = result.headers.get('Location', '')
         expect_url = werkzeug.urls.url_join(
-            flask.url_for('root', _external=True),
+            'http://localhost/',
             expect)
         assert result.status_code == 302
         assert get_url == expect_url
