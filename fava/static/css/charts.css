@@ -1,31 +1,28 @@
 .chart-labels {
   color: var(--color-text-lightest);
   font-size: 1em;
-  line-height: 14px;
-  margin-bottom: 20px;
-  margin-top: 8px;
-  position: relative;
+  margin-bottom: 1.5em;
   text-align: center;
 
   & label {
-    padding: 0 5px;
+    cursor: pointer;
+    padding-left: .5em;
 
+    &.selected,
     &:hover {
       color: var(--color-text-lighter);
-      cursor: pointer;
     }
-
-    &.selected { color: var(--color-text-lighter); }
   }
 
   & label + label { border-left: 1px solid var(--color-text-lighter); }
 }
 
 .toggle-chart {
+  margin: 0;
   padding: 4px 6px;
   position: absolute;
-  right: 19px;
-  top: 19px;
+  right: 1.5em;
+  top: 1.5em;
 
   & span {
     border: 0;
@@ -50,7 +47,7 @@
   padding-right: 35px;
 
   & > span {
-    margin-right: 10px;
+    margin-right: .5em;
   }
 }
 

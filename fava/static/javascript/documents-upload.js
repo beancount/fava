@@ -1,23 +1,34 @@
 import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
-const filenameRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
+let dataTransferFiles = [];
 
-function uploadDocument(formData) {
-  const documentFolder = $('#document-upload-folder').value;
-  formData.append('folder', documentFolder);
+e.on('form-submit-document-upload', (form) => {
+  const promises = [];
+  $$('#document-names input').forEach((element, index) => {
+    const formData = new FormData(form);
+    formData.append('file', dataTransferFiles[index], element.value);
 
-  $.fetch($('#document-upload-submit').getAttribute('data-url'), {
-    method: 'PUT',
-    body: formData,
-  })
-    .then(handleJSON)
-    .then((data) => {
-      e.trigger('info', data.message);
-    }, (error) => {
-      e.trigger('error', `Upload error: ${error}`);
+    promises.push($.fetch(form.getAttribute('data-url'), {
+      method: 'PUT',
+      body: formData,
+    })
+      .then(handleJSON)
+      .then((data) => {
+        e.trigger('info', data.message);
+      }, (error) => {
+        e.trigger('error', `Upload error: ${error}`);
+      }));
+  });
+
+  $('#documents-upload').classList.remove('shown');
+  $('#document-names').innerHTML = '';
+  dataTransferFiles = [];
+  Promise.all(promises)
+    .then(() => {
+      e.trigger('reload');
     });
-}
+});
 
 // File uploads via Drag and Drop on elements with class "droptarget" and
 // attribute "data-account-name"
@@ -46,62 +57,38 @@ e.on('page-loaded', () => {
       event.preventDefault();
       event.stopPropagation();
 
-      const folders = $$('#document-upload-folder option');
-      const { files } = event.dataTransfer;
-      let entryDate = new Date();
-      const entryDateString = target.getAttribute('data-entry-date');
-      if (entryDateString) {
-        entryDate = new Date(entryDateString);
-      }
+      dataTransferFiles = event.dataTransfer.files;
+      const form = $('#document-upload-form');
+      const dateAttribute = target.getAttribute('data-entry-date');
+      const entryDate = dateAttribute || new Date().toISOString().substring(0, 10);
+      form.elements.account.value = target.getAttribute('data-account-name');
+      form.elements.hash.value = target.getAttribute('data-entry');
+
       let changedFilename = false;
 
-      if (!folders.length) {
-        e.trigger('error', 'You need to set the "documents" Beancount option to enable file uploads.');
+      if (!form.elements.folder.length) {
+        e.trigger('error', 'You need to set the "documents" Beancount option for file uploads.');
         return;
       }
 
       // add input elements for files
       $('#document-names').innerHTML = '';
-      for (let i = 0; i < files.length; i += 1) {
-        let filename = files[i].name;
+      for (let i = 0; i < dataTransferFiles.length; i += 1) {
+        let filename = dataTransferFiles[i].name;
 
-        if (filename.length < 11 || filenameRegex.test(filename.substring(0, 10)) === false) {
-          filename = `${entryDate.toISOString().substring(0, 10)} ${filename}`;
+        if (!/^\d{4}-\d{2}-\d{2}/.test(filename)) {
+          filename = `${entryDate} ${filename}`;
           changedFilename = true;
         }
 
-        $('#document-names').insertAdjacentHTML('beforeend', `<input type="text" value="${filename}" data-index="${i}">`);
+        $('#document-names').insertAdjacentHTML('beforeend', `<input value="${filename}">`);
       }
 
-      // upload files on submit
-      $.once($('#document-upload-submit'), 'click', (event_) => {
-        event_.preventDefault();
-
-        $$('#document-names input').forEach((element) => {
-          const formData = new FormData();
-          const file = files[element.getAttribute('data-index')];
-          const accountName = target.getAttribute('data-account-name');
-          const entryHash = target.getAttribute('data-entry');
-          formData.append('file', file, element.value);
-          formData.append('account', accountName);
-
-          if (entryHash) {
-            // statement upload (add adding it to metadata)
-            formData.append('entry_hash', entryHash);
-          }
-
-          uploadDocument(formData);
-        });
-
-        $('#documents-upload').classList.remove('shown');
-        $('#document-names').innerHTML = '';
-        e.trigger('reload');
-      });
-
-      if (folders.length > 1 || changedFilename) {
+      if (form.elements.folder.length > 1 || changedFilename) {
         $('#documents-upload').classList.add('shown');
+        $('#document-names input').focus();
       } else {
-        $('#document-upload-submit').click();
+        e.trigger('form-submit-document-upload', form);
       }
     });
   });

@@ -70,7 +70,6 @@
 
   & .fieldset {
     & label {
-      line-height: 33px;
       width: 150px;
     }
 
@@ -81,14 +80,9 @@
 }
 
 .documents-upload .fieldset {
-  display: block;
-
   & input {
-    width: 100%;
-  }
-
-  & label {
-    margin-right: .5em;
+    flex-grow: 1;
+    min-width: 60%;
   }
 }
 

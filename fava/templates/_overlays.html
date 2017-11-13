@@ -3,20 +3,23 @@
 <div id="documents-upload" class="documents-upload overlay-wrapper">
   <div class="overlay">
     <button type=button class="link close-overlay">({{ _('close') }})</button>
-    <form>
+    <form id="document-upload-form" data-event="document-upload" data-url="{{ url_for('json_api.add_document') }}">
       <h3>{{ _('Upload file(s)') }}:</h3>
       <div id="document-names" class="fieldset"></div>
       <div class="fieldset">
-        <label for="document-upload-folder">{{ _('Documents folder') }}:</label>
-        <select name="document-upload-folder" id="document-upload-folder">
+        <label for="folder">{{ _('Documents folder') }}:</label>
+        <select name="folder">
           {% for folder in ledger.options['documents'] %}
-            <option value="{{ folder }}"{% if loop.first %} selected{% endif %}>{{ folder }}</option>
+          <option{% if loop.first %} selected{% endif %}>{{ folder }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="fieldset">
-        <button type="submit" id="document-upload-submit" data-url="{{ url_for('json_api.add_document') }}">{{ _('Upload') }}</button>
+        <label for="account">{{ _('Account') }}:</label>
+        <input type="text" name="account" list="accounts">
+        <input type="hidden" name="hash">
       </div>
+      <button type="submit">{{ _('Upload') }}</button>
     </form>
   </div>
 </div>

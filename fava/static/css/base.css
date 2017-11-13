@@ -186,7 +186,12 @@ textarea {
   padding: 6px 10px;
 }
 
+label {
+  margin: 0 .5em .5em 0;
+}
+
 select {
+  font-size: inherit;
   margin: 0 .5em .5em 0;
 }
 
