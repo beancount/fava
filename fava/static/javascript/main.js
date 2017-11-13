@@ -69,13 +69,23 @@ e.on('page-loaded', () => {
   $('#reload-page').classList.add('hidden');
 });
 
-// Watch for all clicks on <button>s and fire the appropriate events.
 e.on('page-init', () => {
+  // Watch for all clicks on <button>s and fire the appropriate events.
   $.delegate(document.body, 'click', 'button', (event) => {
     const button = event.target.closest('button');
     const type = button.getAttribute('data-event');
     if (type) {
       e.trigger(`button-click-${type}`, button);
+    }
+  });
+
+  // Watch for all submits of <forms>s and fire the appropriate events.
+  $.delegate(document.body, 'submit', 'form', (event) => {
+    const form = event.target;
+    const type = form.getAttribute('data-event');
+    if (type) {
+      event.preventDefault();
+      e.trigger(`form-submit-${type}`, form);
     }
   });
 });

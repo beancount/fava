@@ -141,46 +141,40 @@ e.on('reload', () => {
   router.loadURL(window.location.href, false);
 });
 
-e.on('page-init', () => {
-  $('#reload-page').addEventListener('click', () => {
-    e.trigger('reload');
-  });
+e.on('button-click-reload-page', () => {
+  e.trigger('reload');
+});
 
-  $('#filter-form').addEventListener('submit', (event) => {
-    event.preventDefault();
-    router.navigate(updateURL(window.location.href));
-  });
+e.on('form-submit-filters', () => {
+  router.navigate(updateURL(window.location.href));
+});
+
+e.on('form-submit-query', (form) => {
+  const queryString = form.elements.query_string.value.trim();
+  if (queryString === '') {
+    return;
+  }
+
+  const url = new URL(window.location);
+  url.searchParams.set('query_string', queryString);
+
+  const pageURL = url.toString();
+  url.searchParams.set('result_only', true);
+
+  $.fetch(url.toString())
+    .then(response => response.text())
+    .then((data) => {
+      $$('.queryresults-wrapper').forEach((element) => {
+        element.classList.add('toggled');
+      });
+      $('#query-container').insertAdjacentHTML('afterbegin', data);
+      initSort();
+      window.history.replaceState(null, null, pageURL);
+    });
 });
 
 // These elements might be added asynchronously, so rebind them on page-load.
 e.on('page-loaded', () => {
-  if ($('#query-form')) {
-    $('#query-form').addEventListener('submit', (event) => {
-      event.preventDefault();
-      const queryString = $('#query-editor').value.trim();
-      if (queryString === '') {
-        return;
-      }
-
-      const url = new URL(window.location);
-      url.searchParams.set('query_string', queryString);
-
-      const pageURL = url.toString();
-      url.searchParams.set('result_only', true);
-
-      $.fetch(url.toString())
-        .then(response => response.text())
-        .then((data) => {
-          $$('.queryresults-wrapper').forEach((element) => {
-            element.classList.add('toggled');
-          });
-          $('#query-container').insertAdjacentHTML('afterbegin', data);
-          initSort();
-          window.history.replaceState(null, null, pageURL);
-        });
-    });
-  }
-
   if ($('#chart-interval')) {
     $('#chart-interval').addEventListener('change', () => {
       router.navigate(updateURL(window.location.href));

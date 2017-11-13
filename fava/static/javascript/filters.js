@@ -25,22 +25,20 @@ e.on('page-init', () => {
   $$('#filter-form input').forEach((input) => {
     input.addEventListener('autocomplete-select', () => {
       updateInput(input);
-      $('#filter-form [type=submit]').click();
+      e.trigger('form-submit-filters', input.form);
     });
 
     input.addEventListener('input', () => {
       updateInput(input);
     });
   });
+});
 
-  $$('#filter-form button[type="button"]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const input = $('input', button.closest('span'));
-      input.value = '';
-      updateInput(input);
-      if (new URLSearchParams(window.location.search).get(input.name)) {
-        $('#filter-form [type=submit]').click();
-      }
-    });
-  });
+e.on('button-click-filter-clear', (button) => {
+  const input = $('input', button.closest('span'));
+  input.value = '';
+  updateInput(input);
+  if (new URLSearchParams(window.location.search).get(input.name)) {
+    e.trigger('form-submit-filters', button.form);
+  }
 });

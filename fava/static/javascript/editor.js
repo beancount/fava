@@ -126,22 +126,22 @@ CodeMirror.commands.favaJumpToMarker = (cm) => {
 
 // Initialize the query editor
 function initQueryEditor() {
-  const queryEditorTextarea = $('#query-editor');
-  if (!queryEditorTextarea) { return; }
+  const queryForm = $('#query-form');
+  if (!queryForm) { return; }
 
   const queryOptions = {
     mode: 'beancount-query',
     extraKeys: {
       'Ctrl-Enter': () => {
-        $('#submit-query').click();
+        e.trigger('form-submit-query', queryForm);
       },
       'Cmd-Enter': () => {
-        $('#submit-query').click();
+        e.trigger('form-submit-query', queryForm);
       },
     },
-    placeholder: queryEditorTextarea.getAttribute('placeholder'),
+    placeholder: queryForm.elements.query_string.getAttribute('placeholder'),
   };
-  const editor = CodeMirror.fromTextArea(queryEditorTextarea, queryOptions);
+  const editor = CodeMirror.fromTextArea(queryForm.elements.query_string, queryOptions);
 
   editor.on('keyup', (cm, event) => {
     if (!cm.state.completionActive && event.keyCode !== 13) {
@@ -153,7 +153,8 @@ function initQueryEditor() {
     const wrapper = event.target.closest('.toggle-box');
     if (wrapper.classList.contains('inactive')) {
       editor.setValue(wrapper.querySelector('code').innerHTML);
-      $('#query-form').dispatchEvent(new Event('submit'));
+      editor.save();
+      e.trigger('form-submit-query', queryForm);
       return;
     }
     wrapper.classList.toggle('toggled');

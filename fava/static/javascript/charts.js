@@ -932,11 +932,10 @@ e.on('page-loaded', () => {
   if ($('label:first-child', labels)) {
     $('label:first-child', labels).click();
   }
+});
 
-  const toggleChart = $('#toggle-chart');
-  toggleChart.addEventListener('click', () => {
-    toggleChart.classList.toggle('hide-charts');
-    $('#charts').classList.toggle('hidden', toggleChart.classList.contains('hide-charts'));
-    updateChart();
-  });
+e.on('button-click-toggle-chart', (button) => {
+  button.classList.toggle('hide-charts');
+  $('#charts').classList.toggle('hidden', button.classList.contains('hide-charts'));
+  updateChart();
 });
