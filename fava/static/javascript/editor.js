@@ -132,10 +132,12 @@ function initQueryEditor() {
   const queryOptions = {
     mode: 'beancount-query',
     extraKeys: {
-      'Ctrl-Enter': () => {
+      'Ctrl-Enter': (cm) => {
+        cm.save();
         e.trigger('form-submit-query', queryForm);
       },
-      'Cmd-Enter': () => {
+      'Cmd-Enter': (cm) => {
+        cm.save();
         e.trigger('form-submit-query', queryForm);
       },
     },

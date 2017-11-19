@@ -12,6 +12,7 @@
   display: none;
   justify-content: center;
   left: 0;
+  overflow: auto;
   position: fixed;
   right: 0;
   top: 0;
@@ -34,10 +35,11 @@
   box-shadow: 0 0 20px var(--overlay-wrapper-background);
   cursor: auto;
   display: flex;
+  margin: .5em;
   max-height: 100%;
+  max-width: 767px;
   padding: 1.5em;
   position: relative;
-  width: 767px;
 
   & form,
   & > div {
@@ -79,11 +81,9 @@
   }
 }
 
-.documents-upload .fieldset {
-  & input {
-    flex-grow: 1;
-    min-width: 60%;
-  }
+.documents-upload .fieldset input {
+  flex-grow: 1;
+  min-width: 60%;
 }
 
 .notifications {
@@ -107,21 +107,5 @@
 
   & .warning {
     background: var(--color-notification-warning);
-  }
-}
-
-@media (max-width: 767px) {
-  .transaction-overlay {
-    overflow: scroll;
-
-    & .overlay {
-      left: 10px;
-      margin-bottom: 10px;
-      max-height: initial;
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      width: calc(100vw - 20px);
-    }
   }
 }

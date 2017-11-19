@@ -10,11 +10,12 @@
 }
 
 .query-box {
+  align-items: center;
   display: flex;
+  padding-bottom: 1em;
 
   & button {
-    height: 30px;
-    margin-bottom: .5em;
+    margin: 0;
   }
 
   & .CodeMirror,
@@ -24,7 +25,8 @@
     font-family: var(--font-family-editor);
     font-size: 16px;
     height: auto;
-    margin-bottom: 1em;
+    margin: 0;
+    margin-right: .5em;
     width: 100%;
   }
 }

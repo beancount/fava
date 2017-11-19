@@ -1,7 +1,6 @@
 /* Globals */
 * {
   box-sizing: border-box;
-  line-height: 1.5;
 }
 
 html,
@@ -11,6 +10,7 @@ body {
   font-family: var(--font-family);
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -41,14 +41,14 @@ tbody {
 
 td,
 th {
-  padding: 3px 6px;
+  padding: 2px 6px;
   white-space: nowrap;
 
   &.num {
     color: var(--color-text);
     font-family: var(--font-family-monospaced);
     text-align: right;
-    width: 7rem;
+    width: 7em;
   }
 }
 
