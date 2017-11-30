@@ -2744,17 +2744,17 @@ option "operating_currency" "USD"
   Assets:US:ETrade:Cash                              0.00 USD
   Income:US:ETrade:Dividends                         0.00 USD
 
-2014-09-25 * "Buy shares of GLD" #test
+2014-09-25 * "Buy shares of GLD" #test ^test-link
   Assets:US:ETrade:Cash                          -4908.79 USD
   Assets:US:ETrade:GLD                                 44 GLD {111.36 USD}
   Expenses:Financial:Commissions                     8.95 USD
 
-2014-11-15 * "Buy shares of ITOT"
+2014-11-15 * "Buy shares of ITOT" ^test-link
   Assets:US:ETrade:Cash                           -757.39 USD
   Assets:US:ETrade:ITOT                                 9 ITOT {83.16 USD}
   Expenses:Financial:Commissions                     8.95 USD
 
-2014-11-15 * "Buy shares of GLD"
+2014-11-15 * "Buy shares of GLD" ^test-link
   Assets:US:ETrade:Cash                           -779.37 USD
   Assets:US:ETrade:GLD                                  7 GLD {110.06 USD}
   Expenses:Financial:Commissions                     8.95 USD

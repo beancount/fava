@@ -147,7 +147,7 @@ class TagFilter(EntryFilter):
         include = hasattr(entry, 'tags') and (
             (entry.tags & self.tags) or
             (entry.links & self.links)
-        ) if self.tags else True
+        ) if self.tags or self.links else True
 
         exclude = hasattr(entry, 'tags') and (
             (entry.tags & self.exclude_tags) or
