@@ -60,7 +60,6 @@
   & .close { background-color: var(--color-journal-entry-close); }
   & .query { background-color: var(--color-journal-entry-note); }
   & .pad { background-color: var(--color-journal-entry-pad); }
-  & .document { background-color: var(--color-journal-entry-document); }
 
   & .note { background-color: var(--color-journal-entry-note); }
   & .note label { color: color(var(--color-journal-entry-note) shade(50%)); }
@@ -158,6 +157,8 @@
   }
 
   & .document {
+    background-color: var(--color-journal-entry-document);
+
     & .account-link {
       color: color(var(--color-journal-tag-document) shade(15%));
 
