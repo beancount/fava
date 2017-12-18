@@ -89,6 +89,16 @@ click to reload the page.  If the file change is due to user interaction, e.g.,
 uploading a document or adding a transaction, Fava will always reload the page
 automatically.
 
+## `locale`
+
+Default: `en_US.UTF8`.
+
+If you set `render_commas` to `TRUE`, you can set up your locale to your favourite setup. 
+`2010-01-01 custom "fava-option" "locale" "en_IN"`
+This will change the comma system to the [http://en.wikipedia.org/wiki/Indian_numbering_system](Indian numbering system).
+
+There are other locales described in [http://babel.pocoo.org/en/latest/api/numbers.html](here)
+
 ---
 
 ## `unrealized`
