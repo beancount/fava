@@ -66,10 +66,10 @@ LIST_OPTS = [
 ]
 
 STR_OPTS = [
-    'locale',
     'import-config',
     'interval',
     'language',
+    'locale',
     'unrealized',
 ]
 

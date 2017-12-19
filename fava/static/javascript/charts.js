@@ -24,7 +24,7 @@ const formatCurrencyWithoutComma = format('.2f');
 function formatCurrency(number) {
   let str = '';
   if (window.favaAPI.options.render_commas) {
-    str = formatCurrencyWithComma(number);
+    str = formatCurrencyWithComma(number).toLocaleString();
   } else {
     str = formatCurrencyWithoutComma(number);
   }
