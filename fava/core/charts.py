@@ -52,8 +52,8 @@ def _serialize_account_node(node, date):
     ]
     return {
         'account': node.name,
-        'balance_children': cost_or_value(node.balance_children),
-        'balance': cost_or_value(node.balance),
+        'balance_children': cost_or_value(node.balance_children, date),
+        'balance': cost_or_value(node.balance, date),
         'children': children,
     }
 
