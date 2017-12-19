@@ -112,11 +112,13 @@ class Router {
   //  - the link has a `data-remote` attribute.
   takeOverLinks() {
     $.delegate(window.document, 'click', 'a', (event) => {
-      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+      if (event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
         return;
       }
       const link = event.target.closest('a');
-      if (link.getAttribute('href').charAt(0) === '#') return;
+      if (link.getAttribute('href').charAt(0) === '#' || link.host !== window.location.host) {
+        return;
+      }
 
       if (!event.defaultPrevented
           && !link.hasAttribute('data-remote')
