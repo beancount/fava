@@ -140,6 +140,7 @@ class ChartModule(FavaModule):
             net worth (Assets + Liabilities) separately converted to all
             operating currencies.
         """
+        # pylint: disable=stop-iteration-return
         transactions = (entry for entry in self.ledger.entries
                         if (isinstance(entry, Transaction) and entry.flag !=
                             flags.FLAG_UNREALIZED))

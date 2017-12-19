@@ -444,7 +444,7 @@ class FavaLedger():
         last = realization.find_last_active_posting(account.txn_postings)
 
         if last is None or isinstance(last, Close):
-            return
+            return None
 
         return get_entry(last)
 
@@ -497,6 +497,7 @@ class FavaLedger():
             if isinstance(txn_posting, TxnPosting) and \
                     txn_posting.txn.flag != FLAG_UNREALIZED:
                 return 'yellow'
+        return None
 
     def account_is_closed(self, account_name):
         """Check if the account is closed.

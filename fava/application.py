@@ -241,6 +241,7 @@ def account(name, subreport='journal'):
         return render_template(
             'account.html', account_name=name, subreport=subreport)
     abort(404)
+    return None
 
 
 @app.route('/<bfile>/document/', methods=['GET'])
@@ -269,6 +270,7 @@ def holdings_by(aggregation_key):
         return render_template(
             'holdings.html', aggregation_key=aggregation_key)
     abort(404)
+    return None
 
 
 @app.route('/<bfile>/<report_name>/')
@@ -277,6 +279,7 @@ def report(report_name):
     if report_name in REPORTS:
         return render_template('{}.html'.format(report_name))
     abort(404)
+    return None
 
 
 @app.route('/<bfile>/download-query/query_result.<result_format>')

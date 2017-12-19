@@ -181,6 +181,7 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
         return quarter_first_day, get_next_interval(quarter_first_day,
                                                     'quarter')
+    return None, None
 
 
 def days_in_daterange(start_date, end_date):

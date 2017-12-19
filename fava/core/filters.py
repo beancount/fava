@@ -96,9 +96,9 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         self.value = value
         if not self.value:
             return True
-        try:
-            self.begin_date, self.end_date = parse_date(self.value)
-        except TypeError:
+
+        self.begin_date, self.end_date = parse_date(self.value)
+        if not self.begin_date:
             raise FilterException('time', 'Failed to parse date: {}'
                                   .format(self.value))
         return True
