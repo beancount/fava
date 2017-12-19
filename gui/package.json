@@ -7,7 +7,7 @@
   "author": "Dominik Aumayr <dominik@aumayr.name>",
   "license": "MIT",
   "dependencies": {
-    "electron-settings": "^3.1.3",
+    "electron-settings": "^3.1.4",
     "request-promise": "^4.2.2"
   },
   "scripts": {
@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "electron": "^1.8.0",
-    "electron-builder": "^19.47.1",
-    "eslint": "^4.12.1",
+    "electron-builder": "^19.49.0",
+    "eslint": "^4.13.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0"
   },
