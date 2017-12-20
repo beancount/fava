@@ -10,3 +10,4 @@ import.
 Fava currently only supports entries of type `Transaction` and `Balance`. Set
 the special metadata key `__source__` to display the corresponding text
 (CSV-row, XML-fragment, etc.) for the entry in the list of entries to import.
+Note that this metadata will be stripped before saving the entry to file.
