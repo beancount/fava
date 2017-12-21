@@ -91,13 +91,15 @@ automatically.
 
 ## `locale`
 
-Default: `en_US.UTF8`.
+Default: `None`.
 
 If you set `render_commas` to `TRUE`, you can set up your locale to your favourite setup. 
 `2010-01-01 custom "fava-option" "locale" "en_IN"`
 This will change the comma system to the [http://en.wikipedia.org/wiki/Indian_numbering_system](Indian numbering system).
 
-There are other locales described in [http://babel.pocoo.org/en/latest/api/numbers.html](here)
+The locales that have been tested in this setup are:
+1. `en_US.UTF8`
+2. `en_IN`
 
 ---
 
