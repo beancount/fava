@@ -171,3 +171,22 @@ def format_errormsg(message):
     new_message = re.sub(ACCOUNT_RE,
                          '<a href="{}">'.format(url) + r'\1' + '</a>', message)
     return new_message.replace('for \'', 'for ').replace('\': ', ': ')
+
+
+def group_by_date(entries, kind='M'):
+    if kind == 'Y':
+        def group_fn(d): return d.year
+    elif kind == 'Q':
+        def group_fn(d): return '{}-Q{}'.format(d.year, (d.month-1)//3+1)
+    elif kind == 'M':
+        def group_fn(d): return '{}-{:02}'.format(d.year, d.month)
+    elif kind == 'W':
+        def group_fn(d): return '{}-W{:02}'.format(d.year, d.isocalendar()[1])
+    elif kind == 'D':
+        def group_fn(d): return '{}-{:02}-{:02}'.format(d.year, d.month, d.day)
+    else:
+        return [(None, entries)]
+    values = set(map(lambda entry: group_fn(entry.date), entries))
+    return [
+        (x, [entry for entry in entries if group_fn(entry.date) == x])
+        for x in values]
