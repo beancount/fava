@@ -86,6 +86,11 @@
   min-width: 60%;
 }
 
+.transaction-overlay form>.fieldset button {
+  margin-bottom: 0;
+  margin-top: .7em;
+}
+
 .notifications {
   position: fixed;
   right: 10px;
