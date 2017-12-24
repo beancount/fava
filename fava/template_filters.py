@@ -5,7 +5,9 @@ All functions in this module will be automatically added as template filters.
 
 import os
 import unicodedata
+import re
 
+import flask
 from flask import g
 from beancount.core import compare
 from beancount.core import convert
@@ -14,6 +16,8 @@ from beancount.core import prices
 from beancount.core import realization
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
+
+ACCOUNT_RE = re.compile(r'([A-Z][A-Za-z0-9\-]+(?::[A-Z][A-Za-z0-9\-]*)+)')
 
 
 def get_market_value(pos, price_map, date=None):
@@ -156,3 +160,14 @@ def should_show(account):
 def basename(file_path):
     """Return the basename of a filepath."""
     return unicodedata.normalize('NFC', os.path.basename(file_path))
+
+
+def format_errormsg(message):
+    """Match account names in error messages and insert HTML links for them."""
+    match = re.search(ACCOUNT_RE, message)
+    if not match:
+        return message
+    url = flask.url_for('account', name=match.group())
+    new_message = re.sub(ACCOUNT_RE,
+                         '<a href="{}">'.format(url) + r'\1' + '</a>', message)
+    return new_message.replace('for \'', 'for ').replace('\': ', ': ')

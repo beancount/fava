@@ -19,7 +19,7 @@
                 {% with link=url_for_source(file_path=error.source['filename'], line=error.source['lineno']) %}
                 <td><a class="source" href="{{ link }}" title="{{ _('Show source %(file)s:%(lineno)s', file=error.source['filename'], lineno=error.source['lineno']) }}">{{ error.source['filename'] }}</a></td>
                 <td class="num"><a class="source" href="{{ link }}" title="{{ _('Show source %(file)s:%(lineno)s', file=error.source['filename'], lineno=error.source['lineno']) }}">{{ error.source['lineno'] }}</a></td>
-                <td>{{ error.message }}</td>
+                <td>{{ error.message|format_errormsg|safe }}</td>
                 {% endwith %}
             </tr>
             {% endfor %}
