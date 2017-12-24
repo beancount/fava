@@ -601,8 +601,16 @@ td .status-indicator {
       color: var(--color-background);
     }
 
-    & span {
+    & span:before {
       background-color: var(--color-autocomplete-match);
+      border-radius: 2px;
+      content: "";
+      height: 1.2em;
+      margin-left: -0.1em;
+      margin-top: 0.1em;
+      position: absolute;
+      width: 1.1em;
+      z-index: -1;
     }
   }
 
