@@ -85,6 +85,16 @@
 
   & .transaction { cursor: pointer; }
 
+  & .group {
+    background-color: var(--color-journal-entry-group);
+    font-weight: bold;
+    margin-top: 2em;
+
+    &:nth-child(2) {
+      margin-top: 0;
+    }
+  }
+
   /* Metadata */
   & dl {
     font-size: .9em;
