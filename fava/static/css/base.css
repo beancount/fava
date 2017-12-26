@@ -608,9 +608,9 @@ td .status-indicator {
       content: "";
       height: 1.2em;
       margin-left: -.1em;
-      margin-top: .1em;
+      margin-top: .12em;
       position: absolute;
-      width: 1.1em;
+      width: .65em;
       z-index: -1;
     }
   }
