@@ -5,7 +5,8 @@ from flask import g
 
 from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
-from fava.template_filters import basename, get_or_create, should_show
+from fava.template_filters import (basename, get_or_create, should_show,
+                                   format_errormsg)
 
 
 def test_basename():
@@ -34,3 +35,11 @@ def test_should_show(app):
         assert not g.ledger.fava_options['show-accounts-with-zero-balance']
         assert should_show(g.ledger.root_tree.get('')) is True
         assert should_show(g.ledger.root_tree.get('Expenses')) is False
+
+
+def test_format_errormsg(app):
+    with app.test_request_context('/'):
+        app.preprocess_request()
+        assert format_errormsg('Test Expenses:Acme:Cash Test') == \
+            'Test <a href="/example-beancount-file/account/Expenses:Acme:Cash/">Expenses:Acme:Cash</a> Test'  # noqa: E501
+        assert format_errormsg('Test: Test') == 'Test: Test'
