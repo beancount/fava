@@ -40,6 +40,8 @@ def test_should_show(app):
 def test_format_errormsg(app):
     with app.test_request_context('/'):
         app.preprocess_request()
+        assert format_errormsg('Test for \'Expenses:Acme:Cash\': Test') == \
+            'Test for <a href="/example-beancount-file/account/Expenses:Acme:Cash/">Expenses:Acme:Cash</a>: Test'  # noqa: E501
         assert format_errormsg('Test Expenses:Acme:Cash Test') == \
             'Test <a href="/example-beancount-file/account/Expenses:Acme:Cash/">Expenses:Acme:Cash</a> Test'  # noqa: E501
         assert format_errormsg('Test: Test') == 'Test: Test'
