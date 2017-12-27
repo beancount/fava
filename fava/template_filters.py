@@ -16,8 +16,7 @@ from beancount.core import prices
 from beancount.core import realization
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
-
-ACCOUNT_RE = re.compile(r'([A-Z][A-Za-z0-9\-]+(?::[A-Z][A-Za-z0-9\-]*)+)')
+from beancount.core.account import ACCOUNT_RE
 
 
 def get_market_value(pos, price_map, date=None):
@@ -167,7 +166,9 @@ def format_errormsg(message):
     match = re.search(ACCOUNT_RE, message)
     if not match:
         return message
-    url = flask.url_for('account', name=match.group())
-    new_message = re.sub(ACCOUNT_RE,
-                         '<a href="{}">'.format(url) + r'\1' + '</a>', message)
-    return new_message.replace('for \'', 'for ').replace('\': ', ': ')
+    account = match.group()
+    url = flask.url_for('account', name=account)
+    return message \
+        .replace(account, '<a href="{}">{}</a>'.format(url, account)) \
+        .replace('for \'', 'for ') \
+        .replace('\': ', ': ')
