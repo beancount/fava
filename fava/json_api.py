@@ -122,6 +122,15 @@ def add_document():
     return _api_success(message='Uploaded to {}'.format(filepath))
 
 
+def _parse_number(num):
+    if not num:
+        return None
+    if '/' in num:
+        left, right = num.split('/')
+        return D(left) / D(right)
+    return D(num)
+
+
 def json_to_entry(json_entry, valid_accounts):
     """Parse JSON to a Beancount entry."""
     # pylint: disable=not-callable
@@ -140,7 +149,7 @@ def json_to_entry(json_entry, valid_accounts):
                 raise FavaAPIException('Unknown account: {}.'
                                        .format(posting['account']))
             data.create_simple_posting(txn, posting['account'],
-                                       posting.get('number') or None,
+                                       _parse_number(posting.get('number')),
                                        posting.get('currency'))
 
         return txn
@@ -148,7 +157,7 @@ def json_to_entry(json_entry, valid_accounts):
         if json_entry['account'] not in valid_accounts:
             raise FavaAPIException(
                 'Unknown account: {}.'.format(json_entry['account']))
-        number = D(json_entry['number'])
+        number = _parse_number(json_entry['number'])
         amount = Amount(number, json_entry.get('currency'))
 
         return data.Balance(json_entry['metadata'], date,
