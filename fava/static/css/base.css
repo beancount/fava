@@ -214,6 +214,7 @@ button,
 .button {
   background-color: var(--color-header);
   border: 0;
+  border-radius: 0;
   color: var(--color-background);
   cursor: pointer;
   outline: 0;
@@ -601,8 +602,16 @@ td .status-indicator {
       color: var(--color-background);
     }
 
-    & span {
+    & span::before {
       background-color: var(--color-autocomplete-match);
+      border-radius: 2px;
+      content: "";
+      height: 1.2em;
+      margin-left: -.1em;
+      margin-top: .12em;
+      position: absolute;
+      width: .65em;
+      z-index: -1;
     }
   }
 
