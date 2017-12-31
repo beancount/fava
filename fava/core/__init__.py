@@ -22,8 +22,7 @@ from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule, get_entry_slice
-from fava.core.filters import (AccountFilter, FromFilter, PayeeFilter,
-                               TagFilter, TimeFilter)
+from fava.core.filters import AccountFilter, AdvancedFilter, TimeFilter
 from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
@@ -115,9 +114,7 @@ class FavaLedger():
         self._is_encrypted = is_encrypted_file(path)
         self._filters = {
             'account': AccountFilter(),
-            'from': FromFilter(),
-            'payee': PayeeFilter(),
-            'tag': TagFilter(),
+            'filter': AdvancedFilter(),
             'time': TimeFilter(),
         }
 

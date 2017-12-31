@@ -12,7 +12,7 @@ import { handleHash } from './overlays';
 // conversion <select>'s.
 function updateURL(url) {
   const newURL = new URL(url);
-  ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
+  ['account', 'filter', 'time'].forEach((filter) => {
     newURL.searchParams.delete(filter);
     const el = $(`#${filter}-filter`);
     if (el.value) {

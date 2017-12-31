@@ -120,7 +120,7 @@ def _inject_filters(endpoint, values):
         values['interval'] = request.args.get('interval')
     if 'conversion' not in values:
         values['conversion'] = request.args.get('conversion')
-    for filter_name in ['account', 'from', 'payee', 'tag', 'time']:
+    for filter_name in ['account', 'filter', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
 
@@ -170,7 +170,7 @@ def _template_context():
 def _perform_global_filters():
     g.filters = {
         name: request.args.get(name)
-        for name in ['account', 'from', 'payee', 'tag', 'time']
+        for name in ['account', 'filter', 'time']
     }
 
     # check (and possibly reload) source file

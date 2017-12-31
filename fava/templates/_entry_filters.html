@@ -1,22 +1,17 @@
 {% set placeholders = {
-    'from': 'FROM',
     'time': _('Time'),
-    'tag': _('Tag'),
     'account': _('Account'),
-    'payee': _('Payee'),
+    'filter': _('Filter by tag, payee, ...'),
 } %}
 {% set lists = {
     'time': 'years',
-    'tag': 'tags',
+    'filter': 'tags',
     'account': 'accounts',
-    'payee': 'payees',
 } %}
 {% set keys = {
-    'from': 'f f',
     'time': 'f t',
-    'tag': 'f g',
     'account': 'f a',
-    'payee': 'f p',
+    'filter': 'f f',
 } %}
 {% macro filter_input(name) %}
     {% set filter_value = g.filters[name] %}
@@ -27,7 +22,7 @@
     </span>
 {% endmacro %}
 <form id="filter-form" class="filter-form" action="{{ url_for_current() }}" data-event="filters" method="GET">
-    {% for name in ['from', 'time', 'tag', 'account', 'payee'] %}
+    {% for name in ['time', 'account', 'filter'] %}
         {{ filter_input(name) }}
     {% endfor %}
     <button type="submit"></button>

@@ -29,12 +29,13 @@ class CompletionList {
 
     // The events that the active input will listen to.
     this.events = {
-      blur: this.close.bind(this),
+      blur: this.blur.bind(this),
       input: this.evaluate.bind(this),
       keydown: (event) => {
         if (event.keyCode === 13 && this.index > -1) { // ENTER
           event.preventDefault();
           this.select(ul.children[this.index]);
+          this.close();
         } else if (event.keyCode === 27) { // ESC
           this.close();
         } else if (event.keyCode === 38) { // UP
@@ -64,9 +65,14 @@ class CompletionList {
     this.evaluate();
   }
 
-  // Close, i.e., hide and unbind events.
+  // Close.
   close() {
     this.ul.innerHTML = '';
+  }
+
+  // Close and unbind events.
+  blur() {
+    this.close();
     this.input.removeEventListener('input', this.events.input);
     this.input.removeEventListener('keydown', this.events.keydown);
     this.input.removeEventListener('blur', this.events.blur);
@@ -101,7 +107,7 @@ class CompletionList {
             li.setAttribute('value', suggestion.value);
             this.ul.appendChild(li);
           });
-        this.highlight(0);
+        this.index = -1;
         this.position();
       });
   }
@@ -122,7 +128,7 @@ class CompletionList {
   filter(suggestions) {
     let { value } = this.input;
     if (this.list === 'tags') {
-      value = value.match(/[^,]*$/)[0].trim();
+      [value] = value.slice(0, this.input.selectionStart).match(/\S*$/);
     }
     return suggestions
       .map(suggestion => String(suggestion))
@@ -152,7 +158,9 @@ class CompletionList {
       }
     }
     if (this.list === 'tags') {
-      return new Promise((resolve) => { resolve(window.favaAPI[this.list].map(tag => `#${tag}`)); });
+      const suggestions = window.favaAPI.tags.map(tag => `#${tag}`)
+        .concat(window.favaAPI.payees.map(payee => `payee:"${payee}"`));
+      return new Promise((resolve) => { resolve(suggestions); });
     }
     return new Promise((resolve) => { resolve(window.favaAPI[this.list]); });
   }
@@ -161,13 +169,12 @@ class CompletionList {
   select(li) {
     const value = li.getAttribute('value');
     if (this.list === 'tags') {
-      const before = this.input.value.match(/^.+,\s*|/)[0];
-      this.input.value = `${before}${value}, `;
+      const [search] = this.input.value.slice(0, this.input.selectionStart).match(/\S*$/);
+      this.input.value = `${this.input.value.slice(0, this.input.selectionStart - search.length)}${value}${this.input.value.slice(this.input.selectionStart)}`;
     } else {
       this.input.value = value;
     }
     this.input.dispatchEvent(new Event('autocomplete-select'));
-    this.close();
   }
 }
 

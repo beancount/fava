@@ -11,7 +11,7 @@ function updateInput(input) {
 }
 
 e.on('page-loaded', () => {
-  ['account', 'from', 'payee', 'tag', 'time'].forEach((filter) => {
+  ['account', 'filter', 'time'].forEach((filter) => {
     const value = new URLSearchParams(window.location.search).get(filter);
     const el = document.getElementById(`${filter}-filter`);
     if (value) {

@@ -2,14 +2,228 @@
 
 import re
 
+import ply.yacc
 from beancount.core import account
 from beancount.core.data import Custom, Transaction
 from beancount.ops import summarize
-from beancount.query import (
-    query_compile, query_env, query_execute, query_parser)
+from beancount.query import query_compile, query_env, query_parser
 
 from fava.util.date import parse_date
 from fava.core.helpers import FilterException
+
+
+class Token(object):
+    """A token having a certain type and value.
+
+    The lexer attribute only exists since PLY writes to it in case of a parser
+    error.
+    """
+    # pylint: disable=too-few-public-methods
+    __slots__ = ['type', 'value', 'lexer']
+
+    def __init__(self, type_, value):
+        self.type = type_
+        self.value = value
+
+    def __repr__(self):
+        return 'Token({}, {})'.format(self.type, self.value)
+
+
+QUERY_PARSER = query_parser.Parser()
+ENV_ENTRIES = query_env.FilterEntriesEnvironment()
+
+
+class FilterSyntaxLexer(object):
+    """Lexer for Fava's filter syntax."""
+    # pylint: disable=missing-docstring,invalid-name,no-self-use
+
+    tokens = (
+        'STRING',
+        'LINK',
+        'TAG',
+        'KEY',
+    )
+
+    RULES = (
+        ('LINK', r'\^[A-Za-z0-9\-_/.]+'),
+        ('TAG', r'\#[A-Za-z0-9\-_/.]+'),
+        ('KEY', r'[a-z][a-zA-Z0-9\-_]+:'),
+        ('STRING', r'\w+|"[^"]*"|\'[^\']*\''),
+    )
+
+    literals = '-,|&()'
+    ignore = ' \t'
+    regex = re.compile('|'.join(
+        ('(?P<{}>{})'.format(name, rule) for name, rule in RULES)))
+
+    def LINK(self, token, value):
+        return token, value[1:]
+
+    def TAG(self, token, value):
+        return token, value[1:]
+
+    def KEY(self, token, value):
+        return token, value[:-1]
+
+    def STRING(self, token, value):
+        if value[0] in ['"', "'"]:
+            return token, value[1:-1]
+        return token, value
+
+    def lex(self, data):
+        """A generator yielding all tokens in a given line.
+
+        Arguments:
+            data: A string, the line to lex.
+
+        Yields:
+            All Tokens in the line.
+        """
+        ignore = self.ignore
+        literals = self.literals
+        regex = self.regex.match
+
+        pos = 0
+        length = len(data)
+        while pos < length:
+            char = data[pos]
+            if char in ignore:
+                pos += 1
+                continue
+            match = regex(data, pos)
+            if match:
+                value = match.group()
+                pos += len(value)
+                token = match.lastgroup
+                func = getattr(self, token)
+                ret = func(token, value)
+                if ret:
+                    yield Token(*ret)
+            elif char in literals:
+                yield Token(char, char)
+                pos += 1
+            else:
+                raise FilterException(
+                    'filter', 'Illegal character "{}" in filter: ')
+                pos += 1
+
+
+def _match(search, string):
+    try:
+        return re.match(search, string) or search == string
+    except re.error:
+        return search == string
+
+
+class FilterSyntaxParser(object):
+    # pylint: disable=missing-docstring,invalid-name,no-self-use
+
+    precedence = (
+        ('left', ','),
+        ('left', '&'),
+        ('right', '-'),
+    )
+    tokens = FilterSyntaxLexer.tokens
+
+    def p_error(self, _):
+        raise FilterException('filter', 'Failed to parse filter: ')
+
+    def p_filter(self, p):
+        """
+        filter : expr
+        """
+        p[0] = p[1]
+
+    def p_filter_empty(self, p):
+        """
+        filter :
+        """
+        p[0] = lambda _: True
+
+    def p_expr(self, p):
+        """
+        expr : simple_expr
+        """
+        p[0] = p[1]
+
+    def p_expr_parentheses(self, p):
+        """
+        expr : '(' expr ')'
+        """
+        p[0] = p[2]
+
+    def p_expr_and(self, p):
+        """
+        expr : expr expr %prec '&'
+        """
+        left, right = p[1], p[2]
+
+        def _and(entry):
+            return left(entry) and right(entry)
+        p[0] = _and
+
+    def p_expr_or(self, p):
+        """
+        expr : expr ',' expr
+        """
+        left, right = p[1], p[3]
+
+        def _or(entry):
+            return left(entry) or right(entry)
+        p[0] = _or
+
+    def p_expr_negated(self, p):
+        """
+        expr : '-' expr
+        """
+        func = p[2]
+
+        def _neg(entry):
+            return not func(entry)
+
+        p[0] = _neg
+
+    def p_simple_expr_TAG(self, p):
+        """
+        simple_expr : TAG
+        """
+        tag = p[1]
+
+        def _tag(entry):
+            return hasattr(entry, 'tags') and (tag in entry.tags)
+        p[0] = _tag
+
+    def p_simple_expr_LINK(self, p):
+        """
+        simple_expr : LINK
+        """
+        link = p[1]
+
+        def _link(entry):
+            return hasattr(entry, 'links') and (link in entry.links)
+        p[0] = _link
+
+    def p_simple_expr_key(self, p):
+        """
+        simple_expr : KEY STRING
+        """
+        key, value = p[1], p[2]
+
+        if key == 'from':
+            try:
+                from_clause = QUERY_PARSER.parse(
+                    'select * from ' + value).from_clause
+                c_from = query_compile.compile_from(from_clause, ENV_ENTRIES)
+            except (query_compile.CompilationError,
+                    query_parser.ParseError) as exception:
+                raise FilterException('from', str(exception))
+            p[0] = c_from.c_expr
+            return
+
+        def _key(entry):
+            return hasattr(entry, key) and _match(value,
+                                                  getattr(entry, key) or '')
+        p[0] = _key
 
 
 class EntryFilter(object):
@@ -53,35 +267,6 @@ class EntryFilter(object):
         return bool(self.value)
 
 
-class FromFilter(EntryFilter):  # pylint: disable=abstract-method
-    """Filter by a FROM expression in the Beancount Query Language."""
-
-    def __init__(self):
-        super().__init__()
-        self.parser = query_parser.Parser()
-        self.env_entries = query_env.FilterEntriesEnvironment()
-        self.c_from = None
-
-    def set(self, value):
-        if value == self.value:
-            return False
-        self.value = value
-        if not self.value:
-            return True
-        try:
-            from_clause = self.parser.parse(
-                'select * from ' + value).from_clause
-            self.c_from = query_compile.compile_from(
-                from_clause, self.env_entries)
-        except (query_compile.CompilationError,
-                query_parser.ParseError) as exception:
-            raise FilterException('from', str(exception))
-        return True
-
-    def _filter(self, entries, options):
-        return query_execute.filter_entries(self.c_from, entries, options)
-
-
 class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
     """Filter by dates."""
 
@@ -109,59 +294,42 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         return entries
 
 
-class TagFilter(EntryFilter):
-    """Filter by tags and links.
+LEXER = FilterSyntaxLexer()
+PARSE = ply.yacc.yacc(
+    errorlog=ply.yacc.NullLogger(),
+    write_tables=False,
+    debug=False,
+    module=FilterSyntaxParser()).parse
 
-    Only keeps entries that can have tags and links.
-    """
+
+class AdvancedFilter(EntryFilter):
+    """Filter by tags and links and keys."""
 
     def __init__(self):
         super().__init__()
-        self.tags = set()
-        self.exclude_tags = set()
-        self.links = set()
-        self.exclude_links = set()
+        self._include = None
 
     def set(self, value):
         if value == self.value:
             return False
         self.value = value
-        if not self.value:
-            return True
-        self.tags = set()
-        self.exclude_tags = set()
-        self.links = set()
-        self.exclude_links = set()
-        for tag_or_link in [t.strip() for t in value.split(',')]:
-            if tag_or_link.startswith('#'):
-                self.tags.add(tag_or_link[1:])
-            if tag_or_link.startswith('-#'):
-                self.exclude_tags.add(tag_or_link[2:])
-            if tag_or_link.startswith('^'):
-                self.links.add(tag_or_link[1:])
-            if tag_or_link.startswith('-^'):
-                self.exclude_links.add(tag_or_link[2:])
+        if value:
+            try:
+                tokens = LEXER.lex(value)
+                self._include = PARSE(
+                    lexer='NONE',
+                    tokenfunc=lambda toks=tokens: next(toks, None))
+            except FilterException as exception:
+                exception.message = exception.message + value
+                raise exception
+        else:
+            self._include = None
         return True
 
     def _include_entry(self, entry):
-        include = hasattr(entry, 'tags') and (
-            (entry.tags & self.tags) or
-            (entry.links & self.links)
-        ) if self.tags or self.links else True
-
-        exclude = hasattr(entry, 'tags') and (
-            (entry.tags & self.exclude_tags) or
-            (entry.links & self.exclude_links)
-        )
-
-        return include and not exclude
-
-
-def _match(search, string):
-    try:
-        return re.match(search, string) or search == string
-    except re.error:
-        return search == string
+        if self._include:
+            return self._include(entry)
+        return True
 
 
 def entry_account_predicate(entry, predicate):
@@ -195,14 +363,3 @@ class AccountFilter(EntryFilter):
 
     def _include_entry(self, entry):
         return entry_account_predicate(entry, self._account_predicate)
-
-
-class PayeeFilter(EntryFilter):
-    """Filter by payee.
-
-    The filter string can either a regular expression or a full payee name.
-    """
-
-    def _include_entry(self, entry):
-        return isinstance(entry, Transaction) and \
-            _match(self.value, entry.payee or '')
