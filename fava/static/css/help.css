@@ -3,11 +3,16 @@
 :root {
   --color-help-sidebar: #f8f8f8;
   --color-help-sidebar-border: #eaeaea;
+  --help-max-width: 600px;
+}
+
+.help {
+  max-width: calc(var(--help-max-width) + 160px);
 }
 
 .help-text {
   font: 16px var(--font-family-alternative);
-  width: 660px;
+  max-width: var(--help-max-width);
 
   & h2,
   & h3,
@@ -44,16 +49,13 @@
 .help-sidebar {
   background-color: var(--color-help-sidebar);
   border: 1px solid var(--color-help-sidebar-border);
-  border-radius: 1px;
   float: right;
   font-size: 1.1em;
-  left: 850px;
   margin: 0 0 10px 10px;
   padding: 10px 10px 0;
-  position: fixed;
 
-  & a {
-    &:hover,
-    &.selected { font-weight: 500; }
+  & a:hover,
+  & a.selected {
+    font-weight: 500;
   }
 }

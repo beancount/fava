@@ -4,17 +4,17 @@
 {% set page_title=_('Help - %(title)s', title=config['HELP_PAGES'][page_slug]) %}
 
 {% block content %}
-    <div class="help">
-        <div class="help-sidebar">
-            <h3>{{ _('Help pages') }}</h3>
-            <ul>
-                {% for slug, title in config['HELP_PAGES']|dictsort %}
-                    <li><a href="{{ url_for('help_page', page_slug=slug) }}"{% if slug == page_slug %} class="selected"{% endif %}>{{ title }}</a>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="help-text">
-            {{ help_html|safe }}
-        </div>
-    </div>
+<div class="help">
+  <div class="help-sidebar">
+    <h3>{{ _('Help pages') }}</h3>
+    <ul>
+      {% for slug, title in config['HELP_PAGES']|dictsort %}
+      <li><a href="{{ url_for('help_page', page_slug=slug) }}"{% if slug == page_slug %} class="selected"{% endif %}>{{ title }}</a>
+        {% endfor %}
+    </ul>
+  </div>
+  <div class="help-text">
+    {{ help_html|safe }}
+  </div>
+</div>
 {% endblock %}
