@@ -36,7 +36,7 @@
   }
 
   .aside-button,
-  .add-transaction-button {
+  .navigation .add-transaction-button {
     border-color: var(--color-sidebar-border);
     border-style: solid;
     border-width: 0 1px 1px 0;
@@ -44,6 +44,7 @@
     left: 0;
     padding: 6px 4px;
     position: fixed;
+    text-align: center;
     width: 42px;
   }
 
@@ -59,7 +60,7 @@
     }
   }
 
-  .add-transaction-button {
+  .navigation .add-transaction-button {
     color: var(--color-mobile-button-text);
     font-size: 30px;
     top: 42px;

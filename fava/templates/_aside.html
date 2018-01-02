@@ -23,9 +23,10 @@
               <li><a{% if query.name == name %} class="selected"{% endif %} href="{{ url_for('report', report_name='query', query_string='run "{}"'.format(query.name)) }}">{{ query.name|truncate(25, True, ' …') }}</a></li>
             {% endfor %}
           </ul>
-        {% endif %}
-        {% if id == 'editor' %}
-          <a href="#add-transaction" class="add-transaction-button" data-key="n">+</a>
+        {% elif id == 'editor' %}
+          <a href="#add-transaction" class="secondary add-transaction-button" data-key="n">+</a>
+        {% elif id == 'import' %}
+        <a href="{{ url_for('download_journal') }}" class="secondary" title="{{ _('Export currently filtered entries as a Beancount file') }}" data-remote>↓</a>
         {% endif %}
       </li>
       {% if id == 'editor' %}

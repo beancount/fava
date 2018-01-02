@@ -64,7 +64,6 @@
 {% macro journal_table(entries, show_change_and_balance=False) %}
 {% autoescape false %}
 <form id="entry-filters" class="wide-form">
-  <a href="{{ url_for('download_journal', account=account_name) if account_name else url_for('download_journal') }}" class="button" title="{{ _('Export Journal as a Beancount file') }}" data-remote>{{ _('Export') }}</a>
   <span class="spacer"></span>
   {% for type in entry_types %}
   <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>

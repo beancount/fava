@@ -309,27 +309,6 @@ header {
   }
 }
 
-.add-transaction-button {
-  background-color: var(--color-sidebar-background);
-  color: inherit;
-  font-size: 25px;
-  height: 100%;
-  line-height: 1;
-  margin: 0;
-  padding: 5px 8px 5px 10px !important;
-  position: absolute;
-  right: 0;
-  text-align: center;
-  top: 0;
-  transition: var(--transitions);
-
-  &:hover {
-    background-color: var(--color-sidebar-border);
-    box-shadow: none;
-    color: var(--color-sidebar-text-hover);
-  }
-}
-
 aside {
   background-color: var(--color-sidebar-background);
   border-right: 1px solid var(--color-sidebar-border);
@@ -367,9 +346,22 @@ aside {
     }
   }
 
+  & .secondary {
+    background-color: var(--color-sidebar-background);
+    color: inherit;
+    font-size: 23px;
+    line-height: 1;
+    padding: 4px 9px 2px 9px;
+    transition: var(--transitions);
+  }
+
   & li {
-    display: block;
+    display: flex;
     position: relative;
+
+    & a:first-child {
+      flex: 1;
+    }
   }
 
   & .error {

@@ -295,7 +295,8 @@ def download_query(result_format):
 @app.route('/<bfile>/download-journal/')
 def download_journal():
     """Download a Journal file."""
-    filename = "journal_{}.beancount".format(datetime.datetime.now())
+    now = datetime.datetime.now().replace(microsecond=0)
+    filename = "journal_{}.beancount".format(now.isoformat())
     data = BytesIO(bytes(render_template('beancount_file'), 'utf8'))
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
