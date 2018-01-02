@@ -1,17 +1,9 @@
 from datetime import date
 
 from beancount.core.number import D
-import pytest
 
 from fava.core.budgets import (parse_budgets, calculate_budget,
                                calculate_budget_children)
-
-
-@pytest.fixture
-def budgets_doc(load_doc):
-    entries, _, _ = load_doc
-    budgets, _ = parse_budgets(entries)
-    return budgets
 
 
 def test_budgets(load_doc):

@@ -3,7 +3,7 @@ from beancount.core.amount import A
 from fava.core.inventory import CounterInventory
 
 
-def test_CounterInventory_add():
+def test_add():
     inv = CounterInventory()
     key = 'KEY'
     inv.add(key, 10)
@@ -12,7 +12,7 @@ def test_CounterInventory_add():
     assert inv.is_empty()
 
 
-def test_CounterInventory_add_amount():
+def test_add_amount():
     inv = CounterInventory()
     inv.add_amount(A('10 USD'))
     inv.add_amount(A('30 USD'))
@@ -28,7 +28,7 @@ def test_CounterInventory_add_amount():
     assert len(inv) == 1
 
 
-def test_CounterInventory_add_inventory():
+def test_add_inventory():
     inv = CounterInventory()
     inv2 = CounterInventory()
     inv3 = CounterInventory()

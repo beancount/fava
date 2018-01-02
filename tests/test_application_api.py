@@ -3,9 +3,9 @@ import hashlib
 from io import BytesIO
 import os
 
+import flask
 from beancount.core.data import Transaction, create_simple_posting
 from beancount.scripts.format import align_beancount
-import flask
 
 from fava.json_api import json_to_entry
 

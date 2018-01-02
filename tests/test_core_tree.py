@@ -4,7 +4,7 @@ from beancount.ops import summarize
 from fava.core.tree import Tree
 
 
-def test_Tree():
+def test_tree():
     tree = Tree()
     assert len(tree) == 1
     tree.get('account:name:a:b:c')
@@ -33,7 +33,7 @@ def _compare_inv_and_counter(inv, counter):
         assert len(inv) == len(counter)
 
 
-def test_Tree_from_entries(example_ledger):
+def test_tree_from_entries(example_ledger):
     tree = Tree(example_ledger.entries)
     real_account = realization.realize(example_ledger.entries)
 
@@ -45,7 +45,7 @@ def test_Tree_from_entries(example_ledger):
             realization.compute_balance(account), node.balance_children)
 
 
-def test_Tree_cap(example_ledger):
+def test_tree_cap(example_ledger):
     closing_entries = summarize.cap_opt(
         example_ledger.entries, example_ledger.options)
     real_account = realization.realize(closing_entries)

@@ -105,7 +105,6 @@ class FilterSyntaxLexer(object):
             else:
                 raise FilterException(
                     'filter', 'Illegal character "{}" in filter: ')
-                pos += 1
 
 
 def _match(search, string):
@@ -221,8 +220,8 @@ class FilterSyntaxParser(object):
             return
 
         def _key(entry):
-            return hasattr(entry, key) and _match(value,
-                                                  getattr(entry, key) or '')
+            return hasattr(entry, key) and \
+                _match(value, str(getattr(entry, key)) or '')
         p[0] = _key
 
 

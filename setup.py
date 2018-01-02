@@ -33,9 +33,10 @@ setup(
     install_requires=[
         'beancount>=2.0b15',
         'click',
-        'markdown2>=2.3.0',
         'Flask>=0.10.1',
         'Flask-Babel>=0.10.0',
+        'markdown2>=2.3.0',
+        'ply',
     ],
     extras_require={
         'excel': [

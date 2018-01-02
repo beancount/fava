@@ -1,7 +1,7 @@
 import os
 
-from beancount.query import query
 import pytest
+from beancount.query import query
 
 from fava.core.helpers import FavaAPIException
 from fava.core.query_shell import QueryShell

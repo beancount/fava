@@ -2,9 +2,9 @@ import datetime
 from textwrap import dedent
 import re
 
+import pytest
 from beancount.core import data, amount
 from beancount.core.number import D
-import pytest
 
 from fava.core.helpers import FavaAPIException
 from fava.core.file import (next_key, leading_space, insert_metadata_in_file,

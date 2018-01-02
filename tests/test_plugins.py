@@ -64,7 +64,7 @@ def test_plugins(tmpdir):
     assert not entries[8].tags
 
 
-def test_link_statements_no_documents(load_doc):
+def test_link_statements_error(load_doc):
     """
     plugin "fava.plugins.link_statements"
 
