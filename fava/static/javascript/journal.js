@@ -1,10 +1,20 @@
-import { $, $$ } from './helpers';
+import { $, $$, nextUntil } from './helpers';
 import e from './events';
 import router from './router';
+
+function hideEmptyGroups() {
+  $$('#journal-table .group').forEach((el) => {
+    let elements = nextUntil(el, '.group').length;
+    let hidden = nextUntil(el, '.group', '.hidden').length;
+    el.classList.toggle('hidden', elements === hidden);
+  });
+}
 
 e.on('page-loaded', () => {
   const journal = $('#journal-table');
   if (!journal) return;
+
+  hideEmptyGroups();
 
   // Toggle postings by clicking on transaction row.
   $.delegate(journal, 'click', '.transaction', (event) => {
@@ -42,6 +52,8 @@ e.on('page-loaded', () => {
           filterShow.push(el.getAttribute('data-type'));
         }
       });
+
+      hideEmptyGroups();
 
       const url = new URL(window.location);
       url.searchParams.delete('show');

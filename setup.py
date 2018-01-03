@@ -36,6 +36,7 @@ setup(
         'markdown2>=2.3.0',
         'Flask>=0.10.1',
         'Flask-Babel>=0.10.0',
+        'Jinja2>=2.10',
     ],
     extras_require={
         'excel': [
