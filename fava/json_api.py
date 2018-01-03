@@ -116,8 +116,8 @@ def add_document():
 
     upload.save(filepath)
 
-    if request.form.get('entry_hash'):
-        g.ledger.file.insert_metadata(request.form['entry_hash'], 'statement',
+    if request.form.get('hash'):
+        g.ledger.file.insert_metadata(request.form['hash'], 'statement',
                                       filename)
     return _api_success(message='Uploaded to {}'.format(filepath))
 
