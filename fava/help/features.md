@@ -133,10 +133,8 @@ current page but change the time filter to the current month.
 ## Language
 
 You can change the language of the interface by specifying the `language`
-setting. Currently Fava supports English (`en`) and German (`de`).
-
-If no setting is specified, Fava tries to guess the language from your browser
-settings.
+option. If no option is specified, Fava tries to guess the language from your
+browser settings.
 
 ## Documents upload
 
