@@ -73,6 +73,10 @@ def test_filterexception():
     ('payee:BayBook', 62),
     ('(payee:BayBook, #test,#nomatch) -#nomatch', 64),
     ('payee:"BayBo.*"', 62),
+    (r'number:"\d*"', 3),
+    ('not_a_meta_key:".*"', 0),
+    ('name:".*ETF"', 4),
+    ('name:".*ETF$"', 3),
 ])
 def test_advanced_filter(example_ledger, string, number):
     FILTER.set(string)

@@ -18,11 +18,9 @@ months ago.
 
 ### Account
 Filter entries by account, matching any entry this account is part of. The
-filter can simply be an account name or a regular expression, e.g.
-`.*:Company:.*` to filter for all that contain `Company` as a component in the
-account name. If a regular expression is given, it must match the whole account
-name.
-
+filter can be an account name or a regular expression matching the account
+name, e.g.  `.*:Company:.*` to filter for all that contain `Company` as a
+component in the account name.
 
 ### Filter by tag, link, payee and other metadata
 
@@ -32,7 +30,7 @@ This final filter allows you to filter entries by various attributes.
 - Filter by payee `payee:".*restaurant.*"`, or narration `narration:'Dinner with Joe'`,
   or any other entry attribute. The argument needs to be quoted (with `'` or
   `"`) if it contains spaces and can either be simply a string or a regular
-  expression.
+  expression that matches the attribute.
 - Filter entries using a `FROM` expression as supported by the
   Beancount Query Language: `from:'year = 2012'`.
 - Filter for entries having certain metadata values: `statement:".*pdf"`.
@@ -40,7 +38,7 @@ This final filter allows you to filter entries by various attributes.
   or `-(^link #tag)`.
 
 These filters can be combined by separating them by spaces to match all entries
-satisfying all filters or by commas to match all entries satisfying at least
-one of the filters. In other words, a space acts like an "and" and a comma like
-an "or". As usual, the logical "and" has a higher grouping power than "or", but
-you can use parentheses to group filters.
+satisfying all given filters or by commas to match all entries satisfying at
+least one of the given filters. In other words, a space acts like an "and" and
+a comma like an "or". As usual, the logical "and" has a higher grouping power
+than "or" and you can use parentheses to group filters.

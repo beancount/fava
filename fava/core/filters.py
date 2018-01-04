@@ -220,8 +220,11 @@ class FilterSyntaxParser(object):
             return
 
         def _key(entry):
-            return hasattr(entry, key) and \
-                _match(value, str(getattr(entry, key)) or '')
+            if hasattr(entry, key):
+                return _match(value, str(getattr(entry, key) or ''))
+            if key in entry.meta:
+                return _match(value, str(entry.meta.get(key)))
+            return False
         p[0] = _key
 
 
