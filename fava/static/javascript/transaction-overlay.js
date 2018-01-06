@@ -36,14 +36,10 @@ function submitTransactionForm(form, successCallback) {
     });
 }
 
-e.on('page-init', () => {
-  const form = $('#transaction #transaction-form');
+e.on('button-click-transaction-form-submit', (button) => {
+  submitTransactionForm(button.form, closeOverlay);
+});
 
-  form.querySelector('#transaction-form-submit').addEventListener('click', () => {
-    submitTransactionForm(form, closeOverlay);
-  });
-
-  form.querySelector('#transaction-form-submit-and-new').addEventListener('click', () => {
-    submitTransactionForm(form);
-  });
+e.on('button-click-transaction-form-submit-and-new', (button) => {
+  submitTransactionForm(button.form);
 });

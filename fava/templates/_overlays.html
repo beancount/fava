@@ -30,8 +30,8 @@
       <h3>{{ _('New transaction') }}:</h3>
       {{ forms.transaction() }}
       <div class="fieldset">
-        <button type="button" id="transaction-form-submit">{{ _('Save') }}</button>
-        <button type="button" class="muted" id="transaction-form-submit-and-new">{{ _('Save and add new') }}</button>
+        <button type="button" data-event="transaction-form-submit">{{ _('Save') }}</button>
+        <button type="button" class="muted" data-event="transaction-form-submit-and-new">{{ _('Save and add new') }}</button>
       </div>
     </form>
   </div>
