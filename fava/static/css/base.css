@@ -349,10 +349,13 @@ aside {
   & .secondary {
     background-color: var(--color-sidebar-background);
     color: inherit;
-    font-size: 23px;
-    line-height: 1;
+    line-height: 23px;
     padding: 4px 9px 2px 9px;
     transition: var(--transitions);
+  }
+
+  & .add-transaction-button {
+    font-size: 23px;
   }
 
   & li {

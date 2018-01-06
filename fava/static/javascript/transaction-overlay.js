@@ -36,18 +36,6 @@ function submitTransactionForm(form, successCallback) {
     });
 }
 
-let initialized = false;
-export default function showTransactionOverlay() {
-  const form = $('#transaction-form');
-  if (!initialized) {
-    addPostingRow(form);
-    addPostingRow(form);
-    initialized = true;
-  }
-  $('#transaction').classList.add('shown');
-  form.focus();
-}
-
 e.on('page-init', () => {
   const form = $('#transaction #transaction-form');
 

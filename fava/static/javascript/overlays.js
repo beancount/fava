@@ -2,7 +2,7 @@ import { $, $$ } from './helpers';
 import e from './events';
 
 import initSourceEditor from './editor';
-import showTransactionOverlay from './transaction-overlay';
+import { addPostingRow } from './entry-forms';
 
 export function closeOverlay() {
   $('#context-overlay .content').innerHTML = '';
@@ -14,6 +14,18 @@ export function closeOverlay() {
   }
 }
 
+let initialized = false;
+function showTransactionOverlay() {
+  const form = $('#transaction-form');
+  if (!initialized) {
+    addPostingRow(form);
+    addPostingRow(form);
+    initialized = true;
+  }
+  $('#transaction').classList.add('shown');
+  form.focus();
+}
+
 // Show various overlays depending on the hash.
 export function handleHash() {
   const { hash } = window.location;
@@ -21,6 +33,8 @@ export function handleHash() {
     closeOverlay();
   } else if (hash === '#add-transaction') {
     showTransactionOverlay();
+  } else if (hash === '#export') {
+    $('#export-overlay').classList.add('shown');
   } else if (hash.startsWith('#context')) {
     $.fetch(`${window.favaAPI.baseURL}_context/?entry_hash=${hash.slice(9)}`)
       .then(response => response.text())

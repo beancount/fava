@@ -42,5 +42,14 @@
     <div class="content"></div>
   </div>
 </div>
+<div id="export-overlay" class="overlay-wrapper">
+  <div class="overlay">
+    <button type=button class="link close-overlay">({{ _('close') }})</button>
+    <div class="content">
+      <h3>{{ _('Export') }}:</h3>
+      <a href="{{ url_for('download_journal') }}" data-remote>{{ _('Download currently filtered entries as a Beancount file') }}</a>
+    </div>
+  </div>
+</div>
 <div class="hidden" id="posting-template">{{ forms.posting() }}</div>
 <div class="hidden" id="metadata-template">{{ forms.metadata() }}</div>
