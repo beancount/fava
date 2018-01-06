@@ -4,11 +4,19 @@ import pytest
 from beancount.core import account
 
 from fava.core.filters import (
-    FilterException, AccountFilter, AdvancedFilter,
-    TimeFilter, FilterSyntaxLexer)
+    AccountFilter, AdvancedFilter, TimeFilter,
+    FilterSyntaxLexer, Match)
+from fava.core.helpers import FilterException
 
 
 LEX = FilterSyntaxLexer().lex
+
+
+def test_match():
+    assert Match('asdf')('asdf')
+    assert Match('asdf')('asdfasdf')
+    assert not Match('asdf')('aasdfasdf')
+    assert Match('(((')('(((')
 
 
 def test_lexer_basic():
@@ -19,6 +27,14 @@ def test_lexer_basic():
         ('-', '-'),
         ('LINK', 'some_link'),
     ]
+    data = "'string' string \"string\""
+    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+        ('STRING', 'string'),
+        ('STRING', 'string'),
+        ('STRING', 'string'),
+    ]
+    with pytest.raises(FilterException):
+        list(LEX('|'))
 
 
 def test_lexer_key():

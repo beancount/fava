@@ -51,8 +51,6 @@ class FilterSyntaxLexer(object):
         ('STRING', r'\w+|"[^"]*"|\'[^\']*\''),
     )
 
-    literals = '-,|&()'
-    ignore = ' \t'
     regex = re.compile('|'.join(
         ('(?P<{}>{})'.format(name, rule) for name, rule in RULES)))
 
@@ -79,8 +77,8 @@ class FilterSyntaxLexer(object):
         Yields:
             All Tokens in the line.
         """
-        ignore = self.ignore
-        literals = self.literals
+        ignore = ' \t'
+        literals = '-,()'
         regex = self.regex.match
 
         pos = 0
@@ -107,11 +105,19 @@ class FilterSyntaxLexer(object):
                     'filter', 'Illegal character "{}" in filter: ')
 
 
-def _match(search, string):
-    try:
-        return re.match(search, string) or search == string
-    except re.error:
-        return search == string
+class Match(object):
+    """Match a string."""
+    # pylint: disable=too-few-public-methods
+    __slots__ = ['match']
+
+    def __init__(self, search):
+        try:
+            self.match = re.compile(search).match
+        except re.error:
+            self.match = lambda string: string == search
+
+    def __call__(self, string):
+        return self.match(string)
 
 
 class FilterSyntaxParser(object):
@@ -219,11 +225,13 @@ class FilterSyntaxParser(object):
             p[0] = c_from.c_expr
             return
 
+        match = Match(value)
+
         def _key(entry):
             if hasattr(entry, key):
-                return _match(value, str(getattr(entry, key) or ''))
+                return match(str(getattr(entry, key) or ''))
             if key in entry.meta:
-                return _match(value, str(entry.meta.get(key)))
+                return match(str(entry.meta.get(key)))
             return False
         p[0] = _key
 
@@ -359,9 +367,19 @@ class AccountFilter(EntryFilter):
     The filter string can either a regular expression or a parent account.
     """
 
+    def __init__(self):
+        super().__init__()
+        self.match = None
+
+    def set(self, value):
+        if value == self.value:
+            return False
+        self.value = value
+        self.match = Match(value or '')
+        return True
+
     def _account_predicate(self, name):
-        return (account.has_component(name, self.value) or
-                _match(self.value, name))
+        return account.has_component(name, self.value) or self.match(name)
 
     def _include_entry(self, entry):
         return entry_account_predicate(entry, self._account_predicate)

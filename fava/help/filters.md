@@ -3,6 +3,7 @@ that are displayed in Fava's reports.  If you use multiple filters, the subset
 of entries matching all active filters will be selected.
 
 ### Time
+
 Filter entries by their date. You can specify dates and intervals like years,
 quarters, months, weeks, and days (for example `2015`, `2012-Q1`, `2010-10`,
 `2016-W12`, or `2015-06-12`). You can specify a range of dates like
@@ -17,10 +18,11 @@ of the last and current year. To prevent subtraction, use parentheses:
 months ago.
 
 ### Account
+
 Filter entries by account, matching any entry this account is part of. The
-filter can be an account name or a regular expression matching the account
-name, e.g.  `.*:Company:.*` to filter for all that contain `Company` as a
-component in the account name.
+filter can be an account name, either the full account name or a component of
+the account name, or a regular expression matching the account name, e.g.
+`.*Company.*` to filter for all that contain `Company`.
 
 ### Filter by tag, link, payee and other metadata
 
