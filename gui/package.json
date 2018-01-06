@@ -14,9 +14,9 @@
     "start": "electron src/main.js"
   },
   "devDependencies": {
-    "electron": "^1.8.0",
-    "electron-builder": "^19.49.0",
-    "eslint": "^4.13.1",
+    "electron": "^1.7.10",
+    "electron-builder": "^19.52.1",
+    "eslint": "^4.14.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0"
   },
