@@ -1,6 +1,7 @@
 from textwrap import dedent
 from beancount.loader import load_file, load_string
 from fava.plugins.link_statements import StatementDocumentError
+from fava.plugins.todo_as_error import TodoError
 
 
 def test_plugins(tmpdir):
@@ -103,3 +104,20 @@ def test_link_statements_missing(tmpdir):
     assert len(errors) == 1
     assert isinstance(errors[0], StatementDocumentError)
     assert len(entries) == 3
+
+
+def test_todo_as_error(load_doc):
+    """
+    plugin "fava.plugins.todo_as_error"
+    plugin "beancount.plugins.auto_accounts"
+
+    2016-11-01 * "Foo" "Bar"
+        todo: "This will become an error"
+        Expenses:Foo                100 EUR
+        Assets:Cash
+    """
+    entries, errors, _ = load_doc
+
+    assert len(errors) == 1
+    assert isinstance(errors[0], TodoError)
+    assert errors[0].message == 'This will become an error'

@@ -153,3 +153,15 @@ corresponding transaction and can be filtered in the Journal:
 
 When displaying a Journal, including a filtered Journal, the entries displayed
 can be downloaded in Beancount format by clicking the `Export` button.
+
+### Display 'todo'-metadata-entries as errors
+
+When enabling the `todo_as_error`-plugin, transactions with the `todo`-metadata-key will be added as Beancount errors, displaying the value of the `todo`-metadata-entry as the error description.
+
+    plugin "fava.plugins.link_statements"
+
+    2017-12-27 * "" "Groceries"
+      todo: "Put the milk into the fridge"
+      Expenses:Groceries   150.00 USD
+      Assets:Cash
+
