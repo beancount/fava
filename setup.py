@@ -35,6 +35,7 @@ setup(
         'click',
         'Flask>=0.10.1',
         'Flask-Babel>=0.10.0',
+        'Jinja2>=2.10',
         'markdown2>=2.3.0',
         'ply',
     ],
