@@ -17,6 +17,12 @@ e.on('page-loaded', () => {
       e.trigger('form-submit-filters', filter.form);
       return;
     }
+    if (event.target.tagName === 'DD') {
+      const filter = $('#filter-filter');
+      filter.value += ` ${event.target.previousElementSibling.innerText}:"${event.target.innerText}"`;
+      e.trigger('form-submit-filters', filter.form);
+      return;
+    }
     const clickedTransaction = event.target.closest('.transaction');
     $('.postings', clickedTransaction).classList.toggle('hidden');
     if ($('.metadata', clickedTransaction)) {
