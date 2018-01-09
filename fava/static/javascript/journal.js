@@ -11,6 +11,12 @@ e.on('page-loaded', () => {
     if (event.target.tagName === 'A') {
       return;
     }
+    if (event.target.className === 'tag' || event.target.className === 'link') {
+      const filter = $('#filter-filter');
+      filter.value += ` ${event.target.innerText}`;
+      e.trigger('form-submit-filters', filter.form);
+      return;
+    }
     const clickedTransaction = event.target.closest('.transaction');
     $('.postings', clickedTransaction).classList.toggle('hidden');
     if ($('.metadata', clickedTransaction)) {

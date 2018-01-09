@@ -50,15 +50,9 @@
 {% endif %}
 {%- endmacro %}
 
-{% set tag_url = url_for_current(filter='#REPLACEME '+(g.filters['filter'] or '')) %}
-{% set link_url = url_for_current(filter='^REPLACEME '+(g.filters['filter'] or '')) %}
 {% macro render_tags_links(entry) -%}
-{% for tag in entry.tags %}
-<a class="tag" href="{{ tag_url.replace('REPLACEME', tag) }}">#{{ tag }}</a>
-{% endfor %}
-{% for link_ in entry.links %}
-<a class="link" href="{{ link_url.replace('REPLACEME', link_) }}">^{{ link_ }}</a>
-{% endfor %}
+{% for tag in entry.tags %}<span class="tag">#{{ tag }}</span>{% endfor %}
+{% for link_ in entry.links %}<span class="link">^{{ link_ }}</span>{% endfor %}
 {%- endmacro %}
 
 {% macro journal_table(entries, show_change_and_balance=False) %}
