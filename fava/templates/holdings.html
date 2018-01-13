@@ -2,12 +2,7 @@
 {% set active_page = 'holdings' %}
 {% import '_query_table.html' as querytable %}
 
-{% macro num_cell(value, currency) -%}
-<td class="num">{{ value|format_currency(currency) }}</td>
-{%- endmacro %}
-
-{% set holdings_by = {
-'none': 'SELECT account,
+{% set holdings_all = 'SELECT account,
     units(sum(position)) as units,
     cost_number as cost,
     first(getprice(currency, cost_currency)) as price,
@@ -16,7 +11,8 @@
     cost_date as acquision_date
   WHERE account_sortkey(account) ~ "^[01]"
   GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
-  ORDER BY account_sortkey(account)',
+  ORDER BY account_sortkey(account)' %}
+{% set holdings_by = {
 'account': 'SELECT account,
     units(sum(position)) as units,
     sum(cost_number)/count(cost_number) as average_cost,
@@ -45,9 +41,7 @@
   GROUP BY cost_currency
   ORDER BY cost_currency',
 } %}
-
 {% set units_column = {
-  'none': 1,
   'account': 1,
   'currency': 0,
   'cost_currency': 0,
@@ -61,12 +55,11 @@
         {% endfor %}
     </div>
 
-    {% if not aggregation_key %}{% set aggregation_key = 'none' %}{% endif %}
-    {% set query = holdings_by[aggregation_key] %}
+    {% set query_string = holdings_by.get(aggregation_key, holdings_all) %}
     <p>
-      <a href={{ url_for('report', report_name='query', query_string=holdings_by[aggregation_key]) }}>Query</a>
-      {{ querytable.download_links(query) }}
+      <a href={{ url_for('report', report_name='query', query_string=query_string) }}>Query</a>
+      {{ querytable.download_links(query_string) }}
     </p>
-    {% set contents, result_types, result_rows = ledger.query_shell.execute_query(holdings_by[aggregation_key]) %}
-    {{ querytable.querytable(result_types, result_rows, filter_empty=units_column[aggregation_key]) }}
+    {% set contents, result_types, result_rows = ledger.query_shell.execute_query(query_string) %}
+    {{ querytable.querytable(result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}
 {% endblock %}

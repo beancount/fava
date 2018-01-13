@@ -2,44 +2,27 @@
 {% set active_page = 'statistics' %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
+{% import '_query_table.html' as querytable %}
 
 {% macro copy_balance_directives_text() -%}
-    {% for account in ledger.attributes.accounts -%}
-        {% if ledger.accounts[account].meta.get('fava-uptodate-indication') %}
-            {%- if ledger.account_uptodate_status(account) != "green" -%}
-                {{- account_macros.balance_directive(account) }}
-            {%- endif -%}
-        {% endif %}
-    {%- endfor -%}
+{% for account in ledger.attributes.accounts -%}
+{% if ledger.accounts[account].meta.get('fava-uptodate-indication') %}
+{%- if ledger.account_uptodate_status(account) != "green" -%}
+{{- account_macros.balance_directive(account) }}
+{%- endif -%}
+{% endif %}
+{%- endfor -%}
 {%- endmacro %}
 
 {% block content %}
-    {% set postings = ledger.postings %}
-
     <div class="left">
-        <h3>{{ _('Postings per Account') }}</h3>
-        <table class="sortable">
-            <thead>
-                <tr>
-                    <th data-sort="string">{{ _('Account') }}</th>
-                    <th data-sort="num">{{ _('# Postings') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for group in postings|groupby('account') %}
-                    <tr>
-                        <td class="account"><a href="{{ url_for('account', name=group.grouper) }}">{{ group.grouper }}</a></td>
-                        <td class="num">{{ group.list|length }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>{{ _('Total') }}</td>
-                    <td class="num">{{ postings|length }}</td>
-                </tr>
-            </tfoot>
-        </table>
+      {% set postings_per_account = 'SELECT account, count(account) GROUP BY account ORDER BY account' %}
+      <h3>
+        {{ _('Postings per Account') }}
+        (<a href={{ url_for('report', report_name='query', query_string=postings_per_account) }}>Query</a>)
+      </h3>
+      {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
+      {{ querytable.querytable(result_types, result_rows) }}
     </div>
 
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
