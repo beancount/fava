@@ -70,6 +70,10 @@ function sortableJournal(ol) {
     headers.forEach((el) => { el.removeAttribute('data-order'); });
     header.setAttribute('data-order', order);
 
+    // remove groups
+    ol.classList.remove('grouped');
+    $$('.group', ol).forEach((el) => { el.remove(); });
+
     sortElements({
       parent: ol,
       elements: [].slice.call(ol.children, 1),

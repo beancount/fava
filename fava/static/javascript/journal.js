@@ -8,6 +8,7 @@ function hideEmptyGroups() {
     let hidden = nextUntil(el, '.group', '.hidden').length;
     el.classList.toggle('hidden', elements === hidden);
   });
+  $("#journal-table").classList.add('grouped');
 }
 
 e.on('page-loaded', () => {

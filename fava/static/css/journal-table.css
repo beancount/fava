@@ -85,15 +85,15 @@
 
   & .transaction { cursor: pointer; }
 
-  & .head {
-    margin-bottom: -1.5em;
+  &.grouped .head {
+    margin-bottom: -1.2em;
   }
 
   & .group {
     background-color: var(--color-journal-entry-group);
     font-size: 0.9em;
     font-weight: bold;
-    margin-top: 1.5em;
+    margin-top: 1.2em;
   }
 
   /* Metadata */

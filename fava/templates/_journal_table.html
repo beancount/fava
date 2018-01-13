@@ -96,9 +96,9 @@
 {% for entry in entries %}
     {% if entry|date_group != ns.group %}
       {% set ns.group = entry|date_group %}
-      <li class="group">
+      <li class="group hidden">
           <p>
-              <span class="datecell" data-group-value="{{ ns.group }}""><a href="{{ url_for_current(time=ns.group) }}">{{ ns.group }}</a>
+              <span class="datecell" data-group-value="{{ ns.group }}"><a href="{{ url_for_current(time=ns.group) }}">{{ ns.group }}</a>
           </p>
       </li>
     {% endif %}
