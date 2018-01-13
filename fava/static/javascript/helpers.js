@@ -114,21 +114,20 @@ export function handleJSON(response) {
 }
 
 // Returns sibling elements
-export function nextUntil(elem, selector, filter) {
-  var siblings = [];
-  elem = elem.nextElementSibling;
+export function nextUntil(element, selector, filter) {
+  const siblings = [];
+  let elem = element.nextElementSibling;
 
   while (elem) {
     if (elem.matches(selector)) break;
 
     if (filter && !elem.matches(filter)) {
       elem = elem.nextElementSibling;
-      continue;
+    } else {
+      siblings.push(elem);
+      elem = elem.nextElementSibling;
     }
-
-    siblings.push(elem);
-    elem = elem.nextElementSibling;
   }
 
   return siblings;
-};
+}

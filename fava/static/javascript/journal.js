@@ -4,11 +4,11 @@ import router from './router';
 
 function hideEmptyGroups() {
   $$('#journal-table .group').forEach((el) => {
-    let elements = nextUntil(el, '.group').length;
-    let hidden = nextUntil(el, '.group', '.hidden').length;
+    const elements = nextUntil(el, '.group').length;
+    const hidden = nextUntil(el, '.group', '.hidden').length;
     el.classList.toggle('hidden', elements === hidden);
   });
-  $("#journal-table").classList.add('grouped');
+  $('#journal-table').classList.add('grouped');
 }
 
 e.on('page-loaded', () => {
