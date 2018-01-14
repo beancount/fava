@@ -93,7 +93,7 @@
         </p>
     </li>
 {% set ns = namespace(group=None) %}
-{% for entry in entries %}
+{% for entry in entries|reverse %}
     {% if entry|date_group != ns.group %}
       {% set ns.group = entry|date_group %}
       <li class="group hidden">
