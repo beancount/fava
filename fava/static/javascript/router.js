@@ -72,6 +72,10 @@ class Router {
   // Replace <article> contents with the page at `url`. If `historyState` is
   // false, do not create a history state.
   loadURL(url, historyState = true) {
+    const state = { interrupt: false };
+    e.trigger('navigate', state);
+    if (state.interrupt) { return; }
+
     const getUrl = new URL(url);
     getUrl.searchParams.set('partial', true);
 
