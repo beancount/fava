@@ -222,6 +222,7 @@ const sourceEditorOptions = {
   },
 };
 
+let activeEditor = null;
 // Init source editor.
 export default function initSourceEditor(name) {
   sourceEditorOptions.rulers = [];
@@ -236,6 +237,9 @@ export default function initSourceEditor(name) {
   if (!sourceEditorTextarea) { return; }
 
   const editor = CodeMirror.fromTextArea(sourceEditorTextarea, sourceEditorOptions);
+  if (name === '#source-editor') {
+    activeEditor = editor;
+  }
   const saveButton = $(`${name}-submit`);
   editor.setOption('favaSaveButton', saveButton);
 
@@ -284,4 +288,27 @@ e.on('page-loaded', () => {
   initQueryEditor();
   initReadOnlyEditors();
   initSourceEditor('#source-editor');
+});
+
+const leaveMessage = 'There are unsaved changes. Are you sure you want to leave?';
+
+e.on('navigate', (state) => {
+  if (activeEditor) {
+    if (!activeEditor.isClean()) {
+      const leave = window.confirm(leaveMessage); // eslint-disable-line no-alert
+      if (!leave) {
+        state.interrupt = true; // eslint-disable-line no-param-reassign
+      } else {
+        activeEditor = null;
+      }
+    } else {
+      activeEditor = null;
+    }
+  }
+});
+
+window.addEventListener('beforeunload', (event) => {
+  if (activeEditor && !activeEditor.isClean()) {
+    event.returnValue = leaveMessage; // eslint-disable-line no-param-reassign
+  }
 });

@@ -61,6 +61,12 @@ class Router {
   // Go to URL. If load is `true`, load the page at URL, otherwise only update
   // the current state.
   navigate(url, load = true) {
+    const state = { interrupt: false };
+    e.trigger('navigate', state);
+    if (state.interrupt) {
+      return;
+    }
+
     if (load) {
       this.loadURL(url);
     } else {
