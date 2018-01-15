@@ -6,15 +6,15 @@ node_modules:
 	rm -f package-lock.json
 	npm install
 
-bin/fava:
+bin/fava: ../fava
 	make -C ..
-	make -C .. pyinstaller
 	rm -rf bin
-	mkdir -p bin
-	cp -r ../dist/fava bin/fava
+	pyinstaller --clean --distpath bin pyinstaller.spec
+	rm -rf build/pyinstaller
 
 clean:
 	rm -rf bin dist
+	rm -rf build/pyinstaller
 	rm -rf node_modules
 
 lint: node_modules

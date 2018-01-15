@@ -8,6 +8,7 @@
 /fava.egg-info
 /htmlcov
 /gui/bin
+/gui/build
 /gui/dist
 /venv
 
