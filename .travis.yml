@@ -29,7 +29,6 @@ matrix:
         nvm use stable
         pip install pyinstaller
         pip install -e .
-        pip install "Babel<2.5.0"
       script: |
         make
         make pyinstaller
@@ -43,7 +42,6 @@ matrix:
         brew install python3
         pip3 install pyinstaller
         pip3 install -e .
-        pip3 install "Babel<2.5.0"
       script: |
         make
         make pyinstaller

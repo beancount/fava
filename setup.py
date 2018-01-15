@@ -32,6 +32,7 @@ setup(
     },
     install_requires=[
         'beancount>=2.0b15',
+        'Babel>=2.5.2',
         'click',
         'Flask>=0.10.1',
         'Flask-Babel>=0.10.0',
