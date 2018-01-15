@@ -147,7 +147,7 @@ function initQueryEditor() {
 
   editor.on('keyup', (cm, event) => {
     if (!cm.state.completionActive && event.keyCode !== 13 &&
-        (event.keyCode < 33 || event.keyCode > 40)) {
+        event.keyCode !== 27 && (event.keyCode < 33 || event.keyCode > 40)) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
@@ -222,7 +222,7 @@ export default function initSourceEditor(name) {
 
   editor.on('keyup', (cm, event) => {
     if (!cm.state.completionActive && event.keyCode !== 13 &&
-        (event.keyCode < 33 || event.keyCode > 40)) {
+        event.keyCode !== 27 && (event.keyCode < 33 || event.keyCode > 40)) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
