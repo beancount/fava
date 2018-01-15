@@ -34,7 +34,7 @@ export default {
         postcssColorFunction(),
         postcssNesting(),
       ],
-      extract: 'gen/style.css',
+      extract: true,
     }),
     commonjs({
       include: 'node_modules/**',

@@ -15,8 +15,8 @@
   },
   "devDependencies": {
     "electron": "^1.7.10",
-    "electron-builder": "^19.52.1",
-    "eslint": "^4.14.0",
+    "electron-builder": "^19.53.6",
+    "eslint": "^4.15.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0"
   },
