@@ -124,6 +124,30 @@ CodeMirror.commands.favaJumpToMarker = (cm) => {
   }
 };
 
+// If the given key should be ignored for autocompletion
+function ignoreKey(key) {
+  switch (key) {
+    case 'ArrowDown':
+    case 'ArrowUp':
+    case 'ArrowLeft':
+    case 'ArrowRight':
+    case 'PageDown':
+    case 'PageUp':
+    case 'Home':
+    case 'End':
+    case 'Escape':
+    case 'Enter':
+    case 'Alt':
+    case 'Control':
+    case 'Meta':
+    case 'Shift':
+    case 'CapsLock':
+      return true;
+    default:
+      return false;
+  }
+}
+
 // Initialize the query editor
 function initQueryEditor() {
   const queryForm = $('#query-form');
@@ -146,7 +170,7 @@ function initQueryEditor() {
   const editor = CodeMirror.fromTextArea(queryForm.elements.query_string, queryOptions);
 
   editor.on('keyup', (cm, event) => {
-    if (!cm.state.completionActive && event.keyCode !== 13) {
+    if (!cm.state.completionActive && !ignoreKey(event.key)) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
@@ -220,7 +244,7 @@ export default function initSourceEditor(name) {
   });
 
   editor.on('keyup', (cm, event) => {
-    if (!cm.state.completionActive && event.keyCode !== 13) {
+    if (!cm.state.completionActive && !ignoreKey(event.key)) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
