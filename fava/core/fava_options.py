@@ -29,6 +29,7 @@ DEFAULTS = {
     'journal-show-document': ['discovered', 'statement'],
     'journal-show-transaction': ['cleared', 'pending'],
     'language': None,
+    'locale': None,
     'show-accounts-with-zero-balance': True,
     'show-accounts-with-zero-transactions': True,
     'show-closed-accounts': False,
@@ -68,6 +69,7 @@ STR_OPTS = [
     'import-config',
     'interval',
     'language',
+    'locale',
     'unrealized',
 ]
 
