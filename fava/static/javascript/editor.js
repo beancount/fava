@@ -146,7 +146,8 @@ function initQueryEditor() {
   const editor = CodeMirror.fromTextArea(queryForm.elements.query_string, queryOptions);
 
   editor.on('keyup', (cm, event) => {
-    if (!cm.state.completionActive && event.keyCode !== 13) {
+    const key = event.keyCode;
+    if (!cm.state.completionActive && key !== 13 && key !== 27 && (key < 33 || key > 40)) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
@@ -220,7 +221,8 @@ export default function initSourceEditor(name) {
   });
 
   editor.on('keyup', (cm, event) => {
-    if (!cm.state.completionActive && event.keyCode !== 13) {
+    const key = event.keyCode;
+    if (!cm.state.completionActive && key !== 13 && key !== 27 && (key < 33 || key > 40)) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
