@@ -1,18 +1,31 @@
 import { $, $$ } from './helpers';
 import e from './events';
 
-// Append a posting row to an .entry-form
-export function addPostingRow(form) {
+// Append a posting row to an .entry-form.
+function addPostingRow(form) {
   const newPosting = $('#posting-template').children[0].cloneNode(true);
   form.querySelector('.postings').appendChild(newPosting);
   return newPosting;
 }
 
-// Append a metadata row to an .entry-form
+// Append a metadata row to an .entry-form.
 function addMetadataRow(form) {
   const newMetadata = $('#metadata-template').children[0].cloneNode(true);
   form.querySelector('.metadata').appendChild(newMetadata);
   return newMetadata;
+}
+
+// Reset an entry form.
+export function resetEntryForm(form) {
+  $$('.metadata', form).forEach((el) => {
+    el.remove();
+  });
+  $$('.posting', form).forEach((el) => {
+    el.remove();
+  });
+  addPostingRow(form);
+  addPostingRow(form);
+  form.focus();
 }
 
 export function entryFormToJSON(form) {

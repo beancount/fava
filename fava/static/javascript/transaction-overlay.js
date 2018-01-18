@@ -1,6 +1,6 @@
 import e from './events';
-import { $, $$, handleJSON } from './helpers';
-import { addPostingRow, entryFormToJSON } from './entry-forms';
+import { $, handleJSON } from './helpers';
+import { resetEntryForm, entryFormToJSON } from './entry-forms';
 import { closeOverlay } from './overlays';
 
 function submitTransactionForm(form, successCallback) {
@@ -17,15 +17,7 @@ function submitTransactionForm(form, successCallback) {
   })
     .then(handleJSON)
     .then((data) => {
-      $$('.metadata', form).forEach((el) => {
-        el.remove();
-      });
-      $$('.posting', form).forEach((el) => {
-        el.remove();
-      });
-      addPostingRow(form);
-      addPostingRow(form);
-      form.focus();
+      resetEntryForm();
       e.trigger('reload');
       e.trigger('info', data.message);
       if (successCallback) {

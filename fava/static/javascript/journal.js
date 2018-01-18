@@ -11,12 +11,14 @@ e.on('page-loaded', () => {
     if (event.target.tagName === 'A') {
       return;
     }
+    // Filter for tags and links when clicking on them.
     if (event.target.className === 'tag' || event.target.className === 'link') {
       const filter = $('#filter-filter');
       filter.value += ` ${event.target.innerText}`;
       e.trigger('form-submit-filters', filter.form);
       return;
     }
+    // Filter for metadata when clicking on the value.
     if (event.target.tagName === 'DD') {
       const filter = $('#filter-filter');
       filter.value += ` ${event.target.previousElementSibling.innerText}:"${event.target.innerText}"`;

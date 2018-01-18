@@ -38,7 +38,7 @@
     {% endfor %}
   </div>
   <div class="postings">
-    {% for p in (entry.postings or []) %}
+    {% for p in (entry.postings or [None, None]) %}
     {{ posting(posting=p) }}
     {% endfor %}
   </div>
