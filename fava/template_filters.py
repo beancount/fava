@@ -173,18 +173,17 @@ def format_errormsg(message):
     return new_message.replace('for \'', 'for ').replace('\': ', ': ')
 
 
-def date_group(entry):
+def date_group(entry, interval):
     """Return the date group an entry belongs to."""
-    kind = g.ledger.fava_options['interval']
     date = entry.date
-    if kind == 'year':
+    if interval == 'year':
         return date.year
-    elif kind == 'quarter':
+    elif interval == 'quarter':
         return '{}-Q{}'.format(date.year, (date.month-1)//3+1)
-    elif kind == 'month':
+    elif interval == 'month':
         return '{}-{:02}'.format(date.year, date.month)
-    elif kind == 'week':
+    elif interval == 'week':
         return '{}-W{:02}'.format(date.year, date.isocalendar()[1])
-    elif kind == 'day':
+    elif interval == 'day':
         return '{}-{:02}-{:02}'.format(date.year, date.month, date.day)
     return None
