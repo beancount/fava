@@ -43,6 +43,14 @@
 }) %}
 {% endmacro %}
 
+{% macro sankey() %}
+{% do chart_data.append({
+    'type': 'sankey',
+    'label': 'Sankey',
+    'data': ledger.charts.sankey(),
+}) %}
+{% endmacro %}
+
 {% macro commodities() %}
 {% for pair in ledger.commodity_pairs() %}
 {% do chart_data.append({

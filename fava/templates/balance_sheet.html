@@ -4,6 +4,7 @@
 
 {% block content %}
     {{ charts.skeleton() }}
+    {{ charts.sankey() }}
     {{ charts.net_worth(interval) }}
     {{ charts.hierarchy(ledger.options['name_assets']) }}
     {{ charts.hierarchy(ledger.options['name_liabilities']) }}

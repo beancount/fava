@@ -10,11 +10,13 @@ import { arc, line } from 'd3-shape';
 import { schemeSet3 } from 'd3-scale-chromatic';
 import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
+import { sankey as d3Sankey, sankeyLinkHorizontal } from 'd3-sankey';
 
 import { $, $$ } from './helpers';
 import e from './events';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
+const sankeyColorScale = scaleOrdinal(schemeSet3);
 const sunburstColorScale = scaleOrdinal(schemeCategory20c);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
@@ -753,6 +755,86 @@ class HierarchyContainer extends BaseChart {
   }
 }
 
+class SankeyChartContainer extends BaseChart {
+  constructor(svg) {
+    super();
+    this.svg = svg;
+    this.svg.attr('class', 'sankey');
+  }
+
+
+  draw(data) {
+    this.setSize();
+    this.data = data;
+
+    return this;
+  }
+
+  setSize() {
+    this.width = container.node().offsetWidth;
+    this.svg
+      .attr('width', this.width)
+      .attr('height', 500);
+  }
+
+  update() {
+    this.setSize();
+
+    var sankey = d3Sankey()
+          .nodeWidth(15)
+          .nodePadding(10)
+          .extent([[80, 1], [this.width - 1, 500 - 6]]);
+
+    sankey(this.data)
+
+    var link = this.svg.append('g')
+        .attr('class', 'links')
+        .attr('fill', 'none')
+        .attr('stroke', '#000')
+        .attr('stroke-opacity', 0.2)
+      .selectAll('path');
+
+    var node = this.svg.append('g')
+        .attr('class', 'nodes')
+        .attr('font-family', 'sans-serif')
+        .attr('font-size', 10)
+      .selectAll('g');
+
+    link = link
+      .data(this.data.links)
+      .enter().append('path')
+        .attr('d', sankeyLinkHorizontal())
+        .attr('stroke-width', function(d) { return Math.max(1, d.width); });
+    link.append('title')
+        .text(function(d) { return d.source.name + ' → ' + d.target.name + '\n' + formatCurrency(d.value); });
+
+    node = node
+      .data(this.data.nodes)
+      .enter().append('g');
+
+    node.append('rect')
+        .attr('x', function(d) { return d.x0; })
+        .attr('y', function(d) { return d.y0; })
+        .attr('height', function(d) { return d.y1 - d.y0; })
+        .attr('width', function(d) { return d.x1 - d.x0; })
+        .attr('fill', function(d) { return sankeyColorScale(d.name.replace(/ .*/, '')); })
+        .attr('stroke', '#000');
+
+    node.append('text')
+        .attr('x', function(d) { return d.x0 - 6; })
+        .attr('y', function(d) { return (d.y1 + d.y0) / 2; })
+        .attr('dy', '0.35em')
+        .attr('text-anchor', 'end')
+        .text(function(d) { return d.name; })
+      .filter(function(d) { return d.x0 < self.width / 2; })
+        .attr('x', function(d) { return d.x1 + 6; })
+        .attr('text-anchor', 'start');
+
+    node.append('title')
+        .text(function(d) { return d.name + '\n' + formatCurrency(d.value); });
+  }
+}
+
 let currentChart;
 function updateChart() {
   if (!$('#charts').classList.contains('hidden')) {
@@ -874,6 +956,19 @@ e.on('page-loaded', () => {
         charts[chartId] = new ScatterPlot(chartContainer(chartId, chart.label))
           .set('tooltipText', d => `${d.description}<em>${dateFormat.day(d.date)}</em>`)
           .draw(series);
+
+        break;
+      }
+      case 'sankey': {
+        // const series = chart.events.map(d => ({
+        //   type: d.type,
+        //   date: new Date(d.date),
+        //   description: d.description,
+        // }));
+
+        charts[chartId] = new SankeyChartContainer(chartContainer(chartId, chart.label))
+          // .set('tooltipText', d => `${d.description}<em>${dateFormat.day(d.date)}</em>`)
+          .draw(chart.data);
 
         break;
       }

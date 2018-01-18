@@ -173,3 +173,52 @@ class ChartModule(FavaModule):
                     for currency in self.ledger.options['operating_currency']
                 }
             }
+
+    def sankey(self):
+        """Sample datastructure for sankey diagram."""
+        return {
+            'nodes': [
+                { 'name': 'Expenses' },
+                { 'name': 'Assets' },
+                { 'name': 'Liabilities' },
+                { 'name': 'Income' },
+                { 'name': 'Equity' },
+            ],
+            'links': [
+                {
+                    'source': 0,
+                    'target': 1,
+                    'value': 5.1
+                },
+                {
+                    'source': 0,
+                    'target': 3,
+                    'value': 6.3
+                },
+                {
+                    'source': 1,
+                    'target': 2,
+                    'value': 2.0
+                },
+                {
+                    'source': 2,
+                    'target': 3,
+                    'value': 1.5
+                },
+                {
+                    'source': 4,
+                    'target': 3,
+                    'value': 7.8
+                },
+                {
+                    'source': 4,
+                    'target': 1,
+                    'value': 8.1
+                },
+                {
+                    'source': 4,
+                    'target': 2,
+                    'value': 2.9
+                },
+            ]
+        }
