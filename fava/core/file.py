@@ -9,6 +9,7 @@ from beancount.core import data, flags
 from beancount.parser.printer import format_entry
 
 from fava.core.helpers import FavaAPIException, FavaModule
+from fava.core.misc import align
 
 
 class FileModule(FavaModule):
@@ -105,13 +106,10 @@ class FileModule(FavaModule):
         """
         self.ledger.changed()
         for entry in sorted(entries, key=incomplete_sortkey):
-            insert_entry(entry,
-                         self.list_sources(),
-                         self.ledger.fava_options['insert-entry'])
+            insert_entry(entry, self.list_sources(), self.ledger.fava_options)
             self.ledger.extensions.run_hook('after_insert_entry', entry)
 
-    @staticmethod
-    def render_entries(entries):
+    def render_entries(self, entries):
         """Return entries in Beancount format.
 
         Only renders Balances and Transactions.
@@ -141,7 +139,7 @@ class FileModule(FavaModule):
                 try:
                     yield get_entry_slice(entry)[0] + '\n'
                 except FileNotFoundError:
-                    yield _format_entry(entry)
+                    yield _format_entry(entry, self.ledger.fava_options)
 
 
 def incomplete_sortkey(entry):
@@ -258,23 +256,23 @@ def save_entry_slice(entry, source_slice, sha256sum):
     return sha256(codecs.encode(source_slice)).hexdigest()
 
 
-def insert_entry(entry, filenames, insert_options):
+def insert_entry(entry, filenames, fava_options):
     """Insert an entry.
 
     Args:
         entry: An entry.
         filenames: List of filenames.
-        insert_options: List of InsertOption. Note that the line numbers of the
-            options might be updated.
-
+        fava_options: The ledgers fava_options. Note that the line numbers of
+            the insert options might be updated.
     """
+    insert_options = fava_options.get('insert-entry', [])
     if isinstance(entry, data.Transaction):
         accounts = reversed([p.account for p in entry.postings])
     else:
         accounts = [entry.account]
     filename, lineno = find_insert_position(accounts, entry.date,
                                             insert_options, filenames)
-    content = _format_entry(entry) + '\n'
+    content = _format_entry(entry, fava_options) + '\n'
 
     with open(filename, "r") as file:
         contents = file.readlines()
@@ -291,9 +289,9 @@ def insert_entry(entry, filenames, insert_options):
                 lineno=lineno + added_lines)
 
 
-def _format_entry(entry):
+def _format_entry(entry, fava_options):
     """Wrapper that strips unnecessary whitespace from format_entry."""
-    string = format_entry(entry)
+    string = align(format_entry(entry), fava_options)
     return '\n'.join((line.rstrip() for line in string.split('\n')))
 
 

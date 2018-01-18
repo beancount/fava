@@ -107,15 +107,15 @@ def test_insert_entry_transaction(tmpdir):
                                    datetime.date(2016, 1, 1), '*', 'new payee',
                                    'narr', None, None, postings)
 
-    insert_entry(transaction, [str(samplefile)], [])
+    insert_entry(transaction, [str(samplefile)], {})
     assert samplefile.read() == dedent("""
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
 
     """)
 
@@ -130,19 +130,19 @@ def test_insert_entry_transaction(tmpdir):
             datetime.date(2017, 1, 1),
             re.compile('.*:Food'), str(samplefile), 6),
     ]
-    insert_entry(transaction, [str(samplefile)], options)
+    insert_entry(transaction, [str(samplefile)], {'insert-entry': options})
     assert samplefile.read() == dedent("""
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
 
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
 
     """)
 
@@ -154,14 +154,14 @@ def test_insert_entry_transaction(tmpdir):
             datetime.date(2015, 1, 2),
             re.compile('.*:FOOO'), str(samplefile), 2),
     ]
-    insert_entry(transaction, [str(samplefile)], options)
+    insert_entry(transaction, [str(samplefile)], {'insert-entry': options})
     assert samplefile.read() == dedent("""
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
 
 
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -169,8 +169,46 @@ def test_insert_entry_transaction(tmpdir):
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate  -10.00 USD
-          Expenses:Food                10.00 USD
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
+
+    """)
+
+
+def test_insert_entry_align(tmpdir):
+    file_content = dedent("""
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+    """)
+    samplefile = tmpdir.mkdir('fava_util_file3').join('example.beancount')
+    samplefile.write(file_content)
+
+    postings = [
+        data.Posting('Liabilities:US:Chase:Slate',
+                     amount.Amount(D('-10.00'), 'USD'), None, None, None,
+                     None),
+        data.Posting('Expenses:Food',
+                     amount.Amount(D('10.00'), 'USD'), None, None, None, None),
+    ]
+
+    transaction = data.Transaction(None,
+                                   datetime.date(2016, 1, 1), '*', 'new payee',
+                                   'narr', None, None, postings)
+
+    fava_options = {
+        'currency-column': 50,
+    }
+    insert_entry(transaction, [str(samplefile)], fava_options)
+    assert samplefile.read() == dedent("""
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "new payee" "narr"
+          Liabilities:US:Chase:Slate              -10.00 USD
+          Expenses:Food                            10.00 USD
 
     """)
 

@@ -226,9 +226,9 @@ let activeEditor = null;
 // Init source editor.
 export default function initSourceEditor(name) {
   sourceEditorOptions.rulers = [];
-  if (window.favaAPI.favaOptions['editor-print-margin-column']) {
+  if (window.favaAPI.favaOptions['currency-column']) {
     sourceEditorOptions.rulers.push({
-      column: window.favaAPI.favaOptions['editor-print-margin-column'],
+      column: window.favaAPI.favaOptions['currency-column'] - 1,
       lineStyle: 'dotted',
     });
   }
