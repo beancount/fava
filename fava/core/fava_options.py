@@ -15,6 +15,8 @@ InsertEntryOption = namedtuple('InsertEntryOption', 'date re filename lineno')
 
 DEFAULTS = {
     'account-journal-include-children': True,
+    'align-num-width': None,
+    'align-prefix-width': None,
     'auto-reload': False,
     'default-file': None,
     'editor-print-margin-column': 60,
@@ -48,6 +50,8 @@ BOOL_OPTS = [
 ]
 
 INT_OPTS = [
+    'align-num-width',
+    'align-prefix-width',
     'editor-print-margin-column',
     'upcoming-events',
     'uptodate-indicator-grey-lookback-days',
