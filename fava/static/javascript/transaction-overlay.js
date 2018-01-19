@@ -17,7 +17,7 @@ function submitTransactionForm(form, successCallback) {
   })
     .then(handleJSON)
     .then((data) => {
-      resetEntryForm();
+      resetEntryForm(form);
       e.trigger('reload');
       e.trigger('info', data.message);
       if (successCallback) {
