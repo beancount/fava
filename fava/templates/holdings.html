@@ -8,7 +8,7 @@
     first(getprice(currency, cost_currency)) as price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value,
-    cost_date as acquision_date
+    cost_date as acquisition_date
   WHERE account_sortkey(account) ~ "^[01]"
   GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
   ORDER BY account_sortkey(account)' %}
