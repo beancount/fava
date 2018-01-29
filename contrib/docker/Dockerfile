@@ -21,7 +21,7 @@ RUN cd /root \
         && python3 -mpip uninstall --yes pip \
         && find /usr/local/lib/python3.6/site-packages -name *.so -print0|xargs -0 strip -v \
         && apk del $BUILDDEPS \
-        && rm -rf /var/cache/apk/{*,.[!.]*} /tmp/{*,.[!.]*} /root/{*,.[!.]*} \
+        && rm -rf /var/cache/apk/* /var/cache/apk/.[!.]* /tmp/* /tmp/.[!.]* /root/* /root/.[!.]* \
         && find /usr/local/lib/python3.6 -name __pycache__ -print0|xargs -0 rm -rf \
         && find /usr/local/lib/python3.6 -name *.pyc -print0|xargs -0 rm -f
 
