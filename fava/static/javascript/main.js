@@ -32,12 +32,8 @@
 
 // Polyfills:
 //
-// We try to support modern browsers only really, these polyfills should add
-// support for IE though.
-import 'es6-promise';
-import 'whatwg-fetch';
-import 'classlist.js';
-import 'element-closest';
+// We try to support modern browsers only really, this polyfill should add
+// support for Edge(<17) though.
 import 'url-search-params';
 
 import { $, handleJSON } from './helpers';
