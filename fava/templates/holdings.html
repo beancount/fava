@@ -22,8 +22,6 @@
   ORDER BY account_sortkey(account)',
 'currency': 'SELECT
     units(sum(position)) as units,
-    sum(cost_number)/count(cost_number) as average_cost,
-    first(getprice(currency, cost_currency)) as price,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
