@@ -15,7 +15,7 @@ show to the next and previous chart respectively.
 If you started Fava from the command line, you can run `fava --help` to see all the
 available command line options.
 
-If you discover bug in Fava, or have some ideas for improvement, please open a
+If you discover a bug in Fava, or have some ideas for improvement, please open a
 [bug report](https://github.com/beancount/fava/issues).
 
 ### Related websites
