@@ -9,7 +9,7 @@ a motivational document written by Martin Blais, the author of Beancount.
 To learn how to create your beancount file, refer to `Getting Started with
 Beancount
 <https://docs.google.com/document/d/1P5At-z1sP8rgwYLHso5sEy3u4rMnIUDDgob9Y_BYuWE/>`__
-guide. Martin Blais has written a great deal of very detailed documention for
+guide. Martin Blais has written a great deal of very detailed documentation for
 Beancount, see the `Beancount Documentation
 <https://docs.google.com/document/d/1RaondTJCS_IUPBHFNdT8oqFKJjVJDsfsn6JEjBG04eA>`__
 page for an index of the available documentation.

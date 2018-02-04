@@ -18,7 +18,7 @@ All in CAPS: `USD`, `EUR`, `CAD`, `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
 ## Accounts
 
 Account are given by a colon-separated list of capitalized words. They must
-begin with one the five root accounts listed in the table below. The separation
+begin with one of the five root accounts listed in the table below. The separation
 by colons defines an implicit hierarchy, for example we say that `Assets:Cash` is a
 sub-account of `Assets`.
 
@@ -30,7 +30,7 @@ sub-account of `Assets`.
 | `Expenses`    | +    | Expense categories           | `Expenses:Fun:Cinema`     |
 | `Equity`      | -    | Almost always auto-generated | `Equity:Opening-Balances` |
 
-The names of the five root accounts can be changes with the following options:
+The names of the five root accounts can be changed with the following options:
 
 <pre><textarea class="editor-readonly">
 option "name_assets"      "Vermoegen"
@@ -68,7 +68,7 @@ Declaring commodities is optional. Use this if you want to attach metadata by cu
 
 ### Prices
 
-You can use this directive to fill historical price database:
+You can use this directive to fill the historical price database:
 
 <pre><textarea class="editor-readonly">
 2015-04-30 price AAPL   125.15 USD
