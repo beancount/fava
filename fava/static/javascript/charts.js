@@ -4,10 +4,10 @@ import { format } from 'd3-format';
 import { utcFormat } from 'd3-time-format';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
 import { scaleBand, scaleLinear, scaleOrdinal, scalePoint,
-  scaleSqrt, scaleUtc, schemeCategory10, schemeCategory20c } from 'd3-scale';
+  scaleSqrt, scaleUtc } from 'd3-scale';
 import { event, select } from 'd3-selection';
 import { arc, line } from 'd3-shape';
-import { schemeSet3 } from 'd3-scale-chromatic';
+import { schemeSet3, schemeCategory10 } from 'd3-scale-chromatic';
 import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
 
@@ -15,7 +15,7 @@ import { $, $$ } from './helpers';
 import e from './events';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
-const sunburstColorScale = scaleOrdinal(schemeCategory20c);
+const sunburstColorScale = scaleOrdinal(schemeCategory10);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 

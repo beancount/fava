@@ -157,7 +157,7 @@ Additions
 - German translation. :bug:`284`
 - The Beancount is now being reloaded when it is saved in the Source Editor.
 - New Journal filter controls. Thanks to :user:`yagebu`.
-- Tree-tables are now displayed in a hierachical way. Thanks to :user:`yagebu`.
+- Tree-tables are now displayed in a hierarchical way. Thanks to :user:`yagebu`.
 
 Changes
 
@@ -320,13 +320,13 @@ v0.2.0 (February 11th, 2016 - first release of `fava`)
 - 2016-01-09 - Added Windows/Cygwin-support to ``beancount-urlscheme``.  Thanks
   to :user:`redstreet`.:bug:`92`
 - 2016-01-07 - Added setting ``collapse-accounts`` to specify a list of
-  accounts to collapse in the account hierachy. :bug:`91`
+  accounts to collapse in the account hierarchy. :bug:`91`
 - 2016-01-07 - Added a ``beancount-urlscheme``-command to register the
   ``beancount://``-URL -scheme on a Mac (other platforms still missing, but in
   development). There is a new setting called ``use-external-editor`` that
-  will, if set to ``True``, render all links to the Source Editor als
+  will, if set to ``True``, render all links to the Source Editor as
   ``beancount://``-URLs to open the files directly in the editor specified by
-  the ``external-editor-cmd``-setting (The URL-scheme has to be registerd with
+  the ``external-editor-cmd``-setting (The URL-scheme has to be registered with
   ``beancount-urlscheme`` first). This also renders the Source Editor view as
   readonly. :bug:`92`
 - 2015-12-28 - Added new setting (and feature) called ``editor-insert-marker``.

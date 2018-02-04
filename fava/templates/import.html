@@ -28,7 +28,7 @@ No importers configured. See <a href="{{ url_for('help_page', page_slug='import'
         <pre title="{{ filename }}">{{ filename|basename }}</pre>
       </td>
       <td>{{ importer.name() }}</td>
-      <td>{{ account_macros.account_name(importer.file_account(filename)) }}</td>
+      <td>{{ account_macros.account_name(importer.file_account(filename) or '') }}</td>
       <td>
         <a class="button" title="{{ _('Extract') }} {{ filename }}" href="{{ url_for('report', report_name='extract', filename=filename, importer=importer.name()) }}">{{ _('Extract') }}</button>
       </td>
