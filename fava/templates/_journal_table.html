@@ -41,7 +41,7 @@
   {% for key, value in metadata.items() %}
   <dt>{{ key }}</dt>
   <dd>
-  {%- if key.startswith('statement') %}<a data-remote href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{% endif -%}
+  {%- if key.startswith('statement') %}<a data-remote target=_blank href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{% endif -%}
     {{ value }}
     {%- if key.startswith('statement') %}</a>{% endif -%}
   </dd>
@@ -121,7 +121,7 @@
             {%- elif value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
           {%- endfor -%}
         {% elif type == 'document' %}
-            Document for {{ account_link(entry.account) }} <a class="filename" data-remote href="{{ url_for('document', filename=entry.filename) }}">{{ entry.filename|basename }}</a>
+            Document for {{ account_link(entry.account) }} <a class="filename" data-remote target=_blank href="{{ url_for('document', filename=entry.filename) }}">{{ entry.filename|basename }}</a>
             {{ render_tags_links(entry) }}
         {% elif type == 'balance' %}
             Balance {{ account_link(entry.account) }}
