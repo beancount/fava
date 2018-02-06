@@ -40,7 +40,7 @@ title=\"Double-entry bookkeeping software Beancount\">Beancount</a>""",
     'github_button': 'false',
     'show_powered_by': 'false',
     'extra_nav_links': {
-        "fava @ Github": 'https://github.com/beancount/fava',
+        "fava @ GitHub": 'https://github.com/beancount/fava',
         "Issue Tracker": 'https://github.com/beancount/fava/issues',
     },
     'link': '#3572b0',

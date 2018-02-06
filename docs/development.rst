@@ -39,7 +39,7 @@ install from source like so (more details `here
 
     pip install hg+https://bitbucket.org/blais/beancount#egg=beancount
 
-Contributions are very welcome, just open a PR on `Github
+Contributions are very welcome, just open a PR on `GitHub
 <https://github.com/beancount/fava/pulls>`__.
 
 Fava is released under the `MIT License

@@ -1,7 +1,7 @@
 Fava supports extensions. Currently they can only register hooks for some events.
 
 If you use this extension system and need it to do more or need other hooks,
-please open an issue on [Github](https://github.com/beancount/fava/issues).
+please open an issue on [GitHub](https://github.com/beancount/fava/issues).
 
 A Fava extension is simply a Python module which contains a class that inherits
 from `FavaExtensionBase` from `fava.ext`. Check out `fava.ext.auto_commit` for an

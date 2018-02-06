@@ -40,7 +40,7 @@ import transactions from your bank for example.
 Fava can now show your balances at market value or convert them to a single
 currency if your file contains the necessary price information.
 
-We now also provide a compiled GUI version of Fava for Linux and MacOS. This
+We now also provide a compiled GUI version of Fava for Linux and macOS. This
 version might still be a bit buggy so any feedback/help on it is very welcome.
 
 Other changes:
@@ -322,7 +322,7 @@ v0.2.0 (February 11th, 2016 - first release of `fava`)
 - 2016-01-07 - Added setting ``collapse-accounts`` to specify a list of
   accounts to collapse in the account hierarchy. :bug:`91`
 - 2016-01-07 - Added a ``beancount-urlscheme``-command to register the
-  ``beancount://``-URL -scheme on a Mac (other platforms still missing, but in
+  ``beancount://``-URL -scheme on macOS (other platforms still missing, but in
   development). There is a new setting called ``use-external-editor`` that
   will, if set to ``True``, render all links to the Source Editor as
   ``beancount://``-URLs to open the files directly in the editor specified by
