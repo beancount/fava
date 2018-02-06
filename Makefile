@@ -33,7 +33,7 @@ before-release: translations-push translations-fetch
 
 # Before making a release, CHANGES needs to be updated and version number in
 # fava/__init__.py should be set to the release version.
-# A tag and Github release should be created too.
+# A tag and GitHub release should be created too.
 #
 # After the release, the version number should be bumped in fava/__init__.py
 # (with '-dev') and gui/src/main.js and fava.pythonanywhere.com should be

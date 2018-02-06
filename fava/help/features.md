@@ -66,7 +66,7 @@ Fava can open up your source file in your favorite editor directly from the web
 interface using the `use-external-editor` configuration variable through the
 `beancount://` URL handler. See the [Beancount
 urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
-pre-configured URL handlers for OS X and Cygwin.
+pre-configured URL handlers for macOS and Cygwin.
 
 ## Multiple Beancount files
 

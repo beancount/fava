@@ -81,7 +81,7 @@ file.
 
 ## `auto-reload`
 
-Default: `false`.
+Default: `false`
 
 Set this to `true` to make Fava automatically reload the page whenever a file
 changes is detected. By default only a notification is shown which you can

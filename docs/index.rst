@@ -25,5 +25,5 @@ If you are already familiar with Beancount, this is enough to get you up and run
 
 and visit the web interface at `http://localhost:5000
 <http://localhost:5000>`__ (alternatively, for the GUI version of Fava, head to
-the `Releases <https://github.com/beancount/fava/releases>`__ page on Github to
+the `Releases <https://github.com/beancount/fava/releases>`__ page on GitHub to
 download the latest version for your platform).
