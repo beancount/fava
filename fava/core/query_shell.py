@@ -48,12 +48,17 @@ class QueryShell(shell.BQLShell, FavaModule):
 
     @staticmethod
     def get_history(max_entries):
-        """Get the most recently used shell commands."""
+        """Get the most recently used shell commands (removing duplicates)."""
         num_entries = readline.get_current_history_length()
-        return [
-            readline.get_history_item(index + 1)
-            for index in range(max(num_entries - max_entries, 0), num_entries)
-        ]
+        history = []
+        for index in range(num_entries):
+            if len(history) >= max_entries:
+                return history
+            item = readline.get_history_item(index + 1)
+            if item in history:
+                history.remove(item)
+            history.append(item)
+        return history
 
     def _loadfun(self):
         self.entries = self.ledger.entries
