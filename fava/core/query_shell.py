@@ -51,13 +51,12 @@ class QueryShell(shell.BQLShell, FavaModule):
         """Get the most recently used shell commands (removing duplicates)."""
         num_entries = readline.get_current_history_length()
         history = []
-        for index in range(num_entries):
+        for index in range(num_entries, 0, -1):
             if len(history) >= max_entries:
                 return history
-            item = readline.get_history_item(index + 1)
-            if item in history:
-                history.remove(item)
-            history.append(item)
+            item = readline.get_history_item(index)
+            if item not in history:
+                history.insert(0, item)
         return history
 
     def _loadfun(self):
