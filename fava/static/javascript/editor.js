@@ -178,7 +178,7 @@ function initQueryEditor() {
   $.delegate($('#query-container'), 'click', '.toggle-box-header', (event) => {
     const wrapper = event.target.closest('.toggle-box');
     if (wrapper.classList.contains('inactive')) {
-      editor.setValue(wrapper.querySelector('code').innerHTML);
+      editor.setValue(wrapper.querySelector('code').textContent);
       editor.save();
       e.trigger('form-submit-query', queryForm);
       return;
