@@ -4,7 +4,7 @@ Fava has two example pages hosted on
 - [fava.pythonanywhere.com](https://fava.pythonanywhere.com), which runs the
   latest released version.
 - [favadev.pythonanywhere.com](https://favadev.pythonanywhere.com), which
-  tracks the HEAD of the Github repo
+  tracks the HEAD of the GitHub repo
   ([github.com/beancount/fava](https://github.com/beancount/fava))
 
 There are four parts to both instances:

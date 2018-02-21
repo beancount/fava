@@ -3,8 +3,7 @@ import { axisLeft, axisBottom } from 'd3-axis';
 import { format } from 'd3-format';
 import { utcFormat } from 'd3-time-format';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
-import { scaleBand, scaleLinear, scaleOrdinal, scalePoint,
-  scaleSqrt, scaleUtc } from 'd3-scale';
+import { scaleBand, scaleLinear, scaleOrdinal, scalePoint, scaleSqrt, scaleUtc } from 'd3-scale';
 import { event, select } from 'd3-selection';
 import { arc, line } from 'd3-shape';
 import { schemeSet3, schemeCategory10 } from 'd3-scale-chromatic';
@@ -771,11 +770,26 @@ function getOperatingCurrencies() {
   return window.favaAPI.options.operating_currency;
 }
 
-e.on('page-loaded', () => {
+// Create and return an <svg> for a chart and add a label.
+function chartContainer(id, label) {
+  const svg = container.append('svg')
+    .attr('id', id);
+
+  select('#chart-labels').append('label')
+    .attr('for', id)
+    .html(label);
+
+  return svg;
+}
+
+e.on('page-init', () => {
   tooltip = select('#tooltip');
+  window.addEventListener('resize', updateChart);
+});
+
+e.on('page-loaded', () => {
   tooltip.style('opacity', 0);
 
-  window.removeEventListener('resize', updateChart);
   if (!$('#charts')) {
     return;
   }
@@ -784,20 +798,7 @@ e.on('page-loaded', () => {
   container.html('');
   charts = {};
 
-  function chartContainer(id, label) {
-    const svg = container.append('svg')
-      .attr('class', 'chart')
-      .attr('id', id);
-
-    select('#chart-labels').append('label')
-      .attr('for', id)
-      .html(label);
-
-    return svg;
-  }
-
-  const chartData = JSON.parse($('#chart-data').innerHTML);
-  chartData.forEach((chart, index) => {
+  JSON.parse($('#chart-data').innerHTML).forEach((chart, index) => {
     const chartId = `${chart.type}-${index}`;
     switch (chart.type) {
       case 'balances': {
@@ -838,6 +839,7 @@ e.on('page-loaded', () => {
         break;
       }
       case 'bar': {
+        const currentDateFormat = dateFormat[$('#chart-interval').value];
         const series = chart.interval_totals.map(d => ({
           values: getOperatingCurrencies().map(name => ({
             name,
@@ -845,7 +847,7 @@ e.on('page-loaded', () => {
             budget: +d.budgets[name] || 0,
           })),
           date: new Date(d.begin_date),
-          label: dateFormat[$('#chart-interval').value](new Date(d.begin_date)),
+          label: currentDateFormat(new Date(d.begin_date)),
         }));
 
         charts[chartId] = new BarChart(chartContainer(chartId, chart.label))
@@ -910,7 +912,7 @@ e.on('page-loaded', () => {
       }
 
       const chartId = label.getAttribute('for');
-      $$('.charts .chart').forEach((el) => { el.classList.add('hidden'); });
+      $$('#charts svg').forEach((el) => { el.classList.add('hidden'); });
       $(`#${chartId}`).classList.remove('hidden');
 
       $$('.selected', labels).forEach((el) => { el.classList.remove('selected'); });
@@ -923,7 +925,6 @@ e.on('page-loaded', () => {
 
       $$('#chart-form input[name=mode]').forEach((el) => { el.addEventListener('change', updateChart); });
       $('#chart-currency').addEventListener('change', updateChart);
-      window.addEventListener('resize', updateChart);
 
       $('#chart-currency').classList.toggle('hidden', !currentChart.has_currency_setting);
       $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);

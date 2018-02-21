@@ -71,7 +71,6 @@
   }
 }
 
-.chart > p,
 .loading {
   color: var(--color-text-lightest);
   font-style: italic;
