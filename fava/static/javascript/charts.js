@@ -754,7 +754,7 @@ class HierarchyContainer extends BaseChart {
 
 let currentChart;
 function updateChart() {
-  if (!$('#charts').classList.contains('hidden')) {
+  if (!$('#charts').classList.contains('hide-charts')) {
     currentChart.update();
   }
 }
@@ -935,8 +935,7 @@ e.on('page-loaded', () => {
   }
 });
 
-e.on('button-click-toggle-chart', (button) => {
-  button.classList.toggle('hide-charts');
-  $('#charts').classList.toggle('hidden', button.classList.contains('hide-charts'));
+e.on('button-click-toggle-chart', () => {
+  $('#charts').classList.toggle('hide-charts');
   updateChart();
 });
