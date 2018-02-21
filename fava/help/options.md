@@ -4,7 +4,7 @@ following to your Beancount file.
 <pre><textarea class="editor-readonly">
 2016-06-14 custom "fava-option" "default-file"
 2016-06-14 custom "fava-option" "interval" "week"
-2016-04-14 custom "fava-option" "charts" "false"
+2016-04-14 custom "fava-option" "auto-reload" "true"
 2016-04-14 custom "fava-option" "journal-show" "transaction open"
 2016-04-14 custom "fava-option" "editor-print-margin-column" "10" </textarea></pre>
 
@@ -37,15 +37,6 @@ Default: `month`
 
 The default interval that charts and the account reports by interval use.
 The possible options are `day`, `week`, `month`, `quarter`, and `year`.
-
----
-
-## `charts`
-
-Default: `true`
-
-Set this to `false` to hide the charts. In any case, they can be hidden/shown
-using the "Toggle Charts" button.
 
 ---
 

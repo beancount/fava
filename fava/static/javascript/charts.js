@@ -12,6 +12,7 @@ import 'd3-transition';
 
 import { $, $$ } from './helpers';
 import e from './events';
+import router from './router';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
 const sunburstColorScale = scaleOrdinal(schemeCategory10);
@@ -934,6 +935,13 @@ e.on('page-loaded', () => {
 });
 
 e.on('button-click-toggle-chart', () => {
-  $('#charts').classList.toggle('hide-charts');
+  const hideCharts = $('#charts').classList.toggle('hide-charts');
+  const url = new URL(window.location.href);
+  if (hideCharts) {
+    url.searchParams.set('charts', false);
+  } else {
+    url.searchParams.delete('charts');
+  }
+  router.navigate(url.toString(), false);
   updateChart();
 });

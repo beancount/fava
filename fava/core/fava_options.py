@@ -16,7 +16,6 @@ InsertEntryOption = namedtuple('InsertEntryOption', 'date re filename lineno')
 DEFAULTS = {
     'account-journal-include-children': True,
     'auto-reload': False,
-    'charts': True,
     'default-file': None,
     'editor-print-margin-column': 60,
     'extensions': [],
@@ -42,7 +41,6 @@ DEFAULTS = {
 BOOL_OPTS = [
     'account-journal-include-children',
     'auto-reload',
-    'charts',
     'show-accounts-with-zero-balance',
     'show-accounts-with-zero-transactions',
     'show-closed-accounts',

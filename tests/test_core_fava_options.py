@@ -25,7 +25,6 @@ def test_fava_options(load_doc):
             datetime.date(2016, 4, 14),
             re.compile('Ausgaben:Test'), '<string>', 6)
     ]
-    assert options['charts']
     assert options['show-closed-accounts']
     assert options['journal-show'] == ['transaction', 'open']
     assert options['editor-print-margin-column'] == 10
