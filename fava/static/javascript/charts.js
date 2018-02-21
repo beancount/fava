@@ -642,9 +642,7 @@ class LineChart extends BaseChart {
 class SunburstChartContainer extends BaseChart {
   constructor(svg) {
     super();
-    this.svg = svg;
-    this.svg.attr('class', 'sunburst');
-
+    this.svg = svg.attr('class', 'sunburst');
     this.sunbursts = [];
     this.canvases = [];
   }

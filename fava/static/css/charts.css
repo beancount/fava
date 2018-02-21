@@ -96,10 +96,8 @@ svg {
       stroke-dasharray: 2, 2;
     }
   }
-}
 
-.voronoi {
-  & path {
+  & .voronoi {
     fill: none;
     pointer-events: all;
   }
@@ -121,13 +119,11 @@ svg {
 .sunburst {
   & .account {
     cursor: pointer;
-    font-size: 13px;
-    font-weight: 700;
+    fill: var(--color-text);
   }
 
   & .balance {
     font-family: var(--font-family-monospaced);
-    font-size: 14px;
   }
 
   & path {
