@@ -1,7 +1,5 @@
 import { extent, max, merge, min } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
-import { format } from 'd3-format';
-import { utcFormat } from 'd3-time-format';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
 import { scaleBand, scaleLinear, scaleOrdinal, scalePoint, scaleSqrt, scaleUtc } from 'd3-scale';
 import { event, select } from 'd3-selection';
@@ -10,8 +8,10 @@ import { schemeSet3, schemeCategory10 } from 'd3-scale-chromatic';
 import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
 
-import { $, $$ } from './helpers';
 import e from './events';
+import { formatCurrency, formatCurrencyShort, dateFormat } from './format';
+import setTimeFilter from './filters';
+import { $, $$ } from './helpers';
 import router from './router';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
@@ -19,55 +19,11 @@ const sunburstColorScale = scaleOrdinal(schemeCategory10);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrencyWithComma = format(',.2f');
-const formatCurrencyWithoutComma = format('.2f');
-function formatCurrency(number) {
-  let str = '';
-  if (window.favaAPI.options.render_commas) {
-    str = formatCurrencyWithComma(number);
-  } else {
-    str = formatCurrencyWithoutComma(number);
-  }
-  if (window.favaAPI.incognito) {
-    str = str.replace(/[0-9]/g, 'X');
-  }
-  return str;
-}
-
-const formatCurrencyShortDefault = format('.2s');
-function formatCurrencyShort(number) {
-  let str = formatCurrencyShortDefault(number);
-  if (window.favaAPI.incognito) {
-    str = str.replace(/[0-9]/g, 'X');
-  }
-  return str;
-}
-
-const dateFormat = {
-  year: utcFormat('%Y'),
-  quarter(date) {
-    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
-  },
-  month: utcFormat('%b %Y'),
-  week: utcFormat('%YW%W'),
-  day: utcFormat('%Y-%m-%d'),
-};
-
 let container;
 let tooltip;
 let charts;
 let renderers;
 let currentChart;
-
-const timeFilterDateFormat = {
-  year: utcFormat('%Y'),
-  quarter(date) {
-    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
-  },
-  month: utcFormat('%Y-%m'),
-  week: utcFormat('%Y-W%W'),
-  day: utcFormat('%Y-%m-%d'),
-};
 
 function addInternalNodesAsLeaves(node) {
   node.children.forEach((o) => {
@@ -101,11 +57,6 @@ function addTooltip(selection, tooltipText) {
     .on('mouseleave', () => {
       tooltip.style('opacity', 0);
     });
-}
-
-function timeFilter(date) {
-  $('#time-filter').value = timeFilterDateFormat[$('#chart-interval').value](date);
-  $('#filter-form [type=submit]').click();
 }
 
 function addLegend(domain, colorScale) {
@@ -384,7 +335,7 @@ class BarChart extends BaseChart {
 
     this.selections.axisgroupboxes = this.selections.groups.append('rect')
       .on('click', (d) => {
-        timeFilter(d.date);
+        setTimeFilter(d.date);
       })
       .attr('class', 'axis-group-box');
 
