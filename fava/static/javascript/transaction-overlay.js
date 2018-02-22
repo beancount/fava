@@ -1,12 +1,13 @@
 import e from './events';
 import { $, handleJSON } from './helpers';
-import { resetEntryForm, entryFormToJSON } from './entry-forms';
+import EntryForm from './entry-forms';
 import { closeOverlay } from './overlays';
 
 function submitTransactionForm(form, successCallback) {
+  const entryForm = new EntryForm(form.querySelector('.entry-form'));
   const jsonData = {
     entries: [
-      entryFormToJSON(form.querySelector('.entry-form')),
+      entryForm.toJSON(),
     ],
   };
 
@@ -17,7 +18,7 @@ function submitTransactionForm(form, successCallback) {
   })
     .then(handleJSON)
     .then((data) => {
-      resetEntryForm(form);
+      entryForm.reset();
       e.trigger('reload');
       e.trigger('info', data.message);
       if (successCallback) {

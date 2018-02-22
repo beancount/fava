@@ -1,5 +1,5 @@
 import { $, $$, handleJSON } from './helpers';
-import { entryFormToJSON } from './entry-forms';
+import EntryForm from './entry-forms';
 import e from './events';
 
 e.on('button-click-extract-submit', (button) => {
@@ -8,7 +8,7 @@ e.on('button-click-extract-submit', (button) => {
   const jsonData = { entries: [] };
 
   $$('.ingest-row.import .entry-form', form).forEach((entryForm) => {
-    jsonData.entries.push(entryFormToJSON(entryForm));
+    jsonData.entries.push(new EntryForm(entryForm).toJSON());
   });
 
   $.fetch(url, {
