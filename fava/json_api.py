@@ -104,6 +104,16 @@ def payee_accounts():
     }
 
 
+@json_api.route('/payee-transaction/', methods=['GET'])
+@json_response
+def payee_transaction():
+    """Last transaction for the given payee."""
+    return {
+        'payload': g.ledger.attributes.payee_transaction(
+            request.args.get('payee'))
+    }
+
+
 @json_api.route('/add-document/', methods=['PUT'])
 @json_response
 def add_document():

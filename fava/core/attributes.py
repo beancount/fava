@@ -52,3 +52,11 @@ class AttributesModule(FavaModule):
                 for posting in txn.postings:
                     account_ranker.update(posting.account, txn.date)
         return account_ranker.sort()
+
+    def payee_transaction(self, payee):
+        """The last transaction for the given payee."""
+        transactions = self.ledger.all_entries_by_type[Transaction]
+        for txn in reversed(transactions):
+            if txn.payee == payee:
+                return txn
+        return None
