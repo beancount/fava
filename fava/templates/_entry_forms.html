@@ -17,8 +17,8 @@
 </div>
 {% endmacro %}
 
-{% macro transaction(entry=None) %}
-<div class="entry-form transaction" data-type="transaction">
+{% macro Transaction(entry=None) %}
+<div class="entry-form transaction" data-type="Transaction">
   <div class="fieldset">
     <input type="date" name="date" value="{{ entry.date or today() }}">
     <input type="text" name="flag" value="{{ entry.flag or '*' }}">
@@ -42,8 +42,8 @@
 </div>
 {% endmacro %}
 
-{% macro balance(entry=None) %}
-<div class="entry-form balance" data-type="balance">
+{% macro Balance(entry=None) %}
+<div class="entry-form balance" data-type="Balance">
   <div class="fieldset">
     <input type="date" name="date" value="{{ entry.date or today() }}" >
     <h4>{{ _('Balance') }}</h4>
@@ -60,8 +60,8 @@
 </div>
 {% endmacro %}
 
-{% macro note(entry=None) %}
-<div class="entry-form note" data-type="note">
+{% macro Note(entry=None) %}
+<div class="entry-form note" data-type="Note">
   <div class="fieldset">
     <input type="date" name="date" value="{{ entry.date or today() }}">
     <h4>{{ _('Note') }}</h4>

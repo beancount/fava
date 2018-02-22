@@ -17,7 +17,7 @@
     <div class="actions">{{ _('Actions') }}</div>
   </div>
   {% for entry in g.ledger.ingest.extract(request.args.get('filename'), request.args.get('importer')) %}
-  {% set type = entry.__class__.__name__.lower() %}
+  {% set type = entry.__class__.__name__ %}
   {% set duplicate = '__duplicate__' in entry.meta %}
   <div class="ingest-row{{ ' duplicate' if duplicate else ' import' }}">
     <div class="line">{% if entry.meta.lineno > 0 %}{{ entry.meta.lineno }}{% endif %}</div>
@@ -26,7 +26,7 @@
       <pre>{{ entry.meta['__source__'] }}</pre>
       {% endif %}
     </div>
-    {{ entry_forms[type](entry) if type in ['balance', 'note', 'transaction'] else '' }}
+    {{ entry_forms[type](entry) if type in ['Balance', 'Note', 'Transaction'] else '' }}
     <div class="actions">
       <div class="inner">
         <label><input name="action-{{ loop.index }}" type="radio" value="ignore">{{ _('Ignore') }}</label>

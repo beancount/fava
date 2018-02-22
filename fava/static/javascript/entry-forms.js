@@ -24,6 +24,7 @@ export default class EntryForm {
 
   // Reset the entry form.
   reset() {
+    $('[name=narration]', this.form).value = '';
     $$('.metadata', this.form).forEach((el) => { el.remove(); });
     $$('.posting', this.form).forEach((el) => { el.remove(); });
     this.addPosting();
@@ -49,7 +50,7 @@ export default class EntryForm {
       }
     });
 
-    if (entryData.type === 'transaction') {
+    if (entryData.type === 'Transaction') {
       entryData.postings = [];
       $$('.posting', this.form).forEach((posting) => {
         const account = posting.querySelector('.account').value;
@@ -80,15 +81,17 @@ export default class EntryForm {
   // Set all but date and payee like in the given transaction (if empty).
   set(entry) {
     if (!this.isEmpty()) return;
-    $('[name=narration]', this.form).value = entry[4]; // eslint-disable-line prefer-destructuring
+    $('[name=narration]', this.form).value = entry.narration;
     $$('.posting', this.form).forEach((el) => { el.remove(); });
-    entry[7].forEach((posting) => {
-      const [account, amount] = posting;
-      const [number, currency] = amount;
+    entry.postings.forEach((posting) => {
+      const { account, units } = posting;
       const row = this.addPosting();
       $('.account', row).value = account;
-      $('.number', row).value = formatCurrency(number);
-      $('.currency', row).value = currency;
+      if (units) {
+        const [number, currency] = units;
+        $('.number', row).value = formatCurrency(number);
+        $('.currency', row).value = currency;
+      }
     });
   }
 }

@@ -1,19 +1,19 @@
-"""JSON API."""
+"""JSON API.
+
+This module contains the url endpoints of the JSON API that is used by the web
+interface for asynchronous functionality.
+"""
 
 import os
 import functools
 
 from flask import Blueprint, jsonify, g, request
 from werkzeug.utils import secure_filename
-from beancount.core import data
-from beancount.core.amount import Amount
-from beancount.core.number import D
 from beancount.scripts.format import align_beancount
 
-from fava import util
+from fava.serialisation import deserialise, serialise
 from fava.core.file import save_entry_slice
 from fava.core.helpers import FavaAPIException
-from fava.core.misc import extract_tags_links
 
 json_api = Blueprint('json_api', __name__)  # pylint: disable=invalid-name
 
@@ -108,10 +108,8 @@ def payee_accounts():
 @json_response
 def payee_transaction():
     """Last transaction for the given payee."""
-    return {
-        'payload': g.ledger.attributes.payee_transaction(
-            request.args.get('payee'))
-    }
+    entry = g.ledger.attributes.payee_transaction(request.args.get('payee'))
+    return {'payload': serialise(entry)}
 
 
 @json_api.route('/add-document/', methods=['PUT'])
@@ -158,60 +156,6 @@ def add_document():
     return {'message': 'Uploaded to {}'.format(filepath)}
 
 
-def _parse_number(num):
-    if not num:
-        return None
-    if '/' in num:
-        left, right = num.split('/')
-        return D(left) / D(right)
-    return D(num)
-
-
-def json_to_entry(json_entry, valid_accounts):
-    """Parse JSON to a Beancount entry."""
-    # pylint: disable=not-callable
-    date = util.date.parse_date(json_entry['date'])[0]
-    if json_entry['type'] == 'transaction':
-        narration, tags, links = extract_tags_links(json_entry['narration'])
-        txn = data.Transaction(json_entry['metadata'], date,
-                               json_entry['flag'], json_entry['payee'],
-                               narration, tags, links, [])
-
-        if not json_entry.get('postings'):
-            raise FavaAPIException('Transaction contains no postings.')
-
-        for posting in json_entry['postings']:
-            if posting['account'] not in valid_accounts:
-                raise FavaAPIException('Unknown account: {}.'.format(
-                    posting['account']))
-            data.create_simple_posting(txn, posting['account'],
-                                       _parse_number(posting.get('number')),
-                                       posting.get('currency'))
-
-        return txn
-    elif json_entry['type'] == 'balance':
-        if json_entry['account'] not in valid_accounts:
-            raise FavaAPIException('Unknown account: {}.'.format(
-                json_entry['account']))
-        number = _parse_number(json_entry['number'])
-        amount = Amount(number, json_entry.get('currency'))
-
-        return data.Balance(json_entry['metadata'], date,
-                            json_entry['account'], amount, None, None)
-    elif json_entry['type'] == 'note':
-        if json_entry['account'] not in valid_accounts:
-            raise FavaAPIException('Unknown account: {}.'.format(
-                json_entry['account']))
-
-        if '"' in json_entry['comment']:
-            raise FavaAPIException('Note contains double-quotes (")')
-
-        return data.Note(json_entry['metadata'], date, json_entry['account'],
-                         json_entry['comment'])
-    else:
-        raise FavaAPIException('Unsupported entry type.')
-
-
 @json_api.route('/add-entries/', methods=['PUT'])
 @json_request
 @json_response
@@ -219,7 +163,7 @@ def add_entries(request_data):
     """Add multiple entries."""
     try:
         entries = [
-            json_to_entry(entry, g.ledger.attributes.accounts)
+            deserialise(entry, g.ledger.attributes.accounts)
             for entry in request_data['entries']
         ]
     except KeyError as error:
