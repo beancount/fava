@@ -13,6 +13,8 @@ matrix:
       env: TRAVIS_BUILD=coverage
       before_install: "pip install codecov"
       after_success: "codecov"
+    - python: 3.6
+      env: TRAVIS_BUILD=py36
     - python: 3.5
       dist: trusty
       sudo: false
