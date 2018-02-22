@@ -1,16 +1,24 @@
-from fava.core.misc import extract_tags_links
+import datetime
+
+from beancount.loader import load_string
+
+from fava.core.misc import sidebar_links, upcoming_events
 
 
-def test_extract_tags_links():
-    assert extract_tags_links('notag') == ('notag', frozenset(), frozenset())
-    assert extract_tags_links('Some text #tag') == (
-        'Some text', frozenset(['tag']), frozenset())
-    assert extract_tags_links('Some text ^link') == ('Some text', frozenset(),
-                                                     frozenset(['link']))
-    assert extract_tags_links('Some text #tag #tag2 ^link') == (
-        'Some text', frozenset(['tag', 'tag2']), frozenset(['link']))
-    assert extract_tags_links('Some text#tag#tag2 ^link') == (
-        'Some text#tag#tag2', frozenset(), frozenset(['link']))
-    assert extract_tags_links('Some text#tag#tag2^link') == (
-        'Some text#tag#tag2^link', frozenset(), frozenset())
-    assert extract_tags_links('#tag') == ('', frozenset(['tag']), frozenset())
+def test_sidebar_links(load_doc):
+    """
+    2016-01-01 custom "fava-sidebar-link" "title" "link"
+    2016-01-02 custom "fava-sidebar-link" "titl1" "lin1"
+    """
+    entries, _, _ = load_doc
+    assert sidebar_links(entries) == [
+        ('title', 'link'), ('titl1', 'lin1')
+    ]
+
+
+def test_upcoming_events():
+    entries, _, _ = load_string(
+        '{} event "some_event" "test"\n'
+        '2012-12-12 event "test" "test"'
+        .format(str(datetime.date.today())))
+    assert len(upcoming_events(entries, 1)) == 1

@@ -8,6 +8,8 @@ representation of the entry is provided.
 This is not intended to work well enough for full roundtrips yet.
 """
 
+import re
+
 from beancount.core import data
 from beancount.core.amount import Amount
 from beancount.core.interpolate import AUTOMATIC_META
@@ -15,7 +17,25 @@ from beancount.core.number import D
 
 from fava import util
 from fava.core.helpers import FavaAPIException
-from fava.core.misc import extract_tags_links
+
+
+def extract_tags_links(string):
+    """Extract tags and links from a narration string.
+
+    Args:
+        string: A string, possibly containing tags (`#tag`) and links
+        (`^link`).
+
+    Returns:
+        A triple (new_string, tags, links) where `new_string` is `string`
+        stripped of tags and links.
+    """
+
+    tags = re.findall(r'(?:^|\s)#([A-Za-z0-9\-_/.]+)', string)
+    links = re.findall(r'(?:^|\s)\^([A-Za-z0-9\-_/.]+)', string)
+    new_string = re.sub(r'(?:^|\s)[#^]([A-Za-z0-9\-_/.]+)', '', string).strip()
+
+    return new_string, frozenset(tags), frozenset(links)
 
 
 def _parse_number(num):

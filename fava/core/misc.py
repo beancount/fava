@@ -2,7 +2,6 @@
 
 from collections import namedtuple
 import datetime
-import re
 
 from beancount.core.data import Custom, Event
 
@@ -23,9 +22,9 @@ class FavaMisc(FavaModule):
 
     def load_file(self):
         custom_entries = self.ledger.all_entries_by_type[Custom]
-        self.sidebar_links = _sidebar_links(custom_entries)
+        self.sidebar_links = sidebar_links(custom_entries)
 
-        self.upcoming_events = _upcoming_events(
+        self.upcoming_events = upcoming_events(
             self.ledger.all_entries_by_type[Event],
             self.ledger.fava_options['upcoming-events'])
 
@@ -35,7 +34,7 @@ class FavaMisc(FavaModule):
                           'Please add one to your beancount file.', None))
 
 
-def _sidebar_links(custom_entries):
+def sidebar_links(custom_entries):
     """Parse custom entries for links.
 
     They have the following format:
@@ -49,7 +48,7 @@ def _sidebar_links(custom_entries):
             for entry in sidebar_link_entries]
 
 
-def _upcoming_events(events, max_delta):
+def upcoming_events(events, max_delta):
     """Parse entries for upcoming events.
 
     Args:
@@ -61,30 +60,11 @@ def _upcoming_events(events, max_delta):
         away.
     """
     today = datetime.date.today()
-    upcoming_events = []
+    upcoming = []
 
     for event in events:
         delta = event.date - today
         if delta.days >= 0 and delta.days < max_delta:
-            upcoming_events.append(event)
+            upcoming.append(event)
 
-    return upcoming_events
-
-
-def extract_tags_links(string):
-    """Extract tags and links from a (narration) string.
-
-    Args:
-        string: A string, possibly containing tags (`#tag`) and links
-        (`^link`).
-
-    Returns:
-        A triple (new_string, tags, links) where `new_string` is `string`
-        stripped of tags and links.
-    """
-
-    tags = re.findall(r'(?:^|\s)#([A-Za-z0-9\-_/.]+)', string)
-    links = re.findall(r'(?:^|\s)\^([A-Za-z0-9\-_/.]+)', string)
-    new_string = re.sub(r'(?:^|\s)[#^]([A-Za-z0-9\-_/.]+)', '', string).strip()
-
-    return new_string, frozenset(tags), frozenset(links)
+    return upcoming
