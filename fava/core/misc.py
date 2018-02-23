@@ -3,7 +3,6 @@
 from collections import namedtuple
 import datetime
 import inspect
-import re
 
 from beancount.core.data import Custom, Event
 from beancount.scripts.format import align_beancount
@@ -77,7 +76,7 @@ def align(string, fava_options):
     """Wrapper around align_beancount."""
     # pylint: disable=too-many-function-args
     if 'prefix_width' in inspect.signature(align_beancount).parameters:
-        if fava_options['align-prefix-width']:
+        if fava_options.get('align-prefix-width'):
             return align_beancount(string, fava_options['align-prefix-width'],
                                    fava_options['align-num-width'])
     return align_beancount(string)
