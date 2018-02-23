@@ -1,36 +1,11 @@
-import { $, $$, handleJSON } from './helpers';
+import { $, $$ } from './helpers';
 import EntryForm from './entry-forms';
 import e from './events';
 
-e.on('button-click-extract-submit', (button) => {
-  const url = button.getAttribute('data-url');
+e.on('button-click-extract-submit', () => {
   const form = $('.ingest-extract');
-  const jsonData = { entries: [] };
-
-  let allValid = true;
-
-  $$('.ingest-row.import .entry-form', form).forEach((entryForm) => {
-    try {
-      jsonData.entries.push(new EntryForm(entryForm).toJSON());
-    } catch (error) {
-      allValid = false;
-    }
-  });
-
-  if (!allValid) return;
-
-  $.fetch(url, {
-    method: 'PUT',
-    body: JSON.stringify(jsonData),
-    headers: { 'Content-Type': 'application/json' },
-  })
-    .then(handleJSON)
-    .then((data) => {
-      e.trigger('reload');
-      e.trigger('info', data.message);
-    }, (error) => {
-      e.trigger('error', `Importing failed: ${error}`);
-    });
+  const forms = $$('.ingest-row.import .entry-form', form).map(el => new EntryForm(el));
+  EntryForm.submit(forms);
 });
 
 e.on('button-click-extract-toggle-ignore', (button) => {

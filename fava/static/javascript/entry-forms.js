@@ -26,7 +26,8 @@ export default class EntryForm {
   // Reset the entry form.
   reset() {
     $('[name=narration]', this.form).value = '';
-    $$('.metadata', this.form).forEach((el) => { el.remove(); });
+    $('[name=payee]', this.form).value = '';
+    $$('.metadata-row', this.form).forEach((el) => { el.remove(); });
     $$('.posting', this.form).forEach((el) => { el.remove(); });
     this.addPosting();
     this.addPosting();
@@ -97,6 +98,38 @@ export default class EntryForm {
         $('.currency', row).value = currency;
       }
     });
+  }
+
+  // Submit an Array of forms (do nothing if one of them is invalid).
+  static submit(forms, successCallback) {
+    const jsonData = { entries: [] };
+    let allValid = true;
+
+    forms.forEach((entryForm) => {
+      try {
+        jsonData.entries.push(entryForm.toJSON());
+      } catch (error) {
+        allValid = false;
+      }
+    });
+
+    if (!allValid) return;
+
+    $.fetch(`${window.favaAPI.baseURL}api/add-entries/`, {
+      method: 'PUT',
+      body: JSON.stringify(jsonData),
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then(handleJSON)
+      .then((data) => {
+        e.trigger('reload');
+        e.trigger('info', data.message);
+        if (successCallback) {
+          successCallback();
+        }
+      }, (error) => {
+        e.trigger('error', `Saving failed: ${error}`);
+      });
   }
 }
 

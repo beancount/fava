@@ -1,42 +1,18 @@
 import e from './events';
-import { $, handleJSON } from './helpers';
 import EntryForm from './entry-forms';
 import { closeOverlay } from './overlays';
 
-function submitTransactionForm(form, successCallback) {
-  const entryForm = new EntryForm(form.querySelector('.entry-form'));
-  const jsonData = {
-    entries: [],
-  };
-
-  try {
-    jsonData.entries.push(entryForm.toJSON());
-  } catch (error) {
-    return;
-  }
-
-  $.fetch(form.getAttribute('action'), {
-    method: 'PUT',
-    body: JSON.stringify(jsonData),
-    headers: { 'Content-Type': 'application/json' },
-  })
-    .then(handleJSON)
-    .then((data) => {
-      entryForm.reset();
-      e.trigger('reload');
-      e.trigger('info', data.message);
-      if (successCallback) {
-        successCallback();
-      }
-    }, (error) => {
-      e.trigger('error', `Adding transaction failed: ${error}`);
-    });
-}
-
 e.on('button-click-transaction-form-submit', (button) => {
-  submitTransactionForm(button.form, closeOverlay);
+  const form = new EntryForm(button.form.querySelector('.entry-form'));
+  EntryForm.submit([form], () => {
+    form.reset();
+    closeOverlay();
+  });
 });
 
 e.on('button-click-transaction-form-submit-and-new', (button) => {
-  submitTransactionForm(button.form);
+  const form = new EntryForm(button.form.querySelector('.entry-form'));
+  EntryForm.submit([form], () => {
+    form.reset();
+  });
 });
