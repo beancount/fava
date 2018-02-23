@@ -1,8 +1,15 @@
 import datetime
 
 from beancount.core.data import Transaction, create_simple_posting
+from beancount.core.number import D
 
-from fava.serialisation import deserialise, extract_tags_links
+from fava.serialisation import deserialise, extract_tags_links, parse_number
+
+
+def test_parse_number():
+    assert parse_number('5/2') == D('2.5')
+    assert parse_number('5') == D('5')
+    assert parse_number('12.345') == D('12.345')
 
 
 def test_deserialise():
@@ -12,8 +19,8 @@ def test_deserialise():
         'date': '2017-12-12',
         'flag': '*',
         'payee': 'Test3',
-        'narration': 'asdfasd',
-        'metadata': {},
+        'narration': 'asdfasd #tag ^link',
+        'meta': {},
         'postings': [
             {
                 'account': 'Assets:ETrade:Cash',
@@ -27,7 +34,7 @@ def test_deserialise():
     }
 
     txn = Transaction({}, datetime.date(2017, 12, 12), '*', 'Test3', 'asdfasd',
-                      frozenset(), frozenset(), [])
+                      frozenset(['tag']), frozenset(['link']), [])
     create_simple_posting(txn, 'Assets:ETrade:Cash', '100', 'USD')
     create_simple_posting(txn, 'Assets:ETrade:GLD', None, None)
     assert deserialise(json_txn, valid_accounts) == txn

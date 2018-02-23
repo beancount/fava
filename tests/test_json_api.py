@@ -123,7 +123,7 @@ def test_api_add_entries(app, test_client, tmpdir):
                     'flag': '*',
                     'payee': 'Test3',
                     'narration': '',
-                    'metadata': {},
+                    'meta': {},
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
@@ -141,7 +141,7 @@ def test_api_add_entries(app, test_client, tmpdir):
                     'flag': '*',
                     'payee': 'Test1',
                     'narration': '',
-                    'metadata': {},
+                    'meta': {},
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
@@ -159,7 +159,7 @@ def test_api_add_entries(app, test_client, tmpdir):
                     'flag': '*',
                     'payee': 'Test',
                     'narration': 'Test',
-                    'metadata': {},
+                    'meta': {},
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',

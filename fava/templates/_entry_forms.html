@@ -17,6 +17,14 @@
 </div>
 {% endmacro %}
 
+{% macro entry_meta(meta) %}
+<div class="metadata">
+  {% for key, value in meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
+  {{ metadata(key=key, value=value) }}
+  {% endfor %}
+</div>
+{% endmacro %}
+
 {% macro Transaction(entry=None) %}
 <div class="entry-form transaction" data-type="Transaction">
   <div class="fieldset">
@@ -29,11 +37,7 @@
     <button class="muted round" type="button" data-event="add-metadata" title="{{ _('Add metadata') }}">m</button>
     <button class="muted round" type="button" data-event="add-posting" title="{{ _('Add posting') }}">p</button>
   </div>
-  <div class="metadata">
-    {% for key, value in entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
-    {{ metadata(key=key, value=value) }}
-    {% endfor %}
-  </div>
+  {{ entry_meta(entry.meta) }}
   <div class="postings">
     {% for p in (entry.postings or [None, None]) %}
     {{ posting(posting=p) }}
@@ -52,11 +56,7 @@
     <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ entry.amount.currency if entry.amount else '' }}">
     <button class="muted round" type="button" data-event="add-metadata" title="{{ _('Add metadata') }}">m</button>
   </div>
-  <div class="metadata">
-    {% for key, value in entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
-    {{ metadata(key=key, value=value) }}
-    {% endfor %}
-  </div>
+  {{ entry_meta(entry.meta) }}
 </div>
 {% endmacro %}
 
@@ -71,10 +71,6 @@
   <div class="fieldset">
     <textarea name="comment" rows="2">{{ entry.comment or '' }}</textarea>
   </div>
-  <div class="metadata">
-    {% for key, value in entry.meta|remove_keys(['__duplicate__', '__source__', 'filename', 'lineno'])|dictsort %}
-    {{ metadata(key=key, value=value) }}
-    {% endfor %}
-  </div>
+  {{ entry_meta(entry.meta) }}
 </div>
 {% endmacro %}

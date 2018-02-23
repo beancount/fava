@@ -36,17 +36,17 @@ export default class EntryForm {
   toJSON() {
     const entryData = {
       type: this.form.getAttribute('data-type'),
-      metadata: {},
+      meta: {},
     };
 
     $$('[name]', this.form).forEach((input) => {
       entryData[input.name] = input.value;
     });
 
-    $$('.metadata-row', this.form).forEach((metadata) => {
-      const key = metadata.querySelector('.metadata-key').value;
+    $$('.metadata-row', this.form).forEach((row) => {
+      const key = row.querySelector('.metadata-key').value;
       if (key) {
-        entryData.metadata[key] = metadata.querySelector('.metadata-value').value;
+        entryData.meta[key] = row.querySelector('.metadata-value').value;
       }
     });
 

@@ -38,7 +38,8 @@ def extract_tags_links(string):
     return new_string, frozenset(tags), frozenset(links)
 
 
-def _parse_number(num):
+def parse_number(num):
+    """Parse a number as entered in an entry form, supporting division."""
     if not num:
         return None
     if '/' in num:
@@ -73,9 +74,8 @@ def deserialise(json_entry, valid_accounts):
     date = util.date.parse_date(json_entry['date'])[0]
     if json_entry['type'] == 'Transaction':
         narration, tags, links = extract_tags_links(json_entry['narration'])
-        txn = data.Transaction(json_entry['metadata'], date,
-                               json_entry['flag'], json_entry['payee'],
-                               narration, tags, links, [])
+        txn = data.Transaction(json_entry['meta'], date, json_entry['flag'],
+                               json_entry['payee'], narration, tags, links, [])
 
         if not json_entry.get('postings'):
             raise FavaAPIException('Transaction contains no postings.')
@@ -85,7 +85,7 @@ def deserialise(json_entry, valid_accounts):
                 raise FavaAPIException('Unknown account: {}.'.format(
                     posting['account']))
             data.create_simple_posting(txn, posting['account'],
-                                       _parse_number(posting.get('number')),
+                                       parse_number(posting.get('number')),
                                        posting.get('currency'))
 
         return txn
@@ -93,11 +93,11 @@ def deserialise(json_entry, valid_accounts):
         if json_entry['account'] not in valid_accounts:
             raise FavaAPIException('Unknown account: {}.'.format(
                 json_entry['account']))
-        number = _parse_number(json_entry['number'])
+        number = parse_number(json_entry['number'])
         amount = Amount(number, json_entry.get('currency'))
 
-        return data.Balance(json_entry['metadata'], date,
-                            json_entry['account'], amount, None, None)
+        return data.Balance(json_entry['meta'], date, json_entry['account'],
+                            amount, None, None)
     elif json_entry['type'] == 'Note':
         if json_entry['account'] not in valid_accounts:
             raise FavaAPIException('Unknown account: {}.'.format(
@@ -106,7 +106,7 @@ def deserialise(json_entry, valid_accounts):
         if '"' in json_entry['comment']:
             raise FavaAPIException('Note contains double-quotes (")')
 
-        return data.Note(json_entry['metadata'], date, json_entry['account'],
+        return data.Note(json_entry['meta'], date, json_entry['account'],
                          json_entry['comment'])
     else:
         raise FavaAPIException('Unsupported entry type.')
