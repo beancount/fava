@@ -2,7 +2,9 @@ import datetime
 
 from beancount.core.data import Transaction, create_simple_posting
 from beancount.core.number import D
+import pytest
 
+from fava.core.helpers import FavaAPIException
 from fava.serialisation import deserialise, extract_tags_links, parse_number
 
 
@@ -13,7 +15,6 @@ def test_parse_number():
 
 
 def test_deserialise():
-    valid_accounts = ['Assets:ETrade:Cash', 'Assets:ETrade:GLD']
     json_txn = {
         'type': 'Transaction',
         'date': '2017-12-12',
@@ -37,7 +38,13 @@ def test_deserialise():
                       frozenset(['tag']), frozenset(['link']), [])
     create_simple_posting(txn, 'Assets:ETrade:Cash', '100', 'USD')
     create_simple_posting(txn, 'Assets:ETrade:GLD', None, None)
-    assert deserialise(json_txn, valid_accounts) == txn
+    assert deserialise(json_txn) == txn
+
+    with pytest.raises(KeyError):
+        deserialise({})
+
+    with pytest.raises(FavaAPIException):
+        deserialise({'type': 'NoEntry'})
 
 
 def test_extract_tags_links():

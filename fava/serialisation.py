@@ -68,41 +68,38 @@ def serialise(entry):
     return ret
 
 
-def deserialise(json_entry, valid_accounts):
-    """Parse JSON to a Beancount entry."""
+def deserialise(json_entry):
+    """Parse JSON to a Beancount entry.
+
+    Args:
+        json_entry: The entry.
+
+    Raises:
+        KeyError: if one of the required entry fields is missing.
+        FavaAPIException: if the type of the given entry is not supported.
+    """
     # pylint: disable=not-callable
-    date = util.date.parse_date(json_entry['date'])[0]
     if json_entry['type'] == 'Transaction':
+        date = util.date.parse_date(json_entry['date'])[0]
         narration, tags, links = extract_tags_links(json_entry['narration'])
         txn = data.Transaction(json_entry['meta'], date, json_entry['flag'],
                                json_entry['payee'], narration, tags, links, [])
 
-        if not json_entry.get('postings'):
-            raise FavaAPIException('Transaction contains no postings.')
-
         for posting in json_entry['postings']:
-            if posting['account'] not in valid_accounts:
-                raise FavaAPIException('Unknown account: {}.'.format(
-                    posting['account']))
             data.create_simple_posting(txn, posting['account'],
                                        parse_number(posting.get('number')),
                                        posting.get('currency'))
 
         return txn
     elif json_entry['type'] == 'Balance':
-        if json_entry['account'] not in valid_accounts:
-            raise FavaAPIException('Unknown account: {}.'.format(
-                json_entry['account']))
+        date = util.date.parse_date(json_entry['date'])[0]
         number = parse_number(json_entry['number'])
         amount = Amount(number, json_entry.get('currency'))
 
         return data.Balance(json_entry['meta'], date, json_entry['account'],
                             amount, None, None)
     elif json_entry['type'] == 'Note':
-        if json_entry['account'] not in valid_accounts:
-            raise FavaAPIException('Unknown account: {}.'.format(
-                json_entry['account']))
-
+        date = util.date.parse_date(json_entry['date'])[0]
         if '"' in json_entry['comment']:
             raise FavaAPIException('Note contains double-quotes (")')
 

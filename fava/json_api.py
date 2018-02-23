@@ -163,8 +163,7 @@ def add_entries(request_data):
     """Add multiple entries."""
     try:
         entries = [
-            deserialise(entry, g.ledger.attributes.accounts)
-            for entry in request_data['entries']
+            deserialise(entry) for entry in request_data['entries']
         ]
     except KeyError as error:
         raise FavaAPIException('KeyError: {}'.format(str(error)))
