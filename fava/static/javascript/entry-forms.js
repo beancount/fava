@@ -6,6 +6,7 @@ import { $, $$, handleJSON } from './helpers';
 export default class EntryForm {
   constructor(form) {
     this.form = form;
+    this.type = this.form.getAttribute('data-type');
   }
 
   // Append a posting row.
@@ -32,10 +33,19 @@ export default class EntryForm {
     this.form.focus();
   }
 
+  // Check validity of the form.
+  checkValidity() {
+    if ($$('input', this.form).some(input => !input.checkValidity())) return false;
+    if (this.type === 'Transaction' && $$('.posting', this.form).length === 0) return false;
+    return true;
+  }
+
   // Convert the form data to JSON.
   toJSON() {
+    if (!this.checkValidity()) throw new Error();
+
     const entryData = {
-      type: this.form.getAttribute('data-type'),
+      type: this.type,
       meta: {},
     };
 
@@ -45,23 +55,17 @@ export default class EntryForm {
 
     $$('.metadata-row', this.form).forEach((row) => {
       const key = row.querySelector('.metadata-key').value;
-      if (key) {
-        entryData.meta[key] = row.querySelector('.metadata-value').value;
-      }
+      entryData.meta[key] = row.querySelector('.metadata-value').value;
     });
 
-    if (entryData.type === 'Transaction') {
+    if (this.type === 'Transaction') {
       entryData.postings = [];
       $$('.posting', this.form).forEach((posting) => {
-        const account = posting.querySelector('.account').value;
-
-        if (account) {
-          entryData.postings.push({
-            account,
-            number: posting.querySelector('.number').value,
-            currency: posting.querySelector('.currency').value,
-          });
-        }
+        entryData.postings.push({
+          account: posting.querySelector('.account').value,
+          number: posting.querySelector('.number').value,
+          currency: posting.querySelector('.currency').value,
+        });
       });
     }
 

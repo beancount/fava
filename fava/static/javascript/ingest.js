@@ -7,9 +7,17 @@ e.on('button-click-extract-submit', (button) => {
   const form = $('.ingest-extract');
   const jsonData = { entries: [] };
 
+  let allValid = true;
+
   $$('.ingest-row.import .entry-form', form).forEach((entryForm) => {
-    jsonData.entries.push(new EntryForm(entryForm).toJSON());
+    try {
+      jsonData.entries.push(new EntryForm(entryForm).toJSON());
+    } catch (error) {
+      allValid = false;
+    }
   });
+
+  if (!allValid) return;
 
   $.fetch(url, {
     method: 'PUT',

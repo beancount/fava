@@ -6,10 +6,14 @@ import { closeOverlay } from './overlays';
 function submitTransactionForm(form, successCallback) {
   const entryForm = new EntryForm(form.querySelector('.entry-form'));
   const jsonData = {
-    entries: [
-      entryForm.toJSON(),
-    ],
+    entries: [],
   };
+
+  try {
+    jsonData.entries.push(entryForm.toJSON());
+  } catch (error) {
+    return;
+  }
 
   $.fetch(form.getAttribute('action'), {
     method: 'PUT',
