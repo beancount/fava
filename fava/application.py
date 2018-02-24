@@ -53,7 +53,6 @@ app.secret_key = '1234'
 
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
-app.config['LEDGERS'] = {}
 
 REPORTS = [
     '_context',
@@ -79,6 +78,7 @@ def _load_file():
 
     This is run automatically on the first request.
     """
+    app.config['LEDGERS'] = {}
     for filepath in app.config['BEANCOUNT_FILES']:
         ledger = FavaLedger(filepath)
         slug = slugify(ledger.options['title'])
@@ -200,7 +200,7 @@ def _incognito(response):
 @app.url_value_preprocessor
 def _pull_beancount_file(_, values):
     g.beancount_file_slug = values.pop('bfile', None) if values else None
-    if not app.config['LEDGERS']:
+    if not app.config.get('LEDGERS'):
         _load_file()
     if not g.beancount_file_slug:
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]
@@ -224,14 +224,9 @@ def fava_api_exception(error):
 
 
 @app.route('/')
-def root():
-    """Redirect to the index page for the first Beancount file."""
-    return redirect(url_for('index', bfile=app.config['FILE_SLUGS'][0]))
-
-
 @app.route('/<bfile>/')
 def index():
-    """Redirect to the Income Statement."""
+    """Redirect to the Income Statement (of the given or first file)."""
     return redirect(url_for('report', report_name='income_statement'))
 
 
