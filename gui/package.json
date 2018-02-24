@@ -14,11 +14,11 @@
     "start": "electron src/main.js"
   },
   "devDependencies": {
-    "electron": "^1.7.12",
-    "electron-builder": "^19.55.3",
-    "eslint": "^4.16.0",
+    "electron": "^1.8.2",
+    "electron-builder": "^20.2.0",
+    "eslint": "^4.18.1",
     "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0"
+    "eslint-plugin-import": "^2.9.0"
   },
   "eslintConfig": {
     "extends": [
