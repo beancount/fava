@@ -7,7 +7,6 @@ Welcome to Fava!
     usage
     changelog
     development
-    deployment
 
 Fava is a web interface for the double-entry bookkeeping software `Beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
