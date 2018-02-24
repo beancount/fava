@@ -1,12 +1,10 @@
 """Fava's main WSGI application.
 
-when using Fava's WSGI app, make sure to set ``app.config['BEANCOUNT_FILES']``
-and call :func:`load_file` before starting the server.  To start a simple
-server::
+when using Fava's WSGI app, make sure to set ``app.config['BEANCOUNT_FILES']``.
+To start a simple server::
 
-    from fava.application import app, load_file
+    from fava.application import app
     app.config['BEANCOUNT_FILES'] = ['/path/to/file.beancount']
-    load_file()
     app.run('localhost', 5000)
 
 Attributes:
@@ -76,8 +74,11 @@ REPORTS = [
 ]
 
 
-def load_file():
-    """Load Beancount files. """
+def _load_file():
+    """Load Beancount files.
+
+    This is run automatically on the first request.
+    """
     for filepath in app.config['BEANCOUNT_FILES']:
         ledger = FavaLedger(filepath)
         slug = slugify(ledger.options['title'])
@@ -97,7 +98,6 @@ def get_locale():
     Returns:
         The locale that should be used for Babel. If not given as an option to
         Fava, guess from browser.
-
     """
     if g.ledger.fava_options['language']:
         return g.ledger.fava_options['language']
@@ -200,6 +200,8 @@ def _incognito(response):
 @app.url_value_preprocessor
 def _pull_beancount_file(_, values):
     g.beancount_file_slug = values.pop('bfile', None) if values else None
+    if not app.config['LEDGERS']:
+        _load_file()
     if not g.beancount_file_slug:
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:

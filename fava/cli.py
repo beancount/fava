@@ -6,7 +6,7 @@ import errno
 import click
 from werkzeug.wsgi import DispatcherMiddleware
 
-from fava.application import app, load_file
+from fava.application import app
 from fava.util import simple_wsgi
 from fava import __version__
 
@@ -24,7 +24,7 @@ from fava import __version__
 @click.option('--incognito', is_flag=True,
               help='Run in incognito mode (obscure all numbers).')
 @click.option('-d', '--debug', is_flag=True,
-              help='Turn on debugging. Disables live-reloading.')
+              help='Turn on debugging.')
 @click.option('--profile', is_flag=True,
               help='Turn on profiling. Implies --debug.')
 @click.option('--profile-dir', type=click.Path(),
@@ -40,8 +40,6 @@ def main(filenames, port, host, prefix, incognito, debug, profile, profile_dir,
     specified there in addition to FILENAMES.
     """
 
-    if profile_dir:  # pragma: no cover
-        profile = True
     if profile:  # pragma: no cover
         debug = True
 
@@ -53,7 +51,6 @@ def main(filenames, port, host, prefix, incognito, debug, profile, profile_dir,
         raise click.UsageError('No file specified')
 
     app.config['BEANCOUNT_FILES'] = filenames
-    load_file()
     app.config['INCOGNITO'] = incognito
 
     if prefix:
