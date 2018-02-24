@@ -23,15 +23,13 @@ def test_paths_to_watch(example_ledger):
     )
     documents = example_ledger.options['documents']
     example_ledger.options['documents'] = ['folder']
-    base = os.path.dirname(example_ledger.beancount_file_path) + '/folder'
+    base = os.path.join(
+        os.path.dirname(example_ledger.beancount_file_path), 'folder')
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
         [
-            base + '/Assets',
-            base + '/Liabilities',
-            base + '/Equity',
-            base + '/Income',
-            base + '/Expenses',
+            os.path.join(base, account) for account in [
+                'Assets', 'Liabilities', 'Equity', 'Income', 'Expenses']
         ]
     )
     example_ledger.options['documents'] = documents

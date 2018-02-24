@@ -2,7 +2,10 @@ import os
 import signal
 import socket
 import subprocess
+import sys
 import time
+
+import pytest
 
 from .conftest import EXAMPLE_FILE
 
@@ -39,6 +42,7 @@ def _run_fava(args=None):
                             universal_newlines=True)
 
 
+@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 def test_cli_basic():
     port = _get_port()
     args = (EXAMPLE_FILE, '-p', str(port))
@@ -48,6 +52,7 @@ def test_cli_basic():
     process.wait()
 
 
+@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 def test_cli_prefix():
     args = (EXAMPLE_FILE, '-p', str(_get_port()), '--prefix', '/test')
     process = _run_fava(args)
@@ -56,6 +61,7 @@ def test_cli_prefix():
     process.wait()
 
 
+@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 def test_cli_empty():
     process = _run_fava()
     process.wait()
@@ -63,6 +69,7 @@ def test_cli_empty():
     assert process.returncode == 2
 
 
+@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 def test_cli_addrinuse():
     args = (EXAMPLE_FILE, '-p', str(_get_port()))
     process = _run_fava(args)

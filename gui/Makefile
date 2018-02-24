@@ -18,10 +18,10 @@ clean:
 	rm -rf node_modules
 
 lint: node_modules
-	`npm bin`/eslint src/main.js
+	npm run lint
 
 dist: node_modules bin/fava
-	`npm bin`/build
+	npm run dist
 
 # Requires imagemagick's convert
 icons: build/icon.icns build/icon.ico

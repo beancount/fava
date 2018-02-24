@@ -11,7 +11,9 @@
     "request-promise": "^4.2.2"
   },
   "scripts": {
-    "start": "electron src/main.js"
+    "start": "electron src/main.js",
+    "dist": "electron-builder",
+    "lint": "eslint src/main.js"
   },
   "devDependencies": {
     "electron": "^1.8.3",
