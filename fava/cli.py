@@ -15,9 +15,9 @@ from fava import __version__
 @click.command()
 @click.argument('filenames', nargs=-1,
                 type=click.Path(exists=True, resolve_path=True))
-@click.option('-p', '--port', type=int, default=5000,
+@click.option('-p', '--port', type=int, default=5000, metavar='<port>',
               help='The port to listen on. (default: 5000)')
-@click.option('-H', '--host', type=str, default='localhost',
+@click.option('-H', '--host', type=str, default='localhost', metavar='<host>',
               help='The host to listen on. (default: localhost)')
 @click.option('--prefix', type=str,
               help='Set an URL prefix. (for reverse proxy)')
@@ -29,12 +29,10 @@ from fava import __version__
               help='Turn on profiling. Implies --debug.')
 @click.option('--profile-dir', type=click.Path(),
               help='Output directory for profiling data.')
-@click.option('--profile-restriction', type=int, default=30,
-              help='Number of functions to show in profile.')
 @click.version_option(version=__version__, prog_name='fava')
-def main(filenames, port, host, prefix, incognito, debug, profile, profile_dir,
-         profile_restriction):
-    """Start Fava for FILENAMES on http://host:port.
+def main(filenames, port, host, prefix, incognito, debug, profile,
+         profile_dir):
+    """Start Fava for FILENAMES on http://<host>:<port>.
 
     If the `BEANCOUNT_FILE` environment variable is set, Fava will use the file
     specified there in addition to FILENAMES.
@@ -63,7 +61,7 @@ def main(filenames, port, host, prefix, incognito, debug, profile, profile_dir,
             app.config['PROFILE'] = True
             app.wsgi_app = ProfilerMiddleware(
                 app.wsgi_app,
-                restrictions=(profile_restriction,),
+                restrictions=(30,),
                 profile_dir=profile_dir if profile_dir else None)
 
         app.jinja_env.auto_reload = True
