@@ -182,7 +182,7 @@ textarea {
 
 input,
 textarea {
-  border: 1px solid color(var(--color-background-darkest));
+  border: 1px solid var(--color-background-darkest);
   padding: 6px 10px;
 }
 
@@ -405,7 +405,7 @@ aside {
 
     &.selected,
     &:hover {
-      background-color: color(var(--color-sidebar-background) shade(15%));
+      filter: brightness(85%);
     }
   }
 }

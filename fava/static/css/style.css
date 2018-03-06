@@ -54,31 +54,30 @@ body {
 
   --color-links: #0067a5;
   --color-headings: #333;
-  --color-error: #900;
-  --color-warning: #edd42f;
+  --color-error: hsl(0, 100%, 30%);
+  --color-warning: hsl(52, 84%, 56%);
   --color-code-background: #f8f8f8;
 
   --color-sidebar-text: #444;
   --color-sidebar-text-hover: var(--color-links);
-  --color-sidebar-background: #f5f5f5;
-  --color-sidebar-border: color(var(--color-sidebar-background) shade(10%));
+  --color-sidebar-background: hsl(0, 0%, 96%);
+  --color-sidebar-border: hsl(0, 0%, 87%);
 
-  --color-scrollbar: color(var(--color-sidebar-background) shade(30%));
+  --color-scrollbar: hsl(0, 0, 67%);
   --color-autocomplete-match: #ffd27c;
 
-  --color-header: #0067a5;
-  --color-header-bottom: color(var(--color-header) shade(10%));
+  --color-header: hsl(203, 100%, 32%);
   --color-header-text: #fff;
 
-  --color-status-red: #900;
-  --color-status-yellow: #edd42f;
-  --color-status-green: #007f41;
+  --color-status-red: var(--color-error);
+  --color-status-yellow: var(--color-warning);
+  --color-status-green: hsl(151, 100%, 25%);
   --color-status-gray: #aaa;
 
   --color-notification: #fff;
-  --color-notification-info: color(var(--color-status-green) alpha(70%));
-  --color-notification-error: color(var(--color-error) alpha(70%));
-  --color-notification-warning: color(var(--color-warning) alpha(70%));
+  --color-notification-info: hsl(151, 100%, 25%, .7);
+  --color-notification-error: hsl(0, 100%, 30%, .7));
+  --color-notification-warning: hsl(52, 84%, 56%, .7);
 
   --color-table-header-text: #666;
   --color-table-header-background: #e6e6e6;
@@ -101,7 +100,8 @@ body {
   --color-journal-tag-document: #bb7ebb;
   --color-journal-link: #cbdde8;
   --color-journal-link-document: #c79cc7;
-  --color-journal-indicator: #c1d0d9;
+  --color-journal-posting-indicator: hsl(203, 24%, 80%);
+  --color-journal-metadata-indicator: hsl(203, 24%, 60%);
 
   --color-treetable-expander: #afc1d3;
 
