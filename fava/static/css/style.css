@@ -48,9 +48,9 @@ body {
   --color-background: #fff;
   --color-background-darker: #d9d9d9;
   --color-background-darkest: #ccc;
-  --color-text: #444;
-  --color-text-lighter: #555;
-  --color-text-lightest: #777;
+  --color-text: hsl(0, 0%, 27%);
+  --color-text-lighter: hsl(0, 0%, 33%);
+  --color-text-lightest: hsl(0, 0%, 47%);
 
   --color-links: #0067a5;
   --color-headings: #333;
@@ -67,7 +67,11 @@ body {
   --color-autocomplete-match: #ffd27c;
 
   --color-header: hsl(203, 100%, 32%);
-  --color-header-text: #fff;
+  --color-header-light: hsl(203, 56%, 45%);
+  --color-header-tinted: hsl(203, 47%, 66%);
+  --color-header-text: hsl(0, 0%, 100%);
+  --color-header-text-half: hsl(0, 0%, 100%, .5);
+  --color-text-transparent: hsl(0, 0%, 27%, .2);
 
   --color-status-red: var(--color-error);
   --color-status-yellow: var(--color-warning);
