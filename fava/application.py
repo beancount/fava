@@ -126,7 +126,7 @@ def _inject_filters(endpoint, values):
 
 
 app.add_template_global(datetime.date.today, 'today')
-CACHED_URL_FOR = functools.lru_cache(2000)(flask.url_for)
+CACHED_URL_FOR = functools.lru_cache(2048)(flask.url_for)
 
 
 @app.template_global()
