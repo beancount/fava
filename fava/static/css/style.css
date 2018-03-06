@@ -45,6 +45,8 @@ body {
   --z-index-autocomplete: 8;
   --z-index-overlay: 4;
 
+  --color-transparent-white: hsl(0, 0%, 100%, .5);
+
   --color-background: #fff;
   --color-background-darker: #d9d9d9;
   --color-background-darkest: #ccc;
@@ -52,7 +54,9 @@ body {
   --color-text-lighter: hsl(0, 0%, 33%);
   --color-text-lightest: hsl(0, 0%, 47%);
 
-  --color-links: #0067a5;
+  --color-links: hsl(203, 100%, 32%);
+  --color-links-hover: hsl(203, 100%, 22%);
+  --color-links-transparent: hsl(203, 100%, 32%, .5);
   --color-headings: #333;
   --color-error: hsl(0, 100%, 30%);
   --color-warning: hsl(52, 84%, 56%);
@@ -67,6 +71,7 @@ body {
   --color-autocomplete-match: #ffd27c;
 
   --color-header: hsl(203, 100%, 32%);
+  --color-header-darker: hsl(203, 100%, 22%);
   --color-header-light: hsl(203, 56%, 45%);
   --color-header-tinted: hsl(203, 47%, 66%);
   --color-header-text: hsl(0, 0%, 100%);
