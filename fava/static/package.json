@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "watch-js": "rollup -c -w",
-    "watch-css": "postcss -lw -u 'postcss-import' -u 'postcss-custom-properties' -u 'postcss-nesting' -o 'gen/app.css' css/style.css",
+    "watch-css": "postcss -lw -u 'postcss-import' -u 'postcss-nesting' -o 'gen/app.css' css/style.css",
     "lint": "eslint javascript --ext .js && stylelint 'css/*.css'"
   },
   "eslintConfig": {
@@ -35,7 +35,6 @@
     "postcss": "^6.0.16",
     "postcss-cli": "^4.1.1",
     "postcss-copy": "^7.1.0",
-    "postcss-custom-properties": "^6.2.0",
     "postcss-import": "^11.0.0",
     "postcss-nesting": "^4.2.1",
     "rollup": "^0.55.3",
