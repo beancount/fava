@@ -23,7 +23,7 @@
   }
 
   aside {
-    margin-left: -var(--aside-width);
+    margin-left: calc(-1 * var(--aside-width));
     top: 0;
 
     &.active {
