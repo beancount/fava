@@ -374,6 +374,12 @@ aside {
       color: var(--color-sidebar-background);
     }
 
+    & a.selected,
+    & a:hover {
+      background-color: var(--color-error);
+      filter: brightness(80%);
+    }
+
     & .bubble {
       background-color: var(--color-transparent-white);
     }
