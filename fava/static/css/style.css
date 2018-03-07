@@ -92,23 +92,20 @@ body {
   --color-table-header-background: #e6e6e6;
   --color-table-border: #f2f2f2;
 
-  --color-journal-entry-open: #e8e8e8;
-  --color-journal-entry-close: #888;
+  --color-journal-entry-open: hsl(0, 0%, 92%);
+  --color-journal-entry-close: hsl(0, 0%, 60%);
   --color-journal-entry-txn-other: #cff;
   --color-journal-entry-txn-pending: #f8a;
   --color-journal-entry-balance: #cfc;
   --color-journal-entry-note: #aad0ff;
   --color-journal-entry-document: #ffc8ff;
   --color-journal-entry-pad: #8ff;
-  --color-journal-entry-postingwarning: #f66;
   --color-journal-entry-custom: #fff3ab;
   --color-journal-entry-budget: #ffddae;
 
-  --color-journal-metadata: #85aacf;
-  --color-journal-tag: #6aa2db;
-  --color-journal-tag-document: #bb7ebb;
-  --color-journal-link: #cbdde8;
-  --color-journal-link-document: #c79cc7;
+  --color-journal-metadata: hsl(210, 44%, 67%);
+  --color-journal-tag: hsl(210, 61%, 64%);
+  --color-journal-link: hsl(203, 39%, 85%);
   --color-journal-posting-indicator: hsl(203, 24%, 80%);
   --color-journal-metadata-indicator: hsl(203, 24%, 60%);
 

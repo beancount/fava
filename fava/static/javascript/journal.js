@@ -27,9 +27,6 @@ e.on('page-loaded', () => {
     }
     const clickedTransaction = event.target.closest('.transaction');
     $('.postings', clickedTransaction).classList.toggle('hidden');
-    if ($('.metadata', clickedTransaction)) {
-      $('.metadata', clickedTransaction).classList.toggle('hidden');
-    }
   });
 
   // Toggle entries with buttons.
