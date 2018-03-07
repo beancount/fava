@@ -45,6 +45,7 @@ body {
   --z-index-autocomplete: 8;
   --z-index-overlay: 4;
 
+  --color-transparent-black: hsla(0, 0%, 0%, .5);
   --color-transparent-white: hsla(0, 0%, 100%, .5);
 
   --color-background: #fff;
@@ -76,7 +77,6 @@ body {
   --color-header-tinted: hsl(203, 47%, 66%);
   --color-header-text: hsl(0, 0%, 100%);
   --color-header-text-half: hsla(0, 0%, 100%, .5);
-  --color-text-transparent: hsla(0, 0%, 27%, .2);
 
   --color-status-red: var(--color-error);
   --color-status-yellow: var(--color-warning);
@@ -85,7 +85,7 @@ body {
 
   --color-notification: #fff;
   --color-notification-info: hsla(151, 100%, 25%, .7);
-  --color-notification-error: hsla(0, 100%, 30%, .7));
+  --color-notification-error: hsla(0, 100%, 30%, .7);
   --color-notification-warning: hsla(52, 84%, 56%, .7);
 
   --color-table-header-text: #666;
