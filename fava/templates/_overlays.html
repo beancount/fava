@@ -26,9 +26,9 @@
 <div id="transaction" class="transaction-overlay overlay-wrapper">
   <div class="overlay">
     <button type=button class="link close-overlay">({{ _('close') }})</button>
-    <form id="transaction-form" action="{{ url_for('json_api.add_entries') }}">
+    <form id="transaction-form">
       <h3>{{ _('New transaction') }}:</h3>
-      {{ forms.transaction() }}
+      {{ forms.Transaction() }}
       <div class="fieldset">
         <button type="button" data-event="transaction-form-submit">{{ _('Save') }}</button>
         <button type="button" class="muted" data-event="transaction-form-submit-and-new">{{ _('Save and add new') }}</button>

@@ -30,7 +30,7 @@ table {
 tbody {
   & tr {
     &:nth-child(2n) {
-      background-color: color(var(--color-background) shade(5%));
+      background-color: var(--color-sidebar-background);
     }
   }
 
@@ -100,7 +100,7 @@ h5 {
 }
 
 hr {
-  border: 1px solid color(var(--color-background) shade(20%));
+  border: 1px solid var(--color-background-darker);
 }
 
 b,
@@ -113,7 +113,7 @@ a {
 
   &:hover,
   &:focus {
-    color: color(var(--color-links) shade(40%));
+    color: var(--color-links-hover);
   }
 
   &:link,
@@ -182,7 +182,7 @@ textarea {
 
 input,
 textarea {
-  border: 1px solid color(var(--color-background-darkest));
+  border: 1px solid var(--color-background-darkest);
   padding: 6px 10px;
 }
 
@@ -192,7 +192,7 @@ label {
 
 select {
   font-size: inherit;
-  margin: 0 .5em .5em 0;
+  margin: 0 .5em 0 0;
 }
 
 input {
@@ -223,21 +223,21 @@ button,
   &:focus,
   &:active,
   &:hover {
-    background-color: color(var(--color-header) shade(10%));
+    background-color: var(--color-header-darker);
     box-shadow: 0 0 5px var(--color-header);
   }
 
   &:disabled,
   &.inactive,
   &.muted {
-    background-color: color(var(--color-header-text) shade(20%));
+    background-color: var(--color-background-darker);
     color: var(--color-text);
 
     &:focus,
     &:active,
     &:hover {
-      background-color: color(var(--color-header-text) shade(30%));
-      box-shadow: 0 0 5px color(var(--color-header-text) shade(20%));
+      box-shadow: 0 0 5px var(--color-background-darker);
+      filter: brightness(90%);
     }
   }
 
@@ -251,7 +251,7 @@ button,
     &:active,
     &:hover {
       box-shadow: none;
-      color: color(var(--color-links) shade(10%));
+      filter: brightness(90%);
     }
   }
 
@@ -374,13 +374,8 @@ aside {
       color: var(--color-sidebar-background);
     }
 
-    & a.selected,
-    & a:hover {
-      background-color: color(var(--color-error) shade(5%));
-    }
-
     & .bubble {
-      background-color: color(var(--color-error) tint(60%));
+      background-color: var(--color-transparent-white);
     }
   }
 
@@ -405,7 +400,7 @@ aside {
 
     &.selected,
     &:hover {
-      background-color: color(var(--color-sidebar-background) shade(15%));
+      filter: brightness(85%);
     }
   }
 }
@@ -418,6 +413,7 @@ article {
 }
 
 .wide-form {
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   margin-bottom: .5em;
@@ -426,9 +422,13 @@ article {
   & .small {
     margin-left: -3px;
   }
+
+  & > span {
+    margin-right: .5em;
+  }
 }
 
-.dragover { background-color: color(var(--color-links) tint(50%)); }
+.dragover { background-color: var(--color-links-transparent); }
 
 .headerline {
   align-items: center;
@@ -533,7 +533,7 @@ kbd {
 [data-order='desc']::after {
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid color(var(--color-background) shade(50%));
+  border-top: 5px solid var(--color-text-lightest);
   content: '';
   display: block;
   position: absolute;
@@ -542,7 +542,7 @@ kbd {
 }
 
 [data-order='asc']::after {
-  border-bottom: 5px solid color(var(--color-background) shade(50%));
+  border-bottom: 5px solid var(--color-text-lightest);
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   content: '';

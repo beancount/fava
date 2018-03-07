@@ -18,11 +18,9 @@
 }
 
 .toggle-chart {
+  height: 22px;
   margin: 0;
-  padding: 4px 6px;
-  position: absolute;
-  right: 1.5em;
-  top: 1.5em;
+  padding: 2px 6px;
 
   & span {
     border: 0;
@@ -31,24 +29,21 @@
     border-top: 13px solid var(--color-background);
     display: block;
   }
-
-  &.hide-charts span {
-    border: 0;
-    border-bottom: 13px solid var(--color-background);
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
-  }
 }
 
-.charts form {
-  display: flex;
-  margin-bottom: 10px;
-  padding-left: 10px;
-  padding-right: 35px;
+.hide-charts .toggle-chart span {
+  border: 0;
+  border-bottom: 13px solid var(--color-background);
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+}
 
-  & > span {
-    margin-right: .5em;
-  }
+.hide-charts .chart-container,
+.hide-charts .chart-legend,
+.hide-charts .chart-currency,
+.hide-charts .chart-mode,
+.hide-charts .chart-labels {
+  display: none;
 }
 
 .chart-container {
@@ -101,10 +96,8 @@ svg {
       stroke-dasharray: 2, 2;
     }
   }
-}
 
-.voronoi {
-  & path {
+  & .voronoi {
     fill: none;
     pointer-events: all;
   }
@@ -126,13 +119,11 @@ svg {
 .sunburst {
   & .account {
     cursor: pointer;
-    font-size: 13px;
-    font-weight: 700;
+    fill: var(--color-text);
   }
 
   & .balance {
     font-family: var(--font-family-monospaced);
-    font-size: 14px;
   }
 
   & path {

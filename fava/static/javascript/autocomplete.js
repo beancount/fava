@@ -174,6 +174,7 @@ class CompletionList {
     } else {
       this.input.value = value;
     }
+    e.trigger(`autocomplete-select-${this.list}`, this.input);
     this.input.dispatchEvent(new Event('autocomplete-select'));
   }
 }

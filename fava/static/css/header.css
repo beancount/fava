@@ -1,24 +1,17 @@
-:root {
-  --color-header-text-half: color(var(--color-header-text) alpha(50%)));
-  --color-text-transparent: color(var(--color-text) alpha(20%));
-}
-
 @keyframes spinner {
   to {
     transform: rotate(360deg);
   }
 }
 
-header > svg {
-  &.loading {
-    animation: spinner 1s linear infinite;
-    border-radius: 50%;
-    border-top: 2px solid var(--color-header-text);
-    padding: 0;
+header > svg.loading {
+  animation: spinner 1s linear infinite;
+  border-radius: 50%;
+  border-top: 2px solid var(--color-header-text);
+  padding: 0;
 
-    & path {
-      opacity: 0;
-    }
+  & path {
+    opacity: 0;
   }
 }
 
@@ -144,14 +137,14 @@ h1 {
   & [type='text'] {
     &:placeholder-shown,
     &::placeholder {
-      color: color(var(--color-header) tint(50%));
+      color: var(--color-header-tinted);
       opacity: 1;
     }
 
     &:focus {
       &:placeholder-shown,
       &::placeholder {
-        color: color(var(--color-header) tint(50%));
+        color: var(--color-header-tinted);
       }
 
       background-color: var(--color-background);
@@ -165,7 +158,7 @@ h1 {
 
   & .empty {
     & input {
-      background-color: color(var(--color-header) tint(20%));
+      background-color: var(--color-header-light);
     }
 
     & .close {

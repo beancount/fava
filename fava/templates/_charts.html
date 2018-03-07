@@ -56,19 +56,16 @@
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}
-{% set show_charts = ledger.fava_options['charts'] %}
-<button type="button" data-event="toggle-chart" data-key="ctrl+c" class="toggle-chart{% if not show_charts %} hide-charts{% endif %}">
-    <span></span>
-</button>
-<div id="charts" class="charts {% if not show_charts %} hidden{% endif %}">
-    <form id="chart-form">
+<div id="charts" class="charts{% if request.args.get('charts') == 'false' %} hide-charts{% endif %}">
+    <form id="chart-form" class="wide-form">
         <span id="chart-legend" class="chart-legend"></span>
-        <select name="chart-currency" id="chart-currency" class="hidden">
+        <span class="spacer"></span>
+        <select name="chart-currency" id="chart-currency" class="chart-currency hidden">
         {% for currency in operating_currencies %}
             <option value="{{ currency }}">{{ currency }}</option>
         {% endfor %}
         </select>
-        <span id="chart-mode" class="hidden">
+        <span id="chart-mode" class="chart-mode hidden">
             <input name="mode" type="radio" value="treemap" id="mode-treemap" checked> <label for="mode-treemap">{{ _('Treemap') }}</label>
             <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
         </span>
@@ -85,13 +82,16 @@
         {% if not hide_interval_filter %}
             <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
                 {% for interval_ in ['day', 'week', 'month', 'quarter', 'year'] %}
-                    <option value="{{ interval_ }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_macros.interval_labels[interval_] }}</option>
+                <option value="{{ interval_ }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_macros.interval_labels[interval_] }}</option>
                 {% endfor %}
             </select>
-        {% endif %}
+            {% endif %}
+            <button type="button" data-event="toggle-chart" data-key="ctrl+c" class="toggle-chart">
+              <span></span>
+            </button>
     </form>
     <div id="chart-container" class="chart-container">
-        <div class="loading">{{ _('Loading charts&hellip;') }}</div>
+      <div class="loading">{{ _('Loading charts&hellip;') }}</div>
     </div>
     <div id="chart-labels" class="chart-labels"></div>
 </div>

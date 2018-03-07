@@ -12,6 +12,7 @@ import { handleHash } from './overlays';
 // conversion <select>'s.
 function updateURL(url) {
   const newURL = new URL(url);
+  const currentURL = new URL(window.location.href);
   ['account', 'filter', 'time'].forEach((filter) => {
     newURL.searchParams.delete(filter);
     const el = $(`#${filter}-filter`);
@@ -19,20 +20,15 @@ function updateURL(url) {
       newURL.searchParams.set(filter, el.value);
     }
   });
-  const interval = $('#chart-interval');
-  if (interval) {
-    newURL.searchParams.set('interval', interval.value);
-    if (interval.value === interval.getAttribute('data-default')) {
-      newURL.searchParams.delete('interval');
+
+  ['interval', 'charts', 'conversion'].forEach((setting) => {
+    if (currentURL.searchParams.has(setting)) {
+      newURL.searchParams.set(setting, currentURL.searchParams.get(setting));
+    } else {
+      newURL.searchParams.delete(setting);
     }
-  }
-  const conversion = $('#conversion');
-  if (conversion) {
-    newURL.searchParams.set('conversion', conversion.value);
-    if (conversion.value === 'at_cost') {
-      newURL.searchParams.delete('conversion');
-    }
-  }
+  });
+
   return newURL.toString();
 }
 
@@ -181,15 +177,27 @@ e.on('form-submit-query', (form) => {
 
 // These elements might be added asynchronously, so rebind them on page-load.
 e.on('page-loaded', () => {
-  if ($('#chart-interval')) {
-    $('#chart-interval').addEventListener('change', () => {
-      router.navigate(updateURL(window.location.href));
+  const interval = $('#chart-interval');
+  if (interval) {
+    interval.addEventListener('change', () => {
+      const newURL = new URL(window.location.href);
+      newURL.searchParams.set('interval', interval.value);
+      if (interval.value === interval.getAttribute('data-default')) {
+        newURL.searchParams.delete('interval');
+      }
+      router.navigate(newURL.toString());
     });
   }
 
-  if ($('#conversion')) {
-    $('#conversion').addEventListener('change', () => {
-      router.navigate(updateURL(window.location.href));
+  const conversion = $('#conversion');
+  if (conversion) {
+    conversion.addEventListener('change', () => {
+      const newURL = new URL(window.location.href);
+      newURL.searchParams.set('conversion', conversion.value);
+      if (conversion.value === 'at_cost') {
+        newURL.searchParams.delete('conversion');
+      }
+      router.navigate(newURL.toString());
     });
   }
 });

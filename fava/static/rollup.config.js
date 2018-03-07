@@ -6,8 +6,6 @@ import postcss from 'rollup-plugin-postcss';
 
 import postcssCopy from 'postcss-copy';
 import postcssImport from 'postcss-import';
-import postcssColorFunction from 'postcss-color-function';
-import postcssCustomProperties from 'postcss-custom-properties';
 import postcssNesting from 'postcss-nesting';
 
 export default {
@@ -30,8 +28,6 @@ export default {
           src: ['css', 'node_modules'],
           dest: 'gen',
         }),
-        postcssCustomProperties(),
-        postcssColorFunction(),
         postcssNesting(),
       ],
       extract: true,

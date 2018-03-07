@@ -1,5 +1,6 @@
-import { $, $$ } from './helpers';
 import e from './events';
+import { timeFilterDateFormat } from './format';
+import { $, $$ } from './helpers';
 
 // Adjust the size of the input element.
 function updateInput(input) {
@@ -8,6 +9,14 @@ function updateInput(input) {
 
   const isEmpty = !input.value;
   input.closest('span').classList.toggle('empty', isEmpty);
+}
+
+export default function setTimeFilter(date) {
+  const interval = $('#chart-interval').value;
+  const input = $('#time-filter');
+  input.value = timeFilterDateFormat[interval](date);
+  updateInput(input);
+  e.trigger('form-submit-filters', input.form);
 }
 
 e.on('page-loaded', () => {

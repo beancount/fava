@@ -60,9 +60,7 @@
   & .close { background-color: var(--color-journal-entry-close); }
   & .query { background-color: var(--color-journal-entry-note); }
   & .pad { background-color: var(--color-journal-entry-pad); }
-
   & .note { background-color: var(--color-journal-entry-note); }
-  & .note label { color: color(var(--color-journal-entry-note) shade(50%)); }
 
   & .balance { background-color: var(--color-journal-entry-balance); }
   & .balance.fail { background-color: var(--color-journal-entry-txn-pending); }
@@ -160,11 +158,8 @@
     background-color: var(--color-journal-entry-document);
 
     & .account-link {
-      color: color(var(--color-journal-tag-document) shade(15%));
-
-      & span {
-        color: color(var(--color-journal-tag-document) shade(25%));
-      }
+      color: var(--color-journal-tag-document);
+      filter: brightness(85%);
     }
 
     & .filename {
@@ -183,7 +178,7 @@
     justify-content: flex-end;
 
     & span {
-      background-color: var(--color-journal-indicator);
+      background-color: var(--color-journal-posting-indicator);
       border-radius: 3px;
       height: 6px;
       margin-right: 4px;
@@ -197,7 +192,7 @@
 
     & .metadata-indicator {
       border-radius: 20px;
-      color: color(var(--color-journal-indicator) shade(30%));
+      color: var(--color-journal-metadata-indicator);
       font-size: 10px;
       height: 16px;
       line-height: 16px;

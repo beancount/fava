@@ -1,7 +1,5 @@
 import { extent, max, merge, min } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
-import { format } from 'd3-format';
-import { utcFormat } from 'd3-time-format';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
 import { scaleBand, scaleLinear, scaleOrdinal, scalePoint, scaleSqrt, scaleUtc } from 'd3-scale';
 import { event, select } from 'd3-selection';
@@ -10,61 +8,22 @@ import { schemeSet3, schemeCategory10 } from 'd3-scale-chromatic';
 import { voronoi } from 'd3-voronoi';
 import 'd3-transition';
 
-import { $, $$ } from './helpers';
 import e from './events';
+import { formatCurrency, formatCurrencyShort, dateFormat } from './format';
+import setTimeFilter from './filters';
+import { $, $$ } from './helpers';
+import router from './router';
 
 const treemapColorScale = scaleOrdinal(schemeSet3);
 const sunburstColorScale = scaleOrdinal(schemeCategory10);
 const currencyColorScale = scaleOrdinal(schemeCategory10);
 const scatterColorScale = scaleOrdinal(schemeCategory10);
 
-const formatCurrencyWithComma = format(',.2f');
-const formatCurrencyWithoutComma = format('.2f');
-function formatCurrency(number) {
-  let str = '';
-  if (window.favaAPI.options.render_commas) {
-    str = formatCurrencyWithComma(number);
-  } else {
-    str = formatCurrencyWithoutComma(number);
-  }
-  if (window.favaAPI.incognito) {
-    str = str.replace(/[0-9]/g, 'X');
-  }
-  return str;
-}
-
-const formatCurrencyShortDefault = format('.2s');
-function formatCurrencyShort(number) {
-  let str = formatCurrencyShortDefault(number);
-  if (window.favaAPI.incognito) {
-    str = str.replace(/[0-9]/g, 'X');
-  }
-  return str;
-}
-
-const dateFormat = {
-  year: utcFormat('%Y'),
-  quarter(date) {
-    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
-  },
-  month: utcFormat('%b %Y'),
-  week: utcFormat('%YW%W'),
-  day: utcFormat('%Y-%m-%d'),
-};
-
 let container;
 let tooltip;
 let charts;
-
-const timeFilterDateFormat = {
-  year: utcFormat('%Y'),
-  quarter(date) {
-    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
-  },
-  month: utcFormat('%Y-%m'),
-  week: utcFormat('%Y-W%W'),
-  day: utcFormat('%Y-%m-%d'),
-};
+let renderers;
+let currentChart;
 
 function addInternalNodesAsLeaves(node) {
   node.children.forEach((o) => {
@@ -98,11 +57,6 @@ function addTooltip(selection, tooltipText) {
     .on('mouseleave', () => {
       tooltip.style('opacity', 0);
     });
-}
-
-function timeFilter(date) {
-  $('#time-filter').value = timeFilterDateFormat[$('#chart-interval').value](date);
-  $('#filter-form [type=submit]').click();
 }
 
 function addLegend(domain, colorScale) {
@@ -381,7 +335,7 @@ class BarChart extends BaseChart {
 
     this.selections.axisgroupboxes = this.selections.groups.append('rect')
       .on('click', (d) => {
-        timeFilter(d.date);
+        setTimeFilter(d.date);
       })
       .attr('class', 'axis-group-box');
 
@@ -642,9 +596,7 @@ class LineChart extends BaseChart {
 class SunburstChartContainer extends BaseChart {
   constructor(svg) {
     super();
-    this.svg = svg;
-    this.svg.attr('class', 'sunburst');
-
+    this.svg = svg.attr('class', 'sunburst');
     this.sunbursts = [];
     this.canvases = [];
   }
@@ -752,13 +704,20 @@ class HierarchyContainer extends BaseChart {
   }
 }
 
-let currentChart;
+// Update the current chart (or render the first one if there is none).
 function updateChart() {
-  if (!$('#charts').classList.contains('hidden')) {
+  if ($('#charts').classList.contains('hide-charts')) return;
+  if (!currentChart) {
+    if ($('#chart-labels label:first-child')) {
+      $('#chart-labels label:first-child').click();
+    }
+  } else {
     currentChart.update();
   }
 }
 
+// Get the list of operating currencies, adding in the current conversion
+// currency.
 function getOperatingCurrencies() {
   const conversion = $('#conversion').value;
   if (conversion && conversion !== 'at_cost' && conversion !== 'at_value'
@@ -770,16 +729,27 @@ function getOperatingCurrencies() {
   return window.favaAPI.options.operating_currency;
 }
 
-// Create and return an <svg> for a chart and add a label.
-function chartContainer(id, label) {
-  const svg = container.append('svg')
-    .attr('id', id);
+// Show the chart with the given id.
+function showChart(id) {
+  // If the chart has not been rendered yet, do so now.
+  if (!charts[id]) {
+    const svg = container.append('svg').attr('id', id);
+    charts[id] = renderers[id](svg);
+  }
+  currentChart = charts[id];
 
-  select('#chart-labels').append('label')
-    .attr('for', id)
-    .html(label);
+  $$('#charts svg').forEach((el) => { el.classList.add('hidden'); });
+  $(`#${id}`).classList.remove('hidden');
 
-  return svg;
+  $('#chart-legend').innerHTML = '';
+
+  $$('#chart-labels .selected').forEach((el) => { el.classList.remove('selected'); });
+  $(`#chart-labels [for=${id}]`).classList.add('selected');
+
+  currentChart.update();
+
+  $('#chart-currency').classList.toggle('hidden', !currentChart.has_currency_setting);
+  $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);
 }
 
 e.on('page-init', () => {
@@ -790,16 +760,18 @@ e.on('page-init', () => {
 e.on('page-loaded', () => {
   tooltip.style('opacity', 0);
 
-  if (!$('#charts')) {
-    return;
-  }
+  if (!$('#charts')) return;
 
   container = select('#chart-container');
   container.html('');
   charts = {};
+  renderers = {};
+  currentChart = undefined;
 
+  // Go through the chart data and prepare it for rendering. For each chart,
+  // add a label, and a function renderers[id] that will render the chart.
   JSON.parse($('#chart-data').innerHTML).forEach((chart, index) => {
-    const chartId = `${chart.type}-${index}`;
+    const id = `${chart.type}-${index}`;
     switch (chart.type) {
       case 'balances': {
         const series = window.favaAPI.options.commodities
@@ -815,10 +787,9 @@ e.on('page-loaded', () => {
           }))
           .filter(d => d.values.length);
 
-        charts[chartId] = new LineChart(chartContainer(chartId, chart.label))
+        renderers[id] = svg => new LineChart(svg)
           .set('tooltipText', d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`)
           .draw(series);
-
         break;
       }
       case 'commodities': {
@@ -832,7 +803,7 @@ e.on('page-loaded', () => {
         }];
 
         if (series[0].values.length) {
-          charts[chartId] = new LineChart(chartContainer(chartId, chart.label))
+          renderers[id] = svg => new LineChart(svg)
             .set('tooltipText', d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`)
             .draw(series);
         }
@@ -850,7 +821,7 @@ e.on('page-loaded', () => {
           label: currentDateFormat(new Date(d.begin_date)),
         }));
 
-        charts[chartId] = new BarChart(chartContainer(chartId, chart.label))
+        renderers[id] = svg => new BarChart(svg)
           .set('tooltipText', (d) => {
             let text = '';
             d.values.forEach((a) => {
@@ -873,7 +844,7 @@ e.on('page-loaded', () => {
           description: d.description,
         }));
 
-        charts[chartId] = new ScatterPlot(chartContainer(chartId, chart.label))
+        renderers[id] = svg => new ScatterPlot(svg)
           .set('tooltipText', d => `${d.description}<em>${dateFormat.day(d.date)}</em>`)
           .draw(series);
 
@@ -890,7 +861,7 @@ e.on('page-loaded', () => {
             .sort((a, b) => b.value - a.value);
         });
 
-        charts[chartId] = new HierarchyContainer(chartContainer(chartId, chart.label))
+        renderers[id] = svg => new HierarchyContainer(svg)
           .set('currencies', operatingCurrencies)
           .draw(roots);
 
@@ -899,44 +870,36 @@ e.on('page-loaded', () => {
       default:
         break;
     }
+    if (renderers[id]) {
+      select('#chart-labels').append('label')
+        .attr('for', id)
+        .html(chart.label);
+    }
   });
 
-  const labels = $('#chart-labels');
+  $$('#chart-form input[name=mode]').forEach((el) => { el.addEventListener('change', updateChart); });
+  $('#chart-currency').addEventListener('change', updateChart);
 
   // Switch between charts
-  $$('label', labels).forEach((label) => {
+  $$('#chart-labels label').forEach((label) => {
     label.addEventListener('click', () => {
-      // Don't do anything if the charts aren't shown.
-      if ($('#charts').classList.contains('hidden')) {
-        return;
+      if (!$('#charts').classList.contains('hide-charts')) {
+        showChart(label.getAttribute('for'));
       }
-
-      const chartId = label.getAttribute('for');
-      $$('#charts svg').forEach((el) => { el.classList.add('hidden'); });
-      $(`#${chartId}`).classList.remove('hidden');
-
-      $$('.selected', labels).forEach((el) => { el.classList.remove('selected'); });
-      label.classList.add('selected');
-
-      $('#chart-legend').innerHTML = '';
-
-      currentChart = charts[chartId];
-      currentChart.update();
-
-      $$('#chart-form input[name=mode]').forEach((el) => { el.addEventListener('change', updateChart); });
-      $('#chart-currency').addEventListener('change', updateChart);
-
-      $('#chart-currency').classList.toggle('hidden', !currentChart.has_currency_setting);
-      $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);
     });
   });
-  if ($('label:first-child', labels)) {
-    $('label:first-child', labels).click();
-  }
+
+  updateChart();
 });
 
-e.on('button-click-toggle-chart', (button) => {
-  button.classList.toggle('hide-charts');
-  $('#charts').classList.toggle('hidden', button.classList.contains('hide-charts'));
+e.on('button-click-toggle-chart', () => {
+  const hideCharts = $('#charts').classList.toggle('hide-charts');
+  const url = new URL(window.location.href);
+  if (hideCharts) {
+    url.searchParams.set('charts', false);
+  } else {
+    url.searchParams.delete('charts');
+  }
+  router.navigate(url.toString(), false);
   updateChart();
 });
