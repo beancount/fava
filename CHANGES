@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.7 (in development)
----------------------
+v1.7 (March 9th, 2018)
+----------------------
 
 The entry filters have been reworked in this release and should now support for
 more flexible filtering of the entries. See the help page on how the new syntax
