@@ -94,16 +94,14 @@ def deserialise(json_entry):
     elif json_entry['type'] == 'Balance':
         date = util.date.parse_date(json_entry['date'])[0]
         number = parse_number(json_entry['number'])
-        amount = Amount(number, json_entry.get('currency'))
+        amount = Amount(number, json_entry['currency'])
 
         return data.Balance(json_entry['meta'], date, json_entry['account'],
                             amount, None, None)
     elif json_entry['type'] == 'Note':
         date = util.date.parse_date(json_entry['date'])[0]
-        if '"' in json_entry['comment']:
-            raise FavaAPIException('Note contains double-quotes (")')
-
+        comment = json_entry['comment'].replace('"', '')
         return data.Note(json_entry['meta'], date, json_entry['account'],
-                         json_entry['comment'])
+                         comment)
     else:
         raise FavaAPIException('Unsupported entry type.')
