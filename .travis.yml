@@ -40,9 +40,9 @@ matrix:
       os: osx
       install: |
         brew update
-        brew install python3
-        pip3 install pyinstaller beancount
-        pip3 install -e .
+        brew outdated python || brew upgrade python
+        pip install pyinstaller beancount
+        pip install -e .
       script: "make -C gui dist"
 
 cache:
