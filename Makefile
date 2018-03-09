@@ -35,10 +35,16 @@ before-release: translations-push translations-fetch
 # fava/__init__.py should be set to the release version.
 # A tag and GitHub release should be created too.
 #
-# After the release, the version number should be bumped in fava/__init__.py
-# (with '-dev') and gui/src/main.js and fava.pythonanywhere.com should be
-# updated.
-release: fava/static/gen/app.js before-release
+# After the release, the version number should be bumped in:
+#  - fava/__init__.py (with '-dev')
+#  - gui/package.json
+#  - gui/src/main.js
+#
+# Also, fava.pythonanywhere.com should be updated and a draft for the next
+# version should be created so that electron-builder will push artifacts (this
+# should have the version from gui/package.json prefixed with a 'v' as the
+# version)
+release: fava/static/gen/app.js
 	python setup.py sdist bdist_wheel upload
 
 # Extract translation strings and upload them to POEditor.com.

@@ -80,7 +80,7 @@ function openBeancountFile() {
   loadMainPage();
 }
 
-const currentVersion = 'v1.7';
+const currentVersion = 'v1.8';
 const updateURL = 'https://api.github.com/repos/beancount/fava/releases/latest';
 
 function updateCheck() {

@@ -2,7 +2,7 @@
   "name": "fava",
   "productName": "Fava",
   "description": "Interface for Beancount",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "main": "src/main.js",
   "author": "Dominik Aumayr <dominik@aumayr.name>",
   "license": "MIT",
