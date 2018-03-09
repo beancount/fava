@@ -1,6 +1,20 @@
 Changelog
 =========
 
+v1.7 (in development)
+---------------------
+
+The entry filters have been reworked in this release and should now support for
+more flexible filtering of the entries. See the help page on how the new syntax
+works.  Also, when completing the payee in the transaction form, the postings
+of the last transaction for this payee will be auto-filled.
+
+Other changes:
+
+- The fava-option to hide the charts has been removed. This is now tracked in
+  the page URL.
+- As always, bugs have been fixed.
+
 v1.6 (November 6th, 2017)
 -------------------------
 
