@@ -11,7 +11,7 @@ import subprocess
 from fava.ext import FavaExtensionBase
 
 
-class AutoCommit(FavaExtensionBase):
+class AutoCommit(FavaExtensionBase):  # pragma: no cover
     def _run(self, args):
         cwd = os.path.dirname(self.ledger.beancount_file_path)
         subprocess.call(args, cwd=cwd, stdout=subprocess.DEVNULL)
