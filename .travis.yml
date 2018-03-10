@@ -41,8 +41,8 @@ matrix:
       install: |
         brew update
         brew outdated python || brew upgrade python
-        pip install pyinstaller beancount
-        pip install -e .
+        pip3 install pyinstaller beancount
+        pip3 install -e .
       script: "make -C gui dist"
 
 cache:
