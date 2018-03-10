@@ -51,21 +51,8 @@
     border-bottom: thin solid var(--color-table-border);
   }
 
-  /* Journal entry types (li) */
-  & .balance { --entry-type-color: var(--color-journal-entry-balance); }
-  & .budget { --entry-type-color: var(--color-journal-entry-budget); }
-  & .close { --entry-type-color: var(--color-journal-entry-close); }
-  & .custom { --entry-type-color: var(--color-journal-entry-custom); }
-  & .note { --entry-type-color: var(--color-journal-entry-note); }
-  & .open { --entry-type-color: var(--color-journal-entry-open); }
-  & .pad { --entry-type-color: var(--color-journal-entry-pad); }
-  & .query { --entry-type-color: var(--color-journal-entry-note); }
-
-  & .other { --entry-type-color: var(--color-journal-entry-txn-other); }
-  & .pending { --entry-type-color: var(--color-journal-entry-txn-pending); }
-
   & .postings {
-    background-color: var(--color-journal-entry-open);
+    background-color: var(--color-journal-postings);
     font-size: .9em;
     opacity: .8;
 
@@ -158,12 +145,8 @@
     font-size: .9em;
   }
 
-  & .document {
-    --entry-type-color: var(--color-journal-entry-document);
-
-    & .filename {
-      margin-left: 1em;
-    }
+  & .document .filename {
+    margin-left: 1em;
   }
 
   & .indicators {

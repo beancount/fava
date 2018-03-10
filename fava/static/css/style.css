@@ -92,23 +92,6 @@ body {
   --color-table-header-background: #e6e6e6;
   --color-table-border: #f2f2f2;
 
-  --color-journal-entry-open: hsl(0, 0%, 92%);
-  --color-journal-entry-close: hsl(0, 0%, 60%);
-  --color-journal-entry-txn-other: #cff;
-  --color-journal-entry-txn-pending: #f8a;
-  --color-journal-entry-balance: #cfc;
-  --color-journal-entry-note: #aad0ff;
-  --color-journal-entry-document: #ffc8ff;
-  --color-journal-entry-pad: #8ff;
-  --color-journal-entry-custom: #fff3ab;
-  --color-journal-entry-budget: #ffddae;
-
-  --color-journal-metadata: hsl(210, 44%, 67%);
-  --color-journal-tag: hsl(210, 61%, 64%);
-  --color-journal-link: hsl(203, 39%, 85%);
-  --color-journal-posting-indicator: hsl(203, 24%, 80%);
-  --color-journal-metadata-indicator: hsl(203, 24%, 60%);
-
   --color-treetable-expander: #afc1d3;
 
   --color-budget-negative: #af3d3d;
@@ -131,4 +114,26 @@ body {
   --color-mobile-button-text: #000;
 
   --color-ingest: #cefac1;
+}
+
+.journal-table {
+  & .balance { --entry-type-color: #cfc; }
+  & .close { --entry-type-color: hsl(0, 0%, 60%); }
+  & .custom { --entry-type-color: #fff3ab; }
+  & .document { --entry-type-color: #ffc8ff; }
+  & .note { --entry-type-color: #aad0ff; }
+  & .open { --entry-type-color: hsl(0, 0%, 92%); }
+  & .other { --entry-type-color: #cff; }
+  & .pad { --entry-type-color: #8ff; }
+  & .pending { --entry-type-color: #f8a; }
+  & .query { --entry-type-color: #aad0ff; }
+
+  & .budget { --entry-type-color: #ffddae; }
+
+  --color-journal-postings: hsl(0, 0%, 92%);
+  --color-journal-metadata: hsl(210, 44%, 67%);
+  --color-journal-tag: hsl(210, 61%, 64%);
+  --color-journal-link: hsl(203, 39%, 85%);
+  --color-journal-posting-indicator: hsl(203, 24%, 80%);
+  --color-journal-metadata-indicator: hsl(203, 24%, 60%);
 }
