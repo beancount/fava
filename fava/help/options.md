@@ -114,6 +114,17 @@ the following transaction flags:
 
 ---
 
+## `align-prefix-width` and `align-num-width`
+
+Default: `None, None`
+
+These two options can be used to configure how posting lines are aligned when
+saved to file or when using 'Align Amounts' in the editor. Fava tries to align
+so that the currencies in posting lines all occur in the same column.
+Note: This currently requires a development version of Beancount to work.
+
+---
+
 ## `sidebar-show-queries`
 
 Default: `5`

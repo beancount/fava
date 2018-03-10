@@ -1,9 +1,11 @@
 import hashlib
+import inspect
 from io import BytesIO
 import os
 
 import flask
 from beancount.scripts.format import align_beancount
+import pytest
 
 
 def test_api_changed(app, test_client):
@@ -102,8 +104,38 @@ def test_api_format_source(app, test_client):
     result = test_client.post(url, data=flask.json.dumps({'source': payload}),
                               content_type='application/json')
     data = flask.json.loads(result.get_data(True))
-    assert data == {'payload': align_beancount(payload),
-                    'success': True}
+    assert data == {'payload': align_beancount(payload), 'success': True}
+
+
+@pytest.mark.skipif(
+    'prefix_width' not in inspect.signature(align_beancount).parameters,
+    reason='old Beancount version')
+def test_api_format_source_options(app, test_client):
+    # pylint: disable=too-many-function-args
+    path = app.config['BEANCOUNT_FILES'][0]
+    payload = open(path).read()
+    with app.test_request_context():
+        app.preprocess_request()
+        url = flask.url_for('json_api.format_source')
+        old_num_width = flask.g.ledger.fava_options['align-num-width']
+        flask.g.ledger.fava_options['align-num-width'] = 90
+        old_prefix_width = flask.g.ledger.fava_options['align-prefix-width']
+        flask.g.ledger.fava_options['align-prefix-width'] = 100
+
+        result = test_client.post(
+            url,
+            data=flask.json.dumps({
+                'source': payload
+            }),
+            content_type='application/json')
+        data = flask.json.loads(result.get_data(True))
+        assert data == {
+            'payload': align_beancount(payload, 100, 90),
+            'success': True
+        }
+
+        flask.g.ledger.fava_options['align-num-width'] = old_num_width
+        flask.g.ledger.fava_options['align-prefix-width'] = old_prefix_width
 
 
 def test_api_add_entries(app, test_client, tmpdir):
