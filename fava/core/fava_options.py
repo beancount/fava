@@ -24,7 +24,7 @@ DEFAULTS = {
     'insert-entry': [],
     'interval': 'month',
     'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
-                     'budget'],
+                     'budget', 'query'],
     'journal-show-document': ['discovered', 'statement'],
     'journal-show-transaction': ['cleared', 'pending'],
     'language': None,

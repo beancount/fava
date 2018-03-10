@@ -93,7 +93,7 @@ trees are shown at market value.
 
 ## `journal-show`
 
-Default: `transaction balance note document custom budget`
+Default: `transaction balance note document custom budget query`
 
 The entry types given in this list will be shown in the Journal report.
 All other types will be hidden and can be toggled using the buttons.
