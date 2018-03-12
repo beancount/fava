@@ -28,6 +28,9 @@ test:
 docs:
 	sphinx-build -b html docs build/docs
 
+format:
+	yapf -rip tests --style='{based_on_style: pep8, coalesce_brackets: True, indent_dictionary_value: True}'
+
 before-release: translations-push translations-fetch
 	contrib/scripts.py generate_bql_grammar_json
 

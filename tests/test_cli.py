@@ -10,7 +10,7 @@ import pytest
 from .conftest import EXAMPLE_FILE
 
 HOST = '0.0.0.0'
-FAVA = ('fava',)
+FAVA = ('fava', )
 
 if 'BEANCOUNT_FILE' in os.environ:
     del os.environ['BEANCOUNT_FILE']
@@ -36,10 +36,11 @@ def _wait_for_output(process, output, timeout):
 
 def _run_fava(args=None):
     proc = FAVA + args if args else FAVA
-    return subprocess.Popen(proc,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.STDOUT,
-                            universal_newlines=True)
+    return subprocess.Popen(
+        proc,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True)
 
 
 @pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")

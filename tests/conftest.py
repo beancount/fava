@@ -7,10 +7,8 @@ from fava.core import FavaLedger
 from fava.application import app as fava_app
 from fava.core.budgets import parse_budgets
 
-
 EXAMPLE_FILE = os.path.join(os.path.dirname(__file__), 'example.beancount')
 API = FavaLedger(EXAMPLE_FILE)
-
 
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()

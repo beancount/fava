@@ -21,8 +21,8 @@ def test_plugins(tmpdir):
     foo_folder = documents_folder.mkdir('Expenses').mkdir('Foo')
     sample_statement1 = foo_folder.join('2016-11-01 Test 1.pdf')
     sample_statement1.write('Hello World 1')
-    sample_statement1_short = os.path.join(
-        'documents', 'Expenses', 'Foo', '2016-11-01 Test 1.pdf')
+    sample_statement1_short = os.path.join('documents', 'Expenses', 'Foo',
+                                           '2016-11-01 Test 1.pdf')
     sample_statement2 = foo_folder.join('2016-11-01 Test 2.pdf')
     sample_statement2.write('Hello World 2')
     sample_statement3 = foo_folder.join('2016-11-01 Test 3 discovered.pdf')
@@ -30,16 +30,17 @@ def test_plugins(tmpdir):
 
     assets_folder = documents_folder.mkdir('Assets').mkdir('Cash')
     sample_statement4 = assets_folder.join('2016-11-01 Test 4.pdf')
-    sample_statement4_short = os.path.join(
-        'documents', 'Assets', 'Cash', '2016-11-01 Test 4.pdf')
+    sample_statement4_short = os.path.join('documents', 'Assets', 'Cash',
+                                           '2016-11-01 Test 4.pdf')
     sample_statement4.write('Hello World 4')
     sample_statement5 = assets_folder.join('Test 5.pdf')
-    sample_statement5_short = os.path.join(
-        'documents', 'Assets', 'Cash', 'Test 5.pdf')
+    sample_statement5_short = os.path.join('documents', 'Assets', 'Cash',
+                                           'Test 5.pdf')
     sample_statement5.write('Hello World 5')
 
     beancount_file = sample_folder.join('example.beancount')
-    beancount_file.write(_format("""
+    beancount_file.write(
+        _format("""
         option "title" "Test"
         option "operating_currency" "EUR"
         option "documents" "{}"

@@ -99,13 +99,12 @@ def test_insert_entry_transaction(tmpdir):
         data.Posting('Liabilities:US:Chase:Slate',
                      amount.Amount(D('-10.00'), 'USD'), None, None, None,
                      None),
-        data.Posting('Expenses:Food',
-                     amount.Amount(D('10.00'), 'USD'), None, None, None, None),
+        data.Posting('Expenses:Food', amount.Amount(D('10.00'), 'USD'), None,
+                     None, None, None),
     ]
 
-    transaction = data.Transaction(None,
-                                   datetime.date(2016, 1, 1), '*', 'new payee',
-                                   'narr', None, None, postings)
+    transaction = data.Transaction(None, datetime.date(2016, 1, 1), '*',
+                                   'new payee', 'narr', None, None, postings)
 
     insert_entry(transaction, [str(samplefile)], {})
     assert samplefile.read() == dedent("""
@@ -121,14 +120,14 @@ def test_insert_entry_transaction(tmpdir):
 
     options = [
         InsertEntryOption(
-            datetime.date(2015, 1, 1),
-            re.compile('.*:Food'), str(samplefile), 2),
+            datetime.date(2015, 1, 1), re.compile('.*:Food'), str(samplefile),
+            2),
         InsertEntryOption(
-            datetime.date(2015, 1, 2),
-            re.compile('.*:FOOO'), str(samplefile), 2),
+            datetime.date(2015, 1, 2), re.compile('.*:FOOO'), str(samplefile),
+            2),
         InsertEntryOption(
-            datetime.date(2017, 1, 1),
-            re.compile('.*:Food'), str(samplefile), 6),
+            datetime.date(2017, 1, 1), re.compile('.*:Food'), str(samplefile),
+            6),
     ]
     insert_entry(transaction, [str(samplefile)], {'insert-entry': options})
     assert samplefile.read() == dedent("""
@@ -148,11 +147,11 @@ def test_insert_entry_transaction(tmpdir):
 
     options = [
         InsertEntryOption(
-            datetime.date(2015, 1, 1),
-            re.compile('.*:Slate'), str(samplefile), 5),
+            datetime.date(2015, 1, 1), re.compile('.*:Slate'), str(samplefile),
+            5),
         InsertEntryOption(
-            datetime.date(2015, 1, 2),
-            re.compile('.*:FOOO'), str(samplefile), 2),
+            datetime.date(2015, 1, 2), re.compile('.*:FOOO'), str(samplefile),
+            2),
     ]
     insert_entry(transaction, [str(samplefile)], {'insert-entry': options})
     assert samplefile.read() == dedent("""
@@ -189,13 +188,12 @@ def test_insert_entry_align(tmpdir):
         data.Posting('Liabilities:US:Chase:Slate',
                      amount.Amount(D('-10.00'), 'USD'), None, None, None,
                      None),
-        data.Posting('Expenses:Food',
-                     amount.Amount(D('10.00'), 'USD'), None, None, None, None),
+        data.Posting('Expenses:Food', amount.Amount(D('10.00'), 'USD'), None,
+                     None, None, None),
     ]
 
-    transaction = data.Transaction(None,
-                                   datetime.date(2016, 1, 1), '*', 'new payee',
-                                   'narr', None, None, postings)
+    transaction = data.Transaction(None, datetime.date(2016, 1, 1), '*',
+                                   'new payee', 'narr', None, None, postings)
 
     fava_options = {
         'currency-column': 50,

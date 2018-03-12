@@ -9,6 +9,7 @@ def test_listify():
     def fun():
         for i in [1, 2, 3]:
             yield i
+
     assert fun() == [1, 2, 3]
 
 

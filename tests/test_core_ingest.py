@@ -3,7 +3,6 @@ import os
 
 from fava.core import FavaLedger
 
-
 FILE_PATH = os.path.join(os.path.dirname(__file__), 'data/import.beancount')
 EXAMPLE = os.path.join(os.path.dirname(__file__), 'data/import.csv')
 

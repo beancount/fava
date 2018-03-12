@@ -156,15 +156,15 @@ def test_api_add_entries(app, test_client, tmpdir):
             'entries': [
                 {
                     'type':
-                    'Transaction',
+                        'Transaction',
                     'date':
-                    '2017-12-12',
+                        '2017-12-12',
                     'flag':
-                    '*',
+                        '*',
                     'payee':
-                    'Test3',
+                        'Test3',
                     'narration':
-                    '',
+                        '',
                     'meta': {},
                     'postings': [
                         {
@@ -179,15 +179,15 @@ def test_api_add_entries(app, test_client, tmpdir):
                 },
                 {
                     'type':
-                    'Transaction',
+                        'Transaction',
                     'date':
-                    '2017-01-12',
+                        '2017-01-12',
                     'flag':
-                    '*',
+                        '*',
                     'payee':
-                    'Test1',
+                        'Test1',
                     'narration':
-                    '',
+                        '',
                     'meta': {},
                     'postings': [
                         {
@@ -202,15 +202,15 @@ def test_api_add_entries(app, test_client, tmpdir):
                 },
                 {
                     'type':
-                    'Transaction',
+                        'Transaction',
                     'date':
-                    '2017-02-12',
+                        '2017-02-12',
                     'flag':
-                    '*',
+                        '*',
                     'payee':
-                    'Test',
+                        'Test',
                     'narration':
-                    'Test',
+                        'Test',
                     'meta': {},
                     'postings': [
                         {
