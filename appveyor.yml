@@ -23,7 +23,6 @@ test_script:
 
 cache:
   - '%LOCALAPPDATA%\pip\cache'
-  - '.tox'
   - 'fava\static\node_modules'
   - 'gui\node_modules'
 
