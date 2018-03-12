@@ -129,15 +129,8 @@ a {
   }
 }
 
-dt {
-  display: inline-block;
-  float: left;
-  width: 120px;
-}
-
-dt,
-dd {
-  margin-bottom: 3px;
+dl {
+  margin: 0;
 }
 
 code,
@@ -429,7 +422,7 @@ article {
   width: 100%;
 
   & .small {
-    margin-left: -3px;
+    margin-left: -6px;
   }
 
   & > span {

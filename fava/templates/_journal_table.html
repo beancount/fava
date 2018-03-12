@@ -32,12 +32,23 @@
   'discovered': 'd d',
   'statement': 'd s',
 } %}
+{% set short_type = {
+   'balance': 'Bal',
+   'close': 'Close',
+   'document': 'Doc',
+   'note': 'Note',
+   'open': 'Open',
+} %}
+{% if not request.args.get('show') %}
+{% set journal_show = g.ledger.fava_options['journal-show'] + g.ledger.fava_options['journal-show-transaction'] + g.ledger.fava_options['journal-show-document'] %}
+{% else %}
+{% set journal_show = request.args.getlist('show') %}
+{% endif %}
 
 {% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
-
 {% macro render_metadata(metadata, entry_hash=None) -%}
 {% if metadata %}
-<dl class="metadata{{ ' hidden' if 'metadata' not in g.journal_show else ''}}">
+<dl class="metadata">
   {% for key, value in metadata.items() %}
   <dt>{{ key }}:</dt>
   <dd>
@@ -49,36 +60,27 @@
 </dl>
 {% endif %}
 {%- endmacro %}
-
 {% macro render_tags_links(entry) -%}
 {% for tag in entry.tags %}<span class="tag">#{{ tag }}</span>{% endfor %}
 {% for link_ in entry.links %}<span class="link">^{{ link_ }}</span>{% endfor %}
 {%- endmacro %}
-
-{% set short_type = {
-   'balance': 'Bal',
-   'close': 'Close',
-   'document': 'Doc',
-   'note': 'Note',
-   'open': 'Open',
-} %}
 
 {% macro journal_table(entries, show_change_and_balance=False) %}
 {% autoescape false %}
 <form id="entry-filters" class="wide-form">
   <span class="spacer"></span>
   {% for type in entry_types %}
-  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in g.journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
+  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
   {% if type in sub_types.keys() %}
   {% for sub_type in sub_types[type] %}
-  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-key="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in g.journal_show or type not in g.journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
+  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-key="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in journal_show or type not in journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
   {% endfor %}
   {% endif %}
   {% endfor %}
-  <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
-  <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in g.journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
+  <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
+  <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
 </form>
-<ol id="journal-table" class="journal-table">
+<ol id="journal-table" class="journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
     <li class="head">
         <p>
         <span class="datecell" data-sort="num" data-order="desc">{{ _('Date') }}</span>
@@ -100,10 +102,7 @@
     {% set type = entry.__class__.__name__.lower() %}
     {% set entry_hash = entry|hash_entry %}
     {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
-    <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}
-    {{- ' statement' if entry.tags and 'statement' in entry.tags else '' }}
-    {{- ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}
-    {{- ' hidden' if not entry|show_journal_entry else '' }}">
+    <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' statement' if entry.tags and 'statement' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
         <p>
         <span class="datecell" data-sort-value=-{{ loop.index }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
         <span class="flag">{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
@@ -141,14 +140,12 @@
         {% endif %}
         </span>
         <span class="indicators">
-        {% for key, value in metadata.items() %}
+          {% for key, value in metadata.items() %}
           <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
-        {% endfor %}
-        {% if type == 'transaction' %}
-          {% for posting in entry.postings %}
-            <span{% if posting.flag %} class="{{ posting.flag|flag_to_type }}"{% endif %}></span>
           {% endfor %}
-        {% endif %}
+          {% for posting in entry.postings %}
+          <span{% if posting.flag %} class="{{ posting.flag|flag_to_type }}"{% endif %}></span>
+          {% endfor %}
         </span>
         {% if type == 'balance' %}
           <span class="num bal {{ ' pending' if entry.diff_amount else '' }}">{{ entry.amount|format_amount }}</span>
@@ -160,12 +157,12 @@
         {% endif %}
         {{ render_metadata(metadata, entry_hash) }}
         {% if entry.postings %}
-          <ul class="postings{{ ' hidden' if 'postings' not in g.journal_show else '' }}">
+          <ul class="postings">
         {% for posting in entry.postings %}
         <li{% if posting.flag %} class="{{ posting.flag|flag_to_type }}"{% endif %}>
             <p>
                 <span class="datecell"></span>
-                <span class="flag"> </span>
+                <span class="flag">{{ posting.flag or '' }}</span>
                 <span class="description droptarget" data-entry="{{ entry_hash }}" data-account-name="{{ posting.account }}" data-entry-date="{{ entry.date }}">{{ account_link(posting.account) }}</span>
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}

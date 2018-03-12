@@ -1,9 +1,8 @@
 {% set entry_hash = request.args.get('entry_hash') %}
 {% set entry, balances, slice, sha256sum = ledger.context(entry_hash) %}
-<dl>
-  <dt>{{ _('Location') }}:</dt>
-  <dd><code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code></dd>
-</dl>
+<p>
+  {{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
+</p>
 {% if balances %}
   <div class="toggle-box toggled">
     <div class="toggle-box-header">

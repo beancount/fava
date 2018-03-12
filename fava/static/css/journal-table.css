@@ -1,5 +1,5 @@
 .tree-table,
-.journal-table {
+.journal {
   & p,
   & li,
   & ul,
@@ -45,7 +45,40 @@
   }
 }
 
-.journal-table {
+.journal > li,
+.journal.show-custom .custom.budget,
+.journal.show-document .document.discovered,
+.journal.show-document .document.statement,
+.journal .metadata,
+.journal .postings {
+  display: none;
+}
+
+.journal .head,
+.journal.show-balance .balance,
+.journal.show-close .close,
+.journal.show-custom .custom,
+.journal.show-document .document,
+.journal.show-note .note,
+.journal.show-open .open,
+.journal.show-pad .pad,
+.journal.show-query .query,
+.journal.show-metadata .metadata,
+.journal.show-postings .postings,
+.transaction.show-postings .postings {
+  display: block;
+}
+
+.journal.show-transaction.show-cleared .transaction.cleared,
+.journal.show-transaction.show-pending .transaction.pending,
+.journal.show-transaction.show-other .transaction.other,
+.journal.show-document.show-discovered .document.discovered,
+.journal.show-document.show-statement .document.statement,
+.journal.show-custom.show-budget .custom.budget {
+  display: block;
+}
+
+.journal {
   & p,
   & dl {
     border-bottom: thin solid var(--color-table-border);
@@ -68,23 +101,20 @@
   & dl {
     font-size: .9em;
     margin: 0;
-    padding: 2px 0 2px 4em;
+    padding: 2px 0;
+  }
 
-    & dt,
-    & dd {
-      margin-bottom: 0;
-    }
+  & dt {
+    color: var(--color-journal-metadata);
+    display: inline-block;
+    float: left;
+    margin-left: 9rem;
+    min-width: 4rem;
+    width: auto;
+  }
 
-    & dt {
-      color: var(--color-journal-metadata);
-      margin-right: .5rem;
-      min-width: 4rem;
-      width: auto;
-    }
-
-    & dd {
-      margin-left: 5.5rem;
-    }
+  & dd {
+    margin-left: 15rem;
   }
 
   /* Table cells (span) */
@@ -127,6 +157,7 @@
 
   & .tag,
   & .link {
+    cursor: pointer;
     font-size: .9em;
     margin-left: 8px;
   }
@@ -161,8 +192,8 @@
       border-radius: 3px;
       height: 6px;
       margin-right: 4px;
+      min-width: 6px;
       padding: 0;
-      width: 6px;
     }
 
     & .pending,
@@ -178,7 +209,6 @@
       line-height: 16px;
       padding: 0 6px;
       text-transform: lowercase;
-      width: auto;
     }
   }
 }
