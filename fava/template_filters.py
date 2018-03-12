@@ -87,12 +87,12 @@ def format_currency(value, currency=None, show_if_zero=False):
 
 def format_amount(amount):
     """Format an amount to string using the DisplayContext."""
-    if not amount:
+    if amount is None:
         return ''
     number, currency = amount
-    if not number:
+    if number is None:
         return ''
-    return "{} {}".format(format_currency(number, currency), currency)
+    return "{} {}".format(format_currency(number, currency, True), currency)
 
 
 def hash_entry(entry):
