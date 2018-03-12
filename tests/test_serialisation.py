@@ -4,6 +4,7 @@ from beancount.core.data import (Transaction, create_simple_posting, Balance,
                                  Note)
 from beancount.core.number import D
 from beancount.core.amount import A
+from flask.json import dumps, loads
 import pytest
 
 from fava.core.helpers import FavaAPIException
@@ -17,7 +18,7 @@ def test_parse_number():
     assert parse_number('12.345') == D('12.345')
 
 
-def test_serialise():
+def test_serialise(app):
     assert serialise(None) is None
     txn = Transaction({}, datetime.date(2017, 12, 12), '*', 'Test3', 'asdfasd',
                       frozenset(['tag']), frozenset(['link']), [])
@@ -33,12 +34,17 @@ def test_serialise():
         'meta': {},
     }
 
-    serialised = serialise(txn)
+    with app.test_request_context():
+        serialised = loads(dumps(serialise(txn)))
+
     for key, value in json_txn.items():
         assert serialised[key] == value or str(serialised[key]) == value
 
     assert serialised['postings'][0]['account'] == 'Assets:ETrade:Cash'
-    assert str(serialised['postings'][0]['units']) == '100 USD'
+    assert serialised['postings'][0]['units'] == {
+        'currency': 'USD',
+        'number': 100,
+    }
 
 
 def test_deserialise():

@@ -93,9 +93,8 @@ export default class EntryForm {
       const row = this.addPosting();
       $('.account', row).value = account;
       if (units) {
-        const [number, currency] = units;
-        $('.number', row).value = formatCurrency(number);
-        $('.currency', row).value = currency;
+        $('.number', row).value = formatCurrency(units.number);
+        $('.currency', row).value = units.currency;
       }
     });
   }

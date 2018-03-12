@@ -12,7 +12,6 @@ import re
 
 from beancount.core import data
 from beancount.core.amount import Amount
-from beancount.core.interpolate import AUTOMATIC_META
 from beancount.core.number import D
 
 from fava import util
@@ -59,12 +58,6 @@ def serialise(entry):
             ret['narration'] += ' ' + ' '.join(['#' + t for t in entry.tags])
         if entry.links:
             ret['narration'] += ' ' + ' '.join(['^' + l for l in entry.links])
-        ret['postings'] = []
-        for posting in entry.postings:
-            pos = dict(posting._asdict())
-            if posting.meta and posting.meta.get(AUTOMATIC_META):
-                pos['units'] = None
-            ret['postings'].append(pos)
     return ret
 
 
