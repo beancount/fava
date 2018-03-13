@@ -1,5 +1,4 @@
 import os
-import signal
 import socket
 import subprocess
 import sys
@@ -16,7 +15,7 @@ if 'BEANCOUNT_FILE' in os.environ:
     del os.environ['BEANCOUNT_FILE']
 
 
-def _get_port():
+def get_port():
     sock = socket.socket()
     sock.bind((HOST, 0))
     port = sock.getsockname()[1]
@@ -24,59 +23,33 @@ def _get_port():
     return port
 
 
-def _wait_for_output(process, output, timeout):
+def output_contains(process, output, timeout):
     endtime = time.time() + timeout
     while True:
         if time.time() > endtime:
-            return
+            return False
         if output in process.stdout.readline():
-            return
+            return True
         time.sleep(.1)
 
 
-def _run_fava(args=None):
-    proc = FAVA + args if args else FAVA
+def run_fava(args=()):
     return subprocess.Popen(
-        proc,
+        FAVA + args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         universal_newlines=True)
 
 
 @pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
-def test_cli_basic():
-    port = _get_port()
-    args = (EXAMPLE_FILE, '-p', str(port))
-    process = _run_fava(args)
-    _wait_for_output(process, 'Running on', 20)
-    process.send_signal(signal.SIGINT)
-    process.wait()
-
-
-@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
-def test_cli_prefix():
-    args = (EXAMPLE_FILE, '-p', str(_get_port()), '--prefix', '/test')
-    process = _run_fava(args)
-    _wait_for_output(process, 'Running on', 20)
-    process.send_signal(signal.SIGINT)
-    process.wait()
-
-
-@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
-def test_cli_empty():
-    process = _run_fava()
-    process.wait()
-    assert 'No file specified' in ''.join(process.stdout.readlines())
-    assert process.returncode == 2
-
-
-@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
-def test_cli_addrinuse():
-    args = (EXAMPLE_FILE, '-p', str(_get_port()))
-    process = _run_fava(args)
-    _wait_for_output(process, 'Running on', 20)
-    process2 = _run_fava(args)
+def test_cli():
+    port = str(get_port())
+    args = (EXAMPLE_FILE, '-p', port)
+    process = run_fava(args)
+    assert output_contains(process, 'Running on', 20)
+    process2 = run_fava(args)
     process2.wait()
-    process.send_signal(signal.SIGINT)
+    process.terminate()
+    process.wait()
     assert 'in use' in ''.join(process2.stdout.readlines())
     assert process2.returncode == 2
