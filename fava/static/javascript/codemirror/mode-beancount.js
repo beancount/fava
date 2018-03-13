@@ -46,6 +46,14 @@ CodeMirror.defineSimpleMode('beancount', {
       token: 'tag',
     },
     {
+      regex: /[A-Z][A-Z0-9'\._\-]{0,22}[A-Z0-9]/,
+      token: 'commodity keyword',
+    },
+    {
+      regex: /TRUE|FALSE/,
+      token: 'bool atom',
+    },
+    {
       regex: /[*!&#?%PSTCURM]|txn/,
       token: 'directive transaction',
     },
@@ -61,20 +69,12 @@ CodeMirror.defineSimpleMode('beancount', {
       sol: true,
     },
     {
-      regex: /TRUE|FALSE/,
-      token: 'bool atom',
-    },
-    {
       regex: /[0-9]{4,}[\-\/][0-9]+[\-\/][0-9]+/,
       token: 'date',
     },
     {
       regex: /(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+/,
       token: 'account',
-    },
-    {
-      regex: /[A-Z][A-Z0-9'\._\-]{0,22}[A-Z0-9]/,
-      token: 'commodity keyword',
     },
     {
       regex: /(?:[0-9]+|[0-9][0-9,]+[0-9])(?:\.[0-9]*)?/,
