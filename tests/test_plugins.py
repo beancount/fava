@@ -1,9 +1,19 @@
 from textwrap import dedent
+import os
+
 from beancount.loader import load_file, load_string
+
 from fava.plugins.link_statements import StatementDocumentError
 
 
+def _format(string, args):
+    """Dedent, and format (escaping backslashes in paths for Windows)."""
+    args = (str(path).replace('\\', '\\\\') for path in args)
+    return dedent(string).format(*args)
+
+
 def test_plugins(tmpdir):
+    # pylint: disable=too-many-locals
     sample_folder = tmpdir.mkdir('fava_plugins')
 
     documents_folder = sample_folder.mkdir('documents')
@@ -11,6 +21,8 @@ def test_plugins(tmpdir):
     foo_folder = documents_folder.mkdir('Expenses').mkdir('Foo')
     sample_statement1 = foo_folder.join('2016-11-01 Test 1.pdf')
     sample_statement1.write('Hello World 1')
+    sample_statement1_short = os.path.join('documents', 'Expenses', 'Foo',
+                                           '2016-11-01 Test 1.pdf')
     sample_statement2 = foo_folder.join('2016-11-01 Test 2.pdf')
     sample_statement2.write('Hello World 2')
     sample_statement3 = foo_folder.join('2016-11-01 Test 3 discovered.pdf')
@@ -18,12 +30,17 @@ def test_plugins(tmpdir):
 
     assets_folder = documents_folder.mkdir('Assets').mkdir('Cash')
     sample_statement4 = assets_folder.join('2016-11-01 Test 4.pdf')
+    sample_statement4_short = os.path.join('documents', 'Assets', 'Cash',
+                                           '2016-11-01 Test 4.pdf')
     sample_statement4.write('Hello World 4')
     sample_statement5 = assets_folder.join('Test 5.pdf')
+    sample_statement5_short = os.path.join('documents', 'Assets', 'Cash',
+                                           'Test 5.pdf')
     sample_statement5.write('Hello World 5')
 
     beancount_file = sample_folder.join('example.beancount')
-    beancount_file.write(dedent("""
+    beancount_file.write(
+        _format("""
         option "title" "Test"
         option "operating_currency" "EUR"
         option "documents" "{}"
@@ -40,13 +57,14 @@ def test_plugins(tmpdir):
             Assets:Cash
 
         2016-11-02 * "Foo" "Bar"
-            statement: "documents/Expenses/Foo/2016-11-01 Test 1.pdf"
-            statement-2: "documents/Assets/Cash/2016-11-01 Test 4.pdf"
+            statement: "{}"
+            statement-2: "{}"
             Expenses:Foo        100 EUR
             Assets:Cash
 
-        2016-11-02 document Assets:Cash "documents/Assets/Cash/Test 5.pdf"
-    """.format(documents_folder, sample_statement2)))
+        2016-11-02 document Assets:Cash "{}"
+    """, (documents_folder, sample_statement2, sample_statement1_short,
+          sample_statement4_short, sample_statement5_short)))
 
     entries, errors, _ = load_file(str(beancount_file))
 
@@ -85,7 +103,7 @@ def test_link_statements_error(load_doc):
 def test_link_statements_missing(tmpdir):
     sample_folder = tmpdir.mkdir('fava_plugins').mkdir('documents')
 
-    bfile = dedent("""
+    bfile = _format("""
         option "documents" "{}"
         plugin "fava.plugins.link_statements"
 
@@ -93,10 +111,10 @@ def test_link_statements_missing(tmpdir):
         2016-10-31 open Assets:Cash
 
         2016-11-01 * "Foo" "Bar"
-            statement: "test/Foobar.pdf"
+            statement: "{}"
             Expenses:Foo                100 EUR
             Assets:Cash
-    """.format(sample_folder))
+    """, (sample_folder, os.path.join('test', 'Foobar.pdf')))
 
     entries, errors, _ = load_string(bfile)
 

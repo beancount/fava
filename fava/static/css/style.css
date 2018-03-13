@@ -45,7 +45,8 @@ body {
   --z-index-autocomplete: 8;
   --z-index-overlay: 4;
 
-  --color-transparent-white: hsl(0, 0%, 100%, .5);
+  --color-transparent-black: hsla(0, 0%, 0%, .5);
+  --color-transparent-white: hsla(0, 0%, 100%, .5);
 
   --color-background: #fff;
   --color-background-darker: #d9d9d9;
@@ -56,7 +57,7 @@ body {
 
   --color-links: hsl(203, 100%, 32%);
   --color-links-hover: hsl(203, 100%, 22%);
-  --color-links-transparent: hsl(203, 100%, 32%, .5);
+  --color-links-transparent: hsla(203, 100%, 32%, .5);
   --color-headings: #333;
   --color-error: hsl(0, 100%, 30%);
   --color-warning: hsl(52, 84%, 56%);
@@ -75,8 +76,7 @@ body {
   --color-header-light: hsl(203, 56%, 45%);
   --color-header-tinted: hsl(203, 47%, 66%);
   --color-header-text: hsl(0, 0%, 100%);
-  --color-header-text-half: hsl(0, 0%, 100%, .5);
-  --color-text-transparent: hsl(0, 0%, 27%, .2);
+  --color-header-text-half: hsla(0, 0%, 100%, .5);
 
   --color-status-red: var(--color-error);
   --color-status-yellow: var(--color-warning);
@@ -84,33 +84,13 @@ body {
   --color-status-gray: #aaa;
 
   --color-notification: #fff;
-  --color-notification-info: hsl(151, 100%, 25%, .7);
-  --color-notification-error: hsl(0, 100%, 30%, .7));
-  --color-notification-warning: hsl(52, 84%, 56%, .7);
+  --color-notification-info: hsla(151, 100%, 25%, .7);
+  --color-notification-error: hsla(0, 100%, 30%, .7);
+  --color-notification-warning: hsla(52, 84%, 56%, .7);
 
   --color-table-header-text: #666;
   --color-table-header-background: #e6e6e6;
   --color-table-border: #f2f2f2;
-
-  --color-journal-entry-open: #e8e8e8;
-  --color-journal-entry-close: #888;
-  --color-journal-entry-txn-other: #cff;
-  --color-journal-entry-txn-pending: #f8a;
-  --color-journal-entry-balance: #cfc;
-  --color-journal-entry-note: #aad0ff;
-  --color-journal-entry-document: #ffc8ff;
-  --color-journal-entry-pad: #8ff;
-  --color-journal-entry-postingwarning: #f66;
-  --color-journal-entry-custom: #fff3ab;
-  --color-journal-entry-budget: #ffddae;
-
-  --color-journal-metadata: #85aacf;
-  --color-journal-tag: #6aa2db;
-  --color-journal-tag-document: #bb7ebb;
-  --color-journal-link: #cbdde8;
-  --color-journal-link-document: #c79cc7;
-  --color-journal-posting-indicator: hsl(203, 24%, 80%);
-  --color-journal-metadata-indicator: hsl(203, 24%, 60%);
 
   --color-treetable-expander: #afc1d3;
 
@@ -134,4 +114,26 @@ body {
   --color-mobile-button-text: #000;
 
   --color-ingest: #cefac1;
+}
+
+.journal {
+  & .balance { --entry-type-color: #cfc; }
+  & .close { --entry-type-color: hsl(0, 0%, 70%); }
+  & .custom { --entry-type-color: #fff3ab; }
+  & .document { --entry-type-color: #ffc8ff; }
+  & .note { --entry-type-color: #aad0ff; }
+  & .open { --entry-type-color: hsl(0, 0%, 92%); }
+  & .other { --entry-type-color: #cff; }
+  & .pad { --entry-type-color: #8ff; }
+  & .pending { --entry-type-color: #f8a; }
+  & .query { --entry-type-color: #aad0ff; }
+
+  & .budget { --entry-type-color: #ffddae; }
+
+  --color-journal-postings: hsl(0, 0%, 92%);
+  --color-journal-metadata: hsl(210, 44%, 67%);
+  --color-journal-tag: hsl(210, 61%, 64%);
+  --color-journal-link: hsl(203, 39%, 85%);
+  --color-journal-posting-indicator: hsl(203, 24%, 80%);
+  --color-journal-metadata-indicator: hsl(203, 24%, 40%);
 }

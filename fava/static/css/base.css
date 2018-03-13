@@ -129,15 +129,8 @@ a {
   }
 }
 
-dt {
-  display: inline-block;
-  float: left;
-  width: 120px;
-}
-
-dt,
-dd {
-  margin-bottom: 3px;
+dl {
+  margin: 0;
 }
 
 code,
@@ -360,6 +353,7 @@ aside {
 
   & li {
     display: flex;
+    flex-wrap: wrap;
     position: relative;
 
     & a:first-child {
@@ -372,6 +366,12 @@ aside {
 
     & a {
       color: var(--color-sidebar-background);
+    }
+
+    & a.selected,
+    & a:hover {
+      background-color: var(--color-error);
+      filter: brightness(80%);
     }
 
     & .bubble {
@@ -390,6 +390,8 @@ aside {
 }
 
 .submenu {
+  width: 100%;
+
   & li {
     font-size: .95em;
     line-height: .95em;
@@ -420,7 +422,7 @@ article {
   width: 100%;
 
   & .small {
-    margin-left: -3px;
+    margin-left: -6px;
   }
 
   & > span {
@@ -464,13 +466,12 @@ kbd {
 }
 
 .keyboard-tooltip {
-  background: var(--color-text);
-  box-shadow: 0 0 5px var(--color-background-darker);
-  color: var(--color-background-darker);
+  background-color: var(--color-text);
+  color: var(--color-background);
   display: inline-block;
   font-size: .9em;
-  opacity: .85;
-  padding: .5em;
+  opacity: .9;
+  padding: .3em .5em;
   position: absolute;
   text-align: center;
   z-index: var(--z-index-keyboard-overlays);
@@ -578,7 +579,7 @@ td .status-indicator {
 }
 
 .autocomplete {
-  background: var(--color-background);
+  background-color: var(--color-background);
   border: 1px solid var(--color-background-darkest);
   box-shadow: 0 3px 3px var(--color-background-darker);
   overflow-x: hidden;

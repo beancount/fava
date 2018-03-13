@@ -15,16 +15,16 @@ InsertEntryOption = namedtuple('InsertEntryOption', 'date re filename lineno')
 
 DEFAULTS = {
     'account-journal-include-children': True,
+    'currency-column': 61,
     'auto-reload': False,
     'default-file': None,
-    'editor-print-margin-column': 60,
     'extensions': [],
     'import-config': None,
     'import-dirs': [],
     'insert-entry': [],
     'interval': 'month',
     'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
-                     'budget'],
+                     'budget', 'query'],
     'journal-show-document': ['discovered', 'statement'],
     'journal-show-transaction': ['cleared', 'pending'],
     'language': None,
@@ -48,7 +48,7 @@ BOOL_OPTS = [
 ]
 
 INT_OPTS = [
-    'editor-print-margin-column',
+    'currency-column',
     'upcoming-events',
     'uptodate-indicator-grey-lookback-days',
     'sidebar-show-queries',

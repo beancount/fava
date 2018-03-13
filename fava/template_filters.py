@@ -11,7 +11,6 @@ import flask
 from flask import g
 from beancount.core import compare
 from beancount.core import convert
-from beancount.core import data
 from beancount.core import prices
 from beancount.core import realization
 from beancount.core.amount import Amount
@@ -88,12 +87,12 @@ def format_currency(value, currency=None, show_if_zero=False):
 
 def format_amount(amount):
     """Format an amount to string using the DisplayContext."""
-    if not amount:
+    if amount is None:
         return ''
     number, currency = amount
-    if not number:
+    if number is None:
         return ''
-    return "{} {}".format(format_currency(number, currency), currency)
+    return "{} {}".format(format_currency(number, currency, True), currency)
 
 
 def hash_entry(entry):
@@ -119,22 +118,6 @@ FLAGS_TO_TYPES = {'*': 'cleared', '!': 'pending'}
 def flag_to_type(flag):
     """Names for entry flags."""
     return FLAGS_TO_TYPES.get(flag, 'other')
-
-
-def show_journal_entry(entry):
-    """Determine whether the entry is shown in the journal."""
-    if isinstance(entry, data.Transaction):
-        if flag_to_type(entry.flag) not in g.journal_show:
-            return False
-    if isinstance(entry, data.Document):
-        if 'statement' in entry.tags and 'statement' not in g.journal_show:
-            return False
-        if 'discovered' in entry.tags and 'discovered' not in g.journal_show:
-            return False
-    entry_type = entry.__class__.__name__.lower()
-    if entry_type not in g.journal_show:
-        return False
-    return True
 
 
 def should_show(account):

@@ -6,20 +6,32 @@ import werkzeug.urls
 
 from fava.application import REPORTS
 
-
 FILTER_COMBINATIONS = [
-    {'account': 'Assets'},
-    {'from': 'has_account("Assets")'},
-    {'time': '2015'},
-    {'payee': 'BayBook'},
-    {'tag': 'tag1, tag2'},
-    {'time': '2015', 'payee': 'BayBook'},
+    {
+        'account': 'Assets'
+    },
+    {
+        'from': 'has_account("Assets")'
+    },
+    {
+        'time': '2015'
+    },
+    {
+        'payee': 'BayBook'
+    },
+    {
+        'tag': 'tag1, tag2'
+    },
+    {
+        'time': '2015',
+        'payee': 'BayBook'
+    },
 ]
 
 
-@pytest.mark.parametrize('report,filters', [
-    (report, filters) for report in REPORTS for filters in FILTER_COMBINATIONS
-])
+@pytest.mark.parametrize('report,filters',
+                         [(report, filters) for report in REPORTS
+                          for filters in FILTER_COMBINATIONS])
 def test_reports(app, test_client, report, filters):
     if report.startswith('_'):
         return
@@ -40,8 +52,8 @@ def test_reports(app, test_client, report, filters):
 def test_query(app, test_client, query_string, result_str):
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('report', report_name='query',
-                            query_string=query_string)
+        url = flask.url_for(
+            'report', report_name='query', query_string=query_string)
 
     result = test_client.get(url)
     assert result.status_code == 200
@@ -72,13 +84,10 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 
     Note: according to RFC 2616, Location: header should use an absolute URL.
     """
-    result = test_client.get(jump_link,
-                             headers=[('Referer', referer)])
+    result = test_client.get(jump_link, headers=[('Referer', referer)])
     with app.test_request_context():
         get_url = result.headers.get('Location', '')
-        expect_url = werkzeug.urls.url_join(
-            'http://localhost/',
-            expect)
+        expect_url = werkzeug.urls.url_join('http://localhost/', expect)
         assert result.status_code == 302
         assert get_url == expect_url
 

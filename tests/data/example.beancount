@@ -1,0 +1,78 @@
+option "title" "Short Example"
+option "operating_currency" "USD"
+plugin "beancount.plugins.auto_accounts"
+
+2012-11-18 * "Payee" "Narration with many postings and long narration"
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Assets:Account2
+
+2012-11-20 custom "type" TRUE TRUE Assets:Other 20 USD
+2012-11-20 custom "budget" Expenses:Books "weekly" 20.00 EUR
+
+2012-12-10 pad Assets:Account1 Equity:Opening-Balances
+2012-12-11 balance Assets:Account1   10.00 EUR
+
+2012-12-12 * "Payee" "Narration"
+    statement: "file.pdf"
+    Expenses:Food                    10.00 EUR
+    Assets:Account1                 -10.00 EUR
+
+2012-12-13 * "Payee" "Narration"
+    ! Expenses:Food                  10.00 EUR
+    Assets:Account1                 -10.00 EUR
+
+2012-12-17 ! "Payee" "Narration"
+    ! Expenses:Food                  10.00 EUR
+    Expenses:Others                  10.00 EUR
+    Assets:Account1
+
+2012-12-17 P "Payee" "Narration"
+    ! Expenses:Food                  10.00 EUR
+    Assets:Account1
+
+2012-12-17 * "Payee" "Narration" ^link1
+    ! Expenses:Food                  10.00 EUR
+    P Expenses:Food                  10.00 EUR
+    * Expenses:Food                  10.00 EUR
+    Assets:Account1
+
+2012-12-15 balance Assets:Account1   10.00 EUR
+
+2012-12-12 query "journal" "journal"
+
+2012-12-15 note Expenses:Other "Just some comment"
+    meta: "Value"
+    test: TRUE
+    account: Expenses:Food
+
+2012-12-15 document Expenses:Food "import.csv" #tag ^link1
+2012-12-15 document Expenses:Food "receipt.pdf" #discovered
+
+2014-01-01 close Assets:Account1

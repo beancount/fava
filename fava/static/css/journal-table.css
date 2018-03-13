@@ -1,5 +1,5 @@
 .tree-table,
-.journal-table {
+.journal {
   & p,
   & li,
   & ul,
@@ -14,12 +14,8 @@
     & > span {
       flex-shrink: 0;
       margin: 0;
-      padding: 2px 3px;
+      padding: 2px 4px;
     }
-  }
-
-  & a {
-    text-decoration: none;
   }
 
   & .num {
@@ -32,7 +28,7 @@
     & p > span {
       background-color: var(--color-table-header-background);
       color: var(--color-table-header-text);
-      padding: 3px 5px;
+      padding: 3px 4px;
     }
 
     & .num {
@@ -49,37 +45,55 @@
   }
 }
 
-.journal-table {
+.journal > li,
+.journal.show-custom .custom.budget,
+.journal.show-document .document.discovered,
+.journal.show-document .document.statement,
+.journal .metadata,
+.journal .postings {
+  display: none;
+}
+
+.journal .head,
+.journal.show-balance .balance,
+.journal.show-close .close,
+.journal.show-custom .custom,
+.journal.show-document .document,
+.journal.show-note .note,
+.journal.show-open .open,
+.journal.show-pad .pad,
+.journal.show-query .query,
+.journal.show-metadata .metadata,
+.journal.show-postings .postings,
+.transaction.show-postings .postings {
+  display: block;
+}
+
+.journal.show-transaction.show-cleared .transaction.cleared,
+.journal.show-transaction.show-pending .transaction.pending,
+.journal.show-transaction.show-other .transaction.other,
+.journal.show-document.show-discovered .document.discovered,
+.journal.show-document.show-statement .document.statement,
+.journal.show-custom.show-budget .custom.budget {
+  display: block;
+}
+
+.journal {
   & p,
   & dl {
     border-bottom: thin solid var(--color-table-border);
   }
 
-  /* Journal entry types (li) */
-  & .open { background-color: var(--color-journal-entry-open); }
-  & .close { background-color: var(--color-journal-entry-close); }
-  & .query { background-color: var(--color-journal-entry-note); }
-  & .pad { background-color: var(--color-journal-entry-pad); }
-  & .note { background-color: var(--color-journal-entry-note); }
-
-  & .balance { background-color: var(--color-journal-entry-balance); }
-  & .balance.fail { background-color: var(--color-journal-entry-txn-pending); }
-
-  & .other { background-color: var(--color-journal-entry-txn-other); }
-  & .pending { background-color: var(--color-journal-entry-txn-pending); }
-
   & .postings {
-    background-color: var(--color-journal-entry-open);
+    background-color: var(--color-journal-postings);
     font-size: .9em;
     opacity: .8;
 
-    & .num { line-height: 16px; }
-
-    & .pending { background-color: var(--color-journal-entry-postingwarning); }
+    & .num {
+      line-height: 16px;
+      overflow: hidden;
+    }
   }
-
-  & .custom { background-color: var(--color-journal-entry-custom); }
-  & .budget { background-color: var(--color-journal-entry-budget); }
 
   & .transaction { cursor: pointer; }
 
@@ -87,28 +101,20 @@
   & dl {
     font-size: .9em;
     margin: 0;
-    padding: 2px 0 2px 8em;
+    padding: 2px 0;
+  }
 
-    & dt,
-    & dd {
-      margin-bottom: 0;
-    }
+  & dt {
+    color: var(--color-journal-metadata);
+    display: inline-block;
+    float: left;
+    margin-left: 9rem;
+    min-width: 4rem;
+    width: auto;
+  }
 
-    & dt {
-      color: var(--color-journal-metadata);
-      margin-right: 10px;
-      min-width: 80px;
-      width: auto;
-    }
-
-    & dd {
-      margin-left: 80px;
-    }
-
-    & a {
-      font-weight: normal;
-      &:hover { text-decoration: underline; }
-    }
+  & dd {
+    margin-left: 15rem;
   }
 
   /* Table cells (span) */
@@ -117,57 +123,62 @@
     width: 9rem;
   }
 
-  & .datecell {
-    padding-right: 0;
-    width: 6rem;
+  & .datecell,
+  & .flag {
+    background-color: var(--entry-type-color);
+    text-align: center;
   }
 
-  & .flag {
-    text-align: center;
-    width: 1.6rem;
-  }
+  & .datecell { width: 5.5rem; }
+  & .flag { width: 3rem; }
 
   & .change { font-weight: 500; }
 
   & .description {
+    align-items: center;
+    display: flex;
     flex: 1;
+    padding-left: 8px;
 
     & .separator {
       background-color: var(--color-text-lighter);
-      display: inline-block;
       height: 4px;
-      margin: 0 2px 2px 6px;
+      margin: 0 6px;
       width: 4px;
     }
 
-    & .tag,
-    & .link {
-      display: inline-block;
-      margin-right: 8px;
+    & .account-link {
+      margin-right: .5em;
     }
 
-    & .tag { color: var(--color-journal-tag); }
-    & .link { color: var(--color-journal-link); }
+    & .num {
+      margin: 0 5px;
+    }
   }
+
+  & .tag,
+  & .link {
+    cursor: pointer;
+    font-size: .9em;
+    margin-left: 8px;
+  }
+
+  & .tag { color: var(--color-journal-tag); }
+  & .link { color: var(--color-journal-link); }
+
+  & .bal { background-color: var(--entry-type-color); }
 
   & a:hover {
     filter: brightness(80%);
   }
 
-  & .document {
-    background-color: var(--color-journal-entry-document);
+  & .filename {
+    font-family: var(--font-family-monospaced);
+    font-size: .9em;
+  }
 
-    & .account-link {
-      color: var(--color-journal-tag-document);
-      filter: brightness(85%);
-    }
-
-    & .filename {
-      margin-left: .3em;
-    }
-
-    & .tag { color: var(--color-journal-tag-document); }
-    & .link { color: var(--color-journal-link-document); }
+  & .document .filename {
+    margin-left: 1em;
   }
 
   & .indicators {
@@ -182,12 +193,13 @@
       border-radius: 3px;
       height: 6px;
       margin-right: 4px;
+      min-width: 6px;
       padding: 0;
-      width: 6px;
     }
 
-    & .pending {
-      background-color: var(--color-journal-entry-postingwarning);
+    & .pending,
+    & .other {
+      background-color: var(--entry-type-color);
     }
 
     & .metadata-indicator {
@@ -198,7 +210,6 @@
       line-height: 16px;
       padding: 0 6px;
       text-transform: lowercase;
-      width: auto;
     }
   }
 }

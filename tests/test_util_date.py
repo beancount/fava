@@ -35,21 +35,21 @@ def test_get_next_intervalfail2():
 
 
 def test_interval_tuples():
-    assert list(
-        interval_ends(date(2014, 3, 5), date(2014, 5, 5), 'month')) == [
-            date(2014, 3, 5),
-            date(2014, 4, 1),
-            date(2014, 5, 1),
-            date(2014, 5, 5),
-        ]
-    assert list(
-        interval_ends(date(2014, 1, 1), date(2014, 5, 1), 'month')) == [
-            date(2014, 1, 1),
-            date(2014, 2, 1),
-            date(2014, 3, 1),
-            date(2014, 4, 1),
-            date(2014, 5, 1),
-        ]
+    assert list(interval_ends(date(2014, 3, 5), date(2014, 5, 5),
+                              'month')) == [
+                                  date(2014, 3, 5),
+                                  date(2014, 4, 1),
+                                  date(2014, 5, 1),
+                                  date(2014, 5, 5),
+                              ]
+    assert list(interval_ends(date(2014, 1, 1), date(2014, 5, 1),
+                              'month')) == [
+                                  date(2014, 1, 1),
+                                  date(2014, 2, 1),
+                                  date(2014, 3, 1),
+                                  date(2014, 4, 1),
+                                  date(2014, 5, 1),
+                              ]
     assert list(interval_ends(date(2014, 3, 5), date(2014, 5, 5), 'year')) == [
         date(2014, 3, 5),
         date(2014, 5, 5),

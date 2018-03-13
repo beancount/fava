@@ -81,7 +81,7 @@ h1 {
   border: 1px solid var(--color-background-darker);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
-  box-shadow: 0 3px 6px var(--color-text-transparent);
+  box-shadow: 0 3px 6px var(--color-transparent-black);
   color: var(--color-links);
   display: none;
   left: 19px;

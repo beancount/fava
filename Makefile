@@ -1,4 +1,4 @@
-.PHONY: docs test lint binaries gh-pages translations-push translations-fetch before-release release
+.PHONY: docs test lint binaries gh-pages translations-push translations-fetch before-release release run-example format
 
 all: fava/static/gen/app.js
 
@@ -28,6 +28,12 @@ test:
 docs:
 	sphinx-build -b html docs build/docs
 
+run-example:
+	BEANCOUNT_FILE= fava tests/data/example.beancount
+
+format:
+	yapf -rip tests --style='{based_on_style: pep8, coalesce_brackets: True, indent_dictionary_value: True}'
+
 before-release: translations-push translations-fetch
 	contrib/scripts.py generate_bql_grammar_json
 
@@ -35,10 +41,16 @@ before-release: translations-push translations-fetch
 # fava/__init__.py should be set to the release version.
 # A tag and GitHub release should be created too.
 #
-# After the release, the version number should be bumped in fava/__init__.py
-# (with '-dev') and gui/src/main.js and fava.pythonanywhere.com should be
-# updated.
-release: fava/static/gen/app.js before-release
+# After the release, the version number should be bumped in:
+#  - fava/__init__.py (with '-dev')
+#  - gui/package.json
+#  - gui/src/main.js
+#
+# Also, fava.pythonanywhere.com should be updated and a draft for the next
+# version should be created so that electron-builder will push artifacts (this
+# should have the version from gui/package.json prefixed with a 'v' as the
+# version)
+release: fava/static/gen/app.js
 	python setup.py sdist bdist_wheel upload
 
 # Extract translation strings and upload them to POEditor.com.

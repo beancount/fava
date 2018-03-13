@@ -24,9 +24,11 @@ def test_hierarchy(example_ledger):
     with app.test_request_context('/'):
         app.preprocess_request()
         data = example_ledger.charts.hierarchy('Assets')
-        assert data['balance_children'] == {'IRAUSD': D('7200.00'),
-                                            'USD': D('94320.27840'),
-                                            'VACHR': D('-82')}
+        assert data['balance_children'] == {
+            'IRAUSD': D('7200.00'),
+            'USD': D('94320.27840'),
+            'VACHR': D('-82')
+        }
         assert data['balance'] == {}
         # Assets:US:ETrade
         etrade = data['children'][1]['children'][2]

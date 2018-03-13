@@ -9,11 +9,11 @@ import functools
 
 from flask import Blueprint, jsonify, g, request
 from werkzeug.utils import secure_filename
-from beancount.scripts.format import align_beancount
 
 from fava.serialisation import deserialise, serialise
 from fava.core.file import save_entry_slice
 from fava.core.helpers import FavaAPIException
+from fava.core.misc import align
 
 json_api = Blueprint('json_api', __name__)  # pylint: disable=invalid-name
 
@@ -91,7 +91,8 @@ def source(request_data):
 @json_response
 def format_source(request_data):
     """Format beancount file."""
-    return {'payload': align_beancount(request_data['source'])}
+    aligned = align(request_data['source'], g.ledger.fava_options)
+    return {'payload': aligned}
 
 
 @json_api.route('/payee-accounts/', methods=['GET'])

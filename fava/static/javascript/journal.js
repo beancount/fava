@@ -6,8 +6,7 @@ e.on('page-loaded', () => {
   const journal = $('#journal-table');
   if (!journal) return;
 
-  // Toggle postings by clicking on transaction row.
-  $.delegate(journal, 'click', '.transaction', (event) => {
+  $.delegate(journal, 'click', 'li', (event) => {
     if (event.target.tagName === 'A') {
       return;
     }
@@ -21,14 +20,14 @@ e.on('page-loaded', () => {
     // Filter for metadata when clicking on the value.
     if (event.target.tagName === 'DD') {
       const filter = $('#filter-filter');
-      filter.value += ` ${event.target.previousElementSibling.innerText}:"${event.target.innerText}"`;
+      filter.value += ` ${event.target.previousElementSibling.innerText}"${event.target.innerText}"`;
       e.trigger('form-submit-filters', filter.form);
       return;
     }
-    const clickedTransaction = event.target.closest('.transaction');
-    $('.postings', clickedTransaction).classList.toggle('hidden');
-    if ($('.metadata', clickedTransaction)) {
-      $('.metadata', clickedTransaction).classList.toggle('hidden');
+    // Toggle postings by clicking on transaction row.
+    const transaction = event.target.closest('.transaction');
+    if (transaction) {
+      transaction.classList.toggle('show-postings');
     }
   });
 
@@ -45,9 +44,7 @@ e.on('page-loaded', () => {
         });
       }
 
-      $$(`#journal-table .${type}`).forEach((el) => {
-        el.classList.toggle('hidden', !shouldShow);
-      });
+      journal.classList.toggle(`show-${type}`, shouldShow);
 
       // Modify get params
       const filterShow = [];

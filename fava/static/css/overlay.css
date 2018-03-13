@@ -98,7 +98,7 @@
   width: 400px;
 
   & li {
-    background: var(--color-notification-info);
+    background-color: var(--color-notification-info);
     color: var(--color-notification);
     display: block;
     margin-bottom: .5em;
@@ -107,10 +107,10 @@
   }
 
   & .error {
-    background: var(--color-notification-error);
+    background-color: var(--color-notification-error);
   }
 
   & .warning {
-    background: var(--color-notification-warning);
+    background-color: var(--color-notification-warning);
   }
 }

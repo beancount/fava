@@ -3,11 +3,9 @@ import datetime
 import pytest
 from beancount.core import account
 
-from fava.core.filters import (
-    AccountFilter, AdvancedFilter, TimeFilter,
-    FilterSyntaxLexer, Match)
+from fava.core.filters import (AccountFilter, AdvancedFilter, TimeFilter,
+                               FilterSyntaxLexer, Match)
 from fava.core.helpers import FilterException
-
 
 LEX = FilterSyntaxLexer().lex
 
@@ -96,8 +94,8 @@ def test_filterexception():
 ])
 def test_advanced_filter(example_ledger, string, number):
     FILTER.set(string)
-    filtered_entries = FILTER.apply(
-        example_ledger.all_entries, example_ledger.options)
+    filtered_entries = FILTER.apply(example_ledger.all_entries,
+                                    example_ledger.options)
     assert len(filtered_entries) == number
     FILTER.set('')
 
@@ -106,8 +104,8 @@ def test_account_filter(example_ledger):
     account_filter = AccountFilter()
 
     account_filter.set('Assets')
-    filtered_entries = account_filter.apply(
-        example_ledger.all_entries, example_ledger.options)
+    filtered_entries = account_filter.apply(example_ledger.all_entries,
+                                            example_ledger.options)
     assert len(filtered_entries) == 541
     assert all(map(
         lambda x: hasattr(x, 'account') and
@@ -116,8 +114,8 @@ def test_account_filter(example_ledger):
         filtered_entries))
 
     account_filter.set('.*US:State')
-    filtered_entries = account_filter.apply(
-        example_ledger.all_entries, example_ledger.options)
+    filtered_entries = account_filter.apply(example_ledger.all_entries,
+                                            example_ledger.options)
     assert len(filtered_entries) == 67
 
 
@@ -127,18 +125,18 @@ def test_time_filter(example_ledger):
     time_filter.set('2017')
     assert time_filter.begin_date == datetime.date(2017, 1, 1)
     assert time_filter.end_date == datetime.date(2018, 1, 1)
-    filtered_entries = time_filter.apply(
-        example_ledger.all_entries, example_ledger.options)
+    filtered_entries = time_filter.apply(example_ledger.all_entries,
+                                         example_ledger.options)
     assert len(filtered_entries) == 82
 
     time_filter.set('1000')
-    filtered_entries = time_filter.apply(
-        example_ledger.all_entries, example_ledger.options)
+    filtered_entries = time_filter.apply(example_ledger.all_entries,
+                                         example_ledger.options)
     assert not filtered_entries
 
     time_filter.set(None)
-    filtered_entries = time_filter.apply(
-        example_ledger.all_entries, example_ledger.options)
+    filtered_entries = time_filter.apply(example_ledger.all_entries,
+                                         example_ledger.options)
     assert len(filtered_entries) == len(example_ledger.all_entries)
 
     with pytest.raises(FilterException):

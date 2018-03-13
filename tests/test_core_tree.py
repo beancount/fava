@@ -46,8 +46,8 @@ def test_tree_from_entries(example_ledger):
 
 
 def test_tree_cap(example_ledger):
-    closing_entries = summarize.cap_opt(
-        example_ledger.entries, example_ledger.options)
+    closing_entries = summarize.cap_opt(example_ledger.entries,
+                                        example_ledger.options)
     real_account = realization.realize(closing_entries)
 
     tree = Tree(example_ledger.entries)

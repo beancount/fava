@@ -2,7 +2,7 @@
   "name": "fava",
   "productName": "Fava",
   "description": "Interface for Beancount",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "main": "src/main.js",
   "author": "Dominik Aumayr <dominik@aumayr.name>",
   "license": "MIT",
@@ -11,7 +11,9 @@
     "request-promise": "^4.2.2"
   },
   "scripts": {
-    "start": "electron src/main.js"
+    "start": "electron src/main.js",
+    "dist": "electron-builder",
+    "lint": "eslint src/main.js"
   },
   "devDependencies": {
     "electron": "^1.8.3",

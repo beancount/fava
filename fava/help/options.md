@@ -6,7 +6,7 @@ following to your Beancount file.
 2016-06-14 custom "fava-option" "interval" "week"
 2016-04-14 custom "fava-option" "auto-reload" "true"
 2016-04-14 custom "fava-option" "journal-show" "transaction open"
-2016-04-14 custom "fava-option" "editor-print-margin-column" "10" </textarea></pre>
+2016-04-14 custom "fava-option" "currency-column" "100" </textarea></pre>
 
 Below is a list of all possible options for Fava.
 
@@ -93,7 +93,7 @@ trees are shown at market value.
 
 ## `journal-show`
 
-Default: `transaction balance note document custom budget`
+Default: `transaction balance note document custom budget query`
 
 The entry types given in this list will be shown in the Journal report.
 All other types will be hidden and can be toggled using the buttons.
@@ -111,6 +111,17 @@ the following transaction flags:
 - `cleared` - `*`
 - `pending` - `!`
 - `other` - All other transaction flags.
+
+---
+
+## `currency-colum`
+
+Default: `61`
+
+This option can be used to configure how posting lines are aligned when saved
+to file or when using 'Align Amounts' in the editor. Fava tries to align so
+that the currencies all occur in the given column. Also, Fava will show a
+vertical line before this column in the editor.
 
 ---
 
@@ -155,15 +166,6 @@ Like `show-closed-accounts`.
 Default: `true`
 
 Like `show-closed-accounts`.
-
----
-
-## `editor-print-margin-column`
-
-Default: `60`
-
-Show a vertical line after this column in the editor.
-Can be used to keep decimal points aligned for example.
 
 ---
 

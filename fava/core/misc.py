@@ -2,10 +2,14 @@
 
 from collections import namedtuple
 import datetime
+import io
+import re
 
 from beancount.core.data import Custom, Event
+from beancount.core import amount
 
 from fava.core.helpers import FavaModule
+from fava.core.fava_options import DEFAULTS
 
 FavaError = namedtuple('FavaError', 'source message entry')
 
@@ -68,3 +72,25 @@ def upcoming_events(events, max_delta):
             upcoming.append(event)
 
     return upcoming
+
+
+def align(string, fava_options):
+    """Align currencies in one column."""
+
+    column = fava_options.get('currency-column', DEFAULTS['currency-column'])
+
+    output = io.StringIO()
+    for line in string.splitlines():
+        match = re.match(
+            r'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({}\b.*)'.format(
+                amount.CURRENCY_RE), line)
+        if match:
+            prefix, number, rest = match.groups()
+            num_of_spaces = column - len(prefix) - len(number) - 4
+            spaces = ' ' * num_of_spaces
+            output.write(prefix + spaces + '  ' + number + ' ' + rest)
+        else:
+            output.write(line)
+        output.write('\n')
+
+    return output.getvalue()

@@ -1,0 +1,30 @@
+build: false
+version: '{build}'
+platform: x64
+environment:
+  PYTHON: 'C:\Python36'
+
+install:
+  - '%PYTHON%\python -m pip install -U setuptools pip wheel'
+  - '%PYTHON%\python -m pip install -U tox pyinstaller'
+  - ps: Install-Product node Current
+
+build_script:
+  - 'cd %APPVEYOR_BUILD_FOLDER%\fava\static'
+  - 'npm install'
+  - 'npm run build'
+  - 'cd %APPVEYOR_BUILD_FOLDER%\gui'
+  - '%PYTHON%\scripts\pyinstaller --clean --distpath bin pyinstaller.spec'
+  - 'npm install'
+  - 'npm run dist'
+
+test_script:
+  - '%PYTHON%\scripts\tox -e py36-dev'
+
+cache:
+  - '%LOCALAPPDATA%\pip\cache'
+  - 'fava\static\node_modules'
+  - 'gui\node_modules'
+
+artifacts:
+  - path: 'gui\dist\*.exe'
