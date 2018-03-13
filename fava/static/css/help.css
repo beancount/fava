@@ -13,37 +13,37 @@
 .help-text {
   font: 16px var(--font-family-alternative);
   max-width: var(--help-max-width);
+}
 
-  & h2,
-  & h3,
-  & h4,
-  & h5 {
-    font-family: var(--font-family);
-  }
+.help-text h2,
+.help-text h3,
+.help-text h4,
+.help-text h5 {
+  font-family: var(--font-family);
+}
 
-  & > div {
-    margin-bottom: 1em;
-  }
+.help-text > div {
+  margin-bottom: 1em;
+}
 
-  & .CodeMirror {
-    background-color: var(--color-code-background);
-    border: 0;
-    height: auto;
-    margin: 0;
-    padding: 0;
-  }
+.help-text .CodeMirror {
+  background-color: var(--color-code-background);
+  border: 0;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
 
-  & code {
-    font-size: .9em;
-  }
+.help-text code {
+  font-size: .9em;
+}
 
-  & ul {
-    padding-left: 2em;
-  }
+.help-text ul {
+  padding-left: 2em;
+}
 
-  & li {
-    list-style-type: disc;
-  }
+.help-text li {
+  list-style-type: disc;
 }
 
 .help-sidebar {
@@ -53,9 +53,9 @@
   font-size: 1.1em;
   margin: 0 0 10px 10px;
   padding: 10px 10px 0;
+}
 
-  & a:hover,
-  & a.selected {
-    font-weight: 500;
-  }
+.help-sidebar a:hover,
+.help-sidebar a.selected {
+  font-weight: 500;
 }

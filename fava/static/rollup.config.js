@@ -6,7 +6,6 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import postcss from 'rollup-plugin-postcss';
 
 import postcssImport from 'postcss-import';
-import postcssNesting from 'postcss-nesting';
 
 export default {
   input: 'javascript/main.js',
@@ -34,7 +33,6 @@ export default {
     postcss({
       plugins: [
         postcssImport(),
-        postcssNesting(),
       ],
       extract: true,
     }),

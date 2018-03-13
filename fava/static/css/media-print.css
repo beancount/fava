@@ -5,14 +5,14 @@
 
   header {
     position: relative;
+  }
 
-    & > * {
-      display: none;
-    }
+  header > * {
+    display: none;
+  }
 
-    & h1 {
-      display: block;
-    }
+  header h1 {
+    display: block;
   }
 
   .filter-form {

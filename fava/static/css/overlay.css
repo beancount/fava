@@ -17,10 +17,10 @@
   right: 0;
   top: 0;
   z-index: var(--z-index-overlay);
+}
 
-  &.shown {
-    display: flex;
-  }
+.overlay-wrapper.shown {
+  display: flex;
 }
 
 .close-overlay {
@@ -40,45 +40,43 @@
   max-width: 767px;
   padding: 1.5em;
   position: relative;
+}
 
-  & form,
-  & > div {
-    width: 100%;
-  }
+.overlay form,
+.overlay > div {
+  width: 100%;
+}
 
-  & strong {
-    display: inline-block;
-    margin: 6px 0 5px;
-  }
+.overlay strong {
+  display: inline-block;
+  margin: 6px 0 5px;
+}
 
-  & table {
-    margin-left: auto;
-    margin-right: auto;
-  }
+.overlay table {
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  & dt {
-    display: inline-block;
-    float: left;
-    font-weight: normal;
-    line-height: 1.8em;
-    padding-right: 10px;
-    text-align: right;
-    width: auto;
-  }
+.overlay dt {
+  display: inline-block;
+  float: left;
+  font-weight: normal;
+  line-height: 1.8em;
+  padding-right: 10px;
+  text-align: right;
+  width: auto;
+}
 
-  & dd {
-    line-height: 1.8em;
-  }
+.overlay dd {
+  line-height: 1.8em;
+}
 
-  & .fieldset {
-    & label {
-      width: 150px;
-    }
+.overlay .fieldset label {
+  width: 150px;
+}
 
-    &[type='submit'] {
-      margin: .5em .5em -.5em 0;
-    }
-  }
+.overlay .fieldset[type='submit'] {
+  margin: .5em .5em -.5em 0;
 }
 
 .documents-upload .fieldset input {
@@ -96,21 +94,21 @@
   right: 10px;
   top: calc(var(--header-height) + 10px);
   width: 400px;
+}
 
-  & li {
-    background-color: var(--color-notification-info);
-    color: var(--color-notification);
-    display: block;
-    margin-bottom: .5em;
-    padding: 5px 10px;
-    width: 100%;
-  }
+.notifications li {
+  background-color: var(--color-notification-info);
+  color: var(--color-notification);
+  display: block;
+  margin-bottom: .5em;
+  padding: 5px 10px;
+  width: 100%;
+}
 
-  & .error {
-    background-color: var(--color-notification-error);
-  }
+.notifications .error {
+  background-color: var(--color-notification-error);
+}
 
-  & .warning {
-    background-color: var(--color-notification-warning);
-  }
+.notifications .warning {
+  background-color: var(--color-notification-warning);
 }

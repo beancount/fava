@@ -25,14 +25,14 @@
   aside {
     margin-left: calc(-1 * var(--aside-width));
     top: 0;
+  }
 
-    &.active {
-      margin-left: 0;
+  aside.active {
+    margin-left: 0;
+  }
 
-      & .add-transaction-button {
-        left: var(--aside-width);
-      }
-    }
+  aside.active .add-transaction-button {
+    left: var(--aside-width);
   }
 
   .aside-button,
@@ -52,12 +52,12 @@
     display: block;
     margin-left: 0;
     top: 0;
+  }
 
-    &.active {
-      background-color: var(--color-sidebar-background);
-      box-shadow: none;
-      left: var(--aside-width);
-    }
+  .aside-button.active {
+    background-color: var(--color-sidebar-background);
+    box-shadow: none;
+    left: var(--aside-width);
   }
 
   .navigation .add-transaction-button {

@@ -2,73 +2,73 @@
   border-bottom: thin solid var(--color-table-header-background);
   display: flex;
   padding-top: .5em;
+}
 
-  & .line {
-    line-height: 28px;
-    min-width: 40px;
-    text-align: center;
-  }
+.ingest-row .line {
+  line-height: 28px;
+  min-width: 40px;
+  text-align: center;
+}
 
-  & .source {
-    flex-grow: 1;
-    margin-right: .5em;
-    overflow: auto;
+.ingest-row .source {
+  flex-grow: 1;
+  margin-right: .5em;
+  overflow: auto;
+}
 
-    & pre {
-      font-size: .9em;
-    }
-  }
+.ingest-row .source pre {
+  font-size: .9em;
+}
 
-  & .entry-form {
-    flex-shrink: 0;
-    min-width: 600px;
-  }
+.ingest-row .entry-form {
+  flex-shrink: 0;
+  min-width: 600px;
+}
 
-  & input[name='payee'] {
-    width: 140px;
-  }
+.ingest-row input[name='payee'] {
+  width: 140px;
+}
 
-  & .actions {
-    font-size: .8em;
-    width: 60px;
+.ingest-row .actions {
+  font-size: .8em;
+  width: 60px;
+}
 
-    & .inner {
-      min-width: 100px;
-      text-align: left;
-      transform: rotate(90deg);
-      transform-origin: 30% 50%;
-    }
+.ingest-row .actions .inner {
+  min-width: 100px;
+  text-align: left;
+  transform: rotate(90deg);
+  transform-origin: 30% 50%;
+}
 
-    & label {
-      display: inline-block;
-      margin: 0;
-    }
-  }
+.ingest-row .actions label {
+  display: inline-block;
+  margin: 0;
+}
 
-  &.header {
-    background: var(--color-table-header-background);
-    color: var(--color-table-header-text);
-    line-height: 1.5em;
-    padding: 0;
+.ingest-row.header {
+  background: var(--color-table-header-background);
+  color: var(--color-table-header-text);
+  line-height: 1.5em;
+  padding: 0;
+}
 
-    & > div {
-      padding: 3px 5px;
-    }
+.ingest-row.header > div {
+  padding: 3px 5px;
+}
 
-    & .line {
-      line-height: inherit;
-    }
-  }
+.ingest-row.header .line {
+  line-height: inherit;
+}
 
-  &.duplicate,
-  &.ignore {
-    opacity: .5;
-  }
+.ingest-row.duplicate,
+.ingest-row.ignore {
+  opacity: .5;
+}
 
-  &.duplicate,
-  &.import {
-    background: var(--color-ingest);
-  }
+.ingest-row.duplicate,
+.ingest-row.import {
+  background: var(--color-ingest);
 }
 
 .ingest-footer {
