@@ -39,7 +39,6 @@ import 'url-search-params';
 import { $, handleJSON } from './helpers';
 import e from './events';
 import router from './router';
-import './../css/style.css';
 
 import './autocomplete';
 import './charts';

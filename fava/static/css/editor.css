@@ -1,9 +1,9 @@
 /* Editor */
 
-@import 'codemirror/lib/codemirror';
-@import 'codemirror/addon/dialog/dialog';
-@import 'codemirror/addon/fold/foldgutter';
-@import 'codemirror/addon/hint/show-hint';
+@import 'codemirror/lib-codemirror.css';
+@import 'codemirror/addon-dialog-dialog.css';
+@import 'codemirror/addon-fold-foldgutter.css';
+@import 'codemirror/addon-hint-show-hint.css';
 
 :root {
   --source-editor-fieldset-height: 44px;
@@ -46,6 +46,7 @@
   border-bottom-right-radius: 3px;
   box-shadow: 0 3px 6px var(--color-transparent-black);
   display: none;
+  line-height: 1.5;
   margin-left: -10px;
   position: absolute;
   top: var(--source-editor-fieldset-height);

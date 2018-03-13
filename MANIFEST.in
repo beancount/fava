@@ -2,6 +2,7 @@ include CHANGES LICENSE README.rst AUTHORS
 
 graft fava
 prune fava/static
+graft fava/static/css
 graft fava/static/gen
 graft fava/static/images
 
