@@ -1,10 +1,10 @@
-import os
-
 import pytest
 from beancount.query import query
 
 from fava.core.helpers import FavaAPIException
 from fava.core.query_shell import QueryShell
+
+from .conftest import data_file
 
 
 def test_execute_query(example_ledger):
@@ -28,7 +28,7 @@ def test_query_to_file(example_ledger):
 
     name, data = query_shell.query_to_file('balances', 'csv')
     assert name == 'query_result'
-    csv = os.path.join(os.path.dirname(__file__), 'data/example-balances.csv')
+    csv = data_file('example-balances.csv')
     with open(csv, 'rb') as file:
         assert data.getvalue() == file.read()
 

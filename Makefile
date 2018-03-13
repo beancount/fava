@@ -1,4 +1,4 @@
-.PHONY: docs test lint binaries gh-pages translations-push translations-fetch before-release release
+.PHONY: docs test lint binaries gh-pages translations-push translations-fetch before-release release run-example format
 
 all: fava/static/gen/app.js
 
@@ -27,6 +27,9 @@ test:
 
 docs:
 	sphinx-build -b html docs build/docs
+
+run-example:
+	BEANCOUNT_FILE= fava tests/data/example.beancount
 
 format:
 	yapf -rip tests --style='{based_on_style: pep8, coalesce_brackets: True, indent_dictionary_value: True}'
