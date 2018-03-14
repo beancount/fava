@@ -11,7 +11,7 @@
     cost_date as acquisition_date
   WHERE account_sortkey(account) ~ "^[01]"
   GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
-  ORDER BY account_sortkey(account)' %}
+  ORDER BY account_sortkey(account), currency, cost_date' %}
 {% set holdings_by = {
 'account': 'SELECT account,
     units(sum(position)) as units,
@@ -19,7 +19,7 @@
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
   GROUP BY account, cost_currency, account_sortkey(account)
-  ORDER BY account_sortkey(account)',
+  ORDER BY account_sortkey(account), currency',
 'currency': 'SELECT
     units(sum(position)) as units,
     cost(sum(position)) as book_value,
