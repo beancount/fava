@@ -148,7 +148,9 @@ class CompletionList {
         if (accountCompletionCache[payee]) {
           return new Promise((resolve) => { resolve(accountCompletionCache[payee]); });
         }
-        return $.fetch(`${window.favaAPI.baseURL}api/payee-accounts/?payee=${payee}`)
+        const params = new URLSearchParams();
+        params.set('payee', payee);
+        return $.fetch(`${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`)
           .then(handleJSON)
           .then(data => data.payload)
           .then((suggestions) => {
