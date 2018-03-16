@@ -35,7 +35,6 @@ from fava.ext import find_extensions
 MAXDATE = datetime.date.max
 
 
-# pylint: disable=too-few-public-methods
 class AccountData(object):
     """Holds information about an account."""
     __slots__ = ('meta', 'close_date')
@@ -61,7 +60,7 @@ class _AccountDict(dict):
         return self[key]
 
 
-# pylint: disable=too-few-public-methods, missing-docstring
+# pylint: disable=missing-docstring
 class ExtensionModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
@@ -91,7 +90,7 @@ MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'misc',
            'query_shell', 'ingest']
 
 
-# pylint: disable=too-many-instance-attributes,too-many-public-methods
+# pylint: disable=too-many-instance-attributes
 class FavaLedger():
     """Create an interface for a Beancount ledger.
 

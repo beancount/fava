@@ -18,7 +18,6 @@ class Token(object):
     The lexer attribute only exists since PLY writes to it in case of a parser
     error.
     """
-    # pylint: disable=too-few-public-methods
     __slots__ = ['type', 'value', 'lexer']
 
     def __init__(self, type_, value):
@@ -107,7 +106,6 @@ class FilterSyntaxLexer(object):
 
 class Match(object):
     """Match a string."""
-    # pylint: disable=too-few-public-methods
     __slots__ = ['match']
 
     def __init__(self, search):
