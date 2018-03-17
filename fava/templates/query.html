@@ -8,38 +8,34 @@
 {% set contents, result_types, result_rows = ledger.query_shell.execute_query(query, add_to_history=True) %}
 
 {% block content %}
-  {% if not result_only %}
-    <form id="query-form" class="query-box" data-event="query" action="{{ url_for('report', report_name='query') }}" method="GET">
-      <textarea name="query_string" placeholder="{{ _('...enter a BQL query. \'help\' to list available commands.') }}">{{ query or '' }}</textarea>
-      <button type="submit" data-key="Ctrl/Cmd+Enter">{{ _('Submit') }}</button>
-    </form>
-    <div id="query-container">
+{% if not result_only %}
+<form id="query-form" class="query-box" data-event="query" action="{{ url_for('report', report_name='query') }}" method="GET">
+  <textarea name="query_string" placeholder="{{ _('...enter a BQL query. \'help\' to list available commands.') }}">{{ query or '' }}</textarea>
+  <button type="submit" data-key="Ctrl/Cmd+Enter">{{ _('Submit') }}</button>
+</form>
+<div id="query-container">
   {% endif %}
-    {% if query %}
-      <div class="toggle-box queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
-        <div class="toggle-box-header"><pre><code>{{ query }}</code></pre>
-          <span class="spacer"></span>
-          {{ querytable.download_links(query) if result_types else '' }}
-        </div>
-        {% if contents or result_types %}
-          <div class="toggle-box-content">
-            {% if contents %}
-              <pre><code>{{ contents }}</code></pre>
-            {% elif result_types %}
-              {{ querytable.querytable(result_types, result_rows) }}
-            {% endif %}
-          </div>
-        {% endif %}
-      </div>
-    {% endif %}
-  {% if not result_only %}
-      {% for history_item in query_shell_history %}
-        <div class="toggle-box queryresults-wrapper toggled inactive">
-          <div class="toggle-box-header">
-            <pre><code>{{ history_item }}</code></pre>
-          </div>
-        </div>
-      {% endfor %}
+  {% if query %}
+  <div class="toggle-box queryresults-wrapper{{ ' error' if (contents and 'ERROR' in contents) else '' }}">
+    <div class="toggle-box-header"><pre><code>{{ query }}</code></pre>
+      <span class="spacer"></span>
+      {{ querytable.download_links(query) if result_types else '' }}
     </div>
+    {% if contents or result_types %}
+    <div class="toggle-box-content">
+      {{ querytable.querytable(contents, result_types, result_rows) }}
+    </div>
+    {% endif %}
+  </div>
   {% endif %}
+  {% if not result_only %}
+  {% for history_item in query_shell_history %}
+  <div class="toggle-box queryresults-wrapper toggled inactive">
+    <div class="toggle-box-header">
+      <pre><code>{{ history_item }}</code></pre>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

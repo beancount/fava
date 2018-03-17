@@ -39,25 +39,29 @@
 {% endif %}
 {% endmacro %}
 
-{% macro querytable(types, rows, filter_empty=None) %}
-  <table class="queryresults sortable">
-    <thead>
-      <tr>
-        {% for name, type in types %}
-          <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in rows if filter_empty == None or not row[filter_empty].is_empty() %}
-        <tr>
-          {% for name, type in types %}
-            {{ querycell(name, row[name], type)  }}
-          {% endfor %}
-        </tr>
+{% macro querytable(contents, types, rows, filter_empty=None) %}
+{% if contents %}
+<pre><code>{{ contents }}</code></pre>
+{% elif types %}
+<table class="queryresults sortable">
+  <thead>
+    <tr>
+      {% for name, type in types %}
+      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
       {% endfor %}
-    </tbody>
-  </table>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows if filter_empty == None or not row[filter_empty].is_empty() %}
+    <tr>
+      {% for name, type in types %}
+      {{ querycell(name, row[name], type)  }}
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
 {% endmacro %}
 
 {% macro download_links(query) -%}
