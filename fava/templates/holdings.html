@@ -18,7 +18,7 @@
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
-  GROUP BY account, cost_currency, account_sortkey(account)
+  GROUP BY account, cost_currency, account_sortkey(account), currency
   ORDER BY account_sortkey(account), currency',
 'currency': 'SELECT
     units(sum(position)) as units,
