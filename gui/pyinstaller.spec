@@ -7,6 +7,7 @@ hidden_imports = collect_submodules('beancount',
 
 data_files = [
     ('../fava/help', 'fava/help'),
+    ('../fava/static/css', 'fava/static/css'),
     ('../fava/static/gen', 'fava/static/gen'),
     ('../fava/templates', 'fava/templates'),
     ('../fava/translations', 'fava/translations'),
