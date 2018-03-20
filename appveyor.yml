@@ -6,24 +6,10 @@ environment:
 
 install:
   - '%PYTHON%\python -m pip install -U setuptools pip wheel tox'
-  - ps: Install-Product node Current
-
-build_script:
-  - 'cd %APPVEYOR_BUILD_FOLDER%\fava\static'
-  - 'npm install'
-  - 'npm run build'
-  - 'cd %APPVEYOR_BUILD_FOLDER%'
-  - '%PYTHON%\scripts\tox -e deploy'
-  - '%APPVEYOR_BUILD_FOLDER%\gui\bin\fava\cli || true'
 
 test_script:
   - '%PYTHON%\scripts\tox -e py36-dev'
 
 cache:
   - '%LOCALAPPDATA%\pip\cache'
-  - 'fava\static\node_modules'
-  - 'gui\node_modules'
   - '.tox'
-
-artifacts:
-  - path: 'gui\dist\*.exe'

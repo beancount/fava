@@ -9,7 +9,6 @@ fava/static/gen/app.js: fava/static/css/* fava/static/javascript/* fava/static/p
 clean: mostlyclean
 	rm -rf build dist
 	rm -rf fava/static/gen
-	make -C gui clean
 
 mostlyclean:
 	rm -rf .tox
@@ -20,7 +19,6 @@ mostlyclean:
 lint:
 	tox -e lint
 	cd fava/static; npm install; npm run lint
-	make -C gui lint
 
 test:
 	tox
@@ -43,13 +41,8 @@ before-release: translations-push translations-fetch
 #
 # After the release, the version number should be bumped in:
 #  - fava/__init__.py (with '-dev')
-#  - gui/package.json
-#  - gui/src/main.js
 #
-# Also, fava.pythonanywhere.com should be updated and a draft for the next
-# version should be created so that electron-builder will push artifacts (this
-# should have the version from gui/package.json prefixed with a 'v' as the
-# version)
+# Also, fava.pythonanywhere.com should be updated.
 release: fava/static/gen/app.js
 	python setup.py sdist bdist_wheel upload
 

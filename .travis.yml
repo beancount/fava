@@ -4,8 +4,6 @@ script: "tox -e $TRAVIS_BUILD"
 python: 3.6
 
 matrix:
-  allow_failures:
-    - env: TRAVIS_BUILD=deploy
   fast_finish: true
   include:
     - env: TRAVIS_BUILD=coverage
@@ -17,27 +15,6 @@ matrix:
       sudo: false
       before_install: "nvm use stable"
       script: "make && make lint"
-    - env: TRAVIS_BUILD=deploy
-      dist: trusty
-      sudo: required
-      before_install: |
-        sudo apt-get install --no-install-recommends -y icnsutils graphicsmagick xz-utils
-        . $HOME/.nvm/nvm.sh
-        nvm install stable
-        nvm use stable
-        make
-      after_success: "gui/bin/fava/cli || true"
-    - env: TRAVIS_BUILD=deploy
-      language: node
-      node_js: node
-      os: osx
-      before_install: |
-        brew update
-        brew outdated python || brew upgrade python
-        brew outdated mercurial || brew upgrade mercurial
-        make
-      install: "pip3 install tox"
-      after_success: "gui/bin/fava/cli || true"
 
 cache:
   directories:
