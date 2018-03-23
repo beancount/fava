@@ -8,7 +8,7 @@
 {% set type = type_|string %}
 {% if type == "<class 'beancount.core.inventory.Inventory'>" %}
 <td class="num">
-  {% for position in value|units if position.units.number != 0 %}
+  {% for position in value|sort(attribute='units.currency') %}
   {{ position.units|format_amount }}<br>
   {% endfor %}
 </td>
