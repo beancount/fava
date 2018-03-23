@@ -250,7 +250,10 @@ def statement():
     entry_hash = request.args.get('entry_hash')
     key = request.args.get('key')
     document_path = g.ledger.statement_path(entry_hash, key)
-    return send_file(document_path)
+    response = send_file(document_path)
+    cont_disp = 'inline; filename="{}"'.format(os.path.basename(document_path))
+    response.headers['Content-Disposition'] = cont_disp
+    return response
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')
