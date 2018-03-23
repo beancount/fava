@@ -8,6 +8,9 @@ import re
 import unicodedata
 import time
 
+from flask import send_file
+from werkzeug.urls import url_quote
+
 BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 
@@ -82,3 +85,23 @@ def simple_wsgi(_, start_response):
     """A simple wsgi app that always returns an empty response."""
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [b'']
+
+
+def send_as_inline(file_path):
+    """Send  a file as an inline, including the original filename."""
+    response = send_file(file_path)
+    cont_disp = 'inline; filename='
+    filename = os.path.basename(file_path)
+    try:
+        filename = filename.encode('latin-1')
+    except UnicodeEncodeError:
+        normalized_filename = unicodedata.normalize('NFKD', filename)
+        cont_disp += '"{}"; filename*={}'.format(
+            normalized_filename.encode('latin-1', 'ignore').decode(),
+            "UTF-8''{}".format(url_quote(filename))
+        )
+    else:
+        cont_disp += '"{}"'.format(filename.decode())
+
+    response.headers['Content-Disposition'] = cont_disp
+    return response
