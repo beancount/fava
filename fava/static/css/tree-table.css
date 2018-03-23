@@ -3,176 +3,177 @@
  * some of the shared styles are in `journal-table.css`
  */
 
-.tree-table {
-  &.fullwidth {
-    display: block;
-    max-width: 100%;
-    overflow-x: auto;
-  }
+.tree-table.fullwidth {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
 
-  & p {
-    margin-top: -1px;
+.tree-table p {
+  margin-top: -1px;
+}
 
-    & > span {
-      border: 1px solid var(--color-table-header-background);
-      margin-right: -1px;
-    }
-  }
+.tree-table p > span {
+  border: 1px solid var(--color-table-header-background);
+  margin-right: -1px;
+}
 
-  & .account-cell {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    max-width: 30em;
-    min-width: 14em;
+.tree-table .account-cell {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  max-width: 30em;
+  min-width: 14em;
+}
 
-    &.depth-1 {
-      margin-left: 1em;
-      max-width: 29em;
-      min-width: 13em;
-    }
+.tree-table .account-cell.depth-1 {
+  margin-left: 1em;
+  max-width: 29em;
+  min-width: 13em;
+}
 
-    &.depth-2 {
-      margin-left: 2em;
-      max-width: 28em;
-      min-width: 12em;
-    }
+.tree-table .account-cell.depth-2 {
+  margin-left: 2em;
+  max-width: 28em;
+  min-width: 12em;
+}
 
-    &.depth-3 {
-      margin-left: 3em;
-      max-width: 27em;
-      min-width: 11em;
-    }
+.tree-table .account-cell.depth-3 {
+  margin-left: 3em;
+  max-width: 27em;
+  min-width: 11em;
+}
 
-    &.depth-4 {
-      margin-left: 4em;
-      max-width: 26em;
-      min-width: 10em;
-    }
+.tree-table .account-cell.depth-4 {
+  margin-left: 4em;
+  max-width: 26em;
+  min-width: 10em;
+}
 
-    &.depth-5 {
-      margin-left: 5em;
-      max-width: 25em;
-      min-width: 9em;
-    }
+.tree-table .account-cell.depth-5 {
+  margin-left: 5em;
+  max-width: 25em;
+  min-width: 9em;
+}
 
-    &.depth-6 {
-      margin-left: 6em;
-      max-width: 24em;
-      min-width: 8em;
-    }
+.tree-table .account-cell.depth-6 {
+  margin-left: 6em;
+  max-width: 24em;
+  min-width: 8em;
+}
 
-    &.depth-7 {
-      margin-left: 7em;
-      max-width: 23em;
-      min-width: 7em;
-    }
+.tree-table .account-cell.depth-7 {
+  margin-left: 7em;
+  max-width: 23em;
+  min-width: 7em;
+}
 
-    &.depth-8 {
-      margin-left: 8em;
-      max-width: 22em;
-      min-width: 6em;
-    }
+.tree-table .account-cell.depth-8 {
+  margin-left: 8em;
+  max-width: 22em;
+  min-width: 6em;
+}
 
-    &.depth-9 {
-      margin-left: 9em;
-      max-width: 21em;
-      min-width: 5em;
-    }
+.tree-table .account-cell.depth-9 {
+  margin-left: 9em;
+  max-width: 21em;
+  min-width: 5em;
+}
 
-    & a {
-      margin-left: 1em;
-    }
-  }
+.tree-table .account-cell a {
+  margin-left: 1em;
+}
 
-  & .has-children {
-    cursor: pointer;
+.tree-table .has-children {
+  cursor: pointer;
+}
 
-    &::before {
-      border-left: 5px solid transparent;
-      border-right: 5px solid transparent;
-      border-top: 5px solid var(--color-treetable-expander);
-      content: '';
-      margin: 0 -10px 0 0;
-    }
-  }
+.tree-table .has-children::before {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid var(--color-treetable-expander);
+  content: '';
+  margin: 0 -10px 0 0;
+}
 
-  & .num {
-    width: 10em;
+.tree-table .num {
+  width: 10em;
+}
 
-    & a {
-      color: inherit;
-      display: block;
-    }
-  }
+.tree-table .num a {
+  color: inherit;
+  display: block;
+}
 
-  & .other {
-    width: 13em;
+.tree-table .other {
+  width: 13em;
+}
 
-    & a {
-      color: inherit;
-      display: block;
-    }
-  }
+.tree-table .other a {
+  color: inherit;
+  display: block;
+}
 
-  & .has-balance {
-    & .balance {
-      display: block;
-    }
+.tree-table .has-balance .balance {
+  display: block;
+}
 
-    & .balance-children {
-      display: none;
-    }
-  }
+.tree-table .has-balance .balance-children {
+  display: none;
+}
 
-  & .balance-children {
-    display: block;
-    opacity: .7;
-  }
+.tree-table .balance-children {
+  display: block;
+  opacity: .7;
+}
 
-  & .toggled {
-    & ol { display: none; }
+.tree-table .toggled ol {
+  display: none;
+}
 
-    & .balance {
-      display: none;
-    }
+.tree-table .toggled .balance {
+  display: none;
+}
 
-    & .balance-children {
-      color: var(--color-text);
-      display: block;
-    }
+.tree-table .toggled .balance-children {
+  color: var(--color-text);
+  display: block;
+}
 
-    & .has-children::before {
-      transform: rotate(270deg);
-    }
-  }
+.tree-table .toggled .has-children::before {
+  transform: rotate(270deg);
+}
 
-  & .expand-all {
-    color: inherit;
-    font-weight: normal;
-    margin-left: 15px;
-    opacity: .5;
-  }
+.tree-table .expand-all {
+  color: inherit;
+  font-weight: normal;
+  margin-left: 15px;
+  opacity: .5;
+}
 
-  & .diff {
-    color: var(--color-budget-zero);
-    font-size: .9em;
-    margin-right: 3px;
+.tree-table .diff {
+  color: var(--color-budget-zero);
+  font-size: .9em;
+  margin-right: 3px;
+}
 
-    &.negative { color: var(--color-budget-negative); }
-    &.positive { color: var(--color-budget-positive); }
-  }
+.tree-table .diff.negative {
+  color: var(--color-budget-negative);
+}
+
+.tree-table .diff.positive {
+  color: var(--color-budget-positive);
 }
 
 /* For two or more operating currencies, set a slightly smaller size. */
 .two-currencies {
   font-size: .9em;
+}
 
-  & .num {
-    width: 8em;
-  }
+.two-currencies .num {
+  width: 8em;
+}
 
-  & .other {
-    width: 11em;
-  }
+.two-currencies .other {
+  width: 11em;
 }

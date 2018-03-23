@@ -11,15 +11,15 @@
     cost_date as acquisition_date
   WHERE account_sortkey(account) ~ "^[01]"
   GROUP BY account, cost_date, currency, cost_currency, cost_number, account_sortkey(account)
-  ORDER BY account_sortkey(account)' %}
+  ORDER BY account_sortkey(account), currency, cost_date' %}
 {% set holdings_by = {
 'account': 'SELECT account,
     units(sum(position)) as units,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
-  GROUP BY account, cost_currency, account_sortkey(account)
-  ORDER BY account_sortkey(account)',
+  GROUP BY account, cost_currency, account_sortkey(account), currency
+  ORDER BY account_sortkey(account), currency',
 'currency': 'SELECT
     units(sum(position)) as units,
     cost(sum(position)) as book_value,
@@ -55,5 +55,5 @@
       {{ querytable.download_links(query_string) }}
     </p>
     {% set contents, result_types, result_rows = ledger.query_shell.execute_query(query_string) %}
-    {{ querytable.querytable(result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}
+    {{ querytable.querytable(contents, result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}
 {% endblock %}

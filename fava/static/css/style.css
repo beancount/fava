@@ -116,20 +116,20 @@ body {
   --color-ingest: #cefac1;
 }
 
+.journal .balance { --entry-type-color: #cfc; }
+.journal .close { --entry-type-color: hsl(0, 0%, 70%); }
+.journal .custom { --entry-type-color: #fff3ab; }
+.journal .document { --entry-type-color: #ffc8ff; }
+.journal .note { --entry-type-color: #aad0ff; }
+.journal .open { --entry-type-color: hsl(0, 0%, 92%); }
+.journal .other { --entry-type-color: #cff; }
+.journal .pad { --entry-type-color: #8ff; }
+.journal .pending { --entry-type-color: #f8a; }
+.journal .query { --entry-type-color: #aad0ff; }
+
+.journal .budget { --entry-type-color: #ffddae; }
+
 .journal {
-  & .balance { --entry-type-color: #cfc; }
-  & .close { --entry-type-color: hsl(0, 0%, 70%); }
-  & .custom { --entry-type-color: #fff3ab; }
-  & .document { --entry-type-color: #ffc8ff; }
-  & .note { --entry-type-color: #aad0ff; }
-  & .open { --entry-type-color: hsl(0, 0%, 92%); }
-  & .other { --entry-type-color: #cff; }
-  & .pad { --entry-type-color: #8ff; }
-  & .pending { --entry-type-color: #f8a; }
-  & .query { --entry-type-color: #aad0ff; }
-
-  & .budget { --entry-type-color: #ffddae; }
-
   --color-journal-postings: hsl(0, 0%, 92%);
   --color-journal-metadata: hsl(210, 44%, 67%);
   --color-journal-tag: hsl(210, 61%, 64%);

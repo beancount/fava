@@ -1,48 +1,53 @@
-.tree-table,
-.journal {
-  & p,
-  & li,
-  & ul,
-  & ol {
-    margin: 0;
-    padding: 0;
-  }
+.tree-table p,
+.tree-table li,
+.tree-table ul,
+.tree-table ol,
+.journal p,
+.journal li,
+.journal ul,
+.journal ol {
+  margin: 0;
+  padding: 0;
+}
 
-  & p {
-    display: flex;
+.tree-table p,
+.journal p {
+  display: flex;
+}
 
-    & > span {
-      flex-shrink: 0;
-      margin: 0;
-      padding: 2px 4px;
-    }
-  }
+.tree-table p > span,
+.journal p > span {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 2px 4px;
+}
 
-  & .num {
-    color: var(--color-text);
-    font-family: var(--font-family-monospaced);
-    text-align: right;
-  }
+.tree-table .num,
+.journal .num {
+  color: var(--color-text);
+  font-family: var(--font-family-monospaced);
+  text-align: right;
+}
 
-  & .head {
-    & p > span {
-      background-color: var(--color-table-header-background);
-      color: var(--color-table-header-text);
-      padding: 3px 4px;
-    }
+.tree-table .head p > span,
+.journal .head p > span {
+  background-color: var(--color-table-header-background);
+  color: var(--color-table-header-text);
+  padding: 3px 4px;
+}
 
-    & .num {
-      background-color: var(--color-table-header-background);
-      color: var(--color-table-header-text);
-      font-family: var(--font-family);
-      text-align: inherit;
-    }
-  }
+.tree-table .head .num,
+.journal .head .num {
+  background-color: var(--color-table-header-background);
+  color: var(--color-table-header-text);
+  font-family: var(--font-family);
+  text-align: inherit;
+}
 
-  & .totals p > span {
-    background-color: var(--color-table-header-background);
-    color: var(--color-table-header-text);
-  }
+.tree-table .totals p > span,
+.journal .totals p > span {
+  background-color: var(--color-table-header-background);
+  color: var(--color-table-header-text);
 }
 
 .journal > li,
@@ -78,138 +83,151 @@
   display: block;
 }
 
-.journal {
-  & p,
-  & dl {
-    border-bottom: thin solid var(--color-table-border);
-  }
+.journal p,
+.journal dl {
+  border-bottom: thin solid var(--color-table-border);
+}
 
-  & .postings {
-    background-color: var(--color-journal-postings);
-    font-size: .9em;
-    opacity: .8;
+.journal .postings {
+  background-color: var(--color-journal-postings);
+  font-size: .9em;
+  opacity: .8;
+}
 
-    & .num {
-      line-height: 16px;
-      overflow: hidden;
-    }
-  }
+.journal .postings .num {
+  line-height: 16px;
+  overflow: hidden;
+}
 
-  & .transaction { cursor: pointer; }
+.journal .transaction {
+  cursor: pointer;
+}
 
-  /* Metadata */
-  & dl {
-    font-size: .9em;
-    margin: 0;
-    padding: 2px 0;
-  }
+/* Metadata */
+.journal dl {
+  font-size: .9em;
+  margin: 0;
+  padding: 2px 0;
+}
 
-  & dt {
-    color: var(--color-journal-metadata);
-    display: inline-block;
-    float: left;
-    margin-left: 9rem;
-    min-width: 4rem;
-    width: auto;
-  }
+.journal dt {
+  color: var(--color-journal-metadata);
+  display: inline-block;
+  float: left;
+  margin-left: 9rem;
+  min-width: 4rem;
+  width: auto;
+}
 
-  & dd {
-    margin-left: 15rem;
-  }
+.journal dd {
+  margin-left: 15rem;
+}
 
-  /* Table cells (span) */
-  & p > .num {
-    border-left: 1px solid var(--color-table-border);
-    width: 9rem;
-  }
+.journal p > .num {
+  border-left: 1px solid var(--color-table-border);
+  width: 9rem;
+}
 
-  & .datecell,
-  & .flag {
-    background-color: var(--entry-type-color);
-    text-align: center;
-  }
+.journal .datecell,
+.journal .flag {
+  background-color: var(--entry-type-color);
+  text-align: center;
+}
 
-  & .datecell { width: 5.5rem; }
-  & .flag { width: 3rem; }
+.journal .datecell {
+  width: 5.5rem;
+}
 
-  & .change { font-weight: 500; }
+.journal .flag {
+  width: 3rem;
+}
 
-  & .description {
-    align-items: center;
-    display: flex;
-    flex: 1;
-    padding-left: 8px;
+.journal .change {
+  font-weight: 500;
+}
 
-    & .separator {
-      background-color: var(--color-text-lighter);
-      height: 4px;
-      margin: 0 6px;
-      width: 4px;
-    }
+.journal .description {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  padding-left: 8px;
+}
 
-    & .account-link {
-      margin-right: .5em;
-    }
+.journal .description .separator {
+  background-color: var(--color-text-lighter);
+  height: 4px;
+  margin: 0 6px;
+  width: 4px;
+}
 
-    & .num {
-      margin: 0 5px;
-    }
-  }
+.journal .description .account-link {
+  margin-right: .5em;
+}
 
-  & .tag,
-  & .link {
-    cursor: pointer;
-    font-size: .9em;
-    margin-left: 8px;
-  }
+.journal .description .num {
+  margin: 0 5px;
+}
 
-  & .tag { color: var(--color-journal-tag); }
-  & .link { color: var(--color-journal-link); }
+.journal .tag,
+.journal .link {
+  cursor: pointer;
+  font-size: .9em;
+  margin-left: 8px;
+}
 
-  & .bal { background-color: var(--entry-type-color); }
+.journal .tag {
+  color: var(--color-journal-tag);
+}
 
-  & a:hover {
-    filter: brightness(80%);
-  }
+.journal .link {
+  color: var(--color-journal-link);
+}
 
-  & .filename {
-    font-family: var(--font-family-monospaced);
-    font-size: .9em;
-  }
+.journal .bal {
+  background-color: var(--entry-type-color);
+}
 
-  & .document .filename {
-    margin-left: 1em;
-  }
+.journal a:hover {
+  filter: brightness(80%);
+}
 
-  & .indicators {
-    align-items: center;
-    display: flex;
-    flex-shrink: 3;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+.journal .filename {
+  font-family: var(--font-family-monospaced);
+  font-size: .9em;
+}
 
-    & span {
-      background-color: var(--color-journal-posting-indicator);
-      border-radius: 3px;
-      height: 6px;
-      margin-right: 4px;
-      min-width: 6px;
-      padding: 0;
-    }
+.journal .document .filename {
+  margin-left: 1em;
+}
 
-    & .pending,
-    & .other {
-      background-color: var(--entry-type-color);
-    }
+.journal .indicators {
+  align-items: center;
+  display: flex;
+  flex-shrink: 3;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
 
-    & .metadata-indicator {
-      border-radius: 20px;
-      color: var(--color-journal-metadata-indicator);
-      font-size: 10px;
-      height: 16px;
-      line-height: 16px;
-      padding: 0 6px;
-      text-transform: lowercase;
-    }
-  }
+.journal .indicators span {
+  background-color: var(--color-journal-posting-indicator);
+  border-radius: 3px;
+  height: 6px;
+  margin-right: 4px;
+  min-width: 6px;
+  padding: 0;
+}
+
+.journal .indicators .pending,
+.journal .indicators .other {
+  background-color: var(--entry-type-color);
+}
+
+.journal .indicators .metadata-indicator {
+  border-radius: 20px;
+  color: var(--color-journal-metadata-indicator);
+  font-size: 10px;
+  height: 16px;
+  line-height: 16px;
+  padding: 0 6px;
+  text-transform: lowercase;
 }

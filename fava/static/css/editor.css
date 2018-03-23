@@ -1,9 +1,9 @@
 /* Editor */
 
-@import 'codemirror/lib/codemirror';
-@import 'codemirror/addon/dialog/dialog';
-@import 'codemirror/addon/fold/foldgutter';
-@import 'codemirror/addon/hint/show-hint';
+@import 'codemirror/lib-codemirror.css';
+@import 'codemirror/addon-dialog-dialog.css';
+@import 'codemirror/addon-fold-foldgutter.css';
+@import 'codemirror/addon-hint-show-hint.css';
 
 :root {
   --source-editor-fieldset-height: 44px;
@@ -21,48 +21,49 @@
   display: flex;
   height: 100%;
   margin: 0;
+}
 
-  & .selected::before {
-    content: '›';
-  }
+.dropdown .selected::before {
+  content: '›';
+}
 
-  & > li {
-    cursor: default;
-    height: var(--source-editor-fieldset-height);
-    line-height: var(--source-editor-fieldset-height);
-    margin-right: 10px;
-    position: relative;
-  }
+.dropdown > li {
+  cursor: default;
+  height: var(--source-editor-fieldset-height);
+  line-height: var(--source-editor-fieldset-height);
+  margin-right: 10px;
+  position: relative;
+}
 
-  & button {
-    color: inherit;
-  }
+.dropdown button {
+  color: inherit;
+}
 
-  & > li > ul {
-    background-color: var(--color-background);
-    border: 1px solid var(--color-background-darker);
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    box-shadow: 0 3px 6px var(--color-transparent-black);
-    display: none;
-    margin-left: -10px;
-    position: absolute;
-    top: var(--source-editor-fieldset-height);
-    width: 500px;
-    z-index: var(--z-index-floating-ui);
-  }
+.dropdown > li > ul {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-background-darker);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  box-shadow: 0 3px 6px var(--color-transparent-black);
+  display: none;
+  line-height: 1.5;
+  margin-left: -10px;
+  position: absolute;
+  top: var(--source-editor-fieldset-height);
+  width: 500px;
+  z-index: var(--z-index-floating-ui);
+}
 
-  & > li > ul > li {
-    padding: 4px 10px;
-  }
+.dropdown > li > ul > li {
+  padding: 4px 10px;
+}
 
-  & > li > ul > li span {
-    float: right;
-  }
+.dropdown > li > ul > li span {
+  float: right;
+}
 
-  & li:hover > ul {
-    display: block;
-  }
+.dropdown li:hover > ul {
+  display: block;
 }
 
 .source-form {
@@ -72,28 +73,28 @@
   position: fixed;
   right: 0;
   top: var(--header-height);
+}
 
-  & .fieldset {
-    border-bottom: 1px solid var(--color-sidebar-border);
-    height: var(--source-editor-fieldset-height);
-    padding-left: .5em;
+.source-form .fieldset {
+  border-bottom: 1px solid var(--color-sidebar-border);
+  height: var(--source-editor-fieldset-height);
+  padding-left: .5em;
+}
 
-    & > button {
-      margin: 0;
-    }
-  }
+.source-form .fieldset > button {
+  margin: 0;
+}
 
-  & .CodeMirror,
-  & textarea {
-    border: 0;
-    height: 100%;
-    margin: 0;
-    width: 100%;
-  }
+.source-form .CodeMirror,
+.source-form textarea {
+  border: 0;
+  height: 100%;
+  margin: 0;
+  width: 100%;
+}
 
-  & .CodeMirror-lines {
-    border-top: 1px solid var(--color-sidebar-border);
-  }
+.source-form .CodeMirror-lines {
+  border-top: 1px solid var(--color-sidebar-border);
 }
 
 .source-slice-editor-form .CodeMirror {
@@ -150,8 +151,8 @@
 
 .CodeMirror-hint {
   max-width: 600px;
+}
 
-  & .highlight {
-    font-weight: 500;
-  }
+.CodeMirror-hint .highlight {
+  font-weight: 500;
 }

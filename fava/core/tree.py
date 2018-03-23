@@ -7,7 +7,6 @@ from beancount.core import account, convert
 from fava.core.inventory import CounterInventory
 
 
-# pylint: disable=too-few-public-methods
 class TreeNode(object):
     """A node in the account tree."""
     __slots__ = ('name', 'children', 'balance', 'balance_children', 'has_txns')

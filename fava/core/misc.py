@@ -17,8 +17,6 @@ FavaError = namedtuple('FavaError', 'source message entry')
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
-    # pylint: disable=too-few-public-methods
-
     def __init__(self, ledger):
         super().__init__(ledger)
         self.sidebar_links = None

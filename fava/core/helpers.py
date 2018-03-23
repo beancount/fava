@@ -23,7 +23,7 @@ class FilterException(FavaAPIException):
         return self.message
 
 
-class FavaModule(object):  # pylint: disable=too-few-public-methods
+class FavaModule(object):
     """Base class for the "modules" of FavaLedger."""
 
     def __init__(self, ledger):

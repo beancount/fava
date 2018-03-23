@@ -153,7 +153,9 @@ e.on('button-click-add-posting', (button) => {
 // Autofill complete transactions.
 e.on('autocomplete-select-payees', (input) => {
   const payee = input.value;
-  $.fetch(`${window.favaAPI.baseURL}api/payee-transaction/?payee=${payee}`)
+  const params = new URLSearchParams();
+  params.set('payee', payee);
+  $.fetch(`${window.favaAPI.baseURL}api/payee-transaction/?${params.toString()}`)
     .then(handleJSON)
     .then(data => data.payload)
     .then((entry) => {

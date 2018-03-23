@@ -3,32 +3,34 @@
   font-size: 1em;
   margin-bottom: 1.5em;
   text-align: center;
+}
 
-  & label {
-    cursor: pointer;
-    padding-left: .5em;
+.chart-labels label {
+  cursor: pointer;
+  padding-left: .5em;
+}
 
-    &.selected,
-    &:hover {
-      color: var(--color-text-lighter);
-    }
-  }
+.chart-labels label.selected,
+.chart-labels label:hover {
+  color: var(--color-text-lighter);
+}
 
-  & label + label { border-left: 1px solid var(--color-text-lighter); }
+.chart-labels label + label {
+  border-left: 1px solid var(--color-text-lighter);
 }
 
 .toggle-chart {
   height: 22px;
   margin: 0;
   padding: 2px 6px;
+}
 
-  & span {
-    border: 0;
-    border-left: 9px solid transparent;
-    border-right: 9px solid transparent;
-    border-top: 13px solid var(--color-background);
-    display: block;
-  }
+.toggle-chart span {
+  border: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 13px solid var(--color-background);
+  display: block;
 }
 
 .hide-charts .toggle-chart span {
@@ -53,17 +55,17 @@
 
 .chart-legend {
   flex-grow: 1;
+}
 
-  & .color {
-    border-radius: 10px;
-    display: inline-block;
-    height: 10px;
-    width: 10px;
-  }
+.chart-legend .color {
+  border-radius: 10px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
 
-  & .name {
-    margin: 0 6px 0 3px;
-  }
+.chart-legend .name {
+  margin: 0 6px 0 3px;
 }
 
 .loading {
@@ -73,83 +75,73 @@
   text-align: center;
 }
 
-svg {
-  & text {
-    fill: var(--color-text-lightest);
-  }
+svg text {
+  fill: var(--color-text-lightest);
+}
 
-  & .line {
-    fill: none;
-    stroke-width: 2px;
-  }
+svg .line {
+  fill: none;
+  stroke-width: 2px;
+}
 
-  & .axis {
-    & path,
-    & line {
-      fill: none;
-      shape-rendering: crispEdges;
-      stroke: var(--color-chart-axis);
-    }
+svg .axis path,
+svg .axis line {
+  fill: none;
+  shape-rendering: crispEdges;
+  stroke: var(--color-chart-axis);
+}
 
-    &.y line {
-      stroke: var(--color-chart-axis);
-      stroke-dasharray: 2, 2;
-    }
-  }
+svg .axis.y line {
+  stroke: var(--color-chart-axis);
+  stroke-dasharray: 2, 2;
+}
 
-  & .voronoi {
-    fill: none;
-    pointer-events: all;
-  }
+svg .voronoi {
+  fill: none;
+  pointer-events: all;
 }
 
 .treemap {
   shape-rendering: crispEdges;
-
-  & rect {
-    stroke: var(--color-treemap-text);
-    stroke-width: 2px;
-  }
-
-  & text {
-    cursor: pointer;
-  }
 }
 
-.sunburst {
-  & .account {
-    cursor: pointer;
-    fill: var(--color-text);
-  }
-
-  & .balance {
-    font-family: var(--font-family-monospaced);
-  }
-
-  & path {
-    cursor: pointer;
-  }
+.treemap rect {
+  stroke: var(--color-treemap-text);
+  stroke-width: 2px;
 }
 
-.barchart {
-  & .group {
-    &:hover .group-box {
-      opacity: .1;
-    }
-  }
+.treemap text {
+  cursor: pointer;
+}
 
-  & .axis-group-box {
-    cursor: pointer;
-    opacity: 0;
-  }
+.sunburst .account {
+  cursor: pointer;
+  fill: var(--color-text);
+}
 
-  & .group-box {
-    opacity: 0;
-  }
+.sunburst .balance {
+  font-family: var(--font-family-monospaced);
+}
 
-  & .budget {
-    opacity: .3;
-  }
+.sunburst path {
+  cursor: pointer;
+}
+
+.barchart .group:hover .group-box {
+  opacity: .1;
+}
+
+.barchart .axis-group-box {
+  cursor: pointer;
+  opacity: 0;
+}
+
+.barchart .group-box {
+  opacity: 0;
+}
+
+.barchart .budget {
+  opacity: .3;
 }
 
 .tooltip {
@@ -165,23 +157,23 @@ svg {
   text-align: center;
   transform: translate(-50%, -100%);
   z-index: var(--z-index-floating-ui);
+}
 
-  &::before {
-    border: 15px solid transparent;
-    border-top-color: var(--color-background-darkest);
-    content: '';
-    height: 0;
-    left: 50%;
-    margin-left: -15px;
-    position: absolute;
-    top: 100%;
-    width: 0;
-  }
+.tooltip::before {
+  border: 15px solid transparent;
+  border-top-color: var(--color-background-darkest);
+  content: '';
+  height: 0;
+  left: 50%;
+  margin-left: -15px;
+  position: absolute;
+  top: 100%;
+  width: 0;
+}
 
-  & em {
-    color: var(--color-text-lightest);
-    display: block;
-    font-family: var(--font-family);
-    margin-top: 5px;
-  }
+.tooltip em {
+  color: var(--color-text-lightest);
+  display: block;
+  font-family: var(--font-family);
+  margin-top: 5px;
 }

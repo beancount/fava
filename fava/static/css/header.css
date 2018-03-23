@@ -9,10 +9,10 @@ header > svg.loading {
   border-radius: 50%;
   border-top: 2px solid var(--color-header-text);
   padding: 0;
+}
 
-  & path {
-    opacity: 0;
-  }
+header > svg.loading path {
+  opacity: 0;
 }
 
 h1 {
@@ -25,40 +25,40 @@ h1 {
   max-height: var(--header-height);
   overflow: hidden;
   padding: calc((var(--header-height) - 24px) / 2) 10px;
+}
 
-  & .droptarget {
-    margin-left: -.6em;
-    padding: .6em;
-  }
+h1 .droptarget {
+  margin-left: -.6em;
+  padding: .6em;
+}
 
-  & a:hover,
-  & a:link,
-  & a:visited {
-    color: inherit;
-  }
+h1 a:hover,
+h1 a:link,
+h1 a:visited {
+  color: inherit;
+}
 
-  & .last-activity {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: normal;
-    margin-left: 10px;
-    opacity: .8;
-  }
+h1 .last-activity {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 10px;
+  opacity: .8;
+}
 
-  & .status-indicator {
-    border-radius: 10px;
-    height: 10px;
-    margin: 0 0 0 10px;
-    width: 10px;
+h1 .status-indicator {
+  border-radius: 10px;
+  height: 10px;
+  margin: 0 0 0 10px;
+  width: 10px;
+}
 
-    &.status-gray { margin-left: 0; }
-  }
+h1 .status-indicator.status-gray {
+  margin-left: 0;
+}
 
-  &:hover {
-    & .beancount-files {
-      display: block;
-    }
-  }
+h1:hover .beancount-files {
+  display: block;
 }
 
 .page-title::before {
@@ -88,30 +88,30 @@ h1 {
   position: absolute;
   top: var(--header-height);
   width: 20em;
+}
 
-  & ul {
-    margin-bottom: 0;
-    max-height: 400px;
-    overflow-y: auto;
-  }
+.beancount-files ul {
+  margin-bottom: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
 
-  & a {
-    cursor: pointer;
-    display: block;
-    padding: 8px 12px 8px 28px;
+.beancount-files a {
+  cursor: pointer;
+  display: block;
+  padding: 8px 12px 8px 28px;
+}
 
-    &.active,
-    &:hover {
-      background-color: var(--color-links);
-      color: var(--color-background);
-    }
+.beancount-files a.active,
+.beancount-files a:hover {
+  background-color: var(--color-links);
+  color: var(--color-background);
+}
 
-    &.active {
-      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=');
-      background-position: 9px center;
-      background-repeat: no-repeat;
-    }
-  }
+.beancount-files a.active {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=');
+  background-position: 9px center;
+  background-repeat: no-repeat;
 }
 
 .filter-form {
@@ -119,57 +119,53 @@ h1 {
   display: flex;
   margin: 0;
   padding-top: 7px;
+}
 
-  & > span {
-    margin: 0 4px 6px 0;
-    position: relative;
-  }
+.filter-form > span {
+  margin: 0 4px 6px 0;
+  position: relative;
+}
 
-  & input {
-    background-color: var(--color-background);
-    border: 0;
-    margin: 0;
-    max-width: 18rem;
-    outline: none;
-    padding: 8px 25px 8px 10px;
-  }
+.filter-form input {
+  background-color: var(--color-background);
+  border: 0;
+  margin: 0;
+  max-width: 18rem;
+  outline: none;
+  padding: 8px 25px 8px 10px;
+}
 
-  & [type='text'] {
-    &:placeholder-shown,
-    &::placeholder {
-      color: var(--color-header-tinted);
-      opacity: 1;
-    }
+.filter-form [type='text']:placeholder-shown,
+.filter-form [type='text']::placeholder {
+  color: var(--color-header-tinted);
+  opacity: 1;
+}
 
-    &:focus {
-      &:placeholder-shown,
-      &::placeholder {
-        color: var(--color-header-tinted);
-      }
+.filter-form [type='text']:focus:placeholder-shown,
+.filter-form [type='text']:focus::placeholder {
+  color: var(--color-header-tinted);
+}
 
-      background-color: var(--color-background);
-      color: var(--color-text);
-    }
-  }
+.filter-form [type='text']:focus {
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
 
-  & [type='submit'] {
-    display: none;
-  }
+.filter-form [type='submit'] {
+  display: none;
+}
 
-  & .empty {
-    & input {
-      background-color: var(--color-header-light);
-    }
+.filter-form .empty input {
+  background-color: var(--color-header-light);
+}
 
-    & .close {
-      display: none;
-    }
-  }
+.filter-form .empty .close {
+  display: none;
+}
 
-  & .close {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 8px;
-  }
+.filter-form .close {
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 8px;
 }
