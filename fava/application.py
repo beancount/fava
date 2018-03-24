@@ -33,7 +33,7 @@ from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException, FilterException
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
-from fava.util import slugify, resource_path, setup_logging
+from fava.util import slugify, resource_path, setup_logging, send_file_inline
 from fava.util.excel import HAVE_EXCEL
 
 
@@ -241,7 +241,7 @@ def document():
     if not any((filename == document.filename for document in
                 g.ledger.all_entries_by_type[Document])):
         abort(404)
-    return send_file(filename)
+    return send_file_inline(filename)
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])
@@ -250,7 +250,7 @@ def statement():
     entry_hash = request.args.get('entry_hash')
     key = request.args.get('key')
     document_path = g.ledger.statement_path(entry_hash, key)
-    return send_file(document_path)
+    return send_file_inline(document_path)
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')

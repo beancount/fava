@@ -1,7 +1,9 @@
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
-from fava.util import simple_wsgi, slugify, pairwise, listify
+from fava.util import simple_wsgi, slugify, pairwise, listify, send_file_inline
+
+from .conftest import data_file
 
 
 def test_listify():
@@ -35,3 +37,15 @@ def test_slugify():
     assert slugify('söße') == 'söße'
     assert slugify('ASDF') == 'asdf'
     assert slugify('ASDF test test') == 'asdf-test-test'
+
+
+def test_send_file_inline(app):
+    with app.test_request_context():
+        app.preprocess_request()
+        resp = send_file_inline(data_file('example-balances.csv'))
+        assert resp.headers['Content-Disposition'] == \
+            'inline; filename*=UTF-8\'\'example-balances.csv'
+        resp = send_file_inline(data_file('example-utf8-🦁.txt'))
+        # pylint: disable=line-too-long
+        assert resp.headers['Content-Disposition'] == \
+            'inline; filename*=UTF-8\'\'example-utf8-%F0%9F%A6%81.txt'

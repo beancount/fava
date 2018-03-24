@@ -8,6 +8,9 @@ import re
 import unicodedata
 import time
 
+from flask import send_file
+from werkzeug.urls import url_quote
+
 BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 
 
@@ -82,3 +85,12 @@ def simple_wsgi(_, start_response):
     """A simple wsgi app that always returns an empty response."""
     start_response('200 OK', [('Content-Type', 'text/html')])
     return [b'']
+
+
+def send_file_inline(file_path):
+    """Send a file inline, including the original filename."""
+    response = send_file(file_path)
+    basename = os.path.basename(file_path)
+    cont_disp = "inline; filename*=UTF-8''{}".format(url_quote(basename))
+    response.headers['Content-Disposition'] = cont_disp
+    return response
