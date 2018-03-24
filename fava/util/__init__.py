@@ -87,10 +87,13 @@ def simple_wsgi(_, start_response):
     return [b'']
 
 
-def send_file_inline(file_path):
-    """Send a file inline, including the original filename."""
-    response = send_file(file_path)
-    basename = os.path.basename(file_path)
+def send_file_inline(filename):
+    """Send a file inline, including the original filename.
+
+    Ref: http://test.greenbytes.de/tech/tc2231/.
+    """
+    response = send_file(filename)
+    basename = os.path.basename(filename)
     cont_disp = "inline; filename*=UTF-8''{}".format(url_quote(basename))
     response.headers['Content-Disposition'] = cont_disp
     return response
