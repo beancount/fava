@@ -6,7 +6,6 @@ python: 3.6
 matrix:
   allow_failures:
     - env: TRAVIS_BUILD=deploy
-    - env: TRAVIS_BUILD=py36-dev
   fast_finish: true
   include:
     - env: TRAVIS_BUILD=coverage
