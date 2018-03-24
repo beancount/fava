@@ -17,19 +17,9 @@ page for an index of the available documentation.
 Installation
 ------------
 
-There are two ways to run Fava. You can start the Fava process in a terminal
-and access it with you default web browser. Alternatively there is a GUI
-version which bundles Fava with a browser basically.  If you know your way
-around the terminal, installation via ``pip`` (see below) is recommended,
-otherwise, head to the `Releases
-<https://github.com/beancount/fava/releases>`__ page on GitHub and download the
-latest GUI version for your platform: ``AppImage`` on Linux (the file needs to
-be made executable after downloading) or ``dmg`` for macOS. There is currently no
-build of the GUI for Windows.
-
-Fava is known to run on macOS, Linux, and Windows (with Cygwin).  You will need
-`Python 3 <https://www.python.org/downloads/>`__ (at least version 3.4).  Then
-you can use ``pip`` to install Fava by running::
+Fava is known to run on macOS, Linux, and Windows.  You will need `Python 3
+<https://www.python.org/downloads/>`__ (at least version 3.5).  Then you can
+use ``pip`` to install Fava by running::
 
     pip3 install fava
 

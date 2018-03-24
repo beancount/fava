@@ -23,9 +23,7 @@ Beancount, you can get started with Fava::
     fava ledger.beancount
 
 and visit the web interface at `http://localhost:5000
-<http://localhost:5000>`__.  Alternatively, for the GUI version of Fava, head
-to the `Releases <https://github.com/beancount/fava/releases>`__ page on GitHub
-to download the latest release for your platform.
+<http://localhost:5000>`__.
 
 If you want to hack on Fava or run a development version, see the
 `Development <https://beancount.github.io/fava/development.html>`__ page on the
