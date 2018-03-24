@@ -10,12 +10,6 @@ project = 'Fava'
 copyright = '2016, Dominik Aumayr'
 author = 'Dominik Aumayr'
 
-with open('../fava/__init__.py', 'rb') as f:
-    version = str(ast.literal_eval(re.search(
-        r'__version__\s+=\s+(.*)',
-        f.read().decode('utf-8')).group(1)))
-release = version
-
 exclude_patterns = ['_build']
 pygments_style = 'sphinx'
 
