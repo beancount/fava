@@ -8,9 +8,6 @@
 /fava/translations/messages.pot
 /fava.egg-info
 /htmlcov
-/gui/bin
-/gui/build
-/gui/dist
 /venv
 
 package-lock.json

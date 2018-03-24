@@ -1,7 +1,0 @@
-
-                     A GUI for Fava
-                     ~~~~~~~~~~~~~~
-
-Run `make` to install and start with `npm start`.
-
-To build an installable package for your platform, run `make dist`.
