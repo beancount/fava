@@ -11,7 +11,7 @@ import requests
 
 BASE_PATH = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '../fava'))
-LANGUAGES = ['de', 'es', 'fr', 'nl', 'pt', 'ru', 'zh-CN', 'uk']
+LANGUAGES = ['de', 'es', 'fr', 'nl', 'pt', 'ru', 'zh-CN', 'sk', 'uk']
 
 
 @click.group()
@@ -100,9 +100,11 @@ def download_from_poeditor(language, format_, token):
         'https://api.poeditor.com/v2/projects/export', data=data)
     url = request.json()['result']['url']
     content = requests.get(url).content
-    path = os.path.join(
-        BASE_PATH,
-        f'translations/{language_short}/LC_MESSAGES/messages.{format_}')
+    folder = os.path.join(BASE_PATH, 'translations', language_short,
+                          'LC_MESSAGES')
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+    path = os.path.join(folder, f'messages.{format_}')
     with open(path, 'wb') as file_:
         file_.write(content)
     click.echo(f'Downloaded to "{path}"')
