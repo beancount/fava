@@ -64,11 +64,7 @@
       {%- if not partial %}
     </article>
     {% include "_overlays.html" %}
-    <ul id="notifications" class="notifications">
-      {% for message in get_flashed_messages() %}
-      <li class="error">{{ message }}</li>
-      {% endfor %}
-    </ul>
+    <ul id="notifications" class="notifications"></ul>
     <div id="tooltip" class="tooltip"></div>
     <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
   </body>
