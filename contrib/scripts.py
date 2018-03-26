@@ -11,7 +11,7 @@ import requests
 
 BASE_PATH = os.path.normpath(
     os.path.join(os.path.dirname(__file__), '../fava'))
-LANGUAGES = ['de', 'es', 'fr', 'nl', 'pt', 'ru', 'zh-CN']
+LANGUAGES = ['de', 'es', 'fr', 'nl', 'pt', 'ru', 'zh-CN', 'uk']
 
 
 @click.group()
