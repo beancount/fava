@@ -21,12 +21,10 @@ def cli():
 
 
 def _env_to_list(attributes):
-    result = []
     for name in attributes.keys():
         if isinstance(name, tuple):
             name = name[0]
-        result.append(name)
-    return result
+        yield name
 
 
 @cli.command()
@@ -40,9 +38,10 @@ def generate_bql_grammar_json():
 
     target_env = query_env.TargetsEnvironment()
     data = {
-        'columns': sorted(_env_to_list(target_env.columns)),
-        'functions': sorted(_env_to_list(target_env.functions)),
-        'keywords': sorted([kw.lower() for kw in query_parser.Lexer.keywords]),
+        'columns': sorted(set(_env_to_list(target_env.columns))),
+        'functions': sorted(set(_env_to_list(target_env.functions))),
+        'keywords': sorted(set(
+            [kw.lower() for kw in query_parser.Lexer.keywords])),
     }
     path = os.path.join(
         os.path.dirname(__file__),

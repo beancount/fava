@@ -1,4 +1,4 @@
-.PHONY: docs test lint binaries gh-pages translations-push translations-fetch before-release release run-example format
+.PHONY: docs test lint binaries gh-pages bql-grammar translations-push translations-fetch before-release release run-example format
 
 all: fava/static/gen/app.js
 
@@ -32,8 +32,10 @@ run-example:
 format:
 	yapf -rip tests --style='{based_on_style: pep8, coalesce_brackets: True, indent_dictionary_value: True}'
 
-before-release: translations-push translations-fetch
+bql-grammar:
 	contrib/scripts.py generate_bql_grammar_json
+
+before-release: bql-grammar translations-push translations-fetch
 
 # Before making a release, CHANGES needs to be updated and version number in
 # fava/__init__.py should be set to the release version.
