@@ -84,9 +84,9 @@ body {
   --color-status-gray: #aaa;
 
   --color-notification: #fff;
-  --color-notification-info: hsla(151, 100%, 25%, .7);
-  --color-notification-error: hsla(0, 100%, 30%, .7);
-  --color-notification-warning: hsla(52, 84%, 56%, .7);
+  --color-notification-info: hsla(151, 100%, 25%);
+  --color-notification-error: hsla(0, 100%, 30%);
+  --color-notification-warning: hsla(52, 84%, 56%);
 
   --color-table-header-text: #666;
   --color-table-header-background: #e6e6e6;

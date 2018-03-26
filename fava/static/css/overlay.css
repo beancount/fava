@@ -111,4 +111,5 @@
 
 .notifications .warning {
   background-color: var(--color-notification-warning);
+  color: var(--color-text);
 }
