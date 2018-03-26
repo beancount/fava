@@ -83,46 +83,46 @@ msgstr "Estatísticas"
 msgid "Help"
 msgstr "Ajuda"
 
-#: fava/templates/_journal_table.html:76 fava/templates/commodities.html:15
+#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:15
 #: fava/templates/events.html:17
 msgid "Date"
 msgstr "Data"
 
-#: fava/templates/_journal_table.html:77
+#: fava/templates/_journal_table.html:87
 msgid "F"
 msgstr "F"
 
-#: fava/templates/_journal_table.html:78
+#: fava/templates/_journal_table.html:88
 msgid "Narration/Payee"
 msgstr "Descritivo / Beneficiário"
 
-#: fava/templates/_journal_table.html:79
+#: fava/templates/_journal_table.html:89
 msgid "Position"
 msgstr "Posição"
 
-#: fava/templates/_journal_table.html:80 fava/templates/commodities.html:16
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:16
 msgid "Price"
 msgstr "Preço"
 
-#: fava/templates/_journal_table.html:81
+#: fava/templates/_journal_table.html:91
 msgid "Cost"
 msgstr "Custo"
 
-#: fava/templates/_journal_table.html:83
+#: fava/templates/_journal_table.html:93
 msgid "Change"
 msgstr "Alterar"
 
-#: fava/templates/_entry_forms.html:60 fava/templates/_journal_table.html:84
+#: fava/templates/_entry_forms.html:60 fava/templates/_journal_table.html:94
 #: fava/templates/statistics.html:40
 msgid "Balance"
 msgstr "Saldo"
 
-#: fava/templates/_context.html:58 fava/templates/_overlays.html:33
+#: fava/templates/_context.html:57 fava/templates/_overlays.html:33
 #: fava/templates/editor.html:41
 msgid "Save"
 msgstr "Guardar"
 
-#: fava/templates/_context.html:58 fava/templates/editor.html:41
+#: fava/templates/_context.html:57 fava/templates/editor.html:41
 msgid "Saving..."
 msgstr "A guardar..."
 
@@ -160,7 +160,7 @@ msgid "Balances"
 msgstr "Saldos"
 
 #. Should variable names file and lineno be translated?
-#: fava/templates/_context.html:5 fava/templates/errors.html:20
+#: fava/templates/_context.html:4 fava/templates/errors.html:20
 #: fava/templates/errors.html:21 fava/templates/events.html:25
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Mostrar fonte %(file)s:%(lineno)s"
@@ -237,7 +237,7 @@ msgstr "Chave"
 msgid "Value"
 msgstr "Valor"
 
-#: fava/templates/_query_table.html:65
+#: fava/templates/_query_table.html:69
 msgid "Download as"
 msgstr "Guardar como"
 
@@ -375,7 +375,7 @@ msgstr ""
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr ""
 
-#: fava/templates/_journal_table.html:70
+#: fava/templates/_journal_table.html:80
 msgid "Metadata"
 msgstr ""
 
@@ -392,15 +392,15 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: fava/templates/_context.html:10
+#: fava/templates/_context.html:9
 msgid "Context"
 msgstr ""
 
-#: fava/templates/_context.html:16
+#: fava/templates/_context.html:15
 msgid "Balances before entry"
 msgstr ""
 
-#: fava/templates/_context.html:36
+#: fava/templates/_context.html:35
 msgid "Balances after entry"
 msgstr ""
 
@@ -424,7 +424,7 @@ msgstr ""
 msgid "Documents with a #statement tag"
 msgstr ""
 
-#: fava/templates/_journal_table.html:71
+#: fava/templates/_journal_table.html:81
 msgid "Postings"
 msgstr ""
 
