@@ -159,6 +159,7 @@
   background-color: var(--color-text-lighter);
   height: 4px;
   margin: 0 6px;
+  padding: 2px;
   width: 4px;
 }
 
