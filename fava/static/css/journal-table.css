@@ -27,6 +27,7 @@
   color: var(--color-text);
   font-family: var(--font-family-monospaced);
   text-align: right;
+  white-space: nowrap;
 }
 
 .tree-table .head p > span,
@@ -136,6 +137,7 @@
 
 .journal .datecell {
   width: 5.5rem;
+  white-space: nowrap;
 }
 
 .journal .flag {
