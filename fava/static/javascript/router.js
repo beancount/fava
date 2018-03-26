@@ -66,7 +66,7 @@ class Router {
   }
 
   // Replace <article> contents with the page at `url`. If `historyState` is
-  // false, do not create a history state.
+  // false, do not create a history state and do not scroll to top.
   loadURL(url, historyState = true) {
     const state = { interrupt: false };
     e.trigger('navigate', state);
@@ -84,6 +84,7 @@ class Router {
         svg.classList.remove('loading');
         if (historyState) {
           window.history.pushState(null, null, url);
+          window.scroll(0, 0);
         }
         this.updateState();
         $('article').innerHTML = data;
