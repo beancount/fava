@@ -4,7 +4,6 @@
 /dist
 /build
 /fava/static/gen
-/fava/static/css/codemirror
 /fava/translations/messages.pot
 /fava.egg-info
 /htmlcov

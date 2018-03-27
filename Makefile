@@ -1,4 +1,4 @@
-.PHONY: docs test lint binaries gh-pages bql-grammar translations-push translations-fetch before-release release run-example format
+.PHONY: docs test lint binaries gh-pages bql-grammar translations-push translations-fetch before-release run-example format upload
 
 all: fava/static/gen/app.js
 
@@ -35,6 +35,10 @@ format:
 bql-grammar:
 	contrib/scripts.py generate_bql_grammar_json
 
+dist: fava/static/gen/app.js fava
+	rm -rf dist
+	python setup.py sdist bdist_wheel
+
 before-release: bql-grammar translations-push translations-fetch
 
 # Before making a release, CHANGES needs to be updated and version number in
@@ -45,8 +49,8 @@ before-release: bql-grammar translations-push translations-fetch
 #  - fava/__init__.py (with '-dev')
 #
 # Also, fava.pythonanywhere.com should be updated.
-release: fava/static/gen/app.js
-	python setup.py sdist bdist_wheel upload
+upload: dist
+	twine upload dist/*
 
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token
