@@ -150,7 +150,7 @@ class FilterSyntaxParser(object):
 
     def p_expr_any(self, p):
         """
-        expr : ANY expr ')'
+        expr : ANY '(' expr ')'
         """
         expr = p[2]
 
