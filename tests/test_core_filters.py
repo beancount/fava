@@ -77,6 +77,7 @@ def test_filterexception():
 
 @pytest.mark.parametrize('string,number', [
     ('from:\'has_account("Assets:US:ETrade")\'', 53),
+    ('any(account:"Assets:US:ETrade")', 48),
     ('#test', 2),
     ('#test,#nomatch', 2),
     ('-#nomatch', 1825),

@@ -37,16 +37,18 @@ class FilterSyntaxLexer(object):
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
     tokens = (
-        'STRING',
-        'LINK',
-        'TAG',
+        'ANY',
         'KEY',
+        'LINK',
+        'STRING',
+        'TAG',
     )
 
     RULES = (
         ('LINK', r'\^[A-Za-z0-9\-_/.]+'),
         ('TAG', r'\#[A-Za-z0-9\-_/.]+'),
         ('KEY', r'[a-z][a-zA-Z0-9\-_]+:'),
+        ('ANY', r'any\('),
         ('STRING', r'\w+|"[^"]*"|\'[^\']*\''),
     )
 
@@ -61,6 +63,9 @@ class FilterSyntaxLexer(object):
 
     def KEY(self, token, value):
         return token, value[:-1]
+
+    def ANY(self, token, _):
+        return token, token
 
     def STRING(self, token, value):
         if value[0] in ['"', "'"]:
@@ -100,8 +105,8 @@ class FilterSyntaxLexer(object):
                 yield Token(char, char)
                 pos += 1
             else:
-                raise FilterException(
-                    'filter', 'Illegal character "{}" in filter: ')
+                raise FilterException('filter',
+                                      'Illegal character "{}" in filter: ')
 
 
 class Match(object):
@@ -137,17 +142,23 @@ class FilterSyntaxParser(object):
         """
         p[0] = p[1]
 
-    def p_filter_empty(self, p):
-        """
-        filter :
-        """
-        p[0] = lambda _: True
-
     def p_expr(self, p):
         """
         expr : simple_expr
         """
         p[0] = p[1]
+
+    def p_expr_any(self, p):
+        """
+        expr : ANY expr ')'
+        """
+        expr = p[2]
+
+        def _match_postings(entry):
+            return any(
+                expr(posting) for posting in getattr(entry, 'postings', []))
+
+        p[0] = _match_postings
 
     def p_expr_parentheses(self, p):
         """
@@ -163,6 +174,7 @@ class FilterSyntaxParser(object):
 
         def _and(entry):
             return left(entry) and right(entry)
+
         p[0] = _and
 
     def p_expr_or(self, p):
@@ -173,6 +185,7 @@ class FilterSyntaxParser(object):
 
         def _or(entry):
             return left(entry) or right(entry)
+
         p[0] = _or
 
     def p_expr_negated(self, p):
@@ -194,6 +207,7 @@ class FilterSyntaxParser(object):
 
         def _tag(entry):
             return hasattr(entry, 'tags') and (tag in entry.tags)
+
         p[0] = _tag
 
     def p_simple_expr_LINK(self, p):
@@ -204,6 +218,7 @@ class FilterSyntaxParser(object):
 
         def _link(entry):
             return hasattr(entry, 'links') and (link in entry.links)
+
         p[0] = _link
 
     def p_simple_expr_key(self, p):
@@ -231,6 +246,7 @@ class FilterSyntaxParser(object):
             if key in entry.meta:
                 return match(str(entry.meta.get(key)))
             return False
+
         p[0] = _key
 
 
@@ -292,8 +308,8 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
 
         self.begin_date, self.end_date = parse_date(self.value)
         if not self.begin_date:
-            raise FilterException('time', 'Failed to parse date: {}'
-                                  .format(self.value))
+            raise FilterException('time', 'Failed to parse date: {}'.format(
+                self.value))
         return True
 
     def _filter(self, entries, options):
@@ -321,9 +337,9 @@ class AdvancedFilter(EntryFilter):
         if value == self.value:
             return False
         self.value = value
-        if value:
+        if value and value.strip():
             try:
-                tokens = LEXER.lex(value)
+                tokens = LEXER.lex(value.strip())
                 self._include = PARSE(
                     lexer='NONE',
                     tokenfunc=lambda toks=tokens: next(toks, None))
@@ -354,8 +370,9 @@ def entry_account_predicate(entry, predicate):
     if isinstance(entry, Transaction):
         return any(predicate(posting.account) for posting in entry.postings)
     if isinstance(entry, Custom):
-        return any(predicate(val.value)
-                   for val in entry.values if val.dtype == account.TYPE)
+        return any(
+            predicate(val.value) for val in entry.values
+            if val.dtype == account.TYPE)
     return hasattr(entry, 'account') and predicate(entry.account)
 
 
