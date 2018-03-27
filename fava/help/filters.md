@@ -45,6 +45,9 @@ This final filter allows you to filter entries by various attributes.
   `any(id:'12', account:".*Cash")` for all entries that have at least one
   posting with metadata `id: 12` or account ending in `Cash`.
 
+The match for `#tag` and `^link` is case sensitive whereas payees and other
+metadata are matched in a case insensitive manner.
+
 These filters can be combined by separating them by spaces to match all entries
 satisfying all given filters or by commas to match all entries satisfying at
 least one of the given filters. In other words, a space acts like an "and" and
