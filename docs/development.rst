@@ -8,8 +8,9 @@ working on, check out the online `dev-demo
 Setting up a development environment
 ------------------------------------
 
-If you want to hack on Fava or run the latest development version, this will
-get you up and running:
+If you want to hack on Fava or run the latest development version, make sure
+you have Python 3 (with `pip`) and Node.js (with `npm`) installed. Then this
+will get you up and running:
 
 .. code:: bash
 
@@ -22,14 +23,9 @@ get you up and running:
     pip install --editable .
 
 You can start Fava in the virtual environment as usual by running ``fava``.
-Note that a development installation Fava requires recent versions of Node.js
-and npm.  To package the development version, you can run ``python setup.py
-bdist_wheel`` (make sure the ``wheel`` Python package is installed), which will
-produce a ``.whl`` file in the ``dist`` directory which you can install with
-``pip`` on a different machine.
 
-You can run the tests with ``make test`` (requires ``tox``), and build the
-website with ``make docs`` (requires ``sphinx``).
+You can run the tests with ``make test`` (requires ``tox``). After any changes
+to the Javascript code, you will need to re-run `make`.
 
 If you need a newer version of Beancount than the latest released one, you can
 install from source like so (more details `here
