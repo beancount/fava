@@ -33,7 +33,8 @@ This final filter allows you to filter entries by various attributes.
 - Filter by payee `payee:".*restaurant.*"`, or narration `narration:'Dinner with Joe'`,
   or any other entry attribute. The argument needs to be quoted (with `'` or
   `"`) if it contains spaces and can either be simply a string or a regular
-  expression that matches the attribute.
+  expression that matches the attribute. The regular expression matching is
+  case insensitive.
 - Filter entries using a `FROM` expression as supported by the
   Beancount Query Language: `from:'year = 2012'`.
 - Filter for entries having certain metadata values: `statement:".*pdf"`. Note

@@ -116,7 +116,7 @@ class Match(object):
 
     def __init__(self, search):
         try:
-            self.match = re.compile(search).match
+            self.match = re.compile(search, re.IGNORECASE).match
         except re.error:
             self.match = lambda string: string == search
 
