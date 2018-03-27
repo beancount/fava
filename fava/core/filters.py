@@ -105,8 +105,9 @@ class FilterSyntaxLexer(object):
                 yield Token(char, char)
                 pos += 1
             else:
-                raise FilterException('filter',
-                                      'Illegal character "{}" in filter: ')
+                raise FilterException(
+                    'filter',
+                    'Illegal character "{}" in filter: '.format(char))
 
 
 class Match(object):
