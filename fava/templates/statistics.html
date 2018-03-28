@@ -16,13 +16,13 @@
 
 {% block content %}
     <div class="left">
-      {% set postings_per_account = 'SELECT account, count(account) GROUP BY account ORDER BY account' %}
+      {% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
       <h3>
         {{ _('Postings per Account') }}
         (<a href={{ url_for('report', report_name='query', query_string=postings_per_account) }}>Query</a>)
       </h3>
       {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
-      {{ querytable.querytable(result_types, result_rows) }}
+      {{ querytable.querytable(contents, result_types, result_rows) }}
     </div>
 
     {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
