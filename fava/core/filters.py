@@ -309,8 +309,9 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
 
         self.begin_date, self.end_date = parse_date(self.value)
         if not self.begin_date:
+            self.value = None
             raise FilterException('time', 'Failed to parse date: {}'.format(
-                self.value))
+                value))
         return True
 
     def _filter(self, entries, options):
@@ -346,6 +347,7 @@ class AdvancedFilter(EntryFilter):
                     tokenfunc=lambda toks=tokens: next(toks, None))
             except FilterException as exception:
                 exception.message = exception.message + value
+                self.value = None
                 raise exception
         else:
             self._include = None

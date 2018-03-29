@@ -17,7 +17,7 @@ import inspect
 import os
 from io import BytesIO
 
-from flask import (abort, Flask, flash, render_template, request,
+from flask import (abort, Flask, render_template, request,
                    redirect, g, send_file, render_template_string)
 import flask
 from flask_babel import Babel
@@ -30,7 +30,7 @@ from beancount.core.data import Document
 from fava import template_filters
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
-from fava.core.helpers import FavaAPIException, FilterException
+from fava.core.helpers import FavaAPIException
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.util import slugify, resource_path, setup_logging, send_file_inline
@@ -48,8 +48,6 @@ app.json_encoder = FavaJSONEncoder
 app.jinja_options['extensions'].append('jinja2.ext.do')
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
-# the key is currently only required to flash messages
-app.secret_key = '1234'
 
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
@@ -177,11 +175,7 @@ def _perform_global_filters():
     if request.blueprint != 'json_api':
         g.ledger.changed()
 
-    try:
-        g.ledger.filter(**g.filters)
-    except FilterException as exception:
-        g.filters[exception.filter_type] = None
-        flash(str(exception))
+    g.ledger.filter(**g.filters)
 
 
 @app.after_request
@@ -208,12 +202,15 @@ def _pull_beancount_file(_, values):
         abort(404)
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
     g.conversion = request.args.get('conversion')
+    g.partial = request.args.get('partial', False)
 
 
 @app.errorhandler(FavaAPIException)
 def fava_api_exception(error):
     """Handle API errors."""
-    return error.message, 400
+    if g.partial:
+        return error.message, 400
+    return render_template('_error.html', error=error), 400
 
 
 @app.route('/')

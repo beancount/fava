@@ -79,20 +79,27 @@ class Router {
     svg.classList.add('loading');
 
     $.fetch(getUrl.toString())
-      .then(response => response.text())
-      .then((data) => {
-        svg.classList.remove('loading');
-        if (historyState) {
-          window.history.pushState(null, null, url);
-          window.scroll(0, 0);
-        }
-        this.updateState();
-        $('article').innerHTML = data;
-        e.trigger('page-loaded');
-        handleHash();
+      .then((response) => {
+        response.text()
+          .then((data) => {
+            if (!response.ok) {
+              e.trigger('error', data);
+              return;
+            }
+            if (historyState) {
+              window.history.pushState(null, null, url);
+              window.scroll(0, 0);
+            }
+            this.updateState();
+            $('article').innerHTML = data;
+            e.trigger('page-loaded');
+            handleHash();
+          });
       }, () => {
-        svg.classList.remove('loading');
         e.trigger('error', `Loading ${url} failed.`);
+      })
+      .finally(() => {
+        svg.classList.remove('loading');
       });
   }
 

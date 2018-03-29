@@ -45,12 +45,3 @@ e.on('page-init', () => {
     event.target.closest('li').remove();
   });
 });
-
-e.on('page-loaded', () => {
-  const messages = $('#flashed-messages');
-  if (messages) {
-    JSON.parse($('#flashed-messages').innerHTML).forEach((msg) => {
-      e.trigger('error', msg);
-    });
-  }
-});
