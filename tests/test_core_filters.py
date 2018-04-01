@@ -72,9 +72,6 @@ def test_filterexception():
     assert str(exception) == exception.message
 
     with pytest.raises(FilterException):
-        FILTER.set('from:invalid')
-
-    with pytest.raises(FilterException):
         FILTER.set('who:"fff')
         assert str(exception) == 'Illegal character "\"" in filter: who:"fff'
 
@@ -84,7 +81,6 @@ def test_filterexception():
 
 
 @pytest.mark.parametrize('string,number', [
-    ('from:\'has_account("Assets:US:ETrade")\'', 53),
     ('any(account:"Assets:US:ETrade")', 48),
     ('#test', 2),
     ('#test,#nomatch', 2),

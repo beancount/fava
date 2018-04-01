@@ -1,13 +1,11 @@
 """Entry filters."""
 
-import collections
 import re
 
 import ply.yacc
 from beancount.core import account
 from beancount.core.data import Custom, Transaction
 from beancount.ops import summarize
-from beancount.query import query_compile, query_env, query_parser
 
 from fava.util.date import parse_date
 from fava.core.helpers import FilterException
@@ -27,10 +25,6 @@ class Token(object):
 
     def __repr__(self):
         return 'Token({}, {})'.format(self.type, self.value)
-
-
-QUERY_PARSER = query_parser.Parser()
-ENV_ENTRIES = query_env.FilterEntriesEnvironment()
 
 
 class FilterSyntaxLexer(object):
@@ -228,25 +222,6 @@ class FilterSyntaxParser(object):
         simple_expr : KEY STRING
         """
         key, value = p[1], p[2]
-
-        if key == 'from':
-            try:
-                from_clause = QUERY_PARSER.parse(
-                    'select * from ' + value).from_clause
-                c_from = query_compile.compile_from(from_clause, ENV_ENTRIES)
-            except (query_compile.CompilationError,
-                    query_parser.ParseError) as exception:
-                raise FilterException('from', str(exception))
-
-            c_expr = c_from.c_expr
-            minimal_context = collections.namedtuple('Context', ('entry'))
-
-            def _from(entry):
-                return c_expr(minimal_context(entry))
-
-            p[0] = _from
-            return
-
         match = Match(value)
 
         def _key(entry):

@@ -35,8 +35,6 @@ This final filter allows you to filter entries by various attributes.
   `"`) if it contains spaces and can either be simply a string or a regular
   expression that matches the attribute. The regular expression matching is
   case insensitive.
-- Filter entries using a `FROM` expression as supported by the
-  Beancount Query Language: `from:'year = 2012'`.
 - Filter for entries having certain metadata values: `statement:".*pdf"`. Note
   that if the entry has an attribute of the same name as the metadata key, the
   filter will apply to the entry attribute, not the metadata value.
