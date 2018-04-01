@@ -1,3 +1,7 @@
+// This module contains the main code to render Fava's charts.
+//
+// The charts heavily use d3 libraries.
+
 import { extent, max, merge, min } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
@@ -14,10 +18,15 @@ import setTimeFilter from './filters';
 import { $, $$ } from './helpers';
 import router from './router';
 
-const treemapColorScale = scaleOrdinal(schemeSet3);
-const sunburstColorScale = scaleOrdinal(schemeCategory10);
-const currencyColorScale = scaleOrdinal(schemeCategory10);
-const scatterColorScale = scaleOrdinal(schemeCategory10);
+// The color scales for the charts.
+// TODO: these could be initialised with all accounts/currencies to always give
+// the same colours.
+const scales = {
+  treemap: scaleOrdinal(schemeSet3),
+  sunburst: scaleOrdinal(schemeCategory10),
+  currencies: scaleOrdinal(schemeCategory10),
+  scatterplot: scaleOrdinal(schemeCategory10),
+};
 
 let container;
 let tooltip;
@@ -38,6 +47,8 @@ function addInternalNodesAsLeaves(node) {
   }
 }
 
+// Turn the elements in the selection (assuming they have a .account attribute)
+// into links to the account page.
 function makeAccountLink(selection) {
   selection
     .on('click', (d) => {
@@ -46,6 +57,7 @@ function makeAccountLink(selection) {
     });
 }
 
+// Add a tooltip to the given selection.
 function addTooltip(selection, tooltipText) {
   selection
     .on('mouseenter', (d) => {
@@ -59,7 +71,8 @@ function addTooltip(selection, tooltipText) {
     });
 }
 
-function addLegend(domain, colorScale) {
+// Set the chart legend to the given domain.
+function setLegend(domain, colorScale) {
   const legend = select('#chart-legend').selectAll('span.legend')
     .data(domain)
     .enter()
@@ -73,14 +86,39 @@ function addLegend(domain, colorScale) {
   legend.append('span')
     .attr('class', 'name')
     .html(d => d);
-
-  return legend;
 }
 
+// Obtain the current value of a <select> and update the list of options.
+function selectSetValues(selector, values) {
+  const selectElement = $(selector);
+  const { value } = selectElement;
+  selectElement.innerHTML = '';
+  values.forEach((currency) => {
+    const opt = document.createElement('option');
+    opt.value = currency;
+    opt.text = currency;
+    selectElement.add(opt);
+  });
+  return values.includes(value) ? value : values[0];
+}
+
+// The base class for all charts.
+//
+// Provides the following methods:
+//
+// - setHeight(num): set the height of the chart, accounting for margins.
+// - setWidth(num): set the width of the chart, accounting for margins.
+// - set(property, value): set the given property of the chart class to value.
+//
+// Charts should implement the following methods:
+//
+//  - constructor(svg): Initialise the chart, prepare for drawing it to the
+//    given <svg> (which is a d3-selection).
+//  - draw(data): Draw the chart for the given data.
+//  - update(): Update the chart (after resize, toggling, etc)
 class BaseChart {
   constructor() {
     this.selections = {};
-
     this.margin = {
       top: 10,
       right: 10,
@@ -128,9 +166,9 @@ class TreeMapChart extends BaseChart {
       .attr('fill', (d) => {
         const node = d.data.dummy ? d.parent : d;
         if (node.parent === this.root || !node.parent) {
-          return treemapColorScale(node.data.account);
+          return scales.treemap(node.data.account);
         }
-        return treemapColorScale(node.parent.data.account);
+        return scales.treemap(node.parent.data.account);
       });
 
     this.selections.cells.append('text')
@@ -219,7 +257,7 @@ class SunburstChart extends BaseChart {
       .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
       .append('path')
       .attr('fill-rule', 'evenodd')
-      .style('fill', d => sunburstColorScale(d.data.account))
+      .style('fill', d => scales.sunburst(d.data.account))
       .on('mouseover', d => this.mouseOver(d))
       .call(makeAccountLink);
 
@@ -328,7 +366,7 @@ class BarChart extends BaseChart {
       .enter()
       .append('rect')
       .attr('class', 'bar')
-      .style('fill', d => currencyColorScale(d.name));
+      .style('fill', d => scales.currencies(d.name));
 
     this.selections.budgets = this.selections.groups.selectAll('.budget')
       .data(d => d.values)
@@ -388,7 +426,7 @@ class BarChart extends BaseChart {
       .attr('y', d => this.y(Math.max(0, d.value)))
       .attr('height', d => Math.abs(this.y(d.value) - this.y(0)));
 
-    addLegend(this.x1.domain(), currencyColorScale);
+    setLegend(this.x1.domain(), scales.currencies);
   }
 
   filterTicks(domain) {
@@ -433,7 +471,7 @@ class ScatterPlot extends BaseChart {
       .append('circle')
       .attr('class', 'dot')
       .attr('r', 5)
-      .style('fill', d => scatterColorScale(d.type))
+      .style('fill', d => scales.scatterplot(d.type))
       .call(addTooltip, this.tooltipText);
 
     this.update();
@@ -508,7 +546,7 @@ class LineChart extends BaseChart {
       .enter()
       .append('path')
       .attr('class', 'line')
-      .style('stroke', d => currencyColorScale(d.name));
+      .style('stroke', d => scales.currencies(d.name));
 
     this.selections.dots = this.canvas.selectAll('g.dot')
       .data(data)
@@ -520,7 +558,7 @@ class LineChart extends BaseChart {
       .enter()
       .append('circle')
       .attr('r', 3)
-      .style('fill', d => currencyColorScale(d.name));
+      .style('fill', d => scales.currencies(d.name));
 
     this.selections.voronoi.selectAll('path')
       .data(this.voronoi.polygons(merge(data.map(d => d.values))))
@@ -573,7 +611,7 @@ class LineChart extends BaseChart {
       .filter(d => d !== undefined)
       .attr('d', d => `M${d.join('L')}Z`);
 
-    addLegend(this.data.map(d => d.name), currencyColorScale);
+    setLegend(this.data.map(d => d.name), scales.currencies);
   }
 }
 
@@ -624,20 +662,6 @@ class SunburstChartContainer extends BaseChart {
         .attr('transform', `translate(${(this.width * i) / this.currencies.length},0)`);
     });
   }
-}
-
-// Obtain the current value of a <select> and update the list of options.
-function selectSetValues(selector, values) {
-  const selectElement = $(selector);
-  const { value } = selectElement;
-  selectElement.innerHTML = '';
-  values.forEach((currency) => {
-    const opt = document.createElement('option');
-    opt.value = currency;
-    opt.text = currency;
-    selectElement.add(opt);
-  });
-  return values.includes(value) ? value : values[0];
 }
 
 class HierarchyContainer extends BaseChart {
@@ -892,7 +916,7 @@ e.on('button-click-toggle-chart', () => {
     url.searchParams.set('charts', false);
   } else {
     url.searchParams.delete('charts');
+    updateChart();
   }
   router.navigate(url.toString(), false);
-  updateChart();
 });
