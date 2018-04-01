@@ -136,8 +136,8 @@
 }
 
 .journal .datecell {
-  width: 5.5rem;
   white-space: nowrap;
+  width: 5.5rem;
 }
 
 .journal .flag {

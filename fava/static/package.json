@@ -5,7 +5,8 @@
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "lint": "eslint javascript --ext .js && stylelint 'css/*.css' --fix"
+    "lint": "eslint javascript --ext .js && stylelint 'css/*.css'",
+    "fix": "stylelint 'css/*.css' --fix"
   },
   "eslintConfig": {
     "extends": [
