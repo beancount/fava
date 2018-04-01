@@ -32,9 +32,11 @@ class CompletionList {
       blur: this.blur.bind(this),
       input: this.evaluate.bind(this),
       keydown: (event) => {
-        if (event.keyCode === 13 && this.index > -1) { // ENTER
-          event.preventDefault();
-          this.select(ul.children[this.index]);
+        if (event.keyCode === 13) { // ENTER
+          if (this.index > -1) {
+            event.preventDefault();
+            this.select(ul.children[this.index]);
+          }
           this.close();
         } else if (event.keyCode === 27) { // ESC
           this.close();
