@@ -2,7 +2,7 @@
 <input type="text" class="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ account or '' }}" required pattern="(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+">
 {% endmacro %}
 {% macro input_date(date) %}
-<input type="date" name="date" value="{{ date or today() }}" required autofocus>
+<input type="date" name="date" value="{{ date or today() }}" required>
 {% endmacro %}
 
 {% macro posting(posting=None) %}
