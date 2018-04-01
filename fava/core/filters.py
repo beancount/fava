@@ -1,5 +1,6 @@
 """Entry filters."""
 
+import collections
 import re
 
 import ply.yacc
@@ -236,7 +237,14 @@ class FilterSyntaxParser(object):
             except (query_compile.CompilationError,
                     query_parser.ParseError) as exception:
                 raise FilterException('from', str(exception))
-            p[0] = c_from.c_expr
+
+            c_expr = c_from.c_expr
+            minimal_context = collections.namedtuple('Context', ('entry'))
+
+            def _from(entry):
+                return c_expr(minimal_context(entry))
+
+            p[0] = _from
             return
 
         match = Match(value)
@@ -310,8 +318,8 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         self.begin_date, self.end_date = parse_date(self.value)
         if not self.begin_date:
             self.value = None
-            raise FilterException('time', 'Failed to parse date: {}'.format(
-                value))
+            raise FilterException('time',
+                                  'Failed to parse date: {}'.format(value))
         return True
 
     def _filter(self, entries, options):
