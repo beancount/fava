@@ -61,9 +61,6 @@
         <span id="chart-legend" class="chart-legend"></span>
         <span class="spacer"></span>
         <select name="chart-currency" id="chart-currency" class="chart-currency hidden">
-        {% for currency in operating_currencies %}
-            <option value="{{ currency }}">{{ currency }}</option>
-        {% endfor %}
         </select>
         <span id="chart-mode" class="chart-mode hidden">
             <input name="mode" type="radio" value="treemap" id="mode-treemap" checked> <label for="mode-treemap">{{ _('Treemap') }}</label>

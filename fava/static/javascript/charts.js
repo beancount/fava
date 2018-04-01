@@ -124,11 +124,6 @@ class TreeMapChart extends BaseChart {
       .append('g')
       .call(addTooltip, this.tooltipText);
 
-    if (this.selections.cells.empty()) {
-      this.selections.empty = this.canvas.append('text')
-        .text('Chart is empty.');
-    }
-
     this.selections.cells.append('rect')
       .attr('fill', (d) => {
         const node = d.data.dummy ? d.parent : d;
@@ -156,12 +151,6 @@ class TreeMapChart extends BaseChart {
       .attr('width', this.width)
       .attr('height', this.height);
     this.treemap.size([this.width, this.height]);
-
-    if (this.selections.empty) {
-      this.selections.empty
-        .attr('x', this.width / 2)
-        .attr('y', this.height / 2);
-    }
 
     this.treemap(this.root);
 
@@ -257,16 +246,11 @@ class SunburstChart extends BaseChart {
   }
 
   setLabel(d) {
-    if (this.selections.paths.empty()) {
-      this.selections.accountLabel
-        .text('Chart is empty.');
-    } else {
-      this.selections.balanceLabel
-        .text(this.labelText(d));
-      this.selections.accountLabel
-        .text(d.data.account)
-        .call(makeAccountLink);
-    }
+    this.selections.balanceLabel
+      .text(this.labelText(d));
+    this.selections.accountLabel
+      .text(d.data.account)
+      .call(makeAccountLink);
   }
 
   // Fade all but the current sequence
@@ -603,6 +587,7 @@ class SunburstChartContainer extends BaseChart {
 
   draw(data) {
     this.setSize();
+    this.currencies = Object.keys(data);
 
     this.currencies.forEach((currency, i) => {
       const canvas = this.svg.append('g')
@@ -641,52 +626,57 @@ class SunburstChartContainer extends BaseChart {
   }
 }
 
+// Obtain the current value of a <select> and update the list of options.
+function selectSetValues(selector, values) {
+  const selectElement = $(selector);
+  const { value } = selectElement;
+  selectElement.innerHTML = '';
+  values.forEach((currency) => {
+    const opt = document.createElement('option');
+    opt.value = currency;
+    opt.text = currency;
+    selectElement.add(opt);
+  });
+  return values.includes(value) ? value : values[0];
+}
+
 class HierarchyContainer extends BaseChart {
   constructor(svg) {
     super();
     this.svg = svg;
-
-    this.has_mode_setting = true;
-    this.currentCurrency = '';
-    this.currentMode = '';
-
     this.canvas = this.svg.append('g');
+    this.has_mode_setting = true;
   }
 
   draw(data) {
     this.data = data;
+    this.currencies = Object.keys(data);
     this.setSize();
 
     const mode = $('#chart-form input[name=mode]:checked').value;
-    const currency = $('#chart-currency').value;
+    const currency = selectSetValues('#chart-currency', this.currencies);
+    this.canvas.html('');
 
-    if (mode === 'treemap' && (mode !== this.currentMode || currency !== this.currentCurrency)) {
-      this.canvas.html('');
-
+    if (this.currencies.length === 0) {
+      this.canvas.append('text')
+        .text('Chart is empty.')
+        .attr('text-anchor', 'middle')
+        .attr('x', this.width / 2)
+        .attr('y', 160 / 2);
+    } else if (mode === 'treemap') {
       this.currentChart = new TreeMapChart(this.canvas)
         .set('tooltipText', d => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`)
         .draw(data[currency]);
 
       this.has_currency_setting = true;
-      this.currentCurrency = currency;
-      $('#chart-currency').classList.remove('hidden');
-    }
-
-    if (mode === 'sunburst' && mode !== this.currentMode) {
-      this.canvas
-        .html('');
-
+    } else {
       this.currentChart = new SunburstChartContainer(this.canvas)
-        .set('currencies', this.currencies)
         .draw(data);
 
       this.has_currency_setting = false;
-      $('#chart-currency').classList.add('hidden');
     }
-    this.currentMode = mode;
 
-    this.svg
-      .attr('height', this.canvas.attr('height'));
+    this.svg.attr('height', this.canvas.attr('height'));
 
     return this;
   }
@@ -698,9 +688,10 @@ class HierarchyContainer extends BaseChart {
   }
 
   update() {
-    this.setSize();
     this.draw(this.data);
-    this.currentChart.update();
+    if (this.currentChart) {
+      this.currentChart.update();
+    }
   }
 }
 
@@ -782,7 +773,7 @@ e.on('page-loaded', () => {
               .map(d => ({
                 name: c,
                 date: new Date(d.date),
-                value: d.balance[c],
+                value: Number(d.balance[c]),
               })),
           }))
           .filter(d => d.values.length);
@@ -856,13 +847,15 @@ e.on('page-loaded', () => {
 
         const operatingCurrencies = getOperatingCurrencies();
         operatingCurrencies.forEach((currency) => {
-          roots[currency] = hierarchy(chart.root)
+          const currencyHierarchy = hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
+          if (currencyHierarchy.value !== 0) {
+            roots[currency] = currencyHierarchy;
+          }
         });
 
         renderers[id] = svg => new HierarchyContainer(svg)
-          .set('currencies', operatingCurrencies)
           .draw(roots);
 
         break;
