@@ -27,6 +27,10 @@
   color: var(--color-text);
   font-family: var(--font-family-monospaced);
   text-align: right;
+}
+
+.tree-table .number,
+.journal .num {
   white-space: nowrap;
 }
 

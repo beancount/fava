@@ -155,6 +155,7 @@
   color: var(--color-budget-zero);
   font-size: .9em;
   margin-right: 3px;
+  white-space: nowrap;
 }
 
 .tree-table .diff.negative {
