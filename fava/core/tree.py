@@ -9,11 +9,13 @@ from fava.core.inventory import CounterInventory
 
 class TreeNode(object):
     """A node in the account tree."""
-    __slots__ = ('name', 'children', 'balance', 'balance_children', 'has_txns')
+    __slots__ = ('name', 'end_date', 'children', 'balance', 'balance_children', 'has_txns')
 
-    def __init__(self, name):
+    def __init__(self, name, end_date):
         #: str: Account name.
         self.name = name
+        #: date: Date of last entry.
+        self.end_date = end_date
         #: A list of :class:`.TreeNode`, its children.
         self.children = []
         #: :class:`.CounterInventory`: The cumulative account balance.
@@ -25,6 +27,7 @@ class TreeNode(object):
 
 
 class Tree(dict):
+    end_date = None
     """Account tree.
 
     Args:
@@ -33,11 +36,13 @@ class Tree(dict):
     def __init__(self, entries=None):
         dict.__init__(self)
         self.get('', insert=True)
+        self.end_date = None
         if entries:
             account_balances = collections.defaultdict(CounterInventory)
             for entry in entries:
                 for posting in getattr(entry, 'postings', []):
                     account_balances[posting.account].add_position(posting)
+                self.end_date = entry.date
 
             for name, balance in sorted(account_balances.items()):
                 self.insert(name, balance)
@@ -85,7 +90,7 @@ class Tree(dict):
         try:
             return self[name]
         except KeyError:
-            node = TreeNode(name)
+            node = TreeNode(name, self.end_date)
             if insert:
                 if name:
                     parent = self.get(account.parent(name), insert=True)
