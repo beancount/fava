@@ -20,7 +20,7 @@ export function handleHash() {
     closeOverlay();
   } else if (hash === '#add-transaction') {
     $('#transaction').classList.add('shown');
-    $('#transaction-form').focus();
+    $('#transaction-form input:first-child').focus();
   } else if (hash === '#export') {
     $('#export-overlay').classList.add('shown');
   } else if (hash.startsWith('#context')) {
