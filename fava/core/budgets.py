@@ -61,6 +61,19 @@ def parse_budgets(custom_entries):
                                 entry.values[1].value,
                                 entry.values[2].value.number,
                                 entry.values[2].value.currency)
+                if budget.period not in [
+                    "daily", "weekly", "monthly", "quarterly", "yearly"
+                ]:
+                    errors.append(
+                        BudgetError(
+                            entry.meta,
+                            'invalid budget period "%s", please use "daily", \
+                        "weekly", "monthly", "quarterly" or "yearly"'
+                            % budget.period,
+                            entry,
+                        )
+                    )
+                    continue
                 budgets[budget.account].append(budget)
             except (IndexError, TypeError):
                 errors.append(
