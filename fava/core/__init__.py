@@ -90,7 +90,7 @@ MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file', 'misc',
            'query_shell', 'ingest']
 
 
-# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes,too-many-public-methods
 class FavaLedger():
     """Create an interface for a Beancount ledger.
 
@@ -237,6 +237,13 @@ class FavaLedger():
         if self._filters['time']:
             self._date_first = self._filters['time'].begin_date
             self._date_last = self._filters['time'].end_date
+
+    @property
+    def end_date(self):
+        """The date to use for prices."""
+        if self._filters['time']:
+            return self._filters['time'].end_date
+        return None
 
     def paths_to_watch(self):
         """The paths to included files and document directories.
