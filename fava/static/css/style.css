@@ -14,24 +14,6 @@
 @import 'media-mobile.css';
 @import 'media-print.css';
 
-::-webkit-scrollbar {
-  height: .5em;
-  width: .5em;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-scrollbar);
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-body {
-  scrollbar-face-color: var(--color-scrollbar);
-  scrollbar-track-color: transparent;
-}
-
 :root {
   --font-family: 'Fira Sans', sans-serif;
   --font-family-alternative: 'Source Serif Pro', sans-serif;
@@ -68,7 +50,6 @@ body {
   --color-sidebar-background: hsl(0, 0%, 96%);
   --color-sidebar-border: hsl(0, 0%, 87%);
 
-  --color-scrollbar: hsl(0, 0, 67%);
   --color-autocomplete-match: #ffd27c;
 
   --color-header: hsl(203, 100%, 32%);
