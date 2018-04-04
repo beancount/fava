@@ -13,7 +13,9 @@ run fava within the container.
 
 To build the container run this command:
 
-    docker build -t fava .
+```
+docker build -t fava .
+```
 
 This will build everything and name the image `fava`.  Because docker depends
 heavily on caching to improve efficiency, to incorporate a new version of
@@ -23,9 +25,11 @@ beancount or fava you must use the `--no-cache` flag when rebuilding the image.
 
 To run the fava container, use this command:
 
-    docker run --detach --name="beancount" --publish 5000:5000 \
-      --volume $(pwd)/example.beancount:/example.beancount \
-      --env BEANCOUNT_INPUT_FILE=/example.beancount fava
+```
+docker run --detach --name="beancount" --publish 5000:5000 \
+  --volume $(pwd)/example.beancount:/example.beancount \
+  --env BEANCOUNT_INPUT_FILE=/example.beancount fava
+```
 
 Let's look at each argument independently:
 
@@ -176,7 +180,7 @@ Let's document the new arguments:
    data into a docker instance.
 1. `--env` sets arbitrary environment values in docker instances. We will use
    these values in later sections to hook up automatically generate and refresh
-   Let's Encrypt ssl certificates. Without a Let's Encrypt certificate, your
+   Let's Encrypt SSL certificates. Without a Let's Encrypt certificate, your
    oauth2\_proxy cookie will be visible to anyone who can see your network
    traffic. You don't want this.
 1. Everything after the `skippy/oauth2_proxy` are arguments to oauth2\_proxy.
@@ -187,3 +191,62 @@ service immediately on port 4180, otherwise you may expose your authentication
 cookie to the internet.
 
 ### Letsencrypt
+
+[Let's Encrypt](https://letsencrypt.org/) is a very popular project aimed at
+making SSL certificates available to everyone for free. This will be a great
+way to secure our fava instance so that we can share secret cookies without
+fear of anyone impersonating us.
+
+We don't just want to set up a static Let's Encrypt config. We want to use the
+magic of docker instances to generate our configs and keep them up to date at
+all times. To accomplish this we will use three separate docker instances
+working in conjunction. These instructions will mostly be a specific
+implementation of the instructions found in
+[JrCs/docker-letsencrypt-nginx-proxy-companion](https://github.com/JrCs/docker-letsencrypt-nginx-proxy-companion#separate-containers).
+
+We will run three separate containers:
+
+```
+docker run --detach --publish 80:80 --publish 443:443 \
+    --name nginx \
+    --volume /etc/nginx/conf.d \
+    --volume /etc/nginx/vhost.d \
+    --volume /usr/share/nginx/html \
+    --volume $(pwd)/certs:/etc/nginx/certs:ro \
+    --volume $(pwd)/htpasswd:/etc/nginx/htpasswd:ro \
+    --label com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy=true \
+    nginx
+```
+
+```
+docker run --detach \
+    --name nginx-gen \
+    --volumes-from nginx \
+    --volume /var/run/docker.sock:/tmp/docker.sock:ro \
+    jwilder/docker-gen \
+    -notify-sighup nginx -watch -only-exposed -wait 5s:30s \
+    /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
+```
+
+```
+docker run --detach \
+    --name nginx-letsencrypt \
+    --env "NGINX_DOCKER_GEN_CONTAINER=nginx-gen" \
+    --volumes-from nginx \
+    --volume $(dirname $(realpath $0))/certs:/etc/nginx/certs:rw \
+    --volume /var/run/docker.sock:/var/run/docker.sock:ro \
+    jrcs/letsencrypt-nginx-proxy-companion
+```
+
+The main new argument in these three images is `--volumes-from`. This flag
+allows containers to share paths and make their data visible to each other.
+
+Another interesting thing is that the non-nginx docker images need access to
+the docker socket so that they can read the environment variables of other
+instances and also send sighups to the nginx process when configs change.
+
+Now all you have to do is expose port 80 and 443 from your host machine to the
+internet and point the domain you specified in `VIRTUAL_HOST` and
+`LETSENCRYPT_HOST` to your IP. Once all these parts are set up point your
+browser to your virtual host domain and enjoy a fully authenticated, secure,
+publicly addressable fava instance.
