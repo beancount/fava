@@ -238,6 +238,11 @@ class FavaLedger():
             self._date_first = self._filters['time'].begin_date
             self._date_last = self._filters['time'].end_date
 
+    @property
+    def end_date(self):
+        return (
+            self._filters['time'].end_date if self._filters['time'] else None)
+
     def paths_to_watch(self):
         """The paths to included files and document directories.
 
