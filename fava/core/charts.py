@@ -84,7 +84,7 @@ class ChartModule(FavaModule):
         """Renders totals for account (or accounts) in the intervals.
 
         Args:
-            interval: A string for the interval.
+            interval: An interval.
             accounts: A single account (str) or a tuple of accounts.
         """
         for begin, end in pairwise(self.ledger.interval_ends(interval)):

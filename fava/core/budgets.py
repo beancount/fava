@@ -99,7 +99,7 @@ def calculate_budget(budgets, account_name, date_from, date_to):
         A dictionary of currency to Decimal with the budget for the
         specified account and period.
     """
-    if account_name not in budgets.keys():
+    if account_name not in budgets:
         return {}
 
     currency_dict = defaultdict(Decimal)

@@ -110,7 +110,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
                 {% set time_filter = begin_date|string + ' - ' + end_date|string %}
             {% endif %}
 
-            <span class="other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
+            <span class="other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ begin_date|format_date }}</a></span>
         {% endfor %}
         </p>
     </li>

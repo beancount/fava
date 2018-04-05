@@ -3,6 +3,7 @@ import datetime
 from beancount.core.number import D
 
 from fava.application import app
+from fava.util.date import Interval
 
 
 def test_linechart_data(example_ledger):
@@ -13,7 +14,7 @@ def test_linechart_data(example_ledger):
 
 
 def test_net_worth(example_ledger):
-    data = example_ledger.charts.net_worth('month')
+    data = example_ledger.charts.net_worth(Interval.MONTH)
     assert data[-18]['date'] == datetime.date(2015, 1, 1)
     assert data[-18]['balance']['USD'] == D('39125.34004')
     assert data[-1]['date'] == datetime.date(2016, 5, 10)

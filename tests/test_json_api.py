@@ -113,10 +113,7 @@ def test_api_format_source(app, test_client):
         }),
         content_type='application/json')
     data = flask.json.loads(result.get_data(True))
-    assert data == {
-        'payload': align(payload, {}),
-        'success': True
-    }
+    assert data == {'payload': align(payload, {}), 'success': True}
 
 
 def test_api_format_source_options(app, test_client):

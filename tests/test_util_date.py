@@ -3,8 +3,16 @@ from unittest import mock
 
 import pytest
 
-from fava.util.date import (parse_date, get_next_interval, interval_ends,
-                            substitute, number_of_days_in_period)
+from fava.util.date import (Interval, parse_date, get_next_interval,
+                            interval_ends, substitute,
+                            number_of_days_in_period)
+
+
+def test_interval():
+    assert Interval.get('month') is Interval.MONTH
+    assert Interval.get('year') is Interval.YEAR
+    assert Interval.get('YEAR') is Interval.YEAR
+    assert Interval.get('asdfasdf') is Interval.MONTH
 
 
 def _to_date(string):
@@ -13,16 +21,16 @@ def _to_date(string):
 
 
 @pytest.mark.parametrize('input_date_string,interval,expect', [
-    ('2016-01-01', 'day', '2016-01-02'),
-    ('2016-01-01', 'week', '2016-01-04'),
-    ('2016-01-01', 'month', '2016-02-01'),
-    ('2016-01-01', 'quarter', '2016-04-01'),
-    ('2016-01-01', 'year', '2017-01-01'),
-    ('2016-12-31', 'day', '2017-01-01'),
-    ('2016-12-31', 'week', '2017-01-02'),
-    ('2016-12-31', 'month', '2017-01-01'),
-    ('2016-12-31', 'quarter', '2017-01-01'),
-    ('2016-12-31', 'year', '2017-01-01'),
+    ('2016-01-01', Interval.DAY, '2016-01-02'),
+    ('2016-01-01', Interval.WEEK, '2016-01-04'),
+    ('2016-01-01', Interval.MONTH, '2016-02-01'),
+    ('2016-01-01', Interval.QUARTER, '2016-04-01'),
+    ('2016-01-01', Interval.YEAR, '2017-01-01'),
+    ('2016-12-31', Interval.DAY, '2017-01-01'),
+    ('2016-12-31', Interval.WEEK, '2017-01-02'),
+    ('2016-12-31', Interval.MONTH, '2017-01-01'),
+    ('2016-12-31', Interval.QUARTER, '2017-01-01'),
+    ('2016-12-31', Interval.YEAR, '2017-01-01'),
 ])
 def test_get_next_interval(input_date_string, interval, expect):
     get = get_next_interval(_to_date(input_date_string), interval)
@@ -35,29 +43,31 @@ def test_get_next_intervalfail2():
 
 
 def test_interval_tuples():
-    assert list(interval_ends(date(2014, 3, 5), date(2014, 5, 5),
-                              'month')) == [
-                                  date(2014, 3, 5),
-                                  date(2014, 4, 1),
-                                  date(2014, 5, 1),
-                                  date(2014, 5, 5),
-                              ]
-    assert list(interval_ends(date(2014, 1, 1), date(2014, 5, 1),
-                              'month')) == [
-                                  date(2014, 1, 1),
-                                  date(2014, 2, 1),
-                                  date(2014, 3, 1),
-                                  date(2014, 4, 1),
-                                  date(2014, 5, 1),
-                              ]
-    assert list(interval_ends(date(2014, 3, 5), date(2014, 5, 5), 'year')) == [
-        date(2014, 3, 5),
-        date(2014, 5, 5),
-    ]
-    assert list(interval_ends(date(2014, 1, 1), date(2015, 1, 1), 'year')) == [
-        date(2014, 1, 1),
-        date(2015, 1, 1),
-    ]
+    assert list(
+        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.MONTH)) == [
+            date(2014, 3, 5),
+            date(2014, 4, 1),
+            date(2014, 5, 1),
+            date(2014, 5, 5),
+        ]
+    assert list(
+        interval_ends(date(2014, 1, 1), date(2014, 5, 1), Interval.MONTH)) == [
+            date(2014, 1, 1),
+            date(2014, 2, 1),
+            date(2014, 3, 1),
+            date(2014, 4, 1),
+            date(2014, 5, 1),
+        ]
+    assert list(
+        interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.YEAR)) == [
+            date(2014, 3, 5),
+            date(2014, 5, 5),
+        ]
+    assert list(
+        interval_ends(date(2014, 1, 1), date(2015, 1, 1), Interval.YEAR)) == [
+            date(2014, 1, 1),
+            date(2015, 1, 1),
+        ]
 
 
 @pytest.mark.parametrize("string,output", [
