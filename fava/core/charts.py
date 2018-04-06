@@ -33,14 +33,6 @@ class FavaJSONEncoder(JSONEncoder):
             return str(o)
 
 
-def _inventory_units(inventory):
-    """Renders an the units in an inventory to a currency -> amount dict."""
-    return {
-        p.units.currency: p.units.number
-        for p in inventory.reduce(convert.get_units)
-    }
-
-
 def _serialize_account_node(node, date):
     children = [
         _serialize_account_node(account, date)
@@ -98,6 +90,7 @@ class ChartModule(FavaModule):
                 self.ledger.budgets.calculate_children(accounts, begin, end),
             }
 
+    @listify
     def linechart(self, account_name):
         """The balance of an account.
 
@@ -117,12 +110,21 @@ class ChartModule(FavaModule):
         # When the balance for a commodity just went to zero, it will be
         # missing from the 'balance' field but appear in the 'change' field.
         # Use 0 for those commodities.
-        return [{
-            'date': entry.date,
-            'balance': dict({curr: 0
-                             for curr in list(change.currencies())},
-                            **_inventory_units(balance)),
-        } for entry, _, change, balance in journal if len(change)]
+        for entry, _, change, balance in journal:
+            if change.is_empty():
+                continue
+
+            inv_units = {
+                p.units.currency: p.units.number
+                for p in balance.reduce(convert.get_units)
+            }
+
+            yield {
+                'date': entry.date,
+                'balance': dict({curr: 0
+                                 for curr in list(change.currencies())},
+                                **inv_units),
+            }
 
     @listify
     def net_worth(self, interval):

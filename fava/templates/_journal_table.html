@@ -151,8 +151,8 @@
           <span class="num bal {{ ' pending' if entry.diff_amount else '' }}">{{ entry.amount|format_amount }}</span>
         {% endif %}
         {% if show_change_and_balance %}
-            <span class="change num">{% for pos in change %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
-            <span class="num">{% for pos in balance %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
+            <span class="change num">{% for pos in change|cost_or_value(entry.date) %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
+            <span class="num">{% for pos in balance|cost_or_value(entry.date) %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
         </p>
         {% endif %}
         {{ render_metadata(metadata, entry_hash) }}

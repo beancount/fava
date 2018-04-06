@@ -1,11 +1,12 @@
 """This module provides the data required by Fava's reports."""
 
 import collections
+import copy
 import datetime
 import os
 
 from beancount import loader
-from beancount.core import getters, interpolate, prices, realization, convert
+from beancount.core import getters, interpolate, prices, realization
 from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
@@ -354,8 +355,8 @@ class FavaLedger():
             postings = real_account.txn_postings
 
         return [(entry, postings_,
-                 change.reduce(convert.get_units),
-                 balance.reduce(convert.get_units)) for
+                 copy.copy(change),
+                 copy.copy(balance)) for
                 (entry, postings_, change, balance) in
                 realization.iterate_with_balance(postings)]
 
