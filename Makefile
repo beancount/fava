@@ -13,6 +13,7 @@ clean: mostlyclean
 mostlyclean:
 	rm -rf .tox
 	rm -rf fava/static/node_modules
+	rm -rf .*cache
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
