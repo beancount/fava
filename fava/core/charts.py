@@ -3,11 +3,11 @@ import datetime
 
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
-from beancount.core.data import Transaction, Cost
+from beancount.core.data import Transaction, Cost, iter_entry_dates
 from beancount.core.number import Decimal, ZERO
 from beancount.core.position import Position
-from beancount.core.data import iter_entry_dates
 from beancount.utils.misc_utils import filter_type
+from flask import g
 from flask.json import JSONEncoder
 
 from fava.util import listify, pairwise
@@ -114,16 +114,21 @@ class ChartModule(FavaModule):
             if change.is_empty():
                 continue
 
-            inv_units = {
-                p.units.currency: p.units.number
-                for p in balance.reduce(convert.get_units)
-            }
+            if g.conversion == 'units':
+                bal = {curr: 0 for curr in list(change.currencies())}
+                bal.update({
+                    p.units.currency: p.units.number
+                    for p in balance.reduce(convert.get_units)
+                })
+            else:
+                bal = {
+                    p.units.currency: p.units.number
+                    for p in cost_or_value(balance, entry.date)
+                }
 
             yield {
                 'date': entry.date,
-                'balance': dict({curr: 0
-                                 for curr in list(change.currencies())},
-                                **inv_units),
+                'balance': bal,
             }
 
     @listify

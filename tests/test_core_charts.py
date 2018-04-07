@@ -1,16 +1,36 @@
 import datetime
 
 from beancount.core.number import D
+from flask import g
 
 from fava.application import app
 from fava.util.date import Interval
 
 
 def test_linechart_data(example_ledger):
-    data = example_ledger.charts.linechart(
-        'Assets:Testing:MultipleCommodities')
-    assert data[1]['balance']['USD'] == 50
-    assert data[2]['balance']['USD'] == 0
+    with app.test_request_context('/'):
+        g.conversion = 'units'
+        data = example_ledger.charts.linechart(
+            'Assets:Testing:MultipleCommodities')
+        assert data == [{
+            'date': datetime.date(2000, 1, 1),
+            'balance': {
+                'USD': D('100')
+            },
+        }, {
+            'date': datetime.date(2000, 1, 2),
+            'balance': {
+                'XYZ': D('1'),
+                'USD': D('50')
+            },
+        }, {
+            'date': datetime.date(2000, 1, 3),
+            'balance': {
+                'USD': 0,
+                'ABC': D('1'),
+                'XYZ': D('1')
+            },
+        }]
 
 
 def test_net_worth(example_ledger):

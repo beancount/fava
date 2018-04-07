@@ -738,7 +738,7 @@ function updateChart() {
 // currency.
 function getOperatingCurrencies() {
   const conversion = $('#conversion').value;
-  if (conversion && conversion !== 'at_cost' && conversion !== 'at_value'
+  if (conversion && conversion !== 'at_cost' && conversion !== 'at_value' && conversion !== 'units'
       && window.favaAPI.options.operating_currency.indexOf(conversion) === -1) {
     const currencies = window.favaAPI.options.operating_currency.slice();
     currencies.push(conversion);
