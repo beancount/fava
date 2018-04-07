@@ -4,8 +4,7 @@ import datetime
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
 from beancount.core.data import Transaction, Cost
-from beancount.core.display_context import DisplayContext
-from beancount.core.number import Decimal, MISSING, ZERO
+from beancount.core.number import Decimal, ZERO
 from beancount.core.position import Position
 from beancount.core.data import iter_entry_dates
 from beancount.utils.misc_utils import filter_type
@@ -31,9 +30,6 @@ class FavaJSONEncoder(JSONEncoder):
         try:
             return JSONEncoder.default(self, o)
         except TypeError:
-            # workaround for #472
-            if isinstance(o, DisplayContext):
-                o.ccontexts.pop(MISSING, None)
             return str(o)
 
 
