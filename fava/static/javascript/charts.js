@@ -97,6 +97,9 @@ function selectSetValues(selector, values) {
     const opt = document.createElement('option');
     opt.value = currency;
     opt.text = currency;
+    if (value === currency) {
+      opt.selected = true;
+    }
     selectElement.add(opt);
   });
   return values.includes(value) ? value : values[0];
