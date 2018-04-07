@@ -591,7 +591,7 @@ class LineChart extends BaseChart {
 
     this.y.range([this.height, 0]);
     this.x.range([0, this.width]);
-    this.voronoi.size([this.width, this.height]);
+    // this.voronoi.size([this.width, this.height]);
 
     this.svg
       .attr('width', this.width + this.margin.left + this.margin.right)
@@ -609,10 +609,10 @@ class LineChart extends BaseChart {
     this.selections.lines
       .attr('d', d => this.line(d.values));
 
-    this.selections.voronoi.selectAll('path')
-      .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
-      .filter(d => d !== undefined)
-      .attr('d', d => `M${d.join('L')}Z`);
+    // this.selections.voronoi.selectAll('path')
+    //   .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
+    //   .filter(d => d !== undefined)
+    //   .attr('d', d => `M${d.join('L')}Z`);
 
     setLegend(this.data.map(d => d.name), scales.currencies);
   }
