@@ -5,9 +5,9 @@
 {% block content %}
     {{ charts.skeleton() }}
 
-    {{ charts.interval_totals(interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit')) }}
-    {{ charts.interval_totals(interval, ledger.options['name_income'], label=_('Income')) }}
-    {{ charts.interval_totals(interval, ledger.options['name_expenses'], label=_('Expenses')) }}
+    {{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit')) }}
+    {{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income')) }}
+    {{ charts.interval_totals(g.interval, ledger.options['name_expenses'], label=_('Expenses')) }}
 
     {{ charts.hierarchy(ledger.options['name_expenses']) }}
     {{ charts.hierarchy(ledger.options['name_income']) }}

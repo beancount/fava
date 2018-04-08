@@ -155,14 +155,9 @@ def url_for_source(**kwargs):
 
 
 @app.context_processor
-def _template_context():
-    """Inject variables into the global request context."""
-
-    return {
-        'ledger': g.ledger,
-        'operating_currencies': g.ledger.options['operating_currency'],
-        'interval': g.interval,
-    }
+def template_context():
+    """Inject variables into the template context."""
+    return dict(ledger=g.ledger)
 
 
 @app.before_request

@@ -1,5 +1,5 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% set show_other_column = (operating_currencies|length < ledger.options['commodities']|length) %}
+{% set show_other_column = (ledger.options.operating_currency|length < ledger.options['commodities']|length) %}
 {% set table_hover_text = _('Hold Shift while clicking to expand all children.
 Hold Ctrl or Cmd while clicking to expand one level.') %}
 
@@ -18,11 +18,11 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
 {% endmacro %}
 
 {% macro tree(account_node, totals=True) %}
-<ol class="tree-table{{ ' two-currencies' if operating_currencies|length > 1 else '' }}" title="{{ table_hover_text }}">
+<ol class="tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ table_hover_text }}">
   <li class="head">
     <p>
       <span class="account-cell"><span>{{ _('Account') }}</span><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
-      {% for currency in operating_currencies %}
+      {% for currency in ledger.options.operating_currency %}
       <span class="num">{{ currency }}</span>
       {% endfor %}
       {% if show_other_column %}
@@ -40,7 +40,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
     <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ ' has-children' if account.children else '' }}" data-account-name="{{ account.name }}">
       {{ account_macros.account_name(account.name, last_segment=True) }}
     </span>
-    {% for currency in operating_currencies %}
+    {% for currency in ledger.options.operating_currency %}
     <span class="num">
       <span class="balance">{{ render_diff_and_number(balance, cost, currency) }}</span>
       <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency) }}</span>
@@ -73,7 +73,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
   <li class="totals">
     <p>
     <span class="account-cell">&nbsp;</span>
-    {% for currency in operating_currencies %}
+    {% for currency in ledger.options.operating_currency %}
     <span class="num">{{ balance.pop(currency, 0)|format_currency(currency) }}</span>
     {% endfor %}
     {% if show_other_column %}

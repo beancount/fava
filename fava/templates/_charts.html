@@ -69,10 +69,10 @@
           <option value="at_cost"{{ ' selected' if not selected_conversion }} >{{ _('At Cost') }}</option>
           <option value="at_value"{{ ' selected' if selected_conversion == 'at_value' }}>{{ _('At Market Value') }}</option>
           <option value="units"{{ ' selected' if selected_conversion == 'units' }}>{{ _('Units') }}</option>
-          {% for currency in operating_currencies %}
+          {% for currency in ledger.options.operating_currency %}
             <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
           {% endfor %}
-          {% for currency in ledger.options.commodities|sort if currency not in operating_currencies %}
+          {% for currency in ledger.options.commodities|sort if currency not in ledger.options.operating_currency %}
             <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
           {% endfor %}
         </select>

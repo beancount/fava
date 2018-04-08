@@ -13,7 +13,7 @@
 <div class="droptarget" data-account-name="{{ account_name }}">
     {{ charts.skeleton() }}
     {{ charts.account_balance(account_name) }}
-    {{ charts.interval_totals(interval, account_name, label=_('Changes')) }}
+    {{ charts.interval_totals(g.interval, account_name, label=_('Changes')) }}
 
     {% if not journal %}
         {{ charts.hierarchy(account_name) }}
@@ -21,8 +21,8 @@
 
     <div class="headerline">
         <h3>{% if not journal %}<a href="{{ url_for('account', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
-        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ interval.label|lower }})</a>{% else %}{{ _('Changes') }} ({{ interval.label|lower }}){% endif %}</h3>
-        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ interval.label|lower }})</a>{% else %}{{ _('Balances') }} ({{ interval.label|lower }}){% endif %}</h3>
+        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ g.interval.label|lower }})</a>{% else %}{{ _('Changes') }} ({{ g.interval.label|lower }}){% endif %}</h3>
+        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ g.interval.label|lower }})</a>{% else %}{{ _('Balances') }} ({{ g.interval.label|lower }}){% endif %}</h3>
     </div>
 
     {% if journal %}
@@ -30,7 +30,7 @@
         {{ journal_table.journal_table(entries, show_change_and_balance=True) }}
     {% else %}
         {% set accumulate = subreport == 'balances' %}
-        {% set interval_balances, dates = ledger.interval_balances(interval, account_name, accumulate) %}
+        {% set interval_balances, dates = ledger.interval_balances(g.interval, account_name, accumulate) %}
         {% if interval_balances %}
             {% for begin_date, end_date in dates[:3] %}
                 {{ charts.hierarchy(account_name, begin_date, end_date, label=begin_date|format_date) }}
