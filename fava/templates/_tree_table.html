@@ -31,8 +31,8 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
     </p>
   </li>
   {% for account in ([account_node] if account_node.name else account_node.children) if account|should_show recursive %}
-  {% set balance = account.balance|cost_or_value %}
-  {% set balance_children = account.balance_children|cost_or_value %}
+  {% set balance = account.balance|cost_or_value(ledger.end_date) %}
+  {% set balance_children = account.balance_children|cost_or_value(ledger.end_date) %}
   {% set cost = account.balance|cost if g.conversion == 'at_value' else {} %}
   {% set cost_children = account.balance_children|cost if g.conversion == 'at_value' else {} %}
   <li{{ ' class=toggled' if ledger.accounts[account.name].meta.get('fava-collapse-account') else '' }}>
@@ -110,7 +110,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
                 {% set time_filter = begin_date|string + ' - ' + end_date|string %}
             {% endif %}
 
-            <span class="other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ interval_macros.format_date(begin_date) }}</a></span>
+            <span class="other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ begin_date|format_date }}</a></span>
         {% endfor %}
         </p>
     </li>

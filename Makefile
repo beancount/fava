@@ -13,6 +13,7 @@ clean: mostlyclean
 mostlyclean:
 	rm -rf .tox
 	rm -rf fava/static/node_modules
+	rm -rf .*cache
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
@@ -27,7 +28,7 @@ docs:
 	sphinx-build -b html docs build/docs
 
 run-example:
-	BEANCOUNT_FILE= fava tests/data/example.beancount
+	BEANCOUNT_FILE= fava --debug tests/data/example.beancount
 
 format:
 	yapf -rip tests --style='{based_on_style: pep8, coalesce_brackets: True, indent_dictionary_value: True}'

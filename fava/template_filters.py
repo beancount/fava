@@ -17,6 +17,8 @@ from beancount.core.amount import Amount
 from beancount.core.number import Decimal
 from beancount.core.account import ACCOUNT_RE
 
+from fava.util.date import Interval
+
 
 def get_market_value(pos, price_map, date=None):
     """Get the market value of a Position.
@@ -93,6 +95,21 @@ def format_amount(amount):
     if number is None:
         return ''
     return "{} {}".format(format_currency(number, currency, True), currency)
+
+
+def format_date(date):
+    """Format a date according to the current interval."""
+    if g.interval is Interval.YEAR:
+        return date.strftime('%Y')
+    if g.interval is Interval.QUARTER:
+        return '{}Q{}'.format(date.year, (date.month-1)//3 + 1)
+    if g.interval is Interval.MONTH:
+        return date.strftime('%b %Y')
+    if g.interval is Interval.WEEK:
+        return date.strftime('%YW%W')
+    if g.interval is Interval.DAY:
+        return date.strftime('%Y-%m-%d')
+    return ''
 
 
 def hash_entry(entry):

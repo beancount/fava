@@ -1,5 +1,3 @@
-{% import 'macros/_interval_macros.html' as interval_macros with context %}
-
 {% set chart_data = [] %}
 
 {% macro hierarchy(account_name, begin_date=None, end_date=None, label=None) %}
@@ -78,8 +76,8 @@
         </select>
         {% if not hide_interval_filter %}
             <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
-                {% for interval_ in ['day', 'week', 'month', 'quarter', 'year'] %}
-                <option value="{{ interval_ }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_macros.interval_labels[interval_] }}</option>
+                {% for interval_ in g.interval.members() %}
+                <option value="{{ interval_.value }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_.label }}</option>
                 {% endfor %}
             </select>
             {% endif %}

@@ -34,6 +34,7 @@ from fava.core.helpers import FavaAPIException
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.util import slugify, resource_path, setup_logging, send_file_inline
+from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
 
@@ -156,11 +157,11 @@ def url_for_source(**kwargs):
 @app.context_processor
 def _template_context():
     """Inject variables into the global request context."""
+
     return {
         'ledger': g.ledger,
         'operating_currencies': g.ledger.options['operating_currency'],
-        'interval': request.args.get('interval',
-                                     g.ledger.fava_options['interval']),
+        'interval': g.interval,
     }
 
 
@@ -203,6 +204,8 @@ def _pull_beancount_file(_, values):
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
     g.conversion = request.args.get('conversion')
     g.partial = request.args.get('partial', False)
+    g.interval = Interval.get(request.args.get(
+        'interval', g.ledger.fava_options['interval']))
 
 
 @app.errorhandler(FavaAPIException)

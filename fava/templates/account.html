@@ -1,7 +1,6 @@
 {% extends "_layout.html" %}
 
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% import 'macros/_interval_macros.html' as interval_macros with context %}
 {% import '_tree_table.html' as tree_table with context %}
 {% import '_journal_table.html' as journal_table with context %}
 
@@ -22,8 +21,8 @@
 
     <div class="headerline">
         <h3>{% if not journal %}<a href="{{ url_for('account', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
-        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Changes') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
-        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ interval_macros.interval_label|lower }})</a>{% else %}{{ _('Balances') }} ({{ interval_macros.interval_label|lower }}){% endif %}</h3>
+        <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ interval.label|lower }})</a>{% else %}{{ _('Changes') }} ({{ interval.label|lower }}){% endif %}</h3>
+        <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ interval.label|lower }})</a>{% else %}{{ _('Balances') }} ({{ interval.label|lower }}){% endif %}</h3>
     </div>
 
     {% if journal %}
@@ -34,7 +33,7 @@
         {% set interval_balances, dates = ledger.interval_balances(interval, account_name, accumulate) %}
         {% if interval_balances %}
             {% for begin_date, end_date in dates[:3] %}
-                {{ charts.hierarchy(account_name, begin_date, end_date, label=interval_macros.format_date(begin_date)) }}
+                {{ charts.hierarchy(account_name, begin_date, end_date, label=begin_date|format_date) }}
             {% endfor %}
             {{ tree_table.account_tree(account_name, interval_balances, dates, accumulate) }}
         {% endif %}
