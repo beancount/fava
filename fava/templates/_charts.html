@@ -79,7 +79,7 @@
         {% if not hide_interval_filter %}
             <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
                 {% for interval_ in g.interval.members() %}
-                <option value="{{ interval_.value }}"{% if interval == interval_ %} selected="selected"{% endif %}>{{ interval_.label }}</option>
+                <option value="{{ interval_.value }}"{% if g.interval == interval_ %} selected="selected"{% endif %}>{{ interval_.label }}</option>
                 {% endfor %}
             </select>
             {% endif %}
