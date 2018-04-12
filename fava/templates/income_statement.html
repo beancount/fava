@@ -9,8 +9,8 @@
     {{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income')) }}
     {{ charts.interval_totals(g.interval, ledger.options['name_expenses'], label=_('Expenses')) }}
 
-    {{ charts.hierarchy(ledger.options['name_expenses']) }}
     {{ charts.hierarchy(ledger.options['name_income']) }}
+    {{ charts.hierarchy(ledger.options['name_expenses']) }}
 
     <div class="row">
         <div class="column">
