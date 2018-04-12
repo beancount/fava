@@ -257,7 +257,7 @@ class SunburstChart extends BaseChart {
     this.selections.paths = this.canvas.selectAll('path')
       .data(this.root.descendants())
       .enter()
-      .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
+      .filter(d => (!d.data.dummy && d.depth))
       .append('path')
       .attr('fill-rule', 'evenodd')
       .style('fill', d => scales.sunburst(d.data.account))
@@ -278,7 +278,7 @@ class SunburstChart extends BaseChart {
     this.y.range([0, this.radius()]);
 
     this.selections.paths = this.canvas.selectAll('path')
-      .filter(d => ((d.x1 - d.x0) > 0.005 && !d.data.dummy && d.depth))
+      .filter(d => (!d.data.dummy && d.depth))
       .attr('d', this.arc);
   }
 
