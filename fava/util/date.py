@@ -235,22 +235,30 @@ def days_in_daterange(start_date, end_date):
         yield start_date + datetime.timedelta(diff)
 
 
-def number_of_days_in_period(period, date_):
-    """Returns the days in the specified `period` and `date_`."""
+def number_of_days_in_period(interval, date):
+    """Number of days in the surrounding interval.
 
-    if period == 'daily':
+    Args:
+        interval: An interval.
+        date: A date.
+
+    Returns:
+        A number, the number of days surrounding the given date in the
+        interval.
+    """
+
+    if interval is Interval.DAY:
         return 1
-    if period == 'weekly':
+    if interval is Interval.WEEK:
         return 7
-    if period == 'monthly':
-        date_ = datetime.date(date_.year, date_.month, 1)
-        return (get_next_interval(date_, Interval.MONTH) - date_).days
-    if period == 'quarterly':
-        quarter = (date_.month - 1) / 3 + 1
-        date_ = datetime.date(date_.year, int(quarter) * 3 - 2, 1)
-        return (get_next_interval(date_, Interval.QUARTER) - date_).days
-    if period == 'yearly':
-        date_ = datetime.date(date_.year, 1, 1)
-        return (get_next_interval(date_, Interval.YEAR) - date_).days
-    else:
-        raise NotImplementedError
+    if interval is Interval.MONTH:
+        date = datetime.date(date.year, date.month, 1)
+        return (get_next_interval(date, Interval.MONTH) - date).days
+    if interval is Interval.QUARTER:
+        quarter = (date.month - 1) / 3 + 1
+        date = datetime.date(date.year, int(quarter) * 3 - 2, 1)
+        return (get_next_interval(date, Interval.QUARTER) - date).days
+    if interval is Interval.YEAR:
+        date = datetime.date(date.year, 1, 1)
+        return (get_next_interval(date, Interval.YEAR) - date).days
+    raise NotImplementedError

@@ -5,7 +5,8 @@ from collections import defaultdict, namedtuple, Counter
 from beancount.core.data import Custom
 from beancount.core.number import Decimal
 
-from fava.util.date import days_in_daterange, number_of_days_in_period
+from fava.util.date import (Interval, days_in_daterange,
+                            number_of_days_in_period)
 from fava.core.helpers import FavaModule
 
 Budget = namedtuple('Budget', 'account date_start period number currency')
@@ -54,11 +55,25 @@ def parse_budgets(custom_entries):
     budgets = defaultdict(list)
     errors = []
 
+    interval_map = {
+        'daily': Interval.DAY,
+        'weekly': Interval.WEEK,
+        'monthly': Interval.MONTH,
+        'quarterly': Interval.QUARTER,
+        'yearly': Interval.YEAR,
+    }
+
     for entry in custom_entries:
         if entry.type == 'budget':
             try:
-                budget = Budget(entry.values[0].value, entry.date,
-                                entry.values[1].value,
+                interval = interval_map.get(str(entry.values[1].value))
+                if not interval:
+                    errors.append(
+                        BudgetError(entry.meta,
+                                    'Invalid interval for budget entry',
+                                    entry))
+                    continue
+                budget = Budget(entry.values[0].value, entry.date, interval,
                                 entry.values[2].value.number,
                                 entry.values[2].value.currency)
                 budgets[budget.account].append(budget)

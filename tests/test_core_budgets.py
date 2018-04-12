@@ -10,12 +10,13 @@ def test_budgets(load_doc):
     """
     2016-01-01 custom "budget" Expenses:Groceries "weekly" 100.00 CNY
     2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR
+    2016-06-01 custom "budget" Expenses:Groceries "asdfasdf"  10.00 EUR
     2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
     """
     entries, _, _ = load_doc
     budgets, errors = parse_budgets(entries)
 
-    assert len(errors) == 1
+    assert len(errors) == 2
 
     assert calculate_budget(budgets, 'Expenses', date(2016, 6, 1),
                             date(2016, 6, 8)) == {}
