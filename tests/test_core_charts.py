@@ -1,10 +1,35 @@
 import datetime
+from collections import Counter
 
 from beancount.core.number import D
 from flask import g
 
 from fava.application import app
 from fava.util.date import Interval
+
+
+def test_interval_totals(small_example_ledger):
+    with app.test_request_context(''):
+        g.conversion = None
+        data = small_example_ledger.charts.interval_totals(
+            Interval.MONTH, 'Expenses')
+        assert data == [{
+            'date': datetime.date(2012, 11, 18),
+            'balance': {
+                'EUR': D('280.00')
+            },
+            'budgets': Counter({
+                'EUR': D('31.42857142857142857142857145')
+            })
+        }, {
+            'date': datetime.date(2012, 12, 1),
+            'balance': {
+                'EUR': D('80.00')
+            },
+            'budgets': Counter({
+                'EUR': D('48.57142857142857142857142861')
+            })
+        }]
 
 
 def test_linechart_data(example_ledger):

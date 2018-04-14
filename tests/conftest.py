@@ -36,6 +36,11 @@ def load_doc(request):
 
 
 @pytest.fixture
+def small_example_ledger():
+    return FavaLedger(data_file('example.beancount'))
+
+
+@pytest.fixture
 def example_ledger():
     yield API
     API.filter(account=None, filter=None, time=None)

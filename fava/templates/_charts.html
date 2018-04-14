@@ -13,7 +13,7 @@
 {% do chart_data.append({
     'type': 'bar',
     'label': account_name if not label else label,
-    'interval_totals': ledger.charts.interval_totals(interval, account_name),
+    'series': ledger.charts.interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
 

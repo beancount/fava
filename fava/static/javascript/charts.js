@@ -833,14 +833,15 @@ e.on('page-loaded', () => {
       }
       case 'bar': {
         const currentDateFormat = dateFormat[$('#chart-interval').value];
-        const series = chart.interval_totals.map(d => ({
-          values: getOperatingCurrencies().map(name => ({
+        const operatingCurrencies = getOperatingCurrencies();
+        const series = chart.series.map(d => ({
+          values: operatingCurrencies.map(name => ({
             name,
-            value: +d.totals[name] || 0,
+            value: +d.balance[name] || 0,
             budget: +d.budgets[name] || 0,
           })),
-          date: new Date(d.begin_date),
-          label: currentDateFormat(new Date(d.begin_date)),
+          date: new Date(d.date),
+          label: currentDateFormat(new Date(d.date)),
         }));
 
         renderers[id] = svg => new BarChart(svg)

@@ -61,8 +61,7 @@ class ChartModule(FavaModule):
     def hierarchy(self, account_name, begin=None, end=None):
         """An account tree."""
         if begin:
-            entries = iter_entry_dates(self.ledger.entries, begin, end)
-            tree = Tree(entries)
+            tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
         else:
             tree = self.ledger.root_tree
         return _serialize_account_node(tree.get(account_name), end)
@@ -84,8 +83,8 @@ class ChartModule(FavaModule):
                         inventory.add_position(posting)
 
             yield {
-                'begin_date': begin,
-                'totals': cost_or_value(inventory, end),
+                'date': begin,
+                'balance': cost_or_value(inventory, end),
                 'budgets':
                 self.ledger.budgets.calculate_children(accounts, begin, end),
             }
