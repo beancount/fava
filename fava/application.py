@@ -15,6 +15,7 @@ import datetime
 import functools
 import inspect
 import os
+import os.path
 from io import BytesIO
 
 from flask import (abort, Flask, render_template, request,
@@ -122,6 +123,30 @@ def _inject_filters(endpoint, values):
     for filter_name in ['account', 'filter', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
+
+
+@app.url_defaults
+def _static_modified(endpoint, values):
+    """Add a query param to force cache updates when static files change."""
+    if endpoint != 'static' and not endpoint.endswith('.static'):
+        return
+
+    filename = values.get('filename', None)
+    if not filename:
+        return
+
+    blueprint = request.blueprint
+    if '.' in endpoint:  # blueprint
+        blueprint = endpoint.rsplit('.', 1)[0]
+
+    static_folder = app.static_folder
+    # use blueprint, but dont set `static_folder` option
+    if blueprint and app.blueprints[blueprint].static_folder:
+        static_folder = app.blueprints[blueprint].static_folder
+
+    file_path = os.path.join(static_folder, filename)
+    if os.path.exists(file_path):
+        values['_'] = int(os.stat(file_path).st_mtime)
 
 
 app.add_template_global(datetime.date.today, 'today')
