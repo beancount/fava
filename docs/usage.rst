@@ -23,8 +23,10 @@ use ``pip`` to install Fava by running::
 
     pip3 install fava
 
-which will also pull in all required dependencies including Beancount, if you
-don't have it installed already.
+which will also pull in all required dependencies including Beancount. If you
+don't have Beancount installed already, you might want to have a look at its
+`installation instructions
+<https://docs.google.com/document/d/1FqyrTPwiHVLyncWTf3v5TcooCu9z5JRX8Nm41lVZi0U>`__.
 
 If you want to export query results to Microsoft Excel or LibreOffice Calc, use
 the following command to install the optional dependencies for this feature::
