@@ -97,7 +97,7 @@ def parse_options(custom_entries):
 
                 if key == 'default-file':
                     options[key] = entry.meta['filename']
-                if key == 'insert-entry':
+                elif key == 'insert-entry':
                     opt = InsertEntryOption(
                         entry.date,
                         re.compile(entry.values[1].value),
