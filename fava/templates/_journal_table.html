@@ -61,8 +61,8 @@
 {% endif %}
 {%- endmacro %}
 {% macro render_tags_links(entry) -%}
-{% for tag in entry.tags %}<span class="tag">#{{ tag }}</span>{% endfor %}
-{% for link_ in entry.links %}<span class="link">^{{ link_ }}</span>{% endfor %}
+{% for tag in entry.tags|sort %}<span class="tag">#{{ tag }}</span>{% endfor %}
+{% for link_ in entry.links|sort %}<span class="link">^{{ link_ }}</span>{% endfor %}
 {%- endmacro %}
 
 {% macro journal_table(entries, show_change_and_balance=False) %}
