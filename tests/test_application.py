@@ -135,3 +135,16 @@ def test_download_journal(app, test_client):
     assert result.headers['Content-Disposition'].startswith(
         'attachment; filename="journal_')
     assert result.headers['Content-Type'] == 'application/octet-stream'
+
+
+@pytest.mark.parametrize('filename,has_modified', [
+    ('not-a-real-file', False),
+    ('javascript/main.js', True),
+    ('css/style.css', True),
+])
+def test_url_for_static(app, filename, has_modified):
+    with app.test_request_context():
+        app.preprocess_request()
+        url = flask.url_for('static', filename=filename)
+    assert url.startswith('/static/' + filename)
+    assert ('?_=' in url) == has_modified
