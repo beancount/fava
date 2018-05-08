@@ -128,23 +128,14 @@ def _inject_filters(endpoint, values):
 @app.url_defaults
 def _static_modified(endpoint, values):
     """Add a query param to force cache updates when static files change."""
-    if endpoint != 'static' and not endpoint.endswith('.static'):
+    if endpoint != 'static':
         return
 
     filename = values.get('filename', None)
     if not filename:
         return
 
-    blueprint = request.blueprint
-    if '.' in endpoint:  # blueprint
-        blueprint = endpoint.rsplit('.', 1)[0]
-
-    static_folder = app.static_folder
-    # use blueprint, but dont set `static_folder` option
-    if blueprint and app.blueprints[blueprint].static_folder:
-        static_folder = app.blueprints[blueprint].static_folder
-
-    file_path = os.path.join(static_folder, filename)
+    file_path = os.path.join(app.static_folder, filename)
     if os.path.exists(file_path):
         values['_'] = int(os.stat(file_path).st_mtime)
 
