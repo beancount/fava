@@ -125,19 +125,18 @@ def _inject_filters(endpoint, values):
             values[filter_name] = g.filters[filter_name]
 
 
-@app.url_defaults
-def _static_modified(endpoint, values):
-    """Add a query param to force cache updates when static files change."""
-    if endpoint != 'static':
-        return
-
+@app.template_global()
+def static_url(**values):
+    """Return a static url with an mtime query string for cache busting."""
     filename = values.get('filename', None)
     if not filename:
-        return
+        return url_for('static', **values)
 
     file_path = os.path.join(app.static_folder, filename)
     if os.path.exists(file_path):
-        values['_'] = int(os.stat(file_path).st_mtime)
+        values['mtime'] = int(os.stat(file_path).st_mtime)
+
+    return url_for('static', **values)
 
 
 app.add_template_global(datetime.date.today, 'today')

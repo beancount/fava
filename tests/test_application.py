@@ -3,8 +3,9 @@ from textwrap import dedent
 import flask
 import pytest
 import werkzeug.urls
+import werkzeug.routing
 
-from fava.application import REPORTS
+from fava.application import REPORTS, static_url
 
 FILTER_COMBINATIONS = [
     {
@@ -142,9 +143,19 @@ def test_download_journal(app, test_client):
     ('javascript/main.js', True),
     ('css/style.css', True),
 ])
-def test_url_for_static(app, filename, has_modified):
+def test_static_url(app, filename, has_modified):
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('static', filename=filename)
+        url = static_url(filename=filename)
     assert url.startswith('/static/' + filename)
-    assert ('?_=' in url) == has_modified
+    assert ('?mtime=' in url) == has_modified
+
+
+def test_static_url_no_filename(app):
+    with app.test_request_context():
+        app.preprocess_request()
+        try:
+            static_url()
+            assert False, "static_url without a filename should throw an error"
+        except werkzeug.routing.BuildError:
+            pass
