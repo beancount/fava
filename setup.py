@@ -34,6 +34,7 @@ setup(
         'Babel>=2.5.2',
         'Flask-Babel>=0.10.0',
         'Flask>=0.10.1',
+        'Flask-Login==0.4.1',
         'Jinja2>=2.10',
         'beancount>=2.0',
         'click',

@@ -64,7 +64,20 @@ def main(filenames, port, host, prefix, incognito, debug, profile,
                 restrictions=(30,),
                 profile_dir=profile_dir if profile_dir else None)
 
+        app.config['ENV'] = 'development'
         app.jinja_env.auto_reload = True
+    elif app.config.get('SECRET_KEY') == 'development':  # pragma: no cover
+        raise click.UsageError(
+            "Cannot start non-debug server without a secret key. Did you "
+            "forget to set the FAVA_SETTINGS environment variable to a Flask "
+            "configuration file?"
+        )
+    else:
+        # When running in production, lock down all session cookies
+        app.config['SESSION_COOKIE_SECURE'] = True
+        app.config['SESSION_COOKIE_HTTPONLY'] = True
+        app.config['REMEMBER_COOKIE_SECURE'] = True
+        app.config['REMEMBER_COOKIE_HTTPONLY'] = True
 
     try:
         app.run(host, port, debug)
