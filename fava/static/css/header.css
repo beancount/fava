@@ -4,14 +4,14 @@
   }
 }
 
-header > svg.loading {
+header > img.loading {
   animation: spinner 1s linear infinite;
   border-radius: 50%;
   border-top: 2px solid var(--color-header-text);
   padding: 0;
 }
 
-header > svg.loading path {
+header > img.loading path {
   opacity: 0;
 }
 
