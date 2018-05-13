@@ -12,6 +12,7 @@ body {
   font-weight: 400;
   line-height: 1.5;
   margin: 0;
+  height: 100%;
 }
 
 table {
@@ -297,6 +298,8 @@ button.round,
 body {
   padding: var(--header-height) 0 0 var(--aside-width);
   transition: var(--transitions);
+  display: flex;
+  flex-direction: column;
 }
 
 header {
@@ -304,13 +307,13 @@ header {
   background-color: var(--color-header);
   color: var(--color-header-text);
   display: flex;
-  height: var(--header-height);
   left: 0;
   padding: 0 7px 0 10px;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: var(--z-index-header);
+  flex: 1 0 var(--header-height);
 }
 
 .aside-button {
@@ -429,11 +432,9 @@ aside h3 {
   filter: brightness(85%);
 }
 
-article {
-  height: 100%;
+body > article {
+  flex: 1 0 auto;
   padding: 1.5em;
-  position: relative;
-  width: 100%;
 }
 
 .wide-form {

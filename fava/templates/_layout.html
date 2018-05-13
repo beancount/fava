@@ -60,6 +60,12 @@
     <ul id="notifications" class="notifications"></ul>
     <div id="tooltip" class="tooltip"></div>
     <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
+    <footer class="footer">
+        {% if current_user.is_authenticated %}
+        <b>Logged in as {{ current_user.name }}</b>
+        {% endif %}
+        | Copyright &copy; 2015-2016 Dominik Aumayr fava project contributors.
+    </footer>
   </body>
 </html>
 {%- endif %}

@@ -1,0 +1,6 @@
+.footer {
+    background: var(--color-header);
+    color: var(--color-header-text);
+    padding: 7px;
+    text-align: right;
+}

@@ -1,16 +1,12 @@
 .event-container {
     display: flex;
     flex-wrap: wrap;
-}
-
-@media screen and (max-width: 1000px) {
-    .event-container {
-        justify-content: center;
-    }
+    justify-content: center;
 }
 
 .event-table {
     flex: 0 1 400px;
+    padding: 30px;
 }
 
 .event-table > div > h3 {

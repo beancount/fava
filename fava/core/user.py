@@ -1,7 +1,13 @@
 """This module contains Fava's user handling."""
 users = {
-    'test_user_1': {'password': 'a very secure password'},
-    'test_user_2': {'password': 'another very secure password'},
+    'test_user_1': {
+        'password': 'a very secure password',
+        'name': 'Test User 1'
+    },
+    'test_user_2': {
+        'password': 'another very secure password',
+        'name': 'Test User 2'
+    },
 }
 
 
@@ -25,6 +31,12 @@ class FavaUser:
         if self.username not in users:
             return
         users[self.username]['authenticated'] = True
+
+    @property
+    def name(self):
+        if self.username not in users:
+            return 'an unnamed user'
+        return users[self.username]['name']
 
     def get_id(self):
         return self.username
