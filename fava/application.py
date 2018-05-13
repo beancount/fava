@@ -54,17 +54,19 @@ app.jinja_env.lstrip_blocks = True
 
 app.config['SECRET_KEY'] = 'development'
 
-login_manager = flask_login.LoginManager()
-login_manager.init_app(app)
-decorate_user(login_manager)
-if app.config['ENV'] != 'development':
-    login_manager.session_protection = 'strong'
-login_manager.login_view = 'login_page'
-
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 
+app.config.from_object('fava.environments.' + app.config['ENV'])
 app.config.from_envvar('FAVA_SETTINGS', silent=True)
+
+app.login_manager = flask_login.LoginManager()
+decorate_user(app.login_manager)
+if app.config['ENV'] != 'development':
+    app.login_manager.session_protection = 'strong'
+app.login_manager.login_view = 'login_page'
+
+app.login_manager.init_app(app)
 
 REPORTS = [
     '_context',
@@ -247,6 +249,7 @@ def login_page():
 def logout():
     flask_login.logout_user()
     return redirect(url_for('login_page'))
+
 
 @app.route('/')
 @app.route('/<bfile>/')

@@ -8,6 +8,7 @@
 /fava.egg-info
 /htmlcov
 /venv
+/fava/environments/production.py
 
 package-lock.json
 npm-debug.log

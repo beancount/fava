@@ -72,12 +72,6 @@ def main(filenames, port, host, prefix, incognito, debug, profile,
             "forget to set the FAVA_SETTINGS environment variable to a Flask "
             "configuration file?"
         )
-    else:
-        # When running in production, lock down all session cookies
-        app.config['SESSION_COOKIE_SECURE'] = True
-        app.config['SESSION_COOKIE_HTTPONLY'] = True
-        app.config['REMEMBER_COOKIE_SECURE'] = True
-        app.config['REMEMBER_COOKIE_HTTPONLY'] = True
 
     try:
         app.run(host, port, debug)
