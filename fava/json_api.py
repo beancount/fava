@@ -120,7 +120,7 @@ def add_document():
     if not g.ledger.options['documents']:
         raise FavaAPIException('You need to set a documents folder.')
 
-    upload = request.files['file']
+    upload = request.files.get('file')
     if not upload:
         raise FavaAPIException('No file uploaded.')
 
