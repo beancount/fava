@@ -9,9 +9,6 @@
 .login-container {
     max-width: 300px;
     margin: 40px auto 0px auto;
-    background: #eee;
-    border-radius: var(--border-radii);
-    box-shadow: 2px 2px 2px #667;
 }
 
 .login-header {
@@ -20,8 +17,6 @@
     color: var(--color-header-text);
     padding: 7px 7px 7px 10px;
     width: 100%;
-    border-top-left-radius: var(--border-radii);
-    border-top-right-radius: var(--border-radii);
 }
 
 .login-header > h1 {

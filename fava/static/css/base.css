@@ -659,3 +659,19 @@ td .status-indicator {
 .autocomplete:empty {
   display: none;
 }
+
+.rounded-box-header {
+    background: var(--color-header-light);
+    border-top-left-radius: var(--border-radii);
+    border-top-right-radius: var(--border-radii);
+    color: var(--color-header-text);
+    margin: 0;
+    padding: 7px;
+    width: 100%;
+}
+
+.rounded-box-container {
+    background: #eee;
+    border-radius: var(--border-radii);
+    box-shadow: 0px 0px 4px #667;
+}
