@@ -63,9 +63,9 @@
     <footer class="footer">
         {% if current_user.is_authenticated %}
         <b>Logged in as {{ current_user.name }}</b>
-        <a href="{{ url_for('logout') }}" always-fully-navigate> (logout) </a>
+        | <a href="{{ url_for('logout') }}" always-fully-navigate>logout</a> |
         {% endif %}
-        | Copyright &copy; 2015-2016 Dominik Aumayr fava project contributors.
+        Copyright &copy; 2015-2016 Dominik Aumayr fava project contributors.
     </footer>
   </body>
 </html>
