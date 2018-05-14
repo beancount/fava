@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title> Fava Login </title>
+  </head>
+  <body>
+    <header>
+        <image src="{{ url_for('static', filename='images/fava.svg') }}" />
+        <h1> Welcome to fava! </h1>
+    </header>
+    <div class="login-root" >
+        <div class="login-container rounded-box-container" >
+            <div class="login-header rounded-box-header" >
+                <image src="{{ url_for('static', filename='images/fava.svg') }}" />
+                <h1> Login </h1>
+            </div>
+            {% if login_error is not none %}
+            <div class="error-box"> {{ login_error }} </div>
+            {% endif %}
+            <form action="login" method="POST">
+                <div class="login-input-element">
+                    <label class="login-label" for="username" >Username</label> <br/>
+                    <input class="login-input" type="text" id="username" name="username" />
+                </div>
+                <div class="login-input-element">
+                    <label class="login-label" for="password" >Password</label> <br/>
+                    <input class="login-input" type="password" id="password" name="password" />
+                </div>
+                <div class="login-input-element">
+                    <input class="login-button" type="submit" value="Login" />
+                </div>
+            </form>
+        </div>
+    </div>
+</html>

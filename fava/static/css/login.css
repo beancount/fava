@@ -1,0 +1,45 @@
+:root {
+    --border-radii: 4px;
+}
+
+.login-root {
+    margin-right: var(--aside-width);
+}
+
+.login-container {
+    max-width: 300px;
+    margin: 40px auto 0px auto;
+}
+
+.login-header {
+    display: flex;
+    background: var(--color-header);
+    color: var(--color-header-text);
+    padding: 7px 7px 7px 10px;
+    width: 100%;
+}
+
+.login-header > h1 {
+    padding: 0 0 0 7px;
+}
+
+.login-input-element {
+    width: 100%;
+    padding: 7px;
+}
+
+.login-input {
+    width: 100%;
+}
+
+.login-button {
+    width: 100%;
+}
+
+.error-box {
+    background: var(--color-error);
+    color: var(--color-notification);
+    padding:7px;
+    border-bottom-right-radius: var(--border-radii);
+    border-bottom-left-radius: var(--border-radii);
+}

@@ -1,0 +1,7 @@
+# An example production environment
+SECRET_KEY = 'Q@]v99OMRt^NM2CXf$p>8%fjHO\x0b4+|a2'
+DEBUG = False
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+REMEMBER_COOKIE_SECURE = True
+REMEMBER_COOKIE_HTTPONLY = True

@@ -21,6 +21,8 @@ from flask import (abort, Flask, render_template, request,
                    redirect, g, send_file, render_template_string)
 import flask
 from flask_babel import Babel
+import flask_login
+import logging
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
@@ -31,6 +33,7 @@ from fava import template_filters
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException
+from fava.core.user import decorate_user, try_login_from_post
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.util import slugify, resource_path, setup_logging, send_file_inline
@@ -50,8 +53,27 @@ app.jinja_options['extensions'].append('jinja2.ext.do')
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
+app.config['SECRET_KEY'] = 'development'
+
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
+
+try:
+    app.config.from_object('fava.environments.' + app.config['ENV'])
+except werkzeug.utils.ImportStringError:
+    import warnings
+    warnings.warn(
+        'Failed to find environemnt fava.environments.%s' % app.config['ENV']
+    )
+logging.info('Using environment ' + app.config['ENV'])
+app.config.from_envvar('FAVA_SETTINGS', silent=True)
+
+app.login_manager = flask_login.LoginManager()
+app.login_manager.init_app(app)
+decorate_user(app.login_manager)
+if app.config['ENV'] != 'development':
+    app.login_manager.session_protection = 'strong'
+app.login_manager.login_view = 'login_page'
 
 REPORTS = [
     '_context',
@@ -211,8 +233,36 @@ def fava_api_exception(error):
     return render_template('_error.html', error=error), 400
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login_page():
+    print(flask.session)
+    if request.method == 'GET':
+        # Pull in and discard flashed messages
+        flask.app.get_flashed_messages()
+        return render_template('login.html', login_error=None)
+
+    user = try_login_from_post(request)
+    if user:
+        flask_login.login_user(user)
+        print(user)
+        return redirect(url_for('index'))
+    else:
+        return render_template(
+            'login.html',
+            login_error='username or password was incorrect'
+        )
+
+
+@app.route('/logout')
+@flask_login.login_required
+def logout():
+    flask_login.logout_user()
+    return redirect(url_for('login_page'))
+
+
 @app.route('/')
 @app.route('/<bfile>/')
+@flask_login.login_required
 def index():
     """Redirect to the Income Statement (of the given or first file)."""
     return redirect(url_for('report', report_name='income_statement'))
@@ -220,6 +270,7 @@ def index():
 
 @app.route('/<bfile>/account/<name>/')
 @app.route('/<bfile>/account/<name>/<subreport>/')
+@flask_login.login_required
 def account(name, subreport='journal'):
     """The account report."""
     if subreport in ['journal', 'balances', 'changes']:
@@ -230,6 +281,7 @@ def account(name, subreport='journal'):
 
 
 @app.route('/<bfile>/document/', methods=['GET'])
+@flask_login.login_required
 def document():
     """Download a document."""
     filename = request.args.get('filename')
@@ -240,6 +292,7 @@ def document():
 
 
 @app.route('/<bfile>/statement/', methods=['GET'])
+@flask_login.login_required
 def statement():
     """Download a statement file."""
     entry_hash = request.args.get('entry_hash')
@@ -249,6 +302,7 @@ def statement():
 
 
 @app.route('/<bfile>/holdings/by_<aggregation_key>/')
+@flask_login.login_required
 def holdings_by(aggregation_key):
     """The holdings report."""
     if aggregation_key in ['account', 'currency', 'cost_currency']:
@@ -259,6 +313,7 @@ def holdings_by(aggregation_key):
 
 
 @app.route('/<bfile>/<report_name>/')
+@flask_login.login_required
 def report(report_name):
     """Endpoint for most reports."""
     if report_name in REPORTS:
@@ -268,6 +323,7 @@ def report(report_name):
 
 
 @app.route('/<bfile>/download-query/query_result.<result_format>')
+@flask_login.login_required
 def download_query(result_format):
     """Download a query result."""
     name, data = g.ledger.query_shell.query_to_file(
@@ -278,6 +334,7 @@ def download_query(result_format):
 
 
 @app.route('/<bfile>/download-journal/')
+@flask_login.login_required
 def download_journal():
     """Download a Journal file."""
     now = datetime.datetime.now().replace(microsecond=0)
@@ -288,6 +345,7 @@ def download_journal():
 
 @app.route('/<bfile>/help/')
 @app.route('/<bfile>/help/<string:page_slug>/')
+@flask_login.login_required
 def help_page(page_slug='_index'):
     """Fava's included documentation."""
     if page_slug not in app.config['HELP_PAGES']:
@@ -302,6 +360,7 @@ def help_page(page_slug='_index'):
 
 
 @app.route('/jump')
+@flask_login.login_required
 def jump():
     """Redirect back to the referer, replacing some parameters.
 

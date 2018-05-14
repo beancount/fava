@@ -30,7 +30,10 @@ def test_api_add_document(app, test_client, tmpdir):
         url = flask.url_for('json_api.add_document')
 
         response = test_client.put(url)
-        assert response.status_code == 400
+        assert flask.json.loads(response.get_data(True)) == {
+            'success': False,
+            'error': 'No file uploaded.',
+        }
 
         filename = os.path.join(str(tmpdir), 'Test', '2015-12-12_test')
 

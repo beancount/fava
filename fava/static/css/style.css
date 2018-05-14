@@ -2,7 +2,9 @@
 @import 'components.css';
 @import 'charts.css';
 @import 'editor.css';
+@import 'events.css';
 @import 'fonts.css';
+@import 'footer.css';
 @import 'header.css';
 @import 'help.css';
 @import 'overlay.css';
@@ -11,6 +13,7 @@
 @import 'tree-table.css';
 @import 'ingest.css';
 @import 'entry-forms.css';
+@import 'login.css';
 @import 'media-mobile.css';
 @import 'media-print.css';
 

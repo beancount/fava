@@ -1,0 +1,11 @@
+.footer {
+    background: var(--color-header);
+    color: var(--color-header-text);
+    padding: 7px;
+    text-align: right;
+}
+
+.footer > a {
+    color: var(--color-header-text);
+    text-decoration: currentcolor underline solid;
+}
