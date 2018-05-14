@@ -22,6 +22,7 @@ from flask import (abort, Flask, render_template, request,
 import flask
 from flask_babel import Babel
 import flask_login
+import logging
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
@@ -57,16 +58,22 @@ app.config['SECRET_KEY'] = 'development'
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
 
-app.config.from_object('fava.environments.' + app.config['ENV'])
+try:
+    app.config.from_object('fava.environments.' + app.config['ENV'])
+except werkzeug.utils.ImportStringError:
+    import warnings
+    warnings.warn(
+        'Failed to find environemnt fava.environments.%s' % app.config['ENV']
+    )
+logging.info('Using environment ' + app.config['ENV'])
 app.config.from_envvar('FAVA_SETTINGS', silent=True)
 
 app.login_manager = flask_login.LoginManager()
+app.login_manager.init_app(app)
 decorate_user(app.login_manager)
 if app.config['ENV'] != 'development':
     app.login_manager.session_protection = 'strong'
 app.login_manager.login_view = 'login_page'
-
-app.login_manager.init_app(app)
 
 REPORTS = [
     '_context',
