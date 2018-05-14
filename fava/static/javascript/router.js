@@ -124,6 +124,11 @@ class Router {
         return;
       }
       const link = event.target.closest('a');
+      if (link.hasAttribute('always-fully-navigate')) {
+        // Some internal links shouldn't be loaded as children,
+        // notably the logout link
+        return;
+      }
       if (link.getAttribute('href').charAt(0) === '#' || link.host !== window.location.host) {
         return;
       }
