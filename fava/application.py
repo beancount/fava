@@ -237,6 +237,8 @@ def fava_api_exception(error):
 def login_page():
     print(flask.session)
     if request.method == 'GET':
+        # Pull in and discard flashed messages
+        flask.app.get_flashed_messages()
         return render_template('login.html', login_error=None)
 
     user = try_login_from_post(request)
