@@ -15,11 +15,13 @@ class AttributesModule(FavaModule):
         self.accounts = None
         self.currencies = None
         self.payees = None
+        self.links = None
         self.tags = None
         self.years = None
 
     def load_file(self):
         all_entries = self.ledger.all_entries
+        self.links = getters.get_all_links(all_entries)
         self.tags = getters.get_all_tags(all_entries)
         self.years = list(getters.get_active_years(all_entries))[::-1]
 

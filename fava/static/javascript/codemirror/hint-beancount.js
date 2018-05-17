@@ -33,6 +33,12 @@ CodeMirror.registerHelper('hint', 'beancount', (cm) => {
       from: cursor,
       to: cursor,
     };
+  } else if (currentCharacter === '^') {
+    return {
+      list: window.favaAPI.links,
+      from: cursor,
+      to: cursor,
+    };
   }
 
   if (token.type === 'tag') {
