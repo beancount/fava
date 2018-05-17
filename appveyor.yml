@@ -12,4 +12,4 @@ test_script:
 
 cache:
   - '%LOCALAPPDATA%\pip\cache'
-  - '.tox'
+  - '.tox -> setup.py'
