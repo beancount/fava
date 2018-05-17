@@ -163,6 +163,7 @@ class CompletionList {
     }
     if (this.list === 'tags') {
       const suggestions = window.favaAPI.tags.map(tag => `#${tag}`)
+        .concat(window.favaAPI.links.map(link => `^${link}`))
         .concat(window.favaAPI.payees.map(payee => `payee:"${payee}"`));
       return new Promise((resolve) => { resolve(suggestions); });
     }
