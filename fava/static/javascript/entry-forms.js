@@ -70,6 +70,10 @@ export default class EntryForm {
       });
     }
 
+    if (this.type === 'Balance') {
+      entryData.account = this.form.querySelector('.account').value;
+    }
+
     return entryData;
   }
 
