@@ -27,6 +27,9 @@ import 'codemirror/addon/comment/comment';
 // placeholder
 import 'codemirror/addon/display/placeholder';
 
+// highlight line
+import 'codemirror/addon/selection/active-line';
+
 import './codemirror/fold-beancount';
 import './codemirror/hint-beancount';
 import './codemirror/mode-beancount';
@@ -203,6 +206,7 @@ const sourceEditorOptions = {
   lineNumbers: true,
   foldGutter: true,
   showTrailingSpace: true,
+  styleActiveLine: true,
   gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
   extraKeys: {
     'Ctrl-Space': 'autocomplete',
