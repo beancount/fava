@@ -7,8 +7,8 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="shortcut icon" href="{{ static_url(filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ static_url(filename='css/style.css') }}">
     <title>{{ short_title }} - {{ ledger.options.title }}</title>
   </head>
   <body>
@@ -62,7 +62,7 @@
     {% include "_overlays.html" %}
     <ul id="notifications" class="notifications"></ul>
     <div id="tooltip" class="tooltip"></div>
-    <script type="text/javascript" src="{{ url_for('static', filename='gen/app.js') }}"></script>
+    <script type="text/javascript" src="{{ static_url(filename='gen/app.js') }}"></script>
   </body>
 </html>
 {%- endif %}

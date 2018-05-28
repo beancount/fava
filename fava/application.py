@@ -15,6 +15,7 @@ import datetime
 import functools
 import inspect
 import os
+import os.path
 from io import BytesIO
 
 from flask import (abort, Flask, render_template, request,
@@ -122,6 +123,20 @@ def _inject_filters(endpoint, values):
     for filter_name in ['account', 'filter', 'time']:
         if filter_name not in values:
             values[filter_name] = g.filters[filter_name]
+
+
+@app.template_global()
+def static_url(**values):
+    """Return a static url with an mtime query string for cache busting."""
+    filename = values.get('filename', None)
+    if not filename:
+        return url_for('static', **values)
+
+    file_path = os.path.join(app.static_folder, filename)
+    if os.path.exists(file_path):
+        values['mtime'] = int(os.stat(file_path).st_mtime)
+
+    return url_for('static', **values)
 
 
 app.add_template_global(datetime.date.today, 'today')
