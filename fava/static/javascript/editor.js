@@ -42,7 +42,7 @@ import e from './events';
 
 import { closeOverlay } from './overlays';
 
-// This handles saving in both the main and the overlayed entry editors.
+// This handles saving in both the main and the overlaid entry editors.
 CodeMirror.commands.favaSave = (cm) => {
   const button = cm.getOption('favaSaveButton');
 
