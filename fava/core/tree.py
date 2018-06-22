@@ -3,6 +3,7 @@
 import collections
 
 from beancount.core import account, convert
+from beancount.core.data import Open
 
 from fava.core.inventory import CounterInventory
 
@@ -36,6 +37,8 @@ class Tree(dict):
         if entries:
             account_balances = collections.defaultdict(CounterInventory)
             for entry in entries:
+                if isinstance(entry, Open):
+                    self.get(entry.account, insert=True)
                 for posting in getattr(entry, 'postings', []):
                     account_balances[posting.account].add_position(posting)
 
