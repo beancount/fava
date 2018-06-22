@@ -25,6 +25,9 @@
 // reload:
 //    This triggers a reload of the page.
 //
+// close-overlay:
+//    Close any open overlays.
+//
 // button-click-*:
 //    For <button>s that have a `data-event` attribute, the event
 //    `button-click-${data-event}` will be triggered.

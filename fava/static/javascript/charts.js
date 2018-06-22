@@ -2,10 +2,14 @@
 //
 // The charts heavily use d3 libraries.
 
-import { extent, max, merge, min } from 'd3-array';
+import {
+  extent, max, merge, min,
+} from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
-import { scaleBand, scaleLinear, scaleOrdinal, scalePoint, scaleSqrt, scaleUtc } from 'd3-scale';
+import {
+  scaleBand, scaleLinear, scaleOrdinal, scalePoint, scaleSqrt, scaleUtc,
+} from 'd3-scale';
 import { event, select } from 'd3-selection';
 import { arc, line } from 'd3-shape';
 import { schemeSet3, schemeCategory10 } from 'd3-scale-chromatic';

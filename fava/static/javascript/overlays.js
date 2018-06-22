@@ -3,21 +3,11 @@ import e from './events';
 
 import initSourceEditor from './editor';
 
-export function closeOverlay() {
-  $('#context-overlay .content').innerHTML = '';
-  $$('.overlay-wrapper').forEach((el) => {
-    el.classList.remove('shown');
-  });
-  if (window.location.hash) {
-    window.location.hash = '';
-  }
-}
-
 // Show various overlays depending on the hash.
-export function handleHash() {
+export default function handleHash() {
   const { hash } = window.location;
   if (!hash) {
-    closeOverlay();
+    e.trigger('close-overlay');
   } else if (hash === '#add-transaction') {
     $('#transaction').classList.add('shown');
     $('#transaction-form input').focus();
@@ -39,9 +29,9 @@ export function handleHash() {
 e.on('page-init', () => {
   $$('.overlay-wrapper').forEach((el) => {
     el.addEventListener('mousedown', (event) => {
-      if (event.target.classList.contains('overlay-wrapper') ||
-          event.target.classList.contains('close-overlay')) {
-        closeOverlay();
+      if (event.target.classList.contains('overlay-wrapper')
+          || event.target.classList.contains('close-overlay')) {
+        e.trigger('close-overlay');
       }
     });
   });
@@ -50,3 +40,12 @@ e.on('page-init', () => {
   });
 });
 
+e.on('close-overlay', () => {
+  $('#context-overlay .content').innerHTML = '';
+  $$('.overlay-wrapper').forEach((el) => {
+    el.classList.remove('shown');
+  });
+  if (window.location.hash) {
+    window.location.hash = '';
+  }
+});

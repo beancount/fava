@@ -1,5 +1,7 @@
 import e from './events';
-import { $, fuzzytest, fuzzywrap, handleJSON } from './helpers';
+import {
+  $, fuzzytest, fuzzywrap, handleJSON,
+} from './helpers';
 
 const accountCompletionCache = {};
 

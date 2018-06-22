@@ -6,7 +6,7 @@
 import { $, $$ } from './helpers';
 import e from './events';
 import initSort from './sort';
-import { handleHash } from './overlays';
+import handleHash from './overlays';
 
 // Set the query string to match the filter inputs and the interval and
 // conversion <select>'s.
