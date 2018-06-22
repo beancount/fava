@@ -52,6 +52,6 @@ def test_hierarchy(example_ledger):
         }
         assert data['balance'] == {}
         # Assets:US:ETrade
-        etrade = data['children'][1]['children'][2]
-        assert etrade['children'][1]['balance'] == {'USD': D('4899.98')}
+        etrade = data['children'][0]['children'][2]
+        assert etrade['children'][4]['balance'] == {'USD': D('4899.98')}
         assert etrade['balance_children'] == {'USD': D('23137.54')}
