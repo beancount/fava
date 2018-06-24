@@ -126,7 +126,7 @@ msgstr "保存"
 msgid "Saving..."
 msgstr "保存中…"
 
-#: fava/templates/_layout.html:23
+#: fava/templates/_layout.html:22
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
@@ -142,19 +142,19 @@ msgstr "展开所有"
 msgid "Other"
 msgstr "其他"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "此账户及其子账户的日记账"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "账户日记账"
 
-#: fava/templates/account.html:17 fava/templates/account.html:25
+#: fava/templates/account.html:16 fava/templates/account.html:24
 msgid "Changes"
 msgstr "变更"
 
-#: fava/templates/account.html:26
+#: fava/templates/account.html:25
 msgid "Balances"
 msgstr "余额"
 
@@ -273,26 +273,6 @@ msgstr "类型"
 #: fava/templates/statistics.html:77
 msgid "# Entries"
 msgstr "# 项目"
-
-#: fava/templates/macros/_interval_macros.html:2
-msgid "Daily"
-msgstr "按日"
-
-#: fava/templates/macros/_interval_macros.html:3
-msgid "Weekly"
-msgstr "按周"
-
-#: fava/templates/macros/_interval_macros.html:4
-msgid "Monthly"
-msgstr "按月"
-
-#: fava/templates/macros/_interval_macros.html:5
-msgid "Quarterly"
-msgstr "按季"
-
-#: fava/templates/macros/_interval_macros.html:6
-msgid "Yearly"
-msgstr "按年"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
@@ -488,5 +468,25 @@ msgstr ""
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
+msgstr ""
+
+#: fava/util/date.py:44
+msgid "Yearly"
+msgstr ""
+
+#: fava/util/date.py:45
+msgid "Quarterly"
+msgstr ""
+
+#: fava/util/date.py:46
+msgid "Monthly"
+msgstr ""
+
+#: fava/util/date.py:47
+msgid "Weekly"
+msgstr ""
+
+#: fava/util/date.py:48
+msgid "Daily"
 msgstr ""
 

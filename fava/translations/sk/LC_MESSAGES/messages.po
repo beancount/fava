@@ -128,7 +128,7 @@ msgstr "Uložiť"
 msgid "Saving..."
 msgstr "Ukladá sa..."
 
-#: fava/templates/_layout.html:23
+#: fava/templates/_layout.html:22
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -144,20 +144,20 @@ msgstr "Rozšíriť všetko"
 msgid "Other"
 msgstr "Ostatné"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Register všetkých zápisov pre tento účet a jeho podúčty"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 #, fuzzy
 msgid "Account Journal"
 msgstr "Register účtu"
 
-#: fava/templates/account.html:17 fava/templates/account.html:25
+#: fava/templates/account.html:16 fava/templates/account.html:24
 msgid "Changes"
 msgstr "Zmeny"
 
-#: fava/templates/account.html:26
+#: fava/templates/account.html:25
 msgid "Balances"
 msgstr "Zostatky"
 
@@ -277,26 +277,6 @@ msgstr "Typ"
 #: fava/templates/statistics.html:77
 msgid "# Entries"
 msgstr "Počet zápisov"
-
-#: fava/templates/macros/_interval_macros.html:2
-msgid "Daily"
-msgstr "Denne"
-
-#: fava/templates/macros/_interval_macros.html:3
-msgid "Weekly"
-msgstr "Týždenne"
-
-#: fava/templates/macros/_interval_macros.html:4
-msgid "Monthly"
-msgstr "Mesačne"
-
-#: fava/templates/macros/_interval_macros.html:5
-msgid "Quarterly"
-msgstr "Štvrťročne"
-
-#: fava/templates/macros/_interval_macros.html:6
-msgid "Yearly"
-msgstr "Ročne"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
@@ -493,4 +473,24 @@ msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 #: fava/templates/extract.html:40
 msgid "Import entries"
 msgstr "Importovať zápisy"
+
+#: fava/util/date.py:44
+msgid "Yearly"
+msgstr ""
+
+#: fava/util/date.py:45
+msgid "Quarterly"
+msgstr ""
+
+#: fava/util/date.py:46
+msgid "Monthly"
+msgstr ""
+
+#: fava/util/date.py:47
+msgid "Weekly"
+msgstr ""
+
+#: fava/util/date.py:48
+msgid "Daily"
+msgstr ""
 

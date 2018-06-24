@@ -127,7 +127,7 @@ msgid "Saving..."
 msgstr "A guardar..."
 
 #. Wouldn't "arquivo" be better than "ficheiro"?
-#: fava/templates/_layout.html:23
+#: fava/templates/_layout.html:22
 msgid "File change detected. Click to reload."
 msgstr "Arquivo alterado. Clique para atualizar."
 
@@ -143,19 +143,19 @@ msgstr "Expandir tudo"
 msgid "Other"
 msgstr "Outros"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Todos os movimentos para esta conta e Sub-Contas"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "Movimentos de Conta"
 
-#: fava/templates/account.html:17 fava/templates/account.html:25
+#: fava/templates/account.html:16 fava/templates/account.html:24
 msgid "Changes"
 msgstr "Alterações"
 
-#: fava/templates/account.html:26
+#: fava/templates/account.html:25
 msgid "Balances"
 msgstr "Saldos"
 
@@ -276,26 +276,6 @@ msgstr "Tipo"
 #: fava/templates/statistics.html:77
 msgid "# Entries"
 msgstr "# Entradas"
-
-#: fava/templates/macros/_interval_macros.html:2
-msgid "Daily"
-msgstr "Diariamente"
-
-#: fava/templates/macros/_interval_macros.html:3
-msgid "Weekly"
-msgstr "Semanal"
-
-#: fava/templates/macros/_interval_macros.html:4
-msgid "Monthly"
-msgstr "Mensal"
-
-#: fava/templates/macros/_interval_macros.html:5
-msgid "Quarterly"
-msgstr "Trimestral"
-
-#: fava/templates/macros/_interval_macros.html:6
-msgid "Yearly"
-msgstr "Anual"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
@@ -491,5 +471,25 @@ msgstr ""
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
+msgstr ""
+
+#: fava/util/date.py:44
+msgid "Yearly"
+msgstr ""
+
+#: fava/util/date.py:45
+msgid "Quarterly"
+msgstr ""
+
+#: fava/util/date.py:46
+msgid "Monthly"
+msgstr ""
+
+#: fava/util/date.py:47
+msgid "Weekly"
+msgstr ""
+
+#: fava/util/date.py:48
+msgid "Daily"
 msgstr ""
 

@@ -125,7 +125,7 @@ msgstr "Speichern"
 msgid "Saving..."
 msgstr "Speichern"
 
-#: fava/templates/_layout.html:23
+#: fava/templates/_layout.html:22
 msgid "File change detected. Click to reload."
 msgstr "Änderung in Quelldatei entdeckt. Klicken um neu zu laden."
 
@@ -141,19 +141,19 @@ msgstr "Alle erweitern"
 msgid "Other"
 msgstr "Andere"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Journal aller Einträge dieses Kontos und aller Unterkonten"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "Konto Journal"
 
-#: fava/templates/account.html:17 fava/templates/account.html:25
+#: fava/templates/account.html:16 fava/templates/account.html:24
 msgid "Changes"
 msgstr "Änderungen"
 
-#: fava/templates/account.html:26
+#: fava/templates/account.html:25
 msgid "Balances"
 msgstr "Salden"
 
@@ -272,26 +272,6 @@ msgstr "Typ"
 #: fava/templates/statistics.html:77
 msgid "# Entries"
 msgstr "Anzahl Einträge"
-
-#: fava/templates/macros/_interval_macros.html:2
-msgid "Daily"
-msgstr "Täglich"
-
-#: fava/templates/macros/_interval_macros.html:3
-msgid "Weekly"
-msgstr "Wöchentlich"
-
-#: fava/templates/macros/_interval_macros.html:4
-msgid "Monthly"
-msgstr "Monatlich"
-
-#: fava/templates/macros/_interval_macros.html:5
-msgid "Quarterly"
-msgstr "Quartalsweise"
-
-#: fava/templates/macros/_interval_macros.html:6
-msgid "Yearly"
-msgstr "Jährlich"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
@@ -487,5 +467,25 @@ msgstr ""
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
+msgstr ""
+
+#: fava/util/date.py:44
+msgid "Yearly"
+msgstr ""
+
+#: fava/util/date.py:45
+msgid "Quarterly"
+msgstr ""
+
+#: fava/util/date.py:46
+msgid "Monthly"
+msgstr ""
+
+#: fava/util/date.py:47
+msgid "Weekly"
+msgstr ""
+
+#: fava/util/date.py:48
+msgid "Daily"
 msgstr ""
 

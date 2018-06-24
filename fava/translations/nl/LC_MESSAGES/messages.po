@@ -126,7 +126,7 @@ msgstr "Opslaan"
 msgid "Saving..."
 msgstr "Bezig met opslaan..."
 
-#: fava/templates/_layout.html:23
+#: fava/templates/_layout.html:22
 msgid "File change detected. Click to reload."
 msgstr "Bestand is gewijzigd. Klik om te herladen."
 
@@ -142,19 +142,19 @@ msgstr "Alles uitvouwen"
 msgid "Other"
 msgstr "Anderen"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Dagboek met alle transacties voor deze rekening en sub-rekeningen"
 
-#: fava/templates/account.html:24
+#: fava/templates/account.html:23
 msgid "Account Journal"
 msgstr "Rekening dagboek"
 
-#: fava/templates/account.html:17 fava/templates/account.html:25
+#: fava/templates/account.html:16 fava/templates/account.html:24
 msgid "Changes"
 msgstr "Wijzigingen"
 
-#: fava/templates/account.html:26
+#: fava/templates/account.html:25
 msgid "Balances"
 msgstr "Balansen"
 
@@ -273,26 +273,6 @@ msgstr "Soort"
 #: fava/templates/statistics.html:77
 msgid "# Entries"
 msgstr "Aantal invoer"
-
-#: fava/templates/macros/_interval_macros.html:2
-msgid "Daily"
-msgstr "Dagelijks"
-
-#: fava/templates/macros/_interval_macros.html:3
-msgid "Weekly"
-msgstr "Wekelijks"
-
-#: fava/templates/macros/_interval_macros.html:4
-msgid "Monthly"
-msgstr "Maandelijks"
-
-#: fava/templates/macros/_interval_macros.html:5
-msgid "Quarterly"
-msgstr "Driemaandelijks"
-
-#: fava/templates/macros/_interval_macros.html:6
-msgid "Yearly"
-msgstr "Jaarlijks"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
@@ -488,5 +468,25 @@ msgstr ""
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
+msgstr ""
+
+#: fava/util/date.py:44
+msgid "Yearly"
+msgstr ""
+
+#: fava/util/date.py:45
+msgid "Quarterly"
+msgstr ""
+
+#: fava/util/date.py:46
+msgid "Monthly"
+msgstr ""
+
+#: fava/util/date.py:47
+msgid "Weekly"
+msgstr ""
+
+#: fava/util/date.py:48
+msgid "Daily"
 msgstr ""
 
