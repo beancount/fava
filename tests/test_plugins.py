@@ -3,7 +3,7 @@ import os
 
 from beancount.loader import load_file, load_string
 
-from fava.plugins.link_statements import StatementDocumentError
+from fava.plugins.link_documents import DocumentError
 
 
 def _format(string, args):
@@ -45,20 +45,20 @@ def test_plugins(tmpdir):
         option "operating_currency" "EUR"
         option "documents" "{}"
 
-        plugin "fava.plugins.link_statements"
+        plugin "fava.plugins.link_documents"
         plugin "fava.plugins.tag_discovered_documents"
 
         2016-10-31 open Expenses:Foo
         2016-10-31 open Assets:Cash
 
         2016-11-01 * "Foo" "Bar"
-            statement: "{}"
+            document: "{}"
             Expenses:Foo                100 EUR
             Assets:Cash
 
         2016-11-02 * "Foo" "Bar"
-            statement: "{}"
-            statement-2: "{}"
+            document: "{}"
+            document-2: "{}"
             Expenses:Foo        100 EUR
             Assets:Cash
 
@@ -71,9 +71,9 @@ def test_plugins(tmpdir):
     assert not errors
     assert len(entries) == 9
 
-    assert 'statement' in entries[3].tags
-    assert 'statement' in entries[4].tags
-    assert 'statement' in entries[5].tags
+    assert 'linked' in entries[3].tags
+    assert 'linked' in entries[4].tags
+    assert 'linked' in entries[5].tags
 
     assert entries[2].links == entries[5].links
     assert entries[7].links == entries[3].links == entries[4].links
@@ -82,15 +82,15 @@ def test_plugins(tmpdir):
     assert not entries[8].tags
 
 
-def test_link_statements_error(load_doc):
+def test_link_documents_error(load_doc):
     """
-    plugin "fava.plugins.link_statements"
+    plugin "fava.plugins.link_documents"
 
     2016-10-31 open Expenses:Foo
     2016-10-31 open Assets:Cash
 
     2016-11-01 * "Foo" "Bar"
-        statement: "asdf"
+        document: "asdf"
         Expenses:Foo                100 EUR
         Assets:Cash
     """
@@ -100,18 +100,18 @@ def test_link_statements_error(load_doc):
     assert len(entries) == 3
 
 
-def test_link_statements_missing(tmpdir):
+def test_link_documents_missing(tmpdir):
     sample_folder = tmpdir.mkdir('fava_plugins').mkdir('documents')
 
     bfile = _format("""
         option "documents" "{}"
-        plugin "fava.plugins.link_statements"
+        plugin "fava.plugins.link_documents"
 
         2016-10-31 open Expenses:Foo
         2016-10-31 open Assets:Cash
 
         2016-11-01 * "Foo" "Bar"
-            statement: "{}"
+            document: "{}"
             Expenses:Foo                100 EUR
             Assets:Cash
     """, (sample_folder, os.path.join('test', 'Foobar.pdf')))
@@ -119,5 +119,5 @@ def test_link_statements_missing(tmpdir):
     entries, errors, _ = load_string(bfile)
 
     assert len(errors) == 1
-    assert isinstance(errors[0], StatementDocumentError)
+    assert isinstance(errors[0], DocumentError)
     assert len(entries) == 3
