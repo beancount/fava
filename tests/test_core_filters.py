@@ -92,6 +92,7 @@ def test_filterexception():
     ('^test-link,#test', 4),
     ('^test-link -#test', 2),
     ('payee:BayBook', 62),
+    ('BayBook', 62),
     ('(payee:BayBook, #test,#nomatch) -#nomatch', 64),
     ('payee:"BayBo.*"', 62),
     ('payee:"baybo.*"', 62),

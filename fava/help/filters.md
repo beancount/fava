@@ -35,6 +35,9 @@ This final filter allows you to filter entries by various attributes.
   `"`) if it contains spaces and can either be simply a string or a regular
   expression that matches the attribute. The regular expression matching is
   case insensitive.
+- Search payee and narration by supplying a simple string, which again is
+  matched as a regular expression. For Note directives, the comment will be
+  searched.
 - Filter for entries having certain metadata values: `statement:".*pdf"`. Note
   that if the entry has an attribute of the same name as the metadata key, the
   filter will apply to the entry attribute, not the metadata value.

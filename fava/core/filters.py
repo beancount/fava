@@ -216,6 +216,22 @@ class FilterSyntaxParser(object):
 
         p[0] = _link
 
+    def p_simple_expr_STRING(self, p):
+        """
+        simple_expr : STRING
+        """
+        string = p[1]
+        match = Match(string)
+
+        def _string(entry):
+            for name in ('narration', 'payee', 'comment'):
+                value = getattr(entry, name, '')
+                if value and match(value):
+                    return True
+            return False
+
+        p[0] = _string
+
     def p_simple_expr_key(self, p):
         """
         simple_expr : KEY STRING
