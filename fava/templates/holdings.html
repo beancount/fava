@@ -22,6 +22,7 @@
   ORDER BY account_sortkey(account), currency',
 'currency': 'SELECT
     units(sum(position)) as units,
+    SAFEDIV(number(only(first(cost_currency), cost(sum(position)))), number(only(first(currency), units(sum(position))))) as average_cost,
     cost(sum(position)) as book_value,
     value(sum(position)) as market_value
   WHERE account_sortkey(account) ~ "^[01]"
