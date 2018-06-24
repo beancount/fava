@@ -85,6 +85,8 @@ def test_filterexception():
     ('#test', 2),
     ('#test,#nomatch', 2),
     ('-#nomatch', 1825),
+    ('-#nomatch -#nomatch', 1825),
+    ('-#nomatch -#test', 1823),
     ('-#test', 1823),
     ('^test-link', 3),
     ('^test-link,#test', 4),

@@ -123,9 +123,8 @@ class FilterSyntaxParser(object):
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
     precedence = (
-        ('left', ','),
-        ('left', '&'),
-        ('right', '-'),
+        ('left', 'AND'),
+        ('right', 'UMINUS'),
     )
     tokens = FilterSyntaxLexer.tokens
 
@@ -164,7 +163,7 @@ class FilterSyntaxParser(object):
 
     def p_expr_and(self, p):
         """
-        expr : expr expr %prec '&'
+        expr : expr expr %prec AND
         """
         left, right = p[1], p[2]
 
@@ -186,7 +185,7 @@ class FilterSyntaxParser(object):
 
     def p_expr_negated(self, p):
         """
-        expr : '-' expr
+        expr : '-' expr %prec UMINUS
         """
         func = p[2]
 
