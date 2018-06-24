@@ -33,6 +33,7 @@ class FilterSyntaxLexer(object):
 
     tokens = (
         'ANY',
+        'ALL',
         'KEY',
         'LINK',
         'STRING',
@@ -43,6 +44,7 @@ class FilterSyntaxLexer(object):
         ('LINK', r'\^[A-Za-z0-9\-_/.]+'),
         ('TAG', r'\#[A-Za-z0-9\-_/.]+'),
         ('KEY', r'[a-z][a-zA-Z0-9\-_]+:'),
+        ('ALL', r'all\('),
         ('ANY', r'any\('),
         ('STRING', r'\w+|"[^"]*"|\'[^\']*\''),
     )
@@ -58,6 +60,9 @@ class FilterSyntaxLexer(object):
 
     def KEY(self, token, value):
         return token, value[:-1]
+
+    def ALL(self, token, _):
+        return token, token
 
     def ANY(self, token, _):
         return token, token
@@ -142,6 +147,18 @@ class FilterSyntaxParser(object):
         expr : simple_expr
         """
         p[0] = p[1]
+
+    def p_expr_all(self, p):
+        """
+        expr : ALL expr ')'
+        """
+        expr = p[2]
+
+        def _match_postings(entry):
+            return all(
+                expr(posting) for posting in getattr(entry, 'postings', []))
+
+        p[0] = _match_postings
 
     def p_expr_any(self, p):
         """
