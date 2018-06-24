@@ -5,6 +5,7 @@ import errno
 
 import click
 from werkzeug.wsgi import DispatcherMiddleware
+from cheroot import wsgi
 
 from fava.application import app
 from fava.util import simple_wsgi
@@ -55,7 +56,11 @@ def main(filenames, port, host, prefix, incognito, debug, profile,
         app.wsgi_app = DispatcherMiddleware(simple_wsgi,
                                             {prefix: app.wsgi_app})
 
-    if debug:  # pragma: no cover
+    if not debug:
+        server = wsgi.Server((host, port), app)
+        print('Running Fava on http://{}:{}'.format(host, port))
+        server.safe_start()
+    else:
         if profile:
             from werkzeug.contrib.profiler import ProfilerMiddleware
             app.config['PROFILE'] = True
@@ -65,16 +70,15 @@ def main(filenames, port, host, prefix, incognito, debug, profile,
                 profile_dir=profile_dir if profile_dir else None)
 
         app.jinja_env.auto_reload = True
-
-    try:
-        app.run(host, port, debug)
-    except OSError as error:
-        if error.errno == errno.EADDRINUSE:
-            raise click.UsageError(
-                "Can not start webserver because the port is already in "
-                "use. Please choose another port with the '-p' option.")
-        else:  # pragma: no cover
-            raise
+        try:
+            app.run(host, port, debug)
+        except OSError as error:
+            if error.errno == errno.EADDRINUSE:
+                raise click.UsageError(
+                    "Can not start webserver because the port is already in "
+                    "use. Please choose another port with the '-p' option.")
+            else:  # pragma: no cover
+                raise
 
 
 # needed for pyinstaller:

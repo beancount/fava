@@ -32,6 +32,7 @@ setup(
     },
     install_requires=[
         'Babel>=2.5.2',
+        'cheroot',
         'Flask-Babel>=0.10.0',
         'Flask>=0.10.1',
         'Jinja2>=2.10',

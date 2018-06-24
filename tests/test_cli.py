@@ -44,7 +44,7 @@ def run_fava(args=()):
 @pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
 def test_cli():
     port = str(get_port())
-    args = (EXAMPLE_FILE, '-p', port)
+    args = (EXAMPLE_FILE, '-d', '-p', port)
     process = run_fava(args)
     assert output_contains(process, 'Running on', 20)
     process2 = run_fava(args)
