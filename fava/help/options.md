@@ -33,6 +33,16 @@ languages:
 
 ---
 
+## `locale`
+
+Default: Not set
+
+This sets the locale that is used to render out numbers. For example, with the
+locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
+`1,111,111.33` with locale `en`, or `1.111.111,33` with locale `de`.
+
+---
+
 ## `default-file`
 
 Use this option to specify a default file for the editor to open.  This option

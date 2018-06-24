@@ -31,7 +31,7 @@ setup(
         ]
     },
     install_requires=[
-        'Babel>=2.5.2',
+        'Babel>=2.6.0',
         'cheroot',
         'Flask-Babel>=0.10.0',
         'Flask>=0.10.1',

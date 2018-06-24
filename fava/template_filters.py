@@ -14,7 +14,7 @@ from beancount.core import convert
 from beancount.core import prices
 from beancount.core import realization
 from beancount.core.amount import Amount
-from beancount.core.number import Decimal
+from beancount.core.number import ZERO
 from beancount.core.account import ACCOUNT_RE
 
 from fava.util.date import Interval
@@ -84,9 +84,9 @@ def format_currency(value, currency=None, show_if_zero=False):
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ''
-    if value == 0.0:
-        return g.ledger.quantize(Decimal(0.0), currency)
-    return g.ledger.quantize(value, currency)
+    if value == ZERO:
+        return g.ledger.format_decimal(ZERO, currency)
+    return g.ledger.format_decimal(value, currency)
 
 
 def format_amount(amount):
