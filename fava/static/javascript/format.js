@@ -3,28 +3,32 @@
 import { format } from 'd3-format';
 import { utcFormat } from 'd3-time-format';
 
-const formatCurrencyWithComma = format(',.2f');
-const formatCurrencyWithoutComma = format('.2f');
-export function formatCurrency(number) {
-  let str = '';
-  if (window.favaAPI.options.render_commas) {
-    str = formatCurrencyWithComma(number);
+import e from './events';
+
+let formatter;
+let incognito;
+
+e.on('page-init', () => {
+  const { locale } = window.favaAPI.favaOptions;
+  if (locale) {
+    formatter = new Intl.NumberFormat(locale.replace('_', '-')).format;
   } else {
-    str = formatCurrencyWithoutComma(number);
+    formatter = format('.2f');
   }
   if (window.favaAPI.incognito) {
-    str = str.replace(/[0-9]/g, 'X');
+    incognito = num => num.replace(/[0-9]/g, 'X');
+  } else {
+    incognito = num => num;
   }
-  return str;
+});
+
+export function formatCurrency(number) {
+  return incognito(formatter(number));
 }
 
-const formatCurrencyShortDefault = format('.2s');
+const formatterShort = format('.2s');
 export function formatCurrencyShort(number) {
-  let str = formatCurrencyShortDefault(number);
-  if (window.favaAPI.incognito) {
-    str = str.replace(/[0-9]/g, 'X');
-  }
-  return str;
+  return incognito(formatterShort(number));
 }
 
 export const dateFormat = {
