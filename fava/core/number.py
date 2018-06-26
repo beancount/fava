@@ -19,14 +19,21 @@ class DecimalFormatModule(FavaModule):
         self.default_pattern = None
 
     def load_file(self):
-        try:
-            self.locale = Locale.parse(self.ledger.fava_options['locale'])
-        except UnknownLocaleError:
-            self.locale = None
-            self.ledger.errors.append(
-                OptionError(
-                    None, 'Unknown locale: {}.'.format(
-                        self.ledger.fava_options['locale']), None))
+        self.locale = None
+
+        locale_option = self.ledger.fava_options['locale']
+        if self.ledger.options['render_commas'] and not locale_option:
+            locale_option = 'en'
+
+        if locale_option:
+            try:
+                self.locale = Locale.parse(locale_option)
+            except UnknownLocaleError:
+                self.locale = None
+                self.ledger.errors.append(
+                    OptionError(
+                        None, 'Unknown locale: {}.'.format(
+                            self.ledger.fava_options['locale']), None))
 
         if self.locale:
             self.default_pattern = copy.copy(
