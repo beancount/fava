@@ -188,7 +188,10 @@ def find_entry_lines(lines, lineno):
     entry_lines = [lines[lineno]]
     while True:
         lineno += 1
-        line = lines[lineno]
+        try:
+            line = lines[lineno]
+        except IndexError:
+            break
         if not line.strip() or re.match('[0-9a-z]', line[0]):
             break
         entry_lines.append(line)
