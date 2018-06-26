@@ -13,7 +13,7 @@ import {
 import { event, select } from 'd3-selection';
 import { arc, line } from 'd3-shape';
 import { schemeSet3, schemeCategory10 } from 'd3-scale-chromatic';
-import { voronoi } from 'd3-voronoi';
+import { Delaunay } from 'd3-delaunay';
 import 'd3-transition';
 
 import e from './events';
@@ -528,10 +528,6 @@ class LineChart extends BaseChart {
       .x(d => this.x(d.date))
       .y(d => this.y(d.value));
 
-    this.voronoi = voronoi()
-      .x(d => this.x(d.date))
-      .y(d => this.y(d.value));
-
     this.canvas = this.svg.classed('linechart', true).append('g');
     this.selections.xAxis = this.canvas.append('g').attr('class', 'x axis');
     this.selections.yAxis = this.canvas.append('g').attr('class', 'y axis');
@@ -540,6 +536,7 @@ class LineChart extends BaseChart {
 
   draw(data) {
     this.data = data;
+    this.points = merge(data.map(d => d.values));
     this.x.domain([
       min(this.data, s => s.values[0].date),
       max(this.data, s => s.values[s.values.length - 1].date),
@@ -569,10 +566,9 @@ class LineChart extends BaseChart {
       .style('fill', d => scales.currencies(d.name));
 
     this.selections.voronoi.selectAll('path')
-      .data(this.voronoi.polygons(merge(data.map(d => d.values))))
+      .data(this.points)
       .enter()
       .append('path')
-      .filter(d => d !== undefined)
       .on('mouseenter', (d) => {
         tooltip.style('opacity', 1).html(this.tooltipText(d.data));
       })
@@ -596,7 +592,6 @@ class LineChart extends BaseChart {
 
     this.y.range([this.height, 0]);
     this.x.range([0, this.width]);
-    // this.voronoi.size([this.width, this.height]);
 
     this.svg
       .attr('width', this.width + this.margin.left + this.margin.right)
@@ -614,10 +609,12 @@ class LineChart extends BaseChart {
     this.selections.lines
       .attr('d', d => this.line(d.values));
 
-    // this.selections.voronoi.selectAll('path')
-    //   .data(this.voronoi.polygons(merge(this.data.map(d => d.values))))
-    //   .filter(d => d !== undefined)
-    //   .attr('d', d => `M${d.join('L')}Z`);
+    const delaunay = Delaunay.from(this.points, d => this.x(d.date), d => this.y(d.value));
+    const polygons = delaunay.voronoi([0, 0, this.width, this.height]).cellPolygons();
+    const paths = this.points.map(d => ({ path: polygons.next().value, data: d }));
+    this.selections.voronoi.selectAll('path')
+      .data(paths)
+      .attr('d', d => `M${d.path.join('L')}Z`);
 
     setLegend(this.data.map(d => d.name), scales.currencies);
   }

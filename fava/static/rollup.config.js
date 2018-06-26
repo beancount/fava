@@ -16,7 +16,13 @@ export default {
   plugins: [
     nodeResolve(),
     json(),
-    buble({ exclude: 'css/**' }),
+    buble({
+      exclude: 'css/**',
+      transforms: {
+        generator: false,
+        forOf: false,
+      },
+    }),
     copy({
       'node_modules/codemirror/lib/codemirror.css': 'gen/codemirror/lib-codemirror.css',
       'node_modules/codemirror/addon/fold/foldgutter.css': 'gen/codemirror/addon-fold-foldgutter.css',
