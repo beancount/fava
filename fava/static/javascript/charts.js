@@ -23,8 +23,9 @@ import { $, $$ } from './helpers';
 import router from './router';
 
 // The color scales for the charts.
-// TODO: these could be initialised with all accounts/currencies to always give
-// the same colours.
+//
+// The scales for treemap and sunburst charts will be initialised with all
+// accounts on page init and currencies with all commodities.
 const scales = {
   treemap: scaleOrdinal(schemeSet3),
   sunburst: scaleOrdinal(schemeCategory10),
@@ -777,6 +778,10 @@ function showChart(id) {
 e.on('page-init', () => {
   tooltip = select('#tooltip');
   window.addEventListener('resize', updateChart);
+
+  scales.treemap.domain(window.favaAPI.accounts);
+  scales.sunburst.domain(window.favaAPI.accounts);
+  scales.currencies.domain(window.favaAPI.options.commodities);
 });
 
 e.on('page-loaded', () => {
