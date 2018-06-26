@@ -778,6 +778,7 @@ e.on('page-init', () => {
 
   scales.treemap.domain(window.favaAPI.accounts);
   scales.sunburst.domain(window.favaAPI.accounts);
+  window.favaAPI.options.commodities.sort();
   scales.currencies.domain(window.favaAPI.options.commodities);
 });
 
