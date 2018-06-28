@@ -35,9 +35,6 @@ const scales = {
 
 let container;
 let tooltip;
-let charts;
-let renderers;
-let currentChart;
 
 function addInternalNodesAsLeaves(node) {
   node.children.forEach((o) => {
@@ -94,7 +91,7 @@ function setLegend(domain, colorScale) {
 }
 
 // Obtain the current value of a <select> and update the list of options.
-function selectSetValues(selector, values) {
+function setSelect(selector, values) {
   const selectElement = $(selector);
   const { value } = selectElement;
   selectElement.innerHTML = '';
@@ -609,11 +606,17 @@ class LineChart extends BaseChart {
     this.selections.lines
       .attr('d', d => this.line(d.values));
 
-    const delaunay = Delaunay.from(this.points, d => this.x(d.date), d => this.y(d.value));
-    const polygons = delaunay.voronoi([0, 0, this.width, this.height]).cellPolygons();
-    const paths = this.points.map(d => ({ path: polygons.next().value, data: d }));
+    let paths;
+    try {
+      const delaunay = Delaunay.from(this.points, d => this.x(d.date), d => this.y(d.value));
+      const polygons = delaunay.voronoi([0, 0, this.width, this.height]).cellPolygons();
+      paths = this.points.map(d => ({ path: polygons.next().value, data: d }));
+    } catch (error) {
+      paths = [];
+    }
     this.selections.voronoi.selectAll('path')
       .data(paths)
+      .filter(d => d.path !== undefined)
       .attr('d', d => `M${d.path.join('L')}Z`);
 
     setLegend(this.data.map(d => d.name), scales.currencies);
@@ -683,7 +686,7 @@ class HierarchyContainer extends BaseChart {
     this.setSize();
 
     const mode = $('#chart-form input[name=mode]:checked').value;
-    const currency = selectSetValues('#chart-currency', this.currencies);
+    const currency = setSelect('#chart-currency', this.currencies);
     this.canvas.html('');
 
     if (this.currencies.length === 0) {
@@ -724,17 +727,87 @@ class HierarchyContainer extends BaseChart {
   }
 }
 
-// Update the current chart (or render the first one if there is none).
-function updateChart() {
-  if ($('#charts').classList.contains('hide-charts')) return;
-  if (!currentChart) {
-    if ($('#chart-labels label:first-child')) {
-      $('#chart-labels label:first-child').click();
+class ChartSwitcher {
+  constructor() {
+    this.state = {};
+  }
+
+  // After a page load, reset the chart switcher with new data.
+  reset(renderers) {
+    container = select('#chart-container');
+    container.html('');
+
+    this.renderers = renderers;
+    this.charts = {};
+    this.currentChart = undefined;
+
+    // Chart controls
+    $$('#chart-form input[name=mode]').forEach((el) => {
+      el.addEventListener('change', () => {
+        this.state.mode = el.value;
+        this.show(this.state.id);
+      });
+    });
+    $('#chart-currency').addEventListener('change', this.update.bind(this));
+
+    // Switch between charts
+    $$('#chart-labels label').forEach((label) => {
+      label.addEventListener('click', () => {
+        this.show(label.getAttribute('for'));
+      });
+    });
+
+    if (this.state.mode) {
+      $(`#mode-${this.state.mode}`).checked = true;
     }
-  } else {
-    currentChart.update();
+    // Show the same chart as last time (or call .update() to show the first one).
+    if (this.state.id && this.renderers[this.state.id]) {
+      this.show(this.state.id);
+    } else {
+      this.update();
+    }
+  }
+
+  // Update the current chart (or render the first one if there is none).
+  update() {
+    if ($('#charts').classList.contains('hide-charts')) return;
+    if (!this.currentChart) {
+      const firstLabel = $('#chart-labels label:first-child');
+      if (firstLabel) {
+        this.show(firstLabel.getAttribute('for'));
+      }
+    } else {
+      this.currentChart.update();
+    }
+  }
+
+  // Show the chart with the given id.
+  show(id) {
+    if ($('#charts').classList.contains('hide-charts')) return;
+    // If the chart has not been rendered yet, do so now.
+    if (!this.charts[id]) {
+      const svg = container.append('svg').attr('id', id);
+      this.charts[id] = this.renderers[id](svg);
+    }
+    this.currentChart = this.charts[id];
+    this.state.id = id;
+
+    $$('#charts svg').forEach((el) => { el.classList.add('hidden'); });
+    $(`#${id}`).classList.remove('hidden');
+
+    $('#chart-legend').innerHTML = '';
+
+    $$('#chart-labels .selected').forEach((el) => { el.classList.remove('selected'); });
+    $(`#chart-labels [for=${id}]`).classList.add('selected');
+
+    this.currentChart.update();
+
+    $('#chart-currency').classList.toggle('hidden', !this.currentChart.has_currency_setting);
+    $('#chart-mode').classList.toggle('hidden', !this.currentChart.has_mode_setting);
   }
 }
+
+const chartSwitcher = new ChartSwitcher();
 
 // Get the list of operating currencies, adding in the current conversion
 // currency.
@@ -749,32 +822,9 @@ function getOperatingCurrencies() {
   return window.favaAPI.options.operating_currency;
 }
 
-// Show the chart with the given id.
-function showChart(id) {
-  // If the chart has not been rendered yet, do so now.
-  if (!charts[id]) {
-    const svg = container.append('svg').attr('id', id);
-    charts[id] = renderers[id](svg);
-  }
-  currentChart = charts[id];
-
-  $$('#charts svg').forEach((el) => { el.classList.add('hidden'); });
-  $(`#${id}`).classList.remove('hidden');
-
-  $('#chart-legend').innerHTML = '';
-
-  $$('#chart-labels .selected').forEach((el) => { el.classList.remove('selected'); });
-  $(`#chart-labels [for=${id}]`).classList.add('selected');
-
-  currentChart.update();
-
-  $('#chart-currency').classList.toggle('hidden', !currentChart.has_currency_setting);
-  $('#chart-mode').classList.toggle('hidden', !currentChart.has_mode_setting);
-}
-
 e.on('page-init', () => {
   tooltip = select('#tooltip');
-  window.addEventListener('resize', updateChart);
+  window.addEventListener('resize', chartSwitcher.update.bind(chartSwitcher));
 
   scales.treemap.domain(window.favaAPI.accounts);
   scales.sunburst.domain(window.favaAPI.accounts);
@@ -787,11 +837,7 @@ e.on('page-loaded', () => {
 
   if (!$('#charts')) return;
 
-  container = select('#chart-container');
-  container.html('');
-  charts = {};
-  renderers = {};
-  currentChart = undefined;
+  const renderers = {};
 
   // Go through the chart data and prepare it for rendering. For each chart,
   // add a label, and a function renderers[id] that will render the chart.
@@ -905,19 +951,7 @@ e.on('page-loaded', () => {
     }
   });
 
-  $$('#chart-form input[name=mode]').forEach((el) => { el.addEventListener('change', updateChart); });
-  $('#chart-currency').addEventListener('change', updateChart);
-
-  // Switch between charts
-  $$('#chart-labels label').forEach((label) => {
-    label.addEventListener('click', () => {
-      if (!$('#charts').classList.contains('hide-charts')) {
-        showChart(label.getAttribute('for'));
-      }
-    });
-  });
-
-  updateChart();
+  chartSwitcher.reset(renderers);
 });
 
 e.on('button-click-toggle-chart', () => {
@@ -927,7 +961,7 @@ e.on('button-click-toggle-chart', () => {
     url.searchParams.set('charts', false);
   } else {
     url.searchParams.delete('charts');
-    updateChart();
+    chartSwitcher.update();
   }
   router.navigate(url.toString(), false);
 });

@@ -19,6 +19,25 @@
   border-left: 1px solid var(--color-text-lighter);
 }
 
+.chart-mode input {
+  display: none;
+}
+
+.chart-mode label {
+  background-color: var(--color-background-darker);
+  color: var(--color-text);
+  margin-right: 0;
+}
+
+.chart-mode label:hover {
+  color: var(--color-background);
+}
+
+.chart-mode input:checked + label {
+  background-color: var(--color-header);
+  color: var(--color-background);
+}
+
 .toggle-chart {
   height: 22px;
   margin: 0;

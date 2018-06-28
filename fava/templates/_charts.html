@@ -61,8 +61,8 @@
         <select name="chart-currency" id="chart-currency" class="chart-currency hidden">
         </select>
         <span id="chart-mode" class="chart-mode hidden">
-            <input name="mode" type="radio" value="treemap" id="mode-treemap" checked> <label for="mode-treemap">{{ _('Treemap') }}</label>
-            <input name="mode" type="radio" value="sunburst" id="mode-sunburst"> <label for="mode-sunburst">{{ _('Sunburst') }}</label>
+            <input name="mode" type="radio" value="treemap" id="mode-treemap" checked><label for="mode-treemap" class="button">{{ _('Treemap') }}</label>
+            <input name="mode" type="radio" value="sunburst" id="mode-sunburst"><label for="mode-sunburst" class="button">{{ _('Sunburst') }}</label>
         </span>
         <select name="conversion" id="conversion">
           {% set selected_conversion = request.args.get('conversion') %}
