@@ -17,6 +17,7 @@ No importers configured. See <a href="{{ url_for('help_page', page_slug='import'
       <th>{{ _('File') }}</th>
       <th>{{ _('Importer') }}</th>
       <th>{{ _('Account') }}</th>
+      <th>{{ _('Date') }}</th>
       <th></th>
     </tr>
   </thead>
@@ -28,7 +29,8 @@ No importers configured. See <a href="{{ url_for('help_page', page_slug='import'
         <pre title="{{ filename }}">{{ filename|basename }}</pre>
       </td>
       <td>{{ importer.name() }}</td>
-      <td>{{ account_macros.account_name(importer.file_account(filename) or '') }}</td>
+      <td>{{ account_macros.account_name(ledger.ingest.file_account(filename, importer) or '') }}</td>
+      <td>{{ ledger.ingest.file_date(filename, importer) or '' }}</td>
       <td>
         <a class="button" title="{{ _('Extract') }} {{ filename }}" href="{{ url_for('report', report_name='extract', filename=filename, importer=importer.name()) }}">{{ _('Extract') }}</button>
       </td>

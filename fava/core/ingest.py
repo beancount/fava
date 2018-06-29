@@ -5,7 +5,7 @@ import os
 import runpy
 from collections import namedtuple
 
-from beancount.ingest import identify, extract
+from beancount.ingest import cache, identify, extract
 
 from fava.core.helpers import FavaModule
 
@@ -18,6 +18,7 @@ class IngestModule(FavaModule):
     def __init__(self, ledger):
         super().__init__(ledger)
         self.config = []
+        self.importers = {}
 
     def load_file(self):
         if self.ledger.fava_options['import-config']:
@@ -27,12 +28,17 @@ class IngestModule(FavaModule):
                     self.ledger.fava_options['import-config']))
 
             if not os.path.exists(full_path) or os.path.isdir(full_path):
-                error = IngestError(
-                    None, "File does not exist: '{}'".format(full_path), None)
-                self.ledger.errors.append(error)
+                self.ledger.errors.append(
+                    IngestError(None,
+                                "File does not exist: '{}'".format(full_path),
+                                None))
             else:
                 mod = runpy.run_path(full_path)
                 self.config = mod['CONFIG']
+                self.importers = {
+                    importer.name(): importer
+                    for importer in self.config
+                }
 
     def identify_directory(self, directory):
         """Identify files and importers for a given directory.
@@ -48,19 +54,60 @@ class IngestModule(FavaModule):
 
         full_path = os.path.normpath(
             os.path.join(
-                os.path.dirname(self.ledger.beancount_file_path),
-                directory))
+                os.path.dirname(self.ledger.beancount_file_path), directory))
 
         return filter(
             operator.itemgetter(1),
             identify.find_imports(self.config, full_path))
 
-    def extract(self, filepath, importer_name):
-        """Extract entries from filepath with the specified importer."""
-        importer = next(imp for imp in self.config
-                        if imp.name() == importer_name)
+    def extract(self, filename, importer_name):
+        """Extract entries from filename with the specified importer.
+
+        Args:
+            filename: The full path to a file.
+            importer_name: The name of an importer that matched the file.
+
+        Returns:
+            A list of new imported entries.
+        """
+        if not filename or not importer_name:
+            return []
 
         new_entries, _ = extract.extract_from_file(
-            filepath, importer, existing_entries=self.ledger.all_entries)
+            filename,
+            self.importers.get(importer_name),
+            existing_entries=self.ledger.all_entries)
 
         return new_entries
+
+    @staticmethod
+    def file_account(filename, importer):
+        """Account for the given file.
+
+        Args:
+            filename: The full path to a file.
+            importer: An importer that matched the file.
+
+        Returns:
+            The account name or the exception message if one occurs.
+        """
+        try:
+            return importer.file_account(cache.get_file(filename))
+        except Exception as exception:  # pylint: disable=broad-except
+            return str(exception)
+
+    @staticmethod
+    def file_date(filename, importer):
+        """Date for the given file.
+
+        Args:
+            filename: The full path to a file.
+            importer: An importer that matched the file.
+
+        Returns:
+            The date or the exception message if one occurs.
+        """
+        try:
+            return importer.file_date(cache.get_file(filename))
+        except Exception as exception:  # pylint: disable=broad-except
+            return str(exception)
