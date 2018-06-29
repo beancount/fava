@@ -2,39 +2,36 @@
 {% set active_page = 'events' %}
 
 {% block content %}
-    {% set events = ledger.events() %}
-    {% if events %}
-        {{ charts.skeleton(hide_interval_filter=True) }}
-        {{ charts.events() }}
+{% set events = ledger.events() %}
+{% if events %}
+{{ charts.skeleton(hide_interval_filter=True) }}
+{{ charts.events() }}
 
-    {% for group in events|groupby('type') %}
-    <div class="left">
-        {{ charts.events(group.grouper) }}
-        <h3>{{ _('Event: %(type)s', type=group.grouper) }}</h3>
-        <table class="sortable">
-            <thead>
-                <tr>
-                    <th data-sort="string" data-order="asc">{{ _('Date') }}</th>
-                    <th data-sort="string">{{ _('Description') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for event in group.list %}
-                    <tr>
-                        <td>
-                            <a href="{{ url_for_source(file_path=event.meta.filename, line=event.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=event.meta.file, lineno=event.meta.lineno) }}">{{ event.date }}</a>
-                        </td>
-                        <td>{{ event.description }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% endfor %}
-    {% else %}
-    <p>
-        {{ _('No events.') }}
-    </p>
-    {% endif %}
+{% for group in events|groupby('type') %}
+<div class="left">
+  {{ charts.events(group.grouper) }}
+  <h3>{{ _('Event: %(type)s', type=group.grouper) }}</h3>
+  <table class="sortable">
+    <thead>
+      <tr>
+        <th data-sort="string" data-order="asc">{{ _('Date') }}</th>
+        <th data-sort="string">{{ _('Description') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in group.list %}
+      <tr>
+        <td><a href="#context-{{ event|hash_entry }}">{{ event.date }}</a></td>
+        <td>{{ event.description }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+{% else %}
+<p>
+{{ _('No events.') }}
+</p>
+{% endif %}
 {% endblock %}
-

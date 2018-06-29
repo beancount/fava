@@ -60,7 +60,7 @@ Click to copy the balance directives to the clipboard:
   {% set last_entry = ledger.last_entry(account_name) %}
   {% if last_entry %}
   <span class="last-activity">
-    (Last entry: <a href="{{ url_for_source(file_path=last_entry.meta['filename'], line=last_entry.meta['lineno']) }}" title="Show source {{ last_entry.meta['filename'] }}:{{ last_entry.meta['lineno'] }}">{{ last_entry.date }}</a>)
+    (Last entry: <a href="#context-{{ last_entry|hash_entry }}">{{ last_entry.date }}</a>)
   </span>
   {% endif %}
 </span>
