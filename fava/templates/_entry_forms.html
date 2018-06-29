@@ -12,8 +12,7 @@
 <div class="fieldset posting">
   <button class="muted round remove-fieldset" data-event="remove-fieldset" type="button" tabindex="-1">×</button>
   {{ input_account(posting.account) }}
-  {{ input_number(posting.units.number if posting else '') }}
-  <input type="text" class="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ posting.units.currency if posting else '' }}">
+  <input type="tel" class="amount" placeholder="{{ _('Amount') }}" value="{{ posting.units if posting else '' }}">
   <button class="muted round add-row" type="button" data-event="add-posting" title="{{ _('Add posting') }}">+</button>
 </div>
 {% endmacro %}

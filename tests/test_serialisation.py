@@ -1,15 +1,16 @@
 import datetime
 
 from beancount.core.data import (Transaction, create_simple_posting, Balance,
-                                 Note)
-from beancount.core.number import D
+                                 Note, Posting)
 from beancount.core.amount import A
+from beancount.core.number import D
+from beancount.core.position import Cost
 from flask.json import dumps, loads
 import pytest
 
 from fava.core.helpers import FavaAPIException
 from fava.serialisation import (serialise, deserialise, extract_tags_links,
-                                parse_number)
+                                parse_number, deserialise_posting)
 
 
 def test_parse_number():
@@ -26,33 +27,54 @@ def test_serialise(app):
     create_simple_posting(txn, 'Assets:ETrade:GLD', None, None)
 
     json_txn = {
-        'type': 'Transaction',
         'date': '2017-12-12',
         'flag': '*',
-        'payee': 'Test3',
-        'narration': 'asdfasd #tag ^link',
         'meta': {},
+        'narration': 'asdfasd #tag ^link',
+        'payee': 'Test3',
+        'type': 'Transaction',
+        'postings': [
+            {
+                'account': 'Assets:ETrade:Cash',
+                'amount': '100 USD',
+            },
+            {
+                'account': 'Assets:ETrade:GLD',
+                'amount': '',
+            },
+        ],
     }
 
     with app.test_request_context():
         serialised = loads(dumps(serialise(txn)))
+    assert serialised == json_txn
 
-    for key, value in json_txn.items():
-        assert serialised[key] == value or str(serialised[key]) == value
 
-    assert serialised['postings'][0]['account'] == 'Assets:ETrade:Cash'
-    assert serialised['postings'][0]['units'] == {
-        'currency': 'USD',
-        'number': 100,
+@pytest.mark.parametrize('pos,amount', [
+    ((A('100 USD'), None, None, None, None),
+     '100 USD'),
+    ((A('100 USD'), Cost(D('10'), 'EUR', None, None), None, None, None),
+     '100 USD {10 EUR}'),
+    ((A('100 USD'), Cost(D('10'), 'EUR', None, None), A('11 EUR'), None, None),
+     '100 USD {10 EUR} @ 11 EUR'),
+    ((A('100 USD'), None, A('11 EUR'), None, None),
+     '100 USD @ 11 EUR'),
+])
+def test_serialise_posting(pos, amount):
+    pos = Posting('Assets:ETrade:Cash', *pos)
+    json = {
+        'account': 'Assets:ETrade:Cash',
+        'amount': amount,
     }
+    assert loads(dumps(serialise(pos))) == json
+    assert deserialise_posting(json) == pos
 
 
 def test_deserialise():
     postings = [
         {
             'account': 'Assets:ETrade:Cash',
-            'number': '100',
-            'currency': 'USD',
+            'amount': '100 USD',
         },
         {
             'account': 'Assets:ETrade:GLD',

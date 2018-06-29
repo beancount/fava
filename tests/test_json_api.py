@@ -166,8 +166,7 @@ def test_api_add_entries(app, test_client, tmpdir):
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
-                            'number': '100',
-                            'currency': 'USD',
+                            'amount': '100 USD',
                         },
                         {
                             'account': 'Assets:US:ETrade:GLD',
@@ -189,8 +188,7 @@ def test_api_add_entries(app, test_client, tmpdir):
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
-                            'number': '100',
-                            'currency': 'USD',
+                            'amount': '100 USD',
                         },
                         {
                             'account': 'Assets:US:ETrade:GLD',
@@ -212,8 +210,7 @@ def test_api_add_entries(app, test_client, tmpdir):
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
-                            'number': '100',
-                            'currency': 'USD',
+                            'amount': '100 USD',
                         },
                         {
                             'account': 'Assets:US:ETrade:GLD',

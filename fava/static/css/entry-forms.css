@@ -9,9 +9,8 @@
   display: none;
 }
 
-.entry-form .number,
-.entry-form .currency {
-  width: 100px;
+.entry-form .amount {
+  width: 220px;
 }
 
 .entry-form input[name='flag'] {
@@ -59,8 +58,8 @@
   padding-left: 50px;
 }
 
-.entry-form .posting:last-child .currency {
-  width: 72px;
+.entry-form .posting:last-child .amount {
+  width: 192px;
 }
 
 .entry-form .metadata {

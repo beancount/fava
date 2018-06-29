@@ -1,5 +1,4 @@
 import e from './events';
-import { formatCurrency } from './format';
 import { $, $$, handleJSON } from './helpers';
 
 // Various helpers to deal with entry forms.
@@ -64,8 +63,7 @@ export default class EntryForm {
       $$('.posting', this.form).forEach((posting) => {
         entryData.postings.push({
           account: posting.querySelector('.account').value,
-          number: posting.querySelector('.number').value,
-          currency: posting.querySelector('.currency').value,
+          amount: posting.querySelector('.amount').value,
         });
       });
     }
@@ -93,12 +91,11 @@ export default class EntryForm {
     $('[name=narration]', this.form).value = entry.narration;
     $$('.posting', this.form).forEach((el) => { el.remove(); });
     entry.postings.forEach((posting) => {
-      const { account, units } = posting;
+      const { account, amount } = posting;
       const row = this.addPosting();
       $('.account', row).value = account;
-      if (units) {
-        $('.number', row).value = formatCurrency(units.number);
-        $('.currency', row).value = units.currency;
+      if (amount) {
+        $('.amount', row).value = amount;
       }
     });
   }
