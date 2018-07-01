@@ -27,7 +27,7 @@
 
 {% macro net_worth(interval) %}
 {% do chart_data.append({
-    'type': 'balances',
+    'type': 'net_worth',
     'label': _('Net Worth'),
     'data': ledger.charts.net_worth(interval),
 }) %}

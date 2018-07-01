@@ -844,7 +844,8 @@ e.on('page-loaded', () => {
   JSON.parse($('#chart-data').innerHTML).forEach((chart, index) => {
     const id = `${chart.type}-${index}`;
     switch (chart.type) {
-      case 'balances': {
+      case 'balances':
+      case 'net_worth': {
         const series = window.favaAPI.options.commodities
           .map(c => ({
             name: c,
