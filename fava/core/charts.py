@@ -147,12 +147,22 @@ class ChartModule(FavaModule):
                         if (isinstance(entry, Transaction) and entry.flag !=
                             flags.FLAG_UNREALIZED))
 
-        types = (self.ledger.options['name_assets'],
-                 self.ledger.options['name_liabilities'])
+        name_assets = self.ledger.options['name_assets']
+        name_liabilities = self.ledger.options['name_liabilities']
+        types = (name_assets, name_liabilities)
 
         txn = next(transactions, None)
         inventory = CounterInventory()
-
+        assets_inventory = CounterInventory()
+        liabilities_inventory = CounterInventory()
+        def reduce_inventory(date, inventory):
+            return {
+                currency: inventory.reduce(convert.convert_position,
+                                           currency,
+                                           self.ledger.price_map,
+                                           date).get(currency)
+                for currency in self.ledger.options['operating_currency']
+            }
         for date in self.ledger.interval_ends(interval):
             while txn and txn.date < date:
                 for posting in filter(lambda p: p.account.startswith(types),
@@ -160,18 +170,18 @@ class ChartModule(FavaModule):
                     # Since we will be reducing the inventory to the operating
                     # currencies, pre-aggregate the positions to reduce the
                     # number of elements in the inventory.
-                    inventory.add_amount(
-                        posting.units,
-                        Cost(ZERO, posting.cost.currency, None, None)
-                        if posting.cost else None)
+                    cost = Cost(ZERO, posting.cost.currency, None, None) if posting.cost else None
+                    inventory.add_amount(posting.units, cost)
+                    if posting.account.startswith(name_assets):
+                        assets_inventory.add_amount(posting.units, cost)
+                    elif posting.account.startswith(name_liabilities):
+                        liabilities_inventory.add_amount(posting.units, cost)
                 txn = next(transactions, None)
             yield {
                 'date': date,
-                'balance': {
-                    currency:
-                    inventory.reduce(convert.convert_position, currency,
-                                     self.ledger.price_map,
-                                     date).get(currency)
-                    for currency in self.ledger.options['operating_currency']
-                }
+                # TODO: we could just keep track of assets_inventory and liabilities_inventory
+                # balance is just their sum
+                'balance': reduce_inventory(date, inventory),
+                'assets': reduce_inventory(date, assets_inventory),
+                'liabilities': reduce_inventory(date, liabilities_inventory),
             }
