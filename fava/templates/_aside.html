@@ -8,8 +8,7 @@
   {% endfor %}
 </ul>
 {% endif %}
-{% for title_, menuitems in globals.navigation_bar %}
-<h3>{{ title_ }}</h3>
+{% for menuitems in globals.navigation_bar %}
 <ul class="navigation">
   {% for id in menuitems %}
   <li><a{% if id == active_page %} class="selected"{% endif %} data-key="{{ globals.all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">{{ globals.all_pages[id].0 }}
