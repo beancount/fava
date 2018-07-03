@@ -19,21 +19,25 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = []
         self.importers = {}
+        self.module_path = None
+        self.mtime = None
 
     def load_file(self):
         if self.ledger.fava_options['import-config']:
-            full_path = os.path.normpath(
+            self.module_path = os.path.normpath(
                 os.path.join(
                     os.path.dirname(self.ledger.beancount_file_path),
                     self.ledger.fava_options['import-config']))
 
-            if not os.path.exists(full_path) or os.path.isdir(full_path):
+            if not os.path.exists(self.module_path) or os.path.isdir(
+                    self.module_path):
                 self.ledger.errors.append(
-                    IngestError(None,
-                                "File does not exist: '{}'".format(full_path),
-                                None))
+                    IngestError(
+                        None, "File does not exist: '{}'".format(
+                            self.module_path), None))
             else:
-                mod = runpy.run_path(full_path)
+                mod = runpy.run_path(self.module_path)
+                self.mtime = os.stat(self.module_path).st_mtime_ns
                 self.config = mod['CONFIG']
                 self.importers = {
                     importer.name(): importer
@@ -72,6 +76,9 @@ class IngestModule(FavaModule):
         """
         if not filename or not importer_name:
             return []
+
+        if os.stat(self.module_path).st_mtime_ns > self.mtime:
+            self.load_file()
 
         new_entries, _ = extract.extract_from_file(
             filename,
