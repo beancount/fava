@@ -165,27 +165,15 @@ Set this value to `0` to disable this feature.
 ---
 
 ## `show-closed-accounts`
-
 Default: `false`
-
-This and the next two options specify which accounts (not) to show in the
-account trees, like on the income statement.
-
----
-
 ## `show-accounts-with-zero-transactions`
-
 Default: `true`
-
-Like `show-closed-accounts`.
-
----
-
 ## `show-accounts-with-zero-balance`
-
 Default: `true`
 
-Like `show-closed-accounts`.
+These three options options specify which accounts (not) to show in the
+account trees, like on the income statement. Accounts with a non-zero balance
+will always be shown.
 
 ---
 
