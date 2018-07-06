@@ -155,6 +155,7 @@ class ChartModule(FavaModule):
         inventory = CounterInventory()
         assets_inventory = CounterInventory()
         liabilities_inventory = CounterInventory()
+
         def reduce_inventory(date, inventory):
             return {
                 currency: inventory.reduce(convert.convert_position,
@@ -170,7 +171,10 @@ class ChartModule(FavaModule):
                     # Since we will be reducing the inventory to the operating
                     # currencies, pre-aggregate the positions to reduce the
                     # number of elements in the inventory.
-                    cost = Cost(ZERO, posting.cost.currency, None, None) if posting.cost else None
+                    if posting.cost:
+                        cost = Cost(ZERO, posting.cost.currency, None, None)
+                    else:
+                        cost = None
                     inventory.add_amount(posting.units, cost)
                     if posting.account.startswith(name_assets):
                         assets_inventory.add_amount(posting.units, cost)
@@ -179,8 +183,8 @@ class ChartModule(FavaModule):
                 txn = next(transactions, None)
             yield {
                 'date': date,
-                # TODO: we could just keep track of assets_inventory and liabilities_inventory
-                # balance is just their sum
+                # TODO: we could just keep track of assets_inventory and
+                # liabilities_inventory balance is just their sum
                 'balance': reduce_inventory(date, inventory),
                 'assets': reduce_inventory(date, assets_inventory),
                 'liabilities': reduce_inventory(date, liabilities_inventory),
