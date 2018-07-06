@@ -844,8 +844,7 @@ e.on('page-loaded', () => {
   JSON.parse($('#chart-data').innerHTML).forEach((chart, index) => {
     const id = `${chart.type}-${index}`;
     switch (chart.type) {
-      case 'balances':
-      case 'net_worth': {
+      case 'balances':{
         const series = window.favaAPI.options.commodities
           .map(c => ({
             name: c,
@@ -858,6 +857,53 @@ e.on('page-loaded', () => {
               })),
           }))
           .filter(d => d.values.length);
+
+        renderers[id] = svg => new LineChart(svg)
+          .set('tooltipText', d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`)
+          .draw(series);
+        break;
+      }
+      case 'net_worth':{
+        const balanceSeries = window.favaAPI.options.commodities
+          .map(c => ({
+            name: "Net Worth " + c,
+            values: chart.data
+              .filter(d => !(d.balance[c] === undefined))
+              .map(d => ({
+                name: "Net Worth " + c,
+                date: new Date(d.date),
+                value: Number(d.balance[c]),
+              })),
+          }))
+          .filter(d => d.values.length);
+        const assetsSeries = window.favaAPI.options.commodities
+          .map(c => ({
+            name: "Assets " + c,
+            values: chart.data
+              .filter(d => !(d.assets[c] === undefined))
+              .map(d => ({
+                name: "Assets " + c,
+                date: new Date(d.date),
+                value: Number(d.assets[c]),
+              })),
+          }))
+          .filter(d => d.values.length);
+        const liabilitiesSeries = window.favaAPI.options.commodities
+          .map(c => ({
+            name: "Liabilities " + c,
+            values: chart.data
+              .filter(d => !(d.liabilities[c] === undefined))
+              .map(d => ({
+                name: "Liabilities " + c,
+                date: new Date(d.date),
+                value: Number(d.liabilities[c]),
+              })),
+          }))
+          .filter(d => d.values.length);
+        const series =
+          balanceSeries
+          .concat(assetsSeries)
+          .concat(liabilitiesSeries);
 
         renderers[id] = svg => new LineChart(svg)
           .set('tooltipText', d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`)
