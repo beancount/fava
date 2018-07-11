@@ -75,6 +75,7 @@ function addTooltip(selection, tooltipText) {
 
 // Set the chart legend to the given domain.
 function setLegend(domain, colorScale) {
+  domain.sort();
   const legend = select('#chart-legend').selectAll('span.legend')
     .data(domain)
     .enter()
