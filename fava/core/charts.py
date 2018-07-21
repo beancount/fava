@@ -23,9 +23,9 @@ class FavaJSONEncoder(JSONEncoder):
     def default(self, o):  # pylint: disable=E0202
         if isinstance(o, Decimal):
             return float(o)
-        elif isinstance(o, (datetime.date, Amount, Position)):
+        if isinstance(o, (datetime.date, Amount, Position)):
             return str(o)
-        elif isinstance(o, (set, frozenset)):
+        if isinstance(o, (set, frozenset)):
             return list(o)
         try:
             return JSONEncoder.default(self, o)
@@ -142,7 +142,6 @@ class ChartModule(FavaModule):
             net worth (Assets + Liabilities) separately converted to all
             operating currencies.
         """
-        # pylint: disable=stop-iteration-return
         transactions = (entry for entry in self.ledger.entries
                         if (isinstance(entry, Transaction) and entry.flag !=
                             flags.FLAG_UNREALIZED))

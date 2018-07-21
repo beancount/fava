@@ -421,8 +421,8 @@ class FavaLedger():
 
         if self._filters['time']:
             return [(date, price) for date, price in all_prices
-                    if (date >= self._filters['time'].begin_date and
-                        date < self._filters['time'].end_date)]
+                    if self._filters['time'].begin_date <=
+                    date < self._filters['time'].end_date]
         return all_prices
 
     def last_entry(self, account_name):
