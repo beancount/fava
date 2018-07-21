@@ -6,7 +6,7 @@
   <form id="source-editor-form" class="source-form">
     <div class="fieldset">
       <ul class="dropdown">
-        <li>File▾
+        <li>{{ _('File') }}&nbsp;▾
           <ul>
             {% for source_file in ledger.file.list_sources() %}
               <li {% if source_file == file_path %} class="selected"{% endif %}>
@@ -15,7 +15,7 @@
             {% endfor %}
           </ul>
         </li>
-        <li>Edit▾
+        <li>{{ _('Edit') }}&nbsp;▾
           <ul>
             <li>
               <button data-command="favaFormat" type="button" class="link">{{ _('Align Amounts') }}</button>
