@@ -9,7 +9,7 @@ import sys
 FavaExtensionError = namedtuple('FavaExtensionError', 'source message entry')
 
 
-class FavaExtensionBase(object):
+class FavaExtensionBase():
     """Base class for extensions for Fava.
 
     Any extension should inherit from this class. :func:`find_extension` will

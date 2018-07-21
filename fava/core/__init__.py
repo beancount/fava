@@ -37,7 +37,7 @@ from fava.ext import find_extensions
 MAXDATE = datetime.date.max
 
 
-class AccountData(object):
+class AccountData():
     """Holds information about an account."""
     __slots__ = ('meta', 'close_date')
 

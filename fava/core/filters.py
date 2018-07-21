@@ -11,7 +11,7 @@ from fava.util.date import parse_date
 from fava.core.helpers import FilterException
 
 
-class Token(object):
+class Token():
     """A token having a certain type and value.
 
     The lexer attribute only exists since PLY writes to it in case of a parser
@@ -27,7 +27,7 @@ class Token(object):
         return 'Token({}, {})'.format(self.type, self.value)
 
 
-class FilterSyntaxLexer(object):
+class FilterSyntaxLexer():
     """Lexer for Fava's filter syntax."""
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
@@ -110,7 +110,7 @@ class FilterSyntaxLexer(object):
                     'Illegal character "{}" in filter: '.format(char))
 
 
-class Match(object):
+class Match():
     """Match a string."""
     __slots__ = ['match']
 
@@ -124,7 +124,7 @@ class Match(object):
         return self.match(string)
 
 
-class FilterSyntaxParser(object):
+class FilterSyntaxParser():
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
     precedence = (
@@ -266,7 +266,7 @@ class FilterSyntaxParser(object):
         p[0] = _key
 
 
-class EntryFilter(object):
+class EntryFilter():
     """Filters a list of entries. """
 
     def __init__(self):

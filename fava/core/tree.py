@@ -8,7 +8,7 @@ from beancount.core.data import Open
 from fava.core.inventory import CounterInventory
 
 
-class TreeNode(object):
+class TreeNode():
     """A node in the account tree."""
     __slots__ = ('name', 'children', 'balance', 'balance_children', 'has_txns')
 

@@ -5,7 +5,7 @@ import math
 ZERO = float()
 
 
-class ExponentialDecayRanker(object):
+class ExponentialDecayRanker():
     """Rank a list by exponential decay.
 
     Maintains scores for the items in a list. We can think of this as the sum
