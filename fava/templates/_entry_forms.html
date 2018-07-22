@@ -1,5 +1,5 @@
 {% macro input_account(account) %}
-<input type="text" class="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ account or '' }}" required pattern="(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+">
+<input type="text" class="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ account or '' }}" required pattern="(?:[\p{Lu}][\p{L}\p{Nd}\-]*)(?::[\p{Lu}\p{Nd}][\p{L}\p{Nd}\-]*)+">
 {% endmacro %}
 {% macro input_date(date) %}
 <input type="date" name="date" value="{{ date or today() }}" required>
