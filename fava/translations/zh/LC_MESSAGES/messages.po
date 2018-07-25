@@ -11,12 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "个性化链接"
 
-#. recommend unifying the translation end by “表" as tables
-#: fava/templates/_globals.html:17
-msgid "Reports"
-msgstr "报表"
-
-#: fava/templates/_aside.html:35 fava/templates/errors.html:4
+#: fava/templates/_aside.html:34 fava/templates/errors.html:4
 msgid "Errors"
 msgstr "错误"
 
@@ -26,7 +21,7 @@ msgstr "时间"
 
 #: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
 #: fava/templates/_overlays.html:18 fava/templates/_tree_table.html:24
-#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:47
+#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:48
 #: fava/templates/import.html:19 fava/templates/statistics.html:36
 msgid "Account"
 msgstr "帐户"
@@ -55,7 +50,7 @@ msgstr "日记账"
 msgid "Query"
 msgstr "查询"
 
-#: fava/templates/_globals.html:7 fava/templates/holdings.html:46
+#: fava/templates/_globals.html:7 fava/templates/holdings.html:47
 msgid "Holdings"
 msgstr "资产"
 
@@ -84,7 +79,7 @@ msgid "Help"
 msgstr "帮助"
 
 #: fava/templates/_journal_table.html:86 fava/templates/commodities.html:15
-#: fava/templates/events.html:17
+#: fava/templates/events.html:17 fava/templates/import.html:20
 msgid "Date"
 msgstr "日期"
 
@@ -138,7 +133,7 @@ msgstr "展开所有账户"
 msgid "Expand all"
 msgstr "展开所有"
 
-#: fava/templates/_globals.html:18 fava/templates/_tree_table.html:29
+#: fava/templates/_tree_table.html:29
 msgid "Other"
 msgstr "其他"
 
@@ -159,11 +154,12 @@ msgid "Balances"
 msgstr "余额"
 
 #: fava/templates/_context.html:4 fava/templates/errors.html:20
-#: fava/templates/errors.html:21 fava/templates/events.html:25
+#: fava/templates/errors.html:21
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "源文件 %(file)s:%(lineno)s"
 
-#: fava/templates/errors.html:11 fava/templates/import.html:17
+#: fava/templates/editor.html:9 fava/templates/errors.html:11
+#: fava/templates/import.html:17
 msgid "File"
 msgstr "文件"
 
@@ -187,7 +183,7 @@ msgstr "事件：%(type)s"
 msgid "Description"
 msgstr "描述"
 
-#: fava/templates/events.html:36
+#: fava/templates/events.html:34
 msgid "No events."
 msgstr "没有事件。"
 
@@ -200,15 +196,15 @@ msgid "Help pages"
 msgstr "帮助页"
 
 #: fava/templates/_entry_forms.html:13 fava/templates/_entry_forms.html:63
-#: fava/templates/holdings.html:47
+#: fava/templates/holdings.html:48
 msgid "Currency"
 msgstr "货币"
 
-#: fava/templates/holdings.html:47
+#: fava/templates/holdings.html:48
 msgid "Cost currency"
 msgstr "成本货币"
 
-#: fava/templates/holdings.html:48
+#: fava/templates/holdings.html:49
 msgid "Holdings by"
 msgstr "按"
 
@@ -304,10 +300,6 @@ msgstr "添加记录"
 msgid "Import"
 msgstr "导入"
 
-#: fava/templates/_globals.html:19
-msgid "Configuration"
-msgstr "配置"
-
 #: fava/templates/_journal_table.html:4
 msgid "Budget entries"
 msgstr ""
@@ -344,7 +336,7 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: fava/templates/import.html:33
+#: fava/templates/import.html:35
 msgid "Extract"
 msgstr ""
 
@@ -454,7 +446,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
 
-#: fava/templates/_aside.html:29 fava/templates/_overlays.html:49
+#: fava/templates/_aside.html:28 fava/templates/_overlays.html:49
 msgid "Export"
 msgstr ""
 
@@ -488,5 +480,9 @@ msgstr ""
 
 #: fava/util/date.py:48
 msgid "Daily"
+msgstr ""
+
+#: fava/templates/editor.html:18
+msgid "Edit"
 msgstr ""
 

@@ -11,11 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Links personalizados"
 
-#: fava/templates/_globals.html:17
-msgid "Reports"
-msgstr "Relatórios"
-
-#: fava/templates/_aside.html:35 fava/templates/errors.html:4
+#: fava/templates/_aside.html:34 fava/templates/errors.html:4
 msgid "Errors"
 msgstr "Erros"
 
@@ -25,7 +21,7 @@ msgstr "Data"
 
 #: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
 #: fava/templates/_overlays.html:18 fava/templates/_tree_table.html:24
-#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:47
+#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:48
 #: fava/templates/import.html:19 fava/templates/statistics.html:36
 msgid "Account"
 msgstr "Conta"
@@ -55,7 +51,7 @@ msgstr "Movimentos"
 msgid "Query"
 msgstr "Consulta"
 
-#: fava/templates/_globals.html:7 fava/templates/holdings.html:46
+#: fava/templates/_globals.html:7 fava/templates/holdings.html:47
 msgid "Holdings"
 msgstr "Património"
 
@@ -84,7 +80,7 @@ msgid "Help"
 msgstr "Ajuda"
 
 #: fava/templates/_journal_table.html:86 fava/templates/commodities.html:15
-#: fava/templates/events.html:17
+#: fava/templates/events.html:17 fava/templates/import.html:20
 msgid "Date"
 msgstr "Data"
 
@@ -139,7 +135,7 @@ msgstr "Expandir todas as contas"
 msgid "Expand all"
 msgstr "Expandir tudo"
 
-#: fava/templates/_globals.html:18 fava/templates/_tree_table.html:29
+#: fava/templates/_tree_table.html:29
 msgid "Other"
 msgstr "Outros"
 
@@ -161,12 +157,13 @@ msgstr "Saldos"
 
 #. Should variable names file and lineno be translated?
 #: fava/templates/_context.html:4 fava/templates/errors.html:20
-#: fava/templates/errors.html:21 fava/templates/events.html:25
+#: fava/templates/errors.html:21
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Mostrar fonte %(file)s:%(lineno)s"
 
 #. Isn't "arquivo" better than "ficheiro"?
-#: fava/templates/errors.html:11 fava/templates/import.html:17
+#: fava/templates/editor.html:9 fava/templates/errors.html:11
+#: fava/templates/import.html:17
 msgid "File"
 msgstr "Arquivo"
 
@@ -190,7 +187,7 @@ msgstr "Evento:%(type)s"
 msgid "Description"
 msgstr "Descrição"
 
-#: fava/templates/events.html:36
+#: fava/templates/events.html:34
 msgid "No events."
 msgstr "Sem eventos"
 
@@ -203,15 +200,15 @@ msgid "Help pages"
 msgstr "Páginas de ajuda"
 
 #: fava/templates/_entry_forms.html:13 fava/templates/_entry_forms.html:63
-#: fava/templates/holdings.html:47
+#: fava/templates/holdings.html:48
 msgid "Currency"
 msgstr "Moeda"
 
-#: fava/templates/holdings.html:47
+#: fava/templates/holdings.html:48
 msgid "Cost currency"
 msgstr "Moeda de custo"
 
-#: fava/templates/holdings.html:48
+#: fava/templates/holdings.html:49
 msgid "Holdings by"
 msgstr "Patrimônio por"
 
@@ -307,10 +304,6 @@ msgstr "Inserir movimento"
 msgid "Import"
 msgstr ""
 
-#: fava/templates/_globals.html:19
-msgid "Configuration"
-msgstr ""
-
 #: fava/templates/_journal_table.html:4
 msgid "Budget entries"
 msgstr ""
@@ -347,7 +340,7 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: fava/templates/import.html:33
+#: fava/templates/import.html:35
 msgid "Extract"
 msgstr ""
 
@@ -457,7 +450,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
 
-#: fava/templates/_aside.html:29 fava/templates/_overlays.html:49
+#: fava/templates/_aside.html:28 fava/templates/_overlays.html:49
 msgid "Export"
 msgstr ""
 
@@ -491,5 +484,9 @@ msgstr ""
 
 #: fava/util/date.py:48
 msgid "Daily"
+msgstr ""
+
+#: fava/templates/editor.html:18
+msgid "Edit"
 msgstr ""
 

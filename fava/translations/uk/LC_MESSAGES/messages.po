@@ -11,11 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Налаштовані посилання"
 
-#: fava/templates/_globals.html:17
-msgid "Reports"
-msgstr "Звіти"
-
-#: fava/templates/_aside.html:35 fava/templates/errors.html:4
+#: fava/templates/_aside.html:34 fava/templates/errors.html:4
 msgid "Errors"
 msgstr "Помилки"
 
@@ -25,7 +21,7 @@ msgstr "Час"
 
 #: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
 #: fava/templates/_overlays.html:18 fava/templates/_tree_table.html:24
-#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:47
+#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:48
 #: fava/templates/import.html:19 fava/templates/statistics.html:36
 msgid "Account"
 msgstr "Рахунок"
@@ -54,7 +50,7 @@ msgstr "Журнал"
 msgid "Query"
 msgstr "Запит"
 
-#: fava/templates/_globals.html:7 fava/templates/holdings.html:46
+#: fava/templates/_globals.html:7 fava/templates/holdings.html:47
 msgid "Holdings"
 msgstr "Запаси"
 
@@ -83,7 +79,7 @@ msgid "Help"
 msgstr "Допомога"
 
 #: fava/templates/_journal_table.html:86 fava/templates/commodities.html:15
-#: fava/templates/events.html:17
+#: fava/templates/events.html:17 fava/templates/import.html:20
 msgid "Date"
 msgstr "Дата"
 
@@ -137,7 +133,7 @@ msgstr "Розкрити усі рахунки"
 msgid "Expand all"
 msgstr "Розкрити усе"
 
-#: fava/templates/_globals.html:18 fava/templates/_tree_table.html:29
+#: fava/templates/_tree_table.html:29
 msgid "Other"
 msgstr "Інше"
 
@@ -158,11 +154,12 @@ msgid "Balances"
 msgstr "Баланс"
 
 #: fava/templates/_context.html:4 fava/templates/errors.html:20
-#: fava/templates/errors.html:21 fava/templates/events.html:25
+#: fava/templates/errors.html:21
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Перейти до файлу %(file)s:%(lineno)s"
 
-#: fava/templates/errors.html:11 fava/templates/import.html:17
+#: fava/templates/editor.html:9 fava/templates/errors.html:11
+#: fava/templates/import.html:17
 msgid "File"
 msgstr "Файл"
 
@@ -186,7 +183,7 @@ msgstr "Подія: %(type)s"
 msgid "Description"
 msgstr "Опис"
 
-#: fava/templates/events.html:36
+#: fava/templates/events.html:34
 msgid "No events."
 msgstr "Події відсутні."
 
@@ -199,15 +196,15 @@ msgid "Help pages"
 msgstr "Сторінки допомоги"
 
 #: fava/templates/_entry_forms.html:13 fava/templates/_entry_forms.html:63
-#: fava/templates/holdings.html:47
+#: fava/templates/holdings.html:48
 msgid "Currency"
 msgstr "Валюта"
 
-#: fava/templates/holdings.html:47
+#: fava/templates/holdings.html:48
 msgid "Cost currency"
 msgstr "Курс валюти"
 
-#: fava/templates/holdings.html:48
+#: fava/templates/holdings.html:49
 msgid "Holdings by"
 msgstr "Запаси у"
 
@@ -303,10 +300,6 @@ msgstr "Додати проведення"
 msgid "Import"
 msgstr "Імпортувати"
 
-#: fava/templates/_globals.html:19
-msgid "Configuration"
-msgstr "Налаштування"
-
 #: fava/templates/_journal_table.html:4
 msgid "Budget entries"
 msgstr "Бюджетні записи"
@@ -343,7 +336,7 @@ msgstr "Дублікат"
 msgid "Importer"
 msgstr "Імпортер"
 
-#: fava/templates/import.html:33
+#: fava/templates/import.html:35
 msgid "Extract"
 msgstr "Витягти"
 
@@ -454,7 +447,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "Клік з натисненим Shift щоб розкрити усі рівні.\n"
 "Клік з натисненим Ctrl або Cmd щоб розкрити один рівень."
 
-#: fava/templates/_aside.html:29 fava/templates/_overlays.html:49
+#: fava/templates/_aside.html:28 fava/templates/_overlays.html:49
 msgid "Export"
 msgstr "Експортувати"
 
@@ -488,5 +481,9 @@ msgstr ""
 
 #: fava/util/date.py:48
 msgid "Daily"
+msgstr ""
+
+#: fava/templates/editor.html:18
+msgid "Edit"
 msgstr ""
 
