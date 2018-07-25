@@ -1,8 +1,8 @@
 Changelog
 =========
 
-v1.8 (in development)
----------------------
+v1.8 (July 25th, 2018)
+----------------------
 
 The journal design has been updated and should now have a clearer structure.
 Starting with this version, there will not be any more GUI releases of Fava.
@@ -11,6 +11,8 @@ The GUI broke frequently and does not seem to worth the maintenance burden.
 Other changes:
 
 - When downloading documents, the original filename will be used.
+- `any()` and `all()` functions have been added to the filter syntax to allow
+  filtering entries by properties of their postings.
 - As always, bugs have been fixed.
 
 v1.7 (March 9th, 2018)
