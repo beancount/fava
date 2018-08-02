@@ -390,8 +390,8 @@ msgid "Documents with a #discovered tag"
 msgstr "Документи з #discovered тегом"
 
 #: fava/templates/_journal_table.html:8
-msgid "Documents with a #statement tag"
-msgstr "Документи з #statement тегом"
+msgid "Documents with a #linked tag"
+msgstr "Документи з #linked тегом"
 
 #: fava/templates/_journal_table.html:81
 msgid "Postings"

@@ -394,7 +394,7 @@ msgid "Documents with a #discovered tag"
 msgstr ""
 
 #: fava/templates/_journal_table.html:8
-msgid "Documents with a #statement tag"
+msgid "Documents with a #linked tag"
 msgstr ""
 
 #: fava/templates/_journal_table.html:81

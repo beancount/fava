@@ -5,7 +5,7 @@
   ),
   'document': (
     ('discovered', 'D', _('Documents with a #discovered tag')),
-    ('statement', 'S', _('Documents with a #statement tag')),
+    ('linked', 'S', _('Documents with a #linked tag')),
   ),
   'transaction': (
     ('cleared', '*', _('Cleared transactions')),
@@ -30,7 +30,7 @@
 
   'document': 's d',
   'discovered': 'd d',
-  'statement': 'd s',
+  'linked': 'd l',
 } %}
 {% set short_type = {
    'balance': 'Bal',
@@ -52,9 +52,9 @@
   {% for key, value in metadata.items() %}
   <dt>{{ key }}:</dt>
   <dd>
-  {%- if key.startswith('statement') %}<a class="filename" data-remote target=_blank href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{% endif -%}
+  {%- if key.startswith('document') %}<a class="filename" data-remote target=_blank href="{{ url_for('document', entry_hash=entry_hash, key=key) }}">{% endif -%}
     {{ value }}
-    {%- if key.startswith('statement') %}</a>{% endif -%}
+    {%- if key.startswith('document') %}</a>{% endif -%}
   </dd>
   {% endfor %}
 </dl>
@@ -102,7 +102,7 @@
     {% set type = entry.__class__.__name__.lower() %}
     {% set entry_hash = entry|hash_entry %}
     {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
-    <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' statement' if entry.tags and 'statement' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
+    <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' document' if entry.tags and 'document' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
         <p>
         <span class="datecell" data-sort-value=-{{ loop.index }}><a href="#context-{{ entry_hash }}">{{ entry.date }}</a></span>
         <span class="flag">{% if type == 'transaction' %}{{ entry.flag }}{% else %}{{ short_type.get(type, type[:3]) }}{% endif %}</span>
