@@ -35,8 +35,8 @@ def main(filenames, port, host, prefix, incognito, debug, profile,
          profile_dir):
     """Start Fava for FILENAMES on http://<host>:<port>.
 
-    If the `BEANCOUNT_FILE` environment variable is set, Fava will use the file
-    specified there in addition to FILENAMES.
+    If the `BEANCOUNT_FILE` environment variable is set, Fava will use the
+    files (space-delimited) specified there in addition to FILENAMES.
     """
 
     if profile:  # pragma: no cover
@@ -44,7 +44,7 @@ def main(filenames, port, host, prefix, incognito, debug, profile,
 
     env_filename = os.environ.get('BEANCOUNT_FILE')
     if env_filename:
-        filenames = filenames + (env_filename,)
+        filenames = filenames + tuple(env_filename.split())
 
     if not filenames:
         raise click.UsageError('No file specified')
