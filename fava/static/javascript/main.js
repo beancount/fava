@@ -33,12 +33,6 @@
 //    `button-click-${data-event}` will be triggered.
 //
 
-// Polyfills:
-//
-// We try to support modern browsers only really, this polyfill should add
-// support for Edge(<17) though.
-import 'url-search-params';
-
 import { $, handleJSON } from './helpers';
 import e from './events';
 import router from './router';
