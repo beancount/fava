@@ -25,8 +25,14 @@ WEEK_RE = re.compile(r'^(\d{4})-w(\d{2})$')
 # this matches a quarter like 2016-Q1 for the first quarter of 2016
 QUARTER_RE = re.compile(r'^(\d{4})-q(\d)$')
 
+# this matches a financial year like FY2018 for the financial year ending 2018
+FY_RE = re.compile(r'^fy(\d{4})$')
+
+# this matches a quarter in a financial year like FY2018-Q2
+FY_QUARTER_RE = re.compile(r'^fy(\d{4})-q(\d)$')
+
 VARIABLE_RE = re.compile(
-    r'\(?(year|quarter|month|week|day)(?:([-+])(\d+))?\)?')
+    r'\(?(fiscal_year|year|fiscal_quarter|quarter|month|week|day)(?:([-+])(\d+))?\)?')
 
 
 class Interval(enum.Enum):
@@ -111,11 +117,12 @@ def interval_ends(first, last, interval: Interval):
     yield last
 
 
-def substitute(string):
+def substitute(string, fye=None):
     """Replace variables referring to the current day.
 
     Args:
         string: A string, possibly containing variables for today.
+        fye: Use a specific fiscal-year-end
 
     Returns:
         A string, where variables referring to the current day, like 'year' or
@@ -128,9 +135,25 @@ def substitute(string):
         complete_match, interval, plusminus, mod = match.group(0, 1, 2, 3)
         mod = int(mod) if mod else 0
         plusminus = 1 if plusminus == '+' else -1
+        if interval == 'fiscal_year':
+            year = today.year
+            start, end = get_fiscal_period(year, fye=fye)
+            if today >= end:
+                year += 1
+            year += plusminus * mod
+            string = string.replace(complete_match, "FY{0}".format(year))
         if interval == 'year':
             year = today.year + plusminus * mod
             string = string.replace(complete_match, str(year))
+        if interval == 'fiscal_quarter':
+            target = month_offset(today.replace(day=1), plusminus * mod * 3)
+            start, end = get_fiscal_period(target.year, fye=fye)
+            if start.day != 1:
+                raise ValueError("Cannot use fiscal_quarter if fiscal year does not start on first of the month")
+            if target >= end:
+                start = end
+            q = int(((target.month - start.month) % 12) / 3)
+            string = string.replace(complete_match, "FY{0}-Q{1}".format(start.year + 1, (q % 4) + 1))
         if interval == 'quarter':
             quarter_today = (today.month - 1) // 3 + 1
             year = today.year + (quarter_today + plusminus * mod - 1) // 4
@@ -160,6 +183,7 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
 
     - 2010-03-15, 2010-03, 2010
     - 2010-W01, 2010-Q3
+    - FY2012, FY2012-Q2
 
     Ranges of dates can be expressed in the following forms:
 
@@ -179,7 +203,7 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
     if not string:
         return None, None
 
-    string = substitute(string)
+    string = substitute(string).lower()
 
     match = IS_RANGE_RE.match(string)
     if match:
@@ -217,7 +241,69 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
         return quarter_first_day, get_next_interval(quarter_first_day,
                                                     Interval.QUARTER)
+
+    match = FY_RE.match(string)
+    if match:
+        year = int(match.group(1))
+        return get_fiscal_period(year)
+
+    match = FY_QUARTER_RE.match(string)
+    if match:
+        year, quarter = map(int, match.group(1, 2))
+        return get_fiscal_period(year, quarter)
+
     return None, None
+
+def month_offset(date, months):
+    """Offsets a date by a given number of months
+    
+    Maintains the day, unless that day is invalid when it will raise a ValueError
+    """
+
+    dy, dm = divmod(date.month - 1 + months, 12)
+
+    return date.replace(year=date.year + dy, month=dm + 1)
+
+def get_fiscal_period(year, quarter=None, fye=None):
+    """Calculates fiscal periods
+
+    Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.
+    Defaults to calendar year [12-31]
+
+    Args:
+        year: An interger year
+        quarter: one of [None, 1, 2, 3 or 4]
+        fye: End date for period in "%m-%d" format
+
+    Returns:
+        A tuple (start, end) of dates.
+
+    """
+    if fye is None:
+        from flask import g
+        fye = g.ledger.fava_options['fiscal-year-end']
+    
+    try:
+        start_date = (datetime.datetime.strptime('{0}-{1}'.format(year - 1, fye), '%Y-%m-%d') 
+                + datetime.timedelta(days=1)).date()
+    except:
+        return None, None
+
+    if quarter is None:
+        return start_date, start_date.replace(year=start_date.year + 1)
+
+    if start_date.day != 1:
+        # quarters make no sense in jurisdictions where period starts on a date (UK etc)
+        return None, None
+
+    if quarter < 1 or quarter > 4:
+        return None, None
+
+    if quarter > 1:
+        start_date = month_offset(start_date, (quarter - 1) * 3)
+
+    end_date = month_offset(start_date, 3)
+    return start_date, end_date
 
 
 def days_in_daterange(start_date, end_date):

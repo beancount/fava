@@ -19,6 +19,7 @@ DEFAULTS = {
     'auto-reload': False,
     'default-file': None,
     'extensions': [],
+    'fiscal-year-end': '12-31',
     'import-config': None,
     'import-dirs': [],
     'insert-entry': [],
@@ -69,6 +70,7 @@ STR_OPTS = [
     'language',
     'locale',
     'unrealized',
+    'fiscal-year-end',
 ]
 
 
