@@ -100,6 +100,7 @@ def test_substitute(string, output):
         mock_date.side_effect = date
         assert substitute(string) == output
 
+
 @pytest.mark.parametrize("fye,test_date,string,output", [
     ('06-30', '2018-02-02', 'fiscal_year', 'FY2018'),
     ('06-30', '2018-08-02', 'fiscal_year', 'FY2019'),
@@ -182,20 +183,22 @@ def test_number_of_days_in_period2():
     with pytest.raises(NotImplementedError):
         number_of_days_in_period('test', date(2011, 2, 1))
 
+
 @pytest.mark.parametrize("date_input,offset,expected", [
     ('2018-01-12', 0, '2018-01-12'),
     ('2018-01-01', -3, '2017-10-01'),
-    ('2018-01-30', 1, None), # raises value error, as it should
+    ('2018-01-30', 1, None),   # raises value error, as it should
     ('2018-01-12', 13, '2019-02-12'),
     ('2018-01-12', -13, '2016-12-12'),
 ])
 def test_month_offset(date_input, offset, expected):
-    d = _to_date(date_input)
+    start_date = _to_date(date_input)
     if expected is None:
         with pytest.raises(ValueError):
-            month_offset(d, offset)
+            month_offset(start_date, offset)
     else:
-        assert str(month_offset(d, offset)) == expected
+        assert str(month_offset(start_date, offset)) == expected
+
 
 @pytest.mark.parametrize("year,quarter,fye,expect_start,expect_end", [
     # standard calendar year [FYE=12-31]
@@ -215,12 +218,11 @@ def test_month_offset(date_input, offset, expected):
     (2018, None, '04-05', '2017-04-06', '2018-04-06'),
     (2018, 1, '04-05', 'None', 'None'),
     # expected errors
-    ('2018', None, '12-31', 'None', 'None'),
     (2018, None, 'foo', 'None', 'None'),
     (2018, 0, '12-31', 'None', 'None'),
     (2018, 5, '12-31', 'None', 'None'),
 ])
-def test_financial_year(year, quarter, fye, expect_start, expect_end):
+def test_get_fiscal_period(year, quarter, fye, expect_start, expect_end):
     start_date, end_date = get_fiscal_period(year, quarter, fye)
     assert str(start_date) == expect_start
     assert str(end_date) == expect_end

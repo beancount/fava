@@ -31,8 +31,8 @@ FY_RE = re.compile(r'^fy(\d{4})$')
 # this matches a quarter in a financial year like FY2018-Q2
 FY_QUARTER_RE = re.compile(r'^fy(\d{4})-q(\d)$')
 
-VARIABLE_RE = re.compile(
-    r'\(?(fiscal_year|year|fiscal_quarter|quarter|month|week|day)(?:([-+])(\d+))?\)?')
+VARIABLE_RE = re.compile(r'\(?(fiscal_year|year|fiscal_quarter|quarter'
+                         r'|month|week|day)(?:([-+])(\d+))?\)?')
 
 
 class Interval(enum.Enum):
@@ -117,7 +117,7 @@ def interval_ends(first, last, interval: Interval):
     yield last
 
 
-def substitute(string, fye=None):
+def substitute(string, fye=None):    # pylint: disable=too-many-locals
     """Replace variables referring to the current day.
 
     Args:
@@ -149,11 +149,13 @@ def substitute(string, fye=None):
             target = month_offset(today.replace(day=1), plusminus * mod * 3)
             start, end = get_fiscal_period(target.year, fye=fye)
             if start.day != 1:
-                raise ValueError("Cannot use fiscal_quarter if fiscal year does not start on first of the month")
+                raise ValueError("Cannot use fiscal_quarter if fiscal year "
+                                 "does not start on first of the month")
             if target >= end:
                 start = end
-            q = int(((target.month - start.month) % 12) / 3)
-            string = string.replace(complete_match, "FY{0}-Q{1}".format(start.year + 1, (q % 4) + 1))
+            quarter = int(((target.month - start.month) % 12) / 3)
+            string = string.replace(complete_match, "FY{0}-Q{1}".format(
+                start.year + 1, (quarter % 4) + 1))
         if interval == 'quarter':
             quarter_today = (today.month - 1) // 3 + 1
             year = today.year + (quarter_today + plusminus * mod - 1) // 4
@@ -254,15 +256,19 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
 
     return None, None
 
+
 def month_offset(date, months):
     """Offsets a date by a given number of months
-    
-    Maintains the day, unless that day is invalid when it will raise a ValueError
+
+    Maintains the day, unless that day is invalid when it will
+    raise a ValueError
+
     """
 
-    dy, dm = divmod(date.month - 1 + months, 12)
+    year_delta, month = divmod(date.month - 1 + months, 12)
 
-    return date.replace(year=date.year + dy, month=dm + 1)
+    return date.replace(year=date.year + year_delta, month=month + 1)
+
 
 def get_fiscal_period(year, quarter=None, fye=None):
     """Calculates fiscal periods
@@ -282,18 +288,19 @@ def get_fiscal_period(year, quarter=None, fye=None):
     if fye is None:
         from flask import g
         fye = g.ledger.fava_options['fiscal-year-end']
-    
+
     try:
-        start_date = (datetime.datetime.strptime('{0}-{1}'.format(year - 1, fye), '%Y-%m-%d') 
-                + datetime.timedelta(days=1)).date()
-    except:
+        start_date = (datetime.datetime.strptime('{0}-{1}'.format(
+            year - 1, fye), '%Y-%m-%d') + datetime.timedelta(days=1)).date()
+    except ValueError:
         return None, None
 
     if quarter is None:
         return start_date, start_date.replace(year=start_date.year + 1)
 
     if start_date.day != 1:
-        # quarters make no sense in jurisdictions where period starts on a date (UK etc)
+        # quarters make no sense in jurisdictions where period starts
+        # on a date (UK etc)
         return None, None
 
     if quarter < 1 or quarter > 4:
