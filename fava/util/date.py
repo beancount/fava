@@ -179,7 +179,7 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
     if not string:
         return None, None
 
-    string = substitute(string)
+    string = substitute(string).lower()
 
     match = IS_RANGE_RE.match(string)
     if match:

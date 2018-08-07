@@ -120,6 +120,7 @@ def test_parse_date(expect_start, expect_end, text):
     ('2014-01-01', '2016-06-27', 'year-2-day+2'),
     ('2016-01-01', '2016-06-25', 'year-day'),
     ('2015-01-01', '2017-01-01', '2015-year'),
+    ('2016-01-01', '2016-04-01', 'quarter-1'),
 ])
 def test_parse_date_relative(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
