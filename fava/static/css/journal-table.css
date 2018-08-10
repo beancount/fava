@@ -58,7 +58,7 @@
 .journal > li,
 .journal.show-custom .custom.budget,
 .journal.show-document .document.discovered,
-.journal.show-document .document.statement,
+.journal.show-document .document.linked,
 .journal .metadata,
 .journal .postings {
   display: none;
@@ -83,7 +83,7 @@
 .journal.show-transaction.show-pending .transaction.pending,
 .journal.show-transaction.show-other .transaction.other,
 .journal.show-document.show-discovered .document.discovered,
-.journal.show-document.show-statement .document.statement,
+.journal.show-document.show-linked .document.linked,
 .journal.show-custom.show-budget .custom.budget {
   display: block;
 }
