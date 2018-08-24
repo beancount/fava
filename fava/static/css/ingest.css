@@ -18,6 +18,7 @@
 
 .ingest-row .source pre {
   font-size: .9em;
+  white-space: pre-wrap;
 }
 
 .ingest-row .entry-form {
