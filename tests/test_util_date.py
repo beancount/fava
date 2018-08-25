@@ -147,13 +147,15 @@ def test_parse_date(expect_start, expect_end, text):
     ('2014-01-01', '2016-06-27', 'year-2-day+2'),
     ('2016-01-01', '2016-06-25', 'year-day'),
     ('2015-01-01', '2017-01-01', '2015-year'),
+    ('2013-07-01', '2014-07-01', 'fiscal_year-2'),
+    ('2016-04-01', '2016-07-01', 'fiscal_quarter'),
 ])
 def test_parse_date_relative(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
     with mock.patch('fava.util.date.datetime.date') as mock_date:
         mock_date.today.return_value = _to_date('2016-06-24')
         mock_date.side_effect = date
-        assert parse_date(text) == (start, end)
+        assert parse_date(text, "06-30") == (start, end)
 
 
 @pytest.mark.parametrize("interval,date_str,expect", [
@@ -223,6 +225,6 @@ def test_month_offset(date_input, offset, expected):
     (2018, 5, '12-31', 'None', 'None'),
 ])
 def test_get_fiscal_period(year, quarter, fye, expect_start, expect_end):
-    start_date, end_date = get_fiscal_period(year, quarter, fye)
+    start_date, end_date = get_fiscal_period(year, fye, quarter)
     assert str(start_date) == expect_start
     assert str(end_date) == expect_end

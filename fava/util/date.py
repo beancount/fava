@@ -137,7 +137,7 @@ def substitute(string, fye=None):    # pylint: disable=too-many-locals
         plusminus = 1 if plusminus == '+' else -1
         if interval == 'fiscal_year':
             year = today.year
-            start, end = get_fiscal_period(year, fye=fye)
+            start, end = get_fiscal_period(year, fye)
             if today >= end:
                 year += 1
             year += plusminus * mod
@@ -147,7 +147,7 @@ def substitute(string, fye=None):    # pylint: disable=too-many-locals
             string = string.replace(complete_match, str(year))
         if interval == 'fiscal_quarter':
             target = month_offset(today.replace(day=1), plusminus * mod * 3)
-            start, end = get_fiscal_period(target.year, fye=fye)
+            start, end = get_fiscal_period(target.year, fye)
             if start.day != 1:
                 raise ValueError("Cannot use fiscal_quarter if fiscal year "
                                  "does not start on first of the month")
@@ -178,7 +178,7 @@ def substitute(string, fye=None):    # pylint: disable=too-many-locals
     return string
 
 
-def parse_date(string):  # pylint: disable=too-many-return-statements
+def parse_date(string, fye=None):  # pylint: disable=too-many-return-statements
     """Parse a date.
 
     Example of supported formats:
@@ -205,7 +205,7 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
     if not string:
         return None, None
 
-    string = substitute(string).lower()
+    string = substitute(string, fye).lower()
 
     match = IS_RANGE_RE.match(string)
     if match:
@@ -247,12 +247,12 @@ def parse_date(string):  # pylint: disable=too-many-return-statements
     match = FY_RE.match(string)
     if match:
         year = int(match.group(1))
-        return get_fiscal_period(year)
+        return get_fiscal_period(year, fye)
 
     match = FY_QUARTER_RE.match(string)
     if match:
         year, quarter = map(int, match.group(1, 2))
-        return get_fiscal_period(year, quarter)
+        return get_fiscal_period(year, fye, quarter)
 
     return None, None
 
@@ -270,7 +270,7 @@ def month_offset(date, months):
     return date.replace(year=date.year + year_delta, month=month + 1)
 
 
-def get_fiscal_period(year, quarter=None, fye=None):
+def get_fiscal_period(year, fye, quarter=None):
     """Calculates fiscal periods
 
     Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.
@@ -278,22 +278,23 @@ def get_fiscal_period(year, quarter=None, fye=None):
 
     Args:
         year: An interger year
-        quarter: one of [None, 1, 2, 3 or 4]
         fye: End date for period in "%m-%d" format
+        quarter: one of [None, 1, 2, 3 or 4]
 
     Returns:
         A tuple (start, end) of dates.
 
     """
     if fye is None:
-        from flask import g
-        fye = g.ledger.fava_options['fiscal-year-end']
-
-    try:
-        start_date = (datetime.datetime.strptime('{0}-{1}'.format(
-            year - 1, fye), '%Y-%m-%d') + datetime.timedelta(days=1)).date()
-    except ValueError:
-        return None, None
+        start_date = datetime.date(year=year, month=1, day=1)
+    else:
+        try:
+            start_date = (
+                datetime.datetime.strptime('{0}-{1}'.format(
+                    year - 1, fye), '%Y-%m-%d') +
+                datetime.timedelta(days=1)).date()
+        except ValueError:
+            return None, None
 
     if quarter is None:
         return start_date, start_date.replace(year=start_date.year + 1)
