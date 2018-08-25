@@ -92,14 +92,13 @@ class Router {
             }
             this.updateState();
             $('article').innerHTML = data;
+            svg.classList.remove('loading');
             e.trigger('page-loaded');
             handleHash();
           });
       }, () => {
-        e.trigger('error', `Loading ${url} failed.`);
-      })
-      .finally(() => {
         svg.classList.remove('loading');
+        e.trigger('error', `Loading ${url} failed.`);
       });
   }
 
