@@ -1,12 +1,11 @@
 To customize some of Fava's behaviour, you can add custom entries like the
 following to your Beancount file.
 
-<pre><textarea class="editor-readonly">
-2016-06-14 custom "fava-option" "default-file"
-2016-06-14 custom "fava-option" "interval" "week"
-2016-04-14 custom "fava-option" "auto-reload" "true"
-2016-04-14 custom "fava-option" "journal-show" "transaction open"
-2016-04-14 custom "fava-option" "currency-column" "100" </textarea></pre>
+    2016-06-14 custom "fava-option" "default-file"
+    2016-06-14 custom "fava-option" "interval" "week"
+    2016-04-14 custom "fava-option" "auto-reload" "true"
+    2016-04-14 custom "fava-option" "journal-show" "transaction open"
+    2016-04-14 custom "fava-option" "currency-column" "100"
 
 Below is a list of all possible options for Fava.
 
