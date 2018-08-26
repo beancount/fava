@@ -269,7 +269,9 @@ class FilterSyntaxParser():
 class EntryFilter():
     """Filters a list of entries. """
 
-    def __init__(self):
+    def __init__(self, options, fava_options):
+        self.options = options
+        self.fava_options = fava_options
         self.value = None
 
     def set(self, value):
@@ -285,10 +287,10 @@ class EntryFilter():
     def _include_entry(self, entry):
         raise NotImplementedError
 
-    def _filter(self, entries, _):
+    def _filter(self, entries):
         return [entry for entry in entries if self._include_entry(entry)]
 
-    def apply(self, entries, options):
+    def apply(self, entries):
         """Apply filter.
 
         Args:
@@ -300,7 +302,7 @@ class EntryFilter():
 
         """
         if self.value:
-            return self._filter(entries, options)
+            return self._filter(entries)
         return entries
 
     def __bool__(self):
@@ -310,8 +312,8 @@ class EntryFilter():
 class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
     """Filter by dates."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args):
+        super().__init__(*args)
         self.begin_date = None
         self.end_date = None
 
@@ -329,9 +331,9 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
                                   'Failed to parse date: {}'.format(value))
         return True
 
-    def _filter(self, entries, options):
+    def _filter(self, entries):
         entries, _ = summarize.clamp_opt(entries, self.begin_date,
-                                         self.end_date, options)
+                                         self.end_date, self.options)
         return entries
 
 
@@ -346,8 +348,8 @@ PARSE = ply.yacc.yacc(
 class AdvancedFilter(EntryFilter):
     """Filter by tags and links and keys."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args):
+        super().__init__(*args)
         self._include = None
 
     def set(self, value):
@@ -400,8 +402,8 @@ class AccountFilter(EntryFilter):
     The filter string can either a regular expression or a parent account.
     """
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args):
+        super().__init__(*args)
         self.match = None
 
     def set(self, value):
