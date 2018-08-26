@@ -134,8 +134,12 @@ trees are shown at market value.
 
 Default: `transaction balance note document custom budget query`
 
-The entry types given in this list will be shown in the Journal report.
-All other types will be hidden and can be toggled using the buttons.
+The entry types and other elements given in this list will be shown in the
+Journal report. Supported values are entry type names, as well as well as
+the special values "metadata" and "postings" that determine the default
+visibility of the corresponding transaction parts.
+
+All other elements will be hidden and can be toggled using the buttons.
 
 ---
 
