@@ -112,11 +112,7 @@ class FavaLedger():
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
-        self._filters = {
-            'account': AccountFilter(),
-            'filter': AdvancedFilter(),
-            'time': TimeFilter(),
-        }
+        self._filters = {}
 
         #: An :class:`AttributesModule` instance.
         self.attributes = AttributesModule(self)
@@ -205,6 +201,12 @@ class FavaLedger():
         for mod in MODULES:
             getattr(self, mod).load_file()
 
+        self._filters = {
+            'account': AccountFilter(self.options, self.fava_options),
+            'filter': AdvancedFilter(self.options, self.fava_options),
+            'time': TimeFilter(self.options, self.fava_options),
+        }
+
         self.filter(True)
 
     # pylint: disable=attribute-defined-outside-init
@@ -221,7 +223,7 @@ class FavaLedger():
         self.entries = self.all_entries
 
         for filter_class in self._filters.values():
-            self.entries = filter_class.apply(self.entries, self.options)
+            self.entries = filter_class.apply(self.entries)
 
         self.root_account = realization.realize(self.entries,
                                                 self.account_types)
