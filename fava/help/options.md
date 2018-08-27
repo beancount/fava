@@ -60,6 +60,25 @@ The possible options are `day`, `week`, `month`, `quarter`, and `year`.
 
 ---
 
+## `fiscal-year-end`
+
+Default: `12-31`
+
+The last day of the fiscal (financial or tax) period for accounting purposes in 
+`%m-%d` format.  Allows for the use of `FY2018`, `FY2018-Q3`, `fiscal_year` and 
+`fiscal_quarter` in the time filter.
+
+Examples are:
+
+* `09-30` - US federal government
+* `06-30` - Australia / NZ
+* `04-05` - UK
+
+See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for 
+more examples.
+
+---
+
 ## `extensions`
 
 Default: Not set.

@@ -5,7 +5,8 @@ import pytest
 
 from fava.util.date import (Interval, parse_date, get_next_interval,
                             interval_ends, substitute,
-                            number_of_days_in_period)
+                            number_of_days_in_period, get_fiscal_period,
+                            month_offset)
 
 
 def test_interval():
@@ -100,6 +101,32 @@ def test_substitute(string, output):
         assert substitute(string) == output
 
 
+@pytest.mark.parametrize("fye,test_date,string,output", [
+    ('06-30', '2018-02-02', 'fiscal_year', 'FY2018'),
+    ('06-30', '2018-08-02', 'fiscal_year', 'FY2019'),
+    ('06-30', '2018-07-01', 'fiscal_year', 'FY2019'),
+    ('06-30', '2018-08-02', 'fiscal_year-1', 'FY2018'),
+    ('06-30', '2018-02-02', 'fiscal_year+6', 'FY2024'),
+    ('06-30', '2018-08-02', 'fiscal_year+6', 'FY2025'),
+    ('06-30', '2018-08-02', 'fiscal_quarter', 'FY2019-Q1'),
+    ('06-30', '2018-10-01', 'fiscal_quarter', 'FY2019-Q2'),
+    ('06-30', '2018-12-30', 'fiscal_quarter', 'FY2019-Q2'),
+    ('06-30', '2018-02-02', 'fiscal_quarter', 'FY2018-Q3'),
+    ('06-30', '2018-07-03', 'fiscal_quarter-1', 'FY2018-Q4'),
+    ('06-30', '2018-07-03', 'fiscal_quarter+6', 'FY2020-Q3'),
+    ('04-05', '2018-07-03', 'fiscal_quarter', None),
+])
+def test_fiscal_substitute(fye, test_date, string, output):
+    with mock.patch('fava.util.date.datetime.date') as mock_date:
+        mock_date.today.return_value = _to_date(test_date)
+        mock_date.side_effect = date
+        if output is None:
+            with pytest.raises(ValueError):
+                substitute(string, fye)
+        else:
+            assert substitute(string, fye) == output
+
+
 @pytest.mark.parametrize("expect_start,expect_end,text", [
     (None, None, '    '),
     ('2000-01-01', '2001-01-01', '   2000   '),
@@ -121,13 +148,15 @@ def test_parse_date(expect_start, expect_end, text):
     ('2016-01-01', '2016-06-25', 'year-day'),
     ('2015-01-01', '2017-01-01', '2015-year'),
     ('2016-01-01', '2016-04-01', 'quarter-1'),
+    ('2013-07-01', '2014-07-01', 'fiscal_year-2'),
+    ('2016-04-01', '2016-07-01', 'fiscal_quarter'),
 ])
 def test_parse_date_relative(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
     with mock.patch('fava.util.date.datetime.date') as mock_date:
         mock_date.today.return_value = _to_date('2016-06-24')
         mock_date.side_effect = date
-        assert parse_date(text) == (start, end)
+        assert parse_date(text, "06-30") == (start, end)
 
 
 @pytest.mark.parametrize("interval,date_str,expect", [
@@ -156,3 +185,47 @@ def test_number_of_days_in_period(interval, date_str, expect):
 def test_number_of_days_in_period2():
     with pytest.raises(NotImplementedError):
         number_of_days_in_period('test', date(2011, 2, 1))
+
+
+@pytest.mark.parametrize("date_input,offset,expected", [
+    ('2018-01-12', 0, '2018-01-12'),
+    ('2018-01-01', -3, '2017-10-01'),
+    ('2018-01-30', 1, None),   # raises value error, as it should
+    ('2018-01-12', 13, '2019-02-12'),
+    ('2018-01-12', -13, '2016-12-12'),
+])
+def test_month_offset(date_input, offset, expected):
+    start_date = _to_date(date_input)
+    if expected is None:
+        with pytest.raises(ValueError):
+            month_offset(start_date, offset)
+    else:
+        assert str(month_offset(start_date, offset)) == expected
+
+
+@pytest.mark.parametrize("year,quarter,fye,expect_start,expect_end", [
+    # standard calendar year [FYE=12-31]
+    (2018, None, '12-31', '2018-01-01', '2019-01-01'),
+    (2018, 1, '12-31', '2018-01-01', '2018-04-01'),
+    (2018, 3, '12-31', '2018-07-01', '2018-10-01'),
+    (2018, 4, '12-31', '2018-10-01', '2019-01-01'),
+    # US fiscal year [FYE=09-30]
+    (2018, None, '09-30', '2017-10-01', '2018-10-01'),
+    (2018, 3, '09-30', '2018-04-01', '2018-07-01'),
+    # 30th June - Australia and NZ [FYE=06-30]
+    (2018, None, '06-30', '2017-07-01', '2018-07-01'),
+    (2018, 1, '06-30', '2017-07-01', '2017-10-01'),
+    (2018, 2, '06-30', '2017-10-01', '2018-01-01'),
+    (2018, 4, '06-30', '2018-04-01', '2018-07-01'),
+    # 5th Apr - UK [FYE=04-05]
+    (2018, None, '04-05', '2017-04-06', '2018-04-06'),
+    (2018, 1, '04-05', 'None', 'None'),
+    # expected errors
+    (2018, None, 'foo', 'None', 'None'),
+    (2018, 0, '12-31', 'None', 'None'),
+    (2018, 5, '12-31', 'None', 'None'),
+])
+def test_get_fiscal_period(year, quarter, fye, expect_start, expect_end):
+    start_date, end_date = get_fiscal_period(year, fye, quarter)
+    assert str(start_date) == expect_start
+    assert str(end_date) == expect_end
