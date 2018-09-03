@@ -68,6 +68,12 @@
   display: block;
 }
 
+.buttons-right button {
+  background-color: inherit;
+  margin: 0.5em;
+  padding: 1px;
+}
+
 .source-form {
   background: var(--color-sidebar-background);
   bottom: 0;
