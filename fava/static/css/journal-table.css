@@ -75,7 +75,8 @@
 .journal.show-query .query,
 .journal.show-metadata .metadata,
 .journal.show-postings .postings,
-.transaction.show-postings .postings {
+.transaction.show-postings .postings,
+.transaction.show-postings .metadata {
   display: block;
 }
 
@@ -93,6 +94,10 @@
   border-bottom: thin solid var(--color-table-border);
 }
 
+.journal .payee {
+  cursor: pointer;
+}
+
 .journal .postings {
   background-color: var(--color-journal-postings);
   font-size: .9em;
@@ -102,10 +107,6 @@
 .journal .postings .num {
   line-height: 16px;
   overflow: hidden;
-}
-
-.journal .transaction {
-  cursor: pointer;
 }
 
 /* Metadata */
@@ -125,6 +126,7 @@
 }
 
 .journal dd {
+  cursor: pointer;
   margin-left: 15rem;
 }
 
@@ -209,6 +211,7 @@
 
 .journal .indicators {
   align-items: center;
+  cursor: pointer;
   display: flex;
   flex-shrink: 3;
   flex-wrap: wrap;

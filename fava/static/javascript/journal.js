@@ -2,6 +2,16 @@ import { $, $$ } from './helpers';
 import e from './events';
 import router from './router';
 
+function addFilter(value) {
+  const filter = $('#filter-filter');
+  if (filter.value) {
+    filter.value += ` ${value}`;
+  } else {
+    filter.value = value;
+  }
+  e.trigger('form-submit-filters', filter.form);
+}
+
 e.on('page-loaded', () => {
   const journal = $('#journal-table');
   if (!journal) return;
@@ -10,23 +20,19 @@ e.on('page-loaded', () => {
     if (event.target.tagName === 'A') {
       return;
     }
-    // Filter for tags and links when clicking on them.
+
     if (event.target.className === 'tag' || event.target.className === 'link') {
-      const filter = $('#filter-filter');
-      filter.value += ` ${event.target.innerText}`;
-      e.trigger('form-submit-filters', filter.form);
-      return;
-    }
-    // Filter for metadata when clicking on the value.
-    if (event.target.tagName === 'DD') {
-      const filter = $('#filter-filter');
-      filter.value += ` ${event.target.previousElementSibling.innerText}"${event.target.innerText}"`;
-      e.trigger('form-submit-filters', filter.form);
-      return;
-    }
-    // Toggle postings by clicking on transaction row.
-    const transaction = event.target.closest('.transaction');
-    if (transaction) {
+      // Filter for tags and links when clicking on them.
+      addFilter(event.target.innerText);
+    } else if (event.target.className === 'payee') {
+      // Filter for payees when clicking on them.
+      addFilter(`payee:"${event.target.innerText}"`);
+    } else if (event.target.tagName === 'DD') {
+      // Filter for metadata when clicking on the value.
+      addFilter(` ${event.target.previousElementSibling.innerText}"${event.target.innerText}"`);
+    } else if (event.target.closest('.indicators')) {
+      // Toggle postings and metadata by clicking on indicators.
+      const transaction = event.target.closest('.transaction');
       transaction.classList.toggle('show-postings');
     }
   });
