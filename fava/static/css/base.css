@@ -185,8 +185,8 @@ select {
   margin: 0 .5em 0 0;
 }
 
-input {
-  /* remove dropdown triangle */
+input:invalid {
+  border: 1px solid var(--color-error);
 }
 
 input[type='text']::-webkit-calendar-picker-indicator {

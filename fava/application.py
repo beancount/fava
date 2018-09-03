@@ -27,6 +27,7 @@ import werkzeug.urls
 from werkzeug.utils import secure_filename
 from beancount.utils.text_utils import replace_numbers
 from beancount.core.data import Document
+from beancount.core.account import ACCOUNT_RE
 
 from fava import template_filters
 from fava.core import FavaLedger
@@ -53,6 +54,7 @@ app.jinja_env.lstrip_blocks = True
 
 app.config['HAVE_EXCEL'] = HAVE_EXCEL
 app.config['HELP_PAGES'] = HELP_PAGES
+app.config['ACCOUNT_RE'] = ACCOUNT_RE
 
 REPORTS = [
     '_context',

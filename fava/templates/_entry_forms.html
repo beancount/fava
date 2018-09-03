@@ -1,15 +1,18 @@
 {% macro input_account(account) %}
-<input type="text" class="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ account or '' }}" required pattern="(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+">
+<input type="text" class="account" placeholder="{{ _('Account') }}" list="accounts" value="{{ account or '' }}" pattern="{{ config.ACCOUNT_RE }}">
 {% endmacro %}
-{% macro input_date(date) %}
+{% macro input_date(date) -%}
 <input type="date" name="date" value="{{ date or today() }}" required>
-{% endmacro %}
+{%- endmacro %}
+{% macro input_number(number) -%}
+<input type="tel" class="number" pattern="[0-9.,]*" placeholder="{{ _('Number') }}" value="{{ number }}">
+{%- endmacro %}
 
 {% macro posting(posting=None) %}
 <div class="fieldset posting">
   <button class="muted round remove-fieldset" data-event="remove-fieldset" type="button" tabindex="-1">×</button>
   {{ input_account(posting.account) }}
-  <input type="tel" class="number" placeholder="{{ _('Number') }}" value="{{ posting.units.number if posting else '' }}">
+  {{ input_number(posting.units.number if posting else '') }}
   <input type="text" class="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ posting.units.currency if posting else '' }}">
   <button class="muted round add-row" type="button" data-event="add-posting" title="{{ _('Add posting') }}">+</button>
 </div>
@@ -59,7 +62,7 @@
     {{ input_date(entry.date) }}
     <h4>{{ _('Balance') }}</h4>
     {{ input_account(entry.account) }}
-    <input type="tel" class="number" name="number" placeholder="{{ _('Number') }}" value="{{ entry.amount.number if entry.amount else '' }}">
+    {{ input_number(entry.amount.number if entry.amount else '') }}
     <input type="text" class="currency" name="currency" placeholder="{{ _('Currency') }}" list="currencies" value="{{ entry.amount.currency if entry.amount else '' }}">
     <button class="muted round" type="button" data-event="add-metadata" title="{{ _('Add metadata') }}">m</button>
   </div>
