@@ -35,6 +35,7 @@ from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
+from fava.serialisation import serialise
 from fava.util import slugify, resource_path, setup_logging, send_file_inline
 from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
@@ -109,6 +110,7 @@ def get_locale():
 
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
     app.add_template_filter(function)
+app.add_template_filter(serialise)
 
 
 @app.url_defaults
