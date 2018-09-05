@@ -23,14 +23,14 @@
 
 .entry-form input.account,
 .entry-form input[name='narration'] {
-  flex-grow: 1;
   flex-basis: 200px;
+  flex-grow: 1;
   min-width: 20em;
 }
 
 .entry-form input[name='payee'] {
-  flex-grow: 1;
   flex-basis: 100px;
+  flex-grow: 1;
   min-width: 10em;
 }
 
