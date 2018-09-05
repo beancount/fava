@@ -22,10 +22,16 @@
 }
 
 .entry-form input.account,
-.entry-form input[name='narration'],
+.entry-form input[name='narration'] {
+  flex-grow: 1;
+  flex-basis: 200px;
+  min-width: 20em;
+}
+
 .entry-form input[name='payee'] {
   flex-grow: 1;
-  min-width: 15em;
+  flex-basis: 100px;
+  min-width: 10em;
 }
 
 .entry-form input.metadata-value {

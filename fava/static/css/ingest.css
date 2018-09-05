@@ -26,6 +26,10 @@
   min-width: 600px;
 }
 
+.ingest-row .source.hidden + .entry-form {
+  flex: 1;
+}
+
 .ingest-row input[name='payee'] {
   width: 140px;
 }
@@ -39,7 +43,7 @@
   min-width: 100px;
   text-align: left;
   transform: rotate(90deg);
-  transform-origin: 30% 50%;
+  transform-origin: 28% 50%;
 }
 
 .ingest-row .actions label {
