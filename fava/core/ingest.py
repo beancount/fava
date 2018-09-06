@@ -80,10 +80,13 @@ class IngestModule(FavaModule):
         if os.stat(self.module_path).st_mtime_ns > self.mtime:
             self.load_file()
 
-        new_entries, _ = extract.extract_from_file(
+        new_entries = extract.extract_from_file(
             filename,
             self.importers.get(importer_name),
             existing_entries=self.ledger.all_entries)
+
+        if isinstance(new_entries, tuple):
+            new_entries, _ = new_entries
 
         return new_entries
 
