@@ -23,6 +23,7 @@
 
 .ingest-row .entry-form {
   flex-shrink: 0;
+  max-width: 1000px;
   min-width: 600px;
 }
 
