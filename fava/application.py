@@ -14,6 +14,7 @@ Attributes:
 import datetime
 import functools
 import inspect
+import threading
 import os
 import os.path
 from io import BytesIO
@@ -74,6 +75,9 @@ REPORTS = [
     'statistics',
     'trial_balance',
 ]
+
+
+LOAD_FILE_LOCK = threading.Lock()
 
 
 def _load_file():
@@ -209,8 +213,9 @@ def _incognito(response):
 @app.url_value_preprocessor
 def _pull_beancount_file(_, values):
     g.beancount_file_slug = values.pop('bfile', None) if values else None
-    if not app.config.get('LEDGERS'):
-        _load_file()
+    with LOAD_FILE_LOCK:
+        if not app.config.get('LEDGERS'):
+            _load_file()
     if not g.beancount_file_slug:
         g.beancount_file_slug = app.config['FILE_SLUGS'][0]
     if g.beancount_file_slug not in app.config['FILE_SLUGS']:
