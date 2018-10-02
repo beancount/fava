@@ -5,7 +5,8 @@ to write importers.
 
 Set the `import-config` option to point to your import config and set
 `import-dirs` to the directories that contain the files that you want to
-import.
+import. And if you wish to save new entries elsewhere than main file - use
+`insert-entry` option.
 
 Fava currently only supports entries of type `Transaction` and `Balance`. Set
 the special metadata key `__source__` to display the corresponding text
