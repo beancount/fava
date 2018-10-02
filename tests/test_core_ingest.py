@@ -13,9 +13,8 @@ def test_ingest_examplefile():
     identify_dir = list(ingest_ledger.ingest.identify_directory("."))
     assert len(identify_dir) == 1
 
-    filename, importers = identify_dir[0]
-    importer_name = importers[0].name()
-    entries = ingest_ledger.ingest.extract(filename, importer_name)
+    filename, importer, _ = identify_dir[0]
+    entries = ingest_ledger.ingest.extract(filename, importer.name())
     assert len(entries) == 4
     assert entries[0].date == datetime.date(2017, 2, 12)
     assert entries[0].comment == "Hinweis: Zinssatz auf 0,15% geändert"

@@ -18,12 +18,13 @@ No importers configured. See <a href="{{ url_for('help_page', page_slug='import'
       <th>{{ _('Importer') }}</th>
       <th>{{ _('Account') }}</th>
       <th>{{ _('Date') }}</th>
+      <th>{{ _('Destination filename') }}</th>
+      <th></th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-    {% for filename, importers in ledger.ingest.identify_directory(directory) %}
-    {% for importer  in importers %}
+    {% for filename, importer, new_filename in ledger.ingest.identify_directory(directory) %}
     <tr>
       <td>
         <pre title="{{ filename }}">{{ filename|basename }}</pre>
@@ -31,11 +32,14 @@ No importers configured. See <a href="{{ url_for('help_page', page_slug='import'
       <td>{{ importer.name() }}</td>
       <td>{{ account_macros.account_name(ledger.ingest.file_account(filename, importer) or '') }}</td>
       <td>{{ ledger.ingest.file_date(filename, importer) or '' }}</td>
+      <td>{{ new_filename or '' }}</td>
       <td>
         <a class="button" title="{{ _('Extract') }} {{ filename }}" href="{{ url_for('report', report_name='extract', filename=filename, importer=importer.name()) }}">{{ _('Extract') }}</button>
       </td>
+      <td>
+        <a class="button" title="{{ _('Move') }} {{ filename }}" href="{{ url_for('report', report_name='extract', filename=filename, importer=importer.name()) }}">{{ _('Move') }}</button>
+      </td>
     </tr>
-    {% endfor %}
     {% endfor %}
   </tbody>
 </table>

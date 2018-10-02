@@ -1,6 +1,5 @@
 """Ingest helper functions."""
 
-import operator
 import os
 from os import path
 import runpy
@@ -9,6 +8,7 @@ import sys
 import traceback
 
 from beancount.ingest import cache, identify, extract
+from beancount.ingest import file as ingest_file
 
 from fava.core.helpers import FavaModule
 
@@ -81,7 +81,8 @@ class IngestModule(FavaModule):
             directory: The directory to search (relative to Beancount file).
 
         Returns:
-            Tuples of filenames and lists of matching importers.
+            A list of triples of filenames, lists of matching importers, and
+            destination filenames.
         """
         if not self.config:
             return []
@@ -90,10 +91,17 @@ class IngestModule(FavaModule):
             path.join(path.dirname(self.ledger.beancount_file_path), directory)
         )
 
-        return filter(
-            operator.itemgetter(1),
-            identify.find_imports(self.config, full_path),
-        )
+        files = []
+        for filename, importers in identify.find_imports(
+            self.config, full_path
+        ):
+            for importer in importers:
+                dest_filename = ingest_file.file_one_file(
+                    filename, [importer], ""
+                )
+                files.append((filename, importer, dest_filename))
+
+        return files
 
     def extract(self, filename, importer_name):
         """Extract entries from filename with the specified importer.

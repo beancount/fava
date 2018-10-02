@@ -198,7 +198,7 @@ input[type="date"]::-webkit-clear-button {
 
 button,
 .button {
-  padding: 6px 10px;
+  padding: 5px 10px;
   color: var(--color-background);
   cursor: pointer;
   background-color: var(--color-header);
@@ -212,6 +212,7 @@ h3 button {
   font-size: 1rem;
   font-weight: normal;
 }
+
 
 a.button {
   display: inline-block;
