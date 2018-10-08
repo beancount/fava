@@ -12,4 +12,4 @@
     limitations under the License.
 """
 
-__version__ = '1.9-dev'
+__version__ = '1.9'

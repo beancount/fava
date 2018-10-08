@@ -26,7 +26,7 @@ msgstr "Hora"
 msgid "Account"
 msgstr "Cuenta"
 
-#: fava/templates/_entry_forms.html:40 fava/templates/_entry_forms.html:41
+#: fava/templates/_entry_forms.html:42 fava/templates/_entry_forms.html:43
 msgid "Payee"
 msgstr "Beneficiario"
 
@@ -109,7 +109,7 @@ msgstr "Costo"
 msgid "Change"
 msgstr "Cambio"
 
-#: fava/templates/_entry_forms.html:60 fava/templates/_journal_table.html:94
+#: fava/templates/_entry_forms.html:62 fava/templates/_journal_table.html:94
 #: fava/templates/statistics.html:40
 msgid "Balance"
 msgstr "Saldo"
@@ -197,8 +197,7 @@ msgstr "Ayuda - %(title)s"
 msgid "Help pages"
 msgstr "Páginas de ayuda"
 
-#: fava/templates/_entry_forms.html:13 fava/templates/_entry_forms.html:63
-#: fava/templates/holdings.html:48
+#: fava/templates/_entry_forms.html:65 fava/templates/holdings.html:48
 msgid "Currency"
 msgstr "Moneda"
 
@@ -222,12 +221,12 @@ msgstr "Ingresos"
 msgid "Expenses"
 msgstr "Gastos"
 
-#: fava/templates/_entry_forms.html:21 fava/templates/options.html:9
+#: fava/templates/_entry_forms.html:23 fava/templates/options.html:9
 #: fava/templates/options.html:26
 msgid "Key"
 msgstr "Clave"
 
-#: fava/templates/_entry_forms.html:22 fava/templates/options.html:10
+#: fava/templates/_entry_forms.html:24 fava/templates/options.html:10
 #: fava/templates/options.html:27
 msgid "Value"
 msgstr "Valor"
@@ -281,7 +280,7 @@ msgstr "cerrar"
 msgid "New transaction"
 msgstr "Nueva transacción"
 
-#: fava/templates/_entry_forms.html:42 fava/templates/_entry_forms.html:43
+#: fava/templates/_entry_forms.html:44 fava/templates/_entry_forms.html:45
 msgid "Narration"
 msgstr "Narración"
 
@@ -289,11 +288,11 @@ msgstr "Narración"
 msgid "Save and add new"
 msgstr "Guardar y añadir nueva"
 
-#: fava/templates/_entry_forms.html:12 fava/templates/_entry_forms.html:62
+#: fava/templates/_entry_forms.html:8
 msgid "Number"
 msgstr "Número"
 
-#: fava/templates/_entry_forms.html:14 fava/templates/_entry_forms.html:45
+#: fava/templates/_entry_forms.html:16 fava/templates/_entry_forms.html:47
 msgid "Add posting"
 msgstr "Añadir asiento"
 
@@ -350,12 +349,12 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: fava/templates/_entry_forms.html:23 fava/templates/_entry_forms.html:44
-#: fava/templates/_entry_forms.html:64 fava/templates/_entry_forms.html:76
+#: fava/templates/_entry_forms.html:25 fava/templates/_entry_forms.html:46
+#: fava/templates/_entry_forms.html:66 fava/templates/_entry_forms.html:78
 msgid "Add metadata"
 msgstr ""
 
-#: fava/templates/_entry_forms.html:74
+#: fava/templates/_entry_forms.html:76
 msgid "Note"
 msgstr ""
 
@@ -389,10 +388,6 @@ msgstr ""
 
 #: fava/templates/_journal_table.html:7
 msgid "Documents with a #discovered tag"
-msgstr ""
-
-#: fava/templates/_journal_table.html:8
-msgid "Documents with a #statement tag"
 msgstr ""
 
 #: fava/templates/_journal_table.html:81
@@ -464,27 +459,35 @@ msgstr ""
 msgid "Import entries"
 msgstr ""
 
-#: fava/util/date.py:44
+#: fava/util/date.py:50
 msgid "Yearly"
 msgstr ""
 
-#: fava/util/date.py:45
+#: fava/util/date.py:51
 msgid "Quarterly"
 msgstr ""
 
-#: fava/util/date.py:46
+#: fava/util/date.py:52
 msgid "Monthly"
 msgstr ""
 
-#: fava/util/date.py:47
+#: fava/util/date.py:53
 msgid "Weekly"
 msgstr ""
 
-#: fava/util/date.py:48
+#: fava/util/date.py:54
 msgid "Daily"
 msgstr ""
 
 #: fava/templates/editor.html:18
 msgid "Edit"
+msgstr ""
+
+#: fava/templates/_entry_forms.html:15
+msgid "Amount"
+msgstr ""
+
+#: fava/templates/_journal_table.html:8
+msgid "Documents with a #linked tag"
 msgstr ""
 

@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v1.9 (October 8th, 2018)
+------------------------
+
+In this release, the click behaviour has been updated to allow filtering for
+payees. The entry input forms now allow inputting prices and costs.  As
+always, bugs have been fixed.
+
 v1.8 (July 25th, 2018)
 ----------------------
 
