@@ -5,7 +5,7 @@
 <input type="date" name="date" value="{{ date or today() }}" required>
 {%- endmacro %}
 {% macro input_number(number) -%}
-<input type="tel" class="number" pattern="[0-9.,]*" placeholder="{{ _('Number') }}" value="{{ number }}">
+<input type="tel" class="number" name="number" pattern="[0-9.,]*" placeholder="{{ _('Number') }}" value="{{ number }}">
 {%- endmacro %}
 
 {% macro posting(posting=None) %}
