@@ -13,7 +13,7 @@ import re
 
 from beancount.core import data, position
 from beancount.core.amount import A, Amount
-from beancount.core.number import D
+from beancount.core.number import D, MISSING
 
 from fava import util
 from fava.core.helpers import FavaAPIException
@@ -91,7 +91,18 @@ def deserialise_posting(posting):
             amount, raw_price = amount.split('@')
             price = A(raw_price)
         pos = position.from_string(amount)
-        units, cost = pos.units, pos.cost
+        units = pos.units
+        if re.search(r'{\s*}', amount):
+            cost = data.CostSpec(
+                MISSING,
+                None,
+                MISSING,
+                None,
+                None,
+                False
+            )
+        else:
+            cost = pos.cost
     else:
         units, cost = None, None
     return data.Posting(posting['account'], units, cost, price, None, None)
