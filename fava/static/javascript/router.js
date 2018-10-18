@@ -133,7 +133,7 @@ class Router {
         event.preventDefault();
 
         // update sidebar links
-        if (link.parentNode.parentNode.parentNode.tagName === 'ASIDE') {
+        if (link.closest('aside')) {
           this.navigate(updateURL(link.href));
         } else {
           this.navigate(link.href);
