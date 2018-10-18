@@ -3,8 +3,9 @@ import datetime
 from beancount.core.data import (Transaction, create_simple_posting, Balance,
                                  Note, Posting)
 from beancount.core.amount import A
-from beancount.core.number import D
+from beancount.core.number import D, MISSING
 from beancount.core.position import Cost
+from beancount.core.data import CostSpec
 from flask.json import dumps, loads
 import pytest
 
@@ -59,6 +60,9 @@ def test_serialise(app):
      '100 USD {10 EUR} @ 11 EUR'),
     ((A('100 USD'), None, A('11 EUR'), None, None),
      '100 USD @ 11 EUR'),
+    ((A('100 USD'),
+      CostSpec(MISSING, None, MISSING, None, None, False), None, None, None),
+     '100 USD {}'),
 ])
 def test_serialise_posting(pos, amount):
     pos = Posting('Assets:ETrade:Cash', *pos)
