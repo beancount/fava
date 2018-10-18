@@ -1,10 +1,5 @@
 /* Editor */
 
-@import '../gen/codemirror/lib-codemirror.css';
-@import '../gen/codemirror/addon-dialog-dialog.css';
-@import '../gen/codemirror/addon-fold-foldgutter.css';
-@import '../gen/codemirror/addon-hint-show-hint.css';
-
 :root {
   --source-editor-fieldset-height: 44px;
 }

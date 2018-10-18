@@ -37,6 +37,27 @@ import { $, handleJSON } from './helpers';
 import e from './events';
 import router from './router';
 
+import '../css/style.css';
+import '../css/base.css';
+import '../css/charts.css';
+import '../css/components.css';
+import '../css/editor.css';
+import '../css/entry-forms.css';
+import '../css/fonts.css';
+import '../css/header.css';
+import '../css/help.css';
+import '../css/ingest.css';
+import '../css/journal-table.css';
+import '../css/media-mobile.css';
+import '../css/media-print.css';
+import '../css/overlay.css';
+import '../css/query.css';
+import '../css/tree-table.css';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/addon/dialog/dialog.css';
+import 'codemirror/addon/fold/foldgutter.css';
+import 'codemirror/addon/hint/show-hint.css';
+
 import './autocomplete';
 import './charts';
 import './clipboard';
