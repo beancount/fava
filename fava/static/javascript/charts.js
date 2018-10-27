@@ -539,9 +539,14 @@ class LineChart extends BaseChart {
       min(this.data, s => s.values[0].date),
       max(this.data, s => s.values[s.values.length - 1].date),
     ]);
+
+    // Span y-axis min to max value plus margin as percent of either value
+    this.yMarginPercent = 0.03;
+    this.minDataValue = min(this.data, d => min(d.values, x => x.value));
+    this.maxDataValue = max(this.data, d => max(d.values, x => x.value));
     this.y.domain([
-      Math.min(0, min(this.data, d => min(d.values, x => x.value))),
-      Math.max(0, max(this.data, d => max(d.values, x => x.value))),
+      this.minDataValue - (this.minDataValue * this.yMarginPercent),
+      this.maxDataValue + (this.maxDataValue * this.yMarginPercent)
     ]);
 
     this.selections.lines = this.canvas.selectAll('.line')
