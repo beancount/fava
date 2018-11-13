@@ -36,7 +36,14 @@ class IngestModule(FavaModule):
                         None, "File does not exist: '{}'".format(
                             self.module_path), None))
             else:
-                mod = runpy.run_path(self.module_path)
+                try:
+                    mod = runpy.run_path(self.module_path)
+                except Exception as exception:  # pylint: disable=broad-except
+                    self.ledger.errors.append(
+                        IngestError(
+                            None, "Error in importer: '{}'".format(
+                                exception), None))
+
                 self.mtime = os.stat(self.module_path).st_mtime_ns
                 self.config = mod['CONFIG']
                 self.importers = {
