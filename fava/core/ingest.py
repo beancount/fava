@@ -38,11 +38,12 @@ class IngestModule(FavaModule):
             else:
                 try:
                     mod = runpy.run_path(self.module_path)
-                except Exception as exception:  # pylint: disable=broad-except
+                except Exception:  # pylint: disable=broad-except
                     self.ledger.errors.append(
                         IngestError(
-                            None, "Error in importer: '{}'".format(
-                                exception), None))
+                            None, "Error in importer '{}'".format(
+                                str(self.module_path)), None))
+                    return
 
                 self.mtime = os.stat(self.module_path).st_mtime_ns
                 self.config = mod['CONFIG']
