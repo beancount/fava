@@ -307,16 +307,11 @@ def find_insert_position(accounts, date, insert_options, filenames):
         insert_options: A list of InsertOption.
         filenames: List of Beancount files.
     """
-    position = None
-
     for account in accounts:
         for insert_option in insert_options:
             if insert_option.date >= date:
                 break
             if insert_option.re.match(account):
-                position = (insert_option.filename, insert_option.lineno - 1)
+                return (insert_option.filename, insert_option.lineno - 1)
 
-    if not position:
-        position = filenames[0], len(open(filenames[0]).readlines()) + 1
-
-    return position
+    return (filenames[0], len(open(filenames[0]).readlines()) + 1)
