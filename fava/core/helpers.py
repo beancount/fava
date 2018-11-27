@@ -31,4 +31,3 @@ class FavaModule():
 
     def load_file(self):
         """Get's called when the file has been (re)loaded."""
-        pass
