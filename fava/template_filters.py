@@ -75,8 +75,9 @@ def cost_or_value(inventory, date=None):
     if g.conversion == 'units':
         return inventory.reduce(convert.get_units)
     if g.conversion:
-        return inventory.reduce(convert.convert_position, g.conversion,
-                                g.ledger.price_map, date)
+        return inventory.reduce(
+            convert.convert_position, g.conversion, g.ledger.price_map, date
+        )
     return inventory.reduce(convert.get_cost)
 
 
@@ -104,7 +105,7 @@ def format_date(date):
     if g.interval is Interval.YEAR:
         return date.strftime('%Y')
     if g.interval is Interval.QUARTER:
-        return '{}Q{}'.format(date.year, (date.month-1)//3 + 1)
+        return '{}Q{}'.format(date.year, (date.month - 1) // 3 + 1)
     if g.interval is Interval.MONTH:
         return date.strftime('%b %Y')
     if g.interval is Interval.WEEK:
@@ -141,19 +142,25 @@ def flag_to_type(flag):
 
 def should_show(account):
     """Determine whether the account should be shown."""
-    if (not account.balance_children.is_empty()
-            or any(should_show(a) for a in account.children)):
+    if not account.balance_children.is_empty() or any(
+        should_show(a) for a in account.children
+    ):
         return True
     if account.name not in g.ledger.accounts:
         return False
-    if (not g.ledger.fava_options['show-closed-accounts']
-            and g.ledger.account_is_closed(account.name)):
+    if not g.ledger.fava_options[
+        'show-closed-accounts'
+    ] and g.ledger.account_is_closed(account.name):
         return False
-    if (not g.ledger.fava_options['show-accounts-with-zero-balance']
-            and account.balance.is_empty()):
+    if (
+        not g.ledger.fava_options['show-accounts-with-zero-balance']
+        and account.balance.is_empty()
+    ):
         return False
-    if (not g.ledger.fava_options['show-accounts-with-zero-transactions']
-            and not account.has_txns):
+    if (
+        not g.ledger.fava_options['show-accounts-with-zero-transactions']
+        and not account.has_txns
+    ):
         return False
     return True
 
@@ -170,7 +177,8 @@ def format_errormsg(message):
         return message
     account = match.group()
     url = flask.url_for('account', name=account)
-    return message \
-        .replace(account, '<a href="{}">{}</a>'.format(url, account)) \
-        .replace('for \'', 'for ') \
+    return (
+        message.replace(account, '<a href="{}">{}</a>'.format(url, account))
+        .replace('for \'', 'for ')
         .replace('\': ', ': ')
+    )

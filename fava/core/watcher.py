@@ -3,7 +3,7 @@
 import os
 
 
-class Watcher():
+class Watcher:
     """A simple file and folder watcher.
 
     For folders, only checks mtime of the folder and all subdirectories.

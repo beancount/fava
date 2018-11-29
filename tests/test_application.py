@@ -8,31 +8,23 @@ import werkzeug.routing
 from fava.application import REPORTS, static_url
 
 FILTER_COMBINATIONS = [
-    {
-        'account': 'Assets'
-    },
-    {
-        'from': 'has_account("Assets")'
-    },
-    {
-        'time': '2015'
-    },
-    {
-        'payee': 'BayBook'
-    },
-    {
-        'tag': 'tag1, tag2'
-    },
-    {
-        'time': '2015',
-        'payee': 'BayBook'
-    },
+    {'account': 'Assets'},
+    {'from': 'has_account("Assets")'},
+    {'time': '2015'},
+    {'payee': 'BayBook'},
+    {'tag': 'tag1, tag2'},
+    {'time': '2015', 'payee': 'BayBook'},
 ]
 
 
-@pytest.mark.parametrize('report,filters',
-                         [(report, filters) for report in REPORTS
-                          for filters in FILTER_COMBINATIONS])
+@pytest.mark.parametrize(
+    'report,filters',
+    [
+        (report, filters)
+        for report in REPORTS
+        for filters in FILTER_COMBINATIONS
+    ],
+)
 def test_reports(app, test_client, report, filters):
     if report.startswith('_'):
         return
@@ -45,41 +37,47 @@ def test_reports(app, test_client, report, filters):
     assert result.status_code == 200
 
 
-@pytest.mark.parametrize('query_string,result_str', [
-    ('balances from year = 2014', '5086.65 USD'),
-    ('nononono', 'ERROR: Syntax error near'),
-    ('select sum(day)', '43558'),
-])
+@pytest.mark.parametrize(
+    'query_string,result_str',
+    [
+        ('balances from year = 2014', '5086.65 USD'),
+        ('nononono', 'ERROR: Syntax error near'),
+        ('select sum(day)', '43558'),
+    ],
+)
 def test_query(app, test_client, query_string, result_str):
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for(
-            'report', report_name='query', query_string=query_string)
+            'report', report_name='query', query_string=query_string
+        )
 
     result = test_client.get(url)
     assert result.status_code == 200
     assert result_str in result.get_data(True)
 
 
-@pytest.mark.parametrize('url,return_code', [
-    ('/', 302),
-    ('/asdfasdf/', 404),
-    ('/asdfasdf/asdfasdf/', 404),
-])
+@pytest.mark.parametrize(
+    'url,return_code',
+    [('/', 302), ('/asdfasdf/', 404), ('/asdfasdf/asdfasdf/', 404)],
+)
 def test_urls(test_client, url, return_code):
     result = test_client.get(url)
     assert result.status_code == return_code
 
 
-@pytest.mark.parametrize('referer,jump_link,expect', [
-    ('/?foo=bar', '/jump?foo=baz', '/?foo=baz'),
-    ('/?foo=bar', '/jump?baz=qux', '/?baz=qux&foo=bar'),
-    ('/', '/jump?foo=bar&baz=qux', '/?baz=qux&foo=bar'),
-    ('/', '/jump?baz=qux', '/?baz=qux'),
-    ('/?foo=bar', '/jump?foo=', '/'),
-    ('/?foo=bar', '/jump?foo=&foo=', '/?foo=&foo='),
-    ('/', '/jump?foo=', '/'),
-])
+@pytest.mark.parametrize(
+    'referer,jump_link,expect',
+    [
+        ('/?foo=bar', '/jump?foo=baz', '/?foo=baz'),
+        ('/?foo=bar', '/jump?baz=qux', '/?baz=qux&foo=bar'),
+        ('/', '/jump?foo=bar&baz=qux', '/?baz=qux&foo=bar'),
+        ('/', '/jump?baz=qux', '/?baz=qux'),
+        ('/?foo=bar', '/jump?foo=', '/'),
+        ('/?foo=bar', '/jump?foo=&foo=', '/?foo=&foo='),
+        ('/', '/jump?foo=', '/'),
+    ],
+)
 def test_jump_handler(app, test_client, referer, jump_link, expect):
     """Test /jump handler correctly redirect to the right location.
 
@@ -109,7 +107,8 @@ def test_incognito(app, test_client):
 
 
 def test_download_journal(app, test_client):
-    file_content = dedent("""\
+    file_content = dedent(
+        """\
         ;; -*- mode: org; mode: beancount; -*-
 
         option "title" "Example Beancount file - Journal Export"
@@ -126,7 +125,8 @@ def test_download_journal(app, test_client):
           Liabilities:US:Chase:Slate                       -25.30 USD
           Expenses:Food:Restaurant                          25.30 USD
 
-    """)
+    """
+    )
 
     with app.test_request_context():
         app.preprocess_request()
@@ -134,15 +134,19 @@ def test_download_journal(app, test_client):
     result = test_client.get(url)
     assert result.get_data(True) == file_content
     assert result.headers['Content-Disposition'].startswith(
-        'attachment; filename="journal_')
+        'attachment; filename="journal_'
+    )
     assert result.headers['Content-Type'] == 'application/octet-stream'
 
 
-@pytest.mark.parametrize('filename,has_modified', [
-    ('not-a-real-file', False),
-    ('javascript/main.js', True),
-    ('css/style.css', True),
-])
+@pytest.mark.parametrize(
+    'filename,has_modified',
+    [
+        ('not-a-real-file', False),
+        ('javascript/main.js', True),
+        ('css/style.css', True),
+    ],
+)
 def test_static_url(app, filename, has_modified):
     with app.test_request_context():
         app.preprocess_request()

@@ -31,12 +31,15 @@ FY_RE = re.compile(r'^fy(\d{4})$')
 # this matches a quarter in a financial year like FY2018-Q2
 FY_QUARTER_RE = re.compile(r'^fy(\d{4})-q(\d)$')
 
-VARIABLE_RE = re.compile(r'\(?(fiscal_year|year|fiscal_quarter|quarter'
-                         r'|month|week|day)(?:([-+])(\d+))?\)?')
+VARIABLE_RE = re.compile(
+    r'\(?(fiscal_year|year|fiscal_quarter|quarter'
+    r'|month|week|day)(?:([-+])(\d+))?\)?'
+)
 
 
 class Interval(enum.Enum):
     """The possible intervals."""
+
     YEAR = 'year'
     QUARTER = 'quarter'
     MONTH = 'month'
@@ -117,7 +120,7 @@ def interval_ends(first, last, interval: Interval):
     yield last
 
 
-def substitute(string, fye=None):    # pylint: disable=too-many-locals
+def substitute(string, fye=None):  # pylint: disable=too-many-locals
     """Replace variables referring to the current day.
 
     Args:
@@ -149,32 +152,40 @@ def substitute(string, fye=None):    # pylint: disable=too-many-locals
             target = month_offset(today.replace(day=1), plusminus * mod * 3)
             start, end = get_fiscal_period(target.year, fye)
             if start.day != 1:
-                raise ValueError("Cannot use fiscal_quarter if fiscal year "
-                                 "does not start on first of the month")
+                raise ValueError(
+                    "Cannot use fiscal_quarter if fiscal year "
+                    "does not start on first of the month"
+                )
             if target >= end:
                 start = end
             quarter = int(((target.month - start.month) % 12) / 3)
-            string = string.replace(complete_match, "FY{0}-Q{1}".format(
-                start.year + 1, (quarter % 4) + 1))
+            string = string.replace(
+                complete_match,
+                "FY{0}-Q{1}".format(start.year + 1, (quarter % 4) + 1),
+            )
         if interval == 'quarter':
             quarter_today = (today.month - 1) // 3 + 1
             year = today.year + (quarter_today + plusminus * mod - 1) // 4
             quarter = (quarter_today + plusminus * mod - 1) % 4 + 1
-            string = string.replace(complete_match, '{}-Q{}'.format(
-                year, quarter))
+            string = string.replace(
+                complete_match, '{}-Q{}'.format(year, quarter)
+            )
         if interval == 'month':
             year = today.year + (today.month + plusminus * mod - 1) // 12
             month = (today.month + plusminus * mod - 1) % 12 + 1
-            string = string.replace(complete_match, '{}-{:02}'.format(
-                year, month))
+            string = string.replace(
+                complete_match, '{}-{:02}'.format(year, month)
+            )
         if interval == 'week':
             delta = datetime.timedelta(plusminus * mod * 7)
-            string = string.replace(complete_match,
-                                    (today + delta).strftime('%Y-W%W'))
+            string = string.replace(
+                complete_match, (today + delta).strftime('%Y-W%W')
+            )
         if interval == 'day':
             delta = datetime.timedelta(plusminus * mod)
-            string = string.replace(complete_match,
-                                    (today + delta).isoformat())
+            string = string.replace(
+                complete_match, (today + delta).isoformat()
+            )
     return string
 
 
@@ -234,15 +245,16 @@ def parse_date(string, fye=None):  # pylint: disable=too-many-return-statements
         year, week = match.group(1, 2)
         date_str = '{}{}1'.format(year, week)
         first_week_day = datetime.datetime.strptime(date_str, '%Y%W%w').date()
-        return first_week_day, get_next_interval(first_week_day,
-                                                 Interval.WEEK)
+        return first_week_day, get_next_interval(first_week_day, Interval.WEEK)
 
     match = QUARTER_RE.match(string)
     if match:
         year, quarter = map(int, match.group(1, 2))
         quarter_first_day = datetime.date(year, (quarter - 1) * 3 + 1, 1)
-        return quarter_first_day, get_next_interval(quarter_first_day,
-                                                    Interval.QUARTER)
+        return (
+            quarter_first_day,
+            get_next_interval(quarter_first_day, Interval.QUARTER),
+        )
 
     match = FY_RE.match(string)
     if match:
@@ -290,9 +302,11 @@ def get_fiscal_period(year, fye, quarter=None):
     else:
         try:
             start_date = (
-                datetime.datetime.strptime('{0}-{1}'.format(
-                    year - 1, fye), '%Y-%m-%d') +
-                datetime.timedelta(days=1)).date()
+                datetime.datetime.strptime(
+                    '{0}-{1}'.format(year - 1, fye), '%Y-%m-%d'
+                )
+                + datetime.timedelta(days=1)
+            ).date()
         except ValueError:
             return None, None
 

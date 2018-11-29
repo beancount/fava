@@ -26,9 +26,11 @@ class AttributesModule(FavaModule):
         self.years = list(getters.get_active_years(all_entries))[::-1]
 
         account_ranker = ExponentialDecayRanker(
-            sorted(self.ledger.accounts.keys()))
+            sorted(self.ledger.accounts.keys())
+        )
         currency_ranker = ExponentialDecayRanker(
-            self.ledger.options['commodities'])
+            self.ledger.options['commodities']
+        )
         payee_ranker = ExponentialDecayRanker()
 
         transactions = self.ledger.all_entries_by_type[Transaction]

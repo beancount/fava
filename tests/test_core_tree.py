@@ -42,12 +42,14 @@ def test_tree_from_entries(example_ledger):
         node = tree[name]
         _compare_inv_and_counter(account.balance, node.balance)
         _compare_inv_and_counter(
-            realization.compute_balance(account), node.balance_children)
+            realization.compute_balance(account), node.balance_children
+        )
 
 
 def test_tree_cap(example_ledger):
-    closing_entries = summarize.cap_opt(example_ledger.entries,
-                                        example_ledger.options)
+    closing_entries = summarize.cap_opt(
+        example_ledger.entries, example_ledger.options
+    )
     real_account = realization.realize(closing_entries)
 
     tree = Tree(example_ledger.entries)

@@ -21,8 +21,9 @@ def test_plugins(tmpdir):
     foo_folder = documents_folder.mkdir('Expenses').mkdir('Foo')
     sample_statement1 = foo_folder.join('2016-11-01 Test 1.pdf')
     sample_statement1.write('Hello World 1')
-    sample_statement1_short = os.path.join('documents', 'Expenses', 'Foo',
-                                           '2016-11-01 Test 1.pdf')
+    sample_statement1_short = os.path.join(
+        'documents', 'Expenses', 'Foo', '2016-11-01 Test 1.pdf'
+    )
     sample_statement2 = foo_folder.join('2016-11-01 Test 2.pdf')
     sample_statement2.write('Hello World 2')
     sample_statement3 = foo_folder.join('2016-11-01 Test 3 discovered.pdf')
@@ -30,17 +31,20 @@ def test_plugins(tmpdir):
 
     assets_folder = documents_folder.mkdir('Assets').mkdir('Cash')
     sample_statement4 = assets_folder.join('2016-11-01 Test 4.pdf')
-    sample_statement4_short = os.path.join('documents', 'Assets', 'Cash',
-                                           '2016-11-01 Test 4.pdf')
+    sample_statement4_short = os.path.join(
+        'documents', 'Assets', 'Cash', '2016-11-01 Test 4.pdf'
+    )
     sample_statement4.write('Hello World 4')
     sample_statement5 = assets_folder.join('Test 5.pdf')
-    sample_statement5_short = os.path.join('documents', 'Assets', 'Cash',
-                                           'Test 5.pdf')
+    sample_statement5_short = os.path.join(
+        'documents', 'Assets', 'Cash', 'Test 5.pdf'
+    )
     sample_statement5.write('Hello World 5')
 
     beancount_file = sample_folder.join('example.beancount')
     beancount_file.write(
-        _format("""
+        _format(
+            """
         option "title" "Test"
         option "operating_currency" "EUR"
         option "documents" "{}"
@@ -63,8 +67,16 @@ def test_plugins(tmpdir):
             Assets:Cash
 
         2016-11-02 document Assets:Cash "{}"
-    """, (documents_folder, sample_statement2, sample_statement1_short,
-          sample_statement4_short, sample_statement5_short)))
+    """,
+            (
+                documents_folder,
+                sample_statement2,
+                sample_statement1_short,
+                sample_statement4_short,
+                sample_statement5_short,
+            ),
+        )
+    )
 
     entries, errors, _ = load_file(str(beancount_file))
 
@@ -103,7 +115,8 @@ def test_link_documents_error(load_doc):
 def test_link_documents_missing(tmpdir):
     sample_folder = tmpdir.mkdir('fava_plugins').mkdir('documents')
 
-    bfile = _format("""
+    bfile = _format(
+        """
         option "documents" "{}"
         plugin "fava.plugins.link_documents"
 
@@ -114,7 +127,9 @@ def test_link_documents_missing(tmpdir):
             document: "{}"
             Expenses:Foo                100 EUR
             Assets:Cash
-    """, (sample_folder, os.path.join('test', 'Foobar.pdf')))
+    """,
+        (sample_folder, os.path.join('test', 'Foobar.pdf')),
+    )
 
     entries, errors, _ = load_string(bfile)
 

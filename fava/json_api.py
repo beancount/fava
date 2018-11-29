@@ -77,12 +77,15 @@ def source(request_data):
     """Write one of the source files."""
     if request_data.get('file_path'):
         sha256sum = g.ledger.file.set_source(
-            request_data.get('file_path'), request_data.get('source'),
-            request_data.get('sha256sum'))
+            request_data.get('file_path'),
+            request_data.get('source'),
+            request_data.get('sha256sum'),
+        )
     else:
         entry = g.ledger.get_entry(request_data.get('entry_hash'))
-        sha256sum = save_entry_slice(entry, request_data.get('source'),
-                                     request_data.get('sha256sum'))
+        sha256sum = save_entry_slice(
+            entry, request_data.get('source'), request_data.get('sha256sum')
+        )
     return {'sha256sum': sha256sum}
 
 
@@ -101,7 +104,8 @@ def payee_accounts():
     """Rank accounts for the given payee."""
     return {
         'payload': g.ledger.attributes.payee_accounts(
-            request.args.get('payee'))
+            request.args.get('payee')
+        )
     }
 
 
@@ -126,8 +130,9 @@ def add_document():
 
     documents_folder = request.form['folder']
     if documents_folder not in g.ledger.options['documents']:
-        raise FavaAPIException('Not a documents folder: {}.'
-                               .format(documents_folder))
+        raise FavaAPIException(
+            'Not a documents folder: {}.'.format(documents_folder)
+        )
 
     filename = upload.filename
     for sep in os.path.sep, os.path.altsep:
@@ -139,8 +144,11 @@ def add_document():
 
     directory = os.path.normpath(
         os.path.join(
-            os.path.dirname(g.ledger.beancount_file_path), documents_folder,
-            *request.form['account'].split(':')))
+            os.path.dirname(g.ledger.beancount_file_path),
+            documents_folder,
+            *request.form['account'].split(':')
+        )
+    )
     filepath = os.path.join(directory, filename)
 
     if os.path.exists(filepath):
@@ -152,8 +160,9 @@ def add_document():
     upload.save(filepath)
 
     if request.form.get('hash'):
-        g.ledger.file.insert_metadata(request.form['hash'], 'statement',
-                                      filename)
+        g.ledger.file.insert_metadata(
+            request.form['hash'], 'statement', filename
+        )
     return {'message': 'Uploaded to {}'.format(filepath)}
 
 
@@ -163,9 +172,7 @@ def add_document():
 def add_entries(request_data):
     """Add multiple entries."""
     try:
-        entries = [
-            deserialise(entry) for entry in request_data['entries']
-        ]
+        entries = [deserialise(entry) for entry in request_data['entries']]
     except KeyError as error:
         raise FavaAPIException('KeyError: {}'.format(str(error)))
 

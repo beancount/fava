@@ -35,8 +35,7 @@ class FavaJSONEncoder(JSONEncoder):
 
 def _serialize_account_node(node, date):
     children = [
-        _serialize_account_node(account, date)
-        for account in node.children
+        _serialize_account_node(account, date) for account in node.children
     ]
     return {
         'account': node.name,
@@ -48,15 +47,19 @@ def _serialize_account_node(node, date):
 
 class ChartModule(FavaModule):
     """Return data for the various charts in Fava."""
+
     __slots__ = ['ledger']
 
     def events(self, event_type=None):
         """All events for a given event type."""
-        return [{
-            'type': entry.type,
-            'date': entry.date,
-            'description': entry.description
-        } for entry in self.ledger.events(event_type)]
+        return [
+            {
+                'type': entry.type,
+                'date': entry.date,
+                'description': entry.description,
+            }
+            for entry in self.ledger.events(event_type)
+        ]
 
     def hierarchy(self, account_name, begin=None, end=None):
         """An account tree."""
@@ -85,8 +88,9 @@ class ChartModule(FavaModule):
             yield {
                 'date': begin,
                 'balance': cost_or_value(inventory, end),
-                'budgets':
-                self.ledger.budgets.calculate_children(accounts, begin, end),
+                'budgets': self.ledger.budgets.calculate_children(
+                    accounts, begin, end
+                ),
             }
 
     @listify
@@ -101,8 +105,9 @@ class ChartModule(FavaModule):
             account has changed containing the balance (in units) of the
             account at that date.
         """
-        real_account = realization.get_or_create(self.ledger.root_account,
-                                                 account_name)
+        real_account = realization.get_or_create(
+            self.ledger.root_account, account_name
+        )
         postings = realization.get_postings(real_account)
         journal = realization.iterate_with_balance(postings)
 
@@ -115,20 +120,19 @@ class ChartModule(FavaModule):
 
             if g.conversion == 'units':
                 bal = {curr: 0 for curr in list(change.currencies())}
-                bal.update({
-                    p.units.currency: p.units.number
-                    for p in balance.reduce(convert.get_units)
-                })
+                bal.update(
+                    {
+                        p.units.currency: p.units.number
+                        for p in balance.reduce(convert.get_units)
+                    }
+                )
             else:
                 bal = {
                     p.units.currency: p.units.number
                     for p in cost_or_value(balance, entry.date)
                 }
 
-            yield {
-                'date': entry.date,
-                'balance': bal,
-            }
+            yield {'date': entry.date, 'balance': bal}
 
     @listify
     def net_worth(self, interval):
@@ -142,35 +146,47 @@ class ChartModule(FavaModule):
             net worth (Assets + Liabilities) separately converted to all
             operating currencies.
         """
-        transactions = (entry for entry in self.ledger.entries
-                        if (isinstance(entry, Transaction) and entry.flag !=
-                            flags.FLAG_UNREALIZED))
+        transactions = (
+            entry
+            for entry in self.ledger.entries
+            if (
+                isinstance(entry, Transaction)
+                and entry.flag != flags.FLAG_UNREALIZED
+            )
+        )
 
-        types = (self.ledger.options['name_assets'],
-                 self.ledger.options['name_liabilities'])
+        types = (
+            self.ledger.options['name_assets'],
+            self.ledger.options['name_liabilities'],
+        )
 
         txn = next(transactions, None)
         inventory = CounterInventory()
 
         for date in self.ledger.interval_ends(interval):
             while txn and txn.date < date:
-                for posting in filter(lambda p: p.account.startswith(types),
-                                      txn.postings):
+                for posting in filter(
+                    lambda p: p.account.startswith(types), txn.postings
+                ):
                     # Since we will be reducing the inventory to the operating
                     # currencies, pre-aggregate the positions to reduce the
                     # number of elements in the inventory.
                     inventory.add_amount(
                         posting.units,
                         Cost(ZERO, posting.cost.currency, None, None)
-                        if posting.cost else None)
+                        if posting.cost
+                        else None,
+                    )
                 txn = next(transactions, None)
             yield {
                 'date': date,
                 'balance': {
-                    currency:
-                    inventory.reduce(convert.convert_position, currency,
-                                     self.ledger.price_map,
-                                     date).get(currency)
+                    currency: inventory.reduce(
+                        convert.convert_position,
+                        currency,
+                        self.ledger.price_map,
+                        date,
+                    ).get(currency)
                     for currency in self.ledger.options['operating_currency']
-                }
+                },
             }

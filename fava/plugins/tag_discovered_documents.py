@@ -17,8 +17,11 @@ def tag_discovered_documents(entries, options_map):
 
     for index, entry in enumerate(entries):
         if isinstance(entry, data.Document) and entry.meta['lineno'] == 0:
-            tags = set(entry.tags).union(['discovered']) \
-                   if entry.tags else set(['discovered'])
+            tags = (
+                set(entry.tags).union(['discovered'])
+                if entry.tags
+                else set(['discovered'])
+            )
             entries[index] = entry._replace(tags=tags)
 
     return entries, errors

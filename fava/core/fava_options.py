@@ -24,8 +24,15 @@ DEFAULTS = {
     'import-dirs': [],
     'insert-entry': [],
     'interval': 'month',
-    'journal-show': ['transaction', 'balance', 'note', 'document', 'custom',
-                     'budget', 'query'],
+    'journal-show': [
+        'transaction',
+        'balance',
+        'note',
+        'document',
+        'custom',
+        'budget',
+        'query',
+    ],
     'journal-show-document': ['discovered', 'statement'],
     'journal-show-transaction': ['cleared', 'pending'],
     'language': None,
@@ -106,7 +113,8 @@ def parse_options(custom_entries):
                         entry.date,
                         re.compile(entry.values[1].value),
                         entry.meta['filename'],
-                        entry.meta['lineno'])
+                        entry.meta['lineno'],
+                    )
                     options[key].append(opt)
                 else:
                     value = entry.values[1].value
@@ -122,7 +130,9 @@ def parse_options(custom_entries):
                     options[key] = str(value).strip().split(' ')
             except (IndexError, TypeError, AssertionError):
                 errors.append(
-                    OptionError(entry.meta,
-                                'Failed to parse fava-option entry', entry))
+                    OptionError(
+                        entry.meta, 'Failed to parse fava-option entry', entry
+                    )
+                )
 
     return options, errors

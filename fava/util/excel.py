@@ -9,6 +9,7 @@ from beancount.core.number import Decimal
 
 try:
     import pyexcel
+
     HAVE_EXCEL = True
 except ImportError:  # pragma: no cover
     HAVE_EXCEL = False
@@ -28,10 +29,14 @@ def to_excel(types, rows, result_format, query_string):
     """
     assert result_format in ('xls', 'xlsx', 'ods')
     resp = io.BytesIO()
-    book = pyexcel.Book(OrderedDict([
-        ('Results', _result_array(types, rows)),
-        ('Query', [['Query'], [query_string]])
-    ]))
+    book = pyexcel.Book(
+        OrderedDict(
+            [
+                ('Results', _result_array(types, rows)),
+                ('Query', [['Query'], [query_string]]),
+            ]
+        )
+    )
     book.save_to_memory(result_format, resp)
     resp.seek(0)
     return resp

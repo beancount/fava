@@ -28,12 +28,18 @@ class FavaMisc(FavaModule):
 
         self.upcoming_events = upcoming_events(
             self.ledger.all_entries_by_type[Event],
-            self.ledger.fava_options['upcoming-events'])
+            self.ledger.fava_options['upcoming-events'],
+        )
 
         if not self.ledger.options['operating_currency']:
             self.ledger.errors.append(
-                FavaError(None, 'No operating currency specified. '
-                          'Please add one to your beancount file.', None))
+                FavaError(
+                    None,
+                    'No operating currency specified. '
+                    'Please add one to your beancount file.',
+                    None,
+                )
+            )
 
 
 def sidebar_links(custom_entries):
@@ -46,8 +52,10 @@ def sidebar_links(custom_entries):
     sidebar_link_entries = [
         entry for entry in custom_entries if entry.type == 'fava-sidebar-link'
     ]
-    return [(entry.values[0].value, entry.values[1].value)
-            for entry in sidebar_link_entries]
+    return [
+        (entry.values[0].value, entry.values[1].value)
+        for entry in sidebar_link_entries
+    ]
 
 
 def upcoming_events(events, max_delta):
@@ -81,7 +89,10 @@ def align(string, fava_options):
     for line in string.splitlines():
         match = re.match(
             r'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({}\b.*)'.format(
-                amount.CURRENCY_RE), line)
+                amount.CURRENCY_RE
+            ),
+            line,
+        )
         if match:
             prefix, number, rest = match.groups()
             num_of_spaces = column - len(prefix) - len(number) - 4

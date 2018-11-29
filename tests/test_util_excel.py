@@ -10,13 +10,15 @@ def test_to_csv(example_ledger):
         example_ledger.all_entries,
         example_ledger.options,
         'balances',
-        numberify=True)
+        numberify=True,
+    )
     assert excel.to_csv(types, rows)
     types, rows = run_query(
         example_ledger.all_entries,
         example_ledger.options,
         'select account, tags, date, day',
-        numberify=True)
+        numberify=True,
+    )
     assert excel.to_csv(types, rows)
 
 
@@ -26,5 +28,6 @@ def test_to_excel(example_ledger):
         example_ledger.all_entries,
         example_ledger.options,
         'balances',
-        numberify=True)
+        numberify=True,
+    )
     assert excel.to_excel(types, rows, 'ods', 'balances')

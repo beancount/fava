@@ -20,8 +20,10 @@ def test_ingest_examplefile():
     assert entries[0].date == datetime.date(2017, 2, 12)
     assert entries[0].comment == 'Hinweis: Zinssatz auf 0,15% geändert'
     assert entries[1].date == datetime.date(2017, 2, 13)
-    assert entries[1].narration == \
-        'Payment to Company XYZ REF: 31000161205-6944556-0000463'
+    assert (
+        entries[1].narration
+        == 'Payment to Company XYZ REF: 31000161205-6944556-0000463'
+    )
     assert entries[1].postings[0].account == ''
     assert entries[1].postings[0].units.number == 50.00
     assert entries[1].postings[0].units.currency == 'EUR'

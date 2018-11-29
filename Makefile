@@ -31,7 +31,7 @@ run-example:
 	BEANCOUNT_FILE= fava --debug tests/data/example.beancount
 
 format:
-	yapf -rip tests --style='{based_on_style: pep8, coalesce_brackets: True, indent_dictionary_value: True}'
+	black -S --line-length=79 tests fava
 
 bql-grammar:
 	contrib/scripts.py generate_bql_grammar_json

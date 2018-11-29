@@ -23,12 +23,15 @@ class FileModule(FavaModule):
 
         """
         main_file = self.ledger.beancount_file_path
-        return [main_file] + \
-            sorted(filter(
+        return [main_file] + sorted(
+            filter(
                 lambda x: x != main_file,
-                [os.path.join(
-                    os.path.dirname(main_file), filename)
-                 for filename in self.ledger.options['include']]))
+                [
+                    os.path.join(os.path.dirname(main_file), filename)
+                    for filename in self.ledger.options['include']
+                ],
+            )
+        )
 
     def get_source(self, path):
         """Get source files.
@@ -92,10 +95,12 @@ class FileModule(FavaModule):
         self.ledger.changed()
         entry = self.ledger.get_entry(entry_hash)
         key = next_key(basekey, entry.meta)
-        insert_metadata_in_file(entry.meta['filename'],
-                                entry.meta['lineno'] - 1, key, value)
-        self.ledger.extensions.run_hook('after_insert_metadata', entry, key,
-                                        value)
+        insert_metadata_in_file(
+            entry.meta['filename'], entry.meta['lineno'] - 1, key, value
+        )
+        self.ledger.extensions.run_hook(
+            'after_insert_metadata', entry, key, value
+        )
 
     def insert_entries(self, entries):
         """Insert entries.
@@ -122,19 +127,21 @@ class FileModule(FavaModule):
 
         """
         excl_flags = [
-            flags.FLAG_PADDING,      # P
-            flags.FLAG_SUMMARIZE,    # S
-            flags.FLAG_TRANSFER,     # T
+            flags.FLAG_PADDING,  # P
+            flags.FLAG_SUMMARIZE,  # S
+            flags.FLAG_TRANSFER,  # T
             flags.FLAG_CONVERSIONS,  # C
-            flags.FLAG_UNREALIZED,   # U
-            flags.FLAG_RETURNS,      # R
-            flags.FLAG_MERGING,      # M
+            flags.FLAG_UNREALIZED,  # U
+            flags.FLAG_RETURNS,  # R
+            flags.FLAG_MERGING,  # M
         ]
 
         for entry in entries:
             if isinstance(entry, (data.Balance, data.Transaction)):
-                if isinstance(entry, data.Transaction) and \
-                   entry.flag in excl_flags:
+                if (
+                    isinstance(entry, data.Transaction)
+                    and entry.flag in excl_flags
+                ):
                     continue
                 try:
                     yield get_entry_slice(entry)[0] + '\n'
@@ -164,7 +171,7 @@ def next_key(basekey, keys):
 def leading_space(line):
     """Returns a string representing the leading whitespace for the specified
     string."""
-    return line[:len(line) - len(line.lstrip())]
+    return line[: len(line) - len(line.lstrip())]
 
 
 def insert_metadata_in_file(filename, lineno, key, value):
@@ -250,9 +257,11 @@ def save_entry_slice(entry, source_slice, sha256sum):
     if original_sha256sum != sha256sum:
         raise FavaAPIException('The file changed externally.')
 
-    lines = (lines[:first_entry_line]
-             + [source_slice + '\n']
-             + lines[first_entry_line + len(entry_lines):])
+    lines = (
+        lines[:first_entry_line]
+        + [source_slice + '\n']
+        + lines[first_entry_line + len(entry_lines) :]
+    )
     with open(entry.meta['filename'], "w") as file:
         file.writelines(lines)
 
@@ -273,8 +282,9 @@ def insert_entry(entry, filenames, fava_options):
         accounts = reversed([p.account for p in entry.postings])
     else:
         accounts = [entry.account]
-    filename, lineno = find_insert_position(accounts, entry.date,
-                                            insert_options, filenames)
+    filename, lineno = find_insert_position(
+        accounts, entry.date, insert_options, filenames
+    )
     content = _format_entry(entry, fava_options) + '\n'
 
     with open(filename, "r") as file:
@@ -289,7 +299,8 @@ def insert_entry(entry, filenames, fava_options):
         added_lines = content.count('\n') + 1
         if option.filename == filename and option.lineno > lineno:
             insert_options[index] = option._replace(
-                lineno=lineno + added_lines)
+                lineno=lineno + added_lines
+            )
 
 
 def _format_entry(entry, fava_options):

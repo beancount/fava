@@ -60,7 +60,7 @@ def test_api_source_put(app, test_client):
     response_data = flask.json.loads(response.get_data(True))
     assert response_data == {
         'error': 'Invalid JSON request.',
-        'success': False
+        'success': False,
     }
     assert response.status_code == 200
 
@@ -71,12 +71,15 @@ def test_api_source_put(app, test_client):
     # change source
     result = test_client.put(
         url,
-        data=flask.json.dumps({
-            'source': 'asdf' + payload,
-            'sha256sum': sha256sum,
-            'file_path': path,
-        }),
-        content_type='application/json')
+        data=flask.json.dumps(
+            {
+                'source': 'asdf' + payload,
+                'sha256sum': sha256sum,
+                'file_path': path,
+            }
+        ),
+        content_type='application/json',
+    )
     assert result.status_code == 200
     response_data = flask.json.loads(result.get_data(True))
     sha256sum = hashlib.sha256(open(path, mode='rb').read()).hexdigest()
@@ -88,12 +91,11 @@ def test_api_source_put(app, test_client):
     # write original source file
     result = test_client.put(
         url,
-        data=flask.json.dumps({
-            'source': payload,
-            'sha256sum': sha256sum,
-            'file_path': path,
-        }),
-        content_type='application/json')
+        data=flask.json.dumps(
+            {'source': payload, 'sha256sum': sha256sum, 'file_path': path}
+        ),
+        content_type='application/json',
+    )
     assert result.status_code == 200
     assert open(path).read() == payload
 
@@ -108,10 +110,9 @@ def test_api_format_source(app, test_client):
 
     result = test_client.post(
         url,
-        data=flask.json.dumps({
-            'source': payload
-        }),
-        content_type='application/json')
+        data=flask.json.dumps({'source': payload}),
+        content_type='application/json',
+    )
     data = flask.json.loads(result.get_data(True))
     assert data == {'payload': align(payload, {}), 'success': True}
 
@@ -128,14 +129,13 @@ def test_api_format_source_options(app, test_client):
 
         result = test_client.post(
             url,
-            data=flask.json.dumps({
-                'source': payload
-            }),
-            content_type='application/json')
+            data=flask.json.dumps({'source': payload}),
+            content_type='application/json',
+        )
         data = flask.json.loads(result.get_data(True))
         assert data == {
             'payload': align(payload, {'currency-column': 90}),
-            'success': True
+            'success': True,
         }
 
         flask.g.ledger.fava_options['currency-column'] = old_currency_column
@@ -152,69 +152,48 @@ def test_api_add_entries(app, test_client, tmpdir):
         data = {
             'entries': [
                 {
-                    'type':
-                        'Transaction',
-                    'date':
-                        '2017-12-12',
-                    'flag':
-                        '*',
-                    'payee':
-                        'Test3',
-                    'narration':
-                        '',
+                    'type': 'Transaction',
+                    'date': '2017-12-12',
+                    'flag': '*',
+                    'payee': 'Test3',
+                    'narration': '',
                     'meta': {},
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
                             'amount': '100 USD',
                         },
-                        {
-                            'account': 'Assets:US:ETrade:GLD',
-                        },
+                        {'account': 'Assets:US:ETrade:GLD'},
                     ],
                 },
                 {
-                    'type':
-                        'Transaction',
-                    'date':
-                        '2017-01-12',
-                    'flag':
-                        '*',
-                    'payee':
-                        'Test1',
-                    'narration':
-                        '',
+                    'type': 'Transaction',
+                    'date': '2017-01-12',
+                    'flag': '*',
+                    'payee': 'Test1',
+                    'narration': '',
                     'meta': {},
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
                             'amount': '100 USD',
                         },
-                        {
-                            'account': 'Assets:US:ETrade:GLD',
-                        },
+                        {'account': 'Assets:US:ETrade:GLD'},
                     ],
                 },
                 {
-                    'type':
-                        'Transaction',
-                    'date':
-                        '2017-02-12',
-                    'flag':
-                        '*',
-                    'payee':
-                        'Test',
-                    'narration':
-                        'Test',
+                    'type': 'Transaction',
+                    'date': '2017-02-12',
+                    'flag': '*',
+                    'payee': 'Test',
+                    'narration': 'Test',
                     'meta': {},
                     'postings': [
                         {
                             'account': 'Assets:US:ETrade:Cash',
                             'amount': '100 USD',
                         },
-                        {
-                            'account': 'Assets:US:ETrade:GLD',
-                        },
+                        {'account': 'Assets:US:ETrade:GLD'},
                     ],
                 },
             ]
@@ -222,13 +201,16 @@ def test_api_add_entries(app, test_client, tmpdir):
         url = flask.url_for('json_api.add_entries')
 
         response = test_client.put(
-            url, data=flask.json.dumps(data), content_type='application/json')
+            url, data=flask.json.dumps(data), content_type='application/json'
+        )
         assert flask.json.loads(response.get_data(True)) == {
             'success': True,
             'message': 'Stored 3 entries.',
         }
 
-        assert test_file.read_text('utf-8') == """2017-01-12 * "Test1" ""
+        assert (
+            test_file.read_text('utf-8')
+            == """2017-01-12 * "Test1" ""
   Assets:US:ETrade:Cash                                 100 USD
   Assets:US:ETrade:GLD
 
@@ -241,5 +223,6 @@ def test_api_add_entries(app, test_client, tmpdir):
   Assets:US:ETrade:GLD
 
 """
+        )
 
         flask.g.ledger.beancount_file_path = old_beancount_file

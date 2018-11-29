@@ -9,7 +9,7 @@ import sys
 FavaExtensionError = namedtuple('FavaExtensionError', 'source message entry')
 
 
-class FavaExtensionBase():
+class FavaExtensionBase:
     """Base class for extensions for Fava.
 
     Any extension should inherit from this class. :func:`find_extension` will
@@ -49,15 +49,29 @@ def find_extensions(base_path, name):
     try:
         module = importlib.import_module(name)
     except ImportError:
-        return [], [FavaExtensionError(
-            None, 'Importing module "{}" failed.'.format(name), None)]
+        return (
+            [],
+            [
+                FavaExtensionError(
+                    None, 'Importing module "{}" failed.'.format(name), None
+                )
+            ],
+        )
     for _, obj in inspect.getmembers(module, inspect.isclass):
         if issubclass(obj, FavaExtensionBase) and obj != FavaExtensionBase:
             classes.append(obj)
     sys.path.pop(0)
 
     if not classes:
-        return [], [FavaExtensionError(
-            None, 'Module "{}" contains no extensions.'.format(name), None)]
+        return (
+            [],
+            [
+                FavaExtensionError(
+                    None,
+                    'Module "{}" contains no extensions.'.format(name),
+                    None,
+                )
+            ],
+        )
 
     return classes, []

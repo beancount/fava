@@ -76,10 +76,7 @@ def _serialise_posting(posting):
 
     if posting.price is not None:
         position_str += ' @ {}'.format(posting.price.to_string())
-    return {
-        'account': posting.account,
-        'amount': position_str,
-    }
+    return {'account': posting.account, 'amount': position_str}
 
 
 def deserialise_posting(posting):
@@ -93,14 +90,7 @@ def deserialise_posting(posting):
         pos = position.from_string(amount)
         units = pos.units
         if re.search(r'{\s*}', amount):
-            cost = data.CostSpec(
-                MISSING,
-                None,
-                MISSING,
-                None,
-                None,
-                False
-            )
+            cost = data.CostSpec(MISSING, None, MISSING, None, None, False)
         else:
             cost = pos.cost
     else:
@@ -122,19 +112,28 @@ def deserialise(json_entry):
         date = util.date.parse_date(json_entry['date'])[0]
         narration, tags, links = extract_tags_links(json_entry['narration'])
         postings = [deserialise_posting(pos) for pos in json_entry['postings']]
-        return data.Transaction(json_entry['meta'], date, json_entry['flag'],
-                                json_entry['payee'], narration, tags, links,
-                                postings)
+        return data.Transaction(
+            json_entry['meta'],
+            date,
+            json_entry['flag'],
+            json_entry['payee'],
+            narration,
+            tags,
+            links,
+            postings,
+        )
     if json_entry['type'] == 'Balance':
         date = util.date.parse_date(json_entry['date'])[0]
         number = parse_number(json_entry['number'])
         amount = Amount(number, json_entry['currency'])
 
-        return data.Balance(json_entry['meta'], date, json_entry['account'],
-                            amount, None, None)
+        return data.Balance(
+            json_entry['meta'], date, json_entry['account'], amount, None, None
+        )
     if json_entry['type'] == 'Note':
         date = util.date.parse_date(json_entry['date'])[0]
         comment = json_entry['comment'].replace('"', '')
-        return data.Note(json_entry['meta'], date, json_entry['account'],
-                         comment)
+        return data.Note(
+            json_entry['meta'], date, json_entry['account'], comment
+        )
     raise FavaAPIException('Unsupported entry type.')

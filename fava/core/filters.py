@@ -11,12 +11,13 @@ from fava.util.date import parse_date
 from fava.core.helpers import FilterException
 
 
-class Token():
+class Token:
     """A token having a certain type and value.
 
     The lexer attribute only exists since PLY writes to it in case of a parser
     error.
     """
+
     __slots__ = ['type', 'value', 'lexer']
 
     def __init__(self, type_, value):
@@ -27,18 +28,12 @@ class Token():
         return 'Token({}, {})'.format(self.type, self.value)
 
 
-class FilterSyntaxLexer():
+class FilterSyntaxLexer:
     """Lexer for Fava's filter syntax."""
+
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
-    tokens = (
-        'ANY',
-        'ALL',
-        'KEY',
-        'LINK',
-        'STRING',
-        'TAG',
-    )
+    tokens = ('ANY', 'ALL', 'KEY', 'LINK', 'STRING', 'TAG')
 
     RULES = (
         ('LINK', r'\^[A-Za-z0-9\-_/.]+'),
@@ -49,8 +44,9 @@ class FilterSyntaxLexer():
         ('STRING', r'\w+|"[^"]*"|\'[^\']*\''),
     )
 
-    regex = re.compile('|'.join(
-        ('(?P<{}>{})'.format(name, rule) for name, rule in RULES)))
+    regex = re.compile(
+        '|'.join(('(?P<{}>{})'.format(name, rule) for name, rule in RULES))
+    )
 
     def LINK(self, token, value):
         return token, value[1:]
@@ -106,12 +102,13 @@ class FilterSyntaxLexer():
                 pos += 1
             else:
                 raise FilterException(
-                    'filter',
-                    'Illegal character "{}" in filter: '.format(char))
+                    'filter', 'Illegal character "{}" in filter: '.format(char)
+                )
 
 
-class Match():
+class Match:
     """Match a string."""
+
     __slots__ = ['match']
 
     def __init__(self, search):
@@ -124,13 +121,10 @@ class Match():
         return self.match(string)
 
 
-class FilterSyntaxParser():
+class FilterSyntaxParser:
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
-    precedence = (
-        ('left', 'AND'),
-        ('right', 'UMINUS'),
-    )
+    precedence = (('left', 'AND'), ('right', 'UMINUS'))
     tokens = FilterSyntaxLexer.tokens
 
     def p_error(self, _):
@@ -156,7 +150,8 @@ class FilterSyntaxParser():
 
         def _match_postings(entry):
             return all(
-                expr(posting) for posting in getattr(entry, 'postings', []))
+                expr(posting) for posting in getattr(entry, 'postings', [])
+            )
 
         p[0] = _match_postings
 
@@ -168,7 +163,8 @@ class FilterSyntaxParser():
 
         def _match_postings(entry):
             return any(
-                expr(posting) for posting in getattr(entry, 'postings', []))
+                expr(posting) for posting in getattr(entry, 'postings', [])
+            )
 
         p[0] = _match_postings
 
@@ -266,7 +262,7 @@ class FilterSyntaxParser():
         p[0] = _key
 
 
-class EntryFilter():
+class EntryFilter:
     """Filters a list of entries. """
 
     def __init__(self, options, fava_options):
@@ -325,18 +321,19 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
             return True
 
         self.begin_date, self.end_date = parse_date(
-            self.value,
-            self.fava_options['fiscal-year-end']
+            self.value, self.fava_options['fiscal-year-end']
         )
         if not self.begin_date:
             self.value = None
-            raise FilterException('time',
-                                  'Failed to parse date: {}'.format(value))
+            raise FilterException(
+                'time', 'Failed to parse date: {}'.format(value)
+            )
         return True
 
     def _filter(self, entries):
-        entries, _ = summarize.clamp_opt(entries, self.begin_date,
-                                         self.end_date, self.options)
+        entries, _ = summarize.clamp_opt(
+            entries, self.begin_date, self.end_date, self.options
+        )
         return entries
 
 
@@ -345,7 +342,8 @@ PARSE = ply.yacc.yacc(
     errorlog=ply.yacc.NullLogger(),
     write_tables=False,
     debug=False,
-    module=FilterSyntaxParser()).parse
+    module=FilterSyntaxParser(),
+).parse
 
 
 class AdvancedFilter(EntryFilter):
@@ -364,7 +362,8 @@ class AdvancedFilter(EntryFilter):
                 tokens = LEXER.lex(value.strip())
                 self._include = PARSE(
                     lexer='NONE',
-                    tokenfunc=lambda toks=tokens: next(toks, None))
+                    tokenfunc=lambda toks=tokens: next(toks, None),
+                )
             except FilterException as exception:
                 exception.message = exception.message + value
                 self.value = None
@@ -394,8 +393,10 @@ def entry_account_predicate(entry, predicate):
         return any(predicate(posting.account) for posting in entry.postings)
     if isinstance(entry, Custom):
         return any(
-            predicate(val.value) for val in entry.values
-            if val.dtype == account.TYPE)
+            predicate(val.value)
+            for val in entry.values
+            if val.dtype == account.TYPE
+        )
     return hasattr(entry, 'account') and predicate(entry.account)
 
 

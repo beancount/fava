@@ -10,9 +10,17 @@ from beancount.core import getters, interpolate, prices, realization
 from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
-from beancount.core.data import (get_entry, iter_entry_dates, Open, Close,
-                                 Balance, TxnPosting, Transaction,
-                                 Event, Custom)
+from beancount.core.data import (
+    get_entry,
+    iter_entry_dates,
+    Open,
+    Close,
+    Balance,
+    TxnPosting,
+    Transaction,
+    Event,
+    Custom,
+)
 from beancount.parser.options import get_account_types
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
@@ -37,8 +45,9 @@ from fava.ext import find_extensions
 MAXDATE = datetime.date.max
 
 
-class AccountData():
+class AccountData:
     """Holds information about an account."""
+
     __slots__ = ('meta', 'close_date')
 
     def __init__(self):
@@ -51,6 +60,7 @@ class AccountData():
 
 class _AccountDict(dict):
     """Account info dictionary."""
+
     EMPTY = AccountData()
 
     def __missing__(self, key):
@@ -75,7 +85,8 @@ class ExtensionModule(FavaModule):
         self._extensions = []
         for extension in self.ledger.fava_options['extensions']:
             extensions, errors = find_extensions(
-                os.path.dirname(self.ledger.beancount_file_path), extension)
+                os.path.dirname(self.ledger.beancount_file_path), extension
+            )
             self._extensions.extend(extensions)
             self.ledger.errors.extend(errors)
 
@@ -88,12 +99,21 @@ class ExtensionModule(FavaModule):
             ext.run_hook(event, *args)
 
 
-MODULES = ['attributes', 'budgets', 'charts', 'extensions', 'file',
-           'format_decimal', 'misc', 'query_shell', 'ingest']
+MODULES = [
+    'attributes',
+    'budgets',
+    'charts',
+    'extensions',
+    'file',
+    'format_decimal',
+    'misc',
+    'query_shell',
+    'ingest',
+]
 
 
 # pylint: disable=too-many-instance-attributes,too-many-public-methods
-class FavaLedger():
+class FavaLedger:
     """Create an interface for a Beancount ledger.
 
     Arguments:
@@ -102,11 +122,25 @@ class FavaLedger():
     """
 
     __slots__ = [
-        'account_types', 'accounts', 'all_entries', 'all_entries_by_type',
-        'all_root_account', 'beancount_file_path',
-        '_date_first', '_date_last', 'entries', 'errors',
-        'fava_options', '_filters', '_is_encrypted', 'options', 'price_map',
-        'root_account', 'root_tree', '_watcher'] + MODULES
+        'account_types',
+        'accounts',
+        'all_entries',
+        'all_entries_by_type',
+        'all_root_account',
+        'beancount_file_path',
+        '_date_first',
+        '_date_last',
+        'entries',
+        'errors',
+        'fava_options',
+        '_filters',
+        '_is_encrypted',
+        'options',
+        'price_map',
+        'root_account',
+        'root_tree',
+        '_watcher',
+    ] + MODULES
 
     def __init__(self, path):
         #: The path to the main Beancount file.
@@ -171,18 +205,20 @@ class FavaLedger():
         # use the internal function to disable cache
         if not self._is_encrypted:
             # pylint: disable=protected-access
-            self.all_entries, self.errors, self.options = \
-                loader._load([(self.beancount_file_path, True)],
-                             None, None, None)
+            self.all_entries, self.errors, self.options = loader._load(
+                [(self.beancount_file_path, True)], None, None, None
+            )
             self.account_types = get_account_types(self.options)
             self._watcher.update(*self.paths_to_watch())
         else:
-            self.all_entries, self.errors, self.options = \
-                loader.load_file(self.beancount_file_path)
+            self.all_entries, self.errors, self.options = loader.load_file(
+                self.beancount_file_path
+            )
             self.account_types = get_account_types(self.options)
         self.price_map = prices.build_price_map(self.all_entries)
-        self.all_root_account = realization.realize(self.all_entries,
-                                                    self.account_types)
+        self.all_root_account = realization.realize(
+            self.all_entries, self.account_types
+        )
 
         entries_by_type = collections.defaultdict(list)
         for entry in self.all_entries:
@@ -225,12 +261,14 @@ class FavaLedger():
         for filter_class in self._filters.values():
             self.entries = filter_class.apply(self.entries)
 
-        self.root_account = realization.realize(self.entries,
-                                                self.account_types)
+        self.root_account = realization.realize(
+            self.entries, self.account_types
+        )
         self.root_tree = Tree(self.entries)
 
-        self._date_first, self._date_last = \
-            getters.get_min_max_dates(self.entries, (Transaction))
+        self._date_first, self._date_last = getters.get_min_max_dates(
+            self.entries, (Transaction)
+        )
         if self._date_last:
             self._date_last = self._date_last + datetime.timedelta(1)
 
@@ -252,11 +290,14 @@ class FavaLedger():
             A tuple (files, directories).
         """
         include_path = os.path.dirname(self.beancount_file_path)
-        return self.options['include'], [
-            os.path.normpath(os.path.join(include_path, path, account))
-            for account in self.account_types
-            for path in self.options['documents']
-        ]
+        return (
+            self.options['include'],
+            [
+                os.path.normpath(os.path.join(include_path, path, account))
+                for account in self.account_types
+                for path in self.options['documents']
+            ],
+        )
 
     def changed(self):
         """Check if the file needs to be reloaded.
@@ -311,20 +352,28 @@ class FavaLedger():
             A list of RealAccount instances for all the intervals.
         """
         min_accounts = [
-            account for account in
-            self.accounts.keys()
-            if account.startswith(account_name)]
+            account
+            for account in self.accounts.keys()
+            if account.startswith(account_name)
+        ]
 
         interval_tuples = list(
             reversed(list(pairwise(self.interval_ends(interval))))
         )
 
         interval_balances = [
-            realization.realize(list(iter_entry_dates(
-                self.entries,
-                datetime.date.min if accumulate else begin_date,
-                end_date)), min_accounts)
-            for begin_date, end_date in interval_tuples]
+            realization.realize(
+                list(
+                    iter_entry_dates(
+                        self.entries,
+                        datetime.date.min if accumulate else begin_date,
+                        end_date,
+                    )
+                ),
+                min_accounts,
+            )
+            for begin_date, end_date in interval_tuples
+        ]
 
         return interval_balances, interval_tuples
 
@@ -340,8 +389,9 @@ class FavaLedger():
             A list of tuples ``(entry, postings, change, balance)``.
             change and balance have already been reduced to units.
         """
-        real_account = realization.get_or_create(self.root_account,
-                                                 account_name)
+        real_account = realization.get_or_create(
+            self.root_account, account_name
+        )
 
         if with_journal_children:
             # pylint: disable=unused-variable
@@ -349,11 +399,15 @@ class FavaLedger():
         else:
             postings = real_account.txn_postings
 
-        return [(entry, postings_,
-                 copy.copy(change),
-                 copy.copy(balance)) for
-                (entry, postings_, change, balance) in
-                realization.iterate_with_balance(postings)]
+        return [
+            (entry, postings_, copy.copy(change), copy.copy(balance))
+            for (
+                entry,
+                postings_,
+                change,
+                balance,
+            ) in realization.iterate_with_balance(postings)
+        ]
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
@@ -376,11 +430,15 @@ class FavaLedger():
             FavaAPIException: If there is no entry for the given hash.
         """
         try:
-            return next(entry for entry in self.all_entries
-                        if entry_hash == hash_entry(entry))
+            return next(
+                entry
+                for entry in self.all_entries
+                if entry_hash == hash_entry(entry)
+            )
         except StopIteration:
-            raise FavaAPIException('No entry found for hash "{}"'
-                                   .format(entry_hash))
+            raise FavaAPIException(
+                'No entry found for hash "{}"'.format(entry_hash)
+            )
 
     def context(self, entry_hash):
         """Context for an entry.
@@ -398,7 +456,8 @@ class FavaLedger():
         balances = None
         if isinstance(entry, (Balance, Transaction)):
             balances = interpolate.compute_entry_context(
-                self.all_entries, entry)
+                self.all_entries, entry
+            )
         source_slice, sha256sum = get_entry_slice(entry)
         return entry, balances, source_slice, sha256sum
 
@@ -412,8 +471,10 @@ class FavaLedger():
         fw_pairs = self.price_map.forward_pairs
         bw_pairs = []
         for currency_a, currency_b in fw_pairs:
-            if (currency_a in self.options['operating_currency'] and
-                    currency_b in self.options['operating_currency']):
+            if (
+                currency_a in self.options['operating_currency']
+                and currency_b in self.options['operating_currency']
+            ):
                 bw_pairs.append((currency_b, currency_a))
         return sorted(fw_pairs + bw_pairs)
 
@@ -422,9 +483,13 @@ class FavaLedger():
         all_prices = prices.get_all_prices(self.price_map, (base, quote))
 
         if self._filters['time']:
-            return [(date, price) for date, price in all_prices
-                    if self._filters['time'].begin_date <=
-                    date < self._filters['time'].end_date]
+            return [
+                (date, price)
+                for date, price in all_prices
+                if self._filters['time'].begin_date
+                <= date
+                < self._filters['time'].end_date
+            ]
         return all_prices
 
     def last_entry(self, account_name):
@@ -436,8 +501,9 @@ class FavaLedger():
         Returns:
             The last entry of the account if it is not a Close entry.
         """
-        account = realization.get_or_create(self.all_root_account,
-                                            account_name)
+        account = realization.get_or_create(
+            self.all_root_account, account_name
+        )
 
         last = realization.find_last_active_posting(account.txn_postings)
 
@@ -449,8 +515,11 @@ class FavaLedger():
     @property
     def postings(self):
         """All postings contained in some transaction."""
-        return [posting for entry in filter_type(self.entries, Transaction)
-                for posting in entry.postings]
+        return [
+            posting
+            for entry in filter_type(self.entries, Transaction)
+            for posting in entry.postings
+        ]
 
     def statement_path(self, entry_hash, metadata_key):
         """Returns the path for a statement found in the specified entry."""
@@ -459,10 +528,18 @@ class FavaLedger():
 
         beancount_dir = os.path.dirname(self.beancount_file_path)
         paths = [os.path.join(beancount_dir, value)]
-        paths.extend([os.path.join(beancount_dir, document_root,
-                                   *posting.account.split(':'), value)
-                      for posting in entry.postings
-                      for document_root in self.options['documents']])
+        paths.extend(
+            [
+                os.path.join(
+                    beancount_dir,
+                    document_root,
+                    *posting.account.split(':'),
+                    value
+                )
+                for posting in entry.postings
+                for document_root in self.options['documents']
+            ]
+        )
 
         for path in paths:
             if os.path.isfile(path):
@@ -484,16 +561,19 @@ class FavaLedger():
             - 'yellow': Not a balance check.
         """
 
-        real_account = realization.get_or_create(self.all_root_account,
-                                                 account_name)
+        real_account = realization.get_or_create(
+            self.all_root_account, account_name
+        )
 
         for txn_posting in reversed(real_account.txn_postings):
             if isinstance(txn_posting, Balance):
                 if txn_posting.diff_amount:
                     return 'red'
                 return 'green'
-            if isinstance(txn_posting, TxnPosting) and \
-                    txn_posting.txn.flag != FLAG_UNREALIZED:
+            if (
+                isinstance(txn_posting, TxnPosting)
+                and txn_posting.txn.flag != FLAG_UNREALIZED
+            ):
                 return 'yellow'
         return None
 

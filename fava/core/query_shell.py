@@ -41,10 +41,13 @@ class QueryShell(shell.BQLShell, FavaModule):
             if attrname[:3] != 'on_':
                 continue
             command_name = attrname[3:]
-            setattr(self.__class__, 'help_{}'.format(command_name.lower()),
-                    lambda _, fun=func: print(
-                        textwrap.dedent(fun.__doc__).strip(),
-                        file=self.outfile))
+            setattr(
+                self.__class__,
+                'help_{}'.format(command_name.lower()),
+                lambda _, fun=func: print(
+                    textwrap.dedent(fun.__doc__).strip(), file=self.outfile
+                ),
+            )
 
     @staticmethod
     def get_history(max_entries):
@@ -79,14 +82,18 @@ class QueryShell(shell.BQLShell, FavaModule):
 
     def on_Select(self, statement):  # pylint: disable=invalid-name
         try:
-            c_query = query_compile.compile(statement, self.env_targets,
-                                            self.env_postings,
-                                            self.env_entries)
+            c_query = query_compile.compile(
+                statement,
+                self.env_targets,
+                self.env_postings,
+                self.env_entries,
+            )
         except query_compile.CompilationError as exc:
             print('ERROR: {}.'.format(str(exc).rstrip('.')), file=self.outfile)
             return
-        rtypes, rrows = query_execute.execute_query(c_query, self.entries,
-                                                    self.options_map)
+        rtypes, rrows = query_execute.execute_query(
+            c_query, self.entries, self.options_map
+        )
 
         if not rrows:
             print("(empty)", file=self.outfile)
@@ -127,8 +134,9 @@ class QueryShell(shell.BQLShell, FavaModule):
                 print(query.name)
         else:
             try:
-                query = next((query for query in self.queries
-                              if query.name == name))
+                query = next(
+                    (query for query in self.queries if query.name == name)
+                )
             except StopIteration:
                 print("ERROR: Query '{}' not found".format(name))
             else:
@@ -162,8 +170,9 @@ class QueryShell(shell.BQLShell, FavaModule):
             name = statement.query_name
 
             try:
-                query = next((query for query in self.queries
-                              if query.name == name))
+                query = next(
+                    (query for query in self.queries if query.name == name)
+                )
             except StopIteration:
                 raise FavaAPIException('Query "{}" not found.'.format(name))
             query_string = query.query_string
@@ -173,9 +182,12 @@ class QueryShell(shell.BQLShell, FavaModule):
                 self.ledger.all_entries,
                 self.ledger.options,
                 query_string,
-                numberify=True)
-        except (query_compile.CompilationError,
-                query_parser.ParseError) as exception:
+                numberify=True,
+            )
+        except (
+            query_compile.CompilationError,
+            query_parser.ParseError,
+        ) as exception:
             raise FavaAPIException(str(exception))
 
         if result_format == 'csv':

@@ -9,7 +9,7 @@ import pytest
 from .conftest import EXAMPLE_FILE
 
 HOST = '0.0.0.0'
-FAVA = ('fava', )
+FAVA = ('fava',)
 
 if 'BEANCOUNT_FILE' in os.environ:
     del os.environ['BEANCOUNT_FILE']
@@ -30,7 +30,7 @@ def output_contains(process, output, timeout):
             return False
         if output in process.stdout.readline():
             return True
-        time.sleep(.1)
+        time.sleep(0.1)
 
 
 def run_fava(args=()):
@@ -38,7 +38,8 @@ def run_fava(args=()):
         FAVA + args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        universal_newlines=True)
+        universal_newlines=True,
+    )
 
 
 @pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")

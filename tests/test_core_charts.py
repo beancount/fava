@@ -12,50 +12,43 @@ def test_interval_totals(small_example_ledger):
     with app.test_request_context(''):
         g.conversion = None
         data = small_example_ledger.charts.interval_totals(
-            Interval.MONTH, 'Expenses')
-        assert data == [{
-            'date': datetime.date(2012, 11, 18),
-            'balance': {
-                'EUR': D('280.00')
+            Interval.MONTH, 'Expenses'
+        )
+        assert data == [
+            {
+                'date': datetime.date(2012, 11, 18),
+                'balance': {'EUR': D('280.00')},
+                'budgets': Counter(
+                    {'EUR': D('31.42857142857142857142857145')}
+                ),
             },
-            'budgets': Counter({
-                'EUR': D('31.42857142857142857142857145')
-            })
-        }, {
-            'date': datetime.date(2012, 12, 1),
-            'balance': {
-                'EUR': D('80.00')
+            {
+                'date': datetime.date(2012, 12, 1),
+                'balance': {'EUR': D('80.00')},
+                'budgets': Counter(
+                    {'EUR': D('48.57142857142857142857142861')}
+                ),
             },
-            'budgets': Counter({
-                'EUR': D('48.57142857142857142857142861')
-            })
-        }]
+        ]
 
 
 def test_linechart_data(example_ledger):
     with app.test_request_context('/'):
         g.conversion = 'units'
         data = example_ledger.charts.linechart(
-            'Assets:Testing:MultipleCommodities')
-        assert data == [{
-            'date': datetime.date(2000, 1, 1),
-            'balance': {
-                'USD': D('100')
+            'Assets:Testing:MultipleCommodities'
+        )
+        assert data == [
+            {'date': datetime.date(2000, 1, 1), 'balance': {'USD': D('100')}},
+            {
+                'date': datetime.date(2000, 1, 2),
+                'balance': {'XYZ': D('1'), 'USD': D('50')},
             },
-        }, {
-            'date': datetime.date(2000, 1, 2),
-            'balance': {
-                'XYZ': D('1'),
-                'USD': D('50')
+            {
+                'date': datetime.date(2000, 1, 3),
+                'balance': {'USD': 0, 'ABC': D('1'), 'XYZ': D('1')},
             },
-        }, {
-            'date': datetime.date(2000, 1, 3),
-            'balance': {
-                'USD': 0,
-                'ABC': D('1'),
-                'XYZ': D('1')
-            },
-        }]
+        ]
 
 
 def test_net_worth(example_ledger):
@@ -73,7 +66,7 @@ def test_hierarchy(example_ledger):
         assert data['balance_children'] == {
             'IRAUSD': D('7200.00'),
             'USD': D('94320.27840'),
-            'VACHR': D('-82')
+            'VACHR': D('-82'),
         }
         assert data['balance'] == {}
         # Assets:US:ETrade

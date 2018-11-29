@@ -23,8 +23,11 @@ def test_fava_options(load_doc):
     assert options['interval'] == 'week'
     assert options['insert-entry'] == [
         InsertEntryOption(
-            datetime.date(2016, 4, 14), re.compile('Ausgaben:Test'),
-            '<string>', 7)
+            datetime.date(2016, 4, 14),
+            re.compile('Ausgaben:Test'),
+            '<string>',
+            7,
+        )
     ]
     assert options['show-closed-accounts']
     assert options['journal-show'] == ['transaction', 'open']

@@ -10,15 +10,19 @@ from .conftest import data_file
 def test_execute_query(example_ledger):
     query_shell = QueryShell(example_ledger)
 
-    assert query_shell.execute_query('help exit') == \
-        (QueryShell.noop.__doc__ + '\n', None, None)
+    assert query_shell.execute_query('help exit') == (
+        QueryShell.noop.__doc__ + '\n',
+        None,
+        None,
+    )
 
-    assert query_shell.execute_query('help')[1:] == \
-        (None, None)
+    assert query_shell.execute_query('help')[1:] == (None, None)
 
-    assert query_shell.execute_query('balances', add_to_history=True)[1:] == \
-        query.run_query(query_shell.entries, query_shell.options_map,
-                        'balances')
+    assert query_shell.execute_query('balances', add_to_history=True)[
+        1:
+    ] == query.run_query(
+        query_shell.entries, query_shell.options_map, 'balances'
+    )
 
     assert query_shell.get_history(1) == ['balances']
 

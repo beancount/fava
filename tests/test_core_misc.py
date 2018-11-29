@@ -15,7 +15,8 @@ def test_sidebar_links(load_doc):
 
 
 def test_upcoming_events():
-    entries, _, _ = load_string('{} event "some_event" "test"\n'
-                                '2012-12-12 event "test" "test"'.format(
-                                    str(datetime.date.today())))
+    entries, _, _ = load_string(
+        '{} event "some_event" "test"\n'
+        '2012-12-12 event "test" "test"'.format(str(datetime.date.today()))
+    )
     assert len(upcoming_events(entries, 1)) == 1

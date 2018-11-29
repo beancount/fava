@@ -18,19 +18,28 @@ def test_attributes(example_ledger):
 
 
 def test_paths_to_watch(example_ledger):
-    assert example_ledger.paths_to_watch() == ([
-        example_ledger.beancount_file_path
-    ], [])
+    assert example_ledger.paths_to_watch() == (
+        [example_ledger.beancount_file_path],
+        [],
+    )
     documents = example_ledger.options['documents']
     example_ledger.options['documents'] = ['folder']
     base = os.path.join(
-        os.path.dirname(example_ledger.beancount_file_path), 'folder')
-    assert example_ledger.paths_to_watch() == ([
-        example_ledger.beancount_file_path
-    ], [
-        os.path.join(base, account) for account in
-        ['Assets', 'Liabilities', 'Equity', 'Income', 'Expenses']
-    ])
+        os.path.dirname(example_ledger.beancount_file_path), 'folder'
+    )
+    assert example_ledger.paths_to_watch() == (
+        [example_ledger.beancount_file_path],
+        [
+            os.path.join(base, account)
+            for account in [
+                'Assets',
+                'Liabilities',
+                'Equity',
+                'Income',
+                'Expenses',
+            ]
+        ],
+    )
     example_ledger.options['documents'] = documents
 
 
@@ -51,5 +60,6 @@ def test_account_uptodate_status(example_ledger):
     assert status == 'yellow'
 
     status = example_ledger.account_uptodate_status(
-        'Liabilities:US:Chase:Slate')
+        'Liabilities:US:Chase:Slate'
+    )
     assert status == 'green'

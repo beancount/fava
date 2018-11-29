@@ -27,14 +27,20 @@ class IngestModule(FavaModule):
             self.module_path = os.path.normpath(
                 os.path.join(
                     os.path.dirname(self.ledger.beancount_file_path),
-                    self.ledger.fava_options['import-config']))
+                    self.ledger.fava_options['import-config'],
+                )
+            )
 
             if not os.path.exists(self.module_path) or os.path.isdir(
-                    self.module_path):
+                self.module_path
+            ):
                 self.ledger.errors.append(
                     IngestError(
-                        None, "File does not exist: '{}'".format(
-                            self.module_path), None))
+                        None,
+                        "File does not exist: '{}'".format(self.module_path),
+                        None,
+                    )
+                )
                 return
 
             if os.stat(self.module_path).st_mtime_ns == self.mtime:
@@ -45,15 +51,17 @@ class IngestModule(FavaModule):
             except Exception:  # pylint: disable=broad-except
                 self.ledger.errors.append(
                     IngestError(
-                        None, "Error in importer '{}'".format(
-                            str(self.module_path)), None))
+                        None,
+                        "Error in importer '{}'".format(str(self.module_path)),
+                        None,
+                    )
+                )
                 return
 
             self.mtime = os.stat(self.module_path).st_mtime_ns
             self.config = mod['CONFIG']
             self.importers = {
-                importer.name(): importer
-                for importer in self.config
+                importer.name(): importer for importer in self.config
             }
 
     def identify_directory(self, directory):
@@ -70,11 +78,14 @@ class IngestModule(FavaModule):
 
         full_path = os.path.normpath(
             os.path.join(
-                os.path.dirname(self.ledger.beancount_file_path), directory))
+                os.path.dirname(self.ledger.beancount_file_path), directory
+            )
+        )
 
         return filter(
             operator.itemgetter(1),
-            identify.find_imports(self.config, full_path))
+            identify.find_imports(self.config, full_path),
+        )
 
     def extract(self, filename, importer_name):
         """Extract entries from filename with the specified importer.
@@ -95,7 +106,8 @@ class IngestModule(FavaModule):
         new_entries = extract.extract_from_file(
             filename,
             self.importers.get(importer_name),
-            existing_entries=self.ledger.all_entries)
+            existing_entries=self.ledger.all_entries,
+        )
 
         if isinstance(new_entries, tuple):
             new_entries, _ = new_entries

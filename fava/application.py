@@ -19,8 +19,16 @@ import os
 import os.path
 from io import BytesIO
 
-from flask import (abort, Flask, render_template, request,
-                   redirect, g, send_file, render_template_string)
+from flask import (
+    abort,
+    Flask,
+    render_template,
+    request,
+    redirect,
+    g,
+    send_file,
+    render_template_string,
+)
 import flask
 from flask_babel import Babel
 import markdown2
@@ -46,7 +54,8 @@ setup_logging()
 app = Flask(  # pylint: disable=invalid-name
     __name__,
     template_folder=resource_path('templates'),
-    static_folder=resource_path('static'))
+    static_folder=resource_path('static'),
+)
 app.register_blueprint(json_api, url_prefix='/<bfile>/api')
 
 app.json_encoder = FavaJSONEncoder
@@ -109,7 +118,8 @@ def get_locale():
     if g.ledger.fava_options['language']:
         return g.ledger.fava_options['language']
     return request.accept_languages.best_match(
-        ['de', 'en', 'es', 'zh', 'nl', 'fr', 'pt', 'sk', 'uk'])
+        ['de', 'en', 'es', 'zh', 'nl', 'fr', 'pt', 'sk', 'uk']
+    )
 
 
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
@@ -119,8 +129,9 @@ app.add_template_filter(serialise)
 
 @app.url_defaults
 def _inject_filters(endpoint, values):
-    if ('bfile' not in values
-            and app.url_map.is_endpoint_expecting(endpoint, 'bfile')):
+    if 'bfile' not in values and app.url_map.is_endpoint_expecting(
+        endpoint, 'bfile'
+    ):
         values['bfile'] = g.beancount_file_slug
     if endpoint in ['static', 'index']:
         return
@@ -173,7 +184,8 @@ def url_for_source(**kwargs):
     """URL to source file (possibly link to external editor)."""
     if g.ledger.fava_options['use-external-editor']:
         return "beancount://{}?lineno={}".format(
-            kwargs.get('file_path'), kwargs.get('line', 1))
+            kwargs.get('file_path'), kwargs.get('line', 1)
+        )
     return url_for('report', report_name='editor', **kwargs)
 
 
@@ -186,8 +198,7 @@ def template_context():
 @app.before_request
 def _perform_global_filters():
     g.filters = {
-        name: request.args.get(name)
-        for name in ['account', 'filter', 'time']
+        name: request.args.get(name) for name in ['account', 'filter', 'time']
     }
 
     # check (and possibly reload) source file
@@ -200,10 +211,13 @@ def _perform_global_filters():
 @app.after_request
 def _incognito(response):
     """Replace all numbers with 'X'."""
-    if (app.config.get('INCOGNITO') and
-            response.content_type.startswith('text/html')):
-        is_editor = (request.endpoint == 'report' and
-                     request.view_args['report_name'] == 'editor')
+    if app.config.get('INCOGNITO') and response.content_type.startswith(
+        'text/html'
+    ):
+        is_editor = (
+            request.endpoint == 'report'
+            and request.view_args['report_name'] == 'editor'
+        )
         if not is_editor:
             original_text = response.get_data(as_text=True)
             response.set_data(replace_numbers(original_text))
@@ -223,8 +237,9 @@ def _pull_beancount_file(_, values):
     g.ledger = app.config['LEDGERS'][g.beancount_file_slug]
     g.conversion = request.args.get('conversion')
     g.partial = request.args.get('partial', False)
-    g.interval = Interval.get(request.args.get(
-        'interval', g.ledger.fava_options['interval']))
+    g.interval = Interval.get(
+        request.args.get('interval', g.ledger.fava_options['interval'])
+    )
 
 
 @app.errorhandler(FavaAPIException)
@@ -248,7 +263,8 @@ def account(name, subreport='journal'):
     """The account report."""
     if subreport in ['journal', 'balances', 'changes']:
         return render_template(
-            'account.html', account_name=name, subreport=subreport)
+            'account.html', account_name=name, subreport=subreport
+        )
     abort(404)
     return None
 
@@ -257,8 +273,12 @@ def account(name, subreport='journal'):
 def document():
     """Download a document."""
     filename = request.args.get('filename')
-    if not any((filename == document.filename for document in
-                g.ledger.all_entries_by_type[Document])):
+    if not any(
+        (
+            filename == document.filename
+            for document in g.ledger.all_entries_by_type[Document]
+        )
+    ):
         abort(404)
     return send_file_inline(filename)
 
@@ -277,7 +297,8 @@ def holdings_by(aggregation_key):
     """The holdings report."""
     if aggregation_key in ['account', 'currency', 'cost_currency']:
         return render_template(
-            'holdings.html', aggregation_key=aggregation_key)
+            'holdings.html', aggregation_key=aggregation_key
+        )
     abort(404)
     return None
 
@@ -295,7 +316,8 @@ def report(report_name):
 def download_query(result_format):
     """Download a query result."""
     name, data = g.ledger.query_shell.query_to_file(
-        request.args.get('query_string', ''), result_format)
+        request.args.get('query_string', ''), result_format
+    )
 
     filename = "{}.{}".format(secure_filename(name.strip()), result_format)
     return send_file(data, as_attachment=True, attachment_filename=filename)
@@ -318,11 +340,13 @@ def help_page(page_slug='_index'):
         abort(404)
     html = markdown2.markdown_path(
         os.path.join(resource_path('help'), page_slug + '.md'),
-        extras=['fenced-code-blocks', 'tables'])
+        extras=['fenced-code-blocks', 'tables'],
+    )
     return render_template(
         'help.html',
         page_slug=page_slug,
-        help_html=render_template_string(html))
+        help_html=render_template_string(html),
+    )
 
 
 @app.route('/jump')
@@ -348,6 +372,7 @@ def jump():
             continue
         qs_dict.setlist(key, values)
 
-    redirect_url = url.replace(query=werkzeug.urls.url_encode(
-        qs_dict, sort=True))
+    redirect_url = url.replace(
+        query=werkzeug.urls.url_encode(qs_dict, sort=True)
+    )
     return redirect(werkzeug.urls.url_unparse(redirect_url))

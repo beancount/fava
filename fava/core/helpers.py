@@ -23,7 +23,7 @@ class FilterException(FavaAPIException):
         return self.message
 
 
-class FavaModule():
+class FavaModule:
     """Base class for the "modules" of FavaLedger."""
 
     def __init__(self, ledger):

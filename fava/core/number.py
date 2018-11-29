@@ -32,12 +32,18 @@ class DecimalFormatModule(FavaModule):
                 self.locale = None
                 self.ledger.errors.append(
                     OptionError(
-                        None, 'Unknown locale: {}.'.format(
-                            self.ledger.fava_options['locale']), None))
+                        None,
+                        'Unknown locale: {}.'.format(
+                            self.ledger.fava_options['locale']
+                        ),
+                        None,
+                    )
+                )
 
         if self.locale:
             self.default_pattern = copy.copy(
-                self.locale.decimal_formats.get(None))
+                self.locale.decimal_formats.get(None)
+            )
             self.default_pattern.frac_prec = (2, 2)
         else:
             self.default_pattern = '{:.2f}'
