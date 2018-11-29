@@ -35,22 +35,26 @@ class IngestModule(FavaModule):
                     IngestError(
                         None, "File does not exist: '{}'".format(
                             self.module_path), None))
-            else:
-                try:
-                    mod = runpy.run_path(self.module_path)
-                except Exception:  # pylint: disable=broad-except
-                    self.ledger.errors.append(
-                        IngestError(
-                            None, "Error in importer '{}'".format(
-                                str(self.module_path)), None))
-                    return
+                return
 
-                self.mtime = os.stat(self.module_path).st_mtime_ns
-                self.config = mod['CONFIG']
-                self.importers = {
-                    importer.name(): importer
-                    for importer in self.config
-                }
+            if os.stat(self.module_path).st_mtime_ns == self.mtime:
+                return
+
+            try:
+                mod = runpy.run_path(self.module_path)
+            except Exception:  # pylint: disable=broad-except
+                self.ledger.errors.append(
+                    IngestError(
+                        None, "Error in importer '{}'".format(
+                            str(self.module_path)), None))
+                return
+
+            self.mtime = os.stat(self.module_path).st_mtime_ns
+            self.config = mod['CONFIG']
+            self.importers = {
+                importer.name(): importer
+                for importer in self.config
+            }
 
     def identify_directory(self, directory):
         """Identify files and importers for a given directory.
