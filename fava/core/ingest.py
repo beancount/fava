@@ -4,6 +4,8 @@ import operator
 import os
 import runpy
 from collections import namedtuple
+import sys
+import traceback
 
 from beancount.ingest import cache, identify, extract
 
@@ -49,10 +51,13 @@ class IngestModule(FavaModule):
             try:
                 mod = runpy.run_path(self.module_path)
             except Exception:  # pylint: disable=broad-except
+                message = ''.join(traceback.format_exception(*sys.exc_info()))
                 self.ledger.errors.append(
                     IngestError(
                         None,
-                        "Error in importer '{}'".format(str(self.module_path)),
+                        "Error in importer '{}': {}".format(
+                            str(self.module_path), message
+                        ),
                         None,
                     )
                 )
@@ -97,7 +102,7 @@ class IngestModule(FavaModule):
         Returns:
             A list of new imported entries.
         """
-        if not filename or not importer_name:
+        if not filename or not importer_name or not self.config:
             return []
 
         if os.stat(self.module_path).st_mtime_ns > self.mtime:
