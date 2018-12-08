@@ -1,4 +1,3 @@
-import buble from 'rollup-plugin-buble';
 import commonjs from 'rollup-plugin-commonjs';
 import copy from 'rollup-plugin-copy';
 import css from 'rollup-plugin-css-only';
@@ -14,13 +13,6 @@ export default {
   plugins: [
     nodeResolve(),
     json(),
-    buble({
-      exclude: '**css',
-      transforms: {
-        generator: false,
-        forOf: false,
-      },
-    }),
     css(),
     copy({
       'node_modules/@typopro/web-fira-mono/TypoPRO-FiraMono-Medium.woff':
