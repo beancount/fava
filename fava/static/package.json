@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w",
+    "dev": "rollup -cw",
     "lint": "eslint javascript --ext .js && stylelint 'css/*.css'",
     "fix": "stylelint 'css/*.css' --fix",
     "format": "prettier '**/*.js' --write --ignore-path ../../.gitignore"

@@ -1,4 +1,4 @@
-import CodeMirror from 'codemirror/lib/codemirror';
+import CodeMirror from 'codemirror';
 import { fuzzytest } from '../helpers';
 
 export function getCurrentWord(cursor, line) {

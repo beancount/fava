@@ -2,7 +2,7 @@
 // To keep the regular expressions in sync with Beancount, they might contain
 // some superfluous escape characters.
 
-import CodeMirror from 'codemirror/lib/codemirror';
+import CodeMirror from 'codemirror';
 
 // The rules should mirror `parser/lexel.l` in beancount
 CodeMirror.defineSimpleMode('beancount', {
