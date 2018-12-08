@@ -56,7 +56,7 @@
                         {% endif %}
                         <td><a href="#context-{{ last_entry|hash_entry }}">{{ last_entry.date }}</a></td>
                         <td class="num">
-                            {%- for position in (ledger.root_account|get_or_create(account)).balance -%}
+                            {%- for position in (ledger.root_account|get_or_create(account)).balance|units -%}
                                 {{ position.units|format_amount }}<br>
                             {% endfor -%}
                         </td>
