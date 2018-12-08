@@ -1,7 +1,5 @@
 import e from './events';
-import {
-  $, fuzzytest, fuzzywrap, handleJSON,
-} from './helpers';
+import { $, fuzzytest, fuzzywrap, handleJSON } from './helpers';
 
 const accountCompletionCache = {};
 
@@ -21,7 +19,7 @@ class CompletionList {
     this.ul = ul;
 
     // Clicking on a suggestion selects it.
-    ul.addEventListener('mousedown', (event) => {
+    ul.addEventListener('mousedown', event => {
       if (event.target !== ul && event.button === 0) {
         event.preventDefault();
         this.select(event.target.closest('li'));
@@ -33,21 +31,29 @@ class CompletionList {
     this.events = {
       blur: this.blur.bind(this),
       input: this.evaluate.bind(this),
-      keydown: (event) => {
-        if (event.keyCode === 13) { // ENTER
+      keydown: event => {
+        if (event.keyCode === 13) {
+          // ENTER
           if (this.index > -1) {
             event.preventDefault();
             this.select(ul.children[this.index]);
           }
           this.close();
-        } else if (event.keyCode === 27) { // ESC
+        } else if (event.keyCode === 27) {
+          // ESC
           this.close();
-        } else if (event.keyCode === 38) { // UP
+        } else if (event.keyCode === 38) {
+          // UP
           event.preventDefault();
-          this.highlight(this.index === 0 ? ul.children.length - 1 : this.index - 1);
-        } else if (event.keyCode === 40) { // DOWN
+          this.highlight(
+            this.index === 0 ? ul.children.length - 1 : this.index - 1,
+          );
+        } else if (event.keyCode === 40) {
+          // DOWN
           event.preventDefault();
-          this.highlight(this.index === ul.children.length - 1 ? 0 : this.index + 1);
+          this.highlight(
+            this.index === ul.children.length - 1 ? 0 : this.index + 1,
+          );
         }
       },
     };
@@ -57,7 +63,9 @@ class CompletionList {
   // a 'list' attribute.
   show(input) {
     this.list = input.getAttribute('list');
-    if (!this.list) { return; }
+    if (!this.list) {
+      return;
+    }
 
     this.input = input;
     input.setAttribute('autocomplete', 'off');
@@ -102,18 +110,16 @@ class CompletionList {
   // Position list and fill with suggestions.
   evaluate() {
     this.ul.innerHTML = '';
-    this.suggestions()
-      .then((allSuggestions) => {
-        this.filter(allSuggestions)
-          .forEach((suggestion) => {
-            const li = document.createElement('li');
-            li.innerHTML = suggestion.innerHTML;
-            li.setAttribute('value', suggestion.value);
-            this.ul.appendChild(li);
-          });
-        this.index = -1;
-        this.position();
+    this.suggestions().then(allSuggestions => {
+      this.filter(allSuggestions).forEach(suggestion => {
+        const li = document.createElement('li');
+        li.innerHTML = suggestion.innerHTML;
+        li.setAttribute('value', suggestion.value);
+        this.ul.appendChild(li);
       });
+      this.index = -1;
+      this.position();
+    });
   }
 
   // Position the list.
@@ -121,8 +127,11 @@ class CompletionList {
     const absolutePosition = this.input.closest('article');
     const coords = this.input.getBoundingClientRect();
     this.ul.style.position = absolutePosition ? 'absolute' : 'fixed';
-    this.ul.style.top = `${Math.ceil(coords.top + coords.height) + (absolutePosition ? window.pageYOffset : 0)}px`;
-    this.ul.style.left = `${Math.floor(Math.min(coords.left, document.body.clientWidth - this.ul.offsetWidth))}px`;
+    this.ul.style.top = `${Math.ceil(coords.top + coords.height) +
+      (absolutePosition ? window.pageYOffset : 0)}px`;
+    this.ul.style.left = `${Math.floor(
+      Math.min(coords.left, document.body.clientWidth - this.ul.offsetWidth),
+    )}px`;
   }
 
   // Filter suggestions.
@@ -147,37 +156,54 @@ class CompletionList {
   // Return a promise that yields the suggestions.
   suggestions() {
     if (this.list === 'accounts' && this.input.closest('.entry-form')) {
-      const payee = $('input[name=payee]', this.input.closest('.entry-form')).value.trim();
+      const payee = $(
+        'input[name=payee]',
+        this.input.closest('.entry-form'),
+      ).value.trim();
       if (payee) {
         if (accountCompletionCache[payee]) {
-          return new Promise((resolve) => { resolve(accountCompletionCache[payee]); });
+          return new Promise(resolve => {
+            resolve(accountCompletionCache[payee]);
+          });
         }
         const params = new URLSearchParams();
         params.set('payee', payee);
-        return $.fetch(`${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`)
+        return $.fetch(
+          `${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`,
+        )
           .then(handleJSON)
           .then(data => data.payload)
-          .then((suggestions) => {
+          .then(suggestions => {
             accountCompletionCache[payee] = suggestions;
             return suggestions;
           });
       }
     }
     if (this.list === 'tags') {
-      const suggestions = window.favaAPI.tags.map(tag => `#${tag}`)
+      const suggestions = window.favaAPI.tags
+        .map(tag => `#${tag}`)
         .concat(window.favaAPI.links.map(link => `^${link}`))
         .concat(window.favaAPI.payees.map(payee => `payee:"${payee}"`));
-      return new Promise((resolve) => { resolve(suggestions); });
+      return new Promise(resolve => {
+        resolve(suggestions);
+      });
     }
-    return new Promise((resolve) => { resolve(window.favaAPI[this.list]); });
+    return new Promise(resolve => {
+      resolve(window.favaAPI[this.list]);
+    });
   }
 
   // Set the value of the input to the selected value.
   select(li) {
     const value = li.getAttribute('value');
     if (this.list === 'tags') {
-      const [search] = this.input.value.slice(0, this.input.selectionStart).match(/\S*$/);
-      this.input.value = `${this.input.value.slice(0, this.input.selectionStart - search.length)}${value}${this.input.value.slice(this.input.selectionStart)}`;
+      const [search] = this.input.value
+        .slice(0, this.input.selectionStart)
+        .match(/\S*$/);
+      this.input.value = `${this.input.value.slice(
+        0,
+        this.input.selectionStart - search.length,
+      )}${value}${this.input.value.slice(this.input.selectionStart)}`;
     } else {
       this.input.value = value;
     }
@@ -189,7 +215,7 @@ class CompletionList {
 e.on('page-init', () => {
   const completer = new CompletionList();
 
-  $.delegate(document, 'focusin', 'input', (event) => {
+  $.delegate(document, 'focusin', 'input', event => {
     completer.show(event.target);
   });
 });

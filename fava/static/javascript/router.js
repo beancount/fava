@@ -13,7 +13,7 @@ import handleHash from './overlays';
 function updateURL(url) {
   const newURL = new URL(url);
   const currentURL = new URL(window.location.href);
-  ['account', 'filter', 'time'].forEach((filter) => {
+  ['account', 'filter', 'time'].forEach(filter => {
     newURL.searchParams.delete(filter);
     const el = $(`#${filter}-filter`);
     if (el.value) {
@@ -21,7 +21,7 @@ function updateURL(url) {
     }
   });
 
-  ['interval', 'charts', 'conversion'].forEach((setting) => {
+  ['interval', 'charts', 'conversion'].forEach(setting => {
     if (currentURL.searchParams.has(setting)) {
       newURL.searchParams.set(setting, currentURL.searchParams.get(setting));
     } else {
@@ -40,13 +40,17 @@ class Router {
     this.updateState();
 
     window.addEventListener('popstate', () => {
-      if (window.location.hash !== this.state.hash
-          && window.location.pathname === this.state.pathname
-          && window.location.search === this.state.search) {
+      if (
+        window.location.hash !== this.state.hash &&
+        window.location.pathname === this.state.pathname &&
+        window.location.search === this.state.search
+      ) {
         handleHash();
         this.updateState();
-      } else if (window.location.pathname !== this.state.pathname
-                || window.location.search !== this.state.search) {
+      } else if (
+        window.location.pathname !== this.state.pathname ||
+        window.location.search !== this.state.search
+      ) {
         this.loadURL(window.location.href, false);
       }
     });
@@ -70,7 +74,9 @@ class Router {
   loadURL(url, historyState = true) {
     const state = { interrupt: false };
     e.trigger('navigate', state);
-    if (state.interrupt) { return; }
+    if (state.interrupt) {
+      return;
+    }
 
     const getUrl = new URL(url);
     getUrl.searchParams.set('partial', true);
@@ -78,28 +84,29 @@ class Router {
     const svg = $('header svg');
     svg.classList.add('loading');
 
-    $.fetch(getUrl.toString())
-      .then((response) => {
-        response.text()
-          .then((data) => {
-            if (!response.ok) {
-              e.trigger('error', data);
-              return;
-            }
-            if (historyState) {
-              window.history.pushState(null, null, url);
-              window.scroll(0, 0);
-            }
-            this.updateState();
-            $('article').innerHTML = data;
-            svg.classList.remove('loading');
-            e.trigger('page-loaded');
-            handleHash();
-          });
-      }, () => {
+    $.fetch(getUrl.toString()).then(
+      response => {
+        response.text().then(data => {
+          if (!response.ok) {
+            e.trigger('error', data);
+            return;
+          }
+          if (historyState) {
+            window.history.pushState(null, null, url);
+            window.scroll(0, 0);
+          }
+          this.updateState();
+          $('article').innerHTML = data;
+          svg.classList.remove('loading');
+          e.trigger('page-loaded');
+          handleHash();
+        });
+      },
+      () => {
         svg.classList.remove('loading');
         e.trigger('error', `Loading ${url} failed.`);
-      });
+      },
+    );
   }
 
   // Update the routers state object. The state object is used to distinguish
@@ -118,18 +125,29 @@ class Router {
   //  - the link starts with a hash '#', or
   //  - the link has a `data-remote` attribute.
   takeOverLinks() {
-    $.delegate(window.document, 'click', 'a', (event) => {
-      if (event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) {
+    $.delegate(window.document, 'click', 'a', event => {
+      if (
+        event.button !== 0 ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.metaKey ||
+        event.shiftKey
+      ) {
         return;
       }
       const link = event.target.closest('a');
-      if (link.getAttribute('href').charAt(0) === '#' || link.host !== window.location.host) {
+      if (
+        link.getAttribute('href').charAt(0) === '#' ||
+        link.host !== window.location.host
+      ) {
         return;
       }
 
-      if (!event.defaultPrevented
-          && !link.hasAttribute('data-remote')
-          && link.protocol.indexOf('http') === 0) {
+      if (
+        !event.defaultPrevented &&
+        !link.hasAttribute('data-remote') &&
+        link.protocol.indexOf('http') === 0
+      ) {
         event.preventDefault();
 
         // update sidebar links
@@ -158,7 +176,7 @@ e.on('form-submit-filters', () => {
   router.navigate(updateURL(window.location.href));
 });
 
-e.on('form-submit-query', (form) => {
+e.on('form-submit-query', form => {
   const queryString = form.elements.query_string.value.trim();
   if (queryString === '') {
     return;
@@ -172,8 +190,8 @@ e.on('form-submit-query', (form) => {
 
   $.fetch(url.toString())
     .then(response => response.text())
-    .then((data) => {
-      $$('.queryresults-wrapper').forEach((element) => {
+    .then(data => {
+      $$('.queryresults-wrapper').forEach(element => {
         element.classList.add('toggled');
       });
       $('#query-container').insertAdjacentHTML('afterbegin', data);

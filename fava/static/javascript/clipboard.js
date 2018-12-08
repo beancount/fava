@@ -21,7 +21,7 @@ function copyToClipboard(text) {
 }
 
 e.on('page-loaded', () => {
-  $$('.status-indicator').forEach((indicator) => {
+  $$('.status-indicator').forEach(indicator => {
     indicator.addEventListener('click', () => {
       copyToClipboard(indicator.getAttribute('data-clipboard-text'));
     });

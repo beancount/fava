@@ -84,7 +84,7 @@ e.on('page-loaded', () => {
 
 e.on('page-init', () => {
   // Watch for all clicks on <button>s and fire the appropriate events.
-  $.delegate(document.body, 'click', 'button', (event) => {
+  $.delegate(document.body, 'click', 'button', event => {
     const button = event.target.closest('button');
     const type = button.getAttribute('data-event');
     if (type) {
@@ -93,7 +93,7 @@ e.on('page-init', () => {
   });
 
   // Watch for all submits of <forms>s and fire the appropriate events.
-  $.delegate(document.body, 'submit', 'form', (event) => {
+  $.delegate(document.body, 'submit', 'form', event => {
     const form = event.target;
     const type = form.getAttribute('data-event');
     if (type) {
@@ -108,17 +108,23 @@ e.on('page-init', () => {
 function doPoll() {
   $.fetch(`${window.favaAPI.baseURL}api/changed/`)
     .then(handleJSON)
-    .then((data) => {
-      if (data.changed) {
-        if (window.favaAPI.favaOptions['auto-reload']) {
-          e.trigger('reload');
-        } else {
-          $('#reload-page').classList.remove('hidden');
-          e.trigger('file-modified');
-          e.trigger('reload-warning', $('#reload-page').getAttribute('data-reload-text'));
+    .then(
+      data => {
+        if (data.changed) {
+          if (window.favaAPI.favaOptions['auto-reload']) {
+            e.trigger('reload');
+          } else {
+            $('#reload-page').classList.remove('hidden');
+            e.trigger('file-modified');
+            e.trigger(
+              'reload-warning',
+              $('#reload-page').getAttribute('data-reload-text'),
+            );
+          }
         }
-      }
-    }, () => {})
+      },
+      () => {},
+    )
     .then(() => {
       setTimeout(doPoll, 5000);
     });

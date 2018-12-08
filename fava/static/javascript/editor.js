@@ -41,7 +41,7 @@ import { $, $$, handleJSON } from './helpers';
 import e from './events';
 
 // This handles saving in both the main and the overlaid entry editors.
-CodeMirror.commands.favaSave = (cm) => {
+CodeMirror.commands.favaSave = cm => {
   const button = cm.getOption('favaSaveButton');
 
   const buttonText = button.textContent;
@@ -61,25 +61,28 @@ CodeMirror.commands.favaSave = (cm) => {
     }),
   })
     .then(handleJSON)
-    .then((data) => {
-      cm.focus();
-      cm.getTextArea().setAttribute('data-sha256sum', data.sha256sum);
-      e.trigger('file-modified');
-      // Reload the page if an entry was changed.
-      if (button.getAttribute('data-entry-hash')) {
-        e.trigger('reload');
-        e.trigger('close-overlay');
-      }
-    }, (error) => {
-      e.trigger('error', error);
-    })
+    .then(
+      data => {
+        cm.focus();
+        cm.getTextArea().setAttribute('data-sha256sum', data.sha256sum);
+        e.trigger('file-modified');
+        // Reload the page if an entry was changed.
+        if (button.getAttribute('data-entry-hash')) {
+          e.trigger('reload');
+          e.trigger('close-overlay');
+        }
+      },
+      error => {
+        e.trigger('error', error);
+      },
+    )
     .then(() => {
       cm.markClean();
       button.textContent = buttonText;
     });
 };
 
-CodeMirror.commands.favaFormat = (cm) => {
+CodeMirror.commands.favaFormat = cm => {
   $.fetch(`${window.favaAPI.baseURL}api/format-source/`, {
     method: 'POST',
     headers: {
@@ -90,29 +93,36 @@ CodeMirror.commands.favaFormat = (cm) => {
     }),
   })
     .then(handleJSON)
-    .then((data) => {
-      const scrollPosition = cm.getScrollInfo().top;
-      cm.setValue(data.payload);
-      cm.scrollTo(null, scrollPosition);
-    }, (error) => {
-      e.trigger('error', error);
-    });
+    .then(
+      data => {
+        const scrollPosition = cm.getScrollInfo().top;
+        cm.setValue(data.payload);
+        cm.scrollTo(null, scrollPosition);
+      },
+      error => {
+        e.trigger('error', error);
+      },
+    );
 };
 
-CodeMirror.commands.favaToggleComment = (cm) => {
-  const args = { from: cm.getCursor(true), to: cm.getCursor(false), options: { lineComment: ';' } };
+CodeMirror.commands.favaToggleComment = cm => {
+  const args = {
+    from: cm.getCursor(true),
+    to: cm.getCursor(false),
+    options: { lineComment: ';' },
+  };
   if (!cm.uncomment(args.from, args.to, args.options)) {
     cm.lineComment(args.from, args.to, args.options);
   }
 };
 
-CodeMirror.commands.favaCenterCursor = (cm) => {
+CodeMirror.commands.favaCenterCursor = cm => {
   const { top } = cm.cursorCoords(true, 'local');
   const height = cm.getScrollInfo().clientHeight;
-  cm.scrollTo(null, top - (height / 2));
+  cm.scrollTo(null, top - height / 2);
 };
 
-CodeMirror.commands.favaJumpToMarker = (cm) => {
+CodeMirror.commands.favaJumpToMarker = cm => {
   const cursor = cm.getSearchCursor('FAVA-INSERT-MARKER');
 
   if (cursor.findNext()) {
@@ -152,23 +162,28 @@ function ignoreKey(key) {
 // Initialize the query editor
 function initQueryEditor() {
   const queryForm = $('#query-form');
-  if (!queryForm) { return; }
+  if (!queryForm) {
+    return;
+  }
 
   const queryOptions = {
     mode: 'beancount-query',
     extraKeys: {
-      'Ctrl-Enter': (cm) => {
+      'Ctrl-Enter': cm => {
         cm.save();
         e.trigger('form-submit-query', queryForm);
       },
-      'Cmd-Enter': (cm) => {
+      'Cmd-Enter': cm => {
         cm.save();
         e.trigger('form-submit-query', queryForm);
       },
     },
     placeholder: queryForm.elements.query_string.getAttribute('placeholder'),
   };
-  const editor = CodeMirror.fromTextArea(queryForm.elements.query_string, queryOptions);
+  const editor = CodeMirror.fromTextArea(
+    queryForm.elements.query_string,
+    queryOptions,
+  );
 
   editor.on('keyup', (cm, event) => {
     if (!cm.state.completionActive && !ignoreKey(event.key)) {
@@ -176,7 +191,7 @@ function initQueryEditor() {
     }
   });
 
-  $.delegate($('#query-container'), 'click', '.toggle-box-header', (event) => {
+  $.delegate($('#query-container'), 'click', '.toggle-box-header', event => {
     const wrapper = event.target.closest('.toggle-box');
     if (wrapper.classList.contains('inactive')) {
       editor.setValue(wrapper.querySelector('code').textContent);
@@ -190,7 +205,7 @@ function initQueryEditor() {
 
 // Initialize read-only editors
 function initReadOnlyEditors() {
-  $$('.editor-readonly').forEach((el) => {
+  $$('.editor-readonly').forEach(el => {
     CodeMirror.fromTextArea(el, {
       mode: 'beancount',
       readOnly: true,
@@ -214,7 +229,7 @@ const sourceEditorOptions = {
     'Cmd-D': 'favaFormat',
     'Ctrl-Y': 'favaToggleComment',
     'Cmd-Y': 'favaToggleComment',
-    Tab: (cm) => {
+    Tab: cm => {
       if (cm.somethingSelected()) {
         cm.indentSelection('add');
       } else {
@@ -236,16 +251,21 @@ export default function initSourceEditor(name) {
   }
 
   const sourceEditorTextarea = $(name);
-  if (!sourceEditorTextarea) { return; }
+  if (!sourceEditorTextarea) {
+    return;
+  }
 
-  const editor = CodeMirror.fromTextArea(sourceEditorTextarea, sourceEditorOptions);
+  const editor = CodeMirror.fromTextArea(
+    sourceEditorTextarea,
+    sourceEditorOptions,
+  );
   if (name === '#source-editor') {
     activeEditor = editor;
   }
   const saveButton = $(`${name}-submit`);
   editor.setOption('favaSaveButton', saveButton);
 
-  editor.on('changes', (cm) => {
+  editor.on('changes', cm => {
     saveButton.disabled = cm.isClean();
   });
 
@@ -254,7 +274,10 @@ export default function initSourceEditor(name) {
       CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
     }
   });
-  const line = parseInt(new URLSearchParams(window.location.search).get('line'), 10);
+  const line = parseInt(
+    new URLSearchParams(window.location.search).get('line'),
+    10,
+  );
   if (line > 0) {
     editor.setCursor(line - 1, 0);
     editor.execCommand('favaCenterCursor');
@@ -263,21 +286,21 @@ export default function initSourceEditor(name) {
   }
 
   // keybindings when the focus is outside the editor
-  Mousetrap.bind(['ctrl+s', 'meta+s'], (event) => {
+  Mousetrap.bind(['ctrl+s', 'meta+s'], event => {
     event.preventDefault();
     editor.execCommand('favaSave');
   });
 
-  Mousetrap.bind(['ctrl+d', 'meta+d'], (event) => {
+  Mousetrap.bind(['ctrl+d', 'meta+d'], event => {
     event.preventDefault();
     editor.execCommand('favaFormat');
   });
 
   // Run editor commands with buttons in editor menu.
-  $$(`${name}-form button`).forEach((button) => {
+  $$(`${name}-form button`).forEach(button => {
     const command = button.getAttribute('data-command');
     if (command) {
-      button.addEventListener('click', (event) => {
+      button.addEventListener('click', event => {
         event.preventDefault();
         event.stopImmediatePropagation();
         editor.execCommand(command);
@@ -292,9 +315,10 @@ e.on('page-loaded', () => {
   initSourceEditor('#source-editor');
 });
 
-const leaveMessage = 'There are unsaved changes. Are you sure you want to leave?';
+const leaveMessage =
+  'There are unsaved changes. Are you sure you want to leave?';
 
-e.on('navigate', (state) => {
+e.on('navigate', state => {
   if (activeEditor) {
     if (!activeEditor.isClean()) {
       const leave = window.confirm(leaveMessage); // eslint-disable-line no-alert
@@ -309,7 +333,7 @@ e.on('navigate', (state) => {
   }
 });
 
-window.addEventListener('beforeunload', (event) => {
+window.addEventListener('beforeunload', event => {
   if (activeEditor && !activeEditor.isClean()) {
     event.returnValue = leaveMessage; // eslint-disable-line no-param-reassign
   }

@@ -28,20 +28,22 @@ function showNotification(msg, cls, callback) {
   }, 5000);
 }
 
-e.on('info', (msg) => {
+e.on('info', msg => {
   showNotification(msg);
 });
 
-e.on('reload-warning', (msg) => {
-  showNotification(msg, 'warning', () => { e.trigger('reload'); });
+e.on('reload-warning', msg => {
+  showNotification(msg, 'warning', () => {
+    e.trigger('reload');
+  });
 });
 
-e.on('error', (msg) => {
+e.on('error', msg => {
   showNotification(msg, 'error');
 });
 
 e.on('page-init', () => {
-  $.delegate($('#notifications'), 'click', 'li', (event) => {
+  $.delegate($('#notifications'), 'click', 'li', event => {
     event.target.closest('li').remove();
   });
 });

@@ -35,12 +35,17 @@ function getValue(el) {
 
 function sortElements(options) {
   function sortFunction(a, b) {
-    return (options.order === 'asc' ? 1 : -1)
-            * sorters[options.type](getValue(options.selector(a)), getValue(options.selector(b)));
+    return (
+      (options.order === 'asc' ? 1 : -1) *
+      sorters[options.type](
+        getValue(options.selector(a)),
+        getValue(options.selector(b)),
+      )
+    );
   }
 
   const fragment = document.createDocumentFragment();
-  options.elements.sort(sortFunction).forEach((el) => {
+  options.elements.sort(sortFunction).forEach(el => {
     fragment.appendChild(el);
   });
   options.parent.appendChild(fragment);
@@ -57,7 +62,7 @@ function sortableJournal(ol) {
   const head = $('.head', ol);
   const headers = $$('span[data-sort]', head);
 
-  head.addEventListener('click', (event) => {
+  head.addEventListener('click', event => {
     const header = event.target.closest('span');
     if (!header.getAttribute('data-sort')) {
       return;
@@ -67,7 +72,9 @@ function sortableJournal(ol) {
     const headerClass = header.classList[0];
 
     // update sort order
-    headers.forEach((el) => { el.removeAttribute('data-order'); });
+    headers.forEach(el => {
+      el.removeAttribute('data-order');
+    });
     header.setAttribute('data-order', order);
 
     sortElements({
@@ -86,7 +93,7 @@ function sortableTable(table) {
   const head = table.tHead;
   const headers = $$('th[data-sort]', head);
 
-  head.addEventListener('click', (event) => {
+  head.addEventListener('click', event => {
     const header = event.target.closest('th');
     if (!header.getAttribute('data-sort')) {
       return;
@@ -96,7 +103,9 @@ function sortableTable(table) {
     const index = headers.indexOf(header);
 
     // update sort order
-    headers.forEach((el) => { el.removeAttribute('data-order'); });
+    headers.forEach(el => {
+      el.removeAttribute('data-order');
+    });
     header.setAttribute('data-order', order);
 
     sortElements({
@@ -112,10 +121,10 @@ function sortableTable(table) {
 }
 
 export default function initSort() {
-  $$('.sortable').forEach((el) => {
+  $$('.sortable').forEach(el => {
     sortableTable(el);
   });
-  $$('ol.journal-table').forEach((el) => {
+  $$('ol.journal-table').forEach(el => {
     sortableJournal(el);
   });
 }

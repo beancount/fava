@@ -16,7 +16,7 @@ e.on('page-loaded', () => {
   const journal = $('#journal-table');
   if (!journal) return;
 
-  $.delegate(journal, 'click', 'li', (event) => {
+  $.delegate(journal, 'click', 'li', event => {
     if (event.target.tagName === 'A') {
       return;
     }
@@ -29,7 +29,11 @@ e.on('page-loaded', () => {
       addFilter(`payee:"${event.target.innerText}"`);
     } else if (event.target.tagName === 'DD') {
       // Filter for metadata when clicking on the value.
-      addFilter(` ${event.target.previousElementSibling.innerText}"${event.target.innerText}"`);
+      addFilter(
+        ` ${event.target.previousElementSibling.innerText}"${
+          event.target.innerText
+        }"`,
+      );
     } else if (event.target.closest('.indicators')) {
       // Toggle postings and metadata by clicking on indicators.
       const transaction = event.target.closest('.transaction');
@@ -38,14 +42,14 @@ e.on('page-loaded', () => {
   });
 
   // Toggle entries with buttons.
-  $$('#entry-filters button').forEach((button) => {
+  $$('#entry-filters button').forEach(button => {
     button.addEventListener('click', () => {
       const type = button.getAttribute('data-type');
       const shouldShow = button.classList.contains('inactive');
 
       button.classList.toggle('inactive', !shouldShow);
       if (type === 'transaction' || type === 'custom' || type === 'document') {
-        $$(`#entry-filters .${type}-toggle`).forEach((el) => {
+        $$(`#entry-filters .${type}-toggle`).forEach(el => {
           el.classList.toggle('inactive', !shouldShow);
         });
       }
@@ -54,7 +58,7 @@ e.on('page-loaded', () => {
 
       // Modify get params
       const filterShow = [];
-      $$('#entry-filters button').forEach((el) => {
+      $$('#entry-filters button').forEach(el => {
         if (!el.classList.contains('inactive')) {
           filterShow.push(el.getAttribute('data-type'));
         }
@@ -62,7 +66,7 @@ e.on('page-loaded', () => {
 
       const url = new URL(window.location);
       url.searchParams.delete('show');
-      filterShow.forEach((filter) => {
+      filterShow.forEach(filter => {
         url.searchParams.append('show', filter);
       });
       router.navigate(url.toString(), false);

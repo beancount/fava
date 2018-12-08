@@ -2,13 +2,16 @@
 //
 // The charts heavily use d3 libraries.
 
-import {
-  extent, max, merge, min,
-} from 'd3-array';
+import { extent, max, merge, min } from 'd3-array';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { hierarchy, partition, treemap } from 'd3-hierarchy';
 import {
-  scaleBand, scaleLinear, scaleOrdinal, scalePoint, scaleSqrt, scaleUtc,
+  scaleBand,
+  scaleLinear,
+  scaleOrdinal,
+  scalePoint,
+  scaleSqrt,
+  scaleUtc,
 } from 'd3-scale';
 import { event, select } from 'd3-selection';
 import { arc, line } from 'd3-shape';
@@ -37,7 +40,7 @@ let container;
 let tooltip;
 
 function addInternalNodesAsLeaves(node) {
-  node.children.forEach((o) => {
+  node.children.forEach(o => {
     addInternalNodesAsLeaves(o);
   });
   if (node.children && node.children.length) {
@@ -52,21 +55,25 @@ function addInternalNodesAsLeaves(node) {
 // Turn the elements in the selection (assuming they have a .account attribute)
 // into links to the account page.
 function makeAccountLink(selection) {
-  selection
-    .on('click', (d) => {
-      window.location = window.favaAPI.accountURL.replace('REPLACEME', d.data.account);
-      event.stopPropagation();
-    });
+  selection.on('click', d => {
+    window.location = window.favaAPI.accountURL.replace(
+      'REPLACEME',
+      d.data.account,
+    );
+    event.stopPropagation();
+  });
 }
 
 // Add a tooltip to the given selection.
 function addTooltip(selection, tooltipText) {
   selection
-    .on('mouseenter', (d) => {
+    .on('mouseenter', d => {
       tooltip.style('opacity', 1).html(tooltipText(d));
     })
     .on('mousemove', () => {
-      tooltip.style('left', `${event.pageX}px`).style('top', `${event.pageY - 15}px`);
+      tooltip
+        .style('left', `${event.pageX}px`)
+        .style('top', `${event.pageY - 15}px`);
     })
     .on('mouseleave', () => {
       tooltip.style('opacity', 0);
@@ -76,17 +83,20 @@ function addTooltip(selection, tooltipText) {
 // Set the chart legend to the given domain.
 function setLegend(domain, colorScale) {
   domain.sort();
-  const legend = select('#chart-legend').selectAll('span.legend')
+  const legend = select('#chart-legend')
+    .selectAll('span.legend')
     .data(domain)
     .enter()
     .append('span')
     .attr('class', 'legend');
 
-  legend.append('span')
+  legend
+    .append('span')
     .attr('class', 'color')
     .style('background', d => colorScale(d));
 
-  legend.append('span')
+  legend
+    .append('span')
     .attr('class', 'name')
     .html(d => d);
 }
@@ -96,7 +106,7 @@ function setSelect(selector, values) {
   const selectElement = $(selector);
   const { value } = selectElement;
   selectElement.innerHTML = '';
-  values.forEach((currency) => {
+  values.forEach(currency => {
     const opt = document.createElement('option');
     opt.value = currency;
     opt.text = currency;
@@ -162,22 +172,23 @@ class TreeMapChart extends BaseChart {
     this.root = data;
     this.treemap(this.root);
 
-    this.selections.cells = this.svg.selectAll('g')
+    this.selections.cells = this.svg
+      .selectAll('g')
       .data(this.root.leaves())
       .enter()
       .append('g')
       .call(addTooltip, this.tooltipText);
 
-    this.selections.cells.append('rect')
-      .attr('fill', (d) => {
-        const node = d.data.dummy ? d.parent : d;
-        if (node.parent === this.root || !node.parent) {
-          return scales.treemap(node.data.account);
-        }
-        return scales.treemap(node.parent.data.account);
-      });
+    this.selections.cells.append('rect').attr('fill', d => {
+      const node = d.data.dummy ? d.parent : d;
+      if (node.parent === this.root || !node.parent) {
+        return scales.treemap(node.data.account);
+      }
+      return scales.treemap(node.parent.data.account);
+    });
 
-    this.selections.cells.append('text')
+    this.selections.cells
+      .append('text')
       .attr('dy', '.5em')
       .attr('text-anchor', 'middle')
       .text(d => d.data.account.split(':').pop())
@@ -191,20 +202,17 @@ class TreeMapChart extends BaseChart {
   update() {
     this.width = parseInt(container.style('width'), 10);
     this.height = Math.min(this.width / 2.5, 400);
-    this.svg
-      .attr('width', this.width)
-      .attr('height', this.height);
+    this.svg.attr('width', this.width).attr('height', this.height);
     this.treemap.size([this.width, this.height]);
 
     this.treemap(this.root);
 
     function labelOpacity(d) {
       const length = this.getComputedTextLength();
-      return ((d.x1 - d.x0) > length + 4 && (d.y1 - d.y0) > 14) ? 1 : 0;
+      return d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? 1 : 0;
     }
 
-    this.selections.cells
-      .attr('transform', d => `translate(${d.x0},${d.y0})`);
+    this.selections.cells.attr('transform', d => `translate(${d.x0},${d.y0})`);
 
     this.selections.cells
       .select('rect')
@@ -236,20 +244,25 @@ class SunburstChart extends BaseChart {
     this.width = 500;
     this.height = 250;
 
-    this.canvas = this.svg.attr('class', 'sunburst').append('g')
+    this.canvas = this.svg
+      .attr('class', 'sunburst')
+      .append('g')
       .on('mouseleave', d => this.mouseLeave(d));
   }
 
   draw(data) {
     // Bounding circle underneath the sunburst
-    this.canvas.append('circle')
+    this.canvas
+      .append('circle')
       .style('opacity', 0)
       .attr('r', this.radius());
 
-    this.selections.accountLabel = this.canvas.append('text')
+    this.selections.accountLabel = this.canvas
+      .append('text')
       .attr('class', 'account')
       .attr('text-anchor', 'middle');
-    this.selections.balanceLabel = this.canvas.append('text')
+    this.selections.balanceLabel = this.canvas
+      .append('text')
       .attr('class', 'balance')
       .attr('dy', '1.2em')
       .attr('text-anchor', 'middle');
@@ -257,10 +270,11 @@ class SunburstChart extends BaseChart {
     this.root = data;
     this.partition(this.root);
 
-    this.selections.paths = this.canvas.selectAll('path')
+    this.selections.paths = this.canvas
+      .selectAll('path')
       .data(this.root.descendants())
       .enter()
-      .filter(d => (!d.data.dummy && d.depth))
+      .filter(d => !d.data.dummy && d.depth)
       .append('path')
       .attr('fill-rule', 'evenodd')
       .style('fill', d => scales.sunburst(d.data.account))
@@ -273,15 +287,20 @@ class SunburstChart extends BaseChart {
   }
 
   update() {
-    this.canvas.attr('transform', `translate(${(this.width / 2) + this.margin.left},${(this.height / 2) + this.margin.top})`);
+    this.canvas.attr(
+      'transform',
+      `translate(${this.width / 2 + this.margin.left},${this.height / 2 +
+        this.margin.top})`,
+    );
     this.svg
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom);
 
     this.y.range([0, this.radius()]);
 
-    this.selections.paths = this.canvas.selectAll('path')
-      .filter(d => (!d.data.dummy && d.depth))
+    this.selections.paths = this.canvas
+      .selectAll('path')
+      .filter(d => !d.data.dummy && d.depth)
       .attr('d', this.arc);
   }
 
@@ -290,11 +309,8 @@ class SunburstChart extends BaseChart {
   }
 
   setLabel(d) {
-    this.selections.balanceLabel
-      .text(this.labelText(d));
-    this.selections.accountLabel
-      .text(d.data.account)
-      .call(makeAccountLink);
+    this.selections.balanceLabel.text(this.labelText(d));
+    this.selections.accountLabel.text(d.data.account).call(makeAccountLink);
   }
 
   // Fade all but the current sequence
@@ -306,7 +322,7 @@ class SunburstChart extends BaseChart {
       .interrupt()
       .style('opacity', 0.5)
       // check if d.account starts with node.account
-      .filter(node => (d.data.account.lastIndexOf(node.data.account, 0) === 0))
+      .filter(node => d.data.account.lastIndexOf(node.data.account, 0) === 0)
       .style('opacity', 1);
   }
 
@@ -331,11 +347,9 @@ class BarChart extends BaseChart {
     this.selections = {};
     this.maxColumnWidth = 100;
 
-    this.xAxis = axisBottom(this.x0)
-      .tickSizeOuter(0);
+    this.xAxis = axisBottom(this.x0).tickSizeOuter(0);
 
-    this.yAxis = axisLeft(this.y)
-      .tickFormat(formatCurrencyShort);
+    this.yAxis = axisLeft(this.y).tickFormat(formatCurrencyShort);
 
     this.canvas = this.svg.classed('barchart', true).append('g');
     this.selections.xAxis = this.canvas.append('g').attr('class', 'x axis');
@@ -351,30 +365,35 @@ class BarChart extends BaseChart {
       Math.max(0, max(data, d => max(d.values, x => x.value))),
     ]);
 
-    this.selections.groups = this.canvas.selectAll('.group')
+    this.selections.groups = this.canvas
+      .selectAll('.group')
       .data(data)
       .enter()
       .append('g')
       .attr('class', 'group')
       .call(addTooltip, this.tooltipText);
 
-    this.selections.groupboxes = this.selections.groups.append('rect')
+    this.selections.groupboxes = this.selections.groups
+      .append('rect')
       .attr('class', 'group-box');
 
-    this.selections.axisgroupboxes = this.selections.groups.append('rect')
-      .on('click', (d) => {
+    this.selections.axisgroupboxes = this.selections.groups
+      .append('rect')
+      .on('click', d => {
         setTimeFilter(d.date);
       })
       .attr('class', 'axis-group-box');
 
-    this.selections.bars = this.selections.groups.selectAll('.bar')
+    this.selections.bars = this.selections.groups
+      .selectAll('.bar')
       .data(d => d.values)
       .enter()
       .append('rect')
       .attr('class', 'bar')
       .style('fill', d => scales.currencies(d.name));
 
-    this.selections.budgets = this.selections.groups.selectAll('.budget')
+    this.selections.budgets = this.selections.groups
+      .selectAll('.budget')
       .data(d => d.values)
       .enter()
       .append('rect')
@@ -385,9 +404,12 @@ class BarChart extends BaseChart {
   }
 
   update() {
-    const screenWidth = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    const screenWidth =
+      parseInt(container.style('width'), 10) -
+      this.margin.left -
+      this.margin.right;
     const maxWidth = this.selections.groups.size() * this.maxColumnWidth;
-    const offset = this.margin.left + (Math.max(0, screenWidth - maxWidth) / 2);
+    const offset = this.margin.left + Math.max(0, screenWidth - maxWidth) / 2;
 
     this.width = Math.min(screenWidth, maxWidth);
     this.height = 250 - this.margin.top - this.margin.bottom;
@@ -408,8 +430,10 @@ class BarChart extends BaseChart {
     this.selections.xAxis.call(this.xAxis);
     this.selections.yAxis.call(this.yAxis);
 
-    this.selections.groups
-      .attr('transform', d => `translate(${this.x0(d.label)},0)`);
+    this.selections.groups.attr(
+      'transform',
+      d => `translate(${this.x0(d.label)},0)`,
+    );
 
     this.selections.groupboxes
       .attr('width', this.x0.bandwidth())
@@ -441,7 +465,7 @@ class BarChart extends BaseChart {
       return domain;
     }
     const showIndices = Math.ceil(domain.length / labelsCount);
-    return domain.filter((d, i) => (i % showIndices) === 0);
+    return domain.filter((d, i) => i % showIndices === 0);
   }
 }
 
@@ -454,8 +478,7 @@ class ScatterPlot extends BaseChart {
     this.x = scaleUtc();
     this.y = scalePoint().padding(1);
 
-    this.xAxis = axisBottom(this.x)
-      .tickSizeOuter(0);
+    this.xAxis = axisBottom(this.x).tickSizeOuter(0);
 
     this.yAxis = axisLeft(this.y)
       .tickPadding(6)
@@ -471,7 +494,8 @@ class ScatterPlot extends BaseChart {
     this.selections.xAxis = this.canvas.append('g').attr('class', 'x axis');
     this.selections.yAxis = this.canvas.append('g').attr('class', 'y axis');
 
-    this.selections.dots = this.canvas.selectAll('.dot')
+    this.selections.dots = this.canvas
+      .selectAll('.dot')
       .data(this.data)
       .enter()
       .append('circle')
@@ -485,7 +509,10 @@ class ScatterPlot extends BaseChart {
   }
 
   update() {
-    this.width = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    this.width =
+      parseInt(container.style('width'), 10) -
+      this.margin.left -
+      this.margin.right;
     this.height = 250 - this.margin.top - this.margin.bottom;
 
     this.y.range([this.height, 0]);
@@ -494,7 +521,10 @@ class ScatterPlot extends BaseChart {
     this.svg
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom);
-    this.canvas.attr('transform', `translate(${this.margin.left},${this.margin.top})`);
+    this.canvas.attr(
+      'transform',
+      `translate(${this.margin.left},${this.margin.top})`,
+    );
 
     this.yAxis.tickSize(-this.width, 0);
     this.selections.xAxis.attr('transform', `translate(0,${this.height})`);
@@ -515,8 +545,7 @@ class LineChart extends BaseChart {
     this.x = scaleUtc();
     this.y = scaleLinear();
 
-    this.xAxis = axisBottom(this.x)
-      .tickSizeOuter(0);
+    this.xAxis = axisBottom(this.x).tickSizeOuter(0);
 
     this.yAxis = axisLeft(this.y)
       .tickPadding(6)
@@ -548,14 +577,16 @@ class LineChart extends BaseChart {
       maxDataValue + (maxDataValue - minDataValue) * 0.05,
     ]);
 
-    this.selections.lines = this.canvas.selectAll('.line')
+    this.selections.lines = this.canvas
+      .selectAll('.line')
       .data(data)
       .enter()
       .append('path')
       .attr('class', 'line')
       .style('stroke', d => scales.currencies(d.name));
 
-    this.selections.dots = this.canvas.selectAll('g.dot')
+    this.selections.dots = this.canvas
+      .selectAll('g.dot')
       .data(data)
       .enter()
       .append('g')
@@ -567,14 +598,15 @@ class LineChart extends BaseChart {
       .attr('r', 3)
       .style('fill', d => scales.currencies(d.name));
 
-    this.selections.voronoi.selectAll('path')
+    this.selections.voronoi
+      .selectAll('path')
       .data(this.points)
       .enter()
       .append('path')
-      .on('mouseenter', (d) => {
+      .on('mouseenter', d => {
         tooltip.style('opacity', 1).html(this.tooltipText(d.data));
       })
-      .on('mousemove', (d) => {
+      .on('mousemove', d => {
         const matrix = this.canvas.node().getScreenCTM();
         tooltip
           .style('left', `${this.x(d.data.date) + matrix.e}px`)
@@ -589,7 +621,10 @@ class LineChart extends BaseChart {
   }
 
   update() {
-    this.width = parseInt(container.style('width'), 10) - this.margin.left - this.margin.right;
+    this.width =
+      parseInt(container.style('width'), 10) -
+      this.margin.left -
+      this.margin.right;
     this.height = 250 - this.margin.top - this.margin.bottom;
 
     this.y.range([this.height, 0]);
@@ -598,7 +633,10 @@ class LineChart extends BaseChart {
     this.svg
       .attr('width', this.width + this.margin.left + this.margin.right)
       .attr('height', this.height + this.margin.top + this.margin.bottom);
-    this.canvas.attr('transform', `translate(${this.margin.left},${this.margin.top})`);
+    this.canvas.attr(
+      'transform',
+      `translate(${this.margin.left},${this.margin.top})`,
+    );
 
     this.yAxis.tickSize(-this.width, 0);
     this.selections.xAxis.attr('transform', `translate(0,${this.height})`);
@@ -608,18 +646,24 @@ class LineChart extends BaseChart {
     this.selections.dots
       .attr('cx', d => this.x(d.date))
       .attr('cy', d => this.y(d.value));
-    this.selections.lines
-      .attr('d', d => this.line(d.values));
+    this.selections.lines.attr('d', d => this.line(d.values));
 
     let paths;
     try {
-      const delaunay = Delaunay.from(this.points, d => this.x(d.date), d => this.y(d.value));
-      const polygons = delaunay.voronoi([0, 0, this.width, this.height]).cellPolygons();
+      const delaunay = Delaunay.from(
+        this.points,
+        d => this.x(d.date),
+        d => this.y(d.value),
+      );
+      const polygons = delaunay
+        .voronoi([0, 0, this.width, this.height])
+        .cellPolygons();
       paths = this.points.map(d => ({ path: polygons.next().value, data: d }));
     } catch (error) {
       paths = [];
     }
-    this.selections.voronoi.selectAll('path')
+    this.selections.voronoi
+      .selectAll('path')
       .data(paths)
       .filter(d => d.path !== undefined)
       .attr('d', d => `M${d.path.join('L')}Z`);
@@ -641,13 +685,23 @@ class SunburstChartContainer extends BaseChart {
     this.currencies = Object.keys(data);
 
     this.currencies.forEach((currency, i) => {
-      const canvas = this.svg.append('g')
-        .attr('transform', `translate(${(this.width * i) / this.currencies.length},0)`);
+      const canvas = this.svg
+        .append('g')
+        .attr(
+          'transform',
+          `translate(${(this.width * i) / this.currencies.length},0)`,
+        );
 
       const sunburst = new SunburstChart(canvas)
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
-        .set('labelText', d => `${formatCurrency(d.data.balance_children[currency] || 0)} ${currency}`)
+        .set(
+          'labelText',
+          d =>
+            `${formatCurrency(
+              d.data.balance_children[currency] || 0,
+            )} ${currency}`,
+        )
         .draw(data[currency]);
 
       this.canvases.push(canvas);
@@ -659,9 +713,7 @@ class SunburstChartContainer extends BaseChart {
 
   setSize() {
     this.width = container.node().offsetWidth;
-    this.svg
-      .attr('width', this.width)
-      .attr('height', 500);
+    this.svg.attr('width', this.width).attr('height', 500);
   }
 
   update() {
@@ -671,8 +723,10 @@ class SunburstChartContainer extends BaseChart {
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
         .update();
-      this.canvases[i]
-        .attr('transform', `translate(${(this.width * i) / this.currencies.length},0)`);
+      this.canvases[i].attr(
+        'transform',
+        `translate(${(this.width * i) / this.currencies.length},0)`,
+      );
     });
   }
 }
@@ -695,20 +749,26 @@ class HierarchyContainer extends BaseChart {
     this.canvas.html('');
 
     if (this.currencies.length === 0) {
-      this.canvas.append('text')
+      this.canvas
+        .append('text')
         .text('Chart is empty.')
         .attr('text-anchor', 'middle')
         .attr('x', this.width / 2)
         .attr('y', 160 / 2);
     } else if (mode === 'treemap') {
       this.currentChart = new TreeMapChart(this.canvas)
-        .set('tooltipText', d => `${formatCurrency(d.data.balance[currency])} ${currency}<em>${d.data.account}</em>`)
+        .set(
+          'tooltipText',
+          d =>
+            `${formatCurrency(d.data.balance[currency])} ${currency}<em>${
+              d.data.account
+            }</em>`,
+        )
         .draw(data[currency]);
 
       this.has_currency_setting = true;
     } else {
-      this.currentChart = new SunburstChartContainer(this.canvas)
-        .draw(data);
+      this.currentChart = new SunburstChartContainer(this.canvas).draw(data);
 
       this.has_currency_setting = false;
     }
@@ -720,8 +780,7 @@ class HierarchyContainer extends BaseChart {
 
   setSize() {
     this.width = container.node().offsetWidth;
-    this.svg
-      .attr('width', this.width);
+    this.svg.attr('width', this.width);
   }
 
   update() {
@@ -747,7 +806,7 @@ class ChartSwitcher {
     this.currentChart = undefined;
 
     // Chart controls
-    $$('#chart-form input[name=mode]').forEach((el) => {
+    $$('#chart-form input[name=mode]').forEach(el => {
       el.addEventListener('change', () => {
         this.state.mode = el.value;
         this.show(this.state.id);
@@ -756,7 +815,7 @@ class ChartSwitcher {
     $('#chart-currency').addEventListener('change', this.update.bind(this));
 
     // Switch between charts
-    $$('#chart-labels label').forEach((label) => {
+    $$('#chart-labels label').forEach(label => {
       label.addEventListener('click', () => {
         this.show(label.getAttribute('for'));
       });
@@ -797,18 +856,28 @@ class ChartSwitcher {
     this.currentChart = this.charts[id];
     this.state.id = id;
 
-    $$('#charts svg').forEach((el) => { el.classList.add('hidden'); });
+    $$('#charts svg').forEach(el => {
+      el.classList.add('hidden');
+    });
     $(`#${id}`).classList.remove('hidden');
 
     $('#chart-legend').innerHTML = '';
 
-    $$('#chart-labels .selected').forEach((el) => { el.classList.remove('selected'); });
+    $$('#chart-labels .selected').forEach(el => {
+      el.classList.remove('selected');
+    });
     $(`#chart-labels [for=${id}]`).classList.add('selected');
 
     this.currentChart.update();
 
-    $('#chart-currency').classList.toggle('hidden', !this.currentChart.has_currency_setting);
-    $('#chart-mode').classList.toggle('hidden', !this.currentChart.has_mode_setting);
+    $('#chart-currency').classList.toggle(
+      'hidden',
+      !this.currentChart.has_currency_setting,
+    );
+    $('#chart-mode').classList.toggle(
+      'hidden',
+      !this.currentChart.has_mode_setting,
+    );
   }
 }
 
@@ -818,8 +887,13 @@ const chartSwitcher = new ChartSwitcher();
 // currency.
 function getOperatingCurrencies() {
   const conversion = $('#conversion').value;
-  if (conversion && conversion !== 'at_cost' && conversion !== 'at_value' && conversion !== 'units'
-      && window.favaAPI.options.operating_currency.indexOf(conversion) === -1) {
+  if (
+    conversion &&
+    conversion !== 'at_cost' &&
+    conversion !== 'at_value' &&
+    conversion !== 'units' &&
+    window.favaAPI.options.operating_currency.indexOf(conversion) === -1
+  ) {
     const currencies = window.favaAPI.options.operating_currency.slice();
     currencies.push(conversion);
     return currencies;
@@ -863,25 +937,41 @@ e.on('page-loaded', () => {
           }))
           .filter(d => d.values.length);
 
-        renderers[id] = svg => new LineChart(svg)
-          .set('tooltipText', d => `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`)
-          .draw(series);
+        renderers[id] = svg =>
+          new LineChart(svg)
+            .set(
+              'tooltipText',
+              d =>
+                `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
+                  d.date,
+                )}</em>`,
+            )
+            .draw(series);
         break;
       }
       case 'commodities': {
-        const series = [{
-          name: chart.label,
-          values: chart.prices.map(d => ({
+        const series = [
+          {
             name: chart.label,
-            date: new Date(d[0]),
-            value: d[1],
-          })),
-        }];
+            values: chart.prices.map(d => ({
+              name: chart.label,
+              date: new Date(d[0]),
+              value: d[1],
+            })),
+          },
+        ];
 
         if (series[0].values.length) {
-          renderers[id] = svg => new LineChart(svg)
-            .set('tooltipText', d => `1 ${chart.base} = ${formatCurrency(d.value)} ${chart.quote}<em>${dateFormat.day(d.date)}</em>`)
-            .draw(series);
+          renderers[id] = svg =>
+            new LineChart(svg)
+              .set(
+                'tooltipText',
+                d =>
+                  `1 ${chart.base} = ${formatCurrency(d.value)} ${
+                    chart.quote
+                  }<em>${dateFormat.day(d.date)}</em>`,
+              )
+              .draw(series);
         }
         break;
       }
@@ -898,20 +988,21 @@ e.on('page-loaded', () => {
           label: currentDateFormat(new Date(d.date)),
         }));
 
-        renderers[id] = svg => new BarChart(svg)
-          .set('tooltipText', (d) => {
-            let text = '';
-            d.values.forEach((a) => {
-              text += `${formatCurrency(a.value)} ${a.name}`;
-              if (a.budget) {
-                text += ` / ${formatCurrency(a.budget)} ${a.name}`;
-              }
-              text += '<br>';
-            });
-            text += `<em>${d.label}</em>`;
-            return text;
-          })
-          .draw(series);
+        renderers[id] = svg =>
+          new BarChart(svg)
+            .set('tooltipText', d => {
+              let text = '';
+              d.values.forEach(a => {
+                text += `${formatCurrency(a.value)} ${a.name}`;
+                if (a.budget) {
+                  text += ` / ${formatCurrency(a.budget)} ${a.name}`;
+                }
+                text += '<br>';
+              });
+              text += `<em>${d.label}</em>`;
+              return text;
+            })
+            .draw(series);
         break;
       }
       case 'scatterplot': {
@@ -921,9 +1012,13 @@ e.on('page-loaded', () => {
           description: d.description,
         }));
 
-        renderers[id] = svg => new ScatterPlot(svg)
-          .set('tooltipText', d => `${d.description}<em>${dateFormat.day(d.date)}</em>`)
-          .draw(series);
+        renderers[id] = svg =>
+          new ScatterPlot(svg)
+            .set(
+              'tooltipText',
+              d => `${d.description}<em>${dateFormat.day(d.date)}</em>`,
+            )
+            .draw(series);
 
         break;
       }
@@ -932,7 +1027,7 @@ e.on('page-loaded', () => {
         const roots = {};
 
         const operatingCurrencies = getOperatingCurrencies();
-        operatingCurrencies.forEach((currency) => {
+        operatingCurrencies.forEach(currency => {
           const currencyHierarchy = hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
@@ -941,8 +1036,7 @@ e.on('page-loaded', () => {
           }
         });
 
-        renderers[id] = svg => new HierarchyContainer(svg)
-          .draw(roots);
+        renderers[id] = svg => new HierarchyContainer(svg).draw(roots);
 
         break;
       }
@@ -950,7 +1044,8 @@ e.on('page-loaded', () => {
         break;
     }
     if (renderers[id]) {
-      select('#chart-labels').append('label')
+      select('#chart-labels')
+        .append('label')
         .attr('for', id)
         .html(chart.label);
     }

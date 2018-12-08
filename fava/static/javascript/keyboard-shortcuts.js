@@ -11,17 +11,21 @@ function click(selector) {
 }
 
 e.on('page-loaded', () => {
-  $$('[data-key]').forEach((element) => {
+  $$('[data-key]').forEach(element => {
     const key = element.getAttribute('data-key');
     if (key !== undefined) {
-      Mousetrap.bind(key, () => {
-        const tag = element.tagName;
-        if (tag === 'BUTTON' || tag === 'A') {
-          element.click();
-        } else if (tag === 'INPUT') {
-          element.focus();
-        }
-      }, 'keyup');
+      Mousetrap.bind(
+        key,
+        () => {
+          const tag = element.tagName;
+          if (tag === 'BUTTON' || tag === 'A') {
+            element.click();
+          } else if (tag === 'INPUT') {
+            element.focus();
+          }
+        },
+        'keyup',
+      );
     }
   });
 });
@@ -34,8 +38,11 @@ function showTooltip(target) {
   document.body.appendChild(tooltip);
   const parentCoords = target.getBoundingClientRect();
   // Padded 10px to the left if there is space or centered otherwise
-  const left = parentCoords.left + Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10);
-  const top = parentCoords.top + ((target.offsetHeight - tooltip.offsetHeight) / 2);
+  const left =
+    parentCoords.left +
+    Math.min((target.offsetWidth - tooltip.offsetWidth) / 2, 10);
+  const top =
+    parentCoords.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
   tooltip.style.left = `${parseInt(left, 10)}px`;
   tooltip.style.top = `${parseInt(top, 10) + window.pageYOffset}px`;
 }
@@ -43,7 +50,7 @@ function showTooltip(target) {
 // Show all keyboard shortcut tooltips.
 function showTooltips() {
   $('#reload-page').classList.remove('hidden');
-  $$('[data-key]').forEach((el) => {
+  $$('[data-key]').forEach(el => {
     showTooltip(el);
   });
 }
@@ -51,7 +58,7 @@ function showTooltips() {
 // Remove all keyboard shortcut tooltips.
 function removeTooltips() {
   $('#reload-page').classList.add('hidden');
-  $$('.keyboard-tooltip').forEach((tooltip) => {
+  $$('.keyboard-tooltip').forEach(tooltip => {
     tooltip.remove();
   });
 }

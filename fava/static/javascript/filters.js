@@ -4,7 +4,10 @@ import { $, $$ } from './helpers';
 
 // Adjust the size of the input element.
 function updateInput(input) {
-  const size = Math.max(input.value.length, input.getAttribute('placeholder').length);
+  const size = Math.max(
+    input.value.length,
+    input.getAttribute('placeholder').length,
+  );
   input.setAttribute('size', size + 1);
 
   const isEmpty = !input.value;
@@ -20,7 +23,7 @@ export default function setTimeFilter(date) {
 }
 
 e.on('page-loaded', () => {
-  ['account', 'filter', 'time'].forEach((filter) => {
+  ['account', 'filter', 'time'].forEach(filter => {
     const value = new URLSearchParams(window.location.search).get(filter);
     const el = document.getElementById(`${filter}-filter`);
     if (value) {
@@ -31,7 +34,7 @@ e.on('page-loaded', () => {
 });
 
 e.on('page-init', () => {
-  $$('#filter-form input').forEach((input) => {
+  $$('#filter-form input').forEach(input => {
     input.addEventListener('autocomplete-select', () => {
       updateInput(input);
       e.trigger('form-submit-filters', input.form);
@@ -43,7 +46,7 @@ e.on('page-init', () => {
   });
 });
 
-e.on('button-click-filter-clear', (button) => {
+e.on('button-click-filter-clear', button => {
   const input = $('input', button.closest('span'));
   input.value = '';
   updateInput(input);

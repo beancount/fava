@@ -3,7 +3,7 @@
 /.tox
 /dist
 /build
-/fava/static/gen
+gen
 /fava/translations/messages.pot
 /fava.egg-info
 /htmlcov

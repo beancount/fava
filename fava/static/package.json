@@ -6,15 +6,21 @@
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "lint": "eslint javascript --ext .js && stylelint 'css/*.css'",
-    "fix": "stylelint 'css/*.css' --fix"
+    "fix": "stylelint 'css/*.css' --fix",
+    "format": "prettier '**/*.js' --write --ignore-path ../../.gitignore"
   },
   "eslintConfig": {
     "extends": [
-      "airbnb-base"
+      "airbnb-base",
+      "prettier"
     ],
     "env": {
       "browser": true
     }
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "all"
   },
   "stylelint": {
     "extends": "stylelint-config-standard",
@@ -29,17 +35,19 @@
     }
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
-    "rollup": "^0.67.3",
+    "prettier": "^1.15.3",
+    "rollup": "^0.67.4",
     "rollup-plugin-buble": "^0.19.4",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-css-only": "^0.4.0",
     "rollup-plugin-json": "^3.1.0",
     "rollup-plugin-node-resolve": "^3.4.0",
-    "stylelint": "^9.8.0",
+    "stylelint": "^9.9.0",
     "stylelint-config-standard": "^18.2.0",
     "stylelint-order": "^2.0.0"
   },

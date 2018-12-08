@@ -13,7 +13,7 @@ class Events {
     if (!this.events[event]) {
       return;
     }
-    this.events[event].forEach((callback) => {
+    this.events[event].forEach(callback => {
       callback(...args);
     });
   }

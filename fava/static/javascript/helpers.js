@@ -11,7 +11,7 @@ export function $$(expr, con = document) {
 // Execute the callback of the event of given type is fired on something
 // matching selector.
 $.delegate = function delegate(element, type, selector, callback) {
-  element.addEventListener(type, (event) => {
+  element.addEventListener(type, event => {
     if (event.target.closest(selector)) {
       callback(event);
     }
@@ -21,8 +21,8 @@ $.delegate = function delegate(element, type, selector, callback) {
 // Create a new object that has all properties of the arguments.
 $.extend = function extend(...args) {
   const newObject = {};
-  args.forEach((object) => {
-    Object.keys(object).forEach((i) => {
+  args.forEach(object => {
+    Object.keys(object).forEach(i => {
       if ({}.hasOwnProperty.call(object, i)) {
         newObject[i] = object[i];
       }
@@ -42,7 +42,7 @@ $.once = function once(element, event, callback) {
 };
 
 $.ready = function ready() {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     if (document.readyState !== 'loading') {
       resolve();
     } else {
@@ -104,11 +104,10 @@ export function handleJSON(response) {
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }
-  return response.json()
-    .then((data) => {
-      if (!data.success) {
-        return Promise.reject(data.error);
-      }
-      return data;
-    });
+  return response.json().then(data => {
+    if (!data.success) {
+      return Promise.reject(data.error);
+    }
+    return data;
+  });
 }
