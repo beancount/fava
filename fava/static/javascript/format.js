@@ -44,7 +44,7 @@ export const dateFormat = {
 export const timeFilterDateFormat = {
   year: utcFormat('%Y'),
   quarter(date) {
-    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
+    return `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
   month: utcFormat('%Y-%m'),
   week: utcFormat('%Y-W%W'),
