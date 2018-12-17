@@ -1,6 +1,6 @@
 dist: xenial
 language: python
-python: 3.6
+python: 3.7
 install: "pip install tox"
 script: "tox -e $TRAVIS_BUILD"
 
@@ -9,7 +9,9 @@ matrix:
     - env: TRAVIS_BUILD=coverage
       before_install: "pip install codecov"
       after_success: "codecov"
-    - env: TRAVIS_BUILD=py36-dev
+    - env: TRAVIS_BUILD=py
+      python: 3.6
+    - env: TRAVIS_BUILD=py-dev
     - env: TRAVIS_BUILD=lint
       before_install: "nvm use stable"
       script: "make && make lint"

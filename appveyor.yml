@@ -8,7 +8,7 @@ install:
   - '%PYTHON%\python -m pip install -U setuptools pip wheel tox'
 
 test_script:
-  - '%PYTHON%\scripts\tox -e py36'
+  - '%PYTHON%\scripts\tox -e py'
 
 cache:
   - '%LOCALAPPDATA%\pip\cache'
