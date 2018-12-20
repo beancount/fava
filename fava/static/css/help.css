@@ -11,8 +11,8 @@
 }
 
 .help-text {
-  font: 16px var(--font-family-alternative);
   max-width: var(--help-max-width);
+  font: 16px var(--font-family-alternative);
 }
 
 .help-text h2,
@@ -27,15 +27,15 @@
 }
 
 .help-text .CodeMirror {
+  height: auto;
+  padding: 0;
+  margin: 0;
   background-color: var(--color-code-background);
   border: 0;
-  height: auto;
-  margin: 0;
-  padding: 0;
 }
 
 .help-text code {
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .help-text ul {
@@ -47,12 +47,12 @@
 }
 
 .help-sidebar {
+  float: right;
+  padding: 10px 10px 0;
+  margin: 0 0 10px 10px;
+  font-size: 1.1em;
   background-color: var(--color-help-sidebar);
   border: 1px solid var(--color-help-sidebar-border);
-  float: right;
-  font-size: 1.1em;
-  margin: 0 0 10px 10px;
-  padding: 10px 10px 0;
 }
 
 .help-sidebar a:hover,

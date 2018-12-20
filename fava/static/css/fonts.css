@@ -1,58 +1,58 @@
 /* For the editor */
 @font-face {
-  font-family: 'Source Code Pro';
+  font-family: "Source Code Pro";
   font-style: normal;
   font-weight: normal;
-  src: url('../gen/SourceCodePro-Regular.woff') format('woff');
+  src: url("../gen/SourceCodePro-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Source Code Pro';
+  font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 500;
-  src: url('../gen/SourceCodePro-Semibold.woff') format('woff');
+  src: url("../gen/SourceCodePro-Semibold.woff") format("woff");
 }
 
 /* Interface fonts */
 @font-face {
-  font-family: 'Fira Mono';
+  font-family: "Fira Mono";
   font-style: normal;
   font-weight: normal;
-  src: url('../gen/FiraMono-Regular.woff') format('woff');
+  src: url("../gen/FiraMono-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Fira Mono';
+  font-family: "Fira Mono";
   font-style: normal;
   font-weight: 500;
-  src: url('../gen/FiraMono-Medium.woff') format('woff');
+  src: url("../gen/FiraMono-Medium.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Fira Sans';
+  font-family: "Fira Sans";
   font-style: normal;
   font-weight: normal;
-  src: url('../gen/FiraSans-Regular.woff') format('woff');
+  src: url("../gen/FiraSans-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Fira Sans';
+  font-family: "Fira Sans";
   font-style: normal;
   font-weight: 500;
-  src: url('../gen/FiraSans-Medium.woff') format('woff');
+  src: url("../gen/FiraSans-Medium.woff") format("woff");
 }
 
 /* The help pages */
 @font-face {
-  font-family: 'Source Serif Pro';
+  font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: normal;
-  src: url('../gen/SourceSerifPro-Regular.woff') format('woff');
+  src: url("../gen/SourceSerifPro-Regular.woff") format("woff");
 }
 
 @font-face {
-  font-family: 'Source Serif Pro';
+  font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: 500;
-  src: url('../gen/SourceSerifPro-Semibold.woff') format('woff');
+  src: url("../gen/SourceSerifPro-Semibold.woff") format("woff");
 }

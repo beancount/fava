@@ -1,8 +1,8 @@
 .entry-form textarea {
   flex-grow: 1;
-  font: inherit;
-  padding: 8px;
   width: 100%;
+  padding: 8px;
+  font: inherit;
 }
 
 .entry-form label {
@@ -13,21 +13,21 @@
   width: 220px;
 }
 
-.entry-form input[name='flag'] {
-  padding-left: 2px;
-  padding-right: 2px;
-  text-align: center;
+.entry-form input[name="flag"] {
   width: 1.5em;
+  padding-right: 2px;
+  padding-left: 2px;
+  text-align: center;
 }
 
 .entry-form input.account,
-.entry-form input[name='narration'] {
+.entry-form input[name="narration"] {
   flex-basis: 200px;
   flex-grow: 1;
   min-width: 20em;
 }
 
-.entry-form input[name='payee'] {
+.entry-form input[name="payee"] {
   flex-basis: 100px;
   flex-grow: 1;
   min-width: 10em;
@@ -69,8 +69,8 @@
 }
 
 .entry-form .metadata {
-  font-size: .8em;
   padding-left: 56px;
+  font-size: 0.8em;
 }
 
 @media (max-width: 767px) {
@@ -81,7 +81,7 @@
 
   .entry-form.transaction .fieldset input {
     height: 35px;
-    margin: 0 .5em .5em 0;
+    margin: 0 0.5em 0.5em 0;
   }
 
   .entry-form.transaction .metadata,

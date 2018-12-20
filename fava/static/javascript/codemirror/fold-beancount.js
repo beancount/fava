@@ -1,6 +1,6 @@
-import CodeMirror from 'codemirror';
+import CodeMirror from "codemirror";
 
-CodeMirror.registerHelper('fold', 'beancount', (cm, start) => {
+CodeMirror.registerHelper("fold", "beancount", (cm, start) => {
   const maxDepth = 100;
 
   function headerLevel(lineNo) {

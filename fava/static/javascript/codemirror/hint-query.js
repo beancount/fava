@@ -1,12 +1,12 @@
-import CodeMirror from 'codemirror';
+import CodeMirror from "codemirror";
 
-import { fuzzyMatch, getCurrentWord } from './helpers';
-import { columns, functions, keywords } from './bql-grammar.json';
+import { fuzzyMatch, getCurrentWord } from "./helpers";
+import { columns, functions, keywords } from "./bql-grammar.json";
 
 const functionCompletions = functions.map(f => `${f}(`);
-const commands = ['select'];
+const commands = ["select"];
 
-CodeMirror.registerHelper('hint', 'beancount-query', cm => {
+CodeMirror.registerHelper("hint", "beancount-query", cm => {
   const cursor = cm.getCursor();
   const line = cm.getLine(cursor.line);
   const currentWord = getCurrentWord(cursor, line);

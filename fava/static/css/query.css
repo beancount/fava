@@ -12,8 +12,8 @@
 }
 
 .query-box {
-  align-items: center;
   display: flex;
+  align-items: center;
   padding-bottom: 1em;
 }
 
@@ -23,25 +23,27 @@
 
 .query-box .CodeMirror,
 .query-box textarea {
-  border: 1px solid var(--color-background-darker);
   flex-grow: 1;
-  font-family: var(--font-family-editor);
-  font-size: 16px;
+  width: 100%;
   height: auto;
   margin: 0;
-  margin-right: .5em;
-  width: 100%;
+  margin-right: 0.5em;
+  font-family: var(--font-family-editor);
+  font-size: 16px;
+  border: 1px solid var(--color-background-darker);
 }
 
-.CodeMirror .CodeMirror-placeholder { color: #999; }
+.CodeMirror .CodeMirror-placeholder {
+  color: #999;
+}
 
 .query-error {
-  background: var(--color-error);
-  color: var(--color-background);
   font-family: var(--font-family-monospaced);
+  color: var(--color-background);
+  background: var(--color-error);
 }
 
 .query-syntax-error {
-  color: var(--color-error);
   font-family: var(--font-family-monospaced);
+  color: var(--color-error);
 }

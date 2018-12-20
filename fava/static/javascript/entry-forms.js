@@ -1,35 +1,35 @@
-import e from './events';
-import { $, $$, handleJSON } from './helpers';
+import e from "./events";
+import { $, $$, handleJSON } from "./helpers";
 
 // Various helpers to deal with entry forms.
 export default class EntryForm {
   constructor(form) {
     this.form = form;
-    this.type = this.form.getAttribute('data-type');
+    this.type = this.form.getAttribute("data-type");
   }
 
   // Append a posting row.
   addPosting() {
-    const newPosting = $('#posting-template').children[0].cloneNode(true);
-    this.form.querySelector('.postings').appendChild(newPosting);
+    const newPosting = $("#posting-template").children[0].cloneNode(true);
+    this.form.querySelector(".postings").appendChild(newPosting);
     return newPosting;
   }
 
   // Append a metadata row.
   addMetadata() {
-    const newMetadata = $('#metadata-template').children[0].cloneNode(true);
-    this.form.querySelector('.metadata').appendChild(newMetadata);
+    const newMetadata = $("#metadata-template").children[0].cloneNode(true);
+    this.form.querySelector(".metadata").appendChild(newMetadata);
     return newMetadata;
   }
 
   // Reset the entry form.
   reset() {
-    $('[name=narration]', this.form).value = '';
-    $('[name=payee]', this.form).value = '';
-    $$('.metadata-row', this.form).forEach(el => {
+    $("[name=narration]", this.form).value = "";
+    $("[name=payee]", this.form).value = "";
+    $$(".metadata-row", this.form).forEach(el => {
       el.remove();
     });
-    $$('.posting', this.form).forEach(el => {
+    $$(".posting", this.form).forEach(el => {
       el.remove();
     });
     this.addPosting();
@@ -39,9 +39,9 @@ export default class EntryForm {
 
   // Check validity of the form.
   checkValidity() {
-    if ($$('input', this.form).some(input => !input.checkValidity()))
+    if ($$("input", this.form).some(input => !input.checkValidity()))
       return false;
-    if (this.type === 'Transaction' && $$('.posting', this.form).length === 0)
+    if (this.type === "Transaction" && $$(".posting", this.form).length === 0)
       return false;
     return true;
   }
@@ -55,27 +55,27 @@ export default class EntryForm {
       meta: {},
     };
 
-    $$('[name]', this.form).forEach(input => {
+    $$("[name]", this.form).forEach(input => {
       entryData[input.name] = input.value;
     });
 
-    $$('.metadata-row', this.form).forEach(row => {
-      const key = row.querySelector('.metadata-key').value;
-      entryData.meta[key] = row.querySelector('.metadata-value').value;
+    $$(".metadata-row", this.form).forEach(row => {
+      const key = row.querySelector(".metadata-key").value;
+      entryData.meta[key] = row.querySelector(".metadata-value").value;
     });
 
-    if (this.type === 'Transaction') {
+    if (this.type === "Transaction") {
       entryData.postings = [];
-      $$('.posting', this.form).forEach(posting => {
+      $$(".posting", this.form).forEach(posting => {
         entryData.postings.push({
-          account: posting.querySelector('.account').value,
-          amount: posting.querySelector('.amount').value,
+          account: posting.querySelector(".account").value,
+          amount: posting.querySelector(".amount").value,
         });
       });
     }
 
-    if (this.type === 'Balance') {
-      entryData.account = this.form.querySelector('.account').value;
+    if (this.type === "Balance") {
+      entryData.account = this.form.querySelector(".account").value;
     }
 
     return entryData;
@@ -84,9 +84,9 @@ export default class EntryForm {
   // Check if the form is empty (but for date and payee).
   isEmpty() {
     let empty = true;
-    if ($('[name=narration]', this.form).value) empty = false;
-    $$('.posting', this.form).forEach(posting => {
-      if (posting.querySelector('.account').value) empty = false;
+    if ($("[name=narration]", this.form).value) empty = false;
+    $$(".posting", this.form).forEach(posting => {
+      if (posting.querySelector(".account").value) empty = false;
     });
     return empty;
   }
@@ -94,16 +94,16 @@ export default class EntryForm {
   // Set all but date and payee like in the given transaction (if empty).
   set(entry) {
     if (!this.isEmpty()) return;
-    $('[name=narration]', this.form).value = entry.narration;
-    $$('.posting', this.form).forEach(el => {
+    $("[name=narration]", this.form).value = entry.narration;
+    $$(".posting", this.form).forEach(el => {
       el.remove();
     });
     entry.postings.forEach(posting => {
       const { account, amount } = posting;
       const row = this.addPosting();
-      $('.account', row).value = account;
+      $(".account", row).value = account;
       if (amount) {
-        $('.amount', row).value = amount;
+        $(".amount", row).value = amount;
       }
     });
   }
@@ -124,56 +124,56 @@ export default class EntryForm {
     if (!allValid) return;
 
     $.fetch(`${window.favaAPI.baseURL}api/add-entries/`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(jsonData),
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     })
       .then(handleJSON)
       .then(
         data => {
-          e.trigger('reload');
-          e.trigger('info', data.message);
+          e.trigger("reload");
+          e.trigger("info", data.message);
           if (successCallback) {
             successCallback();
           }
         },
         error => {
-          e.trigger('error', `Saving failed: ${error}`);
+          e.trigger("error", `Saving failed: ${error}`);
         },
       );
   }
 }
 
-e.on('button-click-remove-fieldset', button => {
-  button.closest('.fieldset').remove();
+e.on("button-click-remove-fieldset", button => {
+  button.closest(".fieldset").remove();
 });
 
-e.on('button-click-add-metadata', button => {
-  new EntryForm(button.closest('.entry-form'))
+e.on("button-click-add-metadata", button => {
+  new EntryForm(button.closest(".entry-form"))
     .addMetadata()
-    .querySelector('input')
+    .querySelector("input")
     .focus();
 });
 
-e.on('button-click-add-posting', button => {
-  new EntryForm(button.closest('.entry-form'))
+e.on("button-click-add-posting", button => {
+  new EntryForm(button.closest(".entry-form"))
     .addPosting()
-    .querySelector('input')
+    .querySelector("input")
     .focus();
 });
 
 // Autofill complete transactions.
-e.on('autocomplete-select-payees', input => {
+e.on("autocomplete-select-payees", input => {
   const payee = input.value;
   const params = new URLSearchParams();
-  params.set('payee', payee);
+  params.set("payee", payee);
   $.fetch(
     `${window.favaAPI.baseURL}api/payee-transaction/?${params.toString()}`,
   )
     .then(handleJSON)
     .then(data => data.payload)
     .then(entry => {
-      const form = input.closest('.entry-form');
+      const form = input.closest(".entry-form");
       if (!form || !entry) return;
       new EntryForm(form).set(entry);
     });

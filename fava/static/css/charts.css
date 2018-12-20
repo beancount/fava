@@ -1,13 +1,13 @@
 .chart-labels {
-  color: var(--color-text-lightest);
-  font-size: 1em;
   margin-bottom: 1.5em;
+  font-size: 1em;
+  color: var(--color-text-lightest);
   text-align: center;
 }
 
 .chart-labels label {
+  padding-left: 0.5em;
   cursor: pointer;
-  padding-left: .5em;
 }
 
 .chart-labels label.selected,
@@ -24,9 +24,9 @@
 }
 
 .chart-mode label {
-  background-color: var(--color-background-darker);
-  color: var(--color-text);
   margin-right: 0;
+  color: var(--color-text);
+  background-color: var(--color-background-darker);
 }
 
 .chart-mode label:hover {
@@ -34,29 +34,29 @@
 }
 
 .chart-mode input:checked + label {
-  background-color: var(--color-header);
   color: var(--color-background);
+  background-color: var(--color-header);
 }
 
 .toggle-chart {
   height: 22px;
-  margin: 0;
   padding: 2px 6px;
+  margin: 0;
 }
 
 .toggle-chart span {
-  border: 0;
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
-  border-top: 13px solid var(--color-background);
   display: block;
+  border: 0;
+  border-top: 13px solid var(--color-background);
+  border-right: 9px solid transparent;
+  border-left: 9px solid transparent;
 }
 
 .hide-charts .toggle-chart span {
   border: 0;
+  border-right: 9px solid transparent;
   border-bottom: 13px solid var(--color-background);
   border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
 }
 
 .hide-charts .chart-container,
@@ -68,8 +68,8 @@
 }
 
 .chart-container {
-  min-height: 100px;
   position: relative;
+  min-height: 100px;
 }
 
 .chart-legend {
@@ -77,10 +77,10 @@
 }
 
 .chart-legend .color {
-  border-radius: 10px;
   display: inline-block;
-  height: 10px;
   width: 10px;
+  height: 10px;
+  border-radius: 10px;
 }
 
 .chart-legend .name {
@@ -88,9 +88,9 @@
 }
 
 .loading {
-  color: var(--color-text-lightest);
-  font-style: italic;
   padding-top: 30px;
+  font-style: italic;
+  color: var(--color-text-lightest);
   text-align: center;
 }
 
@@ -106,8 +106,8 @@ svg .line {
 svg .axis path,
 svg .axis line {
   fill: none;
-  shape-rendering: crispEdges;
   stroke: var(--color-chart-axis);
+  shape-rendering: crispEdges;
 }
 
 svg .axis.y line {
@@ -116,8 +116,8 @@ svg .axis.y line {
 }
 
 svg .voronoi {
-  fill: none;
   pointer-events: all;
+  fill: none;
 }
 
 .treemap {
@@ -146,7 +146,7 @@ svg .voronoi {
 }
 
 .barchart .group:hover .group-box {
-  opacity: .1;
+  opacity: 0.1;
 }
 
 .barchart .axis-group-box {
@@ -159,39 +159,39 @@ svg .voronoi {
 }
 
 .barchart .budget {
-  opacity: .3;
+  opacity: 0.3;
 }
 
 .tooltip {
+  position: absolute;
+  z-index: var(--z-index-floating-ui);
+  min-width: 5em;
+  padding: 0.5em;
+  font-family: var(--font-family-monospaced);
+  text-align: center;
+  pointer-events: none;
   background: var(--color-background);
   border: 1px solid var(--color-background-darkest);
   box-shadow: 0 0 5px var(--color-background-darker);
-  font-family: var(--font-family-monospaced);
-  min-width: 5em;
   opacity: 0;
-  padding: .5em;
-  pointer-events: none;
-  position: absolute;
-  text-align: center;
   transform: translate(-50%, -100%);
-  z-index: var(--z-index-floating-ui);
 }
 
 .tooltip::before {
-  border: 15px solid transparent;
-  border-top-color: var(--color-background-darkest);
-  content: '';
-  height: 0;
-  left: 50%;
-  margin-left: -15px;
   position: absolute;
   top: 100%;
+  left: 50%;
   width: 0;
+  height: 0;
+  margin-left: -15px;
+  content: "";
+  border: 15px solid transparent;
+  border-top-color: var(--color-background-darkest);
 }
 
 .tooltip em {
-  color: var(--color-text-lightest);
   display: block;
-  font-family: var(--font-family);
   margin-top: 5px;
+  font-family: var(--font-family);
+  color: var(--color-text-lightest);
 }

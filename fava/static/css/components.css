@@ -1,12 +1,12 @@
 .toggle-box {
-  border: 1px solid var(--color-table-border);
   display: block;
-  margin-bottom: .5em;
   min-width: 400px;
+  margin-bottom: 0.5em;
+  border: 1px solid var(--color-table-border);
 }
 
 .toggle-box.inactive {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .toggle-box.error .toggle-box-header {
@@ -22,27 +22,27 @@
 }
 
 .toggle-box-header {
-  align-items: center;
-  background-color: var(--color-sidebar-background);
-  cursor: pointer;
   display: flex;
+  align-items: center;
   padding: 5px 10px;
+  cursor: pointer;
+  background-color: var(--color-sidebar-background);
 }
 
 .toggle-box-header::before {
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
+  margin-right: 0.5em;
+  content: "";
   border-top: 9px solid var(--color-treetable-expander);
-  content: '';
-  margin-right: .5em;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
 }
 
 .toggle-box-header pre {
   display: inline-block;
-  margin: 0;
   padding: 3px 6px;
+  margin: 0;
 }
 
 .toggle-box-content {
-  padding: .5em;
+  padding: 0.5em;
 }

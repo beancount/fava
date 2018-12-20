@@ -33,69 +33,69 @@
 //    `button-click-${data-event}` will be triggered.
 //
 
-import { $, handleJSON } from './helpers';
-import e from './events';
-import router from './router';
+import { $, handleJSON } from "./helpers";
+import e from "./events";
+import router from "./router";
 
-import '../css/style.css';
-import '../css/base.css';
-import '../css/charts.css';
-import '../css/components.css';
-import '../css/editor.css';
-import '../css/entry-forms.css';
-import '../css/fonts.css';
-import '../css/header.css';
-import '../css/help.css';
-import '../css/ingest.css';
-import '../css/journal-table.css';
-import '../css/media-mobile.css';
-import '../css/media-print.css';
-import '../css/overlay.css';
-import '../css/query.css';
-import '../css/tree-table.css';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/addon/dialog/dialog.css';
-import 'codemirror/addon/fold/foldgutter.css';
-import 'codemirror/addon/hint/show-hint.css';
+import "../css/style.css";
+import "../css/base.css";
+import "../css/charts.css";
+import "../css/components.css";
+import "../css/editor.css";
+import "../css/entry-forms.css";
+import "../css/fonts.css";
+import "../css/header.css";
+import "../css/help.css";
+import "../css/ingest.css";
+import "../css/journal-table.css";
+import "../css/media-mobile.css";
+import "../css/media-print.css";
+import "../css/overlay.css";
+import "../css/query.css";
+import "../css/tree-table.css";
+import "codemirror/lib/codemirror.css";
+import "codemirror/addon/dialog/dialog.css";
+import "codemirror/addon/fold/foldgutter.css";
+import "codemirror/addon/hint/show-hint.css";
 
-import './autocomplete';
-import './charts';
-import './clipboard';
-import './documents-upload';
-import './editor';
-import './entry-forms';
-import './filters';
-import './ingest';
-import './journal';
-import './keyboard-shortcuts';
-import './notifications';
-import './overlays';
-import './sidebar';
-import './sort';
-import './transaction-overlay';
-import './tree-table';
+import "./autocomplete";
+import "./charts";
+import "./clipboard";
+import "./documents-upload";
+import "./editor";
+import "./entry-forms";
+import "./filters";
+import "./ingest";
+import "./journal";
+import "./keyboard-shortcuts";
+import "./notifications";
+import "./overlays";
+import "./sidebar";
+import "./sort";
+import "./transaction-overlay";
+import "./tree-table";
 
-e.on('page-loaded', () => {
-  window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
-  document.title = $('#data-document-title').value;
-  $('h1 strong').innerHTML = $('#data-page-title').innerHTML;
-  $('#reload-page').classList.add('hidden');
+e.on("page-loaded", () => {
+  window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
+  document.title = $("#data-document-title").value;
+  $("h1 strong").innerHTML = $("#data-page-title").innerHTML;
+  $("#reload-page").classList.add("hidden");
 });
 
-e.on('page-init', () => {
+e.on("page-init", () => {
   // Watch for all clicks on <button>s and fire the appropriate events.
-  $.delegate(document.body, 'click', 'button', event => {
-    const button = event.target.closest('button');
-    const type = button.getAttribute('data-event');
+  $.delegate(document.body, "click", "button", event => {
+    const button = event.target.closest("button");
+    const type = button.getAttribute("data-event");
     if (type) {
       e.trigger(`button-click-${type}`, button);
     }
   });
 
   // Watch for all submits of <forms>s and fire the appropriate events.
-  $.delegate(document.body, 'submit', 'form', event => {
+  $.delegate(document.body, "submit", "form", event => {
     const form = event.target;
-    const type = form.getAttribute('data-event');
+    const type = form.getAttribute("data-event");
     if (type) {
       event.preventDefault();
       e.trigger(`form-submit-${type}`, form);
@@ -111,14 +111,14 @@ function doPoll() {
     .then(
       data => {
         if (data.changed) {
-          if (window.favaAPI.favaOptions['auto-reload']) {
-            e.trigger('reload');
+          if (window.favaAPI.favaOptions["auto-reload"]) {
+            e.trigger("reload");
           } else {
-            $('#reload-page').classList.remove('hidden');
-            e.trigger('file-modified');
+            $("#reload-page").classList.remove("hidden");
+            e.trigger("file-modified");
             e.trigger(
-              'reload-warning',
-              $('#reload-page').getAttribute('data-reload-text'),
+              "reload-warning",
+              $("#reload-page").getAttribute("data-reload-text"),
             );
           }
         }
@@ -131,9 +131,9 @@ function doPoll() {
 }
 
 $.ready().then(() => {
-  window.favaAPI = JSON.parse($('#ledger-data').innerHTML);
+  window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
   router.init();
-  e.trigger('page-init');
-  e.trigger('page-loaded');
+  e.trigger("page-init");
+  e.trigger("page-loaded");
   setTimeout(doPoll, 5000);
 });

@@ -6,8 +6,8 @@
 .journal li,
 .journal ul,
 .journal ol {
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
 .tree-table p,
@@ -18,14 +18,14 @@
 .tree-table p > span,
 .journal p > span {
   flex-shrink: 0;
-  margin: 0;
   padding: 2px 4px;
+  margin: 0;
 }
 
 .tree-table .num,
 .journal .num {
-  color: var(--color-text);
   font-family: var(--font-family-monospaced);
+  color: var(--color-text);
   text-align: right;
 }
 
@@ -36,23 +36,23 @@
 
 .tree-table .head p > span,
 .journal .head p > span {
-  background-color: var(--color-table-header-background);
-  color: var(--color-table-header-text);
   padding: 3px 4px;
+  color: var(--color-table-header-text);
+  background-color: var(--color-table-header-background);
 }
 
 .tree-table .head .num,
 .journal .head .num {
-  background-color: var(--color-table-header-background);
-  color: var(--color-table-header-text);
   font-family: var(--font-family);
+  color: var(--color-table-header-text);
   text-align: inherit;
+  background-color: var(--color-table-header-background);
 }
 
 .tree-table .totals p > span,
 .journal .totals p > span {
-  background-color: var(--color-table-header-background);
   color: var(--color-table-header-text);
+  background-color: var(--color-table-header-background);
 }
 
 .journal > li,
@@ -99,51 +99,51 @@
 }
 
 .journal .postings {
+  font-size: 0.9em;
   background-color: var(--color-journal-postings);
-  font-size: .9em;
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .journal .postings .num {
-  line-height: 16px;
   overflow: hidden;
+  line-height: 16px;
 }
 
 /* Metadata */
 .journal dl {
-  font-size: .9em;
-  margin: 0;
   padding: 2px 0;
+  margin: 0;
+  font-size: 0.9em;
 }
 
 .journal dt {
-  color: var(--color-journal-metadata);
   display: inline-block;
   float: left;
-  margin-left: 9rem;
-  min-width: 4rem;
   width: auto;
+  min-width: 4rem;
+  margin-left: 9rem;
+  color: var(--color-journal-metadata);
 }
 
 .journal dd {
-  cursor: pointer;
   margin-left: 15rem;
+  cursor: pointer;
 }
 
 .journal p > .num {
-  border-left: 1px solid var(--color-table-border);
   width: 9rem;
+  border-left: 1px solid var(--color-table-border);
 }
 
 .journal .datecell,
 .journal .flag {
-  background-color: var(--entry-type-color);
   text-align: center;
+  background-color: var(--entry-type-color);
 }
 
 .journal .datecell {
-  white-space: nowrap;
   width: 5.5rem;
+  white-space: nowrap;
 }
 
 .journal .flag {
@@ -155,22 +155,22 @@
 }
 
 .journal .description {
-  align-items: center;
   display: flex;
   flex: 1;
+  align-items: center;
   padding-left: 8px;
 }
 
 .journal .description .separator {
-  background-color: var(--color-text-lighter);
-  height: 4px;
-  margin: 0 6px;
-  padding: 2px;
   width: 4px;
+  height: 4px;
+  padding: 2px;
+  margin: 0 6px;
+  background-color: var(--color-text-lighter);
 }
 
 .journal .description .account-link {
-  margin-right: .5em;
+  margin-right: 0.5em;
 }
 
 .journal .description .num {
@@ -179,9 +179,9 @@
 
 .journal .tag,
 .journal .link {
-  cursor: pointer;
-  font-size: .9em;
   margin-left: 8px;
+  font-size: 0.9em;
+  cursor: pointer;
 }
 
 .journal .tag {
@@ -202,7 +202,7 @@
 
 .journal .filename {
   font-family: var(--font-family-monospaced);
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .journal .document .filename {
@@ -210,21 +210,21 @@
 }
 
 .journal .indicators {
-  align-items: center;
-  cursor: pointer;
   display: flex;
   flex-shrink: 3;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-end;
+  cursor: pointer;
 }
 
 .journal .indicators span {
+  min-width: 6px;
+  height: 6px;
+  padding: 0;
+  margin-right: 4px;
   background-color: var(--color-journal-posting-indicator);
   border-radius: 3px;
-  height: 6px;
-  margin-right: 4px;
-  min-width: 6px;
-  padding: 0;
 }
 
 .journal .indicators .pending,
@@ -233,11 +233,11 @@
 }
 
 .journal .indicators .metadata-indicator {
-  border-radius: 20px;
-  color: var(--color-journal-metadata-indicator);
-  font-size: 10px;
   height: 16px;
-  line-height: 16px;
   padding: 0 6px;
+  font-size: 10px;
+  line-height: 16px;
+  color: var(--color-journal-metadata-indicator);
   text-transform: lowercase;
+  border-radius: 20px;
 }

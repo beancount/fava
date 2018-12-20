@@ -43,17 +43,17 @@ $.once = function once(element, event, callback) {
 
 $.ready = function ready() {
   return new Promise(resolve => {
-    if (document.readyState !== 'loading') {
+    if (document.readyState !== "loading") {
       resolve();
     } else {
-      document.addEventListener('DOMContentLoaded', resolve());
+      document.addEventListener("DOMContentLoaded", resolve());
     }
   });
 };
 
 $.fetch = function fetch(input, init) {
   let def = {
-    credentials: 'same-origin',
+    credentials: "same-origin",
   };
   if (init) {
     def = $.extend(def, init);
@@ -95,7 +95,7 @@ export function fuzzywrap(pattern, string) {
       result.push(char);
     }
   }
-  return result.join('');
+  return result.join("");
 }
 
 // Handles JSON content for a Promise returned by fetch, also handling an HTTP

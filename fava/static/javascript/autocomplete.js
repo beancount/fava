@@ -1,5 +1,5 @@
-import e from './events';
-import { $, fuzzytest, fuzzywrap, handleJSON } from './helpers';
+import e from "./events";
+import { $, fuzzytest, fuzzywrap, handleJSON } from "./helpers";
 
 const accountCompletionCache = {};
 
@@ -13,16 +13,16 @@ class CompletionList {
   // Create and append list to DOM, add event listener to list and create input
   // listeners.
   constructor() {
-    const ul = document.createElement('ul');
+    const ul = document.createElement("ul");
     document.body.appendChild(ul);
-    ul.classList.add('autocomplete');
+    ul.classList.add("autocomplete");
     this.ul = ul;
 
     // Clicking on a suggestion selects it.
-    ul.addEventListener('mousedown', event => {
+    ul.addEventListener("mousedown", event => {
       if (event.target !== ul && event.button === 0) {
         event.preventDefault();
-        this.select(event.target.closest('li'));
+        this.select(event.target.closest("li"));
         this.close();
       }
     });
@@ -62,32 +62,32 @@ class CompletionList {
   // Show the completion list below the given <input> element if the input has
   // a 'list' attribute.
   show(input) {
-    this.list = input.getAttribute('list');
+    this.list = input.getAttribute("list");
     if (!this.list) {
       return;
     }
 
     this.input = input;
-    input.setAttribute('autocomplete', 'off');
+    input.setAttribute("autocomplete", "off");
 
-    input.addEventListener('input', this.events.input);
-    input.addEventListener('keydown', this.events.keydown);
-    input.addEventListener('blur', this.events.blur);
+    input.addEventListener("input", this.events.input);
+    input.addEventListener("keydown", this.events.keydown);
+    input.addEventListener("blur", this.events.blur);
 
     this.evaluate();
   }
 
   // Close.
   close() {
-    this.ul.innerHTML = '';
+    this.ul.innerHTML = "";
   }
 
   // Close and unbind events.
   blur() {
     this.close();
-    this.input.removeEventListener('input', this.events.input);
-    this.input.removeEventListener('keydown', this.events.keydown);
-    this.input.removeEventListener('blur', this.events.blur);
+    this.input.removeEventListener("input", this.events.input);
+    this.input.removeEventListener("keydown", this.events.keydown);
+    this.input.removeEventListener("blur", this.events.blur);
   }
 
   // Highlight the element at an index.
@@ -99,22 +99,22 @@ class CompletionList {
     }
 
     if (children[this.index]) {
-      children[this.index].classList.remove('selected');
+      children[this.index].classList.remove("selected");
     }
 
     const item = children[index];
-    item.classList.add('selected');
+    item.classList.add("selected");
     this.index = index;
   }
 
   // Position list and fill with suggestions.
   evaluate() {
-    this.ul.innerHTML = '';
+    this.ul.innerHTML = "";
     this.suggestions().then(allSuggestions => {
       this.filter(allSuggestions).forEach(suggestion => {
-        const li = document.createElement('li');
+        const li = document.createElement("li");
         li.innerHTML = suggestion.innerHTML;
-        li.setAttribute('value', suggestion.value);
+        li.setAttribute("value", suggestion.value);
         this.ul.appendChild(li);
       });
       this.index = -1;
@@ -124,9 +124,9 @@ class CompletionList {
 
   // Position the list.
   position() {
-    const absolutePosition = this.input.closest('article');
+    const absolutePosition = this.input.closest("article");
     const coords = this.input.getBoundingClientRect();
-    this.ul.style.position = absolutePosition ? 'absolute' : 'fixed';
+    this.ul.style.position = absolutePosition ? "absolute" : "fixed";
     this.ul.style.top = `${Math.ceil(coords.top + coords.height) +
       (absolutePosition ? window.pageYOffset : 0)}px`;
     this.ul.style.left = `${Math.floor(
@@ -140,7 +140,7 @@ class CompletionList {
   // list of {value, innerHTML} for matching suggestions.
   filter(suggestions) {
     let { value } = this.input;
-    if (this.list === 'tags') {
+    if (this.list === "tags") {
       [value] = value.slice(0, this.input.selectionStart).match(/\S*$/);
     }
     return suggestions
@@ -155,10 +155,10 @@ class CompletionList {
 
   // Return a promise that yields the suggestions.
   suggestions() {
-    if (this.list === 'accounts' && this.input.closest('.entry-form')) {
+    if (this.list === "accounts" && this.input.closest(".entry-form")) {
       const payee = $(
-        'input[name=payee]',
-        this.input.closest('.entry-form'),
+        "input[name=payee]",
+        this.input.closest(".entry-form"),
       ).value.trim();
       if (payee) {
         if (accountCompletionCache[payee]) {
@@ -167,7 +167,7 @@ class CompletionList {
           });
         }
         const params = new URLSearchParams();
-        params.set('payee', payee);
+        params.set("payee", payee);
         return $.fetch(
           `${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`,
         )
@@ -179,7 +179,7 @@ class CompletionList {
           });
       }
     }
-    if (this.list === 'tags') {
+    if (this.list === "tags") {
       const suggestions = window.favaAPI.tags
         .map(tag => `#${tag}`)
         .concat(window.favaAPI.links.map(link => `^${link}`))
@@ -195,8 +195,8 @@ class CompletionList {
 
   // Set the value of the input to the selected value.
   select(li) {
-    const value = li.getAttribute('value');
-    if (this.list === 'tags') {
+    const value = li.getAttribute("value");
+    if (this.list === "tags") {
       const [search] = this.input.value
         .slice(0, this.input.selectionStart)
         .match(/\S*$/);
@@ -208,14 +208,14 @@ class CompletionList {
       this.input.value = value;
     }
     e.trigger(`autocomplete-select-${this.list}`, this.input);
-    this.input.dispatchEvent(new Event('autocomplete-select'));
+    this.input.dispatchEvent(new Event("autocomplete-select"));
   }
 }
 
-e.on('page-init', () => {
+e.on("page-init", () => {
   const completer = new CompletionList();
 
-  $.delegate(document, 'focusin', 'input', event => {
+  $.delegate(document, "focusin", "input", event => {
     completer.show(event.target);
   });
 });

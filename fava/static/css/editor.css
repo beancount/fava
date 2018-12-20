@@ -5,11 +5,11 @@
 }
 
 .source-editor-wrapper {
+  position: fixed;
+  top: calc(var(--header-height) + var(--source-editor-fieldset-height));
+  right: 0;
   bottom: 0;
   left: var(--aside-width);
-  position: fixed;
-  right: 0;
-  top: calc(var(--header-height) + var(--source-editor-fieldset-height));
 }
 
 .dropdown {
@@ -19,15 +19,15 @@
 }
 
 .dropdown .selected::before {
-  content: '›';
+  content: "›";
 }
 
 .dropdown > li {
-  cursor: default;
-  height: var(--source-editor-fieldset-height);
-  line-height: var(--source-editor-fieldset-height);
-  margin-right: 10px;
   position: relative;
+  height: var(--source-editor-fieldset-height);
+  margin-right: 10px;
+  line-height: var(--source-editor-fieldset-height);
+  cursor: default;
 }
 
 .dropdown button {
@@ -35,20 +35,20 @@
 }
 
 .dropdown > li > ul {
-  background-color: var(--color-background);
-  border: 1px solid var(--color-background-darker);
-  border-bottom-left-radius: 3px;
-  border-bottom-right-radius: 3px;
-  box-shadow: 0 3px 6px var(--color-transparent-black);
-  display: none;
-  line-height: 1.5;
-  margin-left: -10px;
-  max-height: 400px;
-  overflow-y: auto;
   position: absolute;
   top: var(--source-editor-fieldset-height);
-  width: 500px;
   z-index: var(--z-index-floating-ui);
+  display: none;
+  width: 500px;
+  max-height: 400px;
+  margin-left: -10px;
+  overflow-y: auto;
+  line-height: 1.5;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-background-darker);
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  box-shadow: 0 3px 6px var(--color-transparent-black);
 }
 
 .dropdown > li > ul > li {
@@ -64,18 +64,18 @@
 }
 
 .source-form {
-  background: var(--color-sidebar-background);
+  position: fixed;
+  top: var(--header-height);
+  right: 0;
   bottom: 0;
   left: var(--aside-width);
-  position: fixed;
-  right: 0;
-  top: var(--header-height);
+  background: var(--color-sidebar-background);
 }
 
 .source-form .fieldset {
-  border-bottom: 1px solid var(--color-sidebar-border);
   height: var(--source-editor-fieldset-height);
-  padding-left: .5em;
+  padding-left: 0.5em;
+  border-bottom: 1px solid var(--color-sidebar-border);
 }
 
 .source-form .fieldset > button {
@@ -84,10 +84,10 @@
 
 .source-form .CodeMirror,
 .source-form textarea {
-  border: 0;
+  width: 100%;
   height: 100%;
   margin: 0;
-  width: 100%;
+  border: 0;
 }
 
 .source-form .CodeMirror-lines {
@@ -104,9 +104,9 @@
 }
 
 .CodeMirror {
-  border: 1px solid var(--color-sidebar-border);
-  font: 13px var(--font-family-editor);
   margin-bottom: 1em;
+  font: 13px var(--font-family-editor);
+  border: 1px solid var(--color-sidebar-border);
 }
 
 .cm-trailingspace {
@@ -114,11 +114,11 @@
 }
 
 .cm-section {
+  padding-right: 10px;
+  font-weight: 500;
+  color: var(--color-editor-comment);
   border: solid 1px var(--color-editor-comment);
   border-radius: 2px;
-  color: var(--color-editor-comment);
-  font-weight: 500;
-  padding-right: 10px;
 }
 
 .cm-comment {
@@ -130,8 +130,8 @@
 }
 
 .cm-directive {
-  color: var(--color-editor-directive);
   font-weight: 500;
+  color: var(--color-editor-directive);
 }
 
 .cm-option {

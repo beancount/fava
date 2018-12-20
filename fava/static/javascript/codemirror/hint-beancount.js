@@ -1,35 +1,35 @@
-import CodeMirror from 'codemirror';
+import CodeMirror from "codemirror";
 
-import { fuzzyMatch, getCurrentWord } from './helpers';
+import { fuzzyMatch, getCurrentWord } from "./helpers";
 
 const completionSources = {
-  undatedDirectives: ['option', 'plugin', 'include'],
+  undatedDirectives: ["option", "plugin", "include"],
   datedDirectives: [
-    'open',
-    'close',
-    'commodity',
-    'balance',
-    'pad',
-    'note',
-    'document',
-    'price',
-    'event',
-    'query',
+    "open",
+    "close",
+    "commodity",
+    "balance",
+    "pad",
+    "note",
+    "document",
+    "price",
+    "event",
+    "query",
   ],
 };
 
 const directiveCompletions = {
-  open: ['accounts', 'commodities'],
-  close: ['accounts'],
-  commodity: ['commodities'],
-  balance: ['accounts', null, 'commodities'],
-  pad: ['accounts', 'accounts'],
-  note: ['accounts'],
-  document: ['accounts'],
-  price: ['commodities', null, 'commodities'],
+  open: ["accounts", "commodities"],
+  close: ["accounts"],
+  commodity: ["commodities"],
+  balance: ["accounts", null, "commodities"],
+  pad: ["accounts", "accounts"],
+  note: ["accounts"],
+  document: ["accounts"],
+  price: ["commodities", null, "commodities"],
 };
 
-CodeMirror.registerHelper('hint', 'beancount', cm => {
+CodeMirror.registerHelper("hint", "beancount", cm => {
   const cursor = cm.getCursor();
   const line = cm.getLine(cursor.line);
   const token = cm.getTokenAt(cursor);
@@ -37,14 +37,14 @@ CodeMirror.registerHelper('hint', 'beancount', cm => {
   const currentWord = getCurrentWord(cursor, line);
 
   // If '#' has just been typed, there won't be a tag token yet
-  if (currentCharacter === '#') {
+  if (currentCharacter === "#") {
     return {
       list: window.favaAPI.tags,
       from: cursor,
       to: cursor,
     };
   }
-  if (currentCharacter === '^') {
+  if (currentCharacter === "^") {
     return {
       list: window.favaAPI.links,
       from: cursor,
@@ -52,7 +52,7 @@ CodeMirror.registerHelper('hint', 'beancount', cm => {
     };
   }
 
-  if (token.type === 'tag') {
+  if (token.type === "tag") {
     return {
       list: window.favaAPI.tags.filter(d => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
@@ -78,14 +78,14 @@ CodeMirror.registerHelper('hint', 'beancount', cm => {
     const previousTokens = lineTokens.filter(d => d.end <= startCurrentWord);
 
     // complete accounts for indented lines
-    if (lineTokens[0].type === 'whitespace') {
+    if (lineTokens[0].type === "whitespace") {
       if (previousTokens.length === 1) {
         return fuzzyMatch(cursor, currentWord, window.favaAPI.accounts);
       }
     }
 
     // dated directives
-    if (lineTokens[0].type === 'date') {
+    if (lineTokens[0].type === "date") {
       // date whitespace -> complete directives
       if (previousTokens.length === 2) {
         return {

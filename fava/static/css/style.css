@@ -1,73 +1,59 @@
 :root {
-  --font-family: 'Fira Sans', sans-serif;
-  --font-family-alternative: 'Source Serif Pro', sans-serif;
-  --font-family-monospaced: 'Fira Mono', monospace;
-  --font-family-editor: 'Source Code Pro', monospace;
-
+  --font-family: "Fira Sans", sans-serif;
+  --font-family-alternative: "Source Serif Pro", sans-serif;
+  --font-family-monospaced: "Fira Mono", monospace;
+  --font-family-editor: "Source Code Pro", monospace;
   --z-index-aside: 1;
   --z-index-header: 2;
   --z-index-floating-ui: 3;
   --z-index-keyboard-overlays: 10;
   --z-index-autocomplete: 8;
   --z-index-overlay: 4;
-
-  --color-transparent-black: hsla(0, 0%, 0%, .5);
-  --color-transparent-white: hsla(0, 0%, 100%, .5);
-
+  --color-transparent-black: hsla(0, 0%, 0%, 0.5);
+  --color-transparent-white: hsla(0, 0%, 100%, 0.5);
   --color-background: #fff;
   --color-background-darker: #d9d9d9;
   --color-background-darkest: #ccc;
   --color-text: hsl(0, 0%, 27%);
   --color-text-lighter: hsl(0, 0%, 33%);
   --color-text-lightest: hsl(0, 0%, 47%);
-
   --color-links: hsl(203, 100%, 32%);
   --color-links-hover: hsl(203, 100%, 22%);
-  --color-links-transparent: hsla(203, 100%, 32%, .5);
+  --color-links-transparent: hsla(203, 100%, 32%, 0.5);
   --color-headings: #333;
   --color-error: hsl(0, 100%, 30%);
   --color-warning: hsl(52, 84%, 56%);
   --color-code-background: #f8f8f8;
-
   --color-sidebar-text: #444;
   --color-sidebar-text-hover: var(--color-links);
   --color-sidebar-background: hsl(0, 0%, 96%);
   --color-sidebar-border: hsl(0, 0%, 87%);
-
   --color-autocomplete-match: #ffd27c;
-
   --color-header: hsl(203, 100%, 32%);
   --color-header-darker: hsl(203, 100%, 22%);
   --color-header-light: hsl(203, 56%, 45%);
   --color-header-tinted: hsl(203, 47%, 66%);
   --color-header-text: hsl(0, 0%, 100%);
-  --color-header-text-half: hsla(0, 0%, 100%, .5);
-
+  --color-header-text-half: hsla(0, 0%, 100%, 0.5);
   --color-status-red: var(--color-error);
   --color-status-yellow: var(--color-warning);
   --color-status-green: hsl(151, 100%, 25%);
   --color-status-gray: #aaa;
-
   --color-notification: #fff;
   --color-notification-info: hsl(151, 100%, 25%);
   --color-notification-error: hsl(0, 100%, 30%);
   --color-notification-warning: hsl(52, 84%, 56%);
-
   --color-table-header-text: #666;
   --color-table-header-background: #e6e6e6;
   --color-table-border: #f2f2f2;
-
   --color-treetable-expander: #afc1d3;
-
   --color-budget-negative: #af3d3d;
   --color-budget-positive: #3daf46;
   --color-budget-zero: #ffb900;
-
   --color-treemap-text: #fff;
   --color-chart-axis: #999;
-
   --color-editor-comment: #998;
-  --color-editor-trailing-whitespace: rgba(255, 199, 199, .5);
+  --color-editor-trailing-whitespace: rgba(255, 199, 199, 0.5);
   --color-editor-directive: #333;
   --color-editor-class: #b84;
   --color-editor-date: #099;
@@ -75,24 +61,44 @@
   --color-editor-account: var(--color-links);
   --color-editor-invalid: #333;
   --color-editor-activeline: #ffc;
-
   --color-mobile-button-text: #000;
-
   --color-ingest: #cefac1;
 }
 
-.journal .balance { --entry-type-color: #cfc; }
-.journal .close { --entry-type-color: hsl(0, 0%, 70%); }
-.journal .custom { --entry-type-color: #fff3ab; }
-.journal .document { --entry-type-color: #ffc8ff; }
-.journal .note { --entry-type-color: #aad0ff; }
-.journal .open { --entry-type-color: hsl(0, 0%, 92%); }
-.journal .other { --entry-type-color: #cff; }
-.journal .pad { --entry-type-color: #8ff; }
-.journal .pending { --entry-type-color: #f8a; }
-.journal .query { --entry-type-color: #aad0ff; }
+.journal .balance {
+  --entry-type-color: #cfc;
+}
+.journal .close {
+  --entry-type-color: hsl(0, 0%, 70%);
+}
+.journal .custom {
+  --entry-type-color: #fff3ab;
+}
+.journal .document {
+  --entry-type-color: #ffc8ff;
+}
+.journal .note {
+  --entry-type-color: #aad0ff;
+}
+.journal .open {
+  --entry-type-color: hsl(0, 0%, 92%);
+}
+.journal .other {
+  --entry-type-color: #cff;
+}
+.journal .pad {
+  --entry-type-color: #8ff;
+}
+.journal .pending {
+  --entry-type-color: #f8a;
+}
+.journal .query {
+  --entry-type-color: #aad0ff;
+}
 
-.journal .budget { --entry-type-color: #ffddae; }
+.journal .budget {
+  --entry-type-color: #ffddae;
+}
 
 .journal {
   --color-journal-postings: hsl(0, 0%, 92%);

@@ -2,91 +2,91 @@
 // To keep the regular expressions in sync with Beancount, they might contain
 // some superfluous escape characters.
 
-import CodeMirror from 'codemirror';
+import CodeMirror from "codemirror";
 
 // The rules should mirror `parser/lexel.l` in beancount
-CodeMirror.defineSimpleMode('beancount', {
+CodeMirror.defineSimpleMode("beancount", {
   start: [
     {
       regex: /\*.*/,
-      token: 'comment section',
+      token: "comment section",
       sol: true,
     },
     {
       regex: /[#*;].*/,
-      token: 'comment',
+      token: "comment",
       sol: true,
     },
     {
       regex: /;.*/,
-      token: 'comment',
+      token: "comment",
     },
     {
       regex: /(query)(\s*)("[^"]*")(\s*)(")/,
-      token: ['directive', null, 'string', null, 'string'],
+      token: ["directive", null, "string", null, "string"],
       mode: {
-        spec: 'beancount-query',
+        spec: "beancount-query",
         end: /"/,
       },
     },
     {
       regex: /"(?:[^\\]|\\.)*?"/,
-      token: 'string',
+      token: "string",
     },
     {
       regex: /@|@@|{|}/,
-      token: 'bracket',
+      token: "bracket",
     },
     {
       regex: /\s+/,
-      token: 'whitespace',
+      token: "whitespace",
     },
     {
       regex: /#[A-Za-z0-9\-_\/.]+/,
-      token: 'tag',
+      token: "tag",
     },
     {
       regex: /[A-Z][A-Z0-9'\._\-]{0,22}[A-Z0-9]/,
-      token: 'commodity keyword',
+      token: "commodity keyword",
     },
     {
       regex: /TRUE|FALSE/,
-      token: 'bool atom',
+      token: "bool atom",
     },
     {
       regex: /(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+/,
-      token: 'account',
+      token: "account",
     },
     {
       regex: /[*!&#?%PSTCURM]|txn/,
-      token: 'directive transaction',
+      token: "directive transaction",
     },
     // other dated directives
     {
       regex: /balance|open|close|commodity|pad|event|custom|price|note|document/,
-      token: 'directive',
+      token: "directive",
     },
     // undated directives
     {
       regex: /pushtag|poptag|pushmeta|popmeta|option|plugin|include/,
-      token: 'directive',
+      token: "directive",
       sol: true,
     },
     {
       regex: /[0-9]{4,}[\-\/][0-9]+[\-\/][0-9]+/,
-      token: 'date',
+      token: "date",
     },
     {
       regex: /(?:[0-9]+|[0-9][0-9,]+[0-9])(?:\.[0-9]*)?/,
-      token: 'number',
+      token: "number",
     },
     {
       regex: /\^[A-Za-z0-9\-_\/.]+/,
-      token: 'attribute',
+      token: "attribute",
     },
     {
       regex: /[a-z][a-za-z0-9\-_]+:/,
-      token: 'meta',
+      token: "meta",
     },
   ],
 });

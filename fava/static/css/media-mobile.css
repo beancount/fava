@@ -8,10 +8,10 @@
   }
 
   header {
+    position: inherit;
     flex-wrap: wrap;
     height: auto;
     padding-left: 46px;
-    position: inherit;
   }
 
   h1 {
@@ -23,8 +23,8 @@
   }
 
   aside {
-    margin-left: calc(-1 * var(--aside-width));
     top: 0;
+    margin-left: calc(-1 * var(--aside-width));
   }
 
   aside.active {
@@ -37,33 +37,33 @@
 
   .aside-button,
   .navigation .add-transaction-button {
+    position: fixed;
+    left: 0;
+    width: 42px;
+    height: 42px;
+    padding: 6px 4px;
+    text-align: center;
     border-color: var(--color-sidebar-border);
     border-style: solid;
     border-width: 0 1px 1px 0;
-    height: 42px;
-    left: 0;
-    padding: 6px 4px;
-    position: fixed;
-    text-align: center;
-    width: 42px;
   }
 
   .aside-button {
+    top: 0;
     display: block;
     margin-left: 0;
-    top: 0;
   }
 
   .aside-button.active {
+    left: var(--aside-width);
     background-color: var(--color-sidebar-background);
     box-shadow: none;
-    left: var(--aside-width);
   }
 
   .navigation .add-transaction-button {
-    color: var(--color-mobile-button-text);
-    font-size: 30px;
     top: 42px;
+    font-size: 30px;
+    color: var(--color-mobile-button-text);
   }
 
   .source-form,

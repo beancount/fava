@@ -1,22 +1,22 @@
 /* Overlays */
 
 :root {
-  --overlay-wrapper-background: rgba(0, 0, 0, .5);
+  --overlay-wrapper-background: rgba(0, 0, 0, 0.5);
 }
 
 .overlay-wrapper {
-  align-items: center;
-  background: var(--overlay-wrapper-background);
-  bottom: 0;
-  cursor: pointer;
-  display: none;
-  justify-content: center;
-  left: 0;
-  overflow: auto;
   position: fixed;
-  right: 0;
   top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: var(--z-index-overlay);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  cursor: pointer;
+  background: var(--overlay-wrapper-background);
 }
 
 .overlay-wrapper.shown {
@@ -24,22 +24,22 @@
 }
 
 .close-overlay {
-  color: var(--color-text-lighter);
   position: absolute;
-  right: 10px;
   top: 10px;
+  right: 10px;
+  color: var(--color-text-lighter);
 }
 
 .overlay {
+  position: relative;
+  display: flex;
+  max-width: 767px;
+  max-height: 100%;
+  padding: 1.5em;
+  margin: 0.5em;
+  cursor: auto;
   background: var(--color-background);
   box-shadow: 0 0 20px var(--overlay-wrapper-background);
-  cursor: auto;
-  display: flex;
-  margin: .5em;
-  max-height: 100%;
-  max-width: 767px;
-  padding: 1.5em;
-  position: relative;
 }
 
 .overlay form,
@@ -53,18 +53,18 @@
 }
 
 .overlay table {
-  margin-left: auto;
   margin-right: auto;
+  margin-left: auto;
 }
 
 .overlay dt {
   display: inline-block;
   float: left;
+  width: auto;
+  padding-right: 10px;
   font-weight: normal;
   line-height: 1.8em;
-  padding-right: 10px;
   text-align: right;
-  width: auto;
 }
 
 .overlay dd {
@@ -75,8 +75,8 @@
   width: 150px;
 }
 
-.overlay .fieldset[type='submit'] {
-  margin: .5em .5em -.5em 0;
+.overlay .fieldset[type="submit"] {
+  margin: 0.5em 0.5em -0.5em 0;
 }
 
 .documents-upload .fieldset input {
@@ -85,24 +85,24 @@
 }
 
 .transaction-overlay form > .fieldset button {
+  margin-top: 0.7em;
   margin-bottom: 0;
-  margin-top: .7em;
 }
 
 .notifications {
   position: fixed;
-  right: 10px;
   top: calc(var(--header-height) + 10px);
+  right: 10px;
   width: 400px;
 }
 
 .notifications li {
-  background-color: var(--color-notification-info);
-  color: var(--color-notification);
   display: block;
-  margin-bottom: .5em;
-  padding: 5px 10px;
   width: 100%;
+  padding: 5px 10px;
+  margin-bottom: 0.5em;
+  color: var(--color-notification);
+  background-color: var(--color-notification-info);
 }
 
 .notifications .error {
@@ -110,6 +110,6 @@
 }
 
 .notifications .warning {
-  background-color: var(--color-notification-warning);
   color: var(--color-text);
+  background-color: var(--color-notification-warning);
 }

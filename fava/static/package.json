@@ -5,9 +5,11 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "eslint javascript --ext .js && stylelint 'css/*.css'",
-    "fix": "stylelint 'css/*.css' --fix",
-    "format": "prettier '**/*.js' --write --ignore-path ../../.gitignore"
+    "lint": "eslint javascript --fix && stylelint 'css/*.css' --fix",
+    "format": "prettier '**/*.{css,js}' --write --ignore-path ../../.gitignore"
+  },
+  "prettier": {
+    "trailingComma": "all"
   },
   "eslintConfig": {
     "extends": [
@@ -18,20 +20,14 @@
       "browser": true
     }
   },
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all"
-  },
   "stylelint": {
-    "extends": "stylelint-config-standard",
-    "plugins": [
-      "stylelint-order"
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-recess-order",
+      "stylelint-config-prettier"
     ],
     "rules": {
-      "no-descending-specificity": null,
-      "number-leading-zero": "never",
-      "custom-property-empty-line-before": null,
-      "order/properties-alphabetical-order": true
+      "no-descending-specificity": null
     }
   },
   "devDependencies": {
@@ -40,15 +36,16 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "prettier": "^1.15.3",
-    "rollup": "^0.67.4",
+    "rollup": "^0.68.1",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-copy": "^0.2.3",
     "rollup-plugin-css-only": "^0.4.0",
     "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-node-resolve": "^4.0.0",
     "stylelint": "^9.9.0",
-    "stylelint-config-standard": "^18.2.0",
-    "stylelint-order": "^2.0.0"
+    "stylelint-config-prettier": "^4.0.0",
+    "stylelint-config-recess-order": "^2.0.1",
+    "stylelint-config-standard": "^18.2.0"
   },
   "dependencies": {
     "@typopro/web-fira-mono": "^3.7.5",
