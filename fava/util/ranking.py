@@ -34,7 +34,7 @@ class ExponentialDecayRanker:
             today.
     """
 
-    __slots__ = ['list', 'rate', 'scores']
+    __slots__ = ["list", "rate", "scores"]
 
     def __init__(self, list_=None, rate=math.log(2) * 1 / 365):
         self.list = list_

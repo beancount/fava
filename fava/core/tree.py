@@ -11,7 +11,7 @@ from fava.core.inventory import CounterInventory
 class TreeNode:
     """A node in the account tree."""
 
-    __slots__ = ('name', 'children', 'balance', 'balance_children', 'has_txns')
+    __slots__ = ("name", "children", "balance", "balance_children", "has_txns")
 
     def __init__(self, name):
         #: str: Account name.
@@ -35,13 +35,13 @@ class Tree(dict):
 
     def __init__(self, entries=None):
         dict.__init__(self)
-        self.get('', insert=True)
+        self.get("", insert=True)
         if entries:
             account_balances = collections.defaultdict(CounterInventory)
             for entry in entries:
                 if isinstance(entry, Open):
                     self.get(entry.account, insert=True)
-                for posting in getattr(entry, 'postings', []):
+                for posting in getattr(entry, "postings", []):
                     account_balances[posting.account].add_position(posting)
 
             for name, balance in sorted(account_balances.items()):
@@ -106,11 +106,11 @@ class Tree(dict):
             unrealized_account: The name of the account to post unrealized
                 gains to (as a subaccount of Equity).
         """
-        equity = options['name_equity']
+        equity = options["name_equity"]
         conversions = CounterInventory(
             {
                 (currency, None): -number
-                for currency, number in self.get('')
+                for currency, number in self.get("")
                 .balance_children.reduce(convert.get_cost)
                 .items()
             }
@@ -118,20 +118,20 @@ class Tree(dict):
 
         # Add conversions
         self.insert(
-            equity + ':' + options['account_current_conversions'], conversions
+            equity + ":" + options["account_current_conversions"], conversions
         )
 
         # Insert unrealized gains.
         self.insert(
-            equity + ':' + unrealized_account, -self.get('').balance_children
+            equity + ":" + unrealized_account, -self.get("").balance_children
         )
 
         # Transfer Income and Expenses
         self.insert(
-            equity + ':' + options['account_current_earnings'],
-            self.get(options['name_income']).balance_children,
+            equity + ":" + options["account_current_earnings"],
+            self.get(options["name_income"]).balance_children,
         )
         self.insert(
-            equity + ':' + options['account_current_earnings'],
-            self.get(options['name_expenses']).balance_children,
+            equity + ":" + options["account_current_earnings"],
+            self.get(options["name_expenses"]).balance_children,
         )

@@ -7,23 +7,23 @@ from fava.core.tree import Tree
 def test_tree():
     tree = Tree()
     assert len(tree) == 1
-    tree.get('account:name:a:b:c')
+    tree.get("account:name:a:b:c")
     assert len(tree) == 1
-    node = tree.get('account:name:a:b:c', insert=True)
+    node = tree.get("account:name:a:b:c", insert=True)
     assert len(tree) == 6
-    tree.get('account:name', insert=True)
+    tree.get("account:name", insert=True)
     assert len(tree) == 6
-    assert node is tree.get('account:name:a:b:c', insert=True)
+    assert node is tree.get("account:name:a:b:c", insert=True)
 
-    assert list(tree.ancestors('account:name:a:b:c')) == [
-        tree.get('account:name:a:b'),
-        tree.get('account:name:a'),
-        tree.get('account:name'),
-        tree.get('account'),
-        tree.get(''),
+    assert list(tree.ancestors("account:name:a:b:c")) == [
+        tree.get("account:name:a:b"),
+        tree.get("account:name:a"),
+        tree.get("account:name"),
+        tree.get("account"),
+        tree.get(""),
     ]
 
-    assert len(list(tree.ancestors('not:account:name:a:b:c'))) == 6
+    assert len(list(tree.ancestors("not:account:name:a:b:c"))) == 6
 
 
 def _compare_inv_and_counter(inv, counter):
@@ -53,13 +53,13 @@ def test_tree_cap(example_ledger):
     real_account = realization.realize(closing_entries)
 
     tree = Tree(example_ledger.entries)
-    tree.cap(example_ledger.options, 'Unrealized')
+    tree.cap(example_ledger.options, "Unrealized")
 
     for account in realization.iter_children(real_account):
         name = account.account
         node = tree[name]
         if not name:
             continue
-        if name.startswith('Expenses') or name.startswith('Income'):
+        if name.startswith("Expenses") or name.startswith("Income"):
             continue
         _compare_inv_and_counter(account.balance, node.balance)

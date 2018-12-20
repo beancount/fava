@@ -21,9 +21,9 @@ class DecimalFormatModule(FavaModule):
     def load_file(self):
         self.locale = None
 
-        locale_option = self.ledger.fava_options['locale']
-        if self.ledger.options['render_commas'] and not locale_option:
-            locale_option = 'en'
+        locale_option = self.ledger.fava_options["locale"]
+        if self.ledger.options["render_commas"] and not locale_option:
+            locale_option = "en"
 
         if locale_option:
             try:
@@ -33,8 +33,8 @@ class DecimalFormatModule(FavaModule):
                 self.ledger.errors.append(
                     OptionError(
                         None,
-                        'Unknown locale: {}.'.format(
-                            self.ledger.fava_options['locale']
+                        "Unknown locale: {}.".format(
+                            self.ledger.fava_options["locale"]
                         ),
                         None,
                     )
@@ -46,16 +46,16 @@ class DecimalFormatModule(FavaModule):
             )
             self.default_pattern.frac_prec = (2, 2)
         else:
-            self.default_pattern = '{:.2f}'
+            self.default_pattern = "{:.2f}"
 
-        dcontext = self.ledger.options['dcontext']
+        dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
             precision = ccontext.get_fractional(Precision.MOST_COMMON)
             if self.locale:
                 pattern = copy.copy(self.locale.decimal_formats.get(None))
                 pattern.frac_prec = (precision, precision)
             else:
-                pattern = '{:.' + str(precision) + 'f}'
+                pattern = "{:." + str(precision) + "f}"
             self.patterns[currency] = pattern
 
     def __call__(self, value, currency=None):

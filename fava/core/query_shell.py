@@ -38,12 +38,12 @@ class QueryShell(shell.BQLShell, FavaModule):
     def add_help(self):
         "Attach help functions for each of the parsed token handlers."
         for attrname, func in list(shell.BQLShell.__dict__.items()):
-            if attrname[:3] != 'on_':
+            if attrname[:3] != "on_":
                 continue
             command_name = attrname[3:]
             setattr(
                 self.__class__,
-                'help_{}'.format(command_name.lower()),
+                "help_{}".format(command_name.lower()),
                 lambda _, fun=func: print(
                     textwrap.dedent(fun.__doc__).strip(), file=self.outfile
                 ),
@@ -89,7 +89,7 @@ class QueryShell(shell.BQLShell, FavaModule):
                 self.env_entries,
             )
         except query_compile.CompilationError as exc:
-            print('ERROR: {}.'.format(str(exc).rstrip('.')), file=self.outfile)
+            print("ERROR: {}.".format(str(exc).rstrip(".")), file=self.outfile)
             return
         rtypes, rrows = query_execute.execute_query(
             c_query, self.entries, self.options_map
@@ -116,7 +116,7 @@ class QueryShell(shell.BQLShell, FavaModule):
         with contextlib.redirect_stdout(self.buffer):
             self.onecmd(query)
         if query and add_to_history:
-            readline.add_history(query.replace('\n', ' '))
+            readline.add_history(query.replace("\n", " "))
         contents = self.buffer.getvalue()
         self.buffer.truncate(0)
         if not self.result:
@@ -159,14 +159,14 @@ class QueryShell(shell.BQLShell, FavaModule):
             FavaAPIException: If the result format is not supported or the
             query failed.
         """
-        name = 'query_result'
+        name = "query_result"
 
         try:
             statement = self.parser.parse(query_string)
         except query_parser.ParseError as exception:
             raise FavaAPIException(str(exception))
 
-        if statement.__class__.__name__ == 'RunCustom':
+        if statement.__class__.__name__ == "RunCustom":
             name = statement.query_name
 
             try:
@@ -190,11 +190,11 @@ class QueryShell(shell.BQLShell, FavaModule):
         ) as exception:
             raise FavaAPIException(str(exception))
 
-        if result_format == 'csv':
+        if result_format == "csv":
             data = to_csv(types, rows)
         else:
             if not HAVE_EXCEL:
-                raise FavaAPIException('Result format not supported.')
+                raise FavaAPIException("Result format not supported.")
             data = to_excel(types, rows, result_format, query_string)
         return name, data
 

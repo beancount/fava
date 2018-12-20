@@ -19,42 +19,42 @@ def test_basename():
 
 def test_get_or_create(example_ledger):
     assert (
-        get_or_create(example_ledger.root_account, '')
+        get_or_create(example_ledger.root_account, "")
         == example_ledger.root_account
     )
     assert get_or_create(
-        example_ledger.root_account, 'Expenses'
-    ) == realization.get(example_ledger.root_account, 'Expenses')
+        example_ledger.root_account, "Expenses"
+    ) == realization.get(example_ledger.root_account, "Expenses")
 
 
 def test_should_show(app):
-    with app.test_request_context('/'):
+    with app.test_request_context("/"):
         app.preprocess_request()
-        assert should_show(g.ledger.root_tree.get('')) is True
-        assert should_show(g.ledger.root_tree.get('Expenses')) is True
+        assert should_show(g.ledger.root_tree.get("")) is True
+        assert should_show(g.ledger.root_tree.get("Expenses")) is True
 
-        account = TreeNode('name')
+        account = TreeNode("name")
         assert should_show(account) is False
-        account.balance_children = CounterInventory({('USD', None): 9})
+        account.balance_children = CounterInventory({("USD", None): 9})
         assert should_show(account) is True
-    with app.test_request_context('/?time=2100'):
+    with app.test_request_context("/?time=2100"):
         app.preprocess_request()
-        assert not g.ledger.fava_options['show-accounts-with-zero-balance']
-        assert should_show(g.ledger.root_tree.get('')) is True
-        assert should_show(g.ledger.root_tree.get('Expenses')) is False
+        assert not g.ledger.fava_options["show-accounts-with-zero-balance"]
+        assert should_show(g.ledger.root_tree.get("")) is True
+        assert should_show(g.ledger.root_tree.get("Expenses")) is False
 
 
 def test_format_errormsg(app):
-    with app.test_request_context('/'):
+    with app.test_request_context("/"):
         app.preprocess_request()
         assert (
-            format_errormsg('Test for \'Expenses:Acme:Cash\': Test')
+            format_errormsg("Test for 'Expenses:Acme:Cash': Test")
             == 'Test for <a href="/example-beancount-file/account/Expenses:'
             'Acme:Cash/">Expenses:Acme:Cash</a>: Test'
         )
         assert (
-            format_errormsg('Test Expenses:Acme:Cash Test')
+            format_errormsg("Test Expenses:Acme:Cash Test")
             == 'Test <a href="/example-beancount-file/account/Expenses:'
             'Acme:Cash/">Expenses:Acme:Cash</a> Test'
         )
-        assert format_errormsg('Test: Test') == 'Test: Test'
+        assert format_errormsg("Test: Test") == "Test: Test"

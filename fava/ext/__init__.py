@@ -6,7 +6,7 @@ import inspect
 import sys
 
 
-FavaExtensionError = namedtuple('FavaExtensionError', 'source message entry')
+FavaExtensionError = namedtuple("FavaExtensionError", "source message entry")
 
 
 class FavaExtensionBase:

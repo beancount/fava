@@ -8,11 +8,11 @@ import pytest
 
 from .conftest import EXAMPLE_FILE
 
-HOST = '0.0.0.0'
-FAVA = ('fava',)
+HOST = "0.0.0.0"
+FAVA = ("fava",)
 
-if 'BEANCOUNT_FILE' in os.environ:
-    del os.environ['BEANCOUNT_FILE']
+if "BEANCOUNT_FILE" in os.environ:
+    del os.environ["BEANCOUNT_FILE"]
 
 
 def get_port():
@@ -42,15 +42,15 @@ def run_fava(args=()):
     )
 
 
-@pytest.mark.skipif(sys.platform == 'win32', reason="does not run on windows")
+@pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
 def test_cli():
     port = str(get_port())
-    args = (EXAMPLE_FILE, '-d', '-p', port)
+    args = (EXAMPLE_FILE, "-d", "-p", port)
     process = run_fava(args)
-    assert output_contains(process, 'Running on', 20)
+    assert output_contains(process, "Running on", 20)
     process2 = run_fava(args)
     process2.wait()
     process.terminate()
     process.wait()
-    assert 'in use' in ''.join(process2.stdout.readlines())
+    assert "in use" in "".join(process2.stdout.readlines())
     assert process2.returncode == 2

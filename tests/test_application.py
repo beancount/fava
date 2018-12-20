@@ -8,17 +8,17 @@ import werkzeug.routing
 from fava.application import REPORTS, static_url
 
 FILTER_COMBINATIONS = [
-    {'account': 'Assets'},
-    {'from': 'has_account("Assets")'},
-    {'time': '2015'},
-    {'payee': 'BayBook'},
-    {'tag': 'tag1, tag2'},
-    {'time': '2015', 'payee': 'BayBook'},
+    {"account": "Assets"},
+    {"from": 'has_account("Assets")'},
+    {"time": "2015"},
+    {"payee": "BayBook"},
+    {"tag": "tag1, tag2"},
+    {"time": "2015", "payee": "BayBook"},
 ]
 
 
 @pytest.mark.parametrize(
-    'report,filters',
+    "report,filters",
     [
         (report, filters)
         for report in REPORTS
@@ -26,30 +26,30 @@ FILTER_COMBINATIONS = [
     ],
 )
 def test_reports(app, test_client, report, filters):
-    if report.startswith('_'):
+    if report.startswith("_"):
         return
 
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('report', report_name=report, **filters)
+        url = flask.url_for("report", report_name=report, **filters)
 
     result = test_client.get(url)
     assert result.status_code == 200
 
 
 @pytest.mark.parametrize(
-    'query_string,result_str',
+    "query_string,result_str",
     [
-        ('balances from year = 2014', '5086.65 USD'),
-        ('nononono', 'ERROR: Syntax error near'),
-        ('select sum(day)', '43558'),
+        ("balances from year = 2014", "5086.65 USD"),
+        ("nononono", "ERROR: Syntax error near"),
+        ("select sum(day)", "43558"),
     ],
 )
 def test_query(app, test_client, query_string, result_str):
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for(
-            'report', report_name='query', query_string=query_string
+            "report", report_name="query", query_string=query_string
         )
 
     result = test_client.get(url)
@@ -58,8 +58,8 @@ def test_query(app, test_client, query_string, result_str):
 
 
 @pytest.mark.parametrize(
-    'url,return_code',
-    [('/', 302), ('/asdfasdf/', 404), ('/asdfasdf/asdfasdf/', 404)],
+    "url,return_code",
+    [("/", 302), ("/asdfasdf/", 404), ("/asdfasdf/asdfasdf/", 404)],
 )
 def test_urls(test_client, url, return_code):
     result = test_client.get(url)
@@ -67,15 +67,15 @@ def test_urls(test_client, url, return_code):
 
 
 @pytest.mark.parametrize(
-    'referer,jump_link,expect',
+    "referer,jump_link,expect",
     [
-        ('/?foo=bar', '/jump?foo=baz', '/?foo=baz'),
-        ('/?foo=bar', '/jump?baz=qux', '/?baz=qux&foo=bar'),
-        ('/', '/jump?foo=bar&baz=qux', '/?baz=qux&foo=bar'),
-        ('/', '/jump?baz=qux', '/?baz=qux'),
-        ('/?foo=bar', '/jump?foo=', '/'),
-        ('/?foo=bar', '/jump?foo=&foo=', '/?foo=&foo='),
-        ('/', '/jump?foo=', '/'),
+        ("/?foo=bar", "/jump?foo=baz", "/?foo=baz"),
+        ("/?foo=bar", "/jump?baz=qux", "/?baz=qux&foo=bar"),
+        ("/", "/jump?foo=bar&baz=qux", "/?baz=qux&foo=bar"),
+        ("/", "/jump?baz=qux", "/?baz=qux"),
+        ("/?foo=bar", "/jump?foo=", "/"),
+        ("/?foo=bar", "/jump?foo=&foo=", "/?foo=&foo="),
+        ("/", "/jump?foo=", "/"),
     ],
 )
 def test_jump_handler(app, test_client, referer, jump_link, expect):
@@ -83,10 +83,10 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 
     Note: according to RFC 2616, Location: header should use an absolute URL.
     """
-    result = test_client.get(jump_link, headers=[('Referer', referer)])
+    result = test_client.get(jump_link, headers=[("Referer", referer)])
     with app.test_request_context():
-        get_url = result.headers.get('Location', '')
-        expect_url = werkzeug.urls.url_join('http://localhost/', expect)
+        get_url = result.headers.get("Location", "")
+        expect_url = werkzeug.urls.url_join("http://localhost/", expect)
         assert result.status_code == 302
         assert get_url == expect_url
 
@@ -94,16 +94,16 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 def test_incognito(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
-        app.config['INCOGNITO'] = True
-        url = flask.url_for('report', report_name='balance_sheet')
+        app.config["INCOGNITO"] = True
+        url = flask.url_for("report", report_name="balance_sheet")
 
     result = test_client.get(url)
     assert result.status_code == 200
-    assert 'XXX' in result.get_data(True)
+    assert "XXX" in result.get_data(True)
 
     with app.test_request_context():
         app.preprocess_request()
-        app.config['INCOGNITO'] = False
+        app.config["INCOGNITO"] = False
 
 
 def test_download_journal(app, test_client):
@@ -130,29 +130,29 @@ def test_download_journal(app, test_client):
 
     with app.test_request_context():
         app.preprocess_request()
-        url = flask.url_for('download_journal', time='2016-05-07')
+        url = flask.url_for("download_journal", time="2016-05-07")
     result = test_client.get(url)
     assert result.get_data(True) == file_content
-    assert result.headers['Content-Disposition'].startswith(
+    assert result.headers["Content-Disposition"].startswith(
         'attachment; filename="journal_'
     )
-    assert result.headers['Content-Type'] == 'application/octet-stream'
+    assert result.headers["Content-Type"] == "application/octet-stream"
 
 
 @pytest.mark.parametrize(
-    'filename,has_modified',
+    "filename,has_modified",
     [
-        ('not-a-real-file', False),
-        ('javascript/main.js', True),
-        ('css/style.css', True),
+        ("not-a-real-file", False),
+        ("javascript/main.js", True),
+        ("css/style.css", True),
     ],
 )
 def test_static_url(app, filename, has_modified):
     with app.test_request_context():
         app.preprocess_request()
         url = static_url(filename=filename)
-    assert url.startswith('/static/' + filename)
-    assert ('?mtime=' in url) == has_modified
+    assert url.startswith("/static/" + filename)
+    assert ("?mtime=" in url) == has_modified
 
 
 def test_static_url_no_filename(app):

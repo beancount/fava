@@ -20,15 +20,15 @@ def test_fava_options(load_doc):
 
     assert len(errors) == 1
 
-    assert options['interval'] == 'week'
-    assert options['insert-entry'] == [
+    assert options["interval"] == "week"
+    assert options["insert-entry"] == [
         InsertEntryOption(
             datetime.date(2016, 4, 14),
-            re.compile('Ausgaben:Test'),
-            '<string>',
+            re.compile("Ausgaben:Test"),
+            "<string>",
             7,
         )
     ]
-    assert options['show-closed-accounts']
-    assert options['journal-show'] == ['transaction', 'open']
-    assert options['currency-column'] == 10
+    assert options["show-closed-accounts"]
+    assert options["journal-show"] == ["transaction", "open"]
+    assert options["currency-column"] == 10

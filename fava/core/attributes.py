@@ -29,7 +29,7 @@ class AttributesModule(FavaModule):
             sorted(self.ledger.accounts.keys())
         )
         currency_ranker = ExponentialDecayRanker(
-            self.ledger.options['commodities']
+            self.ledger.options["commodities"]
         )
         payee_ranker = ExponentialDecayRanker()
 

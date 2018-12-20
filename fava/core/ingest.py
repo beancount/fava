@@ -11,7 +11,7 @@ from beancount.ingest import cache, identify, extract
 
 from fava.core.helpers import FavaModule
 
-IngestError = namedtuple('IngestError', 'source message entry')
+IngestError = namedtuple("IngestError", "source message entry")
 
 
 class IngestModule(FavaModule):
@@ -25,11 +25,11 @@ class IngestModule(FavaModule):
         self.mtime = None
 
     def load_file(self):
-        if self.ledger.fava_options['import-config']:
+        if self.ledger.fava_options["import-config"]:
             self.module_path = os.path.normpath(
                 os.path.join(
                     os.path.dirname(self.ledger.beancount_file_path),
-                    self.ledger.fava_options['import-config'],
+                    self.ledger.fava_options["import-config"],
                 )
             )
 
@@ -51,7 +51,7 @@ class IngestModule(FavaModule):
             try:
                 mod = runpy.run_path(self.module_path)
             except Exception:  # pylint: disable=broad-except
-                message = ''.join(traceback.format_exception(*sys.exc_info()))
+                message = "".join(traceback.format_exception(*sys.exc_info()))
                 self.ledger.errors.append(
                     IngestError(
                         None,
@@ -64,7 +64,7 @@ class IngestModule(FavaModule):
                 return
 
             self.mtime = os.stat(self.module_path).st_mtime_ns
-            self.config = mod['CONFIG']
+            self.config = mod["CONFIG"]
             self.importers = {
                 importer.name(): importer for importer in self.config
             }

@@ -30,9 +30,6 @@ docs:
 run-example:
 	BEANCOUNT_FILE= fava --debug tests/data/example.beancount
 
-format:
-	black -S --line-length=79 tests fava
-
 bql-grammar:
 	contrib/scripts.py generate_bql_grammar_json
 

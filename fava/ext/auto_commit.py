@@ -17,14 +17,14 @@ class AutoCommit(FavaExtensionBase):  # pragma: no cover
         subprocess.call(args, cwd=cwd, stdout=subprocess.DEVNULL)
 
     def after_write_source(self, path, _):
-        message = 'autocommit: file saved'
+        message = "autocommit: file saved"
         self._run(["git", "add", path])
         self._run(["git", "commit", "-m", message])
 
     def after_insert_metadata(self, *_):
-        message = 'autocommit: metadata added'
+        message = "autocommit: metadata added"
         self._run(["git", "commit", "-am", message])
 
     def after_insert_entry(self, entry):
-        message = 'autocommit: entry on {}'.format(entry.date)
+        message = "autocommit: entry on {}".format(entry.date)
         self._run(["git", "commit", "-am", message])

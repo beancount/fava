@@ -28,7 +28,7 @@ class FileModule(FavaModule):
                 lambda x: x != main_file,
                 [
                     os.path.join(os.path.dirname(main_file), filename)
-                    for filename in self.ledger.options['include']
+                    for filename in self.ledger.options["include"]
                 ],
             )
         )
@@ -48,9 +48,9 @@ class FileModule(FavaModule):
 
         """
         if path not in self.list_sources():
-            raise FavaAPIException('Trying to read a non-source file')
+            raise FavaAPIException("Trying to read a non-source file")
 
-        with open(path, mode='rb') as file:
+        with open(path, mode="rb") as file:
             contents = file.read()
 
         sha256sum = sha256(contents).hexdigest()
@@ -76,13 +76,13 @@ class FileModule(FavaModule):
         """
         _, original_sha256sum = self.get_source(path)
         if original_sha256sum != sha256sum:
-            raise FavaAPIException('The file changed externally.')
+            raise FavaAPIException("The file changed externally.")
 
         contents = codecs.encode(source)
-        with open(path, 'w+b') as file:
+        with open(path, "w+b") as file:
             file.write(contents)
 
-        self.ledger.extensions.run_hook('after_write_source', path, source)
+        self.ledger.extensions.run_hook("after_write_source", path, source)
         self.ledger.load_file()
 
         return sha256(contents).hexdigest()
@@ -96,10 +96,10 @@ class FileModule(FavaModule):
         entry = self.ledger.get_entry(entry_hash)
         key = next_key(basekey, entry.meta)
         insert_metadata_in_file(
-            entry.meta['filename'], entry.meta['lineno'] - 1, key, value
+            entry.meta["filename"], entry.meta["lineno"] - 1, key, value
         )
         self.ledger.extensions.run_hook(
-            'after_insert_metadata', entry, key, value
+            "after_insert_metadata", entry, key, value
         )
 
     def insert_entries(self, entries):
@@ -112,7 +112,7 @@ class FileModule(FavaModule):
         self.ledger.changed()
         for entry in sorted(entries, key=incomplete_sortkey):
             insert_entry(entry, self.list_sources(), self.ledger.fava_options)
-            self.ledger.extensions.run_hook('after_insert_entry', entry)
+            self.ledger.extensions.run_hook("after_insert_entry", entry)
 
     def render_entries(self, entries):
         """Return entries in Beancount format.
@@ -144,7 +144,7 @@ class FileModule(FavaModule):
                 ):
                     continue
                 try:
-                    yield get_entry_slice(entry)[0] + '\n'
+                    yield get_entry_slice(entry)[0] + "\n"
                 except FileNotFoundError:
                     yield _format_entry(entry, self.ledger.fava_options)
 
@@ -163,9 +163,9 @@ def next_key(basekey, keys):
     if basekey not in keys:
         return basekey
     i = 2
-    while '{}-{}'.format(basekey, i) in keys:
+    while "{}-{}".format(basekey, i) in keys:
         i = i + 1
-    return '{}-{}'.format(basekey, i)
+    return "{}-{}".format(basekey, i)
 
 
 def leading_space(line):
@@ -199,7 +199,7 @@ def find_entry_lines(lines, lineno):
             line = lines[lineno]
         except IndexError:
             break
-        if not line.strip() or re.match('[0-9a-z]', line[0]):
+        if not line.strip() or re.match("[0-9a-z]", line[0]):
             break
         entry_lines.append(line)
     return entry_lines
@@ -220,11 +220,11 @@ def get_entry_slice(entry):
             source files.
 
     """
-    with open(entry.meta['filename'], mode='r') as file:
+    with open(entry.meta["filename"], mode="r") as file:
         lines = file.readlines()
 
-    entry_lines = find_entry_lines(lines, entry.meta['lineno'] - 1)
-    entry_source = ''.join(entry_lines).rstrip('\n')
+    entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
+    entry_source = "".join(entry_lines).rstrip("\n")
     sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
 
     return entry_source, sha256sum
@@ -247,22 +247,22 @@ def save_entry_slice(entry, source_slice, sha256sum):
 
     """
 
-    with open(entry.meta['filename'], 'r') as file:
+    with open(entry.meta["filename"], "r") as file:
         lines = file.readlines()
 
-    first_entry_line = entry.meta['lineno'] - 1
+    first_entry_line = entry.meta["lineno"] - 1
     entry_lines = find_entry_lines(lines, first_entry_line)
-    entry_source = ''.join(entry_lines).rstrip('\n')
+    entry_source = "".join(entry_lines).rstrip("\n")
     original_sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
     if original_sha256sum != sha256sum:
-        raise FavaAPIException('The file changed externally.')
+        raise FavaAPIException("The file changed externally.")
 
     lines = (
         lines[:first_entry_line]
-        + [source_slice + '\n']
+        + [source_slice + "\n"]
         + lines[first_entry_line + len(entry_lines) :]
     )
-    with open(entry.meta['filename'], "w") as file:
+    with open(entry.meta["filename"], "w") as file:
         file.writelines(lines)
 
     return sha256(codecs.encode(source_slice)).hexdigest()
@@ -277,7 +277,7 @@ def insert_entry(entry, filenames, fava_options):
         fava_options: The ledgers fava_options. Note that the line numbers of
             the insert options might be updated.
     """
-    insert_options = fava_options.get('insert-entry', [])
+    insert_options = fava_options.get("insert-entry", [])
     if isinstance(entry, data.Transaction):
         accounts = reversed([p.account for p in entry.postings])
     else:
@@ -285,7 +285,7 @@ def insert_entry(entry, filenames, fava_options):
     filename, lineno = find_insert_position(
         accounts, entry.date, insert_options, filenames
     )
-    content = _format_entry(entry, fava_options) + '\n'
+    content = _format_entry(entry, fava_options) + "\n"
 
     with open(filename, "r") as file:
         contents = file.readlines()
@@ -296,7 +296,7 @@ def insert_entry(entry, filenames, fava_options):
         file.writelines(contents)
 
     for index, option in enumerate(insert_options):
-        added_lines = content.count('\n') + 1
+        added_lines = content.count("\n") + 1
         if option.filename == filename and option.lineno > lineno:
             insert_options[index] = option._replace(
                 lineno=lineno + added_lines
@@ -306,7 +306,7 @@ def insert_entry(entry, filenames, fava_options):
 def _format_entry(entry, fava_options):
     """Wrapper that strips unnecessary whitespace from format_entry."""
     string = align(format_entry(entry), fava_options)
-    return '\n'.join((line.rstrip() for line in string.split('\n')))
+    return "\n".join((line.rstrip() for line in string.split("\n")))
 
 
 def find_insert_position(accounts, date, insert_options, filenames):

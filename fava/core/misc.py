@@ -11,7 +11,7 @@ from beancount.core import amount
 from fava.core.helpers import FavaModule
 from fava.core.fava_options import DEFAULTS
 
-FavaError = namedtuple('FavaError', 'source message entry')
+FavaError = namedtuple("FavaError", "source message entry")
 
 
 class FavaMisc(FavaModule):
@@ -28,15 +28,15 @@ class FavaMisc(FavaModule):
 
         self.upcoming_events = upcoming_events(
             self.ledger.all_entries_by_type[Event],
-            self.ledger.fava_options['upcoming-events'],
+            self.ledger.fava_options["upcoming-events"],
         )
 
-        if not self.ledger.options['operating_currency']:
+        if not self.ledger.options["operating_currency"]:
             self.ledger.errors.append(
                 FavaError(
                     None,
-                    'No operating currency specified. '
-                    'Please add one to your beancount file.',
+                    "No operating currency specified. "
+                    "Please add one to your beancount file.",
                     None,
                 )
             )
@@ -50,7 +50,7 @@ def sidebar_links(custom_entries):
     2016-04-01 custom "fava-sidebar-link" "2014" "/income_statement/?time=2014"
     """
     sidebar_link_entries = [
-        entry for entry in custom_entries if entry.type == 'fava-sidebar-link'
+        entry for entry in custom_entries if entry.type == "fava-sidebar-link"
     ]
     return [
         (entry.values[0].value, entry.values[1].value)
@@ -83,7 +83,7 @@ def upcoming_events(events, max_delta):
 def align(string, fava_options):
     """Align currencies in one column."""
 
-    column = fava_options.get('currency-column', DEFAULTS['currency-column'])
+    column = fava_options.get("currency-column", DEFAULTS["currency-column"])
 
     output = io.StringIO()
     for line in string.splitlines():
@@ -96,10 +96,10 @@ def align(string, fava_options):
         if match:
             prefix, number, rest = match.groups()
             num_of_spaces = column - len(prefix) - len(number) - 4
-            spaces = ' ' * num_of_spaces
-            output.write(prefix + spaces + '  ' + number + ' ' + rest)
+            spaces = " " * num_of_spaces
+            output.write(prefix + spaces + "  " + number + " " + rest)
         else:
             output.write(line)
-        output.write('\n')
+        output.write("\n")
 
     return output.getvalue()

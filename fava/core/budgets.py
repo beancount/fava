@@ -12,8 +12,8 @@ from fava.util.date import (
 )
 from fava.core.helpers import FavaModule
 
-Budget = namedtuple('Budget', 'account date_start period number currency')
-BudgetError = namedtuple('BudgetError', 'source message entry')
+Budget = namedtuple("Budget", "account date_start period number currency")
+BudgetError = namedtuple("BudgetError", "source message entry")
 
 
 class BudgetModule(FavaModule):
@@ -62,22 +62,22 @@ def parse_budgets(custom_entries):
     errors = []
 
     interval_map = {
-        'daily': Interval.DAY,
-        'weekly': Interval.WEEK,
-        'monthly': Interval.MONTH,
-        'quarterly': Interval.QUARTER,
-        'yearly': Interval.YEAR,
+        "daily": Interval.DAY,
+        "weekly": Interval.WEEK,
+        "monthly": Interval.MONTH,
+        "quarterly": Interval.QUARTER,
+        "yearly": Interval.YEAR,
     }
 
     for entry in custom_entries:
-        if entry.type == 'budget':
+        if entry.type == "budget":
             try:
                 interval = interval_map.get(str(entry.values[1].value))
                 if not interval:
                     errors.append(
                         BudgetError(
                             entry.meta,
-                            'Invalid interval for budget entry',
+                            "Invalid interval for budget entry",
                             entry,
                         )
                     )
@@ -93,7 +93,7 @@ def parse_budgets(custom_entries):
             except (IndexError, TypeError):
                 errors.append(
                     BudgetError(
-                        entry.meta, 'Failed to parse budget entry', entry
+                        entry.meta, "Failed to parse budget entry", entry
                     )
                 )
 

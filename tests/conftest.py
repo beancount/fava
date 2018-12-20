@@ -9,15 +9,15 @@ from fava.core.budgets import parse_budgets
 
 
 def data_file(filename):
-    return os.path.join(os.path.dirname(__file__), 'data', filename)
+    return os.path.join(os.path.dirname(__file__), "data", filename)
 
 
-EXAMPLE_FILE = data_file('long-example.beancount')
+EXAMPLE_FILE = data_file("long-example.beancount")
 API = FavaLedger(EXAMPLE_FILE)
 
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
-fava_app.config['BEANCOUNT_FILES'] = [EXAMPLE_FILE]
+fava_app.config["BEANCOUNT_FILES"] = [EXAMPLE_FILE]
 
 
 @pytest.fixture
@@ -37,7 +37,7 @@ def load_doc(request):
 
 @pytest.fixture
 def small_example_ledger():
-    return FavaLedger(data_file('example.beancount'))
+    return FavaLedger(data_file("example.beancount"))
 
 
 @pytest.fixture

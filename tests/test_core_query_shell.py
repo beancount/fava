@@ -10,34 +10,34 @@ from .conftest import data_file
 def test_execute_query(example_ledger):
     query_shell = QueryShell(example_ledger)
 
-    assert query_shell.execute_query('help exit') == (
-        QueryShell.noop.__doc__ + '\n',
+    assert query_shell.execute_query("help exit") == (
+        QueryShell.noop.__doc__ + "\n",
         None,
         None,
     )
 
-    assert query_shell.execute_query('help')[1:] == (None, None)
+    assert query_shell.execute_query("help")[1:] == (None, None)
 
-    assert query_shell.execute_query('balances', add_to_history=True)[
+    assert query_shell.execute_query("balances", add_to_history=True)[
         1:
     ] == query.run_query(
-        query_shell.entries, query_shell.options_map, 'balances'
+        query_shell.entries, query_shell.options_map, "balances"
     )
 
-    assert query_shell.get_history(1) == ['balances']
+    assert query_shell.get_history(1) == ["balances"]
 
 
 def test_query_to_file(example_ledger):
     query_shell = QueryShell(example_ledger)
 
-    name, data = query_shell.query_to_file('balances', 'csv')
-    assert name == 'query_result'
-    csv = data_file('example-balances.csv')
-    with open(csv, 'rb') as file:
+    name, data = query_shell.query_to_file("balances", "csv")
+    assert name == "query_result"
+    csv = data_file("example-balances.csv")
+    with open(csv, "rb") as file:
         assert data.getvalue() == file.read()
 
     with pytest.raises(FavaAPIException):
-        query_shell.query_to_file('select sdf', 'csv')
+        query_shell.query_to_file("select sdf", "csv")
 
     with pytest.raises(FavaAPIException):
-        query_shell.query_to_file('run testsetest', 'csv')
+        query_shell.query_to_file("run testsetest", "csv")

@@ -18,14 +18,14 @@ class Token:
     error.
     """
 
-    __slots__ = ['type', 'value', 'lexer']
+    __slots__ = ["type", "value", "lexer"]
 
     def __init__(self, type_, value):
         self.type = type_
         self.value = value
 
     def __repr__(self):
-        return 'Token({}, {})'.format(self.type, self.value)
+        return "Token({}, {})".format(self.type, self.value)
 
 
 class FilterSyntaxLexer:
@@ -33,19 +33,19 @@ class FilterSyntaxLexer:
 
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
-    tokens = ('ANY', 'ALL', 'KEY', 'LINK', 'STRING', 'TAG')
+    tokens = ("ANY", "ALL", "KEY", "LINK", "STRING", "TAG")
 
     RULES = (
-        ('LINK', r'\^[A-Za-z0-9\-_/.]+'),
-        ('TAG', r'\#[A-Za-z0-9\-_/.]+'),
-        ('KEY', r'[a-z][a-zA-Z0-9\-_]+:'),
-        ('ALL', r'all\('),
-        ('ANY', r'any\('),
-        ('STRING', r'\w+|"[^"]*"|\'[^\']*\''),
+        ("LINK", r"\^[A-Za-z0-9\-_/.]+"),
+        ("TAG", r"\#[A-Za-z0-9\-_/.]+"),
+        ("KEY", r"[a-z][a-zA-Z0-9\-_]+:"),
+        ("ALL", r"all\("),
+        ("ANY", r"any\("),
+        ("STRING", r'\w+|"[^"]*"|\'[^\']*\''),
     )
 
     regex = re.compile(
-        '|'.join(('(?P<{}>{})'.format(name, rule) for name, rule in RULES))
+        "|".join(("(?P<{}>{})".format(name, rule) for name, rule in RULES))
     )
 
     def LINK(self, token, value):
@@ -77,8 +77,8 @@ class FilterSyntaxLexer:
         Yields:
             All Tokens in the line.
         """
-        ignore = ' \t'
-        literals = '-,()'
+        ignore = " \t"
+        literals = "-,()"
         regex = self.regex.match
 
         pos = 0
@@ -102,14 +102,14 @@ class FilterSyntaxLexer:
                 pos += 1
             else:
                 raise FilterException(
-                    'filter', 'Illegal character "{}" in filter: '.format(char)
+                    "filter", 'Illegal character "{}" in filter: '.format(char)
                 )
 
 
 class Match:
     """Match a string."""
 
-    __slots__ = ['match']
+    __slots__ = ["match"]
 
     def __init__(self, search):
         try:
@@ -124,11 +124,11 @@ class Match:
 class FilterSyntaxParser:
     # pylint: disable=missing-docstring,invalid-name,no-self-use
 
-    precedence = (('left', 'AND'), ('right', 'UMINUS'))
+    precedence = (("left", "AND"), ("right", "UMINUS"))
     tokens = FilterSyntaxLexer.tokens
 
     def p_error(self, _):
-        raise FilterException('filter', 'Failed to parse filter: ')
+        raise FilterException("filter", "Failed to parse filter: ")
 
     def p_filter(self, p):
         """
@@ -150,7 +150,7 @@ class FilterSyntaxParser:
 
         def _match_postings(entry):
             return all(
-                expr(posting) for posting in getattr(entry, 'postings', [])
+                expr(posting) for posting in getattr(entry, "postings", [])
             )
 
         p[0] = _match_postings
@@ -163,7 +163,7 @@ class FilterSyntaxParser:
 
         def _match_postings(entry):
             return any(
-                expr(posting) for posting in getattr(entry, 'postings', [])
+                expr(posting) for posting in getattr(entry, "postings", [])
             )
 
         p[0] = _match_postings
@@ -214,7 +214,7 @@ class FilterSyntaxParser:
         tag = p[1]
 
         def _tag(entry):
-            return hasattr(entry, 'tags') and (tag in entry.tags)
+            return hasattr(entry, "tags") and (tag in entry.tags)
 
         p[0] = _tag
 
@@ -225,7 +225,7 @@ class FilterSyntaxParser:
         link = p[1]
 
         def _link(entry):
-            return hasattr(entry, 'links') and (link in entry.links)
+            return hasattr(entry, "links") and (link in entry.links)
 
         p[0] = _link
 
@@ -237,8 +237,8 @@ class FilterSyntaxParser:
         match = Match(string)
 
         def _string(entry):
-            for name in ('narration', 'payee', 'comment'):
-                value = getattr(entry, name, '')
+            for name in ("narration", "payee", "comment"):
+                value = getattr(entry, name, "")
                 if value and match(value):
                     return True
             return False
@@ -254,7 +254,7 @@ class FilterSyntaxParser:
 
         def _key(entry):
             if hasattr(entry, key):
-                return match(str(getattr(entry, key) or ''))
+                return match(str(getattr(entry, key) or ""))
             if key in entry.meta:
                 return match(str(entry.meta.get(key)))
             return False
@@ -321,12 +321,12 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
             return True
 
         self.begin_date, self.end_date = parse_date(
-            self.value, self.fava_options['fiscal-year-end']
+            self.value, self.fava_options["fiscal-year-end"]
         )
         if not self.begin_date:
             self.value = None
             raise FilterException(
-                'time', 'Failed to parse date: {}'.format(value)
+                "time", "Failed to parse date: {}".format(value)
             )
         return True
 
@@ -361,7 +361,7 @@ class AdvancedFilter(EntryFilter):
             try:
                 tokens = LEXER.lex(value.strip())
                 self._include = PARSE(
-                    lexer='NONE',
+                    lexer="NONE",
                     tokenfunc=lambda toks=tokens: next(toks, None),
                 )
             except FilterException as exception:
@@ -397,7 +397,7 @@ def entry_account_predicate(entry, predicate):
             for val in entry.values
             if val.dtype == account.TYPE
         )
-    return hasattr(entry, 'account') and predicate(entry.account)
+    return hasattr(entry, "account") and predicate(entry.account)
 
 
 class AccountFilter(EntryFilter):
@@ -414,7 +414,7 @@ class AccountFilter(EntryFilter):
         if value == self.value:
             return False
         self.value = value
-        self.match = Match(value or '')
+        self.match = Match(value or "")
         return True
 
     def _account_predicate(self, name):

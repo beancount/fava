@@ -27,13 +27,13 @@ def to_excel(types, rows, result_format, query_string):
     Returns:
         The (binary) file contents.
     """
-    assert result_format in ('xls', 'xlsx', 'ods')
+    assert result_format in ("xls", "xlsx", "ods")
     resp = io.BytesIO()
     book = pyexcel.Book(
         OrderedDict(
             [
-                ('Results', _result_array(types, rows)),
-                ('Query', [['Query'], [query_string]]),
+                ("Results", _result_array(types, rows)),
+                ("Query", [["Query"], [query_string]]),
             ]
         )
     )
@@ -55,7 +55,7 @@ def to_csv(types, rows):
     resp = io.StringIO()
     result_array = _result_array(types, rows)
     csv.writer(resp).writerows(result_array)
-    return io.BytesIO(resp.getvalue().encode('utf-8'))
+    return io.BytesIO(resp.getvalue().encode("utf-8"))
 
 
 def _result_array(types, rows):
@@ -78,7 +78,7 @@ def _row_to_pyexcel(row, header):
         elif type_ == int:
             result.append(value)
         elif type_ == set:
-            result.append(' '.join(value))
+            result.append(" ".join(value))
         elif type_ == datetime.date:
             result.append(str(value))
         else:

@@ -8,40 +8,40 @@ from fava.plugins.link_documents import DocumentError
 
 def _format(string, args):
     """Dedent, and format (escaping backslashes in paths for Windows)."""
-    args = (str(path).replace('\\', '\\\\') for path in args)
+    args = (str(path).replace("\\", "\\\\") for path in args)
     return dedent(string).format(*args)
 
 
 def test_plugins(tmpdir):
     # pylint: disable=too-many-locals
-    sample_folder = tmpdir.mkdir('fava_plugins')
+    sample_folder = tmpdir.mkdir("fava_plugins")
 
-    documents_folder = sample_folder.mkdir('documents')
+    documents_folder = sample_folder.mkdir("documents")
 
-    foo_folder = documents_folder.mkdir('Expenses').mkdir('Foo')
-    sample_statement1 = foo_folder.join('2016-11-01 Test 1.pdf')
-    sample_statement1.write('Hello World 1')
+    foo_folder = documents_folder.mkdir("Expenses").mkdir("Foo")
+    sample_statement1 = foo_folder.join("2016-11-01 Test 1.pdf")
+    sample_statement1.write("Hello World 1")
     sample_statement1_short = os.path.join(
-        'documents', 'Expenses', 'Foo', '2016-11-01 Test 1.pdf'
+        "documents", "Expenses", "Foo", "2016-11-01 Test 1.pdf"
     )
-    sample_statement2 = foo_folder.join('2016-11-01 Test 2.pdf')
-    sample_statement2.write('Hello World 2')
-    sample_statement3 = foo_folder.join('2016-11-01 Test 3 discovered.pdf')
-    sample_statement3.write('Hello World 3')
+    sample_statement2 = foo_folder.join("2016-11-01 Test 2.pdf")
+    sample_statement2.write("Hello World 2")
+    sample_statement3 = foo_folder.join("2016-11-01 Test 3 discovered.pdf")
+    sample_statement3.write("Hello World 3")
 
-    assets_folder = documents_folder.mkdir('Assets').mkdir('Cash')
-    sample_statement4 = assets_folder.join('2016-11-01 Test 4.pdf')
+    assets_folder = documents_folder.mkdir("Assets").mkdir("Cash")
+    sample_statement4 = assets_folder.join("2016-11-01 Test 4.pdf")
     sample_statement4_short = os.path.join(
-        'documents', 'Assets', 'Cash', '2016-11-01 Test 4.pdf'
+        "documents", "Assets", "Cash", "2016-11-01 Test 4.pdf"
     )
-    sample_statement4.write('Hello World 4')
-    sample_statement5 = assets_folder.join('Test 5.pdf')
+    sample_statement4.write("Hello World 4")
+    sample_statement5 = assets_folder.join("Test 5.pdf")
     sample_statement5_short = os.path.join(
-        'documents', 'Assets', 'Cash', 'Test 5.pdf'
+        "documents", "Assets", "Cash", "Test 5.pdf"
     )
-    sample_statement5.write('Hello World 5')
+    sample_statement5.write("Hello World 5")
 
-    beancount_file = sample_folder.join('example.beancount')
+    beancount_file = sample_folder.join("example.beancount")
     beancount_file.write(
         _format(
             """
@@ -83,14 +83,14 @@ def test_plugins(tmpdir):
     assert not errors
     assert len(entries) == 9
 
-    assert 'linked' in entries[3].tags
-    assert 'linked' in entries[4].tags
-    assert 'linked' in entries[5].tags
+    assert "linked" in entries[3].tags
+    assert "linked" in entries[4].tags
+    assert "linked" in entries[5].tags
 
     assert entries[2].links == entries[5].links
     assert entries[7].links == entries[3].links == entries[4].links
 
-    assert 'discovered' in entries[6].tags
+    assert "discovered" in entries[6].tags
     assert not entries[8].tags
 
 
@@ -113,7 +113,7 @@ def test_link_documents_error(load_doc):
 
 
 def test_link_documents_missing(tmpdir):
-    sample_folder = tmpdir.mkdir('fava_plugins').mkdir('documents')
+    sample_folder = tmpdir.mkdir("fava_plugins").mkdir("documents")
 
     bfile = _format(
         """
@@ -128,7 +128,7 @@ def test_link_documents_missing(tmpdir):
             Expenses:Foo                100 EUR
             Assets:Cash
     """,
-        (sample_folder, os.path.join('test', 'Foobar.pdf')),
+        (sample_folder, os.path.join("test", "Foobar.pdf")),
     )
 
     entries, errors, _ = load_string(bfile)

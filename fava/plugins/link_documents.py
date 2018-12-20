@@ -12,9 +12,9 @@ from os.path import join, dirname, normpath, basename
 from beancount.core import data
 from beancount.core.compare import hash_entry
 
-DocumentError = collections.namedtuple('DocumentError', 'source message entry')
+DocumentError = collections.namedtuple("DocumentError", "source message entry")
 
-__plugins__ = ['link_documents']
+__plugins__ = ["link_documents"]
 
 
 def link_documents(entries, _):
@@ -36,13 +36,13 @@ def link_documents(entries, _):
         disk_docs = [
             value
             for key, value in entry.meta.items()
-            if key.startswith('document')
+            if key.startswith("document")
         ]
 
         _hash = hash_entry(entry)[:8]
         for disk_doc in disk_docs:
             disk_doc_path = normpath(
-                join(dirname(entry.meta['filename']), disk_doc)
+                join(dirname(entry.meta["filename"]), disk_doc)
             )
             documents = [
                 (j, document)
@@ -67,10 +67,10 @@ def link_documents(entries, _):
             for j, document in documents:
                 tags = (
                     set(document.tags)
-                    .union(['linked'])
-                    .difference(['discovered'])
+                    .union(["linked"])
+                    .difference(["discovered"])
                     if document.tags
-                    else set(['linked'])
+                    else set(["linked"])
                 )
                 links = (
                     set(document.links).union([_hash])

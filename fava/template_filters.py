@@ -70,9 +70,9 @@ def cost(inventory):
 
 def cost_or_value(inventory, date=None):
     """Get the cost or value of an inventory."""
-    if g.conversion == 'at_value':
+    if g.conversion == "at_value":
         return inventory.reduce(get_market_value, g.ledger.price_map, date)
-    if g.conversion == 'units':
+    if g.conversion == "units":
         return inventory.reduce(convert.get_units)
     if g.conversion:
         return inventory.reduce(
@@ -84,7 +84,7 @@ def cost_or_value(inventory, date=None):
 def format_currency(value, currency=None, show_if_zero=False):
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
-        return ''
+        return ""
     if value == ZERO:
         return g.ledger.format_decimal(ZERO, currency)
     return g.ledger.format_decimal(value, currency)
@@ -93,26 +93,26 @@ def format_currency(value, currency=None, show_if_zero=False):
 def format_amount(amount):
     """Format an amount to string using the DisplayContext."""
     if amount is None:
-        return ''
+        return ""
     number, currency = amount
     if number is None:
-        return ''
+        return ""
     return "{} {}".format(format_currency(number, currency, True), currency)
 
 
 def format_date(date):
     """Format a date according to the current interval."""
     if g.interval is Interval.YEAR:
-        return date.strftime('%Y')
+        return date.strftime("%Y")
     if g.interval is Interval.QUARTER:
-        return '{}Q{}'.format(date.year, (date.month - 1) // 3 + 1)
+        return "{}Q{}".format(date.year, (date.month - 1) // 3 + 1)
     if g.interval is Interval.MONTH:
-        return date.strftime('%b %Y')
+        return date.strftime("%b %Y")
     if g.interval is Interval.WEEK:
-        return date.strftime('%YW%W')
+        return date.strftime("%YW%W")
     if g.interval is Interval.DAY:
-        return date.strftime('%Y-%m-%d')
-    return ''
+        return date.strftime("%Y-%m-%d")
+    return ""
 
 
 def hash_entry(entry):
@@ -132,12 +132,12 @@ def get_or_create(account, account_name):
     return realization.get_or_create(account, account_name)
 
 
-FLAGS_TO_TYPES = {'*': 'cleared', '!': 'pending'}
+FLAGS_TO_TYPES = {"*": "cleared", "!": "pending"}
 
 
 def flag_to_type(flag):
     """Names for entry flags."""
-    return FLAGS_TO_TYPES.get(flag, 'other')
+    return FLAGS_TO_TYPES.get(flag, "other")
 
 
 def should_show(account):
@@ -149,16 +149,16 @@ def should_show(account):
     if account.name not in g.ledger.accounts:
         return False
     if not g.ledger.fava_options[
-        'show-closed-accounts'
+        "show-closed-accounts"
     ] and g.ledger.account_is_closed(account.name):
         return False
     if (
-        not g.ledger.fava_options['show-accounts-with-zero-balance']
+        not g.ledger.fava_options["show-accounts-with-zero-balance"]
         and account.balance.is_empty()
     ):
         return False
     if (
-        not g.ledger.fava_options['show-accounts-with-zero-transactions']
+        not g.ledger.fava_options["show-accounts-with-zero-transactions"]
         and not account.has_txns
     ):
         return False
@@ -167,7 +167,7 @@ def should_show(account):
 
 def basename(file_path):
     """Return the basename of a filepath."""
-    return unicodedata.normalize('NFC', os.path.basename(file_path))
+    return unicodedata.normalize("NFC", os.path.basename(file_path))
 
 
 def format_errormsg(message):
@@ -176,9 +176,9 @@ def format_errormsg(message):
     if not match:
         return message
     account = match.group()
-    url = flask.url_for('account', name=account)
+    url = flask.url_for("account", name=account)
     return (
         message.replace(account, '<a href="{}">{}</a>'.format(url, account))
-        .replace('for \'', 'for ')
-        .replace('\': ', ': ')
+        .replace("for '", "for ")
+        .replace("': ", ": ")
     )
