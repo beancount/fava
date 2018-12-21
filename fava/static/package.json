@@ -1,6 +1,5 @@
 {
   "name": "fava",
-  "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "rollup -c",

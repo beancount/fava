@@ -1,18 +1,19 @@
 /*cache
 /.coverage
+/.eggs
 /.tox
-/dist
 /build
-gen
-/fava/translations/messages.pot
+/dist
 /fava.egg-info
+/fava/translations/messages.pot
 /htmlcov
 /venv
+gen
 
-package-lock.json
-npm-debug.log
-node_modules
 *.pyc
 .DS_Store
-TODO
 .env
+TODO
+node_modules
+npm-debug.log
+package-lock.json
