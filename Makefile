@@ -11,9 +11,11 @@ clean: mostlyclean
 
 .PHONY: mostlyclean
 mostlyclean:
-	rm -rf .tox
-	rm -rf fava/static/node_modules
 	rm -rf .*cache
+	rm -rf .tox
+	rm -rf build
+	rm -rf dist
+	rm -rf fava/static/node_modules
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
@@ -28,7 +30,7 @@ test:
 
 .PHONY: docs
 docs:
-	sphinx-build -b html docs build/docs
+	tox -e docs
 
 .PHONY: run-example
 run-example:
@@ -71,10 +73,10 @@ translations-fetch:
 gh-pages:
 	git checkout master
 	git checkout --orphan gh-pages
-	sphinx-build -b html docs _build
-	ls | grep -v '_build' | xargs rm -r
-	mv -f _build/* ./
-	rm -r _build
+	tox -e docs
+	ls | grep -v 'build' | xargs rm -r
+	mv -f build/docs/* ./
+	rm -r build
 	touch .nojekyll
 	git add -A
 	git commit -m 'Update gh-pages'
