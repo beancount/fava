@@ -2,7 +2,8 @@ build: false
 version: '{build}'
 platform: x64
 environment:
-  PYTHON: 'C:\Python36'
+  PYTHON: 'C:\Python37'
+  PYTHONIOENCODING: ':replace'
 
 install:
   - '%PYTHON%\python -m pip install -U setuptools pip wheel tox'
@@ -12,4 +13,4 @@ test_script:
 
 cache:
   - '%LOCALAPPDATA%\pip\cache'
-  - '.tox -> setup.py'
+  - '.tox -> setup.cfg'
