@@ -105,7 +105,7 @@ class Router {
       () => {
         svg.classList.remove("loading");
         e.trigger("error", `Loading ${url} failed.`);
-      },
+      }
     );
   }
 

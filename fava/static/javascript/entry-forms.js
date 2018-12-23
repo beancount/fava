@@ -139,7 +139,7 @@ export default class EntryForm {
         },
         error => {
           e.trigger("error", `Saving failed: ${error}`);
-        },
+        }
       );
   }
 }
@@ -168,7 +168,7 @@ e.on("autocomplete-select-payees", input => {
   const params = new URLSearchParams();
   params.set("payee", payee);
   $.fetch(
-    `${window.favaAPI.baseURL}api/payee-transaction/?${params.toString()}`,
+    `${window.favaAPI.baseURL}api/payee-transaction/?${params.toString()}`
   )
     .then(handleJSON)
     .then(data => data.payload)

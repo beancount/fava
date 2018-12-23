@@ -64,7 +64,7 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
   if (currentWord === line && line.length > 0) {
     return {
       list: completionSources.undatedDirectives.filter(d =>
-        d.startsWith(currentWord),
+        d.startsWith(currentWord)
       ),
       from: new CodeMirror.Pos(cursor.line, 0),
       to: cursor,
@@ -90,7 +90,7 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
       if (previousTokens.length === 2) {
         return {
           list: completionSources.datedDirectives.filter(d =>
-            d.startsWith(currentWord),
+            d.startsWith(currentWord)
           ),
           from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
           to: cursor,

@@ -46,13 +46,13 @@ class CompletionList {
           // UP
           event.preventDefault();
           this.highlight(
-            this.index === 0 ? ul.children.length - 1 : this.index - 1,
+            this.index === 0 ? ul.children.length - 1 : this.index - 1
           );
         } else if (event.keyCode === 40) {
           // DOWN
           event.preventDefault();
           this.highlight(
-            this.index === ul.children.length - 1 ? 0 : this.index + 1,
+            this.index === ul.children.length - 1 ? 0 : this.index + 1
           );
         }
       },
@@ -130,7 +130,7 @@ class CompletionList {
     this.ul.style.top = `${Math.ceil(coords.top + coords.height) +
       (absolutePosition ? window.pageYOffset : 0)}px`;
     this.ul.style.left = `${Math.floor(
-      Math.min(coords.left, document.body.clientWidth - this.ul.offsetWidth),
+      Math.min(coords.left, document.body.clientWidth - this.ul.offsetWidth)
     )}px`;
   }
 
@@ -158,7 +158,7 @@ class CompletionList {
     if (this.list === "accounts" && this.input.closest(".entry-form")) {
       const payee = $(
         "input[name=payee]",
-        this.input.closest(".entry-form"),
+        this.input.closest(".entry-form")
       ).value.trim();
       if (payee) {
         if (accountCompletionCache[payee]) {
@@ -169,7 +169,7 @@ class CompletionList {
         const params = new URLSearchParams();
         params.set("payee", payee);
         return $.fetch(
-          `${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`,
+          `${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`
         )
           .then(handleJSON)
           .then(data => data.payload)
@@ -202,7 +202,7 @@ class CompletionList {
         .match(/\S*$/);
       this.input.value = `${this.input.value.slice(
         0,
-        this.input.selectionStart - search.length,
+        this.input.selectionStart - search.length
       )}${value}${this.input.value.slice(this.input.selectionStart)}`;
     } else {
       this.input.value = value;

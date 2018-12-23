@@ -24,7 +24,7 @@ e.on("page-loaded", () => {
             element.focus();
           }
         },
-        "keyup",
+        "keyup"
       );
     }
   });

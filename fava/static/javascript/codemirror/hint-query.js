@@ -23,6 +23,6 @@ CodeMirror.registerHelper("hint", "beancount-query", cm => {
   return fuzzyMatch(
     cursor,
     currentWord,
-    columns.concat(functionCompletions, keywords),
+    columns.concat(functionCompletions, keywords)
   );
 });

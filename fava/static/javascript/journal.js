@@ -32,7 +32,7 @@ e.on("page-loaded", () => {
       addFilter(
         ` ${event.target.previousElementSibling.innerText}"${
           event.target.innerText
-        }"`,
+        }"`
       );
     } else if (event.target.closest(".indicators")) {
       // Toggle postings and metadata by clicking on indicators.

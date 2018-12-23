@@ -58,7 +58,7 @@ function makeAccountLink(selection) {
   selection.on("click", d => {
     window.location = window.favaAPI.accountURL.replace(
       "REPLACEME",
-      d.data.account,
+      d.data.account
     );
     event.stopPropagation();
   });
@@ -290,7 +290,7 @@ class SunburstChart extends BaseChart {
     this.canvas.attr(
       "transform",
       `translate(${this.width / 2 + this.margin.left},${this.height / 2 +
-        this.margin.top})`,
+        this.margin.top})`
     );
     this.svg
       .attr("width", this.width + this.margin.left + this.margin.right)
@@ -432,7 +432,7 @@ class BarChart extends BaseChart {
 
     this.selections.groups.attr(
       "transform",
-      d => `translate(${this.x0(d.label)},0)`,
+      d => `translate(${this.x0(d.label)},0)`
     );
 
     this.selections.groupboxes
@@ -523,7 +523,7 @@ class ScatterPlot extends BaseChart {
       .attr("height", this.height + this.margin.top + this.margin.bottom);
     this.canvas.attr(
       "transform",
-      `translate(${this.margin.left},${this.margin.top})`,
+      `translate(${this.margin.left},${this.margin.top})`
     );
 
     this.yAxis.tickSize(-this.width, 0);
@@ -635,7 +635,7 @@ class LineChart extends BaseChart {
       .attr("height", this.height + this.margin.top + this.margin.bottom);
     this.canvas.attr(
       "transform",
-      `translate(${this.margin.left},${this.margin.top})`,
+      `translate(${this.margin.left},${this.margin.top})`
     );
 
     this.yAxis.tickSize(-this.width, 0);
@@ -653,7 +653,7 @@ class LineChart extends BaseChart {
       const delaunay = Delaunay.from(
         this.points,
         d => this.x(d.date),
-        d => this.y(d.value),
+        d => this.y(d.value)
       );
       const polygons = delaunay
         .voronoi([0, 0, this.width, this.height])
@@ -689,7 +689,7 @@ class SunburstChartContainer extends BaseChart {
         .append("g")
         .attr(
           "transform",
-          `translate(${(this.width * i) / this.currencies.length},0)`,
+          `translate(${(this.width * i) / this.currencies.length},0)`
         );
 
       const sunburst = new SunburstChart(canvas)
@@ -699,8 +699,8 @@ class SunburstChartContainer extends BaseChart {
           "labelText",
           d =>
             `${formatCurrency(
-              d.data.balance_children[currency] || 0,
-            )} ${currency}`,
+              d.data.balance_children[currency] || 0
+            )} ${currency}`
         )
         .draw(data[currency]);
 
@@ -725,7 +725,7 @@ class SunburstChartContainer extends BaseChart {
         .update();
       this.canvases[i].attr(
         "transform",
-        `translate(${(this.width * i) / this.currencies.length},0)`,
+        `translate(${(this.width * i) / this.currencies.length},0)`
       );
     });
   }
@@ -762,7 +762,7 @@ class HierarchyContainer extends BaseChart {
           d =>
             `${formatCurrency(d.data.balance[currency])} ${currency}<em>${
               d.data.account
-            }</em>`,
+            }</em>`
         )
         .draw(data[currency]);
 
@@ -872,11 +872,11 @@ class ChartSwitcher {
 
     $("#chart-currency").classList.toggle(
       "hidden",
-      !this.currentChart.has_currency_setting,
+      !this.currentChart.has_currency_setting
     );
     $("#chart-mode").classList.toggle(
       "hidden",
-      !this.currentChart.has_mode_setting,
+      !this.currentChart.has_mode_setting
     );
   }
 }
@@ -943,8 +943,8 @@ e.on("page-loaded", () => {
               "tooltipText",
               d =>
                 `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
-                  d.date,
-                )}</em>`,
+                  d.date
+                )}</em>`
             )
             .draw(series);
         break;
@@ -969,7 +969,7 @@ e.on("page-loaded", () => {
                 d =>
                   `1 ${chart.base} = ${formatCurrency(d.value)} ${
                     chart.quote
-                  }<em>${dateFormat.day(d.date)}</em>`,
+                  }<em>${dateFormat.day(d.date)}</em>`
               )
               .draw(series);
         }
@@ -1016,7 +1016,7 @@ e.on("page-loaded", () => {
           new ScatterPlot(svg)
             .set(
               "tooltipText",
-              d => `${d.description}<em>${dateFormat.day(d.date)}</em>`,
+              d => `${d.description}<em>${dateFormat.day(d.date)}</em>`
             )
             .draw(series);
 

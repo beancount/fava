@@ -118,12 +118,12 @@ function doPoll() {
             e.trigger("file-modified");
             e.trigger(
               "reload-warning",
-              $("#reload-page").getAttribute("data-reload-text"),
+              $("#reload-page").getAttribute("data-reload-text")
             );
           }
         }
       },
-      () => {},
+      () => {}
     )
     .then(() => {
       setTimeout(doPoll, 5000);

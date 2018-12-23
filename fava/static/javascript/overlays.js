@@ -23,7 +23,7 @@ export default function handleHash() {
         },
         () => {
           e.trigger("error", "Loading context failed.");
-        },
+        }
       );
     $("#context-overlay").classList.add("shown");
   }

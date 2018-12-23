@@ -27,7 +27,7 @@ e.on("page-loaded", () => {
 
       $(".expand-all", table).classList.toggle(
         "hidden",
-        !$$(".toggled", table).length,
+        !$$(".toggled", table).length
       );
     });
 

@@ -6,7 +6,7 @@ import { $, $$ } from "./helpers";
 function updateInput(input) {
   const size = Math.max(
     input.value.length,
-    input.getAttribute("placeholder").length,
+    input.getAttribute("placeholder").length
   );
   input.setAttribute("size", size + 1);
 

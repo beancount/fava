@@ -5,7 +5,7 @@ import e from "./events";
 e.on("button-click-extract-submit", () => {
   const form = $(".ingest-extract");
   const forms = $$(".ingest-row.import .entry-form", form).map(
-    el => new EntryForm(el),
+    el => new EntryForm(el)
   );
   EntryForm.submit(forms);
 });
@@ -14,7 +14,7 @@ e.on("button-click-extract-toggle-ignore", button => {
   const toImport = button.classList.contains("inactive");
   const value = toImport ? "import" : "ignore";
   $$(
-    `.ingest-row.${toImport ? "ignore" : "import"} input[value=${value}]`,
+    `.ingest-row.${toImport ? "ignore" : "import"} input[value=${value}]`
   ).forEach(input => {
     input.click();
   });

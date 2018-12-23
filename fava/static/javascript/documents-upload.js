@@ -21,8 +21,8 @@ e.on("form-submit-document-upload", form => {
           },
           error => {
             e.trigger("error", `Upload error: ${error}`);
-          },
-        ),
+          }
+        )
     );
   });
 
@@ -74,7 +74,7 @@ e.on("page-loaded", () => {
       if (!form.elements.folder.length) {
         e.trigger(
           "error",
-          'You need to set the "documents" Beancount option for file uploads.',
+          'You need to set the "documents" Beancount option for file uploads.'
         );
         return;
       }
@@ -91,7 +91,7 @@ e.on("page-loaded", () => {
 
         $("#document-names").insertAdjacentHTML(
           "beforeend",
-          `<input value="${filename}">`,
+          `<input value="${filename}">`
         );
       }
 

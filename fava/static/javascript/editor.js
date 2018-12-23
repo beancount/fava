@@ -74,7 +74,7 @@ CodeMirror.commands.favaSave = cm => {
       },
       error => {
         e.trigger("error", error);
-      },
+      }
     )
     .then(() => {
       cm.markClean();
@@ -101,7 +101,7 @@ CodeMirror.commands.favaFormat = cm => {
       },
       error => {
         e.trigger("error", error);
-      },
+      }
     );
 };
 
@@ -182,7 +182,7 @@ function initQueryEditor() {
   };
   const editor = CodeMirror.fromTextArea(
     queryForm.elements.query_string,
-    queryOptions,
+    queryOptions
   );
 
   editor.on("keyup", (cm, event) => {
@@ -257,7 +257,7 @@ export default function initSourceEditor(name) {
 
   const editor = CodeMirror.fromTextArea(
     sourceEditorTextarea,
-    sourceEditorOptions,
+    sourceEditorOptions
   );
   if (name === "#source-editor") {
     activeEditor = editor;
@@ -276,7 +276,7 @@ export default function initSourceEditor(name) {
   });
   const line = parseInt(
     new URLSearchParams(window.location.search).get("line"),
-    10,
+    10
   );
   if (line > 0) {
     editor.setCursor(line - 1, 0);

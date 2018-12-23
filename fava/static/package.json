@@ -8,7 +8,7 @@
     "format": "prettier '**/*.{css,js}' --write --ignore-path ../../.gitignore"
   },
   "prettier": {
-    "trailingComma": "all"
+    "trailingComma": "es5"
   },
   "eslintConfig": {
     "extends": [

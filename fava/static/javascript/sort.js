@@ -39,7 +39,7 @@ function sortElements(options) {
       (options.order === "asc" ? 1 : -1) *
       sorters[options.type](
         getValue(options.selector(a)),
-        getValue(options.selector(b)),
+        getValue(options.selector(b))
       )
     );
   }
