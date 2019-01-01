@@ -18,7 +18,6 @@ LANGUAGES = ["de", "es", "fr", "nl", "pt", "ru", "zh-CN", "sk", "uk"]
 @click.group()
 def cli():
     """Various utilities."""
-    pass
 
 
 def _env_to_list(attributes):
@@ -41,9 +40,7 @@ def generate_bql_grammar_json():
     data = {
         "columns": sorted(set(_env_to_list(target_env.columns))),
         "functions": sorted(set(_env_to_list(target_env.functions))),
-        "keywords": sorted(
-            set([kw.lower() for kw in query_parser.Lexer.keywords])
-        ),
+        "keywords": sorted({kw.lower() for kw in query_parser.Lexer.keywords}),
     }
     path = os.path.join(
         os.path.dirname(__file__),

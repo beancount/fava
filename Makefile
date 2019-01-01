@@ -12,6 +12,7 @@ clean: mostlyclean
 .PHONY: mostlyclean
 mostlyclean:
 	rm -rf .*cache
+	rm -rf .eggs
 	rm -rf .tox
 	rm -rf build
 	rm -rf dist
@@ -38,7 +39,7 @@ run-example:
 
 .PHONY: bql-grammar
 bql-grammar:
-	contrib/scripts.py generate_bql_grammar_json
+	contrib/scripts.py generate-bql-grammar-json
 
 dist: fava/static/gen/app.js fava setup.cfg setup.py MANIFEST.in
 	rm -rf dist
