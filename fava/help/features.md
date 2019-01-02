@@ -143,11 +143,11 @@ first posting.
 
 **Note**: Uploading statements modifies your Beancount file!
 
-When enabling the `link_statements`-plugin, the Document entries created by
-Beancount (see above) will be tagged with `#statement`, linked to the
+When enabling the `link_documents`-plugin, the Document entries created by
+Beancount (see above) will be tagged with `#linked`, linked to the
 corresponding transaction and can be filtered in the Journal:
 
-    plugin "fava.plugins.link_statements"
+    plugin "fava.plugins.link_documents"
 
 ### Exporting a Journal view
 
