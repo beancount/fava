@@ -135,7 +135,7 @@ be tagged with `#discovered` and can be filtered in the Journal:
 ### Uploading statements
 
 When dropping a file on a transaction (or one of its postings) in the Journal,
-the file will be uploaded as described above, and a `statement`-metadata-entry
+the file will be uploaded as described above, and a `document`-metadata-entry
 inserted for the transaction in your Beancount file.
 
 When dropped on the description the subfolder corresponds to the account of the

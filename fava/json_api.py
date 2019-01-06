@@ -161,7 +161,7 @@ def add_document():
 
     if request.form.get("hash"):
         g.ledger.file.insert_metadata(
-            request.form["hash"], "statement", filename
+            request.form["hash"], "document", filename
         )
     return {"message": "Uploaded to {}".format(filepath)}
 
