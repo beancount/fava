@@ -42,7 +42,7 @@ bql-grammar:
 	contrib/scripts.py generate-bql-grammar-json
 
 dist: fava/static/gen/app.js fava setup.cfg setup.py MANIFEST.in
-	rm -rf dist
+	rm -rf build dist
 	python setup.py sdist bdist_wheel
 
 .PHONY: before-release

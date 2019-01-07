@@ -1,8 +1,11 @@
-include CHANGES LICENSE README.rst AUTHORS
+# setuptools_scm ensure all required files are included,
+# we only need excludes here
 
-graft fava
+exclude .editorconfig .gitignore .travis.yml appveyor.yml
+
 prune fava/static
 graft fava/static/gen
 graft fava/static/images
+exclude fava/translations/babel.conf
 
-global-exclude *.py[co] *.orig __pycache__ .DS_Store
+global-exclude *.po *.py[co] *.orig __pycache__ .DS_Store
