@@ -40,7 +40,7 @@ plugin "beancount.plugins.auto_accounts"
 2012-12-11 balance Assets:Account1   10.00 EUR
 
 2012-12-12 * "Payee" "Narration"
-    statement: "file.pdf"
+    document: "file.pdf"
     Expenses:Food                    10.00 EUR
     Assets:Account1                 -10.00 EUR
 
