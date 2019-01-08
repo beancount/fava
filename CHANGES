@@ -1,15 +1,20 @@
 Changelog
 =========
 
-v1.9 (October 8th, 2018)
-------------------------
+Unreleased
+----------
+
+TODO
+
+v1.9 (2018-10-08)
+-----------------
 
 In this release, the click behaviour has been updated to allow filtering for
 payees. The entry input forms now allow inputting prices and costs.  As
 always, bugs have been fixed.
 
-v1.8 (July 25th, 2018)
-----------------------
+v1.8 (2018-07-25)
+-----------------
 
 The journal design has been updated and should now have a clearer structure.
 Starting with this version, there will not be any more GUI releases of Fava.
@@ -22,8 +27,8 @@ Other changes:
   filtering entries by properties of their postings.
 - As always, bugs have been fixed.
 
-v1.7 (March 9th, 2018)
-----------------------
+v1.7 (2018-03-09)
+-----------------
 
 The entry filters have been reworked in this release and should now support for
 more flexible filtering of the entries. See the help page on how the new syntax
@@ -36,8 +41,8 @@ Other changes:
   the page URL.
 - As always, bugs have been fixed.
 
-v1.6 (November 6th, 2017)
--------------------------
+v1.6 (2017-10-06)
+-----------------
 
 This is a release with various small changes and mainly some speed
 improvements to the Balance Sheet and the net worth calculation. Also, if 'At
@@ -49,8 +54,8 @@ Other changes:
 - The currently filtered entries can now be exported from the Journal page.
 - The CLI now has a ``--version`` flag.
 
-v1.5 (July 23rd, 2017)
-----------------------
+v1.5 (2017-07-23)
+-----------------
 
 Fava now has an interface to edit single entries. Clicking on the entry date in
 the Journal will open an overlay that shows the entry context and allows
@@ -66,8 +71,8 @@ Other changes:
   command line switch.
 - As always, several bugs have been fixed.
 
-v1.4 (May 14th, 2017)
----------------------
+v1.4 (2017-05-14)
+-----------------
 
 Fava now provides an interface for Beancount's import system that allows you to
 import transactions from your bank for example.
@@ -88,8 +93,8 @@ Other changes:
 
 Thanks to :user:`TZdyrski` and :user:`Akuukis` for their contributions.
 
-v1.3 (March 15th, 2017)
------------------------
+v1.3 (2017-03-15)
+-----------------
 
 The translations of Fava are now on `POEditor.com
 <https://poeditor.com/projects/view?id=90283>`__, which has helped us get
@@ -117,8 +122,8 @@ Other changes:
 
 Thanks to :user:`johannesharms` and :user:`xentac` for their contributions.
 
-v1.2 (December 25th, 2016)
---------------------------
+v1.2 (2016-12-25)
+-----------------
 
 You can now add transactions from within Fava. The form supports autocompletion
 for most fields.
@@ -136,8 +141,8 @@ Other changes:
 
 Thanks to :user:`fokusov` for their contributions.
 
-v1.1 (November 19th, 2016)
---------------------------
+v1.1 (2016-11-19)
+-----------------
 
 You can now upload documents by dropping them onto transactions, which will
 also add the file path as `statement` metadata to the transaction. Fava also
@@ -157,8 +162,8 @@ Other changes:
 
 Thanks to :user:`adamgibbins` and :user:`xentac` for their contributions.
 
-v1.0 (October 19th, 2016)
--------------------------
+v1.0 (2016-10-19)
+-----------------
 
 This is a major new release that includes too many improvements and changes to
 list. Some highlights:
@@ -179,8 +184,8 @@ lot of bugs have been squashed.
 Thanks to :user:`adamgibbins`, :user:`davidastephens`, :user:`xentac`, and
 :user:`yegle` for their contributions.
 
-v0.3.0 (May 24th, 2016)
------------------------
+v0.3.0 (2016-03-24)
+-------------------
 
 Additions
 
@@ -213,8 +218,8 @@ Fixes
 - Some improvements to the help pages.
 - Many small bug fixes. Thanks to :user:`yagebu`.
 
-v0.2.6 (March 20th, 2016)
--------------------------
+v0.2.6 (2016-03-20)
+-------------------
 
 Additions
 
@@ -261,13 +266,13 @@ Fixes
 - Some improvements to the help pages.
 - Many small bug fixes.
 
-v0.2.5 (February 28th, 2016)
-----------------------------
+v0.2.5 (2016-02-28)
+-------------------
 
 Bump release to remove unused draft code.
 
-v0.2.4 (February 28th, 2016)
-----------------------------
+v0.2.4 (2016-02-18)
+-------------------
 
 Additions
 
@@ -312,8 +317,8 @@ Fixes
 - Fixed Net worth calculation. Thanks to :user:`yagebu`.
 - Many small bug fixes.
 
-v0.2.3 (February 15th, 2016)
-----------------------------
+v0.2.3 (2016-02-15)
+-------------------
 
 Bumped version to communicate that installing via ``pip install`` now works,
 all requirements included.  Thanks to :user:`blais` and :user:`yagebu`.
@@ -322,95 +327,6 @@ all requirements included.  Thanks to :user:`blais` and :user:`yagebu`.
 Earlier Versions
 ----------------
 
-It was not possible to install any of the earlier versions only using `pip`,
-but if you used a source install prior to this point, here are the user-facing
-changes going back to December 19th, 2015. The first commit in the git
-repository was on December 4th, 2015.
-
-v0.2.2 (February 14th, 2016)
-
-- Fixed `setup.py` to include missing dependencies and exclude unused static
-  assets.
-
-v0.2.1 (February 13th, 2016)
-
-- Bumped version due to changes in how JavaScript and CSS are handled
-  internally. Thanks to :user:`yagebu`. :bug:`125`
-
-v0.2.0 (February 11th, 2016 - first release of `fava`)
-
-- Renamed the project from "beancount-web" to "fava". :bug:`85`
-- Moved ``beancount-urlscheme``-command to it's own `project
-  <https://github.com/aumayr/beancount_urlscheme>`__.
-- 2016-01-30 - Include today in the ``Year to Date`` filter. Thanks to
-  :user:`corani`.
-- 2016-01-30 - Legs now collapse correctly in the Journal view. Thanks to
-  :user:`corani`.
-- 2016-01-20 - New favicon. :bug:`90`
-- 2016-01-18 - Display QUERY directives in a dropdown in the Custom Query view.
-  Thanks to :user:`corani` and :user:`yagebu` for help. :bug:`96`
-- 2016-01-14 - Prevent metadata keys from linewrapping
-- 2016-01-11 - Hide filters on pages where they are not used.  Thanks to
-  :user:`corani`. :bug:`97`
-- 2016-01-09 - Added Windows/Cygwin-support to ``beancount-urlscheme``.  Thanks
-  to :user:`redstreet`.:bug:`92`
-- 2016-01-07 - Added setting ``collapse-accounts`` to specify a list of
-  accounts to collapse in the account hierarchy. :bug:`91`
-- 2016-01-07 - Added a ``beancount-urlscheme``-command to register the
-  ``beancount://``-URL -scheme on macOS (other platforms still missing, but in
-  development). There is a new setting called ``use-external-editor`` that
-  will, if set to ``True``, render all links to the Source Editor as
-  ``beancount://``-URLs to open the files directly in the editor specified by
-  the ``external-editor-cmd``-setting (The URL-scheme has to be registered with
-  ``beancount-urlscheme`` first). This also renders the Source Editor view as
-  readonly. :bug:`92`
-- 2015-12-28 - Added new setting (and feature) called ``editor-insert-marker``.
-  If present, the Source editor will jump to the specified marker in the file
-  and will insert two newlines above it and set the cursor there. :bug:`76`
-- 2015-12-28 - Bar chart bars are now clickable and will set the time filter to
-  the year and month the bar is representing.
-- 2015-12-28 - Line charts are now zoomable by drawing a rectangle with the
-  mouse on the chart, which will then zoom to the specified area.
-- 2015-12-28 - Added keyboard shortcuts for jumping to menu items, open and
-  focus filters, Journal entry types and more. Press ? to display an overview
-  of all keyboard shortcuts. Thanks to :user:`redstreet` for the suggestions.
-  :bug:`65`
-- 2015-12-27 - Source editor now supports auto-completion of accounts,
-  commodities, directives and tags.
-- 2015-12-25 - Entries can now be filtered for "No payee" Thanks to
-  :user:`yagebu`. :bug:`42`
-- 2015-12-24 - Metadata is now displayed for Journal entries. For transactions,
-  if there is a metadata-entry called "statement" and it's value is a path to a
-  file (relative to the beancount-file or absolute), this file will be liked.
-- 2015-12-23 - Up-to-date indicator will be shown for Assets and Liabilities
-  accounts in the Statistics view that indicates (there are various settings to
-  change the behaviour of these indicators::
-
-       green:  The latest posting is a balance check that passed.
-       red:    The latest posting is a balance check that failed.
-       yellow: The latest posting is not a balance check.
-       gray:   The account hasn't been updated in a while.
-
-- 2015-12-23 - New settings to show Journal legs by default, to show different
-  entry types in a Journal by default, to hide charts by default and to show
-  negative numbers in treemaps
-- 2015-12-23 - Added new command line option "--settings" to specify a
-  settings-file for beancount-web, like which entry types to display in a
-  Journal by default. There is a sample file called "default-settings.conf" in
-  the source that lists all possible settings.
-- 2015-12-23 - Filters are now part of every URL, so every URL is a permalink
-  to the view including all currently set filters. Thanks to :user:`yagebu`.
-  :bug:`54`
-- 2015-12-21 - BQL queries (like with ``bean-query``) can now be run in a new
-  Query view.  The results will be displayed as a table and somewhat formatted,
-  as account names will be linked to the Account view for example.
-- 2015-12-20 - Simple tables are now sortable by clicking on the column
-  headers.  :bug:`46`
-- 2015-12-20 - Added a yearly balances table to the Account-view. Thanks to
-  :user:`davidastephens`.
-- 2015-12-20 - Show at most 25 x-axis-labels for bar charts. :bug:`45`
-- 2015-12-20 - Fixed a minor bug where treemaps would show white areas.
-  :bug:`49`
-- 2015-12-20 - Fixed daterange filtering of entries. Thanks to :user:`yagebu`.
-- 2015-12-20 - Fixed values in Balance sheet to correctly calculate the closing
-  balances. :bug:`19`
+It was not possible to install any of the earlier versions only using ``pip``
+and you may consult the git log for earlier changes. The first commit in the
+git repository was on December 4th, 2015.

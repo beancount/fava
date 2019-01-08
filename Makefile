@@ -50,7 +50,7 @@ dist: fava/static/gen/app.js fava setup.cfg setup.py MANIFEST.in
 before-release: bql-grammar translations-push translations-fetch
 
 # Before making a release, CHANGES needs to be updated and
-# a tag and GitHub release should be created too.
+# a tag should be created too.
 #
 # Also, fava.pythonanywhere.com should be updated.
 .PHONY: upload
