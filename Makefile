@@ -23,7 +23,8 @@ mostlyclean:
 .PHONY: lint
 lint:
 	tox -e lint
-	cd fava/static; npm install; npm run lint
+	cd fava/static; npm install
+	cd fava/static; npm run lint
 
 .PHONY: test
 test:

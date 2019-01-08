@@ -5,6 +5,7 @@
 /build
 /dist
 /fava.egg-info
+/fava/static/node_modules
 /fava/translations/messages.pot
 /htmlcov
 /venv
@@ -14,6 +15,5 @@ gen
 .DS_Store
 .env
 TODO
-node_modules
 npm-debug.log
 package-lock.json

@@ -22,7 +22,7 @@ Called after the string `source` has been written to the Beancount file at `path
 
 ### `after_insert_metadata(entry, key, value)`
 
-Called after metadata (`key: value`)  has been added to an `entry`.
+Called after metadata (`key: value`) has been added to an `entry`.
 
 ---
 

@@ -3,7 +3,7 @@
 ## Basic
 
 The Dockerfile in this directory is enough to get started running Fava in a
-container.  This guide is meant as a compliment to the great documentation
+container. This guide is meant as a compliment to the great documentation
 found at https://docs.docker.com/.
 
 ### Building
@@ -14,7 +14,7 @@ To build the image using the provided Dockerfile run this command:
 docker build -t fava .
 ```
 
-This will build everything and name the image `fava`.  Because docker depends
+This will build everything and name the image `fava`. Because docker depends
 heavily on caching to improve efficiency, to incorporate a new version of
 Beancount or Fava you must use the `--no-cache` flag when rebuilding the image.
 
@@ -35,7 +35,7 @@ Let's look at each argument independently:
 1. `--name` specifies a name to give the Docker instance instead of generating
    a random id. This will be used later.
 1. `--publish` tells Docker to expose the container's port 5000 as
-   the local machine's port 5000.  This allows us to access Fava with the url
+   the local machine's port 5000. This allows us to access Fava with the url
    http://localhost:5000/.
 1. `--volume` tells Docker to share the example.beancount file in the current
    directory to the container as the file `/input.beancount`.
@@ -46,29 +46,29 @@ Going to http://localhost:5000/ will display your Fava instance.
 ## Advanced
 
 Hosting a local Docker instance is nice and all, but what we really want is a
-globally available, authenticated, secure deployment of Fava.  To do that we
+globally available, authenticated, secure deployment of Fava. To do that we
 need two other parts: oauth proxy and letsencrypt.
 
 ### Oauth proxy
 
 Oauth is an authentication standard that makes it easy to authenticate using a
-third party account.  Using oauth means we can limit access to our site without
+third party account. Using oauth means we can limit access to our site without
 requiring mobile users to enter complicated passwords.
 
-We will be using bitly's [oauth2\_proxy](https://github.com/bitly/oauth2_proxy)
+We will be using bitly's [oauth2_proxy](https://github.com/bitly/oauth2_proxy)
 to manage access to our site.
 
 I recommend using the
-[skippy/oauth2\_proxy](https://hub.docker.com/r/skippy/oauth2_proxy/) Docker
-image. It is an alpinelinux-based Docker image with bitly's oauth2\_proxy
-packaged. It uses an older version of oauth2\_proxy, which is fine enough for
+[skippy/oauth2_proxy](https://hub.docker.com/r/skippy/oauth2_proxy/) Docker
+image. It is an alpinelinux-based Docker image with bitly's oauth2_proxy
+packaged. It uses an older version of oauth2_proxy, which is fine enough for
 Fava, but it is left as an exercise to the reader to build an updated version.
 
 It can be configured entirely using command line flags, but it is generally
 easier to configure using a file.
 
 Follow the Google Auth Provider instructions in the
-[oauth2\_proxy](https://github.com/bitly/oauth2_proxy) README to generate a
+[oauth2_proxy](https://github.com/bitly/oauth2_proxy) README to generate a
 Client ID and Client Secret and fill out the `oauth2_proxy.cfg`.
 
 The file will look something like this:
@@ -170,15 +170,15 @@ Let's document the new arguments:
 
 1. `--link` tells docker to link one container to another, so they can access
    each other's exposed ports, and properly set up hostname mappings. This is
-   why `upstreams` in the oauth2\_proxy config is `http://beancount:5000`.
+   why `upstreams` in the oauth2_proxy config is `http://beancount:5000`.
 1. `--volume` maps host paths into docker instances. This is one way of getting
    data into a docker instance.
 1. `--env` sets arbitrary environment values in docker instances. We will use
    these values in later sections to hook up automatically generate and refresh
    Let's Encrypt SSL certificates. Without a Let's Encrypt certificate, your
-   oauth2\_proxy cookie will be visible to anyone who can see your network
+   oauth2_proxy cookie will be visible to anyone who can see your network
    traffic. You don't want this.
-1. Everything after the `skippy/oauth2_proxy` are arguments to oauth2\_proxy.
+1. Everything after the `skippy/oauth2_proxy` are arguments to oauth2_proxy.
 
 This will start an oauth2 proxy using your config to do authentication using
 Google's OAuth service. It's important that you don't try to access your

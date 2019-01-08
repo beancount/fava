@@ -6,9 +6,9 @@ Beancount defines a language in which financial transactions are entered into a
 text-file, which then can be processed by Beancount. There are a few building
 blocks that are important to understand Beancount's syntax:
 
-- Commodities,
-- Accounts,
-- Directives.
+-   Commodities,
+-   Accounts,
+-   Directives.
 
 ## Commodities
 
@@ -23,7 +23,7 @@ by colons defines an implicit hierarchy, for example we say that `Assets:Cash` i
 sub-account of `Assets`.
 
 | Name          | Type | Contains                     | Examples                  |
-|---------------|------|------------------------------|---------------------------|
+| ------------- | ---- | ---------------------------- | ------------------------- |
 | `Assets`      | +    | Cash, Checking-Account, etc. | `Assets:Checking`         |
 | `Liabilities` | -    | Credit Card, etc.            | `Liabilities:CreditCard`  |
 | `Income`      | -    | Salary, etc.                 | `Income:EmployerA`        |
@@ -41,7 +41,7 @@ option "name_equity"      "Eigenkapital"</textarea></pre>
 
 ## Directives
 
-The basic building block are **directives** (also called **entries**).  Most
+The basic building block are **directives** (also called **entries**). Most
 directives start with a date, then the type of the directive, and then
 directive-specific arguments. The ordering of directives in the input-file does
 not matter, because Beancount orders them based on the date of each directive.

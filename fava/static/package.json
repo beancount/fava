@@ -4,10 +4,13 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "eslint javascript --fix && stylelint 'css/*.css' --fix",
-    "format": "prettier '**/*.{css,js}' --write --ignore-path ../../.gitignore"
+    "lint": "npm run lint:js && npm run lint:css && npm run format",
+    "lint:js": "eslint javascript --fix",
+    "lint:css": "stylelint 'css/*.css' --fix",
+    "format": "cd ../../ && prettier '**/*.{css,js,md}' --write --ignore-path .gitignore"
   },
   "prettier": {
+    "proseWrap": "always",
     "trailingComma": "es5"
   },
   "eslintConfig": {

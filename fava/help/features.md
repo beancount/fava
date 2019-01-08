@@ -29,7 +29,7 @@ and `ods`, install Fava with the `excel` feature:
 By clicking the `+` button or using the `n` keyboard shortcut you can open a
 form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
-`insert-entry` option.  If you want to set a bookmark to this form, adding
+`insert-entry` option. If you want to set a bookmark to this form, adding
 `#add-transaction` to any URL in Fava will open it on load. Tags and links can
 be added in the form by adding them (separated by spaces) to the narration
 field, e.g., `narration #tag ^somelink`.
@@ -38,12 +38,12 @@ field, e.g., `narration #tag ^somelink`.
 
 Fava offers colored indicators that can help you keep your accounts up-to-date.
 They are shown next to accounts that have the metadata
-`fava-uptodate-indication: TRUE` set on their Open directive.  The colors have
+`fava-uptodate-indication: TRUE` set on their Open directive. The colors have
 the following meaning:
 
-- green: The last entry for this account is a balance check that passed.
-- red: The last entry is a balance check that failed.
-- yellow: The last entry is not a balance check.
+-   green: The last entry for this account is a balance check that passed.
+-   red: The last entry is a balance check that failed.
+-   yellow: The last entry is not a balance check.
 
 In addition, a grey dot will be shown if the account has not been updated in a
 while, as configured by the `uptodate-indicator-grey-lookback-days` option.
@@ -53,9 +53,9 @@ while, as configured by the `uptodate-indicator-grey-lookback-days` option.
 To help display only the most relevant subset of accounts when managing a large
 number or a deep hierarchy of accounts, Fava offers the following options:
 
-- `show-closed-accounts`
-- `show-accounts-with-zero-balance`
-- `show-accounts-with-zero-transactions`
+-   `show-closed-accounts`
+-   `show-accounts-with-zero-balance`
+-   `show-accounts-with-zero-transactions`
 
 Additionally, accounts that have the metadata `fava-collapse-account` set to
 `TRUE` on their Open directive will be collapsed in the account trees.
@@ -89,8 +89,8 @@ example above, or absolute, even linking to an external site.
 Two frequently used custom links are for showing all Documents and all Notes
 found in the journal:
 
-- For all Documents: `/<slug>/journal/?show=documents`
-- For all Notes: `/<slug>/journal/?show=notes`
+-   For all Documents: `/<slug>/journal/?show=documents`
+-   For all Notes: `/<slug>/journal/?show=notes`
 
 There is a special URL handler `/jump` which can be used to jump to the current
 page with given URL parameters. For example, `/jump?time=month` will show the

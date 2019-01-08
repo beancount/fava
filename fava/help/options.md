@@ -20,16 +20,16 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
-- Chinese (`zh`)
-- Dutch (`nl`)
-- English (`en`)
-- French (`fr`)
-- German (`de`)
-- Portuguese (`pt`)
-- Russian (`ru`)
-- Slovak (`sk`)
-- Spanish (`es`)
-- Ukrainian (`uk`)
+-   Chinese (`zh`)
+-   Dutch (`nl`)
+-   English (`en`)
+-   French (`fr`)
+-   German (`de`)
+-   Portuguese (`pt`)
+-   Russian (`ru`)
+-   Slovak (`sk`)
+-   Spanish (`es`)
+-   Ukrainian (`uk`)
 
 ---
 
@@ -45,7 +45,7 @@ locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
 
 ## `default-file`
 
-Use this option to specify a default file for the editor to open.  This option
+Use this option to specify a default file for the editor to open. This option
 takes no value, the file the custom entry is in will be used as the default.
 If this option is not specified, Fava opens the main file by default.
 
@@ -64,17 +64,17 @@ The possible options are `day`, `week`, `month`, `quarter`, and `year`.
 
 Default: `12-31`
 
-The last day of the fiscal (financial or tax) period for accounting purposes in 
-`%m-%d` format.  Allows for the use of `FY2018`, `FY2018-Q3`, `fiscal_year` and 
+The last day of the fiscal (financial or tax) period for accounting purposes in
+`%m-%d` format. Allows for the use of `FY2018`, `FY2018-Q3`, `fiscal_year` and
 `fiscal_quarter` in the time filter.
 
 Examples are:
 
-* `09-30` - US federal government
-* `06-30` - Australia / NZ
-* `04-05` - UK
+-   `09-30` - US federal government
+-   `06-30` - Australia / NZ
+-   `04-05` - UK
 
-See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for 
+See [Fiscal Year on WikiPedia](https://en.wikipedia.org/wiki/Fiscal_year) for
 more examples.
 
 ---
@@ -115,7 +115,7 @@ Default: `false`
 
 Set this to `true` to make Fava automatically reload the page whenever a file
 changes is detected. By default only a notification is shown which you can
-click to reload the page.  If the file change is due to user interaction, e.g.,
+click to reload the page. If the file change is due to user interaction, e.g.,
 uploading a document or adding a transaction, Fava will always reload the page
 automatically.
 
@@ -151,9 +151,9 @@ Similarly to the `journal-show` setting, this determines the transaction types
 that will be shown in the Journal report. The "transaction types" correspond to
 the following transaction flags:
 
-- `cleared` - `*`
-- `pending` - `!`
-- `other` - All other transaction flags.
+-   `cleared` - `*`
+-   `pending` - `!`
+-   `other` - All other transaction flags.
 
 ---
 
@@ -188,10 +188,15 @@ Set this value to `0` to disable this feature.
 ---
 
 ## `show-closed-accounts`
+
 Default: `false`
+
 ## `show-accounts-with-zero-transactions`
+
 Default: `true`
+
 ## `show-accounts-with-zero-balance`
+
 Default: `true`
 
 These three options options specify which accounts (not) to show in the
