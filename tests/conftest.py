@@ -4,7 +4,7 @@ import pytest
 
 from beancount.loader import load_string
 from fava.core import FavaLedger
-from fava.application import app as fava_app
+from fava.application import create_app
 from fava.core.budgets import parse_budgets
 
 
@@ -15,6 +15,7 @@ def data_file(filename):
 EXAMPLE_FILE = data_file("long-example.beancount")
 API = FavaLedger(EXAMPLE_FILE)
 
+fava_app = create_app()
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
 fava_app.config["BEANCOUNT_FILES"] = [EXAMPLE_FILE]

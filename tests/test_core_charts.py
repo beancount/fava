@@ -4,11 +4,12 @@ from collections import Counter
 from beancount.core.number import D
 from flask import g
 
-from fava.application import app
+from fava.application import create_app
 from fava.util.date import Interval
 
 
 def test_interval_totals(small_example_ledger):
+    app = create_app()
     with app.test_request_context(""):
         g.conversion = None
         data = small_example_ledger.charts.interval_totals(
@@ -33,6 +34,7 @@ def test_interval_totals(small_example_ledger):
 
 
 def test_linechart_data(example_ledger):
+    app = create_app()
     with app.test_request_context("/"):
         g.conversion = "units"
         data = example_ledger.charts.linechart(
@@ -59,7 +61,7 @@ def test_net_worth(example_ledger):
     assert data[-1]["balance"]["USD"] == D("102327.53144")
 
 
-def test_hierarchy(example_ledger):
+def test_hierarchy(app, example_ledger):
     with app.test_request_context("/"):
         app.preprocess_request()
         data = example_ledger.charts.hierarchy("Assets")

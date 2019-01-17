@@ -7,7 +7,7 @@ import click
 from werkzeug.wsgi import DispatcherMiddleware
 from cheroot import wsgi
 
-from fava.application import app
+from fava.application import create_app
 from fava.util import simple_wsgi
 from fava import __version__
 
@@ -72,6 +72,7 @@ def main(
     if not filenames:
         raise click.UsageError("No file specified")
 
+    app = create_app()
     app.config["BEANCOUNT_FILES"] = filenames
     app.config["INCOGNITO"] = incognito
 
