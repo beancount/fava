@@ -33,7 +33,7 @@ def test_interval_totals(small_example_ledger):
 
 
 def test_linechart_data(example_ledger):
-    with app.test_request_context("/"):
+    with app.test_request_context():
         g.conversion = "units"
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities"
@@ -52,11 +52,14 @@ def test_linechart_data(example_ledger):
 
 
 def test_net_worth(example_ledger):
-    data = example_ledger.charts.net_worth(Interval.MONTH)
-    assert data[-18]["date"] == datetime.date(2015, 1, 1)
-    assert data[-18]["balance"]["USD"] == D("39125.34004")
-    assert data[-1]["date"] == datetime.date(2016, 5, 10)
-    assert data[-1]["balance"]["USD"] == D("102327.53144")
+    with app.test_request_context():
+        app.preprocess_request()
+        g.conversion = "USD"
+        data = example_ledger.charts.net_worth(Interval.MONTH)
+        assert data[-18]["date"] == datetime.date(2015, 1, 1)
+        assert data[-18]["balance"]["USD"] == D("39125.34004")
+        assert data[-1]["date"] == datetime.date(2016, 5, 10)
+        assert data[-1]["balance"]["USD"] == D("102327.53144")
 
 
 def test_hierarchy(example_ledger):

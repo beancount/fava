@@ -3,8 +3,8 @@ import datetime
 
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
-from beancount.core.data import Transaction, Cost, iter_entry_dates
-from beancount.core.number import Decimal, ZERO
+from beancount.core.data import Transaction, iter_entry_dates
+from beancount.core.number import Decimal
 from beancount.core.position import Position
 from beancount.utils.misc_utils import filter_type
 from flask import g
@@ -168,25 +168,6 @@ class ChartModule(FavaModule):
                 for posting in filter(
                     lambda p: p.account.startswith(types), txn.postings
                 ):
-                    # Since we will be reducing the inventory to the operating
-                    # currencies, pre-aggregate the positions to reduce the
-                    # number of elements in the inventory.
-                    inventory.add_amount(
-                        posting.units,
-                        Cost(ZERO, posting.cost.currency, None, None)
-                        if posting.cost
-                        else None,
-                    )
+                    inventory.add_position(posting)
                 txn = next(transactions, None)
-            yield {
-                "date": date,
-                "balance": {
-                    currency: inventory.reduce(
-                        convert.convert_position,
-                        currency,
-                        self.ledger.price_map,
-                        date,
-                    ).get(currency)
-                    for currency in self.ledger.options["operating_currency"]
-                },
-            }
+            yield {"date": date, "balance": cost_or_value(inventory, date)}
