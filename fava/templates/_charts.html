@@ -72,7 +72,7 @@
           {% for currency in ledger.options.operating_currency %}
             <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
           {% endfor %}
-          {% for currency in ledger.options.commodities|sort if currency not in ledger.options.operating_currency %}
+          {% for currency in ledger.options.commodities|sort if currency not in ledger.options.operating_currency and currency|length <= 3 %}
             <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
           {% endfor %}
         </select>
