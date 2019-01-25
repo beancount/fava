@@ -527,7 +527,7 @@ class FavaLedger:
         value = entry.meta[metadata_key]
 
         beancount_dir = os.path.dirname(self.beancount_file_path)
-        paths = [os.path.join(os.path.dirname(entry.meta['filename']), value)]
+        paths = [os.path.join(os.path.dirname(entry.meta["filename"]), value)]
         paths.extend(
             [
                 os.path.join(

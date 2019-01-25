@@ -1,5 +1,4 @@
-import ast
-import re
+# pylint: disable=invalid-name
 
 extensions = [
     "sphinx.ext.extlinks",
@@ -31,8 +30,7 @@ html_theme_options = {
     "logo": "logo.png",
     "logo_name": True,
     "logo_text_align": "center",
-    "description": """Web interface for <a href=\"http://furius.ca/beancount/\"
-title=\"Double-entry bookkeeping software Beancount\">Beancount</a>""",
+    "description": 'Web interface for <a href="http://furius.ca/beancount/">Beancount</a>',
     "github_user": "beancount",
     "github_repo": "fava",
     "github_button": "false",

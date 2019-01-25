@@ -1,0 +1,20 @@
+fava.util
+=========
+
+.. automodule:: fava.util
+
+fava.util.date
+--------------
+
+.. automodule:: fava.util.date
+
+fava.util.excel
+---------------
+
+.. automodule:: fava.util.excel
+
+fava.util.ranking
+-----------------
+
+.. automodule:: fava.util.ranking
+
