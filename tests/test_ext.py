@@ -21,3 +21,9 @@ def test_find_extensions():
     assert len(classes) == 1
     assert classes[0].__name__ == "AutoCommit"
     assert errors == []
+
+    path = os.path.join(os.path.dirname(__file__), "../fava/ext")
+    classes, errors = find_extensions(path, "portfolio_list")
+    assert len(classes) == 1
+    assert classes[0].__name__ == "PortfolioList"
+    assert errors == []

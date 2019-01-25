@@ -1,13 +1,21 @@
 # pylint: disable=missing-docstring
 
 import os
+import sys
 
 import pytest
 
 from beancount.loader import load_string
 from fava.core import FavaLedger
-from fava.application import app as fava_app
+from fava.application import _load_file, app as fava_app
 from fava.core.budgets import parse_budgets
+
+
+def create_app(bfile):
+    key = "BEANCOUNT_FILES"
+    if (key not in fava_app.config) or (fava_app.config[key] != [bfile]):
+        fava_app.config[key] = [bfile]
+        _load_file()
 
 
 def data_file(filename):
@@ -15,15 +23,26 @@ def data_file(filename):
 
 
 EXAMPLE_FILE = data_file("long-example.beancount")
+
+EXTENSION_DIR_PATH = os.path.join(os.path.dirname(__file__), "../fava/ext")
+EXTENSION_REPORT_EXAMPLE_FILE = data_file("extension-report-example.beancount")
 API = FavaLedger(EXAMPLE_FILE)
 
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
-fava_app.config["BEANCOUNT_FILES"] = [EXAMPLE_FILE]
+create_app(EXAMPLE_FILE)
+
+
+@pytest.fixture
+def extension_report_app():
+    sys.path.insert(0, EXTENSION_DIR_PATH)
+    create_app(EXTENSION_REPORT_EXAMPLE_FILE)
+    return fava_app
 
 
 @pytest.fixture
 def app():
+    create_app(EXAMPLE_FILE)
     return fava_app
 
 
@@ -35,6 +54,12 @@ def test_client():
 @pytest.fixture
 def load_doc(request):
     return load_string(request.function.__doc__, dedent=True)
+
+
+@pytest.fixture
+def extension_report_ledger():
+    sys.path.insert(0, EXTENSION_DIR_PATH)
+    return FavaLedger(EXTENSION_REPORT_EXAMPLE_FILE)
 
 
 @pytest.fixture

@@ -80,19 +80,6 @@ more examples.
 
 ---
 
-## `extensions`
-
-Default: Not set.
-
-A space-separated list of Python modules to load as extensions. The directory
-of the main Beancount file is searched too, so for example a `my_extension.py`
-right next to it could be used by giving `my_extension`. Note that Python has a
-global namespace for currently loaded modules, so try avoiding simple names
-that might coincide with some Python library (as well as running Fava on two
-files that have different extensions of the same name).
-
----
-
 ## `insert-entry`
 
 Default: Not set.

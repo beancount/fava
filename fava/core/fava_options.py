@@ -19,7 +19,6 @@ DEFAULTS = {
     "collapse-below-level": None,
     "auto-reload": False,
     "default-file": None,
-    "extensions": [],
     "fiscal-year-end": "12-31",
     "import-config": None,
     "import-dirs": [],
@@ -66,7 +65,6 @@ INT_OPTS = [
 ]
 
 LIST_OPTS = [
-    "extensions",
     "import-dirs",
     "journal-show",
     "journal-show-document",

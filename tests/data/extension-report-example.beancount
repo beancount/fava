@@ -1,0 +1,8 @@
+; extension-report-example.beancount
+
+2010-01-01 custom "fava-extension" "portfolio_list" "[
+        ('account_name_pattern', 'Assets:US:ETrade.*'),
+        ('account_open_metadata_pattern', ('number', '882882'))
+    ]"
+include "long-example.beancount"
+option "title" "Extension Report Beancount File"

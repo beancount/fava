@@ -4,11 +4,34 @@ If you use this extension system and need it to do more or need other hooks,
 please open an issue on [GitHub](https://github.com/beancount/fava/issues).
 
 A Fava extension is simply a Python module which contains a class that inherits
-from `FavaExtensionBase` from `fava.ext`. Check out `fava.ext.auto_commit` for an
-example. To use an extension, see the `extensions` option for Fava.
+from `FavaExtensionBase` from `fava.ext`. Invoking an extension is done via the `fava-extension` option in the beancount file. Check out `fava.ext.auto_commit` for an
+example.
+
+Extensions may also contain a report - this is detected when the extension's directory has a `templates` subdirectory with a report matching the module name. For example, check out `fava.ext.portfolio_list` which has its template located at `fava/ext/portfolio_list/templates/portfolio_list.html`. Extension report titles default to the extension class's `qualname` unless set via `report_title` attribute.
 
 The whole extension system should be considered unstable and it might change
 drastically.
+
+## Fava Extension Setup Options
+
+---
+
+## `fava-extension`
+
+A Python module to load as extension. The paths used by fava are searched along with what is set via the fava option `extensions-dir`. Single python files will also be searched - so for example a `my_extension.py` could be used by giving `my_extension`. Note that Python has a
+global namespace for currently loaded modules, so try avoiding simple names
+that might coincide with some Python library (as well as running Fava on two
+files that have different extensions of the same name).
+
+Extensions allow for an optional configuration options string, whose structure is specified by the individual extension.
+
+<pre><textarea class="editor-readonly">
+2010-01-01 custom "fava-option" "extensions-dir" "../fava-extensions/"
+
+2010-01-01 custom "fava-extension" "extension-name"
+2010-01-01 custom "fava-extension" "extension-with-options" "{'option': 'config_value'}"</textarea></pre>
+
+---
 
 ## Hooks
 
@@ -29,3 +52,9 @@ Called after metadata (`key: value`) has been added to an `entry`.
 ### `after_insert_entry(entry)`
 
 Called after an `entry` has been inserted.
+
+---
+
+### `report_title`
+
+Optional attribute to set extension report title used in sidebar & breadcrumb views.
