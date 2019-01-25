@@ -1,0 +1,9 @@
+{% import "_query_table.html" as querytable with context %}
+
+<h2>Portfolio List Sample Report Extension</h2>
+<br />
+{% for portfolio in extension.portfolio_accounts(None, None) %}
+    <h3>{{portfolio[0]}}</h3>
+    {{ querytable.querytable(None, *portfolio[1]) }}
+    <br />
+{% endfor %}

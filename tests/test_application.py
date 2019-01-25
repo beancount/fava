@@ -165,3 +165,17 @@ def test_static_url_no_filename(app):
             assert False, "static_url without a filename should throw an error"
         except werkzeug.routing.BuildError:
             pass
+
+
+def test_load_extension_reports(extension_report_app, test_client):
+    with extension_report_app.test_request_context():
+        extension_report_app.preprocess_request()
+        slug = "extension-report-beancount-file"
+
+        ledger = extension_report_app.config["LEDGERS"][slug]
+        attributes = ledger.extensions.report_attributes()
+        assert attributes == [("PortfolioList", "Portfolio List")]
+
+        url = flask.url_for("extension_report", report_name="PortfolioList")
+        result = test_client.get(url)
+        assert result.status_code == 200

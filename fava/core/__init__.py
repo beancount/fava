@@ -29,17 +29,17 @@ from fava.util import date, pairwise
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
+from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule, get_entry_slice
 from fava.core.filters import AccountFilter, AdvancedFilter, TimeFilter
-from fava.core.helpers import FavaAPIException, FavaModule
+from fava.core.helpers import FavaAPIException
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
 from fava.core.watcher import Watcher
-from fava.ext import find_extensions
 
 
 MAXDATE = datetime.date.max
@@ -70,33 +70,6 @@ class _AccountDict(dict):
         if key not in self:
             self[key] = AccountData()
         return self[key]
-
-
-# pylint: disable=missing-docstring
-class ExtensionModule(FavaModule):
-    """Some attributes of the ledger (mostly for auto-completion)."""
-
-    def __init__(self, ledger):
-        super().__init__(ledger)
-        self._extensions = None
-        self._instances = {}
-
-    def load_file(self):
-        self._extensions = []
-        for extension in self.ledger.fava_options["extensions"]:
-            extensions, errors = find_extensions(
-                os.path.dirname(self.ledger.beancount_file_path), extension
-            )
-            self._extensions.extend(extensions)
-            self.ledger.errors.extend(errors)
-
-        for cls in self._extensions:
-            if cls not in self._instances:
-                self._instances[cls] = cls(self.ledger)
-
-    def run_hook(self, event, *args):
-        for ext in self._instances.values():
-            ext.run_hook(event, *args)
 
 
 MODULES = [

@@ -4,6 +4,7 @@ from collections import namedtuple
 import importlib
 import inspect
 import sys
+import ast
 
 
 FavaExtensionError = namedtuple("FavaExtensionError", "source message entry")
@@ -16,8 +17,18 @@ class FavaExtensionBase:
     discover all subclasses of this class in the specified modules.
     """
 
-    def __init__(self, ledger):
+    def __init__(self, ledger, config=None):
+        """
+        Base init function.
+
+        Args:
+            ledger: Input ledger file.
+            config: Configuration options string passed from the
+                    beancount file's 'fava-extension' line.
+        """
         self.ledger = ledger
+        self.config = ast.literal_eval(config)
+        self.name = self.__class__.__qualname__
 
     def run_hook(self, event, *args):
         """Run a hook.
