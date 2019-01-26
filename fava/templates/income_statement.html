@@ -21,5 +21,8 @@
             <h3>{{ ledger.options['name_expenses'] }}</h3>
             {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_expenses'])) }}
         </div>
+        <div class="column">
+            {{ tree_table.tree(ledger.root_tree.net_profit(ledger.options, _('Net Profit'))) }}
+        </div>
     </div>
 {% endblock %}

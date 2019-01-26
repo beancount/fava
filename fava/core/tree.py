@@ -98,6 +98,24 @@ class Tree(dict):
                 self[name] = node
             return node
 
+    def net_profit(self, options, account_name):
+        """Calculate the net profit.
+
+        Args:
+            options: The Beancount options.
+            account_name: The name to use for the account containing the net
+                profit.
+        """
+        income = self.get(options["name_income"])
+        expenses = self.get(options["name_expenses"])
+
+        net_profit = Tree()
+        net_profit.insert(
+            account_name, income.balance_children + expenses.balance_children
+        )
+
+        return net_profit.get(account_name)
+
     def cap(self, options, unrealized_account):
         """Transfer Income and Expenses, add conversions and unrealized gains.
 
