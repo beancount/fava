@@ -53,6 +53,11 @@ class CounterInventory(dict):
     def __neg__(self):
         return CounterInventory({key: -num for key, num in self.items()})
 
+    def __add__(self, other):
+        counter = CounterInventory(self)
+        counter.add_inventory(other)
+        return counter
+
     def add_inventory(self, counter):
         """Add another :class:`CounterInventory`."""
         if not self:
