@@ -114,17 +114,17 @@
   color: inherit;
 }
 
+.tree-table .balance-children {
+  display: block;
+  opacity: 0.7;
+}
+
 .tree-table .has-balance .balance {
   display: block;
 }
 
 .tree-table .has-balance .balance-children {
   display: none;
-}
-
-.tree-table .balance-children {
-  display: block;
-  opacity: 0.7;
 }
 
 .tree-table .toggled ol {

@@ -1,37 +1,37 @@
-// Fava's main Javascript entry point.
-//
-// The code for Fava's UI is split into several modules that are all imported
-// below. The different modules can listen to and register events to
-// communicate and to register DOM event handlers for example.
-//
-// The events currently in use in Fava:
-//
-// error, info, reload-warning:
-//    Trigger with a single message argument to display notifications of the
-//    given type in the top right corner of the page.
-//
-// file-modified:
-//    Fetch and update the error count in the sidebar.
-//
-// page-init:
-//    Run once the page is initialized, i.e., when the DOM is ready. Use this
-//    for JS code and parts of the UI that are independent of the current
-//    contents of <article>.
-//
-// page-loaded:
-//    After a new page has been loaded asynchronously. Use this to bind to
-//    elements in the page.
-//
-// reload:
-//    This triggers a reload of the page.
-//
-// close-overlay:
-//    Close any open overlays.
-//
-// button-click-*:
-//    For <button>s that have a `data-event` attribute, the event
-//    `button-click-${data-event}` will be triggered.
-//
+/* Fava's main Javascript entry point.
+ *
+ * The code for Fava's UI is split into several modules that are all imported
+ * below. The different modules can listen to and register events to
+ * communicate and to register DOM event handlers for example.
+ *
+ * The events currently in use in Fava:
+ *
+ * error, info, reload-warning:
+ *    Trigger with a single message argument to display notifications of the
+ *    given type in the top right corner of the page.
+ *
+ * file-modified:
+ *    Fetch and update the error count in the sidebar.
+ *
+ * page-init:
+ *    Run once the page is initialized, i.e., when the DOM is ready. Use this
+ *    for JS code and parts of the UI that are independent of the current
+ *    contents of <article>.
+ *
+ * page-loaded:
+ *    After a new page has been loaded asynchronously. Use this to bind to
+ *    elements in the page.
+ *
+ * reload:
+ *    This triggers a reload of the page.
+ *
+ * close-overlay:
+ *    Close any open overlays.
+ *
+ * button-click-*:
+ *    For <button>s that have a `data-event` attribute, the event
+ *    `button-click-${data-event}` will be triggered.
+ */
 
 import { $, handleJSON } from "./helpers";
 import e from "./events";

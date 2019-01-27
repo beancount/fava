@@ -10,23 +10,23 @@
   cursor: pointer;
 }
 
-.chart-labels label.selected,
-.chart-labels label:hover {
-  color: var(--color-text-lighter);
+.chart-mode label {
+  margin-right: 0;
+  color: var(--color-text);
+  background-color: var(--color-background-darker);
 }
 
 .chart-labels label + label {
   border-left: 1px solid var(--color-text-lighter);
 }
 
-.chart-mode input {
-  display: none;
+.chart-labels label.selected,
+.chart-labels label:hover {
+  color: var(--color-text-lighter);
 }
 
-.chart-mode label {
-  margin-right: 0;
-  color: var(--color-text);
-  background-color: var(--color-background-darker);
+.chart-mode input {
+  display: none;
 }
 
 .chart-mode label:hover {
@@ -59,14 +59,6 @@
   border-left: 9px solid transparent;
 }
 
-.hide-charts .chart-container,
-.hide-charts .chart-legend,
-.hide-charts .chart-currency,
-.hide-charts .chart-mode,
-.hide-charts .chart-labels {
-  display: none;
-}
-
 .chart-container {
   position: relative;
   min-height: 100px;
@@ -74,6 +66,14 @@
 
 .chart-legend {
   flex-grow: 1;
+}
+
+.hide-charts .chart-container,
+.hide-charts .chart-legend,
+.hide-charts .chart-currency,
+.hide-charts .chart-mode,
+.hide-charts .chart-labels {
+  display: none;
 }
 
 .chart-legend .color {
@@ -120,45 +120,45 @@ svg .voronoi {
   fill: none;
 }
 
-.treemap {
+svg.treemap {
   shape-rendering: crispEdges;
 }
 
-.treemap rect {
+svg.treemap rect {
   stroke: var(--color-treemap-text);
   stroke-width: 2px;
 }
 
-.treemap text {
+svg.treemap text {
   cursor: pointer;
 }
 
-.sunburst .account {
+svg.sunburst .account {
   fill: var(--color-text);
 }
 
-.sunburst .balance {
+svg.sunburst .balance {
   font-family: var(--font-family-monospaced);
 }
 
-.sunburst path {
+svg.sunburst path {
   cursor: pointer;
 }
 
-.barchart .group:hover .group-box {
+svg.barchart .axis-group-box {
+  cursor: pointer;
+  opacity: 0;
+}
+
+svg.barchart .group-box {
+  opacity: 0;
+}
+
+svg.barchart .group:hover .group-box {
   opacity: 0.1;
 }
 
-.barchart .axis-group-box {
-  cursor: pointer;
-  opacity: 0;
-}
-
-.barchart .group-box {
-  opacity: 0;
-}
-
-.barchart .budget {
+svg.barchart .budget {
   opacity: 0.3;
 }
 

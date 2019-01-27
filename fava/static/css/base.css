@@ -1,4 +1,5 @@
-/* Globals */
+/* stylelint-disable no-descending-specificity */
+
 * {
   box-sizing: border-box;
 }
@@ -14,25 +15,51 @@ body {
   background-color: var(--color-background);
 }
 
-table {
-  border-spacing: 0;
-  border-collapse: collapse;
+p,
+ol,
+ul,
+dl,
+table,
+pre,
+hr {
+  padding: 0;
+  margin: 0 0 1rem;
+  list-style-type: none;
 }
 
-table pre {
+dl {
+  margin: 0;
+}
+
+code,
+pre {
+  font-family: var(--font-family-monospaced);
+  white-space: pre;
+  background-color: var(--color-code-background);
+  border: 1px solid var(--color-background-darker);
+  border-radius: 3px;
+}
+
+code {
+  padding: 0 4px;
+  line-height: 1;
+}
+
+pre {
+  padding: 6px 10px;
+  overflow: auto;
+}
+
+pre code {
   padding: 0;
   margin: 0;
-  overflow: inherit;
-  background-color: inherit;
+  line-height: inherit;
   border: 0;
 }
 
-tbody tr:nth-child(2n) {
-  background-color: var(--color-sidebar-background);
-}
-
-tbody td {
-  border: 1px solid var(--color-table-border);
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
 }
 
 td,
@@ -57,16 +84,20 @@ tfoot td {
   border: 1px solid var(--color-table-header-background);
 }
 
-p,
-ol,
-ul,
-dl,
-table,
-pre,
-hr {
+tbody tr:nth-child(2n) {
+  background-color: var(--color-sidebar-background);
+}
+
+tbody td {
+  border: 1px solid var(--color-table-border);
+}
+
+table pre {
   padding: 0;
-  margin: 0 0 1rem;
-  list-style-type: none;
+  margin: 0;
+  overflow: inherit;
+  background-color: inherit;
+  border: 0;
 }
 
 h2,
@@ -85,12 +116,6 @@ h2 {
 
 h3 {
   font-size: 1.1429em;
-}
-
-h3 button {
-  padding: 4px 8px;
-  font-size: 1rem;
-  font-weight: normal;
 }
 
 h4,
@@ -126,36 +151,6 @@ a:focus,
 a img {
   border: 0;
   outline: none;
-}
-
-dl {
-  margin: 0;
-}
-
-code,
-pre {
-  font-family: var(--font-family-monospaced);
-  white-space: pre;
-  background-color: var(--color-code-background);
-  border: 1px solid var(--color-background-darker);
-  border-radius: 3px;
-}
-
-code {
-  padding: 0 4px;
-  line-height: 1;
-}
-
-pre {
-  padding: 6px 10px;
-  overflow: auto;
-}
-
-pre code {
-  padding: 0;
-  margin: 0;
-  line-height: inherit;
-  border: 0;
 }
 
 /* fake fieldsets to work around browser bugs with <fieldset> */
@@ -210,6 +205,17 @@ button,
   border: 0;
   border-radius: 0;
   outline: 0;
+}
+
+h3 button {
+  padding: 4px 8px;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+a.button {
+  display: inline-block;
+  padding: 2px 6px;
 }
 
 button:focus,
@@ -384,6 +390,14 @@ aside h3 {
   font-size: 23px;
 }
 
+.navigation .error {
+  background-color: var(--color-error);
+}
+
+.navigation .error a {
+  color: var(--color-sidebar-background);
+}
+
 .navigation li {
   position: relative;
   display: flex;
@@ -394,22 +408,10 @@ aside h3 {
   flex: 1;
 }
 
-.navigation .error {
-  background-color: var(--color-error);
-}
-
-.navigation .error a {
-  color: var(--color-sidebar-background);
-}
-
 .navigation .error a.selected,
 .navigation .error a:hover {
   background-color: var(--color-error);
   filter: brightness(80%);
-}
-
-.navigation .error .bubble {
-  background-color: var(--color-transparent-white);
 }
 
 .navigation .bubble {
@@ -421,6 +423,10 @@ aside h3 {
   border-radius: 12px;
 }
 
+.navigation .error .bubble {
+  background-color: var(--color-transparent-white);
+}
+
 .submenu {
   width: 100%;
 }
@@ -430,7 +436,7 @@ aside h3 {
   line-height: 0.95em;
 }
 
-.submenu a {
+.navigation .submenu a {
   padding-left: 35px;
 }
 
@@ -552,6 +558,12 @@ kbd {
   border-radius: 6px;
 }
 
+td .status-indicator {
+  float: right;
+  margin-top: 3px;
+  margin-left: 3px;
+}
+
 .status-indicator:hover {
   cursor: pointer;
 }
@@ -570,6 +582,18 @@ kbd {
 
 .status-indicator.status-gray {
   background-color: var(--color-status-gray);
+}
+
+.statistics-update-activity .indicator-header {
+  padding-left: 0;
+}
+
+.statistics-update-activity .uptodate-indicator {
+  text-align: center;
+}
+
+.statistics-update-activity .status-indicator {
+  margin: 0 auto;
 }
 
 [data-sort] {
@@ -614,24 +638,6 @@ kbd {
 
 .options td:nth-child(2) {
   white-space: normal;
-}
-
-.statistics-update-activity .indicator-header {
-  padding-left: 0;
-}
-
-.statistics-update-activity .uptodate-indicator {
-  text-align: center;
-}
-
-.statistics-update-activity .status-indicator {
-  margin: 0 auto;
-}
-
-td .status-indicator {
-  float: right;
-  margin-top: 3px;
-  margin-left: 3px;
 }
 
 .autocomplete {

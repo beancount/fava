@@ -4,15 +4,39 @@
   }
 }
 
-header > svg.loading {
+.fava-icon.loading {
   padding: 0;
   border-top: 2px solid var(--color-header-text);
   border-radius: 50%;
   animation: spinner 1s linear infinite;
 }
 
-header > svg.loading path {
+.fava-icon.loading path {
   opacity: 0;
+}
+
+.beancount-files ul {
+  max-height: 400px;
+  margin-bottom: 0;
+  overflow-y: auto;
+}
+
+.beancount-files a {
+  display: block;
+  padding: 8px 12px 8px 28px;
+  cursor: pointer;
+}
+
+.beancount-files a.active,
+.beancount-files a:hover {
+  color: var(--color-background);
+  background-color: var(--color-links);
+}
+
+.beancount-files a.active {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=");
+  background-repeat: no-repeat;
+  background-position: 9px center;
 }
 
 h1 {
@@ -32,11 +56,13 @@ h1 .droptarget {
   margin-left: -0.6em;
 }
 
+/* stylelint-disable no-descending-specificity */
 h1 a:hover,
 h1 a:link,
 h1 a:visited {
   color: inherit;
 }
+/* stylelint-enable no-descending-specificity */
 
 h1 .last-activity {
   display: inline-block;
@@ -55,10 +81,6 @@ h1 .status-indicator {
 
 h1 .status-indicator.status-gray {
   margin-left: 0;
-}
-
-h1:hover .beancount-files {
-  display: block;
 }
 
 .page-title::before {
@@ -90,28 +112,8 @@ h1:hover .beancount-files {
   box-shadow: 0 3px 6px var(--color-transparent-black);
 }
 
-.beancount-files ul {
-  max-height: 400px;
-  margin-bottom: 0;
-  overflow-y: auto;
-}
-
-.beancount-files a {
+h1:hover .beancount-files {
   display: block;
-  padding: 8px 12px 8px 28px;
-  cursor: pointer;
-}
-
-.beancount-files a.active,
-.beancount-files a:hover {
-  color: var(--color-background);
-  background-color: var(--color-links);
-}
-
-.beancount-files a.active {
-  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAMAAABFNRROAAAAOVBMVEUAAAD///////////////////////////////////////////////////////////////////////8KOjVvAAAAEnRSTlMAAQMGHjE8P0Bfi6Omt9Hi7/XCzsNoAAAAO0lEQVQI143HSxZAMBAAwQ5CfEPf/7AWHmZH7Qr+aMcmZHONcQa6PV9ZEnBofsKg1jtQ9A2UGOinxKcT2psCetpsGdwAAAAASUVORK5CYII=");
-  background-repeat: no-repeat;
-  background-position: 9px center;
 }
 
 .filter-form {
@@ -135,6 +137,11 @@ h1:hover .beancount-files {
   outline: none;
 }
 
+.filter-form [type="text"]:focus {
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
 .filter-form [type="text"]:placeholder-shown,
 .filter-form [type="text"]::placeholder {
   color: var(--color-header-tinted);
@@ -146,11 +153,6 @@ h1:hover .beancount-files {
   color: var(--color-header-tinted);
 }
 
-.filter-form [type="text"]:focus {
-  color: var(--color-text);
-  background-color: var(--color-background);
-}
-
 .filter-form [type="submit"] {
   display: none;
 }
@@ -159,13 +161,13 @@ h1:hover .beancount-files {
   background-color: var(--color-header-light);
 }
 
-.filter-form .empty .close {
-  display: none;
-}
-
 .filter-form .close {
   position: absolute;
   top: 8px;
   right: 0;
   display: block;
+}
+
+.filter-form .empty .close {
+  display: none;
 }

@@ -9,18 +9,6 @@
   opacity: 0.5;
 }
 
-.toggle-box.error .toggle-box-header {
-  background-color: var(--color-error);
-}
-
-.toggle-box.toggled .toggle-box-content {
-  display: none;
-}
-
-.toggle-box.toggled .toggle-box-header::before {
-  transform: rotate(270deg);
-}
-
 .toggle-box-header {
   display: flex;
   align-items: center;
@@ -37,6 +25,14 @@
   border-left: 6px solid transparent;
 }
 
+.toggle-box.error .toggle-box-header {
+  background-color: var(--color-error);
+}
+
+.toggle-box.toggled .toggle-box-header::before {
+  transform: rotate(270deg);
+}
+
 .toggle-box-header pre {
   display: inline-block;
   padding: 3px 6px;
@@ -45,4 +41,8 @@
 
 .toggle-box-content {
   padding: 0.5em;
+}
+
+.toggle-box.toggled .toggle-box-content {
+  display: none;
 }

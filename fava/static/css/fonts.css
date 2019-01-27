@@ -3,14 +3,14 @@
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: normal;
-  src: url("../gen/SourceCodePro-Regular.woff") format("woff");
+  src: url("./source-code-pro-latin-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 500;
-  src: url("../gen/SourceCodePro-Semibold.woff") format("woff");
+  src: url("./source-code-pro-latin-500.woff2") format("woff2");
 }
 
 /* Interface fonts */
@@ -18,28 +18,28 @@
   font-family: "Fira Mono";
   font-style: normal;
   font-weight: normal;
-  src: url("../gen/FiraMono-Regular.woff") format("woff");
+  src: url("./fira-mono-latin-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Fira Mono";
   font-style: normal;
   font-weight: 500;
-  src: url("../gen/FiraMono-Medium.woff") format("woff");
+  src: url("./fira-mono-latin-500.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Fira Sans";
   font-style: normal;
   font-weight: normal;
-  src: url("../gen/FiraSans-Regular.woff") format("woff");
+  src: url("./fira-sans-latin-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Fira Sans";
   font-style: normal;
   font-weight: 500;
-  src: url("../gen/FiraSans-Medium.woff") format("woff");
+  src: url("./fira-sans-latin-500.woff2") format("woff2");
 }
 
 /* The help pages */
@@ -47,12 +47,12 @@
   font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: normal;
-  src: url("../gen/SourceSerifPro-Regular.woff") format("woff");
+  src: url("./source-serif-pro-latin-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Source Serif Pro";
   font-style: normal;
-  font-weight: 500;
-  src: url("../gen/SourceSerifPro-Semibold.woff") format("woff");
+  font-weight: 600;
+  src: url("./source-serif-pro-latin-600.woff2") format("woff2");
 }

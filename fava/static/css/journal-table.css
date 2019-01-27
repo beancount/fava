@@ -1,3 +1,5 @@
+/* stylelint-disable no-descending-specificity */
+
 .tree-table p,
 .tree-table li,
 .tree-table ul,
@@ -55,6 +57,26 @@
   background-color: var(--color-table-header-background);
 }
 
+.journal p,
+.journal dl {
+  border-bottom: thin solid var(--color-table-border);
+}
+
+.journal .payee {
+  cursor: pointer;
+}
+
+.journal .postings {
+  font-size: 0.9em;
+  background-color: var(--color-journal-postings);
+  opacity: 0.8;
+}
+
+.journal .postings .num {
+  overflow: hidden;
+  line-height: 16px;
+}
+
 .journal > li,
 .journal.show-custom .custom.budget,
 .journal.show-document .document.discovered,
@@ -87,26 +109,6 @@
 .journal.show-document.show-linked .document.linked,
 .journal.show-custom.show-budget .custom.budget {
   display: block;
-}
-
-.journal p,
-.journal dl {
-  border-bottom: thin solid var(--color-table-border);
-}
-
-.journal .payee {
-  cursor: pointer;
-}
-
-.journal .postings {
-  font-size: 0.9em;
-  background-color: var(--color-journal-postings);
-  opacity: 0.8;
-}
-
-.journal .postings .num {
-  overflow: hidden;
-  line-height: 16px;
 }
 
 /* Metadata */

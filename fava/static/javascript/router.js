@@ -81,7 +81,7 @@ class Router {
     const getUrl = new URL(url);
     getUrl.searchParams.set("partial", true);
 
-    const svg = $("header svg");
+    const svg = $(".fava-icon");
     svg.classList.add("loading");
 
     $.fetch(getUrl.toString()).then(

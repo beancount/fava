@@ -63,6 +63,17 @@
   display: block;
 }
 
+.CodeMirror-gutters {
+  background: var(--color-sidebar-background);
+  border-right: 1px solid var(--color-sidebar-border);
+}
+
+.CodeMirror.CodeMirror {
+  margin-bottom: 1em;
+  font: 13px var(--font-family-editor);
+  border: 1px solid var(--color-sidebar-border);
+}
+
 .source-form {
   position: fixed;
   top: var(--header-height);
@@ -82,6 +93,10 @@
   margin: 0;
 }
 
+.source-form .CodeMirror-lines {
+  border-top: 1px solid var(--color-sidebar-border);
+}
+
 .source-form .CodeMirror,
 .source-form textarea {
   width: 100%;
@@ -90,23 +105,8 @@
   border: 0;
 }
 
-.source-form .CodeMirror-lines {
-  border-top: 1px solid var(--color-sidebar-border);
-}
-
 .source-slice-editor-form .CodeMirror {
   height: auto;
-}
-
-.CodeMirror-gutters {
-  background: var(--color-sidebar-background);
-  border-right: 1px solid var(--color-sidebar-border);
-}
-
-.CodeMirror {
-  margin-bottom: 1em;
-  font: 13px var(--font-family-editor);
-  border: 1px solid var(--color-sidebar-border);
 }
 
 .cm-trailingspace {

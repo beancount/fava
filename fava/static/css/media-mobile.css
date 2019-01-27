@@ -31,10 +31,6 @@
     margin-left: 0;
   }
 
-  aside.active .add-transaction-button {
-    left: var(--aside-width);
-  }
-
   .aside-button,
   .navigation .add-transaction-button {
     position: fixed;
@@ -48,6 +44,16 @@
     border-width: 0 1px 1px 0;
   }
 
+  .navigation .add-transaction-button {
+    top: 42px;
+    font-size: 30px;
+    color: var(--color-mobile-button-text);
+  }
+
+  aside.active .add-transaction-button {
+    left: var(--aside-width);
+  }
+
   .aside-button {
     top: 0;
     display: block;
@@ -58,12 +64,6 @@
     left: var(--aside-width);
     background-color: var(--color-sidebar-background);
     box-shadow: none;
-  }
-
-  .navigation .add-transaction-button {
-    top: 42px;
-    font-size: 30px;
-    color: var(--color-mobile-button-text);
   }
 
   .source-form,
