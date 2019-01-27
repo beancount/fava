@@ -2,6 +2,7 @@
 
 import operator
 import os
+from os import path
 import runpy
 from collections import namedtuple
 import sys
@@ -21,53 +22,57 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = []
         self.importers = {}
-        self.module_path = None
         self.mtime = None
 
+    @property
+    def module_path(self):
+        """The path to the importer configuration."""
+        if not self.ledger.fava_options["import-config"]:
+            return None
+        return path.normpath(
+            path.join(
+                path.dirname(self.ledger.beancount_file_path),
+                self.ledger.fava_options["import-config"],
+            )
+        )
+
     def load_file(self):
-        if self.ledger.fava_options["import-config"]:
-            self.module_path = os.path.normpath(
-                os.path.join(
-                    os.path.dirname(self.ledger.beancount_file_path),
-                    self.ledger.fava_options["import-config"],
+        if not self.ledger.fava_options["import-config"]:
+            return
+
+        if not path.exists(self.module_path) or path.isdir(self.module_path):
+            self.ledger.errors.append(
+                IngestError(
+                    None,
+                    "File does not exist: '{}'".format(self.module_path),
+                    None,
                 )
             )
+            return
 
-            if not os.path.exists(self.module_path) or os.path.isdir(
-                self.module_path
-            ):
-                self.ledger.errors.append(
-                    IngestError(
-                        None,
-                        "File does not exist: '{}'".format(self.module_path),
-                        None,
-                    )
+        if os.stat(self.module_path).st_mtime_ns == self.mtime:
+            return
+
+        try:
+            mod = runpy.run_path(self.module_path)
+        except Exception:  # pylint: disable=broad-except
+            message = "".join(traceback.format_exception(*sys.exc_info()))
+            self.ledger.errors.append(
+                IngestError(
+                    None,
+                    "Error in importer '{}': {}".format(
+                        str(self.module_path), message
+                    ),
+                    None,
                 )
-                return
+            )
+            return
 
-            if os.stat(self.module_path).st_mtime_ns == self.mtime:
-                return
-
-            try:
-                mod = runpy.run_path(self.module_path)
-            except Exception:  # pylint: disable=broad-except
-                message = "".join(traceback.format_exception(*sys.exc_info()))
-                self.ledger.errors.append(
-                    IngestError(
-                        None,
-                        "Error in importer '{}': {}".format(
-                            str(self.module_path), message
-                        ),
-                        None,
-                    )
-                )
-                return
-
-            self.mtime = os.stat(self.module_path).st_mtime_ns
-            self.config = mod["CONFIG"]
-            self.importers = {
-                importer.name(): importer for importer in self.config
-            }
+        self.mtime = os.stat(self.module_path).st_mtime_ns
+        self.config = mod["CONFIG"]
+        self.importers = {
+            importer.name(): importer for importer in self.config
+        }
 
     def identify_directory(self, directory):
         """Identify files and importers for a given directory.
@@ -81,10 +86,8 @@ class IngestModule(FavaModule):
         if not self.config:
             return []
 
-        full_path = os.path.normpath(
-            os.path.join(
-                os.path.dirname(self.ledger.beancount_file_path), directory
-            )
+        full_path = path.normpath(
+            path.join(path.dirname(self.ledger.beancount_file_path), directory)
         )
 
         return filter(

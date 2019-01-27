@@ -208,13 +208,12 @@ class FavaLedger:
             self.all_entries, self.errors, self.options = loader._load(
                 [(self.beancount_file_path, True)], None, None, None
             )
-            self.account_types = get_account_types(self.options)
-            self._watcher.update(*self.paths_to_watch())
         else:
             self.all_entries, self.errors, self.options = loader.load_file(
                 self.beancount_file_path
             )
-            self.account_types = get_account_types(self.options)
+
+        self.account_types = get_account_types(self.options)
         self.price_map = prices.build_price_map(self.all_entries)
         self.all_root_account = realization.realize(
             self.all_entries, self.account_types
@@ -233,6 +232,9 @@ class FavaLedger:
 
         self.fava_options, errors = parse_options(entries_by_type[Custom])
         self.errors.extend(errors)
+
+        if not self._is_encrypted:
+            self._watcher.update(*self.paths_to_watch())
 
         for mod in MODULES:
             getattr(self, mod).load_file()
@@ -290,8 +292,11 @@ class FavaLedger:
             A tuple (files, directories).
         """
         include_path = os.path.dirname(self.beancount_file_path)
+        files = list(self.options["include"])
+        if self.fava_options["import-config"]:
+            files.append(self.ingest.module_path)
         return (
-            self.options["include"],
+            files,
             [
                 os.path.normpath(os.path.join(include_path, path, account))
                 for account in self.account_types
