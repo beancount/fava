@@ -48,4 +48,8 @@ export default {
     css(),
     copy(fonts),
   ],
+  onwarn(warning, warn) {
+    if (warning.code === 'CIRCULAR_DEPENDENCY') return;
+    warn(warning);
+  }
 };
