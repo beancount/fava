@@ -4,7 +4,8 @@ Changelog
 Unreleased
 ----------
 
-TODO
+This release contains mostly smaller changes and fixes. In particular, the net
+worth chart will now follow the seleected conversion.
 
 v1.9 (2018-10-08)
 -----------------
