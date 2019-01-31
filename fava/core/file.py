@@ -117,7 +117,7 @@ class FileModule(FavaModule):
     def render_entries(self, entries):
         """Return entries in Beancount format.
 
-        Only renders Balances and Transactions.
+        Only renders :class:`.Balance` and :class:`.Transaction`.
 
         Args:
             entries: A list of entries.

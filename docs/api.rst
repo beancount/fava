@@ -6,5 +6,6 @@ API Documentation
 .. toctree::
     :glob:
 
-    api/*
+    api/fava*
+    api/beancount*
 
