@@ -20,8 +20,7 @@ msgid "Time"
 msgstr "Čas"
 
 #: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
-#: fava/templates/_overlays.html:18 fava/templates/_tree_table.html:24
-#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:48
+#: fava/templates/_overlays.html:18 fava/templates/holdings.html:48
 #: fava/templates/import.html:19 fava/templates/statistics.html:36
 msgid "Account"
 msgstr "Účet"
@@ -63,7 +62,7 @@ msgstr "Komodity"
 
 #: fava/templates/_globals.html:9
 msgid "Events"
-msgstr "Udalosť"
+msgstr "Udalosti"
 
 #: fava/templates/_globals.html:10
 msgid "Editor"
@@ -87,6 +86,7 @@ msgid "Date"
 msgstr "Dátum"
 
 #: fava/templates/_journal_table.html:87
+#, fuzzy
 msgid "F"
 msgstr "V"
 
@@ -160,7 +160,7 @@ msgstr "Zostatky"
 #: fava/templates/_context.html:4 fava/templates/errors.html:20
 #: fava/templates/errors.html:21
 msgid "Show source %(file)s:%(lineno)s"
-msgstr "Ukázať zdrojový kód"
+msgstr "Ukázať zdroj %(file)s:%(lineno)s"
 
 #: fava/templates/editor.html:9 fava/templates/errors.html:11
 #: fava/templates/import.html:17
@@ -181,7 +181,7 @@ msgstr "Žiadne chyby."
 
 #: fava/templates/events.html:13
 msgid "Event: %(type)s"
-msgstr "Udalosť:"
+msgstr "Udalosť: %(type)s"
 
 #: fava/templates/events.html:18
 msgid "Description"
@@ -193,7 +193,7 @@ msgstr "Žiadne udalosti."
 
 #: fava/templates/help.html:4
 msgid "Help - %(title)s"
-msgstr "Pomoc - %(title)"
+msgstr "Pomoc - %(title)s"
 
 #: fava/templates/help.html:9
 #, fuzzy
@@ -391,7 +391,7 @@ msgstr "Ostatné transakcie"
 
 #: fava/templates/_journal_table.html:7
 msgid "Documents with a #discovered tag"
-msgstr "Dokumenty označené #discovered (objavené)"
+msgstr "Dokumenty s tagom #discovered (objavené)"
 
 #: fava/templates/_journal_table.html:81
 msgid "Postings"
@@ -452,7 +452,7 @@ msgstr "Exportovať"
 
 #: fava/templates/_entry_filters.html:4
 msgid "Filter by tag, payee, ..."
-msgstr "Filtrovať podľa označenia, príjmecu, ..."
+msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
 #: fava/templates/_overlays.html:50
 msgid "Download currently filtered entries as a Beancount file"
@@ -462,35 +462,35 @@ msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 msgid "Import entries"
 msgstr "Importovať zápisy"
 
-#: fava/util/date.py:50
-msgid "Yearly"
-msgstr ""
-
-#: fava/util/date.py:51
-msgid "Quarterly"
-msgstr ""
-
-#: fava/util/date.py:52
-msgid "Monthly"
-msgstr ""
-
 #: fava/util/date.py:53
-msgid "Weekly"
-msgstr ""
+msgid "Yearly"
+msgstr "Ročne"
 
 #: fava/util/date.py:54
+msgid "Quarterly"
+msgstr "Kvartálne"
+
+#: fava/util/date.py:55
+msgid "Monthly"
+msgstr "Mesačne"
+
+#: fava/util/date.py:56
+msgid "Weekly"
+msgstr "Týždenne"
+
+#: fava/util/date.py:57
 msgid "Daily"
-msgstr ""
+msgstr "Denne"
 
 #: fava/templates/editor.html:18
 msgid "Edit"
-msgstr ""
+msgstr "Upraviť"
 
 #: fava/templates/_entry_forms.html:15
 msgid "Amount"
-msgstr ""
+msgstr "Suma"
 
 #: fava/templates/_journal_table.html:8
 msgid "Documents with a #linked tag"
-msgstr ""
+msgstr "Dokumenty s tagom #linked"
 

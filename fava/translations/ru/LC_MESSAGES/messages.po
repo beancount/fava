@@ -20,8 +20,7 @@ msgid "Time"
 msgstr "Время"
 
 #: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
-#: fava/templates/_overlays.html:18 fava/templates/_tree_table.html:24
-#: fava/templates/_tree_table.html:105 fava/templates/holdings.html:48
+#: fava/templates/_overlays.html:18 fava/templates/holdings.html:48
 #: fava/templates/import.html:19 fava/templates/statistics.html:36
 msgid "Account"
 msgstr "Счёт"
@@ -457,23 +456,23 @@ msgstr ""
 msgid "Import entries"
 msgstr ""
 
-#: fava/util/date.py:50
+#: fava/util/date.py:53
 msgid "Yearly"
 msgstr ""
 
-#: fava/util/date.py:51
+#: fava/util/date.py:54
 msgid "Quarterly"
 msgstr ""
 
-#: fava/util/date.py:52
+#: fava/util/date.py:55
 msgid "Monthly"
 msgstr ""
 
-#: fava/util/date.py:53
+#: fava/util/date.py:56
 msgid "Weekly"
 msgstr ""
 
-#: fava/util/date.py:54
+#: fava/util/date.py:57
 msgid "Daily"
 msgstr ""
 

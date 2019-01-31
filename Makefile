@@ -63,12 +63,12 @@ upload: dist
 .PHONY: translations-push
 translations-push:
 	pybabel extract -F fava/translations/babel.conf -k lazy_gettext -o fava/translations/messages.pot ./fava
-	contrib/scripts.py upload_translations
+	contrib/scripts.py upload-translations
 
 # Download translations from POEditor.com. (also requires POEDITOR_TOKEN)
 .PHONY: translations-fetch
 translations-fetch:
-	contrib/scripts.py download_translations
+	contrib/scripts.py download-translations
 
 # Build and upload the website.
 .PHONY: gh-pages
