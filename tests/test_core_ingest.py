@@ -30,3 +30,5 @@ def test_ingest_examplefile():
     assert entries[1].postings[1].account == "Assets:Checking"
     assert entries[1].postings[1].units.number == -50.00
     assert entries[1].postings[1].units.currency == "EUR"
+    assert "__duplicate__" not in entries[1].meta
+    assert "__duplicate__" in entries[2].meta
