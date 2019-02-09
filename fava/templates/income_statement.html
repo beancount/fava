@@ -23,9 +23,7 @@
         </div>
         <div class="column">
             <h3>Net Profit</h3>
-            {{ tree_table.net_profit(ledger.root_tree.get(ledger.options['name_income']),
-                                     ledger.root_tree.get(ledger.options['name_expenses']))
-            }}
+            {{ tree_table.tree(ledger.net_profit()) }}
         </div>
     </div>
 {% endblock %}

@@ -344,6 +344,17 @@ class FavaLedger:
         tree.cap(self.options, self.fava_options["unrealized"])
         return tree
 
+    def net_profit(self):
+        income = self.root_tree.get(self.options['name_income'])
+        expenses = self.root_tree.get(self.options['name_expenses'])
+        account_name = 'Net Profit'
+
+        net_profit = Tree()
+        net_profit.insert(account_name,
+                          income.balance_children + expenses.balance_children)
+
+        return net_profit.get(account_name)
+
     def interval_balances(self, interval, account_name, accumulate=False):
         """Balances by interval.
 
