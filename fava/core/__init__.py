@@ -399,7 +399,6 @@ class FavaLedger:
         )
 
         if with_journal_children:
-            # pylint: disable=unused-variable
             postings = realization.get_postings(real_account)
         else:
             postings = real_account.txn_postings
@@ -416,12 +415,12 @@ class FavaLedger:
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
-        events = list(filter_type(self.entries, Event))
+        events = filter_type(self.entries, Event)
 
         if event_type:
-            return filter(lambda e: e.type == event_type, events)
+            return [event for event in events if event.type == event_type]
 
-        return events
+        return list(events)
 
     def get_entry(self, entry_hash):
         """Find an entry.
