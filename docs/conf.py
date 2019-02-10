@@ -1,9 +1,9 @@
-# pylint: disable=invalid-name
+# pylint: disable=invalid-name,missing-docstring
 
 extensions = [
     "sphinx.ext.extlinks",
-    "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
+    "sphinx.ext.autodoc",
 ]
 source_suffix = ".rst"
 master_doc = "index"
@@ -22,6 +22,17 @@ extlinks = {
 }
 
 autodoc_default_flags = ["members", "undoc-members"]
+
+
+def skip_namedtuples(_app, _what, _name, obj, _options, _lines):
+    if obj.__doc__ and obj.__doc__.startswith("Alias for field number"):
+        return True
+    return None
+
+
+def setup(app):
+    app.connect("autodoc-skip-member", skip_namedtuples)
+
 
 # Options for HTML output
 html_theme = "alabaster"
