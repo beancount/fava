@@ -2,8 +2,9 @@
 /.coverage
 /.eggs
 /.tox
-/build
-/dist
+/build/
+/dist/
+/docs/api/
 /fava.egg-info
 /fava/static/node_modules
 /fava/translations/messages.pot
