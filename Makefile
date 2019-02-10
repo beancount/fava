@@ -1,7 +1,6 @@
 all: fava/static/gen/app.js
 
 fava/static/gen/app.js: fava/static/css/* fava/static/javascript/* fava/static/package.json
-	rm -f fava/static/package-lock.json
 	cd fava/static; npm install; npm run build
 
 .PHONY: clean
