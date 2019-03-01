@@ -182,3 +182,13 @@ def format_errormsg(message):
         .replace("for '", "for ")
         .replace("': ", ": ")
     )
+
+def collapse_account_at_level(account_name, level):
+    """Return true if account should be collapsed at the given tree depth."""
+    collapse_account = g.ledger.accounts[account_name].meta.get('fava-collapse-account')
+    if collapse_account is not None:
+        return collapse_account
+    collapse_level = g.ledger.fava_options['collapse-below-level']
+    if collapse_level is not None:
+        return level >= collapse_level
+    return False

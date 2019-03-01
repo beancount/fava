@@ -16,6 +16,7 @@ InsertEntryOption = namedtuple("InsertEntryOption", "date re filename lineno")
 DEFAULTS = {
     "account-journal-include-children": True,
     "currency-column": 61,
+    "collapse-below-level": None,
     "auto-reload": False,
     "default-file": None,
     "extensions": [],
@@ -57,6 +58,7 @@ BOOL_OPTS = [
 ]
 
 INT_OPTS = [
+    "collapse-below-level",
     "currency-column",
     "upcoming-events",
     "uptodate-indicator-grey-lookback-days",

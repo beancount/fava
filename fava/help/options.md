@@ -205,6 +205,17 @@ will always be shown.
 
 ---
 
+## `collapse-below-level`
+
+Default: Not set
+
+If set to a number all accounts at or below this depth in the account tree will
+be collapsed by default. Setting the option to `0` will thus collapse all
+accounts by default. The `fava-collapse-account` metadata on an account takes
+precedence over this option.
+
+---
+
 ## `use-external-editor`
 
 Default: `false`
