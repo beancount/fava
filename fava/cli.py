@@ -104,8 +104,7 @@ def main(
                     "Can not start webserver because the port is already in "
                     "use. Please choose another port with the '-p' option."
                 )
-            else:  # pragma: no cover
-                raise
+            raise
 
 
 # needed for pyinstaller:
