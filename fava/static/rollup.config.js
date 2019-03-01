@@ -16,8 +16,8 @@ const fonts = [
   "node_modules/typeface-fira-sans/files/fira-sans-latin-500.woff2",
   "node_modules/typeface-source-code-pro/files/source-code-pro-latin-400.woff2",
   "node_modules/typeface-source-code-pro/files/source-code-pro-latin-500.woff2",
-  "node_modules/typeface-source-serif-pro/files/source-serif-pro-latin-400.woff2",
-  "node_modules/typeface-source-serif-pro/files/source-serif-pro-latin-600.woff2",
+  "node_modules/typeface-source-serif-pro/files/source-serif-pro-400.woff2",
+  "node_modules/typeface-source-serif-pro/files/source-serif-pro-600.woff2",
 ];
 
 function copy(files) {
