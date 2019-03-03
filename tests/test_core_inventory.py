@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 from beancount.core.amount import A
 
 from fava.core.inventory import CounterInventory

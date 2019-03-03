@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 from datetime import date, datetime
 from unittest import mock
 

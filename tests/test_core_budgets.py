@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 from datetime import date
 
 from beancount.core.number import D

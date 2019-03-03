@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 import pytest
 from beancount.query import query
 

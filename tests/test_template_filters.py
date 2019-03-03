@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 import os.path
 
 from flask import g

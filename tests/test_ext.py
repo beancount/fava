@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 import os
 
 from fava.ext import find_extensions

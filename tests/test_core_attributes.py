@@ -1,3 +1,6 @@
+# pylint: disable=missing-docstring
+
+
 def test_payee_accounts(example_ledger):
     attr = example_ledger.attributes
     assert attr.payee_accounts("NOTAPAYEE") == attr.accounts

@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 import time
 
 from fava.core.watcher import Watcher

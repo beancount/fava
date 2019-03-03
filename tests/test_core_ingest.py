@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 import datetime
 
 from fava.core import FavaLedger

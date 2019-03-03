@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 

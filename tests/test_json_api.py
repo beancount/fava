@@ -1,3 +1,5 @@
+# pylint: disable=missing-docstring
+
 import hashlib
 from io import BytesIO
 import os
