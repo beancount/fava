@@ -13,13 +13,10 @@
 
     <div class="row">
         <div class="column">
-            <h3>{{ ledger.options['name_assets'] }}</h3>
             {{ tree_table.tree(root_tree_closed.get(ledger.options['name_assets'])) }}
         </div>
         <div class="column">
-            <h3>{{ ledger.options['name_liabilities'] }}</h3>
             {{ tree_table.tree(root_tree_closed.get(ledger.options['name_liabilities'])) }}
-            <h3>{{ ledger.options['name_equity'] }}</h3>
             {{ tree_table.tree(root_tree_closed.get(ledger.options['name_equity'])) }}
         </div>
     </div>
