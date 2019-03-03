@@ -117,12 +117,9 @@ class IngestModule(FavaModule):
             existing_entries=self.ledger.all_entries,
         )
 
-        if isinstance(new_entries, tuple):
-            new_entries, _ = new_entries
-        else:
-            new_entries = extract.find_duplicate_entries(
-                [(filename, new_entries)], self.ledger.all_entries
-            )[0][1]
+        new_entries = extract.find_duplicate_entries(
+            [(filename, new_entries)], self.ledger.all_entries
+        )[0][1]
 
         return new_entries
 
