@@ -5,7 +5,26 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "lint": "eslint javascript --fix && stylelint 'css/*.css' --fix && npm run format",
-    "format": "cd ../../ && prettier '**/*.{css,js,md}' --write --ignore-path .gitignore"
+    "format": "cd ../../ && prettier '**/*.{css,js,md}' --check --write --ignore-path .gitignore"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{css}": [
+      "stylelint --fix",
+      "git add"
+    ],
+    "*.{css,js,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{js}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "prettier": {
     "proseWrap": "always",
@@ -28,10 +47,12 @@
     ]
   },
   "devDependencies": {
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.14.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
     "prettier": "^1.15.3",
     "rollup": "^1.4.0",
     "rollup-plugin-commonjs": "^9.2.1",
