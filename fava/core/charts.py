@@ -1,14 +1,14 @@
 """Provide data suitable for Fava's charts. """
 import datetime
 
+from flask import g
+from flask.json import JSONEncoder
 from beancount.core import flags, convert, realization
 from beancount.core.amount import Amount
 from beancount.core.data import Transaction, iter_entry_dates
 from beancount.core.number import Decimal
 from beancount.core.position import Position
 from beancount.utils.misc_utils import filter_type
-from flask import g
-from flask.json import JSONEncoder
 
 from fava.util import listify, pairwise
 from fava.template_filters import cost_or_value
@@ -20,7 +20,7 @@ from fava.core.tree import Tree
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
 
-    def default(self, o):  # pylint: disable=E0202
+    def default(self, o):  # pylint: disable=method-hidden
         if isinstance(o, Decimal):
             return float(o)
         if isinstance(o, (datetime.date, Amount, Position)):
@@ -31,18 +31,6 @@ class FavaJSONEncoder(JSONEncoder):
             return JSONEncoder.default(self, o)
         except TypeError:
             return str(o)
-
-
-def _serialize_account_node(node, date):
-    children = [
-        _serialize_account_node(account, date) for account in node.children
-    ]
-    return {
-        "account": node.name,
-        "balance_children": cost_or_value(node.balance_children, date),
-        "balance": cost_or_value(node.balance, date),
-        "children": children,
-    }
 
 
 class ChartModule(FavaModule):
@@ -67,7 +55,7 @@ class ChartModule(FavaModule):
             tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
         else:
             tree = self.ledger.root_tree
-        return _serialize_account_node(tree.get(account_name), end)
+        return tree.get(account_name).serialise(end)
 
     @listify
     def interval_totals(self, interval, accounts):
