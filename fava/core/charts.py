@@ -1,9 +1,8 @@
 """Provide data suitable for Fava's charts. """
 import datetime
 
-from flask import g
 from flask.json import JSONEncoder
-from beancount.core import flags, convert, realization
+from beancount.core import flags, realization
 from beancount.core.amount import Amount
 from beancount.core.data import Transaction, iter_entry_dates
 from beancount.core.number import Decimal
@@ -100,27 +99,26 @@ class ChartModule(FavaModule):
         journal = realization.iterate_with_balance(postings)
 
         # When the balance for a commodity just went to zero, it will be
-        # missing from the 'balance' field but appear in the 'change' field.
-        # Use 0 for those commodities.
+        # missing from the 'balance' so keep track of currencies that last had
+        # a balance.
+        last_currencies = None
+
         for entry, _, change, balance in journal:
             if change.is_empty():
                 continue
 
-            if g.conversion == "units":
-                bal = {curr: 0 for curr in list(change.currencies())}
-                bal.update(
-                    {
-                        p.units.currency: p.units.number
-                        for p in balance.reduce(convert.get_units)
-                    }
-                )
-            else:
-                bal = {
-                    p.units.currency: p.units.number
-                    for p in cost_or_value(balance, entry.date)
-                }
+            balance = {
+                p.units.currency: p.units.number
+                for p in cost_or_value(balance, entry.date)
+            }
 
-            yield {"date": entry.date, "balance": bal}
+            currencies = set(balance.keys())
+            if last_currencies:
+                for currency in last_currencies - currencies:
+                    balance[currency] = 0
+            last_currencies = currencies
+
+            yield {"date": entry.date, "balance": balance}
 
     @listify
     def net_worth(self, interval):
