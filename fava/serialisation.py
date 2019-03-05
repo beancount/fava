@@ -13,6 +13,7 @@ import re
 
 from beancount.core import data, position
 from beancount.core.amount import A, Amount
+from beancount.core.data import EMPTY_SET
 from beancount.core.number import D, MISSING
 
 from fava import util
@@ -30,6 +31,9 @@ def extract_tags_links(string):
         A triple (new_string, tags, links) where `new_string` is `string`
         stripped of tags and links.
     """
+
+    if string is None:
+        return None, EMPTY_SET, EMPTY_SET
 
     tags = re.findall(r"(?:^|\s)#([A-Za-z0-9\-_/.]+)", string)
     links = re.findall(r"(?:^|\s)\^([A-Za-z0-9\-_/.]+)", string)
@@ -115,8 +119,8 @@ def deserialise(json_entry):
         return data.Transaction(
             json_entry["meta"],
             date,
-            json_entry["flag"],
-            json_entry["payee"],
+            json_entry.get("flag", ""),
+            json_entry.get("payee", ""),
             narration,
             tags,
             links,

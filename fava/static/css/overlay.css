@@ -4,7 +4,7 @@
   --overlay-wrapper-background: rgba(0, 0, 0, 0.5);
 }
 
-.overlay-wrapper {
+.overlay {
   position: fixed;
   top: 0;
   right: 0;
@@ -12,49 +12,51 @@
   left: 0;
   z-index: var(--z-index-overlay);
   display: none;
+}
+
+.overlay.shown {
+  display: flex;
   align-items: center;
   justify-content: center;
-  overflow: auto;
+}
+
+.overlay-background {
+  position: fixed;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
   background: var(--overlay-wrapper-background);
 }
 
-.overlay-wrapper.shown {
-  display: flex;
-}
-
 .close-overlay {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 1em;
+  right: 1em;
+  margin: 0;
   color: var(--color-text-lighter);
 }
 
-.overlay {
+.overlay-content {
   position: relative;
+  z-index: var(--z-index-overlay);
   display: flex;
+  width: 100%;
   max-width: 767px;
   max-height: 100%;
-  padding: 1.5em;
+  padding: 1em;
   margin: 0.5em;
-  cursor: auto;
   background: var(--color-background);
   box-shadow: 0 0 20px var(--overlay-wrapper-background);
 }
 
-.overlay form,
-.overlay > div {
+.overlay-content form,
+.overlay-content > div {
   width: 100%;
 }
 
 .overlay strong {
   display: inline-block;
   margin: 6px 0 5px;
-}
-
-.overlay table {
-  margin-right: auto;
-  margin-left: auto;
 }
 
 .overlay dt {
@@ -69,24 +71,6 @@
 
 .overlay dd {
   line-height: 1.8em;
-}
-
-.overlay .fieldset label {
-  width: 150px;
-}
-
-.overlay .fieldset[type="submit"] {
-  margin: 0.5em 0.5em -0.5em 0;
-}
-
-.documents-upload .fieldset input {
-  flex-grow: 1;
-  min-width: 60%;
-}
-
-.transaction-overlay form > .fieldset button {
-  margin-top: 0.7em;
-  margin-bottom: 0;
 }
 
 .notifications {

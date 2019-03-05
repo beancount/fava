@@ -109,6 +109,17 @@ def payee_accounts():
     }
 
 
+@json_api.route("/extract/", methods=["GET"])
+@json_response
+def extract():
+    """Extract entries using the ingest framework."""
+    entries = g.ledger.ingest.extract(
+        request.args.get("filename"), request.args.get("importer")
+    )
+    serialised = list(map(serialise, entries))
+    return {"payload": serialised}
+
+
 @json_api.route("/payee-transaction/", methods=["GET"])
 @json_response
 def payee_transaction():

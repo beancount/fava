@@ -8,28 +8,29 @@ export function $$(expr, con = document) {
   return Array.from(con.querySelectorAll(expr));
 }
 
+let translations;
+/*
+ * Translate the given string.
+ */
+export function _(string) {
+  if (translations === undefined) {
+    translations = JSON.parse($("#translations").innerHTML);
+  }
+  return translations[string] || string;
+}
+
 // Execute the callback of the event of given type is fired on something
 // matching selector.
-$.delegate = function delegate(element, type, selector, callback) {
+export function delegate(element, type, selector, callback) {
+  if (!element) return;
   element.addEventListener(type, event => {
-    if (event.target.closest(selector)) {
-      callback(event);
+    const closest = event.target.closest(selector);
+    if (closest) {
+      callback(event, closest);
     }
   });
-};
-
-// Create a new object that has all properties of the arguments.
-$.extend = function extend(...args) {
-  const newObject = {};
-  args.forEach(object => {
-    Object.keys(object).forEach(i => {
-      if ({}.hasOwnProperty.call(object, i)) {
-        newObject[i] = object[i];
-      }
-    });
-  });
-  return newObject;
-};
+}
+$.delegate = delegate;
 
 // Bind an event to element, only run the callback once.
 $.once = function once(element, event, callback) {
@@ -51,15 +52,13 @@ $.ready = function ready() {
   });
 };
 
-$.fetch = function fetch(input, init) {
-  let def = {
+export function fetch(input, init = {}) {
+  const defaults = {
     credentials: "same-origin",
   };
-  if (init) {
-    def = $.extend(def, init);
-  }
-  return window.fetch(input, def);
-};
+  return window.fetch(input, Object.assign(defaults, init));
+}
+$.fetch = fetch;
 
 // Fuzzy match a pattern against a string.
 //
@@ -110,4 +109,13 @@ export function handleJSON(response) {
     }
     return data;
   });
+}
+
+// Handles text content for a Promise returned by fetch, also handling an HTTP
+// error status.
+export function handleText(response) {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
+  }
+  return response.text();
 }

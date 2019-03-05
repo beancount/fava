@@ -1,5 +1,6 @@
 2017-01-01 custom "fava-option" "import-config" "import.config"
 2017-01-01 custom "fava-option" "import-dirs" "."
+option "documents" "./"
 2017-01-01 open Assets:Checking
 2017-01-01 open Expenses:Widgets
 

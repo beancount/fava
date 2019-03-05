@@ -60,7 +60,11 @@
     }|tojson|safe }}</script>
       {%- if not g.partial %}
     </article>
-    {% include "_overlays.html" %}
+    <template id="export-overlay-content">
+      <h3>{{ _('Export') }}:</h3>
+      <a href="{{ url_for('download_journal') }}" data-remote>{{ _('Download currently filtered entries as a Beancount file') }}</a>
+    </template>
+    <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
     <ul id="notifications" class="notifications"></ul>
     <div id="tooltip" class="tooltip"></div>
     <script type="text/javascript" src="{{ static_url(filename='gen/app.js') }}"></script>

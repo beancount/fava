@@ -5,7 +5,7 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "lint": "eslint javascript --fix && stylelint 'css/*.css' --fix && npm run format",
-    "format": "cd ../../ && prettier '**/*.{css,js,md}' --check --write --ignore-path .gitignore"
+    "format": "cd ../../ && prettier '**/*.{css,js,md,svelte}' --check --write --ignore-path .gitignore"
   },
   "husky": {
     "hooks": {
@@ -17,7 +17,7 @@
       "stylelint --fix",
       "git add"
     ],
-    "*.{css,js,md}": [
+    "*.{css,js,svelte,md}": [
       "prettier --write",
       "git add"
     ],
@@ -28,7 +28,13 @@
   },
   "prettier": {
     "proseWrap": "always",
-    "trailingComma": "es5"
+    "trailingComma": "es5",
+    "overrides": [
+      {
+        "files": "*.svelte",
+        "options": { "parser": "html", "tabWidth": 2 }
+      }
+    ]
   },
   "eslintConfig": {
     "extends": [

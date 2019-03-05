@@ -44,7 +44,7 @@ function addInternalNodesAsLeaves(node) {
     addInternalNodesAsLeaves(o);
   });
   if (node.children && node.children.length) {
-    const copy = $.extend(node);
+    const copy = Object.assign({}, node);
     copy.children = null;
     copy.dummy = true;
     node.children.push(copy);

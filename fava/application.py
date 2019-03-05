@@ -30,7 +30,7 @@ from flask import (
     render_template_string,
 )
 import flask
-from flask_babel import Babel
+from flask_babel import Babel, get_translations
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
@@ -192,7 +192,8 @@ def url_for_source(**kwargs):
 @app.context_processor
 def template_context():
     """Inject variables into the template context."""
-    return dict(ledger=g.ledger)
+    catalog = get_translations()._catalog
+    return dict(ledger=g.ledger, translations=catalog)
 
 
 @app.before_request

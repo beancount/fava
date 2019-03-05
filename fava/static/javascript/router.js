@@ -6,7 +6,7 @@
 import { $, $$ } from "./helpers";
 import e from "./events";
 import initSort from "./sort";
-import handleHash from "./overlays";
+import { urlHash } from "./stores";
 
 // Set the query string to match the filter inputs and the interval and
 // conversion <select>'s.
@@ -36,7 +36,7 @@ class Router {
   // This should be called once when the page has been loaded. Initializes the
   // router and takes over clicking on links.
   init() {
-    handleHash();
+    urlHash.set(window.location.hash.slice(1));
     this.updateState();
 
     window.addEventListener("popstate", () => {
@@ -45,7 +45,7 @@ class Router {
         window.location.pathname === this.state.pathname &&
         window.location.search === this.state.search
       ) {
-        handleHash();
+        urlHash.set(window.location.hash.slice(1));
         this.updateState();
       } else if (
         window.location.pathname !== this.state.pathname ||
@@ -99,7 +99,7 @@ class Router {
           $("article").innerHTML = data;
           svg.classList.remove("loading");
           e.trigger("page-loaded");
-          handleHash();
+          urlHash.set(window.location.hash.slice(1));
         });
       },
       () => {
