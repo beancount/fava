@@ -1,6 +1,7 @@
 import commonjs from "rollup-plugin-commonjs";
 import css from "rollup-plugin-css-only";
 import json from "rollup-plugin-json";
+import svelte from "rollup-plugin-svelte";
 import nodeResolve from "rollup-plugin-node-resolve";
 
 import fs from "fs";
@@ -44,6 +45,7 @@ export default {
     commonjs({
       include: "node_modules/**",
     }),
+    svelte(),
     json(),
     css(),
     copy(fonts),

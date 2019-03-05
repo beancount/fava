@@ -305,6 +305,10 @@ def insert_entry(entry, filenames, fava_options):
 
 def _format_entry(entry, fava_options):
     """Wrapper that strips unnecessary whitespace from format_entry."""
+    meta = {
+        key: entry.meta[key] for key in entry.meta if not key.startswith("_")
+    }
+    entry = entry._replace(meta=meta)
     string = align(format_entry(entry), fava_options)
     return "\n".join((line.rstrip() for line in string.split("\n")))
 

@@ -1,5 +1,5 @@
 import e from "./events";
-import { $, fuzzytest, fuzzywrap, handleJSON } from "./helpers";
+import { $, delegate, fuzzytest, fuzzywrap, handleJSON } from "./helpers";
 
 const accountCompletionCache = {};
 
@@ -154,17 +154,16 @@ class CompletionList {
   }
 
   // Return a promise that yields the suggestions.
-  suggestions() {
+  async suggestions() {
     if (this.list === "accounts" && this.input.closest(".entry-form")) {
-      const payee = $(
+      const payeeInput = $(
         "input[name=payee]",
         this.input.closest(".entry-form")
-      ).value.trim();
-      if (payee) {
+      );
+      if (payeeInput) {
+        const payee = payeeInput.value.trim();
         if (accountCompletionCache[payee]) {
-          return new Promise(resolve => {
-            resolve(accountCompletionCache[payee]);
-          });
+          return accountCompletionCache[payee];
         }
         const params = new URLSearchParams();
         params.set("payee", payee);
@@ -180,17 +179,13 @@ class CompletionList {
       }
     }
     if (this.list === "tags") {
-      const suggestions = window.favaAPI.tags
-        .map(tag => `#${tag}`)
-        .concat(window.favaAPI.links.map(link => `^${link}`))
-        .concat(window.favaAPI.payees.map(payee => `payee:"${payee}"`));
-      return new Promise(resolve => {
-        resolve(suggestions);
-      });
+      return [
+        ...window.favaAPI.tags.map(tag => `#${tag}`),
+        ...window.favaAPI.links.map(link => `^${link}`),
+        ...window.favaAPI.payees.map(payee => `payee:"${payee}"`),
+      ];
     }
-    return new Promise(resolve => {
-      resolve(window.favaAPI[this.list]);
-    });
+    return window.favaAPI[this.list];
   }
 
   // Set the value of the input to the selected value.
@@ -207,7 +202,7 @@ class CompletionList {
     } else {
       this.input.value = value;
     }
-    e.trigger(`autocomplete-select-${this.list}`, this.input);
+    this.input.dispatchEvent(new Event("input"));
     this.input.dispatchEvent(new Event("autocomplete-select"));
   }
 }
@@ -215,7 +210,7 @@ class CompletionList {
 e.on("page-init", () => {
   const completer = new CompletionList();
 
-  $.delegate(document, "focusin", "input", event => {
+  delegate(document.body, "focusin", "input", event => {
     completer.show(event.target);
   });
 });

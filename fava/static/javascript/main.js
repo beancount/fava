@@ -25,9 +25,6 @@
  * reload:
  *    This triggers a reload of the page.
  *
- * close-overlay:
- *    Close any open overlays.
- *
  * button-click-*:
  *    For <button>s that have a `data-event` attribute, the event
  *    `button-click-${data-event}` will be triggered.
@@ -46,7 +43,6 @@ import "../css/entry-forms.css";
 import "../css/fonts.css";
 import "../css/header.css";
 import "../css/help.css";
-import "../css/ingest.css";
 import "../css/journal-table.css";
 import "../css/media-mobile.css";
 import "../css/media-print.css";
@@ -61,19 +57,16 @@ import "codemirror/addon/hint/show-hint.css";
 import "./autocomplete";
 import "./charts";
 import "./clipboard";
-import "./documents-upload";
 import "./editor";
-import "./entry-forms";
 import "./filters";
-import "./ingest";
 import "./journal";
 import "./keyboard-shortcuts";
 import "./notifications";
-import "./overlays";
 import "./sidebar";
 import "./sort";
-import "./transaction-overlay";
 import "./tree-table";
+
+import Modals from "./modals/Modals.svelte";
 
 e.on("page-loaded", () => {
   window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
@@ -83,6 +76,9 @@ e.on("page-loaded", () => {
 });
 
 e.on("page-init", () => {
+  // eslint-disable-next-line
+  new Modals({ target: document.body });
+
   // Watch for all clicks on <button>s and fire the appropriate events.
   $.delegate(document.body, "click", "button", event => {
     const button = event.target.closest("button");

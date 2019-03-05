@@ -2,6 +2,7 @@ import Mousetrap from "mousetrap";
 
 import { $, $$ } from "./helpers";
 import e from "./events";
+import { closeOverlay } from "./stores";
 
 function click(selector) {
   const element = $(selector);
@@ -73,7 +74,7 @@ e.on("page-init", () => {
   });
 
   Mousetrap.bind("esc", () => {
-    e.trigger("close-overlay");
+    closeOverlay();
     removeTooltips();
   });
 
