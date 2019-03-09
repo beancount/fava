@@ -177,7 +177,7 @@ def leading_space(line):
 def insert_metadata_in_file(filename, lineno, key, value):
     """Inserts the specified metadata in the file below lineno, taking into
     account the whitespace in front of the line that lineno."""
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         contents = file.readlines()
 
     # use the whitespace of the following line, else use double the whitespace
@@ -185,7 +185,7 @@ def insert_metadata_in_file(filename, lineno, key, value):
 
     contents.insert(lineno + 1, '{}{}: "{}"\n'.format(indention, key, value))
 
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding="utf-8") as file:
         contents = "".join(contents)
         file.write(contents)
 
@@ -220,7 +220,7 @@ def get_entry_slice(entry):
             source files.
 
     """
-    with open(entry.meta["filename"], mode="r") as file:
+    with open(entry.meta["filename"], mode="r", encoding="utf-8") as file:
         lines = file.readlines()
 
     entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
@@ -247,7 +247,7 @@ def save_entry_slice(entry, source_slice, sha256sum):
 
     """
 
-    with open(entry.meta["filename"], "r") as file:
+    with open(entry.meta["filename"], "r", encoding="utf-8") as file:
         lines = file.readlines()
 
     first_entry_line = entry.meta["lineno"] - 1
@@ -262,7 +262,7 @@ def save_entry_slice(entry, source_slice, sha256sum):
         + [source_slice + "\n"]
         + lines[first_entry_line + len(entry_lines) :]
     )
-    with open(entry.meta["filename"], "w") as file:
+    with open(entry.meta["filename"], "w", encoding="utf-8") as file:
         file.writelines(lines)
 
     return sha256(codecs.encode(source_slice)).hexdigest()
@@ -287,12 +287,12 @@ def insert_entry(entry, filenames, fava_options):
     )
     content = _format_entry(entry, fava_options) + "\n"
 
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         contents = file.readlines()
 
     contents.insert(lineno, content)
 
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding="utf-8") as file:
         file.writelines(contents)
 
     for index, option in enumerate(insert_options):
@@ -325,4 +325,4 @@ def find_insert_position(accounts, date, insert_options, filenames):
             if insert_option.re.match(account):
                 return (insert_option.filename, insert_option.lineno - 1)
 
-    return (filenames[0], len(open(filenames[0]).readlines()) + 1)
+    return (filenames[0], len(open(filenames[0], encoding="utf-8").readlines()) + 1)
