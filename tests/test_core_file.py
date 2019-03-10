@@ -308,3 +308,13 @@ def test_render_entries(example_ledger):
     assert file_content == "\n".join(
         example_ledger.file.render_entries([entry1, entry2])
     )
+
+
+def test_utf8_content(utf8_ledger):
+    entry = utf8_ledger.get_entry("b11cd783fba370a9da24f1e54e855e06")
+    entry_slice, sha256sum = get_entry_slice(entry)
+    entry_source = """2019-03-10 * "Árvíztűrő tükörfúrógép" "Árvíztűrő tükörfúrógép"
+    Expenses:Example  100 HUF
+    Assets:Example -100 HUF
+    """
+    save_entry_slice(entry, entry_source, sha256sum)

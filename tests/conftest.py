@@ -49,6 +49,11 @@ def example_ledger():
 
 
 @pytest.fixture
+def utf8_ledger():
+    return FavaLedger(data_file("utf8.beancount"))
+
+
+@pytest.fixture
 def budgets_doc(request):
     entries, _, _ = load_string(request.function.__doc__, dedent=True)
     budgets, _ = parse_budgets(entries)
