@@ -310,11 +310,14 @@ def test_render_entries(example_ledger):
     )
 
 
-def test_utf8_content(utf8_ledger):
+def test_utf8_content(utf8_ledger, tmpdir):
     entry = utf8_ledger.get_entry("b11cd783fba370a9da24f1e54e855e06")
     entry_slice, sha256sum = get_entry_slice(entry)
     entry_source = """2019-03-10 * "Árvíztűrő tükörfúrógép" "Árvíztűrő tükörfúrógép"
     Expenses:Example  100 HUF
-    Assets:Example -100 HUF
-    """
+    Assets:Example -100 HUF"""
     save_entry_slice(entry, entry_source, sha256sum)
+    f = tmpdir.mkdir("test_utf8_content").join("utf8.beancount")
+    f.write_text(entry_source, encoding="utf-8")
+    insert_metadata_in_file(f, 0, 'test', 'value')
+    insert_entry(entry, [f], fava_options={})
