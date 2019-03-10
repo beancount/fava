@@ -311,6 +311,13 @@ def test_render_entries(example_ledger):
 
 
 def test_utf8_content(utf8_ledger, tmpdir):
+    """this test makes sure all relevant methods work on utf-8 encoded ledger files
+
+    * get_entry_slice()
+    * save_entry_slice()
+    * insert_metadata_in_file()
+    * insert_enty()
+    """
     entry = utf8_ledger.get_entry("b11cd783fba370a9da24f1e54e855e06")
     entry_slice, sha256sum = get_entry_slice(entry)
     entry_source = """2019-03-10 * "Árvíztűrő tükörfúrógép" "Árvíztűrő tükörfúrógép"
