@@ -2,6 +2,7 @@
 /.coverage
 /.eggs
 /.tox
+/.idea/
 /build/
 /dist/
 /docs/api/
