@@ -36,16 +36,16 @@ def test_save_entry_slice(example_ledger):
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = entry.meta["filename"]
-    contents = open(filename).read()
+    contents = open(filename, encoding="utf-8").read()
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert open(filename).read() == contents
+        assert open(filename, encoding="utf-8").read() == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
-    assert open(filename).read() != contents
+    assert open(filename, encoding="utf-8").read() != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
-    assert open(filename).read() == contents
+    assert open(filename, encoding="utf-8").read() == contents
 
 
 def test_next_key():
@@ -308,23 +308,3 @@ def test_render_entries(example_ledger):
     assert file_content == "\n".join(
         example_ledger.file.render_entries([entry1, entry2])
     )
-
-
-def test_utf8_content(utf8_ledger, tmpdir):
-    """this test makes sure all relevant methods work on utf-8 encoded ledger files
-
-    * get_entry_slice()
-    * save_entry_slice()
-    * insert_metadata_in_file()
-    * insert_enty()
-    """
-    entry = utf8_ledger.get_entry("b11cd783fba370a9da24f1e54e855e06")
-    sha256sum = get_entry_slice(entry)[1]
-    entry_source = """2019-03-10 * "Árvíztűrő tükörfúrógép" "Árvíztűrő tükörfúrógép"
-    Expenses:Example  100 HUF
-    Assets:Example -100 HUF"""
-    save_entry_slice(entry, entry_source, sha256sum)
-    tmpfile = tmpdir.mkdir("test_utf8_content").join("utf8.beancount")
-    tmpfile.write_text(entry_source, encoding="utf-8")
-    insert_metadata_in_file(tmpfile, 0, "test", "value")
-    insert_entry(entry, [tmpfile], fava_options={})

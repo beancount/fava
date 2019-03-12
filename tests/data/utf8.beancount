@@ -1,7 +1,0 @@
-option "title" "UTF-8 Example"
-option "operating_currency" "HUF"
-plugin "beancount.plugins.auto_accounts"
-
-2019-03-10 * "Árvíztűrő tükörfúrógép" "Árvíztűrő tükörfúrógép"
-    Expenses:Example  100 HUF
-    Assets:Example -100 HUF

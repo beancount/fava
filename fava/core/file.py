@@ -325,4 +325,7 @@ def find_insert_position(accounts, date, insert_options, filenames):
             if insert_option.re.match(account):
                 return (insert_option.filename, insert_option.lineno - 1)
 
-    return (filenames[0], len(open(filenames[0], encoding="utf-8").readlines()) + 1)
+    return (
+        filenames[0],
+        len(open(filenames[0], encoding="utf-8").readlines()) + 1,
+    )
