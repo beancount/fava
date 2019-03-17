@@ -4,6 +4,7 @@ import codecs
 from hashlib import sha256
 import os
 import re
+from chardet.universaldetector import UniversalDetector
 
 from beancount.core import data, flags
 from beancount.parser.printer import format_entry
@@ -177,7 +178,8 @@ def leading_space(line):
 def insert_metadata_in_file(filename, lineno, key, value):
     """Inserts the specified metadata in the file below lineno, taking into
     account the whitespace in front of the line that lineno."""
-    with open(filename, "r") as file:
+    detected_encoding = detect_encoding(filename)
+    with open(filename, "r", encoding=detected_encoding) as file:
         contents = file.readlines()
 
     # use the whitespace of the following line, else use double the whitespace
@@ -185,7 +187,7 @@ def insert_metadata_in_file(filename, lineno, key, value):
 
     contents.insert(lineno + 1, '{}{}: "{}"\n'.format(indention, key, value))
 
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding=detected_encoding) as file:
         contents = "".join(contents)
         file.write(contents)
 
@@ -220,7 +222,11 @@ def get_entry_slice(entry):
             source files.
 
     """
-    with open(entry.meta["filename"], mode="r") as file:
+    with open(
+        entry.meta["filename"],
+        mode="r",
+        encoding=detect_encoding(entry.meta["filename"]),
+    ) as file:
         lines = file.readlines()
 
     entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
@@ -246,8 +252,8 @@ def save_entry_slice(entry, source_slice, sha256sum):
             source files.
 
     """
-
-    with open(entry.meta["filename"], "r") as file:
+    detected_encoding = detect_encoding(entry.meta["filename"])
+    with open(entry.meta["filename"], "r", encoding=detected_encoding) as file:
         lines = file.readlines()
 
     first_entry_line = entry.meta["lineno"] - 1
@@ -262,7 +268,7 @@ def save_entry_slice(entry, source_slice, sha256sum):
         + [source_slice + "\n"]
         + lines[first_entry_line + len(entry_lines) :]
     )
-    with open(entry.meta["filename"], "w") as file:
+    with open(entry.meta["filename"], "w", encoding=detected_encoding) as file:
         file.writelines(lines)
 
     return sha256(codecs.encode(source_slice)).hexdigest()
@@ -287,12 +293,13 @@ def insert_entry(entry, filenames, fava_options):
     )
     content = _format_entry(entry, fava_options) + "\n"
 
-    with open(filename, "r") as file:
+    detected_encoding = detect_encoding(filename)
+    with open(filename, "r", encoding=detected_encoding) as file:
         contents = file.readlines()
 
     contents.insert(lineno, content)
 
-    with open(filename, "w") as file:
+    with open(filename, "w", encoding=detected_encoding) as file:
         file.writelines(contents)
 
     for index, option in enumerate(insert_options):
@@ -324,5 +331,34 @@ def find_insert_position(accounts, date, insert_options, filenames):
                 break
             if insert_option.re.match(account):
                 return (insert_option.filename, insert_option.lineno - 1)
+    lines = open(
+        filenames[0], "r", encoding=detect_encoding(filenames[0])
+    ).readlines()
 
-    return (filenames[0], len(open(filenames[0]).readlines()) + 1)
+    return (filenames[0], len(lines) + 1)
+
+
+def detect_encoding(filename: str) -> str:
+    """Returns detected encoding of a given file
+
+    When this routine detects ascii it will return utf-8 instead to handle the
+    use case when user opens a file without special characters but adds some
+    during the usage of fava (for example inserts a slice on the web interface
+    with special characters).
+
+    This will only read file contents until it's fairly sure an encoding is
+    detected which is cheaper than committing the whole file into the memory.
+    """
+    detector = UniversalDetector()
+    with open(filename, "rb") as file:
+        for line in file:
+            # feed only a line at once
+            detector.feed(line)
+            if detector.done:
+                # if we're confident enough we found the encoding, break
+                break
+        detector.close()
+    if detector.result["encoding"] == "ascii":
+        # this is the default when no unicode encoding was detected
+        return "utf-8"
+    return detector.result["encoding"]

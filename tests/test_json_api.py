@@ -67,7 +67,7 @@ def test_api_source_put(app, test_client):
     assert response.status_code == 200
 
     path = app.config["BEANCOUNT_FILES"][0]
-    payload = open(path).read()
+    payload = open(path, "r", encoding="utf-8").read()
     sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
 
     # change source
@@ -88,7 +88,7 @@ def test_api_source_put(app, test_client):
     assert response_data == {"success": True, "sha256sum": sha256sum}
 
     # check if the file has been written
-    assert open(path).read() == "asdf" + payload
+    assert open(path, "r", encoding="utf-8").read() == "asdf" + payload
 
     # write original source file
     result = test_client.put(
@@ -99,7 +99,7 @@ def test_api_source_put(app, test_client):
         content_type="application/json",
     )
     assert result.status_code == 200
-    assert open(path).read() == payload
+    assert open(path, "r", encoding="utf-8").read() == payload
 
 
 def test_api_format_source(app, test_client):
@@ -108,7 +108,7 @@ def test_api_format_source(app, test_client):
         url = flask.url_for("json_api.format_source")
 
     path = app.config["BEANCOUNT_FILES"][0]
-    payload = open(path).read()
+    payload = open(path, "r", encoding="utf-8").read()
 
     result = test_client.post(
         url,
@@ -122,7 +122,7 @@ def test_api_format_source(app, test_client):
 def test_api_format_source_options(app, test_client):
     # pylint: disable=too-many-function-args
     path = app.config["BEANCOUNT_FILES"][0]
-    payload = open(path).read()
+    payload = open(path, "r", encoding="utf-8").read()
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.format_source")
@@ -148,7 +148,7 @@ def test_api_add_entries(app, test_client, tmpdir):
         app.preprocess_request()
         old_beancount_file = flask.g.ledger.beancount_file_path
         test_file = tmpdir.join("test_file")
-        test_file.open("a")
+        test_file.open("a", encoding="utf-8")
         flask.g.ledger.beancount_file_path = str(test_file)
 
         data = {

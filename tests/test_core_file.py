@@ -16,6 +16,7 @@ from fava.core.file import (
     insert_entry,
     get_entry_slice,
     save_entry_slice,
+    detect_encoding,
 )
 from fava.core.fava_options import InsertEntryOption
 
@@ -36,16 +37,16 @@ def test_save_entry_slice(example_ledger):
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = entry.meta["filename"]
-    contents = open(filename).read()
+    contents = open(filename, "r", encoding="utf-8").read()
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert open(filename).read() == contents
+        assert open(filename, encoding="utf-8").read() == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
-    assert open(filename).read() != contents
+    assert open(filename, encoding="utf-8").read() != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
-    assert open(filename).read() == contents
+    assert open(filename, encoding="utf-8").read() == contents
 
 
 def test_next_key():
@@ -307,4 +308,13 @@ def test_render_entries(example_ledger):
 
     assert file_content == "\n".join(
         example_ledger.file.render_entries([entry1, entry2])
+    )
+
+
+def test_detect_encoding(example_ledger, small_example_ledger):
+    assert detect_encoding(example_ledger.file.list_sources()[0]) == "utf-8"
+    # this file is actually in ascii, but detect_encoding() will return utf-8
+    # as the default instead
+    assert (
+        detect_encoding(small_example_ledger.file.list_sources()[0]) == "utf-8"
     )
