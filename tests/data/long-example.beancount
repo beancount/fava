@@ -1,7 +1,6 @@
 ;; -*- mode: org; mode: beancount; -*-
 ;; Birth: 1980-05-12
 ;; Dates: 2014-01-01 - 2016-05-09
-;; THIS FILE HAS BEEN AUTO-GENERATED.
 * Options
 
 option "title" "Example Beancount file"
@@ -5811,7 +5810,7 @@ option "operating_currency" "USD"
   Assets:Testing:MultipleCommodities                    1 XYZ {50 USD}
   Assets:Testing:MultipleCommodities                  -50 USD
 
-2000-01-03 *
+2000-01-03 * "Árvíztűrő tükörfúrógép" "Árvíztűrő tükörfúrógép"
   Assets:Testing:MultipleCommodities                    1 ABC {50 USD}
   Assets:Testing:MultipleCommodities                  -50 USD
 
