@@ -36,16 +36,16 @@ def test_save_entry_slice(example_ledger):
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = entry.meta["filename"]
-    contents = open(filename).read()
+    contents = open(filename, encoding="utf-8").read()
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert open(filename).read() == contents
+        assert open(filename, encoding="utf-8").read() == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
-    assert open(filename).read() != contents
+    assert open(filename, encoding="utf-8").read() != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
-    assert open(filename).read() == contents
+    assert open(filename, encoding="utf-8").read() == contents
 
 
 def test_next_key():

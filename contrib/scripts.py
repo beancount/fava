@@ -46,7 +46,7 @@ def generate_bql_grammar_json():
         os.path.dirname(__file__),
         "../fava/static/javascript/codemirror/bql-grammar.json",
     )
-    with open(path, "w") as json_file:
+    with open(path, "w", encoding="utf-8") as json_file:
         json.dump(data, json_file)
 
 
