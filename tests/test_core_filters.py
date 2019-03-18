@@ -42,6 +42,14 @@ def test_lexer_basic():
         list(LEX("|"))
 
 
+def test_lexer_literals_in_string():
+    data = "string-2-2 string"
+    assert [(tok.type, tok.value) for tok in LEX(data)] == [
+        ("STRING", "string-2-2"),
+        ("STRING", "string"),
+    ]
+
+
 def test_lexer_key():
     data = 'payee:asdfasdf ^some_link somekey:"testtest" '
     assert [(tok.type, tok.value) for tok in LEX(data)] == [

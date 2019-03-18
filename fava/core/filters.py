@@ -41,7 +41,7 @@ class FilterSyntaxLexer:
         ("KEY", r"[a-z][a-zA-Z0-9\-_]+:"),
         ("ALL", r"all\("),
         ("ANY", r"any\("),
-        ("STRING", r'\w+|"[^"]*"|\'[^\']*\''),
+        ("STRING", r'\w[-\w]*|"[^"]*"|\'[^\']*\''),
     )
 
     regex = re.compile(
