@@ -6,9 +6,14 @@
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
 
-  // TODO change amount
-
   export let entry;
+
+  $: if (entry && !entry.amount) {
+    entry.amount = {
+      number: "",
+      currency: "",
+    };
+  }
 </script>
 <div class="entry-form balance">
   <div class="fieldset">
@@ -20,14 +25,14 @@
       class="number"
       pattern="[0-9.,]*"
       placeholder="{_('Number')}"
-      value="{entry.amount ? entry.amount.number : '' }"
+      bind:value="{entry.amount.number}"
     />
     <input
       type="text"
       class="currency"
       placeholder="{_('Currency')}"
       list="currencies"
-      value="{entry.amount ? entry.amount.currency : '' }"
+      bind:value="{entry.amount.currency}"
     />
     <AddMetadataButton bind:meta="{entry.meta}" />
   </div>
