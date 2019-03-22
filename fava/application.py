@@ -73,7 +73,6 @@ REPORTS = [
     "events",
     "editor",
     "errors",
-    "extract",
     "holdings",
     "import",
     "income_statement",

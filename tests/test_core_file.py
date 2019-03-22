@@ -132,7 +132,7 @@ def test_insert_entry_transaction(tmpdir):
     ]
 
     transaction = data.Transaction(
-        None,
+        {},
         datetime.date(2016, 1, 1),
         "*",
         "new payee",
@@ -263,7 +263,7 @@ def test_insert_entry_align(tmpdir):
     ]
 
     transaction = data.Transaction(
-        None,
+        {},
         datetime.date(2016, 1, 1),
         "*",
         "new payee",
