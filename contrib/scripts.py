@@ -4,15 +4,16 @@
 import json
 import os
 
-from beancount.query import query_env
-from beancount.query import query_parser
 import click
 import requests
+from beancount.query import query_env
+from beancount.query import query_parser
+
+from fava import LOCALES
 
 BASE_PATH = os.path.normpath(
     os.path.join(os.path.dirname(__file__), "../fava")
 )
-LANGUAGES = ["de", "es", "fr", "nl", "pt", "ru", "zh-CN", "sk", "uk"]
 
 
 @click.group()
@@ -58,9 +59,8 @@ def download_translations():
         raise click.UsageError(
             "The POEDITOR_TOKEN environment variable needs to be set."
         )
-    for language in LANGUAGES:
-        download_from_poeditor(language, "po", token)
-        download_from_poeditor(language, "mo", token)
+    for language in LOCALES:
+        download_from_poeditor(language, token)
 
 
 @cli.command()
@@ -77,7 +77,7 @@ def upload_translations():
         "api_token": token,
         "id": 90283,
         "updating": "terms",
-        "sync_terms": 1,
+        # "sync_terms": 1,
     }
     files = {"file": open(path, "rb")}
     request = requests.post(
@@ -86,15 +86,15 @@ def upload_translations():
     click.echo("Done: " + str(request.json()["result"]["terms"]))
 
 
-def download_from_poeditor(language, format_, token):
-    """Download .{po,mo}-file from POEditor and save to disk."""
-    click.echo(f'Downloading .{format_}-file for language "{language}"')
+def download_from_poeditor(language, token):
+    """Download .po-file from POEditor and save to disk."""
+    click.echo(f'Downloading .po-file for language "{language}"')
     language_short = language[:2]
     data = {
         "api_token": token,
         "id": 90283,
         "language": language,
-        "type": format_,
+        "type": "po",
     }
     request = requests.post(
         "https://api.poeditor.com/v2/projects/export", data=data
@@ -106,7 +106,7 @@ def download_from_poeditor(language, format_, token):
     )
     if not os.path.exists(folder):
         os.makedirs(folder)
-    path = os.path.join(folder, f"messages.{format_}")
+    path = os.path.join(folder, f"messages.po")
     with open(path, "wb") as file_:
         file_.write(content)
     click.echo(f'Downloaded to "{path}"')

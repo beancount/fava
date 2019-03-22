@@ -38,7 +38,7 @@ from beancount.utils.text_utils import replace_numbers
 from beancount.core.data import Document
 from beancount.core.account import ACCOUNT_RE
 
-from fava import template_filters
+from fava import template_filters, LANGUAGES
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException
@@ -48,7 +48,6 @@ from fava.serialisation import serialise
 from fava.util import slugify, resource_path, setup_logging, send_file_inline
 from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
-
 
 setup_logging()
 app = Flask(  # pylint: disable=invalid-name
@@ -117,9 +116,7 @@ def get_locale():
     """
     if g.ledger.fava_options["language"]:
         return g.ledger.fava_options["language"]
-    return request.accept_languages.best_match(
-        ["de", "en", "es", "zh", "nl", "fr", "pt", "sk", "uk"]
-    )
+    return request.accept_languages.best_match(LANGUAGES)
 
 
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
@@ -192,6 +189,7 @@ def url_for_source(**kwargs):
 @app.context_processor
 def template_context():
     """Inject variables into the template context."""
+    # pylint: disable=protected-access
     catalog = get_translations()._catalog
     return dict(ledger=g.ledger, translations=catalog)
 
