@@ -57,18 +57,23 @@ before-release: bql-grammar translations-push translations-fetch
 upload: dist
 	twine upload dist/*
 
+# Extract translation strings.
+.PHONY: translations-extract
+translations-extract:
+	pybabel extract -F fava/translations/babel.conf -o fava/translations/messages.pot ./fava
+
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token
 # for POEditor.
 .PHONY: translations-push
-translations-push:
-	pybabel extract -F fava/translations/babel.conf -k lazy_gettext -o fava/translations/messages.pot ./fava
+translations-push: translations-extract
 	contrib/scripts.py upload-translations
 
 # Download translations from POEditor.com. (also requires POEDITOR_TOKEN)
 .PHONY: translations-fetch
 translations-fetch:
 	contrib/scripts.py download-translations
+	pybabel compile -d fava/translations
 
 # Build and upload the website.
 .PHONY: gh-pages

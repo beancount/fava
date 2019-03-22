@@ -25,6 +25,7 @@ languages:
 -   English (`en`)
 -   French (`fr`)
 -   German (`de`)
+-   Persian (`fa`)
 -   Portuguese (`pt`)
 -   Russian (`ru`)
 -   Slovak (`sk`)
