@@ -144,8 +144,7 @@ def test_deserialise_balance():
         "type": "Balance",
         "date": "2017-12-12",
         "account": "Assets:ETrade:Cash",
-        "number": "100",
-        "currency": "USD",
+        "amount": {"number": "100", "currency": "USD"},
         "meta": {},
     }
     bal = Balance(
