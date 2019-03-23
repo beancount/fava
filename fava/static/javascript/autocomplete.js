@@ -168,10 +168,10 @@ class CompletionList {
         const params = new URLSearchParams();
         params.set("payee", payee);
         return $.fetch(
-          `${window.favaAPI.baseURL}api/payee-accounts/?${params.toString()}`
+          `${window.favaAPI.baseURL}api/payee_accounts/?${params.toString()}`
         )
           .then(handleJSON)
-          .then(data => data.payload)
+          .then(responseData => responseData.data)
           .then(suggestions => {
             accountCompletionCache[payee] = suggestions;
             return suggestions;

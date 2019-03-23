@@ -1,7 +1,7 @@
 // This script updates the links and error count in the sidebar as well as
 // toggling the sidebar on mobile.
 
-import { $, $$, handleJSON } from "./helpers";
+import { $, $$, fetchAPI } from "./helpers";
 import e from "./events";
 
 function initSidebar() {
@@ -26,10 +26,8 @@ e.on("page-loaded", () => {
 });
 
 e.on("file-modified", () => {
-  $.fetch(`${window.favaAPI.baseURL}api/errors/`)
-    .then(handleJSON)
-    .then(data => {
-      $("#data-error-count").value = data.errors;
-      initSidebar();
-    });
+  fetchAPI("errors").then(errors => {
+    $("#data-error-count").value = errors;
+    initSidebar();
+  });
 });

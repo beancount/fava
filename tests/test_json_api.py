@@ -16,7 +16,7 @@ def test_api_changed(app, test_client):
 
     result = test_client.get(url)
     response_data = flask.json.loads(result.get_data(True))
-    assert response_data == {"changed": False, "success": True}
+    assert response_data == {"data": False, "success": True}
 
 
 def test_api_add_document(app, test_client, tmpdir):
