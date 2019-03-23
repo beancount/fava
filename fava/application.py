@@ -342,7 +342,7 @@ def help_page(page_slug="_index"):
     )
     return render_template(
         "_layout.html",
-        active_page='help',
+        active_page="help",
         page_slug=page_slug,
         help_html=render_template_string(html),
     )
