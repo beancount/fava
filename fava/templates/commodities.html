@@ -1,7 +1,3 @@
-{% extends "_layout.html" %}
-{% set active_page = 'commodities' %}
-
-{% block content %}
 {{ charts.skeleton(hide_interval_filter=True) }}
 {{ charts.commodities() }}
 
@@ -27,4 +23,3 @@
 </div>
 {% endif %}
 {% endfor %}
-{% endblock %}

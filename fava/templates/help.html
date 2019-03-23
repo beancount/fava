@@ -1,9 +1,3 @@
-{% extends "_layout.html" %}
-{% set active_page = 'help' %}
-
-{% set page_title=_('Help - %(title)s', title=config['HELP_PAGES'][page_slug]) %}
-
-{% block content %}
 <div class="help">
   <div class="help-sidebar">
     <h3>{{ _('Help pages') }}</h3>
@@ -17,4 +11,3 @@
     {{ help_html|safe }}
   </div>
 </div>
-{% endblock %}

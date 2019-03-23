@@ -1,48 +1,44 @@
-{% extends "_layout.html" %}
-{% set active_page = 'editor' %}
 {% set file_path = request.args.get('file_path', ledger.fava_options['default-file'] or ledger.beancount_file_path) %}
 
-{% block content %}
-  <form id="source-editor-form" class="source-form">
-    <div class="fieldset">
-      <ul class="dropdown">
-        <li>{{ _('File') }}&nbsp;▾
-          <ul>
-            {% for source_file in ledger.file.list_sources() %}
-              <li {% if source_file == file_path %} class="selected"{% endif %}>
-                <a href="{{ url_for_source(file_path=source_file) }}">{{ source_file }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-        <li>{{ _('Edit') }}&nbsp;▾
-          <ul>
-            <li>
-              <button data-command="favaFormat" type="button" class="link">{{ _('Align Amounts') }}</button>
-              <span>
-                <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>d</kbd>
-              </span>
-            </li>
-            <li>
-              <button data-command="favaToggleComment" type="button" class="link">{{ _('Toggle Comment (selection)') }}</button>
-              <span>
-                <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>y</kbd>
-              </span>
-            </li>
-            <li>
-              <button data-command="unfoldAll" type="button" class="link">{{ _('Open all folds') }}</button>
-            </li>
-            <li>
-              <button data-command="foldAll" type="button" class="link">{{ _('Close all folds') }}</button>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <button id="source-editor-submit" type="button" disabled data-command="favaSave" data-filename="{{ file_path }}" data-progress-content="{{ _('Saving...') }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>
-    </div>
-    <div class="source-editor-wrapper">
-      {% set source, sha256sum = ledger.file.get_source(file_path) %}
-      <textarea id="source-editor" name="source" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ source or '' }}</textarea>
-    </div>
-  </form>
-{% endblock %}
+<form id="source-editor-form" class="source-form">
+  <div class="fieldset">
+    <ul class="dropdown">
+      <li>{{ _('File') }}&nbsp;▾
+        <ul>
+          {% for source_file in ledger.file.list_sources() %}
+          <li {% if source_file == file_path %} class="selected"{% endif %}>
+            <a href="{{ url_for_source(file_path=source_file) }}">{{ source_file }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li>{{ _('Edit') }}&nbsp;▾
+        <ul>
+          <li>
+            <button data-command="favaFormat" type="button" class="link">{{ _('Align Amounts') }}</button>
+            <span>
+              <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>d</kbd>
+            </span>
+          </li>
+          <li>
+            <button data-command="favaToggleComment" type="button" class="link">{{ _('Toggle Comment (selection)') }}</button>
+            <span>
+              <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>y</kbd>
+            </span>
+          </li>
+          <li>
+            <button data-command="unfoldAll" type="button" class="link">{{ _('Open all folds') }}</button>
+          </li>
+          <li>
+            <button data-command="foldAll" type="button" class="link">{{ _('Close all folds') }}</button>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <button id="source-editor-submit" type="button" disabled data-command="favaSave" data-filename="{{ file_path }}" data-progress-content="{{ _('Saving...') }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>
+  </div>
+  <div class="source-editor-wrapper">
+    {% set source, sha256sum = ledger.file.get_source(file_path) %}
+    <textarea id="source-editor" name="source" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ source or '' }}</textarea>
+  </div>
+</form>

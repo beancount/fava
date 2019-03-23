@@ -1,5 +1,3 @@
-{% extends "_layout.html" %}
-{% set active_page = 'holdings' %}
 {% import '_query_table.html' as querytable %}
 
 {% set holdings_all = 'SELECT account,
@@ -42,19 +40,17 @@
   'cost_currency': 0,
 } %}
 
-{% block content %}
-    <div class="headerline">
-        <h3>{% if aggregation_key %}<a href="{{ url_for('report', report_name='holdings') }}">{{ _('Holdings') }}</a>{% else %}{{ _('Holdings') }}{% endif %}</h3>
-        {% for key, label in [('account', _('Account')), ('currency', _('Currency')), ('cost_currency', _('Cost currency'))] %}
-        <h3>{% if not (aggregation_key == key) %}<a href="{{ url_for('holdings_by', aggregation_key=key) }}">{{ _('Holdings by') }} {{ label }}</a>{% else %}{{ _('Holdings by') }} {{ label }}{% endif %}</h3>
-        {% endfor %}
-    </div>
+<div class="headerline">
+  <h3>{% if aggregation_key %}<a href="{{ url_for('report', report_name='holdings') }}">{{ _('Holdings') }}</a>{% else %}{{ _('Holdings') }}{% endif %}</h3>
+  {% for key, label in [('account', _('Account')), ('currency', _('Currency')), ('cost_currency', _('Cost currency'))] %}
+  <h3>{% if not (aggregation_key == key) %}<a href="{{ url_for('holdings_by', aggregation_key=key) }}">{{ _('Holdings by') }} {{ label }}</a>{% else %}{{ _('Holdings by') }} {{ label }}{% endif %}</h3>
+  {% endfor %}
+</div>
 
-    {% set query_string = holdings_by.get(aggregation_key, holdings_all) %}
-    <p>
-      <a href={{ url_for('report', report_name='query', query_string=query_string) }}>Query</a>
-      {{ querytable.download_links(query_string) }}
-    </p>
-    {% set contents, result_types, result_rows = ledger.query_shell.execute_query(query_string) %}
-    {{ querytable.querytable(contents, result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}
-{% endblock %}
+{% set query_string = holdings_by.get(aggregation_key, holdings_all) %}
+<p>
+<a href={{ url_for('report', report_name='query', query_string=query_string) }}>Query</a>
+{{ querytable.download_links(query_string) }}
+</p>
+{% set contents, result_types, result_rows = ledger.query_shell.execute_query(query_string) %}
+{{ querytable.querytable(contents, result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}

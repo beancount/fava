@@ -1,29 +1,29 @@
 {% set placeholders = {
-    'time': _('Time'),
-    'account': _('Account'),
-    'filter': _('Filter by tag, payee, ...'),
+'time': _('Time'),
+'account': _('Account'),
+'filter': _('Filter by tag, payee, ...'),
 } %}
 {% set lists = {
-    'time': 'years',
-    'filter': 'tags',
-    'account': 'accounts',
+'time': 'years',
+'filter': 'tags',
+'account': 'accounts',
 } %}
 {% set keys = {
-    'time': 'f t',
-    'account': 'f a',
-    'filter': 'f f',
+'time': 'f t',
+'account': 'f a',
+'filter': 'f f',
 } %}
 {% macro filter_input(name) %}
-    {% set filter_value = g.filters[name] %}
-    {% set placeholder = placeholders[name] %}
-    <span{% if not filter_value %} class="empty"{% endif %}>
-      <input id="{{ name }}-filter" data-key="{{ keys[name] }}" name="{{ name }}" type="text" {{ 'list={} '.format(lists[name]) if name in lists else '' }}value="{{ filter_value or '' }}" placeholder="{{ placeholder }}" size="{{ (filter_value or placeholder)|length+1 }}">
-        <button type="button" tabindex="-1" class="close muted round" data-event="filter-clear">&times;</button>
-    </span>
+{% set filter_value = g.filters[name] %}
+{% set placeholder = placeholders[name] %}
+<span{% if not filter_value %} class="empty"{% endif %}>
+  <input id="{{ name }}-filter" data-key="{{ keys[name] }}" name="{{ name }}" type="text" {{ 'list={} '.format(lists[name]) if name in lists else '' }}value="{{ filter_value or '' }}" placeholder="{{ placeholder }}" size="{{ (filter_value or placeholder)|length+1 }}">
+  <button type="button" tabindex="-1" class="close muted round" data-event="filter-clear">&times;</button>
+</span>
 {% endmacro %}
 <form id="filter-form" class="filter-form" action="{{ url_for_current() }}" data-event="filters" method="GET">
-    {% for name in ['time', 'account', 'filter'] %}
-        {{ filter_input(name) }}
-    {% endfor %}
-    <button type="submit"></button>
+  {% for name in ['time', 'account', 'filter'] %}
+  {{ filter_input(name) }}
+  {% endfor %}
+  <button type="submit"></button>
 </form>
