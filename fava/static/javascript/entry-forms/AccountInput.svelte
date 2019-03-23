@@ -7,7 +7,7 @@
     if (window.favaAPI.accounts.includes(val)) {
       input.setCustomValidity("");
     } else {
-      input.setCustomValidity("Needs to be one of the declared accounts");
+      input.setCustomValidity(_("Should be one of the declared accounts"));
     }
   }
 
