@@ -21,6 +21,7 @@ mostlyclean:
 
 .PHONY: lint
 lint:
+	tox -e format
 	tox -e lint
 	cd fava/static; npm install
 	cd fava/static; npm run lint

@@ -14,7 +14,9 @@ matrix:
     - env: TRAVIS_BUILD=py-dev
     - env: TRAVIS_BUILD=lint
       before_install: "nvm use stable"
-      script: "make && make lint"
+      script:
+        - "tox -e $TRAVIS_BUILD"
+        - "cd fava/static && npm install && npm run lint"
 
 cache:
   directories:
