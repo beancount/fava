@@ -834,6 +834,7 @@ class ChartSwitcher {
 
   // Update the current chart (or render the first one if there is none).
   update() {
+    if (!$("#charts")) return;
     if ($("#charts").classList.contains("hide-charts")) return;
     if (!this.currentChart) {
       const firstLabel = $("#chart-labels label:first-child");
