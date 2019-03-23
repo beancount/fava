@@ -305,7 +305,7 @@ def holdings_by(aggregation_key):
 def report(report_name):
     """Endpoint for most reports."""
     if report_name in REPORTS:
-        return render_template("{}.html".format(report_name))
+        return render_template("_layout.html", active_page=report_name)
     abort(404)
     return None
 
@@ -341,7 +341,8 @@ def help_page(page_slug="_index"):
         extras=["fenced-code-blocks", "tables"],
     )
     return render_template(
-        "help.html",
+        "_layout.html",
+        active_page='help',
         page_slug=page_slug,
         help_html=render_template_string(html),
     )

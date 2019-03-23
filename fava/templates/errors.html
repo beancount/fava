@@ -1,33 +1,26 @@
-{% extends "_layout.html" %}
-{% set active_page = 'errors' %}
-
-{% set page_title = _('Errors') %}
-
-{% block content %}
 {% if ledger.errors %}
-    <table class="errors sortable">
-        <thead>
-            <tr>
-                <th data-sort="string" data-order="asc">{{ _('File') }}</th>
-                <th data-sort="num">{{ _('Line') }}</th>
-                <th data-sort="string">{{ _('Error') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for error in ledger.errors %}
-            <tr>
-                {% with link=url_for_source(file_path=error.source['filename'], line=error.source['lineno']) %}
-                <td><a class="source" href="{{ link }}" title="{{ _('Show source %(file)s:%(lineno)s', file=error.source['filename'], lineno=error.source['lineno']) }}">{{ error.source['filename'] }}</a></td>
-                <td class="num"><a class="source" href="{{ link }}" title="{{ _('Show source %(file)s:%(lineno)s', file=error.source['filename'], lineno=error.source['lineno']) }}">{{ error.source['lineno'] }}</a></td>
-                <td>{{ error.message|format_errormsg|safe }}</td>
-                {% endwith %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<table class="errors sortable">
+  <thead>
+    <tr>
+      <th data-sort="string" data-order="asc">{{ _('File') }}</th>
+      <th data-sort="num">{{ _('Line') }}</th>
+      <th data-sort="string">{{ _('Error') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for error in ledger.errors %}
+    <tr>
+      {% with link=url_for_source(file_path=error.source['filename'], line=error.source['lineno']) %}
+      <td><a class="source" href="{{ link }}" title="{{ _('Show source %(file)s:%(lineno)s', file=error.source['filename'], lineno=error.source['lineno']) }}">{{ error.source['filename'] }}</a></td>
+      <td class="num"><a class="source" href="{{ link }}" title="{{ _('Show source %(file)s:%(lineno)s', file=error.source['filename'], lineno=error.source['lineno']) }}">{{ error.source['lineno'] }}</a></td>
+      <td>{{ error.message|format_errormsg|safe }}</td>
+      {% endwith %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% else %}
-    <p>
-        {{ _('No errors.') }}
-    </p>
+<p>
+{{ _('No errors.') }}
+</p>
 {% endif %}
-{% endblock %}

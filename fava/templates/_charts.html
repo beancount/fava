@@ -2,94 +2,94 @@
 
 {% macro hierarchy(account_name, begin_date=None, end_date=None, label=None) %}
 {% do chart_data.append({
-    'type': 'hierarchy',
-    'label': account_name if not label else label,
-    'modifier': ledger.get_account_sign(account_name),
-    'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
+'type': 'hierarchy',
+'label': account_name if not label else label,
+'modifier': ledger.get_account_sign(account_name),
+'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
 }) %}
 {% endmacro %}
 
 {% macro interval_totals(interval, account_name, label=None) %}
 {% do chart_data.append({
-    'type': 'bar',
-    'label': account_name if not label else label,
-    'series': ledger.charts.interval_totals(interval, account_name),
+'type': 'bar',
+'label': account_name if not label else label,
+'series': ledger.charts.interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
 
 {% macro events(event_type=None) %}
 {% do chart_data.append({
-    'type': 'scatterplot',
-    'label': _('Events') if not event_type else _('Event: {}').format(event_type),
-    'events': ledger.charts.events(event_type),
+'type': 'scatterplot',
+'label': _('Events') if not event_type else _('Event: {}').format(event_type),
+'events': ledger.charts.events(event_type),
 }) %}
 {% endmacro %}
 
 {% macro net_worth(interval) %}
 {% do chart_data.append({
-    'type': 'balances',
-    'label': _('Net Worth'),
-    'data': ledger.charts.net_worth(interval),
+'type': 'balances',
+'label': _('Net Worth'),
+'data': ledger.charts.net_worth(interval),
 }) %}
 {% endmacro %}
 
 {% macro account_balance(account_name) %}
 {% do chart_data.append({
-    'type': 'balances',
-    'label': _('Account Balance'),
-    'data': ledger.charts.linechart(account_name),
+'type': 'balances',
+'label': _('Account Balance'),
+'data': ledger.charts.linechart(account_name),
 }) %}
 {% endmacro %}
 
 {% macro commodities() %}
 {% for pair in ledger.commodity_pairs() %}
 {% do chart_data.append({
-    'type': 'commodities',
-    'label': '{0[0]} / {0[1]}'.format(pair),
-    'prices': ledger.prices(pair[0], pair[1]),
-    'base': pair[0],
-    'quote': pair[1],
+'type': 'commodities',
+'label': '{0[0]} / {0[1]}'.format(pair),
+'prices': ledger.prices(pair[0], pair[1]),
+'base': pair[0],
+'quote': pair[1],
 }) %}
 {% endfor %}
 {% endmacro %}
 
 {% macro skeleton(hide_interval_filter=False) %}
 <div id="charts" class="charts{% if request.args.get('charts') == 'false' %} hide-charts{% endif %}">
-    <form id="chart-form" class="wide-form">
-        <span id="chart-legend" class="chart-legend"></span>
-        <span class="spacer"></span>
-        <select name="chart-currency" id="chart-currency" class="chart-currency hidden">
-        </select>
-        <span id="chart-mode" class="chart-mode hidden">
-            <input name="mode" type="radio" value="treemap" id="mode-treemap" checked><label for="mode-treemap" class="button">{{ _('Treemap') }}</label>
-            <input name="mode" type="radio" value="sunburst" id="mode-sunburst"><label for="mode-sunburst" class="button">{{ _('Sunburst') }}</label>
-        </span>
-        <select name="conversion" id="conversion">
-          {% set selected_conversion = request.args.get('conversion') %}
-          <option value="at_cost"{{ ' selected' if not selected_conversion }} >{{ _('At Cost') }}</option>
-          <option value="at_value"{{ ' selected' if selected_conversion == 'at_value' }}>{{ _('At Market Value') }}</option>
-          <option value="units"{{ ' selected' if selected_conversion == 'units' }}>{{ _('Units') }}</option>
-          {% for currency in ledger.options.operating_currency %}
-            <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
-          {% endfor %}
-          {% for currency in ledger.options.commodities|sort if currency not in ledger.options.operating_currency and currency|length <= 3 %}
-            <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
-          {% endfor %}
-        </select>
-        {% if not hide_interval_filter %}
-            <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
-                {% for interval_ in g.interval.members() %}
-                <option value="{{ interval_.value }}"{% if g.interval == interval_ %} selected="selected"{% endif %}>{{ interval_.label }}</option>
-                {% endfor %}
-            </select>
-            {% endif %}
-            <button type="button" data-event="toggle-chart" data-key="ctrl+c" class="toggle-chart">
-              <span></span>
-            </button>
-    </form>
-    <div id="chart-container" class="chart-container">
-      <div class="loading">{{ _('Loading charts&hellip;') }}</div>
-    </div>
-    <div id="chart-labels" class="chart-labels"></div>
+  <form id="chart-form" class="wide-form">
+    <span id="chart-legend" class="chart-legend"></span>
+    <span class="spacer"></span>
+    <select name="chart-currency" id="chart-currency" class="chart-currency hidden">
+    </select>
+    <span id="chart-mode" class="chart-mode hidden">
+      <input name="mode" type="radio" value="treemap" id="mode-treemap" checked><label for="mode-treemap" class="button">{{ _('Treemap') }}</label>
+      <input name="mode" type="radio" value="sunburst" id="mode-sunburst"><label for="mode-sunburst" class="button">{{ _('Sunburst') }}</label>
+    </span>
+    <select name="conversion" id="conversion">
+      {% set selected_conversion = request.args.get('conversion') %}
+      <option value="at_cost"{{ ' selected' if not selected_conversion }} >{{ _('At Cost') }}</option>
+      <option value="at_value"{{ ' selected' if selected_conversion == 'at_value' }}>{{ _('At Market Value') }}</option>
+      <option value="units"{{ ' selected' if selected_conversion == 'units' }}>{{ _('Units') }}</option>
+      {% for currency in ledger.options.operating_currency %}
+      <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
+      {% endfor %}
+      {% for currency in ledger.options.commodities|sort if currency not in ledger.options.operating_currency and currency|length <= 3 %}
+      <option value="{{ currency }}"{{ ' selected' if selected_conversion == currency }}>{{ _('Converted to %(currency)s', currency=currency) }}</option>
+      {% endfor %}
+    </select>
+    {% if not hide_interval_filter %}
+    <select name="chart-interval" id="chart-interval" data-default="{{ ledger.fava_options['interval'] }}">
+      {% for interval_ in g.interval.members() %}
+      <option value="{{ interval_.value }}"{% if g.interval == interval_ %} selected="selected"{% endif %}>{{ interval_.label }}</option>
+      {% endfor %}
+    </select>
+    {% endif %}
+    <button type="button" data-event="toggle-chart" data-key="ctrl+c" class="toggle-chart">
+      <span></span>
+    </button>
+  </form>
+  <div id="chart-container" class="chart-container">
+    <div class="loading">{{ _('Loading charts&hellip;') }}</div>
+  </div>
+  <div id="chart-labels" class="chart-labels"></div>
 </div>
 {% endmacro %}

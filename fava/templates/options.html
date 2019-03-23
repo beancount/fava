@@ -1,39 +1,34 @@
-{% extends "_layout.html" %}
-{% set active_page = 'options' %}
-
-{% block content %}
-  <h2>{{ _('Fava options') }} <a href="{{ url_for('help_page', page_slug='options') }}">({{ _('help') }})</a></h2>
-  <table class="options sortable">
-    <thead>
-      <tr>
-        <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Key') }}</th>
-        <th>{{ _('Value') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for key, value in ledger.fava_options|dictsort %}
-        <tr>
-          <td>{{ key }}</td>
-          <td><pre>{{ value|pprint }}</pre></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  <h2>{{ _('Beancount options') }}</h2>
-  <table class="options sortable">
-    <thead>
-      <tr>
-        <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Key') }}</th>
-        <th>{{ _('Value') }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for key, value in ledger.options|dictsort %}
-        <tr>
-          <td>{{ key }}</td>
-          <td><pre>{{ value }}</pre></td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endblock %}
+<h2>{{ _('Fava options') }} <a href="{{ url_for('help_page', page_slug='options') }}">({{ _('help') }})</a></h2>
+<table class="options sortable">
+  <thead>
+    <tr>
+      <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Key') }}</th>
+      <th>{{ _('Value') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in ledger.fava_options|dictsort %}
+    <tr>
+      <td>{{ key }}</td>
+      <td><pre>{{ value|pprint }}</pre></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<h2>{{ _('Beancount options') }}</h2>
+<table class="options sortable">
+  <thead>
+    <tr>
+      <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Key') }}</th>
+      <th>{{ _('Value') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for key, value in ledger.options|dictsort %}
+    <tr>
+      <td>{{ key }}</td>
+      <td><pre>{{ value }}</pre></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

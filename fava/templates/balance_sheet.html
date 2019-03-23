@@ -1,23 +1,19 @@
-{% extends "_layout.html" %}
-{% set active_page = 'balance_sheet' %}
 {% import '_tree_table.html' as tree_table with context %}
 
-{% block content %}
-    {{ charts.skeleton() }}
-    {{ charts.net_worth(g.interval) }}
-    {{ charts.hierarchy(ledger.options['name_assets']) }}
-    {{ charts.hierarchy(ledger.options['name_liabilities']) }}
-    {{ charts.hierarchy(ledger.options['name_equity']) }}
+{{ charts.skeleton() }}
+{{ charts.net_worth(g.interval) }}
+{{ charts.hierarchy(ledger.options['name_assets']) }}
+{{ charts.hierarchy(ledger.options['name_liabilities']) }}
+{{ charts.hierarchy(ledger.options['name_equity']) }}
 
-    {% set root_tree_closed = ledger.root_tree_closed %}
+{% set root_tree_closed = ledger.root_tree_closed %}
 
-    <div class="row">
-        <div class="column">
-            {{ tree_table.tree(root_tree_closed.get(ledger.options['name_assets'])) }}
-        </div>
-        <div class="column">
-            {{ tree_table.tree(root_tree_closed.get(ledger.options['name_liabilities'])) }}
-            {{ tree_table.tree(root_tree_closed.get(ledger.options['name_equity'])) }}
-        </div>
-    </div>
-{% endblock %}
+<div class="row">
+  <div class="column">
+    {{ tree_table.tree(root_tree_closed.get(ledger.options['name_assets'])) }}
+  </div>
+  <div class="column">
+    {{ tree_table.tree(root_tree_closed.get(ledger.options['name_liabilities'])) }}
+    {{ tree_table.tree(root_tree_closed.get(ledger.options['name_equity'])) }}
+  </div>
+</div>

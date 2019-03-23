@@ -1,9 +1,5 @@
-{% extends "_layout.html" %}
-{% set active_page = 'import' %}
-
 {% import 'macros/_account_macros.html' as account_macros with context %}
 
-{% block content %}
 {% if not ledger.fava_options['import-config'] %}
 <p>
 No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
@@ -40,4 +36,3 @@ No importers configured. See <a href="{{ url_for('help_page', page_slug='import'
   </tbody>
 </table>
 {% endfor %}
-{% endblock %}

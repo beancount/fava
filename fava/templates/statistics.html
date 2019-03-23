@@ -1,6 +1,3 @@
-{% extends "_layout.html" %}
-{% set active_page = 'statistics' %}
-
 {% import 'macros/_account_macros.html' as account_macros with context %}
 {% import '_query_table.html' as querytable %}
 
@@ -14,83 +11,81 @@
 {%- endfor -%}
 {%- endmacro %}
 
-{% block content %}
-    <div class="left">
-      {% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
-      <h3>
-        {{ _('Postings per Account') }}
-        (<a href={{ url_for('report', report_name='query', query_string=postings_per_account) }}>Query</a>)
-      </h3>
-      {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
-      {{ querytable.querytable(contents, result_types, result_rows) }}
-    </div>
+<div class="left">
+  {% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
+  <h3>
+    {{ _('Postings per Account') }}
+    (<a href={{ url_for('report', report_name='query', query_string=postings_per_account) }}>Query</a>)
+  </h3>
+  {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
+  {{ querytable.querytable(contents, result_types, result_rows) }}
+</div>
 
-    {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
-    <div class="left">
-        <h3>{{ _('Update Activity') }}<button type="button" class="right" id="copy-balances" value="" title="
-        {{- _('Click to copy balance directives for accounts (except green ones) to the clipboard.') -}}
-        " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</button></h3>
-        <table class="statistics-update-activity sortable">
-            <thead>
-                <tr>
-                    <th data-sort="string" data-order="asc">{{ _('Account') }}</th>
-                    <th class="indicator-header" data-sort="num" data-sort-default="desc"></th>
-                    <th class="indicator-header" data-sort="num" data-sort-default="desc"></th>
-                    <th data-sort="string">{{ _('Last Entry') }}</th>
-                    <th>{{ _('Balance') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for account in ledger.attributes.accounts %}
-                    {% if account.startswith(ledger.options['name_assets']) or account.startswith(ledger.options['name_liabilities']) %}
-                    {% set last_entry = ledger.last_entry(account) %}
-                    {% if last_entry %}
-                    <tr>
-                        <td class="account"><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
-                        {% if ledger.accounts[account].meta.get('fava-uptodate-indication') %}
-                            <td data-sort-value="{{ status_sortorder[ledger.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
-                            <td class="uptodate-indicator">{{ account_macros.last_account_activity(account) }}</td>
-                        {% else %}
-                            <td data-sort-value="0" class="uptodate-indicator"></td>
-                            <td class="uptodate-indicator"></td>
-                        {% endif %}
-                        <td><a href="#context-{{ last_entry|hash_entry }}">{{ last_entry.date }}</a></td>
-                        <td class="num">
-                            {%- for position in (ledger.root_account|get_or_create(account)).balance|units -%}
-                                {{ position.units|format_amount }}<br>
-                            {% endfor -%}
-                        </td>
-                    </tr>
-                    {% endif %}
-                    {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+{% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
+<div class="left">
+  <h3>{{ _('Update Activity') }}<button type="button" class="right" id="copy-balances" value="" title="
+  {{- _('Click to copy balance directives for accounts (except green ones) to the clipboard.') -}}
+  " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</button></h3>
+  <table class="statistics-update-activity sortable">
+    <thead>
+      <tr>
+        <th data-sort="string" data-order="asc">{{ _('Account') }}</th>
+        <th class="indicator-header" data-sort="num" data-sort-default="desc"></th>
+        <th class="indicator-header" data-sort="num" data-sort-default="desc"></th>
+        <th data-sort="string">{{ _('Last Entry') }}</th>
+        <th>{{ _('Balance') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for account in ledger.attributes.accounts %}
+      {% if account.startswith(ledger.options['name_assets']) or account.startswith(ledger.options['name_liabilities']) %}
+      {% set last_entry = ledger.last_entry(account) %}
+      {% if last_entry %}
+      <tr>
+        <td class="account"><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
+        {% if ledger.accounts[account].meta.get('fava-uptodate-indication') %}
+        <td data-sort-value="{{ status_sortorder[ledger.account_uptodate_status(account) or ''] }}" class="uptodate-indicator">{{ account_macros.indicator(account) }}</td>
+        <td class="uptodate-indicator">{{ account_macros.last_account_activity(account) }}</td>
+        {% else %}
+        <td data-sort-value="0" class="uptodate-indicator"></td>
+        <td class="uptodate-indicator"></td>
+        {% endif %}
+        <td><a href="#context-{{ last_entry|hash_entry }}">{{ last_entry.date }}</a></td>
+        <td class="num">
+          {%- for position in (ledger.root_account|get_or_create(account)).balance|units -%}
+          {{ position.units|format_amount }}<br>
+          {% endfor -%}
+        </td>
+      </tr>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 
-    <div class="left">
-        <h3>{{ _('Entries per Type') }}</h3>
-        <table class="sortable">
-            <thead>
-                <tr>
-                    <th data-sort="string">{{ _('Type') }}</th>
-                    <th data-sort="num">{{ _('# Entries') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for group in ledger.entries|groupby('__class__.__name__') %}
-                <tr>
-                    <td>{{ group.grouper }}</td>
-                    <td class="num">{{ group.list|length }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td>{{ _('Total') }}</td>
-                    <td class="num">{{ ledger.entries|length }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-{% endblock %}
+<div class="left">
+  <h3>{{ _('Entries per Type') }}</h3>
+  <table class="sortable">
+    <thead>
+      <tr>
+        <th data-sort="string">{{ _('Type') }}</th>
+        <th data-sort="num">{{ _('# Entries') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for group in ledger.entries|groupby('__class__.__name__') %}
+      <tr>
+        <td>{{ group.grouper }}</td>
+        <td class="num">{{ group.list|length }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>{{ _('Total') }}</td>
+        <td class="num">{{ ledger.entries|length }}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

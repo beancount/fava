@@ -1,56 +1,56 @@
 {% set entry_hash = request.args.get('entry_hash') %}
 {% set entry, balances, slice, sha256sum = ledger.context(entry_hash) %}
 <p>
-  {{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
+{{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
 </p>
 {% if balances %}
-  <div class="toggle-box toggled">
-    <div class="toggle-box-header">
-      <span>{{ _('Context') }}</span>
-    </div>
-    <div class="toggle-box-content">
-      <table>
-        <thead>
-          <tr colspan=2>
-            <th>{{ _('Balances before entry') }}<th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for account, inventory in  balances[0].items() %}
-            <tr>
-              <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
-              <td>
-                {% for position in inventory %}
-                  <span class="num">{{ position.units|format_amount }}</span>
-                  {% if not loop.last %}<br>{% endif %}
-                {% endfor %}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <table>
-        <thead>
-          <tr colspan=2>
-            <th>{{ _('Balances after entry') }}<th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for account, inventory in  balances[1].items() %}
-            <tr>
-              <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
-              <td>
-                {% for position in inventory %}
-                  <span class="num">{{ position.units|format_amount }}</span>
-                  {% if not loop.last %}<br>{% endif %}
-                {% endfor %}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+<div class="toggle-box toggled">
+  <div class="toggle-box-header">
+    <span>{{ _('Context') }}</span>
   </div>
+  <div class="toggle-box-content">
+    <table>
+      <thead>
+        <tr colspan=2>
+          <th>{{ _('Balances before entry') }}<th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for account, inventory in  balances[0].items() %}
+        <tr>
+          <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
+          <td>
+            {% for position in inventory %}
+            <span class="num">{{ position.units|format_amount }}</span>
+            {% if not loop.last %}<br>{% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <table>
+      <thead>
+        <tr colspan=2>
+          <th>{{ _('Balances after entry') }}<th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for account, inventory in  balances[1].items() %}
+        <tr>
+          <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
+          <td>
+            {% for position in inventory %}
+            <span class="num">{{ position.units|format_amount }}</span>
+            {% if not loop.last %}<br>{% endif %}
+            {% endfor %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endif %}
 <form id="source-slice-editor-form" class="source-slice-editor-form">
   <textarea id="source-slice-editor" name="source-slice" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ slice or '' }}</textarea>
