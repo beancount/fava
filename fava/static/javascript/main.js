@@ -30,7 +30,7 @@
  *    `button-click-${data-event}` will be triggered.
  */
 
-import { $, handleJSON } from "./helpers";
+import { $, fetchAPI } from "./helpers";
 import e from "./events";
 import router from "./router";
 
@@ -102,11 +102,10 @@ e.on("page-init", () => {
 // Check the `changed` API endpoint every 5 seconds and fire the appropriate
 // events if some file changed.
 function doPoll() {
-  $.fetch(`${window.favaAPI.baseURL}api/changed/`)
-    .then(handleJSON)
+  fetchAPI("changed")
     .then(
-      data => {
-        if (data.changed) {
+      changed => {
+        if (changed) {
           if (window.favaAPI.favaOptions["auto-reload"]) {
             e.trigger("reload");
           } else {

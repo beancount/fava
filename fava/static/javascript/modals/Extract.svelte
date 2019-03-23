@@ -75,8 +75,8 @@
       headers: { "Content-Type": "application/json" },
     })
       .then(handleJSON)
-      .then(data => {
-        entries = data.payload;
+      .then(responseData => {
+        entries = responseData.data;
       });
   }
   $: entry = entries[currentIndex - 1];

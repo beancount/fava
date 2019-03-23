@@ -52,6 +52,29 @@ $.ready = function ready() {
   });
 };
 
+// Handles JSON content for a Promise returned by fetch, also handling an HTTP
+// error status.
+export function handleJSON(response) {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
+  }
+  return response.json().then(data => {
+    if (!data.success) {
+      return Promise.reject(data.error);
+    }
+    return data;
+  });
+}
+
+// Handles text content for a Promise returned by fetch, also handling an HTTP
+// error status.
+export function handleText(response) {
+  if (!response.ok) {
+    return Promise.reject(response.statusText);
+  }
+  return response.text();
+}
+
 export function fetch(input, init = {}) {
   const defaults = {
     credentials: "same-origin",
@@ -59,6 +82,12 @@ export function fetch(input, init = {}) {
   return window.fetch(input, Object.assign(defaults, init));
 }
 $.fetch = fetch;
+
+export function fetchAPI(endpoint) {
+  return fetch(`${window.favaAPI.baseURL}api/${endpoint}/`)
+    .then(handleJSON)
+    .then(responseData => responseData.data);
+}
 
 // Fuzzy match a pattern against a string.
 //
@@ -95,27 +124,4 @@ export function fuzzywrap(pattern, string) {
     }
   }
   return result.join("");
-}
-
-// Handles JSON content for a Promise returned by fetch, also handling an HTTP
-// error status.
-export function handleJSON(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-  return response.json().then(data => {
-    if (!data.success) {
-      return Promise.reject(data.error);
-    }
-    return data;
-  });
-}
-
-// Handles text content for a Promise returned by fetch, also handling an HTTP
-// error status.
-export function handleText(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-  return response.text();
 }

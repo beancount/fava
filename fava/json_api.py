@@ -18,6 +18,17 @@ from fava.core.misc import align
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
 
+def api_endpoint(func):
+    """Register an endpoint."""
+
+    @json_api.route("/{}/".format(func.__name__), methods=["GET"])
+    @functools.wraps(func)
+    def _wrapper(*args, **kwargs):
+        return jsonify({"success": True, "data": func(*args, **kwargs)})
+
+    return _wrapper
+
+
 def json_response(func):
     """Jsonify the response."""
 
@@ -56,18 +67,31 @@ def _json_api_oserror(error):
     return {"success": False, "error": error.strerror}
 
 
-@json_api.route("/changed/")
-@json_response
+@api_endpoint
 def changed():
     """Check for file changes."""
-    return {"changed": g.ledger.changed()}
+    return g.ledger.changed()
 
 
-@json_api.route("/errors/")
-@json_response
+@api_endpoint
 def errors():
     """Number of errors."""
-    return {"errors": len(g.ledger.errors)}
+    return len(g.ledger.errors)
+
+
+@api_endpoint
+def payee_accounts():
+    """Rank accounts for the given payee."""
+    return g.ledger.attributes.payee_accounts(request.args.get("payee"))
+
+
+@api_endpoint
+def extract():
+    """Extract entries using the ingest framework."""
+    entries = g.ledger.ingest.extract(
+        request.args.get("filename"), request.args.get("importer")
+    )
+    return list(map(serialise, entries))
 
 
 @json_api.route("/source/", methods=["PUT"])
@@ -96,28 +120,6 @@ def format_source(request_data):
     """Format beancount file."""
     aligned = align(request_data["source"], g.ledger.fava_options)
     return {"payload": aligned}
-
-
-@json_api.route("/payee-accounts/", methods=["GET"])
-@json_response
-def payee_accounts():
-    """Rank accounts for the given payee."""
-    return {
-        "payload": g.ledger.attributes.payee_accounts(
-            request.args.get("payee")
-        )
-    }
-
-
-@json_api.route("/extract/", methods=["GET"])
-@json_response
-def extract():
-    """Extract entries using the ingest framework."""
-    entries = g.ledger.ingest.extract(
-        request.args.get("filename"), request.args.get("importer")
-    )
-    serialised = list(map(serialise, entries))
-    return {"payload": serialised}
 
 
 @json_api.route("/payee-transaction/", methods=["GET"])
