@@ -164,6 +164,7 @@ class TreeMapChart extends BaseChart {
     super();
     this.svg = svg;
     this.treemap = treemap();
+    this.treemap.paddingInner(2);
 
     this.canvas = svg.classed("treemap", true);
   }
