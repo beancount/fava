@@ -6,10 +6,6 @@
  *
  * The events currently in use in Fava:
  *
- * error, info, reload-warning:
- *    Trigger with a single message argument to display notifications of the
- *    given type in the top right corner of the page.
- *
  * file-modified:
  *    Fetch and update the error count in the sidebar.
  *
@@ -30,7 +26,7 @@
  *    `button-click-${data-event}` will be triggered.
  */
 
-import { $, fetchAPI } from "./helpers";
+import { $, _, delegate, ready, fetchAPI } from "./helpers";
 import e from "./events";
 import router from "./router";
 
@@ -61,15 +57,22 @@ import "./editor";
 import "./filters";
 import "./journal";
 import "./keyboard-shortcuts";
-import "./notifications";
+import { notify } from "./notifications";
 import "./sidebar";
 import "./sort";
 import "./tree-table";
 
+import ChartSwitcher from "./ChartSwitcher.svelte";
 import Modals from "./modals/Modals.svelte";
+
+let charts;
 
 e.on("page-loaded", () => {
   window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
+
+  if (charts) charts.$destroy();
+  charts = new ChartSwitcher({ target: $("#svelte-charts") });
+
   document.title = $("#data-document-title").value;
   $("h1 strong").innerHTML = $("#data-page-title").innerHTML;
   $("#reload-page").classList.add("hidden");
@@ -80,7 +83,7 @@ e.on("page-init", () => {
   new Modals({ target: document.body });
 
   // Watch for all clicks on <button>s and fire the appropriate events.
-  $.delegate(document.body, "click", "button", event => {
+  delegate(document.body, "click", "button", event => {
     const button = event.target.closest("button");
     const type = button.getAttribute("data-event");
     if (type) {
@@ -89,7 +92,7 @@ e.on("page-init", () => {
   });
 
   // Watch for all submits of <forms>s and fire the appropriate events.
-  $.delegate(document.body, "submit", "form", event => {
+  delegate(document.body, "submit", "form", event => {
     const form = event.target;
     const type = form.getAttribute("data-event");
     if (type) {
@@ -111,9 +114,12 @@ function doPoll() {
           } else {
             $("#reload-page").classList.remove("hidden");
             e.trigger("file-modified");
-            e.trigger(
-              "reload-warning",
-              $("#reload-page").getAttribute("data-reload-text")
+            notify(
+              _("File change detected. Click to reload."),
+              "warning",
+              () => {
+                e.trigger("reload");
+              }
             );
           }
         }
@@ -125,7 +131,7 @@ function doPoll() {
     });
 }
 
-$.ready().then(() => {
+ready().then(() => {
   window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
   router.init();
   e.trigger("page-init");

@@ -1,5 +1,6 @@
 <script>
   import e from "../events";
+  import { notify } from "../notifications";
   import { _, fetch, handleJSON } from "../helpers";
 
   import ModalBase from "./ModalBase.svelte";
@@ -25,10 +26,10 @@
           .then(handleJSON)
           .then(
             data => {
-              e.trigger("info", data.message);
+              notify(data.message);
             },
             error => {
-              e.trigger("error", `Upload error: ${error}`);
+              notify(`Upload error: ${error}`, "error");
             }
           );
       })
@@ -47,9 +48,9 @@
       return;
     }
     if (!folders.length) {
-      e.trigger(
-        "error",
-        _('You need to set the "documents" Beancount option for file uploads.')
+      notify(
+        _('You need to set the "documents" Beancount option for file uploads.'),
+        "error"
       );
       return;
     }

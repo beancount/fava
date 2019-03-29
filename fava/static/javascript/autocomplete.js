@@ -1,5 +1,12 @@
 import e from "./events";
-import { $, delegate, fuzzytest, fuzzywrap, handleJSON } from "./helpers";
+import {
+  $,
+  delegate,
+  fetch,
+  fuzzytest,
+  fuzzywrap,
+  handleJSON,
+} from "./helpers";
 
 const accountCompletionCache = {};
 
@@ -167,7 +174,7 @@ class CompletionList {
         }
         const params = new URLSearchParams();
         params.set("payee", payee);
-        return $.fetch(
+        return fetch(
           `${window.favaAPI.baseURL}api/payee_accounts/?${params.toString()}`
         )
           .then(handleJSON)

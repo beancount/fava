@@ -2,12 +2,12 @@
 //
 // This handles the toggling of accounts in the accounts trees.
 
-import { $, $$ } from "./helpers";
+import { $, $$, delegate } from "./helpers";
 import e from "./events";
 
 e.on("page-loaded", () => {
   $$(".tree-table").forEach(table => {
-    $.delegate(table, "click", "span.has-children", event => {
+    delegate(table, "click", "span.has-children", event => {
       if (event.target.tagName === "A") {
         return;
       }
@@ -31,7 +31,7 @@ e.on("page-loaded", () => {
       );
     });
 
-    $.delegate(table, "click", ".expand-all", event => {
+    delegate(table, "click", ".expand-all", event => {
       event.target.classList.add("hidden");
       $$(".toggled", table).forEach(el => {
         el.classList.remove("toggled");

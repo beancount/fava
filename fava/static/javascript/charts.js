@@ -22,8 +22,6 @@ import "d3-transition";
 import e from "./events";
 import { formatCurrency, formatCurrencyShort, dateFormat } from "./format";
 import setTimeFilter from "./filters";
-import { $, $$ } from "./helpers";
-import router from "./router";
 
 // The color scales for the charts.
 //
@@ -36,8 +34,14 @@ const scales = {
   scatterplot: scaleOrdinal(schemeCategory10),
 };
 
-let container;
 let tooltip;
+
+const NO_MARGINS = {
+  top: 0,
+  right: 0,
+  bottom: 0,
+  left: 0,
+};
 
 function addInternalNodesAsLeaves(node) {
   node.children.forEach(o => {
@@ -80,44 +84,6 @@ function addTooltip(selection, tooltipText) {
     });
 }
 
-// Set the chart legend to the given domain.
-function setLegend(domain, colorScale) {
-  domain.sort();
-  const legend = select("#chart-legend")
-    .selectAll("span.legend")
-    .data(domain)
-    .enter()
-    .append("span")
-    .attr("class", "legend");
-
-  legend
-    .append("span")
-    .attr("class", "color")
-    .style("background", d => colorScale(d));
-
-  legend
-    .append("span")
-    .attr("class", "name")
-    .html(d => d);
-}
-
-// Obtain the current value of a <select> and update the list of options.
-function setSelect(selector, values) {
-  const selectElement = $(selector);
-  const { value } = selectElement;
-  selectElement.innerHTML = "";
-  values.forEach(currency => {
-    const opt = document.createElement("option");
-    opt.value = currency;
-    opt.text = currency;
-    if (value === currency) {
-      opt.selected = true;
-    }
-    selectElement.add(opt);
-  });
-  return values.includes(value) ? value : values[0];
-}
-
 // The base class for all charts.
 //
 // Provides the following methods:
@@ -133,7 +99,8 @@ function setSelect(selector, values) {
 //  - draw(data): Draw the chart for the given data.
 //  - update(): Update the chart (after resize, toggling, etc)
 class BaseChart {
-  constructor() {
+  constructor(svg) {
+    this.svg = svg.attr("class", "").html("");
     this.selections = {};
     this.margin = {
       top: 10,
@@ -144,11 +111,15 @@ class BaseChart {
   }
 
   setHeight(d) {
+    this.svg.attr("height", d);
+    this.outerHeight = d;
     this.height = d - this.margin.top - this.margin.bottom;
     return this;
   }
 
   setWidth(d) {
+    this.svg.attr("width", d);
+    this.outerWidth = d;
     this.width = d - this.margin.left - this.margin.right;
     return this;
   }
@@ -161,10 +132,9 @@ class BaseChart {
 
 class TreeMapChart extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg;
-    this.treemap = treemap();
-    this.treemap.paddingInner(2);
+    super(svg);
+    this.treemap = treemap().paddingInner(2);
+    this.margin = NO_MARGINS;
 
     this.canvas = svg.classed("treemap", true);
   }
@@ -201,11 +171,9 @@ class TreeMapChart extends BaseChart {
   }
 
   update() {
-    this.width = parseInt(container.style("width"), 10);
-    this.height = Math.min(this.width / 2.5, 400);
-    this.svg.attr("width", this.width).attr("height", this.height);
-    this.treemap.size([this.width, this.height]);
+    this.setHeight(Math.min(this.width / 2.5, 400));
 
+    this.treemap.size([this.width, this.height]);
     this.treemap(this.root);
 
     function labelOpacity(d) {
@@ -230,9 +198,8 @@ class TreeMapChart extends BaseChart {
 
 class SunburstChart extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg;
-    this.margin.left = 10;
+    super(svg);
+    this.margin = NO_MARGINS;
 
     this.x = scaleLinear().range([0, 2 * Math.PI]);
     this.y = scaleSqrt();
@@ -242,8 +209,6 @@ class SunburstChart extends BaseChart {
       .endAngle(d => this.x(d.x1))
       .innerRadius(d => this.y(d.y0))
       .outerRadius(d => this.y(d.y1));
-    this.width = 500;
-    this.height = 250;
 
     this.canvas = this.svg
       .attr("class", "sunburst")
@@ -293,9 +258,6 @@ class SunburstChart extends BaseChart {
       `translate(${this.width / 2 + this.margin.left},${this.height / 2 +
         this.margin.top})`
     );
-    this.svg
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom);
 
     this.y.range([0, this.radius()]);
 
@@ -339,8 +301,7 @@ class SunburstChart extends BaseChart {
 
 class BarChart extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg;
+    super(svg);
 
     this.x0 = scaleBand().padding(0.1);
     this.x1 = scaleBand();
@@ -405,23 +366,17 @@ class BarChart extends BaseChart {
   }
 
   update() {
-    const screenWidth =
-      parseInt(container.style("width"), 10) -
-      this.margin.left -
-      this.margin.right;
+    const screenWidth = this.width;
     const maxWidth = this.selections.groups.size() * this.maxColumnWidth;
     const offset = this.margin.left + Math.max(0, screenWidth - maxWidth) / 2;
 
     this.width = Math.min(screenWidth, maxWidth);
-    this.height = 250 - this.margin.top - this.margin.bottom;
+    this.setHeight(250);
 
     this.y.range([this.height, 0]);
     this.x0.range([0, this.width], 0.1);
     this.x1.range([0, this.x0.bandwidth()]);
 
-    this.svg
-      .attr("width", screenWidth + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom);
     this.canvas.attr("transform", `translate(${offset},${this.margin.top})`);
 
     this.yAxis.tickSize(-this.width, 0);
@@ -457,7 +412,10 @@ class BarChart extends BaseChart {
       .attr("y", d => this.y(Math.max(0, d.value)))
       .attr("height", d => Math.abs(this.y(d.value) - this.y(0)));
 
-    setLegend(this.x1.domain(), scales.currencies);
+    this.legend = {
+      domain: this.x1.domain(),
+      scale: scales.currencies,
+    };
   }
 
   filterTicks(domain) {
@@ -472,8 +430,7 @@ class BarChart extends BaseChart {
 
 class ScatterPlot extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg;
+    super(svg);
     this.margin.left = 70;
 
     this.x = scaleUtc();
@@ -510,18 +467,11 @@ class ScatterPlot extends BaseChart {
   }
 
   update() {
-    this.width =
-      parseInt(container.style("width"), 10) -
-      this.margin.left -
-      this.margin.right;
-    this.height = 250 - this.margin.top - this.margin.bottom;
+    this.setHeight(250);
 
     this.y.range([this.height, 0]);
     this.x.range([0, this.width]);
 
-    this.svg
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom);
     this.canvas.attr(
       "transform",
       `translate(${this.margin.left},${this.margin.top})`
@@ -540,8 +490,7 @@ class ScatterPlot extends BaseChart {
 
 class LineChart extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg;
+    super(svg);
 
     this.x = scaleUtc();
     this.y = scaleLinear();
@@ -622,18 +571,11 @@ class LineChart extends BaseChart {
   }
 
   update() {
-    this.width =
-      parseInt(container.style("width"), 10) -
-      this.margin.left -
-      this.margin.right;
-    this.height = 250 - this.margin.top - this.margin.bottom;
+    this.setHeight(250);
 
     this.y.range([this.height, 0]);
     this.x.range([0, this.width]);
 
-    this.svg
-      .attr("width", this.width + this.margin.left + this.margin.right)
-      .attr("height", this.height + this.margin.top + this.margin.bottom);
     this.canvas.attr(
       "transform",
       `translate(${this.margin.left},${this.margin.top})`
@@ -669,20 +611,26 @@ class LineChart extends BaseChart {
       .filter(d => d.path !== undefined)
       .attr("d", d => `M${d.path.join("L")}Z`);
 
-    setLegend(this.data.map(d => d.name), scales.currencies);
+    this.legend = {
+      domain: this.data.map(d => d.name),
+      scale: scales.currencies,
+    };
   }
 }
 
 class SunburstChartContainer extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg.attr("class", "sunburst");
+    super(svg);
+
+    this.svg.attr("class", "sunburst");
     this.sunbursts = [];
     this.canvases = [];
+    this.margins = NO_MARGINS;
+
+    this.setHeight(500);
   }
 
   draw(data) {
-    this.setSize();
     this.currencies = Object.keys(data);
 
     this.currencies.forEach((currency, i) => {
@@ -712,13 +660,7 @@ class SunburstChartContainer extends BaseChart {
     return this;
   }
 
-  setSize() {
-    this.width = container.node().offsetWidth;
-    this.svg.attr("width", this.width).attr("height", 500);
-  }
-
   update() {
-    this.setSize();
     this.sunbursts.forEach((singleChart, i) => {
       singleChart
         .setWidth(this.width / this.currencies.length)
@@ -734,19 +676,16 @@ class SunburstChartContainer extends BaseChart {
 
 class HierarchyContainer extends BaseChart {
   constructor(svg) {
-    super();
-    this.svg = svg;
+    super(svg);
     this.canvas = this.svg.append("g");
     this.has_mode_setting = true;
+    this.margin = NO_MARGINS;
   }
 
   draw(data) {
     this.data = data;
     this.currencies = Object.keys(data);
-    this.setSize();
 
-    const mode = $("#chart-form input[name=mode]:checked").value;
-    const currency = setSelect("#chart-currency", this.currencies);
     this.canvas.html("");
 
     if (this.currencies.length === 0) {
@@ -756,156 +695,56 @@ class HierarchyContainer extends BaseChart {
         .attr("text-anchor", "middle")
         .attr("x", this.width / 2)
         .attr("y", 160 / 2);
-    } else if (mode === "treemap") {
+    } else if (this.mode === "treemap") {
+      if (!this.currency) this.currency = this.currencies[0];
       this.currentChart = new TreeMapChart(this.canvas)
+        .setWidth(this.width)
         .set(
           "tooltipText",
           d =>
-            `${formatCurrency(d.data.balance[currency])} ${currency}<em>${
-              d.data.account
-            }</em>`
+            `${formatCurrency(d.data.balance[this.currency])} ${
+              this.currency
+            }<em>${d.data.account}</em>`
         )
-        .draw(data[currency]);
+        .draw(data[this.currency]);
 
+      this.setHeight(this.currentChart.outerHeight);
       this.has_currency_setting = true;
     } else {
-      this.currentChart = new SunburstChartContainer(this.canvas).draw(data);
+      this.currentChart = new SunburstChartContainer(this.canvas)
+        .setWidth(this.width)
+        .draw(data);
 
+      this.setHeight(this.currentChart.outerHeight);
       this.has_currency_setting = false;
     }
 
-    this.svg.attr("height", this.canvas.attr("height"));
-
     return this;
-  }
-
-  setSize() {
-    this.width = container.node().offsetWidth;
-    this.svg.attr("width", this.width);
   }
 
   update() {
     this.draw(this.data);
     if (this.currentChart) {
-      this.currentChart.update();
+      this.currentChart.setWidth(this.outerWidth).update();
     }
   }
 }
-
-class ChartSwitcher {
-  constructor() {
-    this.state = {};
-  }
-
-  // After a page load, reset the chart switcher with new data.
-  reset(renderers) {
-    container = select("#chart-container");
-    container.html("");
-
-    this.renderers = renderers;
-    this.charts = {};
-    this.currentChart = undefined;
-
-    // Chart controls
-    $$("#chart-form input[name=mode]").forEach(el => {
-      el.addEventListener("change", () => {
-        this.state.mode = el.value;
-        this.show(this.state.id);
-      });
-    });
-    $("#chart-currency").addEventListener("change", this.update.bind(this));
-
-    // Switch between charts
-    $$("#chart-labels label").forEach(label => {
-      label.addEventListener("click", () => {
-        this.show(label.getAttribute("for"));
-      });
-    });
-
-    if (this.state.mode) {
-      $(`#mode-${this.state.mode}`).checked = true;
-    }
-    // Show the same chart as last time (or call .update() to show the first one).
-    if (this.state.id && this.renderers[this.state.id]) {
-      this.show(this.state.id);
-    } else {
-      this.update();
-    }
-  }
-
-  // Update the current chart (or render the first one if there is none).
-  update() {
-    if (!$("#charts")) return;
-    if ($("#charts").classList.contains("hide-charts")) return;
-    if (!this.currentChart) {
-      const firstLabel = $("#chart-labels label:first-child");
-      if (firstLabel) {
-        this.show(firstLabel.getAttribute("for"));
-      }
-    } else {
-      this.currentChart.update();
-    }
-  }
-
-  // Show the chart with the given id.
-  show(id) {
-    if ($("#charts").classList.contains("hide-charts")) return;
-    // If the chart has not been rendered yet, do so now.
-    if (!this.charts[id]) {
-      const svg = container.append("svg").attr("id", id);
-      this.charts[id] = this.renderers[id](svg);
-    }
-    this.currentChart = this.charts[id];
-    this.state.id = id;
-
-    $$("#charts svg").forEach(el => {
-      el.classList.add("hidden");
-    });
-    $(`#${id}`).classList.remove("hidden");
-
-    $("#chart-legend").innerHTML = "";
-
-    $$("#chart-labels .selected").forEach(el => {
-      el.classList.remove("selected");
-    });
-    $(`#chart-labels [for=${id}]`).classList.add("selected");
-
-    this.currentChart.update();
-
-    $("#chart-currency").classList.toggle(
-      "hidden",
-      !this.currentChart.has_currency_setting
-    );
-    $("#chart-mode").classList.toggle(
-      "hidden",
-      !this.currentChart.has_mode_setting
-    );
-  }
-}
-
-const chartSwitcher = new ChartSwitcher();
 
 // Get the list of operating currencies, adding in the current conversion
 // currency.
-function getOperatingCurrencies() {
-  const conversion = $("#conversion").value;
+function getOperatingCurrencies(conversion) {
   if (
-    conversion &&
-    conversion !== "at_cost" &&
-    conversion !== "at_value" &&
-    conversion !== "units" &&
-    window.favaAPI.options.operating_currency.indexOf(conversion) === -1
+    !conversion ||
+    ["at_cost", "at_value", "units"].includes(conversion) ||
+    window.favaAPI.options.operating_currency.includes(conversion)
   ) {
-    const currencies = window.favaAPI.options.operating_currency.slice();
-    currencies.push(conversion);
-    return currencies;
+    return window.favaAPI.options.operating_currency;
   }
-  return window.favaAPI.options.operating_currency;
+  return [...window.favaAPI.options.operating_currency, conversion];
 }
 
 e.on("page-init", () => {
   tooltip = select("#tooltip");
-  window.addEventListener("resize", chartSwitcher.update.bind(chartSwitcher));
 
   scales.treemap.domain(window.favaAPI.accounts);
   scales.sunburst.domain(window.favaAPI.accounts);
@@ -915,72 +754,73 @@ e.on("page-init", () => {
 
 e.on("page-loaded", () => {
   tooltip.style("opacity", 0);
+});
 
-  if (!$("#charts")) return;
+// eslint-disable-next-line
+export function parseChartData(chartData, conversion, interval) {
+  const result = [];
+  chartData.forEach(chart => {
+    let renderer;
+    let data;
 
-  const renderers = {};
+    const operatingCurrencies = getOperatingCurrencies(conversion);
 
-  // Go through the chart data and prepare it for rendering. For each chart,
-  // add a label, and a function renderers[id] that will render the chart.
-  JSON.parse($("#chart-data").innerHTML).forEach((chart, index) => {
-    const id = `${chart.type}-${index}`;
     switch (chart.type) {
       case "balances": {
-        const series = window.favaAPI.options.commodities
-          .map(c => ({
-            name: c,
-            values: chart.data
-              .filter(d => !(d.balance[c] === undefined))
-              .map(d => ({
-                name: c,
-                date: new Date(d.date),
-                value: Number(d.balance[c]),
-              })),
-          }))
-          .filter(d => d.values.length);
+        const series = {};
+        chart.data.forEach(({ date, balance }) => {
+          Object.entries(balance).forEach(([currency, value]) => {
+            const currencySeries = series[currency] || {
+              name: currency,
+              values: [],
+            };
+            currencySeries.values.push({
+              name: currency,
+              date: new Date(date),
+              value: Number(value),
+            });
+            series[currency] = currencySeries;
+          });
+        });
 
-        renderers[id] = svg =>
-          new LineChart(svg)
-            .set(
-              "tooltipText",
-              d =>
-                `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
-                  d.date
-                )}</em>`
-            )
-            .draw(series);
+        data = Object.values(series);
+        renderer = svg =>
+          new LineChart(svg).set(
+            "tooltipText",
+            d =>
+              `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
+                d.date
+              )}</em>`
+          );
         break;
       }
       case "commodities": {
-        const series = [
-          {
-            name: chart.label,
-            values: chart.prices.map(d => ({
+        if (chart.prices.length) {
+          data = [
+            {
               name: chart.label,
-              date: new Date(d[0]),
-              value: d[1],
-            })),
-          },
-        ];
+              values: chart.prices.map(d => ({
+                name: chart.label,
+                date: new Date(d[0]),
+                value: d[1],
+              })),
+            },
+          ];
 
-        if (series[0].values.length) {
-          renderers[id] = svg =>
-            new LineChart(svg)
-              .set(
-                "tooltipText",
-                d =>
-                  `1 ${chart.base} = ${formatCurrency(d.value)} ${
-                    chart.quote
-                  }<em>${dateFormat.day(d.date)}</em>`
-              )
-              .draw(series);
+          renderer = svg =>
+            new LineChart(svg).set(
+              "tooltipText",
+              d =>
+                `1 ${chart.base} = ${formatCurrency(d.value)} ${
+                  chart.quote
+                }<em>${dateFormat.day(d.date)}</em>`
+            );
         }
         break;
       }
       case "bar": {
-        const currentDateFormat = dateFormat[$("#chart-interval").value];
-        const operatingCurrencies = getOperatingCurrencies();
-        const series = chart.series.map(d => ({
+        const currentDateFormat = dateFormat[interval];
+        data = chart.series.map(d => ({
           values: operatingCurrencies.map(name => ({
             name,
             value: +d.balance[name] || 0,
@@ -989,81 +829,62 @@ e.on("page-loaded", () => {
           date: new Date(d.date),
           label: currentDateFormat(new Date(d.date)),
         }));
-
-        renderers[id] = svg =>
-          new BarChart(svg)
-            .set("tooltipText", d => {
-              let text = "";
-              d.values.forEach(a => {
-                text += `${formatCurrency(a.value)} ${a.name}`;
-                if (a.budget) {
-                  text += ` / ${formatCurrency(a.budget)} ${a.name}`;
-                }
-                text += "<br>";
-              });
-              text += `<em>${d.label}</em>`;
-              return text;
-            })
-            .draw(series);
+        renderer = svg =>
+          new BarChart(svg).set("tooltipText", d => {
+            let text = "";
+            d.values.forEach(a => {
+              text += `${formatCurrency(a.value)} ${a.name}`;
+              if (a.budget) {
+                text += ` / ${formatCurrency(a.budget)} ${a.name}`;
+              }
+              text += "<br>";
+            });
+            text += `<em>${d.label}</em>`;
+            return text;
+          });
         break;
       }
       case "scatterplot": {
-        const series = chart.events.map(d => ({
+        data = chart.events.map(d => ({
           type: d.type,
           date: new Date(d.date),
           description: d.description,
         }));
-
-        renderers[id] = svg =>
-          new ScatterPlot(svg)
-            .set(
-              "tooltipText",
-              d => `${d.description}<em>${dateFormat.day(d.date)}</em>`
-            )
-            .draw(series);
+        renderer = svg =>
+          new ScatterPlot(svg).set(
+            "tooltipText",
+            d => `${d.description}<em>${dateFormat.day(d.date)}</em>`
+          );
 
         break;
       }
       case "hierarchy": {
         addInternalNodesAsLeaves(chart.root);
-        const roots = {};
+        data = {};
 
-        const operatingCurrencies = getOperatingCurrencies();
         operatingCurrencies.forEach(currency => {
           const currencyHierarchy = hierarchy(chart.root)
             .sum(d => d.balance[currency] * chart.modifier)
             .sort((a, b) => b.value - a.value);
           if (currencyHierarchy.value !== 0) {
-            roots[currency] = currencyHierarchy;
+            data[currency] = currencyHierarchy;
           }
         });
 
-        renderers[id] = svg => new HierarchyContainer(svg).draw(roots);
+        renderer = svg => new HierarchyContainer(svg);
 
         break;
       }
       default:
         break;
     }
-    if (renderers[id]) {
-      select("#chart-labels")
-        .append("label")
-        .attr("for", id)
-        .html(chart.label);
+    if (renderer) {
+      result.push({
+        name: chart.label,
+        data,
+        renderer,
+      });
     }
   });
-
-  chartSwitcher.reset(renderers);
-});
-
-e.on("button-click-toggle-chart", () => {
-  const hideCharts = $("#charts").classList.toggle("hide-charts");
-  const url = new URL(window.location.href);
-  if (hideCharts) {
-    url.searchParams.set("charts", false);
-  } else {
-    url.searchParams.delete("charts");
-    chartSwitcher.update();
-  }
-  router.navigate(url.toString(), false);
-});
+  return result;
+}

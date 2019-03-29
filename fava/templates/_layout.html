@@ -19,7 +19,7 @@
       </svg>
       <h1>
         {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-        <button type=button id="reload-page" class="reload-page hidden" data-event="reload-page" data-key="r" data-reload-text="{{ _('File change detected. Click to reload.') }}">&#8635;</button>
+        <button type=button id="reload-page" class="reload-page hidden" data-event="reload-page" data-key="r">&#8635;</button>
         {% if config['LEDGERS']|length > 1 %}
         <div class="beancount-files">
           <ul>
@@ -39,6 +39,7 @@
     <aside>{% include "_aside.html" %}</aside>
     <article>
       {%- endif %}
+      <div id="svelte-charts"></div>
       {% block content %}
       {% include active_page + '.html' %}
       {% endblock %}

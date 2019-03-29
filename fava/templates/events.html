@@ -1,6 +1,5 @@
 {% set events = ledger.events() %}
 {% if events %}
-{{ charts.skeleton(hide_interval_filter=True) }}
 {{ charts.events() }}
 {% for group in events|groupby('type') %}
 <div class="left">

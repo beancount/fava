@@ -10,12 +10,6 @@
   cursor: pointer;
 }
 
-.chart-mode label {
-  margin-right: 0;
-  color: var(--color-text);
-  background-color: var(--color-background-darker);
-}
-
 .chart-labels label + label {
   border-left: 1px solid var(--color-text-lighter);
 }
@@ -25,15 +19,21 @@
   color: var(--color-text-lighter);
 }
 
+.chart-mode span {
+  margin-right: 0;
+  color: var(--color-text);
+  background-color: var(--color-background-darker);
+}
+
 .chart-mode input {
   display: none;
 }
 
-.chart-mode label:hover {
+.chart-mode span:hover {
   color: var(--color-background);
 }
 
-.chart-mode input:checked + label {
+.chart-mode input:checked + span {
   color: var(--color-background);
   background-color: var(--color-header);
 }
@@ -44,36 +44,24 @@
   margin: 0;
 }
 
-.toggle-chart span {
+.toggle-chart::before {
   display: block;
+  content: "";
   border: 0;
   border-top: 13px solid var(--color-background);
   border-right: 9px solid transparent;
   border-left: 9px solid transparent;
 }
 
-.hide-charts .toggle-chart span {
+.hide-charts .toggle-chart::before {
   border: 0;
   border-right: 9px solid transparent;
   border-bottom: 13px solid var(--color-background);
   border-left: 9px solid transparent;
 }
 
-.chart-container {
-  position: relative;
-  min-height: 100px;
-}
-
 .chart-legend {
   flex-grow: 1;
-}
-
-.hide-charts .chart-container,
-.hide-charts .chart-legend,
-.hide-charts .chart-currency,
-.hide-charts .chart-mode,
-.hide-charts .chart-labels {
-  display: none;
 }
 
 .chart-legend .color {
@@ -85,13 +73,6 @@
 
 .chart-legend .name {
   margin: 0 6px 0 3px;
-}
-
-.loading {
-  padding-top: 30px;
-  font-style: italic;
-  color: var(--color-text-lightest);
-  text-align: center;
 }
 
 svg text {

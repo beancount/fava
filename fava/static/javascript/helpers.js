@@ -2,11 +2,13 @@
 export function $(expr, con = document) {
   return con.querySelector(expr);
 }
+export const select = $;
 
 // Select multiple elements (and convert NodeList to Array).
 export function $$(expr, con = document) {
   return Array.from(con.querySelectorAll(expr));
 }
+export const selectAll = $$;
 
 let translations;
 /*
@@ -30,19 +32,18 @@ export function delegate(element, type, selector, callback) {
     }
   });
 }
-$.delegate = delegate;
 
 // Bind an event to element, only run the callback once.
-$.once = function once(element, event, callback) {
+export function once(element, event, callback) {
   function runOnce(...args) {
     element.removeEventListener(event, runOnce);
     callback.apply(element, args);
   }
 
   element.addEventListener(event, runOnce);
-};
+}
 
-$.ready = function ready() {
+export function ready() {
   return new Promise(resolve => {
     if (document.readyState !== "loading") {
       resolve();
@@ -50,7 +51,7 @@ $.ready = function ready() {
       document.addEventListener("DOMContentLoaded", resolve());
     }
   });
-};
+}
 
 // Handles JSON content for a Promise returned by fetch, also handling an HTTP
 // error status.
@@ -81,7 +82,6 @@ export function fetch(input, init = {}) {
   };
   return window.fetch(input, Object.assign(defaults, init));
 }
-$.fetch = fetch;
 
 export function fetchAPI(endpoint) {
   return fetch(`${window.favaAPI.baseURL}api/${endpoint}/`)

@@ -3,10 +3,11 @@
 // Fava intercepts all clicks on links and will in most cases asynchronously
 // load the content of the page and replace the <article> contents with them.
 
-import { $, $$ } from "./helpers";
+import { select, selectAll, delegate, fetch, handleText } from "./helpers";
 import e from "./events";
+import { notify } from "./notifications";
 import initSort from "./sort";
-import { urlHash } from "./stores";
+import { urlHash, conversion, interval, showCharts } from "./stores";
 
 // Set the query string to match the filter inputs and the interval and
 // conversion <select>'s.
@@ -15,7 +16,7 @@ function updateURL(url) {
   const currentURL = new URL(window.location.href);
   ["account", "filter", "time"].forEach(filter => {
     newURL.searchParams.delete(filter);
-    const el = $(`#${filter}-filter`);
+    const el = select(`#${filter}-filter`);
     if (el.value) {
       newURL.searchParams.set(filter, el.value);
     }
@@ -71,7 +72,7 @@ class Router {
 
   // Replace <article> contents with the page at `url`. If `historyState` is
   // false, do not create a history state and do not scroll to top.
-  loadURL(url, historyState = true) {
+  async loadURL(url, historyState = true) {
     const state = { interrupt: false };
     e.trigger("navigate", state);
     if (state.interrupt) {
@@ -81,32 +82,24 @@ class Router {
     const getUrl = new URL(url);
     getUrl.searchParams.set("partial", true);
 
-    const svg = $(".fava-icon");
+    const svg = select(".fava-icon");
     svg.classList.add("loading");
 
-    $.fetch(getUrl.toString()).then(
-      response => {
-        response.text().then(data => {
-          if (!response.ok) {
-            e.trigger("error", data);
-            return;
-          }
-          if (historyState) {
-            window.history.pushState(null, null, url);
-            window.scroll(0, 0);
-          }
-          this.updateState();
-          $("article").innerHTML = data;
-          svg.classList.remove("loading");
-          e.trigger("page-loaded");
-          urlHash.set(window.location.hash.slice(1));
-        });
-      },
-      () => {
-        svg.classList.remove("loading");
-        e.trigger("error", `Loading ${url} failed.`);
+    try {
+      const content = await fetch(getUrl.toString()).then(handleText);
+      if (historyState) {
+        window.history.pushState(null, null, url);
+        window.scroll(0, 0);
       }
-    );
+      this.updateState();
+      select("article").innerHTML = content;
+      e.trigger("page-loaded");
+      urlHash.set(window.location.hash.slice(1));
+    } catch (error) {
+      notify(`Loading ${url} failed.`, "error");
+    } finally {
+      svg.classList.remove("loading");
+    }
   }
 
   // Update the routers state object. The state object is used to distinguish
@@ -125,7 +118,7 @@ class Router {
   //  - the link starts with a hash '#', or
   //  - the link has a `data-remote` attribute.
   takeOverLinks() {
-    $.delegate(window.document, "click", "a", event => {
+    delegate(window.document, "click", "a", event => {
       if (
         event.button !== 0 ||
         event.altKey ||
@@ -188,41 +181,55 @@ e.on("form-submit-query", form => {
   const pageURL = url.toString();
   url.searchParams.set("result_only", true);
 
-  $.fetch(url.toString())
-    .then(response => response.text())
+  fetch(url.toString())
+    .then(handleText)
     .then(data => {
-      $$(".queryresults-wrapper").forEach(element => {
+      selectAll(".queryresults-wrapper").forEach(element => {
         element.classList.add("toggled");
       });
-      $("#query-container").insertAdjacentHTML("afterbegin", data);
+      select("#query-container").insertAdjacentHTML("afterbegin", data);
       initSort();
       window.history.replaceState(null, null, pageURL);
     });
 });
 
-// These elements might be added asynchronously, so rebind them on page-load.
-e.on("page-loaded", () => {
-  const interval = $("#chart-interval");
-  if (interval) {
-    interval.addEventListener("change", () => {
-      const newURL = new URL(window.location.href);
-      newURL.searchParams.set("interval", interval.value);
-      if (interval.value === interval.getAttribute("data-default")) {
-        newURL.searchParams.delete("interval");
-      }
-      router.navigate(newURL.toString());
-    });
-  }
+e.on("page-init", () => {
+  const params = new URL(window.location.href).searchParams;
+  showCharts.set(!(params.get("charts") === "false"));
+  interval.set(params.get("interval") || window.favaAPI.favaOptions.interval);
+  conversion.set(params.get("conversion") || "at_cost");
 
-  const conversion = $("#conversion");
-  if (conversion) {
-    conversion.addEventListener("change", () => {
-      const newURL = new URL(window.location.href);
-      newURL.searchParams.set("conversion", conversion.value);
-      if (conversion.value === "at_cost") {
-        newURL.searchParams.delete("conversion");
-      }
-      router.navigate(newURL.toString());
-    });
-  }
+  interval.subscribe(value => {
+    const newURL = new URL(window.location.href);
+    newURL.searchParams.set("interval", value);
+    if (value === window.favaAPI.favaOptions.interval) {
+      newURL.searchParams.delete("interval");
+    }
+    const url = newURL.toString();
+    if (url !== window.location.href) {
+      router.navigate(url);
+    }
+  });
+
+  conversion.subscribe(value => {
+    const newURL = new URL(window.location.href);
+    newURL.searchParams.set("conversion", value);
+    if (value === "at_cost") {
+      newURL.searchParams.delete("conversion");
+    }
+    const url = newURL.toString();
+    if (url !== window.location.href) {
+      router.navigate(url);
+    }
+  });
+
+  showCharts.subscribe(value => {
+    const newURL = new URL(window.location.href);
+    if (value) {
+      newURL.searchParams.delete("charts");
+    } else {
+      newURL.searchParams.set("charts", false);
+    }
+    router.navigate(newURL.toString(), false);
+  });
 });

@@ -11,7 +11,6 @@
 
 {% block content %}
 <div class="droptarget" data-account-name="{{ account_name }}">
-  {{ charts.skeleton() }}
   {{ charts.account_balance(account_name) }}
   {{ charts.interval_totals(g.interval, account_name, label=_('Changes')) }}
 

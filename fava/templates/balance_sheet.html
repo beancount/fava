@@ -1,6 +1,5 @@
 {% import '_tree_table.html' as tree_table with context %}
 
-{{ charts.skeleton() }}
 {{ charts.net_worth(g.interval) }}
 {{ charts.hierarchy(ledger.options['name_assets']) }}
 {{ charts.hierarchy(ledger.options['name_liabilities']) }}

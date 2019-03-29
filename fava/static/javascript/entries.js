@@ -1,4 +1,5 @@
 import e from "./events";
+import { notify } from "./notifications";
 import { fetch, handleJSON } from "./helpers";
 
 export class Posting {
@@ -31,9 +32,9 @@ export async function saveEntries(entries) {
       headers: { "Content-Type": "application/json" },
     }).then(handleJSON);
     e.trigger("reload");
-    e.trigger("info", data.message);
+    notify(data.message);
   } catch (error) {
-    e.trigger("error", `Saving failed: ${error}`);
+    notify(`Saving failed: ${error}`, "error");
     throw error;
   }
 }

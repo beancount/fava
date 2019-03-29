@@ -1,6 +1,6 @@
 import Mousetrap from "mousetrap";
 
-import { $, $$ } from "./helpers";
+import { $, $$, once } from "./helpers";
 import e from "./events";
 import { closeOverlay } from "./stores";
 
@@ -68,7 +68,7 @@ e.on("page-init", () => {
   Mousetrap.bind("?", () => {
     removeTooltips();
     showTooltips();
-    $.once(document, "mousedown", () => {
+    once(document, "mousedown", () => {
       removeTooltips();
     });
   });
@@ -80,21 +80,21 @@ e.on("page-init", () => {
 
   // Charts
   Mousetrap.bind("c", () => {
-    const selected = $("#chart-labels .selected");
+    const selected = $(".chart-labels .selected");
 
     if (selected && selected.nextElementSibling) {
       selected.nextElementSibling.click();
     } else {
-      click("#chart-labels label:first-child");
+      click(".chart-labels label:first-child");
     }
   });
   Mousetrap.bind("C", () => {
-    const selected = $("#chart-labels .selected");
+    const selected = $(".chart-labels .selected");
 
     if (selected && selected.previousElementSibling) {
       selected.previousElementSibling.click();
     } else {
-      click("#chart-labels label:last-child");
+      click(".chart-labels label:last-child");
     }
   });
 });

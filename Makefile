@@ -36,7 +36,7 @@ docs:
 
 .PHONY: run-example
 run-example:
-	BEANCOUNT_FILE= fava --debug tests/data/import.beancount
+	BEANCOUNT_FILE= fava --debug tests/data/example.beancount
 
 .PHONY: bql-grammar
 bql-grammar:

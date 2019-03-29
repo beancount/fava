@@ -37,8 +37,9 @@ import "./codemirror/mode-beancount";
 import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
-import { $, $$, handleJSON } from "./helpers";
+import { $, $$, delegate, fetch, handleJSON } from "./helpers";
 import e from "./events";
+import { notify } from "./notifications";
 import { closeOverlay } from "./stores";
 
 // This handles saving in both the main and the overlaid entry editors.
@@ -49,7 +50,7 @@ CodeMirror.commands.favaSave = cm => {
   button.disabled = true;
   button.textContent = button.getAttribute("data-progress-content");
 
-  $.fetch(`${window.favaAPI.baseURL}api/source/`, {
+  fetch(`${window.favaAPI.baseURL}api/source/`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -74,7 +75,7 @@ CodeMirror.commands.favaSave = cm => {
         }
       },
       error => {
-        e.trigger("error", error);
+        notify(error, "error");
       }
     )
     .then(() => {
@@ -84,7 +85,7 @@ CodeMirror.commands.favaSave = cm => {
 };
 
 CodeMirror.commands.favaFormat = cm => {
-  $.fetch(`${window.favaAPI.baseURL}api/format-source/`, {
+  fetch(`${window.favaAPI.baseURL}api/format-source/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -101,7 +102,7 @@ CodeMirror.commands.favaFormat = cm => {
         cm.scrollTo(null, scrollPosition);
       },
       error => {
-        e.trigger("error", error);
+        notify(error, "error");
       }
     );
 };
@@ -192,7 +193,7 @@ function initQueryEditor() {
     }
   });
 
-  $.delegate($("#query-container"), "click", ".toggle-box-header", event => {
+  delegate($("#query-container"), "click", ".toggle-box-header", event => {
     const wrapper = event.target.closest(".toggle-box");
     if (wrapper.classList.contains("inactive")) {
       editor.setValue(wrapper.querySelector("code").textContent);

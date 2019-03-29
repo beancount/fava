@@ -1,7 +1,5 @@
 {% import '_tree_table.html' as tree_table with context %}
 
-{{ charts.skeleton(hide_interval_filter=True) }}
-
 {% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
 {{ charts.hierarchy(ledger.options['name_{}'.format(base_account)]) }}
 {% endfor %}

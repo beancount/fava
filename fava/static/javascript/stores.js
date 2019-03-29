@@ -8,3 +8,10 @@ export function closeOverlay() {
   }
   urlHash.set("");
 }
+
+export const conversion = writable("");
+export const interval = writable("");
+export const showCharts = writable(true);
+export const activeChart = writable({});
+export const chartMode = writable("treemap");
+export const chartCurrency = writable("");
