@@ -87,23 +87,27 @@ def get_next_interval(date: datetime.date, interval: Interval):
 
     """
     if interval is Interval.YEAR:
-        return datetime.date(date.year + 1, 1, 1)
-    if interval is Interval.QUARTER:
+        next_interval = datetime.date(date.year + 1, 1, 1)
+    elif interval is Interval.QUARTER:
         for i in [4, 7, 10]:
             if date.month < i:
-                return datetime.date(date.year, i, 1)
-        return datetime.date(date.year + 1, 1, 1)
-    if interval is Interval.MONTH:
+                next_interval = datetime.date(date.year, i, 1)
+                break
+        else:
+            next_interval = datetime.date(date.year + 1, 1, 1)
+    elif interval is Interval.MONTH:
         month = (date.month % 12) + 1
         year = date.year + (date.month + 1 > 12)
-        return datetime.date(year, month, 1)
-    if interval is Interval.FORTNIGHT:
-        return date + datetime.timedelta(14 - date.weekday())
-    if interval is Interval.WEEK:
-        return date + datetime.timedelta(7 - date.weekday())
-    if interval is Interval.DAY:
-        return date + datetime.timedelta(1)
-    raise NotImplementedError
+        next_interval = datetime.date(year, month, 1)
+    elif interval is Interval.FORTNIGHT:
+        next_interval = date + datetime.timedelta(14 - date.weekday())
+    elif interval is Interval.WEEK:
+        next_interval = date + datetime.timedelta(7 - date.weekday())
+    elif interval is Interval.DAY:
+        next_interval = date + datetime.timedelta(1)
+    else:
+        raise NotImplementedError
+    return next_interval
 
 
 def interval_ends(first, last, interval: Interval):
