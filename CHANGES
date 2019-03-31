@@ -4,13 +4,13 @@ Changelog
 Unreleased
 ----------
 
-Nothing yet.
+- Added `biweekly` interval for budget.
 
 v1.10 (2019-01-31)
 ------------------
 
 This release contains mostly smaller changes and fixes. In particular, the net
-worth chart will now follow the seleected conversion.
+worth chart will now follow the selected conversion.
 
 v1.9 (2018-10-08)
 -----------------

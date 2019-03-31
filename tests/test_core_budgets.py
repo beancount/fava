@@ -77,6 +77,24 @@ def test_budgets_weekly(budgets_doc):
     )
 
 
+def test_budgets_biweekly(budgets_doc):
+    """
+    2016-05-01 custom "budget" Expenses:Books "biweekly" 42 EUR"""
+
+    assert (
+        calculate_budget(
+            budgets_doc, "Expenses:Books", date(2016, 5, 1), date(2016, 5, 2)
+        )["EUR"]
+        == D("42") / 14
+    )
+    assert (
+        calculate_budget(
+            budgets_doc, "Expenses:Books", date(2016, 9, 1), date(2016, 9, 2)
+        )["EUR"]
+        == D("42") / 14
+    )
+
+
 def test_budgets_monthly(budgets_doc):
     """
     2014-05-01 custom "budget" Expenses:Books "monthly" 100 EUR"""

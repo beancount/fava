@@ -43,6 +43,7 @@ class Interval(enum.Enum):
     YEAR = "year"
     QUARTER = "quarter"
     MONTH = "month"
+    FORTNIGHT = "fortnight"
     WEEK = "week"
     DAY = "day"
 
@@ -53,6 +54,7 @@ class Interval(enum.Enum):
             Interval.YEAR: gettext("Yearly"),
             Interval.QUARTER: gettext("Quarterly"),
             Interval.MONTH: gettext("Monthly"),
+            Interval.FORTNIGHT: gettext("Biweekly"),
             Interval.WEEK: gettext("Weekly"),
             Interval.DAY: gettext("Daily"),
         }.get(self)
@@ -69,7 +71,8 @@ class Interval(enum.Enum):
     def members():
         """Yield all members of this Enum."""
         for interval in Interval:
-            yield interval
+            if interval is not Interval.FORTNIGHT:
+                yield interval
 
 
 def get_next_interval(date: datetime.date, interval: Interval):
@@ -94,6 +97,8 @@ def get_next_interval(date: datetime.date, interval: Interval):
         month = (date.month % 12) + 1
         year = date.year + (date.month + 1 > 12)
         return datetime.date(year, month, 1)
+    if interval is Interval.FORTNIGHT:
+        return date + datetime.timedelta(14 - date.weekday())
     if interval is Interval.WEEK:
         return date + datetime.timedelta(7 - date.weekday())
     if interval is Interval.DAY:
@@ -359,6 +364,8 @@ def number_of_days_in_period(interval, date):
         return 1
     if interval is Interval.WEEK:
         return 7
+    if interval is Interval.FORTNIGHT:
+        return 14
     if interval is Interval.MONTH:
         date = datetime.date(date.year, date.month, 1)
         return (get_next_interval(date, Interval.MONTH) - date).days
