@@ -301,6 +301,12 @@ def holdings_by(aggregation_key):
     return None
 
 
+@app.route("/<bfile>/_context/")
+def context():
+    """Entry context."""
+    return render_template("_context.html")
+
+
 @app.route("/<bfile>/<report_name>/")
 def report(report_name):
     """Endpoint for most reports."""

@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from "svelte";
 
   import initSourceEditor from "../editor";
-  import { _, fetch, delegate } from "../helpers";
+  import { _, fetch, delegate, handleText } from "../helpers";
   import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
@@ -13,12 +13,7 @@
   $: content = !shown
     ? ""
     : fetch(`${window.favaAPI.baseURL}_context/?entry_hash=${entryHash}`).then(
-        response => {
-          if (!response.ok) {
-            return Promise.reject(response.statusText);
-          }
-          return response.text();
-        }
+        handleText
       );
 
   onMount(() => {
