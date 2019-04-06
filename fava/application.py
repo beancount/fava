@@ -115,7 +115,7 @@ def get_locale():
     """
     if g.ledger.fava_options["language"]:
         return g.ledger.fava_options["language"]
-    return request.accept_languages.best_match(['en'] + LANGUAGES)
+    return request.accept_languages.best_match(["en"] + LANGUAGES)
 
 
 for _, function in inspect.getmembers(template_filters, inspect.isfunction):
