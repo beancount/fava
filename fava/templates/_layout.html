@@ -1,5 +1,5 @@
 {% import "_charts.html" as charts with context %}
-{% import "_globals.html" as globals %}
+{% import "_globals.html" as globals with context %}
 {% set page_title = globals.all_pages[active_page].0 if not page_title else page_title %}
 {% set short_title = page_title if not short_title else short_title %}
 {% if not g.partial %}
