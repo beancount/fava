@@ -17,7 +17,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
   <span class="number">{{ num|format_currency(currency) }}</span>
 {% endmacro %}
 
-{% macro tree(account_node, totals=True) %}
+{% macro tree(account_node) %}
 <ol class="tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ table_hover_text }}">
   <li class="head">
     <p>
@@ -68,24 +68,6 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
     {% endif %}
   </li>
   {% endfor %}
-  {% if totals %}
-  {% set balance = account_node.balance_children|cost_or_value %}
-  <li class="totals">
-    <p>
-    <span class="account-cell">&nbsp;</span>
-    {% for currency in ledger.options.operating_currency %}
-    <span class="num">{{ balance.pop(currency, 0)|format_currency(currency) }}</span>
-    {% endfor %}
-    {% if show_other_column %}
-    <span class="num other">
-      {% for currency, number in balance.items()|sort if number %}
-      {{ (number, currency)|format_amount }}<br>
-      {% endfor %}
-    </span>
-    {% endif %}
-    </p>
-  </li>
-  {% endif %}
 </ol>
 {% endmacro %}
 
@@ -162,19 +144,5 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
     </ol>
     </li>
 {% endfor %}
-    <li class="totals">
-        <p>
-        <span class="account-cell">&nbsp;</span>
-    {% for begin_date, end_date in dates %}
-        {% set current_account = interval_balances[loop.index0]|get_or_create(account_name) %}
-        {% set balance_children = current_account|balance_children|cost_or_value(end_date) %}
-        <span class="num other">
-            {% for pos in balance_children %}
-                {{ pos.units|format_amount }}<br>
-            {% endfor %}
-        </span>
-        {% endfor %}
-        </p>
-    </li>
 </ol>
 {% endmacro %}
