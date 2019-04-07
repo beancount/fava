@@ -11,7 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Vlastné odkazy"
 
-#: fava/templates/_aside.html:34 fava/templates/errors.html:4
+#: fava/templates/_aside.html:34 fava/templates/_globals.html:5
 msgid "Errors"
 msgstr "Chyby"
 
@@ -19,52 +19,52 @@ msgstr "Chyby"
 msgid "Time"
 msgstr "Čas"
 
-#: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
-#: fava/templates/_overlays.html:18 fava/templates/holdings.html:48
-#: fava/templates/import.html:19 fava/templates/statistics.html:36
+#: fava/static/javascript/modals/DocumentUpload.svelte:101
+#: fava/templates/_entry_filters.html:3 fava/templates/holdings.html:45
+#: fava/templates/import.html:15 fava/templates/statistics.html:32
 msgid "Account"
 msgstr "Účet"
 
-#: fava/templates/_entry_forms.html:42 fava/templates/_entry_forms.html:43
+#: fava/static/javascript/entry-forms/Transaction.svelte:48
 msgid "Payee"
 msgstr "Príjemca"
 
-#: fava/templates/_globals.html:2
+#: fava/templates/_globals.html:10
 msgid "Income Statement"
 msgstr "Výkaz ziskov a strát"
 
-#: fava/templates/_globals.html:3
+#: fava/templates/_globals.html:2
 msgid "Balance Sheet"
 msgstr "Súvaha"
 
-#: fava/templates/_globals.html:4
+#: fava/templates/_globals.html:15
 #, fuzzy
 msgid "Trial Balance"
 msgstr "Hrubá súvaha"
 
-#: fava/templates/_globals.html:5
+#: fava/templates/_globals.html:11
 msgid "Journal"
 msgstr "Účtovná kniha"
 
-#: fava/templates/_globals.html:6
+#: fava/templates/_globals.html:13
 #, fuzzy
 msgid "Query"
 msgstr "Dotaz"
 
-#: fava/templates/_globals.html:7 fava/templates/holdings.html:47
+#: fava/templates/_globals.html:8 fava/templates/holdings.html:44
 #, fuzzy
 msgid "Holdings"
 msgstr "Vlastníctvo"
 
-#: fava/templates/_globals.html:8
+#: fava/templates/_globals.html:3
 msgid "Commodities"
 msgstr "Komodity"
 
-#: fava/templates/_globals.html:9
+#: fava/templates/_globals.html:6
 msgid "Events"
 msgstr "Udalosti"
 
-#: fava/templates/_globals.html:10
+#: fava/templates/_globals.html:4
 msgid "Editor"
 msgstr "Editor"
 
@@ -72,16 +72,16 @@ msgstr "Editor"
 msgid "Options"
 msgstr "Možnosti"
 
-#: fava/templates/_globals.html:13
+#: fava/templates/_globals.html:14
 msgid "Statistics"
 msgstr "Štatistiky"
 
-#: fava/templates/_globals.html:14
+#: fava/templates/_globals.html:7
 msgid "Help"
 msgstr "Pomoc"
 
-#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:15
-#: fava/templates/events.html:17 fava/templates/import.html:20
+#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:10
+#: fava/templates/events.html:11 fava/templates/import.html:16
 msgid "Date"
 msgstr "Dátum"
 
@@ -98,7 +98,7 @@ msgstr "Popis/Príjemca"
 msgid "Position"
 msgstr "Pozícia"
 
-#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:16
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
 msgid "Price"
 msgstr "Cena"
 
@@ -110,21 +110,21 @@ msgstr "Výdavok"
 msgid "Change"
 msgstr "Zmena"
 
-#: fava/templates/_entry_forms.html:62 fava/templates/_journal_table.html:94
-#: fava/templates/statistics.html:40
+#: fava/static/javascript/entry-forms/Balance.svelte:21
+#: fava/templates/_journal_table.html:94 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "Zostatok"
 
-#: fava/templates/_context.html:57 fava/templates/_overlays.html:33
-#: fava/templates/editor.html:41
+#: fava/static/javascript/modals/AddTransaction.svelte:57
+#: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
 msgstr "Uložiť"
 
-#: fava/templates/_context.html:57 fava/templates/editor.html:41
+#: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Saving..."
 msgstr "Ukladá sa..."
 
-#: fava/templates/_layout.html:22
+#: fava/static/javascript/main.js:118
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -140,42 +140,42 @@ msgstr "Rozšíriť všetko"
 msgid "Other"
 msgstr "Ostatné"
 
-#: fava/templates/account.html:23
+#: fava/templates/account.html:22
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Register všetkých zápisov pre tento účet a jeho podúčty"
 
-#: fava/templates/account.html:23
+#: fava/templates/account.html:22
 #, fuzzy
 msgid "Account Journal"
 msgstr "Register účtu"
 
-#: fava/templates/account.html:16 fava/templates/account.html:24
+#: fava/templates/account.html:15 fava/templates/account.html:23
 msgid "Changes"
 msgstr "Zmeny"
 
-#: fava/templates/account.html:25
+#: fava/templates/account.html:24
 msgid "Balances"
 msgstr "Zostatky"
 
-#: fava/templates/_context.html:4 fava/templates/errors.html:20
-#: fava/templates/errors.html:21
+#: fava/templates/_context.html:4 fava/templates/errors.html:14
+#: fava/templates/errors.html:15
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Ukázať zdroj %(file)s:%(lineno)s"
 
-#: fava/templates/editor.html:9 fava/templates/errors.html:11
-#: fava/templates/import.html:17
+#: fava/templates/editor.html:6 fava/templates/errors.html:5
+#: fava/templates/import.html:13
 msgid "File"
 msgstr "Súbor"
 
-#: fava/templates/errors.html:12 fava/templates/extract.html:14
+#: fava/static/javascript/modals/Extract.svelte:41 fava/templates/errors.html:6
 msgid "Line"
 msgstr "Riadok"
 
-#: fava/templates/errors.html:13
+#: fava/templates/errors.html:7
 msgid "Error"
 msgstr "Chyba"
 
-#: fava/templates/errors.html:30
+#: fava/templates/errors.html:24
 msgid "No errors."
 msgstr "Žiadne chyby."
 
@@ -183,11 +183,11 @@ msgstr "Žiadne chyby."
 msgid "Event: %(type)s"
 msgstr "Udalosť: %(type)s"
 
-#: fava/templates/events.html:18
+#: fava/templates/events.html:12
 msgid "Description"
 msgstr "Popis"
 
-#: fava/templates/events.html:34
+#: fava/templates/events.html:28
 msgid "No events."
 msgstr "Žiadne udalosti."
 
@@ -195,42 +195,41 @@ msgstr "Žiadne udalosti."
 msgid "Help - %(title)s"
 msgstr "Pomoc - %(title)s"
 
-#: fava/templates/help.html:9
+#: fava/templates/help.html:3
 #, fuzzy
 msgid "Help pages"
 msgstr "Pomocné stránky"
 
-#: fava/templates/_entry_forms.html:65 fava/templates/holdings.html:48
+#: fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "Mena"
 
-#: fava/templates/holdings.html:48
+#: fava/templates/holdings.html:45
 msgid "Cost currency"
 msgstr "Mena výdavku"
 
-#: fava/templates/holdings.html:49
+#: fava/templates/holdings.html:46
 msgid "Holdings by"
 msgstr "Majetok podľa"
 
-#: fava/templates/income_statement.html:8
+#: fava/templates/income_statement.html:3
+#: fava/templates/income_statement.html:18
 msgid "Net Profit"
 msgstr "Čistý zisk"
 
-#: fava/templates/income_statement.html:9
+#: fava/templates/income_statement.html:4
 msgid "Income"
 msgstr "Príjem"
 
-#: fava/templates/income_statement.html:10
+#: fava/templates/income_statement.html:5
 msgid "Expenses"
 msgstr "Výdavky"
 
-#: fava/templates/_entry_forms.html:23 fava/templates/options.html:9
-#: fava/templates/options.html:26
+#: fava/templates/options.html:5 fava/templates/options.html:22
 msgid "Key"
 msgstr "Kľúč"
 
-#: fava/templates/_entry_forms.html:24 fava/templates/options.html:10
-#: fava/templates/options.html:27
+#: fava/templates/options.html:6 fava/templates/options.html:23
 msgid "Value"
 msgstr "Hodnota"
 
@@ -238,39 +237,39 @@ msgstr "Hodnota"
 msgid "Download as"
 msgstr "Stiahnuť ako"
 
-#: fava/templates/statistics.html:21
+#: fava/templates/statistics.html:17
 msgid "Postings per Account"
 msgstr "Položky na účte"
 
-#: fava/templates/statistics.html:90
+#: fava/templates/statistics.html:86
 msgid "Total"
 msgstr "Súhrn"
 
-#: fava/templates/statistics.html:30
+#: fava/templates/statistics.html:26
 msgid "Update Activity"
 msgstr "Aktualizovať aktivitu"
 
-#: fava/templates/statistics.html:31
+#: fava/templates/statistics.html:27
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Kliknutie skopíruje vyrovnávacie príkazy pre účty (okrem účtov oznčených zelenou farbou)."
 
-#: fava/templates/statistics.html:32
+#: fava/templates/statistics.html:28
 msgid "Copy balance directives"
 msgstr "Kopírovať vyrovnávacie príkazy"
 
-#: fava/templates/statistics.html:39
+#: fava/templates/statistics.html:35
 msgid "Last Entry"
 msgstr "Posledný zápis"
 
-#: fava/templates/statistics.html:72
+#: fava/templates/statistics.html:68
 msgid "Entries per Type"
 msgstr "Zápisy podľa typu"
 
-#: fava/templates/statistics.html:76
+#: fava/templates/statistics.html:72
 msgid "Type"
 msgstr "Typ"
 
-#: fava/templates/statistics.html:77
+#: fava/templates/statistics.html:73
 msgid "# Entries"
 msgstr "Počet zápisov"
 
@@ -279,15 +278,15 @@ msgstr "Počet zápisov"
 msgid "close"
 msgstr "zavrieť"
 
-#: fava/templates/_overlays.html:30
+#: fava/static/javascript/modals/AddTransaction.svelte:43
 msgid "New transaction"
 msgstr "Nová transakcia"
 
-#: fava/templates/_entry_forms.html:44 fava/templates/_entry_forms.html:45
+#: fava/static/javascript/entry-forms/Transaction.svelte:58
 msgid "Narration"
 msgstr "Popis"
 
-#: fava/templates/_overlays.html:34
+#: fava/static/javascript/modals/AddTransaction.svelte:55
 msgid "Save and add new"
 msgstr "Uložit a pridať novú transakciu"
 
@@ -299,8 +298,8 @@ msgstr "Číslo"
 msgid "Add posting"
 msgstr "Pridať položku"
 
-#: fava/templates/_globals.html:11 fava/templates/extract.html:7
-#: fava/templates/extract.html:34
+#: fava/static/javascript/modals/Extract.svelte:8
+#: fava/templates/_globals.html:9
 msgid "Import"
 msgstr "Importovať"
 
@@ -316,7 +315,7 @@ msgstr "Prepnúť zdroj"
 msgid "Toggle ignore"
 msgstr "Prepnúť ignorovanie"
 
-#: fava/templates/extract.html:15
+#: fava/static/javascript/modals/Extract.svelte:41
 msgid "Source"
 msgstr "Zdroj"
 
@@ -336,11 +335,11 @@ msgstr "Ignorovať"
 msgid "Duplicate"
 msgstr "Zdvojiť"
 
-#: fava/templates/import.html:18
+#: fava/templates/import.html:14
 msgid "Importer"
 msgstr "Importér"
 
-#: fava/templates/import.html:35
+#: fava/templates/import.html:31
 msgid "Extract"
 msgstr "Extraktovať"
 
@@ -357,7 +356,7 @@ msgstr "Metadáta"
 msgid "Add metadata"
 msgstr "Pridať metadáta"
 
-#: fava/templates/_entry_forms.html:76
+#: fava/static/javascript/entry-forms/Note.svelte:13
 msgid "Note"
 msgstr "Poznámka"
 
@@ -397,7 +396,7 @@ msgstr "Dokumenty s tagom #discovered (objavené)"
 msgid "Postings"
 msgstr "Položky"
 
-#: fava/templates/_overlays.html:7
+#: fava/static/javascript/modals/DocumentUpload.svelte:83
 msgid "Upload file(s)"
 msgstr "Nahrať súbor-y"
 
@@ -405,35 +404,35 @@ msgstr "Nahrať súbor-y"
 msgid "Documents folder"
 msgstr "Priečinok s dokumentmi"
 
-#: fava/templates/_overlays.html:22
+#: fava/static/javascript/modals/DocumentUpload.svelte:111
 msgid "Upload"
 msgstr "Nahrať"
 
-#: fava/templates/editor.html:21
+#: fava/templates/editor.html:18
 msgid "Align Amounts"
 msgstr "Zarovnať hodnoty"
 
-#: fava/templates/editor.html:27
+#: fava/templates/editor.html:24
 msgid "Toggle Comment (selection)"
 msgstr "Prepnúť kommentár (výber)"
 
-#: fava/templates/editor.html:33
+#: fava/templates/editor.html:30
 msgid "Open all folds"
 msgstr "Rozšíriť všetko"
 
-#: fava/templates/editor.html:36
+#: fava/templates/editor.html:33
 msgid "Close all folds"
 msgstr "Zhrnúť všetko"
 
-#: fava/templates/options.html:5
+#: fava/templates/options.html:1
 msgid "Fava options"
 msgstr "Fava možnosti"
 
-#: fava/templates/options.html:5
+#: fava/templates/options.html:1
 msgid "help"
 msgstr "pomoc"
 
-#: fava/templates/options.html:22
+#: fava/templates/options.html:18
 msgid "Beancount options"
 msgstr "Beancount možnosti"
 
@@ -446,7 +445,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "Držte Shift počas kliknutia na rožšírenie všetkých podpodložiek. Držte Ctrl alebo Cmd počas kliknutia na rožirenie jedného stupňa."
 
-#: fava/templates/_aside.html:28 fava/templates/_overlays.html:49
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:67
 msgid "Export"
 msgstr "Exportovať"
 
@@ -454,7 +453,7 @@ msgstr "Exportovať"
 msgid "Filter by tag, payee, ..."
 msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
-#: fava/templates/_overlays.html:50
+#: fava/templates/_layout.html:68
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 
@@ -462,27 +461,27 @@ msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 msgid "Import entries"
 msgstr "Importovať zápisy"
 
-#: fava/util/date.py:53
+#: fava/static/javascript/ChartSwitcher.svelte:93 fava/util/date.py:53
 msgid "Yearly"
 msgstr "Ročne"
 
-#: fava/util/date.py:54
+#: fava/static/javascript/ChartSwitcher.svelte:94 fava/util/date.py:54
 msgid "Quarterly"
 msgstr "Kvartálne"
 
-#: fava/util/date.py:55
+#: fava/static/javascript/ChartSwitcher.svelte:95 fava/util/date.py:55
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: fava/util/date.py:56
+#: fava/static/javascript/ChartSwitcher.svelte:96 fava/util/date.py:56
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: fava/util/date.py:57
+#: fava/static/javascript/ChartSwitcher.svelte:97 fava/util/date.py:57
 msgid "Daily"
 msgstr "Denne"
 
-#: fava/templates/editor.html:18
+#: fava/templates/editor.html:15
 msgid "Edit"
 msgstr "Upraviť"
 
@@ -493,4 +492,36 @@ msgstr "Suma"
 #: fava/templates/_journal_table.html:8
 msgid "Documents with a #linked tag"
 msgstr "Dokumenty s tagom #linked"
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:52
+msgid "You need to set the \"documents\" Beancount option for file uploads."
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:26
+msgid "At Cost"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:27
+msgid "At Market Value"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:28
+msgid "Units"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:127
+msgid "Treemap"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:131
+msgid "Sunburst"
+msgstr ""
+
+#: fava/static/javascript/entry-forms/AccountInput.svelte:10
+msgid "Should be one of the declared accounts"
+msgstr ""
+
+#: fava/templates/events.html:7
+msgid "Event"
+msgstr ""
 

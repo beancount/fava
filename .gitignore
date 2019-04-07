@@ -4,6 +4,7 @@
 /.tox
 /.idea/
 /build/
+/pip-wheel-metadata/
 /dist/
 /docs/api/
 /fava.egg-info

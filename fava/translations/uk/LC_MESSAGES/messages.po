@@ -11,7 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Налаштовані посилання"
 
-#: fava/templates/_aside.html:34 fava/templates/errors.html:4
+#: fava/templates/_aside.html:34 fava/templates/_globals.html:5
 msgid "Errors"
 msgstr "Помилки"
 
@@ -19,49 +19,49 @@ msgstr "Помилки"
 msgid "Time"
 msgstr "Час"
 
-#: fava/templates/_entry_filters.html:3 fava/templates/_entry_forms.html:2
-#: fava/templates/_overlays.html:18 fava/templates/holdings.html:48
-#: fava/templates/import.html:19 fava/templates/statistics.html:36
+#: fava/static/javascript/modals/DocumentUpload.svelte:101
+#: fava/templates/_entry_filters.html:3 fava/templates/holdings.html:45
+#: fava/templates/import.html:15 fava/templates/statistics.html:32
 msgid "Account"
 msgstr "Рахунок"
 
-#: fava/templates/_entry_forms.html:42 fava/templates/_entry_forms.html:43
+#: fava/static/javascript/entry-forms/Transaction.svelte:48
 msgid "Payee"
 msgstr "Отримувач"
 
-#: fava/templates/_globals.html:2
+#: fava/templates/_globals.html:10
 msgid "Income Statement"
 msgstr "Доходний звіт"
 
-#: fava/templates/_globals.html:3
+#: fava/templates/_globals.html:2
 msgid "Balance Sheet"
 msgstr "Баланс"
 
-#: fava/templates/_globals.html:4
+#: fava/templates/_globals.html:15
 msgid "Trial Balance"
 msgstr "Оборотно-сальдова відомість"
 
-#: fava/templates/_globals.html:5
+#: fava/templates/_globals.html:11
 msgid "Journal"
 msgstr "Журнал"
 
-#: fava/templates/_globals.html:6
+#: fava/templates/_globals.html:13
 msgid "Query"
 msgstr "Запит"
 
-#: fava/templates/_globals.html:7 fava/templates/holdings.html:47
+#: fava/templates/_globals.html:8 fava/templates/holdings.html:44
 msgid "Holdings"
 msgstr "Запаси"
 
-#: fava/templates/_globals.html:8
+#: fava/templates/_globals.html:3
 msgid "Commodities"
 msgstr "Цінності"
 
-#: fava/templates/_globals.html:9
+#: fava/templates/_globals.html:6
 msgid "Events"
 msgstr "Події"
 
-#: fava/templates/_globals.html:10
+#: fava/templates/_globals.html:4
 msgid "Editor"
 msgstr "Редактор"
 
@@ -69,16 +69,16 @@ msgstr "Редактор"
 msgid "Options"
 msgstr "Налаштування"
 
-#: fava/templates/_globals.html:13
+#: fava/templates/_globals.html:14
 msgid "Statistics"
 msgstr "Статистика"
 
-#: fava/templates/_globals.html:14
+#: fava/templates/_globals.html:7
 msgid "Help"
 msgstr "Допомога"
 
-#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:15
-#: fava/templates/events.html:17 fava/templates/import.html:20
+#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:10
+#: fava/templates/events.html:11 fava/templates/import.html:16
 msgid "Date"
 msgstr "Дата"
 
@@ -94,7 +94,7 @@ msgstr "Опис/Отримувач"
 msgid "Position"
 msgstr "Позиція"
 
-#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:16
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
 msgid "Price"
 msgstr "Ціна"
 
@@ -106,21 +106,21 @@ msgstr "Вартість"
 msgid "Change"
 msgstr "Зміна"
 
-#: fava/templates/_entry_forms.html:62 fava/templates/_journal_table.html:94
-#: fava/templates/statistics.html:40
+#: fava/static/javascript/entry-forms/Balance.svelte:21
+#: fava/templates/_journal_table.html:94 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "Баланс"
 
-#: fava/templates/_context.html:57 fava/templates/_overlays.html:33
-#: fava/templates/editor.html:41
+#: fava/static/javascript/modals/AddTransaction.svelte:57
+#: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
 msgstr "Зберегти"
 
-#: fava/templates/_context.html:57 fava/templates/editor.html:41
+#: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Saving..."
 msgstr "Зберігається..."
 
-#: fava/templates/_layout.html:22
+#: fava/static/javascript/main.js:118
 msgid "File change detected. Click to reload."
 msgstr "Вміст файлу змінився. Натисніть для перезавантаження."
 
@@ -136,41 +136,41 @@ msgstr "Розкрити усе"
 msgid "Other"
 msgstr "Інше"
 
-#: fava/templates/account.html:23
+#: fava/templates/account.html:22
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Журнал усіх записів цього Рахунку та Субрахунків"
 
-#: fava/templates/account.html:23
+#: fava/templates/account.html:22
 msgid "Account Journal"
 msgstr "Журнал Рахунку"
 
-#: fava/templates/account.html:16 fava/templates/account.html:24
+#: fava/templates/account.html:15 fava/templates/account.html:23
 msgid "Changes"
 msgstr "Зміни"
 
-#: fava/templates/account.html:25
+#: fava/templates/account.html:24
 msgid "Balances"
 msgstr "Баланс"
 
-#: fava/templates/_context.html:4 fava/templates/errors.html:20
-#: fava/templates/errors.html:21
+#: fava/templates/_context.html:4 fava/templates/errors.html:14
+#: fava/templates/errors.html:15
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Перейти до файлу %(file)s:%(lineno)s"
 
-#: fava/templates/editor.html:9 fava/templates/errors.html:11
-#: fava/templates/import.html:17
+#: fava/templates/editor.html:6 fava/templates/errors.html:5
+#: fava/templates/import.html:13
 msgid "File"
 msgstr "Файл"
 
-#: fava/templates/errors.html:12 fava/templates/extract.html:14
+#: fava/static/javascript/modals/Extract.svelte:41 fava/templates/errors.html:6
 msgid "Line"
 msgstr "Строка"
 
-#: fava/templates/errors.html:13
+#: fava/templates/errors.html:7
 msgid "Error"
 msgstr "Помилка"
 
-#: fava/templates/errors.html:30
+#: fava/templates/errors.html:24
 msgid "No errors."
 msgstr "Помилок не знайдено."
 
@@ -178,11 +178,11 @@ msgstr "Помилок не знайдено."
 msgid "Event: %(type)s"
 msgstr "Подія: %(type)s"
 
-#: fava/templates/events.html:18
+#: fava/templates/events.html:12
 msgid "Description"
 msgstr "Опис"
 
-#: fava/templates/events.html:34
+#: fava/templates/events.html:28
 msgid "No events."
 msgstr "Події відсутні."
 
@@ -190,41 +190,40 @@ msgstr "Події відсутні."
 msgid "Help - %(title)s"
 msgstr "Допомога - %(title)s"
 
-#: fava/templates/help.html:9
+#: fava/templates/help.html:3
 msgid "Help pages"
 msgstr "Сторінки допомоги"
 
-#: fava/templates/_entry_forms.html:65 fava/templates/holdings.html:48
+#: fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "Валюта"
 
-#: fava/templates/holdings.html:48
+#: fava/templates/holdings.html:45
 msgid "Cost currency"
 msgstr "Курс валюти"
 
-#: fava/templates/holdings.html:49
+#: fava/templates/holdings.html:46
 msgid "Holdings by"
 msgstr "Запаси у"
 
-#: fava/templates/income_statement.html:8
+#: fava/templates/income_statement.html:3
+#: fava/templates/income_statement.html:18
 msgid "Net Profit"
 msgstr "Чистий дохід"
 
-#: fava/templates/income_statement.html:9
+#: fava/templates/income_statement.html:4
 msgid "Income"
 msgstr "Дохід"
 
-#: fava/templates/income_statement.html:10
+#: fava/templates/income_statement.html:5
 msgid "Expenses"
 msgstr "Витрати"
 
-#: fava/templates/_entry_forms.html:23 fava/templates/options.html:9
-#: fava/templates/options.html:26
+#: fava/templates/options.html:5 fava/templates/options.html:22
 msgid "Key"
 msgstr "Ключ"
 
-#: fava/templates/_entry_forms.html:24 fava/templates/options.html:10
-#: fava/templates/options.html:27
+#: fava/templates/options.html:6 fava/templates/options.html:23
 msgid "Value"
 msgstr "Значення"
 
@@ -232,39 +231,39 @@ msgstr "Значення"
 msgid "Download as"
 msgstr "Скачати як"
 
-#: fava/templates/statistics.html:21
+#: fava/templates/statistics.html:17
 msgid "Postings per Account"
 msgstr "Проведення по Рахункам"
 
-#: fava/templates/statistics.html:90
+#: fava/templates/statistics.html:86
 msgid "Total"
 msgstr "Загалом"
 
-#: fava/templates/statistics.html:30
+#: fava/templates/statistics.html:26
 msgid "Update Activity"
 msgstr "Оновлення"
 
-#: fava/templates/statistics.html:31
+#: fava/templates/statistics.html:27
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Клікніть щоб скопіювати балансові директиви за рахунками (виключаючи зелені) у буфер обміну."
 
-#: fava/templates/statistics.html:32
+#: fava/templates/statistics.html:28
 msgid "Copy balance directives"
 msgstr "Скопіювати строки балансу"
 
-#: fava/templates/statistics.html:39
+#: fava/templates/statistics.html:35
 msgid "Last Entry"
 msgstr "Останній Запис"
 
-#: fava/templates/statistics.html:72
+#: fava/templates/statistics.html:68
 msgid "Entries per Type"
 msgstr "Записи за Типом"
 
-#: fava/templates/statistics.html:76
+#: fava/templates/statistics.html:72
 msgid "Type"
 msgstr "Тип"
 
-#: fava/templates/statistics.html:77
+#: fava/templates/statistics.html:73
 msgid "# Entries"
 msgstr "Записи"
 
@@ -273,15 +272,15 @@ msgstr "Записи"
 msgid "close"
 msgstr "закрити"
 
-#: fava/templates/_overlays.html:30
+#: fava/static/javascript/modals/AddTransaction.svelte:43
 msgid "New transaction"
 msgstr "Нова транзакція"
 
-#: fava/templates/_entry_forms.html:44 fava/templates/_entry_forms.html:45
+#: fava/static/javascript/entry-forms/Transaction.svelte:58
 msgid "Narration"
 msgstr "Опис"
 
-#: fava/templates/_overlays.html:34
+#: fava/static/javascript/modals/AddTransaction.svelte:55
 msgid "Save and add new"
 msgstr "Записати й додати нову"
 
@@ -293,8 +292,8 @@ msgstr "Кількість"
 msgid "Add posting"
 msgstr "Додати проведення"
 
-#: fava/templates/_globals.html:11 fava/templates/extract.html:7
-#: fava/templates/extract.html:34
+#: fava/static/javascript/modals/Extract.svelte:8
+#: fava/templates/_globals.html:9
 msgid "Import"
 msgstr "Імпортувати"
 
@@ -310,7 +309,7 @@ msgstr "Перемкнути джерело"
 msgid "Toggle ignore"
 msgstr "Перемкнути ігнорування"
 
-#: fava/templates/extract.html:15
+#: fava/static/javascript/modals/Extract.svelte:41
 msgid "Source"
 msgstr "Джерело"
 
@@ -330,11 +329,11 @@ msgstr "Ігнорування"
 msgid "Duplicate"
 msgstr "Дублікат"
 
-#: fava/templates/import.html:18
+#: fava/templates/import.html:14
 msgid "Importer"
 msgstr "Імпортер"
 
-#: fava/templates/import.html:35
+#: fava/templates/import.html:31
 msgid "Extract"
 msgstr "Витягти"
 
@@ -351,7 +350,7 @@ msgstr "Метадані"
 msgid "Add metadata"
 msgstr "Додати метадані"
 
-#: fava/templates/_entry_forms.html:76
+#: fava/static/javascript/entry-forms/Note.svelte:13
 msgid "Note"
 msgstr "Примітка"
 
@@ -391,7 +390,7 @@ msgstr "Документи з #discovered тегом"
 msgid "Postings"
 msgstr "Записи"
 
-#: fava/templates/_overlays.html:7
+#: fava/static/javascript/modals/DocumentUpload.svelte:83
 msgid "Upload file(s)"
 msgstr "Завантажити файл(и)"
 
@@ -399,35 +398,35 @@ msgstr "Завантажити файл(и)"
 msgid "Documents folder"
 msgstr "Директорія документів"
 
-#: fava/templates/_overlays.html:22
+#: fava/static/javascript/modals/DocumentUpload.svelte:111
 msgid "Upload"
 msgstr "Завантаження"
 
-#: fava/templates/editor.html:21
+#: fava/templates/editor.html:18
 msgid "Align Amounts"
 msgstr "Вирівняти суми"
 
-#: fava/templates/editor.html:27
+#: fava/templates/editor.html:24
 msgid "Toggle Comment (selection)"
 msgstr "Закоментувати виділене"
 
-#: fava/templates/editor.html:33
+#: fava/templates/editor.html:30
 msgid "Open all folds"
 msgstr "Відкрити усі згортання"
 
-#: fava/templates/editor.html:36
+#: fava/templates/editor.html:33
 msgid "Close all folds"
 msgstr "Закрити усі згортання"
 
-#: fava/templates/options.html:5
+#: fava/templates/options.html:1
 msgid "Fava options"
 msgstr "Налаштування Fava"
 
-#: fava/templates/options.html:5
+#: fava/templates/options.html:1
 msgid "help"
 msgstr "допомога"
 
-#: fava/templates/options.html:22
+#: fava/templates/options.html:18
 msgid "Beancount options"
 msgstr "Налаштування Beancount"
 
@@ -441,7 +440,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "Клік з натисненим Shift щоб розкрити усі рівні.\n"
 "Клік з натисненим Ctrl або Cmd щоб розкрити один рівень."
 
-#: fava/templates/_aside.html:28 fava/templates/_overlays.html:49
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:67
 msgid "Export"
 msgstr "Експортувати"
 
@@ -449,7 +448,7 @@ msgstr "Експортувати"
 msgid "Filter by tag, payee, ..."
 msgstr "Фільтрувати за тегом, отримувачем, ..."
 
-#: fava/templates/_overlays.html:50
+#: fava/templates/_layout.html:68
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Завантажити поточно відфільтровані записи як файл Beancount"
 
@@ -457,27 +456,27 @@ msgstr "Завантажити поточно відфільтровані за�
 msgid "Import entries"
 msgstr "Імпортувати записи"
 
-#: fava/util/date.py:53
+#: fava/static/javascript/ChartSwitcher.svelte:93 fava/util/date.py:53
 msgid "Yearly"
 msgstr ""
 
-#: fava/util/date.py:54
+#: fava/static/javascript/ChartSwitcher.svelte:94 fava/util/date.py:54
 msgid "Quarterly"
 msgstr ""
 
-#: fava/util/date.py:55
+#: fava/static/javascript/ChartSwitcher.svelte:95 fava/util/date.py:55
 msgid "Monthly"
 msgstr ""
 
-#: fava/util/date.py:56
+#: fava/static/javascript/ChartSwitcher.svelte:96 fava/util/date.py:56
 msgid "Weekly"
 msgstr ""
 
-#: fava/util/date.py:57
+#: fava/static/javascript/ChartSwitcher.svelte:97 fava/util/date.py:57
 msgid "Daily"
 msgstr ""
 
-#: fava/templates/editor.html:18
+#: fava/templates/editor.html:15
 msgid "Edit"
 msgstr ""
 
@@ -487,5 +486,37 @@ msgstr ""
 
 #: fava/templates/_journal_table.html:8
 msgid "Documents with a #linked tag"
+msgstr ""
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:52
+msgid "You need to set the \"documents\" Beancount option for file uploads."
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:26
+msgid "At Cost"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:27
+msgid "At Market Value"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:28
+msgid "Units"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:127
+msgid "Treemap"
+msgstr ""
+
+#: fava/static/javascript/ChartSwitcher.svelte:131
+msgid "Sunburst"
+msgstr ""
+
+#: fava/static/javascript/entry-forms/AccountInput.svelte:10
+msgid "Should be one of the declared accounts"
+msgstr ""
+
+#: fava/templates/events.html:7
+msgid "Event"
 msgstr ""
 
