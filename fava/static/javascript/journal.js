@@ -13,7 +13,7 @@ function addFilter(value) {
 }
 
 e.on("page-loaded", () => {
-  const journal = $("#journal-table");
+  const journal = $(".journal");
   if (!journal) return;
 
   delegate(journal, "click", "li", event => {

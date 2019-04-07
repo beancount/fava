@@ -124,7 +124,7 @@ export default function initSort() {
   $$(".sortable").forEach(el => {
     sortableTable(el);
   });
-  $$("ol.journal-table").forEach(el => {
+  $$(".journal").forEach(el => {
     sortableJournal(el);
   });
 }

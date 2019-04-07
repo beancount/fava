@@ -80,7 +80,7 @@
   <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
   <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
 </form>
-<ol id="journal-table" class="journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
+<ol class="journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
     <li class="head">
         <p>
         <span class="datecell" data-sort="num" data-order="desc">{{ _('Date') }}</span>
