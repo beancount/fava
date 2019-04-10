@@ -3,6 +3,7 @@
 import datetime
 
 from fava.core import FavaLedger
+from fava.core.ingest import file_import_info
 
 from .conftest import data_file
 
@@ -10,14 +11,19 @@ FILE_PATH = data_file("import.beancount")
 EXAMPLE = data_file("import.csv")
 
 
+def test_ingest_file_import_info():
+    ingest_ledger = FavaLedger(FILE_PATH)
+    importer = next(iter(ingest_ledger.ingest.importers.values()))
+    assert importer
+
+    info = file_import_info(EXAMPLE, importer)
+    assert info.account == "Assets:Checking"
+
+
 def test_ingest_examplefile():
     ingest_ledger = FavaLedger(FILE_PATH)
-    identify_dir = list(ingest_ledger.ingest.identify_directory("."))
-    assert len(identify_dir) == 1
 
-    filename, importers = identify_dir[0]
-    importer_name = importers[0].name()
-    entries = ingest_ledger.ingest.extract(filename, importer_name)
+    entries = ingest_ledger.ingest.extract(EXAMPLE, "<run_path>.TestImporter")
     assert len(entries) == 4
     assert entries[0].date == datetime.date(2017, 2, 12)
     assert entries[0].comment == "Hinweis: Zinssatz auf 0,15% geändert"

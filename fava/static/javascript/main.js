@@ -62,16 +62,27 @@ import "./sidebar";
 import "./sort";
 import "./tree-table";
 
+import Import from "./Import.svelte";
 import ChartSwitcher from "./ChartSwitcher.svelte";
 import Modals from "./modals/Modals.svelte";
 
-let charts;
+function initSvelteComponent(selector, SvelteComponent) {
+  const el = $(selector);
+  if (el) {
+    let data = {};
+    if (el.firstChild && el.firstChild.type === "application/json") {
+      data = JSON.parse(el.firstChild.innerHTML);
+    }
+    const component = new SvelteComponent({ target: el, props: { data } });
+    e.once("page-loaded", () => component.$destroy());
+  }
+}
 
 e.on("page-loaded", () => {
   window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
 
-  if (charts) charts.$destroy();
-  charts = new ChartSwitcher({ target: $("#svelte-charts") });
+  initSvelteComponent("#svelte-charts", ChartSwitcher);
+  initSvelteComponent("#svelte-import", Import);
 
   document.title = $("#data-document-title").value;
   $("h1 strong").innerHTML = $("#data-page-title").innerHTML;

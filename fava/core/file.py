@@ -321,6 +321,9 @@ def find_insert_position(accounts, date, insert_options, filenames):
         date: A date. Only InsertOptions before this date will be considered.
         insert_options: A list of InsertOption.
         filenames: List of Beancount files.
+
+    Returns:
+        A tuple of the filename and the line number.
     """
     for account in accounts:
         for insert_option in insert_options:

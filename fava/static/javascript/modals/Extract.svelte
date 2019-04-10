@@ -49,7 +49,7 @@
 <script>
   import e from "../events";
   import { saveEntries } from "../entries";
-  import { _, fetch, handleJSON } from "../helpers";
+  import { _, fetchAPI, handleJSON } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 
   import Balance from "../entry-forms/Balance.svelte";
@@ -70,14 +70,9 @@
 
   $: shown = $urlHash.startsWith("extract");
   $: if (shown) {
-    fetch($urlHash.slice(8), {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then(handleJSON)
-      .then(responseData => {
-        entries = responseData.data;
-      });
+    fetchAPI("extract", $urlHash.slice(8)).then(data => {
+      entries = data;
+    });
   }
   $: entry = entries[currentIndex - 1];
   $: if (entry) {

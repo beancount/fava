@@ -4,35 +4,6 @@
 <p>
 No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
 </p>
+{% else %}
+<div id="svelte-import"><script type="application/json">{{ ledger.ingest.import_data()|tojson|safe }}</script></div>
 {% endif %}
-{% for directory in ledger.fava_options['import-dirs'] %}
-<h3>{{ directory }}</h3>
-<table class="ingest-files">
-  <thead>
-    <tr>
-      <th>{{ _('File') }}</th>
-      <th>{{ _('Importer') }}</th>
-      <th>{{ _('Account') }}</th>
-      <th>{{ _('Date') }}</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for filename, importers in ledger.ingest.identify_directory(directory) %}
-    {% for importer  in importers %}
-    <tr>
-      <td>
-        <pre title="{{ filename }}">{{ filename|basename }}</pre>
-      </td>
-      <td>{{ importer.name() }}</td>
-      <td>{{ account_macros.account_name(ledger.ingest.file_account(filename, importer) or '') }}</td>
-      <td>{{ ledger.ingest.file_date(filename, importer) or '' }}</td>
-      <td>
-        <a class="button" title="{{ _('Extract') }} {{ filename }}" href="#extract-{{ url_for('json_api.extract', filename=filename, importer=importer.name()) }}">{{ _('Extract') }}</button>
-      </td>
-    </tr>
-    {% endfor %}
-    {% endfor %}
-  </tbody>
-</table>
-{% endfor %}

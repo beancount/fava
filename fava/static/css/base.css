@@ -92,6 +92,10 @@ tbody td {
   border: 1px solid var(--color-table-border);
 }
 
+table input {
+  margin: 0;
+}
+
 table pre {
   padding: 0;
   margin: 0;
@@ -351,13 +355,6 @@ aside {
   transition: var(--transitions);
 }
 
-aside h3 {
-  margin: 1em 0 1em 20px;
-  font-size: 0.9em;
-  text-transform: uppercase;
-  opacity: 0.6;
-}
-
 .navigation {
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
@@ -371,7 +368,7 @@ aside h3 {
 
 .navigation a {
   display: block;
-  padding: 4px 5px 4px 20px;
+  padding: 0.25em 0.5em 0.25em 1em;
   color: inherit;
 }
 

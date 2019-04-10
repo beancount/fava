@@ -26,24 +26,27 @@ def test_api_add_document(app, test_client, tmpdir):
         flask.g.ledger.options["documents"] = [str(tmpdir)]
         request_data = {
             "folder": str(tmpdir),
-            "account": "Test",
-            "file": (BytesIO(b"asdfasdf"), "2015-12-12_test"),
+            "account": "Expenses:Food:Restaurant",
+            "file": (BytesIO(b"asdfasdf"), "2015-12-12 test"),
         }
         url = flask.url_for("json_api.add_document")
 
         response = test_client.put(url)
         assert response.status_code == 400
 
-        filename = os.path.join(str(tmpdir), "Test", "2015-12-12_test")
+        filename = os.path.join(
+            str(tmpdir), "Expenses", "Food", "Restaurant", "2015-12-12 test"
+        )
 
         response = test_client.put(url, data=request_data)
+        print(flask.json.loads(response.get_data(True)))
         assert flask.json.loads(response.get_data(True)) == {
             "success": True,
             "message": "Uploaded to {}".format(filename),
         }
         assert os.path.isfile(filename)
 
-        request_data["file"] = (BytesIO(b"asdfasdf"), "2015-12-12_test")
+        request_data["file"] = (BytesIO(b"asdfasdf"), "2015-12-12 test")
         response = test_client.put(url, data=request_data)
         assert flask.json.loads(response.get_data(True)) == {
             "success": False,

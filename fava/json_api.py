@@ -5,10 +5,11 @@ interface for asynchronous functionality.
 """
 
 import os
+from os import path
 import functools
+import shutil
 
 from flask import Blueprint, jsonify, g, request
-from werkzeug.utils import secure_filename
 
 from fava.serialisation import deserialise, serialise
 from fava.core.file import save_entry_slice
@@ -95,6 +96,34 @@ def extract():
 
 
 @api_endpoint
+def move():
+    """Move a file."""
+    if not g.ledger.options["documents"]:
+        raise FavaAPIException("You need to set a documents folder.")
+
+    account = request.args.get("account")
+    new_name = request.args.get("newName")
+    filename = request.args.get("filename")
+
+    new_path = filepath_in_document_folder(
+        g.ledger.options["documents"][0], account, new_name
+    )
+
+    if not path.isfile(filename):
+        raise FavaAPIException("Not a file: '{}'".format(filename))
+
+    if path.exists(new_path):
+        raise FavaAPIException("Target file exists: '{}'".format(new_path))
+
+    if not path.exists(path.dirname(new_path)):
+        os.makedirs(path.dirname(new_path), exist_ok=True)
+
+    shutil.move(filename, new_path)
+
+    return "Moved {} to {}.".format(filename, new_path)
+
+
+@api_endpoint
 def payee_transaction():
     """Last transaction for the given payee."""
     entry = g.ledger.attributes.payee_transaction(request.args.get("payee"))
@@ -129,6 +158,40 @@ def format_source(request_data):
     return {"payload": aligned}
 
 
+def filepath_in_document_folder(documents_folder, account, filename):
+    """File path for a document in the folder for an account.
+
+    Args:
+        documents_folder: The documents folder.
+        account: The account to choose the subfolder for.
+        filename: The filename of the document.
+
+    Returns:
+        The path that the document should be saved at.
+    """
+
+    if documents_folder not in g.ledger.options["documents"]:
+        raise FavaAPIException(
+            "Not a documents folder: {}.".format(documents_folder)
+        )
+
+    if account not in g.ledger.attributes.accounts:
+        raise FavaAPIException("Not a valid account: '{}'".format(account))
+
+    for sep in os.sep, os.altsep:
+        if sep:
+            filename = filename.replace(sep, " ")
+
+    return path.normpath(
+        path.join(
+            path.dirname(g.ledger.beancount_file_path),
+            documents_folder,
+            *account.split(":"),
+            filename
+        )
+    )
+
+
 @json_api.route("/add-document/", methods=["PUT"])
 @json_response
 def add_document():
@@ -137,36 +200,19 @@ def add_document():
         raise FavaAPIException("You need to set a documents folder.")
 
     upload = request.files["file"]
+
     if not upload:
         raise FavaAPIException("No file uploaded.")
 
-    documents_folder = request.form["folder"]
-    if documents_folder not in g.ledger.options["documents"]:
-        raise FavaAPIException(
-            "Not a documents folder: {}.".format(documents_folder)
-        )
-
-    filename = upload.filename
-    for sep in os.path.sep, os.path.altsep:
-        if sep:
-            filename = filename.replace(sep, " ")
-
-    if not os.path.supports_unicode_filenames:
-        filename = secure_filename(filename)
-
-    directory = os.path.normpath(
-        os.path.join(
-            os.path.dirname(g.ledger.beancount_file_path),
-            documents_folder,
-            *request.form["account"].split(":")
-        )
+    filepath = filepath_in_document_folder(
+        request.form["folder"], request.form["account"], upload.filename
     )
-    filepath = os.path.join(directory, filename)
+    directory, filename = path.split(filepath)
 
-    if os.path.exists(filepath):
+    if path.exists(filepath):
         raise FavaAPIException("{} already exists.".format(filepath))
 
-    if not os.path.exists(directory):
+    if not path.exists(directory):
         os.makedirs(directory, exist_ok=True)
 
     upload.save(filepath)
