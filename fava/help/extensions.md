@@ -7,7 +7,7 @@ A Fava extension is simply a Python module which contains a class that inherits
 from `FavaExtensionBase` from `fava.ext`. Invoking an extension is done via the `fava-extension` option in the beancount file. Check out `fava.ext.auto_commit` for an
 example.
 
-Extensions may also contain a report - this is detected when the extension's directory has a `templates` subdirectory with a report matching the module name. For example, check out `fava.ext.portfolio_list` which has its template located at `fava/ext/portfolio_list/templates/portfolio_list.html`. Extension report titles default to the extension class's `qualname` unless set via `report_title` attribute.
+Extensions may also contain a report - this is detected when the extension's directory has a `templates` subdirectory with a report matching the class's qualified name. For example, check out `fava.ext.portfolio_list` which has its template located at `fava/ext/portfolio_list/templates/PortfolioList.html`. Extension report titles default to the extension class's `qualname` unless set via `report_title` attribute.
 
 The whole extension system should be considered unstable and it might change
 drastically.

@@ -119,7 +119,7 @@ def report_template_path(ext_class):
     """
     extension_dir = os.path.dirname(inspect.getfile(ext_class))
     template_path = os.path.join(
-        extension_dir, "templates", "{}.html".format(ext_class.__module__)
+        extension_dir, "templates", "{}.html".format(ext_class.__qualname__)
     )
     if os.path.isfile(template_path):
         return template_path
