@@ -202,7 +202,8 @@
   filter: brightness(80%);
 }
 
-.journal .filename {
+.journal .filename,
+.journal .url {
   font-family: var(--font-family-monospaced);
   font-size: 0.9em;
 }
