@@ -307,6 +307,9 @@ def get_fiscal_period(year, fye, quarter=None):
                 )
                 + datetime.timedelta(days=1)
             ).date()
+            # Special case 02-28 because of leap years
+            if fye == "02-28":
+                start_date = start_date.replace(month=3, day=1)
         except ValueError:
             return None, None
 
