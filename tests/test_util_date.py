@@ -251,6 +251,9 @@ def test_month_offset(date_input, offset, expected):
         # 5th Apr - UK [FYE=04-05]
         (2018, None, "04-05", "2017-04-06", "2018-04-06"),
         (2018, 1, "04-05", "None", "None"),
+        # 28th February - consider leap years [FYE=02-28]
+        (2016, None, "02-28", "2015-03-01", "2016-03-01"),
+        (2017, None, "02-28", "2016-03-01", "2017-03-01"),
         # expected errors
         (2018, None, "foo", "None", "None"),
         (2018, 0, "12-31", "None", "None"),
