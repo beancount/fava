@@ -91,7 +91,7 @@ You can use this directive to fill the historical price database:
   Liabilities:CreditCard   -101.23 USD
   Expenses:Restaurant       101.23 USD
 
-2015-05-30 ! "Cable Co" "Phone Bill" #tag ˆlink
+2015-05-30 ! "Cable Co" "Phone Bill" #tag ^link
   id: "TW378743437"               ; Meta-data
   Expenses:Home:Phone  87.45 USD
   Assets:Checking                 ; You may leave one amount out</textarea></pre>
