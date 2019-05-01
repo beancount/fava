@@ -1,12 +1,5 @@
 import e from "./events";
-import {
-  $,
-  delegate,
-  fetch,
-  fuzzytest,
-  fuzzywrap,
-  handleJSON,
-} from "./helpers";
+import { $, delegate, fetchAPI, fuzzytest, fuzzywrap } from "./helpers";
 
 const accountCompletionCache = {};
 
@@ -172,17 +165,9 @@ class CompletionList {
         if (accountCompletionCache[payee]) {
           return accountCompletionCache[payee];
         }
-        const params = new URLSearchParams();
-        params.set("payee", payee);
-        return fetch(
-          `${window.favaAPI.baseURL}api/payee_accounts/?${params.toString()}`
-        )
-          .then(handleJSON)
-          .then(responseData => responseData.data)
-          .then(suggestions => {
-            accountCompletionCache[payee] = suggestions;
-            return suggestions;
-          });
+        const suggestions = await fetchAPI("payee_accounts", { payee });
+        accountCompletionCache[payee] = suggestions;
+        return suggestions;
       }
     }
     if (this.list === "tags") {

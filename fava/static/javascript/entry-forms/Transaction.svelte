@@ -2,7 +2,7 @@
   import { tick } from "svelte";
 
   import { Posting } from "../entries";
-  import { _, fetch, handleJSON } from "../helpers";
+  import { _, fetchAPI, handleJSON } from "../helpers";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
@@ -30,15 +30,9 @@
   function autocompleteSelectPayee(event) {
     entry.payee = event.target.value;
     if (entry.narration || !entry.postings.every(p => !p.account)) return;
-    const params = new URLSearchParams();
-    params.set("payee", entry.payee);
-    fetch(
-      `${window.favaAPI.baseURL}api/payee-transaction/?${params.toString()}`
-    )
-      .then(handleJSON)
-      .then(data => {
-        entry = Object.assign(data.payload, { date: entry.date });
-      });
+    fetchAPI("payee_transaction", { payee: entry.payee }).then(data => {
+      entry = Object.assign(data, { date: entry.date });
+    });
   }
 </script>
 <div class="entry-form transaction">

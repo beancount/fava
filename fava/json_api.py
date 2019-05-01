@@ -94,6 +94,13 @@ def extract():
     return list(map(serialise, entries))
 
 
+@api_endpoint
+def payee_transaction():
+    """Last transaction for the given payee."""
+    entry = g.ledger.attributes.payee_transaction(request.args.get("payee"))
+    return serialise(entry)
+
+
 @json_api.route("/source/", methods=["PUT"])
 @json_request
 @json_response
@@ -120,14 +127,6 @@ def format_source(request_data):
     """Format beancount file."""
     aligned = align(request_data["source"], g.ledger.fava_options)
     return {"payload": aligned}
-
-
-@json_api.route("/payee-transaction/", methods=["GET"])
-@json_response
-def payee_transaction():
-    """Last transaction for the given payee."""
-    entry = g.ledger.attributes.payee_transaction(request.args.get("payee"))
-    return {"payload": serialise(entry)}
 
 
 @json_api.route("/add-document/", methods=["PUT"])

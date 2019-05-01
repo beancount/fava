@@ -83,8 +83,25 @@ export function fetch(input, init = {}) {
   return window.fetch(input, Object.assign(defaults, init));
 }
 
-export function fetchAPI(endpoint) {
-  return fetch(`${window.favaAPI.baseURL}api/${endpoint}/`)
+/**
+ * Fetch an API endpoint and convert the JSON data to an object.
+ * @param endpoint - the endpoint to fetch
+ * @param params - a string to append as params or an object.
+ */
+export function fetchAPI(endpoint, params = null) {
+  let url = `${window.favaAPI.baseURL}api/${endpoint}/`;
+  if (params) {
+    if (typeof params === "string") {
+      url += `?${params}`;
+    } else {
+      const urlParams = new URLSearchParams();
+      Object.entries(params).forEach(([key, value]) => {
+        urlParams.set(key, value);
+      });
+      url += `?${urlParams.toString()}`;
+    }
+  }
+  return fetch(url)
     .then(handleJSON)
     .then(responseData => responseData.data);
 }
