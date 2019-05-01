@@ -83,21 +83,25 @@ def get_next_interval(date: datetime.date, interval: Interval):
         The start date of the next `interval` after `date`.
 
     """
-    if interval is Interval.YEAR:
-        return datetime.date(date.year + 1, 1, 1)
-    if interval is Interval.QUARTER:
-        for i in [4, 7, 10]:
-            if date.month < i:
-                return datetime.date(date.year, i, 1)
-        return datetime.date(date.year + 1, 1, 1)
-    if interval is Interval.MONTH:
-        month = (date.month % 12) + 1
-        year = date.year + (date.month + 1 > 12)
-        return datetime.date(year, month, 1)
-    if interval is Interval.WEEK:
-        return date + datetime.timedelta(7 - date.weekday())
-    if interval is Interval.DAY:
-        return date + datetime.timedelta(1)
+    # pylint: disable=too-many-return-statements
+    try:
+        if interval is Interval.YEAR:
+            return datetime.date(date.year + 1, 1, 1)
+        if interval is Interval.QUARTER:
+            for i in [4, 7, 10]:
+                if date.month < i:
+                    return datetime.date(date.year, i, 1)
+            return datetime.date(date.year + 1, 1, 1)
+        if interval is Interval.MONTH:
+            month = (date.month % 12) + 1
+            year = date.year + (date.month + 1 > 12)
+            return datetime.date(year, month, 1)
+        if interval is Interval.WEEK:
+            return date + datetime.timedelta(7 - date.weekday())
+        if interval is Interval.DAY:
+            return date + datetime.timedelta(1)
+    except (ValueError, OverflowError):
+        return datetime.date.max
     raise NotImplementedError
 
 
@@ -120,7 +124,7 @@ def interval_ends(first, last, interval: Interval):
     yield last
 
 
-def substitute(string, fye=None):  # pylint: disable=too-many-locals
+def substitute(string, fye=None):
     """Replace variables referring to the current day.
 
     Args:
@@ -132,6 +136,7 @@ def substitute(string, fye=None):  # pylint: disable=too-many-locals
         'week' have been replaced by the corresponding string understood by
         :func:`parse_date`.  Can compute addition and subtraction.
     """
+    # pylint: disable=too-many-locals
     today = datetime.date.today()
 
     for match in VARIABLE_RE.finditer(string):
@@ -189,7 +194,7 @@ def substitute(string, fye=None):  # pylint: disable=too-many-locals
     return string
 
 
-def parse_date(string, fye=None):  # pylint: disable=too-many-return-statements
+def parse_date(string, fye=None):
     """Parse a date.
 
     Example of supported formats:
@@ -210,8 +215,8 @@ def parse_date(string, fye=None):  # pylint: disable=too-many-return-statements
 
     Returns:
         A tuple (start, end) of dates.
-
     """
+    # pylint: disable=too-many-return-statements
     string = string.strip().lower()
     if not string:
         return None, None

@@ -42,6 +42,8 @@ def _to_date(string):
         ("2016-12-31", Interval.MONTH, "2017-01-01"),
         ("2016-12-31", Interval.QUARTER, "2017-01-01"),
         ("2016-12-31", Interval.YEAR, "2017-01-01"),
+        ("9999-12-31", Interval.QUARTER, "9999-12-31"),
+        ("9999-12-31", Interval.YEAR, "9999-12-31"),
     ],
 )
 def test_get_next_interval(input_date_string, interval, expect):
