@@ -30,4 +30,4 @@ class FavaModule:
         self.ledger = ledger
 
     def load_file(self):
-        """Get's called when the file has been (re)loaded."""
+        """Gets called when the file has been (re)loaded."""

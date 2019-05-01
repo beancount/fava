@@ -289,7 +289,7 @@ def get_fiscal_period(year, fye, quarter=None):
     Defaults to calendar year [12-31]
 
     Args:
-        year: An interger year
+        year: An integer year
         fye: End date for period in "%m-%d" format
         quarter: one of [None, 1, 2, 3 or 4]
 
