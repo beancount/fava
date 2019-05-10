@@ -52,7 +52,7 @@ function addInternalNodesAsLeaves(node) {
     copy.children = null;
     copy.dummy = true;
     node.children.push(copy);
-    node.balance = {}; // eslint-disable-line no-param-reassign
+    node.balance = {};
   }
 }
 

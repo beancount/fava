@@ -36,8 +36,9 @@
     });
   });
 </script>
+
 <AddTransaction />
 <Context />
-<DocumentUpload bind:this="{documentUploadModal}" />
+<DocumentUpload bind:this={documentUploadModal} />
 <Export />
 <Extract />

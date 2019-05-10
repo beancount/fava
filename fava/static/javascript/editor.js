@@ -325,7 +325,7 @@ e.on("navigate", state => {
     if (!activeEditor.isClean()) {
       const leave = window.confirm(leaveMessage); // eslint-disable-line no-alert
       if (!leave) {
-        state.interrupt = true; // eslint-disable-line no-param-reassign
+        state.interrupt = true;
       } else {
         activeEditor = null;
       }
@@ -337,6 +337,6 @@ e.on("navigate", state => {
 
 window.addEventListener("beforeunload", event => {
   if (activeEditor && !activeEditor.isClean()) {
-    event.returnValue = leaveMessage; // eslint-disable-line no-param-reassign
+    event.returnValue = leaveMessage;
   }
 });

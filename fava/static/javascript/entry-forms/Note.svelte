@@ -7,15 +7,16 @@
 
   export let entry;
 </script>
+
 <div class="entry-form">
   <div class="fieldset">
-    <input type="date" name="date" bind:value="{entry.date}" required />
+    <input type="date" name="date" bind:value={entry.date} required />
     <h4>{_('Note')}</h4>
-    <AccountInput bind:value="{entry.account}" />
-    <AddMetadataButton bind:meta="{entry.meta}" />
+    <AccountInput bind:value={entry.account} />
+    <AddMetadataButton bind:meta={entry.meta} />
   </div>
   <div class="fieldset">
-    <textarea name="comment" rows="2" bind:value="{entry.comment}"></textarea>
+    <textarea name="comment" rows="2" bind:value={entry.comment} />
   </div>
-  <EntryMetadata bind:meta="{entry.meta}" />
+  <EntryMetadata bind:meta={entry.meta} />
 </div>

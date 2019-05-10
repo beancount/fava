@@ -1,55 +1,6 @@
-<div class:shown class="overlay">
-  <div class="overlay-background" on:click="{closeOverlay}"></div>
-  <div class="overlay-content">
-    <button type="button" class="muted close-overlay" on:click="{closeOverlay}">
-      x
-    </button>
-    <form novalidate="{duplicate}" on:submit|preventDefault="{submitOrNext}">
-      <h3>{_('Import')}</h3>
-      {#if entry}
-      <div class="headerline">
-        <h3>
-          Entry {currentIndex} of {entries.length} ({entries.length -
-          duplicates} to import):
-        </h3>
-        <span class="spacer"></span>
-        <label class="button muted">
-          <input
-            type="checkbox"
-            checked="{duplicate}"
-            on:click="{toggleDuplicate}"
-          />ignore duplicate</label
-        >
-      </div>
-      <div class:duplicate="{duplicate}" class="ingest-row">
-        <svelte:component this="{component}" bind:entry />
-      </div>
-      <div class="fieldset">
-        {#if currentIndex > 1 }
-        <button type="button" class="muted" on:click="{previousEntry}">
-          Previous
-        </button>
-        {/if}
-        <span class="spacer"></span>
-        <button type="submit">
-          { currentIndex < entries.length ? 'Next' : 'Save' }
-        </button>
-      </div>
-      <hr />
-      {#if entry.meta.__source__}
-      <h3>
-        {_('Source')} {#if entry.meta.lineno > 0 }({_('Line')}:
-        {entry.meta.lineno}){/if}
-      </h3>
-      <pre>{entry.meta.__source__}</pre>
-      {/if} {/if}
-    </form>
-  </div>
-</div>
 <script>
-  import e from "../events";
   import { saveEntries } from "../entries";
-  import { _, fetchAPI, handleJSON } from "../helpers";
+  import { _, fetchAPI } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 
   import Balance from "../entry-forms/Balance.svelte";
@@ -64,8 +15,8 @@
   let entry;
   let shown;
 
-  function isDuplicate(entry) {
-    return !!entry.meta.__duplicate__;
+  function isDuplicate(e) {
+    return !!e.meta.__duplicate__;
   }
 
   $: shown = $urlHash.startsWith("extract");
@@ -83,9 +34,9 @@
 
   async function submitOrNext() {
     if (currentIndex < entries.length) {
-      currentIndex = currentIndex + 1;
+      currentIndex += 1;
     } else {
-      await saveEntries(entries.filter(entry => !isDuplicate(entry)));
+      await saveEntries(entries.filter(e => !isDuplicate(e)));
       closeOverlay();
     }
   }
@@ -94,11 +45,47 @@
     currentIndex = Math.max(currentIndex - 1, 1);
   }
 
-  function nextEntry() {
-    currentIndex = Math.max(currentIndex + 1, entries.length);
-  }
-
   function toggleDuplicate() {
     entry.meta.__duplicate__ = !entry.meta.__duplicate__;
   }
 </script>
+
+<div class:shown class="overlay">
+  <div class="overlay-background" on:click={closeOverlay} />
+  <div class="overlay-content">
+    <button type="button" class="muted close-overlay" on:click={closeOverlay}>x</button>
+    <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
+      <h3>{_('Import')}</h3>
+      {#if entry}
+        <div class="headerline">
+          <h3>Entry {currentIndex} of {entries.length} ({entries.length - duplicates}
+            to import):</h3>
+          <span class="spacer" />
+          <label class="button muted">
+            <input type="checkbox" checked={duplicate} on:click={toggleDuplicate} />
+            ignore duplicate
+          </label>
+        </div>
+        <div class:duplicate class="ingest-row">
+          <svelte:component this={component} bind:entry />
+        </div>
+        <div class="fieldset">
+          {#if currentIndex > 1}
+            <button type="button" class="muted" on:click={previousEntry}>Previous</button>
+          {/if}
+          <span class="spacer" />
+          <button type="submit"> {currentIndex < entries.length ? 'Next' : 'Save'}
+            </button>
+        </div>
+        <hr />
+        {#if entry.meta.__source__}
+          <h3>
+             {_('Source')}
+            {#if entry.meta.lineno > 0}({_('Line')}: {entry.meta.lineno}){/if}
+          </h3>
+          <pre>{entry.meta.__source__}</pre>
+        {/if}
+      {/if}
+    </form>
+  </div>
+</div>

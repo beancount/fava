@@ -13,12 +13,11 @@
 
   $: shown = files.length;
 
-  async function submit(event) {
+  async function submit() {
     await Promise.all(
       files.map(({ dataTransferFile, filename }) => {
         const formData = new FormData(form);
         formData.append("file", dataTransferFile, filename);
-        console.log(Array.from(formData.entries()));
         return fetch(`${window.favaAPI.baseURL}api/add-document/`, {
           method: "PUT",
           body: formData,
@@ -62,7 +61,7 @@
     hash = target.getAttribute("data-entry");
 
     for (const dataTransferFile of event.dataTransfer.files) {
-      let name = dataTransferFile.name;
+      let { name } = dataTransferFile;
 
       if (!/^\d{4}-\d{2}-\d{2}/.test(name)) {
         name = `${entryDate} ${name}`;
@@ -78,35 +77,31 @@
     // if (form.elements.folder.length > 1 || changedFilename) {
   }
 </script>
+
 <ModalBase {shown}>
-  <form bind:this="{form}" on:submit|preventDefault="{submit}">
+  <form bind:this={form} on:submit|preventDefault={submit}>
     <h3>{_('Upload file(s)')}:</h3>
     {#each files as file}
-    <div class="fieldset">
-      <input value="{file.name}" />
-    </div>
+      <div class="fieldset">
+        <input value={file.name} />
+      </div>
     {/each}
     <div class="fieldset">
-      <label
-        >{_('Documents folder')}:
+      <label>
+         {_('Documents folder')}:
         <select name="folder">
           {#each folders as folder}
-          <option>{folder}</option>
+            <option>{folder}</option>
           {/each}
         </select>
       </label>
     </div>
     <div class="fieldset">
-      <label
-        >{_('Account')}:
-        <input
-          type="text"
-          name="account"
-          list="accounts"
-          bind:value="{account}"
-        />
+      <label>
+         {_('Account')}:
+        <input type="text" name="account" list="accounts" bind:value={account} />
       </label>
-      <input type="hidden" name="hash" value="{hash}" />
+      <input type="hidden" name="hash" value={hash} />
     </div>
     <button type="submit">{_('Upload')}</button>
   </form>
