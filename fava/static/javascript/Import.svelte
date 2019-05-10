@@ -5,12 +5,26 @@
   import AccountInput from "./entry-forms/AccountInput.svelte";
 
   export let data;
+
   const today = new Date().toISOString().slice(0, 10);
+
+  /**
+   * Construct the filename from date and basename.
+   */
+  function newFilename(date, basename) {
+    if (/\d{4}-\d{2}-\d{2}/.test(basename)) {
+      return basename;
+    }
+    return `${date} ${basename}`;
+  }
+
+  // Initially set the file names for all importable files.
   $: for (const items of Object.values(data)) {
     for (const item of items) {
-      item.newName = `${today} ${item.basename}`;
+      item.newName = item.newName || newFilename(today, item.basename);
       for (const importInfo of item.importers) {
-        importInfo.newName = `${importInfo.date} ${importInfo.name}`;
+        importInfo.newName =
+          importInfo.newName || newFilename(importInfo.date, importInfo.name);
       }
     }
   }
@@ -23,12 +37,11 @@
   }
 
   function move(filename, account, newName) {
-    const options = {
+    fetchAPI("move", {
       filename,
       account,
       newName,
-    };
-    fetchAPI("move", options)
+    })
       .then(notify)
       .catch(error => {
         notify(error, "error");
@@ -53,17 +66,17 @@
       {#each item.importers as info}
         <p class="flex-row">
           <AccountInput bind:value={info.account} />
-          <input size="40" value={info.newName} />
+          <input size="40" bind:value={info.newName} />
           <button type="button" on:click={() => move(item.name, info.account, info.newName)}>
             {'Move'} </button>
-          <a class="button" title="{_('Extract')} with importer {info.importer_name}" href={extractURL(item.name, info.importer_name)}>{'Extract'}
+          <a class="button" title="{_('Extract')} with importer {info.importer_name}" href={extractURL(item.name, info.importer_name)}>{_('Extract')}
             ( {info.importer_name} )</a>
         </p>
       {/each}
     {:else}
       <p>
         <AccountInput bind:value={item.account} />
-        <input size="40" value={item.newName} />
+        <input size="40" bind:value={item.newName} />
         <button type="button" on:click={() => move(item.name, item.account, item.newName)}>
           {'Move'} </button>
       </p>
