@@ -90,8 +90,8 @@ example above, or absolute, even linking to an external site.
 Two frequently used custom links are for showing all Documents and all Notes
 found in the journal:
 
--   For all Documents: `/<slug>/journal/?show=documents`
--   For all Notes: `/<slug>/journal/?show=notes`
+-   For all Documents: `/<slug>/journal/?show=document`
+-   For all Notes: `/<slug>/journal/?show=note`
 
 There is a special URL handler `/jump` which can be used to jump to the current
 page with given URL parameters. For example, `/jump?time=month` will show the
