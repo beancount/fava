@@ -1,5 +1,5 @@
-Fava supports extensions. Currently they can only register hooks for some
-events.
+Fava supports extensions. Extensions allow you to register hooks and generate
+your own report pages.
 
 If you use this extension system and need it to do more or need other hooks,
 please open an issue on [GitHub](https://github.com/beancount/fava/issues).
@@ -25,12 +25,16 @@ drastically.
 
 ## `fava-extension`
 
-A Python module to load as extension. The paths used by fava are searched along with what is set via the fava option `extensions-dir`. Single python files will also be searched - so for example a `my_extension.py` could be used by giving `my_extension`. Note that Python has a
-global namespace for currently loaded modules, so try avoiding simple names
-that might coincide with some Python library (as well as running Fava on two
-files that have different extensions of the same name).
+A Python module to load as extension. The paths used by fava are searched along
+with what is set via the fava option `extensions-dir`. Single python files will
+also be searched - so for example a `my_extension.py` could be used by giving
+`my_extension`. Note that Python has a global namespace for currently loaded
+modules, so try avoiding simple names that might coincide with some Python
+library (as well as running Fava on two files that have different extensions of
+the same name).
 
-Extensions allow for an optional configuration options string, whose structure is specified by the individual extension.
+Extensions allow for an optional configuration options string, whose structure
+is specified by the individual extension.
 
 <pre><textarea class="editor-readonly">
 2010-01-01 custom "fava-extension" "extension-name"
@@ -59,6 +63,8 @@ Called after metadata (`key: value`) has been added to an `entry`.
 Called after an `entry` has been inserted.
 
 ---
+
+## Extension attributes
 
 ### `report_title`
 

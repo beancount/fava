@@ -31,7 +31,6 @@ from flask import (
 )
 import flask
 from flask_babel import Babel, get_translations
-from jinja2 import ChoiceLoader, FunctionLoader
 import markdown2
 import werkzeug.urls
 from werkzeug.utils import secure_filename
@@ -101,34 +100,6 @@ def _load_file():
             slug = slugify(filepath)
         app.config["LEDGERS"][slug] = ledger
     app.config["FILE_SLUGS"] = list(app.config["LEDGERS"].keys())
-
-
-def extension_loader(name_html):
-    """Jinja loader for extension templates.
-
-    Args:
-        name_html: Extension name with '.html'
-
-    Returns:
-        Rendered template source or None
-    """
-    with app.request_context(flask.request.environ):
-        if name_html[-5:] != ".html":
-            return None
-
-        name = name_html[:-5]
-        try:
-            template, extension = g.ledger.extensions.report_template_data(
-                name
-            )
-            return render_template_string(template, extension=extension)
-        except LookupError:
-            return None
-
-
-app.jinja_loader = ChoiceLoader(
-    [app.jinja_loader, FunctionLoader(extension_loader)]
-)
 
 
 BABEL = Babel(app)
@@ -328,8 +299,7 @@ def holdings_by(aggregation_key):
             active_page="holdings",
             aggregation_key=aggregation_key,
         )
-    abort(404)
-    return None
+    return abort(404)
 
 
 @app.route("/<bfile>/_context/")
@@ -343,18 +313,22 @@ def report(report_name):
     """Endpoint for most reports."""
     if report_name in REPORTS:
         return render_template("_layout.html", active_page=report_name)
-    abort(404)
-    return None
+    return abort(404)
 
 
 @app.route("/<bfile>/extension/<report_name>/")
 def extension_report(report_name):
     """Endpoint for extension reports."""
     try:
-        return render_template("_layout.html", active_page=report_name)
+        template, extension = g.ledger.extensions.report_template_data(
+            report_name
+        )
+        content = render_template_string(template, extension=extension)
+        return render_template(
+            "_layout.html", content=content, page_title=extension.report_title
+        )
     except LookupError:
-        abort(404)
-        return None
+        return abort(404)
 
 
 @app.route("/<bfile>/download-query/query_result.<result_format>")

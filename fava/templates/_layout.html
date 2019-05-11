@@ -41,7 +41,11 @@
       {%- endif %}
       <div id="svelte-charts"></div>
       {% block content %}
+      {% if content %}
+      {{ content|safe }}
+      {% else %}
       {% include active_page + '.html' %}
+      {% endif %}
       {% endblock %}
       <input type="hidden" id="data-document-title" value="{{ '{} - {}'.format(short_title, ledger.options.title) }}">
       <input type="hidden" id="data-error-count" value="{{ ledger.errors|length }}">
