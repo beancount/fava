@@ -27,7 +27,10 @@ class FavaExtensionBase:
                     beancount file's 'fava-extension' line.
         """
         self.ledger = ledger
-        self.config = ast.literal_eval(config)
+        try:
+            self.config = ast.literal_eval(config)
+        except ValueError:
+            self.config = None
         self.name = self.__class__.__qualname__
 
     def run_hook(self, event, *args):

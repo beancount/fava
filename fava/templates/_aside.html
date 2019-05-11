@@ -8,14 +8,6 @@
   {% endfor %}
 </ul>
 {% endif %}
-{% if ledger.extensions.report_page_globals() %}
-<h3>{{ _('Extension Reports') }}</h3>
-<ul class="navigation">
-  {% for name, label, shortcut in ledger.extensions.report_page_globals() %}
-  <li><a href="{{ url_for('extension_report', report_name=name)}}">{{ label }}</a></li>
-  {% endfor %}
-</ul>
-{% endif %}
 {% for menuitems in globals.navigation_bar %}
 <ul class="navigation">
   {% for id in menuitems %}
@@ -46,3 +38,10 @@
   {% endfor %}
 </ul>
 {% endfor %}
+{% if ledger.extensions.extension_reports %}
+<ul class="navigation">
+  {% for name, label in ledger.extensions.extension_reports %}
+  <li><a href="{{ url_for('extension_report', report_name=name)}}">{{ label }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}

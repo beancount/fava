@@ -1,4 +1,4 @@
-"""Fava extensions """
+"""Fava extensions"""
 
 import os
 import inspect
@@ -9,15 +9,16 @@ from fava.core.helpers import FavaModule
 from fava.ext import find_extensions
 
 
-# pylint: disable=missing-docstring
 class ExtensionModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
+
+    # pylint: disable=missing-docstring
 
     def __init__(self, ledger):
         super().__init__(ledger)
         self._extensions = None
         self._instances = {}
-        self.active_ext = None
+        self.extension_reports = []
 
     def load_file(self):
         self._extensions = []
@@ -41,28 +42,20 @@ class ExtensionModule(FavaModule):
             if cls not in self._instances:
                 self._instances[cls] = cls(self.ledger, ext_config)
 
-    def run_hook(self, event, *args):
-        for ext in self._instances.values():
-            ext.run_hook(event, *args)
-
-    def report_attributes(self):
-        """Returns report-specific attributes for use by views.
-
-        Returns:
-            A tuple of attributes (name, title)
-        """
-        attributes = []
+        self.extension_reports = []
         for ext_class in self._instances:
             ext = self._instances[ext_class]
             if report_template_path(ext_class) is not None:
                 if hasattr(ext, "report_title"):
-                    attributes.append((ext.name, ext.report_title))
+                    self.extension_reports.append((ext.name, ext.report_title))
                 else:
-                    attributes.append((ext.name, ext.name))
-        return attributes
+                    self.extension_reports.append((ext.name, ext.name))
+
+    def run_hook(self, event, *args):
+        for ext in self._instances.values():
+            ext.run_hook(event, *args)
 
     def report_template_data(self, name):
-        # pylint: disable=no-self-use
         """Provide data to render an extension report.
 
         Args:
@@ -80,17 +73,6 @@ class ExtensionModule(FavaModule):
                     return ext_template.read(), self._instances[ext_class]
 
         raise LookupError("Extension report not found.")
-
-    def report_page_globals(self):
-        """Create page globals for extensions.
-
-        Args: A FavaLedger ExtensionModule object.
-
-        Returns: Array of tupled globals to be appended to all_pages.
-        """
-        report_attributes = self.report_attributes()
-        page_globals = list(map(lambda x: (x[0], x[1], ""), report_attributes))
-        return page_globals
 
 
 def extension_entries(custom_entries):

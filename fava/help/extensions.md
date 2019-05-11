@@ -1,13 +1,20 @@
-Fava supports extensions. Currently they can only register hooks for some events.
+Fava supports extensions. Currently they can only register hooks for some
+events.
 
 If you use this extension system and need it to do more or need other hooks,
 please open an issue on [GitHub](https://github.com/beancount/fava/issues).
 
 A Fava extension is simply a Python module which contains a class that inherits
-from `FavaExtensionBase` from `fava.ext`. Invoking an extension is done via the `fava-extension` option in the beancount file. Check out `fava.ext.auto_commit` for an
-example.
+from `FavaExtensionBase` from `fava.ext`. Invoking an extension is done via the
+`fava-extension` option in the beancount file. Check out `fava.ext.auto_commit`
+for an example.
 
-Extensions may also contain a report - this is detected when the extension's directory has a `templates` subdirectory with a report matching the class's qualified name. For example, check out `fava.ext.portfolio_list` which has its template located at `fava/ext/portfolio_list/templates/PortfolioList.html`. Extension report titles default to the extension class's `qualname` unless set via `report_title` attribute.
+Extensions may also contain a report - this is detected when the extension's
+directory has a `templates` subdirectory with a report matching the class's
+qualified name. For example, check out `fava.ext.portfolio_list` which has its
+template located at `fava/ext/portfolio_list/templates/PortfolioList.html`.
+Extension report titles default to the extension class's `qualname` unless set
+via `report_title` attribute.
 
 The whole extension system should be considered unstable and it might change
 drastically.
@@ -26,8 +33,6 @@ files that have different extensions of the same name).
 Extensions allow for an optional configuration options string, whose structure is specified by the individual extension.
 
 <pre><textarea class="editor-readonly">
-2010-01-01 custom "fava-option" "extensions-dir" "../fava-extensions/"
-
 2010-01-01 custom "fava-extension" "extension-name"
 2010-01-01 custom "fava-extension" "extension-with-options" "{'option': 'config_value'}"</textarea></pre>
 

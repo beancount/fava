@@ -17,9 +17,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
     """Sample Extension Report that just prints out an Portfolio List.
     """
 
-    def __init__(self, ledger, config):
-        super().__init__(ledger, config)
-        self.report_title = "Portfolio List"
+    report_title = "Portfolio List"
 
     def portfolio_accounts(self, begin=None, end=None):
         """An account tree based on matching regex patterns."""

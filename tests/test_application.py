@@ -173,8 +173,9 @@ def test_load_extension_reports(extension_report_app, test_client):
         slug = "extension-report-beancount-file"
 
         ledger = extension_report_app.config["LEDGERS"][slug]
-        attributes = ledger.extensions.report_attributes()
-        assert attributes == [("PortfolioList", "Portfolio List")]
+        assert ledger.extensions.extension_reports == [
+            ("PortfolioList", "Portfolio List")
+        ]
 
         url = flask.url_for("extension_report", report_name="PortfolioList")
         result = test_client.get(url)

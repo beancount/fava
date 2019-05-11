@@ -14,8 +14,8 @@
     'statistics':       (_('Statistics'),       'g x'),
     'trial_balance':    (_('Trial Balance'),    'g t'),
 } %}
-{% for name, title, shortcut in ledger.extensions.report_page_globals() %}
-    {% do all_pages.update({name: (_(title), shortcut)}) %}
+{% for name, title in ledger.extensions.extension_reports %}
+    {% do all_pages.update({name: (_(title), '')}) %}
 {% endfor %}
 {% set navigation_bar = [
     ['income_statement', 'balance_sheet', 'trial_balance', 'journal', 'query'],
