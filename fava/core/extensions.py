@@ -45,17 +45,14 @@ class ExtensionModule(FavaModule):
         self.extension_reports = []
         for ext_class in self._instances:
             ext = self._instances[ext_class]
-            if report_template_path(ext_class) is not None:
-                if hasattr(ext, "report_title"):
-                    self.extension_reports.append((ext.name, ext.report_title))
-                else:
-                    self.extension_reports.append((ext.name, ext.name))
+            if hasattr(ext, "report_title"):
+                self.extension_reports.append((ext.name, ext.report_title))
 
     def run_hook(self, event, *args):
         for ext in self._instances.values():
             ext.run_hook(event, *args)
 
-    def report_template_data(self, name):
+    def template_and_extension(self, name):
         """Provide data to render an extension report.
 
         Args:
@@ -65,9 +62,12 @@ class ExtensionModule(FavaModule):
         """
         for ext_class in self._instances:
             if ext_class.__qualname__ == name:
-                template_path = report_template_path(ext_class)
-                if template_path is None:
-                    continue
+                extension_dir = os.path.dirname(inspect.getfile(ext_class))
+                template_path = os.path.join(
+                    extension_dir,
+                    "templates",
+                    "{}.html".format(ext_class.__qualname__),
+                )
 
                 with open(template_path) as ext_template:
                     return ext_template.read(), self._instances[ext_class]
@@ -90,19 +90,3 @@ def extension_entries(custom_entries):
         )
         for entry in _extension_entries
     }
-
-
-def report_template_path(ext_class):
-    """Template path for extension report.
-
-        Args:
-            class: Extension class
-        Returns: String path or None.
-    """
-    extension_dir = os.path.dirname(inspect.getfile(ext_class))
-    template_path = os.path.join(
-        extension_dir, "templates", "{}.html".format(ext_class.__qualname__)
-    )
-    if os.path.isfile(template_path):
-        return template_path
-    return None

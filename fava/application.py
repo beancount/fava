@@ -320,7 +320,7 @@ def report(report_name):
 def extension_report(report_name):
     """Endpoint for extension reports."""
     try:
-        template, extension = g.ledger.extensions.report_template_data(
+        template, extension = g.ledger.extensions.template_and_extension(
             report_name
         )
         content = render_template_string(template, extension=extension)

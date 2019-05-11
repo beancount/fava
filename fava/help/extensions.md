@@ -10,11 +10,10 @@ from `FavaExtensionBase` from `fava.ext`. Invoking an extension is done via the
 for an example.
 
 Extensions may also contain a report - this is detected when the extension's
-directory has a `templates` subdirectory with a report matching the class's
-qualified name. For example, check out `fava.ext.portfolio_list` which has its
-template located at `fava/ext/portfolio_list/templates/PortfolioList.html`.
-Extension report titles default to the extension class's `qualname` unless set
-via `report_title` attribute.
+class has a `report_title` attribute. The template for the report should be in
+a `templates` subdirectory with a report matching the class's name. For
+example, check out `fava.ext.portfolio_list` which has its template located at
+`fava/ext/portfolio_list/templates/PortfolioList.html`.
 
 The whole extension system should be considered unstable and it might change
 drastically.
@@ -68,4 +67,4 @@ Called after an `entry` has been inserted.
 
 ### `report_title`
 
-Optional attribute to set extension report title used in sidebar & breadcrumb views.
+Optional attribute to set extension report title used in the sidebar.
