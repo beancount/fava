@@ -24,8 +24,8 @@ drastically.
 
 ## `fava-extension`
 
-A Python module to load as extension. The paths used by fava are searched along
-with what is set via the fava option `extensions-dir`. Single python files will
+A Python module to load as extension. The path of the Beancount file is
+searched in addition to anything on the Python path. Single python files will
 also be searched - so for example a `my_extension.py` could be used by giving
 `my_extension`. Note that Python has a global namespace for currently loaded
 modules, so try avoiding simple names that might coincide with some Python
