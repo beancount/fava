@@ -295,7 +295,9 @@ def holdings_by(aggregation_key):
     """The holdings report."""
     if aggregation_key in ["account", "currency", "cost_currency"]:
         return render_template(
-            "holdings.html", aggregation_key=aggregation_key
+            "_layout.html",
+            active_page="holdings",
+            aggregation_key=aggregation_key,
         )
     abort(404)
     return None
