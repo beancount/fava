@@ -41,7 +41,7 @@ export const favaAPIValidator = object({
   pageTitle: string,
   payees: array(string),
   tags: array(string),
-  years: array(number),
+  years: array(string),
 });
 
 export type FavaAPI = ReturnType<typeof favaAPIValidator>;

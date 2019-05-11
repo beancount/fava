@@ -2,10 +2,38 @@
 from typing import List
 
 from beancount.core import getters
+from beancount.core.data import Entries
 from beancount.core.data import Transaction
 
 from fava.core.helpers import FavaModule
 from fava.util.ranking import ExponentialDecayRanker
+
+
+def get_active_years(entries: Entries, fye: str) -> List[str]:
+    """Returns active years, with support for fiscal years.
+
+    Args:
+        entries: Beancount entries
+        fye: fiscal year end
+
+    Returns:
+        A reverse sorted list of years or fiscal years that occur in the
+        entries.
+    """
+
+    if fye == "12-31":
+        return sorted(
+            map(str, getters.get_active_years(entries)), reverse=True
+        )
+    seen = set()
+    month, day = map(int, fye.split("-"))
+    for entry in entries:
+        date = entry.date
+        if date.month > month or date.month == month and date.day > day:
+            seen.add(entry.date.year + 1)
+        else:
+            seen.add(entry.date.year)
+    return [f"FY{year}" for year in sorted(seen, reverse=True)]
 
 
 class AttributesModule(FavaModule):
@@ -24,7 +52,9 @@ class AttributesModule(FavaModule):
         all_entries = self.ledger.all_entries
         self.links = getters.get_all_links(all_entries)
         self.tags = getters.get_all_tags(all_entries)
-        self.years = list(getters.get_active_years(all_entries))[::-1]
+        self.years = get_active_years(
+            all_entries, self.ledger.fava_options["fiscal-year-end"]
+        )
 
         account_ranker = ExponentialDecayRanker(
             sorted(self.ledger.accounts.keys())
