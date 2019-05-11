@@ -9,6 +9,8 @@ import enum
 import re
 import datetime
 
+from beancount.core import getters
+
 from flask_babel import gettext
 
 IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*\d{4})(.*)")
@@ -378,3 +380,27 @@ def number_of_days_in_period(interval, date):
         date = datetime.date(date.year, 1, 1)
         return (get_next_interval(date, Interval.YEAR) - date).days
     raise NotImplementedError
+
+
+def get_active_years(entries, fye):
+    """Returns active years, with support for fiscal years.
+
+    Args:
+        entries: beancount entries
+        fye: fiscal year end or None
+
+    Returns:
+        A sorted list of years or fiscal years that have been seen
+        in the entries.
+    """
+
+    if not fye:
+        return list(getters.get_active_years(entries))
+    seen = set()
+    for entry in entries:
+        year = entry.date.year
+        _, end = get_fiscal_period(year, fye)
+        if entry.date >= end:
+            year += 1
+        seen.add(year)
+    return ["FY{0}".format(year) for year in sorted(seen)]

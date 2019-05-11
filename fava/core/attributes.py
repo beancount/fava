@@ -3,8 +3,10 @@
 from beancount.core import getters
 from beancount.core.data import Transaction
 
+from fava.core.fava_options import DEFAULTS
 from fava.core.helpers import FavaModule
 from fava.util.ranking import ExponentialDecayRanker
+import fava.util.date
 
 
 class AttributesModule(FavaModule):
@@ -23,7 +25,13 @@ class AttributesModule(FavaModule):
         all_entries = self.ledger.all_entries
         self.links = getters.get_all_links(all_entries)
         self.tags = getters.get_all_tags(all_entries)
-        self.years = list(getters.get_active_years(all_entries))[::-1]
+        fye = (
+            self.ledger.fava_options["fiscal-year-end"]
+            if self.ledger.fava_options["fiscal-year-end"]
+            != DEFAULTS["fiscal-year-end"]
+            else None
+        )
+        self.years = fava.util.date.get_active_years(all_entries, fye)[::-1]
 
         account_ranker = ExponentialDecayRanker(
             sorted(self.ledger.accounts.keys())
