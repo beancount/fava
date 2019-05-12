@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
 
 import os
-import sys
 
 import pytest
 
@@ -23,9 +22,8 @@ def data_file(filename):
 
 
 EXAMPLE_FILE = data_file("long-example.beancount")
-
-EXTENSION_DIR_PATH = os.path.join(os.path.dirname(__file__), "../fava/ext")
 EXTENSION_REPORT_EXAMPLE_FILE = data_file("extension-report-example.beancount")
+
 API = FavaLedger(EXAMPLE_FILE)
 
 fava_app.testing = True
@@ -35,7 +33,6 @@ create_app(EXAMPLE_FILE)
 
 @pytest.fixture
 def extension_report_app():
-    sys.path.insert(0, EXTENSION_DIR_PATH)
     create_app(EXTENSION_REPORT_EXAMPLE_FILE)
     return fava_app
 
@@ -58,7 +55,6 @@ def load_doc(request):
 
 @pytest.fixture
 def extension_report_ledger():
-    sys.path.insert(0, EXTENSION_DIR_PATH)
     return FavaLedger(EXTENSION_REPORT_EXAMPLE_FILE)
 
 
