@@ -10,18 +10,15 @@ from fava.ext import find_extensions
 
 
 class ExtensionModule(FavaModule):
-    """Some attributes of the ledger (mostly for auto-completion)."""
-
-    # pylint: disable=missing-docstring
+    """Fava extensions."""
 
     def __init__(self, ledger):
         super().__init__(ledger)
-        self._extensions = None
         self._instances = {}
-        self.extension_reports = []
+        self.reports = []
 
     def load_file(self):
-        self._extensions = []
+        all_extensions = []
         custom_entries = self.ledger.all_entries_by_type[Custom]
         _extension_entries = extension_entries(custom_entries)
 
@@ -29,10 +26,10 @@ class ExtensionModule(FavaModule):
             extensions, errors = find_extensions(
                 os.path.dirname(self.ledger.beancount_file_path), extension
             )
-            self._extensions.extend(extensions)
+            all_extensions.extend(extensions)
             self.ledger.errors.extend(errors)
 
-        for cls in self._extensions:
+        for cls in all_extensions:
             module = cls.__module__
             ext_config = (
                 _extension_entries[module]
@@ -42,13 +39,14 @@ class ExtensionModule(FavaModule):
             if cls not in self._instances:
                 self._instances[cls] = cls(self.ledger, ext_config)
 
-        self.extension_reports = []
+        self.reports = []
         for ext_class in self._instances:
             ext = self._instances[ext_class]
             if hasattr(ext, "report_title"):
-                self.extension_reports.append((ext.name, ext.report_title))
+                self.reports.append((ext.name, ext.report_title))
 
     def run_hook(self, event, *args):
+        """Run a hook for all extensions."""
         for ext in self._instances.values():
             ext.run_hook(event, *args)
 

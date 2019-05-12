@@ -173,7 +173,7 @@ def test_load_extension_reports(extension_report_app, test_client):
         slug = "extension-report-beancount-file"
 
         ledger = extension_report_app.config["LEDGERS"][slug]
-        assert ledger.extensions.extension_reports == [
+        assert ledger.extensions.reports == [
             ("PortfolioList", "Portfolio List")
         ]
 

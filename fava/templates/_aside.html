@@ -38,9 +38,9 @@
   {% endfor %}
 </ul>
 {% endfor %}
-{% if ledger.extensions.extension_reports %}
+{% if ledger.extensions.reports %}
 <ul class="navigation">
-  {% for name, label in ledger.extensions.extension_reports %}
+  {% for name, label in ledger.extensions.reports %}
   <li><a href="{{ url_for('extension_report', report_name=name)}}">{{ label }}</a></li>
   {% endfor %}
 </ul>
