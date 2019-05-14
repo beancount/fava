@@ -99,7 +99,9 @@
         {#if legend.domain}
           {#each legend.domain.sort() as item}
             <span class="legend">
-              <span class="color" style="background-color: {legend.scale(item)}" />
+              <span
+                class="color"
+                style="background-color: {legend.scale(item)}" />
               <span class="name">{item}</span>
             </span>
           {/each}
@@ -146,7 +148,11 @@
     </div>
     <div class:hidden={!$showCharts} class="chart-labels">
       {#each charts as chart, index}
-        <label class:selected={index === $activeChart.index} on:click={() => selectChart(index)}>{chart.name}</label>
+        <label
+          class:selected={index === $activeChart.index}
+          on:click={() => selectChart(index)}>
+           {chart.name}
+        </label>
       {/each}
     </div>
   </div>

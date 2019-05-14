@@ -16,4 +16,10 @@
   $: if (input) checkValidity(value);
 </script>
 
-<input type="text" class="account" placeholder={_('Account')} list="accounts" bind:this={input} bind:value />
+<input
+  type="text"
+  class="account"
+  placeholder={_('Account')}
+  list="accounts"
+  bind:this={input}
+  bind:value />

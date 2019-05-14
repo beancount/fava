@@ -53,16 +53,23 @@
 <div class:shown class="overlay">
   <div class="overlay-background" on:click={closeOverlay} />
   <div class="overlay-content">
-    <button type="button" class="muted close-overlay" on:click={closeOverlay}>x</button>
+    <button type="button" class="muted close-overlay" on:click={closeOverlay}>
+      x
+    </button>
     <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
       <h3>{_('Import')}</h3>
       {#if entry}
         <div class="headerline">
-          <h3>Entry {currentIndex} of {entries.length} ({entries.length - duplicates}
-            to import):</h3>
+          <h3>
+            Entry {currentIndex} of {entries.length} ({entries.length - duplicates}
+            to import):
+          </h3>
           <span class="spacer" />
           <label class="button muted">
-            <input type="checkbox" checked={duplicate} on:click={toggleDuplicate} />
+            <input
+              type="checkbox"
+              checked={duplicate}
+              on:click={toggleDuplicate} />
             ignore duplicate
           </label>
         </div>
@@ -71,11 +78,14 @@
         </div>
         <div class="fieldset">
           {#if currentIndex > 1}
-            <button type="button" class="muted" on:click={previousEntry}>Previous</button>
+            <button type="button" class="muted" on:click={previousEntry}>
+              Previous
+            </button>
           {/if}
           <span class="spacer" />
-          <button type="submit"> {currentIndex < entries.length ? 'Next' : 'Save'}
-            </button>
+          <button type="submit">
+             {currentIndex < entries.length ? 'Next' : 'Save'}
+          </button>
         </div>
         <hr />
         {#if entry.meta.__source__}

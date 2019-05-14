@@ -20,8 +20,18 @@
     <input type="date" bind:value={entry.date} required />
     <h4>{_('Balance')}</h4>
     <AccountInput bind:value={entry.account} />
-    <input type="tel" class="number" pattern="[0-9.,]*" placeholder={_('Number')} bind:value={entry.amount.number} />
-    <input type="text" class="currency" placeholder={_('Currency')} list="currencies" bind:value={entry.amount.currency} />
+    <input
+      type="tel"
+      class="number"
+      pattern="[0-9.,]*"
+      placeholder={_('Number')}
+      bind:value={entry.amount.number} />
+    <input
+      type="text"
+      class="currency"
+      placeholder={_('Currency')}
+      list="currencies"
+      bind:value={entry.amount.currency} />
     <AddMetadataButton bind:meta={entry.meta} />
   </div>
   <EntryMetadata bind:meta={entry.meta} />

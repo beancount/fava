@@ -99,7 +99,11 @@
     <div class="fieldset">
       <label>
          {_('Account')}:
-        <input type="text" name="account" list="accounts" bind:value={account} />
+        <input
+          type="text"
+          name="account"
+          list="accounts"
+          bind:value={account} />
       </label>
       <input type="hidden" name="hash" value={hash} />
     </div>

@@ -67,18 +67,28 @@
         <p class="flex-row">
           <AccountInput bind:value={info.account} />
           <input size="40" bind:value={info.newName} />
-          <button type="button" on:click={() => move(item.name, info.account, info.newName)}>
-            {'Move'} </button>
-          <a class="button" title="{_('Extract')} with importer {info.importer_name}" href={extractURL(item.name, info.importer_name)}>{_('Extract')}
-            ( {info.importer_name} )</a>
+          <button
+            type="button"
+            on:click={() => move(item.name, info.account, info.newName)}>
+             {'Move'}
+          </button>
+          <a
+            class="button"
+            title="{_('Extract')} with importer {info.importer_name}"
+            href={extractURL(item.name, info.importer_name)}>
+             {_('Extract')} ( {info.importer_name} )
+          </a>
         </p>
       {/each}
     {:else}
       <p>
         <AccountInput bind:value={item.account} />
         <input size="40" bind:value={item.newName} />
-        <button type="button" on:click={() => move(item.name, item.account, item.newName)}>
-          {'Move'} </button>
+        <button
+          type="button"
+          on:click={() => move(item.name, item.account, item.newName)}>
+           {'Move'}
+        </button>
       </p>
     {/if}
   {/each}

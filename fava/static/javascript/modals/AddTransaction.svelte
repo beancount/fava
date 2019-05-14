@@ -36,14 +36,20 @@
 <div class:shown class="overlay">
   <div class="overlay-background" on:click={closeOverlay} />
   <div class="overlay-content">
-    <button type="button" class="muted close-overlay" on:click={closeOverlay}>x</button>
+    <button type="button" class="muted close-overlay" on:click={closeOverlay}>
+      x
+    </button>
     <form on:submit|preventDefault={submit}>
       <h3>{_('New transaction')}:</h3>
       <TransactionComponent bind:this={transactionComponent} bind:entry />
       <div class="fieldset">
         <span class="spacer" />
-        <button type="submit" on:click|preventDefault={submitAndNew} class="muted">
-          {_('Save and add new')} </button>
+        <button
+          type="submit"
+          on:click|preventDefault={submitAndNew}
+          class="muted">
+           {_('Save and add new')}
+        </button>
         <button type="submit">{_('Save')}</button>
       </div>
     </form>
