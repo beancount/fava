@@ -88,9 +88,10 @@ def align(string, fava_options):
     output = io.StringIO()
     for line in string.splitlines():
         match = re.match(
-            r'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({}\b.*)'.format(
-                amount.CURRENCY_RE
-            ),
+            r'([^";]*?)\s+'
+            r"((?:(?:[-+]?\s*[\d,]+(?:\.\d*)?)\s?)*"
+            r"(?:[-+/*]?\s*[-+]?\s*[\d,]+(?:\.\d*)?))"
+            r"\s+([A-Z]+\b.*)".format(amount.CURRENCY_RE),
             line,
         )
         if match:
