@@ -2737,7 +2737,6 @@ option "operating_currency" "USD"
 2014-01-01 open Assets:US:ETrade:GLD                       GLD
 2014-01-01 open Income:US:ETrade:Gains                      USD
 2014-01-01 open Income:US:ETrade:Dividends                  USD
-    fava-collapse-account: TRUE
 
 2014-09-18 * "Dividends on portfolio" #test
   Assets:US:ETrade:Cash                              0.00 USD
