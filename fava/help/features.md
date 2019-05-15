@@ -57,9 +57,7 @@ number or a deep hierarchy of accounts, Fava offers the following options:
 -   `show-accounts-with-zero-balance`
 -   `show-accounts-with-zero-transactions`
 -   `collapse-below-level`
-
-Additionally, accounts that have the metadata `fava-collapse-account` set to
-`TRUE` on their Open directive will be collapsed in the account trees.
+-   `collapse-patterns`
 
 ## Opening an external editor
 

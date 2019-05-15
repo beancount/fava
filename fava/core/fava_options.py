@@ -17,6 +17,7 @@ DEFAULTS = {
     "account-journal-include-children": True,
     "currency-column": 61,
     "collapse-below-level": None,
+    "collapse-patterns": [],
     "auto-reload": False,
     "default-file": None,
     "fiscal-year-end": "12-31",
@@ -65,6 +66,7 @@ INT_OPTS = [
 ]
 
 LIST_OPTS = [
+    "collapse-patterns",
     "import-dirs",
     "journal-show",
     "journal-show-document",
