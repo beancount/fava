@@ -1,5 +1,6 @@
 import e from "./events";
 import { $, delegate, fetchAPI, fuzzytest, fuzzywrap } from "./helpers";
+import { favaAPI } from "./stores";
 
 const accountCompletionCache = {};
 
@@ -172,12 +173,12 @@ class CompletionList {
     }
     if (this.list === "tags") {
       return [
-        ...window.favaAPI.tags.map(tag => `#${tag}`),
-        ...window.favaAPI.links.map(link => `^${link}`),
-        ...window.favaAPI.payees.map(payee => `payee:"${payee}"`),
+        ...favaAPI.tags.map(tag => `#${tag}`),
+        ...favaAPI.links.map(link => `^${link}`),
+        ...favaAPI.payees.map(payee => `payee:"${payee}"`),
       ];
     }
-    return window.favaAPI[this.list];
+    return favaAPI[this.list];
   }
 
   // Set the value of the input to the selected value.

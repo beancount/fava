@@ -4,18 +4,19 @@ import { format } from "d3-format";
 import { utcFormat } from "d3-time-format";
 
 import e from "./events";
+import { favaAPI } from "./stores";
 
 let formatter;
 let incognito;
 
 e.on("page-init", () => {
-  const { locale } = window.favaAPI.favaOptions;
+  const { locale } = favaAPI.favaOptions;
   if (locale) {
     formatter = new Intl.NumberFormat(locale.replace("_", "-")).format;
   } else {
     formatter = format(".2f");
   }
-  if (window.favaAPI.incognito) {
+  if (favaAPI.incognito) {
     incognito = num => num.replace(/[0-9]/g, "X");
   } else {
     incognito = num => num;

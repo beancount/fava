@@ -2,6 +2,7 @@
   import e from "../events";
   import { notify } from "../notifications";
   import { _, fetch, handleJSON } from "../helpers";
+  import { favaAPI } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
 
@@ -18,7 +19,7 @@
       files.map(({ dataTransferFile, filename }) => {
         const formData = new FormData(form);
         formData.append("file", dataTransferFile, filename);
-        return fetch(`${window.favaAPI.baseURL}api/add-document/`, {
+        return fetch(`${favaAPI.baseURL}api/add-document/`, {
           method: "PUT",
           body: formData,
         })
@@ -40,7 +41,7 @@
   }
 
   export function handleDrop(event, target) {
-    folders = window.favaAPI.options.documents;
+    folders = favaAPI.options.documents;
     files = [];
 
     if (!event.dataTransfer.files.length) {

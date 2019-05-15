@@ -61,6 +61,7 @@ import { notify } from "./notifications";
 import "./sidebar";
 import "./sort";
 import "./tree-table";
+import { favaAPI } from "./stores";
 
 import Import from "./Import.svelte";
 import ChartSwitcher from "./ChartSwitcher.svelte";
@@ -79,7 +80,7 @@ function initSvelteComponent(selector, SvelteComponent) {
 }
 
 e.on("page-loaded", () => {
-  window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
+  Object.assign(favaAPI, JSON.parse($("#ledger-data").innerHTML));
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-import", Import);
@@ -120,7 +121,7 @@ function doPoll() {
     .then(
       changed => {
         if (changed) {
-          if (window.favaAPI.favaOptions["auto-reload"]) {
+          if (favaAPI.favaOptions["auto-reload"]) {
             e.trigger("reload");
           } else {
             $("#reload-page").classList.remove("hidden");
@@ -143,7 +144,7 @@ function doPoll() {
 }
 
 ready().then(() => {
-  window.favaAPI = JSON.parse($("#ledger-data").innerHTML);
+  Object.assign(favaAPI, JSON.parse($("#ledger-data").innerHTML));
   router.init();
   e.trigger("page-init");
   e.trigger("page-loaded");

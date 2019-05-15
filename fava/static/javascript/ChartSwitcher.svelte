@@ -5,6 +5,7 @@
   import { _ } from "./helpers";
   import { parseChartData } from "./charts";
   import {
+    favaAPI,
     activeChart,
     chartCurrency,
     chartMode,
@@ -25,15 +26,13 @@
     ["at_cost", _("At Cost")],
     ["at_value", _("At Market Value")],
     ["units", _("Units")],
-    ...window.favaAPI.options.operating_currency
+    ...favaAPI.options.operating_currency
       .sort()
       .map(currency => [currency, `Converted to ${currency}`]),
-    ...window.favaAPI.options.commodities
+    ...favaAPI.options.commodities
       .sort()
       .filter(
-        c =>
-          !window.favaAPI.options.operating_currency.includes(c) &&
-          c.length <= 3
+        c => !favaAPI.options.operating_currency.includes(c) && c.length <= 3
       )
       .map(currency => [currency, `Converted to ${currency}`]),
   ];

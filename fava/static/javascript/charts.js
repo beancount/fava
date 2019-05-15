@@ -19,6 +19,7 @@ import { schemeSet3, schemeCategory10 } from "d3-scale-chromatic";
 import { Delaunay } from "d3-delaunay";
 import "d3-transition";
 
+import { favaAPI } from "./stores";
 import e from "./events";
 import { formatCurrency, formatCurrencyShort, dateFormat } from "./format";
 import setTimeFilter from "./filters";
@@ -60,10 +61,7 @@ function addInternalNodesAsLeaves(node) {
 // into links to the account page.
 function makeAccountLink(selection) {
   selection.on("click", d => {
-    window.location = window.favaAPI.accountURL.replace(
-      "REPLACEME",
-      d.data.account
-    );
+    window.location = favaAPI.accountURL.replace("REPLACEME", d.data.account);
     event.stopPropagation();
   });
 }
@@ -739,20 +737,20 @@ function getOperatingCurrencies(conversion) {
   if (
     !conversion ||
     ["at_cost", "at_value", "units"].includes(conversion) ||
-    window.favaAPI.options.operating_currency.includes(conversion)
+    favaAPI.options.operating_currency.includes(conversion)
   ) {
-    return window.favaAPI.options.operating_currency;
+    return favaAPI.options.operating_currency;
   }
-  return [...window.favaAPI.options.operating_currency, conversion];
+  return [...favaAPI.options.operating_currency, conversion];
 }
 
 e.on("page-init", () => {
   tooltip = select("#tooltip");
 
-  scales.treemap.domain(window.favaAPI.accounts);
-  scales.sunburst.domain(window.favaAPI.accounts);
-  window.favaAPI.options.commodities.sort();
-  scales.currencies.domain(window.favaAPI.options.commodities);
+  scales.treemap.domain(favaAPI.accounts);
+  scales.sunburst.domain(favaAPI.accounts);
+  favaAPI.options.commodities.sort();
+  scales.currencies.domain(favaAPI.options.commodities);
 });
 
 e.on("page-loaded", () => {

@@ -1,12 +1,13 @@
 <script>
   import { _ } from "../helpers";
+  import { favaAPI } from "../stores";
 
   export let value = "";
 
   let input;
 
   function checkValidity(val) {
-    if (window.favaAPI.accounts.includes(val)) {
+    if (favaAPI.accounts.includes(val)) {
       input.setCustomValidity("");
     } else {
       input.setCustomValidity(_("Should be one of the declared accounts"));

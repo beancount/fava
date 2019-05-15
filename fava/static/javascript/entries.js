@@ -1,6 +1,7 @@
 import e from "./events";
 import { notify } from "./notifications";
 import { fetch, handleJSON } from "./helpers";
+import { favaAPI } from "./stores";
 
 export class Posting {
   constructor() {
@@ -26,7 +27,7 @@ export class Transaction {
 export async function saveEntries(entries) {
   if (!entries.length) return;
   try {
-    const data = await fetch(`${window.favaAPI.baseURL}api/add-entries/`, {
+    const data = await fetch(`${favaAPI.baseURL}api/add-entries/`, {
       method: "PUT",
       body: JSON.stringify({ entries }),
       headers: { "Content-Type": "application/json" },

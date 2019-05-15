@@ -7,7 +7,7 @@ import { select, selectAll, delegate, fetch, handleText } from "./helpers";
 import e from "./events";
 import { notify } from "./notifications";
 import initSort from "./sort";
-import { urlHash, conversion, interval, showCharts } from "./stores";
+import { urlHash, conversion, interval, showCharts, favaAPI } from "./stores";
 
 // Set the query string to match the filter inputs and the interval and
 // conversion <select>'s.
@@ -196,13 +196,13 @@ e.on("form-submit-query", form => {
 e.on("page-init", () => {
   const params = new URL(window.location.href).searchParams;
   showCharts.set(!(params.get("charts") === "false"));
-  interval.set(params.get("interval") || window.favaAPI.favaOptions.interval);
+  interval.set(params.get("interval") || favaAPI.favaOptions.interval);
   conversion.set(params.get("conversion") || "at_cost");
 
   interval.subscribe(value => {
     const newURL = new URL(window.location.href);
     newURL.searchParams.set("interval", value);
-    if (value === window.favaAPI.favaOptions.interval) {
+    if (value === favaAPI.favaOptions.interval) {
       newURL.searchParams.delete("interval");
     }
     const url = newURL.toString();

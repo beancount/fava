@@ -40,7 +40,7 @@ import "./codemirror/mode-query";
 import { $, $$, delegate, fetch, handleJSON } from "./helpers";
 import e from "./events";
 import { notify } from "./notifications";
-import { closeOverlay } from "./stores";
+import { closeOverlay, favaAPI } from "./stores";
 
 // This handles saving in both the main and the overlaid entry editors.
 CodeMirror.commands.favaSave = cm => {
@@ -50,7 +50,7 @@ CodeMirror.commands.favaSave = cm => {
   button.disabled = true;
   button.textContent = button.getAttribute("data-progress-content");
 
-  fetch(`${window.favaAPI.baseURL}api/source/`, {
+  fetch(`${favaAPI.baseURL}api/source/`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -85,7 +85,7 @@ CodeMirror.commands.favaSave = cm => {
 };
 
 CodeMirror.commands.favaFormat = cm => {
-  fetch(`${window.favaAPI.baseURL}api/format-source/`, {
+  fetch(`${favaAPI.baseURL}api/format-source/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -245,9 +245,9 @@ let activeEditor = null;
 // Init source editor.
 export default function initSourceEditor(name) {
   sourceEditorOptions.rulers = [];
-  if (window.favaAPI.favaOptions["currency-column"]) {
+  if (favaAPI.favaOptions["currency-column"]) {
     sourceEditorOptions.rulers.push({
-      column: window.favaAPI.favaOptions["currency-column"] - 1,
+      column: favaAPI.favaOptions["currency-column"] - 1,
       lineStyle: "dotted",
     });
   }

@@ -1,6 +1,7 @@
 import CodeMirror from "codemirror";
 
 import { fuzzyMatch, getCurrentWord } from "./helpers";
+import { favaAPI } from "../stores";
 
 const completionSources = {
   undatedDirectives: ["option", "plugin", "include"],
@@ -39,14 +40,14 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
   // If '#' has just been typed, there won't be a tag token yet
   if (currentCharacter === "#") {
     return {
-      list: window.favaAPI.tags,
+      list: favaAPI.tags,
       from: cursor,
       to: cursor,
     };
   }
   if (currentCharacter === "^") {
     return {
-      list: window.favaAPI.links,
+      list: favaAPI.links,
       from: cursor,
       to: cursor,
     };
@@ -54,7 +55,7 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
 
   if (token.type === "tag") {
     return {
-      list: window.favaAPI.tags.filter(d => d.startsWith(currentWord.slice(1))),
+      list: favaAPI.tags.filter(d => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
       to: new CodeMirror.Pos(cursor.line, token.end),
     };
@@ -80,7 +81,7 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
     // complete accounts for indented lines
     if (lineTokens[0].type === "whitespace") {
       if (previousTokens.length === 1) {
-        return fuzzyMatch(cursor, currentWord, window.favaAPI.accounts);
+        return fuzzyMatch(cursor, currentWord, favaAPI.accounts);
       }
     }
 

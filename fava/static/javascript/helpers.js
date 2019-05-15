@@ -1,3 +1,5 @@
+import { favaAPI } from "./stores";
+
 // Select a single element.
 export function $(expr, con = document) {
   return con.querySelector(expr);
@@ -48,7 +50,7 @@ export function ready() {
     if (document.readyState !== "loading") {
       resolve();
     } else {
-      document.addEventListener("DOMContentLoaded", resolve());
+      document.addEventListener("DOMContentLoaded", resolve);
     }
   });
 }
@@ -89,7 +91,7 @@ export function fetch(input, init = {}) {
  * @param params - a string to append as params or an object.
  */
 export function fetchAPI(endpoint, params = null) {
-  let url = `${window.favaAPI.baseURL}api/${endpoint}/`;
+  let url = `${favaAPI.baseURL}api/${endpoint}/`;
   if (params) {
     if (typeof params === "string") {
       url += `?${params}`;

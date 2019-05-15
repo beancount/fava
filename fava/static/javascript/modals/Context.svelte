@@ -3,7 +3,7 @@
 
   import initSourceEditor from "../editor";
   import { fetch, delegate, handleText } from "../helpers";
-  import { urlHash } from "../stores";
+  import { urlHash, favaAPI } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
 
@@ -12,7 +12,7 @@
   $: entryHash = shown ? $urlHash.slice(8) : "";
   $: content = !shown
     ? ""
-    : fetch(`${window.favaAPI.baseURL}_context/?entry_hash=${entryHash}`).then(
+    : fetch(`${favaAPI.baseURL}_context/?entry_hash=${entryHash}`).then(
         handleText
       );
 
