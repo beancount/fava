@@ -5,9 +5,9 @@ Unreleased
 ----------
 
 The import page of Fava has been reworked - it now supports moving files to the
-documents folder and the import process should be a bit more interactive.
-This release also contains various fixes and a new `collapse-patterns`
-option to collapse accounts in account trees.
+documents folder and the import process should be a bit more interactive. This release
+also contains various fixes and a new `collapse-pattern` option to collapse accounts in
+account trees based on regular expressions.
 
 v1.10 (2019-01-31)
 ------------------
