@@ -6,14 +6,14 @@ Unreleased
 
 The import page of Fava has been reworked - it now supports moving files to the
 documents folder and the import process should be a bit more interactive.
-This release also contains various fixes and a new `collapse-below-level`
+This release also contains various fixes and a new `collapse-patterns`
 option to collapse accounts in account trees.
 
 v1.10 (2019-01-31)
 ------------------
 
 This release contains mostly smaller changes and fixes. In particular, the net
-worth chart will now follow the seleected conversion.
+worth chart will now follow the selected conversion.
 
 v1.9 (2018-10-08)
 -----------------

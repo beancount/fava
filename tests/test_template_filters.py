@@ -67,7 +67,6 @@ def test_format_errormsg(app):
 def test_collapse_account_at_level(app):
     with app.test_request_context("/"):
         app.preprocess_request()
-        g.ledger.fava_options["collapse-below-level"] = 2
         g.ledger.fava_options["collapse-patterns"] = [
             "^Assets:Stock$",
             "^Assets:Property:.*",
@@ -77,7 +76,6 @@ def test_collapse_account_at_level(app):
 
         assert collapse_account_at_level("Assets:Cash", 0) is False
         assert collapse_account_at_level("Assets:Cash", 1) is False
-        assert collapse_account_at_level("Assets:Cash", 2) is True
 
         assert collapse_account_at_level("Assets:Stock", 0) is True
         assert collapse_account_at_level("Assets:Stock", 1) is True
