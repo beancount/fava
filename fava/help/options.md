@@ -193,12 +193,17 @@ will always be shown.
 
 ---
 
-## `collapse-patterns`
+## `collapse-pattern`
 
 Default: Not set
 
-A space-separated list of regex patterns. Accounts matching a pattern on this list will
-be collapsed.
+This option is used to specify accounts that will be collapsed in the displayed account
+trees. The argument to this option is a regular expression matching account names. This
+option can be specified multiple times.
+
+Collapsing all accounts below a specific depth in the account tree can be accomplished
+by a regex such as: `.*:.*:.*` (this example collapses all accounts that are three
+levels deep).
 
 ---
 ## `use-external-editor`

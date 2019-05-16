@@ -16,7 +16,7 @@ InsertEntryOption = namedtuple("InsertEntryOption", "date re filename lineno")
 DEFAULTS = {
     "account-journal-include-children": True,
     "currency-column": 61,
-    "collapse-patterns": [],
+    "collapse-pattern": [],
     "auto-reload": False,
     "default-file": None,
     "fiscal-year-end": "12-31",
@@ -58,13 +58,12 @@ BOOL_OPTS = [
 
 INT_OPTS = [
     "currency-column",
+    "sidebar-show-queries",
     "upcoming-events",
     "uptodate-indicator-grey-lookback-days",
-    "sidebar-show-queries",
 ]
 
 LIST_OPTS = [
-    "collapse-patterns",
     "import-dirs",
     "journal-show",
     "journal-show-document",
@@ -72,15 +71,20 @@ LIST_OPTS = [
 ]
 
 STR_OPTS = [
+    "collapse-pattern",
+    "fiscal-year-end",
     "import-config",
     "interval",
     "language",
     "locale",
     "unrealized",
-    "fiscal-year-end",
 ]
 
+# options that can be specified multiple times
+MULTI_OPTS = ["collapse-pattern"]
 
+
+# pylint: disable=too-many-branches
 def parse_options(custom_entries):
     """Parse custom entries for Fava options.
 
@@ -120,14 +124,22 @@ def parse_options(custom_entries):
                     value = entry.values[1].value
                     assert isinstance(value, str)
 
+                processed_value = None
                 if key in STR_OPTS:
-                    options[key] = value
+                    processed_value = value
                 elif key in BOOL_OPTS:
-                    options[key] = value.lower() == "true"
+                    processed_value = value.lower() == "true"
                 elif key in INT_OPTS:
-                    options[key] = int(value)
+                    processed_value = int(value)
                 elif key in LIST_OPTS:
-                    options[key] = str(value).strip().split(" ")
+                    processed_value = str(value).strip().split(" ")
+
+                if processed_value is not None:
+                    if key in MULTI_OPTS:
+                        options[key].append(processed_value)
+                    else:
+                        options[key] = processed_value
+
             except (IndexError, TypeError, AssertionError):
                 errors.append(
                     OptionError(
