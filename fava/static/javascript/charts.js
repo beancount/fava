@@ -559,8 +559,11 @@ class LineChart extends BaseChart {
       .on("mousemove", d => {
         const matrix = this.canvas.node().getScreenCTM();
         tooltip
-          .style("left", `${this.x(d.data.date) + matrix.e}px`)
-          .style("top", `${this.y(d.data.value) + matrix.f + -15}px`);
+          .style("left", `${window.scrollX + this.x(d.data.date) + matrix.e}px`)
+          .style(
+            "top",
+            `${window.scrollY + this.y(d.data.value) + matrix.f - 15}px`
+          );
       })
       .on("mouseleave", () => {
         tooltip.style("opacity", 0);
