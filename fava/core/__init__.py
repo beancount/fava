@@ -258,20 +258,24 @@ class FavaLedger:
             return self._filters["time"].end_date
         return None
 
+    def join_path(self, *args):
+        """Path relative to the directory of the ledger."""
+        include_path = os.path.dirname(self.beancount_file_path)
+        return os.path.normpath(os.path.join(include_path, *args))
+
     def paths_to_watch(self):
         """The paths to included files and document directories.
 
         Returns:
             A tuple (files, directories).
         """
-        include_path = os.path.dirname(self.beancount_file_path)
         files = list(self.options["include"])
         if self.fava_options["import-config"]:
             files.append(self.ingest.module_path)
         return (
             files,
             [
-                os.path.normpath(os.path.join(include_path, path, account))
+                self.join_path(path, account)
                 for account in self.account_types
                 for path in self.options["documents"]
             ],
@@ -503,15 +507,11 @@ class FavaLedger:
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
 
-        beancount_dir = os.path.dirname(self.beancount_file_path)
         paths = [os.path.join(os.path.dirname(entry.meta["filename"]), value)]
         paths.extend(
             [
-                os.path.join(
-                    beancount_dir,
-                    document_root,
-                    *posting.account.split(":"),
-                    value
+                self.join_path(
+                    document_root, *posting.account.split(":"), value
                 )
                 for posting in entry.postings
                 for document_root in self.options["documents"]

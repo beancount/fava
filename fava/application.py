@@ -271,14 +271,18 @@ def account(name, subreport="journal"):
 def document():
     """Download a document."""
     filename = request.args.get("filename")
-    if not any(
-        (
-            filename == document.filename
-            for document in g.ledger.all_entries_by_type[Document]
-        )
-    ):
-        abort(404)
-    return send_file_inline(filename)
+    filenames = [
+        document.filename
+        for document in g.ledger.all_entries_by_type[Document]
+    ]
+    import_directories = [
+        g.ledger.join_path(d) for d in g.ledger.fava_options["import-dirs"]
+    ]
+    if filename in filenames:
+        return send_file_inline(filename)
+    if any(filename.startswith(d) for d in import_directories):
+        return send_file_inline(filename)
+    return abort(404)
 
 
 @app.route("/<bfile>/statement/", methods=["GET"])

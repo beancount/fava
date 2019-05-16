@@ -54,14 +54,10 @@ class IngestModule(FavaModule):
     @property
     def module_path(self):
         """The path to the importer configuration."""
-        if not self.ledger.fava_options["import-config"]:
+        config_path = self.ledger.fava_options["import-config"]
+        if not config_path:
             return None
-        return path.normpath(
-            path.join(
-                path.dirname(self.ledger.beancount_file_path),
-                self.ledger.fava_options["import-config"],
-            )
-        )
+        return self.ledger.join_path(config_path)
 
     def load_file(self):
         if not self.ledger.fava_options["import-config"]:
@@ -113,11 +109,7 @@ class IngestModule(FavaModule):
         ret = {}
 
         for directory in self.ledger.fava_options["import-dirs"]:
-            full_path = path.normpath(
-                path.join(
-                    path.dirname(self.ledger.beancount_file_path), directory
-                )
-            )
+            full_path = self.ledger.join_path(directory)
             files = list(identify.find_imports(self.config, full_path))
             ret[directory] = []
             for (filename, importers) in files:

@@ -36,6 +36,12 @@
     return `#extract-${params.toString()}`;
   }
 
+  function documentURL(filename) {
+    const params = new URLSearchParams();
+    params.set("filename", filename);
+    return `../document/?${params.toString()}`;
+  }
+
   function move(filename, account, newName) {
     fetchAPI("move", {
       filename,
@@ -61,7 +67,11 @@
 {#each Object.entries(data) as [directory, items]}
   <h3>Directory: {directory}</h3>
   {#each items as item}
-    <pre title={item.name}>{item.basename}</pre>
+    <pre title={item.name}>
+      <a href={documentURL(item.name)} data-remote target="_blank">
+         {item.basename}
+      </a>
+    </pre>
     {#if item.importers.length}
       {#each item.importers as info}
         <p class="flex-row">
