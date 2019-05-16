@@ -56,7 +56,6 @@ number or a deep hierarchy of accounts, Fava offers the following options:
 -   `show-closed-accounts`
 -   `show-accounts-with-zero-balance`
 -   `show-accounts-with-zero-transactions`
--   `collapse-below-level`
 -   `collapse-patterns`
 
 ## Opening an external editor

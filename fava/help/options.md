@@ -193,22 +193,12 @@ will always be shown.
 
 ---
 
-## `collapse-below-level`
-
-Default: Not set
-
-If set to a number all accounts at or below this depth in the account tree will
-be collapsed by default. Setting the option to `0` will thus collapse all
-accounts by default.
-
----
-
 ## `collapse-patterns`
 
 Default: Not set
 
 A space-separated list of regex patterns. Accounts matching a pattern on this list will
-be collapsed. Also see `collapse-below-level`.
+be collapsed.
 
 ---
 ## `use-external-editor`
