@@ -184,11 +184,14 @@ def format_errormsg(message):
     )
 
 
-def collapse_account_at_level(account_name):
-    """Return true if account should be collapsed at the given tree depth."""
+def collapse_account(account_name):
+    """Return true if account should be collapsed."""
     collapse_patterns = g.ledger.fava_options["collapse-pattern"]
     for pattern in collapse_patterns:
-        if re.match(pattern, account_name):
-            return True
+        try:
+            if re.match(pattern, account_name):
+                return True
+        except re.error:
+            pass
 
     return False

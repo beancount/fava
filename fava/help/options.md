@@ -206,6 +206,7 @@ by a regex such as: `.*:.*:.*` (this example collapses all accounts that are thr
 levels deep).
 
 ---
+
 ## `use-external-editor`
 
 Default: `false`

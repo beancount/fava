@@ -13,7 +13,7 @@ from fava.template_filters import (
     get_or_create,
     should_show,
     format_errormsg,
-    collapse_account_at_level,
+    collapse_account,
 )
 
 
@@ -64,7 +64,7 @@ def test_format_errormsg(app):
         assert format_errormsg("Test: Test") == "Test: Test"
 
 
-def test_collapse_account_at_level(app):
+def test_collapse_account(app):
     with app.test_request_context("/"):
         app.preprocess_request()
         g.ledger.fava_options["collapse-pattern"] = [
@@ -74,13 +74,13 @@ def test_collapse_account_at_level(app):
         g.ledger.accounts["Assets:Stock"] = AccountData()
         g.ledger.accounts["Assets:Property"] = AccountData()
 
-        assert collapse_account_at_level("Assets:Cash") is False
-        assert collapse_account_at_level("Assets:Cash") is False
+        assert collapse_account("Assets:Cash") is False
+        assert collapse_account("Assets:Cash") is False
 
-        assert collapse_account_at_level("Assets:Stock") is True
-        assert collapse_account_at_level("Assets:Stock") is True
-        assert collapse_account_at_level("Assets:Stock") is True
+        assert collapse_account("Assets:Stock") is True
+        assert collapse_account("Assets:Stock") is True
+        assert collapse_account("Assets:Stock") is True
 
-        assert collapse_account_at_level("Assets:Property") is False
-        assert collapse_account_at_level("Assets:Property:Real") is True
-        assert collapse_account_at_level("Assets:Property:Real:Land") is True
+        assert collapse_account("Assets:Property") is False
+        assert collapse_account("Assets:Property:Real") is True
+        assert collapse_account("Assets:Property:Real:Land") is True
