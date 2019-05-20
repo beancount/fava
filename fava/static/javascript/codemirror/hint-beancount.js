@@ -98,7 +98,7 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
       }
 
       // Ignore negative sign from previousTokens
-      let tokenLength = previousTokens.filter(t => t.type != null).length;
+      const tokenLength = previousTokens.filter(t => t.type != null).length;
       if (tokenLength % 2 === 0) {
         const directiveType = previousTokens[2].string;
         if (directiveType in directiveCompletions) {
