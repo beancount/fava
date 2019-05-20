@@ -9,7 +9,7 @@
 
   let entries = [];
   let component;
-  let currentIndex = 1;
+  let currentIndex = 0;
   let duplicate;
   let duplicates;
   let entry;
@@ -25,7 +25,7 @@
       entries = data;
     });
   }
-  $: entry = entries[currentIndex - 1];
+  $: entry = entries[currentIndex];
   $: if (entry) {
     component = { Balance, Note, Transaction }[entry.type];
     duplicates = entry && entries.filter(e => isDuplicate(e)).length;
@@ -33,7 +33,7 @@
   }
 
   async function submitOrNext() {
-    if (currentIndex < entries.length) {
+    if (currentIndex < entries.length - 1) {
       currentIndex += 1;
     } else {
       await saveEntries(entries.filter(e => !isDuplicate(e)));
@@ -42,7 +42,7 @@
   }
 
   function previousEntry() {
-    currentIndex = Math.max(currentIndex - 1, 1);
+    currentIndex = Math.max(currentIndex - 1, 0);
   }
 
   function toggleDuplicate() {
@@ -61,7 +61,7 @@
       {#if entry}
         <div class="headerline">
           <h3>
-            Entry {currentIndex} of {entries.length} ({entries.length - duplicates}
+            Entry {currentIndex + 1} of {entries.length} ({entries.length - duplicates}
             to import):
           </h3>
           <span class="spacer" />
@@ -77,15 +77,33 @@
           <svelte:component this={component} bind:entry />
         </div>
         <div class="fieldset">
-          {#if currentIndex > 1}
+          {#if currentIndex > 0}
+            <button
+              type="button"
+              class="muted"
+              on:click={() => {
+                currentIndex = 0;
+              }}>
+              ⏮
+            </button>
             <button type="button" class="muted" on:click={previousEntry}>
-              Previous
+               {_('Previous')}
             </button>
           {/if}
           <span class="spacer" />
-          <button type="submit">
-             {currentIndex < entries.length ? 'Next' : 'Save'}
-          </button>
+          {#if currentIndex < entries.length - 1}
+            <button type="submit">{_('Next')}</button>
+            <button
+              type="button"
+              class="muted"
+              on:click={() => {
+                currentIndex = entries.length - 1;
+              }}>
+              ⏭
+            </button>
+          {:else}
+            <button type="submit">{_('Save')}</button>
+          {/if}
         </div>
         <hr />
         {#if entry.meta.__source__}
