@@ -37,25 +37,20 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
   const currentCharacter = line[cursor.ch - 1];
   const currentWord = getCurrentWord(cursor, line);
 
-  // If '#' has just been typed, there won't be a tag token yet
-  if (currentCharacter === "#") {
+  // If '#' or '^' has just been typed, there won't be a tag or link token yet
+  if (currentCharacter === "#" || currentCharacter === "^") {
+    const list = currentCharacter === "#" ? favaAPI.tags : favaAPI.links;
     return {
-      list: favaAPI.tags,
-      from: cursor,
-      to: cursor,
-    };
-  }
-  if (currentCharacter === "^") {
-    return {
-      list: favaAPI.links,
+      list,
       from: cursor,
       to: cursor,
     };
   }
 
-  if (token.type === "tag") {
+  if (token.type === "tag" || token.type === "link") {
+    const list = token.type === "tag" ? favaAPI.tags : favaAPI.links;
     return {
-      list: favaAPI.tags.filter(d => d.startsWith(currentWord.slice(1))),
+      list: list.filter(d => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
       to: new CodeMirror.Pos(cursor.line, token.end),
     };
