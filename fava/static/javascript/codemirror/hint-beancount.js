@@ -20,14 +20,14 @@ const completionSources = {
 };
 
 const directiveCompletions = {
-  open: ["accounts", "commodities"],
+  open: ["accounts", "currencies"],
   close: ["accounts"],
-  commodity: ["commodities"],
-  balance: ["accounts", null, "commodities"],
+  commodity: ["currencies"],
+  balance: ["accounts", null, "currencies"],
   pad: ["accounts", "accounts"],
   note: ["accounts"],
   document: ["accounts"],
-  price: ["commodities", null, "commodities"],
+  price: ["currencies", null, "currencies"],
 };
 
 CodeMirror.registerHelper("hint", "beancount", cm => {
@@ -98,12 +98,16 @@ CodeMirror.registerHelper("hint", "beancount", cm => {
         };
       }
 
-      if (previousTokens.length % 2 === 0) {
+      // Ignore negative sign from previousTokens
+      const tokenLength = previousTokens.filter(t => t.type != null).length;
+      if (tokenLength % 2 === 0) {
         const directiveType = previousTokens[2].string;
         if (directiveType in directiveCompletions) {
           const complType =
-            directiveCompletions[directiveType][previousTokens.length / 2 - 2];
-          return fuzzyMatch(cursor, currentWord, completionSources[complType]);
+            directiveCompletions[directiveType][tokenLength / 2 - 2];
+          if (complType) {
+            return fuzzyMatch(cursor, currentWord, favaAPI[complType]);
+          }
         }
       }
     }
