@@ -54,7 +54,6 @@ import "./autocomplete";
 import "./charts";
 import "./clipboard";
 import "./editor";
-import "./filters";
 import "./journal";
 import "./keyboard-shortcuts";
 import { notify } from "./notifications";
@@ -65,6 +64,7 @@ import { favaAPI } from "./stores";
 
 import Import from "./Import.svelte";
 import ChartSwitcher from "./ChartSwitcher.svelte";
+import FilterForm from "./FilterForm.svelte";
 import Modals from "./modals/Modals.svelte";
 
 function initSvelteComponent(selector, SvelteComponent) {
@@ -93,6 +93,8 @@ e.on("page-loaded", () => {
 e.on("page-init", () => {
   // eslint-disable-next-line
   new Modals({ target: document.body });
+  // eslint-disable-next-line
+  new FilterForm({ target: $("header") });
 
   // Watch for all clicks on <button>s and fire the appropriate events.
   delegate(document.body, "click", "button", event => {

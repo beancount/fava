@@ -18,11 +18,16 @@ import { arc, line } from "d3-shape";
 import { schemeSet3, schemeCategory10 } from "d3-scale-chromatic";
 import { Delaunay } from "d3-delaunay";
 import "d3-transition";
+import { get } from "svelte/store";
 
-import { favaAPI } from "./stores";
+import { favaAPI, filters, interval } from "./stores";
 import e from "./events";
-import { formatCurrency, formatCurrencyShort, dateFormat } from "./format";
-import setTimeFilter from "./filters";
+import {
+  formatCurrency,
+  formatCurrencyShort,
+  dateFormat,
+  timeFilterDateFormat,
+} from "./format";
 
 // The color scales for the charts.
 //
@@ -43,6 +48,13 @@ const NO_MARGINS = {
   bottom: 0,
   left: 0,
 };
+
+export function setTimeFilter(date) {
+  filters.update(fs => {
+    fs.time = timeFilterDateFormat[get(interval)](date);
+    return fs;
+  });
+}
 
 function addInternalNodesAsLeaves(node) {
   node.children.forEach(o => {

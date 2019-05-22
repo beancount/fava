@@ -1,15 +1,17 @@
 import { $, $$, delegate } from "./helpers";
 import e from "./events";
 import router from "./router";
+import { filters } from "./stores";
 
 function addFilter(value) {
-  const filter = $("#filter-filter");
-  if (filter.value) {
-    filter.value += ` ${value}`;
-  } else {
-    filter.value = value;
-  }
-  e.trigger("form-submit-filters", filter.form);
+  filters.update(fs => {
+    if (fs.filter) {
+      fs.filter += ` ${value}`;
+    } else {
+      fs.filter = value;
+    }
+    return fs;
+  });
 }
 
 e.on("page-loaded", () => {

@@ -7,31 +7,14 @@ import { select, selectAll, delegate, fetch, handleText } from "./helpers";
 import e from "./events";
 import { notify } from "./notifications";
 import initSort from "./sort";
-import { urlHash, conversion, interval, showCharts, favaAPI } from "./stores";
-
-// Set the query string to match the filter inputs and the interval and
-// conversion <select>'s.
-function updateURL(url) {
-  const newURL = new URL(url);
-  const currentURL = new URL(window.location.href);
-  ["account", "filter", "time"].forEach(filter => {
-    newURL.searchParams.delete(filter);
-    const el = select(`#${filter}-filter`);
-    if (el.value) {
-      newURL.searchParams.set(filter, el.value);
-    }
-  });
-
-  ["interval", "charts", "conversion"].forEach(setting => {
-    if (currentURL.searchParams.has(setting)) {
-      newURL.searchParams.set(setting, currentURL.searchParams.get(setting));
-    } else {
-      newURL.searchParams.delete(setting);
-    }
-  });
-
-  return newURL.toString();
-}
+import {
+  urlHash,
+  conversion,
+  interval,
+  showCharts,
+  filters,
+  favaAPI,
+} from "./stores";
 
 class Router {
   // This should be called once when the page has been loaded. Initializes the
@@ -112,44 +95,41 @@ class Router {
     };
   }
 
-  // Intercept all clicks on links (<a>) and .navigate() to the link instead.
-  // Doesn't intercept if
-  //  - a modifier key is pressed,
-  //  - the link starts with a hash '#', or
-  //  - the link has a `data-remote` attribute.
+  /*
+   * Intercept all clicks on links (<a>) and .navigate() to the link instead.
+   *
+   * Doesn't intercept if
+   *  - a button different from the main button is used,
+   *  - a modifier key is pressed,
+   *  - the link starts with a hash '#', or
+   *  - the link has a `data-remote` attribute.
+   */
   takeOverLinks() {
     delegate(window.document, "click", "a", event => {
+      // update sidebar links
+      const link = event.target.closest("a");
+      if (link.closest("aside")) {
+        const newURL = new URL(link.href);
+        newURL.search = window.location.search;
+        link.href = newURL.toString();
+      }
       if (
         event.button !== 0 ||
         event.altKey ||
         event.ctrlKey ||
         event.metaKey ||
-        event.shiftKey
-      ) {
-        return;
-      }
-      const link = event.target.closest("a");
-      if (
+        event.shiftKey ||
         link.getAttribute("href").charAt(0) === "#" ||
-        link.host !== window.location.host
+        link.host !== window.location.host ||
+        link.hasAttribute("data-remote") ||
+        link.protocol.indexOf("http") !== 0 ||
+        event.defaultPrevented
       ) {
         return;
       }
 
-      if (
-        !event.defaultPrevented &&
-        !link.hasAttribute("data-remote") &&
-        link.protocol.indexOf("http") === 0
-      ) {
-        event.preventDefault();
-
-        // update sidebar links
-        if (link.closest("aside")) {
-          this.navigate(updateURL(link.href));
-        } else {
-          this.navigate(link.href);
-        }
-      }
+      event.preventDefault();
+      this.navigate(link.href);
     });
   }
 }
@@ -163,10 +143,6 @@ e.on("reload", () => {
 
 e.on("button-click-reload-page", () => {
   e.trigger("reload");
-});
-
-e.on("form-submit-filters", () => {
-  router.navigate(updateURL(window.location.href));
 });
 
 e.on("form-submit-query", form => {
@@ -195,15 +171,21 @@ e.on("form-submit-query", form => {
 
 e.on("page-init", () => {
   const params = new URL(window.location.href).searchParams;
-  showCharts.set(!(params.get("charts") === "false"));
-  interval.set(params.get("interval") || favaAPI.favaOptions.interval);
-  conversion.set(params.get("conversion") || "at_cost");
 
-  interval.subscribe(value => {
+  filters.set({
+    time: params.get("time") || "",
+    filter: params.get("filter") || "",
+    account: params.get("account") || "",
+  });
+  filters.subscribe(fs => {
     const newURL = new URL(window.location.href);
-    newURL.searchParams.set("interval", value);
-    if (value === favaAPI.favaOptions.interval) {
-      newURL.searchParams.delete("interval");
+    for (const name of ["time", "filter", "account"]) {
+      const value = fs[name];
+      if (value) {
+        newURL.searchParams.set(name, value);
+      } else {
+        newURL.searchParams.delete(name);
+      }
     }
     const url = newURL.toString();
     if (url !== window.location.href) {
@@ -211,25 +193,25 @@ e.on("page-init", () => {
     }
   });
 
-  conversion.subscribe(value => {
-    const newURL = new URL(window.location.href);
-    newURL.searchParams.set("conversion", value);
-    if (value === "at_cost") {
-      newURL.searchParams.delete("conversion");
-    }
-    const url = newURL.toString();
-    if (url !== window.location.href) {
-      router.navigate(url);
-    }
-  });
+  // Set initial values from URL and update URL on store changes
+  const urlParams = [
+    [interval, "interval", favaAPI.favaOptions.interval],
+    [conversion, "conversion", "at_cost"],
+    [showCharts, "charts", true],
+  ];
+  for (const [store, name, defaultValue] of urlParams) {
+    store.set(params.get(name) || defaultValue);
 
-  showCharts.subscribe(value => {
-    const newURL = new URL(window.location.href);
-    if (value) {
-      newURL.searchParams.delete("charts");
-    } else {
-      newURL.searchParams.set("charts", false);
-    }
-    router.navigate(newURL.toString(), false);
-  });
+    store.subscribe(value => {
+      const newURL = new URL(window.location.href);
+      newURL.searchParams.set(name, value);
+      if (value === defaultValue) {
+        newURL.searchParams.delete(name);
+      }
+      const url = newURL.toString();
+      if (url !== window.location.href) {
+        router.navigate(url);
+      }
+    });
+  }
 });
