@@ -4,6 +4,7 @@
 
 import { extent, max, merge, min } from "d3-array";
 import { axisLeft, axisBottom } from "d3-axis";
+import { hcl } from "d3-color";
 import { hierarchy, partition, treemap } from "d3-hierarchy";
 import {
   scaleBand,
@@ -15,7 +16,6 @@ import {
 } from "d3-scale";
 import { event, select } from "d3-selection";
 import { arc, line } from "d3-shape";
-import { schemeSet3, schemeCategory10 } from "d3-scale-chromatic";
 import { Delaunay } from "d3-delaunay";
 import "d3-transition";
 import { get } from "svelte/store";
@@ -29,15 +29,33 @@ import {
   timeFilterDateFormat,
 } from "./format";
 
+/*
+ * Generate an array of colors.
+ *
+ * Uses the HCL color space in an attempt to generate colours that are
+ * to be perceived to be of the same brightness.
+ */
+function hclColorRange(count, chroma = 45, lightness = 70) {
+  const offset = 270;
+  const delta = 360 / count;
+  const colors = [...Array(count).keys()].map(index => {
+    const hue = (index * delta + offset) % 360;
+    return hcl(hue, chroma, lightness);
+  });
+  return colors;
+}
+const colors10 = hclColorRange(10);
+const colors15 = hclColorRange(15, 30, 80);
+
 // The color scales for the charts.
 //
 // The scales for treemap and sunburst charts will be initialised with all
 // accounts on page init and currencies with all commodities.
 const scales = {
-  treemap: scaleOrdinal(schemeSet3),
-  sunburst: scaleOrdinal(schemeCategory10),
-  currencies: scaleOrdinal(schemeCategory10),
-  scatterplot: scaleOrdinal(schemeCategory10),
+  treemap: scaleOrdinal(colors15),
+  sunburst: scaleOrdinal(colors10),
+  currencies: scaleOrdinal(colors10),
+  scatterplot: scaleOrdinal(colors10),
 };
 
 let tooltip;
@@ -759,10 +777,15 @@ function getOperatingCurrencies(conversion) {
 e.on("page-init", () => {
   tooltip = select("#tooltip");
 
-  scales.treemap.domain(favaAPI.accounts);
-  scales.sunburst.domain(favaAPI.accounts);
-  favaAPI.options.commodities.sort();
-  scales.currencies.domain(favaAPI.options.commodities);
+  const { accounts, options } = favaAPI;
+  scales.treemap.domain(accounts);
+  scales.sunburst.domain(accounts);
+  options.operating_currency.sort();
+  options.commodities.sort();
+  scales.currencies.domain([
+    ...options.operating_currency,
+    ...options.commodities,
+  ]);
 });
 
 e.on("page-loaded", () => {
