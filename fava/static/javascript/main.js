@@ -1,4 +1,5 @@
-/* Fava's main Javascript entry point.
+/**
+ * Fava's main Javascript entry point.
  *
  * The code for Fava's UI is split into several modules that are all imported
  * below. The different modules can listen to and register events to
@@ -17,13 +18,6 @@
  * page-loaded:
  *    After a new page has been loaded asynchronously. Use this to bind to
  *    elements in the page.
- *
- * reload:
- *    This triggers a reload of the page.
- *
- * button-click-*:
- *    For <button>s that have a `data-event` attribute, the event
- *    `button-click-${data-event}` will be triggered.
  */
 
 import { $, _, delegate, ready, fetchAPI } from "./helpers";
@@ -124,7 +118,7 @@ function doPoll() {
       changed => {
         if (changed) {
           if (favaAPI.favaOptions["auto-reload"]) {
-            e.trigger("reload");
+            router.reload();
           } else {
             $("#reload-page").classList.remove("hidden");
             e.trigger("file-modified");
@@ -132,7 +126,7 @@ function doPoll() {
               _("File change detected. Click to reload."),
               "warning",
               () => {
-                e.trigger("reload");
+                router.reload();
               }
             );
           }

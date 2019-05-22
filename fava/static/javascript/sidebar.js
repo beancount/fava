@@ -16,9 +16,12 @@ function initSidebar() {
   $("aside li.error span").innerHTML = errors;
 }
 
-e.on("button-click-toggle-aside", button => {
-  $("aside").classList.toggle("active");
-  button.classList.toggle("active");
+e.on("page-init", () => {
+  const asideButton = $("#aside-button");
+  asideButton.addEventListener("click", () => {
+    $("aside").classList.toggle("active");
+    asideButton.classList.toggle("active");
+  });
 });
 
 e.on("page-loaded", () => {

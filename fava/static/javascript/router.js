@@ -53,8 +53,12 @@ class Router {
     }
   }
 
-  // Replace <article> contents with the page at `url`. If `historyState` is
-  // false, do not create a history state and do not scroll to top.
+  /*
+   * Replace <article> contents with the page at `url`.
+   *
+   * If `historyState` is false, do not create a history state and do not
+   * scroll to top.
+   */
   async loadURL(url, historyState = true) {
     const state = { interrupt: false };
     e.trigger("navigate", state);
@@ -85,8 +89,12 @@ class Router {
     }
   }
 
-  // Update the routers state object. The state object is used to distinguish
-  // between the user navigating the browser history or the hash changing.
+  /*
+   * Update the routers state object.
+   *
+   * The state object is used to distinguish between the user navigating the
+   * browser history or the hash changing.
+   */
   updateState() {
     this.state = {
       hash: window.location.hash,
@@ -132,18 +140,17 @@ class Router {
       this.navigate(link.href);
     });
   }
+
+  /*
+   * Reload the page.
+   */
+  reload() {
+    this.loadURL(window.location.href, false);
+  }
 }
 
 const router = new Router();
 export default router;
-
-e.on("reload", () => {
-  router.loadURL(window.location.href, false);
-});
-
-e.on("button-click-reload-page", () => {
-  e.trigger("reload");
-});
 
 e.on("form-submit-query", form => {
   const queryString = form.elements.query_string.value.trim();
@@ -170,6 +177,10 @@ e.on("form-submit-query", form => {
 });
 
 e.on("page-init", () => {
+  select("#reload-page").addEventListener("click", () => {
+    router.reload();
+  });
+
   const params = new URL(window.location.href).searchParams;
 
   filters.set({

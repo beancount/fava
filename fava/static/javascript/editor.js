@@ -39,6 +39,7 @@ import "./codemirror/mode-query";
 
 import { $, $$, delegate, fetch, handleJSON } from "./helpers";
 import e from "./events";
+import router from "./router";
 import { notify } from "./notifications";
 import { closeOverlay, favaAPI } from "./stores";
 
@@ -70,7 +71,7 @@ CodeMirror.commands.favaSave = cm => {
         e.trigger("file-modified");
         // Reload the page if an entry was changed.
         if (button.getAttribute("data-entry-hash")) {
-          e.trigger("reload");
+          router.reload();
           closeOverlay();
         }
       },

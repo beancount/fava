@@ -1,4 +1,4 @@
-import e from "./events";
+import router from "./router";
 import { notify } from "./notifications";
 import { fetch, handleJSON } from "./helpers";
 import { favaAPI } from "./stores";
@@ -32,7 +32,7 @@ export async function saveEntries(entries) {
       body: JSON.stringify({ entries }),
       headers: { "Content-Type": "application/json" },
     }).then(handleJSON);
-    e.trigger("reload");
+    router.reload();
     notify(data.message);
   } catch (error) {
     notify(`Saving failed: ${error}`, "error");

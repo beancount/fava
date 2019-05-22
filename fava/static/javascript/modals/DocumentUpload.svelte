@@ -1,5 +1,5 @@
 <script>
-  import e from "../events";
+  import router from "../router";
   import { notify } from "../notifications";
   import { _, fetch, handleJSON } from "../helpers";
   import { favaAPI } from "../stores";
@@ -37,7 +37,7 @@
     files = [];
     account = "";
     hash = "";
-    e.trigger("reload");
+    router.reload();
   }
 
   export function handleDrop(event, target) {

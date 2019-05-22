@@ -19,7 +19,7 @@
       </svg>
       <h1>
         {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-        <button type=button id="reload-page" class="reload-page hidden" data-event="reload-page" data-key="r">&#8635;</button>
+        <button type=button id="reload-page" class="reload-page hidden" data-key="r">&#8635;</button>
         {% if config['LEDGERS']|length > 1 %}
         <div class="beancount-files">
           <ul>
@@ -32,7 +32,7 @@
         </div>{% endif %}
       </h1>
     </header>
-    <button class="aside-button" type="button" data-event="toggle-aside">
+    <button class="aside-button" type="button" id="aside-button">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" version="1.0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
     </button>
     <aside>{% include "_aside.html" %}</aside>
