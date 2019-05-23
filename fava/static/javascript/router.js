@@ -114,8 +114,17 @@ class Router {
    */
   takeOverLinks() {
     delegate(window.document, "click", "a", event => {
-      // update sidebar links
       const link = event.target.closest("a");
+      if (
+        link.getAttribute("href").charAt(0) === "#" ||
+        link.host !== window.location.host ||
+        link.hasAttribute("data-remote") ||
+        link.protocol.indexOf("http") !== 0 ||
+        event.defaultPrevented
+      ) {
+        return;
+      }
+      // update sidebar links
       if (link.closest("aside")) {
         const newURL = new URL(link.href);
         newURL.search = window.location.search;
@@ -126,12 +135,7 @@ class Router {
         event.altKey ||
         event.ctrlKey ||
         event.metaKey ||
-        event.shiftKey ||
-        link.getAttribute("href").charAt(0) === "#" ||
-        link.host !== window.location.host ||
-        link.hasAttribute("data-remote") ||
-        link.protocol.indexOf("http") !== 0 ||
-        event.defaultPrevented
+        event.shiftKey
       ) {
         return;
       }
