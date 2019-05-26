@@ -7,7 +7,7 @@ import e from "./events";
 function initSidebar() {
   $$("aside a").forEach(el => {
     el.classList.remove("selected");
-    if (el.getAttribute("href").startsWith(window.location.pathname)) {
+    if (el.getAttribute("href").includes(window.location.pathname)) {
       el.classList.add("selected");
     }
   });
