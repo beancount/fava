@@ -145,7 +145,7 @@ the following transaction flags:
 
 ---
 
-## `currency-colum`
+## `currency-column`
 
 Default: `61`
 
