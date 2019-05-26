@@ -24,6 +24,7 @@ class DecimalFormatModule(FavaModule):
         locale_option = self.ledger.fava_options["locale"]
         if self.ledger.options["render_commas"] and not locale_option:
             locale_option = "en"
+            self.ledger.fava_options["locale"] = locale_option
 
         if locale_option:
             try:

@@ -36,7 +36,7 @@ languages:
 
 ## `locale`
 
-Default: Not set
+Default: Not set or `en` if the Beancount `render_commas` option is set.
 
 This sets the locale that is used to render out numbers. For example, with the
 locale `en_IN` the number `1111111.33` will be rendered `11,11,111.33`,
