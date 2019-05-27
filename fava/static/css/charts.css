@@ -68,11 +68,11 @@
   display: inline-block;
   width: 10px;
   height: 10px;
+  margin-left: 5px;
   border-radius: 10px;
 }
-
-.chart-legend .name {
-  margin: 0 6px 0 3px;
+.chart-legend .legend {
+  display: inline-block;
 }
 
 svg text {

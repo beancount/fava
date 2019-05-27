@@ -63,7 +63,7 @@
     hasCurrencySetting = renderedChart.has_currency_setting;
   }
 
-  $: legend = (renderedChart && renderedChart.legend) || {};
+  $: legend = (renderedChart && renderedChart.legend) || { domain: [] };
   $: currencies = (renderedChart && renderedChart.currencies) || [];
   $: hasModeSetting = renderedChart && renderedChart.has_mode_setting;
 
@@ -94,18 +94,14 @@
 {#if charts.length}
   <div class="charts" class:hide-charts={!$showCharts}>
     <form class="wide-form">
-      <span class:hidden={!$showCharts} class="chart-legend">
-        {#if legend.domain}
-          {#each legend.domain.sort() as item}
-            <span class="legend">
-              <span
-                class="color"
-                style="background-color: {legend.scale(item)}" />
-              <span class="name">{item}</span>
-            </span>
-          {/each}
-        {/if}
-      </span>
+      <p class:hidden={!$showCharts} class="chart-legend">
+        {#each legend.domain.sort() as item}
+          <span class="legend">
+            <i class="color" style="background-color: {legend.scale(item)}" />
+             {item}
+          </span>
+        {/each}
+      </p>
       <span class="spacer" />
       <select
         bind:value={$chartCurrency}
