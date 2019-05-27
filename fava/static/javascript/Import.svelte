@@ -69,7 +69,7 @@
   {#each items as item}
     <pre title={item.name}>
       <a href={documentURL(item.name)} data-remote target="_blank">
-         {item.basename}
+        {item.basename}
       </a>
     </pre>
     {#if item.importers.length}
@@ -80,13 +80,13 @@
           <button
             type="button"
             on:click={() => move(item.name, info.account, info.newName)}>
-             {'Move'}
+            {'Move'}
           </button>
           <a
             class="button"
             title="{_('Extract')} with importer {info.importer_name}"
             href={extractURL(item.name, info.importer_name)}>
-             {_('Extract')} ( {info.importer_name} )
+            {_('Extract')} ( {info.importer_name} )
           </a>
         </p>
       {/each}
@@ -97,7 +97,7 @@
         <button
           type="button"
           on:click={() => move(item.name, item.account, item.newName)}>
-           {'Move'}
+          {'Move'}
         </button>
       </p>
     {/if}

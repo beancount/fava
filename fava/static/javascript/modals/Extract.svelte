@@ -87,7 +87,7 @@
               ⏮
             </button>
             <button type="button" class="muted" on:click={previousEntry}>
-               {_('Previous')}
+              {_('Previous')}
             </button>
           {/if}
           <span class="spacer" />
@@ -108,7 +108,7 @@
         <hr />
         {#if entry.meta.__source__}
           <h3>
-             {_('Source')}
+            {_('Source')}
             {#if entry.meta.lineno > 0}({_('Line')}: {entry.meta.lineno}){/if}
           </h3>
           <pre>{entry.meta.__source__}</pre>

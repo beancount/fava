@@ -98,7 +98,7 @@
         {#each legend.domain.sort() as item}
           <span class="legend">
             <i class="color" style="background-color: {legend.scale(item)}" />
-             {item}
+            {item}
           </span>
         {/each}
       </p>
@@ -146,7 +146,7 @@
         <label
           class:selected={index === $activeChart.index}
           on:click={() => selectChart(index)}>
-           {chart.name}
+          {chart.name}
         </label>
       {/each}
     </div>

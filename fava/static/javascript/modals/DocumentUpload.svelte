@@ -89,7 +89,7 @@
     {/each}
     <div class="fieldset">
       <label>
-         {_('Documents folder')}:
+        {_('Documents folder')}:
         <select name="folder">
           {#each folders as folder}
             <option>{folder}</option>
@@ -99,7 +99,7 @@
     </div>
     <div class="fieldset">
       <label>
-         {_('Account')}:
+        {_('Account')}:
         <input
           type="text"
           name="account"
