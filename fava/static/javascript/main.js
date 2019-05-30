@@ -112,31 +112,23 @@ e.on("page-init", () => {
 
 // Check the `changed` API endpoint every 5 seconds and fire the appropriate
 // events if some file changed.
-function doPoll() {
-  fetchAPI("changed")
-    .then(
-      changed => {
-        if (changed) {
-          if (favaAPI.favaOptions["auto-reload"]) {
-            router.reload();
-          } else {
-            $("#reload-page").classList.remove("hidden");
-            e.trigger("file-modified");
-            notify(
-              _("File change detected. Click to reload."),
-              "warning",
-              () => {
-                router.reload();
-              }
-            );
-          }
-        }
-      },
-      () => {}
-    )
-    .then(() => {
-      setTimeout(doPoll, 5000);
-    });
+async function doPoll() {
+  try {
+    const changed = await fetchAPI("changed");
+    if (changed) {
+      if (favaAPI.favaOptions["auto-reload"]) {
+        router.reload();
+      } else {
+        $("#reload-page").classList.remove("hidden");
+        e.trigger("file-modified");
+        notify(_("File change detected. Click to reload."), "warning", () => {
+          router.reload();
+        });
+      }
+    }
+  } finally {
+    setTimeout(doPoll, 5000);
+  }
 }
 
 ready().then(() => {
