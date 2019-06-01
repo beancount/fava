@@ -27,6 +27,7 @@ import {
   formatCurrencyShort,
   dateFormat,
   timeFilterDateFormat,
+  formatPercentage,
 } from "./format";
 
 /*
@@ -683,16 +684,16 @@ class SunburstChartContainer extends BaseChart {
           `translate(${(this.width * i) / this.currencies.length},0)`
         );
 
+      const totalBalance = data[currency].value || 1;
       const sunburst = new SunburstChart(canvas)
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
-        .set(
-          "labelText",
-          d =>
-            `${formatCurrency(
-              d.data.balance_children[currency] || 0
-            )} ${currency}`
-        )
+        .set("labelText", d => {
+          const balance = d.data.balance_children[currency] || 0;
+          return `${formatCurrency(balance)} ${currency} (${formatPercentage(
+            balance / totalBalance
+          )})`;
+        })
         .draw(data[currency]);
 
       this.canvases.push(canvas);
@@ -739,15 +740,17 @@ class HierarchyContainer extends BaseChart {
         .attr("y", 160 / 2);
     } else if (this.mode === "treemap") {
       if (!this.currency) this.currency = this.currencies[0];
+      const totalBalance = data[this.currency].value || 1;
       this.currentChart = new TreeMapChart(this.canvas)
         .setWidth(this.width)
-        .set(
-          "tooltipText",
-          d =>
-            `${formatCurrency(d.data.balance[this.currency])} ${
-              this.currency
-            }<em>${d.data.account}</em>`
-        )
+        .set("tooltipText", d => {
+          const balance = d.data.balance[this.currency];
+          return `${formatCurrency(balance)} ${
+            this.currency
+          } (${formatPercentage(balance / totalBalance)})<em>${
+            d.data.account
+          }</em>`;
+        })
         .draw(data[this.currency]);
 
       this.setHeight(this.currentChart.outerHeight);
