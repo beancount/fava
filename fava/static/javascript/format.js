@@ -29,7 +29,7 @@ export function formatCurrency(number) {
 
 export function formatPercentage(number) {
   const formatterPer = format(".2f");
-  return `${formatterPer(number * 100)}%`;
+  return `${formatterPer(Math.abs(number) * 100)}%`;
 }
 
 const formatterShort = format(".2s");
