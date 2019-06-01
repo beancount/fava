@@ -27,6 +27,11 @@ export function formatCurrency(number) {
   return incognito(formatter(number));
 }
 
+export function formatPercentage(number) {
+  const formatterPer = format(".2f");
+  return `${formatterPer(number * 100)}%`;
+}
+
 const formatterShort = format(".2s");
 export function formatCurrencyShort(number) {
   return incognito(formatterShort(number));

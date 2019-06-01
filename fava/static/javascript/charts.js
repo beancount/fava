@@ -27,6 +27,7 @@ import {
   formatCurrencyShort,
   dateFormat,
   timeFilterDateFormat,
+  formatPercentage,
 } from "./format";
 
 /*
@@ -675,13 +676,14 @@ class SunburstChartContainer extends BaseChart {
       const sunburst = new SunburstChart(canvas)
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
-        .set(
-          "labelText",
-          d =>
-            `${formatCurrency(
-              d.data.balance_children[currency] || 0
-            )} ${currency}`
-        )
+        .set("labelText", d => {
+          const balance = d.data.balance_children[currency] || 0;
+          const totalBalance = data[currency].value || 1;
+          const percent = balance / totalBalance;
+          return `${formatCurrency(balance)} ${currency}(${formatPercentage(
+            percent
+          )})`;
+        })
         .draw(data[currency]);
 
       this.canvases.push(canvas);
