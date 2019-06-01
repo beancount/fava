@@ -14,9 +14,9 @@ import {
   scaleSqrt,
   scaleUtc,
 } from "d3-scale";
-import { event, select } from "d3-selection";
+import { event, select, clientPoint } from "d3-selection";
 import { arc, line } from "d3-shape";
-import { Delaunay } from "d3-delaunay";
+import { quadtree } from "d3-quadtree";
 import "d3-transition";
 import { get } from "svelte/store";
 
@@ -536,7 +536,6 @@ class LineChart extends BaseChart {
     this.canvas = this.svg.classed("linechart", true).append("g");
     this.selections.xAxis = this.canvas.append("g").attr("class", "x axis");
     this.selections.yAxis = this.canvas.append("g").attr("class", "y axis");
-    this.selections.voronoi = this.canvas.append("g").attr("class", "voronoi");
   }
 
   draw(data) {
@@ -576,22 +575,23 @@ class LineChart extends BaseChart {
       .attr("r", 3)
       .style("fill", d => scales.currencies(d.name));
 
-    this.selections.voronoi
-      .selectAll("path")
-      .data(this.points)
-      .enter()
-      .append("path")
-      .on("mouseenter", d => {
-        tooltip.style("opacity", 1).html(this.tooltipText(d.data));
-      })
-      .on("mousemove", d => {
+    this.canvas
+      .on("mousemove", () => {
         const matrix = this.canvas.node().getScreenCTM();
-        tooltip
-          .style("left", `${window.scrollX + this.x(d.data.date) + matrix.e}px`)
-          .style(
-            "top",
-            `${window.scrollY + this.y(d.data.value) + matrix.f - 15}px`
-          );
+        const point = clientPoint(this.canvas.node(), event);
+        const d = this.quadtree.find(...point);
+        if (d) {
+          tooltip
+            .style("opacity", 1)
+            .html(this.tooltipText(d))
+            .style("left", `${window.scrollX + this.x(d.date) + matrix.e}px`)
+            .style(
+              "top",
+              `${window.scrollY + this.y(d.value) + matrix.f - 15}px`
+            );
+        } else {
+          tooltip.style("opacity", 0);
+        }
       })
       .on("mouseleave", () => {
         tooltip.style("opacity", 0);
@@ -622,25 +622,11 @@ class LineChart extends BaseChart {
       .attr("cy", d => this.y(d.value));
     this.selections.lines.attr("d", d => this.line(d.values));
 
-    let paths;
-    try {
-      const delaunay = Delaunay.from(
-        this.points,
-        d => this.x(d.date),
-        d => this.y(d.value)
-      );
-      const polygons = delaunay
-        .voronoi([0, 0, this.width, this.height])
-        .cellPolygons();
-      paths = this.points.map(d => ({ path: polygons.next().value, data: d }));
-    } catch (error) {
-      paths = [];
-    }
-    this.selections.voronoi
-      .selectAll("path")
-      .data(paths)
-      .filter(d => d.path !== undefined)
-      .attr("d", d => `M${d.path.join("L")}Z`);
+    this.quadtree = quadtree(
+      this.points,
+      d => this.x(d.date),
+      d => this.y(d.value)
+    );
 
     this.legend = {
       domain: this.data.map(d => d.name),

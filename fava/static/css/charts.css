@@ -96,9 +96,8 @@ svg .axis.y line {
   stroke-dasharray: 2, 2;
 }
 
-svg .voronoi {
+svg.linechart g {
   pointer-events: all;
-  fill: none;
 }
 
 svg.treemap {
