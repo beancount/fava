@@ -732,13 +732,15 @@ class HierarchyContainer extends BaseChart {
       if (!this.currency) this.currency = this.currencies[0];
       this.currentChart = new TreeMapChart(this.canvas)
         .setWidth(this.width)
-        .set(
-          "tooltipText",
-          d =>
-            `${formatCurrency(d.data.balance[this.currency])} ${
-              this.currency
-            }<em>${d.data.account}</em>`
-        )
+        .set("tooltipText", d => {
+          const balance = d.data.balance[this.currency];
+          const totalBalance = data[this.currency].value || 1;
+          return `${formatCurrency(balance)} ${
+            this.currency
+          }(${formatPercentage(balance / totalBalance)})<em>${
+            d.data.account
+          }</em>`;
+        })
         .draw(data[this.currency]);
 
       this.setHeight(this.currentChart.outerHeight);
