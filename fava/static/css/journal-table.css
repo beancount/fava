@@ -47,7 +47,6 @@
 .journal .head .num {
   font-family: var(--font-family);
   color: var(--color-table-header-text);
-  text-align: inherit;
   background-color: var(--color-table-header-background);
 }
 
