@@ -96,7 +96,8 @@ svg .axis.y line {
   stroke-dasharray: 2, 2;
 }
 
-svg.linechart g {
+svg.scatterplot > g,
+svg.linechart > g {
   pointer-events: all;
 }
 

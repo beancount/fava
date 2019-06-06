@@ -490,6 +490,27 @@ class ScatterPlot extends BaseChart {
       .style("fill", d => scales.scatterplot(d.type))
       .call(addTooltip, this.tooltipText);
 
+    this.canvas
+      .on("mousemove", () => {
+        const matrix = this.canvas.node().getScreenCTM();
+        const d = this.quadtree.find(...clientPoint(this.canvas.node(), event));
+        if (d) {
+          tooltip
+            .style("opacity", 1)
+            .html(this.tooltipText(d))
+            .style("left", `${window.scrollX + this.x(d.date) + matrix.e}px`)
+            .style(
+              "top",
+              `${window.scrollY + this.y(d.type) + matrix.f - 15}px`
+            );
+        } else {
+          tooltip.style("opacity", 0);
+        }
+      })
+      .on("mouseleave", () => {
+        tooltip.style("opacity", 0);
+      });
+
     this.update();
     return this;
   }
@@ -513,6 +534,12 @@ class ScatterPlot extends BaseChart {
     this.selections.dots
       .attr("cx", d => this.x(d.date))
       .attr("cy", d => this.y(d.type));
+
+    this.quadtree = quadtree(
+      this.data,
+      d => this.x(d.date),
+      d => this.y(d.type)
+    );
   }
 }
 
@@ -540,7 +567,6 @@ class LineChart extends BaseChart {
 
   draw(data) {
     this.data = data;
-    this.points = merge(data.map(d => d.values));
     this.x.domain([
       min(this.data, s => s.values[0].date),
       max(this.data, s => s.values[s.values.length - 1].date),
@@ -578,8 +604,7 @@ class LineChart extends BaseChart {
     this.canvas
       .on("mousemove", () => {
         const matrix = this.canvas.node().getScreenCTM();
-        const point = clientPoint(this.canvas.node(), event);
-        const d = this.quadtree.find(...point);
+        const d = this.quadtree.find(...clientPoint(this.canvas.node(), event));
         if (d) {
           tooltip
             .style("opacity", 1)
@@ -623,7 +648,7 @@ class LineChart extends BaseChart {
     this.selections.lines.attr("d", d => this.line(d.values));
 
     this.quadtree = quadtree(
-      this.points,
+      merge(this.data.map(d => d.values)),
       d => this.x(d.date),
       d => this.y(d.value)
     );
