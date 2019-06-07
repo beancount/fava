@@ -53,7 +53,7 @@
   border-left: 9px solid transparent;
 }
 
-.hide-charts .toggle-chart::before {
+.toggle-chart.closed::before {
   border: 0;
   border-right: 9px solid transparent;
   border-bottom: 13px solid var(--color-background);

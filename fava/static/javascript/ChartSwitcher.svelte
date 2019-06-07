@@ -92,63 +92,62 @@
 </script>
 
 {#if charts.length}
-  <div class="charts" class:hide-charts={!$showCharts}>
-    <form class="wide-form">
-      <p class:hidden={!$showCharts} class="chart-legend">
-        {#each legend.domain.sort() as item}
-          <span class="legend">
-            <i class="color" style="background-color: {legend.scale(item)}" />
-            {item}
-          </span>
-        {/each}
-      </p>
-      <span class="spacer" />
-      <select
-        bind:value={$chartCurrency}
-        class:hidden={!$showCharts || !hasCurrencySetting}>
-        {#each currencies as currency}
-          <option value={currency}>{currency}</option>
-        {/each}
-      </select>
-      <span class:hidden={!$showCharts || !hasModeSetting} class="chart-mode">
-        <label>
-          <input type="radio" bind:group={$chartMode} value="treemap" />
-          <span class="button">{_('Treemap')}</span>
-        </label>
-        <label>
-          <input type="radio" bind:group={$chartMode} value="sunburst" />
-          <span class="button">{_('Sunburst')}</span>
-        </label>
-      </span>
-      <select bind:value={$conversion}>
-        {#each conversions as [conversion, conversionName]}
-          <option value={conversion}>{conversionName}</option>
-        {/each}
-      </select>
-      <select bind:value={$interval}>
-        {#each Object.keys(intervals) as key}
-          <option value={key}>{intervals[key]}</option>
-        {/each}
-      </select>
-      <button
-        type="button"
-        on:click={() => {
-          showCharts.update(v => !v);
-        }}
-        data-key="ctrl+c"
-        class="toggle-chart" />
-    </form>
-    <div class:hidden={!$showCharts} bind:clientWidth={chartWidth}>
-      <svg bind:this={svg} />
-    </div>
-    <div class:hidden={!$showCharts} class="chart-labels">
-      {#each charts as chart, index}
-        <label
-          class:selected={index === $activeChart.index}
-          on:click={() => selectChart(index)}>
-          {chart.name}
-        </label>
+  <form class="wide-form">
+    <p class:hidden={!$showCharts} class="chart-legend">
+      {#each legend.domain.sort() as item}
+        <span class="legend">
+          <i class="color" style="background-color: {legend.scale(item)}" />
+          {item}
+        </span>
       {/each}
-    </div>
+    </p>
+    <span class="spacer" />
+    <select
+      bind:value={$chartCurrency}
+      class:hidden={!$showCharts || !hasCurrencySetting}>
+      {#each currencies as currency}
+        <option value={currency}>{currency}</option>
+      {/each}
+    </select>
+    <span class:hidden={!$showCharts || !hasModeSetting} class="chart-mode">
+      <label>
+        <input type="radio" bind:group={$chartMode} value="treemap" />
+        <span class="button">{_('Treemap')}</span>
+      </label>
+      <label>
+        <input type="radio" bind:group={$chartMode} value="sunburst" />
+        <span class="button">{_('Sunburst')}</span>
+      </label>
+    </span>
+    <select bind:value={$conversion}>
+      {#each conversions as [conversion, conversionName]}
+        <option value={conversion}>{conversionName}</option>
+      {/each}
+    </select>
+    <select bind:value={$interval}>
+      {#each Object.keys(intervals) as key}
+        <option value={key}>{intervals[key]}</option>
+      {/each}
+    </select>
+    <button
+      type="button"
+      on:click={() => {
+        showCharts.update(v => !v);
+      }}
+      data-key="ctrl+c"
+      class:closed={!$showCharts}
+      class="toggle-chart" />
+  </form>
+  <div class:hidden={!$showCharts} bind:clientWidth={chartWidth}>
+    <svg bind:this={svg} />
+  </div>
+  <div class:hidden={!$showCharts} class="chart-labels">
+    {#each charts as chart, index}
+      <label
+        class:selected={index === $activeChart.index}
+        on:click={() => selectChart(index)}>
+        {chart.name}
+      </label>
+    {/each}
   </div>
 {/if}

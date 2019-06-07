@@ -210,11 +210,11 @@ e.on("page-init", () => {
 
   // Set initial values from URL and update URL on store changes
   const urlParams = [
-    [interval, "interval", favaAPI.favaOptions.interval],
-    [conversion, "conversion", "at_cost"],
-    [showCharts, "charts", true],
+    [interval, "interval", favaAPI.favaOptions.interval, true],
+    [conversion, "conversion", "at_cost", true],
+    [showCharts, "charts", true, false],
   ];
-  for (const [store, name, defaultValue] of urlParams) {
+  for (const [store, name, defaultValue, shouldLoad] of urlParams) {
     store.set(params.get(name) || defaultValue);
 
     store.subscribe(value => {
@@ -225,7 +225,7 @@ e.on("page-init", () => {
       }
       const url = newURL.toString();
       if (url !== window.location.href) {
-        router.navigate(url);
+        router.navigate(url, shouldLoad);
       }
     });
   }
