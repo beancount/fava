@@ -32,9 +32,7 @@ e.on("page-loaded", () => {
     } else if (event.target.tagName === "DD") {
       // Filter for metadata when clicking on the value.
       addFilter(
-        ` ${event.target.previousElementSibling.innerText}"${
-          event.target.innerText
-        }"`
+        ` ${event.target.previousElementSibling.innerText}"${event.target.innerText}"`
       );
     } else if (event.target.closest(".indicators")) {
       // Toggle postings and metadata by clicking on indicators.
