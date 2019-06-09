@@ -312,6 +312,12 @@ def context():
     return render_template("_context.html")
 
 
+@app.route("/<bfile>/query/")
+def query():
+    """Query shell."""
+    return render_template("query.html")
+
+
 @app.route("/<bfile>/<report_name>/")
 def report(report_name):
     """Endpoint for most reports."""
