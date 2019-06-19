@@ -13,7 +13,7 @@ from fava import __version__
 
 
 # pylint: disable=too-many-arguments
-@click.command()
+@click.command(context_settings=dict(auto_envvar_prefix="FAVA"))
 @click.argument(
     "filenames",
     nargs=-1,
