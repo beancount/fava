@@ -84,7 +84,7 @@
     <h3>{_('Upload file(s)')}:</h3>
     {#each files as file}
       <div class="fieldset">
-        <input value={file.name} />
+        <input name="filename" value={file.name} />
       </div>
     {/each}
     <div class="fieldset">
