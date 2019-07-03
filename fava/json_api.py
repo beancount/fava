@@ -205,7 +205,9 @@ def add_document():
         raise FavaAPIException("No file uploaded.")
 
     filepath = filepath_in_document_folder(
-        request.form["folder"], request.form["account"], request.form["filename"]
+        request.form["folder"],
+        request.form["account"],
+        request.form["filename"],
     )
     directory, filename = path.split(filepath)
 
