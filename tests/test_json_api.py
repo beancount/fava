@@ -27,7 +27,8 @@ def test_api_add_document(app, test_client, tmpdir):
         request_data = {
             "folder": str(tmpdir),
             "account": "Expenses:Food:Restaurant",
-            "file": (BytesIO(b"asdfasdf"), "2015-12-12 test"),
+            "file": (BytesIO(b"asdfasdf"), "test"),
+            "filename": "2015-12-12 test",
         }
         url = flask.url_for("json_api.add_document")
 
