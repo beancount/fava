@@ -48,8 +48,8 @@ There are some command-line options available, run ``fava --help`` for an overvi
 
 Note you can also specify command-line options via environment variable. For
 example, ``--host=0.0.0.0`` is equivalent to setting environment variable
-``FAVA_HOST=0.0.0.0`` when run the ``fava`` command line. You can get all
-available environment variables via ``fava --help``.
+``FAVA_HOST=0.0.0.0``. You can get all available environment variables via
+``fava --help``.
 
 For more information on Fava's features, refer to the help pages that are
 available through Fava's web-interface.  Fava comes with Gmail-style keyboard
