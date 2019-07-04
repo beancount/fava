@@ -11,6 +11,7 @@ from fava.application import app
 from fava.util import simple_wsgi
 from fava import __version__
 
+
 def click_option(*args, **kwargs):
     """A wrapper around click.option decorator to always show environment
     variable name."""
