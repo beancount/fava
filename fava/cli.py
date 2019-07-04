@@ -11,6 +11,13 @@ from fava.application import app
 from fava.util import simple_wsgi
 from fava import __version__
 
+def click_option(*args, **kwargs):
+    """A wrapper around click.option decorator to always show environment
+    variable name."""
+    show_envvar = kwargs.pop("show_envvar", True)
+
+    return click.option(*args, show_envvar=show_envvar, **kwargs)
+
 
 # pylint: disable=too-many-arguments
 @click.command(context_settings=dict(auto_envvar_prefix="FAVA"))
@@ -19,7 +26,7 @@ from fava import __version__
     nargs=-1,
     type=click.Path(exists=True, dir_okay=False, resolve_path=True),
 )
-@click.option(
+@click_option(
     "-p",
     "--port",
     type=int,
@@ -27,7 +34,7 @@ from fava import __version__
     metavar="<port>",
     help="The port to listen on. (default: 5000)",
 )
-@click.option(
+@click_option(
     "-H",
     "--host",
     type=str,
@@ -35,19 +42,19 @@ from fava import __version__
     metavar="<host>",
     help="The host to listen on. (default: localhost)",
 )
-@click.option(
+@click_option(
     "--prefix", type=str, help="Set an URL prefix. (for reverse proxy)"
 )
-@click.option(
+@click_option(
     "--incognito",
     is_flag=True,
     help="Run in incognito mode (obscure all numbers).",
 )
-@click.option("-d", "--debug", is_flag=True, help="Turn on debugging.")
-@click.option(
+@click_option("-d", "--debug", is_flag=True, help="Turn on debugging.")
+@click_option(
     "--profile", is_flag=True, help="Turn on profiling. Implies --debug."
 )
-@click.option(
+@click_option(
     "--profile-dir",
     type=click.Path(),
     help="Output directory for profiling data.",
