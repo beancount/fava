@@ -8,5 +8,17 @@ except DistributionNotFound:
     # package is not installed
     pass
 
-LOCALES = ["de", "es", "fa", "fr", "nl", "pt", "ru", "zh-CN", "sk", "uk"]
+LOCALES = [
+    "de",
+    "es",
+    "fa",
+    "fr",
+    "nl",
+    "pt",
+    "ru",
+    "sk",
+    "uk",
+    "zh",
+    "zh_Hant_TW",
+]
 LANGUAGES = [locale[:2] for locale in LOCALES]

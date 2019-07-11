@@ -20,7 +20,7 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
--   Chinese (`zh`)
+-   Chinese (`zh_CN` and `zh_TW`)
 -   Dutch (`nl`)
 -   English (`en`)
 -   French (`fr`)
