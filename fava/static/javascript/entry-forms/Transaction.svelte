@@ -3,7 +3,9 @@
 
   import { Posting } from "../entries";
   import { _, fetchAPI } from "../helpers";
+  import { favaAPI } from "../stores";
 
+  import AutocompleteInput from "../AutocompleteInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
   import AccountInput from "./AccountInput.svelte";
@@ -41,13 +43,12 @@
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
     <label for="payee">{_('Payee')}:</label>
-    <input
-      type="text"
+    <AutocompleteInput
+      bind:this={focusInput}
       name="payee"
       placeholder={_('Payee')}
-      list="payees"
-      bind:this={focusInput}
       bind:value={entry.payee}
+      suggestions={favaAPI.payees}
       on:autocomplete-select={autocompleteSelectPayee} />
     <label for="payee">{_('Narration')}:</label>
     <input

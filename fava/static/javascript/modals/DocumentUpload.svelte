@@ -5,6 +5,7 @@
   import { favaAPI } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
+  import AccountInput from "../entry-forms/AccountInput.svelte";
 
   let account = "";
   let hash = "";
@@ -100,11 +101,7 @@
     <div class="fieldset">
       <label>
         {_('Account')}:
-        <input
-          type="text"
-          name="account"
-          list="accounts"
-          bind:value={account} />
+        <AccountInput bind:value={account} />
       </label>
       <input type="hidden" name="hash" value={hash} />
     </div>
