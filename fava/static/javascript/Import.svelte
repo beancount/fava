@@ -42,16 +42,20 @@
     return `../document/?${params.toString()}`;
   }
 
-  function move(filename, account, newName) {
-    fetchAPI("move", {
-      filename,
-      account,
-      newName,
-    })
-      .then(notify)
-      .catch(error => {
-        notify(error, "error");
+  async function move(filename, account, newName) {
+    try {
+      const msg = await fetchAPI("move", {
+        filename,
+        account,
+        newName,
       });
+      notify(msg);
+      for (const [directory, items] of Object.entries(data)) {
+        data[directory] = items.filter(item => item.name !== filename);
+      }
+    } catch (error) {
+      notify(error, "error");
+    }
   }
 </script>
 
