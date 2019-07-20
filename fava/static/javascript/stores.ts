@@ -20,7 +20,7 @@ export const filters = writable({
 
 export function closeOverlay() {
   if (window.location.hash) {
-    window.location.hash = "";
+    window.history.pushState({}, "", "#");
   }
   urlHash.set("");
 }

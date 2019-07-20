@@ -37,7 +37,7 @@ import "./codemirror/mode-beancount";
 import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
-import { $, $$, delegate, fetch, handleJSON } from "./helpers";
+import { select, selectAll, delegate, fetch, handleJSON } from "./helpers";
 import e from "./events";
 import router from "./router";
 import { notify } from "./notifications";
@@ -164,7 +164,7 @@ function ignoreKey(key) {
 
 // Initialize the query editor
 function initQueryEditor() {
-  const queryForm = $("#query-form");
+  const queryForm = select("#query-form");
   if (!queryForm) {
     return;
   }
@@ -194,7 +194,7 @@ function initQueryEditor() {
     }
   });
 
-  delegate($("#query-container"), "click", ".toggle-box-header", event => {
+  delegate(select("#query-container"), "click", ".toggle-box-header", event => {
     const wrapper = event.target.closest(".toggle-box");
     if (wrapper.classList.contains("inactive")) {
       editor.setValue(wrapper.querySelector("code").textContent);
@@ -208,7 +208,7 @@ function initQueryEditor() {
 
 // Initialize read-only editors
 function initReadOnlyEditors() {
-  $$(".editor-readonly").forEach(el => {
+  selectAll(".editor-readonly").forEach(el => {
     CodeMirror.fromTextArea(el, {
       mode: "beancount",
       readOnly: true,
@@ -253,7 +253,7 @@ export default function initSourceEditor(name) {
     });
   }
 
-  const sourceEditorTextarea = $(name);
+  const sourceEditorTextarea = select(name);
   if (!sourceEditorTextarea) {
     return;
   }
@@ -265,7 +265,7 @@ export default function initSourceEditor(name) {
   if (name === "#source-editor") {
     activeEditor = editor;
   }
-  const saveButton = $(`${name}-submit`);
+  const saveButton = select(`${name}-submit`);
   editor.setOption("favaSaveButton", saveButton);
 
   editor.on("changes", cm => {
@@ -300,7 +300,7 @@ export default function initSourceEditor(name) {
   });
 
   // Run editor commands with buttons in editor menu.
-  $$(`${name}-form button`).forEach(button => {
+  selectAll(`${name}-form button`).forEach(button => {
     const command = button.getAttribute("data-command");
     if (command) {
       button.addEventListener("click", event => {

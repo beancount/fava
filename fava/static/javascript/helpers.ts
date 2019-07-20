@@ -1,31 +1,36 @@
 import { favaAPI } from "./stores";
 
 // Select a single element.
-export function $(expr, con = document) {
+export function select(expr: string, con: Document | Element = document) {
   return con.querySelector(expr);
 }
-export const select = $;
+export const $ = select;
 
 // Select multiple elements (and convert NodeList to Array).
-export function $$(expr, con = document) {
+export function selectAll(expr: string, con: Document | Element = document) {
   return Array.from(con.querySelectorAll(expr));
 }
-export const selectAll = $$;
+export const $$ = selectAll;
 
-let translations;
+let translations: Record<string, string>;
 /*
  * Translate the given string.
  */
-export function _(string) {
+export function _(string: string) {
   if (translations === undefined) {
-    translations = JSON.parse($("#translations").innerHTML);
+    translations = JSON.parse(select("#translations").innerHTML);
   }
   return translations[string] || string;
 }
 
 // Execute the callback of the event of given type is fired on something
 // matching selector.
-export function delegate(element, type, selector, callback) {
+export function delegate(
+  element: HTMLElement,
+  type: string,
+  selector: string,
+  callback: Function
+) {
   if (!element) return;
   element.addEventListener(type, event => {
     const closest = event.target.closest(selector);
@@ -36,7 +41,7 @@ export function delegate(element, type, selector, callback) {
 }
 
 // Bind an event to element, only run the callback once.
-export function once(element, event, callback) {
+export function once(element: HTMLElement, event: string, callback: Function) {
   function runOnce(...args) {
     element.removeEventListener(event, runOnce);
     callback.apply(element, args);
@@ -78,7 +83,7 @@ export function handleText(response) {
   return response.text();
 }
 
-export function fetch(input, init = {}) {
+export function fetch(input: string, init = {}) {
   const defaults = {
     credentials: "same-origin",
   };
@@ -90,7 +95,10 @@ export function fetch(input, init = {}) {
  * @param endpoint - the endpoint to fetch
  * @param params - a string to append as params or an object.
  */
-export function fetchAPI(endpoint, params = null) {
+export function fetchAPI(
+  endpoint: string,
+  params: string | Record<string, string> | undefined = undefined
+) {
   let url = `${favaAPI.baseURL}api/${endpoint}/`;
   if (params) {
     if (typeof params === "string") {
@@ -113,10 +121,10 @@ export function fetchAPI(endpoint, params = null) {
 // Returns true if all characters of `pattern` can be found in order in
 // `string`. For lowercase characters in `pattern` match both lower and upper
 // case, for uppercase only an exact match counts.
-export function fuzzytest(pattern, string) {
+export function fuzzytest(pattern: string, text: string) {
   let pindex = 0;
-  for (let index = 0; index < string.length; index += 1) {
-    const char = string[index];
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
       pindex += 1;
@@ -129,11 +137,11 @@ export function fuzzytest(pattern, string) {
 //
 // Wrap all occurences of characters of `pattern` (in order) in `string` in
 // <span> tags.
-export function fuzzywrap(pattern, string) {
+export function fuzzywrap(pattern: string, text: string) {
   let pindex = 0;
   const result = [];
-  for (let index = 0; index < string.length; index += 1) {
-    const char = string[index];
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
       result.push(`<span>${char}</span>`);

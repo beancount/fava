@@ -17,6 +17,20 @@ import {
 } from "./stores";
 
 class Router {
+  state: {
+    hash: string;
+    pathname: string;
+    search: string;
+  };
+
+  constructor() {
+    this.state = {
+      hash: window.location.hash,
+      pathname: window.location.pathname,
+      search: window.location.search,
+    };
+  }
+
   // This should be called once when the page has been loaded. Initializes the
   // router and takes over clicking on links.
   init() {
@@ -44,11 +58,11 @@ class Router {
 
   // Go to URL. If load is `true`, load the page at URL, otherwise only update
   // the current state.
-  navigate(url, load = true) {
+  navigate(url: string, load = true) {
     if (load) {
       this.loadURL(url);
     } else {
-      window.history.pushState(null, null, url);
+      window.history.pushState(null, "", url);
       this.updateState();
     }
   }
@@ -59,7 +73,7 @@ class Router {
    * If `historyState` is false, do not create a history state and do not
    * scroll to top.
    */
-  async loadURL(url, historyState = true) {
+  async loadURL(url: string, historyState = true) {
     const state = { interrupt: false };
     e.trigger("navigate", state);
     if (state.interrupt) {
@@ -67,25 +81,26 @@ class Router {
     }
 
     const getUrl = new URL(url);
-    getUrl.searchParams.set("partial", true);
+    getUrl.searchParams.set("partial", "true");
 
     const svg = select(".fava-icon");
-    svg.classList.add("loading");
+    if (svg) svg.classList.add("loading");
 
     try {
       const content = await fetch(getUrl.toString()).then(handleText);
       if (historyState) {
-        window.history.pushState(null, null, url);
+        window.history.pushState(null, "", url);
         window.scroll(0, 0);
       }
       this.updateState();
-      select("article").innerHTML = content;
+      const article = select("article");
+      if (article) article.innerHTML = content;
       e.trigger("page-loaded");
       urlHash.set(window.location.hash.slice(1));
     } catch (error) {
       notify(`Loading ${url} failed.`, "error");
     } finally {
-      svg.classList.remove("loading");
+      if (svg) svg.classList.remove("loading");
     }
   }
 
@@ -217,7 +232,7 @@ e.on("page-init", () => {
   for (const [store, name, defaultValue, shouldLoad] of urlParams) {
     store.set(params.get(name) || defaultValue);
 
-    store.subscribe(value => {
+    store.subscribe((value: string) => {
       const newURL = new URL(window.location.href);
       newURL.searchParams.set(name, value);
       if (value === defaultValue) {

@@ -4,8 +4,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "eslint javascript --ext .js,.svelte && stylelint 'css/*.css' --fix && npm run format",
-    "format": "cd ../../ && prettier '**/*.{css,js,md,svelte}' --check --write --ignore-path .gitignore"
+    "lint": "eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' --fix && npm run format",
+    "format": "cd ../../ && prettier '**/*.{css,js,md,svelte,ts}' --check --write --ignore-path .gitignore"
   },
   "husky": {
     "hooks": {
@@ -17,11 +17,11 @@
       "stylelint --fix",
       "git add"
     ],
-    "*.{css,js,svelte,md}": [
+    "*.{css,js,md,svelte,ts}": [
       "prettier --write",
       "git add"
     ],
-    "*.{js}": [
+    "*.{js,svelte,ts}": [
       "eslint --fix",
       "git add"
     ]
@@ -29,6 +29,7 @@
   "prettier": {
     "proseWrap": "always",
     "trailingComma": "es5",
+    "tabWidth": 2,
     "overrides": [
       {
         "files": "*.svelte",
@@ -52,6 +53,7 @@
     "rules": {
       "no-param-reassign": 0,
       "no-underscore-dangle": 0,
+      "import/no-unresolved": "off",
       "import/prefer-default-export": 0,
       "prefer-destructuring": [
         "error",
@@ -77,6 +79,12 @@
           "import/first": "off",
           "import/no-mutable-exports": "off"
         }
+      },
+      {
+        "files": [
+          "*.ts"
+        ],
+        "parser": "@typescript-eslint/parser"
       }
     ]
   },
@@ -88,6 +96,7 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/parser": "^1.12.0",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "^6.0.0",
@@ -103,10 +112,12 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-svelte": "^5.1.0",
+    "rollup-plugin-typescript": "^1.0.1",
     "stylelint": "^10.1.0",
     "stylelint-config-prettier": "^5.2.0",
     "stylelint-config-recess-order": "^2.0.3",
-    "stylelint-config-standard": "^18.3.0"
+    "stylelint-config-standard": "^18.3.0",
+    "typescript": "^3.5.3"
   },
   "dependencies": {
     "codemirror": "^5.48.2",

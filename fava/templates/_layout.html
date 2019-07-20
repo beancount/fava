@@ -10,6 +10,7 @@
     <link rel="shortcut icon" href="{{ static_url(filename='images/favicon.ico') }}">
     <link rel="stylesheet" href="{{ static_url(filename='gen/app.css') }}">
     <title>{{ short_title }} - {{ ledger.options.title }}</title>
+    <script type="text/javascript" defer src="{{ static_url(filename='gen/app.js') }}"></script>
   </head>
   <body>
     <header>
@@ -73,7 +74,6 @@
     <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
     <ul id="notifications" class="notifications"></ul>
     <div id="tooltip" class="tooltip"></div>
-    <script type="text/javascript" src="{{ static_url(filename='gen/app.js') }}"></script>
   </body>
 </html>
 {%- endif %}

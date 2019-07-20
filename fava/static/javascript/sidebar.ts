@@ -1,25 +1,26 @@
 // This script updates the links and error count in the sidebar as well as
 // toggling the sidebar on mobile.
 
-import { $, $$, fetchAPI } from "./helpers";
+import { select, selectAll, fetchAPI } from "./helpers";
 import e from "./events";
 
 function initSidebar() {
-  $$("aside a").forEach(el => {
+  selectAll("aside a").forEach(el => {
     el.classList.remove("selected");
-    if (el.getAttribute("href").includes(window.location.pathname)) {
+    const href = el.getAttribute("href");
+    if (href && href.includes(window.location.pathname)) {
       el.classList.add("selected");
     }
   });
-  const errors = $("#data-error-count").value;
-  $("aside li.error").classList.toggle("hidden", errors === "0");
-  $("aside li.error span").innerHTML = errors;
+  const errors = select("#data-error-count").value;
+  select("aside li.error").classList.toggle("hidden", errors === "0");
+  select("aside li.error span").innerHTML = errors;
 }
 
 e.on("page-init", () => {
-  const asideButton = $("#aside-button");
+  const asideButton = select("#aside-button");
   asideButton.addEventListener("click", () => {
-    $("aside").classList.toggle("active");
+    select("aside").classList.toggle("active");
     asideButton.classList.toggle("active");
   });
 });
@@ -30,7 +31,7 @@ e.on("page-loaded", () => {
 
 e.on("file-modified", () => {
   fetchAPI("errors").then(errors => {
-    $("#data-error-count").value = errors;
+    select("#data-error-count").value = errors;
     initSidebar();
   });
 });

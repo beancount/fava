@@ -20,7 +20,7 @@
  *    elements in the page.
  */
 
-import { $, _, delegate, ready, fetchAPI } from "./helpers";
+import { select, _, delegate, ready, fetchAPI } from "./helpers";
 import e from "./events";
 import router from "./router";
 
@@ -62,7 +62,7 @@ import FilterForm from "./FilterForm.svelte";
 import Modals from "./modals/Modals.svelte";
 
 function initSvelteComponent(selector, SvelteComponent) {
-  const el = $(selector);
+  const el = select(selector);
   if (el) {
     let data = {};
     if (el.firstChild && el.firstChild.type === "application/json") {
@@ -74,21 +74,21 @@ function initSvelteComponent(selector, SvelteComponent) {
 }
 
 e.on("page-loaded", () => {
-  Object.assign(favaAPI, JSON.parse($("#ledger-data").innerHTML));
+  Object.assign(favaAPI, JSON.parse(select("#ledger-data").innerHTML));
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-import", Import);
 
-  document.title = $("#data-document-title").value;
-  $("h1 strong").innerHTML = $("#data-page-title").innerHTML;
-  $("#reload-page").classList.add("hidden");
+  document.title = select("#data-document-title").value;
+  select("h1 strong").innerHTML = select("#data-page-title").innerHTML;
+  select("#reload-page").classList.add("hidden");
 });
 
 e.on("page-init", () => {
   // eslint-disable-next-line
   new Modals({ target: document.body });
   // eslint-disable-next-line
-  new FilterForm({ target: $("header") });
+  new FilterForm({ target: select("header") });
 
   // Watch for all clicks on <button>s and fire the appropriate events.
   delegate(document.body, "click", "button", event => {
@@ -119,7 +119,7 @@ async function doPoll() {
       if (favaAPI.favaOptions["auto-reload"]) {
         router.reload();
       } else {
-        $("#reload-page").classList.remove("hidden");
+        select("#reload-page").classList.remove("hidden");
         e.trigger("file-modified");
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
@@ -132,7 +132,7 @@ async function doPoll() {
 }
 
 ready().then(() => {
-  Object.assign(favaAPI, JSON.parse($("#ledger-data").innerHTML));
+  Object.assign(favaAPI, JSON.parse(select("#ledger-data").innerHTML));
   router.init();
   e.trigger("page-init");
   e.trigger("page-loaded");

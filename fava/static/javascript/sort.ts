@@ -6,61 +6,66 @@
 //  - 'string': Case-insensitive string comparison.
 //  - 'num': Clean and parse to float.
 
-import { $, $$ } from "./helpers";
+import { select, selectAll } from "./helpers";
 import e from "./events";
 
-function parseNumber(num) {
+function parseNumber(num: string): number {
   const cleaned = num.replace(/[^\-?0-9.]/g, "");
   const n = parseFloat(cleaned);
   return Number.isNaN(n) ? 0 : n;
 }
 
-const sorters = {
-  string(A, B) {
-    const a = A.toLowerCase();
-    const b = B.toLowerCase();
+function stringSorter(A: string, B: string) {
+  const a = A.toLowerCase();
+  const b = B.toLowerCase();
 
-    if (a === b) return 0;
-    if (a < b) return -1;
-    return 1;
-  },
-  num(a, b) {
-    return parseNumber(a) - parseNumber(b);
-  },
-};
+  if (a === b) return 0;
+  if (a < b) return -1;
+  return 1;
+}
+function numSorter(a: string, b: string) {
+  return parseNumber(a) - parseNumber(b);
+}
 
-function getValue(el) {
+type SortOrder = "desc" | "asc";
+
+function getValue(el: HTMLElement) {
   return el.getAttribute("data-sort-value") || el.textContent || el.innerText;
 }
 
-function sortElements(options) {
-  function sortFunction(a, b) {
+function sortElements(
+  parent: Element,
+  elements: Element[],
+  selector: (e: Element) => HTMLElement,
+  order: SortOrder,
+  type: string
+) {
+  const sorter = type === "num" ? numSorter : stringSorter;
+  function sortFunction(a: Element, b: Element) {
     return (
-      (options.order === "asc" ? 1 : -1) *
-      sorters[options.type](
-        getValue(options.selector(a)),
-        getValue(options.selector(b))
-      )
+      (order === "asc" ? 1 : -1) *
+      sorter(getValue(selector(a)), getValue(selector(b)))
     );
   }
 
   const fragment = document.createDocumentFragment();
-  options.elements.sort(sortFunction).forEach(el => {
+  elements.sort(sortFunction).forEach(el => {
     fragment.appendChild(el);
   });
-  options.parent.appendChild(fragment);
+  parent.appendChild(fragment);
 }
 
-function getSortOrder(headerElement) {
+function getSortOrder(headerElement: Element): SortOrder {
   if (!headerElement.getAttribute("data-order")) {
     return headerElement.getAttribute("data-sort-default") || "asc";
   }
   return headerElement.getAttribute("data-order") === "asc" ? "desc" : "asc";
 }
 
-function sortableJournal(ol) {
-  const head = $(".head", ol);
-  const headers = $$("span[data-sort]", head);
+function sortableJournal(ol: HTMLOListElement) {
+  const head = select(".head", ol);
+  if (!head) return;
+  const headers = selectAll("span[data-sort]", head);
 
   head.addEventListener("click", event => {
     const header = event.target.closest("span");
@@ -77,21 +82,23 @@ function sortableJournal(ol) {
     });
     header.setAttribute("data-order", order);
 
-    sortElements({
-      parent: ol,
-      elements: [].slice.call(ol.children, 1),
-      selector(li) {
+    sortElements(
+      ol,
+      [].slice.call(ol.children, 1),
+      function selector(li: HTMLLIElement) {
         return li.querySelector(`.${headerClass}`);
       },
       order,
-      type,
-    });
+      type
+    );
   });
 }
 
-function sortableTable(table) {
+function sortableTable(table: HTMLTableElement) {
   const head = table.tHead;
-  const headers = $$("th[data-sort]", head);
+  const body = table.tBodies.item(0);
+  if (!head || !body) return;
+  const headers = selectAll("th[data-sort]", head);
 
   head.addEventListener("click", event => {
     const header = event.target.closest("th");
@@ -108,24 +115,24 @@ function sortableTable(table) {
     });
     header.setAttribute("data-order", order);
 
-    sortElements({
-      parent: table.querySelector("tbody"),
-      elements: $$("tr", table.querySelector("tbody")),
-      selector(tr) {
+    sortElements(
+      body,
+      selectAll("tr", body),
+      function selector(tr: HTMLTableRowElement) {
         return tr.cells.item(index);
       },
       order,
-      type,
-    });
+      type
+    );
   });
 }
 
 export default function initSort() {
-  $$(".sortable").forEach(el => {
-    sortableTable(el);
+  selectAll("table.sortable").forEach(el => {
+    sortableTable(el as HTMLTableElement);
   });
-  $$(".journal").forEach(el => {
-    sortableJournal(el);
+  selectAll("ol.journal").forEach(el => {
+    sortableJournal(el as HTMLOListElement);
   });
 }
 

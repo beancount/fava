@@ -1,5 +1,5 @@
 import e from "./events";
-import { $, delegate, fetchAPI, fuzzytest, fuzzywrap } from "./helpers";
+import { select, delegate, fetchAPI, fuzzytest, fuzzywrap } from "./helpers";
 import { favaAPI } from "./stores";
 
 const accountCompletionCache = {};
@@ -157,7 +157,7 @@ class CompletionList {
   // Return a promise that yields the suggestions.
   async suggestions() {
     if (this.list === "accounts" && this.input.closest(".entry-form")) {
-      const payeeInput = $(
+      const payeeInput = select(
         "input[name=payee]",
         this.input.closest(".entry-form")
       );

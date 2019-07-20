@@ -1,18 +1,18 @@
 import Mousetrap from "mousetrap";
 
-import { $, $$, once } from "./helpers";
+import { select, selectAll, once } from "./helpers";
 import e from "./events";
 import { closeOverlay } from "./stores";
 
 function click(selector) {
-  const element = $(selector);
+  const element = select(selector);
   if (element) {
     element.click();
   }
 }
 
 e.on("page-loaded", () => {
-  $$("[data-key]").forEach(element => {
+  selectAll("[data-key]").forEach(element => {
     const key = element.getAttribute("data-key");
     if (key !== undefined) {
       Mousetrap.bind(
@@ -50,16 +50,16 @@ function showTooltip(target) {
 
 // Show all keyboard shortcut tooltips.
 function showTooltips() {
-  $("#reload-page").classList.remove("hidden");
-  $$("[data-key]").forEach(el => {
+  select("#reload-page").classList.remove("hidden");
+  selectAll("[data-key]").forEach(el => {
     showTooltip(el);
   });
 }
 
 // Remove all keyboard shortcut tooltips.
 function removeTooltips() {
-  $("#reload-page").classList.add("hidden");
-  $$(".keyboard-tooltip").forEach(tooltip => {
+  select("#reload-page").classList.add("hidden");
+  selectAll(".keyboard-tooltip").forEach(tooltip => {
     tooltip.remove();
   });
 }
@@ -80,7 +80,7 @@ e.on("page-init", () => {
 
   // Charts
   Mousetrap.bind("c", () => {
-    const selected = $(".chart-labels .selected");
+    const selected = select(".chart-labels .selected");
 
     if (selected && selected.nextElementSibling) {
       selected.nextElementSibling.click();
@@ -89,7 +89,7 @@ e.on("page-init", () => {
     }
   });
   Mousetrap.bind("C", () => {
-    const selected = $(".chart-labels .selected");
+    const selected = select(".chart-labels .selected");
 
     if (selected && selected.previousElementSibling) {
       selected.previousElementSibling.click();
