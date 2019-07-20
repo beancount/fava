@@ -91,9 +91,9 @@
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-config-prettier": "^6.0.0",
-    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^2.7.2",
-    "husky": "^3.0.0",
+    "husky": "^3.0.1",
     "lint-staged": "^9.2.0",
     "prettier": "^1.18.2",
     "prettier-plugin-svelte": "^0.7.0",
@@ -109,7 +109,7 @@
     "stylelint-config-standard": "^18.3.0"
   },
   "dependencies": {
-    "codemirror": "^5.48.0",
+    "codemirror": "^5.48.2",
     "d3-array": "^2.2.0",
     "d3-axis": "^1.0.12",
     "d3-color": "^1.2.8",
@@ -124,8 +124,8 @@
     "mousetrap": "^1.6.3",
     "svelte": "^3.6.7",
     "typeface-fira-mono": "0.0.72",
-    "typeface-fira-sans": "0.0.54",
+    "typeface-fira-sans": "0.0.75",
     "typeface-source-code-pro": "0.0.71",
-    "typeface-source-serif-pro": "0.0.73"
+    "typeface-source-serif-pro": "0.0.75"
   }
 }
