@@ -22,8 +22,7 @@
 
 <AutocompleteInput
   bind:this={input}
-  class="account"
-  name="payee"
+  className="account"
   placeholder={_('Account')}
   bind:value
   suggestions={suggestions || favaAPI.accounts} />

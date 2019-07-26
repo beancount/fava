@@ -38,12 +38,12 @@ class Router {
     this.updateState();
 
     window.addEventListener("popstate", () => {
+      urlHash.set(window.location.hash.slice(1));
       if (
         window.location.hash !== this.state.hash &&
         window.location.pathname === this.state.pathname &&
         window.location.search === this.state.search
       ) {
-        urlHash.set(window.location.hash.slice(1));
         this.updateState();
       } else if (
         window.location.pathname !== this.state.pathname ||
@@ -177,11 +177,11 @@ e.on("form-submit-query", form => {
     return;
   }
 
-  const url = new URL(window.location);
+  const url = new URL(window.location.toString());
   url.searchParams.set("query_string", queryString);
 
   const pageURL = url.toString();
-  url.searchParams.set("result_only", true);
+  url.searchParams.set("result_only", "true");
 
   fetch(url.toString())
     .then(handleText)
@@ -191,7 +191,7 @@ e.on("form-submit-query", form => {
       });
       select("#query-container").insertAdjacentHTML("afterbegin", data);
       initSort();
-      window.history.replaceState(null, null, pageURL);
+      window.history.replaceState(null, "", pageURL);
     });
 });
 

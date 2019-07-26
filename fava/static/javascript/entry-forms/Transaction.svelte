@@ -61,7 +61,7 @@
     <label for="payee">{_('Payee')}:</label>
     <AutocompleteInput
       bind:this={focusInput}
-      name="payee"
+      className="payee"
       placeholder={_('Payee')}
       bind:value={entry.payee}
       suggestions={favaAPI.payees}
@@ -83,30 +83,28 @@
     </button>
   </div>
   <EntryMetadata bind:meta={entry.meta} />
-  <div class="postings">
-    {#each entry.postings as posting}
-      <div class="fieldset posting" bind:this={postingRow}>
-        <button
-          class="muted round remove-fieldset"
-          on:click={() => removePosting(posting)}
-          type="button"
-          tabindex="-1">
-          ×
-        </button>
-        <AccountInput bind:value={posting.account} {suggestions} />
-        <input
-          type="text"
-          class="amount"
-          placeholder={_('Amount')}
-          bind:value={posting.amount} />
-        <button
-          class="muted round add-row"
-          type="button"
-          on:click={addPosting}
-          title={_('Add posting')}>
-          +
-        </button>
-      </div>
-    {/each}
-  </div>
+  {#each entry.postings as posting}
+    <div class="fieldset posting" bind:this={postingRow}>
+      <button
+        class="muted round remove-fieldset"
+        on:click={() => removePosting(posting)}
+        type="button"
+        tabindex="-1">
+        ×
+      </button>
+      <AccountInput bind:value={posting.account} {suggestions} />
+      <input
+        type="text"
+        class="amount"
+        placeholder={_('Amount')}
+        bind:value={posting.amount} />
+      <button
+        class="muted round add-row"
+        type="button"
+        on:click={addPosting}
+        title={_('Add posting')}>
+        +
+      </button>
+    </div>
+  {/each}
 </div>

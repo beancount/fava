@@ -4,6 +4,10 @@ import { fetch, handleJSON } from "./helpers";
 import { favaAPI } from "./stores";
 
 export class Posting {
+  account: string;
+
+  amount: string;
+
   constructor() {
     this.account = "";
     this.amount = "";

@@ -26,7 +26,7 @@ export function _(string: string) {
 // Execute the callback of the event of given type is fired on something
 // matching selector.
 export function delegate(
-  element: HTMLElement,
+  element: Element | Document,
   type: string,
   selector: string,
   callback: Function
