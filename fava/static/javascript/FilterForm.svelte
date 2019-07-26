@@ -45,7 +45,7 @@
 
   let values;
   filterStore.subscribe(fs => {
-    values = Object.assign({}, fs);
+    values = { ...fs };
   });
 
   function submit() {
