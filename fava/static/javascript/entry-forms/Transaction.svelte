@@ -1,3 +1,7 @@
+<script context="module">
+  const accountCompletionCache = {};
+</script>
+
 <script>
   import { tick } from "svelte";
 
@@ -12,6 +16,7 @@
 
   export let entry;
   let focusInput;
+  let suggestions;
   let postingRow;
 
   export function focus() {
@@ -28,9 +33,20 @@
     postingRow.querySelector("input").focus();
   }
 
+  $: if (entry.payee) {
+    const { payee } = entry;
+    if (favaAPI.payees.includes(payee)) {
+      if (!accountCompletionCache[payee]) {
+        accountCompletionCache[payee] = fetchAPI("payee_accounts", { payee });
+      }
+      accountCompletionCache[payee].then(s => {
+        suggestions = s;
+      });
+    }
+  }
+
   // Autofill complete transactions.
-  function autocompleteSelectPayee(event) {
-    entry.payee = event.target.value;
+  function autocompleteSelectPayee() {
     if (entry.narration || !entry.postings.every(p => !p.account)) return;
     fetchAPI("payee_transaction", { payee: entry.payee }).then(data => {
       entry = Object.assign(data, { date: entry.date });
@@ -49,7 +65,7 @@
       placeholder={_('Payee')}
       bind:value={entry.payee}
       suggestions={favaAPI.payees}
-      on:autocomplete-select={autocompleteSelectPayee} />
+      on:select={autocompleteSelectPayee} />
     <label for="payee">{_('Narration')}:</label>
     <input
       type="text"
@@ -77,7 +93,7 @@
           tabindex="-1">
           ×
         </button>
-        <AccountInput bind:value={posting.account} />
+        <AccountInput bind:value={posting.account} {suggestions} />
         <input
           type="text"
           class="amount"

@@ -5,6 +5,7 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
 
   export let value = "";
+  export let suggestions;
 
   let input;
 
@@ -25,4 +26,4 @@
   name="payee"
   placeholder={_('Account')}
   bind:value
-  suggestions={favaAPI.accounts} />
+  suggestions={suggestions || favaAPI.accounts} />

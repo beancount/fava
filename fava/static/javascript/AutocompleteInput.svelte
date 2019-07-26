@@ -87,23 +87,6 @@
   $: if (setSize) {
     inputOptions.size = Math.max(value.length, placeholder.length) + 1;
   }
-  /*
-    if (this.list === "accounts" && this.input.closest(".entry-form")) {
-      const payeeInput = select(
-        "input[name=payee]",
-        this.input.closest(".entry-form")
-      );
-      if (payeeInput) {
-        const payee = payeeInput.value.trim();
-        if (accountCompletionCache[payee]) {
-          return accountCompletionCache[payee];
-        }
-        const suggestions = await fetchAPI("payee_accounts", { payee });
-        accountCompletionCache[payee] = suggestions;
-        return suggestions;
-      }
-    }
-    */
 </script>
 
 <style>
