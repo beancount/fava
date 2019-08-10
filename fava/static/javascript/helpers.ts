@@ -4,13 +4,11 @@ import { favaAPI } from "./stores";
 export function select(expr: string, con: Document | Element = document) {
   return con.querySelector(expr);
 }
-export const $ = select;
 
 // Select multiple elements (and convert NodeList to Array).
 export function selectAll(expr: string, con: Document | Element = document) {
   return Array.from(con.querySelectorAll(expr));
 }
-export const $$ = selectAll;
 
 let translations: Record<string, string>;
 /*

@@ -6,8 +6,8 @@ import { utcFormat } from "d3-time-format";
 import e from "./events";
 import { favaAPI } from "./stores";
 
-let formatter;
-let incognito;
+let formatter: (num: number) => string;
+let incognito: (num: string) => string;
 
 e.on("page-init", () => {
   const { locale } = favaAPI.favaOptions;
@@ -23,23 +23,23 @@ e.on("page-init", () => {
   }
 });
 
-export function formatCurrency(number) {
+export function formatCurrency(number: number) {
   return incognito(formatter(number));
 }
 
 const formatterPer = format(".2f");
-export function formatPercentage(number) {
+export function formatPercentage(number: number) {
   return `${formatterPer(Math.abs(number) * 100)}%`;
 }
 
 const formatterShort = format(".2s");
-export function formatCurrencyShort(number) {
+export function formatCurrencyShort(number: number) {
   return incognito(formatterShort(number));
 }
 
 export const dateFormat = {
   year: utcFormat("%Y"),
-  quarter(date) {
+  quarter(date: Date) {
     return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
   month: utcFormat("%b %Y"),
@@ -49,7 +49,7 @@ export const dateFormat = {
 
 export const timeFilterDateFormat = {
   year: utcFormat("%Y"),
-  quarter(date) {
+  quarter(date: Date) {
     return `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) +
       1}`;
   },

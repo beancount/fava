@@ -2,7 +2,8 @@ import e from "./events";
 import { select, selectAll } from "./helpers";
 
 // Copy the given text to the clipboard.
-function copyToClipboard(text) {
+function copyToClipboard(text: string | null) {
+  if (!text) return;
   const textarea = document.createElement("textarea");
   textarea.value = text;
   textarea.style.position = "fixed";
