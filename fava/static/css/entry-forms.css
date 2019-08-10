@@ -13,6 +13,10 @@
   display: none;
 }
 
+.entry-form h4 {
+  margin: 0;
+}
+
 .entry-form .amount {
   width: 220px;
 }
@@ -53,6 +57,10 @@
 .entry-form input.metadata-value {
   flex-grow: 1;
   max-width: 15em;
+}
+
+.balance .currency {
+  width: 6em;
 }
 
 .entry-form input.metadata-key {

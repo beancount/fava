@@ -27,9 +27,10 @@
       class="number"
       pattern="[0-9.,]*"
       placeholder={_('Number')}
+      size="10"
       bind:value={entry.amount.number} />
     <AutocompleteInput
-      class="currency"
+      className="currency"
       placeholder={_('Currency')}
       suggestions={favaAPI.currencies}
       bind:value={entry.amount.currency} />

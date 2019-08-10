@@ -5,7 +5,7 @@
 <script>
   import { tick } from "svelte";
 
-  import { Posting } from "../entries";
+  import { Posting, Transaction } from "../entries";
   import { _, fetchAPI } from "../helpers";
   import { favaAPI } from "../stores";
 
@@ -49,7 +49,7 @@
   function autocompleteSelectPayee() {
     if (entry.narration || !entry.postings.every(p => !p.account)) return;
     fetchAPI("payee_transaction", { payee: entry.payee }).then(data => {
-      entry = Object.assign(data, { date: entry.date });
+      entry = Object.assign(new Transaction(), data, { date: entry.date });
     });
   }
 </script>
