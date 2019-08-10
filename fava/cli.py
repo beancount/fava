@@ -37,9 +37,7 @@ from fava import __version__
     metavar="<host>",
     help="The host to listen on.",
 )
-@click.option(
-    "--prefix", type=str, help="Set an URL prefix."
-)
+@click.option("--prefix", type=str, help="Set an URL prefix.")
 @click.option(
     "--incognito",
     is_flag=True,
