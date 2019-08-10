@@ -31,6 +31,7 @@ export function delegate(
 ) {
   if (!element) return;
   element.addEventListener(type, event => {
+    if (!event.target) return;
     const closest = event.target.closest(selector);
     if (closest) {
       callback(event, closest);

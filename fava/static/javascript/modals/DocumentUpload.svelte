@@ -17,9 +17,10 @@
 
   async function submit() {
     await Promise.all(
-      files.map(({ dataTransferFile, filename }) => {
+      files.map(({ dataTransferFile, name }) => {
         const formData = new FormData(form);
-        formData.append("file", dataTransferFile, filename);
+        formData.append("account", account);
+        formData.append("file", dataTransferFile, name);
         return fetch(`${favaAPI.baseURL}api/add-document/`, {
           method: "PUT",
           body: formData,
@@ -74,18 +75,19 @@
         name,
       });
     }
-
-    // TODO: ?? automatic submit if
-    // if (form.elements.folder.length > 1 || changedFilename) {
+  }
+  function closeHandler() {
+    shown = false;
+    files = [];
   }
 </script>
 
-<ModalBase {shown}>
+<ModalBase {shown} {closeHandler}>
   <form bind:this={form} on:submit|preventDefault={submit}>
     <h3>{_('Upload file(s)')}:</h3>
     {#each files as file}
       <div class="fieldset">
-        <input value={file.name} />
+        <input bind:value={file.name} />
       </div>
     {/each}
     <div class="fieldset">
