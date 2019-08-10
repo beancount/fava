@@ -61,17 +61,6 @@
       return fs;
     });
   }
-  /*
-      <input
-        data-key={key}
-        {name}
-        type="text"
-        bind:value={values[name]}
-        {placeholder}
-        {list}
-        on:-select={submit}
-        size={Math.max(values[name].length, placeholder.length) + 1} />
-  */
 </script>
 
 <form id="filter-form" class="filter-form" on:submit|preventDefault={submit}>
