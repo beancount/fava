@@ -15,19 +15,19 @@ msgstr "Enlaces personalizados"
 msgid "Errors"
 msgstr "Errores"
 
-#: fava/static/javascript/FilterForm.svelte:8
+#: fava/static/javascript/FilterForm.svelte:9
 msgid "Time"
 msgstr "Hora"
 
-#: fava/static/javascript/FilterForm.svelte:14
-#: fava/static/javascript/entry-forms/AccountInput.svelte:23
-#: fava/static/javascript/modals/DocumentUpload.svelte:102
+#: fava/static/javascript/FilterForm.svelte:15
+#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/modals/DocumentUpload.svelte:105
 #: fava/templates/holdings.html:45 fava/templates/statistics.html:32
 msgid "Account"
 msgstr "Cuenta"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:43
-#: fava/static/javascript/entry-forms/Transaction.svelte:47
+#: fava/static/javascript/entry-forms/Transaction.svelte:61
+#: fava/static/javascript/entry-forms/Transaction.svelte:65
 msgid "Payee"
 msgstr "Beneficiario"
 
@@ -110,13 +110,14 @@ msgstr "Costo"
 msgid "Change"
 msgstr "Cambio"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:21
+#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/modals/AddEntry.svelte:12
 #: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "Saldo"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:53
-#: fava/static/javascript/modals/Extract.svelte:105
+#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/Extract.svelte:101
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
 msgstr "Guardar"
@@ -125,7 +126,7 @@ msgstr "Guardar"
 msgid "Saving..."
 msgstr "Guardando..."
 
-#: fava/static/javascript/main.js:124
+#: fava/static/javascript/main.js:123
 msgid "File change detected. Click to reload."
 msgstr "Modificación del fichero detectada. Haga clic para recargar."
 
@@ -166,7 +167,7 @@ msgstr "Mostrar origen %(file)s:%(lineno)s"
 msgid "File"
 msgstr "Fichero"
 
-#: fava/static/javascript/modals/Extract.svelte:112
+#: fava/static/javascript/modals/Extract.svelte:108
 #: fava/templates/errors.html:6
 msgid "Line"
 msgstr "Línea"
@@ -199,7 +200,7 @@ msgstr "Ayuda - %(title)s"
 msgid "Help pages"
 msgstr "Páginas de ayuda"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:32
+#: fava/static/javascript/entry-forms/Balance.svelte:34
 #: fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "Moneda"
@@ -225,12 +226,12 @@ msgstr "Ingresos"
 msgid "Expenses"
 msgstr "Gastos"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:45
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:44
 #: fava/templates/options.html:5 fava/templates/options.html:22
 msgid "Key"
 msgstr "Clave"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:54
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:53
 #: fava/templates/options.html:6 fava/templates/options.html:23
 msgid "Value"
 msgstr "Valor"
@@ -284,25 +285,25 @@ msgstr "cerrar"
 msgid "New transaction"
 msgstr "Nueva transacción"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:52
-#: fava/static/javascript/entry-forms/Transaction.svelte:56
+#: fava/static/javascript/entry-forms/Transaction.svelte:69
+#: fava/static/javascript/entry-forms/Transaction.svelte:73
 msgid "Narration"
 msgstr "Narración"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:51
+#: fava/static/javascript/modals/AddEntry.svelte:70
 msgid "Save and add new"
 msgstr "Guardar y añadir nueva"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:27
+#: fava/static/javascript/entry-forms/Balance.svelte:29
 msgid "Number"
 msgstr "Número"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:63
-#: fava/static/javascript/entry-forms/Transaction.svelte:89
+#: fava/static/javascript/entry-forms/Transaction.svelte:80
+#: fava/static/javascript/entry-forms/Transaction.svelte:105
 msgid "Add posting"
 msgstr "Añadir asiento"
 
-#: fava/static/javascript/modals/Extract.svelte:60
+#: fava/static/javascript/modals/Extract.svelte:56
 #: fava/templates/_globals.html:9
 msgid "Import"
 msgstr ""
@@ -319,7 +320,7 @@ msgstr ""
 msgid "Toggle ignore"
 msgstr ""
 
-#: fava/static/javascript/modals/Extract.svelte:111
+#: fava/static/javascript/modals/Extract.svelte:107
 msgid "Source"
 msgstr ""
 
@@ -343,7 +344,7 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: fava/static/javascript/Import.svelte:89
+#: fava/static/javascript/Import.svelte:93
 msgid "Extract"
 msgstr ""
 
@@ -400,7 +401,7 @@ msgstr ""
 msgid "Postings"
 msgstr ""
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:84
+#: fava/static/javascript/modals/DocumentUpload.svelte:87
 msgid "Upload file(s)"
 msgstr ""
 
@@ -408,7 +409,7 @@ msgstr ""
 msgid "Documents folder"
 msgstr ""
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:111
+#: fava/static/javascript/modals/DocumentUpload.svelte:110
 msgid "Upload"
 msgstr ""
 
@@ -449,15 +450,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
 
-#: fava/templates/_aside.html:28 fava/templates/_layout.html:52
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:53
 msgid "Export"
 msgstr ""
 
-#: fava/static/javascript/FilterForm.svelte:20
+#: fava/static/javascript/FilterForm.svelte:21
 msgid "Filter by tag, payee, ..."
 msgstr ""
 
-#: fava/templates/_layout.html:53
+#: fava/templates/_layout.html:54
 msgid "Download currently filtered entries as a Beancount file"
 msgstr ""
 
@@ -489,7 +490,7 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:83
+#: fava/static/javascript/entry-forms/Transaction.svelte:99
 msgid "Amount"
 msgstr ""
 
@@ -497,7 +498,7 @@ msgstr ""
 msgid "Documents with a #linked tag"
 msgstr ""
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:52
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
@@ -521,7 +522,7 @@ msgstr ""
 msgid "Sunburst"
 msgstr ""
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:13
+#: fava/static/javascript/entry-forms/AccountInput.svelte:16
 msgid "Should be one of the declared accounts"
 msgstr ""
 
@@ -529,11 +530,19 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
-#: fava/static/javascript/modals/Extract.svelte:90
+#: fava/static/javascript/modals/Extract.svelte:86
 msgid "Previous"
 msgstr ""
 
-#: fava/static/javascript/modals/Extract.svelte:95
+#: fava/static/javascript/modals/Extract.svelte:91
 msgid "Next"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:48
+msgid "Add"
 msgstr ""
 

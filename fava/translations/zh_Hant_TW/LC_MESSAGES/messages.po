@@ -15,19 +15,19 @@ msgstr "自定義連結"
 msgid "Errors"
 msgstr "錯誤"
 
-#: fava/static/javascript/FilterForm.svelte:8
+#: fava/static/javascript/FilterForm.svelte:9
 msgid "Time"
 msgstr "時間"
 
-#: fava/static/javascript/FilterForm.svelte:14
-#: fava/static/javascript/entry-forms/AccountInput.svelte:23
-#: fava/static/javascript/modals/DocumentUpload.svelte:102
+#: fava/static/javascript/FilterForm.svelte:15
+#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/modals/DocumentUpload.svelte:105
 #: fava/templates/holdings.html:45 fava/templates/statistics.html:32
 msgid "Account"
 msgstr "帳戶"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:43
-#: fava/static/javascript/entry-forms/Transaction.svelte:47
+#: fava/static/javascript/entry-forms/Transaction.svelte:61
+#: fava/static/javascript/entry-forms/Transaction.svelte:65
 msgid "Payee"
 msgstr "收款人"
 
@@ -108,13 +108,14 @@ msgstr "成本"
 msgid "Change"
 msgstr "更動"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:21
+#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/modals/AddEntry.svelte:12
 #: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "餘額"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:53
-#: fava/static/javascript/modals/Extract.svelte:105
+#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/Extract.svelte:101
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
 msgstr "儲存"
@@ -123,7 +124,7 @@ msgstr "儲存"
 msgid "Saving..."
 msgstr "儲存中..."
 
-#: fava/static/javascript/main.js:124
+#: fava/static/javascript/main.js:123
 msgid "File change detected. Click to reload."
 msgstr "偵測到文件更動，點擊此處重新整理。"
 
@@ -164,7 +165,7 @@ msgstr "原始文件 %(file)s:%(lineno)s"
 msgid "File"
 msgstr "文件"
 
-#: fava/static/javascript/modals/Extract.svelte:112
+#: fava/static/javascript/modals/Extract.svelte:108
 #: fava/templates/errors.html:6
 msgid "Line"
 msgstr "行"
@@ -197,7 +198,7 @@ msgstr "幫助 - %(title)s"
 msgid "Help pages"
 msgstr "幫助頁"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:32
+#: fava/static/javascript/entry-forms/Balance.svelte:34
 #: fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "貨幣"
@@ -223,12 +224,12 @@ msgstr "收入"
 msgid "Expenses"
 msgstr "支出"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:45
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:44
 #: fava/templates/options.html:5 fava/templates/options.html:22
 msgid "Key"
 msgstr "鍵"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:54
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:53
 #: fava/templates/options.html:6 fava/templates/options.html:23
 msgid "Value"
 msgstr "值"
@@ -282,25 +283,25 @@ msgstr "關閉"
 msgid "New transaction"
 msgstr "新交易"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:52
-#: fava/static/javascript/entry-forms/Transaction.svelte:56
+#: fava/static/javascript/entry-forms/Transaction.svelte:69
+#: fava/static/javascript/entry-forms/Transaction.svelte:73
 msgid "Narration"
 msgstr "摘要"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:51
+#: fava/static/javascript/modals/AddEntry.svelte:70
 msgid "Save and add new"
 msgstr "儲存並新增下一條"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:27
+#: fava/static/javascript/entry-forms/Balance.svelte:29
 msgid "Number"
 msgstr "數值"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:63
-#: fava/static/javascript/entry-forms/Transaction.svelte:89
+#: fava/static/javascript/entry-forms/Transaction.svelte:80
+#: fava/static/javascript/entry-forms/Transaction.svelte:105
 msgid "Add posting"
 msgstr "新增記錄"
 
-#: fava/static/javascript/modals/Extract.svelte:60
+#: fava/static/javascript/modals/Extract.svelte:56
 #: fava/templates/_globals.html:9
 msgid "Import"
 msgstr "匯入"
@@ -317,7 +318,7 @@ msgstr "切換來源"
 msgid "Toggle ignore"
 msgstr "切換忽略"
 
-#: fava/static/javascript/modals/Extract.svelte:111
+#: fava/static/javascript/modals/Extract.svelte:107
 msgid "Source"
 msgstr "來源"
 
@@ -342,7 +343,7 @@ msgid "Importer"
 msgstr "匯入器"
 
 #. 不確定 UI 上是用在哪
-#: fava/static/javascript/Import.svelte:89
+#: fava/static/javascript/Import.svelte:93
 msgid "Extract"
 msgstr "匯出"
 
@@ -399,7 +400,7 @@ msgstr "有 #discovered tag 的文件"
 msgid "Postings"
 msgstr "記錄"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:84
+#: fava/static/javascript/modals/DocumentUpload.svelte:87
 msgid "Upload file(s)"
 msgstr "上傳檔案"
 
@@ -407,7 +408,7 @@ msgstr "上傳檔案"
 msgid "Documents folder"
 msgstr "文件資料夾"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:111
+#: fava/static/javascript/modals/DocumentUpload.svelte:110
 msgid "Upload"
 msgstr "上傳"
 
@@ -449,15 +450,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "按住 Shift 並點選以展開所有子項目。\n"
 "按住 Ctrl 或 Cmd 並點選以展開一層"
 
-#: fava/templates/_aside.html:28 fava/templates/_layout.html:52
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:53
 msgid "Export"
 msgstr "匯出"
 
-#: fava/static/javascript/FilterForm.svelte:20
+#: fava/static/javascript/FilterForm.svelte:21
 msgid "Filter by tag, payee, ..."
 msgstr "以 Tag, 付款者, ... 篩選"
 
-#: fava/templates/_layout.html:53
+#: fava/templates/_layout.html:54
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "將篩選結果下載為 Beancount 檔"
 
@@ -489,7 +490,7 @@ msgstr "日"
 msgid "Edit"
 msgstr "編輯"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:83
+#: fava/static/javascript/entry-forms/Transaction.svelte:99
 msgid "Amount"
 msgstr "帳戶"
 
@@ -497,7 +498,7 @@ msgstr "帳戶"
 msgid "Documents with a #linked tag"
 msgstr "有 #linked tag 的文件"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:52
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "你需要設定 Beancount 的 \"文件\" 選項以上傳檔案"
 
@@ -522,7 +523,7 @@ msgstr "Treemap"
 msgid "Sunburst"
 msgstr "Sunburst"
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:13
+#: fava/static/javascript/entry-forms/AccountInput.svelte:16
 msgid "Should be one of the declared accounts"
 msgstr "必須要是宣告過的帳戶"
 
@@ -530,11 +531,19 @@ msgstr "必須要是宣告過的帳戶"
 msgid "Event"
 msgstr "事件"
 
-#: fava/static/javascript/modals/Extract.svelte:90
+#: fava/static/javascript/modals/Extract.svelte:86
 msgid "Previous"
 msgstr "上一個"
 
-#: fava/static/javascript/modals/Extract.svelte:95
+#: fava/static/javascript/modals/Extract.svelte:91
 msgid "Next"
 msgstr "下一個"
+
+#: fava/static/javascript/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:48
+msgid "Add"
+msgstr ""
 
