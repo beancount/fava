@@ -18,6 +18,15 @@ export const filters = writable({
   account: "",
 });
 
+export const urlSyncedParams = [
+  "account",
+  "charts",
+  "conversion",
+  "filter",
+  "interval",
+  "time",
+];
+
 export function closeOverlay() {
   if (window.location.hash) {
     window.history.pushState({}, "", "#");

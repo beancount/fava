@@ -14,6 +14,7 @@ import {
   showCharts,
   filters,
   favaAPI,
+  urlSyncedParams,
 } from "./stores";
 
 class Router {
@@ -128,7 +129,7 @@ class Router {
    *  - the link has a `data-remote` attribute.
    */
   takeOverLinks() {
-    delegate(window.document, "click", "a", event => {
+    delegate(window.document, "click", "a", (event: MouseEvent) => {
       const link = event.target.closest("a");
       if (
         link.getAttribute("href").charAt(0) === "#" ||
@@ -142,7 +143,15 @@ class Router {
       // update sidebar links
       if (link.closest("aside")) {
         const newURL = new URL(link.href);
-        newURL.search = window.location.search;
+        const oldParams = new URL(window.location.href).searchParams;
+        for (const name of urlSyncedParams) {
+          const value = oldParams.get(name);
+          if (value) {
+            newURL.searchParams.set(name, value);
+          } else {
+            newURL.searchParams.delete(name);
+          }
+        }
         link.href = newURL.toString();
       }
       if (
@@ -171,7 +180,7 @@ class Router {
 const router = new Router();
 export default router;
 
-e.on("form-submit-query", form => {
+e.on("form-submit-query", (form: HTMLFormElement) => {
   const queryString = form.elements.query_string.value.trim();
   if (queryString === "") {
     return;
@@ -185,7 +194,7 @@ e.on("form-submit-query", form => {
 
   fetch(url.toString())
     .then(handleText)
-    .then(data => {
+    .then((data: string) => {
       selectAll(".queryresults-wrapper").forEach(element => {
         element.classList.add("toggled");
       });

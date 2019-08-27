@@ -61,7 +61,7 @@ export function ready() {
 
 // Handles JSON content for a Promise returned by fetch, also handling an HTTP
 // error status.
-export function handleJSON(response) {
+export function handleJSON(response: Response) {
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }
@@ -75,7 +75,7 @@ export function handleJSON(response) {
 
 // Handles text content for a Promise returned by fetch, also handling an HTTP
 // error status.
-export function handleText(response) {
+export function handleText(response: Response): Promise<string> {
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }
