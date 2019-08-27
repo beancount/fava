@@ -99,7 +99,7 @@
   }
 
   ul {
-    position: fixed;
+    position: absolute;
     float: left;
     z-index: var(--z-index-autocomplete);
     overflow-x: hidden;
