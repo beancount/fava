@@ -25,7 +25,7 @@
     <input
       type="tel"
       class="number"
-      pattern="[0-9.,]*"
+      pattern="-?[0-9.,]*"
       placeholder={_('Number')}
       size="10"
       bind:value={entry.amount.number} />
