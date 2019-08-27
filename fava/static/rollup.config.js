@@ -1,6 +1,5 @@
 import commonjs from "rollup-plugin-commonjs";
 import css from "rollup-plugin-css-only";
-import json from "rollup-plugin-json";
 import nodeResolve from "rollup-plugin-node-resolve";
 import svelte from "rollup-plugin-svelte";
 import typescript from "rollup-plugin-typescript";
@@ -36,7 +35,7 @@ function copy(files) {
 }
 
 export default {
-  input: "javascript/main.js",
+  input: "javascript/main.ts",
   output: {
     file: "gen/app.js",
     format: "iife",
@@ -48,7 +47,6 @@ export default {
       include: "node_modules/**",
     }),
     svelte(),
-    json(),
     css(),
     copy(fonts),
   ],

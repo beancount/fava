@@ -20,7 +20,14 @@
  *    elements in the page.
  */
 
-import { select, _, delegate, ready, fetchAPI } from "./helpers";
+import {
+  select,
+  _,
+  delegate,
+  ready,
+  fetchAPI,
+  getScriptTagJSON,
+} from "./helpers";
 import e from "./events";
 import router from "./router";
 
@@ -53,19 +60,24 @@ import { notify } from "./notifications";
 import "./sidebar";
 import "./sort";
 import "./tree-table";
-import { favaAPI } from "./stores";
+import { favaAPI, favaAPIValidator } from "./stores";
 
+// @ts-ignore
 import Import from "./Import.svelte";
+// @ts-ignore
 import ChartSwitcher from "./ChartSwitcher.svelte";
+// @ts-ignore
 import FilterForm from "./FilterForm.svelte";
+// @ts-ignore
 import Modals from "./modals/Modals.svelte";
 
-function initSvelteComponent(selector, SvelteComponent) {
+function initSvelteComponent(selector: string, SvelteComponent: any) {
   const el = select(selector);
   if (el) {
     let data = {};
-    if (el.firstChild && el.firstChild.type === "application/json") {
-      data = JSON.parse(el.firstChild.innerHTML);
+    const script = select("script", el);
+    if (script && (script as HTMLScriptElement).type === "application/json") {
+      data = JSON.parse(script.innerHTML);
     }
     const component = new SvelteComponent({ target: el, props: { data } });
     e.once("page-loaded", () => component.$destroy());
@@ -73,14 +85,14 @@ function initSvelteComponent(selector, SvelteComponent) {
 }
 
 e.on("page-loaded", () => {
-  Object.assign(favaAPI, JSON.parse(select("#ledger-data").innerHTML));
+  Object.assign(favaAPI, favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-import", Import);
 
-  document.title = select("#data-document-title").value;
-  select("h1 strong").innerHTML = select("#data-page-title").innerHTML;
-  select("#reload-page").classList.add("hidden");
+  document.title = favaAPI.documentTitle;
+  select("h1 strong")!.innerHTML = favaAPI.pageTitle;
+  select("#reload-page")!.classList.add("hidden");
 });
 
 e.on("page-init", () => {
@@ -90,17 +102,20 @@ e.on("page-init", () => {
   new FilterForm({ target: select("header") });
 
   // Watch for all clicks on <button>s and fire the appropriate events.
-  delegate(document.body, "click", "button", event => {
-    const button = event.target.closest("button");
-    const type = button.getAttribute("data-event");
-    if (type) {
-      e.trigger(`button-click-${type}`, button);
+  delegate(
+    document.body,
+    "click",
+    "button",
+    (event, button: HTMLButtonElement) => {
+      const type = button.getAttribute("data-event");
+      if (type) {
+        e.trigger(`button-click-${type}`, button);
+      }
     }
-  });
+  );
 
   // Watch for all submits of <forms>s and fire the appropriate events.
-  delegate(document.body, "submit", "form", event => {
-    const form = event.target;
+  delegate(document.body, "submit", "form", (event, form: HTMLFormElement) => {
     const type = form.getAttribute("data-event");
     if (type) {
       event.preventDefault();
@@ -118,7 +133,7 @@ async function doPoll() {
       if (favaAPI.favaOptions["auto-reload"]) {
         router.reload();
       } else {
-        select("#reload-page").classList.remove("hidden");
+        select("#reload-page")!.classList.remove("hidden");
         e.trigger("file-modified");
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
@@ -131,7 +146,7 @@ async function doPoll() {
 }
 
 ready().then(() => {
-  Object.assign(favaAPI, JSON.parse(select("#ledger-data").innerHTML));
+  Object.assign(favaAPI, favaAPIValidator(getScriptTagJSON("#ledger-data")));
   router.init();
   e.trigger("page-init");
   e.trigger("page-loaded");

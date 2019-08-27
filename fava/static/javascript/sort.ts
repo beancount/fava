@@ -33,15 +33,15 @@ function getValue(el: HTMLElement) {
   return el.getAttribute("data-sort-value") || el.textContent || el.innerText;
 }
 
-function sortElements(
+function sortElements<T extends Element, C extends HTMLElement>(
   parent: Element,
-  elements: Element[],
-  selector: (e: Element) => HTMLElement,
+  elements: T[],
+  selector: (e: T) => C,
   order: SortOrder,
-  type: string
+  type: string | null
 ) {
   const sorter = type === "num" ? numSorter : stringSorter;
-  function sortFunction(a: Element, b: Element) {
+  function sortFunction(a: T, b: T) {
     return (
       (order === "asc" ? 1 : -1) *
       sorter(getValue(selector(a)), getValue(selector(b)))
@@ -57,7 +57,9 @@ function sortElements(
 
 function getSortOrder(headerElement: Element): SortOrder {
   if (!headerElement.getAttribute("data-order")) {
-    return headerElement.getAttribute("data-sort-default") || "asc";
+    return headerElement.getAttribute("data-sort-default") === "desc"
+      ? "desc"
+      : "asc";
   }
   return headerElement.getAttribute("data-order") === "asc" ? "desc" : "asc";
 }
@@ -68,8 +70,8 @@ function sortableJournal(ol: HTMLOListElement) {
   const headers = selectAll("span[data-sort]", head);
 
   head.addEventListener("click", event => {
-    const header = event.target.closest("span");
-    if (!header.getAttribute("data-sort")) {
+    const header = (event.target as HTMLElement).closest("span");
+    if (!header || !header.getAttribute("data-sort")) {
       return;
     }
     const order = getSortOrder(header);
@@ -85,8 +87,8 @@ function sortableJournal(ol: HTMLOListElement) {
     sortElements(
       ol,
       [].slice.call(ol.children, 1),
-      function selector(li: HTMLLIElement) {
-        return li.querySelector(`.${headerClass}`);
+      function selector(li: HTMLLIElement): HTMLElement {
+        return li.querySelector(`.${headerClass}`) as HTMLElement;
       },
       order,
       type
@@ -101,8 +103,8 @@ function sortableTable(table: HTMLTableElement) {
   const headers = selectAll("th[data-sort]", head);
 
   head.addEventListener("click", event => {
-    const header = event.target.closest("th");
-    if (!header.getAttribute("data-sort")) {
+    const header = (event.target as HTMLElement).closest("th");
+    if (!header || !header.getAttribute("data-sort")) {
       return;
     }
     const order = getSortOrder(header);
@@ -117,9 +119,9 @@ function sortableTable(table: HTMLTableElement) {
 
     sortElements(
       body,
-      selectAll("tr", body),
-      function selector(tr: HTMLTableRowElement) {
-        return tr.cells.item(index);
+      selectAll("tr", body) as HTMLTableRowElement[],
+      function selector(tr: HTMLTableRowElement): HTMLTableDataCellElement {
+        return tr.cells.item(index)!;
       },
       order,
       type

@@ -3,6 +3,7 @@
 // Fava intercepts all clicks on links and will in most cases asynchronously
 // load the content of the page and replace the <article> contents with them.
 
+import { Writable } from "svelte/store";
 import { select, selectAll, delegate, fetch, handleText } from "./helpers";
 import e from "./events";
 import { notify } from "./notifications";
@@ -129,44 +130,48 @@ class Router {
    *  - the link has a `data-remote` attribute.
    */
   takeOverLinks() {
-    delegate(window.document, "click", "a", (event: MouseEvent) => {
-      const link = event.target.closest("a");
-      if (
-        link.getAttribute("href").charAt(0) === "#" ||
-        link.host !== window.location.host ||
-        link.hasAttribute("data-remote") ||
-        link.protocol.indexOf("http") !== 0 ||
-        event.defaultPrevented
-      ) {
-        return;
-      }
-      // update sidebar links
-      if (link.closest("aside")) {
-        const newURL = new URL(link.href);
-        const oldParams = new URL(window.location.href).searchParams;
-        for (const name of urlSyncedParams) {
-          const value = oldParams.get(name);
-          if (value) {
-            newURL.searchParams.set(name, value);
-          } else {
-            newURL.searchParams.delete(name);
-          }
+    delegate(
+      document,
+      "click",
+      "a",
+      (event: MouseEvent, link: HTMLAnchorElement) => {
+        if (
+          (link.getAttribute("href") || "").charAt(0) === "#" ||
+          link.host !== window.location.host ||
+          link.hasAttribute("data-remote") ||
+          link.protocol.indexOf("http") !== 0 ||
+          event.defaultPrevented
+        ) {
+          return;
         }
-        link.href = newURL.toString();
-      }
-      if (
-        event.button !== 0 ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey
-      ) {
-        return;
-      }
+        // update sidebar links
+        if (link.closest("aside")) {
+          const newURL = new URL(link.href);
+          const oldParams = new URL(window.location.href).searchParams;
+          for (const name of urlSyncedParams) {
+            const value = oldParams.get(name);
+            if (value) {
+              newURL.searchParams.set(name, value);
+            } else {
+              newURL.searchParams.delete(name);
+            }
+          }
+          link.href = newURL.toString();
+        }
+        if (
+          event.button !== 0 ||
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey
+        ) {
+          return;
+        }
 
-      event.preventDefault();
-      this.navigate(link.href);
-    });
+        event.preventDefault();
+        this.navigate(link.href);
+      }
+    );
   }
 
   /*
@@ -181,6 +186,7 @@ const router = new Router();
 export default router;
 
 e.on("form-submit-query", (form: HTMLFormElement) => {
+  // @ts-ignore
   const queryString = form.elements.query_string.value.trim();
   if (queryString === "") {
     return;
@@ -198,14 +204,14 @@ e.on("form-submit-query", (form: HTMLFormElement) => {
       selectAll(".queryresults-wrapper").forEach(element => {
         element.classList.add("toggled");
       });
-      select("#query-container").insertAdjacentHTML("afterbegin", data);
+      select("#query-container")!.insertAdjacentHTML("afterbegin", data);
       initSort();
       window.history.replaceState(null, "", pageURL);
     });
 });
 
 e.on("page-init", () => {
-  select("#reload-page").addEventListener("click", () => {
+  select("#reload-page")!.addEventListener("click", () => {
     router.reload();
   });
 
@@ -218,8 +224,8 @@ e.on("page-init", () => {
   });
   filters.subscribe(fs => {
     const newURL = new URL(window.location.href);
-    for (const name of ["time", "filter", "account"]) {
-      const value = fs[name];
+    for (const name of Object.keys(fs)) {
+      const value = fs[name as keyof typeof fs];
       if (value) {
         newURL.searchParams.set(name, value);
       } else {
@@ -232,19 +238,26 @@ e.on("page-init", () => {
     }
   });
 
-  // Set initial values from URL and update URL on store changes
-  const urlParams = [
-    [interval, "interval", favaAPI.favaOptions.interval, true],
-    [conversion, "conversion", "at_cost", true],
-    [showCharts, "charts", true, false],
-  ];
-  for (const [store, name, defaultValue, shouldLoad] of urlParams) {
-    store.set(params.get(name) || defaultValue);
+  function syncStoreValueToUrl<T extends boolean | string>(
+    store: Writable<T>,
+    name: string,
+    defaultValue: T,
+    shouldLoad: boolean
+  ): void {
+    let value: T;
+    if (typeof defaultValue === "boolean") {
+      // @ts-ignore
+      value = params.get(name) !== "false" && defaultValue;
+    } else {
+      // @ts-ignore
+      value = params.get(name) || defaultValue;
+    }
+    store.set(value);
 
-    store.subscribe((value: string) => {
+    store.subscribe((val: T) => {
       const newURL = new URL(window.location.href);
-      newURL.searchParams.set(name, value);
-      if (value === defaultValue) {
+      newURL.searchParams.set(name, val.toString());
+      if (val === defaultValue) {
         newURL.searchParams.delete(name);
       }
       const url = newURL.toString();
@@ -253,4 +266,9 @@ e.on("page-init", () => {
       }
     });
   }
+
+  // Set initial values from URL and update URL on store changes
+  syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval, true);
+  syncStoreValueToUrl(conversion, "conversion", "at_cost", true);
+  syncStoreValueToUrl(showCharts, "charts", true, false);
 });

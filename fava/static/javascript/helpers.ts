@@ -1,3 +1,4 @@
+import { record, string, Validator } from "./validation";
 import { favaAPI } from "./stores";
 
 // Select a single element.
@@ -10,40 +11,54 @@ export function selectAll(expr: string, con: Document | Element = document) {
   return Array.from(con.querySelectorAll(expr));
 }
 
+export function getScriptTagJSON(selector: string): unknown {
+  const el = select(selector);
+  if (!el) {
+    return null;
+  }
+  return JSON.parse(el.innerHTML);
+}
+
 let translations: Record<string, string>;
+const transactionsValidator: Validator<Record<string, string>> = record(string);
+
 /*
  * Translate the given string.
  */
-export function _(string: string) {
+export function _(text: string): string {
   if (translations === undefined) {
-    translations = JSON.parse(select("#translations").innerHTML);
+    translations = transactionsValidator(getScriptTagJSON("#translations"));
   }
-  return translations[string] || string;
+  return translations[text] || text;
 }
 
 // Execute the callback of the event of given type is fired on something
 // matching selector.
-export function delegate(
-  element: Element | Document,
+export function delegate<T extends Event, C extends Element>(
+  element: Element | Document | null,
   type: string,
   selector: string,
-  callback: Function
+  callback: (e: T, c: C) => void
 ) {
   if (!element) return;
   element.addEventListener(type, event => {
     if (!event.target) return;
-    const closest = event.target.closest(selector);
+    const closest = (event.target as HTMLElement).closest(selector);
     if (closest) {
-      callback(event, closest);
+      callback(event as T, closest as C);
     }
   });
 }
 
 // Bind an event to element, only run the callback once.
-export function once(element: HTMLElement, event: string, callback: Function) {
-  function runOnce(...args) {
+export function once(
+  element: EventTarget,
+  event: string,
+  callback: (ev: Event) => void
+) {
+  function runOnce(ev: Event) {
     element.removeEventListener(event, runOnce);
-    callback.apply(element, args);
+    callback.apply(element, [ev]);
   }
 
   element.addEventListener(event, runOnce);
@@ -61,7 +76,7 @@ export function ready() {
 
 // Handles JSON content for a Promise returned by fetch, also handling an HTTP
 // error status.
-export function handleJSON(response: Response) {
+export function handleJSON(response: Response): Promise<unknown> {
   if (!response.ok) {
     return Promise.reject(response.statusText);
   }
@@ -83,7 +98,7 @@ export function handleText(response: Response): Promise<string> {
 }
 
 export function fetch(input: string, init = {}) {
-  const defaults = {
+  const defaults: RequestInit = {
     credentials: "same-origin",
   };
   return window.fetch(input, Object.assign(defaults, init));
@@ -94,10 +109,10 @@ export function fetch(input: string, init = {}) {
  * @param endpoint - the endpoint to fetch
  * @param params - a string to append as params or an object.
  */
-export function fetchAPI(
+export async function fetchAPI(
   endpoint: string,
   params: string | Record<string, string> | undefined = undefined
-) {
+): Promise<unknown> {
   let url = `${favaAPI.baseURL}api/${endpoint}/`;
   if (params) {
     if (typeof params === "string") {
@@ -110,9 +125,8 @@ export function fetchAPI(
       url += `?${urlParams.toString()}`;
     }
   }
-  return fetch(url)
-    .then(handleJSON)
-    .then(responseData => responseData.data);
+  const responseData = await fetch(url).then(handleJSON);
+  return responseData.data;
 }
 
 // Fuzzy match a pattern against a string.

@@ -12,9 +12,9 @@ class Events {
   }
 
   once(event: string, callback: Function) {
-    const runOnce = (...args) => {
+    const runOnce = (arg: any) => {
       this.remove(event, runOnce);
-      callback(...args);
+      callback(arg);
     };
 
     this.on(event, runOnce);
@@ -25,12 +25,12 @@ class Events {
     this.events[event] = this.events[event].filter(c => c !== callback);
   }
 
-  trigger(event: string, ...args) {
+  trigger(event: string, arg?: any) {
     if (!this.events[event]) {
       return;
     }
     this.events[event].forEach(callback => {
-      callback(...args);
+      callback(arg);
     });
   }
 }

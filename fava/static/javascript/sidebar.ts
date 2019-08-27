@@ -2,6 +2,8 @@
 // toggling the sidebar on mobile.
 
 import { select, selectAll, fetchAPI } from "./helpers";
+import { favaAPI } from "./stores";
+import { number } from "./validation";
 import e from "./events";
 
 function initSidebar() {
@@ -12,15 +14,14 @@ function initSidebar() {
       el.classList.add("selected");
     }
   });
-  const errors = select("#data-error-count").value;
-  select("aside li.error").classList.toggle("hidden", errors === "0");
-  select("aside li.error span").innerHTML = errors;
+  select("aside li.error")!.classList.toggle("hidden", favaAPI.errors === 0);
+  select("aside li.error span")!.innerHTML = `${favaAPI.errors}`;
 }
 
 e.on("page-init", () => {
-  const asideButton = select("#aside-button");
+  const asideButton = select("#aside-button")!;
   asideButton.addEventListener("click", () => {
-    select("aside").classList.toggle("active");
+    select("aside")!.classList.toggle("active");
     asideButton.classList.toggle("active");
   });
 });
@@ -29,9 +30,8 @@ e.on("page-loaded", () => {
   initSidebar();
 });
 
-e.on("file-modified", () => {
-  fetchAPI("errors").then(errors => {
-    select("#data-error-count").value = errors;
-    initSidebar();
-  });
+e.on("file-modified", async () => {
+  const errors = await fetchAPI("errors");
+  favaAPI.errors = number(errors);
+  initSidebar();
 });

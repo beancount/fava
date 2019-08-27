@@ -3,9 +3,9 @@
 // The charts heavily use d3 libraries.
 
 import { extent, max, merge, min } from "d3-array";
-import { axisLeft, axisBottom } from "d3-axis";
+import { axisLeft, axisBottom, Axis } from "d3-axis";
 import { hcl } from "d3-color";
-import { hierarchy, partition, treemap } from "d3-hierarchy";
+import { hierarchy, partition, treemap, TreemapLayout } from "d3-hierarchy";
 import {
   scaleBand,
   scaleLinear,
@@ -13,8 +13,11 @@ import {
   scalePoint,
   scaleSqrt,
   scaleUtc,
+  ScaleLinear,
+  ScaleTime,
+  ScalePoint,
 } from "d3-scale";
-import { event, select, clientPoint } from "d3-selection";
+import { event, select, clientPoint, Selection } from "d3-selection";
 import { arc, line } from "d3-shape";
 import { quadtree } from "d3-quadtree";
 import "d3-transition";
@@ -36,7 +39,7 @@ import {
  * Uses the HCL color space in an attempt to generate colours that are
  * to be perceived to be of the same brightness.
  */
-function hclColorRange(count, chroma = 45, lightness = 70) {
+function hclColorRange(count: number, chroma = 45, lightness = 70) {
   const offset = 270;
   const delta = 360 / count;
   const colors = [...Array(count).keys()].map(index => {
@@ -59,7 +62,9 @@ const scales = {
   scatterplot: scaleOrdinal(colors10),
 };
 
-let tooltip;
+const tooltip = select(document.body)
+  .append("div")
+  .attr("class", "tooltip");
 
 const NO_MARGINS = {
   top: 0,
@@ -68,7 +73,7 @@ const NO_MARGINS = {
   left: 0,
 };
 
-export function setTimeFilter(date) {
+export function setTimeFilter(date: Date) {
   filters.update(fs => {
     fs.time = timeFilterDateFormat[get(interval)](date);
     return fs;
@@ -97,8 +102,10 @@ function makeAccountLink(selection) {
   });
 }
 
+type SVGSelection = Selection<SVGElement, undefined, Element, undefined>;
+
 // Add a tooltip to the given selection.
-function addTooltip(selection, tooltipText) {
+function addTooltip(selection: SVGSelection, tooltipText: Function) {
   selection
     .on("mouseenter", d => {
       tooltip.style("opacity", 1).html(tooltipText(d));
@@ -128,7 +135,21 @@ function addTooltip(selection, tooltipText) {
 //  - draw(data): Draw the chart for the given data.
 //  - update(): Update the chart (after resize, toggling, etc)
 class BaseChart {
-  constructor(svg) {
+  svg: SVGSelection;
+
+  selections: Record<string, any>;
+
+  margin: { top: number; right: number; left: number; bottom: number };
+
+  height: number;
+
+  outerHeight?: number;
+
+  width: number;
+
+  outerWidth?: number;
+
+  constructor(svg: SVGSelection) {
     this.svg = svg.attr("class", "").html("");
     this.selections = {};
     this.margin = {
@@ -137,30 +158,36 @@ class BaseChart {
       bottom: 30,
       left: 40,
     };
+    this.height = 300;
+    this.width = 300;
   }
 
-  setHeight(d) {
+  setHeight(d: number) {
     this.svg.attr("height", d);
     this.outerHeight = d;
     this.height = d - this.margin.top - this.margin.bottom;
     return this;
   }
 
-  setWidth(d) {
+  setWidth(d: number) {
     this.svg.attr("width", d);
     this.outerWidth = d;
     this.width = d - this.margin.left - this.margin.right;
     return this;
   }
 
-  set(property, value) {
+  set(property: string, value) {
     this[property] = value;
     return this;
   }
 }
 
 class TreeMapChart extends BaseChart {
-  constructor(svg) {
+  treemap: TreemapLayout<any>;
+
+  canvas: SVGSelection;
+
+  constructor(svg: SVGSelection) {
     super(svg);
     this.treemap = treemap().paddingInner(2);
     this.margin = NO_MARGINS;
@@ -458,7 +485,15 @@ class BarChart extends BaseChart {
 }
 
 class ScatterPlot extends BaseChart {
-  constructor(svg) {
+  x: ScaleTime<number, number>;
+
+  y: ScalePoint<string>;
+
+  xAxis: Axis<any>;
+
+  yAxis: Axis<any>;
+
+  constructor(svg: SVGSelection) {
     super(svg);
     this.margin.left = 70;
 
@@ -545,7 +580,11 @@ class ScatterPlot extends BaseChart {
 }
 
 class LineChart extends BaseChart {
-  constructor(svg) {
+  x: ScaleTime<number, number>;
+
+  y: ScaleLinear<number, number>;
+
+  constructor(svg: SVGSelection) {
     super(svg);
 
     this.x = scaleUtc();
@@ -662,13 +701,18 @@ class LineChart extends BaseChart {
 }
 
 class SunburstChartContainer extends BaseChart {
-  constructor(svg) {
+  currencies: string[];
+
+  sunbursts: SunburstChart[];
+
+  constructor(svg: SVGSelection) {
     super(svg);
 
     this.svg.attr("class", "sunburst");
     this.sunbursts = [];
     this.canvases = [];
-    this.margins = NO_MARGINS;
+    this.margin = NO_MARGINS;
+    this.currencies = [];
 
     this.setHeight(500);
   }
@@ -718,11 +762,14 @@ class SunburstChartContainer extends BaseChart {
 }
 
 class HierarchyContainer extends BaseChart {
-  constructor(svg) {
+  currencies: string[];
+
+  constructor(svg: SVGSelection) {
     super(svg);
     this.canvas = this.svg.append("g");
     this.has_mode_setting = true;
     this.margin = NO_MARGINS;
+    this.currencies = [];
   }
 
   draw(data) {
@@ -777,7 +824,7 @@ class HierarchyContainer extends BaseChart {
 
 // Get the list of operating currencies, adding in the current conversion
 // currency.
-function getOperatingCurrencies(conversion) {
+function getOperatingCurrencies(conversion: string): string[] {
   if (
     !conversion ||
     ["at_cost", "at_value", "units"].includes(conversion) ||
@@ -789,8 +836,6 @@ function getOperatingCurrencies(conversion) {
 }
 
 e.on("page-init", () => {
-  tooltip = select("#tooltip");
-
   const { accounts, options } = favaAPI;
   scales.treemap.domain(accounts);
   scales.sunburst.domain(accounts);
@@ -807,7 +852,11 @@ e.on("page-loaded", () => {
 });
 
 // eslint-disable-next-line
-export function parseChartData(chartData, conversion, interval) {
+export function parseChartData(
+  chartData,
+  conversion: string,
+  intervalStoreValue: string
+) {
   const result = [];
   chartData.forEach(chart => {
     let renderer;
@@ -869,7 +918,7 @@ export function parseChartData(chartData, conversion, interval) {
         break;
       }
       case "bar": {
-        const currentDateFormat = dateFormat[interval];
+        const currentDateFormat = dateFormat[intervalStoreValue];
         data = chart.series.map(d => ({
           values: operatingCurrencies.map(name => ({
             name,

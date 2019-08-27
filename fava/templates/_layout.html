@@ -47,24 +47,24 @@
       {% include active_page + '.html' %}
       {% endif %}
       {% endblock %}
-      <input type="hidden" id="data-document-title" value="{{ '{} - {}'.format(short_title, ledger.options.title) }}">
-      <input type="hidden" id="data-error-count" value="{{ ledger.errors|length }}">
       <template id="export-overlay-content">
         <h3>{{ _('Export') }}:</h3>
         <a href="{{ url_for('download_journal') }}" data-remote>{{ _('Download currently filtered entries as a Beancount file') }}</a>
       </template>
-      <script type="text/html" id="data-page-title">{{ page_title }}</script>
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
       <script type="application/json" id="ledger-data">{{ {
         'accountURL': url_for('account', name='REPLACEME'),
+        'accounts': ledger.attributes.accounts,
+        'accounts': ledger.attributes.accounts,
         'baseURL': url_for('index'),
-        'accounts': ledger.attributes.accounts,
-        'options': ledger.options,
-        'incognito': config.get('INCOGNITO', False),
-        'favaOptions': ledger.fava_options,
-        'accounts': ledger.attributes.accounts,
         'currencies': ledger.attributes.currencies,
+        'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
+        'errors': ledger.errors|length,
+        'favaOptions': ledger.fava_options,
+        'incognito': config.get('INCOGNITO', False),
         'links': ledger.attributes.links,
+        'options': ledger.options,
+        'pageTitle': page_title,
         'payees': ledger.attributes.payees,
         'tags': ledger.attributes.tags,
         'years': ledger.attributes.years,
@@ -73,7 +73,6 @@
     </article>
     <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
     <ul id="notifications" class="notifications"></ul>
-    <div id="tooltip" class="tooltip"></div>
   </body>
 </html>
 {%- endif %}
