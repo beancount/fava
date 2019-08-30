@@ -4,6 +4,10 @@ export interface Validator<T> {
   (json: unknown): T;
 }
 
+export function unknown(json: unknown): unknown {
+  return json;
+}
+
 export function string(json: unknown): string {
   if (typeof json === "string") {
     return json;
@@ -23,6 +27,13 @@ export function number(json: unknown): number {
     return json;
   }
   throw new ValidationError(`Expected a number: ${json}`);
+}
+
+export function date(json: unknown): Date {
+  if (typeof json === "string" || json instanceof Date) {
+    return new Date(json);
+  }
+  throw new ValidationError(`Expected a date: ${json}`);
 }
 
 export function constant<T>(value: T): Validator<T> {
@@ -56,6 +67,12 @@ export function optional<T>(validator: Validator<T>): Validator<T | undefined> {
   };
 }
 
+export function lazy<T>(func: () => Validator<T>): Validator<T> {
+  return (json: unknown) => {
+    return func()(json);
+  };
+}
+
 export function array<T>(validator: Validator<T>): Validator<T[]> {
   return (json: unknown) => {
     if (Array.isArray(json)) {
@@ -66,6 +83,22 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
       return result;
     }
     throw new ValidationError(`Expected an array: ${json}`);
+  };
+}
+
+export function tuple<A, B>(
+  decoders: [Validator<A>, Validator<B>]
+): Validator<[A, B]> {
+  return (json: unknown) => {
+    if (Array.isArray(json) && json.length === 2) {
+      const result = [];
+
+      for (let i = 0; i < decoders.length; i += 1) {
+        result[i] = decoders[i](json[i]);
+      }
+      return result as [A, B];
+    }
+    throw new ValidationError(`Expected a tuple: ${json}`);
   };
 }
 

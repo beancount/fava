@@ -1,12 +1,10 @@
-import { writable } from "svelte/store";
+import { writable, Writable } from "svelte/store";
 
 import {
-  Validator,
   object,
   array,
   string,
   boolean,
-  record,
   number,
   union,
   constant,
@@ -15,7 +13,8 @@ import {
 export const urlHash = writable("");
 
 export const conversion = writable("");
-export const interval = writable("");
+type Interval = "year" | "quarter" | "month" | "week" | "day";
+export const interval: Writable<Interval> = writable("month");
 export const showCharts = writable(true);
 
 export const activeChart = writable({});

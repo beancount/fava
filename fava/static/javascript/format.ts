@@ -4,7 +4,7 @@ import { format } from "d3-format";
 import { utcFormat } from "d3-time-format";
 
 import e from "./events";
-import { favaAPI } from "./stores";
+import { favaAPI, interval } from "./stores";
 
 let formatter: (num: number) => string;
 let incognito: (num: string) => string;
@@ -57,3 +57,15 @@ export const timeFilterDateFormat = {
   week: utcFormat("%Y-W%W"),
   day: utcFormat("%Y-%m-%d"),
 };
+
+// eslint-disable-next-line import/no-mutable-exports
+export let currentDateFormat = dateFormat.month;
+interval.subscribe(intervalValue => {
+  currentDateFormat = dateFormat[intervalValue];
+});
+
+// eslint-disable-next-line import/no-mutable-exports
+export let currentTimeFilterDateFormat = timeFilterDateFormat.month;
+interval.subscribe(intervalValue => {
+  currentTimeFilterDateFormat = timeFilterDateFormat[intervalValue];
+});

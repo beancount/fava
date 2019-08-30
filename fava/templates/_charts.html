@@ -4,8 +4,10 @@
 {% do chart_data.append({
 'type': 'hierarchy',
 'label': account_name if not label else label,
-'modifier': ledger.get_account_sign(account_name),
-'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
+'data': {
+  'modifier': ledger.get_account_sign(account_name),
+  'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
+},
 }) %}
 {% endmacro %}
 
@@ -13,7 +15,7 @@
 {% do chart_data.append({
 'type': 'bar',
 'label': account_name if not label else label,
-'series': ledger.charts.interval_totals(interval, account_name),
+'data': ledger.charts.interval_totals(interval, account_name),
 }) %}
 {% endmacro %}
 
@@ -21,7 +23,7 @@
 {% do chart_data.append({
 'type': 'scatterplot',
 'label': _('Events') if not event_type else _('Event: {}').format(event_type),
-'events': ledger.charts.events(event_type),
+'data': ledger.charts.events(event_type),
 }) %}
 {% endmacro %}
 
@@ -46,9 +48,11 @@
 {% do chart_data.append({
 'type': 'commodities',
 'label': '{0[0]} / {0[1]}'.format(pair),
-'prices': ledger.prices(pair[0], pair[1]),
-'base': pair[0],
-'quote': pair[1],
+'data': {
+  'prices': ledger.prices(pair[0], pair[1]),
+  'base': pair[0],
+  'quote': pair[1],
+},
 }) %}
 {% endfor %}
 {% endmacro %}

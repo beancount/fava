@@ -249,7 +249,7 @@ const sourceEditorOptions = {
 
 let activeEditor: Editor | null = null;
 // Init source editor.
-export default function initSourceEditor(name) {
+export default function initSourceEditor(name: string) {
   sourceEditorOptions.rulers = [];
   if (favaAPI.favaOptions["currency-column"]) {
     sourceEditorOptions.rulers.push({

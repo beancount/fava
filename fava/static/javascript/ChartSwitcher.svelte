@@ -1,7 +1,6 @@
 <script>
   import { onMount, tick } from "svelte";
 
-  import { select } from "d3-selection";
   import { _ } from "./helpers";
   import { parseChartData } from "./charts";
   import {
@@ -46,7 +45,7 @@
     };
     await tick();
     renderedChart = chart
-      .renderer(select(svg))
+      .renderer(svg)
       .setWidth(chartWidth)
       .set("mode", $chartMode)
       .set("currency", $chartCurrency)
@@ -68,10 +67,7 @@
   $: hasModeSetting = renderedChart && renderedChart.has_mode_setting;
 
   onMount(() => {
-    const chartData = JSON.parse(
-      document.querySelector("#chart-data").innerHTML
-    );
-    charts = parseChartData(chartData, $conversion, $interval);
+    charts = parseChartData();
     if (charts.length) {
       const active = charts[$activeChart.index];
       if (active && active.name === $activeChart.name) {
