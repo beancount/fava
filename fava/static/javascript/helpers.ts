@@ -1,12 +1,16 @@
-import { record, string, Validator } from "./validation";
+import { object, record, string, unknown, Validator } from "./validation";
 import { favaAPI } from "./stores";
 
-// Select a single element.
+/**
+ * Select a single element.
+ */
 export function select(expr: string, con: Document | Element = document) {
   return con.querySelector(expr);
 }
 
-// Select multiple elements (and convert NodeList to Array).
+/**
+ * Select multiple elements (and convert NodeList to Array).
+ */
 export function selectAll(expr: string, con: Document | Element = document) {
   return Array.from(con.querySelectorAll(expr));
 }
@@ -22,7 +26,7 @@ export function getScriptTagJSON(selector: string): unknown {
 let translations: Record<string, string>;
 const transactionsValidator: Validator<Record<string, string>> = record(string);
 
-/*
+/**
  * Translate the given string.
  */
 export function _(text: string): string {
@@ -32,8 +36,10 @@ export function _(text: string): string {
   return translations[text] || text;
 }
 
-// Execute the callback of the event of given type is fired on something
-// matching selector.
+/**
+ * Execute the callback of the event of given type is fired on something
+ * matching selector.
+ */
 export function delegate<T extends Event, C extends Element>(
   element: Element | Document | null,
   type: string,
@@ -50,7 +56,9 @@ export function delegate<T extends Event, C extends Element>(
   });
 }
 
-// Bind an event to element, only run the callback once.
+/**
+ * Bind an event to element, only run the callback once.
+ */
 export function once(
   element: EventTarget,
   event: string,
@@ -74,8 +82,10 @@ export function ready() {
   });
 }
 
-// Handles JSON content for a Promise returned by fetch, also handling an HTTP
-// error status.
+/**
+ * Handles JSON content for a Promise returned by fetch, also handling an HTTP
+ * error status.
+ */
 export function handleJSON(response: Response): Promise<unknown> {
   if (!response.ok) {
     return Promise.reject(response.statusText);
@@ -88,8 +98,10 @@ export function handleJSON(response: Response): Promise<unknown> {
   });
 }
 
-// Handles text content for a Promise returned by fetch, also handling an HTTP
-// error status.
+/**
+ * Handles text content for a Promise returned by fetch, also handling an HTTP
+ * error status.
+ */
 export function handleText(response: Response): Promise<string> {
   if (!response.ok) {
     return Promise.reject(response.statusText);
@@ -103,6 +115,8 @@ export function fetch(input: string, init = {}) {
   };
   return window.fetch(input, Object.assign(defaults, init));
 }
+
+const validateAPIResponse = object({ data: unknown });
 
 /**
  * Fetch an API endpoint and convert the JSON data to an object.
@@ -126,14 +140,16 @@ export async function fetchAPI(
     }
   }
   const responseData = await fetch(url).then(handleJSON);
-  return responseData.data;
+  return validateAPIResponse(responseData).data;
 }
 
-// Fuzzy match a pattern against a string.
-//
-// Returns true if all characters of `pattern` can be found in order in
-// `string`. For lowercase characters in `pattern` match both lower and upper
-// case, for uppercase only an exact match counts.
+/**
+ * Fuzzy match a pattern against a string.
+ *
+ * Returns true if all characters of `pattern` can be found in order in
+ * `string`. For lowercase characters in `pattern` match both lower and upper
+ * case, for uppercase only an exact match counts.
+ */
 export function fuzzytest(pattern: string, text: string) {
   let pindex = 0;
   for (let index = 0; index < text.length; index += 1) {
@@ -146,10 +162,12 @@ export function fuzzytest(pattern: string, text: string) {
   return pindex === pattern.length;
 }
 
-// Wrap fuzzy matched characters.
-//
-// Wrap all occurences of characters of `pattern` (in order) in `string` in
-// <span> tags.
+/**
+ * Wrap fuzzy matched characters.
+ *
+ * Wrap all occurences of characters of `pattern` (in order) in `string` in
+ * <span> tags.
+ */
 export function fuzzywrap(pattern: string, text: string) {
   let pindex = 0;
   const result = [];

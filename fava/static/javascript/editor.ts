@@ -1,4 +1,4 @@
-import CodeMirror, { Editor, EditorFromTextArea } from "codemirror";
+import CodeMirror, { Editor, EditorFromTextArea, Position } from "codemirror";
 import Mousetrap from "mousetrap";
 
 import "codemirror/addon/mode/simple";
@@ -43,8 +43,54 @@ import router from "./router";
 import { notify } from "./notifications";
 import { closeOverlay, favaAPI } from "./stores";
 
+interface SearchCursor {
+  findNext(): boolean;
+  pos: { from: Position; to: Position };
+}
+
+declare module "codemirror" {
+  interface EditorConfiguration {
+    // defined in the edit/trailingspace addon
+    showTrailingSpace?: boolean;
+    // defined in the display/rulers addon
+    rulers?: {
+      column: number;
+      lineStyle: string;
+    }[];
+  }
+  interface Editor {
+    // defined in the comment/comment addon
+    uncomment(
+      from: Position,
+      to: Position,
+      options: { lineComment: string }
+    ): boolean;
+    // defined in the comment/comment addon
+    lineComment(
+      from: Position,
+      to: Position,
+      options: { lineComment: string }
+    ): boolean;
+    // defined in the comment/comment addon
+    getSearchCursor(query: string): SearchCursor;
+  }
+  interface CommandActions {
+    favaSave(editor: EditorFromTextArea): void;
+    favaFormat(editor: Editor): void;
+    favaToggleComment(editor: Editor): void;
+    favaCenterCursor(editor: Editor): void;
+    favaJumpToMarker(editor: Editor): void;
+    // defined in the hint/show-hint addon
+    autocomplete(
+      editor: Editor,
+      getHints: undefined,
+      options: { completeSingle: boolean }
+    ): void;
+  }
+}
+
 // This handles saving in both the main and the overlaid entry editors.
-CodeMirror.commands.favaSave = (cm: Editor) => {
+CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
   const button = cm.getOption("favaSaveButton");
 
   const buttonText = button.textContent;
@@ -166,11 +212,13 @@ function ignoreKey(key: string) {
 
 // Initialize the query editor
 function initQueryEditor() {
-  const queryForm = select("#query-form");
+  const queryForm = select("#query-form") as HTMLFormElement;
   if (!queryForm) {
     return;
   }
 
+  // @ts-ignore
+  const queryStringEl: HTMLTextAreaElement = queryForm.elements.query_string;
   const queryOptions = {
     mode: "beancount-query",
     extraKeys: {
@@ -183,45 +231,51 @@ function initQueryEditor() {
         e.trigger("form-submit-query", queryForm);
       },
     },
-    placeholder: queryForm.elements.query_string.getAttribute("placeholder"),
+    placeholder: queryStringEl.getAttribute("placeholder") || undefined,
   };
-  const editor = CodeMirror.fromTextArea(
-    queryForm.elements.query_string,
-    queryOptions
-  );
+  const editor = CodeMirror.fromTextArea(queryStringEl, queryOptions);
 
   editor.on("keyup", (cm: Editor, event: Event) => {
     if (
       !cm.state.completionActive &&
       !ignoreKey((event as KeyboardEvent).key)
     ) {
-      CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+      CodeMirror.commands.autocomplete(cm, undefined, {
+        completeSingle: false,
+      });
     }
   });
 
-  delegate(select("#query-container"), "click", ".toggle-box-header", event => {
-    const wrapper = event.target.closest(".toggle-box");
-    if (wrapper.classList.contains("inactive")) {
-      editor.setValue(wrapper.querySelector("code").textContent);
-      editor.save();
-      e.trigger("form-submit-query", queryForm);
-      return;
+  delegate(
+    select("#query-container"),
+    "click",
+    ".toggle-box-header",
+    (event, closest: HTMLDivElement) => {
+      const wrapper = closest.closest(".toggle-box");
+      if (!wrapper) return;
+      if (wrapper.classList.contains("inactive")) {
+        const code = wrapper.querySelector("code");
+        editor.setValue(code ? code.textContent || "" : "");
+        editor.save();
+        e.trigger("form-submit-query", queryForm);
+        return;
+      }
+      wrapper.classList.toggle("toggled");
     }
-    wrapper.classList.toggle("toggled");
-  });
+  );
 }
 
 // Initialize read-only editors
 function initReadOnlyEditors() {
-  selectAll(".editor-readonly").forEach(el => {
-    CodeMirror.fromTextArea(el, {
+  selectAll("textarea.editor-readonly").forEach(el => {
+    CodeMirror.fromTextArea(el as HTMLTextAreaElement, {
       mode: "beancount",
       readOnly: true,
     });
   });
 }
 
-const sourceEditorOptions = {
+const sourceEditorOptions: CodeMirror.EditorConfiguration = {
   mode: "beancount",
   indentUnit: 4,
   lineNumbers: true,
@@ -239,7 +293,7 @@ const sourceEditorOptions = {
     "Cmd-Y": "favaToggleComment",
     Tab: (cm: Editor) => {
       if (cm.getDoc().somethingSelected()) {
-        cm.indentSelection("add");
+        cm.execCommand("indentMore");
       } else {
         cm.execCommand("insertSoftTab");
       }
@@ -250,12 +304,13 @@ const sourceEditorOptions = {
 let activeEditor: Editor | null = null;
 // Init source editor.
 export default function initSourceEditor(name: string) {
-  sourceEditorOptions.rulers = [];
   if (favaAPI.favaOptions["currency-column"]) {
-    sourceEditorOptions.rulers.push({
-      column: favaAPI.favaOptions["currency-column"] - 1,
-      lineStyle: "dotted",
-    });
+    sourceEditorOptions.rulers = [
+      {
+        column: favaAPI.favaOptions["currency-column"] - 1,
+        lineStyle: "dotted",
+      },
+    ];
   }
 
   const sourceEditorTextarea = select(name) as HTMLTextAreaElement;
@@ -282,7 +337,9 @@ export default function initSourceEditor(name: string) {
       !cm.state.completionActive &&
       !ignoreKey((event as KeyboardEvent).key)
     ) {
-      CodeMirror.commands.autocomplete(cm, null, { completeSingle: false });
+      CodeMirror.commands.autocomplete(cm, undefined, {
+        completeSingle: false,
+      });
     }
   });
   const line = parseInt(
