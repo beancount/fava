@@ -37,7 +37,7 @@ import "./codemirror/mode-beancount";
 import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
-import { select, selectAll, delegate, fetch, handleJSON } from "./helpers";
+import { select, selectAll, delegate, putAPI } from "./helpers";
 import e from "./events";
 import router from "./router";
 import { notify } from "./notifications";
@@ -97,23 +97,16 @@ CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
   button.disabled = true;
   button.textContent = button.getAttribute("data-progress-content");
 
-  fetch(`${favaAPI.baseURL}api/source/`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      file_path: button.getAttribute("data-filename"),
-      entry_hash: button.getAttribute("data-entry-hash"),
-      source: cm.getValue(),
-      sha256sum: cm.getTextArea().getAttribute("data-sha256sum"),
-    }),
+  putAPI("source", {
+    file_path: button.getAttribute("data-filename"),
+    entry_hash: button.getAttribute("data-entry-hash"),
+    source: cm.getValue(),
+    sha256sum: cm.getTextArea().getAttribute("data-sha256sum"),
   })
-    .then(handleJSON)
     .then(
       data => {
         cm.focus();
-        cm.getTextArea().setAttribute("data-sha256sum", data.sha256sum);
+        cm.getTextArea().setAttribute("data-sha256sum", data);
         e.trigger("file-modified");
         // Reload the page if an entry was changed.
         if (button.getAttribute("data-entry-hash")) {
@@ -132,26 +125,16 @@ CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
 };
 
 CodeMirror.commands.favaFormat = (cm: Editor) => {
-  fetch(`${favaAPI.baseURL}api/format-source/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  putAPI("format_source", { source: cm.getValue() }).then(
+    data => {
+      const scrollPosition = cm.getScrollInfo().top;
+      cm.setValue(data);
+      cm.scrollTo(null, scrollPosition);
     },
-    body: JSON.stringify({
-      source: cm.getValue(),
-    }),
-  })
-    .then(handleJSON)
-    .then(
-      data => {
-        const scrollPosition = cm.getScrollInfo().top;
-        cm.setValue(data.payload);
-        cm.scrollTo(null, scrollPosition);
-      },
-      error => {
-        notify(error, "error");
-      }
-    );
+    error => {
+      notify(error, "error");
+    }
+  );
 };
 
 CodeMirror.commands.favaToggleComment = (cm: Editor) => {
@@ -386,7 +369,7 @@ e.on("page-loaded", () => {
 const leaveMessage =
   "There are unsaved changes. Are you sure you want to leave?";
 
-e.on("navigate", state => {
+e.on("navigate", (state: { interrupt?: boolean }) => {
   if (activeEditor) {
     if (!activeEditor.getDoc().isClean()) {
       const leave = window.confirm(leaveMessage); // eslint-disable-line no-alert

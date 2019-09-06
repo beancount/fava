@@ -38,6 +38,7 @@ export const favaAPIValidator = object({
   links: array(string),
   options: object({
     commodities: array(string),
+    documents: array(string),
     operating_currency: array(string),
   }),
   pageTitle: string,
@@ -64,6 +65,7 @@ export const favaAPI = favaAPIValidator({
   payees: [],
   options: {
     commodities: [],
+    documents: [],
     operating_currency: [],
   },
   tags: [],

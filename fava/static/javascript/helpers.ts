@@ -1,4 +1,4 @@
-import { object, record, string, unknown, Validator } from "./validation";
+import { object, record, string, unknown } from "./validation";
 import { favaAPI } from "./stores";
 
 /**
@@ -24,14 +24,13 @@ export function getScriptTagJSON(selector: string): unknown {
 }
 
 let translations: Record<string, string>;
-const transactionsValidator: Validator<Record<string, string>> = record(string);
 
 /**
  * Translate the given string.
  */
 export function _(text: string): string {
   if (translations === undefined) {
-    translations = transactionsValidator(getScriptTagJSON("#translations"));
+    translations = record(string)(getScriptTagJSON("#translations"));
   }
   return translations[text] || text;
 }
@@ -48,10 +47,16 @@ export function delegate<T extends Event, C extends Element>(
 ) {
   if (!element) return;
   element.addEventListener(type, event => {
-    if (!event.target) return;
-    const closest = (event.target as HTMLElement).closest(selector);
-    if (closest) {
-      callback(event as T, closest as C);
+    let { target } = event;
+    if (!target || !(target instanceof Node)) return;
+    if (!(target instanceof Element)) {
+      target = target.parentNode;
+    }
+    if (target instanceof Element) {
+      const closest = (target as HTMLElement).closest(selector);
+      if (closest) {
+        callback(event as T, closest as C);
+      }
     }
   });
 }
@@ -125,22 +130,46 @@ const validateAPIResponse = object({ data: unknown });
  */
 export async function fetchAPI(
   endpoint: string,
-  params: string | Record<string, string> | undefined = undefined
+  params?: Record<string, string>
 ): Promise<unknown> {
   let url = `${favaAPI.baseURL}api/${endpoint}/`;
   if (params) {
-    if (typeof params === "string") {
-      url += `?${params}`;
-    } else {
-      const urlParams = new URLSearchParams();
-      Object.entries(params).forEach(([key, value]) => {
-        urlParams.set(key, value);
-      });
-      url += `?${urlParams.toString()}`;
-    }
+    const urlParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      urlParams.set(key, value);
+    });
+    url += `?${urlParams.toString()}`;
   }
   const responseData = await fetch(url).then(handleJSON);
   return validateAPIResponse(responseData).data;
+}
+
+const putAPIValidators = {
+  add_entries: string,
+  format_source: string,
+  source: string,
+};
+
+type apiTypes = typeof putAPIValidators;
+
+/**
+ * Fetch an API endpoint and convert the JSON data to an object.
+ * @param endpoint - the endpoint to fetch
+ * @param params - a string to append as params or an object.
+ */
+export async function putAPI<T extends keyof apiTypes>(
+  endpoint: T,
+  body: any
+): Promise<ReturnType<apiTypes[T]>> {
+  const res = await fetch(`${favaAPI.baseURL}api/${endpoint}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  }).then(handleJSON);
+  // @ts-ignore
+  return putAPIValidators[endpoint](res);
 }
 
 /**

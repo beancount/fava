@@ -1,7 +1,6 @@
 import router from "./router";
 import { notify } from "./notifications";
-import { fetch, handleJSON } from "./helpers";
-import { favaAPI } from "./stores";
+import { putAPI } from "./helpers";
 
 export class Posting {
   account: string;
@@ -58,13 +57,9 @@ export class Transaction extends Entry {
 export async function saveEntries(entries: Entry[]) {
   if (!entries.length) return;
   try {
-    const data = await fetch(`${favaAPI.baseURL}api/add-entries/`, {
-      method: "PUT",
-      body: JSON.stringify({ entries }),
-      headers: { "Content-Type": "application/json" },
-    }).then(handleJSON);
+    const data = await putAPI("add_entries", { entries });
     router.reload();
-    notify(data.message);
+    notify(data);
   } catch (error) {
     notify(`Saving failed: ${error}`, "error");
     throw error;

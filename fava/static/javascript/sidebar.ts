@@ -1,5 +1,7 @@
-// This script updates the links and error count in the sidebar as well as
-// toggling the sidebar on mobile.
+/**
+ * This script updates the links and error count in the sidebar as well as
+ * toggling the sidebar on mobile.
+ */
 
 import { select, selectAll, fetchAPI } from "./helpers";
 import { favaAPI } from "./stores";

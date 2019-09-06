@@ -42,7 +42,7 @@ def test_api_add_document(app, test_client, tmpdir):
         print(flask.json.loads(response.get_data(True)))
         assert flask.json.loads(response.get_data(True)) == {
             "success": True,
-            "message": "Uploaded to {}".format(filename),
+            "data": "Uploaded to {}".format(filename),
         }
         assert os.path.isfile(filename)
 
@@ -88,7 +88,7 @@ def test_api_source_put(app, test_client):
     assert result.status_code == 200
     response_data = flask.json.loads(result.get_data(True))
     sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
-    assert response_data == {"success": True, "sha256sum": sha256sum}
+    assert response_data == {"success": True, "data": sha256sum}
 
     # check if the file has been written
     assert open(path, encoding="utf-8").read() == "asdf" + payload
@@ -113,13 +113,13 @@ def test_api_format_source(app, test_client):
     path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
 
-    result = test_client.post(
+    result = test_client.put(
         url,
         data=flask.json.dumps({"source": payload}),
         content_type="application/json",
     )
     data = flask.json.loads(result.get_data(True))
-    assert data == {"payload": align(payload, {}), "success": True}
+    assert data == {"data": align(payload, {}), "success": True}
 
 
 def test_api_format_source_options(app, test_client):
@@ -132,14 +132,14 @@ def test_api_format_source_options(app, test_client):
         old_currency_column = flask.g.ledger.fava_options["currency-column"]
         flask.g.ledger.fava_options["currency-column"] = 90
 
-        result = test_client.post(
+        result = test_client.put(
             url,
             data=flask.json.dumps({"source": payload}),
             content_type="application/json",
         )
         data = flask.json.loads(result.get_data(True))
         assert data == {
-            "payload": align(payload, {"currency-column": 90}),
+            "data": align(payload, {"currency-column": 90}),
             "success": True,
         }
 
@@ -210,7 +210,7 @@ def test_api_add_entries(app, test_client, tmpdir):
         )
         assert flask.json.loads(response.get_data(True)) == {
             "success": True,
-            "message": "Stored 3 entries.",
+            "data": "Stored 3 entries.",
         }
 
         assert (

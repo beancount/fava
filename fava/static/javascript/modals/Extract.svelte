@@ -22,7 +22,10 @@
 
   $: shown = $urlHash.startsWith("extract");
   $: if (shown) {
-    fetchAPI("extract", $urlHash.slice(8)).then(data => {
+    const params = new URLSearchParams($urlHash.slice(8));
+    const filename = params.get("filename");
+    const importer = params.get("importer");
+    fetchAPI("extract", { filename, importer }).then(data => {
       entries = data;
     });
   }

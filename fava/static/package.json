@@ -4,8 +4,8 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' --fix && npm run format",
-    "format": "cd ../../ && prettier '**/*.{css,js,md,svelte,ts}' --check --write --ignore-path .gitignore"
+    "lint": "npm run format && eslint javascript --ext ,.svelte,.ts && stylelint 'css/*.css' --fix && npx tsc",
+    "format": "cd ../../ && prettier '**/*.{css,md,svelte,ts}' --check --write --ignore-path .gitignore"
   },
   "husky": {
     "hooks": {
@@ -17,11 +17,11 @@
       "stylelint --fix",
       "git add"
     ],
-    "*.{css,js,md,svelte,ts}": [
+    "*.{css,md,svelte,ts}": [
       "prettier --write",
       "git add"
     ],
-    "*.{js,svelte,ts}": [
+    "*.{svelte,ts}": [
       "eslint --fix",
       "git add"
     ]
