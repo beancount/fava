@@ -12,14 +12,14 @@ export function string(json: unknown): string {
   if (typeof json === "string") {
     return json;
   }
-  throw new ValidationError(`Expected a string: ${json}`);
+  throw new ValidationError(`Expected a string, got '${json}' instead.`);
 }
 
 export function boolean(json: unknown): boolean {
   if (typeof json === "boolean") {
     return json;
   }
-  throw new ValidationError(`Expected a boolean: ${json}`);
+  throw new ValidationError(`Expected a boolean, got '${json}' instead.`);
 }
 
 export function number(json: unknown): number {

@@ -38,6 +38,8 @@ export default {
   input: "javascript/main.ts",
   output: {
     file: "gen/app.js",
+    name: "fava",
+    sourcemap: true,
     format: "iife",
   },
   plugins: [

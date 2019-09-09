@@ -169,7 +169,7 @@ export async function putAPI<T extends keyof apiTypes>(
     body: JSON.stringify(body),
   }).then(handleJSON);
   // @ts-ignore
-  return putAPIValidators[endpoint](res);
+  return putAPIValidators[endpoint](validateAPIResponse(res).data);
 }
 
 /**

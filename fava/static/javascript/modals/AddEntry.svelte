@@ -21,7 +21,7 @@
 
   async function focus() {
     await tick();
-    entryComponent.focus();
+    if (entryComponent.focus) entryComponent.focus();
   }
 
   async function submitAndNew(event) {
