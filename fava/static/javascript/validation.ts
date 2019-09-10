@@ -26,7 +26,7 @@ export function number(json: unknown): number {
   if (typeof json === "number") {
     return json;
   }
-  throw new ValidationError(`Expected a number: ${json}`);
+  throw new ValidationError(`Expected a number, got '${json}' instead.`);
 }
 
 export function date(json: unknown): Date {
