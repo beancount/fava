@@ -129,7 +129,7 @@ def deserialise(json_entry):
     if json_entry["type"] == "Balance":
         date = util.date.parse_date(json_entry["date"])[0]
         raw_amount = json_entry["amount"]
-        amount = Amount(D(raw_amount["number"]), raw_amount["currency"])
+        amount = Amount(D(str(raw_amount["number"])), raw_amount["currency"])
 
         return data.Balance(
             json_entry["meta"], date, json_entry["account"], amount, None, None
