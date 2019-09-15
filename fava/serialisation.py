@@ -67,6 +67,9 @@ def serialise(entry):
         del ret["links"]
         del ret["tags"]
         ret["postings"] = [serialise(pos) for pos in entry.postings]
+    elif ret["type"] == "Balance":
+        amt = ret["amount"]
+        ret["amount"] = {"number":str(amt.number), "currency":amt.currency}
     return ret
 
 
