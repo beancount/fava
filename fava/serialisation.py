@@ -69,7 +69,7 @@ def serialise(entry):
         ret["postings"] = [serialise(pos) for pos in entry.postings]
     elif ret["type"] == "Balance":
         amt = ret["amount"]
-        ret["amount"] = {"number":str(amt.number), "currency":amt.currency}
+        ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
     return ret
 
 
