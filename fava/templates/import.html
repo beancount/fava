@@ -1,5 +1,3 @@
-{% import 'macros/_account_macros.html' as account_macros with context %}
-
 {% if not ledger.fava_options['import-config'] %}
 <p>
 No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
