@@ -91,7 +91,8 @@ declare module "codemirror" {
 
 // This handles saving in both the main and the overlaid entry editors.
 CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
-  const button = cm.getOption("favaSaveButton");
+  // @ts-ignore
+  const button: HTMLButtonElement = cm.getOption("favaSaveButton");
 
   const buttonText = button.textContent;
   button.disabled = true;
@@ -309,6 +310,7 @@ export default function initSourceEditor(name: string) {
     activeEditor = editor;
   }
   const saveButton = select(`${name}-submit`) as HTMLButtonElement;
+  // @ts-ignore
   editor.setOption("favaSaveButton", saveButton);
 
   editor.on("changes", (cm: Editor) => {
