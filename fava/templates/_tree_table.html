@@ -18,7 +18,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
 {% endmacro %}
 
 {% macro tree(account_node) %}
-<ol class="tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ table_hover_text }}">
+<ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ table_hover_text }}">
   <li class="head">
     <p>
       <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
@@ -81,7 +81,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
 {% endmacro %}
 
 {% macro account_tree(account_name, interval_balances, dates, accumulate) %}
-<ol class="fullwidth tree-table">
+<ol class="fullwidth flex-table tree-table">
     <li class="head">
         <p>
         <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>

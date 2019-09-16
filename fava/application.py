@@ -70,6 +70,7 @@ REPORTS = [
     "_context",
     "balance_sheet",
     "commodities",
+    "documents",
     "events",
     "editor",
     "errors",

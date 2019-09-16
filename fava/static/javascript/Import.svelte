@@ -1,6 +1,6 @@
 <script>
-  import { _, fetchAPI } from "./helpers";
-  import { notify } from "./notifications";
+  import { _ } from "./helpers";
+  import { moveDocument } from "./api";
 
   import AccountInput from "./entry-forms/AccountInput.svelte";
 
@@ -43,18 +43,11 @@
   }
 
   async function move(filename, account, newName) {
-    try {
-      const msg = await fetchAPI("move", {
-        filename,
-        account,
-        newName,
-      });
-      notify(msg);
+    const moved = await moveDocument(filename, account, newName);
+    if (moved) {
       for (const [directory, items] of Object.entries(data)) {
         data[directory] = items.filter(item => item.name !== filename);
       }
-    } catch (error) {
-      notify(error, "error");
     }
   }
 </script>

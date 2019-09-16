@@ -69,6 +69,8 @@ import ChartSwitcher from "./ChartSwitcher.svelte";
 // @ts-ignore
 import FilterForm from "./FilterForm.svelte";
 // @ts-ignore
+import Documents from "./documents/Documents.svelte";
+// @ts-ignore
 import Modals from "./modals/Modals.svelte";
 
 function initSvelteComponent(selector: string, SvelteComponent: any) {
@@ -89,6 +91,7 @@ e.on("page-loaded", () => {
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-import", Import);
+  initSvelteComponent("#svelte-documents", Documents);
 
   document.title = favaAPI.documentTitle;
   select("h1 strong")!.innerHTML = favaAPI.pageTitle;

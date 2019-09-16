@@ -18,6 +18,7 @@ from beancount.core.data import (
     Balance,
     TxnPosting,
     Transaction,
+    Document,
     Event,
     Custom,
 )
@@ -389,6 +390,11 @@ class FavaLedger:
                 balance,
             ) in realization.iterate_with_balance(postings)
         ]
+
+    @property
+    def documents(self):
+        """All currently filtered documents."""
+        return list(filter_type(self.entries, Document))
 
     def events(self, event_type=None):
         """List events (possibly filtered by type)."""
