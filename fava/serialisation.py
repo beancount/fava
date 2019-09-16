@@ -60,6 +60,7 @@ def serialise(entry):
     ret = entry._asdict()
     ret["type"] = entry.__class__.__name__
     if ret["type"] == "Transaction":
+        ret["payee"] = entry.payee or ""
         if entry.tags:
             ret["narration"] += " " + " ".join(["#" + t for t in entry.tags])
         if entry.links:

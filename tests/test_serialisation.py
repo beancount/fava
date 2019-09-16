@@ -62,7 +62,16 @@ def test_serialise(app):
 
     with app.test_request_context():
         serialised = loads(dumps(serialise(txn)))
-    assert serialised == json_txn
+        assert serialised == json_txn
+
+        txn = txn._replace(payee="")
+        json_txn["payee"] = ""
+        serialised = loads(dumps(serialise(txn)))
+        assert serialised == json_txn
+
+        txn = txn._replace(payee=None)
+        serialised = loads(dumps(serialise(txn)))
+        assert serialised == json_txn
 
 
 @pytest.mark.parametrize(
