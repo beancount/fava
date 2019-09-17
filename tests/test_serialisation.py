@@ -102,6 +102,7 @@ def test_serialise_posting(pos, amount):
     assert loads(dumps(serialise(pos))) == json
     assert deserialise_posting(json) == pos
 
+
 def test_serialise_balance(app):
     bal = Balance(
         {},
@@ -109,7 +110,7 @@ def test_serialise_balance(app):
         "Assets:ETrade:Cash",
         A("0.1234567891011121314151617 CHF"),
         None,
-        None
+        None,
     )
 
     json = {
@@ -119,13 +120,14 @@ def test_serialise_balance(app):
         "meta": {},
         "tolerance": None,
         "account": "Assets:ETrade:Cash",
-        "type": "Balance"
+        "type": "Balance",
     }
 
     with app.test_request_context():
         serialised = loads(dumps(serialise(bal)))
 
     assert serialised == json
+
 
 def test_deserialise():
     postings = [
