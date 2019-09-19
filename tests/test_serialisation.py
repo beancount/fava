@@ -112,6 +112,32 @@ def test_serialise_posting(pos, amount):
     assert deserialise_posting(json) == pos
 
 
+def test_serialise_balance(app):
+    bal = Balance(
+        {},
+        datetime.date(2019, 9, 17),
+        "Assets:ETrade:Cash",
+        A("0.1234567891011121314151617 CHF"),
+        None,
+        None,
+    )
+
+    json = {
+        "date": "2019-09-17",
+        "amount": {"currency": "CHF", "number": "0.1234567891011121314151617"},
+        "diff_amount": None,
+        "meta": {},
+        "tolerance": None,
+        "account": "Assets:ETrade:Cash",
+        "type": "Balance",
+    }
+
+    with app.test_request_context():
+        serialised = loads(dumps(serialise(bal)))
+
+    assert serialised == json
+
+
 def test_deserialise():
     postings = [
         {"account": "Assets:ETrade:Cash", "amount": "100 USD"},
