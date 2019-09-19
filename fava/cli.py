@@ -4,7 +4,7 @@ import os
 import errno
 
 import click
-from werkzeug.wsgi import DispatcherMiddleware
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from cheroot import wsgi
 
 from fava.application import app
