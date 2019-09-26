@@ -5,6 +5,7 @@
 @media (max-width: 767px) {
   body {
     padding: 0;
+    transition: var(--transitions);
   }
 
   header {
@@ -25,10 +26,19 @@
   aside {
     top: 0;
     margin-left: calc(-1 * var(--aside-width));
+    transition: var(--transitions);
   }
 
   aside.active {
     margin-left: 0;
+  }
+
+  .aside-button.aside-button {
+    transition: var(--transitions);
+  }
+
+  .navigation .secondary {
+    transition: var(--transitions);
   }
 
   .aside-button,

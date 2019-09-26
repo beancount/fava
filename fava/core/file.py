@@ -325,10 +325,15 @@ def find_insert_position(accounts, date, insert_options, filenames):
     Returns:
         A tuple of the filename and the line number.
     """
+    # Make no assumptions about the order of insert_options entries and instead
+    # sort them ourselves (by descending dates)
+    sorted_insert_options = sorted(
+        insert_options, key=lambda x: x.date, reverse=True
+    )
     for account in accounts:
-        for insert_option in insert_options:
+        for insert_option in sorted_insert_options:
             if insert_option.date >= date:
-                break
+                continue
             if insert_option.re.match(account):
                 return (insert_option.filename, insert_option.lineno - 1)
 

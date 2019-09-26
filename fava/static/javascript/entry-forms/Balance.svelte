@@ -1,6 +1,8 @@
 <script>
   import { _ } from "../helpers";
+  import { favaAPI } from "../stores";
 
+  import AutocompleteInput from "../AutocompleteInput.svelte";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
@@ -23,14 +25,14 @@
     <input
       type="tel"
       class="number"
-      pattern="[0-9.,]*"
+      pattern="-?[0-9.,]*"
       placeholder={_('Number')}
+      size="10"
       bind:value={entry.amount.number} />
-    <input
-      type="text"
-      class="currency"
+    <AutocompleteInput
+      className="currency"
       placeholder={_('Currency')}
-      list="currencies"
+      suggestions={favaAPI.currencies}
       bind:value={entry.amount.currency} />
     <AddMetadataButton bind:meta={entry.meta} />
   </div>

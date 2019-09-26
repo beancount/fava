@@ -45,10 +45,10 @@ def generate_bql_grammar_json():
     }
     path = os.path.join(
         os.path.dirname(__file__),
-        "../fava/static/javascript/codemirror/bql-grammar.json",
+        "../fava/static/javascript/codemirror/bql-grammar.ts",
     )
     with open(path, "w", encoding="utf-8") as json_file:
-        json.dump(data, json_file)
+        json_file.write("export default " + json.dumps(data))
 
 
 @cli.command()
@@ -86,14 +86,18 @@ def upload_translations():
     click.echo("Done: " + str(request.json()["result"]["terms"]))
 
 
+# For these languages, the name on POEDITOR is off.
+POEDITOR_LANGUAGE_NAME = {"zh": "zh-CN", "zh_Hant_TW": "zh-TW"}
+
+
 def download_from_poeditor(language, token):
     """Download .po-file from POEditor and save to disk."""
     click.echo(f'Downloading .po-file for language "{language}"')
-    language_short = language[:2]
+    poeditor_name = POEDITOR_LANGUAGE_NAME.get(language, language)
     data = {
         "api_token": token,
         "id": 90283,
-        "language": language,
+        "language": poeditor_name,
         "type": "po",
     }
     request = requests.post(
@@ -101,9 +105,7 @@ def download_from_poeditor(language, token):
     )
     url = request.json()["result"]["url"]
     content = requests.get(url).content
-    folder = os.path.join(
-        BASE_PATH, "translations", language_short, "LC_MESSAGES"
-    )
+    folder = os.path.join(BASE_PATH, "translations", language, "LC_MESSAGES")
     if not os.path.exists(folder):
         os.makedirs(folder)
     path = os.path.join(folder, f"messages.po")

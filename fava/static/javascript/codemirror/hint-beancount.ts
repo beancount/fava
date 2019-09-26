@@ -1,4 +1,4 @@
-import CodeMirror from "codemirror";
+import CodeMirror, { Editor } from "codemirror";
 
 import { fuzzyMatch, getCurrentWord } from "./helpers";
 import { favaAPI } from "../stores";
@@ -19,7 +19,10 @@ const completionSources = {
   ],
 };
 
-const directiveCompletions = {
+const directiveCompletions: Record<
+  string,
+  Array<"accounts" | "currencies" | null>
+> = {
   open: ["accounts", "currencies"],
   close: ["accounts"],
   commodity: ["currencies"],
@@ -30,9 +33,10 @@ const directiveCompletions = {
   price: ["currencies", null, "currencies"],
 };
 
-CodeMirror.registerHelper("hint", "beancount", cm => {
-  const cursor = cm.getCursor();
-  const line = cm.getLine(cursor.line);
+CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
+  const doc = cm.getDoc();
+  const cursor = doc.getCursor();
+  const line = doc.getLine(cursor.line);
   const token = cm.getTokenAt(cursor);
   const currentCharacter = line[cursor.ch - 1];
   const currentWord = getCurrentWord(cursor, line);

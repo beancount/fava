@@ -60,6 +60,7 @@ def serialise(entry):
     ret = entry._asdict()
     ret["type"] = entry.__class__.__name__
     if ret["type"] == "Transaction":
+        ret["payee"] = entry.payee or ""
         if entry.tags:
             ret["narration"] += " " + " ".join(["#" + t for t in entry.tags])
         if entry.links:
@@ -67,6 +68,9 @@ def serialise(entry):
         del ret["links"]
         del ret["tags"]
         ret["postings"] = [serialise(pos) for pos in entry.postings]
+    elif ret["type"] == "Balance":
+        amt = ret["amount"]
+        ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
     return ret
 
 
@@ -129,8 +133,7 @@ def deserialise(json_entry):
     if json_entry["type"] == "Balance":
         date = util.date.parse_date(json_entry["date"])[0]
         raw_amount = json_entry["amount"]
-        number = parse_number(raw_amount["number"])
-        amount = Amount(number, raw_amount["currency"])
+        amount = Amount(D(str(raw_amount["number"])), raw_amount["currency"])
 
         return data.Balance(
             json_entry["meta"], date, json_entry["account"], amount, None, None

@@ -1,3 +1,7 @@
+.entry-form {
+  margin-bottom: 0.5rem;
+}
+
 .entry-form textarea {
   flex-grow: 1;
   width: 100%;
@@ -9,8 +13,25 @@
   display: none;
 }
 
+.entry-form h4 {
+  margin: 0;
+}
+
 .entry-form .amount {
   width: 220px;
+}
+
+.entry-form button,
+.entry-form input {
+  margin: 0;
+}
+
+.entry-form > * + * {
+  margin-top: 0.5rem;
+}
+
+.entry-form .fieldset > * + * {
+  margin-left: 0.5rem;
 }
 
 .entry-form input[name="flag"] {
@@ -20,14 +41,14 @@
   text-align: center;
 }
 
-.entry-form input.account,
+.entry-form .account,
 .entry-form input[name="narration"] {
   flex-basis: 200px;
   flex-grow: 1;
   min-width: 20em;
 }
 
-.entry-form input[name="payee"] {
+.entry-form .payee {
   flex-basis: 100px;
   flex-grow: 1;
   min-width: 10em;
@@ -36,6 +57,10 @@
 .entry-form input.metadata-value {
   flex-grow: 1;
   max-width: 15em;
+}
+
+.balance .currency {
+  width: 6em;
 }
 
 .entry-form input.metadata-key {
@@ -50,12 +75,10 @@
   opacity: 1;
 }
 
-.entry-form .metadata .add-row,
 .entry-form .posting .add-row {
   display: none;
 }
 
-.entry-form .metadata:last-child .add-row,
 .entry-form .posting:last-child .add-row {
   display: initial;
 }

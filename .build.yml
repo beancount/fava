@@ -1,0 +1,15 @@
+image: archlinux
+packages:
+  - python
+  - nodejs
+  - npm
+  - python-tox
+sources:
+  - https://github.com/beancount/fava.git
+tasks:
+  - setup: |
+      cd fava
+      make
+  - test: |
+      cd fava
+      make test

@@ -3,6 +3,7 @@
 // Fava intercepts all clicks on links and will in most cases asynchronously
 // load the content of the page and replace the <article> contents with them.
 
+import { Writable } from "svelte/store";
 import { select, selectAll, delegate, fetch, handleText } from "./helpers";
 import e from "./events";
 import { notify } from "./notifications";
@@ -14,9 +15,24 @@ import {
   showCharts,
   filters,
   favaAPI,
+  urlSyncedParams,
 } from "./stores";
 
 class Router {
+  state: {
+    hash: string;
+    pathname: string;
+    search: string;
+  };
+
+  constructor() {
+    this.state = {
+      hash: window.location.hash,
+      pathname: window.location.pathname,
+      search: window.location.search,
+    };
+  }
+
   // This should be called once when the page has been loaded. Initializes the
   // router and takes over clicking on links.
   init() {
@@ -24,12 +40,12 @@ class Router {
     this.updateState();
 
     window.addEventListener("popstate", () => {
+      urlHash.set(window.location.hash.slice(1));
       if (
         window.location.hash !== this.state.hash &&
         window.location.pathname === this.state.pathname &&
         window.location.search === this.state.search
       ) {
-        urlHash.set(window.location.hash.slice(1));
         this.updateState();
       } else if (
         window.location.pathname !== this.state.pathname ||
@@ -44,11 +60,11 @@ class Router {
 
   // Go to URL. If load is `true`, load the page at URL, otherwise only update
   // the current state.
-  navigate(url, load = true) {
+  navigate(url: string, load = true) {
     if (load) {
       this.loadURL(url);
     } else {
-      window.history.pushState(null, null, url);
+      window.history.pushState(null, "", url);
       this.updateState();
     }
   }
@@ -59,7 +75,7 @@ class Router {
    * If `historyState` is false, do not create a history state and do not
    * scroll to top.
    */
-  async loadURL(url, historyState = true) {
+  async loadURL(url: string, historyState = true) {
     const state = { interrupt: false };
     e.trigger("navigate", state);
     if (state.interrupt) {
@@ -67,25 +83,26 @@ class Router {
     }
 
     const getUrl = new URL(url);
-    getUrl.searchParams.set("partial", true);
+    getUrl.searchParams.set("partial", "true");
 
     const svg = select(".fava-icon");
-    svg.classList.add("loading");
+    if (svg) svg.classList.add("loading");
 
     try {
       const content = await fetch(getUrl.toString()).then(handleText);
       if (historyState) {
-        window.history.pushState(null, null, url);
+        window.history.pushState(null, "", url);
         window.scroll(0, 0);
       }
       this.updateState();
-      select("article").innerHTML = content;
+      const article = select("article");
+      if (article) article.innerHTML = content;
       e.trigger("page-loaded");
       urlHash.set(window.location.hash.slice(1));
     } catch (error) {
       notify(`Loading ${url} failed.`, "error");
     } finally {
-      svg.classList.remove("loading");
+      if (svg) svg.classList.remove("loading");
     }
   }
 
@@ -113,36 +130,48 @@ class Router {
    *  - the link has a `data-remote` attribute.
    */
   takeOverLinks() {
-    delegate(window.document, "click", "a", event => {
-      const link = event.target.closest("a");
-      if (
-        link.getAttribute("href").charAt(0) === "#" ||
-        link.host !== window.location.host ||
-        link.hasAttribute("data-remote") ||
-        link.protocol.indexOf("http") !== 0 ||
-        event.defaultPrevented
-      ) {
-        return;
-      }
-      // update sidebar links
-      if (link.closest("aside")) {
-        const newURL = new URL(link.href);
-        newURL.search = window.location.search;
-        link.href = newURL.toString();
-      }
-      if (
-        event.button !== 0 ||
-        event.altKey ||
-        event.ctrlKey ||
-        event.metaKey ||
-        event.shiftKey
-      ) {
-        return;
-      }
+    delegate(
+      document,
+      "click",
+      "a",
+      (event: MouseEvent, link: HTMLAnchorElement) => {
+        if (
+          (link.getAttribute("href") || "").charAt(0) === "#" ||
+          link.host !== window.location.host ||
+          link.hasAttribute("data-remote") ||
+          link.protocol.indexOf("http") !== 0 ||
+          event.defaultPrevented
+        ) {
+          return;
+        }
+        // update sidebar links
+        if (link.closest("aside")) {
+          const newURL = new URL(link.href);
+          const oldParams = new URL(window.location.href).searchParams;
+          for (const name of urlSyncedParams) {
+            const value = oldParams.get(name);
+            if (value) {
+              newURL.searchParams.set(name, value);
+            } else {
+              newURL.searchParams.delete(name);
+            }
+          }
+          link.href = newURL.toString();
+        }
+        if (
+          event.button !== 0 ||
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey
+        ) {
+          return;
+        }
 
-      event.preventDefault();
-      this.navigate(link.href);
-    });
+        event.preventDefault();
+        this.navigate(link.href);
+      }
+    );
   }
 
   /*
@@ -156,32 +185,33 @@ class Router {
 const router = new Router();
 export default router;
 
-e.on("form-submit-query", form => {
+e.on("form-submit-query", (form: HTMLFormElement) => {
+  // @ts-ignore
   const queryString = form.elements.query_string.value.trim();
   if (queryString === "") {
     return;
   }
 
-  const url = new URL(window.location);
+  const url = new URL(window.location.toString());
   url.searchParams.set("query_string", queryString);
 
   const pageURL = url.toString();
-  url.searchParams.set("result_only", true);
+  url.searchParams.set("result_only", "true");
 
   fetch(url.toString())
     .then(handleText)
-    .then(data => {
+    .then((data: string) => {
       selectAll(".queryresults-wrapper").forEach(element => {
         element.classList.add("toggled");
       });
-      select("#query-container").insertAdjacentHTML("afterbegin", data);
+      select("#query-container")!.insertAdjacentHTML("afterbegin", data);
       initSort();
-      window.history.replaceState(null, null, pageURL);
+      window.history.replaceState(null, "", pageURL);
     });
 });
 
 e.on("page-init", () => {
-  select("#reload-page").addEventListener("click", () => {
+  select("#reload-page")!.addEventListener("click", () => {
     router.reload();
   });
 
@@ -194,8 +224,8 @@ e.on("page-init", () => {
   });
   filters.subscribe(fs => {
     const newURL = new URL(window.location.href);
-    for (const name of ["time", "filter", "account"]) {
-      const value = fs[name];
+    for (const name of Object.keys(fs)) {
+      const value = fs[name as keyof typeof fs];
       if (value) {
         newURL.searchParams.set(name, value);
       } else {
@@ -208,19 +238,26 @@ e.on("page-init", () => {
     }
   });
 
-  // Set initial values from URL and update URL on store changes
-  const urlParams = [
-    [interval, "interval", favaAPI.favaOptions.interval, true],
-    [conversion, "conversion", "at_cost", true],
-    [showCharts, "charts", true, false],
-  ];
-  for (const [store, name, defaultValue, shouldLoad] of urlParams) {
-    store.set(params.get(name) || defaultValue);
+  function syncStoreValueToUrl<T extends boolean | string>(
+    store: Writable<T>,
+    name: string,
+    defaultValue: T,
+    shouldLoad: boolean
+  ): void {
+    let value: T;
+    if (typeof defaultValue === "boolean") {
+      // @ts-ignore
+      value = params.get(name) !== "false" && defaultValue;
+    } else {
+      // @ts-ignore
+      value = params.get(name) || defaultValue;
+    }
+    store.set(value);
 
-    store.subscribe(value => {
+    store.subscribe((val: T) => {
       const newURL = new URL(window.location.href);
-      newURL.searchParams.set(name, value);
-      if (value === defaultValue) {
+      newURL.searchParams.set(name, val.toString());
+      if (val === defaultValue) {
         newURL.searchParams.delete(name);
       }
       const url = newURL.toString();
@@ -229,4 +266,9 @@ e.on("page-init", () => {
       }
     });
   }
+
+  // Set initial values from URL and update URL on store changes
+  syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval, true);
+  syncStoreValueToUrl(conversion, "conversion", "at_cost", true);
+  syncStoreValueToUrl(showCharts, "charts", true, false);
 });

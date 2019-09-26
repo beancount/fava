@@ -1,0 +1,549 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fava\n"
+"Language: zh-TW\n"
+
+#: fava/templates/_aside.html:4
+msgid "Custom Links"
+msgstr "自定義連結"
+
+#: fava/templates/_aside.html:34 fava/templates/_globals.html:5
+msgid "Errors"
+msgstr "錯誤"
+
+#: fava/static/javascript/FilterForm.svelte:9
+msgid "Time"
+msgstr "時間"
+
+#: fava/static/javascript/FilterForm.svelte:15
+#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/modals/DocumentUpload.svelte:105
+#: fava/templates/holdings.html:45 fava/templates/statistics.html:32
+msgid "Account"
+msgstr "帳戶"
+
+#: fava/static/javascript/entry-forms/Transaction.svelte:61
+#: fava/static/javascript/entry-forms/Transaction.svelte:65
+msgid "Payee"
+msgstr "收款人"
+
+#: fava/templates/_globals.html:10
+msgid "Income Statement"
+msgstr "損益表"
+
+#: fava/templates/_globals.html:2
+msgid "Balance Sheet"
+msgstr "資產負債表"
+
+#: fava/templates/_globals.html:15
+msgid "Trial Balance"
+msgstr "試算表"
+
+#: fava/templates/_globals.html:11
+msgid "Journal"
+msgstr "日記帳"
+
+#: fava/templates/_globals.html:13
+msgid "Query"
+msgstr "查詢"
+
+#: fava/templates/_globals.html:8 fava/templates/holdings.html:44
+msgid "Holdings"
+msgstr "資產"
+
+#: fava/templates/_globals.html:3
+msgid "Commodities"
+msgstr "通貨"
+
+#: fava/templates/_globals.html:6
+msgid "Events"
+msgstr "事件"
+
+#: fava/templates/_globals.html:4
+msgid "Editor"
+msgstr "編輯器"
+
+#: fava/templates/_globals.html:12
+msgid "Options"
+msgstr "選項"
+
+#: fava/templates/_globals.html:14
+msgid "Statistics"
+msgstr "統計"
+
+#: fava/templates/_globals.html:7
+msgid "Help"
+msgstr "幫助"
+
+#: fava/templates/_journal_table.html:89 fava/templates/commodities.html:10
+#: fava/templates/events.html:11
+msgid "Date"
+msgstr "日期"
+
+#: fava/templates/_journal_table.html:90
+msgid "F"
+msgstr "F"
+
+#: fava/templates/_journal_table.html:91
+msgid "Narration/Payee"
+msgstr "摘要 / 收款人"
+
+#: fava/templates/_journal_table.html:92
+msgid "Position"
+msgstr "頭寸"
+
+#: fava/templates/_journal_table.html:93 fava/templates/commodities.html:11
+msgid "Price"
+msgstr "價格"
+
+#: fava/templates/_journal_table.html:94
+msgid "Cost"
+msgstr "成本"
+
+#: fava/templates/_journal_table.html:96
+msgid "Change"
+msgstr "更動"
+
+#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/modals/AddEntry.svelte:12
+#: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
+msgid "Balance"
+msgstr "餘額"
+
+#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/Extract.svelte:101
+#: fava/templates/_context.html:57 fava/templates/editor.html:38
+msgid "Save"
+msgstr "儲存"
+
+#: fava/templates/_context.html:57 fava/templates/editor.html:38
+msgid "Saving..."
+msgstr "儲存中..."
+
+#: fava/static/javascript/main.js:123
+msgid "File change detected. Click to reload."
+msgstr "偵測到文件更動，點擊此處重新整理。"
+
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+msgid "Expand all accounts"
+msgstr "展開所有帳戶"
+
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+msgid "Expand all"
+msgstr "展開所有"
+
+#: fava/templates/_tree_table.html:29
+msgid "Other"
+msgstr "其他"
+
+#: fava/templates/account.html:22
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr "此帳戶及其子帳戶的日記帳"
+
+#: fava/templates/account.html:22
+msgid "Account Journal"
+msgstr "帳戶日記帳"
+
+#: fava/templates/account.html:15 fava/templates/account.html:23
+msgid "Changes"
+msgstr "更動"
+
+#: fava/templates/account.html:24
+msgid "Balances"
+msgstr "餘額"
+
+#: fava/templates/_context.html:4 fava/templates/errors.html:14
+#: fava/templates/errors.html:15
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "原始文件 %(file)s:%(lineno)s"
+
+#: fava/templates/editor.html:6 fava/templates/errors.html:5
+msgid "File"
+msgstr "文件"
+
+#: fava/static/javascript/modals/Extract.svelte:108
+#: fava/templates/errors.html:6
+msgid "Line"
+msgstr "行"
+
+#: fava/templates/errors.html:7
+msgid "Error"
+msgstr "錯誤"
+
+#: fava/templates/errors.html:24
+msgid "No errors."
+msgstr "沒有錯誤。"
+
+#: fava/templates/events.html:13
+msgid "Event: %(type)s"
+msgstr "事件：%(type)s"
+
+#: fava/templates/events.html:12
+msgid "Description"
+msgstr "敘述"
+
+#: fava/templates/events.html:28
+msgid "No events."
+msgstr "沒有事件。"
+
+#: fava/templates/help.html:4
+msgid "Help - %(title)s"
+msgstr "幫助 - %(title)s"
+
+#: fava/templates/help.html:3
+msgid "Help pages"
+msgstr "幫助頁"
+
+#: fava/static/javascript/entry-forms/Balance.svelte:34
+#: fava/templates/holdings.html:45
+msgid "Currency"
+msgstr "貨幣"
+
+#: fava/templates/holdings.html:45
+msgid "Cost currency"
+msgstr "成本貨幣"
+
+#: fava/templates/holdings.html:46
+msgid "Holdings by"
+msgstr "按"
+
+#: fava/templates/income_statement.html:3
+#: fava/templates/income_statement.html:18
+msgid "Net Profit"
+msgstr "淨利潤"
+
+#: fava/templates/income_statement.html:4
+msgid "Income"
+msgstr "收入"
+
+#: fava/templates/income_statement.html:5
+msgid "Expenses"
+msgstr "支出"
+
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:44
+#: fava/templates/options.html:5 fava/templates/options.html:22
+msgid "Key"
+msgstr "鍵"
+
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:53
+#: fava/templates/options.html:6 fava/templates/options.html:23
+msgid "Value"
+msgstr "值"
+
+#: fava/templates/_query_table.html:69
+msgid "Download as"
+msgstr "下載為"
+
+#: fava/templates/statistics.html:17
+msgid "Postings per Account"
+msgstr "每個帳戶的記錄數"
+
+#: fava/templates/statistics.html:86
+msgid "Total"
+msgstr "總和"
+
+#: fava/templates/statistics.html:26
+msgid "Update Activity"
+msgstr "更新活動"
+
+#: fava/templates/statistics.html:27
+msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
+msgstr "點擊以複製帳戶（綠色除外）對應的 balance 指定到剪貼簿。"
+
+#: fava/templates/statistics.html:28
+msgid "Copy balance directives"
+msgstr "複製 balance 指令"
+
+#: fava/templates/statistics.html:35
+msgid "Last Entry"
+msgstr "最新項目"
+
+#: fava/templates/statistics.html:68
+msgid "Entries per Type"
+msgstr "每個類型的項目數"
+
+#: fava/templates/statistics.html:72
+msgid "Type"
+msgstr "類型"
+
+#: fava/templates/statistics.html:73
+msgid "# Entries"
+msgstr "# 項目"
+
+#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
+#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
+msgid "close"
+msgstr "關閉"
+
+#: fava/static/javascript/modals/AddTransaction.svelte:43
+msgid "New transaction"
+msgstr "新交易"
+
+#: fava/static/javascript/entry-forms/Transaction.svelte:69
+#: fava/static/javascript/entry-forms/Transaction.svelte:73
+msgid "Narration"
+msgstr "摘要"
+
+#: fava/static/javascript/modals/AddEntry.svelte:70
+msgid "Save and add new"
+msgstr "儲存並新增下一條"
+
+#: fava/static/javascript/entry-forms/Balance.svelte:29
+msgid "Number"
+msgstr "數值"
+
+#: fava/static/javascript/entry-forms/Transaction.svelte:80
+#: fava/static/javascript/entry-forms/Transaction.svelte:105
+msgid "Add posting"
+msgstr "新增記錄"
+
+#: fava/static/javascript/modals/Extract.svelte:56
+#: fava/templates/_globals.html:9
+msgid "Import"
+msgstr "匯入"
+
+#: fava/templates/_journal_table.html:4
+msgid "Budget entries"
+msgstr "預算項目"
+
+#: fava/templates/extract.html:9
+msgid "Toggle source"
+msgstr "切換來源"
+
+#: fava/templates/extract.html:10
+msgid "Toggle ignore"
+msgstr "切換忽略"
+
+#: fava/static/javascript/modals/Extract.svelte:107
+msgid "Source"
+msgstr "來源"
+
+#: fava/templates/extract.html:16
+msgid "Entry"
+msgstr "項目"
+
+#: fava/templates/extract.html:17
+msgid "Actions"
+msgstr "行為"
+
+#: fava/templates/extract.html:32
+msgid "Ignore"
+msgstr "忽略"
+
+#: fava/templates/extract.html:33
+msgid "Duplicate"
+msgstr "重製"
+
+#: fava/templates/import.html:14
+msgid "Importer"
+msgstr "匯入器"
+
+#. 不確定 UI 上是用在哪
+#: fava/static/javascript/Import.svelte:93
+msgid "Extract"
+msgstr "匯出"
+
+#: fava/templates/query.html:13
+msgid "...enter a BQL query. 'help' to list available commands."
+msgstr "... 輸入 BQL 查詢語句。 '幫助' 可列出所有可用的指令。"
+
+#: fava/templates/_journal_table.html:83
+msgid "Metadata"
+msgstr "元資料"
+
+#: fava/static/javascript/entry-forms/AddMetadataButton.svelte:16
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:60
+msgid "Add metadata"
+msgstr "新增元資料"
+
+#: fava/static/javascript/entry-forms/Note.svelte:14
+msgid "Note"
+msgstr "備註"
+
+#: fava/templates/_context.html:4
+msgid "Location"
+msgstr "位置"
+
+#: fava/templates/_context.html:9
+msgid "Context"
+msgstr "前後文"
+
+#: fava/templates/_context.html:15
+msgid "Balances before entry"
+msgstr "在此項目前的損益"
+
+#: fava/templates/_context.html:35
+msgid "Balances after entry"
+msgstr "在此項目後的損益"
+
+#: fava/templates/_journal_table.html:11
+msgid "Cleared transactions"
+msgstr "已入帳的交易"
+
+#: fava/templates/_journal_table.html:12
+msgid "Pending transactions"
+msgstr "未入帳的交易"
+
+#: fava/templates/_journal_table.html:13
+msgid "Other transactions"
+msgstr "其他交易"
+
+#: fava/templates/_journal_table.html:7
+msgid "Documents with a #discovered tag"
+msgstr "有 #discovered tag 的文件"
+
+#: fava/templates/_journal_table.html:84
+msgid "Postings"
+msgstr "記錄"
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:87
+msgid "Upload file(s)"
+msgstr "上傳檔案"
+
+#: fava/templates/_overlays.html:10
+msgid "Documents folder"
+msgstr "文件資料夾"
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:110
+msgid "Upload"
+msgstr "上傳"
+
+#: fava/templates/editor.html:18
+msgid "Align Amounts"
+msgstr "對齊金額"
+
+#: fava/templates/editor.html:24
+msgid "Toggle Comment (selection)"
+msgstr "切換註解"
+
+#: fava/templates/editor.html:30
+msgid "Open all folds"
+msgstr "打開所有折疊"
+
+#: fava/templates/editor.html:33
+msgid "Close all folds"
+msgstr "關閉所有折疊"
+
+#: fava/templates/options.html:1
+msgid "Fava options"
+msgstr "Fava 選項"
+
+#: fava/templates/options.html:1
+msgid "help"
+msgstr "幫助"
+
+#: fava/templates/options.html:18
+msgid "Beancount options"
+msgstr "Beancount 選項"
+
+#: fava/templates/query.html:14
+msgid "Submit"
+msgstr "送出"
+
+#: fava/templates/_tree_table.html:3
+msgid "Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr "按住 Shift 並點選以展開所有子項目。\n"
+"按住 Ctrl 或 Cmd 並點選以展開一層"
+
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:53
+msgid "Export"
+msgstr "匯出"
+
+#: fava/static/javascript/FilterForm.svelte:21
+msgid "Filter by tag, payee, ..."
+msgstr "以 Tag, 付款者, ... 篩選"
+
+#: fava/templates/_layout.html:54
+msgid "Download currently filtered entries as a Beancount file"
+msgstr "將篩選結果下載為 Beancount 檔"
+
+#: fava/templates/extract.html:40
+msgid "Import entries"
+msgstr "匯入項目"
+
+#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:53
+msgid "Yearly"
+msgstr "年度"
+
+#: fava/static/javascript/ChartSwitcher.svelte:87 fava/util/date.py:54
+msgid "Quarterly"
+msgstr "季度"
+
+#: fava/static/javascript/ChartSwitcher.svelte:88 fava/util/date.py:55
+msgid "Monthly"
+msgstr "月"
+
+#: fava/static/javascript/ChartSwitcher.svelte:89 fava/util/date.py:56
+msgid "Weekly"
+msgstr "週"
+
+#: fava/static/javascript/ChartSwitcher.svelte:90 fava/util/date.py:57
+msgid "Daily"
+msgstr "日"
+
+#: fava/templates/editor.html:15
+msgid "Edit"
+msgstr "編輯"
+
+#: fava/static/javascript/entry-forms/Transaction.svelte:99
+msgid "Amount"
+msgstr "帳戶"
+
+#: fava/templates/_journal_table.html:8
+msgid "Documents with a #linked tag"
+msgstr "有 #linked tag 的文件"
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
+msgid "You need to set the \"documents\" Beancount option for file uploads."
+msgstr "你需要設定 Beancount 的 \"文件\" 選項以上傳檔案"
+
+#: fava/static/javascript/ChartSwitcher.svelte:26
+msgid "At Cost"
+msgstr "按照成本"
+
+#: fava/static/javascript/ChartSwitcher.svelte:27
+msgid "At Market Value"
+msgstr "按照市價"
+
+#: fava/static/javascript/ChartSwitcher.svelte:28
+msgid "Units"
+msgstr "按照單位"
+
+#. make it 樹狀圖 is not really proper. People would think about Tree structure while seeing this term.
+#: fava/static/javascript/ChartSwitcher.svelte:115
+msgid "Treemap"
+msgstr "Treemap"
+
+#: fava/static/javascript/ChartSwitcher.svelte:119
+msgid "Sunburst"
+msgstr "Sunburst"
+
+#: fava/static/javascript/entry-forms/AccountInput.svelte:16
+msgid "Should be one of the declared accounts"
+msgstr "必須要是宣告過的帳戶"
+
+#: fava/templates/events.html:7
+msgid "Event"
+msgstr "事件"
+
+#: fava/static/javascript/modals/Extract.svelte:86
+msgid "Previous"
+msgstr "上一個"
+
+#: fava/static/javascript/modals/Extract.svelte:91
+msgid "Next"
+msgstr "下一個"
+
+#: fava/static/javascript/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:48
+msgid "Add"
+msgstr ""
+

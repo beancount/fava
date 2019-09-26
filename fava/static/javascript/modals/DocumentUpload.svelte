@@ -5,6 +5,7 @@
   import { favaAPI } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
+  import AccountInput from "../entry-forms/AccountInput.svelte";
 
   let account = "";
   let hash = "";
@@ -16,17 +17,18 @@
 
   async function submit() {
     await Promise.all(
-      files.map(({ dataTransferFile, filename }) => {
+      files.map(({ dataTransferFile, name }) => {
         const formData = new FormData(form);
-        formData.append("file", dataTransferFile, filename);
+        formData.append("account", account);
+        formData.append("file", dataTransferFile, name);
         return fetch(`${favaAPI.baseURL}api/add-document/`, {
           method: "PUT",
           body: formData,
         })
           .then(handleJSON)
           .then(
-            data => {
-              notify(data.message);
+            response => {
+              notify(response.data);
             },
             error => {
               notify(`Upload error: ${error}`, "error");
@@ -73,18 +75,19 @@
         name,
       });
     }
-
-    // TODO: ?? automatic submit if
-    // if (form.elements.folder.length > 1 || changedFilename) {
+  }
+  function closeHandler() {
+    shown = false;
+    files = [];
   }
 </script>
 
-<ModalBase {shown}>
+<ModalBase {shown} {closeHandler}>
   <form bind:this={form} on:submit|preventDefault={submit}>
     <h3>{_('Upload file(s)')}:</h3>
     {#each files as file}
       <div class="fieldset">
-        <input value={file.name} />
+        <input bind:value={file.name} />
       </div>
     {/each}
     <div class="fieldset">
@@ -100,11 +103,7 @@
     <div class="fieldset">
       <label>
         {_('Account')}:
-        <input
-          type="text"
-          name="account"
-          list="accounts"
-          bind:value={account} />
+        <AccountInput bind:value={account} />
       </label>
       <input type="hidden" name="hash" value={hash} />
     </div>

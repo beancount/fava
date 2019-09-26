@@ -9,11 +9,13 @@ import { select, delegate } from "./helpers";
  * @param {string} cls - The message type.
  * @param {function} callback - The callback to execute on click..
  */
-export function notify(msg, cls = "info", callback) {
+export function notify(msg: string, cls = "info", callback?: Function) {
   const notification = document.createElement("li");
   notification.classList.add(cls);
   notification.appendChild(document.createTextNode(msg));
-  select("#notifications").append(notification);
+  const notificationList = select("#notifications");
+  if (!notificationList) throw new Error();
+  notificationList.append(notification);
   notification.addEventListener("click", () => {
     notification.remove();
     if (callback) {
@@ -25,6 +27,6 @@ export function notify(msg, cls = "info", callback) {
   }, 5000);
 }
 
-delegate(select("#notifications"), "click", "li", event => {
-  event.target.closest("li").remove();
+delegate(select("#notifications"), "click", "li", (event, closest) => {
+  closest.remove();
 });

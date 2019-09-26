@@ -1,8 +1,9 @@
 import e from "./events";
-import { $, $$ } from "./helpers";
+import { select, selectAll } from "./helpers";
 
 // Copy the given text to the clipboard.
-function copyToClipboard(text) {
+function copyToClipboard(text: string | null) {
+  if (!text) return;
   const textarea = document.createElement("textarea");
   textarea.value = text;
   textarea.style.position = "fixed";
@@ -21,13 +22,13 @@ function copyToClipboard(text) {
 }
 
 e.on("page-loaded", () => {
-  $$(".status-indicator").forEach(indicator => {
+  selectAll(".status-indicator").forEach(indicator => {
     indicator.addEventListener("click", () => {
       copyToClipboard(indicator.getAttribute("data-clipboard-text"));
     });
   });
 
-  const copyBalances = $("#copy-balances");
+  const copyBalances = select("#copy-balances");
   if (copyBalances) {
     copyBalances.addEventListener("click", () => {
       copyToClipboard(copyBalances.getAttribute("data-clipboard-text"));

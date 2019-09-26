@@ -1,7 +1,6 @@
 <script>
   import { onMount, tick } from "svelte";
 
-  import { select } from "d3-selection";
   import { _ } from "./helpers";
   import { parseChartData } from "./charts";
   import {
@@ -46,7 +45,7 @@
     };
     await tick();
     renderedChart = chart
-      .renderer(select(svg))
+      .renderer(svg)
       .setWidth(chartWidth)
       .set("mode", $chartMode)
       .set("currency", $chartCurrency)
@@ -68,10 +67,7 @@
   $: hasModeSetting = renderedChart && renderedChart.has_mode_setting;
 
   onMount(() => {
-    const chartData = JSON.parse(
-      document.querySelector("#chart-data").innerHTML
-    );
-    charts = parseChartData(chartData, $conversion, $interval);
+    charts = parseChartData();
     if (charts.length) {
       const active = charts[$activeChart.index];
       if (active && active.name === $activeChart.name) {
@@ -93,7 +89,7 @@
 
 {#if charts.length}
   <form class="wide-form">
-    <p class:hidden={!$showCharts} class="chart-legend">
+    <p hidden={!$showCharts} class="chart-legend">
       {#each legend.domain.sort() as item}
         <span class="legend">
           <i class="color" style="background-color: {legend.scale(item)}" />
@@ -104,12 +100,12 @@
     <span class="spacer" />
     <select
       bind:value={$chartCurrency}
-      class:hidden={!$showCharts || !hasCurrencySetting}>
+      hidden={!$showCharts || !hasCurrencySetting}>
       {#each currencies as currency}
         <option value={currency}>{currency}</option>
       {/each}
     </select>
-    <span class:hidden={!$showCharts || !hasModeSetting} class="chart-mode">
+    <span hidden={!$showCharts || !hasModeSetting} class="chart-mode">
       <label>
         <input type="radio" bind:group={$chartMode} value="treemap" />
         <span class="button">{_('Treemap')}</span>
@@ -138,10 +134,10 @@
       class:closed={!$showCharts}
       class="toggle-chart" />
   </form>
-  <div class:hidden={!$showCharts} bind:clientWidth={chartWidth}>
+  <div hidden={!$showCharts} bind:clientWidth={chartWidth}>
     <svg bind:this={svg} />
   </div>
-  <div class:hidden={!$showCharts} class="chart-labels">
+  <div hidden={!$showCharts} class="chart-labels">
     {#each charts as chart, index}
       <label
         class:selected={index === $activeChart.index}

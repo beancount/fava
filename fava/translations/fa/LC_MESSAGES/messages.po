@@ -15,19 +15,19 @@ msgstr "لینک های ‌دستی"
 msgid "Errors"
 msgstr "خطا‌ ها"
 
-#: fava/templates/_entry_filters.html:2
+#: fava/static/javascript/FilterForm.svelte:9
 msgid "Time"
 msgstr "زمان"
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:19
-#: fava/static/javascript/modals/DocumentUpload.svelte:101
-#: fava/templates/_entry_filters.html:3 fava/templates/holdings.html:45
-#: fava/templates/statistics.html:32
+#: fava/static/javascript/FilterForm.svelte:15
+#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/modals/DocumentUpload.svelte:105
+#: fava/templates/holdings.html:45 fava/templates/statistics.html:32
 msgid "Account"
 msgstr "حساب‌ کاربری"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:43
-#: fava/static/javascript/entry-forms/Transaction.svelte:44
+#: fava/static/javascript/entry-forms/Transaction.svelte:61
+#: fava/static/javascript/entry-forms/Transaction.svelte:65
 msgid "Payee"
 msgstr "دریافت کننده"
 
@@ -108,12 +108,14 @@ msgstr "هزینه"
 msgid "Change"
 msgstr "تغییر"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:21
+#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/modals/AddEntry.svelte:12
 #: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "تراز"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:47
+#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/Extract.svelte:101
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
 msgstr "ذخیره"
@@ -122,7 +124,7 @@ msgstr "ذخیره"
 msgid "Saving..."
 msgstr "پس انداز..."
 
-#: fava/static/javascript/main.js:129
+#: fava/static/javascript/main.js:123
 msgid "File change detected. Click to reload."
 msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
 
@@ -163,7 +165,8 @@ msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
 msgid "File"
 msgstr "فایل"
 
-#: fava/static/javascript/modals/Extract.svelte:84 fava/templates/errors.html:6
+#: fava/static/javascript/modals/Extract.svelte:108
+#: fava/templates/errors.html:6
 msgid "Line"
 msgstr "خط"
 
@@ -195,7 +198,7 @@ msgstr "راهنما - %(title)s"
 msgid "Help pages"
 msgstr "صفحات‌راهنما"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:24
+#: fava/static/javascript/entry-forms/Balance.svelte:34
 #: fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "واحد‌ارز"
@@ -221,12 +224,12 @@ msgstr "درآمد"
 msgid "Expenses"
 msgstr "هزینه‌ها"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:39
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:44
 #: fava/templates/options.html:5 fava/templates/options.html:22
 msgid "Key"
 msgstr "کلید"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:45
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:53
 #: fava/templates/options.html:6 fava/templates/options.html:23
 msgid "Value"
 msgstr "مقدار"
@@ -276,29 +279,29 @@ msgstr "# ورودی‌ها"
 msgid "close"
 msgstr "بستن"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:41
+#: fava/static/javascript/modals/AddTransaction.svelte:43
 msgid "New transaction"
 msgstr "معامله‌جدید"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:45
-#: fava/static/javascript/entry-forms/Transaction.svelte:46
+#: fava/static/javascript/entry-forms/Transaction.svelte:69
+#: fava/static/javascript/entry-forms/Transaction.svelte:73
 msgid "Narration"
 msgstr "توصیف"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:46
+#: fava/static/javascript/modals/AddEntry.svelte:70
 msgid "Save and add new"
 msgstr "ذخیره‌و‌افزودن‌جدید"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/entry-forms/Balance.svelte:29
 msgid "Number"
 msgstr "شماره"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:48
-#: fava/static/javascript/entry-forms/Transaction.svelte:57
+#: fava/static/javascript/entry-forms/Transaction.svelte:80
+#: fava/static/javascript/entry-forms/Transaction.svelte:105
 msgid "Add posting"
 msgstr "افزودن‌پست"
 
-#: fava/static/javascript/modals/Extract.svelte:58
+#: fava/static/javascript/modals/Extract.svelte:56
 #: fava/templates/_globals.html:9
 msgid "Import"
 msgstr "واردکردن"
@@ -315,7 +318,7 @@ msgstr "تغییر‌منبع"
 msgid "Toggle ignore"
 msgstr "تغییر‌چشم‌پوشی"
 
-#: fava/static/javascript/modals/Extract.svelte:83
+#: fava/static/javascript/modals/Extract.svelte:107
 msgid "Source"
 msgstr "منبع"
 
@@ -339,7 +342,7 @@ msgstr "تکراری"
 msgid "Importer"
 msgstr "واردکننده"
 
-#: fava/static/javascript/Import.svelte:72
+#: fava/static/javascript/Import.svelte:93
 msgid "Extract"
 msgstr "استخراج"
 
@@ -351,8 +354,8 @@ msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌�
 msgid "Metadata"
 msgstr "متاداده"
 
-#: fava/static/javascript/entry-forms/AddMetadataButton.svelte:12
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:46
+#: fava/static/javascript/entry-forms/AddMetadataButton.svelte:16
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:60
 msgid "Add metadata"
 msgstr "افزودن‌متاداده"
 
@@ -396,7 +399,7 @@ msgstr "اسناد‌با‌برچسب#کشف‌شده"
 msgid "Postings"
 msgstr "پست‌ها"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:83
+#: fava/static/javascript/modals/DocumentUpload.svelte:87
 msgid "Upload file(s)"
 msgstr "آپلودفایل‌(ها)"
 
@@ -404,7 +407,7 @@ msgstr "آپلودفایل‌(ها)"
 msgid "Documents folder"
 msgstr "پوشه‌اسناد"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:106
+#: fava/static/javascript/modals/DocumentUpload.svelte:110
 msgid "Upload"
 msgstr "آپلود"
 
@@ -446,15 +449,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "نگه‌داشتن Shiftوکلیک‌کردن‌برای‌گسترش‌تمام‌سطح‌ها.\n"
 "نگه‌داشتن Ctrlیا Cmdوکلیک‌کردن‌برای‌گسترش‌یک‌سطح."
 
-#: fava/templates/_aside.html:28 fava/templates/_layout.html:49
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:53
 msgid "Export"
 msgstr "صادر‌کردن"
 
-#: fava/templates/_entry_filters.html:4
+#: fava/static/javascript/FilterForm.svelte:21
 msgid "Filter by tag, payee, ..."
 msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
 
-#: fava/templates/_layout.html:50
+#: fava/templates/_layout.html:54
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌برای‌وودی‌فعلی"
 
@@ -462,23 +465,23 @@ msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌ب�
 msgid "Import entries"
 msgstr "واردکردن‌ورودی‌ها"
 
-#: fava/static/javascript/ChartSwitcher.svelte:87 fava/util/date.py:53
+#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:53
 msgid "Yearly"
 msgstr "سالانه"
 
-#: fava/static/javascript/ChartSwitcher.svelte:88 fava/util/date.py:54
+#: fava/static/javascript/ChartSwitcher.svelte:87 fava/util/date.py:54
 msgid "Quarterly"
 msgstr "سه‌ماهه"
 
-#: fava/static/javascript/ChartSwitcher.svelte:89 fava/util/date.py:55
+#: fava/static/javascript/ChartSwitcher.svelte:88 fava/util/date.py:55
 msgid "Monthly"
 msgstr "ماهانه"
 
-#: fava/static/javascript/ChartSwitcher.svelte:90 fava/util/date.py:56
+#: fava/static/javascript/ChartSwitcher.svelte:89 fava/util/date.py:56
 msgid "Weekly"
 msgstr "هفتگی"
 
-#: fava/static/javascript/ChartSwitcher.svelte:91 fava/util/date.py:57
+#: fava/static/javascript/ChartSwitcher.svelte:90 fava/util/date.py:57
 msgid "Daily"
 msgstr "روزانه"
 
@@ -486,7 +489,7 @@ msgstr "روزانه"
 msgid "Edit"
 msgstr "ویرایش"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:56
+#: fava/static/javascript/entry-forms/Transaction.svelte:99
 msgid "Amount"
 msgstr "میزان"
 
@@ -494,35 +497,51 @@ msgstr "میزان"
 msgid "Documents with a #linked tag"
 msgstr "اسناد با برچسب # مرتبط شده"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:51
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "شما باید گزینه شمارش ”اسناد” را برای آپلود فایل تنظیم کنید."
 
-#: fava/static/javascript/ChartSwitcher.svelte:25
+#: fava/static/javascript/ChartSwitcher.svelte:26
 msgid "At Cost"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:26
+#: fava/static/javascript/ChartSwitcher.svelte:27
 msgid "At Market Value"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:27
+#: fava/static/javascript/ChartSwitcher.svelte:28
 msgid "Units"
-msgstr ""
+msgstr "واحدها"
 
-#: fava/static/javascript/ChartSwitcher.svelte:119
+#: fava/static/javascript/ChartSwitcher.svelte:115
 msgid "Treemap"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:123
+#: fava/static/javascript/ChartSwitcher.svelte:119
 msgid "Sunburst"
 msgstr ""
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:12
+#: fava/static/javascript/entry-forms/AccountInput.svelte:16
 msgid "Should be one of the declared accounts"
 msgstr ""
 
 #: fava/templates/events.html:7
 msgid "Event"
+msgstr "رویداد"
+
+#: fava/static/javascript/modals/Extract.svelte:86
+msgid "Previous"
+msgstr "قبلی"
+
+#: fava/static/javascript/modals/Extract.svelte:91
+msgid "Next"
+msgstr "بعدی"
+
+#: fava/static/javascript/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:48
+msgid "Add"
 msgstr ""
 

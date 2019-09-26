@@ -15,19 +15,19 @@ msgstr "Vlastné odkazy"
 msgid "Errors"
 msgstr "Chyby"
 
-#: fava/templates/_entry_filters.html:2
+#: fava/static/javascript/FilterForm.svelte:9
 msgid "Time"
 msgstr "Čas"
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:19
-#: fava/static/javascript/modals/DocumentUpload.svelte:101
-#: fava/templates/_entry_filters.html:3 fava/templates/holdings.html:45
-#: fava/templates/statistics.html:32
+#: fava/static/javascript/FilterForm.svelte:15
+#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/modals/DocumentUpload.svelte:105
+#: fava/templates/holdings.html:45 fava/templates/statistics.html:32
 msgid "Account"
 msgstr "Účet"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:43
-#: fava/static/javascript/entry-forms/Transaction.svelte:44
+#: fava/static/javascript/entry-forms/Transaction.svelte:61
+#: fava/static/javascript/entry-forms/Transaction.svelte:65
 msgid "Payee"
 msgstr "Príjemca"
 
@@ -112,12 +112,14 @@ msgstr "Výdavok"
 msgid "Change"
 msgstr "Zmena"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:21
+#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/modals/AddEntry.svelte:12
 #: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "Zostatok"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:47
+#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/Extract.svelte:101
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
 msgstr "Uložiť"
@@ -126,7 +128,7 @@ msgstr "Uložiť"
 msgid "Saving..."
 msgstr "Ukladá sa..."
 
-#: fava/static/javascript/main.js:129
+#: fava/static/javascript/main.js:123
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -168,7 +170,8 @@ msgstr "Ukázať zdroj %(file)s:%(lineno)s"
 msgid "File"
 msgstr "Súbor"
 
-#: fava/static/javascript/modals/Extract.svelte:84 fava/templates/errors.html:6
+#: fava/static/javascript/modals/Extract.svelte:108
+#: fava/templates/errors.html:6
 msgid "Line"
 msgstr "Riadok"
 
@@ -201,7 +204,7 @@ msgstr "Pomoc - %(title)s"
 msgid "Help pages"
 msgstr "Pomocné stránky"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:24
+#: fava/static/javascript/entry-forms/Balance.svelte:34
 #: fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "Mena"
@@ -227,12 +230,12 @@ msgstr "Príjem"
 msgid "Expenses"
 msgstr "Výdavky"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:39
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:44
 #: fava/templates/options.html:5 fava/templates/options.html:22
 msgid "Key"
 msgstr "Kľúč"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:45
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:53
 #: fava/templates/options.html:6 fava/templates/options.html:23
 msgid "Value"
 msgstr "Hodnota"
@@ -282,29 +285,29 @@ msgstr "Počet zápisov"
 msgid "close"
 msgstr "zavrieť"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:41
+#: fava/static/javascript/modals/AddTransaction.svelte:43
 msgid "New transaction"
 msgstr "Nová transakcia"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:45
-#: fava/static/javascript/entry-forms/Transaction.svelte:46
+#: fava/static/javascript/entry-forms/Transaction.svelte:69
+#: fava/static/javascript/entry-forms/Transaction.svelte:73
 msgid "Narration"
 msgstr "Popis"
 
-#: fava/static/javascript/modals/AddTransaction.svelte:46
+#: fava/static/javascript/modals/AddEntry.svelte:70
 msgid "Save and add new"
 msgstr "Uložit a pridať novú transakciu"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:23
+#: fava/static/javascript/entry-forms/Balance.svelte:29
 msgid "Number"
 msgstr "Číslo"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:48
-#: fava/static/javascript/entry-forms/Transaction.svelte:57
+#: fava/static/javascript/entry-forms/Transaction.svelte:80
+#: fava/static/javascript/entry-forms/Transaction.svelte:105
 msgid "Add posting"
 msgstr "Pridať položku"
 
-#: fava/static/javascript/modals/Extract.svelte:58
+#: fava/static/javascript/modals/Extract.svelte:56
 #: fava/templates/_globals.html:9
 msgid "Import"
 msgstr "Importovať"
@@ -321,7 +324,7 @@ msgstr "Prepnúť zdroj"
 msgid "Toggle ignore"
 msgstr "Prepnúť ignorovanie"
 
-#: fava/static/javascript/modals/Extract.svelte:83
+#: fava/static/javascript/modals/Extract.svelte:107
 msgid "Source"
 msgstr "Zdroj"
 
@@ -345,7 +348,7 @@ msgstr "Zdvojiť"
 msgid "Importer"
 msgstr "Importér"
 
-#: fava/static/javascript/Import.svelte:72
+#: fava/static/javascript/Import.svelte:93
 msgid "Extract"
 msgstr "Extraktovať"
 
@@ -357,8 +360,8 @@ msgstr "...zadajte BQL dotaz. 'help' zobrazí všetky dostupné príkazy."
 msgid "Metadata"
 msgstr "Metadáta"
 
-#: fava/static/javascript/entry-forms/AddMetadataButton.svelte:12
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:46
+#: fava/static/javascript/entry-forms/AddMetadataButton.svelte:16
+#: fava/static/javascript/entry-forms/EntryMetadata.svelte:60
 msgid "Add metadata"
 msgstr "Pridať metadáta"
 
@@ -402,7 +405,7 @@ msgstr "Dokumenty s tagom #discovered (objavené)"
 msgid "Postings"
 msgstr "Položky"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:83
+#: fava/static/javascript/modals/DocumentUpload.svelte:87
 msgid "Upload file(s)"
 msgstr "Nahrať súbor-y"
 
@@ -410,7 +413,7 @@ msgstr "Nahrať súbor-y"
 msgid "Documents folder"
 msgstr "Priečinok s dokumentmi"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:106
+#: fava/static/javascript/modals/DocumentUpload.svelte:110
 msgid "Upload"
 msgstr "Nahrať"
 
@@ -451,15 +454,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "Držte Shift počas kliknutia na rožšírenie všetkých podpodložiek. Držte Ctrl alebo Cmd počas kliknutia na rožirenie jedného stupňa."
 
-#: fava/templates/_aside.html:28 fava/templates/_layout.html:49
+#: fava/templates/_aside.html:28 fava/templates/_layout.html:53
 msgid "Export"
 msgstr "Exportovať"
 
-#: fava/templates/_entry_filters.html:4
+#: fava/static/javascript/FilterForm.svelte:21
 msgid "Filter by tag, payee, ..."
 msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
-#: fava/templates/_layout.html:50
+#: fava/templates/_layout.html:54
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 
@@ -467,23 +470,23 @@ msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 msgid "Import entries"
 msgstr "Importovať zápisy"
 
-#: fava/static/javascript/ChartSwitcher.svelte:87 fava/util/date.py:53
+#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:53
 msgid "Yearly"
 msgstr "Ročne"
 
-#: fava/static/javascript/ChartSwitcher.svelte:88 fava/util/date.py:54
+#: fava/static/javascript/ChartSwitcher.svelte:87 fava/util/date.py:54
 msgid "Quarterly"
 msgstr "Kvartálne"
 
-#: fava/static/javascript/ChartSwitcher.svelte:89 fava/util/date.py:55
+#: fava/static/javascript/ChartSwitcher.svelte:88 fava/util/date.py:55
 msgid "Monthly"
 msgstr "Mesačne"
 
-#: fava/static/javascript/ChartSwitcher.svelte:90 fava/util/date.py:56
+#: fava/static/javascript/ChartSwitcher.svelte:89 fava/util/date.py:56
 msgid "Weekly"
 msgstr "Týždenne"
 
-#: fava/static/javascript/ChartSwitcher.svelte:91 fava/util/date.py:57
+#: fava/static/javascript/ChartSwitcher.svelte:90 fava/util/date.py:57
 msgid "Daily"
 msgstr "Denne"
 
@@ -491,7 +494,7 @@ msgstr "Denne"
 msgid "Edit"
 msgstr "Upraviť"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:56
+#: fava/static/javascript/entry-forms/Transaction.svelte:99
 msgid "Amount"
 msgstr "Suma"
 
@@ -499,35 +502,51 @@ msgstr "Suma"
 msgid "Documents with a #linked tag"
 msgstr "Dokumenty s tagom #linked"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:51
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:25
+#: fava/static/javascript/ChartSwitcher.svelte:26
 msgid "At Cost"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:26
+#: fava/static/javascript/ChartSwitcher.svelte:27
 msgid "At Market Value"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:27
+#: fava/static/javascript/ChartSwitcher.svelte:28
 msgid "Units"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:119
+#: fava/static/javascript/ChartSwitcher.svelte:115
 msgid "Treemap"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:123
+#: fava/static/javascript/ChartSwitcher.svelte:119
 msgid "Sunburst"
 msgstr ""
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:12
+#: fava/static/javascript/entry-forms/AccountInput.svelte:16
 msgid "Should be one of the declared accounts"
 msgstr ""
 
 #: fava/templates/events.html:7
 msgid "Event"
+msgstr ""
+
+#: fava/static/javascript/modals/Extract.svelte:86
+msgid "Previous"
+msgstr ""
+
+#: fava/static/javascript/modals/Extract.svelte:91
+msgid "Next"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr ""
+
+#: fava/static/javascript/modals/AddEntry.svelte:48
+msgid "Add"
 msgstr ""
 

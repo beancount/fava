@@ -142,6 +142,7 @@ def test_insert_entry_transaction(tmpdir):
         postings,
     )
 
+    # Test insertion without "insert-entry" options.
     insert_entry(transaction, [str(samplefile)], {})
     assert samplefile.read() == dedent(
         """
@@ -156,6 +157,8 @@ def test_insert_entry_transaction(tmpdir):
     """
     )
 
+    # Verify that InsertEntryOptions with dates greater or equal than the
+    # transaction dates are ignored.
     options = [
         InsertEntryOption(
             datetime.date(2015, 1, 1),
@@ -176,10 +179,11 @@ def test_insert_entry_transaction(tmpdir):
             6,
         ),
     ]
+    transaction = transaction._replace(narration="narr1")
     insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
     assert samplefile.read() == dedent(
         """
-        2016-01-01 * "new payee" "narr"
+        2016-01-01 * "new payee" "narr1"
           Liabilities:US:Chase:Slate                         -10.00 USD
           Expenses:Food                                       10.00 USD
 
@@ -194,12 +198,14 @@ def test_insert_entry_transaction(tmpdir):
     """
     )
 
+    # Verify that previous postings are matched against InsertEntryOptions when
+    # the last posting doesn't match.
     options = [
         InsertEntryOption(
             datetime.date(2015, 1, 1),
             re.compile(".*:Slate"),
             str(samplefile),
-            5,
+            6,
         ),
         InsertEntryOption(
             datetime.date(2015, 1, 2),
@@ -208,16 +214,60 @@ def test_insert_entry_transaction(tmpdir):
             2,
         ),
     ]
+    transaction = transaction._replace(narration="narr2")
     insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
     assert samplefile.read() == dedent(
         """
-        2016-01-01 * "new payee" "narr"
+        2016-01-01 * "new payee" "narr1"
           Liabilities:US:Chase:Slate                         -10.00 USD
           Expenses:Food                                       10.00 USD
+
+        2016-01-01 * "new payee" "narr2"
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
+
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
         2016-01-01 * "new payee" "narr"
           Liabilities:US:Chase:Slate                         -10.00 USD
           Expenses:Food                                       10.00 USD
 
+    """
+    )
+
+    # Verify that preference is given to InsertEntryOptions with later dates in
+    # case several of them match a posting.
+    options = [
+        InsertEntryOption(
+            datetime.date(2015, 1, 1),
+            re.compile(".*:Food"),
+            str(samplefile),
+            6,
+        ),
+        InsertEntryOption(
+            datetime.date(2015, 1, 2),
+            re.compile(".*:Food"),
+            str(samplefile),
+            2,
+        ),
+    ]
+    transaction = transaction._replace(narration="narr3")
+    insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
+    assert samplefile.read() == dedent(
+        """
+        2016-01-01 * "new payee" "narr3"
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
+
+        2016-01-01 * "new payee" "narr1"
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
+
+        2016-01-01 * "new payee" "narr2"
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
 
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD

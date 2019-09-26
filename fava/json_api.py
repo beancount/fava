@@ -19,13 +19,28 @@ from fava.core.misc import align
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
 
-def api_endpoint(func):
-    """Register an endpoint."""
+def get_api_endpoint(func):
+    """Register a GET endpoint."""
 
     @json_api.route("/{}/".format(func.__name__), methods=["GET"])
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         return jsonify({"success": True, "data": func(*args, **kwargs)})
+
+    return _wrapper
+
+
+def put_api_endpoint(func):
+    """Register a PUT endpoint."""
+
+    @json_api.route("/{}/".format(func.__name__), methods=["PUT"])
+    @functools.wraps(func)
+    def _wrapper(*args, **kwargs):
+        request_data = request.get_json()
+        if request_data is None:
+            raise FavaAPIException("Invalid JSON request.")
+        res = func(request_data, *args, **kwargs)
+        return jsonify({"success": True, "data": res})
 
     return _wrapper
 
@@ -68,25 +83,25 @@ def _json_api_oserror(error):
     return {"success": False, "error": error.strerror}
 
 
-@api_endpoint
+@get_api_endpoint
 def changed():
     """Check for file changes."""
     return g.ledger.changed()
 
 
-@api_endpoint
+@get_api_endpoint
 def errors():
     """Number of errors."""
     return len(g.ledger.errors)
 
 
-@api_endpoint
+@get_api_endpoint
 def payee_accounts():
     """Rank accounts for the given payee."""
     return g.ledger.attributes.payee_accounts(request.args.get("payee"))
 
 
-@api_endpoint
+@get_api_endpoint
 def extract():
     """Extract entries using the ingest framework."""
     entries = g.ledger.ingest.extract(
@@ -95,7 +110,7 @@ def extract():
     return list(map(serialise, entries))
 
 
-@api_endpoint
+@get_api_endpoint
 def move():
     """Move a file."""
     if not g.ledger.options["documents"]:
@@ -123,18 +138,16 @@ def move():
     return "Moved {} to {}.".format(filename, new_path)
 
 
-@api_endpoint
+@get_api_endpoint
 def payee_transaction():
     """Last transaction for the given payee."""
     entry = g.ledger.attributes.payee_transaction(request.args.get("payee"))
     return serialise(entry)
 
 
-@json_api.route("/source/", methods=["PUT"])
-@json_request
-@json_response
+@put_api_endpoint
 def source(request_data):
-    """Write one of the source files."""
+    """Write one of the source files and return the updated sha256sum."""
     if request_data.get("file_path"):
         sha256sum = g.ledger.file.set_source(
             request_data.get("file_path"),
@@ -146,16 +159,13 @@ def source(request_data):
         sha256sum = save_entry_slice(
             entry, request_data.get("source"), request_data.get("sha256sum")
         )
-    return {"sha256sum": sha256sum}
+    return sha256sum
 
 
-@json_api.route("/format-source/", methods=["POST"])
-@json_request
-@json_response
+@put_api_endpoint
 def format_source(request_data):
     """Format beancount file."""
-    aligned = align(request_data["source"], g.ledger.fava_options)
-    return {"payload": aligned}
+    return align(request_data["source"], g.ledger.fava_options)
 
 
 def filepath_in_document_folder(documents_folder, account, filename):
@@ -221,12 +231,10 @@ def add_document():
         g.ledger.file.insert_metadata(
             request.form["hash"], "document", filename
         )
-    return {"message": "Uploaded to {}".format(filepath)}
+    return {"data": "Uploaded to {}".format(filepath)}
 
 
-@json_api.route("/add-entries/", methods=["PUT"])
-@json_request
-@json_response
+@put_api_endpoint
 def add_entries(request_data):
     """Add multiple entries."""
     try:
@@ -236,4 +244,4 @@ def add_entries(request_data):
 
     g.ledger.file.insert_entries(entries)
 
-    return {"message": "Stored {} entries.".format(len(entries))}
+    return "Stored {} entries.".format(len(entries))

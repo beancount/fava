@@ -145,7 +145,7 @@ def test_download_journal(app, test_client):
     "filename,has_modified",
     [
         ("not-a-real-file", False),
-        ("javascript/main.js", True),
+        ("javascript/main.ts", True),
         ("css/style.css", True),
     ],
 )

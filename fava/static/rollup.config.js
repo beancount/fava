@@ -1,8 +1,8 @@
 import commonjs from "rollup-plugin-commonjs";
 import css from "rollup-plugin-css-only";
-import json from "rollup-plugin-json";
-import svelte from "rollup-plugin-svelte";
 import nodeResolve from "rollup-plugin-node-resolve";
+import svelte from "rollup-plugin-svelte";
+import typescript from "rollup-plugin-typescript";
 
 import fs from "fs";
 import { promisify } from "util";
@@ -35,18 +35,20 @@ function copy(files) {
 }
 
 export default {
-  input: "javascript/main.js",
+  input: "javascript/main.ts",
   output: {
     file: "gen/app.js",
+    name: "fava",
+    sourcemap: true,
     format: "iife",
   },
   plugins: [
     nodeResolve(),
+    typescript(),
     commonjs({
       include: "node_modules/**",
     }),
     svelte(),
-    json(),
     css(),
     copy(fonts),
   ],

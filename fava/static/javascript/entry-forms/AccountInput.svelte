@@ -2,7 +2,10 @@
   import { _ } from "../helpers";
   import { favaAPI } from "../stores";
 
+  import AutocompleteInput from "../AutocompleteInput.svelte";
+
   export let value = "";
+  export let suggestions;
 
   let input;
 
@@ -17,10 +20,9 @@
   $: if (input) checkValidity(value);
 </script>
 
-<input
-  type="text"
-  class="account"
-  placeholder={_('Account')}
-  list="accounts"
+<AutocompleteInput
   bind:this={input}
-  bind:value />
+  className="account"
+  placeholder={_('Account')}
+  bind:value
+  suggestions={suggestions || favaAPI.accounts} />

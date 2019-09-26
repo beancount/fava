@@ -1,34 +1,36 @@
 // Minimal event handler
 class Events {
+  events: Record<string, Function[]>;
+
   constructor() {
     this.events = {};
   }
 
-  on(event, callback) {
+  on(event: string, callback: Function) {
     this.events[event] = this.events[event] || [];
     this.events[event].push(callback);
   }
 
-  once(event, callback) {
-    const runOnce = (...args) => {
+  once(event: string, callback: Function) {
+    const runOnce = (arg: any) => {
       this.remove(event, runOnce);
-      callback(...args);
+      callback(arg);
     };
 
     this.on(event, runOnce);
   }
 
-  remove(event, callback) {
+  remove(event: string, callback: Function) {
     if (!this.events[event].length) return;
     this.events[event] = this.events[event].filter(c => c !== callback);
   }
 
-  trigger(event, ...args) {
+  trigger(event: string, arg?: any) {
     if (!this.events[event]) {
       return;
     }
     this.events[event].forEach(callback => {
-      callback(...args);
+      callback(arg);
     });
   }
 }

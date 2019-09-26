@@ -3,7 +3,7 @@
 
   import { delegate } from "../helpers";
 
-  import AddTransaction from "./AddTransaction.svelte";
+  import AddEntry from "./AddEntry.svelte";
   import Context from "./Context.svelte";
   import DocumentUpload from "./DocumentUpload.svelte";
   import Export from "./Export.svelte";
@@ -37,7 +37,7 @@
   });
 </script>
 
-<AddTransaction />
+<AddEntry />
 <Context />
 <DocumentUpload bind:this={documentUploadModal} />
 <Export />

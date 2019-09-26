@@ -5,6 +5,7 @@
 import CodeMirror from "codemirror";
 
 // The rules should mirror `parser/lexel.l` in beancount
+// @ts-ignore
 CodeMirror.defineSimpleMode("beancount", {
   start: [
     {

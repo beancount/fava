@@ -1,31 +1,51 @@
 <script>
   import { _ } from "./helpers";
-  import { filters as filterStore } from "./stores";
+  import { filters as filterStore, favaAPI } from "./stores";
+  import AutocompleteInput from "./AutocompleteInput.svelte";
 
   const filters = [
     {
       name: "time",
       placeholder: _("Time"),
       key: "f t",
-      list: "years",
+      suggestions: favaAPI.years,
     },
     {
       name: "account",
       placeholder: _("Account"),
       key: "f a",
-      list: "accounts",
+      suggestions: favaAPI.accounts,
     },
     {
       name: "filter",
       placeholder: _("Filter by tag, payee, ..."),
       key: "f f",
-      list: "tags",
+      suggestions: [
+        ...favaAPI.tags.map(tag => `#${tag}`),
+        ...favaAPI.links.map(link => `^${link}`),
+        ...favaAPI.payees.map(payee => `payee:"${payee}"`),
+      ],
+      autocompleteOptions: {
+        valueExtractor(value, input) {
+          const [ret] = value.slice(0, input.selectionStart).match(/\S*$/);
+          return ret;
+        },
+        valueSelector(value, input) {
+          const [search] = input.value
+            .slice(0, input.selectionStart)
+            .match(/\S*$/);
+          return `${input.value.slice(
+            0,
+            input.selectionStart - search.length
+          )}${value}${input.value.slice(input.selectionStart)}`;
+        },
+      },
     },
   ];
 
   let values;
   filterStore.subscribe(fs => {
-    values = Object.assign({}, fs);
+    values = { ...fs };
   });
 
   function submit() {
@@ -44,17 +64,15 @@
 </script>
 
 <form id="filter-form" class="filter-form" on:submit|preventDefault={submit}>
-  {#each filters as { name, placeholder, key, list }}
+  {#each filters as { name, placeholder, key, suggestions, autocompleteOptions }}
     <span class:empty={!values[name]}>
-      <input
-        data-key={key}
-        {name}
-        type="text"
+      <AutocompleteInput
         bind:value={values[name]}
         {placeholder}
-        {list}
-        on:autocomplete-select={submit}
-        size={Math.max(values[name].length, placeholder.length) + 1} />
+        {suggestions}
+        setSize={true}
+        {...autocompleteOptions}
+        on:select={submit} />
       <button
         type="button"
         tabindex="-1"
