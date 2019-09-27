@@ -25,8 +25,8 @@ class Watcher:
             folders: A list of paths to folders.
 
         """
-        self._files = [path for path in files]
-        self._folders = [path for path in folders]
+        self._files = list(files)
+        self._folders = list(folders)
         self.check()
 
     def check(self):
