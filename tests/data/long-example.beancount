@@ -5372,13 +5372,13 @@ option "operating_currency" "USD"
 2014-12-26 price ITOT                               79.65 USD
 2014-12-26 price VEA                                72.91 USD
 2014-12-26 price VHT                               102.58 USD
-2014-12-26 price GLD                               109.10 USD
+2014-12-31 price GLD                               109.10 USD
+2015-01-01 price GLD                               110.40 USD
 2015-01-02 price VBMPX                              27.96 USD
 2015-01-02 price RGAGX                             107.74 USD
 2015-01-02 price ITOT                               81.17 USD
 2015-01-02 price VEA                                74.46 USD
 2015-01-02 price VHT                               100.89 USD
-2015-01-02 price GLD                               110.40 USD
 2015-01-09 price VBMPX                              27.69 USD
 2015-01-09 price RGAGX                             105.36 USD
 2015-01-09 price ITOT                               80.78 USD

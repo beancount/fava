@@ -149,11 +149,17 @@ class ChartModule(FavaModule):
         txn = next(transactions, None)
         inventory = CounterInventory()
 
-        for date in self.ledger.interval_ends(interval):
-            while txn and txn.date < date:
+        for end_date_exclusive in self.ledger.interval_ends(interval):
+            end_date_inclusive = end_date_exclusive - datetime.timedelta(
+                days=1
+            )
+            while txn and txn.date < end_date_exclusive:
                 for posting in filter(
                     lambda p: p.account.startswith(types), txn.postings
                 ):
                     inventory.add_position(posting)
                 txn = next(transactions, None)
-            yield {"date": date, "balance": cost_or_value(inventory, date)}
+            yield {
+                "date": end_date_exclusive,
+                "balance": cost_or_value(inventory, end_date_inclusive),
+            }
