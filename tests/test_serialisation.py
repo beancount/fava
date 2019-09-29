@@ -3,6 +3,7 @@
 import datetime
 
 from beancount.core.data import (
+    Amount,
     Transaction,
     create_simple_posting,
     Balance,
@@ -172,6 +173,45 @@ def test_deserialise():
 
     with pytest.raises(FavaAPIException):
         deserialise({"type": "NoEntry"})
+
+
+def test_deserialise_total_price():
+    postings = [
+        {"account": "Assets:ETrade:Bank", "amount": "20 USD"},
+        {"account": "Assets:ETrade:Foreign", "amount": "-100 EUR @@ 20 USD"},
+    ]
+    json_txn = {
+        "type": "Transaction",
+        "date": "2017-12-12",
+        "flag": "*",
+        "payee": "Test3",
+        "narration": "asdfasd #tag ^link",
+        "meta": {},
+        "postings": postings,
+    }
+
+    txn = Transaction(
+        {},
+        datetime.date(2017, 12, 12),
+        "*",
+        "Test3",
+        "asdfasd",
+        frozenset(["tag"]),
+        frozenset(["link"]),
+        [],
+    )
+    create_simple_posting(txn, "Assets:ETrade:Bank", "20", "USD")
+    txn.postings.append(
+        Posting(
+            "Assets:ETrade:Foreign",
+            Amount(D("-100"), "EUR"),
+            None,
+            Amount(D("0.2"), "USD"),
+            None,
+            None,
+        )
+    )
+    assert deserialise(json_txn) == txn
 
 
 def test_deserialise_balance():

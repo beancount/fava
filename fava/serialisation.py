@@ -90,11 +90,15 @@ def _serialise_posting(posting):
 def deserialise_posting(posting):
     """Parse JSON to a Beancount Posting."""
     amount = posting.get("amount")
-    price = None
+    unit_price = None
+    total_price = None
     if amount:
-        if "@" in amount:
-            amount, raw_price = amount.split("@")
-            price = A(raw_price)
+        if "@@" in amount:
+            amount, raw_total_price = amount.split("@@")
+            total_price = A(raw_total_price)
+        elif "@" in amount:
+            amount, raw_unit_price = amount.split("@")
+            unit_price = A(raw_unit_price)
         pos = position.from_string(amount)
         units = pos.units
         if re.search(r"{\s*}", amount):
@@ -103,7 +107,17 @@ def deserialise_posting(posting):
             cost = pos.cost
     else:
         units, cost = None, None
-    return data.Posting(posting["account"], units, cost, price, None, None)
+    if total_price is not None:
+        if units.number == 0:
+            unit_price = 0
+        else:
+            unit_price = Amount(
+                total_price.number / units.number.copy_abs(),
+                total_price.currency,
+            )
+    return data.Posting(
+        posting["account"], units, cost, unit_price, None, None
+    )
 
 
 def deserialise(json_entry):
