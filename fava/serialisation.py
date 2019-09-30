@@ -9,8 +9,12 @@ This is not intended to work well enough for full roundtrips yet.
 """
 
 import decimal
+import ast
 import functools
+import operator
 import re
+from io import BytesIO
+from tokenize import tokenize, untokenize, NAME, NUMBER, OP, STRING
 
 from beancount.core import data, position
 from beancount.core.amount import A, Amount
@@ -43,14 +47,67 @@ def extract_tags_links(string):
     return new_string, frozenset(tags), frozenset(links)
 
 
-def parse_number(num):
-    """Parse a number as entered in an entry form, supporting division."""
-    if not num:
+def _decimalize_statement(statement):
+    """Wraps every number in the statement string with a call to D().
+
+    Example: "3.14" -> "D(3.14)"
+    """
+    result = []
+    tokens = tokenize(BytesIO(statement.encode()).readline)
+    for token_type, token_value, _, _, _ in tokens:
+        if token_type == NUMBER:
+            result.extend(
+                [
+                    (NAME, "D"),
+                    (OP, "("),
+                    (STRING, repr(token_value)),
+                    (OP, ")"),
+                ]
+            )
+        else:
+            result.append((token_type, token_value))
+    return untokenize(result)
+
+
+def _process_ast_node(node):
+    supported_operators = {
+        ast.Add: operator.add,
+        ast.Sub: operator.sub,
+        ast.Mult: operator.mul,
+        ast.Div: operator.truediv,
+        ast.USub: operator.neg,
+    }
+    if isinstance(node, ast.Call) and node.func.id == "D":  # D(<number>)
+        return D(node.args[0].s)
+    if isinstance(node, ast.BinOp):  # <left> <operator> <right>
+        return supported_operators[type(node.op)](
+            _process_ast_node(node.left), _process_ast_node(node.right)
+        )
+    if isinstance(node, ast.UnaryOp):  # <operator> <operand> e.g., -1
+        return supported_operators[type(node.op)](
+            _process_ast_node(node.operand)
+        )
+    raise TypeError(node)
+
+
+def parse_numerical_expression(expression):
+    """Parse a numeric expression as entered in an entry form.
+
+    Supports addition, subtraction, multiplication and division.
+
+    Raises:
+        FavaAPIException: if the given expression cannot be parsed.
+    """
+    if not expression:
         return None
-    if "/" in num:
-        left, right = num.split("/")
-        return D(left) / D(right)
-    return D(num)
+    try:
+        return _process_ast_node(
+            ast.parse(_decimalize_statement(expression), mode="eval").body
+        )
+    except (TypeError, KeyError):
+        raise FavaAPIException(
+            "Invalid arithmetic expression: {}".format(expression)
+        )
 
 
 @functools.singledispatch
@@ -100,9 +157,15 @@ def deserialise_posting(posting):
         elif "@" in amount:
             amount, raw_unit_price = amount.split("@")
             unit_price = A(raw_unit_price)
-        pos = position.from_string(amount)
+        remainder = ""
+        match = re.match(r"([0-9.\+\-\*\/ ]*[0-9])(.*)", amount)
+        if match:
+            amount = match.group(1)
+            remainder = match.group(2)
+        simplified_amount = str(parse_numerical_expression(amount)) + remainder
+        pos = position.from_string(simplified_amount)
         units = pos.units
-        if re.search(r"{\s*}", amount):
+        if re.search(r"{\s*}", simplified_amount):
             cost = data.CostSpec(MISSING, None, MISSING, None, None, False)
         else:
             cost = pos.cost
