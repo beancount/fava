@@ -12,10 +12,10 @@
    * Construct the filename from date and basename.
    */
   function newFilename(date, basename) {
-    if (/\d{4}-\d{2}-\d{2}/.test(basename)) {
+    if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {
       return basename;
     }
-    return `${date} ${basename}`;
+    return `${date}.${basename}`;
   }
 
   // Initially set the file names for all importable files.
