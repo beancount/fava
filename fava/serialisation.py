@@ -8,13 +8,14 @@ representation of the entry is provided.
 This is not intended to work well enough for full roundtrips yet.
 """
 
+import decimal
 import functools
 import re
 
 from beancount.core import data, position
 from beancount.core.amount import A, Amount
 from beancount.core.data import EMPTY_SET
-from beancount.core.number import D, MISSING
+from beancount.core.number import D, MISSING, ZERO
 
 from fava import util
 from fava.core.helpers import FavaAPIException
@@ -108,13 +109,12 @@ def deserialise_posting(posting):
     else:
         units, cost = None, None
     if total_price is not None:
-        if units.number == 0:
-            unit_price = 0
-        else:
-            unit_price = Amount(
-                total_price.number / units.number.copy_abs(),
-                total_price.currency,
-            )
+        try:
+            num = total_price.number / units.number.copy_abs()
+        except decimal.InvalidOperation:
+            # if both units and total price is zero, set it to zero.
+            num = ZERO
+        unit_price = Amount(num, total_price.currency)
     return data.Posting(
         posting["account"], units, cost, unit_price, None, None
     )
