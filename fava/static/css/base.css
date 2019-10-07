@@ -351,11 +351,6 @@ aside {
   border-right: 1px solid var(--color-sidebar-border);
 }
 
-aside .header-custom-links {
-  margin-bottom: 0.5rem;
-  margin-left: 1rem;
-}
-
 .navigation {
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
