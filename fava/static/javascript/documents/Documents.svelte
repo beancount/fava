@@ -2,6 +2,7 @@
   import { moveDocument } from "../api";
   import { favaAPI } from "../stores";
   import { _ } from "../helpers";
+  import router from "../router";
 
   import { basename, entriesToTree } from "./util";
 
@@ -46,7 +47,7 @@
     );
     if (moved) {
       moving = null;
-      // TODO: remove document
+      router.reload();
     }
   }
 </script>

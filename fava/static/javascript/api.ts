@@ -3,6 +3,7 @@ import { notify } from "./notifications";
 
 /**
  * Move a file, either in an import directory or a document.
+ * @returns whether the file was moved successfully.
  */
 export async function moveDocument(
   filename: string,

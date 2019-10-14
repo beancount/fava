@@ -57,6 +57,8 @@
     }}
     on:drop|preventDefault={drop}
     title={node.fullname}
+    class="droptarget"
+    data-account-name={node.fullname}
     class:expanded
     class:selected={$selectedAccount === node.fullname}
     class:drag>
