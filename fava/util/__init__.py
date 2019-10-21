@@ -19,7 +19,7 @@ def filter_api_changed(record):
     return not record.msg.endswith('api/changed/ HTTP/1.1" 200 -')
 
 
-def setup_logging():
+def setup_logging() -> None:
     """Setup logging for Fava."""
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
