@@ -4,10 +4,12 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
+    "sphinx.ext.intersphinx",
     "sphinx_autodoc_typehints",
 ]
 source_suffix = ".rst"
 master_doc = "index"
+intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # General information about the project.
 project = "Fava"
