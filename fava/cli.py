@@ -4,6 +4,7 @@ import os
 import errno
 
 import click
+from werkzeug.contrib.profiler import ProfilerMiddleware
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from cheroot import wsgi
 
@@ -90,8 +91,6 @@ def main(
         server.safe_start()
     else:
         if profile:
-            from werkzeug.contrib.profiler import ProfilerMiddleware
-
             app.config["PROFILE"] = True
             app.wsgi_app = ProfilerMiddleware(
                 app.wsgi_app,
