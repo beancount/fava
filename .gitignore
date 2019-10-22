@@ -14,6 +14,7 @@
 /venv
 
 node_modules
+*.so
 *.pyc
 *.so
 .DS_Store

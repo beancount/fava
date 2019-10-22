@@ -1,0 +1,2 @@
+([],
+ [ParserError(source={'filename': None, 'lineno': 0}, message="Unbalanced metadata key 'test'; leftover metadata '['value']'", entry=None)])

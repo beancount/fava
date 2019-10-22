@@ -19,9 +19,10 @@ mostlyclean:
 	rm -rf .tox
 	rm -rf build
 	rm -rf dist
-	rm -rf frontend/node_modules
+	find . -type f -name '*.so' -delete
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
+	find . -type d -name "node_modules" -delete
 
 .PHONY: check-lint
 check-lint: frontend/node_modules
@@ -42,8 +43,8 @@ test:
 .PHONY: update-snapshots
 update-snapshots:
 	find . -name "__snapshots__" -type d -prune -exec rm -r "{}" +
-	-SNAPSHOT_UPDATE=1 tox
-	tox
+	-SNAPSHOT_UPDATE=1 tox -e py
+	tox -e py
 
 .PHONY: docs
 docs:
@@ -60,7 +61,7 @@ bql-grammar:
 
 dist: src/fava/static/app.js src/fava setup.cfg setup.py MANIFEST.in
 	rm -rf build dist
-	python setup.py sdist bdist_wheel
+	python3 setup.py sdist bdist_wheel
 
 .PHONY: before-release
 before-release: bql-grammar translations-push translations-fetch
@@ -106,3 +107,9 @@ gh-pages:
 	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
 	git checkout master
 	git branch -D gh-pages
+
+# Update tree-sitter grammar.
+.PHONY: update-grammar
+update-grammar:
+	curl https://raw.githubusercontent.com/yagebu/tree-sitter-beancount/master/src/parser.c --output fava/parser/tree-sitter-beancount/parser.c
+	curl https://raw.githubusercontent.com/yagebu/tree-sitter-beancount/master/src/tree_sitter/parser.h --output fava/parser/tree-sitter-beancount/tree_sitter/parser.h

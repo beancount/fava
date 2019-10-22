@@ -1,0 +1,2 @@
+([],
+ [ParserError(source={'filename': None, 'lineno': 2}, message="Attempting to pop absent tag: 'testtag'", entry=None)])

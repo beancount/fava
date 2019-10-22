@@ -9,6 +9,7 @@ install:
   - '%PYTHON%\python -m pip install -U setuptools pip wheel tox'
 
 test_script:
+  - '%PYTHON%\python setup.py build_ext --inplace'
   - '%PYTHON%\scripts\tox -e py'
 
 cache:
