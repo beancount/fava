@@ -7,15 +7,14 @@ representation of the entry is provided.
 
 This is not intended to work well enough for full roundtrips yet.
 """
-
-import decimal
 import functools
 import re
-
-from beancount.core import data, position
-from beancount.core.amount import A, Amount
+from beancount.core import data
+from beancount.core import position
+from beancount.core.amount import Amount
 from beancount.core.data import EMPTY_SET
-from beancount.core.number import D, MISSING, ZERO
+from beancount.core.number import D
+from beancount.parser.parser import parse_string
 
 from fava import util
 from fava.core.helpers import FavaAPIException
@@ -41,16 +40,6 @@ def extract_tags_links(string):
     new_string = re.sub(r"(?:^|\s)[#^]([A-Za-z0-9\-_/.]+)", "", string).strip()
 
     return new_string, frozenset(tags), frozenset(links)
-
-
-def parse_number(num):
-    """Parse a number as entered in an entry form, supporting division."""
-    if not num:
-        return None
-    if "/" in num:
-        left, right = num.split("/")
-        return D(left) / D(right)
-    return D(num)
 
 
 @functools.singledispatch
@@ -90,34 +79,14 @@ def _serialise_posting(posting):
 
 def deserialise_posting(posting):
     """Parse JSON to a Beancount Posting."""
-    amount = posting.get("amount")
-    unit_price = None
-    total_price = None
-    if amount:
-        if "@@" in amount:
-            amount, raw_total_price = amount.split("@@")
-            total_price = A(raw_total_price)
-        elif "@" in amount:
-            amount, raw_unit_price = amount.split("@")
-            unit_price = A(raw_unit_price)
-        pos = position.from_string(amount)
-        units = pos.units
-        if re.search(r"{\s*}", amount):
-            cost = data.CostSpec(MISSING, None, MISSING, None, None, False)
-        else:
-            cost = pos.cost
-    else:
-        units, cost = None, None
-    if total_price is not None:
-        try:
-            num = total_price.number / units.number.copy_abs()
-        except decimal.InvalidOperation:
-            # if both units and total price is zero, set it to zero.
-            num = ZERO
-        unit_price = Amount(num, total_price.currency)
-    return data.Posting(
-        posting["account"], units, cost, unit_price, None, None
+    amount = posting.get("amount", "")
+    entries, errors, _ = parse_string(
+        '2000-01-01 * "" ""\n Assets:Account {}'.format(amount)
     )
+    if errors:
+        raise FavaAPIException("Invalid amount: {}".format(amount))
+    pos = entries[0].postings[0]
+    return pos._replace(account=posting["account"], meta=None)
 
 
 def deserialise(json_entry):
