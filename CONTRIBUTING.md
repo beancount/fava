@@ -19,4 +19,4 @@ tests, which can be run with `make test` (requires `tox`).
 ### Contributing translations
 
 You can contribute to Fava's translations at the [Fava project on
-POEditor.com](https://poeditor.com/projects/view?id=90283).
+POEditor.com](https://poeditor.com/join/project/TlraSxOCxt).
