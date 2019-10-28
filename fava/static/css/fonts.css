@@ -3,14 +3,14 @@
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: normal;
-  src: url("./source-code-pro-latin-400.woff2") format("woff2");
+  src: url("./source-code-pro-all-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 500;
-  src: url("./source-code-pro-latin-500.woff2") format("woff2");
+  src: url("./source-code-pro-all-500.woff2") format("woff2");
 }
 
 /* Interface fonts */
@@ -32,14 +32,14 @@
   font-family: "Fira Sans";
   font-style: normal;
   font-weight: normal;
-  src: url("./fira-sans-latin-400.woff2") format("woff2");
+  src: url("./fira-sans-all-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Fira Sans";
   font-style: normal;
   font-weight: 500;
-  src: url("./fira-sans-latin-500.woff2") format("woff2");
+  src: url("./fira-sans-all-500.woff2") format("woff2");
 }
 
 /* The help pages */
