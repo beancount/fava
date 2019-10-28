@@ -13,10 +13,10 @@ const copyFile = promisify(fs.copyFile);
 const fonts = [
   "node_modules/typeface-fira-mono/files/fira-mono-latin-400.woff2",
   "node_modules/typeface-fira-mono/files/fira-mono-latin-500.woff2",
-  "node_modules/typeface-fira-sans/files/fira-sans-latin-400.woff2",
-  "node_modules/typeface-fira-sans/files/fira-sans-latin-500.woff2",
-  "node_modules/typeface-source-code-pro/files/source-code-pro-latin-400.woff2",
-  "node_modules/typeface-source-code-pro/files/source-code-pro-latin-500.woff2",
+  "node_modules/@openfonts/fira-sans_all/files/fira-sans-all-400.woff2",
+  "node_modules/@openfonts/fira-sans_all/files/fira-sans-all-500.woff2",
+  "node_modules/@openfonts/source-code-pro_all/files/source-code-pro-all-400.woff2",
+  "node_modules/@openfonts/source-code-pro_all/files/source-code-pro-all-500.woff2",
   "node_modules/typeface-source-serif-pro/files/source-serif-pro-400.woff2",
   "node_modules/typeface-source-serif-pro/files/source-serif-pro-600.woff2",
 ];

@@ -138,6 +138,8 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
+    "@openfonts/fira-sans_all": "^1.43.0",
+    "@openfonts/source-code-pro_all": "^1.43.0",
     "codemirror": "^5.49.2",
     "d3-array": "^2.3.3",
     "d3-axis": "^1.0.12",
@@ -153,8 +155,6 @@
     "mousetrap": "^1.6.3",
     "svelte": "^3.12.1",
     "typeface-fira-mono": "0.0.72",
-    "typeface-fira-sans": "0.0.75",
-    "typeface-source-code-pro": "0.0.71",
     "typeface-source-serif-pro": "0.0.75"
   }
 }
