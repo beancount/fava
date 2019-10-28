@@ -18,14 +18,14 @@
   font-family: "Fira Mono";
   font-style: normal;
   font-weight: normal;
-  src: url("./fira-mono-latin-400.woff2") format("woff2");
+  src: url("./fira-mono-all-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Fira Mono";
   font-style: normal;
   font-weight: 500;
-  src: url("./fira-mono-latin-500.woff2") format("woff2");
+  src: url("./fira-mono-all-500.woff2") format("woff2");
 }
 
 @font-face {
@@ -47,12 +47,12 @@
   font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: normal;
-  src: url("./source-serif-pro-400.woff2") format("woff2");
+  src: url("./source-serif-pro-latin-400.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: 600;
-  src: url("./source-serif-pro-600.woff2") format("woff2");
+  src: url("./source-serif-pro-latin-600.woff2") format("woff2");
 }
