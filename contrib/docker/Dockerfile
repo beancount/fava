@@ -1,7 +1,7 @@
 FROM python:alpine as builder
 
 RUN apk add --update libxml2-dev libxslt-dev gcc musl-dev g++
-RUN pip install --install-option="--prefix=/install" fava
+RUN pip install --prefix="/install" fava
 
 FROM python:alpine
 
