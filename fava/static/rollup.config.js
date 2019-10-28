@@ -11,14 +11,14 @@ import { basename, dirname, join } from "path";
 const copyFile = promisify(fs.copyFile);
 
 const fonts = [
-  "node_modules/typeface-fira-mono/files/fira-mono-latin-400.woff2",
-  "node_modules/typeface-fira-mono/files/fira-mono-latin-500.woff2",
+  "node_modules/@openfonts/fira-mono_all/files/fira-mono-all-400.woff2",
+  "node_modules/@openfonts/fira-mono_all/files/fira-mono-all-500.woff2",
   "node_modules/@openfonts/fira-sans_all/files/fira-sans-all-400.woff2",
   "node_modules/@openfonts/fira-sans_all/files/fira-sans-all-500.woff2",
   "node_modules/@openfonts/source-code-pro_all/files/source-code-pro-all-400.woff2",
   "node_modules/@openfonts/source-code-pro_all/files/source-code-pro-all-500.woff2",
-  "node_modules/typeface-source-serif-pro/files/source-serif-pro-400.woff2",
-  "node_modules/typeface-source-serif-pro/files/source-serif-pro-600.woff2",
+  "node_modules/@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-400.woff2",
+  "node_modules/@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-600.woff2",
 ];
 
 function copy(files) {

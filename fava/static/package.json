@@ -138,8 +138,10 @@
     "typescript": "^3.6.4"
   },
   "dependencies": {
+    "@openfonts/fira-mono_all": "^1.43.0",
     "@openfonts/fira-sans_all": "^1.43.0",
     "@openfonts/source-code-pro_all": "^1.43.0",
+    "@openfonts/source-serif-pro_latin": "^1.43.0",
     "codemirror": "^5.49.2",
     "d3-array": "^2.3.3",
     "d3-axis": "^1.0.12",
@@ -153,8 +155,6 @@
     "d3-time-format": "^2.2.1",
     "d3-transition": "^1.2.0",
     "mousetrap": "^1.6.3",
-    "svelte": "^3.12.1",
-    "typeface-fira-mono": "0.0.72",
-    "typeface-source-serif-pro": "0.0.75"
+    "svelte": "^3.12.1"
   }
 }
