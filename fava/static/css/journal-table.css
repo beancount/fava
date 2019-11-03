@@ -22,7 +22,6 @@
   font-family: var(--font-family-monospaced);
   color: var(--color-text);
   text-align: right;
-  white-space: nowrap;
 }
 
 .flex-table .number {
