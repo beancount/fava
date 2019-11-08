@@ -238,13 +238,11 @@ export function parseChartData() {
         });
 
         const renderer = (svg: SVGElement) => new HierarchyContainer(svg);
-        if (renderer) {
-          result.push({
-            name: chart.label,
-            data,
-            renderer,
-          });
-        }
+        result.push({
+          name: chart.label,
+          data,
+          renderer,
+        });
 
         break;
       }
