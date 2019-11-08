@@ -7,9 +7,12 @@ export class Posting {
 
   amount: string;
 
+  meta: Record<string, string>;
+
   constructor() {
     this.account = "";
     this.amount = "";
+    this.meta = {};
   }
 }
 

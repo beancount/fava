@@ -74,7 +74,13 @@ def _serialise_posting(posting):
 
     if posting.price is not None:
         position_str += " @ {}".format(posting.price.to_string())
-    return {"account": posting.account, "amount": position_str}
+
+    serialized = {"account": posting.account, "amount": position_str}
+
+    if posting.meta is not None:
+        serialized['meta'] = posting.meta
+
+    return serialized
 
 
 def deserialise_posting(posting):
@@ -86,7 +92,7 @@ def deserialise_posting(posting):
     if errors:
         raise FavaAPIException("Invalid amount: {}".format(amount))
     pos = entries[0].postings[0]
-    return pos._replace(account=posting["account"], meta=None)
+    return pos._replace(account=posting["account"], meta=posting.get("meta", {}))
 
 
 def deserialise(json_entry):
