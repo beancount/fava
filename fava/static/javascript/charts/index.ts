@@ -74,7 +74,9 @@ interface ChartWithData<T extends BaseChart> {
   renderer: (svg: SVGElement) => T;
 }
 
-const parsers = {
+const parsers: Partial<
+  Record<string, (json: unknown, label: string) => ChartWithData<any>>
+> = {
   balances(json: unknown): ChartWithData<LineChart> {
     const series: Record<
       string,
@@ -170,6 +172,36 @@ const parsers = {
       });
     return { data, renderer };
   },
+  hierarchy(json: unknown): ChartWithData<HierarchyContainer> {
+    const hierarchyValidator: Validator<AccountHierarchy> = object({
+      account: string,
+      balance: record(number),
+      balance_children: record(number),
+      children: lazy(() => array(hierarchyValidator)),
+    });
+    const validator = object({
+      root: hierarchyValidator,
+      modifier: number,
+    });
+    const chartData_ = validator(json);
+    const { root } = chartData_;
+    addInternalNodesAsLeaves(root);
+    const data: Record<string, AccountHierarchyNode> = {};
+
+    operatingCurrenciesWithConversion.forEach(currency => {
+      const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
+        .sum(d => d.balance[currency] * chartData_.modifier)
+        .sort((a, b) => (b.value || 0) - (a.value || 0));
+      if (currencyHierarchy.value !== 0) {
+        data[currency] = currencyHierarchy;
+      }
+    });
+
+    return {
+      data,
+      renderer: (svg: SVGElement) => new HierarchyContainer(svg),
+    };
+  },
   scatterplot(json: unknown): ChartWithData<ScatterPlot> {
     const parser = array(
       object({
@@ -185,68 +217,23 @@ const parsers = {
   },
 };
 
+const validateChartData = array(
+  object({
+    label: string,
+    type: string,
+    data: unknown,
+  })
+);
 export function parseChartData() {
-  const chartData = array(
-    object({
-      label: string,
-      type: string,
-      data: unknown,
-    })
-  )(getScriptTagJSON("#chart-data"));
+  const chartData = validateChartData(getScriptTagJSON("#chart-data"));
   const result: (ChartWithData<any> & { name: string })[] = [];
   chartData.forEach(chart => {
-    switch (chart.type) {
-      case "balances":
-      case "bar":
-      case "commodities":
-      case "scatterplot": {
-        // eslint-disable-next-line
-        const res = parsers[chart.type](chart.data, chart.label);
-        if (res) {
-          result.push({
-            name: chart.label,
-            data: res.data,
-            renderer: res.renderer,
-          });
-        }
-        break;
-      }
-      case "hierarchy": {
-        const hierarchyValidator: Validator<AccountHierarchy> = object({
-          account: string,
-          balance: record(number),
-          balance_children: record(number),
-          children: lazy(() => array(hierarchyValidator)),
-        });
-        const validator = object({
-          root: hierarchyValidator,
-          modifier: number,
-        });
-        const chartData_ = validator(chart.data);
-        const { root } = chartData_;
-        addInternalNodesAsLeaves(root);
-        const data: Record<string, AccountHierarchyNode> = {};
-
-        operatingCurrenciesWithConversion.forEach(currency => {
-          const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-            .sum(d => d.balance[currency] * chartData_.modifier)
-            .sort((a, b) => (b.value || 0) - (a.value || 0));
-          if (currencyHierarchy.value !== 0) {
-            data[currency] = currencyHierarchy;
-          }
-        });
-
-        const renderer = (svg: SVGElement) => new HierarchyContainer(svg);
-        result.push({
-          name: chart.label,
-          data,
-          renderer,
-        });
-
-        break;
-      }
-      default:
-        break;
+    const parser = parsers[chart.type];
+    if (parser) {
+      result.push({
+        name: chart.label,
+        ...parser(chart.data, chart.label),
+      });
     }
   });
   return result;
