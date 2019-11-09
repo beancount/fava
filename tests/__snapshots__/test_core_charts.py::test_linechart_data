@@ -1,0 +1,5 @@
+[{'balance': {'USD': Decimal('100')}, 'date': datetime.date(2000, 1, 1)},
+ {'balance': {'USD': Decimal('50'), 'XYZ': Decimal('1')},
+  'date': datetime.date(2000, 1, 2)},
+ {'balance': {'ABC': Decimal('1'), 'USD': 0, 'XYZ': Decimal('1')},
+  'date': datetime.date(2000, 1, 3)}]

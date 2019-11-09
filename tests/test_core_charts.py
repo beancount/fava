@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
 
 import datetime
-from collections import Counter
 
 from beancount.core.number import D
 from flask import g
@@ -9,54 +8,28 @@ from flask import g
 from fava.util.date import Interval
 
 
-def test_interval_totals(app, small_example_ledger):
+def test_interval_totals(app, small_example_ledger, snapshot):
     with app.test_request_context(""):
         g.conversion = None
         data = small_example_ledger.charts.interval_totals(
             Interval.MONTH, "Expenses"
         )
-        assert data == [
-            {
-                "date": datetime.date(2012, 11, 18),
-                "balance": {"EUR": D("280.00")},
-                "budgets": Counter(
-                    {"EUR": D("31.42857142857142857142857145")}
-                ),
-            },
-            {
-                "date": datetime.date(2012, 12, 1),
-                "balance": {"EUR": D("80.00")},
-                "budgets": Counter(
-                    {"EUR": D("48.57142857142857142857142861")}
-                ),
-            },
-        ]
+        snapshot(data)
 
 
-def test_linechart_data(app, example_ledger):
-    result = [
-        {"date": datetime.date(2000, 1, 1), "balance": {"USD": D("100")}},
-        {
-            "date": datetime.date(2000, 1, 2),
-            "balance": {"XYZ": D("1"), "USD": D("50")},
-        },
-        {
-            "date": datetime.date(2000, 1, 3),
-            "balance": {"USD": 0, "ABC": D("1"), "XYZ": D("1")},
-        },
-    ]
+def test_linechart_data(app, example_ledger, snapshot):
     with app.test_request_context():
         g.conversion = "units"
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities"
         )
-        assert data == result
+        snapshot(data)
         g.conversion = "at_cost"
         g.ledger = example_ledger
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities"
         )
-        assert data == result
+        snapshot(data)
 
 
 def test_net_worth(app, example_ledger):

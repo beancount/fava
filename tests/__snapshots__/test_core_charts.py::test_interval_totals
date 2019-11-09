@@ -1,0 +1,6 @@
+[{'balance': {'EUR': Decimal('280.00')},
+  'budgets': Counter({'EUR': Decimal('31.42857142857142857142857145')}),
+  'date': datetime.date(2012, 11, 18)},
+ {'balance': {'EUR': Decimal('80.00')},
+  'budgets': Counter({'EUR': Decimal('48.57142857142857142857142861')}),
+  'date': datetime.date(2012, 12, 1)}]

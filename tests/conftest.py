@@ -1,6 +1,8 @@
 # pylint: disable=missing-docstring
 
 import os
+from pathlib import Path
+from pprint import pformat
 
 import pytest
 
@@ -29,6 +31,31 @@ API = FavaLedger(EXAMPLE_FILE)
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
 create_app(EXAMPLE_FILE)
+
+
+SNAPSHOT_UPDATE = bool(os.environ.get("SNAPSHOT_UPDATE"))
+
+
+@pytest.fixture
+def snapshot(request):
+    file_path = Path(request.fspath)
+    fn_name = request.function.__name__
+    snap_dir = file_path.parent / "__snapshots__"
+    snap_file = snap_dir / (file_path.name + "::" + fn_name)
+    if not snap_dir.exists():
+        snap_dir.mkdir()
+
+    def _snapshot_data(data):
+        out = pformat(data)
+        if not snap_file.exists():
+            contents = ""
+        else:
+            contents = open(snap_file).read()
+        if SNAPSHOT_UPDATE:
+            open(snap_file, 'w').write(out)
+        assert out == contents
+
+    return _snapshot_data
 
 
 @pytest.fixture
