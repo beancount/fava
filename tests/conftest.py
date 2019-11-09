@@ -34,6 +34,7 @@ create_app(EXAMPLE_FILE)
 
 
 SNAPSHOT_UPDATE = bool(os.environ.get("SNAPSHOT_UPDATE"))
+MSG = "Maybe snapshots need to be updated with `SNAPSHOT_UPDATE=1 make test`?"
 
 
 @pytest.fixture
@@ -52,8 +53,8 @@ def snapshot(request):
         else:
             contents = open(snap_file).read()
         if SNAPSHOT_UPDATE:
-            open(snap_file, 'w').write(out)
-        assert out == contents
+            open(snap_file, "w").write(out)
+        assert out == contents, MSG
 
     return _snapshot_data
 

@@ -44,14 +44,14 @@
 {% endmacro %}
 
 {% macro commodities() %}
-{% for pair in ledger.commodity_pairs() %}
+{% for base, quote, prices in ledger.charts.prices() %}
 {% do chart_data.append({
 'type': 'commodities',
-'label': '{0[0]} / {0[1]}'.format(pair),
+'label': '{0} / {1}'.format(base, quote),
 'data': {
-  'prices': ledger.prices(pair[0], pair[1]),
-  'base': pair[0],
-  'quote': pair[1],
+  'prices': ledger.prices(base, quote),
+  'base': base,
+  'quote': quote,
 },
 }) %}
 {% endfor %}

@@ -17,6 +17,12 @@ def test_interval_totals(app, small_example_ledger, snapshot):
         snapshot(data)
 
 
+def test_prices(example_ledger, snapshot):
+    data = example_ledger.charts.prices()
+    assert all(price[1] for price in data)
+    snapshot(data)
+
+
 def test_linechart_data(app, example_ledger, snapshot):
     with app.test_request_context():
         g.conversion = "units"

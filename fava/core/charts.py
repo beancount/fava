@@ -57,6 +57,14 @@ class ChartModule(FavaModule):
         return tree.get(account_name).serialise(end)
 
     @listify
+    def prices(self):
+        """An account tree."""
+        for base, quote in self.ledger.commodity_pairs():
+            prices = self.ledger.prices(base, quote)
+            if prices:
+                yield base, quote, prices
+
+    @listify
     def interval_totals(self, interval, accounts):
         """Renders totals for account (or accounts) in the intervals.
 

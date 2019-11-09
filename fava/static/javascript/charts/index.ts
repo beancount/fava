@@ -113,13 +113,12 @@ const parsers = {
         ),
     };
   },
-  commodities(json: unknown, label: string): ChartWithData<LineChart> | null {
+  commodities(json: unknown, label: string): ChartWithData<LineChart> {
     const parsedData = object({
       quote: string,
       base: string,
       prices: array(tuple([date, number])),
     })(json);
-    if (!parsedData.prices.length) return null;
 
     const renderer = (svg: SVGElement) =>
       new LineChart(svg).set(
