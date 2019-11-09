@@ -1,7 +1,5 @@
 # pylint: disable=missing-docstring
 
-import datetime
-
 from beancount.core.number import D
 from flask import g
 
@@ -38,15 +36,12 @@ def test_linechart_data(app, example_ledger, snapshot):
         snapshot(data)
 
 
-def test_net_worth(app, example_ledger):
+def test_net_worth(app, example_ledger, snapshot):
     with app.test_request_context():
         app.preprocess_request()
         g.conversion = "USD"
         data = example_ledger.charts.net_worth(Interval.MONTH)
-        assert data[-18]["date"] == datetime.date(2015, 1, 1)
-        assert data[-18]["balance"]["USD"] == D("39125.34004")
-        assert data[-1]["date"] == datetime.date(2016, 5, 10)
-        assert data[-1]["balance"]["USD"] == D("102327.53144")
+        snapshot(data)
 
 
 def test_hierarchy(app, example_ledger):
