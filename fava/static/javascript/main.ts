@@ -72,6 +72,8 @@ import FilterForm from "./FilterForm.svelte";
 import Documents from "./documents/Documents.svelte";
 // @ts-ignore
 import Modals from "./modals/Modals.svelte";
+// @ts-ignore
+import Query from "./query/Query.svelte";
 
 function initSvelteComponent(selector: string, SvelteComponent: any) {
   const el = select(selector);
@@ -90,8 +92,9 @@ e.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
-  initSvelteComponent("#svelte-import", Import);
   initSvelteComponent("#svelte-documents", Documents);
+  initSvelteComponent("#svelte-import", Import);
+  initSvelteComponent("#svelte-query", Query);
 
   document.title = favaAPI.documentTitle;
   select("h1 strong")!.innerHTML = favaAPI.pageTitle;
@@ -99,9 +102,9 @@ e.on("page-loaded", () => {
 });
 
 e.on("page-init", () => {
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-new
   new Modals({ target: document.body });
-  // eslint-disable-next-line
+  // eslint-disable-next-line no-new
   new FilterForm({ target: select("header") });
 
   // Watch for all clicks on <button>s and fire the appropriate events.

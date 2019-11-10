@@ -58,3 +58,18 @@ def test_hierarchy(app, example_ledger):
         etrade = data["children"][0]["children"][2]
         assert etrade["children"][4]["balance"] == {"USD": D("4899.98")}
         assert etrade["balance_children"] == {"USD": D("23137.54")}
+
+
+def test_query(example_ledger, snapshot):
+    data = example_ledger.charts.query(
+        "select account, sum(position) group by account"
+    )
+    data = example_ledger.charts.query(
+        "select tags, sum(position) group by tags"
+    )
+    data = example_ledger.charts.query(
+        "select date, sum(position) group by date"
+    )
+    snapshot(data)
+    data = example_ledger.charts.query("balances")
+    snapshot(data)

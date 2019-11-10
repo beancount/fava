@@ -68,10 +68,8 @@ e.on("page-init", () => {
   ]);
 });
 
-type FirstParameter<T> = T extends (arg: infer P) => any ? P : never;
-
 interface ChartWithData<T extends BaseChart> {
-  data: FirstParameter<T["draw"]>;
+  data: Parameters<T["draw"]>[0];
   renderer: (svg: SVGElement) => T;
 }
 
@@ -194,7 +192,7 @@ const parsers: Partial<Record<
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
         .sum(d => d.balance[currency] * modifier)
         .sort((a, b) => (b.value || 0) - (a.value || 0));
-      if (currencyHierarchy.value !== 0) {
+      if (currencyHierarchy.value) {
         data[currency] = currencyHierarchy;
       }
     });

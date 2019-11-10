@@ -4,10 +4,9 @@
 // load the content of the page and replace the <article> contents with them.
 
 import { Writable } from "svelte/store";
-import { select, selectAll, delegate, fetch, handleText } from "./helpers";
+import { select, delegate, fetch, handleText } from "./helpers";
 import e from "./events";
 import { notify } from "./notifications";
-import initSort from "./sort";
 import {
   urlHash,
   conversion,
@@ -184,31 +183,6 @@ class Router {
 
 const router = new Router();
 export default router;
-
-e.on("form-submit-query", (form: HTMLFormElement) => {
-  // @ts-ignore
-  const queryString = form.elements.query_string.value.trim();
-  if (queryString === "") {
-    return;
-  }
-
-  const url = new URL(window.location.toString());
-  url.searchParams.set("query_string", queryString);
-
-  const pageURL = url.toString();
-  url.searchParams.set("result_only", "true");
-
-  fetch(url.toString())
-    .then(handleText)
-    .then((data: string) => {
-      selectAll(".queryresults-wrapper").forEach(element => {
-        element.classList.add("toggled");
-      });
-      select("#query-container")!.insertAdjacentHTML("afterbegin", data);
-      initSort();
-      window.history.replaceState(null, "", pageURL);
-    });
-});
 
 e.on("page-init", () => {
   select("#reload-page")!.addEventListener("click", () => {

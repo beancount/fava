@@ -11,6 +11,11 @@
   margin-left: 6px;
 }
 
+.query-result > div {
+  max-height: 80vh;
+  overflow: auto;
+}
+
 .query-box {
   display: flex;
   align-items: center;
@@ -21,8 +26,7 @@
   margin: 0;
 }
 
-.query-box .CodeMirror,
-.query-box textarea {
+.query-box .CodeMirror {
   flex-grow: 1;
   width: 100%;
   height: auto;
@@ -33,7 +37,7 @@
   border: 1px solid var(--color-background-darker);
 }
 
-.CodeMirror .CodeMirror-placeholder {
+.query-box .CodeMirror .CodeMirror-placeholder {
   color: #999;
 }
 

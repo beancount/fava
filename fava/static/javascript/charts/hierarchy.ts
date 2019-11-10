@@ -29,11 +29,16 @@ export interface AccountHierarchy extends AccountHierarchyDatum {
 }
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
+/**
+ * Add internal nodes as fake leaf nodes to their own children.
+ *
+ * In the treemap, we only render leaf nodes, so for accounts that have both
+ * children and a balance, we want to duplicate them as leaf nodes.
+ */
 export function addInternalNodesAsLeaves(node: AccountHierarchy) {
   if (node.children && node.children.length) {
     node.children.forEach(addInternalNodesAsLeaves);
-    const copy = { ...node, children: null, dummy: true };
-    node.children.push(copy);
+    node.children.push({ ...node, children: null, dummy: true });
     node.balance = {};
   }
 }

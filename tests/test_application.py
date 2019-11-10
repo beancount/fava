@@ -40,26 +40,6 @@ def test_reports(app, test_client, report, filters):
 
 
 @pytest.mark.parametrize(
-    "query_string,result_str",
-    [
-        ("balances from year = 2014", "5086.65 USD"),
-        ("nononono", "ERROR: Syntax error near"),
-        ("select sum(day)", "43558"),
-    ],
-)
-def test_query(app, test_client, query_string, result_str):
-    with app.test_request_context():
-        app.preprocess_request()
-        url = flask.url_for(
-            "report", report_name="query", query_string=query_string
-        )
-
-    result = test_client.get(url)
-    assert result.status_code == 200
-    assert result_str in result.get_data(True)
-
-
-@pytest.mark.parametrize(
     "url,return_code",
     [("/", 302), ("/asdfasdf/", 404), ("/asdfasdf/asdfasdf/", 404)],
 )

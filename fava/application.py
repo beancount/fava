@@ -14,38 +14,40 @@ Attributes:
 import datetime
 import functools
 import inspect
-import threading
-import os
 import os.path
+import threading
 from io import BytesIO
 
-from flask import (
-    abort,
-    Flask,
-    render_template,
-    request,
-    redirect,
-    g,
-    send_file,
-    render_template_string,
-)
 import flask
-from flask_babel import Babel, get_translations
 import markdown2
 import werkzeug.urls
-from werkzeug.utils import secure_filename
-from beancount.utils.text_utils import replace_numbers
-from beancount.core.data import Document
 from beancount.core.account import ACCOUNT_RE
+from beancount.core.data import Document
+from beancount.utils.text_utils import replace_numbers
+from flask import abort
+from flask import Flask
+from flask import g
+from flask import redirect
+from flask import render_template
+from flask import render_template_string
+from flask import request
+from flask import send_file
+from flask_babel import Babel
+from flask_babel import get_translations
+from werkzeug.utils import secure_filename
 
-from fava import template_filters, LANGUAGES
+from fava import LANGUAGES
+from fava import template_filters
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
 from fava.core.helpers import FavaAPIException
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.serialisation import serialise
-from fava.util import slugify, resource_path, setup_logging, send_file_inline
+from fava.util import resource_path
+from fava.util import send_file_inline
+from fava.util import setup_logging
+from fava.util import slugify
 from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
@@ -314,10 +316,10 @@ def context():
     return render_template("_context.html")
 
 
-@app.route("/<bfile>/query/")
-def query():
+@app.route("/<bfile>/_query_result/")
+def query_result():
     """Query shell."""
-    return render_template("query.html")
+    return render_template("_query_result.html")
 
 
 @app.route("/<bfile>/<report_name>/")

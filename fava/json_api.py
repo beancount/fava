@@ -3,18 +3,22 @@
 This module contains the url endpoints of the JSON API that is used by the web
 interface for asynchronous functionality.
 """
-
-import os
-from os import path
 import functools
+import os
 import shutil
+from os import path
 
-from flask import Blueprint, jsonify, g, request
+from flask import Blueprint
+from flask import g
+from flask import get_template_attribute
+from flask import jsonify
+from flask import request
 
-from fava.serialisation import deserialise, serialise
 from fava.core.file import save_entry_slice
 from fava.core.helpers import FavaAPIException
 from fava.core.misc import align
+from fava.serialisation import deserialise
+from fava.serialisation import serialise
 
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
@@ -99,6 +103,18 @@ def errors():
 def payee_accounts():
     """Rank accounts for the given payee."""
     return g.ledger.attributes.payee_accounts(request.args.get("payee"))
+
+
+@get_api_endpoint
+def query_result():
+    """Render a query result to HTML."""
+    query = request.args.get("query_string", "")
+    table = get_template_attribute("_query_table.html", "querytable")
+    contents, types, rows = g.ledger.query_shell.execute_query(query)
+    if contents:
+        if "ERROR" in contents:
+            raise FavaAPIException(contents)
+    return table(contents, types, rows)
 
 
 @get_api_endpoint

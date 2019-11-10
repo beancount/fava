@@ -29,6 +29,7 @@ export const favaAPIValidator = object({
     interval: string,
     locale: union(string, constant(null)),
   }),
+  have_excel: boolean,
   incognito: boolean,
   links: array(string),
   options: object({
@@ -56,6 +57,7 @@ export const favaAPI: FavaAPI = {
     interval: "month",
     locale: null,
   },
+  have_excel: false,
   incognito: false,
   links: [],
   pageTitle: "",

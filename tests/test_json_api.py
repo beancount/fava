@@ -1,10 +1,12 @@
 # pylint: disable=missing-docstring
 
+
 import hashlib
 from io import BytesIO
 import os
 
 import flask
+import pytest
 
 from fava.core.misc import align
 
@@ -231,3 +233,21 @@ def test_api_add_entries(app, test_client, tmpdir):
         )
 
         flask.g.ledger.beancount_file_path = old_beancount_file
+
+
+@pytest.mark.parametrize(
+    "query_string,result_str",
+    [
+        ("balances from year = 2014", "5086.65 USD"),
+        ("nononono", "ERROR: Syntax error near"),
+        ("select sum(day)", "43558"),
+    ],
+)
+def test_api_query_result(query_string, result_str, app, test_client):
+    with app.test_request_context():
+        app.preprocess_request()
+        url = flask.url_for("json_api.query_result", query_string=query_string)
+
+    result = test_client.get(url)
+    assert result.status_code == 200
+    assert result_str in result.get_data(True)

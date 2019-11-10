@@ -1,19 +1,27 @@
 """Provide data suitable for Fava's charts. """
 import datetime
 
-from flask.json import JSONEncoder
-from beancount.core import flags, realization
+from beancount.core import flags
+from beancount.core import realization
 from beancount.core.amount import Amount
-from beancount.core.data import Transaction, iter_entry_dates
+from beancount.core.data import iter_entry_dates
+from beancount.core.data import Transaction
 from beancount.core.number import Decimal
+from beancount.core.inventory import Inventory
 from beancount.core.position import Position
+from beancount.query import query_parser
+from beancount.query.query import run_query
 from beancount.utils.misc_utils import filter_type
+from flask.json import JSONEncoder
 
-from fava.util import listify, pairwise
-from fava.template_filters import cost_or_value
+from fava.core.helpers import FavaAPIException
 from fava.core.helpers import FavaModule
 from fava.core.inventory import CounterInventory
 from fava.core.tree import Tree
+from fava.template_filters import cost_or_value
+from fava.template_filters import units
+from fava.util import listify
+from fava.util import pairwise
 
 
 class FavaJSONEncoder(JSONEncoder):
@@ -58,7 +66,12 @@ class ChartModule(FavaModule):
 
     @listify
     def prices(self):
-        """An account tree."""
+        """The prices for all commodity pairs.
+
+        Returns:
+            A list of tuples (base, quote, prices) where prices
+            is a list of prices.
+        """
         for base, quote in self.ledger.commodity_pairs():
             prices = self.ledger.prices(base, quote)
             if prices:
@@ -171,3 +184,29 @@ class ChartModule(FavaModule):
                 "date": end_date_exclusive,
                 "balance": cost_or_value(inventory, end_date_inclusive),
             }
+
+    def query(self, query_string):
+        """Chart for a query.
+
+        Args:
+            query_string: A query string.
+        """
+
+        try:
+            types, _ = run_query([], self.ledger.options, query_string)
+        except query_parser.ParseError as exception:
+            raise FavaAPIException(str(exception))
+        if len(types) != 2:
+            raise FavaAPIException(
+                "Can only plot queries with 2 result columns."
+            )
+        if types[0][1] is datetime.date and types[1][1] is Inventory:
+            types, rows = run_query(
+                self.ledger.entries, self.ledger.options, query_string
+            )
+            return [
+                {"date": row[0], "inventory": units(row[1])} for row in rows
+            ]
+
+        print(types)
+        return []

@@ -20,13 +20,9 @@ def test_execute_query(example_ledger):
 
     assert query_shell.execute_query("help")[1:] == (None, None)
 
-    assert query_shell.execute_query("balances", add_to_history=True)[
-        1:
-    ] == query.run_query(
+    assert query_shell.execute_query("balances")[1:] == query.run_query(
         query_shell.entries, query_shell.options_map, "balances"
     )
-
-    assert query_shell.get_history(1) == ["balances"]
 
 
 def test_query_to_file(example_ledger):

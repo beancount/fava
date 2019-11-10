@@ -124,6 +124,24 @@ export function fetch(input: string, init = {}) {
 const validateAPIResponse = object({ data: unknown });
 
 /**
+ * Get the URL string for one of Fava's reports.
+ */
+export function urlFor(
+  report: string,
+  params?: Record<string, string>
+): string {
+  let url = `${favaAPI.baseURL}${report}/`;
+  if (params) {
+    const urlParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      urlParams.set(key, value);
+    });
+    url += `?${urlParams.toString()}`;
+  }
+  return url;
+}
+
+/**
  * Fetch an API endpoint and convert the JSON data to an object.
  * @param endpoint - the endpoint to fetch
  * @param params - a string to append as params or an object.
@@ -132,16 +150,10 @@ export async function fetchAPI(
   endpoint: string,
   params?: Record<string, string>
 ): Promise<unknown> {
-  let url = `${favaAPI.baseURL}api/${endpoint}/`;
-  if (params) {
-    const urlParams = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => {
-      urlParams.set(key, value);
-    });
-    url += `?${urlParams.toString()}`;
-  }
-  const responseData = await fetch(url).then(handleJSON);
-  return validateAPIResponse(responseData).data;
+  const url = urlFor(`api/${endpoint}`, params);
+  const responseData = await fetch(url);
+  const json: unknown = await handleJSON(responseData);
+  return validateAPIResponse(json).data;
 }
 
 const putAPIValidators = {

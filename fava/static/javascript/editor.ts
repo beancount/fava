@@ -37,7 +37,7 @@ import "./codemirror/mode-beancount";
 import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
-import { select, selectAll, delegate, putAPI } from "./helpers";
+import { select, selectAll, putAPI } from "./helpers";
 import e from "./events";
 import router from "./router";
 import { notify } from "./notifications";
@@ -171,7 +171,7 @@ CodeMirror.commands.favaJumpToMarker = (cm: Editor) => {
 };
 
 // If the given key should be ignored for autocompletion
-function ignoreKey(key: string) {
+export function ignoreKey(key: string) {
   switch (key) {
     case "ArrowDown":
     case "ArrowUp":
@@ -192,61 +192,6 @@ function ignoreKey(key: string) {
     default:
       return false;
   }
-}
-
-// Initialize the query editor
-function initQueryEditor() {
-  const queryForm = select("#query-form") as HTMLFormElement;
-  if (!queryForm) {
-    return;
-  }
-
-  // @ts-ignore
-  const queryStringEl: HTMLTextAreaElement = queryForm.elements.query_string;
-  const queryOptions = {
-    mode: "beancount-query",
-    extraKeys: {
-      "Ctrl-Enter": (cm: Editor) => {
-        (cm as EditorFromTextArea).save();
-        e.trigger("form-submit-query", queryForm);
-      },
-      "Cmd-Enter": (cm: Editor) => {
-        (cm as EditorFromTextArea).save();
-        e.trigger("form-submit-query", queryForm);
-      },
-    },
-    placeholder: queryStringEl.getAttribute("placeholder") || undefined,
-  };
-  const editor = CodeMirror.fromTextArea(queryStringEl, queryOptions);
-
-  editor.on("keyup", (cm: Editor, event: Event) => {
-    if (
-      !cm.state.completionActive &&
-      !ignoreKey((event as KeyboardEvent).key)
-    ) {
-      CodeMirror.commands.autocomplete(cm, undefined, {
-        completeSingle: false,
-      });
-    }
-  });
-
-  delegate(
-    select("#query-container"),
-    "click",
-    ".toggle-box-header",
-    (event, closest: HTMLDivElement) => {
-      const wrapper = closest.closest(".toggle-box");
-      if (!wrapper) return;
-      if (wrapper.classList.contains("inactive")) {
-        const code = wrapper.querySelector("code");
-        editor.setValue(code ? code.textContent || "" : "");
-        editor.save();
-        e.trigger("form-submit-query", queryForm);
-        return;
-      }
-      wrapper.classList.toggle("toggled");
-    }
-  );
 }
 
 // Initialize read-only editors
@@ -363,7 +308,6 @@ export default function initSourceEditor(name: string) {
 }
 
 e.on("page-loaded", () => {
-  initQueryEditor();
   initReadOnlyEditors();
   initSourceEditor("#source-editor");
 });
@@ -374,7 +318,8 @@ const leaveMessage =
 e.on("navigate", (state: { interrupt?: boolean }) => {
   if (activeEditor) {
     if (!activeEditor.getDoc().isClean()) {
-      const leave = window.confirm(leaveMessage); // eslint-disable-line no-alert
+      // eslint-disable-next-line no-alert
+      const leave = window.confirm(leaveMessage);
       if (!leave) {
         state.interrupt = true;
       } else {
