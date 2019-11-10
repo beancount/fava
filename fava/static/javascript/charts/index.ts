@@ -183,14 +183,13 @@ const parsers: Partial<
       root: hierarchyValidator,
       modifier: number,
     });
-    const chartData_ = validator(json);
-    const { root } = chartData_;
+    const { root, modifier } = validator(json);
     addInternalNodesAsLeaves(root);
     const data: Record<string, AccountHierarchyNode> = {};
 
     operatingCurrenciesWithConversion.forEach(currency => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-        .sum(d => d.balance[currency] * chartData_.modifier)
+        .sum(d => d.balance[currency] * modifier)
         .sort((a, b) => (b.value || 0) - (a.value || 0));
       if (currencyHierarchy.value !== 0) {
         data[currency] = currencyHierarchy;

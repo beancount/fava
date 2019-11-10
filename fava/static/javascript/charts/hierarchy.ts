@@ -30,17 +30,11 @@ export interface AccountHierarchy extends AccountHierarchyDatum {
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
 export function addInternalNodesAsLeaves(node: AccountHierarchy) {
-  if (node.children) {
-    node.children.forEach(o => {
-      addInternalNodesAsLeaves(o);
-    });
-    if (node.children.length) {
-      const copy = { ...node };
-      copy.children = null;
-      copy.dummy = true;
-      node.children.push(copy);
-      node.balance = {};
-    }
+  if (node.children && node.children.length) {
+    node.children.forEach(addInternalNodesAsLeaves);
+    const copy = { ...node, children: null, dummy: true };
+    node.children.push(copy);
+    node.balance = {};
   }
 }
 
