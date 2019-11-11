@@ -30,6 +30,12 @@ lint:
 test:
 	tox
 
+.PHONY: update-snapshots
+update-snapshots:
+	find . -name "__snapshots__" -type d -prune -exec rm -r "{}" +
+	-SNAPSHOT_UPDATE=1 tox
+	tox
+
 .PHONY: docs
 docs:
 	tox -e docs

@@ -42,7 +42,7 @@ def snapshot(request):
     file_path = Path(request.fspath)
     fn_name = request.function.__name__
     snap_dir = file_path.parent / "__snapshots__"
-    snap_file = snap_dir / (file_path.name + "::" + fn_name)
+    snap_file = snap_dir / (file_path.name + "-" + fn_name)
     if not snap_dir.exists():
         snap_dir.mkdir()
 
@@ -54,6 +54,7 @@ def snapshot(request):
             contents = open(snap_file).read()
         if SNAPSHOT_UPDATE:
             open(snap_file, "w").write(out)
+            return
         assert out == contents, MSG
 
     return _snapshot_data
