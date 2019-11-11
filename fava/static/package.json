@@ -103,7 +103,7 @@
     ]
   },
   "devDependencies": {
-    "@types/codemirror": "0.0.79",
+    "@types/codemirror": "0.0.80",
     "@types/d3-array": "^2.0.0",
     "@types/d3-axis": "^1.0.12",
     "@types/d3-color": "^1.2.2",
@@ -123,9 +123,9 @@
     "eslint-plugin-svelte3": "^2.7.3",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
-    "prettier": "^1.18.2",
+    "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
-    "rollup": "^1.26.3",
+    "rollup": "^1.26.5",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-css-only": "^1.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -143,7 +143,7 @@
     "@openfonts/source-code-pro_all": "^1.44.0",
     "@openfonts/source-serif-pro_latin": "^1.44.0",
     "codemirror": "^5.49.2",
-    "d3-array": "^2.3.3",
+    "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
     "d3-color": "^1.4.0",
     "d3-format": "^1.4.1",
@@ -155,6 +155,6 @@
     "d3-time-format": "^2.2.1",
     "d3-transition": "^1.2.0",
     "mousetrap": "^1.6.3",
-    "svelte": "^3.12.1"
+    "svelte": "^3.13.0"
   }
 }

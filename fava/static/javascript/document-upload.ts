@@ -25,9 +25,10 @@ delegate(document, "dragleave", ".droptarget", dragleave);
 /* Stores that the Svelte component accesses. */
 export const account = writable("");
 export const hash = writable("");
-export const files: Writable<
-  { dataTransferFile: File; name: string }[]
-> = writable([]);
+export const files: Writable<{
+  dataTransferFile: File;
+  name: string;
+}[]> = writable([]);
 
 function drop(event: DragEvent, target: HTMLElement) {
   target.classList.remove("dragover");

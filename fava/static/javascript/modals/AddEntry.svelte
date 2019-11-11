@@ -9,7 +9,10 @@
   import TransactionComponent from "../entry-forms/Transaction.svelte";
   import BalanceComponent from "../entry-forms/Balance.svelte";
 
-  const entryTypes = [[_("Transaction"), Transaction], [_("Balance"), Balance]];
+  const entryTypes = [
+    [_("Transaction"), Transaction],
+    [_("Balance"), Balance],
+  ];
   let entry = new Transaction();
 
   $: svelteComponent = {
