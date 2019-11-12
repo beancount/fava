@@ -74,9 +74,10 @@ interface ChartWithData<T extends BaseChart> {
   renderer: (svg: SVGElement) => T;
 }
 
-const parsers: Partial<
-  Record<string, (json: unknown, label: string) => ChartWithData<any>>
-> = {
+const parsers: Partial<Record<
+  string,
+  (json: unknown, label: string) => ChartWithData<any>
+>> = {
   balances(json: unknown): ChartWithData<LineChart> {
     const series: Record<
       string,
