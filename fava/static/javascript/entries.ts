@@ -2,15 +2,16 @@ import router from "./router";
 import { notify } from "./notifications";
 import { putAPI } from "./helpers";
 
-export class Posting {
+interface Posting {
   account: string;
-
   amount: string;
+}
 
-  constructor() {
-    this.account = "";
-    this.amount = "";
-  }
+export function emptyPosting(): Posting {
+  return {
+    account: "",
+    amount: "",
+  };
 }
 
 abstract class Entry {
@@ -50,7 +51,7 @@ export class Transaction extends Entry {
     this.flag = "*";
     this.payee = "";
     this.narration = "";
-    this.postings = [new Posting(), new Posting()];
+    this.postings = [emptyPosting(), emptyPosting()];
   }
 }
 

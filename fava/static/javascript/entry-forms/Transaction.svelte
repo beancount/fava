@@ -5,19 +5,19 @@
 <script>
   import { tick } from "svelte";
 
-  import { Posting, Transaction } from "../entries";
+  import { emptyPosting, Transaction } from "../entries";
   import { _, fetchAPI } from "../helpers";
   import { favaAPI } from "../stores";
 
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
-  import AccountInput from "./AccountInput.svelte";
+  import PostingSvelte from "./Posting.svelte";
 
   export let entry;
   let focusInput;
   let suggestions;
-  let postingRow;
+  let el;
 
   export function focus() {
     focusInput.focus();
@@ -28,9 +28,10 @@
   }
 
   async function addPosting() {
-    entry.postings = entry.postings.concat(new Posting());
+    entry.postings = entry.postings.concat(emptyPosting());
     await tick();
-    postingRow.querySelector("input").focus();
+    const inputs = el.querySelectorAll(".posting .account input");
+    inputs[inputs.length - 1].focus();
   }
 
   $: if (entry.payee) {
@@ -46,15 +47,24 @@
   }
 
   // Autofill complete transactions.
-  function autocompleteSelectPayee() {
-    if (entry.narration || !entry.postings.every(p => !p.account)) return;
-    fetchAPI("payee_transaction", { payee: entry.payee }).then(data => {
-      entry = Object.assign(new Transaction(), data, { date: entry.date });
-    });
+  async function autocompleteSelectPayee() {
+    if (entry.narration || !entry.postings.every(p => !p.account)) {
+      return;
+    }
+    const data = await fetchAPI("payee_transaction", { payee: entry.payee });
+    entry = Object.assign(new Transaction(), data, { date: entry.date });
+  }
+
+  function movePosting(ev) {
+    const { from, to } = ev.detail;
+    const moved = entry.postings[from];
+    entry.postings.splice(from, 1);
+    entry.postings.splice(to, 0, moved);
+    entry.postings = entry.postings;
   }
 </script>
 
-<div class="entry-form transaction">
+<div class="entry-form transaction" bind:this={el}>
   <div class="fieldset">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
@@ -83,28 +93,13 @@
     </button>
   </div>
   <EntryMetadata bind:meta={entry.meta} />
-  {#each entry.postings as posting}
-    <div class="fieldset posting" bind:this={postingRow}>
-      <button
-        class="muted round remove-fieldset"
-        on:click={() => removePosting(posting)}
-        type="button"
-        tabindex="-1">
-        ×
-      </button>
-      <AccountInput bind:value={posting.account} {suggestions} />
-      <input
-        type="text"
-        class="amount"
-        placeholder={_('Amount')}
-        bind:value={posting.amount} />
-      <button
-        class="muted round add-row"
-        type="button"
-        on:click={addPosting}
-        title={_('Add posting')}>
-        +
-      </button>
-    </div>
+  {#each entry.postings as posting, index}
+    <PostingSvelte
+      bind:posting
+      {index}
+      {suggestions}
+      on:add={addPosting}
+      on:move={movePosting}
+      on:remove={() => removePosting(posting)} />
   {/each}
 </div>
