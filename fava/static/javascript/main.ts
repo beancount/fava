@@ -60,7 +60,7 @@ import { notify } from "./notifications";
 import "./sidebar";
 import "./sort";
 import "./tree-table";
-import { favaAPI, favaAPIValidator } from "./stores";
+import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 
 // @ts-ignore
 import Import from "./Import.svelte";
@@ -87,7 +87,7 @@ function initSvelteComponent(selector: string, SvelteComponent: any) {
 }
 
 e.on("page-loaded", () => {
-  Object.assign(favaAPI, favaAPIValidator(getScriptTagJSON("#ledger-data")));
+  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-import", Import);
@@ -149,7 +149,7 @@ async function doPoll() {
 }
 
 ready().then(() => {
-  Object.assign(favaAPI, favaAPIValidator(getScriptTagJSON("#ledger-data")));
+  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
   router.init();
   e.trigger("page-init");
   e.trigger("page-loaded");

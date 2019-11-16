@@ -3,15 +3,14 @@
 
   import { _ } from "./helpers";
   import { parseChartData } from "./charts";
+  import { conversion, interval } from "./stores";
   import {
-    favaAPI,
     activeChart,
     chartCurrency,
     chartMode,
-    conversion,
-    interval,
     showCharts,
-  } from "./stores";
+    conversions,
+  } from "./stores/chart";
 
   let charts = [];
   let svg;
@@ -20,22 +19,6 @@
   let chart;
   let hasCurrencySetting;
   let chartWidth;
-
-  const conversions = [
-    ["at_cost", _("At Cost")],
-    ["at_value", _("At Market Value")],
-    ["units", _("Units")],
-    ...favaAPI.options.operating_currency
-      .sort()
-      .map(currency => [currency, `Converted to ${currency}`]),
-    ...favaAPI.options.commodities
-      .sort()
-      .filter(
-        c => !favaAPI.options.operating_currency.includes(c) && c.length <= 3
-      )
-      .map(currency => [currency, `Converted to ${currency}`]),
-  ];
-  // TODO  _('Converted to %(currency)s', currency=currency)
 
   async function selectChart(index) {
     chart = charts[index];
@@ -116,7 +99,7 @@
       </label>
     </span>
     <select bind:value={$conversion}>
-      {#each conversions as [conversion, conversionName]}
+      {#each $conversions as [conversion, conversionName]}
         <option value={conversion}>{conversionName}</option>
       {/each}
     </select>

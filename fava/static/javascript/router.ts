@@ -12,11 +12,11 @@ import {
   urlHash,
   conversion,
   interval,
-  showCharts,
   filters,
   favaAPI,
   urlSyncedParams,
 } from "./stores";
+import { showCharts } from "./stores/chart";
 
 class Router {
   state: {

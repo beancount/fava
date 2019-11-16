@@ -1,5 +1,6 @@
 import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
+import { get } from "svelte/store";
 
 import { filters } from "../stores";
 import { currentTimeFilterDateFormat } from "../format";
@@ -13,7 +14,7 @@ export const NO_MARGINS = {
 
 export function setTimeFilter(date: Date) {
   filters.update(fs => {
-    fs.time = currentTimeFilterDateFormat(date);
+    fs.time = get(currentTimeFilterDateFormat)(date);
     return fs;
   });
 }

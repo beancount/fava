@@ -6,6 +6,7 @@
 
 import { hierarchy } from "d3-hierarchy";
 import "d3-transition";
+import { get } from "svelte/store";
 
 import { getScriptTagJSON } from "../helpers";
 import { favaAPI, conversion } from "../stores";
@@ -149,6 +150,7 @@ const parsers: Partial<Record<
     const jsonData = array(
       object({ date, budgets: record(number), balance: record(number) })
     )(json);
+    const currentDateFmt = get(currentDateFormat);
     const data = jsonData.map(d => ({
       values: operatingCurrenciesWithConversion.map(name => ({
         name,
@@ -156,7 +158,7 @@ const parsers: Partial<Record<
         budget: d.budgets[name] || 0,
       })),
       date: d.date,
-      label: currentDateFormat(d.date),
+      label: currentDateFmt(d.date),
     }));
     const renderer = (svg: SVGElement) =>
       new BarChart(svg).set("tooltipText", d => {

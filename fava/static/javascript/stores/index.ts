@@ -8,18 +8,13 @@ import {
   number,
   union,
   constant,
-} from "./validation";
+} from "../validation";
 
 export const urlHash = writable("");
 
 export const conversion = writable("");
 type Interval = "year" | "quarter" | "month" | "week" | "day";
 export const interval: Writable<Interval> = writable("month");
-export const showCharts = writable(true);
-
-export const activeChart = writable({});
-export const chartMode = writable("treemap");
-export const chartCurrency = writable("");
 
 export const favaAPIValidator = object({
   accountURL: string,
@@ -47,7 +42,8 @@ export const favaAPIValidator = object({
   years: array(number),
 });
 
-export const favaAPI = favaAPIValidator({
+export type FavaAPI = ReturnType<typeof favaAPIValidator>;
+export const favaAPI: FavaAPI = {
   accountURL: "",
   accounts: [],
   baseURL: "",
@@ -71,9 +67,12 @@ export const favaAPI = favaAPIValidator({
   },
   tags: [],
   years: [],
-});
+};
 
-export type FavaAPI = typeof favaAPI;
+export const favaAPIStore = writable(favaAPI);
+favaAPIStore.subscribe(val => {
+  Object.assign(favaAPI, val);
+});
 
 export const filters = writable({
   time: "",
