@@ -121,7 +121,7 @@
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-svelte3": "^2.7.3",
-    "husky": "^3.0.9",
+    "husky": "^3.1.0",
     "lint-staged": "^9.4.2",
     "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
