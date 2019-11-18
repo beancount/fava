@@ -148,7 +148,7 @@
     "d3-color": "^1.4.0",
     "d3-format": "^1.4.2",
     "d3-hierarchy": "^1.1.9",
-    "d3-quadtree": "^1.0.6",
+    "d3-quadtree": "^1.0.7",
     "d3-scale": "^3.2.0",
     "d3-selection": "^1.4.1",
     "d3-shape": "^1.3.7",
