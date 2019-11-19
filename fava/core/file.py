@@ -310,6 +310,7 @@ def _format_entry(entry, fava_options):
     }
     entry = entry._replace(meta=meta)
     string = align(format_entry(entry), fava_options)
+    string = string.replace("<class 'beancount.core.number.MISSING'>", "")
     return "\n".join((line.rstrip() for line in string.split("\n")))
 
 

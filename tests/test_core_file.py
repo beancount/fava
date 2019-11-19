@@ -1,23 +1,21 @@
 # pylint: disable=missing-docstring
-
 import datetime
-from textwrap import dedent
 import re
+from textwrap import dedent
 
 import pytest
-from beancount.core import data, amount
+from beancount.core import amount
+from beancount.core import data
 from beancount.core.number import D
 
-from fava.core.helpers import FavaAPIException
-from fava.core.file import (
-    next_key,
-    leading_space,
-    insert_metadata_in_file,
-    insert_entry,
-    get_entry_slice,
-    save_entry_slice,
-)
 from fava.core.fava_options import InsertEntryOption
+from fava.core.file import get_entry_slice
+from fava.core.file import insert_entry
+from fava.core.file import insert_metadata_in_file
+from fava.core.file import leading_space
+from fava.core.file import next_key
+from fava.core.file import save_entry_slice
+from fava.core.helpers import FavaAPIException
 
 
 def test_get_entry_slice(example_ledger):

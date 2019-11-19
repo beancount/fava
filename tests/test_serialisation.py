@@ -1,5 +1,7 @@
 # pylint: disable=missing-docstring
 import datetime
+
+import pytest
 from beancount.core.amount import A
 from beancount.core.data import Balance
 from beancount.core.data import CostSpec
@@ -9,11 +11,11 @@ from beancount.core.data import Posting
 from beancount.core.data import Transaction
 from beancount.core.number import D
 from beancount.core.number import MISSING
-
-import pytest
 from flask.json import dumps
 from flask.json import loads
 
+from fava.core.fava_options import DEFAULTS
+from fava.core.file import _format_entry
 from fava.core.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
@@ -120,6 +122,23 @@ def test_deserialise_posting(amount_cost_price, amount_string):
     pos = Posting("Assets", *amount_cost_price, None, None)
     json = {"account": "Assets", "amount": amount_string}
     assert deserialise_posting(json) == pos
+
+
+def test_deserialise_posting_and_format(snapshot):
+    txn = Transaction(
+        {},
+        datetime.date(2017, 12, 12),
+        "*",
+        "Test3",
+        "asdfasd",
+        frozenset(["tag"]),
+        frozenset(["link"]),
+        [
+            deserialise_posting({"account": "Assets", "amount": "10"}),
+            deserialise_posting({"account": "Assets", "amount": "10 EUR @"}),
+        ],
+    )
+    snapshot(_format_entry(txn, DEFAULTS))
 
 
 def test_serialise_balance(app):
