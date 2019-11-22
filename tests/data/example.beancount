@@ -1,5 +1,5 @@
 option "title" "Short Example"
-option "operating_currency" "USD"
+option "operating_currency" "EUR"
 plugin "beancount.plugins.auto_accounts"
 
 2012-11-18 * "Payee" "Narration with many postings and long narration"

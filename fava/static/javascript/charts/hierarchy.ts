@@ -21,11 +21,10 @@ import { addTooltip } from "./tooltip";
 interface AccountHierarchyDatum {
   account: string;
   balance: Record<string, number>;
-  balance_children: Record<string, number>;
   dummy?: boolean;
 }
 export interface AccountHierarchy extends AccountHierarchyDatum {
-  children: AccountHierarchy[] | null;
+  children: AccountHierarchy[];
 }
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
@@ -36,9 +35,9 @@ export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
  * children and a balance, we want to duplicate them as leaf nodes.
  */
 export function addInternalNodesAsLeaves(node: AccountHierarchy) {
-  if (node.children && node.children.length) {
+  if (node.children.length) {
     node.children.forEach(addInternalNodesAsLeaves);
-    node.children.push({ ...node, children: null, dummy: true });
+    node.children.push({ ...node, children: [], dummy: true });
     node.balance = {};
   }
 }
@@ -305,7 +304,7 @@ class SunburstChartContainer extends BaseChart {
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
         .set("labelText", d => {
-          const balance = d.data.balance_children[currency] || 0;
+          const balance = d.value || 0;
           return `${formatCurrency(balance)} ${currency} (${formatPercentage(
             balance / totalBalance
           )})`;

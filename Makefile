@@ -42,7 +42,8 @@ docs:
 
 .PHONY: run-example
 run-example:
-	BEANCOUNT_FILE= fava --debug tests/data/example.beancount
+	@xdg-open http://localhost:3333
+	BEANCOUNT_FILE= fava -p 3333 --debug tests/data/example.beancount
 
 .PHONY: bql-grammar
 bql-grammar:

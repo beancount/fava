@@ -11,13 +11,13 @@ import { BaseChart } from "./base";
 import { scales } from "./helpers";
 import { tooltip } from "./tooltip";
 
-interface LineChartDatum {
+export interface LineChartDatum {
   name: string;
   date: Date;
   value: number;
 }
 
-type LineChartData = {
+export type LineChartData = {
   name: string;
   values: LineChartDatum[];
 };
@@ -108,12 +108,12 @@ export class LineChart extends BaseChart {
       .enter()
       .append("g")
       .attr("class", "dot")
+      .style("fill", d => scales.currencies(d.name))
       .selectAll("circle")
       .data(d => d.values)
       .enter()
       .append("circle")
-      .attr("r", 3)
-      .style("fill", d => scales.currencies(d.name));
+      .attr("r", 3);
 
     const canvasNode = this.canvas.node()!;
     this.canvas

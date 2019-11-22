@@ -65,7 +65,7 @@ import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 // @ts-ignore
 import Import from "./Import.svelte";
 // @ts-ignore
-import ChartSwitcher from "./ChartSwitcher.svelte";
+import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 // @ts-ignore
 import FilterForm from "./FilterForm.svelte";
 // @ts-ignore

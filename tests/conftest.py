@@ -42,11 +42,15 @@ def snapshot(request):
     file_path = Path(request.fspath)
     fn_name = request.function.__name__
     snap_dir = file_path.parent / "__snapshots__"
-    snap_file = snap_dir / (file_path.name + "-" + fn_name)
     if not snap_dir.exists():
         snap_dir.mkdir()
 
-    def _snapshot_data(data):
+    def _snapshot_data(data, item=None):
+        snap_file = (
+            snap_dir / f"{file_path.name}-{fn_name}-{item}"
+            if item
+            else snap_dir / f"{file_path.name}-{fn_name}"
+        )
         out = pformat(data)
         if not snap_file.exists():
             contents = ""

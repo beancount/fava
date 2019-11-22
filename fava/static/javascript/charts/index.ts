@@ -4,6 +4,7 @@
  * The charts heavily use d3 libraries.
  */
 
+import { group } from "d3-array";
 import { hierarchy } from "d3-hierarchy";
 import "d3-transition";
 import { get } from "svelte/store";
@@ -27,7 +28,7 @@ import {
 
 import { BaseChart } from "./base";
 import { BarChart } from "./bar";
-import { LineChart } from "./line";
+import { LineChart, LineChartDatum } from "./line";
 import { ScatterPlot } from "./scatter";
 import {
   addInternalNodesAsLeaves,
@@ -73,38 +74,36 @@ interface ChartWithData<T extends BaseChart> {
   renderer: (svg: SVGElement) => T;
 }
 
-const parsers: Partial<Record<
+const parsers: Record<
   string,
   (json: unknown, label: string) => ChartWithData<any>
->> = {
+> = {
   balances(json: unknown): ChartWithData<LineChart> {
-    const series: Record<
-      string,
-      { name: string; values: { date: Date; name: string; value: number }[] }
-    > = {};
     const parsedData = array(
       object({
         date,
         balance: record(number),
       })
     )(json);
-    parsedData.forEach(({ date: date_, balance }) => {
+    const allValues: LineChartDatum[] = [];
+    for (const { date: date_, balance } of parsedData) {
       Object.entries(balance).forEach(([currency, value]) => {
-        const currencySeries = series[currency] || {
-          name: currency,
-          values: [],
-        };
-        currencySeries.values.push({
+        allValues.push({
           name: currency,
           date: date_,
           value,
         });
-        series[currency] = currencySeries;
       });
-    });
+    }
+    const data = [...group(allValues, v => v.name).entries()].map(
+      ([name, values]) => ({
+        name,
+        values,
+      })
+    );
 
     return {
-      data: Object.values(series),
+      data,
       renderer: (svg: SVGElement) =>
         new LineChart(svg).set(
           "tooltipText",
@@ -217,15 +216,14 @@ const parsers: Partial<Record<
   },
 };
 
-const validateChartData = array(
-  object({
-    label: string,
-    type: string,
-    data: unknown,
-  })
-);
 export function parseChartData() {
-  const chartData = validateChartData(getScriptTagJSON("#chart-data"));
+  const chartData = array(
+    object({
+      label: string,
+      type: string,
+      data: unknown,
+    })
+  )(getScriptTagJSON("#chart-data"));
   const result: (ChartWithData<any> & { name: string })[] = [];
   chartData.forEach(chart => {
     const parser = parsers[chart.type];
@@ -237,4 +235,64 @@ export function parseChartData() {
     }
   });
   return result;
+}
+
+export function parseQueryChart(
+  data: unknown
+): ChartWithData<LineChart | HierarchyContainer> | undefined {
+  if (!Array.isArray(data) || !data.length) {
+    return undefined;
+  }
+  if (data[0].group !== undefined) {
+    const validated = array(object({ group: string, balance: record(number) }))(
+      data
+    );
+    const root: AccountHierarchy = {
+      account: "(root)",
+      balance: {},
+      children: [],
+    };
+    const accountMap: Map<string, AccountHierarchy> = new Map([
+      [root.account, root],
+    ]);
+    const addNode = (node: AccountHierarchy) => {
+      const name = node.account;
+      const existing = accountMap.get(name);
+      if (existing) {
+        existing.balance = node.balance;
+        return;
+      }
+      accountMap.set(name, node);
+      const parentEnd = name.lastIndexOf(":");
+      const parentId = parentEnd > 0 ? name.slice(0, parentEnd) : root.account;
+      let parent = accountMap.get(parentId);
+      if (!parent) {
+        parent = { account: parentId, balance: {}, children: [] };
+        addNode(parent);
+      }
+      parent.children.push(node);
+    };
+    for (const { group: account = "(empty)", balance } of validated) {
+      addNode({ account, balance, children: [] });
+    }
+
+    const chartData: Record<string, AccountHierarchyNode> = {};
+    operatingCurrenciesWithConversion.forEach(currency => {
+      const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
+        .sum(d => d.balance[currency])
+        .sort((a, b) => (b.value || 0) - (a.value || 0));
+      if (currencyHierarchy.value !== undefined) {
+        chartData[currency] = currencyHierarchy;
+      }
+    });
+
+    return {
+      data: chartData,
+      renderer: (svg: SVGElement) => new HierarchyContainer(svg),
+    };
+  }
+  if (data[0].date !== undefined) {
+    return parsers.balances(data, "");
+  }
+  return undefined;
 }

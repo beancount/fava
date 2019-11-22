@@ -2,6 +2,7 @@
 
 from beancount.core.number import D
 from flask import g
+import pytest
 
 from fava.util.date import Interval
 
@@ -60,16 +61,15 @@ def test_hierarchy(app, example_ledger):
         assert etrade["balance_children"] == {"USD": D("23137.54")}
 
 
-def test_query(example_ledger, snapshot):
-    data = example_ledger.charts.query(
-        "select account, sum(position) group by account"
-    )
-    data = example_ledger.charts.query(
-        "select tags, sum(position) group by tags"
-    )
-    data = example_ledger.charts.query(
-        "select date, sum(position) group by date"
-    )
-    snapshot(data)
-    data = example_ledger.charts.query("balances")
-    snapshot(data)
+@pytest.mark.parametrize(
+    "query,snapshot_id",
+    [
+        ("select account, sum(position) group by account", "1"),
+        ("select joinstr(tags), sum(position) group by joinstr(tags)", "2"),
+        ("select date, sum(position) group by date", "3"),
+    ],
+)
+def test_query(example_ledger, snapshot, query, snapshot_id):
+    _, types, rows = example_ledger.query_shell.execute_query(query)
+    data = example_ledger.charts.query(types, rows)
+    snapshot(data, snapshot_id)

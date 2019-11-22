@@ -130,7 +130,7 @@ export function urlFor(
   report: string,
   params?: Record<string, string>
 ): string {
-  let url = `${favaAPI.baseURL}${report}/`;
+  let url = `${favaAPI.baseURL}${report}`;
   if (params) {
     const urlParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {

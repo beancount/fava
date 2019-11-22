@@ -9,8 +9,6 @@ from beancount.core.data import Transaction
 from beancount.core.number import Decimal
 from beancount.core.inventory import Inventory
 from beancount.core.position import Position
-from beancount.query import query_parser
-from beancount.query.query import run_query
 from beancount.utils.misc_utils import filter_type
 from flask.json import JSONEncoder
 
@@ -38,6 +36,11 @@ class FavaJSONEncoder(JSONEncoder):
             return JSONEncoder.default(self, o)
         except TypeError:
             return str(o)
+
+
+def inv_to_dict(inventory):
+    """Convert an inventory to a simple cost->number dict."""
+    return {pos.units.currency: pos.units.number for pos in inventory}
 
 
 class ChartModule(FavaModule):
@@ -128,10 +131,7 @@ class ChartModule(FavaModule):
             if change.is_empty():
                 continue
 
-            balance = {
-                p.units.currency: p.units.number
-                for p in cost_or_value(balance, entry.date)
-            }
+            balance = inv_to_dict(cost_or_value(balance, entry.date))
 
             currencies = set(balance.keys())
             if last_currencies:
@@ -185,28 +185,35 @@ class ChartModule(FavaModule):
                 "balance": cost_or_value(inventory, end_date_inclusive),
             }
 
-    def query(self, query_string):
+    @staticmethod
+    def can_plot_query(types):
+        """Whether we can plot the given query.
+
+        Args:
+            types: The list of types returned by the BQL query.
+        """
+        return (
+            len(types) == 2
+            and types[0][1] in {str, datetime.date}
+            and types[1][1] is Inventory
+        )
+
+    def query(self, types, rows):
         """Chart for a query.
 
         Args:
-            query_string: A query string.
+            types: The list of result row types.
+            rows: The result rows.
         """
 
-        try:
-            types, _ = run_query([], self.ledger.options, query_string)
-        except query_parser.ParseError as exception:
-            raise FavaAPIException(str(exception))
-        if len(types) != 2:
-            raise FavaAPIException(
-                "Can only plot queries with 2 result columns."
-            )
-        if types[0][1] is datetime.date and types[1][1] is Inventory:
-            types, rows = run_query(
-                self.ledger.entries, self.ledger.options, query_string
-            )
+        if not self.can_plot_query(types):
+            raise FavaAPIException("Can not plot the given chart.")
+        if types[0][1] is datetime.date:
             return [
-                {"date": row[0], "inventory": units(row[1])} for row in rows
+                {"date": date, "balance": inv_to_dict(units(inv))}
+                for date, inv in rows
             ]
-
-        print(types)
-        return []
+        return [
+            {"group": group, "balance": inv_to_dict(units(inv))}
+            for group, inv in rows
+        ]

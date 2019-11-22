@@ -114,7 +114,13 @@ def query_result():
     if contents:
         if "ERROR" in contents:
             raise FavaAPIException(contents)
-    return table(contents, types, rows)
+    table = table(contents, types, rows)
+    if types and g.ledger.charts.can_plot_query(types):
+        return {
+            "table": table,
+            "chart": g.ledger.charts.query(types, rows),
+        }
+    return {"table": table}
 
 
 @get_api_endpoint
