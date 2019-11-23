@@ -59,6 +59,7 @@ app.register_blueprint(json_api, url_prefix="/<bfile>/api")
 
 app.json_encoder = FavaJSONEncoder
 app.jinja_options["extensions"].append("jinja2.ext.do")
+app.jinja_options["extensions"].append("jinja2.ext.loopcontrols")
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
