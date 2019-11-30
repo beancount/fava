@@ -39,20 +39,26 @@
   }
 </style>
 
-<div
-  class="fieldset posting"
-  class:drag
-  draggable="true"
-  on:dragstart={dragstart}
-  on:dragenter={dragenter}
-  on:dragover={dragenter}
-  on:dragleave={dragleave}
-  on:drop|preventDefault={drop}>
+<div class="fieldset posting" class:drag>
+  <button
+    class="muted round drag-fieldset"
+    draggable="true"
+    on:dragstart={dragstart}
+    on:dragenter={dragenter}
+    on:dragover={dragenter}
+    on:dragleave={dragleave}
+    on:drop|preventDefault={drop}
+    type="button"
+    tabindex="-1"
+    title={_('Move posting')}>
+    ↕
+  </button>
   <button
     class="muted round remove-fieldset"
     on:click={() => dispatch('remove')}
     type="button"
-    tabindex="-1">
+    tabindex="-1"
+    title={_('Remove posting')}>
     ×
   </button>
   <AccountInput bind:value={posting.account} {suggestions} />
