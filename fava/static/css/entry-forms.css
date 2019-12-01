@@ -67,14 +67,12 @@
   width: 10em;
 }
 
-.entry-form .remove-fieldset,
-.entry-form .drag-fieldset {
+.entry-form .fieldset-action {
   font-family: var(--font-family-monospaced);
   opacity: 0;
 }
 
-.entry-form .fieldset:hover .remove-fieldset,
-.entry-form .fieldset:hover .drag-fieldset {
+.entry-form .fieldset:hover .fieldset-action {
   opacity: 1;
 }
 

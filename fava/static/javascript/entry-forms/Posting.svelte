@@ -39,22 +39,24 @@
   }
 </style>
 
-<div class="fieldset posting" class:drag>
+<div
+  class="fieldset posting"
+  class:drag
+  on:dragenter={dragenter}
+  on:dragover={dragenter}
+  on:dragleave={dragleave}
+  on:drop|preventDefault={drop}>
   <button
-    class="muted round drag-fieldset"
+    class="muted round fieldset-action"
     draggable="true"
     on:dragstart={dragstart}
-    on:dragenter={dragenter}
-    on:dragover={dragenter}
-    on:dragleave={dragleave}
-    on:drop|preventDefault={drop}
     type="button"
     tabindex="-1"
     title={_('Move posting')}>
     ↕
   </button>
   <button
-    class="muted round remove-fieldset"
+    class="muted round fieldset-action"
     on:click={() => dispatch('remove')}
     type="button"
     tabindex="-1"
