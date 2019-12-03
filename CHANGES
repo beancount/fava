@@ -6,6 +6,12 @@ Unreleased
 
 Nothing yet.
 
+v1.12 (2019-12-03)
+------------------
+
+Apart from plenty of bug fixes, this release mainly contains improvements to
+the forms to add transactions: postings can now be dragged and the full cost
+syntax of Beancount should supported.
 
 v1.11 (2019-08-20)
 ------------------

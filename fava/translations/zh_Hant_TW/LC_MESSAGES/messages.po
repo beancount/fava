@@ -26,8 +26,8 @@ msgstr "時間"
 msgid "Account"
 msgstr "帳戶"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:61
-#: fava/static/javascript/entry-forms/Transaction.svelte:65
+#: fava/static/javascript/entry-forms/Transaction.svelte:71
+#: fava/static/javascript/entry-forms/Transaction.svelte:75
 msgid "Payee"
 msgstr "收款人"
 
@@ -110,12 +110,12 @@ msgid "Change"
 msgstr "更動"
 
 #: fava/static/javascript/entry-forms/Balance.svelte:23
-#: fava/static/javascript/modals/AddEntry.svelte:12
+#: fava/static/javascript/modals/AddEntry.svelte:14
 #: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "餘額"
 
-#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/AddEntry.svelte:75
 #: fava/static/javascript/modals/Extract.svelte:104
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
@@ -284,12 +284,12 @@ msgstr "關閉"
 msgid "New transaction"
 msgstr "新交易"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:69
-#: fava/static/javascript/entry-forms/Transaction.svelte:73
+#: fava/static/javascript/entry-forms/Transaction.svelte:79
+#: fava/static/javascript/entry-forms/Transaction.svelte:83
 msgid "Narration"
 msgstr "摘要"
 
-#: fava/static/javascript/modals/AddEntry.svelte:70
+#: fava/static/javascript/modals/AddEntry.svelte:73
 msgid "Save and add new"
 msgstr "儲存並新增下一條"
 
@@ -297,8 +297,8 @@ msgstr "儲存並新增下一條"
 msgid "Number"
 msgstr "數值"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:80
-#: fava/static/javascript/entry-forms/Transaction.svelte:105
+#: fava/static/javascript/entry-forms/Posting.svelte:73
+#: fava/static/javascript/entry-forms/Transaction.svelte:90
 msgid "Add posting"
 msgstr "新增記錄"
 
@@ -467,23 +467,23 @@ msgstr "將篩選結果下載為 Beancount 檔"
 msgid "Import entries"
 msgstr "匯入項目"
 
-#: fava/static/javascript/ChartSwitcher.svelte:82 fava/util/date.py:53
+#: fava/static/javascript/ChartSwitcher.svelte:82 fava/util/date.py:54
 msgid "Yearly"
 msgstr "年度"
 
-#: fava/static/javascript/ChartSwitcher.svelte:83 fava/util/date.py:54
+#: fava/static/javascript/ChartSwitcher.svelte:83 fava/util/date.py:55
 msgid "Quarterly"
 msgstr "季度"
 
-#: fava/static/javascript/ChartSwitcher.svelte:84 fava/util/date.py:55
+#: fava/static/javascript/ChartSwitcher.svelte:84 fava/util/date.py:56
 msgid "Monthly"
 msgstr "月"
 
-#: fava/static/javascript/ChartSwitcher.svelte:85 fava/util/date.py:56
+#: fava/static/javascript/ChartSwitcher.svelte:85 fava/util/date.py:57
 msgid "Weekly"
 msgstr "週"
 
-#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:57
+#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:58
 msgid "Daily"
 msgstr "日"
 
@@ -491,7 +491,7 @@ msgstr "日"
 msgid "Edit"
 msgstr "編輯"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:99
+#: fava/static/javascript/entry-forms/Posting.svelte:67
 msgid "Amount"
 msgstr "帳戶"
 
@@ -540,11 +540,11 @@ msgstr "上一個"
 msgid "Next"
 msgstr "下一個"
 
-#: fava/static/javascript/modals/AddEntry.svelte:12
+#: fava/static/javascript/modals/AddEntry.svelte:13
 msgid "Transaction"
 msgstr ""
 
-#: fava/static/javascript/modals/AddEntry.svelte:48
+#: fava/static/javascript/modals/AddEntry.svelte:51
 msgid "Add"
 msgstr ""
 

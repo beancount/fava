@@ -26,8 +26,8 @@ msgstr "Время"
 msgid "Account"
 msgstr "Счёт"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:61
-#: fava/static/javascript/entry-forms/Transaction.svelte:65
+#: fava/static/javascript/entry-forms/Transaction.svelte:71
+#: fava/static/javascript/entry-forms/Transaction.svelte:75
 msgid "Payee"
 msgstr "Контрагент"
 
@@ -110,12 +110,12 @@ msgid "Change"
 msgstr "Изменение"
 
 #: fava/static/javascript/entry-forms/Balance.svelte:23
-#: fava/static/javascript/modals/AddEntry.svelte:12
+#: fava/static/javascript/modals/AddEntry.svelte:14
 #: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
 msgid "Balance"
 msgstr "Баланс"
 
-#: fava/static/javascript/modals/AddEntry.svelte:72
+#: fava/static/javascript/modals/AddEntry.svelte:75
 #: fava/static/javascript/modals/Extract.svelte:104
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
@@ -284,12 +284,12 @@ msgstr "закрыть"
 msgid "New transaction"
 msgstr "Новая транзакция"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:69
-#: fava/static/javascript/entry-forms/Transaction.svelte:73
+#: fava/static/javascript/entry-forms/Transaction.svelte:79
+#: fava/static/javascript/entry-forms/Transaction.svelte:83
 msgid "Narration"
 msgstr "Описание"
 
-#: fava/static/javascript/modals/AddEntry.svelte:70
+#: fava/static/javascript/modals/AddEntry.svelte:73
 msgid "Save and add new"
 msgstr "Записать и добавить новую"
 
@@ -297,15 +297,15 @@ msgstr "Записать и добавить новую"
 msgid "Number"
 msgstr "Количество"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:80
-#: fava/static/javascript/entry-forms/Transaction.svelte:105
+#: fava/static/javascript/entry-forms/Posting.svelte:73
+#: fava/static/javascript/entry-forms/Transaction.svelte:90
 msgid "Add posting"
 msgstr "Добавить проводку"
 
 #: fava/static/javascript/modals/Extract.svelte:59
 #: fava/templates/_globals.html:10
 msgid "Import"
-msgstr ""
+msgstr "Импорт"
 
 #: fava/templates/_journal_table.html:4
 msgid "Budget entries"
@@ -349,16 +349,16 @@ msgstr ""
 
 #: fava/templates/query.html:13
 msgid "...enter a BQL query. 'help' to list available commands."
-msgstr ""
+msgstr "...введите BQL-запрос. 'help' для перечисления доступных команд."
 
 #: fava/templates/_journal_table.html:83
 msgid "Metadata"
-msgstr ""
+msgstr "Метаданные"
 
 #: fava/static/javascript/entry-forms/AddMetadataButton.svelte:16
 #: fava/static/javascript/entry-forms/EntryMetadata.svelte:60
 msgid "Add metadata"
-msgstr ""
+msgstr "Добавить метаданные"
 
 #: fava/static/javascript/entry-forms/Note.svelte:14
 msgid "Note"
@@ -366,11 +366,11 @@ msgstr ""
 
 #: fava/templates/_context.html:4
 msgid "Location"
-msgstr ""
+msgstr "Положение"
 
 #: fava/templates/_context.html:9
 msgid "Context"
-msgstr ""
+msgstr "Контекст"
 
 #: fava/templates/_context.html:15
 msgid "Balances before entry"
@@ -382,15 +382,15 @@ msgstr ""
 
 #: fava/templates/_journal_table.html:11
 msgid "Cleared transactions"
-msgstr ""
+msgstr "Подтверждённые транзакции"
 
 #: fava/templates/_journal_table.html:12
 msgid "Pending transactions"
-msgstr ""
+msgstr "Неподтверждённые транзакции"
 
 #: fava/templates/_journal_table.html:13
 msgid "Other transactions"
-msgstr ""
+msgstr "Прочие транзакции"
 
 #: fava/templates/_journal_table.html:7
 msgid "Documents with a #discovered tag"
@@ -398,7 +398,7 @@ msgstr ""
 
 #: fava/templates/_journal_table.html:84
 msgid "Postings"
-msgstr ""
+msgstr "Проводки"
 
 #: fava/static/javascript/modals/DocumentUpload.svelte:49
 msgid "Upload file(s)"
@@ -430,19 +430,19 @@ msgstr ""
 
 #: fava/templates/options.html:1
 msgid "Fava options"
-msgstr ""
+msgstr "Параметры Fava"
 
 #: fava/templates/options.html:1
 msgid "help"
-msgstr ""
+msgstr "помощь"
 
 #: fava/templates/options.html:18
 msgid "Beancount options"
-msgstr ""
+msgstr "Параметры Beancount"
 
 #: fava/templates/query.html:14
 msgid "Submit"
-msgstr ""
+msgstr "Отправить"
 
 #: fava/templates/_tree_table.html:3
 msgid "Hold Shift while clicking to expand all children.\n"
@@ -451,47 +451,47 @@ msgstr ""
 
 #: fava/templates/_aside.html:27 fava/templates/_layout.html:51
 msgid "Export"
-msgstr ""
+msgstr "Экспорт"
 
 #: fava/static/javascript/FilterForm.svelte:21
 msgid "Filter by tag, payee, ..."
-msgstr ""
+msgstr "Фильтровать по тегу, контрагенту, ..."
 
 #: fava/templates/_layout.html:52
 msgid "Download currently filtered entries as a Beancount file"
-msgstr ""
+msgstr "Скачать отфильтрованные записи как файл Beancount"
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:82 fava/util/date.py:53
+#: fava/static/javascript/ChartSwitcher.svelte:82 fava/util/date.py:54
 msgid "Yearly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:83 fava/util/date.py:54
+#: fava/static/javascript/ChartSwitcher.svelte:83 fava/util/date.py:55
 msgid "Quarterly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:84 fava/util/date.py:55
+#: fava/static/javascript/ChartSwitcher.svelte:84 fava/util/date.py:56
 msgid "Monthly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:85 fava/util/date.py:56
+#: fava/static/javascript/ChartSwitcher.svelte:85 fava/util/date.py:57
 msgid "Weekly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:57
+#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:58
 msgid "Daily"
 msgstr ""
 
 #: fava/templates/editor.html:15
 msgid "Edit"
-msgstr ""
+msgstr "Правка"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:99
+#: fava/static/javascript/entry-forms/Posting.svelte:67
 msgid "Amount"
-msgstr ""
+msgstr "Сумма"
 
 #: fava/templates/_journal_table.html:8
 msgid "Documents with a #linked tag"
@@ -537,13 +537,13 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: fava/static/javascript/modals/AddEntry.svelte:12
+#: fava/static/javascript/modals/AddEntry.svelte:13
 msgid "Transaction"
-msgstr ""
+msgstr "Транзакция"
 
-#: fava/static/javascript/modals/AddEntry.svelte:48
+#: fava/static/javascript/modals/AddEntry.svelte:51
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #: fava/static/javascript/documents/Documents.svelte:81
 msgid "Move or rename document"
@@ -555,5 +555,5 @@ msgstr ""
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
-msgstr ""
+msgstr "Документы"
 
