@@ -85,6 +85,11 @@
 
 .entry-form .posting {
   padding-left: 50px;
+  cursor: grab;
+}
+
+.entry-form .posting > * {
+  cursor: initial;
 }
 
 .entry-form .posting:last-child .amount {

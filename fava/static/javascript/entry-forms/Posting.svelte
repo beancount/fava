@@ -13,7 +13,12 @@
 
   let drag = false;
   function dragstart(event) {
-    event.dataTransfer.setData("fava/posting", index);
+    const element = document.elementFromPoint(event.clientX, event.clientY);
+    if (element === event.target) {
+      event.dataTransfer.setData("fava/posting", index);
+    } else {
+      event.preventDefault();
+    }
   }
   function dragenter(event) {
     if (event.dataTransfer.types.includes("fava/posting")) {
