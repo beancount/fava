@@ -12,13 +12,12 @@
   const dispatch = createEventDispatcher();
 
   let drag = false;
+  let draggable = true;
+  function mousemove(event) {
+    draggable = event.target.nodeName !== "INPUT";
+  }
   function dragstart(event) {
-    const element = document.elementFromPoint(event.clientX, event.clientY);
-    if (element === event.target) {
-      event.dataTransfer.setData("fava/posting", index);
-    } else {
-      event.preventDefault();
-    }
+    event.dataTransfer.setData("fava/posting", index);
   }
   function dragenter(event) {
     if (event.dataTransfer.types.includes("fava/posting")) {
@@ -47,7 +46,8 @@
 <div
   class="fieldset posting"
   class:drag
-  draggable="true"
+  {draggable}
+  on:mousemove={mousemove}
   on:dragstart={dragstart}
   on:dragenter={dragenter}
   on:dragover={dragenter}
