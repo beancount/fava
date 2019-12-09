@@ -1,4 +1,5 @@
 <script>
+  import { todayAsString } from "./format";
   import { _ } from "./helpers";
   import { moveDocument } from "./api";
 
@@ -6,7 +7,7 @@
 
   export let data;
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = todayAsString();
 
   /**
    * Construct the filename from date and basename.

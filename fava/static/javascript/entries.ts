@@ -1,6 +1,6 @@
 import router from "./router";
 import { notify } from "./notifications";
-import { dateToString } from "./format";
+import { todayAsString } from "./format";
 import { putAPI } from "./helpers";
 
 interface Posting {
@@ -25,7 +25,7 @@ abstract class Entry {
   constructor(type: string) {
     this.type = type;
     this.meta = {};
-    this.date = dateToString(new Date());
+    this.date = todayAsString();
   }
 }
 
