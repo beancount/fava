@@ -1,7 +1,7 @@
 // Helper functions to format numbers and dates.
 
 import { format } from "d3-format";
-import { utcFormat } from "d3-time-format";
+import { utcFormat, timeFormat } from "d3-time-format";
 
 import e from "./events";
 import { favaAPI, interval } from "./stores";
@@ -69,3 +69,7 @@ export let currentTimeFilterDateFormat = timeFilterDateFormat.month;
 interval.subscribe(intervalValue => {
   currentTimeFilterDateFormat = timeFilterDateFormat[intervalValue];
 });
+
+export function todayAsString(): string {
+  return timeFormat("%Y-%m-%d")(new Date());
+}

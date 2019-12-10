@@ -5,6 +5,7 @@
 
 import { writable, Writable } from "svelte/store";
 
+import { todayAsString } from "./format";
 import { delegate, _ } from "./helpers";
 import { favaAPI } from "./stores";
 import { notify } from "./notifications";
@@ -47,7 +48,7 @@ function drop(event: DragEvent, target: HTMLElement) {
   }
 
   const dateAttribute = target.getAttribute("data-entry-date");
-  const entryDate = dateAttribute || new Date().toISOString().substring(0, 10);
+  const entryDate = dateAttribute || todayAsString();
   account.set(target.getAttribute("data-account-name") || "");
   hash.set(target.getAttribute("data-entry") || "");
 
