@@ -141,14 +141,7 @@ export function object<T>(
       // eslint-disable-next-line no-restricted-syntax
       for (const key in validators) {
         if (Object.prototype.hasOwnProperty.call(validators, key)) {
-          try {
-            obj[key] = validators[key](json[key]);
-          } catch (exc) {
-            console.log(`Validating key ${key} failed`);
-            console.log(json[key]);
-            console.log(json);
-            throw exc;
-          }
+          obj[key] = validators[key](json[key]);
         }
       }
       return obj as T;

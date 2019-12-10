@@ -365,7 +365,9 @@ export class HierarchyContainer extends BaseChart {
         .attr("x", this.width / 2)
         .attr("y", 160 / 2);
     } else if (this.mode === "treemap") {
-      if (!this.currency) this.currency = this.currencies[0];
+      if (!this.currency) {
+        [this.currency] = this.currencies;
+      }
       const totalBalance = data[this.currency].value || 1;
       const currentChart = new TreeMapChart(this.canvas.node()!)
         .setWidth(this.width)
