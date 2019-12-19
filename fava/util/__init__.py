@@ -1,13 +1,13 @@
 """Some small utility functions."""
-
 import functools
 import itertools
 import logging
 import os
 import re
-import unicodedata
 import time
+import unicodedata
 
+from flask import abort
 from flask import send_file
 from werkzeug.urls import url_quote
 
@@ -91,7 +91,10 @@ def send_file_inline(filename):
 
     Ref: http://test.greenbytes.de/tech/tc2231/.
     """
-    response = send_file(filename)
+    try:
+        response = send_file(filename)
+    except FileNotFoundError:
+        return abort(404)
     basename = os.path.basename(filename)
     cont_disp = "inline; filename*=UTF-8''{}".format(url_quote(basename))
     response.headers["Content-Disposition"] = cont_disp
