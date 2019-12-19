@@ -21,7 +21,9 @@ class Events {
   }
 
   remove(event: string, callback: Function) {
-    if (!this.events[event].length) return;
+    if (!this.events[event].length) {
+      return;
+    }
     this.events[event] = this.events[event].filter(c => c !== callback);
   }
 

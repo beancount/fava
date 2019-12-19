@@ -5,6 +5,7 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "lint": "npm run format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' --fix && npx tsc",
+    "lint:js": "eslint javascript --fix --ext .svelte,.ts",
     "format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --write --ignore-path .gitignore"
   },
   "husky": {
@@ -29,19 +30,12 @@
   "prettier": {
     "proseWrap": "always",
     "trailingComma": "es5",
-    "tabWidth": 2,
-    "overrides": [
-      {
-        "files": "*.svelte",
-        "options": {
-          "tabWidth": 2
-        }
-      }
-    ]
+    "tabWidth": 2
   },
   "eslintConfig": {
     "extends": [
       "airbnb-base",
+      "plugin:@typescript-eslint/recommended",
       "prettier"
     ],
     "plugins": [
@@ -53,18 +47,27 @@
     },
     "rules": {
       "camelcase": 0,
-      "no-param-reassign": 0,
-      "no-underscore-dangle": 0,
+      "curly": [
+        "error",
+        "all"
+      ],
       "max-classes-per-file": 0,
-      "import/extensions": 0,
-      "import/no-unresolved": 0,
-      "import/prefer-default-export": 0,
+      "no-param-reassign": 0,
       "no-restricted-syntax": [
         "error",
         "ForInStatement",
         "LabelStatement",
         "WithStatement"
-      ]
+      ],
+      "no-underscore-dangle": 0,
+      "import/extensions": 0,
+      "import/no-unresolved": 0,
+      "import/prefer-default-export": 0,
+      "@typescript-eslint/ban-ts-ignore": 0,
+      "@typescript-eslint/camelcase": 0,
+      "@typescript-eslint/no-explicit-any": 0,
+      "@typescript-eslint/no-non-null-assertion": 0,
+      "@typescript-eslint/explicit-function-return-type": 0
     },
     "overrides": [
       {
@@ -73,18 +76,14 @@
         ],
         "processor": "svelte3/svelte3",
         "rules": {
-          "import/first": "off",
-          "import/no-mutable-exports": "off"
+          "import/first": 0,
+          "import/no-mutable-exports": 0
         }
       },
       {
         "files": [
           "*.ts"
         ],
-        "rules": {
-          "no-unused-vars": "off",
-          "@typescript-eslint/no-unused-vars": "error"
-        },
         "parser": "@typescript-eslint/parser"
       }
     ]
@@ -150,6 +149,6 @@
     "d3-time-format": "^2.2.2",
     "d3-transition": "^1.3.2",
     "mousetrap": "^1.6.3",
-    "svelte": "^3.16.4"
+    "svelte": "^3.16.5"
   }
 }

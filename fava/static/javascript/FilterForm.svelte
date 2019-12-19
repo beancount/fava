@@ -57,8 +57,9 @@
 
   function clear(name) {
     filterStore.update(fs => {
-      fs[name] = "";
-      return fs;
+      const ret = { ...fs };
+      ret[name] = "";
+      return ret;
     });
   }
 </script>

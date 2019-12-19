@@ -45,10 +45,14 @@ export function delegate<T extends Event, C extends Element>(
   selector: string,
   callback: (e: T, c: C) => void
 ) {
-  if (!element) return;
+  if (!element) {
+    return;
+  }
   element.addEventListener(type, event => {
     let { target } = event;
-    if (!target || !(target instanceof Node)) return;
+    if (!target || !(target instanceof Node)) {
+      return;
+    }
     if (!(target instanceof Element)) {
       target = target.parentNode;
     }

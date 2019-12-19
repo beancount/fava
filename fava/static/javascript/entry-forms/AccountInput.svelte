@@ -17,7 +17,9 @@
     }
   }
 
-  $: if (input) checkValidity(value);
+  $: if (input) {
+    checkValidity(value);
+  }
 </script>
 
 <AutocompleteInput

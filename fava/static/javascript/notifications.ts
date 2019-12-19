@@ -14,7 +14,9 @@ export function notify(msg: string, cls = "info", callback?: Function) {
   notification.classList.add(cls);
   notification.appendChild(document.createTextNode(msg));
   const notificationList = select("#notifications");
-  if (!notificationList) throw new Error();
+  if (!notificationList) {
+    throw new Error();
+  }
   notificationList.append(notification);
   notification.addEventListener("click", () => {
     notification.remove();

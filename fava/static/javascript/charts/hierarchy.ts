@@ -117,7 +117,9 @@ class TreeMapChart extends BaseChart {
   update() {
     this.setHeight(Math.min(this.width / 2.5, 400));
 
-    if (!this.root) return;
+    if (!this.root) {
+      return;
+    }
 
     this.treemap.size([this.width, this.height]);
     this.treemap(this.root);
@@ -333,7 +335,7 @@ class SunburstChartContainer extends BaseChart {
 }
 
 export class HierarchyContainer extends BaseChart {
-  canvas: Selection<SVGGElement, unknown, null, undefined>;
+  canvas: SVGGElement;
 
   data?: Record<string, AccountHierarchyNode>;
 
@@ -347,7 +349,8 @@ export class HierarchyContainer extends BaseChart {
 
   constructor(svg: SVGElement) {
     super(svg);
-    this.canvas = select(this.svg).append("g");
+    this.canvas = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    svg.appendChild(this.canvas);
     this.has_mode_setting = true;
     this.margin = NO_MARGINS;
     this.currencies = [];
@@ -359,10 +362,10 @@ export class HierarchyContainer extends BaseChart {
     this.data = data;
     this.currencies = Object.keys(data);
 
-    this.canvas.html("");
+    this.canvas.innerHTML = "";
 
     if (this.currencies.length === 0) {
-      this.canvas
+      select(this.canvas)
         .append("text")
         .text("Chart is empty.")
         .attr("text-anchor", "middle")
@@ -373,7 +376,7 @@ export class HierarchyContainer extends BaseChart {
         [this.currency] = this.currencies;
       }
       const totalBalance = data[this.currency].value || 1;
-      const currentChart = new TreeMapChart(this.canvas.node()!)
+      const currentChart = new TreeMapChart(this.canvas)
         .setWidth(this.width)
         .set("tooltipText", d => {
           const balance = d.data.balance[this.currency];
@@ -389,7 +392,7 @@ export class HierarchyContainer extends BaseChart {
       this.currentChart = currentChart;
       this.has_currency_setting = true;
     } else {
-      this.currentChart = new SunburstChartContainer(this.canvas.node()!)
+      this.currentChart = new SunburstChartContainer(this.canvas)
         .setWidth(this.width)
         .draw(data);
 
@@ -401,7 +404,9 @@ export class HierarchyContainer extends BaseChart {
   }
 
   update() {
-    if (!this.data) return;
+    if (!this.data) {
+      return;
+    }
     this.draw(this.data);
     if (this.currentChart) {
       this.currentChart.setWidth(this.outerWidth).update();

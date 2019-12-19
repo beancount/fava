@@ -57,7 +57,9 @@ export class Transaction extends Entry {
 }
 
 export async function saveEntries(entries: Entry[]) {
-  if (!entries.length) return;
+  if (!entries.length) {
+    return;
+  }
   try {
     const data = await putAPI("add_entries", { entries });
     router.reload();

@@ -79,7 +79,9 @@ export class ScatterPlot extends BaseChart {
     this.canvas
       .on("mousemove", () => {
         const matrix = canvasNode.getScreenCTM();
-        if (!matrix) return;
+        if (!matrix) {
+          return;
+        }
         const d = this.quadtree.find(...clientPoint(canvasNode, event));
         if (d) {
           tooltip

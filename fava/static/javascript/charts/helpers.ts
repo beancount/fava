@@ -13,10 +13,10 @@ export const NO_MARGINS = {
 };
 
 export function setTimeFilter(date: Date) {
-  filters.update(fs => {
-    fs.time = get(currentTimeFilterDateFormat)(date);
-    return fs;
-  });
+  filters.update(fs => ({
+    ...fs,
+    time: get(currentTimeFilterDateFormat)(date),
+  }));
 }
 
 /*

@@ -6,20 +6,28 @@ import { filters } from "./stores";
 function addFilter(value: string) {
   filters.update(fs => {
     if (fs.filter) {
-      fs.filter += ` ${value}`;
-    } else {
-      fs.filter = value;
+      return {
+        ...fs,
+        filter: `${fs.filter} ${value}`,
+      };
     }
-    return fs;
+    return {
+      ...fs,
+      filter: value,
+    };
   });
 }
 
 e.on("page-loaded", () => {
   const journal = select(".journal");
-  if (!journal) return;
+  if (!journal) {
+    return;
+  }
 
   delegate(journal, "click", "li", event => {
-    if (!event.target) return;
+    if (!event.target) {
+      return;
+    }
     const target = event.target as HTMLElement;
     if (target.tagName === "A") {
       return;

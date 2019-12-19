@@ -23,7 +23,9 @@
   });
 
   afterUpdate(async () => {
-    if (!content) return;
+    if (!content) {
+      return;
+    }
     await content;
     initSourceEditor("#source-slice-editor");
   });

@@ -7,7 +7,10 @@ import e from "./events";
 
 e.on("page-loaded", () => {
   selectAll(".tree-table").forEach(table => {
-    const expandAllLink = select(".expand-all", table)!;
+    const expandAllLink = select(".expand-all", table);
+    if (!expandAllLink) {
+      return;
+    }
 
     expandAllLink.addEventListener("click", () => {
       expandAllLink.classList.add("hidden");
@@ -17,9 +20,13 @@ e.on("page-loaded", () => {
     });
 
     delegate(table, "click", "span.has-children", (event: MouseEvent) => {
-      if (!event.target) return;
+      if (!event.target) {
+        return;
+      }
       const target = event.target as HTMLElement;
-      if (target.tagName === "A") return;
+      if (target.tagName === "A") {
+        return;
+      }
       const row = target.closest("li")!;
       const willShow = row.classList.contains("toggled");
       if (event.shiftKey) {

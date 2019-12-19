@@ -24,7 +24,9 @@
 
   async function focus() {
     await tick();
-    if (entryComponent.focus) entryComponent.focus();
+    if (entryComponent.focus) {
+      entryComponent.focus();
+    }
   }
 
   async function submitAndNew(event) {
@@ -42,7 +44,9 @@
   }
 
   $: shown = $urlHash === "add-transaction";
-  $: if (shown) focus();
+  $: if (shown) {
+    focus();
+  }
 </script>
 
 <ModalBase {shown}>

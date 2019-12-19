@@ -85,7 +85,9 @@ class Router {
     getUrl.searchParams.set("partial", "true");
 
     const svg = select(".fava-icon");
-    if (svg) svg.classList.add("loading");
+    if (svg) {
+      svg.classList.add("loading");
+    }
 
     try {
       const content = await fetch(getUrl.toString()).then(handleText);
@@ -95,13 +97,17 @@ class Router {
       }
       this.updateState();
       const article = select("article");
-      if (article) article.innerHTML = content;
+      if (article) {
+        article.innerHTML = content;
+      }
       e.trigger("page-loaded");
       urlHash.set(window.location.hash.slice(1));
     } catch (error) {
       notify(`Loading ${url} failed.`, "error");
     } finally {
-      if (svg) svg.classList.remove("loading");
+      if (svg) {
+        svg.classList.remove("loading");
+      }
     }
   }
 

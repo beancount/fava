@@ -17,14 +17,16 @@ function parseNumber(num: string): number {
   return Number.isNaN(n) ? 0 : n;
 }
 
-function stringComparator(A: string, B: string) {
+function stringComparator(A: string, B: string): number {
   const a = A.toLowerCase();
   const b = B.toLowerCase();
 
-  if (a === b) return 0;
+  if (a === b) {
+    return 0;
+  }
   return a < b ? -1 : 1;
 }
-function numComparator(a: string, b: string) {
+function numComparator(a: string, b: string): number {
   return parseNumber(a) - parseNumber(b);
 }
 
@@ -33,7 +35,7 @@ type SortOrder = "desc" | "asc";
 /**
  * Obtain the value to sort by for an element.
  */
-function getValue(el: HTMLElement) {
+function getValue(el: HTMLElement): string {
   return el.getAttribute("data-sort-value") || el.textContent || el.innerText;
 }
 
@@ -44,9 +46,9 @@ export function sortFunc<T>(
   type: string | null,
   order: SortOrder,
   getter: (e: T) => string
-) {
+): (a: T, b: T) => number {
   const comparator = type === "num" ? numComparator : stringComparator;
-  function func(a: T, b: T) {
+  function func(a: T, b: T): number {
     return (order === "asc" ? 1 : -1) * comparator(getter(a), getter(b));
   }
   return func;
@@ -61,7 +63,7 @@ function sortElements<T extends Element, C extends HTMLElement>(
   selector: (e: T) => C,
   order: SortOrder,
   type: string | null
-) {
+): void {
   const sortFunction = sortFunc(type, order, (a: T) => getValue(selector(a)));
   const fragment = document.createDocumentFragment();
   elements.sort(sortFunction).forEach(el => {
@@ -82,9 +84,11 @@ function getSortOrder(headerElement: Element): SortOrder {
   return headerElement.getAttribute("data-order") === "asc" ? "desc" : "asc";
 }
 
-function sortableJournal(ol: HTMLOListElement) {
+function sortableJournal(ol: HTMLOListElement): void {
   const head = select(".head", ol);
-  if (!head) return;
+  if (!head) {
+    return;
+  }
   const headers = selectAll("span[data-sort]", head);
 
   headers.forEach(header => {
@@ -112,10 +116,12 @@ function sortableJournal(ol: HTMLOListElement) {
   });
 }
 
-function sortableTable(table: HTMLTableElement) {
+function sortableTable(table: HTMLTableElement): void {
   const head = table.tHead;
   const body = table.tBodies.item(0);
-  if (!head || !body) return;
+  if (!head || !body) {
+    return;
+  }
   const headers = selectAll("th[data-sort]", head);
 
   headers.forEach(header => {
@@ -134,6 +140,7 @@ function sortableTable(table: HTMLTableElement) {
         body,
         selectAll("tr", body) as HTMLTableRowElement[],
         function selector(tr: HTMLTableRowElement): HTMLTableDataCellElement {
+          // eslint-disable-next-line
           return tr.cells.item(index)!;
         },
         order,
