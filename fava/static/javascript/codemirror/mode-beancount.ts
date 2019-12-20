@@ -5,7 +5,6 @@
 import CodeMirror from "codemirror";
 
 // The rules should mirror `parser/lexel.l` in beancount
-// @ts-ignore
 CodeMirror.defineSimpleMode("beancount", {
   start: [
     {
@@ -24,7 +23,7 @@ CodeMirror.defineSimpleMode("beancount", {
     },
     {
       regex: /(query)(\s*)("[^"]*")(\s*)(")/,
-      token: ["directive", null, "string", null, "string"],
+      token: ["directive", "", "string", "", "string"],
       mode: {
         spec: "beancount-query",
         end: /"/,

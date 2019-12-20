@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "es2017",
-        "module": "commonjs",
+        "module": "es2015",
         "allowJs": true,
         "checkJs": true,
         "noEmit": true,

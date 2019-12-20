@@ -246,8 +246,6 @@ class SunburstChart extends BaseChart {
   // Fade all but the current sequence
   mouseOver(d: TreemapDatum) {
     this.setLabel(d);
-
-    // @ts-ignore
     this.paths.interrupt();
 
     // Only highlight segments that are ancestors of the current segment.
@@ -261,7 +259,6 @@ class SunburstChart extends BaseChart {
   // Restore everything to full opacity when moving off the visualization.
   mouseLeave() {
     this.paths
-      // @ts-ignore
       .transition()
       .duration(1000)
       .style("opacity", 1);

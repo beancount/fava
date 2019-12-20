@@ -10,7 +10,6 @@ import bqlGrammar from "./bql-grammar";
 const { columns, functions, keywords } = bqlGrammar;
 
 // This should match the grammar defined in Beancount (`query/query_parser.py`).
-// @ts-ignore
 CodeMirror.defineSimpleMode("beancount-query", {
   start: [
     {

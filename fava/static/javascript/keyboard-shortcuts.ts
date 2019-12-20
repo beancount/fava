@@ -6,8 +6,7 @@ import { closeOverlay } from "./stores";
 
 function click(selector: string) {
   const element = select(selector);
-  if (element) {
-    // @ts-ignore
+  if (element && element instanceof HTMLElement) {
     element.click();
   }
 }
@@ -51,8 +50,10 @@ function showTooltip(target: HTMLElement) {
 
 // Show all keyboard shortcut tooltips.
 function showTooltips() {
-  // @ts-ignore
-  select("#reload-page").classList.remove("hidden");
+  const reloadButton = select("#reload-page");
+  if (reloadButton) {
+    reloadButton.classList.remove("hidden");
+  }
   selectAll("[data-key]").forEach(el => {
     showTooltip(el as HTMLElement);
   });
@@ -60,8 +61,10 @@ function showTooltips() {
 
 // Remove all keyboard shortcut tooltips.
 function removeTooltips() {
-  // @ts-ignore
-  select("#reload-page").classList.add("hidden");
+  const reloadButton = select("#reload-page");
+  if (reloadButton) {
+    reloadButton.classList.add("hidden");
+  }
   selectAll(".keyboard-tooltip").forEach(tooltip => {
     tooltip.remove();
   });

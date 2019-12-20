@@ -184,8 +184,8 @@ export async function putAPI<T extends keyof apiTypes>(
     },
     body: JSON.stringify(body),
   }).then(handleJSON);
-  // @ts-ignore
-  return putAPIValidators[endpoint](validateAPIResponse(res).data);
+  const { data }: { data: unknown } = validateAPIResponse(res);
+  return putAPIValidators[endpoint](data) as ReturnType<apiTypes[T]>;
 }
 
 /**

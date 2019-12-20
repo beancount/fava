@@ -226,11 +226,9 @@ e.on("page-init", () => {
   ): void {
     let value: T;
     if (typeof defaultValue === "boolean") {
-      // @ts-ignore
-      value = params.get(name) !== "false" && defaultValue;
+      value = (params.get(name) !== "false" && defaultValue) as T;
     } else {
-      // @ts-ignore
-      value = params.get(name) || defaultValue;
+      value = (params.get(name) as T) || defaultValue;
     }
     store.set(value);
 

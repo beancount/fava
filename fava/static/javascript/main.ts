@@ -62,17 +62,11 @@ import "./sort";
 import "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 
-// @ts-ignore
 import Import from "./Import.svelte";
-// @ts-ignore
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
-// @ts-ignore
 import FilterForm from "./FilterForm.svelte";
-// @ts-ignore
 import Documents from "./documents/Documents.svelte";
-// @ts-ignore
 import Modals from "./modals/Modals.svelte";
-// @ts-ignore
 import Query from "./query/Query.svelte";
 
 function initSvelteComponent(selector: string, SvelteComponent: any) {
@@ -104,8 +98,11 @@ e.on("page-loaded", () => {
 e.on("page-init", () => {
   // eslint-disable-next-line no-new
   new Modals({ target: document.body });
-  // eslint-disable-next-line no-new
-  new FilterForm({ target: select("header") });
+  const header = select("header");
+  if (header) {
+    // eslint-disable-next-line no-new
+    new FilterForm({ target: header });
+  }
 
   // Watch for all clicks on <button>s and fire the appropriate events.
   delegate(

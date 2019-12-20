@@ -1,7 +1,7 @@
 import { max, merge, min } from "d3-array";
 import { axisLeft, axisBottom, Axis } from "d3-axis";
 import { scaleLinear, scaleUtc, ScaleLinear, ScaleTime } from "d3-scale";
-import { event, clientPoint, select, Selection } from "d3-selection";
+import { event, clientPoint, select, Selection, BaseType } from "d3-selection";
 import { line, Line } from "d3-shape";
 import { quadtree, Quadtree } from "d3-quadtree";
 
@@ -47,7 +47,7 @@ export class LineChart extends BaseChart {
 
   lines: Selection<SVGPathElement, LineChartData, SVGGElement, unknown>;
 
-  dots: Selection<SVGCircleElement, LineChartDatum, SVGGElement, LineChartData>;
+  dots: Selection<SVGCircleElement, LineChartDatum, BaseType, unknown>;
 
   constructor(svg: SVGElement) {
     super(svg);
@@ -73,7 +73,6 @@ export class LineChart extends BaseChart {
     this.yAxisSelection = this.canvas.append("g").attr("class", "y axis");
     this.quadtree = quadtree();
     this.lines = this.canvas.selectAll(".line");
-    // @ts-ignore
     this.dots = this.canvas.selectAll("g.dot").selectAll("circle");
   }
 

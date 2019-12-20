@@ -47,8 +47,18 @@ interface SearchCursor {
   findNext(): boolean;
   pos: { from: Position; to: Position };
 }
+interface SimpleModeRule {
+  regex: string | RegExp;
+  token: string | string[] | null;
+  sol?: boolean;
+  mode?: { spec: string; end: string | RegExp };
+}
 
 declare module "codemirror" {
+  function defineSimpleMode(
+    name: string,
+    config: Record<string, SimpleModeRule[]>
+  ): void;
   interface EditorConfiguration {
     // defined in the edit/trailingspace addon
     showTrailingSpace?: boolean;
@@ -57,6 +67,7 @@ declare module "codemirror" {
       column: number;
       lineStyle: string;
     }[];
+    favaSaveButton?: HTMLButtonElement;
   }
   interface Editor {
     // defined in the comment/comment addon
@@ -89,10 +100,14 @@ declare module "codemirror" {
   }
 }
 
+export { CodeMirror };
+
 // This handles saving in both the main and the overlaid entry editors.
 CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
-  // @ts-ignore
-  const button: HTMLButtonElement = cm.getOption("favaSaveButton");
+  const button = cm.getOption("favaSaveButton");
+  if (!button) {
+    return;
+  }
 
   const buttonText = button.textContent;
   button.disabled = true;
@@ -255,7 +270,6 @@ export default function initSourceEditor(name: string) {
     activeEditor = editor;
   }
   const saveButton = select(`${name}-submit`) as HTMLButtonElement;
-  // @ts-ignore
   editor.setOption("favaSaveButton", saveButton);
 
   editor.on("changes", (cm: Editor) => {
