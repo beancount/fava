@@ -1,4 +1,6 @@
-// Minimal event handler
+/**
+ * Minimal event handler
+ */
 class Events {
   events: Record<string, Function[]>;
 

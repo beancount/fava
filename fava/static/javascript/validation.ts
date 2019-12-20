@@ -1,3 +1,10 @@
+/**
+ * Data validation.
+ *
+ * These functions allow us to ensure that `unknown` data obtained from, e.g.,
+ * an API, is of a specified type.
+ */
+
 class ValidationError extends Error {}
 
 /**
@@ -57,6 +64,9 @@ export function date(json: unknown): Date {
   throw new ValidationError(`Expected a date: ${json}`);
 }
 
+/**
+ * Validate a value to be equal to a constant value.
+ */
 export function constant<T>(value: T): Validator<T> {
   return (json: unknown) => {
     if (json === value) {
@@ -66,6 +76,9 @@ export function constant<T>(value: T): Validator<T> {
   };
 }
 
+/**
+ * Validate a value that is of one of two given types.
+ */
 export function union<A, B>(
   a: Validator<A>,
   b: Validator<B>
@@ -100,6 +113,9 @@ export function lazy<T>(func: () => Validator<T>): Validator<T> {
   };
 }
 
+/**
+ * Validator for an array of values.
+ */
 export function array<T>(validator: Validator<T>): Validator<T[]> {
   return (json: unknown) => {
     if (Array.isArray(json)) {
@@ -113,6 +129,9 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
   };
 }
 
+/**
+ * Validator for a tuple of fixed length.
+ */
 export function tuple<A, B>(
   decoders: [Validator<A>, Validator<B>]
 ): Validator<[A, B]> {
@@ -132,6 +151,9 @@ export function tuple<A, B>(
 const isJsonObject = (json: unknown): json is Record<string, unknown> =>
   typeof json === "object" && json !== null && !Array.isArray(json);
 
+/**
+ * Validator for an object with some given properties.
+ */
 export function object<T>(
   validators: { [t in keyof T]: Validator<T[t]> }
 ): Validator<T> {
@@ -150,6 +172,9 @@ export function object<T>(
   };
 }
 
+/**
+ * Validator for a dict-like structure.
+ */
 export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
   return (json: unknown) => {
     if (isJsonObject(json)) {
