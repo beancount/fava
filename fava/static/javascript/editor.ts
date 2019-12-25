@@ -1,4 +1,4 @@
-import CodeMirror, { Editor, EditorFromTextArea, Position } from "codemirror";
+import CodeMirror, { Editor, EditorFromTextArea } from "codemirror";
 import Mousetrap from "mousetrap";
 
 import "codemirror/addon/mode/simple";
@@ -43,10 +43,6 @@ import router from "./router";
 import { notify } from "./notifications";
 import { closeOverlay, favaAPI } from "./stores";
 
-interface SearchCursor {
-  findNext(): boolean;
-  pos: { from: Position; to: Position };
-}
 interface SimpleModeRule {
   regex: string | RegExp;
   token: string | string[] | null;
@@ -68,22 +64,6 @@ declare module "codemirror" {
       lineStyle: string;
     }[];
     favaSaveButton?: HTMLButtonElement;
-  }
-  interface Editor {
-    // defined in the comment/comment addon
-    uncomment(
-      from: Position,
-      to: Position,
-      options: { lineComment: string }
-    ): boolean;
-    // defined in the comment/comment addon
-    lineComment(
-      from: Position,
-      to: Position,
-      options: { lineComment: string }
-    ): boolean;
-    // defined in the comment/comment addon
-    getSearchCursor(query: string): SearchCursor;
   }
   interface CommandActions {
     favaSave(editor: EditorFromTextArea): void;
@@ -177,7 +157,7 @@ CodeMirror.commands.favaJumpToMarker = (cm: Editor) => {
 
   if (cursor.findNext()) {
     cm.focus();
-    doc.setCursor(cursor.pos.from);
+    doc.setCursor(cursor.from());
     cm.execCommand("goLineUp");
     cm.execCommand("favaCenterCursor");
   } else {
