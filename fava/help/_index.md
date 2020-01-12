@@ -7,6 +7,7 @@ Welcome to the help pages for Fava! There are pages for the following topics:
 -   [Extensions]({{ url_for('help_page', page_slug='extensions') }}) - how Fava can be extended.
 -   [Import]({{ url_for('help_page', page_slug='import') }}) - the import system.
 -   [Options]({{ url_for('help_page', page_slug='options') }}) - the available options.
+-   [Related Tools]({{ url_for('help_page', page_slug='related_tools') }}) - Beancount/Fava related tools and extensions.
 
 Fava comes with keyboard shortcuts - press <kbd>?</kbd> on any page to see the
 available ones. When charts are visible, <kbd>c</kbd> and <kbd>C</kbd> will

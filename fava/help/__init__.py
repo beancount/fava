@@ -11,4 +11,5 @@ HELP_PAGES = {
     "features": "Fava's features",
     "filters": "Filtering entries",
     "extensions": "Extensions",
+    "related_tools": "Related Tools",
 }
