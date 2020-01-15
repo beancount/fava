@@ -86,7 +86,7 @@ export class LineChart extends BaseChart {
     // Span y-axis as max minus min value plus 5 percent margin
     const minDataValue = min(this.data, d => min(d.values, x => x.value));
     const maxDataValue = max(this.data, d => max(d.values, x => x.value));
-    if (minDataValue && maxDataValue) {
+    if (minDataValue !== undefined && maxDataValue !== undefined) {
       this.y.domain([
         minDataValue - (maxDataValue - minDataValue) * 0.05,
         maxDataValue + (maxDataValue - minDataValue) * 0.05,
