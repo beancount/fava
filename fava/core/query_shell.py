@@ -2,6 +2,7 @@
 
 import contextlib
 import io
+import readline
 import textwrap
 
 from beancount.core.data import Query
@@ -11,6 +12,11 @@ from beancount.utils import pager
 
 from fava.core.helpers import FavaAPIException, FavaModule
 from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
+
+
+# This is to limit the size of the history file. Fava is not using readline at
+# all, but Beancount somehow still is...
+readline.set_history_length(1000)
 
 
 class QueryShell(shell.BQLShell, FavaModule):
