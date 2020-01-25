@@ -5,11 +5,9 @@ packages:
   - npm
   - python-tox
 sources:
-  - https://github.com/beancount/fava.git
+  - https://github.com/beancount/fava
 tasks:
   - setup: |
-      cd fava
-      make
+      make -C fava
   - test: |
-      cd fava
-      make test
+      make -C fava test
