@@ -1,0 +1,14 @@
+image: debian/stable
+packages:
+  - python3-dev
+  - nodejs
+  - npm
+  - tox
+sources:
+  - https://github.com/beancount/fava
+tasks:
+  - build: |
+      sudo npm install npm@latest -g --no-progress
+      make -C fava
+  - test: |
+      make -C fava test

@@ -7,7 +7,7 @@ packages:
 sources:
   - https://github.com/beancount/fava
 tasks:
-  - setup: |
+  - build: |
       make -C fava
   - test: |
       make -C fava test

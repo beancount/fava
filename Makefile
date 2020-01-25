@@ -1,7 +1,7 @@
 all: fava/static/gen/app.js
 
 fava/static/gen/app.js: fava/static/css/* fava/static/javascript/* fava/static/package.json
-	cd fava/static; npm install; npm run build
+	cd fava/static; npm install --no-progress; npm run build
 
 .PHONY: clean
 clean: mostlyclean
