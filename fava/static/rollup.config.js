@@ -1,8 +1,8 @@
-import commonjs from "rollup-plugin-commonjs";
+import commonjs from "@rollup/plugin-commonjs";
 import css from "rollup-plugin-css-only";
-import nodeResolve from "rollup-plugin-node-resolve";
+import nodeResolve from "@rollup/plugin-node-resolve";
 import svelte from "rollup-plugin-svelte";
-import typescript from "rollup-plugin-typescript";
+import typescript from "@rollup/plugin-typescript";
 
 import fs from "fs";
 import { promisify } from "util";
