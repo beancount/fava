@@ -20,9 +20,9 @@ msgid "Time"
 msgstr "Час"
 
 #: fava/static/javascript/FilterForm.svelte:15
-#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/entry-forms/AccountInput.svelte:28
 #: fava/static/javascript/modals/DocumentUpload.svelte:67
-#: fava/templates/holdings.html:45 fava/templates/statistics.html:32
+#: fava/templates/holdings.html:45 fava/templates/statistics.html:28
 msgid "Account"
 msgstr "Рахунок"
 
@@ -80,42 +80,42 @@ msgid "Help"
 msgstr "Допомога"
 
 #: fava/static/javascript/documents/Table.svelte:22
-#: fava/templates/_journal_table.html:89 fava/templates/commodities.html:10
+#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:10
 #: fava/templates/events.html:11
 msgid "Date"
 msgstr "Дата"
 
-#: fava/templates/_journal_table.html:90
+#: fava/templates/_journal_table.html:87
 msgid "F"
 msgstr "Ф"
 
-#: fava/templates/_journal_table.html:91
+#: fava/templates/_journal_table.html:88
 msgid "Narration/Payee"
 msgstr "Опис/Отримувач"
 
-#: fava/templates/_journal_table.html:92
+#: fava/templates/_journal_table.html:89
 msgid "Position"
 msgstr "Позиція"
 
-#: fava/templates/_journal_table.html:93 fava/templates/commodities.html:11
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
 msgid "Price"
 msgstr "Ціна"
 
-#: fava/templates/_journal_table.html:94
+#: fava/templates/_journal_table.html:91
 msgid "Cost"
 msgstr "Вартість"
 
-#: fava/templates/_journal_table.html:96
+#: fava/templates/_journal_table.html:93
 msgid "Change"
 msgstr "Зміна"
 
 #: fava/static/javascript/entry-forms/Balance.svelte:23
 #: fava/static/javascript/modals/AddEntry.svelte:14
-#: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
+#: fava/templates/_journal_table.html:94 fava/templates/statistics.html:32
 msgid "Balance"
 msgstr "Баланс"
 
-#: fava/static/javascript/modals/AddEntry.svelte:75
+#: fava/static/javascript/modals/AddEntry.svelte:79
 #: fava/static/javascript/modals/Extract.svelte:104
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
@@ -235,43 +235,44 @@ msgstr "Ключ"
 msgid "Value"
 msgstr "Значення"
 
+#: fava/static/javascript/query/QueryLinks.svelte:15
 #: fava/templates/_query_table.html:69
 msgid "Download as"
 msgstr "Скачати як"
 
-#: fava/templates/statistics.html:17
+#: fava/templates/statistics.html:14
 msgid "Postings per Account"
 msgstr "Проведення по Рахункам"
 
-#: fava/templates/statistics.html:86
+#: fava/templates/statistics.html:81
 msgid "Total"
 msgstr "Загалом"
 
-#: fava/templates/statistics.html:26
+#: fava/templates/statistics.html:23
 msgid "Update Activity"
 msgstr "Оновлення"
 
-#: fava/templates/statistics.html:27
+#: fava/templates/statistics.html:23
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Клікніть щоб скопіювати балансові директиви за рахунками (виключаючи зелені) у буфер обміну."
 
-#: fava/templates/statistics.html:28
+#: fava/templates/statistics.html:24
 msgid "Copy balance directives"
 msgstr "Скопіювати строки балансу"
 
-#: fava/templates/statistics.html:35
+#: fava/templates/statistics.html:31
 msgid "Last Entry"
 msgstr "Останній Запис"
 
-#: fava/templates/statistics.html:68
+#: fava/templates/statistics.html:63
 msgid "Entries per Type"
 msgstr "Записи за Типом"
 
-#: fava/templates/statistics.html:72
+#: fava/templates/statistics.html:67
 msgid "Type"
 msgstr "Тип"
 
-#: fava/templates/statistics.html:73
+#: fava/templates/statistics.html:68
 msgid "# Entries"
 msgstr "Записи"
 
@@ -289,7 +290,7 @@ msgstr "Нова транзакція"
 msgid "Narration"
 msgstr "Опис"
 
-#: fava/static/javascript/modals/AddEntry.svelte:73
+#: fava/static/javascript/modals/AddEntry.svelte:77
 msgid "Save and add new"
 msgstr "Записати й додати нову"
 
@@ -343,15 +344,15 @@ msgstr "Дублікат"
 msgid "Importer"
 msgstr "Імпортер"
 
-#: fava/static/javascript/Import.svelte:86
+#: fava/static/javascript/Import.svelte:87
 msgid "Extract"
 msgstr "Витягти"
 
-#: fava/templates/query.html:13
+#: fava/static/javascript/query/QueryEditor.svelte:31
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "...введіть BQL запрос. 'help' щоб отримати список доступних команд."
 
-#: fava/templates/_journal_table.html:83
+#: fava/templates/_journal_table.html:80
 msgid "Metadata"
 msgstr "Метадані"
 
@@ -396,7 +397,7 @@ msgstr "Інші транзакції"
 msgid "Documents with a #discovered tag"
 msgstr "Документи з #discovered тегом"
 
-#: fava/templates/_journal_table.html:84
+#: fava/templates/_journal_table.html:81
 msgid "Postings"
 msgstr "Записи"
 
@@ -440,7 +441,7 @@ msgstr "допомога"
 msgid "Beancount options"
 msgstr "Налаштування Beancount"
 
-#: fava/templates/query.html:14
+#: fava/static/javascript/query/QueryEditor.svelte:58
 msgid "Submit"
 msgstr "Відправити"
 
@@ -450,7 +451,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "Клік з натисненим Shift щоб розкрити усі рівні.\n"
 "Клік з натисненим Ctrl або Cmd щоб розкрити один рівень."
 
-#: fava/templates/_aside.html:27 fava/templates/_layout.html:51
+#: fava/templates/_aside.html:27 fava/templates/_layout.html:50
 msgid "Export"
 msgstr "Експортувати"
 
@@ -458,7 +459,7 @@ msgstr "Експортувати"
 msgid "Filter by tag, payee, ..."
 msgstr "Фільтрувати за тегом, отримувачем, ..."
 
-#: fava/templates/_layout.html:52
+#: fava/templates/_layout.html:51
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Завантажити поточно відфільтровані записи як файл Beancount"
 
@@ -466,23 +467,28 @@ msgstr "Завантажити поточно відфільтровані за�
 msgid "Import entries"
 msgstr "Імпортувати записи"
 
-#: fava/static/javascript/ChartSwitcher.svelte:82 fava/util/date.py:54
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:7
+#: fava/util/date.py:54
 msgid "Yearly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:83 fava/util/date.py:55
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:8
+#: fava/util/date.py:55
 msgid "Quarterly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:84 fava/util/date.py:56
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:9
+#: fava/util/date.py:56
 msgid "Monthly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:85 fava/util/date.py:57
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:10
+#: fava/util/date.py:57
 msgid "Weekly"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:58
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:11
+#: fava/util/date.py:58
 msgid "Daily"
 msgstr ""
 
@@ -514,11 +520,11 @@ msgstr ""
 msgid "Units"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:111
+#: fava/static/javascript/charts/Chart.svelte:65
 msgid "Treemap"
 msgstr ""
 
-#: fava/static/javascript/ChartSwitcher.svelte:115
+#: fava/static/javascript/charts/Chart.svelte:69
 msgid "Sunburst"
 msgstr ""
 
@@ -542,7 +548,7 @@ msgstr ""
 msgid "Transaction"
 msgstr ""
 
-#: fava/static/javascript/modals/AddEntry.svelte:51
+#: fava/static/javascript/modals/AddEntry.svelte:55
 msgid "Add"
 msgstr ""
 

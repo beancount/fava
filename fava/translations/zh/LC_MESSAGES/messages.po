@@ -20,9 +20,9 @@ msgid "Time"
 msgstr "时间"
 
 #: fava/static/javascript/FilterForm.svelte:15
-#: fava/static/javascript/entry-forms/AccountInput.svelte:26
+#: fava/static/javascript/entry-forms/AccountInput.svelte:28
 #: fava/static/javascript/modals/DocumentUpload.svelte:67
-#: fava/templates/holdings.html:45 fava/templates/statistics.html:32
+#: fava/templates/holdings.html:45 fava/templates/statistics.html:28
 msgid "Account"
 msgstr "帐户"
 
@@ -80,42 +80,42 @@ msgid "Help"
 msgstr "帮助"
 
 #: fava/static/javascript/documents/Table.svelte:22
-#: fava/templates/_journal_table.html:89 fava/templates/commodities.html:10
+#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:10
 #: fava/templates/events.html:11
 msgid "Date"
 msgstr "日期"
 
-#: fava/templates/_journal_table.html:90
+#: fava/templates/_journal_table.html:87
 msgid "F"
 msgstr "F"
 
-#: fava/templates/_journal_table.html:91
+#: fava/templates/_journal_table.html:88
 msgid "Narration/Payee"
 msgstr "摘要/收款人"
 
-#: fava/templates/_journal_table.html:92
+#: fava/templates/_journal_table.html:89
 msgid "Position"
 msgstr "头寸"
 
-#: fava/templates/_journal_table.html:93 fava/templates/commodities.html:11
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
 msgid "Price"
 msgstr "价格"
 
-#: fava/templates/_journal_table.html:94
+#: fava/templates/_journal_table.html:91
 msgid "Cost"
 msgstr "成本"
 
-#: fava/templates/_journal_table.html:96
+#: fava/templates/_journal_table.html:93
 msgid "Change"
 msgstr "变动"
 
 #: fava/static/javascript/entry-forms/Balance.svelte:23
 #: fava/static/javascript/modals/AddEntry.svelte:14
-#: fava/templates/_journal_table.html:97 fava/templates/statistics.html:36
+#: fava/templates/_journal_table.html:94 fava/templates/statistics.html:32
 msgid "Balance"
 msgstr "余额"
 
-#: fava/static/javascript/modals/AddEntry.svelte:75
+#: fava/static/javascript/modals/AddEntry.svelte:79
 #: fava/static/javascript/modals/Extract.svelte:104
 #: fava/templates/_context.html:57 fava/templates/editor.html:38
 msgid "Save"
@@ -235,43 +235,44 @@ msgstr "键"
 msgid "Value"
 msgstr "值"
 
+#: fava/static/javascript/query/QueryLinks.svelte:15
 #: fava/templates/_query_table.html:69
 msgid "Download as"
 msgstr "下载为"
 
-#: fava/templates/statistics.html:17
+#: fava/templates/statistics.html:14
 msgid "Postings per Account"
 msgstr "每账户记录数"
 
-#: fava/templates/statistics.html:86
+#: fava/templates/statistics.html:81
 msgid "Total"
 msgstr "合计"
 
-#: fava/templates/statistics.html:26
+#: fava/templates/statistics.html:23
 msgid "Update Activity"
 msgstr "变更动态"
 
-#: fava/templates/statistics.html:27
+#: fava/templates/statistics.html:23
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "单击来复制账户（绿色除外）对应的 balance 指令到剪贴板。"
 
-#: fava/templates/statistics.html:28
+#: fava/templates/statistics.html:24
 msgid "Copy balance directives"
 msgstr "复制 balance 指令"
 
-#: fava/templates/statistics.html:35
+#: fava/templates/statistics.html:31
 msgid "Last Entry"
 msgstr "最新项目"
 
-#: fava/templates/statistics.html:68
+#: fava/templates/statistics.html:63
 msgid "Entries per Type"
 msgstr "每类型项目数"
 
-#: fava/templates/statistics.html:72
+#: fava/templates/statistics.html:67
 msgid "Type"
 msgstr "类型"
 
-#: fava/templates/statistics.html:73
+#: fava/templates/statistics.html:68
 msgid "# Entries"
 msgstr "# 项目"
 
@@ -289,7 +290,7 @@ msgstr "新交易"
 msgid "Narration"
 msgstr "摘要"
 
-#: fava/static/javascript/modals/AddEntry.svelte:73
+#: fava/static/javascript/modals/AddEntry.svelte:77
 msgid "Save and add new"
 msgstr "保存并添加下一条"
 
@@ -343,15 +344,15 @@ msgstr "复制"
 msgid "Importer"
 msgstr "导入器"
 
-#: fava/static/javascript/Import.svelte:86
+#: fava/static/javascript/Import.svelte:87
 msgid "Extract"
 msgstr "导出"
 
-#: fava/templates/query.html:13
+#: fava/static/javascript/query/QueryEditor.svelte:31
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命令。"
 
-#: fava/templates/_journal_table.html:83
+#: fava/templates/_journal_table.html:80
 msgid "Metadata"
 msgstr "元数据"
 
@@ -396,7 +397,7 @@ msgstr "其他交易"
 msgid "Documents with a #discovered tag"
 msgstr "带有 #discovered 标签的文档"
 
-#: fava/templates/_journal_table.html:84
+#: fava/templates/_journal_table.html:81
 msgid "Postings"
 msgstr "记录"
 
@@ -440,7 +441,7 @@ msgstr "帮助"
 msgid "Beancount options"
 msgstr "Beancount 选项"
 
-#: fava/templates/query.html:14
+#: fava/static/javascript/query/QueryEditor.svelte:58
 msgid "Submit"
 msgstr "提交"
 
@@ -450,7 +451,7 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "按住 Shift 键展开所有子集\n"
 "按住 Ctrl 或 Cmd 键并点击展开单层子集"
 
-#: fava/templates/_aside.html:27 fava/templates/_layout.html:51
+#: fava/templates/_aside.html:27 fava/templates/_layout.html:50
 msgid "Export"
 msgstr "导出"
 
@@ -458,7 +459,7 @@ msgstr "导出"
 msgid "Filter by tag, payee, ..."
 msgstr "筛选（标签，收款人等等）"
 
-#: fava/templates/_layout.html:52
+#: fava/templates/_layout.html:51
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "将当前筛选结果下载为 Beancount 文件"
 
@@ -466,23 +467,28 @@ msgstr "将当前筛选结果下载为 Beancount 文件"
 msgid "Import entries"
 msgstr "导入项目"
 
-#: fava/static/javascript/ChartSwitcher.svelte:82 fava/util/date.py:54
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:7
+#: fava/util/date.py:54
 msgid "Yearly"
 msgstr "按年"
 
-#: fava/static/javascript/ChartSwitcher.svelte:83 fava/util/date.py:55
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:8
+#: fava/util/date.py:55
 msgid "Quarterly"
 msgstr "按季"
 
-#: fava/static/javascript/ChartSwitcher.svelte:84 fava/util/date.py:56
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:9
+#: fava/util/date.py:56
 msgid "Monthly"
 msgstr "按月"
 
-#: fava/static/javascript/ChartSwitcher.svelte:85 fava/util/date.py:57
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:10
+#: fava/util/date.py:57
 msgid "Weekly"
 msgstr "按周"
 
-#: fava/static/javascript/ChartSwitcher.svelte:86 fava/util/date.py:58
+#: fava/static/javascript/charts/ConversionAndInterval.svelte:11
+#: fava/util/date.py:58
 msgid "Daily"
 msgstr "按日"
 
@@ -514,11 +520,11 @@ msgstr "按市价"
 msgid "Units"
 msgstr "按单位数量"
 
-#: fava/static/javascript/ChartSwitcher.svelte:111
+#: fava/static/javascript/charts/Chart.svelte:65
 msgid "Treemap"
 msgstr "树状图"
 
-#: fava/static/javascript/ChartSwitcher.svelte:115
+#: fava/static/javascript/charts/Chart.svelte:69
 msgid "Sunburst"
 msgstr "旭日图"
 
@@ -542,7 +548,7 @@ msgstr "下一个"
 msgid "Transaction"
 msgstr ""
 
-#: fava/static/javascript/modals/AddEntry.svelte:51
+#: fava/static/javascript/modals/AddEntry.svelte:55
 msgid "Add"
 msgstr ""
 
