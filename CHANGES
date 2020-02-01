@@ -6,6 +6,13 @@ Unreleased
 
 Nothing yet.
 
+v1.13 (2020-02-01)
+------------------
+
+Fava can now display charts for BQL queries - if they have exactly two columns
+with the first being a date or string and the second an inventory, then a line
+chart or treemap chart is shown on the query page.
+
 v1.12 (2019-12-03)
 ------------------
 
