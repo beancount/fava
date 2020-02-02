@@ -250,3 +250,23 @@ url_for('help_page', page_slug='import') }}) help page for details.
 Default: Not set
 
 Set the directories to be scanned by the Beancount import mechanism.
+
+---
+
+## `conversion`
+
+Default: "at_cost"
+
+The default conversion that charts and the account reports use. This option takes
+a string representing the same values available in the conversion dropdown.
+
+Examples are:
+
+-   `at_cost`  - At Cost
+-   `at_value` - At Market Value
+-   `units`    - Units
+-   `USD`      - Converted to USD
+-   `EUR`      - Converted to EUR
+
+If this option is not specified or the value is not valid (i.e., a non-existent
+commodity), Fava defaults to "At Cost"

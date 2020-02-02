@@ -237,7 +237,9 @@ def _pull_beancount_file(_, values):
     if g.beancount_file_slug not in app.config["FILE_SLUGS"]:
         abort(404)
     g.ledger = app.config["LEDGERS"][g.beancount_file_slug]
-    g.conversion = request.args.get("conversion")
+    g.conversion = request.args.get(
+        "conversion", g.ledger.fava_options["conversion"]
+    )
     g.partial = request.args.get("partial", False)
     g.interval = Interval.get(
         request.args.get("interval", g.ledger.fava_options["interval"])

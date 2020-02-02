@@ -18,6 +18,7 @@ DEFAULTS = {
     "currency-column": 61,
     "collapse-pattern": [],
     "auto-reload": False,
+    "conversion": "at_cost",
     "default-file": None,
     "fiscal-year-end": "12-31",
     "import-config": None,
@@ -72,6 +73,7 @@ LIST_OPTS = [
 
 STR_OPTS = [
     "collapse-pattern",
+    "conversion",
     "fiscal-year-end",
     "import-config",
     "interval",
