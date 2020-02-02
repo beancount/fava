@@ -18,7 +18,7 @@ export const conversions = derived(favaAPIStore, favaAPI => [
   ...favaAPI.options.commodities
     .sort()
     .filter(
-      c => !favaAPI.options.operating_currency.includes(c) && c.length <= 3
+      c => !favaAPI.options.operating_currency.includes(c) && favaAPI.favaOptions["conversion-currencies"].includes(c)
     )
     .map(currency => [currency, `Converted to ${currency}`]),
 ]);

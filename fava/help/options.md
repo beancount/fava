@@ -250,3 +250,14 @@ url_for('help_page', page_slug='import') }}) help page for details.
 Default: Not set
 
 Set the directories to be scanned by the Beancount import mechanism.
+
+---
+
+## `conversion-currencies`
+
+Default: List of all ISO 4217 currencies
+
+List of currencies which amounts can be converted to in charts. This 
+limits the choices in the "Converted to ..." drop down to valid
+currencies. This option is available if you would like to populate a
+non ISO 4217 currency for conversion.
