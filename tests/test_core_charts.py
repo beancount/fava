@@ -22,14 +22,47 @@ def test_prices(example_ledger, snapshot):
     snapshot(data)
 
 
-def test_linechart_data(app, example_ledger, snapshot):
+def test_linechart_data_default(app, example_ledger, snapshot):
+    with app.test_request_context():
+        g.conversion = ""
+        data = example_ledger.charts.linechart(
+            "Assets:Testing:MultipleCommodities"
+        )
+        snapshot(data)
+
+
+def test_linechart_data_units(app, example_ledger, snapshot):
     with app.test_request_context():
         g.conversion = "units"
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities"
         )
         snapshot(data)
+
+
+def test_linechart_data_at_cost(app, example_ledger, snapshot):
+    with app.test_request_context():
         g.conversion = "at_cost"
+        g.ledger = example_ledger
+        data = example_ledger.charts.linechart(
+            "Assets:Testing:MultipleCommodities"
+        )
+        snapshot(data)
+
+
+def test_linechart_data_at_value(app, example_ledger, snapshot):
+    with app.test_request_context():
+        g.conversion = "at_value"
+        g.ledger = example_ledger
+        data = example_ledger.charts.linechart(
+            "Assets:Testing:MultipleCommodities"
+        )
+        snapshot(data)
+
+
+def test_linechart_data_usd(app, example_ledger, snapshot):
+    with app.test_request_context():
+        g.conversion = "USD"
         g.ledger = example_ledger
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities"

@@ -99,13 +99,13 @@ def test_filterexception():
     "string,number",
     [
         ('any(account:"Assets:US:ETrade")', 48),
-        ('all(-account:"Assets:US:ETrade")', 1825 - 48),
+        ('all(-account:"Assets:US:ETrade")', 1826 - 48),
         ("#test", 2),
         ("#test,#nomatch", 2),
-        ("-#nomatch", 1825),
-        ("-#nomatch -#nomatch", 1825),
-        ("-#nomatch -#test", 1823),
-        ("-#test", 1823),
+        ("-#nomatch", 1826),
+        ("-#nomatch -#nomatch", 1826),
+        ("-#nomatch -#test", 1824),
+        ("-#test", 1824),
         ("^test-link", 3),
         ("^test-link,#test", 4),
         ("^test-link -#test", 2),
@@ -165,7 +165,7 @@ def test_time_filter(example_ledger):
     assert time_filter.begin_date == datetime.date(2017, 1, 1)
     assert time_filter.end_date == datetime.date(2018, 1, 1)
     filtered_entries = time_filter.apply(example_ledger.all_entries)
-    assert len(filtered_entries) == 82
+    assert len(filtered_entries) == 83
 
     time_filter.set("1000")
     filtered_entries = time_filter.apply(example_ledger.all_entries)
