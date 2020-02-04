@@ -26,6 +26,7 @@ export const favaAPIValidator = object({
   favaOptions: object({
     "auto-reload": boolean,
     "currency-column": number,
+    conversion: string,
     interval: string,
     locale: union(string, constant(null)),
   }),
@@ -54,6 +55,7 @@ export const favaAPI: FavaAPI = {
   favaOptions: {
     "auto-reload": false,
     "currency-column": 80,
+    conversion: "at_cost",
     interval: "month",
     locale: null,
   },

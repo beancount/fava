@@ -15,6 +15,7 @@ def test_fava_options(load_doc):
     2016-04-14 custom "fava-option" "currency-column" "10"
     2016-04-14 custom "fava-option" "insert-entry" "Ausgaben:Test"
     2016-04-14 custom "fava-option" "invalid"
+    2016-06-14 custom "fava-option" "conversion" "USD"
     """
 
     entries, _, _ = load_doc
@@ -34,3 +35,4 @@ def test_fava_options(load_doc):
     assert options["show-closed-accounts"]
     assert options["journal-show"] == ["transaction", "open"]
     assert options["currency-column"] == 10
+    assert options["conversion"] == "USD"

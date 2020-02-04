@@ -247,6 +247,6 @@ e.on("page-init", () => {
 
   // Set initial values from URL and update URL on store changes
   syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval, true);
-  syncStoreValueToUrl(conversion, "conversion", "at_cost", true);
+  syncStoreValueToUrl(conversion, "conversion", favaAPI.favaOptions.conversion, true);
   syncStoreValueToUrl(showCharts, "charts", true, false);
 });

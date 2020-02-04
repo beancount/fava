@@ -5813,6 +5813,7 @@ option "operating_currency" "USD"
   Assets:Testing:MultipleCommodities                    1 ABC {50 USD}
   Assets:Testing:MultipleCommodities                  -50 USD
 
+2000-01-03 price XYZ                                  125 USD
 
 * Cash
 
