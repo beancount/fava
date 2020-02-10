@@ -1,7 +1,11 @@
 all: fava/static/gen/app.js
 
-fava/static/gen/app.js: fava/static/css/* fava/static/javascript/* fava/static/package.json
-	cd fava/static; npm install --no-progress; npm run build
+fava/static/gen/app.js: fava/static/css/* fava/static/javascript/* fava/static/package.json fava/static/node_modules
+	cd fava/static; npm run build
+
+fava/static/node_modules: fava/static/package-lock.json
+	cd fava/static; npm install --no-progress
+	touch -m fava/static/node_modules
 
 .PHONY: clean
 clean: mostlyclean
@@ -19,12 +23,16 @@ mostlyclean:
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
+.PHONY: check-lint
+check-lint: fava/static/node_modules
+	cd fava/static; npm run check-lint
+	tox -e lint
+
 .PHONY: lint
-lint:
+lint: fava/static/node_modules
+	cd fava/static; npm run lint
 	tox -e format
 	tox -e lint
-	cd fava/static; npm install
-	cd fava/static; npm run lint
 
 .PHONY: test
 test:

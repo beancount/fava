@@ -5,7 +5,9 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "lint": "npm run format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' --fix && npx tsc",
+    "check-lint": "npm run check-format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' && npx tsc",
     "lint:js": "eslint javascript --fix --ext .js,.svelte,.ts",
+    "check-format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --ignore-path .gitignore",
     "format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --write --ignore-path .gitignore"
   },
   "husky": {
