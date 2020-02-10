@@ -262,11 +262,11 @@ a string representing the same values available in the conversion dropdown.
 
 Examples are:
 
--   `at_cost`  - At Cost
+-   `at_cost` - At Cost
 -   `at_value` - At Market Value
--   `units`    - Units
--   `USD`      - Converted to USD
--   `EUR`      - Converted to EUR
+-   `units` - Units
+-   `USD` - Converted to USD
+-   `EUR` - Converted to EUR
 
 If this option is not specified or the value is not valid (i.e., a non-existent
 commodity), Fava defaults to "At Cost"
