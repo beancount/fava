@@ -4,7 +4,7 @@ import os
 import errno
 
 import click
-from werkzeug.contrib.profiler import ProfilerMiddleware
+from werkzeug.middleware.profiler import ProfilerMiddleware
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from cheroot import wsgi
 
