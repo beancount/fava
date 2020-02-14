@@ -1,23 +1,15 @@
 <script>
-  import { todayAsString } from "./format";
-  import { _ } from "./helpers";
-  import { moveDocument } from "./api";
+  import { todayAsString } from "../format";
+  import { _ } from "../helpers";
+  import { moveDocument } from "../api";
 
-  import AccountInput from "./entry-forms/AccountInput.svelte";
+  import { newFilename, documentURL, extractURL } from "./helpers";
+
+  import AccountInput from "../entry-forms/AccountInput.svelte";
 
   export let data;
 
   const today = todayAsString();
-
-  /**
-   * Construct the filename from date and basename.
-   */
-  function newFilename(date, basename) {
-    if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {
-      return basename;
-    }
-    return `${date} ${basename}`;
-  }
 
   // Initially set the file names for all importable files.
   $: for (const items of Object.values(data)) {
@@ -28,19 +20,6 @@
           importInfo.newName || newFilename(importInfo.date, importInfo.name);
       }
     }
-  }
-
-  function extractURL(filename, importer) {
-    const params = new URLSearchParams();
-    params.set("filename", filename);
-    params.set("importer", importer);
-    return `#extract-${params.toString()}`;
-  }
-
-  function documentURL(filename) {
-    const params = new URLSearchParams();
-    params.set("filename", filename);
-    return `../document/?${params.toString()}`;
   }
 
   async function move(filename, account, newName) {
@@ -84,7 +63,7 @@
             class="button"
             title="{_('Extract')} with importer {info.importer_name}"
             href={extractURL(item.name, info.importer_name)}>
-            {_('Extract')} ( {info.importer_name} )
+            {_('Extract')} ({info.importer_name})
           </a>
         </p>
       {/each}

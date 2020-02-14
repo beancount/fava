@@ -55,7 +55,7 @@ import "./sort";
 import "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 
-import Import from "./Import.svelte";
+import Import from "./import/Import.svelte";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import FilterForm from "./FilterForm.svelte";
 import Documents from "./documents/Documents.svelte";
