@@ -16,7 +16,7 @@ BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
 
 def filter_api_changed(record):
     """Filter out LogRecords for requests that poll for changes."""
-    return not record.msg.endswith('api/changed/ HTTP/1.1" 200 -')
+    return '/api/changed/' not in record.msg
 
 
 def setup_logging() -> None:
