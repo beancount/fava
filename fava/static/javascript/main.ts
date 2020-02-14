@@ -20,14 +20,7 @@
  *    elements in the page.
  */
 
-import {
-  select,
-  _,
-  delegate,
-  ready,
-  fetchAPI,
-  getScriptTagJSON,
-} from "./helpers";
+import { select, _, ready, fetchAPI, getScriptTagJSON } from "./helpers";
 import e from "./events";
 import router from "./router";
 
@@ -69,6 +62,11 @@ import Documents from "./documents/Documents.svelte";
 import Modals from "./modals/Modals.svelte";
 import Query from "./query/Query.svelte";
 
+/**
+ * Try to select the given element, load JSON and init Svelte component.
+ *
+ * On the next page load, the component will be removed.
+ */
 function initSvelteComponent(selector: string, SvelteComponent: any) {
   const el = select(selector);
   if (el) {
@@ -103,28 +101,6 @@ e.on("page-init", () => {
     // eslint-disable-next-line no-new
     new FilterForm({ target: header });
   }
-
-  // Watch for all clicks on <button>s and fire the appropriate events.
-  delegate(
-    document.body,
-    "click",
-    "button",
-    (event, button: HTMLButtonElement) => {
-      const type = button.getAttribute("data-event");
-      if (type) {
-        e.trigger(`button-click-${type}`, button);
-      }
-    }
-  );
-
-  // Watch for all submits of <forms>s and fire the appropriate events.
-  delegate(document.body, "submit", "form", (event, form: HTMLFormElement) => {
-    const type = form.getAttribute("data-event");
-    if (type) {
-      event.preventDefault();
-      e.trigger(`form-submit-${type}`, form);
-    }
-  });
 });
 
 // Check the `changed` API endpoint every 5 seconds and fire the appropriate
