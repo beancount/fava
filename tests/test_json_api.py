@@ -1,9 +1,9 @@
 # pylint: disable=missing-docstring
-
-
 import hashlib
-from io import BytesIO
 import os
+from io import BytesIO
+from typing import Any
+from typing import Optional
 
 import flask
 import pytest
@@ -11,14 +11,29 @@ import pytest
 from fava.core.misc import align
 
 
+def assert_api_error(response, msg: Optional[str] = None) -> None:
+    """Asserts that the reponse errored and contains the message."""
+    assert response.status_code == 200
+    assert not response.json["success"]
+    if msg:
+        assert msg in response.json["error"]
+
+
+def assert_api_success(response, data: Optional[Any] = None) -> None:
+    """Asserts that the request was successful and contains the data."""
+    assert response.status_code == 200
+    assert response.json["success"]
+    if data:
+        assert data == response.json["data"]
+
+
 def test_api_changed(app, test_client):
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.changed")
 
-    result = test_client.get(url)
-    response_data = flask.json.loads(result.get_data(True))
-    assert response_data == {"data": False, "success": True}
+    response = test_client.get(url)
+    assert_api_success(response, False)
 
 
 def test_api_add_document(app, test_client, tmpdir):
@@ -41,20 +56,22 @@ def test_api_add_document(app, test_client, tmpdir):
         )
 
         response = test_client.put(url, data=request_data)
-        print(flask.json.loads(response.get_data(True)))
-        assert flask.json.loads(response.get_data(True)) == {
-            "success": True,
-            "data": "Uploaded to {}".format(filename),
-        }
+        assert_api_success(response, "Uploaded to {}".format(filename))
         assert os.path.isfile(filename)
 
         request_data["file"] = (BytesIO(b"asdfasdf"), "2015-12-12 test")
         response = test_client.put(url, data=request_data)
-        assert flask.json.loads(response.get_data(True)) == {
-            "success": False,
-            "error": "{} already exists.".format(filename),
-        }
+        assert_api_error(response, "{} already exists.".format(filename))
         flask.g.ledger.options["documents"] = old_documents
+
+
+def test_api_move(app, test_client):
+    with app.test_request_context():
+        app.preprocess_request()
+        url = flask.url_for("json_api.move")
+
+        response = test_client.get(url)
+        assert_api_error(response)
 
 
 def test_api_source_put(app, test_client):
@@ -64,19 +81,14 @@ def test_api_source_put(app, test_client):
 
     # test bad request
     response = test_client.put(url)
-    response_data = flask.json.loads(response.get_data(True))
-    assert response_data == {
-        "error": "Invalid JSON request.",
-        "success": False,
-    }
-    assert response.status_code == 200
+    assert_api_error(response, "Invalid JSON request.")
 
     path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
     sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
 
     # change source
-    result = test_client.put(
+    response = test_client.put(
         url,
         data=flask.json.dumps(
             {
@@ -87,10 +99,8 @@ def test_api_source_put(app, test_client):
         ),
         content_type="application/json",
     )
-    assert result.status_code == 200
-    response_data = flask.json.loads(result.get_data(True))
     sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
-    assert response_data == {"success": True, "data": sha256sum}
+    assert_api_success(response, sha256sum)
 
     # check if the file has been written
     assert open(path, encoding="utf-8").read() == "asdf" + payload
@@ -115,17 +125,15 @@ def test_api_format_source(app, test_client):
     path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
 
-    result = test_client.put(
+    response = test_client.put(
         url,
         data=flask.json.dumps({"source": payload}),
         content_type="application/json",
     )
-    data = flask.json.loads(result.get_data(True))
-    assert data == {"data": align(payload, {}), "success": True}
+    assert_api_success(response, align(payload, {}))
 
 
 def test_api_format_source_options(app, test_client):
-    # pylint: disable=too-many-function-args
     path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
     with app.test_request_context():
@@ -134,16 +142,12 @@ def test_api_format_source_options(app, test_client):
         old_currency_column = flask.g.ledger.fava_options["currency-column"]
         flask.g.ledger.fava_options["currency-column"] = 90
 
-        result = test_client.put(
+        response = test_client.put(
             url,
             data=flask.json.dumps({"source": payload}),
             content_type="application/json",
         )
-        data = flask.json.loads(result.get_data(True))
-        assert data == {
-            "data": align(payload, {"currency-column": 90}),
-            "success": True,
-        }
+        assert_api_success(response, align(payload, {"currency-column": 90}))
 
         flask.g.ledger.fava_options["currency-column"] = old_currency_column
 
@@ -210,10 +214,7 @@ def test_api_add_entries(app, test_client, tmpdir):
         response = test_client.put(
             url, data=flask.json.dumps(data), content_type="application/json"
         )
-        assert flask.json.loads(response.get_data(True)) == {
-            "success": True,
-            "data": "Stored 3 entries.",
-        }
+        assert_api_success(response, "Stored 3 entries.")
 
         assert (
             test_file.read_text("utf-8")
@@ -248,6 +249,6 @@ def test_api_query_result(query_string, result_str, app, test_client):
         app.preprocess_request()
         url = flask.url_for("json_api.query_result", query_string=query_string)
 
-    result = test_client.get(url)
-    assert result.status_code == 200
-    assert result_str in result.get_data(True)
+    response = test_client.get(url)
+    assert response.status_code == 200
+    assert result_str in response.get_data(True)

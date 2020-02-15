@@ -142,6 +142,9 @@ def move():
     new_name = request.args.get("newName")
     filename = request.args.get("filename")
 
+    if not new_name:
+        raise FavaAPIException("No new filename given.")
+
     new_path = filepath_in_document_folder(
         g.ledger.options["documents"][0], account, new_name
     )
