@@ -14,9 +14,14 @@ whitespace is highlighted in red.
 
 ## Queries
 
-On the Query report you can execute queries like with the `bean-query`
-command-line tool. For an explanation of how these queries work see
-the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
+On the [Query]({{ url_for('report', report_name='query') }}) report you can
+execute queries like with the `bean-query` command-line tool. For an
+explanation of how these queries work see the [Beancount Query Language
+Reference](http://furius.ca/beancount/doc/query).
+
+Fava displays charts for BQL queries - if they have exactly two columns
+with the first being a date or string and the second an inventory, then a line
+chart or treemap chart is shown on the query page.
 
 Fava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xls`, `xlsx`
