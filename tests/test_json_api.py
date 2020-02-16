@@ -36,13 +36,13 @@ def test_api_changed(app, test_client):
     assert_api_success(response, False)
 
 
-def test_api_add_document(app, test_client, tmpdir):
+def test_api_add_document(app, test_client, tmp_path):
     with app.test_request_context():
         app.preprocess_request()
         old_documents = flask.g.ledger.options["documents"]
-        flask.g.ledger.options["documents"] = [str(tmpdir)]
+        flask.g.ledger.options["documents"] = [str(tmp_path)]
         request_data = {
-            "folder": str(tmpdir),
+            "folder": str(tmp_path),
             "account": "Expenses:Food:Restaurant",
             "file": (BytesIO(b"asdfasdf"), "2015-12-12 test"),
         }
@@ -51,8 +51,8 @@ def test_api_add_document(app, test_client, tmpdir):
         response = test_client.put(url)
         assert response.status_code == 400
 
-        filename = os.path.join(
-            str(tmpdir), "Expenses", "Food", "Restaurant", "2015-12-12 test"
+        filename = (
+            tmp_path / "Expenses" / "Food" / "Restaurant" / "2015-12-12 test"
         )
 
         response = test_client.put(url, data=request_data)
@@ -152,11 +152,11 @@ def test_api_format_source_options(app, test_client):
         flask.g.ledger.fava_options["currency-column"] = old_currency_column
 
 
-def test_api_add_entries(app, test_client, tmpdir):
+def test_api_add_entries(app, test_client, tmp_path):
     with app.test_request_context():
         app.preprocess_request()
         old_beancount_file = flask.g.ledger.beancount_file_path
-        test_file = tmpdir.join("test_file")
+        test_file = tmp_path / "test_file"
         test_file.open("a")
         flask.g.ledger.beancount_file_path = str(test_file)
 

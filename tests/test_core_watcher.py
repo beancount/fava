@@ -5,11 +5,11 @@ import time
 from fava.core.watcher import Watcher
 
 
-def test_watcher_file(tmpdir):
-    file1 = tmpdir.join("file1")
-    file2 = tmpdir.join("file2")
-    file1.write("test")
-    file2.write("test")
+def test_watcher_file(tmp_path):
+    file1 = tmp_path / "file1"
+    file2 = tmp_path / "file2"
+    file1.write_text("test")
+    file2.write_text("test")
 
     watcher = Watcher()
     watcher.update([str(file1), str(file2)], [])
@@ -18,14 +18,15 @@ def test_watcher_file(tmpdir):
     # time.time is too precise
     time.sleep(1)
 
-    file1.write("test2")
+    file1.write_text("test2")
 
     assert watcher.check()
 
 
-def test_watcher_folder(tmpdir):
-    folder = tmpdir.mkdir("folder")
-    folder.mkdir("bar")
+def test_watcher_folder(tmp_path):
+    folder = tmp_path / "folder"
+    folder.mkdir()
+    (folder / "bar").mkdir()
 
     watcher = Watcher()
     watcher.update([], [str(folder)])
@@ -34,6 +35,6 @@ def test_watcher_folder(tmpdir):
     # time.time is too precise
     time.sleep(1)
 
-    folder.mkdir("bar2")
+    (folder / "bar2").mkdir()
 
     assert watcher.check()

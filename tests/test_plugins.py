@@ -14,37 +14,36 @@ def _format(string, args):
     return dedent(string).format(*args)
 
 
-def test_plugins(tmpdir):
+def test_plugins(tmp_path):
     # pylint: disable=too-many-locals
-    sample_folder = tmpdir.mkdir("fava_plugins")
+    documents_folder = tmp_path / "documents"
+    documents_folder.mkdir(parents=True)
 
-    documents_folder = sample_folder.mkdir("documents")
-
-    foo_folder = documents_folder.mkdir("Expenses").mkdir("Foo")
-    sample_statement1 = foo_folder.join("2016-11-01 Test 1.pdf")
-    sample_statement1.write("Hello World 1")
+    foo_folder = documents_folder / "Expenses" / "Foo"
+    foo_folder.mkdir(parents=True)
+    (foo_folder / "2016-11-01 Test 1.pdf").write_text("Hello World 1")
     sample_statement1_short = os.path.join(
         "documents", "Expenses", "Foo", "2016-11-01 Test 1.pdf"
     )
-    sample_statement2 = foo_folder.join("2016-11-01 Test 2.pdf")
-    sample_statement2.write("Hello World 2")
-    sample_statement3 = foo_folder.join("2016-11-01 Test 3 discovered.pdf")
-    sample_statement3.write("Hello World 3")
+    sample_statement2 = foo_folder / "2016-11-01 Test 2.pdf"
+    sample_statement2.write_text("Hello World 2")
+    (foo_folder / "2016-11-01 Test 3 discovered.pdf").write_text(
+        "Hello World 3"
+    )
 
-    assets_folder = documents_folder.mkdir("Assets").mkdir("Cash")
-    sample_statement4 = assets_folder.join("2016-11-01 Test 4.pdf")
+    assets_folder = documents_folder / "Assets" / "Cash"
+    assets_folder.mkdir(parents=True)
     sample_statement4_short = os.path.join(
         "documents", "Assets", "Cash", "2016-11-01 Test 4.pdf"
     )
-    sample_statement4.write("Hello World 4")
-    sample_statement5 = assets_folder.join("Test 5.pdf")
+    (assets_folder / "2016-11-01 Test 4.pdf").write_text("Hello World 4")
     sample_statement5_short = os.path.join(
         "documents", "Assets", "Cash", "Test 5.pdf"
     )
-    sample_statement5.write("Hello World 5")
+    (assets_folder / "Test 5.pdf").write_text("Hello World 5")
 
-    beancount_file = sample_folder.join("example.beancount")
-    beancount_file.write(
+    beancount_file = tmp_path / "example.beancount"
+    beancount_file.write_text(
         _format(
             """
         option "title" "Test"
@@ -114,9 +113,7 @@ def test_link_documents_error(load_doc):
     assert len(entries) == 3
 
 
-def test_link_documents_missing(tmpdir):
-    sample_folder = tmpdir.mkdir("fava_plugins").mkdir("documents")
-
+def test_link_documents_missing(tmp_path):
     bfile = _format(
         """
         option "documents" "{}"
@@ -130,7 +127,7 @@ def test_link_documents_missing(tmpdir):
             Expenses:Foo                100 EUR
             Assets:Cash
     """,
-        (sample_folder, os.path.join("test", "Foobar.pdf")),
+        (tmp_path, os.path.join("test", "Foobar.pdf")),
     )
 
     entries, errors, _ = load_string(bfile)

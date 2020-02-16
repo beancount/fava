@@ -62,7 +62,7 @@ def test_leading_space():
     assert leading_space("\ntest") == "\n"
 
 
-def test_insert_metadata_in_file(tmpdir):
+def test_insert_metadata_in_file(tmp_path):
     file_content = dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -70,14 +70,14 @@ def test_insert_metadata_in_file(tmpdir):
             Expenses:Food:Restaurant                          24.84 USD
     """
     )
-    samplefile = tmpdir.mkdir("fava_util_file").join("example.beancount")
-    samplefile.write(file_content)
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text(file_content)
 
-    assert samplefile.read() == dedent(file_content)
-    assert len(tmpdir.listdir()) == 1
+    assert samplefile.read_text() == dedent(file_content)
+    assert len(list(tmp_path.iterdir())) == 1
 
     insert_metadata_in_file(str(samplefile), 1, "metadata", "test1")
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test1"
@@ -87,7 +87,7 @@ def test_insert_metadata_in_file(tmpdir):
     )
 
     insert_metadata_in_file(str(samplefile), 1, "metadata", "test2")
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test2"
@@ -98,7 +98,7 @@ def test_insert_metadata_in_file(tmpdir):
     )
 
 
-def test_insert_entry_transaction(tmpdir):
+def test_insert_entry_transaction(tmp_path):
     file_content = dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -107,8 +107,8 @@ def test_insert_entry_transaction(tmpdir):
 
     """
     )
-    samplefile = tmpdir.mkdir("fava_util_file3").join("example.beancount")
-    samplefile.write(file_content)
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text(file_content)
 
     postings = [
         data.Posting(
@@ -142,7 +142,7 @@ def test_insert_entry_transaction(tmpdir):
 
     # Test insertion without "insert-entry" options.
     insert_entry(transaction, [str(samplefile)], {})
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
@@ -179,7 +179,7 @@ def test_insert_entry_transaction(tmpdir):
     ]
     transaction = transaction._replace(narration="narr1")
     insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-01-01 * "new payee" "narr1"
           Liabilities:US:Chase:Slate                         -10.00 USD
@@ -214,7 +214,7 @@ def test_insert_entry_transaction(tmpdir):
     ]
     transaction = transaction._replace(narration="narr2")
     insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-01-01 * "new payee" "narr1"
           Liabilities:US:Chase:Slate                         -10.00 USD
@@ -253,7 +253,7 @@ def test_insert_entry_transaction(tmpdir):
     ]
     transaction = transaction._replace(narration="narr3")
     insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-01-01 * "new payee" "narr3"
           Liabilities:US:Chase:Slate                         -10.00 USD
@@ -279,7 +279,7 @@ def test_insert_entry_transaction(tmpdir):
     )
 
 
-def test_insert_entry_align(tmpdir):
+def test_insert_entry_align(tmp_path):
     file_content = dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -288,8 +288,8 @@ def test_insert_entry_align(tmpdir):
 
     """
     )
-    samplefile = tmpdir.mkdir("fava_util_file3").join("example.beancount")
-    samplefile.write(file_content)
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text(file_content)
 
     postings = [
         data.Posting(
@@ -323,7 +323,7 @@ def test_insert_entry_align(tmpdir):
 
     fava_options = {"currency-column": 50}
     insert_entry(transaction, [str(samplefile)], fava_options)
-    assert samplefile.read() == dedent(
+    assert samplefile.read_text() == dedent(
         """
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
