@@ -6,6 +6,13 @@ Unreleased
 
 Nothing yet.
 
+v1.14 (2020-02-16)
+------------------
+
+This is mainly a bugfix release to fix compatibility with one of the main
+dependencies (werkzeug). Also, a `default-conversion` option was added, which
+allows setting a default conversion.
+
 v1.13 (2020-02-01)
 ------------------
 
