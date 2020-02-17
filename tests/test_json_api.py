@@ -218,7 +218,8 @@ def test_api_add_entries(app, test_client, tmp_path):
 
         assert (
             test_file.read_text("utf-8")
-            == """2017-01-12 * "Test1" ""
+            == """
+2017-01-12 * "Test1" ""
   Assets:US:ETrade:Cash                                 100 USD
   Assets:US:ETrade:GLD
 
@@ -229,7 +230,6 @@ def test_api_add_entries(app, test_client, tmp_path):
 2017-12-12 * "Test3" ""
   Assets:US:ETrade:Cash                                 100 USD
   Assets:US:ETrade:GLD
-
 """
         )
 
