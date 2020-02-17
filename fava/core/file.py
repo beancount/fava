@@ -4,6 +4,7 @@ import codecs
 from hashlib import sha256
 import os
 import re
+from typing import List
 
 from beancount.core import data, flags
 from beancount.parser.printer import format_entry
@@ -154,7 +155,7 @@ def incomplete_sortkey(entry):
     return (entry.date, data.SORT_ORDER.get(type(entry), 0))
 
 
-def next_key(basekey, keys):
+def next_key(basekey: str, keys: str) -> str:
     """Returns the next unused key for basekey in the supplied array.
 
     The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc
@@ -168,13 +169,15 @@ def next_key(basekey, keys):
     return "{}-{}".format(basekey, i)
 
 
-def leading_space(line):
+def leading_space(line: str) -> str:
     """Returns a string representing the leading whitespace for the specified
     string."""
     return line[: len(line) - len(line.lstrip())]
 
 
-def insert_metadata_in_file(filename, lineno, key, value):
+def insert_metadata_in_file(
+    filename: str, lineno: int, key: str, value: str
+) -> None:
     """Inserts the specified metadata in the file below lineno, taking into
     account the whitespace in front of the line that lineno."""
     with open(filename, "r", encoding="utf-8") as file:
@@ -186,11 +189,10 @@ def insert_metadata_in_file(filename, lineno, key, value):
     contents.insert(lineno + 1, '{}{}: "{}"\n'.format(indention, key, value))
 
     with open(filename, "w", encoding="utf-8") as file:
-        contents = "".join(contents)
-        file.write(contents)
+        file.write("".join(contents))
 
 
-def find_entry_lines(lines, lineno):
+def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
     """Lines of entry starting at lineno."""
     entry_lines = [lines[lineno]]
     while True:

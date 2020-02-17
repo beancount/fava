@@ -6,12 +6,13 @@ import os
 import re
 import time
 import unicodedata
+from pathlib import Path
 
 from flask import abort
 from flask import send_file
 from werkzeug.urls import url_quote
 
-BASEPATH = os.path.realpath(os.path.join(os.path.dirname(__file__), ".."))
+BASEPATH = Path(__file__).parent.parent
 
 
 def filter_api_changed(record):
@@ -25,9 +26,9 @@ def setup_logging() -> None:
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
-def resource_path(relative_path):
+def resource_path(relative_path: str) -> Path:
     """Get absolute path to resource."""
-    return os.path.join(BASEPATH, relative_path)
+    return BASEPATH / relative_path
 
 
 def listify(func):

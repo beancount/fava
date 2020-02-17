@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 
-import os
+from pathlib import Path
+
 import pytest
 
 from fava.core import FavaAPIException
@@ -26,13 +27,11 @@ def test_paths_to_watch(example_ledger):
     )
     documents = example_ledger.options["documents"]
     example_ledger.options["documents"] = ["folder"]
-    base = os.path.join(
-        os.path.dirname(example_ledger.beancount_file_path), "folder"
-    )
+    base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
         [
-            os.path.join(base, account)
+            str(base / account)
             for account in [
                 "Assets",
                 "Liabilities",

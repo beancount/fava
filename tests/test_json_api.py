@@ -1,7 +1,7 @@
 # pylint: disable=missing-docstring
 import hashlib
-import os
 from io import BytesIO
+from pathlib import Path
 from typing import Any
 from typing import Optional
 
@@ -57,7 +57,7 @@ def test_api_add_document(app, test_client, tmp_path):
 
         response = test_client.put(url, data=request_data)
         assert_api_success(response, "Uploaded to {}".format(filename))
-        assert os.path.isfile(filename)
+        assert Path(filename).is_file()
 
         request_data["file"] = (BytesIO(b"asdfasdf"), "2015-12-12 test")
         response = test_client.put(url, data=request_data)

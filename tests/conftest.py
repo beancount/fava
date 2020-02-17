@@ -12,15 +12,15 @@ from fava.application import _load_file, app as fava_app
 from fava.core.budgets import parse_budgets
 
 
-def create_app(bfile):
+def create_app(bfile: str):
     key = "BEANCOUNT_FILES"
     if (key not in fava_app.config) or (fava_app.config[key] != [bfile]):
         fava_app.config[key] = [bfile]
         _load_file()
 
 
-def data_file(filename):
-    return os.path.join(os.path.dirname(__file__), "data", filename)
+def data_file(filename: str) -> str:
+    return str(Path(__file__).parent / "data" / filename)
 
 
 EXAMPLE_FILE = data_file("long-example.beancount")

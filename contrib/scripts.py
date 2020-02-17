@@ -2,7 +2,8 @@
 """Various utilities."""
 
 import json
-import os
+from os import environ
+from pathlib import Path
 
 import click
 import requests
@@ -11,9 +12,7 @@ from beancount.query import query_parser
 
 from fava import LOCALES
 
-BASE_PATH = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), "../fava")
-)
+BASE_PATH = Path(__file__).parent.parent / "fava"
 
 
 @click.group()
@@ -43,18 +42,14 @@ def generate_bql_grammar_json():
         "functions": sorted(set(_env_to_list(target_env.functions))),
         "keywords": sorted({kw.lower() for kw in query_parser.Lexer.keywords}),
     }
-    path = os.path.join(
-        os.path.dirname(__file__),
-        "../fava/static/javascript/codemirror/bql-grammar.ts",
-    )
-    with open(path, "w", encoding="utf-8") as json_file:
-        json_file.write("export default " + json.dumps(data))
+    path = BASE_PATH / "static/javascript/codemirror/bql-grammar.ts"
+    path.write_text("export default " + json.dumps(data))
 
 
 @cli.command()
 def download_translations():
     """Fetch updated translations from POEditor.com."""
-    token = os.environ.get("POEDITOR_TOKEN")
+    token = environ.get("POEDITOR_TOKEN")
     if not token:
         raise click.UsageError(
             "The POEDITOR_TOKEN environment variable needs to be set."
@@ -66,12 +61,12 @@ def download_translations():
 @cli.command()
 def upload_translations():
     """Upload .pot message catalog to POEditor.com."""
-    token = os.environ.get("POEDITOR_TOKEN")
+    token = environ.get("POEDITOR_TOKEN")
     if not token:
         raise click.UsageError(
             "The POEDITOR_TOKEN environment variable needs to be set."
         )
-    path = os.path.join(BASE_PATH, f"translations/messages.pot")
+    path = BASE_PATH / f"translations/messages.pot"
     click.echo(f"Uploading message catalog: {path}")
     data = {
         "api_token": token,
@@ -105,12 +100,11 @@ def download_from_poeditor(language, token):
     )
     url = request.json()["result"]["url"]
     content = requests.get(url).content
-    folder = os.path.join(BASE_PATH, "translations", language, "LC_MESSAGES")
-    if not os.path.exists(folder):
-        os.makedirs(folder)
-    path = os.path.join(folder, f"messages.po")
-    with open(path, "wb") as file_:
-        file_.write(content)
+    folder = BASE_PATH / "translations" / language / "LC_MESSAGES"
+    if not folder.exists():
+        folder.mkdir(parents=True)
+    path = folder / f"messages.po"
+    path.write_bytes(content)
     click.echo(f'Downloaded to "{path}"')
 
 

@@ -1,24 +1,19 @@
 # pylint: disable=missing-docstring
-
-import os.path
-
-from flask import g
 from beancount.core import realization
+from flask import g
 
 from fava.core import AccountData
 from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
-from fava.template_filters import (
-    basename,
-    get_or_create,
-    should_show,
-    format_errormsg,
-    collapse_account,
-)
+from fava.template_filters import basename
+from fava.template_filters import collapse_account
+from fava.template_filters import format_errormsg
+from fava.template_filters import get_or_create
+from fava.template_filters import should_show
 
 
 def test_basename():
-    assert basename(__file__) == os.path.basename(__file__)
+    assert basename(__file__) == "test_template_filters.py"
 
 
 def test_get_or_create(example_ledger):

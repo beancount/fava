@@ -14,9 +14,9 @@ Attributes:
 import datetime
 import functools
 import inspect
-import os.path
 import threading
 from io import BytesIO
+from pathlib import Path
 
 import flask
 import markdown2
@@ -54,8 +54,8 @@ from fava.util.excel import HAVE_EXCEL
 setup_logging()
 app = Flask(  # pylint: disable=invalid-name
     __name__,
-    template_folder=resource_path("templates"),
-    static_folder=resource_path("static"),
+    template_folder=str(resource_path("templates")),
+    static_folder=str(resource_path("static")),
 )
 app.register_blueprint(json_api, url_prefix="/<bfile>/api")
 
@@ -151,9 +151,9 @@ def static_url(**values):
     if not filename:
         return url_for("static", **values)
 
-    file_path = os.path.join(app.static_folder, filename)
-    if os.path.exists(file_path):
-        values["mtime"] = int(os.stat(file_path).st_mtime)
+    file_path = Path(app.static_folder) / filename
+    if file_path.exists():
+        values["mtime"] = int(file_path.stat().st_mtime)
 
     return url_for("static", **values)
 
@@ -374,7 +374,7 @@ def help_page(page_slug="_index"):
     if page_slug not in app.config["HELP_PAGES"]:
         abort(404)
     html = markdown2.markdown_path(
-        os.path.join(resource_path("help"), page_slug + ".md"),
+        (resource_path("help") / (page_slug + ".md")),
         extras=["fenced-code-blocks", "tables"],
     )
     return render_template(
