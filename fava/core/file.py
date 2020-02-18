@@ -20,8 +20,6 @@ from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.misc import align
 
 
-SOURCE_LOCK = threading.Lock()
-
 #: The flags to exclude when rendering entries entries.
 EXCL_FLAGS = set(
     (
@@ -38,6 +36,10 @@ EXCL_FLAGS = set(
 
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
+
+    def __init__(self, ledger) -> None:
+        super().__init__(ledger)
+        self.lock = threading.Lock()
 
     def list_sources(self) -> List[str]:
         """List source files.
@@ -91,7 +93,7 @@ class FileModule(FavaModule):
             FavaAPIException: If the file at `path` is not one of the
                 source files or if the file was changed externally.
         """
-        with SOURCE_LOCK:
+        with self.lock:
             _, original_sha256sum = self.get_source(path)
             if original_sha256sum != sha256sum:
                 raise FavaAPIException("The file changed externally.")
@@ -112,15 +114,35 @@ class FileModule(FavaModule):
 
         Also, prevent duplicate keys.
         """
-        self.ledger.changed()
-        entry = self.ledger.get_entry(entry_hash)
-        key = next_key(basekey, entry.meta)
-        insert_metadata_in_file(
-            entry.meta["filename"], entry.meta["lineno"], key, value
-        )
-        self.ledger.extensions.run_hook(
-            "after_insert_metadata", entry, key, value
-        )
+        with self.lock:
+            self.ledger.changed()
+            entry = self.ledger.get_entry(entry_hash)
+            key = next_key(basekey, entry.meta)
+            insert_metadata_in_file(
+                entry.meta["filename"], entry.meta["lineno"], key, value
+            )
+            self.ledger.extensions.run_hook(
+                "after_insert_metadata", entry, key, value
+            )
+
+    def save_entry_slice(
+        self, entry_hash: str, source_slice: str, sha256sum: str
+    ) -> str:
+        """Save slice of the source file for an entry.
+
+        Args:
+            entry: An entry.
+            source_slice: The lines that the entry should be replaced with.
+            sha256sum: The sha256sum of the current lines of the entry.
+
+        Returns:
+            The `sha256sum` of the new lines of the entry.
+        Raises:
+            FavaAPIException: If the entry is not found or the file changed.
+        """
+        with self.lock:
+            entry = self.ledger.get_entry(entry_hash)
+            return save_entry_slice(entry, source_slice, sha256sum)
 
     def insert_entries(self, entries) -> None:
         """Insert entries.
@@ -128,14 +150,15 @@ class FileModule(FavaModule):
         Args:
             entries: A list of entries.
         """
-        self.ledger.changed()
-        for entry in sorted(entries, key=incomplete_sortkey):
-            insert_entry(
-                entry,
-                self.ledger.beancount_file_path,
-                self.ledger.fava_options,
-            )
-            self.ledger.extensions.run_hook("after_insert_entry", entry)
+        with self.lock:
+            self.ledger.changed()
+            for entry in sorted(entries, key=incomplete_sortkey):
+                insert_entry(
+                    entry,
+                    self.ledger.beancount_file_path,
+                    self.ledger.fava_options,
+                )
+                self.ledger.extensions.run_hook("after_insert_entry", entry)
 
     def render_entries(self, entries) -> Generator[str, None, None]:
         """Return entries in Beancount format.
@@ -194,20 +217,19 @@ def insert_metadata_in_file(
 ) -> None:
     """Inserts the specified metadata in the file below lineno, taking into
     account the whitespace in front of the line that lineno."""
-    with SOURCE_LOCK:
-        with open(filename, "r", encoding="utf-8") as file:
-            contents = file.readlines()
+    with open(filename, "r", encoding="utf-8") as file:
+        contents = file.readlines()
 
-        # use the whitespace of the following line but at least two spaces.
-        try:
-            indent = leading_space(contents[lineno]) or DEFAULT_INDENT
-        except IndexError:
-            indent = DEFAULT_INDENT
+    # use the whitespace of the following line but at least two spaces.
+    try:
+        indent = leading_space(contents[lineno]) or DEFAULT_INDENT
+    except IndexError:
+        indent = DEFAULT_INDENT
 
-        contents.insert(lineno, '{}{}: "{}"\n'.format(indent, key, value))
+    contents.insert(lineno, '{}{}: "{}"\n'.format(indent, key, value))
 
-        with open(filename, "w", encoding="utf-8") as file:
-            file.write("".join(contents))
+    with open(filename, "w", encoding="utf-8") as file:
+        file.write("".join(contents))
 
 
 def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
@@ -225,7 +247,7 @@ def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
     return entry_lines
 
 
-def get_entry_slice(entry):
+def get_entry_slice(entry) -> Tuple[str, str]:
     """Get slice of the source file for an entry.
 
     Args:
@@ -234,11 +256,8 @@ def get_entry_slice(entry):
     Returns:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
-
     Raises:
-        FavaAPIException: If the file at `path` is not one of the
-            source files.
-
+        FavaAPIException: If the file at `path` is not one of the source files.
     """
     with open(entry.meta["filename"], mode="r", encoding="utf-8") as file:
         lines = file.readlines()
@@ -266,24 +285,23 @@ def save_entry_slice(entry, source_slice: str, sha256sum: str) -> str:
             source files.
     """
 
-    with SOURCE_LOCK:
-        with open(entry.meta["filename"], "r", encoding="utf-8") as file:
-            lines = file.readlines()
+    with open(entry.meta["filename"], "r", encoding="utf-8") as file:
+        lines = file.readlines()
 
-        first_entry_line = entry.meta["lineno"] - 1
-        entry_lines = find_entry_lines(lines, first_entry_line)
-        entry_source = "".join(entry_lines).rstrip("\n")
-        original_sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
-        if original_sha256sum != sha256sum:
-            raise FavaAPIException("The file changed externally.")
+    first_entry_line = entry.meta["lineno"] - 1
+    entry_lines = find_entry_lines(lines, first_entry_line)
+    entry_source = "".join(entry_lines).rstrip("\n")
+    original_sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
+    if original_sha256sum != sha256sum:
+        raise FavaAPIException("The file changed externally.")
 
-        lines = (
-            lines[:first_entry_line]
-            + [source_slice + "\n"]
-            + lines[first_entry_line + len(entry_lines) :]
-        )
-        with open(entry.meta["filename"], "w", encoding="utf-8") as file:
-            file.writelines(lines)
+    lines = (
+        lines[:first_entry_line]
+        + [source_slice + "\n"]
+        + lines[first_entry_line + len(entry_lines) :]
+    )
+    with open(entry.meta["filename"], "w", encoding="utf-8") as file:
+        file.writelines(lines)
 
     return sha256(codecs.encode(source_slice)).hexdigest()
 

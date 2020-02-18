@@ -171,20 +171,19 @@ def payee_transaction():
 
 
 @put_api_endpoint
-def source(request_data):
+def source(request_data) -> str:
     """Write one of the source files and return the updated sha256sum."""
     if request_data.get("file_path"):
-        sha256sum = g.ledger.file.set_source(
+        return g.ledger.file.set_source(
             request_data.get("file_path"),
             request_data.get("source"),
             request_data.get("sha256sum"),
         )
-    else:
-        entry = g.ledger.get_entry(request_data.get("entry_hash"))
-        sha256sum = save_entry_slice(
-            entry, request_data.get("source"), request_data.get("sha256sum")
-        )
-    return sha256sum
+    return save_entry_slice(
+        request_data.get("entry_hash"),
+        request_data.get("source"),
+        request_data.get("sha256sum"),
+    )
 
 
 @put_api_endpoint
