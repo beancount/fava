@@ -1,5 +1,16 @@
 """Exceptions and module base class."""
 
+from typing import Any
+from typing import NamedTuple
+
+
+class BeancountError(NamedTuple):
+    """NamedTuple base for a Beancount-style error."""
+
+    source: Any
+    message: str
+    entry: Any
+
 
 class FavaAPIException(Exception):
     """Fava's base exception class."""

@@ -1,13 +1,19 @@
 """Fava's extension system."""
 
-from collections import namedtuple
 import importlib
 import inspect
 import sys
 import ast
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Type
+
+from fava.core.helpers import BeancountError
 
 
-FavaExtensionError = namedtuple("FavaExtensionError", "source message entry")
+class FavaExtensionError(BeancountError):
+    """Error in one of Fava's extensions."""
 
 
 class FavaExtensionBase:
@@ -17,7 +23,9 @@ class FavaExtensionBase:
     discover all subclasses of this class in the specified modules.
     """
 
-    def __init__(self, ledger, config=None):
+    report_title: Optional[str] = None
+
+    def __init__(self, ledger, config=None) -> None:
         """
         Base init function.
 
@@ -33,12 +41,11 @@ class FavaExtensionBase:
             self.config = None
         self.name = self.__class__.__qualname__
 
-    def run_hook(self, event, *args):
+    def run_hook(self, event, *args) -> None:
         """Run a hook.
 
         Args:
             event: One of the possible events.
-
         """
         try:
             getattr(self, event)(*args)
@@ -46,7 +53,9 @@ class FavaExtensionBase:
             pass
 
 
-def find_extensions(base_path, name):
+def find_extensions(
+    base_path: str, name: str
+) -> Tuple[List[Type[FavaExtensionBase]], List[FavaExtensionError]]:
     """Find extensions in a module.
 
     Args:
@@ -63,13 +72,12 @@ def find_extensions(base_path, name):
     try:
         module = importlib.import_module(name)
     except ImportError:
+        error = FavaExtensionError(
+            None, 'Importing module "{}" failed.'.format(name), None
+        )
         return (
             [],
-            [
-                FavaExtensionError(
-                    None, 'Importing module "{}" failed.'.format(name), None
-                )
-            ],
+            [error],
         )
     for _, obj in inspect.getmembers(module, inspect.isclass):
         if issubclass(obj, FavaExtensionBase) and obj != FavaExtensionBase:
@@ -77,15 +85,12 @@ def find_extensions(base_path, name):
     sys.path.pop(0)
 
     if not classes:
+        error = FavaExtensionError(
+            None, 'Module "{}" contains no extensions.'.format(name), None,
+        )
         return (
             [],
-            [
-                FavaExtensionError(
-                    None,
-                    'Module "{}" contains no extensions.'.format(name),
-                    None,
-                )
-            ],
+            [error],
         )
 
     return classes, []

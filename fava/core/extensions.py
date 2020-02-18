@@ -2,22 +2,27 @@
 
 import os
 import inspect
+from typing import Dict
+from typing import Type
+from typing import List
+from typing import Tuple
 
 from beancount.core.data import Custom
 
 from fava.core.helpers import FavaModule
 from fava.ext import find_extensions
+from fava.ext import FavaExtensionBase
 
 
 class ExtensionModule(FavaModule):
     """Fava extensions."""
 
-    def __init__(self, ledger):
+    def __init__(self, ledger) -> None:
         super().__init__(ledger)
-        self._instances = {}
-        self.reports = []
+        self._instances: Dict[Type[FavaExtensionBase], FavaExtensionBase] = {}
+        self.reports: List[Tuple[str, str]] = []
 
-    def load_file(self):
+    def load_file(self) -> None:
         all_extensions = []
         custom_entries = self.ledger.all_entries_by_type[Custom]
         _extension_entries = extension_entries(custom_entries)
@@ -42,15 +47,17 @@ class ExtensionModule(FavaModule):
         self.reports = []
         for ext_class in self._instances:
             ext = self._instances[ext_class]
-            if hasattr(ext, "report_title"):
+            if ext.report_title is not None:
                 self.reports.append((ext.name, ext.report_title))
 
-    def run_hook(self, event, *args):
+    def run_hook(self, event: str, *args) -> None:
         """Run a hook for all extensions."""
         for ext in self._instances.values():
             ext.run_hook(event, *args)
 
-    def template_and_extension(self, name):
+    def template_and_extension(
+        self, name: str
+    ) -> Tuple[str, FavaExtensionBase]:
         """Provide data to render an extension report.
 
         Args:
