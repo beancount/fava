@@ -19,7 +19,7 @@ from fava.core.file import save_entry_slice
 from fava.core.helpers import FavaAPIException
 
 
-def test_get_entry_slice(example_ledger):
+def test_get_entry_slice(example_ledger) -> None:
     entry = example_ledger.get_entry("d4a067d229bfda57c8c984d1615da699")
     assert get_entry_slice(entry) == (
         """2016-05-03 * "Chichipotle" "Eating out with Joe"
@@ -29,7 +29,7 @@ def test_get_entry_slice(example_ledger):
     )
 
 
-def test_save_entry_slice(example_ledger):
+def test_save_entry_slice(example_ledger) -> None:
     entry = example_ledger.get_entry("d4a067d229bfda57c8c984d1615da699")
     entry_source, sha256sum = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
@@ -57,7 +57,7 @@ def test_next_key() -> None:
     )
 
 
-def test_leading_space():
+def test_leading_space() -> None:
     assert leading_space("test") == "  "
     assert leading_space("	test") == "	"
     assert leading_space("  test") == "  "
@@ -66,7 +66,7 @@ def test_leading_space():
     assert leading_space("\ntest") == "\n"
 
 
-def test_insert_metadata_in_file(tmp_path):
+def test_insert_metadata_in_file(tmp_path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -104,7 +104,7 @@ def test_insert_metadata_in_file(tmp_path):
     )
 
 
-def test_insert_entry_transaction(tmp_path):
+def test_insert_entry_transaction(tmp_path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -132,7 +132,7 @@ def test_insert_entry_transaction(tmp_path):
     )
 
     # Test insertion without "insert-entry" options.
-    insert_entry(transaction, [str(samplefile)], {})
+    insert_entry(transaction, str(samplefile), {})
     assert samplefile.read_text() == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -160,7 +160,7 @@ def test_insert_entry_transaction(tmp_path):
     ]
     insert_entry(
         transaction._replace(narration="narr1"),
-        [str(samplefile)],
+        str(samplefile),
         {"insert-entry": options},
     )
     assert samplefile.read_text() == dedent(
@@ -190,7 +190,7 @@ def test_insert_entry_transaction(tmp_path):
         ),
     ]
     transaction = transaction._replace(narration="narr2")
-    insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
+    insert_entry(transaction, str(samplefile), {"insert-entry": options})
     assert samplefile.read_text() == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
@@ -222,7 +222,7 @@ def test_insert_entry_transaction(tmp_path):
         ),
     ]
     transaction = transaction._replace(narration="narr3")
-    insert_entry(transaction, [str(samplefile)], {"insert-entry": options})
+    insert_entry(transaction, str(samplefile), {"insert-entry": options})
     assert samplefile.read_text() == dedent(
         """\
         2016-01-01 * "new payee" "narr3"
@@ -248,7 +248,7 @@ def test_insert_entry_transaction(tmp_path):
     )
 
 
-def test_insert_entry_align(tmp_path):
+def test_insert_entry_align(tmp_path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -276,7 +276,7 @@ def test_insert_entry_align(tmp_path):
     )
 
     fava_options = {"currency-column": 50}
-    insert_entry(transaction, [str(samplefile)], fava_options)
+    insert_entry(transaction, str(samplefile), fava_options)
     assert samplefile.read_text() == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -290,7 +290,7 @@ def test_insert_entry_align(tmp_path):
     )
 
 
-def test_render_entries(example_ledger):
+def test_render_entries(example_ledger) -> None:
     entry1 = example_ledger.get_entry("4af0865b1371c1b5576e9ff7f7d20dc9")
     entry2 = example_ledger.get_entry("85f3ba57bf52dc1bd6c77ef3510223ae")
 

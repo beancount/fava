@@ -5,7 +5,6 @@ from beancount.core.number import ZERO
 from beancount.core.position import Position
 
 
-# pylint: disable=abstract-method
 class CounterInventory(dict):
     """A lightweight inventory.
 

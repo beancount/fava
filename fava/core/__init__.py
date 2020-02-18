@@ -1,39 +1,50 @@
 """This module provides the data required by Fava's reports."""
-
 import collections
 import copy
 import datetime
 import os
+from typing import Any
+from typing import DefaultDict
+from typing import Dict
+from typing import Iterable
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Type
 
 from beancount import loader
-from beancount.core import getters, interpolate, prices, realization
-from beancount.core.flags import FLAG_UNREALIZED
+from beancount.core import getters
+from beancount.core import interpolate
+from beancount.core import prices
+from beancount.core import realization
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
-from beancount.core.data import (
-    get_entry,
-    iter_entry_dates,
-    Open,
-    Close,
-    Balance,
-    TxnPosting,
-    Transaction,
-    Document,
-    Event,
-    Custom,
-)
+from beancount.core.data import Balance
+from beancount.core.data import Close
+from beancount.core.data import Custom
+from beancount.core.data import Document
+from beancount.core.data import Event
+from beancount.core.data import get_entry
+from beancount.core.data import iter_entry_dates
+from beancount.core.data import Open
+from beancount.core.data import Transaction
+from beancount.core.data import TxnPosting
+from beancount.core.flags import FLAG_UNREALIZED
+from beancount.core.number import Decimal
 from beancount.parser.options import get_account_types
 from beancount.utils.encryption import is_encrypted_file
 from beancount.utils.misc_utils import filter_type
 
-from fava.util import date, pairwise
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import parse_options
-from fava.core.file import FileModule, get_entry_slice
-from fava.core.filters import AccountFilter, AdvancedFilter, TimeFilter
+from fava.core.file import FileModule
+from fava.core.file import get_entry_slice
+from fava.core.filters import AccountFilter
+from fava.core.filters import AdvancedFilter
+from fava.core.filters import TimeFilter
 from fava.core.helpers import FavaAPIException
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
@@ -41,6 +52,8 @@ from fava.core.number import DecimalFormatModule
 from fava.core.query_shell import QueryShell
 from fava.core.tree import Tree
 from fava.core.watcher import Watcher
+from fava.util import date
+from fava.util import pairwise
 
 
 MAXDATE = datetime.date.max
@@ -64,10 +77,10 @@ class _AccountDict(dict):
 
     EMPTY = AccountData()
 
-    def __missing__(self, key):
+    def __missing__(self, key: str) -> AccountData:
         return self.EMPTY
 
-    def setdefault(self, key):
+    def setdefault(self, key: str, _=None) -> AccountData:
         if key not in self:
             self[key] = AccountData()
         return self[key]
@@ -116,11 +129,11 @@ class FavaLedger:
         "_watcher",
     ] + MODULES
 
-    def __init__(self, path):
+    def __init__(self, path) -> None:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
-        self._filters = {}
+        self._filters: Dict[str, Any] = {}
 
         #: An :class:`AttributesModule` instance.
         self.attributes = AttributesModule(self)
@@ -152,29 +165,29 @@ class FavaLedger:
         self._watcher = Watcher()
 
         #: List of all (unfiltered) entries.
-        self.all_entries = None
+        self.all_entries: List[Any] = []
 
         #: Dict of list of all (unfiltered) entries by type.
-        self.all_entries_by_type = None
+        self.all_entries_by_type: Dict[Type[Any], Any] = {}
 
         #: A list of all errors reported by Beancount.
-        self.errors = None
+        self.errors: List[Any] = []
 
         #: A Beancount options map.
-        self.options = None
+        self.options: Dict[str, Any] = {}
 
-        #: A Namedtuple containing the names of the five base accounts.
-        self.account_types = None
+        #: A NamedTuple containing the names of the five base accounts.
+        self.account_types: Iterable[str] = ()
 
         #: A dict containing information about the accounts.
         self.accounts = _AccountDict()
 
         #: A dict with all of Fava's option values.
-        self.fava_options = None
+        self.fava_options: Dict[str, Any] = {}
 
         self.load_file()
 
-    def load_file(self):
+    def load_file(self) -> None:
         """Load the main file and all included files and set attributes."""
         # use the internal function to disable cache
         if not self._is_encrypted:
@@ -193,7 +206,9 @@ class FavaLedger:
             self.all_entries, self.account_types
         )
 
-        entries_by_type = collections.defaultdict(list)
+        entries_by_type: DefaultDict[
+            Type[Any], List[str]
+        ] = collections.defaultdict(list)
         for entry in self.all_entries:
             entries_by_type[type(entry)].append(entry)
         self.all_entries_by_type = entries_by_type
@@ -259,12 +274,12 @@ class FavaLedger:
             return self._filters["time"].end_date
         return None
 
-    def join_path(self, *args):
+    def join_path(self, *args) -> str:
         """Path relative to the directory of the ledger."""
         include_path = os.path.dirname(self.beancount_file_path)
         return os.path.normpath(os.path.join(include_path, *args))
 
-    def paths_to_watch(self):
+    def paths_to_watch(self) -> Tuple[List[str], List[str]]:
         """The paths to included files and document directories.
 
         Returns:
@@ -282,7 +297,7 @@ class FavaLedger:
             ],
         )
 
-    def changed(self):
+    def changed(self) -> bool:
         """Check if the file needs to be reloaded.
 
         Returns:
@@ -297,13 +312,15 @@ class FavaLedger:
             self.load_file()
         return changed
 
-    def interval_ends(self, interval):
+    def interval_ends(
+        self, interval: date.Interval
+    ) -> Iterable[datetime.date]:
         """Generator yielding dates corresponding to interval boundaries."""
         if not self._date_first:
             return []
         return date.interval_ends(self._date_first, self._date_last, interval)
 
-    def get_account_sign(self, account_name):
+    def get_account_sign(self, account_name: str) -> int:
         """Get account sign.
 
         Arguments:
@@ -448,7 +465,7 @@ class FavaLedger:
         source_slice, sha256sum = get_entry_slice(entry)
         return entry, balances, source_slice, sha256sum
 
-    def commodity_pairs(self):
+    def commodity_pairs(self) -> List[Tuple[str, str]]:
         """List pairs of commodities.
 
         Returns:
@@ -465,7 +482,9 @@ class FavaLedger:
                 bw_pairs.append((currency_b, currency_a))
         return sorted(fw_pairs + bw_pairs)
 
-    def prices(self, base, quote):
+    def prices(
+        self, base: str, quote: str
+    ) -> List[Tuple[datetime.date, Decimal]]:
         """List all prices."""
         all_prices = prices.get_all_prices(self.price_map, (base, quote))
 
@@ -479,7 +498,7 @@ class FavaLedger:
             ]
         return all_prices
 
-    def last_entry(self, account_name):
+    def last_entry(self, account_name: str):
         """Get last entry of an account.
 
         Args:
@@ -508,7 +527,7 @@ class FavaLedger:
             for posting in entry.postings
         ]
 
-    def statement_path(self, entry_hash, metadata_key):
+    def statement_path(self, entry_hash: str, metadata_key: str) -> str:
         """Returns the path for a statement found in the specified entry."""
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
@@ -530,7 +549,7 @@ class FavaLedger:
 
         raise FavaAPIException("Statement not found.")
 
-    def account_uptodate_status(self, account_name):
+    def account_uptodate_status(self, account_name: str) -> Optional[str]:
         """Status of the last balance or transaction.
 
         Args:
@@ -560,7 +579,7 @@ class FavaLedger:
                 return "yellow"
         return None
 
-    def account_is_closed(self, account_name):
+    def account_is_closed(self, account_name) -> bool:
         """Check if the account is closed.
 
         Args:

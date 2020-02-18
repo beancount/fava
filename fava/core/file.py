@@ -1,12 +1,13 @@
 """Reading/writing Beancount files."""
 
 import codecs
+import datetime
 from hashlib import sha256
-import os
 import re
 import threading
 from typing import Any
 from typing import Dict
+from typing import Generator
 from typing import Iterable
 from typing import List
 from typing import Optional
@@ -21,11 +22,24 @@ from fava.core.misc import align
 
 SOURCE_LOCK = threading.Lock()
 
+#: The flags to exclude when rendering entries entries.
+EXCL_FLAGS = set(
+    (
+        flags.FLAG_PADDING,  # P
+        flags.FLAG_SUMMARIZE,  # S
+        flags.FLAG_TRANSFER,  # T
+        flags.FLAG_CONVERSIONS,  # C
+        flags.FLAG_UNREALIZED,  # U
+        flags.FLAG_RETURNS,  # R
+        flags.FLAG_MERGING,  # M
+    )
+)
+
 
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
 
-    def list_sources(self):
+    def list_sources(self) -> List[str]:
         """List source files.
 
         Returns:
@@ -33,13 +47,9 @@ class FileModule(FavaModule):
         """
         main_file = self.ledger.beancount_file_path
         return [main_file] + sorted(
-            filter(
-                lambda x: x != main_file,
-                [
-                    os.path.join(os.path.dirname(main_file), filename)
-                    for filename in self.ledger.options["include"]
-                ],
-            )
+            file
+            for file in self.ledger.options["include"]
+            if file != main_file
         )
 
     def get_source(self, path: str) -> Tuple[str, str]:
@@ -55,7 +65,7 @@ class FileModule(FavaModule):
             FavaAPIException: If the file at `path` is not one of the
                 source files.
         """
-        if path not in self.list_sources():
+        if path not in self.ledger.options["include"]:
             raise FavaAPIException("Trying to read a non-source file")
 
         with open(path, mode="rb") as file:
@@ -112,7 +122,7 @@ class FileModule(FavaModule):
             "after_insert_metadata", entry, key, value
         )
 
-    def insert_entries(self, entries):
+    def insert_entries(self, entries) -> None:
         """Insert entries.
 
         Args:
@@ -120,10 +130,14 @@ class FileModule(FavaModule):
         """
         self.ledger.changed()
         for entry in sorted(entries, key=incomplete_sortkey):
-            insert_entry(entry, self.list_sources(), self.ledger.fava_options)
+            insert_entry(
+                entry,
+                self.ledger.beancount_file_path,
+                self.ledger.fava_options,
+            )
             self.ledger.extensions.run_hook("after_insert_entry", entry)
 
-    def render_entries(self, entries):
+    def render_entries(self, entries) -> Generator[str, None, None]:
         """Return entries in Beancount format.
 
         Only renders :class:`.Balance` and :class:`.Transaction`.
@@ -134,21 +148,12 @@ class FileModule(FavaModule):
         Yields:
             The entries rendered in Beancount format.
         """
-        excl_flags = [
-            flags.FLAG_PADDING,  # P
-            flags.FLAG_SUMMARIZE,  # S
-            flags.FLAG_TRANSFER,  # T
-            flags.FLAG_CONVERSIONS,  # C
-            flags.FLAG_UNREALIZED,  # U
-            flags.FLAG_RETURNS,  # R
-            flags.FLAG_MERGING,  # M
-        ]
 
         for entry in entries:
             if isinstance(entry, (data.Balance, data.Transaction)):
                 if (
                     isinstance(entry, data.Transaction)
-                    and entry.flag in excl_flags
+                    and entry.flag in EXCL_FLAGS
                 ):
                     continue
                 try:
@@ -157,7 +162,7 @@ class FileModule(FavaModule):
                     yield _format_entry(entry, self.ledger.fava_options)
 
 
-def incomplete_sortkey(entry):
+def incomplete_sortkey(entry) -> Tuple[datetime.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
     return (entry.date, data.SORT_ORDER.get(type(entry), 0))
 
@@ -193,9 +198,9 @@ def insert_metadata_in_file(
         with open(filename, "r", encoding="utf-8") as file:
             contents = file.readlines()
 
-        # use the whitespace of the following line
+        # use the whitespace of the following line but at least two spaces.
         try:
-            indent = leading_space(contents[lineno])
+            indent = leading_space(contents[lineno]) or DEFAULT_INDENT
         except IndexError:
             indent = DEFAULT_INDENT
 
@@ -283,18 +288,18 @@ def save_entry_slice(entry, source_slice: str, sha256sum: str) -> str:
     return sha256(codecs.encode(source_slice)).hexdigest()
 
 
-def insert_entry(entry, filenames: List[str], fava_options) -> None:
+def insert_entry(entry, default_filename: str, fava_options) -> None:
     """Insert an entry.
 
     Args:
         entry: An entry.
-        filenames: List of filenames.
+        default_filename: The default file to insert into if no option matches.
         fava_options: The ledgers fava_options. Note that the line numbers of
             the insert options might be updated.
     """
     insert_options = fava_options.get("insert-entry", [])
     filename, lineno = find_insert_position(
-        entry, insert_options, filenames[0]
+        entry, insert_options, default_filename
     )
     content = _format_entry(entry, fava_options)
 
