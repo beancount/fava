@@ -1,25 +1,42 @@
 """Ingest helper functions."""
-
-from collections import namedtuple
 import datetime
-from os import path
 import os
 import runpy
 import sys
 import traceback
+from os import path
+from typing import Dict
+from typing import List
+from typing import NamedTuple
+from typing import Optional
 
 from beancount.ingest import cache
 from beancount.ingest import extract
 from beancount.ingest import identify
 
 from fava.core.helpers import FavaModule
+from fava.core.helpers import BeancountError
 
-IngestError = namedtuple("IngestError", "source message entry")
 
-FileImporters = namedtuple("FileImporters", "name basename importers")
-FileImportInfo = namedtuple(
-    "FileImportInfo", "importer_name account date name"
-)
+class IngestError(BeancountError):
+    """An error with one of the importers."""
+
+
+class FileImportInfo(NamedTuple):
+    """Info about one file/importer combination."""
+
+    importer_name: str
+    account: str
+    date: datetime.date
+    name: str
+
+
+class FileImporters(NamedTuple):
+    """Importers for a file."""
+
+    name: str
+    basename: str
+    importers: List[FileImportInfo]
 
 
 def file_import_info(filename: str, importer) -> FileImportInfo:
@@ -52,15 +69,18 @@ class IngestModule(FavaModule):
         self.mtime = None
 
     @property
-    def module_path(self):
+    def module_path(self) -> Optional[str]:
         """The path to the importer configuration."""
         config_path = self.ledger.fava_options["import-config"]
         if not config_path:
             return None
         return self.ledger.join_path(config_path)
 
-    def load_file(self):
+    def load_file(self) -> None:
         if not self.ledger.fava_options["import-config"]:
+            return
+
+        if not self.module_path:
             return
 
         if not path.exists(self.module_path) or path.isdir(self.module_path):
@@ -97,7 +117,7 @@ class IngestModule(FavaModule):
             importer.name(): importer for importer in self.config
         }
 
-    def import_data(self):
+    def import_data(self) -> Dict[str, List[FileImporters]]:
         """Identify files and importers that can be imported.
 
         Returns:
@@ -106,7 +126,7 @@ class IngestModule(FavaModule):
         if not self.config:
             return {}
 
-        ret = {}
+        ret: Dict[str, List[FileImporters]] = {}
 
         for directory in self.ledger.fava_options["import-dirs"]:
             full_path = self.ledger.join_path(directory)
@@ -122,7 +142,7 @@ class IngestModule(FavaModule):
 
         return ret
 
-    def extract(self, filename, importer_name):
+    def extract(self, filename: str, importer_name: str):
         """Extract entries from filename with the specified importer.
 
         Args:
@@ -132,7 +152,12 @@ class IngestModule(FavaModule):
         Returns:
             A list of new imported entries.
         """
-        if not filename or not importer_name or not self.config:
+        if (
+            not filename
+            or not importer_name
+            or not self.config
+            or not self.module_path
+        ):
             return []
 
         if os.stat(self.module_path).st_mtime_ns > self.mtime:
