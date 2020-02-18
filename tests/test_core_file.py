@@ -35,16 +35,16 @@ def test_save_entry_slice(example_ledger) -> None:
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = Path(entry.meta["filename"])
-    contents = filename.read_text()
+    contents = filename.read_text("utf-8")
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert filename.read_text() == contents
+        assert filename.read_text("utf-8") == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
-    assert filename.read_text() != contents
+    assert filename.read_text("utf-8") != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
-    assert filename.read_text() == contents
+    assert filename.read_text("utf-8") == contents
 
 
 def test_next_key() -> None:
@@ -80,7 +80,7 @@ def test_insert_metadata_in_file(tmp_path) -> None:
     # Insert some metadata lines.
     insert_metadata_in_file(str(samplefile), 1, "metadata", "test1")
     insert_metadata_in_file(str(samplefile), 1, "metadata", "test2")
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test2"
@@ -92,7 +92,7 @@ def test_insert_metadata_in_file(tmp_path) -> None:
 
     # Check that inserting also works if the next line is empty.
     insert_metadata_in_file(str(samplefile), 5, "metadata", "test1")
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
             metadata: "test2"
@@ -133,7 +133,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
 
     # Test insertion without "insert-entry" options.
     insert_entry(transaction, str(samplefile), {})
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
@@ -163,7 +163,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
         str(samplefile),
         {"insert-entry": options},
     )
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
           Liabilities:US:Chase:Slate                         -10.00 USD
@@ -191,7 +191,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
     ]
     transaction = transaction._replace(narration="narr2")
     insert_entry(transaction, str(samplefile), {"insert-entry": options})
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
           Liabilities:US:Chase:Slate                         -10.00 USD
@@ -223,7 +223,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
     ]
     transaction = transaction._replace(narration="narr3")
     insert_entry(transaction, str(samplefile), {"insert-entry": options})
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr3"
           Liabilities:US:Chase:Slate                         -10.00 USD
@@ -277,7 +277,7 @@ def test_insert_entry_align(tmp_path) -> None:
 
     fava_options = {"currency-column": 50}
     insert_entry(transaction, str(samplefile), fava_options)
-    assert samplefile.read_text() == dedent(
+    assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
