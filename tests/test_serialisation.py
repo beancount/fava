@@ -14,7 +14,6 @@ from beancount.core.number import MISSING
 from flask.json import dumps
 from flask.json import loads
 
-from fava.core.fava_options import DEFAULTS
 from fava.core.file import _format_entry
 from fava.core.helpers import FavaAPIException
 from fava.serialisation import deserialise
@@ -138,7 +137,7 @@ def test_deserialise_posting_and_format(snapshot):
             deserialise_posting({"account": "Assets", "amount": "10 EUR @"}),
         ],
     )
-    snapshot(_format_entry(txn, DEFAULTS))
+    snapshot(_format_entry(txn, 61))
 
 
 def test_serialise_balance(app):

@@ -187,9 +187,11 @@ def source(request_data) -> str:
 
 
 @put_api_endpoint
-def format_source(request_data):
+def format_source(request_data) -> str:
     """Format beancount file."""
-    return align(request_data["source"], g.ledger.fava_options)
+    return align(
+        request_data["source"], g.ledger.fava_options["currency-column"]
+    )
 
 
 def filepath_in_document_folder(documents_folder, account, filename):

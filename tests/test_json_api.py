@@ -27,7 +27,7 @@ def assert_api_success(response, data: Optional[Any] = None) -> None:
         assert data == response.json["data"]
 
 
-def test_api_changed(app, test_client):
+def test_api_changed(app, test_client) -> None:
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.changed")
@@ -36,7 +36,7 @@ def test_api_changed(app, test_client):
     assert_api_success(response, False)
 
 
-def test_api_add_document(app, test_client, tmp_path):
+def test_api_add_document(app, test_client, tmp_path) -> None:
     with app.test_request_context():
         app.preprocess_request()
         old_documents = flask.g.ledger.options["documents"]
@@ -65,7 +65,7 @@ def test_api_add_document(app, test_client, tmp_path):
         flask.g.ledger.options["documents"] = old_documents
 
 
-def test_api_move(app, test_client):
+def test_api_move(app, test_client) -> None:
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.move")
@@ -74,7 +74,7 @@ def test_api_move(app, test_client):
         assert_api_error(response)
 
 
-def test_api_source_put(app, test_client):
+def test_api_source_put(app, test_client) -> None:
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.source")
@@ -117,7 +117,7 @@ def test_api_source_put(app, test_client):
     assert open(path, encoding="utf-8").read() == payload
 
 
-def test_api_format_source(app, test_client):
+def test_api_format_source(app, test_client) -> None:
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.format_source")
@@ -130,10 +130,10 @@ def test_api_format_source(app, test_client):
         data=flask.json.dumps({"source": payload}),
         content_type="application/json",
     )
-    assert_api_success(response, align(payload, {}))
+    assert_api_success(response, align(payload, 61))
 
 
-def test_api_format_source_options(app, test_client):
+def test_api_format_source_options(app, test_client) -> None:
     path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
     with app.test_request_context():
@@ -147,7 +147,7 @@ def test_api_format_source_options(app, test_client):
             data=flask.json.dumps({"source": payload}),
             content_type="application/json",
         )
-        assert_api_success(response, align(payload, {"currency-column": 90}))
+        assert_api_success(response, align(payload, 90))
 
         flask.g.ledger.fava_options["currency-column"] = old_currency_column
 
@@ -244,7 +244,7 @@ def test_api_add_entries(app, test_client, tmp_path):
         ("select sum(day)", "43558"),
     ],
 )
-def test_api_query_result(query_string, result_str, app, test_client):
+def test_api_query_result(query_string, result_str, app, test_client) -> None:
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("json_api.query_result", query_string=query_string)

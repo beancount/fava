@@ -5,13 +5,30 @@ This module contains a list of possible options, the defaults and the code for
 parsing the options.
 
 """
-
 import copy
-from collections import namedtuple
+import datetime
 import re
+from typing import NamedTuple
 
-OptionError = namedtuple("OptionError", "source message entry")
-InsertEntryOption = namedtuple("InsertEntryOption", "date re filename lineno")
+from fava.core.helpers import BeancountError
+
+
+class OptionError(BeancountError):
+    """An error for one the Fava options."""
+
+
+class InsertEntryOption(NamedTuple):
+    """Insert option.
+
+    An option that determines where entries for matching accounts should be
+    inserted.
+    """
+
+    date: datetime.date
+    re: re.Pattern
+    filename: str
+    lineno: int
+
 
 DEFAULTS = {
     "account-journal-include-children": True,

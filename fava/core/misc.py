@@ -9,7 +9,6 @@ from beancount.core.data import Custom, Event
 from beancount.core import amount
 
 from fava.core.helpers import FavaModule
-from fava.core.fava_options import DEFAULTS
 
 FavaError = namedtuple("FavaError", "source message entry")
 
@@ -80,10 +79,8 @@ def upcoming_events(events, max_delta):
     return upcoming
 
 
-def align(string, fava_options):
+def align(string: str, currency_column: int) -> str:
     """Align currencies in one column."""
-
-    column = fava_options.get("currency-column", DEFAULTS["currency-column"])
 
     output = io.StringIO()
     for line in string.splitlines():
@@ -95,7 +92,7 @@ def align(string, fava_options):
         )
         if match:
             prefix, number, rest = match.groups()
-            num_of_spaces = column - len(prefix) - len(number) - 4
+            num_of_spaces = currency_column - len(prefix) - len(number) - 4
             spaces = " " * num_of_spaces
             output.write(prefix + spaces + "  " + number + " " + rest)
         else:

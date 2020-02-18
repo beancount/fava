@@ -18,6 +18,7 @@ from beancount.parser.printer import format_entry
 
 from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.misc import align
+from fava.core.fava_options import InsertEntryOption
 
 
 #: The flags to exclude when rendering entries entries.
@@ -152,11 +153,15 @@ class FileModule(FavaModule):
         """
         with self.lock:
             self.ledger.changed()
+            fava_options = self.ledger.fava_options
             for entry in sorted(entries, key=incomplete_sortkey):
-                insert_entry(
+                insert_options = fava_options["insert-entry"]
+                currency_column = fava_options["currency-column"]
+                fava_options["insert-entry"] = insert_entry(
                     entry,
                     self.ledger.beancount_file_path,
-                    self.ledger.fava_options,
+                    insert_options,
+                    currency_column,
                 )
                 self.ledger.extensions.run_hook("after_insert_entry", entry)
 
@@ -306,20 +311,27 @@ def save_entry_slice(entry, source_slice: str, sha256sum: str) -> str:
     return sha256(codecs.encode(source_slice)).hexdigest()
 
 
-def insert_entry(entry, default_filename: str, fava_options) -> None:
+def insert_entry(
+    entry,
+    default_filename: str,
+    insert_options: List[InsertEntryOption],
+    currency_column: int,
+) -> List[InsertEntryOption]:
     """Insert an entry.
 
     Args:
         entry: An entry.
         default_filename: The default file to insert into if no option matches.
-        fava_options: The ledgers fava_options. Note that the line numbers of
-            the insert options might be updated.
+        insert_options: Insert options.
+        currency_column: The column to align currencies at.
+
+    Returns:
+        A list of updated insert options.
     """
-    insert_options = fava_options.get("insert-entry", [])
     filename, lineno = find_insert_position(
         entry, insert_options, default_filename
     )
-    content = _format_entry(entry, fava_options)
+    content = _format_entry(entry, currency_column)
 
     with open(filename, "r", encoding="utf-8") as file:
         contents = file.readlines()
@@ -333,28 +345,31 @@ def insert_entry(entry, default_filename: str, fava_options) -> None:
     with open(filename, "w", encoding="utf-8") as file:
         file.writelines(contents)
 
-    if lineno:
-        added_lines = content.count("\n") + 2
-        for index, option in enumerate(insert_options):
-            if option.filename == filename and option.lineno > lineno:
-                insert_options[index] = option._replace(
-                    lineno=lineno + added_lines
-                )
+    if lineno is None:
+        return insert_options
+
+    added_lines = content.count("\n") + 1
+    return [
+        option._replace(lineno=option.lineno + added_lines)
+        if option.filename == filename and option.lineno > lineno
+        else option
+        for option in insert_options
+    ]
 
 
-def _format_entry(entry, fava_options) -> str:
+def _format_entry(entry, currency_column: int) -> str:
     """Wrapper that strips unnecessary whitespace from format_entry."""
     meta = {
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")
     }
     entry = entry._replace(meta=meta)
-    string = align(format_entry(entry), fava_options)
+    string = align(format_entry(entry), currency_column)
     string = string.replace("<class 'beancount.core.number.MISSING'>", "")
     return "\n".join((line.rstrip() for line in string.split("\n")))
 
 
 def find_insert_position(
-    entry, insert_options, default_filename: str
+    entry, insert_options: List[InsertEntryOption], default_filename: str
 ) -> Tuple[str, Optional[int]]:
     """Find insert position for an entry.
 

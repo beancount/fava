@@ -132,7 +132,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
     )
 
     # Test insertion without "insert-entry" options.
-    insert_entry(transaction, str(samplefile), {})
+    insert_entry(transaction, str(samplefile), [], 61)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -158,11 +158,12 @@ def test_insert_entry_transaction(tmp_path) -> None:
             date(2017, 1, 1), re.compile(".*:Food"), str(samplefile), 6,
         ),
     ]
-    insert_entry(
-        transaction._replace(narration="narr1"),
-        str(samplefile),
-        {"insert-entry": options},
+    new_options = insert_entry(
+        transaction._replace(narration="narr1"), str(samplefile), options, 61
     )
+    assert new_options[0].lineno == 5
+    assert new_options[1].lineno == 5
+    assert new_options[2].lineno == 10
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
@@ -190,7 +191,9 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     transaction = transaction._replace(narration="narr2")
-    insert_entry(transaction, str(samplefile), {"insert-entry": options})
+    new_options = insert_entry(transaction, str(samplefile), options, 61)
+    assert new_options[0].lineno == 9
+    assert new_options[1].lineno == 1
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
@@ -222,7 +225,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     transaction = transaction._replace(narration="narr3")
-    insert_entry(transaction, str(samplefile), {"insert-entry": options})
+    insert_entry(transaction, str(samplefile), options, 61)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr3"
@@ -275,8 +278,7 @@ def test_insert_entry_align(tmp_path) -> None:
         {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
     )
 
-    fava_options = {"currency-column": 50}
-    insert_entry(transaction, str(samplefile), fava_options)
+    insert_entry(transaction, str(samplefile), [], 50)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
