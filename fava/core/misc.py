@@ -1,6 +1,5 @@
 """Some miscellaneous reports."""
 
-from collections import namedtuple
 import datetime
 import io
 import re
@@ -9,8 +8,11 @@ from beancount.core.data import Custom, Event
 from beancount.core import amount
 
 from fava.core.helpers import FavaModule
+from fava.core.helpers import BeancountError
 
-FavaError = namedtuple("FavaError", "source message entry")
+
+class FavaError(BeancountError):
+    """Generic Fava-specific error."""
 
 
 class FavaMisc(FavaModule):

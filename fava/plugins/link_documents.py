@@ -5,14 +5,20 @@ associate them to Document entries. It then adds a link from transactions to
 documents, as well as the "#linked" tag.
 
 """
-
-import collections
-from os.path import join, dirname, normpath, basename
+from os.path import basename
+from os.path import dirname
+from os.path import join
+from os.path import normpath
 
 from beancount.core import data
 from beancount.core.compare import hash_entry
 
-DocumentError = collections.namedtuple("DocumentError", "source message entry")
+from fava.core.helpers import BeancountError
+
+
+class DocumentError(BeancountError):
+    """Document-linking related error."""
+
 
 __plugins__ = ["link_documents"]
 

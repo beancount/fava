@@ -1,24 +1,26 @@
 """Formatting numbers."""
-
 import copy
+from typing import Dict
 
-from babel.core import Locale, UnknownLocaleError
+from babel.core import Locale
+from babel.core import UnknownLocaleError
 from beancount.core.display_context import Precision
+from beancount.core.number import Decimal
 
-from fava.core.helpers import FavaModule
 from fava.core.fava_options import OptionError
+from fava.core.helpers import FavaModule
 
 
 class DecimalFormatModule(FavaModule):
     """Formatting numbers."""
 
-    def __init__(self, ledger):
+    def __init__(self, ledger) -> None:
         super().__init__(ledger)
         self.locale = None
-        self.patterns = {}
-        self.default_pattern = None
+        self.patterns: Dict[str, str] = {}
+        self.default_pattern = "{:.2f}"
 
-    def load_file(self):
+    def load_file(self) -> None:
         self.locale = None
 
         locale_option = self.ledger.fava_options["locale"]
@@ -59,7 +61,7 @@ class DecimalFormatModule(FavaModule):
                 pattern = "{:." + str(precision) + "f}"
             self.patterns[currency] = pattern
 
-    def __call__(self, value, currency=None):
+    def __call__(self, value: Decimal, currency=None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
 
         Arguments:
