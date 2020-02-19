@@ -9,7 +9,9 @@ from beancount.core.amount import A
 from beancount.core.data import Posting
 from beancount.core.data import Transaction
 
+from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
+from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
@@ -31,6 +33,7 @@ def test_get_entry_slice(example_ledger) -> None:
 
 def test_save_entry_slice(example_ledger) -> None:
     entry = example_ledger.get_entry("d4a067d229bfda57c8c984d1615da699")
+
     entry_source, sha256sum = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
@@ -102,6 +105,34 @@ def test_insert_metadata_in_file(tmp_path) -> None:
           metadata: "test1"
         """
     )
+
+
+def test_find_entry_lines() -> None:
+    file_content = dedent(
+        """\
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-02-26 note Accounts:Text "Uncle Boons"
+        2016-02-26 note Accounts:Text "Uncle Boons"
+        ; test
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+        """
+    )
+    lines = file_content.split("\n")
+    entry_lines = [
+        '2016-02-26 * "Uncle Boons" "Eating out alone"',
+        "    Liabilities:US:Chase:Slate                       -24.84 USD",
+        "    Expenses:Food:Restaurant                          24.84 USD",
+    ]
+    note_line = ['2016-02-26 note Accounts:Text "Uncle Boons"']
+    assert find_entry_lines(lines, 0) == entry_lines
+    assert find_entry_lines(lines, 7) == entry_lines
+    assert find_entry_lines(lines, 4) == note_line
+    assert find_entry_lines(lines, 5) == note_line
 
 
 def test_insert_entry_transaction(tmp_path) -> None:
@@ -292,9 +323,17 @@ def test_insert_entry_align(tmp_path) -> None:
     )
 
 
-def test_render_entries(example_ledger) -> None:
+def test_render_entries(example_ledger: FavaLedger, snapshot) -> None:
     entry1 = example_ledger.get_entry("4af0865b1371c1b5576e9ff7f7d20dc9")
     entry2 = example_ledger.get_entry("85f3ba57bf52dc1bd6c77ef3510223ae")
+    postings = [
+        Posting("Expenses:Food", A("10.00 USD"), None, None, None, None),
+    ]
+    transaction = Transaction(
+        {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
+    )
+    entries = example_ledger.file.render_entries([entry1, entry2, transaction])
+    snapshot("\n".join(entries))
 
     file_content = dedent(
         """\

@@ -1,0 +1,10 @@
+('2016-04-09 * "Uncle Boons" "" #trip-new-york-2016\n'
+ '  Liabilities:US:Chase:Slate                       -52.22 USD\n'
+ '  Expenses:Food:Restaurant                          52.22 USD\n'
+ '\n'
+ '2016-05-04 * "BANK FEES" "Monthly bank fee"\n'
+ '  Assets:US:BofA:Checking                           -4.00 USD\n'
+ '  Expenses:Financial:Fees                            4.00 USD\n'
+ '\n'
+ '2016-01-01 * "new payee" "narr"\n'
+ '  Expenses:Food                                       10.00 USD\n')

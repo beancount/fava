@@ -27,6 +27,7 @@ from beancount.core.data import Event
 from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Open
+from beancount.core.data import Meta
 from beancount.core.data import Transaction
 from beancount.core.data import TxnPosting
 from beancount.core.flags import FLAG_UNREALIZED
@@ -64,12 +65,12 @@ class AccountData:
 
     __slots__ = ("meta", "close_date")
 
-    def __init__(self):
+    def __init__(self) -> None:
         #: The date on which this account is closed (or datetime.date.max).
         self.close_date = MAXDATE
 
         #: The metadata of the Open entry of this account.
-        self.meta = {}
+        self.meta: Meta = {}
 
 
 class _AccountDict(dict):
@@ -579,7 +580,7 @@ class FavaLedger:
                 return "yellow"
         return None
 
-    def account_is_closed(self, account_name) -> bool:
+    def account_is_closed(self, account_name: str) -> bool:
         """Check if the account is closed.
 
         Args:

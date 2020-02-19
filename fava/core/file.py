@@ -186,8 +186,10 @@ class FileModule(FavaModule):
                     continue
                 try:
                     yield get_entry_slice(entry)[0] + "\n"
-                except FileNotFoundError:
-                    yield _format_entry(entry, self.ledger.fava_options)
+                except (KeyError, FileNotFoundError):
+                    yield _format_entry(
+                        entry, self.ledger.fava_options["currency-column"]
+                    )
 
 
 def incomplete_sortkey(entry) -> Tuple[datetime.date, int]:
@@ -238,18 +240,22 @@ def insert_metadata_in_file(
 
 
 def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
-    """Lines of entry starting at lineno."""
+    """Lines of entry starting at lineno.
+
+    Args:
+        lines: A list of lines.
+        lineno: The 0-based line-index to start at.
+    """
     entry_lines = [lines[lineno]]
     while True:
         lineno += 1
         try:
             line = lines[lineno]
         except IndexError:
-            break
-        if not line.strip() or re.match("[0-9a-z]", line[0]):
-            break
+            return entry_lines
+        if not line.strip() or re.match(r"\S", line[0]):
+            return entry_lines
         entry_lines.append(line)
-    return entry_lines
 
 
 def get_entry_slice(entry) -> Tuple[str, str]:
@@ -261,8 +267,6 @@ def get_entry_slice(entry) -> Tuple[str, str]:
     Returns:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
-    Raises:
-        FavaAPIException: If the file at `path` is not one of the source files.
     """
     with open(entry.meta["filename"], mode="r", encoding="utf-8") as file:
         lines = file.readlines()
