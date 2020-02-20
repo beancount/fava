@@ -3,6 +3,7 @@
 import datetime
 import io
 import re
+from typing import List, Tuple
 
 from beancount.core.data import Custom, Event
 from beancount.core import amount
@@ -15,15 +16,20 @@ class FavaError(BeancountError):
     """Generic Fava-specific error."""
 
 
+SidebarLinks = List[Tuple[str, str]]
+
+
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
-    def __init__(self, ledger):
+    def __init__(self, ledger) -> None:
         super().__init__(ledger)
-        self.sidebar_links = None
-        self.upcoming_events = None
+        #: User-chosen links to show in the sidebar.
+        self.sidebar_links: SidebarLinks = []
+        #: Upcoming events in the next few days.
+        self.upcoming_events: List[Event] = []
 
-    def load_file(self):
+    def load_file(self) -> None:
         custom_entries = self.ledger.all_entries_by_type[Custom]
         self.sidebar_links = sidebar_links(custom_entries)
 
@@ -43,7 +49,7 @@ class FavaMisc(FavaModule):
             )
 
 
-def sidebar_links(custom_entries):
+def sidebar_links(custom_entries: List[Custom]) -> List[Tuple[str, str]]:
     """Parse custom entries for links.
 
     They have the following format:
@@ -59,7 +65,7 @@ def sidebar_links(custom_entries):
     ]
 
 
-def upcoming_events(events, max_delta):
+def upcoming_events(events: List[Event], max_delta: int) -> List[Event]:
     """Parse entries for upcoming events.
 
     Args:

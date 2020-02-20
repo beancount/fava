@@ -14,7 +14,7 @@ import datetime
 import flask
 from beancount.core import compare
 from beancount.core import convert
-from beancount.core import prices
+from beancount.core.prices import get_price
 from beancount.core import realization
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
@@ -46,7 +46,7 @@ def get_market_value(pos, price_map, date=None):
 
     if value_currency:
         base_quote = (units_.currency, value_currency)
-        _, price_number = prices.get_price(price_map, base_quote, date)
+        _, price_number = get_price(price_map, base_quote, date)
         if price_number is not None:
             return Amount(units_.number * price_number, value_currency)
         return Amount(units_.number * cost_.number, value_currency)

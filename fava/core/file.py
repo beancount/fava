@@ -5,20 +5,22 @@ import datetime
 from hashlib import sha256
 import re
 import threading
+from operator import attrgetter
 from typing import Any
 from typing import Dict
 from typing import Generator
-from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Tuple
 
 from beancount.core import data, flags
-from beancount.parser.printer import format_entry
+from beancount.core.data import Entries, Directive
+from beancount.parser.printer import format_entry  # type: ignore
 
 from fava.core.helpers import FavaAPIException, FavaModule
 from fava.core.misc import align
 from fava.core.fava_options import InsertEntryOption
+from fava.core.filters import get_entry_accounts
 
 
 #: The flags to exclude when rendering entries entries.
@@ -117,7 +119,7 @@ class FileModule(FavaModule):
         """
         with self.lock:
             self.ledger.changed()
-            entry = self.ledger.get_entry(entry_hash)
+            entry: Directive = self.ledger.get_entry(entry_hash)
             key = next_key(basekey, entry.meta)
             insert_metadata_in_file(
                 entry.meta["filename"], entry.meta["lineno"], key, value
@@ -145,7 +147,7 @@ class FileModule(FavaModule):
             entry = self.ledger.get_entry(entry_hash)
             return save_entry_slice(entry, source_slice, sha256sum)
 
-    def insert_entries(self, entries) -> None:
+    def insert_entries(self, entries: Entries) -> None:
         """Insert entries.
 
         Args:
@@ -165,7 +167,7 @@ class FileModule(FavaModule):
                 )
                 self.ledger.extensions.run_hook("after_insert_entry", entry)
 
-    def render_entries(self, entries) -> Generator[str, None, None]:
+    def render_entries(self, entries: Entries) -> Generator[str, None, None]:
         """Return entries in Beancount format.
 
         Only renders :class:`.Balance` and :class:`.Transaction`.
@@ -192,7 +194,7 @@ class FileModule(FavaModule):
                     )
 
 
-def incomplete_sortkey(entry) -> Tuple[datetime.date, int]:
+def incomplete_sortkey(entry: Directive) -> Tuple[datetime.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
     return (entry.date, data.SORT_ORDER.get(type(entry), 0))
 
@@ -258,7 +260,7 @@ def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
         entry_lines.append(line)
 
 
-def get_entry_slice(entry) -> Tuple[str, str]:
+def get_entry_slice(entry: Directive) -> Tuple[str, str]:
     """Get slice of the source file for an entry.
 
     Args:
@@ -278,7 +280,9 @@ def get_entry_slice(entry) -> Tuple[str, str]:
     return entry_source, sha256sum
 
 
-def save_entry_slice(entry, source_slice: str, sha256sum: str) -> str:
+def save_entry_slice(
+    entry: Directive, source_slice: str, sha256sum: str
+) -> str:
     """Save slice of the source file for an entry.
 
     Args:
@@ -316,7 +320,7 @@ def save_entry_slice(entry, source_slice: str, sha256sum: str) -> str:
 
 
 def insert_entry(
-    entry,
+    entry: Directive,
     default_filename: str,
     insert_options: List[InsertEntryOption],
     currency_column: int,
@@ -361,7 +365,7 @@ def insert_entry(
     ]
 
 
-def _format_entry(entry, currency_column: int) -> str:
+def _format_entry(entry: Directive, currency_column: int) -> str:
     """Wrapper that strips unnecessary whitespace from format_entry."""
     meta = {
         key: entry.meta[key] for key in entry.meta if not key.startswith("_")
@@ -373,7 +377,9 @@ def _format_entry(entry, currency_column: int) -> str:
 
 
 def find_insert_position(
-    entry, insert_options: List[InsertEntryOption], default_filename: str
+    entry: Directive,
+    insert_options: List[InsertEntryOption],
+    default_filename: str,
 ) -> Tuple[str, Optional[int]]:
     """Find insert position for an entry.
 
@@ -387,19 +393,15 @@ def find_insert_position(
     """
 
     # Get the list of accounts that should be considered for the entry.
-    # For transactions, we take the reversed list of posting accounts.
-    if isinstance(entry, data.Transaction):
-        accounts: Iterable[str] = reversed([p.account for p in entry.postings])
-    else:
-        accounts = [entry.account]
+    # For transactions, we want the reversed list of posting accounts.
+    accounts = get_entry_accounts(entry)
 
     # Make no assumptions about the order of insert_options entries and instead
     # sort them ourselves (by descending dates)
-    sorted_insert_options = sorted(
-        insert_options, key=lambda x: x.date, reverse=True
-    )
+    insert_options.sort(key=attrgetter("date"), reverse=True)
+
     for account in accounts:
-        for insert_option in sorted_insert_options:
+        for insert_option in insert_options:
             # Only consider InsertOptions before the entry date.
             if insert_option.date >= entry.date:
                 continue

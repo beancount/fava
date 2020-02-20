@@ -1,6 +1,8 @@
 """Account balance trees."""
 
 import collections
+from typing import List
+import datetime
 
 from beancount.core import account, convert
 from beancount.core.data import Open
@@ -14,19 +16,19 @@ class TreeNode:
 
     __slots__ = ("name", "children", "balance", "balance_children", "has_txns")
 
-    def __init__(self, name):
-        #: str: Account name.
-        self.name = name
+    def __init__(self, name) -> None:
+        #: Account name.
+        self.name: str = name
         #: A list of :class:`.TreeNode`, its children.
-        self.children = []
-        #: :class:`.CounterInventory`: The cumulative account balance.
+        self.children: List['TreeNode'] = []
+        #: The cumulative account balance.
         self.balance_children = CounterInventory()
-        #: :class:`.CounterInventory`: The account balance.
+        #: The account balance.
         self.balance = CounterInventory()
-        #: bool: True if the account has any transactions.
+        #: Whether the account has any transactions.
         self.has_txns = False
 
-    def serialise(self, end):
+    def serialise(self, end: datetime.date):
         """Serialise the account.
 
         Args:

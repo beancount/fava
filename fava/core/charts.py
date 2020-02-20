@@ -9,7 +9,6 @@ from beancount.core.data import Transaction
 from beancount.core.number import Decimal
 from beancount.core.inventory import Inventory
 from beancount.core.position import Position
-from beancount.utils.misc_utils import filter_type
 from flask.json import JSONEncoder
 
 from fava.core.helpers import FavaAPIException
@@ -91,7 +90,7 @@ class ChartModule(FavaModule):
         for begin, end in pairwise(self.ledger.interval_ends(interval)):
             inventory = CounterInventory()
             entries = iter_entry_dates(self.ledger.entries, begin, end)
-            for entry in filter_type(entries, Transaction):
+            for entry in (e for e in entries if isinstance(e, Transaction)):
                 for posting in entry.postings:
                     if posting.account.startswith(accounts):
                         inventory.add_position(posting)

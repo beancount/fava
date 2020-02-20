@@ -8,7 +8,14 @@ parsing the options.
 import copy
 import datetime
 import re
+from typing import Any
+from typing import Dict
+from typing import Iterable
+from typing import List
 from typing import NamedTuple
+from typing import Tuple
+
+from beancount.core.data import Custom
 
 from fava.core.helpers import BeancountError
 
@@ -103,8 +110,13 @@ STR_OPTS = [
 MULTI_OPTS = ["collapse-pattern"]
 
 
+FavaOptions = Dict[str, Any]
+
+
 # pylint: disable=too-many-branches
-def parse_options(custom_entries):
+def parse_options(
+    custom_entries: List[Custom],
+) -> Tuple[FavaOptions, Iterable[BeancountError]]:
     """Parse custom entries for Fava options.
 
     The format for option entries is the following:
@@ -117,53 +129,51 @@ def parse_options(custom_entries):
     Returns:
         A tuple (options, errors) where options is a dictionary of all options
         to values, and errors contains possible parsing errors.
-
     """
 
-    options = copy.deepcopy(DEFAULTS)
+    options: FavaOptions = copy.deepcopy(DEFAULTS)
     errors = []
 
-    for entry in custom_entries:
-        if entry.type == "fava-option":
-            try:
-                key = entry.values[0].value
-                assert key in DEFAULTS.keys()
+    for entry in (e for e in custom_entries if e.type == "fava-option"):
+        try:
+            key = entry.values[0].value
+            assert key in DEFAULTS.keys()
 
-                if key == "default-file":
-                    options[key] = entry.meta["filename"]
-                elif key == "insert-entry":
-                    opt = InsertEntryOption(
-                        entry.date,
-                        re.compile(entry.values[1].value),
-                        entry.meta["filename"],
-                        entry.meta["lineno"],
-                    )
-                    options[key].append(opt)
-                else:
-                    value = entry.values[1].value
-                    assert isinstance(value, str)
-
-                processed_value = None
-                if key in STR_OPTS:
-                    processed_value = value
-                elif key in BOOL_OPTS:
-                    processed_value = value.lower() == "true"
-                elif key in INT_OPTS:
-                    processed_value = int(value)
-                elif key in LIST_OPTS:
-                    processed_value = str(value).strip().split(" ")
-
-                if processed_value is not None:
-                    if key in MULTI_OPTS:
-                        options[key].append(processed_value)
-                    else:
-                        options[key] = processed_value
-
-            except (IndexError, TypeError, AssertionError):
-                errors.append(
-                    OptionError(
-                        entry.meta, "Failed to parse fava-option entry", entry
-                    )
+            if key == "default-file":
+                options[key] = entry.meta["filename"]
+            elif key == "insert-entry":
+                opt = InsertEntryOption(
+                    entry.date,
+                    re.compile(entry.values[1].value),
+                    entry.meta["filename"],
+                    entry.meta["lineno"],
                 )
+                options[key].append(opt)
+            else:
+                value = entry.values[1].value
+                assert isinstance(value, str)
+
+            processed_value = None
+            if key in STR_OPTS:
+                processed_value = value
+            elif key in BOOL_OPTS:
+                processed_value = value.lower() == "true"
+            elif key in INT_OPTS:
+                processed_value = int(value)
+            elif key in LIST_OPTS:
+                processed_value = str(value).strip().split(" ")
+
+            if processed_value is not None:
+                if key in MULTI_OPTS:
+                    options[key].append(processed_value)
+                else:
+                    options[key] = processed_value
+
+        except (IndexError, TypeError, AssertionError):
+            errors.append(
+                OptionError(
+                    entry.meta, "Failed to parse fava-option entry", entry
+                )
+            )
 
     return options, errors

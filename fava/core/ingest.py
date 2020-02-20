@@ -10,7 +10,7 @@ from typing import List
 from typing import NamedTuple
 from typing import Optional
 
-from beancount.ingest import cache
+from beancount.ingest import cache  # type: ignore
 from beancount.ingest import extract
 from beancount.ingest import identify
 

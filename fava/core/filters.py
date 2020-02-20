@@ -1,15 +1,18 @@
 """Entry filters."""
-
 import re
-from typing import Optional
+from typing import Optional, Generator, Callable, Iterable
 
-import ply.yacc  # type: ignore 
+import ply.yacc  # type: ignore
 from beancount.core import account
-from beancount.core.data import Custom, Transaction
-from beancount.ops import summarize
+from beancount.core.data import Custom
+from beancount.core.data import Directive
+from beancount.core.data import Entries, Pad
+from beancount.core.data import Transaction
+from beancount.ops.summarize import clamp_opt  # type: ignore
 
-from fava.util.date import parse_date
 from fava.core.helpers import FilterException
+from fava.core.fava_options import FavaOptions
+from fava.util.date import parse_date
 
 
 class Token:
@@ -21,7 +24,7 @@ class Token:
 
     __slots__ = ["type", "value", "lexer"]
 
-    def __init__(self, type_, value):
+    def __init__(self, type_: str, value: str) -> None:
         self.type = type_
         self.value = value
 
@@ -69,7 +72,7 @@ class FilterSyntaxLexer:
             return token, value[1:-1]
         return token, value
 
-    def lex(self, data):
+    def lex(self, data: str) -> Generator[Token, None, None]:
         """A generator yielding all tokens in a given line.
 
         Arguments:
@@ -94,6 +97,7 @@ class FilterSyntaxLexer:
                 value = match.group()
                 pos += len(value)
                 token = match.lastgroup
+                assert token is not None, "Internal Error"
                 func = getattr(self, token)
                 ret = func(token, value)
                 if ret:
@@ -112,13 +116,14 @@ class Match:
 
     __slots__ = ["match"]
 
-    def __init__(self, search):
+    def __init__(self, search: str) -> None:
         try:
-            self.match = re.compile(search, re.IGNORECASE).match
+            match = re.compile(search, re.IGNORECASE).match
+            self.match: Callable[[str], bool] = lambda s: bool(match(s))
         except re.error:
-            self.match = lambda string: string == search
+            self.match = lambda s: s == search
 
-    def __call__(self, string):
+    def __call__(self, string: str) -> bool:
         return self.match(string)
 
 
@@ -266,12 +271,12 @@ class FilterSyntaxParser:
 class EntryFilter:
     """Filters a list of entries. """
 
-    def __init__(self, options, fava_options) -> None:
+    def __init__(self, options, fava_options: FavaOptions) -> None:
         self.options = options
         self.fava_options = fava_options
         self.value: Optional[str] = None
 
-    def set(self, value: str) -> bool:
+    def set(self, value: Optional[str]) -> bool:
         """Set the filter.
 
         Subclasses should check for validity of the value in this method.
@@ -281,13 +286,13 @@ class EntryFilter:
         self.value = value
         return True
 
-    def _include_entry(self, entry):
+    def _include_entry(self, entry: Directive):
         raise NotImplementedError
 
-    def _filter(self, entries):
+    def _filter(self, entries: Entries) -> Entries:
         return [entry for entry in entries if self._include_entry(entry)]
 
-    def apply(self, entries):
+    def apply(self, entries: Entries) -> Entries:
         """Apply filter.
 
         Args:
@@ -313,7 +318,7 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         self.begin_date = None
         self.end_date = None
 
-    def set(self, value):
+    def set(self, value: Optional[str]) -> bool:
         if value == self.value:
             return False
         self.value = value
@@ -330,8 +335,8 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
             )
         return True
 
-    def _filter(self, entries):
-        entries, _ = summarize.clamp_opt(
+    def _filter(self, entries: Entries) -> Entries:
+        entries, _ = clamp_opt(
             entries, self.begin_date, self.end_date, self.options
         )
         return entries
@@ -349,11 +354,11 @@ PARSE = ply.yacc.yacc(
 class AdvancedFilter(EntryFilter):
     """Filter by tags and links and keys."""
 
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:
         super().__init__(*args)
         self._include = None
 
-    def set(self, value):
+    def set(self, value: Optional[str]) -> bool:
         if value == self.value:
             return False
         self.value = value
@@ -372,32 +377,32 @@ class AdvancedFilter(EntryFilter):
             self._include = None
         return True
 
-    def _include_entry(self, entry):
+    def _include_entry(self, entry: Directive) -> bool:
         if self._include:
             return self._include(entry)
         return True
 
 
-def entry_account_predicate(entry, predicate):
-    """Predicate for filtering by account.
+def get_entry_accounts(entry: Directive) -> Iterable[str]:
+    """Accounts for an entry.
 
     Args:
         entry: An entry.
-        predicate: A predicate for account names.
 
     Returns:
-        True if predicate is True for any account of the entry.
+        An iterable with the entry's accounts ordered by priority: For
+        transactions the posting accounts are listed in reverse order.
     """
-
     if isinstance(entry, Transaction):
-        return any(predicate(posting.account) for posting in entry.postings)
+        return reversed([p.account for p in entry.postings])
     if isinstance(entry, Custom):
-        return any(
-            predicate(val.value)
-            for val in entry.values
-            if val.dtype == account.TYPE
-        )
-    return hasattr(entry, "account") and predicate(entry.account)
+        return [val.value for val in entry.values if val.dtype == account.TYPE]
+    if isinstance(entry, Pad):
+        return [entry.account, entry.source_account]
+    account_ = getattr(entry, "account", None)
+    if account_ is not None:
+        return [account_]
+    return []
 
 
 class AccountFilter(EntryFilter):
@@ -410,15 +415,17 @@ class AccountFilter(EntryFilter):
         super().__init__(*args)
         self.match = None
 
-    def set(self, value):
+    def set(self, value: Optional[str]):
         if value == self.value:
             return False
         self.value = value
         self.match = Match(value or "")
         return True
 
-    def _account_predicate(self, name):
-        return account.has_component(name, self.value) or self.match(name)
-
-    def _include_entry(self, entry):
-        return entry_account_predicate(entry, self._account_predicate)
+    def _include_entry(self, entry: Directive) -> bool:
+        if self.value is None:
+            return False
+        return any(
+            account.has_component(name, self.value) or self.match(name)
+            for name in get_entry_accounts(entry)
+        )

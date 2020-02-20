@@ -1,17 +1,22 @@
 """For using the Beancount shell from Fava."""
-
 import contextlib
 import io
 import readline
 import textwrap
 
 from beancount.core.data import Query
-from beancount.query import query_compile, query_execute, query_parser, shell
-from beancount.query.query import run_query
-from beancount.utils import pager
+from beancount.query import query_compile  # type: ignore
+from beancount.query import query_execute  # type: ignore
+from beancount.query import query_parser  # type: ignore
+from beancount.query import shell  # type: ignore
+from beancount.query.query import run_query  # type: ignore
+from beancount.utils import pager  # type: ignore
 
-from fava.core.helpers import FavaAPIException, FavaModule
-from fava.util.excel import to_csv, to_excel, HAVE_EXCEL
+from fava.core.helpers import FavaAPIException
+from fava.core.helpers import FavaModule
+from fava.util.excel import HAVE_EXCEL
+from fava.util.excel import to_csv
+from fava.util.excel import to_excel
 
 
 # This is to limit the size of the history file. Fava is not using readline at

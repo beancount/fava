@@ -5,7 +5,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
-    "sphinx_autodoc_typehints",
 ]
 source_suffix = ".rst"
 master_doc = "index"
