@@ -1,6 +1,7 @@
 """Entry filters."""
 
 import re
+from typing import Optional
 
 import ply.yacc
 from beancount.core import account
@@ -265,12 +266,12 @@ class FilterSyntaxParser:
 class EntryFilter:
     """Filters a list of entries. """
 
-    def __init__(self, options, fava_options):
+    def __init__(self, options, fava_options) -> None:
         self.options = options
         self.fava_options = fava_options
-        self.value = None
+        self.value: Optional[str] = None
 
-    def set(self, value):
+    def set(self, value: str) -> bool:
         """Set the filter.
 
         Subclasses should check for validity of the value in this method.
@@ -295,13 +296,12 @@ class EntryFilter:
 
         Returns:
             A list of filtered entries.
-
         """
         if self.value:
             return self._filter(entries)
         return entries
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return bool(self.value)
 
 

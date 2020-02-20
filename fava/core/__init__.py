@@ -87,6 +87,39 @@ class _AccountDict(dict):
         return self[key]
 
 
+class Filters:
+    """The possible entry filters."""
+
+    __slots__ = ("account", "filter", "time")
+
+    def __init__(self, options, fava_options) -> None:
+        self.account = AccountFilter(options, fava_options)
+        self.filter = AdvancedFilter(options, fava_options)
+        self.time = TimeFilter(options, fava_options)
+
+    def set(
+        self,
+        account: Optional[str] = None,
+        filter: Optional[str] = None,  # pylint: disable=redefined-builtin
+        time: Optional[str] = None,
+    ) -> bool:
+        """Set the filters and check if one of them changed."""
+        return any(
+            [
+                self.account.set(account),
+                self.filter.set(filter),
+                self.time.set(time),
+            ]
+        )
+
+    def apply(self, entries):
+        """Apply the filters to the entries."""
+        entries = self.account.apply(entries)
+        entries = self.filter.apply(entries)
+        entries = self.time.apply(entries)
+        return entries
+
+
 MODULES = [
     "attributes",
     "budgets",
@@ -121,7 +154,7 @@ class FavaLedger:
         "entries",
         "errors",
         "fava_options",
-        "_filters",
+        "filters",
         "_is_encrypted",
         "options",
         "price_map",
@@ -134,7 +167,6 @@ class FavaLedger:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
         self._is_encrypted = is_encrypted_file(path)
-        self._filters: Dict[str, Any] = {}
 
         #: An :class:`AttributesModule` instance.
         self.attributes = AttributesModule(self)
@@ -229,29 +261,25 @@ class FavaLedger:
         for mod in MODULES:
             getattr(self, mod).load_file()
 
-        self._filters = {
-            "account": AccountFilter(self.options, self.fava_options),
-            "filter": AdvancedFilter(self.options, self.fava_options),
-            "time": TimeFilter(self.options, self.fava_options),
-        }
+        self.filters = Filters(self.options, self.fava_options)
 
         self.filter(True)
 
     # pylint: disable=attribute-defined-outside-init
-    def filter(self, force=False, **kwargs):
+    def filter(
+        self,
+        force: bool = False,
+        account: Optional[str] = None,
+        filter: Optional[str] = None,  # pylint: disable=redefined-builtin
+        time: Optional[str] = None,
+    ) -> None:
         """Set and apply (if necessary) filters."""
-        changed = False
-        for filter_name, value in kwargs.items():
-            if self._filters[filter_name].set(value):
-                changed = True
+        changed = self.filters.set(account=account, filter=filter, time=time)
 
         if not (changed or force):
             return
 
-        self.entries = self.all_entries
-
-        for filter_class in self._filters.values():
-            self.entries = filter_class.apply(self.entries)
+        self.entries = self.filters.apply(self.all_entries)
 
         self.root_account = realization.realize(
             self.entries, self.account_types
@@ -264,15 +292,15 @@ class FavaLedger:
         if self._date_last:
             self._date_last = self._date_last + datetime.timedelta(1)
 
-        if self._filters["time"]:
-            self._date_first = self._filters["time"].begin_date
-            self._date_last = self._filters["time"].end_date
+        if self.filters.time:
+            self._date_first = self.filters.time.begin_date
+            self._date_last = self.filters.time.end_date
 
     @property
     def end_date(self):
         """The date to use for prices."""
-        if self._filters["time"]:
-            return self._filters["time"].end_date
+        if self.filters.time:
+            return self.filters.time.end_date
         return None
 
     def join_path(self, *args) -> str:
@@ -489,13 +517,13 @@ class FavaLedger:
         """List all prices."""
         all_prices = prices.get_all_prices(self.price_map, (base, quote))
 
-        if self._filters["time"]:
+        if self.filters.time:
             return [
                 (date, price)
                 for date, price in all_prices
-                if self._filters["time"].begin_date
+                if self.filters.time.begin_date
                 <= date
-                < self._filters["time"].end_date
+                < self.filters.time.end_date
             ]
         return all_prices
 
@@ -590,6 +618,6 @@ class FavaLedger:
             True if the account is closed before the end date of the current
             time filter.
         """
-        if self._filters["time"]:
+        if self.filters.time:
             return self.accounts[account_name].close_date < self._date_last
         return self.accounts[account_name].close_date is not MAXDATE

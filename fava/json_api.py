@@ -7,9 +7,9 @@ import functools
 import os
 import shutil
 from os import path
+from typing import List
 
 from flask import Blueprint
-from flask import g
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
@@ -19,6 +19,7 @@ from fava.core.helpers import FavaAPIException
 from fava.core.misc import align
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
+from fava.typing import g
 
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
@@ -88,21 +89,24 @@ def _json_api_oserror(error):
 
 
 @get_api_endpoint
-def changed():
+def changed() -> bool:
     """Check for file changes."""
     return g.ledger.changed()
 
 
 @get_api_endpoint
-def errors():
+def errors() -> int:
     """Number of errors."""
     return len(g.ledger.errors)
 
 
 @get_api_endpoint
-def payee_accounts():
+def payee_accounts() -> List[str]:
     """Rank accounts for the given payee."""
-    return g.ledger.attributes.payee_accounts(request.args.get("payee"))
+    payee = request.args.get("payee")
+    if payee is None:
+        return []
+    return g.ledger.attributes.payee_accounts(payee)
 
 
 @get_api_endpoint
@@ -133,7 +137,7 @@ def extract():
 
 
 @get_api_endpoint
-def move():
+def move() -> str:
     """Move a file."""
     if not g.ledger.options["documents"]:
         raise FavaAPIException("You need to set a documents folder.")
@@ -141,6 +145,9 @@ def move():
     account = request.args.get("account")
     new_name = request.args.get("newName")
     filename = request.args.get("filename")
+
+    if not filename:
+        raise FavaAPIException("No filename specified.")
 
     if not new_name:
         raise FavaAPIException("No new filename given.")
@@ -194,7 +201,9 @@ def format_source(request_data) -> str:
     )
 
 
-def filepath_in_document_folder(documents_folder, account, filename):
+def filepath_in_document_folder(
+    documents_folder: str, account: str, filename: str
+) -> str:
     """File path for a document in the folder for an account.
 
     Args:

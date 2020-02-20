@@ -17,22 +17,24 @@ import inspect
 import threading
 from io import BytesIO
 from pathlib import Path
+from typing import Any
+from typing import Dict
+from typing import Optional
 
 import flask
-import markdown2
+import markdown2  # type: ignore
 import werkzeug.urls
 from beancount.core.account import ACCOUNT_RE
 from beancount.core.data import Document
 from beancount.utils.text_utils import replace_numbers
 from flask import abort
 from flask import Flask
-from flask import g
 from flask import redirect
 from flask import render_template
 from flask import render_template_string
 from flask import request
 from flask import send_file
-from flask_babel import Babel
+from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
 from werkzeug.utils import secure_filename
 
@@ -44,6 +46,7 @@ from fava.core.helpers import FavaAPIException
 from fava.help import HELP_PAGES
 from fava.json_api import json_api
 from fava.serialisation import serialise
+from fava.typing import g
 from fava.util import resource_path
 from fava.util import send_file_inline
 from fava.util import setup_logging
@@ -110,7 +113,7 @@ BABEL = Babel(app)
 
 
 @BABEL.localeselector
-def get_locale():
+def get_locale() -> Optional[str]:
     """Get locale.
 
     Returns:
@@ -128,20 +131,16 @@ app.add_template_filter(serialise)
 
 
 @app.url_defaults
-def _inject_filters(endpoint, values):
+def _inject_filters(endpoint, values) -> None:
     if "bfile" not in values and app.url_map.is_endpoint_expecting(
         endpoint, "bfile"
     ):
         values["bfile"] = g.beancount_file_slug
     if endpoint in ["static", "index"]:
         return
-    if "interval" not in values:
-        values["interval"] = request.args.get("interval")
-    if "conversion" not in values:
-        values["conversion"] = request.args.get("conversion")
-    for filter_name in ["account", "filter", "time"]:
-        if filter_name not in values:
-            values[filter_name] = g.filters[filter_name]
+    for name in ["conversion", "interval", "account", "filter", "time"]:
+        if name not in values:
+            values[name] = request.args.get(name)
 
 
 @app.template_global()
@@ -180,7 +179,7 @@ def url_for_current(**kwargs):
 
 
 @app.template_global()
-def url_for_source(**kwargs):
+def url_for_source(**kwargs) -> str:
     """URL to source file (possibly link to external editor)."""
     if g.ledger.fava_options["use-external-editor"]:
         return "beancount://{}?lineno={}".format(
@@ -190,7 +189,7 @@ def url_for_source(**kwargs):
 
 
 @app.context_processor
-def template_context():
+def template_context() -> Dict[str, Any]:
     """Inject variables into the template context."""
     # pylint: disable=protected-access
     catalog = get_translations()._catalog
@@ -198,16 +197,16 @@ def template_context():
 
 
 @app.before_request
-def _perform_global_filters():
-    g.filters = {
-        name: request.args.get(name) for name in ["account", "filter", "time"]
-    }
-
+def _perform_global_filters() -> None:
     # check (and possibly reload) source file
     if request.blueprint != "json_api":
         g.ledger.changed()
 
-    g.ledger.filter(**g.filters)
+    g.ledger.filter(
+        account=request.args.get("account"),
+        filter=request.args.get("filter"),
+        time=request.args.get("time"),
+    )
 
 
 @app.after_request
@@ -227,7 +226,7 @@ def _incognito(response):
 
 
 @app.url_value_preprocessor
-def _pull_beancount_file(_, values):
+def _pull_beancount_file(_, values) -> None:
     g.beancount_file_slug = values.pop("bfile", None) if values else None
     with LOAD_FILE_LOCK:
         if not app.config.get("LEDGERS"):
@@ -247,7 +246,7 @@ def _pull_beancount_file(_, values):
 
 
 @app.errorhandler(FavaAPIException)
-def fava_api_exception(error):
+def fava_api_exception(error: FavaAPIException):
     """Handle API errors."""
     if g.partial:
         return error.message, 400

@@ -1,17 +1,14 @@
 # pylint: disable=missing-docstring
-
 import datetime
 
 import pytest
 from beancount.core import account
 
-from fava.core.filters import (
-    AccountFilter,
-    AdvancedFilter,
-    TimeFilter,
-    FilterSyntaxLexer,
-    Match,
-)
+from fava.core.filters import AccountFilter
+from fava.core.filters import AdvancedFilter
+from fava.core.filters import FilterSyntaxLexer
+from fava.core.filters import Match
+from fava.core.filters import TimeFilter
 from fava.core.helpers import FilterException
 
 LEX = FilterSyntaxLexer().lex

@@ -6,7 +6,7 @@ import errno
 import click
 from werkzeug.middleware.profiler import ProfilerMiddleware
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from cheroot import wsgi
+from cheroot.wsgi import Server
 
 from fava.application import app
 from fava.util import simple_wsgi
@@ -86,7 +86,7 @@ def main(
         )
 
     if not debug:
-        server = wsgi.Server((host, port), app)
+        server = Server((host, port), app)
         print("Running Fava on http://{}:{}".format(host, port))
         server.safe_start()
     else:

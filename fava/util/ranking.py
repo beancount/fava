@@ -1,6 +1,9 @@
 """Ranking utilities."""
-
 import math
+from typing import Dict
+from typing import List
+from typing import Optional
+import datetime
 
 ZERO = float()
 
@@ -36,14 +39,16 @@ class ExponentialDecayRanker:
 
     __slots__ = ["list", "rate", "scores"]
 
-    def __init__(self, list_=None, rate=math.log(2) * 1 / 365):
+    def __init__(
+        self, list_: Optional[List[str]] = None, rate=math.log(2) * 1 / 365
+    ):
         self.list = list_
         self.rate = rate
         # We don't need to start with float('-inf') here as only the relative
         # scores matter.
-        self.scores = dict()
+        self.scores: Dict[str, float] = dict()
 
-    def update(self, item, date):
+    def update(self, item: str, date: datetime.date) -> None:
         """Add 'like' for item.
 
         Args:
@@ -56,11 +61,11 @@ class ExponentialDecayRanker:
         lower = min(score, time * self.rate)
         self.scores[item] = higher + math.log1p(math.exp(lower - higher))
 
-    def get(self, item):
+    def get(self, item: str) -> float:
         """Get the current score for an item, or zero."""
         return self.scores.get(item, ZERO)
 
-    def sort(self):
+    def sort(self) -> List[str]:
         """Return items sorted by rank."""
         if self.list is None:
             return sorted(self.scores.keys(), key=self.get, reverse=True)

@@ -8,7 +8,7 @@ import io
 from beancount.core.number import Decimal
 
 try:
-    import pyexcel
+    import pyexcel  # type: ignore
 
     HAVE_EXCEL = True
 except ImportError:  # pragma: no cover

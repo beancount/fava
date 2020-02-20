@@ -1,5 +1,7 @@
 """Attributes for auto-completion."""
 
+from typing import List
+
 from beancount.core import getters
 from beancount.core.data import Transaction
 
@@ -10,16 +12,16 @@ from fava.util.ranking import ExponentialDecayRanker
 class AttributesModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
-    def __init__(self, ledger):
+    def __init__(self, ledger) -> None:
         super().__init__(ledger)
-        self.accounts = None
-        self.currencies = None
-        self.payees = None
-        self.links = None
-        self.tags = None
-        self.years = None
+        self.accounts: List[str] = []
+        self.currencies: List[str] = []
+        self.payees: List[str] = []
+        self.links: List[str] = []
+        self.tags: List[str] = []
+        self.years: List[str] = []
 
-    def load_file(self):
+    def load_file(self) -> None:
         all_entries = self.ledger.all_entries
         self.links = getters.get_all_links(all_entries)
         self.tags = getters.get_all_tags(all_entries)
@@ -47,7 +49,7 @@ class AttributesModule(FavaModule):
         self.currencies = currency_ranker.sort()
         self.payees = payee_ranker.sort()
 
-    def payee_accounts(self, payee):
+    def payee_accounts(self, payee: str) -> List[str]:
         """Rank accounts for the given payee."""
         account_ranker = ExponentialDecayRanker(self.accounts)
         transactions = self.ledger.all_entries_by_type[Transaction]

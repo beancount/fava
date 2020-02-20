@@ -6,17 +6,22 @@ All functions in this module will be automatically added as template filters.
 import os
 import unicodedata
 import re
+from typing import Any
+from typing import MutableMapping
+from typing import Optional
+import datetime
 
 import flask
-from flask import g
 from beancount.core import compare
 from beancount.core import convert
 from beancount.core import prices
 from beancount.core import realization
 from beancount.core.amount import Amount
+from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 from beancount.core.account import ACCOUNT_RE
 
+from fava.typing import g
 from fava.util.date import Interval
 
 
@@ -48,7 +53,9 @@ def get_market_value(pos, price_map, date=None):
     return units_
 
 
-def remove_keys(_dict, keys):
+def remove_keys(
+    _dict: MutableMapping[str, Any], keys
+) -> MutableMapping[str, Any]:
     """Remove keys from a dictionary."""
     if not _dict:
         return {}
@@ -68,7 +75,7 @@ def cost(inventory):
     return inventory.reduce(convert.get_cost)
 
 
-def cost_or_value(inventory, date=None):
+def cost_or_value(inventory, date: Optional[datetime.date] = None) -> Any:
     """Get the cost or value of an inventory."""
     if g.conversion == "at_cost":
         return inventory.reduce(convert.get_cost)
@@ -83,7 +90,9 @@ def cost_or_value(inventory, date=None):
     return inventory.reduce(convert.get_cost)
 
 
-def format_currency(value, currency=None, show_if_zero=False):
+def format_currency(
+    value: Decimal, currency: Optional[str] = None, show_if_zero: bool = False
+) -> str:
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ""
@@ -92,7 +101,7 @@ def format_currency(value, currency=None, show_if_zero=False):
     return g.ledger.format_decimal(value, currency)
 
 
-def format_amount(amount):
+def format_amount(amount: Amount) -> str:
     """Format an amount to string using the DisplayContext."""
     if amount is None:
         return ""
@@ -102,7 +111,7 @@ def format_amount(amount):
     return "{} {}".format(format_currency(number, currency, True), currency)
 
 
-def format_date(date):
+def format_date(date: datetime.date) -> str:
     """Format a date according to the current interval."""
     if g.interval is Interval.YEAR:
         return date.strftime("%Y")
@@ -117,7 +126,7 @@ def format_date(date):
     return ""
 
 
-def hash_entry(entry):
+def hash_entry(entry) -> str:
     """Hash an entry."""
     return compare.hash_entry(entry)
 
@@ -142,7 +151,7 @@ def flag_to_type(flag):
     return FLAGS_TO_TYPES.get(flag, "other")
 
 
-def should_show(account):
+def should_show(account) -> bool:
     """Determine whether the account should be shown."""
     if not account.balance_children.is_empty() or any(
         should_show(a) for a in account.children
@@ -167,12 +176,12 @@ def should_show(account):
     return True
 
 
-def basename(file_path):
+def basename(file_path: str) -> str:
     """Return the basename of a filepath."""
     return unicodedata.normalize("NFC", os.path.basename(file_path))
 
 
-def format_errormsg(message):
+def format_errormsg(message: str) -> str:
     """Match account names in error messages and insert HTML links for them."""
     match = re.search(ACCOUNT_RE, message)
     if not match:
@@ -186,7 +195,7 @@ def format_errormsg(message):
     )
 
 
-def collapse_account(account_name):
+def collapse_account(account_name: str) -> bool:
     """Return true if account should be collapsed."""
     collapse_patterns = g.ledger.fava_options["collapse-pattern"]
     for pattern in collapse_patterns:

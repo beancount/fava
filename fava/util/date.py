@@ -10,7 +10,7 @@ import re
 import datetime
 from typing import Optional, Iterator, Tuple
 
-from flask_babel import gettext
+from flask_babel import gettext  # type: ignore
 
 IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*\d{4})(.*)")
 
@@ -59,7 +59,7 @@ class Interval(enum.Enum):
         }.get(self)
 
     @staticmethod
-    def get(string: str) -> enum.Enum:
+    def get(string: str) -> "Interval":
         """Return the enum member for a string."""
         try:
             return Interval[string.upper()]
