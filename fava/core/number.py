@@ -2,7 +2,7 @@
 import copy
 from typing import Dict
 
-from babel.core import Locale
+from babel.core import Locale  # type: ignore 
 from babel.core import UnknownLocaleError
 from beancount.core.display_context import Precision
 from beancount.core.number import Decimal

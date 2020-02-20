@@ -146,6 +146,9 @@ def move() -> str:
     new_name = request.args.get("newName")
     filename = request.args.get("filename")
 
+    if not account:
+        raise FavaAPIException("No account specified.")
+
     if not filename:
         raise FavaAPIException("No filename specified.")
 

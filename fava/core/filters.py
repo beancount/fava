@@ -3,7 +3,7 @@
 import re
 from typing import Optional
 
-import ply.yacc
+import ply.yacc  # type: ignore 
 from beancount.core import account
 from beancount.core.data import Custom, Transaction
 from beancount.ops import summarize

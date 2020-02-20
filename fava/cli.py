@@ -6,7 +6,7 @@ import errno
 import click
 from werkzeug.middleware.profiler import ProfilerMiddleware
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-from cheroot.wsgi import Server
+from cheroot.wsgi import Server  # type: ignore
 
 from fava.application import app
 from fava.util import simple_wsgi
