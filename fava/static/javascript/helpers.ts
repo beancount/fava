@@ -154,7 +154,7 @@ export async function fetchAPI(
   endpoint: string,
   params?: Record<string, string>
 ): Promise<unknown> {
-  const url = urlFor(`api/${endpoint}`, params);
+  const url = urlFor(`api/${endpoint}/`, params);
   const responseData = await fetch(url);
   const json: unknown = await handleJSON(responseData);
   return validateAPIResponse(json).data;
