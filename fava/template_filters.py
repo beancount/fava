@@ -2,24 +2,23 @@
 
 All functions in this module will be automatically added as template filters.
 """
-
+import datetime
 import os
-import unicodedata
 import re
+import unicodedata
 from typing import Any
 from typing import MutableMapping
 from typing import Optional
-import datetime
 
 import flask
 from beancount.core import compare
 from beancount.core import convert
-from beancount.core.prices import get_price
 from beancount.core import realization
+from beancount.core.account import ACCOUNT_RE
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
-from beancount.core.account import ACCOUNT_RE
+from beancount.core.prices import get_price
 
 from fava.typing import g
 from fava.util.date import Interval

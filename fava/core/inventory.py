@@ -1,5 +1,8 @@
 """Alternative implementation of Beancount's Inventory."""
-from typing import Dict, Tuple, Optional
+from typing import Dict
+from typing import Optional
+from typing import Tuple
+
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO

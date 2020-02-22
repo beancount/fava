@@ -1,9 +1,8 @@
 """Writing query results to CSV and spreadsheet documents."""
-
 import csv
-from collections import OrderedDict
 import datetime
 import io
+from collections import OrderedDict
 
 from beancount.core.number import Decimal
 

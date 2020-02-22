@@ -9,6 +9,7 @@ This is not intended to work well enough for full roundtrips yet.
 """
 import functools
 import re
+
 from beancount.core import data
 from beancount.core import position
 from beancount.core.amount import Amount

@@ -1,16 +1,15 @@
 """The command-line interface for Fava."""
-
-import os
 import errno
+import os
 
 import click
-from werkzeug.middleware.profiler import ProfilerMiddleware
-from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from cheroot.wsgi import Server  # type: ignore
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
+from werkzeug.middleware.profiler import ProfilerMiddleware
 
+from fava import __version__
 from fava.application import app
 from fava.util import simple_wsgi
-from fava import __version__
 
 
 # pylint: disable=too-many-arguments

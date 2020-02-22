@@ -4,7 +4,6 @@ This mainly serves as an example how Fava's extension systems, which only
 really does hooks at the moment, works.
 """
 # pylint: disable=missing-docstring
-
 import os
 import subprocess
 

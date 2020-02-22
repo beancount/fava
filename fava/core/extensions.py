@@ -1,17 +1,16 @@
 """Fava extensions"""
-
-import os
 import inspect
+import os
 from typing import Dict
-from typing import Type
 from typing import List
 from typing import Tuple
+from typing import Type
 
 from beancount.core.data import Custom
 
 from fava.core.helpers import FavaModule
-from fava.ext import find_extensions
 from fava.ext import FavaExtensionBase
+from fava.ext import find_extensions
 
 
 class ExtensionModule(FavaModule):

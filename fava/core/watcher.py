@@ -1,5 +1,4 @@
 """A simple file and folder watcher."""
-
 import os
 from typing import Iterable
 from typing import List

@@ -1,17 +1,21 @@
 """Entry filters."""
 import re
-from typing import Optional, Generator, Callable, Iterable
+from typing import Callable
+from typing import Generator
+from typing import Iterable
+from typing import Optional
 
 import ply.yacc  # type: ignore
 from beancount.core import account
 from beancount.core.data import Custom
 from beancount.core.data import Directive
-from beancount.core.data import Entries, Pad
+from beancount.core.data import Entries
+from beancount.core.data import Pad
 from beancount.core.data import Transaction
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
-from fava.core.helpers import FilterException
 from fava.core.fava_options import FavaOptions
+from fava.core.helpers import FilterException
 from fava.util.date import parse_date
 
 

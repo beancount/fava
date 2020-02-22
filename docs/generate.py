@@ -2,12 +2,12 @@
 
 sphinx-apidoc is not customizeable enough to do this.
 """
-
 import os
-from os import path
 import pkgutil
+from os import path
 
 import beancount
+
 import fava
 
 MODULES = list(

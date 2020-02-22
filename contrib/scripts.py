@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Various utilities."""
-
 import json
 from os import environ
 from pathlib import Path

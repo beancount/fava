@@ -1,9 +1,8 @@
 """Fava's extension system."""
-
+import ast
 import importlib
 import inspect
 import sys
-import ast
 from typing import List
 from typing import Optional
 from typing import Tuple

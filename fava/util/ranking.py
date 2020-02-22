@@ -1,9 +1,9 @@
 """Ranking utilities."""
+import datetime
 import math
 from typing import Dict
 from typing import List
 from typing import Optional
-import datetime
 
 ZERO = float()
 

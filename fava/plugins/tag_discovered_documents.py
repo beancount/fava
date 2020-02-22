@@ -3,7 +3,6 @@
 It looks through all Document entries that were added by beancount
 automatically through file discovery and adds the tag "#discovered".
 """
-
 from beancount.core import data
 
 __plugins__ = ["tag_discovered_documents"]

@@ -18,8 +18,8 @@ from beancount.core import getters
 from beancount.core import interpolate  # type: ignore
 from beancount.core import prices
 from beancount.core import realization
-from beancount.core.account_types import get_account_sign
 from beancount.core.account_types import AccountTypes
+from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
@@ -30,31 +30,30 @@ from beancount.core.data import Entries
 from beancount.core.data import Event
 from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
-from beancount.core.data import Open
 from beancount.core.data import Meta
+from beancount.core.data import Open
 from beancount.core.data import Posting
 from beancount.core.data import Transaction
 from beancount.core.data import TxnPosting
-from beancount.core.inventory import Inventory
 from beancount.core.flags import FLAG_UNREALIZED
+from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
-
 
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.extensions import ExtensionModule
-from fava.core.fava_options import parse_options
 from fava.core.fava_options import FavaOptions
+from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
 from fava.core.file import get_entry_slice
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import TimeFilter
-from fava.core.helpers import FavaAPIException
 from fava.core.helpers import BeancountError
+from fava.core.helpers import FavaAPIException
 from fava.core.ingest import IngestModule
 from fava.core.misc import FavaMisc
 from fava.core.number import DecimalFormatModule

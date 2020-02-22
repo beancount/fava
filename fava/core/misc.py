@@ -1,15 +1,16 @@
 """Some miscellaneous reports."""
-
 import datetime
 import io
 import re
-from typing import List, Tuple
+from typing import List
+from typing import Tuple
 
-from beancount.core.data import Custom, Event
 from beancount.core import amount
+from beancount.core.data import Custom
+from beancount.core.data import Event
 
-from fava.core.helpers import FavaModule
 from fava.core.helpers import BeancountError
+from fava.core.helpers import FavaModule
 
 
 class FavaError(BeancountError):

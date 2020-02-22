@@ -6,8 +6,8 @@ from beancount.core import realization
 from beancount.core.amount import Amount
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Transaction
-from beancount.core.number import Decimal
 from beancount.core.inventory import Inventory
+from beancount.core.number import Decimal
 from beancount.core.position import Position
 from flask.json import JSONEncoder
 

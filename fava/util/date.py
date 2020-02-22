@@ -4,11 +4,12 @@ Note:
     Date ranges are always tuples (start, end) from the (inclusive) start date
     to the (exclusive) end date.
 """
-
+import datetime
 import enum
 import re
-import datetime
-from typing import Optional, Iterator, Tuple
+from typing import Iterator
+from typing import Optional
+from typing import Tuple
 
 from flask_babel import gettext  # type: ignore
 

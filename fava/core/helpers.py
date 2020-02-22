@@ -1,5 +1,4 @@
 """Exceptions and module base class."""
-
 from typing import Any
 from typing import NamedTuple
 

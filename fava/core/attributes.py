@@ -1,5 +1,4 @@
 """Attributes for auto-completion."""
-
 from typing import List
 
 from beancount.core import getters

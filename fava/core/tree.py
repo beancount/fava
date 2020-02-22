@@ -1,10 +1,10 @@
 """Account balance trees."""
-
 import collections
-from typing import List
 import datetime
+from typing import List
 
-from beancount.core import account, convert
+from beancount.core import account
+from beancount.core import convert
 from beancount.core.data import Open
 
 from fava.core.inventory import CounterInventory

@@ -1,10 +1,9 @@
 """Reading/writing Beancount files."""
-
 import codecs
 import datetime
-from hashlib import sha256
 import re
 import threading
+from hashlib import sha256
 from operator import attrgetter
 from typing import Any
 from typing import Dict
@@ -13,14 +12,17 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from beancount.core import data, flags
-from beancount.core.data import Entries, Directive
+from beancount.core import data
+from beancount.core import flags
+from beancount.core.data import Directive
+from beancount.core.data import Entries
 from beancount.parser.printer import format_entry  # type: ignore
 
-from fava.core.helpers import FavaAPIException, FavaModule
-from fava.core.misc import align
 from fava.core.fava_options import InsertEntryOption
 from fava.core.filters import get_entry_accounts
+from fava.core.helpers import FavaAPIException
+from fava.core.helpers import FavaModule
+from fava.core.misc import align
 
 
 #: The flags to exclude when rendering entries entries.
