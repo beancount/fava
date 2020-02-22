@@ -20,7 +20,7 @@ import { addTooltip } from "./tooltip";
 
 interface AccountHierarchyDatum {
   account: string;
-  balance: Record<string, number>;
+  balance: Record<string, number | undefined>;
   dummy?: boolean;
 }
 export interface AccountHierarchy extends AccountHierarchyDatum {
@@ -376,7 +376,7 @@ export class HierarchyContainer extends BaseChart {
       const currentChart = new TreeMapChart(this.canvas)
         .setWidth(this.width)
         .set("tooltipText", d => {
-          const balance = d.data.balance[this.currency];
+          const balance = d.data.balance[this.currency] || 0;
           return `${formatCurrency(balance)} ${
             this.currency
           } (${formatPercentage(balance / totalBalance)})<em>${

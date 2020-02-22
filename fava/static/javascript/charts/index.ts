@@ -189,7 +189,7 @@ const parsers: Record<
 
     operatingCurrenciesWithConversion.forEach(currency => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-        .sum(d => d.balance[currency] * modifier)
+        .sum(d => (d.balance[currency] || 0) * modifier)
         .sort((a, b) => (b.value || 0) - (a.value || 0));
       if (currencyHierarchy.value) {
         data[currency] = currencyHierarchy;
@@ -279,7 +279,7 @@ export function parseQueryChart(
     const chartData: Record<string, AccountHierarchyNode> = {};
     operatingCurrenciesWithConversion.forEach(currency => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-        .sum(d => d.balance[currency])
+        .sum(d => d.balance[currency] || 0)
         .sort((a, b) => (b.value || 0) - (a.value || 0));
       if (currencyHierarchy.value !== undefined) {
         chartData[currency] = currencyHierarchy;
