@@ -63,19 +63,6 @@ def json_response(func):
     return _wrapper
 
 
-def json_request(func):
-    """Check existence and load the JSON payload of the request."""
-
-    @functools.wraps(func)
-    def _wrapper():
-        request_data = request.get_json()
-        if request_data is None:
-            raise FavaAPIException("Invalid JSON request.")
-        return func(request_data)
-
-    return _wrapper
-
-
 @json_api.errorhandler(FavaAPIException)
 @json_response
 def _json_api_exception(error):
