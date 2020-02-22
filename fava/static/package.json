@@ -103,8 +103,8 @@
     "@types/d3-time-format": "^2.1.1",
     "@types/d3-transition": "^1.1.6",
     "@types/mousetrap": "^1.6.3",
-    "@typescript-eslint/eslint-plugin": "^2.19.2",
-    "@typescript-eslint/parser": "^2.19.2",
+    "@typescript-eslint/eslint-plugin": "^2.20.0",
+    "@typescript-eslint/parser": "^2.20.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",
@@ -122,14 +122,14 @@
     "stylelint-config-recess-order": "^2.0.3",
     "stylelint-config-standard": "^20.0.0",
     "svelte-type-checker": "^0.1.4",
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.2"
   },
   "dependencies": {
     "@openfonts/fira-mono_all": "^1.44.0",
     "@openfonts/fira-sans_all": "^1.44.0",
     "@openfonts/source-code-pro_all": "^1.44.0",
     "@openfonts/source-serif-pro_latin": "^1.44.0",
-    "codemirror": "^5.51.0",
+    "codemirror": "^5.52.0",
     "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
     "d3-color": "^1.4.0",
