@@ -4,27 +4,28 @@ import datetime
 import enum
 from typing import Any
 from typing import Dict
+from typing import FrozenSet
 from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Set
 from typing import Tuple
+from typing import Type
 from typing import Union
 
-from beancount.core.account import has_component as has_component
-from beancount.core.amount import Amount as Amount
-from beancount.core.number import D as D
-from beancount.core.number import Decimal as Decimal
-from beancount.core.position import Cost as Cost
-from beancount.core.position import CostSpec as CostSpec
-from beancount.utils.bisect_key import (
-    bisect_left_with_key as bisect_left_with_key,
-)
+from beancount.core.amount import Amount
+from beancount.core.number import Decimal
+from beancount.core.number import MISSING
+from beancount.core.position import Cost
+from beancount.core.position import CostSpec
 
 Account = str
 Currency = str
 Flag = str
 Meta = Dict[str, Any]
+Tags = Union[Set[str], FrozenSet[str]]
+Links = Tags
+
 EMPTY_SET: Any
 
 class Booking(enum.Enum):
@@ -34,26 +35,32 @@ class Booking(enum.Enum):
     FIFO: str = ...
     LIFO: str = ...
 
-class DirectiveBase(NamedTuple):
+class Close(NamedTuple):
     meta: Meta
     date: datetime.date
-
-class Close(DirectiveBase):
     account: Account
 
-class Commodity(DirectiveBase):
+class Commodity(NamedTuple):
+    meta: Meta
+    date: datetime.date
     currency: Currency
 
-class Open(DirectiveBase):
+class Open(NamedTuple):
+    meta: Meta
+    date: datetime.date
     account: Account
     currencies: List[Currency]
     booking: Booking
 
-class Pad(DirectiveBase):
+class Pad(NamedTuple):
+    meta: Meta
+    date: datetime.date
     account: Account
     source_account: Account
 
-class Balance(DirectiveBase):
+class Balance(NamedTuple):
+    meta: Meta
+    date: datetime.date
     account: Account
     amount: Amount
     tolerance: Optional[Decimal]
@@ -61,47 +68,61 @@ class Balance(DirectiveBase):
 
 class Posting(NamedTuple):
     account: Account
-    units: Amount
+    units: Union[Amount, Type[MISSING]]
     cost: Optional[Union[Cost, CostSpec]]
     price: Optional[Amount]
     flag: Optional[Flag]
     meta: Optional[Meta]
 
-class Transaction(DirectiveBase):
+class Transaction(NamedTuple):
+    meta: Meta
+    date: datetime.date
     flag: Flag
     payee: Optional[str]
     narration: str
-    tags: Set
-    links: Set
+    tags: Tags
+    links: Links
     postings: List[Posting]
 
 class TxnPosting(NamedTuple):
     txn: Transaction
     posting: Posting
 
-class Note(DirectiveBase):
+class Note(NamedTuple):
+    meta: Meta
+    date: datetime.date
     account: Account
     comment: str
 
-class Event(DirectiveBase):
+class Event(NamedTuple):
+    meta: Meta
+    date: datetime.date
     type: str
     description: str
 
-class Query(DirectiveBase):
+class Query(NamedTuple):
+    meta: Meta
+    date: datetime.date
     name: str
     query_string: str
 
-class Price(DirectiveBase):
+class Price(NamedTuple):
+    meta: Meta
+    date: datetime.date
     currency: Currency
     amount: Amount
 
-class Document(DirectiveBase):
+class Document(NamedTuple):
+    meta: Meta
+    date: datetime.date
     account: Account
     filename: str
-    tags: Optional[Set]
-    links: Optional[Set]
+    tags: Optional[Tags]
+    links: Optional[Links]
 
-class Custom(DirectiveBase):
+class Custom(NamedTuple):
+    meta: Meta
+    date: datetime.date
     type: str
     values: List
 
