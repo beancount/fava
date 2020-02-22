@@ -1,6 +1,9 @@
 """Handlers for all node types returned by the tree-sitter parser."""
 # pylint: disable=unused-argument,redefined-builtin
 import datetime
+from typing import Optional
+from typing import Tuple, Union, Type
+
 from beancount.core.account import TYPE
 from beancount.core.amount import Amount
 from beancount.core.data import Balance
@@ -9,8 +12,8 @@ from beancount.core.data import Close
 from beancount.core.data import Commodity
 from beancount.core.data import Custom
 from beancount.core.data import Document
-from beancount.core.data import Event
 from beancount.core.data import EMPTY_SET
+from beancount.core.data import Event
 from beancount.core.data import Note
 from beancount.core.data import Open
 from beancount.core.data import Pad
@@ -23,27 +26,44 @@ from beancount.core.number import MISSING
 from beancount.core.number import ZERO
 from beancount.core.position import CostSpec
 from beancount.parser.grammar import ValueType
+from tree_sitter import Node
 
 
-def option(state, node):
+class IncludeFound(Exception):
+    """Signal an include directive."""
+
+    __slots__ = ("filename",)
+
+    def __init__(self, filename: str) -> None:
+        super().__init__()
+        self.filename = filename
+
+
+def include(state, node: Node) -> None:
+    """Handle a include directive node."""
+    filename = state.handle_node(node.children[1])
+    raise IncludeFound(filename)
+
+
+def option(state, node: Node) -> None:
     """Handle an option directive."""
     state.handle_option(node, state.get(node, "key"), state.get(node, "value"))
 
 
-def plugin(state, node):
+def plugin(state, node: Node) -> None:
     """Handle a plugin directive node."""
     state.options["plugin"].append(
         (state.get(node, "name"), state.get(node, "config"))
     )
 
 
-def pushtag(state, node):
+def pushtag(state, node: Node) -> None:
     """Handle a pushtag directive node."""
     tag_ = state.get(node, "tag")
     state.tags.add(tag_)
 
 
-def poptag(state, node):
+def poptag(state, node: Node) -> None:
     """Handle a pushtag directive node."""
     tag_ = state.get(node, "tag")
     try:
@@ -52,13 +72,13 @@ def poptag(state, node):
         state.error(node, "Attempting to pop absent tag: '{}'".format(tag_))
 
 
-def pushmeta(state, node):
+def pushmeta(state, node: Node) -> None:
     """Handle a pushmeta directive node."""
     key_, value = state.get(node, "key_value")
     state.meta[key_].append(value)
 
 
-def popmeta(state, node):
+def popmeta(state, node: Node) -> None:
     """Handle a popmeta directive node."""
     key_: str = state.get(node, "key")
     try:
@@ -74,7 +94,7 @@ def popmeta(state, node):
         )
 
 
-def document(state, node):
+def document(state, node: Node):
     """Handle a document directive."""
     tags, links = state.get(node, "tags_and_links") or (set(), EMPTY_SET)
     if state.tags:
@@ -89,7 +109,7 @@ def document(state, node):
     )
 
 
-def commodity(state, node):
+def commodity(state, node: Node):
     """Handle a commodity entry."""
     return Commodity(
         state.metadata(node),
@@ -98,7 +118,7 @@ def commodity(state, node):
     )
 
 
-def event(state, node):
+def event(state, node: Node):
     """Handle an event entry."""
     return Event(
         state.metadata(node),
@@ -108,7 +128,7 @@ def event(state, node):
     )
 
 
-def close(state, node):
+def close(state, node: Node):
     """Handle a close entry."""
     return Close(
         state.metadata(node),
@@ -117,9 +137,10 @@ def close(state, node):
     )
 
 
-def balance(state, node):
+def balance(state, node: Node):
     """Handle a balance entry."""
     amount_with_tolerance = state.get(node, "amount")
+    amo: Amount
     if isinstance(amount_with_tolerance, Amount):
         amo = amount_with_tolerance
         tolerance = None
@@ -129,13 +150,13 @@ def balance(state, node):
         state.metadata(node),
         state.get(node, "date"),
         state.get(node, "account"),
-        amo,
+        amo,  # type: ignore
         tolerance,
         None,
     )
 
 
-def open(state, node):
+def open(state, node: Node):
     """Handle an open entry."""
     booking = state.get(node, "booking")
     if booking is not None:
@@ -152,7 +173,7 @@ def open(state, node):
     )
 
 
-def pad(state, node):
+def pad(state, node: Node):
     """Handle a pad entry."""
     return Pad(
         state.metadata(node),
@@ -162,7 +183,7 @@ def pad(state, node):
     )
 
 
-def custom(state, node):
+def custom(state, node: Node):
     """Handle a custom entry."""
     custom_values = []
     for child in node.children[3:]:
@@ -177,7 +198,7 @@ def custom(state, node):
     )
 
 
-def note(state, node):
+def note(state, node: Node):
     """Handle a Note entry.
 
     A note attaches some comment to an account on a given day."""
@@ -189,7 +210,7 @@ def note(state, node):
     )
 
 
-def price(state, node):
+def price(state, node: Node):
     """Handle a price entry."""
     return Price(
         state.metadata(node),
@@ -199,7 +220,7 @@ def price(state, node):
     )
 
 
-def query(state, node):
+def query(state, node: Node):
     """Handle a query entry."""
     return Query(
         state.metadata(node),
@@ -209,24 +230,27 @@ def query(state, node):
     )
 
 
-def transaction(state, node):
+def transaction(state, node: Node):
     """Handle a Transaction entry."""
     tags, links = state.get(node, "tags_and_links") or (set(), EMPTY_SET)
     if state.tags:
         tags.update(state.tags)
+    strings: Tuple[Optional[str], str] = (
+        state.get(node, "txn_strings") or (None, "")
+    )
 
     return Transaction(
         state.metadata(node),
         state.get(node, "date"),
         state.get(node, "flag"),
-        *(state.get(node, "txn_strings") or (None, "")),
+        *strings,
         frozenset(tags) if tags else EMPTY_SET,
         frozenset(links) if links else EMPTY_SET,
         state.get(node, "postings"),
     )
 
 
-def txn_strings(state, node):
+def txn_strings(state, node: Node):
     """Handle transaction strings:
     payee and narration or just narration."""
     children = tuple(map(state.handle_node, node.children))
@@ -235,12 +259,12 @@ def txn_strings(state, node):
     return children
 
 
-def postings(state, node):
+def postings(state, node: Node):
     """Handle a list of postings."""
     return list(map(state.handle_node, node.children))
 
 
-def price_annotation(state, node):
+def price_annotation(state, node: Node):
     """Handle a price annotation."""
     if len(node.children) > 1:
         istotal = node.children[0].type == "@@"
@@ -248,7 +272,7 @@ def price_annotation(state, node):
     return MISSING
 
 
-def cost_spec(state, node):
+def cost_spec(state, node: Node):
     """Handle a cost spec."""
     # pylint: disable=too-many-branches
     istotal = node.children[0].type != "{"
@@ -284,6 +308,7 @@ def cost_spec(state, node):
             else:
                 state.error(comp, "Duplicate label.")
 
+    number_per: Union[Decimal, Type[MISSING]]
     if compound_cost is None:
         number_per, number_total, currency_ = MISSING, None, MISSING
     else:
@@ -304,17 +329,17 @@ def cost_spec(state, node):
     return CostSpec(number_per, number_total, currency_, date_, label, merge)
 
 
-def cost_comp_list(state, node):
+def cost_comp_list(state, node: Node):
     """Handle a list of cost spec component."""
     return list(map(state.handle_node, node.children))
 
 
-def cost_comp(state, node):
+def cost_comp(state, node: Node):
     """Handle a cost spec component."""
     return node.children[0]
 
 
-def compound_amount(state, node):
+def compound_amount(state, node: Node):
     """Handle a compound amount."""
     number_per = state.get(node, "number_per")
     number_total = state.get(node, "number_total")
@@ -328,7 +353,7 @@ def compound_amount(state, node):
     )
 
 
-def posting(state, node):
+def posting(state, node: Node):
     """Handle a single posting."""
     units = state.get(node, "amount")
     price_ = state.get(node, "price_annotation")
@@ -356,7 +381,7 @@ def posting(state, node):
     )
 
 
-def metadata(state, node):
+def metadata(state, node: Node):
     """Handle metadata."""
     meta = {}
     for child in node.children:
@@ -365,7 +390,7 @@ def metadata(state, node):
     return meta
 
 
-def currency_list(state, node):
+def currency_list(state, node: Node):
     """Handle a currency list."""
     currencies = []
     for child in node.children:
@@ -374,7 +399,7 @@ def currency_list(state, node):
     return currencies
 
 
-def key_value(state, node):
+def key_value(state, node: Node):
     """Handle a key/value line."""
     try:
         return (
@@ -385,7 +410,7 @@ def key_value(state, node):
         return (state.handle_node(node.children[0]), None)
 
 
-def tags_and_links(state, node):
+def tags_and_links(state, node: Node):
     """Tags and links."""
     tags, links = set(), set()
     for child in node.children:
@@ -397,7 +422,7 @@ def tags_and_links(state, node):
     return tags, links
 
 
-def unary_num_expr(state, node):
+def unary_num_expr(state, node: Node):
     """Handle a unary numerical expression."""
     operator = node.children[0].type
     num = state.handle_node(node.children[1])
@@ -406,7 +431,7 @@ def unary_num_expr(state, node):
     return num
 
 
-def binary_num_expr(state, node):
+def binary_num_expr(state, node: Node):
     """Handle a binary numerical expression."""
     operator = node.children[1].type
     left = state.handle_node(node.children[0])
@@ -421,7 +446,7 @@ def binary_num_expr(state, node):
     return left / right
 
 
-def incomplete_amount(state, node):
+def incomplete_amount(state, node: Node):
     """An amount, where one of number and currency might be missing."""
     num, cur = MISSING, MISSING
     for child in node.children:
@@ -431,13 +456,13 @@ def incomplete_amount(state, node):
         else:
             num = state.handle_node(child)
     state.dcupdate(num, cur)
-    return Amount(num, cur)
+    return Amount(num, cur)  # type: ignore
 
 
 amount = incomplete_amount  # pylint: disable=invalid-name
 
 
-def date(state, node):
+def date(state, node: Node):
     """Handle a date token."""
     contents = state.contents
     year = contents[node.start_byte : node.start_byte + 4]
@@ -446,12 +471,12 @@ def date(state, node):
     return datetime.date(int(year), int(month), int(day))
 
 
-def key(state, node):
+def key(state, node: Node):
     """Handle a key token."""
     return state.contents[node.start_byte : node.end_byte - 1].decode()
 
 
-def link(state, node):
+def link(state, node: Node):
     """Handle a link token."""
     return state.contents[node.start_byte + 1 : node.end_byte].decode()
 
@@ -459,29 +484,29 @@ def link(state, node):
 tag = link  # pylint: disable=invalid-name
 
 
-def number(state, node):
+def number(state, node: Node):
     """Handle a number token."""
     return Decimal(state.contents[node.start_byte : node.end_byte].decode())
 
 
-def string(state, node):
+def string(state, node: Node):
     """Handle a string token."""
     return state.contents[node.start_byte + 1 : node.end_byte - 1].decode()
 
 
-def currency(state, node):
+def currency(state, node: Node):
     """Handle a currency token."""
     name = state.contents[node.start_byte : node.end_byte].decode()
     state.options["commodities"].add(name)
     return name
 
 
-def flag(state, node):
+def flag(state, node: Node):
     """Handle a flag token."""
     return state.contents[node.start_byte : node.end_byte].decode()
 
 
-def bool(state, node):
+def bool(state, node: Node):
     """Handle a boolean token."""
     return state.contents[node.start_byte : node.start_byte + 1] == b"T"
 

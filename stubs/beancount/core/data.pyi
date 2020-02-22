@@ -26,7 +26,7 @@ Meta = Dict[str, Any]
 Tags = Union[Set[str], FrozenSet[str]]
 Links = Tags
 
-EMPTY_SET: Any
+EMPTY_SET: Set[str]
 
 class Booking(enum.Enum):
     STRICT: str = ...
@@ -126,7 +126,6 @@ class Custom(NamedTuple):
     type: str
     values: List
 
-# ALL_DIRECTIVES: Any
 Directive = Union[
     Open,
     Close,
@@ -141,6 +140,7 @@ Directive = Union[
     Document,
     Custom,
 ]
+ALL_DIRECTIVES: Tuple[Directive]
 Entries = List[Directive]
 
 def new_metadata(filename: Any, lineno: Any, kvlist: Optional[Any] = ...): ...

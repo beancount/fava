@@ -1,0 +1,9 @@
+option "title" "Include Example"
+option "operating_currency" "EUR"
+plugin "beancount.plugins.auto_accounts"
+
+include "prices/*.beancount"
+
+2012-12-12 * "Payee" "Narration"
+    Expenses:Food                    10.00 EUR
+    Assets:Account1                 -10.00 EUR
