@@ -1,11 +1,15 @@
 """Alternative implementation of Beancount's Inventory."""
-
+from typing import Dict, Tuple, Optional
 from beancount.core.amount import Amount
+from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 from beancount.core.position import Position
 
 
-class CounterInventory(dict):
+InventoryKey = Tuple[str, Optional[str]]
+
+
+class CounterInventory(Dict[InventoryKey, Decimal]):
     """A lightweight inventory.
 
     This is intended as a faster alternative to Beancount's Inventory class.
@@ -15,11 +19,14 @@ class CounterInventory(dict):
     The keys should be tuples ``(currency, cost)``.
     """
 
-    def is_empty(self):
+    # False positive due to use of the typing.Dict base instead of dict
+    # pylint: disable=no-member,unsupported-assignment-operation
+
+    def is_empty(self) -> bool:
         """Check if the inventory is empty."""
         return not bool(self)
 
-    def add(self, key, number):
+    def add(self, key: InventoryKey, number: Decimal) -> None:
         """Add a number to key."""
         new_num = number + self.get(key, ZERO)
         if new_num == ZERO:
@@ -27,7 +34,7 @@ class CounterInventory(dict):
         else:
             self[key] = new_num
 
-    def reduce(self, reducer, *args):
+    def reduce(self, reducer, *args) -> "CounterInventory":
         """Reduce inventory.
 
         Note that this returns a simple :class:`CounterInventory` with just
@@ -49,15 +56,15 @@ class CounterInventory(dict):
         """Add a Position or Posting to the inventory."""
         self.add_amount(pos.units, pos.cost)
 
-    def __neg__(self):
+    def __neg__(self) -> "CounterInventory":
         return CounterInventory({key: -num for key, num in self.items()})
 
-    def __add__(self, other):
+    def __add__(self, other) -> "CounterInventory":
         counter = CounterInventory(self)
         counter.add_inventory(other)
         return counter
 
-    def add_inventory(self, counter):
+    def add_inventory(self, counter: "CounterInventory") -> None:
         """Add another :class:`CounterInventory`."""
         if not self:
             self.update(counter)

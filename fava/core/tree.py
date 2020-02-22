@@ -20,7 +20,7 @@ class TreeNode:
         #: Account name.
         self.name: str = name
         #: A list of :class:`.TreeNode`, its children.
-        self.children: List['TreeNode'] = []
+        self.children: List["TreeNode"] = []
         #: The cumulative account balance.
         self.balance_children = CounterInventory()
         #: The account balance.

@@ -398,7 +398,9 @@ def find_insert_position(
 
     # Make no assumptions about the order of insert_options entries and instead
     # sort them ourselves (by descending dates)
-    insert_options.sort(key=attrgetter("date"), reverse=True)
+    insert_options = sorted(
+        insert_options, key=attrgetter("date"), reverse=True
+    )
 
     for account in accounts:
         for insert_option in insert_options:
