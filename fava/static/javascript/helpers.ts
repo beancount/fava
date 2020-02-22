@@ -134,15 +134,15 @@ export function urlFor(
   report: string,
   params?: Record<string, string>
 ): string {
-  let url = `${favaAPI.baseURL}${report}`;
-  if (params) {
-    const urlParams = new URLSearchParams();
-    Object.entries(params).forEach(([key, value]) => {
-      urlParams.set(key, value);
-    });
-    url += `?${urlParams.toString()}`;
+  const url = `${favaAPI.baseURL}${report}`;
+  if (!params) {
+    return url;
   }
-  return url;
+  const urlParams = new URLSearchParams();
+  Object.entries(params).forEach(([key, value]) => {
+    urlParams.set(key, value);
+  });
+  return `${url}?${urlParams.toString()}`;
 }
 
 /**
@@ -177,7 +177,7 @@ export async function putAPI<T extends keyof apiTypes>(
   endpoint: T,
   body: any
 ): Promise<ReturnType<apiTypes[T]>> {
-  const res = await fetch(`${favaAPI.baseURL}api/${endpoint}/`, {
+  const res = await fetch(urlFor(`api/${endpoint}`), {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

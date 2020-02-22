@@ -18,7 +18,7 @@
         const formData = new FormData(form);
         formData.append("account", $account);
         formData.append("file", dataTransferFile, name);
-        return fetch(`${favaAPI.baseURL}api/add-document/`, {
+        return fetch(`${favaAPI.baseURL}api/add-document`, {
           method: "PUT",
           body: formData,
         })

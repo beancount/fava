@@ -224,7 +224,7 @@ def filepath_in_document_folder(documents_folder, account, filename):
     )
 
 
-@json_api.route("/add-document/", methods=["PUT"])
+@json_api.route("/add-document", methods=["PUT"])
 @json_response
 def add_document():
     """Upload a document."""
