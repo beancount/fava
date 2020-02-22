@@ -26,7 +26,7 @@ json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 def get_api_endpoint(func):
     """Register a GET endpoint."""
 
-    @json_api.route("/{}/".format(func.__name__), methods=["GET"])
+    @json_api.route("/{}".format(func.__name__), methods=["GET"])
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         return jsonify({"success": True, "data": func(*args, **kwargs)})
@@ -37,7 +37,7 @@ def get_api_endpoint(func):
 def put_api_endpoint(func):
     """Register a PUT endpoint."""
 
-    @json_api.route("/{}/".format(func.__name__), methods=["PUT"])
+    @json_api.route("/{}".format(func.__name__), methods=["PUT"])
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         request_data = request.get_json()
