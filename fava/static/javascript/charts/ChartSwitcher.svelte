@@ -1,6 +1,7 @@
 <script>
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
 
+  import { keys } from "../keyboard-shortcuts";
   import { parseChartData } from ".";
   import { activeChart, showCharts } from "../stores/chart";
 
@@ -11,10 +12,22 @@
 
   onMount(() => {
     charts = parseChartData();
-    if (charts.length) {
-      $activeChart =
-        charts.find(c => c.name === $activeChart.name) || charts[0];
+    if (!charts.length) {
+      return;
     }
+    $activeChart = charts.find(c => c.name === $activeChart.name) || charts[0];
+    keys.bind("c", () => {
+      const currentIndex = charts.findIndex(e => e === $activeChart);
+      $activeChart = charts[(currentIndex + 1 + charts.length) % charts.length];
+    });
+    keys.bind("C", () => {
+      const currentIndex = charts.findIndex(e => e === $activeChart);
+      $activeChart = charts[(currentIndex - 1 + charts.length) % charts.length];
+    });
+  });
+  onDestroy(() => {
+    keys.unbind("c");
+    keys.unbind("C");
   });
 </script>
 

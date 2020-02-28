@@ -98,6 +98,7 @@ class Router {
       this.updateState();
       const article = select("article");
       if (article) {
+        e.trigger("before-page-loaded");
         article.innerHTML = content;
       }
       e.trigger("page-loaded");

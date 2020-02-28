@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
   import { fuzzytest, fuzzywrap } from "./helpers";
+  import { keyboardShortcut } from "./keyboard-shortcuts";
 
   const dispatch = createEventDispatcher();
 
@@ -12,6 +13,7 @@
   export let valueSelector;
   export let setSize = false;
   export let className;
+  export let key;
   let filteredSuggestions = [];
   let hidden = true;
   let index = -1;
@@ -142,6 +144,7 @@
     autocomplete="off"
     bind:value
     bind:this={input}
+    use:keyboardShortcut={key}
     on:blur={() => {
       hidden = true;
     }}

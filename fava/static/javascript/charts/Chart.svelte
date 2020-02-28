@@ -2,6 +2,7 @@
   import { tick } from "svelte";
 
   import { _ } from "../helpers";
+  import { keyboardShortcut } from "../keyboard-shortcuts";
   import { chartCurrency, chartMode, showCharts } from "../stores/chart";
 
   export let chart;
@@ -75,7 +76,7 @@
     on:click={() => {
       showCharts.update(v => !v);
     }}
-    data-key="ctrl+c"
+    use:keyboardShortcut={'Control+c'}
     class:closed={!$showCharts}
     class="toggle-chart" />
 </form>

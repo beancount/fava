@@ -1,5 +1,4 @@
 import CodeMirror, { Editor, EditorFromTextArea } from "codemirror";
-import Mousetrap from "mousetrap";
 
 import "codemirror/addon/mode/simple";
 
@@ -38,6 +37,7 @@ import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
 import { select, selectAll, putAPI } from "./helpers";
+import { keys } from "./keyboard-shortcuts";
 import e from "./events";
 import router from "./router";
 import { notify } from "./notifications";
@@ -278,14 +278,18 @@ export default function initSourceEditor(name: string): void {
   }
 
   // keybindings when the focus is outside the editor
-  Mousetrap.bind(["ctrl+s", "meta+s"], event => {
-    event.preventDefault();
-    editor.execCommand("favaSave");
+  ["Control+s", "Meta+s"].forEach((key): void => {
+    keys.bind(key, event => {
+      event.preventDefault();
+      editor.execCommand("favaSave");
+    });
   });
 
-  Mousetrap.bind(["ctrl+d", "meta+d"], event => {
-    event.preventDefault();
-    editor.execCommand("favaFormat");
+  ["Control+d", "Meta+d"].forEach((key): void => {
+    keys.bind(key, event => {
+      event.preventDefault();
+      editor.execCommand("favaFormat");
+    });
   });
 
   // Run editor commands with buttons in editor menu.
@@ -303,6 +307,9 @@ export default function initSourceEditor(name: string): void {
 
 e.on("page-loaded", () => {
   initReadOnlyEditors();
+  for (const key of ["Control+s", "Control+d", "Meta+s", "Meta+d"]) {
+    keys.unbind(key);
+  }
   initSourceEditor("#source-editor");
 });
 

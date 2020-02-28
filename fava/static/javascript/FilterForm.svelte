@@ -71,6 +71,7 @@
         bind:value={values[name]}
         {placeholder}
         {suggestions}
+        {key}
         setSize={true}
         {...autocompleteOptions}
         on:select={submit} />

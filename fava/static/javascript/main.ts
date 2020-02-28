@@ -80,7 +80,7 @@ function initSvelteComponent(
       data = JSON.parse(script.innerHTML);
     }
     const component = new SvelteComponent({ target: el, props: { data } });
-    e.once("page-loaded", () => component.$destroy());
+    e.once("before-page-loaded", () => component.$destroy());
   }
 }
 
