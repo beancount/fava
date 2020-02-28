@@ -21,6 +21,9 @@ const fonts = [
   "node_modules/@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-600.woff2",
 ];
 
+/**
+ * Copy the fonts over to the bundle folder.
+ */
 function copy(files) {
   return {
     name: "rollup-plugin-copy",

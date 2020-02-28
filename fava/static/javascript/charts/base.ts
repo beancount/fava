@@ -55,21 +55,21 @@ export abstract class BaseChart {
 
   abstract draw(data: unknown): this;
 
-  setHeight(d: number) {
+  setHeight(d: number): this {
     this.svg.setAttribute("height", `${d}`);
     this.outerHeight = d;
     this.height = d - this.margin.top - this.margin.bottom;
     return this;
   }
 
-  setWidth(d: number) {
+  setWidth(d: number): this {
     this.svg.setAttribute("width", `${d}`);
     this.outerWidth = d;
     this.width = d - this.margin.left - this.margin.right;
     return this;
   }
 
-  set<T extends keyof this>(property: T, value: this[T]) {
+  set<T extends keyof this>(property: T, value: this[T]): this {
     this[property] = value;
     return this;
   }

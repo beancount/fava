@@ -60,7 +60,7 @@ export class ScatterPlot extends BaseChart {
     this.dots = this.canvas.selectAll(".dot");
   }
 
-  draw(data: ScatterPlotDatum[]) {
+  draw(data: ScatterPlotDatum[]): this {
     this.data = data;
     const dateExtent = extent(data, d => d.date);
     if (dateExtent[0] !== undefined) {
@@ -77,7 +77,10 @@ export class ScatterPlot extends BaseChart {
       .attr("r", 5)
       .style("fill", d => scales.scatterplot(d.type));
 
-    const canvasNode = this.canvas.node()!;
+    const canvasNode = this.canvas.node();
+    if (!canvasNode) {
+      return this;
+    }
     this.canvas
       .on("mousemove", () => {
         const matrix = canvasNode.getScreenCTM();
@@ -92,7 +95,7 @@ export class ScatterPlot extends BaseChart {
             .style("left", `${window.scrollX + this.x(d.date) + matrix.e}px`)
             .style(
               "top",
-              `${window.scrollY + this.y(d.type)! + matrix.f - 15}px`
+              `${window.scrollY + (this.y(d.type) || 0) + matrix.f - 15}px`
             );
         } else {
           tooltip.style("opacity", 0);
@@ -107,11 +110,11 @@ export class ScatterPlot extends BaseChart {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  tooltipText(d: ScatterPlotDatum) {
+  tooltipText(d: ScatterPlotDatum): string {
     return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
   }
 
-  update() {
+  update(): this {
     this.setHeight(250);
 
     this.y.range([this.height, 0]);
@@ -127,12 +130,15 @@ export class ScatterPlot extends BaseChart {
 
     this.xAxisSelection.call(this.xAxis);
     this.yAxisSelection.call(this.yAxis);
-    this.dots.attr("cx", d => this.x(d.date)).attr("cy", d => this.y(d.type)!);
+    this.dots
+      .attr("cx", d => this.x(d.date))
+      .attr("cy", d => this.y(d.type) || 0);
 
     this.quadtree = quadtree<ScatterPlotDatum>(
       this.data,
       d => this.x(d.date),
-      d => this.y(d.type)!
+      d => this.y(d.type) || 0
     );
+    return this;
   }
 }

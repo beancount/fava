@@ -76,7 +76,7 @@ export class BarChart extends BaseChart {
     this.budgets = this.groups.selectAll(".budget");
   }
 
-  draw(data: BarChartDatum[]) {
+  draw(data: BarChartDatum[]): this {
     this.x0.domain(data.map(d => d.label));
     this.x1.domain(data[0].values.map(d => d.name));
 
@@ -121,7 +121,7 @@ export class BarChart extends BaseChart {
     return this;
   }
 
-  update() {
+  update(): this {
     const screenWidth = this.width;
     const maxWidth = this.groups.size() * maxColumnWidth;
     const offset = this.margin.left + Math.max(0, screenWidth - maxWidth) / 2;
@@ -169,9 +169,10 @@ export class BarChart extends BaseChart {
       domain: this.x1.domain(),
       scale: scales.currencies,
     };
+    return this;
   }
 
-  filterTicks(domain: string[]) {
+  filterTicks(domain: string[]): string[] {
     const labelsCount = this.width / 70;
     if (domain.length <= labelsCount) {
       return domain;

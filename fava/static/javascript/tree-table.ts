@@ -27,7 +27,10 @@ e.on("page-loaded", () => {
       if (target.tagName === "A") {
         return;
       }
-      const row = target.closest("li")!;
+      const row = target.closest("li");
+      if (!row) {
+        return;
+      }
       const willShow = row.classList.contains("toggled");
       if (event.shiftKey) {
         selectAll("li", row).forEach(el => {

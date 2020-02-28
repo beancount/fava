@@ -2,7 +2,7 @@ import e from "./events";
 import { select, selectAll } from "./helpers";
 
 // Copy the given text to the clipboard.
-function copyToClipboard(text: string | null) {
+function copyToClipboard(text: string | null): void {
   if (!text) {
     return;
   }

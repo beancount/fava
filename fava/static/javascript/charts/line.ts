@@ -76,7 +76,7 @@ export class LineChart extends BaseChart {
     this.dots = this.canvas.selectAll("g.dot").selectAll("circle");
   }
 
-  draw(data: LineChartData[]) {
+  draw(data: LineChartData[]): this {
     this.data = data;
     this.x.domain([
       min(this.data, s => s.values[0].date) || 0,
@@ -114,7 +114,10 @@ export class LineChart extends BaseChart {
       .append("circle")
       .attr("r", 3);
 
-    const canvasNode = this.canvas.node()!;
+    const canvasNode = this.canvas.node();
+    if (!canvasNode) {
+      return this;
+    }
     this.canvas
       .on("mousemove", () => {
         const matrix = canvasNode.getScreenCTM();
@@ -140,7 +143,7 @@ export class LineChart extends BaseChart {
     return this;
   }
 
-  update() {
+  update(): this {
     this.setHeight(250);
 
     this.y.range([this.height, 0]);
@@ -169,5 +172,6 @@ export class LineChart extends BaseChart {
       domain: this.data.map(d => d.name),
       scale: scales.currencies,
     };
+    return this;
   }
 }

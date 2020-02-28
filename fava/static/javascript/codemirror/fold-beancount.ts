@@ -6,7 +6,7 @@ CodeMirror.registerHelper(
   (cm: Editor, start: Position) => {
     const maxDepth = 100;
 
-    function headerLevel(lineNo: number) {
+    function headerLevel(lineNo: number): number {
       const line = cm.getDoc().getLine(lineNo);
       const match = line && line.match(/^\*+/);
       if (match) {

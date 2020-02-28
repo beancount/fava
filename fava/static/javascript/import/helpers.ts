@@ -1,7 +1,7 @@
 /**
  * Construct the filename from date and basename.
  */
-export function newFilename(date: string, basename: string) {
+export function newFilename(date: string, basename: string): string {
   if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {
     return basename;
   }
@@ -14,7 +14,7 @@ export function newFilename(date: string, basename: string) {
 /**
  * Generate the URL hash for extracting the extract modal.
  */
-export function extractURL(filename: string, importer: string) {
+export function extractURL(filename: string, importer: string): string {
   const params = new URLSearchParams();
   params.set("filename", filename);
   params.set("importer", importer);
@@ -24,7 +24,7 @@ export function extractURL(filename: string, importer: string) {
 /**
  * Generate the URL to the document
  */
-export function documentURL(filename: string) {
+export function documentURL(filename: string): string {
   const params = new URLSearchParams();
   params.set("filename", filename);
   return `../document/?${params.toString()}`;

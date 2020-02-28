@@ -10,7 +10,7 @@ export const tooltip = select(document.body)
 export function addTooltip<S extends Element, T>(
   selection: Selection<S, T, Element, unknown>,
   tooltipText: (d: T) => string
-) {
+): void {
   selection
     .on("mouseenter", (d: T) => {
       tooltip.style("opacity", 1).html(tooltipText(d));

@@ -4,14 +4,20 @@ import { favaAPI } from "./stores";
 /**
  * Select a single element.
  */
-export function select(expr: string, con: Document | Element = document) {
+export function select(
+  expr: string,
+  con: Document | Element = document
+): Element | null {
   return con.querySelector(expr);
 }
 
 /**
  * Select multiple elements (and convert NodeList to Array).
  */
-export function selectAll(expr: string, con: Document | Element = document) {
+export function selectAll(
+  expr: string,
+  con: Document | Element = document
+): Element[] {
   return Array.from(con.querySelectorAll(expr));
 }
 
@@ -44,7 +50,7 @@ export function delegate<T extends Event, C extends Element>(
   type: string,
   selector: string,
   callback: (e: T, c: C) => void
-) {
+): void {
   if (!element) {
     return;
   }
@@ -72,8 +78,8 @@ export function once(
   element: EventTarget,
   event: string,
   callback: (ev: Event) => void
-) {
-  function runOnce(ev: Event) {
+): void {
+  function runOnce(ev: Event): void {
     element.removeEventListener(event, runOnce);
     callback.apply(element, [ev]);
   }
@@ -81,12 +87,14 @@ export function once(
   element.addEventListener(event, runOnce);
 }
 
-export function ready() {
+export function ready(): Promise<void> {
   return new Promise(resolve => {
     if (document.readyState !== "loading") {
       resolve();
     } else {
-      document.addEventListener("DOMContentLoaded", resolve);
+      document.addEventListener("DOMContentLoaded", () => {
+        resolve();
+      });
     }
   });
 }
@@ -118,7 +126,7 @@ export function handleText(response: Response): Promise<string> {
   return response.text();
 }
 
-export function fetch(input: string, init = {}) {
+export function fetch(input: string, init = {}): Promise<Response> {
   const defaults: RequestInit = {
     credentials: "same-origin",
   };
@@ -175,7 +183,7 @@ type apiTypes = typeof putAPIValidators;
  */
 export async function putAPI<T extends keyof apiTypes>(
   endpoint: T,
-  body: any
+  body: unknown
 ): Promise<ReturnType<apiTypes[T]>> {
   const res = await fetch(urlFor(`api/${endpoint}`), {
     method: "PUT",
@@ -195,7 +203,7 @@ export async function putAPI<T extends keyof apiTypes>(
  * `string`. For lowercase characters in `pattern` match both lower and upper
  * case, for uppercase only an exact match counts.
  */
-export function fuzzytest(pattern: string, text: string) {
+export function fuzzytest(pattern: string, text: string): boolean {
   let pindex = 0;
   for (let index = 0; index < text.length; index += 1) {
     const char = text[index];
@@ -213,7 +221,7 @@ export function fuzzytest(pattern: string, text: string) {
  * Wrap all occurences of characters of `pattern` (in order) in `string` in
  * <span> tags.
  */
-export function fuzzywrap(pattern: string, text: string) {
+export function fuzzywrap(pattern: string, text: string): string {
   let pindex = 0;
   const result = [];
   for (let index = 0; index < text.length; index += 1) {

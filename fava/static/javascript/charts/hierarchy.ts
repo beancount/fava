@@ -34,7 +34,7 @@ export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
  * In the treemap, we only render leaf nodes, so for accounts that have both
  * children and a balance, we want to duplicate them as leaf nodes.
  */
-export function addInternalNodesAsLeaves(node: AccountHierarchy) {
+export function addInternalNodesAsLeaves(node: AccountHierarchy): void {
   if (node.children.length) {
     node.children.forEach(addInternalNodesAsLeaves);
     node.children.push({ ...node, children: [], dummy: true });
@@ -49,7 +49,7 @@ function makeAccountLink(
     | Selection<SVGTextElement, TreemapDatum, Element, unknown>
     | Selection<SVGPathElement, TreemapDatum, Element, unknown>
     | Selection<SVGTextElement, TreemapDatum, null, undefined>
-) {
+): void {
   selection.on("click", d => {
     window.location.href = favaAPI.accountURL.replace(
       "REPLACEME",
@@ -62,7 +62,7 @@ function makeAccountLink(
 type TreemapDatum = HierarchyRectangularNode<AccountHierarchyDatum>;
 
 class TreeMapChart extends BaseChart {
-  treemap: TreemapLayout<any>;
+  treemap: TreemapLayout<AccountHierarchyDatum>;
 
   root?: TreemapDatum;
 
@@ -76,7 +76,7 @@ class TreeMapChart extends BaseChart {
 
   constructor(svg: SVGElement) {
     super(svg);
-    this.treemap = treemap().paddingInner(2);
+    this.treemap = treemap<AccountHierarchyDatum>().paddingInner(2);
     this.margin = NO_MARGINS;
 
     this.canvas = select(svg).classed("treemap", true);
@@ -84,7 +84,7 @@ class TreeMapChart extends BaseChart {
     this.labels = this.cells.append("text");
   }
 
-  draw(data: AccountHierarchyNode) {
+  draw(data: AccountHierarchyNode): this {
     this.root = this.treemap(data);
 
     this.cells = this.canvas
@@ -95,7 +95,7 @@ class TreeMapChart extends BaseChart {
       .call(addTooltip, this.tooltipText);
 
     this.cells.append("rect").attr("fill", d => {
-      const node = d.data.dummy ? d.parent! : d;
+      const node = d.data.dummy && d.parent ? d.parent : d;
       if (node.parent === this.root || !node.parent) {
         return scales.treemap(node.data.account);
       }
@@ -114,17 +114,17 @@ class TreeMapChart extends BaseChart {
     return this;
   }
 
-  update() {
+  update(): this {
     this.setHeight(Math.min(this.width / 2.5, 400));
 
     if (!this.root) {
-      return;
+      return this;
     }
 
     this.treemap.size([this.width, this.height]);
     this.treemap(this.root);
 
-    function labelOpacity(this: SVGTextElement, d: TreemapDatum) {
+    function labelOpacity(this: SVGTextElement, d: TreemapDatum): number {
       const length = this.getComputedTextLength();
       return d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? 1 : 0;
     }
@@ -140,6 +140,7 @@ class TreeMapChart extends BaseChart {
       .attr("x", d => (d.x1 - d.x0) / 2)
       .attr("y", d => (d.y1 - d.y0) / 2)
       .style("opacity", labelOpacity);
+    return this;
   }
 }
 
@@ -148,7 +149,7 @@ class SunburstChart extends BaseChart {
 
   root?: TreemapDatum;
 
-  arc: Arc<any, TreemapDatum>;
+  arc: Arc<unknown, TreemapDatum>;
 
   x: ScaleLinear<number, number>;
 
@@ -201,7 +202,7 @@ class SunburstChart extends BaseChart {
     this.paths = this.canvas.selectAll("path");
   }
 
-  draw(data: AccountHierarchyNode) {
+  draw(data: AccountHierarchyNode): this {
     this.root = this.partition(data);
 
     this.paths = this.canvas
@@ -220,7 +221,7 @@ class SunburstChart extends BaseChart {
     return this;
   }
 
-  update() {
+  update(): this {
     this.canvas.attr(
       "transform",
       `translate(${this.width / 2 + this.margin.left},${this.height / 2 +
@@ -231,9 +232,10 @@ class SunburstChart extends BaseChart {
     this.boundingCircle.attr("r", radius);
     this.y.range([0, radius]);
     this.paths.attr("d", this.arc);
+    return this;
   }
 
-  setLabel(d: TreemapDatum) {
+  setLabel(d: TreemapDatum): this {
     if (this.labelText) {
       this.balanceLabel.text(this.labelText(d));
     }
@@ -241,10 +243,11 @@ class SunburstChart extends BaseChart {
       .datum(d)
       .text(d.data.account)
       .call(makeAccountLink);
+    return this;
   }
 
   // Fade all but the current sequence
-  mouseOver(d: TreemapDatum) {
+  mouseOver(d: TreemapDatum): this {
     this.setLabel(d);
     this.paths.interrupt();
 
@@ -254,10 +257,11 @@ class SunburstChart extends BaseChart {
       // check if d.account starts with node.account
       .filter(node => d.data.account.lastIndexOf(node.data.account, 0) === 0)
       .style("opacity", 1);
+    return this;
   }
 
   // Restore everything to full opacity when moving off the visualization.
-  mouseLeave() {
+  mouseLeave(): this {
     this.paths
       .transition()
       .duration(1000)
@@ -265,6 +269,7 @@ class SunburstChart extends BaseChart {
     if (this.root) {
       this.setLabel(this.root);
     }
+    return this;
   }
 }
 
@@ -287,7 +292,7 @@ class SunburstChartContainer extends BaseChart {
     this.setHeight(500);
   }
 
-  draw(data: Record<string, AccountHierarchyNode>) {
+  draw(data: Record<string, AccountHierarchyNode>): this {
     this.currencies = Object.keys(data);
 
     this.currencies.forEach((currency, i) => {
@@ -299,7 +304,7 @@ class SunburstChartContainer extends BaseChart {
         );
 
       const totalBalance = data[currency].value || 1;
-      const sunburst = new SunburstChart(canvas.node()!)
+      const sunburst = new SunburstChart(canvas.node() as SVGGElement)
         .setWidth(this.width / this.currencies.length)
         .setHeight(500)
         .set("labelText", d => {
@@ -317,7 +322,7 @@ class SunburstChartContainer extends BaseChart {
     return this;
   }
 
-  update() {
+  update(): this {
     this.sunbursts.forEach((singleChart, i) => {
       singleChart
         .setWidth(this.width / this.currencies.length)
@@ -328,6 +333,7 @@ class SunburstChartContainer extends BaseChart {
         `translate(${(this.width * i) / this.currencies.length},0)`
       );
     });
+    return this;
   }
 }
 
@@ -355,7 +361,7 @@ export class HierarchyContainer extends BaseChart {
     this.mode = "treemap";
   }
 
-  draw(data: Record<string, AccountHierarchyNode>) {
+  draw(data: Record<string, AccountHierarchyNode>): this {
     this.data = data;
     this.currencies = Object.keys(data);
 
@@ -400,13 +406,14 @@ export class HierarchyContainer extends BaseChart {
     return this;
   }
 
-  update() {
+  update(): this {
     if (!this.data) {
-      return;
+      return this;
     }
     this.draw(this.data);
     if (this.currentChart) {
       this.currentChart.setWidth(this.outerWidth).update();
     }
+    return this;
   }
 }

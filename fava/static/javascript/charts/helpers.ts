@@ -12,7 +12,7 @@ export const NO_MARGINS = {
   left: 0,
 };
 
-export function setTimeFilter(date: Date) {
+export function setTimeFilter(date: Date): void {
   filters.update(fs => ({
     ...fs,
     time: get(currentTimeFilterDateFormat)(date),
@@ -25,18 +25,18 @@ export function setTimeFilter(date: Date) {
  * Uses the HCL color space in an attempt to generate colours that are
  * to be perceived to be of the same brightness.
  */
-function hclColorRange(count: number, chroma = 45, lightness = 70) {
+function hclColorRange(count: number, chroma = 45, lightness = 70): string[] {
   const offset = 270;
   const delta = 360 / count;
   const colors = [...Array(count).keys()].map(index => {
     const hue = (index * delta + offset) % 360;
     return hcl(hue, chroma, lightness);
   });
-  return colors;
+  return colors.map(c => c.toString());
 }
 
-const colors10 = hclColorRange(10).map(c => c.toString());
-const colors15 = hclColorRange(15, 30, 80).map(c => c.toString());
+const colors10 = hclColorRange(10);
+const colors15 = hclColorRange(15, 30, 80);
 
 /*
  * The color scales for the charts.

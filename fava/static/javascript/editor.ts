@@ -83,7 +83,7 @@ declare module "codemirror" {
 export { CodeMirror };
 
 // This handles saving in both the main and the overlaid entry editors.
-CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
+CodeMirror.commands.favaSave = (cm: EditorFromTextArea): void => {
   const button = cm.getOption("favaSaveButton");
   if (!button) {
     return;
@@ -120,7 +120,7 @@ CodeMirror.commands.favaSave = (cm: EditorFromTextArea) => {
     });
 };
 
-CodeMirror.commands.favaFormat = (cm: Editor) => {
+CodeMirror.commands.favaFormat = (cm: Editor): void => {
   putAPI("format_source", { source: cm.getValue() }).then(
     data => {
       const scrollPosition = cm.getScrollInfo().top;
@@ -133,7 +133,7 @@ CodeMirror.commands.favaFormat = (cm: Editor) => {
   );
 };
 
-CodeMirror.commands.favaToggleComment = (cm: Editor) => {
+CodeMirror.commands.favaToggleComment = (cm: Editor): void => {
   const doc = cm.getDoc();
   const args = {
     from: doc.getCursor("start"),
@@ -145,13 +145,13 @@ CodeMirror.commands.favaToggleComment = (cm: Editor) => {
   }
 };
 
-CodeMirror.commands.favaCenterCursor = (cm: Editor) => {
+CodeMirror.commands.favaCenterCursor = (cm: Editor): void => {
   const { top } = cm.cursorCoords(true, "local");
   const height = cm.getScrollInfo().clientHeight;
   cm.scrollTo(null, top - height / 2);
 };
 
-CodeMirror.commands.favaJumpToMarker = (cm: Editor) => {
+CodeMirror.commands.favaJumpToMarker = (cm: Editor): void => {
   const doc = cm.getDoc();
   const cursor = cm.getSearchCursor("FAVA-INSERT-MARKER");
 
@@ -166,7 +166,7 @@ CodeMirror.commands.favaJumpToMarker = (cm: Editor) => {
 };
 
 // If the given key should be ignored for autocompletion
-export function ignoreKey(key: string) {
+export function ignoreKey(key: string): boolean {
   switch (key) {
     case "ArrowDown":
     case "ArrowUp":
@@ -190,7 +190,7 @@ export function ignoreKey(key: string) {
 }
 
 // Initialize read-only editors
-function initReadOnlyEditors() {
+function initReadOnlyEditors(): void {
   selectAll("textarea.editor-readonly").forEach(el => {
     CodeMirror.fromTextArea(el as HTMLTextAreaElement, {
       mode: "beancount",
@@ -215,7 +215,7 @@ const sourceEditorOptions: CodeMirror.EditorConfiguration = {
     "Cmd-D": "favaFormat",
     "Ctrl-Y": "favaToggleComment",
     "Cmd-Y": "favaToggleComment",
-    Tab: (cm: Editor) => {
+    Tab: (cm: Editor): void => {
       if (cm.getDoc().somethingSelected()) {
         cm.execCommand("indentMore");
       } else {
@@ -227,7 +227,7 @@ const sourceEditorOptions: CodeMirror.EditorConfiguration = {
 
 let activeEditor: Editor | null = null;
 // Init source editor.
-export default function initSourceEditor(name: string) {
+export default function initSourceEditor(name: string): void {
   if (favaAPI.favaOptions["currency-column"]) {
     sourceEditorOptions.rulers = [
       {

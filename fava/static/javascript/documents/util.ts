@@ -6,7 +6,7 @@ interface Node {
   children: Map<string, Node>;
 }
 
-export function basename(filename: string) {
+export function basename(filename: string): string {
   const parts = filename.split("/");
   return parts[parts.length - 1];
 }

@@ -10,14 +10,14 @@ import { delegate, _ } from "./helpers";
 import { favaAPI } from "./stores";
 import { notify } from "./notifications";
 
-function dragover(event: DragEvent, closestTarget: HTMLElement) {
+function dragover(event: DragEvent, closestTarget: HTMLElement): void {
   closestTarget.classList.add("dragover");
   event.preventDefault();
 }
 delegate(document, "dragenter", ".droptarget", dragover);
 delegate(document, "dragover", ".droptarget", dragover);
 
-function dragleave(event: DragEvent, closestTarget: HTMLElement) {
+function dragleave(event: DragEvent, closestTarget: HTMLElement): void {
   closestTarget.classList.remove("dragover");
   event.preventDefault();
 }
@@ -31,7 +31,7 @@ export const files: Writable<{
   name: string;
 }[]> = writable([]);
 
-function drop(event: DragEvent, target: HTMLElement) {
+function drop(event: DragEvent, target: HTMLElement): void {
   target.classList.remove("dragover");
   event.preventDefault();
   event.stopPropagation();

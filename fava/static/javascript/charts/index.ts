@@ -74,9 +74,11 @@ interface ChartWithData<T extends BaseChart> {
   renderer: (svg: SVGElement) => T;
 }
 
+type ChartTypes = BarChart | ScatterPlot | LineChart | HierarchyContainer;
+
 const parsers: Record<
   string,
-  (json: unknown, label: string) => ChartWithData<any>
+  (json: unknown, label: string) => ChartWithData<ChartTypes>
 > = {
   balances(json: unknown): ChartWithData<LineChart> {
     const parsedData = array(
@@ -104,7 +106,7 @@ const parsers: Record<
 
     return {
       data,
-      renderer: (svg: SVGElement) =>
+      renderer: (svg: SVGElement): LineChart =>
         new LineChart(svg).set(
           "tooltipText",
           d =>
@@ -121,7 +123,7 @@ const parsers: Record<
       prices: array(tuple([date, number])),
     })(json);
 
-    const renderer = (svg: SVGElement) =>
+    const renderer = (svg: SVGElement): LineChart =>
       new LineChart(svg).set(
         "tooltipText",
         d =>
@@ -157,7 +159,7 @@ const parsers: Record<
       date: d.date,
       label: currentDateFmt(d.date),
     }));
-    const renderer = (svg: SVGElement) =>
+    const renderer = (svg: SVGElement): BarChart =>
       new BarChart(svg).set("tooltipText", d => {
         let text = "";
         d.values.forEach(a => {
@@ -198,7 +200,8 @@ const parsers: Record<
 
     return {
       data,
-      renderer: (svg: SVGElement) => new HierarchyContainer(svg),
+      renderer: (svg: SVGElement): HierarchyContainer =>
+        new HierarchyContainer(svg),
     };
   },
   scatterplot(json: unknown): ChartWithData<ScatterPlot> {
@@ -211,12 +214,14 @@ const parsers: Record<
     );
     return {
       data: parser(json),
-      renderer: (svg: SVGElement) => new ScatterPlot(svg),
+      renderer: (svg: SVGElement): ScatterPlot => new ScatterPlot(svg),
     };
   },
 };
 
-export function parseChartData() {
+export function parseChartData(): (ChartWithData<ChartTypes> & {
+  name: string;
+})[] {
   const chartData = array(
     object({
       label: string,
@@ -224,7 +229,7 @@ export function parseChartData() {
       data: unknown,
     })
   )(getScriptTagJSON("#chart-data"));
-  const result: (ChartWithData<any> & { name: string })[] = [];
+  const result: (ChartWithData<ChartTypes> & { name: string })[] = [];
   chartData.forEach(chart => {
     const parser = parsers[chart.type];
     if (parser) {
@@ -239,7 +244,7 @@ export function parseChartData() {
 
 export function parseQueryChart(
   data: unknown
-): ChartWithData<LineChart | HierarchyContainer> | undefined {
+): ChartWithData<ChartTypes> | undefined {
   if (!Array.isArray(data) || !data.length) {
     return undefined;
   }
@@ -255,7 +260,7 @@ export function parseQueryChart(
     const accountMap: Map<string, AccountHierarchy> = new Map([
       [root.account, root],
     ]);
-    const addNode = (node: AccountHierarchy) => {
+    const addNode = (node: AccountHierarchy): void => {
       const name = node.account;
       const existing = accountMap.get(name);
       if (existing) {
@@ -288,7 +293,8 @@ export function parseQueryChart(
 
     return {
       data: chartData,
-      renderer: (svg: SVGElement) => new HierarchyContainer(svg),
+      renderer: (svg: SVGElement): HierarchyContainer =>
+        new HierarchyContainer(svg),
     };
   }
   if (data[0].date !== undefined) {

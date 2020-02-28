@@ -150,7 +150,7 @@ function sortableTable(table: HTMLTableElement): void {
   });
 }
 
-export default function initSort() {
+export default function initSort(): void {
   selectAll("table.sortable").forEach(el => {
     sortableTable(el as HTMLTableElement);
   });

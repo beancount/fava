@@ -4,7 +4,7 @@ import { select, selectAll, once } from "./helpers";
 import e from "./events";
 import { closeOverlay } from "./stores";
 
-function click(selector: string) {
+function click(selector: string): void {
   const element = select(selector);
   if (element && element instanceof HTMLElement) {
     element.click();
@@ -32,7 +32,7 @@ e.on("page-loaded", () => {
 });
 
 // Add a tooltip showing the keyboard shortcut over the target element.
-function showTooltip(target: HTMLElement) {
+function showTooltip(target: HTMLElement): void {
   const tooltip = document.createElement("div");
   tooltip.className = "keyboard-tooltip";
   tooltip.innerHTML = target.getAttribute("data-key") || "";
@@ -49,7 +49,7 @@ function showTooltip(target: HTMLElement) {
 }
 
 // Show all keyboard shortcut tooltips.
-function showTooltips() {
+function showTooltips(): void {
   const reloadButton = select("#reload-page");
   if (reloadButton) {
     reloadButton.classList.remove("hidden");
@@ -60,7 +60,7 @@ function showTooltips() {
 }
 
 // Remove all keyboard shortcut tooltips.
-function removeTooltips() {
+function removeTooltips(): void {
   const reloadButton = select("#reload-page");
   if (reloadButton) {
     reloadButton.classList.add("hidden");

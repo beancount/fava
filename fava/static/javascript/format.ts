@@ -17,8 +17,8 @@ favaAPIStore.subscribe(favaAPI => {
     ? new Intl.NumberFormat(locale.replace("_", "-")).format
     : (formatter = format(".2f"));
   incognito = favaAPI.incognito
-    ? num => num.replace(/[0-9]/g, "X")
-    : num => num;
+    ? (num: string): string => num.replace(/[0-9]/g, "X")
+    : (num: string): string => num;
 });
 
 export function formatCurrency(number: number): string {
@@ -26,19 +26,19 @@ export function formatCurrency(number: number): string {
 }
 
 const formatterPer = format(".2f");
-export function formatPercentage(number: number) {
+export function formatPercentage(number: number): string {
   return `${formatterPer(Math.abs(number) * 100)}%`;
 }
 
 const formatterShort = format(".2s");
-export function formatCurrencyShort(number: number) {
+export function formatCurrencyShort(number: number): string {
   return incognito(formatterShort(number));
 }
 
 /** Date formatters for human consumption. */
 export const dateFormat = {
   year: utcFormat("%Y"),
-  quarter(date: Date) {
+  quarter(date: Date): string {
     return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
   },
   month: utcFormat("%b %Y"),
@@ -49,7 +49,7 @@ export const dateFormat = {
 /** Date formatters for the entry filter form. */
 export const timeFilterDateFormat = {
   year: utcFormat("%Y"),
-  quarter(date: Date) {
+  quarter(date: Date): string {
     return `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) +
       1}`;
   },

@@ -68,7 +68,7 @@ export function date(json: unknown): Date {
  * Validate a value to be equal to a constant value.
  */
 export function constant<T>(value: T): Validator<T> {
-  return (json: unknown) => {
+  return (json: unknown): T => {
     if (json === value) {
       return json as T;
     }
@@ -83,7 +83,7 @@ export function union<A, B>(
   a: Validator<A>,
   b: Validator<B>
 ): Validator<A | B> {
-  return (json: unknown) => {
+  return (json: unknown): A | B => {
     for (const validator of [a, b]) {
       try {
         return validator(json);
@@ -99,7 +99,7 @@ export function union<A, B>(
  * Validator for an object that might be undefined.
  */
 export function optional<T>(validator: Validator<T>): Validator<T | undefined> {
-  return (json: unknown) => {
+  return (json: unknown): T | undefined => {
     return json === undefined ? undefined : validator(json);
   };
 }
@@ -108,7 +108,7 @@ export function optional<T>(validator: Validator<T>): Validator<T | undefined> {
  * Lazy validator to allow for recursive structures.
  */
 export function lazy<T>(func: () => Validator<T>): Validator<T> {
-  return (json: unknown) => {
+  return (json: unknown): T => {
     return func()(json);
   };
 }
@@ -117,7 +117,7 @@ export function lazy<T>(func: () => Validator<T>): Validator<T> {
  * Validator for an array of values.
  */
 export function array<T>(validator: Validator<T>): Validator<T[]> {
-  return (json: unknown) => {
+  return (json: unknown): T[] => {
     if (Array.isArray(json)) {
       const result: T[] = [];
       json.forEach(element => {
@@ -135,7 +135,7 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
 export function tuple<A, B>(
   decoders: [Validator<A>, Validator<B>]
 ): Validator<[A, B]> {
-  return (json: unknown) => {
+  return (json: unknown): [A, B] => {
     if (Array.isArray(json) && json.length === 2) {
       const result = [];
 
@@ -157,7 +157,7 @@ const isJsonObject = (json: unknown): json is Record<string, unknown> =>
 export function object<T>(
   validators: { [t in keyof T]: Validator<T[t]> }
 ): Validator<T> {
-  return (json: unknown) => {
+  return (json: unknown): T => {
     if (isJsonObject(json)) {
       const obj: Partial<T> = {};
       // eslint-disable-next-line no-restricted-syntax
@@ -176,7 +176,7 @@ export function object<T>(
  * Validator for a dict-like structure.
  */
 export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
-  return (json: unknown) => {
+  return (json: unknown): Record<string, T> => {
     if (isJsonObject(json)) {
       const ret: Record<string, T> = {};
       // eslint-disable-next-line no-restricted-syntax

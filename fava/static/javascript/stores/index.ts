@@ -93,7 +93,7 @@ export const urlSyncedParams = [
   "time",
 ];
 
-export function closeOverlay() {
+export function closeOverlay(): void {
   if (window.location.hash) {
     window.history.pushState({}, "", "#");
   }

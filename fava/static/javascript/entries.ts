@@ -56,7 +56,7 @@ export class Transaction extends Entry {
   }
 }
 
-export async function saveEntries(entries: Entry[]) {
+export async function saveEntries(entries: Entry[]): Promise<void> {
   if (!entries.length) {
     return;
   }

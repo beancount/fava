@@ -8,7 +8,7 @@ import { favaAPI } from "./stores";
 import { number } from "./validation";
 import e from "./events";
 
-function initSidebar() {
+function initSidebar(): void {
   selectAll("aside a").forEach(el => {
     el.classList.remove("selected");
     const href = el.getAttribute("href");
@@ -16,14 +16,17 @@ function initSidebar() {
       el.classList.add("selected");
     }
   });
-  select("aside li.error")!.classList.toggle("hidden", favaAPI.errors === 0);
-  select("aside li.error span")!.innerHTML = `${favaAPI.errors}`;
+  select("aside li.error")?.classList.toggle("hidden", favaAPI.errors === 0);
+  const span = select("aside li.error span");
+  if (span) {
+    span.innerHTML = `${favaAPI.errors}`;
+  }
 }
 
 e.on("page-init", () => {
-  const asideButton = select("#aside-button")!;
-  asideButton.addEventListener("click", () => {
-    select("aside")!.classList.toggle("active");
+  const asideButton = select("#aside-button");
+  asideButton?.addEventListener("click", () => {
+    select("aside")?.classList.toggle("active");
     asideButton.classList.toggle("active");
   });
 });

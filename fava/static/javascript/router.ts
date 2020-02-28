@@ -34,7 +34,7 @@ class Router {
 
   // This should be called once when the page has been loaded. Initializes the
   // router and takes over clicking on links.
-  init() {
+  init(): void {
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
 
@@ -59,7 +59,7 @@ class Router {
 
   // Go to URL. If load is `true`, load the page at URL, otherwise only update
   // the current state.
-  navigate(url: string, load = true) {
+  navigate(url: string, load = true): void {
     if (load) {
       this.loadURL(url);
     } else {
@@ -74,7 +74,7 @@ class Router {
    * If `historyState` is false, do not create a history state and do not
    * scroll to top.
    */
-  async loadURL(url: string, historyState = true) {
+  async loadURL(url: string, historyState = true): Promise<void> {
     const state = { interrupt: false };
     e.trigger("navigate", state);
     if (state.interrupt) {
@@ -117,7 +117,7 @@ class Router {
    * The state object is used to distinguish between the user navigating the
    * browser history or the hash changing.
    */
-  updateState() {
+  updateState(): void {
     this.state = {
       hash: window.location.hash,
       pathname: window.location.pathname,
@@ -134,7 +134,7 @@ class Router {
    *  - the link starts with a hash '#', or
    *  - the link has a `data-remote` attribute.
    */
-  takeOverLinks() {
+  takeOverLinks(): void {
     delegate(
       document,
       "click",
@@ -182,7 +182,7 @@ class Router {
   /*
    * Reload the page.
    */
-  reload() {
+  reload(): void {
     this.loadURL(window.location.href, false);
   }
 }
@@ -191,7 +191,7 @@ const router = new Router();
 export default router;
 
 e.on("page-init", () => {
-  select("#reload-page")!.addEventListener("click", () => {
+  select("#reload-page")?.addEventListener("click", () => {
     router.reload();
   });
 

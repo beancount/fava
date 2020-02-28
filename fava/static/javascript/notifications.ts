@@ -9,7 +9,7 @@ import { select, delegate } from "./helpers";
  * @param {string} cls - The message type.
  * @param {function} callback - The callback to execute on click..
  */
-export function notify(msg: string, cls = "info", callback?: Function) {
+export function notify(msg: string, cls = "info", callback?: Function): void {
   const notification = document.createElement("li");
   notification.classList.add(cls);
   notification.appendChild(document.createTextNode(msg));

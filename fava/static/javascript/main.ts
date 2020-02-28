@@ -20,6 +20,7 @@
  *    elements in the page.
  */
 
+import { SvelteComponentDev } from "svelte/internal";
 import { select, _, ready, fetchAPI, getScriptTagJSON } from "./helpers";
 import e from "./events";
 import router from "./router";
@@ -67,7 +68,10 @@ import Query from "./query/Query.svelte";
  *
  * On the next page load, the component will be removed.
  */
-function initSvelteComponent(selector: string, SvelteComponent: any) {
+function initSvelteComponent(
+  selector: string,
+  SvelteComponent: typeof SvelteComponentDev
+): void {
   const el = select(selector);
   if (el) {
     let data = {};
@@ -80,6 +84,7 @@ function initSvelteComponent(selector: string, SvelteComponent: any) {
   }
 }
 
+const pageTitle = select("h1 strong");
 e.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
@@ -89,8 +94,10 @@ e.on("page-loaded", () => {
   initSvelteComponent("#svelte-query", Query);
 
   document.title = favaAPI.documentTitle;
-  select("h1 strong")!.innerHTML = favaAPI.pageTitle;
-  select("#reload-page")!.classList.add("hidden");
+  if (pageTitle) {
+    pageTitle.innerHTML = favaAPI.pageTitle;
+  }
+  select("#reload-page")?.classList.add("hidden");
 });
 
 e.on("page-init", () => {
@@ -105,14 +112,14 @@ e.on("page-init", () => {
 
 // Check the `changed` API endpoint every 5 seconds and fire the appropriate
 // events if some file changed.
-async function doPoll() {
+async function doPoll(): Promise<void> {
   try {
     const changed = await fetchAPI("changed");
     if (changed) {
       if (favaAPI.favaOptions["auto-reload"]) {
         router.reload();
       } else {
-        select("#reload-page")!.classList.remove("hidden");
+        select("#reload-page")?.classList.remove("hidden");
         e.trigger("file-modified");
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();

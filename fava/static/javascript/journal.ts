@@ -3,7 +3,7 @@ import e from "./events";
 import router from "./router";
 import { filters } from "./stores";
 
-function addFilter(value: string) {
+function addFilter(value: string): void {
   filters.update(fs => {
     if (fs.filter) {
       return {
