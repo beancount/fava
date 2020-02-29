@@ -9,11 +9,11 @@
   export let suggestions = [];
   export let name = "";
   export let placeholder = "";
-  export let valueExtractor;
-  export let valueSelector;
+  export let valueExtractor = null;
+  export let valueSelector = null;
   export let setSize = false;
-  export let className;
-  export let key;
+  export let className = "";
+  export let key = null;
   let filteredSuggestions = [];
   let hidden = true;
   let index = -1;
@@ -137,7 +137,7 @@
   }
 </style>
 
-<span class={className || ''}>
+<span class={className}>
   <input
     {name}
     type="text"

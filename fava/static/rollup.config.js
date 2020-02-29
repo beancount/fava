@@ -8,6 +8,9 @@ import fs from "fs";
 import { promisify } from "util";
 import { basename, dirname, join } from "path";
 
+// Run in dev mode when using rollup watch.
+const production = !process.env.ROLLUP_WATCH;
+
 const copyFile = promisify(fs.copyFile);
 
 const fonts = [
@@ -51,7 +54,7 @@ export default {
     commonjs({
       include: "node_modules/**",
     }),
-    svelte(),
+    svelte({ dev: !production }),
     css(),
     copy(fonts),
   ],

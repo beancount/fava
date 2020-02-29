@@ -5,7 +5,7 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
 
   export let value = "";
-  export let suggestions;
+  export let suggestions = null;
 
   let input;
 
