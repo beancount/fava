@@ -5,12 +5,14 @@
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { chartCurrency, chartMode, showCharts } from "../stores/chart";
 
+  import ScatterPlot from "./ScatterPlot.svelte";
+
   export let chart;
   let svg;
 
   let renderedChart;
   let hasCurrencySetting;
-  let chartWidth;
+  let chartWidth = 0;
 
   async function chartChanged() {
     await tick();
@@ -81,5 +83,9 @@
     class="toggle-chart" />
 </form>
 <div hidden={!$showCharts} bind:clientWidth={chartWidth}>
-  <svg bind:this={svg} />
+  {#if chart.type === 'scatterplot'}
+    <ScatterPlot data={chart.data} width={chartWidth} />
+  {:else}
+    <svg bind:this={svg} />
+  {/if}
 </div>

@@ -29,7 +29,6 @@ import {
 import { BaseChart } from "./base";
 import { BarChart } from "./bar";
 import { LineChart, LineChartDatum } from "./line";
-import { ScatterPlot } from "./scatter";
 import {
   addInternalNodesAsLeaves,
   HierarchyContainer,
@@ -37,6 +36,12 @@ import {
   AccountHierarchyNode,
 } from "./hierarchy";
 import { scales } from "./helpers";
+
+interface ScatterPlotDatum {
+  date: Date;
+  type: string;
+  description: string;
+}
 
 /**
  * The list of operating currencies, adding in the current conversion currency.
@@ -72,13 +77,20 @@ e.on("page-init", () => {
 interface ChartWithData<T extends BaseChart> {
   data: Parameters<T["draw"]>[0];
   renderer: (svg: SVGElement) => T;
+  type?: string;
 }
 
-type ChartTypes = BarChart | ScatterPlot | LineChart | HierarchyContainer;
+interface ScatterPlot {
+  type: "scatterplot";
+  data: ScatterPlotDatum[];
+}
+
+type ChartTypes = BarChart | LineChart | HierarchyContainer;
+type ChartWithDataTypes = ChartWithData<ChartTypes> | ScatterPlot;
 
 const parsers: Record<
   string,
-  (json: unknown, label: string) => ChartWithData<ChartTypes>
+  (json: unknown, label: string) => ChartWithDataTypes
 > = {
   balances(json: unknown): ChartWithData<LineChart> {
     const parsedData = array(
@@ -204,22 +216,21 @@ const parsers: Record<
         new HierarchyContainer(svg),
     };
   },
-  scatterplot(json: unknown): ChartWithData<ScatterPlot> {
-    const parser = array(
-      object({
-        type: string,
-        date,
-        description: string,
-      })
-    );
+  scatterplot(json: unknown): ScatterPlot {
     return {
-      data: parser(json),
-      renderer: (svg: SVGElement): ScatterPlot => new ScatterPlot(svg),
+      type: "scatterplot",
+      data: array(
+        object({
+          type: string,
+          date,
+          description: string,
+        })
+      )(json),
     };
   },
 };
 
-export function parseChartData(): (ChartWithData<ChartTypes> & {
+export function parseChartData(): (ChartWithDataTypes & {
   name: string;
 })[] {
   const chartData = array(
@@ -229,7 +240,9 @@ export function parseChartData(): (ChartWithData<ChartTypes> & {
       data: unknown,
     })
   )(getScriptTagJSON("#chart-data"));
-  const result: (ChartWithData<ChartTypes> & { name: string })[] = [];
+  const result: (ChartWithDataTypes & {
+    name: string;
+  })[] = [];
   chartData.forEach(chart => {
     const parser = parsers[chart.type];
     if (parser) {
@@ -242,9 +255,7 @@ export function parseChartData(): (ChartWithData<ChartTypes> & {
   return result;
 }
 
-export function parseQueryChart(
-  data: unknown
-): ChartWithData<ChartTypes> | undefined {
+export function parseQueryChart(data: unknown): ChartWithDataTypes | undefined {
   if (!Array.isArray(data) || !data.length) {
     return undefined;
   }
