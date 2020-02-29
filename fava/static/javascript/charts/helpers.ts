@@ -5,13 +5,6 @@ import { get } from "svelte/store";
 import { filters } from "../stores";
 import { currentTimeFilterDateFormat } from "../format";
 
-export const NO_MARGINS = {
-  top: 0,
-  right: 0,
-  bottom: 0,
-  left: 0,
-};
-
 export function setTimeFilter(date: Date): void {
   filters.update(fs => ({
     ...fs,

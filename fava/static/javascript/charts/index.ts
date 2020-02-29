@@ -5,7 +5,7 @@
  */
 
 import { group } from "d3-array";
-import { hierarchy } from "d3-hierarchy";
+import { hierarchy, HierarchyNode } from "d3-hierarchy";
 import "d3-transition";
 import { get } from "svelte/store";
 
@@ -26,14 +26,31 @@ import {
   Validator,
 } from "../validation";
 
-import { BaseChart } from "./base";
-import {
-  addInternalNodesAsLeaves,
-  HierarchyContainer,
-  AccountHierarchy,
-  AccountHierarchyNode,
-} from "./hierarchy";
 import { scales } from "./helpers";
+
+interface AccountHierarchyDatum {
+  account: string;
+  balance: Record<string, number | undefined>;
+  dummy?: boolean;
+}
+interface AccountHierarchy extends AccountHierarchyDatum {
+  children: AccountHierarchy[];
+}
+type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
+
+/**
+ * Add internal nodes as fake leaf nodes to their own children.
+ *
+ * In the treemap, we only render leaf nodes, so for accounts that have both
+ * children and a balance, we want to duplicate them as leaf nodes.
+ */
+function addInternalNodesAsLeaves(node: AccountHierarchy): void {
+  if (node.children.length) {
+    node.children.forEach(addInternalNodesAsLeaves);
+    node.children.push({ ...node, children: [], dummy: true });
+    node.balance = {};
+  }
+}
 
 interface ScatterPlotDatum {
   date: Date;
@@ -95,10 +112,9 @@ e.on("page-init", () => {
   ]);
 });
 
-interface ChartWithData<T extends BaseChart> {
-  data: Parameters<T["draw"]>[0];
-  renderer: (svg: SVGElement) => T;
-  type?: string;
+interface HierarchyChart {
+  type: "hierarchy";
+  data: Record<string, AccountHierarchyNode>;
 }
 
 interface BarChart {
@@ -118,17 +134,9 @@ interface ScatterPlot {
   data: ScatterPlotDatum[];
 }
 
-type ChartTypes = HierarchyContainer;
-type ChartWithDataTypes =
-  | ChartWithData<ChartTypes>
-  | BarChart
-  | ScatterPlot
-  | LineChart;
+type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
 
-const parsers: Record<
-  string,
-  (json: unknown, label: string) => ChartWithDataTypes
-> = {
+const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
   balances(json: unknown): LineChart {
     const parsedData = array(
       object({
@@ -216,7 +224,7 @@ const parsers: Record<
     }
     return { data, tooltipText, type: "barchart" };
   },
-  hierarchy(json: unknown): ChartWithData<HierarchyContainer> {
+  hierarchy(json: unknown): HierarchyChart {
     const hierarchyValidator: Validator<AccountHierarchy> = object({
       account: string,
       balance: record(number),
@@ -241,9 +249,8 @@ const parsers: Record<
     });
 
     return {
+      type: "hierarchy",
       data,
-      renderer: (svg: SVGElement): HierarchyContainer =>
-        new HierarchyContainer(svg),
     };
   },
   scatterplot(json: unknown): ScatterPlot {
@@ -260,7 +267,7 @@ const parsers: Record<
   },
 };
 
-export function parseChartData(): (ChartWithDataTypes & {
+export function parseChartData(): (ChartTypes & {
   name: string;
 })[] {
   const chartData = array(
@@ -270,7 +277,7 @@ export function parseChartData(): (ChartWithDataTypes & {
       data: unknown,
     })
   )(getScriptTagJSON("#chart-data"));
-  const result: (ChartWithDataTypes & {
+  const result: (ChartTypes & {
     name: string;
   })[] = [];
   chartData.forEach(chart => {
@@ -285,7 +292,7 @@ export function parseChartData(): (ChartWithDataTypes & {
   return result;
 }
 
-export function parseQueryChart(data: unknown): ChartWithDataTypes | undefined {
+export function parseQueryChart(data: unknown): ChartTypes | undefined {
   if (!Array.isArray(data) || !data.length) {
     return undefined;
   }
@@ -333,9 +340,8 @@ export function parseQueryChart(data: unknown): ChartWithDataTypes | undefined {
     });
 
     return {
+      type: "hierarchy",
       data: chartData,
-      renderer: (svg: SVGElement): HierarchyContainer =>
-        new HierarchyContainer(svg),
     };
   }
   if (data[0].date !== undefined) {
