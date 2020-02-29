@@ -79,11 +79,6 @@ svg text {
   fill: var(--color-text-lightest);
 }
 
-svg .line {
-  fill: none;
-  stroke-width: 2px;
-}
-
 svg .axis path,
 svg .axis line {
   fill: none;
@@ -141,6 +136,11 @@ svg.barchart .group:hover .group-box {
 
 svg.barchart .budget {
   opacity: 0.3;
+}
+
+svg.linechart .lines path {
+  fill: none;
+  stroke-width: 2px;
 }
 
 .tooltip {

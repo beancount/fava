@@ -28,7 +28,6 @@ import {
 
 import { BaseChart } from "./base";
 import { BarChart } from "./bar";
-import { LineChart, LineChartDatum } from "./line";
 import {
   addInternalNodesAsLeaves,
   HierarchyContainer,
@@ -42,6 +41,17 @@ interface ScatterPlotDatum {
   type: string;
   description: string;
 }
+
+interface LineChartDatum {
+  name: string;
+  date: Date;
+  value: number;
+}
+
+type LineChartData = {
+  name: string;
+  values: LineChartDatum[];
+};
 
 /**
  * The list of operating currencies, adding in the current conversion currency.
@@ -80,19 +90,25 @@ interface ChartWithData<T extends BaseChart> {
   type?: string;
 }
 
+interface LineChart {
+  type: "linechart";
+  data: LineChartData[];
+  tooltipText(d: LineChartDatum): string;
+}
+
 interface ScatterPlot {
   type: "scatterplot";
   data: ScatterPlotDatum[];
 }
 
-type ChartTypes = BarChart | LineChart | HierarchyContainer;
-type ChartWithDataTypes = ChartWithData<ChartTypes> | ScatterPlot;
+type ChartTypes = BarChart | HierarchyContainer;
+type ChartWithDataTypes = ChartWithData<ChartTypes> | ScatterPlot | LineChart;
 
 const parsers: Record<
   string,
   (json: unknown, label: string) => ChartWithDataTypes
 > = {
-  balances(json: unknown): ChartWithData<LineChart> {
+  balances(json: unknown): LineChart {
     const parsedData = array(
       object({
         date,
@@ -118,31 +134,20 @@ const parsers: Record<
 
     return {
       data,
-      renderer: (svg: SVGElement): LineChart =>
-        new LineChart(svg).set(
-          "tooltipText",
-          d =>
-            `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
-              d.date
-            )}</em>`
-        ),
+      type: "linechart",
+      tooltipText(d: LineChartDatum): string {
+        return `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
+          d.date
+        )}</em>`;
+      },
     };
   },
-  commodities(json: unknown, label: string): ChartWithData<LineChart> {
+  commodities(json: unknown, label: string): LineChart {
     const parsedData = object({
       quote: string,
       base: string,
       prices: array(tuple([date, number])),
     })(json);
-
-    const renderer = (svg: SVGElement): LineChart =>
-      new LineChart(svg).set(
-        "tooltipText",
-        d =>
-          `1 ${parsedData.base} = ${formatCurrency(d.value)} ${
-            parsedData.quote
-          }<em>${dateFormat.day(d.date)}</em>`
-      );
     return {
       data: [
         {
@@ -154,7 +159,12 @@ const parsers: Record<
           })),
         },
       ],
-      renderer,
+      type: "linechart",
+      tooltipText(d: LineChartDatum): string {
+        return `1 ${parsedData.base} = ${formatCurrency(d.value)} ${
+          parsedData.quote
+        }<em>${dateFormat.day(d.date)}</em>`;
+      },
     };
   },
   bar(json: unknown): ChartWithData<BarChart> {

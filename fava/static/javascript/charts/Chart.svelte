@@ -1,10 +1,12 @@
 <script>
-  import { tick } from "svelte";
+  import { tick, setContext } from "svelte";
+  import { writable } from "svelte/store";
 
   import { _ } from "../helpers";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { chartCurrency, chartMode, showCharts } from "../stores/chart";
 
+  import LineChart from "./LineChart.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
   export let chart;
@@ -14,20 +16,29 @@
   let hasCurrencySetting;
   let chartWidth = 0;
 
+  const legend = writable({ domain: [] });
+  $: domain = $legend ? $legend.domain.sort() : [];
+
+  setContext("chart", {
+    legend,
+  });
+
   async function chartChanged() {
     await tick();
-    if (!svg) {
-      return;
+    if (svg) {
+      renderedChart = chart
+        .renderer(svg)
+        .setWidth(chartWidth)
+        .set("mode", $chartMode)
+        .set("currency", $chartCurrency)
+        .draw(chart.data);
+      hasCurrencySetting = renderedChart.has_currency_setting;
     }
-    renderedChart = chart
-      .renderer(svg)
-      .setWidth(chartWidth)
-      .set("mode", $chartMode)
-      .set("currency", $chartCurrency)
-      .draw(chart.data);
-    hasCurrencySetting = renderedChart.has_currency_setting;
   }
   $: if (chart) {
+    legend.set({ domain: [] });
+    hasCurrencySetting = false;
+    hasModeSetting = false;
     chartChanged();
   }
 
@@ -40,16 +51,19 @@
     hasCurrencySetting = renderedChart.has_currency_setting;
   }
 
-  $: legend = (renderedChart && renderedChart.legend) || { domain: [] };
+  $: if (renderedChart && renderedChart.legend) {
+    legend.set(renderedChart.legend);
+  }
+
   $: currencies = (renderedChart && renderedChart.currencies) || [];
   $: hasModeSetting = renderedChart && renderedChart.has_mode_setting;
 </script>
 
 <form class="wide-form">
   <p hidden={!$showCharts} class="chart-legend">
-    {#each legend.domain.sort() as item}
+    {#each domain as item}
       <span class="legend">
-        <i class="color" style="background-color: {legend.scale(item)}" />
+        <i class="color" style="background-color: {$legend.scale(item)}" />
         {item}
       </span>
     {/each}
@@ -85,6 +99,11 @@
 <div hidden={!$showCharts} bind:clientWidth={chartWidth}>
   {#if chart.type === 'scatterplot'}
     <ScatterPlot data={chart.data} width={chartWidth} />
+  {:else if chart.type === 'linechart'}
+    <LineChart
+      data={chart.data}
+      width={chartWidth}
+      tooltipText={chart.tooltipText} />
   {:else}
     <svg bind:this={svg} />
   {/if}
