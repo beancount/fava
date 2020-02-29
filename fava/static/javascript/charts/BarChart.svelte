@@ -1,0 +1,133 @@
+<script>
+  import { max, min } from "d3-array";
+  import { axisLeft, axisBottom } from "d3-axis";
+  import { scaleLinear, scaleBand } from "d3-scale";
+  import { select } from "d3-selection";
+  import { getContext } from "svelte";
+
+  import { scales, setTimeFilter } from "./helpers";
+  import { formatCurrencyShort } from "../format";
+  import { tooltip } from "./tooltip";
+
+  export let data = [];
+  export let width;
+  export let tooltipText;
+  const maxColumnWidth = 100;
+  const margin = {
+    top: 10,
+    right: 10,
+    bottom: 30,
+    left: 40,
+  };
+  const height = 250;
+  $: innerHeight = height - margin.top - margin.bottom;
+  $: maxWidth = data.length * maxColumnWidth;
+  $: offset = margin.left + Math.max(0, width - maxWidth) / 2;
+  $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
+
+  // Elements
+  let gElement;
+  let xAxisElement;
+  let yAxisElement;
+
+  // Scales
+  let x0 = scaleBand().padding(0.1);
+  let x1 = scaleBand();
+  let y = scaleLinear();
+  $: {
+    x0 = x0.range([0, innerWidth]).domain(data.map(d => d.label));
+    x1 = x1.range([0, x0.bandwidth()]).domain(data[0].values.map(d => d.name));
+    y = y
+      .range([innerHeight, 0])
+      .domain([
+        Math.min(0, min(data, d => min(d.values, x => x.value)) || 0),
+        Math.max(0, max(data, d => max(d.values, x => x.value)) || 0),
+      ]);
+  }
+
+  const context = getContext("chart");
+  $: if (data && x1) {
+    context.legend.set({
+      domain: x1.domain(),
+      scale: scales.currencies,
+    });
+  }
+
+  function filterTicks(domain) {
+    const labelsCount = innerWidth / 70;
+    if (domain.length <= labelsCount) {
+      return domain;
+    }
+    const showIndices = Math.ceil(domain.length / labelsCount);
+    return domain.filter((d, i) => i % showIndices === 0);
+  }
+
+  // Axes
+  const xAxis = axisBottom(x0).tickSizeOuter(0);
+  let yAxis = axisLeft(y).tickFormat(formatCurrencyShort);
+  $: yAxis = yAxis.tickSize(-innerWidth);
+  $: if (x0 && y && yAxisElement && xAxisElement) {
+    xAxis.tickValues(filterTicks(x0.domain()));
+    xAxis(select(xAxisElement));
+    yAxis(select(yAxisElement));
+  }
+
+  function mouseenter(group) {
+    tooltip.style("opacity", 1).html(tooltipText(group));
+  }
+  function mousemove(event) {
+    tooltip
+      .style("left", `${event.pageX}px`)
+      .style("top", `${event.pageY - 15}px`);
+  }
+  function mouseleave() {
+    tooltip.style("opacity", 0);
+  }
+</script>
+
+<svg class="barchart" {width} {height}>
+  <g bind:this={gElement} transform={`translate(${offset},${margin.top})`}>
+    <g
+      class="x axis"
+      bind:this={xAxisElement}
+      transform={`translate(0,${innerHeight})`} />
+    <g class="y axis" bind:this={yAxisElement} />
+    <g>
+      {#each data as group}
+        <g
+          class="group"
+          on:mouseenter={() => mouseenter(group)}
+          on:mousemove={mousemove}
+          on:mouseleave={mouseleave}
+          transform={`translate(${x0(group.label)},0)`}>
+          <rect class="group-box" width={x0.bandwidth()} height={innerHeight} />
+          <rect
+            class="axis-group-box"
+            on:click={() => {
+              setTimeFilter(group.date);
+            }}
+            transform={`translate(0,${innerHeight})`}
+            width={x0.bandwidth()}
+            height={margin.bottom} />
+          {#each group.values as bar}
+            <rect
+              class="bar"
+              fill={scales.currencies(bar.name)}
+              width={x1.bandwidth()}
+              x={x1(bar.name)}
+              y={y(Math.max(0, bar.value))}
+              height={Math.abs(y(bar.value) - y(0))} />
+          {/each}
+          {#each group.values as bar}
+            <rect
+              class="budget"
+              width={x1.bandwidth()}
+              x={x1(bar.name)}
+              y={y(Math.max(0, bar.budget))}
+              height={Math.abs(y(bar.budget) - y(0))} />
+          {/each}
+        </g>
+      {/each}
+    </g>
+  </g>
+</svg>

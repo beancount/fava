@@ -6,6 +6,7 @@
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { chartCurrency, chartMode, showCharts } from "../stores/chart";
 
+  import BarChart from "./BarChart.svelte";
   import LineChart from "./LineChart.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
@@ -17,8 +18,6 @@
   let chartWidth = 0;
 
   const legend = writable({ domain: [] });
-  $: domain = $legend ? $legend.domain.sort() : [];
-
   setContext("chart", {
     legend,
   });
@@ -61,7 +60,7 @@
 
 <form class="wide-form">
   <p hidden={!$showCharts} class="chart-legend">
-    {#each domain as item}
+    {#each $legend.domain.sort() as item}
       <span class="legend">
         <i class="color" style="background-color: {$legend.scale(item)}" />
         {item}
@@ -99,6 +98,11 @@
 <div hidden={!$showCharts} bind:clientWidth={chartWidth}>
   {#if chart.type === 'scatterplot'}
     <ScatterPlot data={chart.data} width={chartWidth} />
+  {:else if chart.type === 'barchart'}
+    <BarChart
+      data={chart.data}
+      width={chartWidth}
+      tooltipText={chart.tooltipText} />
   {:else if chart.type === 'linechart'}
     <LineChart
       data={chart.data}

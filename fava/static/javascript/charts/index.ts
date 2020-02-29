@@ -27,7 +27,6 @@ import {
 } from "../validation";
 
 import { BaseChart } from "./base";
-import { BarChart } from "./bar";
 import {
   addInternalNodesAsLeaves,
   HierarchyContainer,
@@ -52,6 +51,18 @@ type LineChartData = {
   name: string;
   values: LineChartDatum[];
 };
+
+interface BarChartDatumValue {
+  name: string;
+  value: number;
+  budget: number;
+}
+
+interface BarChartDatum {
+  label: string;
+  date: Date;
+  values: BarChartDatumValue[];
+}
 
 /**
  * The list of operating currencies, adding in the current conversion currency.
@@ -90,6 +101,12 @@ interface ChartWithData<T extends BaseChart> {
   type?: string;
 }
 
+interface BarChart {
+  type: "barchart";
+  data: BarChartDatum[];
+  tooltipText(d: BarChartDatum): string;
+}
+
 interface LineChart {
   type: "linechart";
   data: LineChartData[];
@@ -101,8 +118,12 @@ interface ScatterPlot {
   data: ScatterPlotDatum[];
 }
 
-type ChartTypes = BarChart | HierarchyContainer;
-type ChartWithDataTypes = ChartWithData<ChartTypes> | ScatterPlot | LineChart;
+type ChartTypes = HierarchyContainer;
+type ChartWithDataTypes =
+  | ChartWithData<ChartTypes>
+  | BarChart
+  | ScatterPlot
+  | LineChart;
 
 const parsers: Record<
   string,
@@ -167,7 +188,7 @@ const parsers: Record<
       },
     };
   },
-  bar(json: unknown): ChartWithData<BarChart> {
+  bar(json: unknown): BarChart {
     const jsonData = array(
       object({ date, budgets: record(number), balance: record(number) })
     )(json);
@@ -181,20 +202,19 @@ const parsers: Record<
       date: d.date,
       label: currentDateFmt(d.date),
     }));
-    const renderer = (svg: SVGElement): BarChart =>
-      new BarChart(svg).set("tooltipText", d => {
-        let text = "";
-        d.values.forEach(a => {
-          text += `${formatCurrency(a.value)} ${a.name}`;
-          if (a.budget) {
-            text += ` / ${formatCurrency(a.budget)} ${a.name}`;
-          }
-          text += "<br>";
-        });
-        text += `<em>${d.label}</em>`;
-        return text;
+    function tooltipText(d: BarChartDatum): string {
+      let text = "";
+      d.values.forEach(a => {
+        text += `${formatCurrency(a.value)} ${a.name}`;
+        if (a.budget) {
+          text += ` / ${formatCurrency(a.budget)} ${a.name}`;
+        }
+        text += "<br>";
       });
-    return { data, renderer };
+      text += `<em>${d.label}</em>`;
+      return text;
+    }
+    return { data, tooltipText, type: "barchart" };
   },
   hierarchy(json: unknown): ChartWithData<HierarchyContainer> {
     const hierarchyValidator: Validator<AccountHierarchy> = object({
