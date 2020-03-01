@@ -7,9 +7,9 @@
 
   import { scales, setTimeFilter } from "./helpers";
   import { formatCurrencyShort } from "../format";
-  import { tooltip } from "./tooltip";
+  import { followingTooltip } from "./tooltip";
 
-  export let data = [];
+  export let data;
   export let width;
   export let tooltipText;
   const maxColumnWidth = 100;
@@ -26,7 +26,6 @@
   $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
 
   // Elements
-  let gElement;
   let xAxisElement;
   let yAxisElement;
 
@@ -46,7 +45,7 @@
   }
 
   const context = getContext("chart");
-  $: if (data && x1) {
+  $: {
     context.legend.set({
       domain: x1.domain(),
       scale: scales.currencies,
@@ -71,22 +70,10 @@
     xAxis(select(xAxisElement));
     yAxis(select(yAxisElement));
   }
-
-  function mouseenter(group) {
-    tooltip.style("opacity", 1).html(tooltipText(group));
-  }
-  function mousemove(event) {
-    tooltip
-      .style("left", `${event.pageX}px`)
-      .style("top", `${event.pageY - 15}px`);
-  }
-  function mouseleave() {
-    tooltip.style("opacity", 0);
-  }
 </script>
 
 <svg class="barchart" {width} {height}>
-  <g bind:this={gElement} transform={`translate(${offset},${margin.top})`}>
+  <g transform={`translate(${offset},${margin.top})`}>
     <g
       class="x axis"
       bind:this={xAxisElement}
@@ -96,9 +83,7 @@
       {#each data as group}
         <g
           class="group"
-          on:mouseenter={() => mouseenter(group)}
-          on:mousemove={mousemove}
-          on:mouseleave={mouseleave}
+          use:followingTooltip={() => tooltipText(group)}
           transform={`translate(${x0(group.label)},0)`}>
           <rect class="group-box" width={x0.bandwidth()} height={innerHeight} />
           <rect

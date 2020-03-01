@@ -4,21 +4,17 @@
   import { favaAPI } from "../stores";
   import { scales } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
-  import { tooltip } from "./tooltip";
+  import { followingTooltip } from "./tooltip";
 
-  export let data = [];
+  export let data;
   export let width;
   export let currency;
   $: height = Math.min(width / 2.5, 400);
 
   const tree = treemap().paddingInner(1);
-  let root = null;
-  let leaves = [];
+  $: root = tree.size([width, height])(data);
+  $: leaves = root.leaves().filter(d => d.value);
 
-  $: {
-    root = tree.size([width, height])(data);
-    leaves = root.leaves();
-  }
   function fill(d) {
     const node = d.data.dummy && d.parent ? d.parent : d;
     if (node.depth === 1 || !node.parent) {
@@ -27,23 +23,11 @@
     return scales.treemap(node.parent.data.account);
   }
   function tooltipText(d) {
-    const balance = d.value || 0;
-    return `${formatCurrency(balance)} ${currency} (${formatPercentage(
-      balance / root.value
+    return `${formatCurrency(d.value)} ${currency} (${formatPercentage(
+      d.value / root.value
     )})<em>${d.data.account}</em>`;
   }
 
-  function mouseenter(d) {
-    tooltip.style("opacity", 1).html(tooltipText(d));
-  }
-  function mousemove(event) {
-    tooltip
-      .style("left", `${event.pageX}px`)
-      .style("top", `${event.pageY - 15}px`);
-  }
-  function mouseleave() {
-    tooltip.style("opacity", 0);
-  }
   function setOpacity(node, param) {
     function update(d) {
       const length = node.getComputedTextLength();
@@ -58,9 +42,7 @@
   {#each leaves as d}
     <g
       transform={`translate(${d.x0},${d.y0})`}
-      on:mouseenter={() => mouseenter(d)}
-      on:mousemove={mousemove}
-      on:mouseleave={mouseleave}>
+      use:followingTooltip={() => tooltipText(d)}>
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <text
         use:setOpacity={d}

@@ -4,9 +4,7 @@
  * The charts heavily use d3 libraries.
  */
 
-import { group } from "d3-array";
 import { hierarchy, HierarchyNode } from "d3-hierarchy";
-import "d3-transition";
 import { get } from "svelte/store";
 
 import { getScriptTagJSON } from "../helpers";
@@ -144,22 +142,22 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
         balance: record(number),
       })
     )(json);
-    const allValues: LineChartDatum[] = [];
+    const groups: Map<string, LineChartDatum[]> = new Map();
     for (const { date: date_, balance } of parsedData) {
       Object.entries(balance).forEach(([currency, value]) => {
-        allValues.push({
-          name: currency,
-          date: date_,
-          value,
-        });
+        const group = groups.get(currency);
+        const datum = { date: date_, value, name: currency };
+        if (group) {
+          group.push(datum);
+        } else {
+          groups.set(currency, [datum]);
+        }
       });
     }
-    const data = [...group(allValues, v => v.name).entries()].map(
-      ([name, values]) => ({
-        name,
-        values,
-      })
-    );
+    const data = [...groups.entries()].map(([name, values]) => ({
+      name,
+      values,
+    }));
 
     return {
       data,

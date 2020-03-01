@@ -7,7 +7,7 @@
   import { scales } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
 
-  export let data = [];
+  export let data;
   export let currency;
   export let width;
   export let height;

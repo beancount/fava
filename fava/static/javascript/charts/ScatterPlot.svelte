@@ -2,14 +2,14 @@
   import { extent } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scalePoint, scaleUtc } from "d3-scale";
-  import { clientPoint, select } from "d3-selection";
+  import { select } from "d3-selection";
   import { quadtree } from "d3-quadtree";
 
   import { scales } from "./helpers";
   import { dateFormat } from "../format";
-  import { tooltip } from "./tooltip";
+  import { positionedTooltip } from "./tooltip";
 
-  export let data = [];
+  export let data;
   export let width;
   const margin = {
     top: 10,
@@ -22,7 +22,6 @@
   $: innerHeight = height - margin.top - margin.bottom;
 
   // Elements
-  let gElement;
   let xAxisElement;
   let yAxisElement;
 
@@ -56,33 +55,22 @@
   $: quad = quadtree(
     data,
     d => x(d.date),
-    d => y(d.type) || 0
+    d => y(d.type)
   );
-
-  function mousemove(event) {
-    const matrix = gElement.getScreenCTM();
-    const d = quad.find(...clientPoint(gElement, event));
-    if (d) {
-      tooltip
-        .style("opacity", 1)
-        .html(`${d.description}<em>${dateFormat.day(d.date)}</em>`)
-        .style("left", `${window.scrollX + x(d.date) + matrix.e}px`)
-        .style("top", `${window.scrollY + (y(d.type) || 0) + matrix.f - 15}px`);
-    } else {
-      tooltip.style("opacity", 0);
-    }
+  function tooltipText(d) {
+    return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
   }
-  function mouseleave() {
-    tooltip.style("opacity", 0);
+
+  function tooltipInfo(...pos) {
+    const d = quad.find(...pos);
+    return d ? [x(d.date), y(d.type), tooltipText(d)] : undefined;
   }
 </script>
 
 <svg class="scatterplot" {width} {height}>
   <g
-    bind:this={gElement}
-    transform={`translate(${margin.left},${margin.top})`}
-    on:mouseleave={mouseleave}
-    on:mousemove={mousemove}>
+    use:positionedTooltip={tooltipInfo}
+    transform={`translate(${margin.left},${margin.top})`}>
     <g
       class="x axis"
       bind:this={xAxisElement}

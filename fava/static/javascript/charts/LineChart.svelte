@@ -2,16 +2,16 @@
   import { max, merge, min } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scaleLinear, scaleUtc } from "d3-scale";
-  import { clientPoint, select } from "d3-selection";
+  import { select } from "d3-selection";
   import { quadtree } from "d3-quadtree";
   import { line } from "d3-shape";
   import { getContext } from "svelte";
 
   import { scales } from "./helpers";
   import { formatCurrencyShort } from "../format";
-  import { tooltip } from "./tooltip";
+  import { positionedTooltip } from "./tooltip";
 
-  export let data = [];
+  export let data;
   export let width;
   export let tooltipText;
   const margin = {
@@ -33,7 +33,6 @@
   }
 
   // Elements
-  let gElement;
   let xAxisElement;
   let yAxisElement;
 
@@ -83,30 +82,16 @@
     d => y(d.value)
   );
 
-  function mousemove(event) {
-    const matrix = gElement.getScreenCTM();
-    const d = quad.find(...clientPoint(gElement, event));
-    if (d) {
-      tooltip
-        .style("opacity", 1)
-        .html(tooltipText(d))
-        .style("left", `${window.scrollX + x(d.date) + matrix.e}px`)
-        .style("top", `${window.scrollY + y(d.value) + matrix.f - 15}px`);
-    } else {
-      tooltip.style("opacity", 0);
-    }
-  }
-  function mouseleave() {
-    tooltip.style("opacity", 0);
+  function tooltipInfo(...pos) {
+    const d = quad.find(...pos);
+    return d ? [x(d.date), y(d.value), tooltipText(d)] : undefined;
   }
 </script>
 
 <svg class="linechart" {width} {height}>
   <g
-    bind:this={gElement}
-    transform={`translate(${margin.left},${margin.top})`}
-    on:mouseleave={mouseleave}
-    on:mousemove={mousemove}>
+    use:positionedTooltip={tooltipInfo}
+    transform={`translate(${margin.left},${margin.top})`}>
     <g
       class="x axis"
       bind:this={xAxisElement}

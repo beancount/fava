@@ -15,7 +15,7 @@
 
   $: hasCurrencySetting =
     chart.type === "hierarchy" && $chartMode === "treemap";
-  let chartWidth = 0;
+  let chartWidth;
 
   const currencies = writable([]);
   const legend = writable({ domain: [] });
@@ -27,6 +27,13 @@
   $: if (chart) {
     legend.set({ domain: [] });
   }
+
+  const components = {
+    barchart: BarChart,
+    hierarchy: HierarchyContainer,
+    linechart: LineChart,
+    scatterplot: ScatterPlot,
+  };
 </script>
 
 <form class="wide-form">
@@ -67,19 +74,13 @@
     class="toggle-chart" />
 </form>
 <div hidden={!$showCharts} bind:clientWidth={chartWidth}>
-  {#if chart.type === 'scatterplot'}
-    <ScatterPlot data={chart.data} width={chartWidth} />
-  {:else if chart.type === 'barchart'}
-    <BarChart
-      data={chart.data}
-      width={chartWidth}
-      tooltipText={chart.tooltipText} />
-  {:else if chart.type === 'linechart'}
-    <LineChart
-      data={chart.data}
-      width={chartWidth}
-      tooltipText={chart.tooltipText} />
-  {:else}
-    <HierarchyContainer data={chart.data} width={chartWidth} />
+  {#if chartWidth}
+    {#if components[chart.type]}
+      <svelte:component
+        this={components[chart.type]}
+        data={chart.data}
+        tooltipText={chart.tooltipText}
+        width={chartWidth} />
+    {:else}Invalid chart: {chart.type}{/if}
   {/if}
 </div>
