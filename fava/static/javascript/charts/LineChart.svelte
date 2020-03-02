@@ -1,5 +1,5 @@
 <script>
-  import { max, merge, min } from "d3-array";
+  import { max, merge, min, extent } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { quadtree } from "d3-quadtree";
@@ -25,36 +25,32 @@
   $: innerHeight = height - margin.top - margin.bottom;
 
   const context = getContext("chart");
-  $: if (data) {
-    context.legend.set({
-      domain: data.map(d => d.name),
-      scale: scales.currencies,
-    });
-  }
+  $: context.legend.set({
+    domain: data.map(d => d.name),
+    scale: scales.currencies,
+  });
 
   // Scales
-  let x = scaleUtc();
-  let y = scaleLinear();
-  $: {
-    x = x.range([0, innerWidth]);
-    y = y.range([innerHeight, 0]);
-  }
-  $: {
-    x = x.domain([
-      min(data, s => s.values[0].date) || 0,
-      max(data, s => s.values[s.values.length - 1].date) || 0,
-    ]);
+  $: allValues = merge(data.map(d => d.values));
+  $: xDomain = [
+    min(data, s => s.values[0].date),
+    max(data, s => s.values[s.values.length - 1].date),
+  ];
+  $: x = scaleUtc()
+    .domain(xDomain)
+    .range([0, innerWidth]);
+  $: [yMin = 0, yMax = 0] = extent(allValues, v => v.value);
+  // Span y-axis as max minus min value plus 5 percent margin
+  $: y = scaleLinear()
+    .domain([yMin - (yMax - yMin) * 0.05, yMax + (yMax - yMin) * 0.05])
+    .range([innerHeight, 0]);
 
-    // Span y-axis as max minus min value plus 5 percent margin
-    const minDataValue = min(data, d => min(d.values, v => v.value));
-    const maxDataValue = max(data, d => max(d.values, v => v.value));
-    if (minDataValue !== undefined && maxDataValue !== undefined) {
-      y = y.domain([
-        minDataValue - (maxDataValue - minDataValue) * 0.05,
-        maxDataValue + (maxDataValue - minDataValue) * 0.05,
-      ]);
-    }
-  }
+  // Quadtree for hover.
+  $: quad = quadtree(
+    allValues,
+    d => x(d.date),
+    d => y(d.value)
+  );
 
   $: lineShape = line()
     .x(d => x(d.date))
@@ -66,13 +62,6 @@
     .tickPadding(6)
     .tickSize(-innerWidth)
     .tickFormat(formatCurrencyShort);
-
-  // Quadtree for hover.
-  $: quad = quadtree(
-    merge(data.map(d => d.values)),
-    d => x(d.date),
-    d => y(d.value)
-  );
 
   function tooltipInfo(...pos) {
     const d = quad.find(...pos);

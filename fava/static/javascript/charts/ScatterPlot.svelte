@@ -22,19 +22,14 @@
   $: innerHeight = height - margin.top - margin.bottom;
 
   // Scales
-  let x = scaleUtc();
-  let y = scalePoint().padding(1);
-  $: {
-    x = x.range([0, innerWidth]);
-    y = y.range([innerHeight, 0]);
-  }
-  $: {
-    const dateExtent = extent(data, d => d.date);
-    if (dateExtent[0] !== undefined) {
-      x = x.domain(dateExtent);
-    }
-    y = y.domain(data.map(d => d.type));
-  }
+  $: dateExtent = extent(data, d => d.date);
+  $: x = scaleUtc()
+    .domain(dateExtent)
+    .range([0, innerWidth]);
+  $: y = scalePoint()
+    .padding(1)
+    .domain(data.map(d => d.type))
+    .range([innerHeight, 0]);
 
   // Axes
   $: xAxis = axisBottom(x).tickSizeOuter(0);

@@ -1,5 +1,5 @@
 <script>
-  import { max, min } from "d3-array";
+  import { extent, merge } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scaleLinear, scaleBand } from "d3-scale";
   import { getContext } from "svelte";
@@ -28,26 +28,21 @@
   // Scales
   $: x0 = scaleBand()
     .padding(0.1)
-    .range([0, innerWidth])
-    .domain(data.map(d => d.label));
+    .domain(data.map(d => d.label))
+    .range([0, innerWidth]);
   $: x1 = scaleBand()
-    .range([0, x0.bandwidth()])
-    .domain(data[0].values.map(d => d.name));
-  $: valueRange = [
-    Math.min(0, min(data, d => min(d.values, x => x.value)) || 0),
-    Math.max(0, max(data, d => max(d.values, x => x.value)) || 0),
-  ];
+    .domain(data[0].values.map(d => d.name))
+    .range([0, x0.bandwidth()]);
+  $: [yMin, yMax] = extent(merge(data.map(d => d.values)), d => d.value);
   $: y = scaleLinear()
     .range([innerHeight, 0])
-    .domain(valueRange);
+    .domain([Math.min(0, yMin), Math.max(0, yMax)]);
 
   const context = getContext("chart");
-  $: {
-    context.legend.set({
-      domain: x1.domain(),
-      scale: scales.currencies,
-    });
-  }
+  $: context.legend.set({
+    domain: x1.domain(),
+    scale: scales.currencies,
+  });
 
   function filterTicks(domain) {
     const labelsCount = innerWidth / 70;
