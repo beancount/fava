@@ -26,19 +26,20 @@
   $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
 
   // Scales
-  let x0 = scaleBand().padding(0.1);
-  let x1 = scaleBand();
-  let y = scaleLinear();
-  $: {
-    x0 = x0.range([0, innerWidth]).domain(data.map(d => d.label));
-    x1 = x1.range([0, x0.bandwidth()]).domain(data[0].values.map(d => d.name));
-    y = y
-      .range([innerHeight, 0])
-      .domain([
-        Math.min(0, min(data, d => min(d.values, x => x.value)) || 0),
-        Math.max(0, max(data, d => max(d.values, x => x.value)) || 0),
-      ]);
-  }
+  $: x0 = scaleBand()
+    .padding(0.1)
+    .range([0, innerWidth])
+    .domain(data.map(d => d.label));
+  $: x1 = scaleBand()
+    .range([0, x0.bandwidth()])
+    .domain(data[0].values.map(d => d.name));
+  $: valueRange = [
+    Math.min(0, min(data, d => min(d.values, x => x.value)) || 0),
+    Math.max(0, max(data, d => max(d.values, x => x.value)) || 0),
+  ];
+  $: y = scaleLinear()
+    .range([innerHeight, 0])
+    .domain(valueRange);
 
   const context = getContext("chart");
   $: {
@@ -79,7 +80,11 @@
           class="group"
           use:followingTooltip={() => tooltipText(group)}
           transform={`translate(${x0(group.label)},0)`}>
-          <rect class="group-box" width={x0.bandwidth()} height={innerHeight} />
+          <rect
+            class="group-box"
+            x={(x0.bandwidth() - x0.step()) / 2}
+            width={x0.step()}
+            height={innerHeight} />
           <rect
             class="axis-group-box"
             on:click={() => {
