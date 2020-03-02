@@ -1,7 +1,8 @@
 <script>
   import { treemap } from "d3-hierarchy";
 
-  import { favaAPI } from "../stores";
+  import router from "../router";
+  import { accountUrl } from "../stores";
   import { scales } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
   import { followingTooltip } from "./tooltip";
@@ -46,9 +47,7 @@
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <text
         use:setOpacity={d}
-        on:click|stopPropagation={() => {
-          window.location.href = favaAPI.accountURL.replace('REPLACEME', d.data.account);
-        }}
+        on:click={() => router.navigate(accountUrl(d.data.account))}
         dy=".5em"
         x={(d.x1 - d.x0) / 2}
         y={(d.y1 - d.y0) / 2}

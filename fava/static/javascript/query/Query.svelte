@@ -24,7 +24,7 @@
         addToHistory(query);
         result.chart = parseQueryChart(result.chart);
         query_results[query] = { result };
-        const url = new URL(window.location.toString());
+        const url = new URL(window.location.href);
         url.searchParams.set("query_string", query);
         window.history.replaceState(null, "", url.toString());
         // TODO: initSort();
@@ -44,7 +44,7 @@
   }
 
   onMount(() => {
-    const url = new URL(window.location);
+    const url = new URL(window.location.href);
     query_string = url.searchParams.get("query_string") || "";
     if (query_string) {
       submit();

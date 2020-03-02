@@ -93,6 +93,14 @@ export const urlSyncedParams = [
   "time",
 ];
 
+/** Url for the account page for an account. */
+export function accountUrl(account: string): string {
+  return new URL(
+    favaAPI.accountURL.replace("REPLACEME", account),
+    window.location.href
+  ).toString();
+}
+
 export function closeOverlay(): void {
   if (window.location.hash) {
     window.history.pushState({}, "", "#");

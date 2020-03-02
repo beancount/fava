@@ -15,7 +15,7 @@
   }
 
   onMount(() => {
-    const url = new URL(window.location);
+    const url = new URL(window.location.href);
     value = url.searchParams.get("value") || "";
     if (value) {
       dispatch("submit");

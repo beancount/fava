@@ -3,7 +3,8 @@
   import { scaleLinear, scaleSqrt } from "d3-scale";
   import { arc } from "d3-shape";
 
-  import { favaAPI } from "../stores";
+  import router from "../router";
+  import { accountUrl } from "../stores";
   import { scales } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
 
@@ -36,13 +37,6 @@
     .endAngle(d => x(d.x1))
     .innerRadius(d => y(d.y0))
     .outerRadius(d => y(d.y1));
-
-  function click(event, d) {
-    window.location.href = favaAPI.accountURL.replace(
-      "REPLACEME",
-      d.data.account
-    );
-  }
 </script>
 
 <style>
@@ -64,7 +58,7 @@
   <text class="balance" dy="1.2em" text-anchor="middle">{currentBalance}</text>
   {#each leaves as d}
     <path
-      on:click={e => click(e, d)}
+      on:click={() => router.navigate(accountUrl(d.data.account))}
       on:mouseover={() => {
         current = d;
       }}
