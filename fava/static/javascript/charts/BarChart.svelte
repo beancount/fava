@@ -2,9 +2,9 @@
   import { max, min } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scaleLinear, scaleBand } from "d3-scale";
-  import { select } from "d3-selection";
   import { getContext } from "svelte";
 
+  import { axis } from "./axis";
   import { scales, setTimeFilter } from "./helpers";
   import { formatCurrencyShort } from "../format";
   import { followingTooltip } from "./tooltip";
@@ -24,10 +24,6 @@
   $: maxWidth = data.length * maxColumnWidth;
   $: offset = margin.left + Math.max(0, width - maxWidth) / 2;
   $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
-
-  // Elements
-  let xAxisElement;
-  let yAxisElement;
 
   // Scales
   let x0 = scaleBand().padding(0.1);
@@ -62,23 +58,21 @@
   }
 
   // Axes
-  const xAxis = axisBottom(x0).tickSizeOuter(0);
-  let yAxis = axisLeft(y).tickFormat(formatCurrencyShort);
-  $: yAxis = yAxis.tickSize(-innerWidth);
-  $: if (x0 && y && yAxisElement && xAxisElement) {
-    xAxis.tickValues(filterTicks(x0.domain()));
-    xAxis(select(xAxisElement));
-    yAxis(select(yAxisElement));
-  }
+  $: xAxis = axisBottom(x0)
+    .tickSizeOuter(0)
+    .tickValues(filterTicks(x0.domain()));
+  $: yAxis = axisLeft(y)
+    .tickSize(-innerWidth)
+    .tickFormat(formatCurrencyShort);
 </script>
 
 <svg class="barchart" {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
     <g
       class="x axis"
-      bind:this={xAxisElement}
+      use:axis={xAxis}
       transform={`translate(0,${innerHeight})`} />
-    <g class="y axis" bind:this={yAxisElement} />
+    <g class="y axis" use:axis={yAxis} />
     <g>
       {#each data as group}
         <g

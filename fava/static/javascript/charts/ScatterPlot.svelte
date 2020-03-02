@@ -2,9 +2,9 @@
   import { extent } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scalePoint, scaleUtc } from "d3-scale";
-  import { select } from "d3-selection";
   import { quadtree } from "d3-quadtree";
 
+  import { axis } from "./axis";
   import { scales } from "./helpers";
   import { dateFormat } from "../format";
   import { positionedTooltip } from "./tooltip";
@@ -20,10 +20,6 @@
   const height = 250;
   $: innerWidth = width - margin.left - margin.right;
   $: innerHeight = height - margin.top - margin.bottom;
-
-  // Elements
-  let xAxisElement;
-  let yAxisElement;
 
   // Scales
   let x = scaleUtc();
@@ -41,15 +37,11 @@
   }
 
   // Axes
-  const xAxis = axisBottom(x).tickSizeOuter(0);
-  let yAxis = axisLeft(y)
+  $: xAxis = axisBottom(x).tickSizeOuter(0);
+  $: yAxis = axisLeft(y)
     .tickPadding(6)
+    .tickSize(-innerWidth)
     .tickFormat(d => d);
-  $: yAxis = yAxis.tickSize(-innerWidth);
-  $: if (x && y && yAxisElement && xAxisElement) {
-    xAxis(select(xAxisElement));
-    yAxis(select(yAxisElement));
-  }
 
   // Quadtree for hover.
   $: quad = quadtree(
@@ -73,9 +65,9 @@
     transform={`translate(${margin.left},${margin.top})`}>
     <g
       class="x axis"
-      bind:this={xAxisElement}
+      use:axis={xAxis}
       transform={`translate(0,${innerHeight})`} />
-    <g class="y axis" bind:this={yAxisElement} />
+    <g class="y axis" use:axis={yAxis} />
     <g>
       {#each data as dot}
         <circle

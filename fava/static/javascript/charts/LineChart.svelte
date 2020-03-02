@@ -2,12 +2,12 @@
   import { max, merge, min } from "d3-array";
   import { axisLeft, axisBottom } from "d3-axis";
   import { scaleLinear, scaleUtc } from "d3-scale";
-  import { select } from "d3-selection";
   import { quadtree } from "d3-quadtree";
   import { line } from "d3-shape";
   import { getContext } from "svelte";
 
   import { scales } from "./helpers";
+  import { axis } from "./axis";
   import { formatCurrencyShort } from "../format";
   import { positionedTooltip } from "./tooltip";
 
@@ -31,10 +31,6 @@
       scale: scales.currencies,
     });
   }
-
-  // Elements
-  let xAxisElement;
-  let yAxisElement;
 
   // Scales
   let x = scaleUtc();
@@ -65,15 +61,11 @@
     .y(d => y(d.value));
 
   // Axes
-  const xAxis = axisBottom(x).tickSizeOuter(0);
-  let yAxis = axisLeft(y)
+  $: xAxis = axisBottom(x).tickSizeOuter(0);
+  $: yAxis = axisLeft(y)
     .tickPadding(6)
+    .tickSize(-innerWidth)
     .tickFormat(formatCurrencyShort);
-  $: yAxis = yAxis.tickSize(-innerWidth);
-  $: if (x && y && yAxisElement && xAxisElement) {
-    xAxis(select(xAxisElement));
-    yAxis(select(yAxisElement));
-  }
 
   // Quadtree for hover.
   $: quad = quadtree(
@@ -94,9 +86,9 @@
     transform={`translate(${margin.left},${margin.top})`}>
     <g
       class="x axis"
-      bind:this={xAxisElement}
+      use:axis={xAxis}
       transform={`translate(0,${innerHeight})`} />
-    <g class="y axis" bind:this={yAxisElement} />
+    <g class="y axis" use:axis={yAxis} />
     <g class="lines">
       {#each data as d}
         <path d={lineShape(d.values)} stroke={scales.currencies(d.name)} />
