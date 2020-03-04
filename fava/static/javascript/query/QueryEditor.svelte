@@ -5,7 +5,7 @@
   import { ignoreKey } from "../editor";
   import { _ } from "../helpers";
 
-  export let value = "";
+  export let value;
   let form;
   let editor;
   const dispatch = createEventDispatcher();
@@ -15,12 +15,6 @@
   }
 
   onMount(() => {
-    const url = new URL(window.location.href);
-    value = url.searchParams.get("value") || "";
-    if (value) {
-      dispatch("submit");
-    }
-
     const queryOptions = {
       value,
       mode: "beancount-query",

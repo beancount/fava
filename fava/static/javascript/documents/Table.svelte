@@ -6,7 +6,7 @@
   import { basename } from "./util";
 
   export let data;
-  export let selected;
+  export let selected = null;
 
   /* Extract just the latter part of the filename if it starts with a date. */
   function name(doc) {

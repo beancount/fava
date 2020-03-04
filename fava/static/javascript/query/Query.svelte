@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
 
   import { fetchAPI } from "../helpers";
   import { query_shell_history, addToHistory } from "../stores/query";
@@ -10,6 +10,7 @@
   import QueryLinks from "./QueryLinks.svelte";
 
   let query_string = "";
+  const resultElems = {};
 
   const query_results = {};
 
@@ -17,21 +18,26 @@
     return [item, query_results[item] || {}];
   });
 
+  async function setResult(query, res) {
+    addToHistory(query);
+    query_results[query] = res;
+    await tick();
+    const url = new URL(window.location.href);
+    url.searchParams.set("query_string", query);
+    window.history.replaceState(null, "", url.toString());
+    resultElems[query].setAttribute("open", true);
+  }
+
   function submit() {
     const query = query_string;
     fetchAPI("query_result", { query_string: query }).then(
       result => {
-        addToHistory(query);
         result.chart = parseQueryChart(result.chart);
-        query_results[query] = { result };
-        const url = new URL(window.location.href);
-        url.searchParams.set("query_string", query);
-        window.history.replaceState(null, "", url.toString());
+        setResult(query, { result });
         // TODO: initSort();
       },
       error => {
-        addToHistory(query);
-        query_results[query] = { error };
+        setResult(query, { error });
       }
     );
   }
@@ -55,7 +61,10 @@
 <QueryEditor bind:value={query_string} on:submit={submit} />
 <div>
   {#each query_result_array as [history_item, { result, error }] (history_item)}
-    <details class="query-result" class:error>
+    <details
+      class="query-result"
+      class:error
+      bind:this={resultElems[history_item]}>
       <summary on:click={() => click(history_item)}>
         <pre>
           <code>{history_item}</code>
