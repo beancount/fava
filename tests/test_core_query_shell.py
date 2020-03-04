@@ -9,7 +9,7 @@ from fava.core.query_shell import QueryShell
 from .conftest import data_file
 
 
-def test_execute_query(example_ledger):
+def test_execute_query(example_ledger, snapshot):
     query_shell = QueryShell(example_ledger)
 
     assert query_shell.execute_query("help exit") == (
@@ -23,6 +23,8 @@ def test_execute_query(example_ledger):
     assert query_shell.execute_query("balances")[1:] == query.run_query(
         query_shell.entries, query_shell.options_map, "balances"
     )
+    snapshot(query_shell.execute_query("balances"))
+    assert "ERROR" in query_shell.execute_query("asdf")[0]
 
 
 def test_query_to_file(example_ledger):

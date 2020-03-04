@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 
 import os
+from typing import Counter, Any, Callable
 from pathlib import Path
 from pprint import pformat
 
@@ -36,21 +37,27 @@ create_app(EXAMPLE_FILE)
 SNAPSHOT_UPDATE = bool(os.environ.get("SNAPSHOT_UPDATE"))
 MSG = "Maybe snapshots need to be updated with `SNAPSHOT_UPDATE=1 make test`?"
 
+# Keep track of multiple calls to snapshot in one test function to generate
+# unique (simply numbered) file names for the snashop files.
+SNAPS: Counter[Path] = Counter()
 
-@pytest.fixture
-def snapshot(request):
+
+@pytest.fixture()
+def snapshot(request) -> Callable[[Any], None]:
     file_path = Path(request.fspath)
     fn_name = request.function.__name__
     snap_dir = file_path.parent / "__snapshots__"
     if not snap_dir.exists():
         snap_dir.mkdir()
 
-    def _snapshot_data(data, item=None):
-        snap_file = (
-            snap_dir / f"{file_path.name}-{fn_name}-{item}"
-            if item
-            else snap_dir / f"{file_path.name}-{fn_name}"
-        )
+    def _snapshot_data(data) -> None:
+        snap_file = snap_dir / f"{file_path.name}-{fn_name}"
+        SNAPS[snap_file] += 1
+        if SNAPS[snap_file] > 1:
+            snap_file = (
+                snap_dir / f"{file_path.name}-{fn_name}-{SNAPS[snap_file]}"
+            )
+
         out = pformat(data)
         if not snap_file.exists():
             contents = ""

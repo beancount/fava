@@ -95,14 +95,14 @@ def test_hierarchy(app, example_ledger):
 
 
 @pytest.mark.parametrize(
-    "query,snapshot_id",
+    "query",
     [
-        ("select account, sum(position) group by account", "1"),
-        ("select joinstr(tags), sum(position) group by joinstr(tags)", "2"),
-        ("select date, sum(position) group by date", "3"),
+        ("select account, sum(position) group by account"),
+        ("select joinstr(tags), sum(position) group by joinstr(tags)"),
+        ("select date, sum(position) group by date"),
     ],
 )
-def test_query(example_ledger, snapshot, query, snapshot_id):
+def test_query(example_ledger, snapshot, query):
     _, types, rows = example_ledger.query_shell.execute_query(query)
     data = example_ledger.charts.query(types, rows)
-    snapshot(data, snapshot_id)
+    snapshot(data)
