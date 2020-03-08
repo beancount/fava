@@ -87,18 +87,6 @@ export function once(
   element.addEventListener(event, runOnce);
 }
 
-export function ready(): Promise<void> {
-  return new Promise(resolve => {
-    if (document.readyState !== "loading") {
-      resolve();
-    } else {
-      document.addEventListener("DOMContentLoaded", () => {
-        resolve();
-      });
-    }
-  });
-}
-
 /**
  * Handles JSON content for a Promise returned by fetch, also handling an HTTP
  * error status.

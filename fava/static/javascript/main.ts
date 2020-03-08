@@ -11,9 +11,8 @@
  *    Fetch and update the error count in the sidebar.
  *
  * page-init:
- *    Run once the page is initialized, i.e., when the DOM is ready. Use this
- *    for JS code and parts of the UI that are independent of the current
- *    contents of <article>.
+ *    Run once the page is initialized. Use this for JS code and parts of the
+ *    UI that are independent of the current contents of <article>.
  *
  * page-loaded:
  *    After a new page has been loaded asynchronously. Use this to bind to
@@ -21,7 +20,7 @@
  */
 
 import { SvelteComponentDev } from "svelte/internal";
-import { select, _, ready, fetchAPI, getScriptTagJSON } from "./helpers";
+import { select, _, fetchAPI, getScriptTagJSON } from "./helpers";
 import e from "./events";
 import router from "./router";
 
@@ -74,12 +73,12 @@ function initSvelteComponent(
 ): void {
   const el = select(selector);
   if (el) {
-    let data = {};
-    const script = select("script", el);
-    if (script && (script as HTMLScriptElement).type === "application/json") {
-      data = JSON.parse(script.innerHTML);
+    const props: { data?: unknown } = {};
+    const script = el.querySelector("script");
+    if (script && script.type === "application/json") {
+      props.data = JSON.parse(script.innerHTML);
     }
-    const component = new SvelteComponent({ target: el, props: { data } });
+    const component = new SvelteComponent({ target: el, props });
     e.once("before-page-loaded", () => component.$destroy());
   }
 }
@@ -131,10 +130,8 @@ async function doPoll(): Promise<void> {
   }
 }
 
-ready().then(() => {
-  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
-  router.init();
-  e.trigger("page-init");
-  e.trigger("page-loaded");
-  setTimeout(doPoll, 5000);
-});
+favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
+router.init();
+e.trigger("page-init");
+e.trigger("page-loaded");
+setTimeout(doPoll, 5000);

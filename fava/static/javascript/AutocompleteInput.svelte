@@ -66,21 +66,17 @@
   }
 
   function keydown(event) {
-    if (event.keyCode === 13) {
-      // ENTER
+    if (event.key === "Enter") {
       if (index > -1) {
         event.preventDefault();
         select(filteredSuggestions[index].suggestion);
       }
-    } else if (event.keyCode === 27) {
+    } else if (event.key === "Escape") {
       hidden = true;
-      // ESC
-    } else if (event.keyCode === 38) {
-      // UP
+    } else if (event.key === "ArrowUp") {
       event.preventDefault();
       index = index === 0 ? filteredSuggestions.length - 1 : index - 1;
-    } else if (event.keyCode === 40) {
-      // DOWN
+    } else if (event.key === "ArrowDown") {
       event.preventDefault();
       index = index === filteredSuggestions.length - 1 ? 0 : index + 1;
     }
