@@ -1,5 +1,9 @@
 """Provide data suitable for Fava's charts. """
 import datetime
+from typing import Generator
+from typing import List
+from typing import Tuple
+from typing import Union
 
 from beancount.core import flags
 from beancount.core import realization
@@ -19,6 +23,7 @@ from fava.template_filters import cost_or_value
 from fava.template_filters import units
 from fava.util import listify
 from fava.util import pairwise
+from fava.util.date import Interval
 
 
 class FavaJSONEncoder(JSONEncoder):
@@ -67,7 +72,11 @@ class ChartModule(FavaModule):
         return tree.get(account_name).serialise(end)
 
     @listify
-    def prices(self):
+    def prices(
+        self,
+    ) -> Generator[
+        Tuple[str, str, List[Tuple[datetime.date, Decimal]]], None, None
+    ]:
         """The prices for all commodity pairs.
 
         Returns:
@@ -80,7 +89,9 @@ class ChartModule(FavaModule):
                 yield base, quote, prices
 
     @listify
-    def interval_totals(self, interval, accounts):
+    def interval_totals(
+        self, interval: Interval, accounts: Union[str, Tuple[str]]
+    ):
         """Renders totals for account (or accounts) in the intervals.
 
         Args:

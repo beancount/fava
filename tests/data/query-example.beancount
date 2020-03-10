@@ -1,0 +1,2366 @@
+;; -*- mode: org; mode: beancount; -*-
+;; Birth: 1980-05-12
+;; Dates: 2010-01-01 - 2010-12-31
+;; THIS FILE HAS BEEN AUTO-GENERATED.
+* Options
+
+option "title" "Example Beancount file"
+option "operating_currency" "USD"
+
+
+2010-12-12 query "custom_query" "balances"
+2010-12-12 query "custom query with space" "balances"
+
+
+
+* Commodities
+
+
+1792-01-01 commodity USD
+  export: "CASH"
+  name: "US Dollar"
+
+1900-01-01 commodity VMMXX
+  export: "MUTF:VMMXX (MONEY:USD)"
+
+1980-05-12 commodity VACHR
+  export: "IGNORE"
+  name: "Employer Vacation Hours"
+
+1980-05-12 commodity IRAUSD
+  export: "IGNORE"
+  name: "US 401k and IRA Contributions"
+
+1995-09-18 commodity VBMPX
+  export: "MUTF:VBMPX"
+  name: "Vanguard Total Bond Market Index Fund Institutional Plus Shares"
+  price: "USD:google/MUTF:VBMPX"
+
+2004-01-20 commodity ITOT
+  export: "NYSEARCA:ITOT"
+  name: "iShares Core S&P Total U.S. Stock Market ETF"
+  price: "USD:google/NYSEARCA:ITOT"
+
+2004-01-26 commodity VHT
+  export: "NYSEARCA:VHT"
+  name: "Vanguard Health Care ETF"
+  price: "USD:google/NYSEARCA:VHT"
+
+2004-11-01 commodity GLD
+  export: "NYSEARCA:GLD"
+  name: "SPDR Gold Trust (ETF)"
+  price: "USD:google/NYSEARCA:GLD"
+
+2007-07-20 commodity VEA
+  export: "NYSEARCA:VEA"
+  name: "Vanguard FTSE Developed Markets ETF"
+  price: "USD:google/NYSEARCA:VEA"
+
+2009-05-01 commodity RGAGX
+  export: "MUTF:RGAGX"
+  name: "American Funds The Growth Fund of America Class R-6"
+  price: "USD:google/MUTF:RGAGX"
+
+
+
+* Equity Accounts
+
+1980-05-12 open Equity:Opening-Balances
+1980-05-12 open Liabilities:AccountsPayable
+
+
+
+* Banking
+
+2010-01-01 open Assets:US:BofA
+  address: "123 America Street, LargeTown, USA"
+  institution: "Bank of America"
+  phone: "+1.012.345.6789"
+2010-01-01 open Assets:US:BofA:Checking                        USD
+  account: "00234-48574897"
+
+2010-01-01 * "Opening Balance for checking account"
+  Assets:US:BofA:Checking                         4363.28 USD
+  Equity:Opening-Balances                        -4363.28 USD
+
+2010-01-02 balance Assets:US:BofA:Checking        4363.28 USD
+
+2010-01-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-01-06 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-01-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-01-20 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -71.51 USD
+  Expenses:Home:Phone                               71.51 USD
+
+2010-01-21 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -80.13 USD
+  Expenses:Home:Internet                            80.13 USD
+
+2010-01-23 balance Assets:US:BofA:Checking        4225.72 USD
+
+2010-02-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-02-04 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-02-09 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-02-18 balance Assets:US:BofA:Checking        2656.56 USD
+
+2010-02-18 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -46.44 USD
+  Expenses:Home:Phone                               46.44 USD
+
+2010-02-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -80.00 USD
+  Expenses:Home:Internet                            80.00 USD
+
+2010-03-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-03-06 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-03-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-03-16 balance Assets:US:BofA:Checking        2075.90 USD
+
+2010-03-18 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -46.48 USD
+  Expenses:Home:Phone                               46.48 USD
+
+2010-03-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.89 USD
+  Expenses:Home:Internet                            79.89 USD
+
+2010-04-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-04-05 balance Assets:US:BofA:Checking        4646.73 USD
+
+2010-04-06 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-04-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-04-19 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -55.00 USD
+  Expenses:Home:Phone                               55.00 USD
+
+2010-04-21 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.99 USD
+  Expenses:Home:Internet                            79.99 USD
+
+2010-05-02 balance Assets:US:BofA:Checking        4039.31 USD
+
+2010-05-03 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-05-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-05-09 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-05-18 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -66.53 USD
+  Expenses:Home:Phone                               66.53 USD
+
+2010-05-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.97 USD
+  Expenses:Home:Internet                            79.97 USD
+
+2010-05-28 balance Assets:US:BofA:Checking        3373.74 USD
+
+2010-06-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-06-04 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-06-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-06-20 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -63.57 USD
+  Expenses:Home:Phone                               63.57 USD
+
+2010-06-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -80.04 USD
+  Expenses:Home:Internet                            80.04 USD
+
+2010-06-25 balance Assets:US:BofA:Checking        2915.06 USD
+
+2010-07-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-07-05 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-07-09 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-07-19 balance Assets:US:BofA:Checking        1585.60 USD
+
+2010-07-20 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -52.88 USD
+  Expenses:Home:Phone                               52.88 USD
+
+2010-07-22 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -80.13 USD
+  Expenses:Home:Internet                            80.13 USD
+
+2010-08-03 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-08-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-08-06 * "Transfering accumulated savings to other account"
+  Assets:US:BofA:Checking                           -3000 USD
+  Assets:US:ETrade:Cash                              3000 USD
+
+2010-08-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-08-16 balance Assets:US:BofA:Checking         457.72 USD
+
+2010-08-18 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -64.23 USD
+  Expenses:Home:Phone                               64.23 USD
+
+2010-08-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.89 USD
+  Expenses:Home:Internet                            79.89 USD
+
+2010-09-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-09-04 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-09-09 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-09-12 balance Assets:US:BofA:Checking        2414.37 USD
+
+2010-09-17 * "Transfering accumulated savings to other account"
+  Assets:US:BofA:Checking                           -3500 USD
+  Assets:US:ETrade:Cash                              3500 USD
+
+2010-09-18 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -74.05 USD
+  Expenses:Home:Phone                               74.05 USD
+
+2010-09-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.94 USD
+  Expenses:Home:Internet                            79.94 USD
+
+2010-10-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-10-04 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-10-05 balance Assets:US:BofA:Checking        1457.58 USD
+
+2010-10-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-10-20 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -72.34 USD
+  Expenses:Home:Phone                               72.34 USD
+
+2010-10-21 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.91 USD
+  Expenses:Home:Internet                            79.91 USD
+
+2010-10-28 balance Assets:US:BofA:Checking        3065.77 USD
+
+2010-11-03 * "RiverBank Properties" "Paying the rent"
+  Assets:US:BofA:Checking                        -2400.00 USD
+  Expenses:Home:Rent                              2400.00 USD
+
+2010-11-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-11-08 * "EDISON POWER" ""
+  Assets:US:BofA:Checking                          -65.00 USD
+  Expenses:Home:Electricity                         65.00 USD
+
+2010-11-12 * "Transfering accumulated savings to other account"
+  Assets:US:BofA:Checking                           -4500 USD
+  Assets:US:ETrade:Cash                              4500 USD
+
+2010-11-18 * "Verizon Wireless" ""
+  Assets:US:BofA:Checking                          -53.20 USD
+  Expenses:Home:Phone                               53.20 USD
+
+2010-11-23 balance Assets:US:BofA:Checking         614.42 USD
+
+2010-11-23 * "Wine-Tarner Cable" ""
+  Assets:US:BofA:Checking                          -79.97 USD
+  Expenses:Home:Internet                            79.97 USD
+
+2010-12-04 * "BANK FEES" "Monthly bank fee"
+  Assets:US:BofA:Checking                           -4.00 USD
+  Expenses:Financial:Fees                            4.00 USD
+
+2010-12-10 * "Transfering accumulated savings to other account"
+  Assets:US:BofA:Checking                           -5000 USD
+  Assets:US:ETrade:Cash                              5000 USD
+
+2010-12-20 balance Assets:US:BofA:Checking         670.11 USD
+
+2010-12-24 * "Transfering accumulated savings to other account"
+  Assets:US:BofA:Checking                           -3000 USD
+  Assets:US:ETrade:Cash                              3000 USD
+
+
+
+* Credit-Cards
+
+1980-05-12 open Liabilities:US:Chase:Slate                      USD
+
+2010-01-04 * "Jewel of Morroco" "Eating out "
+  Liabilities:US:Chase:Slate                       -32.79 USD
+  Expenses:Food:Restaurant                          32.79 USD
+
+2010-01-06 * "Uncle Boons" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -41.22 USD
+  Expenses:Food:Restaurant                          41.22 USD
+
+2010-01-09 * "Jewel of Morroco" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -20.25 USD
+  Expenses:Food:Restaurant                          20.25 USD
+
+2010-01-11 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       218.12 USD
+  Assets:US:BofA:Checking                         -218.12 USD
+
+2010-01-13 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                      -123.86 USD
+  Expenses:Food:Groceries                          123.86 USD
+
+2010-01-14 * "Kin Soy" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -35.21 USD
+  Expenses:Food:Restaurant                          35.21 USD
+
+2010-01-17 * "Chichipotle" "Eating out "
+  Liabilities:US:Chase:Slate                       -20.84 USD
+  Expenses:Food:Restaurant                          20.84 USD
+
+2010-01-21 * "Chichipotle" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -34.17 USD
+  Expenses:Food:Restaurant                          34.17 USD
+
+2010-01-25 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -24.65 USD
+  Expenses:Food:Restaurant                          24.65 USD
+
+2010-01-25 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -49.77 USD
+  Expenses:Food:Groceries                           49.77 USD
+
+2010-01-27 * "Uncle Boons" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -44.20 USD
+  Expenses:Food:Restaurant                          44.20 USD
+
+2010-01-29 balance Liabilities:US:Chase:Slate     -208.84 USD
+
+2010-01-29 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-01-31 * "Rose Flower" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -22.68 USD
+  Expenses:Food:Restaurant                          22.68 USD
+
+2010-02-02 * "Cafe Modagor" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -29.67 USD
+  Expenses:Food:Restaurant                          29.67 USD
+
+2010-02-07 * "China Garden" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -29.33 USD
+  Expenses:Food:Restaurant                          29.33 USD
+
+2010-02-11 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       450.76 USD
+  Assets:US:BofA:Checking                         -450.76 USD
+
+2010-02-12 * "Kin Soy" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -40.24 USD
+  Expenses:Food:Restaurant                          40.24 USD
+
+2010-02-13 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -47.74 USD
+  Expenses:Food:Groceries                           47.74 USD
+
+2010-02-14 * "China Garden" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -62.08 USD
+  Expenses:Food:Restaurant                          62.08 USD
+
+2010-02-16 * "Kin Soy" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -19.71 USD
+  Expenses:Food:Restaurant                          19.71 USD
+
+2010-02-17 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -24.48 USD
+  Expenses:Food:Restaurant                          24.48 USD
+
+2010-02-18 * "Cafe Modagor" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -40.65 USD
+  Expenses:Food:Restaurant                          40.65 USD
+
+2010-02-19 * "Rose Flower" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -39.22 USD
+  Expenses:Food:Restaurant                          39.22 USD
+
+2010-02-20 * "Onion Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -52.32 USD
+  Expenses:Food:Groceries                           52.32 USD
+
+2010-02-23 balance Liabilities:US:Chase:Slate     -286.20 USD
+
+2010-02-23 * "Uncle Boons" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -23.02 USD
+  Expenses:Food:Restaurant                          23.02 USD
+
+2010-02-27 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-02-28 * "Cafe Modagor" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -21.62 USD
+  Expenses:Food:Restaurant                          21.62 USD
+
+2010-02-28 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                      -107.98 USD
+  Expenses:Food:Groceries                          107.98 USD
+
+2010-03-01 * "Goba Goba" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -34.85 USD
+  Expenses:Food:Restaurant                          34.85 USD
+
+2010-03-05 * "China Garden" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -44.62 USD
+  Expenses:Food:Restaurant                          44.62 USD
+
+2010-03-07 * "Kin Soy" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -11.82 USD
+  Expenses:Food:Restaurant                          11.82 USD
+
+2010-03-08 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       686.42 USD
+  Assets:US:BofA:Checking                         -686.42 USD
+
+2010-03-12 * "Cafe Modagor" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -36.31 USD
+  Expenses:Food:Restaurant                          36.31 USD
+
+2010-03-15 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                      -119.33 USD
+  Expenses:Food:Groceries                          119.33 USD
+
+2010-03-17 * "Rose Flower" "Eating out "
+  Liabilities:US:Chase:Slate                       -37.55 USD
+  Expenses:Food:Restaurant                          37.55 USD
+
+2010-03-21 * "Uncle Boons" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -60.12 USD
+  Expenses:Food:Restaurant                          60.12 USD
+
+2010-03-22 * "Kin Soy" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -34.33 USD
+  Expenses:Food:Restaurant                          34.33 USD
+
+2010-03-22 * "Onion Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -86.56 USD
+  Expenses:Food:Groceries                           86.56 USD
+
+2010-03-23 * "Kin Soy" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -20.34 USD
+  Expenses:Food:Restaurant                          20.34 USD
+
+2010-03-24 balance Liabilities:US:Chase:Slate     -358.23 USD
+
+2010-03-26 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-03-27 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -12.16 USD
+  Expenses:Food:Restaurant                          12.16 USD
+
+2010-03-29 * "Goba Goba" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -24.12 USD
+  Expenses:Food:Restaurant                          24.12 USD
+
+2010-03-31 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -80.62 USD
+  Expenses:Food:Groceries                           80.62 USD
+
+2010-04-02 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -22.40 USD
+  Expenses:Food:Restaurant                          22.40 USD
+
+2010-04-05 * "China Garden" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -19.64 USD
+  Expenses:Food:Restaurant                          19.64 USD
+
+2010-04-08 * "Kin Soy" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -35.78 USD
+  Expenses:Food:Restaurant                          35.78 USD
+
+2010-04-11 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       708.63 USD
+  Assets:US:BofA:Checking                         -708.63 USD
+
+2010-04-12 * "Cafe Modagor" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -35.68 USD
+  Expenses:Food:Restaurant                          35.68 USD
+
+2010-04-12 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -72.11 USD
+  Expenses:Food:Groceries                           72.11 USD
+
+2010-04-13 * "Cafe Modagor" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -92.11 USD
+  Expenses:Food:Restaurant                          92.11 USD
+
+2010-04-14 * "Jewel of Morroco" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -53.37 USD
+  Expenses:Food:Restaurant                          53.37 USD
+
+2010-04-18 * "Rose Flower" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -25.84 USD
+  Expenses:Food:Restaurant                          25.84 USD
+
+2010-04-19 * "Uncle Boons" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -17.81 USD
+  Expenses:Food:Restaurant                          17.81 USD
+
+2010-04-23 balance Liabilities:US:Chase:Slate     -261.24 USD
+
+2010-04-23 * "Cafe Modagor" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -46.98 USD
+  Expenses:Food:Restaurant                          46.98 USD
+
+2010-04-26 * "Onion Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -89.54 USD
+  Expenses:Food:Groceries                           89.54 USD
+
+2010-04-27 * "Kin Soy" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -25.88 USD
+  Expenses:Food:Restaurant                          25.88 USD
+
+2010-04-27 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-05-02 * "Kin Soy" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -72.13 USD
+  Expenses:Food:Restaurant                          72.13 USD
+
+2010-05-03 * "Chichipotle" "Eating out "
+  Liabilities:US:Chase:Slate                       -19.90 USD
+  Expenses:Food:Restaurant                          19.90 USD
+
+2010-05-05 * "Kin Soy" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -24.76 USD
+  Expenses:Food:Restaurant                          24.76 USD
+
+2010-05-07 * "Cafe Modagor" "Eating out "
+  Liabilities:US:Chase:Slate                       -28.69 USD
+  Expenses:Food:Restaurant                          28.69 USD
+
+2010-05-10 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       751.27 USD
+  Assets:US:BofA:Checking                         -751.27 USD
+
+2010-05-11 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -62.15 USD
+  Expenses:Food:Groceries                           62.15 USD
+
+2010-05-12 * "Jewel of Morroco" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -43.46 USD
+  Expenses:Food:Restaurant                          43.46 USD
+
+2010-05-17 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -15.77 USD
+  Expenses:Food:Restaurant                          15.77 USD
+
+2010-05-19 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -55.65 USD
+  Expenses:Food:Groceries                           55.65 USD
+
+2010-05-20 balance Liabilities:US:Chase:Slate     -114.88 USD
+
+2010-05-20 * "Cafe Modagor" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -21.13 USD
+  Expenses:Food:Restaurant                          21.13 USD
+
+2010-05-21 * "Jewel of Morroco" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -44.00 USD
+  Expenses:Food:Restaurant                          44.00 USD
+
+2010-05-26 * "Goba Goba" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -24.28 USD
+  Expenses:Food:Restaurant                          24.28 USD
+
+2010-05-29 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-05-31 * "Chichipotle" "Eating out "
+  Liabilities:US:Chase:Slate                       -26.30 USD
+  Expenses:Food:Restaurant                          26.30 USD
+
+2010-06-02 * "Jewel of Morroco" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -24.17 USD
+  Expenses:Food:Restaurant                          24.17 USD
+
+2010-06-03 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                      -107.00 USD
+  Expenses:Food:Groceries                          107.00 USD
+
+2010-06-06 * "Kin Soy" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -33.67 USD
+  Expenses:Food:Restaurant                          33.67 USD
+
+2010-06-10 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       547.27 USD
+  Assets:US:BofA:Checking                         -547.27 USD
+
+2010-06-11 * "Goba Goba" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -31.84 USD
+  Expenses:Food:Restaurant                          31.84 USD
+
+2010-06-15 * "Chichipotle" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -32.34 USD
+  Expenses:Food:Restaurant                          32.34 USD
+
+2010-06-16 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -90.83 USD
+  Expenses:Food:Groceries                           90.83 USD
+
+2010-06-17 balance Liabilities:US:Chase:Slate     -123.17 USD
+
+2010-06-19 * "Jewel of Morroco" "Eating out "
+  Liabilities:US:Chase:Slate                       -23.93 USD
+  Expenses:Food:Restaurant                          23.93 USD
+
+2010-06-23 * "China Garden" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -33.78 USD
+  Expenses:Food:Restaurant                          33.78 USD
+
+2010-06-26 * "Rose Flower" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -27.92 USD
+  Expenses:Food:Restaurant                          27.92 USD
+
+2010-06-28 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -82.33 USD
+  Expenses:Food:Groceries                           82.33 USD
+
+2010-06-29 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-07-01 * "Cafe Modagor" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -29.92 USD
+  Expenses:Food:Restaurant                          29.92 USD
+
+2010-07-05 * "Cafe Modagor" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -35.13 USD
+  Expenses:Food:Restaurant                          35.13 USD
+
+2010-07-07 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       511.06 USD
+  Assets:US:BofA:Checking                         -511.06 USD
+
+2010-07-09 * "Goba Goba" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -34.88 USD
+  Expenses:Food:Restaurant                          34.88 USD
+
+2010-07-12 balance Liabilities:US:Chase:Slate           0 USD
+
+2010-07-14 * "Chichipotle" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -17.74 USD
+  Expenses:Food:Restaurant                          17.74 USD
+
+2010-07-14 * "Farmer Fresh" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -86.05 USD
+  Expenses:Food:Groceries                           86.05 USD
+
+2010-07-16 * "Chichipotle" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -33.18 USD
+  Expenses:Food:Restaurant                          33.18 USD
+
+2010-07-21 * "Kin Soy" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -31.10 USD
+  Expenses:Food:Restaurant                          31.10 USD
+
+2010-07-23 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -26.98 USD
+  Expenses:Food:Restaurant                          26.98 USD
+
+2010-07-25 * "Chichipotle" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -23.01 USD
+  Expenses:Food:Restaurant                          23.01 USD
+
+2010-07-27 * "Jewel of Morroco" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -31.92 USD
+  Expenses:Food:Restaurant                          31.92 USD
+
+2010-07-30 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-07-31 * "Kin Soy" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -58.82 USD
+  Expenses:Food:Restaurant                          58.82 USD
+
+2010-07-31 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -73.94 USD
+  Expenses:Food:Groceries                           73.94 USD
+
+2010-08-02 * "Rose Flower" "Eating out "
+  Liabilities:US:Chase:Slate                       -50.20 USD
+  Expenses:Food:Restaurant                          50.20 USD
+
+2010-08-04 * "Kin Soy" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -21.27 USD
+  Expenses:Food:Restaurant                          21.27 USD
+
+2010-08-06 * "Cafe Modagor" "Eating out "
+  Liabilities:US:Chase:Slate                       -10.35 USD
+  Expenses:Food:Restaurant                          10.35 USD
+
+2010-08-07 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       627.07 USD
+  Assets:US:BofA:Checking                         -627.07 USD
+
+2010-08-08 * "Kin Soy" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -42.51 USD
+  Expenses:Food:Restaurant                          42.51 USD
+
+2010-08-10 balance Liabilities:US:Chase:Slate           0 USD
+
+2010-08-12 * "Rose Flower" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -19.10 USD
+  Expenses:Food:Restaurant                          19.10 USD
+
+2010-08-13 * "Uncle Boons" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -22.87 USD
+  Expenses:Food:Restaurant                          22.87 USD
+
+2010-08-14 * "Cafe Modagor" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -15.54 USD
+  Expenses:Food:Restaurant                          15.54 USD
+
+2010-08-15 * "Cafe Modagor" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -22.31 USD
+  Expenses:Food:Restaurant                          22.31 USD
+
+2010-08-18 * "Kin Soy" "Eating out "
+  Liabilities:US:Chase:Slate                       -39.41 USD
+  Expenses:Food:Restaurant                          39.41 USD
+
+2010-08-20 * "Farmer Fresh" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -74.19 USD
+  Expenses:Food:Groceries                           74.19 USD
+
+2010-08-22 * "Jewel of Morroco" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -22.66 USD
+  Expenses:Food:Restaurant                          22.66 USD
+
+2010-08-26 * "China Garden" "Eating out "
+  Liabilities:US:Chase:Slate                       -37.51 USD
+  Expenses:Food:Restaurant                          37.51 USD
+
+2010-08-28 * "China Garden" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -22.05 USD
+  Expenses:Food:Restaurant                          22.05 USD
+
+2010-08-29 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-08-31 * "Kin Soy" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -18.26 USD
+  Expenses:Food:Restaurant                          18.26 USD
+
+2010-09-01 * "Farmer Fresh" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -65.28 USD
+  Expenses:Food:Groceries                           65.28 USD
+
+2010-09-04 balance Liabilities:US:Chase:Slate     -479.18 USD
+
+2010-09-04 * "China Garden" "Eating out "
+  Liabilities:US:Chase:Slate                       -16.87 USD
+  Expenses:Food:Restaurant                          16.87 USD
+
+2010-09-05 * "Cafe Modagor" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -11.55 USD
+  Expenses:Food:Restaurant                          11.55 USD
+
+2010-09-09 * "Chichipotle" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -23.83 USD
+  Expenses:Food:Restaurant                          23.83 USD
+
+2010-09-09 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       531.43 USD
+  Assets:US:BofA:Checking                         -531.43 USD
+
+2010-09-14 * "Cafe Modagor" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -24.47 USD
+  Expenses:Food:Restaurant                          24.47 USD
+
+2010-09-14 * "Good Moods Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                      -150.07 USD
+  Expenses:Food:Groceries                          150.07 USD
+
+2010-09-15 * "Goba Goba" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -22.79 USD
+  Expenses:Food:Restaurant                          22.79 USD
+
+2010-09-19 * "Kin Soy" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -22.74 USD
+  Expenses:Food:Restaurant                          22.74 USD
+
+2010-09-21 * "Uncle Boons" "Eating out "
+  Liabilities:US:Chase:Slate                       -52.48 USD
+  Expenses:Food:Restaurant                          52.48 USD
+
+2010-09-22 * "Kin Soy" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -17.96 USD
+  Expenses:Food:Restaurant                          17.96 USD
+
+2010-09-24 * "Goba Goba" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -23.59 USD
+  Expenses:Food:Restaurant                          23.59 USD
+
+2010-09-25 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-09-27 * "China Garden" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -33.69 USD
+  Expenses:Food:Restaurant                          33.69 USD
+
+2010-09-28 * "China Garden" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -38.85 USD
+  Expenses:Food:Restaurant                          38.85 USD
+
+2010-09-29 balance Liabilities:US:Chase:Slate     -506.64 USD
+
+2010-10-02 * "Cafe Modagor" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -45.11 USD
+  Expenses:Food:Restaurant                          45.11 USD
+
+2010-10-02 * "Farmer Fresh" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -75.77 USD
+  Expenses:Food:Groceries                           75.77 USD
+
+2010-10-05 * "Jewel of Morroco" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -21.47 USD
+  Expenses:Food:Restaurant                          21.47 USD
+
+2010-10-10 * "China Garden" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -43.27 USD
+  Expenses:Food:Restaurant                          43.27 USD
+
+2010-10-11 * "Kin Soy" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -32.90 USD
+  Expenses:Food:Restaurant                          32.90 USD
+
+2010-10-11 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       725.16 USD
+  Assets:US:BofA:Checking                         -725.16 USD
+
+2010-10-15 * "Jewel of Morroco" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -29.95 USD
+  Expenses:Food:Restaurant                          29.95 USD
+
+2010-10-17 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -79.74 USD
+  Expenses:Food:Groceries                           79.74 USD
+
+2010-10-19 balance Liabilities:US:Chase:Slate     -109.69 USD
+
+2010-10-20 * "China Garden" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -43.84 USD
+  Expenses:Food:Restaurant                          43.84 USD
+
+2010-10-22 * "Kin Soy" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -32.91 USD
+  Expenses:Food:Restaurant                          32.91 USD
+
+2010-10-26 * "Cafe Modagor" "Eating out alone"
+  Liabilities:US:Chase:Slate                       -20.90 USD
+  Expenses:Food:Restaurant                          20.90 USD
+
+2010-10-27 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-10-29 * "Uncle Boons" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -34.76 USD
+  Expenses:Food:Restaurant                          34.76 USD
+
+2010-10-29 * "Farmer Fresh" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -67.92 USD
+  Expenses:Food:Groceries                           67.92 USD
+
+2010-11-02 * "Jewel of Morroco" "Eating out "
+  Liabilities:US:Chase:Slate                       -18.23 USD
+  Expenses:Food:Restaurant                          18.23 USD
+
+2010-11-04 * "China Garden" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -47.80 USD
+  Expenses:Food:Restaurant                          47.80 USD
+
+2010-11-07 * "Kin Soy" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -34.30 USD
+  Expenses:Food:Restaurant                          34.30 USD
+
+2010-11-07 * "Chase:Slate" "Paying off credit card"
+  Liabilities:US:Chase:Slate                       530.35 USD
+  Assets:US:BofA:Checking                         -530.35 USD
+
+2010-11-09 * "Farmer Fresh" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -87.04 USD
+  Expenses:Food:Groceries                           87.04 USD
+
+2010-11-10 * "Goba Goba" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -88.42 USD
+  Expenses:Food:Restaurant                          88.42 USD
+
+2010-11-11 * "Uncle Boons" "Eating out "
+  Liabilities:US:Chase:Slate                       -37.10 USD
+  Expenses:Food:Restaurant                          37.10 USD
+
+2010-11-13 balance Liabilities:US:Chase:Slate     -212.56 USD
+
+2010-11-15 * "Uncle Boons" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -39.71 USD
+  Expenses:Food:Restaurant                          39.71 USD
+
+2010-11-17 * "China Garden" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -24.11 USD
+  Expenses:Food:Restaurant                          24.11 USD
+
+2010-11-18 * "Chichipotle" "Eating out with work buddies"
+  Liabilities:US:Chase:Slate                       -26.99 USD
+  Expenses:Food:Restaurant                          26.99 USD
+
+2010-11-22 * "Goba Goba" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -35.25 USD
+  Expenses:Food:Restaurant                          35.25 USD
+
+2010-11-23 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-11-25 * "Rose Flower" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -30.33 USD
+  Expenses:Food:Restaurant                          30.33 USD
+
+2010-11-26 * "Onion Market" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -85.98 USD
+  Expenses:Food:Groceries                           85.98 USD
+
+2010-11-28 * "Rose Flower" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -11.60 USD
+  Expenses:Food:Restaurant                          11.60 USD
+
+2010-12-03 * "China Garden" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -31.49 USD
+  Expenses:Food:Restaurant                          31.49 USD
+
+2010-12-07 * "Uncle Boons" "Eating out alone"
+  Liabilities:US:Chase:Slate                      -100.21 USD
+  Expenses:Food:Restaurant                         100.21 USD
+
+2010-12-11 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -60.36 USD
+  Expenses:Food:Groceries                           60.36 USD
+
+2010-12-12 balance Liabilities:US:Chase:Slate     -778.59 USD
+
+2010-12-12 * "Jewel of Morroco" "Eating out with Julie"
+  Liabilities:US:Chase:Slate                       -42.81 USD
+  Expenses:Food:Restaurant                          42.81 USD
+
+2010-12-13 * "Kin Soy" "Eating out "
+  Liabilities:US:Chase:Slate                       -11.68 USD
+  Expenses:Food:Restaurant                          11.68 USD
+
+2010-12-17 * "Cafe Modagor" "Eating out with Natasha"
+  Liabilities:US:Chase:Slate                       -19.24 USD
+  Expenses:Food:Restaurant                          19.24 USD
+
+2010-12-18 * "Corner Deli" "Buying groceries"
+  Liabilities:US:Chase:Slate                       -62.67 USD
+  Expenses:Food:Groceries                           62.67 USD
+
+2010-12-20 * "Chichipotle" "Eating out with Joe"
+  Liabilities:US:Chase:Slate                       -25.21 USD
+  Expenses:Food:Restaurant                          25.21 USD
+
+2010-12-21 * "Metro Transport Authority" "Tram tickets"
+  Liabilities:US:Chase:Slate                      -120.00 USD
+  Expenses:Transport:Tram                          120.00 USD
+
+2010-12-23 * "Kin Soy" "Eating out "
+  Liabilities:US:Chase:Slate                       -28.55 USD
+  Expenses:Food:Restaurant                          28.55 USD
+
+2010-12-27 * "Rose Flower" "Eating out after work"
+  Liabilities:US:Chase:Slate                       -11.24 USD
+  Expenses:Food:Restaurant                          11.24 USD
+
+2010-12-30 * "Chichipotle" "Eating out with Bill"
+  Liabilities:US:Chase:Slate                       -44.45 USD
+  Expenses:Food:Restaurant                          44.45 USD
+
+
+
+* Taxable Investments
+
+2010-01-01 open Assets:US:ETrade:Cash                       USD
+2010-01-01 open Assets:US:ETrade:ITOT                       ITOT
+2010-01-01 open Assets:US:ETrade:VEA                       VEA
+2010-01-01 open Assets:US:ETrade:VHT                       VHT
+2010-01-01 open Assets:US:ETrade:GLD                       GLD
+2010-01-01 open Income:US:ETrade:Gains                      USD
+2010-01-01 open Income:US:ETrade:Dividends                  USD
+
+2010-08-09 * "Buy shares of GLD"
+  Assets:US:ETrade:Cash                          -1341.05 USD
+  Assets:US:ETrade:GLD                                  7 GLD {190.30 USD, 2010-08-09}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-08-09 * "Buy shares of VEA"
+  Assets:US:ETrade:Cash                          -1404.79 USD
+  Assets:US:ETrade:VEA                                 12 VEA {116.32 USD, 2010-08-09}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-08-23 * "Sell shares of GLD"
+  Assets:US:ETrade:GLD                                 -7 GLD {190.30 USD, 2010-08-09} @ 192.97 USD
+  Assets:US:ETrade:Cash                           1341.84 USD
+  Expenses:Financial:Commissions                     8.95 USD
+  Income:US:ETrade:Gains                           -18.69 USD
+
+2010-09-09 * "Buy shares of GLD"
+  Assets:US:ETrade:Cash                           -200.17 USD
+  Assets:US:ETrade:GLD                                  1 GLD {191.22 USD, 2010-09-09}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-09-09 * "Buy shares of VEA"
+  Assets:US:ETrade:Cash                           -250.17 USD
+  Assets:US:ETrade:VEA                                  2 VEA {120.61 USD, 2010-09-09}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-09-09 * "Buy shares of VHT"
+  Assets:US:ETrade:Cash                           -286.31 USD
+  Assets:US:ETrade:VHT                                  4 VHT {69.34 USD, 2010-09-09}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-09-09 * "Buy shares of ITOT"
+  Assets:US:ETrade:Cash                           -219.81 USD
+  Assets:US:ETrade:ITOT                                 2 ITOT {105.43 USD, 2010-09-09}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-09-18 * "Dividends on portfolio"
+  Assets:US:ETrade:Cash                             14.59 USD
+  Income:US:ETrade:Dividends                       -14.59 USD
+
+2010-09-20 * "Buy shares of ITOT"
+  Assets:US:ETrade:Cash                          -4063.39 USD
+  Assets:US:ETrade:ITOT                                39 ITOT {103.96 USD, 2010-09-20}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-10-31 * "Sell shares of VEA"
+  Assets:US:ETrade:VEA                                -12 VEA {116.32 USD, 2010-08-09} @ 119.84 USD
+  Assets:US:ETrade:Cash                           1429.13 USD
+  Expenses:Financial:Commissions                     8.95 USD
+  Income:US:ETrade:Gains                           -42.24 USD
+
+2010-11-06 * "Buy shares of ITOT"
+  Assets:US:ETrade:Cash                           -615.97 USD
+  Assets:US:ETrade:ITOT                                 6 ITOT {101.17 USD, 2010-11-06}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-11-06 * "Buy shares of GLD"
+  Assets:US:ETrade:Cash                           -607.21 USD
+  Assets:US:ETrade:GLD                                  3 GLD {199.42 USD, 2010-11-06}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-11-18 * "Buy shares of GLD"
+  Assets:US:ETrade:Cash                          -1014.05 USD
+  Assets:US:ETrade:GLD                                  5 GLD {201.02 USD, 2010-11-18}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-11-18 * "Buy shares of VHT"
+  Assets:US:ETrade:Cash                          -1057.15 USD
+  Assets:US:ETrade:VHT                                 15 VHT {69.88 USD, 2010-11-18}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-11-18 * "Buy shares of ITOT"
+  Assets:US:ETrade:Cash                          -1100.81 USD
+  Assets:US:ETrade:ITOT                                11 ITOT {99.26 USD, 2010-11-18}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-11-18 * "Buy shares of VEA"
+  Assets:US:ETrade:Cash                           -993.99 USD
+  Assets:US:ETrade:VEA                                  8 VEA {123.13 USD, 2010-11-18}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-11-24 * "Sell shares of VEA"
+  Assets:US:ETrade:VEA                                 -8 VEA {123.13 USD, 2010-11-18} @ 125.02 USD
+  Assets:US:ETrade:Cash                            991.21 USD
+  Expenses:Financial:Commissions                     8.95 USD
+  Income:US:ETrade:Gains                           -15.12 USD
+
+2010-12-07 * "Buy shares of GLD"
+  Assets:US:ETrade:Cash                           -213.03 USD
+  Assets:US:ETrade:GLD                                  1 GLD {204.08 USD, 2010-12-07}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-12-07 * "Buy shares of ITOT"
+  Assets:US:ETrade:Cash                           -215.07 USD
+  Assets:US:ETrade:ITOT                                 2 ITOT {103.06 USD, 2010-12-07}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-12-07 * "Buy shares of VHT"
+  Assets:US:ETrade:Cash                           -299.03 USD
+  Assets:US:ETrade:VHT                                  4 VHT {72.52 USD, 2010-12-07}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-12-07 * "Buy shares of VEA"
+  Assets:US:ETrade:Cash                           -260.99 USD
+  Assets:US:ETrade:VEA                                  2 VEA {126.02 USD, 2010-12-07}
+  Expenses:Financial:Commissions                     8.95 USD
+
+2010-12-17 * "Dividends on portfolio"
+  Assets:US:ETrade:Cash                             55.96 USD
+  Income:US:ETrade:Dividends                       -55.96 USD
+
+
+
+* Vanguard Investments
+
+2010-01-01 open Assets:US:Vanguard:VBMPX                     VBMPX
+  number: "882882"
+2010-01-01 open Assets:US:Vanguard:RGAGX                     RGAGX
+  number: "882882"
+2010-01-01 open Assets:US:Vanguard                            USD
+  address: "P.O. Box 1110, Valley Forge, PA 19482-1110"
+  institution: "Vanguard Group"
+  phone: "+1.800.523.1188"
+2010-01-01 open Income:US:Hoogle:Match401k                   USD
+2010-01-01 open Assets:US:Vanguard:Cash                       USD
+  number: "882882"
+
+2010-01-08 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-01-11 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.064 VBMPX {156.64 USD, 2010-01-11}
+  Assets:US:Vanguard:Cash                         -479.94 USD
+
+2010-01-11 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.965 RGAGX {145.02 USD, 2010-01-11}
+  Assets:US:Vanguard:Cash                         -720.02 USD
+
+2010-01-11 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.532 VBMPX {156.64 USD, 2010-01-11}
+  Assets:US:Vanguard:Cash                         -239.97 USD
+
+2010-01-11 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.483 RGAGX {145.02 USD, 2010-01-11}
+  Assets:US:Vanguard:Cash                         -360.08 USD
+
+2010-01-22 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-01-25 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.136 VBMPX {153.07 USD, 2010-01-25}
+  Assets:US:Vanguard:Cash                         -480.03 USD
+
+2010-01-25 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.950 RGAGX {145.44 USD, 2010-01-25}
+  Assets:US:Vanguard:Cash                         -719.93 USD
+
+2010-01-25 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.568 VBMPX {153.07 USD, 2010-01-25}
+  Assets:US:Vanguard:Cash                         -240.01 USD
+
+2010-01-25 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.475 RGAGX {145.44 USD, 2010-01-25}
+  Assets:US:Vanguard:Cash                         -359.96 USD
+
+2010-02-05 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-02-08 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.106 VBMPX {154.54 USD, 2010-02-08}
+  Assets:US:Vanguard:Cash                         -480.00 USD
+
+2010-02-08 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.820 RGAGX {149.40 USD, 2010-02-08}
+  Assets:US:Vanguard:Cash                         -720.11 USD
+
+2010-02-08 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.553 VBMPX {154.54 USD, 2010-02-08}
+  Assets:US:Vanguard:Cash                         -240.00 USD
+
+2010-02-08 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.409 RGAGX {149.40 USD, 2010-02-08}
+  Assets:US:Vanguard:Cash                         -359.90 USD
+
+2010-02-19 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-02-22 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.130 VBMPX {153.36 USD, 2010-02-22}
+  Assets:US:Vanguard:Cash                         -480.02 USD
+
+2010-02-22 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.869 RGAGX {147.87 USD, 2010-02-22}
+  Assets:US:Vanguard:Cash                         -719.98 USD
+
+2010-02-22 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.565 VBMPX {153.36 USD, 2010-02-22}
+  Assets:US:Vanguard:Cash                         -240.01 USD
+
+2010-02-22 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.435 RGAGX {147.87 USD, 2010-02-22}
+  Assets:US:Vanguard:Cash                         -360.06 USD
+
+2010-03-05 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-03-08 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.070 VBMPX {156.33 USD, 2010-03-08}
+  Assets:US:Vanguard:Cash                         -479.93 USD
+
+2010-03-08 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.971 RGAGX {144.84 USD, 2010-03-08}
+  Assets:US:Vanguard:Cash                         -720.00 USD
+
+2010-03-08 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.535 VBMPX {156.33 USD, 2010-03-08}
+  Assets:US:Vanguard:Cash                         -239.97 USD
+
+2010-03-08 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.486 RGAGX {144.84 USD, 2010-03-08}
+  Assets:US:Vanguard:Cash                         -360.07 USD
+
+2010-03-19 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-03-22 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.061 VBMPX {156.82 USD, 2010-03-22}
+  Assets:US:Vanguard:Cash                         -480.03 USD
+
+2010-03-22 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.792 RGAGX {150.25 USD, 2010-03-22}
+  Assets:US:Vanguard:Cash                         -720.00 USD
+
+2010-03-22 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.530 VBMPX {156.82 USD, 2010-03-22}
+  Assets:US:Vanguard:Cash                         -239.93 USD
+
+2010-03-22 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.396 RGAGX {150.25 USD, 2010-03-22}
+  Assets:US:Vanguard:Cash                         -360.00 USD
+
+2010-04-02 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-04-05 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.043 VBMPX {157.74 USD, 2010-04-05}
+  Assets:US:Vanguard:Cash                         -480.00 USD
+
+2010-04-05 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.807 RGAGX {149.78 USD, 2010-04-05}
+  Assets:US:Vanguard:Cash                         -719.99 USD
+
+2010-04-05 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.522 VBMPX {157.74 USD, 2010-04-05}
+  Assets:US:Vanguard:Cash                         -240.08 USD
+
+2010-04-05 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.404 RGAGX {149.78 USD, 2010-04-05}
+  Assets:US:Vanguard:Cash                         -360.07 USD
+
+2010-04-16 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-04-19 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.085 VBMPX {155.58 USD, 2010-04-19}
+  Assets:US:Vanguard:Cash                         -479.96 USD
+
+2010-04-19 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          4.989 RGAGX {144.32 USD, 2010-04-19}
+  Assets:US:Vanguard:Cash                         -720.01 USD
+
+2010-04-19 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.542 VBMPX {155.58 USD, 2010-04-19}
+  Assets:US:Vanguard:Cash                         -239.90 USD
+
+2010-04-19 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.494 RGAGX {144.32 USD, 2010-04-19}
+  Assets:US:Vanguard:Cash                         -359.93 USD
+
+2010-04-30 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-05-03 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.062 VBMPX {156.79 USD, 2010-05-03}
+  Assets:US:Vanguard:Cash                         -480.09 USD
+
+2010-05-03 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          5.010 RGAGX {143.72 USD, 2010-05-03}
+  Assets:US:Vanguard:Cash                         -720.04 USD
+
+2010-05-03 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.531 VBMPX {156.79 USD, 2010-05-03}
+  Assets:US:Vanguard:Cash                         -240.05 USD
+
+2010-05-03 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.505 RGAGX {143.72 USD, 2010-05-03}
+  Assets:US:Vanguard:Cash                         -360.02 USD
+
+2010-05-14 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-05-17 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.093 VBMPX {155.18 USD, 2010-05-17}
+  Assets:US:Vanguard:Cash                         -479.97 USD
+
+2010-05-17 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          5.293 RGAGX {136.03 USD, 2010-05-17}
+  Assets:US:Vanguard:Cash                         -720.01 USD
+
+2010-05-17 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.546 VBMPX {155.18 USD, 2010-05-17}
+  Assets:US:Vanguard:Cash                         -239.91 USD
+
+2010-05-17 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.646 RGAGX {136.03 USD, 2010-05-17}
+  Assets:US:Vanguard:Cash                         -359.94 USD
+
+2010-05-28 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-05-31 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.039 VBMPX {157.94 USD, 2010-05-31}
+  Assets:US:Vanguard:Cash                         -479.98 USD
+
+2010-05-31 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          5.168 RGAGX {139.33 USD, 2010-05-31}
+  Assets:US:Vanguard:Cash                         -720.06 USD
+
+2010-05-31 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.520 VBMPX {157.94 USD, 2010-05-31}
+  Assets:US:Vanguard:Cash                         -240.07 USD
+
+2010-05-31 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.584 RGAGX {139.33 USD, 2010-05-31}
+  Assets:US:Vanguard:Cash                         -360.03 USD
+
+2010-06-11 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-06-14 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.035 VBMPX {158.17 USD, 2010-06-14}
+  Assets:US:Vanguard:Cash                         -480.05 USD
+
+2010-06-14 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          5.250 RGAGX {137.13 USD, 2010-06-14}
+  Assets:US:Vanguard:Cash                         -719.93 USD
+
+2010-06-14 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.517 VBMPX {158.17 USD, 2010-06-14}
+  Assets:US:Vanguard:Cash                         -239.94 USD
+
+2010-06-14 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.625 RGAGX {137.13 USD, 2010-06-14}
+  Assets:US:Vanguard:Cash                         -359.97 USD
+
+2010-06-25 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          600.00 USD
+  Income:US:Hoogle:Match401k                      -600.00 USD
+
+2010-06-28 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          3.009 VBMPX {159.55 USD, 2010-06-28}
+  Assets:US:Vanguard:Cash                         -480.09 USD
+
+2010-06-28 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          5.191 RGAGX {138.71 USD, 2010-06-28}
+  Assets:US:Vanguard:Cash                         -720.04 USD
+
+2010-06-28 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.504 VBMPX {159.55 USD, 2010-06-28}
+  Assets:US:Vanguard:Cash                         -239.96 USD
+
+2010-06-28 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          2.595 RGAGX {138.71 USD, 2010-06-28}
+  Assets:US:Vanguard:Cash                         -359.95 USD
+
+2010-07-09 * "Employer match for contribution"
+  Assets:US:Vanguard:Cash                          450.00 USD
+  Income:US:Hoogle:Match401k                      -450.00 USD
+
+2010-07-12 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          2.252 VBMPX {159.88 USD, 2010-07-12}
+  Assets:US:Vanguard:Cash                         -360.05 USD
+
+2010-07-12 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          3.807 RGAGX {141.84 USD, 2010-07-12}
+  Assets:US:Vanguard:Cash                         -539.98 USD
+
+2010-07-12 * "Investing 40% of cash in VBMPX"
+  Assets:US:Vanguard:VBMPX                          1.126 VBMPX {159.88 USD, 2010-07-12}
+  Assets:US:Vanguard:Cash                         -180.02 USD
+
+2010-07-12 * "Investing 60% of cash in RGAGX"
+  Assets:US:Vanguard:RGAGX                          1.903 RGAGX {141.84 USD, 2010-07-12}
+  Assets:US:Vanguard:Cash                         -269.92 USD
+
+
+
+* Sources of Income
+
+2010-01-01 open Income:US:Hoogle:Salary                      USD
+2010-01-01 open Income:US:Hoogle:GroupTermLife               USD
+2010-01-01 open Income:US:Hoogle:Vacation                    VACHR
+2010-01-01 open Assets:US:Hoogle:Vacation                    VACHR
+2010-01-01 open Expenses:Vacation                               VACHR
+2010-01-01 open Expenses:Health:Life:GroupTermLife
+2010-01-01 open Expenses:Health:Medical:Insurance
+2010-01-01 open Expenses:Health:Dental:Insurance
+2010-01-01 open Expenses:Health:Vision:Insurance
+
+2010-01-01 event "employer" "Hoogle, 1600 Amphibious Parkway, River View, CA"
+
+2010-01-07 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-01-21 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-02-04 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-02-18 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-03-04 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-03-18 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-04-01 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-04-15 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-04-29 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-05-13 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-05-27 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-06-10 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-06-24 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1350.60 USD
+  Assets:US:Vanguard:Cash                         1200.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                   -1200.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k      1200.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-07-08 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         1650.60 USD
+  Assets:US:Vanguard:Cash                          900.00 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                    -900.00 IRAUSD
+  Expenses:Taxes:Y2010:US:Federal:PreTax401k       900.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-07-22 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-08-05 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-08-19 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-09-02 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-09-16 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-09-30 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-10-14 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-10-28 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-11-11 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-11-25 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   281.54 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-12-09 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2589.06 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                   243.08 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+2010-12-23 * "Hoogle" "Payroll"
+  Assets:US:BofA:Checking                         2832.14 USD
+  Income:US:Hoogle:Salary                        -4615.38 USD
+  Income:US:Hoogle:GroupTermLife                   -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2010:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2010:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2010:US:State                    365.08 USD
+  Expenses:Taxes:Y2010:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2010:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2010:US:SocSec                     0.00 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Assets:US:Hoogle:Vacation                             5 VACHR
+  Income:US:Hoogle:Vacation                            -5 VACHR
+
+
+
+* Taxes
+
+1980-05-12 open Income:US:Federal:PreTax401k                    IRAUSD
+1980-05-12 open Assets:US:Federal:PreTax401k                    IRAUSD
+
+
+
+** Tax Year 2010
+
+2010-01-01 open Expenses:Taxes:Y2010:US:Federal:PreTax401k      IRAUSD
+2010-01-01 open Expenses:Taxes:Y2010:US:Medicare                USD
+2010-01-01 open Expenses:Taxes:Y2010:US:Federal                 USD
+2010-01-01 open Expenses:Taxes:Y2010:US:CityNYC                 USD
+2010-01-01 open Expenses:Taxes:Y2010:US:SDI                     USD
+2010-01-01 open Expenses:Taxes:Y2010:US:State                   USD
+2010-01-01 open Expenses:Taxes:Y2010:US:SocSec                  USD
+
+2010-01-01 balance Assets:US:Federal:PreTax401k         0 IRAUSD
+
+2010-01-01 * "Allowed contributions for one year"
+  Income:US:Federal:PreTax401k                     -16500 IRAUSD
+  Assets:US:Federal:PreTax401k                      16500 IRAUSD
+
+
+
+* Expenses
+
+1980-05-12 open Expenses:Food:Groceries
+1980-05-12 open Expenses:Food:Restaurant
+1980-05-12 open Expenses:Food:Coffee
+1980-05-12 open Expenses:Food:Alcohol
+1980-05-12 open Expenses:Transport:Tram
+1980-05-12 open Expenses:Home:Rent
+1980-05-12 open Expenses:Home:Electricity
+1980-05-12 open Expenses:Home:Internet
+1980-05-12 open Expenses:Home:Phone
+1980-05-12 open Expenses:Financial:Fees
+1980-05-12 open Expenses:Financial:Commissions
+
+
+
+* Prices
+
+2010-01-01 price VBMPX                             155.31 USD
+2010-01-01 price RGAGX                             145.26 USD
+2010-01-01 price ITOT                              100.15 USD
+2010-01-01 price VEA                               108.08 USD
+2010-01-01 price VHT                                66.10 USD
+2010-01-01 price GLD                               182.40 USD
+2010-01-08 price VBMPX                             156.64 USD
+2010-01-08 price RGAGX                             145.02 USD
+2010-01-08 price ITOT                               99.77 USD
+2010-01-08 price VEA                               107.93 USD
+2010-01-08 price VHT                                65.82 USD
+2010-01-08 price GLD                               182.88 USD
+2010-01-15 price VBMPX                             154.18 USD
+2010-01-15 price RGAGX                             146.66 USD
+2010-01-15 price ITOT                               99.98 USD
+2010-01-15 price VEA                               103.27 USD
+2010-01-15 price VHT                                67.70 USD
+2010-01-15 price GLD                               182.38 USD
+2010-01-22 price VBMPX                             153.07 USD
+2010-01-22 price RGAGX                             145.44 USD
+2010-01-22 price ITOT                               99.57 USD
+2010-01-22 price VEA                               104.68 USD
+2010-01-22 price VHT                                66.48 USD
+2010-01-22 price GLD                               182.19 USD
+2010-01-29 price VBMPX                             155.33 USD
+2010-01-29 price RGAGX                             147.44 USD
+2010-01-29 price ITOT                              102.12 USD
+2010-01-29 price VEA                               104.04 USD
+2010-01-29 price VHT                                64.94 USD
+2010-01-29 price GLD                               185.09 USD
+2010-02-05 price VBMPX                             154.54 USD
+2010-02-05 price RGAGX                             149.40 USD
+2010-02-05 price ITOT                              103.24 USD
+2010-02-05 price VEA                               105.18 USD
+2010-02-05 price VHT                                64.87 USD
+2010-02-05 price GLD                               183.80 USD
+2010-02-12 price VBMPX                             154.83 USD
+2010-02-12 price RGAGX                             149.26 USD
+2010-02-12 price ITOT                              103.85 USD
+2010-02-12 price VEA                               104.54 USD
+2010-02-12 price VHT                                65.66 USD
+2010-02-12 price GLD                               184.83 USD
+2010-02-19 price VBMPX                             153.36 USD
+2010-02-19 price RGAGX                             147.87 USD
+2010-02-19 price ITOT                              101.28 USD
+2010-02-19 price VEA                               103.51 USD
+2010-02-19 price VHT                                65.54 USD
+2010-02-19 price GLD                               183.38 USD
+2010-02-26 price VBMPX                             152.85 USD
+2010-02-26 price RGAGX                             146.88 USD
+2010-02-26 price ITOT                              100.84 USD
+2010-02-26 price VEA                               104.21 USD
+2010-02-26 price VHT                                66.12 USD
+2010-02-26 price GLD                               181.90 USD
+2010-03-05 price VBMPX                             156.33 USD
+2010-03-05 price RGAGX                             144.84 USD
+2010-03-05 price ITOT                              100.67 USD
+2010-03-05 price VEA                               106.29 USD
+2010-03-05 price VHT                                66.75 USD
+2010-03-05 price GLD                               181.55 USD
+2010-03-12 price VBMPX                             157.20 USD
+2010-03-12 price RGAGX                             147.63 USD
+2010-03-12 price ITOT                              101.26 USD
+2010-03-12 price VEA                               108.69 USD
+2010-03-12 price VHT                                67.18 USD
+2010-03-12 price GLD                               184.22 USD
+2010-03-19 price VBMPX                             156.82 USD
+2010-03-19 price RGAGX                             150.25 USD
+2010-03-19 price ITOT                               99.93 USD
+2010-03-19 price VEA                               110.45 USD
+2010-03-19 price VHT                                68.05 USD
+2010-03-19 price GLD                               184.09 USD
+2010-03-26 price VBMPX                             157.19 USD
+2010-03-26 price RGAGX                             151.17 USD
+2010-03-26 price ITOT                              101.17 USD
+2010-03-26 price VEA                               111.83 USD
+2010-03-26 price VHT                                68.88 USD
+2010-03-26 price GLD                               183.65 USD
+2010-04-02 price VBMPX                             157.74 USD
+2010-04-02 price RGAGX                             149.78 USD
+2010-04-02 price ITOT                              103.48 USD
+2010-04-02 price VEA                               114.02 USD
+2010-04-02 price VHT                                68.72 USD
+2010-04-02 price GLD                               181.25 USD
+2010-04-09 price VBMPX                             157.39 USD
+2010-04-09 price RGAGX                             152.81 USD
+2010-04-09 price ITOT                              102.37 USD
+2010-04-09 price VEA                               117.08 USD
+2010-04-09 price VHT                                67.69 USD
+2010-04-09 price GLD                               181.37 USD
+2010-04-16 price VBMPX                             155.58 USD
+2010-04-16 price RGAGX                             144.32 USD
+2010-04-16 price ITOT                              103.65 USD
+2010-04-16 price VEA                               115.92 USD
+2010-04-16 price VHT                                68.53 USD
+2010-04-16 price GLD                               182.55 USD
+2010-04-23 price VBMPX                             158.07 USD
+2010-04-23 price RGAGX                             150.88 USD
+2010-04-23 price ITOT                              104.99 USD
+2010-04-23 price VEA                               115.58 USD
+2010-04-23 price VHT                                68.15 USD
+2010-04-23 price GLD                               183.52 USD
+2010-04-30 price VBMPX                             156.79 USD
+2010-04-30 price RGAGX                             143.72 USD
+2010-04-30 price ITOT                              104.63 USD
+2010-04-30 price VEA                               113.68 USD
+2010-04-30 price VHT                                67.79 USD
+2010-04-30 price GLD                               183.59 USD
+2010-05-07 price VBMPX                             157.17 USD
+2010-05-07 price RGAGX                             141.22 USD
+2010-05-07 price ITOT                              106.05 USD
+2010-05-07 price VEA                               115.25 USD
+2010-05-07 price VHT                                69.00 USD
+2010-05-07 price GLD                               183.54 USD
+2010-05-14 price VBMPX                             155.18 USD
+2010-05-14 price RGAGX                             136.03 USD
+2010-05-14 price ITOT                              107.03 USD
+2010-05-14 price VEA                               117.38 USD
+2010-05-14 price VHT                                67.92 USD
+2010-05-14 price GLD                               184.57 USD
+2010-05-21 price VBMPX                             155.83 USD
+2010-05-21 price RGAGX                             138.78 USD
+2010-05-21 price ITOT                              105.23 USD
+2010-05-21 price VEA                               116.97 USD
+2010-05-21 price VHT                                67.36 USD
+2010-05-21 price GLD                               185.26 USD
+2010-05-28 price VBMPX                             157.94 USD
+2010-05-28 price RGAGX                             139.33 USD
+2010-05-28 price ITOT                              105.84 USD
+2010-05-28 price VEA                               114.89 USD
+2010-05-28 price VHT                                69.10 USD
+2010-05-28 price GLD                               185.85 USD
+2010-06-04 price VBMPX                             158.43 USD
+2010-06-04 price RGAGX                             138.94 USD
+2010-06-04 price ITOT                              104.96 USD
+2010-06-04 price VEA                               115.96 USD
+2010-06-04 price VHT                                68.58 USD
+2010-06-04 price GLD                               186.88 USD
+2010-06-11 price VBMPX                             158.17 USD
+2010-06-11 price RGAGX                             137.13 USD
+2010-06-11 price ITOT                              106.75 USD
+2010-06-11 price VEA                               115.63 USD
+2010-06-11 price VHT                                67.30 USD
+2010-06-11 price GLD                               188.93 USD
+2010-06-18 price VBMPX                             159.97 USD
+2010-06-18 price RGAGX                             138.32 USD
+2010-06-18 price ITOT                              107.20 USD
+2010-06-18 price VEA                               115.97 USD
+2010-06-18 price VHT                                64.94 USD
+2010-06-18 price GLD                               192.04 USD
+2010-06-25 price VBMPX                             159.55 USD
+2010-06-25 price RGAGX                             138.71 USD
+2010-06-25 price ITOT                              107.11 USD
+2010-06-25 price VEA                               114.48 USD
+2010-06-25 price VHT                                65.12 USD
+2010-06-25 price GLD                               192.29 USD
+2010-07-02 price VBMPX                             159.67 USD
+2010-07-02 price RGAGX                             141.68 USD
+2010-07-02 price ITOT                              106.99 USD
+2010-07-02 price VEA                               113.61 USD
+2010-07-02 price VHT                                65.63 USD
+2010-07-02 price GLD                               191.55 USD
+2010-07-09 price VBMPX                             159.88 USD
+2010-07-09 price RGAGX                             141.84 USD
+2010-07-09 price ITOT                              107.99 USD
+2010-07-09 price VEA                               111.60 USD
+2010-07-09 price VHT                                65.15 USD
+2010-07-09 price GLD                               191.95 USD
+2010-07-16 price VBMPX                             159.62 USD
+2010-07-16 price RGAGX                             141.72 USD
+2010-07-16 price ITOT                              108.30 USD
+2010-07-16 price VEA                               113.21 USD
+2010-07-16 price VHT                                66.33 USD
+2010-07-16 price GLD                               191.87 USD
+2010-07-23 price VBMPX                             160.09 USD
+2010-07-23 price RGAGX                             142.19 USD
+2010-07-23 price ITOT                              107.16 USD
+2010-07-23 price VEA                               112.45 USD
+2010-07-23 price VHT                                66.81 USD
+2010-07-23 price GLD                               191.94 USD
+2010-07-30 price VBMPX                             157.99 USD
+2010-07-30 price RGAGX                             148.63 USD
+2010-07-30 price ITOT                              105.98 USD
+2010-07-30 price VEA                               114.93 USD
+2010-07-30 price VHT                                68.35 USD
+2010-07-30 price GLD                               190.95 USD
+2010-08-06 price VBMPX                             158.78 USD
+2010-08-06 price RGAGX                             150.64 USD
+2010-08-06 price ITOT                              104.28 USD
+2010-08-06 price VEA                               116.32 USD
+2010-08-06 price VHT                                66.92 USD
+2010-08-06 price GLD                               190.30 USD
+2010-08-13 price VBMPX                             160.10 USD
+2010-08-13 price RGAGX                             146.80 USD
+2010-08-13 price ITOT                              103.63 USD
+2010-08-13 price VEA                               114.98 USD
+2010-08-13 price VHT                                67.69 USD
+2010-08-13 price GLD                               191.24 USD
+2010-08-20 price VBMPX                             159.22 USD
+2010-08-20 price RGAGX                             145.48 USD
+2010-08-20 price ITOT                              103.26 USD
+2010-08-20 price VEA                               118.79 USD
+2010-08-20 price VHT                                67.55 USD
+2010-08-20 price GLD                               192.97 USD
+2010-08-27 price VBMPX                             162.39 USD
+2010-08-27 price RGAGX                             148.29 USD
+2010-08-27 price ITOT                              105.47 USD
+2010-08-27 price VEA                               119.16 USD
+2010-08-27 price VHT                                69.28 USD
+2010-08-27 price GLD                               191.88 USD
+2010-09-03 price VBMPX                             161.74 USD
+2010-09-03 price RGAGX                             146.08 USD
+2010-09-03 price ITOT                              105.43 USD
+2010-09-03 price VEA                               120.61 USD
+2010-09-03 price VHT                                69.34 USD
+2010-09-03 price GLD                               191.22 USD
+2010-09-10 price VBMPX                             160.95 USD
+2010-09-10 price RGAGX                             142.17 USD
+2010-09-10 price ITOT                              103.92 USD
+2010-09-10 price VEA                               121.19 USD
+2010-09-10 price VHT                                68.82 USD
+2010-09-10 price GLD                               192.45 USD
+2010-09-17 price VBMPX                             159.35 USD
+2010-09-17 price RGAGX                             140.78 USD
+2010-09-17 price ITOT                              103.96 USD
+2010-09-17 price VEA                               121.41 USD
+2010-09-17 price VHT                                68.36 USD
+2010-09-17 price GLD                               192.00 USD
+2010-09-24 price VBMPX                             159.74 USD
+2010-09-24 price RGAGX                             142.80 USD
+2010-09-24 price ITOT                              106.34 USD
+2010-09-24 price VEA                               122.45 USD
+2010-09-24 price VHT                                69.92 USD
+2010-09-24 price GLD                               190.49 USD
+2010-10-01 price VBMPX                             159.91 USD
+2010-10-01 price RGAGX                             140.07 USD
+2010-10-01 price ITOT                              106.99 USD
+2010-10-01 price VEA                               121.00 USD
+2010-10-01 price VHT                                70.64 USD
+2010-10-01 price GLD                               192.75 USD
+2010-10-08 price VBMPX                             159.42 USD
+2010-10-08 price RGAGX                             136.73 USD
+2010-10-08 price ITOT                              103.19 USD
+2010-10-08 price VEA                               120.24 USD
+2010-10-08 price VHT                                70.35 USD
+2010-10-08 price GLD                               193.13 USD
+2010-10-15 price VBMPX                             155.74 USD
+2010-10-15 price RGAGX                             135.93 USD
+2010-10-15 price ITOT                              102.05 USD
+2010-10-15 price VEA                               119.15 USD
+2010-10-15 price VHT                                70.51 USD
+2010-10-15 price GLD                               195.80 USD
+2010-10-22 price VBMPX                             157.34 USD
+2010-10-22 price RGAGX                             137.43 USD
+2010-10-22 price ITOT                              100.47 USD
+2010-10-22 price VEA                               119.23 USD
+2010-10-22 price VHT                                69.84 USD
+2010-10-22 price GLD                               198.05 USD
+2010-10-29 price VBMPX                             155.76 USD
+2010-10-29 price RGAGX                             137.59 USD
+2010-10-29 price ITOT                              101.87 USD
+2010-10-29 price VEA                               119.84 USD
+2010-10-29 price VHT                                71.37 USD
+2010-10-29 price GLD                               198.23 USD
+2010-11-05 price VBMPX                             155.07 USD
+2010-11-05 price RGAGX                             140.99 USD
+2010-11-05 price ITOT                              101.17 USD
+2010-11-05 price VEA                               120.80 USD
+2010-11-05 price VHT                                70.89 USD
+2010-11-05 price GLD                               199.42 USD
+2010-11-12 price VBMPX                             151.68 USD
+2010-11-12 price RGAGX                             141.75 USD
+2010-11-12 price ITOT                               99.26 USD
+2010-11-12 price VEA                               123.13 USD
+2010-11-12 price VHT                                69.88 USD
+2010-11-12 price GLD                               201.02 USD
+2010-11-19 price VBMPX                             151.66 USD
+2010-11-19 price RGAGX                             145.43 USD
+2010-11-19 price ITOT                               99.77 USD
+2010-11-19 price VEA                               125.02 USD
+2010-11-19 price VHT                                69.48 USD
+2010-11-19 price GLD                               201.51 USD
+2010-11-26 price VBMPX                             150.63 USD
+2010-11-26 price RGAGX                             145.35 USD
+2010-11-26 price ITOT                              100.22 USD
+2010-11-26 price VEA                               122.56 USD
+2010-11-26 price VHT                                70.47 USD
+2010-11-26 price GLD                               203.08 USD
+2010-12-03 price VBMPX                             150.83 USD
+2010-12-03 price RGAGX                             147.88 USD
+2010-12-03 price ITOT                              103.06 USD
+2010-12-03 price VEA                               126.02 USD
+2010-12-03 price VHT                                72.52 USD
+2010-12-03 price GLD                               204.08 USD
+2010-12-10 price VBMPX                             151.16 USD
+2010-12-10 price RGAGX                             146.05 USD
+2010-12-10 price ITOT                              104.05 USD
+2010-12-10 price VEA                               127.06 USD
+2010-12-10 price VHT                                72.23 USD
+2010-12-10 price GLD                               205.63 USD
+2010-12-17 price VBMPX                             149.93 USD
+2010-12-17 price RGAGX                             146.31 USD
+2010-12-17 price ITOT                              102.55 USD
+2010-12-17 price VEA                               128.12 USD
+2010-12-17 price VHT                                71.83 USD
+2010-12-17 price GLD                               205.07 USD
+2010-12-24 price VBMPX                             149.30 USD
+2010-12-24 price RGAGX                             148.77 USD
+2010-12-24 price ITOT                              102.86 USD
+2010-12-24 price VEA                               127.03 USD
+2010-12-24 price VHT                                71.52 USD
+2010-12-24 price GLD                               205.30 USD
+2010-12-31 price VBMPX                             149.34 USD
+2010-12-31 price RGAGX                             146.34 USD
+2010-12-31 price ITOT                              101.70 USD
+2010-12-31 price VEA                               127.03 USD
+2010-12-31 price VHT                                71.69 USD
+2010-12-31 price GLD                               204.89 USD
+
+
+
+* Cash
+

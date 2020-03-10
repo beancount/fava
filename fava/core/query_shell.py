@@ -8,8 +8,8 @@ from beancount.core.data import Query
 from beancount.query import query_compile  # type: ignore
 from beancount.query import query_execute  # type: ignore
 from beancount.query import query_parser  # type: ignore
-from beancount.query import shell  # type: ignore
-from beancount.query.query import run_query  # type: ignore
+from beancount.query.shell import BQLShell  # type: ignore
+from beancount.query.query import run_query
 from beancount.utils import pager  # type: ignore
 
 from fava.core.helpers import FavaAPIException
@@ -24,7 +24,7 @@ from fava.util.excel import to_excel
 readline.set_history_length(1000)
 
 
-class QueryShell(shell.BQLShell, FavaModule):
+class QueryShell(BQLShell, FavaModule):
     """A light wrapper around Beancount's shell."""
 
     # pylint: disable=too-many-instance-attributes
@@ -45,7 +45,7 @@ class QueryShell(shell.BQLShell, FavaModule):
 
     def add_help(self):
         "Attach help functions for each of the parsed token handlers."
-        for attrname, func in list(shell.BQLShell.__dict__.items()):
+        for attrname, func in BQLShell.__dict__.items():
             if attrname[:3] != "on_":
                 continue
             command_name = attrname[3:]
@@ -113,7 +113,7 @@ class QueryShell(shell.BQLShell, FavaModule):
         contents = self.buffer.getvalue()
         self.buffer.truncate(0)
         if self.result is None:
-            return (contents, None, None)
+            return (contents.strip().strip("\x00"), None, None)
         types, rows = self.result
         self.result = None
         return (None, types, rows)
@@ -136,7 +136,7 @@ class QueryShell(shell.BQLShell, FavaModule):
                 statement = self.parser.parse(query.query_string)
                 self.dispatch(statement)
 
-    def query_to_file(self, query_string, result_format):
+    def query_to_file(self, query_string: str, result_format: str):
         """Get query result as file.
 
         Arguments:
@@ -192,4 +192,4 @@ class QueryShell(shell.BQLShell, FavaModule):
         return name, data
 
 
-QueryShell.on_Select.__doc__ = shell.BQLShell.on_Select.__doc__
+QueryShell.on_Select.__doc__ = BQLShell.on_Select.__doc__
