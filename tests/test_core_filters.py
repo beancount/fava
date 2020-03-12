@@ -17,7 +17,10 @@ LEX = FilterSyntaxLexer().lex
 def test_match():
     assert Match("asdf")("asdf")
     assert Match("asdf")("asdfasdf")
-    assert not Match("asdf")("aasdfasdf")
+    assert Match("asdf")("aasdfasdf")
+    assert Match("^asdf")("asdfasdf")
+    assert not Match("asdf")("fdsadfs")
+    assert not Match("^asdf")("aasdfasdf")
     assert Match("(((")("(((")
 
 
