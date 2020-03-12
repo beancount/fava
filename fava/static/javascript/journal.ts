@@ -3,7 +3,10 @@ import e from "./events";
 import router from "./router";
 import { filters } from "./stores";
 
-function addFilter(value: string, escape: boolean = false): void {
+/**
+ * Add filter, possibly escaping it to produce a valid regex.
+ */
+function addFilter(value: string, escape = false): void {
   if (escape) {
     value = value.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
   }
