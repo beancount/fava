@@ -36,7 +36,7 @@ lint: fava/static/node_modules
 
 .PHONY: test
 test:
-	tox
+	tox -e py
 
 .PHONY: update-snapshots
 update-snapshots:

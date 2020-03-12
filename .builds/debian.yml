@@ -10,5 +10,7 @@ tasks:
   - build: |
       sudo npm install npm@latest -g --no-progress
       make -C fava
+  - lint: |
+      make -C fava check-lint
   - test: |
       make -C fava test

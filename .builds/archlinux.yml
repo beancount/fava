@@ -9,5 +9,7 @@ sources:
 tasks:
   - build: |
       make -C fava
+  - lint: |
+      make -C fava check-lint
   - test: |
       make -C fava test
