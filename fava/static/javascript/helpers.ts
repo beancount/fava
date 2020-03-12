@@ -91,34 +91,38 @@ export function once(
  * Handles JSON content for a Promise returned by fetch, also handling an HTTP
  * error status.
  */
-export function handleJSON(response: Response): Promise<unknown> {
+export async function handleJSON(response: Response): Promise<unknown> {
   if (!response.ok) {
-    return Promise.reject(response.statusText);
+    throw new Error(response.statusText);
   }
-  return response.json().then(data => {
-    if (!data.success) {
-      return Promise.reject(data.error);
-    }
-    return data;
-  });
+  const data = await response.json();
+  if (!data.success) {
+    throw new Error(data.error);
+  }
+  return data;
 }
 
 /**
  * Handles text content for a Promise returned by fetch, also handling an HTTP
  * error status.
  */
-export function handleText(response: Response): Promise<string> {
+export async function handleText(response: Response): Promise<string> {
   if (!response.ok) {
-    return Promise.reject(response.statusText);
+    const msg = await response.text();
+    throw new Error(msg || response.statusText);
   }
   return response.text();
 }
 
-export function fetch(input: string, init = {}): Promise<Response> {
-  const defaults: RequestInit = {
+/** Wrapper around fetch with some default options */
+export function fetch(
+  input: string,
+  init: RequestInit = {}
+): Promise<Response> {
+  return window.fetch(input, {
     credentials: "same-origin",
-  };
-  return window.fetch(input, Object.assign(defaults, init));
+    ...init,
+  });
 }
 
 const validateAPIResponse = object({ data: unknown });
@@ -152,7 +156,7 @@ export async function fetchAPI(
 ): Promise<unknown> {
   const url = urlFor(`api/${endpoint}`, params);
   const responseData = await fetch(url);
-  const json: unknown = await handleJSON(responseData);
+  const json = await handleJSON(responseData);
   return validateAPIResponse(json).data;
 }
 

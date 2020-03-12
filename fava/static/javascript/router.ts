@@ -104,7 +104,7 @@ class Router {
       e.trigger("page-loaded");
       urlHash.set(window.location.hash.slice(1));
     } catch (error) {
-      notify(`Loading ${url} failed.`, "error");
+      notify(`Loading ${url} failed: ${error.message}`, "error");
     } finally {
       if (svg) {
         svg.classList.remove("loading");
