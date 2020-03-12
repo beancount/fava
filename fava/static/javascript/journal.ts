@@ -3,7 +3,11 @@ import e from "./events";
 import router from "./router";
 import { filters } from "./stores";
 
-function addFilter(value: string): void {
+function addFilter(value: string, escape: boolean = false): void {
+  if (escape) {
+    value = value.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
+  }
+
   filters.update(fs => {
     if (fs.filter) {
       return {
@@ -38,7 +42,9 @@ e.on("page-loaded", () => {
       addFilter(target.innerText);
     } else if (target.className === "payee") {
       // Filter for payees when clicking on them.
-      addFilter(`payee:"${target.innerText}"`);
+      // Note: any special characters in the payee string are escaped so the
+      // filter matches against the payee literally.
+      addFilter(`payee:"${target.innerText}"`, true);
     } else if (target.tagName === "DD") {
       // Filter for metadata when clicking on the value.
       addFilter(
