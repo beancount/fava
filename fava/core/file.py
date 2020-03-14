@@ -1,8 +1,9 @@
 """Reading/writing Beancount files."""
-import codecs
 import datetime
 import re
 import threading
+from codecs import decode
+from codecs import encode
 from hashlib import sha256
 from operator import attrgetter
 from typing import Any
@@ -37,6 +38,11 @@ EXCL_FLAGS = set(
         flags.FLAG_MERGING,  # M
     )
 )
+
+
+def sha256_str(val: str) -> str:
+    """Hash a string."""
+    return sha256(encode(val, encoding="utf-8")).hexdigest()
 
 
 class FileModule(FavaModule):
@@ -79,7 +85,7 @@ class FileModule(FavaModule):
             contents = file.read()
 
         sha256sum = sha256(contents).hexdigest()
-        source = codecs.decode(contents)
+        source = decode(contents)
 
         return source, sha256sum
 
@@ -103,7 +109,7 @@ class FileModule(FavaModule):
             if original_sha256sum != sha256sum:
                 raise FavaAPIException("The file changed externally.")
 
-            contents = codecs.encode(source)
+            contents = encode(source, encoding="utf-8")
             with open(path, "w+b") as file:
                 file.write(contents)
 
@@ -277,9 +283,8 @@ def get_entry_slice(entry: Directive) -> Tuple[str, str]:
 
     entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
     entry_source = "".join(entry_lines).rstrip("\n")
-    sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
 
-    return entry_source, sha256sum
+    return entry_source, sha256_str(entry_source)
 
 
 def save_entry_slice(
@@ -306,8 +311,7 @@ def save_entry_slice(
     first_entry_line = entry.meta["lineno"] - 1
     entry_lines = find_entry_lines(lines, first_entry_line)
     entry_source = "".join(entry_lines).rstrip("\n")
-    original_sha256sum = sha256(codecs.encode(entry_source)).hexdigest()
-    if original_sha256sum != sha256sum:
+    if sha256_str(entry_source) != sha256sum:
         raise FavaAPIException("The file changed externally.")
 
     lines = (
@@ -318,7 +322,7 @@ def save_entry_slice(
     with open(entry.meta["filename"], "w", encoding="utf-8") as file:
         file.writelines(lines)
 
-    return sha256(codecs.encode(source_slice)).hexdigest()
+    return sha256_str(source_slice)
 
 
 def insert_entry(
