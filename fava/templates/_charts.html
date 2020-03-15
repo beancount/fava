@@ -23,7 +23,7 @@
 {% do chart_data.append({
 'type': 'scatterplot',
 'label': _('Events') if not event_type else _('Event: {}').format(event_type),
-'data': ledger.charts.events(event_type),
+'data': ledger.events(event_type),
 }) %}
 {% endmacro %}
 

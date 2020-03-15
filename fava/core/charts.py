@@ -50,19 +50,6 @@ def inv_to_dict(inventory):
 class ChartModule(FavaModule):
     """Return data for the various charts in Fava."""
 
-    __slots__ = ["ledger"]
-
-    def events(self, event_type=None):
-        """All events for a given event type."""
-        return [
-            {
-                "type": entry.type,
-                "date": entry.date,
-                "description": entry.description,
-            }
-            for entry in self.ledger.events(event_type)
-        ]
-
     def hierarchy(self, account_name, begin=None, end=None):
         """An account tree."""
         if begin:
