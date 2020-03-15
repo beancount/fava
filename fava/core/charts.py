@@ -2,6 +2,7 @@
 import datetime
 from typing import Generator
 from typing import List
+from typing import Optional
 from typing import Tuple
 from typing import Union
 
@@ -50,9 +51,14 @@ def inv_to_dict(inventory):
 class ChartModule(FavaModule):
     """Return data for the various charts in Fava."""
 
-    def hierarchy(self, account_name, begin=None, end=None):
+    def hierarchy(
+        self,
+        account_name: str,
+        begin: Optional[datetime.date] = None,
+        end: Optional[datetime.date] = None,
+    ):
         """An account tree."""
-        if begin:
+        if begin is not None:
             tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
         else:
             tree = self.ledger.root_tree
@@ -172,10 +178,9 @@ class ChartModule(FavaModule):
                 days=1
             )
             while txn and txn.date < end_date_exclusive:
-                for posting in filter(
-                    lambda p: p.account.startswith(types), txn.postings
-                ):
-                    inventory.add_position(posting)
+                for posting in txn.postings:
+                    if posting.account.startswith(types):
+                        inventory.add_position(posting)
                 txn = next(transactions, None)
             yield {
                 "date": end_date_exclusive,

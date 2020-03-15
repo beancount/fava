@@ -8,8 +8,8 @@ from beancount.core.data import Query
 from beancount.query import query_compile  # type: ignore
 from beancount.query import query_execute  # type: ignore
 from beancount.query import query_parser  # type: ignore
-from beancount.query.shell import BQLShell  # type: ignore
 from beancount.query.query import run_query
+from beancount.query.shell import BQLShell  # type: ignore
 from beancount.utils import pager  # type: ignore
 
 from fava.core.helpers import FavaAPIException
