@@ -2,6 +2,7 @@
 
 from beancount.core.number import D
 from flask import g
+from flask.json import dumps
 import pytest
 
 from fava.util.date import Interval
@@ -14,6 +15,7 @@ def test_interval_totals(app, small_example_ledger, snapshot):
             Interval.MONTH, "Expenses"
         )
         snapshot(data)
+        snapshot(dumps(data))
 
 
 def test_prices(example_ledger, snapshot):
@@ -58,6 +60,7 @@ def test_linechart_data_at_value(app, example_ledger, snapshot):
             "Assets:Testing:MultipleCommodities"
         )
         snapshot(data)
+        snapshot(dumps(data))
 
 
 def test_linechart_data_usd(app, example_ledger, snapshot):
@@ -68,6 +71,7 @@ def test_linechart_data_usd(app, example_ledger, snapshot):
             "Assets:Testing:MultipleCommodities"
         )
         snapshot(data)
+        snapshot(dumps(data))
 
 
 def test_net_worth(app, example_ledger, snapshot):
@@ -76,6 +80,7 @@ def test_net_worth(app, example_ledger, snapshot):
         g.conversion = "USD"
         data = example_ledger.charts.net_worth(Interval.MONTH)
         snapshot(data)
+        snapshot(dumps(data))
 
 
 def test_hierarchy(app, example_ledger):

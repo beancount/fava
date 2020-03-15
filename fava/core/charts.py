@@ -18,7 +18,6 @@ from flask.json import JSONEncoder
 
 from fava.core.helpers import FavaAPIException
 from fava.core.helpers import FavaModule
-from fava.core.inventory import CounterInventory
 from fava.core.tree import Tree
 from fava.template_filters import cost_or_value
 from fava.template_filters import units
@@ -27,8 +26,21 @@ from fava.util import pairwise
 from fava.util.date import Interval
 
 
+def inv_to_dict(inventory):
+    """Convert an inventory to a simple cost->number dict."""
+    return {pos.units.currency: pos.units.number for pos in inventory}
+
+
+Inventory.for_json = inv_to_dict  # type: ignore
+
+
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
+
+    def __init__(self, *args, **kwargs):
+        # Allow use of a `for_json` method to serialise dict subclasses.
+        kwargs['for_json'] = True
+        super().__init__(*args, **kwargs)
 
     def default(self, o):  # pylint: disable=method-hidden
         if isinstance(o, Decimal):
@@ -41,11 +53,6 @@ class FavaJSONEncoder(JSONEncoder):
             return JSONEncoder.default(self, o)
         except TypeError:
             return str(o)
-
-
-def inv_to_dict(inventory):
-    """Convert an inventory to a simple cost->number dict."""
-    return {pos.units.currency: pos.units.number for pos in inventory}
 
 
 class ChartModule(FavaModule):
@@ -92,7 +99,7 @@ class ChartModule(FavaModule):
             accounts: A single account (str) or a tuple of accounts.
         """
         for begin, end in pairwise(self.ledger.interval_ends(interval)):
-            inventory = CounterInventory()
+            inventory = Inventory()
             entries = iter_entry_dates(self.ledger.entries, begin, end)
             for entry in (e for e in entries if isinstance(e, Transaction)):
                 for posting in entry.postings:
@@ -171,7 +178,7 @@ class ChartModule(FavaModule):
         )
 
         txn = next(transactions, None)
-        inventory = CounterInventory()
+        inventory = Inventory()
 
         for end_date_exclusive in self.ledger.interval_ends(interval):
             end_date_inclusive = end_date_exclusive - datetime.timedelta(
@@ -212,10 +219,10 @@ class ChartModule(FavaModule):
             raise FavaAPIException("Can not plot the given chart.")
         if types[0][1] is datetime.date:
             return [
-                {"date": date, "balance": inv_to_dict(units(inv))}
+                {"date": date, "balance": units(inv)}
                 for date, inv in rows
             ]
         return [
-            {"group": group, "balance": inv_to_dict(units(inv))}
+            {"group": group, "balance": units(inv)}
             for group, inv in rows
         ]
