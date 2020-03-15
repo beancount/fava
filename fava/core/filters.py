@@ -122,7 +122,7 @@ class Match:
 
     def __init__(self, search: str) -> None:
         try:
-            match = re.compile(search, re.IGNORECASE).match
+            match = re.compile(search, re.IGNORECASE).search
             self.match: Callable[[str], bool] = lambda s: bool(match(s))
         except re.error:
             self.match = lambda s: s == search

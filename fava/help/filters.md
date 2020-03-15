@@ -30,23 +30,22 @@ the account name, or a regular expression matching the account name, e.g.
 This final filter allows you to filter entries by various attributes.
 
 -   Filter by `#tag` or `^link`.
--   Filter by payee `payee:".*restaurant.*"`, or narration `narration:'Dinner with Joe'`,
-    or any other entry attribute. The argument needs to be quoted (with `'` or
-    `"`) if it contains spaces and can either be simply a string or a regular
-    expression that matches the attribute. The regular expression matching is
-    case insensitive.
--   Search payee and narration by supplying a simple string, which again is
-    matched as a regular expression. For Note directives, the comment will be
-    searched.
--   Filter for entries having certain metadata values: `statement:".*pdf"`. Note
+-   Filter by any entry attribute, such as payee `payee:"restaurant"` or
+    narration `narration:'Dinner with Joe'`. The argument is a regular
+    expression which needs to be quoted (with `'` or `"`) if it contains spaces
+    or special characters. If the argument is not a valid regular expression,
+    Fava will look for an exact match instead.
+-   Search in payee and narration if no specific entry attribute is given, e.g.
+    `"Cash withdrawal"`. For Note directives, the comment will be searched.
+-   Filter for entries having certain metadata values: `document:"\.pdf$"`. Note
     that if the entry has an attribute of the same name as the metadata key, the
     filter will apply to the entry attribute, not the metadata value.
 -   Exclude entries that match a filter by prepending a `-` to it, e.g. `-#tag`
     or `-(^link #tag)`.
 -   To match entries by posting attributes, you can use `any()` and `all()`,
-    e.g., `any(id:'12', account:".*Cash")` for all entries that have at least one
+    e.g., `any(id:'12', account:"Cash$")` for all entries that have at least one
     posting with metadata `id: 12` or account ending in `Cash`, or
-    `all(-account:"Expenses:Food")` to exclude all transactions having a posting
+    `all(-account:"^Expenses:Food")` to exclude all transactions having a posting
     to the Expenses:Food account.
 
 These filters can be combined by separating them by spaces to match all entries
@@ -54,3 +53,8 @@ satisfying all given filters or by commas to match all entries satisfying at
 least one of the given filters. In other words, a space acts like an "and" and
 a comma like an "or". As usual, the logical "and" has a higher grouping power
 than "or" and you can use parentheses to group filters.
+
+When given regular expressions, Fava checks for a match anywhere in the
+corresponding attribute. Matching is always case-insensitive. To find out more
+about the specific syntax Fava uses, refer to [Python's Regular Expression
+Syntax](https://docs.python.org/3/library/re.html?highlight=match#regular-expression-syntax).
