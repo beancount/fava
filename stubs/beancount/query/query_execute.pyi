@@ -4,10 +4,8 @@ from typing import Any
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Type
+from typing import NamedTuple
 
 from beancount.core.data import Entries
 
-def run_query(
-    entries: Entries, options_map: Any, query: str, numberify: bool = None
-) -> Tuple[List[Type], List[Tuple]]: ...
+def execute_query(query: Any, entries: Entries, options_map: Any): ...

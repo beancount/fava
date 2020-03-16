@@ -39,7 +39,7 @@ class FavaJSONEncoder(JSONEncoder):
 
     def __init__(self, *args, **kwargs):
         # Allow use of a `for_json` method to serialise dict subclasses.
-        kwargs['for_json'] = True
+        kwargs["for_json"] = True
         super().__init__(*args, **kwargs)
 
     def default(self, o):  # pylint: disable=method-hidden
@@ -219,10 +219,6 @@ class ChartModule(FavaModule):
             raise FavaAPIException("Can not plot the given chart.")
         if types[0][1] is datetime.date:
             return [
-                {"date": date, "balance": units(inv)}
-                for date, inv in rows
+                {"date": date, "balance": units(inv)} for date, inv in rows
             ]
-        return [
-            {"group": group, "balance": units(inv)}
-            for group, inv in rows
-        ]
+        return [{"group": group, "balance": units(inv)} for group, inv in rows]

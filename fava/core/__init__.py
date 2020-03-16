@@ -497,7 +497,7 @@ class FavaLedger:
                 'No entry found for hash "{}"'.format(entry_hash)
             )
 
-    def context(self, entry_hash):
+    def context(self, entry_hash: str) -> Tuple[Directive, Any, str, str]:
         """Context for an entry.
 
         Arguments:
@@ -551,7 +551,7 @@ class FavaLedger:
             ]
         return all_prices
 
-    def last_entry(self, account_name: str):
+    def last_entry(self, account_name: str) -> Optional[Directive]:
         """Get last entry of an account.
 
         Args:

@@ -6,9 +6,11 @@ import textwrap
 
 from beancount.core.data import Query
 from beancount.query import query_compile  # type: ignore
-from beancount.query import query_execute  # type: ignore
-from beancount.query import query_parser  # type: ignore
 from beancount.query.query import run_query
+from beancount.query.query_compile import CompilationError
+from beancount.query.query_execute import execute_query
+from beancount.query.query_parser import ParseError
+from beancount.query.query_parser import RunCustom
 from beancount.query.shell import BQLShell  # type: ignore
 from beancount.utils import pager  # type: ignore
 
@@ -75,7 +77,8 @@ class QueryShell(BQLShell, FavaModule):
     do_quit = noop
     do_EOF = noop
 
-    def on_Select(self, statement):  # pylint: disable=invalid-name
+    def on_Select(self, statement):
+        # pylint: disable=invalid-name
         try:
             c_query = query_compile.compile(
                 statement,
@@ -83,12 +86,10 @@ class QueryShell(BQLShell, FavaModule):
                 self.env_postings,
                 self.env_entries,
             )
-        except query_compile.CompilationError as exc:
+        except CompilationError as exc:
             print("ERROR: {}.".format(str(exc).rstrip(".")), file=self.outfile)
             return
-        rtypes, rrows = query_execute.execute_query(
-            c_query, self.entries, self.options_map
-        )
+        rtypes, rrows = execute_query(c_query, self.entries, self.options_map)
 
         if not rrows:
             print("(empty)", file=self.outfile)
@@ -156,10 +157,10 @@ class QueryShell(BQLShell, FavaModule):
 
         try:
             statement = self.parser.parse(query_string)
-        except query_parser.ParseError as exception:
+        except ParseError as exception:
             raise FavaAPIException(str(exception))
 
-        if statement.__class__.__name__ == "RunCustom":
+        if isinstance(statement, RunCustom):
             name = statement.query_name
 
             try:
@@ -177,10 +178,7 @@ class QueryShell(BQLShell, FavaModule):
                 query_string,
                 numberify=True,
             )
-        except (
-            query_compile.CompilationError,
-            query_parser.ParseError,
-        ) as exception:
+        except (CompilationError, ParseError) as exception:
             raise FavaAPIException(str(exception))
 
         if result_format == "csv":
