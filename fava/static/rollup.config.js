@@ -50,7 +50,7 @@ export default {
   },
   plugins: [
     nodeResolve(),
-    typescript(),
+    typescript({ noEmitOnError: production }),
     commonjs({
       include: "node_modules/**",
     }),
