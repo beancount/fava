@@ -1,5 +1,5 @@
 <script>
-  import { afterUpdate, onMount } from "svelte";
+  import { afterUpdate } from "svelte";
 
   import initSourceEditor from "../editor";
   import { fetch, delegate, handleText } from "../helpers";
@@ -7,7 +7,6 @@
 
   import ModalBase from "./ModalBase.svelte";
 
-  let div;
   $: shown = $urlHash.startsWith("context");
   $: entryHash = shown ? $urlHash.slice(8) : "";
   $: content = !shown
@@ -16,11 +15,11 @@
         handleText
       );
 
-  onMount(() => {
-    delegate(div, "click", ".toggle-box-header", event => {
+  function toggleBoxes(node) {
+    delegate(node, "click", ".toggle-box-header", event => {
       event.target.closest(".toggle-box").classList.toggle("toggled");
     });
-  });
+  }
 
   afterUpdate(async () => {
     if (!content) {
@@ -32,7 +31,7 @@
 </script>
 
 <ModalBase {shown}>
-  <div class="content" bind:this={div}>
+  <div class="content" use:toggleBoxes>
     {#await content}
       Loading entry context...
     {:then html}

@@ -85,9 +85,7 @@ class Router {
     getUrl.searchParams.set("partial", "true");
 
     const svg = select(".fava-icon");
-    if (svg) {
-      svg.classList.add("loading");
-    }
+    svg?.classList.add("loading");
 
     try {
       const content = await fetch(getUrl.toString()).then(handleText);
@@ -106,9 +104,7 @@ class Router {
     } catch (error) {
       notify(`Loading ${url} failed: ${error.message}`, "error");
     } finally {
-      if (svg) {
-        svg.classList.remove("loading");
-      }
+      svg?.classList.remove("loading");
     }
   }
 
@@ -142,7 +138,7 @@ class Router {
       "a",
       (event: MouseEvent, link: HTMLAnchorElement) => {
         if (
-          (link.getAttribute("href") || "").charAt(0) === "#" ||
+          link.getAttribute("href")?.charAt(0) === "#" ||
           link.host !== window.location.host ||
           link.hasAttribute("data-remote") ||
           link.protocol.indexOf("http") !== 0 ||

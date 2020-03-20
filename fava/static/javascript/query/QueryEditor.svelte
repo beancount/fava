@@ -1,12 +1,11 @@
 <script>
   import CodeMirror from "codemirror";
-  import { onMount, createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from "svelte";
 
   import { ignoreKey } from "../editor";
   import { _ } from "../helpers";
 
   export let value;
-  let form;
   let editor;
   const dispatch = createEventDispatcher();
 
@@ -14,7 +13,7 @@
     editor.setValue(value);
   }
 
-  onMount(() => {
+  function queryEditor(form) {
     const queryOptions = {
       value,
       mode: "beancount-query",
@@ -41,12 +40,12 @@
         });
       }
     });
-  });
+  }
 </script>
 
 <form
   on:submit|preventDefault={() => dispatch('submit')}
-  bind:this={form}
+  use:queryEditor
   class="query-box"
   method="GET">
   <button type="submit" data-key="Ctrl/Cmd+Enter">{_('Submit')}</button>
