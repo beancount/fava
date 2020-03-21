@@ -8,7 +8,9 @@
     "check-lint": "npm run check-format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' && npx tsc",
     "lint:js": "eslint javascript --fix --ext .js,.svelte,.ts",
     "check-format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --ignore-path .gitignore",
-    "format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --write --ignore-path .gitignore"
+    "format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --write --ignore-path .gitignore",
+    "test": "ava",
+    "test:watch": "ava -w"
   },
   "husky": {
     "hooks": {
@@ -24,6 +26,14 @@
     "proseWrap": "always",
     "trailingComma": "es5",
     "tabWidth": 2
+  },
+  "ava": {
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "sucrase/register"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -102,6 +112,7 @@
     "@types/d3-time-format": "^2.1.1",
     "@typescript-eslint/eslint-plugin": "^2.24.0",
     "@typescript-eslint/parser": "^2.24.0",
+    "ava": "^3.5.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-config-prettier": "^6.10.0",
@@ -118,6 +129,7 @@
     "stylelint-config-prettier": "^8.0.1",
     "stylelint-config-recess-order": "^2.0.4",
     "stylelint-config-standard": "^20.0.0",
+    "sucrase": "^3.12.1",
     "typescript": "^3.8.3"
   },
   "dependencies": {

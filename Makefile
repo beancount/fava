@@ -36,6 +36,7 @@ lint: fava/static/node_modules
 
 .PHONY: test
 test:
+	cd fava/static; npm run test
 	tox -e py
 
 .PHONY: update-snapshots

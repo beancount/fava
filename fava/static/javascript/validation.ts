@@ -59,7 +59,11 @@ export function number(json: unknown): number {
  */
 export function date(json: unknown): Date {
   if (typeof json === "string" || json instanceof Date) {
-    return new Date(json);
+    const parsed = new Date(json);
+    if (Number.isNaN(+parsed)) {
+      throw new ValidationError(`Expected a date: ${json}`);
+    }
+    return parsed;
   }
   throw new ValidationError(`Expected a date: ${json}`);
 }
@@ -67,7 +71,9 @@ export function date(json: unknown): Date {
 /**
  * Validate a value to be equal to a constant value.
  */
-export function constant<T>(value: T): Validator<T> {
+export function constant<T extends null | boolean | string | number>(
+  value: T
+): Validator<T> {
   return (json: unknown): T => {
     if (json === value) {
       return json as T;
@@ -179,11 +185,8 @@ export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
   return (json: unknown): Record<string, T> => {
     if (isJsonObject(json)) {
       const ret: Record<string, T> = {};
-      // eslint-disable-next-line no-restricted-syntax
-      for (const key in json) {
-        if (Object.prototype.hasOwnProperty.call(json, key)) {
-          ret[key] = decoder(json[key]);
-        }
+      for (const [key, value] of Object.entries(json)) {
+        ret[key] = decoder(value);
       }
       return ret;
     }
