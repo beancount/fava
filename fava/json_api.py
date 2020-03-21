@@ -176,7 +176,7 @@ def source(request_data) -> str:
             request_data.get("source"),
             request_data.get("sha256sum"),
         )
-    return save_entry_slice(
+    return g.ledger.file.save_entry_slice(
         request_data.get("entry_hash"),
         request_data.get("source"),
         request_data.get("sha256sum"),
