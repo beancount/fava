@@ -1,6 +1,7 @@
 import { writable, derived } from "svelte/store";
 
 import { _ } from "../helpers";
+import iso4217currencies from "../iso4217";
 import { favaAPIStore } from ".";
 
 export const showCharts = writable(true);
@@ -18,7 +19,9 @@ export const conversions = derived(favaAPIStore, favaAPI => [
   ...favaAPI.options.commodities
     .sort()
     .filter(
-      c => !favaAPI.options.operating_currency.includes(c) && c.length <= 3
+      c =>
+        !favaAPI.options.operating_currency.includes(c) &&
+        iso4217currencies.has(c)
     )
     .map(currency => [currency, `Converted to ${currency}`]),
 ]);
