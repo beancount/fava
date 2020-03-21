@@ -8,7 +8,7 @@ import {
   number,
   union,
   constant,
-} from "../validation";
+} from "../lib/validation";
 
 export const urlHash = writable("");
 

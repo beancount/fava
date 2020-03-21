@@ -5,7 +5,7 @@
 
 import { select, selectAll, fetchAPI } from "./helpers";
 import { favaAPI } from "./stores";
-import { number } from "./validation";
+import { number } from "./lib/validation";
 import e from "./events";
 
 function initSidebar(): void {

@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { fuzzytest, fuzzywrap } from "./helpers";
+  import { fuzzytest, fuzzywrap } from "./lib/fuzzy";
   import { keyboardShortcut } from "./keyboard-shortcuts";
 
   const dispatch = createEventDispatcher();

@@ -22,7 +22,7 @@ import {
   unknown,
   lazy,
   Validator,
-} from "../validation";
+} from "../lib/validation";
 
 import { scales } from "./helpers";
 

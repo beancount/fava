@@ -1,5 +1,5 @@
 import CodeMirror, { Position } from "codemirror";
-import { fuzzytest } from "../helpers";
+import { fuzzytest } from "../lib/fuzzy";
 
 export function getCurrentWord(cursor: Position, line: string): string {
   return line.slice(0, cursor.ch).match(/(\S*)$/)?.[0] || "";
