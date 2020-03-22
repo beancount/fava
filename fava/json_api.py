@@ -14,7 +14,6 @@ from flask import get_template_attribute
 from flask import jsonify
 from flask import request
 
-from fava.core.file import save_entry_slice
 from fava.core.helpers import FavaAPIException
 from fava.core.misc import align
 from fava.serialisation import deserialise
