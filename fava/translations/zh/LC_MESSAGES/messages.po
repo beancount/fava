@@ -344,11 +344,11 @@ msgstr "复制"
 msgid "Importer"
 msgstr "导入器"
 
-#: fava/static/javascript/Import.svelte:87
+#: fava/static/javascript/import/Import.svelte:66
 msgid "Extract"
 msgstr "导出"
 
-#: fava/static/javascript/query/QueryEditor.svelte:31
+#: fava/static/javascript/query/QueryEditor.svelte:24
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命令。"
 
@@ -441,7 +441,7 @@ msgstr "帮助"
 msgid "Beancount options"
 msgstr "Beancount 选项"
 
-#: fava/static/javascript/query/QueryEditor.svelte:58
+#: fava/static/javascript/query/QueryEditor.svelte:51
 msgid "Submit"
 msgstr "提交"
 
@@ -468,27 +468,27 @@ msgid "Import entries"
 msgstr "导入项目"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:7
-#: fava/util/date.py:54
+#: fava/util/date.py:55
 msgid "Yearly"
 msgstr "按年"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:8
-#: fava/util/date.py:55
+#: fava/util/date.py:56
 msgid "Quarterly"
 msgstr "按季"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:9
-#: fava/util/date.py:56
+#: fava/util/date.py:57
 msgid "Monthly"
 msgstr "按月"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:10
-#: fava/util/date.py:57
+#: fava/util/date.py:58
 msgid "Weekly"
 msgstr "按周"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:11
-#: fava/util/date.py:58
+#: fava/util/date.py:59
 msgid "Daily"
 msgstr "按日"
 
@@ -520,11 +520,11 @@ msgstr "按市价"
 msgid "Units"
 msgstr "按单位数量"
 
-#: fava/static/javascript/charts/Chart.svelte:65
+#: fava/static/javascript/charts/Chart.svelte:59
 msgid "Treemap"
 msgstr "树状图"
 
-#: fava/static/javascript/charts/Chart.svelte:69
+#: fava/static/javascript/charts/Chart.svelte:63
 msgid "Sunburst"
 msgstr "旭日图"
 

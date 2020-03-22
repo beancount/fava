@@ -345,11 +345,11 @@ msgid "Importer"
 msgstr "匯入器"
 
 #. 不確定 UI 上是用在哪
-#: fava/static/javascript/Import.svelte:87
+#: fava/static/javascript/import/Import.svelte:66
 msgid "Extract"
 msgstr "匯出"
 
-#: fava/static/javascript/query/QueryEditor.svelte:31
+#: fava/static/javascript/query/QueryEditor.svelte:24
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "... 輸入 BQL 查詢語句。 '幫助' 可列出所有可用的指令。"
 
@@ -442,7 +442,7 @@ msgstr "幫助"
 msgid "Beancount options"
 msgstr "Beancount 選項"
 
-#: fava/static/javascript/query/QueryEditor.svelte:58
+#: fava/static/javascript/query/QueryEditor.svelte:51
 msgid "Submit"
 msgstr "送出"
 
@@ -469,27 +469,27 @@ msgid "Import entries"
 msgstr "匯入項目"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:7
-#: fava/util/date.py:54
+#: fava/util/date.py:55
 msgid "Yearly"
 msgstr "年度"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:8
-#: fava/util/date.py:55
+#: fava/util/date.py:56
 msgid "Quarterly"
 msgstr "季度"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:9
-#: fava/util/date.py:56
+#: fava/util/date.py:57
 msgid "Monthly"
 msgstr "月"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:10
-#: fava/util/date.py:57
+#: fava/util/date.py:58
 msgid "Weekly"
 msgstr "週"
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:11
-#: fava/util/date.py:58
+#: fava/util/date.py:59
 msgid "Daily"
 msgstr "日"
 
@@ -522,11 +522,11 @@ msgid "Units"
 msgstr "按照單位"
 
 #. make it 樹狀圖 is not really proper. People would think about Tree structure while seeing this term.
-#: fava/static/javascript/charts/Chart.svelte:65
+#: fava/static/javascript/charts/Chart.svelte:59
 msgid "Treemap"
 msgstr "Treemap"
 
-#: fava/static/javascript/charts/Chart.svelte:69
+#: fava/static/javascript/charts/Chart.svelte:63
 msgid "Sunburst"
 msgstr "Sunburst"
 

@@ -344,11 +344,11 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: fava/static/javascript/Import.svelte:87
+#: fava/static/javascript/import/Import.svelte:66
 msgid "Extract"
 msgstr ""
 
-#: fava/static/javascript/query/QueryEditor.svelte:31
+#: fava/static/javascript/query/QueryEditor.svelte:24
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "...введите BQL-запрос. 'help' для перечисления доступных команд."
 
@@ -441,7 +441,7 @@ msgstr "помощь"
 msgid "Beancount options"
 msgstr "Параметры Beancount"
 
-#: fava/static/javascript/query/QueryEditor.svelte:58
+#: fava/static/javascript/query/QueryEditor.svelte:51
 msgid "Submit"
 msgstr "Отправить"
 
@@ -467,27 +467,27 @@ msgid "Import entries"
 msgstr ""
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:7
-#: fava/util/date.py:54
+#: fava/util/date.py:55
 msgid "Yearly"
 msgstr ""
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:8
-#: fava/util/date.py:55
+#: fava/util/date.py:56
 msgid "Quarterly"
 msgstr ""
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:9
-#: fava/util/date.py:56
+#: fava/util/date.py:57
 msgid "Monthly"
 msgstr ""
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:10
-#: fava/util/date.py:57
+#: fava/util/date.py:58
 msgid "Weekly"
 msgstr ""
 
 #: fava/static/javascript/charts/ConversionAndInterval.svelte:11
-#: fava/util/date.py:58
+#: fava/util/date.py:59
 msgid "Daily"
 msgstr ""
 
@@ -519,11 +519,11 @@ msgstr ""
 msgid "Units"
 msgstr ""
 
-#: fava/static/javascript/charts/Chart.svelte:65
+#: fava/static/javascript/charts/Chart.svelte:59
 msgid "Treemap"
 msgstr ""
 
-#: fava/static/javascript/charts/Chart.svelte:69
+#: fava/static/javascript/charts/Chart.svelte:63
 msgid "Sunburst"
 msgstr ""
 
