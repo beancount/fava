@@ -1,6 +1,7 @@
 import commonjs from "@rollup/plugin-commonjs";
 import css from "rollup-plugin-css-only";
 import nodeResolve from "@rollup/plugin-node-resolve";
+import sucrase from "@rollup/plugin-sucrase";
 import svelte from "rollup-plugin-svelte";
 import typescript from "@rollup/plugin-typescript";
 
@@ -40,6 +41,13 @@ function copy(files) {
   };
 }
 
+const typescriptPlugin = production
+  ? typescript()
+  : sucrase({
+      exclude: ["node_modules/**"],
+      transforms: ["typescript"],
+    });
+
 export default {
   input: "javascript/main.ts",
   output: {
@@ -49,13 +57,13 @@ export default {
     format: "iife",
   },
   plugins: [
-    nodeResolve(),
-    typescript({ noEmitOnError: production }),
+    nodeResolve({ extensions: [".js", ".ts"] }),
     commonjs({
       include: "node_modules/**",
     }),
     svelte({ dev: !production }),
     css(),
+    typescriptPlugin,
     copy(fonts),
   ],
   onwarn(warning, warn) {

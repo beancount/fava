@@ -99,6 +99,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-sucrase": "^3.0.0",
     "@rollup/plugin-typescript": "^4.0.0",
     "@types/codemirror": "0.0.88",
     "@types/d3-array": "^2.0.0",
