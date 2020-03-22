@@ -120,14 +120,10 @@
     background-color: var(--color-links);
   }
 
-  li :global(span::before) {
-    position: absolute;
-    z-index: -1;
-    width: 0.65em;
+  li :global(span) {
     height: 1.2em;
-    margin-top: 0.12em;
-    margin-left: -0.1em;
-    content: "";
+    padding: 0 0.1em;
+    margin: 0 -0.1em;
     background-color: var(--color-autocomplete-match);
     border-radius: 2px;
   }

@@ -28,16 +28,28 @@ export function fuzzytest(pattern: string, text: string): boolean {
  */
 export function fuzzywrap(pattern: string, text: string): string {
   let pindex = 0;
+  let inMatch = false;
   const result = [];
   for (let index = 0; index < text.length; index += 1) {
     const char = text[index];
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
-      result.push(`<span>${char}</span>`);
+      if (!inMatch) {
+        result.push("<span>");
+        inMatch = true;
+      }
+      result.push(char);
       pindex += 1;
     } else {
+      if (inMatch) {
+        result.push("</span>");
+        inMatch = false;
+      }
       result.push(char);
     }
+  }
+  if (inMatch) {
+    result.push("</span>");
   }
   return result.join("");
 }
