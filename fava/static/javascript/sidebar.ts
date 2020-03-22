@@ -12,7 +12,10 @@ function initSidebar(): void {
   selectAll("aside a").forEach(el => {
     el.classList.remove("selected");
     const href = el.getAttribute("href");
-    if (href && href.includes(window.location.pathname)) {
+    if (
+      !el.hasAttribute("data-remote") &&
+      href?.includes(window.location.pathname)
+    ) {
       el.classList.add("selected");
     }
   });
