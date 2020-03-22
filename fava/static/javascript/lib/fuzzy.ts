@@ -9,7 +9,11 @@
  * lower and upper case, for uppercase only an exact match counts.
  */
 export function fuzzytest(pattern: string, text: string): number {
-  if (text.includes(pattern)) {
+  const casesensitive = pattern === pattern.toLowerCase();
+  const exact = casesensitive
+    ? text.toLowerCase().indexOf(pattern)
+    : text.indexOf(pattern);
+  if (exact > -1) {
     return pattern.length ** 2;
   }
   let score = 0;
@@ -47,11 +51,15 @@ export function fuzzyfilter(pattern: string, suggestions: string[]): string[] {
  * <span> tags.
  */
 export function fuzzywrap(pattern: string, text: string): string {
-  const exact = text.indexOf(pattern);
+  const casesensitive = pattern === pattern.toLowerCase();
+  const exact = casesensitive
+    ? text.toLowerCase().indexOf(pattern)
+    : text.indexOf(pattern);
   if (exact > -1) {
     const before = text.slice(0, exact);
+    const match = text.slice(exact, exact + pattern.length);
     const after = text.slice(exact + pattern.length);
-    return `${before}<span>${pattern}</span>${after}`;
+    return `${before}<span>${match}</span>${after}`;
   }
   let pindex = 0;
   let inMatch = false;
