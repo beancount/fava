@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { fuzzytest, fuzzywrap } from "./lib/fuzzy";
+  import { fuzzyfilter, fuzzywrap } from "./lib/fuzzy";
   import { keyboardShortcut } from "./keyboard-shortcuts";
 
   const dispatch = createEventDispatcher();
@@ -34,9 +34,7 @@
 
   $: {
     const val = input && valueExtractor ? valueExtractor(value, input) : value;
-    const filtered = suggestions
-      .map(suggestion => String(suggestion))
-      .filter(suggestion => fuzzytest(val, suggestion))
+    const filtered = fuzzyfilter(val, suggestions)
       .slice(0, 30)
       .map(suggestion => ({
         suggestion,
@@ -122,8 +120,8 @@
 
   li :global(span) {
     height: 1.2em;
-    padding: 0 0.1em;
-    margin: 0 -0.1em;
+    padding: 0 0.05em;
+    margin: 0 -0.05em;
     background-color: var(--color-autocomplete-match);
     border-radius: 2px;
   }

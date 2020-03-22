@@ -1,5 +1,5 @@
 import test from "ava";
-import { fuzzytest, fuzzywrap } from "../javascript/lib/fuzzy";
+import { fuzzyfilter, fuzzytest, fuzzywrap } from "../javascript/lib/fuzzy";
 
 test("fuzzy test", t => {
   t.assert(fuzzytest("asdf", "asdfasdf"));
@@ -11,7 +11,27 @@ test("fuzzy test", t => {
   t.assert(!fuzzytest("a", "sdfsdf"));
 });
 
+test("fuzzy filter", t => {
+  t.deepEqual(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
+  t.deepEqual(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
+    "asdfasdf",
+    "assdfsdf",
+  ]);
+  t.deepEqual(
+    fuzzyfilter("asdf", [
+      "test",
+      "asdfasdf",
+      "asdxf",
+      "asxxdf",
+      "nomatch",
+      "asdf",
+    ]),
+    ["asdfasdf", "asdf", "asdxf", "asxxdf"]
+  );
+});
+
 test("fuzzy wap", t => {
+  t.deepEqual(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
   t.deepEqual(fuzzywrap("sdf", "nomatch"), "nomatch");
   t.deepEqual(fuzzywrap("a", "asdfasdf"), "<span>a</span>sdfasdf");
   t.deepEqual(fuzzywrap("as", "asdfasdf"), "<span>as</span>dfasdf");

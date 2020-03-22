@@ -1,5 +1,5 @@
 import CodeMirror, { Position } from "codemirror";
-import { fuzzytest } from "../lib/fuzzy";
+import { fuzzyfilter } from "../lib/fuzzy";
 
 export function getCurrentWord(cursor: Position, line: string): string {
   return line.slice(0, cursor.ch).match(/(\S*)$/)?.[0] || "";
@@ -10,9 +10,8 @@ export function fuzzyMatch(
   currentWord: string,
   completions: string[]
 ): { list: string[]; from: Position; to: Position } {
-  const search = currentWord.toLowerCase();
   return {
-    list: completions.filter(completion => fuzzytest(search, completion)),
+    list: fuzzyfilter(currentWord, completions),
     from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
     to: cursor,
   };
