@@ -9,12 +9,15 @@ from contextlib import contextmanager
 from importlib.machinery import EXTENSION_SUFFIXES
 from pathlib import Path
 from typing import Any
+from typing import Callable
 from typing import DefaultDict
 from typing import List
 from typing import Optional
-from typing import Set, Tuple
+from typing import Set
+from typing import Tuple
 
-from beancount.core.data import ALL_DIRECTIVES, Entries
+from beancount.core.data import ALL_DIRECTIVES
+from beancount.core.data import Entries
 from beancount.core.display_context import DisplayContext
 from beancount.core.number import Decimal
 from beancount.core.number import MISSING
@@ -27,8 +30,8 @@ from tree_sitter import Language
 from tree_sitter import Node
 from tree_sitter import Parser
 
-from fava.parser import nodes as handlers
 from fava.core.helpers import BeancountError
+from fava.parser import nodes as handlers
 
 
 class ParserState:
@@ -52,7 +55,7 @@ class ParserState:
         #: The file contents in bytes
         self.contents: bytes = contents
         dcontext = DisplayContext()
-        self._dcupdate = dcontext.update
+        self._dcupdate: Callable[[Decimal, str], None] = dcontext.update
         self.options["dcontext"] = dcontext
 
     @contextmanager
@@ -99,11 +102,7 @@ class ParserState:
             number: The number.
             currency: The currency.
         """
-        if (
-            isinstance(number, Decimal)
-            and currency
-            and currency is not MISSING
-        ):
+        if number is not MISSING and currency is not MISSING:
             self._dcupdate(number, currency)
 
     def error(self, node: Optional[Node], msg: str) -> None:
@@ -194,7 +193,7 @@ class ParserState:
             return handler(self, node)
         return node
 
-    def get(self, node: Node, field: str):
+    def get(self, node: Node, field: str) -> Optional[Any]:
         """Get the named node field."""
         child = node.child_by_field_name(field)
         if child is None:

@@ -13,7 +13,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Type
 
-from beancount import loader  # type: ignore
 from beancount.core import realization
 from beancount.core.account_types import AccountTypes
 from beancount.core.account_types import get_account_sign
@@ -38,6 +37,8 @@ from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.prices import build_price_map
 from beancount.core.prices import get_all_prices
+from beancount.loader import _load
+from beancount.loader import load_file
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
@@ -208,11 +209,11 @@ class FavaLedger:
         # use the internal function to disable cache
         if not self._is_encrypted:
             # pylint: disable=protected-access
-            self.all_entries, self.errors, self.options = loader._load(
+            self.all_entries, self.errors, self.options = _load(
                 [(self.beancount_file_path, True)], None, None, None
             )
         else:
-            self.all_entries, self.errors, self.options = loader.load_file(
+            self.all_entries, self.errors, self.options = load_file(
                 self.beancount_file_path
             )
 

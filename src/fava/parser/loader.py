@@ -29,8 +29,12 @@ def _load_tree_sitter(filename: str):
 
 
 def load_file(filename: str, tree_sitter=True):
-    """Load a file, using either Beancount's parser or the tree-sitter one."""
-    # pylint: disable=protected-access
+    """Load a file, using either Beancount's parser or the tree-sitter one.
+
+    Args:
+        filename: The file to load.
+        tree_sitter: Whether to use the tree-sitter based parser.
+    """
     if tree_sitter is False:
         return _load([(filename, True)], None, None, None)
     return _load_tree_sitter(filename)

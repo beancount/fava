@@ -1,8 +1,14 @@
 """Handlers for all node types returned by the tree-sitter parser."""
 # pylint: disable=unused-argument,redefined-builtin
 import datetime
+from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
-from typing import Tuple, Union, Type
+from typing import Set
+from typing import Tuple
+from typing import Type
+from typing import Union
 
 from beancount.core.account import TYPE
 from beancount.core.amount import Amount
@@ -94,7 +100,7 @@ def popmeta(state, node: Node) -> None:
         )
 
 
-def document(state, node: Node):
+def document(state, node: Node) -> Document:
     """Handle a document directive."""
     tags, links = state.get(node, "tags_and_links") or (set(), EMPTY_SET)
     if state.tags:
@@ -109,7 +115,7 @@ def document(state, node: Node):
     )
 
 
-def commodity(state, node: Node):
+def commodity(state, node: Node) -> Commodity:
     """Handle a commodity entry."""
     return Commodity(
         state.metadata(node),
@@ -118,7 +124,7 @@ def commodity(state, node: Node):
     )
 
 
-def event(state, node: Node):
+def event(state, node: Node) -> Event:
     """Handle an event entry."""
     return Event(
         state.metadata(node),
@@ -128,7 +134,7 @@ def event(state, node: Node):
     )
 
 
-def close(state, node: Node):
+def close(state, node: Node) -> Close:
     """Handle a close entry."""
     return Close(
         state.metadata(node),
@@ -137,7 +143,7 @@ def close(state, node: Node):
     )
 
 
-def balance(state, node: Node):
+def balance(state, node: Node) -> Balance:
     """Handle a balance entry."""
     amount_with_tolerance = state.get(node, "amount")
     amo: Amount
@@ -156,7 +162,7 @@ def balance(state, node: Node):
     )
 
 
-def open(state, node: Node):
+def open(state, node: Node) -> Open:
     """Handle an open entry."""
     booking = state.get(node, "booking")
     if booking is not None:
@@ -173,7 +179,7 @@ def open(state, node: Node):
     )
 
 
-def pad(state, node: Node):
+def pad(state, node: Node) -> Pad:
     """Handle a pad entry."""
     return Pad(
         state.metadata(node),
@@ -183,7 +189,7 @@ def pad(state, node: Node):
     )
 
 
-def custom(state, node: Node):
+def custom(state, node: Node) -> Custom:
     """Handle a custom entry."""
     custom_values = []
     for child in node.children[3:]:
@@ -198,7 +204,7 @@ def custom(state, node: Node):
     )
 
 
-def note(state, node: Node):
+def note(state, node: Node) -> Note:
     """Handle a Note entry.
 
     A note attaches some comment to an account on a given day."""
@@ -210,7 +216,7 @@ def note(state, node: Node):
     )
 
 
-def price(state, node: Node):
+def price(state, node: Node) -> Price:
     """Handle a price entry."""
     return Price(
         state.metadata(node),
@@ -220,7 +226,7 @@ def price(state, node: Node):
     )
 
 
-def query(state, node: Node):
+def query(state, node: Node) -> Query:
     """Handle a query entry."""
     return Query(
         state.metadata(node),
@@ -230,7 +236,7 @@ def query(state, node: Node):
     )
 
 
-def transaction(state, node: Node):
+def transaction(state, node: Node) -> Transaction:
     """Handle a Transaction entry."""
     tags, links = state.get(node, "tags_and_links") or (set(), EMPTY_SET)
     if state.tags:
@@ -259,7 +265,7 @@ def txn_strings(state, node: Node):
     return children
 
 
-def postings(state, node: Node):
+def postings(state, node: Node) -> List[Posting]:
     """Handle a list of postings."""
     return list(map(state.handle_node, node.children))
 
@@ -272,7 +278,7 @@ def price_annotation(state, node: Node):
     return MISSING
 
 
-def cost_spec(state, node: Node):
+def cost_spec(state, node: Node) -> CostSpec:
     """Handle a cost spec."""
     # pylint: disable=too-many-branches
     istotal = node.children[0].type != "{"
@@ -339,13 +345,14 @@ def cost_comp(state, node: Node):
     return node.children[0]
 
 
-def compound_amount(state, node: Node):
+def compound_amount(state, node: Node) -> Tuple[Decimal, Decimal, str]:
     """Handle a compound amount."""
     number_per = state.get(node, "number_per")
     number_total = state.get(node, "number_total")
     currency_ = state.get(node, "currency")
-    state.dcupdate(number_per, currency_)
-    state.dcupdate(number_total, currency_)
+    if currency_ is not None:
+        state.dcupdate(number_per, currency_)
+        state.dcupdate(number_total, currency_)
     return (
         number_per,
         number_total,
@@ -353,7 +360,7 @@ def compound_amount(state, node: Node):
     )
 
 
-def posting(state, node: Node):
+def posting(state, node: Node) -> Posting:
     """Handle a single posting."""
     units = state.get(node, "amount")
     price_ = state.get(node, "price_annotation")
@@ -381,7 +388,7 @@ def posting(state, node: Node):
     )
 
 
-def metadata(state, node: Node):
+def metadata(state, node: Node) -> Dict[str, Any]:
     """Handle metadata."""
     meta = {}
     for child in node.children:
@@ -390,7 +397,7 @@ def metadata(state, node: Node):
     return meta
 
 
-def currency_list(state, node: Node):
+def currency_list(state, node: Node) -> List[str]:
     """Handle a currency list."""
     currencies = []
     for child in node.children:
@@ -399,7 +406,7 @@ def currency_list(state, node: Node):
     return currencies
 
 
-def key_value(state, node: Node):
+def key_value(state, node: Node) -> Tuple[str, Optional[Any]]:
     """Handle a key/value line."""
     try:
         return (
@@ -410,7 +417,7 @@ def key_value(state, node: Node):
         return (state.handle_node(node.children[0]), None)
 
 
-def tags_and_links(state, node: Node):
+def tags_and_links(state, node: Node) -> Tuple[Set, Set]:
     """Tags and links."""
     tags, links = set(), set()
     for child in node.children:
@@ -422,7 +429,7 @@ def tags_and_links(state, node: Node):
     return tags, links
 
 
-def unary_num_expr(state, node: Node):
+def unary_num_expr(state, node: Node) -> Decimal:
     """Handle a unary numerical expression."""
     operator = node.children[0].type
     num = state.handle_node(node.children[1])
@@ -431,7 +438,7 @@ def unary_num_expr(state, node: Node):
     return num
 
 
-def binary_num_expr(state, node: Node):
+def binary_num_expr(state, node: Node) -> Decimal:
     """Handle a binary numerical expression."""
     operator = node.children[1].type
     left = state.handle_node(node.children[0])
@@ -462,7 +469,7 @@ def incomplete_amount(state, node: Node):
 amount = incomplete_amount  # pylint: disable=invalid-name
 
 
-def date(state, node: Node):
+def date(state, node: Node) -> datetime.date:
     """Handle a date token."""
     contents = state.contents
     year = contents[node.start_byte : node.start_byte + 4]
@@ -471,44 +478,48 @@ def date(state, node: Node):
     return datetime.date(int(year), int(month), int(day))
 
 
-def key(state, node: Node):
+def key(state, node: Node) -> str:
     """Handle a key token."""
     return state.contents[node.start_byte : node.end_byte - 1].decode()
 
 
-def link(state, node: Node):
+def link(state, node: Node) -> str:
     """Handle a link token."""
     return state.contents[node.start_byte + 1 : node.end_byte].decode()
 
 
-tag = link  # pylint: disable=invalid-name
+def tag(state, node: Node) -> str:
+    """Handle a tag token."""
+    return state.contents[node.start_byte + 1 : node.end_byte].decode()
 
 
-def number(state, node: Node):
+def number(state, node: Node) -> Decimal:
     """Handle a number token."""
     return Decimal(state.contents[node.start_byte : node.end_byte].decode())
 
 
-def string(state, node: Node):
+def string(state, node: Node) -> str:
     """Handle a string token."""
     return state.contents[node.start_byte + 1 : node.end_byte - 1].decode()
 
 
-def currency(state, node: Node):
+def currency(state, node: Node) -> str:
     """Handle a currency token."""
     name = state.contents[node.start_byte : node.end_byte].decode()
     state.options["commodities"].add(name)
     return name
 
 
-def flag(state, node: Node):
+def flag(state, node: Node) -> str:
     """Handle a flag token."""
+    return state.contents[node.start_byte : node.end_byte].decode()
+
+
+def account(state, node: Node) -> str:
+    """Handle an account token."""
     return state.contents[node.start_byte : node.end_byte].decode()
 
 
 def bool(state, node: Node):
     """Handle a boolean token."""
     return state.contents[node.start_byte : node.start_byte + 1] == b"T"
-
-
-account = flag  # pylint: disable=invalid-name
