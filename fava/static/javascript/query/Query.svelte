@@ -34,7 +34,6 @@
       result => {
         result.chart = parseQueryChart(result.chart);
         setResult(query, { result });
-        // TODO: initSort();
       },
       error => {
         setResult(query, { error });

@@ -1,5 +1,5 @@
 <h2>{{ _('Fava options') }} <a href="{{ url_for('help_page', page_slug='options') }}">({{ _('help') }})</a></h2>
-<table class="options sortable">
+<table is="sortable-table" class="options">
   <thead>
     <tr>
       <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Key') }}</th>
@@ -16,7 +16,7 @@
   </tbody>
 </table>
 <h2>{{ _('Beancount options') }}</h2>
-<table class="options sortable">
+<table is="sortable-table" class="options">
   <thead>
     <tr>
       <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Key') }}</th>

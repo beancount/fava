@@ -1,6 +1,3 @@
-import e from "./events";
-import { select, selectAll } from "./helpers";
-
 // Copy the given text to the clipboard.
 function copyToClipboard(text: string | null): void {
   if (!text) {
@@ -23,17 +20,14 @@ function copyToClipboard(text: string | null): void {
   textarea.remove();
 }
 
-e.on("page-loaded", () => {
-  selectAll(".status-indicator").forEach(indicator => {
-    indicator.addEventListener("click", () => {
-      copyToClipboard(indicator.getAttribute("data-clipboard-text"));
-    });
-  });
+class CopyableSpan extends HTMLSpanElement {
+  constructor() {
+    super();
 
-  const copyBalances = select("#copy-balances");
-  if (copyBalances) {
-    copyBalances.addEventListener("click", () => {
-      copyToClipboard(copyBalances.getAttribute("data-clipboard-text"));
+    this.addEventListener("click", event => {
+      copyToClipboard(this.getAttribute("data-clipboard-text"));
+      event.stopPropagation();
     });
   }
-});
+}
+customElements.define("copyable-span", CopyableSpan, { extends: "span" });

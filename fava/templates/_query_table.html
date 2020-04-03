@@ -43,7 +43,7 @@
 {% if contents %}
 <pre><code>{{ contents }}</code></pre>
 {% elif types %}
-<table class="queryresults sortable">
+<table is="sortable-table" class="queryresults">
   <thead>
     <tr>
       {% for name, type in types %}

@@ -8,9 +8,6 @@
  *  - 'num': Clean and parse to float.
  */
 
-import { select, selectAll } from "./helpers";
-import e from "./events";
-
 function parseNumber(num: string): number {
   const cleaned = num.replace(/[^\-?0-9.]/g, "");
   const n = parseFloat(cleaned);
@@ -35,8 +32,10 @@ type SortOrder = "desc" | "asc";
 /**
  * Obtain the value to sort by for an element.
  */
-function getValue(el: HTMLElement): string {
-  return el.getAttribute("data-sort-value") || el.textContent || el.innerText;
+function getValue(el: HTMLElement | null): string {
+  return el
+    ? el.getAttribute("data-sort-value") || el.textContent || el.innerText
+    : "";
 }
 
 /**
@@ -56,11 +55,16 @@ export function sortFunc<T>(
 
 /**
  * Sort elements contained in a given parent element.
+ * @param parent - The element that the sorted children should be inserted into.
+ * @param elements - The elements to sort (children of parent).
+ * @param selector - Selector for the column that should be sorted by.
+ * @param order - The sort order.
+ * @param type - The type of the value that should be sorted by.
  */
 function sortElements<T extends Element, C extends HTMLElement>(
   parent: Element,
   elements: T[],
-  selector: (e: T) => C,
+  selector: (e: T) => C | null,
   order: SortOrder,
   type: string | null
 ): void {
@@ -74,6 +78,7 @@ function sortElements<T extends Element, C extends HTMLElement>(
 
 /**
  * Obtain the sort order for the row from the row header
+ * @param headerElement - The element to get the sort order from.
  */
 function getSortOrder(headerElement: Element): SortOrder {
   if (!headerElement.getAttribute("data-order")) {
@@ -84,81 +89,73 @@ function getSortOrder(headerElement: Element): SortOrder {
   return headerElement.getAttribute("data-order") === "asc" ? "desc" : "asc";
 }
 
-function sortableJournal(ol: HTMLOListElement): void {
-  const head = select(".head", ol);
-  if (!head) {
-    return;
-  }
-  const headers = selectAll("span[data-sort]", head);
+class SortableJournal extends HTMLOListElement {
+  constructor() {
+    super();
 
-  headers.forEach(header => {
-    header.addEventListener("click", () => {
-      const order = getSortOrder(header);
-      const type = header.getAttribute("data-sort");
-      const headerClass = header.classList[0];
+    const head = this.querySelector(".head");
+    if (!head) {
+      return;
+    }
+    const headers = head.querySelectorAll("span[data-sort]");
 
-      // update sort order
-      headers.forEach(el => {
-        el.removeAttribute("data-order");
+    headers.forEach(header => {
+      header.addEventListener("click", () => {
+        const order = getSortOrder(header);
+        const type = header.getAttribute("data-sort");
+        const headerClass = header.classList[0];
+
+        // update sort order
+        headers.forEach(el => {
+          el.removeAttribute("data-order");
+        });
+        header.setAttribute("data-order", order);
+
+        sortElements(
+          this,
+          [].slice.call(this.children, 1),
+          (li: HTMLLIElement): HTMLElement | null =>
+            li.querySelector(`.${headerClass}`),
+          order,
+          type
+        );
       });
-      header.setAttribute("data-order", order);
-
-      sortElements(
-        ol,
-        [].slice.call(ol.children, 1),
-        function selector(li: HTMLLIElement): HTMLElement {
-          return li.querySelector(`.${headerClass}`) as HTMLElement;
-        },
-        order,
-        type
-      );
     });
-  });
-}
-
-function sortableTable(table: HTMLTableElement): void {
-  const head = table.tHead;
-  const body = table.tBodies.item(0);
-  if (!head || !body) {
-    return;
   }
-  const headers = selectAll("th[data-sort]", head);
+}
+customElements.define("sortable-journal", SortableJournal, { extends: "ol" });
 
-  headers.forEach(header => {
-    header.addEventListener("click", () => {
-      const order = getSortOrder(header);
-      const type = header.getAttribute("data-sort");
-      const index = headers.indexOf(header);
+class SortableTable extends HTMLTableElement {
+  constructor() {
+    super();
 
-      // update sort order
-      headers.forEach(el => {
-        el.removeAttribute("data-order");
+    const body = this.tBodies.item(0);
+    if (!this.tHead || !body) {
+      return;
+    }
+    const headers = [...this.tHead.querySelectorAll("th[data-sort]")];
+
+    headers.forEach(header => {
+      header.addEventListener("click", () => {
+        const order = getSortOrder(header);
+        const type = header.getAttribute("data-sort");
+        const index = headers.indexOf(header);
+
+        // update sort order
+        headers.forEach(el => {
+          el.removeAttribute("data-order");
+        });
+        header.setAttribute("data-order", order);
+
+        sortElements(
+          body,
+          [...body.querySelectorAll("tr")],
+          (tr: HTMLTableRowElement): HTMLElement | null => tr.cells.item(index),
+          order,
+          type
+        );
       });
-      header.setAttribute("data-order", order);
-
-      sortElements(
-        body,
-        selectAll("tr", body) as HTMLTableRowElement[],
-        function selector(tr: HTMLTableRowElement): HTMLTableDataCellElement {
-          // eslint-disable-next-line
-          return tr.cells.item(index)!;
-        },
-        order,
-        type
-      );
     });
-  });
+  }
 }
-
-export default function initSort(): void {
-  selectAll("table.sortable").forEach(el => {
-    sortableTable(el as HTMLTableElement);
-  });
-  selectAll("ol.journal").forEach(el => {
-    sortableJournal(el as HTMLOListElement);
-  });
-}
-
-e.on("page-loaded", () => {
-  initSort();
-});
+customElements.define("sortable-table", SortableTable, { extends: "table" });

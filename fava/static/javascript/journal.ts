@@ -32,11 +32,11 @@ e.on("page-loaded", () => {
   }
 
   delegate(journal, "click", "li", event => {
-    if (!event.target) {
-      return;
-    }
-    const target = event.target as HTMLElement;
-    if (target.tagName === "A") {
+    const { target } = event;
+    if (
+      !(target instanceof HTMLElement) ||
+      target instanceof HTMLAnchorElement
+    ) {
       return;
     }
 

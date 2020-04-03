@@ -30,7 +30,7 @@ function showTooltips(): void {
     reloadButton.classList.remove("hidden");
   }
   selectAll("[data-key]").forEach(el => {
-    showTooltip(el as HTMLElement);
+    el instanceof HTMLElement && showTooltip(el);
   });
 }
 
@@ -53,9 +53,9 @@ function removeTooltips(): void {
 function editableElement(element: EventTarget | null): boolean {
   return (
     element instanceof HTMLElement &&
-    (element.tagName === "INPUT" ||
-      element.tagName === "SELECT" ||
-      element.tagName === "TEXTAREA" ||
+    (element instanceof HTMLInputElement ||
+      element instanceof HTMLSelectElement ||
+      element instanceof HTMLTextAreaElement ||
       element.isContentEditable)
   );
 }
@@ -139,9 +139,9 @@ export function keyboardShortcut(
   }
   node.setAttribute("data-key", key);
   bind(key, event => {
-    if (node.tagName === "INPUT") {
+    if (node instanceof HTMLInputElement) {
       event.preventDefault();
-      (node as HTMLInputElement).focus();
+      node.focus();
     } else {
       node.click();
     }
@@ -163,11 +163,13 @@ e.on("page-loaded", () => {
     if (key !== null && !(key in keyboardShortcuts)) {
       currentShortcuts.push(key);
       bind(key, () => {
-        const tag = element.tagName;
-        if (tag === "BUTTON" || tag === "A") {
-          (element as HTMLButtonElement | HTMLAnchorElement).click();
-        } else if (tag === "INPUT") {
-          (element as HTMLInputElement).focus();
+        if (
+          element instanceof HTMLButtonElement ||
+          element instanceof HTMLAnchorElement
+        ) {
+          element.click();
+        } else if (element instanceof HTMLInputElement) {
+          element.focus();
         }
       });
     }

@@ -5,7 +5,7 @@
 {% if prices %}
 <div class="left">
   <h3>{{ commodity_pair.0 }} / {{ commodity_pair.1 }}</h3>
-  <table class="sortable">
+  <table is="sortable-table">
     <thead>
       <th data-sort="string" data-sort-default="desc" data-order="asc">{{ _('Date') }}</th>
       <th data-sort="num">{{ _('Price') }}</th>

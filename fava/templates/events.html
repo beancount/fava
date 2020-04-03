@@ -5,7 +5,7 @@
 <div class="left">
   {{ charts.events(group.grouper) }}
   <h3>{{ _('Event') + ': ' + group.grouper }}</h3>
-  <table class="sortable">
+  <table is="sortable-table">
     <thead>
       <tr>
         <th data-sort="string" data-order="asc">{{ _('Date') }}</th>

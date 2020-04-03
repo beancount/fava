@@ -237,8 +237,8 @@ export default function initSourceEditor(name: string): void {
     ];
   }
 
-  const sourceEditorTextarea = select(name) as HTMLTextAreaElement;
-  if (!sourceEditorTextarea) {
+  const sourceEditorTextarea = select(name);
+  if (!(sourceEditorTextarea instanceof HTMLTextAreaElement)) {
     return;
   }
 
@@ -249,18 +249,17 @@ export default function initSourceEditor(name: string): void {
   if (name === "#source-editor") {
     activeEditor = editor;
   }
-  const saveButton = select(`${name}-submit`) as HTMLButtonElement;
-  editor.setOption("favaSaveButton", saveButton);
+  const saveButton = select(`${name}-submit`);
+  if (saveButton instanceof HTMLButtonElement) {
+    editor.setOption("favaSaveButton", saveButton);
 
-  editor.on("changes", (cm: Editor) => {
-    saveButton.disabled = cm.getDoc().isClean();
-  });
+    editor.on("changes", (cm: Editor) => {
+      saveButton.disabled = cm.getDoc().isClean();
+    });
+  }
 
-  editor.on("keyup", (cm: Editor, event: Event) => {
-    if (
-      !cm.state.completionActive &&
-      !ignoreKey((event as KeyboardEvent).key)
-    ) {
+  editor.on("keyup", (cm: Editor, event: KeyboardEvent) => {
+    if (!cm.state.completionActive && !ignoreKey(event.key)) {
       CodeMirror.commands.autocomplete(cm, undefined, {
         completeSingle: false,
       });

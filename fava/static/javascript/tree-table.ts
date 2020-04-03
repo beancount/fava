@@ -2,29 +2,30 @@
 //
 // This handles the toggling of accounts in the accounts trees.
 
-import { select, selectAll, delegate } from "./helpers";
-import e from "./events";
+import { delegate } from "./helpers";
 
-e.on("page-loaded", () => {
-  selectAll(".tree-table").forEach(table => {
-    const expandAllLink = select(".expand-all", table);
+class TreeTable extends HTMLOListElement {
+  constructor() {
+    super();
+
+    const expandAllLink = this.querySelector(".expand-all");
     if (!expandAllLink) {
       return;
     }
 
     expandAllLink.addEventListener("click", () => {
       expandAllLink.classList.add("hidden");
-      selectAll(".toggled", table).forEach(el => {
+      this.querySelectorAll(".toggled").forEach(el => {
         el.classList.remove("toggled");
       });
     });
 
-    delegate(table, "click", "span.has-children", (event: MouseEvent) => {
-      if (!event.target) {
-        return;
-      }
-      const target = event.target as HTMLElement;
-      if (target.tagName === "A") {
+    delegate(this, "click", "span.has-children", (event: MouseEvent) => {
+      const { target } = event;
+      if (
+        !(target instanceof HTMLElement) ||
+        target instanceof HTMLAnchorElement
+      ) {
         return;
       }
       const row = target.closest("li");
@@ -33,12 +34,12 @@ e.on("page-loaded", () => {
       }
       const willShow = row.classList.contains("toggled");
       if (event.shiftKey) {
-        selectAll("li", row).forEach(el => {
+        this.querySelectorAll("li").forEach(el => {
           el.classList.toggle("toggled", !willShow);
         });
       }
       if (event.ctrlKey || event.metaKey) {
-        selectAll("li", row).forEach(el => {
+        this.querySelectorAll("li").forEach(el => {
           el.classList.toggle("toggled", willShow);
         });
       }
@@ -46,8 +47,9 @@ e.on("page-loaded", () => {
 
       expandAllLink.classList.toggle(
         "hidden",
-        !selectAll(".toggled", table).length
+        !this.querySelectorAll(".toggled").length
       );
     });
-  });
-});
+  }
+}
+customElements.define("tree-table", TreeTable, { extends: "ol" });

@@ -213,6 +213,7 @@ button,
   outline: 0;
 }
 
+h3 .button,
 h3 button {
   padding: 4px 8px;
   font-size: 1rem;
