@@ -36,7 +36,7 @@ import "./codemirror/mode-beancount";
 import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
-import { select, selectAll, putAPI } from "./helpers";
+import { putAPI } from "./helpers";
 import { keys } from "./keyboard-shortcuts";
 import e from "./events";
 import router from "./router";
@@ -244,7 +244,7 @@ export default function initSourceEditor(name: string): void {
     ];
   }
 
-  const sourceEditorTextarea = select(name);
+  const sourceEditorTextarea = document.querySelector(name);
   if (!(sourceEditorTextarea instanceof HTMLTextAreaElement)) {
     return;
   }
@@ -256,7 +256,7 @@ export default function initSourceEditor(name: string): void {
   if (name === "#source-editor") {
     activeEditor = editor;
   }
-  const saveButton = select(`${name}-submit`);
+  const saveButton = document.querySelector(`${name}-submit`);
   if (saveButton instanceof HTMLButtonElement) {
     editor.setOption("favaSaveButton", saveButton);
 
@@ -299,7 +299,7 @@ export default function initSourceEditor(name: string): void {
   });
 
   // Run editor commands with buttons in editor menu.
-  selectAll(`${name}-form button`).forEach(button => {
+  document.querySelectorAll(`${name}-form button`).forEach(button => {
     const command = button.getAttribute("data-command");
     if (command) {
       button.addEventListener("click", event => {

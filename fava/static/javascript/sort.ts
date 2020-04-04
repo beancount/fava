@@ -89,7 +89,7 @@ function getSortOrder(headerElement: Element): SortOrder {
   return headerElement.getAttribute("data-order") === "asc" ? "desc" : "asc";
 }
 
-class SortableJournal extends HTMLOListElement {
+export class SortableJournal extends HTMLOListElement {
   constructor() {
     super();
 
@@ -123,7 +123,6 @@ class SortableJournal extends HTMLOListElement {
     });
   }
 }
-customElements.define("sortable-journal", SortableJournal, { extends: "ol" });
 
 class SortableTable extends HTMLTableElement {
   constructor() {

@@ -1,6 +1,6 @@
-import { select, selectAll, delegate } from "./helpers";
-import e from "./events";
+import { delegate } from "./helpers";
 import router from "./router";
+import { SortableJournal } from "./sort";
 import { filters } from "./stores";
 
 /**
@@ -25,13 +25,54 @@ function addFilter(value: string, escape = false): void {
   });
 }
 
-e.on("page-loaded", () => {
-  const journal = select(".journal");
-  if (!journal) {
-    return;
+export class FavaJournal extends SortableJournal {
+  constructor() {
+    super();
+
+    delegate(this, "click", "li", FavaJournal.handleClick);
+
+    const entryButtons = document.querySelectorAll("#entry-filters button");
+    // Toggle entries with buttons.
+    entryButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const type = button.getAttribute("data-type");
+        const shouldShow = button.classList.contains("inactive");
+
+        button.classList.toggle("inactive", !shouldShow);
+        if (
+          type === "transaction" ||
+          type === "custom" ||
+          type === "document"
+        ) {
+          document
+            .querySelectorAll(`#entry-filters .${type}-toggle`)
+            .forEach(el => {
+              el.classList.toggle("inactive", !shouldShow);
+            });
+        }
+
+        this.classList.toggle(`show-${type}`, shouldShow);
+
+        // Modify get params
+        const filterShow: string[] = [];
+        entryButtons.forEach(el => {
+          const datatype = el.getAttribute("data-type");
+          if (datatype && !el.classList.contains("inactive")) {
+            filterShow.push(datatype);
+          }
+        });
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete("show");
+        filterShow.forEach(filter => {
+          url.searchParams.append("show", filter);
+        });
+        router.navigate(url.toString(), false);
+      });
+    });
   }
 
-  delegate(journal, "click", "li", event => {
+  static handleClick(event: MouseEvent): void {
     const { target } = event;
     if (
       !(target instanceof HTMLElement) ||
@@ -62,38 +103,6 @@ e.on("page-loaded", () => {
         entry.classList.toggle("show-postings");
       }
     }
-  });
-
-  // Toggle entries with buttons.
-  selectAll("#entry-filters button").forEach(button => {
-    button.addEventListener("click", () => {
-      const type = button.getAttribute("data-type");
-      const shouldShow = button.classList.contains("inactive");
-
-      button.classList.toggle("inactive", !shouldShow);
-      if (type === "transaction" || type === "custom" || type === "document") {
-        selectAll(`#entry-filters .${type}-toggle`).forEach(el => {
-          el.classList.toggle("inactive", !shouldShow);
-        });
-      }
-
-      journal.classList.toggle(`show-${type}`, shouldShow);
-
-      // Modify get params
-      const filterShow: string[] = [];
-      selectAll("#entry-filters button").forEach(el => {
-        const datatype = el.getAttribute("data-type");
-        if (datatype && !el.classList.contains("inactive")) {
-          filterShow.push(datatype);
-        }
-      });
-
-      const url = new URL(window.location.href);
-      url.searchParams.delete("show");
-      filterShow.forEach(filter => {
-        url.searchParams.append("show", filter);
-      });
-      router.navigate(url.toString(), false);
-    });
-  });
-});
+  }
+}
+customElements.define("fava-journal", FavaJournal, { extends: "ol" });
