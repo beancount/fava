@@ -315,30 +315,15 @@ e.on("page-loaded", () => {
   for (const key of ["Control+s", "Control+d", "Meta+s", "Meta+d"]) {
     keys.unbind(key);
   }
+  activeEditor = null;
   initSourceEditor("#source-editor");
 });
 
-const leaveMessage =
-  "There are unsaved changes. Are you sure you want to leave?";
-
-e.on("navigate", (state: { interrupt?: boolean }) => {
-  if (activeEditor) {
-    if (!activeEditor.getDoc().isClean()) {
-      // eslint-disable-next-line no-alert
-      const leave = window.confirm(leaveMessage);
-      if (!leave) {
-        state.interrupt = true;
-      } else {
-        activeEditor = null;
-      }
-    } else {
-      activeEditor = null;
-    }
-  }
-});
-
-window.addEventListener("beforeunload", event => {
+function checkEditorChanges(): string | null {
   if (activeEditor && !activeEditor.getDoc().isClean()) {
-    event.returnValue = leaveMessage;
+    return "There are unsaved changes. Are you sure you want to leave?";
   }
-});
+  return null;
+}
+
+router.interruptHandlers.add(checkEditorChanges);

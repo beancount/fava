@@ -27,10 +27,24 @@ class Router {
   /** The URL search string. */
   search: string;
 
+  interruptHandlers: Set<() => string | null>;
+
   constructor() {
     this.hash = window.location.hash;
     this.pathname = window.location.pathname;
     this.search = window.location.search;
+
+    this.interruptHandlers = new Set();
+  }
+
+  shouldInterrupt(): string | null {
+    for (const handler of this.interruptHandlers) {
+      const ret = handler();
+      if (ret) {
+        return ret;
+      }
+    }
+    return null;
   }
 
   // This should be called once when the page has been loaded. Initializes the
@@ -38,6 +52,13 @@ class Router {
   init(): void {
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
+
+    window.addEventListener("beforeunload", event => {
+      const leaveMessage = this.shouldInterrupt();
+      if (leaveMessage) {
+        event.returnValue = leaveMessage;
+      }
+    });
 
     window.addEventListener("popstate", () => {
       urlHash.set(window.location.hash.slice(1));
@@ -76,10 +97,12 @@ class Router {
    * scroll to top.
    */
   async loadURL(url: string, historyState = true): Promise<void> {
-    const state = { interrupt: false };
-    e.trigger("navigate", state);
-    if (state.interrupt) {
-      return;
+    const leaveMessage = this.shouldInterrupt();
+    if (leaveMessage) {
+      // eslint-disable-next-line no-alert
+      if (!window.confirm(leaveMessage)) {
+        return;
+      }
     }
 
     const getUrl = new URL(url);
