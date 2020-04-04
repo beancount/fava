@@ -18,18 +18,19 @@ import {
 import { showCharts } from "./stores/chart";
 
 class Router {
-  state: {
-    hash: string;
-    pathname: string;
-    search: string;
-  };
+  /** The URL hash. */
+  hash: string;
+
+  /** The URL pathname. */
+  pathname: string;
+
+  /** The URL search string. */
+  search: string;
 
   constructor() {
-    this.state = {
-      hash: window.location.hash,
-      pathname: window.location.pathname,
-      search: window.location.search,
-    };
+    this.hash = window.location.hash;
+    this.pathname = window.location.pathname;
+    this.search = window.location.search;
   }
 
   // This should be called once when the page has been loaded. Initializes the
@@ -41,14 +42,14 @@ class Router {
     window.addEventListener("popstate", () => {
       urlHash.set(window.location.hash.slice(1));
       if (
-        window.location.hash !== this.state.hash &&
-        window.location.pathname === this.state.pathname &&
-        window.location.search === this.state.search
+        window.location.hash !== this.hash &&
+        window.location.pathname === this.pathname &&
+        window.location.search === this.search
       ) {
         this.updateState();
       } else if (
-        window.location.pathname !== this.state.pathname ||
-        window.location.search !== this.state.search
+        window.location.pathname !== this.pathname ||
+        window.location.search !== this.search
       ) {
         this.loadURL(window.location.href, false);
       }
@@ -109,17 +110,15 @@ class Router {
   }
 
   /*
-   * Update the routers state object.
+   * Update the routers state.
    *
-   * The state object is used to distinguish between the user navigating the
+   * The routers state is used to distinguish between the user navigating the
    * browser history or the hash changing.
    */
   updateState(): void {
-    this.state = {
-      hash: window.location.hash,
-      pathname: window.location.pathname,
-      search: window.location.search,
-    };
+    this.hash = window.location.hash;
+    this.pathname = window.location.pathname;
+    this.search = window.location.search;
   }
 
   /*
