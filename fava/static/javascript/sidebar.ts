@@ -3,13 +3,13 @@
  * toggling the sidebar on mobile.
  */
 
-import { select, selectAll, fetchAPI } from "./helpers";
+import { select, fetchAPI } from "./helpers";
 import { favaAPI } from "./stores";
 import { number } from "./lib/validation";
 import e from "./events";
 
 function initSidebar(): void {
-  selectAll("aside a").forEach(el => {
+  document.querySelectorAll("aside a").forEach(el => {
     el.classList.remove("selected");
     const href = el.getAttribute("href");
     if (

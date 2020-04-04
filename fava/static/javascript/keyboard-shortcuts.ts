@@ -1,4 +1,4 @@
-import { select, selectAll, once } from "./helpers";
+import { select, once } from "./helpers";
 import e from "./events";
 import { closeOverlay } from "./stores";
 
@@ -29,7 +29,7 @@ function showTooltips(): void {
   if (reloadButton) {
     reloadButton.classList.remove("hidden");
   }
-  selectAll("[data-key]").forEach(el => {
+  document.querySelectorAll("[data-key]").forEach(el => {
     el instanceof HTMLElement && showTooltip(el);
   });
 }
@@ -42,7 +42,7 @@ function removeTooltips(): void {
   if (reloadButton) {
     reloadButton.classList.add("hidden");
   }
-  selectAll(".keyboard-tooltip").forEach(tooltip => {
+  document.querySelectorAll(".keyboard-tooltip").forEach(tooltip => {
     tooltip.remove();
   });
 }
@@ -158,7 +158,7 @@ let currentShortcuts: string[] = [];
 e.on("page-loaded", () => {
   currentShortcuts.map(unbind);
   currentShortcuts = [];
-  selectAll("[data-key]").forEach(element => {
+  document.querySelectorAll("[data-key]").forEach(element => {
     const key = element.getAttribute("data-key");
     if (key !== null && !(key in keyboardShortcuts)) {
       currentShortcuts.push(key);

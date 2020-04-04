@@ -11,16 +11,6 @@ export function select(
   return con.querySelector(expr);
 }
 
-/**
- * Select multiple elements (and convert NodeList to Array).
- */
-export function selectAll(
-  expr: string,
-  con: Document | Element = document
-): Element[] {
-  return Array.from(con.querySelectorAll(expr));
-}
-
 export function getScriptTagJSON(selector: string): unknown {
   const el = select(selector);
   if (!el) {
