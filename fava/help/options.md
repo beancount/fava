@@ -1,7 +1,7 @@
 To customize some of Fava's behaviour, you can add custom entries like the
 following to your Beancount file.
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2016-06-14 custom "fava-option" "default-file"
 2016-06-14 custom "fava-option" "interval" "week"
 2016-04-14 custom "fava-option" "auto-reload" "true"

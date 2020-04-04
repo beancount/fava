@@ -32,7 +32,7 @@ sub-account of `Assets`.
 
 The names of the five root accounts can be changed with the following options:
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 option "name_assets"      "Vermoegen"
 option "name_liabilities" "Verbindlichkeiten"
 option "name_income"      "Einkommen"
@@ -52,7 +52,7 @@ General syntax: `YYYY-MM-DD <directive> <arguments...>`
 
 To open or close an account use the `open` and `close` directives:
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea" is="beancount-textarea">
 2015-05-29 open Expenses:Restaurant
 2015-05-29 open Assets:Checking     USD,EUR  ; Currency constraints
 ; ...
@@ -62,7 +62,7 @@ To open or close an account use the `open` and `close` directives:
 
 Declaring commodities is optional. Use this if you want to attach metadata by currency.
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 1998-07-22 commodity AAPL
   name: "Apple Computer Inc."</textarea></pre>
 
@@ -70,23 +70,23 @@ Declaring commodities is optional. Use this if you want to attach metadata by cu
 
 You can use this directive to fill the historical price database:
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2015-04-30 price AAPL   125.15 USD
 2015-05-30 price AAPL   130.28 USD</textarea></pre>
 
 ### Notes
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2013-03-20 note Assets:Checking "Called to ask about rebate"</textarea></pre>
 
 ### Documents
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2013-03-20 document Assets:Checking "path/to/statement.pdf"</textarea></pre>
 
 ### Transactions
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2015-05-30 * "Some narration about this transaction"
   Liabilities:CreditCard   -101.23 USD
   Expenses:Restaurant       101.23 USD
@@ -98,7 +98,7 @@ You can use this directive to fill the historical price database:
 
 ### Postings
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 ...    123.45 USD                             ; simple
 ...        10 GOOG {502.12 USD}               ; with cost
 ...   1000.00 USD   @ 1.10 CAD                ; with price
@@ -110,17 +110,17 @@ You can use this directive to fill the historical price database:
 
 Asserts the amount for only the given currency:
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2015-06-01 balance Liabilities:CreditCard  -634.30 USD</textarea></pre>
 
 Automatic insertion of transaction to fulfill the following assertion:
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2015-06-01 pad Assets:Checking Equity:Opening-Balances</textarea></pre>
 
 ### Events
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2015-06-01 event "location" "New York, USA"
 2015-06-01 event "address" "123 May Street"</textarea></pre>
 
@@ -129,16 +129,16 @@ Automatic insertion of transaction to fulfill the following assertion:
 See the [Beancount Options Reference](http://furius.ca/beancount/doc/options)
 for the full list of supported options.
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 option "title" "My Personal Ledger"</textarea></pre>
 
 ### Other
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 pushtag #trip-to-peru
 ...
 poptag  #trip-to-peru</textarea></pre>
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 ; inline comments begin with a semi-colon
 * any line not starting with a valid directive is also ignored silently</textarea></pre>

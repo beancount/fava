@@ -189,15 +189,22 @@ export function ignoreKey(key: string): boolean {
   }
 }
 
-// Initialize read-only editors
-function initReadOnlyEditors(): void {
-  selectAll("textarea.editor-readonly").forEach(el => {
-    CodeMirror.fromTextArea(el as HTMLTextAreaElement, {
+/**
+ * Read-only editors in the help pages.
+ */
+class BeancountTextarea extends HTMLTextAreaElement {
+  constructor() {
+    super();
+
+    CodeMirror.fromTextArea(this, {
       mode: "beancount",
       readOnly: true,
     });
-  });
+  }
 }
+customElements.define("beancount-textarea", BeancountTextarea, {
+  extends: "textarea",
+});
 
 const sourceEditorOptions: CodeMirror.EditorConfiguration = {
   mode: "beancount",
@@ -305,7 +312,6 @@ export default function initSourceEditor(name: string): void {
 }
 
 e.on("page-loaded", () => {
-  initReadOnlyEditors();
   for (const key of ["Control+s", "Control+d", "Meta+s", "Meta+d"]) {
     keys.unbind(key);
   }

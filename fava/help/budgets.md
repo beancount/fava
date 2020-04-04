@@ -1,7 +1,7 @@
 Budgets on a per-account basis can be added via `custom` directives in the
 Beancount file:
 
-<pre><textarea class="editor-readonly">
+<pre><textarea is="beancount-textarea">
 2012-01-01 custom "budget" Expenses:Coffee       "daily"         4.00 EUR
 2013-01-01 custom "budget" Expenses:Books        "weekly"       20.00 EUR
 2014-02-10 custom "budget" Expenses:Groceries    "monthly"      40.00 EUR
