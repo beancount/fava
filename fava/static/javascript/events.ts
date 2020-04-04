@@ -1,40 +1,42 @@
+type EventHandler = () => void;
+
 /**
  * Minimal event handler
  */
 class Events {
-  events: Record<string, Function[]>;
+  events: Record<string, EventHandler[]>;
 
   constructor() {
     this.events = {};
   }
 
-  on(event: string, callback: Function): void {
+  on(event: string, callback: EventHandler): void {
     this.events[event] = this.events[event] || [];
     this.events[event].push(callback);
   }
 
-  once(event: string, callback: Function): void {
-    const runOnce = (arg: unknown): void => {
+  once(event: string, callback: EventHandler): void {
+    const runOnce = (): void => {
       this.remove(event, runOnce);
-      callback(arg);
+      callback();
     };
 
     this.on(event, runOnce);
   }
 
-  remove(event: string, callback: Function): void {
+  remove(event: string, callback: EventHandler): void {
     if (!this.events[event].length) {
       return;
     }
     this.events[event] = this.events[event].filter(c => c !== callback);
   }
 
-  trigger(event: string, arg?: unknown): void {
+  trigger(event: string): void {
     if (!this.events[event]) {
       return;
     }
     this.events[event].forEach(callback => {
-      callback(arg);
+      callback();
     });
   }
 }
