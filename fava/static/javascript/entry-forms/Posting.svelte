@@ -3,6 +3,8 @@
 
   import { _ } from "../helpers";
 
+  import { currencySuggestions } from "../stores/chart";
+  import AutocompleteInput from "../AutocompleteInput.svelte";
   import AccountInput from "./AccountInput.svelte";
 
   export let posting;
@@ -10,6 +12,9 @@
   export let suggestions;
 
   const dispatch = createEventDispatcher();
+
+  $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
+  $: amountSuggestions = $currencySuggestions.map(c => `${amount_number} ${c}`);
 
   let drag = false;
   let draggable = true;
@@ -61,10 +66,10 @@
     ×
   </button>
   <AccountInput bind:value={posting.account} {suggestions} />
-  <input
-    type="text"
-    class="amount"
+  <AutocompleteInput
+    className="amount"
     placeholder={_('Amount')}
+    suggestions={amountSuggestions}
     bind:value={posting.amount} />
   <button
     class="muted round add-row"
