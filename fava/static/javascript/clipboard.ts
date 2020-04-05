@@ -1,4 +1,6 @@
-// Copy the given text to the clipboard.
+/**
+ * Copy the given text to the clipboard.
+ */
 function copyToClipboard(text: string | null): void {
   if (!text) {
     return;
@@ -15,12 +17,13 @@ function copyToClipboard(text: string | null): void {
   try {
     document.execCommand("copy");
   } catch (err) {
-    console.error("Unable to copy", err); // eslint-disable-line no-console
+    // eslint-disable-next-line no-console
+    console.error("Unable to copy", err);
   }
   textarea.remove();
 }
 
-class CopyableSpan extends HTMLSpanElement {
+export class CopyableSpan extends HTMLSpanElement {
   constructor() {
     super();
 
@@ -30,4 +33,3 @@ class CopyableSpan extends HTMLSpanElement {
     });
   }
 }
-customElements.define("copyable-span", CopyableSpan, { extends: "span" });

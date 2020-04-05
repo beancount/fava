@@ -23,6 +23,7 @@ function stringComparator(A: string, B: string): number {
   }
   return a < b ? -1 : 1;
 }
+
 function numComparator(a: string, b: string): number {
   return parseNumber(a) - parseNumber(b);
 }
@@ -33,9 +34,7 @@ type SortOrder = "desc" | "asc";
  * Obtain the value to sort by for an element.
  */
 function getValue(el: HTMLElement | null): string {
-  return el
-    ? el.getAttribute("data-sort-value") || el.textContent || el.innerText
-    : "";
+  return el?.getAttribute("data-sort-value") || el?.textContent || "";
 }
 
 /**
@@ -124,7 +123,7 @@ export class SortableJournal extends HTMLOListElement {
   }
 }
 
-class SortableTable extends HTMLTableElement {
+export class SortableTable extends HTMLTableElement {
   constructor() {
     super();
 
@@ -157,4 +156,3 @@ class SortableTable extends HTMLTableElement {
     });
   }
 }
-customElements.define("sortable-table", SortableTable, { extends: "table" });

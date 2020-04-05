@@ -105,4 +105,3 @@ export class FavaJournal extends SortableJournal {
     }
   }
 }
-customElements.define("fava-journal", FavaJournal, { extends: "ol" });

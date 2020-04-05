@@ -45,14 +45,14 @@ import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
 import "./charts";
-import "./clipboard";
-import "./editor";
-import "./journal";
+import { CopyableSpan } from "./clipboard";
+import { BeancountTextarea } from "./editor";
+import { FavaJournal } from "./journal";
 import "./keyboard-shortcuts";
 import { notify } from "./notifications";
 import "./sidebar";
-import "./sort";
-import "./tree-table";
+import { SortableTable } from "./sort";
+import { TreeTable } from "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 
 import Import from "./import/Import.svelte";
@@ -61,6 +61,14 @@ import FilterForm from "./FilterForm.svelte";
 import Documents from "./documents/Documents.svelte";
 import Modals from "./modals/Modals.svelte";
 import Query from "./query/Query.svelte";
+
+customElements.define("beancount-textarea", BeancountTextarea, {
+  extends: "textarea",
+});
+customElements.define("copyable-span", CopyableSpan, { extends: "span" });
+customElements.define("fava-journal", FavaJournal, { extends: "ol" });
+customElements.define("sortable-table", SortableTable, { extends: "table" });
+customElements.define("tree-table", TreeTable, { extends: "ol" });
 
 /**
  * Try to select the given element, load JSON and init Svelte component.

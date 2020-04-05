@@ -1,10 +1,11 @@
-// Account trees.
-//
-// This handles the toggling of accounts in the accounts trees.
-
 import { delegate } from "./helpers";
 
-class TreeTable extends HTMLOListElement {
+/**
+ * Account trees.
+ *
+ * This handles the toggling of accounts in the accounts trees.
+ */
+export class TreeTable extends HTMLOListElement {
   constructor() {
     super();
 
@@ -52,4 +53,3 @@ class TreeTable extends HTMLOListElement {
     });
   }
 }
-customElements.define("tree-table", TreeTable, { extends: "ol" });

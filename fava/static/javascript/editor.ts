@@ -192,7 +192,7 @@ export function ignoreKey(key: string): boolean {
 /**
  * Read-only editors in the help pages.
  */
-class BeancountTextarea extends HTMLTextAreaElement {
+export class BeancountTextarea extends HTMLTextAreaElement {
   constructor() {
     super();
 
@@ -202,9 +202,6 @@ class BeancountTextarea extends HTMLTextAreaElement {
     });
   }
 }
-customElements.define("beancount-textarea", BeancountTextarea, {
-  extends: "textarea",
-});
 
 const sourceEditorOptions: CodeMirror.EditorConfiguration = {
   mode: "beancount",
