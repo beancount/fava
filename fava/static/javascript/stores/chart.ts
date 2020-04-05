@@ -9,9 +9,9 @@ export const activeChart = writable({});
 export const chartMode = writable("treemap");
 export const chartCurrency = writable("");
 
-export const currencySuggestions = derived(
-  [commodities, operating_currency],
-  ([commodities_val, operating_currency_val]) => [
+const currencySuggestions = derived(
+  [operating_currency, commodities],
+  ([operating_currency_val, commodities_val]) => [
     ...operating_currency_val,
     ...commodities_val.filter(
       c => !operating_currency_val.includes(c) && iso4217currencies.has(c)
@@ -19,10 +19,16 @@ export const currencySuggestions = derived(
   ]
 );
 
-export const conversions = derived(currencySuggestions, values => [
-  ["at_cost", _("At Cost")],
-  ["at_value", _("At Market Value")],
-  ["units", _("Units")],
-  ...values.map(currency => [currency, `Converted to ${currency}`]),
-]);
+export const conversions = derived(
+  currencySuggestions,
+  currencySuggestions_val => [
+    ["at_cost", _("At Cost")],
+    ["at_value", _("At Market Value")],
+    ["units", _("Units")],
+    ...currencySuggestions_val.map(currency => [
+      currency,
+      `Converted to ${currency}`,
+    ]),
+  ]
+);
 // TODO  _('Converted to %(currency)s', currency=currency)

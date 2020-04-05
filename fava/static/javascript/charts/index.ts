@@ -311,7 +311,7 @@ export function parseQueryChart(data: unknown): ChartTypes | undefined {
     }
 
     const chartData: Record<string, AccountHierarchyNode> = {};
-    operatingCurrenciesWithConversion.forEach(currency => {
+    get(operatingCurrenciesWithConversion).forEach((currency: string) => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
         .sum(d => d.balance[currency] || 0)
         .sort((a, b) => (b.value || 0) - (a.value || 0));

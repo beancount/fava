@@ -7,7 +7,7 @@
 
   import { emptyPosting, Transaction } from "../entries";
   import { _, fetchAPI } from "../helpers";
-  import { favaAPI } from "../stores";
+  import { payees } from "../stores";
 
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
@@ -36,7 +36,7 @@
 
   $: if (entry.payee) {
     const { payee } = entry;
-    if (favaAPI.payees.includes(payee)) {
+    if ($payees.includes(payee)) {
       if (!accountCompletionCache[payee]) {
         accountCompletionCache[payee] = fetchAPI("payee_accounts", { payee });
       }
@@ -74,7 +74,7 @@
       className="payee"
       placeholder={_('Payee')}
       bind:value={entry.payee}
-      suggestions={favaAPI.payees}
+      suggestions={$payees}
       on:select={autocompleteSelectPayee} />
     <label for="payee">{_('Narration')}:</label>
     <input

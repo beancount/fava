@@ -1,4 +1,4 @@
-import { readable, Readable, derived, writable, Writable } from "svelte/store";
+import { Readable, derived, writable, Writable } from "svelte/store";
 
 import {
   object,
@@ -76,7 +76,7 @@ export const favaAPI: FavaAPI = {
 
 export const favaAPIStore = writable(favaAPI);
 
-function shallow_equal_derived<S, T>(
+function derived_array<S, T>(
   store: Readable<S>,
   getter: (values: S) => T[]
 ): Readable<T[]> {
@@ -94,16 +94,18 @@ function shallow_equal_derived<S, T>(
   );
 }
 
-export const accounts = shallow_equal_derived(
-  favaAPIStore,
-  val => val.accounts
-);
+export const accounts = derived_array(favaAPIStore, val => val.accounts);
+export const currencies = derived_array(favaAPIStore, val => val.currencies);
+export const links = derived_array(favaAPIStore, val => val.links);
+export const payees = derived_array(favaAPIStore, val => val.payees);
+export const tags = derived_array(favaAPIStore, val => val.tags);
+export const years = derived_array(favaAPIStore, val => val.years);
 
-export const operating_currency = shallow_equal_derived(favaAPIStore, val =>
+export const operating_currency = derived_array(favaAPIStore, val =>
   val.options.operating_currency.sort()
 );
 
-export const commodities = shallow_equal_derived(favaAPIStore, val =>
+export const commodities = derived_array(favaAPIStore, val =>
   val.options.commodities.sort()
 );
 

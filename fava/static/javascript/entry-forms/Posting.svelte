@@ -3,7 +3,7 @@
 
   import { _ } from "../helpers";
 
-  import { currencySuggestions } from "../stores/chart";
+  import { currencies } from "../stores";
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import AccountInput from "./AccountInput.svelte";
 
@@ -14,7 +14,7 @@
   const dispatch = createEventDispatcher();
 
   $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
-  $: amountSuggestions = $currencySuggestions.map(c => `${amount_number} ${c}`);
+  $: amountSuggestions = $currencies.map(c => `${amount_number} ${c}`);
 
   let drag = false;
   let draggable = true;
