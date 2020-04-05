@@ -15,6 +15,7 @@ test("fuzzy test", t => {
 });
 
 test("fuzzy filter", t => {
+  t.deepEqual(fuzzyfilter("", ["asdfasdf", "a"]), ["asdfasdf", "a"]);
   t.deepEqual(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
   t.deepEqual(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
     "asdfasdf",
@@ -34,6 +35,7 @@ test("fuzzy filter", t => {
 });
 
 test("fuzzy wap", t => {
+  t.deepEqual(fuzzywrap("", "tenotest"), "tenotest");
   t.deepEqual(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
   t.deepEqual(fuzzywrap("sdf", "nomatch"), "nomatch");
   t.deepEqual(fuzzywrap("test", "tetest"), "te<span>test</span>");

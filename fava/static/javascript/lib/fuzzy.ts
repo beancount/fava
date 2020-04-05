@@ -37,6 +37,9 @@ export function fuzzytest(pattern: string, text: string): number {
  * Filter a list of possible suggestions to only those that match the pattern
  */
 export function fuzzyfilter(pattern: string, suggestions: string[]): string[] {
+  if (!pattern) {
+    return suggestions;
+  }
   return suggestions
     .map((s): [string, number] => [s, fuzzytest(pattern, s)])
     .filter(([, score]) => score)
@@ -51,6 +54,9 @@ export function fuzzyfilter(pattern: string, suggestions: string[]): string[] {
  * <span> tags.
  */
 export function fuzzywrap(pattern: string, text: string): string {
+  if (!pattern) {
+    return text;
+  }
   const casesensitive = pattern === pattern.toLowerCase();
   const exact = casesensitive
     ? text.toLowerCase().indexOf(pattern)
