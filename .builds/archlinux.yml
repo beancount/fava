@@ -4,6 +4,7 @@ packages:
   - nodejs
   - npm
   - python-tox
+  - python-distlib
 sources:
   - https://github.com/beancount/fava
 tasks:
