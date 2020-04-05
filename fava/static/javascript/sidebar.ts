@@ -26,13 +26,16 @@ function initSidebar(): void {
   }
 }
 
-e.on("page-init", () => {
-  const asideButton = select("#aside-button");
-  asideButton?.addEventListener("click", () => {
-    select("aside")?.classList.toggle("active");
-    asideButton.classList.toggle("active");
-  });
-});
+export class AsideButton extends HTMLButtonElement {
+  constructor() {
+    super();
+
+    this.addEventListener("click", () => {
+      select("aside")?.classList.toggle("active");
+      this.classList.toggle("active");
+    });
+  }
+}
 
 e.on("page-loaded", () => {
   initSidebar();

@@ -50,7 +50,7 @@ import { BeancountTextarea } from "./editor";
 import { FavaJournal } from "./journal";
 import "./keyboard-shortcuts";
 import { notify } from "./notifications";
-import "./sidebar";
+import { AsideButton } from "./sidebar";
 import { SortableTable } from "./sort";
 import { TreeTable } from "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
@@ -62,6 +62,7 @@ import Documents from "./documents/Documents.svelte";
 import Modals from "./modals/Modals.svelte";
 import Query from "./query/Query.svelte";
 
+customElements.define("aside-button", AsideButton, { extends: "button" });
 customElements.define("beancount-textarea", BeancountTextarea, {
   extends: "textarea",
 });
