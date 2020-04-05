@@ -5,7 +5,7 @@
   import { quadtree } from "d3-quadtree";
 
   import { axis } from "./axis";
-  import { scales } from "./helpers";
+  import { scatterplotScale } from "./helpers";
   import { dateFormat } from "../format";
   import { positionedTooltip } from "./tooltip";
 
@@ -67,7 +67,7 @@
       {#each data as dot}
         <circle
           r="5"
-          fill={scales.scatterplot(dot.type)}
+          fill={scatterplotScale(dot.type)}
           cx={x(dot.date)}
           cy={y(dot.type)} />
       {/each}

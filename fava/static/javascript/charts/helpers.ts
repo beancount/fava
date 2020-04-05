@@ -1,8 +1,8 @@
 import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
-import { get } from "svelte/store";
+import { get, derived } from "svelte/store";
 
-import { filters } from "../stores";
+import { filters, accounts, operating_currency, commodities } from "../stores";
 import { currentTimeFilterDateFormat } from "../format";
 
 export function setTimeFilter(date: Date): void {
@@ -28,8 +28,8 @@ function hclColorRange(count: number, chroma = 45, lightness = 70): string[] {
   return colors.map(c => c.toString());
 }
 
-const colors10 = hclColorRange(10);
-const colors15 = hclColorRange(15, 30, 80);
+export const colors10 = hclColorRange(10);
+export const colors15 = hclColorRange(15, 30, 80);
 
 /*
  * The color scales for the charts.
@@ -37,9 +37,21 @@ const colors15 = hclColorRange(15, 30, 80);
  * The scales for treemap and sunburst charts will be initialised with all
  * accounts on page init and currencies with all commodities.
  */
-export const scales = {
-  treemap: scaleOrdinal(colors15),
-  sunburst: scaleOrdinal(colors10),
-  currencies: scaleOrdinal(colors10),
-  scatterplot: scaleOrdinal(colors10),
-};
+export const scatterplotScale = scaleOrdinal(colors10);
+
+export const treemapScale = derived(accounts, accounts_val =>
+  scaleOrdinal(colors15).domain(accounts_val)
+);
+
+export const sunburstScale = derived(accounts, accounts_val =>
+  scaleOrdinal(colors10).domain(accounts_val)
+);
+
+export const currenciesScale = derived(
+  [operating_currency, commodities],
+  ([operating_currency_val, commodities_val]) =>
+    scaleOrdinal(colors10).domain([
+      ...operating_currency_val,
+      ...commodities_val,
+    ])
+);

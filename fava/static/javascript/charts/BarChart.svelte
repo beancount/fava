@@ -5,7 +5,7 @@
   import { getContext } from "svelte";
 
   import { axis } from "./axis";
-  import { scales, setTimeFilter } from "./helpers";
+  import { currenciesScale, setTimeFilter } from "./helpers";
   import { formatCurrencyShort } from "../format";
   import { followingTooltip } from "./tooltip";
 
@@ -41,7 +41,7 @@
   const context = getContext("chart");
   $: context.legend.set({
     domain: x1.domain(),
-    scale: scales.currencies,
+    scale: $currenciesScale,
   });
 
   function filterTicks(domain) {
@@ -91,7 +91,7 @@
           {#each group.values as bar}
             <rect
               class="bar"
-              fill={scales.currencies(bar.name)}
+              fill={$currenciesScale(bar.name)}
               width={x1.bandwidth()}
               x={x1(bar.name)}
               y={y(Math.max(0, bar.value))}

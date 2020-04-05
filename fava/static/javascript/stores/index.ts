@@ -1,4 +1,4 @@
-import { writable, Writable } from "svelte/store";
+import { readable, Readable, derived, writable, Writable } from "svelte/store";
 
 import {
   object,
@@ -9,6 +9,7 @@ import {
   union,
   constant,
 } from "../lib/validation";
+import { shallow_equal } from "../lib/equals";
 
 export const urlHash = writable("");
 
@@ -74,6 +75,38 @@ export const favaAPI: FavaAPI = {
 };
 
 export const favaAPIStore = writable(favaAPI);
+
+function shallow_equal_derived<S, T>(
+  store: Readable<S>,
+  getter: (values: S) => T[]
+): Readable<T[]> {
+  let val: T[] = [];
+  return derived(
+    store,
+    (store_val, set) => {
+      const newVal = getter(store_val);
+      if (!shallow_equal(val, newVal)) {
+        set(newVal);
+        val = newVal;
+      }
+    },
+    val
+  );
+}
+
+export const accounts = shallow_equal_derived(
+  favaAPIStore,
+  val => val.accounts
+);
+
+export const operating_currency = shallow_equal_derived(favaAPIStore, val =>
+  val.options.operating_currency.sort()
+);
+
+export const commodities = shallow_equal_derived(favaAPIStore, val =>
+  val.options.commodities.sort()
+);
+
 favaAPIStore.subscribe(val => {
   Object.assign(favaAPI, val);
 });

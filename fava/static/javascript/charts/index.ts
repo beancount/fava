@@ -5,11 +5,10 @@
  */
 
 import { hierarchy, HierarchyNode } from "d3-hierarchy";
-import { get } from "svelte/store";
+import { derived, get } from "svelte/store";
 
 import { getScriptTagJSON } from "../helpers";
-import { favaAPI, conversion } from "../stores";
-import e from "../events";
+import { conversion, operating_currency } from "../stores";
 import { formatCurrency, dateFormat, currentDateFormat } from "../format";
 import {
   array,
@@ -23,8 +22,6 @@ import {
   lazy,
   Validator,
 } from "../lib/validation";
-
-import { scales } from "./helpers";
 
 interface AccountHierarchyDatum {
   account: string;
@@ -82,33 +79,19 @@ interface BarChartDatum {
 /**
  * The list of operating currencies, adding in the current conversion currency.
  */
-let operatingCurrenciesWithConversion: string[] = [];
-conversion.subscribe(conversionValue => {
-  if (
-    !conversionValue ||
-    ["at_cost", "at_value", "units"].includes(conversionValue) ||
-    favaAPI.options.operating_currency.includes(conversionValue)
-  ) {
-    operatingCurrenciesWithConversion = favaAPI.options.operating_currency;
-  } else {
-    operatingCurrenciesWithConversion = [
-      ...favaAPI.options.operating_currency,
-      conversionValue,
-    ];
+const operatingCurrenciesWithConversion = derived(
+  [operating_currency, conversion],
+  ([operating_currency_val, conversion_val]) => {
+    if (
+      !conversion_val ||
+      ["at_cost", "at_value", "units"].includes(conversion_val) ||
+      operating_currency_val.includes(conversion_val)
+    ) {
+      return operating_currency_val;
+    }
+    return [...operating_currency_val, conversion_val];
   }
-});
-
-e.on("page-init", () => {
-  const { accounts, options } = favaAPI;
-  scales.treemap.domain(accounts);
-  scales.sunburst.domain(accounts);
-  options.operating_currency.sort();
-  options.commodities.sort();
-  scales.currencies.domain([
-    ...options.operating_currency,
-    ...options.commodities,
-  ]);
-});
+);
 
 interface HierarchyChart {
   type: "hierarchy";
@@ -200,7 +183,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
     )(json);
     const currentDateFmt = get(currentDateFormat);
     const data = jsonData.map(d => ({
-      values: operatingCurrenciesWithConversion.map(name => ({
+      values: get(operatingCurrenciesWithConversion).map((name: string) => ({
         name,
         value: d.balance[name] || 0,
         budget: d.budgets[name] || 0,
@@ -237,7 +220,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
     addInternalNodesAsLeaves(root);
     const data: Record<string, AccountHierarchyNode> = {};
 
-    operatingCurrenciesWithConversion.forEach(currency => {
+    get(operatingCurrenciesWithConversion).forEach((currency: string) => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
         .sum(d => (d.balance[currency] || 0) * modifier)
         .sort((a, b) => (b.value || 0) - (a.value || 0));

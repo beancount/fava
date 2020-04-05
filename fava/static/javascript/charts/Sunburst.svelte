@@ -5,7 +5,7 @@
 
   import router from "../router";
   import { accountUrl } from "../stores";
-  import { scales } from "./helpers";
+  import { sunburstScale } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
 
   export let data;
@@ -65,7 +65,7 @@
       }}
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
-      fill={scales.sunburst(d.data.account)}
+      fill={$sunburstScale(d.data.account)}
       d={arcShape(d)} />
   {/each}
 </g>

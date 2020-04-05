@@ -1,6 +1,6 @@
 <script>
   import { _ } from "../helpers";
-  import { favaAPI } from "../stores";
+  import { accounts } from "../stores";
 
   import AutocompleteInput from "../AutocompleteInput.svelte";
 
@@ -10,7 +10,7 @@
   let input;
 
   function checkValidity(val) {
-    if (favaAPI.accounts.includes(val)) {
+    if ($accounts.includes(val)) {
       input.setCustomValidity("");
     } else {
       input.setCustomValidity(_("Should be one of the declared accounts"));
@@ -27,4 +27,4 @@
   className="account"
   placeholder={_('Account')}
   bind:value
-  suggestions={suggestions || favaAPI.accounts} />
+  suggestions={suggestions || $accounts} />

@@ -3,7 +3,7 @@
 
   import router from "../router";
   import { accountUrl } from "../stores";
-  import { scales } from "./helpers";
+  import { treemapScale } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
   import { followingTooltip } from "./tooltip";
 
@@ -19,9 +19,9 @@
   function fill(d) {
     const node = d.data.dummy && d.parent ? d.parent : d;
     if (node.depth === 1 || !node.parent) {
-      return scales.treemap(node.data.account);
+      return $treemapScale(node.data.account);
     }
-    return scales.treemap(node.parent.data.account);
+    return $treemapScale(node.parent.data.account);
   }
   function tooltipText(d) {
     return `${formatCurrency(d.value)} ${currency} (${formatPercentage(

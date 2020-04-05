@@ -6,7 +6,7 @@
   import { line } from "d3-shape";
   import { getContext } from "svelte";
 
-  import { scales } from "./helpers";
+  import { currenciesScale } from "./helpers";
   import { axis } from "./axis";
   import { formatCurrencyShort } from "../format";
   import { positionedTooltip } from "./tooltip";
@@ -27,7 +27,7 @@
   const context = getContext("chart");
   $: context.legend.set({
     domain: data.map(d => d.name),
-    scale: scales.currencies,
+    scale: $currenciesScale,
   });
 
   // Scales
@@ -80,12 +80,12 @@
     <g class="y axis" use:axis={yAxis} />
     <g class="lines">
       {#each data as d}
-        <path d={lineShape(d.values)} stroke={scales.currencies(d.name)} />
+        <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
       {/each}
     </g>
     <g>
       {#each data as d}
-        <g fill={scales.currencies(d.name)}>
+        <g fill={$currenciesScale(d.name)}>
           {#each d.values as v}
             <circle r="3" cx={x(v.date)} cy={y(v.value)} />
           {/each}
