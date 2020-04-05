@@ -16,7 +16,7 @@
       );
 
   function toggleBoxes(node) {
-    delegate(node, "click", ".toggle-box-header", event => {
+    delegate(node, "click", ".toggle-box-header", (event) => {
       event.target.closest(".toggle-box").classList.toggle("toggled");
     });
   }

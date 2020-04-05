@@ -14,7 +14,7 @@
 
   const query_results = {};
 
-  $: query_result_array = $query_shell_history.map(item => {
+  $: query_result_array = $query_shell_history.map((item) => {
     return [item, query_results[item] || {}];
   });
 
@@ -31,11 +31,11 @@
   function submit() {
     const query = query_string;
     fetchAPI("query_result", { query_string: query }).then(
-      result => {
+      (result) => {
         result.chart = parseQueryChart(result.chart);
         setResult(query, { result });
       },
-      error => {
+      (error) => {
         setResult(query, { error });
       }
     );

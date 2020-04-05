@@ -11,7 +11,7 @@ import { favaAPIStore, interval } from "./stores";
 let formatter: (num: number) => string;
 let incognito: (num: string) => string;
 
-favaAPIStore.subscribe(favaAPI => {
+favaAPIStore.subscribe((favaAPI) => {
   const { locale } = favaAPI.favaOptions;
   formatter = locale
     ? new Intl.NumberFormat(locale.replace("_", "-")).format
@@ -62,8 +62,8 @@ export const timeFilterDateFormat = {
 export function todayAsString(): string {
   return timeFormat("%Y-%m-%d")(new Date());
 }
-export const currentDateFormat = derived(interval, val => dateFormat[val]);
+export const currentDateFormat = derived(interval, (val) => dateFormat[val]);
 export const currentTimeFilterDateFormat = derived(
   interval,
-  val => timeFilterDateFormat[val]
+  (val) => timeFilterDateFormat[val]
 );

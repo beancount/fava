@@ -25,11 +25,11 @@
         "...enter a BQL query. 'help' to list available commands."
       ),
     };
-    editor = CodeMirror(cm => {
+    editor = CodeMirror((cm) => {
       form.insertBefore(cm, form.firstChild);
     }, queryOptions);
 
-    editor.on("change", cm => {
+    editor.on("change", (cm) => {
       value = cm.getValue();
     });
 

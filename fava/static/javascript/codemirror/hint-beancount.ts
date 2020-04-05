@@ -54,7 +54,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
   if (token.type === "tag" || token.type === "link") {
     const list = token.type === "tag" ? favaAPI.tags : favaAPI.links;
     return {
-      list: list.filter(d => d.startsWith(currentWord.slice(1))),
+      list: list.filter((d) => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
       to: new CodeMirror.Pos(cursor.line, token.end),
     };
@@ -63,7 +63,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
   // directives at the start of the line
   if (currentWord === line && line.length > 0) {
     return {
-      list: completionSources.undatedDirectives.filter(d =>
+      list: completionSources.undatedDirectives.filter((d) =>
         d.startsWith(currentWord)
       ),
       from: new CodeMirror.Pos(cursor.line, 0),
@@ -75,7 +75,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
 
   if (lineTokens.length > 0) {
     const startCurrentWord = cursor.ch - currentWord.length;
-    const previousTokens = lineTokens.filter(d => d.end <= startCurrentWord);
+    const previousTokens = lineTokens.filter((d) => d.end <= startCurrentWord);
 
     // complete accounts for indented lines
     if (lineTokens[0].type === "whitespace") {
@@ -89,7 +89,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
       // date whitespace -> complete directives
       if (previousTokens.length === 2) {
         return {
-          list: completionSources.datedDirectives.filter(d =>
+          list: completionSources.datedDirectives.filter((d) =>
             d.startsWith(currentWord)
           ),
           from: new CodeMirror.Pos(cursor.line, cursor.ch - currentWord.length),
@@ -98,7 +98,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
       }
 
       // Ignore negative sign from previousTokens
-      const tokenLength = previousTokens.filter(t => t.type != null).length;
+      const tokenLength = previousTokens.filter((t) => t.type != null).length;
       if (tokenLength % 2 === 0) {
         const directiveType = previousTokens[2].string;
         if (directiveType in directiveCompletions) {

@@ -28,14 +28,14 @@ class Events {
     if (!this.events[event].length) {
       return;
     }
-    this.events[event] = this.events[event].filter(c => c !== callback);
+    this.events[event] = this.events[event].filter((c) => c !== callback);
   }
 
   trigger(event: string): void {
     if (!this.events[event]) {
       return;
     }
-    this.events[event].forEach(callback => {
+    this.events[event].forEach((callback) => {
       callback();
     });
   }

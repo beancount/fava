@@ -162,7 +162,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
       data: [
         {
           name: label,
-          values: parsedData.prices.map(d => ({
+          values: parsedData.prices.map((d) => ({
             name: label,
             date: d[0],
             value: d[1],
@@ -182,7 +182,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
       object({ date, budgets: record(number), balance: record(number) })
     )(json);
     const currentDateFmt = get(currentDateFormat);
-    const data = jsonData.map(d => ({
+    const data = jsonData.map((d) => ({
       values: get(operatingCurrenciesWithConversion).map((name: string) => ({
         name,
         value: d.balance[name] || 0,
@@ -193,7 +193,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
     }));
     function tooltipText(d: BarChartDatum): string {
       let text = "";
-      d.values.forEach(a => {
+      d.values.forEach((a) => {
         text += `${formatCurrency(a.value)} ${a.name}`;
         if (a.budget) {
           text += ` / ${formatCurrency(a.budget)} ${a.name}`;
@@ -222,7 +222,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
 
     get(operatingCurrenciesWithConversion).forEach((currency: string) => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-        .sum(d => (d.balance[currency] || 0) * modifier)
+        .sum((d) => (d.balance[currency] || 0) * modifier)
         .sort((a, b) => (b.value || 0) - (a.value || 0));
       if (currencyHierarchy.value) {
         data[currency] = currencyHierarchy;
@@ -261,7 +261,7 @@ export function parseChartData(): (ChartTypes & {
   const result: (ChartTypes & {
     name: string;
   })[] = [];
-  chartData.forEach(chart => {
+  chartData.forEach((chart) => {
     const parser = parsers[chart.type];
     if (parser) {
       result.push({
@@ -313,7 +313,7 @@ export function parseQueryChart(data: unknown): ChartTypes | undefined {
     const chartData: Record<string, AccountHierarchyNode> = {};
     get(operatingCurrenciesWithConversion).forEach((currency: string) => {
       const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-        .sum(d => d.balance[currency] || 0)
+        .sum((d) => d.balance[currency] || 0)
         .sort((a, b) => (b.value || 0) - (a.value || 0));
       if (currencyHierarchy.value !== undefined) {
         chartData[currency] = currencyHierarchy;

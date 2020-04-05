@@ -44,7 +44,7 @@ export function delegate<T extends Event, C extends Element>(
   if (!element) {
     return;
   }
-  element.addEventListener(type, event => {
+  element.addEventListener(type, (event) => {
     let { target } = event;
     if (!target || !(target instanceof Node)) {
       return;

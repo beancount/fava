@@ -100,7 +100,7 @@ CodeMirror.commands.favaSave = (cm: EditorFromTextArea): void => {
     sha256sum: cm.getTextArea().getAttribute("data-sha256sum"),
   })
     .then(
-      data => {
+      (data) => {
         cm.focus();
         cm.getTextArea().setAttribute("data-sha256sum", data);
         e.trigger("file-modified");
@@ -110,7 +110,7 @@ CodeMirror.commands.favaSave = (cm: EditorFromTextArea): void => {
           closeOverlay();
         }
       },
-      error => {
+      (error) => {
         notify(error, "error");
       }
     )
@@ -122,12 +122,12 @@ CodeMirror.commands.favaSave = (cm: EditorFromTextArea): void => {
 
 CodeMirror.commands.favaFormat = (cm: Editor): void => {
   putAPI("format_source", { source: cm.getValue() }).then(
-    data => {
+    (data) => {
       const scrollPosition = cm.getScrollInfo().top;
       cm.setValue(data);
       cm.scrollTo(null, scrollPosition);
     },
-    error => {
+    (error) => {
       notify(error, "error");
     }
   );
@@ -282,24 +282,24 @@ export default function initSourceEditor(name: string): void {
 
   // keybindings when the focus is outside the editor
   ["Control+s", "Meta+s"].forEach((key): void => {
-    keys.bind(key, event => {
+    keys.bind(key, (event) => {
       event.preventDefault();
       editor.execCommand("favaSave");
     });
   });
 
   ["Control+d", "Meta+d"].forEach((key): void => {
-    keys.bind(key, event => {
+    keys.bind(key, (event) => {
       event.preventDefault();
       editor.execCommand("favaFormat");
     });
   });
 
   // Run editor commands with buttons in editor menu.
-  document.querySelectorAll(`${name}-form button`).forEach(button => {
+  document.querySelectorAll(`${name}-form button`).forEach((button) => {
     const command = button.getAttribute("data-command");
     if (command) {
-      button.addEventListener("click", event => {
+      button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         editor.execCommand(command);

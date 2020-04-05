@@ -21,7 +21,7 @@
   }
 
   $: root = partition()(data);
-  $: leaves = root.descendants().filter(d => !d.data.dummy && d.depth);
+  $: leaves = root.descendants().filter((d) => !d.data.dummy && d.depth);
 
   let current = null;
   $: if (root) {
@@ -33,10 +33,10 @@
   const x = scaleLinear().range([0, 2 * Math.PI]);
   $: y = scaleSqrt().range([0, radius]);
   $: arcShape = arc()
-    .startAngle(d => x(d.x0))
-    .endAngle(d => x(d.x1))
-    .innerRadius(d => y(d.y0))
-    .outerRadius(d => y(d.y1));
+    .startAngle((d) => x(d.x0))
+    .endAngle((d) => x(d.x1))
+    .innerRadius((d) => y(d.y0))
+    .outerRadius((d) => y(d.y1));
 </script>
 
 <style>

@@ -33,7 +33,7 @@ function copy(files) {
     name: "rollup-plugin-copy",
     generateBundle(options) {
       return Promise.all(
-        files.map(file =>
+        files.map((file) =>
           copyFile(file, join(dirname(options.file), basename(file)))
         )
       );

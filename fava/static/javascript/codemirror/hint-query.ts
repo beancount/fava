@@ -17,7 +17,7 @@ CodeMirror.registerHelper("hint", "beancount-query", (cm: Editor) => {
   // keywords at the start of the line
   if (currentWord === line) {
     return {
-      list: commands.filter(d => d.startsWith(currentWord)),
+      list: commands.filter((d) => d.startsWith(currentWord)),
       from: new CodeMirror.Pos(cursor.line, 0),
       to: cursor,
     };

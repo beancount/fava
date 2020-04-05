@@ -126,7 +126,7 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
   return (json: unknown): T[] => {
     if (Array.isArray(json)) {
       const result: T[] = [];
-      json.forEach(element => {
+      json.forEach((element) => {
         result.push(validator(element));
       });
       return result;

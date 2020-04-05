@@ -27,7 +27,7 @@ export class CopyableSpan extends HTMLSpanElement {
   constructor() {
     super();
 
-    this.addEventListener("click", event => {
+    this.addEventListener("click", (event) => {
       copyToClipboard(this.getAttribute("data-clipboard-text"));
       event.stopPropagation();
     });

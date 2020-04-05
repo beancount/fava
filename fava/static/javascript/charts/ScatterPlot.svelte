@@ -22,13 +22,13 @@
   $: innerHeight = height - margin.top - margin.bottom;
 
   // Scales
-  $: dateExtent = extent(data, d => d.date);
+  $: dateExtent = extent(data, (d) => d.date);
   $: x = scaleUtc()
     .domain(dateExtent)
     .range([0, innerWidth]);
   $: y = scalePoint()
     .padding(1)
-    .domain(data.map(d => d.type))
+    .domain(data.map((d) => d.type))
     .range([innerHeight, 0]);
 
   // Axes
@@ -36,13 +36,13 @@
   $: yAxis = axisLeft(y)
     .tickPadding(6)
     .tickSize(-innerWidth)
-    .tickFormat(d => d);
+    .tickFormat((d) => d);
 
   // Quadtree for hover.
   $: quad = quadtree(
     data,
-    d => x(d.date),
-    d => y(d.type)
+    (d) => x(d.date),
+    (d) => y(d.type)
   );
   function tooltipText(d) {
     return `${d.description}<em>${dateFormat.day(d.date)}</em>`;

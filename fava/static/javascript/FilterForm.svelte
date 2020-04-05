@@ -28,9 +28,9 @@
       placeholder: _("Filter by tag, payee, ..."),
       key: "f f",
       suggestions: [
-        ...$tags.map(tag => `#${tag}`),
-        ...$links.map(link => `^${link}`),
-        ...$payees.map(payee => `payee:"${payee}"`),
+        ...$tags.map((tag) => `#${tag}`),
+        ...$links.map((link) => `^${link}`),
+        ...$payees.map((payee) => `payee:"${payee}"`),
       ],
       autocompleteOptions: {
         valueExtractor(value, input) {
@@ -51,19 +51,19 @@
   ];
 
   let values;
-  filterStore.subscribe(fs => {
+  filterStore.subscribe((fs) => {
     values = { ...fs };
   });
 
   function submit() {
-    filterStore.update(fs => {
+    filterStore.update((fs) => {
       Object.assign(fs, values);
       return fs;
     });
   }
 
   function clear(name) {
-    filterStore.update(fs => {
+    filterStore.update((fs) => {
       const ret = { ...fs };
       ret[name] = "";
       return ret;

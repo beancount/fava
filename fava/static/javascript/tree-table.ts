@@ -16,7 +16,7 @@ export class TreeTable extends HTMLOListElement {
 
     expandAllLink.addEventListener("click", () => {
       expandAllLink.classList.add("hidden");
-      this.querySelectorAll(".toggled").forEach(el => {
+      this.querySelectorAll(".toggled").forEach((el) => {
         el.classList.remove("toggled");
       });
     });
@@ -35,12 +35,12 @@ export class TreeTable extends HTMLOListElement {
       }
       const willShow = row.classList.contains("toggled");
       if (event.shiftKey) {
-        this.querySelectorAll("li").forEach(el => {
+        this.querySelectorAll("li").forEach((el) => {
           el.classList.toggle("toggled", !willShow);
         });
       }
       if (event.ctrlKey || event.metaKey) {
-        this.querySelectorAll("li").forEach(el => {
+        this.querySelectorAll("li").forEach((el) => {
           el.classList.toggle("toggled", willShow);
         });
       }

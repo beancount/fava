@@ -29,7 +29,7 @@ function showTooltips(): void {
   if (reloadButton) {
     reloadButton.classList.remove("hidden");
   }
-  document.querySelectorAll("[data-key]").forEach(el => {
+  document.querySelectorAll("[data-key]").forEach((el) => {
     el instanceof HTMLElement && showTooltip(el);
   });
 }
@@ -42,7 +42,7 @@ function removeTooltips(): void {
   if (reloadButton) {
     reloadButton.classList.add("hidden");
   }
-  document.querySelectorAll(".keyboard-tooltip").forEach(tooltip => {
+  document.querySelectorAll(".keyboard-tooltip").forEach((tooltip) => {
     tooltip.remove();
   });
 }
@@ -138,7 +138,7 @@ export function keyboardShortcut(
     return {};
   }
   node.setAttribute("data-key", key);
-  bind(key, event => {
+  bind(key, (event) => {
     if (node instanceof HTMLInputElement) {
       event.preventDefault();
       node.focus();
@@ -158,7 +158,7 @@ let currentShortcuts: string[] = [];
 e.on("page-loaded", () => {
   currentShortcuts.map(unbind);
   currentShortcuts = [];
-  document.querySelectorAll("[data-key]").forEach(element => {
+  document.querySelectorAll("[data-key]").forEach((element) => {
     const key = element.getAttribute("data-key");
     if (key !== null && !(key in keyboardShortcuts)) {
       currentShortcuts.push(key);

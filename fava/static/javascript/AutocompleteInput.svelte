@@ -36,7 +36,7 @@
     const val = input && valueExtractor ? valueExtractor(value, input) : value;
     const filtered = fuzzyfilter(val, suggestions)
       .slice(0, 30)
-      .map(suggestion => ({
+      .map((suggestion) => ({
         suggestion,
         innerHTML: fuzzywrap(val, suggestion),
       }));
@@ -151,7 +151,7 @@
     {#each filteredSuggestions as { innerHTML, suggestion }, i}
       <li
         class:selected={i === index}
-        on:mousedown={ev => mousedown(ev, suggestion)}>
+        on:mousedown={(ev) => mousedown(ev, suggestion)}>
         {@html innerHTML}
       </li>
     {/each}

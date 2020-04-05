@@ -1,7 +1,7 @@
 import test from "ava";
 import { fuzzyfilter, fuzzytest, fuzzywrap } from "../javascript/lib/fuzzy";
 
-test("fuzzy test", t => {
+test("fuzzy test", (t) => {
   t.assert(fuzzytest("asdf", "asdfasdf"));
   t.assert(fuzzytest("asdf", "ASDFASDF"));
   // "smart-case" matching
@@ -14,7 +14,7 @@ test("fuzzy test", t => {
   t.assert(!fuzzytest("a", "sdfsdf"));
 });
 
-test("fuzzy filter", t => {
+test("fuzzy filter", (t) => {
   t.deepEqual(fuzzyfilter("", ["asdfasdf", "a"]), ["asdfasdf", "a"]);
   t.deepEqual(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
   t.deepEqual(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
@@ -34,7 +34,7 @@ test("fuzzy filter", t => {
   );
 });
 
-test("fuzzy wap", t => {
+test("fuzzy wap", (t) => {
   t.deepEqual(fuzzywrap("", "tenotest"), "tenotest");
   t.deepEqual(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
   t.deepEqual(fuzzywrap("sdf", "nomatch"), "nomatch");

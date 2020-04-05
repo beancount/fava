@@ -53,7 +53,7 @@ class Router {
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
 
-    window.addEventListener("beforeunload", event => {
+    window.addEventListener("beforeunload", (event) => {
       const leaveMessage = this.shouldInterrupt();
       if (leaveMessage) {
         event.returnValue = leaveMessage;
@@ -221,7 +221,7 @@ e.on("page-init", () => {
     filter: params.get("filter") || "",
     account: params.get("account") || "",
   });
-  filters.subscribe(fs => {
+  filters.subscribe((fs) => {
     const newURL = new URL(window.location.href);
     for (const name of Object.keys(fs)) {
       const value = fs[name as keyof typeof fs];

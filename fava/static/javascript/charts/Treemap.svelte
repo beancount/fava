@@ -14,7 +14,7 @@
 
   const tree = treemap().paddingInner(1);
   $: root = tree.size([width, height])(data);
-  $: leaves = root.leaves().filter(d => d.value);
+  $: leaves = root.leaves().filter((d) => d.value);
 
   function fill(d) {
     const node = d.data.dummy && d.parent ? d.parent : d;

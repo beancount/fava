@@ -26,7 +26,7 @@
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
       for (const [directory, items] of Object.entries(data)) {
-        data[directory] = items.filter(item => item.name !== filename);
+        data[directory] = items.filter((item) => item.name !== filename);
       }
     }
   }

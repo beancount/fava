@@ -24,10 +24,10 @@
         })
           .then(handleJSON)
           .then(
-            response => {
+            (response) => {
               notify(response.data);
             },
-            error => {
+            (error) => {
               notify(`Upload error: ${error}`, "error");
             }
           );

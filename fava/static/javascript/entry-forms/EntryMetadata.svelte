@@ -4,7 +4,7 @@
   export let meta;
 
   $: metakeys = Object.keys(meta).filter(
-    key => !key.startsWith("_") && key !== "filename" && key !== "lineno"
+    (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno"
   );
 
   function removeMetadata(metakey) {
@@ -43,7 +43,7 @@
       class="metadata-key"
       placeholder={_('Key')}
       value={metakey}
-      on:change={event => {
+      on:change={(event) => {
         updateMetakey(metakey, event.target.value);
       }}
       required />

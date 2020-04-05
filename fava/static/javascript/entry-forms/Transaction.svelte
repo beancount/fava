@@ -24,7 +24,7 @@
   }
 
   function removePosting(posting) {
-    entry.postings = entry.postings.filter(p => p !== posting);
+    entry.postings = entry.postings.filter((p) => p !== posting);
   }
 
   async function addPosting() {
@@ -40,7 +40,7 @@
       if (!accountCompletionCache[payee]) {
         accountCompletionCache[payee] = fetchAPI("payee_accounts", { payee });
       }
-      accountCompletionCache[payee].then(s => {
+      accountCompletionCache[payee].then((s) => {
         suggestions = s;
       });
     }
@@ -48,7 +48,7 @@
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
-    if (entry.narration || !entry.postings.every(p => !p.account)) {
+    if (entry.narration || !entry.postings.every((p) => !p.account)) {
       return;
     }
     const data = await fetchAPI("payee_transaction", { payee: entry.payee });

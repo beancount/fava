@@ -14,18 +14,18 @@ const currencySuggestions = derived(
   ([operating_currency_val, commodities_val]) => [
     ...operating_currency_val,
     ...commodities_val.filter(
-      c => !operating_currency_val.includes(c) && iso4217currencies.has(c)
+      (c) => !operating_currency_val.includes(c) && iso4217currencies.has(c)
     ),
   ]
 );
 
 export const conversions = derived(
   currencySuggestions,
-  currencySuggestions_val => [
+  (currencySuggestions_val) => [
     ["at_cost", _("At Cost")],
     ["at_value", _("At Market Value")],
     ["units", _("Units")],
-    ...currencySuggestions_val.map(currency => [
+    ...currencySuggestions_val.map((currency) => [
       currency,
       `Converted to ${currency}`,
     ]),

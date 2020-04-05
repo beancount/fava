@@ -9,7 +9,7 @@ import { number } from "./lib/validation";
 import e from "./events";
 
 function initSidebar(): void {
-  document.querySelectorAll("aside a").forEach(el => {
+  document.querySelectorAll("aside a").forEach((el) => {
     el.classList.remove("selected");
     const href = el.getAttribute("href");
     if (

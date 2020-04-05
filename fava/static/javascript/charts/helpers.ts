@@ -6,7 +6,7 @@ import { filters, accounts, operating_currency, commodities } from "../stores";
 import { currentTimeFilterDateFormat } from "../format";
 
 export function setTimeFilter(date: Date): void {
-  filters.update(fs => ({
+  filters.update((fs) => ({
     ...fs,
     time: get(currentTimeFilterDateFormat)(date),
   }));
@@ -21,11 +21,11 @@ export function setTimeFilter(date: Date): void {
 function hclColorRange(count: number, chroma = 45, lightness = 70): string[] {
   const offset = 270;
   const delta = 360 / count;
-  const colors = [...Array(count).keys()].map(index => {
+  const colors = [...Array(count).keys()].map((index) => {
     const hue = (index * delta + offset) % 360;
     return hcl(hue, chroma, lightness);
   });
-  return colors.map(c => c.toString());
+  return colors.map((c) => c.toString());
 }
 
 export const colors10 = hclColorRange(10);
@@ -39,11 +39,11 @@ export const colors15 = hclColorRange(15, 30, 80);
  */
 export const scatterplotScale = scaleOrdinal(colors10);
 
-export const treemapScale = derived(accounts, accounts_val =>
+export const treemapScale = derived(accounts, (accounts_val) =>
   scaleOrdinal(colors15).domain(accounts_val)
 );
 
-export const sunburstScale = derived(accounts, accounts_val =>
+export const sunburstScale = derived(accounts, (accounts_val) =>
   scaleOrdinal(colors10).domain(accounts_val)
 );
 

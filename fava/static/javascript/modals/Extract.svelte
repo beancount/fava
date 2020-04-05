@@ -25,14 +25,14 @@
     const params = new URLSearchParams($urlHash.slice(8));
     const filename = params.get("filename");
     const importer = params.get("importer");
-    fetchAPI("extract", { filename, importer }).then(data => {
+    fetchAPI("extract", { filename, importer }).then((data) => {
       entries = data;
     });
   }
   $: entry = entries[currentIndex];
   $: if (entry) {
     component = { Balance, Note, Transaction }[entry.type];
-    duplicates = entry && entries.filter(e => isDuplicate(e)).length;
+    duplicates = entry && entries.filter((e) => isDuplicate(e)).length;
     duplicate = isDuplicate(entry);
   }
 
@@ -40,7 +40,7 @@
     if (currentIndex < entries.length - 1) {
       currentIndex += 1;
     } else {
-      await saveEntries(entries.filter(e => !isDuplicate(e)));
+      await saveEntries(entries.filter((e) => !isDuplicate(e)));
       closeOverlay();
     }
   }

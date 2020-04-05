@@ -67,7 +67,7 @@
   <button
     type="button"
     on:click={() => {
-      showCharts.update(v => !v);
+      showCharts.update((v) => !v);
     }}
     use:keyboardShortcut={'Control+c'}
     class:closed={!$showCharts}

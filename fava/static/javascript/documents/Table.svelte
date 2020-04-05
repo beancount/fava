@@ -20,20 +20,20 @@
   const tableColumns = [
     {
       header: _("Date"),
-      getter: e => e.date,
+      getter: (e) => e.date,
     },
     {
       header: _("Name"),
-      getter: e => name(e),
+      getter: (e) => name(e),
     },
   ];
 
   /** Index of the table column and order to sort by */
   let sort = [0, "desc"];
   $: table = data
-    .filter(e => e.account.startsWith($selectedAccount))
-    .map(e => [e, tableColumns.map(th => th.getter(e))])
-    .sort(sortFunc("string", sort[1], row => row[1][sort[0]]));
+    .filter((e) => e.account.startsWith($selectedAccount))
+    .map((e) => [e, tableColumns.map((th) => th.getter(e))])
+    .sort(sortFunc("string", sort[1], (row) => row[1][sort[0]]));
 
   function setSort(index) {
     const [col, order] = sort;
@@ -74,7 +74,7 @@
         class:selected={selected === doc}
         draggable="true"
         title={doc.filename}
-        on:dragstart={ev => {
+        on:dragstart={(ev) => {
           ev.dataTransfer.setData('fava/filename', doc.filename);
         }}
         on:click={() => {

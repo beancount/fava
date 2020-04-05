@@ -14,7 +14,7 @@
   const dispatch = createEventDispatcher();
 
   $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
-  $: amountSuggestions = $currencies.map(c => `${amount_number} ${c}`);
+  $: amountSuggestions = $currencies.map((c) => `${amount_number} ${c}`);
 
   let drag = false;
   let draggable = true;

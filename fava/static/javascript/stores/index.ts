@@ -94,22 +94,22 @@ function derived_array<S, T>(
   );
 }
 
-export const accounts = derived_array(favaAPIStore, val => val.accounts);
-export const currencies = derived_array(favaAPIStore, val => val.currencies);
-export const links = derived_array(favaAPIStore, val => val.links);
-export const payees = derived_array(favaAPIStore, val => val.payees);
-export const tags = derived_array(favaAPIStore, val => val.tags);
-export const years = derived_array(favaAPIStore, val => val.years);
+export const accounts = derived_array(favaAPIStore, (val) => val.accounts);
+export const currencies = derived_array(favaAPIStore, (val) => val.currencies);
+export const links = derived_array(favaAPIStore, (val) => val.links);
+export const payees = derived_array(favaAPIStore, (val) => val.payees);
+export const tags = derived_array(favaAPIStore, (val) => val.tags);
+export const years = derived_array(favaAPIStore, (val) => val.years);
 
-export const operating_currency = derived_array(favaAPIStore, val =>
+export const operating_currency = derived_array(favaAPIStore, (val) =>
   val.options.operating_currency.sort()
 );
 
-export const commodities = derived_array(favaAPIStore, val =>
+export const commodities = derived_array(favaAPIStore, (val) =>
   val.options.commodities.sort()
 );
 
-favaAPIStore.subscribe(val => {
+favaAPIStore.subscribe((val) => {
   Object.assign(favaAPI, val);
 });
 

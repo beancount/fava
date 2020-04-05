@@ -9,14 +9,14 @@ import {
   object,
 } from "../javascript/lib/validation";
 
-test("validate boolean", t => {
+test("validate boolean", (t) => {
   t.assert(boolean(true));
   t.assert(!boolean(false));
   t.throws(() => boolean({ a: 1 }));
   t.throws(() => boolean("1"));
 });
 
-test("validate constant", t => {
+test("validate constant", (t) => {
   t.assert(constant(true)(true));
   t.assert(constant(1)(1));
   t.throws(() => constant(1)("1"));
@@ -24,7 +24,7 @@ test("validate constant", t => {
   t.throws(() => constant("1")(1));
 });
 
-test("validate date", t => {
+test("validate date", (t) => {
   const d = new Date("2012-12-12");
   t.deepEqual(+date("2012-12-12"), +d);
   t.deepEqual(date(d), d);
@@ -33,26 +33,26 @@ test("validate date", t => {
   t.throws(() => date("2012-12-40"));
 });
 
-test("validate number", t => {
+test("validate number", (t) => {
   t.assert(number(1) === 1);
   t.throws(() => number({ a: 1 }));
   t.throws(() => number("1"));
 });
 
-test("validate string", t => {
+test("validate string", (t) => {
   t.assert(string("test") === "test");
   t.throws(() => string({ a: 1 }));
   t.throws(() => string(1));
 });
 
-test("validate Record<>", t => {
+test("validate Record<>", (t) => {
   const strRecord = record(string);
   t.deepEqual(strRecord({}), {});
   t.deepEqual(strRecord({ a: "test" }), { a: "test" });
   t.throws(() => strRecord({ a: 1 }));
 });
 
-test("validate object", t => {
+test("validate object", (t) => {
   const val = object({ str: string, num: number });
   t.deepEqual(val({ str: "str", num: 1, extra: 1 }), { str: "str", num: 1 });
   t.deepEqual(val({ str: "str", num: 1 }), { str: "str", num: 1 });

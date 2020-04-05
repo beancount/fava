@@ -26,20 +26,20 @@
 
   const context = getContext("chart");
   $: context.legend.set({
-    domain: data.map(d => d.name),
+    domain: data.map((d) => d.name),
     scale: $currenciesScale,
   });
 
   // Scales
-  $: allValues = merge(data.map(d => d.values));
+  $: allValues = merge(data.map((d) => d.values));
   $: xDomain = [
-    min(data, s => s.values[0].date),
-    max(data, s => s.values[s.values.length - 1].date),
+    min(data, (s) => s.values[0].date),
+    max(data, (s) => s.values[s.values.length - 1].date),
   ];
   $: x = scaleUtc()
     .domain(xDomain)
     .range([0, innerWidth]);
-  $: [yMin = 0, yMax = 0] = extent(allValues, v => v.value);
+  $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear()
     .domain([yMin - (yMax - yMin) * 0.05, yMax + (yMax - yMin) * 0.05])
@@ -48,13 +48,13 @@
   // Quadtree for hover.
   $: quad = quadtree(
     allValues,
-    d => x(d.date),
-    d => y(d.value)
+    (d) => x(d.date),
+    (d) => y(d.value)
   );
 
   $: lineShape = line()
-    .x(d => x(d.date))
-    .y(d => y(d.value));
+    .x((d) => x(d.date))
+    .y((d) => y(d.value));
 
   // Axes
   $: xAxis = axisBottom(x).tickSizeOuter(0);

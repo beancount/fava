@@ -69,7 +69,7 @@ function sortElements<T extends Element, C extends HTMLElement>(
 ): void {
   const sortFunction = sortFunc(type, order, (a: T) => getValue(selector(a)));
   const fragment = document.createDocumentFragment();
-  elements.sort(sortFunction).forEach(el => {
+  elements.sort(sortFunction).forEach((el) => {
     fragment.appendChild(el);
   });
   parent.appendChild(fragment);
@@ -98,14 +98,14 @@ export class SortableJournal extends HTMLOListElement {
     }
     const headers = head.querySelectorAll("span[data-sort]");
 
-    headers.forEach(header => {
+    headers.forEach((header) => {
       header.addEventListener("click", () => {
         const order = getSortOrder(header);
         const type = header.getAttribute("data-sort");
         const headerClass = header.classList[0];
 
         // update sort order
-        headers.forEach(el => {
+        headers.forEach((el) => {
           el.removeAttribute("data-order");
         });
         header.setAttribute("data-order", order);
@@ -133,14 +133,14 @@ export class SortableTable extends HTMLTableElement {
     }
     const headers = [...this.tHead.querySelectorAll("th[data-sort]")];
 
-    headers.forEach(header => {
+    headers.forEach((header) => {
       header.addEventListener("click", () => {
         const order = getSortOrder(header);
         const type = header.getAttribute("data-sort");
         const index = headers.indexOf(header);
 
         // update sort order
-        headers.forEach(el => {
+        headers.forEach((el) => {
           el.removeAttribute("data-order");
         });
         header.setAttribute("data-order", order);

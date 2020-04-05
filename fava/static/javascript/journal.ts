@@ -11,7 +11,7 @@ function addFilter(value: string, escape = false): void {
     value = value.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
   }
 
-  filters.update(fs => {
+  filters.update((fs) => {
     if (fs.filter) {
       return {
         ...fs,
@@ -33,7 +33,7 @@ export class FavaJournal extends SortableJournal {
 
     const entryButtons = document.querySelectorAll("#entry-filters button");
     // Toggle entries with buttons.
-    entryButtons.forEach(button => {
+    entryButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const type = button.getAttribute("data-type");
         const shouldShow = button.classList.contains("inactive");
@@ -46,7 +46,7 @@ export class FavaJournal extends SortableJournal {
         ) {
           document
             .querySelectorAll(`#entry-filters .${type}-toggle`)
-            .forEach(el => {
+            .forEach((el) => {
               el.classList.toggle("inactive", !shouldShow);
             });
         }
@@ -55,7 +55,7 @@ export class FavaJournal extends SortableJournal {
 
         // Modify get params
         const filterShow: string[] = [];
-        entryButtons.forEach(el => {
+        entryButtons.forEach((el) => {
           const datatype = el.getAttribute("data-type");
           if (datatype && !el.classList.contains("inactive")) {
             filterShow.push(datatype);
@@ -64,7 +64,7 @@ export class FavaJournal extends SortableJournal {
 
         const url = new URL(window.location.href);
         url.searchParams.delete("show");
-        filterShow.forEach(filter => {
+        filterShow.forEach((filter) => {
           url.searchParams.append("show", filter);
         });
         router.navigate(url.toString(), false);

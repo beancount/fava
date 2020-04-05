@@ -28,12 +28,12 @@
   // Scales
   $: x0 = scaleBand()
     .padding(0.1)
-    .domain(data.map(d => d.label))
+    .domain(data.map((d) => d.label))
     .range([0, innerWidth]);
   $: x1 = scaleBand()
-    .domain(data[0].values.map(d => d.name))
+    .domain(data[0].values.map((d) => d.name))
     .range([0, x0.bandwidth()]);
-  $: [yMin, yMax] = extent(merge(data.map(d => d.values)), d => d.value);
+  $: [yMin, yMax] = extent(merge(data.map((d) => d.values)), (d) => d.value);
   $: y = scaleLinear()
     .range([innerHeight, 0])
     .domain([Math.min(0, yMin), Math.max(0, yMax)]);

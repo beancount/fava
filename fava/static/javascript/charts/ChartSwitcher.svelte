@@ -15,13 +15,14 @@
     if (!charts.length) {
       return;
     }
-    $activeChart = charts.find(c => c.name === $activeChart.name) || charts[0];
+    $activeChart =
+      charts.find((c) => c.name === $activeChart.name) || charts[0];
     keys.bind("c", () => {
-      const currentIndex = charts.findIndex(e => e === $activeChart);
+      const currentIndex = charts.findIndex((e) => e === $activeChart);
       $activeChart = charts[(currentIndex + 1 + charts.length) % charts.length];
     });
     keys.bind("C", () => {
-      const currentIndex = charts.findIndex(e => e === $activeChart);
+      const currentIndex = charts.findIndex((e) => e === $activeChart);
       $activeChart = charts[(currentIndex - 1 + charts.length) % charts.length];
     });
   });
