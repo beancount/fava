@@ -1,9 +1,9 @@
 <script>
   import { todayAsString } from "../format";
-  import { _ } from "../helpers";
+  import { _, urlFor } from "../helpers";
   import { moveDocument } from "../api";
 
-  import { newFilename, documentURL, extractURL } from "./helpers";
+  import { newFilename, extractURL } from "./helpers";
 
   import AccountInput from "../entry-forms/AccountInput.svelte";
 
@@ -45,7 +45,10 @@
   <h3>Directory: {directory}</h3>
   {#each items as item}
     <pre title={item.name}>
-      <a href={documentURL(item.name)} data-remote target="_blank">
+      <a
+        href={urlFor('document', { filename: item.name })}
+        data-remote
+        target="_blank">
         {item.basename}
       </a>
     </pre>

@@ -161,8 +161,8 @@ class Router {
       (event: MouseEvent, link: HTMLAnchorElement) => {
         if (
           link.getAttribute("href")?.charAt(0) === "#" ||
-          link.host !== window.location.host ||
           link.hasAttribute("data-remote") ||
+          link.host !== window.location.host ||
           link.protocol.indexOf("http") !== 0 ||
           event.defaultPrevented
         ) {

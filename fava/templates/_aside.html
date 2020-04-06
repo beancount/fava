@@ -28,7 +28,7 @@
     {% endif %}
   </li>
   {% if id == 'editor' %}
-  <li class="error{{ ' hidden' if not ledger.errors else '' }}">
+  <li is="error-count" class="error{{ ' hidden' if not ledger.errors else '' }}">
     <a href="{{ url_for('report', report_name='errors') }}">
       {{ _('Errors') }} <span class="bubble">{{ ledger.errors|length }}</span>
     </a>

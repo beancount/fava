@@ -13,10 +13,7 @@ export function select(
 
 export function getScriptTagJSON(selector: string): unknown {
   const el = select(selector);
-  if (!el) {
-    return null;
-  }
-  return JSON.parse(el.innerHTML);
+  return el ? JSON.parse(el.innerHTML) : null;
 }
 
 let translations: Record<string, string>;
@@ -35,7 +32,7 @@ export function _(text: string): string {
  * Execute the callback of the event of given type is fired on something
  * matching selector.
  */
-export function delegate<T extends Event, C extends Element>(
+export function delegate<T extends Event, C extends HTMLElement>(
   element: Element | Document | null,
   type: string,
   selector: string,
@@ -52,8 +49,8 @@ export function delegate<T extends Event, C extends Element>(
     if (!(target instanceof Element)) {
       target = target.parentNode;
     }
-    if (target instanceof Element) {
-      const closest = (target as HTMLElement).closest(selector);
+    if (target instanceof HTMLElement) {
+      const closest = target.closest(selector);
       if (closest) {
         callback(event as T, closest as C);
       }

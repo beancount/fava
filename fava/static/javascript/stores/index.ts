@@ -1,4 +1,4 @@
-import { Readable, derived, writable, Writable } from "svelte/store";
+import { derived, writable, Writable } from "svelte/store";
 
 import {
   object,
@@ -9,7 +9,7 @@ import {
   union,
   constant,
 } from "../lib/validation";
-import { shallow_equal } from "../lib/equals";
+import { derived_array } from "../lib/store";
 
 export const urlHash = writable("");
 
@@ -76,41 +76,37 @@ export const favaAPI: FavaAPI = {
 
 export const favaAPIStore = writable(favaAPI);
 
-function derived_array<S, T>(
-  store: Readable<S>,
-  getter: (values: S) => T[]
-): Readable<T[]> {
-  let val: T[] = [];
-  return derived(
-    store,
-    (store_val, set) => {
-      const newVal = getter(store_val);
-      if (!shallow_equal(val, newVal)) {
-        set(newVal);
-        val = newVal;
-      }
-    },
-    val
-  );
-}
-
+/** Whether Fava supports exporting to Excel. */
+export const HAVE_EXCEL = derived(favaAPIStore, (val) => val.have_excel);
+/** The ranked array of all accounts. */
 export const accounts = derived_array(favaAPIStore, (val) => val.accounts);
+/** The ranked array of all currencies. */
 export const currencies = derived_array(favaAPIStore, (val) => val.currencies);
+/** The ranked array of all links. */
 export const links = derived_array(favaAPIStore, (val) => val.links);
+/** The ranked array of all payees. */
 export const payees = derived_array(favaAPIStore, (val) => val.payees);
+/** The ranked array of all tags. */
 export const tags = derived_array(favaAPIStore, (val) => val.tags);
+/** The array of all years. */
 export const years = derived_array(favaAPIStore, (val) => val.years);
 
+/** The sorted array of operating currencies. */
 export const operating_currency = derived_array(favaAPIStore, (val) =>
   val.options.operating_currency.sort()
 );
 
+/** The sorted array of all used currencies. */
 export const commodities = derived_array(favaAPIStore, (val) =>
   val.options.commodities.sort()
 );
 
+/** The number of Beancount errors. */
+export const errorCount = writable(0);
+
 favaAPIStore.subscribe((val) => {
   Object.assign(favaAPI, val);
+  errorCount.set(favaAPI.errors);
 });
 
 export const filters = writable({

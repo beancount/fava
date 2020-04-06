@@ -1,5 +1,6 @@
 import { fetchAPI } from "./helpers";
 import { notify } from "./notifications";
+import { string } from "./lib/validation";
 
 /**
  * Move a file, either in an import directory or a document.
@@ -16,7 +17,7 @@ export async function moveDocument(
       account,
       newName,
     });
-    notify(msg as string);
+    notify(string(msg));
     return true;
   } catch (error) {
     notify(error, "error");

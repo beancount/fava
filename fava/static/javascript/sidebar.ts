@@ -3,8 +3,8 @@
  * toggling the sidebar on mobile.
  */
 
-import { select, fetchAPI } from "./helpers";
-import { favaAPI } from "./stores";
+import { fetchAPI } from "./helpers";
+import { errorCount } from "./stores";
 import { number } from "./lib/validation";
 import e from "./events";
 
@@ -19,10 +19,19 @@ function initSidebar(): void {
       el.classList.add("selected");
     }
   });
-  select("aside li.error")?.classList.toggle("hidden", favaAPI.errors === 0);
-  const span = select("aside li.error span");
-  if (span) {
-    span.innerHTML = `${favaAPI.errors}`;
+}
+
+export class ErrorCount extends HTMLLIElement {
+  constructor() {
+    super();
+
+    const span = this.querySelector("span");
+    errorCount.subscribe((errorCount_val) => {
+      this.classList.toggle("hidden", errorCount_val === 0);
+      if (span) {
+        span.innerHTML = `${errorCount_val}`;
+      }
+    });
   }
 }
 
@@ -31,7 +40,7 @@ export class AsideButton extends HTMLButtonElement {
     super();
 
     this.addEventListener("click", () => {
-      select("aside")?.classList.toggle("active");
+      document.querySelector("aside")?.classList.toggle("active");
       this.classList.toggle("active");
     });
   }
@@ -43,6 +52,5 @@ e.on("page-loaded", () => {
 
 e.on("file-modified", async () => {
   const errors = await fetchAPI("errors");
-  favaAPI.errors = number(errors);
-  initSidebar();
+  errorCount.set(number(errors));
 });

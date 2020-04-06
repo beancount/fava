@@ -1,6 +1,6 @@
 <script>
   import { _, urlFor } from "../helpers";
-  import { favaAPIStore } from "../stores";
+  import { HAVE_EXCEL } from "../stores";
 
   export let query = "";
 
@@ -14,7 +14,7 @@
 <span class="download">
   ({_('Download as')}
   <a href={queryUrl(query, 'csv')} data-remote>CSV</a>
-  {#if $favaAPIStore.have_excel}
+  {#if $HAVE_EXCEL}
     ,
     <a href={queryUrl(query, 'xls')} data-remote>XLS</a>
     ,

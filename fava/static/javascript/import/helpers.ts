@@ -20,12 +20,3 @@ export function extractURL(filename: string, importer: string): string {
   params.set("importer", importer);
   return `#extract-${params.toString()}`;
 }
-
-/**
- * Generate the URL to the document
- */
-export function documentURL(filename: string): string {
-  const params = new URLSearchParams();
-  params.set("filename", filename);
-  return `../document/?${params.toString()}`;
-}
