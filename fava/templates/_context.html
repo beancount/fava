@@ -4,11 +4,11 @@
 {{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
 </p>
 {% if balances %}
-<div class="toggle-box toggled">
-  <div class="toggle-box-header">
+<details>
+  <summary>
     <span>{{ _('Context') }}</span>
-  </div>
-  <div class="toggle-box-content">
+  </summary>
+  <div>
     <table>
       <thead>
         <tr colspan=2>
@@ -50,7 +50,7 @@
       </tbody>
     </table>
   </div>
-</div>
+</details>
 {% endif %}
 <form id="source-slice-editor-form" class="source-slice-editor-form">
   <textarea id="source-slice-editor" name="source-slice" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ slice or '' }}</textarea>

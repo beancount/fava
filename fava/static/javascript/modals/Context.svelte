@@ -2,7 +2,7 @@
   import { afterUpdate } from "svelte";
 
   import initSourceEditor from "../editor";
-  import { fetch, delegate, handleText } from "../helpers";
+  import { fetch, handleText } from "../helpers";
   import { urlHash, favaAPI } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
@@ -15,12 +15,6 @@
         handleText
       );
 
-  function toggleBoxes(node) {
-    delegate(node, "click", ".toggle-box-header", (event) => {
-      event.target.closest(".toggle-box").classList.toggle("toggled");
-    });
-  }
-
   afterUpdate(async () => {
     if (!content) {
       return;
@@ -31,7 +25,7 @@
 </script>
 
 <ModalBase {shown}>
-  <div class="content" use:toggleBoxes>
+  <div class="content">
     {#await content}
       Loading entry context...
     {:then html}

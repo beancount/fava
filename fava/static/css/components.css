@@ -1,18 +1,15 @@
-details,
-.toggle-box {
+details {
   display: block;
   min-width: 400px;
   margin-bottom: 0.5em;
   border: 1px solid var(--color-table-border);
 }
 
-details.inactive,
-.toggle-box.inactive {
+details.inactive {
   opacity: 0.5;
 }
 
-details summary,
-.toggle-box-header {
+details summary {
   display: flex;
   align-items: center;
   padding: 5px 10px;
@@ -20,42 +17,29 @@ details summary,
   background-color: var(--color-sidebar-background);
 }
 
-details summary::before,
-.toggle-box-header::before {
+details summary::before {
   margin-right: 0.5em;
   content: "";
   border-top: 9px solid var(--color-treetable-expander);
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
+  transform: rotate(270deg);
 }
 
-details.error summary,
-.toggle-box.error .toggle-box-header {
+details.error summary {
   background-color: var(--color-error);
 }
 
-details summary::before {
-  transform: rotate(270deg);
-}
 details[open] summary::before {
   transform: rotate(0deg);
 }
-.toggle-box.toggled .toggle-box-header::before {
-  transform: rotate(270deg);
-}
 
-details summary pre,
-.toggle-box-header pre {
+details summary pre {
   display: inline-block;
   padding: 3px 6px;
   margin: 0;
 }
 
-details > div,
-.toggle-box-content {
+details > div {
   padding: 0.5em;
-}
-
-.toggle-box.toggled .toggle-box-content {
-  display: none;
 }
