@@ -4,11 +4,12 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "npm run format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' --fix && npx tsc",
-    "check-lint": "npm run check-format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css' && npx tsc",
+    "lint": "npm run format && npm run lint:js && npm run lint:css && npx tsc",
+    "lint:css": "stylelint 'css/*.css' 'javascript/**/*.svelte' --fix",
+    "check-lint": "npm run check-format && eslint javascript --ext .js,.svelte,.ts && stylelint 'css/*.css''javascript/**/*.svelte'  && npx tsc",
     "lint:js": "eslint javascript test --fix --ext .js,.svelte,.ts",
-    "check-format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --ignore-path .gitignore",
-    "format": "cd ../../ && prettier '**/*.{css,md,js,svelte,ts}' --check --write --ignore-path .gitignore",
+    "check-format": "cd ../../ && prettier '**/*.{css,md,js,json,svelte,ts}' --check --ignore-path .gitignore",
+    "format": "cd ../../ && prettier '**/*.{css,md,js,json,svelte,ts}' --check --write --ignore-path .gitignore",
     "test": "ava",
     "test:watch": "ava -w"
   },
@@ -18,8 +19,8 @@
     }
   },
   "lint-staged": {
-    "*.{css}": "stylelint --fix",
-    "*.{css,md,js,svelte,ts}": "prettier --write",
+    "*.{css,svelte}": "stylelint --fix",
+    "*.{css,md,js,json,svelte,ts}": "prettier --write",
     "*.{js,svelte,ts}": "eslint --fix"
   },
   "prettier": {
@@ -95,7 +96,17 @@
       "stylelint-config-standard",
       "stylelint-config-recess-order",
       "stylelint-config-prettier"
-    ]
+    ],
+    "rules": {
+      "selector-pseudo-class-no-unknown": [
+        true,
+        {
+          "ignorePseudoClasses": [
+            "global"
+          ]
+        }
+      ]
+    }
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",

@@ -36,10 +36,10 @@
     padding: 0 0 0 0.5em;
   }
   p {
-    border: 1px solid var(--color-table-border);
     margin-bottom: -1px;
     overflow: hidden;
     cursor: pointer;
+    border: 1px solid var(--color-table-border);
   }
   .selected,
   .drag {

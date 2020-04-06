@@ -1,13 +1,13 @@
 {
-    "compilerOptions": {
-        "target": "es2017",
-        "module": "es2015",
-        "moduleResolution": "Node",
-        "allowJs": true,
-        "checkJs": true,
-        "noEmit": true,
-        "strict": true,
-        "esModuleInterop": true
-    },
-    "include": ["javascript/**/*.ts"]
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "es2015",
+    "moduleResolution": "Node",
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "esModuleInterop": true
+  },
+  "include": ["javascript/**/*.ts"]
 }

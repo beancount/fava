@@ -54,12 +54,12 @@
 
 <style>
   .container {
-    display: flex;
     position: fixed;
     top: var(--header-height);
     right: 0;
     bottom: 0;
     left: var(--aside-width);
+    display: flex;
   }
   .half-column {
     width: 33%;

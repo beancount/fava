@@ -87,8 +87,8 @@
 
 <style>
   span {
-    display: inline-block;
     position: relative;
+    display: inline-block;
   }
   input {
     width: 100%;
@@ -96,7 +96,6 @@
 
   ul {
     position: absolute;
-    float: left;
     z-index: var(--z-index-autocomplete);
     overflow-x: hidden;
     overflow-y: auto;
