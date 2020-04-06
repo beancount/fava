@@ -11,10 +11,10 @@ import {
   urlHash,
   conversion,
   interval,
-  filters,
   favaAPI,
   urlSyncedParams,
 } from "./stores";
+import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { showCharts } from "./stores/chart";
 
 class Router {
@@ -209,68 +209,49 @@ class Router {
 const router = new Router();
 export default router;
 
+/**
+ * Sync a store value to the URL.
+ *
+ * Set a store's inital value from the URL and update and navigate to the URL
+ * on store changes.
+ */
+function syncStoreValueToUrl<T extends boolean | string>(
+  store: Writable<T>,
+  name: string,
+  defaultValue: T,
+  shouldLoad = true
+): void {
+  let value: T;
+  const params = new URL(window.location.href).searchParams;
+  if (typeof defaultValue === "boolean") {
+    value = (params.get(name) !== "false" && defaultValue) as T;
+  } else {
+    value = (params.get(name) as T) || defaultValue;
+  }
+  store.set(value);
+
+  store.subscribe((val: T) => {
+    const newURL = new URL(window.location.href);
+    newURL.searchParams.set(name, val.toString());
+    if (val === defaultValue) {
+      newURL.searchParams.delete(name);
+    }
+    if (newURL.href === window.location.href) {
+      router.navigate(newURL.href, shouldLoad);
+    }
+  });
+}
+
 e.on("page-init", () => {
   select("#reload-page")?.addEventListener("click", () => {
     router.reload();
   });
 
-  const params = new URL(window.location.href).searchParams;
-
-  filters.set({
-    time: params.get("time") || "",
-    filter: params.get("filter") || "",
-    account: params.get("account") || "",
-  });
-  filters.subscribe((fs) => {
-    const newURL = new URL(window.location.href);
-    for (const name of Object.keys(fs)) {
-      const value = fs[name as keyof typeof fs];
-      if (value) {
-        newURL.searchParams.set(name, value);
-      } else {
-        newURL.searchParams.delete(name);
-      }
-    }
-    const url = newURL.toString();
-    if (url !== window.location.href) {
-      router.navigate(url);
-    }
-  });
-
-  function syncStoreValueToUrl<T extends boolean | string>(
-    store: Writable<T>,
-    name: string,
-    defaultValue: T,
-    shouldLoad: boolean
-  ): void {
-    let value: T;
-    if (typeof defaultValue === "boolean") {
-      value = (params.get(name) !== "false" && defaultValue) as T;
-    } else {
-      value = (params.get(name) as T) || defaultValue;
-    }
-    store.set(value);
-
-    store.subscribe((val: T) => {
-      const newURL = new URL(window.location.href);
-      newURL.searchParams.set(name, val.toString());
-      if (val === defaultValue) {
-        newURL.searchParams.delete(name);
-      }
-      const url = newURL.toString();
-      if (url !== window.location.href) {
-        router.navigate(url, shouldLoad);
-      }
-    });
-  }
-
   // Set initial values from URL and update URL on store changes
-  syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval, true);
-  syncStoreValueToUrl(
-    conversion,
-    "conversion",
-    favaAPI.favaOptions.conversion,
-    true
-  );
+  syncStoreValueToUrl(account_filter, "account", "");
+  syncStoreValueToUrl(fql_filter, "filter", "");
+  syncStoreValueToUrl(time_filter, "time", "");
+  syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval);
+  syncStoreValueToUrl(conversion, "conversion", favaAPI.favaOptions.conversion);
   syncStoreValueToUrl(showCharts, "charts", true, false);
 });

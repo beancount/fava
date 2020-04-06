@@ -109,12 +109,6 @@ favaAPIStore.subscribe((val) => {
   errorCount.set(favaAPI.errors);
 });
 
-export const filters = writable({
-  time: "",
-  filter: "",
-  account: "",
-});
-
 export const urlSyncedParams = [
   "account",
   "charts",

@@ -1,13 +1,7 @@
 <script>
   import { _ } from "./helpers";
-  import {
-    filters as filterStore,
-    accounts,
-    links,
-    tags,
-    years,
-    payees,
-  } from "./stores";
+  import { accounts, links, tags, years, payees } from "./stores";
+  import { account_filter, time_filter, fql_filter } from "./stores/filters";
   import AutocompleteInput from "./AutocompleteInput.svelte";
 
   const filters = [
@@ -50,24 +44,26 @@
     },
   ];
 
-  let values;
-  filterStore.subscribe((fs) => {
-    values = { ...fs };
+  const values = {};
+  account_filter.subscribe((v) => {
+    values.account = v;
+  });
+  fql_filter.subscribe((v) => {
+    values.filter = v;
+  });
+  time_filter.subscribe((v) => {
+    values.time = v;
   });
 
   function submit() {
-    filterStore.update((fs) => {
-      Object.assign(fs, values);
-      return fs;
-    });
+    account_filter.set(values.account);
+    fql_filter.set(values.filter);
+    time_filter.set(values.time);
   }
 
   function clear(name) {
-    filterStore.update((fs) => {
-      const ret = { ...fs };
-      ret[name] = "";
-      return ret;
-    });
+    values[name] = "";
+    submit();
   }
 </script>
 

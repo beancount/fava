@@ -5,7 +5,7 @@
 
   const dispatch = createEventDispatcher();
 
-  export let value = "";
+  export let value;
   export let suggestions = [];
   export let name = "";
   export let placeholder = "";
@@ -14,6 +14,7 @@
   export let setSize = false;
   export let className = "";
   export let key = null;
+  export let checkValidity = null;
   let filteredSuggestions = [];
   let hidden = true;
   let index = -1;
@@ -24,12 +25,8 @@
     input.focus();
   }
 
-  export function setCustomValidity(str) {
-    input.setCustomValidity(str);
-  }
-
-  $: if (index > filteredSuggestions.length - 1) {
-    index = filteredSuggestions.length - 1;
+  $: if (input && checkValidity) {
+    input.setCustomValidity(checkValidity(value));
   }
 
   $: {
@@ -40,19 +37,14 @@
         suggestion,
         innerHTML: fuzzywrap(val, suggestion),
       }));
-    if (filtered.length === 1 && filtered[0].suggestion === val) {
-      filteredSuggestions = [];
-    } else {
-      filteredSuggestions = filtered;
-    }
+    filteredSuggestions =
+      filtered.length === 1 && filtered[0].suggestion === val ? [] : filtered;
+    index = Math.min(index, filteredSuggestions.length - 1);
   }
 
   function select(suggestion) {
-    if (input && valueSelector) {
-      value = valueSelector(suggestion, input);
-    } else {
-      value = suggestion;
-    }
+    value =
+      input && valueSelector ? valueSelector(suggestion, input) : suggestion;
     dispatch("select");
     hidden = true;
   }

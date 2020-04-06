@@ -4,27 +4,19 @@
 
   import AutocompleteInput from "../AutocompleteInput.svelte";
 
-  export let value = "";
+  export let value;
   export let suggestions = null;
 
-  let input;
-
   function checkValidity(val) {
-    if ($accounts.includes(val)) {
-      input.setCustomValidity("");
-    } else {
-      input.setCustomValidity(_("Should be one of the declared accounts"));
-    }
-  }
-
-  $: if (input) {
-    checkValidity(value);
+    return $accounts.includes(val)
+      ? ""
+      : _("Should be one of the declared accounts");
   }
 </script>
 
 <AutocompleteInput
-  bind:this={input}
   className="account"
   placeholder={_('Account')}
   bind:value
+  {checkValidity}
   suggestions={suggestions || $accounts} />

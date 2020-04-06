@@ -1,7 +1,7 @@
 import { delegate } from "./helpers";
 import router from "./router";
 import { SortableJournal } from "./sort";
-import { filters } from "./stores";
+import { fql_filter } from "./stores/filters";
 
 /**
  * Add filter, possibly escaping it to produce a valid regex.
@@ -11,18 +11,9 @@ function addFilter(value: string, escape = false): void {
     value = value.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
   }
 
-  filters.update((fs) => {
-    if (fs.filter) {
-      return {
-        ...fs,
-        filter: `${fs.filter} ${value}`,
-      };
-    }
-    return {
-      ...fs,
-      filter: value,
-    };
-  });
+  fql_filter.update((fql_filter_val) =>
+    fql_filter_val ? `${fql_filter_val} ${value}` : value
+  );
 }
 
 export class FavaJournal extends SortableJournal {
