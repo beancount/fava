@@ -236,7 +236,7 @@ function syncStoreValueToUrl<T extends boolean | string>(
     if (val === defaultValue) {
       newURL.searchParams.delete(name);
     }
-    if (newURL.href === window.location.href) {
+    if (newURL.href !== window.location.href) {
       router.navigate(newURL.href, shouldLoad);
     }
   });
