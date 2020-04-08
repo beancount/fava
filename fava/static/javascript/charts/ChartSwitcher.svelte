@@ -32,11 +32,33 @@
   });
 </script>
 
+<style>
+  div {
+    margin-bottom: 1.5em;
+    font-size: 1em;
+    color: var(--color-text-lightest);
+    text-align: center;
+  }
+
+  label {
+    padding-left: 0.5em;
+  }
+
+  label + label {
+    border-left: 1px solid var(--color-text-lighter);
+  }
+
+  label.selected,
+  label:hover {
+    color: var(--color-text-lighter);
+  }
+</style>
+
 {#if charts.length}
   <Chart chart={$activeChart}>
     <ConversionAndInterval />
   </Chart>
-  <div hidden={!$showCharts} class="chart-labels">
+  <div hidden={!$showCharts}>
     {#each charts as chart}
       <label
         class:selected={chart === $activeChart}

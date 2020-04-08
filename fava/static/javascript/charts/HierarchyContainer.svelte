@@ -5,13 +5,13 @@
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
 
-  const context = getContext("chart");
+  const context = getContext("chart-currencies");
   export let data;
   export let width;
 
   $: currencies = Object.keys(data);
   $: currency = $chartCurrency || currencies[0];
-  $: context.currencies.set(currencies);
+  $: context.set(currencies);
 </script>
 
 {#if currencies.length === 0}

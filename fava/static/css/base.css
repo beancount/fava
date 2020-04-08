@@ -183,6 +183,7 @@ textarea {
 
 label {
   margin: 0 0.5em 0.5em 0;
+  cursor: pointer;
 }
 
 select {

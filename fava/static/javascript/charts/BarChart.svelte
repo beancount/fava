@@ -38,11 +38,13 @@
     .range([innerHeight, 0])
     .domain([Math.min(0, yMin), Math.max(0, yMax)]);
 
-  const context = getContext("chart");
-  $: context.legend.set({
-    domain: x1.domain(),
-    scale: $currenciesScale,
-  });
+  const legend = getContext("chart-legend");
+  $: legend.set(
+    x1
+      .domain()
+      .sort()
+      .map((c) => [c, $currenciesScale(c)])
+  );
 
   function filterTicks(domain) {
     const labelsCount = innerWidth / 70;

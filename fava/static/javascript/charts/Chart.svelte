@@ -6,26 +6,26 @@
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { chartCurrency, chartMode, showCharts } from "../stores/chart";
 
+  import ChartLegend from "./ChartLegend.svelte";
   import BarChart from "./BarChart.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
   import LineChart from "./LineChart.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
+  // The chart to render.
   export let chart;
 
-  $: hasCurrencySetting =
-    chart.type === "hierarchy" && $chartMode === "treemap";
-  let chartWidth;
+  // Width of the chart.
+  let width;
 
   const currencies = writable([]);
-  const legend = writable({ domain: [] });
-  setContext("chart", {
-    currencies,
-    legend,
-  });
+  const legend = writable([]);
+  setContext("chart-legend", legend);
+  setContext("chart-currencies", currencies);
 
   $: if (chart) {
-    legend.set({ domain: [] });
+    // Reset the chart legend on chart change.
+    legend.set([]);
   }
 
   const components = {
@@ -37,32 +37,29 @@
 </script>
 
 <form class="wide-form">
-  <p hidden={!$showCharts} class="chart-legend">
-    {#each $legend.domain.sort() as item}
-      <span class="legend">
-        <i class="color" style="background-color: {$legend.scale(item)}" />
-        {item}
+  {#if $showCharts}
+    <ChartLegend legend={$legend} />
+    <span class="spacer" />
+    {#if chart.type === 'hierarchy'}
+      <select bind:value={$chartCurrency} hidden={$chartMode !== 'treemap'}>
+        {#each $currencies as currency}
+          <option value={currency}>{currency}</option>
+        {/each}
+      </select>
+      <span class="chart-mode">
+        <label>
+          <input type="radio" bind:group={$chartMode} value="treemap" />
+          <span class="button">{_('Treemap')}</span>
+        </label>
+        <label>
+          <input type="radio" bind:group={$chartMode} value="sunburst" />
+          <span class="button">{_('Sunburst')}</span>
+        </label>
       </span>
-    {/each}
-  </p>
-  <span class="spacer" />
-  <select
-    bind:value={$chartCurrency}
-    hidden={!$showCharts || !hasCurrencySetting}>
-    {#each $currencies as currency}
-      <option value={currency}>{currency}</option>
-    {/each}
-  </select>
-  <span hidden={!$showCharts || chart.type !== 'hierarchy'} class="chart-mode">
-    <label>
-      <input type="radio" bind:group={$chartMode} value="treemap" />
-      <span class="button">{_('Treemap')}</span>
-    </label>
-    <label>
-      <input type="radio" bind:group={$chartMode} value="sunburst" />
-      <span class="button">{_('Sunburst')}</span>
-    </label>
-  </span>
+    {/if}
+  {:else}
+    <span class="spacer" />
+  {/if}
   <slot />
   <button
     type="button"
@@ -73,14 +70,14 @@
     class:closed={!$showCharts}
     class="toggle-chart" />
 </form>
-<div hidden={!$showCharts} bind:clientWidth={chartWidth}>
-  {#if chartWidth}
+<div hidden={!$showCharts} bind:clientWidth={width}>
+  {#if width}
     {#if components[chart.type]}
       <svelte:component
         this={components[chart.type]}
         data={chart.data}
         tooltipText={chart.tooltipText}
-        width={chartWidth} />
+        {width} />
     {:else}Invalid chart: {chart.type}{/if}
   {/if}
 </div>

@@ -24,11 +24,13 @@
   $: innerWidth = width - margin.left - margin.right;
   $: innerHeight = height - margin.top - margin.bottom;
 
-  const context = getContext("chart");
-  $: context.legend.set({
-    domain: data.map((d) => d.name),
-    scale: $currenciesScale,
-  });
+  const legend = getContext("chart-legend");
+  $: legend.set(
+    data
+      .map((d) => d.name)
+      .sort()
+      .map((c) => [c, $currenciesScale(c)])
+  );
 
   // Scales
   $: allValues = merge(data.map((d) => d.values));
