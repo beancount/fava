@@ -57,6 +57,10 @@ pre code {
   border: 0;
 }
 
+.pre {
+  white-space: pre-wrap;
+}
+
 table {
   border-spacing: 0;
   border-collapse: collapse;
