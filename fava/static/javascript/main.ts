@@ -36,7 +36,7 @@ import "../css/help.css";
 import "../css/journal-table.css";
 import "../css/media-mobile.css";
 import "../css/media-print.css";
-import "../css/overlay.css";
+import "../css/notifications.css";
 import "../css/query.css";
 import "../css/tree-table.css";
 import "codemirror/lib/codemirror.css";

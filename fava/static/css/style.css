@@ -65,6 +65,7 @@
   --color-ingest: #cefac1;
   --color-placeholder: var(--color-text-lightest);
   --background-placeholder: var(--color-background);
+  --overlay-wrapper-background: rgba(0, 0, 0, 0.5);
 }
 
 .journal .balance {

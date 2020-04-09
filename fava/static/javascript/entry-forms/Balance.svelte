@@ -8,13 +8,6 @@
   import EntryMetadata from "./EntryMetadata.svelte";
 
   export let entry;
-
-  $: if (entry && !entry.amount) {
-    entry.amount = {
-      number: "",
-      currency: "",
-    };
-  }
 </script>
 
 <style>
@@ -30,7 +23,6 @@
     <AccountInput bind:value={entry.account} />
     <input
       type="tel"
-      class="number"
       pattern="-?[0-9.,]*"
       placeholder={_('Number')}
       size="10"

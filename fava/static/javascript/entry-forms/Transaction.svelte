@@ -68,6 +68,12 @@
     min-width: 10em;
   }
 
+  input[name="narration"] {
+    flex-basis: 200px;
+    flex-grow: 1;
+    min-width: 20em;
+  }
+
   label {
     display: none;
   }

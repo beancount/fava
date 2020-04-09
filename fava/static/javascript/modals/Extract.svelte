@@ -54,6 +54,17 @@
   }
 </script>
 
+<style>
+  pre {
+    font-size: 0.9em;
+    white-space: pre-wrap;
+  }
+
+  .duplicate {
+    opacity: 0.5;
+  }
+</style>
+
 <ModalBase {shown}>
   <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
     <h3>{_('Import')}</h3>
@@ -72,7 +83,7 @@
           ignore duplicate
         </label>
       </div>
-      <div class:duplicate class="ingest-row">
+      <div class:duplicate>
         <svelte:component this={component} bind:entry />
       </div>
       <div class="fieldset">

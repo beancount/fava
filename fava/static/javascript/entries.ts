@@ -8,6 +8,11 @@ interface Posting {
   amount: string;
 }
 
+interface Amount {
+  number: string;
+  currency: string;
+}
+
 export function emptyPosting(): Posting {
   return {
     account: "",
@@ -32,9 +37,15 @@ abstract class Entry {
 export class Balance extends Entry {
   account: string;
 
+  amount: Amount;
+
   constructor() {
     super("Balance");
     this.account = "";
+    this.amount = {
+      number: "",
+      currency: "",
+    };
   }
 }
 

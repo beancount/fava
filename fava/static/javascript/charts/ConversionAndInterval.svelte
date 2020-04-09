@@ -3,13 +3,13 @@
   import { conversion, interval } from "../stores";
   import { conversions } from "../stores/chart";
 
-  const intervals = {
-    year: _("Yearly"),
-    quarter: _("Quarterly"),
-    month: _("Monthly"),
-    week: _("Weekly"),
-    day: _("Daily"),
-  };
+  const intervals = [
+    ["year", _("Yearly")],
+    ["quarter", _("Quarterly")],
+    ["month", _("Monthly")],
+    ["week", _("Weekly")],
+    ["day", _("Daily")],
+  ];
 </script>
 
 <select bind:value={$conversion}>
@@ -18,7 +18,7 @@
   {/each}
 </select>
 <select bind:value={$interval}>
-  {#each Object.keys(intervals) as key}
-    <option value={key}>{intervals[key]}</option>
+  {#each intervals as [interval, name]}
+    <option value={interval}>{name}</option>
   {/each}
 </select>

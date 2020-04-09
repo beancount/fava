@@ -15,8 +15,7 @@
   margin-left: 0.5rem;
 }
 
-.entry-form .account,
-.entry-form input[name="narration"] {
+.entry-form .account {
   flex-basis: 200px;
   flex-grow: 1;
   min-width: 20em;
@@ -28,13 +27,4 @@
 
 .fieldset:hover .remove-fieldset {
   opacity: 1;
-}
-
-.ingest-row .source pre {
-  font-size: 0.9em;
-  white-space: pre-wrap;
-}
-
-.ingest-row.duplicate {
-  opacity: 0.5;
 }
