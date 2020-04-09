@@ -17,10 +17,6 @@
   margin: 0;
 }
 
-.entry-form .amount {
-  width: 220px;
-}
-
 .entry-form button,
 .entry-form input {
   margin: 0;
@@ -75,27 +71,6 @@
   opacity: 1;
 }
 
-.entry-form .posting .add-row {
-  display: none;
-}
-
-.entry-form .posting:last-child .add-row {
-  display: initial;
-}
-
-.entry-form .posting {
-  padding-left: 50px;
-  cursor: grab;
-}
-
-.entry-form .posting > * {
-  cursor: initial;
-}
-
-.entry-form .posting:last-child .amount {
-  width: 192px;
-}
-
 .entry-form .metadata {
   padding-left: 56px;
   font-size: 0.8em;
@@ -121,8 +96,7 @@
     margin: 0 0.5em 0.5em 0;
   }
 
-  .entry-form.transaction .metadata,
-  .entry-form.transaction .posting {
+  .entry-form.transaction .metadata {
     padding-left: 0;
   }
 }

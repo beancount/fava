@@ -15,10 +15,6 @@
     display: block;
   }
 
-  .filter-form {
-    display: none;
-  }
-
   aside,
   .aside-button,
   .toggle-chart-container {

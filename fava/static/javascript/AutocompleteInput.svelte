@@ -15,6 +15,7 @@
   export let className = "";
   export let key = null;
   export let checkValidity = null;
+  export let clearButton = false;
   let filteredSuggestions = [];
   let hidden = true;
   let index = -1;
@@ -82,6 +83,7 @@
     position: relative;
     display: inline-block;
   }
+
   input {
     width: 100%;
   }
@@ -107,6 +109,13 @@
   li:hover {
     color: var(--color-background);
     background-color: var(--color-links);
+  }
+
+  button {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    background: transparent;
   }
 
   li :global(span) {
@@ -138,13 +147,27 @@
     on:keydown={keydown}
     {placeholder}
     {...inputOptions} />
-  <ul {hidden}>
-    {#each filteredSuggestions as { innerHTML, suggestion }, i}
-      <li
-        class:selected={i === index}
-        on:mousedown={(ev) => mousedown(ev, suggestion)}>
-        {@html innerHTML}
-      </li>
-    {/each}
-  </ul>
+  {#if clearButton && value}
+    <button
+      type="button"
+      tabindex="-1"
+      class="muted round"
+      on:click={() => {
+        value = '';
+        dispatch('select');
+      }}>
+      ×
+    </button>
+  {/if}
+  {#if filteredSuggestions.length}
+    <ul {hidden}>
+      {#each filteredSuggestions as { innerHTML, suggestion }, i}
+        <li
+          class:selected={i === index}
+          on:mousedown={(ev) => mousedown(ev, suggestion)}>
+          {@html innerHTML}
+        </li>
+      {/each}
+    </ul>
+  {/if}
 </span>

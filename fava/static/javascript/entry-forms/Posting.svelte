@@ -46,10 +46,41 @@
   .drag {
     box-shadow: 0 0 5px var(--color-text);
   }
+
+  div {
+    padding-left: 50px;
+    cursor: grab;
+  }
+
+  div > * {
+    cursor: initial;
+  }
+
+  div .add-row {
+    display: none;
+  }
+
+  div:last-child .add-row {
+    display: initial;
+  }
+
+  div :global(.amount) {
+    width: 220px;
+  }
+
+  div:last-child :global(.amount) {
+    width: 192px;
+  }
+
+  @media (max-width: 767px) {
+    div {
+      padding-left: 0;
+    }
+  }
 </style>
 
 <div
-  class="fieldset posting"
+  class="fieldset"
   class:drag
   {draggable}
   on:mousemove={mousemove}

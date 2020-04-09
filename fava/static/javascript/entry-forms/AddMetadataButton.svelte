@@ -13,6 +13,7 @@
   class="muted round"
   type="button"
   on:click={addMetadata}
+  tabindex="-1"
   title={_('Add metadata')}>
   m
 </button>

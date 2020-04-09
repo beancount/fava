@@ -63,6 +63,8 @@
   --color-editor-activeline: #ffc;
   --color-mobile-button-text: #000;
   --color-ingest: #cefac1;
+  --color-placeholder: var(--color-text-lightest);
+  --background-placeholder: var(--color-background);
 }
 
 .journal .balance {

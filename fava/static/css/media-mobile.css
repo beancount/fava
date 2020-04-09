@@ -19,10 +19,6 @@
     padding: 8px;
   }
 
-  .filter-form {
-    flex-wrap: wrap;
-  }
-
   aside {
     top: 0;
     margin-left: calc(-1 * var(--aside-width));

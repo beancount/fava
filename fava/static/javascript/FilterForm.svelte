@@ -4,45 +4,23 @@
   import { account_filter, time_filter, fql_filter } from "./stores/filters";
   import AutocompleteInput from "./AutocompleteInput.svelte";
 
-  const filters = [
-    {
-      name: "time",
-      placeholder: _("Time"),
-      key: "f t",
-      suggestions: $years,
-    },
-    {
-      name: "account",
-      placeholder: _("Account"),
-      key: "f a",
-      suggestions: $accounts,
-    },
-    {
-      name: "filter",
-      placeholder: _("Filter by tag, payee, ..."),
-      key: "f f",
-      suggestions: [
-        ...$tags.map((tag) => `#${tag}`),
-        ...$links.map((link) => `^${link}`),
-        ...$payees.map((payee) => `payee:"${payee}"`),
-      ],
-      autocompleteOptions: {
-        valueExtractor(value, input) {
-          const [ret] = value.slice(0, input.selectionStart).match(/\S*$/);
-          return ret;
-        },
-        valueSelector(value, input) {
-          const [search] = input.value
-            .slice(0, input.selectionStart)
-            .match(/\S*$/);
-          return `${input.value.slice(
-            0,
-            input.selectionStart - search.length
-          )}${value}${input.value.slice(input.selectionStart)}`;
-        },
-      },
-    },
+  $: fql_filter_suggestions = [
+    ...$tags.map((tag) => `#${tag}`),
+    ...$links.map((link) => `^${link}`),
+    ...$payees.map((payee) => `payee:"${payee}"`),
   ];
+
+  function valueExtractor(value, input) {
+    const [ret] = value.slice(0, input.selectionStart).match(/\S*$/);
+    return ret;
+  }
+  function valueSelector(value, input) {
+    const [search] = input.value.slice(0, input.selectionStart).match(/\S*$/);
+    return `${input.value.slice(
+      0,
+      input.selectionStart - search.length
+    )}${value}${input.value.slice(input.selectionStart)}`;
+  }
 
   const values = {};
   account_filter.subscribe((v) => {
@@ -60,32 +38,74 @@
     fql_filter.set(values.filter);
     time_filter.set(values.time);
   }
-
-  function clear(name) {
-    values[name] = "";
-    submit();
-  }
 </script>
 
-<form id="filter-form" class="filter-form" on:submit|preventDefault={submit}>
-  {#each filters as { name, placeholder, key, suggestions, autocompleteOptions }}
-    <span class:empty={!values[name]}>
-      <AutocompleteInput
-        bind:value={values[name]}
-        {placeholder}
-        {suggestions}
-        {key}
-        setSize={true}
-        {...autocompleteOptions}
-        on:select={submit} />
-      <button
-        type="button"
-        tabindex="-1"
-        class="close muted round"
-        on:click={() => clear(name)}>
-        ×
-      </button>
-    </span>
-  {/each}
+<style>
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 7px;
+    margin: 0;
+    color: var(--color-text);
+
+    --color-placeholder: var(--color-header-tinted);
+    --background-placeholder: var(--color-header-light);
+  }
+
+  form > :global(span) {
+    max-width: 18rem;
+    margin: 0 4px 6px 0;
+  }
+
+  form :global(input) {
+    padding: 8px 25px 8px 10px;
+    margin: 0;
+    background-color: var(--color-background);
+    border: 0;
+    outline: none;
+  }
+
+  form :global([type="text"]:focus) {
+    background-color: var(--color-background);
+  }
+
+  [type="submit"] {
+    display: none;
+  }
+
+  @media print {
+    form {
+      display: none;
+    }
+  }
+</style>
+
+<form on:submit|preventDefault={submit}>
+  <AutocompleteInput
+    bind:value={values.time}
+    placeholder={_('Time')}
+    suggestions={$years}
+    key="f t"
+    clearButton={true}
+    setSize={true}
+    on:select={submit} />
+  <AutocompleteInput
+    bind:value={values.account}
+    placeholder={_('Account')}
+    suggestions={$accounts}
+    key="f a"
+    clearButton={true}
+    setSize={true}
+    on:select={submit} />
+  <AutocompleteInput
+    bind:value={values.filter}
+    placeholder={_('Filter by tag, payee, ...')}
+    suggestions={fql_filter_suggestions}
+    key="f f"
+    clearButton={true}
+    setSize={true}
+    {valueExtractor}
+    {valueSelector}
+    on:select={submit} />
   <button type="submit" />
 </form>

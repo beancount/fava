@@ -30,7 +30,7 @@
   async function addPosting() {
     entry.postings = entry.postings.concat(emptyPosting());
     await tick();
-    const inputs = el.querySelectorAll(".posting .account input");
+    const inputs = el.querySelectorAll("div .account input");
     inputs[inputs.length - 1].focus();
   }
 

@@ -173,6 +173,7 @@ input,
 textarea {
   margin: 0 0.5em 0.5em 0;
   font: inherit;
+  color: var(--color-text);
 }
 
 input,
@@ -205,6 +206,19 @@ input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-clear-button {
   -webkit-appearance: none;
   display: none;
+}
+
+input[type="text"]::placeholder {
+  color: var(--color-placeholder);
+  opacity: 1;
+}
+
+input[type="text"]::placeholder:focus {
+  color: var(--color-placeholder);
+}
+
+input[type="text"]:placeholder-shown {
+  background-color: var(--background-placeholder);
 }
 
 button,
