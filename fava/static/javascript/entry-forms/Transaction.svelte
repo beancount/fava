@@ -64,7 +64,37 @@
   }
 </script>
 
-<div class="entry-form transaction" bind:this={el}>
+<style>
+  input[name="flag"] {
+    width: 1.5em;
+    padding-right: 2px;
+    padding-left: 2px;
+    text-align: center;
+  }
+
+  :global(.payee) {
+    flex-basis: 100px;
+    flex-grow: 1;
+    min-width: 10em;
+  }
+
+  label {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    label {
+      display: initial;
+      width: 100%;
+    }
+
+    input {
+      margin: 0 0.5em 0.5em 0;
+    }
+  }
+</style>
+
+<div class="entry-form" bind:this={el}>
   <div class="fieldset">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />

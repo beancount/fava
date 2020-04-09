@@ -1,23 +1,26 @@
 <script>
   import { tick } from "svelte";
 
-  import { Balance, Transaction, saveEntries } from "../entries";
+  import { Balance, Note, Transaction, saveEntries } from "../entries";
   import { _ } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
-  import TransactionComponent from "../entry-forms/Transaction.svelte";
   import BalanceComponent from "../entry-forms/Balance.svelte";
+  import NoteComponent from "../entry-forms/Note.svelte";
+  import TransactionComponent from "../entry-forms/Transaction.svelte";
 
   const entryTypes = [
     [_("Transaction"), Transaction],
     [_("Balance"), Balance],
+    [_("Note"), Note],
   ];
   let entry = new Transaction();
 
   $: svelteComponent = {
-    Transaction: TransactionComponent,
     Balance: BalanceComponent,
+    Note: NoteComponent,
+    Transaction: TransactionComponent,
   }[entry.constructor.name];
 
   let entryComponent;
@@ -53,7 +56,7 @@
   <form on:submit|preventDefault={submit}>
     <h3>
       {_('Add')}
-      {#each entryTypes as [name, Cls, component]}
+      {#each entryTypes as [name, Cls]}
         <button
           type="button"
           class:muted={!(entry instanceof Cls)}

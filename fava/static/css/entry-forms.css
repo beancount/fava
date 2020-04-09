@@ -2,21 +2,6 @@
   margin-bottom: 0.5rem;
 }
 
-.entry-form textarea {
-  flex-grow: 1;
-  width: 100%;
-  padding: 8px;
-  font: inherit;
-}
-
-.entry-form label {
-  display: none;
-}
-
-.entry-form h4 {
-  margin: 0;
-}
-
 .entry-form button,
 .entry-form input {
   margin: 0;
@@ -30,13 +15,6 @@
   margin-left: 0.5rem;
 }
 
-.entry-form input[name="flag"] {
-  width: 1.5em;
-  padding-right: 2px;
-  padding-left: 2px;
-  text-align: center;
-}
-
 .entry-form .account,
 .entry-form input[name="narration"] {
   flex-basis: 200px;
@@ -44,36 +22,12 @@
   min-width: 20em;
 }
 
-.entry-form .payee {
-  flex-basis: 100px;
-  flex-grow: 1;
-  min-width: 10em;
-}
-
-.entry-form input.metadata-value {
-  flex-grow: 1;
-  max-width: 15em;
-}
-
-.balance .currency {
-  width: 6em;
-}
-
-.entry-form input.metadata-key {
-  width: 10em;
-}
-
-.entry-form .remove-fieldset {
+.remove-fieldset {
   opacity: 0;
 }
 
-.entry-form .fieldset:hover .remove-fieldset {
+.fieldset:hover .remove-fieldset {
   opacity: 1;
-}
-
-.entry-form .metadata {
-  padding-left: 56px;
-  font-size: 0.8em;
 }
 
 .ingest-row .source pre {
@@ -83,20 +37,4 @@
 
 .ingest-row.duplicate {
   opacity: 0.5;
-}
-
-@media (max-width: 767px) {
-  .entry-form.transaction label {
-    display: initial;
-    width: 100%;
-  }
-
-  .entry-form.transaction .fieldset input {
-    height: 35px;
-    margin: 0 0.5em 0.5em 0;
-  }
-
-  .entry-form.transaction .metadata {
-    padding-left: 0;
-  }
 }

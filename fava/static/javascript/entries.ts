@@ -38,6 +38,18 @@ export class Balance extends Entry {
   }
 }
 
+export class Note extends Entry {
+  account: string;
+
+  comment: string;
+
+  constructor() {
+    super("Note");
+    this.account = "";
+    this.comment = "";
+  }
+}
+
 export class Transaction extends Entry {
   flag: string;
 

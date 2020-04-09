@@ -8,6 +8,15 @@
   export let entry;
 </script>
 
+<style>
+  textarea {
+    flex-grow: 1;
+    width: 100%;
+    padding: 8px;
+    font: inherit;
+  }
+</style>
+
 <div class="entry-form">
   <div class="fieldset">
     <input type="date" name="date" bind:value={entry.date} required />

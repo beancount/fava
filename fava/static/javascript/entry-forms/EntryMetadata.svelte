@@ -29,8 +29,30 @@
   }
 </script>
 
+<style>
+  div {
+    padding-left: 56px;
+    font-size: 0.8em;
+  }
+
+  input.key {
+    width: 10em;
+  }
+
+  input.value {
+    flex-grow: 1;
+    max-width: 15em;
+  }
+
+  @media (max-width: 767px) {
+    div {
+      padding-left: 0;
+    }
+  }
+</style>
+
 {#each metakeys as metakey, i}
-  <div class="fieldset metadata">
+  <div class="fieldset">
     <button
       class="muted round remove-fieldset"
       on:click={() => removeMetadata(metakey)}
@@ -40,7 +62,7 @@
     </button>
     <input
       type="text"
-      class="metadata-key"
+      class="key"
       placeholder={_('Key')}
       value={metakey}
       on:change={(event) => {
@@ -49,7 +71,7 @@
       required />
     <input
       type="text"
-      class="metadata-value"
+      class="value"
       placeholder={_('Value')}
       bind:value={meta[metakey]} />
     {#if i === metakeys.length - 1}

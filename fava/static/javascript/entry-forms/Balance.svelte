@@ -17,7 +17,13 @@
   }
 </script>
 
-<div class="entry-form balance">
+<style>
+  :global(.currency) {
+    width: 6em;
+  }
+</style>
+
+<div class="entry-form">
   <div class="fieldset">
     <input type="date" bind:value={entry.date} required />
     <h4>{_('Balance')}</h4>
