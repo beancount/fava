@@ -23,10 +23,6 @@
 
   $: size = setSize ? Math.max(value.length, placeholder.length) + 1 : null;
 
-  export function focus() {
-    input.focus();
-  }
-
   $: if (input && checkValidity) {
     input.setCustomValidity(checkValidity(value));
   }

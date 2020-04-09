@@ -25,18 +25,10 @@
 
   let entryComponent;
 
-  async function focus() {
-    await tick();
-    if (entryComponent.focus) {
-      entryComponent.focus();
-    }
-  }
-
   async function submitAndNew(event) {
     if (event.target.form.reportValidity()) {
       await saveEntries([entry]);
       entry = new entry.constructor();
-      focus();
     }
   }
 
@@ -47,9 +39,6 @@
   }
 
   $: shown = $urlHash === "add-transaction";
-  $: if (shown) {
-    focus();
-  }
 </script>
 
 <ModalBase {shown}>

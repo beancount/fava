@@ -3,8 +3,6 @@
 </script>
 
 <script>
-  import { tick } from "svelte";
-
   import { emptyPosting, Transaction } from "../entries";
   import { _, fetchAPI } from "../helpers";
   import { payees } from "../stores";
@@ -15,13 +13,8 @@
   import PostingSvelte from "./Posting.svelte";
 
   export let entry;
-  let focusInput;
   let suggestions;
   let el;
-
-  export function focus() {
-    focusInput.focus();
-  }
 
   function removePosting(posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
@@ -29,9 +22,6 @@
 
   async function addPosting() {
     entry.postings = entry.postings.concat(emptyPosting());
-    await tick();
-    const inputs = el.querySelectorAll("div .account input");
-    inputs[inputs.length - 1].focus();
   }
 
   $: if (entry.payee) {
@@ -100,7 +90,6 @@
     <input type="text" name="flag" bind:value={entry.flag} required />
     <label for="payee">{_('Payee')}:</label>
     <AutocompleteInput
-      bind:this={focusInput}
       className="payee"
       placeholder={_('Payee')}
       bind:value={entry.payee}
