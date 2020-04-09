@@ -6,7 +6,7 @@
   const dispatch = createEventDispatcher();
 
   export let value;
-  export let suggestions = [];
+  export let suggestions;
   export let name = "";
   export let placeholder = "";
   export let valueExtractor = null;
@@ -20,7 +20,8 @@
   let hidden = true;
   let index = -1;
   let input;
-  const inputOptions = {};
+
+  $: size = setSize ? Math.max(value.length, placeholder.length) + 1 : null;
 
   export function focus() {
     input.focus();
@@ -71,10 +72,6 @@
       event.preventDefault();
       index = index === filteredSuggestions.length - 1 ? 0 : index + 1;
     }
-  }
-
-  $: if (setSize) {
-    inputOptions.size = Math.max(value.length, placeholder.length) + 1;
   }
 </script>
 
@@ -146,7 +143,7 @@
     }}
     on:keydown={keydown}
     {placeholder}
-    {...inputOptions} />
+    {size} />
   {#if clearButton && value}
     <button
       type="button"
