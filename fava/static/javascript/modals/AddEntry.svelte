@@ -1,6 +1,4 @@
 <script>
-  import { tick } from "svelte";
-
   import { Balance, Note, Transaction, saveEntries } from "../entries";
   import { _ } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
@@ -22,8 +20,6 @@
     Note: NoteComponent,
     Transaction: TransactionComponent,
   }[entry.constructor.name];
-
-  let entryComponent;
 
   async function submitAndNew(event) {
     if (event.target.form.reportValidity()) {
@@ -56,10 +52,7 @@
         </button>
       {/each}
     </h3>
-    <svelte:component
-      this={svelteComponent}
-      bind:this={entryComponent}
-      bind:entry />
+    <svelte:component this={svelteComponent} bind:entry />
     <div class="fieldset">
       <span class="spacer" />
       <button

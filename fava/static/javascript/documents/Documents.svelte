@@ -15,16 +15,20 @@
   let selected;
   let moving = null;
 
+  function copyMoveable(doc) {
+    return {
+      account: doc.account,
+      filename: doc.filename,
+      newName: basename(doc.filename),
+    };
+  }
+
   /**
    * Rename the selected document with <F2>.
    */
   function keyup(ev) {
     if (ev.key === "F2" && selected) {
-      moving = {
-        account: selected.account,
-        filename: selected.filename,
-        newName: basename(selected.filename),
-      };
+      moving = copyMoveable(selected);
     }
   }
 
@@ -32,11 +36,7 @@
    * Move a document to the account it is dropped on.
    */
   function drop(ev) {
-    moving = {
-      account: ev.detail.account,
-      filename: ev.detail.filename,
-      newName: basename(ev.detail.filename),
-    };
+    moving = copyMoveable(ev.detail);
   }
 
   async function move() {

@@ -1,7 +1,3 @@
-<script context="module">
-  const accountCompletionCache = {};
-</script>
-
 <script>
   import { emptyPosting, Transaction } from "../entries";
   import { _, fetchAPI } from "../helpers";
@@ -13,24 +9,21 @@
   import PostingSvelte from "./Posting.svelte";
 
   export let entry;
-  let suggestions;
-  let el;
+  let suggestions = null;
 
   function removePosting(posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
   }
 
-  async function addPosting() {
+  function addPosting() {
     entry.postings = entry.postings.concat(emptyPosting());
   }
 
-  $: if (entry.payee) {
-    const { payee } = entry;
+  $: payee = entry.payee;
+  $: if (payee) {
+    suggestions = null;
     if ($payees.includes(payee)) {
-      if (!accountCompletionCache[payee]) {
-        accountCompletionCache[payee] = fetchAPI("payee_accounts", { payee });
-      }
-      accountCompletionCache[payee].then((s) => {
+      fetchAPI("payee_accounts", { payee }).then((s) => {
         suggestions = s;
       });
     }
@@ -90,7 +83,7 @@
   }
 </style>
 
-<div class="entry-form" bind:this={el}>
+<div class="entry-form">
   <div class="fieldset">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
