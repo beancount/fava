@@ -43,10 +43,29 @@
   }
 </script>
 
-<form
-  on:submit|preventDefault={() => dispatch('submit')}
-  use:queryEditor
-  class="query-box"
-  method="GET">
+<style>
+  form {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1em;
+  }
+
+  button {
+    margin: 0;
+  }
+
+  form :global(.CodeMirror) {
+    flex-grow: 1;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    margin-right: 0.5em;
+    font-family: var(--font-family-editor);
+    font-size: 16px;
+    border: 1px solid var(--color-background-darker);
+  }
+</style>
+
+<form use:queryEditor on:submit|preventDefault={() => dispatch('submit')}>
   <button type="submit" data-key="Ctrl/Cmd+Enter">{_('Submit')}</button>
 </form>

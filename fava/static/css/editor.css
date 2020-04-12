@@ -153,3 +153,7 @@
 .CodeMirror-hint .highlight {
   font-weight: 500;
 }
+
+.CodeMirror.CodeMirror .CodeMirror-placeholder {
+  color: var(--color-placeholder);
+}

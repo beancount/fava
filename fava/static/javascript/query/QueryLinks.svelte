@@ -11,7 +11,13 @@
   }
 </script>
 
-<span class="download">
+<style>
+  span {
+    color: var(--color-text-lighter);
+  }
+</style>
+
+<span>
   ({_('Download as')}
   <a href={queryUrl(query, 'csv')} data-remote>CSV</a>
   {#if $HAVE_EXCEL}
