@@ -17,15 +17,13 @@
   }
 </style>
 
-<div class="entry-form">
-  <div class="fieldset">
+<div>
+  <div class="flex-row">
     <input type="date" name="date" bind:value={entry.date} required />
     <h4>{_('Note')}</h4>
-    <AccountInput bind:value={entry.account} />
+    <AccountInput className="grow" bind:value={entry.account} />
     <AddMetadataButton bind:meta={entry.meta} />
   </div>
-  <div class="fieldset">
-    <textarea name="comment" rows="2" bind:value={entry.comment} />
-  </div>
+  <textarea name="comment" rows="2" bind:value={entry.comment} />
   <EntryMetadata bind:meta={entry.meta} />
 </div>

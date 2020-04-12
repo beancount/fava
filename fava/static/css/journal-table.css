@@ -1,5 +1,13 @@
 /* stylelint-disable no-descending-specificity */
 
+.entry-filters {
+  justify-content: flex-end;
+}
+
+.journal {
+  margin-top: 0.25rem;
+}
+
 .flex-table p,
 .flex-table li,
 .flex-table ul,

@@ -1,0 +1,22 @@
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0 -0.25rem;
+}
+
+.flex-row > * {
+  margin: 0.25rem;
+}
+
+.flex-row .grow {
+  flex-grow: 1;
+}
+
+.remove-row {
+  opacity: 0;
+}
+
+.flex-row:hover .remove-row {
+  opacity: 1;
+}

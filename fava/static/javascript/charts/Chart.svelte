@@ -36,9 +36,11 @@
   };
 </script>
 
-<form class="wide-form">
+<form class="flex-row">
   {#if $showCharts}
-    <ChartLegend legend={$legend} />
+    <div>
+      <ChartLegend legend={$legend} />
+    </div>
     <span class="spacer" />
     {#if chart.type === 'hierarchy'}
       <select bind:value={$chartCurrency} hidden={$chartMode !== 'treemap'}>

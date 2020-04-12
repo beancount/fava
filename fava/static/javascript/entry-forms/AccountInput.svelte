@@ -6,6 +6,7 @@
 
   export let value;
   export let suggestions = null;
+  export let className = null;
 
   function checkValidity(val) {
     return $accounts.includes(val)
@@ -15,8 +16,8 @@
 </script>
 
 <AutocompleteInput
-  className="account"
   placeholder={_('Account')}
   bind:value
+  {className}
   {checkValidity}
   suggestions={suggestions || $accounts} />

@@ -46,8 +46,8 @@
 </script>
 
 <style>
-  .flex-row {
-    display: flex;
+  pre {
+    margin: 0.5rem 0;
   }
   .button {
     padding: 4px 8px;
@@ -64,7 +64,7 @@
     </a>
   </pre>
   {#each file.importers as info}
-    <p class="flex-row">
+    <div class="flex-row">
       <AccountInput bind:value={info.account} />
       <input size="40" bind:value={info.newName} />
       <button
@@ -81,6 +81,6 @@
         </a>
         {info.importer_name}
       {:else}{_('No importer matched this file.')}{/if}
-    </p>
+    </div>
   {/each}
 {/each}

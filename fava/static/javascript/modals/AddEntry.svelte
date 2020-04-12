@@ -50,10 +50,11 @@
           }}>
           {name}
         </button>
+        {' '}
       {/each}
     </h3>
     <svelte:component this={svelteComponent} bind:entry />
-    <div class="fieldset">
+    <div class="flex-row">
       <span class="spacer" />
       <button
         type="submit"

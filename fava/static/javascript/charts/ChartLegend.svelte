@@ -3,10 +3,6 @@
 </script>
 
 <style>
-  p {
-    flex-grow: 1;
-  }
-
   span,
   i {
     display: inline-block;
@@ -20,11 +16,9 @@
   }
 </style>
 
-<p>
-  {#each legend as [item, color]}
-    <span>
-      <i style="background-color: {color}" />
-      {item}
-    </span>
-  {/each}
-</p>
+{#each legend as [item, color]}
+  <span>
+    <i style="background-color: {color}" />
+    {item}
+  </span>
+{/each}

@@ -55,16 +55,14 @@
     text-align: center;
   }
 
-  :global(.payee) {
+  div :global(.payee) {
     flex-basis: 100px;
     flex-grow: 1;
-    min-width: 10em;
   }
 
   input[name="narration"] {
     flex-basis: 200px;
     flex-grow: 1;
-    min-width: 20em;
   }
 
   label {
@@ -83,8 +81,8 @@
   }
 </style>
 
-<div class="entry-form">
-  <div class="fieldset">
+<div>
+  <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
     <label for="payee">{_('Payee')}:</label>

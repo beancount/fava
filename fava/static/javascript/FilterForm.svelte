@@ -59,7 +59,6 @@
 
   form :global(input) {
     padding: 8px 25px 8px 10px;
-    margin: 0;
     background-color: var(--color-background);
     border: 0;
     outline: none;

@@ -70,8 +70,7 @@
 
 {% macro journal_table(entries, show_change_and_balance=False) %}
 {% autoescape false %}
-<form id="entry-filters" class="wide-form">
-  <span class="spacer"></span>
+<form id="entry-filters" class="flex-row entry-filters">
   {% for type in entry_types %}
   <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
   {% if type in sub_types.keys() %}

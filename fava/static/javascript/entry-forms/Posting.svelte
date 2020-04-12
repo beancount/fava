@@ -80,7 +80,7 @@
 </style>
 
 <div
-  class="fieldset"
+  class="flex-row"
   class:drag
   {draggable}
   on:mousemove={mousemove}
@@ -90,13 +90,13 @@
   on:dragleave={dragleave}
   on:drop|preventDefault={drop}>
   <button
-    class="muted round remove-fieldset"
+    class="muted round remove-row"
     on:click={() => dispatch('remove')}
     type="button"
     tabindex="-1">
     ×
   </button>
-  <AccountInput bind:value={posting.account} {suggestions} />
+  <AccountInput className="grow" bind:value={posting.account} {suggestions} />
   <AutocompleteInput
     className="amount"
     placeholder={_('Amount')}

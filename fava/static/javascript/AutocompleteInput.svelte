@@ -12,7 +12,7 @@
   export let valueExtractor = null;
   export let valueSelector = null;
   export let setSize = false;
-  export let className = "";
+  export let className = null;
   export let key = null;
   export let checkValidity = null;
   export let clearButton = false;
@@ -107,7 +107,7 @@
   button {
     position: absolute;
     top: 8px;
-    right: 0;
+    right: 4px;
     background: transparent;
   }
 

@@ -52,9 +52,9 @@
 </style>
 
 {#each metakeys as metakey, i}
-  <div class="fieldset">
+  <div class="flex-row">
     <button
-      class="muted round remove-fieldset"
+      class="muted round remove-row"
       on:click={() => removeMetadata(metakey)}
       type="button"
       tabindex="-1">
@@ -76,7 +76,7 @@
       bind:value={meta[metakey]} />
     {#if i === metakeys.length - 1}
       <button
-        class="muted round add-row"
+        class="muted round"
         type="button"
         on:click={addMetadata}
         title={_('Add metadata')}>

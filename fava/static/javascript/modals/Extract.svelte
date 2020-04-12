@@ -69,7 +69,7 @@
   <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
     <h3>{_('Import')}</h3>
     {#if entry}
-      <div class="headerline">
+      <div class="flex-row">
         <h3>
           Entry {currentIndex + 1} of {entries.length} ({entries.length - duplicates}
           to import):
@@ -86,7 +86,7 @@
       <div class:duplicate>
         <svelte:component this={component} bind:entry />
       </div>
-      <div class="fieldset">
+      <div class="flex-row">
         {#if currentIndex > 0}
           <button
             type="button"

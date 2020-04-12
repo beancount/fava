@@ -11,16 +11,16 @@
 </script>
 
 <style>
-  :global(.currency) {
+  div :global(.currency) {
     width: 6em;
   }
 </style>
 
-<div class="entry-form">
-  <div class="fieldset">
+<div>
+  <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
     <h4>{_('Balance')}</h4>
-    <AccountInput bind:value={entry.account} />
+    <AccountInput className="grow" bind:value={entry.account} />
     <input
       type="tel"
       pattern="-?[0-9.,]*"
