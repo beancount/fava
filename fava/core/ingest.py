@@ -5,7 +5,6 @@ import runpy
 import sys
 import traceback
 from os import path
-from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Optional
@@ -117,28 +116,27 @@ class IngestModule(FavaModule):
             importer.name(): importer for importer in self.config
         }
 
-    def import_data(self) -> Dict[str, List[FileImporters]]:
+    def import_data(self) -> List[FileImporters]:
         """Identify files and importers that can be imported.
 
         Returns:
-            A dict mapping directories to lists of :class:`.FileImportInfo`.
+            A list of :class:`.FileImportInfo`.
         """
         if not self.config:
-            return {}
+            return []
 
-        ret: Dict[str, List[FileImporters]] = {}
+        ret: List[FileImporters] = []
 
         for directory in self.ledger.fava_options["import-dirs"]:
             full_path = self.ledger.join_path(directory)
             files = list(identify.find_imports(self.config, full_path))
-            ret[directory] = []
             for (filename, importers) in files:
                 basename = path.basename(filename)
                 infos = [
                     file_import_info(filename, importer)
                     for importer in importers
                 ]
-                ret[directory].append(FileImporters(filename, basename, infos))
+                ret.append(FileImporters(filename, basename, infos))
 
         return ret
 

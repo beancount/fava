@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import { todayAsString } from "../format";
   import { _, urlFor } from "../helpers";
   import { moveDocument } from "../api";
@@ -8,26 +9,38 @@
   import AccountInput from "../entry-forms/AccountInput.svelte";
 
   export let data;
+  let preprocessedData = [];
 
   const today = todayAsString();
 
   // Initially set the file names for all importable files.
-  $: for (const items of Object.values(data)) {
-    for (const item of items) {
-      item.newName = item.newName || newFilename(today, item.basename);
-      for (const importInfo of item.importers) {
-        importInfo.newName =
-          importInfo.newName || newFilename(importInfo.date, importInfo.name);
+  function preprocessData(arr) {
+    return arr.map((file) => {
+      const importers = file.importers.map((importerfile) => ({
+        ...importerfile,
+        newName: newFilename(importerfile.date, importerfile.name),
+      }));
+      if (importers.length === 0) {
+        const newName = newFilename(today, file.basename);
+        importers.push({ account: "", newName });
       }
-    }
+      return {
+        ...file,
+        importers,
+      };
+    });
   }
+
+  onMount(() => {
+    preprocessedData = preprocessData(data);
+  });
 
   async function move(filename, account, newName) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
-      for (const [directory, items] of Object.entries(data)) {
-        data[directory] = items.filter((item) => item.name !== filename);
-      }
+      preprocessedData = preprocessedData.filter(
+        (item) => item.name !== filename
+      );
     }
   }
 </script>
@@ -41,45 +54,33 @@
   }
 </style>
 
-{#each Object.entries(data) as [directory, items]}
-  <h3>Directory: {directory}</h3>
-  {#each items as item}
-    <pre title={item.name}>
-      <a
-        href={urlFor('document', { filename: item.name })}
-        data-remote
-        target="_blank">
-        {item.basename}
-      </a>
-    </pre>
-    {#if item.importers.length}
-      {#each item.importers as info}
-        <p class="flex-row">
-          <AccountInput bind:value={info.account} />
-          <input size="40" bind:value={info.newName} />
-          <button
-            type="button"
-            on:click={() => move(item.name, info.account, info.newName)}>
-            {'Move'}
-          </button>
-          <a
-            class="button"
-            title="{_('Extract')} with importer {info.importer_name}"
-            href={extractURL(item.name, info.importer_name)}>
-            {_('Extract')} ({info.importer_name})
-          </a>
-        </p>
-      {/each}
-    {:else}
-      <p>
-        <AccountInput bind:value={item.account} />
-        <input size="40" bind:value={item.newName} />
-        <button
-          type="button"
-          on:click={() => move(item.name, item.account, item.newName)}>
-          {'Move'}
-        </button>
-      </p>
-    {/if}
+{#each preprocessedData as file}
+  <pre title={file.name}>
+    <a
+      href={urlFor('document', { filename: file.name })}
+      data-remote
+      target="_blank">
+      {file.basename}
+    </a>
+  </pre>
+  {#each file.importers as info}
+    <p class="flex-row">
+      <AccountInput bind:value={info.account} />
+      <input size="40" bind:value={info.newName} />
+      <button
+        type="button"
+        on:click={() => move(file.name, info.account, info.newName)}>
+        {'Move'}
+      </button>
+      {#if info.importer_name}
+        <a
+          class="button"
+          title="{_('Extract')} with importer {info.importer_name}"
+          href={extractURL(file.name, info.importer_name)}>
+          {_('Extract')}
+        </a>
+        {info.importer_name}
+      {:else}{_('No importer matched this file.')}{/if}
+    </p>
   {/each}
 {/each}
