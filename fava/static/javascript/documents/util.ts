@@ -1,6 +1,6 @@
 import { group } from "d3-array";
 
-interface Node {
+export interface Node {
   name: string;
   fullname: string;
   children: Map<string, Node>;
