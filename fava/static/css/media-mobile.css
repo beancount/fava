@@ -71,9 +71,4 @@
     background-color: var(--color-sidebar-background);
     box-shadow: none;
   }
-
-  .source-form,
-  .source-editor-wrapper {
-    left: 0;
-  }
 }

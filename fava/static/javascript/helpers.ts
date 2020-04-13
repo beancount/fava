@@ -158,6 +158,7 @@ const putAPIValidators = {
   add_entries: string,
   format_source: string,
   source: string,
+  source_slice: string,
 };
 
 type apiTypes = typeof putAPIValidators;

@@ -1,5 +1,3 @@
-{% set entry_hash = request.args.get('entry_hash') %}
-{% set entry, balances, slice, sha256sum = ledger.context(entry_hash) %}
 <p>
 {{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
 </p>
@@ -52,7 +50,3 @@
   </div>
 </details>
 {% endif %}
-<form id="source-slice-editor-form" class="source-slice-editor-form">
-  <textarea id="source-slice-editor" name="source-slice" autofocus spellcheck="false" data-sha256sum="{{ sha256sum }}">{{ slice or '' }}</textarea>
-  <button id="source-slice-editor-submit" type="button" disabled data-command="favaSave" data-entry-hash="{{ entry_hash }}" data-progress-content="{{ _('Saving...') }}" title="{{ _('Save') }} (Ctrl/Cmd+s)"(>{{ _('Save') }}</button>
-</form>

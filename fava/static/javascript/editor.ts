@@ -1,4 +1,4 @@
-import CodeMirror, { Editor, EditorFromTextArea } from "codemirror";
+import CodeMirror, { Editor } from "codemirror";
 
 import "codemirror/addon/mode/simple";
 
@@ -37,11 +37,8 @@ import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
 import { putAPI } from "./helpers";
-import { keys } from "./keyboard-shortcuts";
-import e from "./events";
-import router from "./router";
 import { notify } from "./notifications";
-import { closeOverlay, favaAPI } from "./stores";
+import { favaAPI } from "./stores";
 
 interface SimpleModeRule {
   regex: string | RegExp;
@@ -63,14 +60,10 @@ declare module "codemirror" {
       column: number;
       lineStyle: string;
     }[];
-    favaSaveButton?: HTMLButtonElement;
   }
   interface CommandActions {
-    favaSave(editor: EditorFromTextArea): void;
     favaFormat(editor: Editor): void;
     favaToggleComment(editor: Editor): void;
-    favaCenterCursor(editor: Editor): void;
-    favaJumpToMarker(editor: Editor): void;
     // defined in the hint/show-hint addon
     autocomplete(
       editor: Editor,
@@ -81,44 +74,6 @@ declare module "codemirror" {
 }
 
 export { CodeMirror };
-
-// This handles saving in both the main and the overlaid entry editors.
-CodeMirror.commands.favaSave = (cm: EditorFromTextArea): void => {
-  const button = cm.getOption("favaSaveButton");
-  if (!button) {
-    return;
-  }
-
-  const buttonText = button.textContent;
-  button.disabled = true;
-  button.textContent = button.getAttribute("data-progress-content");
-
-  putAPI("source", {
-    file_path: button.getAttribute("data-filename"),
-    entry_hash: button.getAttribute("data-entry-hash"),
-    source: cm.getValue(),
-    sha256sum: cm.getTextArea().getAttribute("data-sha256sum"),
-  })
-    .then(
-      (data) => {
-        cm.focus();
-        cm.getTextArea().setAttribute("data-sha256sum", data);
-        e.trigger("file-modified");
-        // Reload the page if an entry was changed.
-        if (button.getAttribute("data-entry-hash")) {
-          router.reload();
-          closeOverlay();
-        }
-      },
-      (error) => {
-        notify(error, "error");
-      }
-    )
-    .then(() => {
-      cm.getDoc().markClean();
-      button.textContent = buttonText;
-    });
-};
 
 CodeMirror.commands.favaFormat = (cm: Editor): void => {
   putAPI("format_source", { source: cm.getValue() }).then(
@@ -145,28 +100,10 @@ CodeMirror.commands.favaToggleComment = (cm: Editor): void => {
   }
 };
 
-CodeMirror.commands.favaCenterCursor = (cm: Editor): void => {
-  const { top } = cm.cursorCoords(true, "local");
-  const height = cm.getScrollInfo().clientHeight;
-  cm.scrollTo(null, top - height / 2);
-};
-
-CodeMirror.commands.favaJumpToMarker = (cm: Editor): void => {
-  const doc = cm.getDoc();
-  const cursor = cm.getSearchCursor("FAVA-INSERT-MARKER");
-
-  if (cursor.findNext()) {
-    cm.focus();
-    doc.setCursor(cursor.from());
-    cm.execCommand("goLineUp");
-    cm.execCommand("favaCenterCursor");
-  } else {
-    doc.setCursor(doc.lastLine(), 0);
-  }
-};
-
-// If the given key should be ignored for autocompletion
-export function ignoreKey(key: string): boolean {
+/**
+ * Whether the given key should be ignored for autocompletion
+ */
+function ignoreKey(key: string): boolean {
   switch (key) {
     case "ArrowDown":
     case "ArrowUp":
@@ -189,6 +126,41 @@ export function ignoreKey(key: string): boolean {
   }
 }
 
+export function enableAutomaticCompletions(editor: Editor): void {
+  editor.on("keyup", (cm: Editor, event: KeyboardEvent) => {
+    if (!cm.state.completionActive && !ignoreKey(event.key)) {
+      CodeMirror.commands.autocomplete(cm, undefined, {
+        completeSingle: false,
+      });
+    }
+  });
+}
+/**
+ * Scroll to center the cursor in the middle of the editor.
+ */
+function centerCursor(cm: Editor): void {
+  const { top } = cm.cursorCoords(true, "local");
+  const height = cm.getScrollInfo().clientHeight;
+  cm.scrollTo(null, top - height / 2);
+}
+
+/**
+ * Jump to the `FAVA-INSERT-MARKER` string.
+ */
+function jumpToMarker(cm: Editor): void {
+  const doc = cm.getDoc();
+  const cursor = cm.getSearchCursor("FAVA-INSERT-MARKER");
+
+  if (cursor.findNext()) {
+    cm.focus();
+    doc.setCursor(cursor.from());
+    cm.execCommand("goLineUp");
+    centerCursor(cm);
+  } else {
+    doc.setCursor(doc.lastLine(), 0);
+  }
+}
+
 /**
  * Read-only editors in the help pages.
  */
@@ -203,124 +175,62 @@ export class BeancountTextarea extends HTMLTextAreaElement {
   }
 }
 
-const sourceEditorOptions: CodeMirror.EditorConfiguration = {
-  mode: "beancount",
-  indentUnit: 4,
-  lineNumbers: true,
-  foldGutter: true,
-  showTrailingSpace: true,
-  styleActiveLine: true,
-  gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-  extraKeys: {
-    "Ctrl-Space": "autocomplete",
-    "Ctrl-S": "favaSave",
-    "Cmd-S": "favaSave",
-    "Ctrl-D": "favaFormat",
-    "Cmd-D": "favaFormat",
-    "Ctrl-Y": "favaToggleComment",
-    "Cmd-Y": "favaToggleComment",
-    Tab: (cm: Editor): void => {
-      if (cm.getDoc().somethingSelected()) {
-        cm.execCommand("indentMore");
-      } else {
-        cm.execCommand("insertSoftTab");
-      }
-    },
-  },
-};
-
-let activeEditor: Editor | null = null;
-// Init source editor.
-export default function initSourceEditor(name: string): void {
-  if (favaAPI.favaOptions["currency-column"]) {
-    sourceEditorOptions.rulers = [
-      {
-        column: favaAPI.favaOptions["currency-column"] - 1,
-        lineStyle: "dotted",
+/**
+ * Configuration for a source editor.
+ * @param save - The function that should be called to save the contents.
+ */
+export function sourceEditorOptions(
+  save: () => void
+): CodeMirror.EditorConfiguration {
+  const rulers = favaAPI.favaOptions["currency-column"]
+    ? [
+        {
+          column: favaAPI.favaOptions["currency-column"] - 1,
+          lineStyle: "dotted",
+        },
+      ]
+    : undefined;
+  return {
+    mode: "beancount",
+    indentUnit: 4,
+    lineNumbers: true,
+    foldGutter: true,
+    showTrailingSpace: true,
+    styleActiveLine: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    rulers,
+    extraKeys: {
+      "Ctrl-Space": "autocomplete",
+      "Ctrl-S": save,
+      "Cmd-S": save,
+      "Ctrl-D": "favaFormat",
+      "Cmd-D": "favaFormat",
+      "Ctrl-Y": "favaToggleComment",
+      "Cmd-Y": "favaToggleComment",
+      Tab: (cm: Editor): void => {
+        if (cm.getDoc().somethingSelected()) {
+          cm.execCommand("indentMore");
+        } else {
+          cm.execCommand("insertSoftTab");
+        }
       },
-    ];
-  }
+    },
+  };
+}
 
-  const sourceEditorTextarea = document.querySelector(name);
-  if (!(sourceEditorTextarea instanceof HTMLTextAreaElement)) {
-    return;
-  }
-
-  const editor = CodeMirror.fromTextArea(
-    sourceEditorTextarea,
-    sourceEditorOptions
-  );
-  if (name === "#source-editor") {
-    activeEditor = editor;
-  }
-  const saveButton = document.querySelector(`${name}-submit`);
-  if (saveButton instanceof HTMLButtonElement) {
-    editor.setOption("favaSaveButton", saveButton);
-
-    editor.on("changes", (cm: Editor) => {
-      saveButton.disabled = cm.getDoc().isClean();
-    });
-  }
-
-  editor.on("keyup", (cm: Editor, event: KeyboardEvent) => {
-    if (!cm.state.completionActive && !ignoreKey(event.key)) {
-      CodeMirror.commands.autocomplete(cm, undefined, {
-        completeSingle: false,
-      });
-    }
-  });
+/**
+ * Init source editor.
+ */
+export function initSourceEditor(editor: Editor): void {
+  enableAutomaticCompletions(editor);
   const line = parseInt(
     new URLSearchParams(window.location.search).get("line") || "0",
     10
   );
   if (line > 0) {
     editor.getDoc().setCursor(line - 1, 0);
-    editor.execCommand("favaCenterCursor");
+    centerCursor(editor);
   } else {
-    editor.execCommand("favaJumpToMarker");
+    jumpToMarker(editor);
   }
-
-  // keybindings when the focus is outside the editor
-  ["Control+s", "Meta+s"].forEach((key): void => {
-    keys.bind(key, (event) => {
-      event.preventDefault();
-      editor.execCommand("favaSave");
-    });
-  });
-
-  ["Control+d", "Meta+d"].forEach((key): void => {
-    keys.bind(key, (event) => {
-      event.preventDefault();
-      editor.execCommand("favaFormat");
-    });
-  });
-
-  // Run editor commands with buttons in editor menu.
-  document.querySelectorAll(`${name}-form button`).forEach((button) => {
-    const command = button.getAttribute("data-command");
-    if (command) {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-        editor.execCommand(command);
-      });
-    }
-  });
 }
-
-e.on("page-loaded", () => {
-  for (const key of ["Control+s", "Control+d", "Meta+s", "Meta+d"]) {
-    keys.unbind(key);
-  }
-  activeEditor = null;
-  initSourceEditor("#source-editor");
-});
-
-function checkEditorChanges(): string | null {
-  if (activeEditor && !activeEditor.getDoc().isClean()) {
-    return "There are unsaved changes. Are you sure you want to leave?";
-  }
-  return null;
-}
-
-router.interruptHandlers.add(checkEditorChanges);

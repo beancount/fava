@@ -311,12 +311,6 @@ def holdings_by(aggregation_key):
     return abort(404)
 
 
-@app.route("/<bfile>/_context/")
-def context():
-    """Entry context."""
-    return render_template("_context.html")
-
-
 @app.route("/<bfile>/_query_result/")
 def query_result():
     """Query shell."""

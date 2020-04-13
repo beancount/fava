@@ -12,6 +12,7 @@ from typing import List
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
+from flask import render_template
 from flask import request
 
 from fava.core.helpers import FavaAPIException
@@ -123,6 +124,15 @@ def extract():
 
 
 @get_api_endpoint
+def context():
+    """Entry context."""
+    entry_hash = request.args.get("entry_hash")
+    entry, balances, slice_, sha256sum = g.ledger.context(entry_hash)
+    content = render_template("_context.html", entry=entry, balances=balances)
+    return {"content": content, "sha256sum": sha256sum, "slice": slice_}
+
+
+@get_api_endpoint
 def move() -> str:
     """Move a file."""
     if not g.ledger.options["documents"]:
@@ -169,12 +179,16 @@ def payee_transaction():
 @put_api_endpoint
 def source(request_data) -> str:
     """Write one of the source files and return the updated sha256sum."""
-    if request_data.get("file_path"):
-        return g.ledger.file.set_source(
-            request_data.get("file_path"),
-            request_data.get("source"),
-            request_data.get("sha256sum"),
-        )
+    return g.ledger.file.set_source(
+        request_data.get("file_path"),
+        request_data.get("source"),
+        request_data.get("sha256sum"),
+    )
+
+
+@put_api_endpoint
+def source_slice(request_data) -> str:
+    """Write a entry source slice and return the updated sha256sum."""
     return g.ledger.file.save_entry_slice(
         request_data.get("entry_hash"),
         request_data.get("source"),

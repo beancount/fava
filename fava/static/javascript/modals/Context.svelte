@@ -1,35 +1,27 @@
 <script>
-  import { afterUpdate } from "svelte";
-
-  import initSourceEditor from "../editor";
-  import { fetch, handleText } from "../helpers";
-  import { urlHash, favaAPI } from "../stores";
+  import { fetchAPI } from "../helpers";
+  import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
+  import SliceEditor from "../editor/SliceEditor.svelte";
 
   $: shown = $urlHash.startsWith("context");
-  $: entryHash = shown ? $urlHash.slice(8) : "";
-  $: content = !shown
-    ? ""
-    : fetch(`${favaAPI.baseURL}_context/?entry_hash=${entryHash}`).then(
-        handleText
-      );
-
-  afterUpdate(async () => {
-    if (!content) {
-      return;
-    }
-    await content;
-    initSourceEditor("#source-slice-editor");
-  });
+  $: entry_hash = shown ? $urlHash.slice(8) : "";
+  $: content = !shown ? "" : fetchAPI("context", { entry_hash });
 </script>
 
 <ModalBase {shown}>
   <div class="content">
     {#await content}
       Loading entry context...
-    {:then html}
-      {@html html}
+    {:then response}
+      {#if response}
+        {@html response.content}
+        <SliceEditor
+          {entry_hash}
+          slice={response.slice}
+          sha256sum={response.sha256sum} />
+      {/if}
     {:catch}
       Loading entry context failed.
     {/await}

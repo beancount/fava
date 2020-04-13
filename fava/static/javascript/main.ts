@@ -54,6 +54,7 @@ import { SortableTable } from "./sort";
 import { TreeTable } from "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 
+import Editor from "./editor/Editor.svelte";
 import Import from "./import/Import.svelte";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import FilterForm from "./FilterForm.svelte";
@@ -98,6 +99,7 @@ e.on("page-loaded", () => {
 
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-documents", Documents);
+  initSvelteComponent("#svelte-editor", Editor);
   initSvelteComponent("#svelte-import", Import);
   initSvelteComponent("#svelte-query", Query);
 

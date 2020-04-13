@@ -2,7 +2,7 @@
   import CodeMirror from "codemirror";
   import { createEventDispatcher } from "svelte";
 
-  import { ignoreKey } from "../editor";
+  import { enableAutomaticCompletions } from "../editor";
   import { _ } from "../helpers";
 
   export let value;
@@ -33,13 +33,7 @@
       value = cm.getValue();
     });
 
-    editor.on("keyup", (cm, event) => {
-      if (!cm.state.completionActive && !ignoreKey(event.key)) {
-        CodeMirror.commands.autocomplete(cm, undefined, {
-          completeSingle: false,
-        });
-      }
-    });
+    enableAutomaticCompletions(editor);
   }
 </script>
 
