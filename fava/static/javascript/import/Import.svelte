@@ -6,6 +6,7 @@
 
   import { newFilename, extractURL } from "./helpers";
 
+  import Extract from "./Extract.svelte";
   import AccountInput from "../entry-forms/AccountInput.svelte";
 
   export let data;
@@ -54,6 +55,7 @@
   }
 </style>
 
+<Extract />
 {#each preprocessedData as file}
   <pre title={file.name}>
     <a

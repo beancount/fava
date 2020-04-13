@@ -3,7 +3,7 @@
   import { _, fetchAPI } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 
-  import ModalBase from "./ModalBase.svelte";
+  import ModalBase from "../modals/ModalBase.svelte";
   import Balance from "../entry-forms/Balance.svelte";
   import Note from "../entry-forms/Note.svelte";
   import Transaction from "../entry-forms/Transaction.svelte";

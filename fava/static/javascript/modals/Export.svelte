@@ -1,21 +1,19 @@
 <script>
-  import { onMount } from "svelte";
-
+  import { _, urlFor } from "../helpers";
   import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
 
-  let content = "";
   $: shown = $urlHash === "export";
-
-  onMount(() => {
-    const template = document.querySelector("#export-overlay-content");
-    content = template.innerHTML;
-  });
 </script>
 
 <ModalBase {shown}>
-  <div>
-    {@html content}
-  </div>
+  {#if shown}
+    <div>
+      <h3>{_('Export')}:</h3>
+      <a href={urlFor('download-journal')} data-remote>
+        {_('Download currently filtered entries as a Beancount file')}
+      </a>
+    </div>
+  {/if}
 </ModalBase>

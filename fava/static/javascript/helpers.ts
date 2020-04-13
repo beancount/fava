@@ -1,5 +1,5 @@
 import { object, record, string, unknown } from "./lib/validation";
-import { favaAPI } from "./stores";
+import { urlSyncedParams, favaAPI } from "./stores";
 
 /**
  * Select a single element.
@@ -122,14 +122,21 @@ export function urlFor(
   params?: Record<string, string>
 ): string {
   const url = `${favaAPI.baseURL}${report}`;
-  if (!params) {
-    return url;
-  }
   const urlParams = new URLSearchParams();
-  Object.entries(params).forEach(([key, value]) => {
-    urlParams.set(key, value);
-  });
-  return `${url}?${urlParams.toString()}`;
+  const oldParams = new URL(window.location.href).searchParams;
+  for (const name of urlSyncedParams) {
+    const value = oldParams.get(name);
+    if (value) {
+      urlParams.set(name, value);
+    }
+  }
+  if (params) {
+    Object.entries(params).forEach(([key, value]) => {
+      urlParams.set(key, value);
+    });
+  }
+  const urlParamString = urlParams.toString();
+  return urlParamString ? `${url}?${urlParams.toString()}` : url;
 }
 
 /**

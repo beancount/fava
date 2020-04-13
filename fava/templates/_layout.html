@@ -47,10 +47,6 @@
       {% include active_page + '.html' %}
       {% endif %}
       {% endblock %}
-      <template id="export-overlay-content">
-        <h3>{{ _('Export') }}:</h3>
-        <a href="{{ url_for('download_journal') }}" data-remote>{{ _('Download currently filtered entries as a Beancount file') }}</a>
-      </template>
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
       <script type="application/json" id="ledger-data">{{ {
         'accountURL': url_for('account', name='REPLACEME'),
