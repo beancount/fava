@@ -1,7 +1,7 @@
 import { writable, derived } from "svelte/store";
 
 import { _ } from "../helpers";
-import iso4217currencies from "../iso4217";
+import iso4217currencies from "../lib/iso4217";
 import { commodities, operating_currency } from ".";
 
 export const showCharts = writable(true);

@@ -2,7 +2,7 @@
   import { treemap } from "d3-hierarchy";
 
   import router from "../router";
-  import { accountUrl } from "../stores";
+  import { accountUrl } from "../helpers";
   import { treemapScale } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
   import { followingTooltip } from "./tooltip";

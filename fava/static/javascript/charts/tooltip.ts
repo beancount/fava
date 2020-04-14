@@ -1,22 +1,19 @@
 import { clientPoint } from "d3-selection";
 
-import e from "../events";
-
-const tooltip = document.createElement("div");
-tooltip.className = "tooltip";
-document.body.appendChild(tooltip);
-
-/** Event listener to have the tooltip follow the mouse. */
-function followMouse(event: MouseEvent): void {
-  tooltip.style.opacity = "1";
-  tooltip.style.left = `${event.pageX}px`;
-  tooltip.style.top = `${event.pageY - 15}px`;
+/**
+ * Create tooltip with accompanying hide and destroy functions.
+ */
+function createTooltip(): [HTMLDivElement, () => void] {
+  const tooltip = document.createElement("div");
+  tooltip.className = "tooltip";
+  document.body.appendChild(tooltip);
+  const hide = (): void => {
+    tooltip.style.opacity = "0";
+  };
+  return [tooltip, hide];
 }
 
-/** Hide the tooltip */
-function hideTooltip(): void {
-  tooltip.style.opacity = "0";
-}
+const [tooltip, hide] = createTooltip();
 
 /**
  * Svelte action to have the given element act on mouse to show a tooltip.
@@ -29,14 +26,20 @@ export function followingTooltip(
   text: () => string
 ): { destroy: () => void; update: (t: () => string) => void } {
   let getter = text;
+  /** Event listener to have the tooltip follow the mouse. */
+  function followMouse(event: MouseEvent): void {
+    tooltip.style.opacity = "1";
+    tooltip.style.left = `${event.pageX}px`;
+    tooltip.style.top = `${event.pageY - 15}px`;
+  }
   node.addEventListener("mouseenter", () => {
     tooltip.innerHTML = getter();
   });
   node.addEventListener("mousemove", followMouse);
-  node.addEventListener("mouseleave", hideTooltip);
+  node.addEventListener("mouseleave", hide);
 
   return {
-    destroy: hideTooltip,
+    destroy: hide,
     update(t: () => string): void {
       getter = t;
     },
@@ -65,15 +68,13 @@ export function positionedTooltip(
       tooltip.style.left = `${window.scrollX + x + matrix.e}px`;
       tooltip.style.top = `${window.scrollY + y + matrix.f - 15}px`;
     } else {
-      hideTooltip();
+      hide();
     }
   }
   node.addEventListener("mousemove", mousemove);
-  node.addEventListener("mouseleave", hideTooltip);
+  node.addEventListener("mouseleave", hide);
 
   return {
-    destroy: hideTooltip,
+    destroy: hide,
   };
 }
-
-e.on("page-loaded", hideTooltip);

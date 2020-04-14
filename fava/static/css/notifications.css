@@ -1,11 +1,10 @@
-/* Overlays */
+/* Notifications */
 .notifications {
   position: fixed;
   top: calc(var(--header-height) + 10px);
   right: 10px;
   width: 400px;
 }
-
 .notifications li {
   display: block;
   width: 100%;
@@ -14,11 +13,9 @@
   color: var(--color-notification);
   background-color: var(--color-notification-info);
 }
-
 .notifications .error {
   background-color: var(--color-notification-error);
 }
-
 .notifications .warning {
   color: var(--color-text);
   background-color: var(--color-notification-warning);

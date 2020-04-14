@@ -4,7 +4,7 @@
   import { arc } from "d3-shape";
 
   import router from "../router";
-  import { accountUrl } from "../stores";
+  import { accountUrl } from "../helpers";
   import { sunburstScale } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
 

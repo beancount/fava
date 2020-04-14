@@ -1,7 +1,7 @@
 import router from "./router";
 import { notify } from "./notifications";
 import { todayAsString } from "./format";
-import { putAPI } from "./helpers";
+import { put } from "./api";
 
 interface Posting {
   account: string;
@@ -84,7 +84,7 @@ export async function saveEntries(entries: Entry[]): Promise<void> {
     return;
   }
   try {
-    const data = await putAPI("add_entries", { entries });
+    const data = await put("add_entries", { entries });
     router.reload();
     notify(data);
   } catch (error) {

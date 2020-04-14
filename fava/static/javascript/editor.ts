@@ -36,7 +36,7 @@ import "./codemirror/mode-beancount";
 import "./codemirror/hint-query";
 import "./codemirror/mode-query";
 
-import { putAPI } from "./helpers";
+import { put } from "./api";
 import { notify } from "./notifications";
 import { favaAPI } from "./stores";
 
@@ -76,7 +76,7 @@ declare module "codemirror" {
 export { CodeMirror };
 
 CodeMirror.commands.favaFormat = (cm: Editor): void => {
-  putAPI("format_source", { source: cm.getValue() }).then(
+  put("format_source", { source: cm.getValue() }).then(
     (data) => {
       const scrollPosition = cm.getScrollInfo().top;
       cm.setValue(data);

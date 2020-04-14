@@ -5,7 +5,7 @@ import { closeOverlay } from "./stores";
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
  */
-function showTooltip(target: HTMLElement): void {
+function showTooltip(target: HTMLElement): () => void {
   const tooltip = document.createElement("div");
   tooltip.className = "keyboard-tooltip";
   tooltip.innerHTML = target.getAttribute("data-key") || "";
@@ -19,38 +19,31 @@ function showTooltip(target: HTMLElement): void {
     parentCoords.top + (target.offsetHeight - tooltip.offsetHeight) / 2;
   tooltip.style.left = `${left}px`;
   tooltip.style.top = `${top + window.pageYOffset}px`;
+  return (): void => {
+    tooltip.remove();
+  };
 }
 
 /**
  * Show all keyboard shortcut tooltips.
  */
-function showTooltips(): void {
+function showTooltips(): () => void {
   const reloadButton = select("#reload-page");
-  if (reloadButton) {
-    reloadButton.classList.remove("hidden");
-  }
+  reloadButton?.classList.remove("hidden");
+  const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
-    el instanceof HTMLElement && showTooltip(el);
+    el instanceof HTMLElement && removes.push(showTooltip(el));
   });
-}
-
-/**
- * Remove all keyboard shortcut tooltips.
- */
-function removeTooltips(): void {
-  const reloadButton = select("#reload-page");
-  if (reloadButton) {
-    reloadButton.classList.add("hidden");
-  }
-  document.querySelectorAll(".keyboard-tooltip").forEach((tooltip) => {
-    tooltip.remove();
-  });
+  return (): void => {
+    reloadButton?.classList.add("hidden");
+    removes.forEach((r) => r());
+  };
 }
 
 /**
  * Ignore events originating from editable elements.
  */
-function editableElement(element: EventTarget | null): boolean {
+function isEditableElement(element: EventTarget | null): boolean {
   return (
     element instanceof HTMLElement &&
     (element instanceof HTMLInputElement ||
@@ -61,7 +54,7 @@ function editableElement(element: EventTarget | null): boolean {
 }
 
 type KeyboardEventHandler = (event: KeyboardEvent) => void;
-const keyboardShortcuts: Record<string, KeyboardEventHandler> = {};
+const keyboardShortcuts: Map<string, KeyboardEventHandler> = new Map();
 // The last typed character to check for sequences of two keys.
 let lastChar = "";
 
@@ -71,7 +64,7 @@ let lastChar = "";
  * Dispatch to the relevant handler.
  */
 function keydown(event: KeyboardEvent): void {
-  if (editableElement(event.target)) {
+  if (isEditableElement(event.target)) {
     // ignore events in editable elements.
     return;
   }
@@ -86,10 +79,12 @@ function keydown(event: KeyboardEvent): void {
     eventKey = `Control+${eventKey}`;
   }
   const lastTwoKeys = `${lastChar} ${eventKey}`;
-  if (lastTwoKeys in keyboardShortcuts) {
-    keyboardShortcuts[lastTwoKeys](event);
-  } else if (eventKey in keyboardShortcuts) {
-    keyboardShortcuts[eventKey](event);
+  const lastTwoHandler = keyboardShortcuts.get(lastTwoKeys);
+  const keyHandler = keyboardShortcuts.get(eventKey);
+  if (lastTwoHandler) {
+    lastTwoHandler(event);
+  } else if (keyHandler) {
+    keyHandler(event);
   }
   if (event.key !== "Alt" && event.key !== "Control" && event.key !== "Shift") {
     lastChar = eventKey;
@@ -101,21 +96,24 @@ document.addEventListener("keydown", keydown);
 /**
  * Bind an event handler to a key.
  */
-function bind(key: string, handler: KeyboardEventHandler): void {
+function bind(key: string, handler: KeyboardEventHandler): () => void {
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     // eslint-disable-next-line no-console
     console.error("Only key sequences of length <=2 are supported: ", key);
   }
-  if (key in keyboardShortcuts) {
+  if (keyboardShortcuts.has(key)) {
     // eslint-disable-next-line no-console
     console.error("Duplicate keyboard shortcut: ", key);
   }
-  keyboardShortcuts[key] = handler;
+  keyboardShortcuts.set(key, handler);
+  return (): void => {
+    keyboardShortcuts.delete(key);
+  };
 }
 
 function unbind(key: string): void {
-  delete keyboardShortcuts[key];
+  keyboardShortcuts.delete(key);
 }
 
 export const keys = {
@@ -160,7 +158,7 @@ e.on("page-loaded", () => {
   currentShortcuts = [];
   document.querySelectorAll("[data-key]").forEach((element) => {
     const key = element.getAttribute("data-key");
-    if (key !== null && !(key in keyboardShortcuts)) {
+    if (key !== null && !keyboardShortcuts.has(key)) {
       currentShortcuts.push(key);
       bind(key, () => {
         if (
@@ -178,13 +176,9 @@ e.on("page-loaded", () => {
 
 e.on("page-init", () => {
   bind("?", () => {
-    showTooltips();
-    once(document, "mousedown", () => {
-      removeTooltips();
-    });
-    once(document, "keydown", () => {
-      removeTooltips();
-    });
+    const hide = showTooltips();
+    once(document, "mousedown", hide);
+    once(document, "keydown", hide);
   });
 
   bind("Escape", closeOverlay);

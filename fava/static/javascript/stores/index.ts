@@ -10,6 +10,7 @@ import {
   constant,
 } from "../lib/validation";
 import { derived_array } from "../lib/store";
+import { fetchAPI } from "../helpers";
 
 export const urlHash = writable("");
 
@@ -18,7 +19,6 @@ type Interval = "year" | "quarter" | "month" | "week" | "day";
 export const interval: Writable<Interval> = writable("month");
 
 export const favaAPIValidator = object({
-  accountURL: string,
   accounts: array(string),
   baseURL: string,
   currencies: array(string),
@@ -47,7 +47,6 @@ export const favaAPIValidator = object({
 
 export type FavaAPI = ReturnType<typeof favaAPIValidator>;
 export const favaAPI: FavaAPI = {
-  accountURL: "",
   accounts: [],
   baseURL: "",
   currencies: [],
@@ -104,6 +103,11 @@ export const commodities = derived_array(favaAPIStore, (val) =>
 /** The number of Beancount errors. */
 export const errorCount = writable(0);
 
+export async function fetchErrorCount(): Promise<void> {
+  const errors = await fetchAPI("errors");
+  errorCount.set(number(errors));
+}
+
 favaAPIStore.subscribe((val) => {
   Object.assign(favaAPI, val);
   errorCount.set(favaAPI.errors);
@@ -117,14 +121,6 @@ export const urlSyncedParams = [
   "interval",
   "time",
 ];
-
-/** Url for the account page for an account. */
-export function accountUrl(account: string): string {
-  return new URL(
-    favaAPI.accountURL.replace("REPLACEME", account),
-    window.location.href
-  ).toString();
-}
 
 export function closeOverlay(): void {
   if (window.location.hash) {

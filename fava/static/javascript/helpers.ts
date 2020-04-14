@@ -33,14 +33,11 @@ export function _(text: string): string {
  * matching selector.
  */
 export function delegate<T extends Event, C extends HTMLElement>(
-  element: Element | Document | null,
+  element: Element | Document,
   type: string,
   selector: string,
   callback: (e: T, c: C) => void
 ): void {
-  if (!element) {
-    return;
-  }
   element.addEventListener(type, (event) => {
     let { target } = event;
     if (!target || !(target instanceof Node)) {
@@ -139,6 +136,11 @@ export function urlFor(
   return urlParamString ? `${url}?${urlParams.toString()}` : url;
 }
 
+/** Url for the account page for an account. */
+export function accountUrl(account: string): string {
+  return new URL(urlFor(`account/${account}`), window.location.href).toString();
+}
+
 /**
  * Fetch an API endpoint and convert the JSON data to an object.
  * @param endpoint - the endpoint to fetch
@@ -152,33 +154,4 @@ export async function fetchAPI(
   const responseData = await fetch(url);
   const json = await handleJSON(responseData);
   return validateAPIResponse(json).data;
-}
-
-const putAPIValidators = {
-  add_entries: string,
-  format_source: string,
-  source: string,
-  source_slice: string,
-};
-
-type apiTypes = typeof putAPIValidators;
-
-/**
- * Fetch an API endpoint and convert the JSON data to an object.
- * @param endpoint - the endpoint to fetch
- * @param params - a string to append as params or an object.
- */
-export async function putAPI<T extends keyof apiTypes>(
-  endpoint: T,
-  body: unknown
-): Promise<ReturnType<apiTypes[T]>> {
-  const res = await fetch(urlFor(`api/${endpoint}`), {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
-  }).then(handleJSON);
-  const { data }: { data: unknown } = validateAPIResponse(res);
-  return putAPIValidators[endpoint](data) as ReturnType<apiTypes[T]>;
 }

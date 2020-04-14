@@ -7,9 +7,6 @@
  *
  * The events currently in use in Fava:
  *
- * file-modified:
- *    Fetch and update the error count in the sidebar.
- *
  * page-init:
  *    Run once the page is initialized. Use this for JS code and parts of the
  *    UI that are independent of the current contents of <article>.
@@ -20,9 +17,6 @@
  */
 
 import { SvelteComponentDev } from "svelte/internal";
-import { select, _, fetchAPI, getScriptTagJSON } from "./helpers";
-import e from "./events";
-import router from "./router";
 
 import "../css/style.css";
 import "../css/base.css";
@@ -43,16 +37,23 @@ import "codemirror/addon/dialog/dialog.css";
 import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
-import "./charts";
+import { select, _, fetchAPI, getScriptTagJSON } from "./helpers";
+import e from "./events";
+import router from "./router";
 import { CopyableSpan } from "./clipboard";
 import { BeancountTextarea } from "./editor";
 import { FavaJournal } from "./journal";
 import "./keyboard-shortcuts";
 import { notify } from "./notifications";
-import { AsideButton, ErrorCount } from "./sidebar";
+import { updateSidebar, AsideButton, ErrorCount } from "./sidebar";
 import { SortableTable } from "./sort";
 import { TreeTable } from "./tree-table";
-import { favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
+import {
+  favaAPI,
+  favaAPIStore,
+  favaAPIValidator,
+  fetchErrorCount,
+} from "./stores";
 
 import Editor from "./editor/Editor.svelte";
 import Import from "./import/Import.svelte";
@@ -108,6 +109,7 @@ e.on("page-loaded", () => {
     pageTitle.innerHTML = favaAPI.pageTitle;
   }
   select("#reload-page")?.classList.add("hidden");
+  updateSidebar();
 });
 
 e.on("page-init", () => {
@@ -130,7 +132,7 @@ async function doPoll(): Promise<void> {
         router.reload();
       } else {
         select("#reload-page")?.classList.remove("hidden");
-        e.trigger("file-modified");
+        fetchErrorCount();
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
         });

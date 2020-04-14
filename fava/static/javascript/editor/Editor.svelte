@@ -1,11 +1,11 @@
 <script>
   import { onMount } from "svelte";
 
-  import { putAPI } from "../helpers";
+  import { put } from "../api";
   import { keys } from "../keyboard-shortcuts";
   import { notify } from "../notifications";
-  import e from "../events";
   import router from "../router";
+  import { fetchErrorCount } from "../stores";
   import { CodeMirror, sourceEditorOptions, initSourceEditor } from "../editor";
 
   import EditorMenu from "./EditorMenu.svelte";
@@ -33,7 +33,7 @@
 
     saving = true;
     try {
-      sha256sum = await putAPI("source", {
+      sha256sum = await put("source", {
         file_path,
         source: value,
         sha256sum,
@@ -41,7 +41,7 @@
       changed = false;
       editor.focus();
       editor.getDoc().markClean();
-      e.trigger("file-modified");
+      fetchErrorCount();
     } catch (error) {
       notify(error, "error");
     } finally {
@@ -61,29 +61,32 @@
     file_path = data.file_path;
     sources = data.sources;
 
+    const unbind = [];
     // keybindings when the focus is outside the editor
     ["Control+s", "Meta+s"].forEach((key) => {
-      keys.bind(key, (event) => {
-        event.preventDefault();
-        save();
-      });
+      unbind.push(
+        keys.bind(key, (event) => {
+          event.preventDefault();
+          save();
+        })
+      );
     });
 
     ["Control+d", "Meta+d"].forEach((key) => {
-      keys.bind(key, (event) => {
-        event.preventDefault();
-        if (editor) {
-          editor.execCommand("favaFormat");
-        }
-      });
+      unbind.push(
+        keys.bind(key, (event) => {
+          event.preventDefault();
+          if (editor) {
+            editor.execCommand("favaFormat");
+          }
+        })
+      );
     });
     router.interruptHandlers.add(checkEditorChanges);
 
     return () => {
       router.interruptHandlers.delete(checkEditorChanges);
-      for (const key of ["Control+s", "Control+d", "Meta+s", "Meta+d"]) {
-        keys.unbind(key);
-      }
+      unbind.forEach((u) => u());
     };
   });
 

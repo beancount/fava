@@ -3,12 +3,9 @@
  * toggling the sidebar on mobile.
  */
 
-import { fetchAPI } from "./helpers";
 import { errorCount } from "./stores";
-import { number } from "./lib/validation";
-import e from "./events";
 
-function initSidebar(): void {
+export function updateSidebar(): void {
   document.querySelectorAll("aside a").forEach((el) => {
     el.classList.remove("selected");
     const href = el.getAttribute("href");
@@ -45,12 +42,3 @@ export class AsideButton extends HTMLButtonElement {
     });
   }
 }
-
-e.on("page-loaded", () => {
-  initSidebar();
-});
-
-e.on("file-modified", async () => {
-  const errors = await fetchAPI("errors");
-  errorCount.set(number(errors));
-});

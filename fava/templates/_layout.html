@@ -49,7 +49,6 @@
       {% endblock %}
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
       <script type="application/json" id="ledger-data">{{ {
-        'accountURL': url_for('account', name='REPLACEME'),
         'accounts': ledger.attributes.accounts,
         'baseURL': url_for('index'),
         'currencies': ledger.attributes.currencies,
@@ -68,7 +67,6 @@
       {%- if not g.partial %}
     </article>
     <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
-    <ul id="notifications" class="notifications"></ul>
   </body>
 </html>
 {%- endif %}
