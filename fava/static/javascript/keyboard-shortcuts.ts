@@ -1,5 +1,4 @@
 import { select, once } from "./helpers";
-import e from "./events";
 import { closeOverlay } from "./stores";
 
 /**
@@ -152,27 +151,32 @@ export function keyboardShortcut(
   };
 }
 
-let currentShortcuts: string[] = [];
-e.on("page-loaded", () => {
-  currentShortcuts.map(unbind);
-  currentShortcuts = [];
+export function initCurrentKeyboardShortcuts(): () => void {
+  const currentShortcuts: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((element) => {
     const key = element.getAttribute("data-key");
     if (key !== null && !keyboardShortcuts.has(key)) {
-      currentShortcuts.push(key);
-      bind(key, () => {
-        if (
-          element instanceof HTMLButtonElement ||
-          element instanceof HTMLAnchorElement
-        ) {
-          element.click();
-        } else if (element instanceof HTMLInputElement) {
-          element.focus();
-        }
-      });
+      currentShortcuts.push(
+        bind(key, () => {
+          if (
+            element instanceof HTMLButtonElement ||
+            element instanceof HTMLAnchorElement
+          ) {
+            element.click();
+          } else if (element instanceof HTMLInputElement) {
+            element.focus();
+          } else if (element instanceof HTMLElement) {
+            element.click();
+          }
+        })
+      );
     }
   });
-});
+
+  return (): void => {
+    currentShortcuts.forEach((u) => u());
+  };
+}
 
 export function initGlobalKeyboardShortcuts(): void {
   bind("?", () => {

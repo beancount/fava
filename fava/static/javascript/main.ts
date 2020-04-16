@@ -2,14 +2,9 @@
  * Fava's main Javascript entry point.
  *
  * The code for Fava's UI is split into several modules that are all imported
- * below. The different modules can listen to and register events to
- * communicate and to register DOM event handlers for example.
- *
- * The events currently in use in Fava:
- *
- * page-loaded:
- *    After a new page has been loaded asynchronously. Use this to bind to
- *    elements in the page.
+ * below. The most interactive parts are written as Svelte components. Some
+ * other functionality is written in plain Javascript and or web components
+ * extending normal HTML elements.
  */
 
 import { SvelteComponentDev } from "svelte/internal";
@@ -34,12 +29,14 @@ import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
 import { select, _, fetchAPI, getScriptTagJSON } from "./helpers";
-import e from "./events";
 import router, { initSyncedStoreValues } from "./router";
 import { CopyableSpan } from "./clipboard";
 import { BeancountTextarea } from "./editor";
 import { FavaJournal } from "./journal";
-import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
+import {
+  initCurrentKeyboardShortcuts,
+  initGlobalKeyboardShortcuts,
+} from "./keyboard-shortcuts";
 import { notify } from "./notifications";
 import { updateSidebar, AsideButton, ErrorCount } from "./sidebar";
 import { SortableTable } from "./sort";
@@ -86,14 +83,15 @@ function initSvelteComponent(
       props.data = JSON.parse(script.innerHTML);
     }
     const component = new SvelteComponent({ target: el, props });
-    e.once("before-page-loaded", () => component.$destroy());
+    router.once("before-page-loaded", () => component.$destroy());
   }
 }
 
 const pageTitle = select("h1 strong");
-e.on("page-loaded", () => {
+router.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
+  router.once("before-page-loaded", initCurrentKeyboardShortcuts());
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-documents", Documents);
   initSvelteComponent("#svelte-editor", Editor);
@@ -142,7 +140,7 @@ function init(): void {
   }
   initGlobalKeyboardShortcuts();
   setInterval(doPoll, 5000);
-  e.trigger("page-loaded");
+  router.trigger("page-loaded");
 }
 
 init();

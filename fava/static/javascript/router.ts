@@ -7,7 +7,7 @@
 
 import { Writable } from "svelte/store";
 import { select, delegate, fetch, handleText } from "./helpers";
-import e from "./events";
+import { Events } from "./lib/events";
 import { notify } from "./notifications";
 import {
   urlHash,
@@ -19,7 +19,7 @@ import {
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { showCharts } from "./stores/chart";
 
-class Router {
+class Router extends Events<"page-loaded" | "before-page-loaded"> {
   /** The URL hash. */
   hash: string;
 
@@ -38,6 +38,8 @@ class Router {
   interruptHandlers: Set<() => string | null>;
 
   constructor() {
+    super();
+
     this.hash = window.location.hash;
     this.pathname = window.location.pathname;
     this.search = window.location.search;
@@ -136,10 +138,10 @@ class Router {
       this.updateState();
       const article = select("article");
       if (article) {
-        e.trigger("before-page-loaded");
+        this.trigger("before-page-loaded");
         article.innerHTML = content;
       }
-      e.trigger("page-loaded");
+      this.trigger("page-loaded");
       urlHash.set(window.location.hash.slice(1));
     } catch (error) {
       notify(`Loading ${url} failed: ${error.message}`, "error");
