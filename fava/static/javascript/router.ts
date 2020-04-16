@@ -6,8 +6,8 @@
  */
 
 import { Writable } from "svelte/store";
-import { select, delegate, fetch, handleText } from "./helpers";
-import { Events } from "./lib/events";
+import { fetch, handleText } from "./lib/fetch";
+import { Events, delegate } from "./lib/events";
 import { notify } from "./notifications";
 import {
   urlHash,
@@ -126,7 +126,7 @@ class Router extends Events<"page-loaded" | "before-page-loaded"> {
     const getUrl = new URL(url);
     getUrl.searchParams.set("partial", "true");
 
-    const svg = select(".fava-icon");
+    const svg = document.querySelector(".fava-icon");
     svg?.classList.add("loading");
 
     try {
@@ -136,7 +136,7 @@ class Router extends Events<"page-loaded" | "before-page-loaded"> {
         window.scroll(0, 0);
       }
       this.updateState();
-      const article = select("article");
+      const article = document.querySelector("article");
       if (article) {
         this.trigger("before-page-loaded");
         article.innerHTML = content;
@@ -260,12 +260,10 @@ function syncStoreValueToUrl<T extends boolean | string>(
   });
 }
 
+/**
+ * Set initial values from URL and update URL on store changes
+ */
 export function initSyncedStoreValues(): void {
-  select("#reload-page")?.addEventListener("click", () => {
-    router.reload();
-  });
-
-  // Set initial values from URL and update URL on store changes
   syncStoreValueToUrl(account_filter, "account", "");
   syncStoreValueToUrl(fql_filter, "filter", "");
   syncStoreValueToUrl(time_filter, "time", "");

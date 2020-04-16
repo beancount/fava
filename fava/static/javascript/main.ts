@@ -28,7 +28,7 @@ import "codemirror/addon/dialog/dialog.css";
 import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
-import { select, _, fetchAPI, getScriptTagJSON } from "./helpers";
+import { _, fetchAPI, getScriptTagJSON } from "./helpers";
 import router, { initSyncedStoreValues } from "./router";
 import { CopyableSpan } from "./clipboard";
 import { BeancountTextarea } from "./editor";
@@ -75,7 +75,7 @@ function initSvelteComponent(
   selector: string,
   SvelteComponent: typeof SvelteComponentDev
 ): void {
-  const el = select(selector);
+  const el = document.querySelector(selector);
   if (el) {
     const props: { data?: unknown } = {};
     const script = el.querySelector("script");
@@ -87,7 +87,8 @@ function initSvelteComponent(
   }
 }
 
-const pageTitle = select("h1 strong");
+const pageTitle = document.querySelector("h1 strong");
+const reloadButton = document.querySelector("#reload-page");
 router.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
@@ -102,7 +103,7 @@ router.on("page-loaded", () => {
   if (pageTitle) {
     pageTitle.innerHTML = favaAPI.pageTitle;
   }
-  select("#reload-page")?.classList.add("hidden");
+  reloadButton?.classList.add("hidden");
   updateSidebar();
 });
 
@@ -118,7 +119,7 @@ async function doPoll(): Promise<void> {
     if (favaAPI.favaOptions["auto-reload"]) {
       router.reload();
     } else {
-      select("#reload-page")?.classList.remove("hidden");
+      reloadButton?.classList.remove("hidden");
       fetchErrorCount();
       notify(_("File change detected. Click to reload."), "warning", () => {
         router.reload();
@@ -133,13 +134,17 @@ function init(): void {
   initSyncedStoreValues();
   // eslint-disable-next-line no-new
   new Modals({ target: document.body });
-  const header = select("header");
+  const header = document.querySelector("header");
   if (header) {
     // eslint-disable-next-line no-new
     new FilterForm({ target: header });
   }
   initGlobalKeyboardShortcuts();
   setInterval(doPoll, 5000);
+  reloadButton?.addEventListener("click", () => {
+    router.reload();
+  });
+
   router.trigger("page-loaded");
 }
 

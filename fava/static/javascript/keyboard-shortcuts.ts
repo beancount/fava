@@ -1,4 +1,4 @@
-import { select, once } from "./helpers";
+import { once } from "./lib/events";
 import { closeOverlay } from "./stores";
 
 /**
@@ -6,6 +6,10 @@ import { closeOverlay } from "./stores";
  */
 function showTooltip(target: HTMLElement): () => void {
   const tooltip = document.createElement("div");
+  const isHidden = target.classList.contains("hidden");
+  if (isHidden) {
+    target.classList.remove("hidden");
+  }
   tooltip.className = "keyboard-tooltip";
   tooltip.innerHTML = target.getAttribute("data-key") || "";
   document.body.appendChild(tooltip);
@@ -20,6 +24,9 @@ function showTooltip(target: HTMLElement): () => void {
   tooltip.style.top = `${top + window.pageYOffset}px`;
   return (): void => {
     tooltip.remove();
+    if (isHidden) {
+      target.classList.add("hidden");
+    }
   };
 }
 
@@ -27,14 +34,11 @@ function showTooltip(target: HTMLElement): () => void {
  * Show all keyboard shortcut tooltips.
  */
 function showTooltips(): () => void {
-  const reloadButton = select("#reload-page");
-  reloadButton?.classList.remove("hidden");
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
     el instanceof HTMLElement && removes.push(showTooltip(el));
   });
   return (): void => {
-    reloadButton?.classList.add("hidden");
     removes.forEach((r) => r());
   };
 }

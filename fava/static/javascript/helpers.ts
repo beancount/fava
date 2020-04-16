@@ -1,18 +1,9 @@
+import { fetch, handleJSON } from "./lib/fetch";
 import { object, record, string, unknown } from "./lib/validation";
 import { urlSyncedParams, favaAPI } from "./stores";
 
-/**
- * Select a single element.
- */
-export function select(
-  expr: string,
-  con: Document | Element = document
-): Element | null {
-  return con.querySelector(expr);
-}
-
 export function getScriptTagJSON(selector: string): unknown {
-  const el = select(selector);
+  const el = document.querySelector(selector);
   return el ? JSON.parse(el.innerHTML) : null;
 }
 
@@ -28,87 +19,6 @@ export function _(text: string): string {
   return translations[text] || text;
 }
 
-/**
- * Execute the callback of the event of given type is fired on something
- * matching selector.
- */
-export function delegate<T extends Event, C extends HTMLElement>(
-  element: Element | Document,
-  type: string,
-  selector: string,
-  callback: (e: T, c: C) => void
-): void {
-  element.addEventListener(type, (event) => {
-    let { target } = event;
-    if (!target || !(target instanceof Node)) {
-      return;
-    }
-    if (!(target instanceof Element)) {
-      target = target.parentNode;
-    }
-    if (target instanceof HTMLElement) {
-      const closest = target.closest(selector);
-      if (closest) {
-        callback(event as T, closest as C);
-      }
-    }
-  });
-}
-
-/**
- * Bind an event to element, only run the callback once.
- */
-export function once(
-  element: EventTarget,
-  event: string,
-  callback: (ev: Event) => void
-): void {
-  function runOnce(ev: Event): void {
-    element.removeEventListener(event, runOnce);
-    callback.apply(element, [ev]);
-  }
-
-  element.addEventListener(event, runOnce);
-}
-
-/**
- * Handles JSON content for a Promise returned by fetch, also handling an HTTP
- * error status.
- */
-export async function handleJSON(response: Response): Promise<unknown> {
-  if (!response.ok) {
-    throw new Error(response.statusText);
-  }
-  const data = await response.json();
-  if (!data.success) {
-    throw new Error(data.error);
-  }
-  return data;
-}
-
-/**
- * Handles text content for a Promise returned by fetch, also handling an HTTP
- * error status.
- */
-export async function handleText(response: Response): Promise<string> {
-  if (!response.ok) {
-    const msg = await response.text();
-    throw new Error(msg || response.statusText);
-  }
-  return response.text();
-}
-
-/** Wrapper around fetch with some default options */
-export function fetch(
-  input: string,
-  init: RequestInit = {}
-): Promise<Response> {
-  return window.fetch(input, {
-    credentials: "same-origin",
-    ...init,
-  });
-}
-
 const validateAPIResponse = object({ data: unknown });
 
 /**
@@ -116,15 +26,18 @@ const validateAPIResponse = object({ data: unknown });
  */
 export function urlFor(
   report: string,
-  params?: Record<string, string>
+  params?: Record<string, string>,
+  update = true
 ): string {
   const url = `${favaAPI.baseURL}${report}`;
   const urlParams = new URLSearchParams();
-  const oldParams = new URL(window.location.href).searchParams;
-  for (const name of urlSyncedParams) {
-    const value = oldParams.get(name);
-    if (value) {
-      urlParams.set(name, value);
+  if (update) {
+    const oldParams = new URL(window.location.href).searchParams;
+    for (const name of urlSyncedParams) {
+      const value = oldParams.get(name);
+      if (value) {
+        urlParams.set(name, value);
+      }
     }
   }
   if (params) {
@@ -150,7 +63,7 @@ export async function fetchAPI(
   endpoint: string,
   params?: Record<string, string>
 ): Promise<unknown> {
-  const url = urlFor(`api/${endpoint}`, params);
+  const url = urlFor(`api/${endpoint}`, params, false);
   const responseData = await fetch(url);
   const json = await handleJSON(responseData);
   return validateAPIResponse(json).data;

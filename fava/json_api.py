@@ -240,7 +240,7 @@ def filepath_in_document_folder(
     )
 
 
-@json_api.route("/add-document", methods=["PUT"])
+@json_api.route("/add_document", methods=["PUT"])
 @json_response
 def add_document():
     """Upload a document."""

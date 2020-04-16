@@ -6,7 +6,8 @@
 import { writable, Writable } from "svelte/store";
 
 import { todayAsString } from "./format";
-import { delegate, _ } from "./helpers";
+import { delegate } from "./lib/events";
+import { _ } from "./helpers";
 import { favaAPI } from "./stores";
 import { notify } from "./notifications";
 

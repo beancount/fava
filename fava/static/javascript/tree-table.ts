@@ -1,4 +1,4 @@
-import { delegate } from "./helpers";
+import { delegate } from "./lib/events";
 
 /**
  * Account trees.

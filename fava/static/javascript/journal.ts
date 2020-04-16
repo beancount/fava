@@ -1,4 +1,4 @@
-import { delegate } from "./helpers";
+import { delegate } from "./lib/events";
 import router from "./router";
 import { SortableJournal } from "./sort";
 import { fql_filter } from "./stores/filters";

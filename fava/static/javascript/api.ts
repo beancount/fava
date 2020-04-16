@@ -1,9 +1,11 @@
-import { fetchAPI, handleJSON, urlFor } from "./helpers";
+import { fetchAPI, urlFor } from "./helpers";
 import { notify } from "./notifications";
+import { fetch, handleJSON } from "./lib/fetch";
 import { string, object, unknown } from "./lib/validation";
 
 const validateAPIResponse = object({ data: unknown });
 const putAPIValidators = {
+  add_document: string,
   add_entries: string,
   format_source: string,
   source: string,
@@ -13,20 +15,27 @@ const putAPIValidators = {
 type apiTypes = typeof putAPIValidators;
 
 /**
- * Fetch an API endpoint and convert the JSON data to an object.
+ * PUT to an API endpoint and convert the returned JSON data to an object.
  * @param endpoint - the endpoint to fetch
- * @param params - a string to append as params or an object.
+ * @param body - either a FormData instance or an object that will be converted
+ *               to JSON.
  */
 export async function put<T extends keyof apiTypes>(
   endpoint: T,
-  body: unknown
+  body: FormData | unknown
 ): Promise<ReturnType<apiTypes[T]>> {
+  const opts =
+    body instanceof FormData
+      ? { body }
+      : {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        };
   const res = await fetch(urlFor(`api/${endpoint}`), {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(body),
+    ...opts,
   }).then(handleJSON);
   const { data }: { data: unknown } = validateAPIResponse(res);
   return putAPIValidators[endpoint](data) as ReturnType<apiTypes[T]>;

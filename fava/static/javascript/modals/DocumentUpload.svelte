@@ -1,7 +1,8 @@
 <script>
   import router from "../router";
   import { notify } from "../notifications";
-  import { _, fetch, handleJSON } from "../helpers";
+  import { put } from "../api";
+  import { _ } from "../helpers";
   import { favaAPI } from "../stores";
   import { account, hash, files } from "../document-upload";
 
@@ -18,19 +19,14 @@
         const formData = new FormData(form);
         formData.append("account", $account);
         formData.append("file", dataTransferFile, name);
-        return fetch(`${favaAPI.baseURL}api/add-document`, {
-          method: "PUT",
-          body: formData,
-        })
-          .then(handleJSON)
-          .then(
-            (response) => {
-              notify(response.data);
-            },
-            (error) => {
-              notify(`Upload error: ${error}`, "error");
-            }
-          );
+        return put("add_document", formData).then(
+          (response) => {
+            notify(response);
+          },
+          (error) => {
+            notify(`Upload error: ${error}`, "error");
+          }
+        );
       })
     );
     $files = [];
