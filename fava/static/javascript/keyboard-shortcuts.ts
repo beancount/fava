@@ -174,7 +174,7 @@ e.on("page-loaded", () => {
   });
 });
 
-e.on("page-init", () => {
+export function initGlobalKeyboardShortcuts(): void {
   bind("?", () => {
     const hide = showTooltips();
     once(document, "mousedown", hide);
@@ -182,4 +182,4 @@ e.on("page-init", () => {
   });
 
   bind("Escape", closeOverlay);
-});
+}

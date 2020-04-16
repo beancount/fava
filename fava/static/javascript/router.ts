@@ -1,7 +1,9 @@
-// Routing
-//
-// Fava intercepts all clicks on links and will in most cases asynchronously
-// load the content of the page and replace the <article> contents with them.
+/**
+ * Routing
+ *
+ * Fava intercepts all clicks on links and will in most cases asynchronously
+ * load the content of the page and replace the <article> contents with them.
+ */
 
 import { Writable } from "svelte/store";
 import { select, delegate, fetch, handleText } from "./helpers";
@@ -27,6 +29,12 @@ class Router {
   /** The URL search string. */
   search: string;
 
+  /**
+   * Function to intercept navigation, e.g., when there are unsaved changes.
+   *
+   * If they return a string, that is displayed to the user in an alert to
+   * confirm navigation.
+   */
   interruptHandlers: Set<() => string | null>;
 
   constructor() {
@@ -37,6 +45,10 @@ class Router {
     this.interruptHandlers = new Set();
   }
 
+  /**
+   * Check whether any of the registered interruptHandlers wants to stop
+   * navigation.
+   */
   shouldInterrupt(): string | null {
     for (const handler of this.interruptHandlers) {
       const ret = handler();
@@ -47,8 +59,10 @@ class Router {
     return null;
   }
 
-  // This should be called once when the page has been loaded. Initializes the
-  // router and takes over clicking on links.
+  /**
+   * This should be called once when the page has been loaded. Initializes the
+   * router and takes over clicking on links.
+   */
   init(): void {
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
@@ -79,8 +93,10 @@ class Router {
     this.takeOverLinks();
   }
 
-  // Go to URL. If load is `true`, load the page at URL, otherwise only update
-  // the current state.
+  /**
+   * Go to URL. If load is `true`, load the page at URL, otherwise only update
+   * the current state.
+   */
   navigate(url: string, load = true): void {
     if (load) {
       this.loadURL(url);
@@ -242,7 +258,7 @@ function syncStoreValueToUrl<T extends boolean | string>(
   });
 }
 
-e.on("page-init", () => {
+export function initSyncedStoreValues(): void {
   select("#reload-page")?.addEventListener("click", () => {
     router.reload();
   });
@@ -254,4 +270,4 @@ e.on("page-init", () => {
   syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval);
   syncStoreValueToUrl(conversion, "conversion", favaAPI.favaOptions.conversion);
   syncStoreValueToUrl(showCharts, "charts", true, false);
-});
+}

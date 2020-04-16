@@ -7,10 +7,6 @@
  *
  * The events currently in use in Fava:
  *
- * page-init:
- *    Run once the page is initialized. Use this for JS code and parts of the
- *    UI that are independent of the current contents of <article>.
- *
  * page-loaded:
  *    After a new page has been loaded asynchronously. Use this to bind to
  *    elements in the page.
@@ -39,11 +35,11 @@ import "codemirror/addon/hint/show-hint.css";
 
 import { select, _, fetchAPI, getScriptTagJSON } from "./helpers";
 import e from "./events";
-import router from "./router";
+import router, { initSyncedStoreValues } from "./router";
 import { CopyableSpan } from "./clipboard";
 import { BeancountTextarea } from "./editor";
 import { FavaJournal } from "./journal";
-import "./keyboard-shortcuts";
+import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
 import { notify } from "./notifications";
 import { updateSidebar, AsideButton, ErrorCount } from "./sidebar";
 import { SortableTable } from "./sort";
@@ -112,7 +108,31 @@ e.on("page-loaded", () => {
   updateSidebar();
 });
 
-e.on("page-init", () => {
+/**
+ * Check the `changed` API endpoint and fire the appropriate events if some
+ * file changed.
+ *
+ * This will be scheduled every 5 seconds.
+ */
+async function doPoll(): Promise<void> {
+  const changed = await fetchAPI("changed");
+  if (changed) {
+    if (favaAPI.favaOptions["auto-reload"]) {
+      router.reload();
+    } else {
+      select("#reload-page")?.classList.remove("hidden");
+      fetchErrorCount();
+      notify(_("File change detected. Click to reload."), "warning", () => {
+        router.reload();
+      });
+    }
+  }
+}
+
+function init(): void {
+  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
+  router.init();
+  initSyncedStoreValues();
   // eslint-disable-next-line no-new
   new Modals({ target: document.body });
   const header = select("header");
@@ -120,31 +140,9 @@ e.on("page-init", () => {
     // eslint-disable-next-line no-new
     new FilterForm({ target: header });
   }
-});
-
-// Check the `changed` API endpoint every 5 seconds and fire the appropriate
-// events if some file changed.
-async function doPoll(): Promise<void> {
-  try {
-    const changed = await fetchAPI("changed");
-    if (changed) {
-      if (favaAPI.favaOptions["auto-reload"]) {
-        router.reload();
-      } else {
-        select("#reload-page")?.classList.remove("hidden");
-        fetchErrorCount();
-        notify(_("File change detected. Click to reload."), "warning", () => {
-          router.reload();
-        });
-      }
-    }
-  } finally {
-    setTimeout(doPoll, 5000);
-  }
+  initGlobalKeyboardShortcuts();
+  setInterval(doPoll, 5000);
+  e.trigger("page-loaded");
 }
 
-favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
-router.init();
-e.trigger("page-init");
-e.trigger("page-loaded");
-setTimeout(doPoll, 5000);
+init();
