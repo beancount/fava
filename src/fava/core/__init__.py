@@ -37,8 +37,6 @@ from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.prices import build_price_map
 from beancount.core.prices import get_all_prices
-from beancount.loader import _load
-from beancount.loader import load_file
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
@@ -62,6 +60,7 @@ from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
+from fava.parser.loader import load_file
 from fava.util import date
 from fava.util import pairwise
 
@@ -206,16 +205,9 @@ class FavaLedger:
 
     def load_file(self) -> None:
         """Load the main file and all included files and set attributes."""
-        # use the internal function to disable cache
-        if not self._is_encrypted:
-            # pylint: disable=protected-access
-            self.all_entries, self.errors, self.options = _load(
-                [(self.beancount_file_path, True)], None, None, None
-            )
-        else:
-            self.all_entries, self.errors, self.options = load_file(
-                self.beancount_file_path
-            )
+        self.all_entries, self.errors, self.options = load_file(
+            self.beancount_file_path, False, self._is_encrypted
+        )
 
         self.account_types = get_account_types(self.options)
         self.price_map = build_price_map(self.all_entries)

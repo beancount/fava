@@ -11,6 +11,7 @@ frontend/node_modules: frontend/package-lock.json
 clean: mostlyclean
 	rm -rf build dist
 	rm -rf src/fava/static/*
+	find . -type f -name '*.so' -delete
 
 .PHONY: mostlyclean
 mostlyclean:
@@ -19,10 +20,9 @@ mostlyclean:
 	rm -rf .tox
 	rm -rf build
 	rm -rf dist
-	find . -type f -name '*.so' -delete
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
-	find . -type d -name "node_modules" -delete
+	find . -type d -name "node_modules" -exec rm -r {} +
 
 .PHONY: check-lint
 check-lint: frontend/node_modules

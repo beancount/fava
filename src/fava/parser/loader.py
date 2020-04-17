@@ -1,10 +1,11 @@
 """Loader for Beancount files."""
-from beancount.loader import compute_input_hash
-from beancount.loader import run_transformations
-from beancount.loader import _load
 from beancount.core.data import entry_sortkey
-from beancount.parser import booking  # type: ignore
+from beancount.loader import _load
+from beancount.loader import compute_input_hash
+from beancount.loader import load_file as beancount_load_file
+from beancount.loader import run_transformations
 from beancount.ops import validation  # type: ignore
+from beancount.parser import booking  # type: ignore
 
 from fava.parser.parser import parse_file
 
@@ -28,13 +29,16 @@ def _load_tree_sitter(filename: str):
     return entries, errors, options_map
 
 
-def load_file(filename: str, tree_sitter=True):
+def load_file(filename: str, tree_sitter=True, is_encrypted=False):
     """Load a file, using either Beancount's parser or the tree-sitter one.
 
     Args:
         filename: The file to load.
         tree_sitter: Whether to use the tree-sitter based parser.
+        is_encrypted: Whether the file is encrypted.
     """
+    if is_encrypted:
+        return beancount_load_file(filename)
     if tree_sitter is False:
         return _load([(filename, True)], None, None, None)
     return _load_tree_sitter(filename)
