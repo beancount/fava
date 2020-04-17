@@ -132,7 +132,7 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-svelte3": "^2.7.3",
     "husky": "^4.2.5",
-    "lint-staged": "^10.1.3",
+    "lint-staged": "^10.1.5",
     "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
     "rollup": "^2.6.1",
@@ -146,10 +146,10 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "@openfonts/fira-mono_all": "^1.44.0",
-    "@openfonts/fira-sans_all": "^1.44.0",
-    "@openfonts/source-code-pro_all": "^1.44.0",
-    "@openfonts/source-serif-pro_latin": "^1.44.0",
+    "@openfonts/fira-mono_all": "^1.44.1",
+    "@openfonts/fira-sans_all": "^1.44.1",
+    "@openfonts/source-code-pro_all": "^1.44.1",
+    "@openfonts/source-serif-pro_latin": "^1.44.1",
     "codemirror": "^5.52.2",
     "d3-array": "^2.4.0",
     "d3-axis": "^1.0.12",
