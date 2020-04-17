@@ -10,7 +10,7 @@ import { promisify } from "util";
 import { basename, dirname, join } from "path";
 
 // Run in dev mode when using rollup watch.
-const production = !process.env.ROLLUP_WATCH;
+const dev = process.env.ROLLUP_WATCH;
 
 const copyFile = promisify(fs.copyFile);
 
@@ -41,35 +41,41 @@ function copy(files) {
   };
 }
 
-const typescriptPlugin = production
-  ? typescript()
-  : sucrase({
+const typescriptPlugin = dev
+  ? sucrase({
       exclude: ["node_modules/**"],
       transforms: ["typescript"],
-    });
+    })
+  : typescript();
 
-export default {
-  input: "javascript/main.ts",
-  output: {
-    file: "gen/app.js",
-    name: "fava",
-    sourcemap: true,
-    format: "iife",
-  },
-  plugins: [
-    nodeResolve({ extensions: [".js", ".ts"] }),
-    commonjs({
-      include: "node_modules/**",
-    }),
-    svelte({ dev: !production }),
-    css(),
-    typescriptPlugin,
-    copy(fonts),
-  ],
-  onwarn(warning, warn) {
-    if (warning.code === "CIRCULAR_DEPENDENCY") {
-      return;
-    }
-    warn(warning);
-  },
-};
+function config(input, output) {
+  return {
+    input,
+    output: {
+      file: output,
+      sourcemap: dev,
+      format: "iife",
+    },
+    plugins: [
+      nodeResolve({ extensions: [".js", ".ts"] }),
+      commonjs({
+        include: "node_modules/**",
+      }),
+      svelte({ dev }),
+      css(),
+      typescriptPlugin,
+      copy(fonts),
+    ],
+    onwarn(warning, warn) {
+      if (
+        warning.code === "CIRCULAR_DEPENDENCY" &&
+        warning.importer.includes("d3-")
+      ) {
+        return;
+      }
+      warn(warning);
+    },
+  };
+}
+
+export default config("javascript/main.ts", "gen/app.js");
