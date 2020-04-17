@@ -121,30 +121,13 @@ def test_download_journal(app, test_client):
     assert result.headers["Content-Type"] == "application/octet-stream"
 
 
-@pytest.mark.parametrize(
-    "filename,has_modified",
-    [
-        ("not-a-real-file", False),
-        ("javascript/main.ts", True),
-        ("css/style.css", True),
-    ],
-)
-def test_static_url(app, filename, has_modified):
+def test_static_url(app) -> None:
+    filename = "javascript/main.ts"
     with app.test_request_context():
         app.preprocess_request()
-        url = static_url(filename=filename)
+        url = static_url(filename)
     assert url.startswith("/static/" + filename)
-    assert ("?mtime=" in url) == has_modified
-
-
-def test_static_url_no_filename(app):
-    with app.test_request_context():
-        app.preprocess_request()
-        try:
-            static_url()
-            assert False, "static_url without a filename should throw an error"
-        except werkzeug.routing.BuildError:
-            pass
+    assert "?mtime=" in url
 
 
 def test_load_extension_reports(extension_report_app, test_client):

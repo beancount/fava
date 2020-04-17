@@ -16,7 +16,6 @@ import functools
 import inspect
 import threading
 from io import BytesIO
-from pathlib import Path
 from typing import Any
 from typing import Dict
 from typing import Optional
@@ -54,11 +53,12 @@ from fava.util import slugify
 from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
+STATIC_FOLDER = resource_path("static")
 setup_logging()
 app = Flask(  # pylint: disable=invalid-name
     __name__,
     template_folder=str(resource_path("templates")),
-    static_folder=str(resource_path("static")),
+    static_folder=str(STATIC_FOLDER),
 )
 app.register_blueprint(json_api, url_prefix="/<bfile>/api")
 
@@ -144,17 +144,14 @@ def _inject_filters(endpoint, values) -> None:
 
 
 @app.template_global()
-def static_url(**values):
+def static_url(filename: str) -> str:
     """Return a static url with an mtime query string for cache busting."""
-    filename = values.get("filename", None)
-    if not filename:
-        return url_for("static", **values)
-
-    file_path = Path(app.static_folder) / filename
-    if file_path.exists():
-        values["mtime"] = int(file_path.stat().st_mtime)
-
-    return url_for("static", **values)
+    file_path = STATIC_FOLDER / filename
+    try:
+        mtime = int(file_path.stat().st_mtime)
+    except FileNotFoundError:
+        mtime = 0
+    return url_for("static", filename=filename, mtime=mtime)
 
 
 app.add_template_global(datetime.date.today, "today")
