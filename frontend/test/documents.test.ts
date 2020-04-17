@@ -1,5 +1,5 @@
 import test from "ava";
-import { entriesToTree, Node } from "../javascript/documents/util";
+import { entriesToTree, Node } from "../src/documents/util";
 
 test("tree from documents", (t) => {
   const root: Node = { name: "", fullname: "", children: new Map() };

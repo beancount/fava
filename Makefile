@@ -1,16 +1,16 @@
-all: fava/static/gen/app.js
+all: fava/static/app.js
 
-fava/static/gen/app.js: fava/static/css/* fava/static/javascript/* fava/static/package.json fava/static/node_modules
-	cd fava/static; npm run build
+fava/static/app.js: frontend/css/* frontend/src/* frontend/package.json frontend/node_modules
+	cd frontend; npm run build
 
-fava/static/node_modules: fava/static/package-lock.json
-	cd fava/static; npm install --no-progress
-	touch -m fava/static/node_modules
+frontend/node_modules: frontend/package-lock.json
+	cd frontend; npm install --no-progress
+	touch -m frontend/node_modules
 
 .PHONY: clean
 clean: mostlyclean
 	rm -rf build dist
-	rm -rf fava/static/gen
+	rm -rf fava/static/*
 
 .PHONY: mostlyclean
 mostlyclean:
@@ -19,24 +19,24 @@ mostlyclean:
 	rm -rf .tox
 	rm -rf build
 	rm -rf dist
-	rm -rf fava/static/node_modules
+	rm -rf frontend/node_modules
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
 .PHONY: check-lint
-check-lint: fava/static/node_modules
-	cd fava/static; npm run check-lint
+check-lint: frontend/node_modules
+	cd frontend; npm run check-lint
 	tox -e lint
 
 .PHONY: lint
-lint: fava/static/node_modules
-	cd fava/static; npm run lint
+lint: frontend/node_modules
+	cd frontend; npm run lint
 	tox -e format
 	tox -e lint
 
 .PHONY: test
 test:
-	cd fava/static; npm run test
+	cd frontend; npm run test
 	tox -e py
 
 .PHONY: update-snapshots
@@ -58,7 +58,7 @@ run-example:
 bql-grammar:
 	contrib/scripts.py generate-bql-grammar-json
 
-dist: fava/static/gen/app.js fava setup.cfg setup.py MANIFEST.in
+dist: fava/static/app.js fava setup.cfg setup.py MANIFEST.in
 	rm -rf build dist
 	python setup.py sdist bdist_wheel
 
@@ -76,7 +76,7 @@ upload: dist
 # Extract translation strings.
 .PHONY: translations-extract
 translations-extract:
-	pybabel extract -F fava/translations/babel.conf -o fava/translations/messages.pot ./fava
+	pybabel extract -F fava/translations/babel.conf -o fava/translations/messages.pot .
 
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token

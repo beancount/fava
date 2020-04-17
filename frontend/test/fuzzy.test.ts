@@ -1,5 +1,5 @@
 import test from "ava";
-import { fuzzyfilter, fuzzytest, fuzzywrap } from "../javascript/lib/fuzzy";
+import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy";
 
 test("fuzzy test", (t) => {
   t.assert(fuzzytest("asdf", "asdfasdf"));

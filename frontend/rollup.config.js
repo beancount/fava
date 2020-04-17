@@ -15,6 +15,7 @@ const dev = process.env.ROLLUP_WATCH;
 const copyFile = promisify(fs.copyFile);
 
 const fonts = [
+  "img/favicon.ico",
   "node_modules/@openfonts/fira-mono_all/files/fira-mono-all-400.woff2",
   "node_modules/@openfonts/fira-mono_all/files/fira-mono-all-500.woff2",
   "node_modules/@openfonts/fira-sans_all/files/fira-sans-all-400.woff2",
@@ -78,4 +79,4 @@ function config(input, output) {
   };
 }
 
-export default config("javascript/main.ts", "gen/app.js");
+export default config("src/main.ts", "../fava/static/app.js");

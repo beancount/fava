@@ -1,5 +1,5 @@
 import test from "ava";
-import { shallow_equal } from "../javascript/lib/equals";
+import { shallow_equal } from "../src/lib/equals";
 
 test("shallow array equality", (t) => {
   t.assert(shallow_equal([], []));

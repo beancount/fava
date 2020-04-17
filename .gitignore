@@ -7,13 +7,13 @@
 /pip-wheel-metadata/
 /dist/
 /docs/api/
+/fava/static
 /fava.egg-info
-/fava/static/node_modules
 /fava/translations/messages.pot
 /htmlcov
 /venv
-gen
 
+node_modules
 *.pyc
 .DS_Store
 .env

@@ -7,7 +7,7 @@ import {
   number,
   string,
   object,
-} from "../javascript/lib/validation";
+} from "../src/lib/validation";
 
 test("validate boolean", (t) => {
   t.assert(boolean(true));

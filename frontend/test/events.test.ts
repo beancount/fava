@@ -1,5 +1,5 @@
 import test from "ava";
-import { Events } from "../javascript/lib/events";
+import { Events } from "../src/lib/events";
 
 test("register and listen to events", (t) => {
   const e = new Events<"t">();

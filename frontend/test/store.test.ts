@@ -1,6 +1,6 @@
 import test from "ava";
 import { writable } from "svelte/store";
-import { derived_array } from "../javascript/lib/store";
+import { derived_array } from "../src/lib/store";
 
 test("derived store", (t) => {
   const source = writable<string[]>([]);
