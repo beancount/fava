@@ -11,11 +11,8 @@ from fava.application import REPORTS, static_url
 
 FILTER_COMBINATIONS = [
     {"account": "Assets"},
-    {"from": 'has_account("Assets")'},
-    {"time": "2015"},
-    {"payee": "BayBook"},
-    {"tag": "tag1, tag2"},
-    {"time": "2015", "payee": "BayBook"},
+    {"filter": "any(account: Assets)"},
+    {"time": "2015", "filter": "#tag1 payee:BayBook"},
 ]
 
 
@@ -28,9 +25,6 @@ FILTER_COMBINATIONS = [
     ],
 )
 def test_reports(app, test_client, report, filters):
-    if report.startswith("_"):
-        return
-
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("report", report_name=report, **filters)
@@ -122,7 +116,7 @@ def test_download_journal(app, test_client):
 
 
 def test_static_url(app) -> None:
-    filename = "javascript/main.ts"
+    filename = "app.js"
     with app.test_request_context():
         app.preprocess_request()
         url = static_url(filename)

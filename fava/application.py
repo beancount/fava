@@ -73,7 +73,6 @@ app.config["HELP_PAGES"] = HELP_PAGES
 app.config["ACCOUNT_RE"] = ACCOUNT_RE
 
 REPORTS = [
-    "_context",
     "balance_sheet",
     "commodities",
     "documents",
