@@ -39,7 +39,7 @@
 {% endif %}
 {% endmacro %}
 
-{% macro querytable(contents, types, rows, filter_empty=None) %}
+{% macro querytable(contents, types, rows, filter_empty=None, footer=None) %}
 {% if contents %}
 <pre><code>{{ contents }}</code></pre>
 {% elif types %}
@@ -60,6 +60,15 @@
     </tr>
     {% endfor %}
   </tbody>
+  {% if footer %}
+  <tfoot>
+    <tr>
+      {% for type, value in footer %}
+        {{ querycell('', value, type)  }}
+      {% endfor %}
+    </tr>
+  </tfoot>
+  {% endif %}
 </table>
 {% endif %}
 {% endmacro %}
