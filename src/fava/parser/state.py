@@ -20,7 +20,7 @@ from beancount.parser.options import OPTIONS_DEFAULTS  # type: ignore
 from beancount.parser.options import READ_ONLY_OPTIONS  # type: ignore
 from tree_sitter import Node
 
-from fava.core.helpers import BeancountError
+from fava.helpers import BeancountError
 
 
 class BaseState:

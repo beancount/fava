@@ -6,7 +6,9 @@ import os
 import re
 import time
 import unicodedata
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Optional
 
 from flask import abort
 from flask import send_file
@@ -53,6 +55,16 @@ def timefunc(func):  # pragma: no cover - only used for debugging so far
         return result
 
     return _wrapper
+
+
+@contextmanager
+def log_time(msg: str, logger: Optional[logging.Logger]):
+    """Context manager to time execution for debugging."""
+    start = time.time()
+    yield start
+    end = time.time()
+    if logger is not None:
+        logger.info("{}: {}ms".format(msg, end - start))
 
 
 def pairwise(iterable):

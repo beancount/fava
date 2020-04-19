@@ -3,6 +3,7 @@
 This uses a tree-sitter grammar to provide an alternative parser to the one
 shipped with Beancount, which is a flex/yacc parser.
 """
+import logging
 from importlib.machinery import EXTENSION_SUFFIXES
 from pathlib import Path
 from typing import Any
@@ -11,7 +12,6 @@ from typing import Optional
 from typing import Set
 from typing import Tuple
 
-from beancount.core.data import ALL_DIRECTIVES
 from beancount.core.data import Entries
 from beancount.core.number import MISSING
 from pkg_resources import resource_filename
@@ -19,9 +19,12 @@ from tree_sitter import Language
 from tree_sitter import Node
 from tree_sitter import Parser
 
-from fava.core.helpers import BeancountError
+from fava.helpers import BeancountError
 from fava.parser import nodes as handlers
 from fava.parser.state import BaseState
+from fava.util import log_time
+
+LOG = logging.getLogger(__name__)
 
 
 class ParserState(BaseState):
@@ -110,16 +113,16 @@ def _recursive_parse(
     for node in nodes:
         try:
             res = state.handle_node(node)
-            if isinstance(res, ALL_DIRECTIVES):
+            if res is not None:
                 entries.append(res)
         except handlers.SyntaxError:
-            sexp = node.sexp()
             node_contents = state.contents[
                 node.start_byte : node.end_byte
             ].decode()
             state.error(
                 node,
-                f"Syntax error with transaction:\n{node_contents}\n\n{sexp}",
+                'Syntax error with transaction:\n'
+                f"{node_contents}\n{node.sexp()}",
             )
         except handlers.IncludeFound as incl:
             if filename is None:
@@ -142,7 +145,8 @@ def _recursive_parse(
                     continue
                 contents = included.read_bytes()
                 seen_files.add(included_name)
-                tree = PARSER.parse(contents)
+                with log_time(f"parsing {included_name}", LOG):
+                    tree = PARSER.parse(contents)
                 # Update state for the included file and recurse.
                 with state.set_current_file(contents, included_name):
                     included_entries = _recursive_parse(
@@ -173,7 +177,8 @@ def parse_bytes(contents: bytes, filename: str = None) -> ParserResult:
         filename = str(Path(filename).resolve())
         seen_files.add(filename)
 
-    tree = PARSER.parse(contents)
+    with log_time(f"parsing {filename}", LOG):
+        tree = PARSER.parse(contents)
     entries = _recursive_parse(
         tree.root_node.children, state, filename, seen_files
     )
