@@ -112,6 +112,15 @@ def _recursive_parse(
             res = state.handle_node(node)
             if isinstance(res, ALL_DIRECTIVES):
                 entries.append(res)
+        except handlers.SyntaxError:
+            sexp = node.sexp()
+            node_contents = state.contents[
+                node.start_byte : node.end_byte
+            ].decode()
+            state.error(
+                node,
+                f"Syntax error with transaction:\n{node_contents}\n\n{sexp}",
+            )
         except handlers.IncludeFound as incl:
             if filename is None:
                 state.error(

@@ -33,8 +33,8 @@ setup(
     ext_modules=[
         Extension(
             "fava.parser.tree_sitter_beancount",
-            ["fava/parser/tree-sitter-beancount/parser.c"],
-            include_dirs=["fava/parser/tree-sitter-beancount"],
+            ["src/fava/parser/tree-sitter-beancount/parser.c"],
+            include_dirs=["src/fava/parser/tree-sitter-beancount"],
             extra_compile_args=FLAGS,
         )
     ],

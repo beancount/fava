@@ -49,7 +49,7 @@ class Open(NamedTuple):
     meta: Meta
     date: datetime.date
     account: Account
-    currencies: List[Currency]
+    currencies: Optional[List[Currency]]
     booking: Booking
 
 class Pad(NamedTuple):

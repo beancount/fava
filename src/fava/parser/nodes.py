@@ -37,6 +37,16 @@ from tree_sitter import Node
 from fava.parser.state import BaseState
 
 
+class SyntaxError(Exception):
+    """Syntax error."""
+
+
+def ERROR(state: BaseState, node: Node) -> None:
+    """Handle a syntax error.."""
+    # pylint: disable=invalid-name
+    raise SyntaxError
+
+
 class IncludeFound(Exception):
     """Signal an include directive."""
 
@@ -169,8 +179,8 @@ def open(state: BaseState, node: Node) -> Open:
     booking = state.get(node, "booking")
     if booking is not None:
         booking = getattr(Booking, booking)
-        state.error(node, "Invalid booking method: {}".format(booking))
         if booking is None:
+            state.error(node, "Invalid booking method: {}".format(booking))
             booking = state.options["booking_method"]
     return Open(
         state.metadata(node),
@@ -274,18 +284,18 @@ def postings(state: BaseState, node: Node) -> List[Posting]:
 
 def price_annotation(state: BaseState, node: Node):
     """Handle a price annotation."""
+    istotal = node.children[0].type == "@@"
     if len(node.children) > 1:
-        istotal = node.children[0].type == "@@"
         return state.handle_node(node.children[1]), istotal
-    return MISSING
+    return Amount(MISSING, MISSING), istotal  # type: ignore
 
 
 def cost_spec(state: BaseState, node: Node) -> CostSpec:
     """Handle a cost spec."""
     # pylint: disable=too-many-branches
-    istotal = node.children[0].type != "{"
-    cost_comp_list_ = state.handle_node(node.children[1])
-    if not cost_comp_list_:
+    istotal = node.children[0].type == "{{"
+    cost_comp_list_ = state.get(node, "cost_comp_list")
+    if cost_comp_list_ is None:
         return CostSpec(MISSING, None, MISSING, None, None, False)
 
     compound_cost = None
@@ -367,6 +377,8 @@ def compound_amount(
 def posting(state: BaseState, node: Node) -> Posting:
     """Handle a single posting."""
     units = state.get(node, "amount")
+    if units is None:
+        units = MISSING
     price_ = state.get(node, "price_annotation")
     if price_ is not None and price_ is not MISSING:
         price_, istotal = price_
@@ -376,7 +388,7 @@ def posting(state: BaseState, node: Node) -> Posting:
             and price_.number < ZERO
         ):
             state.error(node.children[0], "Negative prices are not allowed")
-        if istotal:
+        if istotal and units is not MISSING:
             if units.number == ZERO:
                 num = ZERO
             else:
@@ -388,7 +400,7 @@ def posting(state: BaseState, node: Node) -> Posting:
         state.get(node, "cost_spec"),
         price_,
         state.get(node, "flag"),
-        state.metadata(node.children[0]),
+        state.metadata(node, 1),
     )
 
 

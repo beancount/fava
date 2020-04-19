@@ -39,6 +39,12 @@ def load_file(filename: str, tree_sitter=True, is_encrypted=False):
     """
     if is_encrypted:
         return beancount_load_file(filename)
+    ret_bc = _load([(filename, True)], None, None, None)
     if tree_sitter is False:
-        return _load([(filename, True)], None, None, None)
-    return _load_tree_sitter(filename)
+        return ret_bc
+    ret_fava = _load_tree_sitter(filename)
+    for left, right in zip(ret_bc[0], ret_fava[0]):
+        if left != right:
+            print(f"Mismatch:\n{left}\n{right}")
+            assert left == right
+    return ret_fava

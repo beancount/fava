@@ -43,6 +43,11 @@ from fava.util import simple_wsgi
     is_flag=True,
     help="Run in incognito mode and obscure all numbers.",
 )
+@click.option(
+    "--fava-parser",
+    is_flag=True,
+    help="Use Fava's instead of Beancount's parser.",
+)
 @click.option("-d", "--debug", is_flag=True, help="Turn on debugging.")
 @click.option(
     "--profile", is_flag=True, help="Turn on profiling. Implies --debug."
@@ -54,7 +59,15 @@ from fava.util import simple_wsgi
 )
 @click.version_option(version=__version__, prog_name="fava")
 def main(
-    filenames, port, host, prefix, incognito, debug, profile, profile_dir
+    filenames,
+    port,
+    host,
+    prefix,
+    incognito,
+    fava_parser,
+    debug,
+    profile,
+    profile_dir,
 ):  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
@@ -78,6 +91,7 @@ def main(
 
     app.config["BEANCOUNT_FILES"] = filenames
     app.config["INCOGNITO"] = incognito
+    app.config["FAVA_PARSER"] = fava_parser
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(

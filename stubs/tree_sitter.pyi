@@ -12,6 +12,7 @@ class Node:
     end_byte: int
     children: List["Node"]
     def child_by_field_name(self, name: str) -> Optional["Node"]: ...
+    def sexp(self) -> str: ...
 
 class Tree:
     root_node: Node

@@ -139,7 +139,7 @@ class BaseState:
 
         return None
 
-    def metadata(self, node: Optional[Node]):
+    def metadata(self, node: Optional[Node], offset=0):
         """Metadata with the position for a node.
 
         Args:
@@ -155,7 +155,7 @@ class BaseState:
         if node_meta:
             meta.update(node_meta)
         meta["filename"] = self.filename
-        meta["lineno"] = node.start_point[0] + 1
+        meta["lineno"] = node.start_point[0] + 1 + offset
 
         return meta
 

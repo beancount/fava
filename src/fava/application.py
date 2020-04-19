@@ -98,7 +98,7 @@ def _load_file():
     """
     app.config["LEDGERS"] = {}
     for filepath in app.config["BEANCOUNT_FILES"]:
-        ledger = FavaLedger(filepath)
+        ledger = FavaLedger(filepath, app.config.get("FAVA_PARSER", False))
         slug = slugify(ledger.options["title"])
         if not slug:
             slug = slugify(filepath)

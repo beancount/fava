@@ -1,4 +1,4 @@
-all: src/fava/static/app.js
+all: src/fava/static/app.js src/fava/parser/tree_sitter_beancount.so
 
 src/fava/static/app.js: frontend/css/* frontend/src/* frontend/package.json frontend/node_modules
 	cd frontend; npm run build
@@ -6,6 +6,9 @@ src/fava/static/app.js: frontend/css/* frontend/src/* frontend/package.json fron
 frontend/node_modules: frontend/package-lock.json
 	cd frontend; npm install --no-progress
 	touch -m frontend/node_modules
+
+src/fava/parser/tree_sitter_beancount.so: src/fava/parser/tree-sitter-beancount/*
+	python3 setup.py build_ext --inplace
 
 .PHONY: clean
 clean: mostlyclean

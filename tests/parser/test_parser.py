@@ -10,6 +10,7 @@ from beancount.core.data import EMPTY_SET
 from beancount.core.data import Note
 from beancount.core.data import Open
 from beancount.core.number import D
+from beancount.parser.parser import parse_string
 
 from fava.parser.parser import PARSER
 from fava.parser.parser import ParserState
@@ -25,7 +26,7 @@ def _parse_single(line):
 def _parse_many(line):
     contents = bytes(line, "utf-8")
     tree = PARSER.parse(contents)
-    state = ParserState(contents)
+    state = ParserState(contents, "<string>")
     return list(map(state.handle_node, tree.root_node.children))
 
 
@@ -121,6 +122,24 @@ TXN_LINES = """
     Assets:Cash      100 / 10 USD
     Assets:Cash      5 + 5 USD
     Assets:Cash      15 - 5 USD
+
+2014-07-31 * "BayBook" "Payroll"
+  Assets:US:BofA:Checking                         2550.60 USD
+  Assets:US:Federal:PreTax401k                       0.00 IRAUSD
+  Income:US:BayBook:Salary                       -4615.38 USD
+  Income:US:BayBook:GroupTermLife                  -24.32 USD
+  Expenses:Health:Life:GroupTermLife                24.32 USD
+  Expenses:Health:Dental:Insurance                   2.90 USD
+  Expenses:Health:Medical:Insurance                 27.38 USD
+  Expenses:Health:Vision:Insurance                  42.30 USD
+  Expenses:Taxes:Y2014:US:Medicare                 106.62 USD
+  Expenses:Taxes:Y2014:US:Federal                 1062.92 USD
+  Expenses:Taxes:Y2014:US:State                    365.08 USD
+  Expenses:Taxes:Y2014:US:CityNYC                  174.92 USD
+  Expenses:Taxes:Y2014:US:SDI                        1.12 USD
+  Expenses:Taxes:Y2014:US:SocSec                   281.54 USD
+  Assets:US:BayBook:Vacation                            5 VACHR
+  Income:US:BayBook:Vacation                           -5 VACHR
 """
 
 
@@ -128,3 +147,9 @@ def test_transaction(snapshot):
     txns = _parse_many(TXN_LINES)
     snapshot(txns)
     assert all(p.units.number == D("10") for p in txns[1].postings)
+
+
+def test_matches_beancount():
+    bc_entries = parse_string(TXN_LINES)[0]
+    f_entries = _parse_many(TXN_LINES)
+    assert bc_entries == f_entries

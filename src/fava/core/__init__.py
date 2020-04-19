@@ -117,27 +117,29 @@ class FavaLedger:
 
     Arguments:
         path: Path to the main Beancount file.
+        fava_parser: Whether to use Fava's instead of Beancount's parser.
     """
 
     __slots__ = [
+        "_date_first",
+        "_date_last",
+        "_fava_parser",
+        "_is_encrypted",
+        "_watcher",
         "account_types",
         "accounts",
         "all_entries",
         "all_entries_by_type",
         "all_root_account",
         "beancount_file_path",
-        "_date_first",
-        "_date_last",
         "entries",
         "errors",
         "fava_options",
         "filters",
-        "_is_encrypted",
         "options",
         "price_map",
         "root_account",
         "root_tree",
-        "_watcher",
     ] + MODULES
 
     #: List of all (unfiltered) entries.
@@ -149,9 +151,10 @@ class FavaLedger:
     #: A NamedTuple containing the names of the five base accounts.
     account_types: AccountTypes
 
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, fava_parser=False) -> None:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
+        self._fava_parser = fava_parser
         self._is_encrypted = is_encrypted_file(path)
 
         #: An :class:`AttributesModule` instance.
@@ -206,7 +209,7 @@ class FavaLedger:
     def load_file(self) -> None:
         """Load the main file and all included files and set attributes."""
         self.all_entries, self.errors, self.options = load_file(
-            self.beancount_file_path, False, self._is_encrypted
+            self.beancount_file_path, self._fava_parser, self._is_encrypted
         )
 
         self.account_types = get_account_types(self.options)
