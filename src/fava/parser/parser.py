@@ -121,7 +121,7 @@ def _recursive_parse(
             ].decode()
             state.error(
                 node,
-                'Syntax error with transaction:\n'
+                "Syntax error with transaction:\n"
                 f"{node_contents}\n{node.sexp()}",
             )
         except handlers.IncludeFound as incl:

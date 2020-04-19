@@ -9,6 +9,7 @@ from werkzeug.middleware.profiler import ProfilerMiddleware
 
 from fava import __version__
 from fava.application import app
+from fava.util import setup_logging
 from fava.util import simple_wsgi
 
 
@@ -92,6 +93,8 @@ def main(
     app.config["BEANCOUNT_FILES"] = filenames
     app.config["INCOGNITO"] = incognito
     app.config["FAVA_PARSER"] = fava_parser
+
+    setup_logging(debug)
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(

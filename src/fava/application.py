@@ -47,13 +47,11 @@ from fava.json_api import json_api
 from fava.serialisation import serialise
 from fava.util import resource_path
 from fava.util import send_file_inline
-from fava.util import setup_logging
 from fava.util import slugify
 from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
 STATIC_FOLDER = resource_path("static")
-setup_logging()
 app = Flask(  # pylint: disable=invalid-name
     __name__,
     template_folder=str(resource_path("templates")),

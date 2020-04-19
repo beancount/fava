@@ -22,9 +22,10 @@ def filter_api_changed(record):
     return "/api/changed HTTP" not in record.msg
 
 
-def setup_logging() -> None:
+def setup_logging(debug: bool) -> None:
     """Setup logging for Fava."""
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    level = logging.DEBUG if debug else logging.INFO
+    logging.basicConfig(level=level, format="%(message)s")
     logging.getLogger("werkzeug").addFilter(filter_api_changed)
 
 
@@ -64,7 +65,7 @@ def log_time(msg: str, logger: Optional[logging.Logger]):
     yield start
     end = time.time()
     if logger is not None:
-        logger.info("{}: {}ms".format(msg, end - start))
+        logger.debug("{}: {}ms".format(msg, end - start))
 
 
 def pairwise(iterable):
