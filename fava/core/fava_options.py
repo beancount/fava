@@ -33,7 +33,7 @@ class InsertEntryOption(NamedTuple):
     """
 
     date: datetime.date
-    re: Pattern
+    re: Pattern[str]
     filename: str
     lineno: int
 
