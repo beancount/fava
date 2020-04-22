@@ -19,13 +19,9 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     report_title = "Portfolio List"
 
-    def portfolio_accounts(self, begin=None, end=None):
+    def portfolio_accounts(self):
         """An account tree based on matching regex patterns."""
-        if begin:
-            tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
-        else:
-            tree = self.ledger.root_tree
-
+        tree = self.ledger.root_tree
         portfolios = []
 
         for option in self.config:
