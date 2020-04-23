@@ -531,9 +531,19 @@ def flag(state: BaseState, node: Node) -> str:
     return state.contents[node.start_byte : node.end_byte].decode()
 
 
+ALL_ACCOUNTS: Dict[bytes, str] = {}
+
+
 def account(state: BaseState, node: Node) -> str:
     """Handle an account token."""
-    return state.contents[node.start_byte : node.end_byte].decode()
+    # TODO: check against root accounts.
+    contents = state.contents[node.start_byte : node.end_byte]
+    acc = ALL_ACCOUNTS.get(contents)
+    if acc is not None:
+        return acc
+    acc = contents.decode()
+    ALL_ACCOUNTS[contents] = acc
+    return acc
 
 
 def bool(state: BaseState, node: Node):

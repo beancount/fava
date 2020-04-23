@@ -29,6 +29,16 @@ class BaseState:
     This is where data that needs to be kept in the state lives.
     """
 
+    __slots__ = (
+        "_dcupdate",
+        "contents",
+        "errors",
+        "filename",
+        "meta",
+        "options",
+        "tags",
+    )
+
     def __init__(self, contents: bytes, filename: str = None):
         #: The current stack of tags.
         self.tags: Set[str] = set()
@@ -61,11 +71,15 @@ class BaseState:
         """
         orig_contents = self.contents
         orig_filename = self.filename
+        orig_meta = copy.deepcopy(self.meta)
         self.contents = contents
         self.filename = filename
         try:
             yield
         finally:
+            if orig_meta != self.meta:
+                self.error(None, "Unbalanced metadata")
+            self.meta = orig_meta
             self.contents = orig_contents
             self.filename = orig_filename
 

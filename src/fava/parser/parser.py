@@ -63,9 +63,8 @@ class ParserState(BaseState):
 
         For named nodes in the grammar, try to handle them using a function
         from `.handlers`."""
-        type_ = node.type
         if node.is_named:
-            handler = getattr(handlers, type_)
+            handler = getattr(handlers, node.type)
             return handler(self, node)
         return node
 
@@ -120,9 +119,7 @@ def _recursive_parse(
                 node.start_byte : node.end_byte
             ].decode()
             state.error(
-                node,
-                "Syntax error with transaction:\n"
-                f"{node_contents}\n{node.sexp()}",
+                node, f"Syntax error:\n{node_contents}\n{node.sexp()}",
             )
         except handlers.IncludeFound as incl:
             if filename is None:
