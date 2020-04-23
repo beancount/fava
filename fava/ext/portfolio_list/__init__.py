@@ -21,22 +21,18 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     report_title = "Portfolio List"
 
-    def portfolio_accounts(self, begin=None, end=None):
+    def portfolio_accounts(self):
         """An account tree based on matching regex patterns."""
-        if begin:
-            tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
-        else:
-            tree = self.ledger.root_tree
-
+        tree = self.ledger.root_tree
         portfolios = []
 
         for option in self.config:
             opt_key = option[0]
             if opt_key == "account_name_pattern":
-                portfolio = self._account_name_pattern(tree, end, option[1])
+                portfolio = self._account_name_pattern(tree, option[1])
             elif opt_key == "account_open_metadata_pattern":
                 portfolio = self._account_metadata_pattern(
-                    tree, end, option[1][0], option[1][1]
+                    tree, option[1][0], option[1][1]
                 )
             else:
                 raise FavaAPIException("Portfolio List: Invalid option.")
@@ -44,13 +40,12 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
         return portfolios
 
-    def _account_name_pattern(self, tree, date, pattern):
+    def _account_name_pattern(self, tree, pattern):
         """
         Returns portfolio info based on matching account name.
 
         Args:
             tree: Ledger root tree node.
-            date: Date.
             pattern: Account name regex pattern.
         Return:
             Data structured for use with a querytable (types, rows).
@@ -65,16 +60,15 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
                 selected_accounts.append(acct)
 
         selected_nodes = [tree[x] for x in selected_accounts]
-        portfolio_data = self._portfolio_data(selected_nodes, date)
+        portfolio_data = self._portfolio_data(selected_nodes)
         return title, portfolio_data
 
-    def _account_metadata_pattern(self, tree, date, metadata_key, pattern):
+    def _account_metadata_pattern(self, tree, metadata_key, pattern):
         """
         Returns portfolio info based on matching account open metadata.
 
         Args:
             tree: Ledger root tree node.
-            date: Date.
             metadata_key: Metadata key to match for in account open.
             pattern: Metadata value's regex pattern to match for.
         Return:
@@ -96,16 +90,15 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
                 selected_accounts.append(entry.account)
 
         selected_nodes = [tree[x] for x in selected_accounts]
-        portfolio_data = self._portfolio_data(selected_nodes, date)
+        portfolio_data = self._portfolio_data(selected_nodes)
         return title, portfolio_data
 
-    def _portfolio_data(self, nodes, date):
+    def _portfolio_data(self, nodes):
         """
         Turn a portfolio of tree nodes into querytable-style data.
 
         Args:
             nodes: Account tree nodes.
-            date: Date.
         Return:
             types: Tuples of column names and types as strings.
             rows: Dictionaries of row data by column names.
@@ -121,7 +114,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         for node in nodes:
             row = {}
             row["account"] = node.name
-            balance = cost_or_value(node.balance, date)
+            balance = cost_or_value(node.balance)
             if operating_currency in balance:
                 balance_dec = balance[operating_currency]
                 portfolio_total += balance_dec
