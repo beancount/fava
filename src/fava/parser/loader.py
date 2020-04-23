@@ -9,6 +9,7 @@ from beancount.loader import run_transformations
 from beancount.ops import validation  # type: ignore
 from beancount.parser import booking  # type: ignore
 
+from fava.helpers import BeancountError
 from fava.parser.parser import parse_file
 from fava.util import log_time
 
@@ -52,6 +53,7 @@ def load_file(filename: str, tree_sitter=True, is_encrypted=False):
         ret_fava = _load_tree_sitter(filename)
     for left, right in zip(ret_bc[0], ret_fava[0]):
         if left != right:
-            print(f"Mismatch:\n{left}\n{right}")
-            assert left == right
+            msg = f"Mismatch:\n{left}\n\n{right}"
+            print(msg)
+            ret_fava[1].append(BeancountError(None, msg, right))
     return ret_fava

@@ -2,6 +2,7 @@
 The parser state.
 """
 import copy
+import re
 from collections import defaultdict
 from contextlib import contextmanager
 from typing import Any
@@ -9,6 +10,7 @@ from typing import Callable
 from typing import DefaultDict
 from typing import List
 from typing import Optional
+from typing import Pattern
 from typing import Set
 
 from beancount.core.display_context import DisplayContext
@@ -23,14 +25,29 @@ from tree_sitter import Node
 from fava.helpers import BeancountError
 
 
+def valid_base_account_regexp(options) -> Pattern[str]:
+    """Build a regexp to match the base accounts."""
+    names = [
+        options["name_assets"] + ":",
+        options["name_liabilities"] + ":",
+        options["name_equity"] + ":",
+        options["name_income"] + ":",
+        options["name_expenses"] + ":",
+    ]
+    return re.compile("|".join(names))
+
+
 class BaseState:
     """The state of the parser.
 
     This is where data that needs to be kept in the state lives.
     """
 
+    # pylint: disable=too-many-instance-attributes
+
     __slots__ = (
         "_dcupdate",
+        "base_account_regexp",
         "contents",
         "errors",
         "filename",
@@ -38,6 +55,8 @@ class BaseState:
         "options",
         "tags",
     )
+
+    base_account_regexp: Pattern[str]
 
     def __init__(self, contents: bytes, filename: str = None):
         #: The current stack of tags.
@@ -56,6 +75,7 @@ class BaseState:
         dcontext = DisplayContext()
         self._dcupdate: Callable[[Decimal, str], None] = dcontext.update
         self.options["dcontext"] = dcontext
+        self.base_account_regexp = valid_base_account_regexp(self.options)
 
     @contextmanager
     def set_current_file(self, contents: bytes, filename: str):
@@ -109,6 +129,8 @@ class BaseState:
     def handle_option(self, node: Node, name: str, value: Any) -> None:
         """Set an option."""
 
+        # pylint: disable=too-many-branches
+
         if name not in self.options:
             return self.error(node, f"Invalid option: '{name}'")
         if name in READ_ONLY_OPTIONS:
@@ -150,6 +172,8 @@ class BaseState:
         else:
             # Set the value.
             self.options[name] = value
+        if name.startswith("name_"):
+            self.base_account_regexp = valid_base_account_regexp(self.options)
 
         return None
 
