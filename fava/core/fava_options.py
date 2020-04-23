@@ -14,6 +14,7 @@ from typing import Iterable
 from typing import List
 from typing import NamedTuple
 from typing import Tuple
+from typing import Pattern
 
 from beancount.core.data import Custom
 
@@ -32,7 +33,7 @@ class InsertEntryOption(NamedTuple):
     """
 
     date: datetime.date
-    re: re.Pattern
+    re: Pattern[str]
     filename: str
     lineno: int
 
