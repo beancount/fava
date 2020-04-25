@@ -11,6 +11,8 @@ import { SvelteComponentDev } from "svelte/internal";
 
 import "../css/style.css";
 import "../css/base.css";
+import "../css/layout.css";
+import "../css/aside.css";
 import "../css/charts.css";
 import "../css/components.css";
 import "../css/editor.css";

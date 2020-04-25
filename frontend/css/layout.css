@@ -1,0 +1,29 @@
+:root {
+  --header-height: 50px;
+  --aside-width: 160px;
+}
+
+body {
+  padding: var(--header-height) 0 0 var(--aside-width);
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-index-header);
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--header-height);
+  padding: 0 7px 0 10px;
+  color: var(--color-header-text);
+  background-color: var(--color-header);
+}
+
+article {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 1.5em;
+}
