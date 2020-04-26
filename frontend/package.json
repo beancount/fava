@@ -73,9 +73,13 @@
     },
     "overrides": [
       {
-        "files": [
-          "*.svelte"
-        ],
+        "files": "*.js",
+        "rules": {
+          "@typescript-eslint/explicit-function-return-type": 0
+        }
+      },
+      {
+        "files": "*.svelte",
         "processor": "svelte3/svelte3",
         "rules": {
           "import/first": 0,
@@ -84,9 +88,7 @@
         }
       },
       {
-        "files": [
-          "*.ts"
-        ],
+        "files": "*.ts",
         "parser": "@typescript-eslint/parser"
       }
     ]
@@ -136,7 +138,6 @@
     "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
     "rollup": "^2.7.2",
-    "rollup-plugin-css-only": "^2.0.0",
     "rollup-plugin-svelte": "^5.2.1",
     "stylelint": "^13.3.3",
     "stylelint-config-prettier": "^8.0.1",

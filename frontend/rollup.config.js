@@ -1,5 +1,4 @@
 import commonjs from "@rollup/plugin-commonjs";
-import css from "rollup-plugin-css-only";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import sucrase from "@rollup/plugin-sucrase";
 import svelte from "rollup-plugin-svelte";
@@ -9,10 +8,13 @@ import fs from "fs";
 import { promisify } from "util";
 import { basename, dirname, join } from "path";
 
+import css from "./rollup-plugin-css";
+
 // Run in dev mode when using rollup watch.
 const dev = process.env.ROLLUP_WATCH;
 
 const copyFile = promisify(fs.copyFile);
+const mkdir = promisify(fs.mkdir);
 
 const fonts = [
   "img/favicon.ico",
@@ -32,11 +34,11 @@ const fonts = [
 function copy(files) {
   return {
     name: "rollup-plugin-copy",
-    generateBundle(options) {
+    async generateBundle(options) {
+      const outdir = options.file ? dirname(options.file) : options.dir;
+      await mkdir(outdir, { recursive: true });
       return Promise.all(
-        files.map((file) =>
-          copyFile(file, join(dirname(options.file), basename(file)))
-        )
+        files.map((file) => copyFile(file, join(outdir, basename(file))))
       );
     },
   };
@@ -49,13 +51,15 @@ const typescriptPlugin = dev
     })
   : typescript();
 
-function config(input, output) {
+function config(input, outputOpts, ...plugins) {
   return {
     input,
     output: {
-      file: output,
       sourcemap: dev,
       format: "iife",
+      assetFileNames: "[name]-[hash].[ext]",
+      entryFileNames: "[name]-[hash].js",
+      ...outputOpts,
     },
     plugins: [
       nodeResolve({ extensions: [".js", ".ts"] }),
@@ -66,6 +70,7 @@ function config(input, output) {
       css(),
       typescriptPlugin,
       copy(fonts),
+      ...plugins,
     ],
     onwarn(warning, warn) {
       if (
@@ -79,4 +84,4 @@ function config(input, output) {
   };
 }
 
-export default config("src/main.ts", "../fava/static/app.js");
+export default [config("src/main.ts", { file: "../fava/static/app.js" })];
