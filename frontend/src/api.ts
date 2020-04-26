@@ -1,5 +1,7 @@
+import router from "./router";
 import { fetchAPI, urlFor } from "./helpers";
 import { notify } from "./notifications";
+import { Entry } from "./entries";
 import { fetch, handleJSON } from "./lib/fetch";
 import { string, object, unknown } from "./lib/validation";
 
@@ -61,5 +63,22 @@ export async function moveDocument(
   } catch (error) {
     notify(error, "error");
     return false;
+  }
+}
+
+/**
+ * Save an array of entries.
+ */
+export async function saveEntries(entries: Entry[]): Promise<void> {
+  if (!entries.length) {
+    return;
+  }
+  try {
+    const data = await put("add_entries", { entries });
+    router.reload();
+    notify(data);
+  } catch (error) {
+    notify(`Saving failed: ${error}`, "error");
+    throw error;
   }
 }

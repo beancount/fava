@@ -1,12 +1,15 @@
-import router from "./router";
-import { notify } from "./notifications";
 import { todayAsString } from "./format";
-import { put } from "./api";
+import { array, object, string, constant, record } from "./lib/validation";
 
 interface Posting {
   account: string;
   amount: string;
 }
+
+const postingValidator = object({
+  account: string,
+  amount: string,
+});
 
 interface Amount {
   number: string;
@@ -20,7 +23,7 @@ export function emptyPosting(): Posting {
   };
 }
 
-abstract class Entry {
+abstract class EntryBase {
   type: string;
 
   date: string;
@@ -34,7 +37,13 @@ abstract class Entry {
   }
 }
 
-export class Balance extends Entry {
+const validatorBase = {
+  type: string,
+  date: string,
+  meta: record(string),
+};
+
+export class Balance extends EntryBase {
   account: string;
 
   amount: Amount;
@@ -49,7 +58,7 @@ export class Balance extends Entry {
   }
 }
 
-export class Note extends Entry {
+export class Note extends EntryBase {
   account: string;
 
   comment: string;
@@ -61,7 +70,7 @@ export class Note extends Entry {
   }
 }
 
-export class Transaction extends Entry {
+export class Transaction extends EntryBase {
   flag: string;
 
   payee: string;
@@ -77,18 +86,15 @@ export class Transaction extends Entry {
     this.narration = "";
     this.postings = [emptyPosting(), emptyPosting()];
   }
+
+  static validator = object({
+    ...validatorBase,
+    type: constant("Transaction"),
+    flag: string,
+    payee: string,
+    narration: string,
+    postings: array(postingValidator),
+  });
 }
 
-export async function saveEntries(entries: Entry[]): Promise<void> {
-  if (!entries.length) {
-    return;
-  }
-  try {
-    const data = await put("add_entries", { entries });
-    router.reload();
-    notify(data);
-  } catch (error) {
-    notify(`Saving failed: ${error}`, "error");
-    throw error;
-  }
-}
+export type Entry = Balance | Note | Transaction;

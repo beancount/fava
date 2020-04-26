@@ -1,5 +1,5 @@
 <script>
-  import { saveEntries } from "../entries";
+  import { saveEntries } from "../api";
   import { _, fetchAPI } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 

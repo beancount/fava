@@ -1,5 +1,6 @@
 <script>
-  import { Balance, Note, Transaction, saveEntries } from "../entries";
+  import { Balance, Note, Transaction } from "../entries";
+  import { saveEntries } from "../api";
   import { _ } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 
