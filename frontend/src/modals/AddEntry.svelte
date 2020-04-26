@@ -19,7 +19,7 @@
     Balance: BalanceComponent,
     Note: NoteComponent,
     Transaction: TransactionComponent,
-  }[entry.constructor.name];
+  }[entry.type];
 
   async function submitAndNew(event) {
     if (event.target.form.reportValidity()) {
@@ -44,7 +44,7 @@
       {#each entryTypes as [name, Cls]}
         <button
           type="button"
-          class:muted={!(entry instanceof Cls)}
+          class:muted={entry.type !== Cls.name}
           on:click={() => {
             entry = new Cls();
           }}>

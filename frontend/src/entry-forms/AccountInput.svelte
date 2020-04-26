@@ -9,7 +9,7 @@
   export let className = null;
 
   function checkValidity(val) {
-    return $accounts.includes(val)
+    return !$accounts.length || $accounts.includes(val)
       ? ""
       : _("Should be one of the declared accounts");
   }

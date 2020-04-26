@@ -9,6 +9,14 @@
   margin: 0.25rem;
 }
 
+.flex-row > label {
+  display: contents;
+}
+
+.flex-row > label > * {
+  margin: 0.25rem;
+}
+
 .flex-row .grow {
   flex-grow: 1;
 }

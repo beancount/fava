@@ -65,18 +65,14 @@
     flex-grow: 1;
   }
 
-  label {
+  label > span:first-child {
     display: none;
   }
 
   @media (max-width: 767px) {
-    label {
+    label > span:first-child {
       display: initial;
       width: 100%;
-    }
-
-    input {
-      margin: 0 0.5em 0.5em 0;
     }
   }
 </style>
@@ -85,20 +81,24 @@
   <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
-    <label for="payee">{_('Payee')}:</label>
-    <AutocompleteInput
-      className="payee"
-      placeholder={_('Payee')}
-      bind:value={entry.payee}
-      suggestions={$payees}
-      on:select={autocompleteSelectPayee} />
-    <label for="payee">{_('Narration')}:</label>
-    <input
-      type="text"
-      name="narration"
-      placeholder={_('Narration')}
-      bind:value={entry.narration} />
-    <AddMetadataButton bind:meta={entry.meta} />
+    <label>
+      <span>{_('Payee')}:</span>
+      <AutocompleteInput
+        className="payee"
+        placeholder={_('Payee')}
+        bind:value={entry.payee}
+        suggestions={$payees}
+        on:select={autocompleteSelectPayee} />
+    </label>
+    <label>
+      <span>{_('Narration')}:</span>
+      <input
+        type="text"
+        name="narration"
+        placeholder={_('Narration')}
+        bind:value={entry.narration} />
+      <AddMetadataButton bind:meta={entry.meta} />
+    </label>
     <button
       class="muted round"
       type="button"
@@ -109,6 +109,11 @@
     </button>
   </div>
   <EntryMetadata bind:meta={entry.meta} />
+  <div class="flex-row">
+    <label>
+      <span>{_('Postings')}:</span>
+    </label>
+  </div>
   {#each entry.postings as posting, index}
     <PostingSvelte
       bind:posting

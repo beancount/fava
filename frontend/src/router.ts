@@ -19,7 +19,9 @@ import {
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { showCharts } from "./stores/chart";
 
-class Router extends Events<"page-loaded" | "before-page-loaded"> {
+type RouterEvents = "page-loaded" | "before-page-loaded";
+
+class Router extends Events<RouterEvents> {
   /** The URL hash. */
   hash: string;
 
