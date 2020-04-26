@@ -1,5 +1,6 @@
-import { Readable, derived } from "svelte/store";
+import { Readable, writable, Writable, derived } from "svelte/store";
 import { shallow_equal } from "./equals";
+import { Validator } from "./validation";
 
 /**
  * Create a derived store that does a shallow array equality check.
@@ -22,4 +23,27 @@ export function derived_array<S, T>(
     },
     val
   );
+}
+
+/**
+ * Create a store that syncs its value to localStorage.
+ * @param key - The key to save this with in localStorage.
+ * @param validator - A Validator to check the loaded value.
+ * @param init - A default to initialise the store with if localStorage is
+ *               empty.
+ */
+export function localStorageSyncedStore<T>(
+  key: string,
+  validator: Validator<T>,
+  init: () => T
+): Writable<T> {
+  const stored_val = localStorage.getItem(key);
+  const initial = stored_val ? validator(JSON.parse(stored_val)) : init();
+
+  const store = writable(initial);
+
+  store.subscribe((val) => {
+    localStorage.setItem(key, JSON.stringify(val));
+  });
+  return store;
 }
