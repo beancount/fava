@@ -87,6 +87,14 @@ export class Transaction extends EntryBase {
     this.postings = [emptyPosting(), emptyPosting()];
   }
 
+  toString(): string {
+    const postings = this.postings.map((p) => `  ${p.account}  ${p.amount}`);
+    return (
+      `${this.date} ${this.flag} "${this.payee}" "${this.narration}"` +
+      `\n${postings.join("\n")}`
+    );
+  }
+
   static validator = object({
     ...validatorBase,
     type: constant("Transaction"),
@@ -95,6 +103,10 @@ export class Transaction extends EntryBase {
     narration: string,
     postings: array(postingValidator),
   });
+
+  static fromJSON(json: unknown): Transaction {
+    return Object.assign(new Transaction(), Transaction.validator(json));
+  }
 }
 
 export type Entry = Balance | Note | Transaction;
