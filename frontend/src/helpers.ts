@@ -1,6 +1,6 @@
 import { fetch, handleJSON } from "./lib/fetch";
 import { object, record, string, unknown } from "./lib/validation";
-import { urlSyncedParams, favaAPI } from "./stores";
+import { baseURL, urlSyncedParams } from "./stores/url";
 
 export function getScriptTagJSON(selector: string): unknown {
   const el = document.querySelector(selector);
@@ -21,6 +21,11 @@ export function _(text: string): string {
 
 const validateAPIResponse = object({ data: unknown });
 
+let baseURL_val = "";
+baseURL.subscribe((val) => {
+  baseURL_val = val;
+});
+
 /**
  * Get the URL string for one of Fava's reports.
  */
@@ -29,7 +34,7 @@ export function urlFor(
   params?: Record<string, string>,
   update = true
 ): string {
-  const url = `${favaAPI.baseURL}${report}`;
+  const url = `${baseURL_val}${report}`;
   const urlParams = new URLSearchParams();
   if (update) {
     const oldParams = new URL(window.location.href).searchParams;

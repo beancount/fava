@@ -9,13 +9,8 @@ import { Writable } from "svelte/store";
 import { fetch, handleText } from "./lib/fetch";
 import { Events, delegate } from "./lib/events";
 import { notify } from "./notifications";
-import {
-  urlHash,
-  conversion,
-  interval,
-  favaAPI,
-  urlSyncedParams,
-} from "./stores";
+import { urlHash, conversion, interval, favaAPI } from "./stores";
+import { urlSyncedParams } from "./stores/url";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { showCharts } from "./stores/chart";
 

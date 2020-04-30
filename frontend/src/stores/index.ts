@@ -12,6 +12,8 @@ import {
 import { derived_array } from "../lib/store";
 import { fetchAPI } from "../helpers";
 
+import { baseURL } from "./url";
+
 export const urlHash = writable("");
 
 export const conversion = writable("");
@@ -111,16 +113,8 @@ export async function fetchErrorCount(): Promise<void> {
 favaAPIStore.subscribe((val) => {
   Object.assign(favaAPI, val);
   errorCount.set(favaAPI.errors);
+  baseURL.set(favaAPI.baseURL);
 });
-
-export const urlSyncedParams = [
-  "account",
-  "charts",
-  "conversion",
-  "filter",
-  "interval",
-  "time",
-];
 
 export function closeOverlay(): void {
   if (window.location.hash) {
