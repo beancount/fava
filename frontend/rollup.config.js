@@ -4,17 +4,11 @@ import sucrase from "@rollup/plugin-sucrase";
 import svelte from "rollup-plugin-svelte";
 import typescript from "@rollup/plugin-typescript";
 
-import fs from "fs";
-import { promisify } from "util";
-import { basename, dirname, join } from "path";
-
+import copy from "./rollup-plugin-copy";
 import css from "./rollup-plugin-css";
 
 // Run in dev mode when using rollup watch.
 const dev = process.env.ROLLUP_WATCH;
-
-const copyFile = promisify(fs.copyFile);
-const mkdir = promisify(fs.mkdir);
 
 const fonts = [
   "img/favicon.ico",
@@ -27,22 +21,6 @@ const fonts = [
   "node_modules/@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-400.woff2",
   "node_modules/@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-600.woff2",
 ];
-
-/**
- * Copy the fonts over to the bundle folder.
- */
-function copy(files) {
-  return {
-    name: "rollup-plugin-copy",
-    async generateBundle(options) {
-      const outdir = options.file ? dirname(options.file) : options.dir;
-      await mkdir(outdir, { recursive: true });
-      return Promise.all(
-        files.map((file) => copyFile(file, join(outdir, basename(file))))
-      );
-    },
-  };
-}
 
 const typescriptPlugin = dev
   ? sucrase({
