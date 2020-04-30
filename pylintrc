@@ -1,4 +1,5 @@
 [MESSAGES CONTROL]
 disable = too-few-public-methods,
     not-callable,
-    bad-continuation
+    bad-continuation,
+    isinstance-second-argument-not-valid-type
