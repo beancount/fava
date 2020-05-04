@@ -38,9 +38,7 @@
     min(data, (s) => s.values[0].date),
     max(data, (s) => s.values[s.values.length - 1].date),
   ];
-  $: x = scaleUtc()
-    .domain(xDomain)
-    .range([0, innerWidth]);
+  $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
   $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear()

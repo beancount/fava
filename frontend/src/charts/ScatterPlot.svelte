@@ -23,9 +23,7 @@
 
   // Scales
   $: dateExtent = extent(data, (d) => d.date);
-  $: x = scaleUtc()
-    .domain(dateExtent)
-    .range([0, innerWidth]);
+  $: x = scaleUtc().domain(dateExtent).range([0, innerWidth]);
   $: y = scalePoint()
     .padding(1)
     .domain(data.map((d) => d.type))

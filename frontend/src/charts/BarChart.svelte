@@ -59,9 +59,7 @@
   $: xAxis = axisBottom(x0)
     .tickSizeOuter(0)
     .tickValues(filterTicks(x0.domain()));
-  $: yAxis = axisLeft(y)
-    .tickSize(-innerWidth)
-    .tickFormat(formatCurrencyShort);
+  $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat(formatCurrencyShort);
 </script>
 
 <svg class="barchart" {width} {height}>
