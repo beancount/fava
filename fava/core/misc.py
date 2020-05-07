@@ -9,8 +9,8 @@ from beancount.core import amount
 from beancount.core.data import Custom
 from beancount.core.data import Event
 
+from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
-from fava.helpers import FavaModule
 
 
 class FavaError(BeancountError):

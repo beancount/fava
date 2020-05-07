@@ -13,8 +13,8 @@ from beancount.ingest import cache  # type: ignore
 from beancount.ingest import extract
 from beancount.ingest import identify
 
+from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
-from fava.helpers import FavaModule
 
 
 class IngestError(BeancountError):

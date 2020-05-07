@@ -8,7 +8,7 @@ from beancount.core.display_context import Precision
 from beancount.core.number import Decimal
 
 from fava.core.fava_options import OptionError
-from fava.helpers import FavaModule
+from fava.core.module_base import FavaModule
 
 
 class DecimalFormatModule(FavaModule):

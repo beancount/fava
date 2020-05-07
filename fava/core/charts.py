@@ -16,9 +16,9 @@ from beancount.core.number import Decimal
 from beancount.core.position import Position
 from flask.json import JSONEncoder
 
+from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
 from fava.helpers import FavaAPIException
-from fava.helpers import FavaModule
 from fava.template_filters import cost_or_value
 from fava.template_filters import units
 from fava.util import listify

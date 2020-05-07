@@ -5,7 +5,7 @@ from beancount.core import getters
 from beancount.core.data import Entries
 from beancount.core.data import Transaction
 
-from fava.helpers import FavaModule
+from fava.core.module_base import FavaModule
 from fava.util.ranking import ExponentialDecayRanker
 
 
