@@ -30,7 +30,6 @@ from beancount.core.data import Entries
 from beancount.core.data import Event
 from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
-from beancount.core.data import Meta
 from beancount.core.data import Open
 from beancount.core.data import Posting
 from beancount.core.data import Transaction
@@ -41,6 +40,7 @@ from beancount.core.number import Decimal
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
+from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
@@ -62,36 +62,6 @@ from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.util import date
 from fava.util import pairwise
-
-
-MAXDATE = datetime.date.max
-
-
-class AccountData:
-    """Holds information about an account."""
-
-    __slots__ = ("meta", "close_date")
-
-    def __init__(self) -> None:
-        #: The date on which this account is closed (or datetime.date.max).
-        self.close_date = MAXDATE
-
-        #: The metadata of the Open entry of this account.
-        self.meta: Meta = {}
-
-
-class _AccountDict(dict):
-    """Account info dictionary."""
-
-    EMPTY = AccountData()
-
-    def __missing__(self, key: str) -> AccountData:
-        return self.EMPTY
-
-    def setdefault(self, key: str, _=None) -> AccountData:
-        if key not in self:
-            self[key] = AccountData()
-        return self[key]
 
 
 class Filters:
@@ -225,7 +195,7 @@ class FavaLedger:
         self.options: Dict[str, Any] = {}
 
         #: A dict containing information about the accounts.
-        self.accounts = _AccountDict()
+        self.accounts = AccountDict()
 
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = {}
@@ -258,7 +228,7 @@ class FavaLedger:
             entries_by_type[type(entry)].append(entry)
         self.all_entries_by_type = entries_by_type
 
-        self.accounts = _AccountDict()
+        self.accounts = AccountDict()
         for entry in entries_by_type[Open]:
             self.accounts.setdefault(
                 cast(Open, entry).account
@@ -645,4 +615,4 @@ class FavaLedger:
         """
         if self.filters.time:
             return self.accounts[account_name].close_date < self._date_last
-        return self.accounts[account_name].close_date is not MAXDATE
+        return self.accounts[account_name].close_date != datetime.date.max
