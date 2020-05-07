@@ -15,8 +15,19 @@ from beancount.core.data import Transaction
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
 from fava.core.fava_options import FavaOptions
-from fava.core.helpers import FilterException
+from fava.core.helpers import FavaAPIException
 from fava.util.date import parse_date
+
+
+class FilterException(FavaAPIException):
+    """Filter exception."""
+
+    def __init__(self, filter_type: str, message: str) -> None:
+        super().__init__(message)
+        self.filter_type = filter_type
+
+    def __str__(self) -> str:
+        return self.message
 
 
 class Token:

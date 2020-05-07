@@ -2,7 +2,7 @@
 from beancount.core import realization
 from flask import g
 
-from fava.core import AccountData
+from fava.core.accounts import AccountData
 from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
 from fava.template_filters import basename

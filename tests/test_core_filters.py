@@ -9,7 +9,7 @@ from fava.core.filters import AdvancedFilter
 from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
 from fava.core.filters import TimeFilter
-from fava.core.helpers import FilterException
+from fava.core.filters import FilterException
 
 LEX = FilterSyntaxLexer().lex
 

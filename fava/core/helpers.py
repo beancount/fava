@@ -22,17 +22,6 @@ class FavaAPIException(Exception):
         return self.message
 
 
-class FilterException(FavaAPIException):
-    """Filter exception."""
-
-    def __init__(self, filter_type: str, message: str) -> None:
-        super().__init__(message)
-        self.filter_type = filter_type
-
-    def __str__(self) -> str:
-        return self.message
-
-
 class FavaModule:
     """Base class for the "modules" of FavaLedger."""
 
