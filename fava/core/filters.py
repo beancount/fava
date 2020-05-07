@@ -15,7 +15,7 @@ from beancount.core.data import Transaction
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
 from fava.core.fava_options import FavaOptions
-from fava.core.helpers import FavaAPIException
+from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
 
 

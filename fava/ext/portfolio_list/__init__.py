@@ -8,8 +8,8 @@ from beancount.core.data import Open
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 
-from fava.core.helpers import FavaAPIException
 from fava.ext import FavaExtensionBase
+from fava.helpers import FavaAPIException
 from fava.template_filters import cost_or_value
 
 

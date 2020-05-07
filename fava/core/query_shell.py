@@ -14,8 +14,8 @@ from beancount.query.query_parser import RunCustom
 from beancount.query.shell import BQLShell  # type: ignore
 from beancount.utils import pager  # type: ignore
 
-from fava.core.helpers import FavaAPIException
-from fava.core.helpers import FavaModule
+from fava.helpers import FavaAPIException
+from fava.helpers import FavaModule
 from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel

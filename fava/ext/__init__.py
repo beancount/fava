@@ -8,7 +8,7 @@ from typing import Optional
 from typing import Tuple
 from typing import Type
 
-from fava.core.helpers import BeancountError
+from fava.helpers import BeancountError
 
 
 class FavaExtensionError(BeancountError):

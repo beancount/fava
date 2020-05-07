@@ -10,8 +10,8 @@ from typing import Tuple
 from beancount.core.data import Custom
 from beancount.core.number import Decimal
 
-from fava.core.helpers import BeancountError
-from fava.core.helpers import FavaModule
+from fava.helpers import BeancountError
+from fava.helpers import FavaModule
 from fava.util.date import days_in_daterange
 from fava.util.date import Interval
 from fava.util.date import number_of_days_in_period

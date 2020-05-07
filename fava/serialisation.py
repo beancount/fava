@@ -18,7 +18,7 @@ from beancount.core.number import D
 from beancount.parser.parser import parse_string
 
 from fava import util
-from fava.core.helpers import FavaAPIException
+from fava.helpers import FavaAPIException
 
 
 def extract_tags_links(string):

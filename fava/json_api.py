@@ -15,11 +15,11 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 
-from fava.core.helpers import FavaAPIException
+from fava.context import g
 from fava.core.misc import align
+from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
-from fava.context import g
 
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 

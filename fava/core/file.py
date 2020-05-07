@@ -21,9 +21,9 @@ from beancount.parser.printer import format_entry  # type: ignore
 
 from fava.core.fava_options import InsertEntryOption
 from fava.core.filters import get_entry_accounts
-from fava.core.helpers import FavaAPIException
-from fava.core.helpers import FavaModule
 from fava.core.misc import align
+from fava.helpers import FavaAPIException
+from fava.helpers import FavaModule
 
 
 #: The flags to exclude when rendering entries entries.

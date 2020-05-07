@@ -16,7 +16,7 @@ from flask.json import dumps
 from flask.json import loads
 
 from fava.core.file import _format_entry
-from fava.core.helpers import FavaAPIException
+from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
 from fava.serialisation import extract_tags_links

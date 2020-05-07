@@ -13,7 +13,7 @@ from os.path import normpath
 from beancount.core import data
 from beancount.core.compare import hash_entry
 
-from fava.core.helpers import BeancountError
+from fava.helpers import BeancountError
 
 
 class DocumentError(BeancountError):

@@ -18,7 +18,7 @@ from fava.core.file import insert_metadata_in_file
 from fava.core.file import leading_space
 from fava.core.file import next_key
 from fava.core.file import save_entry_slice
-from fava.core.helpers import FavaAPIException
+from fava.helpers import FavaAPIException
 
 
 def test_get_entry_slice(example_ledger) -> None:

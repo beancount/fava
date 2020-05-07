@@ -1,5 +1,4 @@
 """Specify types for the flask application context."""
-
 from typing import Any
 from typing import Optional
 

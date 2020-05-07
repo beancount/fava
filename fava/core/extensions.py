@@ -8,9 +8,9 @@ from typing import Type
 
 from beancount.core.data import Custom
 
-from fava.core.helpers import FavaModule
 from fava.ext import FavaExtensionBase
 from fava.ext import find_extensions
+from fava.helpers import FavaModule
 
 
 class ExtensionModule(FavaModule):

@@ -1,6 +1,6 @@
 """Account close date and metadata."""
-
 import datetime
+
 from beancount.core.data import Meta
 
 

@@ -13,12 +13,12 @@ from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import NamedTuple
-from typing import Tuple
 from typing import Pattern
+from typing import Tuple
 
 from beancount.core.data import Custom
 
-from fava.core.helpers import BeancountError
+from fava.helpers import BeancountError
 
 
 class OptionError(BeancountError):

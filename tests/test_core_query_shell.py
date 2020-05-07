@@ -4,7 +4,7 @@ import pytest
 from beancount.query.query import run_query
 
 from fava.core import FavaLedger
-from fava.core.helpers import FavaAPIException
+from fava.helpers import FavaAPIException
 
 from .conftest import data_file
 
