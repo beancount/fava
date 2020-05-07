@@ -19,7 +19,7 @@ from fava.core.helpers import FavaAPIException
 from fava.core.misc import align
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
-from fava.typing import g
+from fava.context import g
 
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 

@@ -20,7 +20,7 @@ from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 from beancount.core.prices import get_price
 
-from fava.typing import g
+from fava.context import g
 from fava.util.date import Interval
 
 
