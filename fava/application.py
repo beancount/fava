@@ -24,7 +24,6 @@ import flask
 import markdown2  # type: ignore
 import werkzeug.urls
 from beancount.core.account import ACCOUNT_RE
-from beancount.core.data import Document
 from beancount.utils.text_utils import replace_numbers  # type: ignore
 from flask import abort
 from flask import Flask
@@ -42,6 +41,7 @@ from fava import template_filters
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.charts import FavaJSONEncoder
+from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIException
 from fava.json_api import json_api
@@ -272,16 +272,7 @@ def account(name, subreport="journal"):
 def document():
     """Download a document."""
     filename = request.args.get("filename")
-    filenames = [
-        document.filename
-        for document in g.ledger.all_entries_by_type[Document]
-    ]
-    import_directories = [
-        g.ledger.join_path(d) for d in g.ledger.fava_options["import-dirs"]
-    ]
-    if filename in filenames:
-        return send_file_inline(filename)
-    if any(filename.startswith(d) for d in import_directories):
+    if is_document_or_import_file(filename, g.ledger):
         return send_file_inline(filename)
     return abort(404)
 

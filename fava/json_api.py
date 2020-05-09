@@ -7,6 +7,7 @@ import functools
 import os
 import shutil
 from os import path
+from os import remove
 from typing import List
 
 from flask import Blueprint
@@ -17,6 +18,7 @@ from flask import request
 
 from fava.context import g
 from fava.core.documents import filepath_in_document_folder
+from fava.core.documents import is_document_or_import_file
 from fava.core.misc import align
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
@@ -47,6 +49,19 @@ def put_api_endpoint(func):
             raise FavaAPIException("Invalid JSON request.")
         res = func(request_data, *args, **kwargs)
         return jsonify({"success": True, "data": res})
+
+    return _wrapper
+
+
+def delete_api_endpoint(func):
+    """Register a DELETE endpoint."""
+
+    route = func.__name__.replace("delete_", "")
+
+    @json_api.route("/{}".format(route), methods=["DELETE"])
+    @functools.wraps(func)
+    def _wrapper(*args, **kwargs):
+        return jsonify({"success": True, "data": func(*args, **kwargs)})
 
     return _wrapper
 
@@ -203,6 +218,23 @@ def format_source(request_data) -> str:
     return align(
         request_data["source"], g.ledger.fava_options["currency-column"]
     )
+
+
+@delete_api_endpoint
+def delete_document() -> str:
+    """Delete a document."""
+    filename = request.args.get("filename")
+    if not filename:
+        raise FavaAPIException("No filename specified.")
+
+    if not is_document_or_import_file(filename, g.ledger):
+        raise FavaAPIException("No valid document or import file.")
+
+    if not path.exists(filename):
+        raise FavaAPIException(f"{filename} does not exist.")
+
+    remove(filename)
+    return f"Deleted {filename}."
 
 
 @json_api.route("/add_document", methods=["PUT"])

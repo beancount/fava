@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { todayAsString } from "../format";
   import { _, urlFor } from "../helpers";
-  import { moveDocument } from "../api";
+  import { moveDocument, deleteDocument } from "../api";
 
   import { newFilename, extractURL } from "./helpers";
 
@@ -44,11 +44,24 @@
       );
     }
   }
+  async function remove(filename) {
+    const removed = await deleteDocument(filename);
+    if (removed) {
+      preprocessedData = preprocessedData.filter(
+        (item) => item.name !== filename
+      );
+    }
+  }
 </script>
 
 <style>
-  pre {
+  .header {
+    padding: 0.5rem;
     margin: 0.5rem 0;
+    background-color: var(--color-table-header-background);
+  }
+  .header button {
+    float: right;
   }
   .button {
     padding: 4px 8px;
@@ -57,14 +70,22 @@
 
 <Extract />
 {#each preprocessedData as file}
-  <pre title={file.name}>
+  <div class="header" title={file.name}>
     <a
       href={urlFor('document', { filename: file.name })}
       data-remote
       target="_blank">
       {file.basename}
     </a>
-  </pre>
+    <button
+      class="round"
+      on:click={() => remove(file.name)}
+      type="button"
+      title={_('Delete')}
+      tabindex="-1">
+      ×
+    </button>
+  </div>
   {#each file.importers as info}
     <div class="flex-row">
       <AccountInput bind:value={info.account} />

@@ -67,6 +67,23 @@ export async function moveDocument(
 }
 
 /**
+ * Delete a file, either in an import directory or a document.
+ * @returns whether the file was deleted successfully.
+ */
+export async function deleteDocument(filename: string): Promise<boolean> {
+  try {
+    const url = urlFor(`api/document`, { filename }, false);
+    const res = await fetch(url, { method: "DELETE" }).then(handleJSON);
+    const { data }: { data: unknown } = validateAPIResponse(res);
+    notify(string(data));
+    return true;
+  } catch (error) {
+    notify(error, "error");
+    return false;
+  }
+}
+
+/**
  * Save an array of entries.
  */
 export async function saveEntries(entries: Entry[]): Promise<void> {
