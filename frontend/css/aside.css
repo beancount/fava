@@ -23,84 +23,84 @@ aside {
   border-right: 1px solid var(--color-sidebar-border);
 }
 
-.navigation {
+aside .navigation {
   padding-bottom: 0.5rem;
   margin-bottom: 0.5rem;
   border-bottom: 1px solid var(--color-sidebar-border);
 }
 
-.navigation:last-child {
+aside .navigation:last-child {
   margin-bottom: 0;
   border: none;
 }
 
-.navigation a {
+aside .navigation a {
   display: block;
   padding: 0.25em 0.5em 0.25em 1em;
   color: inherit;
 }
 
-.navigation a.selected,
-.navigation a:hover {
+aside .navigation a.selected,
+aside .navigation a:hover {
   color: var(--color-sidebar-text-hover);
   background-color: var(--color-sidebar-border);
 }
 
-.navigation .secondary {
+aside .navigation .secondary {
   padding: 4px 9px 2px 9px;
   line-height: 23px;
   color: inherit;
   background-color: var(--color-sidebar-background);
 }
 
-.navigation .add-transaction-button {
+aside .navigation .add-transaction-button {
   font-size: 23px;
 }
 
-.navigation li {
+aside .navigation li {
   position: relative;
   display: flex;
   flex-wrap: wrap;
 }
 
-.navigation li a:first-child {
+aside .navigation li a:first-child {
   flex: 1;
 }
 
-.navigation .error {
+aside .navigation .error {
   background-color: var(--color-error);
 }
 
-.navigation li.error a {
+aside .navigation li.error a {
   color: var(--color-sidebar-background);
 }
 
-.navigation .submenu li a {
+aside .navigation .submenu li a {
   padding-left: 35px;
 }
 
-.navigation .submenu {
+aside .navigation .submenu {
   width: 100%;
   margin: 0;
 }
 
-.navigation .submenu li {
+aside .navigation .submenu li {
   font-size: 0.95em;
   line-height: 0.95em;
 }
 
-.navigation .submenu a.selected,
-.navigation .submenu a:hover {
+aside .navigation .submenu a.selected,
+aside .navigation .submenu a:hover {
   filter: brightness(85%);
 }
 
-.navigation .error a.selected,
-.navigation .error a:hover {
+aside .navigation .error a.selected,
+aside .navigation .error a:hover {
   background-color: var(--color-error);
   filter: brightness(80%);
 }
 
-.navigation .bubble {
+aside .navigation .bubble {
   float: right;
   padding: 0 8px;
   font-size: 0.9em;
@@ -109,6 +109,6 @@ aside {
   border-radius: 12px;
 }
 
-.navigation .error .bubble {
+aside .navigation .error .bubble {
   background-color: var(--color-transparent-white);
 }
