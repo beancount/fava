@@ -16,6 +16,7 @@ from flask import render_template
 from flask import request
 
 from fava.context import g
+from fava.core.documents import filepath_in_document_folder
 from fava.core.misc import align
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
@@ -152,7 +153,7 @@ def move() -> str:
         raise FavaAPIException("No new filename given.")
 
     new_path = filepath_in_document_folder(
-        g.ledger.options["documents"][0], account, new_name
+        g.ledger.options["documents"][0], account, new_name, g.ledger
     )
 
     if not path.isfile(filename):
@@ -204,42 +205,6 @@ def format_source(request_data) -> str:
     )
 
 
-def filepath_in_document_folder(
-    documents_folder: str, account: str, filename: str
-) -> str:
-    """File path for a document in the folder for an account.
-
-    Args:
-        documents_folder: The documents folder.
-        account: The account to choose the subfolder for.
-        filename: The filename of the document.
-
-    Returns:
-        The path that the document should be saved at.
-    """
-
-    if documents_folder not in g.ledger.options["documents"]:
-        raise FavaAPIException(
-            "Not a documents folder: {}.".format(documents_folder)
-        )
-
-    if account not in g.ledger.attributes.accounts:
-        raise FavaAPIException("Not a valid account: '{}'".format(account))
-
-    for sep in os.sep, os.altsep:
-        if sep:
-            filename = filename.replace(sep, " ")
-
-    return path.normpath(
-        path.join(
-            path.dirname(g.ledger.beancount_file_path),
-            documents_folder,
-            *account.split(":"),
-            filename
-        )
-    )
-
-
 @json_api.route("/add_document", methods=["PUT"])
 @json_response
 def add_document():
@@ -253,7 +218,10 @@ def add_document():
         raise FavaAPIException("No file uploaded.")
 
     filepath = filepath_in_document_folder(
-        request.form["folder"], request.form["account"], upload.filename
+        request.form["folder"],
+        request.form["account"],
+        upload.filename,
+        g.ledger,
     )
     directory, filename = path.split(filepath)
 
