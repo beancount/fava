@@ -1,5 +1,7 @@
 # pylint: disable=missing-docstring
 
+from os import path
+
 import pytest
 
 from fava.core.documents import is_document_or_import_file
@@ -20,24 +22,19 @@ def test_is_document_or_import_file(example_ledger):
 def test_filepath_in_documents_folder(example_ledger):
     old_dirs = example_ledger.options["documents"]
     example_ledger.options["documents"] = ["/test"]
-    assert (
-        filepath_in_document_folder(
-            "/test", "Assets:US:BofA:Checking", "filename", example_ledger
-        )
-        == "/test/Assets/US/BofA/Checking/filename"
-    )
-    assert (
-        filepath_in_document_folder(
-            "/test", "Assets:US:BofA:Checking", "file/name", example_ledger
-        )
-        == "/test/Assets/US/BofA/Checking/file name"
-    )
-    assert (
-        filepath_in_document_folder(
-            "/test", "Assets:US:BofA:Checking", "/../file/name", example_ledger
-        )
-        == "/test/Assets/US/BofA/Checking/ .. file name"
-    )
+
+    def _join(start: str, *args) -> str:
+        return path.abspath(path.join(start, *args))
+
+    assert filepath_in_document_folder(
+        "/test", "Assets:US:BofA:Checking", "filename", example_ledger
+    ) == _join("/test", "Assets", "US", "BofA", "Checking", "filename")
+    assert filepath_in_document_folder(
+        "/test", "Assets:US:BofA:Checking", "file/name", example_ledger
+    ) == _join("/test", "Assets", "US", "BofA", "Checking", "file name")
+    assert filepath_in_document_folder(
+        "/test", "Assets:US:BofA:Checking", "/../file/name", example_ledger
+    ) == _join("/test", "Assets", "US", "BofA", "Checking", " .. file name")
     with pytest.raises(FavaAPIException):
         filepath_in_document_folder(
             "/test", "notanaccount", "filename", example_ledger
