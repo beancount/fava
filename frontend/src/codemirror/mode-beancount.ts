@@ -4,6 +4,8 @@
 
 import CodeMirror from "codemirror";
 
+import accountRegex from "./account-regex";
+
 // The rules should mirror `parser/lexel.l` in beancount
 CodeMirror.defineSimpleMode("beancount", {
   start: [
@@ -54,7 +56,7 @@ CodeMirror.defineSimpleMode("beancount", {
       token: "bool atom",
     },
     {
-      regex: /(?:[A-Z][A-Za-z0-9\-]+)(?::[A-Z][A-Za-z0-9\-]*)+/,
+      regex: accountRegex,
       token: "account",
     },
     {
