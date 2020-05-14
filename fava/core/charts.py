@@ -26,6 +26,9 @@ from fava.util import pairwise
 from fava.util.date import Interval
 
 
+ONE_DAY = datetime.timedelta(days=1)
+
+
 def inv_to_dict(inventory):
     """Convert an inventory to a simple cost->number dict."""
     return {pos.units.currency: pos.units.number for pos in inventory}
@@ -71,7 +74,7 @@ class ChartModule(FavaModule):
         else:
             tree = self.ledger.root_tree
         return tree.get(account_name).serialise(
-            conversion, self.ledger.price_map, end
+            conversion, self.ledger.price_map, end - ONE_DAY if end else None
         )
 
     @listify
@@ -117,7 +120,7 @@ class ChartModule(FavaModule):
             yield {
                 "date": begin,
                 "balance": cost_or_value(
-                    inventory, conversion, price_map, end
+                    inventory, conversion, price_map, end - ONE_DAY
                 ),
                 "budgets": self.ledger.budgets.calculate_children(
                     accounts, begin, end
@@ -196,19 +199,16 @@ class ChartModule(FavaModule):
         inventory = Inventory()
 
         price_map = self.ledger.price_map
-        for end_date_exclusive in self.ledger.interval_ends(interval):
-            end_date_inclusive = end_date_exclusive - datetime.timedelta(
-                days=1
-            )
-            while txn and txn.date < end_date_exclusive:
+        for end_date in self.ledger.interval_ends(interval):
+            while txn and txn.date < end_date:
                 for posting in txn.postings:
                     if posting.account.startswith(types):
                         inventory.add_position(posting)
                 txn = next(transactions, None)
             yield {
-                "date": end_date_exclusive,
+                "date": end_date,
                 "balance": cost_or_value(
-                    inventory, conversion, price_map, end_date_inclusive
+                    inventory, conversion, price_map, end_date - ONE_DAY
                 ),
             }
 
