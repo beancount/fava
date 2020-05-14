@@ -55,7 +55,9 @@ def serialise(entry):
         if entry.tags:
             ret["narration"] += " " + " ".join(["#" + t for t in entry.tags])
         if entry.links:
-            ret["narration"] += " " + " ".join(["^" + l for l in entry.links])
+            ret["narration"] += " " + " ".join(
+                ["^" + link for link in entry.links]
+            )
         del ret["links"]
         del ret["tags"]
         ret["postings"] = [serialise(pos) for pos in entry.postings]
