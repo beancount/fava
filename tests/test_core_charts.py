@@ -13,11 +13,12 @@ def dumps(arg) -> str:
 
 
 def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
-    data = small_example_ledger.charts.interval_totals(
-        Interval.MONTH, "Expenses", "at_cost"
-    )
-    snapshot(data)
-    snapshot(dumps(data))
+    for conversion in ["at_cost", "USD"]:
+        data = small_example_ledger.charts.interval_totals(
+            Interval.MONTH, "Expenses", conversion
+        )
+        snapshot(data)
+        snapshot(dumps(data))
 
 
 def test_prices(example_ledger: FavaLedger, snapshot) -> None:

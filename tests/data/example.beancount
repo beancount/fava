@@ -36,6 +36,9 @@ plugin "beancount.plugins.auto_accounts"
 2012-11-20 custom "type" TRUE TRUE Assets:Other 20 USD
 2012-11-20 custom "budget" Expenses:Books "weekly" 20.00 EUR
 
+2012-11-30 price USD 4 EUR
+2012-12-01 price USD 2 EUR
+
 2012-12-10 pad Assets:Account1 Equity:Opening-Balances
 2012-12-11 balance Assets:Account1   10.00 EUR
 
