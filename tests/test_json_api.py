@@ -8,7 +8,12 @@ from typing import Optional
 import flask
 import pytest
 
+from fava.core.charts import FavaJSONEncoder
 from fava.core.misc import align
+
+
+def dumps(arg) -> str:
+    return FavaJSONEncoder(sort_keys=True).encode(arg)
 
 
 def assert_api_error(response, msg: Optional[str] = None) -> None:
@@ -90,7 +95,7 @@ def test_api_source_put(app, test_client) -> None:
     # change source
     response = test_client.put(
         url,
-        data=flask.json.dumps(
+        data=dumps(
             {
                 "source": "asdf" + payload,
                 "sha256sum": sha256sum,
@@ -108,7 +113,7 @@ def test_api_source_put(app, test_client) -> None:
     # write original source file
     result = test_client.put(
         url,
-        data=flask.json.dumps(
+        data=dumps(
             {"source": payload, "sha256sum": sha256sum, "file_path": path}
         ),
         content_type="application/json",
@@ -126,9 +131,7 @@ def test_api_format_source(app, test_client) -> None:
     payload = open(path, encoding="utf-8").read()
 
     response = test_client.put(
-        url,
-        data=flask.json.dumps({"source": payload}),
-        content_type="application/json",
+        url, data=dumps({"source": payload}), content_type="application/json",
     )
     assert_api_success(response, align(payload, 61))
 
@@ -144,7 +147,7 @@ def test_api_format_source_options(app, test_client) -> None:
 
         response = test_client.put(
             url,
-            data=flask.json.dumps({"source": payload}),
+            data=dumps({"source": payload}),
             content_type="application/json",
         )
         assert_api_success(response, align(payload, 90))
@@ -212,7 +215,7 @@ def test_api_add_entries(app, test_client, tmp_path):
         url = flask.url_for("json_api.add_entries")
 
         response = test_client.put(
-            url, data=flask.json.dumps(data), content_type="application/json"
+            url, data=dumps(data), content_type="application/json"
         )
         assert_api_success(response, "Stored 3 entries.")
 
