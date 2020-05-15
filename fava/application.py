@@ -13,7 +13,6 @@ Attributes:
 """
 import datetime
 import functools
-import inspect
 import threading
 from io import BytesIO
 from typing import Any
@@ -124,7 +123,7 @@ def get_locale() -> Optional[str]:
     return request.accept_languages.best_match(["en"] + LANGUAGES)
 
 
-for _, function in inspect.getmembers(template_filters, inspect.isfunction):
+for function in template_filters.FILTERS:
     app.add_template_filter(function)
 app.add_template_filter(serialise)
 

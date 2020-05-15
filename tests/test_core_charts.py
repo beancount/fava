@@ -1,92 +1,81 @@
 # pylint: disable=missing-docstring
 
 from beancount.core.number import D
-from flask import g
 from flask.json import dumps
 import pytest
 
+from fava.core import FavaLedger
 from fava.util.date import Interval
 
 
-def test_interval_totals(app, small_example_ledger, snapshot):
-    with app.test_request_context(""):
-        g.conversion = None
+def test_interval_totals(
+    app, small_example_ledger: FavaLedger, snapshot
+) -> None:
+    with app.test_request_context():
         data = small_example_ledger.charts.interval_totals(
-            Interval.MONTH, "Expenses"
+            Interval.MONTH, "Expenses", "at_cost"
         )
         snapshot(data)
         snapshot(dumps(data))
 
 
-def test_prices(example_ledger, snapshot):
+def test_prices(example_ledger: FavaLedger, snapshot) -> None:
     data = example_ledger.charts.prices()
     assert all(price[1] for price in data)
     snapshot(data)
 
 
-def test_linechart_data_default(app, example_ledger, snapshot):
+def test_linechart_data_default(example_ledger: FavaLedger, snapshot) -> None:
+    data = example_ledger.charts.linechart(
+        "Assets:Testing:MultipleCommodities", "at_cost"
+    )
+    snapshot(data)
+
+
+def test_linechart_data_units(example_ledger: FavaLedger, snapshot) -> None:
+    data = example_ledger.charts.linechart(
+        "Assets:Testing:MultipleCommodities", "units"
+    )
+    snapshot(data)
+
+
+def test_linechart_data_at_cost(example_ledger: FavaLedger, snapshot) -> None:
+    data = example_ledger.charts.linechart(
+        "Assets:Testing:MultipleCommodities", "at_cost"
+    )
+    snapshot(data)
+
+
+def test_linechart_data_at_value(
+    app, example_ledger: FavaLedger, snapshot
+) -> None:
     with app.test_request_context():
-        g.conversion = ""
         data = example_ledger.charts.linechart(
-            "Assets:Testing:MultipleCommodities"
-        )
-        snapshot(data)
-
-
-def test_linechart_data_units(app, example_ledger, snapshot):
-    with app.test_request_context():
-        g.conversion = "units"
-        data = example_ledger.charts.linechart(
-            "Assets:Testing:MultipleCommodities"
-        )
-        snapshot(data)
-
-
-def test_linechart_data_at_cost(app, example_ledger, snapshot):
-    with app.test_request_context():
-        g.conversion = "at_cost"
-        g.ledger = example_ledger
-        data = example_ledger.charts.linechart(
-            "Assets:Testing:MultipleCommodities"
-        )
-        snapshot(data)
-
-
-def test_linechart_data_at_value(app, example_ledger, snapshot):
-    with app.test_request_context():
-        g.conversion = "at_value"
-        g.ledger = example_ledger
-        data = example_ledger.charts.linechart(
-            "Assets:Testing:MultipleCommodities"
+            "Assets:Testing:MultipleCommodities", "at_value"
         )
         snapshot(data)
         snapshot(dumps(data))
 
 
-def test_linechart_data_usd(app, example_ledger, snapshot):
+def test_linechart_data_usd(app, example_ledger: FavaLedger, snapshot) -> None:
     with app.test_request_context():
-        g.conversion = "USD"
-        g.ledger = example_ledger
         data = example_ledger.charts.linechart(
-            "Assets:Testing:MultipleCommodities"
+            "Assets:Testing:MultipleCommodities", "USD"
         )
         snapshot(data)
         snapshot(dumps(data))
 
 
-def test_net_worth(app, example_ledger, snapshot):
+def test_net_worth(app, example_ledger: FavaLedger, snapshot) -> None:
     with app.test_request_context():
-        app.preprocess_request()
-        g.conversion = "USD"
-        data = example_ledger.charts.net_worth(Interval.MONTH)
+        data = example_ledger.charts.net_worth(Interval.MONTH, "USD")
         snapshot(data)
         snapshot(dumps(data))
 
 
-def test_hierarchy(app, example_ledger):
+def test_hierarchy(app, example_ledger: FavaLedger) -> None:
     with app.test_request_context("/"):
-        app.preprocess_request()
-        data = example_ledger.charts.hierarchy("Assets")
+        data = example_ledger.charts.hierarchy("Assets", "at_cost")
         assert data["balance_children"] == {
             "IRAUSD": D("7200.00"),
             "USD": D("94320.27840"),
@@ -107,7 +96,7 @@ def test_hierarchy(app, example_ledger):
         ("select date, sum(position) group by date"),
     ],
 )
-def test_query(example_ledger, snapshot, query):
+def test_query(example_ledger: FavaLedger, snapshot, query) -> None:
     _, types, rows = example_ledger.query_shell.execute_query(query)
     data = example_ledger.charts.query(types, rows)
     snapshot(data)

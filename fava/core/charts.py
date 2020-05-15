@@ -16,11 +16,11 @@ from beancount.core.number import Decimal
 from beancount.core.position import Position
 from simplejson import JSONEncoder
 
+from fava.core.conversion import cost_or_value
+from fava.core.conversion import units
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
 from fava.helpers import FavaAPIException
-from fava.template_filters import cost_or_value
-from fava.template_filters import units
 from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
@@ -61,6 +61,7 @@ class ChartModule(FavaModule):
     def hierarchy(
         self,
         account_name: str,
+        conversion: str,
         begin: Optional[datetime.date] = None,
         end: Optional[datetime.date] = None,
     ):
@@ -69,7 +70,9 @@ class ChartModule(FavaModule):
             tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
         else:
             tree = self.ledger.root_tree
-        return tree.get(account_name).serialise(end)
+        return tree.get(account_name).serialise(
+            conversion, self.ledger.price_map, end
+        )
 
     @listify
     def prices(
@@ -90,14 +93,19 @@ class ChartModule(FavaModule):
 
     @listify
     def interval_totals(
-        self, interval: Interval, accounts: Union[str, Tuple[str]]
+        self,
+        interval: Interval,
+        accounts: Union[str, Tuple[str]],
+        conversion: str,
     ):
         """Renders totals for account (or accounts) in the intervals.
 
         Args:
             interval: An interval.
             accounts: A single account (str) or a tuple of accounts.
+            conversion: The conversion to use.
         """
+        price_map = self.ledger.price_map
         for begin, end in pairwise(self.ledger.interval_ends(interval)):
             inventory = Inventory()
             entries = iter_entry_dates(self.ledger.entries, begin, end)
@@ -108,18 +116,21 @@ class ChartModule(FavaModule):
 
             yield {
                 "date": begin,
-                "balance": cost_or_value(inventory, end),
+                "balance": cost_or_value(
+                    inventory, conversion, price_map, end
+                ),
                 "budgets": self.ledger.budgets.calculate_children(
                     accounts, begin, end
                 ),
             }
 
     @listify
-    def linechart(self, account_name):
+    def linechart(self, account_name: str, conversion: str):
         """The balance of an account.
 
         Args:
             account_name: A string.
+            conversion: The conversion to use.
 
         Returns:
             A list of dicts for all dates on which the balance of the given
@@ -137,11 +148,14 @@ class ChartModule(FavaModule):
         # a balance.
         last_currencies = None
 
+        price_map = self.ledger.price_map
         for entry, _, change, balance in journal:
             if change.is_empty():
                 continue
 
-            balance = inv_to_dict(cost_or_value(balance, entry.date))
+            balance = inv_to_dict(
+                cost_or_value(balance, conversion, price_map, entry.date)
+            )
 
             currencies = set(balance.keys())
             if last_currencies:
@@ -152,11 +166,12 @@ class ChartModule(FavaModule):
             yield {"date": entry.date, "balance": balance}
 
     @listify
-    def net_worth(self, interval):
+    def net_worth(self, interval: Interval, conversion: str):
         """Compute net worth.
 
         Args:
             interval: A string for the interval.
+            conversion: The conversion to use.
 
         Returns:
             A list of dicts for all ends of the given interval containing the
@@ -180,6 +195,7 @@ class ChartModule(FavaModule):
         txn = next(transactions, None)
         inventory = Inventory()
 
+        price_map = self.ledger.price_map
         for end_date_exclusive in self.ledger.interval_ends(interval):
             end_date_inclusive = end_date_exclusive - datetime.timedelta(
                 days=1
@@ -191,7 +207,9 @@ class ChartModule(FavaModule):
                 txn = next(transactions, None)
             yield {
                 "date": end_date_exclusive,
-                "balance": cost_or_value(inventory, end_date_inclusive),
+                "balance": cost_or_value(
+                    inventory, conversion, price_map, end_date_inclusive
+                ),
             }
 
     @staticmethod

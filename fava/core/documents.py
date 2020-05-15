@@ -1,5 +1,4 @@
 """Document path related helpers."""
-
 import os
 from os import path
 

@@ -7,8 +7,8 @@ from beancount.core import account
 from beancount.core import convert
 from beancount.core.data import Open
 
+from fava.core.conversion import cost_or_value
 from fava.core.inventory import CounterInventory
-from fava.template_filters import cost_or_value
 
 
 class TreeNode:
@@ -28,17 +28,22 @@ class TreeNode:
         #: Whether the account has any transactions.
         self.has_txns = False
 
-    def serialise(self, end: datetime.date):
+    def serialise(self, conversion, price_map, end: datetime.date):
         """Serialise the account.
 
         Args:
             end: A date to use for cost conversions.
         """
-        children = [child.serialise(end) for child in self.children]
+        children = [
+            child.serialise(conversion, price_map, end)
+            for child in self.children
+        ]
         return {
             "account": self.name,
-            "balance_children": cost_or_value(self.balance_children, end),
-            "balance": cost_or_value(self.balance, end),
+            "balance_children": cost_or_value(
+                self.balance_children, conversion, price_map, end
+            ),
+            "balance": cost_or_value(self.balance, conversion, price_map, end),
             "children": children,
         }
 

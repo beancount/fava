@@ -12,44 +12,17 @@ from typing import Optional
 
 import flask
 from beancount.core import compare
-from beancount.core import convert
 from beancount.core import realization
 from beancount.core.account import ACCOUNT_RE
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
-from beancount.core.prices import get_price
 
 from fava.context import g
+from fava.core.conversion import cost
+from fava.core.conversion import cost_or_value as cost_or_value_without_context
+from fava.core.conversion import units
 from fava.util.date import Interval
-
-
-def get_market_value(pos, price_map, date=None):
-    """Get the market value of a Position.
-
-    This differs from the convert.get_value function in Beancount by returning
-    the cost value if no price can be found.
-
-    Args:
-        pos: A Position.
-        price_map: A dict of prices, as built by prices.build_price_map().
-        date: A datetime.date instance to evaluate the value at, or None.
-
-    Returns:
-        An Amount, with value converted or if the conversion failed just the
-        cost value (or the units if the position has no cost).
-    """
-    units_ = pos.units
-    cost_ = pos.cost
-    value_currency = cost_.currency if cost_ else None
-
-    if value_currency:
-        base_quote = (units_.currency, value_currency)
-        _, price_number = get_price(price_map, base_quote, date)
-        if price_number is not None:
-            return Amount(units_.number * price_number, value_currency)
-        return Amount(units_.number * cost_.number, value_currency)
-    return units_
 
 
 def remove_keys(
@@ -64,29 +37,11 @@ def remove_keys(
     return new
 
 
-def units(inventory):
-    """Get the units of an inventory."""
-    return inventory.reduce(convert.get_units)
-
-
-def cost(inventory):
-    """Get the cost of an inventory."""
-    return inventory.reduce(convert.get_cost)
-
-
 def cost_or_value(inventory, date: Optional[datetime.date] = None) -> Any:
     """Get the cost or value of an inventory."""
-    if g.conversion == "at_cost":
-        return inventory.reduce(convert.get_cost)
-    if g.conversion == "at_value":
-        return inventory.reduce(get_market_value, g.ledger.price_map, date)
-    if g.conversion == "units":
-        return inventory.reduce(convert.get_units)
-    if g.conversion:
-        return inventory.reduce(
-            convert.convert_position, g.conversion, g.ledger.price_map, date
-        )
-    return inventory.reduce(convert.get_cost)
+    return cost_or_value_without_context(
+        inventory, g.conversion, g.ledger.price_map, date
+    )
 
 
 def format_currency(
@@ -205,3 +160,23 @@ def collapse_account(account_name: str) -> bool:
             pass
 
     return False
+
+
+FILTERS = [
+    balance_children,
+    basename,
+    collapse_account,
+    cost,
+    cost_or_value,
+    cost_or_value,
+    flag_to_type,
+    format_amount,
+    format_currency,
+    format_date,
+    format_errormsg,
+    get_or_create,
+    hash_entry,
+    remove_keys,
+    should_show,
+    units,
+]

@@ -6,7 +6,7 @@
 'label': account_name if not label else label,
 'data': {
   'modifier': ledger.get_account_sign(account_name),
-  'root': ledger.charts.hierarchy(account_name, begin_date, end_date),
+  'root': ledger.charts.hierarchy(account_name, g.conversion, begin_date, end_date),
 },
 }) %}
 {% endmacro %}
@@ -15,7 +15,7 @@
 {% do chart_data.append({
 'type': 'bar',
 'label': account_name if not label else label,
-'data': ledger.charts.interval_totals(interval, account_name),
+'data': ledger.charts.interval_totals(interval, account_name, g.conversion),
 }) %}
 {% endmacro %}
 
@@ -31,7 +31,7 @@
 {% do chart_data.append({
 'type': 'balances',
 'label': _('Net Worth'),
-'data': ledger.charts.net_worth(interval),
+'data': ledger.charts.net_worth(interval, g.conversion),
 }) %}
 {% endmacro %}
 
