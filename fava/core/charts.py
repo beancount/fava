@@ -14,7 +14,7 @@ from beancount.core.data import Transaction
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.position import Position
-from flask.json import JSONEncoder
+from simplejson import JSONEncoder
 
 from fava.core.module_base import FavaModule
 from fava.core.tree import Tree
