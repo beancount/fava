@@ -26,41 +26,13 @@ def test_prices(example_ledger: FavaLedger, snapshot) -> None:
     snapshot(data)
 
 
-def test_linechart_data_default(example_ledger: FavaLedger, snapshot) -> None:
-    data = example_ledger.charts.linechart(
-        "Assets:Testing:MultipleCommodities", "at_cost"
-    )
-    snapshot(data)
-
-
-def test_linechart_data_units(example_ledger: FavaLedger, snapshot) -> None:
-    data = example_ledger.charts.linechart(
-        "Assets:Testing:MultipleCommodities", "units"
-    )
-    snapshot(data)
-
-
-def test_linechart_data_at_cost(example_ledger: FavaLedger, snapshot) -> None:
-    data = example_ledger.charts.linechart(
-        "Assets:Testing:MultipleCommodities", "at_cost"
-    )
-    snapshot(data)
-
-
-def test_linechart_data_at_value(example_ledger: FavaLedger, snapshot) -> None:
-    data = example_ledger.charts.linechart(
-        "Assets:Testing:MultipleCommodities", "at_value"
-    )
-    snapshot(data)
-    snapshot(dumps(data))
-
-
-def test_linechart_data_usd(example_ledger: FavaLedger, snapshot) -> None:
-    data = example_ledger.charts.linechart(
-        "Assets:Testing:MultipleCommodities", "USD"
-    )
-    snapshot(data)
-    snapshot(dumps(data))
+def test_linechart_data(example_ledger: FavaLedger, snapshot) -> None:
+    for conversion in ["at_cost", "units", "at_value", "USD"]:
+        data = example_ledger.charts.linechart(
+            "Assets:Testing:MultipleCommodities", conversion
+        )
+        snapshot(data)
+        snapshot(dumps(data))
 
 
 def test_net_worth(example_ledger: FavaLedger, snapshot) -> None:
