@@ -76,14 +76,16 @@ class ParserState(BaseState):
         return self.handle_node(child)
 
 
-EXT = EXTENSION_SUFFIXES[-1]
-BEANCOUNT_LANGUAGE = Language(
-    resource_filename("fava.parser", "tree_sitter_beancount" + EXT),
-    "beancount",
-)
-
 PARSER = Parser()
-PARSER.set_language(BEANCOUNT_LANGUAGE)
+EXT = EXTENSION_SUFFIXES[-1]
+try:
+    BEANCOUNT_LANGUAGE = Language(
+        resource_filename("fava.parser", "tree_sitter_beancount" + EXT),
+        "beancount",
+    )
+    PARSER.set_language(BEANCOUNT_LANGUAGE)
+except OSError:
+    LOG.error("tree-sitter parser not found (maybe it needs to be compiled?)")
 
 
 ParserResult = Tuple[Entries, List[BeancountError], Any]
