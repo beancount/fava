@@ -3,7 +3,7 @@
   import { _ } from "../helpers";
 
   import { selectedAccount } from "./stores";
-  import { basename } from "./util";
+  import { basename } from "../lib/paths";
 
   export let data;
   export let selected = null;

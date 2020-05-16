@@ -6,14 +6,20 @@
 import { writable, Writable } from "svelte/store";
 
 import { todayAsString } from "./format";
-import { delegate } from "./lib/events";
-import { _ } from "./helpers";
-import { favaAPI } from "./stores";
 import { notify } from "./notifications";
+import { basename, documentHasAccount } from "./lib/paths";
+import { delegate } from "./lib/events";
+import { put } from "./api";
 
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
-  closestTarget.classList.add("dragover");
-  event.preventDefault();
+  if (
+    event.dataTransfer &&
+    (event.dataTransfer.files.length ||
+      event.dataTransfer.types.includes("text/uri-list"))
+  ) {
+    closestTarget.classList.add("dragover");
+    event.preventDefault();
+  }
 }
 delegate(document, "dragenter", ".droptarget", dragover);
 delegate(document, "dragover", ".droptarget", dragover);
@@ -38,15 +44,28 @@ function drop(event: DragEvent, target: HTMLElement): void {
   target.classList.remove("dragover");
   event.preventDefault();
   event.stopPropagation();
-
-  if (!event.dataTransfer || !event.dataTransfer.files.length) {
+  if (!event.dataTransfer) {
     return;
   }
-  if (!favaAPI.options.documents.length) {
-    notify(
-      _('You need to set the "documents" Beancount option for file uploads.'),
-      "error"
-    );
+
+  const url = event.dataTransfer.getData("URL");
+  if (url) {
+    let filename = new URL(url).searchParams.get("filename");
+    const acc = target.getAttribute("data-account-name");
+    if (acc && filename && documentHasAccount(filename, acc)) {
+      filename = basename(filename);
+    }
+    const entry_hash = target.getAttribute("data-entry");
+    if (filename && entry_hash) {
+      put("attach_document", { filename, entry_hash }).then(
+        (response) => {
+          notify(response);
+        },
+        (error) => {
+          notify(error, "error");
+        }
+      );
+    }
     return;
   }
 

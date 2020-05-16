@@ -9,6 +9,7 @@ const validateAPIResponse = object({ data: unknown });
 const putAPIValidators = {
   add_document: string,
   add_entries: string,
+  attach_document: string,
   format_source: string,
   source: string,
   source_slice: string,

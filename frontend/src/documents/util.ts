@@ -6,11 +6,6 @@ export interface Node {
   children: Map<string, Node>;
 }
 
-export function basename(filename: string): string {
-  const parts = filename.split("/");
-  return parts[parts.length - 1];
-}
-
 /**
  * Generate an account tree from an array of entries.
  */

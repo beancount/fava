@@ -273,6 +273,15 @@ def add_document():
 
 
 @put_api_endpoint
+def attach_document(request_data):
+    """Attach a document to an entry."""
+    filename = request_data["filename"]
+    entry_hash = request_data["entry_hash"]
+    g.ledger.file.insert_metadata(entry_hash, "document", filename)
+    return "Attached '{}' to entry.".format(filename)
+
+
+@put_api_endpoint
 def add_entries(request_data):
     """Add multiple entries."""
     try:
