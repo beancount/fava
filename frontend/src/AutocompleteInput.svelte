@@ -130,6 +130,7 @@
     use:keyboardShortcut={key}
     on:blur={() => {
       hidden = true;
+      dispatch('blur');
     }}
     on:focusin={() => {
       hidden = false;

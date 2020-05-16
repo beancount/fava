@@ -87,6 +87,7 @@
     key="f t"
     clearButton={true}
     setSize={true}
+    on:blur={submit}
     on:select={submit} />
   <AutocompleteInput
     bind:value={values.account}
@@ -95,6 +96,7 @@
     key="f a"
     clearButton={true}
     setSize={true}
+    on:blur={submit}
     on:select={submit} />
   <AutocompleteInput
     bind:value={values.filter}
@@ -105,6 +107,7 @@
     setSize={true}
     {valueExtractor}
     {valueSelector}
+    on:blur={submit}
     on:select={submit} />
   <button type="submit" />
 </form>
