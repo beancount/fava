@@ -71,20 +71,20 @@ def test_api_move(app, test_client) -> None:
         app.preprocess_request()
         url = flask.url_for("json_api.move")
 
-        response = test_client.get(url)
-        assert_api_error(response)
+    response = test_client.get(url)
+    assert_api_error(response)
 
 
 def test_api_source_put(app, test_client) -> None:
     with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         url = flask.url_for("json_api.source")
+        path = flask.g.ledger.beancount_file_path
 
     # test bad request
     response = test_client.put(url)
     assert_api_error(response, "Invalid JSON request.")
 
-    path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
     sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
 
@@ -122,8 +122,8 @@ def test_api_format_source(app, test_client) -> None:
     with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         url = flask.url_for("json_api.format_source")
+        path = flask.g.ledger.beancount_file_path
 
-    path = app.config["BEANCOUNT_FILES"][0]
     payload = open(path, encoding="utf-8").read()
 
     response = test_client.put(
@@ -133,10 +133,11 @@ def test_api_format_source(app, test_client) -> None:
 
 
 def test_api_format_source_options(app, test_client) -> None:
-    path = app.config["BEANCOUNT_FILES"][0]
-    payload = open(path, encoding="utf-8").read()
     with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
+        path = flask.g.ledger.beancount_file_path
+        payload = open(path, encoding="utf-8").read()
+
         url = flask.url_for("json_api.format_source")
         old_currency_column = flask.g.ledger.fava_options["currency-column"]
         flask.g.ledger.fava_options["currency-column"] = 90
