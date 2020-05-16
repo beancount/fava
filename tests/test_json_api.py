@@ -29,7 +29,7 @@ def assert_api_success(response, data: Optional[Any] = None) -> None:
 
 
 def test_api_changed(app, test_client) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("json_api.changed")
 
@@ -38,7 +38,7 @@ def test_api_changed(app, test_client) -> None:
 
 
 def test_api_add_document(app, test_client, tmp_path) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         old_documents = flask.g.ledger.options["documents"]
         flask.g.ledger.options["documents"] = [str(tmp_path)]
@@ -67,7 +67,7 @@ def test_api_add_document(app, test_client, tmp_path) -> None:
 
 
 def test_api_move(app, test_client) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("json_api.move")
 
@@ -76,7 +76,7 @@ def test_api_move(app, test_client) -> None:
 
 
 def test_api_source_put(app, test_client) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("json_api.source")
         path = flask.g.ledger.beancount_file_path
@@ -119,7 +119,7 @@ def test_api_source_put(app, test_client) -> None:
 
 
 def test_api_format_source(app, test_client) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("json_api.format_source")
         path = flask.g.ledger.beancount_file_path
@@ -133,7 +133,7 @@ def test_api_format_source(app, test_client) -> None:
 
 
 def test_api_format_source_options(app, test_client) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         path = flask.g.ledger.beancount_file_path
         payload = open(path, encoding="utf-8").read()
@@ -153,7 +153,7 @@ def test_api_format_source_options(app, test_client) -> None:
 
 
 def test_api_add_entries(app, test_client, tmp_path):
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         old_beancount_file = flask.g.ledger.beancount_file_path
         test_file = tmp_path / "test_file"
@@ -245,7 +245,7 @@ def test_api_add_entries(app, test_client, tmp_path):
     ],
 )
 def test_api_query_result(query_string, result_str, app, test_client) -> None:
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("json_api.query_result", query_string=query_string)
 

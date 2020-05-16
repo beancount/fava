@@ -1,7 +1,5 @@
 """Tests for Fava's main Flask app."""
 
-from textwrap import dedent
-
 import flask
 import pytest
 import werkzeug.urls
@@ -26,7 +24,7 @@ FILTER_COMBINATIONS = [
 )
 def test_reports(app, test_client, report, filters):
     """The standard reports work without error (content isn't checked here)."""
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("report", report_name=report, **filters)
 
@@ -38,7 +36,7 @@ def test_reports(app, test_client, report, filters):
 def test_account_page(app, test_client, filters):
     """Account page works without error."""
     for subreport in ["journal", "balances", "changes"]:
-        with app.test_request_context("/example-beancount-file/"):
+        with app.test_request_context("/long-example/"):
             app.preprocess_request()
             url = flask.url_for(
                 "account",
@@ -89,7 +87,7 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 def test_incognito(app, test_client):
     """Numbers get obfuscated in incognito mode."""
     app.config["INCOGNITO"] = True
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("report", report_name="balance_sheet")
 
@@ -100,34 +98,13 @@ def test_incognito(app, test_client):
     app.config["INCOGNITO"] = False
 
 
-def test_download_journal(app, test_client):
+def test_download_journal(app, test_client, snapshot) -> None:
     """The currently filtered journal can be downloaded."""
-    file_content = dedent(
-        """\
-        ;; -*- mode: org; mode: beancount; -*-
-
-        option "title" "Example Beancount file - Journal Export"
-
-        option "operating_currency" "USD"
-        option "name_assets" "Assets"
-        option "name_liabilities" "Liabilities"
-        option "name_equity" "Equity"
-        option "name_income" "Income"
-        option "name_expenses" "Expenses"
-        plugin "beancount.plugins.auto_accounts"
-
-        2016-05-07 * "Jewel of Morroco" "Eating out alone"
-          Liabilities:US:Chase:Slate                       -25.30 USD
-          Expenses:Food:Restaurant                          25.30 USD
-
-    """
-    )
-
-    with app.test_request_context("/example-beancount-file/"):
+    with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = flask.url_for("download_journal", time="2016-05-07")
     result = test_client.get(url)
-    assert result.get_data(True) == file_content
+    snapshot(result.get_data(True))
     assert result.headers["Content-Disposition"].startswith(
         'attachment; filename="journal_'
     )
