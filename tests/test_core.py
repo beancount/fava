@@ -25,7 +25,6 @@ def test_paths_to_watch(example_ledger: FavaLedger) -> None:
         [example_ledger.beancount_file_path],
         [],
     )
-    documents = example_ledger.options["documents"]
     example_ledger.options["documents"] = ["folder"]
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
@@ -41,7 +40,6 @@ def test_paths_to_watch(example_ledger: FavaLedger) -> None:
             ]
         ],
     )
-    example_ledger.options["documents"] = documents
 
 
 def test_account_metadata(example_ledger: FavaLedger) -> None:
