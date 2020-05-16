@@ -39,7 +39,7 @@
 {% do chart_data.append({
 'type': 'balances',
 'label': _('Account Balance'),
-'data': ledger.charts.linechart(account_name),
+'data': ledger.charts.linechart(account_name, g.conversion),
 }) %}
 {% endmacro %}
 

@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring
+"""Tests for Fava's main Flask app."""
 
 from textwrap import dedent
 
@@ -25,6 +25,7 @@ FILTER_COMBINATIONS = [
     ],
 )
 def test_reports(app, test_client, report, filters):
+    """The standard reports work without error (content isn't checked here)."""
     with app.test_request_context():
         app.preprocess_request()
         url = flask.url_for("report", report_name=report, **filters)
@@ -33,11 +34,26 @@ def test_reports(app, test_client, report, filters):
     assert result.status_code == 200
 
 
+@pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
+def test_account_page(app, test_client, filters):
+    """Account page works without error."""
+    for subreport in ["journal", "balances", "changes"]:
+        with app.test_request_context():
+            app.preprocess_request()
+            url = flask.url_for(
+                "account", name="Assets", subreport=subreport, **filters
+            )
+
+        result = test_client.get(url)
+        assert result.status_code == 200
+
+
 @pytest.mark.parametrize(
     "url,return_code",
     [("/", 302), ("/asdfasdf/", 404), ("/asdfasdf/asdfasdf/", 404)],
 )
 def test_urls(test_client, url, return_code):
+    """Some URLs return a 404."""
     result = test_client.get(url)
     assert result.status_code == return_code
 
@@ -68,6 +84,7 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 
 
 def test_incognito(app, test_client):
+    """Numbers get obfuscated in incognito mode."""
     with app.test_request_context():
         app.preprocess_request()
         app.config["INCOGNITO"] = True
@@ -83,6 +100,7 @@ def test_incognito(app, test_client):
 
 
 def test_download_journal(app, test_client):
+    """The currently filtered journal can be downloaded."""
     file_content = dedent(
         """\
         ;; -*- mode: org; mode: beancount; -*-
@@ -116,6 +134,7 @@ def test_download_journal(app, test_client):
 
 
 def test_static_url(app) -> None:
+    """Static URLs have the mtime appended."""
     filename = "app.js"
     with app.test_request_context():
         app.preprocess_request()
@@ -125,6 +144,7 @@ def test_static_url(app) -> None:
 
 
 def test_load_extension_reports(extension_report_app, test_client):
+    """Extension can register reports."""
     with extension_report_app.test_request_context():
         extension_report_app.preprocess_request()
         slug = "extension-report-beancount-file"
