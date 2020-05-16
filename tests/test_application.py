@@ -41,7 +41,10 @@ def test_account_page(app, test_client, filters):
         with app.test_request_context("/example-beancount-file/"):
             app.preprocess_request()
             url = flask.url_for(
-                "account", name="Assets", subreport=subreport, **filters
+                "account",
+                name="Assets:US:BofA:Checking",
+                subreport=subreport,
+                **filters
             )
 
         result = test_client.get(url)
@@ -145,10 +148,7 @@ def test_load_extension_reports(app, test_client):
     """Extension can register reports."""
     with app.test_request_context("/extension-report-beancount-file/"):
         app.preprocess_request()
-        slug = "extension-report-beancount-file"
-
-        ledger = app.config["LEDGERS"][slug]
-        assert ledger.extensions.reports == [
+        assert flask.g.ledger.extensions.reports == [
             ("PortfolioList", "Portfolio List")
         ]
 
