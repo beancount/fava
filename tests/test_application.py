@@ -26,7 +26,7 @@ FILTER_COMBINATIONS = [
 )
 def test_reports(app, test_client, report, filters):
     """The standard reports work without error (content isn't checked here)."""
-    with app.test_request_context():
+    with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         url = flask.url_for("report", report_name=report, **filters)
 
@@ -38,7 +38,7 @@ def test_reports(app, test_client, report, filters):
 def test_account_page(app, test_client, filters):
     """Account page works without error."""
     for subreport in ["journal", "balances", "changes"]:
-        with app.test_request_context():
+        with app.test_request_context("/example-beancount-file/"):
             app.preprocess_request()
             url = flask.url_for(
                 "account", name="Assets", subreport=subreport, **filters
@@ -85,18 +85,16 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
 
 def test_incognito(app, test_client):
     """Numbers get obfuscated in incognito mode."""
-    with app.test_request_context():
+    app.config["INCOGNITO"] = True
+    with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
-        app.config["INCOGNITO"] = True
         url = flask.url_for("report", report_name="balance_sheet")
 
     result = test_client.get(url)
     assert result.status_code == 200
     assert "XXX" in result.get_data(True)
 
-    with app.test_request_context():
-        app.preprocess_request()
-        app.config["INCOGNITO"] = False
+    app.config["INCOGNITO"] = False
 
 
 def test_download_journal(app, test_client):
@@ -122,7 +120,7 @@ def test_download_journal(app, test_client):
     """
     )
 
-    with app.test_request_context():
+    with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         url = flask.url_for("download_journal", time="2016-05-07")
     result = test_client.get(url)
@@ -143,13 +141,13 @@ def test_static_url(app) -> None:
     assert "?mtime=" in url
 
 
-def test_load_extension_reports(extension_report_app, test_client):
+def test_load_extension_reports(app, test_client):
     """Extension can register reports."""
-    with extension_report_app.test_request_context():
-        extension_report_app.preprocess_request()
+    with app.test_request_context("/extension-report-beancount-file/"):
+        app.preprocess_request()
         slug = "extension-report-beancount-file"
 
-        ledger = extension_report_app.config["LEDGERS"][slug]
+        ledger = app.config["LEDGERS"][slug]
         assert ledger.extensions.reports == [
             ("PortfolioList", "Portfolio List")
         ]

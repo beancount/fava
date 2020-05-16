@@ -27,7 +27,7 @@ def test_get_or_create(example_ledger):
 
 
 def test_should_show(app):
-    with app.test_request_context("/"):
+    with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         assert should_show(g.ledger.root_tree.get("")) is True
         assert should_show(g.ledger.root_tree.get("Expenses")) is True
@@ -36,7 +36,9 @@ def test_should_show(app):
         assert should_show(account) is False
         account.balance_children = CounterInventory({("USD", None): 9})
         assert should_show(account) is True
-    with app.test_request_context("/?time=2100"):
+    with app.test_request_context(
+        "/example-beancount-file/income_statement/?time=2100"
+    ):
         app.preprocess_request()
         assert not g.ledger.fava_options["show-accounts-with-zero-balance"]
         assert should_show(g.ledger.root_tree.get("")) is True
@@ -44,7 +46,7 @@ def test_should_show(app):
 
 
 def test_format_errormsg(app):
-    with app.test_request_context("/"):
+    with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         assert (
             format_errormsg("Test for 'Expenses:Acme:Cash': Test")
@@ -60,7 +62,7 @@ def test_format_errormsg(app):
 
 
 def test_collapse_account(app):
-    with app.test_request_context("/"):
+    with app.test_request_context("/example-beancount-file/"):
         app.preprocess_request()
         g.ledger.fava_options["collapse-pattern"] = [
             "^Assets:Stock$",

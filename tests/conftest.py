@@ -13,13 +13,6 @@ from fava.application import _load_file, app as fava_app
 from fava.core.budgets import parse_budgets
 
 
-def create_app(bfile: str):
-    key = "BEANCOUNT_FILES"
-    if (key not in fava_app.config) or (fava_app.config[key] != [bfile]):
-        fava_app.config[key] = [bfile]
-        _load_file()
-
-
 def data_file(filename: str) -> str:
     return str(Path(__file__).parent / "data" / filename)
 
@@ -31,7 +24,12 @@ API = FavaLedger(EXAMPLE_FILE)
 
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
-create_app(EXAMPLE_FILE)
+
+fava_app.config["BEANCOUNT_FILES"] = [
+    EXAMPLE_FILE,
+    EXTENSION_REPORT_EXAMPLE_FILE,
+]
+_load_file()
 
 
 SNAPSHOT_UPDATE = bool(os.environ.get("SNAPSHOT_UPDATE"))
@@ -72,14 +70,7 @@ def snapshot(request) -> Callable[[Any], None]:
 
 
 @pytest.fixture
-def extension_report_app():
-    create_app(EXTENSION_REPORT_EXAMPLE_FILE)
-    return fava_app
-
-
-@pytest.fixture
 def app():
-    create_app(EXAMPLE_FILE)
     return fava_app
 
 

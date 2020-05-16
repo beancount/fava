@@ -193,15 +193,16 @@ def template_context() -> Dict[str, Any]:
 
 @app.before_request
 def _perform_global_filters() -> None:
-    # check (and possibly reload) source file
-    if request.blueprint != "json_api":
-        g.ledger.changed()
+    if g.ledger:
+        # check (and possibly reload) source file
+        if request.blueprint != "json_api":
+            g.ledger.changed()
 
-    g.ledger.filter(
-        account=request.args.get("account"),
-        filter=request.args.get("filter"),
-        time=request.args.get("time"),
-    )
+        g.ledger.filter(
+            account=request.args.get("account"),
+            filter=request.args.get("filter"),
+            time=request.args.get("time"),
+        )
 
 
 @app.after_request
@@ -226,18 +227,18 @@ def _pull_beancount_file(_, values) -> None:
     with LOAD_FILE_LOCK:
         if not app.config.get("LEDGERS"):
             _load_file()
-    if not g.beancount_file_slug:
-        g.beancount_file_slug = app.config["FILE_SLUGS"][0]
-    if g.beancount_file_slug not in app.config["FILE_SLUGS"]:
-        abort(404)
-    g.ledger = app.config["LEDGERS"][g.beancount_file_slug]
-    g.conversion = request.args.get(
-        "conversion", g.ledger.fava_options["conversion"]
-    )
+    g.ledger = None
+    if g.beancount_file_slug:
+        if g.beancount_file_slug not in app.config["FILE_SLUGS"]:
+            abort(404)
+        g.ledger = app.config["LEDGERS"][g.beancount_file_slug]
+        g.conversion = request.args.get(
+            "conversion", g.ledger.fava_options["conversion"]
+        )
+        g.interval = Interval.get(
+            request.args.get("interval", g.ledger.fava_options["interval"])
+        )
     g.partial = request.args.get("partial", False)
-    g.interval = Interval.get(
-        request.args.get("interval", g.ledger.fava_options["interval"])
-    )
 
 
 @app.errorhandler(FavaAPIException)
@@ -252,6 +253,8 @@ def fava_api_exception(error: FavaAPIException):
 @app.route("/<bfile>/")
 def index():
     """Redirect to the Income Statement (of the given or first file)."""
+    if not g.beancount_file_slug:
+        g.beancount_file_slug = app.config["FILE_SLUGS"][0]
     return redirect(url_for("report", report_name="income_statement"))
 
 

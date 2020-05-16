@@ -43,7 +43,6 @@ def test_slugify():
 
 def test_send_file_inline(app):
     with app.test_request_context():
-        app.preprocess_request()
         resp = send_file_inline(data_file("example-balances.csv"))
         assert (
             resp.headers["Content-Disposition"]
