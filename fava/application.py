@@ -68,7 +68,6 @@ app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
 app.config["HAVE_EXCEL"] = HAVE_EXCEL
-app.config["HELP_PAGES"] = HELP_PAGES
 app.config["ACCOUNT_RE"] = ACCOUNT_RE
 
 REPORTS = [
@@ -353,7 +352,7 @@ def download_journal():
 @app.route("/<bfile>/help/<string:page_slug>/")
 def help_page(page_slug="_index"):
     """Fava's included documentation."""
-    if page_slug not in app.config["HELP_PAGES"]:
+    if page_slug not in HELP_PAGES:
         abort(404)
     html = markdown2.markdown_path(
         (resource_path("help") / (page_slug + ".md")),
@@ -364,6 +363,7 @@ def help_page(page_slug="_index"):
         active_page="help",
         page_slug=page_slug,
         help_html=render_template_string(html),
+        HELP_PAGES=HELP_PAGES
     )
 
 
