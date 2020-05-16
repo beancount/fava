@@ -192,12 +192,13 @@ def template_context() -> Dict[str, Any]:
 
 @app.before_request
 def _perform_global_filters() -> None:
-    if g.ledger:
+    ledger = getattr(g, "ledger", None)
+    if ledger:
         # check (and possibly reload) source file
         if request.blueprint != "json_api":
-            g.ledger.changed()
+            ledger.changed()
 
-        g.ledger.filter(
+        ledger.filter(
             account=request.args.get("account"),
             filter=request.args.get("filter"),
             time=request.args.get("time"),
@@ -226,7 +227,6 @@ def _pull_beancount_file(_, values) -> None:
     with LOAD_FILE_LOCK:
         if not app.config.get("LEDGERS"):
             _load_file()
-    g.ledger = None
     if g.beancount_file_slug:
         if g.beancount_file_slug not in app.config["FILE_SLUGS"]:
             abort(404)
@@ -237,15 +237,14 @@ def _pull_beancount_file(_, values) -> None:
         g.interval = Interval.get(
             request.args.get("interval", g.ledger.fava_options["interval"])
         )
-    g.partial = request.args.get("partial", False)
 
 
 @app.errorhandler(FavaAPIException)
 def fava_api_exception(error: FavaAPIException):
     """Handle API errors."""
-    if g.partial:
-        return error.message, 400
-    return render_template("_error.html", error=error), 400
+    return render_template(
+        "_layout.html", page_title="Error", content=error.message
+    )
 
 
 @app.route("/")
@@ -363,7 +362,7 @@ def help_page(page_slug="_index"):
         active_page="help",
         page_slug=page_slug,
         help_html=render_template_string(html),
-        HELP_PAGES=HELP_PAGES
+        HELP_PAGES=HELP_PAGES,
     )
 
 
