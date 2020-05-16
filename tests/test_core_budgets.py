@@ -1,4 +1,4 @@
-# pylint: disable=missing-docstring
+"""Fava's budget syntax."""
 
 from datetime import date
 
@@ -23,12 +23,10 @@ def test_budgets(load_doc):
 
     assert len(errors) == 2
 
-    assert (
-        calculate_budget(
-            budgets, "Expenses", date(2016, 6, 1), date(2016, 6, 8)
-        )
-        == {}
+    empty = calculate_budget(
+        budgets, "Expenses", date(2016, 6, 1), date(2016, 6, 8)
     )
+    assert empty == {}
 
     budgets = calculate_budget(
         budgets, "Expenses:Groceries", date(2016, 6, 1), date(2016, 6, 8)

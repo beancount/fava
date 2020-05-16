@@ -94,11 +94,6 @@ def load_doc(request):
 
 
 @pytest.fixture
-def extension_report_ledger():
-    return FavaLedger(EXTENSION_REPORT_EXAMPLE_FILE)
-
-
-@pytest.fixture
 def small_example_ledger():
     return FavaLedger(data_file("example.beancount"))
 
