@@ -12,10 +12,10 @@ from beancount.core.data import Posting
 from beancount.core.data import Transaction
 from beancount.core.number import D
 from beancount.core.number import MISSING
-from flask.json import dumps
 from flask.json import loads
 
 from fava.core.file import _format_entry
+from fava.core.charts import dumps
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting

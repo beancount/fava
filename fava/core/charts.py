@@ -43,6 +43,8 @@ class FavaJSONEncoder(JSONEncoder):
     def __init__(self, *args, **kwargs):
         # Allow use of a `for_json` method to serialise dict subclasses.
         kwargs["for_json"] = True
+        # Sort dict keys (Flask also does this by default).
+        kwargs["sort_keys"] = True
         super().__init__(*args, **kwargs)
 
     def default(self, o):  # pylint: disable=method-hidden
@@ -56,6 +58,14 @@ class FavaJSONEncoder(JSONEncoder):
             return JSONEncoder.default(self, o)
         except TypeError:
             return str(o)
+
+
+ENCODER = FavaJSONEncoder()
+
+
+def dumps(arg) -> str:
+    """Encode to JSON."""
+    return ENCODER.encode(arg)
 
 
 class ChartModule(FavaModule):

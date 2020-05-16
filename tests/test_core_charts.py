@@ -4,12 +4,8 @@ from beancount.core.number import D
 import pytest
 
 from fava.core import FavaLedger
-from fava.core.charts import FavaJSONEncoder
+from fava.core.charts import dumps
 from fava.util.date import Interval
-
-
-def dumps(arg) -> str:
-    return FavaJSONEncoder(sort_keys=True).encode(arg)
 
 
 def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:

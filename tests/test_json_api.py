@@ -8,12 +8,8 @@ from typing import Optional
 import flask
 import pytest
 
-from fava.core.charts import FavaJSONEncoder
+from fava.core.charts import dumps
 from fava.core.misc import align
-
-
-def dumps(arg) -> str:
-    return FavaJSONEncoder(sort_keys=True).encode(arg)
 
 
 def assert_api_error(response, msg: Optional[str] = None) -> None:
