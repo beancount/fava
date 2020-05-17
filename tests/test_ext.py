@@ -16,13 +16,13 @@ def test_find_extensions():
     assert len(errors) == 1
     assert errors[0].message == 'Module "fava" contains no extensions.'
 
-    path = Path(__file__).parent.parent / "fava" / "ext"
+    path = Path(__file__).parent.parent / "src" / "fava" / "ext"
     classes, errors = find_extensions(str(path), "auto_commit")
     assert len(classes) == 1
     assert classes[0].__name__ == "AutoCommit"
     assert errors == []
 
-    path = Path(__file__).parent.parent / "fava" / "ext"
+    path = Path(__file__).parent.parent / "src" / "fava" / "ext"
     classes, errors = find_extensions(str(path), "portfolio_list")
     assert len(classes) == 1
     assert classes[0].__name__ == "PortfolioList"

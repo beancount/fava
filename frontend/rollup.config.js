@@ -62,4 +62,4 @@ function config(input, outputOpts, ...plugins) {
   };
 }
 
-export default [config("src/main.ts", { file: "../fava/static/app.js" })];
+export default [config("src/main.ts", { file: "../src/fava/static/app.js" })];

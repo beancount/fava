@@ -1,6 +1,6 @@
-all: fava/static/app.js
+all: src/fava/static/app.js
 
-fava/static/app.js: frontend/css/* frontend/src/* frontend/package.json frontend/node_modules
+src/fava/static/app.js: frontend/css/* frontend/src/* frontend/package.json frontend/node_modules
 	cd frontend; npm run build
 
 frontend/node_modules: frontend/package-lock.json
@@ -10,7 +10,7 @@ frontend/node_modules: frontend/package-lock.json
 .PHONY: clean
 clean: mostlyclean
 	rm -rf build dist
-	rm -rf fava/static/*
+	rm -rf src/fava/static/*
 
 .PHONY: mostlyclean
 mostlyclean:
@@ -58,7 +58,7 @@ run-example:
 bql-grammar:
 	contrib/scripts.py generate-bql-grammar-json
 
-dist: fava/static/app.js fava setup.cfg setup.py MANIFEST.in
+dist: src/fava/static/app.js src/fava setup.cfg setup.py MANIFEST.in
 	rm -rf build dist
 	python setup.py sdist bdist_wheel
 
@@ -76,7 +76,7 @@ upload: dist
 # Extract translation strings.
 .PHONY: translations-extract
 translations-extract:
-	pybabel extract -F fava/translations/babel.conf -o fava/translations/messages.pot .
+	pybabel extract -F src/fava/translations/babel.conf -o src/fava/translations/messages.pot .
 
 # Extract translation strings and upload them to POEditor.com.
 # Requires the environment variable POEDITOR_TOKEN to be set to an API token
@@ -89,7 +89,7 @@ translations-push: translations-extract
 .PHONY: translations-fetch
 translations-fetch:
 	contrib/scripts.py download-translations
-	pybabel compile -d fava/translations
+	pybabel compile -d src/fava/translations
 
 # Build and upload the website.
 .PHONY: gh-pages
