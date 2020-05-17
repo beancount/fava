@@ -4,9 +4,6 @@ import enum
 from typing import Any
 from typing import Optional
 
-from beancount.core import distribution as distribution
-from beancount.core.number import Decimal as Decimal
-
 class Precision(enum.Enum):
     MOST_COMMON: int = ...
     MAXIMUM: int = ...

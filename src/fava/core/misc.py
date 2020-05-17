@@ -5,7 +5,7 @@ import re
 from typing import List
 from typing import Tuple
 
-from beancount.core import amount
+from beancount.core.amount import CURRENCY_RE
 from beancount.core.data import Custom
 from beancount.core.data import Event
 
@@ -89,7 +89,7 @@ def upcoming_events(events: List[Event], max_delta: int) -> List[Event]:
 
 
 ALIGN_RE = re.compile(
-    rf'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({amount.CURRENCY_RE}\b.*)'
+    rf'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({CURRENCY_RE}\b.*)'
 )
 
 

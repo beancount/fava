@@ -14,9 +14,6 @@ from typing import Tuple
 from typing import Type
 
 from beancount import loader  # type: ignore
-from beancount.core import getters
-from beancount.core import interpolate  # type: ignore
-from beancount.core import prices
 from beancount.core import realization
 from beancount.core.account_types import AccountTypes
 from beancount.core.account_types import get_account_sign
@@ -35,8 +32,12 @@ from beancount.core.data import Posting
 from beancount.core.data import Transaction
 from beancount.core.data import TxnPosting
 from beancount.core.flags import FLAG_UNREALIZED
+from beancount.core.getters import get_min_max_dates
+from beancount.core.interpolate import compute_entry_context
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
+from beancount.core.prices import build_price_map
+from beancount.core.prices import get_all_prices
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
@@ -216,7 +217,7 @@ class FavaLedger:
             )
 
         self.account_types = get_account_types(self.options)
-        self.price_map = prices.build_price_map(self.all_entries)
+        self.price_map = build_price_map(self.all_entries)
         self.all_root_account = realization.realize(
             self.all_entries, self.account_types
         )
@@ -274,7 +275,7 @@ class FavaLedger:
         )
         self.root_tree = Tree(self.entries)
 
-        self._date_first, self._date_last = getters.get_min_max_dates(
+        self._date_first, self._date_last = get_min_max_dates(
             self.entries, (Transaction)
         )
         if self._date_last:
@@ -480,9 +481,7 @@ class FavaLedger:
         entry = self.get_entry(entry_hash)
         balances = None
         if isinstance(entry, (Balance, Transaction)):
-            balances = interpolate.compute_entry_context(
-                self.all_entries, entry
-            )
+            balances = compute_entry_context(self.all_entries, entry)
         source_slice, sha256sum = get_entry_slice(entry)
         return entry, balances, source_slice, sha256sum
 
@@ -507,7 +506,7 @@ class FavaLedger:
         self, base: str, quote: str
     ) -> List[Tuple[datetime.date, Decimal]]:
         """List all prices."""
-        all_prices = prices.get_all_prices(self.price_map, (base, quote))
+        all_prices = get_all_prices(self.price_map, (base, quote))
 
         if self.filters.time:
             return [

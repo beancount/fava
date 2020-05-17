@@ -6,7 +6,7 @@ import datetime
 from typing import Any
 from typing import Optional
 
-from beancount.core import convert
+from beancount.core.convert import get_cost, get_units, convert_position
 from beancount.core.amount import Amount
 from beancount.core.prices import get_price
 from beancount.core.prices import PriceMap
@@ -42,12 +42,12 @@ def get_market_value(pos, price_map, date=None):
 
 def units(inventory):
     """Get the units of an inventory."""
-    return inventory.reduce(convert.get_units)
+    return inventory.reduce(get_units)
 
 
 def cost(inventory):
     """Get the cost of an inventory."""
-    return inventory.reduce(convert.get_cost)
+    return inventory.reduce(get_cost)
 
 
 def cost_or_value(
@@ -58,13 +58,11 @@ def cost_or_value(
 ) -> Any:
     """Get the cost or value of an inventory."""
     if conversion == "at_cost":
-        return inventory.reduce(convert.get_cost)
+        return inventory.reduce(get_cost)
     if conversion == "at_value":
         return inventory.reduce(get_market_value, price_map, date)
     if conversion == "units":
-        return inventory.reduce(convert.get_units)
+        return inventory.reduce(get_units)
     if conversion:
-        return inventory.reduce(
-            convert.convert_position, conversion, price_map, date
-        )
-    return inventory.reduce(convert.get_cost)
+        return inventory.reduce(convert_position, conversion, price_map, date)
+    return inventory.reduce(get_cost)

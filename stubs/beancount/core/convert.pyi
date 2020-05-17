@@ -1,26 +1,29 @@
 # pylint: disable=all
 # flake8: noqa
+import datetime
 from typing import Any
 from typing import Optional
 
-from beancount.core import prices as prices
-from beancount.core.amount import Amount as Amount
-from beancount.core.number import Decimal as Decimal
-from beancount.core.number import MISSING as MISSING
-from beancount.core.position import Cost as Cost
-from beancount.core.position import Position as Position
+from beancount.core.amount import Amount
+from beancount.core.position import Position
+from beancount.core.prices import PriceMap
 
-def get_units(pos: Any): ...
-def get_cost(pos: Any): ...
-def get_weight(pos: Any): ...
-def get_value(pos: Any, price_map: Any, date: Optional[Any] = ...): ...
+def get_units(pos: Position) -> Amount: ...
+def get_cost(pos: Position) -> Amount: ...
+def get_weight(pos: Position) -> Amount: ...
+def get_value(
+    pos: Position, price_map: PriceMap, date: Optional[datetime.date] = ...
+) -> Amount: ...
 def convert_position(
-    pos: Any, target_currency: Any, price_map: Any, date: Optional[Any] = ...
-): ...
+    pos: Position,
+    target_currency: str,
+    price_map: PriceMap,
+    date: Optional[datetime.date] = ...,
+) -> Amount: ...
 def convert_amount(
-    amt: Any,
-    target_currency: Any,
-    price_map: Any,
-    date: Optional[Any] = ...,
-    via: Optional[Any] = ...,
-): ...
+    amt: Amount,
+    target_currency: str,
+    price_map: PriceMap,
+    date: Optional[datetime.date] = ...,
+    via: Optional[str] = ...,
+) -> Amount: ...
