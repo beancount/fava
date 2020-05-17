@@ -12,12 +12,12 @@ def test_plugins(tmp_path):
     # Create sample files
     expenses_foo = tmp_path / "documents" / "Expenses" / "Foo"
     expenses_foo.mkdir(parents=True)
-    (expenses_foo / "2016-11-01 Test 1.pdf").touch()
-    (expenses_foo / "2016-11-01 Test 2.pdf").touch()
-    (expenses_foo / "2016-11-01 Test 3 discovered.pdf").touch()
+    (expenses_foo / "2016-11-02 Test 1.pdf").touch()
+    (expenses_foo / "2016-11-03 Test 2.pdf").touch()
+    (expenses_foo / "2016-11-04 Test 3 discovered.pdf").touch()
     assets_cash = tmp_path / "documents" / "Assets" / "Cash"
     assets_cash.mkdir(parents=True)
-    (assets_cash / "2016-11-01 Test 4.pdf").touch()
+    (assets_cash / "2016-11-05 Test 4.pdf").touch()
     (assets_cash / "Test 5.pdf").touch()
 
     expenses_foo_rel = Path("documents") / "Expenses" / "Foo"
@@ -34,21 +34,22 @@ def test_plugins(tmp_path):
         plugin "fava.plugins.link_documents"
         plugin "fava.plugins.tag_discovered_documents"
 
-        2016-10-31 open Expenses:Foo
+        2016-10-30 open Expenses:Foo
         2016-10-31 open Assets:Cash
 
         2016-11-01 * "Foo" "Bar"
-            document: "{expenses_foo / "2016-11-01 Test 2.pdf"}"
+            document: "{expenses_foo / "2016-11-03 Test 2.pdf"}"
+            document-2: "{assets_cash_rel / "2016-11-05 Test 4.pdf"}"
             Expenses:Foo                100 EUR
             Assets:Cash
 
-        2016-11-02 * "Foo" "Bar"
-            document: "{expenses_foo_rel / "2016-11-01 Test 1.pdf"}"
-            document-2: "{assets_cash_rel / "2016-11-01 Test 4.pdf"}"
+        2016-11-07 * "Foo" "Bar"
+            document: "{expenses_foo_rel / "2016-11-02 Test 1.pdf"}"
+            document-2: "{assets_cash_rel / "2016-11-05 Test 4.pdf"}"
             Expenses:Foo        100 EUR
             Assets:Cash
 
-        2016-11-02 document Assets:Cash "{assets_cash_rel / "Test 5.pdf"}"
+        2016-11-06 document Assets:Cash "{assets_cash_rel / "Test 5.pdf"}"
         """.replace(
                 "\\", "\\\\"
             )
@@ -62,13 +63,14 @@ def test_plugins(tmp_path):
 
     assert "linked" in entries[3].tags
     assert "linked" in entries[4].tags
-    assert "linked" in entries[5].tags
 
-    assert entries[2].links == entries[5].links
-    assert entries[7].links == entries[3].links == entries[4].links
+    # Document can be linked twice
+    assert len(entries[6].links) == 2
+    assert entries[2].links == entries[4].links
+    assert entries[8].links == entries[3].links
 
     assert "discovered" in entries[6].tags
-    assert not entries[8].tags
+    assert not entries[7].tags
 
 
 def test_link_documents_error(load_doc):
