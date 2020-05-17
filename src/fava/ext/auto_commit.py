@@ -25,5 +25,5 @@ class AutoCommit(FavaExtensionBase):  # pragma: no cover
         self._run(["git", "commit", "-am", message])
 
     def after_insert_entry(self, entry):
-        message = "autocommit: entry on {}".format(entry.date)
+        message = f"autocommit: entry on {entry.date}"
         self._run(["git", "commit", "-am", message])

@@ -191,10 +191,7 @@ class FileModule(FavaModule):
 
         for entry in entries:
             if isinstance(entry, (Balance, Transaction)):
-                if (
-                    isinstance(entry, Transaction)
-                    and entry.flag in EXCL_FLAGS
-                ):
+                if isinstance(entry, Transaction) and entry.flag in EXCL_FLAGS:
                     continue
                 try:
                     yield get_entry_slice(entry)[0] + "\n"
@@ -218,9 +215,9 @@ def next_key(basekey: str, keys: Dict[str, Any]) -> str:
     if basekey not in keys:
         return basekey
     i = 2
-    while "{}-{}".format(basekey, i) in keys:
+    while f"{basekey}-{i}" in keys:
         i = i + 1
-    return "{}-{}".format(basekey, i)
+    return f"{basekey}-{i}"
 
 
 DEFAULT_INDENT = "  "
@@ -245,7 +242,7 @@ def insert_metadata_in_file(
     except IndexError:
         indent = DEFAULT_INDENT
 
-    contents.insert(lineno, '{}{}: "{}"\n'.format(indent, key, value))
+    contents.insert(lineno, f'{indent}{key}: "{value}"\n')
 
     with open(filename, "w", encoding="utf-8") as file:
         file.write("".join(contents))

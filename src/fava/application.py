@@ -176,8 +176,9 @@ def url_for_current(**kwargs):
 def url_for_source(**kwargs) -> str:
     """URL to source file (possibly link to external editor)."""
     if g.ledger.fava_options["use-external-editor"]:
-        return "beancount://{}?lineno={}".format(
-            kwargs.get("file_path"), kwargs.get("line", 1)
+        return (
+            f"beancount://{kwargs.get('file_path')}"
+            + f"?lineno={kwargs.get('line', 1)}"
         )
     return url_for("report", report_name="editor", **kwargs)
 
@@ -334,7 +335,7 @@ def download_query(result_format):
         request.args.get("query_string", ""), result_format
     )
 
-    filename = "{}.{}".format(secure_filename(name.strip()), result_format)
+    filename = f"{secure_filename(name.strip())}.{result_format}"
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
 
@@ -342,7 +343,7 @@ def download_query(result_format):
 def download_journal():
     """Download a Journal file."""
     now = datetime.datetime.now().replace(microsecond=0)
-    filename = "journal_{}.beancount".format(now.isoformat())
+    filename = f"journal_{now.isoformat()}.beancount"
     data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
     return send_file(data, as_attachment=True, attachment_filename=filename)
 

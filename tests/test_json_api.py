@@ -57,12 +57,12 @@ def test_api_add_document(app, test_client, tmp_path) -> None:
         )
 
         response = test_client.put(url, data=request_data)
-        assert_api_success(response, "Uploaded to {}".format(filename))
+        assert_api_success(response, f"Uploaded to {filename}")
         assert Path(filename).is_file()
 
         request_data["file"] = (BytesIO(b"asdfasdf"), "2015-12-12 test")
         response = test_client.put(url, data=request_data)
-        assert_api_error(response, "{} already exists.".format(filename))
+        assert_api_error(response, f"{filename} already exists.")
         flask.g.ledger.options["documents"] = old_documents
 
 

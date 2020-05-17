@@ -62,7 +62,7 @@ def format_amount(amount: Amount) -> str:
     number, currency = amount
     if number is None:
         return ""
-    return "{} {}".format(format_currency(number, currency, True), currency)
+    return f"{format_currency(number, currency, True)} {currency}"
 
 
 def format_date(date: datetime.date) -> str:
@@ -70,7 +70,7 @@ def format_date(date: datetime.date) -> str:
     if g.interval is Interval.YEAR:
         return date.strftime("%Y")
     if g.interval is Interval.QUARTER:
-        return "{}Q{}".format(date.year, (date.month - 1) // 3 + 1)
+        return f"{date.year}Q{(date.month - 1) // 3 + 1}"
     if g.interval is Interval.MONTH:
         return date.strftime("%b %Y")
     if g.interval is Interval.WEEK:
@@ -143,7 +143,7 @@ def format_errormsg(message: str) -> str:
     account = match.group()
     url = flask.url_for("account", name=account)
     return (
-        message.replace(account, '<a href="{}">{}</a>'.format(url, account))
+        message.replace(account, f'<a href="{url}">{account}</a>')
         .replace("for '", "for ")
         .replace("': ", ": ")
     )

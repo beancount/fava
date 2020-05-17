@@ -72,7 +72,7 @@ def find_extensions(
         module = importlib.import_module(name)
     except ImportError:
         error = FavaExtensionError(
-            None, 'Importing module "{}" failed.'.format(name), None
+            None, f'Importing module "{name}" failed.', None
         )
         return (
             [],
@@ -85,7 +85,7 @@ def find_extensions(
 
     if not classes:
         error = FavaExtensionError(
-            None, 'Module "{}" contains no extensions.'.format(name), None,
+            None, f'Module "{name}" contains no extensions.', None,
         )
         return (
             [],

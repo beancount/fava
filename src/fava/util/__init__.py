@@ -49,7 +49,7 @@ def timefunc(func):
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
-        print("Ran {} in {}".format(func.__name__, end - start))
+        print(f"Ran {func.__name__} in {end - start}")
         return result
 
     return _wrapper
@@ -97,6 +97,6 @@ def send_file_inline(filename):
     except FileNotFoundError:
         return abort(404)
     basename = os.path.basename(filename)
-    cont_disp = "inline; filename*=UTF-8''{}".format(url_quote(basename))
+    cont_disp = f"inline; filename*=UTF-8''{url_quote(basename)}"
     response.headers["Content-Disposition"] = cont_disp
     return response

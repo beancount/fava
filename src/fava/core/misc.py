@@ -88,17 +88,17 @@ def upcoming_events(events: List[Event], max_delta: int) -> List[Event]:
     return upcoming
 
 
+ALIGN_RE = re.compile(
+    rf'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({amount.CURRENCY_RE}\b.*)'
+)
+
+
 def align(string: str, currency_column: int) -> str:
     """Align currencies in one column."""
 
     output = io.StringIO()
     for line in string.splitlines():
-        match = re.match(
-            r'([^";]*?)\s+([-+]?\s*[\d,]+(?:\.\d*)?)\s+({}\b.*)'.format(
-                amount.CURRENCY_RE
-            ),
-            line,
-        )
+        match = ALIGN_RE.match(line)
         if match:
             prefix, number, rest = match.groups()
             num_of_spaces = currency_column - len(prefix) - len(number) - 4

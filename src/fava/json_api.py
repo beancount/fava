@@ -30,7 +30,7 @@ json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 def get_api_endpoint(func):
     """Register a GET endpoint."""
 
-    @json_api.route("/{}".format(func.__name__), methods=["GET"])
+    @json_api.route(f"/{func.__name__}", methods=["GET"])
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         return jsonify({"success": True, "data": func(*args, **kwargs)})
@@ -41,7 +41,7 @@ def get_api_endpoint(func):
 def put_api_endpoint(func):
     """Register a PUT endpoint."""
 
-    @json_api.route("/{}".format(func.__name__), methods=["PUT"])
+    @json_api.route(f"/{func.__name__}", methods=["PUT"])
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         request_data = request.get_json()
@@ -58,7 +58,7 @@ def delete_api_endpoint(func):
 
     route = func.__name__.replace("delete_", "")
 
-    @json_api.route("/{}".format(route), methods=["DELETE"])
+    @json_api.route(f"/{route}", methods=["DELETE"])
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         return jsonify({"success": True, "data": func(*args, **kwargs)})
@@ -172,17 +172,17 @@ def move() -> str:
     )
 
     if not path.isfile(filename):
-        raise FavaAPIException("Not a file: '{}'".format(filename))
+        raise FavaAPIException(f"Not a file: '{filename}'")
 
     if path.exists(new_path):
-        raise FavaAPIException("Target file exists: '{}'".format(new_path))
+        raise FavaAPIException(f"Target file exists: '{new_path}'")
 
     if not path.exists(path.dirname(new_path)):
         os.makedirs(path.dirname(new_path), exist_ok=True)
 
     shutil.move(filename, new_path)
 
-    return "Moved {} to {}.".format(filename, new_path)
+    return f"Moved {filename} to {new_path}."
 
 
 @get_api_endpoint
@@ -258,7 +258,7 @@ def add_document():
     directory, filename = path.split(filepath)
 
     if path.exists(filepath):
-        raise FavaAPIException("{} already exists.".format(filepath))
+        raise FavaAPIException(f"{filepath} already exists.")
 
     if not path.exists(directory):
         os.makedirs(directory, exist_ok=True)
@@ -269,7 +269,7 @@ def add_document():
         g.ledger.file.insert_metadata(
             request.form["hash"], "document", filename
         )
-    return {"data": "Uploaded to {}".format(filepath)}
+    return {"data": f"Uploaded to {filepath}"}
 
 
 @put_api_endpoint
@@ -278,7 +278,7 @@ def attach_document(request_data):
     filename = request_data["filename"]
     entry_hash = request_data["entry_hash"]
     g.ledger.file.insert_metadata(entry_hash, "document", filename)
-    return "Attached '{}' to entry.".format(filename)
+    return f"Attached '{filename}' to entry."
 
 
 @put_api_endpoint
@@ -287,8 +287,8 @@ def add_entries(request_data):
     try:
         entries = [deserialise(entry) for entry in request_data["entries"]]
     except KeyError as error:
-        raise FavaAPIException("KeyError: {}".format(str(error)))
+        raise FavaAPIException(f"KeyError: {error}")
 
     g.ledger.file.insert_entries(entries)
 
-    return "Stored {} entries.".format(len(entries))
+    return f"Stored {len(entries)} entries."

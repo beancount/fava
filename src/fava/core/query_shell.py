@@ -53,7 +53,7 @@ class QueryShell(BQLShell, FavaModule):
             command_name = attrname[3:]
             setattr(
                 self.__class__,
-                "help_{}".format(command_name.lower()),
+                f"help_{command_name.lower()}",
                 lambda _, fun=func: print(
                     textwrap.dedent(fun.__doc__).strip(), file=self.outfile
                 ),
@@ -87,7 +87,7 @@ class QueryShell(BQLShell, FavaModule):
                 self.env_entries,
             )
         except CompilationError as exc:
-            print("ERROR: {}.".format(str(exc).rstrip(".")), file=self.outfile)
+            print(f"ERROR: {str(exc).rstrip('.')}.", file=self.outfile)
             return
         rtypes, rrows = execute_query(c_query, self.entries, self.options_map)
 
@@ -132,7 +132,7 @@ class QueryShell(BQLShell, FavaModule):
                     (query for query in self.queries if query.name == name)
                 )
             except StopIteration:
-                print("ERROR: Query '{}' not found".format(name))
+                print(f"ERROR: Query '{name}' not found")
             else:
                 statement = self.parser.parse(query.query_string)
                 self.dispatch(statement)
@@ -168,7 +168,7 @@ class QueryShell(BQLShell, FavaModule):
                     (query for query in self.queries if query.name == name)
                 )
             except StopIteration:
-                raise FavaAPIException('Query "{}" not found.'.format(name))
+                raise FavaAPIException(f'Query "{name}" not found.')
             query_string = query.query_string
 
         try:

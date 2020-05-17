@@ -70,7 +70,7 @@ class ExtensionModule(FavaModule):
                 template_path = os.path.join(
                     extension_dir,
                     "templates",
-                    "{}.html".format(ext_class.__qualname__),
+                    f"{ext_class.__qualname__}.html",
                 )
 
                 with open(template_path) as ext_template:

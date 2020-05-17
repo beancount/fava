@@ -155,7 +155,7 @@ def substitute(string: str, fye: Optional[str] = None) -> str:
             if end and today >= end:
                 year += 1
             year += plusminus * mod
-            string = string.replace(complete_match, "FY{0}".format(year))
+            string = string.replace(complete_match, f"FY{year}")
         if interval == "year":
             year = today.year + plusminus * mod
             string = string.replace(complete_match, str(year))
@@ -172,22 +172,17 @@ def substitute(string: str, fye: Optional[str] = None) -> str:
             if start:
                 quarter = int(((target.month - start.month) % 12) / 3)
                 string = string.replace(
-                    complete_match,
-                    "FY{0}-Q{1}".format(start.year + 1, (quarter % 4) + 1),
+                    complete_match, f"FY{start.year + 1}-Q{(quarter % 4) + 1}",
                 )
         if interval == "quarter":
             quarter_today = (today.month - 1) // 3 + 1
             year = today.year + (quarter_today + plusminus * mod - 1) // 4
             quarter = (quarter_today + plusminus * mod - 1) % 4 + 1
-            string = string.replace(
-                complete_match, "{}-Q{}".format(year, quarter)
-            )
+            string = string.replace(complete_match, f"{year}-Q{quarter}")
         if interval == "month":
             year = today.year + (today.month + plusminus * mod - 1) // 12
             month = (today.month + plusminus * mod - 1) % 12 + 1
-            string = string.replace(
-                complete_match, "{}-{:02}".format(year, month)
-            )
+            string = string.replace(complete_match, f"{year}-{month:02}")
         if interval == "week":
             delta = datetime.timedelta(plusminus * mod * 7)
             string = string.replace(
@@ -257,7 +252,7 @@ def parse_date(
     match = WEEK_RE.match(string)
     if match:
         year, week = map(int, match.group(1, 2))
-        date_str = "{}{}1".format(year, week)
+        date_str = f"{year}{week}1"
         first_week_day = datetime.datetime.strptime(date_str, "%Y%W%w").date()
         return first_week_day, get_next_interval(first_week_day, Interval.WEEK)
 
@@ -318,9 +313,7 @@ def get_fiscal_period(
     else:
         try:
             start_date = (
-                datetime.datetime.strptime(
-                    "{0}-{1}".format(year - 1, fye), "%Y-%m-%d"
-                )
+                datetime.datetime.strptime(f"{year-1}-{fye}", "%Y-%m-%d")
                 + datetime.timedelta(days=1)
             ).date()
             # Special case 02-28 because of leap years

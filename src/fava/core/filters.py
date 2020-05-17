@@ -44,7 +44,7 @@ class Token:
         self.value = value
 
     def __repr__(self):
-        return "Token({}, {})".format(self.type, self.value)
+        return f"Token({self.type}, {self.value})"
 
 
 class FilterSyntaxLexer:
@@ -64,7 +64,7 @@ class FilterSyntaxLexer:
     )
 
     regex = re.compile(
-        "|".join(("(?P<{}>{})".format(name, rule) for name, rule in RULES))
+        "|".join((f"(?P<{name}>{rule})" for name, rule in RULES))
     )
 
     def LINK(self, token, value):
@@ -122,7 +122,7 @@ class FilterSyntaxLexer:
                 pos += 1
             else:
                 raise FilterException(
-                    "filter", 'Illegal character "{}" in filter: '.format(char)
+                    "filter", f'Illegal character "{char}" in filter.'
                 )
 
 
@@ -345,9 +345,7 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         )
         if not self.begin_date:
             self.value = None
-            raise FilterException(
-                "time", "Failed to parse date: {}".format(value)
-            )
+            raise FilterException("time", f"Failed to parse date: {value}")
         return True
 
     def _filter(self, entries: Entries) -> Entries:

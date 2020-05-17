@@ -47,12 +47,10 @@ def filepath_in_document_folder(
     """
 
     if documents_folder not in ledger.options["documents"]:
-        raise FavaAPIException(
-            "Not a documents folder: {}.".format(documents_folder)
-        )
+        raise FavaAPIException(f"Not a documents folder: {documents_folder}.")
 
     if account not in ledger.attributes.accounts:
-        raise FavaAPIException("Not a valid account: '{}'".format(account))
+        raise FavaAPIException(f"Not a valid account: '{account}'")
 
     for sep in os.sep, os.altsep:
         if sep:
@@ -63,6 +61,6 @@ def filepath_in_document_folder(
             path.dirname(ledger.beancount_file_path),
             documents_folder,
             *account.split(":"),
-            filename
+            filename,
         )
     )

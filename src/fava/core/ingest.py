@@ -85,9 +85,7 @@ class IngestModule(FavaModule):
         if not path.exists(self.module_path) or path.isdir(self.module_path):
             self.ledger.errors.append(
                 IngestError(
-                    None,
-                    "File does not exist: '{}'".format(self.module_path),
-                    None,
+                    None, f"File does not exist: '{self.module_path}'", None,
                 )
             )
             return
@@ -102,9 +100,7 @@ class IngestModule(FavaModule):
             self.ledger.errors.append(
                 IngestError(
                     None,
-                    "Error in importer '{}': {}".format(
-                        str(self.module_path), message
-                    ),
+                    f"Error in importer '{self.module_path}': {message}",
                     None,
                 )
             )

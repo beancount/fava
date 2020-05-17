@@ -79,7 +79,7 @@ def _serialise_posting(posting):
         position_str = ""
 
     if posting.price is not None:
-        position_str += " @ {}".format(posting.price.to_string())
+        position_str += f" @ {posting.price.to_string()}"
     return {"account": posting.account, "amount": position_str}
 
 
@@ -87,10 +87,10 @@ def deserialise_posting(posting):
     """Parse JSON to a Beancount Posting."""
     amount = posting.get("amount", "")
     entries, errors, _ = parse_string(
-        '2000-01-01 * "" ""\n Assets:Account {}'.format(amount)
+        f'2000-01-01 * "" ""\n Assets:Account {amount}'
     )
     if errors:
-        raise FavaAPIException("Invalid amount: {}".format(amount))
+        raise FavaAPIException(f"Invalid amount: {amount}")
     pos = entries[0].postings[0]
     return pos._replace(account=posting["account"], meta=None)
 

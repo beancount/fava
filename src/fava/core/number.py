@@ -33,15 +33,12 @@ class DecimalFormatModule(FavaModule):
                 self.locale = Locale.parse(locale_option)
             except UnknownLocaleError:
                 self.locale = None
-                self.ledger.errors.append(
-                    OptionError(
-                        None,
-                        "Unknown locale: {}.".format(
-                            self.ledger.fava_options["locale"]
-                        ),
-                        None,
-                    )
+                error = OptionError(
+                    None,
+                    f"Unknown locale: {self.ledger.fava_options['locale']}.",
+                    None,
                 )
+                self.ledger.errors.append(error)
 
         if self.locale:
             self.default_pattern = copy.copy(
