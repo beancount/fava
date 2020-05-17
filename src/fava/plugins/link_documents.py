@@ -9,13 +9,16 @@ from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
+from typing import AbstractSet
+from typing import List
+from typing import Optional
+from typing import Set
 from typing import Tuple
-from typing import List, Set, Optional, AbstractSet
 
-from beancount.core.data import Entries
-from beancount.core.data import Document
-from beancount.core.data import Transaction
 from beancount.core.compare import hash_entry
+from beancount.core.data import Document
+from beancount.core.data import Entries
+from beancount.core.data import Transaction
 
 from fava.helpers import BeancountError
 

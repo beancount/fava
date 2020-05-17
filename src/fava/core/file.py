@@ -13,10 +13,12 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from beancount.core import data
 from beancount.core import flags
+from beancount.core.data import Balance
 from beancount.core.data import Directive
 from beancount.core.data import Entries
+from beancount.core.data import SORT_ORDER
+from beancount.core.data import Transaction
 from beancount.parser.printer import format_entry  # type: ignore
 
 from fava.core.fava_options import InsertEntryOption
@@ -188,9 +190,9 @@ class FileModule(FavaModule):
         """
 
         for entry in entries:
-            if isinstance(entry, (data.Balance, data.Transaction)):
+            if isinstance(entry, (Balance, Transaction)):
                 if (
-                    isinstance(entry, data.Transaction)
+                    isinstance(entry, Transaction)
                     and entry.flag in EXCL_FLAGS
                 ):
                     continue
@@ -204,7 +206,7 @@ class FileModule(FavaModule):
 
 def incomplete_sortkey(entry: Directive) -> Tuple[datetime.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
-    return (entry.date, data.SORT_ORDER.get(type(entry), 0))
+    return (entry.date, SORT_ORDER.get(type(entry), 0))
 
 
 def next_key(basekey: str, keys: Dict[str, Any]) -> str:

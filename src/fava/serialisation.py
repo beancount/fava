@@ -10,11 +10,14 @@ This is not intended to work well enough for full roundtrips yet.
 import functools
 import re
 
-from beancount.core import data
-from beancount.core import position
 from beancount.core.amount import Amount
+from beancount.core.data import Balance
 from beancount.core.data import EMPTY_SET
+from beancount.core.data import Note
+from beancount.core.data import Posting
+from beancount.core.data import Transaction
 from beancount.core.number import D
+from beancount.core.position import to_string as position_to_string
 from beancount.parser.parser import parse_string
 
 from fava import util
@@ -67,11 +70,11 @@ def serialise(entry):
     return ret
 
 
-@serialise.register(data.Posting)
+@serialise.register(Posting)
 def _serialise_posting(posting):
     """Serialise a posting."""
     if isinstance(posting.units, Amount):
-        position_str = position.to_string(posting)
+        position_str = position_to_string(posting)
     else:
         position_str = ""
 
@@ -106,7 +109,7 @@ def deserialise(json_entry):
         date = util.date.parse_date(json_entry["date"])[0]
         narration, tags, links = extract_tags_links(json_entry["narration"])
         postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
-        return data.Transaction(
+        return Transaction(
             json_entry["meta"],
             date,
             json_entry.get("flag", ""),
@@ -121,13 +124,11 @@ def deserialise(json_entry):
         raw_amount = json_entry["amount"]
         amount = Amount(D(str(raw_amount["number"])), raw_amount["currency"])
 
-        return data.Balance(
+        return Balance(
             json_entry["meta"], date, json_entry["account"], amount, None, None
         )
     if json_entry["type"] == "Note":
         date = util.date.parse_date(json_entry["date"])[0]
         comment = json_entry["comment"].replace('"', "")
-        return data.Note(
-            json_entry["meta"], date, json_entry["account"], comment
-        )
+        return Note(json_entry["meta"], date, json_entry["account"], comment)
     raise FavaAPIException("Unsupported entry type.")
