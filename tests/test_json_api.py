@@ -13,7 +13,7 @@ from fava.core.misc import align
 
 
 def assert_api_error(response, msg: Optional[str] = None) -> None:
-    """Asserts that the reponse errored and contains the message."""
+    """Asserts that the response errored and contains the message."""
     assert response.status_code == 200
     assert not response.json["success"]
     if msg:
