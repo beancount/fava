@@ -20,7 +20,7 @@ This makes the budgets very flexible, allowing for a monthly budget,
 being taken over by a weekly budget, and so on.
 
 Fava displays budgets in both charts and reports.
-You can find a visualization of the global budget in the the `Net Profit` and
+You can find a visualization of the global budget in the `Net Profit` and
 `Expenses` charts for the `Income Statement` report.
 
 The `Expenses` `Income Statement` report is a good starting point for getting

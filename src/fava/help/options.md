@@ -187,9 +187,9 @@ Default: `true`
 
 Default: `true`
 
-These three options options specify which accounts (not) to show in the
-account trees, like on the income statement. Accounts with a non-zero balance
-will always be shown.
+These three options specify which accounts (not) to show in the account trees,
+like on the income statement. Accounts with a non-zero balance will always be
+shown.
 
 ---
 

@@ -204,7 +204,7 @@ def source(request_data) -> str:
 
 @put_api_endpoint
 def source_slice(request_data) -> str:
-    """Write a entry source slice and return the updated sha256sum."""
+    """Write an entry source slice and return the updated sha256sum."""
     return g.ledger.file.save_entry_slice(
         request_data.get("entry_hash"),
         request_data.get("source"),
