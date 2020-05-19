@@ -9,10 +9,18 @@ from fava.template_filters import basename
 from fava.template_filters import collapse_account
 from fava.template_filters import format_errormsg
 from fava.template_filters import get_or_create
+from fava.template_filters import remove_keys
 from fava.template_filters import should_show
 
 
+def test_remove_keys() -> None:
+    """Dict keys get remove or return empty dict if None is given."""
+    assert remove_keys(None, []) == {}
+    assert remove_keys({"asdf": 1}, ["asdf"]) == {}
+
+
 def test_basename():
+    """Get the basename of a file path."""
     assert basename(__file__) == "test_template_filters.py"
 
 

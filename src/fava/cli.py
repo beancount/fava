@@ -55,7 +55,7 @@ from fava.util import simple_wsgi
 @click.version_option(version=__version__, prog_name="fava")
 def main(
     filenames, port, host, prefix, incognito, debug, profile, profile_dir
-):
+):  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
     If the `BEANCOUNT_FILE` environment variable is set, Fava will use the
@@ -66,7 +66,7 @@ def main(
     variable `FAVA_HOST=0.0.0.0`.
     """
 
-    if profile:  # pragma: no cover
+    if profile:
         debug = True
 
     env_filename = os.environ.get("BEANCOUNT_FILE")

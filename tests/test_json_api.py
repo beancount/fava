@@ -66,6 +66,24 @@ def test_api_add_document(app, test_client, tmp_path) -> None:
         flask.g.ledger.options["documents"] = old_documents
 
 
+def test_api_errors(app, test_client) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        url = flask.url_for("json_api.errors")
+
+    response = test_client.get(url)
+    assert_api_success(response, 0)
+
+
+def test_api_payee_accounts(app, test_client) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        url = flask.url_for("json_api.payee_accounts", payee="test")
+
+    response = test_client.get(url)
+    assert_api_success(response, [])
+
+
 def test_api_move(app, test_client) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()

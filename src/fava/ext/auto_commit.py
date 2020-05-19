@@ -4,13 +4,14 @@ This mainly serves as an example how Fava's extension systems, which only
 really does hooks at the moment, works.
 """
 # pylint: disable=missing-docstring
+# pragma: no cover - this is just an untested example
 import os
 import subprocess
 
 from fava.ext import FavaExtensionBase
 
 
-class AutoCommit(FavaExtensionBase):  # pragma: no cover
+class AutoCommit(FavaExtensionBase):
     def _run(self, args):
         cwd = os.path.dirname(self.ledger.beancount_file_path)
         subprocess.call(args, cwd=cwd, stdout=subprocess.DEVNULL)

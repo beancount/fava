@@ -106,9 +106,7 @@ def errors() -> int:
 @get_api_endpoint
 def payee_accounts() -> List[str]:
     """Rank accounts for the given payee."""
-    payee = request.args.get("payee")
-    if payee is None:
-        return []
+    payee = request.args.get("payee", "")
     return g.ledger.attributes.payee_accounts(payee)
 
 

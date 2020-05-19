@@ -67,12 +67,6 @@ class Interval(enum.Enum):
         except KeyError:
             return Interval.MONTH
 
-    @staticmethod
-    def members() -> Iterator[enum.Enum]:
-        """Yield all members of this Enum."""
-        for interval in Interval:
-            yield interval
-
 
 def get_next_interval(
     date: datetime.date, interval: Interval

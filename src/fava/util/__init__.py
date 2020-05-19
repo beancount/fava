@@ -41,7 +41,7 @@ def listify(func):
     return _wrapper
 
 
-def timefunc(func):
+def timefunc(func):  # pragma: no cover - only used for debugging so far
     """Decorator to time function for debugging."""
 
     @functools.wraps(func)

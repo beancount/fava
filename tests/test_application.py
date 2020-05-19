@@ -84,6 +84,29 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
         assert get_url == expect_url
 
 
+def test_help_ages(app, test_client):
+    """Help pages."""
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        url = flask.url_for("help_page", page_slug="filters")
+        result = test_client.get(url)
+        assert result.status_code == 200
+        url = flask.url_for("help_page", page_slug="asdfasdf")
+        result = test_client.get(url)
+        assert result.status_code == 404
+
+
+def test_query_download(app, test_client):
+    """Download query result."""
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        url = flask.url_for(
+            "download_query", result_format="csv", query_string="balances"
+        )
+        result = test_client.get(url)
+        assert result.status_code == 200
+
+
 def test_incognito(app, test_client):
     """Numbers get obfuscated in incognito mode."""
     app.config["INCOGNITO"] = True
