@@ -538,16 +538,6 @@ class FavaLedger:
 
         return get_entry(last)
 
-    @property
-    def postings(self) -> List[Posting]:
-        """All postings contained in some transaction."""
-        return [
-            posting
-            for entry in self.entries
-            if isinstance(entry, Transaction)
-            for posting in entry.postings
-        ]
-
     def statement_path(self, entry_hash: str, metadata_key: str) -> str:
         """Returns the path for a statement found in the specified entry."""
         entry = self.get_entry(entry_hash)
