@@ -143,7 +143,7 @@ def test_deserialise_posting_and_format(snapshot) -> None:
             deserialise_posting({"account": "Assets", "amount": "10 EUR @"}),
         ],
     )
-    snapshot(_format_entry(txn, 61))
+    snapshot(_format_entry(txn, 61, 2))
 
 
 def test_serialise_balance() -> None:

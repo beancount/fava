@@ -15,7 +15,6 @@ from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
-from fava.core.file import leading_space
 from fava.core.file import next_key
 from fava.core.file import save_entry_slice
 from fava.helpers import FavaAPIException
@@ -70,15 +69,6 @@ def test_next_key() -> None:
     )
 
 
-def test_leading_space() -> None:
-    assert leading_space("test") == "  "
-    assert leading_space("	test") == "	"
-    assert leading_space("  test") == "  "
-    assert leading_space('    2016-10-31 * "Test" "Test"') == "    "
-    assert leading_space("\r\t\r\ttest") == "\r\t\r\t"
-    assert leading_space("\ntest") == "\n"
-
-
 def test_insert_metadata_in_file(tmp_path) -> None:
     file_content = dedent(
         """\
@@ -91,8 +81,8 @@ def test_insert_metadata_in_file(tmp_path) -> None:
     samplefile.write_text(file_content)
 
     # Insert some metadata lines.
-    insert_metadata_in_file(str(samplefile), 1, "metadata", "test1")
-    insert_metadata_in_file(str(samplefile), 1, "metadata", "test2")
+    insert_metadata_in_file(str(samplefile), 1, 4, "metadata", "test1")
+    insert_metadata_in_file(str(samplefile), 1, 4, "metadata", "test2")
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -104,7 +94,7 @@ def test_insert_metadata_in_file(tmp_path) -> None:
     )
 
     # Check that inserting also works if the next line is empty.
-    insert_metadata_in_file(str(samplefile), 5, "metadata", "test1")
+    insert_metadata_in_file(str(samplefile), 5, 2, "metadata", "test1")
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -173,7 +163,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
     )
 
     # Test insertion without "insert-entry" options.
-    insert_entry(transaction, str(samplefile), [], 61)
+    insert_entry(transaction, str(samplefile), [], 61, 2)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -200,7 +190,11 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     new_options = insert_entry(
-        transaction._replace(narration="narr1"), str(samplefile), options, 61
+        transaction._replace(narration="narr1"),
+        str(samplefile),
+        options,
+        61,
+        2,
     )
     assert new_options[0].lineno == 5
     assert new_options[1].lineno == 5
@@ -232,7 +226,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     transaction = transaction._replace(narration="narr2")
-    new_options = insert_entry(transaction, str(samplefile), options, 61)
+    new_options = insert_entry(transaction, str(samplefile), options, 61, 2)
     assert new_options[0].lineno == 9
     assert new_options[1].lineno == 1
     assert samplefile.read_text("utf-8") == dedent(
@@ -266,7 +260,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     transaction = transaction._replace(narration="narr3")
-    insert_entry(transaction, str(samplefile), options, 61)
+    insert_entry(transaction, str(samplefile), options, 61, 2)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr3"
@@ -319,7 +313,7 @@ def test_insert_entry_align(tmp_path) -> None:
         {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
     )
 
-    insert_entry(transaction, str(samplefile), [], 50)
+    insert_entry(transaction, str(samplefile), [], 50, 2)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
