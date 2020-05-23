@@ -81,6 +81,12 @@ more examples.
 
 ---
 
+## `indent`
+
+Default: 2.
+
+The number spaces for indentation.
+
 ## `insert-entry`
 
 Default: Not set.

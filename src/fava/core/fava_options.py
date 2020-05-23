@@ -48,6 +48,7 @@ DEFAULTS = {
     "fiscal-year-end": "12-31",
     "import-config": None,
     "import-dirs": [],
+    "indent": 2,
     "insert-entry": [],
     "interval": "month",
     "journal-show": [
@@ -84,6 +85,7 @@ BOOL_OPTS = [
 
 INT_OPTS = [
     "currency-column",
+    "indent",
     "sidebar-show-queries",
     "upcoming-events",
     "uptodate-indicator-grey-lookback-days",
