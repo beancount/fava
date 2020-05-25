@@ -99,6 +99,7 @@ option "operating_currency" "USD"
 2014-01-19 * "Verizon Wireless" ""
   Assets:US:BofA:Checking                          -85.14 USD
   Expenses:Home:Phone                               85.14 USD
+    overage: "12.34 GB"
 
 2014-01-21 balance Assets:US:BofA:Checking        3433.97 USD
 

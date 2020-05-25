@@ -120,6 +120,7 @@ def test_filterexception():
         ('name:".*ETF$"', 3),
         ('name:".*etf"', 4),
         ('name:".*etf$"', 3),
+        ('any(overage:"GB$")', 1),
     ],
 )
 def test_advanced_filter(example_ledger, string, number):
