@@ -83,7 +83,7 @@ export class FavaJournal extends SortableJournal {
     } else if (target.tagName === "DD") {
       // Filter for metadata when clicking on the value.
       addFilter(
-        ` ${(target.previousElementSibling as HTMLElement).innerText}"${
+        `${(target.previousElementSibling as HTMLElement).innerText}"${
           target.innerText
         }"`
       );
