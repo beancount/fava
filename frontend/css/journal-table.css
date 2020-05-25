@@ -121,6 +121,7 @@
   min-width: 4rem;
   margin-left: 9rem;
   color: var(--color-journal-metadata);
+  cursor: pointer;
 }
 
 .journal .metadata dd {

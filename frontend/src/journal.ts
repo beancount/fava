@@ -84,8 +84,13 @@ export class FavaJournal extends SortableJournal {
       // Note: any special characters in the payee string are escaped so the
       // filter matches against the payee literally.
       addFilter(`payee:"^${escape(target.innerText)}$"`);
+    } else if (target.tagName === "DT") {
+      // Filter for metadata key when clicking on the key. The key tag text
+      // includes the colon.
+      addFilter(`${target.innerText}""`);
     } else if (target.tagName === "DD") {
-      // Filter for metadata when clicking on the value.
+      // Filter for metadata key and value when clicking on the value. The key
+      // tag text includes the colon.
       addFilter(
         `${(target.previousElementSibling as HTMLElement).innerText}"^${escape(
           target.innerText
