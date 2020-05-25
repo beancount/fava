@@ -83,13 +83,13 @@ export class FavaJournal extends SortableJournal {
       // Filter for payees when clicking on them.
       // Note: any special characters in the payee string are escaped so the
       // filter matches against the payee literally.
-      addFilter(`payee:"${escape(target.innerText)}"`);
+      addFilter(`payee:"^${escape(target.innerText)}$"`);
     } else if (target.tagName === "DD") {
       // Filter for metadata when clicking on the value.
       addFilter(
-        `${(target.previousElementSibling as HTMLElement).innerText}"${
+        `${(target.previousElementSibling as HTMLElement).innerText}"^${escape(
           target.innerText
-        }"`
+        )}$"`
       );
     } else if (target.closest(".indicators")) {
       // Toggle postings and metadata by clicking on indicators.
