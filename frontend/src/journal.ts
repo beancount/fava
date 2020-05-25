@@ -87,15 +87,27 @@ export class FavaJournal extends SortableJournal {
     } else if (target.tagName === "DT") {
       // Filter for metadata key when clicking on the key. The key tag text
       // includes the colon.
-      addFilter(`${target.innerText}""`);
+      const expr = `${target.innerText}""`;
+      if (target.closest(".postings")) {
+        // Posting metadata.
+        addFilter(`any(${expr})`);
+      } else {
+        // Entry metadata.
+        addFilter(expr);
+      }
     } else if (target.tagName === "DD") {
       // Filter for metadata key and value when clicking on the value. The key
       // tag text includes the colon.
-      addFilter(
-        `${(target.previousElementSibling as HTMLElement).innerText}"^${escape(
-          target.innerText
-        )}$"`
-      );
+      const key = (target.previousElementSibling as HTMLElement).innerText;
+      const value = `"^${escape(target.innerText)}$"`;
+      const expr = `${key}${value}`;
+      if (target.closest(".postings")) {
+        // Posting metadata.
+        addFilter(`any(${expr})`);
+      } else {
+        // Entry metadata.
+        addFilter(expr);
+      }
     } else if (target.closest(".indicators")) {
       // Toggle postings and metadata by clicking on indicators.
       const entry = target.closest(".transaction");
