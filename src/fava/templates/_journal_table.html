@@ -46,6 +46,11 @@
 {% endif %}
 
 {% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
+{% macro render_metadata_indicators(metadata) -%}
+{% for key, value in metadata.items() %}
+<span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
+{% endfor %}
+{%- endmacro %}
 {% macro render_metadata(metadata, entry_hash=None) -%}
 {% if metadata %}
 <dl class="metadata">
@@ -142,11 +147,10 @@
         {% endif %}
         </span>
         <span class="indicators">
-          {% for key, value in metadata.items() %}
-          <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
-          {% endfor %}
+          {{ render_metadata_indicators(metadata) }}
           {% for posting in entry.postings %}
           <span{% if posting.flag %} class="{{ posting.flag|flag_to_type }}"{% endif %}></span>
+          {{ render_metadata_indicators(posting.meta|remove_keys(['__automatic__', 'lineno', 'filename'])) }}
           {% endfor %}
         </span>
         {% if type == 'balance' %}
