@@ -11,7 +11,8 @@ from beancount.query import query_parser
 
 from fava import LOCALES
 
-BASE_PATH = Path(__file__).parent.parent / "fava"
+BASE_PATH = Path(__file__).parent.parent
+FAVA_PATH = BASE_PATH / "src" / "fava"
 
 
 @click.group()
@@ -41,7 +42,7 @@ def generate_bql_grammar_json():
         "functions": sorted(set(_env_to_list(target_env.functions))),
         "keywords": sorted({kw.lower() for kw in query_parser.Lexer.keywords}),
     }
-    path = BASE_PATH / "static/javascript/codemirror/bql-grammar.ts"
+    path = BASE_PATH / "frontend" / "src" / "codemirror" / "bql-grammar.ts"
     path.write_text("export default " + json.dumps(data))
 
 
@@ -65,7 +66,7 @@ def upload_translations():
         raise click.UsageError(
             "The POEDITOR_TOKEN environment variable needs to be set."
         )
-    path = BASE_PATH / f"translations/messages.pot"
+    path = FAVA_PATH / "translations" / "messages.pot"
     click.echo(f"Uploading message catalog: {path}")
     data = {
         "api_token": token,
@@ -99,10 +100,10 @@ def download_from_poeditor(language, token):
     )
     url = request.json()["result"]["url"]
     content = requests.get(url).content
-    folder = BASE_PATH / "translations" / language / "LC_MESSAGES"
+    folder = FAVA_PATH / "translations" / language / "LC_MESSAGES"
     if not folder.exists():
         folder.mkdir(parents=True)
-    path = folder / f"messages.po"
+    path = folder / "messages.po"
     path.write_bytes(content)
     click.echo(f'Downloaded to "{path}"')
 
