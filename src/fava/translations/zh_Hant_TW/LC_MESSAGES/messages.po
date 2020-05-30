@@ -15,19 +15,18 @@ msgstr "自定義連結"
 msgid "Errors"
 msgstr "錯誤"
 
-#: fava/static/javascript/FilterForm.svelte:9
+#: frontend/src/FilterForm.svelte:85
 msgid "Time"
 msgstr "時間"
 
-#: fava/static/javascript/FilterForm.svelte:15
-#: fava/static/javascript/entry-forms/AccountInput.svelte:28
-#: fava/static/javascript/modals/DocumentUpload.svelte:67
-#: fava/templates/holdings.html:45 fava/templates/statistics.html:28
+#: frontend/src/FilterForm.svelte:94
+#: frontend/src/entry-forms/AccountInput.svelte:19
+#: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
 msgstr "帳戶"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:71
-#: fava/static/javascript/entry-forms/Transaction.svelte:75
+#: frontend/src/entry-forms/Transaction.svelte:85
+#: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Payee"
 msgstr "收款人"
 
@@ -79,9 +78,7 @@ msgstr "統計"
 msgid "Help"
 msgstr "幫助"
 
-#: fava/static/javascript/documents/Table.svelte:22
-#: fava/templates/_journal_table.html:86 fava/templates/commodities.html:10
-#: fava/templates/events.html:11
+#: frontend/src/documents/Table.svelte:22
 msgid "Date"
 msgstr "日期"
 
@@ -109,23 +106,22 @@ msgstr "成本"
 msgid "Change"
 msgstr "更動"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:23
-#: fava/static/javascript/modals/AddEntry.svelte:14
-#: fava/templates/_journal_table.html:94 fava/templates/statistics.html:32
+#: frontend/src/entry-forms/Balance.svelte:22
+#: frontend/src/modals/AddEntry.svelte:14
 msgid "Balance"
 msgstr "餘額"
 
-#: fava/static/javascript/modals/AddEntry.svelte:79
-#: fava/static/javascript/modals/Extract.svelte:104
-#: fava/templates/_context.html:57 fava/templates/editor.html:38
+#: frontend/src/editor/SaveButton.svelte:7
+#: frontend/src/import/Extract.svelte:115
+#: frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "儲存"
 
-#: fava/templates/_context.html:57 fava/templates/editor.html:38
+#: frontend/src/editor/SaveButton.svelte:7
 msgid "Saving..."
 msgstr "儲存中..."
 
-#: fava/static/javascript/main.js:123
+#: frontend/src/main.ts:126
 msgid "File change detected. Click to reload."
 msgstr "偵測到文件更動，點擊此處重新整理。"
 
@@ -162,12 +158,11 @@ msgstr "餘額"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "原始文件 %(file)s:%(lineno)s"
 
-#: fava/templates/editor.html:6 fava/templates/errors.html:5
+#: frontend/src/editor/EditorMenu.svelte:74
 msgid "File"
 msgstr "文件"
 
-#: fava/static/javascript/modals/Extract.svelte:111
-#: fava/templates/errors.html:6
+#: frontend/src/import/Extract.svelte:122
 msgid "Line"
 msgstr "行"
 
@@ -199,8 +194,7 @@ msgstr "幫助 - %(title)s"
 msgid "Help pages"
 msgstr "幫助頁"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:34
-#: fava/templates/holdings.html:45
+#: frontend/src/entry-forms/Balance.svelte:32
 msgid "Currency"
 msgstr "貨幣"
 
@@ -225,18 +219,15 @@ msgstr "收入"
 msgid "Expenses"
 msgstr "支出"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:44
-#: fava/templates/options.html:5 fava/templates/options.html:22
+#: frontend/src/entry-forms/EntryMetadata.svelte:66
 msgid "Key"
 msgstr "鍵"
 
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:53
-#: fava/templates/options.html:6 fava/templates/options.html:23
+#: frontend/src/entry-forms/EntryMetadata.svelte:75
 msgid "Value"
 msgstr "值"
 
-#: fava/static/javascript/query/QueryLinks.svelte:15
-#: fava/templates/_query_table.html:69
+#: frontend/src/query/QueryLinks.svelte:21
 msgid "Download as"
 msgstr "下載為"
 
@@ -285,26 +276,25 @@ msgstr "關閉"
 msgid "New transaction"
 msgstr "新交易"
 
-#: fava/static/javascript/entry-forms/Transaction.svelte:79
-#: fava/static/javascript/entry-forms/Transaction.svelte:83
+#: frontend/src/entry-forms/Transaction.svelte:94
+#: frontend/src/entry-forms/Transaction.svelte:98
 msgid "Narration"
 msgstr "摘要"
 
-#: fava/static/javascript/modals/AddEntry.svelte:77
+#: frontend/src/modals/AddEntry.svelte:64
 msgid "Save and add new"
 msgstr "儲存並新增下一條"
 
-#: fava/static/javascript/entry-forms/Balance.svelte:29
+#: frontend/src/entry-forms/Balance.svelte:27
 msgid "Number"
 msgstr "數值"
 
-#: fava/static/javascript/entry-forms/Posting.svelte:73
-#: fava/static/javascript/entry-forms/Transaction.svelte:90
+#: frontend/src/entry-forms/Posting.svelte:109
+#: frontend/src/entry-forms/Transaction.svelte:106
 msgid "Add posting"
 msgstr "新增記錄"
 
-#: fava/static/javascript/modals/Extract.svelte:59
-#: fava/templates/_globals.html:10
+#: frontend/src/import/Extract.svelte:70
 msgid "Import"
 msgstr "匯入"
 
@@ -320,7 +310,7 @@ msgstr "切換來源"
 msgid "Toggle ignore"
 msgstr "切換忽略"
 
-#: fava/static/javascript/modals/Extract.svelte:110
+#: frontend/src/import/Extract.svelte:121
 msgid "Source"
 msgstr "來源"
 
@@ -345,11 +335,11 @@ msgid "Importer"
 msgstr "匯入器"
 
 #. 不確定 UI 上是用在哪
-#: fava/static/javascript/import/Import.svelte:66
+#: frontend/src/import/Import.svelte:103
 msgid "Extract"
 msgstr "匯出"
 
-#: fava/static/javascript/query/QueryEditor.svelte:24
+#: frontend/src/query/QueryEditor.svelte:24
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "... 輸入 BQL 查詢語句。 '幫助' 可列出所有可用的指令。"
 
@@ -357,12 +347,13 @@ msgstr "... 輸入 BQL 查詢語句。 '幫助' 可列出所有可用的指令�
 msgid "Metadata"
 msgstr "元資料"
 
-#: fava/static/javascript/entry-forms/AddMetadataButton.svelte:16
-#: fava/static/javascript/entry-forms/EntryMetadata.svelte:60
+#: frontend/src/entry-forms/AddMetadataButton.svelte:17
+#: frontend/src/entry-forms/EntryMetadata.svelte:82
 msgid "Add metadata"
 msgstr "新增元資料"
 
-#: fava/static/javascript/entry-forms/Note.svelte:14
+#: frontend/src/entry-forms/Note.svelte:23
+#: frontend/src/modals/AddEntry.svelte:15
 msgid "Note"
 msgstr "備註"
 
@@ -398,11 +389,11 @@ msgstr "其他交易"
 msgid "Documents with a #discovered tag"
 msgstr "有 #discovered tag 的文件"
 
-#: fava/templates/_journal_table.html:81
+#: frontend/src/entry-forms/Transaction.svelte:114
 msgid "Postings"
 msgstr "記錄"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:49
+#: frontend/src/modals/DocumentUpload.svelte:45
 msgid "Upload file(s)"
 msgstr "上傳檔案"
 
@@ -410,23 +401,23 @@ msgstr "上傳檔案"
 msgid "Documents folder"
 msgstr "文件資料夾"
 
-#: fava/static/javascript/modals/DocumentUpload.svelte:72
+#: frontend/src/modals/DocumentUpload.svelte:68
 msgid "Upload"
 msgstr "上傳"
 
-#: fava/templates/editor.html:18
+#: frontend/src/editor/EditorMenu.svelte:87
 msgid "Align Amounts"
 msgstr "對齊金額"
 
-#: fava/templates/editor.html:24
+#: frontend/src/editor/EditorMenu.svelte:97
 msgid "Toggle Comment (selection)"
 msgstr "切換註解"
 
-#: fava/templates/editor.html:30
+#: frontend/src/editor/EditorMenu.svelte:107
 msgid "Open all folds"
 msgstr "打開所有折疊"
 
-#: fava/templates/editor.html:33
+#: frontend/src/editor/EditorMenu.svelte:110
 msgid "Close all folds"
 msgstr "關閉所有折疊"
 
@@ -442,7 +433,7 @@ msgstr "幫助"
 msgid "Beancount options"
 msgstr "Beancount 選項"
 
-#: fava/static/javascript/query/QueryEditor.svelte:51
+#: frontend/src/query/QueryEditor.svelte:64
 msgid "Submit"
 msgstr "送出"
 
@@ -452,15 +443,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 msgstr "按住 Shift 並點選以展開所有子項目。\n"
 "按住 Ctrl 或 Cmd 並點選以展開一層"
 
-#: fava/templates/_aside.html:27 fava/templates/_layout.html:50
+#: frontend/src/modals/Export.svelte:13
 msgid "Export"
 msgstr "匯出"
 
-#: fava/static/javascript/FilterForm.svelte:21
+#: frontend/src/FilterForm.svelte:103
 msgid "Filter by tag, payee, ..."
 msgstr "以 Tag, 付款者, ... 篩選"
 
-#: fava/templates/_layout.html:51
+#: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "將篩選結果下載為 Beancount 檔"
 
@@ -468,36 +459,31 @@ msgstr "將篩選結果下載為 Beancount 檔"
 msgid "Import entries"
 msgstr "匯入項目"
 
-#: fava/static/javascript/charts/ConversionAndInterval.svelte:7
-#: fava/util/date.py:55
+#: frontend/src/charts/ConversionAndInterval.svelte:7
 msgid "Yearly"
 msgstr "年度"
 
-#: fava/static/javascript/charts/ConversionAndInterval.svelte:8
-#: fava/util/date.py:56
+#: frontend/src/charts/ConversionAndInterval.svelte:8
 msgid "Quarterly"
 msgstr "季度"
 
-#: fava/static/javascript/charts/ConversionAndInterval.svelte:9
-#: fava/util/date.py:57
+#: frontend/src/charts/ConversionAndInterval.svelte:9
 msgid "Monthly"
 msgstr "月"
 
-#: fava/static/javascript/charts/ConversionAndInterval.svelte:10
-#: fava/util/date.py:58
+#: frontend/src/charts/ConversionAndInterval.svelte:10
 msgid "Weekly"
 msgstr "週"
 
-#: fava/static/javascript/charts/ConversionAndInterval.svelte:11
-#: fava/util/date.py:59
+#: frontend/src/charts/ConversionAndInterval.svelte:11
 msgid "Daily"
 msgstr "日"
 
-#: fava/templates/editor.html:15
+#: frontend/src/editor/EditorMenu.svelte:84
 msgid "Edit"
 msgstr "編輯"
 
-#: fava/static/javascript/entry-forms/Posting.svelte:67
+#: frontend/src/entry-forms/Posting.svelte:102
 msgid "Amount"
 msgstr "帳戶"
 
@@ -509,28 +495,28 @@ msgstr "有 #linked tag 的文件"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "你需要設定 Beancount 的 \"文件\" 選項以上傳檔案"
 
-#: fava/static/javascript/ChartSwitcher.svelte:25
+#: frontend/src/stores/chart.ts:25
 msgid "At Cost"
 msgstr "按照成本"
 
-#: fava/static/javascript/ChartSwitcher.svelte:26
+#: frontend/src/stores/chart.ts:26
 msgid "At Market Value"
 msgstr "按照市價"
 
-#: fava/static/javascript/ChartSwitcher.svelte:27
+#: frontend/src/stores/chart.ts:27
 msgid "Units"
 msgstr "按照單位"
 
 #. make it 樹狀圖 is not really proper. People would think about Tree structure while seeing this term.
-#: fava/static/javascript/charts/Chart.svelte:59
+#: frontend/src/charts/Chart.svelte:54
 msgid "Treemap"
 msgstr "Treemap"
 
-#: fava/static/javascript/charts/Chart.svelte:63
+#: frontend/src/charts/Chart.svelte:58
 msgid "Sunburst"
 msgstr "Sunburst"
 
-#: fava/static/javascript/entry-forms/AccountInput.svelte:16
+#: frontend/src/entry-forms/AccountInput.svelte:14
 msgid "Should be one of the declared accounts"
 msgstr "必須要是宣告過的帳戶"
 
@@ -538,31 +524,39 @@ msgstr "必須要是宣告過的帳戶"
 msgid "Event"
 msgstr "事件"
 
-#: fava/static/javascript/modals/Extract.svelte:89
+#: frontend/src/import/Extract.svelte:100
 msgid "Previous"
 msgstr "上一個"
 
-#: fava/static/javascript/modals/Extract.svelte:94
+#: frontend/src/import/Extract.svelte:105
 msgid "Next"
 msgstr "下一個"
 
-#: fava/static/javascript/modals/AddEntry.svelte:13
+#: frontend/src/modals/AddEntry.svelte:13
 msgid "Transaction"
 msgstr ""
 
-#: fava/static/javascript/modals/AddEntry.svelte:55
+#: frontend/src/modals/AddEntry.svelte:44
 msgid "Add"
 msgstr ""
 
-#: fava/static/javascript/documents/Documents.svelte:81
+#: frontend/src/documents/Documents.svelte:82
 msgid "Move or rename document"
 msgstr ""
 
-#: fava/static/javascript/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:26
 msgid "Name"
 msgstr ""
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:84
+msgid "Delete"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:106
+msgid "No importer matched this file."
 msgstr ""
 
