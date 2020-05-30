@@ -123,8 +123,8 @@
     "@types/d3-scale": "^2.2.0",
     "@types/d3-shape": "^1.3.2",
     "@types/d3-time-format": "^2.1.1",
-    "@typescript-eslint/eslint-plugin": "^3.0.0",
-    "@typescript-eslint/parser": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.0.2",
+    "@typescript-eslint/parser": "^3.0.2",
     "ava": "^3.8.2",
     "eslint": "^7.1.0",
     "eslint-config-airbnb-base": "^14.1.0",
@@ -132,10 +132,10 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-svelte3": "^2.7.3",
     "husky": "^4.2.5",
-    "lint-staged": "^10.2.6",
+    "lint-staged": "^10.2.7",
     "prettier": "^2.0.5",
     "prettier-plugin-svelte": "^1.1.0",
-    "rollup": "^2.10.8",
+    "rollup": "^2.11.2",
     "rollup-plugin-svelte": "^5.2.2",
     "stylelint": "^13.5.0",
     "stylelint-config-prettier": "^8.0.1",
@@ -160,6 +160,6 @@
     "d3-selection": "^1.4.1",
     "d3-shape": "^1.3.7",
     "d3-time-format": "^2.2.3",
-    "svelte": "^3.22.3"
+    "svelte": "^3.23.0"
   }
 }
