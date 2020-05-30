@@ -6,6 +6,12 @@ Unreleased
 
 Nothing yet.
 
+v1.15 (2020-05-30)
+------------------
+
+This release accumulates various minor fixes and improvements, for example the
+setting of filters from payees and metadata in the Journal report.
+
 v1.14 (2020-02-16)
 ------------------
 
