@@ -96,7 +96,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
         {% endfor %}
         </p>
     </li>
-{% for account in [interval_balances[0]|get_or_create(account_name)] recursive %}
+{% for account in [interval_balances[0]|get_or_create(account_name)]  if ledger.root_tree.get(account.account)|should_show recursive %}
     <li{{ ' class=toggled' if account.account|collapse_account else '' }}>
         <p>
         <span class="account-cell depth-{{ loop.depth0 }} droptarget
