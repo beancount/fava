@@ -5,82 +5,82 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: Fava\n"
-"Language: fa\n"
+"Language: ca\n"
 
 #: fava/templates/_aside.html:4
 msgid "Custom Links"
-msgstr "لینک‌های ‌دستی"
+msgstr "Enllaços personalitzats"
 
 #: fava/templates/_aside.html:33 fava/templates/_globals.html:6
 msgid "Errors"
-msgstr "خطا‌ها"
+msgstr "Errors"
 
 #: frontend/src/FilterForm.svelte:85
 msgid "Time"
-msgstr "زمان"
+msgstr "Data"
 
 #: frontend/src/FilterForm.svelte:94
 #: frontend/src/entry-forms/AccountInput.svelte:19
 #: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
-msgstr "حساب‌ کاربری"
+msgstr "Compte"
 
 #: frontend/src/entry-forms/Transaction.svelte:85
 #: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Payee"
-msgstr "دریافت کننده"
+msgstr "Beneficiari"
 
 #: fava/templates/_globals.html:11
 msgid "Income Statement"
-msgstr "صورت حساب درآمد"
+msgstr "Compte de resultats"
 
 #: fava/templates/_globals.html:2
 msgid "Balance Sheet"
-msgstr "ترازنامه"
+msgstr "Balanç de situació"
 
 #: fava/templates/_globals.html:16
 msgid "Trial Balance"
-msgstr "تراز‌نامه ‌آزمایشی"
+msgstr ""
 
 #: fava/templates/_globals.html:12
 msgid "Journal"
-msgstr "مجله"
+msgstr "Diari"
 
 #: fava/templates/_globals.html:14
 msgid "Query"
-msgstr "پرس ‌و ‌جو"
+msgstr "Consulta"
 
 #: fava/templates/_globals.html:9 fava/templates/holdings.html:44
 msgid "Holdings"
-msgstr "دارایی‌ ها"
+msgstr "Cartera de valors"
 
 #: fava/templates/_globals.html:3
 msgid "Commodities"
-msgstr "کالا ها"
+msgstr "Productes"
 
 #: fava/templates/_globals.html:7
 msgid "Events"
-msgstr "رویداد ها"
+msgstr "Esdeveniments"
 
 #: fava/templates/_globals.html:5
 msgid "Editor"
-msgstr "ویرایشگر"
+msgstr "Editor"
 
 #: fava/templates/_globals.html:13
 msgid "Options"
-msgstr "گزینه‌ ها"
+msgstr "Opcions"
 
 #: fava/templates/_globals.html:15
 msgid "Statistics"
-msgstr "آمار"
+msgstr "Estadístiques"
 
 #: fava/templates/_globals.html:8
 msgid "Help"
-msgstr "راهنما"
+msgstr "Ajuda"
 
 #: frontend/src/documents/Table.svelte:22
 msgid "Date"
-msgstr "تاریخ"
+msgstr "Data"
 
 #: fava/templates/_journal_table.html:87
 msgid "F"
@@ -88,473 +88,472 @@ msgstr "F"
 
 #: fava/templates/_journal_table.html:88
 msgid "Narration/Payee"
-msgstr "توصیف/پرداخت‌کننده"
+msgstr "Descripció/beneficiari"
 
 #: fava/templates/_journal_table.html:89
 msgid "Position"
-msgstr "موقعیت"
+msgstr ""
 
 #: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
 msgid "Price"
-msgstr "قیمت"
+msgstr "Preu"
 
 #: fava/templates/_journal_table.html:91
 msgid "Cost"
-msgstr "قیمت"
+msgstr "Cost"
 
 #: fava/templates/_journal_table.html:93
 msgid "Change"
-msgstr "تغییر"
+msgstr ""
 
 #: frontend/src/entry-forms/Balance.svelte:22
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Balance"
-msgstr "تراز"
+msgstr "Balanç"
 
 #: frontend/src/editor/SaveButton.svelte:7
 #: frontend/src/import/Extract.svelte:115
 #: frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
-msgstr "ذخیره"
+msgstr "Desa"
 
 #: frontend/src/editor/SaveButton.svelte:7
 msgid "Saving..."
-msgstr "پس انداز..."
+msgstr "S'està desant..."
 
 #: frontend/src/main.ts:126
 msgid "File change detected. Click to reload."
-msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
+msgstr ""
 
 #: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
 msgid "Expand all accounts"
-msgstr "توسعه‌حساب‌ها"
+msgstr "Amplia tots els comptes"
 
 #: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
 msgid "Expand all"
-msgstr "توسعه‌همه"
+msgstr "Amplia-ho tot"
 
 #: fava/templates/_tree_table.html:29
 msgid "Other"
-msgstr "سایر"
+msgstr ""
 
 #: fava/templates/account.html:22
 msgid "Journal of all entries for this Account and Sub-Accounts"
-msgstr "مجله‌ی‌همه‌‌نوشته‌های‌این‌حساب‌و‌زیر‌حساب‌ها"
+msgstr ""
 
 #: fava/templates/account.html:22
 msgid "Account Journal"
-msgstr "مجله‌حساب"
+msgstr "Diari del compte"
 
 #: fava/templates/account.html:15 fava/templates/account.html:23
 msgid "Changes"
-msgstr "تغییرات"
+msgstr "Canvis"
 
 #: fava/templates/account.html:24
 msgid "Balances"
-msgstr "ترازها"
+msgstr "Balanços"
 
 #: fava/templates/_context.html:4 fava/templates/errors.html:14
 #: fava/templates/errors.html:15
 msgid "Show source %(file)s:%(lineno)s"
-msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
+msgstr ""
 
 #: frontend/src/editor/EditorMenu.svelte:74
 msgid "File"
-msgstr "فایل"
+msgstr "Fitxer"
 
 #: frontend/src/import/Extract.svelte:122
 msgid "Line"
-msgstr "خط"
+msgstr "Línia"
 
 #: fava/templates/errors.html:7
 msgid "Error"
-msgstr "خطا"
+msgstr "Error"
 
 #: fava/templates/errors.html:24
 msgid "No errors."
-msgstr "بدون خطا."
+msgstr "No hi ha cap error."
 
 #: fava/templates/events.html:13
 msgid "Event: %(type)s"
-msgstr "رویداد: %(type)s"
+msgstr ""
 
 #: fava/templates/events.html:12
 msgid "Description"
-msgstr "توضیحات"
+msgstr "Descripció"
 
 #: fava/templates/events.html:28
 msgid "No events."
-msgstr "بدون‌رویداد"
+msgstr "No hi ha cap esdeveniment."
 
 #: fava/templates/help.html:4
 msgid "Help - %(title)s"
-msgstr "راهنما - %(title)s"
+msgstr "Ajuda: %(title)s"
 
 #: fava/templates/help.html:3
 msgid "Help pages"
-msgstr "صفحات‌راهنما"
+msgstr "Pàgines d'ajuda"
 
 #: frontend/src/entry-forms/Balance.svelte:32
 msgid "Currency"
-msgstr "واحد‌ارز"
+msgstr ""
 
 #: fava/templates/holdings.html:45
 msgid "Cost currency"
-msgstr "قیمت ارز"
+msgstr ""
 
 #: fava/templates/holdings.html:46
 msgid "Holdings by"
-msgstr "منابع‌توسط"
+msgstr ""
 
 #: fava/templates/income_statement.html:3
 #: fava/templates/income_statement.html:18
 msgid "Net Profit"
-msgstr "سود‌خالص"
+msgstr "Benefici net"
 
 #: fava/templates/income_statement.html:4
 msgid "Income"
-msgstr "درآمد"
+msgstr "Ingressos"
 
 #: fava/templates/income_statement.html:5
 msgid "Expenses"
-msgstr "هزینه‌ها"
+msgstr "Despeses"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:66
 msgid "Key"
-msgstr "کلید"
+msgstr "Clau"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:75
 msgid "Value"
-msgstr "مقدار"
+msgstr "Valor"
 
 #: frontend/src/query/QueryLinks.svelte:21
 msgid "Download as"
-msgstr "دانلود‌به‌عنوان"
+msgstr "Anomena i desa"
 
 #: fava/templates/statistics.html:14
 msgid "Postings per Account"
-msgstr "پست‌برای‌هر‌حساب"
+msgstr ""
 
 #: fava/templates/statistics.html:81
 msgid "Total"
-msgstr "کل"
+msgstr "Total"
 
 #: fava/templates/statistics.html:23
 msgid "Update Activity"
-msgstr "بروزرسانی‌فعالیت"
+msgstr ""
 
 #: fava/templates/statistics.html:23
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
-msgstr "برای‌کپی‌کردن‌دستورات تراز‌ها‌‌برای‌حساب‌ها‌(به‌جزموارد‌سبز)درکلیپ‌بور‌کلیک‌کنید."
+msgstr ""
 
 #: fava/templates/statistics.html:24
 msgid "Copy balance directives"
-msgstr "کپی‌دستورات‌ترازها"
+msgstr ""
 
 #: fava/templates/statistics.html:31
 msgid "Last Entry"
-msgstr "آخرین‌ورودی"
+msgstr ""
 
 #: fava/templates/statistics.html:63
 msgid "Entries per Type"
-msgstr "ورودی‌ها‌درهرنوع"
+msgstr "Entrades per tipus"
 
 #: fava/templates/statistics.html:67
 msgid "Type"
-msgstr "نوع"
+msgstr "Tipus"
 
 #: fava/templates/statistics.html:68
 msgid "# Entries"
-msgstr "# ورودی‌ها"
+msgstr ""
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
 msgid "close"
-msgstr "بستن"
+msgstr ""
 
 #: fava/static/javascript/modals/AddTransaction.svelte:43
 msgid "New transaction"
-msgstr "معامله‌جدید"
+msgstr ""
 
 #: frontend/src/entry-forms/Transaction.svelte:94
 #: frontend/src/entry-forms/Transaction.svelte:98
 msgid "Narration"
-msgstr "توصیف"
+msgstr "Descripció"
 
 #: frontend/src/modals/AddEntry.svelte:64
 msgid "Save and add new"
-msgstr "ذخیره‌و‌افزودن‌جدید"
+msgstr "Desa i afegeix-ne una altra"
 
 #: frontend/src/entry-forms/Balance.svelte:27
 msgid "Number"
-msgstr "شماره"
+msgstr "Número"
 
 #: frontend/src/entry-forms/Posting.svelte:109
 #: frontend/src/entry-forms/Transaction.svelte:106
 msgid "Add posting"
-msgstr "افزودن‌پست"
+msgstr ""
 
 #: frontend/src/import/Extract.svelte:70
 msgid "Import"
-msgstr "واردکردن"
+msgstr "Importa"
 
 #: fava/templates/_journal_table.html:4
 msgid "Budget entries"
-msgstr "ورودی‌های‌بودجه"
+msgstr ""
 
 #: fava/templates/extract.html:9
 msgid "Toggle source"
-msgstr "تغییر‌منبع"
+msgstr ""
 
 #: fava/templates/extract.html:10
 msgid "Toggle ignore"
-msgstr "تغییر‌چشم‌پوشی"
+msgstr ""
 
 #: frontend/src/import/Extract.svelte:121
 msgid "Source"
-msgstr "منبع"
+msgstr ""
 
 #: fava/templates/extract.html:16
 msgid "Entry"
-msgstr "ورود"
+msgstr "Entrada"
 
 #: fava/templates/extract.html:17
 msgid "Actions"
-msgstr "اقدامات"
+msgstr "Accions"
 
 #: fava/templates/extract.html:32
 msgid "Ignore"
-msgstr "چشم‌پوشی"
+msgstr "Ignora"
 
 #: fava/templates/extract.html:33
 msgid "Duplicate"
-msgstr "تکراری"
+msgstr ""
 
 #: fava/templates/import.html:14
 msgid "Importer"
-msgstr "واردکننده"
+msgstr ""
 
 #: frontend/src/import/Import.svelte:103
 msgid "Extract"
-msgstr "استخراج"
+msgstr ""
 
 #: frontend/src/query/QueryEditor.svelte:24
 msgid "...enter a BQL query. 'help' to list available commands."
-msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌فهرست‌دستورات‌موجود."
+msgstr ""
 
 #: fava/templates/_journal_table.html:80
 msgid "Metadata"
-msgstr "متاداده"
+msgstr "Metadades"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:17
 #: frontend/src/entry-forms/EntryMetadata.svelte:82
 msgid "Add metadata"
-msgstr "افزودن‌متاداده"
+msgstr "Afegeix metadades"
 
 #: frontend/src/entry-forms/Note.svelte:23
 #: frontend/src/modals/AddEntry.svelte:15
 msgid "Note"
-msgstr "یادداشت"
+msgstr "Nota"
 
 #: fava/templates/_context.html:4
 msgid "Location"
-msgstr "محل"
+msgstr "Ubicació"
 
 #: fava/templates/_context.html:9
 msgid "Context"
-msgstr "متن‌"
+msgstr "Context"
 
 #: fava/templates/_context.html:15
 msgid "Balances before entry"
-msgstr "ترازقبل‌ازورود"
+msgstr ""
 
 #: fava/templates/_context.html:35
 msgid "Balances after entry"
-msgstr "ترازبعدازورود"
+msgstr ""
 
 #: fava/templates/_journal_table.html:11
 msgid "Cleared transactions"
-msgstr "تراکنش‌های‌پاک‌شده"
+msgstr ""
 
 #: fava/templates/_journal_table.html:12
 msgid "Pending transactions"
-msgstr "تراکنش‌های‌درحال‌انتظار"
+msgstr "Transaccions pendents"
 
 #: fava/templates/_journal_table.html:13
 msgid "Other transactions"
-msgstr "سایر‌تراکنش‌ها"
+msgstr "Altres transaccions"
 
 #: fava/templates/_journal_table.html:7
 msgid "Documents with a #discovered tag"
-msgstr "اسناد‌با‌برچسب#کشف‌شده"
+msgstr "Documents amb una etiqueta #discovered"
 
 #: frontend/src/entry-forms/Transaction.svelte:114
 msgid "Postings"
-msgstr "پست‌ها"
+msgstr ""
 
 #: frontend/src/modals/DocumentUpload.svelte:45
 msgid "Upload file(s)"
-msgstr "آپلودفایل‌(ها)"
+msgstr ""
 
 #: fava/templates/_overlays.html:10
 msgid "Documents folder"
-msgstr "پوشه‌اسناد"
+msgstr "Carpeta de documents"
 
 #: frontend/src/modals/DocumentUpload.svelte:68
 msgid "Upload"
-msgstr "آپلود"
+msgstr "Puja"
 
 #: frontend/src/editor/EditorMenu.svelte:87
 msgid "Align Amounts"
-msgstr "هماهنگ‌کردن‌تعداد"
+msgstr "Alinea els imports"
 
 #: frontend/src/editor/EditorMenu.svelte:97
 msgid "Toggle Comment (selection)"
-msgstr "تغییر‌نظر(انتخاب)"
+msgstr ""
 
 #: frontend/src/editor/EditorMenu.svelte:107
 msgid "Open all folds"
-msgstr "بازکردن‌همه‌چینه‌ها"
+msgstr ""
 
 #: frontend/src/editor/EditorMenu.svelte:110
 msgid "Close all folds"
-msgstr "بستن‌همه‌چینه‌ها"
+msgstr ""
 
 #: fava/templates/options.html:1
 msgid "Fava options"
-msgstr "گزینه‌های‌فاوا"
+msgstr "Opcions del Fava"
 
 #: fava/templates/options.html:1
 msgid "help"
-msgstr "راهنما"
+msgstr "ajuda"
 
 #: fava/templates/options.html:18
 msgid "Beancount options"
-msgstr "گزینه‌های‌شمارش‌جزئی"
+msgstr "Opcions del Beancount"
 
 #: frontend/src/query/QueryEditor.svelte:64
 msgid "Submit"
-msgstr "ارسال"
+msgstr "Envia"
 
 #: fava/templates/_tree_table.html:3
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
-msgstr "نگه‌داشتن Shiftوکلیک‌کردن‌برای‌گسترش‌تمام‌سطح‌ها.\n"
-"نگه‌داشتن Ctrlیا Cmdوکلیک‌کردن‌برای‌گسترش‌یک‌سطح."
+msgstr ""
 
 #: frontend/src/modals/Export.svelte:13
 msgid "Export"
-msgstr "صادر‌کردن"
+msgstr "Exporta"
 
 #: frontend/src/FilterForm.svelte:103
 msgid "Filter by tag, payee, ..."
-msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
+msgstr "Filtreu per etiqueta, beneficiari, etc."
 
 #: frontend/src/modals/Export.svelte:15
 msgid "Download currently filtered entries as a Beancount file"
-msgstr "دریافت‌فایل‌شمارش‌جزئی‌فیلترشده‌برای‌وودی‌فعلی"
+msgstr ""
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
-msgstr "واردکردن‌ورودی‌ها"
+msgstr ""
 
 #: frontend/src/charts/ConversionAndInterval.svelte:7
 msgid "Yearly"
-msgstr "سالانه"
+msgstr "Per any"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:8
 msgid "Quarterly"
-msgstr "سه‌ماهه"
+msgstr "Per trimestre"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:9
 msgid "Monthly"
-msgstr "ماهانه"
+msgstr "Per mes"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:10
 msgid "Weekly"
-msgstr "هفتگی"
+msgstr "Per setmana"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:11
 msgid "Daily"
-msgstr "روزانه"
+msgstr "Per dia"
 
 #: frontend/src/editor/EditorMenu.svelte:84
 msgid "Edit"
-msgstr "ویرایش"
+msgstr "Edita"
 
 #: frontend/src/entry-forms/Posting.svelte:102
 msgid "Amount"
-msgstr "میزان"
+msgstr "Import"
 
 #: fava/templates/_journal_table.html:8
 msgid "Documents with a #linked tag"
-msgstr "اسناد با برچسب # مرتبط شده"
+msgstr "Documents amb una etiqueta #linked"
 
 #: fava/static/javascript/modals/DocumentUpload.svelte:54
 msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr "شما باید گزینه شمارش ”اسناد” را برای آپلود فایل تنظیم کنید."
+msgstr ""
 
 #: frontend/src/stores/chart.ts:25
 msgid "At Cost"
-msgstr "با قیمت"
+msgstr ""
 
 #: frontend/src/stores/chart.ts:26
 msgid "At Market Value"
-msgstr "در ارزش بازار"
+msgstr ""
 
 #: frontend/src/stores/chart.ts:27
 msgid "Units"
-msgstr "واحدها"
+msgstr "Unitats"
 
 #: frontend/src/charts/Chart.svelte:54
 msgid "Treemap"
-msgstr "نمودار درختی"
+msgstr "Mapa d'arbre"
 
 #: frontend/src/charts/Chart.svelte:58
 msgid "Sunburst"
-msgstr "نمودار دایره‌ای"
+msgstr "Anells"
 
 #: frontend/src/entry-forms/AccountInput.svelte:14
 msgid "Should be one of the declared accounts"
-msgstr "باید یکی از حساب های اعلام شده باشد"
+msgstr ""
 
 #: fava/templates/events.html:7
 msgid "Event"
-msgstr "رویداد"
+msgstr "Esdeveniment"
 
 #: frontend/src/import/Extract.svelte:100
 msgid "Previous"
-msgstr "قبلی"
+msgstr "Anterior"
 
 #: frontend/src/import/Extract.svelte:105
 msgid "Next"
-msgstr "بعدی"
+msgstr "Següent"
 
 #: frontend/src/modals/AddEntry.svelte:13
 msgid "Transaction"
-msgstr "تراکنش"
+msgstr "Transacció"
 
 #: frontend/src/modals/AddEntry.svelte:44
 msgid "Add"
-msgstr "افزودن"
+msgstr "Afegeix"
 
 #: frontend/src/documents/Documents.svelte:82
 msgid "Move or rename document"
-msgstr "انتقال یا تغییر نام سند"
+msgstr "Mou o canvia el nom del document"
 
 #: frontend/src/documents/Table.svelte:26
 msgid "Name"
-msgstr "نام"
+msgstr "Nom"
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
-msgstr "اسناد"
+msgstr "Documents"
 
 #: frontend/src/import/Import.svelte:84
 msgid "Delete"
-msgstr "حذف"
+msgstr "Suprimeix"
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
-msgstr "هیچ وارد کننده ای با این پرونده مطابقت ندارد."
+msgstr ""
 

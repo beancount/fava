@@ -20,17 +20,18 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
--   Chinese (`zh_CN` and `zh_TW`)
--   Dutch (`nl`)
--   English (`en`)
--   French (`fr`)
--   German (`de`)
--   Persian (`fa`)
--   Portuguese (`pt`)
--   Russian (`ru`)
--   Slovak (`sk`)
--   Spanish (`es`)
--   Ukrainian (`uk`)
+- Catalan (`ca`)
+- Chinese (`zh_CN` and `zh_TW`)
+- Dutch (`nl`)
+- English (`en`)
+- French (`fr`)
+- German (`de`)
+- Persian (`fa`)
+- Portuguese (`pt`)
+- Russian (`ru`)
+- Slovak (`sk`)
+- Spanish (`es`)
+- Ukrainian (`uk`)
 
 ---
 
