@@ -5,7 +5,7 @@
 
   import router from "../router";
   import { accountUrl } from "../helpers";
-  import { sunburstScale } from "./helpers";
+  import { sunburstColor } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
 
   export let data;
@@ -43,6 +43,10 @@
   .half {
     opacity: 0.5;
   }
+  path {
+    stroke: white;
+    stroke-width: 1px;
+  }
 </style>
 
 <g
@@ -65,7 +69,7 @@
       }}
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
-      fill={$sunburstScale(d.data.account)}
+      fill={sunburstColor(d, root)}
       d={arcShape(d)} />
   {/each}
 </g>

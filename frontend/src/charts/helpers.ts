@@ -1,10 +1,20 @@
 import { hcl } from "d3-color";
-import { scaleOrdinal } from "d3-scale";
+import { scaleLinear, scaleOrdinal } from "d3-scale";
 import { get, derived } from "svelte/store";
 
 import { accounts, operating_currency, commodities } from "../stores";
 import { time_filter } from "../stores/filters";
 import { currentTimeFilterDateFormat } from "../format";
+import { AccountHierarchyNode } from "../charts";
+
+interface Partitioned {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+}
+
+interface SunburstNode extends AccountHierarchyNode, Partitioned {}
 
 export function setTimeFilter(date: Date): void {
   time_filter.set(get(currentTimeFilterDateFormat)(date));
@@ -41,9 +51,27 @@ export const treemapScale = derived(accounts, (accounts_val) =>
   scaleOrdinal(colors15).domain(accounts_val)
 );
 
-export const sunburstScale = derived(accounts, (accounts_val) =>
-  scaleOrdinal(colors10).domain(accounts_val)
-);
+/* Return the colour for the wedge of the sunburst chart representing the given
+ * node.  (Note that the root node doesn't get a wedge.)
+ *
+ * This ensures that adjacent wedges are visually distinct, including the
+ * special case of the last and first nodes of the first level.
+ * And at other levels, the last child of node A and the first child of node
+ * A's sibling are adjacent.
+ *
+ */
+export function sunburstColor(node: SunburstNode, root: SunburstNode): string {
+  /* When a non-leaf node has some value (a nonzero balance), a "dummy" node
+   * is created to represent it.  These are used by the treemap, which shows
+   * only leaf nodes.  In the sunburst chart, these are ignored. */
+
+  const maxdepth = root.height;
+  const light_steps = Math.min(10, (95 - 70) / maxdepth);
+  const hue = scaleLinear().range([0, 359])(node.x0 + (node.x1 - node.x0) / 2);
+  const chroma = 45;
+  const lightness = 70 + light_steps * node.depth;
+  return hcl(hue, chroma, lightness).toString();
+}
 
 export const currenciesScale = derived(
   [operating_currency, commodities],

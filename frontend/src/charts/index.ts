@@ -31,7 +31,7 @@ interface AccountHierarchyDatum {
 interface AccountHierarchy extends AccountHierarchyDatum {
   children: AccountHierarchy[];
 }
-type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
+export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
 /**
  * Add internal nodes as fake leaf nodes to their own children.
