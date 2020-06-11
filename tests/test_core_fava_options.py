@@ -13,6 +13,7 @@ def test_fava_options(load_doc):
     2016-04-14 custom "fava-option" "show-closed-accounts" "true"
     2016-04-14 custom "fava-option" "journal-show" "transaction open"
     2016-04-14 custom "fava-option" "currency-column" "10"
+    2016-04-14 custom "fava-option" "indent" "4"
     2016-04-14 custom "fava-option" "insert-entry" "Ausgaben:Test"
     2016-04-14 custom "fava-option" "invalid"
     2016-06-14 custom "fava-option" "conversion" "USD"
@@ -23,13 +24,14 @@ def test_fava_options(load_doc):
 
     assert len(errors) == 1
 
+    assert options["indent"] == 4
     assert options["interval"] == "week"
     assert options["insert-entry"] == [
         InsertEntryOption(
             datetime.date(2016, 4, 14),
             re.compile("Ausgaben:Test"),
             "<string>",
-            7,
+            8,
         )
     ]
     assert options["show-closed-accounts"]
