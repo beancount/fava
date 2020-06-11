@@ -94,7 +94,7 @@ def test_insert_metadata_in_file(tmp_path) -> None:
     )
 
     # Check that inserting also works if the next line is empty.
-    insert_metadata_in_file(str(samplefile), 5, 2, "metadata", "test1")
+    insert_metadata_in_file(str(samplefile), 5, 4, "metadata", "test1")
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -102,7 +102,7 @@ def test_insert_metadata_in_file(tmp_path) -> None:
             metadata: "test1"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
-          metadata: "test1"
+            metadata: "test1"
         """
     )
 
@@ -163,7 +163,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
     )
 
     # Test insertion without "insert-entry" options.
-    insert_entry(transaction, str(samplefile), [], 61, 2)
+    insert_entry(transaction, str(samplefile), [], 61, 4)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -171,8 +171,8 @@ def test_insert_entry_transaction(tmp_path) -> None:
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
         """
     )
 
@@ -194,7 +194,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
         str(samplefile),
         options,
         61,
-        2,
+        4,
     )
     assert new_options[0].lineno == 5
     assert new_options[1].lineno == 5
@@ -202,16 +202,16 @@ def test_insert_entry_transaction(tmp_path) -> None:
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
 
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
         """
     )
 
@@ -226,26 +226,26 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     transaction = transaction._replace(narration="narr2")
-    new_options = insert_entry(transaction, str(samplefile), options, 61, 2)
+    new_options = insert_entry(transaction, str(samplefile), options, 61, 4)
     assert new_options[0].lineno == 9
     assert new_options[1].lineno == 1
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr1"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
 
         2016-01-01 * "new payee" "narr2"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
 
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
         """
     )
 
@@ -260,28 +260,28 @@ def test_insert_entry_transaction(tmp_path) -> None:
         ),
     ]
     transaction = transaction._replace(narration="narr3")
-    insert_entry(transaction, str(samplefile), options, 61, 2)
+    insert_entry(transaction, str(samplefile), options, 61, 4)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-01-01 * "new payee" "narr3"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
 
         2016-01-01 * "new payee" "narr1"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
 
         2016-01-01 * "new payee" "narr2"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
 
         2016-02-26 * "Uncle Boons" "Eating out alone"
             Liabilities:US:Chase:Slate                       -24.84 USD
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate                         -10.00 USD
-          Expenses:Food                                       10.00 USD
+            Liabilities:US:Chase:Slate                       -10.00 USD
+            Expenses:Food                                     10.00 USD
         """
     )
 
@@ -306,14 +306,14 @@ def test_insert_entry_align(tmp_path) -> None:
             None,
             None,
         ),
-        Posting("Expenses:Food", A("10.00 USD"), None, None, None, None,),
+        Posting("Expenses:Food", A("10.00 USD"), None, None, None, None),
     ]
 
     transaction = Transaction(
         {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
     )
 
-    insert_entry(transaction, str(samplefile), [], 50, 2)
+    insert_entry(transaction, str(samplefile), [], 50, 4)
     assert samplefile.read_text("utf-8") == dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -321,8 +321,50 @@ def test_insert_entry_align(tmp_path) -> None:
             Expenses:Food:Restaurant                          24.84 USD
 
         2016-01-01 * "new payee" "narr"
-          Liabilities:US:Chase:Slate              -10.00 USD
-          Expenses:Food                            10.00 USD
+            Liabilities:US:Chase:Slate            -10.00 USD
+            Expenses:Food                          10.00 USD
+        """
+    )
+
+
+def test_insert_entry_indent(tmp_path) -> None:
+    file_content = dedent(
+        """\
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+        """
+    )
+    samplefile = tmp_path / "example.beancount"
+    samplefile.write_text(file_content)
+
+    postings = [
+        Posting(
+            "Liabilities:US:Chase:Slate",
+            A("-10.00 USD"),
+            None,
+            None,
+            None,
+            None,
+        ),
+        Posting("Expenses:Food", A("10.00 USD"), None, None, None, None),
+    ]
+
+    transaction = Transaction(
+        {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
+    )
+
+    # Test insertion with 2-space indent.
+    insert_entry(transaction, str(samplefile), [], 61, 2)
+    assert samplefile.read_text("utf-8") == dedent(
+        """\
+        2016-02-26 * "Uncle Boons" "Eating out alone"
+            Liabilities:US:Chase:Slate                       -24.84 USD
+            Expenses:Food:Restaurant                          24.84 USD
+
+        2016-01-01 * "new payee" "narr"
+          Liabilities:US:Chase:Slate                         -10.00 USD
+          Expenses:Food                                       10.00 USD
         """
     )
 
