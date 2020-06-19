@@ -21,8 +21,18 @@ from fava.core.file import save_entry_slice
 from fava.helpers import FavaAPIException
 
 
-def test_get_entry_slice(example_ledger) -> None:
-    entry = example_ledger.get_entry("d4a067d229bfda57c8c984d1615da699")
+def _get_entry(ledger: FavaLedger, payee: str, date_: str) -> Transaction:
+    """Fetch a transaction with the given payee and date."""
+    return next(
+        e
+        for e in ledger.all_entries_by_type[Transaction]
+        if e.payee == payee and str(e.date) == date_
+    )
+
+
+def test_get_entry_slice(example_ledger: FavaLedger) -> None:
+    entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
+
     assert get_entry_slice(entry) == (
         """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Liabilities:US:Chase:Slate                       -21.70 USD
@@ -32,7 +42,7 @@ def test_get_entry_slice(example_ledger) -> None:
 
 
 def test_save_entry_slice(example_ledger) -> None:
-    entry = example_ledger.get_entry("d4a067d229bfda57c8c984d1615da699")
+    entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
 
     entry_source, sha256sum = get_entry_slice(entry)
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
@@ -324,8 +334,8 @@ def test_insert_entry_align(tmp_path) -> None:
 
 
 def test_render_entries(example_ledger: FavaLedger, snapshot) -> None:
-    entry1 = example_ledger.get_entry("4af0865b1371c1b5576e9ff7f7d20dc9")
-    entry2 = example_ledger.get_entry("85f3ba57bf52dc1bd6c77ef3510223ae")
+    entry1 = _get_entry(example_ledger, "Uncle Boons", "2016-04-09")
+    entry2 = _get_entry(example_ledger, "BANK FEES", "2016-05-04")
     postings = [
         Posting("Expenses:Food", A("10.00 USD"), None, None, None, None),
     ]
