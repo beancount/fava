@@ -14,7 +14,7 @@ import { put } from "./api";
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
   if (
     event.dataTransfer &&
-    (event.dataTransfer.files.length ||
+    (event.dataTransfer.types.includes("Files") ||
       event.dataTransfer.types.includes("text/uri-list"))
   ) {
     closestTarget.classList.add("dragover");
