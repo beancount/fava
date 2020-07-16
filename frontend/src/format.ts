@@ -30,7 +30,7 @@ export function formatPercentage(number: number): string {
   return `${formatterPer(Math.abs(number) * 100)}%`;
 }
 
-const formatterShort = format(".2s");
+const formatterShort = format(".3s");
 export function formatCurrencyShort(number: number): string {
   return incognito(formatterShort(number));
 }
