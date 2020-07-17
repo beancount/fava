@@ -3,9 +3,10 @@
   import { axisLeft, axisBottom } from "d3-axis";
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { quadtree } from "d3-quadtree";
-  import { line } from "d3-shape";
+  import { line, area } from "d3-shape";
   import { getContext } from "svelte";
 
+  import { lineChartMode } from "../stores/chart";
   import { currenciesScale } from "./helpers";
   import { axis } from "./axis";
   import { formatCurrencyShort } from "../format";
@@ -56,6 +57,11 @@
     .x((d) => x(d.date))
     .y((d) => y(d.value));
 
+  $: areaShape = area()
+    .x((d) => x(d.date))
+    .y1((d) => y(d.value))
+    .y0(innerHeight);
+
   // Axes
   $: xAxis = axisBottom(x).tickSizeOuter(0);
   $: yAxis = axisLeft(y)
@@ -69,28 +75,54 @@
   }
 </script>
 
-<svg class="linechart" {width} {height}>
-  <g
-    use:positionedTooltip={tooltipInfo}
-    transform={`translate(${margin.left},${margin.top})`}>
+{#if $lineChartMode === 'line'}
+  <svg class="linechart" {width} {height}>
     <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`} />
-    <g class="y axis" use:axis={yAxis} />
-    <g class="lines">
-      {#each data as d}
-        <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
-      {/each}
+      use:positionedTooltip={tooltipInfo}
+      transform={`translate(${margin.left},${margin.top})`}>
+      <g
+        class="x axis"
+        use:axis={xAxis}
+        transform={`translate(0,${innerHeight})`} />
+      <g class="y axis" use:axis={yAxis} />
+      <g class="lines">
+        {#each data as d}
+          <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
+        {/each}
+      </g>
+      <g>
+        {#each data as d}
+          <g fill={$currenciesScale(d.name)}>
+            {#each d.values as v}
+              <circle r="3" cx={x(v.date)} cy={y(v.value)} />
+            {/each}
+          </g>
+        {/each}
+      </g>
     </g>
-    <g>
-      {#each data as d}
-        <g fill={$currenciesScale(d.name)}>
-          {#each d.values as v}
-            <circle r="3" cx={x(v.date)} cy={y(v.value)} />
-          {/each}
-        </g>
-      {/each}
+  </svg>
+{:else if $lineChartMode === 'area'}
+  <svg class="areachart" {width} {height}>
+    <g
+      use:positionedTooltip={tooltipInfo}
+      transform={`translate(${margin.left},${margin.top})`}>
+      <g
+        class="x axis"
+        use:axis={xAxis}
+        transform={`translate(0,${innerHeight})`} />
+      <g class="y axis" use:axis={yAxis} />
+      <g class="area">
+        {#each data as d}
+          <path
+            d={areaShape(d.values, innerHeight)}
+            fill={$currenciesScale(d.name)} />
+        {/each}
+      </g>
+      <g class="lines">
+        {#each data as d}
+          <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
+        {/each}
+      </g>
     </g>
-  </g>
-</svg>
+  </svg>
+{/if}

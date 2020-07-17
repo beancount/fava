@@ -4,7 +4,12 @@
 
   import { _ } from "../helpers";
   import { keyboardShortcut } from "../keyboard-shortcuts";
-  import { chartCurrency, chartMode, showCharts } from "../stores/chart";
+  import {
+    chartCurrency,
+    lineChartMode,
+    chartMode,
+    showCharts,
+  } from "../stores/chart";
 
   import ChartLegend from "./ChartLegend.svelte";
   import BarChart from "./BarChart.svelte";
@@ -56,6 +61,17 @@
         <label>
           <input type="radio" bind:group={$chartMode} value="sunburst" />
           <span class="button">{_('Sunburst')}</span>
+        </label>
+      </span>
+    {:else if chart.type === 'linechart'}
+      <span class="chart-mode">
+        <label>
+          <input type="radio" bind:group={$lineChartMode} value="line" />
+          <span class="button">{_('Line')}</span>
+        </label>
+        <label>
+          <input type="radio" bind:group={$lineChartMode} value="area" />
+          <span class="button">{_('Area')}</span>
         </label>
       </span>
     {/if}
