@@ -107,6 +107,19 @@ svg.linechart .lines path {
   stroke-width: 2px;
 }
 
+svg.linechart .area path {
+  opacity: 0.3;
+}
+
+svg.linechart .axis.y line {
+  opacity: 0.2;
+  stroke-dasharray: none;
+}
+
+svg.linechart .axis.y path.domain {
+  opacity: 0.2;
+}
+
 .tooltip {
   position: absolute;
   z-index: var(--z-index-floating-ui);
