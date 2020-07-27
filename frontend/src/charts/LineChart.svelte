@@ -75,21 +75,30 @@
   }
 </script>
 
-{#if $lineChartMode === 'line'}
-  <svg class="linechart" {width} {height}>
+<svg class="linechart" {width} {height}>
+  <g
+    use:positionedTooltip={tooltipInfo}
+    transform={`translate(${margin.left},${margin.top})`}>
     <g
-      use:positionedTooltip={tooltipInfo}
-      transform={`translate(${margin.left},${margin.top})`}>
-      <g
-        class="x axis"
-        use:axis={xAxis}
-        transform={`translate(0,${innerHeight})`} />
-      <g class="y axis" use:axis={yAxis} />
-      <g class="lines">
+      class="x axis"
+      use:axis={xAxis}
+      transform={`translate(0,${innerHeight})`} />
+    <g class="y axis" use:axis={yAxis} />
+    {#if $lineChartMode === 'area'}
+      <g class="area">
         {#each data as d}
-          <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
+          <path
+            d={areaShape(d.values, innerHeight)}
+            fill={$currenciesScale(d.name)} />
         {/each}
       </g>
+    {/if}
+    <g class="lines">
+      {#each data as d}
+        <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
+      {/each}
+    </g>
+    {#if $lineChartMode !== 'area'}
       <g>
         {#each data as d}
           <g fill={$currenciesScale(d.name)}>
@@ -99,30 +108,6 @@
           </g>
         {/each}
       </g>
-    </g>
-  </svg>
-{:else if $lineChartMode === 'area'}
-  <svg class="areachart" {width} {height}>
-    <g
-      use:positionedTooltip={tooltipInfo}
-      transform={`translate(${margin.left},${margin.top})`}>
-      <g
-        class="x axis"
-        use:axis={xAxis}
-        transform={`translate(0,${innerHeight})`} />
-      <g class="y axis" use:axis={yAxis} />
-      <g class="area">
-        {#each data as d}
-          <path
-            d={areaShape(d.values, innerHeight)}
-            fill={$currenciesScale(d.name)} />
-        {/each}
-      </g>
-      <g class="lines">
-        {#each data as d}
-          <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
-        {/each}
-      </g>
-    </g>
-  </svg>
-{/if}
+    {/if}
+  </g>
+</svg>
