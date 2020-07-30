@@ -1,4 +1,4 @@
-name: Test on Windows
+name: Test
 
 on:
   push:
@@ -8,10 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         python-version: [3.6, 3.8]
+        os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
