@@ -9,7 +9,7 @@ install:
   - '%PYTHON%\python -m pip install -U setuptools pip wheel tox'
 
 test_script:
-  - '%PYTHON%\scripts\tox -e py'
+  - '%PYTHON%\scripts\tox -e py-dev'
 
 cache:
   - '%LOCALAPPDATA%\pip\cache'
