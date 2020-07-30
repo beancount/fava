@@ -51,8 +51,12 @@ svg .axis line {
 }
 
 svg .axis.y line {
+  opacity: 0.2;
   stroke: var(--color-chart-axis);
-  stroke-dasharray: 2, 2;
+}
+
+svg .axis.y path.domain {
+  opacity: 0.2;
 }
 
 svg.scatterplot > g,
@@ -109,15 +113,6 @@ svg.linechart .lines path {
 
 svg.linechart .area path {
   opacity: 0.3;
-}
-
-svg.linechart .axis.y line {
-  opacity: 0.2;
-  stroke-dasharray: none;
-}
-
-svg.linechart .axis.y path.domain {
-  opacity: 0.2;
 }
 
 .tooltip {
