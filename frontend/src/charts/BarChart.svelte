@@ -9,9 +9,13 @@
   import { formatCurrencyShort } from "../format";
   import { followingTooltip } from "./tooltip";
 
+  /** @type {import('.').BarChartDatum[]} */
   export let data;
+  /** @type {number} */
   export let width;
+  /** @type {(d: import('.').BarChartDatum) => string} */
   export let tooltipText;
+
   const maxColumnWidth = 100;
   const margin = {
     top: 10,
@@ -33,6 +37,8 @@
   $: x1 = scaleBand()
     .domain(data[0].values.map((d) => d.name))
     .range([0, x0.bandwidth()]);
+  let yMin = 0;
+  let yMax = 0;
   $: [yMin, yMax] = extent(merge(data.map((d) => d.values)), (d) => d.value);
   $: y = scaleLinear()
     .range([innerHeight, 0])
@@ -46,6 +52,10 @@
       .map((c) => [c, $currenciesScale(c)])
   );
 
+  /**
+   * Filter the ticks to have them not overlap
+   * @param {string[]} domain
+   */
   function filterTicks(domain) {
     const labelsCount = innerWidth / 70;
     if (domain.length <= labelsCount) {

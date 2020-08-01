@@ -19,8 +19,6 @@ export function _(text: string): string {
   return translations[text] || text;
 }
 
-const validateAPIResponse = object({ data: unknown });
-
 let baseURL_val = "";
 baseURL.subscribe((val) => {
   baseURL_val = val;
@@ -58,6 +56,8 @@ export function urlFor(
 export function accountUrl(account: string): string {
   return new URL(urlFor(`account/${account}`), window.location.href).toString();
 }
+
+const validateAPIResponse = object({ data: unknown });
 
 /**
  * Fetch an API endpoint and convert the JSON data to an object.

@@ -5,10 +5,17 @@
   import { selectedAccount } from "./stores";
   import { basename } from "../lib/paths";
 
+  /** @typedef {{account: string, filename: string, date: string}} Document */
+
+  /** @type {Document[]} */
   export let data;
+  /** @type {Document | null} */
   export let selected = null;
 
-  /* Extract just the latter part of the filename if it starts with a date. */
+  /**
+   * Extract just the latter part of the filename if it starts with a date.
+   * @param {Document} doc
+   */
   function name(doc) {
     const base = basename(doc.filename);
     if (`${doc.date}` === base.substring(0, 10)) {
@@ -20,21 +27,27 @@
   const tableColumns = [
     {
       header: _("Date"),
-      getter: (e) => e.date,
+      getter: (/** @type {Document} */ e) => e.date,
     },
     {
       header: _("Name"),
-      getter: (e) => name(e),
+      getter: (/** @type {Document} */ e) => name(e),
     },
   ];
 
-  /** Index of the table column and order to sort by */
+  /**
+   * Index of the table column and order to sort by
+   * @type {[number, "asc" | "desc"]}
+   */
   let sort = [0, "desc"];
   $: table = data
     .filter((e) => e.account.startsWith($selectedAccount))
-    .map((e) => [e, tableColumns.map((th) => th.getter(e))])
-    .sort(sortFunc("string", sort[1], (row) => row[1][sort[0]]));
+    .map((e) => ({ doc: e, row: tableColumns.map((th) => th.getter(e)) }))
+    .sort(sortFunc("string", sort[1], ({ row }) => row[sort[0]]));
 
+  /**
+   * @param {number} index
+   */
   function setSort(index) {
     const [col, order] = sort;
     if (index === col) {
@@ -69,13 +82,13 @@
     </tr>
   </thead>
   <tbody>
-    {#each table as [doc, row]}
+    {#each table as { doc, row }}
       <tr
         class:selected={selected === doc}
-        draggable="true"
+        draggable={true}
         title={doc.filename}
         on:dragstart={(ev) => {
-          ev.dataTransfer.setData('fava/filename', doc.filename);
+          ev.dataTransfer && ev.dataTransfer.setData('fava/filename', doc.filename);
         }}
         on:click={() => {
           selected = doc;

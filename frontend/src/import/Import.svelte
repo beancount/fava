@@ -36,6 +36,11 @@
     preprocessedData = preprocessData(data);
   });
 
+  /**
+   * @param {string} filename
+   * @param {string} account
+   * @param {string} newName
+   */
   async function move(filename, account, newName) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
@@ -44,6 +49,10 @@
       );
     }
   }
+
+  /**
+   * @param {string} filename
+   */
   async function remove(filename) {
     const removed = await deleteDocument(filename);
     if (removed) {
@@ -82,7 +91,7 @@
       on:click={() => remove(file.name)}
       type="button"
       title={_('Delete')}
-      tabindex="-1">
+      tabindex={-1}>
       ×
     </button>
   </div>

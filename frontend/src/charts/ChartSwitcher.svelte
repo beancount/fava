@@ -8,6 +8,7 @@
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
   import Chart from "./Chart.svelte";
 
+  /** @type {import(".").NamedChartTypes[]} */
   let charts = [];
 
   onMount(() => {
@@ -16,7 +17,7 @@
       return;
     }
     $activeChart =
-      charts.find((c) => c.name === $activeChart.name) || charts[0];
+      charts.find((c) => c.name === ($activeChart || {}).name) || charts[0];
     keys.bind("c", () => {
       const currentIndex = charts.findIndex((e) => e === $activeChart);
       $activeChart = charts[(currentIndex + 1 + charts.length) % charts.length];

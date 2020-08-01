@@ -1,7 +1,7 @@
 import { todayAsString } from "./format";
 import { array, object, string, constant, record } from "./lib/validation";
 
-interface Posting {
+export interface Posting {
   account: string;
   amount: string;
 }
@@ -23,14 +23,16 @@ export function emptyPosting(): Posting {
   };
 }
 
+export type EntryTypeName = "Balance" | "Note" | "Transaction";
+
 abstract class EntryBase {
-  type: string;
+  type: EntryTypeName;
 
   date: string;
 
   meta: Record<string, string>;
 
-  constructor(type: string) {
+  constructor(type: EntryTypeName) {
     this.type = type;
     this.meta = {};
     this.date = todayAsString();
@@ -110,3 +112,13 @@ export class Transaction extends EntryBase {
 }
 
 export type Entry = Balance | Note | Transaction;
+
+const constructors = {
+  Balance,
+  Note,
+  Transaction,
+};
+
+export function create(type: EntryTypeName): Entry {
+  return new constructors[type]();
+}

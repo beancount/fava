@@ -3,9 +3,10 @@ import { writable, derived } from "svelte/store";
 import { _ } from "../helpers";
 import iso4217currencies from "../lib/iso4217";
 import { currencies_sorted, operating_currency } from ".";
+import { NamedChartTypes } from "../charts";
 
 export const showCharts = writable(true);
-export const activeChart = writable({});
+export const activeChart = writable<NamedChartTypes | null>(null);
 export const chartMode = writable("treemap");
 export const lineChartMode = writable("line");
 export const chartCurrency = writable("");

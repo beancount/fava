@@ -1,4 +1,5 @@
 <script>
+  /** @type {[string, string][]} */
   export let legend;
 </script>
 

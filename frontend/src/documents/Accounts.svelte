@@ -3,6 +3,7 @@
 
   import { selectedAccount } from "./stores";
 
+  /** @type {import("./util").Node} */
   export let node;
 
   const expanded = true;
@@ -12,8 +13,15 @@
     $selectedAccount = $selectedAccount === node.fullname ? "" : node.fullname;
   }
 
+  /**
+   * Start drag if a document filename is dragged onto an account.
+   * @param {DragEvent} event
+   */
   function dragenter(event) {
-    if (event.dataTransfer.types.includes("fava/filename")) {
+    if (
+      event.dataTransfer &&
+      event.dataTransfer.types.includes("fava/filename")
+    ) {
       event.preventDefault();
       drag = true;
     }
@@ -22,8 +30,13 @@
 
   const dispatch = createEventDispatcher();
 
+  /**
+   * Handle a drop and bubble the event.
+   * @param {DragEvent} event
+   */
   function drop(event) {
-    const filename = event.dataTransfer.getData("fava/filename");
+    const filename =
+      event.dataTransfer && event.dataTransfer.getData("fava/filename");
     if (filename) {
       dispatch("drop", { account: node.fullname, filename });
       drag = false;

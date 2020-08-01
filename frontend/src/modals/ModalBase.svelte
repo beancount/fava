@@ -50,7 +50,7 @@
     box-shadow: 0 0 20px var(--overlay-wrapper-background);
   }
   .content :global(form),
-  .content :global(> div) {
+  .content > :global(div) {
     width: 100%;
   }
 </style>

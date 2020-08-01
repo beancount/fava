@@ -7,8 +7,11 @@
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import AccountInput from "./AccountInput.svelte";
 
+  /** @type {import("../entries").Posting} */
   export let posting;
+  /** @type {number} */
   export let index;
+  /** @type {string[]} */
   export let suggestions;
 
   const dispatch = createEventDispatcher();
@@ -18,14 +21,27 @@
 
   let drag = false;
   let draggable = true;
+  /**
+   * @param {MouseEvent} event
+   */
   function mousemove(event) {
-    draggable = event.target.nodeName !== "INPUT";
+    draggable = !(event.target instanceof HTMLInputElement);
   }
+  /**
+   * @param {DragEvent} event
+   */
   function dragstart(event) {
-    event.dataTransfer.setData("fava/posting", index);
+    event.dataTransfer &&
+      event.dataTransfer.setData("fava/posting", `${index}`);
   }
+  /**
+   * @param {DragEvent} event
+   */
   function dragenter(event) {
-    if (event.dataTransfer.types.includes("fava/posting")) {
+    if (
+      event.dataTransfer &&
+      event.dataTransfer.types.includes("fava/posting")
+    ) {
       event.preventDefault();
       drag = true;
     }
@@ -33,8 +49,12 @@
   function dragleave() {
     drag = false;
   }
+  /**
+   * @param {DragEvent} event
+   */
   function drop(event) {
-    const from = event.dataTransfer.getData("fava/posting");
+    const from =
+      event.dataTransfer && event.dataTransfer.getData("fava/posting");
     if (from) {
       dispatch("move", { from: +from, to: index });
       drag = false;
@@ -93,7 +113,7 @@
     class="muted round remove-row"
     on:click={() => dispatch('remove')}
     type="button"
-    tabindex="-1">
+    tabindex={-1}>
     ×
   </button>
   <AccountInput className="grow" bind:value={posting.account} {suggestions} />

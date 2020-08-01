@@ -2,11 +2,17 @@
   import { _, urlFor } from "../helpers";
   import { HAVE_EXCEL } from "../stores";
 
-  export let query = "";
+  /** @type {string} */
+  export let query;
 
+  /**
+   * URL to download a query.
+   * @param {string} query_string
+   * @param {string} format
+   */
   function queryUrl(query_string, format) {
     return urlFor(`download-query/query_result.${format}`, {
-      query_string: query,
+      query_string,
     });
   }
 </script>

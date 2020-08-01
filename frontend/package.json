@@ -80,6 +80,7 @@
         "files": "*.svelte",
         "processor": "svelte3/svelte3",
         "rules": {
+          "no-undef-init": 0,
           "import/first": 0,
           "import/no-mutable-exports": 0,
           "@typescript-eslint/explicit-function-return-type": 0

@@ -5,6 +5,7 @@
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
 
+  /** @type {import("../entries").Note} */
   export let entry;
 </script>
 
@@ -24,6 +25,6 @@
     <AccountInput className="grow" bind:value={entry.account} />
     <AddMetadataButton bind:meta={entry.meta} />
   </div>
-  <textarea name="comment" rows="2" bind:value={entry.comment} />
+  <textarea name="comment" rows={2} bind:value={entry.comment} />
   <EntryMetadata bind:meta={entry.meta} />
 </div>

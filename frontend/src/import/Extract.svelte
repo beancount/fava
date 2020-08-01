@@ -4,16 +4,20 @@
   import { urlHash, closeOverlay } from "../stores";
 
   import ModalBase from "../modals/ModalBase.svelte";
-  import Balance from "../entry-forms/Balance.svelte";
-  import Note from "../entry-forms/Note.svelte";
-  import Transaction from "../entry-forms/Transaction.svelte";
+  import Entry from "../entry-forms/Entry.svelte";
 
+  /** @type {import('../entries').Entry[]} */
   let entries = [];
-  let component;
+  /** @type {number} */
   let currentIndex = 0;
+  /** @type {boolean} */
   let duplicate;
+  /** @type {number} */
   let duplicates;
+
+  /** @type {import('../entries').Entry} */
   let entry;
+  /** @type {boolean} */
   let shown;
 
   function isDuplicate(e) {
@@ -31,7 +35,6 @@
   }
   $: entry = entries[currentIndex];
   $: if (entry) {
-    component = { Balance, Note, Transaction }[entry.type];
     duplicates = entry && entries.filter((e) => isDuplicate(e)).length;
     duplicate = isDuplicate(entry);
   }
@@ -84,7 +87,7 @@
         </label>
       </div>
       <div class:duplicate>
-        <svelte:component this={component} bind:entry />
+        <Entry bind:entry />
       </div>
       <div class="flex-row">
         {#if currentIndex > 0}

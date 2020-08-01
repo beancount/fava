@@ -23,7 +23,7 @@ import {
   Validator,
 } from "../lib/validation";
 
-interface AccountHierarchyDatum {
+export interface AccountHierarchyDatum {
   account: string;
   balance: Record<string, number | undefined>;
   dummy?: boolean;
@@ -31,7 +31,7 @@ interface AccountHierarchyDatum {
 interface AccountHierarchy extends AccountHierarchyDatum {
   children: AccountHierarchy[];
 }
-type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
+export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
 /**
  * Add internal nodes as fake leaf nodes to their own children.
@@ -47,19 +47,19 @@ function addInternalNodesAsLeaves(node: AccountHierarchy): void {
   }
 }
 
-interface ScatterPlotDatum {
+export interface ScatterPlotDatum {
   date: Date;
   type: string;
   description: string;
 }
 
-interface LineChartDatum {
+export interface LineChartDatum {
   name: string;
   date: Date;
   value: number;
 }
 
-type LineChartData = {
+export type LineChartData = {
   name: string;
   values: LineChartDatum[];
 };
@@ -70,7 +70,7 @@ interface BarChartDatumValue {
   budget: number;
 }
 
-interface BarChartDatum {
+export interface BarChartDatum {
   label: string;
   date: Date;
   values: BarChartDatumValue[];
@@ -93,7 +93,7 @@ const operatingCurrenciesWithConversion = derived(
   }
 );
 
-interface HierarchyChart {
+export interface HierarchyChart {
   type: "hierarchy";
   data: Record<string, AccountHierarchyNode>;
 }
@@ -248,9 +248,11 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
   },
 };
 
-export function parseChartData(): (ChartTypes & {
+export type NamedChartTypes = ChartTypes & {
   name: string;
-})[] {
+};
+
+export function parseChartData(): NamedChartTypes[] {
   const chartData = array(
     object({
       label: string,

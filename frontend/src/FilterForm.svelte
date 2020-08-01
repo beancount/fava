@@ -10,33 +10,48 @@
     ...$payees.map((payee) => `payee:"${payee}"`),
   ];
 
+  /**
+   * @param {string} value
+   * @param {HTMLInputElement} input
+   */
   function valueExtractor(value, input) {
-    const [ret] = value.slice(0, input.selectionStart).match(/\S*$/);
-    return ret;
+    const match = value
+      .slice(0, input.selectionStart || undefined)
+      .match(/\S*$/);
+    return match ? match[0] : value;
   }
+  /**
+   * @param {string} value
+   * @param {HTMLInputElement} input
+   */
   function valueSelector(value, input) {
-    const [search] = input.value.slice(0, input.selectionStart).match(/\S*$/);
-    return `${input.value.slice(
-      0,
-      input.selectionStart - search.length
-    )}${value}${input.value.slice(input.selectionStart)}`;
+    const selectionStart = input.selectionStart || 0;
+    const match = input.value.slice(0, selectionStart).match(/\S*$/);
+    return match
+      ? `${input.value.slice(
+          0,
+          selectionStart - match[0].length
+        )}${value}${input.value.slice(selectionStart)}`
+      : value;
   }
 
-  const values = {};
+  let account_filter_value = "";
+  let fql_filter_value = "";
+  let time_filter_value = "";
   account_filter.subscribe((v) => {
-    values.account = v;
+    account_filter_value = v;
   });
   fql_filter.subscribe((v) => {
-    values.filter = v;
+    fql_filter_value = v;
   });
   time_filter.subscribe((v) => {
-    values.time = v;
+    time_filter_value = v;
   });
 
   function submit() {
-    account_filter.set(values.account);
-    fql_filter.set(values.filter);
-    time_filter.set(values.time);
+    account_filter.set(account_filter_value);
+    fql_filter.set(fql_filter_value);
+    time_filter.set(time_filter_value);
   }
 </script>
 
@@ -81,7 +96,7 @@
 
 <form on:submit|preventDefault={submit}>
   <AutocompleteInput
-    bind:value={values.time}
+    bind:value={time_filter_value}
     placeholder={_('Time')}
     suggestions={$years}
     key="f t"
@@ -90,7 +105,7 @@
     on:blur={submit}
     on:select={submit} />
   <AutocompleteInput
-    bind:value={values.account}
+    bind:value={account_filter_value}
     placeholder={_('Account')}
     suggestions={$accounts}
     key="f a"
@@ -99,7 +114,7 @@
     on:blur={submit}
     on:select={submit} />
   <AutocompleteInput
-    bind:value={values.filter}
+    bind:value={fql_filter_value}
     placeholder={_('Filter by tag, payee, ...')}
     suggestions={fql_filter_suggestions}
     key="f f"

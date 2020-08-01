@@ -9,9 +9,10 @@
   import ModalBase from "./ModalBase.svelte";
   import AccountInput from "../entry-forms/AccountInput.svelte";
 
+  /** @type {HTMLFormElement} */
   let form;
 
-  $: shown = $files.length;
+  $: shown = !!$files.length;
 
   async function submit() {
     await Promise.all(

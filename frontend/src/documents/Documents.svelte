@@ -12,10 +12,19 @@
   import Accounts from "./Accounts.svelte";
   import Table from "./Table.svelte";
 
+  /** @typedef {{account: string, filename: string, date: string}} Document */
+
+  /** @type {Document[]} */
   export let data;
+
+  /** @type {Document} */
   let selected;
+  /** @type {{account: string, filename: string, newName: string} | null} */
   let moving = null;
 
+  /**
+   * @param {Document} doc
+   */
   function copyMoveable(doc) {
     return {
       account: doc.account,
@@ -26,6 +35,7 @@
 
   /**
    * Rename the selected document with <F2>.
+   * @param {KeyboardEvent} ev
    */
   function keyup(ev) {
     if (ev.key === "F2" && selected) {
@@ -35,17 +45,16 @@
 
   /**
    * Move a document to the account it is dropped on.
+   * @param {CustomEvent} ev
    */
   function drop(ev) {
     moving = copyMoveable(ev.detail);
   }
 
   async function move() {
-    const moved = await moveDocument(
-      moving.filename,
-      moving.account,
-      moving.newName
-    );
+    const moved =
+      moving &&
+      (await moveDocument(moving.filename, moving.account, moving.newName));
     if (moved) {
       moving = null;
       router.reload();
@@ -85,7 +94,7 @@
       </p>
       <p>
         <AccountInput bind:value={moving.account} />
-        <input size="40" bind:value={moving.newName} />
+        <input size={40} bind:value={moving.newName} />
         <button type="button" on:click={move}>{'Move'}</button>
       </p>
     </div>

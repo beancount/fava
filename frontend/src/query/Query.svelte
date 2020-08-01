@@ -10,14 +10,24 @@
   import QueryLinks from "./QueryLinks.svelte";
 
   let query_string = "";
+
+  /** @type {Record<string,HTMLElement>} */
   const resultElems = {};
 
+  /** @typedef {{result?: { table: string, chart: unknown }, error?: unknown}} ResultType
+  /** @type {Record<string,ResultType>} */
   const query_results = {};
 
-  $: query_result_array = $query_shell_history.map((item) => {
-    return [item, query_results[item] || {}];
-  });
+  $: query_result_array = $query_shell_history.map(
+    /** @returns {[string, ResultType]} */ (item) => {
+      return [item, query_results[item] || {}];
+    }
+  );
 
+  /**
+   * @param {string} query
+   * @param {ResultType} res
+   */
   async function setResult(query, res) {
     addToHistory(query);
     query_results[query] = res;
@@ -25,7 +35,7 @@
     const url = new URL(window.location.href);
     url.searchParams.set("query_string", query);
     window.history.replaceState(null, "", url.toString());
-    resultElems[query].setAttribute("open", true);
+    resultElems[query].setAttribute("open", "true");
   }
 
   function submit() {

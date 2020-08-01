@@ -7,6 +7,7 @@
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
 
+  /** @type {import("../entries").Balance} */
   export let entry;
 </script>
 
@@ -25,7 +26,7 @@
       type="tel"
       pattern="-?[0-9.,]*"
       placeholder={_('Number')}
-      size="10"
+      size={10}
       bind:value={entry.amount.number} />
     <AutocompleteInput
       className="currency"

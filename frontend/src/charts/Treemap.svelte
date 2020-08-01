@@ -7,8 +7,11 @@
   import { formatCurrency, formatPercentage } from "../format";
   import { followingTooltip } from "./tooltip";
 
+  /** @type {import(".").AccountHierarchyNode} */
   export let data;
+  /** @type {number} */
   export let width;
+  /** @type {string} */
   export let currency;
   $: height = Math.min(width / 2.5, 400);
 
@@ -16,6 +19,9 @@
   $: root = tree.size([width, height])(data);
   $: leaves = root.leaves().filter((d) => d.value);
 
+  /**
+   * @param {import(".").AccountHierarchyNode} d
+   */
   function fill(d) {
     const node = d.data.dummy && d.parent ? d.parent : d;
     if (node.depth === 1 || !node.parent) {
@@ -23,16 +29,28 @@
     }
     return $treemapScale(node.parent.data.account);
   }
+
+  /**
+   * @param {import(".").AccountHierarchyNode} d
+   */
   function tooltipText(d) {
-    return `${formatCurrency(d.value)} ${currency} (${formatPercentage(
-      d.value / root.value
+    const val = d.value || 0;
+    const rootValue = root.value || 1;
+
+    return `${formatCurrency(val)} ${currency} (${formatPercentage(
+      val / rootValue
     )})<em>${d.data.account}</em>`;
   }
 
+  /**
+   * @param {SVGTextElement} node
+   * @param {import(".").AccountHierarchyNode} param
+   */
   function setOpacity(node, param) {
     function update(d) {
       const length = node.getComputedTextLength();
-      node.style.opacity = d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? 1 : 0;
+      node.style.opacity =
+        d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? "1" : "0";
     }
     update(param);
     return { update };

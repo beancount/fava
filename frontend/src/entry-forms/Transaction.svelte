@@ -8,9 +8,14 @@
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
 
+  /** @type {import("../entries").Transaction} */
   export let entry;
-  let suggestions = null;
+  /** @type {string[] | undefined} */
+  let suggestions;
 
+  /**
+   * @param {import("../entries").Posting} posting
+   */
   function removePosting(posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
   }
@@ -21,7 +26,7 @@
 
   $: payee = entry.payee;
   $: if (payee) {
-    suggestions = null;
+    suggestions = undefined;
     if ($payees.includes(payee)) {
       fetchAPI("payee_accounts", { payee }).then((s) => {
         suggestions = s;
@@ -38,6 +43,9 @@
     entry = Object.assign(new Transaction(), data, { date: entry.date });
   }
 
+  /**
+   * @param {CustomEvent<{from: number, to: number}>} ev
+   */
   function movePosting(ev) {
     const { from, to } = ev.detail;
     const moved = entry.postings[from];
@@ -107,7 +115,7 @@
       type="button"
       on:click={addPosting}
       title={_('Add posting')}
-      tabindex="-1">
+      tabindex={-1}>
       p
     </button>
   </div>

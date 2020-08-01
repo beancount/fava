@@ -12,9 +12,13 @@
   import { formatCurrencyShort } from "../format";
   import { positionedTooltip } from "./tooltip";
 
+  /** @type {import('.').LineChartData[]} */
   export let data;
+  /** @type {number} */
   export let width;
+  /** @type {(d: import('.').LineChartDatum) => string} */
   export let tooltipText;
+
   const margin = {
     top: 10,
     right: 10,
@@ -40,7 +44,9 @@
     max(data, (s) => s.values[s.values.length - 1].date),
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
-  $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
+  let yMin = 0;
+  let yMax = 0;
+  $: [yMin, yMax] = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear()
     .domain([yMin - (yMax - yMin) * 0.05, yMax + (yMax - yMin) * 0.05])
@@ -69,8 +75,12 @@
     .tickSize(-innerWidth)
     .tickFormat(formatCurrencyShort);
 
-  function tooltipInfo(...pos) {
-    const d = quad.find(...pos);
+  /**
+   * @param {number} xPos
+   * @param {number} yPos
+   */
+  function tooltipInfo(xPos, yPos) {
+    const d = quad.find(xPos, yPos);
     return d ? [x(d.date), y(d.value), tooltipText(d)] : undefined;
   }
 </script>

@@ -1,37 +1,37 @@
 <script>
-  import { Balance, Note, Transaction } from "../entries";
+  import { create } from "../entries";
   import { saveEntries } from "../api";
   import { _ } from "../helpers";
   import { urlHash, closeOverlay } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
-  import BalanceComponent from "../entry-forms/Balance.svelte";
-  import NoteComponent from "../entry-forms/Note.svelte";
-  import TransactionComponent from "../entry-forms/Transaction.svelte";
+  import Entry from "../entry-forms/Entry.svelte";
 
+  /** @type {[import("../entries").EntryTypeName, string][]} */
   const entryTypes = [
-    [_("Transaction"), Transaction],
-    [_("Balance"), Balance],
-    [_("Note"), Note],
+    ["Transaction", _("Transaction")],
+    ["Balance", _("Balance")],
+    ["Note", _("Note")],
   ];
-  let entry = new Transaction();
 
-  $: svelteComponent = {
-    Balance: BalanceComponent,
-    Note: NoteComponent,
-    Transaction: TransactionComponent,
-  }[entry.type];
+  let entry = create("Transaction");
 
+  /**
+   * @param {Event} event
+   */
   async function submitAndNew(event) {
-    if (event.target.form.reportValidity()) {
+    if (
+      event.target instanceof HTMLButtonElement &&
+      event.target.form?.reportValidity()
+    ) {
       await saveEntries([entry]);
-      entry = new entry.constructor();
+      entry = create(entry.type);
     }
   }
 
   async function submit() {
     await saveEntries([entry]);
-    entry = new entry.constructor();
+    entry = create(entry.type);
     closeOverlay();
   }
 
@@ -42,19 +42,19 @@
   <form on:submit|preventDefault={submit}>
     <h3>
       {_('Add')}
-      {#each entryTypes as [name, Cls]}
+      {#each entryTypes as [type, displayName]}
         <button
           type="button"
-          class:muted={entry.type !== Cls.name}
+          class:muted={entry.type !== type}
           on:click={() => {
-            entry = new Cls();
+            entry = create(type);
           }}>
-          {name}
+          {displayName}
         </button>
         {' '}
       {/each}
     </h3>
-    <svelte:component this={svelteComponent} bind:entry />
+    <Entry bind:entry />
     <div class="flex-row">
       <span class="spacer" />
       <button

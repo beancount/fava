@@ -1,7 +1,9 @@
 <script>
   import { _ } from "../helpers";
 
+  /** @type {boolean} */
   export let changed;
+  /** @type {boolean} */
   export let saving;
 
   $: buttonContent = saving ? _("Saving...") : _("Save");

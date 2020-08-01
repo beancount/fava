@@ -12,12 +12,14 @@
   import SaveButton from "./SaveButton.svelte";
 
   export let data;
+  /** @type {CodeMirror.Editor | undefined} */
   let editor;
   let changed = false;
 
   let value = "";
   let file_path = "";
   let sha256sum = "";
+  /** @type {string[]} */
   let sources = [];
 
   let saving = false;
@@ -61,6 +63,7 @@
     file_path = data.file_path;
     sources = data.sources;
 
+    /** @type {(() => void)[]} */
     const unbind = [];
     // keybindings when the focus is outside the editor
     ["Control+s", "Meta+s"].forEach((key) => {
@@ -90,6 +93,9 @@
     };
   });
 
+  /**
+   * @param {HTMLElement} div
+   */
   function sourceEditor(div) {
     value = data.source;
     const options = {
@@ -105,6 +111,9 @@
     });
   }
 
+  /**
+   * @param {CustomEvent<string>} ev
+   */
   function command(ev) {
     if (editor) {
       editor.execCommand(ev.detail);

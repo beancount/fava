@@ -17,10 +17,16 @@
   import LineChart from "./LineChart.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
-  // The chart to render.
+  /**
+   * The chart to render.
+   * @type {import(".").NamedChartTypes}
+   */
   export let chart;
 
-  // Width of the chart.
+  /**
+   * Width of the chart.
+   * @type {number}
+   */
   let width;
 
   const currencies = writable([]);

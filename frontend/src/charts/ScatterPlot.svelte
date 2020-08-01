@@ -9,8 +9,11 @@
   import { dateFormat } from "../format";
   import { positionedTooltip } from "./tooltip";
 
+  /** @type {import('.').ScatterPlotDatum[]} */
   export let data;
+  /** @type {number} */
   export let width;
+
   const margin = {
     top: 10,
     right: 10,
@@ -40,14 +43,21 @@
   $: quad = quadtree(
     data,
     (d) => x(d.date),
-    (d) => y(d.type)
+    (d) => y(d.type) || 0
   );
+  /**
+   * @param {import('.').ScatterPlotDatum} d
+   */
   function tooltipText(d) {
     return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
   }
 
-  function tooltipInfo(...pos) {
-    const d = quad.find(...pos);
+  /**
+   * @param {number} xPos
+   * @param {number} yPos
+   */
+  function tooltipInfo(xPos, yPos) {
+    const d = quad.find(xPos, yPos);
     return d ? [x(d.date), y(d.type), tooltipText(d)] : undefined;
   }
 </script>

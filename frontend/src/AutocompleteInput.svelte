@@ -5,23 +5,37 @@
 
   const dispatch = createEventDispatcher();
 
+  /** @type {string} */
   export let value;
+  /** @type {string[]} */
   export let suggestions;
+  /** @type {string} */
   export let name = "";
+  /** @type {string} */
   export let placeholder = "";
+  /** @type {((val: string, input: HTMLInputElement) => string) | null} */
   export let valueExtractor = null;
+  /** @type {((val: string, input: HTMLInputElement) => string) | null} */
   export let valueSelector = null;
   export let setSize = false;
-  export let className = null;
-  export let key = null;
-  export let checkValidity = null;
+  /** @type {string | undefined} */
+  export let className = undefined;
+  /** @type {string | undefined} */
+  export let key = undefined;
+  /** @type {((val: string) => string) | undefined} */
+  export let checkValidity = undefined;
   export let clearButton = false;
+
+  /** @type {{suggestion: string, innerHTML: string}[]} */
   let filteredSuggestions = [];
   let hidden = true;
   let index = -1;
+  /** @type {HTMLInputElement} */
   let input;
 
-  $: size = setSize ? Math.max(value.length, placeholder.length) + 1 : null;
+  $: size = setSize
+    ? Math.max(value.length, placeholder.length) + 1
+    : undefined;
 
   $: if (input && checkValidity) {
     input.setCustomValidity(checkValidity(value));
@@ -40,6 +54,9 @@
     index = Math.min(index, filteredSuggestions.length - 1);
   }
 
+  /**
+   * @param {string} suggestion
+   */
   function select(suggestion) {
     value =
       input && valueSelector ? valueSelector(suggestion, input) : suggestion;
@@ -47,12 +64,19 @@
     hidden = true;
   }
 
+  /**
+   * @param {MouseEvent} event
+   * @param {string} suggestion
+   */
   function mousedown(event, suggestion) {
     if (event.button === 0) {
       select(suggestion);
     }
   }
 
+  /**
+   * @param {KeyboardEvent} event
+   */
   function keydown(event) {
     if (event.key === "Enter") {
       if (index > -1) {
@@ -132,7 +156,7 @@
       hidden = true;
       dispatch('blur');
     }}
-    on:focusin={() => {
+    on:focus={() => {
       hidden = false;
     }}
     on:input={() => {
@@ -144,7 +168,7 @@
   {#if clearButton && value}
     <button
       type="button"
-      tabindex="-1"
+      tabindex={-1}
       class="muted round"
       on:click={() => {
         value = '';

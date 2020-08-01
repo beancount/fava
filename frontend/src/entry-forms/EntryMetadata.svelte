@@ -1,19 +1,30 @@
 <script>
   import { _ } from "../helpers";
 
+  /** @type {Record<string,string>} */
   export let meta;
 
   $: metakeys = Object.keys(meta).filter(
     (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno"
   );
 
+  /**
+   * @param {string} metakey
+   */
   function removeMetadata(metakey) {
     delete meta[metakey];
     meta = meta;
   }
 
+  /**
+   * @param {string} currentKey
+   * @param {string} newKey
+   */
   function updateMetakey(currentKey, newKey) {
-    meta = Object.keys(meta).reduce((m, key) => {
+    meta = Object.keys(meta).reduce((
+      /** @type {Record<string,string>} */ m,
+      key
+    ) => {
       if (key === currentKey) {
         m[newKey] = meta[currentKey];
       } else {
@@ -57,7 +68,7 @@
       class="muted round remove-row"
       on:click={() => removeMetadata(metakey)}
       type="button"
-      tabindex="-1">
+      tabindex={-1}>
       ×
     </button>
     <input

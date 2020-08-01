@@ -6,7 +6,9 @@
   import Treemap from "./Treemap.svelte";
 
   const context = getContext("chart-currencies");
+  /** @type {Record<string, import(".").AccountHierarchyNode>} */
   export let data;
+  /** @type {number} */
   export let width;
 
   $: currencies = Object.keys(data);

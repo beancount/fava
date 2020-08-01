@@ -8,21 +8,32 @@
   import { sunburstScale } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
 
+  /** @type {import(".").AccountHierarchyNode} */
   export let data;
+  /** @type {string} */
   export let currency;
+  /** @type {number} */
   export let width;
+  /** @type {number} */
   export let height;
+
   $: radius = Math.min(width, height) / 2;
 
+  /**
+   * @param {import(".").AccountHierarchyNode} d
+   */
   function balanceText(d) {
-    return `${formatCurrency(d.value)} ${currency} (${formatPercentage(
-      d.value / root.value
+    const val = d.value || 0;
+    const rootVal = root.value || 1;
+    return `${formatCurrency(val)} ${currency} (${formatPercentage(
+      val / rootVal
     )})`;
   }
 
   $: root = partition()(data);
   $: leaves = root.descendants().filter((d) => !d.data.dummy && d.depth);
 
+  /** @type {import(".").AccountHierarchyNode | null} */
   let current = null;
   $: if (root) {
     current = null;

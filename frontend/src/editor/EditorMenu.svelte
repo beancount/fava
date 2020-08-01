@@ -3,7 +3,9 @@
 
   import { _, urlFor } from "../helpers";
 
+  /** @type {string[]} */
   export let sources;
+  /** @type {string} */
   export let file_path;
 
   const dispatch = createEventDispatcher();

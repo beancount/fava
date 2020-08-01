@@ -5,7 +5,9 @@
   import { enableAutomaticCompletions } from "../editor";
   import { _ } from "../helpers";
 
+  /** @type {string} */
   export let value;
+  /** @type {CodeMirror.Editor} */
   let editor;
   const dispatch = createEventDispatcher();
 
@@ -13,6 +15,9 @@
     editor.setValue(value);
   }
 
+  /**
+   * @param {HTMLElement} form
+   */
   function queryEditor(form) {
     const queryOptions = {
       value,
