@@ -146,7 +146,7 @@
             accumulated <span class="num">{{ (entry.amount.number + entry.diff_amount.number)|format_currency(entry.amount.currency, show_if_zero=True) }} {{ entry.amount.currency }}</span>
             {% endif %}
         {% elif type == 'transaction' %}
-            <strong class="payee">{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %}<span class="separator"></span> {% endif %}{{ entry.narration or '' }}
+            <strong class="payee">{{ entry.payee or '' }}</strong>{% if entry.payee and entry.narration %}<span class="separator"></span>{% endif %}{{ entry.narration or '' }}
             {{ render_tags_links(entry) }}
         {% endif %}
         </span>
