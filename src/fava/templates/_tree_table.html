@@ -1,7 +1,4 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% set show_other_column = (ledger.options.operating_currency|length < ledger.options['commodities']|length) %}
-{% set table_hover_text = _('Hold Shift while clicking to expand all children.
-Hold Ctrl or Cmd while clicking to expand one level.') %}
 
 {% macro render_diff_and_number(balance, cost, currency) %}
   {% set num = balance.pop(currency, 0) %}
@@ -18,16 +15,15 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
 {% endmacro %}
 
 {% macro tree(account_node) %}
-<ol is="tree-table" class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ table_hover_text }}">
+<ol is="tree-table" class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
+Hold Ctrl or Cmd while clicking to expand one level.') }}">
   <li class="head">
     <p>
       <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
       {% for currency in ledger.options.operating_currency %}
       <span class="num">{{ currency }}</span>
       {% endfor %}
-      {% if show_other_column %}
       <span class="num other">{{ _('Other') }}</span>
-      {% endif %}
     </p>
   </li>
   {% for account in ([account_node] if account_node.name else account_node.children) if account|should_show recursive %}
@@ -46,7 +42,6 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
       <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency) }}</span>
     </span>
     {% endfor %}
-    {% if show_other_column %}
     <span class="num other">
       <span class="balance">
         {% for currency in balance.keys()|sort %}
@@ -59,7 +54,6 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
         {% endfor %}
       </span>
     </span>
-    {% endif %}
     </p>
     {% if account.children %}
     <ol>
