@@ -65,18 +65,21 @@
     flex-grow: 1;
   }
 
-  label > span:first-child {
+  label > span:first-child,
+  .label > span:first-child {
     display: none;
   }
 
   @media (max-width: 767px) {
-    label > span:first-child {
+    label > span:first-child,
+    .label > span:first-child {
       display: initial;
       width: 100%;
     }
   }
 </style>
 
+<!-- svelte-ignore a11y-label-has-associated-control -->
 <div>
   <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
@@ -110,9 +113,9 @@
   </div>
   <EntryMetadata bind:meta={entry.meta} />
   <div class="flex-row">
-    <label>
+    <span class="label">
       <span>{_('Postings')}:</span>
-    </label>
+    </span>
   </div>
   {#each entry.postings as posting, index}
     <PostingSvelte

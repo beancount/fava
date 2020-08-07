@@ -40,16 +40,16 @@
     text-align: center;
   }
 
-  label {
+  span {
     padding: 0 0.5em;
   }
 
-  label + label {
+  span + span {
     border-left: 1px solid var(--color-text-lighter);
   }
 
-  label.selected,
-  label:hover {
+  span.selected,
+  span:hover {
     color: var(--color-text-lighter);
   }
 </style>
@@ -60,13 +60,13 @@
   </Chart>
   <div hidden={!$showCharts}>
     {#each charts as chart}
-      <label
+      <span
         class:selected={chart === $activeChart}
         on:click={() => {
           $activeChart = chart;
         }}>
         {chart.name}
-      </label>
+      </span>
     {/each}
   </div>
 {/if}

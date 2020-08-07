@@ -40,6 +40,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-label-has-associated-control -->
 <ModalBase {shown} {closeHandler}>
   <form bind:this={form} on:submit|preventDefault={submit}>
     <h3>{_('Upload file(s)')}:</h3>
