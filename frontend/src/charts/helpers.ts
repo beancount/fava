@@ -2,7 +2,7 @@ import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
 import { get, derived } from "svelte/store";
 
-import { accounts, operating_currency, commodities } from "../stores";
+import { accounts, operating_currency, currencies_sorted } from "../stores";
 import { time_filter } from "../stores/filters";
 import { currentTimeFilterDateFormat } from "../format";
 
@@ -46,10 +46,10 @@ export const sunburstScale = derived(accounts, (accounts_val) =>
 );
 
 export const currenciesScale = derived(
-  [operating_currency, commodities],
-  ([operating_currency_val, commodities_val]) =>
+  [operating_currency, currencies_sorted],
+  ([operating_currency_val, currencies_sorted_val]) =>
     scaleOrdinal(colors10).domain([
       ...operating_currency_val,
-      ...commodities_val,
+      ...currencies_sorted_val,
     ])
 );

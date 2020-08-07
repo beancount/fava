@@ -98,8 +98,8 @@ export const operating_currency = derived_array(favaAPIStore, (val) =>
 );
 
 /** The sorted array of all used currencies. */
-export const commodities = derived_array(favaAPIStore, (val) =>
-  val.options.commodities.sort()
+export const currencies_sorted = derived_array(currencies, (val) =>
+  [...val].sort()
 );
 
 /** The number of Beancount errors. */

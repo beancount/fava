@@ -2,7 +2,7 @@ import { writable, derived } from "svelte/store";
 
 import { _ } from "../helpers";
 import iso4217currencies from "../lib/iso4217";
-import { commodities, operating_currency } from ".";
+import { currencies_sorted, operating_currency } from ".";
 
 export const showCharts = writable(true);
 export const activeChart = writable({});
@@ -11,10 +11,10 @@ export const lineChartMode = writable("line");
 export const chartCurrency = writable("");
 
 const currencySuggestions = derived(
-  [operating_currency, commodities],
-  ([operating_currency_val, commodities_val]) => [
+  [operating_currency, currencies_sorted],
+  ([operating_currency_val, currencies_sorted_val]) => [
     ...operating_currency_val,
-    ...commodities_val.filter(
+    ...currencies_sorted_val.filter(
       (c) => !operating_currency_val.includes(c) && iso4217currencies.has(c)
     ),
   ]
