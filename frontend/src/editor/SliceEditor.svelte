@@ -11,10 +11,14 @@
 
   import SaveButton from "./SaveButton.svelte";
 
+  /** @type {string} */
   export let slice;
+  /** @type {string} */
   export let entry_hash;
+  /** @type {string} */
   export let sha256sum;
 
+  /** @type {CodeMirror.Editor} */
   let editor;
   let changed = false;
   let saving = false;
@@ -38,6 +42,9 @@
     }
   }
 
+  /**
+   * @param {HTMLDivElement} div
+   */
   function sourceSliceEditor(div) {
     const options = {
       ...sourceEditorOptions(save),

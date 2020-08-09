@@ -1,7 +1,7 @@
 <script>
   import { _ } from "../i18n";
 
-  /** @type {Record<string, string>} */
+  /** @type {Record<string, unknown>} */
   export let meta;
 
   function addMetadata() {

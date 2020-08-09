@@ -14,7 +14,7 @@
   onMount(() => {
     charts = parseChartData();
     if (!charts.length) {
-      return;
+      $activeChart = undefined;
     }
     $activeChart =
       charts.find((c) => c.name === ($activeChart || {}).name) || charts[0];
@@ -27,6 +27,7 @@
       $activeChart = charts[(currentIndex - 1 + charts.length) % charts.length];
     });
   });
+
   onDestroy(() => {
     keys.unbind("c");
     keys.unbind("C");
@@ -55,7 +56,7 @@
   }
 </style>
 
-{#if charts.length}
+{#if $activeChart}
   <Chart chart={$activeChart}>
     <ConversionAndInterval />
   </Chart>

@@ -96,6 +96,7 @@ const operatingCurrenciesWithConversion = derived(
 export interface HierarchyChart {
   type: "hierarchy";
   data: Record<string, AccountHierarchyNode>;
+  tooltipText?: undefined;
 }
 
 interface BarChart {
@@ -113,6 +114,7 @@ interface LineChart {
 interface ScatterPlot {
   type: "scatterplot";
   data: ScatterPlotDatum[];
+  tooltipText?: undefined;
 }
 
 type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
@@ -260,9 +262,7 @@ export function parseChartData(): NamedChartTypes[] {
       data: unknown,
     })
   )(getScriptTagJSON("#chart-data"));
-  const result: (ChartTypes & {
-    name: string;
-  })[] = [];
+  const result: NamedChartTypes[] = [];
   chartData.forEach((chart) => {
     const parser = parsers[chart.type];
     if (parser) {

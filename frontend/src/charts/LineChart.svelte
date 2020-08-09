@@ -39,6 +39,7 @@
 
   // Scales
   $: allValues = merge(data.map((d) => d.values));
+
   $: xDomain = [
     min(data, (s) => s.values[0].date),
     max(data, (s) => s.values[s.values.length - 1].date),
@@ -78,6 +79,7 @@
   /**
    * @param {number} xPos
    * @param {number} yPos
+   * @returns {[number, number, string] | undefined}
    */
   function tooltipInfo(xPos, yPos) {
     const d = quad.find(xPos, yPos);

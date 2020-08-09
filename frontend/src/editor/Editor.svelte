@@ -11,6 +11,7 @@
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
 
+  /** @type {{source: string, file_path: string, sha256sum: string, sources: string[]}} */
   export let data;
   /** @type {CodeMirror.Editor | undefined} */
   let editor;

@@ -125,7 +125,7 @@
       {#if entry.meta.__source__}
         <h3>
           {_('Source')}
-          {#if entry.meta.lineno > 0}({_('Line')}: {entry.meta.lineno}){/if}
+          {#if entry.meta.lineno}({_('Line')}: {entry.meta.lineno}){/if}
         </h3>
         <pre>{entry.meta.__source__}</pre>
       {/if}

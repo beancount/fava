@@ -21,6 +21,7 @@
 
   /**
    * @param {import(".").AccountHierarchyNode} d
+   * @returns {string}
    */
   function balanceText(d) {
     const val = d.value || 0;

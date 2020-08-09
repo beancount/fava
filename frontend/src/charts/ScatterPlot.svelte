@@ -26,7 +26,9 @@
 
   // Scales
   $: dateExtent = extent(data, (d) => d.date);
-  $: x = scaleUtc().domain(dateExtent).range([0, innerWidth]);
+  $: x = scaleUtc()
+    .domain(dateExtent[0] ? dateExtent : [0, 1])
+    .range([0, innerWidth]);
   $: y = scalePoint()
     .padding(1)
     .domain(data.map((d) => d.type))
@@ -39,7 +41,7 @@
     .tickSize(-innerWidth)
     .tickFormat((d) => d);
 
-  // Quadtree for hover.
+  /** Quadtree for hover. */
   $: quad = quadtree(
     data,
     (d) => x(d.date),
@@ -47,6 +49,7 @@
   );
   /**
    * @param {import('.').ScatterPlotDatum} d
+   * @returns {string}
    */
   function tooltipText(d) {
     return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
@@ -55,10 +58,11 @@
   /**
    * @param {number} xPos
    * @param {number} yPos
+   * @returns {[number, number, string] | undefined}
    */
   function tooltipInfo(xPos, yPos) {
     const d = quad.find(xPos, yPos);
-    return d ? [x(d.date), y(d.type), tooltipText(d)] : undefined;
+    return d ? [x(d.date), y(d.type) || 0, tooltipText(d)] : undefined;
   }
 </script>
 

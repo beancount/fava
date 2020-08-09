@@ -6,7 +6,7 @@ import { currencies_sorted, operating_currency } from ".";
 import { NamedChartTypes } from "../charts";
 
 export const showCharts = writable(true);
-export const activeChart = writable<NamedChartTypes | null>(null);
+export const activeChart = writable<NamedChartTypes | undefined>(undefined);
 export const chartMode = writable("treemap");
 export const lineChartMode = writable("line");
 export const chartCurrency = writable("");

@@ -31,7 +31,9 @@ export function formatPercentage(number: number): string {
 }
 
 const formatterShort = format(".3s");
-export function formatCurrencyShort(number: number): string {
+export function formatCurrencyShort(
+  number: number | { valueOf(): number }
+): string {
   return incognito(formatterShort(number));
 }
 

@@ -7,7 +7,7 @@
 
   $: shown = $urlHash.startsWith("context");
   $: entry_hash = shown ? $urlHash.slice(8) : "";
-  $: content = !shown ? null : get("context", { entry_hash });
+  $: content = shown ? get("context", { entry_hash }) : null;
 </script>
 
 <ModalBase {shown}>
@@ -23,7 +23,7 @@
           sha256sum={response.sha256sum} />
       {/if}
     {:catch}
-      Loading entry context failed.
+      Loading entry context failed...
     {/await}
   </div>
 </ModalBase>
