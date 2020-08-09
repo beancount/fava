@@ -1,5 +1,3 @@
-import { fetch, handleJSON } from "./lib/fetch";
-import { object, unknown } from "./lib/validation";
 import { baseURL, urlSyncedParams } from "./stores/url";
 
 let baseURL_val = "";
