@@ -30,7 +30,8 @@ import "codemirror/addon/dialog/dialog.css";
 import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
-import { _, fetchAPI, getScriptTagJSON } from "./helpers";
+import { fetchAPI } from "./helpers";
+import { _ } from "./i18n";
 import router, { initSyncedStoreValues } from "./router";
 import { CopyableSpan } from "./clipboard";
 import { BeancountTextarea } from "./editor";
@@ -57,6 +58,7 @@ import FilterForm from "./FilterForm.svelte";
 import Documents from "./documents/Documents.svelte";
 import Modals from "./modals/Modals.svelte";
 import Query from "./query/Query.svelte";
+import { getScriptTagJSON } from "./lib/dom";
 
 customElements.define("aside-button", AsideButton, { extends: "button" });
 customElements.define("beancount-textarea", BeancountTextarea, {

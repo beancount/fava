@@ -1,7 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { todayAsString } from "../format";
-  import { _, urlFor } from "../helpers";
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
   import { moveDocument, deleteDocument } from "../api";
 
   import { newFilename, extractURL } from "./helpers";

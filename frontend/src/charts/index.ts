@@ -7,7 +7,7 @@
 import { hierarchy, HierarchyNode } from "d3-hierarchy";
 import { derived, get } from "svelte/store";
 
-import { getScriptTagJSON } from "../helpers";
+import { getScriptTagJSON } from "../lib/dom";
 import { conversion, operating_currency } from "../stores";
 import { formatCurrency, dateFormat, currentDateFormat } from "../format";
 import {

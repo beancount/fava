@@ -1,5 +1,5 @@
 <script>
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
   import { conversion, interval } from "../stores";
   import { conversions } from "../stores/chart";
 

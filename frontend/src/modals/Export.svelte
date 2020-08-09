@@ -1,5 +1,6 @@
 <script>
-  import { _, urlFor } from "../helpers";
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
   import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";

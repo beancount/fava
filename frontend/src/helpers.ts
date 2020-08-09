@@ -1,23 +1,6 @@
 import { fetch, handleJSON } from "./lib/fetch";
-import { object, record, string, unknown } from "./lib/validation";
+import { object, unknown } from "./lib/validation";
 import { baseURL, urlSyncedParams } from "./stores/url";
-
-export function getScriptTagJSON(selector: string): unknown {
-  const el = document.querySelector(selector);
-  return el ? JSON.parse(el.innerHTML) : null;
-}
-
-let translations: Record<string, string>;
-
-/**
- * Translate the given string.
- */
-export function _(text: string): string {
-  if (translations === undefined) {
-    translations = record(string)(getScriptTagJSON("#translations"));
-  }
-  return translations[text] || text;
-}
 
 let baseURL_val = "";
 baseURL.subscribe((val) => {

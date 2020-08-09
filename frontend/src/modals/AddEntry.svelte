@@ -1,7 +1,7 @@
 <script>
   import { create } from "../entries";
   import { saveEntries } from "../api";
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
   import { urlHash, closeOverlay } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";

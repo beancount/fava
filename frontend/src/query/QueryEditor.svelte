@@ -3,7 +3,7 @@
   import { createEventDispatcher } from "svelte";
 
   import { enableAutomaticCompletions } from "../editor";
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
 
   /** @type {string} */
   export let value;

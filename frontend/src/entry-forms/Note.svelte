@@ -1,5 +1,5 @@
 <script>
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
 
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";

@@ -1,5 +1,6 @@
 <script>
-  import { _, urlFor } from "../helpers";
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
   import { HAVE_EXCEL } from "../stores";
 
   /** @type {string} */

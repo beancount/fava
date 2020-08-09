@@ -1,6 +1,7 @@
 <script>
   import { saveEntries } from "../api";
-  import { _, fetchAPI } from "../helpers";
+  import { fetchAPI } from "../helpers";
+  import { _ } from "../i18n";
   import { urlHash, closeOverlay } from "../stores";
 
   import ModalBase from "../modals/ModalBase.svelte";

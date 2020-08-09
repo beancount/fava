@@ -1,5 +1,5 @@
 <script>
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
 
   /** @type {Record<string, string>} */
   export let meta;

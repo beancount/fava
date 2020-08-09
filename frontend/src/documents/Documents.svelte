@@ -1,7 +1,7 @@
 <script>
   import { moveDocument } from "../api";
   import { favaAPI } from "../stores";
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
   import router from "../router";
 
   import { basename } from "../lib/paths";

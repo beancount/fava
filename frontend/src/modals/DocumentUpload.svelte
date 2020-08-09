@@ -2,7 +2,7 @@
   import router from "../router";
   import { notify } from "../notifications";
   import { put } from "../api";
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
   import { favaAPI } from "../stores";
   import { account, hash, files } from "../document-upload";
 

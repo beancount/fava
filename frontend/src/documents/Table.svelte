@@ -1,6 +1,6 @@
 <script>
   import { sortFunc } from "../sort";
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
 
   import { selectedAccount } from "./stores";
   import { basename } from "../lib/paths";

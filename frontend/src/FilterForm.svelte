@@ -1,5 +1,5 @@
 <script>
-  import { _ } from "./helpers";
+  import { _ } from "./i18n";
   import { accounts, links, tags, years, payees } from "./stores";
   import { account_filter, time_filter, fql_filter } from "./stores/filters";
   import AutocompleteInput from "./AutocompleteInput.svelte";

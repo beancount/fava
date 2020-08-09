@@ -1,6 +1,7 @@
 <script>
   import { emptyPosting, Transaction } from "../entries";
-  import { _, fetchAPI } from "../helpers";
+  import { fetchAPI } from "../helpers";
+  import { _ } from "../i18n";
   import { payees } from "../stores";
 
   import AutocompleteInput from "../AutocompleteInput.svelte";

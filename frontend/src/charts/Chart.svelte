@@ -2,7 +2,7 @@
   import { setContext } from "svelte";
   import { writable } from "svelte/store";
 
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import {
     chartCurrency,

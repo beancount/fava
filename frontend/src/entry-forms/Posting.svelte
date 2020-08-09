@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  import { _ } from "../helpers";
+  import { _ } from "../i18n";
 
   import { currencies } from "../stores";
   import AutocompleteInput from "../AutocompleteInput.svelte";
