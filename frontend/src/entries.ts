@@ -1,5 +1,14 @@
 import { todayAsString } from "./format";
-import { array, object, string, constant, record } from "./lib/validation";
+import {
+  array,
+  object,
+  string,
+  constant,
+  record,
+  unknown,
+  union,
+  Validator,
+} from "./lib/validation";
 
 export interface Posting {
   account: string;
@@ -30,7 +39,7 @@ abstract class EntryBase {
 
   date: string;
 
-  meta: Record<string, string>;
+  meta: Record<string, unknown>;
 
   constructor(type: EntryTypeName) {
     this.type = type;
@@ -42,7 +51,7 @@ abstract class EntryBase {
 const validatorBase = {
   type: string,
   date: string,
-  meta: record(string),
+  meta: record(unknown),
 };
 
 export class Balance extends EntryBase {
@@ -58,6 +67,13 @@ export class Balance extends EntryBase {
       currency: "",
     };
   }
+
+  static validator = object({
+    ...validatorBase,
+    type: constant("Balance"),
+    account: string,
+    amount: object({ number: string, currency: string }),
+  });
 }
 
 export class Note extends EntryBase {
@@ -70,6 +86,13 @@ export class Note extends EntryBase {
     this.account = "";
     this.comment = "";
   }
+
+  static validator = object({
+    ...validatorBase,
+    type: constant("Note"),
+    account: string,
+    comment: string,
+  });
 }
 
 export class Transaction extends EntryBase {
@@ -112,6 +135,11 @@ export class Transaction extends EntryBase {
 }
 
 export type Entry = Balance | Note | Transaction;
+
+export const entryValidator: Validator<Entry> = union(
+  union(Balance.validator, Note.validator),
+  Transaction.validator
+);
 
 const constructors = {
   Balance,

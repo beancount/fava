@@ -1,5 +1,5 @@
 <script>
-  import { fetchAPI } from "../helpers";
+  import { get } from "../api";
   import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
@@ -7,7 +7,7 @@
 
   $: shown = $urlHash.startsWith("context");
   $: entry_hash = shown ? $urlHash.slice(8) : "";
-  $: content = !shown ? "" : fetchAPI("context", { entry_hash });
+  $: content = !shown ? null : get("context", { entry_hash });
 </script>
 
 <ModalBase {shown}>

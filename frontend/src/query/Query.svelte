@@ -1,7 +1,7 @@
 <script>
   import { onMount, tick } from "svelte";
 
-  import { fetchAPI } from "../helpers";
+  import { get } from "../api";
   import { query_shell_history, addToHistory } from "../stores/query";
   import { parseQueryChart } from "../charts";
 
@@ -14,7 +14,7 @@
   /** @type {Record<string,HTMLElement>} */
   const resultElems = {};
 
-  /** @typedef {{result?: { table: string, chart: unknown }, error?: unknown}} ResultType
+  /** @typedef {{result?: { table: string, chart: ReturnType<parseQueryChart> }, error?: unknown}} ResultType
   /** @type {Record<string,ResultType>} */
   const query_results = {};
 
@@ -40,10 +40,10 @@
 
   function submit() {
     const query = query_string;
-    fetchAPI("query_result", { query_string: query }).then(
-      (result) => {
-        result.chart = parseQueryChart(result.chart);
-        setResult(query, { result });
+    get("query_result", { query_string: query }).then(
+      (res) => {
+        const chart = parseQueryChart(res.chart);
+        setResult(query, { result: { chart, table: res.table } });
       },
       (error) => {
         setResult(query, { error });
@@ -51,6 +51,9 @@
     );
   }
 
+  /**
+   * @param {string} query
+   */
   function click(query) {
     if (!query_results[query]) {
       query_string = query;

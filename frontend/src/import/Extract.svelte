@@ -1,6 +1,5 @@
 <script>
-  import { saveEntries } from "../api";
-  import { fetchAPI } from "../helpers";
+  import { get, saveEntries } from "../api";
   import { _ } from "../i18n";
   import { urlHash, closeOverlay } from "../stores";
 
@@ -21,6 +20,9 @@
   /** @type {boolean} */
   let shown;
 
+  /**
+   * @param {import("../entries").Entry} e
+   */
   function isDuplicate(e) {
     return !!e.meta.__duplicate__;
   }
@@ -28,9 +30,9 @@
   $: shown = $urlHash.startsWith("extract");
   $: if (shown) {
     const params = new URLSearchParams($urlHash.slice(8));
-    const filename = params.get("filename");
-    const importer = params.get("importer");
-    fetchAPI("extract", { filename, importer }).then((data) => {
+    const filename = params.get("filename") || "";
+    const importer = params.get("importer") || "";
+    get("extract", { filename, importer }).then((data) => {
       entries = data;
     });
   }

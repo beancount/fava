@@ -1,7 +1,7 @@
 <script>
   import { _ } from "../i18n";
 
-  /** @type {Record<string,string>} */
+  /** @type {Record<string,unknown>} */
   export let meta;
 
   $: metakeys = Object.keys(meta).filter(
@@ -22,7 +22,7 @@
    */
   function updateMetakey(currentKey, newKey) {
     meta = Object.keys(meta).reduce((
-      /** @type {Record<string,string>} */ m,
+      /** @type {Record<string,unknown>} */ m,
       key
     ) => {
       if (key === currentKey) {

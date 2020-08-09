@@ -10,7 +10,6 @@ import {
   constant,
 } from "../lib/validation";
 import { derived_array } from "../lib/store";
-import { fetchAPI } from "../helpers";
 
 import { baseURL } from "./url";
 
@@ -37,7 +36,6 @@ export const favaAPIValidator = object({
   incognito: boolean,
   links: array(string),
   options: object({
-    commodities: array(string),
     documents: array(string),
     operating_currency: array(string),
   }),
@@ -67,7 +65,6 @@ export const favaAPI: FavaAPI = {
   pageTitle: "",
   payees: [],
   options: {
-    commodities: [],
     documents: [],
     operating_currency: [],
   },
@@ -104,11 +101,6 @@ export const currencies_sorted = derived_array(currencies, (val) =>
 
 /** The number of Beancount errors. */
 export const errorCount = writable(0);
-
-export async function fetchErrorCount(): Promise<void> {
-  const errors = await fetchAPI("errors");
-  errorCount.set(number(errors));
-}
 
 favaAPIStore.subscribe((val) => {
   Object.assign(favaAPI, val);

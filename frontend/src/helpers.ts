@@ -39,20 +39,3 @@ export function urlFor(
 export function accountUrl(account: string): string {
   return new URL(urlFor(`account/${account}`), window.location.href).toString();
 }
-
-const validateAPIResponse = object({ data: unknown });
-
-/**
- * Fetch an API endpoint and convert the JSON data to an object.
- * @param endpoint - the endpoint to fetch
- * @param params - a string to append as params or an object.
- */
-export async function fetchAPI(
-  endpoint: string,
-  params?: Record<string, string>
-): Promise<unknown> {
-  const url = urlFor(`api/${endpoint}`, params, false);
-  const responseData = await fetch(url);
-  const json = await handleJSON(responseData);
-  return validateAPIResponse(json).data;
-}

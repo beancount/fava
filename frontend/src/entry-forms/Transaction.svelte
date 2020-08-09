@@ -1,6 +1,6 @@
 <script>
   import { emptyPosting, Transaction } from "../entries";
-  import { fetchAPI } from "../helpers";
+  import { get } from "../api";
   import { _ } from "../i18n";
   import { payees } from "../stores";
 
@@ -29,7 +29,7 @@
   $: if (payee) {
     suggestions = undefined;
     if ($payees.includes(payee)) {
-      fetchAPI("payee_accounts", { payee }).then((s) => {
+      get("payee_accounts", { payee }).then((s) => {
         suggestions = s;
       });
     }
@@ -40,7 +40,7 @@
     if (entry.narration || !entry.postings.every((p) => !p.account)) {
       return;
     }
-    const data = await fetchAPI("payee_transaction", { payee: entry.payee });
+    const data = await get("payee_transaction", { payee: entry.payee });
     entry = Object.assign(new Transaction(), data, { date: entry.date });
   }
 

@@ -122,8 +122,8 @@ def query_result():
     table = table(contents, types, rows)
     if types and g.ledger.charts.can_plot_query(types):
         return {
-            "table": table,
             "chart": g.ledger.charts.query(types, rows),
+            "table": table,
         }
     return {"table": table}
 

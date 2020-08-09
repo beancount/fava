@@ -1,11 +1,11 @@
 <script>
   import { onMount } from "svelte";
 
-  import { put } from "../api";
+  import { put, get } from "../api";
   import { keys } from "../keyboard-shortcuts";
   import { notify } from "../notifications";
   import router from "../router";
-  import { fetchErrorCount } from "../stores";
+  import { errorCount } from "../stores";
   import { CodeMirror, sourceEditorOptions, initSourceEditor } from "../editor";
 
   import EditorMenu from "./EditorMenu.svelte";
@@ -43,7 +43,7 @@
       changed = false;
       editor.focus();
       editor.getDoc().markClean();
-      fetchErrorCount();
+      errorCount.set(await get("errors"));
     } catch (error) {
       notify(error, "error");
     } finally {

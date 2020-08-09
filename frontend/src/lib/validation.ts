@@ -5,6 +5,7 @@
  * an API, is of a specified type.
  */
 
+/** A validation error. */
 class ValidationError extends Error {}
 
 /**

@@ -249,7 +249,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
 };
 
 export type NamedChartTypes = ChartTypes & {
-  name: string;
+  name?: string;
 };
 
 export function parseChartData(): NamedChartTypes[] {
