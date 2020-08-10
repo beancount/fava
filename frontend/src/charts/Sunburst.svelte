@@ -55,6 +55,15 @@
   .half {
     opacity: 0.5;
   }
+  .account {
+    fill: var(--color-text);
+  }
+  .balance {
+    font-family: var(--font-family-monospaced);
+  }
+  path {
+    cursor: pointer;
+  }
 </style>
 
 <g

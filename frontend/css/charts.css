@@ -59,62 +59,6 @@ svg .axis.y path.domain {
   opacity: 0.2;
 }
 
-svg.scatterplot > g,
-svg.linechart > g {
-  pointer-events: all;
-}
-
-svg.treemap {
-  shape-rendering: crispEdges;
-}
-
-svg.treemap rect {
-  stroke: var(--color-treemap-text);
-  stroke-width: 2px;
-}
-
-svg.treemap text {
-  cursor: pointer;
-}
-
-svg.sunburst .account {
-  fill: var(--color-text);
-}
-
-svg.sunburst .balance {
-  font-family: var(--font-family-monospaced);
-}
-
-svg.sunburst path {
-  cursor: pointer;
-}
-
-svg.barchart .axis-group-box {
-  cursor: pointer;
-  opacity: 0;
-}
-
-svg.barchart .group-box {
-  opacity: 0;
-}
-
-svg.barchart .group:hover .group-box {
-  opacity: 0.1;
-}
-
-svg.barchart .budget {
-  opacity: 0.3;
-}
-
-svg.linechart .lines path {
-  fill: none;
-  stroke-width: 2px;
-}
-
-svg.linechart .area path {
-  opacity: 0.3;
-}
-
 .tooltip {
   position: absolute;
   z-index: var(--z-index-floating-ui);

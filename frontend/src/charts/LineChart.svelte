@@ -87,7 +87,20 @@
   }
 </script>
 
-<svg class="linechart" {width} {height}>
+<style>
+  svg > g {
+    pointer-events: all;
+  }
+  .lines path {
+    fill: none;
+    stroke-width: 2px;
+  }
+  .area path {
+    opacity: 0.3;
+  }
+</style>
+
+<svg {width} {height}>
   <g
     use:positionedTooltip={tooltipInfo}
     transform={`translate(${margin.left},${margin.top})`}>

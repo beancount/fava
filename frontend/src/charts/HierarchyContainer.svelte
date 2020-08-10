@@ -23,7 +23,7 @@
 {:else if $chartMode === 'treemap' && data[currency]}
   <Treemap data={data[currency]} {currency} {width} />
 {:else if $chartMode === 'sunburst'}
-  <svg class="sunburst" {width} height={500}>
+  <svg {width} height={500}>
     {#each currencies as currency, i (currency)}
       <g transform={`translate(${(width * i) / currencies.length},0)`}>
         <Sunburst

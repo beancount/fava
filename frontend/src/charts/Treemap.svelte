@@ -57,7 +57,22 @@
   }
 </script>
 
-<svg class="treemap" {width} {height}>
+<style>
+  svg {
+    shape-rendering: crispEdges;
+  }
+
+  rect {
+    stroke: var(--color-treemap-text);
+    stroke-width: 2px;
+  }
+
+  text {
+    cursor: pointer;
+  }
+</style>
+
+<svg {width} {height}>
   {#each leaves as d}
     <g
       transform={`translate(${d.x0},${d.y0})`}

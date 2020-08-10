@@ -66,7 +66,13 @@
   }
 </script>
 
-<svg class="scatterplot" {width} {height}>
+<style>
+  svg > g {
+    pointer-events: all;
+  }
+</style>
+
+<svg {width} {height}>
   <g
     use:positionedTooltip={tooltipInfo}
     transform={`translate(${margin.left},${margin.top})`}>

@@ -72,51 +72,65 @@
   $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat(formatCurrencyShort);
 </script>
 
-<svg class="barchart" {width} {height}>
+<style>
+  .axis-group-box {
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  .group-box {
+    opacity: 0;
+  }
+
+  .group:hover .group-box {
+    opacity: 0.1;
+  }
+
+  .budget {
+    opacity: 0.3;
+  }
+</style>
+
+<svg {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
     <g
       class="x axis"
       use:axis={xAxis}
       transform={`translate(0,${innerHeight})`} />
     <g class="y axis" use:axis={yAxis} />
-    <g>
-      {#each data as group}
-        <g
-          class="group"
-          use:followingTooltip={() => tooltipText(group)}
-          transform={`translate(${x0(group.label)},0)`}>
+    {#each data as group}
+      <g
+        class="group"
+        use:followingTooltip={() => tooltipText(group)}
+        transform={`translate(${x0(group.label)},0)`}>
+        <rect
+          class="group-box"
+          x={(x0.bandwidth() - x0.step()) / 2}
+          width={x0.step()}
+          height={innerHeight} />
+        <rect
+          class="axis-group-box"
+          on:click={() => {
+            setTimeFilter(group.date);
+          }}
+          transform={`translate(0,${innerHeight})`}
+          width={x0.bandwidth()}
+          height={margin.bottom} />
+        {#each group.values as bar}
           <rect
-            class="group-box"
-            x={(x0.bandwidth() - x0.step()) / 2}
-            width={x0.step()}
-            height={innerHeight} />
+            fill={$currenciesScale(bar.name)}
+            width={x1.bandwidth()}
+            x={x1(bar.name)}
+            y={y(Math.max(0, bar.value))}
+            height={Math.abs(y(bar.value) - y(0))} />
           <rect
-            class="axis-group-box"
-            on:click={() => {
-              setTimeFilter(group.date);
-            }}
-            transform={`translate(0,${innerHeight})`}
-            width={x0.bandwidth()}
-            height={margin.bottom} />
-          {#each group.values as bar}
-            <rect
-              class="bar"
-              fill={$currenciesScale(bar.name)}
-              width={x1.bandwidth()}
-              x={x1(bar.name)}
-              y={y(Math.max(0, bar.value))}
-              height={Math.abs(y(bar.value) - y(0))} />
-          {/each}
-          {#each group.values as bar}
-            <rect
-              class="budget"
-              width={x1.bandwidth()}
-              x={x1(bar.name)}
-              y={y(Math.max(0, bar.budget))}
-              height={Math.abs(y(bar.budget) - y(0))} />
-          {/each}
-        </g>
-      {/each}
-    </g>
+            class="budget"
+            width={x1.bandwidth()}
+            x={x1(bar.name)}
+            y={y(Math.max(0, bar.budget))}
+            height={Math.abs(y(bar.budget) - y(0))} />
+        {/each}
+      </g>
+    {/each}
   </g>
 </svg>
