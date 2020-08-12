@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
 
   import { put, get } from "../api";
-  import { keys } from "../keyboard-shortcuts";
+  import { bindKey } from "../keyboard-shortcuts";
   import { notify } from "../notifications";
   import router from "../router";
   import { errorCount } from "../stores";
@@ -64,28 +64,24 @@
     file_path = data.file_path;
     sources = data.sources;
 
-    /** @type {(() => void)[]} */
-    const unbind = [];
     // keybindings when the focus is outside the editor
-    ["Control+s", "Meta+s"].forEach((key) => {
-      unbind.push(
-        keys.bind(key, (event) => {
+    const unbind = [
+      ...["Control+s", "Meta+s"].map((key) =>
+        bindKey(key, (event) => {
           event.preventDefault();
           save();
         })
-      );
-    });
-
-    ["Control+d", "Meta+d"].forEach((key) => {
-      unbind.push(
-        keys.bind(key, (event) => {
+      ),
+      ...["Control+d", "Meta+d"].map((key) =>
+        bindKey(key, (event) => {
           event.preventDefault();
           if (editor) {
             editor.execCommand("favaFormat");
           }
         })
-      );
-    });
+      ),
+    ];
+
     router.interruptHandlers.add(checkEditorChanges);
 
     return () => {

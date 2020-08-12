@@ -1,6 +1,6 @@
 <script>
   import { moveDocument } from "../api";
-  import { favaAPI } from "../stores";
+  import { baseURL } from "../stores/url";
   import { _ } from "../i18n";
   import router from "../router";
 
@@ -111,7 +111,7 @@
     {#if selected}
       <object
         title={selected.filename}
-        data={`${favaAPI.baseURL}document/?filename=${selected.filename}`}
+        data={`${$baseURL}document/?filename=${selected.filename}`}
         style="width:100%;height:100%" />
     {/if}
   </div>

@@ -135,6 +135,7 @@ export function enableAutomaticCompletions(editor: Editor): void {
     }
   });
 }
+
 /**
  * Scroll to center the cursor in the middle of the editor.
  */
@@ -182,13 +183,9 @@ export class BeancountTextarea extends HTMLTextAreaElement {
 export function sourceEditorOptions(
   save: () => void
 ): CodeMirror.EditorConfiguration {
-  const rulers = favaAPI.favaOptions["currency-column"]
-    ? [
-        {
-          column: favaAPI.favaOptions["currency-column"] - 1,
-          lineStyle: "dotted",
-        },
-      ]
+  const currencyColumn = favaAPI.favaOptions["currency-column"];
+  const rulers = currencyColumn
+    ? [{ column: currencyColumn - 1, lineStyle: "dotted" }]
     : undefined;
   return {
     mode: "beancount",

@@ -3,6 +3,8 @@ import { closeOverlay } from "./stores";
 
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
+ * @param target - The target element to show the tooltip on.
+ * @returns A function to remove event handler.
  */
 function showTooltip(target: HTMLElement): () => void {
   const tooltip = document.createElement("div");
@@ -45,6 +47,9 @@ function showTooltips(): () => void {
 
 /**
  * Ignore events originating from editable elements.
+ * @param element - The element to check.
+ * @returns true if the element is one of input/select/textarea or a
+ *          contentEditable element.
  */
 function isEditableElement(element: EventTarget | null): boolean {
   return (
@@ -98,8 +103,14 @@ document.addEventListener("keydown", keydown);
 
 /**
  * Bind an event handler to a key.
+ * @param key - The key to bind.
+ * @param handler - The callback to run on key press.
+ * @returns A function to unbind the keyboard handler.
  */
-function bind(key: string, handler: KeyboardEventHandler): () => void {
+export function bindKey(
+  key: string,
+  handler: KeyboardEventHandler
+): () => void {
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     // eslint-disable-next-line no-console
@@ -114,15 +125,6 @@ function bind(key: string, handler: KeyboardEventHandler): () => void {
     keyboardShortcuts.delete(key);
   };
 }
-
-function unbind(key: string): void {
-  keyboardShortcuts.delete(key);
-}
-
-export const keys = {
-  bind,
-  unbind,
-};
 
 /**
  * A svelte action to attach a global keyboard shortcut.
@@ -139,7 +141,7 @@ export function keyboardShortcut(
     return {};
   }
   node.setAttribute("data-key", key);
-  bind(key, (event) => {
+  const destroy = bindKey(key, (event) => {
     if (node instanceof HTMLInputElement) {
       event.preventDefault();
       node.focus();
@@ -148,11 +150,7 @@ export function keyboardShortcut(
     }
   });
 
-  return {
-    destroy(): void {
-      unbind(key);
-    },
-  };
+  return { destroy };
 }
 
 export function initCurrentKeyboardShortcuts(): () => void {
@@ -161,7 +159,7 @@ export function initCurrentKeyboardShortcuts(): () => void {
     const key = element.getAttribute("data-key");
     if (key !== null && !keyboardShortcuts.has(key)) {
       currentShortcuts.push(
-        bind(key, () => {
+        bindKey(key, () => {
           if (
             element instanceof HTMLButtonElement ||
             element instanceof HTMLAnchorElement
@@ -183,11 +181,11 @@ export function initCurrentKeyboardShortcuts(): () => void {
 }
 
 export function initGlobalKeyboardShortcuts(): void {
-  bind("?", () => {
+  bindKey("?", () => {
     const hide = showTooltips();
     once(document, "mousedown", hide);
     once(document, "keydown", hide);
   });
 
-  bind("Escape", closeOverlay);
+  bindKey("Escape", closeOverlay);
 }

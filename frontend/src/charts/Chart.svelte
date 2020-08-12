@@ -29,10 +29,13 @@
    */
   let width;
 
+  /** @type {import("svelte/store").Writable<string[]>} */
   const currencies = writable([]);
+  setContext("chart-currencies", currencies);
+
+  /** @type {import("svelte/store").Writable<[string,string][]>} */
   const legend = writable([]);
   setContext("chart-legend", legend);
-  setContext("chart-currencies", currencies);
 
   $: if (chart) {
     // Reset the chart legend on chart change.

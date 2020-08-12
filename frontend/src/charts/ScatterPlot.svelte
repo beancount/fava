@@ -47,6 +47,7 @@
     (d) => x(d.date),
     (d) => y(d.type) || 0
   );
+
   /**
    * @param {import('.').ScatterPlotDatum} d
    * @returns {string}

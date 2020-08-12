@@ -15,7 +15,7 @@ favaAPIStore.subscribe((favaAPI) => {
   const { locale } = favaAPI.favaOptions;
   formatter = locale
     ? new Intl.NumberFormat(locale.replace("_", "-")).format
-    : (formatter = format(".2f"));
+    : format(".2f");
   incognito = favaAPI.incognito
     ? (num: string): string => num.replace(/[0-9]/g, "X")
     : (num: string): string => num;

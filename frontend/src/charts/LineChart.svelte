@@ -29,6 +29,7 @@
   $: innerWidth = width - margin.left - margin.right;
   $: innerHeight = height - margin.top - margin.bottom;
 
+  /** @type {import("svelte/store").Writable<[string,string][]>} */
   const legend = getContext("chart-legend");
   $: legend.set(
     data

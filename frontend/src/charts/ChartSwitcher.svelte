@@ -1,7 +1,7 @@
 <script>
-  import { onDestroy, onMount } from "svelte";
+  import { onMount } from "svelte";
 
-  import { keys } from "../keyboard-shortcuts";
+  import { bindKey } from "../keyboard-shortcuts";
   import { parseChartData } from ".";
   import { activeChart, showCharts } from "../stores/chart";
 
@@ -18,19 +18,23 @@
     }
     $activeChart =
       charts.find((c) => c.name === ($activeChart || {}).name) || charts[0];
-    keys.bind("c", () => {
-      const currentIndex = charts.findIndex((e) => e === $activeChart);
-      $activeChart = charts[(currentIndex + 1 + charts.length) % charts.length];
-    });
-    keys.bind("C", () => {
-      const currentIndex = charts.findIndex((e) => e === $activeChart);
-      $activeChart = charts[(currentIndex - 1 + charts.length) % charts.length];
-    });
-  });
 
-  onDestroy(() => {
-    keys.unbind("c");
-    keys.unbind("C");
+    const unbind = [
+      bindKey("c", () => {
+        const currentIndex = charts.findIndex((e) => e === $activeChart);
+        $activeChart =
+          charts[(currentIndex + 1 + charts.length) % charts.length];
+      }),
+      bindKey("C", () => {
+        const currentIndex = charts.findIndex((e) => e === $activeChart);
+        $activeChart =
+          charts[(currentIndex - 1 + charts.length) % charts.length];
+      }),
+    ];
+
+    return () => {
+      unbind.forEach((u) => u());
+    };
   });
 </script>
 

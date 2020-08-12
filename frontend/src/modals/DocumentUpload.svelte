@@ -3,7 +3,7 @@
   import { notify } from "../notifications";
   import { put } from "../api";
   import { _ } from "../i18n";
-  import { favaAPI } from "../stores";
+  import { favaAPIStore } from "../stores";
   import { account, hash, files } from "../document-upload";
 
   import ModalBase from "./ModalBase.svelte";
@@ -13,6 +13,7 @@
   let form;
 
   $: shown = !!$files.length;
+  $: documents = $favaAPIStore.options.documents;
 
   async function submit() {
     await Promise.all(
@@ -54,7 +55,7 @@
       <label>
         {_('Documents folder')}:
         <select name="folder">
-          {#each favaAPI.options.documents as folder}
+          {#each documents as folder}
             <option>{folder}</option>
           {/each}
         </select>

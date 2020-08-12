@@ -44,6 +44,7 @@
     .range([innerHeight, 0])
     .domain([Math.min(0, yMin), Math.max(0, yMax)]);
 
+  /** @type {import("svelte/store").Writable<[string,string][]>} */
   const legend = getContext("chart-legend");
   $: legend.set(
     x1

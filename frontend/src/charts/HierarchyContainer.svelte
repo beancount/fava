@@ -5,7 +5,9 @@
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
 
+  /** @type {import("svelte/store").Writable<string[]>} */
   const context = getContext("chart-currencies");
+
   /** @type {Record<string, import(".").AccountHierarchyNode>} */
   export let data;
   /** @type {number} */

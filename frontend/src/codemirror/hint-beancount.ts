@@ -1,7 +1,7 @@
 import CodeMirror, { Editor } from "codemirror";
 
 import { fuzzyMatch, getCurrentWord } from "./helpers";
-import { favaAPI } from "../stores";
+import { getCompletion } from "../stores";
 
 const completionSources = {
   undatedDirectives: ["option", "plugin", "include"],
@@ -43,7 +43,8 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
 
   // If '#' or '^' has just been typed, there won't be a tag or link token yet
   if (currentCharacter === "#" || currentCharacter === "^") {
-    const list = currentCharacter === "#" ? favaAPI.tags : favaAPI.links;
+    const list =
+      currentCharacter === "#" ? getCompletion("tags") : getCompletion("links");
     return {
       list,
       from: cursor,
@@ -52,7 +53,8 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
   }
 
   if (token.type === "tag" || token.type === "link") {
-    const list = token.type === "tag" ? favaAPI.tags : favaAPI.links;
+    const list =
+      token.type === "tag" ? getCompletion("tags") : getCompletion("links");
     return {
       list: list.filter((d) => d.startsWith(currentWord.slice(1))),
       from: new CodeMirror.Pos(cursor.line, token.start + 1),
@@ -80,7 +82,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
     // complete accounts for indented lines
     if (lineTokens[0].type === "whitespace") {
       if (previousTokens.length === 1) {
-        return fuzzyMatch(cursor, currentWord, favaAPI.accounts);
+        return fuzzyMatch(cursor, currentWord, getCompletion("accounts"));
       }
     }
 
@@ -105,7 +107,7 @@ CodeMirror.registerHelper("hint", "beancount", (cm: Editor) => {
           const complType =
             directiveCompletions[directiveType][tokenLength / 2 - 2];
           if (complType) {
-            return fuzzyMatch(cursor, currentWord, favaAPI[complType]);
+            return fuzzyMatch(cursor, currentWord, getCompletion(complType));
           }
         }
       }
