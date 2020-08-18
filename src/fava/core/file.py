@@ -13,6 +13,7 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 from collections import namedtuple
+from itertools import groupby
 import os.path
 
 from beancount.core import flags
@@ -79,12 +80,11 @@ def shorten_folder(folder: FolderNode) -> FolderNode:
         return shorten_folder(
             FolderNode(new_name, subfolder.subfolders, subfolder.subfiles)
         )
-    else:
-        return FolderNode(
-            folder.name,
-            [shorten_folder(subfolder) for subfolder in folder.subfolders],
-            folder.subfiles,
-        )
+    return FolderNode(
+        folder.name,
+        [shorten_folder(subfolder) for subfolder in folder.subfolders],
+        folder.subfiles,
+    )
 
 
 def merge_folder(folders: List[FolderNode]) -> List[FolderNode]:
@@ -102,8 +102,6 @@ def merge_folder(folders: List[FolderNode]) -> List[FolderNode]:
             ),
             [subfile for g in folders for subfile in g.subfiles],
         )
-
-    from itertools import groupby
 
     folders = sorted(folders, key=lambda folder: folder.name)
     return [
