@@ -2,10 +2,12 @@
   import { createEventDispatcher } from "svelte";
 
   import { _ } from "../i18n";
-  import { urlFor } from "../helpers";
+  import Folder from "./Folder.svelte";
 
   /** @type {string[]} */
   export let sources;
+  /** @type {object[]} */
+  export let source_tree;
   /** @type {string} */
   export let file_path;
 
@@ -27,10 +29,6 @@
     display: flex;
     height: 100%;
     margin: 0;
-  }
-
-  .dropdown .selected::before {
-    content: "›";
   }
 
   .dropdown > li {
@@ -76,10 +74,8 @@
     <li>
       {_('File')}&nbsp;▾
       <ul>
-        {#each sources as source}
-          <li class:selected={source === file_path}>
-            <a href={urlFor('editor', { file_path: source })}>{source}</a>
-          </li>
+        {#each source_tree as folder}
+          <Folder {folder} {file_path} expanded />
         {/each}
       </ul>
     </li>

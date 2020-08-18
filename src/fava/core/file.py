@@ -12,6 +12,8 @@ from typing import Generator
 from typing import List
 from typing import Optional
 from typing import Tuple
+from collections import namedtuple
+import os.path
 
 from beancount.core import flags
 from beancount.core.data import Balance
@@ -47,6 +49,63 @@ def sha256_str(val: str) -> str:
     return sha256(encode(val, encoding="utf-8")).hexdigest()
 
 
+FileNode = namedtuple('FileNode', ['name', 'path'])
+FolderNode = namedtuple('FolderNode', ['name', 'subfolders', 'subfiles'])
+
+
+def dummy_folder(path: str) -> FolderNode:
+    """Transform a file path into a FolderNode by fully split the path."""
+    folder_path, name = os.path.split(path)
+    last_node = FileNode(name, path)
+    last_folder_path = folder_path
+    while True:
+        folder_path, name = os.path.split(folder_path)
+        if isinstance(last_node, FolderNode):
+            last_node = FolderNode(name, [last_node], [])
+        else:
+            last_node = FolderNode(name, [], [last_node])
+        if folder_path != last_folder_path:
+            last_folder_path = folder_path
+        else:
+            break
+    return last_node
+
+
+def shorten_folder(folder: FolderNode) -> FolderNode:
+    """"Flatten the nested folder when possible."""
+    if len(folder.subfiles) == 0 and len(folder.subfolders) == 1:
+        subfolder = folder.subfolders[0]
+        new_name = os.path.join(folder.name, subfolder.name)
+        return shorten_folder(
+            FolderNode(new_name, subfolder.subfolders, subfolder.subfiles))
+    else:
+        return FolderNode(
+            folder.name,
+            [shorten_folder(subfolder)
+             for subfolder in folder.subfolders], folder.subfiles)
+
+
+def merge_folder(folders: List[FolderNode]) -> List[FolderNode]:
+    """"Merge folders."""
+    def merge_same_name_folder(name: str,
+                               folders: List[FolderNode]) -> FolderNode:
+        if len(folders) == 1:
+            return folders[0]
+        return FolderNode(
+            name,
+            merge_folder(
+                [subfolder for g in folders for subfolder in g.subfolders]),
+            [subfile for g in folders for subfile in g.subfiles])
+
+    from itertools import groupby
+    folders = sorted(folders, key=lambda folder: folder.name)
+    return [
+        merge_same_name_folder(name, list(group))
+        for name, group in groupby(folders, lambda folder: folder.name)
+    ]
+
+
+
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
 
@@ -66,6 +125,18 @@ class FileModule(FavaModule):
             for file in self.ledger.options["include"]
             if file != main_file
         )
+
+    def source_tree(self) -> List[FolderNode]:
+        """Generate a tree of directories and files.
+
+        Returns:
+            A list of directory tree.
+        """
+        return [
+            shorten_folder(folder) for folder in merge_folder([
+                dummy_folder(path) for path in self.ledger.options["include"]
+            ])
+        ]
 
     def get_source(self, path: str) -> Tuple[str, str]:
         """Get source files.

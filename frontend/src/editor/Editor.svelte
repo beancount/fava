@@ -11,7 +11,7 @@
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
 
-  /** @type {{source: string, file_path: string, sha256sum: string, sources: string[]}} */
+  /** @type {{source: string, file_path: string, sha256sum: string, sources: string[], source_tree: object[]}} */
   export let data;
   /** @type {CodeMirror.Editor | undefined} */
   let editor;
@@ -22,6 +22,8 @@
   let sha256sum = "";
   /** @type {string[]} */
   let sources = [];
+  /** @type {object[]} */
+  let source_tree = [];
 
   let saving = false;
 
@@ -63,6 +65,7 @@
     sha256sum = data.sha256sum;
     file_path = data.file_path;
     sources = data.sources;
+    source_tree = data.source_tree;
 
     // keybindings when the focus is outside the editor
     const unbind = [
@@ -152,7 +155,7 @@
 </style>
 
 <form on:submit|preventDefault={save}>
-  <EditorMenu {file_path} {sources} on:command={command}>
+  <EditorMenu {file_path} {sources} {source_tree} on:command={command}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
   <div use:sourceEditor />
