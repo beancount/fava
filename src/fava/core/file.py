@@ -65,7 +65,7 @@ def dummy_folder(path: str) -> FolderNode:
     while True:
         path, name = os.path.split(path)
         if path == last_path:
-           break
+            break
         folder_node = FolderNode(name, [folder_node], [])
         last_path = path
     return folder_node
