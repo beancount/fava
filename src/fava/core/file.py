@@ -56,19 +56,19 @@ FolderNode = namedtuple('FolderNode', ['name', 'subfolders', 'subfiles'])
 def dummy_folder(path: str) -> FolderNode:
     """Transform a file path into a FolderNode by fully split the path."""
     folder_path, name = os.path.split(path)
-    last_node = FileNode(name, path)
-    last_folder_path = folder_path
+    file_node = FileNode(name, path)
+
+    path, name = os.path.split(folder_path)
+    folder_node = FolderNode(name, [], [file_node])
+
+    last_path = path
     while True:
-        folder_path, name = os.path.split(folder_path)
-        if isinstance(last_node, FolderNode):
-            last_node = FolderNode(name, [last_node], [])
-        else:
-            last_node = FolderNode(name, [], [last_node])
-        if folder_path != last_folder_path:
-            last_folder_path = folder_path
-        else:
-            break
-    return last_node
+        path, name = os.path.split(path)
+        if path == last_path:
+           break
+        folder_node = FolderNode(name, [folder_node], [])
+        last_path = path
+    return folder_node
 
 
 def shorten_folder(folder: FolderNode) -> FolderNode:
