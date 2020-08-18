@@ -47,6 +47,7 @@ function config(input, outputOpts, ...plugins) {
       svelte({ dev }),
       css(),
       typescriptPlugin,
+      sucrase({ exclude: ["node_modules/**"], transforms: [] }),
       copy(fonts),
       ...plugins,
     ],
