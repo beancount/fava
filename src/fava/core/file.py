@@ -49,8 +49,8 @@ def sha256_str(val: str) -> str:
     return sha256(encode(val, encoding="utf-8")).hexdigest()
 
 
-FileNode = namedtuple('FileNode', ['name', 'path'])
-FolderNode = namedtuple('FolderNode', ['name', 'subfolders', 'subfiles'])
+FileNode = namedtuple("FileNode", ["name", "path"])
+FolderNode = namedtuple("FolderNode", ["name", "subfolders", "subfiles"])
 
 
 def dummy_folder(path: str) -> FolderNode:
@@ -77,33 +77,39 @@ def shorten_folder(folder: FolderNode) -> FolderNode:
         subfolder = folder.subfolders[0]
         new_name = os.path.join(folder.name, subfolder.name)
         return shorten_folder(
-            FolderNode(new_name, subfolder.subfolders, subfolder.subfiles))
+            FolderNode(new_name, subfolder.subfolders, subfolder.subfiles)
+        )
     else:
         return FolderNode(
             folder.name,
-            [shorten_folder(subfolder)
-             for subfolder in folder.subfolders], folder.subfiles)
+            [shorten_folder(subfolder) for subfolder in folder.subfolders],
+            folder.subfiles,
+        )
 
 
 def merge_folder(folders: List[FolderNode]) -> List[FolderNode]:
     """"Merge folders."""
-    def merge_same_name_folder(name: str,
-                               folders: List[FolderNode]) -> FolderNode:
+
+    def merge_same_name_folder(
+        name: str, folders: List[FolderNode]
+    ) -> FolderNode:
         if len(folders) == 1:
             return folders[0]
         return FolderNode(
             name,
             merge_folder(
-                [subfolder for g in folders for subfolder in g.subfolders]),
-            [subfile for g in folders for subfile in g.subfiles])
+                [subfolder for g in folders for subfolder in g.subfolders]
+            ),
+            [subfile for g in folders for subfile in g.subfiles],
+        )
 
     from itertools import groupby
+
     folders = sorted(folders, key=lambda folder: folder.name)
     return [
         merge_same_name_folder(name, list(group))
         for name, group in groupby(folders, lambda folder: folder.name)
     ]
-
 
 
 class FileModule(FavaModule):
@@ -133,9 +139,10 @@ class FileModule(FavaModule):
             A list of directory tree.
         """
         return [
-            shorten_folder(folder) for folder in merge_folder([
-                dummy_folder(path) for path in self.ledger.options["include"]
-            ])
+            shorten_folder(folder)
+            for folder in merge_folder(
+                [dummy_folder(path) for path in self.ledger.options["include"]]
+            )
         ]
 
     def get_source(self, path: str) -> Tuple[str, str]:
