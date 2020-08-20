@@ -21,6 +21,22 @@ export interface Validator<T> {
 /**
  * Validate as unknown (noop).
  */
+export function defaultValue<T>(
+  validator: Validator<T>,
+  value: T
+): Validator<T> {
+  return (json: unknown): T => {
+    try {
+      return validator(json);
+    } catch (err) {
+      return value;
+    }
+  };
+}
+
+/**
+ * Validate as unknown (noop).
+ */
 export function unknown(json: unknown): unknown {
   return json;
 }
@@ -34,6 +50,9 @@ export function string(json: unknown): string {
   }
   throw new ValidationError(`Expected a string, got '${json}' instead.`);
 }
+
+/** Validate a string and return the empty string on failure. */
+export const optional_string = defaultValue(string, "");
 
 /**
  * Validate a boolean.

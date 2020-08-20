@@ -7,6 +7,7 @@ import {
   number,
   string,
   object,
+  optional_string,
 } from "../src/lib/validation";
 
 test("validate boolean", (t) => {
@@ -43,6 +44,12 @@ test("validate string", (t) => {
   t.assert(string("test") === "test");
   t.throws(() => string({ a: 1 }));
   t.throws(() => string(1));
+});
+
+test("validate optional string", (t) => {
+  t.assert(optional_string(null) === "");
+  t.assert(optional_string({}) === "");
+  t.assert(optional_string("asdf") === "asdf");
 });
 
 test("validate Record<>", (t) => {

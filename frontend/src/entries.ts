@@ -8,6 +8,7 @@ import {
   unknown,
   union,
   Validator,
+  optional_string,
 } from "./lib/validation";
 
 export interface Posting {
@@ -124,8 +125,8 @@ export class Transaction extends EntryBase {
     ...validatorBase,
     type: constant("Transaction"),
     flag: string,
-    payee: string,
-    narration: string,
+    payee: optional_string,
+    narration: optional_string,
     postings: array(postingValidator),
   });
 
