@@ -102,17 +102,18 @@ export function constant<T extends null | boolean | string | number>(
   };
 }
 
+type TupleElement<T extends unknown[]> = T extends (infer E)[] ? E : T;
+
 /**
  * Validate a value that is of one of two given types.
  */
-export function union<A, B>(
-  a: Validator<A>,
-  b: Validator<B>
-): Validator<A | B> {
-  return (json: unknown): A | B => {
-    for (const validator of [a, b]) {
+export function union<T extends unknown[]>(
+  ...args: { [P in keyof T]: Validator<T[P]> }
+): Validator<TupleElement<T>> {
+  return (json: unknown): TupleElement<T> => {
+    for (const validator of args) {
       try {
-        return validator(json);
+        return validator(json) as TupleElement<T>;
       } catch (exc) {
         // pass
       }

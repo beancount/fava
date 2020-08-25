@@ -138,7 +138,8 @@ export class Transaction extends EntryBase {
 export type Entry = Balance | Note | Transaction;
 
 export const entryValidator: Validator<Entry> = union(
-  union(Balance.validator, Note.validator),
+  Balance.validator,
+  Note.validator,
   Transaction.validator
 );
 
