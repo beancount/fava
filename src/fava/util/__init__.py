@@ -7,6 +7,8 @@ import re
 import time
 import unicodedata
 from pathlib import Path
+from typing import Any
+from typing import Dict
 
 from flask import abort
 from flask import send_file
@@ -62,7 +64,21 @@ def pairwise(iterable):
     return zip(left, right)
 
 
-def slugify(string):
+def next_key(basekey: str, keys: Dict[str, Any]) -> str:
+    """Returns the next unused key for basekey in the supplied dictionary.
+
+    The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc
+    until a free one is found.
+    """
+    if basekey not in keys:
+        return basekey
+    i = 2
+    while f"{basekey}-{i}" in keys:
+        i = i + 1
+    return f"{basekey}-{i}"
+
+
+def slugify(string: str) -> str:
     """Slugify a string.
 
     Args:

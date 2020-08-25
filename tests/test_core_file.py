@@ -15,7 +15,6 @@ from fava.core.file import find_entry_lines
 from fava.core.file import get_entry_slice
 from fava.core.file import insert_entry
 from fava.core.file import insert_metadata_in_file
-from fava.core.file import next_key
 from fava.core.file import save_entry_slice
 from fava.helpers import FavaAPIException
 
@@ -57,16 +56,6 @@ def test_save_entry_slice(example_ledger) -> None:
     assert filename.read_text("utf-8") != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
     assert filename.read_text("utf-8") == contents
-
-
-def test_next_key() -> None:
-    assert next_key("statement", {}) == "statement"
-    assert next_key("statement", {"foo": 1}) == "statement"
-    assert next_key("statement", {"foo": 1, "statement": 1}) == "statement-2"
-    assert (
-        next_key("statement", {"statement": 1, "statement-2": 1})
-        == "statement-3"
-    )
 
 
 def test_insert_metadata_in_file(tmp_path) -> None:

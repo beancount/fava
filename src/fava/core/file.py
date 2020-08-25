@@ -6,8 +6,6 @@ from codecs import decode
 from codecs import encode
 from hashlib import sha256
 from operator import attrgetter
-from typing import Any
-from typing import Dict
 from typing import Generator
 from typing import List
 from typing import Optional
@@ -26,6 +24,7 @@ from fava.core.filters import get_entry_accounts
 from fava.core.misc import align
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException
+from fava.util import next_key
 
 
 #: The flags to exclude when rendering entries entries.
@@ -213,20 +212,6 @@ class FileModule(FavaModule):
 def incomplete_sortkey(entry: Directive) -> Tuple[datetime.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
     return (entry.date, SORT_ORDER.get(type(entry), 0))
-
-
-def next_key(basekey: str, keys: Dict[str, Any]) -> str:
-    """Returns the next unused key for basekey in the supplied array.
-
-    The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc
-    until a free one is found.
-    """
-    if basekey not in keys:
-        return basekey
-    i = 2
-    while f"{basekey}-{i}" in keys:
-        i = i + 1
-    return f"{basekey}-{i}"
 
 
 def insert_metadata_in_file(

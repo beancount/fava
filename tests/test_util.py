@@ -1,9 +1,13 @@
 # pylint: disable=missing-docstring
-
 from werkzeug.test import Client
 from werkzeug.wrappers import BaseResponse
 
-from fava.util import simple_wsgi, slugify, pairwise, listify, send_file_inline
+from fava.util import listify
+from fava.util import next_key
+from fava.util import pairwise
+from fava.util import send_file_inline
+from fava.util import simple_wsgi
+from fava.util import slugify
 
 from .conftest import data_file
 
@@ -27,6 +31,16 @@ def test_simple_wsgi():
     resp = client.get("/any_path")
     assert resp.status_code == 200
     assert resp.data == b""
+
+
+def test_next_key() -> None:
+    assert next_key("statement", {}) == "statement"
+    assert next_key("statement", {"foo": 1}) == "statement"
+    assert next_key("statement", {"foo": 1, "statement": 1}) == "statement-2"
+    assert (
+        next_key("statement", {"statement": 1, "statement-2": 1})
+        == "statement-3"
+    )
 
 
 def test_slugify():
