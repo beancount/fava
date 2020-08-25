@@ -463,8 +463,10 @@ class FavaLedger:
                 for entry in self.all_entries
                 if entry_hash == hash_entry(entry)
             )
-        except StopIteration:
-            raise FavaAPIException(f'No entry found for hash "{entry_hash}"')
+        except StopIteration as exc:
+            raise FavaAPIException(
+                f'No entry found for hash "{entry_hash}"'
+            ) from exc
 
     def context(self, entry_hash: str) -> Tuple[Directive, Any, str, str]:
         """Context for an entry.

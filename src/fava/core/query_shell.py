@@ -158,7 +158,7 @@ class QueryShell(BQLShell, FavaModule):
         try:
             statement = self.parser.parse(query_string)
         except ParseError as exception:
-            raise FavaAPIException(str(exception))
+            raise FavaAPIException(str(exception)) from exception
 
         if isinstance(statement, RunCustom):
             name = statement.query_name
@@ -167,8 +167,8 @@ class QueryShell(BQLShell, FavaModule):
                 query = next(
                     (query for query in self.queries if query.name == name)
                 )
-            except StopIteration:
-                raise FavaAPIException(f'Query "{name}" not found.')
+            except StopIteration as exc:
+                raise FavaAPIException(f'Query "{name}" not found.') from exc
             query_string = query.query_string
 
         try:
@@ -179,7 +179,7 @@ class QueryShell(BQLShell, FavaModule):
                 numberify=True,
             )
         except (CompilationError, ParseError) as exception:
-            raise FavaAPIException(str(exception))
+            raise FavaAPIException(str(exception)) from exception
 
         if result_format == "csv":
             data = to_csv(types, rows)

@@ -285,7 +285,7 @@ def add_entries(request_data):
     try:
         entries = [deserialise(entry) for entry in request_data["entries"]]
     except KeyError as error:
-        raise FavaAPIException(f"KeyError: {error}")
+        raise FavaAPIException(f"KeyError: {error}") from error
 
     g.ledger.file.insert_entries(entries)
 
