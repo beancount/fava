@@ -162,12 +162,7 @@ export function initCurrentKeyboardShortcuts(): () => void {
     if (key !== null && !keyboardShortcuts.has(key)) {
       currentShortcuts.push(
         bindKey(key, () => {
-          if (
-            element instanceof HTMLButtonElement ||
-            element instanceof HTMLAnchorElement
-          ) {
-            element.click();
-          } else if (element instanceof HTMLInputElement) {
+          if (element instanceof HTMLInputElement) {
             element.focus();
           } else if (element instanceof HTMLElement) {
             element.click();

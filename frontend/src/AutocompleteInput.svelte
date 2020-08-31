@@ -24,6 +24,8 @@
   export let key = undefined;
   /** @type {((val: string) => string) | undefined} */
   export let checkValidity = undefined;
+  /** @type {boolean} */
+  export let selectFirst = false;
   export let clearButton = false;
 
   /** @type {{suggestion: string, innerHTML: string}[]} */
@@ -52,6 +54,9 @@
     filteredSuggestions =
       filtered.length === 1 && filtered[0].suggestion === val ? [] : filtered;
     index = Math.min(index, filteredSuggestions.length - 1);
+    if (selectFirst && index < 0) {
+      index = 0;
+    }
   }
 
   /**
@@ -60,7 +65,7 @@
   function select(suggestion) {
     value =
       input && valueSelector ? valueSelector(suggestion, input) : suggestion;
-    dispatch("select");
+    dispatch("select", input);
     hidden = true;
   }
 
@@ -106,7 +111,7 @@
   }
 
   ul {
-    position: absolute;
+    position: fixed;
     z-index: var(--z-index-autocomplete);
     overflow-x: hidden;
     overflow-y: auto;

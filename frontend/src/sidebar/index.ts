@@ -3,7 +3,9 @@
  * toggling the sidebar on mobile.
  */
 
-import { errorCount } from "./stores";
+import { SvelteComponent } from "svelte";
+import { errorCount } from "../stores";
+import AccountSelectorSvelte from "./AccountSelector.svelte";
 
 export function updateSidebar(): void {
   document.querySelectorAll("aside a").forEach((el) => {
@@ -16,6 +18,16 @@ export function updateSidebar(): void {
       el.classList.add("selected");
     }
   });
+}
+
+export class AccountSelector extends HTMLLIElement {
+  component: SvelteComponent;
+
+  constructor() {
+    super();
+
+    this.component = new AccountSelectorSvelte({ target: this });
+  }
 }
 
 export class ErrorCount extends HTMLLIElement {

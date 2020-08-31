@@ -40,7 +40,12 @@ import {
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
 import { notify } from "./notifications";
-import { updateSidebar, AsideButton, ErrorCount } from "./sidebar";
+import {
+  updateSidebar,
+  AccountSelector,
+  AsideButton,
+  ErrorCount,
+} from "./sidebar";
 import { SortableTable } from "./sort";
 import { TreeTable } from "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator, errorCount } from "./stores";
@@ -59,6 +64,7 @@ customElements.define("aside-button", AsideButton, { extends: "button" });
 customElements.define("beancount-textarea", BeancountTextarea, {
   extends: "textarea",
 });
+customElements.define("account-selector", AccountSelector, { extends: "li" });
 customElements.define("error-count", ErrorCount, { extends: "li" });
 customElements.define("copyable-span", CopyableSpan, { extends: "span" });
 customElements.define("fava-journal", FavaJournal, { extends: "ol" });
