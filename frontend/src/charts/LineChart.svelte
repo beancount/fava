@@ -68,7 +68,7 @@
   $: areaShape = area()
     .x((d) => x(d.date))
     .y1((d) => y(d.value))
-    .y0(innerHeight);
+    .y0(Math.min(innerHeight, y(0)));
 
   // Axes
   $: xAxis = axisBottom(x).tickSizeOuter(0);
