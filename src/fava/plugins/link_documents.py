@@ -77,7 +77,9 @@ def link_documents(entries: Entries, _) -> Tuple[Entries, List[DocumentError]]:
             if not documents:
                 errors.append(
                     DocumentError(
-                        entry.meta, f"Document not found: '{disk_doc}'", entry,
+                        entry.meta,
+                        f"Document not found: '{disk_doc}'",
+                        entry,
                     )
                 )
                 continue

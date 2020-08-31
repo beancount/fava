@@ -85,7 +85,9 @@ class IngestModule(FavaModule):
         if not path.exists(self.module_path) or path.isdir(self.module_path):
             self.ledger.errors.append(
                 IngestError(
-                    None, f"File does not exist: '{self.module_path}'", None,
+                    None,
+                    f"File does not exist: '{self.module_path}'",
+                    None,
                 )
             )
             return

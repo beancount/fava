@@ -148,7 +148,14 @@ def test_insert_entry_transaction(tmp_path) -> None:
     ]
 
     transaction = Transaction(
-        {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
+        {},
+        date(2016, 1, 1),
+        "*",
+        "new payee",
+        "narr",
+        None,
+        None,
+        postings,
     )
 
     # Test insertion without "insert-entry" options.
@@ -169,13 +176,22 @@ def test_insert_entry_transaction(tmp_path) -> None:
     # transaction dates are ignored.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1), re.compile(".*:Food"), str(samplefile), 1,
+            date(2015, 1, 1),
+            re.compile(".*:Food"),
+            str(samplefile),
+            1,
         ),
         InsertEntryOption(
-            date(2015, 1, 2), re.compile(".*:FOOO"), str(samplefile), 1,
+            date(2015, 1, 2),
+            re.compile(".*:FOOO"),
+            str(samplefile),
+            1,
         ),
         InsertEntryOption(
-            date(2017, 1, 1), re.compile(".*:Food"), str(samplefile), 6,
+            date(2017, 1, 1),
+            re.compile(".*:Food"),
+            str(samplefile),
+            6,
         ),
     ]
     new_options = insert_entry(
@@ -208,10 +224,16 @@ def test_insert_entry_transaction(tmp_path) -> None:
     # the last posting doesn't match.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1), re.compile(".*:Slate"), str(samplefile), 5,
+            date(2015, 1, 1),
+            re.compile(".*:Slate"),
+            str(samplefile),
+            5,
         ),
         InsertEntryOption(
-            date(2015, 1, 2), re.compile(".*:FOOO"), str(samplefile), 1,
+            date(2015, 1, 2),
+            re.compile(".*:FOOO"),
+            str(samplefile),
+            1,
         ),
     ]
     transaction = transaction._replace(narration="narr2")
@@ -242,10 +264,16 @@ def test_insert_entry_transaction(tmp_path) -> None:
     # case several of them match a posting.
     options = [
         InsertEntryOption(
-            date(2015, 1, 1), re.compile(".*:Food"), str(samplefile), 5,
+            date(2015, 1, 1),
+            re.compile(".*:Food"),
+            str(samplefile),
+            5,
         ),
         InsertEntryOption(
-            date(2015, 1, 2), re.compile(".*:Food"), str(samplefile), 1,
+            date(2015, 1, 2),
+            re.compile(".*:Food"),
+            str(samplefile),
+            1,
         ),
     ]
     transaction = transaction._replace(narration="narr3")
@@ -299,7 +327,14 @@ def test_insert_entry_align(tmp_path) -> None:
     ]
 
     transaction = Transaction(
-        {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
+        {},
+        date(2016, 1, 1),
+        "*",
+        "new payee",
+        "narr",
+        None,
+        None,
+        postings,
     )
 
     insert_entry(transaction, str(samplefile), [], 50, 4)
@@ -340,7 +375,14 @@ def test_insert_entry_indent(tmp_path) -> None:
     ]
 
     transaction = Transaction(
-        {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
+        {},
+        date(2016, 1, 1),
+        "*",
+        "new payee",
+        "narr",
+        None,
+        None,
+        postings,
     )
 
     # Test insertion with 2-space indent.
@@ -365,7 +407,14 @@ def test_render_entries(example_ledger: FavaLedger, snapshot) -> None:
         Posting("Expenses:Food", A("10.00 USD"), None, None, None, None),
     ]
     transaction = Transaction(
-        {}, date(2016, 1, 1), "*", "new payee", "narr", None, None, postings,
+        {},
+        date(2016, 1, 1),
+        "*",
+        "new payee",
+        "narr",
+        None,
+        None,
+        postings,
     )
     entries = example_ledger.file.render_entries([entry1, entry2, transaction])
     snapshot("\n".join(entries))

@@ -14,8 +14,7 @@ from fava.template_filters import cost_or_value
 
 
 class PortfolioList(FavaExtensionBase):  # pragma: no cover
-    """Sample Extension Report that just prints out an Portfolio List.
-    """
+    """Sample Extension Report that just prints out an Portfolio List."""
 
     report_title = "Portfolio List"
 

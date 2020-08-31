@@ -166,7 +166,8 @@ def substitute(string: str, fye: Optional[str] = None) -> str:
             if start:
                 quarter = int(((target.month - start.month) % 12) / 3)
                 string = string.replace(
-                    complete_match, f"FY{start.year + 1}-Q{(quarter % 4) + 1}",
+                    complete_match,
+                    f"FY{start.year + 1}-Q{(quarter % 4) + 1}",
                 )
         if interval == "quarter":
             quarter_today = (today.month - 1) // 3 + 1

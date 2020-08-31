@@ -85,7 +85,9 @@ def find_extensions(
 
     if not classes:
         error = FavaExtensionError(
-            None, f'Module "{name}" contains no extensions.', None,
+            None,
+            f'Module "{name}" contains no extensions.',
+            None,
         )
         return (
             [],

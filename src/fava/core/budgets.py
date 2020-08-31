@@ -73,7 +73,9 @@ class BudgetModule(FavaModule):
         return bool(self.budget_entries)
 
 
-def parse_budgets(custom_entries,) -> Tuple[BudgetDict, List[BudgetError]]:
+def parse_budgets(
+    custom_entries,
+) -> Tuple[BudgetDict, List[BudgetError]]:
     """Parse budget directives from custom entries.
 
     Args:
@@ -103,7 +105,9 @@ def parse_budgets(custom_entries,) -> Tuple[BudgetDict, List[BudgetError]]:
             if not interval:
                 errors.append(
                     BudgetError(
-                        entry.meta, "Invalid interval for budget entry", entry,
+                        entry.meta,
+                        "Invalid interval for budget entry",
+                        entry,
                     )
                 )
                 continue
@@ -165,9 +169,10 @@ def calculate_budget(
     for single_day in days_in_daterange(date_from, date_to):
         matches = _matching_budgets(budgets, account_name, single_day)
         for budget in matches.values():
-            currency_dict[budget.currency] += (
-                budget.number
-                / number_of_days_in_period(budget.period, single_day)
+            currency_dict[
+                budget.currency
+            ] += budget.number / number_of_days_in_period(
+                budget.period, single_day
             )
     return currency_dict
 

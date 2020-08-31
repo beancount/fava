@@ -145,7 +145,9 @@ def test_api_format_source(app, test_client) -> None:
     payload = open(path, encoding="utf-8").read()
 
     response = test_client.put(
-        url, data=dumps({"source": payload}), content_type="application/json",
+        url,
+        data=dumps({"source": payload}),
+        content_type="application/json",
     )
     assert_api_success(response, align(payload, 61))
 

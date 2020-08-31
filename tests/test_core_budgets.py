@@ -142,9 +142,12 @@ def test_budgets_children(budgets_doc):
         budgets_doc, "Expenses:Books", date(2017, 1, 1), date(2017, 1, 2)
     )["USD"] == D("12.00")
 
-    assert calculate_budget_children(
-        budgets_doc,
-        "Expenses:Books:Notebooks",
-        date(2017, 1, 1),
-        date(2017, 1, 2),
-    )["USD"] == D("2.00")
+    assert (
+        calculate_budget_children(
+            budgets_doc,
+            "Expenses:Books:Notebooks",
+            date(2017, 1, 1),
+            date(2017, 1, 2),
+        )["USD"]
+        == D("2.00")
+    )
