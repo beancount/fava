@@ -85,8 +85,7 @@
           <input
             type="checkbox"
             checked={duplicate}
-            on:click={toggleDuplicate} />
-          ignore duplicate
+            on:click={toggleDuplicate} /> ignore duplicate
         </label>
       </div>
       <div class:duplicate>
@@ -117,9 +116,7 @@
             }}>
             ⏭
           </button>
-        {:else}
-          <button type="submit">{_('Save')}</button>
-        {/if}
+        {:else}<button type="submit">{_('Save')}</button>{/if}
       </div>
       <hr />
       {#if entry.meta.__source__}

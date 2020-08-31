@@ -84,9 +84,7 @@
         </label>
       </span>
     {/if}
-  {:else}
-    <span class="spacer" />
-  {/if}
+  {:else}<span class="spacer" />{/if}
   <slot />
   <button
     type="button"

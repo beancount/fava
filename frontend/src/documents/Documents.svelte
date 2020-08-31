@@ -89,9 +89,7 @@
     }}>
     <div>
       <h3>{_('Move or rename document')}</h3>
-      <p>
-        <code>{moving.filename}</code>
-      </p>
+      <p><code>{moving.filename}</code></p>
       <p>
         <AccountInput bind:value={moving.account} />
         <input size={40} bind:value={moving.newName} />

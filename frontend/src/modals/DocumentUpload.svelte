@@ -47,14 +47,11 @@
   <form bind:this={form} on:submit|preventDefault={submit}>
     <h3>{_('Upload file(s)')}:</h3>
     {#each $files as file}
-      <div class="fieldset">
-        <input bind:value={file.name} />
-      </div>
+      <div class="fieldset"><input bind:value={file.name} /></div>
     {/each}
     <div class="fieldset">
       <label>
-        {_('Documents folder')}:
-        <select name="folder">
+        {_('Documents folder')}: <select name="folder">
           {#each documents as folder}
             <option>{folder}</option>
           {/each}

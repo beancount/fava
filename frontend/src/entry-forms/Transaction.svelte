@@ -122,9 +122,7 @@
   </div>
   <EntryMetadata bind:meta={entry.meta} />
   <div class="flex-row">
-    <span class="label">
-      <span>{_('Postings')}:</span>
-    </span>
+    <span class="label"> <span>{_('Postings')}:</span> </span>
   </div>
   {#each entry.postings as posting, index}
     <PostingSvelte

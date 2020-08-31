@@ -18,8 +18,5 @@
 </style>
 
 {#each legend as [item, color]}
-  <span>
-    <i style="background-color: {color}" />
-    {item}
-  </span>
+  <span> <i style="background-color: {color}" /> {item} </span>
 {/each}

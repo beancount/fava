@@ -88,23 +88,11 @@
       <ul>
         <li on:click={() => dispatch('command', 'favaFormat')}>
           {_('Align Amounts')}
-          <span>
-            <kbd>Ctrl</kbd>
-            /
-            <kbd>Cmd</kbd>
-            +
-            <kbd>d</kbd>
-          </span>
+          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>d</kbd> </span>
         </li>
         <li on:click={() => dispatch('command', 'favaToggleComment')}>
           {_('Toggle Comment (selection)')}
-          <span>
-            <kbd>Ctrl</kbd>
-            /
-            <kbd>Cmd</kbd>
-            +
-            <kbd>y</kbd>
-          </span>
+          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>y</kbd> </span>
         </li>
         <li on:click={() => dispatch('command', 'unfoldAll')}>
           {_('Open all folds')}
