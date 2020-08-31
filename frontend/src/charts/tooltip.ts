@@ -1,4 +1,6 @@
-import { clientPoint } from "d3-selection";
+// eslint-disable-next-line
+// @ts-ignore
+import { pointer } from "d3-selection";
 
 /**
  * Create tooltip with accompanying hide and destroy functions.
@@ -59,7 +61,8 @@ export function positionedTooltip(
   find: (x: number, y: number) => [number, number, string] | undefined
 ): { destroy: () => void } {
   function mousemove(event: MouseEvent): void {
-    const res = find(...clientPoint(node, event));
+    const [xPointer, yPointer] = pointer(event);
+    const res = find(xPointer, yPointer);
     const matrix = node.getScreenCTM();
     if (res && matrix) {
       const [x, y, content] = res;
