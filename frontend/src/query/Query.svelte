@@ -40,6 +40,9 @@
 
   function submit() {
     const query = query_string;
+    if (!query) {
+      return;
+    }
     get("query_result", { query_string: query }).then(
       (res) => {
         const chart = parseQueryChart(res.chart);

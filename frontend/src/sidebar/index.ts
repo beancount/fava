@@ -3,7 +3,6 @@
  * toggling the sidebar on mobile.
  */
 
-import { SvelteComponent } from "svelte";
 import { errorCount } from "../stores";
 import AccountSelectorSvelte from "./AccountSelector.svelte";
 
@@ -21,12 +20,15 @@ export function updateSidebar(): void {
 }
 
 export class AccountSelector extends HTMLLIElement {
-  component: SvelteComponent;
+  component?: AccountSelectorSvelte;
 
-  constructor() {
-    super();
-
+  connectedCallback(): void {
     this.component = new AccountSelectorSvelte({ target: this });
+  }
+
+  disconnectedCallback(): void {
+    this.component?.$destroy();
+    this.component = undefined;
   }
 }
 
@@ -34,9 +36,9 @@ export class ErrorCount extends HTMLLIElement {
   constructor() {
     super();
 
-    const span = this.querySelector("span");
     errorCount.subscribe((errorCount_val) => {
       this.classList.toggle("hidden", errorCount_val === 0);
+      const span = this.querySelector("span");
       if (span) {
         span.innerHTML = `${errorCount_val}`;
       }

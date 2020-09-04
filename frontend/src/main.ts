@@ -71,37 +71,48 @@ customElements.define("fava-journal", FavaJournal, { extends: "ol" });
 customElements.define("sortable-table", SortableTable, { extends: "table" });
 customElements.define("tree-table", TreeTable, { extends: "ol" });
 
-/**
- * Try to select the given element, load JSON and init Svelte component.
- *
- * On the next page load, the component will be removed.
- */
-function initSvelteComponent(
-  selector: string,
-  SvelteComponent: typeof SvelteComponentDev
-): void {
-  const el = document.querySelector(selector);
-  if (el) {
+const components = new Map([
+  ["charts", ChartSwitcher],
+  ["documents", Documents],
+  ["editor", Editor],
+  ["import", Import],
+  ["query", Query],
+]);
+
+class SvelteCustomElement extends HTMLDivElement {
+  component?: SvelteComponentDev;
+
+  connectedCallback(): void {
+    if (this.component) {
+      return;
+    }
+    const type = this.dataset.component;
+    const Cls = components.get(type || "");
+    if (!Cls) {
+      throw new Error("Invalid component");
+    }
     const props: { data?: unknown } = {};
-    const script = el.querySelector("script");
+    const script = this.querySelector("script");
     if (script && script.type === "application/json") {
       props.data = JSON.parse(script.innerHTML);
     }
-    const component = new SvelteComponent({ target: el, props });
-    router.once("before-page-loaded", () => component.$destroy());
+    this.component = new Cls({ target: this, props });
+  }
+
+  disconnectedCallback(): void {
+    this.component?.$destroy();
+    this.component = undefined;
   }
 }
+customElements.define("svelte-component", SvelteCustomElement, {
+  extends: "div",
+});
 
 const pageTitle = document.querySelector("h1 strong");
 const reloadButton = document.querySelector("#reload-page");
 router.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
-  initSvelteComponent("#svelte-charts", ChartSwitcher);
-  initSvelteComponent("#svelte-documents", Documents);
-  initSvelteComponent("#svelte-editor", Editor);
-  initSvelteComponent("#svelte-import", Import);
-  initSvelteComponent("#svelte-query", Query);
   initCurrentKeyboardShortcuts();
 
   document.title = favaAPI.documentTitle;
