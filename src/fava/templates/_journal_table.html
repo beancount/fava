@@ -77,15 +77,15 @@
 {% autoescape false %}
 <form id="entry-filters" class="flex-row entry-filters">
   {% for type in entry_types %}
-  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
+  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-keyboard-shortcut="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
   {% if type in sub_types.keys() %}
   {% for sub_type in sub_types[type] %}
-  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-key="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in journal_show or type not in journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
+  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-keyboard-shortcut="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in journal_show or type not in journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
   {% endfor %}
   {% endif %}
   {% endfor %}
-  <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
-  <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
+  <button type="button" title="Toggle metadata" data-type="metadata" data-keyboard-shortcut="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
+  <button type="button" title="Toggle postings" data-type="postings" data-keyboard-shortcut="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
 </form>
 <ol is="fava-journal" class="flex-table journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
     <li class="head">

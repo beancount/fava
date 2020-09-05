@@ -20,7 +20,7 @@
       </svg>
       <h1>
         {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-        <button type=button id="reload-page" class="reload-page hidden" data-key="r">&#8635;</button>
+        <button type=button id="reload-page" class="reload-page hidden" data-keyboard-shortcut="r">&#8635;</button>
         {% if config['LEDGERS']|length > 1 %}
         <div class="beancount-files">
           <ul>

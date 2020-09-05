@@ -97,12 +97,12 @@ const reloadButton = document.querySelector("#reload-page");
 router.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
-  router.once("before-page-loaded", initCurrentKeyboardShortcuts());
   initSvelteComponent("#svelte-charts", ChartSwitcher);
   initSvelteComponent("#svelte-documents", Documents);
   initSvelteComponent("#svelte-editor", Editor);
   initSvelteComponent("#svelte-import", Import);
   initSvelteComponent("#svelte-query", Query);
+  initCurrentKeyboardShortcuts();
 
   document.title = favaAPI.documentTitle;
   if (pageTitle) {

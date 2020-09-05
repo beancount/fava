@@ -14,9 +14,7 @@ import { urlSyncedParams } from "./stores/url";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { showCharts } from "./stores/chart";
 
-type RouterEvents = "page-loaded" | "before-page-loaded";
-
-class Router extends Events<RouterEvents> {
+class Router extends Events<"page-loaded"> {
   /** The URL hash. */
   hash: string;
 
@@ -135,7 +133,6 @@ class Router extends Events<RouterEvents> {
       this.updateState();
       const article = document.querySelector("article");
       if (article) {
-        this.trigger("before-page-loaded");
         article.innerHTML = content;
       }
       this.trigger("page-loaded");
