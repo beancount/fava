@@ -68,7 +68,8 @@ Default: `12-31`
 
 The last day of the fiscal (financial or tax) period for accounting purposes in
 `%m-%d` format. Allows for the use of `FY2018`, `FY2018-Q3`, `fiscal_year` and
-`fiscal_quarter` in the time filter.
+`fiscal_quarter` in the time filter, and `FY2018` as the start date, end date,
+or both dates in a date range in the time filter.
 
 Examples are:
 

@@ -13,7 +13,7 @@ from typing import Tuple
 
 from flask_babel import gettext  # type: ignore
 
-IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*\d{4})(.*)")
+IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
 
 # these match dates of the form 'year-month-day'
 # day or month and day may be omitted
@@ -224,7 +224,10 @@ def parse_date(
 
     match = IS_RANGE_RE.match(string)
     if match:
-        return (parse_date(match.group(1))[0], parse_date(match.group(2))[1])
+        return (
+            parse_date(match.group(1), fye)[0],
+            parse_date(match.group(2), fye)[1],
+        )
 
     match = YEAR_RE.match(string)
     if match:
