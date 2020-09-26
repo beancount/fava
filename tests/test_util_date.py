@@ -156,11 +156,17 @@ def test_fiscal_substitute(fye, test_date, string, output):
         ("2014-01-01", "2016-01-01", "2014 to 2015"),
         ("2014-01-01", "2016-01-01", "2014-2015"),
         ("2011-10-01", "2016-01-01", "2011-10 - 2015"),
+        ("2018-07-01", "2020-07-01", "FY2019 - FY2020"),
+        ("2018-07-01", "2021-01-01", "FY2019 - 2020"),
+        ("2010-07-01", "2015-07-01", "FY2011 to FY2015"),
+        ("2011-01-01", "2015-07-01", "2011 to FY2015"),
     ],
 )
 def test_parse_date(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
-    assert parse_date(text) == (start, end)
+    assert parse_date(text, "06-30") == (start, end)
+    if 'FY' not in text:
+        assert parse_date(text, None) == (start, end)
 
 
 @pytest.mark.parametrize(
