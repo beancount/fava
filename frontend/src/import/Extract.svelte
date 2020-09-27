@@ -77,7 +77,11 @@
     {#if entry}
       <div class="flex-row">
         <h3>
-          Entry {currentIndex + 1} of {entries.length} ({entries.length - duplicates}
+          Entry
+          {currentIndex + 1}
+          of
+          {entries.length}
+          ({entries.length - duplicates}
           to import):
         </h3>
         <span class="spacer" />
@@ -85,7 +89,8 @@
           <input
             type="checkbox"
             checked={duplicate}
-            on:click={toggleDuplicate} /> ignore duplicate
+            on:click={toggleDuplicate} />
+          ignore duplicate
         </label>
       </div>
       <div class:duplicate>

@@ -75,6 +75,7 @@
   <ul class="dropdown">
     <li>
       {_('File')}&nbsp;▾
+
       <ul>
         {#each sources as source}
           <li class:selected={source === file_path}>
@@ -85,6 +86,7 @@
     </li>
     <li>
       {_('Edit')}&nbsp;▾
+
       <ul>
         <li on:click={() => dispatch('command', 'favaFormat')}>
           {_('Align Amounts')}
