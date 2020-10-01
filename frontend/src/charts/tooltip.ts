@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-// @ts-ignore
 import { pointer } from "d3-selection";
 
 /**

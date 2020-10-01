@@ -165,7 +165,7 @@ def test_fiscal_substitute(fye, test_date, string, output):
 def test_parse_date(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
     assert parse_date(text, "06-30") == (start, end)
-    if 'FY' not in text:
+    if "FY" not in text:
         assert parse_date(text, None) == (start, end)
 
 
