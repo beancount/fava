@@ -23,7 +23,7 @@ function copyToClipboard(text: string | null): void {
   textarea.remove();
 }
 
-export class CopyableSpan extends HTMLSpanElement {
+export class CopyableText extends HTMLElement {
   constructor() {
     super();
 

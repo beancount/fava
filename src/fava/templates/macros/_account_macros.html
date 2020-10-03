@@ -7,11 +7,11 @@
 {% macro indicator(account) %}
 {% set status=ledger.account_uptodate_status(account) %}
 {% if status %}
-<span is="copyable-span" class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
+<copyable-text class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
 
 Click to copy the balance directives to the clipboard:
 
-{{ balance_directive(account) }}" data-clipboard-text="{{ balance_directive(account) }}"></span>
+{{ balance_directive(account) }}" data-clipboard-text="{{ balance_directive(account) }}"></copyable-text>
 {% endif %}
 {% endmacro %}
 

@@ -32,7 +32,7 @@ import "codemirror/addon/hint/show-hint.css";
 
 import { _ } from "./i18n";
 import router, { initSyncedStoreValues } from "./router";
-import { CopyableSpan } from "./clipboard";
+import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./editor";
 import { FavaJournal } from "./journal";
 import {
@@ -64,9 +64,9 @@ customElements.define("aside-button", AsideButton, { extends: "button" });
 customElements.define("beancount-textarea", BeancountTextarea, {
   extends: "textarea",
 });
-customElements.define("account-selector", AccountSelector, { extends: "li" });
+customElements.define("account-selector", AccountSelector);
 customElements.define("error-count", ErrorCount, { extends: "li" });
-customElements.define("copyable-span", CopyableSpan, { extends: "span" });
+customElements.define("copyable-text", CopyableText);
 customElements.define("fava-journal", FavaJournal, { extends: "ol" });
 customElements.define("sortable-table", SortableTable, { extends: "table" });
 customElements.define("tree-table", TreeTable, { extends: "ol" });

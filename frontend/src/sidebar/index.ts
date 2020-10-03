@@ -19,7 +19,7 @@ export function updateSidebar(): void {
   });
 }
 
-export class AccountSelector extends HTMLLIElement {
+export class AccountSelector extends HTMLElement {
   component?: AccountSelectorSvelte;
 
   connectedCallback(): void {

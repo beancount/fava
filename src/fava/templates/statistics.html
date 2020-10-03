@@ -23,9 +23,9 @@
 
 {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
 <div class="left">
-  <h3>{{ _('Update Activity') }}<span is="copyable-span" class="button right" title="
+  <h3>{{ _('Update Activity') }}<copyable-text class="button right" title="
   {{- _('Click to copy balance directives for accounts (except green ones) to the clipboard.') -}}
-  " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</span></h3>
+  " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</copyable-text></h3>
   <table is="sortable-table" class="statistics-update-activity">
     <thead>
       <tr>

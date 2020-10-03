@@ -30,7 +30,7 @@
     {% endif %}
   </li>
   {% if id == 'query' %}
-  <li is="account-selector"></li>
+  <li><account-selector></account-selector></li>
   {% elif id == 'editor' %}
   <li is="error-count" class="error{{ ' hidden' if not ledger.errors else '' }}">
     <a href="{{ url_for('report', report_name='errors') }}">
