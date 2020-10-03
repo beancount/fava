@@ -39,7 +39,7 @@
     <aside>{% include "_aside.html" %}</aside>
     <article>
       {%- endif %}
-      <div is="svelte-component" data-component="charts"></div>
+      <svelte-component data-component="charts"></svelte-component>
       {% block content %}
       {% if content %}
       {{ content|safe }}

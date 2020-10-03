@@ -79,7 +79,13 @@ const components = new Map([
   ["query", Query],
 ]);
 
-class SvelteCustomElement extends HTMLDivElement {
+/**
+ * A custom element that represents a Svelte component.
+ *
+ * The tag should have a `data-component` attribute with one
+ * of the valid values in the Map above.
+ */
+class SvelteCustomElement extends HTMLElement {
   component?: SvelteComponentDev;
 
   connectedCallback(): void {
@@ -104,9 +110,7 @@ class SvelteCustomElement extends HTMLDivElement {
     this.component = undefined;
   }
 }
-customElements.define("svelte-component", SvelteCustomElement, {
-  extends: "div",
-});
+customElements.define("svelte-component", SvelteCustomElement);
 
 const pageTitle = document.querySelector("h1 strong");
 const reloadButton = document.querySelector("#reload-page");
