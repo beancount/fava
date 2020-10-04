@@ -1,6 +1,8 @@
 # pylint: disable=missing-docstring
 from datetime import date
 from datetime import datetime
+from typing import Optional
+from typing import Tuple
 from unittest import mock
 
 import pytest
@@ -12,6 +14,7 @@ from fava.util.date import interval_ends
 from fava.util.date import month_offset
 from fava.util.date import number_of_days_in_period
 from fava.util.date import parse_date
+from fava.util.date import parse_fye_string
 from fava.util.date import substitute
 
 
@@ -270,3 +273,21 @@ def test_get_fiscal_period(year, quarter, fye, expect_start, expect_end):
     start_date, end_date = get_fiscal_period(year, fye, quarter)
     assert str(start_date) == expect_start
     assert str(end_date) == expect_end
+
+
+@pytest.mark.parametrize(
+    "fye,expected",
+    [
+        ("12-31", (12, 31)),
+        ("06-30", (6, 30)),
+        ("02-28", (2, 28)),
+        ("12-32", None),
+        ("asdfasdf", None),
+        ("02-29", None),
+    ],
+)
+def test_parse_fye_string(
+    fye: str, expected: Optional[Tuple[int, int]]
+) -> None:
+    fye_tuple = parse_fye_string(fye)
+    assert fye_tuple == expected

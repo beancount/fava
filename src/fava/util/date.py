@@ -8,6 +8,7 @@ import datetime
 import enum
 import re
 from typing import Iterator
+from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 
@@ -287,6 +288,25 @@ def month_offset(date: datetime.date, months: int) -> datetime.date:
     year_delta, month = divmod(date.month - 1 + months, 12)
 
     return date.replace(year=date.year + year_delta, month=month + 1)
+
+
+class FiscalYearEnd(NamedTuple):
+    """Month and day that specify the end of the fiscal year."""
+    month: int
+    day: int
+
+
+def parse_fye_string(fye: str) -> Optional[FiscalYearEnd]:
+    """Parse a string option for the fiscal year end.
+
+    Args:
+        fye: The end of the fiscal year to parse.
+    """
+    try:
+        date = datetime.datetime.strptime(f"2001-{fye}", "%Y-%m-%d")
+    except ValueError:
+        return None
+    return FiscalYearEnd(date.month, date.day)
 
 
 def get_fiscal_period(
