@@ -30,9 +30,9 @@
     {% endif %}
   </li>
   {% if id == 'query' %}
-  <li><account-selector></account-selector></li>
+  <li><svelte-component data-component="account-selector"></svelte-component></li>
   {% elif id == 'editor' %}
-  <li is="error-count" class="error{{ ' hidden' if not ledger.errors else '' }}">
+  <li id="error-count" class="error{{ ' hidden' if not ledger.errors else '' }}">
     <a href="{{ url_for('report', report_name='errors') }}">
       {{ _('Errors') }} <span class="bubble">{{ ledger.errors|length }}</span>
     </a>

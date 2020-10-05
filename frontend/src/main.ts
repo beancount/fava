@@ -7,8 +7,6 @@
  * extending normal HTML elements.
  */
 
-import { SvelteComponentDev } from "svelte/internal";
-
 import "../css/style.css";
 import "../css/base.css";
 import "../css/layout.css";
@@ -40,76 +38,24 @@ import {
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
 import { notify } from "./notifications";
-import {
-  updateSidebar,
-  AccountSelector,
-  AsideButton,
-  ErrorCount,
-} from "./sidebar";
+import { updateSidebar, initSidebar } from "./sidebar";
 import { SortableTable } from "./sort";
 import { TreeTable } from "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator, errorCount } from "./stores";
 
-import Editor from "./editor/Editor.svelte";
-import Import from "./import/Import.svelte";
-import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import FilterForm from "./FilterForm.svelte";
-import Documents from "./documents/Documents.svelte";
 import Modals from "./modals/Modals.svelte";
-import Query from "./query/Query.svelte";
 import { getScriptTagJSON } from "./lib/dom";
 import { get } from "./api";
+import { SvelteCustomElement } from "./svelte-custom-elements";
 
-customElements.define("aside-button", AsideButton, { extends: "button" });
 customElements.define("beancount-textarea", BeancountTextarea, {
   extends: "textarea",
 });
-customElements.define("account-selector", AccountSelector);
-customElements.define("error-count", ErrorCount, { extends: "li" });
 customElements.define("copyable-text", CopyableText);
 customElements.define("fava-journal", FavaJournal, { extends: "ol" });
 customElements.define("sortable-table", SortableTable, { extends: "table" });
 customElements.define("tree-table", TreeTable, { extends: "ol" });
-
-const components = new Map([
-  ["charts", ChartSwitcher],
-  ["documents", Documents],
-  ["editor", Editor],
-  ["import", Import],
-  ["query", Query],
-]);
-
-/**
- * A custom element that represents a Svelte component.
- *
- * The tag should have a `data-component` attribute with one
- * of the valid values in the Map above.
- */
-class SvelteCustomElement extends HTMLElement {
-  component?: SvelteComponentDev;
-
-  connectedCallback(): void {
-    if (this.component) {
-      return;
-    }
-    const type = this.dataset.component;
-    const Cls = components.get(type || "");
-    if (!Cls) {
-      throw new Error("Invalid component");
-    }
-    const props: { data?: unknown } = {};
-    const script = this.querySelector("script");
-    if (script && script.type === "application/json") {
-      props.data = JSON.parse(script.innerHTML);
-    }
-    this.component = new Cls({ target: this, props });
-  }
-
-  disconnectedCallback(): void {
-    this.component?.$destroy();
-    this.component = undefined;
-  }
-}
 customElements.define("svelte-component", SvelteCustomElement);
 
 const pageTitle = document.querySelector("h1 strong");
@@ -159,6 +105,7 @@ function init(): void {
     // eslint-disable-next-line no-new
     new FilterForm({ target: header });
   }
+  initSidebar();
   initGlobalKeyboardShortcuts();
   setInterval(doPoll, 5000);
   reloadButton?.addEventListener("click", () => {

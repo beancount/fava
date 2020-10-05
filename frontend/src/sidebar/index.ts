@@ -4,7 +4,6 @@
  */
 
 import { errorCount } from "../stores";
-import AccountSelectorSvelte from "./AccountSelector.svelte";
 
 export function updateSidebar(): void {
   document.querySelectorAll("aside a").forEach((el) => {
@@ -19,40 +18,23 @@ export function updateSidebar(): void {
   });
 }
 
-export class AccountSelector extends HTMLElement {
-  component?: AccountSelectorSvelte;
-
-  connectedCallback(): void {
-    this.component = new AccountSelectorSvelte({ target: this });
-  }
-
-  disconnectedCallback(): void {
-    this.component?.$destroy();
-    this.component = undefined;
-  }
-}
-
-export class ErrorCount extends HTMLLIElement {
-  constructor() {
-    super();
-
+export function initSidebar(): void {
+  const errorCountEl = document.getElementById("error-count");
+  if (errorCountEl instanceof HTMLLIElement) {
     errorCount.subscribe((errorCount_val) => {
-      this.classList.toggle("hidden", errorCount_val === 0);
-      const span = this.querySelector("span");
+      errorCountEl.classList.toggle("hidden", errorCount_val === 0);
+      const span = errorCountEl.querySelector("span");
       if (span) {
         span.innerHTML = `${errorCount_val}`;
       }
     });
   }
-}
 
-export class AsideButton extends HTMLButtonElement {
-  constructor() {
-    super();
-
-    this.addEventListener("click", () => {
+  const asideButton = document.getElementById("aside-button");
+  if (asideButton instanceof HTMLButtonElement) {
+    asideButton.addEventListener("click", () => {
       document.querySelector("aside")?.classList.toggle("active");
-      this.classList.toggle("active");
+      asideButton.classList.toggle("active");
     });
   }
 }
