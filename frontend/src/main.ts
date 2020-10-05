@@ -43,8 +43,6 @@ import { SortableTable } from "./sort";
 import { TreeTable } from "./tree-table";
 import { favaAPI, favaAPIStore, favaAPIValidator, errorCount } from "./stores";
 
-import FilterForm from "./FilterForm.svelte";
-import Modals from "./modals/Modals.svelte";
 import { getScriptTagJSON } from "./lib/dom";
 import { get } from "./api";
 import { SvelteCustomElement } from "./svelte-custom-elements";
@@ -60,6 +58,7 @@ customElements.define("svelte-component", SvelteCustomElement);
 
 const pageTitle = document.querySelector("h1 strong");
 const reloadButton = document.querySelector("#reload-page");
+
 router.on("page-loaded", () => {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
 
@@ -98,13 +97,6 @@ function init(): void {
   favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
   router.init();
   initSyncedStoreValues();
-  // eslint-disable-next-line no-new
-  new Modals({ target: document.body });
-  const header = document.querySelector("header");
-  if (header) {
-    // eslint-disable-next-line no-new
-    new FilterForm({ target: header });
-  }
   initSidebar();
   initGlobalKeyboardShortcuts();
   setInterval(doPoll, 5000);

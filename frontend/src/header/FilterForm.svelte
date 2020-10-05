@@ -1,8 +1,8 @@
 <script>
-  import { _ } from "./i18n";
-  import { accounts, links, tags, years, payees } from "./stores";
-  import { account_filter, time_filter, fql_filter } from "./stores/filters";
-  import AutocompleteInput from "./AutocompleteInput.svelte";
+  import { _ } from "../i18n";
+  import { accounts, links, tags, years, payees } from "../stores";
+  import { account_filter, time_filter, fql_filter } from "../stores/filters";
+  import AutocompleteInput from "../AutocompleteInput.svelte";
 
   $: fql_filter_suggestions = [
     ...$tags.map((tag) => `#${tag}`),

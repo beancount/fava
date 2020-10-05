@@ -10,6 +10,8 @@ import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import Documents from "./documents/Documents.svelte";
 import Query from "./query/Query.svelte";
 import AccountSelector from "./sidebar/AccountSelector.svelte";
+import FilterForm from "./header/FilterForm.svelte";
+import Modals from "./modals/Modals.svelte";
 
 const components = new Map([
   ["charts", ChartSwitcher],
@@ -18,6 +20,8 @@ const components = new Map([
   ["import", Import],
   ["query", Query],
   ["account-selector", AccountSelector],
+  ["filter-form", FilterForm],
+  ["modals", Modals],
 ]);
 
 /**
@@ -33,8 +37,11 @@ export class SvelteCustomElement extends HTMLElement {
     if (this.component) {
       return;
     }
-    const type = this.dataset.component;
-    const Cls = components.get(type || "");
+    const type = this.getAttribute("type");
+    if (!type) {
+      throw new Error("Component is missing type");
+    }
+    const Cls = components.get(type);
     if (!Cls) {
       throw new Error("Invalid component");
     }

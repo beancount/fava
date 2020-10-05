@@ -32,6 +32,7 @@
           </ul>
         </div>{% endif %}
       </h1>
+      <svelte-component type="filter-form"></svelte-component>
     </header>
     <button id="aside-button" class="aside-button" type="button">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" version="1.0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
@@ -39,7 +40,7 @@
     <aside>{% include "_aside.html" %}</aside>
     <article>
       {%- endif %}
-      <svelte-component data-component="charts"></svelte-component>
+      <svelte-component type="charts"></svelte-component>
       {% block content %}
       {% if content %}
       {{ content|safe }}
@@ -66,6 +67,7 @@
     }|tojson|safe }}</script>
       {%- if not request.args.get('partial') %}
     </article>
+    <svelte-component type="modals"></svelte-component>
     <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
   </body>
 </html>
