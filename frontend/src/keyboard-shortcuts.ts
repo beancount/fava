@@ -38,7 +38,9 @@ function showTooltip(target: HTMLElement): () => void {
 function showTooltips(): () => void {
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
-    el instanceof HTMLElement && removes.push(showTooltip(el));
+    if (el instanceof HTMLElement) {
+      removes.push(showTooltip(el));
+    }
   });
   return (): void => {
     removes.forEach((r) => r());

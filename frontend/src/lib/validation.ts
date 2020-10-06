@@ -118,7 +118,7 @@ export function union<T extends unknown[]>(
         // pass
       }
     }
-    throw new ValidationError(`Validating union failed`);
+    throw new ValidationError("Validating union failed");
   };
 }
 

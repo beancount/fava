@@ -1,6 +1,15 @@
 module.exports = {
-  extends: ["airbnb-base", "plugin:@typescript-eslint/recommended", "prettier"],
   plugins: ["@typescript-eslint", "svelte3"],
+  extends: [
+    "airbnb-typescript/base",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+  ],
+  parserOptions: {
+    tsconfigRootDir: __dirname,
+    project: ["./tsconfig.json"],
+  },
   env: {
     browser: true,
   },
@@ -16,11 +25,11 @@ module.exports = {
       "WithStatement",
     ],
     "no-underscore-dangle": 0,
-    "no-unused-expressions": 0,
     "import/extensions": 0,
     "import/no-unresolved": 0,
     "import/prefer-default-export": 0,
     "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/naming-convention": 0,
   },
   overrides: [
     {

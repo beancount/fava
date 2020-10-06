@@ -114,7 +114,7 @@ export async function moveDocument(
  */
 export async function deleteDocument(filename: string): Promise<boolean> {
   try {
-    const url = urlFor(`api/document`, { filename }, false);
+    const url = urlFor("api/document", { filename }, false);
     const res = await fetch(url, { method: "DELETE" }).then(handleJSON);
     const { data }: { data: unknown } = validateAPIResponse(res);
     notify(string(data));
