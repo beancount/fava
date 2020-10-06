@@ -5,7 +5,7 @@ export class Events<T = string> {
   private events: Map<T, (() => void)[]>;
 
   constructor() {
-    this.events = new Map();
+    this.events = new Map<T, (() => void)[]>();
   }
 
   /**

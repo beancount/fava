@@ -37,8 +37,17 @@ export function formatCurrencyShort(
   return incognito(formatterShort(number));
 }
 
+type DateFormatter = (date: Date) => string;
+interface DateFormatters {
+  year: DateFormatter;
+  quarter: DateFormatter;
+  month: DateFormatter;
+  week: DateFormatter;
+  day: DateFormatter;
+}
+
 /** Date formatters for human consumption. */
-export const dateFormat = {
+export const dateFormat: DateFormatters = {
   year: utcFormat("%Y"),
   quarter(date: Date): string {
     return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
@@ -49,7 +58,7 @@ export const dateFormat = {
 };
 
 /** Date formatters for the entry filter form. */
-export const timeFilterDateFormat = {
+export const timeFilterDateFormat: DateFormatters = {
   year: utcFormat("%Y"),
   quarter(date: Date): string {
     return `${date.getUTCFullYear()}-Q${

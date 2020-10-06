@@ -64,7 +64,7 @@ function isEditableElement(element: EventTarget | null): boolean {
 }
 
 type KeyboardEventHandler = (event: KeyboardEvent) => void;
-const keyboardShortcuts: Map<string, KeyboardEventHandler> = new Map();
+const keyboardShortcuts = new Map<string, KeyboardEventHandler>();
 // The last typed character to check for sequences of two keys.
 let lastChar = "";
 

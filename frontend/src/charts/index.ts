@@ -127,7 +127,7 @@ const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
         balance: record(number),
       })
     )(json);
-    const groups: Map<string, LineChartDatum[]> = new Map();
+    const groups = new Map<string, LineChartDatum[]>();
     for (const { date: date_, balance } of parsedData) {
       Object.entries(balance).forEach(([currency, value]) => {
         const group = groups.get(currency);

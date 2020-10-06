@@ -2,7 +2,8 @@ import CodeMirror, { Position } from "codemirror";
 import { fuzzyfilter } from "../lib/fuzzy";
 
 export function getCurrentWord(cursor: Position, line: string): string {
-  return line.slice(0, cursor.ch).match(/(\S*)$/)?.[0] || "";
+  const lineUpToCursor = line.slice(0, cursor.ch);
+  return /(\S*)$/.exec(lineUpToCursor)?.[0] || "";
 }
 
 export function fuzzyMatch(

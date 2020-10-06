@@ -8,7 +8,7 @@ CodeMirror.registerHelper(
 
     function headerLevel(lineNo: number): number {
       const line = cm.getDoc().getLine(lineNo);
-      const match = line && line.match(/^\*+/);
+      const match = line && /^\*+/.exec(line);
       if (match) {
         return match[0].length;
       }

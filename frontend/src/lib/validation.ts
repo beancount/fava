@@ -175,8 +175,12 @@ export function tuple<A, B>(
   };
 }
 
-const isJsonObject = (json: unknown): json is Record<string, unknown> =>
-  typeof json === "object" && json !== null && !Array.isArray(json);
+/**
+ * Check whether the given object is a string-indexable object.
+ */
+export function isJsonObject(json: unknown): json is Record<string, unknown> {
+  return typeof json === "object" && json !== null && !Array.isArray(json);
+}
 
 /**
  * Validator for an object with some given properties.

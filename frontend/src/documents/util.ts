@@ -11,7 +11,11 @@ export interface Node {
  */
 export function entriesToTree<T extends { account: string }>(data: T[]): Node {
   const groups = group(data, (e) => e.account);
-  const root: Node = { name: "", fullname: "", children: new Map() };
+  const root: Node = {
+    name: "",
+    fullname: "",
+    children: new Map<string, Node>(),
+  };
   for (const account of [...groups.keys()].sort()) {
     let node: Node | undefined = root;
     let parent: Node;
@@ -23,7 +27,7 @@ export function entriesToTree<T extends { account: string }>(data: T[]): Node {
         node = {
           name: part,
           fullname: parent.fullname ? `${parent.fullname}:${part}` : part,
-          children: new Map(),
+          children: new Map<string, Node>(),
         };
         parent.children.set(part, node);
       }
