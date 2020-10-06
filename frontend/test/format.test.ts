@@ -1,5 +1,21 @@
 import test from "ava";
-import { timeFilterDateFormat, dateFormat } from "../src/format";
+import {
+  localeFormatter,
+  timeFilterDateFormat,
+  dateFormat,
+} from "../src/format";
+
+test("locale number formatting", (t) => {
+  const f = localeFormatter(null);
+  const de = localeFormatter("de_DE");
+  const ind = localeFormatter("en_IN");
+  t.deepEqual(f(10), "10.00");
+  t.deepEqual(de(10), "10,00");
+  t.deepEqual(ind(10), "10.00");
+  t.deepEqual(f(1000000), "1000000.00");
+  t.deepEqual(de(1000000), "1.000.000,00");
+  t.deepEqual(ind(1000000), "10,00,000.00");
+});
 
 test("time filter date formatting", (t) => {
   const { day, month, week, quarter, year, ...rest } = timeFilterDateFormat;
