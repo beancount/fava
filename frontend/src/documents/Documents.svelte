@@ -5,7 +5,7 @@
   import router from "../router";
 
   import { basename } from "../lib/paths";
-  import { entriesToTree } from "./util";
+  import { entriesToTree } from "../lib/tree";
 
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import ModalBase from "../modals/ModalBase.svelte";
