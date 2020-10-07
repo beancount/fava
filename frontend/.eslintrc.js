@@ -7,7 +7,6 @@ const airbnbConfigOverrides = {
     "LabelStatement",
     "WithStatement",
   ],
-  "no-underscore-dangle": 0,
   "import/extensions": 0,
   "import/no-unresolved": 0,
   "import/prefer-default-export": 0,
@@ -26,9 +25,6 @@ module.exports = {
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.json"],
-  },
-  env: {
-    browser: true,
   },
   rules: {
     ...airbnbConfigOverrides,

@@ -102,13 +102,13 @@ export interface HierarchyChart {
 interface BarChart {
   type: "barchart";
   data: BarChartDatum[];
-  tooltipText(d: BarChartDatum): string;
+  tooltipText: (d: BarChartDatum) => string;
 }
 
 interface LineChart {
   type: "linechart";
   data: LineChartData[];
-  tooltipText(d: LineChartDatum): string;
+  tooltipText: (d: LineChartDatum) => string;
 }
 
 interface ScatterPlot {
@@ -119,41 +119,47 @@ interface ScatterPlot {
 
 type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
 
-const parsers: Record<string, (json: unknown, label: string) => ChartTypes> = {
-  balances(json: unknown): LineChart {
-    const parsedData = array(
-      object({
-        date,
-        balance: record(number),
-      })
-    )(json);
-    const groups = new Map<string, LineChartDatum[]>();
-    for (const { date: date_, balance } of parsedData) {
-      Object.entries(balance).forEach(([currency, value]) => {
-        const group = groups.get(currency);
-        const datum = { date: date_, value, name: currency };
-        if (group) {
-          group.push(datum);
-        } else {
-          groups.set(currency, [datum]);
-        }
-      });
-    }
-    const data = [...groups.entries()].map(([name, values]) => ({
-      name,
-      values,
-    }));
+export function balances(json: unknown): LineChart {
+  const validator = array(
+    object({
+      date,
+      balance: record(number),
+    })
+  );
+  const parsedData = validator(json);
+  const groups = new Map<string, LineChartDatum[]>();
+  for (const { date: date_, balance } of parsedData) {
+    Object.entries(balance).forEach(([currency, value]) => {
+      const group = groups.get(currency);
+      const datum = { date: date_, value, name: currency };
+      if (group) {
+        group.push(datum);
+      } else {
+        groups.set(currency, [datum]);
+      }
+    });
+  }
+  const data = [...groups.entries()].map(([name, values]) => ({
+    name,
+    values,
+  }));
 
-    return {
-      data,
-      type: "linechart",
-      tooltipText(d: LineChartDatum): string {
-        return `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
-          d.date
-        )}</em>`;
-      },
-    };
-  },
+  return {
+    data,
+    type: "linechart",
+    tooltipText: (d: LineChartDatum): string => {
+      return `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
+        d.date
+      )}</em>`;
+    },
+  };
+}
+
+export const parsers: Record<
+  string,
+  (json: unknown, label: string) => ChartTypes
+> = {
+  balances,
   commodities(json: unknown, label: string): LineChart {
     const parsedData = object({
       quote: string,
@@ -255,13 +261,15 @@ export type NamedChartTypes = ChartTypes & {
 };
 
 export function parseChartData(): NamedChartTypes[] {
-  const chartData = array(
+  const json = getScriptTagJSON("#chart-data");
+  const validator = array(
     object({
       label: string,
       type: string,
       data: unknown,
     })
-  )(getScriptTagJSON("#chart-data"));
+  );
+  const chartData = validator(json);
   const result: NamedChartTypes[] = [];
   chartData.forEach((chart) => {
     const parser = parsers[chart.type];
@@ -275,60 +283,70 @@ export function parseChartData(): NamedChartTypes[] {
   return result;
 }
 
-export function parseQueryChart(data: unknown): ChartTypes | undefined {
-  if (!Array.isArray(data) || !data.length) {
-    return undefined;
-  }
-  if (data[0].group !== undefined) {
-    const validated = array(object({ group: string, balance: record(number) }))(
-      data
-    );
-    const root: AccountHierarchy = {
-      account: "(root)",
-      balance: {},
-      children: [],
-    };
-    const accountMap: Map<string, AccountHierarchy> = new Map([
-      [root.account, root],
-    ]);
-    const addNode = (node: AccountHierarchy): void => {
-      const name = node.account;
-      const existing = accountMap.get(name);
-      if (existing) {
-        existing.balance = node.balance;
-        return;
-      }
-      accountMap.set(name, node);
-      const parentEnd = name.lastIndexOf(":");
-      const parentId = parentEnd > 0 ? name.slice(0, parentEnd) : root.account;
-      let parent = accountMap.get(parentId);
-      if (!parent) {
-        parent = { account: parentId, balance: {}, children: [] };
-        addNode(parent);
-      }
-      parent.children.push(node);
-    };
-    for (const { group: account = "(empty)", balance } of validated) {
-      addNode({ account, balance, children: [] });
+function parseGroupedQueryChart(
+  grouped: {
+    group: string;
+    balance: Record<string, number>;
+  }[]
+): HierarchyChart {
+  const root: AccountHierarchy = {
+    account: "(root)",
+    balance: {},
+    children: [],
+  };
+  const accountMap: Map<string, AccountHierarchy> = new Map([
+    [root.account, root],
+  ]);
+  const addNode = (node: AccountHierarchy): void => {
+    const name = node.account;
+    const existing = accountMap.get(name);
+    if (existing) {
+      existing.balance = node.balance;
+      return;
     }
-
-    const chartData: Record<string, AccountHierarchyNode> = {};
-    get(operatingCurrenciesWithConversion).forEach((currency: string) => {
-      const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
-        .sum((d) => d.balance[currency] || 0)
-        .sort((a, b) => (b.value || 0) - (a.value || 0));
-      if (currencyHierarchy.value !== undefined) {
-        chartData[currency] = currencyHierarchy;
-      }
-    });
-
-    return {
-      type: "hierarchy",
-      data: chartData,
-    };
+    accountMap.set(name, node);
+    const parentEnd = name.lastIndexOf(":");
+    const parentId = parentEnd > 0 ? name.slice(0, parentEnd) : root.account;
+    let parent = accountMap.get(parentId);
+    if (!parent) {
+      parent = { account: parentId, balance: {}, children: [] };
+      addNode(parent);
+    }
+    parent.children.push(node);
+  };
+  for (const { group: account = "(empty)", balance } of grouped) {
+    addNode({ account, balance, children: [] });
   }
-  if (data[0].date !== undefined) {
-    return parsers.balances(data, "");
+
+  const chartData: Record<string, AccountHierarchyNode> = {};
+  get(operatingCurrenciesWithConversion).forEach((currency: string) => {
+    const currencyHierarchy: AccountHierarchyNode = hierarchy(root)
+      .sum((d) => d.balance[currency] || 0)
+      .sort((a, b) => (b.value || 0) - (a.value || 0));
+    if (currencyHierarchy.value !== undefined) {
+      chartData[currency] = currencyHierarchy;
+    }
+  });
+
+  return {
+    type: "hierarchy",
+    data: chartData,
+  };
+}
+
+export function parseQueryChart(data: unknown): ChartTypes | undefined {
+  const validator = array(object({ group: string, balance: record(number) }));
+  try {
+    const grouped = validator(data);
+    return parseGroupedQueryChart(grouped);
+  } catch (err) {
+    // pass
+  }
+  try {
+    const dated = array(unknown)(data);
+    return parsers.balances(dated, "");
+  } catch (err) {
+    // pass
   }
   return undefined;
 }
