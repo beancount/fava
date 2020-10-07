@@ -27,7 +27,7 @@ test("validate constant", (t) => {
 
 test("validate date", (t) => {
   const d = new Date("2012-12-12");
-  t.deepEqual(+date("2012-12-12"), +d);
+  t.is(+date("2012-12-12"), +d);
   t.deepEqual(date(d), d);
   t.throws(() => date("2-40"));
   t.throws(() => date(""));

@@ -10,9 +10,9 @@ test("handle data for balances chart", (t) => {
   ];
   const parsed = balances(data);
   // two currencies
-  t.deepEqual(parsed.data.length, 2);
-  t.deepEqual(parsed.data[0].values.length, 2);
-  t.deepEqual(parsed.data[1].values.length, 1);
+  t.is(parsed.data.length, 2);
+  t.is(parsed.data[0].values.length, 2);
+  t.is(parsed.data[1].values.length, 1);
   t.snapshot(parsed);
 });
 
@@ -27,8 +27,8 @@ test("handle data for commodities chart", (t) => {
     ],
   };
   const parsed = commodities(data, "asdf");
-  t.deepEqual(parsed.data.length, 1);
-  t.deepEqual(parsed.data[0].values.length, 2);
+  t.is(parsed.data.length, 1);
+  t.is(parsed.data[0].values.length, 2);
   t.snapshot(parsed);
 });
 
@@ -38,6 +38,6 @@ test("handle data for scatterplot chart", (t) => {
     { type: "test", date: "2000-01-01", description: "desc" },
   ];
   const parsed = scatterplot(data);
-  t.deepEqual(parsed.data.length, 1);
+  t.is(parsed.data.length, 1);
   t.snapshot(parsed);
 });

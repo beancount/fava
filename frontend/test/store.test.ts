@@ -18,6 +18,6 @@ test("derived store", (t) => {
   source.set(["a", "b"]);
   source.set(["a", "b"]);
   source.set(["a", "b"]);
-  t.deepEqual(source_count, 6);
-  t.deepEqual(derived_count, 2);
+  t.is(source_count, 6);
+  t.is(derived_count, 2);
 });
