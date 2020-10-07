@@ -25,7 +25,7 @@ import {
 
 export interface AccountHierarchyDatum {
   account: string;
-  balance: Record<string, number | undefined>;
+  balance: Partial<Record<string, number>>;
   dummy?: boolean;
 }
 interface AccountHierarchy extends AccountHierarchyDatum {
@@ -95,7 +95,7 @@ const operatingCurrenciesWithConversion = derived(
 
 export interface HierarchyChart {
   type: "hierarchy";
-  data: Record<string, AccountHierarchyNode>;
+  data: Map<string, AccountHierarchyNode>;
   tooltipText?: undefined;
 }
 
@@ -206,40 +206,30 @@ export function bar(json: unknown): BarChart {
 
 export function scatterplot(json: unknown): ScatterPlot {
   const validator = array(object({ type: string, date, description: string }));
-  return {
-    type: "scatterplot",
-    data: validator(json),
-  };
+  return { type: "scatterplot", data: validator(json) };
 }
 
 export function hierarchy(json: unknown): HierarchyChart {
   const hierarchyValidator: Validator<AccountHierarchy> = object({
     account: string,
     balance: record(number),
-    balance_children: record(number),
     children: lazy(() => array(hierarchyValidator)),
   });
-  const validator = object({
-    root: hierarchyValidator,
-    modifier: number,
-  });
+  const validator = object({ root: hierarchyValidator, modifier: number });
   const { root, modifier } = validator(json);
   addInternalNodesAsLeaves(root);
-  const data: Record<string, AccountHierarchyNode> = {};
+  const data = new Map<string, AccountHierarchyNode>();
 
   get(operatingCurrenciesWithConversion).forEach((currency: string) => {
-    const currencyHierarchy: AccountHierarchyNode = d3Hierarchy(root)
+    const currencyHierarchy = d3Hierarchy(root)
       .sum((d) => (d.balance[currency] || 0) * modifier)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
     if (currencyHierarchy.value) {
-      data[currency] = currencyHierarchy;
+      data.set(currency, currencyHierarchy);
     }
   });
 
-  return {
-    type: "hierarchy",
-    data,
-  };
+  return { type: "hierarchy", data };
 }
 
 const parsers: Partial<Record<
@@ -313,20 +303,17 @@ function parseGroupedQueryChart(
     addNode({ account, balance, children: [] });
   }
 
-  const chartData: Record<string, AccountHierarchyNode> = {};
+  const data = new Map<string, AccountHierarchyNode>();
   get(operatingCurrenciesWithConversion).forEach((currency: string) => {
     const currencyHierarchy: AccountHierarchyNode = d3Hierarchy(root)
       .sum((d) => d.balance[currency] || 0)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
     if (currencyHierarchy.value !== undefined) {
-      chartData[currency] = currencyHierarchy;
+      data.set(currency, currencyHierarchy);
     }
   });
 
-  return {
-    type: "hierarchy",
-    data: chartData,
-  };
+  return { type: "hierarchy", data };
 }
 
 export function parseQueryChart(data: unknown): ChartTypes | undefined {
