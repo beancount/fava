@@ -1,8 +1,8 @@
 import test from "ava";
 
-import { balances, commodities } from "../src/charts";
+import { balances, commodities, scatterplot } from "../src/charts";
 
-test("barchart", (t) => {
+test("handle data for balances chart", (t) => {
   t.throws(() => balances(""));
   const data: unknown = [
     { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
@@ -16,7 +16,7 @@ test("barchart", (t) => {
   t.snapshot(parsed);
 });
 
-test("commodities", (t) => {
+test("handle data for commodities chart", (t) => {
   t.throws(() => commodities("", "asdf"));
   const data: unknown = {
     base: "EUR",
@@ -29,5 +29,15 @@ test("commodities", (t) => {
   const parsed = commodities(data, "asdf");
   t.deepEqual(parsed.data.length, 1);
   t.deepEqual(parsed.data[0].values.length, 2);
+  t.snapshot(parsed);
+});
+
+test("handle data for scatterplot chart", (t) => {
+  t.throws(() => scatterplot(""));
+  const data: unknown = [
+    { type: "test", date: "2000-01-01", description: "desc" },
+  ];
+  const parsed = scatterplot(data);
+  t.deepEqual(parsed.data.length, 1);
   t.snapshot(parsed);
 });
