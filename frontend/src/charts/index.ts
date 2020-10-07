@@ -155,36 +155,31 @@ export function balances(json: unknown): LineChart {
   };
 }
 
+export function commodities(json: unknown, label: string): LineChart {
+  const validator = object({
+    quote: string,
+    base: string,
+    prices: array(tuple([date, number])),
+  });
+  const { base, quote, prices } = validator(json);
+  const values = prices.map((d) => ({ name: label, date: d[0], value: d[1] }));
+  return {
+    data: [{ name: label, values }],
+    type: "linechart",
+    tooltipText(d: LineChartDatum): string {
+      return `1 ${base} = ${formatCurrency(
+        d.value
+      )} ${quote}<em>${dateFormat.day(d.date)}</em>`;
+    },
+  };
+}
+
 export const parsers: Record<
   string,
   (json: unknown, label: string) => ChartTypes
 > = {
   balances,
-  commodities(json: unknown, label: string): LineChart {
-    const parsedData = object({
-      quote: string,
-      base: string,
-      prices: array(tuple([date, number])),
-    })(json);
-    return {
-      data: [
-        {
-          name: label,
-          values: parsedData.prices.map((d) => ({
-            name: label,
-            date: d[0],
-            value: d[1],
-          })),
-        },
-      ],
-      type: "linechart",
-      tooltipText(d: LineChartDatum): string {
-        return `1 ${parsedData.base} = ${formatCurrency(d.value)} ${
-          parsedData.quote
-        }<em>${dateFormat.day(d.date)}</em>`;
-      },
-    };
-  },
+  commodities,
   bar(json: unknown): BarChart {
     const jsonData = array(
       object({ date, budgets: record(number), balance: record(number) })

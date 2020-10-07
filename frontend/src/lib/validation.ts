@@ -199,7 +199,7 @@ export function object<T>(
       }
       return obj as T;
     }
-    throw new ValidationError();
+    throw new ValidationError("Validating object failed");
   };
 }
 
