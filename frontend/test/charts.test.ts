@@ -1,6 +1,11 @@
 import test from "ava";
 
-import { balances, commodities, scatterplot } from "../src/charts";
+import {
+  balances,
+  commodities,
+  parseGroupedQueryChart,
+  scatterplot,
+} from "../src/charts";
 
 test("handle data for balances chart", (t) => {
   t.throws(() => balances(""));
@@ -40,4 +45,17 @@ test("handle data for scatterplot chart", (t) => {
   const parsed = scatterplot(data);
   t.is(parsed.data.length, 1);
   t.snapshot(parsed);
+});
+
+test("handle data for query charts", (t) => {
+  const d = [{ group: "Assets:Cash", balance: { EUR: 10 } }];
+  const c = parseGroupedQueryChart(d, ["EUR"]);
+  t.is(c.data.get("EUR")?.value, 10);
+  t.deepEqual(
+    c.data
+      .get("EUR")
+      ?.descendants()
+      .map((n) => n.data.account),
+    ["(root)", "Assets", "Assets:Cash"]
+  );
 });

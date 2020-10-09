@@ -270,11 +270,12 @@ export function parseChartData(): NamedChartTypes[] {
   return result;
 }
 
-function parseGroupedQueryChart(
+export function parseGroupedQueryChart(
   grouped: {
     group: string;
     balance: Record<string, number>;
-  }[]
+  }[],
+  currencies: string[]
 ): HierarchyChart {
   const root: AccountHierarchy = {
     account: "(root)",
@@ -304,7 +305,7 @@ function parseGroupedQueryChart(
   }
 
   const data = new Map<string, AccountHierarchyNode>();
-  get(operatingCurrenciesWithConversion).forEach((currency: string) => {
+  currencies.forEach((currency: string) => {
     const currencyHierarchy: AccountHierarchyNode = d3Hierarchy(root)
       .sum((d) => d.balance[currency] || 0)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
@@ -320,7 +321,8 @@ export function parseQueryChart(data: unknown): ChartTypes | undefined {
   const validator = array(object({ group: string, balance: record(number) }));
   try {
     const grouped = validator(data);
-    return parseGroupedQueryChart(grouped);
+    const currencies = get(operatingCurrenciesWithConversion);
+    return parseGroupedQueryChart(grouped, currencies);
   } catch (err) {
     // pass
   }
