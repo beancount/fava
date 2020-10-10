@@ -1,3 +1,5 @@
+import { parent } from "./account";
+
 /**
  * A tree node.
  *
@@ -5,24 +7,6 @@
  * passed in via the generic parameter.
  */
 export type TreeNode<S> = S & { children: TreeNode<S>[] };
-
-/**
- * Obtain the parent account name.
- * @param name - an account name.
- */
-export function parentAccount(name: string): string {
-  const parentEnd = name.lastIndexOf(":");
-  return parentEnd > 0 ? name.slice(0, parentEnd) : "";
-}
-
-/**
- * Obtain the leaf part of the account name.
- * @param name - an account name.
- */
-export function leafAccount(name: string): string {
-  const parentEnd = name.lastIndexOf(":");
-  return parentEnd > 0 ? name.slice(parentEnd + 1) : name;
-}
 
 /**
  * Generate an account tree from an array.
@@ -51,9 +35,9 @@ export function stratify<T, S = null>(
     }
     const node: TreeNode<S> = { children: [], ...init(name, datum) };
     map.set(name, node);
-    const parentName = parentAccount(name);
-    const parent = map.get(parentName) ?? addAccount(parentName);
-    parent.children.push(node);
+    const parentName = parent(name);
+    const parentNode = map.get(parentName) ?? addAccount(parentName);
+    parentNode.children.push(node);
     return node;
   }
 

@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  import { leafAccount } from "../lib/tree";
+  import { leaf } from "../lib/account";
 
   import { selectedAccount } from "./stores";
 
@@ -77,7 +77,7 @@
     class:expanded
     class:selected={$selectedAccount === node.name}
     class:drag>
-    <span>{leafAccount(node.name)}</span>
+    <span>{leaf(node.name)}</span>
   </p>
 {/if}
 

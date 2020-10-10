@@ -1,14 +1,5 @@
 import test from "ava";
-import { leafAccount, parentAccount, stratify } from "../src/lib/tree";
-
-test("split account names", (t) => {
-  t.is(parentAccount("asd:asdf"), "asd");
-  t.is(parentAccount("asd"), "");
-  t.is(parentAccount(""), "");
-  t.is(leafAccount("asd:asdf"), "asdf");
-  t.is(leafAccount("asd"), "asd");
-  t.is(leafAccount(""), "");
-});
+import { stratify } from "../src/lib/tree";
 
 test("tree: stratify", (t) => {
   const empty = stratify(
