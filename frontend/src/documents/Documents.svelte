@@ -5,7 +5,7 @@
   import router from "../router";
 
   import { basename } from "../lib/paths";
-  import { entriesToTree } from "../lib/tree";
+  import { stratify } from "../lib/tree";
 
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import ModalBase from "../modals/ModalBase.svelte";
@@ -17,7 +17,11 @@
   /** @type {Document[]} */
   export let data;
 
-  $: node = entriesToTree(data);
+  $: node = stratify(
+    new Set(data.map((e) => e.account)),
+    (s) => s,
+    (name) => ({ name })
+  );
 
   /** @type {Document} */
   let selected;

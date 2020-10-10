@@ -62,16 +62,3 @@ export function stratify<T, S = null>(
     .forEach((datum) => addAccount(id(datum), datum));
   return root;
 }
-
-/**
- * Generate an account tree from an array of entries.
- */
-export function entriesToTree<T extends { account: string }>(
-  data: T[]
-): TreeNode<Record<string, unknown>> {
-  return stratify(
-    new Set(data.map((e) => e.account)),
-    (s) => s,
-    (name) => ({ name })
-  );
-}

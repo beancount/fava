@@ -1,10 +1,5 @@
 import test from "ava";
-import {
-  entriesToTree,
-  leafAccount,
-  parentAccount,
-  stratify,
-} from "../src/lib/tree";
+import { leafAccount, parentAccount, stratify } from "../src/lib/tree";
 
 test("split account names", (t) => {
   t.is(parentAccount("asd:asdf"), "asd");
@@ -34,9 +29,11 @@ test("tree: stratify", (t) => {
     (name) => ({ name })
   );
   t.snapshot(tree);
-});
-
-test("tree from documents", (t) => {
-  t.deepEqual(entriesToTree([]), { children: [], name: "" });
-  t.snapshot(entriesToTree([{ account: "Assets:Cash" }]));
+  t.snapshot(
+    stratify(
+      ["Assets:Cash"],
+      (s) => s,
+      (name) => ({ name })
+    )
+  );
 });
