@@ -22,15 +22,14 @@ import {
   lazy,
   Validator,
 } from "../lib/validation";
+import { stratify, TreeNode } from "../lib/tree";
 
 export interface AccountHierarchyDatum {
   account: string;
   balance: Partial<Record<string, number>>;
   dummy?: boolean;
 }
-interface AccountHierarchy extends AccountHierarchyDatum {
-  children: AccountHierarchy[];
-}
+type AccountHierarchy = TreeNode<AccountHierarchyDatum>;
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
 
 /**
@@ -277,32 +276,15 @@ export function parseGroupedQueryChart(
   }[],
   currencies: string[]
 ): HierarchyChart {
-  const root: AccountHierarchy = {
-    account: "(root)",
-    balance: {},
-    children: [],
-  };
-  const accountMap = new Map<string, AccountHierarchy>([[root.account, root]]);
-  const addNode = (node: AccountHierarchy): void => {
-    const name = node.account;
-    const existing = accountMap.get(name);
-    if (existing) {
-      existing.balance = node.balance;
-      return;
-    }
-    accountMap.set(name, node);
-    const parentEnd = name.lastIndexOf(":");
-    const parentId = parentEnd > 0 ? name.slice(0, parentEnd) : root.account;
-    let parent = accountMap.get(parentId);
-    if (!parent) {
-      parent = { account: parentId, balance: {}, children: [] };
-      addNode(parent);
-    }
-    parent.children.push(node);
-  };
-  for (const { group: account = "(empty)", balance } of grouped) {
-    addNode({ account, balance, children: [] });
-  }
+  const root = stratify(
+    grouped,
+    (d) => d.group,
+    (account, d): AccountHierarchyDatum => ({
+      account,
+      balance: d?.balance ?? {},
+    })
+  );
+  root.account = "(root)";
 
   const data = new Map<string, AccountHierarchyNode>();
   currencies.forEach((currency: string) => {

@@ -17,6 +17,8 @@
   /** @type {Document[]} */
   export let data;
 
+  $: node = entriesToTree(data);
+
   /** @type {Document} */
   let selected;
   /** @type {{account: string, filename: string, newName: string} | null} */
@@ -100,7 +102,7 @@
 {/if}
 <div class="container">
   <div class="half-column" style="width: 14rem;">
-    <Accounts node={entriesToTree(data)} on:drop={drop} />
+    <Accounts {node} on:drop={drop} />
   </div>
   <div class="half-column">
     <Table bind:selected {data} />

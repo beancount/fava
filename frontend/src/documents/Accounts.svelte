@@ -5,7 +5,7 @@
 
   import { selectedAccount } from "./stores";
 
-  /** @type {import("../lib/tree").Node} */
+  /** @type {import("../lib/tree").TreeNode<{name: string}>} */
   export let node;
 
   const expanded = true;
