@@ -35,21 +35,21 @@ export function leafAccount(name: string): string {
  * @param init - A getter for any extra properties to set on the node.
  */
 export function stratify<T, S = null>(
-  data: T[],
-  id: (d: T) => string,
-  init: (name: string, d?: T) => S
+  data: Iterable<T>,
+  id: (datum: T) => string,
+  init: (name: string, datum?: T) => S
 ): TreeNode<S> {
   const root: TreeNode<S> = { children: [], ...init("") };
   const map = new Map<string, TreeNode<S>>();
   map.set("", root);
 
-  function addAccount(name: string, d?: T): TreeNode<S> {
+  function addAccount(name: string, datum?: T): TreeNode<S> {
     const existing = map.get(name);
     if (existing) {
-      Object.assign(existing, init(name, d));
+      Object.assign(existing, init(name, datum));
       return existing;
     }
-    const node: TreeNode<S> = { children: [], ...init(name, d) };
+    const node: TreeNode<S> = { children: [], ...init(name, datum) };
     map.set(name, node);
     const parentName = parentAccount(name);
     const parent = map.get(parentName) ?? addAccount(parentName);
@@ -57,7 +57,9 @@ export function stratify<T, S = null>(
     return node;
   }
 
-  data.forEach((d) => addAccount(id(d), d));
+  [...data]
+    .sort((a, b) => id(a).localeCompare(id(b)))
+    .forEach((datum) => addAccount(id(datum), datum));
   return root;
 }
 
@@ -67,9 +69,8 @@ export function stratify<T, S = null>(
 export function entriesToTree<T extends { account: string }>(
   data: T[]
 ): TreeNode<Record<string, unknown>> {
-  const accounts = new Set(data.map((e) => e.account));
   return stratify(
-    [...accounts].sort(),
+    new Set(data.map((e) => e.account)),
     (s) => s,
     (name) => ({ name })
   );

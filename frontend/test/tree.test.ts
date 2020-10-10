@@ -28,6 +28,12 @@ test("tree: stratify", (t) => {
     () => ({ test: "test" })
   );
   t.deepEqual(emptyWithData, { children: [], test: "test" });
+  const tree = stratify(
+    ["aName:cName", "aName", "aName:bName"],
+    (s) => s,
+    (name) => ({ name })
+  );
+  t.snapshot(tree);
 });
 
 test("tree from documents", (t) => {
