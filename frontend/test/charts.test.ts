@@ -50,9 +50,9 @@ test("handle data for scatterplot chart", (t) => {
 test("handle data for query charts", (t) => {
   const d = [{ group: "Assets:Cash", balance: { EUR: 10 } }];
   const c = parseGroupedQueryChart(d, ["EUR"]);
-  t.is(c.data.get("EUR")?.value, 10);
+  t.is(c?.data.get("EUR")?.value, 10);
   t.deepEqual(
-    c.data
+    c?.data
       .get("EUR")
       ?.descendants()
       .map((n) => n.data.account),

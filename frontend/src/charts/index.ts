@@ -21,6 +21,7 @@ import {
   unknown,
   lazy,
   Validator,
+  defaultValue,
 } from "../lib/validation";
 import { stratify, TreeNode } from "../lib/tree";
 
@@ -270,12 +271,14 @@ export function parseChartData(): NamedChartTypes[] {
 }
 
 export function parseGroupedQueryChart(
-  grouped: {
-    group: string;
-    balance: Record<string, number>;
-  }[],
+  json: unknown,
   currencies: string[]
-): HierarchyChart {
+): HierarchyChart | null {
+  const validator = array(object({ group: string, balance: record(number) }));
+  const grouped = defaultValue(validator, null)(json);
+  if (!grouped) {
+    return null;
+  }
   const root = stratify(
     grouped,
     (d) => d.group,
@@ -299,20 +302,15 @@ export function parseGroupedQueryChart(
   return { type: "hierarchy", data };
 }
 
-export function parseQueryChart(data: unknown): ChartTypes | undefined {
-  const validator = array(object({ group: string, balance: record(number) }));
-  try {
-    const grouped = validator(data);
-    const currencies = get(operatingCurrenciesWithConversion);
-    return parseGroupedQueryChart(grouped, currencies);
-  } catch (err) {
-    // pass
+export function parseQueryChart(json: unknown): ChartTypes | undefined {
+  const currencies = get(operatingCurrenciesWithConversion);
+  const tree = parseGroupedQueryChart(json, currencies);
+  if (tree) {
+    return tree;
   }
-  try {
-    const dated = array(unknown)(data);
+  const dated = defaultValue(array(unknown), null);
+  if (dated) {
     return balances(dated);
-  } catch (err) {
-    // pass
   }
   return undefined;
 }
