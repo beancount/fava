@@ -7,6 +7,7 @@ from unittest import mock
 
 import pytest
 
+from fava.util.date import FiscalYearEnd
 from fava.util.date import get_fiscal_period
 from fava.util.date import get_next_interval
 from fava.util.date import Interval
@@ -135,6 +136,7 @@ def test_substitute(string, output):
     ],
 )
 def test_fiscal_substitute(fye, test_date, string, output):
+    fye = parse_fye_string(fye)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = _to_date(test_date)
         mock_date.side_effect = date
@@ -165,7 +167,7 @@ def test_fiscal_substitute(fye, test_date, string, output):
 )
 def test_parse_date(expect_start, expect_end, text):
     start, end = _to_date(expect_start), _to_date(expect_end)
-    assert parse_date(text, "06-30") == (start, end)
+    assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)
     if "FY" not in text:
         assert parse_date(text, None) == (start, end)
 
@@ -186,7 +188,7 @@ def test_parse_date_relative(expect_start, expect_end, text):
     with mock.patch("fava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = _to_date("2016-06-24")
         mock_date.side_effect = date
-        assert parse_date(text, "06-30") == (start, end)
+        assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)
 
 
 @pytest.mark.parametrize(
@@ -264,12 +266,12 @@ def test_month_offset(date_input, offset, expected):
         # None
         (2018, None, None, "2018-01-01", "2019-01-01"),
         # expected errors
-        (2018, None, "foo", "None", "None"),
         (2018, 0, "12-31", "None", "None"),
         (2018, 5, "12-31", "None", "None"),
     ],
 )
 def test_get_fiscal_period(year, quarter, fye, expect_start, expect_end):
+    fye = parse_fye_string(fye)
     start_date, end_date = get_fiscal_period(year, fye, quarter)
     assert str(start_date) == expect_start
     assert str(end_date) == expect_end

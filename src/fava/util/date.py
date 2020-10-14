@@ -40,6 +40,13 @@ VARIABLE_RE = re.compile(
 )
 
 
+class FiscalYearEnd(NamedTuple):
+    """Month and day that specify the end of the fiscal year."""
+
+    month: int
+    day: int
+
+
 class Interval(enum.Enum):
     """The possible intervals."""
 
@@ -125,7 +132,7 @@ def interval_ends(
     yield last
 
 
-def substitute(string: str, fye: Optional[str] = None) -> str:
+def substitute(string: str, fye: Optional[FiscalYearEnd] = None) -> str:
     """Replace variables referring to the current day.
 
     Args:
@@ -193,7 +200,7 @@ def substitute(string: str, fye: Optional[str] = None) -> str:
 
 
 def parse_date(
-    string: str, fye: Optional[str] = None
+    string: str, fye: Optional[FiscalYearEnd] = None
 ) -> Tuple[Optional[datetime.date], Optional[datetime.date]]:
     """Parse a date.
 
@@ -290,12 +297,6 @@ def month_offset(date: datetime.date, months: int) -> datetime.date:
     return date.replace(year=date.year + year_delta, month=month + 1)
 
 
-class FiscalYearEnd(NamedTuple):
-    """Month and day that specify the end of the fiscal year."""
-    month: int
-    day: int
-
-
 def parse_fye_string(fye: str) -> Optional[FiscalYearEnd]:
     """Parse a string option for the fiscal year end.
 
@@ -310,7 +311,7 @@ def parse_fye_string(fye: str) -> Optional[FiscalYearEnd]:
 
 
 def get_fiscal_period(
-    year: int, fye: Optional[str], quarter: Optional[int] = None
+    year: int, fye: Optional[FiscalYearEnd], quarter: Optional[int] = None
 ) -> Tuple[Optional[datetime.date], Optional[datetime.date]]:
     """Calculates fiscal periods
 
@@ -329,16 +330,12 @@ def get_fiscal_period(
     if fye is None:
         start_date = datetime.date(year=year, month=1, day=1)
     else:
-        try:
-            start_date = (
-                datetime.datetime.strptime(f"{year-1}-{fye}", "%Y-%m-%d")
-                + datetime.timedelta(days=1)
-            ).date()
-            # Special case 02-28 because of leap years
-            if fye == "02-28":
-                start_date = start_date.replace(month=3, day=1)
-        except ValueError:
-            return None, None
+        start_date = datetime.date(
+            year=year - 1, month=fye.month, day=fye.day
+        ) + datetime.timedelta(days=1)
+        # Special case 02-28 because of leap years
+        if fye == (2, 28):
+            start_date = start_date.replace(month=3, day=1)
 
     if quarter is None:
         return start_date, start_date.replace(year=start_date.year + 1)

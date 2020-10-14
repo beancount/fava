@@ -6,10 +6,11 @@ from beancount.core.data import Entries
 from beancount.core.data import Transaction
 
 from fava.core.module_base import FavaModule
+from fava.util.date import FiscalYearEnd
 from fava.util.ranking import ExponentialDecayRanker
 
 
-def get_active_years(entries: Entries, fye: str) -> List[str]:
+def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
     """Returns active years, with support for fiscal years.
 
     Args:
@@ -21,12 +22,13 @@ def get_active_years(entries: Entries, fye: str) -> List[str]:
         entries.
     """
 
-    if fye == "12-31":
+    if fye == (12, 31):
         return sorted(
             map(str, getters.get_active_years(entries)), reverse=True
         )
     seen = set()
-    month, day = map(int, fye.split("-"))
+    month = fye.month
+    day = fye.day
     for entry in entries:
         date = entry.date
         if date.month > month or date.month == month and date.day > day:
