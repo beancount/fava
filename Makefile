@@ -34,6 +34,10 @@ lint: frontend/node_modules
 	tox -e format
 	tox -e lint
 
+.PHONY: reorder-imports
+reorder-imports:
+	find src tests -type f -name '*.py' -exec reorder-python-imports --application-directories=.:src {} +
+
 .PHONY: test
 test:
 	cd frontend; npm run test
