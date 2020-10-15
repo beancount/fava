@@ -1,9 +1,9 @@
 # pylint: disable=missing-docstring
-
 import datetime
 import re
 
-from fava.core.fava_options import parse_options, InsertEntryOption
+from fava.core.fava_options import InsertEntryOption
+from fava.core.fava_options import parse_options
 
 
 def test_fava_options(load_doc):

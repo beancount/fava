@@ -1,20 +1,18 @@
 # pylint: disable=missing-docstring
-
-from datetime import date, datetime
+from datetime import date
+from datetime import datetime
 from unittest import mock
 
 import pytest
 
-from fava.util.date import (
-    Interval,
-    parse_date,
-    get_next_interval,
-    interval_ends,
-    substitute,
-    number_of_days_in_period,
-    get_fiscal_period,
-    month_offset,
-)
+from fava.util.date import get_fiscal_period
+from fava.util.date import get_next_interval
+from fava.util.date import Interval
+from fava.util.date import interval_ends
+from fava.util.date import month_offset
+from fava.util.date import number_of_days_in_period
+from fava.util.date import parse_date
+from fava.util.date import substitute
 
 
 def test_interval():

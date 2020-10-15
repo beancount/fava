@@ -1,5 +1,4 @@
 # pylint: disable=missing-docstring
-
 from fava.core.attributes import get_active_years
 
 

@@ -1,7 +1,5 @@
 # pylint: disable=missing-docstring
-
 import pytest
-
 from beancount.query.query import run_query
 
 from fava.util import excel

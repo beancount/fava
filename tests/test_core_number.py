@@ -1,5 +1,4 @@
 # pylint: disable=missing-docstring
-
 from beancount.core.number import D
 
 

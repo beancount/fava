@@ -1,10 +1,10 @@
 # pylint: disable=missing-docstring
-
 import datetime
 
 from beancount.loader import load_string
 
-from fava.core.misc import sidebar_links, upcoming_events
+from fava.core.misc import sidebar_links
+from fava.core.misc import upcoming_events
 
 
 def test_sidebar_links(load_doc):

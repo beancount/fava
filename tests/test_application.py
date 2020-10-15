@@ -1,11 +1,11 @@
 """Tests for Fava's main Flask app."""
-
 import flask
 import pytest
-import werkzeug.urls
 import werkzeug.routing
+import werkzeug.urls
 
-from fava.application import REPORTS, static_url
+from fava.application import REPORTS
+from fava.application import static_url
 
 FILTER_COMBINATIONS = [
     {"account": "Assets"},

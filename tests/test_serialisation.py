@@ -1,9 +1,12 @@
 # pylint: disable=missing-docstring
 import datetime
-from typing import Tuple, Optional, FrozenSet
+from typing import FrozenSet
+from typing import Optional
+from typing import Tuple
 
 import pytest
-from beancount.core.amount import A, Amount
+from beancount.core.amount import A
+from beancount.core.amount import Amount
 from beancount.core.data import Balance
 from beancount.core.data import CostSpec
 from beancount.core.data import create_simple_posting
@@ -14,8 +17,8 @@ from beancount.core.number import D
 from beancount.core.number import MISSING
 from flask.json import loads
 
-from fava.core.file import _format_entry
 from fava.core.charts import dumps
+from fava.core.file import _format_entry
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting

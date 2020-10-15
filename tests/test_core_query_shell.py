@@ -1,12 +1,10 @@
 # pylint: disable=missing-docstring
-
 import pytest
 from beancount.query.query import run_query
 
+from .conftest import data_file
 from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
-
-from .conftest import data_file
 
 LEDGER = FavaLedger(data_file("query-example.beancount"))
 QUERY = LEDGER.query_shell

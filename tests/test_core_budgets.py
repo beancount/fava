@@ -1,14 +1,11 @@
 """Fava's budget syntax."""
-
 from datetime import date
 
 from beancount.core.number import D
 
-from fava.core.budgets import (
-    parse_budgets,
-    calculate_budget,
-    calculate_budget_children,
-)
+from fava.core.budgets import calculate_budget
+from fava.core.budgets import calculate_budget_children
+from fava.core.budgets import parse_budgets
 
 
 def test_budgets(load_doc):

@@ -1,16 +1,18 @@
 # pylint: disable=missing-docstring
-
 import os
 from copy import deepcopy
-from typing import Counter, Any, Callable
 from pathlib import Path
 from pprint import pformat
+from typing import Any
+from typing import Callable
+from typing import Counter
 
 import pytest
-
 from beancount.loader import load_string
+
+from fava.application import _load_file
+from fava.application import app as fava_app
 from fava.core import FavaLedger
-from fava.application import _load_file, app as fava_app
 from fava.core.budgets import parse_budgets
 
 

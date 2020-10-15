@@ -1,7 +1,6 @@
 """Tests for the extension system."""
-
-from fava.core import FavaLedger
 from .conftest import data_file
+from fava.core import FavaLedger
 
 
 def test_report_page_globals():

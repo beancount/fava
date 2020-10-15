@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
-
-from beancount.core.number import D
 import pytest
+from beancount.core.number import D
 
 from fava.core import FavaLedger
 from fava.core.charts import dumps

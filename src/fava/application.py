@@ -17,8 +17,8 @@ import threading
 from io import BytesIO
 from typing import Any
 from typing import Dict
-from typing import Optional
 from typing import List
+from typing import Optional
 
 import flask
 import markdown2  # type: ignore

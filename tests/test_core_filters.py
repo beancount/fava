@@ -6,10 +6,10 @@ from beancount.core import account
 
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
+from fava.core.filters import FilterException
 from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
 from fava.core.filters import TimeFilter
-from fava.core.filters import FilterException
 
 LEX = FilterSyntaxLexer().lex
 

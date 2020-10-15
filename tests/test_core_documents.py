@@ -1,11 +1,10 @@
 # pylint: disable=missing-docstring
-
 from os import path
 
 import pytest
 
-from fava.core.documents import is_document_or_import_file
 from fava.core.documents import filepath_in_document_folder
+from fava.core.documents import is_document_or_import_file
 from fava.helpers import FavaAPIException
 
 
