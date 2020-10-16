@@ -1,13 +1,14 @@
 <script>
-  import { get, saveEntries } from "../api";
+  import { createEventDispatcher } from "svelte";
+  import { saveEntries } from "../api";
   import { _ } from "../i18n";
-  import { urlHash, closeOverlay } from "../stores";
 
   import ModalBase from "../modals/ModalBase.svelte";
   import Entry from "../entry-forms/Entry.svelte";
+  import { isDuplicate } from "./helpers";
 
   /** @type {import('../entries').Entry[]} */
-  let entries = [];
+  export let entries;
   /** @type {number} */
   let currentIndex = 0;
   /** @type {boolean} */
@@ -17,29 +18,17 @@
 
   /** @type {import('../entries').Entry} */
   let entry;
-  /** @type {boolean} */
-  let shown;
 
-  /**
-   * @param {import("../entries").Entry} e
-   */
-  function isDuplicate(e) {
-    return !!e.meta.__duplicate__;
-  }
-
-  $: shown = $urlHash.startsWith("extract");
-  $: if (shown) {
-    const params = new URLSearchParams($urlHash.slice(8));
-    const filename = params.get("filename") || "";
-    const importer = params.get("importer") || "";
-    get("extract", { filename, importer }).then((data) => {
-      entries = data;
-    });
-  }
+  $: shown = entries.length > 0;
   $: entry = entries[currentIndex];
   $: if (entry) {
-    duplicates = entry && entries.filter((e) => isDuplicate(e)).length;
+    duplicates = entries.filter((e) => isDuplicate(e)).length;
     duplicate = isDuplicate(entry);
+  }
+
+  const dispatch = createEventDispatcher();
+  function closeHandler() {
+    dispatch("close");
   }
 
   async function submitOrNext() {
@@ -47,7 +36,7 @@
       currentIndex += 1;
     } else {
       await saveEntries(entries.filter((e) => !isDuplicate(e)));
-      closeOverlay();
+      closeHandler();
     }
   }
 
@@ -71,7 +60,7 @@
   }
 </style>
 
-<ModalBase {shown}>
+<ModalBase {shown} {closeHandler}>
   <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
     <h3>{_('Import')}</h3>
     {#if entry}

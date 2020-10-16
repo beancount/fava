@@ -1,58 +1,46 @@
 <script>
+  import { get } from "../api";
   import { onMount } from "svelte";
-  import { todayAsString } from "../format";
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import { moveDocument, deleteDocument } from "../api";
+  import router from "../router";
 
-  import { newFilename, extractURL } from "./helpers";
+  import { preprocessData } from "./helpers";
 
   import Extract from "./Extract.svelte";
   import AccountInput from "../entry-forms/AccountInput.svelte";
+  import { notify } from "../notifications";
 
-  /** @type {Data} */
+  /** @type {import("./helpers").ImportableFiles} */
   export let data;
 
-  /** @typedef {{account: string, date: string, name: string, importer_name: string}} FileImporterInfo */
-  /** @typedef {{name: string, basename: string, importers: FileImporterInfo[]}[]} Data */
+  /** @type {import('../entries').Entry[]} */
+  let entries = [];
 
-  /** @typedef {{account: string, newName: string, importer_name: string}[]} PreprocessedImporters
-  /** @typedef {{name: string, basename: string, importers: PreprocessedImporters}[]} PreprocessedData
-  /** @type {PreprocessedData} */
+  /** @type {import("./helpers").ProcessedImportableFiles} */
   let preprocessedData = [];
 
-  const today = todayAsString();
+  /** @type {Map<string,import('../entries').Entry[]>} */
+  let extractCache = new Map();
 
-  /**
-   * Initially set the file names for all importable files.
-   * @param {Data} arr
-   * @returns {PreprocessedData}
-   */
-  function preprocessData(arr) {
-    return arr.map((file) => {
-      const importers = file.importers.map(
-        ({ account, importer_name, date, name }) => ({
-          account,
-          importer_name,
-          newName: newFilename(date, name),
-        })
-      );
-      if (importers.length === 0) {
-        const newName = newFilename(today, file.basename);
-        importers.push({ account: "", newName, importer_name: "" });
-      }
-      return {
-        ...file,
-        importers,
-      };
-    });
+  function preventNavigation() {
+    return extractCache.size > 0
+      ? "There are unfinished imports, are you sure you want to continue?"
+      : null;
   }
 
   onMount(() => {
     preprocessedData = preprocessData(data);
+    router.interruptHandlers.add(preventNavigation);
+
+    return () => {
+      router.interruptHandlers.delete(preventNavigation);
+    };
   });
 
   /**
+   * Move the given file to the new file name (and remove from the list).
    * @param {string} filename
    * @param {string} account
    * @param {string} newName
@@ -67,6 +55,7 @@
   }
 
   /**
+   * Delete the given file and remove it from the displayed list.
    * @param {string} filename
    */
   async function remove(filename) {
@@ -76,6 +65,26 @@
         (item) => item.name !== filename
       );
     }
+  }
+
+  /**
+   * Open the extract dialog for the given file/importer combination.
+   * @param {string} filename
+   * @param {string} importer
+   */
+  async function extract(filename, importer) {
+    const extractCacheKey = `${filename}:${importer}`;
+    let cached = extractCache.get(extractCacheKey);
+    if (!cached) {
+      cached = await get("extract", { filename, importer });
+      if (!cached.length) {
+        notify("No entries to import from this file.", "warning");
+        return;
+      }
+      extractCache.set(extractCacheKey, cached);
+      extractCache = extractCache;
+    }
+    entries = cached;
   }
 </script>
 
@@ -88,12 +97,13 @@
   .header button {
     float: right;
   }
-  .button {
-    padding: 4px 8px;
-  }
 </style>
 
-<Extract />
+<Extract
+  {entries}
+  on:close={() => {
+    entries = [];
+  }} />
 {#each preprocessedData as file}
   <div class="header" title={file.name}>
     <a
@@ -121,12 +131,22 @@
         {'Move'}
       </button>
       {#if info.importer_name}
-        <a
-          class="button"
+        <button
+          type="button"
           title="{_('Extract')} with importer {info.importer_name}"
-          href={extractURL(file.name, info.importer_name)}>
-          {_('Extract')}
-        </a>
+          on:click={() => extract(file.name, info.importer_name)}>
+          {extractCache.get(`${file.name}:${info.importer_name}`) ? _('Continue') : _('Extract')}
+        </button>
+        {#if extractCache.get(`${file.name}:${info.importer_name}`)}
+          <button
+            type="button"
+            on:click={() => {
+              extractCache.delete(`${file.name}:${info.importer_name}`);
+              extractCache = extractCache;
+            }}>
+            {_('Clear')}
+          </button>
+        {/if}
         {info.importer_name}
       {:else}{_('No importer matched this file.')}{/if}
     </div>
