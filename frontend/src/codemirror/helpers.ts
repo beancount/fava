@@ -1,4 +1,5 @@
 import CodeMirror, { Position } from "codemirror";
+
 import { fuzzyfilter } from "../lib/fuzzy";
 
 export function getCurrentWord(cursor: Position, line: string): string {

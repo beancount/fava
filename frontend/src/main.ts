@@ -28,24 +28,23 @@ import "codemirror/addon/dialog/dialog.css";
 import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
-import { _ } from "./i18n";
-import router, { initSyncedStoreValues } from "./router";
+import { get } from "./api";
 import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./editor";
+import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import {
   initCurrentKeyboardShortcuts,
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
-import { notify } from "./notifications";
-import { updateSidebar, initSidebar } from "./sidebar";
-import { SortableTable } from "./sort";
-import { TreeTable } from "./tree-table";
-import { favaAPI, favaAPIStore, favaAPIValidator, errorCount } from "./stores";
-
 import { getScriptTagJSON } from "./lib/dom";
-import { get } from "./api";
+import { notify } from "./notifications";
+import router, { initSyncedStoreValues } from "./router";
+import { initSidebar, updateSidebar } from "./sidebar";
+import { SortableTable } from "./sort";
+import { errorCount, favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 import { SvelteCustomElement } from "./svelte-custom-elements";
+import { TreeTable } from "./tree-table";
 
 customElements.define("beancount-textarea", BeancountTextarea, {
   extends: "textarea",

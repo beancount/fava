@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { Events } from "../src/lib/events";
 
 test("register and listen to events", (t) => {

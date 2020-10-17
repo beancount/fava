@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { shallow_equal } from "../src/lib/equals";
 
 test("shallow array equality", (t) => {

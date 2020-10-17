@@ -1,7 +1,8 @@
 import CodeMirror, { Editor } from "codemirror";
 
-import { fuzzyMatch, getCurrentWord } from "./helpers";
 import { getCompletion } from "../stores";
+
+import { fuzzyMatch, getCurrentWord } from "./helpers";
 
 const completionSources = {
   undatedDirectives: ["option", "plugin", "include"],

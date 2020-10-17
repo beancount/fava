@@ -1,8 +1,9 @@
 import test from "ava";
+
 import {
+  dateFormat,
   localeFormatter,
   timeFilterDateFormat,
-  dateFormat,
 } from "../src/format";
 
 test("locale number formatting", (t) => {

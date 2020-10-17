@@ -1,5 +1,5 @@
-import { record, string } from "./lib/validation";
 import { getScriptTagJSON } from "./lib/dom";
+import { record, string } from "./lib/validation";
 
 let translations: Record<string, string>;
 

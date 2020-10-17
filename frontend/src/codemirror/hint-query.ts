@@ -1,7 +1,7 @@
 import CodeMirror, { Editor } from "codemirror";
 
-import { fuzzyMatch, getCurrentWord } from "./helpers";
 import bqlGrammar from "./bql-grammar";
+import { fuzzyMatch, getCurrentWord } from "./helpers";
 
 const { columns, functions, keywords } = bqlGrammar;
 

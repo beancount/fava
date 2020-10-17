@@ -5,11 +5,11 @@
 
 import { writable, Writable } from "svelte/store";
 
-import { todayAsString } from "./format";
-import { notify } from "./notifications";
-import { basename, documentHasAccount } from "./lib/paths";
-import { delegate } from "./lib/events";
 import { put } from "./api";
+import { todayAsString } from "./format";
+import { delegate } from "./lib/events";
+import { basename, documentHasAccount } from "./lib/paths";
+import { notify } from "./notifications";
 
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
   if (

@@ -3,7 +3,7 @@
  */
 
 import { format } from "d3-format";
-import { utcFormat, timeFormat } from "d3-time-format";
+import { timeFormat, utcFormat } from "d3-time-format";
 import { derived } from "svelte/store";
 
 import { favaAPIStore, interval } from "./stores";

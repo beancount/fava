@@ -1,13 +1,14 @@
 import test from "ava";
+
 import {
   boolean,
   constant,
   date,
-  record,
   number,
-  string,
   object,
   optional_string,
+  record,
+  string,
 } from "../src/lib/validation";
 
 test("validate boolean", (t) => {

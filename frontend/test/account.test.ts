@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { leaf, parent } from "../src/lib/account";
 
 test("split account names", (t) => {

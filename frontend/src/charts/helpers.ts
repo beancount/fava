@@ -1,10 +1,10 @@
 import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
-import { get, derived } from "svelte/store";
+import { derived, get } from "svelte/store";
 
-import { accounts, operating_currency, currencies_sorted } from "../stores";
-import { time_filter } from "../stores/filters";
 import { currentTimeFilterDateFormat } from "../format";
+import { accounts, currencies_sorted, operating_currency } from "../stores";
+import { time_filter } from "../stores/filters";
 
 export function setTimeFilter(date: Date): void {
   time_filter.set(get(currentTimeFilterDateFormat)(date));

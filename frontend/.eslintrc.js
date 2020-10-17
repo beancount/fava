@@ -14,6 +14,18 @@ const airbnbConfigOverrides = {
   "@typescript-eslint/naming-convention": 0,
 };
 
+// Sort import statements and members alphabetically.
+const sortImports = {
+  "sort-imports": ["warn", { ignoreDeclarationSort: true, ignoreCase: true }],
+  "import/order": [
+    "warn",
+    {
+      "newlines-between": "always",
+      alphabetize: { order: "asc", caseInsensitive: true },
+    },
+  ],
+};
+
 module.exports = {
   plugins: ["@typescript-eslint", "svelte3"],
   extends: [
@@ -51,6 +63,9 @@ module.exports = {
     {
       files: "*.ts",
       parser: "@typescript-eslint/parser",
+      rules: {
+        ...sortImports,
+      },
     },
   ],
 };

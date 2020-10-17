@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { stratify } from "../src/lib/tree";
 
 test("tree: stratify", (t) => {

@@ -4,14 +4,14 @@
 
 import { SvelteComponent } from "svelte";
 
-import Editor from "./editor/Editor.svelte";
-import Import from "./import/Import.svelte";
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import Documents from "./documents/Documents.svelte";
+import Editor from "./editor/Editor.svelte";
+import FilterForm from "./header/FilterForm.svelte";
+import Import from "./import/Import.svelte";
+import Modals from "./modals/Modals.svelte";
 import Query from "./query/Query.svelte";
 import AccountSelector from "./sidebar/AccountSelector.svelte";
-import FilterForm from "./header/FilterForm.svelte";
-import Modals from "./modals/Modals.svelte";
 
 const components = new Map([
   ["charts", ChartSwitcher],

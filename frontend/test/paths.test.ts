@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { basename, documentHasAccount } from "../src/lib/paths";
 
 test("get basename of file", (t) => {
