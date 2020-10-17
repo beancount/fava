@@ -1,9 +1,8 @@
 <script>
-  import { get, saveEntries } from "../api";
   import { onMount } from "svelte";
+  import { get, saveEntries, moveDocument, deleteDocument } from "../api";
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
-  import { moveDocument, deleteDocument } from "../api";
   import router from "../router";
 
   import { preprocessData, isDuplicate } from "./helpers";
@@ -92,7 +91,7 @@
    */
   async function save() {
     const withoutDuplicates = entries.filter((e) => !isDuplicate(e));
-    const key = [...extractCache].find(([k, e]) => e === entries)?.[0];
+    const key = [...extractCache].find(([, e]) => e === entries)?.[0];
     if (key) {
       extractCache.delete(key);
       extractCache = extractCache;

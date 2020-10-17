@@ -87,9 +87,7 @@
         class:selected={selected === doc}
         draggable={true}
         title={doc.filename}
-        on:dragstart={(ev) => {
-          ev.dataTransfer && ev.dataTransfer.setData('fava/filename', doc.filename);
-        }}
+        on:dragstart={(ev) => ev.dataTransfer?.setData('fava/filename', doc.filename)}
         on:click={() => {
           selected = doc;
         }}>

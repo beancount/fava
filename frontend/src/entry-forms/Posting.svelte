@@ -31,17 +31,13 @@
    * @param {DragEvent} event
    */
   function dragstart(event) {
-    event.dataTransfer &&
-      event.dataTransfer.setData("fava/posting", `${index}`);
+    event.dataTransfer?.setData("fava/posting", `${index}`);
   }
   /**
    * @param {DragEvent} event
    */
   function dragenter(event) {
-    if (
-      event.dataTransfer &&
-      event.dataTransfer.types.includes("fava/posting")
-    ) {
+    if (event.dataTransfer?.types.includes("fava/posting")) {
       event.preventDefault();
       drag = true;
     }
@@ -53,8 +49,7 @@
    * @param {DragEvent} event
    */
   function drop(event) {
-    const from =
-      event.dataTransfer && event.dataTransfer.getData("fava/posting");
+    const from = event.dataTransfer?.getData("fava/posting");
     if (from) {
       dispatch("move", { from: +from, to: index });
       drag = false;

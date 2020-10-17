@@ -35,9 +35,11 @@ module.exports = {
     "prettier",
     "prettier/@typescript-eslint",
   ],
+  env: { browser: true },
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.json"],
+    extraFileExtensions: [".svelte"],
   },
   rules: {
     ...airbnbConfigOverrides,
