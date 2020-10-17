@@ -1,12 +1,12 @@
 <script>
-  import { get } from "../api";
+  import { get, saveEntries } from "../api";
   import { onMount } from "svelte";
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import { moveDocument, deleteDocument } from "../api";
   import router from "../router";
 
-  import { preprocessData } from "./helpers";
+  import { preprocessData, isDuplicate } from "./helpers";
 
   import Extract from "./Extract.svelte";
   import AccountInput from "../entry-forms/AccountInput.svelte";
@@ -86,6 +86,20 @@
     }
     entries = cached;
   }
+
+  /**
+   * Save the current entries.
+   */
+  async function save() {
+    const withoutDuplicates = entries.filter((e) => !isDuplicate(e));
+    const key = [...extractCache].find(([k, e]) => e === entries)?.[0];
+    if (key) {
+      extractCache.delete(key);
+      extractCache = extractCache;
+    }
+    entries = [];
+    await saveEntries(withoutDuplicates);
+  }
 </script>
 
 <style>
@@ -103,7 +117,8 @@
   {entries}
   on:close={() => {
     entries = [];
-  }} />
+  }}
+  on:save={save} />
 {#each preprocessedData as file}
   <div class="header" title={file.name}>
     <a

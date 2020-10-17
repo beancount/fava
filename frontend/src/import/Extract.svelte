@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import { saveEntries } from "../api";
   import { _ } from "../i18n";
 
   import ModalBase from "../modals/ModalBase.svelte";
@@ -9,34 +8,23 @@
 
   /** @type {import('../entries').Entry[]} */
   export let entries;
-  /** @type {number} */
-  let currentIndex = 0;
-  /** @type {boolean} */
-  let duplicate;
-  /** @type {number} */
-  let duplicates;
 
-  /** @type {import('../entries').Entry} */
-  let entry;
+  let currentIndex = 0;
 
   $: shown = entries.length > 0;
   $: entry = entries[currentIndex];
-  $: if (entry) {
-    duplicates = entries.filter((e) => isDuplicate(e)).length;
-    duplicate = isDuplicate(entry);
-  }
+  $: duplicate /** @type {boolean} */ = entry && isDuplicate(entry);
+  $: duplicates = entries.filter((e) => isDuplicate(e)).length;
 
   const dispatch = createEventDispatcher();
-  function closeHandler() {
-    dispatch("close");
-  }
+
+  const closeHandler = () => dispatch("close");
 
   async function submitOrNext() {
     if (currentIndex < entries.length - 1) {
       currentIndex += 1;
     } else {
-      await saveEntries(entries.filter((e) => !isDuplicate(e)));
-      closeHandler();
+      dispatch("save");
     }
   }
 
