@@ -15,18 +15,18 @@ msgstr "Vlastné odkazy"
 msgid "Errors"
 msgstr "Chyby"
 
-#: frontend/src/FilterForm.svelte:85
+#: frontend/src/header/FilterForm.svelte:100
 msgid "Time"
 msgstr "Čas"
 
-#: frontend/src/FilterForm.svelte:94
-#: frontend/src/entry-forms/AccountInput.svelte:19
+#: frontend/src/entry-forms/AccountInput.svelte:25
+#: frontend/src/header/FilterForm.svelte:109
 #: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
 msgstr "Účet"
 
-#: frontend/src/entry-forms/Transaction.svelte:85
-#: frontend/src/entry-forms/Transaction.svelte:88
+#: frontend/src/entry-forms/Transaction.svelte:97
+#: frontend/src/entry-forms/Transaction.svelte:100
 msgid "Payee"
 msgstr "Príjemca"
 
@@ -81,7 +81,7 @@ msgstr "Štatistiky"
 msgid "Help"
 msgstr "Pomoc"
 
-#: frontend/src/documents/Table.svelte:22
+#: frontend/src/documents/Table.svelte:29
 msgid "Date"
 msgstr "Dátum"
 
@@ -110,22 +110,22 @@ msgstr "Výdavok"
 msgid "Change"
 msgstr "Zmena"
 
-#: frontend/src/entry-forms/Balance.svelte:22
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/entry-forms/Balance.svelte:23
+#: frontend/src/modals/AddEntry.svelte:13
 msgid "Balance"
 msgstr "Zostatok"
 
-#: frontend/src/editor/SaveButton.svelte:7
-#: frontend/src/import/Extract.svelte:115
+#: frontend/src/editor/SaveButton.svelte:9
+#: frontend/src/import/Extract.svelte:104
 #: frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "Uložiť"
 
-#: frontend/src/editor/SaveButton.svelte:7
+#: frontend/src/editor/SaveButton.svelte:9
 msgid "Saving..."
 msgstr "Ukladá sa..."
 
-#: frontend/src/main.ts:126
+#: frontend/src/main.ts:88
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -163,11 +163,11 @@ msgstr "Zostatky"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Ukázať zdroj %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:74
+#: frontend/src/editor/EditorMenu.svelte:77
 msgid "File"
 msgstr "Súbor"
 
-#: frontend/src/import/Extract.svelte:122
+#: frontend/src/import/Extract.svelte:110
 msgid "Line"
 msgstr "Riadok"
 
@@ -200,7 +200,7 @@ msgstr "Pomoc - %(title)s"
 msgid "Help pages"
 msgstr "Pomocné stránky"
 
-#: frontend/src/entry-forms/Balance.svelte:32
+#: frontend/src/entry-forms/Balance.svelte:33
 msgid "Currency"
 msgstr "Mena"
 
@@ -225,15 +225,15 @@ msgstr "Príjem"
 msgid "Expenses"
 msgstr "Výdavky"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:66
+#: frontend/src/entry-forms/EntryMetadata.svelte:77
 msgid "Key"
 msgstr "Kľúč"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:75
+#: frontend/src/entry-forms/EntryMetadata.svelte:86
 msgid "Value"
 msgstr "Hodnota"
 
-#: frontend/src/query/QueryLinks.svelte:21
+#: frontend/src/query/QueryLinks.svelte:28
 msgid "Download as"
 msgstr "Stiahnuť ako"
 
@@ -282,8 +282,8 @@ msgstr "zavrieť"
 msgid "New transaction"
 msgstr "Nová transakcia"
 
-#: frontend/src/entry-forms/Transaction.svelte:94
-#: frontend/src/entry-forms/Transaction.svelte:98
+#: frontend/src/entry-forms/Transaction.svelte:106
+#: frontend/src/entry-forms/Transaction.svelte:110
 msgid "Narration"
 msgstr "Popis"
 
@@ -291,16 +291,16 @@ msgstr "Popis"
 msgid "Save and add new"
 msgstr "Uložit a pridať novú transakciu"
 
-#: frontend/src/entry-forms/Balance.svelte:27
+#: frontend/src/entry-forms/Balance.svelte:28
 msgid "Number"
 msgstr "Číslo"
 
-#: frontend/src/entry-forms/Posting.svelte:109
-#: frontend/src/entry-forms/Transaction.svelte:106
+#: frontend/src/entry-forms/Posting.svelte:124
+#: frontend/src/entry-forms/Transaction.svelte:118
 msgid "Add posting"
 msgstr "Pridať položku"
 
-#: frontend/src/import/Extract.svelte:70
+#: frontend/src/import/Extract.svelte:56
 msgid "Import"
 msgstr "Importovať"
 
@@ -316,7 +316,7 @@ msgstr "Prepnúť zdroj"
 msgid "Toggle ignore"
 msgstr "Prepnúť ignorovanie"
 
-#: frontend/src/import/Extract.svelte:121
+#: frontend/src/import/Extract.svelte:109
 msgid "Source"
 msgstr "Zdroj"
 
@@ -340,11 +340,11 @@ msgstr "Zdvojiť"
 msgid "Importer"
 msgstr "Importér"
 
-#: frontend/src/import/Import.svelte:103
+#: frontend/src/import/Import.svelte:152
 msgid "Extract"
 msgstr "Extraktovať"
 
-#: frontend/src/query/QueryEditor.svelte:24
+#: frontend/src/query/QueryEditor.svelte:30
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "...zadajte BQL dotaz. 'help' zobrazí všetky dostupné príkazy."
 
@@ -352,13 +352,13 @@ msgstr "...zadajte BQL dotaz. 'help' zobrazí všetky dostupné príkazy."
 msgid "Metadata"
 msgstr "Metadáta"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:82
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:93
 msgid "Add metadata"
 msgstr "Pridať metadáta"
 
-#: frontend/src/entry-forms/Note.svelte:23
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/entry-forms/Note.svelte:24
+#: frontend/src/modals/AddEntry.svelte:14
 msgid "Note"
 msgstr "Poznámka"
 
@@ -394,11 +394,11 @@ msgstr "Ostatné transakcie"
 msgid "Documents with a #discovered tag"
 msgstr "Dokumenty s tagom #discovered (objavené)"
 
-#: frontend/src/entry-forms/Transaction.svelte:114
+#: frontend/src/entry-forms/Transaction.svelte:125
 msgid "Postings"
 msgstr "Položky"
 
-#: frontend/src/modals/DocumentUpload.svelte:45
+#: frontend/src/modals/DocumentUpload.svelte:48
 msgid "Upload file(s)"
 msgstr "Nahrať súbor-y"
 
@@ -410,19 +410,19 @@ msgstr "Priečinok s dokumentmi"
 msgid "Upload"
 msgstr "Nahrať"
 
-#: frontend/src/editor/EditorMenu.svelte:87
+#: frontend/src/editor/EditorMenu.svelte:92
 msgid "Align Amounts"
 msgstr "Zarovnať hodnoty"
 
-#: frontend/src/editor/EditorMenu.svelte:97
+#: frontend/src/editor/EditorMenu.svelte:96
 msgid "Toggle Comment (selection)"
 msgstr "Prepnúť kommentár (výber)"
 
-#: frontend/src/editor/EditorMenu.svelte:107
+#: frontend/src/editor/EditorMenu.svelte:100
 msgid "Open all folds"
 msgstr "Rozšíriť všetko"
 
-#: frontend/src/editor/EditorMenu.svelte:110
+#: frontend/src/editor/EditorMenu.svelte:103
 msgid "Close all folds"
 msgstr "Zhrnúť všetko"
 
@@ -438,7 +438,7 @@ msgstr "pomoc"
 msgid "Beancount options"
 msgstr "Beancount možnosti"
 
-#: frontend/src/query/QueryEditor.svelte:64
+#: frontend/src/query/QueryEditor.svelte:72
 msgid "Submit"
 msgstr "Potvrdiť"
 
@@ -447,15 +447,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "Držte Shift počas kliknutia na rožšírenie všetkých podpodložiek. Držte Ctrl alebo Cmd počas kliknutia na rožirenie jedného stupňa."
 
-#: frontend/src/modals/Export.svelte:13
+#: frontend/src/modals/Export.svelte:14
 msgid "Export"
 msgstr "Exportovať"
 
-#: frontend/src/FilterForm.svelte:103
+#: frontend/src/header/FilterForm.svelte:118
 msgid "Filter by tag, payee, ..."
 msgstr "Filtrovať podľa tagu, príjemcu, ..."
 
-#: frontend/src/modals/Export.svelte:15
+#: frontend/src/modals/Export.svelte:16
 msgid "Download currently filtered entries as a Beancount file"
 msgstr "Stiahnuť aktuálne filtrované zápisy ako Beancount súbor"
 
@@ -483,11 +483,11 @@ msgstr "Týždenne"
 msgid "Daily"
 msgstr "Denne"
 
-#: frontend/src/editor/EditorMenu.svelte:84
+#: frontend/src/editor/EditorMenu.svelte:88
 msgid "Edit"
 msgstr "Upraviť"
 
-#: frontend/src/entry-forms/Posting.svelte:102
+#: frontend/src/entry-forms/Posting.svelte:117
 msgid "Amount"
 msgstr "Suma"
 
@@ -499,27 +499,27 @@ msgstr "Dokumenty s tagom #linked"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
-#: frontend/src/stores/chart.ts:25
+#: frontend/src/stores/chart.ts:28
 msgid "At Cost"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:26
+#: frontend/src/stores/chart.ts:29
 msgid "At Market Value"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:27
+#: frontend/src/stores/chart.ts:30
 msgid "Units"
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:54
+#: frontend/src/charts/Chart.svelte:70
 msgid "Treemap"
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:58
+#: frontend/src/charts/Chart.svelte:74
 msgid "Sunburst"
 msgstr ""
 
-#: frontend/src/entry-forms/AccountInput.svelte:14
+#: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
 msgstr ""
 
@@ -527,15 +527,15 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:100
+#: frontend/src/import/Extract.svelte:90
 msgid "Previous"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:105
+#: frontend/src/import/Extract.svelte:95
 msgid "Next"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:13
+#: frontend/src/modals/AddEntry.svelte:12
 msgid "Transaction"
 msgstr ""
 
@@ -543,11 +543,11 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:82
+#: frontend/src/documents/Documents.svelte:97
 msgid "Move or rename document"
 msgstr ""
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:33
 msgid "Name"
 msgstr ""
 
@@ -555,11 +555,31 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:84
+#: frontend/src/import/Import.svelte:133
 msgid "Delete"
 msgstr ""
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
+msgstr ""
+
+#: frontend/src/charts/Chart.svelte:81
+msgid "Line chart"
+msgstr ""
+
+#: frontend/src/charts/Chart.svelte:85
+msgid "Area chart"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:152
+msgid "Continue"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:161
+msgid "Clear"
+msgstr ""
+
+#: frontend/src/sidebar/AccountSelector.svelte:24
+msgid "Go to account"
 msgstr ""
 

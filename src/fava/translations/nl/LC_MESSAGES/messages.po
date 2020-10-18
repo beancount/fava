@@ -15,18 +15,18 @@ msgstr "Eigen Links"
 msgid "Errors"
 msgstr "Fouten"
 
-#: frontend/src/FilterForm.svelte:85
+#: frontend/src/header/FilterForm.svelte:100
 msgid "Time"
 msgstr "Periode"
 
-#: frontend/src/FilterForm.svelte:94
-#: frontend/src/entry-forms/AccountInput.svelte:19
+#: frontend/src/entry-forms/AccountInput.svelte:25
+#: frontend/src/header/FilterForm.svelte:109
 #: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
 msgstr "Rekening"
 
-#: frontend/src/entry-forms/Transaction.svelte:85
-#: frontend/src/entry-forms/Transaction.svelte:88
+#: frontend/src/entry-forms/Transaction.svelte:97
+#: frontend/src/entry-forms/Transaction.svelte:100
 msgid "Payee"
 msgstr "Begunstigde"
 
@@ -78,7 +78,7 @@ msgstr "Statistieken"
 msgid "Help"
 msgstr "Hulp"
 
-#: frontend/src/documents/Table.svelte:22
+#: frontend/src/documents/Table.svelte:29
 msgid "Date"
 msgstr "Datum"
 
@@ -107,22 +107,22 @@ msgstr "Kosten"
 msgid "Change"
 msgstr "Verschil"
 
-#: frontend/src/entry-forms/Balance.svelte:22
-#: frontend/src/modals/AddEntry.svelte:14
+#: frontend/src/entry-forms/Balance.svelte:23
+#: frontend/src/modals/AddEntry.svelte:13
 msgid "Balance"
 msgstr "Balans"
 
-#: frontend/src/editor/SaveButton.svelte:7
-#: frontend/src/import/Extract.svelte:115
+#: frontend/src/editor/SaveButton.svelte:9
+#: frontend/src/import/Extract.svelte:104
 #: frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "Opslaan"
 
-#: frontend/src/editor/SaveButton.svelte:7
+#: frontend/src/editor/SaveButton.svelte:9
 msgid "Saving..."
 msgstr "Bezig met opslaan..."
 
-#: frontend/src/main.ts:126
+#: frontend/src/main.ts:88
 msgid "File change detected. Click to reload."
 msgstr "Bestand is gewijzigd. Klik om te herladen."
 
@@ -159,11 +159,11 @@ msgstr "Balansen"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Bekijk bronbestand %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:74
+#: frontend/src/editor/EditorMenu.svelte:77
 msgid "File"
 msgstr "Bestand"
 
-#: frontend/src/import/Extract.svelte:122
+#: frontend/src/import/Extract.svelte:110
 msgid "Line"
 msgstr "Regel"
 
@@ -195,7 +195,7 @@ msgstr "Hulp - %(title)s"
 msgid "Help pages"
 msgstr "Hulp pagina's"
 
-#: frontend/src/entry-forms/Balance.svelte:32
+#: frontend/src/entry-forms/Balance.svelte:33
 msgid "Currency"
 msgstr "Valuta"
 
@@ -220,15 +220,15 @@ msgstr "Inkomsten"
 msgid "Expenses"
 msgstr "Uitgaven"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:66
+#: frontend/src/entry-forms/EntryMetadata.svelte:77
 msgid "Key"
 msgstr "Sleutel"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:75
+#: frontend/src/entry-forms/EntryMetadata.svelte:86
 msgid "Value"
 msgstr "Waarde"
 
-#: frontend/src/query/QueryLinks.svelte:21
+#: frontend/src/query/QueryLinks.svelte:28
 msgid "Download as"
 msgstr "Downloaded als"
 
@@ -277,8 +277,8 @@ msgstr "sluiten"
 msgid "New transaction"
 msgstr "Nieuwe transactie"
 
-#: frontend/src/entry-forms/Transaction.svelte:94
-#: frontend/src/entry-forms/Transaction.svelte:98
+#: frontend/src/entry-forms/Transaction.svelte:106
+#: frontend/src/entry-forms/Transaction.svelte:110
 msgid "Narration"
 msgstr "Omschrijving"
 
@@ -286,16 +286,16 @@ msgstr "Omschrijving"
 msgid "Save and add new"
 msgstr "Opslaan en nieuw"
 
-#: frontend/src/entry-forms/Balance.svelte:27
+#: frontend/src/entry-forms/Balance.svelte:28
 msgid "Number"
 msgstr "Nummer"
 
-#: frontend/src/entry-forms/Posting.svelte:109
-#: frontend/src/entry-forms/Transaction.svelte:106
+#: frontend/src/entry-forms/Posting.svelte:124
+#: frontend/src/entry-forms/Transaction.svelte:118
 msgid "Add posting"
 msgstr "Boeking toevoegen"
 
-#: frontend/src/import/Extract.svelte:70
+#: frontend/src/import/Extract.svelte:56
 msgid "Import"
 msgstr ""
 
@@ -311,7 +311,7 @@ msgstr ""
 msgid "Toggle ignore"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:121
+#: frontend/src/import/Extract.svelte:109
 msgid "Source"
 msgstr ""
 
@@ -335,11 +335,11 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:103
+#: frontend/src/import/Import.svelte:152
 msgid "Extract"
 msgstr ""
 
-#: frontend/src/query/QueryEditor.svelte:24
+#: frontend/src/query/QueryEditor.svelte:30
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr ""
 
@@ -347,13 +347,13 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:82
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:93
 msgid "Add metadata"
 msgstr ""
 
-#: frontend/src/entry-forms/Note.svelte:23
-#: frontend/src/modals/AddEntry.svelte:15
+#: frontend/src/entry-forms/Note.svelte:24
+#: frontend/src/modals/AddEntry.svelte:14
 msgid "Note"
 msgstr ""
 
@@ -389,11 +389,11 @@ msgstr ""
 msgid "Documents with a #discovered tag"
 msgstr ""
 
-#: frontend/src/entry-forms/Transaction.svelte:114
+#: frontend/src/entry-forms/Transaction.svelte:125
 msgid "Postings"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:45
+#: frontend/src/modals/DocumentUpload.svelte:48
 msgid "Upload file(s)"
 msgstr ""
 
@@ -405,19 +405,19 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: frontend/src/editor/EditorMenu.svelte:87
+#: frontend/src/editor/EditorMenu.svelte:92
 msgid "Align Amounts"
 msgstr ""
 
-#: frontend/src/editor/EditorMenu.svelte:97
+#: frontend/src/editor/EditorMenu.svelte:96
 msgid "Toggle Comment (selection)"
 msgstr ""
 
-#: frontend/src/editor/EditorMenu.svelte:107
+#: frontend/src/editor/EditorMenu.svelte:100
 msgid "Open all folds"
 msgstr ""
 
-#: frontend/src/editor/EditorMenu.svelte:110
+#: frontend/src/editor/EditorMenu.svelte:103
 msgid "Close all folds"
 msgstr ""
 
@@ -433,7 +433,7 @@ msgstr ""
 msgid "Beancount options"
 msgstr ""
 
-#: frontend/src/query/QueryEditor.svelte:64
+#: frontend/src/query/QueryEditor.svelte:72
 msgid "Submit"
 msgstr ""
 
@@ -442,15 +442,15 @@ msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
 
-#: frontend/src/modals/Export.svelte:13
+#: frontend/src/modals/Export.svelte:14
 msgid "Export"
 msgstr ""
 
-#: frontend/src/FilterForm.svelte:103
+#: frontend/src/header/FilterForm.svelte:118
 msgid "Filter by tag, payee, ..."
 msgstr ""
 
-#: frontend/src/modals/Export.svelte:15
+#: frontend/src/modals/Export.svelte:16
 msgid "Download currently filtered entries as a Beancount file"
 msgstr ""
 
@@ -478,11 +478,11 @@ msgstr ""
 msgid "Daily"
 msgstr ""
 
-#: frontend/src/editor/EditorMenu.svelte:84
+#: frontend/src/editor/EditorMenu.svelte:88
 msgid "Edit"
 msgstr ""
 
-#: frontend/src/entry-forms/Posting.svelte:102
+#: frontend/src/entry-forms/Posting.svelte:117
 msgid "Amount"
 msgstr ""
 
@@ -494,27 +494,27 @@ msgstr ""
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
-#: frontend/src/stores/chart.ts:25
+#: frontend/src/stores/chart.ts:28
 msgid "At Cost"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:26
+#: frontend/src/stores/chart.ts:29
 msgid "At Market Value"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:27
+#: frontend/src/stores/chart.ts:30
 msgid "Units"
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:54
+#: frontend/src/charts/Chart.svelte:70
 msgid "Treemap"
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:58
+#: frontend/src/charts/Chart.svelte:74
 msgid "Sunburst"
 msgstr ""
 
-#: frontend/src/entry-forms/AccountInput.svelte:14
+#: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
 msgstr ""
 
@@ -522,15 +522,15 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:100
+#: frontend/src/import/Extract.svelte:90
 msgid "Previous"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:105
+#: frontend/src/import/Extract.svelte:95
 msgid "Next"
 msgstr ""
 
-#: frontend/src/modals/AddEntry.svelte:13
+#: frontend/src/modals/AddEntry.svelte:12
 msgid "Transaction"
 msgstr ""
 
@@ -538,11 +538,11 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:82
+#: frontend/src/documents/Documents.svelte:97
 msgid "Move or rename document"
 msgstr ""
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:33
 msgid "Name"
 msgstr ""
 
@@ -550,11 +550,31 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:84
+#: frontend/src/import/Import.svelte:133
 msgid "Delete"
 msgstr ""
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
+msgstr ""
+
+#: frontend/src/charts/Chart.svelte:81
+msgid "Line chart"
+msgstr ""
+
+#: frontend/src/charts/Chart.svelte:85
+msgid "Area chart"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:152
+msgid "Continue"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:161
+msgid "Clear"
+msgstr ""
+
+#: frontend/src/sidebar/AccountSelector.svelte:24
+msgid "Go to account"
 msgstr ""
 
