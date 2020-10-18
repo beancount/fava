@@ -6,6 +6,14 @@ Unreleased
 
 Nothing yet.
 
+v1.16 (2020-10-18)
+------------------
+
+This release brings area charts as an alternative option to view the various
+line charts in Fava and a Catalan translation for Fava. There is also now an
+option to set the indentation of inserted Beancount entries. As usual this
+release also includes various minor fixes and improvements.
+
 v1.15 (2020-05-30)
 ------------------
 
