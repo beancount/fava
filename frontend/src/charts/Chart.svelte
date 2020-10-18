@@ -50,18 +50,20 @@
   };
 </script>
 
-<form class="flex-row">
+<div class="flex-row">
   {#if $showCharts}
     <div>
       <ChartLegend legend={$legend} />
     </div>
     <span class="spacer" />
     {#if chart.type === 'hierarchy'}
-      <select bind:value={$chartCurrency} hidden={$chartMode !== 'treemap'}>
-        {#each $currencies as currency}
-          <option value={currency}>{currency}</option>
-        {/each}
-      </select>
+      {#if $chartMode === 'treemap'}
+        <select bind:value={$chartCurrency}>
+          {#each $currencies as currency}
+            <option value={currency}>{currency}</option>
+          {/each}
+        </select>
+      {/if}
       <span class="chart-mode">
         <label>
           <input type="radio" bind:group={$chartMode} value="treemap" />
@@ -88,13 +90,11 @@
   <slot />
   <button
     type="button"
-    on:click={() => {
-      showCharts.update((v) => !v);
-    }}
+    on:click={() => showCharts.update((v) => !v)}
     use:keyboardShortcut={'Control+c'}
     class:closed={!$showCharts}
     class="toggle-chart" />
-</form>
+</div>
 <div hidden={!$showCharts} bind:clientWidth={width}>
   {#if width}
     {#if components[chart.type]}

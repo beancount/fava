@@ -129,7 +129,7 @@
         {#each data as d}
           <g fill={$currenciesScale(d.name)}>
             {#each d.values as v}
-              <circle r="3" cx={x(v.date)} cy={y(v.value)} />
+              <circle r="2" cx={x(v.date)} cy={y(v.value)} />
             {/each}
           </g>
         {/each}
