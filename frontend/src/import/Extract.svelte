@@ -15,6 +15,9 @@
   $: entry = entries[currentIndex];
   $: duplicate /** @type {boolean} */ = entry && isDuplicate(entry);
   $: duplicates = entries.filter((e) => isDuplicate(e)).length;
+  $: if (entries.length > 0 && currentIndex >= entries.length) {
+    currentIndex = 0;
+  }
 
   const dispatch = createEventDispatcher();
 
