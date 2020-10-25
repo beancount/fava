@@ -51,7 +51,8 @@
     {/each}
     <div class="fieldset">
       <label>
-        {_('Documents folder')}: <select name="folder">
+        {_('Documents folder')}:
+        <select name="folder">
           {#each documents as folder}
             <option>{folder}</option>
           {/each}
@@ -61,6 +62,7 @@
     <div class="fieldset">
       <label>
         {_('Account')}:
+
         <AccountInput bind:value={$account} />
       </label>
       <input type="hidden" name="hash" value={$hash} />
