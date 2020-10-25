@@ -46,14 +46,19 @@ import { errorCount, favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
 import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTable } from "./tree-table";
 
-customElements.define("beancount-textarea", BeancountTextarea, {
-  extends: "textarea",
-});
-customElements.define("copyable-text", CopyableText);
-customElements.define("fava-journal", FavaJournal, { extends: "ol" });
-customElements.define("sortable-table", SortableTable, { extends: "table" });
-customElements.define("tree-table", TreeTable, { extends: "ol" });
-customElements.define("svelte-component", SvelteCustomElement);
+/**
+ * Define the custom elements that Fava uses.
+ */
+function defineCustomElements() {
+  customElements.define("beancount-textarea", BeancountTextarea, {
+    extends: "textarea",
+  });
+  customElements.define("copyable-text", CopyableText);
+  customElements.define("fava-journal", FavaJournal, { extends: "ol" });
+  customElements.define("sortable-table", SortableTable, { extends: "table" });
+  customElements.define("tree-table", TreeTable, { extends: "ol" });
+  customElements.define("svelte-component", SvelteCustomElement);
+}
 
 const pageTitle = document.querySelector("h1 strong");
 const reloadButton = document.querySelector("#reload-page");
@@ -98,6 +103,7 @@ function init(): void {
   initSyncedStoreValues();
   initSidebar();
   initGlobalKeyboardShortcuts();
+  defineCustomElements();
   setInterval(doPoll, 5000);
   reloadButton?.addEventListener("click", () => {
     router.reload();
