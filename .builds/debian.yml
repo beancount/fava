@@ -1,16 +1,16 @@
 image: debian/stable
 packages:
-  - python3-dev
-  - nodejs
-  - npm
-  - tox
+    - python3-dev
+    - nodejs
+    - npm
+    - tox
 sources:
-  - https://github.com/beancount/fava
+    - https://github.com/beancount/fava
 tasks:
-  - build: |
-      sudo npm install npm@latest -g --no-progress
-      make -C fava
-  - lint: |
-      make -C fava check-lint
-  - test: |
-      make -C fava test
+    - build: |
+          sudo npm install npm@latest -g --no-progress
+          make -C fava
+    - lint: |
+          make -C fava check-lint
+    - test: |
+          make -C fava test

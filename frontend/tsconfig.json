@@ -1,18 +1,18 @@
 {
-  "compilerOptions": {
-    "target": "es2017",
-    "module": "es2015",
-    "moduleResolution": "Node",
-    "allowJs": true,
-    "checkJs": true,
-    "noEmit": true,
-    "strict": true,
-    "esModuleInterop": true
-  },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.svelte",
-    "test/**/*.ts",
-    "./.eslintrc.js"
-  ]
+    "compilerOptions": {
+        "target": "es2017",
+        "module": "es2015",
+        "moduleResolution": "Node",
+        "allowJs": true,
+        "checkJs": true,
+        "noEmit": true,
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.svelte",
+        "test/**/*.ts",
+        "./.eslintrc.js"
+    ]
 }
