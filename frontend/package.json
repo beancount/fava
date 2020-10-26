@@ -24,10 +24,6 @@
     "*.{css,md,js,json,svelte,ts}": "prettier --write",
     "*.{js,svelte,ts}": "eslint --fix"
   },
-  "prettier": {
-    "proseWrap": "always",
-    "tabWidth": 2
-  },
   "ava": {
     "extensions": [
       "ts"

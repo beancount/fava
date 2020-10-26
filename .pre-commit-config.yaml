@@ -17,3 +17,11 @@ repos:
       hooks:
           - id: pyupgrade
             args: ["--py36-plus"]
+    - repo: https://github.com/prettier/pre-commit
+      rev: 42a7d8bd7a9dd6d34a5f2a4e91e0497ad90e65fb
+      hooks:
+          - id: prettier
+            additional_dependencies:
+                - prettier@2.1.2
+                - prettier-plugin-svelte@1.4.1
+                - svelte@3.29.4
