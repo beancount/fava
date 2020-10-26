@@ -4,13 +4,11 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "npm run format && npm run lint:js-fix && npm run lint:css && npx tsc",
+    "lint": "npm run lint:js-fix && npm run lint:css && npx tsc",
     "lint:css": "stylelint 'css/*.css' 'src/**/*.svelte' --fix",
-    "check-lint": "npm run check-format && npm run lint:js && stylelint 'css/*.css' 'src/**/*.svelte' && npx tsc",
+    "check-lint": "npm run lint:js && stylelint 'css/*.css' 'src/**/*.svelte' && npx tsc",
     "lint:js": "eslint src test",
     "lint:js-fix": "npm run lint:js -- --fix",
-    "check-format": "cd ../ && prettier '**/*.{css,md,js,json,svelte,ts}' --check --ignore-path .gitignore",
-    "format": "npm run check-format -- --write",
     "test": "ava",
     "test:watch": "ava -w"
   },
@@ -21,7 +19,6 @@
   },
   "lint-staged": {
     "*.{css,svelte}": "stylelint --fix",
-    "*.{css,md,js,json,svelte,ts}": "prettier --write",
     "*.{js,svelte,ts}": "eslint --fix"
   },
   "ava": {
