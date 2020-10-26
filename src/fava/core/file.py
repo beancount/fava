@@ -27,18 +27,16 @@ from fava.helpers import FavaAPIException
 from fava.util import next_key
 
 
-#: The flags to exclude when rendering entries entries.
-EXCL_FLAGS = set(
-    (
-        flags.FLAG_PADDING,  # P
-        flags.FLAG_SUMMARIZE,  # S
-        flags.FLAG_TRANSFER,  # T
-        flags.FLAG_CONVERSIONS,  # C
-        flags.FLAG_UNREALIZED,  # U
-        flags.FLAG_RETURNS,  # R
-        flags.FLAG_MERGING,  # M
-    )
-)
+#: The flags to exclude when rendering entries.
+EXCL_FLAGS = {
+    flags.FLAG_PADDING,  # P
+    flags.FLAG_SUMMARIZE,  # S
+    flags.FLAG_TRANSFER,  # T
+    flags.FLAG_CONVERSIONS,  # C
+    flags.FLAG_UNREALIZED,  # U
+    flags.FLAG_RETURNS,  # R
+    flags.FLAG_MERGING,  # M
+}
 
 
 def sha256_str(val: str) -> str:
@@ -219,7 +217,7 @@ def insert_metadata_in_file(
 ) -> None:
     """Inserts the specified metadata in the file below lineno, taking into
     account the whitespace in front of the line that lineno."""
-    with open(filename, "r", encoding="utf-8") as file:
+    with open(filename, encoding="utf-8") as file:
         contents = file.readlines()
 
     contents.insert(lineno, f'{" " * indent}{key}: "{value}"\n')
@@ -284,7 +282,7 @@ def save_entry_slice(
             source files.
     """
 
-    with open(entry.meta["filename"], "r", encoding="utf-8") as file:
+    with open(entry.meta["filename"], encoding="utf-8") as file:
         lines = file.readlines()
 
     first_entry_line = entry.meta["lineno"] - 1
@@ -328,7 +326,7 @@ def insert_entry(
     )
     content = _format_entry(entry, currency_column, indent)
 
-    with open(filename, "r", encoding="utf-8") as file:
+    with open(filename, encoding="utf-8") as file:
         contents = file.readlines()
 
     if lineno is None:
@@ -360,7 +358,7 @@ def _format_entry(entry: Directive, currency_column: int, indent: int) -> str:
     entry = entry._replace(meta=meta)
     string = align(format_entry(entry, prefix=" " * indent), currency_column)
     string = string.replace("<class 'beancount.core.number.MISSING'>", "")
-    return "\n".join((line.rstrip() for line in string.split("\n")))
+    return "\n".join(line.rstrip() for line in string.split("\n"))
 
 
 def find_insert_position(

@@ -32,7 +32,7 @@ __plugins__ = ["link_documents"]
 
 def add_to_set(set_: Optional[AbstractSet[str]], new: str) -> Set[str]:
     """Add an entry to a set (or create it if doesn't exist)."""
-    return set(set_).union([new]) if set_ else set([new])
+    return set(set_).union([new]) if set_ else {new}
 
 
 def link_documents(entries: Entries, _) -> Tuple[Entries, List[DocumentError]]:

@@ -14,8 +14,7 @@ from fava.util import slugify
 def test_listify():
     @listify
     def fun():
-        for i in [1, 2, 3]:
-            yield i
+        yield from [1, 2, 3]
 
     assert fun() == [1, 2, 3]
 
