@@ -1,4 +1,4 @@
-# pylint: disable=invalid-name,missing-docstring
+# pylint: disable=invalid-name,missing-docstring,redefined-builtin
 
 extensions = [
     "sphinx.ext.extlinks",
@@ -36,6 +36,7 @@ def setup(app):
     app.connect("autodoc-skip-member", skip_namedtuples)
 
 
+desc = 'Web interface for <a href="http://furius.ca/beancount/">Beancount</a>'
 # Options for HTML output
 html_theme = "alabaster"
 html_static_path = ["static"]
@@ -43,7 +44,7 @@ html_theme_options = {
     "logo": "logo.png",
     "logo_name": True,
     "logo_text_align": "center",
-    "description": 'Web interface for <a href="http://furius.ca/beancount/">Beancount</a>',
+    "description": desc,
     "github_user": "beancount",
     "github_repo": "fava",
     "github_button": "false",

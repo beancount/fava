@@ -26,17 +26,14 @@ mostlyclean:
 .PHONY: check-lint
 check-lint: frontend/node_modules
 	cd frontend; npm run check-lint
+	pre-commit run -a
 	tox -e lint
 
 .PHONY: lint
 lint: frontend/node_modules
 	cd frontend; npm run lint
-	tox -e format
+	pre-commit run -a
 	tox -e lint
-
-.PHONY: reorder-imports
-reorder-imports:
-	find src tests -type f -name '*.py' -exec reorder-python-imports --application-directories=.:src {} +
 
 .PHONY: test
 test:
