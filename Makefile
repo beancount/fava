@@ -23,20 +23,14 @@ mostlyclean:
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
-.PHONY: check-lint
-check-lint: frontend/node_modules
-	cd frontend; npm run check-lint
-	pre-commit run -a
-	tox -e lint
-
 .PHONY: lint
 lint: frontend/node_modules
-	cd frontend; npm run lint
 	pre-commit run -a
 	tox -e lint
 
 .PHONY: test
 test:
+	cd frontend; npm run build
 	cd frontend; npm run test
 	tox -e py
 

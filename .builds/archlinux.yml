@@ -5,12 +5,13 @@ packages:
     - npm
     - python-tox
     - python-distlib
+    - python-pre-commit
 sources:
     - https://github.com/beancount/fava
 tasks:
     - build: |
           make -C fava
     - lint: |
-          make -C fava check-lint
+          make -C fava lint
     - test: |
           make -C fava test

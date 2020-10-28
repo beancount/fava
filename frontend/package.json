@@ -4,9 +4,6 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -cw",
-    "lint": "eslint . --fix && npm run lint:css && npx tsc",
-    "lint:css": "stylelint 'css/*.css' 'src/**/*.svelte' --fix",
-    "check-lint": "eslint . && stylelint 'css/*.css' 'src/**/*.svelte' && npx tsc",
     "test": "ava",
     "test:watch": "ava -w"
   },

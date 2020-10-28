@@ -18,7 +18,11 @@ jobs:
                   python-version: ${{ matrix.python-version }}
             - name: Install dependencies
               run: |
-                  pip install tox
+                  pip install tox pre-commit
+            - name: Lint
+              if: ${{ matrix.os == 'ubuntu-latest' }}
+              run: |
+                  make lint
             - name: Test
               run: |
                   tox -e py-dev
