@@ -29,7 +29,7 @@ const typescriptPlugin = dev
     })
   : typescript();
 
-function config(input, outputOpts, ...plugins) {
+function config(input, outputOpts) {
   return {
     input,
     output: {
@@ -40,16 +40,13 @@ function config(input, outputOpts, ...plugins) {
       ...outputOpts,
     },
     plugins: [
-      nodeResolve({ extensions: [".js", ".ts"] }),
-      commonjs({
-        include: "node_modules/**",
-      }),
+      nodeResolve(),
+      commonjs(),
       svelte({ dev }),
       css(),
       typescriptPlugin,
       sucrase({ exclude: ["node_modules/**"], transforms: [] }),
       copy(fonts),
-      ...plugins,
     ],
     onwarn(warning, warn) {
       if (
