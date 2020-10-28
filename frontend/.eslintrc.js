@@ -38,7 +38,7 @@ module.exports = {
   env: { browser: true },
   parserOptions: {
     tsconfigRootDir: __dirname,
-    project: ["./tsconfig.json"],
+    project: ["./tsconfig.json", "./tsconfig.confs.json"],
     extraFileExtensions: [".svelte"],
   },
   rules: {
@@ -49,7 +49,7 @@ module.exports = {
     {
       files: "*.js",
       rules: {
-        "@typescript-eslint/explicit-function-return-type": 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
       },
     },
     {
@@ -59,7 +59,6 @@ module.exports = {
         "no-undef-init": 0,
         "import/first": 0,
         "import/no-mutable-exports": 0,
-        "@typescript-eslint/explicit-function-return-type": 0,
       },
     },
     {

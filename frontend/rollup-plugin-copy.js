@@ -1,9 +1,9 @@
-import fs from "fs";
+import { copyFile as fsCopyFile, mkdir as fsMkdir } from "fs";
 import { promisify } from "util";
 import { basename, dirname, join } from "path";
 
-const copyFile = promisify(fs.copyFile);
-const mkdir = promisify(fs.mkdir);
+const copyFile = promisify(fsCopyFile);
+const mkdir = promisify(fsMkdir);
 
 /**
  * Copy the fonts over to the bundle folder.

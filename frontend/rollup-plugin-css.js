@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import path from "path";
+import { basename, extname } from "path";
 
 import { createFilter } from "@rollup/pluginutils";
 
@@ -27,7 +27,7 @@ export default function css(options = {}) {
       const emitOpts = {};
       const file = options.fileName || opts.file;
       if (file) {
-        emitOpts.fileName = `${path.basename(file, path.extname(file))}.css`;
+        emitOpts.fileName = `${basename(file, extname(file))}.css`;
       } else {
         emitOpts.name = "styles.css";
       }
