@@ -54,7 +54,7 @@ function defineCustomElements() {
     extends: "textarea",
   });
   customElements.define("copyable-text", CopyableText);
-  customElements.define("fava-journal", FavaJournal, { extends: "ol" });
+  customElements.define("fava-journal", FavaJournal);
   customElements.define("sortable-table", SortableTable, { extends: "table" });
   customElements.define("tree-table", TreeTable, { extends: "ol" });
   customElements.define("svelte-component", SvelteCustomElement);

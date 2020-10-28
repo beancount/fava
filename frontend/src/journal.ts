@@ -1,6 +1,6 @@
 import { delegate } from "./lib/events";
 import router from "./router";
-import { SortableJournal } from "./sort";
+import { sortableJournal } from "./sort";
 import { fql_filter } from "./stores/filters";
 
 /**
@@ -66,13 +66,19 @@ function handleClick({ target }: MouseEvent): void {
   }
 }
 
-export class FavaJournal extends SortableJournal {
+export class FavaJournal extends HTMLElement {
   constructor() {
     super();
 
+    const ol = this.querySelector("ol");
+    const form = this.querySelector("form");
+    if (!ol || !form) {
+      throw new Error("fava-journal is missing its <ol> or <form>");
+    }
+    sortableJournal(ol);
     delegate(this, "click", "li", handleClick);
 
-    const entryButtons = document.querySelectorAll("#entry-filters button");
+    const entryButtons = form.querySelectorAll("button");
     // Toggle entries with buttons.
     entryButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -85,11 +91,9 @@ export class FavaJournal extends SortableJournal {
           type === "custom" ||
           type === "document"
         ) {
-          document
-            .querySelectorAll(`#entry-filters .${type}-toggle`)
-            .forEach((el) => {
-              el.classList.toggle("inactive", !shouldShow);
-            });
+          form.querySelectorAll(`.${type}-toggle`).forEach((el) => {
+            el.classList.toggle("inactive", !shouldShow);
+          });
         }
 
         this.classList.toggle(`show-${type}`, shouldShow);
