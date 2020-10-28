@@ -1,7 +1,6 @@
 """For using the Beancount shell from Fava."""
 import contextlib
 import io
-import readline
 import textwrap
 
 from beancount.core.data import Query
@@ -23,7 +22,12 @@ from fava.util.excel import to_excel
 
 # This is to limit the size of the history file. Fava is not using readline at
 # all, but Beancount somehow still is...
-readline.set_history_length(1000)
+try:
+    import readline
+
+    readline.set_history_length(1000)
+except ImportError:
+    pass
 
 
 class QueryShell(BQLShell, FavaModule):

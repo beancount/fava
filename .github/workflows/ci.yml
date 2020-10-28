@@ -25,4 +25,4 @@ jobs:
                   make lint
             - name: Test
               run: |
-                  tox -e py-dev
+                  tox -e py
