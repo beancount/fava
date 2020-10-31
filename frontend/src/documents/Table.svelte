@@ -59,6 +59,9 @@
 </script>
 
 <style>
+  table {
+    width: 100%;
+  }
   tr {
     cursor: pointer;
   }
@@ -68,7 +71,7 @@
   }
 </style>
 
-<table style="width: 100%">
+<table>
   <thead>
     <tr>
       {#each tableColumns as col, index}
