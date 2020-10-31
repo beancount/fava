@@ -4,6 +4,7 @@ import {
   balances,
   commodities,
   parseGroupedQueryChart,
+  parseQueryChart,
   scatterplot,
 } from "../src/charts";
 
@@ -18,6 +19,8 @@ test("handle data for balances chart", (t) => {
   t.is(parsed.data.length, 2);
   t.is(parsed.data[0].values.length, 2);
   t.is(parsed.data[1].values.length, 1);
+  const queryChart = parseQueryChart(data);
+  t.deepEqual(queryChart?.data, parsed.data);
   t.snapshot(parsed);
 });
 
@@ -58,4 +61,10 @@ test("handle data for query charts", (t) => {
       .map((n) => n.data.account),
     ["(root)", "Assets", "Assets:Cash"]
   );
+});
+
+test("handle invalid data for query charts", (t) => {
+  const d: unknown[] = [{}];
+  const c = parseQueryChart(d);
+  t.is(c, null);
 });

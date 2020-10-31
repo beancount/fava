@@ -282,10 +282,7 @@ export function parseGroupedQueryChart(
   const root = stratify(
     grouped,
     (d) => d.group,
-    (account, d): AccountHierarchyDatum => ({
-      account,
-      balance: d?.balance ?? {},
-    })
+    (account, d) => ({ account, balance: d?.balance ?? {} })
   );
   root.account = "(root)";
 
@@ -302,15 +299,23 @@ export function parseGroupedQueryChart(
   return { type: "hierarchy", data };
 }
 
-export function parseQueryChart(json: unknown): ChartTypes | undefined {
+/**
+ * Parse one of the query result charts.
+ * @param json - The chart data to parse.
+ */
+export function parseQueryChart(json: unknown): ChartTypes | null {
   const currencies = get(operatingCurrenciesWithConversion);
   const tree = parseGroupedQueryChart(json, currencies);
   if (tree) {
     return tree;
   }
-  const dated = defaultValue(array(unknown), null);
+  const dated = defaultValue(array(unknown), null)(json);
   if (dated) {
-    return balances(dated);
+    try {
+      return balances(dated);
+    } catch (error) {
+      // pass
+    }
   }
-  return undefined;
+  return null;
 }
