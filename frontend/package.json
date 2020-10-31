@@ -15,23 +15,6 @@
       "sucrase/register"
     ]
   },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-standard",
-      "stylelint-config-recess-order",
-      "stylelint-config-prettier"
-    ],
-    "rules": {
-      "selector-pseudo-class-no-unknown": [
-        true,
-        {
-          "ignorePseudoClasses": [
-            "global"
-          ]
-        }
-      ]
-    }
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
