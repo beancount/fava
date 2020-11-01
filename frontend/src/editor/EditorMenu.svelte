@@ -85,8 +85,8 @@
       </ul>
     </li>
     <li>
-      {_('Edit')}&nbsp;▾
-
+      {_('Edit')}
+      &nbsp;▾
       <ul>
         <li on:click={() => dispatch('command', 'favaFormat')}>
           {_('Align Amounts')}

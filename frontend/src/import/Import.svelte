@@ -1,7 +1,6 @@
 <script>
   import { onMount } from "svelte";
   import { get, saveEntries, moveDocument, deleteDocument } from "../api";
-  import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import router from "../router";
 
@@ -119,12 +118,12 @@
     display: flex;
     align-items: stretch;
   }
-  .filelist {
-    flex: 1 0 40%;
-    padding: 1rem;
+  .fixed-fullsize-container > * {
+    flex: 1 1 40%;
+    overflow: auto;
   }
-  .preview {
-    flex: 1 0 40%;
+  .filelist {
+    padding: 1rem;
   }
 </style>
 
@@ -143,12 +142,7 @@
         on:click|self={() => {
           selected = selected === file.name ? null : file.name;
         }}>
-        <a
-          href={urlFor('document', { filename: file.name })}
-          data-remote
-          target="_blank">
-          {file.basename}
-        </a>
+        {file.basename}
         <button
           class="round"
           on:click={() => remove(file.name)}
@@ -191,7 +185,7 @@
     {/each}
   </div>
   {#if selected}
-    <div class="preview">
+    <div>
       <DocumentPreview filename={selected} />
     </div>
   {/if}
