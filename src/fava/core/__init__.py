@@ -3,6 +3,7 @@ import collections
 import copy
 import datetime
 import os
+from operator import itemgetter
 from typing import Any
 from typing import cast
 from typing import DefaultDict
@@ -606,3 +607,20 @@ class FavaLedger:
         if self.filters.time:
             return self.accounts[account_name].close_date < self._date_last
         return self.accounts[account_name].close_date != datetime.date.max
+
+    @staticmethod
+    def group_entries_by_type(entries: Entries) -> List[Tuple[str, Entries]]:
+        """Group the given entries by type.
+
+        Args:
+            entries: The entries to group.
+
+        Returns:
+            A list of tuples (type, entries) consisting of the directive type
+            as a string and the list of corresponding entries.
+        """
+        groups: Dict[str, Entries] = {}
+        for entry in entries:
+            groups.setdefault(entry.__class__.__name__, []).append(entry)
+
+        return sorted(list(groups.items()), key=itemgetter(0))

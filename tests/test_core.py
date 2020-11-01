@@ -51,6 +51,23 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
     assert not example_ledger.accounts["NOACCOUNT"].meta
 
 
+def test_group_entries(example_ledger: FavaLedger, load_doc) -> None:
+    """
+    2010-11-12 * "test"
+        Assets:T   4.00 USD
+        Expenses:T
+    2010-11-12 * "test"
+        Assets:T   4.00 USD
+        Expenses:T
+    2012-12-12 note Expenses:T "test"
+    """
+
+    entries, _, __ = load_doc
+    assert len(entries) == 3
+    data = example_ledger.group_entries_by_type(entries)
+    assert data == [("Note", [entries[2]]), ("Transaction", entries[0:2])]
+
+
 def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
     func = example_ledger.account_uptodate_status
     assert func("Assets:US:BofA") is None

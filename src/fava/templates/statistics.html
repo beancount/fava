@@ -74,10 +74,10 @@
       </tr>
     </thead>
     <tbody>
-      {% for group in ledger.entries|groupby('__class__.__name__') %}
+      {% for type, entries in ledger.group_entries_by_type(ledger.entries) %}
       <tr>
-        <td>{{ group.grouper }}</td>
-        <td class="num">{{ group.list|length }}</td>
+        <td>{{ type }}</td>
+        <td class="num">{{ entries|length }}</td>
       </tr>
       {% endfor %}
     </tbody>
