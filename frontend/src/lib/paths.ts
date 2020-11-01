@@ -7,6 +7,14 @@ export function basename(filename: string): string {
 }
 
 /**
+ * Get the extension of a filename.
+ */
+export function ext(filename: string): string {
+  const match = /\.(\w+)$/.exec(filename);
+  return match ? match[1] : "";
+}
+
+/**
  * Check whether the given filename includes the account parts at the end.
  */
 export function documentHasAccount(filename: string, account: string): boolean {

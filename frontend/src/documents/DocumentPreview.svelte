@@ -1,8 +1,13 @@
 <script>
+  import { ext } from "../lib/paths";
+
   import { baseURL } from "../stores/url";
 
   /** @type {string} */
   export let filename;
+
+  $: extension = ext(filename);
+  $: url = `${$baseURL}document/?filename=${filename}`;
 </script>
 
 <style>
@@ -12,4 +17,8 @@
   }
 </style>
 
-<object title={filename} data={`${$baseURL}document/?filename=${filename}`} />
+{#if extension === 'pdf'}
+  <object title={filename} data={url} />
+{:else}
+  Preview for file `{filename}` with file type `{extension}` is not implemented
+{/if}
