@@ -96,7 +96,7 @@ export class FavaJournal extends HTMLElement {
           });
         }
 
-        this.classList.toggle(`show-${type}`, shouldShow);
+        ol.classList.toggle(`show-${type}`, shouldShow);
 
         // Modify get params
         const filterShow: string[] = [];
