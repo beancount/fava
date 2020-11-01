@@ -3,4 +3,6 @@ disable = too-few-public-methods,
     not-callable,
     bad-continuation,
     wrong-import-order,
-    isinstance-second-argument-not-valid-type
+    isinstance-second-argument-not-valid-type,
+    unsubscriptable-object,
+    inherit-non-class
