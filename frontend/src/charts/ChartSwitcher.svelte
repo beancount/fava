@@ -48,6 +48,7 @@
 
   span {
     padding: 0 0.5em;
+    cursor: pointer;
   }
 
   span + span {
