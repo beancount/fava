@@ -21,13 +21,13 @@ repos:
       hooks:
           - id: eslint
             name: eslint
-            language: system
-            entry: ./frontend/node_modules/.bin/eslint --fix
+            language: node
+            entry: ./frontend/node_modules/eslint/bin/eslint.js --fix
             files: \.(js|ts|svelte)$
           - id: stylelint
             name: stylelint
-            language: system
-            entry: ./frontend/node_modules/.bin/stylelint --fix
+            language: node
+            entry: ./frontend/node_modules/stylelint/bin/stylelint.js --fix
             files: \.(css|svelte)$
     - repo: https://github.com/prettier/pre-commit
       rev: 42a7d8bd7a9dd6d34a5f2a4e91e0497ad90e65fb
