@@ -3,6 +3,7 @@
 
   import { get } from "../api";
   import { query_shell_history, addToHistory } from "../stores/query";
+  import { getFilterParams } from "../stores/filters";
   import { parseQueryChart } from "../charts";
 
   import Chart from "../charts/Chart.svelte";
@@ -43,7 +44,7 @@
     if (!query) {
       return;
     }
-    get("query_result", { query_string: query }).then(
+    get("query_result", { query_string: query, ...getFilterParams() }).then(
       (res) => {
         const chart = parseQueryChart(res.chart);
         setResult(query, { result: { chart, table: res.table } });
