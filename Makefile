@@ -97,7 +97,7 @@ gh-pages:
 	rm -r build
 	touch .nojekyll
 	git add -A
-	git commit -m 'Update gh-pages'
+	git commit -m 'Update gh-pages' --no-verify
 	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
 	git checkout master
 	git branch -D gh-pages
