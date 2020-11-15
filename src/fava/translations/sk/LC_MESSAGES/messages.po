@@ -21,7 +21,7 @@ msgstr "Čas"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "Účet"
 
@@ -125,7 +125,7 @@ msgstr "Uložiť"
 msgid "Saving..."
 msgstr "Ukladá sa..."
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "Súbor bol zmenený. Kliknutie obnoví stránku."
 
@@ -340,7 +340,7 @@ msgstr "Zdvojiť"
 msgid "Importer"
 msgstr "Importér"
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr "Extraktovať"
 
@@ -406,7 +406,7 @@ msgstr "Nahrať súbor-y"
 msgid "Documents folder"
 msgstr "Priečinok s dokumentmi"
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr "Nahrať"
 
@@ -543,7 +543,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr ""
 
@@ -555,7 +555,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr ""
 
@@ -571,11 +571,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
 msgstr ""
 

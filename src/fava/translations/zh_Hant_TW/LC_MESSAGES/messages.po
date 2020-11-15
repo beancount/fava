@@ -21,7 +21,7 @@ msgstr "時間"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "帳戶"
 
@@ -121,7 +121,7 @@ msgstr "儲存"
 msgid "Saving..."
 msgstr "儲存中..."
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "偵測到文件更動，點擊此處重新整理。"
 
@@ -335,7 +335,7 @@ msgid "Importer"
 msgstr "匯入器"
 
 #. 不確定 UI 上是用在哪
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr "匯出"
 
@@ -401,7 +401,7 @@ msgstr "上傳檔案"
 msgid "Documents folder"
 msgstr "文件資料夾"
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr "上傳"
 
@@ -540,7 +540,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr ""
 
@@ -552,7 +552,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr ""
 
@@ -568,11 +568,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
 msgstr ""
 

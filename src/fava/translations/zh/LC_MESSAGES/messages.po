@@ -21,7 +21,7 @@ msgstr "时间"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "帐户"
 
@@ -121,7 +121,7 @@ msgstr "保存"
 msgid "Saving..."
 msgstr "保存中…"
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
@@ -334,7 +334,7 @@ msgstr "复制"
 msgid "Importer"
 msgstr "导入器"
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr "导出"
 
@@ -400,7 +400,7 @@ msgstr "上传文件"
 msgid "Documents folder"
 msgstr "文档目录"
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr "上传"
 
@@ -538,7 +538,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr ""
 
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr ""
 
@@ -566,11 +566,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
 msgstr ""
 

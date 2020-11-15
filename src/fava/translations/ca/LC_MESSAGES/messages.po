@@ -21,7 +21,7 @@ msgstr "Data"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "Compte"
 
@@ -121,7 +121,7 @@ msgstr "Desa"
 msgid "Saving..."
 msgstr "S'està desant..."
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
@@ -334,7 +334,7 @@ msgstr "Duplicada"
 msgid "Importer"
 msgstr "Importador"
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr "Extreu"
 
@@ -400,7 +400,7 @@ msgstr "Puja un fitxer"
 msgid "Documents folder"
 msgstr "Carpeta de documents"
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr "Puja"
 
@@ -538,7 +538,7 @@ msgstr "Transacció"
 msgid "Add"
 msgstr "Afegeix"
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr "Mou o canvia el nom del document"
 
@@ -550,7 +550,7 @@ msgstr "Nom"
 msgid "Documents"
 msgstr "Documents"
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr "Suprimeix"
 
@@ -560,21 +560,21 @@ msgstr "No hi ha cap importador per a aquest fitxer."
 
 #: frontend/src/charts/Chart.svelte:81
 msgid "Line chart"
-msgstr ""
+msgstr "Diagrama de línies"
 
 #: frontend/src/charts/Chart.svelte:85
 msgid "Area chart"
-msgstr ""
+msgstr "Diagrama d'àrees"
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
-msgstr ""
+msgstr "Continua"
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
-msgstr ""
+msgstr "Esborra"
 
 #: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
-msgstr ""
+msgstr "Vés al compte"
 

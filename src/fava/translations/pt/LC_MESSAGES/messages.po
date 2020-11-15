@@ -21,7 +21,7 @@ msgstr "Data"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "Conta"
 
@@ -123,7 +123,7 @@ msgid "Saving..."
 msgstr "A guardar..."
 
 #. Wouldn't "arquivo" be better than "ficheiro"?
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "Arquivo alterado. Clique para atualizar."
 
@@ -338,7 +338,7 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr ""
 
@@ -404,7 +404,7 @@ msgstr ""
 msgid "Documents folder"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr ""
 
@@ -541,7 +541,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr ""
 
@@ -553,7 +553,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr ""
 
@@ -569,11 +569,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
 msgstr ""
 

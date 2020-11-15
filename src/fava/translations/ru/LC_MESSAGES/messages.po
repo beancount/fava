@@ -21,7 +21,7 @@ msgstr "Время"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "Счёт"
 
@@ -121,7 +121,7 @@ msgstr "Сохранить"
 msgid "Saving..."
 msgstr "Сохраняю..."
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "Содержимое файла изменилось. Нажмите, чтобы перезагрузить."
 
@@ -334,7 +334,7 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr ""
 
@@ -354,7 +354,7 @@ msgstr "Добавить метаданные"
 #: frontend/src/entry-forms/Note.svelte:24
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Note"
-msgstr ""
+msgstr "Заметка"
 
 #: fava/templates/_context.html:4
 msgid "Location"
@@ -400,7 +400,7 @@ msgstr ""
 msgid "Documents folder"
 msgstr ""
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr ""
 
@@ -459,23 +459,23 @@ msgstr ""
 
 #: frontend/src/charts/ConversionAndInterval.svelte:7
 msgid "Yearly"
-msgstr ""
+msgstr "По годам"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:8
 msgid "Quarterly"
-msgstr ""
+msgstr "По кварталам"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:9
 msgid "Monthly"
-msgstr ""
+msgstr "По месяцам"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:10
 msgid "Weekly"
-msgstr ""
+msgstr "По неделям"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:11
 msgid "Daily"
-msgstr ""
+msgstr "По дням"
 
 #: frontend/src/editor/EditorMenu.svelte:88
 msgid "Edit"
@@ -507,11 +507,11 @@ msgstr ""
 
 #: frontend/src/charts/Chart.svelte:70
 msgid "Treemap"
-msgstr ""
+msgstr "Плоское дерево"
 
 #: frontend/src/charts/Chart.svelte:74
 msgid "Sunburst"
-msgstr ""
+msgstr "Солнечные лучи"
 
 #: frontend/src/entry-forms/AccountInput.svelte:20
 msgid "Should be one of the declared accounts"
@@ -537,7 +537,7 @@ msgstr "Транзакция"
 msgid "Add"
 msgstr "Добавить"
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr ""
 
@@ -549,7 +549,7 @@ msgstr ""
 msgid "Documents"
 msgstr "Документы"
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr ""
 
@@ -559,21 +559,21 @@ msgstr ""
 
 #: frontend/src/charts/Chart.svelte:81
 msgid "Line chart"
-msgstr ""
+msgstr "Линейная диаграмма"
 
 #: frontend/src/charts/Chart.svelte:85
 msgid "Area chart"
-msgstr ""
+msgstr "Диаграмма с областями"
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
 msgstr ""
 
 #: frontend/src/sidebar/AccountSelector.svelte:24
 msgid "Go to account"
-msgstr ""
+msgstr "Перейти к счёту"
 

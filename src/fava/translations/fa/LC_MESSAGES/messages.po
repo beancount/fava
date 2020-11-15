@@ -21,7 +21,7 @@ msgstr "زمان"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
 #: frontend/src/header/FilterForm.svelte:109
-#: frontend/src/modals/DocumentUpload.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "حساب‌ کاربری"
 
@@ -121,7 +121,7 @@ msgstr "ذخیره"
 msgid "Saving..."
 msgstr "پس انداز..."
 
-#: frontend/src/main.ts:88
+#: frontend/src/main.ts:93
 msgid "File change detected. Click to reload."
 msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
 
@@ -334,7 +334,7 @@ msgstr "تکراری"
 msgid "Importer"
 msgstr "واردکننده"
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Extract"
 msgstr "استخراج"
 
@@ -400,7 +400,7 @@ msgstr "آپلودفایل‌(ها)"
 msgid "Documents folder"
 msgstr "پوشه‌اسناد"
 
-#: frontend/src/modals/DocumentUpload.svelte:68
+#: frontend/src/modals/DocumentUpload.svelte:70
 msgid "Upload"
 msgstr "آپلود"
 
@@ -538,7 +538,7 @@ msgstr "تراکنش"
 msgid "Add"
 msgstr "افزودن"
 
-#: frontend/src/documents/Documents.svelte:97
+#: frontend/src/documents/Documents.svelte:94
 msgid "Move or rename document"
 msgstr "انتقال یا تغییر نام سند"
 
@@ -550,7 +550,7 @@ msgstr "نام"
 msgid "Documents"
 msgstr "اسناد"
 
-#: frontend/src/import/Import.svelte:133
+#: frontend/src/import/Import.svelte:150
 msgid "Delete"
 msgstr "حذف"
 
@@ -566,11 +566,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:152
+#: frontend/src/import/Import.svelte:169
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:161
+#: frontend/src/import/Import.svelte:178
 msgid "Clear"
 msgstr ""
 
