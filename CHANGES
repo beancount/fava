@@ -6,6 +6,12 @@ Unreleased
 
 Nothing yet.
 
+v1.17 (2020-11-15)
+------------------
+
+This release adds a document preview to the import page, as well as support
+for Python 3.9. It also fixes a couple of bugs.
+
 v1.16 (2020-10-18)
 ------------------
 
