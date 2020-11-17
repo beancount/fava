@@ -82,8 +82,10 @@ class ExtensionModule(FavaModule):
 def extension_entries(custom_entries):
     """Parse custom entries for extensions.
 
-    They have the following format:
-    2016-04-01 custom "fava-extension" "my_extension" "{'my_option': {}}"
+    They have the following format::
+
+        2016-04-01 custom "fava-extension" "my_extension" "{'my_option': {}}"
+
     """
     _extension_entries = [
         entry for entry in custom_entries if entry.type == "fava-extension"
