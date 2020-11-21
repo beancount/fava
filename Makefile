@@ -101,3 +101,7 @@ gh-pages:
 	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
 	git checkout master
 	git branch -D gh-pages
+
+# create a fava executable using pyinstaller
+dist/fava/cli:
+	pyinstaller --clean --noconfirm contrib/pyinstaller.spec
