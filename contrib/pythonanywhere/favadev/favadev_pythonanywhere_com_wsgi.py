@@ -1,3 +1,4 @@
+"""fava wsgi application"""
 from fava.application import app as application
 
 application.config["BEANCOUNT_FILES"] = [

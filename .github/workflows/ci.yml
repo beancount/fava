@@ -39,3 +39,6 @@ jobs:
               run: tox -e lint
             - name: Test
               run: make test
+            - name: PyInstaller build
+              if: ${{ matrix.os == 'ubuntu-latest' }}
+              run: tox -e pyinstaller
