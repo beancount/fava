@@ -43,5 +43,9 @@ jobs:
               run: make test
             - name: Install pyinstaller
               run: pip install pyinstaller
+            - name: Print working directory
+              run: echo ${PWD}
+            - name: Install fava
+              run: pip install .
             - name: Test the pyinstaller binary
               run: make pyinstaller-test
