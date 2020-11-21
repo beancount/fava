@@ -15,7 +15,8 @@
 {% endmacro %}
 
 {% macro tree(account_node) %}
-<ol is="tree-table" class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
+<tree-table>
+<ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
 Hold Ctrl or Cmd while clicking to expand one level.') }}">
   <li class="head">
     <p>
@@ -63,6 +64,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
   </li>
   {% endfor %}
 </ol>
+</tree-table>
 {% endmacro %}
 
 {% macro render_budget(budget, currency, number=0) %}
@@ -75,7 +77,8 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
 {% endmacro %}
 
 {% macro account_tree(account_name, interval_balances, dates, accumulate) %}
-<ol is="tree-table" class="fullwidth flex-table tree-table">
+<tree-table>
+<ol class="fullwidth flex-table tree-table">
     <li class="head">
         <p>
         <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
@@ -139,4 +142,5 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
     </li>
 {% endfor %}
 </ol>
+</tree-table>
 {% endmacro %}
