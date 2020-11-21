@@ -38,3 +38,7 @@ jobs:
               run: tox -e lint
             - name: Test
               run: make test
+            - name: Install pyinstaller
+              run: pip install pyinstaller
+            - name: Test the pyinstaller binary
+              run: make pyinstaller-test

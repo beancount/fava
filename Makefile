@@ -102,6 +102,11 @@ gh-pages:
 	git checkout master
 	git branch -D gh-pages
 
-# create a fava executable using pyinstaller
+# Verify that the binary build using pyinstaller can be executed
+.PHONY: pyinstaller-test
+pyinstaller-test: dist/fava/cli
+	./dist/fava/cli --version
+
+# Create a binary using pyinstaller
 dist/fava/cli:
 	pyinstaller --clean --noconfirm contrib/pyinstaller.spec
