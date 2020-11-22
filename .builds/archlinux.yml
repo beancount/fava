@@ -9,12 +9,12 @@ packages:
 sources:
     - https://github.com/beancount/fava
 tasks:
-    - set_locale: |
-          export LC_ALL=C.UTF-8
-          export LANG=C.UTF-8
     - build: |
           make -C fava
     - lint: |
           make -C fava lint
     - test: |
           make -C fava test
+environment:
+    LC_ALL: C.UTF-8
+    LANG: C.UTF-8
