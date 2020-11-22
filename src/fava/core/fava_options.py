@@ -123,7 +123,7 @@ def parse_options(
 ) -> Tuple[FavaOptions, Iterable[BeancountError]]:
     """Parse custom entries for Fava options.
 
-    The format for option entries is the following:
+    The format for option entries is the following::
 
         2016-04-01 custom "fava-option" "[name]" "[value]"
 

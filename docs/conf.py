@@ -6,8 +6,6 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
 ]
-source_suffix = ".rst"
-master_doc = "index"
 intersphinx_mapping = {"python": ("https://docs.python.org/3", None)}
 
 # General information about the project.
@@ -15,15 +13,15 @@ project = "Fava"
 copyright = "2016, Dominik Aumayr"
 author = "Dominik Aumayr"
 
-exclude_patterns = ["_build"]
-pygments_style = "sphinx"
-
 extlinks = {
     "bug": ("https://github.com/beancount/fava/issues/%s", "#"),
     "user": ("https://github.com/%s", "@"),
 }
 
-autodoc_default_flags = ["members", "undoc-members"]
+autodoc_default_options = {
+    "members": True,
+    "undoc-members": True,
+}
 
 
 def skip_namedtuples(_app, _what, _name, obj, _options, _lines):

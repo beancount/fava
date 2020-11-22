@@ -7,5 +7,4 @@ API Documentation
     :glob:
 
     api/fava*
-    api/beancount*
 
