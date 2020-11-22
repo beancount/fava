@@ -39,9 +39,3 @@ jobs:
               run: tox -e lint
             - name: Test
               run: make test
-            - name: Install pyinstaller
-              run: pip install pyinstaller
-            - name: Install fava
-              run: pip install .
-            - name: Build and test the pyinstaller binary
-              run: make pyinstaller-test

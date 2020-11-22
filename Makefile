@@ -33,6 +33,7 @@ test:
 	cd frontend; npm run build
 	cd frontend; npm run test
 	tox -e py
+	tox -e pyinstaller
 
 .PHONY: update-snapshots
 update-snapshots:
@@ -102,11 +103,6 @@ gh-pages:
 	git checkout master
 	git branch -D gh-pages
 
-# Verify that the binary build using pyinstaller can be executed
-.PHONY: pyinstaller-test
-pyinstaller-test: dist/fava/cli
-	./dist/fava/cli --version
-
 # Create a binary using pyinstaller
 dist/fava/cli:
-	pyinstaller --clean --noconfirm contrib/pyinstaller.spec
+	pyinstaller --clean --noconfirm contrib/pyinstaller_spec.spec
