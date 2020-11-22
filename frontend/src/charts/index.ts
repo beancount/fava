@@ -232,10 +232,9 @@ export function hierarchy(json: unknown): HierarchyChart {
   return { type: "hierarchy", data };
 }
 
-const parsers: Partial<Record<
-  string,
-  (json: unknown, label: string) => ChartTypes
->> = {
+const parsers: Partial<
+  Record<string, (json: unknown, label: string) => ChartTypes>
+> = {
   balances,
   commodities,
   bar,
