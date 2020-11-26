@@ -40,18 +40,7 @@ import { put } from "./api";
 import { notify } from "./notifications";
 import { favaAPI } from "./stores";
 
-interface SimpleModeRule {
-  regex: string | RegExp;
-  token: string | string[] | null;
-  sol?: boolean;
-  mode?: { spec: string; end: string | RegExp };
-}
-
 declare module "codemirror" {
-  function defineSimpleMode(
-    name: string,
-    config: Record<string, SimpleModeRule[]>
-  ): void;
   interface EditorConfiguration {
     // defined in the edit/trailingspace addon
     showTrailingSpace?: boolean;

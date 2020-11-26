@@ -42,7 +42,7 @@ function config(input, outputOpts) {
     plugins: [
       nodeResolve(),
       commonjs(),
-      svelte({ dev }),
+      svelte({ compilerOptions: { dev } }),
       css(),
       typescriptPlugin,
       sucrase({ exclude: ["node_modules/**"], transforms: [] }),
