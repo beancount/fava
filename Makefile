@@ -103,5 +103,5 @@ gh-pages:
 	git branch -D gh-pages
 
 # Create a binary using pyinstaller
-dist/fava/cli:
+dist/fava:
 	tox -e pyinstaller
