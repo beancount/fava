@@ -6,7 +6,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from beancount.core import flags
 from beancount.core import realization
 from beancount.core.amount import Amount
 from beancount.core.data import iter_entry_dates
@@ -16,6 +15,7 @@ from beancount.core.number import Decimal
 from beancount.core.position import Position
 from simplejson import JSONEncoder
 
+from fava.core._compat import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import units
 from fava.core.module_base import FavaModule
@@ -196,7 +196,7 @@ class ChartModule(FavaModule):
             for entry in self.ledger.entries
             if (
                 isinstance(entry, Transaction)
-                and entry.flag != flags.FLAG_UNREALIZED
+                and entry.flag != FLAG_UNREALIZED
             )
         )
 

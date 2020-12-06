@@ -11,14 +11,20 @@ from typing import List
 from typing import Optional
 from typing import Tuple
 
-from beancount.core import flags
 from beancount.core.data import Balance
 from beancount.core.data import Directive
 from beancount.core.data import Entries
 from beancount.core.data import SORT_ORDER
 from beancount.core.data import Transaction
+from beancount.core.flags import FLAG_CONVERSIONS
+from beancount.core.flags import FLAG_MERGING
+from beancount.core.flags import FLAG_PADDING
+from beancount.core.flags import FLAG_SUMMARIZE
+from beancount.core.flags import FLAG_TRANSFER
 from beancount.parser.printer import format_entry  # type: ignore
 
+from fava.core._compat import FLAG_RETURNS
+from fava.core._compat import FLAG_UNREALIZED
 from fava.core.fava_options import InsertEntryOption
 from fava.core.filters import get_entry_accounts
 from fava.core.misc import align
@@ -29,13 +35,13 @@ from fava.util import next_key
 
 #: The flags to exclude when rendering entries.
 EXCL_FLAGS = {
-    flags.FLAG_PADDING,  # P
-    flags.FLAG_SUMMARIZE,  # S
-    flags.FLAG_TRANSFER,  # T
-    flags.FLAG_CONVERSIONS,  # C
-    flags.FLAG_UNREALIZED,  # U
-    flags.FLAG_RETURNS,  # R
-    flags.FLAG_MERGING,  # M
+    FLAG_PADDING,  # P
+    FLAG_SUMMARIZE,  # S
+    FLAG_TRANSFER,  # T
+    FLAG_CONVERSIONS,  # C
+    FLAG_UNREALIZED,  # U
+    FLAG_RETURNS,  # R
+    FLAG_MERGING,  # M
 }
 
 

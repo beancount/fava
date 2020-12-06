@@ -33,7 +33,6 @@ from beancount.core.data import Posting
 from beancount.core.data import Price
 from beancount.core.data import Transaction
 from beancount.core.data import TxnPosting
-from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.getters import get_min_max_dates
 from beancount.core.interpolate import compute_entry_context
 from beancount.core.inventory import Inventory
@@ -43,6 +42,7 @@ from beancount.core.prices import get_all_prices
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
+from fava.core._compat import FLAG_UNREALIZED
 from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
