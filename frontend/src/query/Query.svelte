@@ -20,9 +20,10 @@
   const query_results = {};
 
   $: query_result_array = $query_shell_history.map(
-    /** @returns {[string, ResultType]} */ (item) => {
-      return [item, query_results[item] || {}];
-    }
+    /** @returns {[string, ResultType]} */ (item) => [
+      item,
+      query_results[item] || {},
+    ]
   );
 
   /**

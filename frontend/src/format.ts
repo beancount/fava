@@ -64,9 +64,8 @@ interface DateFormatters {
 /** Date formatters for human consumption. */
 export const dateFormat: DateFormatters = {
   year: utcFormat("%Y"),
-  quarter: (date: Date): string => {
-    return `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`;
-  },
+  quarter: (date: Date): string =>
+    `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
   month: utcFormat("%b %Y"),
   week: utcFormat("%YW%W"),
   day: utcFormat("%Y-%m-%d"),
@@ -75,11 +74,8 @@ export const dateFormat: DateFormatters = {
 /** Date formatters for the entry filter form. */
 export const timeFilterDateFormat: DateFormatters = {
   year: utcFormat("%Y"),
-  quarter: (date: Date): string => {
-    return `${date.getUTCFullYear()}-Q${
-      Math.floor(date.getUTCMonth() / 3) + 1
-    }`;
-  },
+  quarter: (date: Date): string =>
+    `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
   month: utcFormat("%Y-%m"),
   week: utcFormat("%Y-W%W"),
   day: utcFormat("%Y-%m-%d"),

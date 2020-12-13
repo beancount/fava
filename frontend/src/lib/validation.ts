@@ -126,18 +126,15 @@ export function union<T extends unknown[]>(
  * Validator for an object that might be undefined.
  */
 export function optional<T>(validator: Validator<T>): Validator<T | undefined> {
-  return (json: unknown): T | undefined => {
-    return json === undefined ? undefined : validator(json);
-  };
+  return (json: unknown): T | undefined =>
+    json === undefined ? undefined : validator(json);
 }
 
 /**
  * Lazy validator to allow for recursive structures.
  */
 export function lazy<T>(func: () => Validator<T>): Validator<T> {
-  return (json: unknown): T => {
-    return func()(json);
-  };
+  return (json: unknown): T => func()(json);
 }
 
 /**

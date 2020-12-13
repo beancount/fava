@@ -20,7 +20,5 @@ export function ext(filename: string): string {
 export function documentHasAccount(filename: string, account: string): boolean {
   const accountParts = account.split(":").reverse();
   const folders = filename.split(/\/|\\/).reverse().slice(1);
-  return accountParts.every((part, index) => {
-    return part === folders[index];
-  });
+  return accountParts.every((part, index) => part === folders[index]);
 }

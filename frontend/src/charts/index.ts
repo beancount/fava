@@ -147,11 +147,8 @@ export function balances(json: unknown): LineChart {
   return {
     data,
     type: "linechart",
-    tooltipText: (d: LineChartDatum): string => {
-      return `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(
-        d.date
-      )}</em>`;
-    },
+    tooltipText: (d: LineChartDatum): string =>
+      `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`,
   };
 }
 
