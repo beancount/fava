@@ -3,14 +3,16 @@
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: normal;
-  src: url("./source-code-pro-all-400.woff2") format("woff2");
+  src: url("@openfonts/source-code-pro_all/files/source-code-pro-all-400.woff2")
+    format("woff2");
 }
 
 @font-face {
   font-family: "Source Code Pro";
   font-style: normal;
   font-weight: 500;
-  src: url("./source-code-pro-all-500.woff2") format("woff2");
+  src: url("@openfonts/source-code-pro_all/files/source-code-pro-all-500.woff2")
+    format("woff2");
 }
 
 /* Interface fonts */
@@ -18,28 +20,32 @@
   font-family: "Fira Mono";
   font-style: normal;
   font-weight: normal;
-  src: url("./fira-mono-all-400.woff2") format("woff2");
+  src: url("@openfonts/fira-mono_all/files/fira-mono-all-400.woff2")
+    format("woff2");
 }
 
 @font-face {
   font-family: "Fira Mono";
   font-style: normal;
   font-weight: 500;
-  src: url("./fira-mono-all-500.woff2") format("woff2");
+  src: url("@openfonts/fira-mono_all/files/fira-mono-all-500.woff2")
+    format("woff2");
 }
 
 @font-face {
   font-family: "Fira Sans";
   font-style: normal;
   font-weight: normal;
-  src: url("./fira-sans-all-400.woff2") format("woff2");
+  src: url("@openfonts/fira-sans_all/files/fira-sans-all-400.woff2")
+    format("woff2");
 }
 
 @font-face {
   font-family: "Fira Sans";
   font-style: normal;
   font-weight: 500;
-  src: url("./fira-sans-all-500.woff2") format("woff2");
+  src: url("@openfonts/fira-sans_all/files/fira-sans-all-500.woff2")
+    format("woff2");
 }
 
 /* The help pages */
@@ -47,12 +53,14 @@
   font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: normal;
-  src: url("./source-serif-pro-latin-400.woff2") format("woff2");
+  src: url("@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-400.woff2")
+    format("woff2");
 }
 
 @font-face {
   font-family: "Source Serif Pro";
   font-style: normal;
   font-weight: 600;
-  src: url("./source-serif-pro-latin-600.woff2") format("woff2");
+  src: url("@openfonts/source-serif-pro_latin/files/source-serif-pro-latin-600.woff2")
+    format("woff2");
 }
