@@ -1,0 +1,1 @@
+import "@ungap/custom-elements";
