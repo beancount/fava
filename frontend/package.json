@@ -55,6 +55,7 @@
     "@openfonts/fira-sans_all": "^1.44.1",
     "@openfonts/source-code-pro_all": "^1.44.2",
     "@openfonts/source-serif-pro_latin": "^1.44.1",
+    "@ungap/custom-elements": "^0.1.10",
     "codemirror": "^5.58.3",
     "d3-array": "^2.9.1",
     "d3-axis": "^2.0.0",
