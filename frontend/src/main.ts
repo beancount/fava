@@ -28,7 +28,7 @@ import "codemirror/addon/dialog/dialog.css";
 import "codemirror/addon/fold/foldgutter.css";
 import "codemirror/addon/hint/show-hint.css";
 
-import "./polyfills.ts";
+import "@ungap/custom-elements";
 import { get } from "./api";
 import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./editor";
