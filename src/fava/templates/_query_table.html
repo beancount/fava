@@ -16,6 +16,8 @@
 <td>
   {% if name == "account" %}
   <a href="{{ url_for('account', name=value) }}">{{ value }}</a>
+  {% elif name == "id" %}
+  <a href="#context-{{ value }}">{{ value }}</a>
   {% else %}
   {{ value }}
   {% endif %}
