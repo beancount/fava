@@ -276,7 +276,7 @@ class FilterSyntaxParser:
         def _key(entry):
             if hasattr(entry, key):
                 return match(str(getattr(entry, key) or ""))
-            if key in entry.meta:
+            if entry.meta is not None and key in entry.meta:
                 return match(str(entry.meta.get(key)))
             return False
 
