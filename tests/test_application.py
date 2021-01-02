@@ -60,6 +60,57 @@ def test_urls(test_client, url, return_code):
 
 
 @pytest.mark.parametrize(
+    "url,option,expect",
+    [
+        ("/", None, "/long-example/income_statement/"),
+        ("/long-example/", None, "/long-example/income_statement/"),
+        ("/", "income_statement/", "/long-example/income_statement/"),
+        (
+            "/long-example/",
+            "income_statement/",
+            "/long-example/income_statement/",
+        ),
+        (
+            "/",
+            "balance_sheet/?account=Assets:US:BofA:Checking",
+            "/long-example/balance_sheet/?account=Assets:US:BofA:Checking",
+        ),
+        (
+            "/long-example/",
+            "income_statement/?account=Assets:US:BofA:Checking",
+            "/long-example/income_statement/?account=Assets:US:BofA:Checking",
+        ),
+        (
+            "/",
+            "balance_sheet/?time=year-2+-+year",
+            "/long-example/balance_sheet/?time=year-2+-+year",
+        ),
+        (
+            "/",
+            "balance_sheet/?time=year-2 - year",
+            "/long-example/balance_sheet/?time=year-2%20-%20year",
+        ),
+        (
+            "/",
+            "trial_balance/?time=2014&account=Expenses:Rent",
+            "/long-example/trial_balance/?time=2014&account=Expenses:Rent",
+        ),
+    ],
+)
+def test_default_path_redirection(app, test_client, url, option, expect):
+    """Test that default-page option redirects as expected."""
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        if option:
+            flask.g.ledger.fava_options["default-page"] = option
+        result = test_client.get(url)
+        get_url = result.headers.get("Location", "")
+        expect_url = werkzeug.urls.url_join("http://localhost/", expect)
+        assert result.status_code == 302
+        assert get_url == expect_url
+
+
+@pytest.mark.parametrize(
     "referer,jump_link,expect",
     [
         ("/?foo=bar", "/jump?foo=baz", "/?foo=baz"),

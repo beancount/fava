@@ -47,6 +47,7 @@ DEFAULTS = {
     "auto-reload": False,
     "conversion": "at_cost",
     "default-file": None,
+    "default-page": "income_statement/",
     "fiscal-year-end": FiscalYearEnd(12, 31),
     "import-config": None,
     "import-dirs": [],
@@ -103,6 +104,7 @@ LIST_OPTS = [
 STR_OPTS = [
     "collapse-pattern",
     "conversion",
+    "default-page",
     "import-config",
     "interval",
     "language",

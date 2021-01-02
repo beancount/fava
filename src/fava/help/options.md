@@ -53,6 +53,29 @@ If this option is not specified, Fava opens the main file by default.
 
 ---
 
+## `default-page`
+
+Default: `income_statement/`
+
+Use this option to specify the path to be redirected to when visiting the main
+Fava webpage. If this option is not specified, you are taken to the income
+statement. You may also use this feature to set options via the URL. For
+example, a `default-page` of `balance_sheet/?time=year-2+-+year` would result in
+you being redirected to a balance sheet reporting the current year and the two
+previous years.
+
+Note that the supplied path is relative. To be taken to your trial balance
+report at `{{url_for("report", report_name="trial_balance", account="Expenses:Restaurants", time="2021")}}` put the following in your
+beancount file:
+
+<pre><textarea is="beancount-textarea">
+2021-01-01 custom "fava-option" "default-page" "trial_balance/?account=Expenses%3ARestaurants&time=2021"</textarea></pre>
+
+It is probably easiest to navigate to the URL in your browser and copy the
+portion of the URL after the 'title' of your beancount file into this option.
+
+---
+
 ## `interval`
 
 Default: `month`
