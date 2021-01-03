@@ -1,4 +1,4 @@
-{% import '_query_table.html' as querytable %}
+{% import '_query_table.html' as querytable with context %}
 
 {% set holdings_all = 'SELECT account,
     units(sum(position)) as units,

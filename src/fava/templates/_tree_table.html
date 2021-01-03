@@ -46,12 +46,12 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
     <span class="num other">
       <span class="balance">
         {% for currency in balance.keys()|sort %}
-        {{ render_diff_and_number(balance, cost, currency) }} {{ currency }}<br>
+        {{ render_diff_and_number(balance, cost, currency) }} {{ currency | format_commodity }}<br>
         {% endfor %}
       </span>
       <span class="balance-children">
         {% for currency in balance_children.keys()|sort %}
-        {{ render_diff_and_number(balance_children, cost_children, currency) }} {{ currency }}<br>
+        {{ render_diff_and_number(balance_children, cost_children, currency) }} {{ currency | format_commodity }}<br>
         {% endfor %}
       </span>
     </span>

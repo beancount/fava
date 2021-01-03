@@ -55,6 +55,15 @@ def format_currency(
     return g.ledger.format_decimal(value, currency)
 
 
+def format_commodity(currency: str):
+    """Format commodity along with meta name if provided"""
+    commodity = g.ledger.commodities.get(currency)
+    if commodity:
+        alias_name = commodity.meta.get("name")
+        return f"{currency} ({alias_name})"
+    return currency
+
+
 def format_amount(amount: Amount) -> str:
     """Format an amount to string using the DisplayContext."""
     if amount is None:
@@ -62,7 +71,9 @@ def format_amount(amount: Amount) -> str:
     number, currency = amount
     if number is None:
         return ""
-    return f"{format_currency(number, currency, True)} {currency}"
+
+    currency_str = format_commodity(currency)
+    return f"{format_currency(number, currency, True)} {currency_str}"
 
 
 def format_date(date: datetime.date) -> str:
@@ -171,6 +182,7 @@ FILTERS = [
     cost_or_value,
     flag_to_type,
     format_amount,
+    format_commodity,
     format_currency,
     format_date,
     format_errormsg,

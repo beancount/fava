@@ -1,5 +1,5 @@
 {% import 'macros/_account_macros.html' as account_macros with context %}
-{% import '_query_table.html' as querytable %}
+{% import '_query_table.html' as querytable with context %}
 
 {% macro copy_balance_directives_text() -%}
 {% for account in ledger.attributes.accounts -%}

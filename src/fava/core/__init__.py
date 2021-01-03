@@ -21,6 +21,7 @@ from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
+from beancount.core.data import Commodity
 from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Document
@@ -128,6 +129,7 @@ class FavaLedger:
         "all_entries_by_type",
         "all_root_account",
         "beancount_file_path",
+        "commodities",
         "_date_first",
         "_date_last",
         "entries",
@@ -200,6 +202,9 @@ class FavaLedger:
         #: A dict containing information about the accounts.
         self.accounts = AccountDict()
 
+        #: A dict containing information about the commodities
+        self.commodities: Dict[str, Commodity] = {}
+
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = {}
 
@@ -240,6 +245,10 @@ class FavaLedger:
             self.accounts.setdefault(
                 cast(Close, entry).account
             ).close_date = entry.date
+
+        for entry in entries_by_type[Commodity]:
+            commodity = cast(Commodity, entry)
+            self.commodities[commodity.currency] = commodity
 
         self.fava_options, errors = parse_options(
             cast(List[Custom], entries_by_type[Custom])

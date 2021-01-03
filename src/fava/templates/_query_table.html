@@ -16,6 +16,10 @@
 <td>
   {% if name == "account" %}
   <a href="{{ url_for('account', name=value) }}">{{ value }}</a>
+  {%- set name_alias = ledger.accounts[value].meta.get('name') -%}
+  {%- if name_alias -%}
+  &nbsp;({{ name_alias }})
+  {%- endif -%}
   {% elif name == "id" %}
   <a href="#context-{{ value }}">{{ value }}</a>
   {% else %}
