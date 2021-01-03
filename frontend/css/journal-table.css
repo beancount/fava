@@ -108,7 +108,7 @@
 }
 
 .journal .transaction:hover {
-    background: #f5f5f59c;
+  background: var(--color-journal-hover-highlight);
 }
 
 /* Metadata */
