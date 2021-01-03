@@ -4,6 +4,6 @@
 <br />
 {% for portfolio in extension.portfolio_accounts() %}
     <h3>{{portfolio[0]}}</h3>
-    {{ querytable.querytable(None, *portfolio[1]) }}
+    {{ querytable.querytable(ledger, None, *portfolio[1]) }}
     <br />
 {% endfor %}

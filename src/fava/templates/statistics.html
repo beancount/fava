@@ -1,4 +1,5 @@
 {% import 'macros/_account_macros.html' as account_macros %}
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
 {% import '_query_table.html' as querytable %}
 
 {% macro copy_balance_directives_text() -%}
@@ -18,7 +19,7 @@
     (<a href={{ url_for('report', report_name='query', query_string=postings_per_account) }}>Query</a>)
   </h3>
   {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
-  {{ querytable.querytable(contents, result_types, result_rows) }}
+  {{ querytable.querytable(ledger, contents, result_types, result_rows) }}
 </div>
 
 {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
@@ -53,7 +54,7 @@
         <td><a href="#context-{{ last_entry|hash_entry }}">{{ last_entry.date }}</a></td>
         <td class="num">
           {%- for position in (ledger.root_account|get_or_create(account)).balance|units -%}
-          {{ position.units|format_amount }}<br>
+          {{ commodity_macros.render_amount(ledger, position.units) }}<br>
           {% endfor -%}
         </td>
       </tr>
