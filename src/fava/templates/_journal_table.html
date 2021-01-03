@@ -1,3 +1,6 @@
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
+
+
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom'] %}
 {% set sub_types = {
   'custom': (
@@ -127,7 +130,7 @@
           <strong>{{ entry.type }}</strong>
           {%- for value in entry['values'] -%}
             &nbsp;{% if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}
-            {%- elif value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value|format_amount }}</span>
+            {%- elif value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}{{ commodity_macros.render_amount(ledger, value.value) }}
             {%- elif value.dtype|string == "<class 'str'>" %}"{{ value.value }}"
             {%- elif value.dtype|string == "<class 'bool'>" %}{{ value.value }}
             {%- elif value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
@@ -155,11 +158,21 @@
           {% endfor %}
         </span>
         {% if type == 'balance' %}
-          <span class="num bal {{ ' pending' if entry.diff_amount else '' }}">{{ entry.amount|format_amount }}</span>
+          {{ commodity_macros.render_amount(ledger, entry.amount, 'num bal' + (' pending' if entry.diff_amount else '')) }}
         {% endif %}
         {% if show_change_and_balance %}
-            <span class="change num">{% for pos in change|cost_or_value(entry.date) %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
-            <span class="num">{% for pos in balance|cost_or_value(entry.date) %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
+          <span class="change num">
+          {% for pos in change|cost_or_value(entry.date) %}
+            {{ commodity_macros.render_amount(ledger, pos.units) }}
+            <br>
+          {% endfor %}
+          </span>
+          <span class="num">
+          {% for pos in balance|cost_or_value(entry.date) %}
+            {{ commodity_macros.render_amount(ledger, pos.units) }}
+            <br>
+          {% endfor %}
+          </span>
         </p>
         {% endif %}
         {{ render_metadata(metadata, entry_hash) }}
@@ -174,7 +187,7 @@
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>
-                <span class="num">{{ posting.price|format_amount }}</span>
+                {{ commodity_macros.render_amount(ledger, posting.price) }}
                 <span class="num">{{ posting.cost.number }} {{ posting.cost.currency }}
                     {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
                     {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>

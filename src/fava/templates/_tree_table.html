@@ -1,4 +1,5 @@
 {% import 'macros/_account_macros.html' as account_macros %}
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
 
 {% macro render_diff_and_number(balance, cost, currency) %}
   {% set num = balance.pop(currency, 0) %}
@@ -46,12 +47,12 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
     <span class="num other">
       <span class="balance">
         {% for currency in balance.keys()|sort %}
-        {{ render_diff_and_number(balance, cost, currency) }} {{ currency }}<br>
+        {{ render_diff_and_number(balance, cost, currency) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
         {% endfor %}
       </span>
       <span class="balance-children">
         {% for currency in balance_children.keys()|sort %}
-        {{ render_diff_and_number(balance_children, cost_children, currency) }} {{ currency }}<br>
+        {{ render_diff_and_number(balance_children, cost_children, currency) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
         {% endfor %}
       </span>
     </span>
@@ -113,7 +114,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
             {% for pos in balance %}
                 <span class="balance">
                     {{ render_budget(budget, pos.units.currency, pos.units.number) }}
-                    <span class="number">{{ pos.units|format_amount }}</span>
+                    {{ commodity_macros.render_amount(ledger, pos.units, 'number') }}
                 </span>
             {% endfor %}
             {% for currency, number in budget.items() if currency not in balance.currencies() %}
@@ -124,7 +125,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
             {% for pos in balance_children %}
                 <span class="balance-children">
                     {{ render_budget(budget_children, pos.units.currency, pos.units.number) }}
-                    <span class="number">{{ pos.units|format_amount }}</span>
+                    {{ commodity_macros.render_amount(ledger, pos.units, 'number') }}
                 </span>
             {% endfor %}
             {% for currency, number in budget_children.items() if currency not in balance_children.currencies() %}

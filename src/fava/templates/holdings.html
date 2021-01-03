@@ -53,4 +53,4 @@
 {{ querytable.download_links(query_string) }}
 </p>
 {% set contents, result_types, result_rows = ledger.query_shell.execute_query(query_string) %}
-{{ querytable.querytable(contents, result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}
+{{ querytable.querytable(ledger, contents, result_types, result_rows, filter_empty=units_column.get(aggregation_key, 1)) }}

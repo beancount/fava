@@ -21,6 +21,7 @@ from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
+from beancount.core.data import Commodity
 from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Document
@@ -128,6 +129,7 @@ class FavaLedger:
         "all_entries_by_type",
         "all_root_account",
         "beancount_file_path",
+        "commodities",
         "_date_first",
         "_date_last",
         "entries",
@@ -200,6 +202,9 @@ class FavaLedger:
         #: A dict containing information about the accounts.
         self.accounts = AccountDict()
 
+        #: A dict containing information about the commodities
+        self.commodities: Dict[str, Commodity] = {}
+
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = {}
 
@@ -240,6 +245,11 @@ class FavaLedger:
             self.accounts.setdefault(
                 cast(Close, entry).account
             ).close_date = entry.date
+
+        self.commodities = {}
+        for entry in entries_by_type[Commodity]:
+            commodity = cast(Commodity, entry)
+            self.commodities[commodity.currency] = commodity
 
         self.fava_options, errors = parse_options(
             cast(List[Custom], entries_by_type[Custom])
@@ -624,3 +634,16 @@ class FavaLedger:
             groups.setdefault(entry.__class__.__name__, []).append(entry)
 
         return sorted(list(groups.items()), key=itemgetter(0))
+
+    def commodity_name(self, commodity: str) -> Optional[str]:
+        """Return the 'name' field in metadata of a commodity
+        Args:
+            commodity: The commodity in string
+        Returns:
+            The 'name' field in metadata of a commodity if exists,
+            otherwise the input string is returned
+        """
+        commodity_ = self.commodities.get(commodity)
+        if commodity_:
+            return commodity_.meta.get("name")
+        return commodity
