@@ -107,6 +107,10 @@
   display: block;
 }
 
+.journal .transaction:hover {
+  background: var(--color-journal-hover-highlight);
+}
+
 /* Metadata */
 .journal .metadata {
   padding: 2px 0;
