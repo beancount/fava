@@ -65,7 +65,7 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = []
         self.importers = {}
-        self.hooks = [extract.find_duplicate_entries]
+        self.hooks = []
         self.mtime = None
 
     @property
@@ -111,8 +111,19 @@ class IngestModule(FavaModule):
 
         self.mtime = os.stat(self.module_path).st_mtime_ns
         self.config = mod["CONFIG"]
+        self.hooks = [extract.find_duplicate_entries]
         if "HOOKS" in mod:
-            self.hooks = mod["HOOKS"]
+            hooks = mod["HOOKS"]
+            if not isinstance(hooks, list) or not all(callable(fn) for fn in hooks):
+                self.ledger.errors.append(
+                    IngestError(
+                        None,
+                        f"Error in importer '{self.module_path}': HOOKS is not a list of callables",
+                        None,
+                    )
+                )
+            else:
+                self.hooks = mod["HOOKS"]
         self.importers = {
             importer.name(): importer for importer in self.config
         }
