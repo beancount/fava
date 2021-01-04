@@ -65,6 +65,7 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = []
         self.importers = {}
+        self.hooks = [extract.find_duplicate_entries]
         self.mtime = None
 
     @property
@@ -110,6 +111,8 @@ class IngestModule(FavaModule):
 
         self.mtime = os.stat(self.module_path).st_mtime_ns
         self.config = mod["CONFIG"]
+        if "HOOKS" in mod:
+            self.hooks = mod["HOOKS"]
         self.importers = {
             importer.name(): importer for importer in self.config
         }
@@ -165,8 +168,10 @@ class IngestModule(FavaModule):
             existing_entries=self.ledger.all_entries,
         )
 
-        new_entries = extract.find_duplicate_entries(
-            [(filename, new_entries)], self.ledger.all_entries
-        )[0][1]
+        new_entries_list = [(filename, new_entries)]
+        for hook_fn in self.hooks:
+            new_entries_list = hook_fn(
+                new_entries_list, self.ledger.all_entries
+            )
 
-        return new_entries
+        return new_entries_list[0][1]
