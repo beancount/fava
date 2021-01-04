@@ -114,11 +114,14 @@ class IngestModule(FavaModule):
         self.hooks = [extract.find_duplicate_entries]
         if "HOOKS" in mod:
             hooks = mod["HOOKS"]
-            if not isinstance(hooks, list) or not all(callable(fn) for fn in hooks):
+            if not isinstance(hooks, list) or not all(
+                callable(fn) for fn in hooks
+            ):
+                message = "HOOKS is not a list of callables"
                 self.ledger.errors.append(
                     IngestError(
                         None,
-                        f"Error in importer '{self.module_path}': HOOKS is not a list of callables",
+                        f"Error in importer '{self.module_path}': {message}",
                         None,
                     )
                 )
