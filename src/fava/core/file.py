@@ -163,7 +163,13 @@ class FileModule(FavaModule):
         """
         with self.lock:
             entry = self.ledger.get_entry(entry_hash)
-            return save_entry_slice(entry, source_slice, sha256sum)
+            ret = save_entry_slice(entry, source_slice, sha256sum)
+
+            self.ledger.extensions.run_hook(
+                "after_entry_modified", entry, source_slice
+            )
+
+            return ret
 
     def insert_entries(self, entries: Entries) -> None:
         """Insert entries.

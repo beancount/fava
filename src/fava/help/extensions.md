@@ -63,6 +63,12 @@ Called after an `entry` has been inserted.
 
 ---
 
+### `after_entry_modified(entry, new_lines: str)`
+
+Called after an `entry` modified via the context popup.
+
+---
+
 ## Extension attributes
 
 ### `report_title`

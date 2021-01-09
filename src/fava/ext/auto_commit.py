@@ -28,3 +28,7 @@ class AutoCommit(FavaExtensionBase):
     def after_insert_entry(self, entry):
         message = f"autocommit: entry on {entry.date}"
         self._run(["git", "commit", "-am", message])
+
+    def after_entry_modified(self, entry, _):
+        message = f"autocommit: modified entry on {entry.date}"
+        self._run(["git", "commit", "-am", message])
