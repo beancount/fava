@@ -135,13 +135,15 @@ def test_null_meta_posting():
     FILTER.set('any(some_meta:"1")')
 
     # pad entry produces Posting with null meta:
-    entries, _, _ = load_string("""
+    entries, _, _ = load_string(
+        """
 2000-01-01 open Assets:Bank USD
 2000-01-01 open Equity:OpeningBalances USD
 
 2000-01-02 pad Assets:Bank Assets:OpeningBalances
 2000-01-03 balance Assets:Bank 1.00 USD
-    """)
+    """
+    )
 
     filtered_entries = FILTER.apply(entries)
     assert len(filtered_entries) == 0
