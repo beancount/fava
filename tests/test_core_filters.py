@@ -3,6 +3,7 @@ import datetime
 
 import pytest
 from beancount.core import account
+from beancount.loader import load_string
 
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
@@ -128,6 +129,22 @@ def test_advanced_filter(example_ledger, string, number):
     filtered_entries = FILTER.apply(example_ledger.all_entries)
     assert len(filtered_entries) == number
     FILTER.set("")
+
+
+def test_null_meta_posting():
+    FILTER.set('any(some_meta:"1")')
+
+    # pad entry produces Posting with null meta:
+    entries, _, _ = load_string("""
+2000-01-01 open Assets:Bank USD
+2000-01-01 open Equity:OpeningBalances USD
+
+2000-01-02 pad Assets:Bank Assets:OpeningBalances
+2000-01-03 balance Assets:Bank 1.00 USD
+    """)
+
+    filtered_entries = FILTER.apply(entries)
+    assert len(filtered_entries) == 0
 
 
 def test_account_filter(example_ledger):
