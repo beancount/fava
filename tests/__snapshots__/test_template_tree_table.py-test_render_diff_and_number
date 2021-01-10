@@ -1,0 +1,1 @@
+Markup('    <span class="diff positive" title="10.00 EUR">\n      (2.00)\n    </span>\n  <span class="number">12.00</span>\n')

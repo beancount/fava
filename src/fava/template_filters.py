@@ -44,13 +44,18 @@ def cost_or_value(inventory, date: Optional[datetime.date] = None) -> Any:
 
 
 def format_currency(
-    value: Decimal, currency: Optional[str] = None, show_if_zero: bool = False
+    value: Decimal,
+    currency: Optional[str] = None,
+    show_if_zero: bool = False,
+    invert: bool = False,
 ) -> str:
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ""
     if value == ZERO:
         return g.ledger.format_decimal(ZERO, currency)
+    if invert:
+        value = -value
     return g.ledger.format_decimal(value, currency)
 
 

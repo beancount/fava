@@ -112,6 +112,7 @@ class ChartModule(FavaModule):
         interval: Interval,
         accounts: Union[str, Tuple[str]],
         conversion: str,
+        invert: bool = False,
     ):
         """Renders totals for account (or accounts) in the intervals.
 
@@ -129,14 +130,21 @@ class ChartModule(FavaModule):
                     if posting.account.startswith(accounts):
                         inventory.add_position(posting)
 
+            balance = cost_or_value(
+                inventory, conversion, price_map, end - ONE_DAY
+            )
+            budgets = self.ledger.budgets.calculate_children(
+                accounts, begin, end
+            )
+
+            if invert:
+                balance = -balance
+                budgets = -budgets
+
             yield {
                 "date": begin,
-                "balance": cost_or_value(
-                    inventory, conversion, price_map, end - ONE_DAY
-                ),
-                "budgets": self.ledger.budgets.calculate_children(
-                    accounts, begin, end
-                ),
+                "balance": balance,
+                "budgets": budgets,
             }
 
     @listify
