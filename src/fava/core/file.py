@@ -171,7 +171,6 @@ class FileModule(FavaModule):
 
             return ret
 
-
     def insert_entries(self, entries: Entries) -> None:
         """Insert entries.
 
