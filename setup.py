@@ -13,6 +13,8 @@ from setuptools.command.build_py import build_py
 class BuildFrontend(Command):
     """Custom command `setup.py build_frontend` to build fava's frontend."""
 
+    user_options = []
+
     def initialize_options(self) -> None:
         pass
 
