@@ -20,7 +20,8 @@
         <SliceEditor
           {entry_hash}
           slice={response.slice}
-          sha256sum={response.sha256sum} />
+          sha256sum={response.sha256sum}
+        />
       {/if}
     {:catch}
       Loading entry context failed...

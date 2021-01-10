@@ -55,6 +55,42 @@
   }
 </script>
 
+<form on:submit|preventDefault={submit}>
+  <AutocompleteInput
+    bind:value={time_filter_value}
+    placeholder={_("Time")}
+    suggestions={$years}
+    key="f t"
+    clearButton={true}
+    setSize={true}
+    on:blur={submit}
+    on:select={submit}
+  />
+  <AutocompleteInput
+    bind:value={account_filter_value}
+    placeholder={_("Account")}
+    suggestions={$accounts}
+    key="f a"
+    clearButton={true}
+    setSize={true}
+    on:blur={submit}
+    on:select={submit}
+  />
+  <AutocompleteInput
+    bind:value={fql_filter_value}
+    placeholder={_("Filter by tag, payee, ...")}
+    suggestions={fql_filter_suggestions}
+    key="f f"
+    clearButton={true}
+    setSize={true}
+    {valueExtractor}
+    {valueSelector}
+    on:blur={submit}
+    on:select={submit}
+  />
+  <button type="submit" />
+</form>
+
 <style>
   form {
     display: flex;
@@ -93,36 +129,3 @@
     }
   }
 </style>
-
-<form on:submit|preventDefault={submit}>
-  <AutocompleteInput
-    bind:value={time_filter_value}
-    placeholder={_('Time')}
-    suggestions={$years}
-    key="f t"
-    clearButton={true}
-    setSize={true}
-    on:blur={submit}
-    on:select={submit} />
-  <AutocompleteInput
-    bind:value={account_filter_value}
-    placeholder={_('Account')}
-    suggestions={$accounts}
-    key="f a"
-    clearButton={true}
-    setSize={true}
-    on:blur={submit}
-    on:select={submit} />
-  <AutocompleteInput
-    bind:value={fql_filter_value}
-    placeholder={_('Filter by tag, payee, ...')}
-    suggestions={fql_filter_suggestions}
-    key="f f"
-    clearButton={true}
-    setSize={true}
-    {valueExtractor}
-    {valueSelector}
-    on:blur={submit}
-    on:select={submit} />
-  <button type="submit" />
-</form>

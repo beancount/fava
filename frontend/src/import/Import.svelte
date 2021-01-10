@@ -104,6 +104,72 @@
   }
 </script>
 
+<Extract
+  {entries}
+  on:close={() => {
+    entries = [];
+  }}
+  on:save={save}
+/>
+<div class="fixed-fullsize-container">
+  <div class="filelist">
+    {#each preprocessedData as file}
+      <div
+        class="header"
+        title={file.name}
+        on:click|self={() => {
+          selected = selected === file.name ? null : file.name;
+        }}
+      >
+        {file.basename}
+        <button
+          class="round"
+          on:click={() => remove(file.name)}
+          type="button"
+          title={_("Delete")}
+          tabindex={-1}> × </button>
+      </div>
+      {#each file.importers as info}
+        <div class="flex-row">
+          <AccountInput bind:value={info.account} />
+          <input size={40} bind:value={info.newName} />
+          <button
+            type="button"
+            on:click={() => move(file.name, info.account, info.newName)}>
+            {"Move"}
+          </button>
+          {#if info.importer_name}
+            <button
+              type="button"
+              title="{_('Extract')} with importer {info.importer_name}"
+              on:click={() => extract(file.name, info.importer_name)}>
+              {extractCache.get(`${file.name}:${info.importer_name}`)
+                ? _("Continue")
+                : _("Extract")}
+            </button>
+            {#if extractCache.get(`${file.name}:${info.importer_name}`)}
+              <button
+                type="button"
+                on:click={() => {
+                  extractCache.delete(`${file.name}:${info.importer_name}`);
+                  extractCache = extractCache;
+                }}>
+                {_("Clear")}
+              </button>
+            {/if}
+            {info.importer_name}
+          {:else}{_("No importer matched this file.")}{/if}
+        </div>
+      {/each}
+    {/each}
+  </div>
+  {#if selected}
+    <div>
+      <DocumentPreview filename={selected} />
+    </div>
+  {/if}
+</div>
+
 <style>
   .header {
     padding: 0.5rem;
@@ -126,67 +192,3 @@
     padding: 1rem;
   }
 </style>
-
-<Extract
-  {entries}
-  on:close={() => {
-    entries = [];
-  }}
-  on:save={save} />
-<div class="fixed-fullsize-container">
-  <div class="filelist">
-    {#each preprocessedData as file}
-      <div
-        class="header"
-        title={file.name}
-        on:click|self={() => {
-          selected = selected === file.name ? null : file.name;
-        }}>
-        {file.basename}
-        <button
-          class="round"
-          on:click={() => remove(file.name)}
-          type="button"
-          title={_('Delete')}
-          tabindex={-1}>
-          ×
-        </button>
-      </div>
-      {#each file.importers as info}
-        <div class="flex-row">
-          <AccountInput bind:value={info.account} />
-          <input size={40} bind:value={info.newName} />
-          <button
-            type="button"
-            on:click={() => move(file.name, info.account, info.newName)}>
-            {'Move'}
-          </button>
-          {#if info.importer_name}
-            <button
-              type="button"
-              title="{_('Extract')} with importer {info.importer_name}"
-              on:click={() => extract(file.name, info.importer_name)}>
-              {extractCache.get(`${file.name}:${info.importer_name}`) ? _('Continue') : _('Extract')}
-            </button>
-            {#if extractCache.get(`${file.name}:${info.importer_name}`)}
-              <button
-                type="button"
-                on:click={() => {
-                  extractCache.delete(`${file.name}:${info.importer_name}`);
-                  extractCache = extractCache;
-                }}>
-                {_('Clear')}
-              </button>
-            {/if}
-            {info.importer_name}
-          {:else}{_('No importer matched this file.')}{/if}
-        </div>
-      {/each}
-    {/each}
-  </div>
-  {#if selected}
-    <div>
-      <DocumentPreview filename={selected} />
-    </div>
-  {/if}
-</div>

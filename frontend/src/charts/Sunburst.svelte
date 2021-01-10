@@ -51,21 +51,6 @@
     .outerRadius((d) => y(d.y1));
 </script>
 
-<style>
-  .half {
-    opacity: 0.5;
-  }
-  .account {
-    fill: var(--color-text);
-  }
-  .balance {
-    font-family: var(--font-family-monospaced);
-  }
-  path {
-    cursor: pointer;
-  }
-</style>
-
 <g
   {width}
   {height}
@@ -87,6 +72,22 @@
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
       fill={$sunburstScale(d.data.account)}
-      d={arcShape(d)} />
+      d={arcShape(d)}
+    />
   {/each}
 </g>
+
+<style>
+  .half {
+    opacity: 0.5;
+  }
+  .account {
+    fill: var(--color-text);
+  }
+  .balance {
+    font-family: var(--font-family-monospaced);
+  }
+  path {
+    cursor: pointer;
+  }
+</style>

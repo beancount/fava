@@ -12,6 +12,43 @@
   const dispatch = createEventDispatcher();
 </script>
 
+<div class="fieldset">
+  <ul class="dropdown">
+    <li>
+      {_("File")}&nbsp;▾
+
+      <ul>
+        {#each sources as source}
+          <li class:selected={source === file_path}>
+            <a href={urlFor("editor", { file_path: source })}>{source}</a>
+          </li>
+        {/each}
+      </ul>
+    </li>
+    <li>
+      {_("Edit")}
+      &nbsp;▾
+      <ul>
+        <li on:click={() => dispatch("command", "favaFormat")}>
+          {_("Align Amounts")}
+          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>d</kbd> </span>
+        </li>
+        <li on:click={() => dispatch("command", "favaToggleComment")}>
+          {_("Toggle Comment (selection)")}
+          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>y</kbd> </span>
+        </li>
+        <li on:click={() => dispatch("command", "unfoldAll")}>
+          {_("Open all folds")}
+        </li>
+        <li on:click={() => dispatch("command", "foldAll")}>
+          {_("Close all folds")}
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <slot />
+</div>
+
 <style>
   li {
     cursor: pointer;
@@ -70,40 +107,3 @@
     display: block;
   }
 </style>
-
-<div class="fieldset">
-  <ul class="dropdown">
-    <li>
-      {_('File')}&nbsp;▾
-
-      <ul>
-        {#each sources as source}
-          <li class:selected={source === file_path}>
-            <a href={urlFor('editor', { file_path: source })}>{source}</a>
-          </li>
-        {/each}
-      </ul>
-    </li>
-    <li>
-      {_('Edit')}
-      &nbsp;▾
-      <ul>
-        <li on:click={() => dispatch('command', 'favaFormat')}>
-          {_('Align Amounts')}
-          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>d</kbd> </span>
-        </li>
-        <li on:click={() => dispatch('command', 'favaToggleComment')}>
-          {_('Toggle Comment (selection)')}
-          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>y</kbd> </span>
-        </li>
-        <li on:click={() => dispatch('command', 'unfoldAll')}>
-          {_('Open all folds')}
-        </li>
-        <li on:click={() => dispatch('command', 'foldAll')}>
-          {_('Close all folds')}
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <slot />
-</div>

@@ -56,6 +56,54 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-label-has-associated-control -->
+<div>
+  <div class="flex-row">
+    <input type="date" bind:value={entry.date} required />
+    <input type="text" name="flag" bind:value={entry.flag} required />
+    <label>
+      <span>{_("Payee")}:</span>
+      <AutocompleteInput
+        className="payee"
+        placeholder={_("Payee")}
+        bind:value={entry.payee}
+        suggestions={$payees}
+        on:select={autocompleteSelectPayee}
+      />
+    </label>
+    <label>
+      <span>{_("Narration")}:</span>
+      <input
+        type="text"
+        name="narration"
+        placeholder={_("Narration")}
+        bind:value={entry.narration}
+      />
+      <AddMetadataButton bind:meta={entry.meta} />
+    </label>
+    <button
+      class="muted round"
+      type="button"
+      on:click={addPosting}
+      title={_("Add posting")}
+      tabindex={-1}> p </button>
+  </div>
+  <EntryMetadata bind:meta={entry.meta} />
+  <div class="flex-row">
+    <span class="label"> <span>{_("Postings")}:</span> </span>
+  </div>
+  {#each entry.postings as posting, index}
+    <PostingSvelte
+      bind:posting
+      {index}
+      {suggestions}
+      on:add={addPosting}
+      on:move={movePosting}
+      on:remove={() => removePosting(posting)}
+    />
+  {/each}
+</div>
+
 <style>
   input[name="flag"] {
     width: 1.5em;
@@ -87,50 +135,3 @@
     }
   }
 </style>
-
-<!-- svelte-ignore a11y-label-has-associated-control -->
-<div>
-  <div class="flex-row">
-    <input type="date" bind:value={entry.date} required />
-    <input type="text" name="flag" bind:value={entry.flag} required />
-    <label>
-      <span>{_('Payee')}:</span>
-      <AutocompleteInput
-        className="payee"
-        placeholder={_('Payee')}
-        bind:value={entry.payee}
-        suggestions={$payees}
-        on:select={autocompleteSelectPayee} />
-    </label>
-    <label>
-      <span>{_('Narration')}:</span>
-      <input
-        type="text"
-        name="narration"
-        placeholder={_('Narration')}
-        bind:value={entry.narration} />
-      <AddMetadataButton bind:meta={entry.meta} />
-    </label>
-    <button
-      class="muted round"
-      type="button"
-      on:click={addPosting}
-      title={_('Add posting')}
-      tabindex={-1}>
-      p
-    </button>
-  </div>
-  <EntryMetadata bind:meta={entry.meta} />
-  <div class="flex-row">
-    <span class="label"> <span>{_('Postings')}:</span> </span>
-  </div>
-  {#each entry.postings as posting, index}
-    <PostingSvelte
-      bind:posting
-      {index}
-      {suggestions}
-      on:add={addPosting}
-      on:move={movePosting}
-      on:remove={() => removePosting(posting)} />
-  {/each}
-</div>

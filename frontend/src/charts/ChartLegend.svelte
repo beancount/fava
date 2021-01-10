@@ -3,6 +3,10 @@
   export let legend;
 </script>
 
+{#each legend as [item, color]}
+  <span> <i style="background-color: {color}" /> {item} </span>
+{/each}
+
 <style>
   span,
   i {
@@ -16,7 +20,3 @@
     border-radius: 10px;
   }
 </style>
-
-{#each legend as [item, color]}
-  <span> <i style="background-color: {color}" /> {item} </span>
-{/each}

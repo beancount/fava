@@ -46,22 +46,6 @@
   }
 </script>
 
-<style>
-  ul {
-    padding: 0 0 0 0.5em;
-  }
-  p {
-    margin-bottom: -1px;
-    overflow: hidden;
-    cursor: pointer;
-    border: 1px solid var(--color-table-border);
-  }
-  .selected,
-  .drag {
-    background-color: var(--color-table-header-background);
-  }
-</style>
-
 {#if node.name}
   <p
     on:click={click}
@@ -76,7 +60,8 @@
     data-account-name={node.name}
     class:expanded
     class:selected={$selectedAccount === node.name}
-    class:drag>
+    class:drag
+  >
     <span>{leaf(node.name)}</span>
   </p>
 {/if}
@@ -92,3 +77,19 @@
     {/each}
   </ul>
 {/if}
+
+<style>
+  ul {
+    padding: 0 0 0 0.5em;
+  }
+  p {
+    margin-bottom: -1px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--color-table-border);
+  }
+  .selected,
+  .drag {
+    background-color: var(--color-table-header-background);
+  }
+</style>

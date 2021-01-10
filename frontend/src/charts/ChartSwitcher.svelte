@@ -38,6 +38,23 @@
   });
 </script>
 
+{#if $activeChart}
+  <Chart chart={$activeChart}>
+    <ConversionAndInterval />
+  </Chart>
+  <div hidden={!$showCharts}>
+    {#each charts as chart}
+      <span
+        class:selected={chart === $activeChart}
+        on:click={() => {
+          $activeChart = chart;
+        }}>
+        {chart.name}
+      </span>
+    {/each}
+  </div>
+{/if}
+
 <style>
   div {
     margin-bottom: 1.5em;
@@ -60,20 +77,3 @@
     color: var(--color-text-lighter);
   }
 </style>
-
-{#if $activeChart}
-  <Chart chart={$activeChart}>
-    <ConversionAndInterval />
-  </Chart>
-  <div hidden={!$showCharts}>
-    {#each charts as chart}
-      <span
-        class:selected={chart === $activeChart}
-        on:click={() => {
-          $activeChart = chart;
-        }}>
-        {chart.name}
-      </span>
-    {/each}
-  </div>
-{/if}

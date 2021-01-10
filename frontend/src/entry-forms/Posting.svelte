@@ -57,6 +57,36 @@
   }
 </script>
 
+<div
+  class="flex-row"
+  class:drag
+  {draggable}
+  on:mousemove={mousemove}
+  on:dragstart={dragstart}
+  on:dragenter={dragenter}
+  on:dragover={dragenter}
+  on:dragleave={dragleave}
+  on:drop|preventDefault={drop}
+>
+  <button
+    class="muted round remove-row"
+    on:click={() => dispatch("remove")}
+    type="button"
+    tabindex={-1}> × </button>
+  <AccountInput className="grow" bind:value={posting.account} {suggestions} />
+  <AutocompleteInput
+    className="amount"
+    placeholder={_("Amount")}
+    suggestions={amountSuggestions}
+    bind:value={posting.amount}
+  />
+  <button
+    class="muted round add-row"
+    type="button"
+    on:click={() => dispatch("add")}
+    title={_("Add posting")}> + </button>
+</div>
+
 <style>
   .drag {
     box-shadow: 0 0 5px var(--color-text);
@@ -93,35 +123,3 @@
     }
   }
 </style>
-
-<div
-  class="flex-row"
-  class:drag
-  {draggable}
-  on:mousemove={mousemove}
-  on:dragstart={dragstart}
-  on:dragenter={dragenter}
-  on:dragover={dragenter}
-  on:dragleave={dragleave}
-  on:drop|preventDefault={drop}>
-  <button
-    class="muted round remove-row"
-    on:click={() => dispatch('remove')}
-    type="button"
-    tabindex={-1}>
-    ×
-  </button>
-  <AccountInput className="grow" bind:value={posting.account} {suggestions} />
-  <AutocompleteInput
-    className="amount"
-    placeholder={_('Amount')}
-    suggestions={amountSuggestions}
-    bind:value={posting.amount} />
-  <button
-    class="muted round add-row"
-    type="button"
-    on:click={() => dispatch('add')}
-    title={_('Add posting')}>
-    +
-  </button>
-</div>

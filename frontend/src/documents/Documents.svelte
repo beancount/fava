@@ -68,6 +68,35 @@
   }
 </script>
 
+<svelte:window on:keyup={keyup} />
+{#if moving}
+  <ModalBase
+    shown={true}
+    closeHandler={() => {
+      moving = null;
+    }}
+  >
+    <div>
+      <h3>{_("Move or rename document")}</h3>
+      <p><code>{moving.filename}</code></p>
+      <p>
+        <AccountInput bind:value={moving.account} />
+        <input size={40} bind:value={moving.newName} />
+        <button type="button" on:click={move}>{"Move"}</button>
+      </p>
+    </div>
+  </ModalBase>
+{/if}
+<div class="fixed-fullsize-container">
+  <Accounts {node} on:drop={drop} />
+  <div>
+    <Table bind:selected {data} />
+  </div>
+  {#if selected}
+    <DocumentPreview filename={selected.filename} />
+  {/if}
+</div>
+
 <style>
   .fixed-fullsize-container {
     display: grid;
@@ -82,31 +111,3 @@
     border-left: thin solid var(--color-sidebar-border);
   }
 </style>
-
-<svelte:window on:keyup={keyup} />
-{#if moving}
-  <ModalBase
-    shown={true}
-    closeHandler={() => {
-      moving = null;
-    }}>
-    <div>
-      <h3>{_('Move or rename document')}</h3>
-      <p><code>{moving.filename}</code></p>
-      <p>
-        <AccountInput bind:value={moving.account} />
-        <input size={40} bind:value={moving.newName} />
-        <button type="button" on:click={move}>{'Move'}</button>
-      </p>
-    </div>
-  </ModalBase>
-{/if}
-<div class="fixed-fullsize-container">
-  <Accounts {node} on:drop={drop} />
-  <div>
-    <Table bind:selected {data} />
-  </div>
-  {#if selected}
-    <DocumentPreview filename={selected.filename} />
-  {/if}
-</div>

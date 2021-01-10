@@ -40,6 +40,39 @@
   }
 </script>
 
+{#each metakeys as metakey, i}
+  <div class="flex-row">
+    <button
+      class="muted round remove-row"
+      on:click={() => removeMetadata(metakey)}
+      type="button"
+      tabindex={-1}> × </button>
+    <input
+      type="text"
+      class="key"
+      placeholder={_("Key")}
+      value={metakey}
+      on:change={(event) => {
+        updateMetakey(metakey, event.target.value);
+      }}
+      required
+    />
+    <input
+      type="text"
+      class="value"
+      placeholder={_("Value")}
+      bind:value={meta[metakey]}
+    />
+    {#if i === metakeys.length - 1}
+      <button
+        class="muted round"
+        type="button"
+        on:click={addMetadata}
+        title={_("Add metadata")}> + </button>
+    {/if}
+  </div>
+{/each}
+
 <style>
   div {
     padding-left: 56px;
@@ -61,38 +94,3 @@
     }
   }
 </style>
-
-{#each metakeys as metakey, i}
-  <div class="flex-row">
-    <button
-      class="muted round remove-row"
-      on:click={() => removeMetadata(metakey)}
-      type="button"
-      tabindex={-1}>
-      ×
-    </button>
-    <input
-      type="text"
-      class="key"
-      placeholder={_('Key')}
-      value={metakey}
-      on:change={(event) => {
-        updateMetakey(metakey, event.target.value);
-      }}
-      required />
-    <input
-      type="text"
-      class="value"
-      placeholder={_('Value')}
-      bind:value={meta[metakey]} />
-    {#if i === metakeys.length - 1}
-      <button
-        class="muted round"
-        type="button"
-        on:click={addMetadata}
-        title={_('Add metadata')}>
-        +
-      </button>
-    {/if}
-  </div>
-{/each}
