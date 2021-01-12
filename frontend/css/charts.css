@@ -41,6 +41,7 @@
 
 svg text {
   fill: var(--color-text-lightest);
+  font-family: var(--font-family);
 }
 
 svg .axis path,
