@@ -5,6 +5,7 @@ packages:
     - npm
     - python-tox
     - python-distlib
+    - python-setuptools
     - python-pre-commit
 sources:
     - https://github.com/beancount/fava
