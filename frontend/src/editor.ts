@@ -33,9 +33,6 @@ import "./codemirror/fold-beancount";
 import "./codemirror/hint-beancount";
 import "./codemirror/mode-beancount";
 
-import "./codemirror/hint-query";
-import "./codemirror/mode-query";
-
 import { put } from "./api";
 import { notify } from "./notifications";
 import { favaAPI } from "./stores";

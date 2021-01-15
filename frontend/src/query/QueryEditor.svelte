@@ -1,49 +1,41 @@
 <script>
-  import CodeMirror from "codemirror";
   import { createEventDispatcher } from "svelte";
 
-  import { enableAutomaticCompletions } from "../editor";
-  import { _ } from "../i18n";
+  import { initQueryEditor } from "./query-editor";
   import { keyboardShortcut } from "../keyboard-shortcuts";
+  import { _ } from "../i18n";
 
   /** @type {string} */
   export let value;
-  /** @type {CodeMirror.Editor} */
+  /** @type {import('@codemirror/view').EditorView} */
   let editor;
-  const dispatch = createEventDispatcher();
 
-  $: if (editor && value !== editor.getValue()) {
-    editor.setValue(value);
+  const dispatch = createEventDispatcher();
+  const submit = () => dispatch("submit");
+
+  $: if (editor && value !== editor.state.doc.toString()) {
+    editor.dispatch({
+      changes: { from: 0, to: editor.state.doc.length, insert: value },
+    });
   }
 
   /**
    * @param {HTMLElement} form
    */
   function queryEditor(form) {
-    const queryOptions = {
+    editor = initQueryEditor(
       value,
-      mode: "beancount-query",
-      extraKeys: {
-        "Ctrl-Enter": () => dispatch("submit"),
-        "Cmd-Enter": () => dispatch("submit"),
+      (v) => {
+        value = v;
       },
-      placeholder: _(
-        "...enter a BQL query. 'help' to list available commands."
-      ),
-    };
-    editor = CodeMirror((cm) => {
-      form.insertBefore(cm, form.firstChild);
-    }, queryOptions);
+      submit
+    );
 
-    editor.on("change", (cm) => {
-      value = cm.getValue();
-    });
-
-    enableAutomaticCompletions(editor);
+    form.insertBefore(editor.dom, form.firstChild);
   }
 </script>
 
-<form use:queryEditor on:submit|preventDefault={() => dispatch("submit")}>
+<form use:queryEditor on:submit|preventDefault={submit}>
   <button type="submit" use:keyboardShortcut={"Control+Enter"}
     >{_("Submit")}</button
   >
@@ -60,7 +52,7 @@
     margin: 0;
   }
 
-  form :global(.CodeMirror) {
+  form :global(.cm-wrap) {
     flex-grow: 1;
     width: 100%;
     height: auto;
