@@ -3,6 +3,7 @@
   --font-family-alternative: "Source Serif Pro", sans-serif;
   --font-family-monospaced: "Fira Mono", monospace;
   --font-family-editor: "Source Code Pro", monospace;
+  --z-index-editor: 0;
   --z-index-aside: 1;
   --z-index-header: 2;
   --z-index-floating-ui: 3;
