@@ -141,7 +141,7 @@ def parse_options(
     for entry in (e for e in custom_entries if e.type == "fava-option"):
         try:
             key = entry.values[0].value
-            assert key in DEFAULTS.keys()
+            assert key in DEFAULTS.keys(), f"unknown option `{key}`"
 
             if key == "default-file":
                 options[key] = entry.meta["filename"]
@@ -155,7 +155,9 @@ def parse_options(
                 options[key].append(opt)
             else:
                 value = entry.values[1].value
-                assert isinstance(value, str)
+                assert isinstance(
+                    value, str
+                ), f"expected value for option `{key}` to be a string"
 
             processed_value = None
             if key in STR_OPTS:
@@ -176,11 +178,8 @@ def parse_options(
                 else:
                     options[key] = processed_value
 
-        except (IndexError, TypeError, AssertionError):
-            errors.append(
-                OptionError(
-                    entry.meta, "Failed to parse fava-option entry", entry
-                )
-            )
+        except (IndexError, TypeError, AssertionError) as err:
+            msg = f"Failed to parse fava-option entry: {str(err)}"
+            errors.append(OptionError(entry.meta, msg, entry))
 
     return options, errors

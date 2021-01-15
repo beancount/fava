@@ -43,6 +43,12 @@
   }
 </script>
 
+<form use:queryEditor on:submit|preventDefault={() => dispatch("submit")}>
+  <button type="submit" use:keyboardShortcut={"Control+Enter"}
+    >{_("Submit")}</button
+  >
+</form>
+
 <style>
   form {
     display: flex;
@@ -65,9 +71,3 @@
     border: 1px solid var(--color-background-darker);
   }
 </style>
-
-<form use:queryEditor on:submit|preventDefault={() => dispatch('submit')}>
-  <button
-    type="submit"
-    use:keyboardShortcut={'Control+Enter'}>{_('Submit')}</button>
-</form>

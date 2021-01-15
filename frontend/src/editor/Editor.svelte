@@ -26,6 +26,8 @@
   }
 </script>
 
+<div use:initialiseEditor />
+
 <style>
   div {
     width: 100%;
@@ -41,5 +43,3 @@
     border: 0;
   }
 </style>
-
-<div use:initialiseEditor />

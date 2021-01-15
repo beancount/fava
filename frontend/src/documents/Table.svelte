@@ -58,19 +58,6 @@
   }
 </script>
 
-<style>
-  table {
-    width: 100%;
-  }
-  tr {
-    cursor: pointer;
-  }
-  .selected,
-  tr:hover {
-    background-color: var(--color-table-header-background);
-  }
-</style>
-
 <table>
   <thead>
     <tr>
@@ -90,7 +77,8 @@
         class:selected={selected === doc}
         draggable={true}
         title={doc.filename}
-        on:dragstart={(ev) => ev.dataTransfer?.setData('fava/filename', doc.filename)}
+        on:dragstart={(ev) =>
+          ev.dataTransfer?.setData("fava/filename", doc.filename)}
         on:click={() => {
           selected = doc;
         }}>
@@ -100,3 +88,16 @@
     {/each}
   </tbody>
 </table>
+
+<style>
+  table {
+    width: 100%;
+  }
+  tr {
+    cursor: pointer;
+  }
+  .selected,
+  tr:hover {
+    background-color: var(--color-table-header-background);
+  }
+</style>

@@ -40,20 +40,9 @@
   }
 </script>
 
-<style>
-  pre {
-    font-size: 0.9em;
-    white-space: pre-wrap;
-  }
-
-  .duplicate {
-    opacity: 0.5;
-  }
-</style>
-
 <ModalBase {shown} {closeHandler}>
   <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
-    <h3>{_('Import')}</h3>
+    <h3>{_("Import")}</h3>
     {#if entry}
       <div class="flex-row">
         <h3>
@@ -69,7 +58,8 @@
           <input
             type="checkbox"
             checked={duplicate}
-            on:click={toggleDuplicate} />
+            on:click={toggleDuplicate}
+          />
           ignore duplicate
         </label>
       </div>
@@ -83,34 +73,41 @@
             class="muted"
             on:click={() => {
               currentIndex = 0;
-            }}>
-            ⏮
-          </button>
+            }}> ⏮ </button>
           <button type="button" class="muted" on:click={previousEntry}>
-            {_('Previous')}
+            {_("Previous")}
           </button>
         {/if}
         <span class="spacer" />
         {#if currentIndex < entries.length - 1}
-          <button type="submit">{_('Next')}</button>
+          <button type="submit">{_("Next")}</button>
           <button
             type="button"
             class="muted"
             on:click={() => {
               currentIndex = entries.length - 1;
-            }}>
-            ⏭
-          </button>
-        {:else}<button type="submit">{_('Save')}</button>{/if}
+            }}> ⏭ </button>
+        {:else}<button type="submit">{_("Save")}</button>{/if}
       </div>
       <hr />
       {#if entry.meta.__source__}
         <h3>
-          {_('Source')}
-          {#if entry.meta.lineno}({_('Line')}: {entry.meta.lineno}){/if}
+          {_("Source")}
+          {#if entry.meta.lineno}({_("Line")}: {entry.meta.lineno}){/if}
         </h3>
         <pre>{entry.meta.__source__}</pre>
       {/if}
     {/if}
   </form>
 </ModalBase>
+
+<style>
+  pre {
+    font-size: 0.9em;
+    white-space: pre-wrap;
+  }
+
+  .duplicate {
+    opacity: 0.5;
+  }
+</style>

@@ -45,13 +45,13 @@
 <!-- svelte-ignore a11y-label-has-associated-control -->
 <ModalBase {shown} {closeHandler}>
   <form bind:this={form} on:submit|preventDefault={submit}>
-    <h3>{_('Upload file(s)')}:</h3>
+    <h3>{_("Upload file(s)")}:</h3>
     {#each $files as file}
       <div class="fieldset"><input bind:value={file.name} /></div>
     {/each}
     <div class="fieldset">
       <label>
-        {_('Documents folder')}:
+        {_("Documents folder")}:
         <select name="folder">
           {#each documents as folder}
             <option>{folder}</option>
@@ -61,12 +61,12 @@
     </div>
     <div class="fieldset">
       <label>
-        {_('Account')}:
+        {_("Account")}:
 
         <AccountInput bind:value={$account} />
       </label>
       <input type="hidden" name="hash" value={$hash} />
     </div>
-    <button type="submit">{_('Upload')}</button>
+    <button type="submit">{_("Upload")}</button>
   </form>
 </ModalBase>

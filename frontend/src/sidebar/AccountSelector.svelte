@@ -21,8 +21,9 @@
 
 <AutocompleteInput
   bind:value
-  placeholder={_('Go to account')}
+  placeholder={_("Go to account")}
   selectFirst={true}
   suggestions={$accounts}
   key="g a"
-  on:select={select} />
+  on:select={select}
+/>

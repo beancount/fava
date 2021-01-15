@@ -59,13 +59,13 @@
   }
 </script>
 
+<form on:submit|preventDefault={save}>
+  <div use:sourceSliceEditor />
+  <SaveButton {changed} {saving} />
+</form>
+
 <style>
   div :global(.CodeMirror) {
     height: auto;
   }
 </style>
-
-<form on:submit|preventDefault={save}>
-  <div use:sourceSliceEditor />
-  <SaveButton {changed} {saving} />
-</form>

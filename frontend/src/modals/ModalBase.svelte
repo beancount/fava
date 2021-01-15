@@ -5,6 +5,14 @@
   export let closeHandler = closeOverlay;
 </script>
 
+<div class:shown class="overlay">
+  <div class="background" on:click={closeHandler} />
+  <div class="content">
+    <button type="button" class="muted close" on:click={closeHandler}>x</button>
+    <slot />
+  </div>
+</div>
+
 <style>
   .background {
     position: fixed;
@@ -54,11 +62,3 @@
     width: 100%;
   }
 </style>
-
-<div class:shown class="overlay">
-  <div class="background" on:click={closeHandler} />
-  <div class="content">
-    <button type="button" class="muted close" on:click={closeHandler}>x</button>
-    <slot />
-  </div>
-</div>

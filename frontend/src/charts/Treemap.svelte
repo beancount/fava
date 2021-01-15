@@ -57,6 +57,25 @@
   }
 </script>
 
+<svg {width} {height}>
+  {#each leaves as d}
+    <g
+      transform={`translate(${d.x0},${d.y0})`}
+      use:followingTooltip={() => tooltipText(d)}>
+      <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
+      <text
+        use:setOpacity={d}
+        on:click={() => router.navigate(accountUrl(d.data.account))}
+        dy=".5em"
+        x={(d.x1 - d.x0) / 2}
+        y={(d.y1 - d.y0) / 2}
+        text-anchor="middle">
+        {d.data.account.split(":").pop() || ""}
+      </text>
+    </g>
+  {/each}
+</svg>
+
 <style>
   svg {
     shape-rendering: crispEdges;
@@ -71,22 +90,3 @@
     cursor: pointer;
   }
 </style>
-
-<svg {width} {height}>
-  {#each leaves as d}
-    <g
-      transform={`translate(${d.x0},${d.y0})`}
-      use:followingTooltip={() => tooltipText(d)}>
-      <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
-      <text
-        use:setOpacity={d}
-        on:click={() => router.navigate(accountUrl(d.data.account))}
-        dy=".5em"
-        x={(d.x1 - d.x0) / 2}
-        y={(d.y1 - d.y0) / 2}
-        text-anchor="middle">
-        {d.data.account.split(':').pop() || ''}
-      </text>
-    </g>
-  {/each}
-</svg>

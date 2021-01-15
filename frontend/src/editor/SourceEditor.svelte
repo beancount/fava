@@ -116,6 +116,13 @@
   }
 </script>
 
+<form class="fixed-fullsize-container" on:submit|preventDefault={save}>
+  <EditorMenu {file_path} {sources} on:command={command}>
+    <SaveButton {changed} {saving} />
+  </EditorMenu>
+  <div use:sourceEditor />
+</form>
+
 <style>
   form {
     background: var(--color-sidebar-background);
@@ -136,10 +143,3 @@
     border: 0;
   }
 </style>
-
-<form class="fixed-fullsize-container" on:submit|preventDefault={save}>
-  <EditorMenu {file_path} {sources} on:command={command}>
-    <SaveButton {changed} {saving} />
-  </EditorMenu>
-  <div use:sourceEditor />
-</form>

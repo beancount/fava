@@ -45,21 +45,27 @@ is specified by the individual extension.
 
 Below is a list of all current hooks.
 
-### `after_write_source(path, source)`
+### `after_write_source(path: str, source: str)`
 
 Called after the string `source` has been written to the Beancount file at `path`.
 
 ---
 
-### `after_insert_metadata(entry, key, value)`
+### `after_insert_metadata(entry: Directive, key: str, value: str)`
 
 Called after metadata (`key: value`) has been added to an `entry`.
 
 ---
 
-### `after_insert_entry(entry)`
+### `after_insert_entry(entry: Directive)`
 
 Called after an `entry` has been inserted.
+
+---
+
+### `after_entry_modified(entry: str, new_lines: str)`
+
+Called after an `entry` has been modified, e.g., via the context popup.
 
 ---
 

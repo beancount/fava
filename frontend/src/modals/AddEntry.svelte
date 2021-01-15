@@ -41,7 +41,7 @@
 <ModalBase {shown}>
   <form on:submit|preventDefault={submit}>
     <h3>
-      {_('Add')}
+      {_("Add")}
       {#each entryTypes as [type, displayName]}
         <button
           type="button"
@@ -51,7 +51,7 @@
           }}>
           {displayName}
         </button>
-        {' '}
+        {" "}
       {/each}
     </h3>
     <Entry bind:entry />
@@ -61,9 +61,9 @@
         type="submit"
         on:click|preventDefault={submitAndNew}
         class="muted">
-        {_('Save and add new')}
+        {_("Save and add new")}
       </button>
-      <button type="submit">{_('Save')}</button>
+      <button type="submit">{_("Save")}</button>
     </div>
   </form>
 </ModalBase>

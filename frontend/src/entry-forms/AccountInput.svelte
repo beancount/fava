@@ -22,8 +22,9 @@
 </script>
 
 <AutocompleteInput
-  placeholder={_('Account')}
+  placeholder={_("Account")}
   bind:value
   {className}
   {checkValidity}
-  suggestions={suggestions || $accounts} />
+  suggestions={suggestions || $accounts}
+/>

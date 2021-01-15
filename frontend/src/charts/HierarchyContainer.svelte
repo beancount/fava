@@ -22,9 +22,9 @@
   <svg {width}>
     <text x={width / 2} y={80} text-anchor="middle">Chart is empty.</text>
   </svg>
-{:else if $chartMode === 'treemap' && data.get(currency)}
+{:else if $chartMode === "treemap" && data.get(currency)}
   <Treemap data={data.get(currency)} {currency} {width} />
-{:else if $chartMode === 'sunburst'}
+{:else if $chartMode === "sunburst"}
   <svg {width} height={500}>
     {#each [...data] as [currency, d], i (currency)}
       <g transform={`translate(${(width * i) / currencies.length},0)`}>
@@ -32,7 +32,8 @@
           data={d}
           {currency}
           width={width / currencies.length}
-          height={500} />
+          height={500}
+        />
       </g>
     {/each}
   </svg>

@@ -75,19 +75,6 @@
   });
 </script>
 
-<style>
-  details > div {
-    max-height: 80vh;
-    overflow: auto;
-  }
-
-  div :global(.query-error) {
-    font-family: var(--font-family-monospaced);
-    color: var(--color-background);
-    background: var(--color-error);
-  }
-</style>
-
 <QueryEditor bind:value={query_string} on:submit={submit} />
 <div>
   {#each query_result_array as [history_item, { result, error }] (history_item)}
@@ -114,3 +101,16 @@
     </details>
   {/each}
 </div>
+
+<style>
+  details > div {
+    max-height: 80vh;
+    overflow: auto;
+  }
+
+  div :global(.query-error) {
+    font-family: var(--font-family-monospaced);
+    color: var(--color-background);
+    background: var(--color-error);
+  }
+</style>

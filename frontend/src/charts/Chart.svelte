@@ -56,8 +56,8 @@
       <ChartLegend legend={$legend} />
     </div>
     <span class="spacer" />
-    {#if chart.type === 'hierarchy'}
-      {#if $chartMode === 'treemap'}
+    {#if chart.type === "hierarchy"}
+      {#if $chartMode === "treemap"}
         <select bind:value={$chartCurrency}>
           {#each $currencies as currency}
             <option value={currency}>{currency}</option>
@@ -67,22 +67,22 @@
       <span class="chart-mode">
         <label>
           <input type="radio" bind:group={$chartMode} value="treemap" />
-          <span class="button">{_('Treemap')}</span>
+          <span class="button">{_("Treemap")}</span>
         </label>
         <label>
           <input type="radio" bind:group={$chartMode} value="sunburst" />
-          <span class="button">{_('Sunburst')}</span>
+          <span class="button">{_("Sunburst")}</span>
         </label>
       </span>
-    {:else if chart.type === 'linechart'}
+    {:else if chart.type === "linechart"}
       <span class="chart-mode">
         <label>
           <input type="radio" bind:group={$lineChartMode} value="line" />
-          <span class="button">{_('Line chart')}</span>
+          <span class="button">{_("Line chart")}</span>
         </label>
         <label>
           <input type="radio" bind:group={$lineChartMode} value="area" />
-          <span class="button">{_('Area chart')}</span>
+          <span class="button">{_("Area chart")}</span>
         </label>
       </span>
     {/if}
@@ -91,9 +91,10 @@
   <button
     type="button"
     on:click={() => showCharts.update((v) => !v)}
-    use:keyboardShortcut={'Control+c'}
+    use:keyboardShortcut={"Control+c"}
     class:closed={!$showCharts}
-    class="toggle-chart" />
+    class="toggle-chart"
+  />
 </div>
 <div hidden={!$showCharts} bind:clientWidth={width}>
   {#if width}
@@ -102,7 +103,8 @@
         this={components[chart.type]}
         data={chart.data}
         tooltipText={chart.tooltipText}
-        {width} />
+        {width}
+      />
     {:else}Invalid chart: {chart.type}{/if}
   {/if}
 </div>

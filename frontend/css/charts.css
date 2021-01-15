@@ -40,6 +40,7 @@
 }
 
 svg text {
+  font-family: var(--font-family);
   fill: var(--color-text-lightest);
 }
 
