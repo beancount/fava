@@ -10,6 +10,7 @@
 }
 
 .CodeMirror.CodeMirror {
+  z-index: var(--z-index-editor);
   margin-bottom: 1em;
   font: 13px var(--font-family-editor);
   border: 1px solid var(--color-sidebar-border);
