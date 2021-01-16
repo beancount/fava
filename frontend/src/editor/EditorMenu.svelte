@@ -1,8 +1,12 @@
 <script>
   import { createEventDispatcher } from "svelte";
+  import { toggleComment } from "@codemirror/comment";
+  import { foldAll, unfoldAll } from "@codemirror/fold";
 
   import { _ } from "../i18n";
   import { urlFor } from "../helpers";
+
+  import { favaFormat } from "./commands";
 
   /** @type {string[]} */
   export let sources;
@@ -29,18 +33,18 @@
       {_("Edit")}
       &nbsp;▾
       <ul>
-        <li on:click={() => dispatch("command", "favaFormat")}>
+        <li on:click={() => dispatch("command", favaFormat)}>
           {_("Align Amounts")}
           <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>d</kbd> </span>
         </li>
-        <li on:click={() => dispatch("command", "favaToggleComment")}>
+        <li on:click={() => dispatch("command", toggleComment)}>
           {_("Toggle Comment (selection)")}
-          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>y</kbd> </span>
+          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>/</kbd> </span>
         </li>
-        <li on:click={() => dispatch("command", "unfoldAll")}>
+        <li on:click={() => dispatch("command", unfoldAll)}>
           {_("Open all folds")}
         </li>
-        <li on:click={() => dispatch("command", "foldAll")}>
+        <li on:click={() => dispatch("command", foldAll)}>
           {_("Close all folds")}
         </li>
       </ul>

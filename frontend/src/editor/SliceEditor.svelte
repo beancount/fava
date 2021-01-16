@@ -3,13 +3,9 @@
   import { notify } from "../notifications";
   import router from "../router";
   import { closeOverlay } from "../stores";
-  import {
-    CodeMirror,
-    sourceEditorOptions,
-    enableAutomaticCompletions,
-  } from "../editor";
 
   import SaveButton from "./SaveButton.svelte";
+  import { initBeancountEditor } from "./init-editor";
 
   /** @type {string} */
   export let slice;
@@ -18,21 +14,25 @@
   /** @type {string} */
   export let sha256sum;
 
-  /** @type {CodeMirror.Editor} */
+  /** @type {import('@codemirror/view').EditorView | undefined} */
   let editor;
   let changed = false;
+
   let saving = false;
 
   async function save() {
+    if (!editor) {
+      return;
+    }
     saving = true;
     try {
+      slice = editor.state.doc.toString();
       sha256sum = await put("source_slice", {
         entry_hash,
         source: slice,
         sha256sum,
       });
       changed = false;
-      editor.getDoc().markClean();
       router.reload();
       closeOverlay();
     } catch (error) {
@@ -46,16 +46,14 @@
    * @param {HTMLDivElement} div
    */
   function sourceSliceEditor(div) {
-    const options = {
-      ...sourceEditorOptions(save),
-      value: slice,
-    };
-    editor = CodeMirror(div, options);
-    enableAutomaticCompletions(editor);
-    editor.on("changes", (cm) => {
-      slice = cm.getValue();
-      changed = !cm.getDoc().isClean();
-    });
+    editor = initBeancountEditor(
+      slice,
+      () => {
+        changed = true;
+      },
+      []
+    );
+    div.appendChild(editor.dom);
   }
 </script>
 
@@ -63,9 +61,3 @@
   <div use:sourceSliceEditor />
   <SaveButton {changed} {saving} />
 </form>
-
-<style>
-  div :global(.CodeMirror) {
-    height: auto;
-  }
-</style>

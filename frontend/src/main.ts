@@ -23,17 +23,13 @@ import "../css/media-mobile.css";
 import "../css/media-print.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/addon/dialog/dialog.css";
-import "codemirror/addon/fold/foldgutter.css";
-import "codemirror/addon/hint/show-hint.css";
 
 // Polyfill for customised builtin elements in Webkit
 import "@ungap/custom-elements";
 
 import { get } from "./api";
 import { CopyableText } from "./clipboard";
-import { BeancountTextarea } from "./editor";
+import { BeancountTextarea } from "./editor/init-editor";
 import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import {

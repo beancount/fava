@@ -6,30 +6,29 @@
   import { notify } from "../notifications";
   import router from "../router";
   import { errorCount } from "../stores";
-  import { CodeMirror, sourceEditorOptions, initSourceEditor } from "../editor";
 
+  import {
+    initBeancountEditor,
+    positionCursorInSourceEditor,
+  } from "./init-editor";
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
+  import { favaFormat } from "./commands";
 
   /** @type {{source: string, file_path: string, sha256sum: string, sources: string[]}} */
   export let data;
 
-  /** @type {CodeMirror.Editor | undefined} */
+  /** @type {import('@codemirror/view').EditorView | undefined} */
   let editor;
 
   let changed = false;
 
-  let value = "";
   let file_path = "";
   let sha256sum = "";
   /** @type {string[]} */
   let sources = [];
 
   let saving = false;
-
-  $: if (editor && value !== editor.getValue()) {
-    editor.setValue(value);
-  }
 
   async function save() {
     if (!editor) {
@@ -40,12 +39,11 @@
     try {
       sha256sum = await put("source", {
         file_path,
-        source: value,
+        source: editor.state.doc.toString(),
         sha256sum,
       });
       changed = false;
       editor.focus();
-      editor.getDoc().markClean();
       errorCount.set(await get("errors"));
     } catch (error) {
       notify(error, "error");
@@ -55,7 +53,7 @@
   }
 
   function checkEditorChanges() {
-    if (editor && !editor.getDoc().isClean()) {
+    if (editor && changed) {
       return "There are unsaved changes. Are you sure you want to leave?";
     }
     return null;
@@ -65,6 +63,8 @@
     sha256sum = data.sha256sum;
     file_path = data.file_path;
     sources = data.sources;
+
+    router.interruptHandlers.add(checkEditorChanges);
 
     // keybindings when the focus is outside the editor
     const unbind = [
@@ -77,12 +77,12 @@
       ...["Control+d", "Meta+d"].map((key) =>
         bindKey(key, (event) => {
           event.preventDefault();
-          editor?.execCommand("favaFormat");
+          if (editor) {
+            favaFormat(editor);
+          }
         })
       ),
     ];
-
-    router.interruptHandlers.add(checkEditorChanges);
 
     return () => {
       router.interruptHandlers.delete(checkEditorChanges);
@@ -94,52 +94,65 @@
    * @param {HTMLElement} div
    */
   function sourceEditor(div) {
-    value = data.source;
-    const options = {
-      ...sourceEditorOptions(save),
-      autofocus: true,
-      value,
+    editor = initBeancountEditor(
+      data.source,
+      () => {
+        changed = true;
+      },
+      [
+        {
+          key: "Control-s",
+          mac: "Meta-s",
+          run: () => {
+            save();
+            return true;
+          },
+        },
+      ]
+    );
+    div.appendChild(editor.dom);
+    editor.focus();
+    positionCursorInSourceEditor(editor);
+    return {
+      destroy: () => {
+        editor = undefined;
+      },
     };
-    editor = CodeMirror(div, options);
-    initSourceEditor(editor);
-    editor.on("changes", (cm) => {
-      value = cm.getValue();
-      changed = !cm.getDoc().isClean();
-    });
   }
 
   /**
-   * @param {CustomEvent<string>} ev
+   * @param {CustomEvent<import("@codemirror/view").Command>} ev
    */
   function command(ev) {
-    editor?.execCommand(ev.detail);
+    if (editor) {
+      ev.detail(editor);
+    }
   }
 </script>
 
-<form class="fixed-fullsize-container" on:submit|preventDefault={save}>
+<form
+  class="fixed-fullsize-container"
+  on:submit|preventDefault={save}
+  use:sourceEditor
+>
   <EditorMenu {file_path} {sources} on:command={command}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
-  <div use:sourceEditor />
 </form>
 
 <style>
   form {
+    display: flex;
+    flex-direction: column;
     background: var(--color-sidebar-background);
   }
-  div {
-    position: fixed;
-    top: calc(var(--header-height) + var(--source-editor-fieldset-height));
-    bottom: 0;
+  form :global(.cm-wrap) {
+    flex: 1;
     width: 100%;
-  }
-  div :global(.CodeMirror-lines) {
-    border-top: 1px solid var(--color-sidebar-border);
-  }
-  div :global(.CodeMirror) {
-    width: 100%;
-    height: 100%;
+    height: calc(100% - 44px);
     margin: 0;
-    border: 0;
+  }
+  form :global(.cm-lines) {
+    border-top: 1px solid var(--color-sidebar-border);
   }
 </style>
