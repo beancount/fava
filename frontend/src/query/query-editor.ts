@@ -1,9 +1,28 @@
 import { basicSetup, EditorState, EditorView } from "@codemirror/basic-setup";
+import { defaultHighlightStyle } from "@codemirror/highlight";
+import { Prec } from "@codemirror/state";
 import { keymap, placeholder } from "@codemirror/view";
 
 import { bql } from "../codemirror/bql";
 import { _ } from "../i18n";
 
+/**
+ * A basic readonly BQL editor that only does syntax highlighting.
+ */
+export function initReadonlyEditor(value: string): EditorView {
+  const extensions = [
+    bql,
+    Prec.fallback(defaultHighlightStyle),
+    EditorView.editable.of(false),
+  ];
+  return new EditorView({
+    state: EditorState.create({ doc: value, extensions }),
+  });
+}
+
+/**
+ * The main BQL editor.
+ */
 export function initQueryEditor(
   value: string | undefined,
   onChanges: (s: string) => void,

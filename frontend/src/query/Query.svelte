@@ -9,6 +9,7 @@
   import Chart from "../charts/Chart.svelte";
   import QueryEditor from "./QueryEditor.svelte";
   import QueryLinks from "./QueryLinks.svelte";
+  import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";
 
   let query_string = "";
 
@@ -80,9 +81,7 @@
   {#each query_result_array as [history_item, { result, error }] (history_item)}
     <details class:error bind:this={resultElems[history_item]}>
       <summary on:click={() => click(history_item)}>
-        <pre>
-          <code>{history_item}</code>
-        </pre>
+        <ReadonlyQueryEditor value={history_item} />
         {#if result}
           <span class="spacer" />
           <QueryLinks query={history_item} />

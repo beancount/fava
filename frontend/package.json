@@ -51,6 +51,7 @@
   "dependencies": {
     "@codemirror/autocomplete": "^0.17.2",
     "@codemirror/basic-setup": "^0.17.1",
+    "@codemirror/highlight": "^0.17.1",
     "@codemirror/language": "^0.17.4",
     "@codemirror/state": "^0.17.1",
     "@codemirror/stream-parser": "^0.17.1",
