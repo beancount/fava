@@ -15,18 +15,18 @@ msgstr "Налаштовані посилання"
 msgid "Errors"
 msgstr "Помилки"
 
-#: frontend/src/header/FilterForm.svelte:100
+#: frontend/src/header/FilterForm.svelte:61
 msgid "Time"
 msgstr "Час"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
-#: frontend/src/header/FilterForm.svelte:109
+#: frontend/src/header/FilterForm.svelte:71
 #: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "Рахунок"
 
-#: frontend/src/entry-forms/Transaction.svelte:97
-#: frontend/src/entry-forms/Transaction.svelte:100
+#: frontend/src/entry-forms/Transaction.svelte:65
+#: frontend/src/entry-forms/Transaction.svelte:68
 msgid "Payee"
 msgstr "Отримувач"
 
@@ -106,14 +106,13 @@ msgstr "Вартість"
 msgid "Change"
 msgstr "Зміна"
 
-#: frontend/src/entry-forms/Balance.svelte:23
+#: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:13
 msgid "Balance"
 msgstr "Баланс"
 
 #: frontend/src/editor/SaveButton.svelte:9
-#: frontend/src/import/Extract.svelte:104
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/import/Extract.svelte:90 frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "Зберегти"
 
@@ -121,7 +120,7 @@ msgstr "Зберегти"
 msgid "Saving..."
 msgstr "Зберігається..."
 
-#: frontend/src/main.ts:93
+#: frontend/src/main.ts:96
 msgid "File change detected. Click to reload."
 msgstr "Вміст файлу змінився. Натисніть для перезавантаження."
 
@@ -158,11 +157,11 @@ msgstr "Баланс"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Перейти до файлу %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:77
+#: frontend/src/editor/EditorMenu.svelte:18
 msgid "File"
 msgstr "Файл"
 
-#: frontend/src/import/Extract.svelte:110
+#: frontend/src/import/Extract.svelte:96
 msgid "Line"
 msgstr "Строка"
 
@@ -194,7 +193,7 @@ msgstr "Допомога - %(title)s"
 msgid "Help pages"
 msgstr "Сторінки допомоги"
 
-#: frontend/src/entry-forms/Balance.svelte:33
+#: frontend/src/entry-forms/Balance.svelte:28
 msgid "Currency"
 msgstr "Валюта"
 
@@ -219,15 +218,15 @@ msgstr "Дохід"
 msgid "Expenses"
 msgstr "Витрати"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:77
+#: frontend/src/entry-forms/EntryMetadata.svelte:53
 msgid "Key"
 msgstr "Ключ"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:86
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
 msgid "Value"
 msgstr "Значення"
 
-#: frontend/src/query/QueryLinks.svelte:28
+#: frontend/src/query/QueryLinks.svelte:22
 msgid "Download as"
 msgstr "Скачати як"
 
@@ -276,8 +275,8 @@ msgstr "закрити"
 msgid "New transaction"
 msgstr "Нова транзакція"
 
-#: frontend/src/entry-forms/Transaction.svelte:106
-#: frontend/src/entry-forms/Transaction.svelte:110
+#: frontend/src/entry-forms/Transaction.svelte:75
+#: frontend/src/entry-forms/Transaction.svelte:79
 msgid "Narration"
 msgstr "Опис"
 
@@ -285,16 +284,16 @@ msgstr "Опис"
 msgid "Save and add new"
 msgstr "Записати й додати нову"
 
-#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/entry-forms/Balance.svelte:22
 msgid "Number"
 msgstr "Кількість"
 
-#: frontend/src/entry-forms/Posting.svelte:124
-#: frontend/src/entry-forms/Transaction.svelte:118
+#: frontend/src/entry-forms/Posting.svelte:87
+#: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Add posting"
 msgstr "Додати проведення"
 
-#: frontend/src/import/Extract.svelte:56
+#: frontend/src/import/Extract.svelte:45
 msgid "Import"
 msgstr "Імпортувати"
 
@@ -310,7 +309,7 @@ msgstr "Перемкнути джерело"
 msgid "Toggle ignore"
 msgstr "Перемкнути ігнорування"
 
-#: frontend/src/import/Extract.svelte:109
+#: frontend/src/import/Extract.svelte:95
 msgid "Source"
 msgstr "Джерело"
 
@@ -334,7 +333,7 @@ msgstr "Дублікат"
 msgid "Importer"
 msgstr "Імпортер"
 
-#: frontend/src/import/Import.svelte:169
+#: frontend/src/import/Import.svelte:148
 msgid "Extract"
 msgstr "Витягти"
 
@@ -347,11 +346,11 @@ msgid "Metadata"
 msgstr "Метадані"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:93
+#: frontend/src/entry-forms/EntryMetadata.svelte:71
 msgid "Add metadata"
 msgstr "Додати метадані"
 
-#: frontend/src/entry-forms/Note.svelte:24
+#: frontend/src/entry-forms/Note.svelte:15
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Note"
 msgstr "Примітка"
@@ -388,7 +387,7 @@ msgstr "Інші транзакції"
 msgid "Documents with a #discovered tag"
 msgstr "Документи з #discovered тегом"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:93
 msgid "Postings"
 msgstr "Записи"
 
@@ -404,19 +403,19 @@ msgstr "Директорія документів"
 msgid "Upload"
 msgstr "Завантаження"
 
-#: frontend/src/editor/EditorMenu.svelte:92
+#: frontend/src/editor/EditorMenu.svelte:33
 msgid "Align Amounts"
 msgstr "Вирівняти суми"
 
-#: frontend/src/editor/EditorMenu.svelte:96
+#: frontend/src/editor/EditorMenu.svelte:37
 msgid "Toggle Comment (selection)"
 msgstr "Закоментувати виділене"
 
-#: frontend/src/editor/EditorMenu.svelte:100
+#: frontend/src/editor/EditorMenu.svelte:41
 msgid "Open all folds"
 msgstr "Відкрити усі згортання"
 
-#: frontend/src/editor/EditorMenu.svelte:103
+#: frontend/src/editor/EditorMenu.svelte:44
 msgid "Close all folds"
 msgstr "Закрити усі згортання"
 
@@ -432,7 +431,7 @@ msgstr "допомога"
 msgid "Beancount options"
 msgstr "Налаштування Beancount"
 
-#: frontend/src/query/QueryEditor.svelte:72
+#: frontend/src/query/QueryEditor.svelte:48
 msgid "Submit"
 msgstr "Відправити"
 
@@ -446,7 +445,7 @@ msgstr "Клік з натисненим Shift щоб розкрити усі р
 msgid "Export"
 msgstr "Експортувати"
 
-#: frontend/src/header/FilterForm.svelte:118
+#: frontend/src/header/FilterForm.svelte:81
 msgid "Filter by tag, payee, ..."
 msgstr "Фільтрувати за тегом, отримувачем, ..."
 
@@ -478,11 +477,11 @@ msgstr ""
 msgid "Daily"
 msgstr ""
 
-#: frontend/src/editor/EditorMenu.svelte:88
+#: frontend/src/editor/EditorMenu.svelte:29
 msgid "Edit"
 msgstr ""
 
-#: frontend/src/entry-forms/Posting.svelte:117
+#: frontend/src/entry-forms/Posting.svelte:79
 msgid "Amount"
 msgstr ""
 
@@ -522,11 +521,11 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:90
+#: frontend/src/import/Extract.svelte:78
 msgid "Previous"
 msgstr ""
 
-#: frontend/src/import/Extract.svelte:95
+#: frontend/src/import/Extract.svelte:83
 msgid "Next"
 msgstr ""
 
@@ -538,7 +537,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:94
+#: frontend/src/documents/Documents.svelte:80
 msgid "Move or rename document"
 msgstr ""
 
@@ -550,7 +549,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:150
+#: frontend/src/import/Import.svelte:129
 msgid "Delete"
 msgstr ""
 
@@ -566,11 +565,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:169
+#: frontend/src/import/Import.svelte:147
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:178
+#: frontend/src/import/Import.svelte:157
 msgid "Clear"
 msgstr ""
 

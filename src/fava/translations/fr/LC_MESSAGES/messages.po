@@ -15,18 +15,18 @@ msgstr "Liens personnalisés"
 msgid "Errors"
 msgstr "Erreurs"
 
-#: frontend/src/header/FilterForm.svelte:100
+#: frontend/src/header/FilterForm.svelte:61
 msgid "Time"
 msgstr "Année"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
-#: frontend/src/header/FilterForm.svelte:109
+#: frontend/src/header/FilterForm.svelte:71
 #: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "Compte"
 
-#: frontend/src/entry-forms/Transaction.svelte:97
-#: frontend/src/entry-forms/Transaction.svelte:100
+#: frontend/src/entry-forms/Transaction.svelte:65
+#: frontend/src/entry-forms/Transaction.svelte:68
 msgid "Payee"
 msgstr "Bénéficiaire"
 
@@ -110,14 +110,13 @@ msgstr "Coût"
 msgid "Change"
 msgstr "Opération"
 
-#: frontend/src/entry-forms/Balance.svelte:23
+#: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:13
 msgid "Balance"
 msgstr "Solde"
 
 #: frontend/src/editor/SaveButton.svelte:9
-#: frontend/src/import/Extract.svelte:104
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/import/Extract.svelte:90 frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -125,7 +124,7 @@ msgstr "Sauvegarder"
 msgid "Saving..."
 msgstr "Sauvegarde…"
 
-#: frontend/src/main.ts:93
+#: frontend/src/main.ts:96
 msgid "File change detected. Click to reload."
 msgstr "Changement de fichier détecté. Cliquez pour recharger."
 
@@ -163,11 +162,11 @@ msgstr "Balances"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Afficher la source %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:77
+#: frontend/src/editor/EditorMenu.svelte:18
 msgid "File"
 msgstr "Fichier"
 
-#: frontend/src/import/Extract.svelte:110
+#: frontend/src/import/Extract.svelte:96
 msgid "Line"
 msgstr "Ligne"
 
@@ -199,7 +198,7 @@ msgstr "Aide – %(title)s"
 msgid "Help pages"
 msgstr "Pages d’aide"
 
-#: frontend/src/entry-forms/Balance.svelte:33
+#: frontend/src/entry-forms/Balance.svelte:28
 msgid "Currency"
 msgstr "Devise"
 
@@ -224,15 +223,15 @@ msgstr "Revenus"
 msgid "Expenses"
 msgstr "Dépenses"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:77
+#: frontend/src/entry-forms/EntryMetadata.svelte:53
 msgid "Key"
 msgstr "Clé"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:86
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
 msgid "Value"
 msgstr "Valeur"
 
-#: frontend/src/query/QueryLinks.svelte:28
+#: frontend/src/query/QueryLinks.svelte:22
 msgid "Download as"
 msgstr "Télécharger en tant que"
 
@@ -285,8 +284,8 @@ msgstr "Fermer"
 msgid "New transaction"
 msgstr "Nouvelle transaction"
 
-#: frontend/src/entry-forms/Transaction.svelte:106
-#: frontend/src/entry-forms/Transaction.svelte:110
+#: frontend/src/entry-forms/Transaction.svelte:75
+#: frontend/src/entry-forms/Transaction.svelte:79
 msgid "Narration"
 msgstr "Description"
 
@@ -294,17 +293,17 @@ msgstr "Description"
 msgid "Save and add new"
 msgstr "Enregistrer et ajouter une nouvelle"
 
-#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/entry-forms/Balance.svelte:22
 msgid "Number"
 msgstr "Nombre"
 
-#: frontend/src/entry-forms/Posting.svelte:124
-#: frontend/src/entry-forms/Transaction.svelte:118
+#: frontend/src/entry-forms/Posting.svelte:87
+#: frontend/src/entry-forms/Transaction.svelte:88
 #, fuzzy
 msgid "Add posting"
 msgstr "Ajouter un enregistrement"
 
-#: frontend/src/import/Extract.svelte:56
+#: frontend/src/import/Extract.svelte:45
 msgid "Import"
 msgstr "Importer"
 
@@ -320,7 +319,7 @@ msgstr "Source"
 msgid "Toggle ignore"
 msgstr "Ignore"
 
-#: frontend/src/import/Extract.svelte:109
+#: frontend/src/import/Extract.svelte:95
 msgid "Source"
 msgstr "Source"
 
@@ -344,7 +343,7 @@ msgstr "Doublon"
 msgid "Importer"
 msgstr "Importer"
 
-#: frontend/src/import/Import.svelte:169
+#: frontend/src/import/Import.svelte:148
 msgid "Extract"
 msgstr "Extraire"
 
@@ -357,11 +356,11 @@ msgid "Metadata"
 msgstr "Métadonnées"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:93
+#: frontend/src/entry-forms/EntryMetadata.svelte:71
 msgid "Add metadata"
 msgstr "Ajouter une métadonnée"
 
-#: frontend/src/entry-forms/Note.svelte:24
+#: frontend/src/entry-forms/Note.svelte:15
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Note"
 msgstr "Note"
@@ -398,7 +397,7 @@ msgstr "Autres transactions"
 msgid "Documents with a #discovered tag"
 msgstr "Documents avec une étiquette #discovered"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:93
 msgid "Postings"
 msgstr "Affectations"
 
@@ -414,19 +413,19 @@ msgstr "Emplacement des documents"
 msgid "Upload"
 msgstr "Téléverser"
 
-#: frontend/src/editor/EditorMenu.svelte:92
+#: frontend/src/editor/EditorMenu.svelte:33
 msgid "Align Amounts"
 msgstr "Aligner les montants"
 
-#: frontend/src/editor/EditorMenu.svelte:96
+#: frontend/src/editor/EditorMenu.svelte:37
 msgid "Toggle Comment (selection)"
 msgstr "Commentaires (sélection)"
 
-#: frontend/src/editor/EditorMenu.svelte:100
+#: frontend/src/editor/EditorMenu.svelte:41
 msgid "Open all folds"
 msgstr "Tout développer"
 
-#: frontend/src/editor/EditorMenu.svelte:103
+#: frontend/src/editor/EditorMenu.svelte:44
 msgid "Close all folds"
 msgstr "Tout réduire"
 
@@ -442,7 +441,7 @@ msgstr "Aide"
 msgid "Beancount options"
 msgstr "Options de Beancount"
 
-#: frontend/src/query/QueryEditor.svelte:72
+#: frontend/src/query/QueryEditor.svelte:48
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -456,7 +455,7 @@ msgstr "Maintenez Shift en cliquant pour développer tous les nœuds.\n"
 msgid "Export"
 msgstr "Exporter"
 
-#: frontend/src/header/FilterForm.svelte:118
+#: frontend/src/header/FilterForm.svelte:81
 msgid "Filter by tag, payee, ..."
 msgstr "Filtrer par étiquette, bénéficiaire, …"
 
@@ -488,11 +487,11 @@ msgstr "Hebdomadaire"
 msgid "Daily"
 msgstr "Journalier"
 
-#: frontend/src/editor/EditorMenu.svelte:88
+#: frontend/src/editor/EditorMenu.svelte:29
 msgid "Edit"
 msgstr "Éditer"
 
-#: frontend/src/entry-forms/Posting.svelte:117
+#: frontend/src/entry-forms/Posting.svelte:79
 msgid "Amount"
 msgstr "Montant"
 
@@ -532,11 +531,11 @@ msgstr "Doit être l’un des comptes déclarés"
 msgid "Event"
 msgstr "Événement"
 
-#: frontend/src/import/Extract.svelte:90
+#: frontend/src/import/Extract.svelte:78
 msgid "Previous"
 msgstr "Précédent"
 
-#: frontend/src/import/Extract.svelte:95
+#: frontend/src/import/Extract.svelte:83
 msgid "Next"
 msgstr "Suivant"
 
@@ -548,7 +547,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:94
+#: frontend/src/documents/Documents.svelte:80
 msgid "Move or rename document"
 msgstr ""
 
@@ -560,7 +559,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:150
+#: frontend/src/import/Import.svelte:129
 msgid "Delete"
 msgstr ""
 
@@ -576,11 +575,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:169
+#: frontend/src/import/Import.svelte:147
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:178
+#: frontend/src/import/Import.svelte:157
 msgid "Clear"
 msgstr ""
 

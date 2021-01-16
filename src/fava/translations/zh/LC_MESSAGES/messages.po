@@ -15,18 +15,18 @@ msgstr "个性化链接"
 msgid "Errors"
 msgstr "错误"
 
-#: frontend/src/header/FilterForm.svelte:100
+#: frontend/src/header/FilterForm.svelte:61
 msgid "Time"
 msgstr "时间"
 
 #: frontend/src/entry-forms/AccountInput.svelte:25
-#: frontend/src/header/FilterForm.svelte:109
+#: frontend/src/header/FilterForm.svelte:71
 #: frontend/src/modals/DocumentUpload.svelte:64
 msgid "Account"
 msgstr "帐户"
 
-#: frontend/src/entry-forms/Transaction.svelte:97
-#: frontend/src/entry-forms/Transaction.svelte:100
+#: frontend/src/entry-forms/Transaction.svelte:65
+#: frontend/src/entry-forms/Transaction.svelte:68
 msgid "Payee"
 msgstr "收款人"
 
@@ -106,14 +106,13 @@ msgstr "成本"
 msgid "Change"
 msgstr "变动"
 
-#: frontend/src/entry-forms/Balance.svelte:23
+#: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:13
 msgid "Balance"
 msgstr "余额"
 
 #: frontend/src/editor/SaveButton.svelte:9
-#: frontend/src/import/Extract.svelte:104
-#: frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/import/Extract.svelte:90 frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "保存"
 
@@ -121,7 +120,7 @@ msgstr "保存"
 msgid "Saving..."
 msgstr "保存中…"
 
-#: frontend/src/main.ts:93
+#: frontend/src/main.ts:96
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
@@ -158,11 +157,11 @@ msgstr "余额"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "源文件 %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:77
+#: frontend/src/editor/EditorMenu.svelte:18
 msgid "File"
 msgstr "文件"
 
-#: frontend/src/import/Extract.svelte:110
+#: frontend/src/import/Extract.svelte:96
 msgid "Line"
 msgstr "行"
 
@@ -194,7 +193,7 @@ msgstr "帮助 - %(title)s"
 msgid "Help pages"
 msgstr "帮助页"
 
-#: frontend/src/entry-forms/Balance.svelte:33
+#: frontend/src/entry-forms/Balance.svelte:28
 msgid "Currency"
 msgstr "货币"
 
@@ -219,15 +218,15 @@ msgstr "收入"
 msgid "Expenses"
 msgstr "支出"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:77
+#: frontend/src/entry-forms/EntryMetadata.svelte:53
 msgid "Key"
 msgstr "键"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:86
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
 msgid "Value"
 msgstr "值"
 
-#: frontend/src/query/QueryLinks.svelte:28
+#: frontend/src/query/QueryLinks.svelte:22
 msgid "Download as"
 msgstr "下载为"
 
@@ -276,8 +275,8 @@ msgstr "关闭"
 msgid "New transaction"
 msgstr "新交易"
 
-#: frontend/src/entry-forms/Transaction.svelte:106
-#: frontend/src/entry-forms/Transaction.svelte:110
+#: frontend/src/entry-forms/Transaction.svelte:75
+#: frontend/src/entry-forms/Transaction.svelte:79
 msgid "Narration"
 msgstr "摘要"
 
@@ -285,16 +284,16 @@ msgstr "摘要"
 msgid "Save and add new"
 msgstr "保存并添加下一条"
 
-#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/entry-forms/Balance.svelte:22
 msgid "Number"
 msgstr "数额"
 
-#: frontend/src/entry-forms/Posting.svelte:124
-#: frontend/src/entry-forms/Transaction.svelte:118
+#: frontend/src/entry-forms/Posting.svelte:87
+#: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Add posting"
 msgstr "添加记录"
 
-#: frontend/src/import/Extract.svelte:56
+#: frontend/src/import/Extract.svelte:45
 msgid "Import"
 msgstr "导入"
 
@@ -310,7 +309,7 @@ msgstr "设为来源"
 msgid "Toggle ignore"
 msgstr "忽略"
 
-#: frontend/src/import/Extract.svelte:109
+#: frontend/src/import/Extract.svelte:95
 msgid "Source"
 msgstr "来源"
 
@@ -334,7 +333,7 @@ msgstr "复制"
 msgid "Importer"
 msgstr "导入器"
 
-#: frontend/src/import/Import.svelte:169
+#: frontend/src/import/Import.svelte:148
 msgid "Extract"
 msgstr "导出"
 
@@ -347,11 +346,11 @@ msgid "Metadata"
 msgstr "元数据"
 
 #: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:93
+#: frontend/src/entry-forms/EntryMetadata.svelte:71
 msgid "Add metadata"
 msgstr "添加元数据"
 
-#: frontend/src/entry-forms/Note.svelte:24
+#: frontend/src/entry-forms/Note.svelte:15
 #: frontend/src/modals/AddEntry.svelte:14
 msgid "Note"
 msgstr "备注"
@@ -388,7 +387,7 @@ msgstr "其他交易"
 msgid "Documents with a #discovered tag"
 msgstr "带有 #discovered 标签的文档"
 
-#: frontend/src/entry-forms/Transaction.svelte:125
+#: frontend/src/entry-forms/Transaction.svelte:93
 msgid "Postings"
 msgstr "记录"
 
@@ -404,19 +403,19 @@ msgstr "文档目录"
 msgid "Upload"
 msgstr "上传"
 
-#: frontend/src/editor/EditorMenu.svelte:92
+#: frontend/src/editor/EditorMenu.svelte:33
 msgid "Align Amounts"
 msgstr "对齐金额"
 
-#: frontend/src/editor/EditorMenu.svelte:96
+#: frontend/src/editor/EditorMenu.svelte:37
 msgid "Toggle Comment (selection)"
 msgstr "设为注释"
 
-#: frontend/src/editor/EditorMenu.svelte:100
+#: frontend/src/editor/EditorMenu.svelte:41
 msgid "Open all folds"
 msgstr "展开所有行"
 
-#: frontend/src/editor/EditorMenu.svelte:103
+#: frontend/src/editor/EditorMenu.svelte:44
 msgid "Close all folds"
 msgstr "折叠所有行"
 
@@ -432,7 +431,7 @@ msgstr "帮助"
 msgid "Beancount options"
 msgstr "Beancount 选项"
 
-#: frontend/src/query/QueryEditor.svelte:72
+#: frontend/src/query/QueryEditor.svelte:48
 msgid "Submit"
 msgstr "提交"
 
@@ -446,7 +445,7 @@ msgstr "按住 Shift 键展开所有子集\n"
 msgid "Export"
 msgstr "导出"
 
-#: frontend/src/header/FilterForm.svelte:118
+#: frontend/src/header/FilterForm.svelte:81
 msgid "Filter by tag, payee, ..."
 msgstr "筛选（标签，收款人等等）"
 
@@ -478,11 +477,11 @@ msgstr "按周"
 msgid "Daily"
 msgstr "按日"
 
-#: frontend/src/editor/EditorMenu.svelte:88
+#: frontend/src/editor/EditorMenu.svelte:29
 msgid "Edit"
 msgstr "编辑"
 
-#: frontend/src/entry-forms/Posting.svelte:117
+#: frontend/src/entry-forms/Posting.svelte:79
 msgid "Amount"
 msgstr "金额"
 
@@ -522,11 +521,11 @@ msgstr "该账户未找到"
 msgid "Event"
 msgstr "事件"
 
-#: frontend/src/import/Extract.svelte:90
+#: frontend/src/import/Extract.svelte:78
 msgid "Previous"
 msgstr "上一个"
 
-#: frontend/src/import/Extract.svelte:95
+#: frontend/src/import/Extract.svelte:83
 msgid "Next"
 msgstr "下一个"
 
@@ -538,7 +537,7 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:94
+#: frontend/src/documents/Documents.svelte:80
 msgid "Move or rename document"
 msgstr ""
 
@@ -550,7 +549,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:150
+#: frontend/src/import/Import.svelte:129
 msgid "Delete"
 msgstr ""
 
@@ -566,11 +565,11 @@ msgstr ""
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:169
+#: frontend/src/import/Import.svelte:147
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:178
+#: frontend/src/import/Import.svelte:157
 msgid "Clear"
 msgstr ""
 
