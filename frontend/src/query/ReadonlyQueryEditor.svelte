@@ -1,5 +1,5 @@
 <script>
-  import { initReadonlyEditor } from "./query-editor";
+  import { initReadonlyQueryEditor } from "./query-editor";
 
   /** @type {string} */
   export let value;
@@ -8,7 +8,7 @@
    * @param {HTMLElement} el
    */
   function queryEditor(el) {
-    const editor = initReadonlyEditor(value);
+    const editor = initReadonlyQueryEditor(value);
     el.appendChild(editor.dom);
   }
 </script>

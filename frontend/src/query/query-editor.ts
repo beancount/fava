@@ -9,7 +9,7 @@ import { _ } from "../i18n";
 /**
  * A basic readonly BQL editor that only does syntax highlighting.
  */
-export function initReadonlyEditor(value: string): EditorView {
+export function initReadonlyQueryEditor(value: string): EditorView {
   const extensions = [
     bql,
     Prec.fallback(defaultHighlightStyle),
