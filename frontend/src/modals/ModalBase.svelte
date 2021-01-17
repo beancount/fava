@@ -90,10 +90,17 @@
     top: 1em;
     right: 1em;
     margin: 0;
+    height: 2em;
+    width: 2em;
+    line-height: 1em;
     color: var(--color-text-lighter);
   }
   .content :global(form),
   .content > :global(div) {
     width: 100%;
+  }
+
+  .content :global(.fieldset) {
+    margin-bottom: 6px;
   }
 </style>
