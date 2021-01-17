@@ -76,7 +76,7 @@
   }
 
   .fieldset {
-    display: 'block';
+    display: "block";
   }
 
   .fieldset :global(span):first-child {
