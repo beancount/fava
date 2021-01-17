@@ -68,20 +68,16 @@
 
     // keybindings when the focus is outside the editor
     const unbind = [
-      ...["Control+s", "Meta+s"].map((key) =>
-        bindKey(key, (event) => {
-          event.preventDefault();
-          save();
-        })
-      ),
-      ...["Control+d", "Meta+d"].map((key) =>
-        bindKey(key, (event) => {
-          event.preventDefault();
-          if (editor) {
-            favaFormat(editor);
-          }
-        })
-      ),
+      bindKey({ key: "Control+s", mac: "Meta+s" }, (event) => {
+        event.preventDefault();
+        save();
+      }),
+      bindKey({ key: "Control+d", mac: "Meta+d" }, (event) => {
+        event.preventDefault();
+        if (editor) {
+          favaFormat(editor);
+        }
+      }),
     ];
 
     return () => {

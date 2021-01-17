@@ -106,6 +106,27 @@ function keydown(event: KeyboardEvent): void {
 
 document.addEventListener("keydown", keydown);
 
+/** A type to specify a platform-dependent keyboard shortcut. */
+export type KeySpec = string | { key: string; mac: string };
+
+const currentPlatform: "mac" | "key" =
+  typeof navigator !== "undefined" && /Mac/.test(navigator.platform)
+    ? "mac"
+    : "key";
+
+export const modKey = currentPlatform === "mac" ? "Cmd" : "Ctrl";
+
+/**
+ * Get the keyboard key specifier string for the current platform.
+ * @param keySpec - The key spec.
+ */
+export function getKeySpecKey(keySpec: KeySpec): string {
+  if (typeof keySpec === "string") {
+    return keySpec;
+  }
+  return currentPlatform === "mac" ? keySpec.mac : keySpec.key;
+}
+
 /**
  * Bind an event handler to a key.
  * @param key - The key to bind.
@@ -113,9 +134,10 @@ document.addEventListener("keydown", keydown);
  * @returns A function to unbind the keyboard handler.
  */
 export function bindKey(
-  key: string,
+  keySpec: KeySpec,
   handler: KeyboardShortcutAction
 ): () => void {
+  const key = getKeySpecKey(keySpec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     // eslint-disable-next-line no-console

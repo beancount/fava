@@ -7,6 +7,7 @@
   import { urlFor } from "../helpers";
 
   import { favaFormat } from "./commands";
+  import { modKey } from "../keyboard-shortcuts";
 
   /** @type {string[]} */
   export let sources;
@@ -35,17 +36,19 @@
       <ul>
         <li on:click={() => dispatch("command", favaFormat)}>
           {_("Align Amounts")}
-          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>d</kbd> </span>
+          <span><kbd>{modKey}</kbd> + <kbd>d</kbd></span>
         </li>
         <li on:click={() => dispatch("command", toggleComment)}>
           {_("Toggle Comment (selection)")}
-          <span> <kbd>Ctrl</kbd> / <kbd>Cmd</kbd> + <kbd>/</kbd> </span>
+          <span><kbd>{modKey}</kbd> + <kbd>/</kbd></span>
         </li>
         <li on:click={() => dispatch("command", unfoldAll)}>
           {_("Open all folds")}
+          <span><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>]</kbd></span>
         </li>
         <li on:click={() => dispatch("command", foldAll)}>
           {_("Close all folds")}
+          <span><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>[</kbd></span>
         </li>
       </ul>
     </li>
