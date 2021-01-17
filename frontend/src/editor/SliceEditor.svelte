@@ -5,7 +5,7 @@
   import { closeOverlay } from "../stores";
 
   import SaveButton from "./SaveButton.svelte";
-  import { initBeancountEditor } from "./init-editor";
+  import { initBeancountEditor } from "../codemirror/setup";
 
   /** @type {string} */
   export let slice;

@@ -3,10 +3,10 @@ import { cursorLineUp } from "@codemirror/commands";
 import { defaultHighlightStyle } from "@codemirror/highlight";
 import { SearchCursor } from "@codemirror/search";
 import { EditorSelection, Prec } from "@codemirror/state";
-import { KeyBinding, keymap } from "@codemirror/view";
+import { KeyBinding, keymap, placeholder } from "@codemirror/view";
 
-import { beancount } from "../codemirror/beancount";
-
+import { beancount } from "./beancount";
+import { bql } from "./bql";
 import { favaKeymap } from "./commands";
 
 /*
@@ -75,38 +75,81 @@ export function initBeancountEditor(
 }
 
 /**
- * Jump to the `FAVA-INSERT-MARKER` string.
+ * Position the cursor
  */
-function jumpToMarker(cm: EditorView): void {
-  const cursor = new SearchCursor(cm.state.doc, "FAVA-INSERT-MARKER");
-  cursor.next();
-
-  if (cursor.value.from) {
-    cm.focus();
-    const selection = EditorSelection.cursor(cursor.value.from);
-    cm.dispatch({ selection, scrollIntoView: true });
-    cursorLineUp(cm);
-  } else {
-    const selection = EditorSelection.cursor(cm.state.doc.length);
-    cm.dispatch({ selection, scrollIntoView: true });
-  }
-}
-
-/**
- * Init source editor.
- */
-export function positionCursorInSourceEditor(cm: EditorView): void {
-  const line = parseInt(
-    new URLSearchParams(window.location.search).get("line") ?? "0",
-    10
-  );
+export function positionCursorInSourceEditor(
+  cm: EditorView,
+  line: number
+): void {
   if (line > 0) {
+    // Scroll to the given line
     const linePos = cm.state.doc.line(line);
     cm.dispatch({
       selection: { ...linePos, anchor: linePos.from },
       scrollIntoView: true,
     });
   } else {
-    jumpToMarker(cm);
+    // Jump to the `FAVA-INSERT-MARKER` string.
+    const cursor = new SearchCursor(cm.state.doc, "FAVA-INSERT-MARKER");
+    cursor.next();
+
+    if (cursor.value.from) {
+      cm.focus();
+      const selection = EditorSelection.cursor(cursor.value.from);
+      cm.dispatch({ selection, scrollIntoView: true });
+      cursorLineUp(cm);
+    } else {
+      const selection = EditorSelection.cursor(cm.state.doc.length);
+      cm.dispatch({ selection, scrollIntoView: true });
+    }
   }
+}
+
+/**
+ * A basic readonly BQL editor that only does syntax highlighting.
+ */
+export function initReadonlyQueryEditor(value: string): EditorView {
+  const extensions = [
+    bql,
+    Prec.fallback(defaultHighlightStyle),
+    EditorView.editable.of(false),
+  ];
+  return new EditorView({
+    state: EditorState.create({ doc: value, extensions }),
+  });
+}
+
+/**
+ * The main BQL editor.
+ */
+export function initQueryEditor(
+  value: string | undefined,
+  onDocChanges: (s: EditorState) => void,
+  _placeholder: string,
+  submit: () => void
+): EditorView {
+  const extensions = [
+    basicSetup,
+    bql,
+    EditorView.updateListener.of((update) => {
+      if (update.docChanged) {
+        onDocChanges(update.state);
+      }
+    }),
+    keymap.of([
+      {
+        key: "Control-Enter",
+        mac: "Meta-Enter",
+        run: () => {
+          submit();
+          return true;
+        },
+      },
+    ]),
+    placeholder(_placeholder),
+  ];
+
+  return new EditorView({
+    state: EditorState.create({ doc: value, extensions }),
+  });
 }

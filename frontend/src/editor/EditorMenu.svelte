@@ -6,7 +6,7 @@
   import { _ } from "../i18n";
   import { urlFor } from "../helpers";
 
-  import { favaFormat } from "./commands";
+  import { favaFormat } from "../codemirror/commands";
   import { modKey } from "../keyboard-shortcuts";
 
   /** @type {string[]} */

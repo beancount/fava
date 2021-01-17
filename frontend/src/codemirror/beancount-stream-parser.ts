@@ -87,6 +87,7 @@ export const beancountStreamParser: StreamParser<unknown> = {
     if (char === "{" || char === "}") {
       return "bracket";
     }
+    stream.skipToEnd();
     return null;
   },
   languageData: {

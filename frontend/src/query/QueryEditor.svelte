@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher } from "svelte";
 
-  import { initQueryEditor } from "./query-editor";
+  import { initQueryEditor } from "../codemirror/setup";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { _ } from "../i18n";
 
@@ -25,9 +25,10 @@
   function queryEditor(form) {
     editor = initQueryEditor(
       value,
-      (v) => {
-        value = v;
+      (s) => {
+        value = s.doc.toString();
       },
+      _("...enter a BQL query. 'help' to list available commands."),
       submit
     );
 

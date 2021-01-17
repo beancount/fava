@@ -29,7 +29,7 @@ import "@ungap/custom-elements";
 
 import { get } from "./api";
 import { CopyableText } from "./clipboard";
-import { BeancountTextarea } from "./editor/init-editor";
+import { BeancountTextarea } from "./codemirror/setup";
 import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import {

@@ -10,10 +10,10 @@
   import {
     initBeancountEditor,
     positionCursorInSourceEditor,
-  } from "./init-editor";
+  } from "../codemirror/setup";
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
-  import { favaFormat } from "./commands";
+  import { favaFormat } from "../codemirror/commands";
 
   /** @type {{source: string, file_path: string, sha256sum: string, sources: string[]}} */
   export let data;
@@ -108,7 +108,11 @@
     );
     div.appendChild(editor.dom);
     editor.focus();
-    positionCursorInSourceEditor(editor);
+    const line = parseInt(
+      new URLSearchParams(window.location.search).get("line") ?? "0",
+      10
+    );
+    positionCursorInSourceEditor(editor, line);
     return {
       destroy: () => {
         editor = undefined;

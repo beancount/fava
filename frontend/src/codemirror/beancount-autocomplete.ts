@@ -24,10 +24,23 @@ const opts = (s: string[]) => s.map((label) => ({ label }));
 
 const lang = StreamLanguage.define(beancountStreamParser);
 
+const directiveCompletions: Record<
+  string,
+  Array<"accounts" | "currencies" | null> | undefined
+> = {
+  open: ["accounts", "currencies"],
+  close: ["accounts"],
+  commodity: ["currencies"],
+  balance: ["accounts", null, "currencies"],
+  pad: ["accounts", "accounts"],
+  note: ["accounts"],
+  document: ["accounts"],
+  price: ["currencies", null, "currencies"],
+};
+
 export const beancountCompletion: CompletionSource = (context) => {
   const { state, pos } = context;
   const { doc } = state;
-  const line = doc.lineAt(pos);
 
   const tag = context.matchBefore(/#[A-Za-z0-9\-_/.]*/);
   if (tag) {
@@ -48,74 +61,38 @@ export const beancountCompletion: CompletionSource = (context) => {
     };
   }
 
+  const line = doc.lineAt(pos);
   const currentWord = context.matchBefore(/\S*/);
   if (currentWord?.from === line.from && line.length > 0) {
     return { options: opts(undatedDirectives), from: line.from };
   }
 
-  const node = lang.parseString(doc.sliceString(line.from, pos)).cursor();
+  const lineContent = doc.sliceString(line.from, pos);
+  const node = lang.parseString(lineContent).cursor();
   const tokens: { name: string; from: number; to: number }[] = [];
   while (node.next()) {
-    tokens.push({ name: node.name, from: node.from, to: node.to });
-  }
-  // console.log(tokens)
-  if (tokens.length > 0) {
-    const first = tokens[0];
-    // Dates have the 'number.special' token name
-    if (first.name === "number.special" && line.length > first.to) {
-      return { options: opts(datedDirectives), from: first.to + 1 };
+    if (node.name !== "invalid.special") {
+      tokens.push({ name: node.name, from: node.from, to: node.to });
     }
   }
-
-  return null;
-};
-
-/*
-const directiveCompletions: Record<
-  string,
-  Array<"accounts" | "currencies" | null>
-> = {
-  open: ["accounts", "currencies"],
-  close: ["accounts"],
-  commodity: ["currencies"],
-  balance: ["accounts", null, "currencies"],
-  pad: ["accounts", "accounts"],
-  note: ["accounts"],
-  document: ["accounts"],
-  price: ["currencies", null, "currencies"],
-};
-
-  const doc = cm.getDoc();
-  const cursor = doc.getCursor();
-  const line = doc.getLine(cursor.line);
-  const token = cm.getTokenAt(cursor);
-
-  const lineTokens = cm.getLineTokens(cursor.line);
-
-  if (lineTokens.length > 0) {
-    const startCurrentWord = cursor.ch - currentWord.length;
-    const previousTokens = lineTokens.filter((d) => d.end <= startCurrentWord);
-
-    // dated directives
-    if (lineTokens[0].type === "date") {
-
-      // Ignore negative sign from previousTokens
-      const tokenLength = previousTokens.filter((t) => t.type != null).length;
-      if (tokenLength % 2 === 0) {
-        const directiveType = previousTokens[2].string;
-        if (directiveType in directiveCompletions) {
-          const complType =
-            directiveCompletions[directiveType][tokenLength / 2 - 2];
-          if (complType) {
-            return fuzzyMatch(cursor, currentWord, getCompletion(complType));
-          }
+  if (tokens.length > 0) {
+    const first = tokens[0];
+    const last = tokens[tokens.length - 1];
+    // Dates have the 'number.special' token name
+    if (first.name === "number.special" && line.length > last.to) {
+      if (tokens.length === 1) {
+        return { options: opts(datedDirectives), from: first.to + 1 };
+      }
+      const directive = lineContent.slice(tokens[1].from, tokens[1].to);
+      const compl = directiveCompletions[directive];
+      if (compl) {
+        const complType = compl[tokens.length - 2];
+        if (complType) {
+          return { options: opts(getCompletion(complType)), from: last.to + 1 };
         }
       }
     }
   }
 
-  return {
-    list: [],
-  };
-});
-*/
+  return null;
+};

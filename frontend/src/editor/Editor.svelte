@@ -1,5 +1,5 @@
 <script>
-  import { initReadonlyEditor } from "./init-editor";
+  import { initReadonlyEditor } from "../codemirror/setup";
   /** @type {string} */
   export let value;
 
