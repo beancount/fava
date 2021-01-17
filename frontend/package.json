@@ -16,7 +16,6 @@
     ]
   },
   "devDependencies": {
-    "@types/codemirror": "0.0.106",
     "@types/d3-array": "^2.8.0",
     "@types/d3-axis": "^2.0.0",
     "@types/d3-color": "^2.0.1",
@@ -65,7 +64,6 @@
     "@openfonts/source-code-pro_all": "^1.44.2",
     "@openfonts/source-serif-pro_latin": "^1.44.1",
     "@ungap/custom-elements": "^0.1.12",
-    "codemirror": "^5.59.2",
     "d3-array": "^2.10.0",
     "d3-axis": "^2.0.0",
     "d3-color": "^2.0.0",
