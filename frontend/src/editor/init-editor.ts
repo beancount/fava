@@ -12,7 +12,6 @@ import { favaKeymap } from "./commands";
 /*
  TODO:
  - center cursor?
- - highlight trailing whitespace
  - rulers:
 const rulers = currencyColumn
     ? [{ column: currencyColumn - 1, lineStyle: "dotted" }]

@@ -1,9 +1,5 @@
 /* Editor */
 
-:root {
-  --source-editor-fieldset-height: 44px;
-}
-
 .cm-gutters {
   background: var(--color-sidebar-background);
   border-right: 1px solid var(--color-sidebar-border);
@@ -11,50 +7,12 @@
 
 .cm-wrap {
   z-index: var(--z-index-editor);
-  border: 1px solid var(--color-sidebar-border);
 }
 
 .cm-wrap.cm-wrap .cm-scroller {
-  font-family: (--font-family-editor);
-}
-
-.cm-trailingspace {
-  background-color: var(--color-editor-trailing-whitespace);
-}
-
-.cm-section {
-  padding-right: 10px;
-  font-weight: 500;
-  color: var(--color-editor-comment);
-  border: solid 1px var(--color-editor-comment);
-  border-radius: 2px;
+  font-family: var(--font-family-editor);
 }
 
 .cm-wrap.cm-wrap .cm-placeholder {
   color: var(--color-placeholder);
-}
-
-.cm-comment {
-  color: var(--color-editor-comment);
-}
-
-.cm-date {
-  color: var(--color-editor-date);
-}
-
-.cm-directive {
-  font-weight: 500;
-  color: var(--color-editor-directive);
-}
-
-.cm-option {
-  color: var(--color-editor-class);
-}
-
-.cm-account {
-  color: var(--color-editor-account);
-}
-
-.cm-invalid {
-  color: var(--color-editor-invalid);
 }

@@ -61,3 +61,10 @@
   <div use:sourceSliceEditor />
   <SaveButton {changed} {saving} />
 </form>
+
+<style>
+  form :global(.cm-wrap) {
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--color-sidebar-border);
+  }
+</style>

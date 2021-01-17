@@ -62,8 +62,11 @@
   }
 
   .fieldset {
+    --source-editor-fieldset-height: 44px;
+
     height: var(--source-editor-fieldset-height);
     padding-left: 0.5em;
+    background: var(--color-sidebar-background);
     border-bottom: 1px solid var(--color-sidebar-border);
   }
 

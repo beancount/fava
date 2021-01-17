@@ -140,15 +140,10 @@
   form {
     display: flex;
     flex-direction: column;
-    background: var(--color-sidebar-background);
   }
   form :global(.cm-wrap) {
     flex: 1;
     width: 100%;
     height: calc(100% - 44px);
-    margin: 0;
-  }
-  form :global(.cm-lines) {
-    border-top: 1px solid var(--color-sidebar-border);
   }
 </style>

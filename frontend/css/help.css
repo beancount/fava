@@ -27,9 +27,7 @@
 }
 
 .help-text .cm-wrap {
-  margin: 0;
   background-color: var(--color-code-background);
-  border: 0;
 }
 
 .help-text code {

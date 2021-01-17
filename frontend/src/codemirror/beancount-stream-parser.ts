@@ -24,12 +24,21 @@ const meta = /[a-z][a-za-z0-9\-_]+:/;
 
 export const beancountStreamParser: StreamParser<unknown> = {
   token(stream) {
+    if (stream.match(/\s+$/)) {
+      return "invalid.special";
+    }
     if (stream.eatSpace() || stream.eol()) {
       return null;
     }
     const sol = stream.sol();
-    if (sol && (stream.match(sectionComment) || stream.match(comment))) {
+    if (sol && stream.match(sectionComment)) {
+      return "lineComment.special";
+    }
+    if (sol && stream.match(comment)) {
       return "lineComment";
+    }
+    if (stream.match(tag) || stream.match(link)) {
+      return "labelName";
     }
     if (
       (sol && stream.match(undatedDirectives)) ||
@@ -37,33 +46,37 @@ export const beancountStreamParser: StreamParser<unknown> = {
       stream.match(txn)
     ) {
       if (stream.peek() === ":") {
-        return "labelName";
+        return "propertyName";
       }
       return "keyword";
     }
     if (stream.match(inlineComment)) {
       return "comment";
     }
-    if (stream.match(date) || stream.match(number)) {
+    if (stream.match(date)) {
+      return "number.special";
+    }
+    if (stream.match(number)) {
       return "number";
     }
     if (stream.match(bool)) {
       return "bool";
     }
     if (stream.match(commodity)) {
-      return "keyword";
+      return "unit";
     }
     if (stream.match(string)) {
+      if (stream.start === 7 && stream.string.startsWith("option ")) {
+        // Option name
+        return "string.special";
+      }
       return "string";
     }
     if (stream.match(accountRegex)) {
       return "className";
     }
-    if (stream.match(tag) || stream.match(link)) {
-      return "propertyName";
-    }
     if (stream.match(meta)) {
-      return "labelName";
+      return "propertyName";
     }
 
     // Skip one character since no known token matched.

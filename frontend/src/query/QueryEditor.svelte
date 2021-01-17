@@ -56,7 +56,6 @@
     flex-grow: 1;
     width: 100%;
     height: auto;
-    margin: 0;
     margin-right: 0.5em;
     font-family: var(--font-family-editor);
     font-size: 16px;

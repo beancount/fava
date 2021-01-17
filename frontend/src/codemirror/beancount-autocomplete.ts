@@ -49,21 +49,22 @@ export const beancountCompletion: CompletionSource = (context) => {
   }
 
   const currentWord = context.matchBefore(/\S*/);
+  if (currentWord?.from === line.from && line.length > 0) {
+    return { options: opts(undatedDirectives), from: line.from };
+  }
+
   const node = lang.parseString(doc.sliceString(line.from, pos)).cursor();
   const tokens: { name: string; from: number; to: number }[] = [];
   while (node.next()) {
     tokens.push({ name: node.name, from: node.from, to: node.to });
   }
+  // console.log(tokens)
   if (tokens.length > 0) {
     const first = tokens[0];
-    // Dates have the 'number' token
-    if (first.name === "number" && line.length > first.to) {
+    // Dates have the 'number.special' token name
+    if (first.name === "number.special" && line.length > first.to) {
       return { options: opts(datedDirectives), from: first.to + 1 };
     }
-  }
-
-  if (currentWord?.from === line.from && line.length > 0) {
-    return { options: opts(undatedDirectives), from: line.from };
   }
 
   return null;
