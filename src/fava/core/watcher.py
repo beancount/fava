@@ -38,7 +38,10 @@ class Watcher:
         """
         latest_mtime = 0
         for path in self._files:
-            mtime = os.stat(path).st_mtime_ns
+            try:
+                mtime = os.stat(path).st_mtime_ns
+            except FileNotFoundError:
+                return True
             if mtime > latest_mtime:
                 latest_mtime = mtime
         for path in self._folders:

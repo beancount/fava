@@ -22,6 +22,18 @@ def test_watcher_file(tmp_path):
     assert watcher.check()
 
 
+def test_watcher_deleted_file(tmp_path):
+    file1 = tmp_path / "file1"
+    file1.write_text("test")
+
+    watcher = Watcher()
+    watcher.update([str(file1)], [])
+    assert not watcher.check()
+
+    file1.unlink()
+    assert watcher.check()
+
+
 def test_watcher_folder(tmp_path):
     folder = tmp_path / "folder"
     folder.mkdir()
