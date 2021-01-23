@@ -48,7 +48,7 @@ export const beancountHighlight = HighlightStyle.define(
   },
   {
     // Option name
-    tag: tags.special(tags.string),
+    tag: tags.standard(tags.string),
     color: "var(--color-editor-class)",
   },
   {

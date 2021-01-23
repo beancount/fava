@@ -75,13 +75,13 @@ export const beancountStreamParser: StreamParser<{ string: boolean }> = {
     if (stream.match(string)) {
       if (stream.start === 7 && stream.string.startsWith("option ")) {
         // Option name
-        return "string.special";
+        return "string.standard";
       }
       return "string";
     }
     if (stream.match(openString)) {
       state.string = true;
-      return "string";
+      return "string.special";
     }
     if (stream.match(accountRegex)) {
       return "className";

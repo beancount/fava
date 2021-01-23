@@ -108,15 +108,6 @@ favaAPIStore.subscribe((val) => {
   baseURL.set(favaAPI.baseURL);
 });
 
-/**
- * Get the list of completions for the given type of entry attribute.
- */
-export function getCompletion(
-  type: "accounts" | "currencies" | "links" | "tags"
-): string[] {
-  return favaAPI[type];
-}
-
 export function closeOverlay(): void {
   if (window.location.hash) {
     window.history.pushState({}, "", "#");
