@@ -10,7 +10,7 @@ frontend/node_modules: frontend/package-lock.json
 .PHONY: clean
 clean: mostlyclean
 	rm -rf build dist
-	rm -rf src/fava/static/*
+	find src/fava/static ! -name 'favicon.ico' -type f -exec rm -f {} +
 
 .PHONY: mostlyclean
 mostlyclean:
