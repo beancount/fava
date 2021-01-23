@@ -7,7 +7,7 @@ function headerLevel(line: string): number {
   return match ? match[0].length : MAXDEPTH;
 }
 
-export const beancountFold = foldService.of(({ doc }, lineStart) => {
+export const beancountFold = foldService.of(({ doc }, lineStart, lineEnd) => {
   const startLine = doc.lineAt(lineStart);
   const totalLines = doc.lines;
   const level = headerLevel(startLine.text);
@@ -24,5 +24,5 @@ export const beancountFold = foldService.of(({ doc }, lineStart) => {
     }
     end = line.to;
   }
-  return { from: lineStart, to: end };
+  return { from: lineEnd, to: end };
 });

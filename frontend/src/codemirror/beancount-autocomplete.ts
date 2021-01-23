@@ -81,14 +81,20 @@ export const beancountCompletion: CompletionSource = (context) => {
     // Dates have the 'number.special' token name
     if (first.name === "number.special" && line.length > last.to) {
       if (tokens.length === 1) {
-        return { options: opts(datedDirectives), from: first.to + 1 };
+        return {
+          options: opts(datedDirectives),
+          from: line.from + first.to + 1,
+        };
       }
       const directive = lineContent.slice(tokens[1].from, tokens[1].to);
       const compl = directiveCompletions[directive];
       if (compl) {
         const complType = compl[tokens.length - 2];
         if (complType) {
-          return { options: opts(getCompletion(complType)), from: last.to + 1 };
+          return {
+            options: opts(getCompletion(complType)),
+            from: line.from + last.to + 1,
+          };
         }
       }
     }

@@ -19,7 +19,7 @@ export const beancount = new LanguageSupport(beancountLanguage, [
   keymap.of([{ key: "Control-d", mac: "Meta-d", run: beancountFormat }]),
   Prec.fallback(indentUnit.of("  ")),
   beancountLanguage.data.of({
-    indentOnInput: /^\s+\d\d\d\d/,
     autocomplete: beancountCompletion,
+    indentOnInput: /^\s+\d\d\d\d/,
   }),
 ]);
