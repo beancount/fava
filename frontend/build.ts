@@ -6,6 +6,22 @@ import { build } from "esbuild";
 import svelte from "esbuild-plugin-svelte";
 
 /**
+ * Create a debounced function.
+ */
+function debounce(func: () => void, wait: number): () => void {
+  let timeout: NodeJS.Timeout | null = null;
+  return () => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      timeout = null;
+      func();
+    }, wait);
+  };
+}
+
+/**
  * Build the frontend using esbuild.
  * @param dev - Whether to generate sourcemaps and watch for changes.
  */
@@ -24,19 +40,26 @@ async function runBuild(dev: boolean) {
   });
   console.log("finished build");
 
-  if (dev) {
+  if (dev && builder.rebuild) {
+    const reb = builder.rebuild;
     console.log("watching for file changes");
+    const rebuild = debounce(async () => {
+      console.log("starting rebuild");
+      try {
+        await reb();
+      } catch (err) {
+        console.error(err);
+      }
+      console.log("finished rebuild");
+    }, 200);
     chokidar
-      .watch("src/**/*.{ts,svelte}", {
+      .watch(["src", "css"], {
         awaitWriteFinish: true,
         ignoreInitial: true,
       })
       .on("all", async (eventName, path) => {
         console.log(`${path} ${eventName}`);
-        if (builder.rebuild) {
-          await builder.rebuild();
-          console.log("finished build");
-        }
+        rebuild();
       });
   }
 }
