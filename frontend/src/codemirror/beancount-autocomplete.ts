@@ -4,6 +4,7 @@ import { get, Readable } from "svelte/store";
 
 import { accounts, currencies, links, payees, tags } from "../stores";
 
+import { beancountSnippets } from "./beancount-snippets";
 import { beancountStreamParser } from "./beancount-stream-parser";
 
 const undatedDirectives = ["option", "plugin", "include"];
@@ -64,6 +65,10 @@ export const beancountCompletion: CompletionSource = (context) => {
   }
 
   const line = doc.lineAt(pos);
+
+  if (context.matchBefore(/\d+/)) {
+    return { options: beancountSnippets(), from: line.from };
+  }
   const currentWord = context.matchBefore(/\S*/);
   if (currentWord?.from === line.from && line.length > 0) {
     return res(undatedDirectives, line.from);
@@ -80,24 +85,28 @@ export const beancountCompletion: CompletionSource = (context) => {
   if (tokens.length > 0) {
     const first = tokens[0];
     const last = tokens[tokens.length - 1];
+    const lineFrom = line.from;
     // Dates have the 'number.special' token name
     if (first.name === "number.special" && line.length > last.to) {
       if (tokens.length === 1) {
-        return res(datedDirectives, line.from + first.to + 1);
+        return res(datedDirectives, lineFrom + first.to + 1);
       }
       const directive = lineContent.slice(tokens[1].from, tokens[1].to);
       const compl = directiveCompletions[directive];
       if (compl) {
         const completions = compl[tokens.length - 2];
         if (completions) {
-          return res(get(completions), line.from + last.to + 1);
+          return res(get(completions), lineFrom + last.to + 1);
         }
       }
       if (directive === "txn" || directive.length === 1) {
         if (tokens.length === 3 || last.name === "string.special") {
-          return res(get(payees), line.from + last.from + 1);
+          return res(get(payees), lineFrom + last.from + 1);
         }
       }
+    }
+    if (last.name === "number" && line.length > last.to) {
+      return res(get(currencies), lineFrom + last.to + 1);
     }
   }
 
