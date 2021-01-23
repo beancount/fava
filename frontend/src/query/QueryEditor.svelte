@@ -7,36 +7,28 @@
 
   /** @type {string} */
   export let value;
-  /** @type {import('@codemirror/view').EditorView} */
-  let editor;
 
   const dispatch = createEventDispatcher();
   const submit = () => dispatch("submit");
 
-  $: if (editor && value !== editor.state.doc.toString()) {
+  const [editor, useEditor] = initQueryEditor(
+    value,
+    (s) => {
+      value = s.doc.toString();
+    },
+    _("...enter a BQL query. 'help' to list available commands."),
+    submit
+  );
+
+  $: if (value !== editor.state.doc.toString()) {
     editor.dispatch({
       changes: { from: 0, to: editor.state.doc.length, insert: value },
     });
   }
-
-  /**
-   * @param {HTMLElement} form
-   */
-  function queryEditor(form) {
-    editor = initQueryEditor(
-      value,
-      (s) => {
-        value = s.doc.toString();
-      },
-      _("...enter a BQL query. 'help' to list available commands."),
-      submit
-    );
-
-    form.insertBefore(editor.dom, form.firstChild);
-  }
 </script>
 
-<form use:queryEditor on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={submit}>
+  <div use:useEditor />
   <button type="submit" use:keyboardShortcut={"Control+Enter"}
     >{_("Submit")}</button
   >
@@ -53,13 +45,16 @@
     margin: 0;
   }
 
-  form :global(.cm-wrap) {
+  div {
     flex-grow: 1;
     width: 100%;
     height: auto;
     margin-right: 0.5em;
-    font-family: var(--font-family-editor);
     font-size: 16px;
     border: 1px solid var(--color-background-darker);
+  }
+
+  form :global(.cm-wrap) {
+    width: 100%;
   }
 </style>

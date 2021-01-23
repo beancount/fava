@@ -3,25 +3,16 @@
   /** @type {string} */
   export let value;
 
-  /** @type {import('@codemirror/view').EditorView | undefined} */
-  let editor;
+  const [editor, useEditor] = initReadonlyEditor(value);
 
-  $: if (editor && value !== editor.state.doc.toString()) {
+  $: if (value !== editor.state.doc.toString()) {
     editor.dispatch({
       changes: { from: 0, to: editor.state.doc.length, insert: value },
     });
   }
-
-  /**
-   * @param {HTMLElement} div
-   */
-  function initialiseEditor(div) {
-    editor = initReadonlyEditor(value);
-    div.appendChild(editor.dom);
-  }
 </script>
 
-<div use:initialiseEditor />
+<div use:useEditor />
 
 <style>
   div {

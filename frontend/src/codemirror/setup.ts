@@ -2,7 +2,7 @@ import { basicSetup, EditorState, EditorView } from "@codemirror/basic-setup";
 import { cursorLineUp } from "@codemirror/commands";
 import { defaultHighlightStyle } from "@codemirror/highlight";
 import { SearchCursor } from "@codemirror/search";
-import { EditorSelection, Prec } from "@codemirror/state";
+import { EditorSelection, Extension, Prec } from "@codemirror/state";
 import { KeyBinding, keymap, placeholder } from "@codemirror/view";
 
 import { beancount } from "./beancount";
@@ -18,18 +18,28 @@ const rulers = currencyColumn
     : undefined;
 */
 
+/** An editor and a function to attach it to a DOM element. */
+type EditorAndAction = [EditorView, (el: HTMLElement) => void];
+
+function setup(
+  value: string | undefined,
+  extensions: Extension[]
+): EditorAndAction {
+  const view = new EditorView({
+    state: EditorState.create({ doc: value, extensions }),
+  });
+  return [view, (el) => el.appendChild(view.dom)];
+}
+
 /**
  * A basic readonly editor.
  */
-export function initReadonlyEditor(value: string): EditorView {
-  const extensions = [
+export function initReadonlyEditor(value: string): EditorAndAction {
+  return setup(value, [
     basicSetup,
     Prec.fallback(defaultHighlightStyle),
     EditorView.editable.of(false),
-  ];
-  return new EditorView({
-    state: EditorState.create({ doc: value, extensions }),
-  });
+  ]);
 }
 
 /**
@@ -38,14 +48,11 @@ export function initReadonlyEditor(value: string): EditorView {
 export class BeancountTextarea extends HTMLTextAreaElement {
   constructor() {
     super();
-    const extensions = [
+    const [view] = setup(this.value, [
       beancount,
       Prec.fallback(defaultHighlightStyle),
       EditorView.editable.of(false),
-    ];
-    const view = new EditorView({
-      state: EditorState.create({ doc: this.value, extensions }),
-    });
+    ]);
     this.parentNode?.insertBefore(view.dom, this);
     this.style.display = "none";
   }
@@ -58,8 +65,8 @@ export function initBeancountEditor(
   value: string,
   onDocChanges: (s: EditorState) => void,
   commands: KeyBinding[]
-): EditorView {
-  const extensions = [
+): EditorAndAction {
+  return setup(value, [
     basicSetup,
     beancount,
     keymap.of([...favaKeymap, ...commands]),
@@ -68,10 +75,7 @@ export function initBeancountEditor(
         onDocChanges(update.state);
       }
     }),
-  ];
-  return new EditorView({
-    state: EditorState.create({ doc: value, extensions }),
-  });
+  ]);
 }
 
 /**
@@ -108,15 +112,12 @@ export function positionCursorInSourceEditor(
 /**
  * A basic readonly BQL editor that only does syntax highlighting.
  */
-export function initReadonlyQueryEditor(value: string): EditorView {
-  const extensions = [
+export function initReadonlyQueryEditor(value: string): EditorAndAction {
+  return setup(value, [
     bql,
     Prec.fallback(defaultHighlightStyle),
     EditorView.editable.of(false),
-  ];
-  return new EditorView({
-    state: EditorState.create({ doc: value, extensions }),
-  });
+  ]);
 }
 
 /**
@@ -127,8 +128,8 @@ export function initQueryEditor(
   onDocChanges: (s: EditorState) => void,
   _placeholder: string,
   submit: () => void
-): EditorView {
-  const extensions = [
+): EditorAndAction {
+  return setup(value, [
     basicSetup,
     bql,
     EditorView.updateListener.of((update) => {
@@ -147,9 +148,5 @@ export function initQueryEditor(
       },
     ]),
     placeholder(_placeholder),
-  ];
-
-  return new EditorView({
-    state: EditorState.create({ doc: value, extensions }),
-  });
+  ]);
 }

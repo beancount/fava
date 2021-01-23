@@ -14,16 +14,16 @@
   /** @type {string} */
   export let sha256sum;
 
-  /** @type {import('@codemirror/view').EditorView | undefined} */
-  let editor;
   let changed = false;
+  const onDocChanges = () => {
+    changed = true;
+  };
+
+  const [editor, useEditor] = initBeancountEditor(slice, onDocChanges, []);
 
   let saving = false;
 
   async function save() {
-    if (!editor) {
-      return;
-    }
     saving = true;
     try {
       slice = editor.state.doc.toString();
@@ -41,24 +41,10 @@
       saving = false;
     }
   }
-
-  /**
-   * @param {HTMLDivElement} div
-   */
-  function sourceSliceEditor(div) {
-    editor = initBeancountEditor(
-      slice,
-      () => {
-        changed = true;
-      },
-      []
-    );
-    div.appendChild(editor.dom);
-  }
 </script>
 
 <form on:submit|preventDefault={save}>
-  <div use:sourceSliceEditor />
+  <div use:useEditor />
   <SaveButton {changed} {saving} />
 </form>
 

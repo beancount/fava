@@ -4,13 +4,7 @@
   /** @type {string} */
   export let value;
 
-  /**
-   * @param {HTMLElement} el
-   */
-  function queryEditor(el) {
-    const editor = initReadonlyQueryEditor(value);
-    el.appendChild(editor.dom);
-  }
+  const [, useEditor] = initReadonlyQueryEditor(value);
 </script>
 
-<pre use:queryEditor />
+<pre use:useEditor />
