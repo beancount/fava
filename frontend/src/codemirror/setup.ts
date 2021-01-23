@@ -1,13 +1,58 @@
-import { basicSetup, EditorState, EditorView } from "@codemirror/basic-setup";
-import { cursorLineUp } from "@codemirror/commands";
+import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
+import { closeBrackets, closeBracketsKeymap } from "@codemirror/closebrackets";
+import { defaultKeymap } from "@codemirror/commands";
+import { commentKeymap } from "@codemirror/comment";
+import { foldGutter, foldKeymap } from "@codemirror/fold";
+import { lineNumbers } from "@codemirror/gutter";
 import { defaultHighlightStyle } from "@codemirror/highlight";
-import { SearchCursor } from "@codemirror/search";
-import { EditorSelection, Extension, Prec } from "@codemirror/state";
-import { KeyBinding, keymap, placeholder } from "@codemirror/view";
+import { history, historyKeymap } from "@codemirror/history";
+import { indentOnInput } from "@codemirror/language";
+import { lintKeymap } from "@codemirror/lint";
+import { bracketMatching } from "@codemirror/matchbrackets";
+import { rectangularSelection } from "@codemirror/rectangular-selection";
+import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
+import { EditorState, Extension, Prec } from "@codemirror/state";
+import {
+  drawSelection,
+  EditorView,
+  highlightActiveLine,
+  highlightSpecialChars,
+  KeyBinding,
+  keymap,
+  placeholder,
+} from "@codemirror/view";
 
 import { beancount } from "./beancount";
 import { bql } from "./bql";
-import { favaKeymap } from "./commands";
+import { tabCommand } from "./tab-command";
+
+const baseExtensions = [
+  lineNumbers(),
+  highlightSpecialChars(),
+  history(),
+  foldGutter(),
+  drawSelection(),
+  EditorState.allowMultipleSelections.of(true),
+  indentOnInput(),
+  Prec.fallback(defaultHighlightStyle),
+  bracketMatching(),
+  closeBrackets(),
+  autocompletion(),
+  rectangularSelection(),
+  highlightActiveLine(),
+  highlightSelectionMatches(),
+  keymap.of([
+    ...closeBracketsKeymap,
+    ...defaultKeymap,
+    ...searchKeymap,
+    ...historyKeymap,
+    ...foldKeymap,
+    ...commentKeymap,
+    ...completionKeymap,
+    ...lintKeymap,
+    { key: "Tab", run: tabCommand },
+  ]),
+];
 
 /*
  TODO:
@@ -36,7 +81,7 @@ function setup(
  */
 export function initReadonlyEditor(value: string): EditorAndAction {
   return setup(value, [
-    basicSetup,
+    baseExtensions,
     Prec.fallback(defaultHighlightStyle),
     EditorView.editable.of(false),
   ]);
@@ -67,46 +112,15 @@ export function initBeancountEditor(
   commands: KeyBinding[]
 ): EditorAndAction {
   return setup(value, [
-    basicSetup,
+    baseExtensions,
     beancount,
-    keymap.of([...favaKeymap, ...commands]),
+    keymap.of(commands),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
         onDocChanges(update.state);
       }
     }),
   ]);
-}
-
-/**
- * Position the cursor
- */
-export function positionCursorInSourceEditor(
-  cm: EditorView,
-  line: number
-): void {
-  if (line > 0) {
-    // Scroll to the given line
-    const linePos = cm.state.doc.line(line);
-    cm.dispatch({
-      selection: { ...linePos, anchor: linePos.from },
-      scrollIntoView: true,
-    });
-  } else {
-    // Jump to the `FAVA-INSERT-MARKER` string.
-    const cursor = new SearchCursor(cm.state.doc, "FAVA-INSERT-MARKER");
-    cursor.next();
-
-    if (cursor.value.from) {
-      cm.focus();
-      const selection = EditorSelection.cursor(cursor.value.from);
-      cm.dispatch({ selection, scrollIntoView: true });
-      cursorLineUp(cm);
-    } else {
-      const selection = EditorSelection.cursor(cm.state.doc.length);
-      cm.dispatch({ selection, scrollIntoView: true });
-    }
-  }
 }
 
 /**
@@ -130,7 +144,7 @@ export function initQueryEditor(
   submit: () => void
 ): EditorAndAction {
   return setup(value, [
-    basicSetup,
+    baseExtensions,
     bql,
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {

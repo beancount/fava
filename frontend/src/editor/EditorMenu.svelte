@@ -6,7 +6,7 @@
   import { _ } from "../i18n";
   import { urlFor } from "../helpers";
 
-  import { favaFormat } from "../codemirror/commands";
+  import { beancountFormat } from "../codemirror/beancount-format";
   import { modKey } from "../keyboard-shortcuts";
 
   /** @type {string[]} */
@@ -34,7 +34,7 @@
       {_("Edit")}
       &nbsp;▾
       <ul>
-        <li on:click={() => dispatch("command", favaFormat)}>
+        <li on:click={() => dispatch("command", beancountFormat)}>
           {_("Align Amounts")}
           <span><kbd>{modKey}</kbd> + <kbd>d</kbd></span>
         </li>

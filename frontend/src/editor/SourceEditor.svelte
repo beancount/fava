@@ -7,13 +7,11 @@
   import router from "../router";
   import { errorCount } from "../stores";
 
-  import {
-    initBeancountEditor,
-    positionCursorInSourceEditor,
-  } from "../codemirror/setup";
+  import { initBeancountEditor } from "../codemirror/setup";
+  import { positionCursorInSourceEditor } from "../codemirror/position-cursor";
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
-  import { favaFormat } from "../codemirror/commands";
+  import { beancountFormat } from "../codemirror/beancount-format";
 
   /** @type {{source: string, file_path: string, sha256sum: string, sources: string[]}} */
   export let data;
@@ -77,7 +75,7 @@
       }),
       bindKey({ key: "Control+d", mac: "Meta+d" }, (event) => {
         event.preventDefault();
-        favaFormat(editor);
+        beancountFormat(editor);
       }),
     ];
 
