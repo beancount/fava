@@ -48,7 +48,8 @@
           class:muted={entry.type !== type}
           on:click={() => {
             entry = create(type);
-          }}>
+          }}
+        >
           {displayName}
         </button>
         {" "}
@@ -60,7 +61,8 @@
       <button
         type="submit"
         on:click|preventDefault={submitAndNew}
-        class="muted">
+        class="muted"
+      >
         {_("Save and add new")}
       </button>
       <button type="submit">{_("Save")}</button>

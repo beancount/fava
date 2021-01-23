@@ -127,7 +127,10 @@
           on:click={() => remove(file.name)}
           type="button"
           title={_("Delete")}
-          tabindex={-1}> × </button>
+          tabindex={-1}
+        >
+          ×
+        </button>
       </div>
       {#each file.importers as info}
         <div class="flex-row">
@@ -135,14 +138,16 @@
           <input size={40} bind:value={info.newName} />
           <button
             type="button"
-            on:click={() => move(file.name, info.account, info.newName)}>
+            on:click={() => move(file.name, info.account, info.newName)}
+          >
             {"Move"}
           </button>
           {#if info.importer_name}
             <button
               type="button"
               title="{_('Extract')} with importer {info.importer_name}"
-              on:click={() => extract(file.name, info.importer_name)}>
+              on:click={() => extract(file.name, info.importer_name)}
+            >
               {extractCache.get(`${file.name}:${info.importer_name}`)
                 ? _("Continue")
                 : _("Extract")}
@@ -153,7 +158,8 @@
                 on:click={() => {
                   extractCache.delete(`${file.name}:${info.importer_name}`);
                   extractCache = extractCache;
-                }}>
+                }}
+              >
                 {_("Clear")}
               </button>
             {/if}

@@ -46,7 +46,10 @@
       class="muted round remove-row"
       on:click={() => removeMetadata(metakey)}
       type="button"
-      tabindex={-1}> × </button>
+      tabindex={-1}
+    >
+      ×
+    </button>
     <input
       type="text"
       class="key"
@@ -68,7 +71,10 @@
         class="muted round"
         type="button"
         on:click={addMetadata}
-        title={_("Add metadata")}> + </button>
+        title={_("Add metadata")}
+      >
+        +
+      </button>
     {/if}
   </div>
 {/each}

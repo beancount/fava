@@ -1,10 +1,10 @@
 """Ingest helper functions."""
 import datetime
 import os
-import runpy
 import sys
 import traceback
 from os import path
+from runpy import run_path
 from typing import List
 from typing import NamedTuple
 from typing import Optional
@@ -97,7 +97,8 @@ class IngestModule(FavaModule):
             return
 
         try:
-            mod = runpy.run_path(self.module_path)
+            # The type stubs seem incorrect:
+            mod = run_path(self.module_path)  # type: ignore
         except Exception:  # pylint: disable=broad-except
             message = "".join(traceback.format_exception(*sys.exc_info()))
             self.ledger.errors.append(

@@ -57,7 +57,8 @@
   transform={`translate(${width / 2},${height / 2})`}
   on:mouseleave={() => {
     current = null;
-  }}>
+  }}
+>
   <circle style="opacity:0" r={radius} />
   <text class="account" text-anchor="middle">
     {currentAccount || root.data.account}

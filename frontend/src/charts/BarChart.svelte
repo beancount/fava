@@ -85,7 +85,8 @@
       <g
         class="group"
         use:followingTooltip={() => tooltipText(group)}
-        transform={`translate(${x0(group.label)},0)`}>
+        transform={`translate(${x0(group.label)},0)`}
+      >
         <rect
           class="group-box"
           x={(x0.bandwidth() - x0.step()) / 2}

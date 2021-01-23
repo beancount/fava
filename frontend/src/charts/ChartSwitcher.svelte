@@ -48,7 +48,8 @@
         class:selected={chart === $activeChart}
         on:click={() => {
           $activeChart = chart;
-        }}>
+        }}
+      >
         {chart.name}
       </span>
     {/each}

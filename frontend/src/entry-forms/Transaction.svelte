@@ -86,7 +86,10 @@
       type="button"
       on:click={addPosting}
       title={_("Add posting")}
-      tabindex={-1}> p </button>
+      tabindex={-1}
+    >
+      p
+    </button>
   </div>
   <EntryMetadata bind:meta={entry.meta} />
   <div class="flex-row">

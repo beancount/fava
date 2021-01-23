@@ -65,7 +65,8 @@
         <th
           on:click={() => setSort(index)}
           data-sort
-          data-order={index === sort[0] ? sort[1] : null}>
+          data-order={index === sort[0] ? sort[1] : null}
+        >
           {col.header}
         </th>
       {/each}
@@ -81,7 +82,8 @@
           ev.dataTransfer?.setData("fava/filename", doc.filename)}
         on:click={() => {
           selected = doc;
-        }}>
+        }}
+      >
         <td>{row[0]}</td>
         <td>{row[1]}</td>
       </tr>

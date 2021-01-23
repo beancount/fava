@@ -72,7 +72,10 @@
     class="muted round remove-row"
     on:click={() => dispatch("remove")}
     type="button"
-    tabindex={-1}> × </button>
+    tabindex={-1}
+  >
+    ×
+  </button>
   <AccountInput className="grow" bind:value={posting.account} {suggestions} />
   <AutocompleteInput
     className="amount"
@@ -84,7 +87,10 @@
     class="muted round add-row"
     type="button"
     on:click={() => dispatch("add")}
-    title={_("Add posting")}> + </button>
+    title={_("Add posting")}
+  >
+    +
+  </button>
 </div>
 
 <style>

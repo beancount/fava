@@ -73,7 +73,10 @@
             class="muted"
             on:click={() => {
               currentIndex = 0;
-            }}> ⏮ </button>
+            }}
+          >
+            ⏮
+          </button>
           <button type="button" class="muted" on:click={previousEntry}>
             {_("Previous")}
           </button>
@@ -86,7 +89,10 @@
             class="muted"
             on:click={() => {
               currentIndex = entries.length - 1;
-            }}> ⏭ </button>
+            }}
+          >
+            ⏭
+          </button>
         {:else}<button type="submit">{_("Save")}</button>{/if}
       </div>
       <hr />

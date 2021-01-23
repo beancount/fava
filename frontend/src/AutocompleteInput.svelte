@@ -130,7 +130,10 @@
       on:click={() => {
         value = "";
         dispatch("select");
-      }}> × </button>
+      }}
+    >
+      ×
+    </button>
   {/if}
   {#if filteredSuggestions.length}
     <ul {hidden}>

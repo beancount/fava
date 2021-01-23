@@ -70,7 +70,8 @@
 <svg {width} {height}>
   <g
     use:positionedTooltip={tooltipInfo}
-    transform={`translate(${margin.left},${margin.top})`}>
+    transform={`translate(${margin.left},${margin.top})`}
+  >
     <g
       class="x axis"
       use:axis={xAxis}
