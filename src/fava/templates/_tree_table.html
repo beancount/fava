@@ -1,4 +1,4 @@
-{% import 'macros/_account_macros.html' as account_macros with context %}
+{% import 'macros/_account_macros.html' as account_macros %}
 
 {% macro render_diff_and_number(balance, cost, currency) %}
   {% set num = balance.pop(currency, 0) %}
@@ -35,7 +35,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
   <li{{ ' class=toggled' if account.name|collapse_account else '' }}>
     <p{{ ' class=has-balance' if not balance.is_empty() else '' }}>
     <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ ' has-children' if account.children else '' }}" data-account-name="{{ account.name }}">
-      {{ account_macros.account_name(account.name, last_segment=True) }}
+      {{ account_macros.account_name(ledger, account.name, last_segment=True) }}
     </span>
     {% for currency in ledger.options.operating_currency %}
     <span class="num">
@@ -100,7 +100,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
         {{- '' if not account|length else ' has-children'}}
         " data-account-name="{{ account.account }}">
             {% if account|length %}<span class="expander"></span>{% endif %}
-        {{ account_macros.account_name(account.account, last_segment=True) }}</span>
+        {{ account_macros.account_name(ledger, account.account, last_segment=True) }}</span>
     {% for begin_date, end_date in dates %}
         {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
         {% set budget = ledger.budgets.calculate(account.account, begin_date, end_date) %}
