@@ -45,7 +45,7 @@
 {% set journal_show = request.args.getlist('show') %}
 {% endif %}
 
-{% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
+{% macro account_link(name) %}<a href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
 {% macro render_metadata_indicators(metadata) -%}
 {% for key, value in metadata.items() %}
 <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
@@ -122,7 +122,7 @@
         {% elif type == 'query' %}
           <a href="{{ url_for('report', report_name='query', query_string='run "{}"'.format(entry.name)) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
-            {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
+            {{ account_link(entry.account) }}&nbsp;from&nbsp;{{ account_link(entry.source_account) }}
         {% elif type == 'custom' %}
           <strong>{{ entry.type }}</strong>
           {%- for value in entry['values'] -%}

@@ -172,10 +172,6 @@
   background-color: var(--color-text-lighter);
 }
 
-.journal .description .account-link {
-  margin-right: 0.5em;
-}
-
 .journal .description .num {
   margin: 0 5px;
 }
