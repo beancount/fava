@@ -6,7 +6,7 @@ import { foldGutter, foldKeymap } from "@codemirror/fold";
 import { lineNumbers } from "@codemirror/gutter";
 import { defaultHighlightStyle } from "@codemirror/highlight";
 import { history, historyKeymap } from "@codemirror/history";
-import { indentOnInput } from "@codemirror/language";
+import { indentOnInput, indentUnit } from "@codemirror/language";
 import { lintKeymap } from "@codemirror/lint";
 import { bracketMatching } from "@codemirror/matchbrackets";
 import { rectangularSelection } from "@codemirror/rectangular-selection";
@@ -21,6 +21,8 @@ import {
   keymap,
   placeholder,
 } from "@codemirror/view";
+
+import { favaAPI } from "../stores";
 
 import { beancount } from "./beancount";
 import { bql } from "./bql";
@@ -114,6 +116,7 @@ export function initBeancountEditor(
   return setup(value, [
     baseExtensions,
     beancount,
+    indentUnit.of(" ".repeat(favaAPI.favaOptions.indent)),
     keymap.of(commands),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {

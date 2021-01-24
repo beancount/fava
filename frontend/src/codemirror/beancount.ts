@@ -1,5 +1,4 @@
-import { indentUnit, LanguageSupport } from "@codemirror/language";
-import { Prec } from "@codemirror/state";
+import { LanguageSupport } from "@codemirror/language";
 import { StreamLanguage } from "@codemirror/stream-parser";
 import { keymap } from "@codemirror/view";
 
@@ -17,7 +16,6 @@ export const beancount = new LanguageSupport(beancountLanguage, [
   beancountHighlight,
   beancountIndent,
   keymap.of([{ key: "Control-d", mac: "Meta-d", run: beancountFormat }]),
-  Prec.fallback(indentUnit.of("  ")),
   beancountLanguage.data.of({
     autocomplete: beancountCompletion,
     indentOnInput: /^\s+\d\d\d\d/,
