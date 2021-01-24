@@ -262,8 +262,8 @@ entry, then the grey uptodate-indicator is shown.
 
 Default: Not set
 
-Path to a Beancount import configuration file. See the [Import]({{
-url_for('help_page', page_slug='import') }}) help page for details.
+Path to a Beancount import configuration file. See the [Import](./import) help
+page for details.
 
 ---
 

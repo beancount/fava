@@ -372,9 +372,9 @@ def download_journal():
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
 
-@app.route("/<bfile>/help/")
-@app.route("/<bfile>/help/<string:page_slug>/")
-def help_page(page_slug="_index"):
+@app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
+@app.route("/<bfile>/help/<string:page_slug>")
+def help_page(page_slug):
     """Fava's included documentation."""
     if page_slug not in HELP_PAGES:
         abort(404)

@@ -3,21 +3,20 @@ offer.
 
 ## Editor
 
-The [editor]({{ url_for('report', report_name='editor') }}) provides a
-convenient way to edit the source file. The cursor will jump to the bottom of
-the file by default, or if the string `FAVA-INSERT-MARKER` is found in the file,
-to the line above it. If you want to use a file different from the main file to
-be opened by default, use the `default-file` option.
+The [editor](../editor) provides a convenient way to edit the source file. The
+cursor will jump to the bottom of the file by default, or if the string
+`FAVA-INSERT-MARKER` is found in the file, to the line above it. If you want to
+use a file different from the main file to be opened by default, use the
+`default-file` option.
 
 The editor supports auto-completion for account names and tags. Trailing
 whitespace is highlighted in red.
 
 ## Queries
 
-On the [Query]({{ url_for('report', report_name='query') }}) report you can
-execute queries like with the `bean-query` command-line tool. For an explanation
-of how these queries work see the
-[Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
+On the [Query](../query/) report you can execute queries like with the
+`bean-query` command-line tool. For an explanation of how these queries work see
+the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
 Fava displays charts for BQL queries - if they have exactly two columns with the
 first being a date or string and the second an inventory, then a line chart or
