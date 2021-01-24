@@ -3,8 +3,8 @@
 ## Basic
 
 The Dockerfile in this directory is enough to get started running Fava in a
-container. This guide is meant as a compliment to the great documentation
-found at https://docs.docker.com/.
+container. This guide is meant as a compliment to the great documentation found
+at https://docs.docker.com/.
 
 ### Building
 
@@ -32,10 +32,10 @@ Let's look at each argument independently:
 
 1. `--detach` tells Docker to start the image and run it in the background as a
    daemon.
-1. `--name` specifies a name to give the Docker instance instead of generating
-   a random id. This will be used later.
-1. `--publish` tells Docker to expose the container's port 5000 as
-   the local machine's port 5000. This allows us to access Fava with the url
+1. `--name` specifies a name to give the Docker instance instead of generating a
+   random id. This will be used later.
+1. `--publish` tells Docker to expose the container's port 5000 as the local
+   machine's port 5000. This allows us to access Fava with the url
    http://localhost:5000/.
 1. `--volume` tells Docker to share the example.beancount file in the current
    directory to the container as the file `/input.beancount`.
@@ -46,8 +46,8 @@ Going to http://localhost:5000/ will display your Fava instance.
 ## Advanced
 
 Hosting a local Docker instance is nice and all, but what we really want is a
-globally available, authenticated, secure deployment of Fava. To do that we
-need two other parts: oauth proxy and letsencrypt.
+globally available, authenticated, secure deployment of Fava. To do that we need
+two other parts: oauth proxy and letsencrypt.
 
 ### Oauth proxy
 
@@ -181,16 +181,16 @@ Let's document the new arguments:
 1. Everything after the `skippy/oauth2_proxy` are arguments to oauth2_proxy.
 
 This will start an oauth2 proxy using your config to do authentication using
-Google's OAuth service. It's important that you don't try to access your
-service immediately on port 4180, otherwise you may expose your authentication
-cookie to the internet.
+Google's OAuth service. It's important that you don't try to access your service
+immediately on port 4180, otherwise you may expose your authentication cookie to
+the internet.
 
 ### Letsencrypt
 
 [Let's Encrypt](https://letsencrypt.org/) is a very popular project aimed at
-making SSL certificates available to everyone for free. This will be a great
-way to secure our Fava instance so that we can share secret cookies without
-fear of anyone impersonating us.
+making SSL certificates available to everyone for free. This will be a great way
+to secure our Fava instance so that we can share secret cookies without fear of
+anyone impersonating us.
 
 We don't just want to set up a static Let's Encrypt config. We want to use the
 magic of docker instances to generate our configs and keep them up to date at
@@ -236,9 +236,9 @@ docker run --detach \
 The main new argument in these three images is `--volumes-from`. This flag
 allows containers to share paths and make their data visible to each other.
 
-Another interesting thing is that the non-nginx docker images need access to
-the docker socket so that they can read the environment variables of other
-instances and also send sighups to the nginx process when configs change.
+Another interesting thing is that the non-nginx docker images need access to the
+docker socket so that they can read the environment variables of other instances
+and also send sighups to the nginx process when configs change.
 
 Now all you have to do is expose port 80 and 443 from your host machine to the
 internet and point the domain you specified in `VIRTUAL_HOST` and

@@ -32,4 +32,6 @@ repos:
           - id: prettier
             name: prettier
             language: node
-            entry: ./frontend/node_modules/prettier/bin-prettier.js --write --list-different --ignore-unknown
+            entry:
+                ./frontend/node_modules/prettier/bin-prettier.js --write
+                --list-different --ignore-unknown

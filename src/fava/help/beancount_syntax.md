@@ -18,9 +18,9 @@ All in CAPS: `USD`, `EUR`, `CAD`, `GOOG`, `AAPL`, `RBF1005`, `HOME_MAYST`,
 ## Accounts
 
 Account are given by a colon-separated list of capitalized words. They must
-begin with one of the five root accounts listed in the table below. The separation
-by colons defines an implicit hierarchy, for example we say that `Assets:Cash` is a
-sub-account of `Assets`.
+begin with one of the five root accounts listed in the table below. The
+separation by colons defines an implicit hierarchy, for example we say that
+`Assets:Cash` is a sub-account of `Assets`.
 
 | Name          | Type | Contains                     | Examples                  |
 | ------------- | ---- | ---------------------------- | ------------------------- |
@@ -60,7 +60,8 @@ To open or close an account use the `open` and `close` directives:
 
 ### Commodities
 
-Declaring commodities is optional. Use this if you want to attach metadata by currency.
+Declaring commodities is optional. Use this if you want to attach metadata by
+currency.
 
 <pre><textarea is="beancount-textarea">
 1998-07-22 commodity AAPL
