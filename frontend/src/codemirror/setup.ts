@@ -26,7 +26,6 @@ import { favaAPI } from "../stores";
 
 import { beancount } from "./beancount";
 import { bql } from "./bql";
-import { tabCommand } from "./tab-command";
 
 const baseExtensions = [
   lineNumbers(),
@@ -52,7 +51,6 @@ const baseExtensions = [
     ...commentKeymap,
     ...completionKeymap,
     ...lintKeymap,
-    { key: "Tab", run: tabCommand },
   ]),
 ];
 
