@@ -1,5 +1,4 @@
 import { once } from "./lib/events";
-import { closeOverlay } from "./stores";
 
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
@@ -184,6 +183,4 @@ export function initGlobalKeyboardShortcuts(): void {
     once(document, "mousedown", hide);
     once(document, "keydown", hide);
   });
-
-  bindKey("Escape", closeOverlay);
 }

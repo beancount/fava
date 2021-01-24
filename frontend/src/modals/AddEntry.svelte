@@ -38,7 +38,7 @@
   $: shown = $urlHash === "add-transaction";
 </script>
 
-<ModalBase {shown}>
+<ModalBase {shown} focus=".payee input">
   <form on:submit|preventDefault={submit}>
     <h3>
       {_("Add")}
