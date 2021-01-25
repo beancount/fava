@@ -1,12 +1,14 @@
 image: archlinux
 packages:
-    - python
     - nodejs
     - npm
-    - python-tox
+    - python
     - python-distlib
-    - python-setuptools
+    - python-pip
     - python-pre-commit
+    - python-setuptools
+    - python-tox
+    - python-wheel
 sources:
     - https://github.com/beancount/fava
 tasks:
