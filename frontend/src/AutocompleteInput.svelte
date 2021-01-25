@@ -88,6 +88,8 @@
         event.preventDefault();
         select(filteredSuggestions[index].suggestion);
       }
+    } else if (event.key === " " && event.ctrlKey) {
+      hidden = false;
     } else if (event.key === "Escape") {
       hidden = true;
     } else if (event.key === "ArrowUp") {
