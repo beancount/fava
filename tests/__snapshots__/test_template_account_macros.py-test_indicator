@@ -1,1 +1,0 @@
-Markup('<copyable-text class="status-indicator status-yellow" title="The last entry is not a balance check.\n\nClick to copy the balance directives to the clipboard:\n\n2021-01-24 balance Assets:US:BofA:Checking              1632.79 USD\n" data-clipboard-text="2021-01-24 balance Assets:US:BofA:Checking              1632.79 USD\n"></copyable-text>\n')
