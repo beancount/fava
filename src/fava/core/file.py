@@ -57,19 +57,6 @@ class FileModule(FavaModule):
         super().__init__(ledger)
         self.lock = threading.Lock()
 
-    def list_sources(self) -> List[str]:
-        """List source files.
-
-        Returns:
-            A list of all sources files, with the main file listed first.
-        """
-        main_file = self.ledger.beancount_file_path
-        return [main_file] + sorted(
-            file
-            for file in self.ledger.options["include"]
-            if file != main_file
-        )
-
     def get_source(self, path: str) -> Tuple[str, str]:
         """Get source files.
 

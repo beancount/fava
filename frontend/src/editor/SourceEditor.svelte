@@ -13,7 +13,7 @@
   import SaveButton from "./SaveButton.svelte";
   import { beancountFormat } from "../codemirror/beancount-format";
 
-  /** @type {{source: string, file_path: string, sha256sum: string, sources: string[]}} */
+  /** @type {{source: string, file_path: string, sha256sum: string}} */
   export let data;
 
   let changed = false;
@@ -105,11 +105,7 @@
   on:submit|preventDefault={() => save(editor)}
   use:useEditor
 >
-  <EditorMenu
-    file_path={data.file_path}
-    sources={data.sources}
-    on:command={command}
-  >
+  <EditorMenu file_path={data.file_path} on:command={command}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
 </form>

@@ -9,11 +9,16 @@
   import { beancountFormat } from "../codemirror/beancount-format";
   import { modKey } from "../keyboard-shortcuts";
   import Key from "./Key.svelte";
+  import { favaAPIStore } from "../stores";
 
-  /** @type {string[]} */
-  export let sources;
   /** @type {string} */
   export let file_path;
+
+  $: options = $favaAPIStore.options;
+  $: sources = [
+    options.filename,
+    ...options.include.filter((f) => f !== options.filename),
+  ];
 
   const dispatch = createEventDispatcher();
 </script>
