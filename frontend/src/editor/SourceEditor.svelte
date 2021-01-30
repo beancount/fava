@@ -91,13 +91,6 @@
       unbind.forEach((u) => u());
     };
   });
-
-  /**
-   * @param {CustomEvent<import("@codemirror/view").Command>} ev
-   */
-  function command(ev) {
-    ev.detail(editor);
-  }
 </script>
 
 <form
@@ -105,7 +98,7 @@
   on:submit|preventDefault={() => save(editor)}
   use:useEditor
 >
-  <EditorMenu file_path={data.file_path} on:command={command}>
+  <EditorMenu file_path={data.file_path} onCommand={(c) => c(editor)}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
 </form>

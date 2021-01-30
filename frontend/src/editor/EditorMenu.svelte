@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { toggleComment } from "@codemirror/comment";
   import { foldAll, unfoldAll } from "@codemirror/fold";
 
@@ -14,13 +13,14 @@
   /** @type {string} */
   export let file_path;
 
+  /** @type {(c: import("@codemirror/view").Command) => void} */
+  export let onCommand;
+
   $: options = $favaAPIStore.options;
   $: sources = [
     options.filename,
     ...options.include.filter((f) => f !== options.filename),
   ];
-
-  const dispatch = createEventDispatcher();
 </script>
 
 <div class="fieldset">
@@ -38,19 +38,19 @@
     <span>
       {_("Edit")}
       <ul>
-        <li on:click={() => dispatch("command", beancountFormat)}>
+        <li on:click={() => onCommand(beancountFormat)}>
           {_("Align Amounts")}
           <span><Key key={`${modKey}+d`} /></span>
         </li>
-        <li on:click={() => dispatch("command", toggleComment)}>
+        <li on:click={() => onCommand(toggleComment)}>
           {_("Toggle Comment (selection)")}
           <span><Key key={`${modKey}+/`} /></span>
         </li>
-        <li on:click={() => dispatch("command", unfoldAll)}>
+        <li on:click={() => onCommand(unfoldAll)}>
           {_("Open all folds")}
           <span><Key key="Ctrl+Alt+]" /></span>
         </li>
-        <li on:click={() => dispatch("command", foldAll)}>
+        <li on:click={() => onCommand(foldAll)}>
           {_("Close all folds")}
           <span><Key key="Ctrl+Alt+[" /></span>
         </li>
