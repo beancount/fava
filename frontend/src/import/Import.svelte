@@ -26,10 +26,15 @@
   /** @type {Map<string,import('../entries').Entry[]>} */
   let extractCache = new Map();
 
-  $: importableFiles = preprocessedData.filter(i => i.importers[0].importer_name !== "");
-  $: nonImportableFiles = preprocessedData.filter(i => i.importers[0].importer_name === "");
+  $: importableFiles = preprocessedData.filter(
+    (i) => i.importers[0].importer_name !== ""
+  );
+  $: nonImportableFiles = preprocessedData.filter(
+    (i) => i.importers[0].importer_name === ""
+  );
   // open the <details> when these are the only files remaining
-  $: nonImportableOpen = nonImportableFiles.length > 0 && importableFiles.length === 0;
+  $: nonImportableOpen =
+    nonImportableFiles.length > 0 && importableFiles.length === 0;
 
   function preventNavigation() {
     return extractCache.size > 0
@@ -51,11 +56,10 @@
    * @param {import('./helpers').MoveFileArgs} args
    */
   async function move(args) {
-    let {filename, account, newName} = args;
-    const moved = await moveDocument(filename, account, newName);
+    const moved = await moveDocument(args.filename, args.account, args.newName);
     if (moved) {
       preprocessedData = preprocessedData.filter(
-        (item) => item.name !== filename
+        (item) => item.name !== args.filename
       );
     }
   }
@@ -78,11 +82,13 @@
    * @param {import('./helpers').ExtractFileArgs} args
    */
   async function extract(args) {
-    let {filename, importer} = args;
-    const extractCacheKey = `${filename}:${importer}`;
+    const extractCacheKey = `${args.filename}:${args.importer}`;
     let cached = extractCache.get(extractCacheKey);
     if (!cached) {
-      cached = await get("extract", { filename, importer });
+      cached = await get("extract", {
+        filename: args.filename,
+        importer: args.importer,
+      });
       if (!cached.length) {
         notify("No entries to import from this file.", "warning");
         return;
