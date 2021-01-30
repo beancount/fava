@@ -7,7 +7,7 @@
   import { preprocessData, isDuplicate } from "./helpers";
 
   import Extract from "./Extract.svelte";
-  import AccountInput from "../entry-forms/AccountInput.svelte";
+  import FileList from "./FileList.svelte";
   import { notify } from "../notifications";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
 
@@ -26,6 +26,11 @@
   /** @type {Map<string,import('../entries').Entry[]>} */
   let extractCache = new Map();
 
+  $: importableFiles = preprocessedData.filter(i => i.importers[0].importer_name !== "");
+  $: nonImportableFiles = preprocessedData.filter(i => i.importers[0].importer_name === "");
+  // open the <details> when these are the only files remaining
+  $: nonImportableOpen = nonImportableFiles.length > 0 && importableFiles.length === 0;
+
   function preventNavigation() {
     return extractCache.size > 0
       ? "There are unfinished imports, are you sure you want to continue?"
@@ -43,11 +48,10 @@
 
   /**
    * Move the given file to the new file name (and remove from the list).
-   * @param {string} filename
-   * @param {string} account
-   * @param {string} newName
+   * @param {import('./helpers').MoveFileArgs} args
    */
-  async function move(filename, account, newName) {
+  async function move(args) {
+    let {filename, account, newName} = args;
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
       preprocessedData = preprocessedData.filter(
@@ -71,10 +75,10 @@
 
   /**
    * Open the extract dialog for the given file/importer combination.
-   * @param {string} filename
-   * @param {string} importer
+   * @param {import('./helpers').ExtractFileArgs} args
    */
-  async function extract(filename, importer) {
+  async function extract(args) {
+    let {filename, importer} = args;
     const extractCacheKey = `${filename}:${importer}`;
     let cached = extractCache.get(extractCacheKey);
     if (!cached) {
@@ -113,61 +117,38 @@
 />
 <div class="fixed-fullsize-container">
   <div class="filelist">
-    {#each preprocessedData as file}
-      <div
-        class="header"
-        title={file.name}
-        on:click|self={() => {
-          selected = selected === file.name ? null : file.name;
-        }}
-      >
-        {file.basename}
-        <button
-          class="round"
-          on:click={() => remove(file.name)}
-          type="button"
-          title={_("Delete")}
-          tabindex={-1}
-        >
-          ×
-        </button>
+    {#if preprocessedData.length === 0}
+      <p>{_("No files were found for import.")}</p>
+    {/if}
+    {#if importableFiles.length > 0}
+      <div class="importableFiles">
+        <h2>{_("Importable Files")}</h2>
+        <FileList
+          files={importableFiles}
+          {extractCache}
+          bind:selected
+          on:moveFile={(e) => move(e.detail)}
+          on:removeFile={(e) => remove(e.detail)}
+          on:extractFile={(e) => extract(e.detail)}
+        />
       </div>
-      {#each file.importers as info}
-        <div class="flex-row">
-          <AccountInput bind:value={info.account} />
-          <input size={40} bind:value={info.newName} />
-          <button
-            type="button"
-            on:click={() => move(file.name, info.account, info.newName)}
-          >
-            {"Move"}
-          </button>
-          {#if info.importer_name}
-            <button
-              type="button"
-              title="{_('Extract')} with importer {info.importer_name}"
-              on:click={() => extract(file.name, info.importer_name)}
-            >
-              {extractCache.get(`${file.name}:${info.importer_name}`)
-                ? _("Continue")
-                : _("Extract")}
-            </button>
-            {#if extractCache.get(`${file.name}:${info.importer_name}`)}
-              <button
-                type="button"
-                on:click={() => {
-                  extractCache.delete(`${file.name}:${info.importer_name}`);
-                  extractCache = extractCache;
-                }}
-              >
-                {_("Clear")}
-              </button>
-            {/if}
-            {info.importer_name}
-          {:else}{_("No importer matched this file.")}{/if}
-        </div>
-      {/each}
-    {/each}
+      <hr />
+    {/if}
+    {#if nonImportableFiles.length > 0}
+      <details open={nonImportableOpen}>
+        <summary>
+          <strong>{_("Non-importable Files")}</strong>
+        </summary>
+        <FileList
+          files={nonImportableFiles}
+          {extractCache}
+          bind:selected
+          on:moveFile={(e) => move(e.detail)}
+          on:removeFile={(e) => remove(e.detail)}
+          on:extractFile={(e) => extract(e.detail)}
+        />
+      </details>
+    {/if}
   </div>
   {#if selected}
     <div>
@@ -177,15 +158,6 @@
 </div>
 
 <style>
-  .header {
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    cursor: pointer;
-    background-color: var(--color-table-header-background);
-  }
-  .header button {
-    float: right;
-  }
   .fixed-fullsize-container {
     display: flex;
     align-items: stretch;
@@ -196,5 +168,8 @@
   }
   .filelist {
     padding: 1rem;
+  }
+  .importableFiles {
+    padding-bottom: 0.8rem;
   }
 </style>
