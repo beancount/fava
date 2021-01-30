@@ -8,6 +8,7 @@
 
   import { beancountFormat } from "../codemirror/beancount-format";
   import { modKey } from "../keyboard-shortcuts";
+  import Key from "./Key.svelte";
 
   /** @type {string[]} */
   export let sources;
@@ -18,10 +19,9 @@
 </script>
 
 <div class="fieldset">
-  <ul class="dropdown">
-    <li>
-      {_("File")}&nbsp;▾
-
+  <div class="dropdown">
+    <span>
+      {_("File")}
       <ul>
         {#each sources as source}
           <li class:selected={source === file_path}>
@@ -29,30 +29,29 @@
           </li>
         {/each}
       </ul>
-    </li>
-    <li>
+    </span>
+    <span>
       {_("Edit")}
-      &nbsp;▾
       <ul>
         <li on:click={() => dispatch("command", beancountFormat)}>
           {_("Align Amounts")}
-          <span><kbd>{modKey}</kbd> + <kbd>d</kbd></span>
+          <span><Key key={`${modKey}+d`} /></span>
         </li>
         <li on:click={() => dispatch("command", toggleComment)}>
           {_("Toggle Comment (selection)")}
-          <span><kbd>{modKey}</kbd> + <kbd>/</kbd></span>
+          <span><Key key={`${modKey}+/`} /></span>
         </li>
         <li on:click={() => dispatch("command", unfoldAll)}>
           {_("Open all folds")}
-          <span><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>]</kbd></span>
+          <span><Key key="Ctrl+Alt+]" /></span>
         </li>
         <li on:click={() => dispatch("command", foldAll)}>
           {_("Close all folds")}
-          <span><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>[</kbd></span>
+          <span><Key key="Ctrl+Alt+[" /></span>
         </li>
       </ul>
-    </li>
-  </ul>
+    </span>
+  </div>
   <slot />
 </div>
 
@@ -62,35 +61,35 @@
   }
 
   .fieldset {
-    --source-editor-fieldset-height: 44px;
-
-    height: var(--source-editor-fieldset-height);
-    padding-left: 0.5em;
+    height: 3rem;
     background: var(--color-sidebar-background);
     border-bottom: 1px solid var(--color-sidebar-border);
   }
 
   .dropdown {
     display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
     height: 100%;
-    margin: 0;
+    margin-right: 0.5rem;
   }
 
   .dropdown .selected::before {
     content: "›";
   }
 
-  .dropdown > li {
-    position: relative;
-    height: var(--source-editor-fieldset-height);
-    margin-right: 10px;
-    line-height: var(--source-editor-fieldset-height);
-    cursor: default;
+  .dropdown > span {
+    padding: 0.75rem 0.5rem;
+    cursor: pointer;
   }
 
-  .dropdown > li > ul {
+  .dropdown > span::after {
+    content: "▾";
+  }
+
+  .dropdown > span > ul {
     position: absolute;
-    top: var(--source-editor-fieldset-height);
+    top: 3rem;
     z-index: var(--z-index-floating-ui);
     display: none;
     width: 500px;
@@ -105,15 +104,20 @@
     box-shadow: 0 3px 6px var(--color-transparent-black);
   }
 
-  .dropdown > li > ul > li {
+  .dropdown > span > ul > li {
     padding: 2px 10px;
   }
 
-  .dropdown > li > ul > li span {
+  .dropdown > span > ul > li span {
     float: right;
   }
 
-  .dropdown li:hover > ul {
+  .dropdown li:hover,
+  .dropdown > span:hover {
+    background-color: var(--color-background-darkest);
+  }
+
+  .dropdown > span:hover > ul {
     display: block;
   }
 </style>

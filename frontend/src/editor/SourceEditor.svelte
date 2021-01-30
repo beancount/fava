@@ -122,6 +122,6 @@
   form :global(.cm-wrap) {
     flex: 1;
     width: 100%;
-    height: calc(100% - 44px);
+    height: calc(100% - 3rem);
   }
 </style>
