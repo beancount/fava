@@ -380,7 +380,7 @@ def help_page(page_slug):
         abort(404)
     html = markdown2.markdown_path(
         (resource_path("help") / (page_slug + ".md")),
-        extras=["fenced-code-blocks", "tables"],
+        extras=["fenced-code-blocks", "tables", "header-ids"],
     )
     return render_template(
         "_layout.html",

@@ -10,7 +10,7 @@ baseURL.subscribe((val) => {
  */
 export function urlFor(
   report: string,
-  params?: Record<string, string>,
+  params?: Record<string, string | number | undefined>,
   update = true
 ): string {
   const url = `${baseURL_val}${report}`;
@@ -26,7 +26,9 @@ export function urlFor(
   }
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
-      urlParams.set(key, value);
+      if (value !== undefined) {
+        urlParams.set(key, `${value}`);
+      }
     });
   }
   const urlParamString = urlParams.toString();

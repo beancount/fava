@@ -9,18 +9,36 @@
   import { modKey } from "../keyboard-shortcuts";
   import Key from "./Key.svelte";
   import { favaAPIStore } from "../stores";
+  import { scrollToLine } from "../codemirror/scroll-to-line";
+  import router from "../router";
 
   /** @type {string} */
   export let file_path;
 
-  /** @type {(c: import("@codemirror/view").Command) => void} */
-  export let onCommand;
+  /** @type {import("@codemirror/view").EditorView} */
+  export let editor;
 
   $: options = $favaAPIStore.options;
   $: sources = [
     options.filename,
     ...options.include.filter((f) => f !== options.filename),
   ];
+  $: insertEntryOptions = $favaAPIStore.favaOptions["insert-entry"];
+
+  /**
+   *
+   * @param {string} filename
+   * @param {number} [line]
+   */
+  function goToFileAndLine(filename, line) {
+    const url = urlFor("editor", { file_path: filename, line });
+    const shouldLoad = filename !== file_path;
+    router.navigate(url, shouldLoad);
+    if (!shouldLoad && line) {
+      scrollToLine(editor, line);
+      editor.focus();
+    }
+  }
 </script>
 
 <div class="fieldset">
@@ -29,8 +47,11 @@
       {_("File")}
       <ul>
         {#each sources as source}
-          <li class:selected={source === file_path}>
-            <a href={urlFor("editor", { file_path: source })}>{source}</a>
+          <li
+            class:selected={source === file_path}
+            on:click={() => goToFileAndLine(source)}
+          >
+            {source}
           </li>
         {/each}
       </ul>
@@ -38,33 +59,45 @@
     <span>
       {_("Edit")}
       <ul>
-        <li on:click={() => onCommand(beancountFormat)}>
+        <li on:click={() => beancountFormat(editor)}>
           {_("Align Amounts")}
           <span><Key key={`${modKey}+d`} /></span>
         </li>
-        <li on:click={() => onCommand(toggleComment)}>
+        <li on:click={() => toggleComment(editor)}>
           {_("Toggle Comment (selection)")}
           <span><Key key={`${modKey}+/`} /></span>
         </li>
-        <li on:click={() => onCommand(unfoldAll)}>
+        <li on:click={() => unfoldAll(editor)}>
           {_("Open all folds")}
           <span><Key key="Ctrl+Alt+]" /></span>
         </li>
-        <li on:click={() => onCommand(foldAll)}>
+        <li on:click={() => foldAll(editor)}>
           {_("Close all folds")}
           <span><Key key="Ctrl+Alt+[" /></span>
         </li>
       </ul>
     </span>
+    {#if insertEntryOptions.length}
+      <span>
+        <code>insert-entry</code>
+        {_("Options")}
+        <ul>
+          {#each insertEntryOptions as opt}
+            <li
+              on:click={() => goToFileAndLine(opt.filename, opt.lineno - 1)}
+              title={`${opt.filename}:${opt.lineno}`}
+            >
+              {opt.re} <span>{opt.date}</span>
+            </li>
+          {/each}
+        </ul>
+      </span>
+    {/if}
   </div>
   <slot />
 </div>
 
 <style>
-  li {
-    cursor: pointer;
-  }
-
   .fieldset {
     height: 3rem;
     background: var(--color-sidebar-background);
@@ -79,12 +112,21 @@
     margin-right: 0.5rem;
   }
 
-  .dropdown .selected::before {
+  .selected::before {
     content: "›";
   }
 
+  li {
+    padding: 2px 10px;
+    cursor: pointer;
+  }
+
+  li span {
+    float: right;
+  }
+
   .dropdown > span {
-    padding: 0.75rem 0.5rem;
+    padding: 0.7rem 0.5rem;
     cursor: pointer;
   }
 
@@ -92,16 +134,14 @@
     content: "▾";
   }
 
-  .dropdown > span > ul {
+  ul {
     position: absolute;
-    top: 3rem;
     z-index: var(--z-index-floating-ui);
     display: none;
     width: 500px;
     max-height: 400px;
-    margin-left: -10px;
+    margin: 0.75rem 0 0 -0.5rem;
     overflow-y: auto;
-    line-height: 1.5;
     background-color: var(--color-background);
     border: 1px solid var(--color-background-darker);
     border-bottom-right-radius: 3px;
@@ -109,20 +149,12 @@
     box-shadow: 0 3px 6px var(--color-transparent-black);
   }
 
-  .dropdown > span > ul > li {
-    padding: 2px 10px;
-  }
-
-  .dropdown > span > ul > li span {
-    float: right;
-  }
-
-  .dropdown li:hover,
-  .dropdown > span:hover {
+  li:hover,
+  span:hover {
     background-color: var(--color-background-darkest);
   }
 
-  .dropdown > span:hover > ul {
+  span:hover > ul {
     display: block;
   }
 </style>

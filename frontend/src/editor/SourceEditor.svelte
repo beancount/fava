@@ -5,10 +5,10 @@
   import { bindKey } from "../keyboard-shortcuts";
   import { notify } from "../notifications";
   import router from "../router";
-  import { errorCount } from "../stores";
+  import { errorCount, favaAPIStore } from "../stores";
 
   import { initBeancountEditor } from "../codemirror/setup";
-  import { positionCursorInSourceEditor } from "../codemirror/position-cursor";
+  import { scrollToLine } from "../codemirror/scroll-to-line";
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
   import { beancountFormat } from "../codemirror/beancount-format";
@@ -80,11 +80,19 @@
     ];
 
     editor.focus();
+    const opts = $favaAPIStore.favaOptions["insert-entry"].filter(
+      (f) => f.filename === data.file_path
+    );
     const line = parseInt(
       new URLSearchParams(window.location.search).get("line") ?? "0",
       10
     );
-    positionCursorInSourceEditor(editor, line);
+    if (line > 0) {
+      scrollToLine(editor, line);
+    } else if (opts.length > 0) {
+      const last = opts[opts.length - 1];
+      scrollToLine(editor, last.lineno - 1);
+    }
 
     return () => {
       router.interruptHandlers.delete(checkEditorChanges);
@@ -98,7 +106,7 @@
   on:submit|preventDefault={() => save(editor)}
   use:useEditor
 >
-  <EditorMenu file_path={data.file_path} onCommand={(c) => c(editor)}>
+  <EditorMenu file_path={data.file_path} {editor}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
 </form>

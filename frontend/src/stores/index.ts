@@ -32,6 +32,9 @@ export const favaAPIValidator = object({
     indent: number,
     interval: string,
     locale: union(string, constant(null)),
+    "insert-entry": array(
+      object({ date: string, filename: string, lineno: number, re: string })
+    ),
   }),
   have_excel: boolean,
   incognito: boolean,
@@ -62,6 +65,7 @@ export const favaAPI: FavaAPI = {
     indent: 2,
     interval: "month",
     locale: null,
+    "insert-entry": [],
   },
   have_excel: false,
   incognito: false,

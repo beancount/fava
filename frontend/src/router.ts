@@ -119,7 +119,7 @@ class Router extends Events<"page-loaded"> {
       }
     }
 
-    const getUrl = new URL(url);
+    const getUrl = new URL(url, window.location.href);
     getUrl.searchParams.set("partial", "true");
 
     const svg = document.querySelector(".fava-icon");
@@ -137,7 +137,11 @@ class Router extends Events<"page-loaded"> {
         article.innerHTML = content;
       }
       this.trigger("page-loaded");
-      urlHash.set(window.location.hash.slice(1));
+      const hash = window.location.hash.slice(1);
+      urlHash.set(hash);
+      if (hash) {
+        document.getElementById(hash)?.scrollIntoView();
+      }
     } catch (error) {
       notify(`Loading ${url} failed: ${error.message}`, "error");
     } finally {
