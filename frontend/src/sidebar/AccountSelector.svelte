@@ -2,7 +2,7 @@
   import { _ } from "../i18n";
   import { accounts } from "../stores";
   import router from "../router";
-  import { accountUrl } from "../helpers";
+  import { urlFor } from "../helpers";
   import AutocompleteInput from "../AutocompleteInput.svelte";
 
   let value = "";
@@ -12,7 +12,7 @@
    */
   function select(ev) {
     if (value) {
-      router.navigate(accountUrl(value));
+      router.navigate(urlFor(`account/${value}`));
       ev.detail.blur();
       value = "";
     }

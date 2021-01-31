@@ -2,7 +2,7 @@
   import { treemap } from "d3-hierarchy";
 
   import router from "../router";
-  import { accountUrl } from "../helpers";
+  import { urlFor } from "../helpers";
   import { treemapScale } from "./helpers";
   import { formatCurrency, formatPercentage } from "../format";
   import { followingTooltip } from "./tooltip";
@@ -66,7 +66,7 @@
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <text
         use:setOpacity={d}
-        on:click={() => router.navigate(accountUrl(d.data.account))}
+        on:click={() => router.navigate(urlFor(`account/${d.data.account}`))}
         dy=".5em"
         x={(d.x1 - d.x0) / 2}
         y={(d.y1 - d.y0) / 2}

@@ -34,8 +34,3 @@ export function urlFor(
   const urlParamString = urlParams.toString();
   return urlParamString ? `${url}?${urlParams.toString()}` : url;
 }
-
-/** Url for the account page for an account. */
-export function accountUrl(account: string): string {
-  return new URL(urlFor(`account/${account}`), window.location.href).toString();
-}
