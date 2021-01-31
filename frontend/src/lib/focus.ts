@@ -19,6 +19,7 @@ export function getFocusableElements(el: Element): Element[] {
 export function attemptFocus(el: Node): boolean {
   try {
     // @ts-expect-error We are attempting to focus any kind of element here.
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     el.focus();
   } catch (e) {
     // pass

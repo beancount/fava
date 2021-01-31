@@ -37,6 +37,7 @@ import {
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
 import { getScriptTagJSON } from "./lib/dom";
+import { log_error } from "./log";
 import { notify } from "./notifications";
 import router, { initSyncedStoreValues } from "./router";
 import { initSidebar, updateSidebar } from "./sidebar";
@@ -81,19 +82,20 @@ router.on("page-loaded", () => {
  *
  * This will be scheduled every 5 seconds.
  */
-async function doPoll(): Promise<void> {
-  const changed = await get("changed");
-  if (changed) {
-    if (favaAPI.favaOptions["auto-reload"]) {
-      router.reload();
-    } else {
-      reloadButton?.classList.remove("hidden");
-      errorCount.set(await get("errors"));
-      notify(_("File change detected. Click to reload."), "warning", () => {
+function doPoll(): void {
+  get("changed").then((changed) => {
+    if (changed) {
+      if (favaAPI.favaOptions["auto-reload"]) {
         router.reload();
-      });
+      } else {
+        reloadButton?.classList.remove("hidden");
+        get("errors").then((count) => errorCount.set(count), log_error);
+        notify(_("File change detected. Click to reload."), "warning", () => {
+          router.reload();
+        });
+      }
     }
-  }
+  }, log_error);
 }
 
 function init(): void {

@@ -1,4 +1,5 @@
 import { delegate } from "./lib/events";
+import { log_error } from "./log";
 import router from "./router";
 import { sortableJournal } from "./sort";
 import { fql_filter } from "./stores/filters";
@@ -83,6 +84,10 @@ export class FavaJournal extends HTMLElement {
     entryButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const type = button.getAttribute("data-type");
+        if (!type) {
+          log_error("Button is missing type: ", button);
+          return;
+        }
         const shouldShow = button.classList.contains("inactive");
 
         button.classList.toggle("inactive", !shouldShow);

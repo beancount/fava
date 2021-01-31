@@ -3,6 +3,7 @@
 
   import { put, get } from "../api";
   import { bindKey } from "../keyboard-shortcuts";
+  import { log_error } from "../log";
   import { notify } from "../notifications";
   import router from "../router";
   import { errorCount, favaAPIStore } from "../stores";
@@ -38,7 +39,7 @@
       });
       changed = false;
       cm.focus();
-      errorCount.set(await get("errors"));
+      get("errors").then((count) => errorCount.set(count), log_error);
     } catch (error) {
       notify(error, "error");
     } finally {

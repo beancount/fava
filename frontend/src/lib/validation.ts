@@ -6,7 +6,11 @@
  */
 
 /** A validation error. */
-class ValidationError extends Error {}
+class ValidationError extends Error {
+  constructor(readonly message: string, readonly value: unknown) {
+    super();
+  }
+}
 
 /**
  * A validator.
@@ -48,7 +52,7 @@ export function string(json: unknown): string {
   if (typeof json === "string") {
     return json;
   }
-  throw new ValidationError(`Expected a string, got '${json}' instead.`);
+  throw new ValidationError("Expected a string", json);
 }
 
 /** Validate a string and return the empty string on failure. */
@@ -61,7 +65,7 @@ export function boolean(json: unknown): boolean {
   if (typeof json === "boolean") {
     return json;
   }
-  throw new ValidationError(`Expected a boolean, got '${json}' instead.`);
+  throw new ValidationError("Expected a boolean", json);
 }
 
 /**
@@ -71,7 +75,7 @@ export function number(json: unknown): number {
   if (typeof json === "number") {
     return json;
   }
-  throw new ValidationError(`Expected a number, got '${json}' instead.`);
+  throw new ValidationError("Expected a number", json);
 }
 
 /**
@@ -81,11 +85,11 @@ export function date(json: unknown): Date {
   if (typeof json === "string" || json instanceof Date) {
     const parsed = new Date(json);
     if (Number.isNaN(+parsed)) {
-      throw new ValidationError(`Expected a date: ${json}`);
+      throw new ValidationError("Expected a date", json);
     }
     return parsed;
   }
-  throw new ValidationError(`Expected a date: ${json}`);
+  throw new ValidationError("Expected a date", json);
 }
 
 /**
@@ -98,7 +102,7 @@ export function constant<T extends null | boolean | string | number>(
     if (json === value) {
       return json as T;
     }
-    throw new ValidationError(`Expected a constant: ${json}`);
+    throw new ValidationError("Expected a constant", json);
   };
 }
 
@@ -118,7 +122,7 @@ export function union<T extends unknown[]>(
         // pass
       }
     }
-    throw new ValidationError("Validating union failed");
+    throw new ValidationError("Validating union failed", json);
   };
 }
 
@@ -149,7 +153,7 @@ export function array<T>(validator: Validator<T>): Validator<T[]> {
       });
       return result;
     }
-    throw new ValidationError(`Expected an array: ${json}`);
+    throw new ValidationError("Expected an array", json);
   };
 }
 
@@ -168,7 +172,7 @@ export function tuple<A, B>(
       }
       return result as [A, B];
     }
-    throw new ValidationError(`Expected a tuple: ${json}`);
+    throw new ValidationError("Expected a tuple", json);
   };
 }
 
@@ -196,7 +200,7 @@ export function object<T>(
       }
       return obj as T;
     }
-    throw new ValidationError("Validating object failed");
+    throw new ValidationError("Validating object failed", json);
   };
 }
 
@@ -212,6 +216,6 @@ export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
       }
       return ret;
     }
-    throw new ValidationError();
+    throw new ValidationError("Validating record failed", json);
   };
 }

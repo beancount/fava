@@ -9,6 +9,7 @@ import {
   string,
   unknown,
 } from "./lib/validation";
+import { log_error } from "./log";
 import { notify } from "./notifications";
 import router from "./router";
 
@@ -137,7 +138,10 @@ export async function saveEntries(entries: Entry[]): Promise<void> {
     router.reload();
     notify(data);
   } catch (error) {
-    notify(`Saving failed: ${error}`, "error");
+    log_error(error);
+    if (error instanceof Error) {
+      notify(`Saving failed: ${error.message}`, "error");
+    }
     throw error;
   }
 }

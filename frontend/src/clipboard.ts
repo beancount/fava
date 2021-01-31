@@ -1,3 +1,5 @@
+import { log_error } from "./log";
+
 /**
  * Copy the given text to the clipboard.
  */
@@ -17,8 +19,7 @@ function copyToClipboard(text: string | null): void {
   try {
     document.execCommand("copy");
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.error("Unable to copy", err);
+    log_error(err);
   }
   textarea.remove();
 }

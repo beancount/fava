@@ -43,21 +43,23 @@ async function runBuild(dev: boolean) {
   if (dev && builder.rebuild) {
     const reb = builder.rebuild;
     console.log("watching for file changes");
-    const rebuild = debounce(async () => {
+    const rebuild = debounce(() => {
       console.log("starting rebuild");
-      try {
-        await reb();
-      } catch (err) {
-        console.error(err);
-      }
-      console.log("finished rebuild");
+      reb().then(
+        () => {
+          console.log("finished rebuild");
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
     }, 200);
     chokidar
       .watch(["src", "css"], {
         awaitWriteFinish: true,
         ignoreInitial: true,
       })
-      .on("all", async (eventName, path) => {
+      .on("all", (eventName, path) => {
         console.log(`${path} ${eventName}`);
         rebuild();
       });
@@ -66,5 +68,5 @@ async function runBuild(dev: boolean) {
 
 if (require.main === module) {
   const dev = process.argv.includes("--watch");
-  runBuild(dev);
+  runBuild(dev).catch(console.error);
 }
