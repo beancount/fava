@@ -2,6 +2,7 @@
   import { onMount, tick } from "svelte";
 
   import { get } from "../api";
+  import { operatingCurrenciesWithConversion } from "../stores";
   import { query_shell_history, addToHistory } from "../stores/query";
   import { getFilterParams } from "../stores/filters";
   import { parseQueryChart } from "../charts";
@@ -48,7 +49,10 @@
     }
     get("query_result", { query_string: query, ...getFilterParams() }).then(
       (res) => {
-        const chart = parseQueryChart(res.chart);
+        const chart = parseQueryChart(
+          res.chart,
+          $operatingCurrenciesWithConversion
+        );
         setResult(query, { result: { chart, table: res.table } });
       },
       (error) => {

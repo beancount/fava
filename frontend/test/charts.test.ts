@@ -19,7 +19,7 @@ test("handle data for balances chart", (t) => {
   t.is(parsed.data.length, 2);
   t.is(parsed.data[0].values.length, 2);
   t.is(parsed.data[1].values.length, 1);
-  const queryChart = parseQueryChart(data);
+  const queryChart = parseQueryChart(data, ["EUR"]);
   t.deepEqual(queryChart?.data, parsed.data);
   t.snapshot(parsed);
 });

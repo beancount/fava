@@ -1,9 +1,7 @@
-import { baseURL, urlSyncedParams } from "./stores/url";
+import { get } from "svelte/store";
 
-let baseURL_val = "";
-baseURL.subscribe((val) => {
-  baseURL_val = val;
-});
+import { baseURL } from "./stores";
+import { urlSyncedParams } from "./stores/url";
 
 /**
  * Get the URL string for one of Fava's reports.
@@ -13,7 +11,7 @@ export function urlFor(
   params?: Record<string, string | number | undefined>,
   update = true
 ): string {
-  const url = `${baseURL_val}${report}`;
+  const url = `${get(baseURL)}${report}`;
   const urlParams = new URLSearchParams();
   if (update) {
     const oldParams = new URL(window.location.href).searchParams;

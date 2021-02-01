@@ -26,6 +26,7 @@ import "../css/tree-table.css";
 
 // Polyfill for customised builtin elements in Webkit
 import "@ungap/custom-elements";
+import { get as store_get } from "svelte/store";
 
 import { get } from "./api";
 import { CopyableText } from "./clipboard";
@@ -37,12 +38,13 @@ import {
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
 import { getScriptTagJSON } from "./lib/dom";
+import { object, string } from "./lib/validation";
 import { log_error } from "./log";
 import { notify } from "./notifications";
 import router, { initSyncedStoreValues } from "./router";
 import { initSidebar, updateSidebar } from "./sidebar";
 import { SortableTable } from "./sort";
-import { errorCount, favaAPI, favaAPIStore, favaAPIValidator } from "./stores";
+import { errorCount, favaOptions, ledgerData, rawLedgerData } from "./stores";
 import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTable } from "./tree-table";
 
@@ -60,19 +62,25 @@ function defineCustomElements() {
   customElements.define("svelte-component", SvelteCustomElement);
 }
 
-const pageTitle = document.querySelector("h1 strong");
-const reloadButton = document.querySelector("#reload-page");
+const pageTitleValidator = object({
+  documentTitle: string,
+  pageTitle: string,
+});
+
+function updatePageTitle(): void {
+  const v = pageTitleValidator(getScriptTagJSON("#page-title"));
+  document.title = v.documentTitle;
+  const pageTitle = document.querySelector("h1 strong");
+  if (pageTitle) {
+    pageTitle.innerHTML = v.pageTitle;
+  }
+}
 
 router.on("page-loaded", () => {
-  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
-
+  rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
+  updatePageTitle();
   initCurrentKeyboardShortcuts();
-
-  document.title = favaAPI.documentTitle;
-  if (pageTitle) {
-    pageTitle.innerHTML = favaAPI.pageTitle;
-  }
-  reloadButton?.classList.add("hidden");
+  document.getElementById("reload-page")?.classList.add("hidden");
   updateSidebar();
 });
 
@@ -85,10 +93,10 @@ router.on("page-loaded", () => {
 function doPoll(): void {
   get("changed").then((changed) => {
     if (changed) {
-      if (favaAPI.favaOptions["auto-reload"]) {
+      if (store_get(favaOptions)["auto-reload"]) {
         router.reload();
       } else {
-        reloadButton?.classList.remove("hidden");
+        document.getElementById("reload-page")?.classList.remove("hidden");
         get("errors").then((count) => errorCount.set(count), log_error);
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
@@ -99,15 +107,20 @@ function doPoll(): void {
 }
 
 function init(): void {
-  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
+  rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
+
   router.init();
   initSyncedStoreValues();
   initSidebar();
   initGlobalKeyboardShortcuts();
   defineCustomElements();
   setInterval(doPoll, 5000);
-  reloadButton?.addEventListener("click", () => {
+  document.getElementById("reload-page")?.addEventListener("click", () => {
     router.reload();
+  });
+
+  ledgerData.subscribe((val) => {
+    errorCount.set(val.errors);
   });
 
   router.trigger("page-loaded");

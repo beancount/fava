@@ -5,13 +5,13 @@
  * load the content of the page and replace the <article> contents with them.
  */
 
-import { Writable } from "svelte/store";
+import { get, Writable } from "svelte/store";
 
 import { delegate, Events } from "./lib/events";
 import { fetch, handleText } from "./lib/fetch";
 import { log_error } from "./log";
 import { notify } from "./notifications";
-import { conversion, favaAPI, interval, urlHash } from "./stores";
+import { conversion, favaOptions, interval, urlHash } from "./stores";
 import { showCharts } from "./stores/chart";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { urlSyncedParams } from "./stores/url";
@@ -268,10 +268,11 @@ function syncStoreValueToUrl<T extends boolean | string>(
  * Set initial values from URL and update URL on store changes
  */
 export function initSyncedStoreValues(): void {
+  const opts = get(favaOptions);
   syncStoreValueToUrl(account_filter, "account", "");
   syncStoreValueToUrl(fql_filter, "filter", "");
   syncStoreValueToUrl(time_filter, "time", "");
-  syncStoreValueToUrl(interval, "interval", favaAPI.favaOptions.interval);
-  syncStoreValueToUrl(conversion, "conversion", favaAPI.favaOptions.conversion);
+  syncStoreValueToUrl(interval, "interval", opts.interval);
+  syncStoreValueToUrl(conversion, "conversion", opts.conversion);
   syncStoreValueToUrl(showCharts, "charts", true, false);
 }

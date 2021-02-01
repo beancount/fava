@@ -8,7 +8,7 @@
   import { beancountFormat } from "../codemirror/beancount-format";
   import { modKey } from "../keyboard-shortcuts";
   import Key from "./Key.svelte";
-  import { favaAPIStore } from "../stores";
+  import { favaOptions, options } from "../stores";
   import { scrollToLine } from "../codemirror/scroll-to-line";
   import router from "../router";
 
@@ -18,12 +18,11 @@
   /** @type {import("@codemirror/view").EditorView} */
   export let editor;
 
-  $: options = $favaAPIStore.options;
   $: sources = [
-    options.filename,
-    ...options.include.filter((f) => f !== options.filename),
+    $options.filename,
+    ...$options.include.filter((f) => f !== $options.filename),
   ];
-  $: insertEntryOptions = $favaAPIStore.favaOptions["insert-entry"];
+  $: insertEntryOptions = $favaOptions["insert-entry"];
 
   /**
    *

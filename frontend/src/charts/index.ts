@@ -5,9 +5,9 @@
  */
 
 import { hierarchy as d3Hierarchy, HierarchyNode } from "d3-hierarchy";
-import { derived, get } from "svelte/store";
+import { get } from "svelte/store";
 
-import { currentDateFormat, dateFormat, formatCurrency } from "../format";
+import { currentDateFormat, dateFormat, FormatterContext } from "../format";
 import { getScriptTagJSON } from "../lib/dom";
 import { stratify, TreeNode } from "../lib/tree";
 import {
@@ -23,7 +23,7 @@ import {
   unknown,
   Validator,
 } from "../lib/validation";
-import { conversion, operating_currency } from "../stores";
+import { operatingCurrenciesWithConversion } from "../stores";
 
 export interface AccountHierarchyDatum {
   account: string;
@@ -76,42 +76,25 @@ export interface BarChartDatum {
   values: BarChartDatumValue[];
 }
 
-/**
- * The list of operating currencies, adding in the current conversion currency.
- */
-const operatingCurrenciesWithConversion = derived(
-  [operating_currency, conversion],
-  ([operating_currency_val, conversion_val]) => {
-    if (
-      !conversion_val ||
-      ["at_cost", "at_value", "units"].includes(conversion_val) ||
-      operating_currency_val.includes(conversion_val)
-    ) {
-      return operating_currency_val;
-    }
-    return [...operating_currency_val, conversion_val];
-  }
-);
-
 export interface HierarchyChart {
   type: "hierarchy";
   data: Map<string, AccountHierarchyNode>;
   tooltipText?: undefined;
 }
 
-interface BarChart {
+export interface BarChart {
   type: "barchart";
   data: BarChartDatum[];
-  tooltipText: (d: BarChartDatum) => string;
+  tooltipText: (c: FormatterContext, d: BarChartDatum) => string;
 }
 
-interface LineChart {
+export interface LineChart {
   type: "linechart";
   data: LineChartData[];
-  tooltipText: (d: LineChartDatum) => string;
+  tooltipText: (c: FormatterContext, d: LineChartDatum) => string;
 }
 
-interface ScatterPlot {
+export interface ScatterPlot {
   type: "scatterplot";
   data: ScatterPlotDatum[];
   tooltipText?: undefined;
@@ -147,8 +130,8 @@ export function balances(json: unknown): LineChart {
   return {
     data,
     type: "linechart",
-    tooltipText: (d: LineChartDatum): string =>
-      `${formatCurrency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`,
+    tooltipText: (c, d) =>
+      `${c.currency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`,
   };
 }
 
@@ -163,10 +146,10 @@ export function commodities(json: unknown, label: string): LineChart {
   return {
     data: [{ name: label, values }],
     type: "linechart",
-    tooltipText(d: LineChartDatum): string {
-      return `1 ${base} = ${formatCurrency(
-        d.value
-      )} ${quote}<em>${dateFormat.day(d.date)}</em>`;
+    tooltipText(c, d) {
+      return `1 ${base} = ${c.currency(d.value)} ${quote}<em>${dateFormat.day(
+        d.date
+      )}</em>`;
     },
   };
 }
@@ -186,19 +169,22 @@ export function bar(json: unknown): BarChart {
     date: d.date,
     label: currentDateFmt(d.date),
   }));
-  function tooltipText(d: BarChartDatum): string {
-    let text = "";
-    d.values.forEach((a) => {
-      text += `${formatCurrency(a.value)} ${a.name}`;
-      if (a.budget) {
-        text += ` / ${formatCurrency(a.budget)} ${a.name}`;
-      }
-      text += "<br>";
-    });
-    text += `<em>${d.label}</em>`;
-    return text;
-  }
-  return { data, tooltipText, type: "barchart" };
+  return {
+    data,
+    tooltipText: (c, d) => {
+      let text = "";
+      d.values.forEach((a) => {
+        text += `${c.currency(a.value)} ${a.name}`;
+        if (a.budget) {
+          text += ` / ${c.currency(a.budget)} ${a.name}`;
+        }
+        text += "<br>";
+      });
+      text += `<em>${d.label}</em>`;
+      return text;
+    },
+    type: "barchart",
+  };
 }
 
 export function scatterplot(json: unknown): ScatterPlot {
@@ -299,9 +285,11 @@ export function parseGroupedQueryChart(
  * Parse one of the query result charts.
  * @param json - The chart data to parse.
  */
-export function parseQueryChart(json: unknown): ChartTypes | null {
-  const currencies = get(operatingCurrenciesWithConversion);
-  const tree = parseGroupedQueryChart(json, currencies);
+export function parseQueryChart(
+  json: unknown,
+  operating_currencies: string[]
+): ChartTypes | null {
+  const tree = parseGroupedQueryChart(json, operating_currencies);
   if (tree) {
     return tree;
   }

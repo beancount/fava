@@ -21,8 +21,9 @@ import {
   keymap,
   placeholder,
 } from "@codemirror/view";
+import { get } from "svelte/store";
 
-import { favaAPI } from "../stores";
+import { favaOptions } from "../stores";
 
 import { beancount } from "./beancount";
 import { bql } from "./bql";
@@ -114,7 +115,7 @@ export function initBeancountEditor(
   return setup(value, [
     baseExtensions,
     beancount,
-    indentUnit.of(" ".repeat(favaAPI.favaOptions.indent)),
+    indentUnit.of(" ".repeat(get(favaOptions).indent)),
     keymap.of(commands),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {

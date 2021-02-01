@@ -3,7 +3,7 @@
   import { fetch, handleText } from "../lib/fetch";
   import { ext } from "../lib/paths";
 
-  import { baseURL } from "../stores/url";
+  import { baseURL } from "../stores";
 
   /** @type {string} */
   export let filename;

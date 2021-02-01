@@ -3,7 +3,7 @@
   import { notify } from "../notifications";
   import { put } from "../api";
   import { _ } from "../i18n";
-  import { favaAPIStore } from "../stores";
+  import { options } from "../stores";
   import { account, hash, files } from "../document-upload";
 
   import ModalBase from "./ModalBase.svelte";
@@ -13,7 +13,7 @@
   let form;
 
   $: shown = !!$files.length;
-  $: documents = $favaAPIStore.options.documents;
+  $: documents = $options.documents;
 
   async function submit() {
     await Promise.all(

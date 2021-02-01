@@ -6,7 +6,7 @@
   import router from "../router";
   import { urlFor } from "../helpers";
   import { sunburstScale } from "./helpers";
-  import { formatCurrency, formatPercentage } from "../format";
+  import { ctx, formatPercentage } from "../format";
 
   /** @type {import(".").AccountHierarchyNode} */
   export let data;
@@ -26,7 +26,7 @@
   function balanceText(d) {
     const val = d.value || 0;
     const rootVal = root.value || 1;
-    return `${formatCurrency(val)} ${currency} (${formatPercentage(
+    return `${$ctx.currency(val)} ${currency} (${formatPercentage(
       val / rootVal
     )})`;
   }

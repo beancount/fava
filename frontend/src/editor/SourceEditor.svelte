@@ -6,7 +6,7 @@
   import { log_error } from "../log";
   import { notify } from "../notifications";
   import router from "../router";
-  import { errorCount, favaAPIStore } from "../stores";
+  import { errorCount, favaOptions } from "../stores";
 
   import { initBeancountEditor } from "../codemirror/setup";
   import { scrollToLine } from "../codemirror/scroll-to-line";
@@ -81,7 +81,7 @@
     ];
 
     editor.focus();
-    const opts = $favaAPIStore.favaOptions["insert-entry"].filter(
+    const opts = $favaOptions["insert-entry"].filter(
       (f) => f.filename === data.file_path
     );
     const line = parseInt(

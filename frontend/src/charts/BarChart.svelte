@@ -6,14 +6,14 @@
 
   import { axis } from "./axis";
   import { currenciesScale, setTimeFilter } from "./helpers";
-  import { formatCurrencyShort } from "../format";
+  import { ctx } from "../format";
   import { followingTooltip } from "./tooltip";
 
-  /** @type {import('.').BarChartDatum[]} */
+  /** @type {import('.').BarChart['data']} */
   export let data;
   /** @type {number} */
   export let width;
-  /** @type {(d: import('.').BarChartDatum) => string} */
+  /** @type {import('.').BarChart['tooltipText']} */
   export let tooltipText;
 
   const maxColumnWidth = 100;
@@ -70,7 +70,7 @@
   $: xAxis = axisBottom(x0)
     .tickSizeOuter(0)
     .tickValues(filterTicks(x0.domain()));
-  $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat(formatCurrencyShort);
+  $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat($ctx.short);
 </script>
 
 <svg {width} {height}>
@@ -84,7 +84,7 @@
     {#each data as group}
       <g
         class="group"
-        use:followingTooltip={() => tooltipText(group)}
+        use:followingTooltip={() => tooltipText($ctx, group)}
         transform={`translate(${x0(group.label)},0)`}
       >
         <rect

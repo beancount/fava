@@ -9,14 +9,14 @@
   import { lineChartMode } from "../stores/chart";
   import { currenciesScale } from "./helpers";
   import { axis } from "./axis";
-  import { formatCurrencyShort } from "../format";
+  import { ctx } from "../format";
   import { positionedTooltip } from "./tooltip";
 
-  /** @type {import('.').LineChartData[]} */
+  /** @type {import('.').LineChart['data']} */
   export let data;
   /** @type {number} */
   export let width;
-  /** @type {(d: import('.').LineChartDatum) => string} */
+  /** @type {import('.').LineChart['tooltipText']} */
   export let tooltipText;
 
   const margin = {
@@ -75,7 +75,7 @@
   $: yAxis = axisLeft(y)
     .tickPadding(6)
     .tickSize(-innerWidth)
-    .tickFormat(formatCurrencyShort);
+    .tickFormat($ctx.short);
 
   /**
    * @param {number} xPos
@@ -84,7 +84,7 @@
    */
   function tooltipInfo(xPos, yPos) {
     const d = quad.find(xPos, yPos);
-    return d ? [x(d.date), y(d.value), tooltipText(d)] : undefined;
+    return d ? [x(d.date), y(d.value), tooltipText($ctx, d)] : undefined;
   }
 </script>
 

@@ -4,7 +4,7 @@
   import router from "../router";
   import { urlFor } from "../helpers";
   import { treemapScale } from "./helpers";
-  import { formatCurrency, formatPercentage } from "../format";
+  import { ctx, formatPercentage } from "../format";
   import { followingTooltip } from "./tooltip";
 
   /** @type {import(".").AccountHierarchyNode} */
@@ -37,7 +37,7 @@
     const val = d.value || 0;
     const rootValue = root.value || 1;
 
-    return `${formatCurrency(val)} ${currency} (${formatPercentage(
+    return `${$ctx.currency(val)} ${currency} (${formatPercentage(
       val / rootValue
     )})<em>${d.data.account}</em>`;
   }
