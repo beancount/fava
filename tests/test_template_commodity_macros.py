@@ -1,6 +1,5 @@
 # pylint: disable=missing-docstring
-from beancount.core.data import Transaction
-from flask import g
+from beancount.core.amount import A
 from flask import get_template_attribute
 
 
@@ -16,9 +15,8 @@ def test_render_currency(app, example_ledger) -> None:
 
 
 def test_render_amount(app, example_ledger) -> None:
-    with app.test_request_context(""):
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
         macro = get_template_attribute(COMMODITY_MACROS_PATH, "render_amount")
-        g.ledger = example_ledger
-        transaction = example_ledger.all_entries_by_type[Transaction][0]
-        amount = transaction.postings[0].units
+        amount = A("10 USD")
         assert "US Dollar" in macro(example_ledger, amount)
