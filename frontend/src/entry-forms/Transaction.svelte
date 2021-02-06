@@ -45,10 +45,9 @@
   }
 
   /**
-   * @param {CustomEvent<{from: number, to: number}>} ev
+   * @param {{from: number, to: number}} arg
    */
-  function movePosting(ev) {
-    const { from, to } = ev.detail;
+  function movePosting({ from, to }) {
     const moved = entry.postings[from];
     entry.postings.splice(from, 1);
     entry.postings.splice(to, 0, moved);
@@ -100,9 +99,9 @@
       bind:posting
       {index}
       {suggestions}
-      on:add={addPosting}
-      on:move={movePosting}
-      on:remove={() => removePosting(posting)}
+      add={addPosting}
+      move={movePosting}
+      remove={() => removePosting(posting)}
     />
   {/each}
 </div>

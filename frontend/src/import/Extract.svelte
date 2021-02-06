@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { _ } from "../i18n";
 
   import ModalBase from "../modals/ModalBase.svelte";
@@ -8,6 +7,10 @@
 
   /** @type {import('../entries').Entry[]} */
   export let entries;
+  /** @type {() => void} */
+  export let save;
+  /** @type {() => void} */
+  export let close;
 
   let currentIndex = 0;
 
@@ -19,15 +22,11 @@
     currentIndex = 0;
   }
 
-  const dispatch = createEventDispatcher();
-
-  const closeHandler = () => dispatch("close");
-
   async function submitOrNext() {
     if (currentIndex < entries.length - 1) {
       currentIndex += 1;
     } else {
-      dispatch("save");
+      save();
     }
   }
 
@@ -40,7 +39,7 @@
   }
 </script>
 
-<ModalBase {shown} {closeHandler}>
+<ModalBase {shown} closeHandler={close}>
   <form novalidate={duplicate} on:submit|preventDefault={submitOrNext}>
     <h3>{_("Import")}</h3>
     {#if entry}

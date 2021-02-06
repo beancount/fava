@@ -1,15 +1,12 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
   import { initQueryEditor } from "../codemirror/setup";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import { _ } from "../i18n";
 
   /** @type {string} */
   export let value;
-
-  const dispatch = createEventDispatcher();
-  const submit = () => dispatch("submit");
+  /** @type {() => void} */
+  export let submit;
 
   const [editor, useEditor] = initQueryEditor(
     value,
@@ -29,9 +26,9 @@
 
 <form on:submit|preventDefault={submit}>
   <div use:useEditor />
-  <button type="submit" use:keyboardShortcut={"Control+Enter"}
-    >{_("Submit")}</button
-  >
+  <button type="submit" use:keyboardShortcut={"Control+Enter"}>
+    {_("Submit")}
+  </button>
 </form>
 
 <style>

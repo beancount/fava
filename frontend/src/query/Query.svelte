@@ -80,7 +80,7 @@
   });
 </script>
 
-<QueryEditor bind:value={query_string} on:submit={submit} />
+<QueryEditor bind:value={query_string} {submit} />
 <div>
   {#each query_result_array as [history_item, { result, error }] (history_item)}
     <details class:error bind:this={resultElems[history_item]}>

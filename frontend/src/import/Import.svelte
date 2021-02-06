@@ -106,10 +106,10 @@
 
 <Extract
   {entries}
-  on:close={() => {
+  close={() => {
     entries = [];
   }}
-  on:save={save}
+  {save}
 />
 <div class="fixed-fullsize-container">
   <div class="filelist">

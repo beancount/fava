@@ -29,32 +29,13 @@
   let moving = null;
 
   /**
-   * @param {Document} doc
-   */
-  function copyMoveable(doc) {
-    return {
-      account: doc.account,
-      filename: doc.filename,
-      newName: basename(doc.filename),
-    };
-  }
-
-  /**
    * Rename the selected document with <F2>.
    * @param {KeyboardEvent} ev
    */
   function keyup(ev) {
     if (ev.key === "F2" && selected) {
-      moving = copyMoveable(selected);
+      moving = { ...selected, newName: basename(selected.filename) };
     }
-  }
-
-  /**
-   * Move a document to the account it is dropped on.
-   * @param {CustomEvent} ev
-   */
-  function drop(ev) {
-    moving = copyMoveable(ev.detail);
   }
 
   async function move() {
@@ -88,7 +69,12 @@
   </ModalBase>
 {/if}
 <div class="fixed-fullsize-container">
-  <Accounts {node} on:drop={drop} />
+  <Accounts
+    {node}
+    move={(arg) => {
+      moving = { ...arg, newName: basename(arg.filename) };
+    }}
+  />
   <div>
     <Table bind:selected {data} />
   </div>

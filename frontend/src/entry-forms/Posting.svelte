@@ -1,6 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
   import { _ } from "../i18n";
 
   import { currencies } from "../stores";
@@ -13,8 +11,12 @@
   export let index;
   /** @type {string[]} */
   export let suggestions;
-
-  const dispatch = createEventDispatcher();
+  /** @type {(arg: {from: number; to: number}) => void} */
+  export let move;
+  /** @type {() => void} */
+  export let remove;
+  /** @type {() => void} */
+  export let add;
 
   $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
   $: amountSuggestions = $currencies.map((c) => `${amount_number} ${c}`);
@@ -51,7 +53,7 @@
   function drop(event) {
     const from = event.dataTransfer?.getData("fava/posting");
     if (from) {
-      dispatch("move", { from: +from, to: index });
+      move({ from: +from, to: index });
       drag = false;
     }
   }
@@ -70,7 +72,7 @@
 >
   <button
     class="muted round remove-row"
-    on:click={() => dispatch("remove")}
+    on:click={remove}
     type="button"
     tabindex={-1}
   >
@@ -86,7 +88,7 @@
   <button
     class="muted round add-row"
     type="button"
-    on:click={() => dispatch("add")}
+    on:click={add}
     title={_("Add posting")}
   >
     +

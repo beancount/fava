@@ -1,12 +1,13 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-
   import { leaf } from "../lib/account";
 
   import { selectedAccount } from "./stores";
 
   /** @type {import("../lib/tree").TreeNode<{name: string}>} */
   export let node;
+
+  /** @type {(m: {account: string; filename: string}) => void} */
+  export let move;
 
   const expanded = true;
   let drag = false;
@@ -30,8 +31,6 @@
   }
   const dragover = dragenter;
 
-  const dispatch = createEventDispatcher();
-
   /**
    * Handle a drop and bubble the event.
    * @param {DragEvent} event
@@ -40,7 +39,7 @@
     const filename =
       event.dataTransfer && event.dataTransfer.getData("fava/filename");
     if (filename) {
-      dispatch("drop", { account: node.name, filename });
+      move({ account: node.name, filename });
       drag = false;
     }
   }
@@ -71,7 +70,7 @@
     {#each node.children as child}
       <li>
         {#if node.children.length}
-          <svelte:self on:drop node={child} />
+          <svelte:self node={child} {move} />
         {:else}node.name{/if}
       </li>
     {/each}
