@@ -38,13 +38,14 @@ export function localStorageSyncedStore<T>(
   validator: Validator<T>,
   init: () => T
 ): Writable<T> {
-  const stored_val = localStorage.getItem(key);
+  const fullKey = `fava-${key}`;
+  const stored_val = localStorage.getItem(fullKey);
   const initial = stored_val ? validator(JSON.parse(stored_val)) : init();
 
   const store = writable(initial);
 
   store.subscribe((val) => {
-    localStorage.setItem(key, JSON.stringify(val));
+    localStorage.setItem(fullKey, JSON.stringify(val));
   });
   return store;
 }

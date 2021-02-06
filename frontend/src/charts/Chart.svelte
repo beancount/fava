@@ -7,7 +7,7 @@
   import {
     chartCurrency,
     lineChartMode,
-    chartMode,
+    hierarchyChartMode,
     showCharts,
   } from "../stores/chart";
 
@@ -57,7 +57,7 @@
     </div>
     <span class="spacer" />
     {#if chart.type === "hierarchy"}
-      {#if $chartMode === "treemap"}
+      {#if $hierarchyChartMode === "treemap"}
         <select bind:value={$chartCurrency}>
           {#each $currencies as currency}
             <option value={currency}>{currency}</option>
@@ -66,11 +66,19 @@
       {/if}
       <span class="chart-mode">
         <label>
-          <input type="radio" bind:group={$chartMode} value="treemap" />
+          <input
+            type="radio"
+            bind:group={$hierarchyChartMode}
+            value="treemap"
+          />
           <span class="button">{_("Treemap")}</span>
         </label>
         <label>
-          <input type="radio" bind:group={$chartMode} value="sunburst" />
+          <input
+            type="radio"
+            bind:group={$hierarchyChartMode}
+            value="sunburst"
+          />
           <span class="button">{_("Sunburst")}</span>
         </label>
       </span>

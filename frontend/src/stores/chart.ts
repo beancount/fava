@@ -3,13 +3,23 @@ import { derived, writable } from "svelte/store";
 import { NamedChartTypes } from "../charts";
 import { _ } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
+import { localStorageSyncedStore } from "../lib/store";
+import { string } from "../lib/validation";
 
 import { currencies_sorted, operating_currency } from ".";
 
 export const showCharts = writable(true);
 export const activeChart = writable<NamedChartTypes | undefined>(undefined);
-export const chartMode = writable("treemap");
-export const lineChartMode = writable("line");
+export const hierarchyChartMode = localStorageSyncedStore(
+  "hierarchy-chart-mode",
+  string,
+  () => "treemap"
+);
+export const lineChartMode = localStorageSyncedStore(
+  "line-chart-mode",
+  string,
+  () => "line"
+);
 export const chartCurrency = writable("");
 
 const currencySuggestions = derived(
