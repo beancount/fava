@@ -29,12 +29,9 @@
   $: importableFiles = preprocessedData.filter(
     (i) => i.importers[0].importer_name !== ""
   );
-  $: nonImportableFiles = preprocessedData.filter(
+  $: otherFiles = preprocessedData.filter(
     (i) => i.importers[0].importer_name === ""
   );
-  // open the <details> when these are the only files remaining
-  $: nonImportableOpen =
-    nonImportableFiles.length > 0 && importableFiles.length === 0;
 
   function preventNavigation() {
     return extractCache.size > 0
@@ -71,6 +68,10 @@
    * @param {string} filename
    */
   async function remove(filename) {
+    // eslint-disable-next-line
+    if (!confirm(_("Delete this file?"))) {
+      return;
+    }
     const removed = await deleteDocument(filename);
     if (removed) {
       preprocessedData = preprocessedData.filter(
@@ -127,7 +128,7 @@
       <p>{_("No files were found for import.")}</p>
     {/if}
     {#if importableFiles.length > 0}
-      <div class="importableFiles">
+      <div class="importable-files">
         <h2>{_("Importable Files")}</h2>
         <FileList
           files={importableFiles}
@@ -140,13 +141,11 @@
       </div>
       <hr />
     {/if}
-    {#if nonImportableFiles.length > 0}
-      <details open={nonImportableOpen}>
-        <summary>
-          <strong>{_("Non-importable Files")}</strong>
-        </summary>
+    {#if otherFiles.length > 0}
+      <details open={importableFiles.length === 0}>
+        <summary>{_("Non-importable Files")}</summary>
         <FileList
-          files={nonImportableFiles}
+          files={otherFiles}
           {extractCache}
           bind:selected
           moveFile={move}
@@ -175,7 +174,7 @@
   .filelist {
     padding: 1rem;
   }
-  .importableFiles {
+  .importable-files {
     padding-bottom: 0.8rem;
   }
 </style>

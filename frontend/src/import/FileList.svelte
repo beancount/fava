@@ -12,13 +12,13 @@
   /** @type {string|null} */
   export let selected;
 
-  /** @type {function(string)} */
+  /** @type {(name: string) => void} */
   export let removeFile;
 
-  /** @type {function(string, string, string)} */
+  /** @type {(name: string, account: string, newName: string) => void} */
   export let moveFile;
 
-  /** @type {function(string, string)} */
+  /** @type {(name: string, importer: string) => void} */
   export let extract;
 </script>
 
@@ -73,7 +73,7 @@
           </button>
         {/if}
         {info.importer_name}
-      {:else}{_("No importer matched this file.")}{/if}
+      {/if}
     </div>
   {/each}
 {/each}
@@ -83,7 +83,7 @@
     padding: 0.5rem;
     margin: 0.5rem 0;
     cursor: pointer;
-    background-color: var(--color-table-header-background);
+    background-color: var(--color-sidebar-background);
   }
   .header button {
     float: right;
