@@ -53,13 +53,15 @@
 
   /**
    * Move the given file to the new file name (and remove from the list).
-   * @param {import('./helpers').MoveFileArgs} args
+   * @param {string} filename
+   * @param {string} account
+   * @param {string} newName
    */
-  async function move(args) {
-    const moved = await moveDocument(args.filename, args.account, args.newName);
+  async function move(filename, account, newName) {
+    const moved = await moveDocument(filename, account, newName);
     if (moved) {
       preprocessedData = preprocessedData.filter(
-        (item) => item.name !== args.filename
+        (item) => item.name !== filename
       );
     }
   }
@@ -79,16 +81,14 @@
 
   /**
    * Open the extract dialog for the given file/importer combination.
-   * @param {import('./helpers').ExtractFileArgs} args
+   * @param {string} filename
+   * @param {string} importer
    */
-  async function extract(args) {
-    const extractCacheKey = `${args.filename}:${args.importer}`;
+  async function extract(filename, importer) {
+    const extractCacheKey = `${filename}:${importer}`;
     let cached = extractCache.get(extractCacheKey);
     if (!cached) {
-      cached = await get("extract", {
-        filename: args.filename,
-        importer: args.importer,
-      });
+      cached = await get("extract", { filename, importer });
       if (!cached.length) {
         notify("No entries to import from this file.", "warning");
         return;
@@ -133,9 +133,9 @@
           files={importableFiles}
           {extractCache}
           bind:selected
-          on:moveFile={(e) => move(e.detail)}
-          on:removeFile={(e) => remove(e.detail)}
-          on:extractFile={(e) => extract(e.detail)}
+          moveFile={move}
+          removeFile={remove}
+          {extract}
         />
       </div>
       <hr />
@@ -149,9 +149,9 @@
           files={nonImportableFiles}
           {extractCache}
           bind:selected
-          on:moveFile={(e) => move(e.detail)}
-          on:removeFile={(e) => remove(e.detail)}
-          on:extractFile={(e) => extract(e.detail)}
+          moveFile={move}
+          removeFile={remove}
+          {extract}
         />
       </details>
     {/if}

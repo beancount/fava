@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   import { _ } from "../i18n";
 
   import AccountInput from "../entry-forms/AccountInput.svelte";
@@ -13,22 +12,14 @@
   /** @type {string|null} */
   export let selected;
 
-  const dispatch = createEventDispatcher();
+  /** @type {function(string)} */
+  export let removeFile;
 
-  /** @param {string} filename */
-  function remove(filename) {
-    dispatch("removeFile", filename);
-  }
+  /** @type {function(string, string, string)} */
+  export let moveFile;
 
-  /** @param {import('./helpers').MoveFileArgs} args */
-  function move(args) {
-    dispatch("moveFile", args);
-  }
-
-  /** @param {import('./helpers').ExtractFileArgs} args */
-  function extract(args) {
-    dispatch("extractFile", args);
-  }
+  /** @type {function(string, string)} */
+  export let extract;
 </script>
 
 {#each files as file}
@@ -42,7 +33,7 @@
     {file.basename}
     <button
       class="round"
-      on:click={() => remove(file.name)}
+      on:click={() => removeFile(file.name)}
       type="button"
       title={_("Delete")}
       tabindex={-1}
@@ -56,12 +47,7 @@
       <input size={40} bind:value={info.newName} />
       <button
         type="button"
-        on:click={() =>
-          move({
-            filename: file.name,
-            account: info.account,
-            newName: info.newName,
-          })}
+        on:click={() => moveFile(file.name, info.account, info.newName)}
       >
         {"Move"}
       </button>
@@ -69,8 +55,7 @@
         <button
           type="button"
           title="{_('Extract')} with importer {info.importer_name}"
-          on:click={() =>
-            extract({ filename: file.name, importer: info.importer_name })}
+          on:click={() => extract(file.name, info.importer_name)}
         >
           {extractCache.get(`${file.name}:${info.importer_name}`)
             ? _("Continue")

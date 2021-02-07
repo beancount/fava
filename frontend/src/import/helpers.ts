@@ -62,14 +62,3 @@ export function preprocessData(arr: ImportableFiles): ProcessedImportableFiles {
     return { ...file, importers };
   });
 }
-
-export interface MoveFileArgs {
-  filename: string;
-  account: string;
-  newName: string;
-}
-
-export interface ExtractFileArgs {
-  filename: string;
-  importer: string;
-}
