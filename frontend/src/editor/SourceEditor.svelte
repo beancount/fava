@@ -93,6 +93,8 @@
     } else if (opts.length > 0) {
       const last = opts[opts.length - 1];
       scrollToLine(editor, last.lineno - 1);
+    } else {
+      scrollToLine(editor, editor.state.doc.lines);
     }
 
     return () => {
