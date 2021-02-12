@@ -1,13 +1,13 @@
-{% macro render_currency(ledger, currency) %}
+{% macro render_currency(ledger, currency) -%}
 <span title="{{ ledger.commodity_name(currency) | default(currency) }}">{{ currency }}</span>
-{% endmacro %}
+{%- endmacro %}
 
 {% macro render_amount(ledger, amount, class="num") %}
-{% if amount is none or amount.number is none %}
-  <span class="{{ class }}"><span>
-{% else %}
+{% if amount is none or amount.number is none -%}
+  <span class="{{ class }}"></span>
+{%- else -%}
   <span class="{{ class }}" title="{{ ledger.commodity_name(amount.currency) }}">
-    {{ amount.number | format_currency(amount.currency, True) }} {{ amount.currency }}
+    {{- amount.number | format_currency(amount.currency, True) }} {{ amount.currency -}}
   </span>
-{% endif %}
+{%- endif %}
 {% endmacro %}
