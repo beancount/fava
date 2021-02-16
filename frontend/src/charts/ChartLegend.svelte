@@ -1,6 +1,5 @@
-<script>
-  /** @type {[string, string][]} */
-  export let legend;
+<script lang="ts">
+  export let legend: [string, string][];
 </script>
 
 {#each legend as [item, color]}

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import { urlHash } from "../stores";

@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
+  import type { Balance } from "../entries";
   import { _ } from "../i18n";
   import { currencies } from "../stores";
 
@@ -7,8 +8,7 @@
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
 
-  /** @type {import("../entries").Balance} */
-  export let entry;
+  export let entry: Balance;
 </script>
 
 <div>

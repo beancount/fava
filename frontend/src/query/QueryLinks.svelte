@@ -1,17 +1,14 @@
-<script>
+<script lang="ts">
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
   import { HAVE_EXCEL } from "../stores";
 
-  /** @type {string} */
-  export let query;
+  export let query: string;
 
   /**
    * URL to download a query.
-   * @param {string} query_string
-   * @param {string} format
    */
-  function queryUrl(query_string, format) {
+  function queryUrl(query_string: string, format: string) {
     return urlFor(`download-query/query_result.${format}`, {
       query_string,
     });

@@ -1,19 +1,13 @@
-<script>
+<script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
   import { accounts } from "../stores";
 
-  /** @type {string} */
-  export let value;
-  /** @type {string[] | undefined} */
-  export let suggestions = undefined;
-  /** @type {string | undefined} */
-  export let className = undefined;
+  export let value: string;
+  export let suggestions: string[] | undefined = undefined;
+  export let className: string | undefined = undefined;
 
-  /**
-   * @param {string} val
-   */
-  function checkValidity(val) {
+  function checkValidity(val: string) {
     return !$accounts.length || $accounts.includes(val)
       ? ""
       : _("Should be one of the declared accounts");

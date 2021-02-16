@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { extent } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { quadtree } from "d3-quadtree";
@@ -10,10 +10,10 @@
   import { scatterplotScale } from "./helpers";
   import { positionedTooltip } from "./tooltip";
 
-  /** @type {import('.').ScatterPlotDatum[]} */
-  export let data;
-  /** @type {number} */
-  export let width;
+  import type { ScatterPlotDatum } from ".";
+
+  export let data: ScatterPlotDatum[];
+  export let width: number;
 
   const margin = {
     top: 10,
@@ -49,20 +49,14 @@
     (d) => y(d.type) || 0
   );
 
-  /**
-   * @param {import('.').ScatterPlotDatum} d
-   * @returns {string}
-   */
-  function tooltipText(d) {
+  function tooltipText(d: ScatterPlotDatum) {
     return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
   }
 
-  /**
-   * @param {number} xPos
-   * @param {number} yPos
-   * @returns {[number, number, string] | undefined}
-   */
-  function tooltipInfo(xPos, yPos) {
+  function tooltipInfo(
+    xPos: number,
+    yPos: number
+  ): [number, number, string] | undefined {
     const d = quad.find(xPos, yPos);
     return d ? [x(d.date), y(d.type) || 0, tooltipText(d)] : undefined;
   }

@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { emptyPosting, Transaction } from "../entries";
+  import type { Posting } from "../entries";
   import { _ } from "../i18n";
   import { payees } from "../stores";
 
@@ -9,15 +10,10 @@
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
 
-  /** @type {import("../entries").Transaction} */
-  export let entry;
-  /** @type {string[] | undefined} */
-  let suggestions;
+  export let entry: Transaction;
+  let suggestions: string[] | undefined;
 
-  /**
-   * @param {import("../entries").Posting} posting
-   */
-  function removePosting(posting) {
+  function removePosting(posting: Posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
   }
 
@@ -44,10 +40,7 @@
     entry = Object.assign(new Transaction(), data, { date: entry.date });
   }
 
-  /**
-   * @param {{from: number, to: number}} arg
-   */
-  function movePosting({ from, to }) {
+  function movePosting({ from, to }: { from: number; to: number }) {
     const moved = entry.postings[from];
     entry.postings.splice(from, 1);
     entry.postings.splice(to, 0, moved);

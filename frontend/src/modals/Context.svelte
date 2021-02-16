@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { get } from "../api";
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { urlHash } from "../stores";

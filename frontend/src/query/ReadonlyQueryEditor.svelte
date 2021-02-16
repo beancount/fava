@@ -1,8 +1,7 @@
-<script>
+<script lang="ts">
   import { initReadonlyQueryEditor } from "../codemirror/setup";
 
-  /** @type {string} */
-  export let value;
+  export let value: string;
 
   const [, useEditor] = initReadonlyQueryEditor(value);
 </script>

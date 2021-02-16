@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
   import { accounts, links, payees, tags, years } from "../stores";
@@ -10,21 +10,13 @@
     ...$payees.map((payee) => `payee:"${payee}"`),
   ];
 
-  /**
-   * @param {string} value
-   * @param {HTMLInputElement} input
-   */
-  function valueExtractor(value, input) {
+  function valueExtractor(value: string, input: HTMLInputElement) {
     const match = value
       .slice(0, input.selectionStart || undefined)
       .match(/\S*$/);
     return match ? match[0] : value;
   }
-  /**
-   * @param {string} value
-   * @param {HTMLInputElement} input
-   */
-  function valueSelector(value, input) {
+  function valueSelector(value: string, input: HTMLInputElement) {
     const selectionStart = input.selectionStart || 0;
     const match = input.value.slice(0, selectionStart).match(/\S*$/);
     return match

@@ -1,44 +1,31 @@
-<script>
+<script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
+  import type { Posting } from "../entries";
   import { _ } from "../i18n";
   import { currencies } from "../stores";
 
   import AccountInput from "./AccountInput.svelte";
 
-  /** @type {import("../entries").Posting} */
-  export let posting;
-  /** @type {number} */
-  export let index;
-  /** @type {string[]} */
-  export let suggestions;
-  /** @type {(arg: {from: number; to: number}) => void} */
-  export let move;
-  /** @type {() => void} */
-  export let remove;
-  /** @type {() => void} */
-  export let add;
+  export let posting: Posting;
+  export let index: number;
+  export let suggestions: string[] | undefined;
+  export let move: (arg: { from: number; to: number }) => void;
+  export let remove: () => void;
+  export let add: () => void;
 
   $: amount_number = posting.amount.replace(/[^\-?0-9.]/g, "");
   $: amountSuggestions = $currencies.map((c) => `${amount_number} ${c}`);
 
   let drag = false;
   let draggable = true;
-  /**
-   * @param {MouseEvent} event
-   */
-  function mousemove(event) {
+
+  function mousemove(event: MouseEvent) {
     draggable = !(event.target instanceof HTMLInputElement);
   }
-  /**
-   * @param {DragEvent} event
-   */
-  function dragstart(event) {
+  function dragstart(event: DragEvent) {
     event.dataTransfer?.setData("fava/posting", `${index}`);
   }
-  /**
-   * @param {DragEvent} event
-   */
-  function dragenter(event) {
+  function dragenter(event: DragEvent) {
     if (event.dataTransfer?.types.includes("fava/posting")) {
       event.preventDefault();
       drag = true;
@@ -47,10 +34,7 @@
   function dragleave() {
     drag = false;
   }
-  /**
-   * @param {DragEvent} event
-   */
-  function drop(event) {
+  function drop(event: DragEvent) {
     const from = event.dataTransfer?.getData("fava/posting");
     if (from) {
       move({ from: +from, to: index });

@@ -1,22 +1,19 @@
-<script>
+<script lang="ts">
   import { _ } from "../i18n";
   import { basename } from "../lib/paths";
   import { sortFunc } from "../sort";
 
   import { selectedAccount } from "./stores";
 
-  /** @typedef {{account: string, filename: string, date: string}} Document */
+  type Document = { account: string; filename: string; date: string };
 
-  /** @type {Document[]} */
-  export let data;
-  /** @type {Document | null} */
-  export let selected = null;
+  export let data: Document[];
+  export let selected: Document | null = null;
 
   /**
    * Extract just the latter part of the filename if it starts with a date.
-   * @param {Document} doc
    */
-  function name(doc) {
+  function name(doc: Document) {
     const base = basename(doc.filename);
     if (`${doc.date}` === base.substring(0, 10)) {
       return base.substring(11);
@@ -24,31 +21,27 @@
     return base;
   }
 
-  const tableColumns = [
+  const tableColumns: { header: string; getter: (e: Document) => string }[] = [
     {
       header: _("Date"),
-      getter: (/** @type {Document} */ e) => e.date,
+      getter: (e) => e.date,
     },
     {
       header: _("Name"),
-      getter: (/** @type {Document} */ e) => name(e),
+      getter: (e) => name(e),
     },
   ];
 
   /**
-   * Index of the table column and order to sort by
-   * @type {[number, "asc" | "desc"]}
+   * Index of the table column and order to sort by.
    */
-  let sort = [0, "desc"];
+  let sort: [number, "asc" | "desc"] = [0, "desc"];
   $: table = data
     .filter((e) => e.account.startsWith($selectedAccount))
     .map((e) => ({ doc: e, row: tableColumns.map((th) => th.getter(e)) }))
     .sort(sortFunc("string", sort[1], ({ row }) => row[sort[0]]));
 
-  /**
-   * @param {number} index
-   */
-  function setSort(index) {
+  function setSort(index: number) {
     const [col, order] = sort;
     if (index === col) {
       sort = [index, order === "asc" ? "desc" : "asc"];

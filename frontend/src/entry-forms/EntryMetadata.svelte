@@ -1,30 +1,19 @@
-<script>
+<script lang="ts">
   import { _ } from "../i18n";
 
-  /** @type {Record<string,unknown>} */
-  export let meta;
+  export let meta: Record<string, unknown>;
 
   $: metakeys = Object.keys(meta).filter(
     (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno"
   );
 
-  /**
-   * @param {string} metakey
-   */
-  function removeMetadata(metakey) {
+  function removeMetadata(metakey: string) {
     delete meta[metakey];
     meta = meta;
   }
 
-  /**
-   * @param {string} currentKey
-   * @param {string} newKey
-   */
-  function updateMetakey(currentKey, newKey) {
-    meta = Object.keys(meta).reduce((
-      /** @type {Record<string,unknown>} */ m,
-      key
-    ) => {
+  function updateMetakey(currentKey: string, newKey: string) {
+    meta = Object.keys(meta).reduce<Record<string, unknown>>((m, key) => {
       if (key === currentKey) {
         m[newKey] = meta[currentKey];
       } else {
@@ -56,7 +45,7 @@
       placeholder={_("Key")}
       value={metakey}
       on:change={(event) => {
-        updateMetakey(metakey, event.target.value);
+        updateMetakey(metakey, event.currentTarget.value);
       }}
       required
     />

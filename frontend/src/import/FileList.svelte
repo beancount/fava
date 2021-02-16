@@ -1,24 +1,16 @@
-<script>
+<script lang="ts">
+  import type { Entry } from "../entries";
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
 
-  /** @type {import("./helpers").ProcessedImportableFiles} */
-  export let files;
+  import type { ProcessedImportableFiles } from "./helpers";
 
-  /** @type {Map<string,import('../entries').Entry[]>} */
-  export let extractCache;
-
-  /** @type {string|null} */
-  export let selected;
-
-  /** @type {(name: string) => void} */
-  export let removeFile;
-
-  /** @type {(name: string, account: string, newName: string) => void} */
-  export let moveFile;
-
-  /** @type {(name: string, importer: string) => void} */
-  export let extract;
+  export let files: ProcessedImportableFiles;
+  export let extractCache: Map<string, Entry[]>;
+  export let selected: string | null;
+  export let removeFile: (name: string) => unknown;
+  export let moveFile: (name: string, a: string, newName: string) => unknown;
+  export let extract: (name: string, importer: string) => unknown;
 </script>
 
 {#each files as file}

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { put } from "../api";
   import { account, files, hash } from "../document-upload";
   import AccountInput from "../entry-forms/AccountInput.svelte";
@@ -9,8 +9,7 @@
 
   import ModalBase from "./ModalBase.svelte";
 
-  /** @type {HTMLFormElement} */
-  let form;
+  let form: HTMLFormElement;
 
   $: shown = !!$files.length;
   $: documents = $options.documents;

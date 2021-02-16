@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
 
   import { keyboardShortcut } from "./keyboard-shortcuts";
@@ -6,35 +6,27 @@
 
   const dispatch = createEventDispatcher();
 
-  /** @type {string} */
-  export let value;
-  /** @type {string[]} */
-  export let suggestions;
-  /** @type {string} */
+  export let value: string;
+  export let suggestions: string[];
   export let name = "";
-  /** @type {string} */
   export let placeholder = "";
-  /** @type {((val: string, input: HTMLInputElement) => string) | null} */
-  export let valueExtractor = null;
-  /** @type {((val: string, input: HTMLInputElement) => string) | null} */
-  export let valueSelector = null;
+  export let valueExtractor:
+    | ((val: string, input: HTMLInputElement) => string)
+    | null = null;
+  export let valueSelector:
+    | ((val: string, input: HTMLInputElement) => string)
+    | null = null;
   export let setSize = false;
-  /** @type {string | undefined} */
-  export let className = undefined;
-  /** @type {string | undefined} */
-  export let key = undefined;
-  /** @type {((val: string) => string) | undefined} */
-  export let checkValidity = undefined;
-  /** @type {boolean} */
+  export let className: string | undefined = undefined;
+  export let key: string | undefined = undefined;
+  export let checkValidity: ((val: string) => string) | undefined = undefined;
   export let selectFirst = false;
   export let clearButton = false;
 
-  /** @type {{suggestion: string, innerHTML: string}[]} */
-  let filteredSuggestions = [];
+  let filteredSuggestions: { suggestion: string; innerHTML: string }[] = [];
   let hidden = true;
   let index = -1;
-  /** @type {HTMLInputElement} */
-  let input;
+  let input: HTMLInputElement;
 
   $: size = setSize
     ? Math.max(value.length, placeholder.length) + 1
@@ -60,30 +52,20 @@
     }
   }
 
-  /**
-   * @param {string} suggestion
-   */
-  function select(suggestion) {
+  function select(suggestion: string) {
     value =
       input && valueSelector ? valueSelector(suggestion, input) : suggestion;
     dispatch("select", input);
     hidden = true;
   }
 
-  /**
-   * @param {MouseEvent} event
-   * @param {string} suggestion
-   */
-  function mousedown(event, suggestion) {
+  function mousedown(event: MouseEvent, suggestion: string) {
     if (event.button === 0) {
       select(suggestion);
     }
   }
 
-  /**
-   * @param {KeyboardEvent} event
-   */
-  function keydown(event) {
+  function keydown(event: KeyboardEvent) {
     if (event.key === "Enter") {
       if (index > -1) {
         event.preventDefault();

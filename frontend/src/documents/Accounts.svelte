@@ -1,13 +1,11 @@
-<script>
+<script lang="ts">
   import { leaf } from "../lib/account";
+  import type { TreeNode } from "../lib/tree";
 
   import { selectedAccount } from "./stores";
 
-  /** @type {import("../lib/tree").TreeNode<{name: string}>} */
-  export let node;
-
-  /** @type {(m: {account: string; filename: string}) => void} */
-  export let move;
+  export let node: TreeNode<{ name: string }>;
+  export let move: (m: { account: string; filename: string }) => void;
 
   const expanded = true;
   let drag = false;
@@ -18,13 +16,9 @@
 
   /**
    * Start drag if a document filename is dragged onto an account.
-   * @param {DragEvent} event
    */
-  function dragenter(event) {
-    if (
-      event.dataTransfer &&
-      event.dataTransfer.types.includes("fava/filename")
-    ) {
+  function dragenter(event: DragEvent) {
+    if (event.dataTransfer?.types.includes("fava/filename")) {
       event.preventDefault();
       drag = true;
     }
@@ -33,11 +27,9 @@
 
   /**
    * Handle a drop and bubble the event.
-   * @param {DragEvent} event
    */
-  function drop(event) {
-    const filename =
-      event.dataTransfer && event.dataTransfer.getData("fava/filename");
+  function drop(event: DragEvent) {
+    const filename = event.dataTransfer?.getData("fava/filename");
     if (filename) {
       move({ account: node.name, filename });
       drag = false;

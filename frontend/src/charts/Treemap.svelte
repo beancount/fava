@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
   import { treemap } from "d3-hierarchy";
+  import type { HierarchyRectangularNode } from "d3-hierarchy";
 
   import { ctx, formatPercentage } from "../format";
   import { urlFor } from "../helpers";
@@ -8,22 +9,19 @@
   import { treemapScale } from "./helpers";
   import { followingTooltip } from "./tooltip";
 
-  /** @type {import(".").AccountHierarchyNode} */
-  export let data;
-  /** @type {number} */
-  export let width;
-  /** @type {string} */
-  export let currency;
+  import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
+
+  export let data: AccountHierarchyNode;
+  export let width: number;
+  export let currency: string;
+
   $: height = Math.min(width / 2.5, 400);
 
-  const tree = treemap().paddingInner(1);
+  const tree = treemap<AccountHierarchyDatum>().paddingInner(1);
   $: root = tree.size([width, height])(data);
   $: leaves = root.leaves().filter((d) => d.value);
 
-  /**
-   * @param {import(".").AccountHierarchyNode} d
-   */
-  function fill(d) {
+  function fill(d: AccountHierarchyNode) {
     const node = d.data.dummy && d.parent ? d.parent : d;
     if (node.depth === 1 || !node.parent) {
       return $treemapScale(node.data.account);
@@ -31,10 +29,7 @@
     return $treemapScale(node.parent.data.account);
   }
 
-  /**
-   * @param {import(".").AccountHierarchyNode} d
-   */
-  function tooltipText(d) {
+  function tooltipText(d: AccountHierarchyNode) {
     const val = d.value || 0;
     const rootValue = root.value || 1;
 
@@ -43,12 +38,11 @@
     )})<em>${d.data.account}</em>`;
   }
 
-  /**
-   * @param {SVGTextElement} node
-   * @param {import(".").AccountHierarchyNode} param
-   */
-  function setOpacity(node, param) {
-    function update(d) {
+  function setOpacity(
+    node: SVGTextElement,
+    param: HierarchyRectangularNode<AccountHierarchyDatum>
+  ) {
+    function update(d: HierarchyRectangularNode<AccountHierarchyDatum>) {
       const length = node.getComputedTextLength();
       node.style.opacity =
         d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? "1" : "0";

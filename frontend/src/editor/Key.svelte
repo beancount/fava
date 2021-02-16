@@ -1,6 +1,5 @@
-<script>
-  /** @type {string} */
-  export let key;
+<script lang="ts">
+  export let key: string;
   $: parts = key.split("+");
 </script>
 

@@ -40,6 +40,10 @@ module.exports = {
     project: ["./tsconfig.json", "./tsconfig.confs.json"],
     extraFileExtensions: [".svelte"],
   },
+  settings: {
+    // eslint-disable-next-line
+    "svelte3/typescript": require("typescript"),
+  },
   rules: {
     ...airbnbConfigOverrides,
     ...sortImports,

@@ -1,22 +1,20 @@
-<script>
+<script lang="ts">
+  import type { Entry as EntryType } from "../entries";
   import Entry from "../entry-forms/Entry.svelte";
   import { _ } from "../i18n";
   import ModalBase from "../modals/ModalBase.svelte";
 
   import { isDuplicate } from "./helpers";
 
-  /** @type {import('../entries').Entry[]} */
-  export let entries;
-  /** @type {() => void} */
-  export let save;
-  /** @type {() => void} */
-  export let close;
+  export let entries: EntryType[];
+  export let save: () => void;
+  export let close: () => void;
 
   let currentIndex = 0;
 
   $: shown = entries.length > 0;
   $: entry = entries[currentIndex];
-  $: duplicate /** @type {boolean} */ = entry && isDuplicate(entry);
+  $: duplicate = entry && isDuplicate(entry);
   $: duplicates = entries.filter((e) => isDuplicate(e)).length;
   $: if (entries.length > 0 && currentIndex >= entries.length) {
     currentIndex = 0;

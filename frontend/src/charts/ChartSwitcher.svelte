@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
 
   import { bindKey } from "../keyboard-shortcuts";
@@ -8,9 +8,9 @@
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
 
   import { parseChartData } from ".";
+  import type { NamedChartTypes } from ".";
 
-  /** @type {import(".").NamedChartTypes[]} */
-  let charts = [];
+  let charts: NamedChartTypes[] = [];
 
   onMount(() => {
     charts = parseChartData();

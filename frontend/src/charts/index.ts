@@ -67,7 +67,7 @@ export type LineChartData = {
   values: LineChartDatum[];
 };
 
-interface BarChartDatumValue {
+export interface BarChartDatumValue {
   name: string;
   value: number;
   budget: number;

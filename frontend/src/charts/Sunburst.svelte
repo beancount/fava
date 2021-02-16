@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
   import { partition } from "d3-hierarchy";
+  import type { HierarchyRectangularNode } from "d3-hierarchy";
   import { scaleLinear, scaleSqrt } from "d3-scale";
   import { arc } from "d3-shape";
 
@@ -9,22 +10,16 @@
 
   import { sunburstScale } from "./helpers";
 
-  /** @type {import(".").AccountHierarchyNode} */
-  export let data;
-  /** @type {string} */
-  export let currency;
-  /** @type {number} */
-  export let width;
-  /** @type {number} */
-  export let height;
+  import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
+
+  export let data: AccountHierarchyNode;
+  export let currency: string;
+  export let width: number;
+  export let height: number;
 
   $: radius = Math.min(width, height) / 2;
 
-  /**
-   * @param {import(".").AccountHierarchyNode} d
-   * @returns {string}
-   */
-  function balanceText(d) {
+  function balanceText(d: AccountHierarchyNode): string {
     const val = d.value || 0;
     const rootVal = root.value || 1;
     return `${$ctx.currency(val)} ${currency} (${formatPercentage(
@@ -32,11 +27,10 @@
     )})`;
   }
 
-  $: root = partition()(data);
+  $: root = partition<AccountHierarchyDatum>()(data);
   $: leaves = root.descendants().filter((d) => !d.data.dummy && d.depth);
 
-  /** @type {import(".").AccountHierarchyNode | null} */
-  let current = null;
+  let current: AccountHierarchyNode | null = null;
   $: if (root) {
     current = null;
   }
@@ -45,7 +39,7 @@
 
   const x = scaleLinear().range([0, 2 * Math.PI]);
   $: y = scaleSqrt().range([0, radius]);
-  $: arcShape = arc()
+  $: arcShape = arc<HierarchyRectangularNode<AccountHierarchyDatum>>()
     .startAngle((d) => x(d.x0))
     .endAngle((d) => x(d.x1))
     .innerRadius((d) => y(d.y0))
@@ -74,7 +68,7 @@
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
       fill={$sunburstScale(d.data.account)}
-      d={arcShape(d)}
+      d={arcShape(d) ?? undefined}
     />
   {/each}
 </g>

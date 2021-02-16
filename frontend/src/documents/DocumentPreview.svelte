@@ -1,11 +1,10 @@
-<script>
+<script lang="ts">
   import Editor from "../editor/Editor.svelte";
   import { fetch, handleText } from "../lib/fetch";
   import { ext } from "../lib/paths";
   import { baseURL } from "../stores";
 
-  /** @type {string} */
-  export let filename;
+  export let filename: string;
 
   $: extension = ext(filename);
   $: url = `${$baseURL}document/?filename=${filename}`;

@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
   import { extent, max, merge, min } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { quadtree } from "d3-quadtree";
   import { scaleLinear, scaleUtc } from "d3-scale";
   import { area, line } from "d3-shape";
   import { getContext } from "svelte";
+  import type { Writable } from "svelte/store";
 
   import { ctx } from "../format";
   import { lineChartMode } from "../stores/chart";
@@ -13,12 +14,11 @@
   import { currenciesScale } from "./helpers";
   import { positionedTooltip } from "./tooltip";
 
-  /** @type {import('.').LineChart['data']} */
-  export let data;
-  /** @type {number} */
-  export let width;
-  /** @type {import('.').LineChart['tooltipText']} */
-  export let tooltipText;
+  import type { LineChart, LineChartDatum } from ".";
+
+  export let data: LineChart["data"];
+  export let width: number;
+  export let tooltipText: LineChart["tooltipText"];
 
   const margin = {
     top: 10,
@@ -30,8 +30,7 @@
   $: innerWidth = width - margin.left - margin.right;
   $: innerHeight = height - margin.top - margin.bottom;
 
-  /** @type {import("svelte/store").Writable<[string,string][]>} */
-  const legend = getContext("chart-legend");
+  const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(
     data
       .map((d) => d.name)
@@ -40,16 +39,16 @@
   );
 
   // Scales
-  $: allValues = merge(data.map((d) => d.values));
+  $: allValues = merge<LineChartDatum>(data.map((d) => d.values));
 
   $: xDomain = [
-    min(data, (s) => s.values[0].date),
-    max(data, (s) => s.values[s.values.length - 1].date),
+    min(data, (s) => s.values[0].date) ?? 0,
+    max(data, (s) => s.values[s.values.length - 1].date) ?? 0,
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
   let yMin = 0;
   let yMax = 0;
-  $: [yMin, yMax] = extent(allValues, (v) => v.value);
+  $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear()
     .domain([yMin - (yMax - yMin) * 0.05, yMax + (yMax - yMin) * 0.05])
@@ -62,11 +61,11 @@
     (d) => y(d.value)
   );
 
-  $: lineShape = line()
+  $: lineShape = line<LineChartDatum>()
     .x((d) => x(d.date))
     .y((d) => y(d.value));
 
-  $: areaShape = area()
+  $: areaShape = area<LineChartDatum>()
     .x((d) => x(d.date))
     .y1((d) => y(d.value))
     .y0(Math.min(innerHeight, y(0)));
@@ -78,12 +77,10 @@
     .tickSize(-innerWidth)
     .tickFormat($ctx.short);
 
-  /**
-   * @param {number} xPos
-   * @param {number} yPos
-   * @returns {[number, number, string] | undefined}
-   */
-  function tooltipInfo(xPos, yPos) {
+  function tooltipInfo(
+    xPos: number,
+    yPos: number
+  ): [number, number, string] | undefined {
     const d = quad.find(xPos, yPos);
     return d ? [x(d.date), y(d.value), tooltipText($ctx, d)] : undefined;
   }
@@ -104,7 +101,7 @@
       <g class="area">
         {#each data as d}
           <path
-            d={areaShape(d.values, innerHeight)}
+            d={areaShape(d.values) ?? undefined}
             fill={$currenciesScale(d.name)}
           />
         {/each}
@@ -112,7 +109,10 @@
     {/if}
     <g class="lines">
       {#each data as d}
-        <path d={lineShape(d.values)} stroke={$currenciesScale(d.name)} />
+        <path
+          d={lineShape(d.values) ?? undefined}
+          stroke={$currenciesScale(d.name)}
+        />
       {/each}
     </g>
     {#if $lineChartMode !== "area"}

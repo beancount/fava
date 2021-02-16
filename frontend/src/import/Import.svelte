@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
 
   import { deleteDocument, get, moveDocument, saveEntries } from "../api";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
+  import type { Entry } from "../entries";
   import { _ } from "../i18n";
   import { notify } from "../notifications";
   import router from "../router";
@@ -10,21 +11,16 @@
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
   import { isDuplicate, preprocessData } from "./helpers";
+  import type { ImportableFiles, ProcessedImportableFiles } from "./helpers";
 
-  /** @type {import("./helpers").ImportableFiles} */
-  export let data;
+  export let data: ImportableFiles;
 
-  /** @type {import('../entries').Entry[]} */
-  let entries = [];
+  let entries: Entry[] = [];
+  let selected: string | null = null;
 
-  /** @type {string | null} */
-  let selected = null;
+  let preprocessedData: ProcessedImportableFiles = [];
 
-  /** @type {import("./helpers").ProcessedImportableFiles} */
-  let preprocessedData = [];
-
-  /** @type {Map<string,import('../entries').Entry[]>} */
-  let extractCache = new Map();
+  let extractCache = new Map<string, Entry[]>();
 
   $: importableFiles = preprocessedData.filter(
     (i) => i.importers[0].importer_name !== ""
@@ -50,11 +46,8 @@
 
   /**
    * Move the given file to the new file name (and remove from the list).
-   * @param {string} filename
-   * @param {string} account
-   * @param {string} newName
    */
-  async function move(filename, account, newName) {
+  async function move(filename: string, account: string, newName: string) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
       preprocessedData = preprocessedData.filter(
@@ -65,9 +58,8 @@
 
   /**
    * Delete the given file and remove it from the displayed list.
-   * @param {string} filename
    */
-  async function remove(filename) {
+  async function remove(filename: string) {
     // eslint-disable-next-line
     if (!confirm(_("Delete this file?"))) {
       return;
@@ -82,10 +74,8 @@
 
   /**
    * Open the extract dialog for the given file/importer combination.
-   * @param {string} filename
-   * @param {string} importer
    */
-  async function extract(filename, importer) {
+  async function extract(filename: string, importer: string) {
     const extractCacheKey = `${filename}:${importer}`;
     let cached = extractCache.get(extractCacheKey);
     if (!cached) {

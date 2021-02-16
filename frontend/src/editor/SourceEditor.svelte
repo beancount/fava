@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+  import type { EditorView } from "@codemirror/view";
   import { onMount } from "svelte";
 
   import { get, put } from "../api";
@@ -14,8 +15,7 @@
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
 
-  /** @type {{source: string, file_path: string, sha256sum: string}} */
-  export let data;
+  export let data: { source: string; file_path: string; sha256sum: string };
 
   let changed = false;
   const onDocChanges = () => {
@@ -27,9 +27,8 @@
 
   /**
    * Save the contents of the editor.
-   * @param {import("@codemirror/view").EditorView} cm
    */
-  async function save(cm) {
+  async function save(cm: EditorView) {
     saving = true;
     try {
       sha256sum = await put("source", {

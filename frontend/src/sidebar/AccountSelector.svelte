@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
   import { urlFor } from "../helpers";
   import { _ } from "../i18n";
@@ -7,10 +7,7 @@
 
   let value = "";
 
-  /**
-   * @param {CustomEvent<HTMLInputElement>} ev
-   */
-  function select(ev) {
+  function select(ev: CustomEvent<HTMLInputElement>) {
     if (value) {
       router.navigate(urlFor(`account/${value}`));
       ev.detail.blur();

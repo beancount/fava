@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
+  import type { Entry } from "../entries";
+
   import Balance from "./Balance.svelte";
   import Note from "./Note.svelte";
   import Transaction from "./Transaction.svelte";
 
-  /** @type {import('../entries').Entry} */
-  export let entry;
+  export let entry: Entry;
 
   const components = { Balance, Note, Transaction };
 

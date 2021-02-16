@@ -1,12 +1,10 @@
-<script>
+<script lang="ts">
   import { initQueryEditor } from "../codemirror/setup";
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
 
-  /** @type {string} */
-  export let value;
-  /** @type {() => void} */
-  export let submit;
+  export let value: string;
+  export let submit: () => void;
 
   const [editor, useEditor] = initQueryEditor(
     value,

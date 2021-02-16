@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import { saveEntries } from "../api";
   import { create } from "../entries";
+  import type { EntryTypeName } from "../entries";
   import Entry from "../entry-forms/Entry.svelte";
   import { _ } from "../i18n";
   import { closeOverlay, urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
 
-  /** @type {[import("../entries").EntryTypeName, string][]} */
-  const entryTypes = [
+  const entryTypes: [EntryTypeName, string][] = [
     ["Transaction", _("Transaction")],
     ["Balance", _("Balance")],
     ["Note", _("Note")],
@@ -16,14 +16,12 @@
 
   let entry = create("Transaction");
 
-  /**
-   * @param {Event} event
-   */
-  async function submitAndNew(event) {
-    if (
-      event.target instanceof HTMLButtonElement &&
-      event.target.form?.reportValidity()
-    ) {
+  async function submitAndNew({
+    currentTarget,
+  }: {
+    currentTarget: HTMLButtonElement;
+  }) {
+    if (currentTarget.form?.reportValidity()) {
       await saveEntries([entry]);
       entry = create(entry.type);
     }

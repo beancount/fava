@@ -1,8 +1,9 @@
-<script>
+<script lang="ts">
   import { extent, merge } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear } from "d3-scale";
   import { getContext } from "svelte";
+  import type { Writable } from "svelte/store";
 
   import { ctx } from "../format";
 
@@ -10,12 +11,11 @@
   import { currenciesScale, setTimeFilter } from "./helpers";
   import { followingTooltip } from "./tooltip";
 
-  /** @type {import('.').BarChart['data']} */
-  export let data;
-  /** @type {number} */
-  export let width;
-  /** @type {import('.').BarChart['tooltipText']} */
-  export let tooltipText;
+  import type { BarChart, BarChartDatumValue } from ".";
+
+  export let data: BarChart["data"];
+  export let width: number;
+  export let tooltipText: BarChart["tooltipText"];
 
   const maxColumnWidth = 100;
   const margin = {
@@ -40,13 +40,15 @@
     .range([0, x0.bandwidth()]);
   let yMin = 0;
   let yMax = 0;
-  $: [yMin, yMax] = extent(merge(data.map((d) => d.values)), (d) => d.value);
+  $: [yMin = 0, yMax = 0] = extent(
+    merge<BarChartDatumValue>(data.map((d) => d.values)),
+    (d) => d.value
+  );
   $: y = scaleLinear()
     .range([innerHeight, 0])
     .domain([Math.min(0, yMin), Math.max(0, yMax)]);
 
-  /** @type {import("svelte/store").Writable<[string,string][]>} */
-  const legend = getContext("chart-legend");
+  const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(
     x1
       .domain()
@@ -56,9 +58,8 @@
 
   /**
    * Filter the ticks to have them not overlap
-   * @param {string[]} domain
    */
-  function filterTicks(domain) {
+  function filterTicks(domain: string[]) {
     const labelsCount = innerWidth / 70;
     if (domain.length <= labelsCount) {
       return domain;
