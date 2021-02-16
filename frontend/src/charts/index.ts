@@ -4,12 +4,16 @@
  * The charts heavily use d3 libraries.
  */
 
-import { hierarchy as d3Hierarchy, HierarchyNode } from "d3-hierarchy";
+import type { HierarchyNode } from "d3-hierarchy";
+import { hierarchy as d3Hierarchy } from "d3-hierarchy";
 import { get } from "svelte/store";
 
-import { currentDateFormat, dateFormat, FormatterContext } from "../format";
+import type { FormatterContext } from "../format";
+import { currentDateFormat, dateFormat } from "../format";
 import { getScriptTagJSON } from "../lib/dom";
-import { stratify, TreeNode } from "../lib/tree";
+import type { TreeNode } from "../lib/tree";
+import { stratify } from "../lib/tree";
+import type { Validator } from "../lib/validation";
 import {
   array,
   date,
@@ -21,7 +25,6 @@ import {
   string,
   tuple,
   unknown,
-  Validator,
 } from "../lib/validation";
 import { operatingCurrenciesWithConversion } from "../stores";
 

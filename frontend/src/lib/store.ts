@@ -1,7 +1,8 @@
-import { derived, Readable, Writable, writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 
 import { shallow_equal } from "./equals";
-import { Validator } from "./validation";
+import type { Validator } from "./validation";
 
 /**
  * Create a derived store that does a shallow array equality check.

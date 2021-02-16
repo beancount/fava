@@ -1,4 +1,5 @@
 import { todayAsString } from "./format";
+import type { Validator } from "./lib/validation";
 import {
   array,
   constant,
@@ -8,7 +9,6 @@ import {
   string,
   union,
   unknown,
-  Validator,
 } from "./lib/validation";
 
 export interface Posting {

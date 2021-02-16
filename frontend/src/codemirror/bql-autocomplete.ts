@@ -1,4 +1,4 @@
-import { CompletionSource } from "@codemirror/autocomplete";
+import type { CompletionSource } from "@codemirror/autocomplete";
 
 import bqlGrammar from "./bql-grammar";
 

@@ -1,4 +1,5 @@
-import { derived, Readable, writable, Writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 
 import { derived_array } from "../lib/store";
 import {

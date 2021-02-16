@@ -1,6 +1,6 @@
 import { derived, writable } from "svelte/store";
 
-import { NamedChartTypes } from "../charts";
+import type { NamedChartTypes } from "../charts";
 import { _ } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";

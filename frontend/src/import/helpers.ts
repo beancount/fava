@@ -1,4 +1,4 @@
-import { Entry } from "../entries";
+import type { Entry } from "../entries";
 import { todayAsString } from "../format";
 
 /**

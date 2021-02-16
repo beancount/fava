@@ -11,13 +11,14 @@ import { lintKeymap } from "@codemirror/lint";
 import { bracketMatching } from "@codemirror/matchbrackets";
 import { rectangularSelection } from "@codemirror/rectangular-selection";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
-import { EditorState, Extension, Prec } from "@codemirror/state";
+import type { Extension } from "@codemirror/state";
+import { EditorState, Prec } from "@codemirror/state";
+import type { KeyBinding } from "@codemirror/view";
 import {
   drawSelection,
   EditorView,
   highlightActiveLine,
   highlightSpecialChars,
-  KeyBinding,
   keymap,
   placeholder,
 } from "@codemirror/view";

@@ -1,4 +1,5 @@
-import { Entry, entryValidator, Transaction } from "./entries";
+import type { Entry } from "./entries";
+import { entryValidator, Transaction } from "./entries";
 import { urlFor } from "./helpers";
 import { fetch, handleJSON } from "./lib/fetch";
 import {

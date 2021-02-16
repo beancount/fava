@@ -1,4 +1,5 @@
-import { Completion, snippetCompletion } from "@codemirror/autocomplete";
+import { snippetCompletion } from "@codemirror/autocomplete";
+import type { Completion } from "@codemirror/autocomplete";
 
 import { todayAsString } from "../format";
 

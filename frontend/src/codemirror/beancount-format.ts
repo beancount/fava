@@ -1,4 +1,4 @@
-import { Command } from "@codemirror/view";
+import type { Command } from "@codemirror/view";
 
 import { put } from "../api";
 import { notify } from "../notifications";

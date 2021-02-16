@@ -2,7 +2,7 @@
  * A custom element that will render a Svelte component.
  */
 
-import { SvelteComponent } from "svelte";
+import type { SvelteComponent } from "svelte";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
 import Documents from "./documents/Documents.svelte";

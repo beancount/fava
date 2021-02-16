@@ -5,7 +5,8 @@
  * load the content of the page and replace the <article> contents with them.
  */
 
-import { get, Writable } from "svelte/store";
+import type { Writable } from "svelte/store";
+import { get } from "svelte/store";
 
 import { delegate, Events } from "./lib/events";
 import { fetch, handleText } from "./lib/fetch";

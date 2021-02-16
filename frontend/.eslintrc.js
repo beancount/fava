@@ -43,6 +43,7 @@ module.exports = {
   rules: {
     ...airbnbConfigOverrides,
     ...sortImports,
+    "@typescript-eslint/consistent-type-imports": "warn",
     curly: ["error", "all"],
   },
   overrides: [
