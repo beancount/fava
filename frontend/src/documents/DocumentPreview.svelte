@@ -2,7 +2,6 @@
   import Editor from "../editor/Editor.svelte";
   import { fetch, handleText } from "../lib/fetch";
   import { ext } from "../lib/paths";
-
   import { baseURL } from "../stores";
 
   /** @type {string} */

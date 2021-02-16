@@ -1,8 +1,7 @@
 <script>
+  import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
   import { accounts } from "../stores";
-
-  import AutocompleteInput from "../AutocompleteInput.svelte";
 
   /** @type {string} */
   export let value;

@@ -42,15 +42,10 @@ module.exports = {
   },
   rules: {
     ...airbnbConfigOverrides,
+    ...sortImports,
     curly: ["error", "all"],
   },
   overrides: [
-    {
-      files: "*.js",
-      rules: {
-        "@typescript-eslint/explicit-module-boundary-types": 0,
-      },
-    },
     {
       files: "*.svelte",
       processor: "svelte3/svelte3",
@@ -66,9 +61,6 @@ module.exports = {
       extends: [
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
-      rules: {
-        ...sortImports,
-      },
     },
   ],
 };

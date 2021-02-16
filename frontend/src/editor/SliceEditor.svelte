@@ -1,11 +1,11 @@
 <script>
   import { put } from "../api";
+  import { initBeancountEditor } from "../codemirror/setup";
   import { notify } from "../notifications";
   import router from "../router";
   import { closeOverlay } from "../stores";
 
   import SaveButton from "./SaveButton.svelte";
-  import { initBeancountEditor } from "../codemirror/setup";
 
   /** @type {string} */
   export let slice;

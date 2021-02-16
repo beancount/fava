@@ -1,10 +1,10 @@
 <script>
-  import { emptyPosting, Transaction } from "../entries";
   import { get } from "../api";
+  import AutocompleteInput from "../AutocompleteInput.svelte";
+  import { emptyPosting, Transaction } from "../entries";
   import { _ } from "../i18n";
   import { payees } from "../stores";
 
-  import AutocompleteInput from "../AutocompleteInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";

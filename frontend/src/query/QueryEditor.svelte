@@ -1,7 +1,7 @@
 <script>
   import { initQueryEditor } from "../codemirror/setup";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
   import { _ } from "../i18n";
+  import { keyboardShortcut } from "../keyboard-shortcuts";
 
   /** @type {string} */
   export let value;

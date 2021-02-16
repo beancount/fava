@@ -1,15 +1,16 @@
 <script>
-  import { max, merge, min, extent } from "d3-array";
-  import { axisLeft, axisBottom } from "d3-axis";
-  import { scaleLinear, scaleUtc } from "d3-scale";
+  import { extent, max, merge, min } from "d3-array";
+  import { axisBottom, axisLeft } from "d3-axis";
   import { quadtree } from "d3-quadtree";
-  import { line, area } from "d3-shape";
+  import { scaleLinear, scaleUtc } from "d3-scale";
+  import { area, line } from "d3-shape";
   import { getContext } from "svelte";
 
-  import { lineChartMode } from "../stores/chart";
-  import { currenciesScale } from "./helpers";
-  import { axis } from "./axis";
   import { ctx } from "../format";
+  import { lineChartMode } from "../stores/chart";
+
+  import { axis } from "./axis";
+  import { currenciesScale } from "./helpers";
   import { positionedTooltip } from "./tooltip";
 
   /** @type {import('.').LineChart['data']} */

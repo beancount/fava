@@ -1,8 +1,8 @@
 <script>
-  import { _ } from "../i18n";
-
-  import ModalBase from "../modals/ModalBase.svelte";
   import Entry from "../entry-forms/Entry.svelte";
+  import { _ } from "../i18n";
+  import ModalBase from "../modals/ModalBase.svelte";
+
   import { isDuplicate } from "./helpers";
 
   /** @type {import('../entries').Entry[]} */

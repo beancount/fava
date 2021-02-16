@@ -1,12 +1,13 @@
 <script>
   import { extent } from "d3-array";
-  import { axisLeft, axisBottom } from "d3-axis";
-  import { scalePoint, scaleUtc } from "d3-scale";
+  import { axisBottom, axisLeft } from "d3-axis";
   import { quadtree } from "d3-quadtree";
+  import { scalePoint, scaleUtc } from "d3-scale";
+
+  import { dateFormat } from "../format";
 
   import { axis } from "./axis";
   import { scatterplotScale } from "./helpers";
-  import { dateFormat } from "../format";
   import { positionedTooltip } from "./tooltip";
 
   /** @type {import('.').ScatterPlotDatum[]} */

@@ -2,15 +2,15 @@
   import { toggleComment } from "@codemirror/comment";
   import { foldAll, unfoldAll } from "@codemirror/fold";
 
-  import { _ } from "../i18n";
-  import { urlFor } from "../helpers";
-
   import { beancountFormat } from "../codemirror/beancount-format";
-  import { modKey } from "../keyboard-shortcuts";
-  import Key from "./Key.svelte";
-  import { favaOptions, options } from "../stores";
   import { scrollToLine } from "../codemirror/scroll-to-line";
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
+  import { modKey } from "../keyboard-shortcuts";
   import router from "../router";
+  import { favaOptions, options } from "../stores";
+
+  import Key from "./Key.svelte";
 
   /** @type {string} */
   export let file_path;

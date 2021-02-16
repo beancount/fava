@@ -1,9 +1,9 @@
 <script>
-  import { sortFunc } from "../sort";
   import { _ } from "../i18n";
+  import { basename } from "../lib/paths";
+  import { sortFunc } from "../sort";
 
   import { selectedAccount } from "./stores";
-  import { basename } from "../lib/paths";
 
   /** @typedef {{account: string, filename: string, date: string}} Document */
 

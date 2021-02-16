@@ -1,11 +1,11 @@
 <script>
-  import { create } from "../entries";
   import { saveEntries } from "../api";
+  import { create } from "../entries";
+  import Entry from "../entry-forms/Entry.svelte";
   import { _ } from "../i18n";
-  import { urlHash, closeOverlay } from "../stores";
+  import { closeOverlay, urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
-  import Entry from "../entry-forms/Entry.svelte";
 
   /** @type {[import("../entries").EntryTypeName, string][]} */
   const entryTypes = [

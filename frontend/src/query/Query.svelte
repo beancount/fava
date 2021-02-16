@@ -2,12 +2,12 @@
   import { onMount, tick } from "svelte";
 
   import { get } from "../api";
-  import { operatingCurrenciesWithConversion } from "../stores";
-  import { query_shell_history, addToHistory } from "../stores/query";
-  import { getFilterParams } from "../stores/filters";
   import { parseQueryChart } from "../charts";
-
   import Chart from "../charts/Chart.svelte";
+  import { operatingCurrenciesWithConversion } from "../stores";
+  import { getFilterParams } from "../stores/filters";
+  import { addToHistory, query_shell_history } from "../stores/query";
+
   import QueryEditor from "./QueryEditor.svelte";
   import QueryLinks from "./QueryLinks.svelte";
   import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";

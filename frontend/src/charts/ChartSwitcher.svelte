@@ -2,11 +2,12 @@
   import { onMount } from "svelte";
 
   import { bindKey } from "../keyboard-shortcuts";
-  import { parseChartData } from ".";
   import { activeChart, showCharts } from "../stores/chart";
 
-  import ConversionAndInterval from "./ConversionAndInterval.svelte";
   import Chart from "./Chart.svelte";
+  import ConversionAndInterval from "./ConversionAndInterval.svelte";
+
+  import { parseChartData } from ".";
 
   /** @type {import(".").NamedChartTypes[]} */
   let charts = [];

@@ -1,10 +1,11 @@
 <script>
   import { treemap } from "d3-hierarchy";
 
-  import router from "../router";
-  import { urlFor } from "../helpers";
-  import { treemapScale } from "./helpers";
   import { ctx, formatPercentage } from "../format";
+  import { urlFor } from "../helpers";
+  import router from "../router";
+
+  import { treemapScale } from "./helpers";
   import { followingTooltip } from "./tooltip";
 
   /** @type {import(".").AccountHierarchyNode} */

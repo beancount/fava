@@ -6,13 +6,13 @@
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import {
     chartCurrency,
-    lineChartMode,
     hierarchyChartMode,
+    lineChartMode,
     showCharts,
   } from "../stores/chart";
 
-  import ChartLegend from "./ChartLegend.svelte";
   import BarChart from "./BarChart.svelte";
+  import ChartLegend from "./ChartLegend.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
   import LineChart from "./LineChart.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";

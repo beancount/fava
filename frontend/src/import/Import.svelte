@@ -1,15 +1,15 @@
 <script>
   import { onMount } from "svelte";
-  import { get, saveEntries, moveDocument, deleteDocument } from "../api";
-  import { _ } from "../i18n";
-  import router from "../router";
 
-  import { preprocessData, isDuplicate } from "./helpers";
+  import { deleteDocument, get, moveDocument, saveEntries } from "../api";
+  import DocumentPreview from "../documents/DocumentPreview.svelte";
+  import { _ } from "../i18n";
+  import { notify } from "../notifications";
+  import router from "../router";
 
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
-  import { notify } from "../notifications";
-  import DocumentPreview from "../documents/DocumentPreview.svelte";
+  import { isDuplicate, preprocessData } from "./helpers";
 
   /** @type {import("./helpers").ImportableFiles} */
   export let data;

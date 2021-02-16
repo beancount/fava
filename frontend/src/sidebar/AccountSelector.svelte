@@ -1,9 +1,9 @@
 <script>
-  import { _ } from "../i18n";
-  import { accounts } from "../stores";
-  import router from "../router";
-  import { urlFor } from "../helpers";
   import AutocompleteInput from "../AutocompleteInput.svelte";
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
+  import router from "../router";
+  import { accounts } from "../stores";
 
   let value = "";
 

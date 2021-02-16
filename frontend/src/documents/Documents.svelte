@@ -1,16 +1,15 @@
 <script>
   import { moveDocument } from "../api";
+  import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
-  import router from "../router";
-
   import { basename } from "../lib/paths";
   import { stratify } from "../lib/tree";
-
-  import AccountInput from "../entry-forms/AccountInput.svelte";
   import ModalBase from "../modals/ModalBase.svelte";
+  import router from "../router";
+
   import Accounts from "./Accounts.svelte";
-  import Table from "./Table.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
+  import Table from "./Table.svelte";
 
   /** @typedef {{account: string, filename: string, date: string}} Document */
 

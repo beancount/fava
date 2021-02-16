@@ -1,9 +1,9 @@
 <script>
   import { get } from "../api";
+  import SliceEditor from "../editor/SliceEditor.svelte";
   import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
-  import SliceEditor from "../editor/SliceEditor.svelte";
 
   $: shown = $urlHash.startsWith("context");
   $: entry_hash = shown ? $urlHash.slice(8) : "";

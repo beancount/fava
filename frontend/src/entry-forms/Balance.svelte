@@ -1,8 +1,8 @@
 <script>
+  import AutocompleteInput from "../AutocompleteInput.svelte";
   import { _ } from "../i18n";
   import { currencies } from "../stores";
 
-  import AutocompleteInput from "../AutocompleteInput.svelte";
   import AccountInput from "./AccountInput.svelte";
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";

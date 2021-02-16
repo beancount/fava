@@ -1,12 +1,13 @@
 <script>
   import { extent, merge } from "d3-array";
-  import { axisLeft, axisBottom } from "d3-axis";
-  import { scaleLinear, scaleBand } from "d3-scale";
+  import { axisBottom, axisLeft } from "d3-axis";
+  import { scaleBand, scaleLinear } from "d3-scale";
   import { getContext } from "svelte";
+
+  import { ctx } from "../format";
 
   import { axis } from "./axis";
   import { currenciesScale, setTimeFilter } from "./helpers";
-  import { ctx } from "../format";
   import { followingTooltip } from "./tooltip";
 
   /** @type {import('.').BarChart['data']} */

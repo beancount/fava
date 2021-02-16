@@ -1,5 +1,6 @@
 <script>
   import { getContext } from "svelte";
+
   import { chartCurrency, hierarchyChartMode } from "../stores/chart";
 
   import Sunburst from "./Sunburst.svelte";

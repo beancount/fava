@@ -1,18 +1,18 @@
 <script>
   import { onMount } from "svelte";
 
-  import { put, get } from "../api";
+  import { get, put } from "../api";
+  import { beancountFormat } from "../codemirror/beancount-format";
+  import { scrollToLine } from "../codemirror/scroll-to-line";
+  import { initBeancountEditor } from "../codemirror/setup";
   import { bindKey } from "../keyboard-shortcuts";
   import { log_error } from "../log";
   import { notify } from "../notifications";
   import router from "../router";
   import { errorCount, favaOptions } from "../stores";
 
-  import { initBeancountEditor } from "../codemirror/setup";
-  import { scrollToLine } from "../codemirror/scroll-to-line";
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
-  import { beancountFormat } from "../codemirror/beancount-format";
 
   /** @type {{source: string, file_path: string, sha256sum: string}} */
   export let data;

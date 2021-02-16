@@ -22,7 +22,7 @@ repos:
           - id: eslint
             name: eslint
             language: node
-            entry: ./frontend/node_modules/eslint/bin/eslint.js --fix
+            entry: ./frontend/node_modules/eslint/bin/eslint.js
             files: \.(js|ts|svelte)$
           - id: stylelint
             name: stylelint

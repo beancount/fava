@@ -1,13 +1,13 @@
 <script>
-  import router from "../router";
-  import { notify } from "../notifications";
   import { put } from "../api";
+  import { account, files, hash } from "../document-upload";
+  import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
+  import { notify } from "../notifications";
+  import router from "../router";
   import { options } from "../stores";
-  import { account, hash, files } from "../document-upload";
 
   import ModalBase from "./ModalBase.svelte";
-  import AccountInput from "../entry-forms/AccountInput.svelte";
 
   /** @type {HTMLFormElement} */
   let form;

@@ -1,7 +1,6 @@
 <script>
-  import { _ } from "../i18n";
-
   import AccountInput from "../entry-forms/AccountInput.svelte";
+  import { _ } from "../i18n";
 
   /** @type {import("./helpers").ProcessedImportableFiles} */
   export let files;
