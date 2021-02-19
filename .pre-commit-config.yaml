@@ -19,19 +19,19 @@ repos:
             args: ["--py36-plus"]
     - repo: local
       hooks:
-          - id: eslint
-            name: eslint
-            language: node
-            entry: ./frontend/node_modules/eslint/bin/eslint.js
-            files: \.(js|ts|svelte)$
-          - id: stylelint
-            name: stylelint
-            language: node
-            entry: ./frontend/node_modules/stylelint/bin/stylelint.js --fix
-            files: \.(css|svelte)$
           - id: prettier
             name: prettier
             language: node
             entry:
                 ./frontend/node_modules/prettier/bin-prettier.js --write
                 --list-different --ignore-unknown
+          - id: stylelint
+            name: stylelint
+            language: node
+            entry: ./frontend/node_modules/stylelint/bin/stylelint.js --fix
+            files: \.(css|svelte)$
+          - id: eslint
+            name: eslint
+            language: node
+            entry: ./frontend/node_modules/eslint/bin/eslint.js
+            files: \.(js|ts|svelte)$
