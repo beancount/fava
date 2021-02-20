@@ -33,6 +33,13 @@ the following command to install the optional dependencies for this feature::
 
    pip3 install fava[excel]
 
+Updating Fava
+-------------
+
+You can update your existing fava installation to the latest version using pip, by running::
+    
+         pip3 install fava -U
+
 
 Starting Fava
 -------------
