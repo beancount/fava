@@ -18,26 +18,26 @@ Installation
 ------------
 
 Fava is known to run on macOS, Linux, and Windows.  You will need `Python 3
-<https://www.python.org/downloads/>`__ (at least version 3.5).  Then you can
-use ``pip`` to install Fava by running::
+<https://www.python.org/downloads/>`__.  Then you can use ``pip`` to install
+Fava or update your existing Installation by running::
 
-    pip3 install fava
+    pip install --upgrade fava
 
 which will also pull in all required dependencies including Beancount. If you
-don't have Beancount installed already, you might want to have a look at its
+do not have Beancount installed already, you might want to have a look at its
 `installation instructions
 <https://docs.google.com/document/d/1FqyrTPwiHVLyncWTf3v5TcooCu9z5JRX8Nm41lVZi0U>`__.
 
 If you want to export query results to Microsoft Excel or LibreOffice Calc, use
 the following command to install the optional dependencies for this feature::
 
-   pip3 install fava[excel]
+   pip install --upgrade fava[excel]
 
 
 Starting Fava
 -------------
 
-If you installed Fava using ``pip``, start it by running::
+After installing Fava, you can start it by running::
 
     fava ledger.beancount
 
