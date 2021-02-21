@@ -32,7 +32,6 @@ module.exports = {
     "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "prettier/@typescript-eslint",
   ],
   env: { browser: true },
   parserOptions: {
