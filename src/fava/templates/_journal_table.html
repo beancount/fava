@@ -162,16 +162,10 @@
         {% endif %}
         {% if show_change_and_balance %}
           <span class="change num">
-          {% for pos in change|cost_or_value(entry.date) %}
-            {{ commodity_macros.render_amount(ledger, pos.units) }}
-            <br>
-          {% endfor %}
+          {%- for pos in change|cost_or_value(entry.date) %}{{ commodity_macros.render_amount(ledger, pos.units) }}<br>{% endfor -%}
           </span>
           <span class="num">
-          {% for pos in balance|cost_or_value(entry.date) %}
-            {{ commodity_macros.render_amount(ledger, pos.units) }}
-            <br>
-          {% endfor %}
+          {%- for pos in balance|cost_or_value(entry.date) %}{{ commodity_macros.render_amount(ledger, pos.units) }}<br>{% endfor -%}
           </span>
         </p>
         {% endif %}
