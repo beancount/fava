@@ -90,9 +90,13 @@
     padding-top: 7px;
     margin: 0;
     color: var(--color-text);
+  }
 
-    --color-placeholder: var(--color-header-tinted);
-    --background-placeholder: var(--color-header-light);
+  @media (prefers-color-scheme: light) {
+    form {
+      --color-placeholder: var(--color-header-tinted);
+      --background-placeholder: var(--color-header-light);
+    }
   }
 
   form > :global(span) {

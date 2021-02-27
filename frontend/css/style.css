@@ -25,6 +25,11 @@
   --color-error: hsl(0, 100%, 30%);
   --color-warning: hsl(52, 84%, 56%);
   --color-code-background: #f8f8f8;
+  --color-code-border: var(--color-background-darker);
+  --color-kbd-background: var(--color-background);
+  --color-kbd-border: var(--color-background-darker);
+  --color-kbd-shadow: var(--color-background-darkest);
+  --color-kbd-text: var(--color-text-lighter);
   --color-sidebar-text: #444;
   --color-sidebar-text-hover: var(--color-links);
   --color-sidebar-background: hsl(0, 0%, 96%);
@@ -67,6 +72,30 @@
   --color-placeholder: var(--color-text-lightest);
   --background-placeholder: var(--color-background);
   --overlay-wrapper-background: rgba(0, 0, 0, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-header: var(--color-background-darker);
+    --color-headings: #f0f6fc;
+    --color-header-text: var(--color-headings);
+    --color-text: #c9d1d9;
+    --color-links: #58a6ff;
+    --color-code-background: rgba(240, 246, 252, 0.15);
+    --color-code-border: rgba(255, 255, 255, 0.3);
+    --color-background: #0d1117;
+    --color-background-darker: #161b22;
+    --color-background-darkest: #06090f;
+    --color-sidebar-background: var(--color-background-darkest);
+    --color-sidebar-text: var(--color-text);
+    --color-sidebar-border: #21262d;
+    --color-help-sidebar: var(--color-background-darkest);
+    --color-help-sidebar-border: var(--color-sidebar-border);
+    --color-kbd-background: #0d1117;
+    --color-kbd-border: #6e7681;
+    --color-kbd-shadow: #6e7681;
+    --color-kbd-text: #b1bac4;
+  }
 }
 
 .journal .balance {
