@@ -1,21 +1,24 @@
 {% import 'macros/_account_macros.html' as account_macros %}
 {% import 'macros/_commodity_macros.html' as commodity_macros %}
 
-{% macro render_diff_and_number(balance, cost, currency) %}
+{% macro render_diff_and_number(balance, cost, currency, invert=False) %}
   {% set num = balance.pop(currency, 0) %}
   {% if currency in cost %}
     {% set cost_num = cost.pop(currency, 0) %}
     {% set diff = num - cost_num %}
+    {% if invert %}
+      {% set diff = -diff %}
+    {% endif %}
     {% if diff %}
-    <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency) }} {{ currency }}">
+    <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency, invert=invert) }} {{ currency }}">
       ({{ diff|format_currency(currency) }})
     </span>
     {% endif %}
   {% endif %}
-  <span class="number">{{ num|format_currency(currency) }}</span>
+  <span class="number">{{ num|format_currency(currency, invert=invert) }}</span>
 {% endmacro %}
 
-{% macro tree(account_node) %}
+{% macro tree(account_node, invert=False) %}
 <tree-table>
 <ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
 Hold Ctrl or Cmd while clicking to expand one level.') }}">
@@ -40,19 +43,19 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
     </span>
     {% for currency in ledger.options.operating_currency %}
     <span class="num">
-      <span class="balance">{{ render_diff_and_number(balance, cost, currency) }}</span>
-      <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency) }}</span>
+      <span class="balance">{{ render_diff_and_number(balance, cost, currency, invert=invert) }}</span>
+      <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }}</span>
     </span>
     {% endfor %}
     <span class="num other">
       <span class="balance">
         {% for currency in balance.keys()|sort %}
-        {{ render_diff_and_number(balance, cost, currency) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
+        {{ render_diff_and_number(balance, cost, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
         {% endfor %}
       </span>
       <span class="balance-children">
         {% for currency in balance_children.keys()|sort %}
-        {{ render_diff_and_number(balance_children, cost_children, currency) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
+        {{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
         {% endfor %}
       </span>
     </span>

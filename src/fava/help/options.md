@@ -293,3 +293,20 @@ Examples are:
 
 If this option is not specified or the value is not valid (i.e., a non-existent
 commodity), Fava defaults to "At Cost"
+
+---
+
+## `invert-income-liabilities-equity`
+
+Default: False
+
+In Beancount the Income, Liabilities and Equity accounts tend to have a negative
+balance (see
+[Types of Accounts](https://beancount.github.io/docs/the_double_entry_counting_method.html#types-of-accounts)).
+
+This fava options flips the sign of these three accounts in the income statement
+and the balance sheet. This way, the net profit chart will show positive numbers
+if the income is greater than the expenses for a given timespan.
+
+Note: To keep consistency with the internal accounting of beancount, the journal
+and the individual account pages are not affected by this configuration option.

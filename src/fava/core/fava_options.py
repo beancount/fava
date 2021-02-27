@@ -54,6 +54,7 @@ DEFAULTS = {
     "indent": 2,
     "insert-entry": [],
     "interval": "month",
+    "invert-income-liabilities-equity": False,
     "journal-show": [
         "transaction",
         "balance",
@@ -80,6 +81,7 @@ DEFAULTS = {
 BOOL_OPTS = [
     "account-journal-include-children",
     "auto-reload",
+    "invert-income-liabilities-equity",
     "show-accounts-with-zero-balance",
     "show-accounts-with-zero-transactions",
     "show-closed-accounts",

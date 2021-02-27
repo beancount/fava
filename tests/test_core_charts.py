@@ -16,6 +16,17 @@ def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
         snapshot(dumps(data))
 
 
+def test_interval_totals_inverted(
+    small_example_ledger: FavaLedger, snapshot
+) -> None:
+    for conversion in ["at_cost", "USD"]:
+        data = small_example_ledger.charts.interval_totals(
+            Interval.MONTH, "Expenses", conversion, invert=True
+        )
+        snapshot(data)
+        snapshot(dumps(data))
+
+
 def test_prices(example_ledger: FavaLedger, snapshot) -> None:
     data = example_ledger.charts.prices()
     assert all(price[1] for price in data)
