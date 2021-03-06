@@ -1,15 +1,10 @@
 import { HighlightStyle, tags } from "@codemirror/highlight";
 
-export const beancountHighlight = HighlightStyle.define(
+export const beancountHighlight = HighlightStyle.define([
   {
     // Dates
     tag: tags.special(tags.number),
     color: "var(--color-editor-date)",
-  },
-  {
-    // Strings
-    tag: tags.string,
-    color: "#a11",
   },
   {
     // Accounts
@@ -42,11 +37,6 @@ export const beancountHighlight = HighlightStyle.define(
     color: "var(--color-editor-directive)",
   },
   {
-    // Tags and links
-    tag: tags.labelName,
-    color: "#219",
-  },
-  {
     // Option name
     tag: tags.standard(tags.string),
     color: "var(--color-editor-class)",
@@ -60,5 +50,5 @@ export const beancountHighlight = HighlightStyle.define(
     // Trailing whitespace
     tag: tags.special(tags.invalid),
     backgroundColor: "var(--color-editor-trailing-whitespace)",
-  }
-);
+  },
+]);
