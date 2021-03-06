@@ -3,7 +3,7 @@
 
 import chokidar from "chokidar";
 import { build } from "esbuild";
-import svelte from "esbuild-plugin-svelte";
+import svelte from "esbuild-svelte";
 import { typescript } from "svelte-preprocess-esbuild";
 
 /**
@@ -35,7 +35,7 @@ async function runBuild(dev: boolean) {
     loader: {
       ".woff2": "file",
     },
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    // eslint-disable-next-line
     plugins: [svelte({ preprocess: typescript() })],
     sourcemap: dev,
     incremental: dev,
