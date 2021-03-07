@@ -65,6 +65,6 @@ test("handle data for query charts", (t) => {
 
 test("handle invalid data for query charts", (t) => {
   const d: unknown[] = [{}];
-  const c = parseQueryChart(d);
+  const c = parseQueryChart(d, []);
   t.is(c, null);
 });

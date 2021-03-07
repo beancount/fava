@@ -8,7 +8,7 @@
   import { ctx } from "../format";
 
   import { axis } from "./axis";
-  import { currenciesScale, setTimeFilter } from "./helpers";
+  import { currenciesScale, filterTicks, setTimeFilter } from "./helpers";
   import { followingTooltip } from "./tooltip";
 
   import type { BarChart, BarChartDatumValue } from ".";
@@ -56,22 +56,10 @@
       .map((c) => [c, $currenciesScale(c)])
   );
 
-  /**
-   * Filter the ticks to have them not overlap
-   */
-  function filterTicks(domain: string[]) {
-    const labelsCount = innerWidth / 70;
-    if (domain.length <= labelsCount) {
-      return domain;
-    }
-    const showIndices = Math.ceil(domain.length / labelsCount);
-    return domain.filter((d, i) => i % showIndices === 0);
-  }
-
   // Axes
   $: xAxis = axisBottom(x0)
     .tickSizeOuter(0)
-    .tickValues(filterTicks(x0.domain()));
+    .tickValues(filterTicks(x0.domain(), innerWidth / 70));
   $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat($ctx.short);
 </script>
 

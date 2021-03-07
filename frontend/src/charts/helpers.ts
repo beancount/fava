@@ -15,6 +15,19 @@ export function setTimeFilter(date: Date): void {
 }
 
 /**
+ * Filter ticks to have them not overlap.
+ * @param domain - The domain of values to filter.
+ * @param count - The number of ticks that should be returned.
+ */
+export function filterTicks(domain: string[], count: number): string[] {
+  if (domain.length <= count) {
+    return domain;
+  }
+  const showIndices = Math.ceil(domain.length / count);
+  return domain.filter((d, i) => i % showIndices === 0);
+}
+
+/**
  * Generate an array of colors.
  *
  * Uses the HCL color space in an attempt to generate colours that are
