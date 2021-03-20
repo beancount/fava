@@ -31,7 +31,7 @@
     "@typescript-eslint/parser": "^4.15.1",
     "ava": "^3.15.0",
     "chokidar": "^3.5.1",
-    "esbuild": "^0.8.50",
+    "esbuild": "^0.9.5",
     "esbuild-svelte": "^0.4.2",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
@@ -45,7 +45,7 @@
     "stylelint-config-recess-order": "^2.3.0",
     "stylelint-config-standard": "^21.0.0",
     "sucrase": "^3.17.1",
-    "svelte-preprocess-esbuild": "^1.0.4",
+    "svelte-preprocess-esbuild": "^2.0.0",
     "typescript": "^4.1.5"
   },
   "dependencies": {
