@@ -17,6 +17,39 @@ import { showCharts } from "./stores/chart";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
 import { urlSyncedParams } from "./stores/url";
 
+/**
+ *
+ * Set a store's inital value from the URL
+ */
+function writeUrlValueToStore<T extends boolean | string>(
+  store: Writable<T>,
+  name: string,
+  defaultValue: T
+): void {
+  let value: T;
+  const params = new URL(window.location.href).searchParams;
+  if (typeof defaultValue === "boolean") {
+    value = (params.get(name) !== "false" && defaultValue) as T;
+  } else {
+    value = (params.get(name) as T) || defaultValue;
+  }
+  store.set(value);
+}
+
+/**
+ * Set a store's inital value from the URL
+ */
+export function setStoreValueFromUrl(): void {
+  const opts = get(favaOptions);
+
+  writeUrlValueToStore(account_filter, "account", "");
+  writeUrlValueToStore(fql_filter, "filter", "");
+  writeUrlValueToStore(time_filter, "time", "");
+  writeUrlValueToStore(interval, "interval", opts.interval);
+  writeUrlValueToStore(conversion, "conversion", opts.conversion);
+  writeUrlValueToStore(showCharts, "charts", true);
+}
+
 class Router extends Events<"page-loaded"> {
   /** The URL hash. */
   hash: string;
@@ -87,6 +120,7 @@ class Router extends Events<"page-loaded"> {
         window.location.search !== this.search
       ) {
         this.loadURL(window.location.href, false).catch(log_error);
+        setStoreValueFromUrl();
       }
     });
 
@@ -235,8 +269,7 @@ export default router;
 /**
  * Sync a store value to the URL.
  *
- * Set a store's inital value from the URL and update and navigate to the URL
- * on store changes.
+ * Update and navigate to the URL on store changes.
  */
 function syncStoreValueToUrl<T extends boolean | string>(
   store: Writable<T>,
@@ -244,15 +277,6 @@ function syncStoreValueToUrl<T extends boolean | string>(
   defaultValue: T,
   shouldLoad = true
 ): void {
-  let value: T;
-  const params = new URL(window.location.href).searchParams;
-  if (typeof defaultValue === "boolean") {
-    value = (params.get(name) !== "false" && defaultValue) as T;
-  } else {
-    value = (params.get(name) as T) || defaultValue;
-  }
-  store.set(value);
-
   store.subscribe((val: T) => {
     const newURL = new URL(window.location.href);
     newURL.searchParams.set(name, val.toString());
@@ -266,10 +290,11 @@ function syncStoreValueToUrl<T extends boolean | string>(
 }
 
 /**
- * Set initial values from URL and update URL on store changes
+ * Update URL on store changes
  */
 export function initSyncedStoreValues(): void {
   const opts = get(favaOptions);
+
   syncStoreValueToUrl(account_filter, "account", "");
   syncStoreValueToUrl(fql_filter, "filter", "");
   syncStoreValueToUrl(time_filter, "time", "");
