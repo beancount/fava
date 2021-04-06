@@ -5,6 +5,7 @@
 import type { SvelteComponent } from "svelte";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
+import ConversionAndInterval from "./charts/ConversionAndInterval.svelte";
 import Documents from "./documents/Documents.svelte";
 import SourceEditor from "./editor/SourceEditor.svelte";
 import FilterForm from "./header/FilterForm.svelte";
@@ -22,6 +23,7 @@ const components = new Map([
   ["account-selector", AccountSelector],
   ["filter-form", FilterForm],
   ["modals", Modals],
+  ["conversion-and-interval", ConversionAndInterval],
 ]);
 
 /**
