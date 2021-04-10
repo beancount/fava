@@ -2,9 +2,11 @@
 import pytest
 import werkzeug.routing
 import werkzeug.urls
+from beancount import __version__ as beancount_version
 from flask import g
 from flask import url_for
 
+from fava import __version__ as fava_version
 from fava.application import REPORTS
 from fava.application import static_url
 
@@ -43,7 +45,7 @@ def test_account_page(app, test_client, filters):
                 "account",
                 name="Assets:US:BofA:Checking",
                 subreport=subreport,
-                **filters
+                **filters,
             )
 
         result = test_client.get(url)
@@ -142,6 +144,11 @@ def test_help_ages(app, test_client):
     """Help pages."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
+        url = url_for("help_page")
+        result = test_client.get(url)
+        assert result.status_code == 200
+        assert f"Fava <code>{fava_version}</code>" in result.get_data(True)
+        assert f"<code>{beancount_version}</code>" in result.get_data(True)
         url = url_for("help_page", page_slug="filters")
         result = test_client.get(url)
         assert result.status_code == 200

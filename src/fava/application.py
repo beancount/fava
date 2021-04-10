@@ -23,6 +23,7 @@ from typing import Optional
 import flask
 import markdown2  # type: ignore
 import werkzeug.urls
+from beancount import __version__ as beancount_version
 from beancount.core.account import ACCOUNT_RE
 from beancount.utils.text_utils import replace_numbers  # type: ignore
 from flask import abort
@@ -36,6 +37,7 @@ from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
 from werkzeug.utils import secure_filename
 
+from fava import __version__ as fava_version
 from fava import LANGUAGES
 from fava import template_filters
 from fava.context import g
@@ -382,7 +384,11 @@ def help_page(page_slug):
         "_layout.html",
         active_page="help",
         page_slug=page_slug,
-        help_html=render_template_string(html),
+        help_html=render_template_string(
+            html,
+            beancount_version=beancount_version,
+            fava_version=fava_version,
+        ),
         HELP_PAGES=HELP_PAGES,
     )
 
