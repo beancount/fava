@@ -30,7 +30,7 @@
 <td class="num" data-sort-value="{{ value or 0 }}">{{ value|format_currency }}</td>
 {% elif type == "<class 'beancount.core.amount.Amount'>" %}
 <td class="num" data-sort-value="{{ value.number or 0 }}">
-  {{ commodity_macros.render_amount(ledger, value.units) }}
+  {{ commodity_macros.render_amount(ledger, value) }}
 </td>
 {% elif type == "<class 'bool'>" %}
 <td>{{ value|upper }}</td>
