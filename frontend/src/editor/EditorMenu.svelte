@@ -23,7 +23,7 @@
   $: insertEntryOptions = $favaOptions["insert-entry"];
 
   function goToFileAndLine(filename: string, line?: number) {
-    const url = urlFor("editor", { file_path: filename, line });
+    const url = urlFor("editor/", { file_path: filename, line });
     const shouldLoad = filename !== file_path;
     router.navigate(url, shouldLoad);
     if (!shouldLoad && line) {
