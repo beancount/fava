@@ -77,13 +77,18 @@ def test_format_errormsg(app):
         assert format_errormsg("Test: Test") == "Test: Test"
 
 
-def test_collapse_account(app):
+def test_collapse_account(app, monkeypatch):
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        g.ledger.fava_options["collapse-pattern"] = [
-            "^Assets:Stock$",
-            "^Assets:Property:.*",
-        ]
+
+        monkeypatch.setitem(
+            g.ledger.fava_options,
+            "collapse-pattern",
+            [
+                "^Assets:Stock$",
+                "^Assets:Property:.*",
+            ],
+        )
         g.ledger.accounts["Assets:Stock"] = AccountData()
         g.ledger.accounts["Assets:Property"] = AccountData()
 

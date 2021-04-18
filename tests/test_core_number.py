@@ -10,17 +10,17 @@ def test_format_decimal(example_ledger):
     assert fmt(D("12.333"), None) == "12.33"
 
 
-def test_format_decimal_locale(example_ledger):
+def test_format_decimal_locale(example_ledger, monkeypatch):
     fmt = example_ledger.format_decimal
-    example_ledger.fava_options["locale"] = "en_IN"
+    monkeypatch.setitem(example_ledger.fava_options, "locale", "en_IN")
     fmt.load_file()
     assert fmt(D("1111111.333"), "USD") == "11,11,111.33"
     assert fmt(D("11.333"), "USD") == "11.33"
     assert fmt(D("11.3333"), None) == "11.33"
-    example_ledger.fava_options["locale"] = "de_DE"
+    monkeypatch.setitem(example_ledger.fava_options, "locale", "de_DE")
     fmt.load_file()
     assert fmt(D("1111111.333"), "USD") == "1.111.111,33"
-    example_ledger.fava_options["locale"] = "invalid"
+    monkeypatch.setitem(example_ledger.fava_options, "locale", "invalid")
     fmt.load_file()
     assert fmt(D("1111111.333"), "USD") == "1111111.33"
     fmt.load_file()

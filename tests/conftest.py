@@ -1,6 +1,5 @@
 # pylint: disable=missing-docstring
 import os
-from copy import deepcopy
 from pathlib import Path
 from pprint import pformat
 from typing import Any
@@ -24,8 +23,6 @@ EXAMPLE_FILE = data_file("long-example.beancount")
 EXTENSION_REPORT_EXAMPLE_FILE = data_file("extension-report-example.beancount")
 
 EXAMPLE_LEDGER = FavaLedger(EXAMPLE_FILE)
-EXAMPLE_LEDGER_OPTIONS = deepcopy(EXAMPLE_LEDGER.options)
-EXAMPLE_LEDGER_FAVA_OPTIONS = deepcopy(EXAMPLE_LEDGER.fava_options)
 
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
@@ -97,8 +94,6 @@ def small_example_ledger():
 @pytest.fixture
 def example_ledger():
     yield EXAMPLE_LEDGER
-    EXAMPLE_LEDGER.options = deepcopy(EXAMPLE_LEDGER_OPTIONS)
-    EXAMPLE_LEDGER.fava_options = deepcopy(EXAMPLE_LEDGER_FAVA_OPTIONS)
     EXAMPLE_LEDGER.filter(account=None, filter=None, time=None)
 
 

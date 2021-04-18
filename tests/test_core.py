@@ -20,12 +20,12 @@ def test_attributes(example_ledger: FavaLedger) -> None:
     assert "Assets" not in example_ledger.attributes.accounts
 
 
-def test_paths_to_watch(example_ledger: FavaLedger) -> None:
+def test_paths_to_watch(example_ledger: FavaLedger, monkeypatch) -> None:
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
         [],
     )
-    example_ledger.options["documents"] = ["folder"]
+    monkeypatch.setitem(example_ledger.options, "documents", ["folder"])
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],

@@ -6,3 +6,7 @@ disable = too-few-public-methods,
     isinstance-second-argument-not-valid-type,
     unsubscriptable-object,
     inherit-non-class
+
+[DESIGN]
+# max args for a function / method
+max-args=7
