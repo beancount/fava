@@ -4,7 +4,8 @@ Changelog
 Unreleased
 ----------
 
-Nothing yet.
+The `conversion` and `interval` options have been removed. Their functionality
+can be achieved with the new `default-page` option.
 
 v1.18 (2021-01-16)
 ------------------
