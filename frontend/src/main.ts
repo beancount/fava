@@ -41,7 +41,7 @@ import { getScriptTagJSON } from "./lib/dom";
 import { object, string } from "./lib/validation";
 import { log_error } from "./log";
 import { notify } from "./notifications";
-import router, { initSyncedStoreValues } from "./router";
+import router, { initSyncedStoreValues, setStoreValueFromUrl } from "./router";
 import { initSidebar, updateSidebar } from "./sidebar";
 import { SortableTable } from "./sort";
 import { errorCount, favaOptions, ledgerData, rawLedgerData } from "./stores";
@@ -110,6 +110,7 @@ function init(): void {
   rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
 
   router.init();
+  setStoreValueFromUrl();
   initSyncedStoreValues();
   initSidebar();
   initGlobalKeyboardShortcuts();
