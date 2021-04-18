@@ -3,7 +3,6 @@ following to your Beancount file.
 
 <pre><textarea is="beancount-textarea">
 2016-06-14 custom "fava-option" "default-file"
-2016-06-14 custom "fava-option" "interval" "week"
 2016-04-14 custom "fava-option" "auto-reload" "true"
 2016-04-14 custom "fava-option" "journal-show" "transaction open"
 2016-04-14 custom "fava-option" "currency-column" "100" </textarea></pre>
@@ -69,15 +68,6 @@ your beancount file into this option.
 
 ---
 
-## `interval`
-
-Default: `month`
-
-The default interval that charts and the account reports by interval use. The
-possible options are `day`, `week`, `month`, `quarter`, and `year`.
-
----
-
 ## `fiscal-year-end`
 
 Default: `12-31`
@@ -103,6 +93,8 @@ more examples.
 Default: 2.
 
 The number spaces for indentation.
+
+---
 
 ## `insert-entry`
 
@@ -272,27 +264,6 @@ page for details.
 Default: Not set
 
 Set the directories to be scanned by the Beancount import mechanism.
-
----
-
-## `conversion`
-
-Default: "at_cost"
-
-The default conversion that charts and the account reports use. This option
-takes a string representing the same values available in the conversion
-dropdown.
-
-Examples are:
-
--   `at_cost` - At Cost
--   `at_value` - At Market Value
--   `units` - Units
--   `USD` - Converted to USD
--   `EUR` - Converted to EUR
-
-If this option is not specified or the value is not valid (i.e., a non-existent
-commodity), Fava defaults to "At Cost"
 
 ---
 

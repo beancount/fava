@@ -45,7 +45,6 @@ DEFAULTS = {
     "currency-column": 61,
     "collapse-pattern": [],
     "auto-reload": False,
-    "conversion": "at_cost",
     "default-file": None,
     "default-page": "income_statement/",
     "fiscal-year-end": FiscalYearEnd(12, 31),
@@ -53,7 +52,6 @@ DEFAULTS = {
     "import-dirs": [],
     "indent": 2,
     "insert-entry": [],
-    "interval": "month",
     "invert-income-liabilities-equity": False,
     "journal-show": [
         "transaction",
@@ -105,10 +103,8 @@ LIST_OPTS = [
 
 STR_OPTS = [
     "collapse-pattern",
-    "conversion",
     "default-page",
     "import-config",
-    "interval",
     "language",
     "locale",
     "unrealized",

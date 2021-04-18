@@ -1,6 +1,8 @@
 import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
+import type { Interval } from "../lib/interval";
+import { DEFAULT_INTERVAL } from "../lib/interval";
 import { derived_array } from "../lib/store";
 import {
   array,
@@ -15,8 +17,7 @@ import {
 export const urlHash = writable("");
 
 export const conversion = writable("");
-type Interval = "year" | "quarter" | "month" | "week" | "day";
-export const interval: Writable<Interval> = writable("month");
+export const interval: Writable<Interval> = writable(DEFAULT_INTERVAL);
 
 export const ledgerDataValidator = object({
   accounts: array(string),
@@ -26,9 +27,7 @@ export const ledgerDataValidator = object({
   favaOptions: object({
     "auto-reload": boolean,
     "currency-column": number,
-    conversion: string,
     indent: number,
-    interval: string,
     locale: union(string, constant(null)),
     "insert-entry": array(
       object({ date: string, filename: string, lineno: number, re: string })

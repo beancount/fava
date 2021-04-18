@@ -252,12 +252,8 @@ def _pull_beancount_file(_, values) -> None:
             # one of the file slugs changed, update the mapping
             update_ledger_slugs(app.config["LEDGERS"].values())
         g.ledger = app.config["LEDGERS"][g.beancount_file_slug]
-        g.conversion = request.args.get(
-            "conversion", g.ledger.fava_options["conversion"]
-        )
-        g.interval = Interval.get(
-            request.args.get("interval", g.ledger.fava_options["interval"])
-        )
+        g.conversion = request.args.get("conversion", "at_cost")
+        g.interval = Interval.get(request.args.get("interval", "month"))
 
 
 @app.errorhandler(FavaAPIException)
