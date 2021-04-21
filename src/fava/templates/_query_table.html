@@ -55,7 +55,7 @@
   <thead>
     <tr>
       {% for name, type in types %}
-      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
+      <th data-sort="{% if '_value' in name %}num{% else %}{{ sort_type[type|string] or 'string' }}{% endif %}">{{ name }}</th>
       {% endfor %}
     </tr>
   </thead>
