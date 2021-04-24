@@ -41,7 +41,7 @@ module.exports = {
   },
   settings: {
     // eslint-disable-next-line
-    "svelte3/typescript": require("typescript"),
+    "svelte3/typescript": () => require("typescript"),
   },
   rules: {
     ...airbnbConfigOverrides,
