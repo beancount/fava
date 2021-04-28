@@ -18,6 +18,9 @@
   {:then value}
     <Editor {value} />
   {/await}
+{:else if ["gif", "jpg", "jpeg", "png", "svg", "webp", "bmp", "ico"].includes(extension)}
+  <!-- The list of file extensions was taken here 'https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img' -->
+  <img src="{url}" alt="{filename}" class="image" />
 {:else}
   Preview for file `{filename}` with file type `{extension}` is not implemented
 {/if}
@@ -26,5 +29,10 @@
   object {
     width: 100%;
     height: 100%;
+  }
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 </style>
