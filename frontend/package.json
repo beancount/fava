@@ -2,8 +2,8 @@
   "name": "fava",
   "private": true,
   "scripts": {
-    "build": "node -r sucrase/register build.ts",
-    "dev": "node -r sucrase/register build.ts --watch",
+    "build": "node -r esbuild-register build.ts",
+    "dev": "node -r esbuild-register build.ts --watch",
     "test": "ava",
     "test:watch": "ava -w"
   },
@@ -12,7 +12,7 @@
       "ts"
     ],
     "require": [
-      "sucrase/register"
+      "esbuild-register"
     ]
   },
   "devDependencies": {
@@ -32,6 +32,7 @@
     "ava": "^3.15.0",
     "chokidar": "^3.5.1",
     "esbuild": "^0.11.5",
+    "esbuild-register": "^2.5.0",
     "esbuild-svelte": "^0.5.1",
     "eslint": "^7.20.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
@@ -44,7 +45,6 @@
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-recess-order": "^2.3.0",
     "stylelint-config-standard": "^22.0.0",
-    "sucrase": "^3.17.1",
     "svelte-preprocess-esbuild": "^2.0.0",
     "typescript": "^4.1.5"
   },
