@@ -177,7 +177,7 @@ class QueryShell(BQLShell, FavaModule):
 
         try:
             types, rows = run_query(
-                self.ledger.all_entries,
+                self.ledger.entries,
                 self.ledger.options,
                 query_string,
                 numberify=True,
