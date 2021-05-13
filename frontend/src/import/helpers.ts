@@ -40,7 +40,8 @@ export type ImportableFile<T> = {
 };
 
 export type ImportableFiles = ImportableFile<ImporterInfo>[];
-export type ProcessedImportableFiles = ImportableFile<ImporterInfoWithNewName>[];
+export type ProcessedImportableFiles =
+  ImportableFile<ImporterInfoWithNewName>[];
 
 /**
  * Initially set the file names for all importable files.

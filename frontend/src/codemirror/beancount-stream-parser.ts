@@ -15,8 +15,10 @@ const bool = /^TRUE|FALSE/;
 const date = /^[0-9]{4,}[-/][0-9]+[-/][0-9]+/;
 const number = /^-?(?:[0-9]+|[0-9][0-9,]+[0-9])(?:\.[0-9]*)?/;
 const txn = /^([*!&#?%PSTCURM]|txn)/;
-const undatedDirectives = /^(pushtag|poptag|pushmeta|popmeta|option|plugin|include)/;
-const directives = /^(balance|open|close|commodity|pad|event|custom|price|note|query|document)/;
+const undatedDirectives =
+  /^(pushtag|poptag|pushmeta|popmeta|option|plugin|include)/;
+const directives =
+  /^(balance|open|close|commodity|pad|event|custom|price|note|query|document)/;
 const link = /^\^[A-Za-z0-9\-_/.]+/;
 const meta = /^[a-z][a-zA-Z0-9\-_]+:/;
 
