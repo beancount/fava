@@ -15,18 +15,18 @@ msgstr "لینک‌های ‌دستی"
 msgid "Errors"
 msgstr "خطا‌ها"
 
-#: frontend/src/header/FilterForm.svelte:61
+#: frontend/src/header/FilterForm.svelte:53
 msgid "Time"
 msgstr "زمان"
 
-#: frontend/src/entry-forms/AccountInput.svelte:25
-#: frontend/src/header/FilterForm.svelte:71
-#: frontend/src/modals/DocumentUpload.svelte:64
+#: frontend/src/entry-forms/AccountInput.svelte:18
+#: frontend/src/header/FilterForm.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
 msgstr "حساب‌ کاربری"
 
-#: frontend/src/entry-forms/Transaction.svelte:65
-#: frontend/src/entry-forms/Transaction.svelte:68
+#: frontend/src/entry-forms/Transaction.svelte:57
+#: frontend/src/entry-forms/Transaction.svelte:60
 msgid "Payee"
 msgstr "دریافت کننده"
 
@@ -66,7 +66,7 @@ msgstr "رویداد ها"
 msgid "Editor"
 msgstr "ویرایشگر"
 
-#: fava/templates/_globals.html:13
+#: frontend/src/editor/EditorMenu.svelte:75
 msgid "Options"
 msgstr "گزینه‌ ها"
 
@@ -78,7 +78,7 @@ msgstr "آمار"
 msgid "Help"
 msgstr "راهنما"
 
-#: frontend/src/documents/Table.svelte:29
+#: frontend/src/documents/Table.svelte:26
 msgid "Date"
 msgstr "تاریخ"
 
@@ -111,16 +111,16 @@ msgstr "تغییر"
 msgid "Balance"
 msgstr "تراز"
 
-#: frontend/src/editor/SaveButton.svelte:9
-#: frontend/src/import/Extract.svelte:90 frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/editor/SaveButton.svelte:8
+#: frontend/src/import/Extract.svelte:93 frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "ذخیره"
 
-#: frontend/src/editor/SaveButton.svelte:9
+#: frontend/src/editor/SaveButton.svelte:8
 msgid "Saving..."
 msgstr "پس انداز..."
 
-#: frontend/src/main.ts:96
+#: frontend/src/main.ts:101
 msgid "File change detected. Click to reload."
 msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
 
@@ -157,11 +157,11 @@ msgstr "ترازها"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "نمایش منبع %(فایل)ها:%(شماره خط)ها"
 
-#: frontend/src/editor/EditorMenu.svelte:18
+#: frontend/src/editor/EditorMenu.svelte:39
 msgid "File"
 msgstr "فایل"
 
-#: frontend/src/import/Extract.svelte:96
+#: frontend/src/import/Extract.svelte:99
 msgid "Line"
 msgstr "خط"
 
@@ -218,15 +218,15 @@ msgstr "درآمد"
 msgid "Expenses"
 msgstr "هزینه‌ها"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:53
+#: frontend/src/entry-forms/EntryMetadata.svelte:45
 msgid "Key"
 msgstr "کلید"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/EntryMetadata.svelte:55
 msgid "Value"
 msgstr "مقدار"
 
-#: frontend/src/query/QueryLinks.svelte:22
+#: frontend/src/query/QueryLinks.svelte:19
 msgid "Download as"
 msgstr "دانلود‌به‌عنوان"
 
@@ -275,8 +275,8 @@ msgstr "بستن"
 msgid "New transaction"
 msgstr "معامله‌جدید"
 
-#: frontend/src/entry-forms/Transaction.svelte:75
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:67
+#: frontend/src/entry-forms/Transaction.svelte:71
 msgid "Narration"
 msgstr "توصیف"
 
@@ -288,12 +288,12 @@ msgstr "ذخیره‌و‌افزودن‌جدید"
 msgid "Number"
 msgstr "شماره"
 
-#: frontend/src/entry-forms/Posting.svelte:87
-#: frontend/src/entry-forms/Transaction.svelte:88
+#: frontend/src/entry-forms/Posting.svelte:76
+#: frontend/src/entry-forms/Transaction.svelte:80
 msgid "Add posting"
 msgstr "افزودن‌پست"
 
-#: frontend/src/import/Extract.svelte:45
+#: frontend/src/import/Extract.svelte:42
 msgid "Import"
 msgstr "واردکردن"
 
@@ -309,7 +309,7 @@ msgstr "تغییر‌منبع"
 msgid "Toggle ignore"
 msgstr "تغییر‌چشم‌پوشی"
 
-#: frontend/src/import/Extract.svelte:95
+#: frontend/src/import/Extract.svelte:98
 msgid "Source"
 msgstr "منبع"
 
@@ -333,11 +333,11 @@ msgstr "تکراری"
 msgid "Importer"
 msgstr "واردکننده"
 
-#: frontend/src/import/Import.svelte:148
+#: frontend/src/import/FileList.svelte:53
 msgid "Extract"
 msgstr "استخراج"
 
-#: frontend/src/query/QueryEditor.svelte:30
+#: frontend/src/query/QueryEditor.svelte:14
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌فهرست‌دستورات‌موجود."
 
@@ -345,8 +345,8 @@ msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌�
 msgid "Metadata"
 msgstr "متاداده"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:71
+#: frontend/src/entry-forms/AddMetadataButton.svelte:17
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
 msgid "Add metadata"
 msgstr "افزودن‌متاداده"
 
@@ -387,11 +387,11 @@ msgstr "سایر‌تراکنش‌ها"
 msgid "Documents with a #discovered tag"
 msgstr "اسناد‌با‌برچسب#کشف‌شده"
 
-#: frontend/src/entry-forms/Transaction.svelte:93
+#: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Postings"
 msgstr "پست‌ها"
 
-#: frontend/src/modals/DocumentUpload.svelte:48
+#: frontend/src/modals/DocumentUpload.svelte:47
 msgid "Upload file(s)"
 msgstr "آپلودفایل‌(ها)"
 
@@ -399,23 +399,23 @@ msgstr "آپلودفایل‌(ها)"
 msgid "Documents folder"
 msgstr "پوشه‌اسناد"
 
-#: frontend/src/modals/DocumentUpload.svelte:70
+#: frontend/src/modals/DocumentUpload.svelte:68
 msgid "Upload"
 msgstr "آپلود"
 
-#: frontend/src/editor/EditorMenu.svelte:33
+#: frontend/src/editor/EditorMenu.svelte:55
 msgid "Align Amounts"
 msgstr "هماهنگ‌کردن‌تعداد"
 
-#: frontend/src/editor/EditorMenu.svelte:37
+#: frontend/src/editor/EditorMenu.svelte:59
 msgid "Toggle Comment (selection)"
 msgstr "تغییر‌نظر(انتخاب)"
 
-#: frontend/src/editor/EditorMenu.svelte:41
+#: frontend/src/editor/EditorMenu.svelte:63
 msgid "Open all folds"
 msgstr "بازکردن‌همه‌چینه‌ها"
 
-#: frontend/src/editor/EditorMenu.svelte:44
+#: frontend/src/editor/EditorMenu.svelte:67
 msgid "Close all folds"
 msgstr "بستن‌همه‌چینه‌ها"
 
@@ -431,7 +431,7 @@ msgstr "راهنما"
 msgid "Beancount options"
 msgstr "گزینه‌های‌شمارش‌جزئی"
 
-#: frontend/src/query/QueryEditor.svelte:48
+#: frontend/src/query/QueryEditor.svelte:28
 msgid "Submit"
 msgstr "ارسال"
 
@@ -445,7 +445,7 @@ msgstr "نگه‌داشتن Shiftوکلیک‌کردن‌برای‌گسترش�
 msgid "Export"
 msgstr "صادر‌کردن"
 
-#: frontend/src/header/FilterForm.svelte:81
+#: frontend/src/header/FilterForm.svelte:73
 msgid "Filter by tag, payee, ..."
 msgstr "فیلتربراساس برچسب،پرداخت‌کننده، ..."
 
@@ -477,11 +477,11 @@ msgstr "هفتگی"
 msgid "Daily"
 msgstr "روزانه"
 
-#: frontend/src/editor/EditorMenu.svelte:29
+#: frontend/src/editor/EditorMenu.svelte:52
 msgid "Edit"
 msgstr "ویرایش"
 
-#: frontend/src/entry-forms/Posting.svelte:79
+#: frontend/src/entry-forms/Posting.svelte:68
 msgid "Amount"
 msgstr "میزان"
 
@@ -493,27 +493,27 @@ msgstr "اسناد با برچسب # مرتبط شده"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "شما باید گزینه شمارش ”اسناد” را برای آپلود فایل تنظیم کنید."
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:38
 msgid "At Cost"
 msgstr "با قیمت"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:39
 msgid "At Market Value"
 msgstr "در ارزش بازار"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:40
 msgid "Units"
 msgstr "واحدها"
 
-#: frontend/src/charts/Chart.svelte:70
+#: frontend/src/charts/Chart.svelte:73
 msgid "Treemap"
 msgstr "نمودار درختی"
 
-#: frontend/src/charts/Chart.svelte:74
+#: frontend/src/charts/Chart.svelte:81
 msgid "Sunburst"
 msgstr "نمودار دایره‌ای"
 
-#: frontend/src/entry-forms/AccountInput.svelte:20
+#: frontend/src/entry-forms/AccountInput.svelte:13
 msgid "Should be one of the declared accounts"
 msgstr "باید یکی از حساب های اعلام شده باشد"
 
@@ -533,15 +533,15 @@ msgstr "بعدی"
 msgid "Transaction"
 msgstr "تراکنش"
 
-#: frontend/src/modals/AddEntry.svelte:44
+#: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
 msgstr "افزودن"
 
-#: frontend/src/documents/Documents.svelte:80
+#: frontend/src/documents/Documents.svelte:57
 msgid "Move or rename document"
 msgstr "انتقال یا تغییر نام سند"
 
-#: frontend/src/documents/Table.svelte:33
+#: frontend/src/documents/Table.svelte:30
 msgid "Name"
 msgstr "نام"
 
@@ -549,7 +549,7 @@ msgstr "نام"
 msgid "Documents"
 msgstr "اسناد"
 
-#: frontend/src/import/Import.svelte:129
+#: frontend/src/import/FileList.svelte:29
 msgid "Delete"
 msgstr "حذف"
 
@@ -557,23 +557,31 @@ msgstr "حذف"
 msgid "No importer matched this file."
 msgstr "هیچ وارد کننده ای با این پرونده مطابقت ندارد."
 
-#: frontend/src/charts/Chart.svelte:81
+#: frontend/src/charts/Chart.svelte:88
 msgid "Line chart"
 msgstr "نمودار خطی"
 
-#: frontend/src/charts/Chart.svelte:85
+#: frontend/src/charts/Chart.svelte:92
 msgid "Area chart"
 msgstr "نمودار ناحیه ای"
 
-#: frontend/src/import/Import.svelte:147
+#: frontend/src/import/FileList.svelte:52
 msgid "Continue"
 msgstr "ادامه"
 
-#: frontend/src/import/Import.svelte:157
+#: frontend/src/import/FileList.svelte:63
 msgid "Clear"
 msgstr "پاک کردن"
 
-#: frontend/src/sidebar/AccountSelector.svelte:24
+#: frontend/src/sidebar/AccountSelector.svelte:21
 msgid "Go to account"
 msgstr "رفتن به حساب"
+
+#: frontend/src/import/Import.svelte:64
+msgid "Delete this file?"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:118
+msgid "No files were found for import."
+msgstr ""
 

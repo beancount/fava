@@ -15,18 +15,18 @@ msgstr "Enllaços personalitzats"
 msgid "Errors"
 msgstr "Errors"
 
-#: frontend/src/header/FilterForm.svelte:61
+#: frontend/src/header/FilterForm.svelte:53
 msgid "Time"
 msgstr "Data"
 
-#: frontend/src/entry-forms/AccountInput.svelte:25
-#: frontend/src/header/FilterForm.svelte:71
-#: frontend/src/modals/DocumentUpload.svelte:64
+#: frontend/src/entry-forms/AccountInput.svelte:18
+#: frontend/src/header/FilterForm.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
 msgstr "Compte"
 
-#: frontend/src/entry-forms/Transaction.svelte:65
-#: frontend/src/entry-forms/Transaction.svelte:68
+#: frontend/src/entry-forms/Transaction.svelte:57
+#: frontend/src/entry-forms/Transaction.svelte:60
 msgid "Payee"
 msgstr "Beneficiari"
 
@@ -66,7 +66,7 @@ msgstr "Esdeveniments"
 msgid "Editor"
 msgstr "Editor"
 
-#: fava/templates/_globals.html:13
+#: frontend/src/editor/EditorMenu.svelte:75
 msgid "Options"
 msgstr "Opcions"
 
@@ -78,7 +78,7 @@ msgstr "Estadístiques"
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/documents/Table.svelte:29
+#: frontend/src/documents/Table.svelte:26
 msgid "Date"
 msgstr "Data"
 
@@ -111,16 +111,16 @@ msgstr "Canvi"
 msgid "Balance"
 msgstr "Balanç"
 
-#: frontend/src/editor/SaveButton.svelte:9
-#: frontend/src/import/Extract.svelte:90 frontend/src/modals/AddEntry.svelte:66
+#: frontend/src/editor/SaveButton.svelte:8
+#: frontend/src/import/Extract.svelte:93 frontend/src/modals/AddEntry.svelte:66
 msgid "Save"
 msgstr "Desa"
 
-#: frontend/src/editor/SaveButton.svelte:9
+#: frontend/src/editor/SaveButton.svelte:8
 msgid "Saving..."
 msgstr "S'està desant..."
 
-#: frontend/src/main.ts:96
+#: frontend/src/main.ts:101
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
@@ -157,11 +157,11 @@ msgstr "Balanços"
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Mostra la font %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:18
+#: frontend/src/editor/EditorMenu.svelte:39
 msgid "File"
 msgstr "Fitxer"
 
-#: frontend/src/import/Extract.svelte:96
+#: frontend/src/import/Extract.svelte:99
 msgid "Line"
 msgstr "Línia"
 
@@ -218,15 +218,15 @@ msgstr "Ingressos"
 msgid "Expenses"
 msgstr "Despeses"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:53
+#: frontend/src/entry-forms/EntryMetadata.svelte:45
 msgid "Key"
 msgstr "Clau"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/EntryMetadata.svelte:55
 msgid "Value"
 msgstr "Valor"
 
-#: frontend/src/query/QueryLinks.svelte:22
+#: frontend/src/query/QueryLinks.svelte:19
 msgid "Download as"
 msgstr "Anomena i desa"
 
@@ -275,8 +275,8 @@ msgstr "tanca"
 msgid "New transaction"
 msgstr "Transacció nova"
 
-#: frontend/src/entry-forms/Transaction.svelte:75
-#: frontend/src/entry-forms/Transaction.svelte:79
+#: frontend/src/entry-forms/Transaction.svelte:67
+#: frontend/src/entry-forms/Transaction.svelte:71
 msgid "Narration"
 msgstr "Descripció"
 
@@ -288,12 +288,12 @@ msgstr "Desa i afegeix-ne una altra"
 msgid "Number"
 msgstr "Número"
 
-#: frontend/src/entry-forms/Posting.svelte:87
-#: frontend/src/entry-forms/Transaction.svelte:88
+#: frontend/src/entry-forms/Posting.svelte:76
+#: frontend/src/entry-forms/Transaction.svelte:80
 msgid "Add posting"
 msgstr "Afegeix una comptabilització"
 
-#: frontend/src/import/Extract.svelte:45
+#: frontend/src/import/Extract.svelte:42
 msgid "Import"
 msgstr "Importa"
 
@@ -309,7 +309,7 @@ msgstr "Canvia la font"
 msgid "Toggle ignore"
 msgstr "Canvia si s'ha d'ignorar"
 
-#: frontend/src/import/Extract.svelte:95
+#: frontend/src/import/Extract.svelte:98
 msgid "Source"
 msgstr "Font"
 
@@ -333,11 +333,11 @@ msgstr "Duplicada"
 msgid "Importer"
 msgstr "Importador"
 
-#: frontend/src/import/Import.svelte:148
+#: frontend/src/import/FileList.svelte:53
 msgid "Extract"
 msgstr "Extreu"
 
-#: frontend/src/query/QueryEditor.svelte:30
+#: frontend/src/query/QueryEditor.svelte:14
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "Introduïu una consulta SQL. Escriviu «help» per veure una llista de les ordres disponibles."
 
@@ -345,8 +345,8 @@ msgstr "Introduïu una consulta SQL. Escriviu «help» per veure una llista de l
 msgid "Metadata"
 msgstr "Metadades"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:18
-#: frontend/src/entry-forms/EntryMetadata.svelte:71
+#: frontend/src/entry-forms/AddMetadataButton.svelte:17
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
 msgid "Add metadata"
 msgstr "Afegeix metadades"
 
@@ -387,11 +387,11 @@ msgstr "Altres transaccions"
 msgid "Documents with a #discovered tag"
 msgstr "Documents amb una etiqueta #discovered"
 
-#: frontend/src/entry-forms/Transaction.svelte:93
+#: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Postings"
 msgstr "Comptabilitzacions"
 
-#: frontend/src/modals/DocumentUpload.svelte:48
+#: frontend/src/modals/DocumentUpload.svelte:47
 msgid "Upload file(s)"
 msgstr "Puja un fitxer"
 
@@ -399,23 +399,23 @@ msgstr "Puja un fitxer"
 msgid "Documents folder"
 msgstr "Carpeta de documents"
 
-#: frontend/src/modals/DocumentUpload.svelte:70
+#: frontend/src/modals/DocumentUpload.svelte:68
 msgid "Upload"
 msgstr "Puja"
 
-#: frontend/src/editor/EditorMenu.svelte:33
+#: frontend/src/editor/EditorMenu.svelte:55
 msgid "Align Amounts"
 msgstr "Alinea els imports"
 
-#: frontend/src/editor/EditorMenu.svelte:37
+#: frontend/src/editor/EditorMenu.svelte:59
 msgid "Toggle Comment (selection)"
 msgstr "Commuta el comentari (selecció)"
 
-#: frontend/src/editor/EditorMenu.svelte:41
+#: frontend/src/editor/EditorMenu.svelte:63
 msgid "Open all folds"
 msgstr "Desplega les línies"
 
-#: frontend/src/editor/EditorMenu.svelte:44
+#: frontend/src/editor/EditorMenu.svelte:67
 msgid "Close all folds"
 msgstr "Plega les línies"
 
@@ -431,7 +431,7 @@ msgstr "ajuda"
 msgid "Beancount options"
 msgstr "Opcions del Beancount"
 
-#: frontend/src/query/QueryEditor.svelte:48
+#: frontend/src/query/QueryEditor.svelte:28
 msgid "Submit"
 msgstr "Envia"
 
@@ -445,7 +445,7 @@ msgstr "Premeu Maj en fer clic per ampliar tots els elements secundaris.\n"
 msgid "Export"
 msgstr "Exporta"
 
-#: frontend/src/header/FilterForm.svelte:81
+#: frontend/src/header/FilterForm.svelte:73
 msgid "Filter by tag, payee, ..."
 msgstr "Filtreu per etiqueta, beneficiari, etc."
 
@@ -477,11 +477,11 @@ msgstr "Per setmana"
 msgid "Daily"
 msgstr "Per dia"
 
-#: frontend/src/editor/EditorMenu.svelte:29
+#: frontend/src/editor/EditorMenu.svelte:52
 msgid "Edit"
 msgstr "Edita"
 
-#: frontend/src/entry-forms/Posting.svelte:79
+#: frontend/src/entry-forms/Posting.svelte:68
 msgid "Amount"
 msgstr "Import"
 
@@ -493,27 +493,27 @@ msgstr "Documents amb una etiqueta #linked"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "Heu de definir l'opció «documents» del Beancount per pujar fitxers."
 
-#: frontend/src/stores/chart.ts:28
+#: frontend/src/stores/chart.ts:38
 msgid "At Cost"
 msgstr "Cost"
 
-#: frontend/src/stores/chart.ts:29
+#: frontend/src/stores/chart.ts:39
 msgid "At Market Value"
 msgstr "Valor de mercat"
 
-#: frontend/src/stores/chart.ts:30
+#: frontend/src/stores/chart.ts:40
 msgid "Units"
 msgstr "Unitats"
 
-#: frontend/src/charts/Chart.svelte:70
+#: frontend/src/charts/Chart.svelte:73
 msgid "Treemap"
 msgstr "Mapa d'arbre"
 
-#: frontend/src/charts/Chart.svelte:74
+#: frontend/src/charts/Chart.svelte:81
 msgid "Sunburst"
 msgstr "Anells"
 
-#: frontend/src/entry-forms/AccountInput.svelte:20
+#: frontend/src/entry-forms/AccountInput.svelte:13
 msgid "Should be one of the declared accounts"
 msgstr "Ha de ser un dels comptes declarats"
 
@@ -533,15 +533,15 @@ msgstr "Següent"
 msgid "Transaction"
 msgstr "Transacció"
 
-#: frontend/src/modals/AddEntry.svelte:44
+#: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
 msgstr "Afegeix"
 
-#: frontend/src/documents/Documents.svelte:80
+#: frontend/src/documents/Documents.svelte:57
 msgid "Move or rename document"
 msgstr "Mou o canvia el nom del document"
 
-#: frontend/src/documents/Table.svelte:33
+#: frontend/src/documents/Table.svelte:30
 msgid "Name"
 msgstr "Nom"
 
@@ -549,7 +549,7 @@ msgstr "Nom"
 msgid "Documents"
 msgstr "Documents"
 
-#: frontend/src/import/Import.svelte:129
+#: frontend/src/import/FileList.svelte:29
 msgid "Delete"
 msgstr "Suprimeix"
 
@@ -557,23 +557,31 @@ msgstr "Suprimeix"
 msgid "No importer matched this file."
 msgstr "No hi ha cap importador per a aquest fitxer."
 
-#: frontend/src/charts/Chart.svelte:81
+#: frontend/src/charts/Chart.svelte:88
 msgid "Line chart"
 msgstr "Diagrama de línies"
 
-#: frontend/src/charts/Chart.svelte:85
+#: frontend/src/charts/Chart.svelte:92
 msgid "Area chart"
 msgstr "Diagrama d'àrees"
 
-#: frontend/src/import/Import.svelte:147
+#: frontend/src/import/FileList.svelte:52
 msgid "Continue"
 msgstr "Continua"
 
-#: frontend/src/import/Import.svelte:157
+#: frontend/src/import/FileList.svelte:63
 msgid "Clear"
 msgstr "Esborra"
 
-#: frontend/src/sidebar/AccountSelector.svelte:24
+#: frontend/src/sidebar/AccountSelector.svelte:21
 msgid "Go to account"
 msgstr "Vés al compte"
+
+#: frontend/src/import/Import.svelte:64
+msgid "Delete this file?"
+msgstr ""
+
+#: frontend/src/import/Import.svelte:118
+msgid "No files were found for import."
+msgstr ""
 
