@@ -1,5 +1,6 @@
 [MESSAGES CONTROL]
 disable = too-few-public-methods,
+    assigning-non-slot,  # false positive since Flask 2 (on flask.g)
     not-callable,
     bad-continuation,
     wrong-import-order,

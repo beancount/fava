@@ -16,4 +16,4 @@ class Context:
     ledger: FavaLedger
 
 
-g: Context = flask.g
+g: Context = flask.g  # type: ignore
