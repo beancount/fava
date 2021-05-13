@@ -89,7 +89,7 @@ translations-fetch:
 # Build and upload the website.
 .PHONY: gh-pages
 gh-pages:
-	git checkout master
+	git checkout main
 	git checkout --orphan gh-pages
 	tox -e docs
 	ls | grep -v 'build' | xargs rm -r
@@ -99,7 +99,7 @@ gh-pages:
 	git add -A
 	git commit -m 'Update gh-pages' --no-verify
 	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
-	git checkout master
+	git checkout main
 	git branch -D gh-pages
 
 # Create a binary using pyinstaller

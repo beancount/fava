@@ -5,8 +5,6 @@
    :target: https://pypi.python.org/pypi/fava
 .. image:: https://img.shields.io/pypi/v/fava.svg
    :target: https://pypi.python.org/pypi/fava
-.. image:: https://img.shields.io/travis/beancount/fava.svg
-   :target: https://travis-ci.org/beancount/fava?branch=master
 
 Fava is a web interface for the double-entry bookkeeping software `Beancount
 <http://furius.ca/beancount/>`__ with a focus on features and usability.
