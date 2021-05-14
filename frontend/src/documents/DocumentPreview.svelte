@@ -19,7 +19,7 @@
 
   export let filename: string;
 
-  $: extension = ext(filename);
+  $: extension = ext(filename).toLowerCase();
   $: url = `${$baseURL}document/?filename=${filename}`;
 </script>
 
