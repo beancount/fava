@@ -1,5 +1,6 @@
 """Formatting numbers."""
 import copy
+from typing import Callable
 from typing import Dict
 from typing import Optional
 
@@ -9,18 +10,36 @@ from beancount.core.number import Decimal
 
 from fava.core.module_base import FavaModule
 
+Formatter = Callable[[Decimal], str]
 
-def get_pattern(locale, precision: Optional[int]):
-    """Obtain formatting pattern for the given locale and precision."""
-    if precision and precision > 14:
-        # Set a maximum precision of 14, half the default precision of Decimal
-        precision = 14
+
+def get_locale_format(locale: Optional[Locale], precision: int) -> Formatter:
+    """Obtain formatting pattern for the given locale and precision.
+
+    Arguments:
+        locale: An optional locale.
+        precision: The precision.
+
+    Returns:
+        A function that renders Decimals to strings as desired.
+    """
+    # Set a maximum precision of 14, half the default precision of Decimal
+    precision = min(precision, 14)
     if locale is None:
-        return "{:." + str(precision) + "f}"
+        fmt_string = "{:." + str(precision) + "f}"
+
+        def fmt(num: Decimal) -> str:
+            return fmt_string.format(num)
+
+        return fmt
 
     pattern = copy.copy(locale.decimal_formats.get(None))
     pattern.frac_prec = (precision, precision)
-    return pattern
+
+    def locale_fmt(num: Decimal) -> str:
+        return pattern.apply(num, locale)
+
+    return locale_fmt
 
 
 class DecimalFormatModule(FavaModule):
@@ -29,8 +48,8 @@ class DecimalFormatModule(FavaModule):
     def __init__(self, ledger) -> None:
         super().__init__(ledger)
         self.locale = None
-        self.patterns: Dict[str, str] = {}
-        self.default_pattern = "{:.2f}"
+        self.formatters: Dict[str, Formatter] = {}
+        self.default_pattern = get_locale_format(None, 2)
 
     def load_file(self) -> None:
         self.locale = None
@@ -43,12 +62,15 @@ class DecimalFormatModule(FavaModule):
         if locale_option:
             self.locale = Locale.parse(locale_option)
 
-        self.default_pattern = get_pattern(self.locale, 2)
+        self.default_pattern = get_locale_format(self.locale, 2)
 
         dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
-            precision = ccontext.get_fractional(Precision.MOST_COMMON)
-            self.patterns[currency] = get_pattern(self.locale, precision)
+            prec = ccontext.get_fractional(Precision.MOST_COMMON)
+            if prec is not None:
+                self.formatters[currency] = get_locale_format(
+                    self.locale, prec
+                )
 
     def __call__(self, value: Decimal, currency=None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
@@ -60,7 +82,4 @@ class DecimalFormatModule(FavaModule):
         Returns:
             A string, the formatted decimal.
         """
-        pattern = self.patterns.get(currency, self.default_pattern)
-        if not self.locale:
-            return pattern.format(value)
-        return pattern.apply(value, self.locale)
+        return self.formatters.get(currency, self.default_pattern)(value)
