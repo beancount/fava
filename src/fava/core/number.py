@@ -1,6 +1,7 @@
 """Formatting numbers."""
 import copy
 from typing import Dict
+from typing import Optional
 
 from babel.core import Locale  # type: ignore
 from babel.core import UnknownLocaleError
@@ -9,6 +10,19 @@ from beancount.core.number import Decimal
 
 from fava.core.fava_options import OptionError
 from fava.core.module_base import FavaModule
+
+
+def get_pattern(locale, precision: Optional[int]):
+    """Obtain formatting pattern for the given locale and precision."""
+    if precision and precision > 14:
+        # Set a maximum precision of 14, half the default precision of Decimal
+        precision = 14
+    if locale is None:
+        return "{:." + str(precision) + "f}"
+
+    pattern = copy.copy(locale.decimal_formats.get(None))
+    pattern.frac_prec = (precision, precision)
+    return pattern
 
 
 class DecimalFormatModule(FavaModule):
@@ -40,23 +54,12 @@ class DecimalFormatModule(FavaModule):
                 )
                 self.ledger.errors.append(error)
 
-        if self.locale:
-            self.default_pattern = copy.copy(
-                self.locale.decimal_formats.get(None)
-            )
-            self.default_pattern.frac_prec = (2, 2)
-        else:
-            self.default_pattern = "{:.2f}"
+        self.default_pattern = get_pattern(self.locale, 2)
 
         dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
             precision = ccontext.get_fractional(Precision.MOST_COMMON)
-            if self.locale:
-                pattern = copy.copy(self.locale.decimal_formats.get(None))
-                pattern.frac_prec = (precision, precision)
-            else:
-                pattern = "{:." + str(precision) + "f}"
-            self.patterns[currency] = pattern
+            self.patterns[currency] = get_pattern(self.locale, precision)
 
     def __call__(self, value: Decimal, currency=None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
