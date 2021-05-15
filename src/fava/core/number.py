@@ -4,11 +4,9 @@ from typing import Dict
 from typing import Optional
 
 from babel.core import Locale  # type: ignore
-from babel.core import UnknownLocaleError
 from beancount.core.display_context import Precision
 from beancount.core.number import Decimal
 
-from fava.core.fava_options import OptionError
 from fava.core.module_base import FavaModule
 
 
@@ -43,16 +41,7 @@ class DecimalFormatModule(FavaModule):
             self.ledger.fava_options["locale"] = locale_option
 
         if locale_option:
-            try:
-                self.locale = Locale.parse(locale_option)
-            except UnknownLocaleError:
-                self.locale = None
-                error = OptionError(
-                    None,
-                    f"Unknown locale: {self.ledger.fava_options['locale']}.",
-                    None,
-                )
-                self.ledger.errors.append(error)
+            self.locale = Locale.parse(locale_option)
 
         self.default_pattern = get_pattern(self.locale, 2)
 

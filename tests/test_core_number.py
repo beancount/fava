@@ -39,8 +39,4 @@ def test_format_decimal_locale(example_ledger, monkeypatch) -> None:
     monkeypatch.setattr(fmt.patterns["USD"], "frac_prec", (14, 14))
     assert fmt(dec, "USD") == "1,25000000000000"
 
-    monkeypatch.setitem(example_ledger.fava_options, "locale", "invalid")
-    fmt.load_file()
-    assert fmt(D("1111111.333"), "USD") == "1111111.33"
-
     fmt.load_file()

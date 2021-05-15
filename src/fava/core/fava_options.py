@@ -16,6 +16,8 @@ from typing import NamedTuple
 from typing import Pattern
 from typing import Tuple
 
+from babel.core import Locale  # type: ignore
+from babel.core import UnknownLocaleError
 from beancount.core.data import Custom
 
 from fava.helpers import BeancountError
@@ -106,7 +108,6 @@ STR_OPTS = [
     "default-page",
     "import-config",
     "language",
-    "locale",
     "unrealized",
 ]
 
@@ -162,6 +163,12 @@ def parse_options(
             processed_value = None
             if key in STR_OPTS:
                 processed_value = value
+            elif key == "locale":
+                try:
+                    Locale.parse(value)
+                    processed_value = value
+                except UnknownLocaleError:
+                    assert False, f"Unknown locale: '{value}'."
             elif key == "fiscal-year-end":
                 processed_value = parse_fye_string(value)
                 assert processed_value, "Invalid 'fiscal-year-end' option."
