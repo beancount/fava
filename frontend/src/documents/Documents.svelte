@@ -29,7 +29,7 @@
    * Rename the selected document with <F2>.
    */
   function keyup(ev: KeyboardEvent) {
-    if (ev.key === "F2" && selected) {
+    if (ev.key === "F2" && selected && !moving) {
       moving = { ...selected, newName: basename(selected.filename) };
     }
   }
@@ -53,15 +53,15 @@
       moving = null;
     }}
   >
-    <div>
+    <form on:submit|preventDefault={move}>
       <h3>{_("Move or rename document")}</h3>
       <p><code>{moving.filename}</code></p>
       <p>
         <AccountInput bind:value={moving.account} />
         <input size={40} bind:value={moving.newName} />
-        <button type="button" on:click={move}>{"Move"}</button>
+        <button type="submit">{"Move"}</button>
       </p>
-    </div>
+    </form>
   </ModalBase>
 {/if}
 <div class="fixed-fullsize-container">
