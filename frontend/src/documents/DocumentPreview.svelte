@@ -25,7 +25,7 @@
 
 {#if extension === "pdf"}
   <object title={filename} data={url} />
-{:else if ["csv", "txt"].includes(extension)}
+{:else if ["csv", "txt", "qfx"].includes(extension)}
   {#await fetch(url).then(handleText)}
     Loading...
   {:then value}
