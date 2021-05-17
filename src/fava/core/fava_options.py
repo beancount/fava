@@ -19,7 +19,7 @@ from typing import Tuple
 try:
     from typing_extensions import TypedDict  # below Python 3.8
 except ImportError:
-    from typing import TypedDict
+    from typing import TypedDict  # type: ignore
 
 from babel.core import Locale  # type: ignore
 from babel.core import UnknownLocaleError

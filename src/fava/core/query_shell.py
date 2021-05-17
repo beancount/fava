@@ -3,7 +3,7 @@ import contextlib
 import io
 import textwrap
 
-from beancount.query import query_compile  # type: ignore
+from beancount.query import query_compile
 from beancount.query.query import run_query
 from beancount.query.query_compile import CompilationError
 from beancount.query.query_execute import execute_query
