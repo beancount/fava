@@ -139,7 +139,7 @@ class ChartModule(FavaModule):
 
             if invert:
                 balance = -balance
-                budgets = -budgets
+                budgets = {k: -v for k, v in budgets.items()}
 
             yield {
                 "date": begin,
