@@ -9,12 +9,17 @@ import copy
 import datetime
 import re
 from typing import Any
-from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import NamedTuple
+from typing import Optional
 from typing import Pattern
 from typing import Tuple
+
+try:
+    from typing import TypedDict
+except ImportError:
+    from typing_extensions import TypedDict
 
 from babel.core import Locale  # type: ignore
 from babel.core import UnknownLocaleError
@@ -42,7 +47,39 @@ class InsertEntryOption(NamedTuple):
     lineno: int
 
 
-DEFAULTS = {
+FavaOptions = TypedDict(
+    "FavaOptions",
+    {
+        "account-journal-include-children": bool,
+        "currency-column": int,
+        "collapse-pattern": List[str],
+        "auto-reload": bool,
+        "default-file": Optional[str],
+        "default-page": str,
+        "fiscal-year-end": FiscalYearEnd,
+        "import-config": Optional[str],
+        "import-dirs": List[str],
+        "indent": int,
+        "insert-entry": List[InsertEntryOption],
+        "invert-income-liabilities-equity": bool,
+        "journal-show": List[str],
+        "journal-show-document": List[str],
+        "journal-show-transaction": List[str],
+        "language": Optional[str],
+        "locale": Optional[str],
+        "show-accounts-with-zero-balance": bool,
+        "show-accounts-with-zero-transactions": bool,
+        "show-closed-accounts": bool,
+        "sidebar-show-queries": int,
+        "unrealized": str,
+        "upcoming-events": int,
+        "uptodate-indicator-grey-lookback-days": int,
+        "use-external-editor": bool,
+    },
+)
+
+
+DEFAULTS: FavaOptions = {
     "account-journal-include-children": True,
     "currency-column": 61,
     "collapse-pattern": [],
@@ -115,9 +152,6 @@ STR_OPTS = [
 MULTI_OPTS = ["collapse-pattern"]
 
 
-FavaOptions = Dict[str, Any]
-
-
 # pylint: disable=too-many-branches
 def parse_options(
     custom_entries: List[Custom],
@@ -145,22 +179,24 @@ def parse_options(
             assert key in DEFAULTS.keys(), f"unknown option `{key}`"
 
             if key == "default-file":
-                options[key] = entry.meta["filename"]
-            elif key == "insert-entry":
+                options["default-file"] = entry.meta["filename"]
+                continue
+            if key == "insert-entry":
                 opt = InsertEntryOption(
                     entry.date,
                     re.compile(entry.values[1].value),
                     entry.meta["filename"],
                     entry.meta["lineno"],
                 )
-                options[key].append(opt)
-            else:
-                value = entry.values[1].value
-                assert isinstance(
-                    value, str
-                ), f"expected value for option `{key}` to be a string"
+                options["insert-entry"].append(opt)
+                continue
 
-            processed_value = None
+            value = entry.values[1].value
+            assert isinstance(
+                value, str
+            ), f"expected value for option `{key}` to be a string"
+
+            processed_value: Any = None
             if key in STR_OPTS:
                 processed_value = value
             elif key == "locale":
@@ -181,9 +217,9 @@ def parse_options(
 
             if processed_value is not None:
                 if key in MULTI_OPTS:
-                    options[key].append(processed_value)
+                    options[key].append(processed_value)  # type: ignore
                 else:
-                    options[key] = processed_value
+                    options[key] = processed_value  # type: ignore
 
         except (IndexError, TypeError, AssertionError) as err:
             msg = f"Failed to parse fava-option entry: {str(err)}"

@@ -4,7 +4,6 @@ This is a simple example of Fava's extension reports system.
 """
 import re
 
-from beancount.core.data import Open
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 
@@ -80,7 +79,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         )
         selected_accounts = []
         regexer = re.compile(pattern)
-        for entry in self.ledger.all_entries_by_type[Open]:
+        for entry in self.ledger.all_entries_by_type.Open:
             if (metadata_key in entry.meta) and (
                 regexer.match(entry.meta[metadata_key]) is not None
             ):

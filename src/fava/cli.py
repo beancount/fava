@@ -1,6 +1,7 @@
 """The command-line interface for Fava."""
 import errno
 import os
+from typing import Tuple
 
 import click
 from cheroot.wsgi import Server  # type: ignore
@@ -54,8 +55,15 @@ from fava.util import simple_wsgi
 )
 @click.version_option(version=__version__, prog_name="fava")
 def main(
-    filenames, port, host, prefix, incognito, debug, profile, profile_dir
-):  # pragma: no cover
+    filenames: Tuple[str],
+    port: int,
+    host: str,
+    prefix: str,
+    incognito: bool,
+    debug: bool,
+    profile: bool,
+    profile_dir: str,
+) -> None:  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
     If the `BEANCOUNT_FILE` environment variable is set, Fava will use the
@@ -70,17 +78,18 @@ def main(
         debug = True
 
     env_filename = os.environ.get("BEANCOUNT_FILE")
-    if env_filename:
-        filenames = filenames + tuple(env_filename.split())
+    all_filenames = (
+        filenames + tuple(env_filename.split()) if env_filename else filenames
+    )
 
-    if not filenames:
+    if not all_filenames:
         raise click.UsageError("No file specified")
 
-    app.config["BEANCOUNT_FILES"] = filenames
+    app.config["BEANCOUNT_FILES"] = all_filenames
     app.config["INCOGNITO"] = incognito
 
     if prefix:
-        app.wsgi_app = DispatcherMiddleware(
+        app.wsgi_app = DispatcherMiddleware(  # type: ignore
             simple_wsgi, {prefix: app.wsgi_app}
         )
 
@@ -91,7 +100,7 @@ def main(
     else:
         if profile:
             app.config["PROFILE"] = True
-            app.wsgi_app = ProfilerMiddleware(
+            app.wsgi_app = ProfilerMiddleware(  # type: ignore
                 app.wsgi_app,
                 restrictions=(30,),
                 profile_dir=profile_dir if profile_dir else None,

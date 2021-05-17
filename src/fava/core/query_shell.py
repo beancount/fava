@@ -3,7 +3,6 @@ import contextlib
 import io
 import textwrap
 
-from beancount.core.data import Query
 from beancount.query import query_compile  # type: ignore
 from beancount.query.query import run_query
 from beancount.query.query_compile import CompilationError
@@ -47,7 +46,7 @@ class QueryShell(BQLShell, FavaModule):
         self.queries = []
 
     def load_file(self):
-        self.queries = self.ledger.all_entries_by_type[Query]
+        self.queries = self.ledger.all_entries_by_type.Query
 
     def add_help(self):
         "Attach help functions for each of the parsed token handlers."

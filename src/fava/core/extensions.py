@@ -6,8 +6,6 @@ from typing import List
 from typing import Tuple
 from typing import Type
 
-from beancount.core.data import Custom
-
 from fava.core.module_base import FavaModule
 from fava.ext import FavaExtensionBase
 from fava.ext import find_extensions
@@ -23,7 +21,7 @@ class ExtensionModule(FavaModule):
 
     def load_file(self) -> None:
         all_extensions = []
-        custom_entries = self.ledger.all_entries_by_type[Custom]
+        custom_entries = self.ledger.all_entries_by_type.Custom
         _extension_entries = extension_entries(custom_entries)
 
         for extension in _extension_entries:

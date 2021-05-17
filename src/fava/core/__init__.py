@@ -1,18 +1,14 @@
 """This module provides the data required by Fava's reports."""
-import collections
 import copy
 import datetime
 import os
 from operator import itemgetter
 from typing import Any
-from typing import cast
-from typing import DefaultDict
 from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Type
 
 from beancount import loader  # type: ignore
 from beancount.core import realization
@@ -22,14 +18,12 @@ from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
 from beancount.core.data import Commodity
-from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Document
 from beancount.core.data import Entries
 from beancount.core.data import Event
 from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
-from beancount.core.data import Open
 from beancount.core.data import Posting
 from beancount.core.data import Price
 from beancount.core.data import Transaction
@@ -48,7 +42,9 @@ from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
+from fava.core.entries_by_type import group_entries_by_type
 from fava.core.extensions import ExtensionModule
+from fava.core.fava_options import DEFAULTS
 from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
@@ -191,7 +187,7 @@ class FavaLedger:
         self.all_entries = []
 
         #: Dict of list of all (unfiltered) entries by type.
-        self.all_entries_by_type: Dict[Type[Directive], Entries] = {}
+        self.all_entries_by_type = group_entries_by_type([])
 
         #: A list of all errors reported by Beancount.
         self.errors: List[BeancountError] = []
@@ -206,7 +202,7 @@ class FavaLedger:
         self.commodities: Dict[str, Commodity] = {}
 
         #: A dict with all of Fava's option values.
-        self.fava_options: FavaOptions = {}
+        self.fava_options: FavaOptions = DEFAULTS
 
         self.load_file()
 
@@ -229,30 +225,20 @@ class FavaLedger:
             self.all_entries, self.account_types
         )
 
-        entries_by_type: DefaultDict[
-            Type[Directive], Entries
-        ] = collections.defaultdict(list)
-        for entry in self.all_entries:
-            entries_by_type[type(entry)].append(entry)
-        self.all_entries_by_type = entries_by_type
+        self.all_entries_by_type = group_entries_by_type(self.all_entries)
 
         self.accounts = AccountDict()
-        for entry in entries_by_type[Open]:
-            self.accounts.setdefault(
-                cast(Open, entry).account
-            ).meta = entry.meta
-        for entry in entries_by_type[Close]:
-            self.accounts.setdefault(
-                cast(Close, entry).account
-            ).close_date = entry.date
+        for open_entry in self.all_entries_by_type.Open:
+            self.accounts.setdefault(open_entry.account).meta = open_entry.meta
+        for close in self.all_entries_by_type.Close:
+            self.accounts.setdefault(close.account).close_date = close.date
 
         self.commodities = {}
-        for entry in entries_by_type[Commodity]:
-            commodity = cast(Commodity, entry)
+        for commodity in self.all_entries_by_type.Commodity:
             self.commodities[commodity.currency] = commodity
 
         self.fava_options, errors = parse_options(
-            cast(List[Custom], entries_by_type[Custom])
+            self.all_entries_by_type.Custom
         )
         self.errors.extend(errors)
 
