@@ -17,9 +17,9 @@ from typing import Pattern
 from typing import Tuple
 
 try:
-    from typing import TypedDict
+    from typing_extensions import TypedDict  # below Python 3.8
 except ImportError:
-    from typing_extensions import TypedDict
+    from typing import TypedDict
 
 from babel.core import Locale  # type: ignore
 from babel.core import UnknownLocaleError
