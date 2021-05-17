@@ -23,7 +23,7 @@ def _get_entry(ledger: FavaLedger, payee: str, date_: str) -> Transaction:
     """Fetch a transaction with the given payee and date."""
     return next(
         e
-        for e in ledger.all_entries_by_type[Transaction]
+        for e in ledger.all_entries_by_type.Transaction
         if e.payee == payee and str(e.date) == date_
     )
 

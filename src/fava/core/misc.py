@@ -31,11 +31,11 @@ class FavaMisc(FavaModule):
         self.upcoming_events: List[Event] = []
 
     def load_file(self) -> None:
-        custom_entries = self.ledger.all_entries_by_type[Custom]
+        custom_entries = self.ledger.all_entries_by_type.Custom
         self.sidebar_links = sidebar_links(custom_entries)
 
         self.upcoming_events = upcoming_events(
-            self.ledger.all_entries_by_type[Event],
+            self.ledger.all_entries_by_type.Event,
             self.ledger.fava_options["upcoming-events"],
         )
 

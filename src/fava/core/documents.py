@@ -2,8 +2,6 @@
 import os
 from os import path
 
-from beancount.core.data import Document
-
 from fava.helpers import FavaAPIException
 
 
@@ -18,7 +16,7 @@ def is_document_or_import_file(filename: str, ledger) -> bool:
         Whether this is one of the documents or a path in an import dir.
     """
     filenames = [
-        document.filename for document in ledger.all_entries_by_type[Document]
+        document.filename for document in ledger.all_entries_by_type.Document
     ]
     import_directories = [
         ledger.join_path(d) for d in ledger.fava_options["import-dirs"]

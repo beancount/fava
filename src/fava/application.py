@@ -18,7 +18,6 @@ from io import BytesIO
 from typing import Any
 from typing import Dict
 from typing import List
-from typing import Optional
 
 import flask
 import markdown2  # type: ignore
@@ -130,15 +129,16 @@ BABEL = Babel(app)
 
 
 @BABEL.localeselector
-def get_locale() -> Optional[str]:
+def get_locale() -> str:
     """Get locale.
 
     Returns:
         The locale that should be used for Babel. If not given as an option to
         Fava, guess from browser.
     """
-    if g.ledger.fava_options["language"]:
-        return g.ledger.fava_options["language"]
+    lang = g.ledger.fava_options["language"]
+    if lang is not None:
+        return lang
     return request.accept_languages.best_match(["en"] + LANGUAGES)
 
 

@@ -3,7 +3,6 @@ from typing import List
 
 from beancount.core import getters
 from beancount.core.data import Entries
-from beancount.core.data import Transaction
 
 from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
@@ -64,13 +63,15 @@ class AttributesModule(FavaModule):
         currency_ranker = ExponentialDecayRanker()
         payee_ranker = ExponentialDecayRanker()
 
-        transactions = self.ledger.all_entries_by_type[Transaction]
+        transactions = self.ledger.all_entries_by_type.Transaction
         for txn in transactions:
             if txn.payee:
                 payee_ranker.update(txn.payee, txn.date)
             for posting in txn.postings:
                 account_ranker.update(posting.account, txn.date)
-                currency_ranker.update(posting.units.currency, txn.date)
+                currency_ranker.update(
+                    posting.units.currency, txn.date  # type: ignore
+                )
                 if posting.cost:
                     currency_ranker.update(posting.cost.currency, txn.date)
 
@@ -81,7 +82,7 @@ class AttributesModule(FavaModule):
     def payee_accounts(self, payee: str) -> List[str]:
         """Rank accounts for the given payee."""
         account_ranker = ExponentialDecayRanker(self.accounts)
-        transactions = self.ledger.all_entries_by_type[Transaction]
+        transactions = self.ledger.all_entries_by_type.Transaction
         for txn in transactions:
             if txn.payee == payee:
                 for posting in txn.postings:
@@ -90,7 +91,7 @@ class AttributesModule(FavaModule):
 
     def payee_transaction(self, payee):
         """The last transaction for the given payee."""
-        transactions = self.ledger.all_entries_by_type[Transaction]
+        transactions = self.ledger.all_entries_by_type.Transaction
         for txn in reversed(transactions):
             if txn.payee == payee:
                 return txn

@@ -1,5 +1,7 @@
 """Entry filters."""
 import re
+from datetime import date
+from typing import Any
 from typing import Callable
 from typing import Generator
 from typing import Iterable
@@ -17,6 +19,9 @@ from beancount.ops.summarize import clamp_opt  # type: ignore
 from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
+
+
+BeancountOptions = Any
 
 
 class FilterException(FavaAPIException):
@@ -43,7 +48,7 @@ class Token:
         self.type = type_
         self.value = value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Token({self.type}, {self.value})"
 
 
@@ -284,9 +289,11 @@ class FilterSyntaxParser:
 
 
 class EntryFilter:
-    """Filters a list of entries. """
+    """Filters a list of entries."""
 
-    def __init__(self, options, fava_options: FavaOptions) -> None:
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
         self.options = options
         self.fava_options = fava_options
         self.value: Optional[str] = None
@@ -301,7 +308,7 @@ class EntryFilter:
         self.value = value
         return True
 
-    def _include_entry(self, entry: Directive):
+    def _include_entry(self, entry: Directive) -> bool:
         raise NotImplementedError
 
     def _filter(self, entries: Entries) -> Entries:
@@ -328,10 +335,12 @@ class EntryFilter:
 class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
     """Filter by dates."""
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.begin_date = None
-        self.end_date = None
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
+        super().__init__(options, fava_options)
+        self.begin_date: Optional[date] = None
+        self.end_date: Optional[date] = None
 
     def set(self, value: Optional[str]) -> bool:
         if value == self.value:
@@ -367,8 +376,10 @@ PARSE = ply.yacc.yacc(
 class AdvancedFilter(EntryFilter):
     """Filter by tags and links and keys."""
 
-    def __init__(self, *args) -> None:
-        super().__init__(*args)
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
+        super().__init__(options, fava_options)
         self._include = None
 
     def set(self, value: Optional[str]) -> bool:
@@ -424,11 +435,13 @@ class AccountFilter(EntryFilter):
     The filter string can either a regular expression or a parent account.
     """
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.match = None
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
+        super().__init__(options, fava_options)
+        self.match: Optional[Match] = None
 
-    def set(self, value: Optional[str]):
+    def set(self, value: Optional[str]) -> bool:
         if value == self.value:
             return False
         self.value = value
@@ -436,7 +449,7 @@ class AccountFilter(EntryFilter):
         return True
 
     def _include_entry(self, entry: Directive) -> bool:
-        if self.value is None:
+        if self.value is None or self.match is None:
             return False
         return any(
             account.has_component(name, self.value) or self.match(name)
