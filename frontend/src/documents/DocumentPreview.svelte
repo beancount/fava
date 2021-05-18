@@ -1,4 +1,5 @@
 <script lang="ts" context="module">
+  const plainTextExtensions = ["csv", "txt", "qfx"];
   const imageExtensions = [
     "gif",
     "jpg",
@@ -25,7 +26,7 @@
 
 {#if extension === "pdf"}
   <object title={filename} data={url} />
-{:else if ["csv", "txt", "qfx"].includes(extension)}
+{:else if plainTextExtensions.includes(extension)}
   {#await fetch(url).then(handleText)}
     Loading...
   {:then value}
