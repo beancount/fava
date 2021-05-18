@@ -4,8 +4,18 @@ Changelog
 Unreleased
 ----------
 
+Nothing yet.
+
+v1.19 (2021-05-18)
+------------------
+
 The `conversion` and `interval` options have been removed. Their functionality
-can be achieved with the new `default-page` option.
+can be achieved with the new `default-page` option. The editor components have
+been completely reworked, include autocompletion in more places and are now
+based on version 6 of CodeMirror. An option `invert-income-liabilities-equity`
+has been added to invert the numbers of those accounts on the income statement
+and the balance sheet. This release also adds a Bulgarian translation and
+features various smaller improvements and fixes as usual.
 
 v1.18 (2021-01-16)
 ------------------
