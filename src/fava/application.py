@@ -18,6 +18,7 @@ from io import BytesIO
 from typing import Any
 from typing import Dict
 from typing import List
+from typing import Optional
 
 import flask
 import markdown2  # type: ignore
@@ -129,7 +130,7 @@ BABEL = Babel(app)
 
 
 @BABEL.localeselector
-def get_locale() -> str:
+def get_locale() -> Optional[str]:
     """Get locale.
 
     Returns:
