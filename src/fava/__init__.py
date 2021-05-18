@@ -9,6 +9,7 @@ except DistributionNotFound:
     pass
 
 LOCALES = [
+    "bg",
     "ca",
     "de",
     "es",

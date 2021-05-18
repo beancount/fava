@@ -19,6 +19,7 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
+-   Bulgarian (`bg`)
 -   Catalan (`ca`)
 -   Chinese (`zh_CN` and `zh_TW`)
 -   Dutch (`nl`)
