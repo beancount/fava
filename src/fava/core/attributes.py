@@ -1,12 +1,18 @@
 """Attributes for auto-completion."""
 from typing import List
+from typing import Optional
+from typing import TYPE_CHECKING
 
 from beancount.core import getters
 from beancount.core.data import Entries
+from beancount.core.data import Transaction
 
 from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
 from fava.util.ranking import ExponentialDecayRanker
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 
 def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
@@ -40,7 +46,7 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
 class AttributesModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         self.accounts: List[str] = []
         self.currencies: List[str] = []
@@ -89,7 +95,7 @@ class AttributesModule(FavaModule):
                     account_ranker.update(posting.account, txn.date)
         return account_ranker.sort()
 
-    def payee_transaction(self, payee):
+    def payee_transaction(self, payee: str) -> Optional[Transaction]:
         """The last transaction for the given payee."""
         transactions = self.ledger.all_entries_by_type.Transaction
         for txn in reversed(transactions):

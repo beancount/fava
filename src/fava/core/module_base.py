@@ -11,5 +11,5 @@ class FavaModule:
     def __init__(self, ledger: "FavaLedger"):
         self.ledger = ledger
 
-    def load_file(self):
+    def load_file(self) -> None:
         """Gets called when the file has been (re)loaded."""

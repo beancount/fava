@@ -4,6 +4,7 @@ import io
 import re
 from typing import List
 from typing import Tuple
+from typing import TYPE_CHECKING
 
 from beancount.core.amount import CURRENCY_RE
 from beancount.core.data import Custom
@@ -11,6 +12,9 @@ from beancount.core.data import Event
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 
 class FavaError(BeancountError):
@@ -23,7 +27,7 @@ SidebarLinks = List[Tuple[str, str]]
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         #: User-chosen links to show in the sidebar.
         self.sidebar_links: SidebarLinks = []

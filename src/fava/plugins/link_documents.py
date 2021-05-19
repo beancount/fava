@@ -10,6 +10,7 @@ from os.path import dirname
 from os.path import join
 from os.path import normpath
 from typing import AbstractSet
+from typing import Any
 from typing import List
 from typing import Optional
 from typing import Set
@@ -35,7 +36,9 @@ def add_to_set(set_: Optional[AbstractSet[str]], new: str) -> Set[str]:
     return set(set_).union([new]) if set_ else {new}
 
 
-def link_documents(entries: Entries, _) -> Tuple[Entries, List[DocumentError]]:
+def link_documents(
+    entries: Entries, _: Any
+) -> Tuple[Entries, List[DocumentError]]:
     """Link transactions to documents."""
 
     errors = []

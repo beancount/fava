@@ -1,11 +1,11 @@
 """Entry filters."""
 import re
 from datetime import date
-from typing import Any
 from typing import Callable
 from typing import Generator
 from typing import Iterable
 from typing import Optional
+from typing import Tuple
 
 import ply.yacc  # type: ignore
 from beancount.core import account
@@ -19,9 +19,7 @@ from beancount.ops.summarize import clamp_opt  # type: ignore
 from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
-
-
-BeancountOptions = Any
+from fava.util.typing import BeancountOptions
 
 
 class FilterException(FavaAPIException):
@@ -72,22 +70,22 @@ class FilterSyntaxLexer:
         "|".join((f"(?P<{name}>{rule})" for name, rule in RULES))
     )
 
-    def LINK(self, token, value):
+    def LINK(self, token: str, value: str) -> Tuple[str, str]:
         return token, value[1:]
 
-    def TAG(self, token, value):
+    def TAG(self, token: str, value: str) -> Tuple[str, str]:
         return token, value[1:]
 
-    def KEY(self, token, value):
+    def KEY(self, token: str, value: str) -> Tuple[str, str]:
         return token, value[:-1]
 
-    def ALL(self, token, _):
+    def ALL(self, token: str, _: str) -> Tuple[str, str]:
         return token, token
 
-    def ANY(self, token, _):
+    def ANY(self, token: str, _: str) -> Tuple[str, str]:
         return token, token
 
-    def STRING(self, token, value):
+    def STRING(self, token: str, value: str) -> Tuple[str, str]:
         if value[0] in ['"', "'"]:
             return token, value[1:-1]
         return token, value
@@ -118,10 +116,11 @@ class FilterSyntaxLexer:
                 pos += len(value)
                 token = match.lastgroup
                 assert token is not None, "Internal Error"
-                func = getattr(self, token)
+                func: Callable[[str, str], Tuple[str, str]] = getattr(
+                    self, token
+                )
                 ret = func(token, value)
-                if ret:
-                    yield Token(*ret)
+                yield Token(*ret)
             elif char in literals:
                 yield Token(char, char)
                 pos += 1

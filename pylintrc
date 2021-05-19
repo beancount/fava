@@ -12,3 +12,6 @@ disable = too-few-public-methods,
 [DESIGN]
 # max args for a function / method
 max-args=7
+
+[SIMILARITIES]
+ignore-imports=yes

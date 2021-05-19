@@ -1,5 +1,7 @@
 """Account close date and metadata."""
 import datetime
+from typing import Any
+from typing import Dict
 
 from beancount.core.data import Meta
 
@@ -17,7 +19,7 @@ class AccountData:
         self.meta: Meta = {}
 
 
-class AccountDict(dict):
+class AccountDict(Dict[str, AccountData]):
     """Account info dictionary."""
 
     EMPTY = AccountData()
@@ -25,7 +27,7 @@ class AccountDict(dict):
     def __missing__(self, key: str) -> AccountData:
         return self.EMPTY
 
-    def setdefault(self, key: str, _=None) -> AccountData:
+    def setdefault(self, key: str, _: Any = None) -> AccountData:
         if key not in self:
             self[key] = AccountData()
         return self[key]

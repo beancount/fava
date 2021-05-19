@@ -3,12 +3,17 @@ import ast
 import importlib
 import inspect
 import sys
+from typing import Any
 from typing import List
 from typing import Optional
 from typing import Tuple
 from typing import Type
+from typing import TYPE_CHECKING
 
 from fava.helpers import BeancountError
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 
 class FavaExtensionError(BeancountError):
@@ -24,7 +29,11 @@ class FavaExtensionBase:
 
     report_title: Optional[str] = None
 
-    def __init__(self, ledger, config=None) -> None:
+    config: Any
+
+    def __init__(
+        self, ledger: "FavaLedger", config: Optional[str] = None
+    ) -> None:
         """
         Base init function.
 
@@ -35,12 +44,12 @@ class FavaExtensionBase:
         """
         self.ledger = ledger
         try:
-            self.config = ast.literal_eval(config)
+            self.config = ast.literal_eval(config) if config else None
         except ValueError:
             self.config = None
         self.name = self.__class__.__qualname__
 
-    def run_hook(self, event, *args) -> None:
+    def run_hook(self, event: str, *args: Any) -> None:
         """Run a hook.
 
         Args:

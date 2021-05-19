@@ -5,16 +5,24 @@ All functions in this module will be automatically added as template filters.
 import datetime
 from typing import Any
 from typing import Optional
+from typing import overload
 
 from beancount.core.amount import Amount
 from beancount.core.convert import convert_position
 from beancount.core.convert import get_cost
 from beancount.core.convert import get_units
+from beancount.core.inventory import Inventory
+from beancount.core.position import Position
 from beancount.core.prices import get_price
 from beancount.core.prices import PriceMap
 
+from fava.core.inventory import CounterInventory
+from fava.core.inventory import SimpleCounterInventory
 
-def get_market_value(pos, price_map, date=None):
+
+def get_market_value(
+    pos: Position, price_map: PriceMap, date: Optional[datetime.date] = None
+):
     """Get the market value of a Position.
 
     This differs from the convert.get_value function in Beancount by returning
@@ -36,6 +44,7 @@ def get_market_value(pos, price_map, date=None):
     if value_currency:
         base_quote = (units_.currency, value_currency)
         _, price_number = get_price(price_map, base_quote, date)
+        assert units_.number is not None
         if price_number is not None:
             return Amount(units_.number * price_number, value_currency)
         return Amount(units_.number * cost_.number, value_currency)
@@ -50,6 +59,26 @@ def units(inventory):
 def cost(inventory):
     """Get the cost of an inventory."""
     return inventory.reduce(get_cost)
+
+
+@overload
+def cost_or_value(
+    inventory: Inventory,
+    conversion: str,
+    price_map: PriceMap,
+    date: Optional[datetime.date],
+) -> Inventory:
+    ...
+
+
+@overload
+def cost_or_value(
+    inventory: CounterInventory,
+    conversion: str,
+    price_map: PriceMap,
+    date: Optional[datetime.date],
+) -> SimpleCounterInventory:
+    ...
 
 
 def cost_or_value(

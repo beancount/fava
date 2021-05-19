@@ -5,9 +5,12 @@ import sys
 import traceback
 from os import path
 from runpy import run_path
+from typing import Any
+from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Optional
+from typing import TYPE_CHECKING
 
 from beancount.ingest import cache  # type: ignore
 from beancount.ingest import extract
@@ -15,6 +18,10 @@ from beancount.ingest import identify
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
+
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 
 class IngestError(BeancountError):
@@ -61,12 +68,12 @@ def file_import_info(filename: str, importer) -> FileImportInfo:
 class IngestModule(FavaModule):
     """Exposes ingest functionality."""
 
-    def __init__(self, ledger):
+    def __init__(self, ledger: "FavaLedger"):
         super().__init__(ledger)
-        self.config = []
-        self.importers = {}
-        self.hooks = []
-        self.mtime = None
+        self.config: List[Any] = []
+        self.importers: Dict[str, Any] = {}
+        self.hooks: List[Any] = []
+        self.mtime: Optional[int] = None
 
     @property
     def module_path(self) -> Optional[str]:
@@ -76,41 +83,30 @@ class IngestModule(FavaModule):
             return None
         return self.ledger.join_path(config_path)
 
+    def _error(self, msg: str) -> None:
+        self.ledger.errors.append(IngestError(None, msg, None))
+
     def load_file(self) -> None:
-        if not self.ledger.fava_options["import-config"]:
+        module_path = self.module_path
+        if module_path is None:
             return
 
-        if not self.module_path:
+        if not path.exists(module_path) or path.isdir(module_path):
+            self._error(f"File does not exist: '{module_path}'")
             return
 
-        if not path.exists(self.module_path) or path.isdir(self.module_path):
-            self.ledger.errors.append(
-                IngestError(
-                    None,
-                    f"File does not exist: '{self.module_path}'",
-                    None,
-                )
-            )
-            return
-
-        if os.stat(self.module_path).st_mtime_ns == self.mtime:
+        if os.stat(module_path).st_mtime_ns == self.mtime:
             return
 
         try:
             # The type stubs seem incorrect:
-            mod = run_path(self.module_path)  # type: ignore
+            mod = run_path(module_path)  # type: ignore
         except Exception:  # pylint: disable=broad-except
             message = "".join(traceback.format_exception(*sys.exc_info()))
-            self.ledger.errors.append(
-                IngestError(
-                    None,
-                    f"Error in importer '{self.module_path}': {message}",
-                    None,
-                )
-            )
+            self._error(f"Error in importer '{module_path}': {message}")
             return
 
-        self.mtime = os.stat(self.module_path).st_mtime_ns
+        self.mtime = os.stat(module_path).st_mtime_ns
         self.config = mod["CONFIG"]
         self.hooks = [extract.find_duplicate_entries]
         if "HOOKS" in mod:
@@ -119,13 +115,7 @@ class IngestModule(FavaModule):
                 callable(fn) for fn in hooks
             ):
                 message = "HOOKS is not a list of callables"
-                self.ledger.errors.append(
-                    IngestError(
-                        None,
-                        f"Error in importer '{self.module_path}': {message}",
-                        None,
-                    )
-                )
+                self._error(f"Error in importer '{module_path}': {message}")
             else:
                 self.hooks = hooks
         self.importers = {
@@ -174,7 +164,10 @@ class IngestModule(FavaModule):
         ):
             return []
 
-        if os.stat(self.module_path).st_mtime_ns > self.mtime:
+        if (
+            self.mtime is None
+            or os.stat(self.module_path).st_mtime_ns > self.mtime
+        ):
             self.load_file()
 
         new_entries = extract.extract_from_file(

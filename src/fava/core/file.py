@@ -10,6 +10,7 @@ from typing import Generator
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import TYPE_CHECKING
 
 from beancount.core.data import Balance
 from beancount.core.data import Directive
@@ -32,6 +33,8 @@ from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException
 from fava.util import next_key
 
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 #: The flags to exclude when rendering entries.
 EXCL_FLAGS = {
@@ -53,7 +56,7 @@ def sha256_str(val: str) -> str:
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         self.lock = threading.Lock()
 

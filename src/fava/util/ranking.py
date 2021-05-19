@@ -40,7 +40,9 @@ class ExponentialDecayRanker:
     __slots__ = ["list", "rate", "scores"]
 
     def __init__(
-        self, list_: Optional[List[str]] = None, rate=math.log(2) * 1 / 365
+        self,
+        list_: Optional[List[str]] = None,
+        rate: float = math.log(2) * 1 / 365,
     ):
         self.list = list_
         self.rate = rate

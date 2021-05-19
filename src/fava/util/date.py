@@ -57,9 +57,9 @@ class Interval(enum.Enum):
     DAY = "day"
 
     @property
-    def label(self):
+    def label(self) -> "Interval":
         """The label for the interval."""
-        return {
+        return {  # type: ignore
             Interval.YEAR: gettext("Yearly"),
             Interval.QUARTER: gettext("Quarterly"),
             Interval.MONTH: gettext("Monthly"),

@@ -34,7 +34,8 @@ from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.prices import build_price_map
 from beancount.core.prices import get_all_prices
-from beancount.parser.options import get_account_types  # type: ignore
+from beancount.parser.options import get_account_types
+from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
 from fava.core._compat import FLAG_UNREALIZED
@@ -62,6 +63,7 @@ from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
 from fava.util import date
 from fava.util import pairwise
+from fava.util.typing import BeancountOptions
 
 
 class Filters:
@@ -69,7 +71,9 @@ class Filters:
 
     __slots__ = ("account", "filter", "time")
 
-    def __init__(self, options, fava_options: FavaOptions) -> None:
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
         self.account = AccountFilter(options, fava_options)
         self.filter = AdvancedFilter(options, fava_options)
         self.time = TimeFilter(options, fava_options)
@@ -193,7 +197,7 @@ class FavaLedger:
         self.errors: List[BeancountError] = []
 
         #: A Beancount options map.
-        self.options: Dict[str, Any] = {}
+        self.options: BeancountOptions = OPTIONS_DEFAULTS
 
         #: A dict containing information about the accounts.
         self.accounts = AccountDict()
@@ -302,7 +306,7 @@ class FavaLedger:
             A tuple (files, directories).
         """
         files = list(self.options["include"])
-        if self.fava_options["import-config"]:
+        if self.ingest.module_path:
             files.append(self.ingest.module_path)
         return (
             files,

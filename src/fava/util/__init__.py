@@ -8,7 +8,14 @@ import time
 import unicodedata
 from pathlib import Path
 from typing import Any
+from typing import Callable
 from typing import Dict
+from typing import Generator
+from typing import Iterable
+from typing import Iterator
+from typing import List
+from typing import Tuple
+from typing import TypeVar
 
 from flask import abort
 from flask import send_file
@@ -33,11 +40,16 @@ def resource_path(relative_path: str) -> Path:
     return BASEPATH / relative_path
 
 
-def listify(func):
+Item = TypeVar("Item")
+
+
+def listify(
+    func: Callable[..., Generator[Item, None, None]]
+) -> Callable[..., List[Item]]:
     """Decorator to make generator function return a list."""
 
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
+    def _wrapper(*args, **kwargs) -> List[Item]:
         return list(func(*args, **kwargs))
 
     return _wrapper
@@ -57,7 +69,7 @@ def timefunc(func):  # pragma: no cover - only used for debugging so far
     return _wrapper
 
 
-def pairwise(iterable):
+def pairwise(iterable: Iterable[Item]) -> Iterator[Tuple[Item, Item]]:
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     left, right = itertools.tee(iterable)
     next(right, None)
@@ -103,7 +115,7 @@ def simple_wsgi(_, start_response):
     return [b""]
 
 
-def send_file_inline(filename):
+def send_file_inline(filename: str) -> Any:
     """Send a file inline, including the original filename.
 
     Ref: http://test.greenbytes.de/tech/tc2231/.

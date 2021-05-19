@@ -1,6 +1,7 @@
 """Provide data suitable for Fava's charts. """
 from datetime import date
 from datetime import timedelta
+from typing import Dict
 from typing import Generator
 from typing import List
 from typing import Optional
@@ -21,17 +22,19 @@ from fava.core._compat import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import units
 from fava.core.module_base import FavaModule
+from fava.core.tree import SerialisedTreeNode
 from fava.core.tree import Tree
 from fava.helpers import FavaAPIException
 from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
+from fava.util.typing import TypedDict
 
 
 ONE_DAY = timedelta(days=1)
 
 
-def inv_to_dict(inventory):
+def inv_to_dict(inventory: Inventory) -> Dict[str, Decimal]:
     """Convert an inventory to a simple cost->number dict."""
     return {pos.units.currency: pos.units.number for pos in inventory}
 
@@ -72,6 +75,21 @@ def dumps(arg) -> str:
     return ENCODER.encode(arg)
 
 
+class DateAndBalance(TypedDict):
+    """Balance at a date."""
+
+    date: date
+    balance: Union[Dict[str, Decimal], Inventory]
+
+
+class DateAndBalanceWithBudget(TypedDict):
+    """Balance at a date with a budget."""
+
+    date: date
+    balance: Dict[str, Decimal]
+    budgets: Dict[str, Decimal]
+
+
 class ChartModule(FavaModule):
     """Return data for the various charts in Fava."""
 
@@ -81,7 +99,7 @@ class ChartModule(FavaModule):
         conversion: str,
         begin: Optional[date] = None,
         end: Optional[date] = None,
-    ):
+    ) -> SerialisedTreeNode:
         """An account tree."""
         if begin is not None:
             tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
@@ -113,7 +131,7 @@ class ChartModule(FavaModule):
         accounts: Union[str, Tuple[str]],
         conversion: str,
         invert: bool = False,
-    ):
+    ) -> Generator[DateAndBalanceWithBudget, None, None]:
         """Renders totals for account (or accounts) in the intervals.
 
         Args:
@@ -133,9 +151,11 @@ class ChartModule(FavaModule):
             balance = cost_or_value(
                 inventory, conversion, price_map, end - ONE_DAY
             )
-            budgets = self.ledger.budgets.calculate_children(
-                accounts, begin, end
-            )
+            budgets = {}
+            if isinstance(accounts, str):
+                budgets = self.ledger.budgets.calculate_children(
+                    accounts, begin, end
+                )
 
             if invert:
                 balance = -balance
@@ -148,7 +168,9 @@ class ChartModule(FavaModule):
             }
 
     @listify
-    def linechart(self, account_name: str, conversion: str):
+    def linechart(
+        self, account_name: str, conversion: str
+    ) -> Generator[DateAndBalance, None, None]:
         """The balance of an account.
 
         Args:
@@ -172,12 +194,14 @@ class ChartModule(FavaModule):
         last_currencies = None
 
         price_map = self.ledger.price_map
-        for entry, _, change, balance in journal:
+        for entry, _, change, balance_inventory in journal:
             if change.is_empty():
                 continue
 
             balance = inv_to_dict(
-                cost_or_value(balance, conversion, price_map, entry.date)
+                cost_or_value(
+                    balance_inventory, conversion, price_map, entry.date
+                )
             )
 
             currencies = set(balance.keys())
@@ -189,7 +213,9 @@ class ChartModule(FavaModule):
             yield {"date": entry.date, "balance": balance}
 
     @listify
-    def net_worth(self, interval: Interval, conversion: str):
+    def net_worth(
+        self, interval: Interval, conversion: str
+    ) -> Generator[DateAndBalance, None, None]:
         """Compute net worth.
 
         Args:

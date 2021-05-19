@@ -3,12 +3,16 @@ import copy
 from typing import Callable
 from typing import Dict
 from typing import Optional
+from typing import TYPE_CHECKING
 
 from babel.core import Locale  # type: ignore
 from beancount.core.display_context import Precision
 from beancount.core.number import Decimal
 
 from fava.core.module_base import FavaModule
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 Formatter = Callable[[Decimal], str]
 
@@ -45,7 +49,7 @@ def get_locale_format(locale: Optional[Locale], precision: int) -> Formatter:
 class DecimalFormatModule(FavaModule):
     """Formatting numbers."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         self.locale = None
         self.formatters: Dict[str, Formatter] = {}
@@ -72,7 +76,7 @@ class DecimalFormatModule(FavaModule):
                     self.locale, prec
                 )
 
-    def __call__(self, value: Decimal, currency=None) -> str:
+    def __call__(self, value: Decimal, currency: Optional[str] = None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
 
         Arguments:
@@ -82,4 +86,6 @@ class DecimalFormatModule(FavaModule):
         Returns:
             A string, the formatted decimal.
         """
+        if currency is None:
+            return self.default_pattern(value)
         return self.formatters.get(currency, self.default_pattern)(value)

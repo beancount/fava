@@ -2,7 +2,12 @@
 import contextlib
 import io
 import textwrap
+from typing import List
+from typing import TYPE_CHECKING
 
+from beancount.core.data import Entries
+from beancount.core.data import Query
+from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.query import query_compile
 from beancount.query.query import run_query
 from beancount.query.query_compile import CompilationError
@@ -13,11 +18,14 @@ from beancount.query.shell import BQLShell  # type: ignore
 from beancount.utils import pager  # type: ignore
 
 from fava.core.module_base import FavaModule
+from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
 from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 # This is to limit the size of the history file. Fava is not using readline at
 # all, but Beancount somehow still is...
@@ -34,21 +42,21 @@ class QueryShell(BQLShell, FavaModule):
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, ledger):
-        self.ledger = ledger
+    def __init__(self, ledger: "FavaLedger"):
         self.buffer = io.StringIO()
+        BQLShell.__init__(self, True, None, self.buffer)
+        FavaModule.__init__(self, ledger)
         self.result = None
-        super().__init__(True, None, self.buffer)
         self.stdout = self.buffer
-        self.entries = None
-        self.errors = None
-        self.options_map = None
-        self.queries = []
+        self.entries: Entries = []
+        self.errors: List[BeancountError] = []
+        self.options_map = OPTIONS_DEFAULTS
+        self.queries: List[Query] = []
 
-    def load_file(self):
+    def load_file(self) -> None:
         self.queries = self.ledger.all_entries_by_type.Query
 
-    def add_help(self):
+    def add_help(self) -> None:
         "Attach help functions for each of the parsed token handlers."
         for attrname, func in BQLShell.__dict__.items():
             if attrname[:3] != "on_":
@@ -62,7 +70,7 @@ class QueryShell(BQLShell, FavaModule):
                 ),
             )
 
-    def _loadfun(self):
+    def _loadfun(self) -> None:
         self.entries = self.ledger.entries
         self.errors = self.ledger.errors
         self.options_map = self.ledger.options
@@ -71,7 +79,7 @@ class QueryShell(BQLShell, FavaModule):
         """No real pager, just a wrapper that doesn't close self.buffer."""
         return pager.flush_only(self.buffer)
 
-    def noop(self, _):
+    def noop(self, _) -> None:
         """Doesn't do anything in Fava's query shell."""
         print(self.noop.__doc__, file=self.outfile)
 
@@ -99,7 +107,7 @@ class QueryShell(BQLShell, FavaModule):
 
         self.result = rtypes, rrows
 
-    def execute_query(self, query):
+    def execute_query(self, query: str):
         """Run a query.
 
         Arguments:
