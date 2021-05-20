@@ -16,7 +16,16 @@
     changed = true;
   };
 
-  const [editor, useEditor] = initBeancountEditor(slice, onDocChanges, []);
+  const [editor, useEditor] = initBeancountEditor(slice, onDocChanges, [
+      {
+        key: "Control-s",
+        mac: "Meta-s",
+        run: () => {
+          save(editor);
+          return true;
+        }
+      }
+    ]);
 
   let saving = false;
 
