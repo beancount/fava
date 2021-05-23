@@ -34,7 +34,7 @@
 {:else if imageExtensions.includes(extension)}
   <img src={url} alt={filename} />
 {:else if ["html", "htm"].includes(extension)}
-  <iframe src={url} title={filename}></iframe>
+  <iframe src={url} title={filename} sandbox=""></iframe>
 {:else}
   Preview for file `{filename}` with file type `{extension}` is not implemented
 {/if}
