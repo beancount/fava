@@ -34,6 +34,8 @@
   {/await}
 {:else if imageExtensions.includes(extension)}
   <img src={url} alt={filename} />
+{:else if ["html", "htm"].includes(extension)}
+  <iframe src={url} title={filename} sandbox="" />
 {:else}
   Preview for file `{filename}` with file type `{extension}` is not implemented
 {/if}
@@ -47,5 +49,9 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
   }
 </style>
