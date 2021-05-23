@@ -20,6 +20,7 @@
   export let width: number;
   export let tooltipText: LineChart["tooltipText"];
 
+  const today = new Date();
   const margin = {
     top: 10,
     right: 10,
@@ -41,9 +42,10 @@
   // Scales
   $: allValues = merge<LineChartDatum>(data.map((d) => d.values));
 
+  let xDomain: [Date, Date];
   $: xDomain = [
-    min(data, (s) => s.values[0].date) ?? 0,
-    max(data, (s) => s.values[s.values.length - 1].date) ?? 0,
+    min(data, (s) => s.values[0].date) ?? today,
+    max(data, (s) => s.values[s.values.length - 1].date) ?? today,
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
   let yMin = 0;
@@ -86,9 +88,15 @@
     const d = quad.find(xPos, yPos);
     return d ? [x(d.date), y(d.value), tooltipText($ctx, d)] : undefined;
   }
+
+  $: hasFutureData = xDomain[1] > today;
 </script>
 
 <svg {width} {height}>
+  <filter id="desaturateFuture">
+    <feColorMatrix type="saturate" values="0.5" x={x(today)} />
+    <feBlend in2="SourceGraphic" />
+  </filter>
   <g
     use:positionedTooltip={tooltipInfo}
     transform={`translate(${margin.left},${margin.top})`}
@@ -100,7 +108,10 @@
     />
     <g class="y axis" use:axis={yAxis} />
     {#if $lineChartMode === "area"}
-      <g class="area">
+      <g
+        class="area"
+        filter={hasFutureData ? "url(#desaturateFuture)" : undefined}
+      >
         {#each data as d}
           <path
             d={areaShape(d.values) ?? undefined}
@@ -109,7 +120,10 @@
         {/each}
       </g>
     {/if}
-    <g class="lines">
+    <g
+      class="lines"
+      filter={hasFutureData ? "url(#desaturateFuture)" : undefined}
+    >
       {#each data as d}
         <path
           d={lineShape(d.values) ?? undefined}
@@ -122,7 +136,12 @@
         {#each data as d}
           <g fill={$currenciesScale(d.name)}>
             {#each d.values as v}
-              <circle r="2" cx={x(v.date)} cy={y(v.value)} />
+              <circle
+                r="2"
+                cx={x(v.date)}
+                cy={y(v.value)}
+                class:desaturate={v.date > today}
+              />
             {/each}
           </g>
         {/each}
@@ -141,5 +160,8 @@
   }
   .area path {
     opacity: 0.3;
+  }
+  .desaturate {
+    filter: saturate(50%);
   }
 </style>
