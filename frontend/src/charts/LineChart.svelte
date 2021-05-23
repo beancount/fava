@@ -11,7 +11,7 @@
   import { lineChartMode } from "../stores/chart";
 
   import { axis } from "./axis";
-  import { currenciesScale } from "./helpers";
+  import { currenciesScale, desatCurrenciesScale } from "./helpers";
   import { positionedTooltip } from "./tooltip";
 
   import type { LineChart, LineChartDatum } from ".";
@@ -61,15 +61,32 @@
     (d) => y(d.value)
   );
 
+  let today = new Date();
+  let isUpToToday = (d, i, data) => i == 0 || data[i - 1].date <= today;
+  let isFuture = (d) => d.date > today;
+
   $: lineShape = line<LineChartDatum>()
     .x((d) => x(d.date))
     .y((d) => y(d.value))
+    .defined(isUpToToday)
+    .curve(curveStepAfter);
+  $: lineShapesFuture = line<LineChartDatum>()
+    .x((d) => x(d.date))
+    .y((d) => y(d.value))
+    .defined(isFuture)
     .curve(curveStepAfter);
 
   $: areaShape = area<LineChartDatum>()
     .x((d) => x(d.date))
     .y1((d) => y(d.value))
     .y0(Math.min(innerHeight, y(0)))
+    .defined(isUpToToday)
+    .curve(curveStepAfter);
+  $: areaShapeFuture = area<LineChartDatum>()
+    .x((d) => x(d.date))
+    .y1((d) => y(d.value))
+    .y0(Math.min(innerHeight, y(0)))
+    .defined(isFuture)
     .curve(curveStepAfter);
 
   // Axes
@@ -106,6 +123,10 @@
             d={areaShape(d.values) ?? undefined}
             fill={$currenciesScale(d.name)}
           />
+          <path
+            d={areaShapeFuture(d.values) ?? undefined}
+            fill={$desatCurrenciesScale(d.name)}
+          />
         {/each}
       </g>
     {/if}
@@ -115,16 +136,25 @@
           d={lineShape(d.values) ?? undefined}
           stroke={$currenciesScale(d.name)}
         />
+        <path
+          d={lineShapesFuture(d.values) ?? undefined}
+          stroke={$desatCurrenciesScale(d.name)}
+        />
       {/each}
     </g>
     {#if $lineChartMode !== "area"}
       <g>
         {#each data as d}
-          <g fill={$currenciesScale(d.name)}>
-            {#each d.values as v}
-              <circle r="2" cx={x(v.date)} cy={y(v.value)} />
-            {/each}
-          </g>
+          {#each d.values as v}
+            <circle
+              r="2"
+              cx={x(v.date)}
+              cy={y(v.value)}
+              fill={v.date <= today
+                ? $currenciesScale(d.name)
+                : $desatCurrenciesScale(d.name)}
+            />
+          {/each}
         {/each}
       </g>
     {/if}
