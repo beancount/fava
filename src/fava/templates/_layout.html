@@ -70,7 +70,7 @@
       {%- if not request.args.get('partial') %}
     </article>
     <svelte-component type="modals"></svelte-component>
-    <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
+    <script type="application/json" id="translations">{{ translations()|tojson|safe }}</script>
   </body>
 </html>
 {%- endif %}
