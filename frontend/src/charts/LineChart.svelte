@@ -11,8 +11,9 @@
   import { lineChartMode } from "../stores/chart";
 
   import { axis } from "./axis";
-  import { currenciesScale, desatCurrenciesScale } from "./helpers";
+  import { currenciesScale } from "./helpers";
   import { positionedTooltip } from "./tooltip";
+  import FutureColorFilter from "./FutureColorFilter.svelte";
 
   import type { LineChart, LineChartDatum } from ".";
 
@@ -61,32 +62,15 @@
     (d) => y(d.value)
   );
 
-  let today = new Date();
-  let isUpToToday = (d, i, data) => i == 0 || data[i - 1].date <= today;
-  let isFuture = (d) => d.date > today;
-
   $: lineShape = line<LineChartDatum>()
     .x((d) => x(d.date))
     .y((d) => y(d.value))
-    .defined(isUpToToday)
-    .curve(curveStepAfter);
-  $: lineShapesFuture = line<LineChartDatum>()
-    .x((d) => x(d.date))
-    .y((d) => y(d.value))
-    .defined(isFuture)
     .curve(curveStepAfter);
 
   $: areaShape = area<LineChartDatum>()
     .x((d) => x(d.date))
     .y1((d) => y(d.value))
     .y0(Math.min(innerHeight, y(0)))
-    .defined(isUpToToday)
-    .curve(curveStepAfter);
-  $: areaShapeFuture = area<LineChartDatum>()
-    .x((d) => x(d.date))
-    .y1((d) => y(d.value))
-    .y0(Math.min(innerHeight, y(0)))
-    .defined(isFuture)
     .curve(curveStepAfter);
 
   // Axes
@@ -103,9 +87,17 @@
     const d = quad.find(xPos, yPos);
     return d ? [x(d.date), y(d.value), tooltipText($ctx, d)] : undefined;
   }
+
+  let hasFutureData: bool;
 </script>
 
 <svg {width} {height}>
+  <FutureColorFilter
+    {x}
+    lastDate={xDomain[1]}
+    {innerHeight}
+    bind:hasFutureData
+  />
   <g
     use:positionedTooltip={tooltipInfo}
     transform={`translate(${margin.left},${margin.top})`}
@@ -116,48 +108,40 @@
       transform={`translate(0,${innerHeight})`}
     />
     <g class="y axis" use:axis={yAxis} />
-    {#if $lineChartMode === "area"}
-      <g class="area">
-        {#each data as d}
-          <path
-            d={areaShape(d.values) ?? undefined}
-            fill={$currenciesScale(d.name)}
-          />
-          <path
-            d={areaShapeFuture(d.values) ?? undefined}
-            fill={$desatCurrenciesScale(d.name)}
-          />
-        {/each}
-      </g>
-    {/if}
-    <g class="lines">
-      {#each data as d}
-        <path
-          d={lineShape(d.values) ?? undefined}
-          stroke={$currenciesScale(d.name)}
-        />
-        <path
-          d={lineShapesFuture(d.values) ?? undefined}
-          stroke={$desatCurrenciesScale(d.name)}
-        />
-      {/each}
-    </g>
-    {#if $lineChartMode !== "area"}
-      <g>
-        {#each data as d}
-          {#each d.values as v}
-            <circle
-              r="2"
-              cx={x(v.date)}
-              cy={y(v.value)}
-              fill={v.date <= today
-                ? $currenciesScale(d.name)
-                : $desatCurrenciesScale(d.name)}
+    <g filter={hasFutureData ? "url(#futureColorFilter)" : ""}>
+      {#if $lineChartMode === "area"}
+        <g class="area">
+          {#each data as d}
+            <path
+              d={areaShape(d.values) ?? undefined}
+              fill={$currenciesScale(d.name)}
             />
           {/each}
+        </g>
+      {/if}
+      <g class="lines">
+        {#each data as d}
+          <path
+            d={lineShape(d.values) ?? undefined}
+            stroke={$currenciesScale(d.name)}
+          />
         {/each}
       </g>
-    {/if}
+      {#if $lineChartMode !== "area"}
+        <g>
+          {#each data as d}
+            {#each d.values as v}
+              <circle
+                r="2"
+                cx={x(v.date)}
+                cy={y(v.value)}
+                fill={$currenciesScale(d.name)}
+              />
+            {/each}
+          {/each}
+        </g>
+      {/if}
+    </g>
   </g>
 </svg>
 

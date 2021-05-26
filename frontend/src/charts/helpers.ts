@@ -47,7 +47,6 @@ function hclColorRange(count: number, chroma = 45, luminance = 70): string[] {
 }
 
 export const colors10 = hclColorRange(10);
-export const colorsDesat10 = hclColorRange(10, 20);
 export const colors15 = hclColorRange(15, 30, 80);
 
 /*
@@ -70,15 +69,6 @@ export const currenciesScale = derived(
   [operating_currency, currencies_sorted],
   ([operating_currency_val, currencies_sorted_val]) =>
     scaleOrdinal(colors10).domain([
-      ...operating_currency_val,
-      ...currencies_sorted_val,
-    ])
-);
-
-export const desatCurrenciesScale = derived(
-  [operating_currency, currencies_sorted],
-  ([operating_currency_val, currencies_sorted_val]) =>
-    scaleOrdinal(colorsDesat10).domain([
       ...operating_currency_val,
       ...currencies_sorted_val,
     ])
