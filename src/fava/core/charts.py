@@ -158,6 +158,7 @@ class ChartModule(FavaModule):
                 )
 
             if invert:
+                # pylint: disable=invalid-unary-operand-type
                 balance = -balance
                 budgets = {k: -v for k, v in budgets.items()}
 
