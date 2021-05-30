@@ -1,7 +1,6 @@
-# pylint: disable=all
-# flake8: noqa
+# pylint: disable=missing-docstring,unused-argument,multiple-statements
+
 import datetime
-from typing import Any
 from typing import Optional
 
 from beancount.core.amount import Amount

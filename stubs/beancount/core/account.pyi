@@ -1,7 +1,4 @@
-# pylint: disable=all
-# flake8: noqa
-from typing import Any
-from typing import Optional
+# pylint: disable=missing-docstring,unused-argument,multiple-statements
 
 # from beancount.utils import regexp_utils as regexp_utils
 

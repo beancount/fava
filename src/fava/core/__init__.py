@@ -208,6 +208,9 @@ class FavaLedger:
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = DEFAULTS
 
+        self._date_first: Optional[datetime.date] = None
+        self._date_last: Optional[datetime.date] = None
+
         self.load_file()
 
     def load_file(self) -> None:
@@ -336,7 +339,7 @@ class FavaLedger:
         self, interval: date.Interval
     ) -> Iterable[datetime.date]:
         """Generator yielding dates corresponding to interval boundaries."""
-        if not self._date_first:
+        if not self._date_first or not self._date_last:
             return []
         return date.interval_ends(self._date_first, self._date_last, interval)
 
@@ -604,7 +607,7 @@ class FavaLedger:
             True if the account is closed before the end date of the current
             time filter.
         """
-        if self.filters.time:
+        if self.filters.time and self._date_last is not None:
             return self.accounts[account_name].close_date < self._date_last
         return self.accounts[account_name].close_date != datetime.date.max
 

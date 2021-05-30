@@ -1,5 +1,5 @@
-# pylint: disable=all
-# flake8: noqa
+# pylint: disable=missing-docstring,unused-argument,multiple-statements
+
 FLAG_OKAY: str
 FLAG_WARNING: str
 FLAG_PADDING: str

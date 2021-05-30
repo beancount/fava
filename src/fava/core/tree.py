@@ -3,12 +3,13 @@ import collections
 import datetime
 from typing import Dict
 from typing import Generator
+from typing import Iterable
 from typing import List
 from typing import Optional
 
 from beancount.core import account
 from beancount.core import convert
-from beancount.core.data import Entries
+from beancount.core.data import Directive
 from beancount.core.data import Open
 from beancount.core.prices import PriceMap
 
@@ -77,7 +78,7 @@ class Tree(Dict[str, TreeNode]):
         entries: A list of entries to compute balances from.
     """
 
-    def __init__(self, entries: Optional[Entries] = None):
+    def __init__(self, entries: Optional[Iterable[Directive]] = None):
         super().__init__(self)
         self.get("", insert=True)
         if entries:

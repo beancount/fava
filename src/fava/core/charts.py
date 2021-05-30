@@ -101,7 +101,7 @@ class ChartModule(FavaModule):
         end: Optional[date] = None,
     ) -> SerialisedTreeNode:
         """An account tree."""
-        if begin is not None:
+        if begin is not None and end is not None:
             tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
         else:
             tree = self.ledger.root_tree

@@ -1,8 +1,7 @@
-# pylint: disable=all
-# flake8: noqa
+# pylint: disable=missing-docstring,unused-argument,multiple-statements
+
 from typing import Any
 from typing import List
-from typing import Optional
 from typing import Tuple
 from typing import Type
 

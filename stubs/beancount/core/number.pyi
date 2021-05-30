@@ -1,5 +1,5 @@
-# pylint: disable=all
-# flake8: noqa
+# pylint: disable=missing-docstring,unused-argument,multiple-statements
+
 import decimal
 from typing import Optional
 from typing import Union

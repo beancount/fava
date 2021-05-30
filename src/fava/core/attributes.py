@@ -3,9 +3,11 @@ from typing import List
 from typing import Optional
 from typing import TYPE_CHECKING
 
-from beancount.core import getters
 from beancount.core.data import Entries
 from beancount.core.data import Transaction
+from beancount.core.getters import get_active_years as getters_get_active_years
+from beancount.core.getters import get_all_links
+from beancount.core.getters import get_all_tags
 
 from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
@@ -29,7 +31,7 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
 
     if fye == (12, 31):
         return sorted(
-            map(str, getters.get_active_years(entries)), reverse=True
+            map(str, getters_get_active_years(entries)), reverse=True
         )
     seen = set()
     month = fye.month
@@ -57,8 +59,8 @@ class AttributesModule(FavaModule):
 
     def load_file(self) -> None:
         all_entries = self.ledger.all_entries
-        self.links = getters.get_all_links(all_entries)
-        self.tags = getters.get_all_tags(all_entries)
+        self.links = get_all_links(all_entries)
+        self.tags = get_all_tags(all_entries)
         self.years = get_active_years(
             all_entries, self.ledger.fava_options["fiscal-year-end"]
         )
@@ -78,7 +80,7 @@ class AttributesModule(FavaModule):
                 currency_ranker.update(
                     posting.units.currency, txn.date  # type: ignore
                 )
-                if posting.cost:
+                if posting.cost and posting.cost.currency is not None:
                     currency_ranker.update(posting.cost.currency, txn.date)
 
         self.accounts = account_ranker.sort()

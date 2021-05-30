@@ -12,7 +12,7 @@ from beancount.core.position import Cost
 from beancount.core.position import Position
 
 
-InventoryKey = Tuple[str, Optional[str]]
+InventoryKey = Tuple[str, Optional[Cost]]
 
 
 class SimpleCounterInventory(Dict[str, Decimal]):
@@ -71,8 +71,8 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
 
     def add_amount(self, amount: Amount, cost: Optional[Cost] = None) -> None:
         """Add an Amount to the inventory."""
-        key = (amount.currency, cost)
         assert amount.number is not None
+        key = (amount.currency, cost)
         self.add(key, amount.number)
 
     def add_position(self, pos: Position) -> None:

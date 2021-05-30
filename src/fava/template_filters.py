@@ -14,6 +14,7 @@ import flask
 from beancount.core import compare
 from beancount.core import realization
 from beancount.core.account import ACCOUNT_RE
+from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 
@@ -79,12 +80,14 @@ def hash_entry(entry) -> str:
     return compare.hash_entry(entry)
 
 
-def balance_children(account):
+def balance_children(account: realization.RealAccount) -> Inventory:
     """Compute the total balance of an account."""
     return realization.compute_balance(account)
 
 
-def get_or_create(account, account_name):
+def get_or_create(
+    account: realization.RealAccount, account_name: str
+) -> realization.RealAccount:
     """Get or create a child account."""
     if account.account == account_name:
         return account
