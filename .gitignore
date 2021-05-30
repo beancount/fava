@@ -2,7 +2,6 @@
 /.coverage
 /.eggs
 /.tox
-/.idea/
 /build/
 /pip-wheel-metadata/
 /dist/
@@ -13,6 +12,9 @@
 /src/fava.egg-info
 /htmlcov
 /venv
+
+/.idea/
+/.vscode/
 
 node_modules
 *.pyc
