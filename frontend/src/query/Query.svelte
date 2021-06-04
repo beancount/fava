@@ -23,10 +23,9 @@
 
   const query_results: Record<string, ResultType> = {};
 
-  $: query_result_array = $query_shell_history.map((item): [
-    string,
-    ResultType
-  ] => [item, query_results[item] || {}]);
+  $: query_result_array = $query_shell_history.map(
+    (item): [string, ResultType] => [item, query_results[item] || {}]
+  );
 
   async function setResult(query: string, res: ResultType) {
     addToHistory(query);
