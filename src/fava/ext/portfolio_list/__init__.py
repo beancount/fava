@@ -2,6 +2,7 @@
 
 This is a simple example of Fava's extension reports system.
 """
+# mypy: ignore-errors
 import re
 
 from beancount.core.number import Decimal

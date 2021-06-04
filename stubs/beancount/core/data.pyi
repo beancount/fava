@@ -1,16 +1,16 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
 import datetime
 import enum
 from typing import Any
 from typing import Dict
 from typing import FrozenSet
+from typing import Generator
 from typing import List
 from typing import NamedTuple
 from typing import Optional
 from typing import Set
 from typing import Type
-from typing import Union, Generator
+from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal

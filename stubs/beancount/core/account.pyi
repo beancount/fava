@@ -1,7 +1,5 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
 # from beancount.utils import regexp_utils as regexp_utils
-
 # sep: str
 # ACC_COMP_TYPE_RE: Any
 # ACC_COMP_NAME_RE: Any

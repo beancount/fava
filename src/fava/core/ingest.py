@@ -10,8 +10,10 @@ from typing import Dict
 from typing import List
 from typing import NamedTuple
 from typing import Optional
+from typing import Tuple
 from typing import TYPE_CHECKING
 
+from beancount.core.data import Entries
 from beancount.ingest import cache  # type: ignore
 from beancount.ingest import extract
 from beancount.ingest import identify
@@ -45,7 +47,7 @@ class FileImporters(NamedTuple):
     importers: List[FileImportInfo]
 
 
-def file_import_info(filename: str, importer) -> FileImportInfo:
+def file_import_info(filename: str, importer: Any) -> FileImportInfo:
     """Generate info about a file with an importer."""
     # pylint: disable=broad-except
     file = cache.get_file(filename)
@@ -146,7 +148,7 @@ class IngestModule(FavaModule):
 
         return ret
 
-    def extract(self, filename: str, importer_name: str):
+    def extract(self, filename: str, importer_name: str) -> Entries:
         """Extract entries from filename with the specified importer.
 
         Args:
@@ -176,7 +178,7 @@ class IngestModule(FavaModule):
             existing_entries=self.ledger.all_entries,
         )
 
-        new_entries_list = [(filename, new_entries)]
+        new_entries_list: List[Tuple[str, Entries]] = [(filename, new_entries)]
         for hook_fn in self.hooks:
             new_entries_list = hook_fn(
                 new_entries_list, self.ledger.all_entries

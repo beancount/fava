@@ -7,6 +7,7 @@ import os
 import re
 import unicodedata
 from typing import Any
+from typing import List
 from typing import MutableMapping
 from typing import Optional
 
@@ -14,6 +15,7 @@ import flask
 from beancount.core import compare
 from beancount.core import realization
 from beancount.core.account import ACCOUNT_RE
+from beancount.core.data import Directive
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
@@ -22,11 +24,12 @@ from fava.context import g
 from fava.core.conversion import cost
 from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.conversion import units
+from fava.core.tree import TreeNode
 from fava.util.date import Interval
 
 
 def remove_keys(
-    _dict: MutableMapping[str, Any], keys
+    _dict: MutableMapping[str, Any], keys: List[str]
 ) -> MutableMapping[str, Any]:
     """Remove keys from a dictionary."""
     if not _dict:
@@ -37,7 +40,9 @@ def remove_keys(
     return new
 
 
-def cost_or_value(inventory, date: Optional[datetime.date] = None) -> Any:
+def cost_or_value(
+    inventory: Inventory, date: Optional[datetime.date] = None
+) -> Any:
     """Get the cost or value of an inventory."""
     return cost_or_value_without_context(
         inventory, g.conversion, g.ledger.price_map, date
@@ -75,7 +80,7 @@ def format_date(date: datetime.date) -> str:
     return ""
 
 
-def hash_entry(entry) -> str:
+def hash_entry(entry: Directive) -> str:
     """Hash an entry."""
     return compare.hash_entry(entry)
 
@@ -97,12 +102,12 @@ def get_or_create(
 FLAGS_TO_TYPES = {"*": "cleared", "!": "pending"}
 
 
-def flag_to_type(flag):
+def flag_to_type(flag: str) -> str:
     """Names for entry flags."""
     return FLAGS_TO_TYPES.get(flag, "other")
 
 
-def should_show(account) -> bool:
+def should_show(account: TreeNode) -> bool:
     """Determine whether the account should be shown."""
     if not account.balance_children.is_empty() or any(
         should_show(a) for a in account.children

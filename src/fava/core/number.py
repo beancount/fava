@@ -41,7 +41,7 @@ def get_locale_format(locale: Optional[Locale], precision: int) -> Formatter:
     pattern.frac_prec = (precision, precision)
 
     def locale_fmt(num: Decimal) -> str:
-        return pattern.apply(num, locale)
+        return pattern.apply(num, locale)  # type: ignore
 
     return locale_fmt
 

@@ -1,9 +1,11 @@
 """Entry filters."""
 import re
 from datetime import date
+from typing import Any
 from typing import Callable
 from typing import Generator
 from typing import Iterable
+from typing import List
 from typing import Optional
 from typing import Tuple
 
@@ -152,116 +154,118 @@ class FilterSyntaxParser:
     precedence = (("left", "AND"), ("right", "UMINUS"))
     tokens = FilterSyntaxLexer.tokens
 
-    def p_error(self, _):
+    def p_error(self, _: Any) -> None:
         raise FilterException("filter", "Failed to parse filter: ")
 
-    def p_filter(self, p):
+    def p_filter(self, p: List[Any]) -> None:
         """
         filter : expr
         """
         p[0] = p[1]
 
-    def p_expr(self, p):
+    def p_expr(self, p: List[Any]) -> None:
         """
         expr : simple_expr
         """
         p[0] = p[1]
 
-    def p_expr_all(self, p):
+    def p_expr_all(self, p: List[Any]) -> None:
         """
         expr : ALL expr ')'
         """
         expr = p[2]
 
-        def _match_postings(entry):
+        def _match_postings(entry: Directive) -> bool:
             return all(
                 expr(posting) for posting in getattr(entry, "postings", [])
             )
 
         p[0] = _match_postings
 
-    def p_expr_any(self, p):
+    def p_expr_any(self, p: List[Any]) -> None:
         """
         expr : ANY expr ')'
         """
         expr = p[2]
 
-        def _match_postings(entry):
+        def _match_postings(entry: Directive) -> bool:
             return any(
                 expr(posting) for posting in getattr(entry, "postings", [])
             )
 
         p[0] = _match_postings
 
-    def p_expr_parentheses(self, p):
+    def p_expr_parentheses(self, p: List[Any]) -> None:
         """
         expr : '(' expr ')'
         """
         p[0] = p[2]
 
-    def p_expr_and(self, p):
+    def p_expr_and(self, p: List[Any]) -> None:
         """
         expr : expr expr %prec AND
         """
         left, right = p[1], p[2]
 
-        def _and(entry):
-            return left(entry) and right(entry)
+        def _and(entry: Directive) -> bool:
+            return left(entry) and right(entry)  # type: ignore
 
         p[0] = _and
 
-    def p_expr_or(self, p):
+    def p_expr_or(self, p: List[Any]) -> None:
         """
         expr : expr ',' expr
         """
         left, right = p[1], p[3]
 
-        def _or(entry):
-            return left(entry) or right(entry)
+        def _or(entry: Directive) -> bool:
+            return left(entry) or right(entry)  # type: ignore
 
         p[0] = _or
 
-    def p_expr_negated(self, p):
+    def p_expr_negated(self, p: List[Any]) -> None:
         """
         expr : '-' expr %prec UMINUS
         """
         func = p[2]
 
-        def _neg(entry):
+        def _neg(entry: Directive) -> bool:
             return not func(entry)
 
         p[0] = _neg
 
-    def p_simple_expr_TAG(self, p):
+    def p_simple_expr_TAG(self, p: List[Any]) -> None:
         """
         simple_expr : TAG
         """
         tag = p[1]
 
-        def _tag(entry):
-            return hasattr(entry, "tags") and (tag in entry.tags)
+        def _tag(entry: Directive) -> bool:
+            tags = getattr(entry, "tags", None)
+            return (tag in tags) if tags is not None else False
 
         p[0] = _tag
 
-    def p_simple_expr_LINK(self, p):
+    def p_simple_expr_LINK(self, p: List[Any]) -> None:
         """
         simple_expr : LINK
         """
         link = p[1]
 
-        def _link(entry):
-            return hasattr(entry, "links") and (link in entry.links)
+        def _link(entry: Directive) -> bool:
+            links = getattr(entry, "links", None)
+            return (link in links) if links is not None else False
 
         p[0] = _link
 
-    def p_simple_expr_STRING(self, p):
+    def p_simple_expr_STRING(self, p: List[Any]) -> None:
         """
         simple_expr : STRING
         """
         string = p[1]
         match = Match(string)
 
-        def _string(entry):
+        def _string(entry: Directive) -> bool:
             for name in ("narration", "payee", "comment"):
                 value = getattr(entry, name, "")
                 if value and match(value):
@@ -270,14 +274,14 @@ class FilterSyntaxParser:
 
         p[0] = _string
 
-    def p_simple_expr_key(self, p):
+    def p_simple_expr_key(self, p: List[Any]) -> None:
         """
         simple_expr : KEY STRING
         """
         key, value = p[1], p[2]
         match = Match(value)
 
-        def _key(entry):
+        def _key(entry: Directive) -> bool:
             if hasattr(entry, key):
                 return match(str(getattr(entry, key) or ""))
             if entry.meta is not None and key in entry.meta:

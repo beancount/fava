@@ -55,10 +55,9 @@ class FavaExtensionBase:
         Args:
             event: One of the possible events.
         """
-        try:
-            getattr(self, event)(*args)
-        except AttributeError:
-            pass
+        handler = getattr(self, event, None)
+        if handler is not None:
+            handler(*args)
 
 
 def find_extensions(

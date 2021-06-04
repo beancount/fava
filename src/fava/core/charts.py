@@ -1,6 +1,7 @@
 """Provide data suitable for Fava's charts. """
 from datetime import date
 from datetime import timedelta
+from typing import Any
 from typing import Dict
 from typing import Generator
 from typing import List
@@ -36,7 +37,11 @@ ONE_DAY = timedelta(days=1)
 
 def inv_to_dict(inventory: Inventory) -> Dict[str, Decimal]:
     """Convert an inventory to a simple cost->number dict."""
-    return {pos.units.currency: pos.units.number for pos in inventory}
+    return {
+        pos.units.currency: pos.units.number
+        for pos in inventory
+        if pos.units.number is not None
+    }
 
 
 Inventory.for_json = inv_to_dict  # type: ignore
@@ -45,14 +50,14 @@ Inventory.for_json = inv_to_dict  # type: ignore
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # Allow use of a `for_json` method to serialise dict subclasses.
         kwargs["for_json"] = True
         # Sort dict keys (Flask also does this by default).
         kwargs["sort_keys"] = True
-        super().__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)  # type: ignore
 
-    def default(self, o):  # pylint: disable=method-hidden
+    def default(self, o: Any) -> Any:  # pylint: disable=method-hidden
         if isinstance(o, Decimal):
             return float(o)
         if isinstance(o, (date, Amount, Position)):
@@ -70,7 +75,7 @@ class FavaJSONEncoder(JSONEncoder):
 ENCODER = FavaJSONEncoder()
 
 
-def dumps(arg) -> str:
+def dumps(arg: Any) -> Any:
     """Encode to JSON."""
     return ENCODER.encode(arg)
 
@@ -86,7 +91,7 @@ class DateAndBalanceWithBudget(TypedDict):
     """Balance at a date with a budget."""
 
     date: date
-    balance: Dict[str, Decimal]
+    balance: Inventory
     budgets: Dict[str, Decimal]
 
 
@@ -260,7 +265,7 @@ class ChartModule(FavaModule):
             }
 
     @staticmethod
-    def can_plot_query(types):
+    def can_plot_query(types: List[Tuple[str, Any]]) -> bool:
         """Whether we can plot the given query.
 
         Args:
@@ -272,7 +277,9 @@ class ChartModule(FavaModule):
             and types[1][1] is Inventory
         )
 
-    def query(self, types, rows):
+    def query(
+        self, types: List[Tuple[str, Any]], rows: List[Tuple[Any, ...]]
+    ) -> Any:
         """Chart for a query.
 
         Args:

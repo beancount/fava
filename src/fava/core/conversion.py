@@ -6,6 +6,7 @@ import datetime
 from typing import Any
 from typing import Optional
 from typing import overload
+from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.convert import convert_position
@@ -22,7 +23,7 @@ from fava.core.inventory import SimpleCounterInventory
 
 def get_market_value(
     pos: Position, price_map: PriceMap, date: Optional[datetime.date] = None
-):
+) -> Amount:
     """Get the market value of a Position.
 
     This differs from the convert.get_value function in Beancount by returning
@@ -51,12 +52,32 @@ def get_market_value(
     return units_
 
 
-def units(inventory):
+@overload
+def units(inventory: Inventory) -> Inventory:
+    ...
+
+
+@overload
+def units(inventory: CounterInventory) -> SimpleCounterInventory:
+    ...
+
+
+def units(inventory: Union[Inventory, CounterInventory]) -> Any:
     """Get the units of an inventory."""
     return inventory.reduce(get_units)
 
 
-def cost(inventory):
+@overload
+def cost(inventory: Inventory) -> Inventory:
+    ...
+
+
+@overload
+def cost(inventory: CounterInventory) -> SimpleCounterInventory:
+    ...
+
+
+def cost(inventory: Union[Inventory, CounterInventory]) -> Any:
     """Get the cost of an inventory."""
     return inventory.reduce(get_cost)
 
@@ -82,7 +103,7 @@ def cost_or_value(
 
 
 def cost_or_value(
-    inventory,
+    inventory: Union[Inventory, CounterInventory],
     conversion: str,
     price_map: PriceMap,
     date: Optional[datetime.date] = None,

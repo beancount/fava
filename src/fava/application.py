@@ -200,8 +200,8 @@ def translations() -> Any:
 app.add_template_global(static_url, "static_url")  # type: ignore
 app.add_template_global(datetime.date.today, "today")
 app.add_template_global(url_for, "url_for")  # type: ignore
-app.add_template_global(url_for_source, "url_for_source")  # type: ignore
-app.add_template_global(translations, "translations")  # type: ignore
+app.add_template_global(url_for_source, "url_for_source")
+app.add_template_global(translations, "translations")
 
 
 @app.context_processor
@@ -243,7 +243,9 @@ def _incognito(response: flask.wrappers.Response) -> flask.wrappers.Response:
 
 
 @app.url_value_preprocessor
-def _pull_beancount_file(_, values) -> None:
+def _pull_beancount_file(
+    _: Optional[str], values: Optional[Dict[str, str]]
+) -> None:
     g.beancount_file_slug = values.pop("bfile", None) if values else None
     with LOAD_FILE_LOCK:
         if not app.config.get("LEDGERS"):
@@ -263,7 +265,7 @@ def _pull_beancount_file(_, values) -> None:
 
 
 @app.errorhandler(FavaAPIException)  # type: ignore
-def fava_api_exception(error: FavaAPIException):
+def fava_api_exception(error: FavaAPIException) -> str:
     """Handle API errors."""
     return render_template(
         "_layout.html", page_title="Error", content=error.message

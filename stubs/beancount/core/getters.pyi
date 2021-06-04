@@ -1,9 +1,10 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
 import datetime
 from typing import Any
 from typing import List
-from typing import Optional, Union, Tuple
+from typing import Optional
+from typing import Tuple
+from typing import Union
 
 from beancount.core.data import Entries
 
@@ -12,7 +13,7 @@ from beancount.core.data import Entries
 # def get_entry_accounts(entry: Directive): ...
 # def get_account_components(entries: Entries): ...
 def get_all_tags(entries: Entries) -> List[str]: ...
-def get_all_payees(entries: Entries): ...
+def get_all_payees(entries: Entries) -> List[str]: ...
 def get_all_links(entries: Entries) -> List[str]: ...
 
 # def get_leveln_parent_accounts(

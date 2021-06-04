@@ -8,6 +8,10 @@ import os
 import shutil
 from os import path
 from os import remove
+from typing import Any
+from typing import Callable
+from typing import cast
+from typing import Dict
 from typing import List
 
 from flask import Blueprint
@@ -27,68 +31,64 @@ from fava.serialisation import serialise
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
 
-def get_api_endpoint(func):
+def json_err(msg: str) -> Any:
+    """Jsonify the error message."""
+    return jsonify({"success": False, "error": msg})
+
+
+def json_success(data: Any) -> Any:
+    """Jsonify the response."""
+    return jsonify({"success": True, "data": data})
+
+
+@json_api.errorhandler(FavaAPIException)  # type: ignore
+def _json_api_exception(error: FavaAPIException) -> Any:
+    return json_err(error.message)
+
+
+@json_api.errorhandler(OSError)  # type: ignore
+def _json_api_oserror(error: OSError) -> Any:
+    return json_err(error.strerror)
+
+
+def get_api_endpoint(func: Callable[[], Any]) -> Callable[[], Any]:
     """Register a GET endpoint."""
 
     @json_api.route(f"/{func.__name__}", methods=["GET"])
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
-        return jsonify({"success": True, "data": func(*args, **kwargs)})
+    def _wrapper() -> Any:
+        return json_success(func())
 
-    return _wrapper
+    return cast(Callable[[], Any], _wrapper)
 
 
-def put_api_endpoint(func):
+def put_api_endpoint(
+    func: Callable[[Dict[str, Any]], Any]
+) -> Callable[[Dict[str, Any]], Any]:
     """Register a PUT endpoint."""
 
     @json_api.route(f"/{func.__name__}", methods=["PUT"])
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
+    def _wrapper() -> Any:
         request_data = request.get_json()
         if request_data is None:
             raise FavaAPIException("Invalid JSON request.")
-        res = func(request_data, *args, **kwargs)
-        return jsonify({"success": True, "data": res})
+        return json_success(func(request_data))
 
-    return _wrapper
+    return cast(Callable[[Dict[str, Any]], Any], _wrapper)
 
 
-def delete_api_endpoint(func):
+def delete_api_endpoint(func: Callable[[], Any]) -> Callable[[], Any]:
     """Register a DELETE endpoint."""
 
     route = func.__name__.replace("delete_", "")
 
     @json_api.route(f"/{route}", methods=["DELETE"])
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
-        return jsonify({"success": True, "data": func(*args, **kwargs)})
+    def _wrapper() -> Any:
+        return json_success(func())
 
-    return _wrapper
-
-
-def json_response(func):
-    """Jsonify the response."""
-
-    @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
-        json_data = func(*args, **kwargs)
-        if "success" not in json_data:
-            json_data["success"] = True
-        return jsonify(json_data)
-
-    return _wrapper
-
-
-@json_api.errorhandler(FavaAPIException)
-@json_response
-def _json_api_exception(error):
-    return {"success": False, "error": error.message}
-
-
-@json_api.errorhandler(OSError)
-@json_response
-def _json_api_oserror(error):
-    return {"success": False, "error": error.strerror}
+    return cast(Callable[[], Any], _wrapper)
 
 
 @get_api_endpoint
@@ -111,7 +111,7 @@ def payee_accounts() -> List[str]:
 
 
 @get_api_endpoint
-def query_result():
+def query_result() -> Any:
     """Render a query result to HTML."""
     query = request.args.get("query_string", "")
     table = get_template_attribute("_query_table.html", "querytable")
@@ -130,18 +130,21 @@ def query_result():
 
 
 @get_api_endpoint
-def extract():
+def extract() -> List[Any]:
     """Extract entries using the ingest framework."""
     entries = g.ledger.ingest.extract(
-        request.args.get("filename"), request.args.get("importer")
+        request.args.get("filename"),  # type: ignore
+        request.args.get("importer"),  # type: ignore
     )
     return list(map(serialise, entries))
 
 
 @get_api_endpoint
-def context():
+def context() -> Any:
     """Entry context."""
     entry_hash = request.args.get("entry_hash")
+    if not entry_hash:
+        raise FavaAPIException("No entry hash given.")
     entry, balances, slice_, sha256sum = g.ledger.context(entry_hash)
     content = render_template("_context.html", entry=entry, balances=balances)
     return {"content": content, "sha256sum": sha256sum, "slice": slice_}
@@ -159,10 +162,8 @@ def move() -> str:
 
     if not account:
         raise FavaAPIException("No account specified.")
-
     if not filename:
         raise FavaAPIException("No filename specified.")
-
     if not new_name:
         raise FavaAPIException("No new filename given.")
 
@@ -172,47 +173,47 @@ def move() -> str:
 
     if not path.isfile(filename):
         raise FavaAPIException(f"Not a file: '{filename}'")
-
     if path.exists(new_path):
         raise FavaAPIException(f"Target file exists: '{new_path}'")
 
     if not path.exists(path.dirname(new_path)):
         os.makedirs(path.dirname(new_path), exist_ok=True)
-
     shutil.move(filename, new_path)
 
     return f"Moved {filename} to {new_path}."
 
 
 @get_api_endpoint
-def payee_transaction():
+def payee_transaction() -> Any:
     """Last transaction for the given payee."""
-    entry = g.ledger.attributes.payee_transaction(request.args.get("payee"))
+    entry = g.ledger.attributes.payee_transaction(
+        request.args.get("payee", "")
+    )
     return serialise(entry)
 
 
 @put_api_endpoint
-def source(request_data) -> str:
+def source(request_data: Dict[str, Any]) -> str:
     """Write one of the source files and return the updated sha256sum."""
     return g.ledger.file.set_source(
-        request_data.get("file_path"),
-        request_data.get("source"),
-        request_data.get("sha256sum"),
+        request_data.get("file_path"),  # type: ignore
+        request_data.get("source"),  # type: ignore
+        request_data.get("sha256sum"),  # type: ignore
     )
 
 
 @put_api_endpoint
-def source_slice(request_data) -> str:
+def source_slice(request_data: Dict[str, Any]) -> str:
     """Write an entry source slice and return the updated sha256sum."""
     return g.ledger.file.save_entry_slice(
-        request_data.get("entry_hash"),
-        request_data.get("source"),
-        request_data.get("sha256sum"),
+        request_data.get("entry_hash"),  # type: ignore
+        request_data.get("source"),  # type: ignore
+        request_data.get("sha256sum"),  # type: ignore
     )
 
 
 @put_api_endpoint
-def format_source(request_data) -> str:
+def format_source(request_data: Dict[str, Any]) -> str:
     """Format beancount file."""
     return align(
         request_data["source"], g.ledger.fava_options["currency-column"]
@@ -237,8 +238,7 @@ def delete_document() -> str:
 
 
 @json_api.route("/add_document", methods=["PUT"])
-@json_response
-def add_document():
+def add_document() -> Any:
     """Upload a document."""
     if not g.ledger.options["documents"]:
         raise FavaAPIException("You need to set a documents folder.")
@@ -247,6 +247,8 @@ def add_document():
 
     if not upload:
         raise FavaAPIException("No file uploaded.")
+    if not upload.filename:
+        raise FavaAPIException("Uploaded file is missing filename.")
 
     filepath = filepath_in_document_folder(
         request.form["folder"],
@@ -268,11 +270,11 @@ def add_document():
         g.ledger.file.insert_metadata(
             request.form["hash"], "document", filename
         )
-    return {"data": f"Uploaded to {filepath}"}
+    return json_success(f"Uploaded to {filepath}")
 
 
 @put_api_endpoint
-def attach_document(request_data):
+def attach_document(request_data: Dict[str, Any]) -> str:
     """Attach a document to an entry."""
     filename = request_data["filename"]
     entry_hash = request_data["entry_hash"]
@@ -281,7 +283,7 @@ def attach_document(request_data):
 
 
 @put_api_endpoint
-def add_entries(request_data):
+def add_entries(request_data: Dict[str, Any]) -> str:
     """Add multiple entries."""
     try:
         entries = [deserialise(entry) for entry in request_data["entries"]]

@@ -6,7 +6,7 @@ from beancount.core.display_context import DisplayContext
 try:
     from typing_extensions import TypedDict  # below Python 3.8
 except ImportError:
-    from typing import TypedDict  # type: ignore
+    from typing import TypedDict
 
 
 class BeancountOptions(TypedDict):

@@ -1,7 +1,7 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
 import enum
-from typing import Optional, Dict
+from typing import Dict
+from typing import Optional
 
 from beancount.core.number import Decimal
 

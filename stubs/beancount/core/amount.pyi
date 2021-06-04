@@ -1,5 +1,4 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
 from typing import Any
 from typing import NamedTuple
 from typing import Optional

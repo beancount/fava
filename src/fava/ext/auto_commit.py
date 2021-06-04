@@ -3,6 +3,7 @@
 This mainly serves as an example how Fava's extension systems, which only
 really does hooks at the moment, works.
 """
+# mypy: ignore-errors
 # pylint: disable=missing-docstring
 # pragma: no cover - this is just an untested example
 import os

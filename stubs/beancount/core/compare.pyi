@@ -1,5 +1,4 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
 from beancount.core.data import Directive
 from beancount.core.data import Entries
 

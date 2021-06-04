@@ -1,5 +1,5 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-
+from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import Optional
@@ -14,7 +14,7 @@ from beancount.core.inventory import Inventory
 
 TxnPostingList = List[Union[Directive, TxnPosting]]
 
-class RealAccount(dict):
+class RealAccount(Dict[str, "RealAccount"]):
     account: str = ...
     txn_postings: TxnPostingList = ...
     balance: Optional[Inventory] = ...

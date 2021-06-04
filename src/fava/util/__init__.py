@@ -24,7 +24,7 @@ from werkzeug.urls import url_quote
 BASEPATH = Path(__file__).parent.parent
 
 
-def filter_api_changed(record):
+def filter_api_changed(record: Any) -> bool:
     """Filter out LogRecords for requests that poll for changes."""
     return "/api/changed HTTP" not in record.msg
 
@@ -49,17 +49,19 @@ def listify(
     """Decorator to make generator function return a list."""
 
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs) -> List[Item]:
+    def _wrapper(*args: Any, **kwargs: Any) -> List[Item]:
         return list(func(*args, **kwargs))
 
     return _wrapper
 
 
-def timefunc(func):  # pragma: no cover - only used for debugging so far
+def timefunc(
+    func: Any,
+) -> Any:  # pragma: no cover - only used for debugging so far
     """Decorator to time function for debugging."""
 
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
+    def _wrapper(*args: Any, **kwargs: Any) -> Any:
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
@@ -109,7 +111,7 @@ def slugify(string: str) -> str:
     return string
 
 
-def simple_wsgi(_, start_response):
+def simple_wsgi(_: Any, start_response: Any) -> List[bytes]:
     """A simple wsgi app that always returns an empty response."""
     start_response("200 OK", [("Content-Type", "text/html")])
     return [b""]

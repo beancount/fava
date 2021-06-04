@@ -1,4 +1,5 @@
 """For using the Beancount shell from Fava."""
+# mypy: ignore-errors
 import contextlib
 import io
 import textwrap
