@@ -33,5 +33,5 @@ repos:
           - id: eslint
             name: eslint
             language: node
-            entry: ./frontend/node_modules/eslint/bin/eslint.js
+            entry: ./frontend/node_modules/eslint/bin/eslint.js --max-warnings 0
             files: \.(js|ts|svelte)$
