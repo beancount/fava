@@ -107,9 +107,12 @@
       transform={`translate(0,${innerHeight})`}
     />
     <g class="y axis" use:axis={yAxis} />
-    <g filter={hasFutureData ? "url(#desaturateFuture)" : undefined}>
+    <g>
       {#if $lineChartMode === "area"}
-        <g class="area">
+        <g
+          class="area"
+          filter={hasFutureData ? "url(#desaturateFuture)" : undefined}
+        >
           {#each data as d}
             <path
               d={areaShape(d.values) ?? undefined}
@@ -118,7 +121,10 @@
           {/each}
         </g>
       {/if}
-      <g class="lines">
+      <g
+        class="lines"
+        filter={hasFutureData ? "url(#desaturateFuture)" : undefined}
+      >
         {#each data as d}
           <path
             d={lineShape(d.values) ?? undefined}
@@ -135,6 +141,7 @@
                 cx={x(v.date)}
                 cy={y(v.value)}
                 fill={$currenciesScale(d.name)}
+                class={v.date > today ? "desaturate" : undefined}
               />
             {/each}
           {/each}
@@ -154,5 +161,8 @@
   }
   .area path {
     opacity: 0.3;
+  }
+  .desaturate {
+    filter: saturate(50%);
   }
 </style>
