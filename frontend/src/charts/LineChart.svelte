@@ -13,7 +13,6 @@
   import { axis } from "./axis";
   import { currenciesScale } from "./helpers";
   import { positionedTooltip } from "./tooltip";
-  import FutureColorFilter from "./FutureColorFilter.svelte";
 
   import type { LineChart, LineChartDatum } from ".";
 
@@ -42,9 +41,11 @@
   // Scales
   $: allValues = merge<LineChartDatum>(data.map((d) => d.values));
 
+  const today = new Date();
+  let xDomain: [Date, Date];
   $: xDomain = [
-    min(data, (s) => s.values[0].date) ?? 0,
-    max(data, (s) => s.values[s.values.length - 1].date) ?? 0,
+    min(data, (s) => s.values[0].date) ?? today,
+    max(data, (s) => s.values[s.values.length - 1].date) ?? today,
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
   let yMin = 0;
@@ -88,16 +89,14 @@
     return d ? [x(d.date), y(d.value), tooltipText($ctx, d)] : undefined;
   }
 
-  let hasFutureData: bool;
+  $: hasFutureData = xDomain[1] > today;
 </script>
 
 <svg {width} {height}>
-  <FutureColorFilter
-    {x}
-    lastDate={xDomain[1]}
-    {innerHeight}
-    bind:hasFutureData
-  />
+  <filter id="desaturateFuture">
+    <feColorMatrix type="saturate" values="0.5" x={x(today)} />
+    <feBlend in2="SourceGraphic" />
+  </filter>
   <g
     use:positionedTooltip={tooltipInfo}
     transform={`translate(${margin.left},${margin.top})`}
@@ -108,7 +107,7 @@
       transform={`translate(0,${innerHeight})`}
     />
     <g class="y axis" use:axis={yAxis} />
-    <g filter={hasFutureData ? "url(#futureColorFilter)" : ""}>
+    <g filter={hasFutureData ? "url(#desaturateFuture)" : undefined}>
       {#if $lineChartMode === "area"}
         <g class="area">
           {#each data as d}
