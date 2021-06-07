@@ -41,17 +41,13 @@
 {/if}
 
 <style>
-  object {
+  object,
+  img,
+  iframe {
     width: 100%;
     height: 100%;
   }
   img {
-    width: 100%;
-    height: 100%;
     object-fit: contain;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
   }
 </style>

@@ -12,8 +12,8 @@
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
   import Table from "./Table.svelte";
+  import type { Document } from "./types";
 
-  type Document = { account: string; filename: string; date: string };
   type MoveDetails = { account: string; filename: string; newName: string };
 
   export let data: Document[];

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { _ } from "../i18n";
+  import { isDescendant } from "../lib/account";
   import { basename } from "../lib/paths";
   import { sortFunc } from "../sort";
 
   import { selectedAccount } from "./stores";
-
-  type Document = { account: string; filename: string; date: string };
+  import type { Document } from "./types";
 
   export let data: Document[];
   export let selected: Document | null = null;
@@ -15,38 +15,30 @@
    */
   function name(doc: Document) {
     const base = basename(doc.filename);
-    if (`${doc.date}` === base.substring(0, 10)) {
-      return base.substring(11);
-    }
-    return base;
+    return `${doc.date}` === base.substring(0, 10) ? base.substring(11) : base;
   }
 
-  const tableColumns: { header: string; getter: (e: Document) => string }[] = [
-    {
-      header: _("Date"),
-      getter: (e) => e.date,
-    },
-    {
-      header: _("Name"),
-      getter: (e) => name(e),
-    },
-  ];
+  const headers: [string, string] = [_("Date"), _("Name")];
+  const rowGetter: (d: Document) => [string, string] = (d) => [d.date, name(d)];
 
-  /**
-   * Index of the table column and order to sort by.
-   */
-  let sort: [number, "asc" | "desc"] = [0, "desc"];
+  /** Index of the table column that is sorted by. */
+  let sortColumn = 0;
+  /** Sort order. */
+  let sortOrder: "asc" | "desc" = "desc";
+
   $: table = data
-    .filter((e) => e.account.startsWith($selectedAccount))
-    .map((e) => ({ doc: e, row: tableColumns.map((th) => th.getter(e)) }))
-    .sort(sortFunc("string", sort[1], ({ row }) => row[sort[0]]));
+    .filter((doc) => isDescendant(doc.account, $selectedAccount))
+    .map((doc) => ({ doc, row: rowGetter(doc) }));
+  $: sortedTable = table.sort(
+    sortFunc("string", sortOrder, ({ row }) => row[sortColumn])
+  );
 
   function setSort(index: number) {
-    const [col, order] = sort;
-    if (index === col) {
-      sort = [index, order === "asc" ? "desc" : "asc"];
+    if (index === sortColumn) {
+      sortOrder = sortOrder === "asc" ? "desc" : "asc";
     } else {
-      sort = [index, "asc"];
+      sortOrder = "asc";
+      sortColumn = index;
     }
   }
 </script>
@@ -54,25 +46,26 @@
 <table>
   <thead>
     <tr>
-      {#each tableColumns as col, index}
+      {#each headers as header, index}
         <th
           on:click={() => setSort(index)}
           data-sort
-          data-order={index === sort[0] ? sort[1] : null}
+          data-order={index === sortColumn ? sortOrder : null}
         >
-          {col.header}
+          {header}
         </th>
       {/each}
     </tr>
   </thead>
   <tbody>
-    {#each table as { doc, row }}
+    {#each sortedTable as { doc, row }}
       <tr
         class:selected={selected === doc}
         draggable={true}
         title={doc.filename}
-        on:dragstart={(ev) =>
-          ev.dataTransfer?.setData("fava/filename", doc.filename)}
+        on:dragstart={(ev) => {
+          ev.dataTransfer?.setData("fava/filename", doc.filename);
+        }}
         on:click={() => {
           selected = doc;
         }}
