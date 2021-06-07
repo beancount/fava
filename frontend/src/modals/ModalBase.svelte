@@ -4,7 +4,6 @@
    *
    * This tries to follow https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal.
    */
-  import { keyboardShortcut } from "../keyboard-shortcuts";
   import { attemptFocus, getFocusableElements } from "../lib/focus";
   import { closeOverlay } from "../stores";
 

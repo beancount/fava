@@ -3,7 +3,7 @@
   import { axisBottom, axisLeft } from "d3-axis";
   import { quadtree } from "d3-quadtree";
   import { scaleLinear, scaleUtc } from "d3-scale";
-  import { area, line, curveStepAfter } from "d3-shape";
+  import { area, curveStepAfter, line } from "d3-shape";
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
