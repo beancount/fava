@@ -70,16 +70,16 @@
     "@openfonts/source-code-pro_all": "^1.44.2",
     "@openfonts/source-serif-pro_latin": "^1.44.1",
     "@ungap/custom-elements": "^1.0.0",
-    "d3-array": "^2.11.0",
+    "d3-array": "^3.0.1",
     "d3-axis": "^2.0.0",
     "d3-color": "^3.0.0",
     "d3-format": "^3.0.0",
     "d3-hierarchy": "^3.0.0",
     "d3-quadtree": "^3.0.0",
-    "d3-scale": "^3.2.3",
+    "d3-scale": "^4.0.0",
     "d3-selection": "^2.0.0",
     "d3-shape": "^3.0.0",
-    "d3-time-format": "^3.0.0",
+    "d3-time-format": "^4.0.0",
     "svelte": "^3.32.3"
   }
 }
