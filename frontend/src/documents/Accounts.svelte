@@ -4,7 +4,7 @@
 
   import { selectedAccount } from "./stores";
 
-  export let node: TreeNode<{ name: string }>;
+  export let node: TreeNode<{ name: string; count: number }>;
   export let move: (m: { account: string; filename: string }) => void;
 
   const expanded = true;
@@ -35,6 +35,8 @@
       drag = false;
     }
   }
+
+  $: hasChildren = node.children.length > 0;
 </script>
 
 {#if node.name}
@@ -54,16 +56,18 @@
     class:drag
   >
     <span>{leaf(node.name)}</span>
+    {#if node.count > 0}
+      <span class="spacer" />
+      <span class="count"> {node.count}</span>
+    {/if}
   </p>
 {/if}
 
-{#if node.children.length}
+{#if hasChildren}
   <ul class="flex-table" hidden={!expanded}>
     {#each node.children as child}
       <li>
-        {#if node.children.length}
-          <svelte:self node={child} {move} />
-        {:else}node.name{/if}
+        <svelte:self node={child} {move} />
       </li>
     {/each}
   </ul>
@@ -78,6 +82,9 @@
     overflow: hidden;
     cursor: pointer;
     border: 1px solid var(--color-table-border);
+  }
+  .count {
+    opacity: 0.6;
   }
   .selected,
   .drag {
