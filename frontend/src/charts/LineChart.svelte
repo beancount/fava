@@ -20,6 +20,7 @@
   export let width: number;
   export let tooltipText: LineChart["tooltipText"];
 
+  const today = new Date();
   const margin = {
     top: 10,
     right: 10,
@@ -41,7 +42,6 @@
   // Scales
   $: allValues = merge<LineChartDatum>(data.map((d) => d.values));
 
-  const today = new Date();
   let xDomain: [Date, Date];
   $: xDomain = [
     min(data, (s) => s.values[0].date) ?? today,
@@ -141,7 +141,7 @@
                 cx={x(v.date)}
                 cy={y(v.value)}
                 fill={$currenciesScale(d.name)}
-                class={v.date > today ? "desaturate" : undefined}
+                class:desaturate={v.date > today}
               />
             {/each}
           {/each}

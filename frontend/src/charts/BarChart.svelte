@@ -17,6 +17,7 @@
   export let width: number;
   export let tooltipText: BarChart["tooltipText"];
 
+  const today = new Date();
   const maxColumnWidth = 100;
   const margin = {
     top: 10,
@@ -74,6 +75,7 @@
     {#each data as group}
       <g
         class="group"
+        class:desaturate={group.date > today}
         use:followingTooltip={() => tooltipText($ctx, group)}
         transform={`translate(${x0(group.label)},0)`}
       >
@@ -118,16 +120,16 @@
     cursor: pointer;
     opacity: 0;
   }
-
   .group-box {
     opacity: 0;
   }
-
   .group:hover .group-box {
     opacity: 0.1;
   }
-
   .budget {
     opacity: 0.3;
+  }
+  .desaturate {
+    filter: saturate(50%);
   }
 </style>
