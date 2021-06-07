@@ -257,7 +257,7 @@ def get_entry_slice(entry: Directive) -> Tuple[str, str]:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
     """
-    with open(entry.meta["filename"], mode="r", encoding="utf-8") as file:
+    with open(entry.meta["filename"], encoding="utf-8") as file:
         lines = file.readlines()
 
     entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)
