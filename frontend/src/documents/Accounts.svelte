@@ -7,15 +7,15 @@
   export let node: TreeNode<{ name: string; count: number }>;
   export let move: (m: { account: string; filename: string }) => void;
 
-  const expanded = true;
+  let expanded = true;
   let drag = false;
 
-  function click() {
-    $selectedAccount = $selectedAccount === node.name ? "" : node.name;
-  }
+  $: hasChildren = node.children.length > 0;
+  $: selected = $selectedAccount === node.name;
 
   /**
    * Start drag if a document filename is dragged onto an account.
+   * @param event - The drag event that is passed to the event handler.
    */
   function dragenter(event: DragEvent) {
     if (event.dataTransfer?.types.includes("fava/filename")) {
@@ -23,10 +23,10 @@
       drag = true;
     }
   }
-  const dragover = dragenter;
 
   /**
    * Handle a drop and bubble the event.
+   * @param event - The drag event that is passed to the event handler.
    */
   function drop(event: DragEvent) {
     const filename = event.dataTransfer?.getData("fava/filename");
@@ -35,15 +35,15 @@
       drag = false;
     }
   }
-
-  $: hasChildren = node.children.length > 0;
 </script>
 
 {#if node.name}
   <p
-    on:click={click}
+    on:click={() => {
+      $selectedAccount = selected ? "" : node.name;
+    }}
     on:dragenter={dragenter}
-    on:dragover={dragover}
+    on:dragover={dragenter}
     on:dragleave={() => {
       drag = false;
     }}
@@ -51,10 +51,17 @@
     title={node.name}
     class="droptarget"
     data-account-name={node.name}
-    class:expanded
-    class:selected={$selectedAccount === node.name}
+    class:has-children={hasChildren}
+    class:selected
     class:drag
   >
+    <span
+      class="toggle"
+      on:click={(ev) => {
+        expanded = !expanded;
+        ev.stopPropagation();
+      }}>{expanded ? "▾" : "▸"}</span
+    >
     <span>{leaf(node.name)}</span>
     {#if node.count > 0}
       <span class="spacer" />
@@ -89,5 +96,12 @@
   .selected,
   .drag {
     background-color: var(--color-table-header-background);
+  }
+  .toggle {
+    color: var(--color-treetable-expander);
+    visibility: hidden;
+  }
+  .has-children > .toggle {
+    visibility: visible;
   }
 </style>
