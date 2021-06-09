@@ -55,7 +55,7 @@ class FavaJSONEncoder(JSONEncoder):
         kwargs["for_json"] = True
         # Sort dict keys (Flask also does this by default).
         kwargs["sort_keys"] = True
-        super().__init__(*args, **kwargs)  # type: ignore
+        super().__init__(*args, **kwargs)
 
     def default(self, o: Any) -> Any:  # pylint: disable=method-hidden
         if isinstance(o, Decimal):

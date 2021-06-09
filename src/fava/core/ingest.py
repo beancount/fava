@@ -101,8 +101,7 @@ class IngestModule(FavaModule):
             return
 
         try:
-            # The type stubs seem incorrect:
-            mod = run_path(module_path)  # type: ignore
+            mod = run_path(module_path)
         except Exception:  # pylint: disable=broad-except
             message = "".join(traceback.format_exception(*sys.exc_info()))
             self._error(f"Error in importer '{module_path}': {message}")
