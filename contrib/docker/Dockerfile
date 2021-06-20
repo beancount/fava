@@ -7,7 +7,6 @@ FROM python:alpine
 
 COPY --from=builder /install /usr/local
 
-ENV BEANCOUNT_FILE ""
-ENV FAVA_OPTIONS ""
+ENV FAVA_HOST "0.0.0.0"
 EXPOSE 5000
-CMD fava --host 0.0.0.0 $FAVA_OPTIONS $BEANCOUNT_FILE
+CMD fava
