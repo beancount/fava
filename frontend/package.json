@@ -16,7 +16,7 @@
     ]
   },
   "devDependencies": {
-    "@types/d3-array": "^2.12.1",
+    "@types/d3-array": "^3.0.0",
     "@types/d3-axis": "^2.1.0",
     "@types/d3-color": "^2.0.1",
     "@types/d3-format": "^2.0.0",
