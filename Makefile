@@ -40,6 +40,12 @@ update-snapshots:
 	-SNAPSHOT_UPDATE=1 tox
 	tox
 
+.PHONY: update-deps
+update-deps:
+	pre-commit autoupdate
+	cd frontend; npx npm-check -y
+	cd frontend; npm update
+
 .PHONY: docs
 docs:
 	tox -e docs
