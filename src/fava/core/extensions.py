@@ -49,11 +49,11 @@ class ExtensionModule(FavaModule):
             if cls not in self._instances:
                 self._instances[cls] = cls(self.ledger, ext_config)
 
-        self.reports = []
-        for ext_class in self._instances:
-            ext = self._instances[ext_class]
-            if ext.report_title is not None:
-                self.reports.append((ext.name, ext.report_title))
+        self.reports = [
+            (ext.name, ext.report_title)
+            for ext in self._instances.values()
+            if ext.report_title is not None
+        ]
 
     def run_hook(self, event: str, *args: Any) -> None:
         """Run a hook for all extensions."""
@@ -70,7 +70,7 @@ class ExtensionModule(FavaModule):
         Returns:
             Tuple of associated template source, extension instance
         """
-        for ext_class in self._instances:
+        for ext_class, ext in self._instances.items():
             if ext_class.__qualname__ == name:
                 extension_dir = os.path.dirname(inspect.getfile(ext_class))
                 template_path = os.path.join(
@@ -80,7 +80,7 @@ class ExtensionModule(FavaModule):
                 )
 
                 with open(template_path) as ext_template:
-                    return ext_template.read(), self._instances[ext_class]
+                    return ext_template.read(), ext
 
         raise LookupError("Extension report not found.")
 

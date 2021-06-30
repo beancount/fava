@@ -62,9 +62,11 @@ def snapshot(request) -> Callable[[Any], None]:
         if not snap_file.exists():
             contents = ""
         else:
-            contents = open(snap_file).read()
+            with open(snap_file) as snap_file_handle:
+                contents = snap_file_handle.read()
         if SNAPSHOT_UPDATE:
-            open(snap_file, "w").write(out)
+            with open(snap_file, "w") as snap_file_handle:
+                snap_file_handle.write(out)
             return
         assert out == contents, MSG
 

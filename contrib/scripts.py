@@ -74,11 +74,14 @@ def upload_translations():
         "updating": "terms",
         # "sync_terms": 1,
     }
-    files = {"file": open(path, "rb")}
-    request = requests.post(
-        "https://api.poeditor.com/v2/projects/upload", data=data, files=files
-    )
-    click.echo("Done: " + str(request.json()["result"]["terms"]))
+    with open(path, "rb") as file:
+        files = {"file": file}
+        request = requests.post(
+            "https://api.poeditor.com/v2/projects/upload",
+            data=data,
+            files=files,
+        )
+        click.echo("Done: " + str(request.json()["result"]["terms"]))
 
 
 # For these languages, the name on POEDITOR is off.
