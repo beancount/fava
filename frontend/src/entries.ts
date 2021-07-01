@@ -2,13 +2,14 @@ import { todayAsString } from "./format";
 import type { Validator } from "./lib/validation";
 import {
   array,
+  boolean,
   constant,
+  defaultValue,
   object,
   optional_string,
   record,
   string,
   union,
-  unknown,
 } from "./lib/validation";
 
 export interface Posting {
@@ -33,6 +34,7 @@ export function emptyPosting(): Posting {
   };
 }
 
+export type EntryMetadata = Record<string, string | boolean>;
 export type EntryTypeName = "Balance" | "Note" | "Transaction";
 
 abstract class EntryBase {
@@ -40,7 +42,7 @@ abstract class EntryBase {
 
   date: string;
 
-  meta: Record<string, unknown>;
+  meta: EntryMetadata;
 
   constructor(type: EntryTypeName) {
     this.type = type;
@@ -52,7 +54,9 @@ abstract class EntryBase {
 const validatorBase = {
   type: string,
   date: string,
-  meta: record(unknown),
+  meta: record(
+    defaultValue(union(boolean, string), "Unsupported metadata value")
+  ),
 };
 
 export class Balance extends EntryBase {

@@ -1,7 +1,8 @@
 <script lang="ts">
+  import type { EntryMetadata } from "../entries";
   import { _ } from "../i18n";
 
-  export let meta: Record<string, unknown>;
+  export let meta: EntryMetadata;
 
   function addMetadata() {
     meta[""] = "";
