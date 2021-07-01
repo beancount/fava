@@ -34,6 +34,9 @@ jobs:
             - name: pre-commit
               if: ${{ matrix.os == 'ubuntu-latest' && matrix.py == 3.9 }}
               uses: pre-commit/action@v2.0.0
+            - name: svelte-check
+              if: ${{ matrix.os == 'ubuntu-latest' && matrix.py == 3.9 }}
+              run: cd frontend; npx svelte-check
             - name: Lint
               if: ${{ matrix.os == 'ubuntu-latest' && matrix.py == 3.9 }}
               run: tox -e lint

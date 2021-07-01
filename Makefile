@@ -26,6 +26,7 @@ mostlyclean:
 .PHONY: lint
 lint: frontend/node_modules
 	pre-commit run -a
+	cd frontend; npx svelte-check
 	tox -e lint
 
 .PHONY: test
