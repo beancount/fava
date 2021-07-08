@@ -43,9 +43,12 @@ update-snapshots:
 
 .PHONY: update-deps
 update-deps:
-	pre-commit autoupdate
 	cd frontend; npx npm-check -y
 	cd frontend; npm update
+
+.PHONY: update-precommit
+update-precommit:
+	pre-commit autoupdate
 
 .PHONY: docs
 docs:
