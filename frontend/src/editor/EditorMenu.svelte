@@ -2,6 +2,7 @@
   import { toggleComment } from "@codemirror/comment";
   import { foldAll, unfoldAll } from "@codemirror/fold";
   import type { EditorView } from "@codemirror/view";
+  import path from "path-browserify";
 
   import { beancountFormat } from "../codemirror/beancount-format";
   import { scrollToLine } from "../codemirror/scroll-to-line";
@@ -11,6 +12,7 @@
   import router from "../router";
   import { favaOptions, options } from "../stores";
 
+  import Folder from "./Folder.svelte";
   import Key from "./Key.svelte";
 
   export let file_path: string;
@@ -31,6 +33,79 @@
       editor.focus();
     }
   }
+
+  function _dummy_folder(name: string, sub_node) {
+    if ("subfolders" in sub_node) {
+      return { name, subfolders: [sub_node], subfiles: [] };
+    }
+    return { name, subfolders: [], subfiles: [sub_node] };
+  }
+  function dummy_folder(path_str: string) {
+    let p = path.parse(path_str);
+    let folder_path = p.dir;
+    const { root } = p;
+
+    const file_node = { name: p.base, path: path_str };
+    let last_node = file_node;
+    while (folder_path !== root) {
+      p = path.parse(folder_path);
+      last_node = _dummy_folder(p.base, last_node);
+      folder_path = p.dir;
+    }
+    return _dummy_folder(root, last_node);
+  }
+  function shorten_folder(folder) {
+    // Flatten the nested folder when possible.
+    if (folder.subfiles.length === 0 && folder.subfolders.length === 1) {
+      const subfolder = folder.subfolders[0];
+      const new_name = path.join(folder.name, subfolder.name);
+      return shorten_folder({
+        name: new_name,
+        subfolders: subfolder.subfolders,
+        subfiles: subfolder.subfiles,
+      });
+    }
+    return {
+      name: folder.name,
+      subfolders: folder.subfolders.map(shorten_folder),
+      subfiles: folder.subfiles,
+    };
+  }
+  let merge_folder;
+  function merge_same_name_folder(name: string, i_folders: []) {
+    if (i_folders.length === 1) {
+      return i_folders[0];
+    }
+    return {
+      name,
+      subfolders: merge_folder(i_folders.map((o) => o.subfolders).flat()),
+      subfiles: i_folders.map((o) => o.subfiles).flat(),
+    };
+  }
+  function groupBy(xs: [], key: string) {
+    return xs.reduce((rv, x) => {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  }
+  merge_folder = (i_folders: []): [] => {
+    const dict = groupBy(
+      i_folders.sort((a, b) => {
+        if (a.name === b.name) {
+          return 0;
+        }
+        return a.name > b.name ? 1 : -1;
+      }),
+      "name"
+    );
+    return Object.entries(dict).map(([name, group]) =>
+      merge_same_name_folder(name, group)
+    );
+  };
+  function source_tree(files: string[]): [] {
+    return merge_folder(files.map(dummy_folder)).map(shorten_folder);
+  }
+  $: folders = source_tree(sources);
 </script>
 
 <div class="fieldset">
@@ -38,13 +113,8 @@
     <span>
       {_("File")}
       <ul>
-        {#each sources as source}
-          <li
-            class:selected={source === file_path}
-            on:click={() => goToFileAndLine(source)}
-          >
-            {source}
-          </li>
+        {#each folders as folder}
+          <Folder {folder} {file_path} expanded />
         {/each}
       </ul>
     </span>
@@ -102,10 +172,6 @@
     align-items: stretch;
     height: 100%;
     margin-right: 0.5rem;
-  }
-
-  .selected::before {
-    content: "›";
   }
 
   li {
