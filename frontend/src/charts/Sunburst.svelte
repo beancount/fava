@@ -65,6 +65,9 @@
       on:mouseover={() => {
         current = d;
       }}
+      on:focus={() => {
+        current = d;
+      }}
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
       fill={$sunburstScale(d.data.account)}
