@@ -42,6 +42,8 @@ This final filter allows you to filter entries by various attributes.
     filter will apply to the entry attribute, not the metadata value.
 -   Exclude entries that match a filter by prepending a `-` to it, e.g. `-#tag`
     or `-(^link #tag)`.
+-   Filter for entries having postings of certain amount, e.g.
+    `amount:"100.5 USD"` or `amount:">= 100 USD"`
 -   To match entries by posting attributes, you can use `any()` and `all()`,
     e.g., `any(id:'12', account:"Cash$")` for all entries that have at least one
     posting with metadata `id: 12` or account ending in `Cash`, or

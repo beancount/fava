@@ -11,6 +11,7 @@ from typing import Tuple
 
 import ply.yacc  # type: ignore
 from beancount.core import account
+from beancount.core.amount import Amount
 from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Entries
@@ -270,6 +271,7 @@ class FilterSyntaxParser:
                 value = getattr(entry, name, "")
                 if value and match(value):
                     return True
+
             return False
 
         p[0] = _string
@@ -281,11 +283,39 @@ class FilterSyntaxParser:
         key, value = p[1], p[2]
         match = Match(value)
 
+        if key == "amount":
+            amount_match_mode = "="
+
+            prefix_match = re.search(r"^(=|>=|<=|<|>) *", value)
+            if prefix_match:
+                amount_match_mode = prefix_match.group(1)
+                value = value.replace(prefix_match.group(0), "")
+
+            try:
+                value = Amount.from_string(value)
+            except ValueError as e:
+                raise FilterException(
+                    "amount", f"Failed to parse amount: {value}"
+                ) from e
+
         def _key(entry: Directive) -> bool:
             if hasattr(entry, key):
                 return match(str(getattr(entry, key) or ""))
             if entry.meta is not None and key in entry.meta:
                 return match(str(entry.meta.get(key)))
+            if key == "amount":
+                return any(
+                    posting.units.currency == value.currency
+                    and {
+                        "=": posting.units == value,
+                        ">=": posting.units >= value,
+                        "<=": posting.units <= value,
+                        ">": posting.units > value,
+                        "<": posting.units < value,
+                    }[amount_match_mode]
+                    for posting in getattr(entry, "postings", [])
+                )
+
             return False
 
         p[0] = _key
@@ -397,7 +427,7 @@ class AdvancedFilter(EntryFilter):
                     tokenfunc=lambda toks=tokens: next(toks, None),
                 )
             except FilterException as exception:
-                exception.message = exception.message + value
+                exception.message = f"{exception.message} ({value})"
                 self.value = None
                 raise exception
         else:
