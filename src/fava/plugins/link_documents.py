@@ -9,11 +9,8 @@ from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
-from typing import AbstractSet
 from typing import Any
 from typing import List
-from typing import Optional
-from typing import Set
 from typing import Tuple
 
 from beancount.core.compare import hash_entry
@@ -23,6 +20,7 @@ from beancount.core.data import Transaction
 
 from fava.core.accounts import get_entry_accounts
 from fava.helpers import BeancountError
+from fava.util.sets import add_to_set
 
 
 class DocumentError(BeancountError):
@@ -30,11 +28,6 @@ class DocumentError(BeancountError):
 
 
 __plugins__ = ["link_documents"]
-
-
-def add_to_set(set_: Optional[AbstractSet[str]], new: str) -> Set[str]:
-    """Add an entry to a set (or create it if doesn't exist)."""
-    return set(set_).union([new]) if set_ is not None else {new}
 
 
 def link_documents(
