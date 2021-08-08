@@ -8,7 +8,7 @@ from beancount.loader import load_string
 from fava.plugins.link_documents import DocumentError
 
 
-def test_plugins(tmp_path):
+def test_plugins(tmp_path: Path) -> None:
     # Create sample files
     expenses_foo = tmp_path / "documents" / "Expenses" / "Foo"
     expenses_foo.mkdir(parents=True)
@@ -32,7 +32,6 @@ def test_plugins(tmp_path):
         option "documents" "{tmp_path / "documents"}"
 
         plugin "fava.plugins.link_documents"
-        plugin "fava.plugins.tag_discovered_documents"
 
         2016-10-30 open Expenses:Foo
         2016-10-31 open Assets:Cash
@@ -50,6 +49,8 @@ def test_plugins(tmp_path):
             Assets:Cash
 
         2016-11-06 document Assets:Cash "{assets_cash_rel / "Test 5.pdf"}"
+        2017-11-06 balance Assets:Cash   -200 EUR
+            document: "{assets_cash_rel / "Test 5.pdf"}"
         """.replace(
                 "\\", "\\\\"
             )
@@ -59,7 +60,7 @@ def test_plugins(tmp_path):
     entries, errors, _ = load_file(str(beancount_file))
 
     assert not errors
-    assert len(entries) == 9
+    assert len(entries) == 10
 
     assert "linked" in entries[3].tags
     assert "linked" in entries[4].tags
@@ -69,11 +70,8 @@ def test_plugins(tmp_path):
     assert entries[2].links == entries[4].links
     assert entries[8].links == entries[3].links
 
-    assert "discovered" in entries[6].tags
-    assert not entries[7].tags
 
-
-def test_link_documents_error(load_doc):
+def test_link_documents_error(load_doc) -> None:
     """
     plugin "fava.plugins.link_documents"
 
@@ -91,7 +89,7 @@ def test_link_documents_error(load_doc):
     assert len(entries) == 3
 
 
-def test_link_documents_missing(tmp_path):
+def test_link_documents_missing(tmp_path: Path) -> None:
     bfile = dedent(
         f"""
         option "documents" "{tmp_path}"

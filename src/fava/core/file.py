@@ -26,8 +26,8 @@ from beancount.parser.printer import format_entry  # type: ignore
 
 from fava.core._compat import FLAG_RETURNS
 from fava.core._compat import FLAG_UNREALIZED
+from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import InsertEntryOption
-from fava.core.filters import get_entry_accounts
 from fava.core.misc import align
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException

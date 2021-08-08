@@ -40,6 +40,7 @@ from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
 from fava.core._compat import FLAG_UNREALIZED
 from fava.core.accounts import AccountDict
+from fava.core.accounts import get_entry_accounts
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
@@ -562,10 +563,8 @@ class FavaLedger:
         ]
         paths.extend(
             [
-                self.join_path(
-                    document_root, *posting.account.split(":"), value
-                )
-                for posting in getattr(entry, "postings", [])
+                self.join_path(document_root, *account.split(":"), value)
+                for account in get_entry_accounts(entry)
                 for document_root in self.options["documents"]
             ]
         )

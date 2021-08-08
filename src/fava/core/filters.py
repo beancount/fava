@@ -4,20 +4,17 @@ from datetime import date
 from typing import Any
 from typing import Callable
 from typing import Generator
-from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Tuple
 
 import ply.yacc  # type: ignore
 from beancount.core import account
-from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Entries
-from beancount.core.data import Pad
-from beancount.core.data import Transaction
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
+from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
@@ -408,28 +405,6 @@ class AdvancedFilter(EntryFilter):
         if self._include:
             return self._include(entry)
         return True
-
-
-def get_entry_accounts(entry: Directive) -> Iterable[str]:
-    """Accounts for an entry.
-
-    Args:
-        entry: An entry.
-
-    Returns:
-        An iterable with the entry's accounts ordered by priority: For
-        transactions the posting accounts are listed in reverse order.
-    """
-    if isinstance(entry, Transaction):
-        return reversed([p.account for p in entry.postings])
-    if isinstance(entry, Custom):
-        return [val.value for val in entry.values if val.dtype == account.TYPE]
-    if isinstance(entry, Pad):
-        return [entry.account, entry.source_account]
-    account_ = getattr(entry, "account", None)
-    if account_ is not None:
-        return [account_]
-    return []
 
 
 class AccountFilter(EntryFilter):
