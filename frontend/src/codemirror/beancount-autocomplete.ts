@@ -76,7 +76,7 @@ export const beancountCompletion: CompletionSource = (context) => {
   }
 
   const lineContent = doc.sliceString(line.from, pos);
-  const node = lang.parseString(lineContent).cursor();
+  const node = lang.parser.parse(lineContent).cursor();
   const tokens: { name: string; from: number; to: number }[] = [];
   while (node.next()) {
     if (node.name !== "invalid.special") {
