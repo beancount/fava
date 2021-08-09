@@ -1,8 +1,11 @@
 """This module provides the data required by Fava's reports."""
 import copy
 import datetime
-import os
 from operator import itemgetter
+from os.path import basename
+from os.path import dirname
+from os.path import join
+from os.path import normpath
 from typing import Any
 from typing import Dict
 from typing import Iterable
@@ -300,8 +303,8 @@ class FavaLedger:
 
     def join_path(self, *args: str) -> str:
         """Path relative to the directory of the ledger."""
-        include_path = os.path.dirname(self.beancount_file_path)
-        return os.path.normpath(os.path.join(include_path, *args))
+        include_path = dirname(self.beancount_file_path)
+        return normpath(join(include_path, *args))
 
     def paths_to_watch(self) -> Tuple[List[str], List[str]]:
         """The paths to included files and document directories.
@@ -558,20 +561,14 @@ class FavaLedger:
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
 
-        paths: List[str] = [
-            os.path.join(os.path.dirname(entry.meta["filename"]), value)
-        ]
-        paths.extend(
-            [
-                self.join_path(document_root, *account.split(":"), value)
-                for account in get_entry_accounts(entry)
-                for document_root in self.options["documents"]
-            ]
-        )
-
-        for path in paths:
-            if os.path.isfile(path):
-                return path
+        accounts = set(get_entry_accounts(entry))
+        full_path = join(dirname(entry.meta["filename"]), value)
+        for document in self.all_entries_by_type.Document:
+            if document.filename == full_path:
+                return document.filename
+            if document.account in accounts:
+                if basename(document.filename) == value:
+                    return document.filename
 
         raise FavaAPIException("Statement not found.")
 
