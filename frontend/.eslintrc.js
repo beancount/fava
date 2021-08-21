@@ -29,6 +29,7 @@ const sortImports = {
 module.exports = {
   plugins: ["@typescript-eslint", "svelte3"],
   extends: [
+    "airbnb-base",
     "airbnb-typescript/base",
     "plugin:@typescript-eslint/recommended",
     "prettier",
