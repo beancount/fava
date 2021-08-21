@@ -48,7 +48,7 @@ class ExponentialDecayRanker:
         self.rate = rate
         # We don't need to start with float('-inf') here as only the relative
         # scores matter.
-        self.scores: Dict[str, float] = dict()
+        self.scores: Dict[str, float] = {}
 
     def update(self, item: str, date: datetime.date) -> None:
         """Add 'like' for item.

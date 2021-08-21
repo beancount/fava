@@ -79,7 +79,7 @@ class ExtensionModule(FavaModule):
                     f"{ext_class.__qualname__}.html",
                 )
 
-                with open(template_path) as ext_template:
+                with open(template_path, encoding="utf-8") as ext_template:
                     return ext_template.read(), ext
 
         raise LookupError("Extension report not found.")
