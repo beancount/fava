@@ -1,5 +1,4 @@
 # pylint: disable=missing-docstring
-
 from pathlib import Path
 
 from fava.ext import find_extensions

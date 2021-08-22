@@ -1,53 +1,139 @@
-<script>
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+  import { toggleComment } from "@codemirror/comment";
+  import { foldAll, unfoldAll } from "@codemirror/fold";
+  import type { EditorView } from "@codemirror/view";
 
-  import { _, urlFor } from "../helpers";
+  import { beancountFormat } from "../codemirror/beancount-format";
+  import { scrollToLine } from "../codemirror/scroll-to-line";
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
+  import { modKey } from "../keyboard-shortcuts";
+  import router from "../router";
+  import { favaOptions, options } from "../stores";
 
-  export let sources;
-  export let file_path;
+  import Key from "./Key.svelte";
 
-  const dispatch = createEventDispatcher();
+  export let file_path: string;
+  export let editor: EditorView;
+
+  $: sources = [
+    $options.filename,
+    ...$options.include.filter((f) => f !== $options.filename),
+  ];
+  $: insertEntryOptions = $favaOptions["insert-entry"];
+
+  function goToFileAndLine(filename: string, line?: number) {
+    const url = urlFor("editor/", { file_path: filename, line });
+    const shouldLoad = filename !== file_path;
+    router.navigate(url, shouldLoad);
+    if (!shouldLoad && line) {
+      scrollToLine(editor, line);
+      editor.focus();
+    }
+  }
 </script>
 
-<style>
-  li {
-    cursor: pointer;
-  }
+<div class="fieldset">
+  <div class="dropdown">
+    <span>
+      {_("File")}
+      <ul>
+        {#each sources as source}
+          <li
+            class:selected={source === file_path}
+            on:click={() => goToFileAndLine(source)}
+          >
+            {source}
+          </li>
+        {/each}
+      </ul>
+    </span>
+    <span>
+      {_("Edit")}
+      <ul>
+        <li on:click={() => beancountFormat(editor)}>
+          {_("Align Amounts")}
+          <span><Key key={`${modKey}+d`} /></span>
+        </li>
+        <li on:click={() => toggleComment(editor)}>
+          {_("Toggle Comment (selection)")}
+          <span><Key key={`${modKey}+/`} /></span>
+        </li>
+        <li on:click={() => unfoldAll(editor)}>
+          {_("Open all folds")}
+          <span><Key key="Ctrl+Alt+]" /></span>
+        </li>
+        <li on:click={() => foldAll(editor)}>
+          {_("Close all folds")}
+          <span><Key key="Ctrl+Alt+[" /></span>
+        </li>
+      </ul>
+    </span>
+    {#if insertEntryOptions.length}
+      <span>
+        <code>insert-entry</code>
+        {_("Options")}
+        <ul>
+          {#each insertEntryOptions as opt}
+            <li
+              on:click={() => goToFileAndLine(opt.filename, opt.lineno - 1)}
+              title={`${opt.filename}:${opt.lineno}`}
+            >
+              {opt.re} <span>{opt.date}</span>
+            </li>
+          {/each}
+        </ul>
+      </span>
+    {/if}
+  </div>
+  <slot />
+</div>
 
+<style>
   .fieldset {
-    height: var(--source-editor-fieldset-height);
-    padding-left: 0.5em;
+    height: 3rem;
+    background: var(--color-sidebar-background);
     border-bottom: 1px solid var(--color-sidebar-border);
   }
 
   .dropdown {
     display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
     height: 100%;
-    margin: 0;
+    margin-right: 0.5rem;
   }
 
-  .dropdown .selected::before {
+  .selected::before {
     content: "›";
   }
 
-  .dropdown > li {
-    position: relative;
-    height: var(--source-editor-fieldset-height);
-    margin-right: 10px;
-    line-height: var(--source-editor-fieldset-height);
-    cursor: default;
+  li {
+    padding: 2px 10px;
+    cursor: pointer;
   }
 
-  .dropdown > li > ul {
+  li span {
+    float: right;
+  }
+
+  .dropdown > span {
+    padding: 0.7rem 0.5rem;
+    cursor: pointer;
+  }
+
+  .dropdown > span::after {
+    content: "▾";
+  }
+
+  ul {
     position: absolute;
-    top: var(--source-editor-fieldset-height);
     z-index: var(--z-index-floating-ui);
     display: none;
     width: 500px;
     max-height: 400px;
-    margin-left: -10px;
+    margin: 0.75rem 0 0 -0.5rem;
     overflow-y: auto;
-    line-height: 1.5;
     background-color: var(--color-background);
     border: 1px solid var(--color-background-darker);
     border-bottom-right-radius: 3px;
@@ -55,62 +141,12 @@
     box-shadow: 0 3px 6px var(--color-transparent-black);
   }
 
-  .dropdown > li > ul > li {
-    padding: 2px 10px;
+  li:hover,
+  span:hover {
+    background-color: var(--color-background-darkest);
   }
 
-  .dropdown > li > ul > li span {
-    float: right;
-  }
-
-  .dropdown li:hover > ul {
+  span:hover > ul {
     display: block;
   }
 </style>
-
-<div class="fieldset">
-  <ul class="dropdown">
-    <li>
-      {_('File')}&nbsp;▾
-      <ul>
-        {#each sources as source}
-          <li class:selected={source === file_path}>
-            <a href={urlFor('editor', { file_path: source })}>{source}</a>
-          </li>
-        {/each}
-      </ul>
-    </li>
-    <li>
-      {_('Edit')}&nbsp;▾
-      <ul>
-        <li on:click={() => dispatch('command', 'favaFormat')}>
-          {_('Align Amounts')}
-          <span>
-            <kbd>Ctrl</kbd>
-            /
-            <kbd>Cmd</kbd>
-            +
-            <kbd>d</kbd>
-          </span>
-        </li>
-        <li on:click={() => dispatch('command', 'favaToggleComment')}>
-          {_('Toggle Comment (selection)')}
-          <span>
-            <kbd>Ctrl</kbd>
-            /
-            <kbd>Cmd</kbd>
-            +
-            <kbd>y</kbd>
-          </span>
-        </li>
-        <li on:click={() => dispatch('command', 'unfoldAll')}>
-          {_('Open all folds')}
-        </li>
-        <li on:click={() => dispatch('command', 'foldAll')}>
-          {_('Close all folds')}
-        </li>
-      </ul>
-    </li>
-  </ul>
-  <slot />
-</div>

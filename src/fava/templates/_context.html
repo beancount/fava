@@ -1,3 +1,6 @@
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
+
+
 <p>
 {{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
 </p>
@@ -19,7 +22,7 @@
           <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
           <td>
             {% for position in inventory %}
-            <span class="num">{{ position.units|format_amount }}</span>
+              {{ commodity_macros.render_amount(ledger, position.units) }}
             {% if not loop.last %}<br>{% endif %}
             {% endfor %}
           </td>
@@ -39,7 +42,7 @@
           <td><a href="{{ url_for('account', name=account) }}">{{ account }}</a></td>
           <td>
             {% for position in inventory %}
-            <span class="num">{{ position.units|format_amount }}</span>
+              {{ commodity_macros.render_amount(ledger, position.units) }}
             {% if not loop.last %}<br>{% endif %}
             {% endfor %}
           </td>

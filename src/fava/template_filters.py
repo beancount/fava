@@ -14,7 +14,6 @@ import flask
 from beancount.core import compare
 from beancount.core import realization
 from beancount.core.account import ACCOUNT_RE
-from beancount.core.amount import Amount
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 
@@ -45,24 +44,19 @@ def cost_or_value(inventory, date: Optional[datetime.date] = None) -> Any:
 
 
 def format_currency(
-    value: Decimal, currency: Optional[str] = None, show_if_zero: bool = False
+    value: Decimal,
+    currency: Optional[str] = None,
+    show_if_zero: bool = False,
+    invert: bool = False,
 ) -> str:
     """Format a value using the derived precision for a specified currency."""
     if not value and not show_if_zero:
         return ""
     if value == ZERO:
         return g.ledger.format_decimal(ZERO, currency)
+    if invert:
+        value = -value
     return g.ledger.format_decimal(value, currency)
-
-
-def format_amount(amount: Amount) -> str:
-    """Format an amount to string using the DisplayContext."""
-    if amount is None:
-        return ""
-    number, currency = amount
-    if number is None:
-        return ""
-    return f"{format_currency(number, currency, True)} {currency}"
 
 
 def format_date(date: datetime.date) -> str:
@@ -170,7 +164,6 @@ FILTERS = [
     cost_or_value,
     cost_or_value,
     flag_to_type,
-    format_amount,
     format_currency,
     format_date,
     format_errormsg,

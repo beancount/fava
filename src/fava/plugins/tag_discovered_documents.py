@@ -20,7 +20,7 @@ def tag_discovered_documents(entries, options_map):
             tags = (
                 set(entry.tags).union(["discovered"])
                 if entry.tags
-                else set(["discovered"])
+                else {"discovered"}
             )
             entries[index] = entry._replace(tags=tags)
 

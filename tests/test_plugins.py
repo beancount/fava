@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring
-from textwrap import dedent
 from pathlib import Path
+from textwrap import dedent
 
 from beancount.loader import load_file
 from beancount.loader import load_string

@@ -1,5 +1,6 @@
-<script>
-  import { _, urlFor } from "../helpers";
+<script lang="ts">
+  import { urlFor } from "../helpers";
+  import { _ } from "../i18n";
   import { urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
@@ -10,9 +11,9 @@
 <ModalBase {shown}>
   {#if shown}
     <div>
-      <h3>{_('Export')}:</h3>
-      <a href={urlFor('download-journal')} data-remote>
-        {_('Download currently filtered entries as a Beancount file')}
+      <h3>{_("Export")}:</h3>
+      <a href={urlFor("download-journal")} data-remote>
+        {_("Download currently filtered entries as a Beancount file")}
       </a>
     </div>
   {/if}

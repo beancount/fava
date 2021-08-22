@@ -1,5 +1,6 @@
 import test from "ava";
 import { writable } from "svelte/store";
+
 import { derived_array } from "../src/lib/store";
 
 test("derived store", (t) => {
@@ -18,6 +19,6 @@ test("derived store", (t) => {
   source.set(["a", "b"]);
   source.set(["a", "b"]);
   source.set(["a", "b"]);
-  t.deepEqual(source_count, 6);
-  t.deepEqual(derived_count, 2);
+  t.is(source_count, 6);
+  t.is(derived_count, 2);
 });

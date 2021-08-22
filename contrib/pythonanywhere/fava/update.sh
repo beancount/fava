@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start virtualenv
-virtualenv ~/venv --python=python3.5
+virtualenv ~/venv --python=python3.8
 source ~/venv/bin/activate
 
 # Update fava

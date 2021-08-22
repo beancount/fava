@@ -2,7 +2,7 @@ import { localStorageSyncedStore } from "../lib/store";
 import { array, string } from "../lib/validation";
 
 export const query_shell_history = localStorageSyncedStore(
-  "fava-query-history",
+  "query-history",
   array(string),
   () => []
 );

@@ -1,40 +1,17 @@
-import { fetch, handleJSON } from "./lib/fetch";
-import { object, record, string, unknown } from "./lib/validation";
-import { baseURL, urlSyncedParams } from "./stores/url";
+import { get } from "svelte/store";
 
-export function getScriptTagJSON(selector: string): unknown {
-  const el = document.querySelector(selector);
-  return el ? JSON.parse(el.innerHTML) : null;
-}
-
-let translations: Record<string, string>;
-
-/**
- * Translate the given string.
- */
-export function _(text: string): string {
-  if (translations === undefined) {
-    translations = record(string)(getScriptTagJSON("#translations"));
-  }
-  return translations[text] || text;
-}
-
-const validateAPIResponse = object({ data: unknown });
-
-let baseURL_val = "";
-baseURL.subscribe((val) => {
-  baseURL_val = val;
-});
+import { baseURL } from "./stores";
+import { urlSyncedParams } from "./stores/url";
 
 /**
  * Get the URL string for one of Fava's reports.
  */
 export function urlFor(
   report: string,
-  params?: Record<string, string>,
+  params?: Record<string, string | number | undefined>,
   update = true
 ): string {
-  const url = `${baseURL_val}${report}`;
+  const url = `${get(baseURL)}${report}`;
   const urlParams = new URLSearchParams();
   if (update) {
     const oldParams = new URL(window.location.href).searchParams;
@@ -47,29 +24,11 @@ export function urlFor(
   }
   if (params) {
     Object.entries(params).forEach(([key, value]) => {
-      urlParams.set(key, value);
+      if (value !== undefined) {
+        urlParams.set(key, `${value}`);
+      }
     });
   }
   const urlParamString = urlParams.toString();
   return urlParamString ? `${url}?${urlParams.toString()}` : url;
-}
-
-/** Url for the account page for an account. */
-export function accountUrl(account: string): string {
-  return new URL(urlFor(`account/${account}`), window.location.href).toString();
-}
-
-/**
- * Fetch an API endpoint and convert the JSON data to an object.
- * @param endpoint - the endpoint to fetch
- * @param params - a string to append as params or an object.
- */
-export async function fetchAPI(
-  endpoint: string,
-  params?: Record<string, string>
-): Promise<unknown> {
-  const url = urlFor(`api/${endpoint}`, params, false);
-  const responseData = await fetch(url);
-  const json = await handleJSON(responseData);
-  return validateAPIResponse(json).data;
 }

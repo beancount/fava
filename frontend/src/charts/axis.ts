@@ -1,4 +1,4 @@
-import { Axis } from "d3-axis";
+import type { Axis } from "d3-axis";
 import { select } from "d3-selection";
 
 export function axis<T>(

@@ -10,20 +10,28 @@ details.inactive {
 }
 
 details summary {
+  position: relative;
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  padding: 5px 10px 5px 30px;
   cursor: pointer;
   background-color: var(--color-sidebar-background);
 }
 
 details summary::before {
+  position: absolute;
+  top: 50%;
+  left: 10px;
   margin-right: 0.5em;
   content: "";
   border-top: 9px solid var(--color-treetable-expander);
   border-right: 6px solid transparent;
   border-left: 6px solid transparent;
-  transform: rotate(270deg);
+  transform: translateY(-50%) rotate(270deg);
+}
+
+details summary::-webkit-details-marker {
+  display: none;
 }
 
 details.error summary {
@@ -31,7 +39,7 @@ details.error summary {
 }
 
 details[open] summary::before {
-  transform: rotate(0deg);
+  transform: translateY(-50%) rotate(0deg);
 }
 
 details summary pre {

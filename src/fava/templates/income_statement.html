@@ -1,7 +1,9 @@
 {% import '_tree_table.html' as tree_table with context %}
 
-{{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit')) }}
-{{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income')) }}
+{% set invert = ledger.fava_options['invert-income-liabilities-equity'] %}
+
+{{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit'), invert=invert) }}
+{{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income'), invert=invert) }}
 {{ charts.interval_totals(g.interval, ledger.options['name_expenses'], label=_('Expenses')) }}
 
 {{ charts.hierarchy(ledger.options['name_income']) }}
@@ -9,12 +11,12 @@
 
 <div class="row">
   <div class="column">
-    {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_income'])) }}
+    {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_income']), invert=invert) }}
   </div>
   <div class="column">
     {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_expenses'])) }}
   </div>
   <div class="column">
-    {{ tree_table.tree(ledger.root_tree.net_profit(ledger.options, _('Net Profit'))) }}
+    {{ tree_table.tree(ledger.root_tree.net_profit(ledger.options, _('Net Profit')), invert=invert) }}
   </div>
 </div>

@@ -10,9 +10,9 @@ quarters, months, weeks, and days (for example `2015`, `2012-Q1`, `2010-10`,
 `2010 - 2012-10` which will display all entries between the start of 2010 and
 the end of October 2012.
 
-To refer to dates relative to the current day, you can use the variables
-`year`, `quarter`, `month`, `week`, and `day`. These will be substituted with
-the current date expressed in the respective format, and support addition and
+To refer to dates relative to the current day, you can use the variables `year`,
+`quarter`, `month`, `week`, and `day`. These will be substituted with the
+current date expressed in the respective format, and support addition and
 subtraction. For example you can write `year - day` for all entries in the
 current year up to today, or `year-1 - year` for all entries of the last and
 current year. To prevent subtraction, use parentheses: `(month)-10` refers to
@@ -45,16 +45,16 @@ This final filter allows you to filter entries by various attributes.
 -   To match entries by posting attributes, you can use `any()` and `all()`,
     e.g., `any(id:'12', account:"Cash$")` for all entries that have at least one
     posting with metadata `id: 12` or account ending in `Cash`, or
-    `all(-account:"^Expenses:Food")` to exclude all transactions having a posting
-    to the Expenses:Food account.
+    `all(-account:"^Expenses:Food")` to exclude all transactions having a
+    posting to the Expenses:Food account.
 
 These filters can be combined by separating them by spaces to match all entries
 satisfying all given filters or by commas to match all entries satisfying at
-least one of the given filters. In other words, a space acts like an "and" and
-a comma like an "or". As usual, the logical "and" has a higher grouping power
-than "or" and you can use parentheses to group filters.
+least one of the given filters. In other words, a space acts like an "and" and a
+comma like an "or". As usual, the logical "and" has a higher grouping power than
+"or" and you can use parentheses to group filters.
 
 When given regular expressions, Fava checks for a match anywhere in the
 corresponding attribute. Matching is always case-insensitive. To find out more
-about the specific syntax Fava uses, refer to [Python's Regular Expression
-Syntax](https://docs.python.org/3/library/re.html?highlight=match#regular-expression-syntax).
+about the specific syntax Fava uses, refer to
+[Python's Regular Expression Syntax](https://docs.python.org/3/library/re.html?highlight=match#regular-expression-syntax).

@@ -1,3 +1,3 @@
 {% set file_path = request.args.get('file_path', ledger.fava_options['default-file'] or ledger.beancount_file_path) %}
 {% set source, sha256sum = ledger.file.get_source(file_path) %}
-<div id="svelte-editor"><script type="application/json">{{ { 'source': source, 'sha256sum': sha256sum, 'file_path': file_path, 'sources': ledger.file.list_sources() }|tojson|safe }}</script></div>
+<svelte-component type="editor"><script type="application/json">{{ { 'source': source, 'sha256sum': sha256sum, 'file_path': file_path }|tojson|safe }}</script></svelte-component>

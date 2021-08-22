@@ -1,3 +1,5 @@
+import { isJsonObject, string } from "./validation";
+
 /** Wrapper around fetch with some default options */
 export function fetch(
   input: string,
@@ -17,9 +19,12 @@ export async function handleJSON(response: Response): Promise<unknown> {
   if (!response.ok) {
     throw new Error(response.statusText);
   }
-  const data = await response.json();
+  const data: unknown = await response.json();
+  if (!isJsonObject(data)) {
+    throw new Error("Invalid response");
+  }
   if (!data.success) {
-    throw new Error(data.error);
+    throw new Error(string(data.error));
   }
   return data;
 }

@@ -1,7 +1,6 @@
 """For using the Beancount shell from Fava."""
 import contextlib
 import io
-import readline
 import textwrap
 
 from beancount.core.data import Query
@@ -23,7 +22,12 @@ from fava.util.excel import to_excel
 
 # This is to limit the size of the history file. Fava is not using readline at
 # all, but Beancount somehow still is...
-readline.set_history_length(1000)
+try:
+    import readline
+
+    readline.set_history_length(1000)
+except ImportError:
+    pass
 
 
 class QueryShell(BQLShell, FavaModule):
@@ -129,7 +133,7 @@ class QueryShell(BQLShell, FavaModule):
         else:
             try:
                 query = next(
-                    (query for query in self.queries if query.name == name)
+                    query for query in self.queries if query.name == name
                 )
             except StopIteration:
                 print(f"ERROR: Query '{name}' not found")
@@ -158,17 +162,17 @@ class QueryShell(BQLShell, FavaModule):
         try:
             statement = self.parser.parse(query_string)
         except ParseError as exception:
-            raise FavaAPIException(str(exception))
+            raise FavaAPIException(str(exception)) from exception
 
         if isinstance(statement, RunCustom):
             name = statement.query_name
 
             try:
                 query = next(
-                    (query for query in self.queries if query.name == name)
+                    query for query in self.queries if query.name == name
                 )
-            except StopIteration:
-                raise FavaAPIException(f'Query "{name}" not found.')
+            except StopIteration as exc:
+                raise FavaAPIException(f'Query "{name}" not found.') from exc
             query_string = query.query_string
 
         try:
@@ -179,7 +183,7 @@ class QueryShell(BQLShell, FavaModule):
                 numberify=True,
             )
         except (CompilationError, ParseError) as exception:
-            raise FavaAPIException(str(exception))
+            raise FavaAPIException(str(exception)) from exception
 
         if result_format == "csv":
             data = to_csv(types, rows)

@@ -10,10 +10,12 @@
 {% for menuitems in globals.navigation_bar %}
 <ul class="navigation">
   {% for id in menuitems %}
-  <li><a{% if id == active_page %} class="selected"{% endif %} data-key="{{ globals.all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">{{ globals.all_pages[id].0 }}
-      {% if id == 'events' and ledger.misc.upcoming_events %}
+  <li>
+    <a{% if id == active_page %} class="selected"{% endif %} data-keyboard-shortcut="{{ globals.all_pages[id].1 }}" href="{{ url_for('report', report_name=id) }}">
+      {{- globals.all_pages[id].0 }}
+      {%- if id == 'events' and ledger.misc.upcoming_events -%}
       <span class="bubble">{{ ledger.misc.upcoming_events|length }}</span>
-      {% endif %}
+      {%- endif -%}
     </a>
     {% if id == 'query' and user_queries %}
     <ul class="submenu">
@@ -22,13 +24,15 @@
       {% endfor %}
     </ul>
     {% elif id == 'editor' %}
-    <a href="#add-transaction" class="secondary add-transaction-button" data-key="n">+</a>
+    <a href="#add-transaction" class="secondary add-transaction-button" data-keyboard-shortcut="n">+</a>
     {% elif id == 'import' %}
     <a href="#export" class="secondary" title="{{ _('Export') }}">⬇</a>
     {% endif %}
   </li>
-  {% if id == 'editor' %}
-  <li is="error-count" class="error{{ ' hidden' if not ledger.errors else '' }}">
+  {% if id == 'query' %}
+  <li><svelte-component type="account-selector"></svelte-component></li>
+  {% elif id == 'editor' %}
+  <li id="error-count" class="error{{ ' hidden' if not ledger.errors else '' }}">
     <a href="{{ url_for('report', report_name='errors') }}">
       {{ _('Errors') }} <span class="bubble">{{ ledger.errors|length }}</span>
     </a>

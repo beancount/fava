@@ -88,39 +88,39 @@ function getSortOrder(headerElement: Element): SortOrder {
   return headerElement.getAttribute("data-order") === "asc" ? "desc" : "asc";
 }
 
-export class SortableJournal extends HTMLOListElement {
-  constructor() {
-    super();
-
-    const head = this.querySelector(".head");
-    if (!head) {
-      return;
-    }
-    const headers = head.querySelectorAll("span[data-sort]");
-
-    headers.forEach((header) => {
-      header.addEventListener("click", () => {
-        const order = getSortOrder(header);
-        const type = header.getAttribute("data-sort");
-        const headerClass = header.classList[0];
-
-        // update sort order
-        headers.forEach((el) => {
-          el.removeAttribute("data-order");
-        });
-        header.setAttribute("data-order", order);
-
-        sortElements(
-          this,
-          [].slice.call(this.children, 1),
-          (li: HTMLLIElement): HTMLElement | null =>
-            li.querySelector(`.${headerClass}`),
-          order,
-          type
-        );
-      });
-    });
+/**
+ * Make the Fava journal sortable.
+ * @param ol - the <ol> element.
+ */
+export function sortableJournal(ol: HTMLOListElement): void {
+  const head = ol.querySelector(".head");
+  if (!head) {
+    return;
   }
+  const headers = head.querySelectorAll("span[data-sort]");
+
+  headers.forEach((header) => {
+    header.addEventListener("click", () => {
+      const order = getSortOrder(header);
+      const type = header.getAttribute("data-sort");
+      const headerClass = header.classList[0];
+
+      // update sort order
+      headers.forEach((el) => {
+        el.removeAttribute("data-order");
+      });
+      header.setAttribute("data-order", order);
+
+      sortElements(
+        ol,
+        [].slice.call(ol.children, 1),
+        (li: HTMLLIElement): HTMLElement | null =>
+          li.querySelector(`.${headerClass}`),
+        order,
+        type
+      );
+    });
+  });
 }
 
 export class SortableTable extends HTMLTableElement {

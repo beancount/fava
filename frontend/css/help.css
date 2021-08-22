@@ -26,12 +26,8 @@
   margin-bottom: 1em;
 }
 
-.help-text .CodeMirror {
-  height: auto;
-  padding: 0;
-  margin: 0;
+.help-text .cm-wrap {
   background-color: var(--color-code-background);
-  border: 0;
 }
 
 .help-text code {

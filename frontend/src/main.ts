@@ -7,8 +7,6 @@
  * extending normal HTML elements.
  */
 
-import { SvelteComponentDev } from "svelte/internal";
-
 import "../css/style.css";
 import "../css/base.css";
 import "../css/layout.css";
@@ -25,87 +23,64 @@ import "../css/media-mobile.css";
 import "../css/media-print.css";
 import "../css/notifications.css";
 import "../css/tree-table.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/addon/dialog/dialog.css";
-import "codemirror/addon/fold/foldgutter.css";
-import "codemirror/addon/hint/show-hint.css";
 
-import { _, fetchAPI, getScriptTagJSON } from "./helpers";
-import router, { initSyncedStoreValues } from "./router";
-import { CopyableSpan } from "./clipboard";
-import { BeancountTextarea } from "./editor";
+// Polyfill for customised builtin elements in Webkit
+import "@ungap/custom-elements";
+import { get as store_get } from "svelte/store";
+
+import { get } from "./api";
+import { CopyableText } from "./clipboard";
+import { BeancountTextarea } from "./codemirror/setup";
+import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import {
   initCurrentKeyboardShortcuts,
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
+import { getScriptTagJSON } from "./lib/dom";
+import { object, string } from "./lib/validation";
+import { log_error } from "./log";
 import { notify } from "./notifications";
-import { updateSidebar, AsideButton, ErrorCount } from "./sidebar";
+import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
+import { initSidebar, updateSidebar } from "./sidebar";
 import { SortableTable } from "./sort";
+import { errorCount, favaOptions, ledgerData, rawLedgerData } from "./stores";
+import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTable } from "./tree-table";
-import {
-  favaAPI,
-  favaAPIStore,
-  favaAPIValidator,
-  fetchErrorCount,
-} from "./stores";
-
-import Editor from "./editor/Editor.svelte";
-import Import from "./import/Import.svelte";
-import ChartSwitcher from "./charts/ChartSwitcher.svelte";
-import FilterForm from "./FilterForm.svelte";
-import Documents from "./documents/Documents.svelte";
-import Modals from "./modals/Modals.svelte";
-import Query from "./query/Query.svelte";
-
-customElements.define("aside-button", AsideButton, { extends: "button" });
-customElements.define("beancount-textarea", BeancountTextarea, {
-  extends: "textarea",
-});
-customElements.define("error-count", ErrorCount, { extends: "li" });
-customElements.define("copyable-span", CopyableSpan, { extends: "span" });
-customElements.define("fava-journal", FavaJournal, { extends: "ol" });
-customElements.define("sortable-table", SortableTable, { extends: "table" });
-customElements.define("tree-table", TreeTable, { extends: "ol" });
 
 /**
- * Try to select the given element, load JSON and init Svelte component.
- *
- * On the next page load, the component will be removed.
+ * Define the custom elements that Fava uses.
  */
-function initSvelteComponent(
-  selector: string,
-  SvelteComponent: typeof SvelteComponentDev
-): void {
-  const el = document.querySelector(selector);
-  if (el) {
-    const props: { data?: unknown } = {};
-    const script = el.querySelector("script");
-    if (script && script.type === "application/json") {
-      props.data = JSON.parse(script.innerHTML);
-    }
-    const component = new SvelteComponent({ target: el, props });
-    router.once("before-page-loaded", () => component.$destroy());
+function defineCustomElements() {
+  customElements.define("beancount-textarea", BeancountTextarea, {
+    extends: "textarea",
+  });
+  customElements.define("copyable-text", CopyableText);
+  customElements.define("fava-journal", FavaJournal);
+  customElements.define("sortable-table", SortableTable, { extends: "table" });
+  customElements.define("tree-table", TreeTable);
+  customElements.define("svelte-component", SvelteCustomElement);
+}
+
+const pageTitleValidator = object({
+  documentTitle: string,
+  pageTitle: string,
+});
+
+function updatePageTitle(): void {
+  const v = pageTitleValidator(getScriptTagJSON("#page-title"));
+  document.title = v.documentTitle;
+  const pageTitle = document.querySelector("h1 strong");
+  if (pageTitle) {
+    pageTitle.innerHTML = v.pageTitle;
   }
 }
 
-const pageTitle = document.querySelector("h1 strong");
-const reloadButton = document.querySelector("#reload-page");
 router.on("page-loaded", () => {
-  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
-
-  router.once("before-page-loaded", initCurrentKeyboardShortcuts());
-  initSvelteComponent("#svelte-charts", ChartSwitcher);
-  initSvelteComponent("#svelte-documents", Documents);
-  initSvelteComponent("#svelte-editor", Editor);
-  initSvelteComponent("#svelte-import", Import);
-  initSvelteComponent("#svelte-query", Query);
-
-  document.title = favaAPI.documentTitle;
-  if (pageTitle) {
-    pageTitle.innerHTML = favaAPI.pageTitle;
-  }
-  reloadButton?.classList.add("hidden");
+  rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
+  updatePageTitle();
+  initCurrentKeyboardShortcuts();
+  document.getElementById("reload-page")?.classList.add("hidden");
   updateSidebar();
 });
 
@@ -115,36 +90,38 @@ router.on("page-loaded", () => {
  *
  * This will be scheduled every 5 seconds.
  */
-async function doPoll(): Promise<void> {
-  const changed = await fetchAPI("changed");
-  if (changed) {
-    if (favaAPI.favaOptions["auto-reload"]) {
-      router.reload();
-    } else {
-      reloadButton?.classList.remove("hidden");
-      fetchErrorCount();
-      notify(_("File change detected. Click to reload."), "warning", () => {
+function doPoll(): void {
+  get("changed").then((changed) => {
+    if (changed) {
+      if (store_get(favaOptions)["auto-reload"]) {
         router.reload();
-      });
+      } else {
+        document.getElementById("reload-page")?.classList.remove("hidden");
+        get("errors").then((count) => errorCount.set(count), log_error);
+        notify(_("File change detected. Click to reload."), "warning", () => {
+          router.reload();
+        });
+      }
     }
-  }
+  }, log_error);
 }
 
 function init(): void {
-  favaAPIStore.set(favaAPIValidator(getScriptTagJSON("#ledger-data")));
+  rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
+
   router.init();
-  initSyncedStoreValues();
-  // eslint-disable-next-line no-new
-  new Modals({ target: document.body });
-  const header = document.querySelector("header");
-  if (header) {
-    // eslint-disable-next-line no-new
-    new FilterForm({ target: header });
-  }
+  setStoreValuesFromURL();
+  syncStoreValuesToURL();
+  initSidebar();
   initGlobalKeyboardShortcuts();
+  defineCustomElements();
   setInterval(doPoll, 5000);
-  reloadButton?.addEventListener("click", () => {
+  document.getElementById("reload-page")?.addEventListener("click", () => {
     router.reload();
+  });
+
+  ledgerData.subscribe((val) => {
+    errorCount.set(val.errors);
   });
 
   router.trigger("page-loaded");

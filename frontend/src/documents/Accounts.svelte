@@ -1,35 +1,73 @@
-<script>
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+  import { leaf } from "../lib/account";
+  import type { TreeNode } from "../lib/tree";
 
   import { selectedAccount } from "./stores";
 
-  export let node;
+  export let node: TreeNode<{ name: string }>;
+  export let move: (m: { account: string; filename: string }) => void;
 
   const expanded = true;
   let drag = false;
 
   function click() {
-    $selectedAccount = $selectedAccount === node.fullname ? "" : node.fullname;
+    $selectedAccount = $selectedAccount === node.name ? "" : node.name;
   }
 
-  function dragenter(event) {
-    if (event.dataTransfer.types.includes("fava/filename")) {
+  /**
+   * Start drag if a document filename is dragged onto an account.
+   */
+  function dragenter(event: DragEvent) {
+    if (event.dataTransfer?.types.includes("fava/filename")) {
       event.preventDefault();
       drag = true;
     }
   }
   const dragover = dragenter;
 
-  const dispatch = createEventDispatcher();
-
-  function drop(event) {
-    const filename = event.dataTransfer.getData("fava/filename");
+  /**
+   * Handle a drop and bubble the event.
+   */
+  function drop(event: DragEvent) {
+    const filename = event.dataTransfer?.getData("fava/filename");
     if (filename) {
-      dispatch("drop", { account: node.fullname, filename });
+      move({ account: node.name, filename });
       drag = false;
     }
   }
 </script>
+
+{#if node.name}
+  <p
+    on:click={click}
+    on:dragenter={dragenter}
+    on:dragover={dragover}
+    on:dragleave={() => {
+      drag = false;
+    }}
+    on:drop|preventDefault={drop}
+    title={node.name}
+    class="droptarget"
+    data-account-name={node.name}
+    class:expanded
+    class:selected={$selectedAccount === node.name}
+    class:drag
+  >
+    <span>{leaf(node.name)}</span>
+  </p>
+{/if}
+
+{#if node.children.length}
+  <ul class="flex-table" hidden={!expanded}>
+    {#each node.children as child}
+      <li>
+        {#if node.children.length}
+          <svelte:self node={child} {move} />
+        {:else}node.name{/if}
+      </li>
+    {/each}
+  </ul>
+{/if}
 
 <style>
   ul {
@@ -46,34 +84,3 @@
     background-color: var(--color-table-header-background);
   }
 </style>
-
-{#if node.name}
-  <p
-    on:click={click}
-    on:dragenter={dragenter}
-    on:dragover={dragover}
-    on:dragleave={() => {
-      drag = false;
-    }}
-    on:drop|preventDefault={drop}
-    title={node.fullname}
-    class="droptarget"
-    data-account-name={node.fullname}
-    class:expanded
-    class:selected={$selectedAccount === node.fullname}
-    class:drag>
-    <span>{node.name}</span>
-  </p>
-{/if}
-
-{#if node.children.size}
-  <ul class="flex-table" hidden={!expanded}>
-    {#each [...node.children.values()] as child}
-      <li>
-        {#if node.children.size}
-          <svelte:self on:drop node={child} />
-        {:else}node.name{/if}
-      </li>
-    {/each}
-  </ul>
-{/if}

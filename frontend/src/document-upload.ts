@@ -3,18 +3,19 @@
  * and attribute "data-account-name"
  */
 
-import { writable, Writable } from "svelte/store";
+import type { Writable } from "svelte/store";
+import { writable } from "svelte/store";
 
-import { todayAsString } from "./format";
-import { notify } from "./notifications";
-import { basename, documentHasAccount } from "./lib/paths";
-import { delegate } from "./lib/events";
 import { put } from "./api";
+import { todayAsString } from "./format";
+import { delegate } from "./lib/events";
+import { basename, documentHasAccount } from "./lib/paths";
+import { notify } from "./notifications";
 
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
   if (
     event.dataTransfer &&
-    (event.dataTransfer.files.length ||
+    (event.dataTransfer.types.includes("Files") ||
       event.dataTransfer.types.includes("text/uri-list"))
   ) {
     closestTarget.classList.add("dragover");

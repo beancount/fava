@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
-
-from beancount.core.number import D
 import pytest
+from beancount.core.number import D
 
 from fava.core import FavaLedger
 from fava.core.charts import dumps
@@ -12,6 +11,17 @@ def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
     for conversion in ["at_cost", "USD"]:
         data = small_example_ledger.charts.interval_totals(
             Interval.MONTH, "Expenses", conversion
+        )
+        snapshot(data)
+        snapshot(dumps(data))
+
+
+def test_interval_totals_inverted(
+    small_example_ledger: FavaLedger, snapshot
+) -> None:
+    for conversion in ["at_cost", "USD"]:
+        data = small_example_ledger.charts.interval_totals(
+            Interval.MONTH, "Expenses", conversion, invert=True
         )
         snapshot(data)
         snapshot(dumps(data))

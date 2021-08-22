@@ -1,120 +1,113 @@
-import { derived, writable, Writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 
-import {
-  object,
-  array,
-  string,
-  boolean,
-  number,
-  union,
-  constant,
-} from "../lib/validation";
+import type { Interval } from "../lib/interval";
+import { DEFAULT_INTERVAL } from "../lib/interval";
 import { derived_array } from "../lib/store";
-import { fetchAPI } from "../helpers";
-
-import { baseURL } from "./url";
+import {
+  array,
+  boolean,
+  constant,
+  number,
+  object,
+  string,
+  union,
+} from "../lib/validation";
 
 export const urlHash = writable("");
 
 export const conversion = writable("");
-type Interval = "year" | "quarter" | "month" | "week" | "day";
-export const interval: Writable<Interval> = writable("month");
+export const interval: Writable<Interval> = writable(DEFAULT_INTERVAL);
 
-export const favaAPIValidator = object({
+export const ledgerDataValidator = object({
   accounts: array(string),
   baseURL: string,
   currencies: array(string),
-  documentTitle: string,
   errors: number,
   favaOptions: object({
     "auto-reload": boolean,
     "currency-column": number,
-    conversion: string,
-    interval: string,
+    indent: number,
     locale: union(string, constant(null)),
+    "insert-entry": array(
+      object({ date: string, filename: string, lineno: number, re: string })
+    ),
   }),
   have_excel: boolean,
   incognito: boolean,
   links: array(string),
   options: object({
-    commodities: array(string),
     documents: array(string),
+    filename: string,
+    include: array(string),
     operating_currency: array(string),
   }),
-  pageTitle: string,
   payees: array(string),
   tags: array(string),
   years: array(string),
 });
 
-export type FavaAPI = ReturnType<typeof favaAPIValidator>;
-export const favaAPI: FavaAPI = {
-  accounts: [],
-  baseURL: "",
-  currencies: [],
-  documentTitle: "",
-  errors: 0,
-  favaOptions: {
-    "auto-reload": false,
-    "currency-column": 80,
-    conversion: "at_cost",
-    interval: "month",
-    locale: null,
-  },
-  have_excel: false,
-  incognito: false,
-  links: [],
-  pageTitle: "",
-  payees: [],
-  options: {
-    commodities: [],
-    documents: [],
-    operating_currency: [],
-  },
-  tags: [],
-  years: [],
-};
+export const rawLedgerData = writable("");
 
-export const favaAPIStore = writable(favaAPI);
+type LedgerData = ReturnType<typeof ledgerDataValidator>;
 
+export const ledgerData: Readable<LedgerData> = derived(rawLedgerData, (s) =>
+  ledgerDataValidator(JSON.parse(s))
+);
+
+/** Fava's options */
+export const favaOptions = derived(ledgerData, (val) => val.favaOptions);
+/** Beancount's options */
+export const options = derived(ledgerData, (val) => val.options);
 /** Whether Fava supports exporting to Excel. */
-export const HAVE_EXCEL = derived(favaAPIStore, (val) => val.have_excel);
+export const HAVE_EXCEL = derived(ledgerData, (val) => val.have_excel);
+/** Whether Fava should obscure all numbers. */
+export const incognito = derived(ledgerData, (val) => val.incognito);
+/** Base URL. */
+export const baseURL = derived(ledgerData, (val) => val.baseURL);
+
 /** The ranked array of all accounts. */
-export const accounts = derived_array(favaAPIStore, (val) => val.accounts);
+export const accounts = derived_array(ledgerData, (val) => val.accounts);
 /** The ranked array of all currencies. */
-export const currencies = derived_array(favaAPIStore, (val) => val.currencies);
+export const currencies = derived_array(ledgerData, (val) => val.currencies);
 /** The ranked array of all links. */
-export const links = derived_array(favaAPIStore, (val) => val.links);
+export const links = derived_array(ledgerData, (val) => val.links);
 /** The ranked array of all payees. */
-export const payees = derived_array(favaAPIStore, (val) => val.payees);
+export const payees = derived_array(ledgerData, (val) => val.payees);
 /** The ranked array of all tags. */
-export const tags = derived_array(favaAPIStore, (val) => val.tags);
+export const tags = derived_array(ledgerData, (val) => val.tags);
 /** The array of all years. */
-export const years = derived_array(favaAPIStore, (val) => val.years);
+export const years = derived_array(ledgerData, (val) => val.years);
 
 /** The sorted array of operating currencies. */
-export const operating_currency = derived_array(favaAPIStore, (val) =>
+export const operating_currency = derived_array(ledgerData, (val) =>
   val.options.operating_currency.sort()
 );
 
 /** The sorted array of all used currencies. */
-export const commodities = derived_array(favaAPIStore, (val) =>
-  val.options.commodities.sort()
+export const currencies_sorted = derived_array(currencies, (val) =>
+  [...val].sort()
+);
+
+/**
+ * The list of operating currencies, adding in the current conversion currency.
+ */
+export const operatingCurrenciesWithConversion = derived(
+  [operating_currency, conversion],
+  ([operating_currency_val, conversion_val]) => {
+    if (
+      !conversion_val ||
+      ["at_cost", "at_value", "units"].includes(conversion_val) ||
+      operating_currency_val.includes(conversion_val)
+    ) {
+      return operating_currency_val;
+    }
+    return [...operating_currency_val, conversion_val];
+  }
 );
 
 /** The number of Beancount errors. */
 export const errorCount = writable(0);
-
-export async function fetchErrorCount(): Promise<void> {
-  const errors = await fetchAPI("errors");
-  errorCount.set(number(errors));
-}
-
-favaAPIStore.subscribe((val) => {
-  Object.assign(favaAPI, val);
-  errorCount.set(favaAPI.errors);
-  baseURL.set(favaAPI.baseURL);
-});
 
 export function closeOverlay(): void {
   if (window.location.hash) {

@@ -1,12 +1,13 @@
 """Provide data suitable for Fava's charts. """
-import datetime
+from datetime import date
+from datetime import timedelta
 from typing import Generator
 from typing import List
 from typing import Optional
+from typing import Pattern
 from typing import Tuple
 from typing import Union
 
-from beancount.core import flags
 from beancount.core import realization
 from beancount.core.amount import Amount
 from beancount.core.data import iter_entry_dates
@@ -16,6 +17,7 @@ from beancount.core.number import Decimal
 from beancount.core.position import Position
 from simplejson import JSONEncoder
 
+from fava.core._compat import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import units
 from fava.core.module_base import FavaModule
@@ -26,7 +28,7 @@ from fava.util import pairwise
 from fava.util.date import Interval
 
 
-ONE_DAY = datetime.timedelta(days=1)
+ONE_DAY = timedelta(days=1)
 
 
 def inv_to_dict(inventory):
@@ -50,10 +52,12 @@ class FavaJSONEncoder(JSONEncoder):
     def default(self, o):  # pylint: disable=method-hidden
         if isinstance(o, Decimal):
             return float(o)
-        if isinstance(o, (datetime.date, Amount, Position)):
+        if isinstance(o, (date, Amount, Position)):
             return str(o)
         if isinstance(o, (set, frozenset)):
             return list(o)
+        if isinstance(o, Pattern):
+            return o.pattern
         try:
             return JSONEncoder.default(self, o)
         except TypeError:
@@ -75,8 +79,8 @@ class ChartModule(FavaModule):
         self,
         account_name: str,
         conversion: str,
-        begin: Optional[datetime.date] = None,
-        end: Optional[datetime.date] = None,
+        begin: Optional[date] = None,
+        end: Optional[date] = None,
     ):
         """An account tree."""
         if begin is not None:
@@ -90,9 +94,7 @@ class ChartModule(FavaModule):
     @listify
     def prices(
         self,
-    ) -> Generator[
-        Tuple[str, str, List[Tuple[datetime.date, Decimal]]], None, None
-    ]:
+    ) -> Generator[Tuple[str, str, List[Tuple[date, Decimal]]], None, None]:
         """The prices for all commodity pairs.
 
         Returns:
@@ -110,6 +112,7 @@ class ChartModule(FavaModule):
         interval: Interval,
         accounts: Union[str, Tuple[str]],
         conversion: str,
+        invert: bool = False,
     ):
         """Renders totals for account (or accounts) in the intervals.
 
@@ -127,14 +130,21 @@ class ChartModule(FavaModule):
                     if posting.account.startswith(accounts):
                         inventory.add_position(posting)
 
+            balance = cost_or_value(
+                inventory, conversion, price_map, end - ONE_DAY
+            )
+            budgets = self.ledger.budgets.calculate_children(
+                accounts, begin, end
+            )
+
+            if invert:
+                balance = -balance
+                budgets = -budgets
+
             yield {
                 "date": begin,
-                "balance": cost_or_value(
-                    inventory, conversion, price_map, end - ONE_DAY
-                ),
-                "budgets": self.ledger.budgets.calculate_children(
-                    accounts, begin, end
-                ),
+                "balance": balance,
+                "budgets": budgets,
             }
 
     @listify
@@ -196,7 +206,7 @@ class ChartModule(FavaModule):
             for entry in self.ledger.entries
             if (
                 isinstance(entry, Transaction)
-                and entry.flag != flags.FLAG_UNREALIZED
+                and entry.flag != FLAG_UNREALIZED
             )
         )
 
@@ -231,7 +241,7 @@ class ChartModule(FavaModule):
         """
         return (
             len(types) == 2
-            and types[0][1] in {str, datetime.date}
+            and types[0][1] in {str, date}
             and types[1][1] is Inventory
         )
 
@@ -245,7 +255,7 @@ class ChartModule(FavaModule):
 
         if not self.can_plot_query(types):
             raise FavaAPIException("Can not plot the given chart.")
-        if types[0][1] is datetime.date:
+        if types[0][1] is date:
             return [
                 {"date": date, "balance": units(inv)} for date, inv in rows
             ]

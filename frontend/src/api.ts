@@ -1,9 +1,18 @@
-import router from "./router";
-import { fetchAPI, urlFor } from "./helpers";
-import { notify } from "./notifications";
-import { Entry } from "./entries";
+import type { Entry } from "./entries";
+import { entryValidator, Transaction } from "./entries";
+import { urlFor } from "./helpers";
 import { fetch, handleJSON } from "./lib/fetch";
-import { string, object, unknown } from "./lib/validation";
+import {
+  array,
+  boolean,
+  number,
+  object,
+  string,
+  unknown,
+} from "./lib/validation";
+import { log_error } from "./log";
+import { notify } from "./notifications";
+import router from "./router";
 
 const validateAPIResponse = object({ data: unknown });
 const putAPIValidators = {
@@ -14,8 +23,7 @@ const putAPIValidators = {
   source: string,
   source_slice: string,
 };
-
-type apiTypes = typeof putAPIValidators;
+type PutAPITypes = typeof putAPIValidators;
 
 /**
  * PUT to an API endpoint and convert the returned JSON data to an object.
@@ -23,10 +31,10 @@ type apiTypes = typeof putAPIValidators;
  * @param body - either a FormData instance or an object that will be converted
  *               to JSON.
  */
-export async function put<T extends keyof apiTypes>(
+export async function put<T extends keyof PutAPITypes>(
   endpoint: T,
   body: FormData | unknown
-): Promise<ReturnType<apiTypes[T]>> {
+): Promise<ReturnType<PutAPITypes[T]>> {
   const opts =
     body instanceof FormData
       ? { body }
@@ -41,7 +49,42 @@ export async function put<T extends keyof apiTypes>(
     ...opts,
   }).then(handleJSON);
   const { data }: { data: unknown } = validateAPIResponse(res);
-  return putAPIValidators[endpoint](data) as ReturnType<apiTypes[T]>;
+  return putAPIValidators[endpoint](data) as ReturnType<PutAPITypes[T]>;
+}
+
+const getAPIValidators = {
+  changed: boolean,
+  context: object({
+    content: string,
+    sha256sum: string,
+    slice: string,
+  }),
+  errors: number,
+  extract: array(entryValidator),
+  payee_accounts: array(string),
+  move: string,
+  payee_transaction: Transaction.validator,
+  query_result: object({
+    chart: unknown,
+    table: string,
+  }),
+};
+type GetAPITypes = typeof getAPIValidators;
+
+/**
+ * Fetch an API endpoint and convert the JSON data to an object.
+ * @param endpoint - the endpoint to fetch
+ * @param params - a string to append as params or an object.
+ */
+export async function get<T extends keyof GetAPITypes>(
+  endpoint: T,
+  params?: Record<string, string>
+): Promise<ReturnType<GetAPITypes[T]>> {
+  const url = urlFor(`api/${endpoint}`, params, false);
+  const responseData = await fetch(url);
+  const json = await handleJSON(responseData);
+  const { data }: { data: unknown } = validateAPIResponse(json);
+  return getAPIValidators[endpoint](data) as ReturnType<GetAPITypes[T]>;
 }
 
 /**
@@ -54,7 +97,7 @@ export async function moveDocument(
   newName: string
 ): Promise<boolean> {
   try {
-    const msg = await fetchAPI("move", {
+    const msg = await get("move", {
       filename,
       account,
       newName,
@@ -73,7 +116,7 @@ export async function moveDocument(
  */
 export async function deleteDocument(filename: string): Promise<boolean> {
   try {
-    const url = urlFor(`api/document`, { filename }, false);
+    const url = urlFor("api/document", { filename }, false);
     const res = await fetch(url, { method: "DELETE" }).then(handleJSON);
     const { data }: { data: unknown } = validateAPIResponse(res);
     notify(string(data));
@@ -96,7 +139,10 @@ export async function saveEntries(entries: Entry[]): Promise<void> {
     router.reload();
     notify(data);
   } catch (error) {
-    notify(`Saving failed: ${error}`, "error");
+    log_error(error);
+    if (error instanceof Error) {
+      notify(`Saving failed: ${error.message}`, "error");
+    }
     throw error;
   }
 }

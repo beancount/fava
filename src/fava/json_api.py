@@ -119,11 +119,12 @@ def query_result():
     if contents:
         if "ERROR" in contents:
             raise FavaAPIException(contents)
-    table = table(contents, types, rows)
+    table = table(g.ledger, contents, types, rows)
+
     if types and g.ledger.charts.can_plot_query(types):
         return {
-            "table": table,
             "chart": g.ledger.charts.query(types, rows),
+            "table": table,
         }
     return {"table": table}
 
@@ -285,7 +286,7 @@ def add_entries(request_data):
     try:
         entries = [deserialise(entry) for entry in request_data["entries"]]
     except KeyError as error:
-        raise FavaAPIException(f"KeyError: {error}")
+        raise FavaAPIException(f"KeyError: {error}") from error
 
     g.ledger.file.insert_entries(entries)
 

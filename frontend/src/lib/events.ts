@@ -5,7 +5,7 @@ export class Events<T = string> {
   private events: Map<T, (() => void)[]>;
 
   constructor() {
-    this.events = new Map();
+    this.events = new Map<T, (() => void)[]>();
   }
 
   /**
@@ -82,23 +82,4 @@ export function delegate<T extends Event, C extends Element>(
       }
     }
   });
-}
-
-/**
- * Bind an event to element, only run the callback once.
- * @param element - The element to attach the listener to.
- * @param event - The event type.
- * @param callback - The event listener.
- */
-export function once(
-  element: EventTarget,
-  event: string,
-  callback: (ev: Event) => void
-): void {
-  function runOnce(ev: Event): void {
-    element.removeEventListener(event, runOnce);
-    callback.apply(element, [ev]);
-  }
-
-  element.addEventListener(event, runOnce);
 }

@@ -1,10 +1,10 @@
 {% extends "_layout.html" %}
 
-{% import 'macros/_account_macros.html' as account_macros with context %}
+{% import 'macros/_account_macros.html' as account_macros %}
 {% import '_tree_table.html' as tree_table with context %}
 {% import '_journal_table.html' as journal_table with context %}
 
-{% set page_title = account_macros.account_name_header(account_name) %}
+{% set page_title = account_macros.account_name_header(ledger, account_name) %}
 {% set short_title = account_name %}
 
 {% set journal = subreport == 'journal' %}

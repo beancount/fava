@@ -1,10 +1,10 @@
 import { hcl } from "d3-color";
 import { scaleLinear, scaleOrdinal } from "d3-scale";
-import { get, derived } from "svelte/store";
+import { derived, get } from "svelte/store";
 
-import { accounts, operating_currency, commodities } from "../stores";
-import { time_filter } from "../stores/filters";
 import { currentTimeFilterDateFormat } from "../format";
+import { accounts, currencies_sorted, operating_currency } from "../stores";
+import { time_filter } from "../stores/filters";
 import { AccountHierarchyNode } from "../charts";
 
 interface Partitioned {
@@ -16,22 +16,42 @@ interface Partitioned {
 
 interface SunburstNode extends AccountHierarchyNode, Partitioned {}
 
+/**
+ * Set the time filter to the given value (formatted according to the current interval).
+ * @param date - a date.
+ */
 export function setTimeFilter(date: Date): void {
   time_filter.set(get(currentTimeFilterDateFormat)(date));
 }
 
-/*
+/**
+ * Filter ticks to have them not overlap.
+ * @param domain - The domain of values to filter.
+ * @param count - The number of ticks that should be returned.
+ */
+export function filterTicks(domain: string[], count: number): string[] {
+  if (domain.length <= count) {
+    return domain;
+  }
+  const showIndices = Math.ceil(domain.length / count);
+  return domain.filter((d, i) => i % showIndices === 0);
+}
+
+/**
  * Generate an array of colors.
  *
  * Uses the HCL color space in an attempt to generate colours that are
  * to be perceived to be of the same brightness.
+ * @param count - the number of colors to generate.
+ * @param chroma - optional, the chroma channel value.
+ * @param luminance - optional, the luminance channel value.
  */
-function hclColorRange(count: number, chroma = 45, lightness = 70): string[] {
+function hclColorRange(count: number, chroma = 45, luminance = 70): string[] {
   const offset = 270;
   const delta = 360 / count;
   const colors = [...Array(count).keys()].map((index) => {
     const hue = (index * delta + offset) % 360;
-    return hcl(hue, chroma, lightness);
+    return hcl(hue, chroma, luminance);
   });
   return colors.map((c) => c.toString());
 }
@@ -74,10 +94,10 @@ export function sunburstColor(node: SunburstNode, root: SunburstNode): string {
 }
 
 export const currenciesScale = derived(
-  [operating_currency, commodities],
-  ([operating_currency_val, commodities_val]) =>
+  [operating_currency, currencies_sorted],
+  ([operating_currency_val, currencies_sorted_val]) =>
     scaleOrdinal(colors10).domain([
       ...operating_currency_val,
-      ...commodities_val,
+      ...currencies_sorted_val,
     ])
 );

@@ -1,3 +1,6 @@
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
+
+
 {% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom'] %}
 {% set sub_types = {
   'custom': (
@@ -45,7 +48,7 @@
 {% set journal_show = request.args.getlist('show') %}
 {% endif %}
 
-{% macro account_link(name) %}<a class="account-link" href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
+{% macro account_link(name) %}<a href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
 {% macro render_metadata_indicators(metadata) -%}
 {% for key, value in metadata.items() %}
 <span class="metadata-indicator" title="{{ key }}: {{ value }}">{{ key[:2] }}</span>
@@ -75,19 +78,20 @@
 
 {% macro journal_table(entries, show_change_and_balance=False) %}
 {% autoescape false %}
-<form id="entry-filters" class="flex-row entry-filters">
+<fava-journal>
+<form class="flex-row entry-filters">
   {% for type in entry_types %}
-  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-key="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
+  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-keyboard-shortcut="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
   {% if type in sub_types.keys() %}
   {% for sub_type in sub_types[type] %}
-  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-key="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in journal_show or type not in journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
+  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-keyboard-shortcut="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in journal_show or type not in journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
   {% endfor %}
   {% endif %}
   {% endfor %}
-  <button type="button" title="Toggle metadata" data-type="metadata" data-key="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
-  <button type="button" title="Toggle postings" data-type="postings" data-key="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
+  <button type="button" title="Toggle metadata" data-type="metadata" data-keyboard-shortcut="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
+  <button type="button" title="Toggle postings" data-type="postings" data-keyboard-shortcut="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
 </form>
-<ol is="fava-journal" class="flex-table journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
+<ol class="flex-table journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
     <li class="head">
         <p>
         <span class="datecell" data-sort="num" data-order="desc">{{ _('Date') }}</span>
@@ -121,12 +125,12 @@
         {% elif type == 'query' %}
           <a href="{{ url_for('report', report_name='query', query_string='run "{}"'.format(entry.name)) }}">{{ entry.name }}</a>
         {% elif type == 'pad' %}
-            {{ account_link(entry.account) }} from {{ account_link(entry.source_account) }}
+            {{ account_link(entry.account) }}&nbsp;from&nbsp;{{ account_link(entry.source_account) }}
         {% elif type == 'custom' %}
           <strong>{{ entry.type }}</strong>
           {%- for value in entry['values'] -%}
             &nbsp;{% if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}
-            {%- elif value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}<span class="num">{{ value.value|format_amount }}</span>
+            {%- elif value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}{{ commodity_macros.render_amount(ledger, value.value) }}
             {%- elif value.dtype|string == "<class 'str'>" %}"{{ value.value }}"
             {%- elif value.dtype|string == "<class 'bool'>" %}{{ value.value }}
             {%- elif value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
@@ -154,11 +158,15 @@
           {% endfor %}
         </span>
         {% if type == 'balance' %}
-          <span class="num bal {{ ' pending' if entry.diff_amount else '' }}">{{ entry.amount|format_amount }}</span>
+          {{ commodity_macros.render_amount(ledger, entry.amount, 'num bal' + (' pending' if entry.diff_amount else '')) }}
         {% endif %}
         {% if show_change_and_balance %}
-            <span class="change num">{% for pos in change|cost_or_value(entry.date) %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
-            <span class="num">{% for pos in balance|cost_or_value(entry.date) %}{{ pos.units|format_amount }}<br>{% endfor %}</span>
+          <span class="change num">
+          {%- for pos in change|cost_or_value(entry.date) %}{{ commodity_macros.render_amount(ledger, pos.units) }}<br>{% endfor -%}
+          </span>
+          <span class="num">
+          {%- for pos in balance|cost_or_value(entry.date) %}{{ commodity_macros.render_amount(ledger, pos.units) }}<br>{% endfor -%}
+          </span>
         </p>
         {% endif %}
         {{ render_metadata(metadata, entry_hash) }}
@@ -173,7 +181,7 @@
                 {# We want the output these amounts with the same precision as in the input file.
                    For computed values this might give a lot of digits, so format the price using the DisplayContext for now.#}
                 <span class="num">{{ posting.units or '' }}</span>
-                <span class="num">{{ posting.price|format_amount }}</span>
+                {{ commodity_macros.render_amount(ledger, posting.price) }}
                 <span class="num">{{ posting.cost.number }} {{ posting.cost.currency }}
                     {{- ', {}'.format(posting.cost.date) if posting.cost.date else '' }}
                     {{- ', "{}"'.format(posting.cost.label) if posting.cost.label else '' }}</span>
@@ -190,5 +198,6 @@
     </li>
 {% endfor %}
 </ol>
+</fava-journal>
 {% endautoescape %}
 {%- endmacro %}

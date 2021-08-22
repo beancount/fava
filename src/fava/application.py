@@ -17,11 +17,13 @@ import threading
 from io import BytesIO
 from typing import Any
 from typing import Dict
+from typing import List
 from typing import Optional
 
 import flask
 import markdown2  # type: ignore
 import werkzeug.urls
+from beancount import __version__ as beancount_version
 from beancount.core.account import ACCOUNT_RE
 from beancount.utils.text_utils import replace_numbers  # type: ignore
 from flask import abort
@@ -35,6 +37,7 @@ from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
 from werkzeug.utils import secure_filename
 
+from fava import __version__ as fava_version
 from fava import LANGUAGES
 from fava import template_filters
 from fava.context import g
@@ -45,6 +48,7 @@ from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIException
 from fava.json_api import json_api
 from fava.serialisation import serialise
+from fava.util import next_key
 from fava.util import resource_path
 from fava.util import send_file_inline
 from fava.util import setup_logging
@@ -91,19 +95,31 @@ REPORTS = [
 LOAD_FILE_LOCK = threading.Lock()
 
 
-def _load_file():
+def ledger_slug(ledger: FavaLedger) -> str:
+    """Generate URL slug for a ledger."""
+    title_slug = slugify(ledger.options["title"])
+    return title_slug or slugify(ledger.beancount_file_path)
+
+
+def update_ledger_slugs(ledgers: List[FavaLedger]) -> None:
+    """Update the dictionary mapping URL slugs to ledgers."""
+    ledgers_by_slug: Dict[str, FavaLedger] = {}
+    for ledger in ledgers:
+        slug = ledger_slug(ledger)
+        unique_key = next_key(slug, ledgers_by_slug)
+        ledgers_by_slug[unique_key] = ledger
+    app.config["LEDGERS"] = ledgers_by_slug
+
+
+def _load_file() -> None:
     """Load Beancount files.
 
     This is run automatically on the first request.
     """
-    app.config["LEDGERS"] = {}
-    for filepath in app.config["BEANCOUNT_FILES"]:
-        ledger = FavaLedger(filepath)
-        slug = slugify(ledger.options["title"])
-        if not slug:
-            slug = slugify(filepath)
-        app.config["LEDGERS"][slug] = ledger
-    app.config["FILE_SLUGS"] = list(app.config["LEDGERS"].keys())
+    ledgers = [
+        FavaLedger(filepath) for filepath in app.config["BEANCOUNT_FILES"]
+    ]
+    update_ledger_slugs(ledgers)
 
 
 BABEL = Babel(app)
@@ -229,15 +245,17 @@ def _pull_beancount_file(_, values) -> None:
         if not app.config.get("LEDGERS"):
             _load_file()
     if g.beancount_file_slug:
-        if g.beancount_file_slug not in app.config["FILE_SLUGS"]:
-            abort(404)
+        if g.beancount_file_slug not in app.config["LEDGERS"]:
+            if not any(
+                g.beancount_file_slug == ledger_slug(ledger)
+                for ledger in app.config["LEDGERS"].values()
+            ):
+                abort(404)
+            # one of the file slugs changed, update the mapping
+            update_ledger_slugs(app.config["LEDGERS"].values())
         g.ledger = app.config["LEDGERS"][g.beancount_file_slug]
-        g.conversion = request.args.get(
-            "conversion", g.ledger.fava_options["conversion"]
-        )
-        g.interval = Interval.get(
-            request.args.get("interval", g.ledger.fava_options["interval"])
-        )
+        g.conversion = request.args.get("conversion", "at_cost")
+        g.interval = Interval.get(request.args.get("interval", "month"))
 
 
 @app.errorhandler(FavaAPIException)
@@ -253,8 +271,12 @@ def fava_api_exception(error: FavaAPIException):
 def index():
     """Redirect to the Income Statement (of the given or first file)."""
     if not g.beancount_file_slug:
-        g.beancount_file_slug = app.config["FILE_SLUGS"][0]
-    return redirect(url_for("report", report_name="income_statement"))
+        g.beancount_file_slug = next(iter(app.config["LEDGERS"]))
+    index_url = url_for("index")
+    default_path = app.config["LEDGERS"][g.beancount_file_slug].fava_options[
+        "default-page"
+    ]
+    return redirect(f"{index_url}{default_path}")
 
 
 @app.route("/<bfile>/account/<name>/")
@@ -348,21 +370,25 @@ def download_journal():
     return send_file(data, as_attachment=True, attachment_filename=filename)
 
 
-@app.route("/<bfile>/help/")
-@app.route("/<bfile>/help/<string:page_slug>/")
-def help_page(page_slug="_index"):
+@app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
+@app.route("/<bfile>/help/<string:page_slug>")
+def help_page(page_slug):
     """Fava's included documentation."""
     if page_slug not in HELP_PAGES:
         abort(404)
     html = markdown2.markdown_path(
         (resource_path("help") / (page_slug + ".md")),
-        extras=["fenced-code-blocks", "tables"],
+        extras=["fenced-code-blocks", "tables", "header-ids"],
     )
     return render_template(
         "_layout.html",
         active_page="help",
         page_slug=page_slug,
-        help_html=render_template_string(html),
+        help_html=render_template_string(
+            html,
+            beancount_version=beancount_version,
+            fava_version=fava_version,
+        ),
         HELP_PAGES=HELP_PAGES,
     )
 

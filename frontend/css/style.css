@@ -3,6 +3,7 @@
   --font-family-alternative: "Source Serif Pro", sans-serif;
   --font-family-monospaced: "Fira Mono", monospace;
   --font-family-editor: "Source Code Pro", monospace;
+  --z-index-editor: 0;
   --z-index-aside: 1;
   --z-index-header: 2;
   --z-index-floating-ui: 3;
@@ -110,4 +111,5 @@
   --color-journal-link: hsl(203, 39%, 85%);
   --color-journal-posting-indicator: hsl(203, 24%, 80%);
   --color-journal-metadata-indicator: hsl(203, 24%, 40%);
+  --color-journal-hover-highlight: #f5f5f59c;
 }

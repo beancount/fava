@@ -2,30 +2,10 @@
   "name": "fava",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -cw",
-    "lint": "npm run format && npm run lint:js && npm run lint:css && npx tsc",
-    "lint:css": "stylelint 'css/*.css' 'src/**/*.svelte' --fix",
-    "check-lint": "npm run check-format && eslint src --ext .js,.svelte,.ts && stylelint 'css/*.css' 'src/**/*.svelte'  && npx tsc",
-    "lint:js": "eslint src test --fix --ext .js,.svelte,.ts",
-    "check-format": "cd ../ && prettier '**/*.{css,md,js,json,svelte,ts}' --check --ignore-path .gitignore",
-    "format": "cd ../ && prettier '**/*.{css,md,js,json,svelte,ts}' --check --write --ignore-path .gitignore",
+    "build": "node -r sucrase/register build.ts",
+    "dev": "node -r sucrase/register build.ts --watch",
     "test": "ava",
     "test:watch": "ava -w"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{css,svelte}": "stylelint --fix",
-    "*.{css,md,js,json,svelte,ts}": "prettier --write",
-    "*.{js,svelte,ts}": "eslint --fix"
-  },
-  "prettier": {
-    "proseWrap": "always",
-    "tabWidth": 2
   },
   "ava": {
     "extensions": [
@@ -35,131 +15,71 @@
       "sucrase/register"
     ]
   },
-  "eslintConfig": {
-    "extends": [
-      "airbnb-base",
-      "plugin:@typescript-eslint/recommended",
-      "prettier"
-    ],
-    "plugins": [
-      "@typescript-eslint",
-      "svelte3"
-    ],
-    "env": {
-      "browser": true
-    },
-    "rules": {
-      "camelcase": 0,
-      "curly": [
-        "error",
-        "all"
-      ],
-      "max-classes-per-file": 0,
-      "no-param-reassign": 0,
-      "no-restricted-syntax": [
-        "error",
-        "ForInStatement",
-        "LabelStatement",
-        "WithStatement"
-      ],
-      "no-underscore-dangle": 0,
-      "no-unused-expressions": 0,
-      "import/extensions": 0,
-      "import/no-unresolved": 0,
-      "import/prefer-default-export": 0,
-      "@typescript-eslint/camelcase": 0
-    },
-    "overrides": [
-      {
-        "files": "*.js",
-        "rules": {
-          "@typescript-eslint/explicit-function-return-type": 0
-        }
-      },
-      {
-        "files": "*.svelte",
-        "processor": "svelte3/svelte3",
-        "rules": {
-          "import/first": 0,
-          "import/no-mutable-exports": 0,
-          "@typescript-eslint/explicit-function-return-type": 0
-        }
-      },
-      {
-        "files": "*.ts",
-        "parser": "@typescript-eslint/parser"
-      }
-    ]
-  },
-  "stylelint": {
-    "extends": [
-      "stylelint-config-standard",
-      "stylelint-config-recess-order",
-      "stylelint-config-prettier"
-    ],
-    "rules": {
-      "selector-pseudo-class-no-unknown": [
-        true,
-        {
-          "ignorePseudoClasses": [
-            "global"
-          ]
-        }
-      ]
-    }
-  },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^12.0.0",
-    "@rollup/plugin-node-resolve": "^8.0.0",
-    "@rollup/plugin-sucrase": "^3.0.2",
-    "@rollup/plugin-typescript": "^4.1.2",
-    "@types/codemirror": "0.0.95",
-    "@types/d3-array": "^2.0.0",
-    "@types/d3-axis": "^1.0.12",
-    "@types/d3-color": "^1.2.2",
-    "@types/d3-format": "^1.3.1",
-    "@types/d3-hierarchy": "^1.1.6",
-    "@types/d3-quadtree": "^1.0.7",
-    "@types/d3-scale": "^2.2.0",
-    "@types/d3-shape": "^1.3.2",
-    "@types/d3-time-format": "^2.1.1",
-    "@typescript-eslint/eslint-plugin": "^3.0.2",
-    "@typescript-eslint/parser": "^3.0.2",
-    "ava": "^3.8.2",
-    "eslint": "^7.1.0",
-    "eslint-config-airbnb-base": "^14.1.0",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-svelte3": "^2.7.3",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.7",
-    "prettier": "^2.0.5",
-    "prettier-plugin-svelte": "^1.1.0",
-    "rollup": "^2.11.2",
-    "rollup-plugin-svelte": "^5.2.2",
-    "stylelint": "^13.5.0",
-    "stylelint-config-prettier": "^8.0.1",
-    "stylelint-config-recess-order": "^2.0.4",
-    "stylelint-config-standard": "^20.0.0",
-    "sucrase": "^3.15.0",
-    "typescript": "^3.9.3"
+    "@types/d3-array": "^2.9.0",
+    "@types/d3-axis": "^2.0.0",
+    "@types/d3-color": "^2.0.1",
+    "@types/d3-format": "^2.0.0",
+    "@types/d3-hierarchy": "^2.0.0",
+    "@types/d3-quadtree": "^2.0.0",
+    "@types/d3-scale": "^3.2.2",
+    "@types/d3-selection": "^2.0.0",
+    "@types/d3-shape": "^2.0.0",
+    "@types/d3-time-format": "^3.0.0",
+    "@types/node": "^14.14.31",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "ava": "^3.15.0",
+    "chokidar": "^3.5.1",
+    "esbuild": "^0.11.5",
+    "esbuild-svelte": "^0.4.2",
+    "eslint": "^7.20.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-svelte3": "^3.1.1",
+    "prettier": "^2.2.1",
+    "prettier-plugin-svelte": "^2.1.6",
+    "stylelint": "^13.11.0",
+    "stylelint-config-prettier": "^8.0.2",
+    "stylelint-config-recess-order": "^2.3.0",
+    "stylelint-config-standard": "^21.0.0",
+    "sucrase": "^3.17.1",
+    "svelte-preprocess-esbuild": "^2.0.0",
+    "typescript": "^4.1.5"
   },
   "dependencies": {
-    "@openfonts/fira-mono_all": "^1.44.1",
+    "@codemirror/autocomplete": "^0.18.0",
+    "@codemirror/closebrackets": "^0.18.0",
+    "@codemirror/commands": "^0.18.0",
+    "@codemirror/comment": "^0.18.0",
+    "@codemirror/fold": "^0.18.0",
+    "@codemirror/gutter": "^0.18.0",
+    "@codemirror/highlight": "^0.18.3",
+    "@codemirror/history": "^0.18.0",
+    "@codemirror/language": "^0.18.0",
+    "@codemirror/lint": "^0.18.0",
+    "@codemirror/matchbrackets": "^0.18.0",
+    "@codemirror/rectangular-selection": "^0.18.0",
+    "@codemirror/search": "^0.18.0",
+    "@codemirror/state": "^0.18.0",
+    "@codemirror/stream-parser": "^0.18.0",
+    "@codemirror/view": "^0.18.1",
+    "@openfonts/fira-mono_all": "^1.44.2",
     "@openfonts/fira-sans_all": "^1.44.1",
-    "@openfonts/source-code-pro_all": "^1.44.1",
+    "@openfonts/source-code-pro_all": "^1.44.2",
     "@openfonts/source-serif-pro_latin": "^1.44.1",
-    "codemirror": "^5.54.0",
-    "d3-array": "^2.4.0",
-    "d3-axis": "^1.0.12",
-    "d3-color": "^1.4.1",
-    "d3-format": "^1.4.4",
-    "d3-hierarchy": "^1.1.9",
-    "d3-quadtree": "^1.0.7",
-    "d3-scale": "^3.2.1",
-    "d3-selection": "^1.4.1",
-    "d3-shape": "^1.3.7",
-    "d3-time-format": "^2.2.3",
-    "svelte": "^3.23.0"
+    "@ungap/custom-elements": "^0.1.15",
+    "d3-array": "^2.11.0",
+    "d3-axis": "^2.0.0",
+    "d3-color": "^2.0.0",
+    "d3-format": "^2.0.0",
+    "d3-hierarchy": "^2.0.0",
+    "d3-quadtree": "^2.0.0",
+    "d3-scale": "^3.2.3",
+    "d3-selection": "^2.0.0",
+    "d3-shape": "^2.0.0",
+    "d3-time-format": "^3.0.0",
+    "svelte": "^3.32.3"
   }
 }

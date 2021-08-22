@@ -4,18 +4,25 @@
     'yellow': "The last entry is not a balance check.",
 } %}
 
-{% macro indicator(account) %}
+{% macro balance_directive(ledger, account) %}
+{% for position in (ledger.all_root_account|get_or_create(account)).balance|units %}
+{{ today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
+{% endfor %}
+{% endmacro %}
+
+{% macro indicator(ledger, account) %}
 {% set status=ledger.account_uptodate_status(account) %}
+{% set balance=balance_directive(ledger, account) %}
 {% if status %}
-<span is="copyable-span" class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
+<copyable-text class="status-indicator status-{{ status }}" title="{{ infotext[status] }}
 
 Click to copy the balance directives to the clipboard:
 
-{{ balance_directive(account) }}" data-clipboard-text="{{ balance_directive(account) }}"></span>
+{{ balance }}" data-clipboard-text="{{ balance }}"></copyable-text>
 {% endif %}
 {% endmacro %}
 
-{% macro last_account_activity(account_name) %}
+{% macro last_account_activity(ledger, account_name) %}
 {% set last_entry = ledger.last_entry(account_name) %}
 {% set last_account_activity = (today() - last_entry.date).days if last_entry else 0 %}
 {% if last_account_activity > ledger.fava_options['uptodate-indicator-grey-lookback-days'] %}
@@ -23,24 +30,18 @@ Click to copy the balance directives to the clipboard:
 {% endif %}
 {% endmacro %}
 
-{% macro balance_directive(account) %}
-{% for position in (ledger.all_root_account|get_or_create(account)).balance|units %}
-{{ today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
-{% endfor %}
-{% endmacro %}
-
-{% macro account_name(account_name, last_segment=False) %}
+{% macro account_name(ledger, account_name, last_segment=False) %}
 <a href="{{ url_for('account', name=account_name) }}" class="account">
-  {{ account_name.split(':')[-1] if last_segment else account_name }}
+  {{- account_name.split(':')[-1] if last_segment else account_name -}}
 </a>
-
 {% if account_name and ledger.accounts[account_name].meta.get('fava-uptodate-indication') %}
-{{ indicator(account_name) }}
-{{ last_account_activity(account_name) }}
+
+{{ indicator(ledger, account_name) }}
+{{ last_account_activity(ledger, account_name) }}
 {% endif %}
 {% endmacro %}
 
-{% macro account_name_header(account_name) -%}
+{% macro account_name_header(ledger, account_name) -%}
 <span class="droptarget" data-account-name="{{ account_name }}">
   {%- set parts = account_name.split(':') -%}
   {%- for part in parts -%}
@@ -53,8 +54,8 @@ Click to copy the balance directives to the clipboard:
   {%- endfor -%}
 
   {%- if account_name and ledger.accounts[account_name].meta.get('fava-uptodate-indication') -%}
-  {{ indicator(account_name) }}
-  {{ last_account_activity(account_name) }}
+  {{ indicator(ledger, account_name) }}
+  {{ last_account_activity(ledger, account_name) }}
   {%- endif -%}
 
   {%- set last_entry = ledger.last_entry(account_name) -%}

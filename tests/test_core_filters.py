@@ -3,13 +3,15 @@ import datetime
 
 import pytest
 from beancount.core import account
+from beancount.core.data import create_simple_posting
+from beancount.core.data import Transaction
 
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
+from fava.core.filters import FilterException
 from fava.core.filters import FilterSyntaxLexer
 from fava.core.filters import Match
 from fava.core.filters import TimeFilter
-from fava.core.filters import FilterException
 
 LEX = FilterSyntaxLexer().lex
 
@@ -127,7 +129,25 @@ def test_advanced_filter(example_ledger, string, number):
     FILTER.set(string)
     filtered_entries = FILTER.apply(example_ledger.all_entries)
     assert len(filtered_entries) == number
-    FILTER.set("")
+
+
+def test_null_meta_posting():
+    FILTER.set('any(some_meta:"1")')
+
+    txn = Transaction(
+        {},
+        datetime.date(2017, 12, 12),
+        "*",
+        "",
+        "",
+        None,
+        None,
+        [],
+    )
+    # This will create a posting with meta set to `None`.
+    create_simple_posting(txn, "Assets:ETrade:Cash", "100", "USD")
+    assert txn.postings[0].meta is None
+    assert len(FILTER.apply([txn])) == 0
 
 
 def test_account_filter(example_ledger):

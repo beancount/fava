@@ -3,25 +3,24 @@ offer.
 
 ## Editor
 
-The [editor]({{ url_for('report', report_name='editor') }}) provides a
-convenient way to edit the source file. The cursor will jump to the bottom of
-the file by default, or if the string `FAVA-INSERT-MARKER` is found in the
-file, to the line above it. If you want to use a file different from the main
-file to be opened by default, use the `default-file` option.
+The [editor](../editor) provides a convenient way to edit the source file. If
+you want to use a file different from the main file to be opened by default, use
+the [`default-file`](./options#default-file) option. If you have
+[`insert-entry`](./options#insert-entry) options set, the cursor will by default
+jump to the (date-wise) latest one in the opened file.
 
-The editor supports auto-completion for account names and tags. Trailing
-whitespace is highlighted in red.
+The editor supports auto-completion for various entities, e.g., account names,
+payees, and tags. Trailing whitespace is highlighted in red.
 
 ## Queries
 
-On the [Query]({{ url_for('report', report_name='query') }}) report you can
-execute queries like with the `bean-query` command-line tool. For an
-explanation of how these queries work see the [Beancount Query Language
-Reference](http://furius.ca/beancount/doc/query).
+On the [Query](../query/) report you can execute queries like with the
+`bean-query` command-line tool. For an explanation of how these queries work see
+the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
-Fava displays charts for BQL queries - if they have exactly two columns
-with the first being a date or string and the second an inventory, then a line
-chart or treemap chart is shown on the query page.
+Fava displays charts for BQL queries - if they have exactly two columns with the
+first being a date or string and the second an inventory, then a line chart or
+treemap chart is shown on the query page.
 
 Fava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xls`, `xlsx`
@@ -34,10 +33,10 @@ and `ods`, install Fava with the `excel` feature:
 By clicking the `+` button or using the `n` keyboard shortcut you can open a
 form to insert a transaction to your Beancount file. The position that
 transactions are inserted at can be specified in a flexible way using the
-`insert-entry` option. If you want to set a bookmark to this form, adding
-`#add-transaction` to any URL in Fava will open it on load. Tags and links can
-be added in the form by adding them (separated by spaces) to the narration
-field, e.g., `narration #tag ^somelink`.
+[`insert-entry`](./options#insert-entry) option. If you want to set a bookmark
+to this form, adding `#add-transaction` to any URL in Fava will open it on load.
+Tags and links can be added in the form by adding them (separated by spaces) to
+the narration field, e.g., `narration #tag ^somelink`.
 
 ## Up-to-date indicators
 
@@ -67,8 +66,8 @@ number or a deep hierarchy of accounts, Fava offers the following options:
 
 Fava can open up your source file in your favorite editor directly from the web
 interface using the `use-external-editor` configuration variable through the
-`beancount://` URL handler. See the [Beancount
-urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
+`beancount://` URL handler. See the
+[Beancount urlscheme](https://github.com/aumayr/beancount_urlscheme) project for
 pre-configured URL handlers for macOS and Cygwin.
 
 ## Multiple Beancount files
@@ -101,9 +100,9 @@ current page but change the time filter to the current month.
 
 ## Language
 
-You can change the language of the interface by specifying the `language`
-option. If no option is specified, Fava tries to guess the language from your
-browser settings.
+You can change the language of the interface by specifying the
+[`language`](./options#language) option. If no option is specified, Fava tries
+to guess the language from your browser settings.
 
 ## Documents upload
 
@@ -147,8 +146,8 @@ first posting.
 **Note**: Uploading statements modifies your Beancount file!
 
 When enabling the `link_documents`-plugin, the Document entries created by
-Beancount (see above) will be tagged with `#linked`, linked to the
-corresponding transaction and can be filtered in the Journal:
+Beancount (see above) will be tagged with `#linked`, linked to the corresponding
+transaction and can be filtered in the Journal:
 
     plugin "fava.plugins.link_documents"
 

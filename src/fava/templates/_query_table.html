@@ -1,21 +1,27 @@
+{% import 'macros/_account_macros.html' as account_macros %}
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
+
+
 {% set sort_type = {
     "<class 'decimal.Decimal'>": 'num',
     "<class 'cdecimal.Decimal'>": 'num',
     "<class 'int'>": 'num',
 } %}
 
-{% macro querycell(name, value, type_) %}
+{% macro querycell(ledger, name, value, type_) %}
 {% set type = type_|string %}
 {% if type == "<class 'beancount.core.inventory.Inventory'>" %}
 <td class="num">
   {% for position in value|sort(attribute='units.currency') %}
-  {{ position.units|format_amount }}<br>
+    {{ commodity_macros.render_amount(ledger, position.units) }}<br>
   {% endfor %}
 </td>
 {% elif type == "<class 'str'>" %}
 <td>
   {% if name == "account" %}
-  <a href="{{ url_for('account', name=value) }}">{{ value }}</a>
+    {{ account_macros.account_name(ledger, value) }}
+  {% elif name == "id" %}
+  <a href="#context-{{ value }}">{{ value }}</a>
   {% else %}
   {{ value }}
   {% endif %}
@@ -23,7 +29,9 @@
 {% elif type == "<class 'decimal.Decimal'>" or type == "<class 'cdecimal.Decimal'>" %}
 <td class="num" data-sort-value="{{ value or 0 }}">{{ value|format_currency }}</td>
 {% elif type == "<class 'beancount.core.amount.Amount'>" %}
-<td class="num" data-sort-value="{{ value.number or 0 }}">{{ value|format_amount }}</td>
+<td class="num" data-sort-value="{{ value.number or 0 }}">
+  {{ commodity_macros.render_amount(ledger, value) }}
+</td>
 {% elif type == "<class 'bool'>" %}
 <td>{{ value|upper }}</td>
 {% elif type == "<class 'int'>" %}
@@ -33,13 +41,13 @@
 {% elif type == "<class 'datetime.date'>" %}
 <td>{{ value or '' }}</td>
 {% elif type == "<class 'beancount.core.position.Position'>" %}
-<td class="num">{{ value.units|format_amount }}</td>
+<td class="num">{{ commodity_macros.render_amount(ledger, value.units) }}</td>
 {% else %}
 <td class="query-error" title="Type {{ type|string }} not recognized">{{ value }}</td>
 {% endif %}
 {% endmacro %}
 
-{% macro querytable(contents, types, rows, filter_empty=None, footer=None) %}
+{% macro querytable(ledger, contents, types, rows, filter_empty=None, footer=None) %}
 {% if contents %}
 <pre><code>{{ contents }}</code></pre>
 {% elif types %}
@@ -55,7 +63,7 @@
     {% for row in rows if filter_empty == None or not row[filter_empty].is_empty() %}
     <tr>
       {% for name, type in types %}
-      {{ querycell(name, row[name], type)  }}
+      {{ querycell(ledger, name, row[name], type)  }}
       {% endfor %}
     </tr>
     {% endfor %}
@@ -64,7 +72,7 @@
   <tfoot>
     <tr>
       {% for type, value in footer %}
-        {{ querycell('', value, type)  }}
+        {{ querycell(ledger, '', value, type)  }}
       {% endfor %}
     </tr>
   </tfoot>

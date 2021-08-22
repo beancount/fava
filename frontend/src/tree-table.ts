@@ -5,7 +5,7 @@ import { delegate } from "./lib/events";
  *
  * This handles the toggling of accounts in the accounts trees.
  */
-export class TreeTable extends HTMLOListElement {
+export class TreeTable extends HTMLElement {
   constructor() {
     super();
 

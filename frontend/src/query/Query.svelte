@@ -1,39 +1,55 @@
-<script>
+<script lang="ts">
   import { onMount, tick } from "svelte";
 
-  import { fetchAPI } from "../helpers";
-  import { query_shell_history, addToHistory } from "../stores/query";
+  import { get } from "../api";
   import { parseQueryChart } from "../charts";
-
   import Chart from "../charts/Chart.svelte";
+  import { operatingCurrenciesWithConversion } from "../stores";
+  import { getFilterParams } from "../stores/filters";
+  import { addToHistory, query_shell_history } from "../stores/query";
+
   import QueryEditor from "./QueryEditor.svelte";
   import QueryLinks from "./QueryLinks.svelte";
+  import ReadonlyQueryEditor from "./ReadonlyQueryEditor.svelte";
 
   let query_string = "";
-  const resultElems = {};
 
-  const query_results = {};
+  const resultElems: Record<string, HTMLElement> = {};
 
-  $: query_result_array = $query_shell_history.map((item) => {
-    return [item, query_results[item] || {}];
-  });
+  type ResultType = {
+    result?: { table: string; chart: ReturnType<typeof parseQueryChart> };
+    error?: unknown;
+  };
 
-  async function setResult(query, res) {
+  const query_results: Record<string, ResultType> = {};
+
+  $: query_result_array = $query_shell_history.map((item): [
+    string,
+    ResultType
+  ] => [item, query_results[item] || {}]);
+
+  async function setResult(query: string, res: ResultType) {
     addToHistory(query);
     query_results[query] = res;
     await tick();
     const url = new URL(window.location.href);
     url.searchParams.set("query_string", query);
     window.history.replaceState(null, "", url.toString());
-    resultElems[query].setAttribute("open", true);
+    resultElems[query].setAttribute("open", "true");
   }
 
   function submit() {
     const query = query_string;
-    fetchAPI("query_result", { query_string: query }).then(
-      (result) => {
-        result.chart = parseQueryChart(result.chart);
-        setResult(query, { result });
+    if (!query) {
+      return;
+    }
+    get("query_result", { query_string: query, ...getFilterParams() }).then(
+      (res) => {
+        const chart = parseQueryChart(
+          res.chart,
+          $operatingCurrenciesWithConversion
+        );
+        setResult(query, { result: { chart, table: res.table } });
       },
       (error) => {
         setResult(query, { error });
@@ -41,7 +57,7 @@
     );
   }
 
-  function click(query) {
+  function click(query: string) {
     if (!query_results[query]) {
       query_string = query;
       submit();
@@ -57,27 +73,12 @@
   });
 </script>
 
-<style>
-  details > div {
-    max-height: 80vh;
-    overflow: auto;
-  }
-
-  div :global(.query-error) {
-    font-family: var(--font-family-monospaced);
-    color: var(--color-background);
-    background: var(--color-error);
-  }
-</style>
-
-<QueryEditor bind:value={query_string} on:submit={submit} />
+<QueryEditor bind:value={query_string} {submit} />
 <div>
   {#each query_result_array as [history_item, { result, error }] (history_item)}
     <details class:error bind:this={resultElems[history_item]}>
       <summary on:click={() => click(history_item)}>
-        <pre>
-          <code>{history_item}</code>
-        </pre>
+        <ReadonlyQueryEditor value={history_item} />
         {#if result}
           <span class="spacer" />
           <QueryLinks query={history_item} />
@@ -96,3 +97,16 @@
     </details>
   {/each}
 </div>
+
+<style>
+  details > div {
+    max-height: 80vh;
+    overflow: auto;
+  }
+
+  div :global(.query-error) {
+    font-family: var(--font-family-monospaced);
+    color: var(--color-background);
+    background: var(--color-error);
+  }
+</style>

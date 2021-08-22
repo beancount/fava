@@ -1,69 +1,69 @@
-<script>
-  import { Balance, Note, Transaction } from "../entries";
+<script lang="ts">
   import { saveEntries } from "../api";
-  import { _ } from "../helpers";
-  import { urlHash, closeOverlay } from "../stores";
+  import { create } from "../entries";
+  import type { EntryTypeName } from "../entries";
+  import Entry from "../entry-forms/Entry.svelte";
+  import { _ } from "../i18n";
+  import { closeOverlay, urlHash } from "../stores";
 
   import ModalBase from "./ModalBase.svelte";
-  import BalanceComponent from "../entry-forms/Balance.svelte";
-  import NoteComponent from "../entry-forms/Note.svelte";
-  import TransactionComponent from "../entry-forms/Transaction.svelte";
 
-  const entryTypes = [
-    [_("Transaction"), Transaction],
-    [_("Balance"), Balance],
-    [_("Note"), Note],
+  const entryTypes: [EntryTypeName, string][] = [
+    ["Transaction", _("Transaction")],
+    ["Balance", _("Balance")],
+    ["Note", _("Note")],
   ];
-  let entry = new Transaction();
 
-  $: svelteComponent = {
-    Balance: BalanceComponent,
-    Note: NoteComponent,
-    Transaction: TransactionComponent,
-  }[entry.type];
+  let entry = create("Transaction");
 
-  async function submitAndNew(event) {
-    if (event.target.form.reportValidity()) {
+  async function submitAndNew({
+    currentTarget,
+  }: {
+    currentTarget: HTMLButtonElement;
+  }) {
+    if (currentTarget.form?.reportValidity()) {
       await saveEntries([entry]);
-      entry = new entry.constructor();
+      entry = create(entry.type);
     }
   }
 
   async function submit() {
     await saveEntries([entry]);
-    entry = new entry.constructor();
+    entry = create(entry.type);
     closeOverlay();
   }
 
   $: shown = $urlHash === "add-transaction";
 </script>
 
-<ModalBase {shown}>
+<ModalBase {shown} focus=".payee input">
   <form on:submit|preventDefault={submit}>
     <h3>
-      {_('Add')}
-      {#each entryTypes as [name, Cls]}
+      {_("Add")}
+      {#each entryTypes as [type, displayName]}
         <button
           type="button"
-          class:muted={entry.type !== Cls.name}
+          class:muted={entry.type !== type}
           on:click={() => {
-            entry = new Cls();
-          }}>
-          {name}
+            entry = create(type);
+          }}
+        >
+          {displayName}
         </button>
-        {' '}
+        {" "}
       {/each}
     </h3>
-    <svelte:component this={svelteComponent} bind:entry />
+    <Entry bind:entry />
     <div class="flex-row">
       <span class="spacer" />
       <button
         type="submit"
         on:click|preventDefault={submitAndNew}
-        class="muted">
-        {_('Save and add new')}
+        class="muted"
+      >
+        {_("Save and add new")}
       </button>
-      <button type="submit">{_('Save')}</button>
+      <button type="submit">{_("Save")}</button>
     </div>
   </form>
 </ModalBase>

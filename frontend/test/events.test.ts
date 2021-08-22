@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { Events } from "../src/lib/events";
 
 test("register and listen to events", (t) => {
@@ -12,14 +13,14 @@ test("register and listen to events", (t) => {
   e.once("t", () => {
     once += 1;
   });
-  t.deepEqual(count, 0);
-  t.deepEqual(once, 0);
+  t.is(count, 0);
+  t.is(once, 0);
   e.trigger("t");
   e.trigger("t");
   e.trigger("t");
-  t.deepEqual(count, 3);
-  t.deepEqual(once, 1);
+  t.is(count, 3);
+  t.is(once, 1);
   e.remove("t", inc);
   e.trigger("t");
-  t.deepEqual(count, 3);
+  t.is(count, 3);
 });

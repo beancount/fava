@@ -1,33 +1,34 @@
-{% import 'macros/_account_macros.html' as account_macros with context %}
-{% set show_other_column = (ledger.options.operating_currency|length < ledger.options['commodities']|length) %}
-{% set table_hover_text = _('Hold Shift while clicking to expand all children.
-Hold Ctrl or Cmd while clicking to expand one level.') %}
+{% import 'macros/_account_macros.html' as account_macros %}
+{% import 'macros/_commodity_macros.html' as commodity_macros %}
 
-{% macro render_diff_and_number(balance, cost, currency) %}
+{% macro render_diff_and_number(balance, cost, currency, invert=False) %}
   {% set num = balance.pop(currency, 0) %}
   {% if currency in cost %}
     {% set cost_num = cost.pop(currency, 0) %}
     {% set diff = num - cost_num %}
+    {% if invert %}
+      {% set diff = -diff %}
+    {% endif %}
     {% if diff %}
-    <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency) }} {{ currency }}">
+    <span class="diff{{ ' positive' if diff > 0 else ' negative' }}" title="{{ cost_num|format_currency(currency, invert=invert) }} {{ currency }}">
       ({{ diff|format_currency(currency) }})
     </span>
     {% endif %}
   {% endif %}
-  <span class="number">{{ num|format_currency(currency) }}</span>
+  <span class="number">{{ num|format_currency(currency, invert=invert) }}</span>
 {% endmacro %}
 
-{% macro tree(account_node) %}
-<ol is="tree-table" class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ table_hover_text }}">
+{% macro tree(account_node, invert=False) %}
+<tree-table>
+<ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
+Hold Ctrl or Cmd while clicking to expand one level.') }}">
   <li class="head">
     <p>
       <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
       {% for currency in ledger.options.operating_currency %}
       <span class="num">{{ currency }}</span>
       {% endfor %}
-      {% if show_other_column %}
       <span class="num other">{{ _('Other') }}</span>
-      {% endif %}
     </p>
   </li>
   {% for account in ([account_node] if account_node.name else account_node.children) if account|should_show recursive %}
@@ -38,28 +39,26 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
   <li{{ ' class=toggled' if account.name|collapse_account else '' }}>
     <p{{ ' class=has-balance' if not balance.is_empty() else '' }}>
     <span class="account-cell depth-{{ loop.depth0 }} droptarget{{ ' has-children' if account.children else '' }}" data-account-name="{{ account.name }}">
-      {{ account_macros.account_name(account.name, last_segment=True) }}
+      {{ account_macros.account_name(ledger, account.name, last_segment=True) }}
     </span>
     {% for currency in ledger.options.operating_currency %}
     <span class="num">
-      <span class="balance">{{ render_diff_and_number(balance, cost, currency) }}</span>
-      <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency) }}</span>
+      <span class="balance">{{ render_diff_and_number(balance, cost, currency, invert=invert) }}</span>
+      <span class="balance-children">{{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }}</span>
     </span>
     {% endfor %}
-    {% if show_other_column %}
     <span class="num other">
       <span class="balance">
         {% for currency in balance.keys()|sort %}
-        {{ render_diff_and_number(balance, cost, currency) }} {{ currency }}<br>
+        {{ render_diff_and_number(balance, cost, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
         {% endfor %}
       </span>
       <span class="balance-children">
         {% for currency in balance_children.keys()|sort %}
-        {{ render_diff_and_number(balance_children, cost_children, currency) }} {{ currency }}<br>
+        {{ render_diff_and_number(balance_children, cost_children, currency, invert=invert) }} {{ commodity_macros.render_currency(ledger, currency) }}<br>
         {% endfor %}
       </span>
     </span>
-    {% endif %}
     </p>
     {% if account.children %}
     <ol>
@@ -69,6 +68,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
   </li>
   {% endfor %}
 </ol>
+</tree-table>
 {% endmacro %}
 
 {% macro render_budget(budget, currency, number=0) %}
@@ -81,7 +81,8 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
 {% endmacro %}
 
 {% macro account_tree(account_name, interval_balances, dates, accumulate) %}
-<ol is="tree-table" class="fullwidth flex-table tree-table">
+<tree-table>
+<ol class="fullwidth flex-table tree-table">
     <li class="head">
         <p>
         <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
@@ -103,7 +104,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
         {{- '' if not account|length else ' has-children'}}
         " data-account-name="{{ account.account }}">
             {% if account|length %}<span class="expander"></span>{% endif %}
-        {{ account_macros.account_name(account.account, last_segment=True) }}</span>
+        {{ account_macros.account_name(ledger, account.account, last_segment=True) }}</span>
     {% for begin_date, end_date in dates %}
         {% if accumulate %}{% set begin_date = dates[-1][0] %}{% endif %}
         {% set budget = ledger.budgets.calculate(account.account, begin_date, end_date) %}
@@ -116,7 +117,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
             {% for pos in balance %}
                 <span class="balance">
                     {{ render_budget(budget, pos.units.currency, pos.units.number) }}
-                    <span class="number">{{ pos.units|format_amount }}</span>
+                    {{ commodity_macros.render_amount(ledger, pos.units, 'number') }}
                 </span>
             {% endfor %}
             {% for currency, number in budget.items() if currency not in balance.currencies() %}
@@ -127,7 +128,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
             {% for pos in balance_children %}
                 <span class="balance-children">
                     {{ render_budget(budget_children, pos.units.currency, pos.units.number) }}
-                    <span class="number">{{ pos.units|format_amount }}</span>
+                    {{ commodity_macros.render_amount(ledger, pos.units, 'number') }}
                 </span>
             {% endfor %}
             {% for currency, number in budget_children.items() if currency not in balance_children.currencies() %}
@@ -145,4 +146,5 @@ Hold Ctrl or Cmd while clicking to expand one level.') %}
     </li>
 {% endfor %}
 </ol>
+</tree-table>
 {% endmacro %}

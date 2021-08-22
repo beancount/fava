@@ -10,7 +10,7 @@ frontend/node_modules: frontend/package-lock.json
 .PHONY: clean
 clean: mostlyclean
 	rm -rf build dist
-	rm -rf src/fava/static/*
+	find src/fava/static ! -name 'favicon.ico' -type f -exec rm -f {} +
 
 .PHONY: mostlyclean
 mostlyclean:
@@ -23,19 +23,14 @@ mostlyclean:
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
 
-.PHONY: check-lint
-check-lint: frontend/node_modules
-	cd frontend; npm run check-lint
-	tox -e lint
-
 .PHONY: lint
 lint: frontend/node_modules
-	cd frontend; npm run lint
-	tox -e format
+	pre-commit run -a
 	tox -e lint
 
 .PHONY: test
 test:
+	cd frontend; npm run build
 	cd frontend; npm run test
 	tox -e py
 
@@ -102,7 +97,11 @@ gh-pages:
 	rm -r build
 	touch .nojekyll
 	git add -A
-	git commit -m 'Update gh-pages'
+	git commit -m 'Update gh-pages' --no-verify
 	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
 	git checkout master
 	git branch -D gh-pages
+
+# Create a binary using pyinstaller
+dist/fava: src/fava/static/app.js
+	tox -e pyinstaller

@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from decimal import Decimal
+
 from beancount.core import realization
 from flask import g
 
@@ -7,6 +9,7 @@ from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
 from fava.template_filters import basename
 from fava.template_filters import collapse_account
+from fava.template_filters import format_currency
 from fava.template_filters import format_errormsg
 from fava.template_filters import get_or_create
 from fava.template_filters import remove_keys
@@ -17,6 +20,13 @@ def test_remove_keys() -> None:
     """Dict keys get remove or return empty dict if None is given."""
     assert remove_keys(None, []) == {}
     assert remove_keys({"asdf": 1}, ["asdf"]) == {}
+
+
+def test_format_currency(app) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        assert format_currency(Decimal("2.12")) == "2.12"
+        assert format_currency(Decimal("2.13"), invert=True) == "-2.13"
 
 
 def test_basename():
@@ -67,13 +77,18 @@ def test_format_errormsg(app):
         assert format_errormsg("Test: Test") == "Test: Test"
 
 
-def test_collapse_account(app):
+def test_collapse_account(app, monkeypatch):
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        g.ledger.fava_options["collapse-pattern"] = [
-            "^Assets:Stock$",
-            "^Assets:Property:.*",
-        ]
+
+        monkeypatch.setitem(
+            g.ledger.fava_options,
+            "collapse-pattern",
+            [
+                "^Assets:Stock$",
+                "^Assets:Property:.*",
+            ],
+        )
         g.ledger.accounts["Assets:Stock"] = AccountData()
         g.ledger.accounts["Assets:Property"] = AccountData()
 

@@ -1,42 +1,53 @@
-<script>
+<script lang="ts">
   import { onMount } from "svelte";
-  import { todayAsString } from "../format";
-  import { _, urlFor } from "../helpers";
-  import { moveDocument, deleteDocument } from "../api";
 
-  import { newFilename, extractURL } from "./helpers";
+  import { deleteDocument, get, moveDocument, saveEntries } from "../api";
+  import DocumentPreview from "../documents/DocumentPreview.svelte";
+  import type { Entry } from "../entries";
+  import { _ } from "../i18n";
+  import { notify } from "../notifications";
+  import router from "../router";
 
   import Extract from "./Extract.svelte";
-  import AccountInput from "../entry-forms/AccountInput.svelte";
+  import FileList from "./FileList.svelte";
+  import { isDuplicate, preprocessData } from "./helpers";
+  import type { ImportableFiles, ProcessedImportableFiles } from "./helpers";
 
-  export let data;
-  let preprocessedData = [];
+  export let data: ImportableFiles;
 
-  const today = todayAsString();
+  let entries: Entry[] = [];
+  let selected: string | null = null;
 
-  // Initially set the file names for all importable files.
-  function preprocessData(arr) {
-    return arr.map((file) => {
-      const importers = file.importers.map((importerfile) => ({
-        ...importerfile,
-        newName: newFilename(importerfile.date, importerfile.name),
-      }));
-      if (importers.length === 0) {
-        const newName = newFilename(today, file.basename);
-        importers.push({ account: "", newName });
-      }
-      return {
-        ...file,
-        importers,
-      };
-    });
+  let preprocessedData: ProcessedImportableFiles = [];
+
+  let extractCache = new Map<string, Entry[]>();
+
+  $: importableFiles = preprocessedData.filter(
+    (i) => i.importers[0].importer_name !== ""
+  );
+  $: otherFiles = preprocessedData.filter(
+    (i) => i.importers[0].importer_name === ""
+  );
+
+  function preventNavigation() {
+    return extractCache.size > 0
+      ? "There are unfinished imports, are you sure you want to continue?"
+      : null;
   }
 
   onMount(() => {
     preprocessedData = preprocessData(data);
+    router.interruptHandlers.add(preventNavigation);
+
+    return () => {
+      router.interruptHandlers.delete(preventNavigation);
+    };
   });
 
-  async function move(filename, account, newName) {
+  /**
+   * Move the given file to the new file name (and remove from the list).
+   */
+  async function move(filename: string, account: string, newName: string) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
       preprocessedData = preprocessedData.filter(
@@ -44,7 +55,15 @@
       );
     }
   }
-  async function remove(filename) {
+
+  /**
+   * Delete the given file and remove it from the displayed list.
+   */
+  async function remove(filename: string) {
+    // eslint-disable-next-line
+    if (!confirm(_("Delete this file?"))) {
+      return;
+    }
     const removed = await deleteDocument(filename);
     if (removed) {
       preprocessedData = preprocessedData.filter(
@@ -52,58 +71,100 @@
       );
     }
   }
+
+  /**
+   * Open the extract dialog for the given file/importer combination.
+   */
+  async function extract(filename: string, importer: string) {
+    const extractCacheKey = `${filename}:${importer}`;
+    let cached = extractCache.get(extractCacheKey);
+    if (!cached) {
+      cached = await get("extract", { filename, importer });
+      if (!cached.length) {
+        notify("No entries to import from this file.", "warning");
+        return;
+      }
+      extractCache.set(extractCacheKey, cached);
+      extractCache = extractCache;
+    }
+    entries = cached;
+  }
+
+  /**
+   * Save the current entries.
+   */
+  async function save() {
+    const withoutDuplicates = entries.filter((e) => !isDuplicate(e));
+    const key = [...extractCache].find(([, e]) => e === entries)?.[0];
+    if (key) {
+      extractCache.delete(key);
+      extractCache = extractCache;
+    }
+    entries = [];
+    await saveEntries(withoutDuplicates);
+  }
 </script>
 
+<Extract
+  {entries}
+  close={() => {
+    entries = [];
+  }}
+  {save}
+/>
+<div class="fixed-fullsize-container">
+  <div class="filelist">
+    {#if preprocessedData.length === 0}
+      <p>{_("No files were found for import.")}</p>
+    {/if}
+    {#if importableFiles.length > 0}
+      <div class="importable-files">
+        <h2>{_("Importable Files")}</h2>
+        <FileList
+          files={importableFiles}
+          {extractCache}
+          bind:selected
+          moveFile={move}
+          removeFile={remove}
+          {extract}
+        />
+      </div>
+      <hr />
+    {/if}
+    {#if otherFiles.length > 0}
+      <details open={importableFiles.length === 0}>
+        <summary>{_("Non-importable Files")}</summary>
+        <FileList
+          files={otherFiles}
+          {extractCache}
+          bind:selected
+          moveFile={move}
+          removeFile={remove}
+          {extract}
+        />
+      </details>
+    {/if}
+  </div>
+  {#if selected}
+    <div>
+      <DocumentPreview filename={selected} />
+    </div>
+  {/if}
+</div>
+
 <style>
-  .header {
-    padding: 0.5rem;
-    margin: 0.5rem 0;
-    background-color: var(--color-table-header-background);
+  .fixed-fullsize-container {
+    display: flex;
+    align-items: stretch;
   }
-  .header button {
-    float: right;
+  .fixed-fullsize-container > * {
+    flex: 1 1 40%;
+    overflow: auto;
   }
-  .button {
-    padding: 4px 8px;
+  .filelist {
+    padding: 1rem;
+  }
+  .importable-files {
+    padding-bottom: 0.8rem;
   }
 </style>
-
-<Extract />
-{#each preprocessedData as file}
-  <div class="header" title={file.name}>
-    <a
-      href={urlFor('document', { filename: file.name })}
-      data-remote
-      target="_blank">
-      {file.basename}
-    </a>
-    <button
-      class="round"
-      on:click={() => remove(file.name)}
-      type="button"
-      title={_('Delete')}
-      tabindex="-1">
-      ×
-    </button>
-  </div>
-  {#each file.importers as info}
-    <div class="flex-row">
-      <AccountInput bind:value={info.account} />
-      <input size="40" bind:value={info.newName} />
-      <button
-        type="button"
-        on:click={() => move(file.name, info.account, info.newName)}>
-        {'Move'}
-      </button>
-      {#if info.importer_name}
-        <a
-          class="button"
-          title="{_('Extract')} with importer {info.importer_name}"
-          href={extractURL(file.name, info.importer_name)}>
-          {_('Extract')}
-        </a>
-        {info.importer_name}
-      {:else}{_('No importer matched this file.')}{/if}
-    </div>
-  {/each}
-{/each}

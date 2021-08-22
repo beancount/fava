@@ -20,12 +20,12 @@ def test_attributes(example_ledger: FavaLedger) -> None:
     assert "Assets" not in example_ledger.attributes.accounts
 
 
-def test_paths_to_watch(example_ledger: FavaLedger) -> None:
+def test_paths_to_watch(example_ledger: FavaLedger, monkeypatch) -> None:
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
         [],
     )
-    example_ledger.options["documents"] = ["folder"]
+    monkeypatch.setitem(example_ledger.options, "documents", ["folder"])
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
@@ -51,8 +51,31 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
     assert not example_ledger.accounts["NOACCOUNT"].meta
 
 
+def test_group_entries(example_ledger: FavaLedger, load_doc) -> None:
+    """
+    2010-11-12 * "test"
+        Assets:T   4.00 USD
+        Expenses:T
+    2010-11-12 * "test"
+        Assets:T   4.00 USD
+        Expenses:T
+    2012-12-12 note Expenses:T "test"
+    """
+
+    entries, _, __ = load_doc
+    assert len(entries) == 3
+    data = example_ledger.group_entries_by_type(entries)
+    assert data == [("Note", [entries[2]]), ("Transaction", entries[0:2])]
+
+
 def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
     func = example_ledger.account_uptodate_status
     assert func("Assets:US:BofA") is None
     assert func("Assets:US:BofA:Checking") == "yellow"
     assert func("Liabilities:US:Chase:Slate") == "green"
+
+
+def test_commodities(example_ledger: FavaLedger) -> None:
+    assert len(example_ledger.commodities) == 10
+    usd = example_ledger.commodities["USD"]
+    assert usd.meta["export"] == "CASH"

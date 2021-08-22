@@ -1,8 +1,7 @@
-import { once } from "./lib/events";
-import { closeOverlay } from "./stores";
-
 /**
  * Add a tooltip showing the keyboard shortcut over the target element.
+ * @param target - The target element to show the tooltip on.
+ * @returns A function to remove event handler.
  */
 function showTooltip(target: HTMLElement): () => void {
   const tooltip = document.createElement("div");
@@ -36,7 +35,9 @@ function showTooltip(target: HTMLElement): () => void {
 function showTooltips(): () => void {
   const removes: (() => void)[] = [];
   document.querySelectorAll("[data-key]").forEach((el) => {
-    el instanceof HTMLElement && removes.push(showTooltip(el));
+    if (el instanceof HTMLElement) {
+      removes.push(showTooltip(el));
+    }
   });
   return (): void => {
     removes.forEach((r) => r());
@@ -45,6 +46,9 @@ function showTooltips(): () => void {
 
 /**
  * Ignore events originating from editable elements.
+ * @param element - The element to check.
+ * @returns true if the element is one of input/select/textarea or a
+ *          contentEditable element.
  */
 function isEditableElement(element: EventTarget | null): boolean {
   return (
@@ -56,8 +60,9 @@ function isEditableElement(element: EventTarget | null): boolean {
   );
 }
 
-type KeyboardEventHandler = (event: KeyboardEvent) => void;
-const keyboardShortcuts: Map<string, KeyboardEventHandler> = new Map();
+/** A handler function or an element to click. */
+type KeyboardShortcutAction = ((event: KeyboardEvent) => void) | HTMLElement;
+const keyboardShortcuts = new Map<string, KeyboardShortcutAction>();
 // The last typed character to check for sequences of two keys.
 let lastChar = "";
 
@@ -82,12 +87,17 @@ function keydown(event: KeyboardEvent): void {
     eventKey = `Control+${eventKey}`;
   }
   const lastTwoKeys = `${lastChar} ${eventKey}`;
-  const lastTwoHandler = keyboardShortcuts.get(lastTwoKeys);
-  const keyHandler = keyboardShortcuts.get(eventKey);
-  if (lastTwoHandler) {
-    lastTwoHandler(event);
-  } else if (keyHandler) {
-    keyHandler(event);
+  const handler =
+    keyboardShortcuts.get(lastTwoKeys) ?? keyboardShortcuts.get(eventKey);
+  if (handler) {
+    if (handler instanceof HTMLInputElement) {
+      event.preventDefault();
+      handler.focus();
+    } else if (handler instanceof HTMLElement) {
+      handler.click();
+    } else {
+      handler(event);
+    }
   }
   if (event.key !== "Alt" && event.key !== "Control" && event.key !== "Shift") {
     lastChar = eventKey;
@@ -96,10 +106,38 @@ function keydown(event: KeyboardEvent): void {
 
 document.addEventListener("keydown", keydown);
 
+/** A type to specify a platform-dependent keyboard shortcut. */
+export type KeySpec = string | { key: string; mac: string };
+
+const currentPlatform: "mac" | "key" =
+  typeof navigator !== "undefined" && /Mac/.test(navigator.platform)
+    ? "mac"
+    : "key";
+
+export const modKey = currentPlatform === "mac" ? "Cmd" : "Ctrl";
+
+/**
+ * Get the keyboard key specifier string for the current platform.
+ * @param keySpec - The key spec.
+ */
+export function getKeySpecKey(keySpec: KeySpec): string {
+  if (typeof keySpec === "string") {
+    return keySpec;
+  }
+  return currentPlatform === "mac" ? keySpec.mac : keySpec.key;
+}
+
 /**
  * Bind an event handler to a key.
+ * @param key - The key to bind.
+ * @param handler - The callback to run on key press.
+ * @returns A function to unbind the keyboard handler.
  */
-function bind(key: string, handler: KeyboardEventHandler): () => void {
+export function bindKey(
+  keySpec: KeySpec,
+  handler: KeyboardShortcutAction
+): () => void {
+  const key = getKeySpecKey(keySpec);
   const sequence = key.split(" ");
   if (sequence.length > 2) {
     // eslint-disable-next-line no-console
@@ -107,22 +145,13 @@ function bind(key: string, handler: KeyboardEventHandler): () => void {
   }
   if (keyboardShortcuts.has(key)) {
     // eslint-disable-next-line no-console
-    console.error("Duplicate keyboard shortcut: ", key);
+    console.warn("Duplicate keyboard shortcut: ", key, handler);
   }
   keyboardShortcuts.set(key, handler);
   return (): void => {
     keyboardShortcuts.delete(key);
   };
 }
-
-function unbind(key: string): void {
-  keyboardShortcuts.delete(key);
-}
-
-export const keys = {
-  bind,
-  unbind,
-};
 
 /**
  * A svelte action to attach a global keyboard shortcut.
@@ -139,55 +168,44 @@ export function keyboardShortcut(
     return {};
   }
   node.setAttribute("data-key", key);
-  bind(key, (event) => {
-    if (node instanceof HTMLInputElement) {
-      event.preventDefault();
-      node.focus();
-    } else {
-      node.click();
-    }
-  });
+  const destroy = bindKey(key, node);
 
-  return {
-    destroy(): void {
-      unbind(key);
-    },
-  };
+  return { destroy };
 }
 
-export function initCurrentKeyboardShortcuts(): () => void {
-  const currentShortcuts: (() => void)[] = [];
-  document.querySelectorAll("[data-key]").forEach((element) => {
-    const key = element.getAttribute("data-key");
-    if (key !== null && !keyboardShortcuts.has(key)) {
-      currentShortcuts.push(
-        bind(key, () => {
-          if (
-            element instanceof HTMLButtonElement ||
-            element instanceof HTMLAnchorElement
-          ) {
-            element.click();
-          } else if (element instanceof HTMLInputElement) {
-            element.focus();
-          } else if (element instanceof HTMLElement) {
-            element.click();
-          }
-        })
-      );
+/**
+ * Register keyboard shortcuts for all newly added elements with a
+ * `data-keyboard-shortcut` attribute.
+ */
+export function initCurrentKeyboardShortcuts(): void {
+  // clean up
+  for (const [key, action] of keyboardShortcuts.entries()) {
+    if (action instanceof HTMLElement && !document.contains(action)) {
+      keyboardShortcuts.delete(key);
+    }
+  }
+  document.querySelectorAll("[data-keyboard-shortcut]").forEach((element) => {
+    const key = element.getAttribute("data-keyboard-shortcut");
+    if (key && element instanceof HTMLElement) {
+      element.removeAttribute("data-keyboard-shortcut");
+      element.setAttribute("data-key", key);
+      bindKey(key, element);
     }
   });
-
-  return (): void => {
-    currentShortcuts.forEach((u) => u());
-  };
 }
 
+/**
+ * Register the keys to show/hide the tooltips
+ */
 export function initGlobalKeyboardShortcuts(): void {
-  bind("?", () => {
+  bindKey("?", () => {
     const hide = showTooltips();
-    once(document, "mousedown", hide);
-    once(document, "keydown", hide);
+    const once = () => {
+      hide();
+      document.removeEventListener("mousedown", once);
+      document.removeEventListener("keydown", once);
+    };
+    document.addEventListener("mousedown", once);
+    document.addEventListener("keydown", once);
   });
-
-  bind("Escape", closeOverlay);
 }

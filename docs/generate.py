@@ -6,13 +6,9 @@ import os
 import pkgutil
 from os import path
 
-import beancount
-
 import fava
 
-MODULES = list(
-    pkgutil.walk_packages(fava.__path__, fava.__name__ + ".")
-) + list(pkgutil.walk_packages(beancount.__path__, beancount.__name__ + "."))
+MODULES = list(pkgutil.walk_packages(fava.__path__, fava.__name__ + "."))
 
 RST_PATH = path.join(path.dirname(__file__), "api")
 if not path.isdir(RST_PATH):
@@ -24,9 +20,7 @@ def heading(name, level="-"):
     return f"{name}\n{level * len(name)}\n\n"
 
 
-for package in ["fava", "beancount"] + [
-    mod.name for mod in MODULES if mod.ispkg
-]:
+for package in ["fava"] + [mod.name for mod in MODULES if mod.ispkg]:
     submodules = [
         mod.name
         for mod in MODULES

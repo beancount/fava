@@ -1,4 +1,5 @@
 import test from "ava";
+
 import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy";
 
 test("fuzzy test", (t) => {
@@ -35,12 +36,12 @@ test("fuzzy filter", (t) => {
 });
 
 test("fuzzy wap", (t) => {
-  t.deepEqual(fuzzywrap("", "tenotest"), "tenotest");
-  t.deepEqual(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
-  t.deepEqual(fuzzywrap("sdf", "nomatch"), "nomatch");
-  t.deepEqual(fuzzywrap("test", "tetest"), "te<span>test</span>");
-  t.deepEqual(fuzzywrap("test", "teTEST"), "te<span>TEST</span>");
-  t.deepEqual(fuzzywrap("a", "asdfasdf"), "<span>a</span>sdfasdf");
-  t.deepEqual(fuzzywrap("as", "asdfasdf"), "<span>as</span>dfasdf");
-  t.deepEqual(fuzzywrap("as", "as"), "<span>as</span>");
+  t.is(fuzzywrap("", "tenotest"), "tenotest");
+  t.is(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
+  t.is(fuzzywrap("sdf", "nomatch"), "nomatch");
+  t.is(fuzzywrap("test", "tetest"), "te<span>test</span>");
+  t.is(fuzzywrap("test", "teTEST"), "te<span>TEST</span>");
+  t.is(fuzzywrap("a", "asdfasdf"), "<span>a</span>sdfasdf");
+  t.is(fuzzywrap("as", "asdfasdf"), "<span>as</span>dfasdf");
+  t.is(fuzzywrap("as", "as"), "<span>as</span>");
 });

@@ -1,0 +1,579 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fava\n"
+"Language: ca\n"
+
+#: fava/templates/_aside.html:4
+msgid "Custom Links"
+msgstr "Enllaços personalitzats"
+
+#: fava/templates/_aside.html:33 fava/templates/_globals.html:6
+msgid "Errors"
+msgstr "Errors"
+
+#: frontend/src/header/FilterForm.svelte:61
+msgid "Time"
+msgstr "Data"
+
+#: frontend/src/entry-forms/AccountInput.svelte:25
+#: frontend/src/header/FilterForm.svelte:71
+#: frontend/src/modals/DocumentUpload.svelte:64
+msgid "Account"
+msgstr "Compte"
+
+#: frontend/src/entry-forms/Transaction.svelte:65
+#: frontend/src/entry-forms/Transaction.svelte:68
+msgid "Payee"
+msgstr "Beneficiari"
+
+#: fava/templates/_globals.html:11
+msgid "Income Statement"
+msgstr "Compte de resultats"
+
+#: fava/templates/_globals.html:2
+msgid "Balance Sheet"
+msgstr "Balanç de situació"
+
+#: fava/templates/_globals.html:16
+msgid "Trial Balance"
+msgstr "Balanç de comprovació"
+
+#: fava/templates/_globals.html:12
+msgid "Journal"
+msgstr "Llibre diari"
+
+#: fava/templates/_globals.html:14
+msgid "Query"
+msgstr "Consulta"
+
+#: fava/templates/_globals.html:9 fava/templates/holdings.html:44
+msgid "Holdings"
+msgstr "Cartera de valors"
+
+#: fava/templates/_globals.html:3
+msgid "Commodities"
+msgstr "Productes"
+
+#: fava/templates/_globals.html:7
+msgid "Events"
+msgstr "Esdeveniments"
+
+#: fava/templates/_globals.html:5
+msgid "Editor"
+msgstr "Editor"
+
+#: fava/templates/_globals.html:13
+msgid "Options"
+msgstr "Opcions"
+
+#: fava/templates/_globals.html:15
+msgid "Statistics"
+msgstr "Estadístiques"
+
+#: fava/templates/_globals.html:8
+msgid "Help"
+msgstr "Ajuda"
+
+#: frontend/src/documents/Table.svelte:29
+msgid "Date"
+msgstr "Data"
+
+#: fava/templates/_journal_table.html:87
+msgid "F"
+msgstr "F"
+
+#: fava/templates/_journal_table.html:88
+msgid "Narration/Payee"
+msgstr "Descripció/beneficiari"
+
+#: fava/templates/_journal_table.html:89
+msgid "Position"
+msgstr "Situació"
+
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
+msgid "Price"
+msgstr "Preu"
+
+#: fava/templates/_journal_table.html:91
+msgid "Cost"
+msgstr "Cost"
+
+#: fava/templates/_journal_table.html:93
+msgid "Change"
+msgstr "Canvi"
+
+#: frontend/src/entry-forms/Balance.svelte:17
+#: frontend/src/modals/AddEntry.svelte:13
+msgid "Balance"
+msgstr "Balanç"
+
+#: frontend/src/editor/SaveButton.svelte:9
+#: frontend/src/import/Extract.svelte:90 frontend/src/modals/AddEntry.svelte:66
+msgid "Save"
+msgstr "Desa"
+
+#: frontend/src/editor/SaveButton.svelte:9
+msgid "Saving..."
+msgstr "S'està desant..."
+
+#: frontend/src/main.ts:96
+msgid "File change detected. Click to reload."
+msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
+
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+msgid "Expand all accounts"
+msgstr "Amplia tots els comptes"
+
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+msgid "Expand all"
+msgstr "Amplia-ho tot"
+
+#: fava/templates/_tree_table.html:29
+msgid "Other"
+msgstr "Altres"
+
+#: fava/templates/account.html:22
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr "Llibre diari de totes les entrades per a aquest compte i els comptes secundaris"
+
+#: fava/templates/account.html:22
+msgid "Account Journal"
+msgstr "Llibre diari del compte"
+
+#: fava/templates/account.html:15 fava/templates/account.html:23
+msgid "Changes"
+msgstr "Canvis"
+
+#: fava/templates/account.html:24
+msgid "Balances"
+msgstr "Balanços"
+
+#: fava/templates/_context.html:4 fava/templates/errors.html:14
+#: fava/templates/errors.html:15
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "Mostra la font %(file)s:%(lineno)s"
+
+#: frontend/src/editor/EditorMenu.svelte:18
+msgid "File"
+msgstr "Fitxer"
+
+#: frontend/src/import/Extract.svelte:96
+msgid "Line"
+msgstr "Línia"
+
+#: fava/templates/errors.html:7
+msgid "Error"
+msgstr "Error"
+
+#: fava/templates/errors.html:24
+msgid "No errors."
+msgstr "No hi ha cap error."
+
+#: fava/templates/events.html:13
+msgid "Event: %(type)s"
+msgstr "Esdeveniment: %(type)s"
+
+#: fava/templates/events.html:12
+msgid "Description"
+msgstr "Descripció"
+
+#: fava/templates/events.html:28
+msgid "No events."
+msgstr "No hi ha cap esdeveniment."
+
+#: fava/templates/help.html:4
+msgid "Help - %(title)s"
+msgstr "Ajuda: %(title)s"
+
+#: fava/templates/help.html:3
+msgid "Help pages"
+msgstr "Pàgines d'ajuda"
+
+#: frontend/src/entry-forms/Balance.svelte:28
+msgid "Currency"
+msgstr "Moneda"
+
+#: fava/templates/holdings.html:45
+msgid "Cost currency"
+msgstr "Moneda de cost"
+
+#: fava/templates/holdings.html:46
+msgid "Holdings by"
+msgstr "Cartera de valors per"
+
+#: fava/templates/income_statement.html:3
+#: fava/templates/income_statement.html:18
+msgid "Net Profit"
+msgstr "Benefici net"
+
+#: fava/templates/income_statement.html:4
+msgid "Income"
+msgstr "Ingressos"
+
+#: fava/templates/income_statement.html:5
+msgid "Expenses"
+msgstr "Despeses"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:53
+msgid "Key"
+msgstr "Clau"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
+msgid "Value"
+msgstr "Valor"
+
+#: frontend/src/query/QueryLinks.svelte:22
+msgid "Download as"
+msgstr "Anomena i desa"
+
+#: fava/templates/statistics.html:14
+msgid "Postings per Account"
+msgstr "Comptabilitzacions per compte"
+
+#: fava/templates/statistics.html:81
+msgid "Total"
+msgstr "Total"
+
+#: fava/templates/statistics.html:23
+msgid "Update Activity"
+msgstr "Activitat d'actualització"
+
+#: fava/templates/statistics.html:23
+msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
+msgstr "Feu clic per copiar les directives de balanç dels comptes (excepte les de color verd) al porta-retalls."
+
+#: fava/templates/statistics.html:24
+msgid "Copy balance directives"
+msgstr "Copia les directives de balanç"
+
+#: fava/templates/statistics.html:31
+msgid "Last Entry"
+msgstr "Darrera entrada"
+
+#: fava/templates/statistics.html:63
+msgid "Entries per Type"
+msgstr "Entrades per tipus"
+
+#: fava/templates/statistics.html:67
+msgid "Type"
+msgstr "Tipus"
+
+#: fava/templates/statistics.html:68
+msgid "# Entries"
+msgstr "Nombre d'entrades"
+
+#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
+#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
+msgid "close"
+msgstr "tanca"
+
+#: fava/static/javascript/modals/AddTransaction.svelte:43
+msgid "New transaction"
+msgstr "Transacció nova"
+
+#: frontend/src/entry-forms/Transaction.svelte:75
+#: frontend/src/entry-forms/Transaction.svelte:79
+msgid "Narration"
+msgstr "Descripció"
+
+#: frontend/src/modals/AddEntry.svelte:64
+msgid "Save and add new"
+msgstr "Desa i afegeix-ne una altra"
+
+#: frontend/src/entry-forms/Balance.svelte:22
+msgid "Number"
+msgstr "Número"
+
+#: frontend/src/entry-forms/Posting.svelte:87
+#: frontend/src/entry-forms/Transaction.svelte:88
+msgid "Add posting"
+msgstr "Afegeix una comptabilització"
+
+#: frontend/src/import/Extract.svelte:45
+msgid "Import"
+msgstr "Importa"
+
+#: fava/templates/_journal_table.html:4
+msgid "Budget entries"
+msgstr "Entrades de pressupost"
+
+#: fava/templates/extract.html:9
+msgid "Toggle source"
+msgstr "Canvia la font"
+
+#: fava/templates/extract.html:10
+msgid "Toggle ignore"
+msgstr "Canvia si s'ha d'ignorar"
+
+#: frontend/src/import/Extract.svelte:95
+msgid "Source"
+msgstr "Font"
+
+#: fava/templates/extract.html:16
+msgid "Entry"
+msgstr "Entrada"
+
+#: fava/templates/extract.html:17
+msgid "Actions"
+msgstr "Accions"
+
+#: fava/templates/extract.html:32
+msgid "Ignore"
+msgstr "Ignora"
+
+#: fava/templates/extract.html:33
+msgid "Duplicate"
+msgstr "Duplicada"
+
+#: fava/templates/import.html:14
+msgid "Importer"
+msgstr "Importador"
+
+#: frontend/src/import/Import.svelte:148
+msgid "Extract"
+msgstr "Extreu"
+
+#: frontend/src/query/QueryEditor.svelte:30
+msgid "...enter a BQL query. 'help' to list available commands."
+msgstr "Introduïu una consulta SQL. Escriviu «help» per veure una llista de les ordres disponibles."
+
+#: fava/templates/_journal_table.html:80
+msgid "Metadata"
+msgstr "Metadades"
+
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:71
+msgid "Add metadata"
+msgstr "Afegeix metadades"
+
+#: frontend/src/entry-forms/Note.svelte:15
+#: frontend/src/modals/AddEntry.svelte:14
+msgid "Note"
+msgstr "Nota"
+
+#: fava/templates/_context.html:4
+msgid "Location"
+msgstr "Ubicació"
+
+#: fava/templates/_context.html:9
+msgid "Context"
+msgstr "Context"
+
+#: fava/templates/_context.html:15
+msgid "Balances before entry"
+msgstr "Balanços abans de l'entrada"
+
+#: fava/templates/_context.html:35
+msgid "Balances after entry"
+msgstr "Balanços després de l'entrada"
+
+#: fava/templates/_journal_table.html:11
+msgid "Cleared transactions"
+msgstr "Transaccions efectives"
+
+#: fava/templates/_journal_table.html:12
+msgid "Pending transactions"
+msgstr "Transaccions pendents"
+
+#: fava/templates/_journal_table.html:13
+msgid "Other transactions"
+msgstr "Altres transaccions"
+
+#: fava/templates/_journal_table.html:7
+msgid "Documents with a #discovered tag"
+msgstr "Documents amb una etiqueta #discovered"
+
+#: frontend/src/entry-forms/Transaction.svelte:93
+msgid "Postings"
+msgstr "Comptabilitzacions"
+
+#: frontend/src/modals/DocumentUpload.svelte:48
+msgid "Upload file(s)"
+msgstr "Puja un fitxer"
+
+#: fava/templates/_overlays.html:10
+msgid "Documents folder"
+msgstr "Carpeta de documents"
+
+#: frontend/src/modals/DocumentUpload.svelte:70
+msgid "Upload"
+msgstr "Puja"
+
+#: frontend/src/editor/EditorMenu.svelte:33
+msgid "Align Amounts"
+msgstr "Alinea els imports"
+
+#: frontend/src/editor/EditorMenu.svelte:37
+msgid "Toggle Comment (selection)"
+msgstr "Commuta el comentari (selecció)"
+
+#: frontend/src/editor/EditorMenu.svelte:41
+msgid "Open all folds"
+msgstr "Desplega les línies"
+
+#: frontend/src/editor/EditorMenu.svelte:44
+msgid "Close all folds"
+msgstr "Plega les línies"
+
+#: fava/templates/options.html:1
+msgid "Fava options"
+msgstr "Opcions del Fava"
+
+#: fava/templates/options.html:1
+msgid "help"
+msgstr "ajuda"
+
+#: fava/templates/options.html:18
+msgid "Beancount options"
+msgstr "Opcions del Beancount"
+
+#: frontend/src/query/QueryEditor.svelte:48
+msgid "Submit"
+msgstr "Envia"
+
+#: fava/templates/_tree_table.html:3
+msgid "Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr "Premeu Maj en fer clic per ampliar tots els elements secundaris.\n"
+"Premeu Ctrl o Cmd en fer clic per ampliar un nivell."
+
+#: frontend/src/modals/Export.svelte:14
+msgid "Export"
+msgstr "Exporta"
+
+#: frontend/src/header/FilterForm.svelte:81
+msgid "Filter by tag, payee, ..."
+msgstr "Filtreu per etiqueta, beneficiari, etc."
+
+#: frontend/src/modals/Export.svelte:16
+msgid "Download currently filtered entries as a Beancount file"
+msgstr "Baixa les entrades filtrades actualment com un fitxer del Beancount"
+
+#: fava/templates/extract.html:40
+msgid "Import entries"
+msgstr "Importa les entrades"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:7
+msgid "Yearly"
+msgstr "Per any"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:8
+msgid "Quarterly"
+msgstr "Per trimestre"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:9
+msgid "Monthly"
+msgstr "Per mes"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:10
+msgid "Weekly"
+msgstr "Per setmana"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:11
+msgid "Daily"
+msgstr "Per dia"
+
+#: frontend/src/editor/EditorMenu.svelte:29
+msgid "Edit"
+msgstr "Edita"
+
+#: frontend/src/entry-forms/Posting.svelte:79
+msgid "Amount"
+msgstr "Import"
+
+#: fava/templates/_journal_table.html:8
+msgid "Documents with a #linked tag"
+msgstr "Documents amb una etiqueta #linked"
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
+msgid "You need to set the \"documents\" Beancount option for file uploads."
+msgstr "Heu de definir l'opció «documents» del Beancount per pujar fitxers."
+
+#: frontend/src/stores/chart.ts:28
+msgid "At Cost"
+msgstr "Cost"
+
+#: frontend/src/stores/chart.ts:29
+msgid "At Market Value"
+msgstr "Valor de mercat"
+
+#: frontend/src/stores/chart.ts:30
+msgid "Units"
+msgstr "Unitats"
+
+#: frontend/src/charts/Chart.svelte:70
+msgid "Treemap"
+msgstr "Mapa d'arbre"
+
+#: frontend/src/charts/Chart.svelte:74
+msgid "Sunburst"
+msgstr "Anells"
+
+#: frontend/src/entry-forms/AccountInput.svelte:20
+msgid "Should be one of the declared accounts"
+msgstr "Ha de ser un dels comptes declarats"
+
+#: fava/templates/events.html:7
+msgid "Event"
+msgstr "Esdeveniment"
+
+#: frontend/src/import/Extract.svelte:78
+msgid "Previous"
+msgstr "Anterior"
+
+#: frontend/src/import/Extract.svelte:83
+msgid "Next"
+msgstr "Següent"
+
+#: frontend/src/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr "Transacció"
+
+#: frontend/src/modals/AddEntry.svelte:44
+msgid "Add"
+msgstr "Afegeix"
+
+#: frontend/src/documents/Documents.svelte:80
+msgid "Move or rename document"
+msgstr "Mou o canvia el nom del document"
+
+#: frontend/src/documents/Table.svelte:33
+msgid "Name"
+msgstr "Nom"
+
+#: fava/templates/_globals.html:4
+msgid "Documents"
+msgstr "Documents"
+
+#: frontend/src/import/Import.svelte:129
+msgid "Delete"
+msgstr "Suprimeix"
+
+#: frontend/src/import/Import.svelte:106
+msgid "No importer matched this file."
+msgstr "No hi ha cap importador per a aquest fitxer."
+
+#: frontend/src/charts/Chart.svelte:81
+msgid "Line chart"
+msgstr "Diagrama de línies"
+
+#: frontend/src/charts/Chart.svelte:85
+msgid "Area chart"
+msgstr "Diagrama d'àrees"
+
+#: frontend/src/import/Import.svelte:147
+msgid "Continue"
+msgstr "Continua"
+
+#: frontend/src/import/Import.svelte:157
+msgid "Clear"
+msgstr "Esborra"
+
+#: frontend/src/sidebar/AccountSelector.svelte:24
+msgid "Go to account"
+msgstr "Vés al compte"
+

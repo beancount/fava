@@ -1,10 +1,10 @@
 """Ingest helper functions."""
 import datetime
 import os
-import runpy
 import sys
 import traceback
 from os import path
+from runpy import run_path
 from typing import List
 from typing import NamedTuple
 from typing import Optional
@@ -65,6 +65,7 @@ class IngestModule(FavaModule):
         super().__init__(ledger)
         self.config = []
         self.importers = {}
+        self.hooks = []
         self.mtime = None
 
     @property
@@ -85,7 +86,9 @@ class IngestModule(FavaModule):
         if not path.exists(self.module_path) or path.isdir(self.module_path):
             self.ledger.errors.append(
                 IngestError(
-                    None, f"File does not exist: '{self.module_path}'", None,
+                    None,
+                    f"File does not exist: '{self.module_path}'",
+                    None,
                 )
             )
             return
@@ -94,7 +97,8 @@ class IngestModule(FavaModule):
             return
 
         try:
-            mod = runpy.run_path(self.module_path)
+            # The type stubs seem incorrect:
+            mod = run_path(self.module_path)  # type: ignore
         except Exception:  # pylint: disable=broad-except
             message = "".join(traceback.format_exception(*sys.exc_info()))
             self.ledger.errors.append(
@@ -108,6 +112,22 @@ class IngestModule(FavaModule):
 
         self.mtime = os.stat(self.module_path).st_mtime_ns
         self.config = mod["CONFIG"]
+        self.hooks = [extract.find_duplicate_entries]
+        if "HOOKS" in mod:
+            hooks = mod["HOOKS"]
+            if not isinstance(hooks, list) or not all(
+                callable(fn) for fn in hooks
+            ):
+                message = "HOOKS is not a list of callables"
+                self.ledger.errors.append(
+                    IngestError(
+                        None,
+                        f"Error in importer '{self.module_path}': {message}",
+                        None,
+                    )
+                )
+            else:
+                self.hooks = hooks
         self.importers = {
             importer.name(): importer for importer in self.config
         }
@@ -163,8 +183,10 @@ class IngestModule(FavaModule):
             existing_entries=self.ledger.all_entries,
         )
 
-        new_entries = extract.find_duplicate_entries(
-            [(filename, new_entries)], self.ledger.all_entries
-        )[0][1]
+        new_entries_list = [(filename, new_entries)]
+        for hook_fn in self.hooks:
+            new_entries_list = hook_fn(
+                new_entries_list, self.ledger.all_entries
+            )
 
-        return new_entries
+        return new_entries_list[0][1]

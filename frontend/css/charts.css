@@ -40,6 +40,7 @@
 }
 
 svg text {
+  font-family: var(--font-family);
   fill: var(--color-text-lightest);
 }
 
@@ -51,60 +52,12 @@ svg .axis line {
 }
 
 svg .axis.y line {
+  opacity: 0.2;
   stroke: var(--color-chart-axis);
-  stroke-dasharray: 2, 2;
 }
 
-svg.scatterplot > g,
-svg.linechart > g {
-  pointer-events: all;
-}
-
-svg.treemap {
-  shape-rendering: crispEdges;
-}
-
-svg.treemap rect {
-  stroke: var(--color-treemap-text);
-  stroke-width: 2px;
-}
-
-svg.treemap text {
-  cursor: pointer;
-}
-
-svg.sunburst .account {
-  fill: var(--color-text);
-}
-
-svg.sunburst .balance {
-  font-family: var(--font-family-monospaced);
-}
-
-svg.sunburst path {
-  cursor: pointer;
-}
-
-svg.barchart .axis-group-box {
-  cursor: pointer;
-  opacity: 0;
-}
-
-svg.barchart .group-box {
-  opacity: 0;
-}
-
-svg.barchart .group:hover .group-box {
-  opacity: 0.1;
-}
-
-svg.barchart .budget {
-  opacity: 0.3;
-}
-
-svg.linechart .lines path {
-  fill: none;
-  stroke-width: 2px;
+svg .axis.y path.domain {
+  opacity: 0.2;
 }
 
 .tooltip {

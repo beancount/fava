@@ -3,5 +3,5 @@
 No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
 </p>
 {% else %}
-<div id="svelte-import"><script type="application/json">{{ ledger.ingest.import_data()|tojson|safe }}</script></div>
+<svelte-component type="import"><script type="application/json">{{ ledger.ingest.import_data()|tojson|safe }}</script></svelte-component>
 {% endif %}

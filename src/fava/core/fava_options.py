@@ -19,6 +19,8 @@ from typing import Tuple
 from beancount.core.data import Custom
 
 from fava.helpers import BeancountError
+from fava.util.date import FiscalYearEnd
+from fava.util.date import parse_fye_string
 
 
 class OptionError(BeancountError):
@@ -43,13 +45,14 @@ DEFAULTS = {
     "currency-column": 61,
     "collapse-pattern": [],
     "auto-reload": False,
-    "conversion": "at_cost",
     "default-file": None,
-    "fiscal-year-end": "12-31",
+    "default-page": "income_statement/",
+    "fiscal-year-end": FiscalYearEnd(12, 31),
     "import-config": None,
     "import-dirs": [],
+    "indent": 2,
     "insert-entry": [],
-    "interval": "month",
+    "invert-income-liabilities-equity": False,
     "journal-show": [
         "transaction",
         "balance",
@@ -76,6 +79,7 @@ DEFAULTS = {
 BOOL_OPTS = [
     "account-journal-include-children",
     "auto-reload",
+    "invert-income-liabilities-equity",
     "show-accounts-with-zero-balance",
     "show-accounts-with-zero-transactions",
     "show-closed-accounts",
@@ -84,6 +88,7 @@ BOOL_OPTS = [
 
 INT_OPTS = [
     "currency-column",
+    "indent",
     "sidebar-show-queries",
     "upcoming-events",
     "uptodate-indicator-grey-lookback-days",
@@ -98,10 +103,8 @@ LIST_OPTS = [
 
 STR_OPTS = [
     "collapse-pattern",
-    "conversion",
-    "fiscal-year-end",
+    "default-page",
     "import-config",
-    "interval",
     "language",
     "locale",
     "unrealized",
@@ -120,7 +123,7 @@ def parse_options(
 ) -> Tuple[FavaOptions, Iterable[BeancountError]]:
     """Parse custom entries for Fava options.
 
-    The format for option entries is the following:
+    The format for option entries is the following::
 
         2016-04-01 custom "fava-option" "[name]" "[value]"
 
@@ -138,7 +141,7 @@ def parse_options(
     for entry in (e for e in custom_entries if e.type == "fava-option"):
         try:
             key = entry.values[0].value
-            assert key in DEFAULTS.keys()
+            assert key in DEFAULTS.keys(), f"unknown option `{key}`"
 
             if key == "default-file":
                 options[key] = entry.meta["filename"]
@@ -152,11 +155,16 @@ def parse_options(
                 options[key].append(opt)
             else:
                 value = entry.values[1].value
-                assert isinstance(value, str)
+                assert isinstance(
+                    value, str
+                ), f"expected value for option `{key}` to be a string"
 
             processed_value = None
             if key in STR_OPTS:
                 processed_value = value
+            elif key == "fiscal-year-end":
+                processed_value = parse_fye_string(value)
+                assert processed_value, "Invalid 'fiscal-year-end' option."
             elif key in BOOL_OPTS:
                 processed_value = value.lower() == "true"
             elif key in INT_OPTS:
@@ -170,11 +178,8 @@ def parse_options(
                 else:
                     options[key] = processed_value
 
-        except (IndexError, TypeError, AssertionError):
-            errors.append(
-                OptionError(
-                    entry.meta, "Failed to parse fava-option entry", entry
-                )
-            )
+        except (IndexError, TypeError, AssertionError) as err:
+            msg = f"Failed to parse fava-option entry: {str(err)}"
+            errors.append(OptionError(entry.meta, msg, entry))
 
     return options, errors

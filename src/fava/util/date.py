@@ -8,12 +8,13 @@ import datetime
 import enum
 import re
 from typing import Iterator
+from typing import NamedTuple
 from typing import Optional
 from typing import Tuple
 
 from flask_babel import gettext  # type: ignore
 
-IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*\d{4})(.*)")
+IS_RANGE_RE = re.compile(r"(.*?)(?:-|to)(?=\s*(?:fy)*\d{4})(.*)")
 
 # these match dates of the form 'year-month-day'
 # day or month and day may be omitted
@@ -37,6 +38,13 @@ VARIABLE_RE = re.compile(
     r"\(?(fiscal_year|year|fiscal_quarter|quarter"
     r"|month|week|day)(?:([-+])(\d+))?\)?"
 )
+
+
+class FiscalYearEnd(NamedTuple):
+    """Month and day that specify the end of the fiscal year."""
+
+    month: int
+    day: int
 
 
 class Interval(enum.Enum):
@@ -124,7 +132,7 @@ def interval_ends(
     yield last
 
 
-def substitute(string: str, fye: Optional[str] = None) -> str:
+def substitute(string: str, fye: Optional[FiscalYearEnd] = None) -> str:
     """Replace variables referring to the current day.
 
     Args:
@@ -166,7 +174,8 @@ def substitute(string: str, fye: Optional[str] = None) -> str:
             if start:
                 quarter = int(((target.month - start.month) % 12) / 3)
                 string = string.replace(
-                    complete_match, f"FY{start.year + 1}-Q{(quarter % 4) + 1}",
+                    complete_match,
+                    f"FY{start.year + 1}-Q{(quarter % 4) + 1}",
                 )
         if interval == "quarter":
             quarter_today = (today.month - 1) // 3 + 1
@@ -191,7 +200,7 @@ def substitute(string: str, fye: Optional[str] = None) -> str:
 
 
 def parse_date(
-    string: str, fye: Optional[str] = None
+    string: str, fye: Optional[FiscalYearEnd] = None
 ) -> Tuple[Optional[datetime.date], Optional[datetime.date]]:
     """Parse a date.
 
@@ -223,7 +232,10 @@ def parse_date(
 
     match = IS_RANGE_RE.match(string)
     if match:
-        return (parse_date(match.group(1))[0], parse_date(match.group(2))[1])
+        return (
+            parse_date(match.group(1), fye)[0],
+            parse_date(match.group(2), fye)[1],
+        )
 
     match = YEAR_RE.match(string)
     if match:
@@ -285,8 +297,21 @@ def month_offset(date: datetime.date, months: int) -> datetime.date:
     return date.replace(year=date.year + year_delta, month=month + 1)
 
 
+def parse_fye_string(fye: str) -> Optional[FiscalYearEnd]:
+    """Parse a string option for the fiscal year end.
+
+    Args:
+        fye: The end of the fiscal year to parse.
+    """
+    try:
+        date = datetime.datetime.strptime(f"2001-{fye}", "%Y-%m-%d")
+    except ValueError:
+        return None
+    return FiscalYearEnd(date.month, date.day)
+
+
 def get_fiscal_period(
-    year: int, fye: Optional[str], quarter: Optional[int] = None
+    year: int, fye: Optional[FiscalYearEnd], quarter: Optional[int] = None
 ) -> Tuple[Optional[datetime.date], Optional[datetime.date]]:
     """Calculates fiscal periods
 
@@ -305,16 +330,12 @@ def get_fiscal_period(
     if fye is None:
         start_date = datetime.date(year=year, month=1, day=1)
     else:
-        try:
-            start_date = (
-                datetime.datetime.strptime(f"{year-1}-{fye}", "%Y-%m-%d")
-                + datetime.timedelta(days=1)
-            ).date()
-            # Special case 02-28 because of leap years
-            if fye == "02-28":
-                start_date = start_date.replace(month=3, day=1)
-        except ValueError:
-            return None, None
+        start_date = datetime.date(
+            year=year - 1, month=fye.month, day=fye.day
+        ) + datetime.timedelta(days=1)
+        # Special case 02-28 because of leap years
+        if fye == (2, 28):
+            start_date = start_date.replace(month=3, day=1)
 
     if quarter is None:
         return start_date, start_date.replace(year=start_date.year + 1)

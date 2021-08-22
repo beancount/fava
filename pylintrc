@@ -2,4 +2,11 @@
 disable = too-few-public-methods,
     not-callable,
     bad-continuation,
-    isinstance-second-argument-not-valid-type
+    wrong-import-order,
+    isinstance-second-argument-not-valid-type,
+    unsubscriptable-object,
+    inherit-non-class
+
+[DESIGN]
+# max args for a function / method
+max-args=7

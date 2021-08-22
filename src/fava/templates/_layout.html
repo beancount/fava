@@ -20,7 +20,7 @@
       </svg>
       <h1>
         {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-        <button type=button id="reload-page" class="reload-page hidden" data-key="r">&#8635;</button>
+        <button type=button id="reload-page" class="reload-page hidden" data-keyboard-shortcut="r">&#8635;</button>
         {% if config['LEDGERS']|length > 1 %}
         <div class="beancount-files">
           <ul>
@@ -32,14 +32,15 @@
           </ul>
         </div>{% endif %}
       </h1>
+      <svelte-component type="filter-form"></svelte-component>
     </header>
-    <button is="aside-button" class="aside-button" type="button">
+    <button id="aside-button" class="aside-button" type="button">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" version="1.0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
     </button>
     <aside>{% include "_aside.html" %}</aside>
     <article>
       {%- endif %}
-      <div id="svelte-charts"></div>
+      <svelte-component type="charts"></svelte-component>
       {% block content %}
       {% if content %}
       {{ content|safe }}
@@ -48,24 +49,27 @@
       {% endif %}
       {% endblock %}
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
+      <script type="application/json" id="page-title">{{ {
+        'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
+        'pageTitle': page_title,
+    }|tojson|safe }}</script>
       <script type="application/json" id="ledger-data">{{ {
         'accounts': ledger.attributes.accounts,
         'baseURL': url_for('index'),
         'currencies': ledger.attributes.currencies,
-        'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
         'errors': ledger.errors|length,
         'favaOptions': ledger.fava_options,
         'incognito': config.get('INCOGNITO', False),
         'have_excel': config.get('HAVE_EXCEL', False),
         'links': ledger.attributes.links,
         'options': ledger.options,
-        'pageTitle': page_title,
         'payees': ledger.attributes.payees,
         'tags': ledger.attributes.tags,
         'years': ledger.attributes.years,
     }|tojson|safe }}</script>
       {%- if not request.args.get('partial') %}
     </article>
+    <svelte-component type="modals"></svelte-component>
     <script type="application/json" id="translations">{{ translations|tojson|safe }}</script>
   </body>
 </html>

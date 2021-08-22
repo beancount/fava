@@ -4,7 +4,27 @@ Changelog
 Unreleased
 ----------
 
-Nothing yet.
+The `conversion` and `interval` options have been removed. Their functionality
+can be achieved with the new `default-page` option.
+
+v1.18 (2021-01-16)
+------------------
+
+This release contains couple of small improvements and various bug fixes.
+
+v1.17 (2020-11-15)
+------------------
+
+This release adds a document preview to the import page, as well as support
+for Python 3.9. It also fixes a couple of bugs.
+
+v1.16 (2020-10-18)
+------------------
+
+This release brings area charts as an alternative option to view the various
+line charts in Fava and a Catalan translation for Fava. There is also now an
+option to set the indentation of inserted Beancount entries. As usual this
+release also includes various minor fixes and improvements.
 
 v1.15 (2020-05-30)
 ------------------

@@ -3,6 +3,7 @@ import collections
 import copy
 import datetime
 import os
+from operator import itemgetter
 from typing import Any
 from typing import cast
 from typing import DefaultDict
@@ -20,6 +21,7 @@ from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
+from beancount.core.data import Commodity
 from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Document
@@ -29,9 +31,9 @@ from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Open
 from beancount.core.data import Posting
+from beancount.core.data import Price
 from beancount.core.data import Transaction
 from beancount.core.data import TxnPosting
-from beancount.core.flags import FLAG_UNREALIZED
 from beancount.core.getters import get_min_max_dates
 from beancount.core.interpolate import compute_entry_context
 from beancount.core.inventory import Inventory
@@ -41,6 +43,7 @@ from beancount.core.prices import get_all_prices
 from beancount.parser.options import get_account_types  # type: ignore
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
+from fava.core._compat import FLAG_UNREALIZED
 from fava.core.accounts import AccountDict
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
@@ -126,6 +129,7 @@ class FavaLedger:
         "all_entries_by_type",
         "all_root_account",
         "beancount_file_path",
+        "commodities",
         "_date_first",
         "_date_last",
         "entries",
@@ -198,6 +202,9 @@ class FavaLedger:
         #: A dict containing information about the accounts.
         self.accounts = AccountDict()
 
+        #: A dict containing information about the commodities
+        self.commodities: Dict[str, Commodity] = {}
+
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = {}
 
@@ -239,6 +246,11 @@ class FavaLedger:
                 cast(Close, entry).account
             ).close_date = entry.date
 
+        self.commodities = {}
+        for entry in entries_by_type[Commodity]:
+            commodity = cast(Commodity, entry)
+            self.commodities[commodity.currency] = commodity
+
         self.fava_options, errors = parse_options(
             cast(List[Custom], entries_by_type[Custom])
         )
@@ -276,7 +288,7 @@ class FavaLedger:
         self.root_tree = Tree(self.entries)
 
         self._date_first, self._date_last = get_min_max_dates(
-            self.entries, (Transaction)
+            self.entries, (Transaction, Price)
         )
         if self._date_last:
             self._date_last = self._date_last + datetime.timedelta(1)
@@ -463,8 +475,10 @@ class FavaLedger:
                 for entry in self.all_entries
                 if entry_hash == hash_entry(entry)
             )
-        except StopIteration:
-            raise FavaAPIException(f'No entry found for hash "{entry_hash}"')
+        except StopIteration as exc:
+            raise FavaAPIException(
+                f'No entry found for hash "{entry_hash}"'
+            ) from exc
 
     def context(self, entry_hash: str) -> Tuple[Directive, Any, str, str]:
         """Context for an entry.
@@ -603,3 +617,33 @@ class FavaLedger:
         if self.filters.time:
             return self.accounts[account_name].close_date < self._date_last
         return self.accounts[account_name].close_date != datetime.date.max
+
+    @staticmethod
+    def group_entries_by_type(entries: Entries) -> List[Tuple[str, Entries]]:
+        """Group the given entries by type.
+
+        Args:
+            entries: The entries to group.
+
+        Returns:
+            A list of tuples (type, entries) consisting of the directive type
+            as a string and the list of corresponding entries.
+        """
+        groups: Dict[str, Entries] = {}
+        for entry in entries:
+            groups.setdefault(entry.__class__.__name__, []).append(entry)
+
+        return sorted(list(groups.items()), key=itemgetter(0))
+
+    def commodity_name(self, commodity: str) -> Optional[str]:
+        """Return the 'name' field in metadata of a commodity
+        Args:
+            commodity: The commodity in string
+        Returns:
+            The 'name' field in metadata of a commodity if exists,
+            otherwise the input string is returned
+        """
+        commodity_ = self.commodities.get(commodity)
+        if commodity_:
+            return commodity_.meta.get("name")
+        return commodity

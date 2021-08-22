@@ -107,6 +107,10 @@
   display: block;
 }
 
+.journal .transaction:hover {
+  background: var(--color-journal-hover-highlight);
+}
+
 /* Metadata */
 .journal .metadata {
   padding: 2px 0;
@@ -115,10 +119,10 @@
 }
 
 .journal .metadata dt {
-  display: inline-block;
   float: left;
   width: auto;
   min-width: 4rem;
+  margin-right: 6px;
   margin-left: 9rem;
   color: var(--color-journal-metadata);
   cursor: pointer;
@@ -131,6 +135,7 @@
 
 .journal p > .num {
   width: 9rem;
+  white-space: pre;
   border-left: 1px solid var(--color-table-border);
 }
 
@@ -166,10 +171,6 @@
   padding: 2px;
   margin: 0 6px;
   background-color: var(--color-text-lighter);
-}
-
-.journal .description .account-link {
-  margin-right: 0.5em;
 }
 
 .journal .description .num {

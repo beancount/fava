@@ -1,7 +1,17 @@
 import { todayAsString } from "./format";
-import { array, object, string, constant, record } from "./lib/validation";
+import type { Validator } from "./lib/validation";
+import {
+  array,
+  constant,
+  object,
+  optional_string,
+  record,
+  string,
+  union,
+  unknown,
+} from "./lib/validation";
 
-interface Posting {
+export interface Posting {
   account: string;
   amount: string;
 }
@@ -23,14 +33,16 @@ export function emptyPosting(): Posting {
   };
 }
 
+export type EntryTypeName = "Balance" | "Note" | "Transaction";
+
 abstract class EntryBase {
-  type: string;
+  type: EntryTypeName;
 
   date: string;
 
-  meta: Record<string, string>;
+  meta: Record<string, unknown>;
 
-  constructor(type: string) {
+  constructor(type: EntryTypeName) {
     this.type = type;
     this.meta = {};
     this.date = todayAsString();
@@ -40,7 +52,7 @@ abstract class EntryBase {
 const validatorBase = {
   type: string,
   date: string,
-  meta: record(string),
+  meta: record(unknown),
 };
 
 export class Balance extends EntryBase {
@@ -56,6 +68,13 @@ export class Balance extends EntryBase {
       currency: "",
     };
   }
+
+  static validator = object({
+    ...validatorBase,
+    type: constant("Balance"),
+    account: string,
+    amount: object({ number: string, currency: string }),
+  });
 }
 
 export class Note extends EntryBase {
@@ -68,6 +87,13 @@ export class Note extends EntryBase {
     this.account = "";
     this.comment = "";
   }
+
+  static validator = object({
+    ...validatorBase,
+    type: constant("Note"),
+    account: string,
+    comment: string,
+  });
 }
 
 export class Transaction extends EntryBase {
@@ -99,8 +125,8 @@ export class Transaction extends EntryBase {
     ...validatorBase,
     type: constant("Transaction"),
     flag: string,
-    payee: string,
-    narration: string,
+    payee: optional_string,
+    narration: optional_string,
     postings: array(postingValidator),
   });
 
@@ -110,3 +136,19 @@ export class Transaction extends EntryBase {
 }
 
 export type Entry = Balance | Note | Transaction;
+
+export const entryValidator: Validator<Entry> = union(
+  Balance.validator,
+  Note.validator,
+  Transaction.validator
+);
+
+const constructors = {
+  Balance,
+  Note,
+  Transaction,
+};
+
+export function create(type: EntryTypeName): Entry {
+  return new constructors[type]();
+}
