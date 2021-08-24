@@ -67,7 +67,7 @@
       }}
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
-      fill={sunburstColor(d, root)}
+      fill={sunburstColor(d, root, radius)}
       d={arcShape(d) ?? undefined}
     />
   {/each}
