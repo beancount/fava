@@ -2,6 +2,7 @@
   import { onMount, tick } from "svelte";
 
   import { get } from "../api";
+  import type { ChartTypes } from "../charts";
   import { parseQueryChart } from "../charts";
   import Chart from "../charts/Chart.svelte";
   import { operatingCurrenciesWithConversion } from "../stores";
@@ -17,7 +18,7 @@
   const resultElems: Record<string, HTMLElement> = {};
 
   type ResultType = {
-    result?: { table: string; chart: ReturnType<typeof parseQueryChart> };
+    result?: { table: string; chart: ChartTypes | null };
     error?: unknown;
   };
 
@@ -44,10 +45,11 @@
     }
     get("query_result", { query_string: query, ...getFilterParams() }).then(
       (res) => {
-        const chart = parseQueryChart(
+        const r = parseQueryChart(
           res.chart,
           $operatingCurrenciesWithConversion
         );
+        const chart = r.success ? r.value : null;
         setResult(query, { result: { chart, table: res.table } });
       },
       (error) => {

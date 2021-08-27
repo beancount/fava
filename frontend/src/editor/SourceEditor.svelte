@@ -7,7 +7,6 @@
   import { scrollToLine } from "../codemirror/scroll-to-line";
   import { initBeancountEditor } from "../codemirror/setup";
   import { bindKey } from "../keyboard-shortcuts";
-  import { log_error } from "../log";
   import { notify } from "../notifications";
   import router from "../router";
   import { errorCount, favaOptions } from "../stores";
@@ -38,7 +37,7 @@
       });
       changed = false;
       cm.focus();
-      get("errors").then((count) => errorCount.set(count), log_error);
+      get("errors").then((count) => errorCount.set(count));
     } catch (error) {
       if (error instanceof Error) {
         notify(error.message, "error");

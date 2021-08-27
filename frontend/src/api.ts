@@ -2,6 +2,9 @@ import type { Entry } from "./entries";
 import { entryValidator, Transaction } from "./entries";
 import { urlFor } from "./helpers";
 import { fetch, handleJSON } from "./lib/fetch";
+import type { Result } from "./lib/result";
+import { ok } from "./lib/result";
+import type { ValidationT, Validator } from "./lib/validation";
 import {
   array,
   boolean,
@@ -14,17 +17,15 @@ import { log_error } from "./log";
 import { notify } from "./notifications";
 import router from "./router";
 
-const validateAPIResponse = object({ data: unknown });
-/** Return types for the various PUT API endpoints. */
-const putAPIValidators = {
-  add_document: string,
-  add_entries: string,
-  attach_document: string,
-  format_source: string,
-  source: string,
-  source_slice: string,
-};
-type PutAPITypes = typeof putAPIValidators;
+function validateResponse<T>(
+  data: unknown,
+  val: Validator<T>
+): Result<T, string> {
+  const validator = object({ data: val });
+  const res = validator(data);
+  return res.success ? ok(res.value.data) : res;
+}
+
 /** Required arguments for the various PUT API endpoints. */
 interface PutAPIInputs {
   add_document: FormData;
@@ -41,10 +42,10 @@ interface PutAPIInputs {
  * @param body - either a FormData instance or an object that will be converted
  *               to JSON.
  */
-export async function put<T extends keyof PutAPITypes>(
+export async function put<T extends keyof PutAPIInputs>(
   endpoint: T,
   body: PutAPIInputs[T]
-): Promise<ReturnType<PutAPITypes[T]>> {
+): Promise<string> {
   const opts =
     body instanceof FormData
       ? { body }
@@ -53,9 +54,12 @@ export async function put<T extends keyof PutAPITypes>(
           body: JSON.stringify(body),
         };
   const url = urlFor(`api/${endpoint}`);
-  const res = await fetch(url, { method: "PUT", ...opts }).then(handleJSON);
-  const { data } = validateAPIResponse(res);
-  return putAPIValidators[endpoint](data) as ReturnType<PutAPITypes[T]>;
+  const json = await fetch(url, { method: "PUT", ...opts }).then(handleJSON);
+  const res = validateResponse(json, string);
+  if (res.success) {
+    return res.value;
+  }
+  throw new Error();
 }
 
 const getAPIValidators = {
@@ -85,12 +89,16 @@ type GetAPITypes = typeof getAPIValidators;
 export async function get<T extends keyof GetAPITypes>(
   endpoint: T,
   params?: Record<string, string>
-): Promise<ReturnType<GetAPITypes[T]>> {
+): Promise<ValidationT<GetAPITypes[T]>> {
   const url = urlFor(`api/${endpoint}`, params, false);
   const responseData = await fetch(url);
   const json = await handleJSON(responseData);
-  const { data }: { data: unknown } = validateAPIResponse(json);
-  return getAPIValidators[endpoint](data) as ReturnType<GetAPITypes[T]>;
+  // @ts-expect-error TS doesn't infer the correct type here.
+  const res = validateResponse(json, getAPIValidators[endpoint]);
+  if (res.success) {
+    return res.value as ValidationT<GetAPITypes[T]>;
+  }
+  throw new Error();
 }
 
 /**
@@ -108,9 +116,10 @@ export async function moveDocument(
       account,
       newName,
     });
-    notify(string(msg));
+    notify(msg);
     return true;
   } catch (error) {
+    log_error(error);
     if (error instanceof Error) {
       notify(error.message, "error");
     }
@@ -126,10 +135,11 @@ export async function deleteDocument(filename: string): Promise<boolean> {
   try {
     const url = urlFor("api/document", { filename }, false);
     const res = await fetch(url, { method: "DELETE" }).then(handleJSON);
-    const { data }: { data: unknown } = validateAPIResponse(res);
-    notify(string(data));
-    return true;
+    const d = validateResponse(res, string);
+    notify(d.value);
+    return d.success;
   } catch (error) {
+    log_error(error);
     if (error instanceof Error) {
       notify(error.message, "error");
     }

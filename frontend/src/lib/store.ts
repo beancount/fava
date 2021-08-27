@@ -2,6 +2,7 @@ import type { Readable, Writable } from "svelte/store";
 import { derived, writable } from "svelte/store";
 
 import { shallow_equal } from "./equals";
+import { parseJSON } from "./json";
 import type { Validator } from "./validation";
 
 /**
@@ -41,9 +42,15 @@ export function localStorageSyncedStore<T>(
 ): Writable<T> {
   const fullKey = `fava-${key}`;
   const stored_val = localStorage.getItem(fullKey);
-  const initial = stored_val ? validator(JSON.parse(stored_val)) : init();
-
-  const store = writable(initial);
+  let initial: T | null = null;
+  if (stored_val) {
+    const json = parseJSON(stored_val);
+    const parsed = json.success ? validator(json.value) : null;
+    if (parsed?.success) {
+      initial = parsed.value;
+    }
+  }
+  const store = writable(initial ?? init());
 
   store.subscribe((val) => {
     localStorage.setItem(fullKey, JSON.stringify(val));

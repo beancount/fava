@@ -11,13 +11,14 @@ import { get } from "svelte/store";
 import type { FormatterContext } from "../format";
 import { currentDateFormat, dateFormat } from "../format";
 import { getScriptTagJSON } from "../lib/dom";
+import type { Result } from "../lib/result";
+import { err, ok } from "../lib/result";
 import type { TreeNode } from "../lib/tree";
 import { stratify } from "../lib/tree";
 import type { Validator } from "../lib/validation";
 import {
   array,
   date,
-  defaultValue,
   lazy,
   number,
   object,
@@ -103,16 +104,16 @@ export interface ScatterPlot {
   tooltipText?: undefined;
 }
 
-type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
+export type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
 
-export function balances(json: unknown): LineChart {
-  const validator = array(
-    object({
-      date,
-      balance: record(number),
-    })
-  );
-  const parsedData = validator(json);
+const balances_validator = array(object({ date, balance: record(number) }));
+
+export function balances(json: unknown): Result<LineChart, string> {
+  const res = balances_validator(json);
+  if (!res.success) {
+    return res;
+  }
+  const parsedData = res.value;
   const groups = new Map<string, LineChartDatum[]>();
   for (const { date: date_, balance } of parsedData) {
     Object.entries(balance).forEach(([currency, value]) => {
@@ -130,38 +131,51 @@ export function balances(json: unknown): LineChart {
     values,
   }));
 
-  return {
+  return ok({
+    type: "linechart" as const,
     data,
-    type: "linechart",
     tooltipText: (c, d) =>
       `${c.currency(d.value)} ${d.name}<em>${dateFormat.day(d.date)}</em>`,
-  };
+  });
 }
 
-export function commodities(json: unknown, label: string): LineChart {
-  const validator = object({
-    quote: string,
-    base: string,
-    prices: array(tuple([date, number])),
-  });
-  const { base, quote, prices } = validator(json);
+const commodities_validator = object({
+  quote: string,
+  base: string,
+  prices: array(tuple([date, number])),
+});
+
+export function commodities(
+  json: unknown,
+  label: string
+): Result<LineChart, string> {
+  const res = commodities_validator(json);
+  if (!res.success) {
+    return res;
+  }
+  const { base, quote, prices } = res.value;
   const values = prices.map((d) => ({ name: label, date: d[0], value: d[1] }));
-  return {
+  return ok({
+    type: "linechart" as const,
     data: [{ name: label, values }],
-    type: "linechart",
     tooltipText(c, d) {
       return `1 ${base} = ${c.currency(d.value)} ${quote}<em>${dateFormat.day(
         d.date
       )}</em>`;
     },
-  };
+  });
 }
 
-export function bar(json: unknown): BarChart {
-  const validator = array(
-    object({ date, budgets: record(number), balance: record(number) })
-  );
-  const parsedData = validator(json);
+const bar_validator = array(
+  object({ date, budgets: record(number), balance: record(number) })
+);
+
+export function bar(json: unknown): Result<BarChart, string> {
+  const res = bar_validator(json);
+  if (!res.success) {
+    return res;
+  }
+  const parsedData = res.value;
   const currentDateFmt = get(currentDateFormat);
   const data = parsedData.map((d) => ({
     values: get(operatingCurrenciesWithConversion).map((name: string) => ({
@@ -172,7 +186,8 @@ export function bar(json: unknown): BarChart {
     date: d.date,
     label: currentDateFmt(d.date),
   }));
-  return {
+  return ok({
+    type: "barchart" as const,
     data,
     tooltipText: (c, d) => {
       let text = "";
@@ -186,23 +201,37 @@ export function bar(json: unknown): BarChart {
       text += `<em>${d.label}</em>`;
       return text;
     },
-    type: "barchart",
-  };
-}
-
-export function scatterplot(json: unknown): ScatterPlot {
-  const validator = array(object({ type: string, date, description: string }));
-  return { type: "scatterplot", data: validator(json) };
-}
-
-export function hierarchy(json: unknown): HierarchyChart {
-  const hierarchyValidator: Validator<AccountHierarchy> = object({
-    account: string,
-    balance: record(number),
-    children: lazy(() => array(hierarchyValidator)),
   });
-  const validator = object({ root: hierarchyValidator, modifier: number });
-  const { root, modifier } = validator(json);
+}
+
+const scatterplot_validator = array(
+  object({ type: string, date, description: string })
+);
+
+export function scatterplot(json: unknown): Result<ScatterPlot, string> {
+  const res = scatterplot_validator(json);
+  if (!res.success) {
+    return res;
+  }
+  return ok({ type: "scatterplot" as const, data: res.value });
+}
+
+const account_hierarchy_validator: Validator<AccountHierarchy> = object({
+  account: string,
+  balance: record(number),
+  children: lazy(() => array(account_hierarchy_validator)),
+});
+const hierarchy_validator = object({
+  root: account_hierarchy_validator,
+  modifier: number,
+});
+
+export function hierarchy(json: unknown): Result<HierarchyChart, string> {
+  const res = hierarchy_validator(json);
+  if (!res.success) {
+    return res;
+  }
+  const { root, modifier } = res.value;
   addInternalNodesAsLeaves(root);
   const data = new Map<string, AccountHierarchyNode>();
 
@@ -215,11 +244,11 @@ export function hierarchy(json: unknown): HierarchyChart {
     }
   });
 
-  return { type: "hierarchy", data };
+  return ok({ type: "hierarchy" as const, data });
 }
 
 const parsers: Partial<
-  Record<string, (json: unknown, label: string) => ChartTypes>
+  Record<string, (json: unknown, label: string) => Result<ChartTypes, string>>
 > = {
   balances,
   commodities,
@@ -232,40 +261,49 @@ export type NamedChartTypes = ChartTypes & {
   name?: string;
 };
 
-export function parseChartData(): NamedChartTypes[] {
-  const json = getScriptTagJSON("#chart-data");
-  const validator = array(
-    object({
-      label: string,
-      type: string,
-      data: unknown,
-    })
-  );
-  const chartData = validator(json);
+const chart_data_validator = array(
+  object({ label: string, type: string, data: unknown })
+);
+
+export function parseChartData(): Result<NamedChartTypes[], string> {
+  const json_res = getScriptTagJSON("#chart-data");
+  if (!json_res.success) {
+    return json_res;
+  }
+  const res = chart_data_validator(json_res.value);
+  if (!res.success) {
+    return res;
+  }
+  const chartData = res.value;
   const result: NamedChartTypes[] = [];
   chartData.forEach((chart) => {
     const parser = parsers[chart.type];
     if (parser) {
-      result.push({
-        name: chart.label,
-        ...parser(chart.data, chart.label),
-      });
+      const r = parser(chart.data, chart.label);
+      if (r.success) {
+        result.push({ name: chart.label, ...r.value });
+      }
     }
   });
-  return result;
+  return ok(result);
 }
 
+const grouped_chart_validator = array(
+  object({ group: string, balance: record(number) })
+);
 export function parseGroupedQueryChart(
   json: unknown,
   currencies: string[]
-): HierarchyChart | null {
-  const validator = array(object({ group: string, balance: record(number) }));
-  const grouped = defaultValue(validator, null)(json);
-  if (!grouped) {
-    return null;
+): Result<HierarchyChart, string> {
+  const grouped = grouped_chart_validator(json);
+  if (!grouped.success) {
+    return err("No grouped query data");
+  }
+  if (!grouped.value[0].group) {
+    throw new Error("asdf");
   }
   const root = stratify(
-    grouped,
+    grouped.value,
     (d) => d.group,
     (account, d) => ({ account, balance: d?.balance ?? {} })
   );
@@ -281,7 +319,7 @@ export function parseGroupedQueryChart(
     }
   });
 
-  return { type: "hierarchy", data };
+  return ok({ type: "hierarchy" as const, data });
 }
 
 /**
@@ -291,18 +329,17 @@ export function parseGroupedQueryChart(
 export function parseQueryChart(
   json: unknown,
   operating_currencies: string[]
-): ChartTypes | null {
+): Result<ChartTypes, string> {
   const tree = parseGroupedQueryChart(json, operating_currencies);
-  if (tree) {
+  if (tree.success) {
     return tree;
   }
-  const dated = defaultValue(array(unknown), null)(json);
-  if (dated) {
-    try {
-      return balances(dated);
-    } catch (error) {
-      // pass
+  const dated = array(unknown)(json);
+  if (dated.success) {
+    const bal = balances(dated.value);
+    if (bal.success) {
+      return bal;
     }
   }
-  return null;
+  return err("No query chart found.");
 }
