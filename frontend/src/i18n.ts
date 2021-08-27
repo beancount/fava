@@ -8,7 +8,9 @@ let translations: Record<string, string>;
  */
 export function _(text: string): string {
   if (translations === undefined) {
-    translations = record(string)(getScriptTagJSON("#translations"));
+    const res = record(string)(getScriptTagJSON("#translations"));
+    translations = res.success ? res.value : {};
+    // TODO log error.
   }
   return translations[text] || text;
 }

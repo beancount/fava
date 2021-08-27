@@ -37,7 +37,7 @@ import {
   initCurrentKeyboardShortcuts,
   initGlobalKeyboardShortcuts,
 } from "./keyboard-shortcuts";
-import { getScriptTagJSON } from "./lib/dom";
+import { getScriptTagValue } from "./lib/dom";
 import { object, string } from "./lib/validation";
 import { log_error } from "./log";
 import { notify } from "./notifications";
@@ -62,17 +62,20 @@ function defineCustomElements() {
   customElements.define("svelte-component", SvelteCustomElement);
 }
 
-const pageTitleValidator = object({
+const page_title_validator = object({
   documentTitle: string,
   pageTitle: string,
 });
 
 function updatePageTitle(): void {
-  const v = pageTitleValidator(getScriptTagJSON("#page-title"));
-  document.title = v.documentTitle;
-  const pageTitle = document.querySelector("h1 strong");
-  if (pageTitle) {
-    pageTitle.innerHTML = v.pageTitle;
+  const v = getScriptTagValue("#page-title", page_title_validator);
+  // TODO log error
+  if (v.success) {
+    document.title = v.value.documentTitle;
+    const pageTitle = document.querySelector("h1 strong");
+    if (pageTitle) {
+      pageTitle.innerHTML = v.value.pageTitle;
+    }
   }
 }
 
