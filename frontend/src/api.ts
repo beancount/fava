@@ -15,6 +15,7 @@ import { notify } from "./notifications";
 import router from "./router";
 
 const validateAPIResponse = object({ data: unknown });
+/** Return types for the various PUT API endpoints. */
 const putAPIValidators = {
   add_document: string,
   add_entries: string,
@@ -24,6 +25,15 @@ const putAPIValidators = {
   source_slice: string,
 };
 type PutAPITypes = typeof putAPIValidators;
+/** Required arguments for the various PUT API endpoints. */
+interface PutAPIInputs {
+  add_document: FormData;
+  add_entries: { entries: Entry[] };
+  attach_document: { filename: string; entry_hash: string };
+  format_source: { source: string };
+  source: { file_path: string; source: string; sha256sum: string };
+  source_slice: { entry_hash: string; source: string; sha256sum: string };
+}
 
 /**
  * PUT to an API endpoint and convert the returned JSON data to an object.
@@ -33,22 +43,18 @@ type PutAPITypes = typeof putAPIValidators;
  */
 export async function put<T extends keyof PutAPITypes>(
   endpoint: T,
-  body: FormData | unknown
+  body: PutAPIInputs[T]
 ): Promise<ReturnType<PutAPITypes[T]>> {
   const opts =
     body instanceof FormData
       ? { body }
       : {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         };
-  const res = await fetch(urlFor(`api/${endpoint}`), {
-    method: "PUT",
-    ...opts,
-  }).then(handleJSON);
-  const { data }: { data: unknown } = validateAPIResponse(res);
+  const url = urlFor(`api/${endpoint}`);
+  const res = await fetch(url, { method: "PUT", ...opts }).then(handleJSON);
+  const { data } = validateAPIResponse(res);
   return putAPIValidators[endpoint](data) as ReturnType<PutAPITypes[T]>;
 }
 
@@ -105,7 +111,9 @@ export async function moveDocument(
     notify(string(msg));
     return true;
   } catch (error) {
-    notify(error, "error");
+    if (error instanceof Error) {
+      notify(error.message, "error");
+    }
     return false;
   }
 }
@@ -122,7 +130,9 @@ export async function deleteDocument(filename: string): Promise<boolean> {
     notify(string(data));
     return true;
   } catch (error) {
-    notify(error, "error");
+    if (error instanceof Error) {
+      notify(error.message, "error");
+    }
     return false;
   }
 }
