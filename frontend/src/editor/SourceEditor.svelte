@@ -40,7 +40,9 @@
       cm.focus();
       get("errors").then((count) => errorCount.set(count), log_error);
     } catch (error) {
-      notify(error, "error");
+      if (error instanceof Error) {
+        notify(error.message, "error");
+      }
     } finally {
       saving = false;
     }

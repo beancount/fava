@@ -27,7 +27,9 @@
       router.reload();
       closeOverlay();
     } catch (error) {
-      notify(error, "error");
+      if (error instanceof Error) {
+        notify(error.message, "error");
+      }
     } finally {
       saving = false;
     }
