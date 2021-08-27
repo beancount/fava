@@ -1,18 +1,12 @@
 /* Editor */
 
-.cm-gutters {
+.cm-editor .cm-gutters {
   background: var(--color-sidebar-background);
   border-right: 1px solid var(--color-sidebar-border);
 }
-
-.cm-editor {
-  z-index: var(--z-index-editor);
-}
-
-.cm-editor.cm-editor .cm-scroller {
+.cm-editor .cm-scroller {
   font-family: var(--font-family-editor);
 }
-
-.cm-editor.cm-editor .cm-placeholder {
+.cm-editor .cm-placeholder {
   color: var(--color-placeholder);
 }

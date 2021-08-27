@@ -58,7 +58,7 @@
 </form>
 
 <style>
-  form :global(.cm-editor) {
+  div {
     margin-bottom: 0.5rem;
     border: 1px solid var(--color-sidebar-border);
   }

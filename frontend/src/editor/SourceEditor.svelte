@@ -108,11 +108,11 @@
 <form
   class="fixed-fullsize-container"
   on:submit|preventDefault={() => save(editor)}
-  use:useEditor
 >
   <EditorMenu file_path={data.file_path} {editor}>
     <SaveButton {changed} {saving} />
   </EditorMenu>
+  <div use:useEditor />
 </form>
 
 <style>
@@ -120,9 +120,13 @@
     display: flex;
     flex-direction: column;
   }
-  form :global(.cm-editor) {
+  form div {
     flex: 1;
     width: 100%;
     height: calc(100% - 3rem);
+  }
+  form :global(.cm-editor) {
+    width: 100%;
+    height: 100%;
   }
 </style>
