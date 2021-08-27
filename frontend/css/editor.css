@@ -5,14 +5,14 @@
   border-right: 1px solid var(--color-sidebar-border);
 }
 
-.cm-wrap {
+.cm-editor {
   z-index: var(--z-index-editor);
 }
 
-.cm-wrap.cm-wrap .cm-scroller {
+.cm-editor.cm-editor .cm-scroller {
   font-family: var(--font-family-editor);
 }
 
-.cm-wrap.cm-wrap .cm-placeholder {
+.cm-editor.cm-editor .cm-placeholder {
   color: var(--color-placeholder);
 }

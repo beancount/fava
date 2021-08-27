@@ -120,7 +120,7 @@
     display: flex;
     flex-direction: column;
   }
-  form :global(.cm-wrap) {
+  form :global(.cm-editor) {
     flex: 1;
     width: 100%;
     height: calc(100% - 3rem);
