@@ -210,6 +210,7 @@ export function hierarchy(json: unknown): HierarchyChart {
     const currencyHierarchy = d3Hierarchy(root)
       .sum((d) => (d.balance[currency] || 0) * modifier)
       .sort((a, b) => (b.value || 0) - (a.value || 0));
+    currencyHierarchy.sign = modifier;
     if (currencyHierarchy.value) {
       data.set(currency, currencyHierarchy);
     }

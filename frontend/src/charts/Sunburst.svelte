@@ -8,7 +8,7 @@
   import { urlFor } from "../helpers";
   import router from "../router";
 
-  import { sunburstColor } from "./helpers";
+  import { sunburstTree } from "./helpers";
 
   import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
 
@@ -27,16 +27,6 @@
     )})`;
   }
 
-  $: root = partition<AccountHierarchyDatum>()(data);
-  $: leaves = root.descendants().filter((d) => !d.data.dummy && d.depth);
-
-  let current: AccountHierarchyNode | null = null;
-  $: if (root) {
-    current = null;
-  }
-  $: currentAccount = current ? current.data.account : root.data.account;
-  $: currentBalance = current ? balanceText(current) : balanceText(root);
-
   const x = scaleLinear().range([0, 2 * Math.PI]);
   $: y = scaleSqrt().range([0, radius]);
   $: arcShape = arc<HierarchyRectangularNode<AccountHierarchyDatum>>()
@@ -44,6 +34,16 @@
     .endAngle((d) => x(d.x1))
     .innerRadius((d) => y(d.y0))
     .outerRadius((d) => y(d.y1));
+
+  $: root = sunburstTree(data, radius, currency, y);
+  $: leaves = root.descendants().slice(1);
+
+  let current: AccountHierarchyNode | null = null;
+  $: if (root) {
+    current = null;
+  }
+  $: currentAccount = current ? current.data.account : root.data.account;
+  $: currentBalance = current ? balanceText(current) : balanceText(root);
 </script>
 
 <g
@@ -67,7 +67,7 @@
       }}
       class:half={current && !currentAccount.startsWith(d.data.account)}
       fill-rule="evenodd"
-      fill={sunburstColor(d, root, radius)}
+      fill={d.color}
       d={arcShape(d) ?? undefined}
     />
   {/each}
