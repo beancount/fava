@@ -7,9 +7,11 @@
   import router from "../router";
 
   import { treemapScale } from "./helpers";
+  import type {
+    AccountHierarchyDatum,
+    AccountHierarchyNode,
+  } from "./hierarchy";
   import { followingTooltip } from "./tooltip";
-
-  import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
 
   export let data: AccountHierarchyNode;
   export let width: number;

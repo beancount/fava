@@ -95,23 +95,6 @@ export const currencies_sorted = derived_array(currencies, (val) =>
   [...val].sort()
 );
 
-/**
- * The list of operating currencies, adding in the current conversion currency.
- */
-export const operatingCurrenciesWithConversion = derived(
-  [operating_currency, conversion],
-  ([operating_currency_val, conversion_val]) => {
-    if (
-      !conversion_val ||
-      ["at_cost", "at_value", "units"].includes(conversion_val) ||
-      operating_currency_val.includes(conversion_val)
-    ) {
-      return operating_currency_val;
-    }
-    return [...operating_currency_val, conversion_val];
-  }
-);
-
 /** The number of Beancount errors. */
 export const errorCount = writable(0);
 

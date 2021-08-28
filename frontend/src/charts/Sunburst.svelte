@@ -9,8 +9,10 @@
   import router from "../router";
 
   import { sunburstScale } from "./helpers";
-
-  import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
+  import type {
+    AccountHierarchyDatum,
+    AccountHierarchyNode,
+  } from "./hierarchy";
 
   export let data: AccountHierarchyNode;
   export let currency: string;

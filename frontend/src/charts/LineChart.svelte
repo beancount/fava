@@ -12,9 +12,8 @@
 
   import { axis } from "./axis";
   import { currenciesScale } from "./helpers";
+  import type { LineChart, LineChartDatum } from "./line";
   import { positionedTooltip } from "./tooltip";
-
-  import type { LineChart, LineChartDatum } from ".";
 
   export let data: LineChart["data"];
   export let width: number;

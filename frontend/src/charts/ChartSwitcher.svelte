@@ -6,6 +6,7 @@
   import { activeChart, showCharts } from "../stores/chart";
 
   import Chart from "./Chart.svelte";
+  import { chartContext } from "./context";
   import ConversionAndInterval from "./ConversionAndInterval.svelte";
 
   import { parseChartData } from ".";
@@ -14,7 +15,7 @@
   let charts: NamedChartTypes[] = [];
 
   onMount(() => {
-    const res = parseChartData();
+    const res = parseChartData($chartContext);
     if (res.success) {
       charts = res.value;
     } else {

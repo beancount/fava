@@ -3,9 +3,9 @@
 
   import { get } from "../api";
   import type { ChartTypes } from "../charts";
-  import { parseQueryChart } from "../charts";
   import Chart from "../charts/Chart.svelte";
-  import { operatingCurrenciesWithConversion } from "../stores";
+  import { chartContext } from "../charts/context";
+  import { parseQueryChart } from "../charts/query-charts";
   import { getFilterParams } from "../stores/filters";
   import { addToHistory, query_shell_history } from "../stores/query";
 
@@ -45,10 +45,7 @@
     }
     get("query_result", { query_string: query, ...getFilterParams() }).then(
       (res) => {
-        const r = parseQueryChart(
-          res.chart,
-          $operatingCurrenciesWithConversion
-        );
+        const r = parseQueryChart(res.chart, $chartContext);
         const chart = r.success ? r.value : null;
         setResult(query, { result: { chart, table: res.table } });
       },

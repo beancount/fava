@@ -8,10 +8,9 @@
   import { ctx } from "../format";
 
   import { axis } from "./axis";
+  import type { BarChart, BarChartDatumValue } from "./bar";
   import { currenciesScale, filterTicks, setTimeFilter } from "./helpers";
   import { followingTooltip } from "./tooltip";
-
-  import type { BarChart, BarChartDatumValue } from ".";
 
   export let data: BarChart["data"];
   export let width: number;

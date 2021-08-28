@@ -4,10 +4,9 @@
 
   import { chartCurrency, hierarchyChartMode } from "../stores/chart";
 
+  import type { HierarchyChart } from "./hierarchy";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
-
-  import type { HierarchyChart } from ".";
 
   const context: Writable<string[]> = getContext("chart-currencies");
 

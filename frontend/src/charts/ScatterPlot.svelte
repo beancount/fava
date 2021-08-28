@@ -4,13 +4,12 @@
   import { quadtree } from "d3-quadtree";
   import { scalePoint, scaleUtc } from "d3-scale";
 
-  import { dateFormat } from "../format";
+  import { day } from "../format";
 
   import { axis } from "./axis";
   import { scatterplotScale } from "./helpers";
+  import type { ScatterPlotDatum } from "./scatterplot";
   import { positionedTooltip } from "./tooltip";
-
-  import type { ScatterPlotDatum } from ".";
 
   export let data: ScatterPlotDatum[];
   export let width: number;
@@ -51,7 +50,7 @@
   );
 
   function tooltipText(d: ScatterPlotDatum) {
-    return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
+    return `${d.description}<em>${day(d.date)}</em>`;
   }
 
   function tooltipInfo(
