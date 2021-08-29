@@ -1,6 +1,6 @@
 # pylint: disable=missing-docstring
 from werkzeug.test import Client
-from werkzeug.wrappers import BaseResponse
+from werkzeug.wrappers import Response
 
 from .conftest import data_file
 from fava.util import listify
@@ -25,7 +25,7 @@ def test_pairwise():
 
 
 def test_simple_wsgi():
-    client = Client(simple_wsgi, BaseResponse)
+    client = Client(simple_wsgi, Response)
     resp = client.get("/any_path")
     assert resp.status_code == 200
     assert resp.data == b""

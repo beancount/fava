@@ -1,4 +1,4 @@
-image: debian/stable
+image: debian/testing
 packages:
     - nodejs
     - npm

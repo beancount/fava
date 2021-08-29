@@ -4,41 +4,36 @@ on:
     workflow_dispatch:
     push:
         branches:
-            - master
+            - main
     pull_request:
         branches:
-            - master
+            - main
 
 jobs:
     build:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                python-version: [3.6, 3.9]
-                os: [windows-latest, macos-latest, ubuntu-latest]
-
+                py: ["3.9", "3.6"]
+                os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         steps:
             - uses: actions/checkout@v2
-            - name: Set up Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v2
+            - uses: actions/setup-python@v2
               with:
-                  python-version: ${{ matrix.python-version }}
-            - name: Set up Node
-              uses: actions/setup-node@v1
+                  python-version: ${{ matrix.py }}
+            - uses: actions/setup-node@v2
               with:
-                  node-version: "14"
-            - name: Install tox
-              run: pip install tox
-            - name: Install node dependencies
-              run: cd frontend && npm ci
-            - name: pre-commit
-              if: ${{ matrix.os == 'ubuntu-latest' }}
-              uses: pre-commit/action@v2.0.0
-            - name: Lint
-              if: ${{ matrix.os == 'ubuntu-latest' }}
+                  node-version: "lts/*"
+                  cache: "npm"
+                  cache-dependency-path: frontend/package-lock.json
+            - run: pip install tox
+            - run: cd frontend && npm ci
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
+              uses: pre-commit/action@v2.0.3
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
+              run: cd frontend; npx svelte-check
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
               run: tox -e lint
-            - name: Test
-              run: make test
-            - name: PyInstaller build
-              if: ${{ matrix.os == 'ubuntu-latest' }}
+            - run: make test
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
               run: tox -e pyinstaller

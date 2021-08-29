@@ -15,12 +15,14 @@ def test_fava_options(load_doc):
     2016-04-14 custom "fava-option" "indent" "4"
     2016-04-14 custom "fava-option" "insert-entry" "Ausgaben:Test"
     2016-04-14 custom "fava-option" "invalid"
+    2016-04-14 custom "fava-option" "locale" "en"
+    2016-04-14 custom "fava-option" "locale" "invalid"
     """
 
     entries, _, _ = load_doc
     options, errors = parse_options(entries)
 
-    assert len(errors) == 1
+    assert len(errors) == 2
 
     assert options["indent"] == 4
     assert options["insert-entry"] == [

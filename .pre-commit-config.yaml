@@ -1,19 +1,19 @@
 repos:
     - repo: https://github.com/psf/black
-      rev: 20.8b1
+      rev: 21.7b0
       hooks:
           - id: black
     - repo: https://github.com/asottile/reorder_python_imports
-      rev: v2.3.6
+      rev: v2.6.0
       hooks:
           - id: reorder-python-imports
             args: ["--application-directories=.:src"]
     - repo: https://gitlab.com/pycqa/flake8
-      rev: 3.8.4
+      rev: 3.9.2
       hooks:
           - id: flake8
     - repo: https://github.com/asottile/pyupgrade
-      rev: v2.9.0
+      rev: v2.23.1
       hooks:
           - id: pyupgrade
             args: ["--py36-plus"]
@@ -33,5 +33,5 @@ repos:
           - id: eslint
             name: eslint
             language: node
-            entry: ./frontend/node_modules/eslint/bin/eslint.js
+            entry: ./frontend/node_modules/eslint/bin/eslint.js --max-warnings 0
             files: \.(js|ts|svelte)$

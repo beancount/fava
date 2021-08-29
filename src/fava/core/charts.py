@@ -1,6 +1,8 @@
 """Provide data suitable for Fava's charts. """
 from datetime import date
 from datetime import timedelta
+from typing import Any
+from typing import Dict
 from typing import Generator
 from typing import List
 from typing import Optional
@@ -21,19 +23,25 @@ from fava.core._compat import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
 from fava.core.conversion import units
 from fava.core.module_base import FavaModule
+from fava.core.tree import SerialisedTreeNode
 from fava.core.tree import Tree
 from fava.helpers import FavaAPIException
 from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
+from fava.util.typing import TypedDict
 
 
 ONE_DAY = timedelta(days=1)
 
 
-def inv_to_dict(inventory):
+def inv_to_dict(inventory: Inventory) -> Dict[str, Decimal]:
     """Convert an inventory to a simple cost->number dict."""
-    return {pos.units.currency: pos.units.number for pos in inventory}
+    return {
+        pos.units.currency: pos.units.number
+        for pos in inventory
+        if pos.units.number is not None
+    }
 
 
 Inventory.for_json = inv_to_dict  # type: ignore
@@ -42,14 +50,14 @@ Inventory.for_json = inv_to_dict  # type: ignore
 class FavaJSONEncoder(JSONEncoder):
     """Allow encoding some Beancount date structures."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         # Allow use of a `for_json` method to serialise dict subclasses.
         kwargs["for_json"] = True
         # Sort dict keys (Flask also does this by default).
         kwargs["sort_keys"] = True
         super().__init__(*args, **kwargs)
 
-    def default(self, o):  # pylint: disable=method-hidden
+    def default(self, o: Any) -> Any:  # pylint: disable=method-hidden
         if isinstance(o, Decimal):
             return float(o)
         if isinstance(o, (date, Amount, Position)):
@@ -67,9 +75,24 @@ class FavaJSONEncoder(JSONEncoder):
 ENCODER = FavaJSONEncoder()
 
 
-def dumps(arg) -> str:
+def dumps(arg: Any) -> Any:
     """Encode to JSON."""
     return ENCODER.encode(arg)
+
+
+class DateAndBalance(TypedDict):
+    """Balance at a date."""
+
+    date: date
+    balance: Union[Dict[str, Decimal], Inventory]
+
+
+class DateAndBalanceWithBudget(TypedDict):
+    """Balance at a date with a budget."""
+
+    date: date
+    balance: Inventory
+    budgets: Dict[str, Decimal]
 
 
 class ChartModule(FavaModule):
@@ -81,9 +104,9 @@ class ChartModule(FavaModule):
         conversion: str,
         begin: Optional[date] = None,
         end: Optional[date] = None,
-    ):
+    ) -> SerialisedTreeNode:
         """An account tree."""
-        if begin is not None:
+        if begin is not None and end is not None:
             tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
         else:
             tree = self.ledger.root_tree
@@ -113,7 +136,7 @@ class ChartModule(FavaModule):
         accounts: Union[str, Tuple[str]],
         conversion: str,
         invert: bool = False,
-    ):
+    ) -> Generator[DateAndBalanceWithBudget, None, None]:
         """Renders totals for account (or accounts) in the intervals.
 
         Args:
@@ -133,13 +156,16 @@ class ChartModule(FavaModule):
             balance = cost_or_value(
                 inventory, conversion, price_map, end - ONE_DAY
             )
-            budgets = self.ledger.budgets.calculate_children(
-                accounts, begin, end
-            )
+            budgets = {}
+            if isinstance(accounts, str):
+                budgets = self.ledger.budgets.calculate_children(
+                    accounts, begin, end
+                )
 
             if invert:
+                # pylint: disable=invalid-unary-operand-type
                 balance = -balance
-                budgets = -budgets
+                budgets = {k: -v for k, v in budgets.items()}
 
             yield {
                 "date": begin,
@@ -148,7 +174,9 @@ class ChartModule(FavaModule):
             }
 
     @listify
-    def linechart(self, account_name: str, conversion: str):
+    def linechart(
+        self, account_name: str, conversion: str
+    ) -> Generator[DateAndBalance, None, None]:
         """The balance of an account.
 
         Args:
@@ -172,12 +200,14 @@ class ChartModule(FavaModule):
         last_currencies = None
 
         price_map = self.ledger.price_map
-        for entry, _, change, balance in journal:
+        for entry, _, change, balance_inventory in journal:
             if change.is_empty():
                 continue
 
             balance = inv_to_dict(
-                cost_or_value(balance, conversion, price_map, entry.date)
+                cost_or_value(
+                    balance_inventory, conversion, price_map, entry.date
+                )
             )
 
             currencies = set(balance.keys())
@@ -189,7 +219,9 @@ class ChartModule(FavaModule):
             yield {"date": entry.date, "balance": balance}
 
     @listify
-    def net_worth(self, interval: Interval, conversion: str):
+    def net_worth(
+        self, interval: Interval, conversion: str
+    ) -> Generator[DateAndBalance, None, None]:
         """Compute net worth.
 
         Args:
@@ -233,7 +265,7 @@ class ChartModule(FavaModule):
             }
 
     @staticmethod
-    def can_plot_query(types):
+    def can_plot_query(types: List[Tuple[str, Any]]) -> bool:
         """Whether we can plot the given query.
 
         Args:
@@ -245,7 +277,9 @@ class ChartModule(FavaModule):
             and types[1][1] is Inventory
         )
 
-    def query(self, types, rows):
+    def query(
+        self, types: List[Tuple[str, Any]], rows: List[Tuple[Any, ...]]
+    ) -> Any:
         """Chart for a query.
 
         Args:

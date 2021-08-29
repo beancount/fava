@@ -2,7 +2,7 @@
 
 cd ~/fava || exit
 git fetch
-git reset --hard origin/master
+git reset --hard origin/main
 
 source /home/favadev/.virtualenvs/fava/bin/activate
 

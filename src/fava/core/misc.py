@@ -4,6 +4,7 @@ import io
 import re
 from typing import List
 from typing import Tuple
+from typing import TYPE_CHECKING
 
 from beancount.core.amount import CURRENCY_RE
 from beancount.core.data import Custom
@@ -11,6 +12,9 @@ from beancount.core.data import Event
 
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 
 class FavaError(BeancountError):
@@ -23,7 +27,7 @@ SidebarLinks = List[Tuple[str, str]]
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         #: User-chosen links to show in the sidebar.
         self.sidebar_links: SidebarLinks = []
@@ -31,11 +35,11 @@ class FavaMisc(FavaModule):
         self.upcoming_events: List[Event] = []
 
     def load_file(self) -> None:
-        custom_entries = self.ledger.all_entries_by_type[Custom]
+        custom_entries = self.ledger.all_entries_by_type.Custom
         self.sidebar_links = sidebar_links(custom_entries)
 
         self.upcoming_events = upcoming_events(
-            self.ledger.all_entries_by_type[Event],
+            self.ledger.all_entries_by_type.Event,
             self.ledger.fava_options["upcoming-events"],
         )
 

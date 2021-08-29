@@ -15,6 +15,7 @@
   export let data: ScatterPlotDatum[];
   export let width: number;
 
+  const today = new Date();
   const margin = {
     top: 10,
     right: 10,
@@ -80,6 +81,7 @@
           fill={scatterplotScale(dot.type)}
           cx={x(dot.date)}
           cy={y(dot.type)}
+          class:desaturate={dot.date > today}
         />
       {/each}
     </g>
@@ -89,5 +91,8 @@
 <style>
   svg > g {
     pointer-events: all;
+  }
+  .desaturate {
+    filter: saturate(50%);
   }
 </style>

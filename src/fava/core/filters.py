@@ -1,22 +1,24 @@
 """Entry filters."""
 import re
+from datetime import date
+from typing import Any
 from typing import Callable
 from typing import Generator
-from typing import Iterable
+from typing import List
 from typing import Optional
+from typing import Tuple
 
 import ply.yacc  # type: ignore
 from beancount.core import account
-from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Entries
-from beancount.core.data import Pad
-from beancount.core.data import Transaction
 from beancount.ops.summarize import clamp_opt  # type: ignore
 
+from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import FavaOptions
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
+from fava.util.typing import BeancountOptions
 
 
 class FilterException(FavaAPIException):
@@ -43,7 +45,7 @@ class Token:
         self.type = type_
         self.value = value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"Token({self.type}, {self.value})"
 
 
@@ -67,22 +69,22 @@ class FilterSyntaxLexer:
         "|".join((f"(?P<{name}>{rule})" for name, rule in RULES))
     )
 
-    def LINK(self, token, value):
+    def LINK(self, token: str, value: str) -> Tuple[str, str]:
         return token, value[1:]
 
-    def TAG(self, token, value):
+    def TAG(self, token: str, value: str) -> Tuple[str, str]:
         return token, value[1:]
 
-    def KEY(self, token, value):
+    def KEY(self, token: str, value: str) -> Tuple[str, str]:
         return token, value[:-1]
 
-    def ALL(self, token, _):
+    def ALL(self, token: str, _: str) -> Tuple[str, str]:
         return token, token
 
-    def ANY(self, token, _):
+    def ANY(self, token: str, _: str) -> Tuple[str, str]:
         return token, token
 
-    def STRING(self, token, value):
+    def STRING(self, token: str, value: str) -> Tuple[str, str]:
         if value[0] in ['"', "'"]:
             return token, value[1:-1]
         return token, value
@@ -113,10 +115,11 @@ class FilterSyntaxLexer:
                 pos += len(value)
                 token = match.lastgroup
                 assert token is not None, "Internal Error"
-                func = getattr(self, token)
+                func: Callable[[str, str], Tuple[str, str]] = getattr(
+                    self, token
+                )
                 ret = func(token, value)
-                if ret:
-                    yield Token(*ret)
+                yield Token(*ret)
             elif char in literals:
                 yield Token(char, char)
                 pos += 1
@@ -148,116 +151,118 @@ class FilterSyntaxParser:
     precedence = (("left", "AND"), ("right", "UMINUS"))
     tokens = FilterSyntaxLexer.tokens
 
-    def p_error(self, _):
+    def p_error(self, _: Any) -> None:
         raise FilterException("filter", "Failed to parse filter: ")
 
-    def p_filter(self, p):
+    def p_filter(self, p: List[Any]) -> None:
         """
         filter : expr
         """
         p[0] = p[1]
 
-    def p_expr(self, p):
+    def p_expr(self, p: List[Any]) -> None:
         """
         expr : simple_expr
         """
         p[0] = p[1]
 
-    def p_expr_all(self, p):
+    def p_expr_all(self, p: List[Any]) -> None:
         """
         expr : ALL expr ')'
         """
         expr = p[2]
 
-        def _match_postings(entry):
+        def _match_postings(entry: Directive) -> bool:
             return all(
                 expr(posting) for posting in getattr(entry, "postings", [])
             )
 
         p[0] = _match_postings
 
-    def p_expr_any(self, p):
+    def p_expr_any(self, p: List[Any]) -> None:
         """
         expr : ANY expr ')'
         """
         expr = p[2]
 
-        def _match_postings(entry):
+        def _match_postings(entry: Directive) -> bool:
             return any(
                 expr(posting) for posting in getattr(entry, "postings", [])
             )
 
         p[0] = _match_postings
 
-    def p_expr_parentheses(self, p):
+    def p_expr_parentheses(self, p: List[Any]) -> None:
         """
         expr : '(' expr ')'
         """
         p[0] = p[2]
 
-    def p_expr_and(self, p):
+    def p_expr_and(self, p: List[Any]) -> None:
         """
         expr : expr expr %prec AND
         """
         left, right = p[1], p[2]
 
-        def _and(entry):
-            return left(entry) and right(entry)
+        def _and(entry: Directive) -> bool:
+            return left(entry) and right(entry)  # type: ignore
 
         p[0] = _and
 
-    def p_expr_or(self, p):
+    def p_expr_or(self, p: List[Any]) -> None:
         """
         expr : expr ',' expr
         """
         left, right = p[1], p[3]
 
-        def _or(entry):
-            return left(entry) or right(entry)
+        def _or(entry: Directive) -> bool:
+            return left(entry) or right(entry)  # type: ignore
 
         p[0] = _or
 
-    def p_expr_negated(self, p):
+    def p_expr_negated(self, p: List[Any]) -> None:
         """
         expr : '-' expr %prec UMINUS
         """
         func = p[2]
 
-        def _neg(entry):
+        def _neg(entry: Directive) -> bool:
             return not func(entry)
 
         p[0] = _neg
 
-    def p_simple_expr_TAG(self, p):
+    def p_simple_expr_TAG(self, p: List[Any]) -> None:
         """
         simple_expr : TAG
         """
         tag = p[1]
 
-        def _tag(entry):
-            return hasattr(entry, "tags") and (tag in entry.tags)
+        def _tag(entry: Directive) -> bool:
+            tags = getattr(entry, "tags", None)
+            return (tag in tags) if tags is not None else False
 
         p[0] = _tag
 
-    def p_simple_expr_LINK(self, p):
+    def p_simple_expr_LINK(self, p: List[Any]) -> None:
         """
         simple_expr : LINK
         """
         link = p[1]
 
-        def _link(entry):
-            return hasattr(entry, "links") and (link in entry.links)
+        def _link(entry: Directive) -> bool:
+            links = getattr(entry, "links", None)
+            return (link in links) if links is not None else False
 
         p[0] = _link
 
-    def p_simple_expr_STRING(self, p):
+    def p_simple_expr_STRING(self, p: List[Any]) -> None:
         """
         simple_expr : STRING
         """
         string = p[1]
         match = Match(string)
 
-        def _string(entry):
+        def _string(entry: Directive) -> bool:
             for name in ("narration", "payee", "comment"):
                 value = getattr(entry, name, "")
                 if value and match(value):
@@ -266,14 +271,14 @@ class FilterSyntaxParser:
 
         p[0] = _string
 
-    def p_simple_expr_key(self, p):
+    def p_simple_expr_key(self, p: List[Any]) -> None:
         """
         simple_expr : KEY STRING
         """
         key, value = p[1], p[2]
         match = Match(value)
 
-        def _key(entry):
+        def _key(entry: Directive) -> bool:
             if hasattr(entry, key):
                 return match(str(getattr(entry, key) or ""))
             if entry.meta is not None and key in entry.meta:
@@ -284,9 +289,11 @@ class FilterSyntaxParser:
 
 
 class EntryFilter:
-    """Filters a list of entries. """
+    """Filters a list of entries."""
 
-    def __init__(self, options, fava_options: FavaOptions) -> None:
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
         self.options = options
         self.fava_options = fava_options
         self.value: Optional[str] = None
@@ -301,7 +308,7 @@ class EntryFilter:
         self.value = value
         return True
 
-    def _include_entry(self, entry: Directive):
+    def _include_entry(self, entry: Directive) -> bool:
         raise NotImplementedError
 
     def _filter(self, entries: Entries) -> Entries:
@@ -328,10 +335,12 @@ class EntryFilter:
 class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
     """Filter by dates."""
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.begin_date = None
-        self.end_date = None
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
+        super().__init__(options, fava_options)
+        self.begin_date: Optional[date] = None
+        self.end_date: Optional[date] = None
 
     def set(self, value: Optional[str]) -> bool:
         if value == self.value:
@@ -367,8 +376,10 @@ PARSE = ply.yacc.yacc(
 class AdvancedFilter(EntryFilter):
     """Filter by tags and links and keys."""
 
-    def __init__(self, *args) -> None:
-        super().__init__(*args)
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
+        super().__init__(options, fava_options)
         self._include = None
 
     def set(self, value: Optional[str]) -> bool:
@@ -396,39 +407,19 @@ class AdvancedFilter(EntryFilter):
         return True
 
 
-def get_entry_accounts(entry: Directive) -> Iterable[str]:
-    """Accounts for an entry.
-
-    Args:
-        entry: An entry.
-
-    Returns:
-        An iterable with the entry's accounts ordered by priority: For
-        transactions the posting accounts are listed in reverse order.
-    """
-    if isinstance(entry, Transaction):
-        return reversed([p.account for p in entry.postings])
-    if isinstance(entry, Custom):
-        return [val.value for val in entry.values if val.dtype == account.TYPE]
-    if isinstance(entry, Pad):
-        return [entry.account, entry.source_account]
-    account_ = getattr(entry, "account", None)
-    if account_ is not None:
-        return [account_]
-    return []
-
-
 class AccountFilter(EntryFilter):
     """Filter by account.
 
     The filter string can either a regular expression or a parent account.
     """
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.match = None
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
+        super().__init__(options, fava_options)
+        self.match: Optional[Match] = None
 
-    def set(self, value: Optional[str]):
+    def set(self, value: Optional[str]) -> bool:
         if value == self.value:
             return False
         self.value = value
@@ -436,7 +427,7 @@ class AccountFilter(EntryFilter):
         return True
 
     def _include_entry(self, entry: Directive) -> bool:
-        if self.value is None:
+        if self.value is None or self.match is None:
             return False
         return any(
             account.has_component(name, self.value) or self.match(name)

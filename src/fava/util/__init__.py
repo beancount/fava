@@ -8,7 +8,14 @@ import time
 import unicodedata
 from pathlib import Path
 from typing import Any
+from typing import Callable
 from typing import Dict
+from typing import Generator
+from typing import Iterable
+from typing import Iterator
+from typing import List
+from typing import Tuple
+from typing import TypeVar
 
 from flask import abort
 from flask import send_file
@@ -17,7 +24,7 @@ from werkzeug.urls import url_quote
 BASEPATH = Path(__file__).parent.parent
 
 
-def filter_api_changed(record):
+def filter_api_changed(record: Any) -> bool:
     """Filter out LogRecords for requests that poll for changes."""
     return "/api/changed HTTP" not in record.msg
 
@@ -33,21 +40,28 @@ def resource_path(relative_path: str) -> Path:
     return BASEPATH / relative_path
 
 
-def listify(func):
+Item = TypeVar("Item")
+
+
+def listify(
+    func: Callable[..., Generator[Item, None, None]]
+) -> Callable[..., List[Item]]:
     """Decorator to make generator function return a list."""
 
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
+    def _wrapper(*args: Any, **kwargs: Any) -> List[Item]:
         return list(func(*args, **kwargs))
 
     return _wrapper
 
 
-def timefunc(func):  # pragma: no cover - only used for debugging so far
+def timefunc(
+    func: Any,
+) -> Any:  # pragma: no cover - only used for debugging so far
     """Decorator to time function for debugging."""
 
     @functools.wraps(func)
-    def _wrapper(*args, **kwargs):
+    def _wrapper(*args: Any, **kwargs: Any) -> Any:
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
@@ -57,7 +71,7 @@ def timefunc(func):  # pragma: no cover - only used for debugging so far
     return _wrapper
 
 
-def pairwise(iterable):
+def pairwise(iterable: Iterable[Item]) -> Iterator[Tuple[Item, Item]]:
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     left, right = itertools.tee(iterable)
     next(right, None)
@@ -97,13 +111,13 @@ def slugify(string: str) -> str:
     return string
 
 
-def simple_wsgi(_, start_response):
+def simple_wsgi(_: Any, start_response: Any) -> List[bytes]:
     """A simple wsgi app that always returns an empty response."""
     start_response("200 OK", [("Content-Type", "text/html")])
     return [b""]
 
 
-def send_file_inline(filename):
+def send_file_inline(filename: str) -> Any:
     """Send a file inline, including the original filename.
 
     Ref: http://test.greenbytes.de/tech/tc2231/.

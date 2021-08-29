@@ -1,18 +1,16 @@
-"""Beancount plugin to link transactions to documents.
+"""Beancount plugin to link entries to documents.
 
-It goes through all transactions with a `document` metadata-key, and tries to
-associate them to Document entries. It then adds a link from transactions to
-documents, as well as the "#linked" tag.
+It goes through all entries with a `document` metadata-key, and tries to
+associate them to Document entries. For transactions, it then also adds a link
+from the transaction to documents, as well as the "#linked" tag.
 """
 from collections import defaultdict
 from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
-from typing import AbstractSet
+from typing import Any
 from typing import List
-from typing import Optional
-from typing import Set
 from typing import Tuple
 
 from beancount.core.compare import hash_entry
@@ -20,7 +18,9 @@ from beancount.core.data import Document
 from beancount.core.data import Entries
 from beancount.core.data import Transaction
 
+from fava.core.accounts import get_entry_accounts
 from fava.helpers import BeancountError
+from fava.util.sets import add_to_set
 
 
 class DocumentError(BeancountError):
@@ -30,27 +30,24 @@ class DocumentError(BeancountError):
 __plugins__ = ["link_documents"]
 
 
-def add_to_set(set_: Optional[AbstractSet[str]], new: str) -> Set[str]:
-    """Add an entry to a set (or create it if doesn't exist)."""
-    return set(set_).union([new]) if set_ else {new}
-
-
-def link_documents(entries: Entries, _) -> Tuple[Entries, List[DocumentError]]:
-    """Link transactions to documents."""
+def link_documents(
+    entries: Entries, _: Any
+) -> Tuple[Entries, List[DocumentError]]:
+    """Link entries to documents."""
 
     errors = []
 
-    transactions = []
+    # All document indices by their full file path.
     by_fullname = {}
+    # All document indices by their file basename.
     by_basename = defaultdict(list)
+
     for index, entry in enumerate(entries):
         if isinstance(entry, Document):
             by_fullname[entry.filename] = index
             by_basename[basename(entry.filename)].append((index, entry))
-        elif isinstance(entry, Transaction):
-            transactions.append((index, entry))
 
-    for index, entry in transactions:
+    for index, entry in enumerate(entries):
         disk_docs = [
             value
             for key, value in entry.meta.items()
@@ -61,12 +58,12 @@ def link_documents(entries: Entries, _) -> Tuple[Entries, List[DocumentError]]:
             continue
 
         hash_ = hash_entry(entry)[:8]
-        txn_accounts = [pos.account for pos in entry.postings]
+        entry_accounts = get_entry_accounts(entry)
         for disk_doc in disk_docs:
             documents = [
                 j
                 for j, document in by_basename[disk_doc]
-                if document.account in txn_accounts
+                if document.account in entry_accounts
             ]
             disk_doc_path = normpath(
                 join(dirname(entry.meta["filename"]), disk_doc)
@@ -93,8 +90,11 @@ def link_documents(entries: Entries, _) -> Tuple[Entries, List[DocumentError]]:
                     tags=add_to_set(doc.tags, "linked"),
                 )
 
-            entries[index] = entry._replace(
-                links=add_to_set(entry.links, hash_)
-            )
+            # The other entry types do not support links, so only add links for
+            # txns.
+            if isinstance(entry, Transaction):
+                entries[index] = entry._replace(
+                    links=add_to_set(entry.links, hash_)
+                )
 
     return entries, errors

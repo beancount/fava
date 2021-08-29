@@ -26,10 +26,6 @@
   margin-bottom: 1em;
 }
 
-.help-text .cm-wrap {
-  background-color: var(--color-code-background);
-}
-
 .help-text code {
   font-size: 0.9em;
 }

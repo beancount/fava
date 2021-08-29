@@ -3,6 +3,8 @@ import csv
 import datetime
 import io
 from collections import OrderedDict
+from typing import Any
+from typing import List
 
 from beancount.core.number import Decimal
 
@@ -14,7 +16,9 @@ except ImportError:  # pragma: no cover
     HAVE_EXCEL = False
 
 
-def to_excel(types, rows, result_format, query_string):
+def to_excel(
+    types: Any, rows: Any, result_format: str, query_string: str
+) -> Any:
     """Save result to spreadsheet document.
 
     Args:
@@ -41,7 +45,7 @@ def to_excel(types, rows, result_format, query_string):
     return resp
 
 
-def to_csv(types, rows):
+def to_csv(types: Any, rows: Any) -> Any:
     """Save result to CSV.
 
     Args:
@@ -57,14 +61,14 @@ def to_csv(types, rows):
     return io.BytesIO(resp.getvalue().encode("utf-8"))
 
 
-def _result_array(types, rows):
+def _result_array(types: Any, rows: Any) -> Any:
     result_array = [[name for name, t in types]]
     for row in rows:
         result_array.append(_row_to_pyexcel(row, types))
     return result_array
 
 
-def _row_to_pyexcel(row, header):
+def _row_to_pyexcel(row: Any, header: Any) -> List[str]:
     result = []
     for idx, column in enumerate(header):
         value = row[idx]

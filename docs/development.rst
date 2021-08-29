@@ -1,10 +1,6 @@
 Development
 ===========
 
-If you want to try out the current `master`-version of Fava and see what we are
-working on, check out the online `dev-demo
-<https://favadev.pythonanywhere.com>`__ (updated every midnight UTC).
-
 Setting up a development environment
 ------------------------------------
 
@@ -44,5 +40,5 @@ Contributions are very welcome, just open a PR on `GitHub
 <https://github.com/beancount/fava/pulls>`__.
 
 Fava is released under the `MIT License
-<https://github.com/beancount/fava/blob/master/LICENSE>`__.
+<https://github.com/beancount/fava/blob/main/LICENSE>`__.
 

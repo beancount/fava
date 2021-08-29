@@ -103,8 +103,10 @@ def test_api_source_put(app, test_client) -> None:
     response = test_client.put(url)
     assert_api_error(response, "Invalid JSON request.")
 
-    payload = open(path, encoding="utf-8").read()
-    sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
+    with open(path, encoding="utf-8") as file_handle:
+        payload = file_handle.read()
+    with open(path, mode="rb") as bfile_handle:
+        sha256sum = hashlib.sha256(bfile_handle.read()).hexdigest()
 
     # change source
     response = test_client.put(
@@ -118,11 +120,13 @@ def test_api_source_put(app, test_client) -> None:
         ),
         content_type="application/json",
     )
-    sha256sum = hashlib.sha256(open(path, mode="rb").read()).hexdigest()
+    with open(path, mode="rb") as bfile_handle:
+        sha256sum = hashlib.sha256(bfile_handle.read()).hexdigest()
     assert_api_success(response, sha256sum)
 
     # check if the file has been written
-    assert open(path, encoding="utf-8").read() == "asdf" + payload
+    with open(path, encoding="utf-8") as file_handle:
+        assert file_handle.read() == "asdf" + payload
 
     # write original source file
     result = test_client.put(
@@ -133,7 +137,8 @@ def test_api_source_put(app, test_client) -> None:
         content_type="application/json",
     )
     assert result.status_code == 200
-    assert open(path, encoding="utf-8").read() == payload
+    with open(path, encoding="utf-8") as file_handle:
+        assert file_handle.read() == payload
 
 
 def test_api_format_source(app, test_client) -> None:
@@ -142,7 +147,8 @@ def test_api_format_source(app, test_client) -> None:
         url = url_for("json_api.format_source")
         path = g.ledger.beancount_file_path
 
-    payload = open(path, encoding="utf-8").read()
+    with open(path, encoding="utf-8") as file_handle:
+        payload = file_handle.read()
 
     response = test_client.put(
         url,
@@ -156,7 +162,8 @@ def test_api_format_source_options(app, test_client, monkeypatch) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         path = g.ledger.beancount_file_path
-        payload = open(path, encoding="utf-8").read()
+        with open(path, encoding="utf-8") as file_handle:
+            payload = file_handle.read()
 
         url = url_for("json_api.format_source")
 

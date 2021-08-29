@@ -1,13 +1,20 @@
 """Attributes for auto-completion."""
 from typing import List
+from typing import Optional
+from typing import TYPE_CHECKING
 
-from beancount.core import getters
 from beancount.core.data import Entries
 from beancount.core.data import Transaction
+from beancount.core.getters import get_active_years as getters_get_active_years
+from beancount.core.getters import get_all_links
+from beancount.core.getters import get_all_tags
 
 from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
 from fava.util.ranking import ExponentialDecayRanker
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 
 def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
@@ -24,7 +31,7 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
 
     if fye == (12, 31):
         return sorted(
-            map(str, getters.get_active_years(entries)), reverse=True
+            map(str, getters_get_active_years(entries)), reverse=True
         )
     seen = set()
     month = fye.month
@@ -41,7 +48,7 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
 class AttributesModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         self.accounts: List[str] = []
         self.currencies: List[str] = []
@@ -52,8 +59,8 @@ class AttributesModule(FavaModule):
 
     def load_file(self) -> None:
         all_entries = self.ledger.all_entries
-        self.links = getters.get_all_links(all_entries)
-        self.tags = getters.get_all_tags(all_entries)
+        self.links = get_all_links(all_entries)
+        self.tags = get_all_tags(all_entries)
         self.years = get_active_years(
             all_entries, self.ledger.fava_options["fiscal-year-end"]
         )
@@ -64,14 +71,16 @@ class AttributesModule(FavaModule):
         currency_ranker = ExponentialDecayRanker()
         payee_ranker = ExponentialDecayRanker()
 
-        transactions = self.ledger.all_entries_by_type[Transaction]
+        transactions = self.ledger.all_entries_by_type.Transaction
         for txn in transactions:
             if txn.payee:
                 payee_ranker.update(txn.payee, txn.date)
             for posting in txn.postings:
                 account_ranker.update(posting.account, txn.date)
-                currency_ranker.update(posting.units.currency, txn.date)
-                if posting.cost:
+                currency_ranker.update(
+                    posting.units.currency, txn.date  # type: ignore
+                )
+                if posting.cost and posting.cost.currency is not None:
                     currency_ranker.update(posting.cost.currency, txn.date)
 
         self.accounts = account_ranker.sort()
@@ -81,16 +90,16 @@ class AttributesModule(FavaModule):
     def payee_accounts(self, payee: str) -> List[str]:
         """Rank accounts for the given payee."""
         account_ranker = ExponentialDecayRanker(self.accounts)
-        transactions = self.ledger.all_entries_by_type[Transaction]
+        transactions = self.ledger.all_entries_by_type.Transaction
         for txn in transactions:
             if txn.payee == payee:
                 for posting in txn.postings:
                     account_ranker.update(posting.account, txn.date)
         return account_ranker.sort()
 
-    def payee_transaction(self, payee):
+    def payee_transaction(self, payee: str) -> Optional[Transaction]:
         """The last transaction for the given payee."""
-        transactions = self.ledger.all_entries_by_type[Transaction]
+        transactions = self.ledger.all_entries_by_type.Transaction
         for txn in reversed(transactions):
             if txn.payee == payee:
                 return txn

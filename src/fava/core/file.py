@@ -10,6 +10,7 @@ from typing import Generator
 from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import TYPE_CHECKING
 
 from beancount.core.data import Balance
 from beancount.core.data import Directive
@@ -25,13 +26,15 @@ from beancount.parser.printer import format_entry  # type: ignore
 
 from fava.core._compat import FLAG_RETURNS
 from fava.core._compat import FLAG_UNREALIZED
+from fava.core.accounts import get_entry_accounts
 from fava.core.fava_options import InsertEntryOption
-from fava.core.filters import get_entry_accounts
 from fava.core.misc import align
 from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException
 from fava.util import next_key
 
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
 #: The flags to exclude when rendering entries.
 EXCL_FLAGS = {
@@ -53,7 +56,7 @@ def sha256_str(val: str) -> str:
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         self.lock = threading.Lock()
 
@@ -254,7 +257,7 @@ def get_entry_slice(entry: Directive) -> Tuple[str, str]:
         A string containing the lines of the entry and the `sha256sum` of
         these lines.
     """
-    with open(entry.meta["filename"], mode="r", encoding="utf-8") as file:
+    with open(entry.meta["filename"], encoding="utf-8") as file:
         lines = file.readlines()
 
     entry_lines = find_entry_lines(lines, entry.meta["lineno"] - 1)

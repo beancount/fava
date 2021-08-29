@@ -2,9 +2,9 @@
 
 This is a simple example of Fava's extension reports system.
 """
+# mypy: ignore-errors
 import re
 
-from beancount.core.data import Open
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 
@@ -23,7 +23,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         tree = self.ledger.root_tree
         portfolios = []
 
-        for option in self.config:
+        for option in self.config:  # pylint: disable=not-an-iterable
             opt_key = option[0]
             if opt_key == "account_name_pattern":
                 portfolio = self._account_name_pattern(tree, option[1])
@@ -80,7 +80,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
         )
         selected_accounts = []
         regexer = re.compile(pattern)
-        for entry in self.ledger.all_entries_by_type[Open]:
+        for entry in self.ledger.all_entries_by_type.Open:
             if (metadata_key in entry.meta) and (
                 regexer.match(entry.meta[metadata_key]) is not None
             ):

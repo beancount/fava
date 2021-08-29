@@ -4,7 +4,6 @@
    *
    * This tries to follow https://www.w3.org/TR/wai-aria-practices-1.1/#dialog_modal.
    */
-  import { keyboardShortcut } from "../keyboard-shortcuts";
   import { attemptFocus, getFocusableElements } from "../lib/focus";
   import { closeOverlay } from "../stores";
 
@@ -25,6 +24,9 @@
           ev.preventDefault();
           attemptFocus(first);
         }
+      } else if (ev.key === "Escape") {
+        ev.preventDefault();
+        closeHandler();
       }
     }
     document.addEventListener("keydown", keydown);
@@ -43,11 +45,8 @@
     <div class="background" on:click={closeHandler} aria-hidden="true" />
     <div class="content" use:handleFocus role="dialog" aria-modal="true">
       <slot />
-      <button
-        type="button"
-        class="muted close"
-        on:click={closeHandler}
-        use:keyboardShortcut={"Escape"}>x</button
+      <button type="button" class="muted close" on:click={closeHandler}
+        >x</button
       >
     </div>
   </div>

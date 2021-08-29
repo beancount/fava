@@ -1,11 +1,13 @@
-# pylint: disable=all
-# flake8: noqa
-from typing import Any
+# pylint: disable=missing-docstring,unused-argument,multiple-statements
 from typing import List
-from typing import Optional
 from typing import Tuple
-from typing import NamedTuple
 
 from beancount.core.data import Entries
+from beancount.query.query import ResultRow
+from beancount.query.query import ResultType
 
-def execute_query(query: Any, entries: Entries, options_map: Any): ...
+from fava.util.typing import BeancountOptions
+
+def execute_query(
+    query: str, entries: Entries, options_map: BeancountOptions
+) -> Tuple[List[ResultType], List[ResultRow]]: ...

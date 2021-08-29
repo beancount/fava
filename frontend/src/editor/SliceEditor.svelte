@@ -11,33 +11,45 @@
   export let entry_hash: string;
   export let sha256sum: string;
 
-  let changed = false;
-  const onDocChanges = () => {
-    changed = true;
-  };
-
-  const [editor, useEditor] = initBeancountEditor(slice, onDocChanges, []);
+  let currentSlice = slice;
+  $: changed = currentSlice !== slice;
 
   let saving = false;
 
   async function save() {
     saving = true;
     try {
-      slice = editor.state.doc.toString();
       sha256sum = await put("source_slice", {
         entry_hash,
-        source: slice,
+        source: currentSlice,
         sha256sum,
       });
-      changed = false;
       router.reload();
       closeOverlay();
     } catch (error) {
-      notify(error, "error");
+      if (error instanceof Error) {
+        notify(error.message, "error");
+      }
     } finally {
       saving = false;
     }
   }
+  const [, useEditor] = initBeancountEditor(
+    slice,
+    (state) => {
+      currentSlice = state.doc.toString();
+    },
+    [
+      {
+        key: "Control-s",
+        mac: "Meta-s",
+        run: () => {
+          save();
+          return true;
+        },
+      },
+    ]
+  );
 </script>
 
 <form on:submit|preventDefault={save}>
@@ -46,7 +58,7 @@
 </form>
 
 <style>
-  form :global(.cm-wrap) {
+  div {
     margin-bottom: 0.5rem;
     border: 1px solid var(--color-sidebar-border);
   }

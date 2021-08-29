@@ -1,24 +1,59 @@
 """Formatting numbers."""
 import copy
+from typing import Callable
 from typing import Dict
+from typing import Optional
+from typing import TYPE_CHECKING
 
 from babel.core import Locale  # type: ignore
-from babel.core import UnknownLocaleError
 from beancount.core.display_context import Precision
 from beancount.core.number import Decimal
 
-from fava.core.fava_options import OptionError
 from fava.core.module_base import FavaModule
+
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
+
+Formatter = Callable[[Decimal], str]
+
+
+def get_locale_format(locale: Optional[Locale], precision: int) -> Formatter:
+    """Obtain formatting pattern for the given locale and precision.
+
+    Arguments:
+        locale: An optional locale.
+        precision: The precision.
+
+    Returns:
+        A function that renders Decimals to strings as desired.
+    """
+    # Set a maximum precision of 14, half the default precision of Decimal
+    precision = min(precision, 14)
+    if locale is None:
+        fmt_string = "{:." + str(precision) + "f}"
+
+        def fmt(num: Decimal) -> str:
+            return fmt_string.format(num)
+
+        return fmt
+
+    pattern = copy.copy(locale.decimal_formats.get(None))
+    pattern.frac_prec = (precision, precision)
+
+    def locale_fmt(num: Decimal) -> str:
+        return pattern.apply(num, locale)  # type: ignore
+
+    return locale_fmt
 
 
 class DecimalFormatModule(FavaModule):
     """Formatting numbers."""
 
-    def __init__(self, ledger) -> None:
+    def __init__(self, ledger: "FavaLedger") -> None:
         super().__init__(ledger)
         self.locale = None
-        self.patterns: Dict[str, str] = {}
-        self.default_pattern = "{:.2f}"
+        self.formatters: Dict[str, Formatter] = {}
+        self.default_pattern = get_locale_format(None, 2)
 
     def load_file(self) -> None:
         self.locale = None
@@ -29,36 +64,19 @@ class DecimalFormatModule(FavaModule):
             self.ledger.fava_options["locale"] = locale_option
 
         if locale_option:
-            try:
-                self.locale = Locale.parse(locale_option)
-            except UnknownLocaleError:
-                self.locale = None
-                error = OptionError(
-                    None,
-                    f"Unknown locale: {self.ledger.fava_options['locale']}.",
-                    None,
-                )
-                self.ledger.errors.append(error)
+            self.locale = Locale.parse(locale_option)
 
-        if self.locale:
-            self.default_pattern = copy.copy(
-                self.locale.decimal_formats.get(None)
-            )
-            self.default_pattern.frac_prec = (2, 2)
-        else:
-            self.default_pattern = "{:.2f}"
+        self.default_pattern = get_locale_format(self.locale, 2)
 
         dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
-            precision = ccontext.get_fractional(Precision.MOST_COMMON)
-            if self.locale:
-                pattern = copy.copy(self.locale.decimal_formats.get(None))
-                pattern.frac_prec = (precision, precision)
-            else:
-                pattern = "{:." + str(precision) + "f}"
-            self.patterns[currency] = pattern
+            prec = ccontext.get_fractional(Precision.MOST_COMMON)
+            if prec is not None:
+                self.formatters[currency] = get_locale_format(
+                    self.locale, prec
+                )
 
-    def __call__(self, value: Decimal, currency=None) -> str:
+    def __call__(self, value: Decimal, currency: Optional[str] = None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
 
         Arguments:
@@ -68,7 +86,6 @@ class DecimalFormatModule(FavaModule):
         Returns:
             A string, the formatted decimal.
         """
-        pattern = self.patterns.get(currency, self.default_pattern)
-        if not self.locale:
-            return pattern.format(value)
-        return pattern.apply(value, self.locale)
+        if currency is None:
+            return self.default_pattern(value)
+        return self.formatters.get(currency, self.default_pattern)(value)

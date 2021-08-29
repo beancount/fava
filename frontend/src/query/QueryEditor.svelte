@@ -49,7 +49,7 @@
     border: 1px solid var(--color-background-darker);
   }
 
-  form :global(.cm-wrap) {
+  form :global(.cm-editor) {
     width: 100%;
   }
 </style>

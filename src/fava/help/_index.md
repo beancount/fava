@@ -1,7 +1,7 @@
 Welcome to the help pages for Fava! You are running Beancount version
 `{{ beancount_version }}` and Fava `{{ fava_version }}`
-([changelog](https://github.com/beancount/fava/blob/master/CHANGES)). There are
-help pages for the following topics:
+([changelog](https://beancount.github.io/fava/changelog.html)). There are help
+pages for the following topics:
 
 -   [Beancount Syntax](./beancount_syntax) - short overview of the syntax.
 -   [Budgets](./budgets) - how to use Fava's budgeting feature.

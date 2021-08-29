@@ -1,14 +1,32 @@
 """Account balance trees."""
 import collections
 import datetime
+from typing import Dict
+from typing import Generator
+from typing import Iterable
 from typing import List
+from typing import Optional
 
 from beancount.core import account
 from beancount.core import convert
+from beancount.core.data import Directive
 from beancount.core.data import Open
+from beancount.core.prices import PriceMap
 
 from fava.core.conversion import cost_or_value
 from fava.core.inventory import CounterInventory
+from fava.core.inventory import SimpleCounterInventory
+from fava.util.typing import BeancountOptions
+from fava.util.typing import TypedDict
+
+
+class SerialisedTreeNode(TypedDict):
+    """A serialised TreeNode."""
+
+    account: str
+    balance: SimpleCounterInventory
+    balance_children: SimpleCounterInventory
+    children: "SerialisedTreeNode"  # type: ignore
 
 
 class TreeNode:
@@ -16,7 +34,7 @@ class TreeNode:
 
     __slots__ = ("name", "children", "balance", "balance_children", "has_txns")
 
-    def __init__(self, name) -> None:
+    def __init__(self, name: str) -> None:
         #: Account name.
         self.name: str = name
         #: A list of :class:`.TreeNode`, its children.
@@ -28,7 +46,12 @@ class TreeNode:
         #: Whether the account has any transactions.
         self.has_txns = False
 
-    def serialise(self, conversion, price_map, end: datetime.date):
+    def serialise(
+        self,
+        conversion: str,
+        price_map: PriceMap,
+        end: Optional[datetime.date],
+    ) -> SerialisedTreeNode:
         """Serialise the account.
 
         Args:
@@ -48,18 +71,20 @@ class TreeNode:
         }
 
 
-class Tree(dict):
+class Tree(Dict[str, TreeNode]):
     """Account tree.
 
     Args:
         entries: A list of entries to compute balances from.
     """
 
-    def __init__(self, entries=None):
-        dict.__init__(self)
+    def __init__(self, entries: Optional[Iterable[Directive]] = None):
+        super().__init__(self)
         self.get("", insert=True)
         if entries:
-            account_balances = collections.defaultdict(CounterInventory)
+            account_balances: Dict[
+                str, CounterInventory
+            ] = collections.defaultdict(CounterInventory)
             for entry in entries:
                 if isinstance(entry, Open):
                     self.get(entry.account, insert=True)
@@ -69,7 +94,7 @@ class Tree(dict):
             for name, balance in sorted(account_balances.items()):
                 self.insert(name, balance)
 
-    def ancestors(self, name):
+    def ancestors(self, name: str) -> Generator[TreeNode, None, None]:
         """Ancestors of an account.
 
         Args:
@@ -81,7 +106,7 @@ class Tree(dict):
             name = account.parent(name)
             yield self.get(name)
 
-    def insert(self, name, balance):
+    def insert(self, name: str, balance: CounterInventory) -> None:
         """Insert account with a balance.
 
         Insert account and update its balance and the balances of its
@@ -98,7 +123,7 @@ class Tree(dict):
         for parent_node in self.ancestors(name):
             parent_node.balance_children.add_inventory(balance)
 
-    def get(self, name, insert=False):
+    def get(self, name: str, insert: bool = False) -> TreeNode:  # type: ignore
         """Get an account.
 
         Args:
@@ -120,7 +145,9 @@ class Tree(dict):
                 self[name] = node
             return node
 
-    def net_profit(self, options, account_name):
+    def net_profit(
+        self, options: BeancountOptions, account_name: str
+    ) -> TreeNode:
         """Calculate the net profit.
 
         Args:
@@ -138,7 +165,7 @@ class Tree(dict):
 
         return net_profit.get(account_name)
 
-    def cap(self, options, unrealized_account):
+    def cap(self, options: BeancountOptions, unrealized_account: str) -> None:
         """Transfer Income and Expenses, add conversions and unrealized gains.
 
         Args:

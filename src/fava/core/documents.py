@@ -1,13 +1,15 @@
 """Document path related helpers."""
 import os
 from os import path
-
-from beancount.core.data import Document
+from typing import TYPE_CHECKING
 
 from fava.helpers import FavaAPIException
 
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
 
-def is_document_or_import_file(filename: str, ledger) -> bool:
+
+def is_document_or_import_file(filename: str, ledger: "FavaLedger") -> bool:
     """Check whether the filename is a document or in an import directory.
 
     Args:
@@ -18,7 +20,7 @@ def is_document_or_import_file(filename: str, ledger) -> bool:
         Whether this is one of the documents or a path in an import dir.
     """
     filenames = [
-        document.filename for document in ledger.all_entries_by_type[Document]
+        document.filename for document in ledger.all_entries_by_type.Document
     ]
     import_directories = [
         ledger.join_path(d) for d in ledger.fava_options["import-dirs"]
@@ -32,7 +34,7 @@ def is_document_or_import_file(filename: str, ledger) -> bool:
 
 
 def filepath_in_document_folder(
-    documents_folder: str, account: str, filename: str, ledger
+    documents_folder: str, account: str, filename: str, ledger: "FavaLedger"
 ) -> str:
     """File path for a document in the folder for an account.
 

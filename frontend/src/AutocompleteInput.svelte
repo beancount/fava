@@ -74,6 +74,9 @@
     } else if (event.key === " " && event.ctrlKey) {
       hidden = false;
     } else if (event.key === "Escape") {
+      if (!hidden && filteredSuggestions.length > 0) {
+        event.stopPropagation();
+      }
       hidden = true;
     } else if (event.key === "ArrowUp") {
       event.preventDefault();

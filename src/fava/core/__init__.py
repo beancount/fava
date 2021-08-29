@@ -1,18 +1,17 @@
 """This module provides the data required by Fava's reports."""
-import collections
 import copy
 import datetime
-import os
 from operator import itemgetter
+from os.path import basename
+from os.path import dirname
+from os.path import join
+from os.path import normpath
 from typing import Any
-from typing import cast
-from typing import DefaultDict
 from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Tuple
-from typing import Type
 
 from beancount import loader  # type: ignore
 from beancount.core import realization
@@ -22,14 +21,12 @@ from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
 from beancount.core.data import Commodity
-from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Document
 from beancount.core.data import Entries
 from beancount.core.data import Event
 from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
-from beancount.core.data import Open
 from beancount.core.data import Posting
 from beancount.core.data import Price
 from beancount.core.data import Transaction
@@ -40,15 +37,19 @@ from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.prices import build_price_map
 from beancount.core.prices import get_all_prices
-from beancount.parser.options import get_account_types  # type: ignore
+from beancount.parser.options import get_account_types
+from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.utils.encryption import is_encrypted_file  # type: ignore
 
 from fava.core._compat import FLAG_UNREALIZED
 from fava.core.accounts import AccountDict
+from fava.core.accounts import get_entry_accounts
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
+from fava.core.entries_by_type import group_entries_by_type
 from fava.core.extensions import ExtensionModule
+from fava.core.fava_options import DEFAULTS
 from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
@@ -66,6 +67,7 @@ from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
 from fava.util import date
 from fava.util import pairwise
+from fava.util.typing import BeancountOptions
 
 
 class Filters:
@@ -73,7 +75,9 @@ class Filters:
 
     __slots__ = ("account", "filter", "time")
 
-    def __init__(self, options, fava_options: FavaOptions) -> None:
+    def __init__(
+        self, options: BeancountOptions, fava_options: FavaOptions
+    ) -> None:
         self.account = AccountFilter(options, fava_options)
         self.filter = AdvancedFilter(options, fava_options)
         self.time = TimeFilter(options, fava_options)
@@ -191,13 +195,13 @@ class FavaLedger:
         self.all_entries = []
 
         #: Dict of list of all (unfiltered) entries by type.
-        self.all_entries_by_type: Dict[Type[Directive], Entries] = {}
+        self.all_entries_by_type = group_entries_by_type([])
 
         #: A list of all errors reported by Beancount.
         self.errors: List[BeancountError] = []
 
         #: A Beancount options map.
-        self.options: Dict[str, Any] = {}
+        self.options: BeancountOptions = OPTIONS_DEFAULTS
 
         #: A dict containing information about the accounts.
         self.accounts = AccountDict()
@@ -206,7 +210,10 @@ class FavaLedger:
         self.commodities: Dict[str, Commodity] = {}
 
         #: A dict with all of Fava's option values.
-        self.fava_options: FavaOptions = {}
+        self.fava_options: FavaOptions = DEFAULTS
+
+        self._date_first: Optional[datetime.date] = None
+        self._date_last: Optional[datetime.date] = None
 
         self.load_file()
 
@@ -229,30 +236,20 @@ class FavaLedger:
             self.all_entries, self.account_types
         )
 
-        entries_by_type: DefaultDict[
-            Type[Directive], Entries
-        ] = collections.defaultdict(list)
-        for entry in self.all_entries:
-            entries_by_type[type(entry)].append(entry)
-        self.all_entries_by_type = entries_by_type
+        self.all_entries_by_type = group_entries_by_type(self.all_entries)
 
         self.accounts = AccountDict()
-        for entry in entries_by_type[Open]:
-            self.accounts.setdefault(
-                cast(Open, entry).account
-            ).meta = entry.meta
-        for entry in entries_by_type[Close]:
-            self.accounts.setdefault(
-                cast(Close, entry).account
-            ).close_date = entry.date
+        for open_entry in self.all_entries_by_type.Open:
+            self.accounts.setdefault(open_entry.account).meta = open_entry.meta
+        for close in self.all_entries_by_type.Close:
+            self.accounts.setdefault(close.account).close_date = close.date
 
         self.commodities = {}
-        for entry in entries_by_type[Commodity]:
-            commodity = cast(Commodity, entry)
+        for commodity in self.all_entries_by_type.Commodity:
             self.commodities[commodity.currency] = commodity
 
         self.fava_options, errors = parse_options(
-            cast(List[Custom], entries_by_type[Custom])
+            self.all_entries_by_type.Custom
         )
         self.errors.extend(errors)
 
@@ -306,8 +303,8 @@ class FavaLedger:
 
     def join_path(self, *args: str) -> str:
         """Path relative to the directory of the ledger."""
-        include_path = os.path.dirname(self.beancount_file_path)
-        return os.path.normpath(os.path.join(include_path, *args))
+        include_path = dirname(self.beancount_file_path)
+        return normpath(join(include_path, *args))
 
     def paths_to_watch(self) -> Tuple[List[str], List[str]]:
         """The paths to included files and document directories.
@@ -316,7 +313,7 @@ class FavaLedger:
             A tuple (files, directories).
         """
         files = list(self.options["include"])
-        if self.fava_options["import-config"]:
+        if self.ingest.module_path:
             files.append(self.ingest.module_path)
         return (
             files,
@@ -346,7 +343,7 @@ class FavaLedger:
         self, interval: date.Interval
     ) -> Iterable[datetime.date]:
         """Generator yielding dates corresponding to interval boundaries."""
-        if not self._date_first:
+        if not self._date_first or not self._date_last:
             return []
         return date.interval_ends(self._date_first, self._date_last, interval)
 
@@ -374,7 +371,10 @@ class FavaLedger:
         interval: date.Interval,
         account_name: str,
         accumulate: bool = False,
-    ):
+    ) -> Tuple[
+        List[realization.RealAccount],
+        List[Tuple[datetime.date, datetime.date]],
+    ]:
         """Balances by interval.
 
         Arguments:
@@ -522,7 +522,11 @@ class FavaLedger:
         """List all prices."""
         all_prices = get_all_prices(self.price_map, (base, quote))
 
-        if self.filters.time:
+        if (
+            self.filters.time
+            and self.filters.time.begin_date is not None
+            and self.filters.time.end_date is not None
+        ):
             return [
                 (date, price)
                 for date, price in all_prices
@@ -557,20 +561,14 @@ class FavaLedger:
         entry = self.get_entry(entry_hash)
         value = entry.meta[metadata_key]
 
-        paths = [os.path.join(os.path.dirname(entry.meta["filename"]), value)]
-        paths.extend(
-            [
-                self.join_path(
-                    document_root, *posting.account.split(":"), value
-                )
-                for posting in getattr(entry, "postings", [])
-                for document_root in self.options["documents"]
-            ]
-        )
-
-        for path in paths:
-            if os.path.isfile(path):
-                return path
+        accounts = set(get_entry_accounts(entry))
+        full_path = join(dirname(entry.meta["filename"]), value)
+        for document in self.all_entries_by_type.Document:
+            if document.filename == full_path:
+                return document.filename
+            if document.account in accounts:
+                if basename(document.filename) == value:
+                    return document.filename
 
         raise FavaAPIException("Statement not found.")
 
@@ -614,7 +612,7 @@ class FavaLedger:
             True if the account is closed before the end date of the current
             time filter.
         """
-        if self.filters.time:
+        if self.filters.time and self._date_last is not None:
             return self.accounts[account_name].close_date < self._date_last
         return self.accounts[account_name].close_date != datetime.date.max
 

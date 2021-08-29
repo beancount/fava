@@ -15,3 +15,15 @@ export function leaf(name: string): string {
   const parentEnd = name.lastIndexOf(":");
   return parentEnd > 0 ? name.slice(parentEnd + 1) : name;
 }
+
+/**
+ * Obtain the leaf part of the account name.
+ * @param name - an account name.
+ * @param of - the possible ancestor
+ */
+export function isDescendant(name: string, of: string): boolean {
+  if (of === "") {
+    return true;
+  }
+  return name === of || name.startsWith(`${of}:`);
+}

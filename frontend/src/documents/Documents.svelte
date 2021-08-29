@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { group } from "d3-array";
+
   import { moveDocument } from "../api";
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
@@ -10,16 +12,17 @@
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
   import Table from "./Table.svelte";
+  import type { Document } from "./types";
 
-  type Document = { account: string; filename: string; date: string };
   type MoveDetails = { account: string; filename: string; newName: string };
 
   export let data: Document[];
 
+  $: grouped = group(data, (d) => d.account);
   $: node = stratify(
-    new Set(data.map((e) => e.account)),
-    (s) => s,
-    (name) => ({ name })
+    grouped.entries(),
+    ([s]) => s,
+    (name, d) => ({ name, count: d?.[1].length ?? 0 })
   );
 
   let selected: Document;
@@ -29,7 +32,7 @@
    * Rename the selected document with <F2>.
    */
   function keyup(ev: KeyboardEvent) {
-    if (ev.key === "F2" && selected) {
+    if (ev.key === "F2" && selected && !moving) {
       moving = { ...selected, newName: basename(selected.filename) };
     }
   }
@@ -53,15 +56,15 @@
       moving = null;
     }}
   >
-    <div>
+    <form on:submit|preventDefault={move}>
       <h3>{_("Move or rename document")}</h3>
       <p><code>{moving.filename}</code></p>
       <p>
         <AccountInput bind:value={moving.account} />
         <input size={40} bind:value={moving.newName} />
-        <button type="button" on:click={move}>{"Move"}</button>
+        <button type="submit">{"Move"}</button>
       </p>
-    </div>
+    </form>
   </ModalBase>
 {/if}
 <div class="fixed-fullsize-container">

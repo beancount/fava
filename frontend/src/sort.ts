@@ -38,7 +38,10 @@ function getValue(el: HTMLElement | null): string {
 }
 
 /**
- * Generate a sort function for a given comparison type, using a getter
+ * Generate a sort function for a given comparison type, using a getter.
+ * @param type - The sort type ('num' or 'string').
+ * @param order - The sort order ('desc' or 'asc').
+ * @param getter - The getter that obtains the attribute to sort by.
  */
 export function sortFunc<T>(
   type: string | null,

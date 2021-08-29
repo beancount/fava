@@ -7,3 +7,5 @@ try:
 except ImportError:
     FLAG_UNREALIZED = "U"
     FLAG_RETURNS = "R"
+
+__all__ = ["FLAG_RETURNS", "FLAG_UNREALIZED"]

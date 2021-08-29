@@ -19,6 +19,7 @@ If this setting is not specified, Fava will try to guess the language from your
 browser settings. Fava currently ships translations into the following
 languages:
 
+-   Bulgarian (`bg`)
 -   Catalan (`ca`)
 -   Chinese (`zh_CN` and `zh_TW`)
 -   Dutch (`nl`)
@@ -275,7 +276,7 @@ In Beancount the Income, Liabilities and Equity accounts tend to have a negative
 balance (see
 [Types of Accounts](https://beancount.github.io/docs/the_double_entry_counting_method.html#types-of-accounts)).
 
-This fava options flips the sign of these three accounts in the income statement
+This Fava option flips the sign of these three accounts in the income statement
 and the balance sheet. This way, the net profit chart will show positive numbers
 if the income is greater than the expenses for a given timespan.
 

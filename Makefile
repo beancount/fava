@@ -26,6 +26,7 @@ mostlyclean:
 .PHONY: lint
 lint: frontend/node_modules
 	pre-commit run -a
+	cd frontend; npx svelte-check
 	tox -e lint
 
 .PHONY: test
@@ -39,6 +40,15 @@ update-snapshots:
 	find . -name "__snapshots__" -type d -prune -exec rm -r "{}" +
 	-SNAPSHOT_UPDATE=1 tox
 	tox
+
+.PHONY: update-deps
+update-deps:
+	cd frontend; npx npm-check -y
+	cd frontend; npm update
+
+.PHONY: update-precommit
+update-precommit:
+	pre-commit autoupdate
 
 .PHONY: docs
 docs:
@@ -89,17 +99,17 @@ translations-fetch:
 # Build and upload the website.
 .PHONY: gh-pages
 gh-pages:
-	git checkout master
+	git checkout main
 	git checkout --orphan gh-pages
 	tox -e docs
 	ls | grep -v 'build' | xargs rm -r
 	mv -f build/docs/* ./
-	rm -r build
+	rm -r build .builds .github
 	touch .nojekyll
 	git add -A
 	git commit -m 'Update gh-pages' --no-verify
 	git push --force git@github.com:beancount/fava.git gh-pages:gh-pages
-	git checkout master
+	git checkout main
 	git branch -D gh-pages
 
 # Create a binary using pyinstaller

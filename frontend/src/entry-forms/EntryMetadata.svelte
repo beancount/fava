@@ -1,7 +1,10 @@
 <script lang="ts">
+  import type { EntryMetadata } from "../entries";
   import { _ } from "../i18n";
 
-  export let meta: Record<string, unknown>;
+  import { metaValueToString, stringToMetaValue } from "./metadata";
+
+  export let meta: EntryMetadata;
 
   $: metakeys = Object.keys(meta).filter(
     (key) => !key.startsWith("_") && key !== "filename" && key !== "lineno"
@@ -13,7 +16,7 @@
   }
 
   function updateMetakey(currentKey: string, newKey: string) {
-    meta = Object.keys(meta).reduce<Record<string, unknown>>((m, key) => {
+    meta = Object.keys(meta).reduce<EntryMetadata>((m, key) => {
       if (key === currentKey) {
         m[newKey] = meta[currentKey];
       } else {
@@ -53,7 +56,10 @@
       type="text"
       class="value"
       placeholder={_("Value")}
-      bind:value={meta[metakey]}
+      value={metaValueToString(meta[metakey])}
+      on:change={(event) => {
+        meta[metakey] = stringToMetaValue(event.currentTarget.value);
+      }}
     />
     {#if i === metakeys.length - 1}
       <button

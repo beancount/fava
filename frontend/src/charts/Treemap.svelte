@@ -17,7 +17,7 @@
 
   $: height = Math.min(width / 2.5, 400);
 
-  const tree = treemap<AccountHierarchyDatum>().paddingInner(1);
+  const tree = treemap<AccountHierarchyDatum>().paddingInner(2).round(true);
   $: root = tree.size([width, height])(data);
   $: leaves = root.leaves().filter((d) => d.value);
 
@@ -38,14 +38,14 @@
     )})<em>${d.data.account}</em>`;
   }
 
-  function setOpacity(
+  function setVisibility(
     node: SVGTextElement,
     param: HierarchyRectangularNode<AccountHierarchyDatum>
   ) {
     function update(d: HierarchyRectangularNode<AccountHierarchyDatum>) {
       const length = node.getComputedTextLength();
-      node.style.opacity =
-        d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? "1" : "0";
+      node.style.visibility =
+        d.x1 - d.x0 > length + 4 && d.y1 - d.y0 > 14 ? "visible" : "hidden";
     }
     update(param);
     return { update };
@@ -60,7 +60,7 @@
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <text
-        use:setOpacity={d}
+        use:setVisibility={d}
         on:click={() => router.navigate(urlFor(`account/${d.data.account}/`))}
         dy=".5em"
         x={(d.x1 - d.x0) / 2}
@@ -76,11 +76,6 @@
 <style>
   svg {
     shape-rendering: crispEdges;
-  }
-
-  rect {
-    stroke: var(--color-treemap-text);
-    stroke-width: 2px;
   }
 
   text {

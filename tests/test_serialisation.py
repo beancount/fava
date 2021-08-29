@@ -205,7 +205,7 @@ def test_deserialise() -> None:
     )
     assert deserialise(json_txn) == txn
 
-    with pytest.raises(KeyError):
+    with pytest.raises(FavaAPIException):
         deserialise({})
 
     with pytest.raises(FavaAPIException):
