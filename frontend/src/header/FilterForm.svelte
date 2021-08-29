@@ -17,7 +17,7 @@
     return match ? match[0] : value;
   }
   function valueSelector(value: string, input: HTMLInputElement) {
-    const selectionStart = input.selectionStart || 0;
+    const selectionStart = input.selectionStart ?? 0;
     const match = input.value.slice(0, selectionStart).match(/\S*$/);
     return match
       ? `${input.value.slice(

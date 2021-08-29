@@ -38,8 +38,8 @@
   $: x1 = scaleBand()
     .domain(data[0].values.map((d) => d.name))
     .range([0, x0.bandwidth()]);
-  let yMin = 0;
-  let yMax = 0;
+  let yMin: number;
+  let yMax: number;
   $: [yMin = 0, yMax = 0] = extent(
     merge<BarChartDatumValue>(data.map((d) => d.values)),
     (d) => d.value

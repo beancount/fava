@@ -9,6 +9,7 @@
   import { axis } from "./axis";
   import { scatterplotScale } from "./helpers";
   import type { ScatterPlotDatum } from "./scatterplot";
+  import type { TooltipFindNode } from "./tooltip";
   import { positionedTooltip } from "./tooltip";
 
   export let data: ScatterPlotDatum[];
@@ -46,25 +47,22 @@
   $: quad = quadtree(
     data,
     (d) => x(d.date),
-    (d) => y(d.type) || 0
+    (d) => y(d.type) ?? 0
   );
 
   function tooltipText(d: ScatterPlotDatum) {
     return `${d.description}<em>${day(d.date)}</em>`;
   }
 
-  function tooltipInfo(
-    xPos: number,
-    yPos: number
-  ): [number, number, string] | undefined {
+  const tooltipFindNode: TooltipFindNode = (xPos, yPos) => {
     const d = quad.find(xPos, yPos);
-    return d ? [x(d.date), y(d.type) || 0, tooltipText(d)] : undefined;
-  }
+    return d && [x(d.date), y(d.type) ?? 0, tooltipText(d)];
+  };
 </script>
 
 <svg {width} {height}>
   <g
-    use:positionedTooltip={tooltipInfo}
+    use:positionedTooltip={tooltipFindNode}
     transform={`translate(${margin.left},${margin.top})`}
   >
     <g

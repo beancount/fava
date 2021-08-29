@@ -42,8 +42,8 @@ export function bar(
   const data = parsedData.map((d) => ({
     values: currencies.map((name) => ({
       name,
-      value: d.balance[name] || 0,
-      budget: d.budgets[name] || 0,
+      value: d.balance[name] ?? 0,
+      budget: d.budgets[name] ?? 0,
     })),
     date: d.date,
     label: dateFormat(d.date),

@@ -39,8 +39,8 @@ export function parseGroupedQueryChart(
   const data = new Map<string, AccountHierarchyNode>();
   currencies.forEach((currency) => {
     const currencyHierarchy: AccountHierarchyNode = d3Hierarchy(root)
-      .sum((d) => d.balance[currency] || 0)
-      .sort((a, b) => (b.value || 0) - (a.value || 0));
+      .sum((d) => d.balance[currency] ?? 0)
+      .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
     if (currencyHierarchy.value !== undefined) {
       data.set(currency, currencyHierarchy);
     }
