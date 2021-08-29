@@ -117,6 +117,17 @@
 </div>
 
 <style>
+  .chart-mode span {
+    --button-color: var(--button-muted-color);
+    --button-background: var(--button-muted-background);
+  }
+  .chart-mode input {
+    display: none;
+  }
+  .chart-mode input:checked + span {
+    color: var(--color-background);
+    background-color: var(--color-header);
+  }
   .toggle-chart {
     height: 22px;
     padding: 2px 6px;

@@ -215,9 +215,9 @@ input[type="text"]:placeholder-shown {
 button,
 .button {
   padding: 6px 10px;
-  color: var(--color-background);
+  color: var(--button-color);
   cursor: pointer;
-  background-color: var(--color-header);
+  background-color: var(--button-background);
   border: 0;
   border-radius: 0;
   outline: 0;
@@ -241,8 +241,8 @@ button:hover,
 .button:focus,
 .button:active,
 .button:hover {
-  background-color: var(--color-header-darker);
-  box-shadow: 0 0 5px var(--color-header);
+  filter: brightness(90%);
+  box-shadow: 0 0 5px var(--color-background-darker);
 }
 
 button:disabled,
@@ -251,30 +251,8 @@ button.muted,
 .button:disabled,
 .button.inactive,
 .button.muted {
-  color: var(--color-text);
-  background-color: var(--color-background-darker);
-}
-
-button:disabled:focus,
-button:disabled:active,
-button:disabled:hover,
-button.inactive:focus,
-button.inactive:active,
-button.inactive:hover,
-button.muted:focus,
-button.muted:active,
-button.muted:hover,
-.button:disabled:focus,
-.button:disabled:active,
-.button:disabled:hover,
-.button.inactive:focus,
-.button.inactive:active,
-.button.inactive:hover,
-.button.muted:focus,
-.button.muted:active,
-.button.muted:hover {
-  filter: brightness(90%);
-  box-shadow: 0 0 5px var(--color-background-darker);
+  color: var(--button-muted-color);
+  background-color: var(--button-muted-background);
 }
 
 button.link,

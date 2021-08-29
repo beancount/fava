@@ -1,18 +1,3 @@
-.chart-mode span {
-  margin-right: 0;
-  color: var(--color-text);
-  background-color: var(--color-background-darker);
-}
-.chart-mode input {
-  display: none;
-}
-.chart-mode span:hover {
-  color: var(--color-background);
-}
-.chart-mode input:checked + span {
-  color: var(--color-background);
-  background-color: var(--color-header);
-}
 svg text {
   font-family: var(--font-family);
   fill: var(--color-text-lightest);
