@@ -15,7 +15,7 @@
 
 .tree-table p > span {
   margin-right: -1px;
-  border: 1px solid var(--color-table-header-background);
+  border: 1px solid var(--table-header-background);
 }
 
 .tree-table .account-cell {
@@ -91,7 +91,7 @@
 .tree-table .has-children::before {
   margin: 0 -10px 0 0;
   content: "";
-  border-top: 5px solid var(--color-treetable-expander);
+  border-top: 5px solid var(--treetable-expander);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
 }
@@ -137,7 +137,7 @@
 
 .tree-table .toggled .balance-children {
   display: block;
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 .tree-table .toggled .has-children::before {
@@ -154,16 +154,16 @@
 .tree-table .diff {
   margin-right: 3px;
   font-size: 0.9em;
-  color: var(--color-budget-zero);
+  color: var(--budget-zero);
   white-space: nowrap;
 }
 
 .tree-table .diff.negative {
-  color: var(--color-budget-negative);
+  color: var(--budget-negative);
 }
 
 .tree-table .diff.positive {
-  color: var(--color-budget-positive);
+  color: var(--budget-positive);
 }
 
 /* For two or more operating currencies, set a slightly smaller size. */

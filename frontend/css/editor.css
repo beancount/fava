@@ -1,12 +1,12 @@
 /* Editor */
 
 .cm-editor .cm-gutters {
-  background: var(--color-sidebar-background);
-  border-right: 1px solid var(--color-sidebar-border);
+  background: var(--sidebar-background);
+  border-right: 1px solid var(--sidebar-border);
 }
 .cm-editor .cm-scroller {
   font-family: var(--font-family-editor);
 }
 .cm-editor .cm-placeholder {
-  color: var(--color-placeholder);
+  color: var(--placeholder-color);
 }

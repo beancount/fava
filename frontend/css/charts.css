@@ -1,6 +1,6 @@
 svg text {
   font-family: var(--font-family);
-  fill: var(--color-text-lightest);
+  fill: var(--text-color-lightest);
 }
 .tooltip {
   position: absolute;
@@ -10,9 +10,9 @@ svg text {
   font-family: var(--font-family-monospaced);
   text-align: center;
   pointer-events: none;
-  background: var(--color-background);
-  border: 1px solid var(--color-background-darkest);
-  box-shadow: 0 0 5px var(--color-background-darker);
+  background: var(--background);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 5px var(--border);
   opacity: 0;
   transform: translate(-50%, -100%);
 }
@@ -25,11 +25,11 @@ svg text {
   margin-left: -15px;
   content: "";
   border: 15px solid transparent;
-  border-top-color: var(--color-background-darkest);
+  border-top-color: var(--border);
 }
 .tooltip em {
   display: block;
   margin-top: 5px;
   font-family: var(--font-family);
-  color: var(--color-text-lightest);
+  color: var(--text-color-lightest);
 }

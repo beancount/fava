@@ -45,7 +45,7 @@
     height: 42px;
     padding: 6px 4px;
     text-align: center;
-    border-color: var(--color-sidebar-border);
+    border-color: var(--sidebar-border);
     border-style: solid;
     border-width: 0 1px 1px 0;
   }
@@ -53,7 +53,7 @@
   .navigation .add-transaction-button {
     top: 42px;
     font-size: 30px;
-    color: var(--color-mobile-button-text);
+    color: var(--mobile-button-text);
   }
 
   aside.active .add-transaction-button {
@@ -68,7 +68,7 @@
 
   .aside-button.active {
     left: var(--aside-width);
-    background-color: var(--color-sidebar-background);
+    background-color: var(--sidebar-background);
     box-shadow: none;
   }
 }

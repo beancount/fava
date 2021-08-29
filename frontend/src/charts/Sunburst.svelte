@@ -83,7 +83,7 @@
     opacity: 0.5;
   }
   .account {
-    fill: var(--color-text);
+    fill: var(--text-color);
   }
   .balance {
     font-family: var(--font-family-monospaced);

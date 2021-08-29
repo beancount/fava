@@ -92,8 +92,8 @@
 <style>
   .fieldset {
     height: 3rem;
-    background: var(--color-sidebar-background);
-    border-bottom: 1px solid var(--color-sidebar-border);
+    background: var(--sidebar-background);
+    border-bottom: 1px solid var(--sidebar-border);
   }
 
   .dropdown {
@@ -134,16 +134,16 @@
     max-height: 400px;
     margin: 0.75rem 0 0 -0.5rem;
     overflow-y: auto;
-    background-color: var(--color-background);
-    border: 1px solid var(--color-background-darker);
+    background-color: var(--background);
+    border: 1px solid var(--border);
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
-    box-shadow: 0 3px 6px var(--color-transparent-black);
+    box-shadow: 0 3px 6px var(--transparent-black);
   }
 
   li:hover,
   span:hover {
-    background-color: var(--color-background-darkest);
+    background-color: var(--background-darker);
   }
 
   span:hover > ul {

@@ -31,6 +31,6 @@
 
 <style>
   span {
-    color: var(--color-text-lighter);
+    color: var(--text-color-lighter);
   }
 </style>

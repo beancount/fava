@@ -79,7 +79,7 @@
     max-height: 100%;
     padding: 1em;
     margin: 0.5em;
-    background: var(--color-background);
+    background: var(--background);
     box-shadow: 0 0 20px var(--overlay-wrapper-background);
   }
   .close {
@@ -90,7 +90,7 @@
     height: 2em;
     margin: 0;
     line-height: 1em;
-    color: var(--color-text-lighter);
+    color: var(--text-color-lighter);
   }
   .content :global(form),
   .content > :global(div) {

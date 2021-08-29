@@ -88,17 +88,17 @@
     margin-bottom: -1px;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid var(--color-table-border);
+    border: 1px solid var(--table-border);
   }
   .count {
     opacity: 0.6;
   }
   .selected,
   .drag {
-    background-color: var(--color-table-header-background);
+    background-color: var(--table-header-background);
   }
   .toggle {
-    color: var(--color-treetable-expander);
+    color: var(--treetable-expander);
     visibility: hidden;
   }
   .has-children > .toggle {

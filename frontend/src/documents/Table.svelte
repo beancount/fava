@@ -86,6 +86,6 @@
   }
   .selected,
   tr:hover {
-    background-color: var(--color-table-header-background);
+    background-color: var(--table-header-background);
   }
 </style>

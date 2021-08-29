@@ -69,7 +69,7 @@
   div {
     margin-bottom: 1.5em;
     font-size: 1em;
-    color: var(--color-text-lightest);
+    color: var(--text-color-lightest);
     text-align: center;
   }
 
@@ -79,11 +79,11 @@
   }
 
   span + span {
-    border-left: 1px solid var(--color-text-lighter);
+    border-left: 1px solid var(--text-color-lighter);
   }
 
   span.selected,
   span:hover {
-    color: var(--color-text-lighter);
+    color: var(--text-color-lighter);
   }
 </style>

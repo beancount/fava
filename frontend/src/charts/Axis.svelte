@@ -35,13 +35,10 @@
   g :global(path),
   g :global(line) {
     fill: none;
-    stroke: var(--color-chart-axis);
+    stroke: var(--chart-axis);
     shape-rendering: crispEdges;
   }
-  g.y :global(line) {
-    opacity: 0.2;
-    stroke: var(--color-chart-axis);
-  }
+  g.y :global(line),
   g.y :global(path.domain) {
     opacity: 0.2;
   }

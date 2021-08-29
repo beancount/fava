@@ -113,14 +113,14 @@
     display: block;
     content: "";
     border: 0;
-    border-top: 13px solid var(--color-background);
+    border-top: 13px solid var(--background);
     border-right: 9px solid transparent;
     border-left: 9px solid transparent;
   }
   .toggle-chart.closed::before {
     border: 0;
     border-right: 9px solid transparent;
-    border-bottom: 13px solid var(--color-background);
+    border-bottom: 13px solid var(--background);
     border-left: 9px solid transparent;
   }
 </style>

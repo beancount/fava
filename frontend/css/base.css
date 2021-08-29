@@ -11,8 +11,8 @@ body {
   font-size: 14px;
   font-weight: 400;
   line-height: 1.5;
-  color: var(--color-text);
-  background-color: var(--color-background);
+  color: var(--text-color);
+  background-color: var(--background);
 }
 
 p,
@@ -35,8 +35,8 @@ code,
 pre {
   font-family: var(--font-family-monospaced);
   white-space: pre;
-  background-color: var(--color-code-background);
-  border: 1px solid var(--color-background-darker);
+  background-color: var(--code-background);
+  border: 1px solid var(--border);
   border-radius: 3px;
 }
 
@@ -76,24 +76,24 @@ td.num,
 th.num {
   width: 7em;
   font-family: var(--font-family-monospaced);
-  color: var(--color-text);
+  color: var(--text-color);
   text-align: right;
 }
 
 thead th,
 tfoot td {
   font-weight: 400;
-  color: var(--color-table-header-text);
-  background-color: var(--color-table-header-background);
-  border: 1px solid var(--color-table-header-background);
+  color: var(--table-header-text);
+  background-color: var(--table-header-background);
+  border: 1px solid var(--table-header-background);
 }
 
 tbody tr:nth-child(2n) {
-  background-color: var(--color-sidebar-background);
+  background-color: var(--sidebar-background);
 }
 
 tbody td {
-  border: 1px solid var(--color-table-border);
+  border: 1px solid var(--table-border);
 }
 
 table pre {
@@ -109,7 +109,7 @@ h3 {
   padding: 0;
   margin: 0 0.5rem 1rem 0;
   font-weight: 500;
-  color: var(--color-headings);
+  color: var(--heading-color);
 }
 
 h2 {
@@ -126,7 +126,7 @@ h5 {
 }
 
 hr {
-  border: 1px solid var(--color-background-darker);
+  border: 1px solid var(--border);
 }
 
 b,
@@ -138,14 +138,14 @@ a {
   text-decoration: none;
 }
 
-a:hover,
-a:focus {
-  color: var(--color-links-hover);
-}
-
 a:link,
 a:visited {
-  color: var(--color-links);
+  color: var(--link-color);
+}
+
+a:hover,
+a:focus {
+  color: var(--link-hover-color);
 }
 
 a:active,
@@ -166,13 +166,13 @@ button,
 input,
 textarea {
   font: inherit;
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 input,
 textarea {
   padding: 6px 10px;
-  border: 1px solid var(--color-background-darkest);
+  border: 1px solid var(--border-darker);
 }
 
 label {
@@ -184,7 +184,7 @@ select {
 }
 
 input:invalid {
-  border: 1px solid var(--color-error);
+  border: 1px solid var(--error);
   outline: none;
   box-shadow: none;
 }
@@ -200,16 +200,16 @@ input[type="date"]::-webkit-clear-button {
 }
 
 input[type="text"]::placeholder {
-  color: var(--color-placeholder);
+  color: var(--placeholder-color);
   opacity: 1;
 }
 
 input[type="text"]::placeholder:focus {
-  color: var(--color-placeholder);
+  color: var(--placeholder-color);
 }
 
 input[type="text"]:placeholder-shown {
-  background-color: var(--background-placeholder);
+  background-color: var(--placeholder-background);
 }
 
 button,
@@ -242,7 +242,7 @@ button:hover,
 .button:active,
 .button:hover {
   filter: brightness(90%);
-  box-shadow: 0 0 5px var(--color-background-darker);
+  box-shadow: 0 0 5px var(--border);
 }
 
 button:disabled,
@@ -258,7 +258,7 @@ button.muted,
 button.link,
 .button.link {
   padding: 0;
-  color: var(--color-links);
+  color: var(--link-color);
   background: none;
 }
 
@@ -282,7 +282,7 @@ button.round,
 .button:link,
 .button:visited {
   height: 100%;
-  color: var(--color-background);
+  color: var(--background);
 }
 
 .hidden.hidden {
@@ -295,7 +295,7 @@ button.round,
 }
 
 .dragover {
-  background-color: var(--color-links-transparent);
+  background-color: var(--dragover-background);
 }
 
 .headerline {
@@ -311,11 +311,11 @@ button.round,
 }
 
 .headerline a {
-  color: var(--color-text-lighter);
+  color: var(--text-color-lighter);
 }
 
 .headerline a:hover {
-  color: var(--color-text);
+  color: var(--text-color);
 }
 
 kbd {
@@ -323,12 +323,12 @@ kbd {
   padding: 3px 6px;
   margin: 0 1px;
   font: 0.8em var(--font-family-monospaced);
-  color: var(--color-text-lighter);
-  background-color: var(--color-background);
-  border: solid 1px var(--color-background-darker);
-  border-bottom-color: var(--color-background-darkest);
+  color: var(--text-color-lighter);
+  background-color: var(--background);
+  border: solid 1px var(--border);
+  border-bottom-color: var(--border-darker);
   border-radius: 3px;
-  box-shadow: inset 0 -1px 0 var(--color-background-darkest);
+  box-shadow: inset 0 -1px 0 var(--border-darker);
 }
 
 .keyboard-tooltip {
@@ -337,9 +337,9 @@ kbd {
   display: inline-block;
   padding: 0.3em 0.5em;
   font-size: 0.9em;
-  color: var(--color-background);
+  color: var(--background);
   text-align: center;
-  background-color: var(--color-text);
+  background-color: var(--text-color);
   opacity: 0.9;
 }
 
@@ -395,19 +395,19 @@ td .status-indicator {
 }
 
 .status-indicator.status-red {
-  background-color: var(--color-status-red);
+  background-color: var(--red);
 }
 
 .status-indicator.status-yellow {
-  background-color: var(--color-status-yellow);
+  background-color: var(--yellow);
 }
 
 .status-indicator.status-green {
-  background-color: var(--color-status-green);
+  background-color: var(--green);
 }
 
 .status-indicator.status-gray {
-  background-color: var(--color-status-gray);
+  background-color: var(--gray);
 }
 
 .statistics-update-activity .indicator-header {
@@ -434,7 +434,7 @@ td .status-indicator {
   right: 4px;
   display: block;
   content: "";
-  border-top: 5px solid var(--color-text-lightest);
+  border-top: 5px solid var(--text-color-lightest);
   border-right: 5px solid transparent;
   border-left: 5px solid transparent;
 }
@@ -446,7 +446,7 @@ td .status-indicator {
   display: block;
   content: "";
   border-right: 5px solid transparent;
-  border-bottom: 5px solid var(--color-text-lightest);
+  border-bottom: 5px solid var(--text-color-lightest);
   border-left: 5px solid transparent;
 }
 

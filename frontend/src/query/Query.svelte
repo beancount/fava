@@ -104,7 +104,7 @@
 
   div :global(.query-error) {
     font-family: var(--font-family-monospaced);
-    color: var(--color-background);
-    background: var(--color-error);
+    color: var(--background);
+    background: var(--error);
   }
 </style>

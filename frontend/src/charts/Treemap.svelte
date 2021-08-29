@@ -79,7 +79,6 @@
   svg {
     shape-rendering: crispEdges;
   }
-
   text {
     cursor: pointer;
   }

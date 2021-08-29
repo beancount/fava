@@ -93,6 +93,6 @@
     resize: horizontal;
   }
   .fixed-fullsize-container > :global(* + *) {
-    border-left: thin solid var(--color-sidebar-border);
+    border-left: thin solid var(--sidebar-border);
   }
 </style>

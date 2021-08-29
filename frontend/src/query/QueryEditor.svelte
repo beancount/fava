@@ -46,7 +46,7 @@
     height: auto;
     margin-right: 0.5em;
     font-size: 16px;
-    border: 1px solid var(--color-background-darker);
+    border: 1px solid var(--border);
   }
 
   form :global(.cm-editor) {

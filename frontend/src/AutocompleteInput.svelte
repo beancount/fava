@@ -152,9 +152,9 @@
     z-index: var(--z-index-autocomplete);
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: var(--color-background);
-    border: 1px solid var(--color-background-darkest);
-    box-shadow: 0 3px 3px var(--color-background-darker);
+    background-color: var(--background);
+    border: 1px solid var(--border-darker);
+    box-shadow: 0 3px 3px var(--border);
   }
 
   li {
@@ -166,8 +166,8 @@
 
   li.selected,
   li:hover {
-    color: var(--color-background);
-    background-color: var(--color-links);
+    color: var(--background);
+    background-color: var(--link-color);
   }
 
   button {
@@ -181,7 +181,7 @@
     height: 1.2em;
     padding: 0 0.05em;
     margin: 0 -0.05em;
-    background-color: var(--color-autocomplete-match);
+    background-color: var(--autocomplete-match);
     border-radius: 2px;
   }
 </style>

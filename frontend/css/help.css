@@ -1,12 +1,8 @@
 /* Help Pages */
 
-:root {
-  --color-help-sidebar: #f8f8f8;
-  --color-help-sidebar-border: #eaeaea;
-  --help-max-width: 600px;
-}
-
 .help {
+  --help-max-width: 600px;
+
   max-width: calc(var(--help-max-width) + 160px);
 }
 
@@ -43,8 +39,8 @@
   padding: 10px 10px 0;
   margin: 0 0 10px 10px;
   font-size: 1.1em;
-  background-color: var(--color-help-sidebar);
-  border: 1px solid var(--color-help-sidebar-border);
+  background-color: var(--help-sidebar-background);
+  border: 1px solid var(--help-sidebar-border);
 }
 
 .help-sidebar a:hover,

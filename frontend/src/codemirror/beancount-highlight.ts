@@ -4,23 +4,23 @@ export const beancountHighlight = HighlightStyle.define([
   {
     // Dates
     tag: tags.special(tags.number),
-    color: "var(--color-editor-date)",
+    color: "var(--editor-date)",
   },
   {
     // Accounts
     tag: tags.className,
-    color: "var(--color-editor-account)",
+    color: "var(--editor-account)",
   },
   {
     // Plain comments
     tag: tags.comment,
-    color: "var(--color-editor-comment)",
+    color: "var(--editor-comment)",
   },
   {
     // Sections
     tag: tags.special(tags.lineComment),
-    color: "var(--color-editor-comment)",
-    border: "solid 1px var(--color-editor-comment)",
+    color: "var(--editor-comment)",
+    border: "solid 1px var(--editor-comment)",
     borderRadius: "2px",
     paddingRight: "10px",
     fontWeight: "500",
@@ -34,21 +34,21 @@ export const beancountHighlight = HighlightStyle.define([
     // Directives
     tag: tags.keyword,
     fontWeight: "500",
-    color: "var(--color-editor-directive)",
+    color: "var(--editor-directive)",
   },
   {
     // Option name
     tag: tags.standard(tags.string),
-    color: "var(--color-editor-class)",
+    color: "var(--editor-class)",
   },
   {
     // Invalid token
     tag: tags.invalid,
-    color: "var(--color-editor-invalid)",
+    color: "var(--editor-invalid)",
   },
   {
     // Trailing whitespace
     tag: tags.special(tags.invalid),
-    backgroundColor: "var(--color-editor-trailing-whitespace)",
+    backgroundColor: "var(--editor-trailing-whitespace)",
   },
 ]);

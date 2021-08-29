@@ -74,7 +74,7 @@
     padding: 0.5rem;
     margin: 0.5rem 0;
     cursor: pointer;
-    background-color: var(--color-sidebar-background);
+    background-color: var(--sidebar-background);
   }
   .header button {
     float: right;

@@ -60,6 +60,6 @@
 <style>
   div {
     margin-bottom: 0.5rem;
-    border: 1px solid var(--color-sidebar-border);
+    border: 1px solid var(--sidebar-border);
   }
 </style>

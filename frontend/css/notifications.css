@@ -10,14 +10,14 @@
   width: 100%;
   padding: 5px 10px;
   margin-bottom: 0.5em;
-  color: var(--color-notification);
+  color: var(--notification-color);
   cursor: pointer;
-  background-color: var(--color-notification-info);
+  background-color: var(--green);
 }
 .notifications .error {
-  background-color: var(--color-notification-error);
+  background-color: var(--error);
 }
 .notifications .warning {
-  color: var(--color-text);
-  background-color: var(--color-notification-warning);
+  color: var(--text-color);
+  background-color: var(--yellow);
 }

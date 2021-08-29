@@ -89,10 +89,10 @@
     flex-wrap: wrap;
     padding-top: 7px;
     margin: 0;
-    color: var(--color-text);
+    color: var(--text-color);
 
-    --color-placeholder: var(--color-header-tinted);
-    --background-placeholder: var(--color-header-light);
+    --placeholder-color: var(--header-placeholder-color);
+    --placeholder-background: var(--header-placeholder-background);
   }
 
   form > :global(span) {
@@ -102,13 +102,13 @@
 
   form :global(input) {
     padding: 8px 25px 8px 10px;
-    background-color: var(--color-background);
+    background-color: var(--background);
     border: 0;
     outline: none;
   }
 
   form :global([type="text"]:focus) {
-    background-color: var(--color-background);
+    background-color: var(--background);
   }
 
   [type="submit"] {
