@@ -10,7 +10,7 @@
   import { ctx } from "../format";
   import { lineChartMode } from "../stores/chart";
 
-  import { axis } from "./axis";
+  import Axis from "./Axis.svelte";
   import { currenciesScale } from "./helpers";
   import type { LineChart, LineChartDatum } from "./line";
   import type { TooltipFindNode } from "./tooltip";
@@ -98,12 +98,8 @@
     use:positionedTooltip={tooltipFindNode}
     transform={`translate(${margin.left},${margin.top})`}
   >
-    <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`}
-    />
-    <g class="y axis" use:axis={yAxis} />
+    <Axis x axis={xAxis} {innerHeight} />
+    <Axis y axis={yAxis} />
     {#if $lineChartMode === "area"}
       <g class="area" filter={futureFilter}>
         {#each data as d}

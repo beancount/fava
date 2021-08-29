@@ -6,7 +6,7 @@
 
   import { day } from "../format";
 
-  import { axis } from "./axis";
+  import Axis from "./Axis.svelte";
   import { scatterplotScale } from "./helpers";
   import type { ScatterPlotDatum } from "./scatterplot";
   import type { TooltipFindNode } from "./tooltip";
@@ -65,12 +65,8 @@
     use:positionedTooltip={tooltipFindNode}
     transform={`translate(${margin.left},${margin.top})`}
   >
-    <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`}
-    />
-    <g class="y axis" use:axis={yAxis} />
+    <Axis x axis={xAxis} {innerHeight} />
+    <Axis y axis={yAxis} />
     <g>
       {#each data as dot}
         <circle

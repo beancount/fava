@@ -7,7 +7,7 @@
 
   import { ctx } from "../format";
 
-  import { axis } from "./axis";
+  import Axis from "./Axis.svelte";
   import type { BarChart, BarChartDatumValue } from "./bar";
   import { currenciesScale, filterTicks, setTimeFilter } from "./helpers";
   import { followingTooltip } from "./tooltip";
@@ -65,12 +65,8 @@
 
 <svg {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
-    <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`}
-    />
-    <g class="y axis" use:axis={yAxis} />
+    <Axis x axis={xAxis} {innerHeight} />
+    <Axis y axis={yAxis} />
     {#each data as group}
       <g
         class="group"
