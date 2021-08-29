@@ -16,6 +16,7 @@
   import ChartLegend from "./ChartLegend.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
   import LineChart from "./LineChart.svelte";
+  import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
   import type { NamedChartTypes } from ".";
@@ -63,35 +64,21 @@
           {/each}
         </select>
       {/if}
-      <span class="chart-mode">
-        <label>
-          <input
-            type="radio"
-            bind:group={$hierarchyChartMode}
-            value="treemap"
-          />
-          <span class="button">{_("Treemap")}</span>
-        </label>
-        <label>
-          <input
-            type="radio"
-            bind:group={$hierarchyChartMode}
-            value="sunburst"
-          />
-          <span class="button">{_("Sunburst")}</span>
-        </label>
-      </span>
+      <ModeSwitch
+        bind:value={$hierarchyChartMode}
+        options={[
+          ["treemap", _("Treemap")],
+          ["sunburst", _("Sunburst")],
+        ]}
+      />
     {:else if chart.type === "linechart"}
-      <span class="chart-mode">
-        <label>
-          <input type="radio" bind:group={$lineChartMode} value="line" />
-          <span class="button">{_("Line chart")}</span>
-        </label>
-        <label>
-          <input type="radio" bind:group={$lineChartMode} value="area" />
-          <span class="button">{_("Area chart")}</span>
-        </label>
-      </span>
+      <ModeSwitch
+        bind:value={$lineChartMode}
+        options={[
+          ["line", _("Line chart")],
+          ["area", _("Area chart")],
+        ]}
+      />
     {/if}
   {:else}<span class="spacer" />{/if}
   <slot />
@@ -117,17 +104,6 @@
 </div>
 
 <style>
-  .chart-mode span {
-    --button-color: var(--button-muted-color);
-    --button-background: var(--button-muted-background);
-  }
-  .chart-mode input {
-    display: none;
-  }
-  .chart-mode input:checked + span {
-    color: var(--color-background);
-    background-color: var(--color-header);
-  }
   .toggle-chart {
     height: 22px;
     padding: 2px 6px;
