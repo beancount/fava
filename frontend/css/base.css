@@ -85,11 +85,11 @@ tfoot td {
   font-weight: 400;
   color: var(--table-header-text);
   background-color: var(--table-header-background);
-  border: 1px solid var(--table-header-background);
+  border: 1px solid var(--table-border);
 }
 
 tbody tr:nth-child(2n) {
-  background-color: var(--sidebar-background);
+  background-color: var(--table-background-even);
 }
 
 tbody td {

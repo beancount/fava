@@ -55,7 +55,8 @@
   /* Tables */
   --table-header-text: hsl(0, 0%, 40%);
   --table-header-background: hsl(0, 0%, 90%);
-  --table-border: hsl(0, 0%, 95%);
+  --table-border: hsl(0, 0%, 90%);
+  --table-background-even: hsl(0, 0%, 95%);
   --treetable-expander: #afc1d3;
   --budget-negative: #af3d3d;
   --budget-positive: #3daf46;

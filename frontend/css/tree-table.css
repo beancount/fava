@@ -15,7 +15,7 @@
 
 .tree-table p > span {
   margin-right: -1px;
-  border: 1px solid var(--table-header-background);
+  border: 1px solid var(--table-border);
 }
 
 .tree-table .account-cell {
