@@ -9,8 +9,10 @@
   import router from "../router";
 
   import { sunburstTree } from "./helpers";
-
-  import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
+  import type {
+    AccountHierarchyDatum,
+    AccountHierarchyNode,
+  } from "./hierarchy";
 
   export let data: AccountHierarchyNode;
   export let currency: string;
@@ -20,7 +22,7 @@
   $: radius = Math.min(width, height) / 2;
 
   function balanceText(d: AccountHierarchyNode): string {
-    const val = d.value || 0;
+    const val = d.value ?? 0;
     const rootVal = root.value || 1;
     return `${$ctx.currency(val)} ${currency} (${formatPercentage(
       val / rootVal

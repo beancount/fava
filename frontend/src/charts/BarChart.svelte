@@ -7,11 +7,10 @@
 
   import { ctx } from "../format";
 
-  import { axis } from "./axis";
+  import Axis from "./Axis.svelte";
+  import type { BarChart, BarChartDatumValue } from "./bar";
   import { currenciesScale, filterTicks, setTimeFilter } from "./helpers";
   import { followingTooltip } from "./tooltip";
-
-  import type { BarChart, BarChartDatumValue } from ".";
 
   export let data: BarChart["data"];
   export let width: number;
@@ -39,8 +38,8 @@
   $: x1 = scaleBand()
     .domain(data[0].values.map((d) => d.name))
     .range([0, x0.bandwidth()]);
-  let yMin = 0;
-  let yMax = 0;
+  let yMin: number;
+  let yMax: number;
   $: [yMin = 0, yMax = 0] = extent(
     merge<BarChartDatumValue>(data.map((d) => d.values)),
     (d) => d.value
@@ -66,12 +65,8 @@
 
 <svg {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
-    <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`}
-    />
-    <g class="y axis" use:axis={yAxis} />
+    <Axis x axis={xAxis} {innerHeight} />
+    <Axis y axis={yAxis} />
     {#each data as group}
       <g
         class="group"

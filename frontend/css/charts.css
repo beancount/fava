@@ -1,65 +1,7 @@
-.chart-mode span {
-  margin-right: 0;
-  color: var(--color-text);
-  background-color: var(--color-background-darker);
-}
-
-.chart-mode input {
-  display: none;
-}
-
-.chart-mode span:hover {
-  color: var(--color-background);
-}
-
-.chart-mode input:checked + span {
-  color: var(--color-background);
-  background-color: var(--color-header);
-}
-
-.toggle-chart {
-  height: 22px;
-  padding: 2px 6px;
-  margin: 0;
-}
-
-.toggle-chart::before {
-  display: block;
-  content: "";
-  border: 0;
-  border-top: 13px solid var(--color-background);
-  border-right: 9px solid transparent;
-  border-left: 9px solid transparent;
-}
-
-.toggle-chart.closed::before {
-  border: 0;
-  border-right: 9px solid transparent;
-  border-bottom: 13px solid var(--color-background);
-  border-left: 9px solid transparent;
-}
-
 svg text {
   font-family: var(--font-family);
   fill: var(--color-text-lightest);
 }
-
-svg .axis path,
-svg .axis line {
-  fill: none;
-  stroke: var(--color-chart-axis);
-  shape-rendering: crispEdges;
-}
-
-svg .axis.y line {
-  opacity: 0.2;
-  stroke: var(--color-chart-axis);
-}
-
-svg .axis.y path.domain {
-  opacity: 0.2;
-}
-
 .tooltip {
   position: absolute;
   z-index: var(--z-index-floating-ui);
@@ -74,7 +16,6 @@ svg .axis.y path.domain {
   opacity: 0;
   transform: translate(-50%, -100%);
 }
-
 .tooltip::before {
   position: absolute;
   top: 100%;
@@ -86,7 +27,6 @@ svg .axis.y path.domain {
   border: 15px solid transparent;
   border-top-color: var(--color-background-darkest);
 }
-
 .tooltip em {
   display: block;
   margin-top: 5px;

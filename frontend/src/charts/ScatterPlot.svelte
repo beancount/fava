@@ -4,13 +4,13 @@
   import { quadtree } from "d3-quadtree";
   import { scalePoint, scaleUtc } from "d3-scale";
 
-  import { dateFormat } from "../format";
+  import { day } from "../format";
 
-  import { axis } from "./axis";
+  import Axis from "./Axis.svelte";
   import { scatterplotScale } from "./helpers";
+  import type { ScatterPlotDatum } from "./scatterplot";
+  import type { TooltipFindNode } from "./tooltip";
   import { positionedTooltip } from "./tooltip";
-
-  import type { ScatterPlotDatum } from ".";
 
   export let data: ScatterPlotDatum[];
   export let width: number;
@@ -47,33 +47,26 @@
   $: quad = quadtree(
     data,
     (d) => x(d.date),
-    (d) => y(d.type) || 0
+    (d) => y(d.type) ?? 0
   );
 
   function tooltipText(d: ScatterPlotDatum) {
-    return `${d.description}<em>${dateFormat.day(d.date)}</em>`;
+    return `${d.description}<em>${day(d.date)}</em>`;
   }
 
-  function tooltipInfo(
-    xPos: number,
-    yPos: number
-  ): [number, number, string] | undefined {
+  const tooltipFindNode: TooltipFindNode = (xPos, yPos) => {
     const d = quad.find(xPos, yPos);
-    return d ? [x(d.date), y(d.type) || 0, tooltipText(d)] : undefined;
-  }
+    return d && [x(d.date), y(d.type) ?? 0, tooltipText(d)];
+  };
 </script>
 
 <svg {width} {height}>
   <g
-    use:positionedTooltip={tooltipInfo}
+    use:positionedTooltip={tooltipFindNode}
     transform={`translate(${margin.left},${margin.top})`}
   >
-    <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`}
-    />
-    <g class="y axis" use:axis={yAxis} />
+    <Axis x axis={xAxis} {innerHeight} />
+    <Axis y axis={yAxis} />
     <g>
       {#each data as dot}
         <circle

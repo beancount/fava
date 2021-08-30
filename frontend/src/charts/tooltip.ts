@@ -46,6 +46,12 @@ export function followingTooltip(
   };
 }
 
+/** A function to find the closest node and the content to show in the tooltip. */
+export type TooltipFindNode = (
+  x: number,
+  y: number
+) => [number, number, string] | undefined;
+
 /**
  * Svelte action to have the given <g> element act on mouse to show a tooltip.
  *
@@ -56,7 +62,7 @@ export function followingTooltip(
  */
 export function positionedTooltip(
   node: SVGGElement,
-  find: (x: number, y: number) => [number, number, string] | undefined
+  find: TooltipFindNode
 ): { destroy: () => void } {
   function mousemove(event: MouseEvent): void {
     const [xPointer, yPointer] = pointer(event);

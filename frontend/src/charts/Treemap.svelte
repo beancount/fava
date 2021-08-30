@@ -7,9 +7,11 @@
   import router from "../router";
 
   import { treemapScale } from "./helpers";
+  import type {
+    AccountHierarchyDatum,
+    AccountHierarchyNode,
+  } from "./hierarchy";
   import { followingTooltip } from "./tooltip";
-
-  import type { AccountHierarchyDatum, AccountHierarchyNode } from ".";
 
   export let data: AccountHierarchyNode;
   export let width: number;
@@ -30,7 +32,7 @@
   }
 
   function tooltipText(d: AccountHierarchyNode) {
-    const val = d.value || 0;
+    const val = d.value ?? 0;
     const rootValue = root.value || 1;
 
     return `${$ctx.currency(val)} ${currency} (${formatPercentage(

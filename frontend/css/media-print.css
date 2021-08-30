@@ -16,8 +16,7 @@
   }
 
   aside,
-  .aside-button,
-  .toggle-chart-container {
+  .aside-button {
     display: none;
   }
 }

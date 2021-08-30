@@ -63,6 +63,9 @@ interface DateFormatters {
   day: DateFormatter;
 }
 
+/** Format the date as a ISO-8601 date string. */
+export const day = utcFormat("%Y-%m-%d");
+
 /** Date formatters for human consumption. */
 export const dateFormat: DateFormatters = {
   year: utcFormat("%Y"),
@@ -70,7 +73,7 @@ export const dateFormat: DateFormatters = {
     `${date.getUTCFullYear()}Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
   month: utcFormat("%b %Y"),
   week: utcFormat("%YW%W"),
-  day: utcFormat("%Y-%m-%d"),
+  day,
 };
 
 /** Date formatters for the entry filter form. */
@@ -80,7 +83,7 @@ export const timeFilterDateFormat: DateFormatters = {
     `${date.getUTCFullYear()}-Q${Math.floor(date.getUTCMonth() / 3) + 1}`,
   month: utcFormat("%Y-%m"),
   week: utcFormat("%Y-W%W"),
-  day: utcFormat("%Y-%m-%d"),
+  day,
 };
 
 /** Today as a ISO-8601 date string. */

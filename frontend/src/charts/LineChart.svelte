@@ -10,11 +10,11 @@
   import { ctx } from "../format";
   import { lineChartMode } from "../stores/chart";
 
-  import { axis } from "./axis";
+  import Axis from "./Axis.svelte";
   import { currenciesScale } from "./helpers";
+  import type { LineChart, LineChartDatum } from "./line";
+  import type { TooltipFindNode } from "./tooltip";
   import { positionedTooltip } from "./tooltip";
-
-  import type { LineChart, LineChartDatum } from ".";
 
   export let data: LineChart["data"];
   export let width: number;
@@ -48,8 +48,8 @@
     max(data, (s) => s.values[s.values.length - 1].date) ?? today,
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
-  let yMin = 0;
-  let yMax = 0;
+  let yMin: number;
+  let yMax: number;
   $: [yMin = 0, yMax = 0] = extent(allValues, (v) => v.value);
   // Span y-axis as max minus min value plus 5 percent margin
   $: y = scaleLinear()
@@ -81,15 +81,12 @@
     .tickSize(-innerWidth)
     .tickFormat($ctx.short);
 
-  function tooltipInfo(
-    xPos: number,
-    yPos: number
-  ): [number, number, string] | undefined {
+  const tooltipFindNode: TooltipFindNode = (xPos, yPos) => {
     const d = quad.find(xPos, yPos);
-    return d ? [x(d.date), y(d.value), tooltipText($ctx, d)] : undefined;
-  }
+    return d && [x(d.date), y(d.value), tooltipText($ctx, d)];
+  };
 
-  $: hasFutureData = xDomain[1] > today;
+  $: futureFilter = xDomain[1] > today ? "url(#desaturateFuture)" : undefined;
 </script>
 
 <svg {width} {height}>
@@ -98,20 +95,13 @@
     <feBlend in2="SourceGraphic" />
   </filter>
   <g
-    use:positionedTooltip={tooltipInfo}
+    use:positionedTooltip={tooltipFindNode}
     transform={`translate(${margin.left},${margin.top})`}
   >
-    <g
-      class="x axis"
-      use:axis={xAxis}
-      transform={`translate(0,${innerHeight})`}
-    />
-    <g class="y axis" use:axis={yAxis} />
+    <Axis x axis={xAxis} {innerHeight} />
+    <Axis y axis={yAxis} />
     {#if $lineChartMode === "area"}
-      <g
-        class="area"
-        filter={hasFutureData ? "url(#desaturateFuture)" : undefined}
-      >
+      <g class="area" filter={futureFilter}>
         {#each data as d}
           <path
             d={areaShape(d.values) ?? undefined}
@@ -120,10 +110,7 @@
         {/each}
       </g>
     {/if}
-    <g
-      class="lines"
-      filter={hasFutureData ? "url(#desaturateFuture)" : undefined}
-    >
+    <g class="lines" filter={futureFilter}>
       {#each data as d}
         <path
           d={lineShape(d.values) ?? undefined}

@@ -16,6 +16,7 @@
   import ChartLegend from "./ChartLegend.svelte";
   import HierarchyContainer from "./HierarchyContainer.svelte";
   import LineChart from "./LineChart.svelte";
+  import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
   import type { NamedChartTypes } from ".";
@@ -63,35 +64,21 @@
           {/each}
         </select>
       {/if}
-      <span class="chart-mode">
-        <label>
-          <input
-            type="radio"
-            bind:group={$hierarchyChartMode}
-            value="treemap"
-          />
-          <span class="button">{_("Treemap")}</span>
-        </label>
-        <label>
-          <input
-            type="radio"
-            bind:group={$hierarchyChartMode}
-            value="sunburst"
-          />
-          <span class="button">{_("Sunburst")}</span>
-        </label>
-      </span>
+      <ModeSwitch
+        bind:value={$hierarchyChartMode}
+        options={[
+          ["treemap", _("Treemap")],
+          ["sunburst", _("Sunburst")],
+        ]}
+      />
     {:else if chart.type === "linechart"}
-      <span class="chart-mode">
-        <label>
-          <input type="radio" bind:group={$lineChartMode} value="line" />
-          <span class="button">{_("Line chart")}</span>
-        </label>
-        <label>
-          <input type="radio" bind:group={$lineChartMode} value="area" />
-          <span class="button">{_("Area chart")}</span>
-        </label>
-      </span>
+      <ModeSwitch
+        bind:value={$lineChartMode}
+        options={[
+          ["line", _("Line chart")],
+          ["area", _("Area chart")],
+        ]}
+      />
     {/if}
   {:else}<span class="spacer" />{/if}
   <slot />
@@ -115,3 +102,25 @@
     {:else}Invalid chart: {chart.type}{/if}
   {/if}
 </div>
+
+<style>
+  .toggle-chart {
+    height: 22px;
+    padding: 2px 6px;
+    margin: 0;
+  }
+  .toggle-chart::before {
+    display: block;
+    content: "";
+    border: 0;
+    border-top: 13px solid var(--color-background);
+    border-right: 9px solid transparent;
+    border-left: 9px solid transparent;
+  }
+  .toggle-chart.closed::before {
+    border: 0;
+    border-right: 9px solid transparent;
+    border-bottom: 13px solid var(--color-background);
+    border-left: 9px solid transparent;
+  }
+</style>

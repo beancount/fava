@@ -24,6 +24,14 @@
   --color-error: hsl(0, 100%, 30%);
   --color-warning: hsl(52, 84%, 56%);
   --color-code-background: #f8f8f8;
+
+  /* Buttons */
+  --button-color: #fff;
+  --button-background: hsl(203, 100%, 32%);
+  --button-muted-color: var(--color-text);
+  --button-muted-background: var(--color-background-darker);
+
+  /* Sidebar */
   --color-sidebar-text: #444;
   --color-sidebar-text-hover: var(--color-links);
   --color-sidebar-background: hsl(0, 0%, 96%);
