@@ -10,3 +10,5 @@ def test_report_page_globals():
     )
     result = extension_report_ledger.extensions.reports
     assert result == [("PortfolioList", "Portfolio List")]
+
+    extension_report_ledger.extensions.after_write_source("test", "test")

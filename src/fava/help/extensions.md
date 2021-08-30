@@ -64,7 +64,7 @@ Called after an `entry` has been inserted.
 
 ---
 
-### `after_entry_modified(entry: str, new_lines: str)`
+### `after_entry_modified(entry: Directive, new_lines: str)`
 
 Called after an `entry` has been modified, e.g., via the context popup.
 

@@ -1,7 +1,6 @@
 """Fava extensions"""
 import inspect
 import os
-from typing import Any
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -10,6 +9,7 @@ from typing import Type
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Custom
+from beancount.core.data import Directive
 
 from fava.core.module_base import FavaModule
 from fava.ext import FavaExtensionBase
@@ -55,10 +55,13 @@ class ExtensionModule(FavaModule):
             if ext.report_title is not None
         ]
 
-    def run_hook(self, event: str, *args: Any) -> None:
-        """Run a hook for all extensions."""
-        for ext in self._instances.values():
-            ext.run_hook(event, *args)
+    def exts_for_hook(self, hook: str) -> List[FavaExtensionBase]:
+        """Find all extensions that have implemented the given hook."""
+        return [
+            ext
+            for base, ext in self._instances.items()
+            if getattr(base, hook) != getattr(FavaExtensionBase, hook)
+        ]
 
     def template_and_extension(
         self, name: str
@@ -83,6 +86,26 @@ class ExtensionModule(FavaModule):
                     return ext_template.read(), ext
 
         raise LookupError("Extension report not found.")
+
+    # pylint: disable=missing-docstring
+
+    def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
+        for ext in self.exts_for_hook("after_entry_modified"):
+            ext.after_entry_modified(entry, new_lines)
+
+    def after_insert_entry(self, entry: Directive) -> None:
+        for ext in self.exts_for_hook("after_insert_entry"):
+            ext.after_insert_entry(entry)
+
+    def after_insert_metadata(
+        self, entry: Directive, key: str, value: str
+    ) -> None:
+        for ext in self.exts_for_hook("after_insert_metadata"):
+            ext.after_insert_metadata(entry, key, value)
+
+    def after_write_source(self, path: str, source: str) -> None:
+        for ext in self.exts_for_hook("after_write_source"):
+            ext.after_write_source(path, source)
 
 
 def extension_entries(

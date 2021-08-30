@@ -10,6 +10,8 @@ from typing import Tuple
 from typing import Type
 from typing import TYPE_CHECKING
 
+from beancount.core.data import Directive
+
 from fava.helpers import BeancountError
 
 if TYPE_CHECKING:
@@ -49,15 +51,19 @@ class FavaExtensionBase:
             self.config = None
         self.name = self.__class__.__qualname__
 
-    def run_hook(self, event: str, *args: Any) -> None:
-        """Run a hook.
+    def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
+        """Called after an `entry` has been modified."""
 
-        Args:
-            event: One of the possible events.
-        """
-        handler = getattr(self, event, None)
-        if handler is not None:
-            handler(*args)
+    def after_insert_entry(self, entry: Directive) -> None:
+        """Called after an `entry` has been inserted."""
+
+    def after_insert_metadata(
+        self, entry: Directive, key: str, value: str
+    ) -> None:
+        """Called after metadata (key: value) was added to an entry."""
+
+    def after_write_source(self, path: str, source: str) -> None:
+        """Called after `source` has been written to path."""
 
 
 def find_extensions(

@@ -108,7 +108,7 @@ class FileModule(FavaModule):
             with open(path, "w+b") as file:
                 file.write(contents)
 
-            self.ledger.extensions.run_hook("after_write_source", path, source)
+            self.ledger.extensions.after_write_source(path, source)
             self.ledger.load_file()
 
             return sha256(contents).hexdigest()
@@ -132,9 +132,7 @@ class FileModule(FavaModule):
                 key,
                 value,
             )
-            self.ledger.extensions.run_hook(
-                "after_insert_metadata", entry, key, value
-            )
+            self.ledger.extensions.after_insert_metadata(entry, key, value)
 
     def save_entry_slice(
         self, entry_hash: str, source_slice: str, sha256sum: str
@@ -142,7 +140,7 @@ class FileModule(FavaModule):
         """Save slice of the source file for an entry.
 
         Args:
-            entry: An entry.
+            entry_hash: An entry.
             source_slice: The lines that the entry should be replaced with.
             sha256sum: The sha256sum of the current lines of the entry.
 
@@ -154,11 +152,7 @@ class FileModule(FavaModule):
         with self.lock:
             entry = self.ledger.get_entry(entry_hash)
             ret = save_entry_slice(entry, source_slice, sha256sum)
-
-            self.ledger.extensions.run_hook(
-                "after_entry_modified", entry, source_slice
-            )
-
+            self.ledger.extensions.after_entry_modified(entry, source_slice)
             return ret
 
     def insert_entries(self, entries: Entries) -> None:
@@ -181,7 +175,7 @@ class FileModule(FavaModule):
                     currency_column,
                     indent,
                 )
-                self.ledger.extensions.run_hook("after_insert_entry", entry)
+                self.ledger.extensions.after_insert_entry(entry)
 
     def render_entries(self, entries: Entries) -> Generator[str, None, None]:
         """Return entries in Beancount format.
