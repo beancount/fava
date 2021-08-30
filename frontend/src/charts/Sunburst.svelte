@@ -8,7 +8,7 @@
   import { urlFor } from "../helpers";
   import router from "../router";
 
-  import { sunburstTree } from "./helpers";
+  import { sunburstTree } from "./hierarchy";
   import type {
     AccountHierarchyDatum,
     AccountHierarchyNode,
