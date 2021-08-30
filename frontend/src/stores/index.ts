@@ -4,6 +4,7 @@ import { derived, writable } from "svelte/store";
 import type { Interval } from "../lib/interval";
 import { DEFAULT_INTERVAL } from "../lib/interval";
 import { derived_array } from "../lib/store";
+import type { ValidationT } from "../lib/validation";
 import {
   array,
   boolean,
@@ -49,11 +50,16 @@ export const ledgerDataValidator = object({
 
 export const rawLedgerData = writable("");
 
-type LedgerData = ReturnType<typeof ledgerDataValidator>;
+type LedgerData = ValidationT<typeof ledgerDataValidator>;
 
-export const ledgerData: Readable<LedgerData> = derived(rawLedgerData, (s) =>
-  ledgerDataValidator(JSON.parse(s))
-);
+export const ledgerData: Readable<LedgerData> = derived(rawLedgerData, (s) => {
+  const res = ledgerDataValidator(JSON.parse(s));
+  if (!res.success) {
+    // TODO log error
+    throw new Error("Loading ledger data failed.");
+  }
+  return res.value;
+});
 
 /** Fava's options */
 export const favaOptions = derived(ledgerData, (val) => val.favaOptions);

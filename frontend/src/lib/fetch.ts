@@ -1,4 +1,4 @@
-import { isJsonObject, string } from "./validation";
+import { isJsonObject } from "./validation";
 
 /** Wrapper around fetch with some default options */
 export function fetch(
@@ -24,7 +24,11 @@ export async function handleJSON(response: Response): Promise<unknown> {
     throw new Error("Invalid response");
   }
   if (!data.success) {
-    throw new Error(string(data.error));
+    if (typeof data.error === "string") {
+      throw new Error(data.error);
+    } else {
+      throw new Error("Invalid response");
+    }
   }
   return data;
 }

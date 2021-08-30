@@ -159,18 +159,23 @@
 }
 
 .journal .description {
-  display: flex;
   flex: 1;
-  align-items: center;
   padding-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.journal .description .separator {
-  width: 4px;
-  height: 4px;
+.journal .show-postings .description {
+  white-space: normal;
+}
+
+.journal .description .separator::before {
   padding: 2px;
   margin: 0 6px;
-  background-color: var(--color-text-lighter);
+  font-weight: bold;
+  color: var(--color-text-lighter);
+  content: "•";
 }
 
 .journal .description .num {

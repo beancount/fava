@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
 
   import { bindKey } from "../keyboard-shortcuts";
+  import { log_error } from "../log";
   import { activeChart, showCharts } from "../stores/chart";
 
   import Chart from "./Chart.svelte";
@@ -13,7 +14,13 @@
   let charts: NamedChartTypes[] = [];
 
   onMount(() => {
-    charts = parseChartData();
+    const res = parseChartData();
+    if (res.success) {
+      charts = res.value;
+    } else {
+      log_error(res.value);
+    }
+    // TODO log error
     if (!charts.length) {
       $activeChart = undefined;
     }
