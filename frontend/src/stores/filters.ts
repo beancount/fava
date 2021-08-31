@@ -4,12 +4,14 @@ export const time_filter = writable("");
 export const account_filter = writable("");
 export const fql_filter = writable("");
 
-interface Filters {
+/** The three entry filters that Fava supports. */
+export type Filters = {
   account: string;
   filter: string;
   time: string;
-}
+};
 
+/** Get the current filters. */
 export function getFilterParams(): Filters {
   return {
     account: get(account_filter),

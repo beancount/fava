@@ -1,10 +1,8 @@
 import type { Entry } from "./entries";
 import { entryValidator, Transaction } from "./entries";
 import { urlFor } from "./helpers";
-import { fetch, handleJSON } from "./lib/fetch";
-import type { Result } from "./lib/result";
-import { ok } from "./lib/result";
-import type { ValidationT, Validator } from "./lib/validation";
+import { fetchJSON } from "./lib/fetch";
+import type { ValidationT } from "./lib/validation";
 import {
   array,
   boolean,
@@ -16,15 +14,7 @@ import {
 import { log_error } from "./log";
 import { notify } from "./notifications";
 import router from "./router";
-
-function validateResponse<T>(
-  data: unknown,
-  val: Validator<T>
-): Result<T, string> {
-  const validator = object({ data: val });
-  const res = validator(data);
-  return res.success ? ok(res.value.data) : res;
-}
+import type { Filters } from "./stores/filters";
 
 /** Required arguments for the various PUT API endpoints. */
 interface PutAPIInputs {
@@ -54,51 +44,57 @@ export async function put<T extends keyof PutAPIInputs>(
           body: JSON.stringify(body),
         };
   const url = urlFor(`api/${endpoint}`);
-  const json = await fetch(url, { method: "PUT", ...opts }).then(handleJSON);
-  const res = validateResponse(json, string);
+  const json = await fetchJSON(url, { method: "PUT", ...opts });
+  const res = string(json);
   if (res.success) {
     return res.value;
   }
-  throw new Error();
+  notify(`Invalid data returned in API request: ${res.value}`, "error");
+  throw new Error(res.value);
 }
 
 const getAPIValidators = {
   changed: boolean,
-  context: object({
-    content: string,
-    sha256sum: string,
-    slice: string,
-  }),
+  context: object({ content: string, sha256sum: string, slice: string }),
   errors: number,
   extract: array(entryValidator),
-  payee_accounts: array(string),
   move: string,
+  payee_accounts: array(string),
   payee_transaction: Transaction.validator,
-  query_result: object({
-    chart: unknown,
-    table: string,
-  }),
+  query_result: object({ chart: unknown, table: string }),
 };
 type GetAPITypes = typeof getAPIValidators;
+
+interface GetAPIParams {
+  changed: undefined;
+  context: { entry_hash: string };
+  errors: undefined;
+  extract: { filename: string; importer: string };
+  move: { filename: string; account: string; newName: string };
+  payee_accounts: { payee: string };
+  payee_transaction: { payee: string };
+  query_result: Filters & { query_string: string };
+}
 
 /**
  * Fetch an API endpoint and convert the JSON data to an object.
  * @param endpoint - the endpoint to fetch
  * @param params - a string to append as params or an object.
  */
-export async function get<T extends keyof GetAPITypes>(
+export async function get<T extends keyof GetAPIParams>(
   endpoint: T,
-  params?: Record<string, string>
+  ...[params]: GetAPIParams[T] extends undefined
+    ? [undefined?]
+    : [GetAPIParams[T]]
 ): Promise<ValidationT<GetAPITypes[T]>> {
   const url = urlFor(`api/${endpoint}`, params, false);
-  const responseData = await fetch(url);
-  const json = await handleJSON(responseData);
-  // @ts-expect-error TS doesn't infer the correct type here.
-  const res = validateResponse(json, getAPIValidators[endpoint]);
+  const json = await fetchJSON(url);
+  const res = getAPIValidators[endpoint](json);
   if (res.success) {
     return res.value as ValidationT<GetAPITypes[T]>;
   }
-  throw new Error();
+  notify(`Invalid data returned in API request: ${res.value}`, "error");
+  throw new Error(res.value);
 }
 
 /**
@@ -111,11 +107,7 @@ export async function moveDocument(
   newName: string
 ): Promise<boolean> {
   try {
-    const msg = await get("move", {
-      filename,
-      account,
-      newName,
-    });
+    const msg = await get("move", { filename, account, newName });
     notify(msg);
     return true;
   } catch (error) {
@@ -134,8 +126,8 @@ export async function moveDocument(
 export async function deleteDocument(filename: string): Promise<boolean> {
   try {
     const url = urlFor("api/document", { filename }, false);
-    const res = await fetch(url, { method: "DELETE" }).then(handleJSON);
-    const d = validateResponse(res, string);
+    const res = await fetchJSON(url, { method: "DELETE" });
+    const d = string(res);
     notify(d.value);
     return d.success;
   } catch (error) {
