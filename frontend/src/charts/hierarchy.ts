@@ -77,10 +77,26 @@ export function hierarchy(
   return ok({ type: "hierarchy" as const, data });
 }
 
-interface SunburstNode extends HierarchyRectangularNode<AccountHierarchyDatum> {
-  colorIndex: number,
-  color: Color,
-}
+/* Sunburst chart helpers */
+
+/* First-level wedges are assigned a colour category from this list.
+ * Each entry is a [min, max] range of HCL hues.  The colour chosen will be the
+ * midpoint of the range, but second-level colours will be shades chosen from
+ * the range.
+ */
+const COLOR_CATEGORIES = [
+  [344, 360+24], // red
+  // [63, 74], // yellow -- too narrow for multiple shades
+  [100, 144], // green
+  // [191, 202], // aqua -- too narrow for multiple shades
+  [231, 279], // blue
+  [291, 322], // purple
+];
+
+/* Each second-level wedge is assigned a colour from within the colour category
+ * of its parent wedge.  The hue range is divided into NUM_SHADES choices.
+ */
+const NUM_SHADES = 3;
 
 /* This is the minimum width in pixels, measured at the inner diameter of the
  * sunburst chart, of a slice.  Slices smaller than this are grouped into an
@@ -89,6 +105,111 @@ interface SunburstNode extends HierarchyRectangularNode<AccountHierarchyDatum> {
  * border-width into account.
  */
 const SUNBURST_MIN_SLICE_WIDTH = 3;
+
+interface SunburstNode extends HierarchyRectangularNode<AccountHierarchyDatum> {
+  colorIndex: number,
+  color: Color,
+}
+
+/* Return a 0-based index representing the colour to give the sunburst wedge
+ * for this tree node.  The actual colours are looked up by sunburstColor using
+ * the index for the node and its ancestors.
+ *
+ * The caller should assign the result to node.colorIndex, and must ensure that
+ * colorIndex has been set for all this nodes' ancestors.
+ *
+ * This ensures that adjacent wedges are visually distinct, including the
+ * special case at the top of the circle where the first and last wedges are
+ * adjacent.  Furthermore, these colours try to draw attention to the tree
+ * structure underlying the chart.
+ */
+function sunburstColorIndex(node: SunburstNode): number {
+  // Level width does not include the "other" entry (if present) because it is
+  // coloured distinctly and may be invisibly narrow or nearly so.
+  function getLevelWidth(n: SunburstNode): number {
+    const nodes = n.parent.children;
+    if (nodes[nodes.length - 1].data.isOther) {
+      return nodes.length - 1;
+    }
+    return nodes.length;
+  }
+
+  if (node.data.isOther) {
+    return -1;
+  }
+
+  const siblings = node.parent.children;
+  const index = siblings.indexOf(node);
+  const levelWidth = getLevelWidth(node);
+  const level = node.depth; // 1 is the first level
+
+  if (level === 1) {
+    if (levelWidth % COLOR_CATEGORIES.length === 1
+        && index === levelWidth - 1) {
+      return 1;
+    }
+    return index % COLOR_CATEGORIES.length;
+  }
+
+  if (level === 2) {
+    let rv;
+    if (levelWidth === 1) {
+      rv = (NUM_SHADES - 1) / 2;
+    } else {
+      rv = index % NUM_SHADES;
+    }
+
+    // Normally at the second level, the first slice and the last slice cannot
+    // have the same colour because their parents (first-level slices) have
+    // different colours.  However, if there is only one first-level slice
+    // shown, then the first and last second-level slices have the same parent
+    // and thus the same base colour and are in danger of being assinged the
+    // same shade.
+    const parentLevelWidth = getLevelWidth(node.parent);
+    if (parentLevelWidth === 1
+        && index === levelWidth - 1 // this is the last child
+        && rv === 0) { // it was to be assigned colour 0 (same as first child)
+      rv = 1;
+    }
+
+    return rv;
+  }
+
+  return index;
+}
+
+/* Return the colour for the wedge of the sunburst chart representing the given
+ * node.  (Note that the root node doesn't get a wedge.)
+ */
+function sunburstColor(node: SunburstNode): Color {
+  if (node.data.isOther) {
+    return hcl(0, 0, 80);
+  }
+
+  const indices = [];
+  for (const n = node; n.parent; n = n.parent) {
+    indices.unshift(n.colorIndex);
+  }
+  // assert: node.depth === indices.length
+
+  const level = node.depth;
+  const [cat_low, cat_high] = COLOR_CATEGORIES[indices[0]];
+
+  let hue;
+  if (level === 1) {
+    hue = cat_low + (cat_high - cat_low) / 2;
+  } else {
+    const shadeScale = scaleLinear()
+      .domain([0, NUM_SHADES - 1])
+      .range([cat_low, cat_high])
+      .clamp(true);
+    hue = shadeScale(indices[1]);
+  }
+
+  // Levels deeper than the second just use the same colour for now.
+
+  return hcl(hue, 35, 80);
+}
 
 /* Produce a tree of SunburstNodes of what the sunburst chart should show.
  *
@@ -202,122 +323,3 @@ export function sunburstTree(
 
   return data;
 }
-
-/* Return a 0-based index representing the colour to give the sunburst wedge
- * for this tree node.  The actual colours are looked up by sunburstColor using
- * the index for the node and its ancestors.
- *
- * The caller should assign the result to node.colorIndex, and must ensure that
- * colorIndex has been set for all this nodes' ancestors.
- *
- * This ensures that adjacent wedges are visually distinct, including the
- * special case at the top of the circle where the first and last wedges are
- * adjacent.  Furthermore, these colours try to draw attention to the tree
- * structure underlying the chart.
- */
-function sunburstColorIndex(node: SunburstNode): number {
-  // Level width does not include the "other" entry (if present) because it is
-  // coloured distinctly and may be invisibly narrow or nearly so.
-  function getLevelWidth(n: SunburstNode): number {
-    const nodes = n.parent.children;
-    if (nodes[nodes.length - 1].data.isOther) {
-      return nodes.length - 1;
-    }
-    return nodes.length;
-  }
-
-  if (node.data.isOther) {
-    return -1;
-  }
-
-  const siblings = node.parent.children;
-  const index = siblings.indexOf(node);
-  const levelWidth = getLevelWidth(node);
-  const level = node.depth; // 1 is the first level
-
-  if (level === 1) {
-    if (levelWidth % COLOR_CATEGORIES.length === 1
-        && index === levelWidth - 1) {
-      return 1;
-    }
-    return index % COLOR_CATEGORIES.length;
-  }
-
-  if (level === 2) {
-    let rv;
-    if (levelWidth === 1) {
-      rv = (NUM_SHADES - 1) / 2;
-    } else {
-      rv = index % NUM_SHADES;
-    }
-
-    // Normally at the second level, the first slice and the last slice cannot
-    // have the same colour because their parents (first-level slices) have
-    // different colours.  However, if there is only one first-level slice
-    // shown, then the first and last second-level slices have the same parent
-    // and thus the same base colour and are in danger of being assinged the
-    // same shade.
-    const parentLevelWidth = getLevelWidth(node.parent);
-    if (parentLevelWidth === 1
-        && index === levelWidth - 1 // this is the last child
-        && rv === 0) { // it was to be assigned colour 0 (same as first child)
-      rv = 1;
-    }
-
-    return rv;
-  }
-
-  return index;
-}
-
-/* Return the colour for the wedge of the sunburst chart representing the given
- * node.  (Note that the root node doesn't get a wedge.)
- */
-function sunburstColor(node: SunburstNode): Color {
-  if (node.data.isOther) {
-    return hcl(0, 0, 80);
-  }
-
-  const indices = [];
-  for (const n = node; n.parent; n = n.parent) {
-    indices.unshift(n.colorIndex);
-  }
-  // assert: node.depth === indices.length
-
-  const level = node.depth;
-  const [cat_low, cat_high] = COLOR_CATEGORIES[indices[0]];
-
-  let hue;
-  if (level === 1) {
-    hue = cat_low + (cat_high - cat_low) / 2;
-  } else {
-    const shadeScale = scaleLinear()
-      .domain([0, NUM_SHADES - 1])
-      .range([cat_low, cat_high])
-      .clamp(true);
-    hue = shadeScale(indices[1]);
-  }
-
-  // Levels deeper than the second just use the same colour for now.
-
-  return hcl(hue, 35, 80);
-}
-
-/* First-level wedges are assigned a colour category from this list.
- * Each entry is a [min, max] range of HCL hues.  The colour chosen will be the
- * midpoint of the range, but second-level colours will be shades chosen from
- * the range.
- */
-const COLOR_CATEGORIES = [
-  [344, 360+24], // red
-  // [63, 74], // yellow -- too narrow for multiple shades
-  [100, 144], // green
-  // [191, 202], // aqua -- too narrow for multiple shades
-  [231, 279], // blue
-  [291, 322], // purple
-];
-
-/* Each second-level wedge is assigned a colour from within the colour category
- * of its parent wedge.  The hue range is divided into NUM_SHADES choices.
- */
-const NUM_SHADES = 3;
