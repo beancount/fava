@@ -101,35 +101,33 @@ const SUNBURST_MIN_SLICE_WIDTH = 3;
  * construct a new hierarchy of just the parts to keep.
  */
 export function sunburstTree(
-  orig_data: AccountHierarchyNode,
+  orig_data: AccountHierarchyNode & { sign: number },
   radius: number,
   currency: string,
   y: (number) => number, // y = scaleSqrt from Sunburst.svelte
 ): SunburstNode {
 
-  const sign = orig_data.sign;
-  if (sign != 1 && sign == -1) {
-    console.error("sign is", sign);
-  }
+  const { sign } = orig_data;
+  // assert: sign === 1 || sign === -1
 
   let data = partition<AccountHierarchyDatum>()(orig_data);
   const inner_radius = y(data.y1);
 
   // Mark nodes that won't be shown.
   data.each(n => {
-    if (n.depth == 0) return;
+    if (n.depth === 0) {
+      // Always ignore the root node.
+    }
 
     // Dummy nodes: When a non-leaf node has a nonzero balance), it has a
     // "dummy" node child to represent it in the treemap.  In the sunburst
     // chart, dummy nodes are ignored.
-    if (n.data.dummy) {
+    else if (n.data.dummy) {
       n.del = true;
-      return;
     }
 
-    if (n.value == 0) {
+    else if (n.value === 0) {
       n.del = true;
-      return;
     }
 
     // Negative balances: Accounts with negative balances can't be represented,
@@ -137,31 +135,32 @@ export function sunburstTree(
     // will misrepresent the accounts, and, except at the first level, the sum
     // of the child account sizes may exceed the parent's size.  At the first
     // level, siblings are not omitted because that would leave an empty chart.
-    if (n.value < 0) {
+    else if (n.value < 0) {
       n.del = true;
       if (n.depth > 1) {
-        for (let sibling of n.parent.children) {
+        for (const sibling of n.parent.children) {
           sibling.del = true;
         }
       }
-      return;
     }
 
     // Slices too narrow to see: The slice width (x1-x0) * 2πr must be at
     // least SUNBURST_MIN_SLICE_WIDTH.  Compare the width using the inner
     // radius of the chart to avoid visible descendants of invisible slices.
-    if ((n.x1 - n.x0) * Math.PI * 2 * inner_radius
+    else if ((n.x1 - n.x0) * Math.PI * 2 * inner_radius
         < SUNBURST_MIN_SLICE_WIDTH) {
       n.del = true;
       if (!n.parent.other_children) {
         n.parent.other_children = 0;
       }
       n.parent.other_children += n.value;
-      return;
     }
   });
 
-  function toSunburstData(n) {
+  interface TempNode extends HierarchyRectangularNode<AccountHierarchyDatum> {
+    del?: boolean;
+  }
+  function toSunburstData(n: TempNode): RawAccountHierarchy {
     if (n.del) {
       return null;
     }
@@ -187,8 +186,8 @@ export function sunburstTree(
     .sum((d) => d.balance[currency] * sign)
     .sort((a, b) => {
       // Always sort the "other" entry last, regardless of its size.
-      if (a.data.isOther) return 1;
-      if (b.data.isOther) return -1;
+      if (a.data.isOther) { return 1; }
+      if (b.data.isOther) { return -1; }
       return b.value - a.value
     });
 
@@ -219,8 +218,8 @@ export function sunburstTree(
 function sunburstColorIndex(node: SunburstNode): number {
   // Level width does not include the "other" entry (if present) because it is
   // coloured distinctly and may be invisibly narrow or nearly so.
-  function getLevelWidth(n) {
-    const nodes = node.parent.children;
+  function getLevelWidth(n: SunburstNode): number {
+    const nodes = n.parent.children;
     if (nodes[nodes.length - 1].data.isOther) {
       return nodes.length - 1;
     }
@@ -236,13 +235,17 @@ function sunburstColorIndex(node: SunburstNode): number {
   const levelWidth = getLevelWidth(node);
   const level = node.depth; // 1 is the first level
 
-  if (level == 1) {
-    if (levelWidth % COLOR_CATEGORIES.length == 1 && index == levelWidth - 1) {
+  if (level === 1) {
+    if (levelWidth % COLOR_CATEGORIES.length === 1
+        && index === levelWidth - 1) {
       return 1;
     }
     return index % COLOR_CATEGORIES.length;
-  } else if (level == 2) {
-    if (levelWidth == 1) {
+  }
+
+  if (level === 2) {
+    let rv;
+    if (levelWidth === 1) {
       rv = (NUM_SHADES - 1) / 2;
     } else {
       rv = index % NUM_SHADES;
@@ -255,15 +258,16 @@ function sunburstColorIndex(node: SunburstNode): number {
     // and thus the same base colour and are in danger of being assinged the
     // same shade.
     const parentLevelWidth = getLevelWidth(node.parent);
-    if (parentLevelWidth == 1
-        && index == levelWidth - 1 // this is the last child
-        && rv == 0) { // it was to be assigned colour 0 (same as first child)
+    if (parentLevelWidth === 1
+        && index === levelWidth - 1 // this is the last child
+        && rv === 0) { // it was to be assigned colour 0 (same as first child)
       rv = 1;
     }
+
     return rv;
-  } else {
-    return index;
   }
+
+  return index;
 }
 
 /* Return the colour for the wedge of the sunburst chart representing the given
@@ -274,20 +278,17 @@ function sunburstColor(node: SunburstNode): Color {
     return hcl(0, 0, 80);
   }
 
-  let indices = [];
-  for (let n = node; n.parent; n = n.parent) {
+  const indices = [];
+  for (const n = node; n.parent; n = n.parent) {
     indices.unshift(n.colorIndex);
   }
-  if (node.depth != indices.length) {
-    console.error("node.depth", node.depth,
-                  "!=", indices.length, "indices.length");
-  }
+  // assert: node.depth === indices.length
 
   const level = node.depth;
   const [cat_low, cat_high] = COLOR_CATEGORIES[indices[0]];
 
   let hue;
-  if (level == 1) {
+  if (level === 1) {
     hue = cat_low + (cat_high - cat_low) / 2;
   } else {
     const shadeScale = scaleLinear()
@@ -309,9 +310,9 @@ function sunburstColor(node: SunburstNode): Color {
  */
 const COLOR_CATEGORIES = [
   [344, 360+24], // red
-  //[63, 74], // yellow -- too narrow for multiple shades
+  // [63, 74], // yellow -- too narrow for multiple shades
   [100, 144], // green
-  //[191, 202], // aqua -- too narrow for multiple shades
+  // [191, 202], // aqua -- too narrow for multiple shades
   [231, 279], // blue
   [291, 322], // purple
 ];

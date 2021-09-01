@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { partition } from "d3-hierarchy";
   import type { HierarchyRectangularNode } from "d3-hierarchy";
   import { scaleLinear, scaleSqrt } from "d3-scale";
   import { arc } from "d3-shape";
