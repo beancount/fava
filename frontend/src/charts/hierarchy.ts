@@ -187,7 +187,7 @@ function sunburstColor(node: SunburstNode): Color {
   }
 
   const indices = [];
-  for (const n = node; n.parent; n = n.parent) {
+  for (let n = node; n.parent; n = n.parent) {
     indices.unshift(n.colorIndex);
   }
   // assert: node.depth === indices.length
