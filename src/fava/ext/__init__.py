@@ -51,6 +51,9 @@ class FavaExtensionBase:
             self.config = None
         self.name = self.__class__.__qualname__
 
+    def before_insert_entry(self, entry: Directive) -> None:
+        """Called before an `entry` is inserted."""
+
     def after_entry_modified(self, entry: Directive, new_lines: str) -> None:
         """Called after an `entry` has been modified."""
 

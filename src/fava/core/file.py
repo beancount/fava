@@ -168,6 +168,7 @@ class FileModule(FavaModule):
                 insert_options = fava_options["insert-entry"]
                 currency_column = fava_options["currency-column"]
                 indent = fava_options["indent"]
+                self.ledger.extensions.before_insert_entry(entry)
                 fava_options["insert-entry"] = insert_entry(
                     entry,
                     self.ledger.beancount_file_path,
