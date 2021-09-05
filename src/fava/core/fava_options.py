@@ -52,6 +52,7 @@ FavaOptions = TypedDict(
         "auto-reload": bool,
         "default-file": Optional[str],
         "default-page": str,
+        "documents-directory-structure": str,
         "fiscal-year-end": FiscalYearEnd,
         "import-config": Optional[str],
         "import-dirs": List[str],
@@ -82,6 +83,7 @@ DEFAULTS: FavaOptions = {
     "auto-reload": False,
     "default-file": None,
     "default-page": "income_statement/",
+    "documents-directory-structure": "by-account",
     "fiscal-year-end": FiscalYearEnd(12, 31),
     "import-config": None,
     "import-dirs": [],
@@ -139,6 +141,7 @@ LIST_OPTS = [
 STR_OPTS = [
     "collapse-pattern",
     "default-page",
+    "documents-directory-structure",
     "import-config",
     "language",
     "unrealized",

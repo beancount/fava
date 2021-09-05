@@ -1,6 +1,7 @@
 """Document path related helpers."""
 import os
 from os import path
+import re
 from typing import TYPE_CHECKING
 
 from fava.helpers import FavaAPIException
@@ -57,12 +58,23 @@ def filepath_in_document_folder(
     for sep in os.sep, os.altsep:
         if sep:
             filename = filename.replace(sep, " ")
-
-    return path.normpath(
-        path.join(
-            path.dirname(ledger.beancount_file_path),
-            documents_folder,
-            *account.split(":"),
-            filename,
+    
+    method = ledger.fava_options["documents-directory-structure"]
+    if method == 'by-account':
+        return path.normpath(
+            path.join(
+                path.dirname(ledger.beancount_file_path),
+                documents_folder,
+                *account.split(":"),
+                filename,
+            )
         )
-    )
+    elif method == 'by-account-root':
+        return path.normpath(path.join(path.dirname(ledger.beancount_file_path), documents_folder, account.split(':')[0], filename))
+    elif method == 'by-fileprefix':
+        file_prefix = re.search(r'([A-Za-z]+)',filename)[1]
+        return path.normpath(path.join(path.dirname(ledger.beancount_file_path), documents_folder, file_prefix, filename))
+    elif method == 'none':
+        return path.normpath(path.join(path.dirname(ledger.beancount_file_path), documents_folder, filename))
+    else:
+        raise FavaAPIException(f"Not a valid value for option documents-directory-structure: '{method}'")
