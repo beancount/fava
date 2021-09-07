@@ -1,12 +1,15 @@
-import test from "ava";
+import { test } from "uvu";
+import assert from "uvu/assert";
 
 import { shallow_equal } from "../src/lib/equals";
 
-test("shallow array equality", (t) => {
-  t.assert(shallow_equal([], []));
-  t.assert(shallow_equal(["asdf", 1], ["asdf", 1]));
-  t.assert(!shallow_equal([1, "asdf"], ["asdf", 1]));
-  t.assert(shallow_equal(["asdf"], ["asdf"]));
+test("shallow array equality", () => {
+  assert.ok(shallow_equal([], []));
+  assert.ok(shallow_equal(["asdf", 1], ["asdf", 1]));
+  assert.ok(!shallow_equal([1, "asdf"], ["asdf", 1]));
+  assert.ok(shallow_equal(["asdf"], ["asdf"]));
   const obj = {};
-  t.assert(shallow_equal([obj], [obj]));
+  assert.ok(shallow_equal([obj], [obj]));
 });
+
+test.run();

@@ -4,16 +4,8 @@
   "scripts": {
     "build": "node -r esbuild-register build.ts",
     "dev": "node -r esbuild-register build.ts --watch",
-    "test": "ava",
-    "test:watch": "ava -w"
-  },
-  "ava": {
-    "extensions": [
-      "ts"
-    ],
-    "require": [
-      "esbuild-register"
-    ]
+    "test": "uvu -r esbuild-register test",
+    "test:watch": "watchlist --eager src test -- npm test"
   },
   "devDependencies": {
     "@types/d3-array": "^3.0.1",
@@ -29,7 +21,6 @@
     "@types/node": "^16.7.13",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
-    "ava": "^3.15.0",
     "chokidar": "^3.5.1",
     "esbuild": "^0.12.24",
     "esbuild-register": "^3.0.0",
@@ -48,7 +39,9 @@
     "stylelint-config-standard": "^22.0.0",
     "svelte-check": "^2.2.5",
     "svelte-preprocess-esbuild": "^2.0.0",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "uvu": "^0.5.1",
+    "watchlist": "^0.3.1"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^0.19.2",

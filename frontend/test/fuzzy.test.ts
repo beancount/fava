@@ -1,28 +1,29 @@
-import test from "ava";
+import { test } from "uvu";
+import assert from "uvu/assert";
 
 import { fuzzyfilter, fuzzytest, fuzzywrap } from "../src/lib/fuzzy";
 
-test("fuzzy test", (t) => {
-  t.assert(fuzzytest("asdf", "asdfasdf"));
-  t.assert(fuzzytest("asdf", "ASDFASDF"));
+test("fuzzy test", () => {
+  assert.ok(fuzzytest("asdf", "asdfasdf"));
+  assert.ok(fuzzytest("asdf", "ASDFASDF"));
   // "smart-case" matching
-  t.assert(fuzzytest("Asdf", "ASDFASDF") < fuzzytest("asdf", "ASDFASDF"));
-  t.assert(fuzzytest("ASDF", "ASDFASDF") === fuzzytest("asdf", "ASDFASDF"));
+  assert.ok(fuzzytest("Asdf", "ASDFASDF") < fuzzytest("asdf", "ASDFASDF"));
+  assert.ok(fuzzytest("ASDF", "ASDFASDF") === fuzzytest("asdf", "ASDFASDF"));
 
-  t.assert(!fuzzytest("Asdf", "asdfasdf"));
-  t.assert(fuzzytest("asdf", "a;lks;lk;lkd;lk;flkj;l"));
-  t.assert(!fuzzytest("asdf", "sdfsdf"));
-  t.assert(!fuzzytest("a", "sdfsdf"));
+  assert.ok(!fuzzytest("Asdf", "asdfasdf"));
+  assert.ok(fuzzytest("asdf", "a;lks;lk;lkd;lk;flkj;l"));
+  assert.ok(!fuzzytest("asdf", "sdfsdf"));
+  assert.ok(!fuzzytest("a", "sdfsdf"));
 });
 
-test("fuzzy filter", (t) => {
-  t.deepEqual(fuzzyfilter("", ["asdfasdf", "a"]), ["asdfasdf", "a"]);
-  t.deepEqual(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
-  t.deepEqual(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
+test("fuzzy filter", () => {
+  assert.equal(fuzzyfilter("", ["asdfasdf", "a"]), ["asdfasdf", "a"]);
+  assert.equal(fuzzyfilter("asdf", ["asdfasdf", "nomatch"]), ["asdfasdf"]);
+  assert.equal(fuzzyfilter("asdf", ["assdfsdf", "asdfasdf", "nomatch"]), [
     "asdfasdf",
     "assdfsdf",
   ]);
-  t.deepEqual(
+  assert.equal(
     fuzzyfilter("asdf", [
       "test",
       "asdfasdf",
@@ -35,13 +36,15 @@ test("fuzzy filter", (t) => {
   );
 });
 
-test("fuzzy wap", (t) => {
-  t.is(fuzzywrap("", "tenotest"), "tenotest");
-  t.is(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
-  t.is(fuzzywrap("sdf", "nomatch"), "nomatch");
-  t.is(fuzzywrap("test", "tetest"), "te<span>test</span>");
-  t.is(fuzzywrap("test", "teTEST"), "te<span>TEST</span>");
-  t.is(fuzzywrap("a", "asdfasdf"), "<span>a</span>sdfasdf");
-  t.is(fuzzywrap("as", "asdfasdf"), "<span>as</span>dfasdf");
-  t.is(fuzzywrap("as", "as"), "<span>as</span>");
+test("fuzzy wap", () => {
+  assert.is(fuzzywrap("", "tenotest"), "tenotest");
+  assert.is(fuzzywrap("test", "tenotest"), "teno<span>test</span>");
+  assert.is(fuzzywrap("sdf", "nomatch"), "nomatch");
+  assert.is(fuzzywrap("test", "tetest"), "te<span>test</span>");
+  assert.is(fuzzywrap("test", "teTEST"), "te<span>TEST</span>");
+  assert.is(fuzzywrap("a", "asdfasdf"), "<span>a</span>sdfasdf");
+  assert.is(fuzzywrap("as", "asdfasdf"), "<span>as</span>dfasdf");
+  assert.is(fuzzywrap("as", "as"), "<span>as</span>");
 });
+
+test.run();

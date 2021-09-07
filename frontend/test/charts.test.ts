@@ -1,4 +1,5 @@
-import test from "ava";
+import { test } from "uvu";
+import assert from "uvu/assert";
 
 import { balances, commodities } from "../src/charts/line";
 import {
@@ -17,24 +18,32 @@ function force_ok<T>(r: Result<T, unknown>): T {
 
 const ctx = { currencies: ["EUR"], dateFormat: () => "DATE" };
 
-test("handle data for balances chart", (t) => {
-  t.false(balances("").success);
+test("handle data for balances chart", () => {
+  assert.is(false, balances("").success);
   const data: unknown = [
     { date: "2000-01-01", balance: { EUR: 10, USD: 10 } },
     { date: "2000-02-01", balance: { EUR: 10 } },
   ];
   const parsed = force_ok(balances(data));
-  // two currencies
-  t.is(parsed.data.length, 2);
-  t.is(parsed.data[0].values.length, 2);
-  t.is(parsed.data[1].values.length, 1);
+  assert.equal(parsed.data, [
+    {
+      name: "EUR",
+      values: [
+        { date: new Date("2000-01-01"), name: "EUR", value: 10 },
+        { date: new Date("2000-02-01"), name: "EUR", value: 10 },
+      ],
+    },
+    {
+      name: "USD",
+      values: [{ date: new Date("2000-01-01"), name: "USD", value: 10 }],
+    },
+  ]);
   const queryChart = parseQueryChart(data, ctx);
-  t.deepEqual(queryChart.success && queryChart.value.data, parsed.data);
-  t.snapshot(parsed);
+  assert.equal(queryChart.success && queryChart.value.data, parsed.data);
 });
 
-test("handle data for commodities chart", (t) => {
-  t.false(commodities("", null, "asdf").success);
+test("handle data for commodities chart", () => {
+  assert.is(false, commodities("", null, "asdf").success);
   const data: unknown = {
     base: "EUR",
     quote: "USD",
@@ -44,26 +53,35 @@ test("handle data for commodities chart", (t) => {
     ],
   };
   const parsed = force_ok(commodities(data, null, "asdf"));
-  t.is(parsed.data.length, 1);
-  t.is(parsed.data[0].values.length, 2);
-  t.snapshot(parsed);
+  assert.equal(parsed.data, [
+    {
+      name: "asdf",
+      values: [
+        { date: new Date("2000-01-01"), name: "asdf", value: 10 },
+        { date: new Date("2000-02-01"), name: "asdf", value: 12 },
+      ],
+    },
+  ]);
 });
 
-test("handle data for scatterplot chart", (t) => {
-  t.false(scatterplot("").success);
+test("handle data for scatterplot chart", () => {
+  assert.is(false, scatterplot("").success);
   const data: unknown = [
     { type: "test", date: "2000-01-01", description: "desc" },
   ];
   const parsed = force_ok(scatterplot(data));
-  t.is(parsed.data.length, 1);
-  t.snapshot(parsed);
+  assert.is(parsed.data.length, 1);
+  assert.equal(parsed, {
+    data: [{ date: new Date("2000-01-01"), description: "desc", type: "test" }],
+    type: "scatterplot",
+  });
 });
 
-test("handle data for query charts", (t) => {
+test("handle data for query charts", () => {
   const d = [{ group: "Assets:Cash", balance: { EUR: 10 } }];
   const { data } = force_ok(parseGroupedQueryChart(d, ctx));
-  t.is(data.get("EUR")?.value, 10);
-  t.deepEqual(
+  assert.is(data.get("EUR")?.value, 10);
+  assert.equal(
     data
       .get("EUR")
       ?.descendants()
@@ -72,8 +90,10 @@ test("handle data for query charts", (t) => {
   );
 });
 
-test("handle invalid data for query charts", (t) => {
+test("handle invalid data for query charts", () => {
   const d: unknown[] = [{}];
   const c = parseQueryChart(d, ctx);
-  t.false(c.success);
+  assert.is(false, c.success);
 });
+
+test.run();

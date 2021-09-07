@@ -1,9 +1,10 @@
-import test from "ava";
 import { writable } from "svelte/store";
+import { test } from "uvu";
+import assert from "uvu/assert";
 
 import { derived_array } from "../src/lib/store";
 
-test("derived store", (t) => {
+test("derived store", () => {
   const source = writable<string[]>([]);
   const derived = derived_array(source, (s) => s);
   let source_count = 0;
@@ -19,6 +20,8 @@ test("derived store", (t) => {
   source.set(["a", "b"]);
   source.set(["a", "b"]);
   source.set(["a", "b"]);
-  t.is(source_count, 6);
-  t.is(derived_count, 2);
+  assert.is(source_count, 6);
+  assert.is(derived_count, 2);
 });
+
+test.run();
