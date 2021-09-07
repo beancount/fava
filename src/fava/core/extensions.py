@@ -93,6 +93,10 @@ class ExtensionModule(FavaModule):
         for ext in self.exts_for_hook("after_entry_modified"):
             ext.after_entry_modified(entry, new_lines)
 
+    def before_insert_entry(self, entry: Directive) -> None:
+        for ext in self.exts_for_hook("before_insert_entry"):
+            ext.before_insert_entry(entry)
+
     def after_insert_entry(self, entry: Directive) -> None:
         for ext in self.exts_for_hook("after_insert_entry"):
             ext.after_insert_entry(entry)
