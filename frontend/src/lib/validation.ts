@@ -171,9 +171,9 @@ const { hasOwnProperty } = Object.prototype;
 /**
  * Validator for an object with some given properties.
  */
-export function object<T>(
-  validators: { [t in keyof T]: Validator<T[t]> }
-): Validator<T> {
+export function object<T>(validators: {
+  [t in keyof T]: Validator<T[t]>;
+}): Validator<T> {
   return (json) => {
     if (isJsonObject(json)) {
       const obj: Partial<T> = {};
