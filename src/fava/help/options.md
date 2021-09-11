@@ -76,24 +76,23 @@ Default: `by-account`
 Use this option to specify how to organize the documents that are uploaded by
 drag and drop to a transaction in the journal view. Available options are:
 
-`by-account`: Save documents in a directory structure that resembles the
-hierarchy of the account structure. For example, if the account of the first
-posting is `Expenses:Home:Electricity`, the document will be saved in
-`<documents>/Expenses/Home/Electricity/`.
-
-`by-account-root`: Similar to `by-account`, but use only the root account. For example,
-if the account of the first posting is `Expenses:Home:Electricity`, the document
-will be saved in `<documents>/Expenses/`.
-
-`by-fileprefix`: Derive the directory from the first letters (up to the first
-number or special symbol) of the filename. This can be used to store the documents
-by their type, e.g. the file `IncomingInvoice-Company-A.pdf` will be saved in
-`<documents>/IncomingInvoice/`, the file `OutgoingInvoice-Company-B.pdf` will
-be saved in `<documents>/OutgoingInvoice/`, and the file `AccountStatement-Bank-C.pdf`
-will be saved in `<documents>/AccountStatement/`.
-
-`none`: Save all documents in the directory specified by the beancount option
-`documents` without creating any sub-directories.
+-   `by-account`: Save documents in a directory structure that resembles the
+    hierarchy of the account structure. For example, if the account of the first
+    posting is `Expenses:Home:Electricity`, the document will be saved in
+    `<documents>/Expenses/Home/Electricity/`.
+-   `by-account-root`: Similar to `by-account`, but use only the root account.
+    For example, if the account of the first posting is
+    `Expenses:Home:Electricity`, the document will be saved in
+    `<documents>/Expenses/`.
+-   `by-fileprefix`: Derive the directory from the first letters (up to the
+    first number or special symbol) of the filename. This can be used to store
+    the documents by their type, e.g. the file `IncomingInvoice-Company-A.pdf`
+    will be saved in `<documents>/IncomingInvoice/`, the file
+    `OutgoingInvoice-Company-B.pdf` will be saved in
+    `<documents>/OutgoingInvoice/`, and the file `AccountStatement-Bank-C.pdf`
+    will be saved in `<documents>/AccountStatement/`.
+-   `none`: Save all documents in the directory specified by the beancount
+    option `documents` without creating any sub-directories.
 
 ---
 
