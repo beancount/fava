@@ -82,7 +82,7 @@ function setup(
  * A basic readonly editor.
  */
 export function initReadonlyEditor(value: string): EditorAndAction {
-  return setup(value, [baseExtensions, EditorView.editable.of(false)]);
+  return setup(value, [baseExtensions, EditorState.readOnly.of(true)]);
 }
 
 /**
