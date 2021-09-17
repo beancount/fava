@@ -46,16 +46,16 @@ def test_save_entry_slice(example_ledger) -> None:
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = Path(entry.meta["filename"])
-    contents = filename.read_text("utf-8")
+    contents = filename.read_text(encoding="utf-8")
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert filename.read_text("utf-8") == contents
+        assert filename.read_text(encoding="utf-8") == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
-    assert filename.read_text("utf-8") != contents
+    assert filename.read_text(encoding="utf-8") != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
-    assert filename.read_text("utf-8") == contents
+    assert filename.read_text(encoding="utf-8") == contents
 
 
 def test_insert_metadata_in_file(tmp_path) -> None:

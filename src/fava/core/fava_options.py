@@ -172,7 +172,7 @@ def parse_options(
     for entry in (e for e in custom_entries if e.type == "fava-option"):
         try:
             key = entry.values[0].value
-            assert key in DEFAULTS.keys(), f"unknown option `{key}`"
+            assert key in DEFAULTS, f"unknown option `{key}`"
 
             if key == "default-file":
                 options["default-file"] = entry.meta["filename"]
