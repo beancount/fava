@@ -55,7 +55,6 @@ msgid "Holdings"
 msgstr "Fonds"
 
 #: fava/templates/_globals.html:3
-#, fuzzy
 msgid "Commodities"
 msgstr "Unités de compte"
 
@@ -84,7 +83,6 @@ msgid "Date"
 msgstr "Date"
 
 #: fava/templates/_journal_table.html:87
-#, fuzzy
 msgid "F"
 msgstr "F"
 
@@ -93,7 +91,6 @@ msgid "Narration/Payee"
 msgstr "Description / Bénéficiaire"
 
 #: fava/templates/_journal_table.html:89
-#, fuzzy
 msgid "Position"
 msgstr "Position"
 
@@ -106,7 +103,6 @@ msgid "Cost"
 msgstr "Coût"
 
 #: fava/templates/_journal_table.html:93
-#, fuzzy
 msgid "Change"
 msgstr "Opération"
 
@@ -149,7 +145,6 @@ msgid "Account Journal"
 msgstr "Journal du compte"
 
 #: fava/templates/account.html:15 fava/templates/account.html:23
-#, fuzzy
 msgid "Changes"
 msgstr "Opérations"
 
@@ -236,7 +231,6 @@ msgid "Download as"
 msgstr "Télécharger en tant que"
 
 #: fava/templates/statistics.html:14
-#, fuzzy
 msgid "Postings per Account"
 msgstr "Enregistrements par compte"
 
@@ -249,12 +243,10 @@ msgid "Update Activity"
 msgstr "Activité"
 
 #: fava/templates/statistics.html:23
-#, fuzzy
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Cliquez pour copier les directives balance des comptes (sauf pour ceux en verts) dans le presse-papiers."
 
 #: fava/templates/statistics.html:24
-#, fuzzy
 msgid "Copy balance directives"
 msgstr "Copier les directives balance"
 
@@ -276,7 +268,6 @@ msgstr "# Entrées"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
-#, fuzzy
 msgid "close"
 msgstr "Fermer"
 
@@ -299,7 +290,6 @@ msgstr "Nombre"
 
 #: frontend/src/entry-forms/Posting.svelte:76
 #: frontend/src/entry-forms/Transaction.svelte:80
-#, fuzzy
 msgid "Add posting"
 msgstr "Ajouter un enregistrement"
 
@@ -541,57 +531,57 @@ msgstr "Suivant"
 
 #: frontend/src/modals/AddEntry.svelte:12
 msgid "Transaction"
-msgstr ""
+msgstr "Transaction"
 
 #: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
-msgstr ""
+msgstr "Ajouter"
 
 #: frontend/src/documents/Documents.svelte:57
 msgid "Move or rename document"
-msgstr ""
+msgstr "Déplacer ou renommer le document"
 
 #: frontend/src/documents/Table.svelte:30
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
-msgstr ""
+msgstr "Documents"
 
 #: frontend/src/import/FileList.svelte:29
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
-msgstr ""
+msgstr "Aucun importeur ne correspond à ce fichier."
 
 #: frontend/src/charts/Chart.svelte:88
 msgid "Line chart"
-msgstr ""
+msgstr "Graphique en courbe"
 
 #: frontend/src/charts/Chart.svelte:92
 msgid "Area chart"
-msgstr ""
+msgstr "Graphique en aire"
 
 #: frontend/src/import/FileList.svelte:52
 msgid "Continue"
-msgstr ""
+msgstr "Continuer"
 
 #: frontend/src/import/FileList.svelte:63
 msgid "Clear"
-msgstr ""
+msgstr "Effacer"
 
 #: frontend/src/sidebar/AccountSelector.svelte:21
 msgid "Go to account"
-msgstr ""
+msgstr "Aller au compte"
 
 #: frontend/src/import/Import.svelte:64
 msgid "Delete this file?"
-msgstr ""
+msgstr "Supprimer ce fichier ?"
 
 #: frontend/src/import/Import.svelte:118
 msgid "No files were found for import."
-msgstr ""
+msgstr "Aucun fichier à importer n'a été trouvé."
 
