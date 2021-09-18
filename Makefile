@@ -65,6 +65,7 @@ bql-grammar:
 
 dist: src/fava/static/app.js src/fava setup.cfg setup.py MANIFEST.in
 	rm -rf build dist
+	pybabel compile -d src/fava/translations
 	python setup.py sdist bdist_wheel
 
 .PHONY: before-release

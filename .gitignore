@@ -19,6 +19,7 @@
 node_modules
 *.pyc
 *.so
+*.mo
 .DS_Store
 .env
 TODO
