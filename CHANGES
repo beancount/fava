@@ -6,6 +6,13 @@ Unreleased
 
 Nothing yet.
 
+v1.20 (2021-09-19)
+------------------
+
+In this release, the document page now shows counts in the account tree and
+allows collapsing of accounts in the tree. Parts of the charts in the future
+are now desaturated. This release contains a couple of bug fixes as usual.
+
 v1.19 (2021-05-18)
 ------------------
 
