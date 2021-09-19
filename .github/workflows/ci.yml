@@ -14,8 +14,15 @@ jobs:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
-                py: ["3.9", "3.6"]
+                py: ["3.10", "3.7"]
                 os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+                # Beancount does not build in CI on Windows + 3.10
+                include:
+                    - py: "3.9"
+                      os: "windows-latest"
+                exclude:
+                    - py: "3.10"
+                      os: "windows-latest"
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-python@v2
@@ -28,12 +35,13 @@ jobs:
                   cache-dependency-path: frontend/package-lock.json
             - run: pip install tox
             - run: cd frontend && npm ci
-            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.10'
               uses: pre-commit/action@v2.0.3
-            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.10'
               run: cd frontend; npx svelte-check
-            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.10'
               run: tox -e lint
             - run: make test
-            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.9'
+              # Pyinstaller does not support Python 3.10 yet
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.7'
               run: tox -e pyinstaller
