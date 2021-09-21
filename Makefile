@@ -1,15 +1,20 @@
-all: src/fava/static/app.js
+all: src/fava/static/app.js src/fava/translations
 
-src/fava/static/app.js: frontend/css/* frontend/src/* frontend/package.json frontend/node_modules
+FRONTEND_SOURCES := $(shell find frontend/src -type f)
+src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/css/* frontend/package.json frontend/node_modules
 	cd frontend; npm run build
 
 frontend/node_modules: frontend/package-lock.json
 	cd frontend; npm install --no-progress
 	touch -m frontend/node_modules
 
+TRANSLATION_SOURCES := $(shell find src/fava/translations -name '*.po')
+src/fava/translations: $(TRANSLATION_SOURCES)
+	pybabel compile -d src/fava/translations
+	touch -m src/fava/translations
+
 .PHONY: clean
 clean: mostlyclean
-	rm -rf build dist
 	find src/fava/static ! -name 'favicon.ico' -type f -exec rm -f {} +
 
 .PHONY: mostlyclean
@@ -22,6 +27,7 @@ mostlyclean:
 	rm -rf frontend/node_modules
 	find . -type f -name '*.py[c0]' -delete
 	find . -type d -name "__pycache__" -delete
+	find src/fava/translations -name '*.mo' -delete
 
 .PHONY: lint
 lint: frontend/node_modules
@@ -38,8 +44,8 @@ test:
 .PHONY: update-snapshots
 update-snapshots:
 	find . -name "__snapshots__" -type d -prune -exec rm -r "{}" +
-	-SNAPSHOT_UPDATE=1 tox
-	tox
+	-SNAPSHOT_UPDATE=1 tox -e py
+	tox -e py
 
 .PHONY: update-deps
 update-deps:
@@ -65,7 +71,6 @@ bql-grammar:
 
 dist: src/fava/static/app.js src/fava setup.cfg setup.py MANIFEST.in
 	rm -rf build dist
-	pybabel compile -d src/fava/translations
 	python setup.py sdist bdist_wheel
 
 .PHONY: before-release
@@ -95,7 +100,6 @@ translations-push: translations-extract
 .PHONY: translations-fetch
 translations-fetch:
 	contrib/scripts.py download-translations
-	pybabel compile -d src/fava/translations
 
 # Build and upload the website.
 .PHONY: gh-pages

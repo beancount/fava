@@ -25,7 +25,8 @@ autodoc_default_options = {
 
 
 def skip_namedtuples(_app, _what, _name, obj, _options, _lines):
-    if obj.__doc__ and obj.__doc__.startswith("Alias for field number"):
+    docstr = obj.__doc__
+    if isinstance(docstr, str) and docstr.startswith("Alias for field number"):
         return True
     return None
 
