@@ -4,7 +4,7 @@
  * The charts heavily use d3 libraries.
  */
 
-import { getScriptTagJSON } from "../lib/dom";
+import { getScriptTagValue } from "../lib/dom";
 import type { Result } from "../lib/result";
 import { ok } from "../lib/result";
 import { array, object, string, unknown } from "../lib/validation";
@@ -46,11 +46,7 @@ const chart_data_validator = array(
 export function parseChartData(
   ctx: ChartContext
 ): Result<NamedChartTypes[], string> {
-  const json_res = getScriptTagJSON("#chart-data");
-  if (!json_res.success) {
-    return json_res;
-  }
-  const res = chart_data_validator(json_res.value);
+  const res = getScriptTagValue("#chart-data", chart_data_validator);
   if (!res.success) {
     return res;
   }

@@ -184,7 +184,9 @@ export function object<T>(validators: {
           if (res.success) {
             obj[key] = res.value;
           } else {
-            return res;
+            return err(
+              `Validating object failed at key '${key}': ${res.value}`
+            );
           }
         }
       }
@@ -206,7 +208,7 @@ export function record<T>(decoder: Validator<T>): Validator<Record<string, T>> {
         if (res.success) {
           ret[key] = res.value;
         } else {
-          return res;
+          return err(`Validating record failed at key '${key}': ${res.value}`);
         }
       }
       return ok(ret);

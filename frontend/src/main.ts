@@ -69,13 +69,14 @@ const page_title_validator = object({
 
 function updatePageTitle(): void {
   const v = getScriptTagValue("#page-title", page_title_validator);
-  // TODO log error
   if (v.success) {
     document.title = v.value.documentTitle;
     const pageTitle = document.querySelector("h1 strong");
     if (pageTitle) {
       pageTitle.innerHTML = v.value.pageTitle;
     }
+  } else {
+    log_error(`Loading page title failed: ${v.value}`);
   }
 }
 
