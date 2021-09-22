@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 from fava.helpers import FavaAPIException
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 

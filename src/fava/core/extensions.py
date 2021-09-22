@@ -15,7 +15,7 @@ from fava.core.module_base import FavaModule
 from fava.ext import FavaExtensionBase
 from fava.ext import find_extensions
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 

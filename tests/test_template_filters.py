@@ -1,6 +1,8 @@
 # pylint: disable=missing-docstring
+from datetime import date
 from decimal import Decimal
 
+import pytest
 from beancount.core import realization
 from flask import g
 
@@ -10,6 +12,7 @@ from fava.core.tree import TreeNode
 from fava.template_filters import basename
 from fava.template_filters import collapse_account
 from fava.template_filters import format_currency
+from fava.template_filters import format_date
 from fava.template_filters import format_errormsg
 from fava.template_filters import get_or_create
 from fava.template_filters import remove_keys
@@ -20,6 +23,26 @@ def test_remove_keys() -> None:
     """Dict keys get remove or return empty dict if None is given."""
     assert remove_keys(None, []) == {}
     assert remove_keys({"asdf": 1}, ["asdf"]) == {}
+
+
+@pytest.mark.parametrize(
+    "interval,output",
+    [
+        ("year", "2012"),
+        ("quarter", "2012Q4"),
+        ("month", "Dec 2012"),
+        ("week", "2012W51"),
+        ("day", "2012-12-20"),
+    ],
+)
+def test_format_date(app, interval, output) -> None:
+    test_date = date(2012, 12, 20)
+    url = (
+        f"/long-example/?interval={interval}" if interval else "/long-example"
+    )
+    with app.test_request_context(url):
+        app.preprocess_request()
+        assert format_date(test_date) == output
 
 
 def test_format_currency(app) -> None:

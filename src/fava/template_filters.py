@@ -29,7 +29,7 @@ from fava.util.date import Interval
 
 
 def remove_keys(
-    _dict: MutableMapping[str, Any], keys: List[str]
+    _dict: Optional[MutableMapping[str, Any]], keys: List[str]
 ) -> MutableMapping[str, Any]:
     """Remove keys from a dictionary."""
     if not _dict:
@@ -71,13 +71,12 @@ def format_date(date: datetime.date) -> str:
         return date.strftime("%Y")
     if g.interval is Interval.QUARTER:
         return f"{date.year}Q{(date.month - 1) // 3 + 1}"
-    if g.interval is Interval.MONTH:
-        return date.strftime("%b %Y")
     if g.interval is Interval.WEEK:
         return date.strftime("%YW%W")
     if g.interval is Interval.DAY:
         return date.strftime("%Y-%m-%d")
-    return ""
+    assert g.interval is Interval.MONTH
+    return date.strftime("%b %Y")
 
 
 def hash_entry(entry: Directive) -> str:
@@ -113,19 +112,21 @@ def should_show(account: TreeNode) -> bool:
         should_show(a) for a in account.children
     ):
         return True
-    if account.name not in g.ledger.accounts:
+    ledger = g.ledger
+    if account.name not in ledger.accounts:
         return False
-    if not g.ledger.fava_options[
-        "show-closed-accounts"
-    ] and g.ledger.account_is_closed(account.name):
+    fava_options = ledger.fava_options
+    if not fava_options["show-closed-accounts"] and ledger.account_is_closed(
+        account.name
+    ):
         return False
     if (
-        not g.ledger.fava_options["show-accounts-with-zero-balance"]
+        not fava_options["show-accounts-with-zero-balance"]
         and account.balance.is_empty()
     ):
         return False
     if (
-        not g.ledger.fava_options["show-accounts-with-zero-transactions"]
+        not fava_options["show-accounts-with-zero-transactions"]
         and not account.has_txns
     ):
         return False

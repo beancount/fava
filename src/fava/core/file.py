@@ -33,7 +33,7 @@ from fava.core.module_base import FavaModule
 from fava.helpers import FavaAPIException
 from fava.util import next_key
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 #: The flags to exclude when rendering entries.

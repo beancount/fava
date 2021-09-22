@@ -25,7 +25,7 @@ from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 # This is to limit the size of the history file. Fava is not using readline at

@@ -5,7 +5,7 @@ from textwrap import dedent
 from beancount.loader import load_file
 
 
-def test_plugins(tmp_path: Path) -> None:
+def test_tag_discovered_plugin(tmp_path: Path) -> None:
     # Create sample files
     assets_cash = tmp_path / "documents" / "Assets" / "Cash"
     assets_cash.mkdir(parents=True)

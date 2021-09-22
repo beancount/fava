@@ -216,3 +216,6 @@ def test_load_extension_reports(app, test_client):
         url = url_for("extension_report", report_name="PortfolioList")
         result = test_client.get(url)
         assert result.status_code == 200
+        url = url_for("extension_report", report_name="MissingExtension")
+        result = test_client.get(url)
+        assert result.status_code == 404

@@ -17,7 +17,7 @@ from fava.util.date import days_in_daterange
 from fava.util.date import Interval
 from fava.util.date import number_of_days_in_period
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 

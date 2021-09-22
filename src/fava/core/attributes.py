@@ -13,7 +13,7 @@ from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
 from fava.util.ranking import ExponentialDecayRanker
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 

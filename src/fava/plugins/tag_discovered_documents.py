@@ -20,7 +20,7 @@ def tag_discovered_documents(
     entries: Entries, options_map: BeancountOptions
 ) -> Tuple[Entries, List[BeancountError]]:
     """Tag automatically added documents."""
-    if "documents" not in options_map or not options_map["documents"]:
+    if not options_map["documents"]:  # pragma: no cover
         return entries, []
 
     for index, entry in enumerate(entries):

@@ -4,7 +4,7 @@
 try:
     from beancount.core.flags import FLAG_UNREALIZED
     from beancount.core.flags import FLAG_RETURNS
-except ImportError:
+except ImportError:  # pragma: no cover
     FLAG_UNREALIZED = "U"
     FLAG_RETURNS = "R"
 

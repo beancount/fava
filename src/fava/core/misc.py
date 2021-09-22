@@ -13,7 +13,7 @@ from beancount.core.data import Event
 from fava.core.module_base import FavaModule
 from fava.helpers import BeancountError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 

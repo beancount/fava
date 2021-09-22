@@ -5,7 +5,6 @@ really does hooks at the moment, works.
 """
 # mypy: ignore-errors
 # pylint: disable=missing-docstring
-# pragma: no cover - this is just an untested example
 import os
 import subprocess
 

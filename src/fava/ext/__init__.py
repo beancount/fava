@@ -14,7 +14,7 @@ from beancount.core.data import Directive
 
 from fava.helpers import BeancountError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 
