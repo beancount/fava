@@ -6,6 +6,12 @@ Unreleased
 
 Nothing yet.
 
+v1.20.1 (2021-09-22)
+--------------------
+
+Bugfix release to fix loading of translations for the browser-rendered frontend
+parts.
+
 v1.20 (2021-09-19)
 ------------------
 
