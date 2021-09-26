@@ -1,597 +1,2431 @@
-[{'balance': (), 'date': datetime.date(2000, 1, 1)},
- {'balance': (-50 USD, 1 XYZ), 'date': datetime.date(2000, 1, 2)},
- {'balance': (-50 USD, 1 ABC), 'date': datetime.date(2000, 1, 3)},
- {'balance': (), 'date': datetime.date(2014, 1, 1)},
- {'balance': (), 'date': datetime.date(2014, 1, 2)},
- {'balance': (), 'date': datetime.date(2014, 1, 3)},
- {'balance': (), 'date': datetime.date(2014, 1, 4)},
- {'balance': (-1799.96 USD, 11.644 RGAGX, 21.964 VBMPX),
-  'date': datetime.date(2014, 1, 6)},
- {'balance': (), 'date': datetime.date(2014, 1, 8)},
- {'balance': (), 'date': datetime.date(2014, 1, 9)},
- {'balance': (), 'date': datetime.date(2014, 1, 10)},
- {'balance': (), 'date': datetime.date(2014, 1, 11)},
- {'balance': (), 'date': datetime.date(2014, 1, 12)},
- {'balance': (), 'date': datetime.date(2014, 1, 14)},
- {'balance': (), 'date': datetime.date(2014, 1, 15)},
- {'balance': (), 'date': datetime.date(2014, 1, 16)},
- {'balance': (), 'date': datetime.date(2014, 1, 17)},
- {'balance': (), 'date': datetime.date(2014, 1, 19)},
- {'balance': (-1800.03 USD, 11.724 RGAGX, 21.720 VBMPX),
-  'date': datetime.date(2014, 1, 20)},
- {'balance': (), 'date': datetime.date(2014, 1, 21)},
- {'balance': (), 'date': datetime.date(2014, 1, 22)},
- {'balance': (), 'date': datetime.date(2014, 1, 23)},
- {'balance': (), 'date': datetime.date(2014, 1, 25)},
- {'balance': (), 'date': datetime.date(2014, 1, 28)},
- {'balance': (), 'date': datetime.date(2014, 1, 29)},
- {'balance': (), 'date': datetime.date(2014, 1, 30)},
- {'balance': (), 'date': datetime.date(2014, 1, 31)},
- {'balance': (), 'date': datetime.date(2014, 2, 1)},
- {'balance': (-1800.03 USD, 11.784 RGAGX, 21.372 VBMPX),
-  'date': datetime.date(2014, 2, 3)},
- {'balance': (), 'date': datetime.date(2014, 2, 4)},
- {'balance': (), 'date': datetime.date(2014, 2, 6)},
- {'balance': (), 'date': datetime.date(2014, 2, 9)},
- {'balance': (), 'date': datetime.date(2014, 2, 10)},
- {'balance': (), 'date': datetime.date(2014, 2, 13)},
- {'balance': (), 'date': datetime.date(2014, 2, 14)},
- {'balance': (), 'date': datetime.date(2014, 2, 15)},
- {'balance': (-1799.99 USD, 11.593 RGAGX, 21.798 VBMPX),
-  'date': datetime.date(2014, 2, 17)},
- {'balance': (), 'date': datetime.date(2014, 2, 18)},
- {'balance': (), 'date': datetime.date(2014, 2, 20)},
- {'balance': (), 'date': datetime.date(2014, 2, 22)},
- {'balance': (), 'date': datetime.date(2014, 2, 23)},
- {'balance': (), 'date': datetime.date(2014, 2, 24)},
- {'balance': (), 'date': datetime.date(2014, 2, 25)},
- {'balance': (), 'date': datetime.date(2014, 2, 27)},
- {'balance': (), 'date': datetime.date(2014, 2, 28)},
- {'balance': (), 'date': datetime.date(2014, 3, 2)},
- {'balance': (-1799.98 USD, 11.536 RGAGX, 22.011 VBMPX),
-  'date': datetime.date(2014, 3, 3)},
- {'balance': (), 'date': datetime.date(2014, 3, 4)},
- {'balance': (), 'date': datetime.date(2014, 3, 6)},
- {'balance': (), 'date': datetime.date(2014, 3, 7)},
- {'balance': (), 'date': datetime.date(2014, 3, 9)},
- {'balance': (), 'date': datetime.date(2014, 3, 10)},
- {'balance': (), 'date': datetime.date(2014, 3, 13)},
- {'balance': (), 'date': datetime.date(2014, 3, 14)},
- {'balance': (), 'date': datetime.date(2014, 3, 15)},
- {'balance': (), 'date': datetime.date(2014, 3, 16)},
- {'balance': (-1800.01 USD, 11.382 RGAGX, 22.153 VBMPX),
-  'date': datetime.date(2014, 3, 17)},
- {'balance': (), 'date': datetime.date(2014, 3, 20)},
- {'balance': (), 'date': datetime.date(2014, 3, 22)},
- {'balance': (), 'date': datetime.date(2014, 3, 23)},
- {'balance': (), 'date': datetime.date(2014, 3, 24)},
- {'balance': (), 'date': datetime.date(2014, 3, 27)},
- {'balance': (), 'date': datetime.date(2014, 3, 28)},
- {'balance': (), 'date': datetime.date(2014, 3, 29)},
- {'balance': (-1800.01 USD, 11.102 RGAGX, 21.898 VBMPX),
-  'date': datetime.date(2014, 3, 31)},
- {'balance': (), 'date': datetime.date(2014, 4, 1)},
- {'balance': (), 'date': datetime.date(2014, 4, 2)},
- {'balance': (), 'date': datetime.date(2014, 4, 3)},
- {'balance': (), 'date': datetime.date(2014, 4, 4)},
- {'balance': (), 'date': datetime.date(2014, 4, 5)},
- {'balance': (), 'date': datetime.date(2014, 4, 8)},
- {'balance': (), 'date': datetime.date(2014, 4, 10)},
- {'balance': (), 'date': datetime.date(2014, 4, 11)},
- {'balance': (-1800.00 USD, 10.910 RGAGX, 22.066 VBMPX),
-  'date': datetime.date(2014, 4, 14)},
- {'balance': (), 'date': datetime.date(2014, 4, 17)},
- {'balance': (), 'date': datetime.date(2014, 4, 20)},
- {'balance': (), 'date': datetime.date(2014, 4, 21)},
- {'balance': (), 'date': datetime.date(2014, 4, 22)},
- {'balance': (), 'date': datetime.date(2014, 4, 23)},
- {'balance': (), 'date': datetime.date(2014, 4, 24)},
- {'balance': (), 'date': datetime.date(2014, 4, 25)},
- {'balance': (), 'date': datetime.date(2014, 4, 26)},
- {'balance': (), 'date': datetime.date(2014, 4, 27)},
- {'balance': (-1800.02 USD, 11.024 RGAGX, 22.222 VBMPX),
-  'date': datetime.date(2014, 4, 28)},
- {'balance': (), 'date': datetime.date(2014, 5, 1)},
- {'balance': (), 'date': datetime.date(2014, 5, 3)},
- {'balance': (), 'date': datetime.date(2014, 5, 4)},
- {'balance': (), 'date': datetime.date(2014, 5, 5)},
- {'balance': (), 'date': datetime.date(2014, 5, 7)},
- {'balance': (), 'date': datetime.date(2014, 5, 8)},
- {'balance': (), 'date': datetime.date(2014, 5, 9)},
- {'balance': (), 'date': datetime.date(2014, 5, 10)},
- {'balance': (), 'date': datetime.date(2014, 5, 11)},
- {'balance': (-1799.94 USD, 10.951 RGAGX, 22.105 VBMPX),
-  'date': datetime.date(2014, 5, 12)},
- {'balance': (), 'date': datetime.date(2014, 5, 15)},
- {'balance': (), 'date': datetime.date(2014, 5, 16)},
- {'balance': (), 'date': datetime.date(2014, 5, 19)},
- {'balance': (), 'date': datetime.date(2014, 5, 21)},
- {'balance': (), 'date': datetime.date(2014, 5, 22)},
- {'balance': (), 'date': datetime.date(2014, 5, 23)},
- {'balance': (), 'date': datetime.date(2014, 5, 25)},
- {'balance': (-1800.06 USD, 10.716 RGAGX, 22.465 VBMPX),
-  'date': datetime.date(2014, 5, 26)},
- {'balance': (), 'date': datetime.date(2014, 5, 28)},
- {'balance': (), 'date': datetime.date(2014, 6, 1)},
- {'balance': (), 'date': datetime.date(2014, 6, 2)},
- {'balance': (), 'date': datetime.date(2014, 6, 3)},
- {'balance': (), 'date': datetime.date(2014, 6, 4)},
- {'balance': (), 'date': datetime.date(2014, 6, 5)},
- {'balance': (), 'date': datetime.date(2014, 6, 6)},
- {'balance': (), 'date': datetime.date(2014, 6, 8)},
- {'balance': (-1799.95 USD, 10.682 RGAGX, 23.099 VBMPX),
-  'date': datetime.date(2014, 6, 9)},
- {'balance': (), 'date': datetime.date(2014, 6, 11)},
- {'balance': (), 'date': datetime.date(2014, 6, 13)},
- {'balance': (), 'date': datetime.date(2014, 6, 16)},
- {'balance': (), 'date': datetime.date(2014, 6, 19)},
- {'balance': (), 'date': datetime.date(2014, 6, 20)},
- {'balance': (), 'date': datetime.date(2014, 6, 21)},
- {'balance': (), 'date': datetime.date(2014, 6, 22)},
- {'balance': (-1800.04 USD, 10.995 RGAGX, 23.181 VBMPX),
-  'date': datetime.date(2014, 6, 23)},
- {'balance': (), 'date': datetime.date(2014, 6, 26)},
- {'balance': (), 'date': datetime.date(2014, 6, 28)},
- {'balance': (), 'date': datetime.date(2014, 6, 29)},
- {'balance': (), 'date': datetime.date(2014, 7, 3)},
- {'balance': (), 'date': datetime.date(2014, 7, 4)},
- {'balance': (), 'date': datetime.date(2014, 7, 5)},
- {'balance': (-1799.94 USD, 11.074 RGAGX, 23.062 VBMPX),
-  'date': datetime.date(2014, 7, 7)},
- {'balance': (), 'date': datetime.date(2014, 7, 9)},
- {'balance': (), 'date': datetime.date(2014, 7, 10)},
- {'balance': (), 'date': datetime.date(2014, 7, 12)},
- {'balance': (), 'date': datetime.date(2014, 7, 15)},
- {'balance': (), 'date': datetime.date(2014, 7, 17)},
- {'balance': (), 'date': datetime.date(2014, 7, 18)},
- {'balance': (), 'date': datetime.date(2014, 7, 20)},
- {'balance': (-1050.01 USD, 6.515 RGAGX, 13.376 VBMPX),
-  'date': datetime.date(2014, 7, 21)},
- {'balance': (), 'date': datetime.date(2014, 7, 22)},
- {'balance': (), 'date': datetime.date(2014, 7, 23)},
- {'balance': (), 'date': datetime.date(2014, 7, 26)},
- {'balance': (), 'date': datetime.date(2014, 7, 27)},
- {'balance': (), 'date': datetime.date(2014, 7, 28)},
- {'balance': (), 'date': datetime.date(2014, 7, 29)},
- {'balance': (), 'date': datetime.date(2014, 7, 31)},
- {'balance': (), 'date': datetime.date(2014, 8, 1)},
- {'balance': (), 'date': datetime.date(2014, 8, 3)},
- {'balance': (), 'date': datetime.date(2014, 8, 4)},
- {'balance': (), 'date': datetime.date(2014, 8, 5)},
- {'balance': (), 'date': datetime.date(2014, 8, 6)},
- {'balance': (), 'date': datetime.date(2014, 8, 7)},
- {'balance': (), 'date': datetime.date(2014, 8, 9)},
- {'balance': (), 'date': datetime.date(2014, 8, 11)},
- {'balance': (), 'date': datetime.date(2014, 8, 14)},
- {'balance': (), 'date': datetime.date(2014, 8, 15)},
- {'balance': (), 'date': datetime.date(2014, 8, 16)},
- {'balance': (), 'date': datetime.date(2014, 8, 17)},
- {'balance': (), 'date': datetime.date(2014, 8, 18)},
- {'balance': (), 'date': datetime.date(2014, 8, 19)},
- {'balance': (), 'date': datetime.date(2014, 8, 21)},
- {'balance': (), 'date': datetime.date(2014, 8, 23)},
- {'balance': (), 'date': datetime.date(2014, 8, 25)},
- {'balance': (), 'date': datetime.date(2014, 8, 28)},
- {'balance': (), 'date': datetime.date(2014, 8, 29)},
- {'balance': (), 'date': datetime.date(2014, 9, 2)},
- {'balance': (), 'date': datetime.date(2014, 9, 3)},
- {'balance': (), 'date': datetime.date(2014, 9, 4)},
- {'balance': (), 'date': datetime.date(2014, 9, 7)},
- {'balance': (), 'date': datetime.date(2014, 9, 8)},
- {'balance': (), 'date': datetime.date(2014, 9, 9)},
- {'balance': (), 'date': datetime.date(2014, 9, 10)},
- {'balance': (), 'date': datetime.date(2014, 9, 11)},
- {'balance': (), 'date': datetime.date(2014, 9, 12)},
- {'balance': (), 'date': datetime.date(2014, 9, 15)},
- {'balance': (), 'date': datetime.date(2014, 9, 16)},
- {'balance': (), 'date': datetime.date(2014, 9, 18)},
- {'balance': (), 'date': datetime.date(2014, 9, 19)},
- {'balance': (), 'date': datetime.date(2014, 9, 21)},
- {'balance': (), 'date': datetime.date(2014, 9, 22)},
- {'balance': (-4899.84 USD, 44 GLD), 'date': datetime.date(2014, 9, 25)},
- {'balance': (), 'date': datetime.date(2014, 9, 27)},
- {'balance': (), 'date': datetime.date(2014, 10, 1)},
- {'balance': (), 'date': datetime.date(2014, 10, 2)},
- {'balance': (), 'date': datetime.date(2014, 10, 4)},
- {'balance': (), 'date': datetime.date(2014, 10, 6)},
- {'balance': (), 'date': datetime.date(2014, 10, 7)},
- {'balance': (), 'date': datetime.date(2014, 10, 8)},
- {'balance': (), 'date': datetime.date(2014, 10, 9)},
- {'balance': (), 'date': datetime.date(2014, 10, 10)},
- {'balance': (), 'date': datetime.date(2014, 10, 11)},
- {'balance': (), 'date': datetime.date(2014, 10, 14)},
- {'balance': (), 'date': datetime.date(2014, 10, 15)},
- {'balance': (), 'date': datetime.date(2014, 10, 18)},
- {'balance': (), 'date': datetime.date(2014, 10, 19)},
- {'balance': (), 'date': datetime.date(2014, 10, 20)},
- {'balance': (), 'date': datetime.date(2014, 10, 23)},
- {'balance': (), 'date': datetime.date(2014, 10, 24)},
- {'balance': (), 'date': datetime.date(2014, 10, 26)},
- {'balance': (), 'date': datetime.date(2014, 10, 28)},
- {'balance': (), 'date': datetime.date(2014, 10, 29)},
- {'balance': (), 'date': datetime.date(2014, 10, 30)},
- {'balance': (), 'date': datetime.date(2014, 11, 1)},
- {'balance': (), 'date': datetime.date(2014, 11, 4)},
- {'balance': (), 'date': datetime.date(2014, 11, 5)},
- {'balance': (), 'date': datetime.date(2014, 11, 6)},
- {'balance': (), 'date': datetime.date(2014, 11, 7)},
- {'balance': (), 'date': datetime.date(2014, 11, 8)},
- {'balance': (), 'date': datetime.date(2014, 11, 9)},
- {'balance': (), 'date': datetime.date(2014, 11, 11)},
- {'balance': (), 'date': datetime.date(2014, 11, 14)},
- {'balance': (-3065.54 USD, 7 GLD, 8 VHT, 10 VEA, 9 ITOT),
-  'date': datetime.date(2014, 11, 15)},
- {'balance': (), 'date': datetime.date(2014, 11, 16)},
- {'balance': (), 'date': datetime.date(2014, 11, 17)},
- {'balance': (), 'date': datetime.date(2014, 11, 18)},
- {'balance': (), 'date': datetime.date(2014, 11, 19)},
- {'balance': (), 'date': datetime.date(2014, 11, 20)},
- {'balance': (), 'date': datetime.date(2014, 11, 21)},
- {'balance': (), 'date': datetime.date(2014, 11, 22)},
- {'balance': (), 'date': datetime.date(2014, 11, 23)},
- {'balance': (), 'date': datetime.date(2014, 11, 27)},
- {'balance': (), 'date': datetime.date(2014, 11, 30)},
- {'balance': (4899.84 USD, -44 GLD), 'date': datetime.date(2014, 12, 3)},
- {'balance': (), 'date': datetime.date(2014, 12, 4)},
- {'balance': (), 'date': datetime.date(2014, 12, 5)},
- {'balance': (-4955.67 USD, 11 GLD, 12 VHT, 17 VEA, 16 ITOT),
-  'date': datetime.date(2014, 12, 8)},
- {'balance': (), 'date': datetime.date(2014, 12, 9)},
- {'balance': (), 'date': datetime.date(2014, 12, 10)},
- {'balance': (), 'date': datetime.date(2014, 12, 11)},
- {'balance': (), 'date': datetime.date(2014, 12, 14)},
- {'balance': (), 'date': datetime.date(2014, 12, 15)},
- {'balance': (), 'date': datetime.date(2014, 12, 16)},
- {'balance': (), 'date': datetime.date(2014, 12, 17)},
- {'balance': (), 'date': datetime.date(2014, 12, 18)},
- {'balance': (), 'date': datetime.date(2014, 12, 19)},
- {'balance': (), 'date': datetime.date(2014, 12, 20)},
- {'balance': (), 'date': datetime.date(2014, 12, 22)},
- {'balance': (), 'date': datetime.date(2014, 12, 24)},
- {'balance': (), 'date': datetime.date(2014, 12, 26)},
- {'balance': (), 'date': datetime.date(2014, 12, 31)},
- {'balance': (), 'date': datetime.date(2015, 1, 1)},
- {'balance': (), 'date': datetime.date(2015, 1, 2)},
- {'balance': (), 'date': datetime.date(2015, 1, 4)},
- {'balance': (-1799.99 USD, 10.024 RGAGX, 25.751 VBMPX),
-  'date': datetime.date(2015, 1, 5)},
- {'balance': (), 'date': datetime.date(2015, 1, 6)},
- {'balance': (), 'date': datetime.date(2015, 1, 8)},
- {'balance': (), 'date': datetime.date(2015, 1, 9)},
- {'balance': (), 'date': datetime.date(2015, 1, 12)},
- {'balance': (), 'date': datetime.date(2015, 1, 13)},
- {'balance': (), 'date': datetime.date(2015, 1, 14)},
- {'balance': (), 'date': datetime.date(2015, 1, 15)},
- {'balance': (), 'date': datetime.date(2015, 1, 16)},
- {'balance': (-1800.00 USD, 10.181 RGAGX, 25.751 VBMPX),
-  'date': datetime.date(2015, 1, 19)},
- {'balance': (), 'date': datetime.date(2015, 1, 20)},
- {'balance': (), 'date': datetime.date(2015, 1, 22)},
- {'balance': (), 'date': datetime.date(2015, 1, 24)},
- {'balance': (), 'date': datetime.date(2015, 1, 25)},
- {'balance': (), 'date': datetime.date(2015, 1, 28)},
- {'balance': (), 'date': datetime.date(2015, 1, 29)},
- {'balance': (), 'date': datetime.date(2015, 1, 30)},
- {'balance': (), 'date': datetime.date(2015, 1, 31)},
- {'balance': (), 'date': datetime.date(2015, 2, 1)},
- {'balance': (-1800.01 USD, 9.810 RGAGX, 26.462 VBMPX),
-  'date': datetime.date(2015, 2, 2)},
- {'balance': (), 'date': datetime.date(2015, 2, 3)},
- {'balance': (), 'date': datetime.date(2015, 2, 4)},
- {'balance': (), 'date': datetime.date(2015, 2, 5)},
- {'balance': (), 'date': datetime.date(2015, 2, 9)},
- {'balance': (), 'date': datetime.date(2015, 2, 12)},
- {'balance': (), 'date': datetime.date(2015, 2, 13)},
- {'balance': (), 'date': datetime.date(2015, 2, 14)},
- {'balance': (-1800.08 USD, 9.506 RGAGX, 25.881 VBMPX),
-  'date': datetime.date(2015, 2, 16)},
- {'balance': (), 'date': datetime.date(2015, 2, 17)},
- {'balance': (), 'date': datetime.date(2015, 2, 18)},
- {'balance': (), 'date': datetime.date(2015, 2, 19)},
- {'balance': (), 'date': datetime.date(2015, 2, 21)},
- {'balance': (), 'date': datetime.date(2015, 2, 23)},
- {'balance': (), 'date': datetime.date(2015, 2, 24)},
- {'balance': (), 'date': datetime.date(2015, 2, 25)},
- {'balance': (), 'date': datetime.date(2015, 2, 26)},
- {'balance': (), 'date': datetime.date(2015, 2, 27)},
- {'balance': (), 'date': datetime.date(2015, 2, 28)},
- {'balance': (-1799.97 USD, 9.566 RGAGX, 26.567 VBMPX),
-  'date': datetime.date(2015, 3, 2)},
- {'balance': (), 'date': datetime.date(2015, 3, 4)},
- {'balance': (), 'date': datetime.date(2015, 3, 5)},
- {'balance': (), 'date': datetime.date(2015, 3, 9)},
- {'balance': (), 'date': datetime.date(2015, 3, 10)},
- {'balance': (), 'date': datetime.date(2015, 3, 12)},
- {'balance': (), 'date': datetime.date(2015, 3, 13)},
- {'balance': (), 'date': datetime.date(2015, 3, 14)},
- {'balance': (-1799.95 USD, 9.285 RGAGX, 27.007 VBMPX),
-  'date': datetime.date(2015, 3, 16)},
- {'balance': (), 'date': datetime.date(2015, 3, 17)},
- {'balance': (), 'date': datetime.date(2015, 3, 18)},
- {'balance': (), 'date': datetime.date(2015, 3, 19)},
- {'balance': (), 'date': datetime.date(2015, 3, 20)},
- {'balance': (), 'date': datetime.date(2015, 3, 21)},
- {'balance': (), 'date': datetime.date(2015, 3, 22)},
- {'balance': (), 'date': datetime.date(2015, 3, 23)},
- {'balance': (), 'date': datetime.date(2015, 3, 24)},
- {'balance': (), 'date': datetime.date(2015, 3, 26)},
- {'balance': (), 'date': datetime.date(2015, 3, 27)},
- {'balance': (), 'date': datetime.date(2015, 3, 29)},
- {'balance': (-1800.01 USD, 9.091 RGAGX, 27.078 VBMPX),
-  'date': datetime.date(2015, 3, 30)},
- {'balance': (), 'date': datetime.date(2015, 4, 3)},
- {'balance': (), 'date': datetime.date(2015, 4, 4)},
- {'balance': (), 'date': datetime.date(2015, 4, 6)},
- {'balance': (), 'date': datetime.date(2015, 4, 8)},
- {'balance': (), 'date': datetime.date(2015, 4, 9)},
- {'balance': (), 'date': datetime.date(2015, 4, 10)},
- {'balance': (-1800.07 USD, 9.147 RGAGX, 26.441 VBMPX),
-  'date': datetime.date(2015, 4, 13)},
- {'balance': (), 'date': datetime.date(2015, 4, 15)},
- {'balance': (), 'date': datetime.date(2015, 4, 18)},
- {'balance': (), 'date': datetime.date(2015, 4, 19)},
- {'balance': (), 'date': datetime.date(2015, 4, 20)},
- {'balance': (), 'date': datetime.date(2015, 4, 21)},
- {'balance': (), 'date': datetime.date(2015, 4, 23)},
- {'balance': (), 'date': datetime.date(2015, 4, 24)},
- {'balance': (), 'date': datetime.date(2015, 4, 26)},
- {'balance': (-1799.93 USD, 9.153 RGAGX, 27.282 VBMPX),
-  'date': datetime.date(2015, 4, 27)},
- {'balance': (), 'date': datetime.date(2015, 4, 29)},
- {'balance': (), 'date': datetime.date(2015, 4, 30)},
- {'balance': (), 'date': datetime.date(2015, 5, 3)},
- {'balance': (), 'date': datetime.date(2015, 5, 4)},
- {'balance': (), 'date': datetime.date(2015, 5, 5)},
- {'balance': (), 'date': datetime.date(2015, 5, 7)},
- {'balance': (), 'date': datetime.date(2015, 5, 8)},
- {'balance': (), 'date': datetime.date(2015, 5, 9)},
- {'balance': (), 'date': datetime.date(2015, 5, 10)},
- {'balance': (-1800.08 USD, 8.999 RGAGX, 27.160 VBMPX),
-  'date': datetime.date(2015, 5, 11)},
- {'balance': (), 'date': datetime.date(2015, 5, 14)},
- {'balance': (), 'date': datetime.date(2015, 5, 15)},
- {'balance': (), 'date': datetime.date(2015, 5, 17)},
- {'balance': (), 'date': datetime.date(2015, 5, 19)},
- {'balance': (), 'date': datetime.date(2015, 5, 21)},
- {'balance': (), 'date': datetime.date(2015, 5, 22)},
- {'balance': (), 'date': datetime.date(2015, 5, 23)},
- {'balance': (-1799.91 USD, 8.937 RGAGX, 27.766 VBMPX),
-  'date': datetime.date(2015, 5, 25)},
- {'balance': (), 'date': datetime.date(2015, 5, 26)},
- {'balance': (), 'date': datetime.date(2015, 5, 31)},
- {'balance': (), 'date': datetime.date(2015, 6, 1)},
- {'balance': (), 'date': datetime.date(2015, 6, 2)},
- {'balance': (), 'date': datetime.date(2015, 6, 4)},
- {'balance': (), 'date': datetime.date(2015, 6, 5)},
- {'balance': (), 'date': datetime.date(2015, 6, 7)},
- {'balance': (-1800.07 USD, 8.630 RGAGX, 28.192 VBMPX),
-  'date': datetime.date(2015, 6, 8)},
- {'balance': (), 'date': datetime.date(2015, 6, 10)},
- {'balance': (), 'date': datetime.date(2015, 6, 11)},
- {'balance': (759.80 USD, -10 VEA), 'date': datetime.date(2015, 6, 13)},
- {'balance': (-548.15 USD, 1 VHT, 1 GLD, 2 VEA, 2 ITOT),
-  'date': datetime.date(2015, 6, 14)},
- {'balance': (), 'date': datetime.date(2015, 6, 17)},
- {'balance': (), 'date': datetime.date(2015, 6, 18)},
- {'balance': (), 'date': datetime.date(2015, 6, 19)},
- {'balance': (-1799.94 USD, 8.414 RGAGX, 28.158 VBMPX),
-  'date': datetime.date(2015, 6, 22)},
- {'balance': (), 'date': datetime.date(2015, 6, 25)},
- {'balance': (), 'date': datetime.date(2015, 6, 27)},
- {'balance': (), 'date': datetime.date(2015, 6, 29)},
- {'balance': (), 'date': datetime.date(2015, 7, 2)},
- {'balance': (), 'date': datetime.date(2015, 7, 3)},
- {'balance': (), 'date': datetime.date(2015, 7, 4)},
- {'balance': (-1800.00 USD, 8.229 RGAGX, 27.672 VBMPX),
-  'date': datetime.date(2015, 7, 6)},
- {'balance': (), 'date': datetime.date(2015, 7, 8)},
- {'balance': (), 'date': datetime.date(2015, 7, 9)},
- {'balance': (), 'date': datetime.date(2015, 7, 10)},
- {'balance': (), 'date': datetime.date(2015, 7, 11)},
- {'balance': (), 'date': datetime.date(2015, 7, 12)},
- {'balance': (), 'date': datetime.date(2015, 7, 13)},
- {'balance': (), 'date': datetime.date(2015, 7, 14)},
- {'balance': (), 'date': datetime.date(2015, 7, 16)},
- {'balance': (), 'date': datetime.date(2015, 7, 17)},
- {'balance': (), 'date': datetime.date(2015, 7, 18)},
- {'balance': (-1800.08 USD, 8.189 RGAGX, 27.419 VBMPX),
-  'date': datetime.date(2015, 7, 20)},
- {'balance': (), 'date': datetime.date(2015, 7, 21)},
- {'balance': (), 'date': datetime.date(2015, 7, 22)},
- {'balance': (), 'date': datetime.date(2015, 7, 23)},
- {'balance': (), 'date': datetime.date(2015, 7, 24)},
- {'balance': (), 'date': datetime.date(2015, 7, 25)},
- {'balance': (), 'date': datetime.date(2015, 7, 26)},
- {'balance': (), 'date': datetime.date(2015, 7, 27)},
- {'balance': (), 'date': datetime.date(2015, 7, 30)},
- {'balance': (), 'date': datetime.date(2015, 8, 1)},
- {'balance': (), 'date': datetime.date(2015, 8, 3)},
- {'balance': (), 'date': datetime.date(2015, 8, 4)},
- {'balance': (), 'date': datetime.date(2015, 8, 5)},
- {'balance': (), 'date': datetime.date(2015, 8, 6)},
- {'balance': (), 'date': datetime.date(2015, 8, 9)},
- {'balance': (), 'date': datetime.date(2015, 8, 11)},
- {'balance': (), 'date': datetime.date(2015, 8, 13)},
- {'balance': (), 'date': datetime.date(2015, 8, 14)},
- {'balance': (), 'date': datetime.date(2015, 8, 15)},
- {'balance': (), 'date': datetime.date(2015, 8, 16)},
- {'balance': (), 'date': datetime.date(2015, 8, 18)},
- {'balance': (), 'date': datetime.date(2015, 8, 19)},
- {'balance': (), 'date': datetime.date(2015, 8, 21)},
- {'balance': (), 'date': datetime.date(2015, 8, 24)},
- {'balance': (), 'date': datetime.date(2015, 8, 25)},
- {'balance': (), 'date': datetime.date(2015, 8, 27)},
- {'balance': (), 'date': datetime.date(2015, 8, 28)},
- {'balance': (), 'date': datetime.date(2015, 8, 29)},
- {'balance': (), 'date': datetime.date(2015, 8, 30)},
- {'balance': (), 'date': datetime.date(2015, 9, 3)},
- {'balance': (), 'date': datetime.date(2015, 9, 4)},
- {'balance': (-3354.83 USD, 7 VHT, 8 GLD, 11 VEA, 10 ITOT),
-  'date': datetime.date(2015, 9, 6)},
- {'balance': (), 'date': datetime.date(2015, 9, 7)},
- {'balance': (), 'date': datetime.date(2015, 9, 8)},
- {'balance': (), 'date': datetime.date(2015, 9, 9)},
- {'balance': (), 'date': datetime.date(2015, 9, 10)},
- {'balance': (), 'date': datetime.date(2015, 9, 11)},
- {'balance': (), 'date': datetime.date(2015, 9, 15)},
- {'balance': (), 'date': datetime.date(2015, 9, 17)},
- {'balance': (), 'date': datetime.date(2015, 9, 18)},
- {'balance': (), 'date': datetime.date(2015, 9, 19)},
- {'balance': (), 'date': datetime.date(2015, 9, 22)},
- {'balance': (), 'date': datetime.date(2015, 9, 23)},
- {'balance': (), 'date': datetime.date(2015, 9, 24)},
- {'balance': (), 'date': datetime.date(2015, 9, 26)},
- {'balance': (), 'date': datetime.date(2015, 9, 29)},
- {'balance': (), 'date': datetime.date(2015, 10, 1)},
- {'balance': (), 'date': datetime.date(2015, 10, 4)},
- {'balance': (), 'date': datetime.date(2015, 10, 5)},
- {'balance': (), 'date': datetime.date(2015, 10, 6)},
- {'balance': (), 'date': datetime.date(2015, 10, 7)},
- {'balance': (), 'date': datetime.date(2015, 10, 8)},
- {'balance': (), 'date': datetime.date(2015, 10, 9)},
- {'balance': (-4134.49 USD, 9 VHT, 10 GLD, 14 VEA, 12 ITOT),
-  'date': datetime.date(2015, 10, 11)},
- {'balance': (), 'date': datetime.date(2015, 10, 14)},
- {'balance': (), 'date': datetime.date(2015, 10, 18)},
- {'balance': (), 'date': datetime.date(2015, 10, 19)},
- {'balance': (), 'date': datetime.date(2015, 10, 21)},
- {'balance': (), 'date': datetime.date(2015, 10, 22)},
- {'balance': (), 'date': datetime.date(2015, 10, 23)},
- {'balance': (), 'date': datetime.date(2015, 10, 24)},
- {'balance': (1197.13 USD, -11 GLD), 'date': datetime.date(2015, 10, 27)},
- {'balance': (), 'date': datetime.date(2015, 10, 28)},
- {'balance': (), 'date': datetime.date(2015, 11, 1)},
- {'balance': (), 'date': datetime.date(2015, 11, 4)},
- {'balance': (), 'date': datetime.date(2015, 11, 5)},
- {'balance': (), 'date': datetime.date(2015, 11, 6)},
- {'balance': (), 'date': datetime.date(2015, 11, 7)},
- {'balance': (), 'date': datetime.date(2015, 11, 8)},
- {'balance': (), 'date': datetime.date(2015, 11, 9)},
- {'balance': (1291.36 USD, -16 ITOT), 'date': datetime.date(2015, 11, 11)},
- {'balance': (), 'date': datetime.date(2015, 11, 12)},
- {'balance': (), 'date': datetime.date(2015, 11, 16)},
- {'balance': (), 'date': datetime.date(2015, 11, 19)},
- {'balance': (), 'date': datetime.date(2015, 11, 20)},
- {'balance': (), 'date': datetime.date(2015, 11, 21)},
- {'balance': (), 'date': datetime.date(2015, 11, 22)},
- {'balance': (-6528.78 USD, 20 VHT, 28 VEA, 25 ITOT),
-  'date': datetime.date(2015, 11, 23)},
- {'balance': (), 'date': datetime.date(2015, 11, 26)},
- {'balance': (), 'date': datetime.date(2015, 11, 30)},
- {'balance': (), 'date': datetime.date(2015, 12, 2)},
- {'balance': (), 'date': datetime.date(2015, 12, 3)},
- {'balance': (), 'date': datetime.date(2015, 12, 4)},
- {'balance': (), 'date': datetime.date(2015, 12, 5)},
- {'balance': (), 'date': datetime.date(2015, 12, 6)},
- {'balance': (), 'date': datetime.date(2015, 12, 8)},
- {'balance': (), 'date': datetime.date(2015, 12, 9)},
- {'balance': (), 'date': datetime.date(2015, 12, 14)},
- {'balance': (), 'date': datetime.date(2015, 12, 16)},
- {'balance': (), 'date': datetime.date(2015, 12, 17)},
- {'balance': (), 'date': datetime.date(2015, 12, 18)},
- {'balance': (), 'date': datetime.date(2015, 12, 19)},
- {'balance': (786.88 USD, -8 VHT), 'date': datetime.date(2015, 12, 20)},
- {'balance': (), 'date': datetime.date(2015, 12, 22)},
- {'balance': (1228.42 USD, -17 VEA), 'date': datetime.date(2015, 12, 23)},
- {'balance': (), 'date': datetime.date(2015, 12, 25)},
- {'balance': (-2278.40 USD, 11 GLD, 15 VEA),
-  'date': datetime.date(2015, 12, 27)},
- {'balance': (), 'date': datetime.date(2015, 12, 28)},
- {'balance': (), 'date': datetime.date(2015, 12, 30)},
- {'balance': (), 'date': datetime.date(2015, 12, 31)},
- {'balance': (), 'date': datetime.date(2016, 1, 1)},
- {'balance': (), 'date': datetime.date(2016, 1, 3)},
- {'balance': (), 'date': datetime.date(2016, 1, 4)},
- {'balance': (), 'date': datetime.date(2016, 1, 6)},
- {'balance': (), 'date': datetime.date(2016, 1, 7)},
- {'balance': (), 'date': datetime.date(2016, 1, 8)},
- {'balance': (), 'date': datetime.date(2016, 1, 9)},
- {'balance': (), 'date': datetime.date(2016, 1, 13)},
- {'balance': (), 'date': datetime.date(2016, 1, 14)},
- {'balance': (), 'date': datetime.date(2016, 1, 15)},
- {'balance': (), 'date': datetime.date(2016, 1, 16)},
- {'balance': (-1799.98 USD, 7.812 RGAGX, 23.330 VBMPX),
-  'date': datetime.date(2016, 1, 18)},
- {'balance': (), 'date': datetime.date(2016, 1, 20)},
- {'balance': (), 'date': datetime.date(2016, 1, 21)},
- {'balance': (770.42 USD, -7 GLD), 'date': datetime.date(2016, 1, 23)},
- {'balance': (), 'date': datetime.date(2016, 1, 25)},
- {'balance': (), 'date': datetime.date(2016, 1, 26)},
- {'balance': (), 'date': datetime.date(2016, 1, 27)},
- {'balance': (), 'date': datetime.date(2016, 1, 28)},
- {'balance': (), 'date': datetime.date(2016, 1, 29)},
- {'balance': (-1799.94 USD, 8.032 RGAGX, 23.421 VBMPX),
-  'date': datetime.date(2016, 2, 1)},
- {'balance': (), 'date': datetime.date(2016, 2, 2)},
- {'balance': (), 'date': datetime.date(2016, 2, 4)},
- {'balance': (), 'date': datetime.date(2016, 2, 5)},
- {'balance': (), 'date': datetime.date(2016, 2, 7)},
- {'balance': (), 'date': datetime.date(2016, 2, 9)},
- {'balance': (), 'date': datetime.date(2016, 2, 11)},
- {'balance': (), 'date': datetime.date(2016, 2, 12)},
- {'balance': (-1799.98 USD, 8.062 RGAGX, 23.084 VBMPX),
-  'date': datetime.date(2016, 2, 15)},
- {'balance': (), 'date': datetime.date(2016, 2, 18)},
- {'balance': (), 'date': datetime.date(2016, 2, 19)},
- {'balance': (), 'date': datetime.date(2016, 2, 21)},
- {'balance': (), 'date': datetime.date(2016, 2, 23)},
- {'balance': (), 'date': datetime.date(2016, 2, 25)},
- {'balance': (), 'date': datetime.date(2016, 2, 26)},
- {'balance': (-1799.99 USD, 8.202 RGAGX, 22.614 VBMPX),
-  'date': datetime.date(2016, 2, 29)},
- {'balance': (), 'date': datetime.date(2016, 3, 2)},
- {'balance': (), 'date': datetime.date(2016, 3, 4)},
- {'balance': (), 'date': datetime.date(2016, 3, 6)},
- {'balance': (), 'date': datetime.date(2016, 3, 7)},
- {'balance': (), 'date': datetime.date(2016, 3, 8)},
- {'balance': (), 'date': datetime.date(2016, 3, 10)},
- {'balance': (), 'date': datetime.date(2016, 3, 11)},
- {'balance': (), 'date': datetime.date(2016, 3, 12)},
- {'balance': (-1800.11 USD, 8.286 RGAGX, 22.375 VBMPX),
-  'date': datetime.date(2016, 3, 14)},
- {'balance': (), 'date': datetime.date(2016, 3, 16)},
- {'balance': (), 'date': datetime.date(2016, 3, 17)},
- {'balance': (), 'date': datetime.date(2016, 3, 18)},
- {'balance': (), 'date': datetime.date(2016, 3, 20)},
- {'balance': (), 'date': datetime.date(2016, 3, 21)},
- {'balance': (), 'date': datetime.date(2016, 3, 22)},
- {'balance': (), 'date': datetime.date(2016, 3, 23)},
- {'balance': (), 'date': datetime.date(2016, 3, 24)},
- {'balance': (), 'date': datetime.date(2016, 3, 25)},
- {'balance': (), 'date': datetime.date(2016, 3, 26)},
- {'balance': (-1799.90 USD, 8.211 RGAGX, 22.045 VBMPX),
-  'date': datetime.date(2016, 3, 28)},
- {'balance': (), 'date': datetime.date(2016, 4, 1)},
- {'balance': (), 'date': datetime.date(2016, 4, 2)},
- {'balance': (), 'date': datetime.date(2016, 4, 4)},
- {'balance': (), 'date': datetime.date(2016, 4, 5)},
- {'balance': (), 'date': datetime.date(2016, 4, 6)},
- {'balance': (), 'date': datetime.date(2016, 4, 7)},
- {'balance': (), 'date': datetime.date(2016, 4, 8)},
- {'balance': (), 'date': datetime.date(2016, 4, 9)},
- {'balance': (), 'date': datetime.date(2016, 4, 10)},
- {'balance': (-1800.02 USD, 8.182 RGAGX, 22.291 VBMPX),
-  'date': datetime.date(2016, 4, 11)},
- {'balance': (), 'date': datetime.date(2016, 4, 12)},
- {'balance': (), 'date': datetime.date(2016, 4, 13)},
- {'balance': (), 'date': datetime.date(2016, 4, 14)},
- {'balance': (), 'date': datetime.date(2016, 4, 15)},
- {'balance': (), 'date': datetime.date(2016, 4, 17)},
- {'balance': (), 'date': datetime.date(2016, 4, 20)},
- {'balance': (), 'date': datetime.date(2016, 4, 21)},
- {'balance': (), 'date': datetime.date(2016, 4, 22)},
- {'balance': (), 'date': datetime.date(2016, 4, 24)},
- {'balance': (-1800.02 USD, 7.901 RGAGX, 23.317 VBMPX),
-  'date': datetime.date(2016, 4, 25)},
- {'balance': (), 'date': datetime.date(2016, 4, 26)},
- {'balance': (), 'date': datetime.date(2016, 4, 27)},
- {'balance': (-3663.93 USD, 17 GLD, 22 VEA),
-  'date': datetime.date(2016, 4, 30)},
- {'balance': (), 'date': datetime.date(2016, 5, 2)},
- {'balance': (), 'date': datetime.date(2016, 5, 3)},
- {'balance': (), 'date': datetime.date(2016, 5, 4)},
- {'balance': (), 'date': datetime.date(2016, 5, 5)},
- {'balance': (), 'date': datetime.date(2016, 5, 6)},
- {'balance': (), 'date': datetime.date(2016, 5, 7)},
- {'balance': (-1799.98 USD, 7.858 RGAGX, 23.935 VBMPX),
-  'date': datetime.date(2016, 5, 9)}]
+[
+ {
+  "balance": {},
+  "date": "2000-01-01"
+ },
+ {
+  "balance": {
+   "USD": -50,
+   "XYZ": 1
+  },
+  "date": "2000-01-02"
+ },
+ {
+  "balance": {
+   "ABC": 1,
+   "USD": -50
+  },
+  "date": "2000-01-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-02"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-04"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.644,
+   "USD": -1799.96,
+   "VBMPX": 21.964
+  },
+  "date": "2014-01-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-12"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-19"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.724,
+   "USD": -1800.03,
+   "VBMPX": 21.720
+  },
+  "date": "2014-01-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-25"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-29"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-30"
+ },
+ {
+  "balance": {},
+  "date": "2014-01-31"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-01"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.784,
+   "USD": -1800.03,
+   "VBMPX": 21.372
+  },
+  "date": "2014-02-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-13"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-15"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.593,
+   "USD": -1799.99,
+   "VBMPX": 21.798
+  },
+  "date": "2014-02-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-24"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-25"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-27"
+ },
+ {
+  "balance": {},
+  "date": "2014-02-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-02"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.536,
+   "USD": -1799.98,
+   "VBMPX": 22.011
+  },
+  "date": "2014-03-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-13"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-16"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.382,
+   "USD": -1800.01,
+   "VBMPX": 22.153
+  },
+  "date": "2014-03-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-24"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-27"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-03-29"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.102,
+   "USD": -1800.01,
+   "VBMPX": 21.898
+  },
+  "date": "2014-03-31"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-02"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-05"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-11"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.910,
+   "USD": -1800.00,
+   "VBMPX": 22.066
+  },
+  "date": "2014-04-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-24"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-25"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-26"
+ },
+ {
+  "balance": {},
+  "date": "2014-04-27"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.024,
+   "USD": -1800.02,
+   "VBMPX": 22.222
+  },
+  "date": "2014-04-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-05"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-11"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.951,
+   "USD": -1799.94,
+   "VBMPX": 22.105
+  },
+  "date": "2014-05-12"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-25"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.716,
+   "USD": -1800.06,
+   "VBMPX": 22.465
+  },
+  "date": "2014-05-26"
+ },
+ {
+  "balance": {},
+  "date": "2014-05-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-02"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-05"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-08"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.682,
+   "USD": -1799.95,
+   "VBMPX": 23.099
+  },
+  "date": "2014-06-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-13"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-22"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.995,
+   "USD": -1800.04,
+   "VBMPX": 23.181
+  },
+  "date": "2014-06-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-26"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-06-29"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-05"
+ },
+ {
+  "balance": {
+   "RGAGX": 11.074,
+   "USD": -1799.94,
+   "VBMPX": 23.062
+  },
+  "date": "2014-07-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-12"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-20"
+ },
+ {
+  "balance": {
+   "RGAGX": 6.515,
+   "USD": -1050.01,
+   "VBMPX": 13.376
+  },
+  "date": "2014-07-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-26"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-27"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-29"
+ },
+ {
+  "balance": {},
+  "date": "2014-07-31"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-05"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-25"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-08-29"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-02"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-12"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-22"
+ },
+ {
+  "balance": {
+   "GLD": 44,
+   "USD": -4899.84
+  },
+  "date": "2014-09-25"
+ },
+ {
+  "balance": {},
+  "date": "2014-09-27"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-02"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-24"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-26"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-28"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-29"
+ },
+ {
+  "balance": {},
+  "date": "2014-10-30"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-01"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-05"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-06"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-07"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-14"
+ },
+ {
+  "balance": {
+   "GLD": 7,
+   "ITOT": 9,
+   "USD": -3065.54,
+   "VEA": 10,
+   "VHT": 8
+  },
+  "date": "2014-11-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-21"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-23"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-27"
+ },
+ {
+  "balance": {},
+  "date": "2014-11-30"
+ },
+ {
+  "balance": {
+   "GLD": -44,
+   "USD": 4899.84
+  },
+  "date": "2014-12-03"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-04"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-05"
+ },
+ {
+  "balance": {
+   "GLD": 11,
+   "ITOT": 16,
+   "USD": -4955.67,
+   "VEA": 17,
+   "VHT": 12
+  },
+  "date": "2014-12-08"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-09"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-10"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-11"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-14"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-15"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-16"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-17"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-18"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-19"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-20"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-22"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-24"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-26"
+ },
+ {
+  "balance": {},
+  "date": "2014-12-31"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-01"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-02"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-04"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.024,
+   "USD": -1799.99,
+   "VBMPX": 25.751
+  },
+  "date": "2015-01-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-12"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-13"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-15"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-16"
+ },
+ {
+  "balance": {
+   "RGAGX": 10.181,
+   "USD": -1800.00,
+   "VBMPX": 25.751
+  },
+  "date": "2015-01-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-20"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-25"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-28"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-29"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-01-31"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-01"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.810,
+   "USD": -1800.01,
+   "VBMPX": 26.462
+  },
+  "date": "2015-02-02"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-12"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-13"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-14"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.506,
+   "USD": -1800.08,
+   "VBMPX": 25.881
+  },
+  "date": "2015-02-16"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-25"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-26"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-02-28"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.566,
+   "USD": -1799.97,
+   "VBMPX": 26.567
+  },
+  "date": "2015-03-02"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-10"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-12"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-13"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-14"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.285,
+   "USD": -1799.95,
+   "VBMPX": 27.007
+  },
+  "date": "2015-03-16"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-20"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-26"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-03-29"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.091,
+   "USD": -1800.01,
+   "VBMPX": 27.078
+  },
+  "date": "2015-03-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-10"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.147,
+   "USD": -1800.07,
+   "VBMPX": 26.441
+  },
+  "date": "2015-04-13"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-15"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-20"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-26"
+ },
+ {
+  "balance": {
+   "RGAGX": 9.153,
+   "USD": -1799.93,
+   "VBMPX": 27.282
+  },
+  "date": "2015-04-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-29"
+ },
+ {
+  "balance": {},
+  "date": "2015-04-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-07"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-10"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.999,
+   "USD": -1800.08,
+   "VBMPX": 27.160
+  },
+  "date": "2015-05-11"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-15"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-23"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.937,
+   "USD": -1799.91,
+   "VBMPX": 27.766
+  },
+  "date": "2015-05-25"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-26"
+ },
+ {
+  "balance": {},
+  "date": "2015-05-31"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-01"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-02"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-07"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.630,
+   "USD": -1800.07,
+   "VBMPX": 28.192
+  },
+  "date": "2015-06-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-10"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-11"
+ },
+ {
+  "balance": {
+   "USD": 759.80,
+   "VEA": -10
+  },
+  "date": "2015-06-13"
+ },
+ {
+  "balance": {
+   "GLD": 1,
+   "ITOT": 2,
+   "USD": -548.15,
+   "VEA": 2,
+   "VHT": 1
+  },
+  "date": "2015-06-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-19"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.414,
+   "USD": -1799.94,
+   "VBMPX": 28.158
+  },
+  "date": "2015-06-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-25"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-06-29"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-02"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-04"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.229,
+   "USD": -1800.00,
+   "VBMPX": 27.672
+  },
+  "date": "2015-07-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-10"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-11"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-12"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-13"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-16"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-18"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.189,
+   "USD": -1800.08,
+   "VBMPX": 27.419
+  },
+  "date": "2015-07-20"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-25"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-26"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-07-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-01"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-11"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-13"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-15"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-16"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-25"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-28"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-29"
+ },
+ {
+  "balance": {},
+  "date": "2015-08-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-04"
+ },
+ {
+  "balance": {
+   "GLD": 8,
+   "ITOT": 10,
+   "USD": -3354.83,
+   "VEA": 11,
+   "VHT": 7
+  },
+  "date": "2015-09-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-07"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-10"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-11"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-15"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-24"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-26"
+ },
+ {
+  "balance": {},
+  "date": "2015-09-29"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-01"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-07"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-09"
+ },
+ {
+  "balance": {
+   "GLD": 10,
+   "ITOT": 12,
+   "USD": -4134.49,
+   "VEA": 14,
+   "VHT": 9
+  },
+  "date": "2015-10-11"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-22"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-24"
+ },
+ {
+  "balance": {
+   "GLD": -11,
+   "USD": 1197.13
+  },
+  "date": "2015-10-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-10-28"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-01"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-07"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-09"
+ },
+ {
+  "balance": {
+   "ITOT": -16,
+   "USD": 1291.36
+  },
+  "date": "2015-11-11"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-12"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-16"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-19"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-20"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-21"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-22"
+ },
+ {
+  "balance": {
+   "ITOT": 25,
+   "USD": -6528.78,
+   "VEA": 28,
+   "VHT": 20
+  },
+  "date": "2015-11-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-26"
+ },
+ {
+  "balance": {},
+  "date": "2015-11-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-02"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-03"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-04"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-05"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-06"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-08"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-09"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-14"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-16"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-17"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-18"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-19"
+ },
+ {
+  "balance": {
+   "USD": 786.88,
+   "VHT": -8
+  },
+  "date": "2015-12-20"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-22"
+ },
+ {
+  "balance": {
+   "USD": 1228.42,
+   "VEA": -17
+  },
+  "date": "2015-12-23"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-25"
+ },
+ {
+  "balance": {
+   "GLD": 11,
+   "USD": -2278.40,
+   "VEA": 15
+  },
+  "date": "2015-12-27"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-28"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-30"
+ },
+ {
+  "balance": {},
+  "date": "2015-12-31"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-01"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-03"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-04"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-06"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-07"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-08"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-09"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-13"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-14"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-15"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-16"
+ },
+ {
+  "balance": {
+   "RGAGX": 7.812,
+   "USD": -1799.98,
+   "VBMPX": 23.330
+  },
+  "date": "2016-01-18"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-20"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-21"
+ },
+ {
+  "balance": {
+   "GLD": -7,
+   "USD": 770.42
+  },
+  "date": "2016-01-23"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-25"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-26"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-27"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-28"
+ },
+ {
+  "balance": {},
+  "date": "2016-01-29"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.032,
+   "USD": -1799.94,
+   "VBMPX": 23.421
+  },
+  "date": "2016-02-01"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-02"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-04"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-05"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-07"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-09"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-11"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-12"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.062,
+   "USD": -1799.98,
+   "VBMPX": 23.084
+  },
+  "date": "2016-02-15"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-18"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-19"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-21"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-23"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-25"
+ },
+ {
+  "balance": {},
+  "date": "2016-02-26"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.202,
+   "USD": -1799.99,
+   "VBMPX": 22.614
+  },
+  "date": "2016-02-29"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-02"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-04"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-06"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-07"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-08"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-10"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-11"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-12"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.286,
+   "USD": -1800.11,
+   "VBMPX": 22.375
+  },
+  "date": "2016-03-14"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-16"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-17"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-18"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-20"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-21"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-22"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-23"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-24"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-25"
+ },
+ {
+  "balance": {},
+  "date": "2016-03-26"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.211,
+   "USD": -1799.90,
+   "VBMPX": 22.045
+  },
+  "date": "2016-03-28"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-01"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-02"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-04"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-05"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-06"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-07"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-08"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-09"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-10"
+ },
+ {
+  "balance": {
+   "RGAGX": 8.182,
+   "USD": -1800.02,
+   "VBMPX": 22.291
+  },
+  "date": "2016-04-11"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-12"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-13"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-14"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-15"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-17"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-20"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-21"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-22"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-24"
+ },
+ {
+  "balance": {
+   "RGAGX": 7.901,
+   "USD": -1800.02,
+   "VBMPX": 23.317
+  },
+  "date": "2016-04-25"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-26"
+ },
+ {
+  "balance": {},
+  "date": "2016-04-27"
+ },
+ {
+  "balance": {
+   "GLD": 17,
+   "USD": -3663.93,
+   "VEA": 22
+  },
+  "date": "2016-04-30"
+ },
+ {
+  "balance": {},
+  "date": "2016-05-02"
+ },
+ {
+  "balance": {},
+  "date": "2016-05-03"
+ },
+ {
+  "balance": {},
+  "date": "2016-05-04"
+ },
+ {
+  "balance": {},
+  "date": "2016-05-05"
+ },
+ {
+  "balance": {},
+  "date": "2016-05-06"
+ },
+ {
+  "balance": {},
+  "date": "2016-05-07"
+ },
+ {
+  "balance": {
+   "RGAGX": 7.858,
+   "USD": -1799.98,
+   "VBMPX": 23.935
+  },
+  "date": "2016-05-09"
+ }
+]

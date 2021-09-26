@@ -3,8 +3,11 @@ import pytest
 from beancount.core.number import D
 
 from fava.core import FavaLedger
-from fava.core.charts import dumps
+from fava.core.charts import PRETTY_ENCODER
 from fava.util.date import Interval
+
+
+dumps = PRETTY_ENCODER.encode
 
 
 def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
@@ -12,7 +15,6 @@ def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
         data = small_example_ledger.charts.interval_totals(
             Interval.MONTH, "Expenses", conversion
         )
-        snapshot(data)
         snapshot(dumps(data))
 
 
@@ -23,7 +25,6 @@ def test_interval_totals_inverted(
         data = small_example_ledger.charts.interval_totals(
             Interval.MONTH, "Expenses", conversion, invert=True
         )
-        snapshot(data)
         snapshot(dumps(data))
 
 
@@ -38,13 +39,11 @@ def test_linechart_data(example_ledger: FavaLedger, snapshot) -> None:
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities", conversion
         )
-        snapshot(data)
         snapshot(dumps(data))
 
 
 def test_net_worth(example_ledger: FavaLedger, snapshot) -> None:
     data = example_ledger.charts.net_worth(Interval.MONTH, "USD")
-    snapshot(data)
     snapshot(dumps(data))
 
 
@@ -73,4 +72,4 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
 def test_query(example_ledger: FavaLedger, snapshot, query) -> None:
     _, types, rows = example_ledger.query_shell.execute_query(query)
     data = example_ledger.charts.query(types, rows)
-    snapshot(data)
+    snapshot(dumps(data))

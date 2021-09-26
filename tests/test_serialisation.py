@@ -17,13 +17,16 @@ from beancount.core.number import D
 from beancount.core.number import MISSING
 from flask.json import loads
 
-from fava.core.charts import dumps
+from fava.core.charts import PRETTY_ENCODER
 from fava.core.file import _format_entry
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
 from fava.serialisation import extract_tags_links
 from fava.serialisation import serialise
+
+
+dumps = PRETTY_ENCODER.encode
 
 
 def test_serialise() -> None:

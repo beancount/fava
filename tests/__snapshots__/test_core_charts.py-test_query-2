@@ -1,14 +1,35 @@
-[{'balance': {('ABC', None): 1 ABC,
-              ('GLD', None): 3 GLD,
-              ('ITOT', None): 58 ITOT,
-              ('RGAGX', None): 373.339 RGAGX,
-              ('USD', None): -87145.92 USD,
-              ('VBMPX', None): 935.491 VBMPX,
-              ('VEA', None): 92 VEA,
-              ('VHT', None): 49 VHT,
-              ('XYZ', None): 1 XYZ},
-  'group': ''},
- {'balance': (-4899.84 USD, 44 GLD), 'group': 'test'},
- {'balance': (), 'group': 'trip-chicago-2015'},
- {'balance': (), 'group': 'trip-san-francisco-2015'},
- {'balance': (), 'group': 'trip-new-york-2016'}]
+[
+ {
+  "balance": {
+   "ABC": 1,
+   "GLD": 3,
+   "ITOT": 58,
+   "RGAGX": 373.339,
+   "USD": -87145.92,
+   "VBMPX": 935.491,
+   "VEA": 92,
+   "VHT": 49,
+   "XYZ": 1
+  },
+  "group": ""
+ },
+ {
+  "balance": {
+   "GLD": 44,
+   "USD": -4899.84
+  },
+  "group": "test"
+ },
+ {
+  "balance": {},
+  "group": "trip-chicago-2015"
+ },
+ {
+  "balance": {},
+  "group": "trip-san-francisco-2015"
+ },
+ {
+  "balance": {},
+  "group": "trip-new-york-2016"
+ }
+]

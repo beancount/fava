@@ -9,8 +9,11 @@ import pytest
 from flask import url_for
 
 from fava.context import g
-from fava.core.charts import dumps
+from fava.core.charts import PRETTY_ENCODER
 from fava.core.misc import align
+
+
+dumps = PRETTY_ENCODER.encode
 
 
 def assert_api_error(response, msg: Optional[str] = None) -> None:

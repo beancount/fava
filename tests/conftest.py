@@ -58,15 +58,14 @@ def snapshot(request) -> Callable[[Any], None]:
                 snap_dir / f"{file_path.name}-{fn_name}-{SNAPS[snap_file]}"
             )
 
-        out = pformat(data)
+        # print strings directly, otherwise try pretty-printing
+        out = data if isinstance(data, str) else pformat(data)
         if not snap_file.exists():
             contents = ""
         else:
-            with open(snap_file, encoding="utf-8") as snap_file_handle:
-                contents = snap_file_handle.read()
+            contents = snap_file.read_text(encoding="utf-8")
         if SNAPSHOT_UPDATE:
-            with open(snap_file, "w", encoding="utf-8") as snap_file_handle:
-                snap_file_handle.write(out)
+            snap_file.write_text(out, encoding="utf-8")
             return
         assert out == contents, MSG
 

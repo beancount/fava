@@ -1,1 +1,4 @@
-Markup('    <span class="diff positive" title="-12.00 EUR">\n      (2.00)\n    </span>\n  <span class="number">-10.00</span>\n')
+    <span class="diff positive" title="-12.00 EUR">
+      (2.00)
+    </span>
+  <span class="number">-10.00</span>

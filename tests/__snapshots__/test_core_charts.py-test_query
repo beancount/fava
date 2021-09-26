@@ -1,62 +1,355 @@
-[{'balance': (1 XYZ, 1 ABC), 'group': 'Assets:Testing:MultipleCommodities'},
- {'balance': (-3553.18 USD), 'group': 'Equity:Opening-Balances'},
- {'balance': (1632.79 USD), 'group': 'Assets:US:BofA:Checking'},
- {'balance': (-53500 IRAUSD), 'group': 'Income:US:Federal:PreTax401k'},
- {'balance': (7200.00 IRAUSD), 'group': 'Assets:US:Federal:PreTax401k'},
- {'balance': (0.02 USD), 'group': 'Assets:US:Vanguard:Cash'},
- {'balance': (-286153.56 USD), 'group': 'Income:US:BayBook:Salary'},
- {'balance': (-1507.84 USD), 'group': 'Income:US:BayBook:GroupTermLife'},
- {'balance': (1507.84 USD), 'group': 'Expenses:Health:Life:GroupTermLife'},
- {'balance': (179.80 USD), 'group': 'Expenses:Health:Dental:Insurance'},
- {'balance': (1697.56 USD), 'group': 'Expenses:Health:Medical:Insurance'},
- {'balance': (2622.60 USD), 'group': 'Expenses:Health:Vision:Insurance'},
- {'balance': (2772.12 USD), 'group': 'Expenses:Taxes:Y2014:US:Medicare'},
- {'balance': (27947.73 USD), 'group': 'Expenses:Taxes:Y2014:US:Federal'},
- {'balance': (9911.94 USD), 'group': 'Expenses:Taxes:Y2014:US:State'},
- {'balance': (4547.92 USD), 'group': 'Expenses:Taxes:Y2014:US:CityNYC'},
- {'balance': (29.12 USD), 'group': 'Expenses:Taxes:Y2014:US:SDI'},
- {'balance': (7000.04 USD), 'group': 'Expenses:Taxes:Y2014:US:SocSec'},
- {'balance': (17500.00 IRAUSD),
-  'group': 'Expenses:Taxes:Y2014:US:Federal:PreTax401k'},
- {'balance': (-82 VACHR), 'group': 'Assets:US:BayBook:Vacation'},
- {'balance': (-310 VACHR), 'group': 'Income:US:BayBook:Vacation'},
- {'balance': (-23150.00 USD), 'group': 'Income:US:BayBook:Match401k'},
- {'balance': (116.00 USD), 'group': 'Expenses:Financial:Fees'},
- {'balance': (-2935.65 USD), 'group': 'Liabilities:US:Chase:Slate'},
- {'balance': (11432.69 USD), 'group': 'Expenses:Food:Restaurant'},
- {'balance': (67200.00 USD), 'group': 'Expenses:Home:Rent'},
- {'balance': (935.491 VBMPX), 'group': 'Assets:US:Vanguard:VBMPX'},
- {'balance': (373.339 RGAGX), 'group': 'Assets:US:Vanguard:RGAGX'},
- {'balance': (1820.00 USD), 'group': 'Expenses:Home:Electricity'},
- {'balance': (5153.45 USD), 'group': 'Expenses:Food:Groceries'},
- {'balance': (1769.99 USD), 'group': 'Expenses:Home:Phone'},
- {'balance': (2239.93 USD), 'group': 'Expenses:Home:Internet'},
- {'balance': (3240.00 USD), 'group': 'Expenses:Transport:Tram'},
- {'balance': (641.76 USD), 'group': 'Assets:US:ETrade:Cash'},
- {'balance': (-453.55 USD), 'group': 'Income:US:ETrade:Dividends'},
- {'balance': (47 GLD), 'group': 'Assets:US:ETrade:GLD'},
- {'balance': (313.25 USD), 'group': 'Expenses:Financial:Commissions'},
- {'balance': (58 ITOT), 'group': 'Assets:US:ETrade:ITOT'},
- {'balance': (92 VEA), 'group': 'Assets:US:ETrade:VEA'},
- {'balance': (49 VHT), 'group': 'Assets:US:ETrade:VHT'},
- {'balance': (2.76 USD), 'group': 'Income:US:ETrade:Gains'},
- {'balance': (2878.74 USD), 'group': 'Expenses:Taxes:Y2015:US:Medicare'},
- {'balance': (29093.23 USD), 'group': 'Expenses:Taxes:Y2015:US:Federal'},
- {'balance': (10144.37 USD), 'group': 'Expenses:Taxes:Y2015:US:State'},
- {'balance': (4722.84 USD), 'group': 'Expenses:Taxes:Y2015:US:CityNYC'},
- {'balance': (30.24 USD), 'group': 'Expenses:Taxes:Y2015:US:SDI'},
- {'balance': (7000.04 USD), 'group': 'Expenses:Taxes:Y2015:US:SocSec'},
- {'balance': (18000.00 IRAUSD),
-  'group': 'Expenses:Taxes:Y2015:US:Federal:PreTax401k'},
- {'balance': (117.43 USD), 'group': 'Expenses:Food:Coffee'},
- {'balance': (12.02 USD), 'group': 'Expenses:Food:Alcohol'},
- {'balance': (392 VACHR), 'group': 'Expenses:Vacation'},
- {'balance': (), 'group': 'Liabilities:AccountsPayable'},
- {'balance': (959.58 USD), 'group': 'Expenses:Taxes:Y2016:US:Medicare'},
- {'balance': (9566.28 USD), 'group': 'Expenses:Taxes:Y2016:US:Federal'},
- {'balance': (3285.72 USD), 'group': 'Expenses:Taxes:Y2016:US:State'},
- {'balance': (1574.28 USD), 'group': 'Expenses:Taxes:Y2016:US:CityNYC'},
- {'balance': (10.08 USD), 'group': 'Expenses:Taxes:Y2016:US:SDI'},
- {'balance': (2533.86 USD), 'group': 'Expenses:Taxes:Y2016:US:SocSec'},
- {'balance': (10800.00 IRAUSD),
-  'group': 'Expenses:Taxes:Y2016:US:Federal:PreTax401k'}]
+[
+ {
+  "balance": {
+   "ABC": 1,
+   "XYZ": 1
+  },
+  "group": "Assets:Testing:MultipleCommodities"
+ },
+ {
+  "balance": {
+   "USD": -3553.18
+  },
+  "group": "Equity:Opening-Balances"
+ },
+ {
+  "balance": {
+   "USD": 1632.79
+  },
+  "group": "Assets:US:BofA:Checking"
+ },
+ {
+  "balance": {
+   "IRAUSD": -53500
+  },
+  "group": "Income:US:Federal:PreTax401k"
+ },
+ {
+  "balance": {
+   "IRAUSD": 7200.00
+  },
+  "group": "Assets:US:Federal:PreTax401k"
+ },
+ {
+  "balance": {
+   "USD": 0.02
+  },
+  "group": "Assets:US:Vanguard:Cash"
+ },
+ {
+  "balance": {
+   "USD": -286153.56
+  },
+  "group": "Income:US:BayBook:Salary"
+ },
+ {
+  "balance": {
+   "USD": -1507.84
+  },
+  "group": "Income:US:BayBook:GroupTermLife"
+ },
+ {
+  "balance": {
+   "USD": 1507.84
+  },
+  "group": "Expenses:Health:Life:GroupTermLife"
+ },
+ {
+  "balance": {
+   "USD": 179.80
+  },
+  "group": "Expenses:Health:Dental:Insurance"
+ },
+ {
+  "balance": {
+   "USD": 1697.56
+  },
+  "group": "Expenses:Health:Medical:Insurance"
+ },
+ {
+  "balance": {
+   "USD": 2622.60
+  },
+  "group": "Expenses:Health:Vision:Insurance"
+ },
+ {
+  "balance": {
+   "USD": 2772.12
+  },
+  "group": "Expenses:Taxes:Y2014:US:Medicare"
+ },
+ {
+  "balance": {
+   "USD": 27947.73
+  },
+  "group": "Expenses:Taxes:Y2014:US:Federal"
+ },
+ {
+  "balance": {
+   "USD": 9911.94
+  },
+  "group": "Expenses:Taxes:Y2014:US:State"
+ },
+ {
+  "balance": {
+   "USD": 4547.92
+  },
+  "group": "Expenses:Taxes:Y2014:US:CityNYC"
+ },
+ {
+  "balance": {
+   "USD": 29.12
+  },
+  "group": "Expenses:Taxes:Y2014:US:SDI"
+ },
+ {
+  "balance": {
+   "USD": 7000.04
+  },
+  "group": "Expenses:Taxes:Y2014:US:SocSec"
+ },
+ {
+  "balance": {
+   "IRAUSD": 17500.00
+  },
+  "group": "Expenses:Taxes:Y2014:US:Federal:PreTax401k"
+ },
+ {
+  "balance": {
+   "VACHR": -82
+  },
+  "group": "Assets:US:BayBook:Vacation"
+ },
+ {
+  "balance": {
+   "VACHR": -310
+  },
+  "group": "Income:US:BayBook:Vacation"
+ },
+ {
+  "balance": {
+   "USD": -23150.00
+  },
+  "group": "Income:US:BayBook:Match401k"
+ },
+ {
+  "balance": {
+   "USD": 116.00
+  },
+  "group": "Expenses:Financial:Fees"
+ },
+ {
+  "balance": {
+   "USD": -2935.65
+  },
+  "group": "Liabilities:US:Chase:Slate"
+ },
+ {
+  "balance": {
+   "USD": 11432.69
+  },
+  "group": "Expenses:Food:Restaurant"
+ },
+ {
+  "balance": {
+   "USD": 67200.00
+  },
+  "group": "Expenses:Home:Rent"
+ },
+ {
+  "balance": {
+   "VBMPX": 935.491
+  },
+  "group": "Assets:US:Vanguard:VBMPX"
+ },
+ {
+  "balance": {
+   "RGAGX": 373.339
+  },
+  "group": "Assets:US:Vanguard:RGAGX"
+ },
+ {
+  "balance": {
+   "USD": 1820.00
+  },
+  "group": "Expenses:Home:Electricity"
+ },
+ {
+  "balance": {
+   "USD": 5153.45
+  },
+  "group": "Expenses:Food:Groceries"
+ },
+ {
+  "balance": {
+   "USD": 1769.99
+  },
+  "group": "Expenses:Home:Phone"
+ },
+ {
+  "balance": {
+   "USD": 2239.93
+  },
+  "group": "Expenses:Home:Internet"
+ },
+ {
+  "balance": {
+   "USD": 3240.00
+  },
+  "group": "Expenses:Transport:Tram"
+ },
+ {
+  "balance": {
+   "USD": 641.76
+  },
+  "group": "Assets:US:ETrade:Cash"
+ },
+ {
+  "balance": {
+   "USD": -453.55
+  },
+  "group": "Income:US:ETrade:Dividends"
+ },
+ {
+  "balance": {
+   "GLD": 47
+  },
+  "group": "Assets:US:ETrade:GLD"
+ },
+ {
+  "balance": {
+   "USD": 313.25
+  },
+  "group": "Expenses:Financial:Commissions"
+ },
+ {
+  "balance": {
+   "ITOT": 58
+  },
+  "group": "Assets:US:ETrade:ITOT"
+ },
+ {
+  "balance": {
+   "VEA": 92
+  },
+  "group": "Assets:US:ETrade:VEA"
+ },
+ {
+  "balance": {
+   "VHT": 49
+  },
+  "group": "Assets:US:ETrade:VHT"
+ },
+ {
+  "balance": {
+   "USD": 2.76
+  },
+  "group": "Income:US:ETrade:Gains"
+ },
+ {
+  "balance": {
+   "USD": 2878.74
+  },
+  "group": "Expenses:Taxes:Y2015:US:Medicare"
+ },
+ {
+  "balance": {
+   "USD": 29093.23
+  },
+  "group": "Expenses:Taxes:Y2015:US:Federal"
+ },
+ {
+  "balance": {
+   "USD": 10144.37
+  },
+  "group": "Expenses:Taxes:Y2015:US:State"
+ },
+ {
+  "balance": {
+   "USD": 4722.84
+  },
+  "group": "Expenses:Taxes:Y2015:US:CityNYC"
+ },
+ {
+  "balance": {
+   "USD": 30.24
+  },
+  "group": "Expenses:Taxes:Y2015:US:SDI"
+ },
+ {
+  "balance": {
+   "USD": 7000.04
+  },
+  "group": "Expenses:Taxes:Y2015:US:SocSec"
+ },
+ {
+  "balance": {
+   "IRAUSD": 18000.00
+  },
+  "group": "Expenses:Taxes:Y2015:US:Federal:PreTax401k"
+ },
+ {
+  "balance": {
+   "USD": 117.43
+  },
+  "group": "Expenses:Food:Coffee"
+ },
+ {
+  "balance": {
+   "USD": 12.02
+  },
+  "group": "Expenses:Food:Alcohol"
+ },
+ {
+  "balance": {
+   "VACHR": 392
+  },
+  "group": "Expenses:Vacation"
+ },
+ {
+  "balance": {},
+  "group": "Liabilities:AccountsPayable"
+ },
+ {
+  "balance": {
+   "USD": 959.58
+  },
+  "group": "Expenses:Taxes:Y2016:US:Medicare"
+ },
+ {
+  "balance": {
+   "USD": 9566.28
+  },
+  "group": "Expenses:Taxes:Y2016:US:Federal"
+ },
+ {
+  "balance": {
+   "USD": 3285.72
+  },
+  "group": "Expenses:Taxes:Y2016:US:State"
+ },
+ {
+  "balance": {
+   "USD": 1574.28
+  },
+  "group": "Expenses:Taxes:Y2016:US:CityNYC"
+ },
+ {
+  "balance": {
+   "USD": 10.08
+  },
+  "group": "Expenses:Taxes:Y2016:US:SDI"
+ },
+ {
+  "balance": {
+   "USD": 2533.86
+  },
+  "group": "Expenses:Taxes:Y2016:US:SocSec"
+ },
+ {
+  "balance": {
+   "IRAUSD": 10800.00
+  },
+  "group": "Expenses:Taxes:Y2016:US:Federal:PreTax401k"
+ }
+]

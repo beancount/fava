@@ -73,11 +73,7 @@ class FavaJSONEncoder(JSONEncoder):
 
 
 ENCODER = FavaJSONEncoder()
-
-
-def dumps(arg: Any) -> Any:
-    """Encode to JSON."""
-    return ENCODER.encode(arg)
+PRETTY_ENCODER = FavaJSONEncoder(indent=True)
 
 
 class DateAndBalance(TypedDict):
