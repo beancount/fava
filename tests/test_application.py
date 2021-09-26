@@ -3,12 +3,12 @@ import pytest
 import werkzeug.routing
 import werkzeug.urls
 from beancount import __version__ as beancount_version
-from flask import g
 from flask import url_for
 
 from fava import __version__ as fava_version
 from fava.application import REPORTS
 from fava.application import static_url
+from fava.context import g
 
 FILTER_COMBINATIONS = [
     {"account": "Assets"},

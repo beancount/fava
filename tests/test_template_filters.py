@@ -5,8 +5,8 @@ from decimal import Decimal
 
 import pytest
 from beancount.core import realization
-from flask import g
 
+from fava.context import g
 from fava.core.accounts import AccountData
 from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
@@ -113,8 +113,10 @@ def test_collapse_account(app, monkeypatch):
                 re.compile("^Assets:Property:.*"),
             ],
         )
-        g.ledger.accounts["Assets:Stock"] = AccountData()
-        g.ledger.accounts["Assets:Property"] = AccountData()
+        monkeypatch.setitem(g.ledger.accounts, "Assets:Stock", AccountData())
+        monkeypatch.setitem(
+            g.ledger.accounts, "Assets:Property", AccountData()
+        )
 
         assert collapse_account("Assets:Cash") is False
         assert collapse_account("Assets:Cash") is False

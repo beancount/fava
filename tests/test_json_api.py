@@ -6,9 +6,9 @@ from typing import Any
 from typing import Optional
 
 import pytest
-from flask import g
 from flask import url_for
 
+from fava.context import g
 from fava.core.charts import dumps
 from fava.core.misc import align
 
