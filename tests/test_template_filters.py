@@ -1,4 +1,5 @@
 # pylint: disable=missing-docstring
+import re
 from datetime import date
 from decimal import Decimal
 
@@ -108,8 +109,8 @@ def test_collapse_account(app, monkeypatch):
             g.ledger.fava_options,
             "collapse-pattern",
             [
-                "^Assets:Stock$",
-                "^Assets:Property:.*",
+                re.compile("^Assets:Stock$"),
+                re.compile("^Assets:Property:.*"),
             ],
         )
         g.ledger.accounts["Assets:Stock"] = AccountData()

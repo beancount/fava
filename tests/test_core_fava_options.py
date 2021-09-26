@@ -17,12 +17,14 @@ def test_fava_options(load_doc):
     2016-04-14 custom "fava-option" "invalid"
     2016-04-14 custom "fava-option" "locale" "en"
     2016-04-14 custom "fava-option" "locale" "invalid"
+    2016-04-14 custom "fava-option" "collapse-pattern" "Account:Name"
+    2016-04-14 custom "fava-option" "collapse-pattern" "(invalid"
     """
 
     entries, _, _ = load_doc
     options, errors = parse_options(entries)
 
-    assert len(errors) == 2
+    assert len(errors) == 3
 
     assert options["indent"] == 4
     assert options["insert-entry"] == [
@@ -36,3 +38,4 @@ def test_fava_options(load_doc):
     assert options["show-closed-accounts"]
     assert options["journal-show"] == ["transaction", "open"]
     assert options["currency-column"] == 10
+    assert options["collapse-pattern"] == [re.compile("Account:Name")]

@@ -9,7 +9,6 @@ import copy
 import datetime
 import re
 from typing import Any
-from typing import Iterable
 from typing import List
 from typing import NamedTuple
 from typing import Optional
@@ -48,7 +47,7 @@ FavaOptions = TypedDict(
     {
         "account-journal-include-children": bool,
         "currency-column": int,
-        "collapse-pattern": List[str],
+        "collapse-pattern": List[Pattern[str]],
         "auto-reload": bool,
         "default-file": Optional[str],
         "default-page": str,
@@ -111,7 +110,7 @@ DEFAULTS: FavaOptions = {
     "use-external-editor": False,
 }
 
-BOOL_OPTS = [
+BOOL_OPTS = {
     "account-journal-include-children",
     "auto-reload",
     "invert-income-liabilities-equity",
@@ -119,39 +118,35 @@ BOOL_OPTS = [
     "show-accounts-with-zero-transactions",
     "show-closed-accounts",
     "use-external-editor",
-]
+}
 
-INT_OPTS = [
+INT_OPTS = {
     "currency-column",
     "indent",
     "sidebar-show-queries",
     "upcoming-events",
     "uptodate-indicator-grey-lookback-days",
-]
+}
 
-LIST_OPTS = [
+LIST_OPTS = {
     "import-dirs",
     "journal-show",
     "journal-show-document",
     "journal-show-transaction",
-]
+}
 
-STR_OPTS = [
-    "collapse-pattern",
+STR_OPTS = {
     "default-page",
     "import-config",
     "language",
     "unrealized",
-]
-
-# options that can be specified multiple times
-MULTI_OPTS = ["collapse-pattern"]
+}
 
 
 # pylint: disable=too-many-branches
 def parse_options(
     custom_entries: List[Custom],
-) -> Tuple[FavaOptions, Iterable[BeancountError]]:
+) -> Tuple[FavaOptions, List[BeancountError]]:
     """Parse custom entries for Fava options.
 
     The format for option entries is the following::
@@ -195,6 +190,11 @@ def parse_options(
             processed_value: Any = None
             if key in STR_OPTS:
                 processed_value = value
+            elif key == "collapse-pattern":
+                try:
+                    options["collapse-pattern"].append(re.compile(value))
+                except re.error:
+                    assert False, f"Should be a regular expression: '{value}'."
             elif key == "locale":
                 try:
                     Locale.parse(value)
@@ -212,10 +212,7 @@ def parse_options(
                 processed_value = str(value).strip().split(" ")
 
             if processed_value is not None:
-                if key in MULTI_OPTS:
-                    options[key].append(processed_value)  # type: ignore
-                else:
-                    options[key] = processed_value  # type: ignore
+                options[key] = processed_value  # type: ignore
 
         except (IndexError, TypeError, AssertionError) as err:
             msg = f"Failed to parse fava-option entry: {str(err)}"

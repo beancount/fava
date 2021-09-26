@@ -155,14 +155,7 @@ def format_errormsg(message: str) -> str:
 def collapse_account(account_name: str) -> bool:
     """Return true if account should be collapsed."""
     collapse_patterns = g.ledger.fava_options["collapse-pattern"]
-    for pattern in collapse_patterns:
-        try:
-            if re.match(pattern, account_name):
-                return True
-        except re.error:
-            pass
-
-    return False
+    return any(pattern.match(account_name) for pattern in collapse_patterns)
 
 
 FILTERS = [
