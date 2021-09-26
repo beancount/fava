@@ -67,10 +67,7 @@ app = Flask(  # pylint: disable=invalid-name
 app.register_blueprint(json_api, url_prefix="/<bfile>/api")
 
 app.json_encoder = FavaJSONEncoder  # type: ignore
-try:
-    jinja_extensions = app.jinja_options.setdefault("extensions", [])
-except TypeError:  # Flask <2
-    jinja_extensions = app.jinja_options["extensions"]
+jinja_extensions = app.jinja_options.setdefault("extensions", [])
 jinja_extensions.append("jinja2.ext.do")
 jinja_extensions.append("jinja2.ext.loopcontrols")
 app.jinja_env.trim_blocks = True
@@ -365,12 +362,7 @@ def download_query(result_format: str) -> Any:
     )
 
     filename = f"{secure_filename(name.strip())}.{result_format}"
-    try:
-        return send_file(data, as_attachment=True, download_name=filename)
-    except TypeError:  # Flask <2
-        return send_file(
-            data, as_attachment=True, attachment_filename=filename
-        )
+    return send_file(data, as_attachment=True, download_name=filename)
 
 
 @app.route("/<bfile>/download-journal/")
@@ -379,12 +371,7 @@ def download_journal() -> Any:
     now = datetime.datetime.now().replace(microsecond=0)
     filename = f"journal_{now.isoformat()}.beancount"
     data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
-    try:
-        return send_file(data, as_attachment=True, download_name=filename)
-    except TypeError:  # Flask <2
-        return send_file(
-            data, as_attachment=True, attachment_filename=filename
-        )
+    return send_file(data, as_attachment=True, download_name=filename)
 
 
 @app.route("/<bfile>/help/", defaults={"page_slug": "_index"})
