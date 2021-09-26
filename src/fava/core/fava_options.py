@@ -146,7 +146,7 @@ STR_OPTS = {
 # pylint: disable=too-many-branches
 def parse_options(
     custom_entries: List[Custom],
-) -> Tuple[FavaOptions, List[BeancountError]]:
+) -> Tuple[FavaOptions, List[OptionError]]:
     """Parse custom entries for Fava options.
 
     The format for option entries is the following::

@@ -19,16 +19,16 @@ from fava.util.date import parse_fye_string
 from fava.util.date import substitute
 
 
-def test_interval():
+def test_interval() -> None:
     assert Interval.get("month") is Interval.MONTH
     assert Interval.get("year") is Interval.YEAR
     assert Interval.get("YEAR") is Interval.YEAR
     assert Interval.get("asdfasdf") is Interval.MONTH
 
 
-def _to_date(string):
+def _to_date(string: str) -> date:
     """Convert a string in ISO 8601 format into a datetime.date object."""
-    return datetime.strptime(string, "%Y-%m-%d").date() if string else None
+    return datetime.strptime(string, "%Y-%m-%d").date()
 
 
 @pytest.mark.parametrize(
@@ -48,17 +48,19 @@ def _to_date(string):
         ("9999-12-31", Interval.YEAR, "9999-12-31"),
     ],
 )
-def test_get_next_interval(input_date_string, interval, expect):
+def test_get_next_interval(
+    input_date_string: str, interval: Interval, expect: str
+) -> None:
     get = get_next_interval(_to_date(input_date_string), interval)
     assert get == _to_date(expect)
 
 
-def test_get_next_intervalfail2():
+def test_get_next_intervalfail2() -> None:
     with pytest.raises(NotImplementedError):
         get_next_interval(date(2016, 4, 18), "decade")
 
 
-def test_interval_tuples():
+def test_interval_tuples() -> None:
     assert list(
         interval_ends(date(2014, 3, 5), date(2014, 5, 5), Interval.MONTH)
     ) == [
@@ -107,7 +109,7 @@ def test_interval_tuples():
         ("day+20", "2016-07-14"),
     ],
 )
-def test_substitute(string, output):
+def test_substitute(string: str, output: str) -> None:
     # Mock the imported datetime.date in fava.util.date module
     # Ref:
     # http://www.voidspace.org.uk/python/mock/examples.html#partial-mocking
@@ -135,7 +137,9 @@ def test_substitute(string, output):
         ("04-05", "2018-07-03", "fiscal_quarter", None),
     ],
 )
-def test_fiscal_substitute(fye, test_date, string, output):
+def test_fiscal_substitute(
+    fye: str, test_date: str, string: str, output: Optional[str]
+) -> None:
     fye = parse_fye_string(fye)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = _to_date(test_date)
@@ -150,7 +154,6 @@ def test_fiscal_substitute(fye, test_date, string, output):
 @pytest.mark.parametrize(
     "expect_start,expect_end,text",
     [
-        (None, None, "    "),
         ("2000-01-01", "2001-01-01", "   2000   "),
         ("2010-10-01", "2010-11-01", "2010-10"),
         ("2000-01-03", "2000-01-04", "2000-01-03"),
@@ -165,11 +168,16 @@ def test_fiscal_substitute(fye, test_date, string, output):
         ("2011-01-01", "2015-07-01", "2011 to FY2015"),
     ],
 )
-def test_parse_date(expect_start, expect_end, text):
-    start, end = _to_date(expect_start), _to_date(expect_end)
-    assert parse_date(text, FiscalYearEnd(6, 30)) == (start, end)
+def test_parse_date(expect_start: str, expect_end: str, text: str) -> None:
+    expected = (_to_date(expect_start), _to_date(expect_end))
+    assert parse_date(text, FiscalYearEnd(6, 30)) == expected
     if "FY" not in text:
-        assert parse_date(text, None) == (start, end)
+        assert parse_date(text, None) == expected
+
+
+def test_parse_date_empty() -> None:
+    assert parse_date("     ", FiscalYearEnd(6, 30)) == (None, None)
+    assert parse_date("     ", None) == (None, None)
 
 
 @pytest.mark.parametrize(
@@ -183,7 +191,9 @@ def test_parse_date(expect_start, expect_end, text):
         ("2016-04-01", "2016-07-01", "fiscal_quarter"),
     ],
 )
-def test_parse_date_relative(expect_start, expect_end, text):
+def test_parse_date_relative(
+    expect_start: str, expect_end: str, text: str
+) -> None:
     start, end = _to_date(expect_start), _to_date(expect_end)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = _to_date("2016-06-24")
@@ -213,11 +223,13 @@ def test_parse_date_relative(expect_start, expect_end, text):
         (Interval.YEAR, "2016-01-01", 366),
     ],
 )
-def test_number_of_days_in_period(interval, date_str, expect):
+def test_number_of_days_in_period(
+    interval: Interval, date_str: str, expect: int
+) -> None:
     assert number_of_days_in_period(interval, _to_date(date_str)) == expect
 
 
-def test_number_of_days_in_period2():
+def test_number_of_days_in_period2() -> None:
     with pytest.raises(NotImplementedError):
         number_of_days_in_period("test", date(2011, 2, 1))
 
@@ -232,7 +244,7 @@ def test_number_of_days_in_period2():
         ("2018-01-12", -13, "2016-12-12"),
     ],
 )
-def test_month_offset(date_input, offset, expected):
+def test_month_offset(date_input: str, offset: int, expected: Optional[str]):
     start_date = _to_date(date_input)
     if expected is None:
         with pytest.raises(ValueError):
@@ -270,7 +282,13 @@ def test_month_offset(date_input, offset, expected):
         (2018, 5, "12-31", "None", "None"),
     ],
 )
-def test_get_fiscal_period(year, quarter, fye, expect_start, expect_end):
+def test_get_fiscal_period(
+    year: int,
+    quarter: Optional[int],
+    fye: Optional[str],
+    expect_start: str,
+    expect_end: str,
+) -> None:
     fye = parse_fye_string(fye)
     start_date, end_date = get_fiscal_period(year, fye, quarter)
     assert str(start_date) == expect_start
