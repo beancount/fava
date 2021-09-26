@@ -49,7 +49,7 @@ update-snapshots:
 
 .PHONY: update-deps
 update-deps:
-	cd frontend; npx npm-check -y
+	cd frontend; npx npm-check -u
 	cd frontend; npm update
 
 .PHONY: update-precommit
