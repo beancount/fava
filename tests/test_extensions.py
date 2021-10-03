@@ -12,3 +12,14 @@ def test_report_page_globals():
     assert result == [("PortfolioList", "Portfolio List")]
 
     extension_report_ledger.extensions.after_write_source("test", "test")
+
+
+def test_before_insert_entry():
+    """Extensions provide a before_insert_entry hook method."""
+    hook_ledger = FavaLedger(
+        data_file("extension-report-example.beancount")
+    )
+
+    assert bool(getattr(hook_ledger.extensions, "before_insert_entry"))
+
+    hook_ledger.extensions.before_insert_entry("entry")
