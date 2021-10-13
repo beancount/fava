@@ -197,9 +197,9 @@ def translations() -> Any:
     return get_translations()._catalog
 
 
-app.add_template_global(static_url, "static_url")  # type: ignore
+app.add_template_global(static_url, "static_url")
 app.add_template_global(datetime.date.today, "today")
-app.add_template_global(url_for, "url_for")  # type: ignore
+app.add_template_global(url_for, "url_for")
 app.add_template_global(url_for_source, "url_for_source")
 app.add_template_global(translations, "translations")
 
@@ -264,7 +264,7 @@ def _pull_beancount_file(
         g.interval = Interval.get(request.args.get("interval", "month"))
 
 
-@app.errorhandler(FavaAPIException)  # type: ignore
+@app.errorhandler(FavaAPIException)
 def fava_api_exception(error: FavaAPIException) -> str:
     """Handle API errors."""
     return render_template(

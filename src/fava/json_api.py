@@ -41,12 +41,12 @@ def json_success(data: Any) -> Any:
     return jsonify({"success": True, "data": data})
 
 
-@json_api.errorhandler(FavaAPIException)  # type: ignore
+@json_api.errorhandler(FavaAPIException)
 def _json_api_exception(error: FavaAPIException) -> Any:
     return json_err(error.message)
 
 
-@json_api.errorhandler(OSError)  # type: ignore
+@json_api.errorhandler(OSError)
 def _json_api_oserror(error: OSError) -> Any:
     return json_err(error.strerror)
 
