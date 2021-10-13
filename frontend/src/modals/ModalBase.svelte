@@ -60,6 +60,7 @@
     cursor: pointer;
     background: var(--overlay-wrapper-background);
   }
+
   .overlay {
     position: fixed;
     top: 0;
@@ -71,6 +72,7 @@
     align-items: center;
     justify-content: center;
   }
+
   .content {
     position: relative;
     display: flex;
@@ -82,6 +84,7 @@
     background: var(--background);
     box-shadow: 0 0 20px var(--overlay-wrapper-background);
   }
+
   .close {
     position: absolute;
     top: 1em;
@@ -92,10 +95,12 @@
     line-height: 1em;
     color: var(--text-color-lighter);
   }
+
   .content :global(form),
   .content > :global(div) {
     width: 100%;
   }
+
   .content :global(.fieldset) {
     margin-bottom: 6px;
   }

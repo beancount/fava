@@ -85,6 +85,7 @@
   svg > g {
     pointer-events: all;
   }
+
   .desaturate {
     filter: saturate(50%);
   }

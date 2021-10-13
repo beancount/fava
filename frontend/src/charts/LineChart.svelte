@@ -141,13 +141,16 @@
   svg > g {
     pointer-events: all;
   }
+
   .lines path {
     fill: none;
     stroke-width: 2px;
   }
+
   .area path {
     opacity: 0.3;
   }
+
   .desaturate {
     filter: saturate(50%);
   }

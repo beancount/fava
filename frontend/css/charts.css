@@ -2,6 +2,7 @@ svg text {
   font-family: var(--font-family);
   fill: var(--text-color-lightest);
 }
+
 .tooltip {
   position: absolute;
   z-index: var(--z-index-floating-ui);
@@ -16,6 +17,7 @@ svg text {
   opacity: 0;
   transform: translate(-50%, -100%);
 }
+
 .tooltip::before {
   position: absolute;
   top: 100%;
@@ -27,6 +29,7 @@ svg text {
   border: 15px solid transparent;
   border-top-color: var(--border);
 }
+
 .tooltip em {
   display: block;
   margin-top: 5px;

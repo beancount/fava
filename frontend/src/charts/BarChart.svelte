@@ -115,15 +115,19 @@
     cursor: pointer;
     opacity: 0;
   }
+
   .group-box {
     opacity: 0;
   }
+
   .group:hover .group-box {
     opacity: 0.1;
   }
+
   .budget {
     opacity: 0.3;
   }
+
   .desaturate {
     filter: saturate(50%);
   }

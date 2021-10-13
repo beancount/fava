@@ -5,6 +5,7 @@
   right: 10px;
   width: 400px;
 }
+
 .notifications li {
   display: block;
   width: 100%;
@@ -14,9 +15,11 @@
   cursor: pointer;
   background-color: var(--green);
 }
+
 .notifications .error {
   background-color: var(--error);
 }
+
 .notifications .warning {
   color: var(--text-color);
   background-color: var(--yellow);

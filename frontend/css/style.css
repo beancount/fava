@@ -91,30 +91,39 @@
 .journal .balance {
   --entry-background: #cfc;
 }
+
 .journal .close {
   --entry-background: hsl(0, 0%, 70%);
 }
+
 .journal .custom {
   --entry-background: #fff3ab;
 }
+
 .journal .document {
   --entry-background: #ffc8ff;
 }
+
 .journal .note {
   --entry-background: #aad0ff;
 }
+
 .journal .open {
   --entry-background: hsl(0, 0%, 92%);
 }
+
 .journal .other {
   --entry-background: #cff;
 }
+
 .journal .pad {
   --entry-background: #8ff;
 }
+
 .journal .pending {
   --entry-background: #f8a;
 }
+
 .journal .query {
   --entry-background: #aad0ff;
 }

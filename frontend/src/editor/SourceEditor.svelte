@@ -119,11 +119,13 @@
     display: flex;
     flex-direction: column;
   }
+
   form div {
     flex: 1;
     width: 100%;
     height: calc(100% - 3rem);
   }
+
   form :global(.cm-editor) {
     width: 100%;
     height: 100%;

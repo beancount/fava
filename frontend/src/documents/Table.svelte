@@ -81,9 +81,11 @@
   table {
     width: 100%;
   }
+
   tr {
     cursor: pointer;
   }
+
   .selected,
   tr:hover {
     background-color: var(--table-header-background);

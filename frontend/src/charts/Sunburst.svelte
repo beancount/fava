@@ -82,12 +82,15 @@
   .half {
     opacity: 0.5;
   }
+
   .account {
     fill: var(--text-color);
   }
+
   .balance {
     font-family: var(--font-family-monospaced);
   }
+
   path {
     cursor: pointer;
   }

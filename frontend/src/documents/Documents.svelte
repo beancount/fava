@@ -87,11 +87,13 @@
     display: grid;
     grid-template-columns: 1fr 2fr 3fr;
   }
+
   .fixed-fullsize-container > :global(*) {
     height: 100%;
     overflow: auto;
     resize: horizontal;
   }
+
   .fixed-fullsize-container > :global(* + *) {
     border-left: thin solid var(--sidebar-border);
   }

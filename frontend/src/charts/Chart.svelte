@@ -109,6 +109,7 @@
     padding: 2px 6px;
     margin: 0;
   }
+
   .toggle-chart::before {
     display: block;
     content: "";
@@ -117,6 +118,7 @@
     border-right: 9px solid transparent;
     border-left: 9px solid transparent;
   }
+
   .toggle-chart.closed::before {
     border: 0;
     border-right: 9px solid transparent;

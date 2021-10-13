@@ -38,6 +38,7 @@
     stroke: var(--chart-axis);
     shape-rendering: crispEdges;
   }
+
   g.y :global(line),
   g.y :global(path.domain) {
     opacity: 0.2;

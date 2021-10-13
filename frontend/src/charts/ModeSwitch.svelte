@@ -16,6 +16,7 @@
   input {
     display: none;
   }
+
   label + label {
     margin-left: 0.25rem;
   }

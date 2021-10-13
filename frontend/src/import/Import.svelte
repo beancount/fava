@@ -157,13 +157,16 @@
     display: flex;
     align-items: stretch;
   }
+
   .fixed-fullsize-container > * {
     flex: 1 1 40%;
     overflow: auto;
   }
+
   .filelist {
     padding: 1rem;
   }
+
   .importable-files {
     padding-bottom: 0.8rem;
   }

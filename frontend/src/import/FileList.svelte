@@ -76,6 +76,7 @@
     cursor: pointer;
     background-color: var(--sidebar-background);
   }
+
   .header button {
     float: right;
   }

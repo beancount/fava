@@ -19,6 +19,7 @@
     width: 100%;
     height: 100%;
   }
+
   div :global(.cm-editor) {
     width: 100%;
     height: 100%;
