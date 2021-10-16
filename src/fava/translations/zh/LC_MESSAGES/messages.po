@@ -3,9 +3,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: POEditor.com\n"
+"X-Generator: Poedit 3.0\n"
 "Project-Id-Version: Fava\n"
-"Language: zh-CN\n"
+"Language: zh_CN\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Dallas Lu <i@dallas.lu>\n"
+"Language-Team: \n"
 
 #: fava/templates/_aside.html:4
 msgid "Custom Links"
@@ -447,7 +451,7 @@ msgstr "导出"
 
 #: frontend/src/header/FilterForm.svelte:73
 msgid "Filter by tag, payee, ..."
-msgstr "筛选（标签，收款人等等）"
+msgstr "筛选（标签，收款人等）"
 
 #: frontend/src/modals/Export.svelte:16
 msgid "Download currently filtered entries as a Beancount file"
@@ -531,57 +535,56 @@ msgstr "下一个"
 
 #: frontend/src/modals/AddEntry.svelte:12
 msgid "Transaction"
-msgstr ""
+msgstr "交易"
 
 #: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
 #: frontend/src/documents/Documents.svelte:57
 msgid "Move or rename document"
-msgstr ""
+msgstr "移动或重命名文件"
 
 #: frontend/src/documents/Table.svelte:30
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
-msgstr ""
+msgstr "文档"
 
 #: frontend/src/import/FileList.svelte:29
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
-msgstr ""
+msgstr "没有与这个文件匹配的导入器。"
 
 #: frontend/src/charts/Chart.svelte:88
 msgid "Line chart"
-msgstr ""
+msgstr "折线图"
 
 #: frontend/src/charts/Chart.svelte:92
 msgid "Area chart"
-msgstr ""
+msgstr "面积图"
 
 #: frontend/src/import/FileList.svelte:52
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
 #: frontend/src/import/FileList.svelte:63
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 #: frontend/src/sidebar/AccountSelector.svelte:21
 msgid "Go to account"
-msgstr ""
+msgstr "前往账户"
 
 #: frontend/src/import/Import.svelte:64
 msgid "Delete this file?"
-msgstr ""
+msgstr "是否删除此文件？"
 
 #: frontend/src/import/Import.svelte:118
 msgid "No files were found for import."
-msgstr ""
-
+msgstr "没有发现可供导入的文件。"
