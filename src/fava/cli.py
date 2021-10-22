@@ -53,6 +53,9 @@ from fava.util import simple_wsgi
     type=click.Path(),
     help="Output directory for profiling data.",
 )
+@click.option(
+    "--enable-proxy-fix", is_flag=True, help="Enable Werkzeug ProxyFix middleware, enable if running behind reverse proxy."
+)
 @click.version_option(version=__version__, prog_name="fava")
 def main(
     filenames: Tuple[str],
@@ -63,6 +66,7 @@ def main(
     debug: bool,
     profile: bool,
     profile_dir: str,
+    enable_proxy_fix: bool,
 ) -> None:  # pragma: no cover
     """Start Fava for FILENAMES on http://<host>:<port>.
 
@@ -87,6 +91,11 @@ def main(
 
     app.config["BEANCOUNT_FILES"] = all_filenames
     app.config["INCOGNITO"] = incognito
+    
+    if enable_proxy_fix:
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        # App is behind one proxy that sets the -For and -Host headers.
+        app = ProxyFix(app, x_for=1, x_host=1)
 
     if prefix:
         app.wsgi_app = DispatcherMiddleware(  # type: ignore
