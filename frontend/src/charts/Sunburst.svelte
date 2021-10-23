@@ -56,7 +56,7 @@
     current = null;
   }}
 >
-  <circle style="opacity:0" r={radius} />
+  <circle style="opacity:0%" r={radius} />
   <text class="account" text-anchor="middle">
     {currentAccount || root.data.account}
   </text>
@@ -80,7 +80,7 @@
 
 <style>
   .half {
-    opacity: 0.5;
+    opacity: 50%;
   }
 
   .account {

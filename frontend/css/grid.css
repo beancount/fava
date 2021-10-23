@@ -22,9 +22,9 @@
 }
 
 .remove-row {
-  opacity: 0;
+  opacity: 0%;
 }
 
 .flex-row:hover .remove-row {
-  opacity: 1;
+  opacity: 100%;
 }

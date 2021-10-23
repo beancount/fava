@@ -148,7 +148,7 @@
   }
 
   .area path {
-    opacity: 0.3;
+    opacity: 30%;
   }
 
   .desaturate {

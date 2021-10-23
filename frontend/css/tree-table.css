@@ -116,7 +116,7 @@
 
 .tree-table .balance-children {
   display: block;
-  opacity: 0.7;
+  opacity: 70%;
 }
 
 .tree-table .has-balance .balance {
@@ -148,7 +148,7 @@
   margin-left: 15px;
   font-weight: normal;
   color: inherit;
-  opacity: 0.5;
+  opacity: 50%;
 }
 
 .tree-table .diff {

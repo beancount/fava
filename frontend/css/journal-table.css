@@ -60,7 +60,7 @@
 .journal .postings {
   font-size: 0.9em;
   background-color: var(--journal-postings);
-  opacity: 0.8;
+  opacity: 80%;
 }
 
 .journal .postings .num {

@@ -14,49 +14,49 @@
   --z-index-overlay: 4;
 
   /* Base colors */
-  --error: hsl(0, 100%, 30%);
-  --warning: hsl(52, 84%, 56%);
+  --error: hsl(0deg 100% 30%);
+  --warning: hsl(52deg 84% 56%);
   --red: var(--error);
   --yellow: var(--warning);
-  --green: hsl(151, 100%, 25%);
+  --green: hsl(151deg 100% 25%);
   --gray: #aaa;
-  --transparent-black: hsla(0, 0%, 0%, 0.5);
-  --transparent-white: hsla(0, 0%, 100%, 0.5);
+  --transparent-black: hsl(0deg 0% 0% / 50%);
+  --transparent-white: hsl(0deg 0% 100% / 50%);
   --background: #fff;
-  --background-darker: hsl(0, 0%, 85%);
-  --text-color: hsl(0, 0%, 27%);
-  --text-color-lighter: hsl(0, 0%, 33%);
-  --text-color-lightest: hsl(0, 0%, 47%);
-  --link-color: hsl(203, 100%, 32%);
-  --link-hover-color: hsl(0, 0%, 33%);
+  --background-darker: hsl(0deg 0% 85%);
+  --text-color: hsl(0deg 0% 27%);
+  --text-color-lighter: hsl(0deg 0% 33%);
+  --text-color-lightest: hsl(0deg 0% 47%);
+  --link-color: hsl(203deg 100% 32%);
+  --link-hover-color: hsl(0deg 0% 33%);
   --heading-color: #333;
-  --code-background: hsl(0, 0%, 97%);
-  --border: hsl(0, 0%, 85%);
-  --border-darker: hsl(0, 0%, 80%);
+  --code-background: hsl(0deg 0% 97%);
+  --border: hsl(0deg 0% 85%);
+  --border-darker: hsl(0deg 0% 80%);
 
   /* Buttons */
   --button-color: #fff;
-  --button-background: hsl(203, 100%, 32%);
+  --button-background: hsl(203deg 100% 32%);
   --button-muted-color: var(--text-color);
   --button-muted-background: var(--background-darker);
 
   /* Sidebar */
   --sidebar-color: #444;
   --sidebar-hover-color: var(--link-color);
-  --sidebar-background: hsl(0, 0%, 96%);
-  --sidebar-border: hsl(0, 0%, 87%);
+  --sidebar-background: hsl(0deg 0% 96%);
+  --sidebar-border: hsl(0deg 0% 87%);
 
   /* Header */
   --header-color: #fff;
-  --header-background: hsl(203, 100%, 32%);
-  --header-placeholder-color: hsl(203, 47%, 66%);
-  --header-placeholder-background: hsl(203, 56%, 45%);
+  --header-background: hsl(203deg 100% 32%);
+  --header-placeholder-color: hsl(203deg 47% 66%);
+  --header-placeholder-background: hsl(203deg 56% 45%);
 
   /* Tables */
-  --table-header-text: hsl(0, 0%, 40%);
-  --table-header-background: hsl(0, 0%, 90%);
-  --table-border: hsl(0, 0%, 90%);
-  --table-background-even: hsl(0, 0%, 95%);
+  --table-header-text: hsl(0deg 0% 40%);
+  --table-header-background: hsl(0deg 0% 90%);
+  --table-border: hsl(0deg 0% 90%);
+  --table-background-even: hsl(0deg 0% 95%);
   --treetable-expander: #afc1d3;
   --budget-negative: #af3d3d;
   --budget-positive: #3daf46;
@@ -64,7 +64,7 @@
 
   /* Editor */
   --editor-comment: #998;
-  --editor-trailing-whitespace: rgba(255, 199, 199, 0.5);
+  --editor-trailing-whitespace: rgb(255 199 199 / 50%);
   --editor-directive: #333;
   --editor-class: #b84;
   --editor-date: #099;
@@ -80,8 +80,8 @@
   --mobile-button-text: #000;
   --placeholder-color: var(--text-color-lightest);
   --placeholder-background: var(--background);
-  --dragover-background: hsla(203, 100%, 32%, 0.5);
-  --overlay-wrapper-background: rgba(0, 0, 0, 0.5);
+  --dragover-background: hsl(203deg 100% 32% / 50%);
+  --overlay-wrapper-background: rgb(0 0 0 / 50%);
 
   /* Help pages */
   --help-sidebar-background: #f8f8f8;
@@ -93,7 +93,7 @@
 }
 
 .journal .close {
-  --entry-background: hsl(0, 0%, 70%);
+  --entry-background: hsl(0deg 0% 70%);
 }
 
 .journal .custom {
@@ -109,7 +109,7 @@
 }
 
 .journal .open {
-  --entry-background: hsl(0, 0%, 92%);
+  --entry-background: hsl(0deg 0% 92%);
 }
 
 .journal .other {
@@ -133,11 +133,11 @@
 }
 
 .journal {
-  --journal-postings: hsl(0, 0%, 92%);
-  --journal-metadata: hsl(210, 44%, 67%);
-  --journal-tag: hsl(210, 61%, 64%);
-  --journal-link: hsl(203, 39%, 85%);
-  --journal-posting-indicator: hsl(203, 24%, 80%);
-  --journal-metadata-indicator: hsl(203, 24%, 40%);
+  --journal-postings: hsl(0deg 0% 92%);
+  --journal-metadata: hsl(210deg 44% 67%);
+  --journal-tag: hsl(210deg 61% 64%);
+  --journal-link: hsl(203deg 39% 85%);
+  --journal-posting-indicator: hsl(203deg 24% 80%);
+  --journal-metadata-indicator: hsl(203deg 24% 40%);
   --journal-hover-highlight: #f5f5f59c;
 }

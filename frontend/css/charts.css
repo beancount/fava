@@ -14,7 +14,7 @@ svg text {
   background: var(--background);
   border: 1px solid var(--border);
   box-shadow: 0 0 5px var(--border);
-  opacity: 0;
+  opacity: 0%;
   transform: translate(-50%, -100%);
 }
 

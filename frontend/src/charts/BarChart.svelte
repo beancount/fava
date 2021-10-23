@@ -113,19 +113,19 @@
 <style>
   .axis-group-box {
     cursor: pointer;
-    opacity: 0;
+    opacity: 0%;
   }
 
   .group-box {
-    opacity: 0;
+    opacity: 0%;
   }
 
   .group:hover .group-box {
-    opacity: 0.1;
+    opacity: 10%;
   }
 
   .budget {
-    opacity: 0.3;
+    opacity: 30%;
   }
 
   .desaturate {

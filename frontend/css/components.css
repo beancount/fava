@@ -6,7 +6,7 @@ details {
 }
 
 details.inactive {
-  opacity: 0.5;
+  opacity: 50%;
 }
 
 details summary {

@@ -111,6 +111,6 @@
   }
 
   .duplicate {
-    opacity: 0.5;
+    opacity: 50%;
   }
 </style>

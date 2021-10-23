@@ -195,13 +195,13 @@ input[type="text"]::-webkit-calendar-picker-indicator {
 
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-clear-button {
-  -webkit-appearance: none;
+  appearance: none;
   display: none;
 }
 
 input[type="text"]::placeholder {
   color: var(--placeholder-color);
-  opacity: 1;
+  opacity: 100%;
 }
 
 input[type="text"]::placeholder:focus {
@@ -340,7 +340,7 @@ kbd {
   color: var(--background);
   text-align: center;
   background-color: var(--text-color);
-  opacity: 0.9;
+  opacity: 90%;
 }
 
 /*
