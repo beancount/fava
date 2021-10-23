@@ -4,6 +4,7 @@ const config = {
     "stylelint-config-recess-order",
     "stylelint-config-prettier",
   ],
+  customSyntax: "postcss-html",
   rules: {
     "selector-pseudo-class-no-unknown": [
       true,
