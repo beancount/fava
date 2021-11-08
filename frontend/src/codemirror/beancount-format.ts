@@ -11,7 +11,9 @@ export const beancountFormat: Command = (cm) => {
       });
     },
     (error) => {
-      notify(error, "error");
+      if (error instanceof Error) {
+        notify(error.message, "error");
+      }
     }
   );
   return true;

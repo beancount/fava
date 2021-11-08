@@ -63,7 +63,9 @@ function drop(event: DragEvent, target: HTMLElement): void {
           notify(response);
         },
         (error) => {
-          notify(error, "error");
+          if (error instanceof Error) {
+            notify(error.message, "error");
+          }
         }
       );
     }

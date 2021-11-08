@@ -41,6 +41,6 @@
 
   g.y :global(line),
   g.y :global(path.domain) {
-    opacity: 20%;
+    opacity: 0.2;
   }
 </style>

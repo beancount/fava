@@ -35,7 +35,6 @@ async function runBuild(dev: boolean) {
     loader: {
       ".woff2": "file",
     },
-    // eslint-disable-next-line
     plugins: [svelte({ preprocess: typescript() })],
     sourcemap: dev,
     incremental: dev,

@@ -15,6 +15,7 @@ type NotificationType = "info" | "warning" | "error";
  */
 export function notify(
   msg: string,
+  // eslint-disable-next-line default-param-last
   cls: NotificationType = "info",
   callback?: () => void
 ): void {
