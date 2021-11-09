@@ -148,7 +148,7 @@
   }
 
   ul {
-    position: fixed;
+    position: absolute;
     z-index: var(--z-index-autocomplete);
     overflow-x: hidden;
     overflow-y: auto;
