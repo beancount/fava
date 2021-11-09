@@ -46,6 +46,14 @@ export function fuzzyfilter(pattern: string, suggestions: string[]): string[] {
     .sort((a, b) => b[1] - a[1])
     .map(([s]) => s);
 }
+const escapeChars: Record<string, string> = {
+  '"': "&quot;",
+  "'": "&#39;",
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+};
+const e = (text: string) => text.replace(/["'&<>]/g, (m) => escapeChars[m]);
 
 /**
  * Wrap fuzzy matched characters.
@@ -55,7 +63,7 @@ export function fuzzyfilter(pattern: string, suggestions: string[]): string[] {
  */
 export function fuzzywrap(pattern: string, text: string): string {
   if (!pattern) {
-    return text;
+    return e(text);
   }
   const casesensitive = pattern === pattern.toLowerCase();
   const exact = casesensitive
@@ -65,7 +73,7 @@ export function fuzzywrap(pattern: string, text: string): string {
     const before = text.slice(0, exact);
     const match = text.slice(exact, exact + pattern.length);
     const after = text.slice(exact + pattern.length);
-    return `${before}<span>${match}</span>${after}`;
+    return `${e(before)}<span>${e(match)}</span>${e(after)}`;
   }
   let pindex = 0;
   let inMatch = false;
@@ -78,15 +86,18 @@ export function fuzzywrap(pattern: string, text: string): string {
         result.push("<span>");
         inMatch = true;
       }
-      result.push(char);
+      result.push(e(char));
       pindex += 1;
     } else {
       if (inMatch) {
         result.push("</span>");
         inMatch = false;
       }
-      result.push(char);
+      result.push(e(char));
     }
+  }
+  if (pindex < pattern.length) {
+    return e(text);
   }
   if (inMatch) {
     result.push("</span>");
