@@ -11,23 +11,23 @@
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
   import { isDuplicate, preprocessData } from "./helpers";
-  import type { ImportableFiles, ProcessedImportableFiles } from "./helpers";
+  import type { ImportableFile, ProcessedImportableFile } from "./helpers";
 
-  export let data: ImportableFiles;
+  export let data: ImportableFile[];
 
+  /** The array of entries to show the modal for. */
   let entries: Entry[] = [];
+
+  /** Name of the currently selected file. */
   let selected: string | null = null;
 
-  let preprocessedData: ProcessedImportableFiles = [];
+  /** All files (importable and those without importers). */
+  let files: ProcessedImportableFile[] = [];
 
   let extractCache = new Map<string, Entry[]>();
 
-  $: importableFiles = preprocessedData.filter(
-    (i) => i.importers[0].importer_name !== ""
-  );
-  $: otherFiles = preprocessedData.filter(
-    (i) => i.importers[0].importer_name === ""
-  );
+  $: importableFiles = files.filter((i) => i.importers[0].importer_name !== "");
+  $: otherFiles = files.filter((i) => i.importers[0].importer_name === "");
 
   function preventNavigation() {
     return extractCache.size > 0
@@ -36,7 +36,7 @@
   }
 
   onMount(() => {
-    preprocessedData = preprocessData(data);
+    files = preprocessData(data);
     router.interruptHandlers.add(preventNavigation);
 
     return () => {
@@ -50,9 +50,7 @@
   async function move(filename: string, account: string, newName: string) {
     const moved = await moveDocument(filename, account, newName);
     if (moved) {
-      preprocessedData = preprocessedData.filter(
-        (item) => item.name !== filename
-      );
+      files = files.filter((item) => item.name !== filename);
     }
   }
 
@@ -60,15 +58,13 @@
    * Delete the given file and remove it from the displayed list.
    */
   async function remove(filename: string) {
-    // eslint-disable-next-line
-    if (!confirm(_("Delete this file?"))) {
+    // eslint-disable-next-line no-alert
+    if (!window.confirm(_("Delete this file?"))) {
       return;
     }
     const removed = await deleteDocument(filename);
     if (removed) {
-      preprocessedData = preprocessedData.filter(
-        (item) => item.name !== filename
-      );
+      files = files.filter((item) => item.name !== filename);
     }
   }
 
@@ -114,18 +110,18 @@
 />
 <div class="fixed-fullsize-container">
   <div class="filelist">
-    {#if preprocessedData.length === 0}
+    {#if files.length === 0}
       <p>{_("No files were found for import.")}</p>
     {/if}
     {#if importableFiles.length > 0}
-      <div class="importable-files">
+      <div>
         <h2>{_("Importable Files")}</h2>
         <FileList
           files={importableFiles}
           {extractCache}
           bind:selected
-          moveFile={move}
-          removeFile={remove}
+          {move}
+          {remove}
           {extract}
         />
       </div>
@@ -138,8 +134,8 @@
           files={otherFiles}
           {extractCache}
           bind:selected
-          moveFile={move}
-          removeFile={remove}
+          {move}
+          {remove}
           {extract}
         />
       </details>
@@ -167,7 +163,7 @@
     padding: 1rem;
   }
 
-  .importable-files {
-    padding-bottom: 0.8rem;
+  hr {
+    margin: 1rem 0;
   }
 </style>

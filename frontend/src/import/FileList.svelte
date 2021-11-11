@@ -3,13 +3,13 @@
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
 
-  import type { ProcessedImportableFiles } from "./helpers";
+  import type { ProcessedImportableFile } from "./helpers";
 
-  export let files: ProcessedImportableFiles;
+  export let files: ProcessedImportableFile[];
   export let extractCache: Map<string, Entry[]>;
   export let selected: string | null;
-  export let removeFile: (name: string) => unknown;
-  export let moveFile: (name: string, a: string, newName: string) => unknown;
+  export let remove: (name: string) => unknown;
+  export let move: (name: string, a: string, newName: string) => unknown;
   export let extract: (name: string, importer: string) => unknown;
 </script>
 
@@ -25,7 +25,7 @@
     {file.basename}
     <button
       class="round"
-      on:click={() => removeFile(file.name)}
+      on:click={() => remove(file.name)}
       type="button"
       title={_("Delete")}
       tabindex={-1}
@@ -39,7 +39,7 @@
       <input size={40} bind:value={info.newName} />
       <button
         type="button"
-        on:click={() => moveFile(file.name, info.account, info.newName)}
+        on:click={() => move(file.name, info.account, info.newName)}
       >
         {"Move"}
       </button>

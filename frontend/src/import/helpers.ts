@@ -21,32 +21,21 @@ function newFilename(date: string, basename: string): string {
   return `${date} ${basename}`;
 }
 
-interface ImporterInfo {
-  account: string;
-  date: string;
-  name: string;
-  importer_name: string;
-}
-interface ImporterInfoWithNewName {
-  account: string;
-  newName: string;
-  importer_name: string;
-}
-
-export type ImportableFile<T> = {
+type FileWithImporters<T> = {
   name: string;
   basename: string;
-  importers: T[];
+  importers: ({ account: string; importer_name: string } & T)[];
 };
 
-export type ImportableFiles = ImportableFile<ImporterInfo>[];
-export type ProcessedImportableFiles =
-  ImportableFile<ImporterInfoWithNewName>[];
+export type ImportableFile = FileWithImporters<{ date: string; name: string }>;
+export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
 
 /**
  * Initially set the file names for all importable files.
  */
-export function preprocessData(arr: ImportableFiles): ProcessedImportableFiles {
+export function preprocessData(
+  arr: ImportableFile[]
+): ProcessedImportableFile[] {
   const today = todayAsString();
   return arr.map((file) => {
     const importers = file.importers.map(
