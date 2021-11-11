@@ -46,6 +46,10 @@
   --sidebar-background: hsl(0deg 0% 96%);
   --sidebar-border: hsl(0deg 0% 87%);
 
+  /* Details */
+  --summary-background: hsl(0deg 0% 95%);
+  --summary-background-darker: hsl(0deg 0% 90%);
+
   /* Header */
   --header-color: #fff;
   --header-background: hsl(203deg 100% 32%);

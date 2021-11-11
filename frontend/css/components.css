@@ -15,7 +15,7 @@ details summary {
   align-items: center;
   padding: 5px 10px 5px 30px;
   cursor: pointer;
-  background-color: var(--sidebar-background);
+  background-color: var(--summary-background);
 }
 
 details summary::before {

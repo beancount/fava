@@ -17,6 +17,7 @@
   <div
     class="header"
     title={file.name}
+    class:selected={selected === file.name}
     on:click|self={() => {
       selected = selected === file.name ? null : file.name;
     }}
@@ -74,10 +75,14 @@
     padding: 0.5rem;
     margin: 0.5rem 0;
     cursor: pointer;
-    background-color: var(--sidebar-background);
+    background-color: var(--summary-background);
   }
 
   .header button {
     float: right;
+  }
+
+  .header.selected {
+    background-color: var(--summary-background-darker);
   }
 </style>
