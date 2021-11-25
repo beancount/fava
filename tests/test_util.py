@@ -21,7 +21,7 @@ def test_listify():
 
 def test_pairwise():
     assert list(pairwise([1, 2, 3])) == [(1, 2), (2, 3)]
-    assert list(pairwise([])) == []
+    assert not list(pairwise([]))
 
 
 def test_simple_wsgi():

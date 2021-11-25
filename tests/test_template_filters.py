@@ -22,8 +22,8 @@ from fava.template_filters import should_show
 
 def test_remove_keys() -> None:
     """Dict keys get remove or return empty dict if None is given."""
-    assert remove_keys(None, []) == {}
-    assert remove_keys({"asdf": 1}, ["asdf"]) == {}
+    assert not remove_keys(None, [])
+    assert not remove_keys({"asdf": 1}, ["asdf"])
 
 
 @pytest.mark.parametrize(
