@@ -78,7 +78,7 @@ msgstr "آمار"
 msgid "Help"
 msgstr "راهنما"
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:21
 msgid "Date"
 msgstr "تاریخ"
 
@@ -120,7 +120,7 @@ msgstr "ذخیره"
 msgid "Saving..."
 msgstr "پس انداز..."
 
-#: frontend/src/main.ts:101
+#: frontend/src/main.ts:105
 msgid "File change detected. Click to reload."
 msgstr "تغییر‌فایل‌شناسایی‌شده‌است. برای‌بارگیری‌مجدد‌کلیک‌کنید."
 
@@ -218,11 +218,11 @@ msgstr "درآمد"
 msgid "Expenses"
 msgstr "هزینه‌ها"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:45
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
 msgid "Key"
 msgstr "کلید"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:55
+#: frontend/src/entry-forms/EntryMetadata.svelte:58
 msgid "Value"
 msgstr "مقدار"
 
@@ -333,7 +333,7 @@ msgstr "تکراری"
 msgid "Importer"
 msgstr "واردکننده"
 
-#: frontend/src/import/FileList.svelte:53
+#: frontend/src/import/FileList.svelte:54
 msgid "Extract"
 msgstr "استخراج"
 
@@ -345,8 +345,8 @@ msgstr "... یک‌پرس‌وجوBQLواردکنید.'راهنما'برای‌�
 msgid "Metadata"
 msgstr "متاداده"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:69
 msgid "Add metadata"
 msgstr "افزودن‌متاداده"
 
@@ -537,11 +537,11 @@ msgstr "تراکنش"
 msgid "Add"
 msgstr "افزودن"
 
-#: frontend/src/documents/Documents.svelte:57
+#: frontend/src/documents/Documents.svelte:60
 msgid "Move or rename document"
 msgstr "انتقال یا تغییر نام سند"
 
-#: frontend/src/documents/Table.svelte:30
+#: frontend/src/documents/Table.svelte:21
 msgid "Name"
 msgstr "نام"
 
@@ -549,7 +549,7 @@ msgstr "نام"
 msgid "Documents"
 msgstr "اسناد"
 
-#: frontend/src/import/FileList.svelte:29
+#: frontend/src/import/FileList.svelte:30
 msgid "Delete"
 msgstr "حذف"
 
@@ -557,19 +557,19 @@ msgstr "حذف"
 msgid "No importer matched this file."
 msgstr "هیچ وارد کننده ای با این پرونده مطابقت ندارد."
 
-#: frontend/src/charts/Chart.svelte:88
+#: frontend/src/charts/Chart.svelte:78
 msgid "Line chart"
 msgstr "نمودار خطی"
 
-#: frontend/src/charts/Chart.svelte:92
+#: frontend/src/charts/Chart.svelte:79
 msgid "Area chart"
 msgstr "نمودار ناحیه ای"
 
-#: frontend/src/import/FileList.svelte:52
+#: frontend/src/import/FileList.svelte:53
 msgid "Continue"
 msgstr "ادامه"
 
-#: frontend/src/import/FileList.svelte:63
+#: frontend/src/import/FileList.svelte:64
 msgid "Clear"
 msgstr "پاک کردن"
 
@@ -577,11 +577,11 @@ msgstr "پاک کردن"
 msgid "Go to account"
 msgstr "رفتن به حساب"
 
-#: frontend/src/import/Import.svelte:64
+#: frontend/src/import/Import.svelte:62
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:118
+#: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
 msgstr ""
 

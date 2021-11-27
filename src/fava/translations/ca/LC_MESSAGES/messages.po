@@ -78,7 +78,7 @@ msgstr "Estadístiques"
 msgid "Help"
 msgstr "Ajuda"
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:21
 msgid "Date"
 msgstr "Data"
 
@@ -120,7 +120,7 @@ msgstr "Desa"
 msgid "Saving..."
 msgstr "S'està desant..."
 
-#: frontend/src/main.ts:101
+#: frontend/src/main.ts:105
 msgid "File change detected. Click to reload."
 msgstr "S'ha detectat un canvi al fitxer. Feu clic per tornar-lo a carregar."
 
@@ -218,11 +218,11 @@ msgstr "Ingressos"
 msgid "Expenses"
 msgstr "Despeses"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:45
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
 msgid "Key"
 msgstr "Clau"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:55
+#: frontend/src/entry-forms/EntryMetadata.svelte:58
 msgid "Value"
 msgstr "Valor"
 
@@ -333,7 +333,7 @@ msgstr "Duplicada"
 msgid "Importer"
 msgstr "Importador"
 
-#: frontend/src/import/FileList.svelte:53
+#: frontend/src/import/FileList.svelte:54
 msgid "Extract"
 msgstr "Extreu"
 
@@ -345,8 +345,8 @@ msgstr "Introduïu una consulta SQL. Escriviu «help» per veure una llista de l
 msgid "Metadata"
 msgstr "Metadades"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:69
 msgid "Add metadata"
 msgstr "Afegeix metadades"
 
@@ -537,11 +537,11 @@ msgstr "Transacció"
 msgid "Add"
 msgstr "Afegeix"
 
-#: frontend/src/documents/Documents.svelte:57
+#: frontend/src/documents/Documents.svelte:60
 msgid "Move or rename document"
 msgstr "Mou o canvia el nom del document"
 
-#: frontend/src/documents/Table.svelte:30
+#: frontend/src/documents/Table.svelte:21
 msgid "Name"
 msgstr "Nom"
 
@@ -549,7 +549,7 @@ msgstr "Nom"
 msgid "Documents"
 msgstr "Documents"
 
-#: frontend/src/import/FileList.svelte:29
+#: frontend/src/import/FileList.svelte:30
 msgid "Delete"
 msgstr "Suprimeix"
 
@@ -557,19 +557,19 @@ msgstr "Suprimeix"
 msgid "No importer matched this file."
 msgstr "No hi ha cap importador per a aquest fitxer."
 
-#: frontend/src/charts/Chart.svelte:88
+#: frontend/src/charts/Chart.svelte:78
 msgid "Line chart"
 msgstr "Diagrama de línies"
 
-#: frontend/src/charts/Chart.svelte:92
+#: frontend/src/charts/Chart.svelte:79
 msgid "Area chart"
 msgstr "Diagrama d'àrees"
 
-#: frontend/src/import/FileList.svelte:52
+#: frontend/src/import/FileList.svelte:53
 msgid "Continue"
 msgstr "Continua"
 
-#: frontend/src/import/FileList.svelte:63
+#: frontend/src/import/FileList.svelte:64
 msgid "Clear"
 msgstr "Esborra"
 
@@ -577,11 +577,11 @@ msgstr "Esborra"
 msgid "Go to account"
 msgstr "Vés al compte"
 
-#: frontend/src/import/Import.svelte:64
+#: frontend/src/import/Import.svelte:62
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:118
+#: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
 msgstr ""
 

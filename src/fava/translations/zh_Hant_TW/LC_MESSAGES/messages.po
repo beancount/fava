@@ -78,7 +78,7 @@ msgstr "統計"
 msgid "Help"
 msgstr "幫助"
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:21
 msgid "Date"
 msgstr "日期"
 
@@ -120,7 +120,7 @@ msgstr "儲存"
 msgid "Saving..."
 msgstr "儲存中..."
 
-#: frontend/src/main.ts:101
+#: frontend/src/main.ts:105
 msgid "File change detected. Click to reload."
 msgstr "偵測到文件更動，點擊此處重新整理。"
 
@@ -218,11 +218,11 @@ msgstr "收入"
 msgid "Expenses"
 msgstr "支出"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:45
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
 msgid "Key"
 msgstr "鍵"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:55
+#: frontend/src/entry-forms/EntryMetadata.svelte:58
 msgid "Value"
 msgstr "值"
 
@@ -334,7 +334,7 @@ msgid "Importer"
 msgstr "匯入器"
 
 #. 不確定 UI 上是用在哪
-#: frontend/src/import/FileList.svelte:53
+#: frontend/src/import/FileList.svelte:54
 msgid "Extract"
 msgstr "匯出"
 
@@ -346,8 +346,8 @@ msgstr "... 輸入 BQL 查詢語句。 '幫助' 可列出所有可用的指令�
 msgid "Metadata"
 msgstr "元資料"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:69
 msgid "Add metadata"
 msgstr "新增元資料"
 
@@ -533,57 +533,57 @@ msgstr "下一個"
 
 #: frontend/src/modals/AddEntry.svelte:12
 msgid "Transaction"
-msgstr ""
+msgstr "交易"
 
 #: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
-msgstr ""
+msgstr "新增"
 
-#: frontend/src/documents/Documents.svelte:57
+#: frontend/src/documents/Documents.svelte:60
 msgid "Move or rename document"
-msgstr ""
+msgstr "移動或重命名檔案"
 
-#: frontend/src/documents/Table.svelte:30
+#: frontend/src/documents/Table.svelte:21
 msgid "Name"
-msgstr ""
+msgstr "名稱"
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
-msgstr ""
+msgstr "憑證檔案"
 
-#: frontend/src/import/FileList.svelte:29
+#: frontend/src/import/FileList.svelte:30
 msgid "Delete"
-msgstr ""
+msgstr "移除"
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
-msgstr ""
+msgstr "沒有匹配此檔案的匯入器。"
 
-#: frontend/src/charts/Chart.svelte:88
+#: frontend/src/charts/Chart.svelte:78
 msgid "Line chart"
-msgstr ""
+msgstr "折綫圖"
 
-#: frontend/src/charts/Chart.svelte:92
+#: frontend/src/charts/Chart.svelte:79
 msgid "Area chart"
-msgstr ""
+msgstr "面積圖"
 
-#: frontend/src/import/FileList.svelte:52
+#: frontend/src/import/FileList.svelte:53
 msgid "Continue"
-msgstr ""
+msgstr "繼續"
 
-#: frontend/src/import/FileList.svelte:63
+#: frontend/src/import/FileList.svelte:64
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 #: frontend/src/sidebar/AccountSelector.svelte:21
 msgid "Go to account"
-msgstr ""
+msgstr "轉到賬戶"
 
-#: frontend/src/import/Import.svelte:64
+#: frontend/src/import/Import.svelte:62
 msgid "Delete this file?"
-msgstr ""
+msgstr "刪除這個文件？"
 
-#: frontend/src/import/Import.svelte:118
+#: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
-msgstr ""
+msgstr "未發現有可供匯入的檔案"
 

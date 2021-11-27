@@ -78,7 +78,7 @@ msgstr "Estadísticas"
 msgid "Help"
 msgstr "Ayuda"
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:21
 msgid "Date"
 msgstr "Fecha"
 
@@ -122,7 +122,7 @@ msgstr "Guardar"
 msgid "Saving..."
 msgstr "Guardando..."
 
-#: frontend/src/main.ts:101
+#: frontend/src/main.ts:105
 msgid "File change detected. Click to reload."
 msgstr "Modificación del fichero detectada. Haga clic para recargar."
 
@@ -220,11 +220,11 @@ msgstr "Ingresos"
 msgid "Expenses"
 msgstr "Gastos"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:45
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
 msgid "Key"
 msgstr "Clave"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:55
+#: frontend/src/entry-forms/EntryMetadata.svelte:58
 msgid "Value"
 msgstr "Valor"
 
@@ -335,7 +335,7 @@ msgstr ""
 msgid "Importer"
 msgstr ""
 
-#: frontend/src/import/FileList.svelte:53
+#: frontend/src/import/FileList.svelte:54
 msgid "Extract"
 msgstr ""
 
@@ -347,8 +347,8 @@ msgstr ""
 msgid "Metadata"
 msgstr ""
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:69
 msgid "Add metadata"
 msgstr ""
 
@@ -538,11 +538,11 @@ msgstr ""
 msgid "Add"
 msgstr ""
 
-#: frontend/src/documents/Documents.svelte:57
+#: frontend/src/documents/Documents.svelte:60
 msgid "Move or rename document"
 msgstr ""
 
-#: frontend/src/documents/Table.svelte:30
+#: frontend/src/documents/Table.svelte:21
 msgid "Name"
 msgstr ""
 
@@ -550,7 +550,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: frontend/src/import/FileList.svelte:29
+#: frontend/src/import/FileList.svelte:30
 msgid "Delete"
 msgstr ""
 
@@ -558,19 +558,19 @@ msgstr ""
 msgid "No importer matched this file."
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:88
+#: frontend/src/charts/Chart.svelte:78
 msgid "Line chart"
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:92
+#: frontend/src/charts/Chart.svelte:79
 msgid "Area chart"
 msgstr ""
 
-#: frontend/src/import/FileList.svelte:52
+#: frontend/src/import/FileList.svelte:53
 msgid "Continue"
 msgstr ""
 
-#: frontend/src/import/FileList.svelte:63
+#: frontend/src/import/FileList.svelte:64
 msgid "Clear"
 msgstr ""
 
@@ -578,11 +578,11 @@ msgstr ""
 msgid "Go to account"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:64
+#: frontend/src/import/Import.svelte:62
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:118
+#: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
 msgstr ""
 

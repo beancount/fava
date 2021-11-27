@@ -56,7 +56,7 @@ msgstr "资产"
 
 #: fava/templates/_globals.html:3
 msgid "Commodities"
-msgstr "货币"
+msgstr "通货"
 
 #: fava/templates/_globals.html:7
 msgid "Events"
@@ -78,7 +78,7 @@ msgstr "统计"
 msgid "Help"
 msgstr "帮助"
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:21
 msgid "Date"
 msgstr "日期"
 
@@ -92,7 +92,7 @@ msgstr "摘要/收款人"
 
 #: fava/templates/_journal_table.html:89
 msgid "Position"
-msgstr "头寸"
+msgstr "款项"
 
 #: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
 msgid "Price"
@@ -120,7 +120,7 @@ msgstr "保存"
 msgid "Saving..."
 msgstr "保存中…"
 
-#: frontend/src/main.ts:101
+#: frontend/src/main.ts:105
 msgid "File change detected. Click to reload."
 msgstr "检测到文件发生变化，点击此处刷新。"
 
@@ -218,11 +218,11 @@ msgstr "收入"
 msgid "Expenses"
 msgstr "支出"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:45
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
 msgid "Key"
 msgstr "键"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:55
+#: frontend/src/entry-forms/EntryMetadata.svelte:58
 msgid "Value"
 msgstr "值"
 
@@ -252,11 +252,11 @@ msgstr "复制 balance 指令"
 
 #: fava/templates/statistics.html:31
 msgid "Last Entry"
-msgstr "最新项目"
+msgstr "最新条目"
 
 #: fava/templates/statistics.html:63
 msgid "Entries per Type"
-msgstr "每类型项目数"
+msgstr "每类型条目数"
 
 #: fava/templates/statistics.html:67
 msgid "Type"
@@ -264,7 +264,7 @@ msgstr "类型"
 
 #: fava/templates/statistics.html:68
 msgid "# Entries"
-msgstr "# 项目"
+msgstr "# 条目"
 
 #: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
 #: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
@@ -299,7 +299,7 @@ msgstr "导入"
 
 #: fava/templates/_journal_table.html:4
 msgid "Budget entries"
-msgstr "预算项目"
+msgstr "预算条目"
 
 #: fava/templates/extract.html:9
 msgid "Toggle source"
@@ -315,7 +315,7 @@ msgstr "来源"
 
 #: fava/templates/extract.html:16
 msgid "Entry"
-msgstr "项目"
+msgstr "条目"
 
 #: fava/templates/extract.html:17
 msgid "Actions"
@@ -333,7 +333,7 @@ msgstr "复制"
 msgid "Importer"
 msgstr "导入器"
 
-#: frontend/src/import/FileList.svelte:53
+#: frontend/src/import/FileList.svelte:54
 msgid "Extract"
 msgstr "导出"
 
@@ -345,8 +345,8 @@ msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命
 msgid "Metadata"
 msgstr "元数据"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:69
 msgid "Add metadata"
 msgstr "添加元数据"
 
@@ -365,11 +365,11 @@ msgstr "内容"
 
 #: fava/templates/_context.html:15
 msgid "Balances before entry"
-msgstr "在此项目前余额"
+msgstr "在此条目前余额"
 
 #: fava/templates/_context.html:35
 msgid "Balances after entry"
-msgstr "在此项目后余额"
+msgstr "在此条目后余额"
 
 #: fava/templates/_journal_table.html:11
 msgid "Cleared transactions"
@@ -385,7 +385,7 @@ msgstr "其他交易"
 
 #: fava/templates/_journal_table.html:7
 msgid "Documents with a #discovered tag"
-msgstr "带有 #discovered 标签的文档"
+msgstr "带有 #discovered 标签的凭证票据"
 
 #: frontend/src/entry-forms/Transaction.svelte:88
 msgid "Postings"
@@ -397,7 +397,7 @@ msgstr "上传文件"
 
 #: fava/templates/_overlays.html:10
 msgid "Documents folder"
-msgstr "文档目录"
+msgstr "凭证目录"
 
 #: frontend/src/modals/DocumentUpload.svelte:68
 msgid "Upload"
@@ -451,11 +451,11 @@ msgstr "筛选（标签，收款人等等）"
 
 #: frontend/src/modals/Export.svelte:16
 msgid "Download currently filtered entries as a Beancount file"
-msgstr "将当前筛选结果下载为 Beancount 文件"
+msgstr "将当前筛选的条目下载为 Beancount 文件"
 
 #: fava/templates/extract.html:40
 msgid "Import entries"
-msgstr "导入项目"
+msgstr "导入条目"
 
 #: frontend/src/charts/ConversionAndInterval.svelte:7
 msgid "Yearly"
@@ -487,11 +487,11 @@ msgstr "金额"
 
 #: fava/templates/_journal_table.html:8
 msgid "Documents with a #linked tag"
-msgstr "有 #linked 标签的文档"
+msgstr "有 #linked 标签的凭证票据"
 
 #: fava/static/javascript/modals/DocumentUpload.svelte:54
 msgid "You need to set the \"documents\" Beancount option for file uploads."
-msgstr "请在 Beancount 选项中启用“文档”以上传文件"
+msgstr "请设定 Beancount 选项 “documents”以上传文件。"
 
 #: frontend/src/stores/chart.ts:38
 msgid "At Cost"
@@ -531,57 +531,57 @@ msgstr "下一个"
 
 #: frontend/src/modals/AddEntry.svelte:12
 msgid "Transaction"
-msgstr ""
+msgstr "交易"
 
 #: frontend/src/modals/AddEntry.svelte:42
 msgid "Add"
-msgstr ""
+msgstr "添加"
 
-#: frontend/src/documents/Documents.svelte:57
+#: frontend/src/documents/Documents.svelte:60
 msgid "Move or rename document"
-msgstr ""
+msgstr "移动或重命名凭证文件"
 
-#: frontend/src/documents/Table.svelte:30
+#: frontend/src/documents/Table.svelte:21
 msgid "Name"
-msgstr ""
+msgstr "名称"
 
 #: fava/templates/_globals.html:4
 msgid "Documents"
-msgstr ""
+msgstr "凭证文档"
 
-#: frontend/src/import/FileList.svelte:29
+#: frontend/src/import/FileList.svelte:30
 msgid "Delete"
-msgstr ""
+msgstr "删除"
 
 #: frontend/src/import/Import.svelte:106
 msgid "No importer matched this file."
-msgstr ""
+msgstr "没有与这个文件匹配的导入器。"
 
-#: frontend/src/charts/Chart.svelte:88
+#: frontend/src/charts/Chart.svelte:78
 msgid "Line chart"
-msgstr ""
+msgstr "折线图"
 
-#: frontend/src/charts/Chart.svelte:92
+#: frontend/src/charts/Chart.svelte:79
 msgid "Area chart"
-msgstr ""
+msgstr "面积图"
 
-#: frontend/src/import/FileList.svelte:52
+#: frontend/src/import/FileList.svelte:53
 msgid "Continue"
-msgstr ""
+msgstr "继续"
 
-#: frontend/src/import/FileList.svelte:63
+#: frontend/src/import/FileList.svelte:64
 msgid "Clear"
-msgstr ""
+msgstr "清除"
 
 #: frontend/src/sidebar/AccountSelector.svelte:21
 msgid "Go to account"
-msgstr ""
+msgstr "前往账户"
 
-#: frontend/src/import/Import.svelte:64
+#: frontend/src/import/Import.svelte:62
 msgid "Delete this file?"
-msgstr ""
+msgstr "是否删除此文件？"
 
-#: frontend/src/import/Import.svelte:118
+#: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
-msgstr ""
+msgstr "没有发现可供导入的文件。"
 

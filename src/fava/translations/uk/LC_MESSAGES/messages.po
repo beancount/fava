@@ -78,7 +78,7 @@ msgstr "Статистика"
 msgid "Help"
 msgstr "Допомога"
 
-#: frontend/src/documents/Table.svelte:26
+#: frontend/src/documents/Table.svelte:21
 msgid "Date"
 msgstr "Дата"
 
@@ -120,7 +120,7 @@ msgstr "Зберегти"
 msgid "Saving..."
 msgstr "Зберігається..."
 
-#: frontend/src/main.ts:101
+#: frontend/src/main.ts:105
 msgid "File change detected. Click to reload."
 msgstr "Вміст файлу змінився. Натисніть для перезавантаження."
 
@@ -218,11 +218,11 @@ msgstr "Дохід"
 msgid "Expenses"
 msgstr "Витрати"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:45
+#: frontend/src/entry-forms/EntryMetadata.svelte:48
 msgid "Key"
 msgstr "Ключ"
 
-#: frontend/src/entry-forms/EntryMetadata.svelte:55
+#: frontend/src/entry-forms/EntryMetadata.svelte:58
 msgid "Value"
 msgstr "Значення"
 
@@ -333,7 +333,7 @@ msgstr "Дублікат"
 msgid "Importer"
 msgstr "Імпортер"
 
-#: frontend/src/import/FileList.svelte:53
+#: frontend/src/import/FileList.svelte:54
 msgid "Extract"
 msgstr "Витягти"
 
@@ -345,8 +345,8 @@ msgstr "...введіть BQL запит. 'help' щоб отримати спи�
 msgid "Metadata"
 msgstr "Метадані"
 
-#: frontend/src/entry-forms/AddMetadataButton.svelte:17
-#: frontend/src/entry-forms/EntryMetadata.svelte:63
+#: frontend/src/entry-forms/AddMetadataButton.svelte:18
+#: frontend/src/entry-forms/EntryMetadata.svelte:69
 msgid "Add metadata"
 msgstr "Додати метадані"
 
@@ -537,11 +537,11 @@ msgstr "Транзакція"
 msgid "Add"
 msgstr "Додати"
 
-#: frontend/src/documents/Documents.svelte:57
+#: frontend/src/documents/Documents.svelte:60
 msgid "Move or rename document"
 msgstr "Перемістити чи пеерйменувати документ"
 
-#: frontend/src/documents/Table.svelte:30
+#: frontend/src/documents/Table.svelte:21
 msgid "Name"
 msgstr "Ім'я"
 
@@ -549,7 +549,7 @@ msgstr "Ім'я"
 msgid "Documents"
 msgstr "Документи"
 
-#: frontend/src/import/FileList.svelte:29
+#: frontend/src/import/FileList.svelte:30
 msgid "Delete"
 msgstr "Видалити"
 
@@ -557,19 +557,19 @@ msgstr "Видалити"
 msgid "No importer matched this file."
 msgstr "Жоден імпортер не підходить для цього файлу."
 
-#: frontend/src/charts/Chart.svelte:88
+#: frontend/src/charts/Chart.svelte:78
 msgid "Line chart"
 msgstr "Лінійна діаграма"
 
-#: frontend/src/charts/Chart.svelte:92
+#: frontend/src/charts/Chart.svelte:79
 msgid "Area chart"
 msgstr "Діаграма з областями"
 
-#: frontend/src/import/FileList.svelte:52
+#: frontend/src/import/FileList.svelte:53
 msgid "Continue"
 msgstr "Продовжити"
 
-#: frontend/src/import/FileList.svelte:63
+#: frontend/src/import/FileList.svelte:64
 msgid "Clear"
 msgstr "Очистити"
 
@@ -577,11 +577,11 @@ msgstr "Очистити"
 msgid "Go to account"
 msgstr "Перейти до акаунту"
 
-#: frontend/src/import/Import.svelte:64
+#: frontend/src/import/Import.svelte:62
 msgid "Delete this file?"
 msgstr ""
 
-#: frontend/src/import/Import.svelte:118
+#: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
 msgstr ""
 
