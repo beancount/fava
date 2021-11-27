@@ -20,3 +20,7 @@ tests, which can be run with `make test` (requires `tox`).
 
 You can contribute to Fava's translations at the
 [Fava project on POEditor.com](https://poeditor.com/join/project/TlraSxOCxt).
+All new contributors have to be approved by the maintainers, who do not
+automatically get notified, so please send an e-mail/chat on gitter/open an
+issue. Translations will be fetched manually by the maintainers from POEditor
+for updates.
