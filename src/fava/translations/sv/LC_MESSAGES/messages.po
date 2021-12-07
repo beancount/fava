@@ -1,0 +1,586 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: POEditor.com\n"
+"Project-Id-Version: Fava\n"
+"Language: sv\n"
+
+#: fava/templates/_aside.html:4
+msgid "Custom Links"
+msgstr "Egna länkar"
+
+#: fava/templates/_aside.html:33 fava/templates/_globals.html:6
+msgid "Errors"
+msgstr "Fel"
+
+#: frontend/src/header/FilterForm.svelte:53
+msgid "Time"
+msgstr "Tid"
+
+#: frontend/src/entry-forms/AccountInput.svelte:18
+#: frontend/src/header/FilterForm.svelte:63
+#: frontend/src/modals/DocumentUpload.svelte:63
+msgid "Account"
+msgstr "Konto"
+
+#: frontend/src/entry-forms/Transaction.svelte:57
+#: frontend/src/entry-forms/Transaction.svelte:60
+msgid "Payee"
+msgstr "Mottagare"
+
+#: fava/templates/_globals.html:11
+msgid "Income Statement"
+msgstr "Resultaträkning"
+
+#: fava/templates/_globals.html:2
+msgid "Balance Sheet"
+msgstr "Balansräkning"
+
+#: fava/templates/_globals.html:16
+msgid "Trial Balance"
+msgstr "Råbalans"
+
+#: fava/templates/_globals.html:12
+msgid "Journal"
+msgstr "Journal"
+
+#: fava/templates/_globals.html:14
+msgid "Query"
+msgstr "Uppslag"
+
+#: fava/templates/_globals.html:9 fava/templates/holdings.html:44
+msgid "Holdings"
+msgstr "Innehav"
+
+#: fava/templates/_globals.html:3
+msgid "Commodities"
+msgstr "Råvaror"
+
+#: fava/templates/_globals.html:7
+msgid "Events"
+msgstr "Händelser"
+
+#: fava/templates/_globals.html:5
+msgid "Editor"
+msgstr "Redigerare"
+
+#: frontend/src/editor/EditorMenu.svelte:75
+msgid "Options"
+msgstr "Inställningar"
+
+#: fava/templates/_globals.html:15
+msgid "Statistics"
+msgstr "Statistik"
+
+#: fava/templates/_globals.html:8
+msgid "Help"
+msgstr "Hjälp"
+
+#: frontend/src/documents/Table.svelte:26
+msgid "Date"
+msgstr "Datum"
+
+#: fava/templates/_journal_table.html:87
+msgid "F"
+msgstr "M"
+
+#: fava/templates/_journal_table.html:88
+msgid "Narration/Payee"
+msgstr "Beskrivning/Mottagare"
+
+#: fava/templates/_journal_table.html:89
+msgid "Position"
+msgstr "Position"
+
+#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
+msgid "Price"
+msgstr "Pris"
+
+#: fava/templates/_journal_table.html:91
+msgid "Cost"
+msgstr "Kostnad"
+
+#: fava/templates/_journal_table.html:93
+msgid "Change"
+msgstr "Ändra"
+
+#: frontend/src/entry-forms/Balance.svelte:17
+#: frontend/src/modals/AddEntry.svelte:13
+msgid "Balance"
+msgstr "Saldo"
+
+#: frontend/src/editor/SaveButton.svelte:8
+#: frontend/src/import/Extract.svelte:93 frontend/src/modals/AddEntry.svelte:66
+msgid "Save"
+msgstr "Spara"
+
+#: frontend/src/editor/SaveButton.svelte:8
+msgid "Saving..."
+msgstr "Sparar…"
+
+#: frontend/src/main.ts:101
+msgid "File change detected. Click to reload."
+msgstr "Filändring upptäckt. Klicka för att ladda om."
+
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+msgid "Expand all accounts"
+msgstr "Expandera alla konton"
+
+#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+msgid "Expand all"
+msgstr "Expandera alla"
+
+#: fava/templates/_tree_table.html:29
+msgid "Other"
+msgstr "Annat"
+
+#: fava/templates/account.html:22
+msgid "Journal of all entries for this Account and Sub-Accounts"
+msgstr "Journal över alla inlägg for detta konto och underkonton"
+
+#: fava/templates/account.html:22
+msgid "Account Journal"
+msgstr "Kontojournal"
+
+#: fava/templates/account.html:15 fava/templates/account.html:23
+msgid "Changes"
+msgstr "Ändringar"
+
+#: fava/templates/account.html:24
+msgid "Balances"
+msgstr "Saldon"
+
+#: fava/templates/_context.html:4 fava/templates/errors.html:14
+#: fava/templates/errors.html:15
+msgid "Show source %(file)s:%(lineno)s"
+msgstr "Visa källa: %(file)s:%(lineno)s"
+
+#: frontend/src/editor/EditorMenu.svelte:39
+msgid "File"
+msgstr "Fil"
+
+#: frontend/src/import/Extract.svelte:99
+msgid "Line"
+msgstr "Linje"
+
+#: fava/templates/errors.html:7
+msgid "Error"
+msgstr "Fel"
+
+#: fava/templates/errors.html:24
+msgid "No errors."
+msgstr "Inga fel."
+
+#: fava/templates/events.html:13
+msgid "Event: %(type)s"
+msgstr "Händelse: %(type)s"
+
+#: fava/templates/events.html:12
+msgid "Description"
+msgstr "Beskrivning"
+
+#: fava/templates/events.html:28
+msgid "No events."
+msgstr "Inga händelser."
+
+#: fava/templates/help.html:4
+msgid "Help - %(title)s"
+msgstr "Hjälp - %(title)s"
+
+#: fava/templates/help.html:3
+msgid "Help pages"
+msgstr "Hjälpsidor"
+
+#: frontend/src/entry-forms/Balance.svelte:28
+msgid "Currency"
+msgstr "Valuta"
+
+#: fava/templates/holdings.html:45
+msgid "Cost currency"
+msgstr "Valutakostnad"
+
+#: fava/templates/holdings.html:46
+msgid "Holdings by"
+msgstr "Innehav av"
+
+#: fava/templates/income_statement.html:3
+#: fava/templates/income_statement.html:18
+msgid "Net Profit"
+msgstr "Nettoresultat"
+
+#: fava/templates/income_statement.html:4
+msgid "Income"
+msgstr "Intäkter"
+
+#: fava/templates/income_statement.html:5
+msgid "Expenses"
+msgstr "Utgifter"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:45
+msgid "Key"
+msgstr "Nyckel"
+
+#: frontend/src/entry-forms/EntryMetadata.svelte:55
+msgid "Value"
+msgstr "Värde"
+
+#: frontend/src/query/QueryLinks.svelte:19
+msgid "Download as"
+msgstr "Ladda ner som"
+
+#: fava/templates/statistics.html:14
+msgid "Postings per Account"
+msgstr "Poster per konto"
+
+#: fava/templates/statistics.html:81
+msgid "Total"
+msgstr "Total"
+
+#: fava/templates/statistics.html:23
+msgid "Update Activity"
+msgstr "Uppdatera aktivitet"
+
+#: fava/templates/statistics.html:23
+msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
+msgstr "Klicka för att kopiera balansdirektkiven för konotn (förutom de gröna) till urklipp."
+
+#: fava/templates/statistics.html:24
+msgid "Copy balance directives"
+msgstr "Kopiera balansdirektkiv"
+
+#: fava/templates/statistics.html:31
+msgid "Last Entry"
+msgstr "Senaste inlägg"
+
+#: fava/templates/statistics.html:63
+msgid "Entries per Type"
+msgstr "Inlägg per typ"
+
+#: fava/templates/statistics.html:67
+msgid "Type"
+msgstr "Typ"
+
+#: fava/templates/statistics.html:68
+msgid "# Entries"
+msgstr "Antal poster"
+
+#: fava/templates/_overlays.html:5 fava/templates/_overlays.html:28
+#: fava/templates/_overlays.html:41 fava/templates/_overlays.html:47
+msgid "close"
+msgstr "stäng"
+
+#: fava/static/javascript/modals/AddTransaction.svelte:43
+msgid "New transaction"
+msgstr "Ny transaktion"
+
+#: frontend/src/entry-forms/Transaction.svelte:67
+#: frontend/src/entry-forms/Transaction.svelte:71
+msgid "Narration"
+msgstr "Beskrivning"
+
+#: frontend/src/modals/AddEntry.svelte:64
+msgid "Save and add new"
+msgstr "Spara och lägg till ny"
+
+#: frontend/src/entry-forms/Balance.svelte:22
+msgid "Number"
+msgstr "Antal"
+
+#: frontend/src/entry-forms/Posting.svelte:76
+#: frontend/src/entry-forms/Transaction.svelte:80
+msgid "Add posting"
+msgstr "Lägg till post"
+
+#: frontend/src/import/Extract.svelte:42
+msgid "Import"
+msgstr "Importera"
+
+#: fava/templates/_journal_table.html:4
+msgid "Budget entries"
+msgstr "Budget-inlägg"
+
+#: fava/templates/extract.html:9
+msgid "Toggle source"
+msgstr "Toggla källa"
+
+#: fava/templates/extract.html:10
+msgid "Toggle ignore"
+msgstr "Toggla umschalten"
+
+#: frontend/src/import/Extract.svelte:98
+msgid "Source"
+msgstr "Källkod"
+
+#: fava/templates/extract.html:16
+msgid "Entry"
+msgstr "Inlägg"
+
+#: fava/templates/extract.html:17
+msgid "Actions"
+msgstr "Åtgärder"
+
+#: fava/templates/extract.html:32
+msgid "Ignore"
+msgstr "Ignorera"
+
+#: fava/templates/extract.html:33
+msgid "Duplicate"
+msgstr "Dublett"
+
+#: fava/templates/import.html:14
+msgid "Importer"
+msgstr "Importerare"
+
+#: frontend/src/import/FileList.svelte:53
+msgid "Extract"
+msgstr "Extrahera"
+
+#: frontend/src/query/QueryEditor.svelte:14
+msgid "...enter a BQL query. 'help' to list available commands."
+msgstr "… eine BQL-Abfrage eingeben. »help«, um verfügbare Befehle aufzulisten."
+
+#: fava/templates/_journal_table.html:80
+msgid "Metadata"
+msgstr "Metadata"
+
+#: frontend/src/entry-forms/AddMetadataButton.svelte:17
+#: frontend/src/entry-forms/EntryMetadata.svelte:63
+msgid "Add metadata"
+msgstr "Lägg till metadata"
+
+#: frontend/src/entry-forms/Note.svelte:15
+#: frontend/src/modals/AddEntry.svelte:14
+msgid "Note"
+msgstr "Anteckning"
+
+#: fava/templates/_context.html:4
+msgid "Location"
+msgstr "Plats"
+
+#: fava/templates/_context.html:9
+msgid "Context"
+msgstr "Kontext"
+
+#: fava/templates/_context.html:15
+msgid "Balances before entry"
+msgstr "Saldon innan inlägg"
+
+#: fava/templates/_context.html:35
+msgid "Balances after entry"
+msgstr "Saldon efter inlägg"
+
+#: fava/templates/_journal_table.html:11
+msgid "Cleared transactions"
+msgstr "Färdiga transaktioner"
+
+#: fava/templates/_journal_table.html:12
+msgid "Pending transactions"
+msgstr "Väntande transaktioner"
+
+#: fava/templates/_journal_table.html:13
+msgid "Other transactions"
+msgstr "Andra transaktioner"
+
+#: fava/templates/_journal_table.html:7
+msgid "Documents with a #discovered tag"
+msgstr "Dokument med etiketten #discovered"
+
+#: frontend/src/entry-forms/Transaction.svelte:88
+msgid "Postings"
+msgstr "Poster"
+
+#: frontend/src/modals/DocumentUpload.svelte:47
+msgid "Upload file(s)"
+msgstr "Ladda upp fil(er)"
+
+#: fava/templates/_overlays.html:10
+msgid "Documents folder"
+msgstr "Dokumentmapp"
+
+#: frontend/src/modals/DocumentUpload.svelte:68
+msgid "Upload"
+msgstr "Ladda upp"
+
+#: frontend/src/editor/EditorMenu.svelte:55
+msgid "Align Amounts"
+msgstr "Justera belopp"
+
+#: frontend/src/editor/EditorMenu.svelte:59
+msgid "Toggle Comment (selection)"
+msgstr "Toggla kommentar (för markering)"
+
+#: frontend/src/editor/EditorMenu.svelte:63
+msgid "Open all folds"
+msgstr "Öppna alla sektioner"
+
+#: frontend/src/editor/EditorMenu.svelte:67
+msgid "Close all folds"
+msgstr "Stäng alla sektioner"
+
+#: fava/templates/options.html:1
+msgid "Fava options"
+msgstr "Fava-inställningar"
+
+#: fava/templates/options.html:1
+msgid "help"
+msgstr "hjälp"
+
+#: fava/templates/options.html:18
+msgid "Beancount options"
+msgstr "Beancount-inställningar"
+
+#: frontend/src/query/QueryEditor.svelte:28
+msgid "Submit"
+msgstr "Skicka"
+
+#: fava/templates/_tree_table.html:3
+msgid "Hold Shift while clicking to expand all children.\n"
+"Hold Ctrl or Cmd while clicking to expand one level."
+msgstr "Håll inne Shift medan du klickar för att expandera alla undernivåer. \n "
+"Håll inne Ctrl eller Cmd medan du klickar för att expandera en nivå."
+
+#: frontend/src/modals/Export.svelte:14
+msgid "Export"
+msgstr "Exportera"
+
+#: frontend/src/header/FilterForm.svelte:73
+msgid "Filter by tag, payee, ..."
+msgstr "Filtrera efter etikett, mottagare, …"
+
+#: frontend/src/modals/Export.svelte:16
+msgid "Download currently filtered entries as a Beancount file"
+msgstr "Ladda ner filtrerade inlägg som en Beancount-fil"
+
+#: fava/templates/extract.html:40
+msgid "Import entries"
+msgstr "Importera inlägg"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:7
+msgid "Yearly"
+msgstr "Årligt"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:8
+msgid "Quarterly"
+msgstr "Kvartalsvis"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:9
+msgid "Monthly"
+msgstr "Månatligt"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:10
+msgid "Weekly"
+msgstr "Veckovis"
+
+#: frontend/src/charts/ConversionAndInterval.svelte:11
+msgid "Daily"
+msgstr "Dagligt"
+
+#: frontend/src/editor/EditorMenu.svelte:52
+msgid "Edit"
+msgstr "Redigera"
+
+#: frontend/src/entry-forms/Posting.svelte:68
+msgid "Amount"
+msgstr "Belopp"
+
+#: fava/templates/_journal_table.html:8
+msgid "Documents with a #linked tag"
+msgstr "Dokument med etiketten #linked"
+
+#: fava/static/javascript/modals/DocumentUpload.svelte:54
+msgid "You need to set the \"documents\" Beancount option for file uploads."
+msgstr "Du behöver ställa in Beancount-inställningen \"documents\" för att aktivera filuppladdningar."
+
+#: frontend/src/stores/chart.ts:38
+msgid "At Cost"
+msgstr "Kostnad"
+
+#: frontend/src/stores/chart.ts:39
+msgid "At Market Value"
+msgstr "Marknadsvärde"
+
+#: frontend/src/stores/chart.ts:40
+msgid "Units"
+msgstr "Enheter"
+
+#: frontend/src/charts/Chart.svelte:73
+msgid "Tree map"
+msgstr "Trädkarta"
+
+#: frontend/src/charts/Chart.svelte:81
+msgid "Sunburst"
+msgstr "Sunburst"
+
+#: frontend/src/entry-forms/AccountInput.svelte:13
+msgid "Should be one of the declared accounts"
+msgstr "Bör vara ett av de deklarerade kontona"
+
+#: fava/templates/events.html:7
+msgid "Event"
+msgstr "Händelser"
+
+#: frontend/src/import/Extract.svelte:78
+msgid "Previous"
+msgstr "Föregående"
+
+#: frontend/src/import/Extract.svelte:83
+msgid "Next"
+msgstr "Nästa"
+
+#: frontend/src/modals/AddEntry.svelte:12
+msgid "Transaction"
+msgstr "Transaktion"
+
+#: frontend/src/modals/AddEntry.svelte:42
+msgid "Add"
+msgstr "Lägg till:"
+
+#: frontend/src/documents/Documents.svelte:57
+msgid "Move or rename document"
+msgstr "Flytta eller byta dokument"
+
+#: frontend/src/documents/Table.svelte:30
+msgid "Name"
+msgstr "Namn"
+
+#: fava/templates/_globals.html:4
+msgid "Documents"
+msgstr "Dokument"
+
+#: frontend/src/import/FileList.svelte:29
+msgid "Delete"
+msgstr "Radera"
+
+#: frontend/src/import/Import.svelte:106
+msgid "No importer matched this file."
+msgstr "Ingen importör matchade den här filen."
+
+#: frontend/src/charts/Chart.svelte:88
+msgid "Line chart"
+msgstr "Linjediagram"
+
+#: frontend/src/charts/Chart.svelte:92
+msgid "Area chart"
+msgstr "Områdesdiagram"
+
+#: frontend/src/import/FileList.svelte:52
+msgid "Continue"
+msgstr "Fortsätt"
+
+#: frontend/src/import/FileList.svelte:63
+msgid "Clear"
+msgstr "Rensa"
+
+#: frontend/src/sidebar/AccountSelector.svelte:21
+msgid "Go to account"
+msgstr "Gå till konto"
+
+#: frontend/src/import/Import.svelte:64
+msgid "Delete this file?"
+msgstr "Radera denna fil?"
+
+#: frontend/src/import/Import.svelte:118
+msgid "No files were found for import."
+msgstr "Inga filer för import kunde hittas."
