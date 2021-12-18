@@ -189,7 +189,7 @@ def payee_transaction() -> Any:
     entry = g.ledger.attributes.payee_transaction(
         request.args.get("payee", "")
     )
-    return serialise(entry)
+    return serialise(entry) if entry else None
 
 
 @put_api_endpoint

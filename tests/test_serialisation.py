@@ -30,7 +30,6 @@ dumps = PRETTY_ENCODER.encode
 
 
 def test_serialise() -> None:
-    assert serialise(None) is None
     txn = Transaction(
         {},
         datetime.date(2017, 12, 12),

@@ -12,7 +12,10 @@ import functools
 import re
 from typing import Any
 from typing import FrozenSet
+from typing import NamedTuple
+from typing import Optional
 from typing import Tuple
+from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.data import Balance
@@ -31,7 +34,7 @@ from fava.util.date import parse_date
 
 def extract_tags_links(
     string: str,
-) -> Tuple[str, FrozenSet[str], FrozenSet[str]]:
+) -> Tuple[Optional[str], FrozenSet[str], FrozenSet[str]]:
     """Extract tags and links from a narration string.
 
     Args:
@@ -54,31 +57,42 @@ def extract_tags_links(
 
 
 @functools.singledispatch
-def serialise(entry: Directive) -> Any:
-    """Serialise an entry."""
-    if not entry:
-        return None
+def serialise(entry: Union[Directive, Posting]) -> Any:
+    """Serialise an entry or posting."""
+    assert isinstance(entry, NamedTuple), f"Unsupported object {entry}"
     ret = entry._asdict()
     ret["type"] = entry.__class__.__name__
-    if isinstance(entry, Transaction):
-        ret["payee"] = entry.payee or ""
-        if entry.tags:
-            ret["narration"] += " " + " ".join(["#" + t for t in entry.tags])
-        if entry.links:
-            ret["narration"] += " " + " ".join(
-                ["^" + link for link in entry.links]
-            )
-        del ret["links"]
-        del ret["tags"]
-        ret["postings"] = [serialise(pos) for pos in entry.postings]
-    elif ret["type"] == "Balance":
-        amt = ret["amount"]
-        ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
     return ret
 
 
-@serialise.register(Posting)
-def _serialise_posting(posting: Posting) -> Any:
+@serialise.register
+def _(entry: Transaction) -> Any:
+    """Serialise an entry."""
+    ret = entry._asdict()
+    ret["type"] = "Transaction"
+    ret["payee"] = entry.payee or ""
+    if entry.tags:
+        ret["narration"] += " " + " ".join(["#" + n for n in entry.tags])
+    if entry.links:
+        ret["narration"] += " " + " ".join(["^" + n for n in entry.links])
+    del ret["links"]
+    del ret["tags"]
+    ret["postings"] = list(map(serialise, entry.postings))
+    return ret
+
+
+@serialise.register
+def _(entry: Balance) -> Any:
+    """Serialise an entry."""
+    ret = entry._asdict()
+    ret["type"] = "Balance"
+    amt = ret["amount"]
+    ret["amount"] = {"number": str(amt.number), "currency": amt.currency}
+    return ret
+
+
+@serialise.register
+def _(posting: Posting) -> Any:
     """Serialise a posting."""
     if isinstance(posting.units, Amount):
         position_str = position_to_string(posting)
@@ -125,7 +139,7 @@ def deserialise(json_entry: Any) -> Directive:
             date,
             json_entry.get("flag", ""),
             json_entry.get("payee", ""),
-            narration,
+            narration or "",
             tags,
             links,
             postings,
