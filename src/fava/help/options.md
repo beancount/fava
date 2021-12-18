@@ -31,6 +31,7 @@ languages:
 -   Russian (`ru`)
 -   Slovak (`sk`)
 -   Spanish (`es`)
+-   Swedish (`sv`)
 -   Ukrainian (`uk`)
 
 ---

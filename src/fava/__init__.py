@@ -19,6 +19,7 @@ LOCALES = [
     "pt",
     "ru",
     "sk",
+    "sv",
     "uk",
     "zh",
     "zh_Hant_TW",
