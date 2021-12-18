@@ -4,6 +4,7 @@
 
   import { chartCurrency, hierarchyChartMode } from "../stores/chart";
 
+  import Flamegraph from "./Flamegraph.svelte";
   import type { HierarchyChart } from "./hierarchy";
   import Sunburst from "./Sunburst.svelte";
   import Treemap from "./Treemap.svelte";
@@ -17,14 +18,14 @@
   $: currency = $chartCurrency || currencies[0];
   $: context.set(currencies);
 
-  $: treemapData = $hierarchyChartMode === "treemap" && data.get(currency);
+  $: treemapData = data.get(currency);
 </script>
 
 {#if currencies.length === 0}
   <svg {width}>
     <text x={width / 2} y={80} text-anchor="middle">Chart is empty.</text>
   </svg>
-{:else if treemapData}
+{:else if $hierarchyChartMode === "treemap" && treemapData}
   <Treemap data={treemapData} {currency} {width} />
 {:else if $hierarchyChartMode === "sunburst"}
   <svg {width} height={500}>
@@ -39,4 +40,6 @@
       </g>
     {/each}
   </svg>
+{:else if $hierarchyChartMode === "flamegraph" && treemapData}
+  <Flamegraph data={treemapData} {currency} {width} />
 {/if}

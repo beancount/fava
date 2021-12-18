@@ -57,7 +57,7 @@
     </div>
     <span class="spacer" />
     {#if chart.type === "hierarchy"}
-      {#if $hierarchyChartMode === "treemap"}
+      {#if $hierarchyChartMode === "treemap" || $hierarchyChartMode === "flamegraph"}
         <select bind:value={$chartCurrency}>
           {#each $currencies as currency}
             <option value={currency}>{currency}</option>
@@ -69,6 +69,7 @@
         options={[
           ["treemap", _("Treemap")],
           ["sunburst", _("Sunburst")],
+          ["flamegraph", _("Flamegraph")],
         ]}
       />
     {:else if chart.type === "linechart"}
