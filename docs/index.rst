@@ -9,10 +9,12 @@ Welcome to Fava!
     development
     api
 
-Fava is a web interface for the double-entry bookkeeping software `Beancount
-<http://furius.ca/beancount/>`__ with a focus on features and usability.
+Fava is a web interface for the double-entry bookkeeping software `Beancount`_
+with a focus on features and usability.
 
-You can try out an online `demo <https://fava.pythonanywhere.com>`__.
+.. _Beancount: https://beancount.github.io/
+
+You can try out an online `demo <https://fava.pythonanywhere.com>`_.
 
 .. image:: https://i.imgbox.com/rfb9I7Zw.png
 
@@ -25,4 +27,4 @@ running::
     fava ledger.beancount
 
 and visit the web interface at `http://localhost:5000
-<http://localhost:5000>`__.
+<http://localhost:5000>`_.
