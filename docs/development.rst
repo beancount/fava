@@ -14,8 +14,11 @@ the tests, you will need `tox` and to run the linters you will need
     git clone https://github.com/beancount/fava.git
     cd fava
     # using a virtual environment is optional, but recommended
+    pip install --user virtualenv
     virtualenv -p python3 venv
     . venv/bin/activate
+    pip install tox
+    pip install pre-commit
     make
     pre-commit install  # add a pre-commit hook to run linters
     pip install --editable .
