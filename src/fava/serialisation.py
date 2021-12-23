@@ -60,8 +60,8 @@ def extract_tags_links(
 def serialise(entry: Union[Directive, Posting]) -> Any:
     """Serialise an entry or posting."""
     assert isinstance(entry, NamedTuple), f"Unsupported object {entry}"
-    ret = entry._asdict()
-    ret["type"] = entry.__class__.__name__
+    ret = entry._asdict()  # type: ignore
+    ret["type"] = entry.__class__.__name__  # type: ignore
     return ret
 
 
