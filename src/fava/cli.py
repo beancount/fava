@@ -4,7 +4,7 @@ import os
 from typing import Tuple
 
 import click
-from cheroot.wsgi import Server  # type: ignore
+from cheroot.wsgi import Server
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from werkzeug.middleware.profiler import ProfilerMiddleware
 
