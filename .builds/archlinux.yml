@@ -3,7 +3,7 @@ packages:
     - nodejs
     - npm
     - python
-    - python-distlib
+    - python-babel
     - python-pip
     - python-pre-commit
     - python-setuptools
