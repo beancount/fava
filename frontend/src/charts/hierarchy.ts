@@ -60,7 +60,7 @@ export function hierarchy(
 
   currencies.forEach((currency) => {
     const currencyHierarchy = d3Hierarchy(root)
-      .sum((d) => (d.balance[currency] ?? 0) * modifier)
+      .sum((d) => Math.max((d.balance[currency] ?? 0) * modifier, 0))
       .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
     if (currencyHierarchy.value) {
       data.set(currency, currencyHierarchy);
