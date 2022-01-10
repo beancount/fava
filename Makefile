@@ -1,17 +1,19 @@
-all: src/fava/static/app.js src/fava/translations
+FRONTEND_SOURCES := $(shell find frontend/src frontend/css -type f)
+TRANSLATION_SOURCES := $(wildcard src/fava/translations/*/LC_MESSAGES/messages.po)
+TRANSLATION_TARGETS := $(TRANSLATION_SOURCES:messages.po=messages.mo)
 
-FRONTEND_SOURCES := $(shell find frontend/src -type f)
-src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/css/* frontend/package.json frontend/node_modules
+.PHONY: all
+all: src/fava/static/app.js $(TRANSLATION_TARGETS)
+
+src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
 	cd frontend; npm run build
 
 frontend/node_modules: frontend/package-lock.json
 	cd frontend; npm install --no-progress
 	touch -m frontend/node_modules
 
-TRANSLATION_SOURCES := $(shell find src/fava/translations -name '*.po')
-src/fava/translations: $(TRANSLATION_SOURCES)
+$(TRANSLATION_TARGETS): $(TRANSLATION_SOURCES)
 	pybabel compile -d src/fava/translations
-	touch -m src/fava/translations
 
 .PHONY: clean
 clean: mostlyclean
