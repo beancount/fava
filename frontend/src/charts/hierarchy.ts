@@ -13,6 +13,7 @@ export interface AccountHierarchyDatum {
   account: string;
   balance: Partial<Record<string, number>>;
   dummy?: boolean;
+  cumulbalance?: number;
 }
 type RawAccountHierarchy = TreeNode<AccountHierarchyDatum>;
 export type AccountHierarchyNode = HierarchyNode<AccountHierarchyDatum>;
@@ -60,7 +61,17 @@ export function hierarchy(
 
   currencies.forEach((currency) => {
     const currencyHierarchy = d3Hierarchy(root)
-      .sum((d) => (d.balance[currency] ?? 0) * modifier)
+      .sum((d) => {
+        const balance = (d.balance[currency] ?? 0) * modifier;
+        const balance_children =
+            d.children?.reduce((acc, c) => acc + c.cumulbalance, 0) ?? 0;
+        d.cumulbalance = balance + balance_children;
+
+        const value = Math.abs(balance);
+        const value_children =
+            d.children?.reduce((acc, c) => acc + c.value, 0) ?? 0;
+        return value + value_children;
+      })
       .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
     if (currencyHierarchy.value) {
       data.set(currency, currencyHierarchy);

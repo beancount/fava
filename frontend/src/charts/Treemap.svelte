@@ -31,12 +31,20 @@
     return $treemapScale(node.parent.data.account);
   }
 
+  function mask(d: AccountHierarchyNode) {
+    const node = d.data.dummy && d.parent ? d.parent : d;
+    if (node.data.cumulbalance < 0) {
+        return "url(#treemapHatch-mask)";
+    }
+    return null;
+  }
+
   function tooltipText(d: AccountHierarchyNode) {
-    const val = d.value ?? 0;
-    const rootValue = root.value || 1;
+    const val = d.data.cumulbalance ?? 0;
+    const refValue = root.data.cumulbalance || 1;
 
     return `${$ctx.currency(val)} ${currency} (${formatPercentage(
-      val / rootValue
+      val / refValue
     )})<em>${d.data.account}</em>`;
   }
 
@@ -55,12 +63,26 @@
 </script>
 
 <svg {width} {height}>
+  <defs>
+    <pattern id="treemapHatch" width="10" height="10"
+             stroke="white" stroke-linecap="square" stroke-width="8"
+             patternTransform="rotate(45) scale(1)"
+             patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="10"></line>
+    </pattern>
+    <mask id="treemapHatch-mask" x="0" y="0" width="1" height="1"
+          mask-repeat="repeat">
+      <rect x="0" y="0" width="100%" height="100%" fill="url(#treemapHatch)" />
+    </mask>
+  </defs>
+
   {#each leaves as d}
     <g
       transform={`translate(${d.x0},${d.y0})`}
       use:followingTooltip={() => tooltipText(d)}
     >
-      <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
+      <rect fill={fill(d)} mask={mask(d)}
+            width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <text
         use:setVisibility={d}
         on:click={() => router.navigate(urlFor(`account/${d.data.account}/`))}
