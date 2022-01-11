@@ -215,9 +215,7 @@ def source_slice(request_data: Dict[str, Any]) -> str:
 @put_api_endpoint
 def format_source(request_data: Dict[str, Any]) -> str:
     """Format beancount file."""
-    return align(
-        request_data["source"], g.ledger.fava_options["currency-column"]
-    )
+    return align(request_data["source"], g.ledger.fava_options.currency_column)
 
 
 @delete_api_endpoint

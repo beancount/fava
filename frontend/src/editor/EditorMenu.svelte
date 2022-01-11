@@ -20,7 +20,7 @@
     $options.filename,
     ...$options.include.filter((f) => f !== $options.filename),
   ];
-  $: insertEntryOptions = $favaOptions["insert-entry"];
+  $: insertEntryOptions = $favaOptions.insert_entry;
 
   function goToFileAndLine(filename: string, line?: number) {
     const url = urlFor("editor/", { file_path: filename, line });

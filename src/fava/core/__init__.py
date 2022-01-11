@@ -49,7 +49,6 @@ from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
 from fava.core.entries_by_type import group_entries_by_type
 from fava.core.extensions import ExtensionModule
-from fava.core.fava_options import DEFAULTS
 from fava.core.fava_options import FavaOptions
 from fava.core.fava_options import parse_options
 from fava.core.file import FileModule
@@ -210,7 +209,7 @@ class FavaLedger:
         self.commodities: Dict[str, Commodity] = {}
 
         #: A dict with all of Fava's option values.
-        self.fava_options: FavaOptions = DEFAULTS
+        self.fava_options: FavaOptions = FavaOptions()
 
         self._date_first: Optional[datetime.date] = None
         self._date_last: Optional[datetime.date] = None
@@ -363,7 +362,7 @@ class FavaLedger:
     def root_tree_closed(self) -> Tree:
         """A root tree for the balance sheet."""
         tree = Tree(self.entries)
-        tree.cap(self.options, self.fava_options["unrealized"])
+        tree.cap(self.options, self.fava_options.unrealized)
         return tree
 
     def interval_balances(

@@ -40,7 +40,7 @@ class FavaMisc(FavaModule):
 
         self.upcoming_events = upcoming_events(
             self.ledger.all_entries_by_type.Event,
-            self.ledger.fava_options["upcoming-events"],
+            self.ledger.fava_options.upcoming_events,
         )
 
         if not self.ledger.options["operating_currency"]:

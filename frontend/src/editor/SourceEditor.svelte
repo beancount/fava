@@ -81,7 +81,7 @@
     ];
 
     editor.focus();
-    const opts = $favaOptions["insert-entry"].filter(
+    const opts = $favaOptions.insert_entry.filter(
       (f) => f.filename === data.file_path
     );
     const line = parseInt(

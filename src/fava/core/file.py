@@ -124,7 +124,7 @@ class FileModule(FavaModule):
             self.ledger.changed()
             entry: Directive = self.ledger.get_entry(entry_hash)
             key = next_key(basekey, entry.meta)
-            indent = self.ledger.fava_options["indent"]
+            indent = self.ledger.fava_options.indent
             insert_metadata_in_file(
                 entry.meta["filename"],
                 entry.meta["lineno"],
@@ -165,10 +165,10 @@ class FileModule(FavaModule):
             self.ledger.changed()
             fava_options = self.ledger.fava_options
             for entry in sorted(entries, key=incomplete_sortkey):
-                insert_options = fava_options["insert-entry"]
-                currency_column = fava_options["currency-column"]
-                indent = fava_options["indent"]
-                fava_options["insert-entry"] = insert_entry(
+                insert_options = fava_options.insert_entry
+                currency_column = fava_options.currency_column
+                indent = fava_options.indent
+                fava_options.insert_entry = insert_entry(
                     entry,
                     self.ledger.beancount_file_path,
                     insert_options,
@@ -188,7 +188,7 @@ class FileModule(FavaModule):
         Yields:
             The entries rendered in Beancount format.
         """
-        indent = self.ledger.fava_options["indent"]
+        indent = self.ledger.fava_options.indent
         for entry in entries:
             if isinstance(entry, (Balance, Transaction)):
                 if isinstance(entry, Transaction) and entry.flag in EXCL_FLAGS:
@@ -198,7 +198,7 @@ class FileModule(FavaModule):
                 except (KeyError, FileNotFoundError):
                     yield _format_entry(
                         entry,
-                        self.ledger.fava_options["currency-column"],
+                        self.ledger.fava_options.currency_column,
                         indent,
                     )
 

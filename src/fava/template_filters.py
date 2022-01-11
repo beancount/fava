@@ -116,17 +116,17 @@ def should_show(account: TreeNode) -> bool:
     if account.name not in ledger.accounts:
         return False
     fava_options = ledger.fava_options
-    if not fava_options["show-closed-accounts"] and ledger.account_is_closed(
+    if not fava_options.show_closed_accounts and ledger.account_is_closed(
         account.name
     ):
         return False
     if (
-        not fava_options["show-accounts-with-zero-balance"]
+        not fava_options.show_accounts_with_zero_balance
         and account.balance.is_empty()
     ):
         return False
     if (
-        not fava_options["show-accounts-with-zero-transactions"]
+        not fava_options.show_accounts_with_zero_transactions
         and not account.has_txns
     ):
         return False
@@ -154,7 +154,7 @@ def format_errormsg(message: str) -> str:
 
 def collapse_account(account_name: str) -> bool:
     """Return true if account should be collapsed."""
-    collapse_patterns = g.ledger.fava_options["collapse-pattern"]
+    collapse_patterns = g.ledger.fava_options.collapse_pattern
     return any(pattern.match(account_name) for pattern in collapse_patterns)
 
 

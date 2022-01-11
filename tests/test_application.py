@@ -107,7 +107,7 @@ def test_default_path_redirection(
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         if option:
-            monkeypatch.setitem(g.ledger.fava_options, "default-page", option)
+            monkeypatch.setattr(g.ledger.fava_options, "default_page", option)
         result = test_client.get(url)
         get_url = result.headers.get("Location", "")
         expect_url = werkzeug.urls.url_join("http://localhost/", expect)

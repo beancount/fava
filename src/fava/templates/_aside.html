@@ -1,5 +1,5 @@
 {% import '_globals.html' as globals with context %}
-{% set user_queries = ledger.query_shell.queries[:ledger.fava_options['sidebar-show-queries']] %}
+{% set user_queries = ledger.query_shell.queries[:ledger.fava_options.sidebar_show_queries] %}
 {% if ledger.misc.sidebar_links %}
 <ul class="navigation">
   {% for label, link in ledger.misc.sidebar_links %}

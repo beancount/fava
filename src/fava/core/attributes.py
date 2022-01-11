@@ -62,7 +62,7 @@ class AttributesModule(FavaModule):
         self.links = get_all_links(all_entries)
         self.tags = get_all_tags(all_entries)
         self.years = get_active_years(
-            all_entries, self.ledger.fava_options["fiscal-year-end"]
+            all_entries, self.ledger.fava_options.fiscal_year_end
         )
 
         account_ranker = ExponentialDecayRanker(

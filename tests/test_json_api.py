@@ -170,7 +170,7 @@ def test_api_format_source_options(app, test_client, monkeypatch) -> None:
 
         url = url_for("json_api.format_source")
 
-        monkeypatch.setitem(g.ledger.fava_options, "currency-column", 90)
+        monkeypatch.setattr(g.ledger.fava_options, "currency_column", 90)
 
         response = test_client.put(
             url,

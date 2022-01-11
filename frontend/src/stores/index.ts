@@ -26,11 +26,11 @@ export const ledgerDataValidator = object({
   currencies: array(string),
   errors: number,
   favaOptions: object({
-    "auto-reload": boolean,
-    "currency-column": number,
+    auto_reload: boolean,
+    currency_column: number,
     indent: number,
     locale: union(string, constant(null)),
-    "insert-entry": array(
+    insert_entry: array(
       object({ date: string, filename: string, lineno: number, re: string })
     ),
   }),

@@ -1,6 +1,6 @@
 {% import '_tree_table.html' as tree_table with context %}
 
-{% set invert = ledger.fava_options['invert-income-liabilities-equity'] %}
+{% set invert = ledger.fava_options.invert_income_liabilities_equity %}
 
 {{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit'), invert=invert) }}
 {{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income'), invert=invert) }}

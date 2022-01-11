@@ -23,7 +23,7 @@ def is_document_or_import_file(filename: str, ledger: "FavaLedger") -> bool:
         document.filename for document in ledger.all_entries_by_type.Document
     ]
     import_directories = [
-        ledger.join_path(d) for d in ledger.fava_options["import-dirs"]
+        ledger.join_path(d) for d in ledger.fava_options.import_dirs
     ]
     if filename in filenames:
         return True

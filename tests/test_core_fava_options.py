@@ -19,7 +19,7 @@ def test_fava_options(load_doc):
     2016-04-14 custom "fava-option" "locale" "en"
     2016-04-14 custom "fava-option" "locale" "invalid"
     2016-04-14 custom "fava-option" "collapse-pattern" "Account:Name"
-    2016-04-14 custom "fava-option" "collapse-pattern" "(invalid"
+    2016-04-14 custom "fava-option" "collapse_pattern" "(invalid"
     2016-04-14 custom "fava-option" "fiscal-year-end" "01-11"
     """
 
@@ -28,8 +28,8 @@ def test_fava_options(load_doc):
 
     assert len(errors) == 3
 
-    assert options["indent"] == 4
-    assert options["insert-entry"] == [
+    assert options.indent == 4
+    assert options.insert_entry == [
         InsertEntryOption(
             datetime.date(2016, 4, 14),
             re.compile("Ausgaben:Test"),
@@ -37,8 +37,8 @@ def test_fava_options(load_doc):
             7,
         )
     ]
-    assert options["show-closed-accounts"]
-    assert options["journal-show"] == ["transaction", "open"]
-    assert options["currency-column"] == 10
-    assert options["collapse-pattern"] == [re.compile("Account:Name")]
-    assert options["fiscal-year-end"] == FiscalYearEnd(1, 11)
+    assert options.show_closed_accounts
+    assert options.journal_show == ("transaction", "open")
+    assert options.currency_column == 10
+    assert options.collapse_pattern == [re.compile("Account:Name")]
+    assert options.fiscal_year_end == FiscalYearEnd(1, 11)

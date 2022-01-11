@@ -5,15 +5,16 @@ This module contains a list of possible options, the defaults and the code for
 parsing the options.
 
 """
-import copy
+from __future__ import annotations
+
 import datetime
 import re
-from typing import Any
-from typing import List
+from dataclasses import asdict
+from dataclasses import dataclass
+from dataclasses import field
+from dataclasses import fields
 from typing import NamedTuple
-from typing import Optional
 from typing import Pattern
-from typing import Tuple
 
 from babel.core import Locale  # type: ignore
 from babel.core import UnknownLocaleError
@@ -22,7 +23,6 @@ from beancount.core.data import Custom
 from fava.helpers import BeancountError
 from fava.util.date import FiscalYearEnd
 from fava.util.date import parse_fye_string
-from fava.util.typing import TypedDict
 
 
 class OptionError(BeancountError):
@@ -42,52 +42,25 @@ class InsertEntryOption(NamedTuple):
     lineno: int
 
 
-FavaOptions = TypedDict(
-    "FavaOptions",
-    {
-        "account-journal-include-children": bool,
-        "currency-column": int,
-        "collapse-pattern": List[Pattern[str]],
-        "auto-reload": bool,
-        "default-file": Optional[str],
-        "default-page": str,
-        "fiscal-year-end": FiscalYearEnd,
-        "import-config": Optional[str],
-        "import-dirs": List[str],
-        "indent": int,
-        "insert-entry": List[InsertEntryOption],
-        "invert-income-liabilities-equity": bool,
-        "journal-show": List[str],
-        "journal-show-document": List[str],
-        "journal-show-transaction": List[str],
-        "language": Optional[str],
-        "locale": Optional[str],
-        "show-accounts-with-zero-balance": bool,
-        "show-accounts-with-zero-transactions": bool,
-        "show-closed-accounts": bool,
-        "sidebar-show-queries": int,
-        "unrealized": str,
-        "upcoming-events": int,
-        "uptodate-indicator-grey-lookback-days": int,
-        "use-external-editor": bool,
-    },
-)
+@dataclass
+class FavaOptions:
+    """Options for Fava that can be set in the Beancount file."""
 
+    # pylint: disable=too-many-instance-attributes
 
-DEFAULTS: FavaOptions = {
-    "account-journal-include-children": True,
-    "currency-column": 61,
-    "collapse-pattern": [],
-    "auto-reload": False,
-    "default-file": None,
-    "default-page": "income_statement/",
-    "fiscal-year-end": FiscalYearEnd(12, 31),
-    "import-config": None,
-    "import-dirs": [],
-    "indent": 2,
-    "insert-entry": [],
-    "invert-income-liabilities-equity": False,
-    "journal-show": [
+    account_journal_include_children: bool = True
+    auto_reload: bool = False
+    collapse_pattern: list[Pattern[str]] = field(default_factory=list)
+    currency_column: int = 61
+    default_file: str | None = None
+    default_page: str = "income_statement/"
+    fiscal_year_end: FiscalYearEnd = FiscalYearEnd(12, 31)
+    import_config: str | None = None
+    import_dirs: tuple[str, ...] = ()
+    indent: int = 2
+    insert_entry: list[InsertEntryOption] = field(default_factory=list)
+    invert_income_liabilities_equity: bool = False
+    journal_show: tuple[str, ...] = (
         "transaction",
         "balance",
         "note",
@@ -95,58 +68,82 @@ DEFAULTS: FavaOptions = {
         "custom",
         "budget",
         "query",
-    ],
-    "journal-show-document": ["discovered", "statement"],
-    "journal-show-transaction": ["cleared", "pending"],
-    "language": None,
-    "locale": None,
-    "show-accounts-with-zero-balance": True,
-    "show-accounts-with-zero-transactions": True,
-    "show-closed-accounts": False,
-    "sidebar-show-queries": 5,
-    "unrealized": "Unrealized",
-    "upcoming-events": 7,
-    "uptodate-indicator-grey-lookback-days": 60,
-    "use-external-editor": False,
-}
+    )
+    journal_show_document: tuple[str, ...] = ("discovered", "statement")
+    journal_show_transaction: tuple[str, ...] = ("cleared", "pending")
+    language: str | None = None
+    locale: str | None = None
+    show_accounts_with_zero_balance: bool = True
+    show_accounts_with_zero_transactions: bool = True
+    show_closed_accounts: bool = False
+    sidebar_show_queries: int = 5
+    unrealized: str = "Unrealized"
+    upcoming_events: int = 7
+    uptodate_indicator_grey_lookback_days: int = 60
+    use_external_editor: bool = False
 
-BOOL_OPTS = {
-    "account-journal-include-children",
-    "auto-reload",
-    "invert-income-liabilities-equity",
-    "show-accounts-with-zero-balance",
-    "show-accounts-with-zero-transactions",
-    "show-closed-accounts",
-    "use-external-editor",
-}
-
-INT_OPTS = {
-    "currency-column",
-    "indent",
-    "sidebar-show-queries",
-    "upcoming-events",
-    "uptodate-indicator-grey-lookback-days",
-}
-
-LIST_OPTS = {
-    "import-dirs",
-    "journal-show",
-    "journal-show-document",
-    "journal-show-transaction",
-}
-
-STR_OPTS = {
-    "default-page",
-    "import-config",
-    "language",
-    "unrealized",
-}
+    asdict = asdict
 
 
-# pylint: disable=too-many-branches
+_fields = fields(FavaOptions)
+All_OPTS = {f.name for f in _fields}
+BOOL_OPTS = {f.name for f in _fields if f.type == "bool"}  # type: ignore
+INT_OPTS = {f.name for f in _fields if f.type == "int"}  # type: ignore
+TUPLE_OPTS = {f.name for f in _fields if f.type.startswith("tuple[str,")}
+STR_OPTS = {f.name for f in _fields if f.type.startswith("str")}
+
+
+def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
+    """Parse a single custom fava-option entry and set option accordingly."""
+    key = entry.values[0].value.replace("-", "_")
+    assert key in All_OPTS, f"unknown option `{key}`"
+
+    if key == "default_file":
+        options.default_file = entry.meta["filename"]
+        return
+
+    value = entry.values[1].value
+    assert isinstance(value, str), f"expected string value for option `{key}`"
+
+    if key == "insert_entry":
+        try:
+            pattern = re.compile(value)
+        except re.error:
+            assert False, f"Should be a regular expression: '{value}'."
+        opt = InsertEntryOption(
+            entry.date, pattern, entry.meta["filename"], entry.meta["lineno"]
+        )
+        options.insert_entry.append(opt)
+    elif key == "collapse_pattern":
+        try:
+            pattern = re.compile(value)
+        except re.error:
+            assert False, f"Should be a regular expression: '{value}'."
+        options.collapse_pattern.append(pattern)
+    elif key == "locale":
+        try:
+            Locale.parse(value)
+            options.locale = value
+        except UnknownLocaleError:
+            assert False, f"Unknown locale: '{value}'."
+    elif key == "fiscal_year_end":
+        fye = parse_fye_string(value)
+        assert fye, "Invalid 'fiscal_year_end' option."
+        options.fiscal_year_end = fye
+    elif key in STR_OPTS:
+        setattr(options, key, value)
+    elif key in BOOL_OPTS:
+        setattr(options, key, value.lower() == "true")
+    elif key in INT_OPTS:
+        setattr(options, key, int(value))
+    else:
+        assert key in TUPLE_OPTS, f"unknown option `{key}`"
+        setattr(options, key, tuple(value.strip().split(" ")))
+
+
 def parse_options(
-    custom_entries: List[Custom],
-) -> Tuple[FavaOptions, List[OptionError]]:
+    custom_entries: list[Custom],
+) -> tuple[FavaOptions, list[OptionError]]:
     """Parse custom entries for Fava options.
 
     The format for option entries is the following::
@@ -161,59 +158,12 @@ def parse_options(
         to values, and errors contains possible parsing errors.
     """
 
-    options: FavaOptions = copy.deepcopy(DEFAULTS)
+    options = FavaOptions()
     errors = []
 
     for entry in (e for e in custom_entries if e.type == "fava-option"):
         try:
-            key = entry.values[0].value
-            assert key in DEFAULTS, f"unknown option `{key}`"
-
-            if key == "default-file":
-                options["default-file"] = entry.meta["filename"]
-                continue
-            if key == "insert-entry":
-                opt = InsertEntryOption(
-                    entry.date,
-                    re.compile(entry.values[1].value),
-                    entry.meta["filename"],
-                    entry.meta["lineno"],
-                )
-                options["insert-entry"].append(opt)
-                continue
-
-            value = entry.values[1].value
-            assert isinstance(
-                value, str
-            ), f"expected value for option `{key}` to be a string"
-
-            processed_value: Any = None
-            if key in STR_OPTS:
-                processed_value = value
-            elif key == "collapse-pattern":
-                try:
-                    options["collapse-pattern"].append(re.compile(value))
-                except re.error:
-                    assert False, f"Should be a regular expression: '{value}'."
-            elif key == "locale":
-                try:
-                    Locale.parse(value)
-                    processed_value = value
-                except UnknownLocaleError:
-                    assert False, f"Unknown locale: '{value}'."
-            elif key == "fiscal-year-end":
-                processed_value = parse_fye_string(value)
-                assert processed_value, "Invalid 'fiscal-year-end' option."
-            elif key in BOOL_OPTS:
-                processed_value = value.lower() == "true"
-            elif key in INT_OPTS:
-                processed_value = int(value)
-            elif key in LIST_OPTS:
-                processed_value = str(value).strip().split(" ")
-
-            if processed_value is not None:
-                options[key] = processed_value  # type: ignore
-
+            parse_option_custom_entry(entry, options)
         except (IndexError, TypeError, AssertionError) as err:
             msg = f"Failed to parse fava-option entry: {str(err)}"
             errors.append(OptionError(entry.meta, msg, entry))

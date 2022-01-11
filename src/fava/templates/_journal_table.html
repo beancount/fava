@@ -43,7 +43,7 @@
    'open': 'Open',
 } %}
 {% if not request.args.get('show') %}
-{% set journal_show = g.ledger.fava_options['journal-show'] + g.ledger.fava_options['journal-show-transaction'] + g.ledger.fava_options['journal-show-document'] %}
+{% set journal_show = g.ledger.fava_options.journal_show + g.ledger.fava_options.journal_show_transaction + g.ledger.fava_options.journal_show_document %}
 {% else %}
 {% set journal_show = request.args.getlist('show') %}
 {% endif %}

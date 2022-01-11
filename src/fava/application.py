@@ -131,7 +131,7 @@ def get_locale() -> Optional[str]:
         The locale that should be used for Babel. If not given as an option to
         Fava, guess from browser.
     """
-    lang = g.ledger.fava_options["language"]
+    lang = g.ledger.fava_options.language
     if lang is not None:
         return lang
     return request.accept_languages.best_match(["en"] + LANGUAGES)
@@ -180,7 +180,7 @@ def url_for(endpoint: str, **values: Any) -> str:
 
 def url_for_source(**kwargs: Any) -> str:
     """URL to source file (possibly link to external editor)."""
-    if g.ledger.fava_options["use-external-editor"]:
+    if g.ledger.fava_options.use_external_editor:
         return (
             f"beancount://{kwargs.get('file_path')}"
             + f"?lineno={kwargs.get('line', 1)}"
@@ -276,9 +276,9 @@ def index() -> werkzeug.wrappers.response.Response:
     if not g.beancount_file_slug:
         g.beancount_file_slug = next(iter(app.config["LEDGERS"]))
     index_url = url_for("index")
-    default_path = app.config["LEDGERS"][g.beancount_file_slug].fava_options[
-        "default-page"
-    ]
+    default_path = app.config["LEDGERS"][
+        g.beancount_file_slug
+    ].fava_options.default_page
     return redirect(f"{index_url}{default_path}")
 
 

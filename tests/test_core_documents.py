@@ -9,7 +9,7 @@ from fava.helpers import FavaAPIException
 
 
 def test_is_document_or_import_file(example_ledger, monkeypatch):
-    monkeypatch.setitem(example_ledger.fava_options, "import-dirs", ["/test/"])
+    monkeypatch.setattr(example_ledger.fava_options, "import_dirs", ["/test/"])
     assert not is_document_or_import_file("/asdfasdf", example_ledger)
     assert not is_document_or_import_file("/test/../../err", example_ledger)
     assert is_document_or_import_file("/test/err/../err", example_ledger)

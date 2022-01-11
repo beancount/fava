@@ -25,7 +25,7 @@
   </div>
 
   {% if journal %}
-  {% set entries = ledger.account_journal(account_name, with_journal_children=ledger.fava_options['account-journal-include-children']) %}
+  {% set entries = ledger.account_journal(account_name, with_journal_children=ledger.fava_options.account_journal_include_children) %}
   {{ journal_table.journal_table(entries, show_change_and_balance=True) }}
   {% else %}
   {% set accumulate = subreport == 'balances' %}

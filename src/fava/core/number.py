@@ -58,10 +58,10 @@ class DecimalFormatModule(FavaModule):
     def load_file(self) -> None:
         self.locale = None
 
-        locale_option = self.ledger.fava_options["locale"]
+        locale_option = self.ledger.fava_options.locale
         if self.ledger.options["render_commas"] and not locale_option:
             locale_option = "en"
-            self.ledger.fava_options["locale"] = locale_option
+            self.ledger.fava_options.locale = locale_option
 
         if locale_option:
             self.locale = Locale.parse(locale_option)

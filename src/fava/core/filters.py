@@ -350,7 +350,7 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
             return True
 
         self.begin_date, self.end_date = parse_date(
-            self.value, self.fava_options["fiscal-year-end"]
+            self.value, self.fava_options.fiscal_year_end
         )
         if not self.begin_date:
             self.value = None
