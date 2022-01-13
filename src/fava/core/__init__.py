@@ -1,4 +1,6 @@
 """This module provides the data required by Fava's reports."""
+from __future__ import annotations
+
 import copy
 import datetime
 from operator import itemgetter
@@ -7,11 +9,7 @@ from os.path import dirname
 from os.path import join
 from os.path import normpath
 from typing import Any
-from typing import Dict
 from typing import Iterable
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 from beancount import loader  # type: ignore
 from beancount.core import realization
@@ -83,9 +81,9 @@ class Filters:
 
     def set(
         self,
-        account: Optional[str] = None,
-        filter: Optional[str] = None,  # pylint: disable=redefined-builtin
-        time: Optional[str] = None,
+        account: str | None = None,
+        filter: str | None = None,  # pylint: disable=redefined-builtin
+        time: str | None = None,
     ) -> bool:
         """Set the filters and check if one of them changed."""
         return any(
@@ -197,7 +195,7 @@ class FavaLedger:
         self.all_entries_by_type = group_entries_by_type([])
 
         #: A list of all errors reported by Beancount.
-        self.errors: List[BeancountError] = []
+        self.errors: list[BeancountError] = []
 
         #: A Beancount options map.
         self.options: BeancountOptions = OPTIONS_DEFAULTS
@@ -206,13 +204,13 @@ class FavaLedger:
         self.accounts = AccountDict()
 
         #: A dict containing information about the commodities
-        self.commodities: Dict[str, Commodity] = {}
+        self.commodities: dict[str, Commodity] = {}
 
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = FavaOptions()
 
-        self._date_first: Optional[datetime.date] = None
-        self._date_last: Optional[datetime.date] = None
+        self._date_first: datetime.date | None = None
+        self._date_last: datetime.date | None = None
 
         self.load_file()
 
@@ -266,9 +264,9 @@ class FavaLedger:
     def filter(
         self,
         force: bool = False,
-        account: Optional[str] = None,
-        filter: Optional[str] = None,  # pylint: disable=redefined-builtin
-        time: Optional[str] = None,
+        account: str | None = None,
+        filter: str | None = None,  # pylint: disable=redefined-builtin
+        time: str | None = None,
     ) -> None:
         """Set and apply (if necessary) filters."""
         changed = self.filters.set(account=account, filter=filter, time=time)
@@ -294,7 +292,7 @@ class FavaLedger:
             self._date_last = self.filters.time.end_date
 
     @property
-    def end_date(self) -> Optional[datetime.date]:
+    def end_date(self) -> datetime.date | None:
         """The date to use for prices."""
         if self.filters.time:
             return self.filters.time.end_date
@@ -305,7 +303,7 @@ class FavaLedger:
         include_path = dirname(self.beancount_file_path)
         return normpath(join(include_path, *args))
 
-    def paths_to_watch(self) -> Tuple[List[str], List[str]]:
+    def paths_to_watch(self) -> tuple[list[str], list[str]]:
         """The paths to included files and document directories.
 
         Returns:
@@ -370,9 +368,9 @@ class FavaLedger:
         interval: date.Interval,
         account_name: str,
         accumulate: bool = False,
-    ) -> Tuple[
-        List[realization.RealAccount],
-        List[Tuple[datetime.date, datetime.date]],
+    ) -> tuple[
+        list[realization.RealAccount],
+        list[tuple[datetime.date, datetime.date]],
     ]:
         """Balances by interval.
 
@@ -413,7 +411,7 @@ class FavaLedger:
 
     def account_journal(
         self, account_name: str, with_journal_children: bool = False
-    ) -> List[Tuple[Directive, List[Posting], Inventory, Inventory]]:
+    ) -> list[tuple[Directive, list[Posting], Inventory, Inventory]]:
         """Journal for an account.
 
         Args:
@@ -445,11 +443,11 @@ class FavaLedger:
         ]
 
     @property
-    def documents(self) -> List[Document]:
+    def documents(self) -> list[Document]:
         """All currently filtered documents."""
         return [e for e in self.entries if isinstance(e, Document)]
 
-    def events(self, event_type: Optional[str] = None) -> List[Event]:
+    def events(self, event_type: str | None = None) -> list[Event]:
         """List events (possibly filtered by type)."""
         events = [e for e in self.entries if isinstance(e, Event)]
         if event_type:
@@ -479,7 +477,7 @@ class FavaLedger:
                 f'No entry found for hash "{entry_hash}"'
             ) from exc
 
-    def context(self, entry_hash: str) -> Tuple[Directive, Any, str, str]:
+    def context(self, entry_hash: str) -> tuple[Directive, Any, str, str]:
         """Context for an entry.
 
         Arguments:
@@ -498,7 +496,7 @@ class FavaLedger:
         source_slice, sha256sum = get_entry_slice(entry)
         return entry, balances, source_slice, sha256sum
 
-    def commodity_pairs(self) -> List[Tuple[str, str]]:
+    def commodity_pairs(self) -> list[tuple[str, str]]:
         """List pairs of commodities.
 
         Returns:
@@ -517,7 +515,7 @@ class FavaLedger:
 
     def prices(
         self, base: str, quote: str
-    ) -> List[Tuple[datetime.date, Decimal]]:
+    ) -> list[tuple[datetime.date, Decimal]]:
         """List all prices."""
         all_prices = get_all_prices(self.price_map, (base, quote))
 
@@ -535,7 +533,7 @@ class FavaLedger:
             ]
         return all_prices
 
-    def last_entry(self, account_name: str) -> Optional[Directive]:
+    def last_entry(self, account_name: str) -> Directive | None:
         """Get last entry of an account.
 
         Args:
@@ -571,7 +569,7 @@ class FavaLedger:
 
         raise FavaAPIException("Statement not found.")
 
-    def account_uptodate_status(self, account_name: str) -> Optional[str]:
+    def account_uptodate_status(self, account_name: str) -> str | None:
         """Status of the last balance or transaction.
 
         Args:
@@ -616,7 +614,7 @@ class FavaLedger:
         return self.accounts[account_name].close_date != datetime.date.max
 
     @staticmethod
-    def group_entries_by_type(entries: Entries) -> List[Tuple[str, Entries]]:
+    def group_entries_by_type(entries: Entries) -> list[tuple[str, Entries]]:
         """Group the given entries by type.
 
         Args:
@@ -626,13 +624,13 @@ class FavaLedger:
             A list of tuples (type, entries) consisting of the directive type
             as a string and the list of corresponding entries.
         """
-        groups: Dict[str, Entries] = {}
+        groups: dict[str, Entries] = {}
         for entry in entries:
             groups.setdefault(entry.__class__.__name__, []).append(entry)
 
         return sorted(list(groups.items()), key=itemgetter(0))
 
-    def commodity_name(self, commodity: str) -> Optional[str]:
+    def commodity_name(self, commodity: str) -> str | None:
         """Return the 'name' field in metadata of a commodity
         Args:
             commodity: The commodity in string

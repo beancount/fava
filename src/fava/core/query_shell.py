@@ -1,9 +1,9 @@
 """For using the Beancount shell from Fava."""
-# mypy: ignore-errors
+from __future__ import annotations
+
 import contextlib
 import io
 import textwrap
-from typing import List
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Entries
@@ -25,6 +25,8 @@ from fava.util.excel import HAVE_EXCEL
 from fava.util.excel import to_csv
 from fava.util.excel import to_excel
 
+# mypy: ignore-errors
+
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
@@ -43,16 +45,16 @@ class QueryShell(BQLShell, FavaModule):
 
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, ledger: "FavaLedger"):
+    def __init__(self, ledger: FavaLedger):
         self.buffer = io.StringIO()
         BQLShell.__init__(self, True, None, self.buffer)
         FavaModule.__init__(self, ledger)
         self.result = None
         self.stdout = self.buffer
         self.entries: Entries = []
-        self.errors: List[BeancountError] = []
+        self.errors: list[BeancountError] = []
         self.options_map = OPTIONS_DEFAULTS
-        self.queries: List[Query] = []
+        self.queries: list[Query] = []
 
     def load_file(self) -> None:
         self.queries = self.ledger.all_entries_by_type.Query

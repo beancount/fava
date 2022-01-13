@@ -1,6 +1,6 @@
 """Attributes for auto-completion."""
-from typing import List
-from typing import Optional
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Entries
@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 
-def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
+def get_active_years(entries: Entries, fye: FiscalYearEnd) -> list[str]:
     """Returns active years, with support for fiscal years.
 
     Args:
@@ -48,14 +48,14 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> List[str]:
 class AttributesModule(FavaModule):
     """Some attributes of the ledger (mostly for auto-completion)."""
 
-    def __init__(self, ledger: "FavaLedger") -> None:
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self.accounts: List[str] = []
-        self.currencies: List[str] = []
-        self.payees: List[str] = []
-        self.links: List[str] = []
-        self.tags: List[str] = []
-        self.years: List[str] = []
+        self.accounts: list[str] = []
+        self.currencies: list[str] = []
+        self.payees: list[str] = []
+        self.links: list[str] = []
+        self.tags: list[str] = []
+        self.years: list[str] = []
 
     def load_file(self) -> None:
         all_entries = self.ledger.all_entries
@@ -87,7 +87,7 @@ class AttributesModule(FavaModule):
         self.currencies = currency_ranker.sort()
         self.payees = payee_ranker.sort()
 
-    def payee_accounts(self, payee: str) -> List[str]:
+    def payee_accounts(self, payee: str) -> list[str]:
         """Rank accounts for the given payee."""
         account_ranker = ExponentialDecayRanker(self.accounts)
         transactions = self.ledger.all_entries_by_type.Transaction
@@ -97,7 +97,7 @@ class AttributesModule(FavaModule):
                     account_ranker.update(posting.account, txn.date)
         return account_ranker.sort()
 
-    def payee_transaction(self, payee: str) -> Optional[Transaction]:
+    def payee_transaction(self, payee: str) -> Transaction | None:
         """The last transaction for the given payee."""
         transactions = self.ledger.all_entries_by_type.Transaction
         for txn in reversed(transactions):

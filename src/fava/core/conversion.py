@@ -2,11 +2,11 @@
 
 All functions in this module will be automatically added as template filters.
 """
+from __future__ import annotations
+
 import datetime
 from typing import Any
-from typing import Optional
 from typing import overload
-from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.convert import convert_position
@@ -22,7 +22,7 @@ from fava.core.inventory import SimpleCounterInventory
 
 
 def get_market_value(
-    pos: Position, price_map: PriceMap, date: Optional[datetime.date] = None
+    pos: Position, price_map: PriceMap, date: datetime.date | None = None
 ) -> Amount:
     """Get the market value of a Position.
 
@@ -62,7 +62,7 @@ def units(inventory: CounterInventory) -> SimpleCounterInventory:
     ...
 
 
-def units(inventory: Union[Inventory, CounterInventory]) -> Any:
+def units(inventory: Inventory | CounterInventory) -> Any:
     """Get the units of an inventory."""
     return inventory.reduce(get_units)
 
@@ -77,7 +77,7 @@ def cost(inventory: CounterInventory) -> SimpleCounterInventory:
     ...
 
 
-def cost(inventory: Union[Inventory, CounterInventory]) -> Any:
+def cost(inventory: Inventory | CounterInventory) -> Any:
     """Get the cost of an inventory."""
     return inventory.reduce(get_cost)
 
@@ -87,7 +87,7 @@ def cost_or_value(
     inventory: Inventory,
     conversion: str,
     price_map: PriceMap,
-    date: Optional[datetime.date],
+    date: datetime.date | None,
 ) -> Inventory:
     ...
 
@@ -97,16 +97,16 @@ def cost_or_value(
     inventory: CounterInventory,
     conversion: str,
     price_map: PriceMap,
-    date: Optional[datetime.date],
+    date: datetime.date | None,
 ) -> SimpleCounterInventory:
     ...
 
 
 def cost_or_value(
-    inventory: Union[Inventory, CounterInventory],
+    inventory: Inventory | CounterInventory,
     conversion: str,
     price_map: PriceMap,
-    date: Optional[datetime.date] = None,
+    date: datetime.date | None = None,
 ) -> Any:
     """Get the cost or value of an inventory."""
     if conversion == "at_cost":

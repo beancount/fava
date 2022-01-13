@@ -1,9 +1,9 @@
 """Some miscellaneous reports."""
+from __future__ import annotations
+
 import datetime
 import io
 import re
-from typing import List
-from typing import Tuple
 from typing import TYPE_CHECKING
 
 from beancount.core.amount import CURRENCY_RE
@@ -16,23 +16,22 @@ from fava.helpers import BeancountError
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
+    SidebarLinks = list[tuple[str, str]]
+
 
 class FavaError(BeancountError):
     """Generic Fava-specific error."""
 
 
-SidebarLinks = List[Tuple[str, str]]
-
-
 class FavaMisc(FavaModule):
     """Provides access to some miscellaneous reports."""
 
-    def __init__(self, ledger: "FavaLedger") -> None:
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         #: User-chosen links to show in the sidebar.
         self.sidebar_links: SidebarLinks = []
         #: Upcoming events in the next few days.
-        self.upcoming_events: List[Event] = []
+        self.upcoming_events: list[Event] = []
 
     def load_file(self) -> None:
         custom_entries = self.ledger.all_entries_by_type.Custom
@@ -54,7 +53,7 @@ class FavaMisc(FavaModule):
             )
 
 
-def sidebar_links(custom_entries: List[Custom]) -> List[Tuple[str, str]]:
+def sidebar_links(custom_entries: list[Custom]) -> list[tuple[str, str]]:
     """Parse custom entries for links.
 
     They have the following format:
@@ -70,7 +69,7 @@ def sidebar_links(custom_entries: List[Custom]) -> List[Tuple[str, str]]:
     ]
 
 
-def upcoming_events(events: List[Event], max_delta: int) -> List[Event]:
+def upcoming_events(events: list[Event], max_delta: int) -> list[Event]:
     """Parse entries for upcoming events.
 
     Args:

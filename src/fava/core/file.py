@@ -1,4 +1,6 @@
 """Reading/writing Beancount files."""
+from __future__ import annotations
+
 import datetime
 import re
 import threading
@@ -7,9 +9,6 @@ from codecs import encode
 from hashlib import sha256
 from operator import attrgetter
 from typing import Generator
-from typing import List
-from typing import Optional
-from typing import Tuple
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Balance
@@ -56,11 +55,11 @@ def sha256_str(val: str) -> str:
 class FileModule(FavaModule):
     """Functions related to reading/writing to Beancount files."""
 
-    def __init__(self, ledger: "FavaLedger") -> None:
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self.lock = threading.Lock()
 
-    def get_source(self, path: str) -> Tuple[str, str]:
+    def get_source(self, path: str) -> tuple[str, str]:
         """Get source files.
 
         Args:
@@ -203,7 +202,7 @@ class FileModule(FavaModule):
                     )
 
 
-def incomplete_sortkey(entry: Directive) -> Tuple[datetime.date, int]:
+def incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
     """Sortkey for entries that might have incomplete metadata."""
     return (entry.date, SORT_ORDER.get(type(entry), 0))
 
@@ -222,7 +221,7 @@ def insert_metadata_in_file(
         file.write("".join(contents))
 
 
-def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
+def find_entry_lines(lines: list[str], lineno: int) -> list[str]:
     """Lines of entry starting at lineno.
 
     Args:
@@ -241,7 +240,7 @@ def find_entry_lines(lines: List[str], lineno: int) -> List[str]:
         entry_lines.append(line)
 
 
-def get_entry_slice(entry: Directive) -> Tuple[str, str]:
+def get_entry_slice(entry: Directive) -> tuple[str, str]:
     """Get slice of the source file for an entry.
 
     Args:
@@ -301,10 +300,10 @@ def save_entry_slice(
 def insert_entry(
     entry: Directive,
     default_filename: str,
-    insert_options: List[InsertEntryOption],
+    insert_options: list[InsertEntryOption],
     currency_column: int,
     indent: int,
-) -> List[InsertEntryOption]:
+) -> list[InsertEntryOption]:
     """Insert an entry.
 
     Args:
@@ -359,9 +358,9 @@ def _format_entry(entry: Directive, currency_column: int, indent: int) -> str:
 
 def find_insert_position(
     entry: Directive,
-    insert_options: List[InsertEntryOption],
+    insert_options: list[InsertEntryOption],
     default_filename: str,
-) -> Tuple[str, Optional[int]]:
+) -> tuple[str, int | None]:
     """Find insert position for an entry.
 
     Args:

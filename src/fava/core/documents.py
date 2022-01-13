@@ -1,4 +1,6 @@
 """Document path related helpers."""
+from __future__ import annotations
+
 import os
 from os import path
 from typing import TYPE_CHECKING
@@ -9,7 +11,7 @@ if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
 
 
-def is_document_or_import_file(filename: str, ledger: "FavaLedger") -> bool:
+def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
     """Check whether the filename is a document or in an import directory.
 
     Args:
@@ -34,7 +36,7 @@ def is_document_or_import_file(filename: str, ledger: "FavaLedger") -> bool:
 
 
 def filepath_in_document_folder(
-    documents_folder: str, account: str, filename: str, ledger: "FavaLedger"
+    documents_folder: str, account: str, filename: str, ledger: FavaLedger
 ) -> str:
     """File path for a document in the folder for an account.
 

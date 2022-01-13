@@ -1,11 +1,11 @@
 """Account balance trees."""
+from __future__ import annotations
+
 import collections
 import datetime
 from typing import Dict
 from typing import Generator
 from typing import Iterable
-from typing import List
-from typing import Optional
 
 from beancount.core import account
 from beancount.core import convert
@@ -26,7 +26,7 @@ class SerialisedTreeNode(TypedDict):
     account: str
     balance: SimpleCounterInventory
     balance_children: SimpleCounterInventory
-    children: "SerialisedTreeNode"  # type: ignore
+    children: SerialisedTreeNode  # type: ignore
 
 
 class TreeNode:
@@ -38,7 +38,7 @@ class TreeNode:
         #: Account name.
         self.name: str = name
         #: A list of :class:`.TreeNode`, its children.
-        self.children: List["TreeNode"] = []
+        self.children: list[TreeNode] = []
         #: The cumulative account balance.
         self.balance_children = CounterInventory()
         #: The account balance.
@@ -50,7 +50,7 @@ class TreeNode:
         self,
         conversion: str,
         price_map: PriceMap,
-        end: Optional[datetime.date],
+        end: datetime.date | None,
     ) -> SerialisedTreeNode:
         """Serialise the account.
 
@@ -78,11 +78,11 @@ class Tree(Dict[str, TreeNode]):
         entries: A list of entries to compute balances from.
     """
 
-    def __init__(self, entries: Optional[Iterable[Directive]] = None):
+    def __init__(self, entries: Iterable[Directive] | None = None):
         super().__init__(self)
         self.get("", insert=True)
         if entries:
-            account_balances: Dict[
+            account_balances: dict[
                 str, CounterInventory
             ] = collections.defaultdict(CounterInventory)
             for entry in entries:

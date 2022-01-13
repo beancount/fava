@@ -1,7 +1,8 @@
 """A simple file and folder watcher."""
+from __future__ import annotations
+
 import os
 from typing import Iterable
-from typing import List
 
 
 class Watcher:
@@ -14,8 +15,8 @@ class Watcher:
     __slots__ = ["_files", "_folders", "_last_checked"]
 
     def __init__(self) -> None:
-        self._files: List[str] = []
-        self._folders: List[str] = []
+        self._files: list[str] = []
+        self._folders: list[str] = []
         self._last_checked = 0
 
     def update(self, files: Iterable[str], folders: Iterable[str]) -> None:

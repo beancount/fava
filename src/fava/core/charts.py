@@ -1,14 +1,11 @@
 """Provide data suitable for Fava's charts. """
+from __future__ import annotations
+
 from datetime import date
 from datetime import timedelta
 from typing import Any
-from typing import Dict
 from typing import Generator
-from typing import List
-from typing import Optional
 from typing import Pattern
-from typing import Tuple
-from typing import Union
 
 from beancount.core import realization
 from beancount.core.amount import Amount
@@ -35,7 +32,7 @@ from fava.util.typing import TypedDict
 ONE_DAY = timedelta(days=1)
 
 
-def inv_to_dict(inventory: Inventory) -> Dict[str, Decimal]:
+def inv_to_dict(inventory: Inventory) -> dict[str, Decimal]:
     """Convert an inventory to a simple cost->number dict."""
     return {
         pos.units.currency: pos.units.number
@@ -80,7 +77,7 @@ class DateAndBalance(TypedDict):
     """Balance at a date."""
 
     date: date
-    balance: Union[Dict[str, Decimal], Inventory]
+    balance: dict[str, Decimal] | Inventory
 
 
 class DateAndBalanceWithBudget(TypedDict):
@@ -88,7 +85,7 @@ class DateAndBalanceWithBudget(TypedDict):
 
     date: date
     balance: Inventory
-    budgets: Dict[str, Decimal]
+    budgets: dict[str, Decimal]
 
 
 class ChartModule(FavaModule):
@@ -98,8 +95,8 @@ class ChartModule(FavaModule):
         self,
         account_name: str,
         conversion: str,
-        begin: Optional[date] = None,
-        end: Optional[date] = None,
+        begin: date | None = None,
+        end: date | None = None,
     ) -> SerialisedTreeNode:
         """An account tree."""
         if begin is not None and end is not None:
@@ -113,7 +110,7 @@ class ChartModule(FavaModule):
     @listify
     def prices(
         self,
-    ) -> Generator[Tuple[str, str, List[Tuple[date, Decimal]]], None, None]:
+    ) -> Generator[tuple[str, str, list[tuple[date, Decimal]]], None, None]:
         """The prices for all commodity pairs.
 
         Returns:
@@ -129,7 +126,7 @@ class ChartModule(FavaModule):
     def interval_totals(
         self,
         interval: Interval,
-        accounts: Union[str, Tuple[str]],
+        accounts: str | tuple[str],
         conversion: str,
         invert: bool = False,
     ) -> Generator[DateAndBalanceWithBudget, None, None]:
@@ -261,7 +258,7 @@ class ChartModule(FavaModule):
             }
 
     @staticmethod
-    def can_plot_query(types: List[Tuple[str, Any]]) -> bool:
+    def can_plot_query(types: list[tuple[str, Any]]) -> bool:
         """Whether we can plot the given query.
 
         Args:
@@ -274,7 +271,7 @@ class ChartModule(FavaModule):
         )
 
     def query(
-        self, types: List[Tuple[str, Any]], rows: List[Tuple[Any, ...]]
+        self, types: list[tuple[str, Any]], rows: list[tuple[Any, ...]]
     ) -> Any:
         """Chart for a query.
 

@@ -1,37 +1,27 @@
 """Entries grouped by type."""
-from typing import List
+from __future__ import annotations
+
 from typing import NamedTuple
 
-from beancount.core.data import Balance
-from beancount.core.data import Close
-from beancount.core.data import Commodity
-from beancount.core.data import Custom
-from beancount.core.data import Document
+from beancount.core import data
 from beancount.core.data import Entries
-from beancount.core.data import Event
-from beancount.core.data import Note
-from beancount.core.data import Open
-from beancount.core.data import Pad
-from beancount.core.data import Price
-from beancount.core.data import Query
-from beancount.core.data import Transaction
 
 
 class EntriesByType(NamedTuple):
     """Entries grouped by type."""
 
-    Balance: List[Balance]
-    Close: List[Close]
-    Commodity: List[Commodity]
-    Custom: List[Custom]
-    Document: List[Document]
-    Event: List[Event]
-    Note: List[Note]
-    Open: List[Open]
-    Pad: List[Pad]
-    Price: List[Price]
-    Query: List[Query]
-    Transaction: List[Transaction]
+    Balance: list[data.Balance]
+    Close: list[data.Close]
+    Commodity: list[data.Commodity]
+    Custom: list[data.Custom]
+    Document: list[data.Document]
+    Event: list[data.Event]
+    Note: list[data.Note]
+    Open: list[data.Open]
+    Pad: list[data.Pad]
+    Price: list[data.Price]
+    Query: list[data.Query]
+    Transaction: list[data.Transaction]
 
 
 def group_entries_by_type(entries: Entries) -> EntriesByType:

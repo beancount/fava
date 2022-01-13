@@ -1,11 +1,8 @@
 """Fava extensions"""
+from __future__ import annotations
+
 import inspect
 import os
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Type
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Custom
@@ -22,10 +19,10 @@ if TYPE_CHECKING:  # pragma: no cover
 class ExtensionModule(FavaModule):
     """Fava extensions."""
 
-    def __init__(self, ledger: "FavaLedger") -> None:
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self._instances: Dict[Type[FavaExtensionBase], FavaExtensionBase] = {}
-        self.reports: List[Tuple[str, str]] = []
+        self._instances: dict[type[FavaExtensionBase], FavaExtensionBase] = {}
+        self.reports: list[tuple[str, str]] = []
 
     def load_file(self) -> None:
         all_extensions = []
@@ -55,7 +52,7 @@ class ExtensionModule(FavaModule):
             if ext.report_title is not None
         ]
 
-    def exts_for_hook(self, hook: str) -> List[FavaExtensionBase]:
+    def exts_for_hook(self, hook: str) -> list[FavaExtensionBase]:
         """Find all extensions that have implemented the given hook."""
         return [
             ext
@@ -65,7 +62,7 @@ class ExtensionModule(FavaModule):
 
     def template_and_extension(
         self, name: str
-    ) -> Tuple[str, FavaExtensionBase]:
+    ) -> tuple[str, FavaExtensionBase]:
         """Provide data to render an extension report.
 
         Args:
@@ -109,8 +106,8 @@ class ExtensionModule(FavaModule):
 
 
 def extension_entries(
-    custom_entries: List[Custom],
-) -> Dict[str, Optional[str]]:
+    custom_entries: list[Custom],
+) -> dict[str, str | None]:
     """Parse custom entries for extensions.
 
     They have the following format::

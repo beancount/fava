@@ -1,8 +1,9 @@
 """Account close date and metadata."""
+from __future__ import annotations
+
 import datetime
 from typing import Any
 from typing import Dict
-from typing import List
 
 from beancount.core.account import TYPE as ACCOUNT_TYPE
 from beancount.core.data import Custom
@@ -39,7 +40,7 @@ class AccountDict(Dict[str, AccountData]):
         return self[key]
 
 
-def get_entry_accounts(entry: Directive) -> List[str]:
+def get_entry_accounts(entry: Directive) -> list[str]:
     """Accounts for an entry.
 
     Args:

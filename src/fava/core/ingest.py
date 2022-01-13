@@ -1,4 +1,6 @@
 """Ingest helper functions."""
+from __future__ import annotations
+
 import datetime
 import os
 import sys
@@ -6,11 +8,7 @@ import traceback
 from os import path
 from runpy import run_path
 from typing import Any
-from typing import Dict
-from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Tuple
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Entries
@@ -44,7 +42,7 @@ class FileImporters(NamedTuple):
 
     name: str
     basename: str
-    importers: List[FileImportInfo]
+    importers: list[FileImportInfo]
 
 
 def file_import_info(filename: str, importer: Any) -> FileImportInfo:
@@ -70,15 +68,15 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
 class IngestModule(FavaModule):
     """Exposes ingest functionality."""
 
-    def __init__(self, ledger: "FavaLedger"):
+    def __init__(self, ledger: FavaLedger):
         super().__init__(ledger)
-        self.config: List[Any] = []
-        self.importers: Dict[str, Any] = {}
-        self.hooks: List[Any] = []
-        self.mtime: Optional[int] = None
+        self.config: list[Any] = []
+        self.importers: dict[str, Any] = {}
+        self.hooks: list[Any] = []
+        self.mtime: int | None = None
 
     @property
-    def module_path(self) -> Optional[str]:
+    def module_path(self) -> str | None:
         """The path to the importer configuration."""
         config_path = self.ledger.fava_options.import_config
         if not config_path:
@@ -123,7 +121,7 @@ class IngestModule(FavaModule):
             importer.name(): importer for importer in self.config
         }
 
-    def import_data(self) -> List[FileImporters]:
+    def import_data(self) -> list[FileImporters]:
         """Identify files and importers that can be imported.
 
         Returns:
@@ -132,7 +130,7 @@ class IngestModule(FavaModule):
         if not self.config:
             return []
 
-        ret: List[FileImporters] = []
+        ret: list[FileImporters] = []
 
         for directory in self.ledger.fava_options.import_dirs:
             full_path = self.ledger.join_path(directory)
@@ -177,7 +175,7 @@ class IngestModule(FavaModule):
             existing_entries=self.ledger.all_entries,
         )
 
-        new_entries_list: List[Tuple[str, Entries]] = [(filename, new_entries)]
+        new_entries_list: list[tuple[str, Entries]] = [(filename, new_entries)]
         for hook_fn in self.hooks:
             new_entries_list = hook_fn(
                 new_entries_list, self.ledger.all_entries

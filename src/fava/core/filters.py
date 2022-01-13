@@ -1,12 +1,11 @@
 """Entry filters."""
+from __future__ import annotations
+
 import re
 from datetime import date
 from typing import Any
 from typing import Callable
 from typing import Generator
-from typing import List
-from typing import Optional
-from typing import Tuple
 
 import ply.yacc  # type: ignore
 from beancount.core import account
@@ -69,22 +68,22 @@ class FilterSyntaxLexer:
         "|".join((f"(?P<{name}>{rule})" for name, rule in RULES))
     )
 
-    def LINK(self, token: str, value: str) -> Tuple[str, str]:
+    def LINK(self, token: str, value: str) -> tuple[str, str]:
         return token, value[1:]
 
-    def TAG(self, token: str, value: str) -> Tuple[str, str]:
+    def TAG(self, token: str, value: str) -> tuple[str, str]:
         return token, value[1:]
 
-    def KEY(self, token: str, value: str) -> Tuple[str, str]:
+    def KEY(self, token: str, value: str) -> tuple[str, str]:
         return token, value[:-1]
 
-    def ALL(self, token: str, _: str) -> Tuple[str, str]:
+    def ALL(self, token: str, _: str) -> tuple[str, str]:
         return token, token
 
-    def ANY(self, token: str, _: str) -> Tuple[str, str]:
+    def ANY(self, token: str, _: str) -> tuple[str, str]:
         return token, token
 
-    def STRING(self, token: str, value: str) -> Tuple[str, str]:
+    def STRING(self, token: str, value: str) -> tuple[str, str]:
         if value[0] in ['"', "'"]:
             return token, value[1:-1]
         return token, value
@@ -115,7 +114,7 @@ class FilterSyntaxLexer:
                 pos += len(value)
                 token = match.lastgroup
                 assert token is not None, "Internal Error"
-                func: Callable[[str, str], Tuple[str, str]] = getattr(
+                func: Callable[[str, str], tuple[str, str]] = getattr(
                     self, token
                 )
                 ret = func(token, value)
@@ -154,19 +153,19 @@ class FilterSyntaxParser:
     def p_error(self, _: Any) -> None:
         raise FilterException("filter", "Failed to parse filter: ")
 
-    def p_filter(self, p: List[Any]) -> None:
+    def p_filter(self, p: list[Any]) -> None:
         """
         filter : expr
         """
         p[0] = p[1]
 
-    def p_expr(self, p: List[Any]) -> None:
+    def p_expr(self, p: list[Any]) -> None:
         """
         expr : simple_expr
         """
         p[0] = p[1]
 
-    def p_expr_all(self, p: List[Any]) -> None:
+    def p_expr_all(self, p: list[Any]) -> None:
         """
         expr : ALL expr ')'
         """
@@ -179,7 +178,7 @@ class FilterSyntaxParser:
 
         p[0] = _match_postings
 
-    def p_expr_any(self, p: List[Any]) -> None:
+    def p_expr_any(self, p: list[Any]) -> None:
         """
         expr : ANY expr ')'
         """
@@ -192,13 +191,13 @@ class FilterSyntaxParser:
 
         p[0] = _match_postings
 
-    def p_expr_parentheses(self, p: List[Any]) -> None:
+    def p_expr_parentheses(self, p: list[Any]) -> None:
         """
         expr : '(' expr ')'
         """
         p[0] = p[2]
 
-    def p_expr_and(self, p: List[Any]) -> None:
+    def p_expr_and(self, p: list[Any]) -> None:
         """
         expr : expr expr %prec AND
         """
@@ -209,7 +208,7 @@ class FilterSyntaxParser:
 
         p[0] = _and
 
-    def p_expr_or(self, p: List[Any]) -> None:
+    def p_expr_or(self, p: list[Any]) -> None:
         """
         expr : expr ',' expr
         """
@@ -220,7 +219,7 @@ class FilterSyntaxParser:
 
         p[0] = _or
 
-    def p_expr_negated(self, p: List[Any]) -> None:
+    def p_expr_negated(self, p: list[Any]) -> None:
         """
         expr : '-' expr %prec UMINUS
         """
@@ -231,7 +230,7 @@ class FilterSyntaxParser:
 
         p[0] = _neg
 
-    def p_simple_expr_TAG(self, p: List[Any]) -> None:
+    def p_simple_expr_TAG(self, p: list[Any]) -> None:
         """
         simple_expr : TAG
         """
@@ -243,7 +242,7 @@ class FilterSyntaxParser:
 
         p[0] = _tag
 
-    def p_simple_expr_LINK(self, p: List[Any]) -> None:
+    def p_simple_expr_LINK(self, p: list[Any]) -> None:
         """
         simple_expr : LINK
         """
@@ -255,7 +254,7 @@ class FilterSyntaxParser:
 
         p[0] = _link
 
-    def p_simple_expr_STRING(self, p: List[Any]) -> None:
+    def p_simple_expr_STRING(self, p: list[Any]) -> None:
         """
         simple_expr : STRING
         """
@@ -271,7 +270,7 @@ class FilterSyntaxParser:
 
         p[0] = _string
 
-    def p_simple_expr_key(self, p: List[Any]) -> None:
+    def p_simple_expr_key(self, p: list[Any]) -> None:
         """
         simple_expr : KEY STRING
         """
@@ -296,9 +295,9 @@ class EntryFilter:
     ) -> None:
         self.options = options
         self.fava_options = fava_options
-        self.value: Optional[str] = None
+        self.value: str | None = None
 
-    def set(self, value: Optional[str]) -> bool:
+    def set(self, value: str | None) -> bool:
         """Set the filter.
 
         Subclasses should check for validity of the value in this method.
@@ -339,10 +338,10 @@ class TimeFilter(EntryFilter):  # pylint: disable=abstract-method
         self, options: BeancountOptions, fava_options: FavaOptions
     ) -> None:
         super().__init__(options, fava_options)
-        self.begin_date: Optional[date] = None
-        self.end_date: Optional[date] = None
+        self.begin_date: date | None = None
+        self.end_date: date | None = None
 
-    def set(self, value: Optional[str]) -> bool:
+    def set(self, value: str | None) -> bool:
         if value == self.value:
             return False
         self.value = value
@@ -382,7 +381,7 @@ class AdvancedFilter(EntryFilter):
         super().__init__(options, fava_options)
         self._include = None
 
-    def set(self, value: Optional[str]) -> bool:
+    def set(self, value: str | None) -> bool:
         if value == self.value:
             return False
         self.value = value
@@ -417,9 +416,9 @@ class AccountFilter(EntryFilter):
         self, options: BeancountOptions, fava_options: FavaOptions
     ) -> None:
         super().__init__(options, fava_options)
-        self.match: Optional[Match] = None
+        self.match: Match | None = None
 
-    def set(self, value: Optional[str]) -> bool:
+    def set(self, value: str | None) -> bool:
         if value == self.value:
             return False
         self.value = value

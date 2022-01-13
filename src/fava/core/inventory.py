@@ -1,4 +1,6 @@
 """Alternative implementation of Beancount's Inventory."""
+from __future__ import annotations
+
 from typing import Any
 from typing import Callable
 from typing import Dict
@@ -69,7 +71,7 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
             counter.add(amount.currency, amount.number)
         return counter
 
-    def add_amount(self, amount: Amount, cost: Optional[Cost] = None) -> None:
+    def add_amount(self, amount: Amount, cost: Cost | None = None) -> None:
         """Add an Amount to the inventory."""
         assert amount.number is not None
         key = (amount.currency, cost)
@@ -79,15 +81,15 @@ class CounterInventory(Dict[InventoryKey, Decimal]):
         """Add a Position or Posting to the inventory."""
         self.add_amount(pos.units, pos.cost)
 
-    def __neg__(self) -> "CounterInventory":
+    def __neg__(self) -> CounterInventory:
         return CounterInventory({key: -num for key, num in self.items()})
 
-    def __add__(self, other: "CounterInventory") -> "CounterInventory":
+    def __add__(self, other: CounterInventory) -> CounterInventory:
         counter = CounterInventory(self)
         counter.add_inventory(other)
         return counter
 
-    def add_inventory(self, counter: "CounterInventory") -> None:
+    def add_inventory(self, counter: CounterInventory) -> None:
         """Add another :class:`CounterInventory`."""
         if not self:
             self.update(counter)

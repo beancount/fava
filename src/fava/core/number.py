@@ -1,8 +1,8 @@
 """Formatting numbers."""
+from __future__ import annotations
+
 import copy
 from typing import Callable
-from typing import Dict
-from typing import Optional
 from typing import TYPE_CHECKING
 
 from babel.core import Locale  # type: ignore
@@ -17,7 +17,7 @@ if TYPE_CHECKING:  # pragma: no cover
 Formatter = Callable[[Decimal], str]
 
 
-def get_locale_format(locale: Optional[Locale], precision: int) -> Formatter:
+def get_locale_format(locale: Locale | None, precision: int) -> Formatter:
     """Obtain formatting pattern for the given locale and precision.
 
     Arguments:
@@ -49,10 +49,10 @@ def get_locale_format(locale: Optional[Locale], precision: int) -> Formatter:
 class DecimalFormatModule(FavaModule):
     """Formatting numbers."""
 
-    def __init__(self, ledger: "FavaLedger") -> None:
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self.locale = None
-        self.formatters: Dict[str, Formatter] = {}
+        self.formatters: dict[str, Formatter] = {}
         self.default_pattern = get_locale_format(None, 2)
 
     def load_file(self) -> None:
@@ -76,7 +76,7 @@ class DecimalFormatModule(FavaModule):
                     self.locale, prec
                 )
 
-    def __call__(self, value: Decimal, currency: Optional[str] = None) -> str:
+    def __call__(self, value: Decimal, currency: str | None = None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
 
         Arguments:

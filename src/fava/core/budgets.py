@@ -1,11 +1,12 @@
 """Parsing and computing budgets."""
+from __future__ import annotations
+
 import datetime
 from collections import Counter
 from collections import defaultdict
 from typing import Dict
 from typing import List
 from typing import NamedTuple
-from typing import Tuple
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Custom
@@ -41,7 +42,7 @@ class BudgetError(BeancountError):
 class BudgetModule(FavaModule):
     """Parses budget entries."""
 
-    def __init__(self, ledger: "FavaLedger") -> None:
+    def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self.budget_entries: BudgetDict = {}
 
@@ -56,7 +57,7 @@ class BudgetModule(FavaModule):
         account: str,
         begin_date: datetime.date,
         end_date: datetime.date,
-    ) -> Dict[str, Decimal]:
+    ) -> dict[str, Decimal]:
         """Calculate the budget for an account in an interval."""
         return calculate_budget(
             self.budget_entries, account, begin_date, end_date
@@ -67,7 +68,7 @@ class BudgetModule(FavaModule):
         account: str,
         begin_date: datetime.date,
         end_date: datetime.date,
-    ) -> Dict[str, Decimal]:
+    ) -> dict[str, Decimal]:
         """Calculate the budget for an account including its children."""
         return calculate_budget_children(
             self.budget_entries, account, begin_date, end_date
@@ -78,8 +79,8 @@ class BudgetModule(FavaModule):
 
 
 def parse_budgets(
-    custom_entries: List[Custom],
-) -> Tuple[BudgetDict, List[BudgetError]]:
+    custom_entries: list[Custom],
+) -> tuple[BudgetDict, list[BudgetError]]:
     """Parse budget directives from custom entries.
 
     Args:
@@ -133,7 +134,7 @@ def parse_budgets(
 
 def _matching_budgets(
     budgets: BudgetDict, accounts: str, date_active: datetime.date
-) -> Dict[str, Budget]:
+) -> dict[str, Budget]:
     """Find matching budgets.
 
     Returns:
@@ -154,7 +155,7 @@ def calculate_budget(
     account: str,
     date_from: datetime.date,
     date_to: datetime.date,
-) -> Dict[str, Decimal]:
+) -> dict[str, Decimal]:
     """Calculate budget for an account.
 
     Args:
@@ -170,7 +171,7 @@ def calculate_budget(
     if account not in budgets:
         return {}
 
-    currency_dict: Dict[str, Decimal] = defaultdict(Decimal)
+    currency_dict: dict[str, Decimal] = defaultdict(Decimal)
 
     for single_day in days_in_daterange(date_from, date_to):
         matches = _matching_budgets(budgets, account, single_day)
@@ -188,7 +189,7 @@ def calculate_budget_children(
     account: str,
     date_from: datetime.date,
     date_to: datetime.date,
-) -> Dict[str, Decimal]:
+) -> dict[str, Decimal]:
     """Calculate budget for an account including budgets of its children.
 
     Args:
@@ -201,7 +202,7 @@ def calculate_budget_children(
         A dictionary of currency to Decimal with the budget for the
         specified account and period.
     """
-    currency_dict: Dict[str, Decimal] = Counter()  # type: ignore
+    currency_dict: dict[str, Decimal] = Counter()  # type: ignore
 
     for child in budgets.keys():
         if child.startswith(account):
