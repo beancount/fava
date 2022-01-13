@@ -1,10 +1,11 @@
 """Writing query results to CSV and spreadsheet documents."""
+from __future__ import annotations
+
 import csv
 import datetime
 import io
 from collections import OrderedDict
 from typing import Any
-from typing import List
 
 from beancount.core.number import Decimal
 
@@ -68,7 +69,7 @@ def _result_array(types: Any, rows: Any) -> Any:
     return result_array
 
 
-def _row_to_pyexcel(row: Any, header: Any) -> List[str]:
+def _row_to_pyexcel(row: Any, header: Any) -> list[str]:
     result = []
     for idx, column in enumerate(header):
         value = row[idx]

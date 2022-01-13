@@ -1,5 +1,5 @@
 """Typing helpers."""
-from typing import List
+from __future__ import annotations
 
 from beancount.core.display_context import DisplayContext
 
@@ -21,9 +21,9 @@ class BeancountOptions(TypedDict):
     account_current_conversions: str
     account_current_earnings: str
     render_commas: bool
-    operating_currency: List[str]
-    documents: List[str]
-    include: List[str]
+    operating_currency: list[str]
+    documents: list[str]
+    include: list[str]
     dcontext: DisplayContext
 
 

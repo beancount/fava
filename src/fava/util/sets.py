@@ -1,10 +1,10 @@
 """Utils for Python sets."""
+from __future__ import annotations
+
 from typing import AbstractSet
-from typing import Optional
-from typing import Set
 
 
-def add_to_set(set_: Optional[AbstractSet[str]], new: str) -> Set[str]:
+def add_to_set(set_: AbstractSet[str] | None, new: str) -> set[str]:
     """Add an entry to a set (or create it if doesn't exist).
 
     Args:

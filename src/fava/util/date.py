@@ -4,13 +4,13 @@ Note:
     Date ranges are always tuples (start, end) from the (inclusive) start date
     to the (exclusive) end date.
 """
+from __future__ import annotations
+
 import datetime
 import enum
 import re
 from typing import Iterator
 from typing import NamedTuple
-from typing import Optional
-from typing import Tuple
 
 from flask_babel import gettext  # type: ignore
 
@@ -57,7 +57,7 @@ class Interval(enum.Enum):
     DAY = "day"
 
     @property
-    def label(self) -> "Interval":
+    def label(self) -> Interval:
         """The label for the interval."""
         return {  # type: ignore
             Interval.YEAR: gettext("Yearly"),
@@ -68,7 +68,7 @@ class Interval(enum.Enum):
         }.get(self)
 
     @staticmethod
-    def get(string: str) -> "Interval":
+    def get(string: str) -> Interval:
         """Return the enum member for a string."""
         try:
             return Interval[string.upper()]
@@ -132,7 +132,7 @@ def interval_ends(
     yield last
 
 
-def substitute(string: str, fye: Optional[FiscalYearEnd] = None) -> str:
+def substitute(string: str, fye: FiscalYearEnd | None = None) -> str:
     """Replace variables referring to the current day.
 
     Args:
@@ -200,8 +200,8 @@ def substitute(string: str, fye: Optional[FiscalYearEnd] = None) -> str:
 
 
 def parse_date(
-    string: str, fye: Optional[FiscalYearEnd] = None
-) -> Tuple[Optional[datetime.date], Optional[datetime.date]]:
+    string: str, fye: FiscalYearEnd | None = None
+) -> tuple[datetime.date | None, datetime.date | None]:
     """Parse a date.
 
     Example of supported formats:
@@ -297,7 +297,7 @@ def month_offset(date: datetime.date, months: int) -> datetime.date:
     return date.replace(year=date.year + year_delta, month=month + 1)
 
 
-def parse_fye_string(fye: str) -> Optional[FiscalYearEnd]:
+def parse_fye_string(fye: str) -> FiscalYearEnd | None:
     """Parse a string option for the fiscal year end.
 
     Args:
@@ -311,8 +311,8 @@ def parse_fye_string(fye: str) -> Optional[FiscalYearEnd]:
 
 
 def get_fiscal_period(
-    year: int, fye: Optional[FiscalYearEnd], quarter: Optional[int] = None
-) -> Tuple[Optional[datetime.date], Optional[datetime.date]]:
+    year: int, fye: FiscalYearEnd | None, quarter: int | None = None
+) -> tuple[datetime.date | None, datetime.date | None]:
     """Calculates fiscal periods
 
     Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.

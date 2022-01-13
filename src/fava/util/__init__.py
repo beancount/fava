@@ -1,4 +1,6 @@
 """Some small utility functions."""
+from __future__ import annotations
+
 import functools
 import itertools
 import logging
@@ -9,12 +11,9 @@ import unicodedata
 from pathlib import Path
 from typing import Any
 from typing import Callable
-from typing import Dict
 from typing import Generator
 from typing import Iterable
 from typing import Iterator
-from typing import List
-from typing import Tuple
 from typing import TypeVar
 
 from flask import abort
@@ -45,11 +44,11 @@ Item = TypeVar("Item")
 
 def listify(
     func: Callable[..., Generator[Item, None, None]]
-) -> Callable[..., List[Item]]:
+) -> Callable[..., list[Item]]:
     """Decorator to make generator function return a list."""
 
     @functools.wraps(func)
-    def _wrapper(*args: Any, **kwargs: Any) -> List[Item]:
+    def _wrapper(*args: Any, **kwargs: Any) -> list[Item]:
         return list(func(*args, **kwargs))
 
     return _wrapper
@@ -71,14 +70,14 @@ def timefunc(
     return _wrapper
 
 
-def pairwise(iterable: Iterable[Item]) -> Iterator[Tuple[Item, Item]]:
+def pairwise(iterable: Iterable[Item]) -> Iterator[tuple[Item, Item]]:
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
     left, right = itertools.tee(iterable)
     next(right, None)
     return zip(left, right)
 
 
-def next_key(basekey: str, keys: Dict[str, Any]) -> str:
+def next_key(basekey: str, keys: dict[str, Any]) -> str:
     """Returns the next unused key for basekey in the supplied dictionary.
 
     The first try is `basekey`, followed by `basekey-2`, `basekey-3`, etc
@@ -111,7 +110,7 @@ def slugify(string: str) -> str:
     return string
 
 
-def simple_wsgi(_: Any, start_response: Any) -> List[bytes]:
+def simple_wsgi(_: Any, start_response: Any) -> list[bytes]:
     """A simple wsgi app that always returns an empty response."""
     start_response("200 OK", [("Content-Type", "text/html")])
     return [b""]
