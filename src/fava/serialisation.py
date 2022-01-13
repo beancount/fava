@@ -7,15 +7,13 @@ representation of the entry is provided.
 
 This is not intended to work well enough for full roundtrips yet.
 """
+from __future__ import annotations
+
 import datetime
 import functools
 import re
 from typing import Any
-from typing import FrozenSet
 from typing import NamedTuple
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.data import Balance
@@ -34,7 +32,7 @@ from fava.util.date import parse_date
 
 def extract_tags_links(
     string: str,
-) -> Tuple[Optional[str], FrozenSet[str], FrozenSet[str]]:
+) -> tuple[str | None, frozenset[str], frozenset[str]]:
     """Extract tags and links from a narration string.
 
     Args:
@@ -57,7 +55,7 @@ def extract_tags_links(
 
 
 @functools.singledispatch
-def serialise(entry: Union[Directive, Posting]) -> Any:
+def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
     assert isinstance(entry, NamedTuple), f"Unsupported object {entry}"
     ret = entry._asdict()  # type: ignore

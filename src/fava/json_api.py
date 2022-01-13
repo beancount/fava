@@ -3,6 +3,8 @@
 This module contains the url endpoints of the JSON API that is used by the web
 interface for asynchronous functionality.
 """
+from __future__ import annotations
+
 import functools
 import os
 import shutil
@@ -12,7 +14,6 @@ from typing import Any
 from typing import Callable
 from typing import cast
 from typing import Dict
-from typing import List
 
 from flask import Blueprint
 from flask import get_template_attribute
@@ -63,8 +64,8 @@ def get_api_endpoint(func: Callable[[], Any]) -> Callable[[], Any]:
 
 
 def put_api_endpoint(
-    func: Callable[[Dict[str, Any]], Any]
-) -> Callable[[Dict[str, Any]], Any]:
+    func: Callable[[dict[str, Any]], Any]
+) -> Callable[[dict[str, Any]], Any]:
     """Register a PUT endpoint."""
 
     @json_api.route(f"/{func.__name__}", methods=["PUT"])
@@ -104,7 +105,7 @@ def errors() -> int:
 
 
 @get_api_endpoint
-def payee_accounts() -> List[str]:
+def payee_accounts() -> list[str]:
     """Rank accounts for the given payee."""
     payee = request.args.get("payee", "")
     return g.ledger.attributes.payee_accounts(payee)
@@ -130,7 +131,7 @@ def query_result() -> Any:
 
 
 @get_api_endpoint
-def extract() -> List[Any]:
+def extract() -> list[Any]:
     """Extract entries using the ingest framework."""
     entries = g.ledger.ingest.extract(
         request.args.get("filename"),  # type: ignore
@@ -193,7 +194,7 @@ def payee_transaction() -> Any:
 
 
 @put_api_endpoint
-def source(request_data: Dict[str, Any]) -> str:
+def source(request_data: dict[str, Any]) -> str:
     """Write one of the source files and return the updated sha256sum."""
     return g.ledger.file.set_source(
         request_data.get("file_path"),  # type: ignore
@@ -203,7 +204,7 @@ def source(request_data: Dict[str, Any]) -> str:
 
 
 @put_api_endpoint
-def source_slice(request_data: Dict[str, Any]) -> str:
+def source_slice(request_data: dict[str, Any]) -> str:
     """Write an entry source slice and return the updated sha256sum."""
     return g.ledger.file.save_entry_slice(
         request_data.get("entry_hash"),  # type: ignore
@@ -213,7 +214,7 @@ def source_slice(request_data: Dict[str, Any]) -> str:
 
 
 @put_api_endpoint
-def format_source(request_data: Dict[str, Any]) -> str:
+def format_source(request_data: dict[str, Any]) -> str:
     """Format beancount file."""
     return align(request_data["source"], g.ledger.fava_options.currency_column)
 
@@ -272,7 +273,7 @@ def add_document() -> Any:
 
 
 @put_api_endpoint
-def attach_document(request_data: Dict[str, Any]) -> str:
+def attach_document(request_data: dict[str, Any]) -> str:
     """Attach a document to an entry."""
     filename = request_data["filename"]
     entry_hash = request_data["entry_hash"]
@@ -281,7 +282,7 @@ def attach_document(request_data: Dict[str, Any]) -> str:
 
 
 @put_api_endpoint
-def add_entries(request_data: Dict[str, Any]) -> str:
+def add_entries(request_data: dict[str, Any]) -> str:
     """Add multiple entries."""
     try:
         entries = [deserialise(entry) for entry in request_data["entries"]]

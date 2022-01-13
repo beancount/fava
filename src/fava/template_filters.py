@@ -2,14 +2,14 @@
 
 All functions in this module will be automatically added as template filters.
 """
+from __future__ import annotations
+
 import datetime
 import os
 import re
 import unicodedata
 from typing import Any
-from typing import List
 from typing import MutableMapping
-from typing import Optional
 
 import flask
 from beancount.core import compare
@@ -29,7 +29,7 @@ from fava.util.date import Interval
 
 
 def remove_keys(
-    _dict: Optional[MutableMapping[str, Any]], keys: List[str]
+    _dict: MutableMapping[str, Any] | None, keys: list[str]
 ) -> MutableMapping[str, Any]:
     """Remove keys from a dictionary."""
     if not _dict:
@@ -41,7 +41,7 @@ def remove_keys(
 
 
 def cost_or_value(
-    inventory: Inventory, date: Optional[datetime.date] = None
+    inventory: Inventory, date: datetime.date | None = None
 ) -> Any:
     """Get the cost or value of an inventory."""
     return cost_or_value_without_context(
@@ -51,7 +51,7 @@ def cost_or_value(
 
 def format_currency(
     value: Decimal,
-    currency: Optional[str] = None,
+    currency: str | None = None,
     show_if_zero: bool = False,
     invert: bool = False,
 ) -> str:

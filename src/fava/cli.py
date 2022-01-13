@@ -1,7 +1,8 @@
 """The command-line interface for Fava."""
+from __future__ import annotations
+
 import errno
 import os
-from typing import Tuple
 
 import click
 from cheroot.wsgi import Server
@@ -55,7 +56,7 @@ from fava.util import simple_wsgi
 )
 @click.version_option(version=__version__, prog_name="fava")
 def main(
-    filenames: Tuple[str],
+    filenames: tuple[str],
     port: int,
     host: str,
     prefix: str,

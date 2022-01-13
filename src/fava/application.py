@@ -11,14 +11,13 @@ Attributes:
     app: An instance of :class:`flask.Flask`, this is Fava's WSGI application.
 
 """
+from __future__ import annotations
+
 import datetime
 import functools
 import threading
 from io import BytesIO
 from typing import Any
-from typing import Dict
-from typing import List
-from typing import Optional
 
 import flask
 import markdown2  # type: ignore
@@ -103,9 +102,9 @@ def ledger_slug(ledger: FavaLedger) -> str:
     return title_slug or slugify(ledger.beancount_file_path)
 
 
-def update_ledger_slugs(ledgers: List[FavaLedger]) -> None:
+def update_ledger_slugs(ledgers: list[FavaLedger]) -> None:
     """Update the dictionary mapping URL slugs to ledgers."""
-    ledgers_by_slug: Dict[str, FavaLedger] = {}
+    ledgers_by_slug: dict[str, FavaLedger] = {}
     for ledger in ledgers:
         slug = ledger_slug(ledger)
         unique_key = next_key(slug, ledgers_by_slug)
@@ -124,7 +123,7 @@ def _load_file() -> None:
     update_ledger_slugs(ledgers)
 
 
-def get_locale() -> Optional[str]:
+def get_locale() -> str | None:
     """Get locale.
 
     Returns:
@@ -147,7 +146,7 @@ app.add_template_filter(serialise)
 
 
 @app.url_defaults
-def _inject_filters(endpoint: str, values: Dict[str, Any]) -> None:
+def _inject_filters(endpoint: str, values: dict[str, Any]) -> None:
     if "bfile" not in values and app.url_map.is_endpoint_expecting(
         endpoint, "bfile"
     ):
@@ -202,7 +201,7 @@ app.add_template_global(translations, "translations")
 
 
 @app.context_processor
-def template_context() -> Dict[str, Any]:
+def template_context() -> dict[str, Any]:
     """Inject variables into the template context."""
     return dict(ledger=g.ledger)
 
@@ -240,9 +239,7 @@ def _incognito(response: flask.wrappers.Response) -> flask.wrappers.Response:
 
 
 @app.url_value_preprocessor
-def _pull_beancount_file(
-    _: Optional[str], values: Optional[Dict[str, str]]
-) -> None:
+def _pull_beancount_file(_: str | None, values: dict[str, str] | None) -> None:
     g.beancount_file_slug = values.pop("bfile", None) if values else None
     with LOAD_FILE_LOCK:
         if not app.config.get("LEDGERS"):
