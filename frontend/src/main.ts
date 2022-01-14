@@ -97,7 +97,7 @@ router.on("page-loaded", () => {
 function doPoll(): void {
   get("changed").then((changed) => {
     if (changed) {
-      if (store_get(favaOptions)["auto-reload"]) {
+      if (store_get(favaOptions).auto_reload) {
         router.reload();
       } else {
         document.getElementById("reload-page")?.classList.remove("hidden");
