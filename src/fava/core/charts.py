@@ -1,6 +1,8 @@
 """Provide data suitable for Fava's charts. """
 from __future__ import annotations
 
+from dataclasses import fields
+from dataclasses import is_dataclass
 from datetime import date
 from datetime import timedelta
 from typing import Any
@@ -63,6 +65,8 @@ class FavaJSONEncoder(JSONEncoder):
             return list(o)
         if isinstance(o, Pattern):
             return o.pattern
+        if is_dataclass(o):
+            return {field.name: getattr(o, field.name) for field in fields(o)}
         try:
             return JSONEncoder.default(self, o)
         except TypeError:

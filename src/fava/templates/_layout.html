@@ -58,7 +58,7 @@
         'baseURL': url_for('index'),
         'currencies': ledger.attributes.currencies,
         'errors': ledger.errors|length,
-        'favaOptions': ledger.fava_options.asdict(),
+        'favaOptions': ledger.fava_options,
         'incognito': config.get('INCOGNITO', False),
         'have_excel': config.get('HAVE_EXCEL', False),
         'links': ledger.attributes.links,
