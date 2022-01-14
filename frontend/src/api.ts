@@ -70,7 +70,7 @@ interface GetAPIParams {
   context: { entry_hash: string };
   errors: undefined;
   extract: { filename: string; importer: string };
-  move: { filename: string; account: string; newName: string };
+  move: { filename: string; account: string; new_name: string };
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
   query_result: Filters & { query_string: string };
@@ -104,10 +104,10 @@ export async function get<T extends keyof GetAPIParams>(
 export async function moveDocument(
   filename: string,
   account: string,
-  newName: string
+  new_name: string
 ): Promise<boolean> {
   try {
-    const msg = await get("move", { filename, account, newName });
+    const msg = await get("move", { filename, account, new_name });
     notify(msg);
     return true;
   } catch (error) {

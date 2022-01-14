@@ -6,6 +6,7 @@ import werkzeug.routing
 import werkzeug.urls
 from beancount import __version__ as beancount_version
 from flask import url_for
+from flask.testing import FlaskClient
 
 from fava import __version__ as fava_version
 from fava.application import REPORTS
@@ -27,7 +28,7 @@ FILTER_COMBINATIONS = [
         for filters in FILTER_COMBINATIONS
     ],
 )
-def test_reports(app, test_client, report, filters):
+def test_reports(app, test_client: FlaskClient, report, filters):
     """The standard reports work without error (content isn't checked here)."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -38,7 +39,7 @@ def test_reports(app, test_client, report, filters):
 
 
 @pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
-def test_account_page(app, test_client, filters):
+def test_account_page(app, test_client: FlaskClient, filters):
     """Account page works without error."""
     for subreport in ["journal", "balances", "changes"]:
         with app.test_request_context("/long-example/"):
@@ -58,7 +59,7 @@ def test_account_page(app, test_client, filters):
     "url,return_code",
     [("/", 302), ("/asdfasdf/", 404), ("/asdfasdf/asdfasdf/", 404)],
 )
-def test_urls(test_client, url, return_code):
+def test_urls(test_client: FlaskClient, url, return_code):
     """Some URLs return a 404."""
     result = test_client.get(url)
     assert result.status_code == return_code
@@ -103,7 +104,7 @@ def test_urls(test_client, url, return_code):
     ],
 )
 def test_default_path_redirection(
-    app, test_client, url, option, expect, monkeypatch
+    app, test_client: FlaskClient, url, option, expect, monkeypatch
 ):
     """Test that default-page option redirects as expected."""
     with app.test_request_context("/long-example/"):
@@ -129,7 +130,9 @@ def test_default_path_redirection(
         ("/", "/jump?foo=", "/"),
     ],
 )
-def test_jump_handler(app, test_client, referer, jump_link, expect):
+def test_jump_handler(
+    app, test_client: FlaskClient, referer, jump_link, expect
+):
     """Test /jump handler correctly redirect to the right location.
 
     Note: according to RFC 2616, Location: header should use an absolute URL.
@@ -142,7 +145,7 @@ def test_jump_handler(app, test_client, referer, jump_link, expect):
         assert get_url == expect_url
 
 
-def test_help_ages(app, test_client):
+def test_help_ages(app, test_client: FlaskClient):
     """Help pages."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -159,7 +162,7 @@ def test_help_ages(app, test_client):
         assert result.status_code == 404
 
 
-def test_query_download(app, test_client):
+def test_query_download(app, test_client: FlaskClient):
     """Download query result."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -170,7 +173,7 @@ def test_query_download(app, test_client):
         assert result.status_code == 200
 
 
-def test_incognito(app, test_client):
+def test_incognito(app, test_client: FlaskClient):
     """Numbers get obfuscated in incognito mode."""
     app.config["INCOGNITO"] = True
     with app.test_request_context("/long-example/"):
@@ -184,7 +187,7 @@ def test_incognito(app, test_client):
     app.config["INCOGNITO"] = False
 
 
-def test_download_journal(app, test_client, snapshot) -> None:
+def test_download_journal(app, test_client: FlaskClient, snapshot) -> None:
     """The currently filtered journal can be downloaded."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -207,7 +210,7 @@ def test_static_url(app) -> None:
     assert "?mtime=" in url
 
 
-def test_load_extension_reports(app, test_client):
+def test_load_extension_reports(app, test_client: FlaskClient):
     """Extension can register reports."""
     with app.test_request_context("/extension-report-beancount-file/"):
         app.preprocess_request()

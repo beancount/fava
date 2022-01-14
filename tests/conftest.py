@@ -7,6 +7,7 @@ from pprint import pformat
 from typing import Any
 from typing import Callable
 from typing import Counter
+from typing import Iterable
 
 import pytest
 from beancount.loader import load_string
@@ -90,12 +91,12 @@ def load_doc(request):
 
 
 @pytest.fixture
-def small_example_ledger():
+def small_example_ledger() -> FavaLedger:
     return FavaLedger(data_file("example.beancount"))
 
 
 @pytest.fixture
-def example_ledger():
+def example_ledger() -> Iterable[FavaLedger]:
     yield EXAMPLE_LEDGER
     EXAMPLE_LEDGER.filter(account=None, filter=None, time=None)
 

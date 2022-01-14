@@ -56,7 +56,8 @@ class FavaJSONEncoder(JSONEncoder):
         kwargs["sort_keys"] = True
         super().__init__(*args, **kwargs)
 
-    def default(self, o: Any) -> Any:  # pylint: disable=method-hidden
+    def default(self, o: Any) -> Any:
+        # pylint: disable=too-many-return-statements
         if isinstance(o, Decimal):
             return float(o)
         if isinstance(o, (date, Amount, Position)):

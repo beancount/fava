@@ -8,13 +8,26 @@ from typing import Any
 
 import pytest
 from flask import url_for
+from flask.testing import FlaskClient
 
 from fava.context import g
 from fava.core.charts import PRETTY_ENCODER
 from fava.core.misc import align
+from fava.json_api import validate_func_arguments
+from fava.json_api import ValidationError
 
 
 dumps = PRETTY_ENCODER.encode
+
+
+def test_validate_get_args() -> None:
+    def func(test: str):
+        assert test and isinstance(test, str)
+
+    validator = validate_func_arguments(func)
+    with pytest.raises(ValidationError):
+        validator({"notest": "value"})
+    assert validator({"test": "value"}) == ["value"]
 
 
 def assert_api_error(response, msg: str | None = None) -> None:
@@ -22,7 +35,7 @@ def assert_api_error(response, msg: str | None = None) -> None:
     assert response.status_code == 200
     assert not response.json["success"]
     if msg:
-        assert msg in response.json["error"]
+        assert msg == response.json["error"]
 
 
 def assert_api_success(response, data: Any | None = None) -> None:
@@ -33,16 +46,18 @@ def assert_api_success(response, data: Any | None = None) -> None:
         assert data == response.json["data"]
 
 
-def test_api_changed(app, test_client) -> None:
+def test_api_changed(app, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.changed")
+        url = url_for("json_api.get_changed")
 
     response = test_client.get(url)
     assert_api_success(response, False)
 
 
-def test_api_add_document(app, test_client, tmp_path, monkeypatch) -> None:
+def test_api_add_document(
+    app, test_client: FlaskClient, tmp_path, monkeypatch
+) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 
@@ -52,7 +67,7 @@ def test_api_add_document(app, test_client, tmp_path, monkeypatch) -> None:
             "account": "Expenses:Food:Restaurant",
             "file": (BytesIO(b"asdfasdf"), "2015-12-12 test"),
         }
-        url = url_for("json_api.add_document")
+        url = url_for("json_api.put_add_document")
 
         response = test_client.put(url)
         assert response.status_code == 400
@@ -70,37 +85,39 @@ def test_api_add_document(app, test_client, tmp_path, monkeypatch) -> None:
         assert_api_error(response, f"{filename} already exists.")
 
 
-def test_api_errors(app, test_client) -> None:
+def test_api_errors(app, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.errors")
+        url = url_for("json_api.get_errors")
 
     response = test_client.get(url)
     assert_api_success(response, 0)
 
 
-def test_api_payee_accounts(app, test_client) -> None:
+def test_api_payee_accounts(app, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.payee_accounts", payee="test")
+        url = url_for("json_api.get_payee_accounts", payee="test")
 
     response = test_client.get(url)
     assert_api_success(response, [])
 
 
-def test_api_move(app, test_client) -> None:
+def test_api_move(app, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.move")
+        url = url_for("json_api.get_move")
 
     response = test_client.get(url)
-    assert_api_error(response)
+    assert_api_error(
+        response, "Invalid API request: Parameter `account` is missing."
+    )
 
 
-def test_api_source_put(app, test_client) -> None:
+def test_api_source_put(app, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.source")
+        url = url_for("json_api.put_source")
         path = g.ledger.beancount_file_path
 
     # test bad request
@@ -145,10 +162,10 @@ def test_api_source_put(app, test_client) -> None:
         assert file_handle.read() == payload
 
 
-def test_api_format_source(app, test_client) -> None:
+def test_api_format_source(app, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.format_source")
+        url = url_for("json_api.put_format_source")
         path = g.ledger.beancount_file_path
 
     with open(path, encoding="utf-8") as file_handle:
@@ -162,14 +179,16 @@ def test_api_format_source(app, test_client) -> None:
     assert_api_success(response, align(payload, 61))
 
 
-def test_api_format_source_options(app, test_client, monkeypatch) -> None:
+def test_api_format_source_options(
+    app, test_client: FlaskClient, monkeypatch
+) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         path = g.ledger.beancount_file_path
         with open(path, encoding="utf-8") as file_handle:
             payload = file_handle.read()
 
-        url = url_for("json_api.format_source")
+        url = url_for("json_api.put_format_source")
 
         monkeypatch.setattr(g.ledger.fava_options, "currency_column", 90)
 
@@ -181,7 +200,7 @@ def test_api_format_source_options(app, test_client, monkeypatch) -> None:
         assert_api_success(response, align(payload, 90))
 
 
-def test_api_add_entries(app, test_client, tmp_path, monkeypatch):
+def test_api_add_entries(app, test_client: FlaskClient, tmp_path, monkeypatch):
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         test_file = tmp_path / "test_file"
@@ -237,7 +256,7 @@ def test_api_add_entries(app, test_client, tmp_path, monkeypatch):
                 },
             ]
         }
-        url = url_for("json_api.add_entries")
+        url = url_for("json_api.put_add_entries")
 
         response = test_client.put(
             url, data=dumps(data), content_type="application/json"
@@ -270,11 +289,27 @@ def test_api_add_entries(app, test_client, tmp_path, monkeypatch):
         ("select sum(day)", "43558"),
     ],
 )
-def test_api_query_result(query_string, result_str, app, test_client) -> None:
+def test_api_query_result(
+    query_string, result_str, app, test_client: FlaskClient
+) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        url = url_for("json_api.query_result", query_string=query_string)
+        url = url_for("json_api.get_query_result", query_string=query_string)
 
     response = test_client.get(url)
     assert response.status_code == 200
     assert result_str in response.get_data(True)
+
+
+def test_api_query_result_filters(app, test_client: FlaskClient) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+        url = url_for(
+            "json_api.get_query_result",
+            query_string="select sum(day)",
+            time="2021",
+        )
+
+    response = test_client.get(url)
+    assert response.status_code == 200
+    assert "6882" in response.get_data(True)
