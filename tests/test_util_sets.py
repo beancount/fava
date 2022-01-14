@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from fava.util.sets import add_to_set
 
 

@@ -4,14 +4,14 @@ It goes through all entries with a `document` metadata-key, and tries to
 associate them to Document entries. For transactions, it then also adds a link
 from the transaction to documents, as well as the "#linked" tag.
 """
+from __future__ import annotations
+
 from collections import defaultdict
 from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
 from typing import Any
-from typing import List
-from typing import Tuple
 
 from beancount.core.compare import hash_entry
 from beancount.core.data import Document
@@ -32,7 +32,7 @@ __plugins__ = ["link_documents"]
 
 def link_documents(
     entries: Entries, _: Any
-) -> Tuple[Entries, List[DocumentError]]:
+) -> tuple[Entries, list[DocumentError]]:
     """Link entries to documents."""
 
     errors = []

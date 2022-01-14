@@ -1,4 +1,6 @@
 """Tests for Fava's main Flask app."""
+from __future__ import annotations
+
 import pytest
 import werkzeug.routing
 import werkzeug.urls

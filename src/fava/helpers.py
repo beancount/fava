@@ -1,4 +1,6 @@
 """Exceptions and module base class."""
+from __future__ import annotations
+
 from typing import Any
 from typing import NamedTuple
 

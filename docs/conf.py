@@ -1,4 +1,5 @@
 # pylint: disable=invalid-name,missing-docstring,redefined-builtin
+from __future__ import annotations
 
 extensions = [
     "sphinx.ext.extlinks",

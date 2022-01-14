@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from datetime import date
 
 from fava.util.ranking import ExponentialDecayRanker

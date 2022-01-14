@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from fava.core.attributes import get_active_years
 from fava.util.date import FiscalYearEnd
 

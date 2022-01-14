@@ -1,4 +1,6 @@
 """Tests for the extension system."""
+from __future__ import annotations
+
 from .conftest import data_file
 from fava.core import FavaLedger
 

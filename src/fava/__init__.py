@@ -1,4 +1,6 @@
 """Fava – A web interface for Beancount."""
+from __future__ import annotations
+
 from pkg_resources import DistributionNotFound
 from pkg_resources import get_distribution
 

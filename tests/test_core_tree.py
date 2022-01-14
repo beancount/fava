@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from beancount.core import realization
 from beancount.ops import summarize
 

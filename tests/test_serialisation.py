@@ -1,8 +1,7 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 import datetime
-from typing import FrozenSet
-from typing import Optional
-from typing import Tuple
 
 import pytest
 from beancount.core.amount import A
@@ -101,7 +100,7 @@ def test_serialise() -> None:
     ],
 )
 def test_serialise_posting(
-    amount_cost_price: Tuple[Amount, Optional[CostSpec], Amount],
+    amount_cost_price: tuple[Amount, CostSpec | None, Amount],
     amount_string: str,
 ) -> None:
     pos = Posting("Assets", *amount_cost_price, None, None)
@@ -125,7 +124,7 @@ def test_serialise_posting(
     ],
 )
 def test_deserialise_posting(
-    amount_cost_price: Tuple[Amount, Optional[CostSpec], Amount],
+    amount_cost_price: tuple[Amount, CostSpec | None, Amount],
     amount_string: str,
 ) -> None:
     """Roundtrip is not possible here due to total price or calculation."""
@@ -252,7 +251,7 @@ def test_deserialise_note() -> None:
 
 def test_extract_tags_links() -> None:
     assert extract_tags_links("notag") == ("notag", frozenset(), frozenset())
-    extracted1: Tuple[str, FrozenSet[str], FrozenSet[str]] = (
+    extracted1: tuple[str, frozenset[str], frozenset[str]] = (
         "Some text",
         frozenset(["tag"]),
         frozenset(),

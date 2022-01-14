@@ -1,8 +1,8 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from datetime import date
 from datetime import datetime
-from typing import Optional
-from typing import Tuple
 from unittest import mock
 
 import pytest
@@ -138,7 +138,7 @@ def test_substitute(string: str, output: str) -> None:
     ],
 )
 def test_fiscal_substitute(
-    fye: str, test_date: str, string: str, output: Optional[str]
+    fye: str, test_date: str, string: str, output: str | None
 ) -> None:
     fye = parse_fye_string(fye)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
@@ -244,7 +244,7 @@ def test_number_of_days_in_period2() -> None:
         ("2018-01-12", -13, "2016-12-12"),
     ],
 )
-def test_month_offset(date_input: str, offset: int, expected: Optional[str]):
+def test_month_offset(date_input: str, offset: int, expected: str | None):
     start_date = _to_date(date_input)
     if expected is None:
         with pytest.raises(ValueError):
@@ -284,8 +284,8 @@ def test_month_offset(date_input: str, offset: int, expected: Optional[str]):
 )
 def test_get_fiscal_period(
     year: int,
-    quarter: Optional[int],
-    fye: Optional[str],
+    quarter: int | None,
+    fye: str | None,
     expect_start: str,
     expect_end: str,
 ) -> None:
@@ -306,8 +306,6 @@ def test_get_fiscal_period(
         ("02-29", None),
     ],
 )
-def test_parse_fye_string(
-    fye: str, expected: Optional[Tuple[int, int]]
-) -> None:
+def test_parse_fye_string(fye: str, expected: tuple[int, int] | None) -> None:
     fye_tuple = parse_fye_string(fye)
     assert fye_tuple == expected

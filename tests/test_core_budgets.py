@@ -1,4 +1,6 @@
 """Fava's budget syntax."""
+from __future__ import annotations
+
 from datetime import date
 
 from beancount.core.number import D

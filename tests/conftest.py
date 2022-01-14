@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 import os
 from pathlib import Path
 from pprint import pformat

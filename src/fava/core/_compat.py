@@ -1,5 +1,6 @@
 """Beancount V2/V3 compatibility."""
 # pylint: disable=unused-import
+from __future__ import annotations
 
 try:
     from beancount.core.flags import FLAG_UNREALIZED

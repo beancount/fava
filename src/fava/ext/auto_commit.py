@@ -5,6 +5,8 @@ really does hooks at the moment, works.
 """
 # mypy: ignore-errors
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 import os
 import subprocess
 

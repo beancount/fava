@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from decimal import Decimal
 
 from flask import get_template_attribute

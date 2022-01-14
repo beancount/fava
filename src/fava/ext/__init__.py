@@ -1,13 +1,11 @@
 """Fava's extension system."""
+from __future__ import annotations
+
 import ast
 import importlib
 import inspect
 import sys
 from typing import Any
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Type
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Directive
@@ -29,13 +27,11 @@ class FavaExtensionBase:
     discover all subclasses of this class in the specified modules.
     """
 
-    report_title: Optional[str] = None
+    report_title: str | None = None
 
     config: Any
 
-    def __init__(
-        self, ledger: "FavaLedger", config: Optional[str] = None
-    ) -> None:
+    def __init__(self, ledger: FavaLedger, config: str | None = None) -> None:
         """
         Base init function.
 
@@ -68,7 +64,7 @@ class FavaExtensionBase:
 
 def find_extensions(
     base_path: str, name: str
-) -> Tuple[List[Type[FavaExtensionBase]], List[FavaExtensionError]]:
+) -> tuple[list[type[FavaExtensionBase]], list[FavaExtensionError]]:
     """Find extensions in a module.
 
     Args:

@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from babel.core import Locale  # type: ignore
 from beancount.core.number import D
 

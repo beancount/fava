@@ -3,8 +3,7 @@
 It looks through all Document entries that were added by Beancount
 automatically through file discovery and adds the tag "#discovered".
 """
-from typing import List
-from typing import Tuple
+from __future__ import annotations
 
 from beancount.core.data import Document
 from beancount.core.data import Entries
@@ -18,7 +17,7 @@ __plugins__ = ["tag_discovered_documents"]
 
 def tag_discovered_documents(
     entries: Entries, options_map: BeancountOptions
-) -> Tuple[Entries, List[BeancountError]]:
+) -> tuple[Entries, list[BeancountError]]:
     """Tag automatically added documents."""
     if not options_map["documents"]:  # pragma: no cover
         return entries, []

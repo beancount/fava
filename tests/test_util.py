@@ -1,4 +1,6 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 

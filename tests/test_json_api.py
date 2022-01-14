@@ -1,9 +1,10 @@
 # pylint: disable=missing-docstring
+from __future__ import annotations
+
 import hashlib
 from io import BytesIO
 from pathlib import Path
 from typing import Any
-from typing import Optional
 
 import pytest
 from flask import url_for
@@ -16,7 +17,7 @@ from fava.core.misc import align
 dumps = PRETTY_ENCODER.encode
 
 
-def assert_api_error(response, msg: Optional[str] = None) -> None:
+def assert_api_error(response, msg: str | None = None) -> None:
     """Asserts that the response errored and contains the message."""
     assert response.status_code == 200
     assert not response.json["success"]
@@ -24,7 +25,7 @@ def assert_api_error(response, msg: Optional[str] = None) -> None:
         assert msg in response.json["error"]
 
 
-def assert_api_success(response, data: Optional[Any] = None) -> None:
+def assert_api_success(response, data: Any | None = None) -> None:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == 200
     assert response.json["success"]

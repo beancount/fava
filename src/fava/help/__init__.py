@@ -1,6 +1,7 @@
 """
 List of all available help pages.
 """
+from __future__ import annotations
 
 HELP_PAGES = {
     "_index": "Index",
