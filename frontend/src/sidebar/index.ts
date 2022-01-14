@@ -11,7 +11,8 @@ export function updateSidebar(): void {
     const href = el.getAttribute("href");
     if (
       !el.hasAttribute("data-remote") &&
-      href?.includes(window.location.pathname)
+      href?.includes(window.location.pathname) &&
+      !el.matches(".submenu a")
     ) {
       el.classList.add("selected");
     }
