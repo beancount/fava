@@ -8,7 +8,6 @@ from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
-from typing import Any
 from typing import Iterable
 
 from beancount import loader  # type: ignore
@@ -477,24 +476,41 @@ class FavaLedger:
                 f'No entry found for hash "{entry_hash}"'
             ) from exc
 
-    def context(self, entry_hash: str) -> tuple[Directive, Any, str, str]:
+    def context(
+        self, entry_hash: str
+    ) -> tuple[
+        Directive,
+        dict[str, list[str]] | None,
+        dict[str, list[str]] | None,
+        str,
+        str,
+    ]:
         """Context for an entry.
 
         Arguments:
             entry_hash: Hash of entry.
 
         Returns:
-            A tuple ``(entry, balances, source_slice, sha256sum)`` of the
+            A tuple ``(entry, before, after, source_slice, sha256sum)`` of the
             (unique) entry with the given ``entry_hash``. If the entry is a
-            Balance or Transaction then ``balances`` is a 2-tuple containing
+            Balance or Transaction then ``before`` and ``after`` contain
             the balances before and after the entry of the affected accounts.
         """
         entry = self.get_entry(entry_hash)
-        balances = None
-        if isinstance(entry, (Balance, Transaction)):
-            balances = compute_entry_context(self.all_entries, entry)
         source_slice, sha256sum = get_entry_slice(entry)
-        return entry, balances, source_slice, sha256sum
+        if not isinstance(entry, (Balance, Transaction)):
+            return entry, None, None, source_slice, sha256sum
+
+        balances = compute_entry_context(self.all_entries, entry)
+        before = {
+            acc: [pos.to_string() for pos in sorted(inv)]
+            for acc, inv in balances[0].items()
+        }
+        after = {
+            acc: [pos.to_string() for pos in sorted(inv)]
+            for acc, inv in balances[1].items()
+        }
+        return entry, before, after, source_slice, sha256sum
 
     def commodity_pairs(self) -> list[tuple[str, str]]:
         """List pairs of commodities.

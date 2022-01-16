@@ -5,7 +5,7 @@
   import { arc } from "d3-shape";
 
   import { ctx, formatPercentage } from "../format";
-  import { urlFor } from "../helpers";
+  import { urlForAccount } from "../helpers";
   import router from "../router";
 
   import { sunburstScale } from "./helpers";
@@ -63,7 +63,7 @@
   <text class="balance" dy="1.2em" text-anchor="middle">{currentBalance}</text>
   {#each leaves as d}
     <path
-      on:click={() => router.navigate(urlFor(`account/${d.data.account}/`))}
+      on:click={() => router.navigate(urlForAccount(d.data.account))}
       on:mouseover={() => {
         current = d;
       }}

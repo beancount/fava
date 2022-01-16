@@ -3,6 +3,7 @@
   import SliceEditor from "../editor/SliceEditor.svelte";
   import { urlHash } from "../stores";
 
+  import EntryContext from "./EntryContext.svelte";
   import ModalBase from "./ModalBase.svelte";
 
   $: shown = $urlHash.startsWith("context");
@@ -16,7 +17,11 @@
       Loading entry context...
     {:then response}
       {#if response}
-        {@html response.content}
+        <EntryContext
+          entry={response.entry}
+          balances_before={response.balances_before}
+          balances_after={response.balances_after}
+        />
         <SliceEditor
           {entry_hash}
           slice={response.slice}

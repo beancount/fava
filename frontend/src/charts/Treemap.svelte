@@ -3,7 +3,7 @@
   import type { HierarchyRectangularNode } from "d3-hierarchy";
 
   import { ctx, formatPercentage } from "../format";
-  import { urlFor } from "../helpers";
+  import { urlForAccount } from "../helpers";
   import router from "../router";
 
   import { treemapScale } from "./helpers";
@@ -63,7 +63,7 @@
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
       <text
         use:setVisibility={d}
-        on:click={() => router.navigate(urlFor(`account/${d.data.account}/`))}
+        on:click={() => router.navigate(urlForAccount(d.data.account))}
         dy=".5em"
         x={(d.x1 - d.x0) / 2}
         y={(d.y1 - d.y0) / 2}

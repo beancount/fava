@@ -1,6 +1,6 @@
 <script lang="ts">
   import AutocompleteInput from "../AutocompleteInput.svelte";
-  import { urlFor } from "../helpers";
+  import { urlForAccount } from "../helpers";
   import { _ } from "../i18n";
   import router from "../router";
   import { accounts } from "../stores";
@@ -9,7 +9,7 @@
 
   function select(ev: CustomEvent<HTMLInputElement>) {
     if (value) {
-      router.navigate(urlFor(`account/${value}/`));
+      router.navigate(urlForAccount(value));
       ev.detail.blur();
       value = "";
     }

@@ -5,6 +5,7 @@ import {
   boolean,
   constant,
   defaultValue,
+  number,
   object,
   optional_string,
   record,
@@ -34,7 +35,7 @@ export function emptyPosting(): Posting {
   };
 }
 
-export type EntryMetadata = Record<string, string | boolean>;
+export type EntryMetadata = Record<string, string | boolean | number>;
 export type EntryTypeName = "Balance" | "Note" | "Transaction";
 
 abstract class EntryBase {
@@ -55,7 +56,7 @@ const validatorBase = {
   type: string,
   date: string,
   meta: record(
-    defaultValue(union(boolean, string), "Unsupported metadata value")
+    defaultValue(union(boolean, number, string), "Unsupported metadata value")
   ),
 };
 

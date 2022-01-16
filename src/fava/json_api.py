@@ -22,7 +22,6 @@ from typing import Mapping
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
-from flask import render_template
 from flask import request
 from flask.wrappers import Response
 
@@ -33,6 +32,7 @@ from fava.core.misc import align
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
+
 
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
@@ -191,7 +191,9 @@ def get_extract(filename: str, importer: str) -> list[Any]:
 class Context:
     """Context for an entry."""
 
-    content: str
+    entry: Any
+    balances_before: dict[str, list[str]] | None
+    balances_after: dict[str, list[str]] | None
     sha256sum: str
     slice: str
 
@@ -199,9 +201,8 @@ class Context:
 @api_endpoint
 def get_context(entry_hash: str) -> Context:
     """Entry context."""
-    entry, balances, slice_, sha256sum = g.ledger.context(entry_hash)
-    content = render_template("_context.html", entry=entry, balances=balances)
-    return Context(content, sha256sum, slice_)
+    entry, before, after, slice_, sha256sum = g.ledger.context(entry_hash)
+    return Context(serialise(entry), before, after, sha256sum, slice_)
 
 
 @api_endpoint

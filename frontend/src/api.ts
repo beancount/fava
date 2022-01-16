@@ -8,6 +8,8 @@ import {
   boolean,
   number,
   object,
+  optional,
+  record,
   string,
   unknown,
 } from "./lib/validation";
@@ -55,7 +57,13 @@ export async function put<T extends keyof PutAPIInputs>(
 
 const getAPIValidators = {
   changed: boolean,
-  context: object({ content: string, sha256sum: string, slice: string }),
+  context: object({
+    entry: entryValidator,
+    balances_before: optional(record(array(string))),
+    balances_after: optional(record(array(string))),
+    sha256sum: string,
+    slice: string,
+  }),
   errors: number,
   extract: array(entryValidator),
   move: string,

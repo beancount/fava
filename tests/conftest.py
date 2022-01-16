@@ -8,7 +8,6 @@ from typing import Any
 from typing import Callable
 from typing import Counter
 from typing import Iterable
-from urllib.parse import quote
 
 import pytest
 from beancount.loader import load_string
@@ -73,14 +72,11 @@ def snapshot(request) -> Callable[[Any], None]:
             EXAMPLE_FILE,
             "FAVA_LONG_EXAMPLE_PATH.beancount",
         )
-        out = out.replace(
-            EXAMPLE_FILE.replace("\\", "\\\\"),
-            "FAVA_LONG_EXAMPLE_PATH.beancount",
-        )
-        out = out.replace(
-            quote(EXAMPLE_FILE, safe=""),
-            "FAVA_LONG_EXAMPLE_PATH.beancount",
-        )
+        if os.name == "nt":
+            out = out.replace(
+                EXAMPLE_FILE.replace("\\", "\\\\"),
+                "FAVA_LONG_EXAMPLE_PATH.beancount",
+            )
         if not snap_file.exists():
             contents = ""
         else:

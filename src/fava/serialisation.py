@@ -13,13 +13,16 @@ import datetime
 import functools
 import re
 from typing import Any
-from typing import NamedTuple
 
 from beancount.core.amount import Amount
 from beancount.core.data import Balance
+from beancount.core.data import Close
+from beancount.core.data import Commodity
 from beancount.core.data import Directive
 from beancount.core.data import EMPTY_SET
 from beancount.core.data import Note
+from beancount.core.data import Open
+from beancount.core.data import Pad
 from beancount.core.data import Posting
 from beancount.core.data import Transaction
 from beancount.core.number import D
@@ -57,9 +60,11 @@ def extract_tags_links(
 @functools.singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
-    assert isinstance(entry, NamedTuple), f"Unsupported object {entry}"
-    ret = entry._asdict()  # type: ignore
-    ret["type"] = entry.__class__.__name__  # type: ignore
+    assert isinstance(
+        entry, (Open, Close, Commodity, Pad)
+    ), f"Unsupported object {entry}"
+    ret = entry._asdict()
+    ret["type"] = entry.__class__.__name__
     return ret
 
 
