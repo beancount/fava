@@ -72,7 +72,7 @@ def test_api_add_document(
         url = url_for("json_api.put_add_document")
 
         response = test_client.put(url)
-        assert response.status_code == 400
+        assert_api_error(response, "No file uploaded.")
 
         filename = (
             tmp_path / "Expenses" / "Food" / "Restaurant" / "2015-12-12 test"

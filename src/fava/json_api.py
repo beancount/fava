@@ -68,7 +68,7 @@ def _json_api_validation_error(error: ValidationError) -> Response:
 
 def validate_func_arguments(
     func: Callable[..., Any]
-) -> Callable[[Mapping[str, str]], list[str]]:
+) -> Callable[[Mapping[str, str]], list[str]] | None:
     """Validate arguments for a function.
 
     This currently only works for strings and lists (but only does a shallow
@@ -79,7 +79,8 @@ def validate_func_arguments(
 
     Returns:
         A function, which takes a Mapping and tries to construct a list of
-        positional parameters for the given function.
+        positional parameters for the given function or None if the function
+        has no parameters.
     """
     sig = signature(func)
     params: list[tuple[str, Any]] = []
@@ -92,6 +93,9 @@ def validate_func_arguments(
             param.kind == Parameter.POSITIONAL_OR_KEYWORD
         ), f"Param {param.name} should be positional"
         params.append((param.name, str if param.annotation == "str" else list))
+
+    if not params:
+        return None
 
     def validator(mapping: Mapping[str, str]) -> list[str]:
         args: list[str] = []
@@ -126,14 +130,17 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     @json_api.route(f"/{name}", methods=[method])
     @functools.wraps(func)
     def _wrapper() -> Response:
-        if method == "put":
-            request_json = request.get_json()
-            if request_json is None:
-                raise FavaAPIException("Invalid JSON request.")
-            data = request_json
+        if validator is not None:
+            if method == "put":
+                request_json = request.get_json()
+                if request_json is None:
+                    raise FavaAPIException("Invalid JSON request.")
+                data = request_json
+            else:
+                data = request.args
+            res = func(*validator(data))
         else:
-            data = request.args
-        res = func(*validator(data))
+            res = func()
         return json_success(res)
 
     return cast(Callable[[], Response], _wrapper)
@@ -265,13 +272,13 @@ def delete_document(filename: str) -> str:
     return f"Deleted {filename}."
 
 
-@json_api.route("/add_document", methods=["PUT"])
-def put_add_document() -> Response:
+@api_endpoint
+def put_add_document() -> str:
     """Upload a document."""
     if not g.ledger.options["documents"]:
         raise FavaAPIException("You need to set a documents folder.")
 
-    upload = request.files["file"]
+    upload = request.files.get("file", None)
 
     if not upload:
         raise FavaAPIException("No file uploaded.")
@@ -298,7 +305,7 @@ def put_add_document() -> Response:
         g.ledger.file.insert_metadata(
             request.form["hash"], "document", filename
         )
-    return json_success(f"Uploaded to {filepath}")
+    return f"Uploaded to {filepath}"
 
 
 @api_endpoint
