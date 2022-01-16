@@ -17,5 +17,5 @@ export function addToHistory(query: string): void {
 }
 
 export function clearHistory(): void {
-  query_shell_history.update((x) => []);
+  query_shell_history.set([]);
 }
