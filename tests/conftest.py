@@ -8,6 +8,7 @@ from typing import Any
 from typing import Callable
 from typing import Counter
 from typing import Iterable
+from urllib.parse import quote
 
 import pytest
 from beancount.loader import load_string
@@ -18,12 +19,14 @@ from fava.core import FavaLedger
 from fava.core.budgets import parse_budgets
 
 
+TESTS_DIR = Path(__file__).parent
+
+
 def data_file(filename: str) -> str:
-    return str(Path(__file__).parent / "data" / filename)
+    return str(TESTS_DIR / "data" / filename)
 
 
 EXAMPLE_FILE = data_file("long-example.beancount")
-EXTENSION_REPORT_EXAMPLE_FILE = data_file("extension-report-example.beancount")
 
 EXAMPLE_LEDGER = FavaLedger(EXAMPLE_FILE)
 
@@ -32,7 +35,10 @@ TEST_CLIENT = fava_app.test_client()
 
 fava_app.config["BEANCOUNT_FILES"] = [
     EXAMPLE_FILE,
-    EXTENSION_REPORT_EXAMPLE_FILE,
+    data_file("example.beancount"),
+    data_file("extension-report-example.beancount"),
+    data_file("import.beancount"),
+    data_file("query-example.beancount"),
 ]
 _load_file()
 
@@ -63,6 +69,18 @@ def snapshot(request) -> Callable[[Any], None]:
 
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
+        out = out.replace(
+            EXAMPLE_FILE,
+            "FAVA_LONG_EXAMPLE_PATH.beancount",
+        )
+        out = out.replace(
+            EXAMPLE_FILE.replace("\\", "\\\\"),
+            "FAVA_LONG_EXAMPLE_PATH.beancount",
+        )
+        out = out.replace(
+            quote(EXAMPLE_FILE, safe=""),
+            "FAVA_LONG_EXAMPLE_PATH.beancount",
+        )
         if not snap_file.exists():
             contents = ""
         else:
@@ -70,6 +88,7 @@ def snapshot(request) -> Callable[[Any], None]:
         if SNAPSHOT_UPDATE:
             snap_file.write_text(out, encoding="utf-8")
             return
+
         assert out == contents, MSG
 
     return _snapshot_data

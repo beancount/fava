@@ -1,4 +1,4 @@
-option "title" "Short Example"
+option "title" "Example"
 option "operating_currency" "EUR"
 plugin "beancount.plugins.auto_accounts"
 

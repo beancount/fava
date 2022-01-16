@@ -1,0 +1,9 @@
+{'data': {'content': '<p>\n'
+                     'Location: <code><a '
+                     'href="/long-example/editor/?file_path=FAVA_LONG_EXAMPLE_PATH.beancount&amp;line=5052" '
+                     'title="Show source '
+                     'FAVA_LONG_EXAMPLE_PATH.beancount:5052">FAVA_LONG_EXAMPLE_PATH.beancount:5052</a></code>\n'
+                     '</p>\n',
+          'sha256sum': '7198a732bba60e03bfebbf4368637a66260d384e80c9af182390e419d4a0bbc8',
+          'slice': '1980-05-12 open Expenses:Food:Alcohol'},
+ 'success': True}

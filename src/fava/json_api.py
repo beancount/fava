@@ -38,7 +38,7 @@ json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
 
 
 class ValidationError(Exception):
-    pass
+    """Validation of data failed."""
 
 
 def json_err(msg: str) -> Response:
@@ -83,24 +83,26 @@ def validate_func_arguments(
     """
     sig = signature(func)
     params: list[tuple[str, Any]] = []
-    for p in sig.parameters.values():
-        assert p.annotation in {
+    for param in sig.parameters.values():
+        assert param.annotation in {
             "str",
             "list[Any]",
-        }, f"Type of param {p.name} needs to str or list"
+        }, f"Type of param {param.name} needs to str or list"
         assert (
-            p.kind == Parameter.POSITIONAL_OR_KEYWORD
-        ), f"Param {p.name} should be positional"
-        params.append((p.name, str if p.annotation == "str" else list))
+            param.kind == Parameter.POSITIONAL_OR_KEYWORD
+        ), f"Param {param.name} should be positional"
+        params.append((param.name, str if param.annotation == "str" else list))
 
     def validator(mapping: Mapping[str, str]) -> list[str]:
         args: list[str] = []
-        for p, type_ in params:
-            val = mapping.get(p, None)
+        for param, type_ in params:
+            val = mapping.get(param, None)
             if val is None:
-                raise ValidationError(f"Parameter `{p}` is missing.")
+                raise ValidationError(f"Parameter `{param}` is missing.")
             if not isinstance(val, type_):
-                raise ValidationError(f"Parameter `{p}` of incorrect type.")
+                raise ValidationError(
+                    f"Parameter `{param}` of incorrect type."
+                )
             args.append(val)
         return args
 
@@ -118,14 +120,13 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     """
 
     method, _, name = func.__name__.partition("_")
-    METHOD = method.upper()
-    assert METHOD in {"GET", "DELETE", "PUT"}, func.__name__
+    assert method in {"get", "delete", "put"}, func.__name__
     validator = validate_func_arguments(func)
 
-    @json_api.route(f"/{name}", methods=[METHOD])
+    @json_api.route(f"/{name}", methods=[method])
     @functools.wraps(func)
     def _wrapper() -> Response:
-        if METHOD == "PUT":
+        if method == "put":
             request_json = request.get_json()
             if request_json is None:
                 raise FavaAPIException("Invalid JSON request.")

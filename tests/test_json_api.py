@@ -7,10 +7,12 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from beancount.core.compare import hash_entry
 from flask import url_for
 from flask.testing import FlaskClient
 
 from fava.context import g
+from fava.core import FavaLedger
 from fava.core.charts import PRETTY_ENCODER
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
@@ -33,7 +35,7 @@ def test_validate_get_args() -> None:
 def assert_api_error(response, msg: str | None = None) -> None:
     """Asserts that the response errored and contains the message."""
     assert response.status_code == 200
-    assert not response.json["success"]
+    assert not response.json["success"], response.json
     if msg:
         assert msg == response.json["error"]
 
@@ -41,7 +43,7 @@ def assert_api_error(response, msg: str | None = None) -> None:
 def assert_api_success(response, data: Any | None = None) -> None:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == 200
-    assert response.json["success"]
+    assert response.json["success"], response.json
     if data:
         assert data == response.json["data"]
 
@@ -92,6 +94,42 @@ def test_api_errors(app, test_client: FlaskClient) -> None:
 
     response = test_client.get(url)
     assert_api_success(response, 0)
+
+
+def test_api_context(
+    app, test_client: FlaskClient, snapshot, example_ledger: FavaLedger
+) -> None:
+    with app.test_request_context("/long-example/"):
+        app.preprocess_request()
+
+        url = url_for("json_api.get_context")
+        response = test_client.get(url)
+        assert_api_error(
+            response, "Invalid API request: Parameter `entry_hash` is missing."
+        )
+
+        url = url_for(
+            "json_api.get_context",
+            entry_hash=hash_entry(
+                next(
+                    entry
+                    for entry in example_ledger.all_entries
+                    if entry.meta["lineno"] == 3732
+                )
+            ),
+        )
+        response = test_client.get(url)
+        assert_api_success(response)
+        snapshot(response.json)
+
+        url = url_for(
+            "json_api.get_context",
+            entry_hash=hash_entry(example_ledger.entries[10]),
+        )
+        response = test_client.get(url)
+        assert_api_success(response)
+        assert not response.json.get("balances_before")
+        snapshot(response.json)
 
 
 def test_api_payee_accounts(app, test_client: FlaskClient) -> None:

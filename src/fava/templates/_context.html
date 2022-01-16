@@ -1,5 +1,4 @@
-{% import 'macros/_commodity_macros.html' as commodity_macros %}
-
+{% import 'macros/_commodity_macros.html' as commodity_macros -%}
 
 <p>
 {{ _('Location') }}: <code><a href="{{ url_for_source(file_path=entry.meta.filename, line=entry.meta.lineno) }}" title="{{ _('Show source %(file)s:%(lineno)s', file=entry.meta.filename, lineno=entry.meta.lineno) }}">{{ entry.meta.filename }}:{{ entry.meta.lineno }}</a></code>
