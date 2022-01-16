@@ -4,13 +4,15 @@ from __future__ import annotations
 from typing import Any
 from typing import NamedTuple
 
+from beancount.core.data import Directive
+
 
 class BeancountError(NamedTuple):
     """NamedTuple base for a Beancount-style error."""
 
     source: Any
     message: str
-    entry: Any
+    entry: Directive | None
 
 
 class FavaAPIException(Exception):

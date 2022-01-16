@@ -14,11 +14,18 @@ from typing import Callable
 from typing import Generator
 from typing import Iterable
 from typing import Iterator
+from typing import TYPE_CHECKING
 from typing import TypeVar
 
 from flask import abort
 from flask import send_file
+from flask.wrappers import Response
 from werkzeug.urls import url_quote
+
+if TYPE_CHECKING:
+    from _typeshed.wsgi import StartResponse
+    from _typeshed.wsgi import WSGIEnvironment
+
 
 BASEPATH = Path(__file__).parent.parent
 
@@ -110,19 +117,21 @@ def slugify(string: str) -> str:
     return string
 
 
-def simple_wsgi(_: Any, start_response: Any) -> list[bytes]:
+def simple_wsgi(
+    _: WSGIEnvironment, start_response: StartResponse
+) -> list[bytes]:
     """A simple wsgi app that always returns an empty response."""
     start_response("200 OK", [("Content-Type", "text/html")])
     return [b""]
 
 
-def send_file_inline(filename: str) -> Any:
+def send_file_inline(filename: str) -> Response:
     """Send a file inline, including the original filename.
 
     Ref: http://test.greenbytes.de/tech/tc2231/.
     """
     try:
-        response = send_file(filename)
+        response: Response = send_file(filename)
     except FileNotFoundError:
         return abort(404)
     basename = os.path.basename(filename)

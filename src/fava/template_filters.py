@@ -10,6 +10,7 @@ import re
 import unicodedata
 from typing import Any
 from typing import MutableMapping
+from typing import TypeVar
 
 import flask
 from beancount.core import compare
@@ -27,16 +28,21 @@ from fava.core.conversion import units
 from fava.core.tree import TreeNode
 from fava.util.date import Interval
 
+MappingValue = TypeVar("MappingValue")
+
 
 def remove_keys(
-    _dict: MutableMapping[str, Any] | None, keys: list[str]
-) -> MutableMapping[str, Any]:
+    _dict: MutableMapping[str, MappingValue] | None, keys: list[str]
+) -> MutableMapping[str, MappingValue]:
     """Remove keys from a dictionary."""
     if not _dict:
         return {}
     new = dict(_dict)
     for key in keys:
-        new.pop(key, None)
+        try:
+            del new[key]
+        except KeyError:
+            pass
     return new
 
 

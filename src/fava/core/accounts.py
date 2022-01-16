@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any
 from typing import Dict
 
 from beancount.core.account import TYPE as ACCOUNT_TYPE
@@ -34,7 +33,9 @@ class AccountDict(Dict[str, AccountData]):
     def __missing__(self, key: str) -> AccountData:
         return self.EMPTY
 
-    def setdefault(self, key: str, _: Any = None) -> AccountData:
+    def setdefault(
+        self, key: str, _: AccountData | None = None
+    ) -> AccountData:
         if key not in self:
             self[key] = AccountData()
         return self[key]

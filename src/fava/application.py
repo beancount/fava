@@ -32,6 +32,7 @@ from flask import render_template
 from flask import render_template_string
 from flask import request
 from flask import send_file
+from flask.wrappers import Response
 from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
 from werkzeug.utils import secure_filename
@@ -146,7 +147,7 @@ app.add_template_filter(serialise)
 
 
 @app.url_defaults
-def _inject_filters(endpoint: str, values: dict[str, Any]) -> None:
+def _inject_filters(endpoint: str, values: dict[str, str | None]) -> None:
     if "bfile" not in values and app.url_map.is_endpoint_expecting(
         endpoint, "bfile"
     ):
@@ -171,13 +172,13 @@ def static_url(filename: str) -> str:
 CACHED_URL_FOR = functools.lru_cache(2048)(flask.url_for)
 
 
-def url_for(endpoint: str, **values: Any) -> str:
+def url_for(endpoint: str, **values: str | int) -> str:
     """A wrapper around flask.url_for that uses a cache."""
     _inject_filters(endpoint, values)
     return CACHED_URL_FOR(endpoint, **values)
 
 
-def url_for_source(**kwargs: Any) -> str:
+def url_for_source(**kwargs: str) -> str:
     """URL to source file (possibly link to external editor)."""
     if g.ledger.fava_options.use_external_editor:
         return (
@@ -201,7 +202,7 @@ app.add_template_global(translations, "translations")
 
 
 @app.context_processor
-def template_context() -> dict[str, Any]:
+def template_context() -> dict[str, FavaLedger]:
     """Inject variables into the template context."""
     return dict(ledger=g.ledger)
 
@@ -222,7 +223,7 @@ def _perform_global_filters() -> None:
 
 
 @app.after_request
-def _incognito(response: flask.wrappers.Response) -> flask.wrappers.Response:
+def _incognito(response: Response) -> Response:
     """Replace all numbers with 'X'."""
     if app.config.get("INCOGNITO") and response.content_type.startswith(
         "text/html"
@@ -291,7 +292,7 @@ def account(name: str, subreport: str = "journal") -> str:
 
 
 @app.route("/<bfile>/document/", methods=["GET"])
-def document() -> Any:
+def document() -> Response:
     """Download a document."""
     filename = request.args.get("filename")
     if filename is None:
@@ -302,7 +303,7 @@ def document() -> Any:
 
 
 @app.route("/<bfile>/statement/", methods=["GET"])
-def statement() -> Any:
+def statement() -> Response:
     """Download a statement file."""
     entry_hash = request.args.get("entry_hash", "")
     key = request.args.get("key", "")
