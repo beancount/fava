@@ -55,7 +55,8 @@
     const query = query_string;
     if (!query) {
       return;
-    } else if (query.trim().toUpperCase() === "CLEAR") {
+    }
+    if (query.trim().toUpperCase() === "CLEAR") {
       clearResults();
       return;
     }
