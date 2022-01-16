@@ -44,8 +44,7 @@
         suggestion,
         innerHTML: fuzzywrap(val, suggestion),
       }));
-    filteredSuggestions =
-      filtered.length === 1 && filtered[0].suggestion === val ? [] : filtered;
+    filteredSuggestions = filtered;
     index = Math.min(index, filteredSuggestions.length - 1);
     if (selectFirst && index < 0) {
       index = 0;
@@ -178,7 +177,6 @@
   }
 
   li :global(span) {
-    height: 1.2em;
     padding: 0 0.05em;
     margin: 0 -0.05em;
     background-color: var(--autocomplete-match);
