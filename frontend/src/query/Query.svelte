@@ -7,7 +7,11 @@
   import { chartContext } from "../charts/context";
   import { parseQueryChart } from "../charts/query-charts";
   import { getFilterParams } from "../stores/filters";
-  import { addToHistory, query_shell_history } from "../stores/query";
+  import {
+    addToHistory,
+    clearHistory,
+    query_shell_history,
+  } from "../stores/query";
 
   import QueryEditor from "./QueryEditor.svelte";
   import QueryLinks from "./QueryLinks.svelte";
@@ -38,9 +42,22 @@
     resultElems[query].setAttribute("open", "true");
   }
 
+  async function clearResults() {
+    clearHistory();
+    await tick();
+    const url = new URL(window.location.href);
+    query_string = "";
+    url.searchParams.set("query_string", query_string);
+    window.history.replaceState(null, "", url.toString());
+  }
+
   function submit() {
     const query = query_string;
     if (!query) {
+      return;
+    }
+    if (query.trim().toUpperCase() === "CLEAR") {
+      clearResults();
       return;
     }
     get("query_result", { query_string: query, ...getFilterParams() }).then(
