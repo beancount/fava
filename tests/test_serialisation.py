@@ -7,10 +7,19 @@ import pytest
 from beancount.core.amount import A
 from beancount.core.amount import Amount
 from beancount.core.data import Balance
+from beancount.core.data import Booking
+from beancount.core.data import Close
+from beancount.core.data import Commodity
 from beancount.core.data import CostSpec
 from beancount.core.data import create_simple_posting
+from beancount.core.data import Document
+from beancount.core.data import Event
 from beancount.core.data import Note
+from beancount.core.data import Open
+from beancount.core.data import Pad
 from beancount.core.data import Posting
+from beancount.core.data import Price
+from beancount.core.data import Query
 from beancount.core.data import Transaction
 from beancount.core.number import D
 from beancount.core.number import MISSING
@@ -28,7 +37,7 @@ from fava.serialisation import serialise
 dumps = PRETTY_ENCODER.encode
 
 
-def test_serialise() -> None:
+def test_serialise_txn() -> None:
     txn = Transaction(
         {},
         datetime.date(2017, 12, 12),
@@ -66,6 +75,25 @@ def test_serialise() -> None:
     txn = txn._replace(payee=None)
     serialised = loads(dumps(serialise(txn)))
     assert serialised == json_txn
+
+
+def test_serialise_entry_types(snapshot) -> None:
+    date_ = datetime.date(2017, 12, 12)
+    entries = [
+        Open({}, date_, "Assets:Cash", ["USD"], Booking.STRICT),
+        Close({}, date_, "Assets:Cash"),
+        Balance({}, date_, "Assets:Cash", A("1 USD"), None, None),
+        Balance({}, date_, "Assets:Cash", A("1 USD"), D("1.0"), A("1 USD")),
+        Commodity({}, date_, "USD"),
+        Document({}, date_, "Assets:Cash", "filename", {"tag"}, {"link"}),
+        Event({}, date_, "event name", "event description"),
+        Note({}, date_, "Assets:Cash", "This is some comment or note"),
+        Pad({}, date_, "Assets:Cash", "Assets:OtherCash"),
+        Price({}, date_, "USD", A("1 EUR")),
+        Query({}, date_, "query name", "journal"),
+    ]
+
+    snapshot(dumps([serialise(entry) for entry in entries]))
 
 
 @pytest.mark.parametrize(

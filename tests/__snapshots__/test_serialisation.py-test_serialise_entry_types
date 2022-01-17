@@ -1,0 +1,101 @@
+[
+ {
+  "account": "Assets:Cash",
+  "booking": "Booking.STRICT",
+  "currencies": [
+   "USD"
+  ],
+  "date": "2017-12-12",
+  "meta": {},
+  "type": "Open"
+ },
+ {
+  "account": "Assets:Cash",
+  "date": "2017-12-12",
+  "meta": {},
+  "type": "Close"
+ },
+ {
+  "account": "Assets:Cash",
+  "amount": {
+   "currency": "USD",
+   "number": "1"
+  },
+  "date": "2017-12-12",
+  "diff_amount": null,
+  "meta": {},
+  "tolerance": null,
+  "type": "Balance"
+ },
+ {
+  "account": "Assets:Cash",
+  "amount": {
+   "currency": "USD",
+   "number": "1"
+  },
+  "date": "2017-12-12",
+  "diff_amount": {
+   "currency": "USD",
+   "number": 1
+  },
+  "meta": {},
+  "tolerance": 1.0,
+  "type": "Balance"
+ },
+ {
+  "currency": "USD",
+  "date": "2017-12-12",
+  "meta": {},
+  "type": "Commodity"
+ },
+ {
+  "account": "Assets:Cash",
+  "date": "2017-12-12",
+  "filename": "filename",
+  "links": [
+   "link"
+  ],
+  "meta": {},
+  "tags": [
+   "tag"
+  ],
+  "type": "Document"
+ },
+ {
+  "date": "2017-12-12",
+  "description": "event description",
+  "meta": {},
+  "type": "Event"
+ },
+ {
+  "account": "Assets:Cash",
+  "comment": "This is some comment or note",
+  "date": "2017-12-12",
+  "meta": {},
+  "type": "Note"
+ },
+ {
+  "account": "Assets:Cash",
+  "date": "2017-12-12",
+  "meta": {},
+  "source_account": "Assets:OtherCash",
+  "type": "Pad"
+ },
+ {
+  "amount": {
+   "currency": "EUR",
+   "number": 1
+  },
+  "currency": "USD",
+  "date": "2017-12-12",
+  "meta": {},
+  "type": "Price"
+ },
+ {
+  "date": "2017-12-12",
+  "meta": {},
+  "name": "query name",
+  "query_string": "journal",
+  "type": "Query"
+ }
+]

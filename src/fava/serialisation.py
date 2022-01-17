@@ -18,12 +18,17 @@ from beancount.core.amount import Amount
 from beancount.core.data import Balance
 from beancount.core.data import Close
 from beancount.core.data import Commodity
+from beancount.core.data import Custom
 from beancount.core.data import Directive
+from beancount.core.data import Document
 from beancount.core.data import EMPTY_SET
+from beancount.core.data import Event
 from beancount.core.data import Note
 from beancount.core.data import Open
 from beancount.core.data import Pad
 from beancount.core.data import Posting
+from beancount.core.data import Price
+from beancount.core.data import Query
 from beancount.core.data import Transaction
 from beancount.core.number import D
 from beancount.core.position import to_string as position_to_string
@@ -57,12 +62,26 @@ def extract_tags_links(
     return new_string, frozenset(tags), frozenset(links)
 
 
+ENTRY_TYPES = (
+    Open,
+    Close,
+    Commodity,
+    Pad,
+    Balance,
+    Transaction,
+    Note,
+    Event,
+    Query,
+    Price,
+    Document,
+    Custom,
+)
+
+
 @functools.singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
-    assert isinstance(
-        entry, (Open, Close, Commodity, Pad)
-    ), f"Unsupported object {entry}"
+    assert isinstance(entry, ENTRY_TYPES), f"Unsupported object {entry}"
     ret = entry._asdict()
     ret["type"] = entry.__class__.__name__
     return ret
