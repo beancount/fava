@@ -19,8 +19,16 @@
 <AutocompleteInput
   bind:value
   placeholder={_("Go to account")}
-  selectFirst={true}
   suggestions={$accounts}
+  className="account-selector"
   key="g a"
   on:select={select}
+  on:enter={select}
 />
+
+<style>
+  :global(.account-selector input) {
+    padding: 0.25em 0.5em 0.25em 1em;
+    border: none;
+  }
+</style>

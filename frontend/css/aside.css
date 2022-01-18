@@ -81,7 +81,7 @@ aside .navigation .submenu li a {
 
 aside .navigation .submenu {
   width: 100%;
-  margin: 0;
+  margin: 0 0 0.25em 0;
 }
 
 aside .navigation .submenu li {

@@ -8,7 +8,6 @@
 
   export let value: string;
   export let suggestions: string[];
-  export let name = "";
   export let placeholder = "";
   export let valueExtractor:
     | ((val: string, input: HTMLInputElement) => string)
@@ -20,7 +19,6 @@
   export let className: string | undefined = undefined;
   export let key: string | undefined = undefined;
   export let checkValidity: ((val: string) => string) | undefined = undefined;
-  export let selectFirst = false;
   export let clearButton = false;
 
   let filteredSuggestions: { suggestion: string; innerHTML: string }[] = [];
@@ -47,9 +45,6 @@
     filteredSuggestions =
       filtered.length === 1 && filtered[0].suggestion === val ? [] : filtered;
     index = Math.min(index, filteredSuggestions.length - 1);
-    if (selectFirst && index < 0) {
-      index = 0;
-    }
   }
 
   function select(suggestion: string) {
@@ -67,15 +62,18 @@
 
   function keydown(event: KeyboardEvent) {
     if (event.key === "Enter") {
-      if (index > -1) {
+      if (index > -1 && !hidden && filteredSuggestions[index]) {
         event.preventDefault();
         select(filteredSuggestions[index].suggestion);
+      } else {
+        dispatch("enter", input);
       }
     } else if (event.key === " " && event.ctrlKey) {
       hidden = false;
     } else if (event.key === "Escape") {
       if (!hidden && filteredSuggestions.length > 0) {
         event.stopPropagation();
+        index = -1;
       }
       hidden = true;
     } else if (event.key === "ArrowUp") {
@@ -90,7 +88,6 @@
 
 <span class={className}>
   <input
-    {name}
     type="text"
     autocomplete="off"
     bind:value
