@@ -24,7 +24,7 @@ import markdown2  # type: ignore
 import werkzeug.urls
 from beancount import __version__ as beancount_version
 from beancount.core.account import ACCOUNT_RE
-from beancount.utils.text_utils import replace_numbers  # type: ignore
+from beancount.utils.text_utils import replace_numbers
 from flask import abort
 from flask import Flask
 from flask import redirect

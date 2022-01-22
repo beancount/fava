@@ -37,7 +37,7 @@ from beancount.loader import _load  # type: ignore
 from beancount.loader import load_file
 from beancount.parser.options import get_account_types
 from beancount.parser.options import OPTIONS_DEFAULTS
-from beancount.utils.encryption import is_encrypted_file  # type: ignore
+from beancount.utils.encryption import is_encrypted_file
 
 from fava.core._compat import FLAG_UNREALIZED
 from fava.core.accounts import AccountDict
