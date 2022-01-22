@@ -1,10 +1,13 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 from beancount.query.query import run_query
 
 from .conftest import data_file
+from .conftest import SnapshotFunc
 from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
 
@@ -12,15 +15,16 @@ LEDGER = FavaLedger(data_file("query-example.beancount"))
 QUERY = LEDGER.query_shell
 
 
-def run(query_string):
+def run(query_string: str) -> Any:
     return QUERY.execute_query(query_string)
 
 
-def run_text(query_string):
+def run_text(query_string: str) -> str:
     """Run a query that should only return string contents."""
     contents, types, result = run(query_string)
     assert types is None
     assert result is None
+    assert isinstance(contents, str)
     return contents
 
 
@@ -51,7 +55,7 @@ def test_query() -> None:
     )
 
 
-def test_query_to_file(snapshot):
+def test_query_to_file(snapshot: SnapshotFunc) -> None:
     name, data = QUERY.query_to_file("run custom_query", "csv")
     assert name == "custom_query"
     name, data = QUERY.query_to_file("balances", "csv")

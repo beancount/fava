@@ -6,6 +6,7 @@ import datetime
 from typing import Dict
 from typing import Generator
 from typing import Iterable
+from typing import TYPE_CHECKING
 
 from beancount.core import account
 from beancount.core import convert
@@ -16,8 +17,12 @@ from beancount.core.prices import PriceMap
 from fava.core.conversion import cost_or_value
 from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
-from fava.util.typing import BeancountOptions
-from fava.util.typing import TypedDict
+
+if TYPE_CHECKING:
+    from typing import TypedDict
+    from fava.util.typing import BeancountOptions
+else:
+    TypedDict = dict
 
 
 class SerialisedTreeNode(TypedDict):

@@ -26,10 +26,11 @@ def get_port() -> int:
     sock.bind((HOST, 0))
     port = sock.getsockname()[1]
     sock.close()
+    assert isinstance(port, int)
     return port
 
 
-def output_contains(process: Popen, output: str, timeout: int) -> bool:
+def output_contains(process: Popen[str], output: str, timeout: int) -> bool:
     endtime = time() + timeout
     while True:
         if time() > endtime or not process.stdout:

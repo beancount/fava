@@ -2,19 +2,22 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import pytest
+from pytest import MonkeyPatch
 
-from fava.core import FavaAPIException
 from fava.core import FavaLedger
+from fava.helpers import FavaAPIException
+
+if TYPE_CHECKING:
+    from fava.util.typing import LoaderResult
 
 
-def test_apiexception():
+def test_apiexception() -> None:
     with pytest.raises(FavaAPIException) as exception:
         raise FavaAPIException("error")
-    exception = exception.value
-    assert str(exception) == "error"
-    assert str(exception) == exception.message
+    assert str(exception.value) == "error"
 
 
 def test_attributes(example_ledger: FavaLedger) -> None:
@@ -22,12 +25,16 @@ def test_attributes(example_ledger: FavaLedger) -> None:
     assert "Assets" not in example_ledger.attributes.accounts
 
 
-def test_paths_to_watch(example_ledger: FavaLedger, monkeypatch) -> None:
+def test_paths_to_watch(
+    example_ledger: FavaLedger, monkeypatch: MonkeyPatch
+) -> None:
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
         [],
     )
-    monkeypatch.setitem(example_ledger.options, "documents", ["folder"])
+    monkeypatch.setitem(
+        example_ledger.options, "documents", ["folder"]  # type: ignore
+    )
     base = Path(example_ledger.beancount_file_path).parent / "folder"
     assert example_ledger.paths_to_watch() == (
         [example_ledger.beancount_file_path],
@@ -53,7 +60,9 @@ def test_account_metadata(example_ledger: FavaLedger) -> None:
     assert not example_ledger.accounts["NOACCOUNT"].meta
 
 
-def test_group_entries(example_ledger: FavaLedger, load_doc) -> None:
+def test_group_entries(
+    example_ledger: FavaLedger, load_doc: LoaderResult
+) -> None:
     """
     2010-11-12 * "test"
         Assets:T   4.00 USD

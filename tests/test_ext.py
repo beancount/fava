@@ -6,7 +6,7 @@ from pathlib import Path
 from fava.ext import find_extensions
 
 
-def test_find_extensions():
+def test_find_extensions() -> None:
     classes, errors = find_extensions(".", "NOMODULENAME")
     assert not classes
     assert len(errors) == 1

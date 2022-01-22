@@ -3,11 +3,17 @@ from __future__ import annotations
 
 from pathlib import Path
 from textwrap import dedent
+from typing import TYPE_CHECKING
 
+from beancount.core.data import Document
+from beancount.core.data import Transaction
 from beancount.loader import load_file
 from beancount.loader import load_string
 
 from fava.plugins.link_documents import DocumentError
+
+if TYPE_CHECKING:
+    from fava.util.typing import LoaderResult
 
 
 def test_plugins(tmp_path: Path) -> None:
@@ -64,16 +70,21 @@ def test_plugins(tmp_path: Path) -> None:
     assert not errors
     assert len(entries) == 10
 
-    assert "linked" in entries[3].tags
-    assert "linked" in entries[4].tags
+    assert isinstance(entries[3], Document)
+    assert entries[3].tags and "linked" in entries[3].tags
+    assert isinstance(entries[4], Document)
+    assert entries[4].tags and "linked" in entries[4].tags
 
     # Document can be linked twice
-    assert len(entries[6].links) == 2
+    assert isinstance(entries[6], Document)
+    assert entries[6].links and len(entries[6].links) == 2
+    assert isinstance(entries[2], Transaction)
+    assert isinstance(entries[8], Transaction)
     assert entries[2].links == entries[4].links
     assert entries[8].links == entries[3].links
 
 
-def test_link_documents_error(load_doc) -> None:
+def test_link_documents_error(load_doc: LoaderResult) -> None:
     """
     plugin "fava.plugins.link_documents"
 

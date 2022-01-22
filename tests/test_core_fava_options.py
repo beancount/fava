@@ -3,13 +3,17 @@ from __future__ import annotations
 
 import datetime
 import re
+from typing import TYPE_CHECKING
 
 from fava.core.fava_options import InsertEntryOption
 from fava.core.fava_options import parse_options
 from fava.util.date import FiscalYearEnd
 
+if TYPE_CHECKING:
+    from fava.util.typing import LoaderResult
 
-def test_fava_options(load_doc):
+
+def test_fava_options(load_doc: LoaderResult) -> None:
     """
     2016-06-14 custom "fava-option" "default-file"
     2016-04-14 custom "fava-option" "show-closed-accounts" "true"
@@ -26,7 +30,7 @@ def test_fava_options(load_doc):
     """
 
     entries, _, _ = load_doc
-    options, errors = parse_options(entries)
+    options, errors = parse_options(entries)  # type: ignore
 
     assert len(errors) == 3
 

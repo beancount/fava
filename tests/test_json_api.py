@@ -8,9 +8,13 @@ from typing import Any
 
 import pytest
 from beancount.core.compare import hash_entry
+from flask import Flask
 from flask import url_for
 from flask.testing import FlaskClient
+from pytest import MonkeyPatch
+from werkzeug.test import TestResponse
 
+from .conftest import SnapshotFunc
 from fava.context import g
 from fava.core import FavaLedger
 from fava.core.misc import align
@@ -19,32 +23,42 @@ from fava.json_api import ValidationError
 
 
 def test_validate_get_args() -> None:
-    def func(test: str):
+    def noparams() -> None:
+        pass
+
+    assert validate_func_arguments(noparams) is None
+
+    def func(test: str) -> None:
         assert test and isinstance(test, str)
 
     validator = validate_func_arguments(func)
+    assert validator
     with pytest.raises(ValidationError):
         validator({"notest": "value"})
     assert validator({"test": "value"}) == ["value"]
 
 
-def assert_api_error(response, msg: str | None = None) -> None:
+def assert_api_error(response: TestResponse, msg: str | None = None) -> None:
     """Asserts that the response errored and contains the message."""
     assert response.status_code == 200
+    assert response.json
     assert not response.json["success"], response.json
     if msg:
         assert msg == response.json["error"]
 
 
-def assert_api_success(response, data: Any | None = None) -> None:
+def assert_api_success(
+    response: TestResponse, data: Any | None = None
+) -> None:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == 200
+    assert response.json
     assert response.json["success"], response.json
     if data:
         assert data == response.json["data"]
 
 
-def test_api_changed(app, test_client: FlaskClient) -> None:
+def test_api_changed(app: Flask, test_client: FlaskClient) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         url = url_for("json_api.get_changed")
@@ -54,12 +68,17 @@ def test_api_changed(app, test_client: FlaskClient) -> None:
 
 
 def test_api_add_document(
-    app, test_client: FlaskClient, tmp_path: Path, monkeypatch
+    app: Flask,
+    test_client: FlaskClient,
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 
-        monkeypatch.setitem(g.ledger.options, "documents", [str(tmp_path)])
+        monkeypatch.setitem(
+            g.ledger.options, "documents", [str(tmp_path)]  # type: ignore
+        )
         request_data = {
             "folder": str(tmp_path),
             "account": "Expenses:Food:Restaurant",
@@ -83,85 +102,68 @@ def test_api_add_document(
         assert_api_error(response, f"{filename} already exists.")
 
 
-def test_api_errors(app, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.get_errors")
-
-    response = test_client.get(url)
+def test_api_errors(test_client: FlaskClient) -> None:
+    response = test_client.get("/long-example/api/errors")
     assert_api_success(response, 0)
 
 
 def test_api_context(
-    app, test_client: FlaskClient, snapshot, example_ledger: FavaLedger
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+    example_ledger: FavaLedger,
 ) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
+    response = test_client.get("/long-example/api/context")
+    assert_api_error(
+        response, "Invalid API request: Parameter `entry_hash` is missing."
+    )
 
-        url = url_for("json_api.get_context")
-        response = test_client.get(url)
-        assert_api_error(
-            response, "Invalid API request: Parameter `entry_hash` is missing."
+    entry_hash = hash_entry(
+        next(
+            entry
+            for entry in example_ledger.all_entries
+            if entry.meta["lineno"] == 3732
         )
+    )
+    response = test_client.get(
+        f"/long-example/api/context?entry_hash={entry_hash}"
+    )
+    assert_api_success(response)
+    snapshot(response.json)
 
-        url = url_for(
-            "json_api.get_context",
-            entry_hash=hash_entry(
-                next(
-                    entry
-                    for entry in example_ledger.all_entries
-                    if entry.meta["lineno"] == 3732
-                )
-            ),
-        )
-        response = test_client.get(url)
-        assert_api_success(response)
-        snapshot(response.json)
-
-        url = url_for(
-            "json_api.get_context",
-            entry_hash=hash_entry(example_ledger.entries[10]),
-        )
-        response = test_client.get(url)
-        assert_api_success(response)
-        assert not response.json.get("balances_before")
-        snapshot(response.json)
+    entry_hash = hash_entry(example_ledger.entries[10])
+    response = test_client.get(
+        f"/long-example/api/context?entry_hash={entry_hash}"
+    )
+    assert_api_success(response)
+    assert response.json
+    assert not response.json.get("balances_before")
+    snapshot(response.json)
 
 
-def test_api_payee_accounts(app, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.get_payee_accounts", payee="test")
-
-    response = test_client.get(url)
+def test_api_payee_accounts(test_client: FlaskClient) -> None:
+    response = test_client.get("/long-example/api/payee_accounts?payee=test")
     assert_api_success(response, [])
 
 
-def test_api_move(app, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.get_move")
-
-    response = test_client.get(url)
+def test_api_move(test_client: FlaskClient) -> None:
+    response = test_client.get("/long-example/api/move")
     assert_api_error(
         response, "Invalid API request: Parameter `account` is missing."
     )
 
 
-def test_api_source_put(app, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.put_source")
-        path = g.ledger.beancount_file_path
+def test_api_source_put(
+    test_client: FlaskClient, example_ledger: FavaLedger
+) -> None:
+    path = Path(example_ledger.beancount_file_path)
 
+    url = "/long-example/api/source"
     # test bad request
     response = test_client.put(url)
     assert_api_error(response, "Invalid JSON request.")
 
-    with open(path, encoding="utf-8") as file_handle:
-        payload = file_handle.read()
-    with open(path, mode="rb") as bfile_handle:
-        sha256sum = hashlib.sha256(bfile_handle.read()).hexdigest()
+    payload = path.read_text("utf-8")
+    sha256sum = hashlib.sha256(path.read_bytes()).hexdigest()
 
     # change source
     response = test_client.put(
@@ -172,13 +174,11 @@ def test_api_source_put(app, test_client: FlaskClient) -> None:
             "file_path": path,
         },
     )
-    with open(path, mode="rb") as bfile_handle:
-        sha256sum = hashlib.sha256(bfile_handle.read()).hexdigest()
+    sha256sum = hashlib.sha256(path.read_bytes()).hexdigest()
     assert_api_success(response, sha256sum)
 
     # check if the file has been written
-    with open(path, encoding="utf-8") as file_handle:
-        assert file_handle.read() == "asdf" + payload
+    assert path.read_text("utf-8") == "asdf" + payload
 
     # write original source file
     result = test_client.put(
@@ -186,31 +186,28 @@ def test_api_source_put(app, test_client: FlaskClient) -> None:
         json={"source": payload, "sha256sum": sha256sum, "file_path": path},
     )
     assert result.status_code == 200
-    with open(path, encoding="utf-8") as file_handle:
-        assert file_handle.read() == payload
+    assert path.read_text("utf-8") == payload
 
 
-def test_api_format_source(app, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.put_format_source")
-        path = g.ledger.beancount_file_path
+def test_api_format_source(
+    test_client: FlaskClient, example_ledger: FavaLedger
+) -> None:
+    path = Path(example_ledger.beancount_file_path)
+    url = "/long-example/api/format_source"
 
-    with open(path, encoding="utf-8") as file_handle:
-        payload = file_handle.read()
+    payload = path.read_text("utf-8")
 
     response = test_client.put(url, json={"source": payload})
     assert_api_success(response, align(payload, 61))
 
 
 def test_api_format_source_options(
-    app, test_client: FlaskClient, monkeypatch
+    app: Flask, test_client: FlaskClient, monkeypatch: MonkeyPatch
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        path = g.ledger.beancount_file_path
-        with open(path, encoding="utf-8") as file_handle:
-            payload = file_handle.read()
+        path = Path(g.ledger.beancount_file_path)
+        payload = path.read_text("utf-8")
 
         url = url_for("json_api.put_format_source")
 
@@ -221,8 +218,11 @@ def test_api_format_source_options(
 
 
 def test_api_add_entries(
-    app, test_client: FlaskClient, tmp_path: Path, monkeypatch
-):
+    app: Flask,
+    test_client: FlaskClient,
+    tmp_path: Path,
+    monkeypatch: MonkeyPatch,
+) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         test_file = tmp_path / "test_file"
@@ -300,26 +300,18 @@ def test_api_add_entries(
     ],
 )
 def test_api_query_result(
-    query_string, result_str, app, test_client: FlaskClient
+    query_string: str, result_str: str, test_client: FlaskClient
 ) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.get_query_result", query_string=query_string)
-
-    response = test_client.get(url)
+    response = test_client.get(
+        f"/long-example/api/query_result?query_string={query_string}"
+    )
     assert response.status_code == 200
     assert result_str in response.get_data(True)
 
 
-def test_api_query_result_filters(app, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for(
-            "json_api.get_query_result",
-            query_string="select sum(day)",
-            time="2021",
-        )
-
-    response = test_client.get(url)
+def test_api_query_result_filters(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/long-example/api/query_result?time=2021&query_string=select sum(day)"
+    )
     assert response.status_code == 200
     assert "6882" in response.get_data(True)

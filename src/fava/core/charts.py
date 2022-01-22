@@ -8,6 +8,7 @@ from datetime import timedelta
 from typing import Any
 from typing import Generator
 from typing import Pattern
+from typing import TYPE_CHECKING
 
 from beancount.core import realization
 from beancount.core.amount import Amount
@@ -28,7 +29,11 @@ from fava.helpers import FavaAPIException
 from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
-from fava.util.typing import TypedDict
+
+if TYPE_CHECKING:
+    from typing import TypedDict
+else:
+    TypedDict = dict
 
 
 ONE_DAY = timedelta(days=1)

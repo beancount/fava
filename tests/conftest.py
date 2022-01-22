@@ -8,15 +8,22 @@ from typing import Any
 from typing import Callable
 from typing import Counter
 from typing import Iterable
+from typing import TYPE_CHECKING
 
 import pytest
 from beancount.loader import load_string
+from flask.app import Flask
+from flask.testing import FlaskClient
+from pytest import FixtureRequest
 
 from fava.application import _load_file
 from fava.application import app as fava_app
 from fava.core import FavaLedger
+from fava.core.budgets import BudgetDict
 from fava.core.budgets import parse_budgets
 
+if TYPE_CHECKING:
+    from fava.util.typing import LoaderResult
 
 TESTS_DIR = Path(__file__).parent
 
@@ -50,15 +57,18 @@ MSG = "Maybe snapshots need to be updated with `SNAPSHOT_UPDATE=1 make test`?"
 SNAPS: Counter[Path] = Counter()
 
 
+SnapshotFunc = Callable[[Any], None]
+
+
 @pytest.fixture()
-def snapshot(request) -> Callable[[Any], None]:
+def snapshot(request: FixtureRequest) -> SnapshotFunc:
     file_path = Path(request.fspath)
     fn_name = request.function.__name__
     snap_dir = file_path.parent / "__snapshots__"
     if not snap_dir.exists():
         snap_dir.mkdir()
 
-    def _snapshot_data(data) -> None:
+    def _snapshot_data(data: Any) -> None:
         snap_file = snap_dir / f"{file_path.name}-{fn_name}"
         SNAPS[snap_file] += 1
         if SNAPS[snap_file] > 1:
@@ -80,9 +90,9 @@ def snapshot(request) -> Callable[[Any], None]:
         if not snap_file.exists():
             contents = ""
         else:
-            contents = snap_file.read_text(encoding="utf-8")
+            contents = snap_file.read_text("utf-8")
         if SNAPSHOT_UPDATE:
-            snap_file.write_text(out, encoding="utf-8")
+            snap_file.write_text(out, "utf-8")
             return
 
         assert out == contents, MSG
@@ -91,17 +101,17 @@ def snapshot(request) -> Callable[[Any], None]:
 
 
 @pytest.fixture
-def app():
+def app() -> Flask:
     return fava_app
 
 
 @pytest.fixture
-def test_client():
+def test_client() -> FlaskClient:
     return TEST_CLIENT
 
 
 @pytest.fixture
-def load_doc(request):
+def load_doc(request: FixtureRequest) -> LoaderResult:
     return load_string(request.function.__doc__, dedent=True)
 
 
@@ -117,7 +127,7 @@ def example_ledger() -> Iterable[FavaLedger]:
 
 
 @pytest.fixture
-def budgets_doc(request):
+def budgets_doc(request: FixtureRequest) -> BudgetDict:
     entries, _, _ = load_string(request.function.__doc__, dedent=True)
-    budgets, _ = parse_budgets(entries)
+    budgets, _ = parse_budgets(entries)  # type: ignore
     return budgets

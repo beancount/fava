@@ -2,13 +2,16 @@
 from __future__ import annotations
 
 from beancount.core.amount import A
+from flask import Flask
 from flask import get_template_attribute
+
+from fava.core import FavaLedger
 
 
 COMMODITY_MACROS_PATH = "macros/_commodity_macros.html"
 
 
-def test_render_currency(app, example_ledger) -> None:
+def test_render_currency(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context(""):
         macro = get_template_attribute(
             COMMODITY_MACROS_PATH, "render_currency"
@@ -18,7 +21,7 @@ def test_render_currency(app, example_ledger) -> None:
         assert macro(example_ledger, "TEST") == test
 
 
-def test_render_amount(app, example_ledger) -> None:
+def test_render_amount(app: Flask, example_ledger: FavaLedger) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         macro = get_template_attribute(COMMODITY_MACROS_PATH, "render_amount")

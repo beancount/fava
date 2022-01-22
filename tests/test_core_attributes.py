@@ -1,11 +1,17 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from fava.core.attributes import get_active_years
 from fava.util.date import FiscalYearEnd
 
+if TYPE_CHECKING:
+    from fava.core import FavaLedger
+    from fava.util.typing import LoaderResult
 
-def test_get_active_years(load_doc) -> None:
+
+def test_get_active_years(load_doc: LoaderResult) -> None:
     """
     2010-11-12 * "test"
         Assets:T   4.00 USD
@@ -36,7 +42,7 @@ def test_get_active_years(load_doc) -> None:
     ]
 
 
-def test_payee_accounts(example_ledger) -> None:
+def test_payee_accounts(example_ledger: FavaLedger) -> None:
     attr = example_ledger.attributes
     assert attr.payee_accounts("NOTAPAYEE") == attr.accounts
 
@@ -45,8 +51,9 @@ def test_payee_accounts(example_ledger) -> None:
     assert len(verizon) == len(attr.accounts)
 
 
-def test_payee_transaction(example_ledger) -> None:
+def test_payee_transaction(example_ledger: FavaLedger) -> None:
     attr = example_ledger.attributes
     assert attr.payee_transaction("NOTAPAYEE") is None
 
-    assert str(attr.payee_transaction("BayBook").date) == "2016-05-05"
+    txn = attr.payee_transaction("BayBook")
+    assert txn and str(txn.date) == "2016-05-05"

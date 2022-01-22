@@ -2,20 +2,21 @@
 from __future__ import annotations
 
 from beancount.core.amount import A
+from beancount.core.number import D
 
 from fava.core.inventory import CounterInventory
 
 
-def test_add():
+def test_add() -> None:
     inv = CounterInventory()
-    key = "KEY"
-    inv.add(key, 10)
+    key = ("KEY", None)
+    inv.add(key, D(10))
     assert len(inv) == 1
-    inv.add(key, -10)
+    inv.add(key, D(-10))
     assert inv.is_empty()
 
 
-def test_add_amount():
+def test_add_amount() -> None:
     inv = CounterInventory()
     inv.add_amount(A("10 USD"))
     inv.add_amount(A("30 USD"))
@@ -31,7 +32,7 @@ def test_add_amount():
     assert len(inv) == 1
 
 
-def test_add_inventory():
+def test_add_inventory() -> None:
     inv = CounterInventory()
     inv2 = CounterInventory()
     inv3 = CounterInventory()

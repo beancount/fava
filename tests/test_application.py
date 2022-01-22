@@ -5,9 +5,12 @@ import pytest
 import werkzeug.routing
 import werkzeug.urls
 from beancount import __version__ as beancount_version
+from flask import Flask
 from flask import url_for
 from flask.testing import FlaskClient
+from pytest import MonkeyPatch
 
+from .conftest import SnapshotFunc
 from fava import __version__ as fava_version
 from fava.application import REPORTS
 from fava.application import static_url
@@ -28,7 +31,9 @@ FILTER_COMBINATIONS = [
         for filters in FILTER_COMBINATIONS
     ],
 )
-def test_reports(app, test_client: FlaskClient, report, filters):
+def test_reports(
+    app: Flask, test_client: FlaskClient, report: str, filters: dict[str, str]
+) -> None:
     """The standard reports work without error (content isn't checked here)."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -39,7 +44,9 @@ def test_reports(app, test_client: FlaskClient, report, filters):
 
 
 @pytest.mark.parametrize("filters", FILTER_COMBINATIONS)
-def test_account_page(app, test_client: FlaskClient, filters):
+def test_account_page(
+    app: Flask, test_client: FlaskClient, filters: dict[str, str]
+) -> None:
     """Account page works without error."""
     for subreport in ["journal", "balances", "changes"]:
         with app.test_request_context("/long-example/"):
@@ -59,7 +66,7 @@ def test_account_page(app, test_client: FlaskClient, filters):
     "url,return_code",
     [("/", 302), ("/asdfasdf/", 404), ("/asdfasdf/asdfasdf/", 404)],
 )
-def test_urls(test_client: FlaskClient, url, return_code):
+def test_urls(test_client: FlaskClient, url: str, return_code: int) -> None:
     """Some URLs return a 404."""
     result = test_client.get(url)
     assert result.status_code == return_code
@@ -104,8 +111,13 @@ def test_urls(test_client: FlaskClient, url, return_code):
     ],
 )
 def test_default_path_redirection(
-    app, test_client: FlaskClient, url, option, expect, monkeypatch
-):
+    app: Flask,
+    test_client: FlaskClient,
+    url: str,
+    option: str | None,
+    expect: str,
+    monkeypatch: MonkeyPatch,
+) -> None:
     """Test that default-page option redirects as expected."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -131,8 +143,12 @@ def test_default_path_redirection(
     ],
 )
 def test_jump_handler(
-    app, test_client: FlaskClient, referer, jump_link, expect
-):
+    app: Flask,
+    test_client: FlaskClient,
+    referer: str,
+    jump_link: str,
+    expect: str,
+) -> None:
     """Test /jump handler correctly redirect to the right location.
 
     Note: according to RFC 2616, Location: header should use an absolute URL.
@@ -145,49 +161,39 @@ def test_jump_handler(
         assert get_url == expect_url
 
 
-def test_help_ages(app, test_client: FlaskClient):
+def test_help_ages(test_client: FlaskClient) -> None:
     """Help pages."""
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("help_page")
-        result = test_client.get(url)
-        assert result.status_code == 200
-        assert f"Fava <code>{fava_version}</code>" in result.get_data(True)
-        assert f"<code>{beancount_version}</code>" in result.get_data(True)
-        url = url_for("help_page", page_slug="filters")
-        result = test_client.get(url)
-        assert result.status_code == 200
-        url = url_for("help_page", page_slug="asdfasdf")
-        result = test_client.get(url)
-        assert result.status_code == 404
+    result = test_client.get("/long-example/help/")
+    assert result.status_code == 200
+    assert f"Fava <code>{fava_version}</code>" in result.get_data(True)
+    assert f"<code>{beancount_version}</code>" in result.get_data(True)
+    result = test_client.get("/long-example/help/filters")
+    assert result.status_code == 200
+    result = test_client.get("/long-example/help/asdfasdf")
+    assert result.status_code == 404
 
 
-def test_query_download(app, test_client: FlaskClient):
-    """Download query result."""
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for(
-            "download_query", result_format="csv", query_string="balances"
-        )
-        result = test_client.get(url)
-        assert result.status_code == 200
+def test_query_download(test_client: FlaskClient) -> None:
+    """Download query as csv."""
+    result = test_client.get(
+        "/long-example/download-query/query_result.csv?query_string=balances"
+    )
+    assert result.status_code == 200
 
 
-def test_incognito(app, test_client: FlaskClient):
+def test_incognito(
+    app: Flask, test_client: FlaskClient, monkeypatch: MonkeyPatch
+) -> None:
     """Numbers get obfuscated in incognito mode."""
-    app.config["INCOGNITO"] = True
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("report", report_name="balance_sheet")
-
-    result = test_client.get(url)
+    monkeypatch.setitem(app.config, "INCOGNITO", True)
+    result = test_client.get("/long-example/balance_sheet/")
     assert result.status_code == 200
     assert "XXX" in result.get_data(True)
 
-    app.config["INCOGNITO"] = False
 
-
-def test_download_journal(app, test_client: FlaskClient, snapshot) -> None:
+def test_download_journal(
+    app: Flask, test_client: FlaskClient, snapshot: SnapshotFunc
+) -> None:
     """The currently filtered journal can be downloaded."""
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -200,17 +206,15 @@ def test_download_journal(app, test_client: FlaskClient, snapshot) -> None:
     assert result.headers["Content-Type"] == "application/octet-stream"
 
 
-def test_static_url(app) -> None:
+def test_static_url(app: Flask) -> None:
     """Static URLs have the mtime appended."""
-    filename = "app.js"
     with app.test_request_context():
         app.preprocess_request()
-        url = static_url(filename)
-    assert url.startswith("/static/" + filename)
-    assert "?mtime=" in url
+        url = static_url("app.js")
+    assert url.startswith("/static/app.js?mtime=")
 
 
-def test_load_extension_reports(app, test_client: FlaskClient):
+def test_load_extension_reports(app: Flask, test_client: FlaskClient) -> None:
     """Extension can register reports."""
     with app.test_request_context("/extension-report-beancount-file/"):
         app.preprocess_request()

@@ -7,7 +7,7 @@ from pathlib import Path
 from fava.core.watcher import Watcher
 
 
-def test_watcher_file(tmp_path: Path):
+def test_watcher_file(tmp_path: Path) -> None:
     file1 = tmp_path / "file1"
     file2 = tmp_path / "file2"
     file1.write_text("test")
@@ -25,7 +25,7 @@ def test_watcher_file(tmp_path: Path):
     assert watcher.check()
 
 
-def test_watcher_deleted_file(tmp_path: Path):
+def test_watcher_deleted_file(tmp_path: Path) -> None:
     file1 = tmp_path / "file1"
     file1.write_text("test")
 
@@ -37,7 +37,7 @@ def test_watcher_deleted_file(tmp_path: Path):
     assert watcher.check()
 
 
-def test_watcher_folder(tmp_path: Path):
+def test_watcher_folder(tmp_path: Path) -> None:
     folder = tmp_path / "folder"
     folder.mkdir()
     (folder / "bar").mkdir()

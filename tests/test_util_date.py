@@ -57,7 +57,7 @@ def test_get_next_interval(
 
 def test_get_next_intervalfail2() -> None:
     with pytest.raises(NotImplementedError):
-        get_next_interval(date(2016, 4, 18), "decade")
+        get_next_interval(date(2016, 4, 18), "decade")  # type: ignore
 
 
 def test_interval_tuples() -> None:
@@ -120,7 +120,7 @@ def test_substitute(string: str, output: str) -> None:
 
 
 @pytest.mark.parametrize(
-    "fye,test_date,string,output",
+    "fye_str,test_date,string,output",
     [
         ("06-30", "2018-02-02", "fiscal_year", "FY2018"),
         ("06-30", "2018-08-02", "fiscal_year", "FY2019"),
@@ -138,9 +138,9 @@ def test_substitute(string: str, output: str) -> None:
     ],
 )
 def test_fiscal_substitute(
-    fye: str, test_date: str, string: str, output: str | None
+    fye_str: str, test_date: str, string: str, output: str | None
 ) -> None:
-    fye = parse_fye_string(fye)
+    fye = parse_fye_string(fye_str)
     with mock.patch("fava.util.date.datetime.date") as mock_date:
         mock_date.today.return_value = _to_date(test_date)
         mock_date.side_effect = date
@@ -231,7 +231,7 @@ def test_number_of_days_in_period(
 
 def test_number_of_days_in_period2() -> None:
     with pytest.raises(NotImplementedError):
-        number_of_days_in_period("test", date(2011, 2, 1))
+        number_of_days_in_period("test", date(2011, 2, 1))  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -244,7 +244,9 @@ def test_number_of_days_in_period2() -> None:
         ("2018-01-12", -13, "2016-12-12"),
     ],
 )
-def test_month_offset(date_input: str, offset: int, expected: str | None):
+def test_month_offset(
+    date_input: str, offset: int, expected: str | None
+) -> None:
     start_date = _to_date(date_input)
     if expected is None:
         with pytest.raises(ValueError):
@@ -254,7 +256,7 @@ def test_month_offset(date_input: str, offset: int, expected: str | None):
 
 
 @pytest.mark.parametrize(
-    "year,quarter,fye,expect_start,expect_end",
+    "year,quarter,fye_str,expect_start,expect_end",
     [
         # standard calendar year [FYE=12-31]
         (2018, None, "12-31", "2018-01-01", "2019-01-01"),
@@ -285,11 +287,11 @@ def test_month_offset(date_input: str, offset: int, expected: str | None):
 def test_get_fiscal_period(
     year: int,
     quarter: int | None,
-    fye: str | None,
+    fye_str: str | None,
     expect_start: str,
     expect_end: str,
 ) -> None:
-    fye = parse_fye_string(fye)
+    fye = parse_fye_string(fye_str) if fye_str else None
     start_date, end_date = get_fiscal_period(year, fye, quarter)
     assert str(start_date) == expect_start
     assert str(end_date) == expect_end

@@ -11,6 +11,7 @@ from beancount.core.amount import A
 from beancount.core.data import Posting
 from beancount.core.data import Transaction
 
+from .conftest import SnapshotFunc
 from fava.core import FavaLedger
 from fava.core.fava_options import InsertEntryOption
 from fava.core.file import find_entry_lines
@@ -48,16 +49,16 @@ def test_save_entry_slice(example_ledger: FavaLedger) -> None:
     new_source = """2016-05-03 * "Chichipotle" "Eating out with Joe"
   Expenses:Food:Restaurant                          21.70 USD"""
     filename = Path(entry.meta["filename"])
-    contents = filename.read_text(encoding="utf-8")
+    contents = filename.read_text("utf-8")
 
     with pytest.raises(FavaAPIException):
         save_entry_slice(entry, new_source, "wrong hash")
-        assert filename.read_text(encoding="utf-8") == contents
+        assert filename.read_text("utf-8") == contents
 
     new_sha256sum = save_entry_slice(entry, new_source, sha256sum)
-    assert filename.read_text(encoding="utf-8") != contents
+    assert filename.read_text("utf-8") != contents
     sha256sum = save_entry_slice(entry, entry_source, new_sha256sum)
-    assert filename.read_text(encoding="utf-8") == contents
+    assert filename.read_text("utf-8") == contents
 
 
 def test_insert_metadata_in_file(tmp_path: Path) -> None:
@@ -155,8 +156,8 @@ def test_insert_entry_transaction(tmp_path: Path) -> None:
         "*",
         "new payee",
         "narr",
-        None,
-        None,
+        frozenset(),
+        frozenset(),
         postings,
     )
 
@@ -334,8 +335,8 @@ def test_insert_entry_align(tmp_path: Path) -> None:
         "*",
         "new payee",
         "narr",
-        None,
-        None,
+        frozenset(),
+        frozenset(),
         postings,
     )
 
@@ -382,8 +383,8 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
         "*",
         "new payee",
         "narr",
-        None,
-        None,
+        frozenset(),
+        frozenset(),
         postings,
     )
 
@@ -402,7 +403,9 @@ def test_insert_entry_indent(tmp_path: Path) -> None:
     )
 
 
-def test_render_entries(example_ledger: FavaLedger, snapshot) -> None:
+def test_render_entries(
+    example_ledger: FavaLedger, snapshot: SnapshotFunc
+) -> None:
     entry1 = _get_entry(example_ledger, "Uncle Boons", "2016-04-09")
     entry2 = _get_entry(example_ledger, "BANK FEES", "2016-05-04")
     postings = [
@@ -414,8 +417,8 @@ def test_render_entries(example_ledger: FavaLedger, snapshot) -> None:
         "*",
         "new payee",
         "narr",
-        None,
-        None,
+        frozenset(),
+        frozenset(),
         postings,
     )
     entries = example_ledger.file.render_entries([entry1, entry2, transaction])

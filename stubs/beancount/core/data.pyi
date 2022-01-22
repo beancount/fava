@@ -63,7 +63,7 @@ class Balance(NamedTuple):
     account: Account
     amount: Amount
     tolerance: Optional[Decimal]
-    diff_amount: Optional[Decimal]
+    diff_amount: Optional[Amount]
 
 class Posting(NamedTuple):
     account: Account
@@ -146,7 +146,10 @@ def new_metadata(
     filename: Any, lineno: Any, kvlist: Optional[Any] = ...
 ) -> Meta: ...
 def create_simple_posting(
-    entry: Transaction, account: str, number: Decimal, currency: str
+    entry: Transaction,
+    account: str,
+    number: Decimal | None,
+    currency: str | None,
 ) -> None: ...
 
 # def create_simple_posting_with_cost(

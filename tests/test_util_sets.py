@@ -6,7 +6,7 @@ from fava.util.sets import add_to_set
 
 def test_add_to_set_basic() -> None:
     assert add_to_set(None, "test") == {"test"}
-    assert add_to_set({}, "test") == {"test"}
+    assert add_to_set(set(), "test") == {"test"}
     assert add_to_set({"test"}, "test") == {"test"}
 
 

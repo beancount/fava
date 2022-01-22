@@ -4,15 +4,17 @@ from __future__ import annotations
 import pytest
 from beancount.core.number import D
 
+from .conftest import SnapshotFunc
 from fava.core import FavaLedger
 from fava.core.charts import PRETTY_ENCODER
 from fava.util.date import Interval
 
-
 dumps = PRETTY_ENCODER.encode
 
 
-def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
+def test_interval_totals(
+    small_example_ledger: FavaLedger, snapshot: SnapshotFunc
+) -> None:
     for conversion in ["at_cost", "USD"]:
         data = small_example_ledger.charts.interval_totals(
             Interval.MONTH, "Expenses", conversion
@@ -21,7 +23,7 @@ def test_interval_totals(small_example_ledger: FavaLedger, snapshot) -> None:
 
 
 def test_interval_totals_inverted(
-    small_example_ledger: FavaLedger, snapshot
+    small_example_ledger: FavaLedger, snapshot: SnapshotFunc
 ) -> None:
     for conversion in ["at_cost", "USD"]:
         data = small_example_ledger.charts.interval_totals(
@@ -30,13 +32,15 @@ def test_interval_totals_inverted(
         snapshot(dumps(data))
 
 
-def test_prices(example_ledger: FavaLedger, snapshot) -> None:
+def test_prices(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     data = example_ledger.charts.prices()
     assert all(price[1] for price in data)
     snapshot(data)
 
 
-def test_linechart_data(example_ledger: FavaLedger, snapshot) -> None:
+def test_linechart_data(
+    example_ledger: FavaLedger, snapshot: SnapshotFunc
+) -> None:
     for conversion in ["at_cost", "units", "at_value", "USD"]:
         data = example_ledger.charts.linechart(
             "Assets:Testing:MultipleCommodities", conversion
@@ -44,7 +48,7 @@ def test_linechart_data(example_ledger: FavaLedger, snapshot) -> None:
         snapshot(dumps(data))
 
 
-def test_net_worth(example_ledger: FavaLedger, snapshot) -> None:
+def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
     data = example_ledger.charts.net_worth(Interval.MONTH, "USD")
     snapshot(dumps(data))
 
@@ -71,7 +75,9 @@ def test_hierarchy(example_ledger: FavaLedger) -> None:
         ("select date, sum(position) group by date"),
     ],
 )
-def test_query(example_ledger: FavaLedger, snapshot, query) -> None:
+def test_query(
+    example_ledger: FavaLedger, snapshot: SnapshotFunc, query: str
+) -> None:
     _, types, rows = example_ledger.query_shell.execute_query(query)
     data = example_ledger.charts.query(types, rows)
     snapshot(dumps(data))

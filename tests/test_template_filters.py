@@ -7,8 +7,12 @@ from decimal import Decimal
 
 import pytest
 from beancount.core import realization
+from beancount.core.number import D
+from flask import Flask
+from pytest import MonkeyPatch
 
 from fava.context import g
+from fava.core import FavaLedger
 from fava.core.accounts import AccountData
 from fava.core.inventory import CounterInventory
 from fava.core.tree import TreeNode
@@ -38,7 +42,7 @@ def test_remove_keys() -> None:
         ("day", "2012-12-20"),
     ],
 )
-def test_format_date(app, interval, output) -> None:
+def test_format_date(app: Flask, interval: str, output: str) -> None:
     test_date = date(2012, 12, 20)
     url = (
         f"/long-example/?interval={interval}" if interval else "/long-example"
@@ -48,19 +52,19 @@ def test_format_date(app, interval, output) -> None:
         assert format_date(test_date) == output
 
 
-def test_format_currency(app) -> None:
+def test_format_currency(app: Flask) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         assert format_currency(Decimal("2.12")) == "2.12"
         assert format_currency(Decimal("2.13"), invert=True) == "-2.13"
 
 
-def test_basename():
+def test_basename() -> None:
     """Get the basename of a file path."""
     assert basename(__file__) == "test_template_filters.py"
 
 
-def test_get_or_create(example_ledger):
+def test_get_or_create(example_ledger: FavaLedger) -> None:
     assert (
         get_or_create(example_ledger.root_account, "")
         == example_ledger.root_account
@@ -70,7 +74,7 @@ def test_get_or_create(example_ledger):
     ) == realization.get(example_ledger.root_account, "Expenses")
 
 
-def test_should_show(app):
+def test_should_show(app: Flask) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         assert should_show(g.ledger.root_tree.get("")) is True
@@ -78,7 +82,7 @@ def test_should_show(app):
 
         account = TreeNode("name")
         assert should_show(account) is False
-        account.balance_children = CounterInventory({("USD", None): 9})
+        account.balance_children = CounterInventory({("USD", None): D("9")})
         assert should_show(account) is True
     with app.test_request_context("/long-example/income_statement/?time=2100"):
         app.preprocess_request()
@@ -87,7 +91,7 @@ def test_should_show(app):
         assert should_show(g.ledger.root_tree.get("Expenses")) is False
 
 
-def test_format_errormsg(app):
+def test_format_errormsg(app: Flask) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         assert (
@@ -103,7 +107,7 @@ def test_format_errormsg(app):
         assert format_errormsg("Test: Test") == "Test: Test"
 
 
-def test_collapse_account(app, monkeypatch):
+def test_collapse_account(app: Flask, monkeypatch: MonkeyPatch) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
 

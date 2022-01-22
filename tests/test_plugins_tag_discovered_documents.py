@@ -4,6 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from textwrap import dedent
 
+from beancount.core.data import Document
 from beancount.loader import load_file
 
 
@@ -42,8 +43,10 @@ def test_tag_discovered_plugin(tmp_path: Path) -> None:
     assert not errors
     assert len(entries) == 3
 
+    assert isinstance(entries[1], Document)
     assert discovered in entries[1].filename
-    assert "discovered" in entries[1].tags
+    assert entries[1].tags and "discovered" in entries[1].tags
 
+    assert isinstance(entries[2], Document)
     assert non_discovered in entries[2].filename
     assert not entries[2].tags

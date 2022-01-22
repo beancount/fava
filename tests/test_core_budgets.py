@@ -2,15 +2,20 @@
 from __future__ import annotations
 
 from datetime import date
+from typing import TYPE_CHECKING
 
 from beancount.core.number import D
 
+from fava.core.budgets import BudgetDict
 from fava.core.budgets import calculate_budget
 from fava.core.budgets import calculate_budget_children
 from fava.core.budgets import parse_budgets
 
+if TYPE_CHECKING:
+    from fava.util.typing import LoaderResult
 
-def test_budgets(load_doc):
+
+def test_budgets(load_doc: LoaderResult) -> None:
     """
     2016-01-01 custom "budget" Expenses:Groceries "weekly" 100.00 CNY
     2016-06-01 custom "budget" Expenses:Groceries "weekly"  10.00 EUR
@@ -18,7 +23,7 @@ def test_budgets(load_doc):
     2016-06-01 custom "budget" Expenses:Groceries 10.00 EUR
     """
     entries, _, _ = load_doc
-    budgets, errors = parse_budgets(entries)
+    budgets, errors = parse_budgets(entries)  # type: ignore
 
     assert len(errors) == 2
 
@@ -27,15 +32,15 @@ def test_budgets(load_doc):
     )
     assert empty == {}
 
-    budgets = calculate_budget(
+    budgets_ = calculate_budget(
         budgets, "Expenses:Groceries", date(2016, 6, 1), date(2016, 6, 8)
     )
 
-    assert budgets["CNY"] == D("100")
-    assert budgets["EUR"] == D("10")
+    assert budgets_["CNY"] == D("100")
+    assert budgets_["EUR"] == D("10")
 
 
-def test_budgets_daily(budgets_doc):
+def test_budgets_daily(budgets_doc: BudgetDict) -> None:
     """
     2016-05-01 custom "budget" Expenses:Books "daily" 2.5 EUR"""
 
@@ -56,7 +61,7 @@ def test_budgets_daily(budgets_doc):
     )["EUR"] == D("2.5")
 
 
-def test_budgets_weekly(budgets_doc):
+def test_budgets_weekly(budgets_doc: BudgetDict) -> None:
     """
     2016-05-01 custom "budget" Expenses:Books "weekly" 21 EUR"""
 
@@ -74,7 +79,7 @@ def test_budgets_weekly(budgets_doc):
     )
 
 
-def test_budgets_monthly(budgets_doc):
+def test_budgets_monthly(budgets_doc: BudgetDict) -> None:
     """
     2014-05-01 custom "budget" Expenses:Books "monthly" 100 EUR"""
 
@@ -98,7 +103,7 @@ def test_budgets_monthly(budgets_doc):
     )
 
 
-def test_budgets_doc_quarterly(budgets_doc):
+def test_budgets_doc_quarterly(budgets_doc: BudgetDict) -> None:
     """
     2014-05-01 custom "budget" Expenses:Books "quarterly" 123456.7 EUR"""
 
@@ -116,7 +121,7 @@ def test_budgets_doc_quarterly(budgets_doc):
     )
 
 
-def test_budgets_doc_yearly(budgets_doc):
+def test_budgets_doc_yearly(budgets_doc: BudgetDict) -> None:
     """
     2010-01-01 custom "budget" Expenses:Books "yearly" 99999.87 EUR"""
 
@@ -128,7 +133,7 @@ def test_budgets_doc_yearly(budgets_doc):
     )
 
 
-def test_budgets_children(budgets_doc):
+def test_budgets_children(budgets_doc: BudgetDict) -> None:
     """
     2017-01-01 custom "budget" Expenses:Books "daily" 10.00 USD
     2017-01-01 custom "budget" Expenses:Books:Notebooks "daily" 2.00 USD"""

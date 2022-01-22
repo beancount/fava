@@ -4,10 +4,11 @@ from __future__ import annotations
 import pytest
 from beancount.query.query import run_query
 
+from fava.core import FavaLedger
 from fava.util import excel
 
 
-def test_to_csv(example_ledger):
+def test_to_csv(example_ledger: FavaLedger) -> None:
     types, rows = run_query(
         example_ledger.all_entries,
         example_ledger.options,
@@ -25,7 +26,7 @@ def test_to_csv(example_ledger):
 
 
 @pytest.mark.skipif(not excel.HAVE_EXCEL, reason="pyexcel not installed")
-def test_to_excel(example_ledger):
+def test_to_excel(example_ledger: FavaLedger) -> None:
     types, rows = run_query(
         example_ledger.all_entries,
         example_ledger.options,

@@ -1,6 +1,9 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+from typing import Generator
+
+from flask import Flask
 from werkzeug.test import Client
 from werkzeug.wrappers import Response
 
@@ -13,20 +16,20 @@ from fava.util import simple_wsgi
 from fava.util import slugify
 
 
-def test_listify():
+def test_listify() -> None:
     @listify
-    def fun():
+    def fun() -> Generator[int, None, None]:
         yield from [1, 2, 3]
 
     assert fun() == [1, 2, 3]
 
 
-def test_pairwise():
+def test_pairwise() -> None:
     assert list(pairwise([1, 2, 3])) == [(1, 2), (2, 3)]
     assert not list(pairwise([]))
 
 
-def test_simple_wsgi():
+def test_simple_wsgi() -> None:
     client = Client(simple_wsgi, Response)
     resp = client.get("/any_path")
     assert resp.status_code == 200
@@ -43,7 +46,7 @@ def test_next_key() -> None:
     )
 
 
-def test_slugify():
+def test_slugify() -> None:
     assert slugify("Example Beancount File") == "example-beancount-file"
     assert slugify("    Example Beancount File  ") == "example-beancount-file"
     assert slugify("test") == "test"
@@ -55,7 +58,7 @@ def test_slugify():
     assert slugify("ASDF test test") == "asdf-test-test"
 
 
-def test_send_file_inline(app):
+def test_send_file_inline(app: Flask) -> None:
     with app.test_request_context():
         resp = send_file_inline(data_file("example-balances.csv"))
         assert (

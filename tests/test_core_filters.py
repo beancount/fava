@@ -4,10 +4,15 @@ from __future__ import annotations
 import datetime
 
 import pytest
-from beancount.core import account
+from beancount.core.account import has_component
 from beancount.core.data import create_simple_posting
 from beancount.core.data import Transaction
+from beancount.core.number import D
+from beancount.parser.options import OPTIONS_DEFAULTS
 
+from fava.core import FavaLedger
+from fava.core.accounts import get_entry_accounts
+from fava.core.fava_options import FavaOptions
 from fava.core.filters import AccountFilter
 from fava.core.filters import AdvancedFilter
 from fava.core.filters import FilterException
@@ -18,7 +23,7 @@ from fava.core.filters import TimeFilter
 LEX = FilterSyntaxLexer().lex
 
 
-def test_match():
+def test_match() -> None:
     assert Match("asdf")("asdf")
     assert Match("asdf")("asdfasdf")
     assert Match("asdf")("aasdfasdf")
@@ -28,7 +33,7 @@ def test_match():
     assert Match("(((")("(((")
 
 
-def test_lexer_basic():
+def test_lexer_basic() -> None:
     data = "#some_tag ^some_link -^some_link"
     assert [(tok.type, tok.value) for tok in LEX(data)] == [
         ("TAG", "some_tag"),
@@ -46,7 +51,7 @@ def test_lexer_basic():
         list(LEX("|"))
 
 
-def test_lexer_literals_in_string():
+def test_lexer_literals_in_string() -> None:
     data = "string-2-2 string"
     assert [(tok.type, tok.value) for tok in LEX(data)] == [
         ("STRING", "string-2-2"),
@@ -54,7 +59,7 @@ def test_lexer_literals_in_string():
     ]
 
 
-def test_lexer_key():
+def test_lexer_key() -> None:
     data = 'payee:asdfasdf ^some_link somekey:"testtest" '
     assert [(tok.type, tok.value) for tok in LEX(data)] == [
         ("KEY", "payee"),
@@ -65,7 +70,7 @@ def test_lexer_key():
     ]
 
 
-def test_lexer_parentheses():
+def test_lexer_parentheses() -> None:
     data = "(payee:asdfasdf ^some_link) (somekey:'testtest')"
     assert [(tok.type, tok.value) for tok in LEX(data)] == [
         ("(", "("),
@@ -80,21 +85,15 @@ def test_lexer_parentheses():
     ]
 
 
-FILTER = AdvancedFilter({}, {})
+FILTER = AdvancedFilter(OPTIONS_DEFAULTS, FavaOptions())
 
 
-def test_filterexception():
+def test_filterexception() -> None:
     with pytest.raises(FilterException) as exception:
-        raise FilterException("type", "error")
-    exception = exception.value
-    assert str(exception) == "error"
-    assert str(exception) == exception.message
-
-    with pytest.raises(FilterException):
         FILTER.set('who:"fff')
         assert str(exception) == 'Illegal character """ in filter: who:"fff'
 
-    with pytest.raises(FilterException):
+    with pytest.raises(FilterException) as exception:
         FILTER.set('any(who:"Martin"')
         assert str(exception) == 'Failed to parse filter: any(who:"Martin"'
 
@@ -127,13 +126,15 @@ def test_filterexception():
         ('any(overage:"GB$")', 1),
     ],
 )
-def test_advanced_filter(example_ledger, string, number):
+def test_advanced_filter(
+    example_ledger: FavaLedger, string: str, number: int
+) -> None:
     FILTER.set(string)
     filtered_entries = FILTER.apply(example_ledger.all_entries)
     assert len(filtered_entries) == number
 
 
-def test_null_meta_posting():
+def test_null_meta_posting() -> None:
     FILTER.set('any(some_meta:"1")')
 
     txn = Transaction(
@@ -142,17 +143,17 @@ def test_null_meta_posting():
         "*",
         "",
         "",
-        None,
-        None,
+        frozenset(),
+        frozenset(),
         [],
     )
     # This will create a posting with meta set to `None`.
-    create_simple_posting(txn, "Assets:ETrade:Cash", "100", "USD")
+    create_simple_posting(txn, "Assets:ETrade:Cash", D("100"), "USD")
     assert txn.postings[0].meta is None
     assert len(FILTER.apply([txn])) == 0
 
 
-def test_account_filter(example_ledger):
+def test_account_filter(example_ledger: FavaLedger) -> None:
     account_filter = AccountFilter(
         example_ledger.options, example_ledger.fava_options
     )
@@ -160,26 +161,18 @@ def test_account_filter(example_ledger):
     account_filter.set("Assets")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 541
-    assert all(
-        map(
-            lambda x: hasattr(x, "account")
-            and account.has_component(x.account, "Assets")
-            or any(
-                map(
-                    lambda p: account.has_component(p.account, "Assets"),
-                    x.postings,
-                )
-            ),
-            filtered_entries,
+
+    for entry in filtered_entries:
+        assert any(
+            has_component(a, "Assets") for a in get_entry_accounts(entry)
         )
-    )
 
     account_filter.set(".*US:State")
     filtered_entries = account_filter.apply(example_ledger.all_entries)
     assert len(filtered_entries) == 67
 
 
-def test_time_filter(example_ledger):
+def test_time_filter(example_ledger: FavaLedger) -> None:
     time_filter = TimeFilter(
         example_ledger.options, example_ledger.fava_options
     )

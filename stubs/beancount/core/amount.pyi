@@ -31,7 +31,8 @@ class Amount(_Amount):
 # def sub(amount1: Any, amount2: Any): ...
 # def abs(amount: Any): ...
 #
-# A: Any
+def A(s: str) -> Amount: ...
+
 #
 # from_string: Any
 # NULL_AMOUNT: Any

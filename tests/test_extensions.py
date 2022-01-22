@@ -5,7 +5,7 @@ from .conftest import data_file
 from fava.core import FavaLedger
 
 
-def test_report_page_globals():
+def test_report_page_globals() -> None:
     """Extensions can register reports."""
     extension_report_ledger = FavaLedger(
         data_file("extension-report-example.beancount")

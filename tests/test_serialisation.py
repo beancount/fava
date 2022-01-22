@@ -10,9 +10,9 @@ from beancount.core.data import Balance
 from beancount.core.data import Booking
 from beancount.core.data import Close
 from beancount.core.data import Commodity
-from beancount.core.data import CostSpec
 from beancount.core.data import create_simple_posting
 from beancount.core.data import Document
+from beancount.core.data import Entries
 from beancount.core.data import Event
 from beancount.core.data import Note
 from beancount.core.data import Open
@@ -23,8 +23,10 @@ from beancount.core.data import Query
 from beancount.core.data import Transaction
 from beancount.core.number import D
 from beancount.core.number import MISSING
+from beancount.core.position import CostSpec
 from flask.json import loads
 
+from .conftest import SnapshotFunc
 from fava.core.charts import PRETTY_ENCODER
 from fava.core.file import _format_entry
 from fava.helpers import FavaAPIException
@@ -32,7 +34,6 @@ from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
 from fava.serialisation import extract_tags_links
 from fava.serialisation import serialise
-
 
 dumps = PRETTY_ENCODER.encode
 
@@ -48,7 +49,7 @@ def test_serialise_txn() -> None:
         frozenset(["link"]),
         [],
     )
-    create_simple_posting(txn, "Assets:ETrade:Cash", "100", "USD")
+    create_simple_posting(txn, "Assets:ETrade:Cash", D("100"), "USD")
     create_simple_posting(txn, "Assets:ETrade:GLD", None, None)
 
     json_txn = {
@@ -77,9 +78,9 @@ def test_serialise_txn() -> None:
     assert serialised == json_txn
 
 
-def test_serialise_entry_types(snapshot) -> None:
+def test_serialise_entry_types(snapshot: SnapshotFunc) -> None:
     date_ = datetime.date(2017, 12, 12)
-    entries = [
+    entries: Entries = [
         Open({}, date_, "Assets:Cash", ["USD"], Booking.STRICT),
         Close({}, date_, "Assets:Cash"),
         Balance({}, date_, "Assets:Cash", A("1 USD"), None, None),
@@ -120,7 +121,9 @@ def test_serialise_entry_types(snapshot) -> None:
         (
             (
                 A("100 USD"),
-                CostSpec(MISSING, None, MISSING, None, None, False),
+                CostSpec(
+                    MISSING, None, MISSING, None, None, False  # type: ignore
+                ),
                 None,
             ),
             "100 USD {}",
@@ -161,7 +164,7 @@ def test_deserialise_posting(
     assert deserialise_posting(json) == pos
 
 
-def test_deserialise_posting_and_format(snapshot) -> None:
+def test_deserialise_posting_and_format(snapshot: SnapshotFunc) -> None:
     txn = Transaction(
         {},
         datetime.date(2017, 12, 12),
@@ -228,7 +231,7 @@ def test_deserialise() -> None:
         frozenset(["link"]),
         [],
     )
-    create_simple_posting(txn, "Assets:ETrade:Cash", "100", "USD")
+    create_simple_posting(txn, "Assets:ETrade:Cash", D("100"), "USD")
     txn.postings.append(
         Posting("Assets:ETrade:GLD", MISSING, None, None, None, None)
     )
