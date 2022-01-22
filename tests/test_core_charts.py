@@ -55,16 +55,16 @@ def test_net_worth(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
 
 def test_hierarchy(example_ledger: FavaLedger) -> None:
     data = example_ledger.charts.hierarchy("Assets", "at_cost")
-    assert data["balance_children"] == {
+    assert data.balance_children == {
         "IRAUSD": D("7200.00"),
         "USD": D("94320.27840"),
         "VACHR": D("-82"),
     }
-    assert data["balance"] == {}
+    assert data.balance == {}
     # Assets:US:ETrade
-    etrade = data["children"][0]["children"][2]
-    assert etrade["children"][4]["balance"] == {"USD": D("4899.98")}
-    assert etrade["balance_children"] == {"USD": D("23137.54")}
+    etrade = data.children[0].children[2]
+    assert etrade.children[4].balance == {"USD": D("4899.98")}
+    assert etrade.balance_children == {"USD": D("23137.54")}
 
 
 @pytest.mark.parametrize(

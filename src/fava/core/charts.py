@@ -1,6 +1,7 @@
 """Provide data suitable for Fava's charts. """
 from __future__ import annotations
 
+from dataclasses import dataclass
 from dataclasses import fields
 from dataclasses import is_dataclass
 from datetime import date
@@ -8,7 +9,6 @@ from datetime import timedelta
 from typing import Any
 from typing import Generator
 from typing import Pattern
-from typing import TYPE_CHECKING
 
 from beancount.core import realization
 from beancount.core.amount import Amount
@@ -29,11 +29,6 @@ from fava.helpers import FavaAPIException
 from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
-
-if TYPE_CHECKING:
-    from typing import TypedDict
-else:
-    TypedDict = dict
 
 
 ONE_DAY = timedelta(days=1)
@@ -83,14 +78,16 @@ ENCODER = FavaJSONEncoder()
 PRETTY_ENCODER = FavaJSONEncoder(indent=True)
 
 
-class DateAndBalance(TypedDict):
+@dataclass
+class DateAndBalance:
     """Balance at a date."""
 
     date: date
     balance: dict[str, Decimal] | Inventory
 
 
-class DateAndBalanceWithBudget(TypedDict):
+@dataclass
+class DateAndBalanceWithBudget:
     """Balance at a date with a budget."""
 
     date: date
@@ -170,11 +167,11 @@ class ChartModule(FavaModule):
                 balance = -balance
                 budgets = {k: -v for k, v in budgets.items()}
 
-            yield {
-                "date": begin,
-                "balance": balance,
-                "budgets": budgets,
-            }
+            yield DateAndBalanceWithBudget(
+                begin,
+                balance,
+                budgets,
+            )
 
     @listify
     def linechart(
@@ -219,7 +216,7 @@ class ChartModule(FavaModule):
                     balance[currency] = 0
             last_currencies = currencies
 
-            yield {"date": entry.date, "balance": balance}
+            yield DateAndBalance(entry.date, balance)
 
     @listify
     def net_worth(
@@ -260,12 +257,12 @@ class ChartModule(FavaModule):
                     if posting.account.startswith(types):
                         inventory.add_position(posting)
                 txn = next(transactions, None)
-            yield {
-                "date": end_date,
-                "balance": cost_or_value(
+            yield DateAndBalance(
+                end_date,
+                cost_or_value(
                     inventory, conversion, price_map, end_date - ONE_DAY
                 ),
-            }
+            )
 
     @staticmethod
     def can_plot_query(types: list[tuple[str, Any]]) -> bool:

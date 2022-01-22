@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import collections
 import datetime
+from dataclasses import dataclass
 from typing import Dict
 from typing import Generator
 from typing import Iterable
@@ -19,19 +20,17 @@ from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
 
 if TYPE_CHECKING:
-    from typing import TypedDict
     from fava.util.typing import BeancountOptions
-else:
-    TypedDict = dict
 
 
-class SerialisedTreeNode(TypedDict):
+@dataclass
+class SerialisedTreeNode:
     """A serialised TreeNode."""
 
     account: str
     balance: SimpleCounterInventory
     balance_children: SimpleCounterInventory
-    children: SerialisedTreeNode  # type: ignore
+    children: list[SerialisedTreeNode]
 
 
 class TreeNode:
@@ -66,14 +65,12 @@ class TreeNode:
             child.serialise(conversion, price_map, end)
             for child in self.children
         ]
-        return {
-            "account": self.name,
-            "balance_children": cost_or_value(
-                self.balance_children, conversion, price_map, end
-            ),
-            "balance": cost_or_value(self.balance, conversion, price_map, end),
-            "children": children,
-        }
+        return SerialisedTreeNode(
+            self.name,
+            cost_or_value(self.balance, conversion, price_map, end),
+            cost_or_value(self.balance_children, conversion, price_map, end),
+            children,
+        )
 
 
 class Tree(Dict[str, TreeNode]):
