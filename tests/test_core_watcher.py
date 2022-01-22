@@ -2,11 +2,12 @@
 from __future__ import annotations
 
 import time
+from pathlib import Path
 
 from fava.core.watcher import Watcher
 
 
-def test_watcher_file(tmp_path):
+def test_watcher_file(tmp_path: Path):
     file1 = tmp_path / "file1"
     file2 = tmp_path / "file2"
     file1.write_text("test")
@@ -24,7 +25,7 @@ def test_watcher_file(tmp_path):
     assert watcher.check()
 
 
-def test_watcher_deleted_file(tmp_path):
+def test_watcher_deleted_file(tmp_path: Path):
     file1 = tmp_path / "file1"
     file1.write_text("test")
 
@@ -36,7 +37,7 @@ def test_watcher_deleted_file(tmp_path):
     assert watcher.check()
 
 
-def test_watcher_folder(tmp_path):
+def test_watcher_folder(tmp_path: Path):
     folder = tmp_path / "folder"
     folder.mkdir()
     (folder / "bar").mkdir()

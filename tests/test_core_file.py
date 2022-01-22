@@ -41,7 +41,7 @@ def test_get_entry_slice(example_ledger: FavaLedger) -> None:
     )
 
 
-def test_save_entry_slice(example_ledger) -> None:
+def test_save_entry_slice(example_ledger: FavaLedger) -> None:
     entry = _get_entry(example_ledger, "Chichipotle", "2016-05-03")
 
     entry_source, sha256sum = get_entry_slice(entry)
@@ -60,7 +60,7 @@ def test_save_entry_slice(example_ledger) -> None:
     assert filename.read_text(encoding="utf-8") == contents
 
 
-def test_insert_metadata_in_file(tmp_path) -> None:
+def test_insert_metadata_in_file(tmp_path: Path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -126,7 +126,7 @@ def test_find_entry_lines() -> None:
     assert find_entry_lines(lines, 5) == note_line
 
 
-def test_insert_entry_transaction(tmp_path) -> None:
+def test_insert_entry_transaction(tmp_path: Path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -305,7 +305,7 @@ def test_insert_entry_transaction(tmp_path) -> None:
     )
 
 
-def test_insert_entry_align(tmp_path) -> None:
+def test_insert_entry_align(tmp_path: Path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"
@@ -353,7 +353,7 @@ def test_insert_entry_align(tmp_path) -> None:
     )
 
 
-def test_insert_entry_indent(tmp_path) -> None:
+def test_insert_entry_indent(tmp_path: Path) -> None:
     file_content = dedent(
         """\
         2016-02-26 * "Uncle Boons" "Eating out alone"

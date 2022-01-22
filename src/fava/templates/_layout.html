@@ -48,11 +48,11 @@
       {% include active_page + '.html' %}
       {% endif %}
       {% endblock %}
-      <script type="application/json" id="chart-data">{{ charts.chart_data|tojson|safe }}</script>
+      <script type="application/json" id="chart-data">{{ charts.chart_data|tojson }}</script>
       <script type="application/json" id="page-title">{{ {
         'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
         'pageTitle': page_title,
-    }|tojson|safe }}</script>
+      }|tojson }}</script>
       <script type="application/json" id="ledger-data">{{ {
         'accounts': ledger.attributes.accounts,
         'baseURL': url_for('index'),
@@ -66,11 +66,11 @@
         'payees': ledger.attributes.payees,
         'tags': ledger.attributes.tags,
         'years': ledger.attributes.years,
-    }|tojson|safe }}</script>
+      }|tojson }}</script>
       {%- if not request.args.get('partial') %}
     </article>
     <svelte-component type="modals"></svelte-component>
-    <script type="application/json" id="translations">{{ translations()|tojson|safe }}</script>
+    <script type="application/json" id="translations">{{ translations()|tojson }}</script>
   </body>
 </html>
 {%- endif %}

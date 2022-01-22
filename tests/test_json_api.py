@@ -13,13 +13,9 @@ from flask.testing import FlaskClient
 
 from fava.context import g
 from fava.core import FavaLedger
-from fava.core.charts import PRETTY_ENCODER
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
-
-
-dumps = PRETTY_ENCODER.encode
 
 
 def test_validate_get_args() -> None:
@@ -58,7 +54,7 @@ def test_api_changed(app, test_client: FlaskClient) -> None:
 
 
 def test_api_add_document(
-    app, test_client: FlaskClient, tmp_path, monkeypatch
+    app, test_client: FlaskClient, tmp_path: Path, monkeypatch
 ) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
@@ -170,14 +166,11 @@ def test_api_source_put(app, test_client: FlaskClient) -> None:
     # change source
     response = test_client.put(
         url,
-        data=dumps(
-            {
-                "source": "asdf" + payload,
-                "sha256sum": sha256sum,
-                "file_path": path,
-            }
-        ),
-        content_type="application/json",
+        json={
+            "source": "asdf" + payload,
+            "sha256sum": sha256sum,
+            "file_path": path,
+        },
     )
     with open(path, mode="rb") as bfile_handle:
         sha256sum = hashlib.sha256(bfile_handle.read()).hexdigest()
@@ -190,10 +183,7 @@ def test_api_source_put(app, test_client: FlaskClient) -> None:
     # write original source file
     result = test_client.put(
         url,
-        data=dumps(
-            {"source": payload, "sha256sum": sha256sum, "file_path": path}
-        ),
-        content_type="application/json",
+        json={"source": payload, "sha256sum": sha256sum, "file_path": path},
     )
     assert result.status_code == 200
     with open(path, encoding="utf-8") as file_handle:
@@ -209,11 +199,7 @@ def test_api_format_source(app, test_client: FlaskClient) -> None:
     with open(path, encoding="utf-8") as file_handle:
         payload = file_handle.read()
 
-    response = test_client.put(
-        url,
-        data=dumps({"source": payload}),
-        content_type="application/json",
-    )
+    response = test_client.put(url, json={"source": payload})
     assert_api_success(response, align(payload, 61))
 
 
@@ -230,75 +216,61 @@ def test_api_format_source_options(
 
         monkeypatch.setattr(g.ledger.fava_options, "currency_column", 90)
 
-        response = test_client.put(
-            url,
-            data=dumps({"source": payload}),
-            content_type="application/json",
-        )
+        response = test_client.put(url, json={"source": payload})
         assert_api_success(response, align(payload, 90))
 
 
-def test_api_add_entries(app, test_client: FlaskClient, tmp_path, monkeypatch):
+def test_api_add_entries(
+    app, test_client: FlaskClient, tmp_path: Path, monkeypatch
+):
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
         test_file = tmp_path / "test_file"
         test_file.open("a")
         monkeypatch.setattr(g.ledger, "beancount_file_path", str(test_file))
 
-        data = {
-            "entries": [
-                {
-                    "type": "Transaction",
-                    "date": "2017-12-12",
-                    "flag": "*",
-                    "payee": "Test3",
-                    "narration": "",
-                    "meta": {},
-                    "postings": [
-                        {
-                            "account": "Assets:US:ETrade:Cash",
-                            "amount": "100 USD",
-                        },
-                        {"account": "Assets:US:ETrade:GLD"},
-                    ],
-                },
-                {
-                    "type": "Transaction",
-                    "date": "2017-01-12",
-                    "flag": "*",
-                    "payee": "Test1",
-                    "narration": "",
-                    "meta": {},
-                    "postings": [
-                        {
-                            "account": "Assets:US:ETrade:Cash",
-                            "amount": "100 USD",
-                        },
-                        {"account": "Assets:US:ETrade:GLD"},
-                    ],
-                },
-                {
-                    "type": "Transaction",
-                    "date": "2017-02-12",
-                    "flag": "*",
-                    "payee": "Test",
-                    "narration": "Test",
-                    "meta": {},
-                    "postings": [
-                        {
-                            "account": "Assets:US:ETrade:Cash",
-                            "amount": "100 USD",
-                        },
-                        {"account": "Assets:US:ETrade:GLD"},
-                    ],
-                },
-            ]
-        }
+        entries = [
+            {
+                "type": "Transaction",
+                "date": "2017-12-12",
+                "flag": "*",
+                "payee": "Test3",
+                "narration": "",
+                "meta": {},
+                "postings": [
+                    {"account": "Assets:US:ETrade:Cash", "amount": "100 USD"},
+                    {"account": "Assets:US:ETrade:GLD"},
+                ],
+            },
+            {
+                "type": "Transaction",
+                "date": "2017-01-12",
+                "flag": "*",
+                "payee": "Test1",
+                "narration": "",
+                "meta": {},
+                "postings": [
+                    {"account": "Assets:US:ETrade:Cash", "amount": "100 USD"},
+                    {"account": "Assets:US:ETrade:GLD"},
+                ],
+            },
+            {
+                "type": "Transaction",
+                "date": "2017-02-12",
+                "flag": "*",
+                "payee": "Test",
+                "narration": "Test",
+                "meta": {},
+                "postings": [
+                    {"account": "Assets:US:ETrade:Cash", "amount": "100 USD"},
+                    {"account": "Assets:US:ETrade:GLD"},
+                ],
+            },
+        ]
+
         url = url_for("json_api.put_add_entries")
 
-        response = test_client.put(
-            url, data=dumps(data), content_type="application/json"
-        )
+        response = test_client.put(url, json={"entries": entries})
         assert_api_success(response, "Stored 3 entries.")
 
         assert (
