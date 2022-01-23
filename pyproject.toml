@@ -6,3 +6,23 @@ build-backend = "setuptools.build_meta"
 
 [tool.black]
 line-length = 79
+
+[tool.mypy]
+mypy_path = "stubs"
+strict = true
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "too-few-public-methods",
+    "assigning-non-slot",  # false positive since Flask 2 (on flask.g)
+    "not-callable",        # false positive for Beancount Entries
+    "wrong-import-order",
+    "isinstance-second-argument-not-valid-type"
+]
+
+[tool.pylint.DESIGN]
+# max args for a function / method
+max-args = 7
+
+[tool.pylint.SIMILARITIES]
+ignore-imports = true
