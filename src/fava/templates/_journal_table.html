@@ -105,7 +105,7 @@
         {% endif %}
         </p>
     </li>
-{% for entry in entries|reverse %}
+    {% for entry in (entries|reverse if g.ledger.fava_options.reverse_entries else entries) %}
     {% if show_change_and_balance %}
         {% set entry, _, change, balance = entry %}
     {% endif %}

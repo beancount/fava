@@ -73,6 +73,7 @@ class FavaOptions:
     journal_show_transaction: tuple[str, ...] = ("cleared", "pending")
     language: str | None = None
     locale: str | None = None
+    reverse_entries: bool = True
     show_accounts_with_zero_balance: bool = True
     show_accounts_with_zero_transactions: bool = True
     show_closed_accounts: bool = False
