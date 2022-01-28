@@ -32,16 +32,17 @@ def data_file(filename: str) -> str:
     return str(TESTS_DIR / "data" / filename)
 
 
-EXAMPLE_FILE = data_file("long-example.beancount")
+LONG_EXAMPLE_FILE = data_file("long-example.beancount")
+EXAMPLE_FILE = data_file("example.beancount")
 
-EXAMPLE_LEDGER = FavaLedger(EXAMPLE_FILE)
+EXAMPLE_LEDGER = FavaLedger(LONG_EXAMPLE_FILE)
 
 fava_app.testing = True
 TEST_CLIENT = fava_app.test_client()
 
 fava_app.config["BEANCOUNT_FILES"] = [
+    LONG_EXAMPLE_FILE,
     EXAMPLE_FILE,
-    data_file("example.beancount"),
     data_file("extension-report-example.beancount"),
     data_file("import.beancount"),
     data_file("query-example.beancount"),
@@ -79,12 +80,12 @@ def snapshot(request: FixtureRequest) -> SnapshotFunc:
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
         out = out.replace(
-            EXAMPLE_FILE,
+            LONG_EXAMPLE_FILE,
             "FAVA_LONG_EXAMPLE_PATH.beancount",
         )
         if os.name == "nt":
             out = out.replace(
-                EXAMPLE_FILE.replace("\\", "\\\\"),
+                LONG_EXAMPLE_FILE.replace("\\", "\\\\"),
                 "FAVA_LONG_EXAMPLE_PATH.beancount",
             )
         if not snap_file.exists():

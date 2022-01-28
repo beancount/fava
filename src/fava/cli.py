@@ -94,10 +94,25 @@ def main(
             simple_wsgi, {prefix: app.wsgi_app}
         )
 
+    if host == "localhost":
+        # ensure that cheroot does not use IP6 for localhost
+        host = "127.0.0.1"
+
+    click.echo(f"Starting Fava on http://{host}:{port}")
     if not debug:
         server = Server((host, port), app)
-        print(f"Running Fava on http://{host}:{port}")
-        server.safe_start()
+        try:
+            server.start()
+        except KeyboardInterrupt:
+            click.echo("Keyboard interrupt received: stopping Fava", err=True)
+            server.stop()
+        except OSError as error:
+            if "No socket could be created" in str(error):
+                click.echo(
+                    f"Cannot start Fava because port {port} is already in use."
+                    "\nPlease choose a different port with the '-p' option."
+                )
+            raise click.Abort
     else:
         if profile:
             app.config["PROFILE"] = True
@@ -112,10 +127,11 @@ def main(
             app.run(host, port, debug)
         except OSError as error:
             if error.errno == errno.EADDRINUSE:
-                raise click.UsageError(
-                    "Can not start webserver because the port is already in "
-                    "use. Please choose another port with the '-p' option."
+                click.echo(
+                    f"Cannot start Fava because port {port} is already in use."
+                    "\nPlease choose a different port with the '-p' option."
                 )
+                raise click.Abort
             raise
 
 

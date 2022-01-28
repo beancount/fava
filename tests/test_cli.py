@@ -1,7 +1,6 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-import os
 import sys
 from socket import socket
 from subprocess import PIPE
@@ -11,14 +10,11 @@ from time import sleep
 from time import time
 
 import pytest
+from pytest import MonkeyPatch
 
 from .conftest import EXAMPLE_FILE
 
 HOST = "0.0.0.0"
-FAVA = ("fava",)
-
-if "BEANCOUNT_FILE" in os.environ:
-    del os.environ["BEANCOUNT_FILE"]
 
 
 def get_port() -> int:
@@ -41,18 +37,19 @@ def output_contains(process: Popen[str], output: str, timeout: int) -> bool:
 
 
 @pytest.mark.skipif(sys.platform == "win32", reason="does not run on windows")
-def test_cli() -> None:
+def test_cli(monkeypatch: MonkeyPatch) -> None:
     port = str(get_port())
-    args = (EXAMPLE_FILE, "-d", "-p", port)
+    monkeypatch.delenv("BEANCOUNT_FILE", raising=False)
+    args = ("fava", EXAMPLE_FILE, "-p", port)
     with Popen(
-        FAVA + args,
+        args,
         stdout=PIPE,
         stderr=STDOUT,
         universal_newlines=True,
     ) as process:
-        assert output_contains(process, "Running on", 20)
+        assert output_contains(process, "Starting Fava on", 20)
         with Popen(
-            FAVA + args,
+            args,
             stdout=PIPE,
             stderr=STDOUT,
             universal_newlines=True,
@@ -61,4 +58,4 @@ def test_cli() -> None:
             process.terminate()
             assert process2.stdout
             assert "in use" in "".join(process2.stdout.readlines())
-            assert process2.returncode == 2
+            assert process2.returncode > 0
