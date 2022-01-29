@@ -77,7 +77,7 @@
 
 <style>
   svg {
-    shape-rendering: crispEdges;
+    shape-rendering: crispedges;
   }
 
   text {

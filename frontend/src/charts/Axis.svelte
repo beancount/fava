@@ -36,7 +36,7 @@
   g :global(line) {
     fill: none;
     stroke: var(--chart-axis);
-    shape-rendering: crispEdges;
+    shape-rendering: crispedges;
   }
 
   g.y :global(line),
