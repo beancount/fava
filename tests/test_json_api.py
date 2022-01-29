@@ -5,6 +5,7 @@ import hashlib
 from io import BytesIO
 from pathlib import Path
 from typing import Any
+from typing import TYPE_CHECKING
 
 import pytest
 from beancount.core.compare import hash_entry
@@ -12,7 +13,6 @@ from flask import Flask
 from flask import url_for
 from flask.testing import FlaskClient
 from pytest import MonkeyPatch
-from werkzeug.test import TestResponse
 
 from .conftest import SnapshotFunc
 from fava.context import g
@@ -20,6 +20,9 @@ from fava.core import FavaLedger
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
+
+if TYPE_CHECKING:
+    from werkzeug.test import TestResponse
 
 
 def test_validate_get_args() -> None:
