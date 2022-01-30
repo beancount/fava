@@ -323,12 +323,6 @@ def holdings_by(aggregation_key: str) -> str:
     return abort(404)
 
 
-@app.route("/<bfile>/_query_result/")
-def query_result() -> str:
-    """Query shell."""
-    return render_template("_query_result.html")
-
-
 @app.route("/<bfile>/<report_name>/")
 def report(report_name: str) -> str:
     """Endpoint for most reports."""
