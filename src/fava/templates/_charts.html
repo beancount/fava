@@ -6,7 +6,7 @@
 'label': account_name if not label else label,
 'data': {
   'modifier': ledger.get_account_sign(account_name),
-  'root': ledger.charts.hierarchy(account_name, g.conversion, begin_date, end_date),
+  'root': ledger.charts.hierarchy(account_name, g.conversion, begin_date, end_date or g.ledger.end_date),
 },
 }) %}
 {% endmacro %}
