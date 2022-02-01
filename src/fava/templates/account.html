@@ -20,8 +20,8 @@
 
   <div class="headerline">
     <h3>{% if not journal %}<a href="{{ url_for('account', name=account_name) }}" title="{{ _('Journal of all entries for this Account and Sub-Accounts') }}">{{ _('Account Journal') }}</a>{% else %}{{ _('Account Journal') }}{% endif %}</h3>
-    <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ g.interval.label|lower }})</a>{% else %}{{ _('Changes') }} ({{ g.interval.label|lower }}){% endif %}</h3>
-    <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ g.interval.label|lower }})</a>{% else %}{{ _('Balances') }} ({{ g.interval.label|lower }}){% endif %}</h3>
+    <h3>{% if subreport != 'changes' %}<a href="{{ url_for('account', name=account_name, subreport='changes') }}">{{ _('Changes') }} ({{ g.interval.label|lower }})</a>{% else %}{{ _('Changes') }} ({{ g.interval.label|lower }}){% endif %}</h3>
+    <h3>{% if subreport != 'balances' %}<a href="{{ url_for('account', name=account_name, subreport='balances') }}">{{ _('Balances') }} ({{ g.interval.label|lower }})</a>{% else %}{{ _('Balances') }} ({{ g.interval.label|lower }}){% endif %}</h3>
   </div>
 
   {% if journal %}

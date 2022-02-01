@@ -5,7 +5,7 @@
       {% for slug, title in HELP_PAGES|dictsort %}
         <li>
           <a href="{{ url_for('help_page', page_slug=slug) }}"{% if slug == page_slug %} class="selected"{% endif %}>
-            {{ title }}
+            {{ title }}
           </a>
         </li>
       {% endfor %}

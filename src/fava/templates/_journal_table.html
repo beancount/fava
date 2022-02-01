@@ -58,7 +58,7 @@
 {% if metadata %}
 <dl class="metadata">
   {% for key, value in metadata.items() %}
-  <dt>{{ key }}:</dt>
+  <dt>{{ key }}:</dt>
   <dd>
   {%- if key.startswith('document') %}<a class="filename" data-remote target=_blank href="{{ url_for('statement', entry_hash=entry_hash, key=key) }}">{{ value }}</a>
   {% elif value is string and (value.startswith('http://') or value.startswith('https://')) %}<a class="url" data-remote target=_blank href="{{ value }}">{{ value }}</a>
@@ -93,15 +93,15 @@
 <ol class="flex-table journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
     <li class="head">
         <p>
-        <span class="datecell" data-sort="num" data-order="desc">{{ _('Date') }}</span>
-        <span class="flag" data-sort="string">{{ _('F') }}</span>
-        <span class="description" data-sort="string">{{ _('Narration/Payee') }}</span>
-        <span class="num">{{ _('Position') }}</span>
-        <span class="num">{{ _('Price') }}</span>
-        <span class="num">{{ _('Cost') }}</span>
+        <span class="datecell" data-sort="num" data-order="desc">{{ _('Date') }}</span>
+        <span class="flag" data-sort="string">{{ _('F') }}</span>
+        <span class="description" data-sort="string">{{ _('Narration/Payee') }}</span>
+        <span class="num">{{ _('Position') }}</span>
+        <span class="num">{{ _('Price') }}</span>
+        <span class="num">{{ _('Cost') }}</span>
         {% if show_change_and_balance %}
-        <span class="num">{{ _('Change') }}</span>
-        <span class="num">{{ _('Balance') }}</span>
+        <span class="num">{{ _('Change') }}</span>
+        <span class="num">{{ _('Balance') }}</span>
         {% endif %}
         </p>
     </li>
@@ -131,8 +131,8 @@
             &nbsp;{% if value.dtype|string == "<AccountDummy>" %}{{ account_link(value.value) }}
             {%- elif value.dtype|string == "<class 'beancount.core.amount.Amount'>" %}{{ commodity_macros.render_amount(ledger, value.value) }}
             {%- elif value.dtype|string == "<class 'str'>" %}"{{ value.value }}"
-            {%- elif value.dtype|string == "<class 'bool'>" %}{{ value.value }}
-            {%- elif value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
+            {%- elif value.dtype|string == "<class 'bool'>" %}{{ value.value }}
+            {%- elif value.dtype|string == "<class 'datetime.date'>" %}{{ value.value }}{% endif -%}
           {%- endfor -%}
         {% elif type == 'document' %}
             {{ account_link(entry.account) }}

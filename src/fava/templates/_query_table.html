@@ -1,7 +1,6 @@
 {% import 'macros/_account_macros.html' as account_macros %}
 {% import 'macros/_commodity_macros.html' as commodity_macros %}
 
-
 {% set sort_type = {
     "<class 'decimal.Decimal'>": 'num',
     "<class 'cdecimal.Decimal'>": 'num',
@@ -55,7 +54,7 @@
   <thead>
     <tr>
       {% for name, type in types %}
-      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
+      <th data-sort="{{ sort_type[type|string] or "string" }}">{{ name }}</th>
       {% endfor %}
     </tr>
   </thead>

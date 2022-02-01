@@ -15,8 +15,8 @@
 <div class="left">
   {% set postings_per_account = 'SELECT account, count(account) ORDER BY account' %}
   <h3>
-    {{ _('Postings per Account') }}
-    (<a href={{ url_for('report', report_name='query', query_string=postings_per_account) }}>Query</a>)
+    {{ _('Postings per Account') }}
+    (<a href="{{ url_for('report', report_name='query', query_string=postings_per_account) }}">Query</a>)
   </h3>
   {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
   {{ querytable.querytable(ledger, contents, result_types, result_rows) }}
@@ -24,17 +24,17 @@
 
 {% set status_sortorder = { 'red': 5, 'yellow': 4, 'green': 3, '': 2 } %}
 <div class="left">
-  <h3>{{ _('Update Activity') }}<copyable-text class="button right" title="
-  {{- _('Click to copy balance directives for accounts (except green ones) to the clipboard.') -}}
-  " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</copyable-text></h3>
+  <h3>{{ _('Update Activity') }}<copyable-text class="button right" title="
+  {{- _('Click to copy balance directives for accounts (except green ones) to the clipboard.') -}}
+  " data-clipboard-text="{{ copy_balance_directives_text() }}">{{ _('Copy balance directives') }}</copyable-text></h3>
   <table is="sortable-table" class="statistics-update-activity">
     <thead>
       <tr>
-        <th data-sort="string" data-order="asc">{{ _('Account') }}</th>
+        <th data-sort="string" data-order="asc">{{ _('Account') }}</th>
         <th class="indicator-header" data-sort="num" data-sort-default="desc"></th>
         <th class="indicator-header" data-sort="num" data-sort-default="desc"></th>
-        <th data-sort="string">{{ _('Last Entry') }}</th>
-        <th>{{ _('Balance') }}</th>
+        <th data-sort="string">{{ _('Last Entry') }}</th>
+        <th>{{ _('Balance') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -66,25 +66,25 @@
 </div>
 
 <div class="left">
-  <h3>{{ _('Entries per Type') }}</h3>
+  <h3>{{ _('Entries per Type') }}</h3>
   <table is="sortable-table">
     <thead>
       <tr>
-        <th data-sort="string">{{ _('Type') }}</th>
-        <th data-sort="num">{{ _('# Entries') }}</th>
+        <th data-sort="string">{{ _('Type') }}</th>
+        <th data-sort="num">{{ _('# Entries') }}</th>
       </tr>
     </thead>
     <tbody>
       {% for type, entries in ledger.group_entries_by_type(ledger.entries) %}
       <tr>
-        <td>{{ type }}</td>
+        <td>{{ type }}</td>
         <td class="num">{{ entries|length }}</td>
       </tr>
       {% endfor %}
     </tbody>
     <tfoot>
       <tr>
-        <td>{{ _('Total') }}</td>
+        <td>{{ _('Total') }}</td>
         <td class="num">{{ ledger.entries|length }}</td>
       </tr>
     </tfoot>

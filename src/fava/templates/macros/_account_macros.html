@@ -6,7 +6,7 @@
 
 {% macro balance_directive(ledger, account) %}
 {% for position in (ledger.all_root_account|get_or_create(account)).balance|units %}
-{{ today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
+{{ today() }} balance {{ account.ljust(28) }} {% with num=position.units.number|string %}{{ num.rjust(15) }}{% endwith %} {{ position.units.currency }}
 {% endfor %}
 {% endmacro %}
 

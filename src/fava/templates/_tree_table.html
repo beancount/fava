@@ -20,7 +20,7 @@
 
 {% macro tree(account_node, invert=False) %}
 <tree-table>
-<ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
+<ol class="flex-table tree-table{{ ' two-currencies' if ledger.options.operating_currency|length > 1 else '' }}" title="{{ _('Hold Shift while clicking to expand all children.
 Hold Ctrl or Cmd while clicking to expand one level.') }}">
   <li class="head">
     <p>
