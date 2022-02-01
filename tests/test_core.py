@@ -86,7 +86,7 @@ def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
     assert func("Liabilities:US:Chase:Slate") == "green"
 
 
-def test_commodities(example_ledger: FavaLedger) -> None:
-    assert len(example_ledger.commodities) == 10
-    usd = example_ledger.commodities["USD"]
-    assert usd.meta["export"] == "CASH"
+def test_commodity_names(example_ledger: FavaLedger) -> None:
+    assert example_ledger.commodity_names.get("USD") == "US Dollar"
+    assert example_ledger.commodity_names.get("NOCOMMODITY") is None
+    assert example_ledger.commodity_names.get("VMMXX") is None
