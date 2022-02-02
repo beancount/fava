@@ -7,8 +7,8 @@ Setting up a development environment
 If you want to hack on Fava or run the latest development version, make sure
 you have the following installed (ideally with your system package manager):
 
-- `Python 3`_ (with `pip` to install the Fava Python package),
-- `Node.js`_ (with `npm` to install the Javascript dependencies),
+- `Python 3`_ - with `pip` (at least v21.3), to install the Fava Python package,
+- `Node.js`_ - with `npm`, to install the Javascript dependencies,
 - `tox`_ - to run the Python tests,
 - `pre-commit`_ - to lint changes with a git pre-commit hook.
 
