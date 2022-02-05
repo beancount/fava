@@ -18,3 +18,10 @@ export function _(text: string): string {
   }
   return translations[text] || text;
 }
+
+/**
+ * Replace the placeholders in a translation string.
+ */
+export function format(text: string, values: Record<string, string>): string {
+  return text.replace(/%\(\w+\)s/g, (match) => values[match.slice(2, -2)]);
+}
