@@ -1,7 +1,7 @@
 import { derived, writable } from "svelte/store";
 
 import type { NamedChartTypes } from "../charts";
-import { _ } from "../i18n";
+import { _, format } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
 import { string } from "../lib/validation";
@@ -40,8 +40,7 @@ export const conversions = derived(
     ["units", _("Units")],
     ...currencySuggestions_val.map((currency) => [
       currency,
-      `Converted to ${currency}`,
+      format(_("Converted to %(currency)s"), { currency }),
     ]),
   ]
 );
-// TODO  _('Converted to %(currency)s', currency=currency)
