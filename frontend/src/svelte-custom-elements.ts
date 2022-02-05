@@ -29,7 +29,7 @@ const components = new Map([
 /**
  * A custom element that represents a Svelte component.
  *
- * The tag should have a `data-component` attribute with one
+ * The tag should have a `type` attribute with one
  * of the valid values in the Map above.
  */
 export class SvelteCustomElement extends HTMLElement {

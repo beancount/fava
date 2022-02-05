@@ -33,6 +33,9 @@ export const ledgerDataValidator = object({
     insert_entry: array(
       object({ date: string, filename: string, lineno: number, re: string })
     ),
+    journal_show: array(string),
+    journal_show_document: array(string),
+    journal_show_transaction: array(string),
   }),
   have_excel: boolean,
   incognito: boolean,

@@ -1,40 +1,5 @@
 {% import 'macros/_commodity_macros.html' as commodity_macros %}
 
-
-{% set entry_types = ['open', 'close', 'transaction', 'balance', 'note', 'document', 'pad', 'query', 'custom'] %}
-{% set sub_types = {
-  'custom': (
-    ('budget', 'B', _('Budget entries')),
-  ),
-  'document': (
-    ('discovered', 'D', _('Documents with a #discovered tag')),
-    ('linked', 'L', _('Documents with a #linked tag')),
-  ),
-  'transaction': (
-    ('cleared', '*', _('Cleared transactions')),
-    ('pending', '!', _('Pending transactions')),
-    ('other', 'x', _('Other transactions')),
-  ),
-} %}
-{% set keyboard_shortcuts = {
-  'open': 's o',
-  'close': 's c',
-  'balance': 's b',
-  'note': 's n',
-  'pad': 's p',
-  'query': 's q',
-  'custom': 's C',
-  'budget': 's B',
-
-  'transaction': 's t',
-  'cleared': 't c',
-  'pending': 't p',
-  'other': 't o',
-
-  'document': 's d',
-  'discovered': 'd d',
-  'linked': 'd l',
-} %}
 {% set short_type = {
    'balance': 'Bal',
    'close': 'Close',
@@ -42,11 +7,6 @@
    'note': 'Note',
    'open': 'Open',
 } %}
-{% if not request.args.get('show') %}
-{% set journal_show = g.ledger.fava_options.journal_show + g.ledger.fava_options.journal_show_transaction + g.ledger.fava_options.journal_show_document %}
-{% else %}
-{% set journal_show = request.args.getlist('show') %}
-{% endif %}
 
 {% macro account_link(name) %}<a href="{{ url_for('account', name=name) }}">{{ name }}</a>{% endmacro %}
 {% macro render_metadata_indicators(metadata) -%}
@@ -78,19 +38,7 @@
 {% macro journal_table(entries, show_change_and_balance=False) %}
 {% autoescape false %}
 <fava-journal>
-<form class="flex-row entry-filters">
-  {% for type in entry_types %}
-  <button type="button" title="Toggle {{ type|capitalize }} entries" data-type="{{ type }}" data-keyboard-shortcut="{{ keyboard_shortcuts[type] }}"{% if type not in journal_show %} class="inactive"{% endif %}>{{ type|capitalize }}</button>
-  {% if type in sub_types.keys() %}
-  {% for sub_type in sub_types[type] %}
-  <button type="button" title="{{ sub_type.2 }}" data-type="{{ sub_type.0 }}" data-keyboard-shortcut="{{ keyboard_shortcuts[sub_type.0] }}" class="small {{ type }}-toggle{% if sub_type.0 not in journal_show or type not in journal_show %} inactive{% endif %}">{{ sub_type.1 }}</button>
-  {% endfor %}
-  {% endif %}
-  {% endfor %}
-  <button type="button" title="Toggle metadata" data-type="metadata" data-keyboard-shortcut="m"{% if 'metadata' not in journal_show %} class="inactive"{% endif %}>{{ _('Metadata') }}</button>
-  <button type="button" title="Toggle postings" data-type="postings" data-keyboard-shortcut="p"{% if 'postings' not in journal_show %} class="inactive"{% endif %}>{{ _('Postings') }}</button>
-</form>
-<ol class="flex-table journal{% for type in journal_show %} show-{{ type }}{% endfor %}">
+<ol class="flex-table journal">
     <li class="head">
         <p>
         <span class="datecell" data-sort="num" data-order="desc">{{ _('Date') }}</span>

@@ -1,8 +1,14 @@
-import { delegate } from "./lib/events";
-import { log_error } from "./log";
-import router from "./router";
-import { sortableJournal } from "./sort";
-import { fql_filter } from "./stores/filters";
+import type { SvelteComponent } from "svelte";
+import { get, writable } from "svelte/store";
+
+import { shallow_equal } from "../lib/equals";
+import { delegate } from "../lib/events";
+import router from "../router";
+import { sortableJournal } from "../sort";
+import { favaOptions } from "../stores";
+import { fql_filter } from "../stores/filters";
+
+import JournalFilters from "./JournalFilters.svelte";
 
 /**
  * Escape the value to produce a valid regex.
@@ -68,57 +74,50 @@ function handleClick({ target }: MouseEvent): void {
 }
 
 export class FavaJournal extends HTMLElement {
-  constructor() {
-    super();
+  component?: SvelteComponent;
+
+  unsubscribe?: () => void;
+
+  connectedCallback() {
+    const opts = get(favaOptions);
+    const defaults = [
+      ...opts.journal_show,
+      ...opts.journal_show_transaction,
+      ...opts.journal_show_document,
+    ].sort();
 
     const ol = this.querySelector("ol");
-    const form = this.querySelector("form");
-    if (!ol || !form) {
+    if (!ol) {
       throw new Error("fava-journal is missing its <ol> or <form>");
     }
-    sortableJournal(ol);
-    delegate(this, "click", "li", handleClick);
 
-    const entryButtons = form.querySelectorAll("button");
-    // Toggle entries with buttons.
-    entryButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const type = button.getAttribute("data-type");
-        if (!type) {
-          log_error("Button is missing type: ", button);
-          return;
-        }
-        const shouldShow = button.classList.contains("inactive");
+    const url_show = new URL(window.location.href).searchParams.getAll("show");
+    const show = writable(new Set(url_show.length ? url_show : defaults));
+    this.unsubscribe = show.subscribe((show_value) => {
+      const classes = [...show_value].map((s) => `show-${s}`).join(" ");
+      ol.className = `flex-table journal ${classes}`;
 
-        button.classList.toggle("inactive", !shouldShow);
-        if (
-          type === "transaction" ||
-          type === "custom" ||
-          type === "document"
-        ) {
-          form.querySelectorAll(`.${type}-toggle`).forEach((el) => {
-            el.classList.toggle("inactive", !shouldShow);
-          });
-        }
-
-        ol.classList.toggle(`show-${type}`, shouldShow);
-
-        // Modify get params
-        const filterShow: string[] = [];
-        entryButtons.forEach((el) => {
-          const datatype = el.getAttribute("data-type");
-          if (datatype && !el.classList.contains("inactive")) {
-            filterShow.push(datatype);
-          }
-        });
-
-        const url = new URL(window.location.href);
-        url.searchParams.delete("show");
-        filterShow.forEach((filter) => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("show");
+      if (!shallow_equal([...show_value].sort(), defaults)) {
+        show_value.forEach((filter) => {
           url.searchParams.append("show", filter);
         });
-        router.navigate(url.toString(), false);
-      });
+      }
+      router.navigate(url.toString(), false);
     });
+    this.component = new JournalFilters({
+      target: this,
+      props: { show },
+      anchor: ol,
+    });
+
+    sortableJournal(ol);
+    delegate(this, "click", "li", handleClick);
+  }
+
+  disconnectedCallback(): void {
+    this.unsubscribe?.();
+    this.component?.$destroy();
   }
 }
