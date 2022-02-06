@@ -60,17 +60,6 @@ class FavaOptions:
     indent: int = 2
     insert_entry: list[InsertEntryOption] = field(default_factory=list)
     invert_income_liabilities_equity: bool = False
-    journal_show: tuple[str, ...] = (
-        "transaction",
-        "balance",
-        "note",
-        "document",
-        "custom",
-        "budget",
-        "query",
-    )
-    journal_show_document: tuple[str, ...] = ("discovered", "statement")
-    journal_show_transaction: tuple[str, ...] = ("cleared", "pending")
     language: str | None = None
     locale: str | None = None
     show_accounts_with_zero_balance: bool = True

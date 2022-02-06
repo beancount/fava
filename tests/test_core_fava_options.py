@@ -17,7 +17,6 @@ def test_fava_options(load_doc: LoaderResult) -> None:
     """
     2016-06-14 custom "fava-option" "default-file"
     2016-04-14 custom "fava-option" "show-closed-accounts" "true"
-    2016-04-14 custom "fava-option" "journal-show" "transaction open"
     2016-04-14 custom "fava-option" "currency-column" "10"
     2016-04-14 custom "fava-option" "indent" "4"
     2016-04-14 custom "fava-option" "insert-entry" "Ausgaben:Test"
@@ -40,11 +39,10 @@ def test_fava_options(load_doc: LoaderResult) -> None:
             datetime.date(2016, 4, 14),
             re.compile("Ausgaben:Test"),
             "<string>",
-            7,
+            6,
         )
     ]
     assert options.show_closed_accounts
-    assert options.journal_show == ("transaction", "open")
     assert options.currency_column == 10
     assert options.collapse_pattern == [re.compile("Account:Name")]
     assert options.fiscal_year_end == FiscalYearEnd(1, 11)

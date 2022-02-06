@@ -1,12 +1,9 @@
 import type { SvelteComponent } from "svelte";
-import { get, writable } from "svelte/store";
 
-import { shallow_equal } from "../lib/equals";
 import { delegate } from "../lib/events";
-import router from "../router";
 import { sortableJournal } from "../sort";
-import { favaOptions } from "../stores";
 import { fql_filter } from "../stores/filters";
+import { journalShow } from "../stores/journal";
 
 import JournalFilters from "./JournalFilters.svelte";
 
@@ -79,38 +76,16 @@ export class FavaJournal extends HTMLElement {
   unsubscribe?: () => void;
 
   connectedCallback() {
-    const opts = get(favaOptions);
-    const defaults = [
-      ...opts.journal_show,
-      ...opts.journal_show_transaction,
-      ...opts.journal_show_document,
-    ].sort();
-
     const ol = this.querySelector("ol");
     if (!ol) {
-      throw new Error("fava-journal is missing its <ol> or <form>");
+      throw new Error("fava-journal is missing its <ol>");
     }
 
-    const url_show = new URL(window.location.href).searchParams.getAll("show");
-    const show = writable(new Set(url_show.length ? url_show : defaults));
-    this.unsubscribe = show.subscribe((show_value) => {
-      const classes = [...show_value].map((s) => `show-${s}`).join(" ");
+    this.unsubscribe = journalShow.subscribe((show) => {
+      const classes = [...show].map((s) => `show-${s}`).join(" ");
       ol.className = `flex-table journal ${classes}`;
-
-      const url = new URL(window.location.href);
-      url.searchParams.delete("show");
-      if (!shallow_equal([...show_value].sort(), defaults)) {
-        show_value.forEach((filter) => {
-          url.searchParams.append("show", filter);
-        });
-      }
-      router.navigate(url.toString(), false);
     });
-    this.component = new JournalFilters({
-      target: this,
-      props: { show },
-      anchor: ol,
-    });
+    this.component = new JournalFilters({ target: this, anchor: ol });
 
     sortableJournal(ol);
     delegate(this, "click", "li", handleClick);

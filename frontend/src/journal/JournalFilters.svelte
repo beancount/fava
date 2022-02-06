@@ -1,8 +1,7 @@
 <script lang="ts" context="module">
-  import type { Writable } from "svelte/store";
-
   import { _, format } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
+  import { journalShow } from "../stores/journal";
 
   const toggleText = _("Toggle %(type)s entries");
 
@@ -45,20 +44,25 @@
 </script>
 
 <script lang="ts">
-  export let show: Writable<Set<string>>;
+  $: shownSet = new Set($journalShow);
 
   function toggle(type: string): void {
-    const toggle_func = $show.has(type)
-      ? $show.delete.bind($show)
-      : $show.add.bind($show);
-    toggle_func(type);
-    // Also toggle all entries that have `type` as their supertype.
-    buttons.filter((b) => b[4] === type).forEach((b) => toggle_func(b[0]));
-    $show = $show;
+    journalShow.update((show) => {
+      const set = new Set(show);
+      const toggle_func = set.has(type)
+        ? set.delete.bind(set)
+        : set.add.bind(set);
+      toggle_func(type);
+      // Also toggle all entries that have `type` as their supertype.
+      buttons.filter((b) => b[4] === type).forEach((b) => toggle_func(b[0]));
+      return [...set].sort();
+    });
   }
 
   $: active = (type: string, supertype?: string): boolean =>
-    supertype ? $show.has(supertype) && $show.has(type) : $show.has(type);
+    supertype
+      ? shownSet.has(type) && shownSet.has(supertype)
+      : shownSet.has(type);
 </script>
 
 <form class="flex-row">

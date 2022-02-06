@@ -4,7 +4,6 @@ following to your Beancount file.
 <pre><textarea is="beancount-textarea">
 2016-06-14 custom "fava-option" "default-file"
 2016-04-14 custom "fava-option" "auto-reload" "true"
-2016-04-14 custom "fava-option" "journal-show" "transaction open"
 2016-04-14 custom "fava-option" "currency-column" "100" </textarea></pre>
 
 Below is a list of all possible options for Fava.
@@ -133,33 +132,6 @@ Default: `Unrealized`
 
 The subaccount of the Equity account to post unrealized gains to if the account
 trees are shown at market value.
-
----
-
-## `journal-show`
-
-Default: `transaction balance note document custom budget query`
-
-The entry types and other elements given in this list will be shown in the
-Journal report. Supported values are entry type names, as well as well as the
-special values "metadata" and "postings" that determine the default visibility
-of the corresponding transaction parts.
-
-All other elements will be hidden and can be toggled using the buttons.
-
----
-
-## `journal-show-transaction`
-
-Default: `cleared pending`
-
-Similarly to the `journal-show` setting, this determines the transaction types
-that will be shown in the Journal report. The "transaction types" correspond to
-the following transaction flags:
-
--   `cleared` - `*`
--   `pending` - `!`
--   `other` - All other transaction flags.
 
 ---
 
