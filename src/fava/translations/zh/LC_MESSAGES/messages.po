@@ -297,7 +297,7 @@ msgstr "添加记录"
 msgid "Import"
 msgstr "导入"
 
-#: fava/templates/_journal_table.html:4
+#: frontend/src/journal/JournalFilters.svelte:41
 msgid "Budget entries"
 msgstr "预算条目"
 
@@ -341,7 +341,7 @@ msgstr "导出"
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "请输入一条 BQL 查询命令。输入“help”查看所有可用命令。"
 
-#: fava/templates/_journal_table.html:80
+#: frontend/src/journal/JournalFilters.svelte:42
 msgid "Metadata"
 msgstr "元数据"
 
@@ -355,39 +355,40 @@ msgstr "添加元数据"
 msgid "Note"
 msgstr "备注"
 
-#: fava/templates/_context.html:4
+#: frontend/src/modals/EntryContext.svelte:13
 msgid "Location"
 msgstr "位置"
 
-#: fava/templates/_context.html:9
+#: frontend/src/modals/EntryContext.svelte:24
 msgid "Context"
 msgstr "内容"
 
-#: fava/templates/_context.html:15
+#: frontend/src/modals/EntryContext.svelte:30
 msgid "Balances before entry"
 msgstr "在此条目前余额"
 
-#: fava/templates/_context.html:35
+#: frontend/src/modals/EntryContext.svelte:47
 msgid "Balances after entry"
 msgstr "在此条目后余额"
 
-#: fava/templates/_journal_table.html:11
+#: frontend/src/journal/JournalFilters.svelte:24
 msgid "Cleared transactions"
 msgstr "已入账交易"
 
-#: fava/templates/_journal_table.html:12
+#: frontend/src/journal/JournalFilters.svelte:25
 msgid "Pending transactions"
 msgstr "未入账交易"
 
-#: fava/templates/_journal_table.html:13
+#: frontend/src/journal/JournalFilters.svelte:26
 msgid "Other transactions"
 msgstr "其他交易"
 
-#: fava/templates/_journal_table.html:7
+#: frontend/src/journal/JournalFilters.svelte:33
 msgid "Documents with a #discovered tag"
 msgstr "带有 #discovered 标签的凭证票据"
 
 #: frontend/src/entry-forms/Transaction.svelte:88
+#: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "记录"
 
@@ -485,7 +486,7 @@ msgstr "编辑"
 msgid "Amount"
 msgstr "金额"
 
-#: fava/templates/_journal_table.html:8
+#: frontend/src/journal/JournalFilters.svelte:37
 msgid "Documents with a #linked tag"
 msgstr "有 #linked 标签的凭证票据"
 
@@ -584,4 +585,12 @@ msgstr "是否删除此文件？"
 #: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
 msgstr "没有发现可供导入的文件。"
+
+#: frontend/src/journal/JournalFilters.svelte:7
+msgid "Toggle %(type)s entries"
+msgstr ""
+
+#: frontend/src/stores/chart.ts:43
+msgid "Converted to %(currency)s"
+msgstr ""
 

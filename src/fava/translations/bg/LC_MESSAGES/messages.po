@@ -297,7 +297,7 @@ msgstr "Добавете публикация"
 msgid "Import"
 msgstr "Вкарване"
 
-#: fava/templates/_journal_table.html:4
+#: frontend/src/journal/JournalFilters.svelte:41
 msgid "Budget entries"
 msgstr "Бюджетни вписвания"
 
@@ -341,7 +341,7 @@ msgstr "Извадка"
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "... въведете BQL заявка. 'help' за изброяване на наличните команди."
 
-#: fava/templates/_journal_table.html:80
+#: frontend/src/journal/JournalFilters.svelte:42
 msgid "Metadata"
 msgstr "Метаданни"
 
@@ -355,39 +355,40 @@ msgstr "Добавете метаданни"
 msgid "Note"
 msgstr "Бележка"
 
-#: fava/templates/_context.html:4
+#: frontend/src/modals/EntryContext.svelte:13
 msgid "Location"
 msgstr "Положение"
 
-#: fava/templates/_context.html:9
+#: frontend/src/modals/EntryContext.svelte:24
 msgid "Context"
 msgstr "Контекст"
 
-#: fava/templates/_context.html:15
+#: frontend/src/modals/EntryContext.svelte:30
 msgid "Balances before entry"
 msgstr "Баланс преди запис"
 
-#: fava/templates/_context.html:35
+#: frontend/src/modals/EntryContext.svelte:47
 msgid "Balances after entry"
 msgstr "Баланс след запис"
 
-#: fava/templates/_journal_table.html:11
+#: frontend/src/journal/JournalFilters.svelte:24
 msgid "Cleared transactions"
 msgstr "Потвърдени транзакции"
 
-#: fava/templates/_journal_table.html:12
+#: frontend/src/journal/JournalFilters.svelte:25
 msgid "Pending transactions"
 msgstr "Непотвърдени транзакции"
 
-#: fava/templates/_journal_table.html:13
+#: frontend/src/journal/JournalFilters.svelte:26
 msgid "Other transactions"
 msgstr "Други транзакции"
 
-#: fava/templates/_journal_table.html:7
+#: frontend/src/journal/JournalFilters.svelte:33
 msgid "Documents with a #discovered tag"
 msgstr "Документи с #discovered таг"
 
 #: frontend/src/entry-forms/Transaction.svelte:88
+#: frontend/src/journal/JournalFilters.svelte:43
 msgid "Postings"
 msgstr "Публикации"
 
@@ -485,7 +486,7 @@ msgstr "Редактиране"
 msgid "Amount"
 msgstr "Сума"
 
-#: fava/templates/_journal_table.html:8
+#: frontend/src/journal/JournalFilters.svelte:37
 msgid "Documents with a #linked tag"
 msgstr "Документи с #linked таг"
 
@@ -584,4 +585,12 @@ msgstr "Да се изтрие ли този файл?"
 #: frontend/src/import/Import.svelte:114
 msgid "No files were found for import."
 msgstr "Не бяха намерени файлове за вкарване."
+
+#: frontend/src/journal/JournalFilters.svelte:7
+msgid "Toggle %(type)s entries"
+msgstr ""
+
+#: frontend/src/stores/chart.ts:43
+msgid "Converted to %(currency)s"
+msgstr ""
 
