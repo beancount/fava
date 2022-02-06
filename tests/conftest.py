@@ -63,7 +63,7 @@ SnapshotFunc = Callable[[Any], None]
 
 @pytest.fixture()
 def snapshot(request: FixtureRequest) -> SnapshotFunc:
-    file_path = Path(request.fspath)
+    file_path = Path(getattr(request, "path", getattr(request, "fspath")))
     fn_name = request.function.__name__
     snap_dir = file_path.parent / "__snapshots__"
     if not snap_dir.exists():
