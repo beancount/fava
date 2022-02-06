@@ -42,6 +42,5 @@ jobs:
             - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.10'
               run: tox -e lint
             - run: make test
-              # Pyinstaller does not support Python 3.10 yet
-            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.7'
+            - if: matrix.os == 'ubuntu-latest' && matrix.py == '3.10'
               run: tox -e pyinstaller
