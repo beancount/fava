@@ -74,9 +74,9 @@ run-example:
 bql-grammar:
 	contrib/scripts.py generate-bql-grammar-json
 
-dist: src/fava/static/app.js src/fava setup.cfg setup.py MANIFEST.in
+dist: src/fava/static/app.js src/fava setup.cfg pyproject.toml MANIFEST.in
 	rm -rf build dist
-	python setup.py sdist bdist_wheel
+	tox -e build-dist
 
 .PHONY: before-release
 before-release: bql-grammar translations-push translations-fetch

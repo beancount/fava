@@ -6,6 +6,12 @@ Unreleased
 
 Nothing yet.
 
+v1.21 (2022-02-06)
+------------------
+
+This release of Fava drops support for Python 3.6. It mainly consists of
+various small improvements and fixes.
+
 v1.20.1 (2021-09-22)
 --------------------
 
