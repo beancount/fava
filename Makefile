@@ -54,7 +54,6 @@ update-snapshots:
 update-deps:
 	-cd frontend; npm outdated
 	cd frontend; npm update
-	cd frontend; npx npm-check -u
 	touch -m frontend/node_modules
 
 .PHONY: update-precommit
