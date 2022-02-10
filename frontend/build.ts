@@ -30,6 +30,7 @@ async function runBuild(dev: boolean) {
   console.log("starting build");
   const builder = await build({
     entryPoints: ["src/main.ts"],
+    format: "esm",
     bundle: true,
     outfile: "../src/fava/static/app.js",
     loader: {
