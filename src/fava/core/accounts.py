@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import datetime
+from dataclasses import dataclass
+from dataclasses import field
 from typing import Dict
 
 from beancount.core.account import TYPE as ACCOUNT_TYPE
@@ -12,17 +14,15 @@ from beancount.core.data import Pad
 from beancount.core.data import Transaction
 
 
+@dataclass
 class AccountData:
     """Holds information about an account."""
 
-    __slots__ = ("meta", "close_date")
+    #: The date on which this account is closed (or datetime.date.max).
+    close_date: datetime.date = datetime.date.max
 
-    def __init__(self) -> None:
-        #: The date on which this account is closed (or datetime.date.max).
-        self.close_date = datetime.date.max
-
-        #: The metadata of the Open entry of this account.
-        self.meta: Meta = {}
+    #: The metadata of the Open entry of this account.
+    meta: Meta = field(default_factory=dict)
 
 
 class AccountDict(Dict[str, AccountData]):
