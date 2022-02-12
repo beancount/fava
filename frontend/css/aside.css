@@ -17,7 +17,7 @@ aside {
   width: var(--aside-width);
   padding-top: 0.5rem;
   margin: 0;
-  overflow-y: visible;
+  overflow-y: auto;
   color: var(--sidebar-color);
   background-color: var(--sidebar-background);
   border-right: 1px solid var(--sidebar-border);

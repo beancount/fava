@@ -154,6 +154,12 @@
     box-shadow: 0 3px 3px var(--border);
   }
 
+  :global(aside) ul {
+    /* the only way to get the list to overflow the
+       aside is to put it in fixed position */
+    position: fixed;
+  }
+
   li {
     min-width: 8rem;
     padding: 0 0.5em;
