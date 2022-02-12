@@ -9,8 +9,10 @@ import {
   array,
   boolean,
   constant,
+  date,
   number,
   object,
+  record,
   string,
   union,
 } from "../lib/validation";
@@ -22,6 +24,11 @@ export const interval: Writable<Interval> = writable(DEFAULT_INTERVAL);
 
 export const ledgerDataValidator = object({
   accounts: array(string),
+  account_details: record(
+    object({
+      close_date: date,
+    })
+  ),
   baseURL: string,
   currencies: array(string),
   errors: number,
@@ -76,7 +83,15 @@ export const incognito = derived(ledgerData, (val) => val.incognito);
 export const baseURL = derived(ledgerData, (val) => val.baseURL);
 
 /** The ranked array of all accounts. */
-export const accounts = derived_array(ledgerData, (val) => val.accounts);
+export const accounts: Readable<string[]> = derived_array(
+  ledgerData,
+  (val) => val.accounts
+);
+
+export const account_details = derived(
+  ledgerData,
+  (val) => val.account_details
+);
 /** The ranked array of all currencies. */
 export const currencies = derived_array(ledgerData, (val) => val.currencies);
 /** The ranked array of all links. */

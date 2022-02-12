@@ -9,9 +9,11 @@ from beancount.core.getters import get_active_years as getters_get_active_years
 from beancount.core.getters import get_all_links
 from beancount.core.getters import get_all_tags
 
+from fava.core.accounts import AccountData
 from fava.core.module_base import FavaModule
 from fava.util.date import FiscalYearEnd
 from fava.util.ranking import ExponentialDecayRanker
+
 
 if TYPE_CHECKING:  # pragma: no cover
     from fava.core import FavaLedger
@@ -51,6 +53,7 @@ class AttributesModule(FavaModule):
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self.accounts: list[str] = []
+        self.account_details: dict[str, AccountData] = {}
         self.currencies: list[str] = []
         self.payees: list[str] = []
         self.links: list[str] = []
@@ -70,6 +73,11 @@ class AttributesModule(FavaModule):
         )
         currency_ranker = ExponentialDecayRanker()
         payee_ranker = ExponentialDecayRanker()
+
+        self.account_details = {
+            account: self.ledger.accounts[account]
+            for account in self.ledger.accounts
+        }
 
         transactions = self.ledger.all_entries_by_type.Transaction
         for txn in transactions:
