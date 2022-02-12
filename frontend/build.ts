@@ -34,6 +34,7 @@ async function runBuild(dev: boolean) {
     bundle: true,
     outfile: "../src/fava/static/app.js",
     loader: {
+      ".woff": "file",
       ".woff2": "file",
     },
     plugins: [svelte({ preprocess: typescript() })],

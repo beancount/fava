@@ -6,6 +6,8 @@ TRANSLATION_TARGETS := $(TRANSLATION_SOURCES:messages.po=messages.mo)
 all: src/fava/static/app.js $(TRANSLATION_TARGETS)
 
 src/fava/static/app.js: $(FRONTEND_SOURCES) frontend/build.ts frontend/node_modules
+	rm -f src/fava/static/*
+	git checkout -- src/fava/static
 	cd frontend; npm run build
 
 frontend/node_modules: frontend/package-lock.json
