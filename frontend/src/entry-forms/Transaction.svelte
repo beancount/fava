@@ -4,14 +4,14 @@
   import { emptyPosting, Transaction } from "../entries";
   import type { Posting } from "../entries";
   import { _ } from "../i18n";
-  import { account_details, accounts, payees } from "../stores";
+  import { payees } from "../stores";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
   import EntryMetadata from "./EntryMetadata.svelte";
   import PostingSvelte from "./Posting.svelte";
 
   export let entry: Transaction;
-  let suggestions: string[];
+  let suggestions: string[] | undefined;
 
   function removePosting(posting: Posting) {
     entry.postings = entry.postings.filter((p) => p !== posting);
@@ -21,18 +21,12 @@
     entry.postings = entry.postings.concat(emptyPosting());
   }
 
-  $: suggestions = $accounts.filter(
-    (value) => $account_details[value].close_date >= new Date(entry.date)
-  );
-
   $: payee = entry.payee;
   $: if (payee) {
-    suggestions = [];
+    suggestions = undefined;
     if ($payees.includes(payee)) {
       get("payee_accounts", { payee }).then((s) => {
-        suggestions = s.filter(
-          (value) => $account_details[value].close_date >= new Date(entry.date)
-        );
+        suggestions = s;
       });
     }
   }
@@ -98,6 +92,7 @@
       bind:posting
       {index}
       {suggestions}
+      date={entry.date}
       add={addPosting}
       move={movePosting}
       remove={() => removePosting(posting)}
