@@ -55,7 +55,7 @@
       }|tojson }}</script>
       <script type="application/json" id="ledger-data">{{ {
         'accounts': ledger.attributes.accounts,
-        'account_details': ledger.attributes.account_details,
+        'account_details': ledger.accounts,
         'baseURL': url_for('index'),
         'currencies': ledger.attributes.currencies,
         'errors': ledger.errors|length,

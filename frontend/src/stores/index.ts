@@ -83,10 +83,7 @@ export const incognito = derived(ledgerData, (val) => val.incognito);
 export const baseURL = derived(ledgerData, (val) => val.baseURL);
 
 /** The ranked array of all accounts. */
-export const accounts: Readable<string[]> = derived_array(
-  ledgerData,
-  (val) => val.accounts
-);
+export const accounts = derived_array(ledgerData, (val) => val.accounts);
 
 export const account_details = derived(
   ledgerData,
