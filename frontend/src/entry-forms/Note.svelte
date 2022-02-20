@@ -13,7 +13,11 @@
   <div class="flex-row">
     <input type="date" name="date" bind:value={entry.date} required />
     <h4>{_("Note")}</h4>
-    <AccountInput className="grow" bind:value={entry.account} />
+    <AccountInput
+      className="grow"
+      bind:value={entry.account}
+      date={entry.date}
+    />
     <AddMetadataButton bind:meta={entry.meta} />
   </div>
   <textarea name="comment" rows={2} bind:value={entry.comment} />

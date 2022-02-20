@@ -15,7 +15,11 @@
   <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
     <h4>{_("Balance")}</h4>
-    <AccountInput className="grow" bind:value={entry.account} />
+    <AccountInput
+      className="grow"
+      bind:value={entry.account}
+      date={entry.date}
+    />
     <input
       type="tel"
       pattern="-?[0-9.,]*"
