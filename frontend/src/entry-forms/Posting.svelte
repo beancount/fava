@@ -9,6 +9,7 @@
   export let posting: Posting;
   export let index: number;
   export let suggestions: string[] | undefined;
+  export let date: string | undefined;
   export let move: (arg: { from: number; to: number }) => void;
   export let remove: () => void;
   export let add: () => void;
@@ -62,7 +63,12 @@
   >
     ×
   </button>
-  <AccountInput className="grow" bind:value={posting.account} {suggestions} />
+  <AccountInput
+    className="grow"
+    bind:value={posting.account}
+    {suggestions}
+    {date}
+  />
   <AutocompleteInput
     className="amount"
     placeholder={_("Amount")}
