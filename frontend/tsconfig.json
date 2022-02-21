@@ -4,6 +4,7 @@
         "module": "es2015",
         "moduleResolution": "Node",
         "preserveValueImports": true,
+        "resolveJsonModule": true,
         "allowJs": true,
         "checkJs": true,
         "noEmit": true,
@@ -11,5 +12,5 @@
         "skipLibCheck": true,
         "esModuleInterop": true
     },
-    "include": ["build.ts", "src/**/*.ts", "src/**/*.svelte", "test/**/*.ts"]
+    "include": ["*.ts", "src/**/*.ts", "src/**/*.svelte", "test/**/*.ts"]
 }

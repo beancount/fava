@@ -1,3 +1,5 @@
+ci:
+    skip: ["eslint"]
 repos:
     - repo: https://github.com/psf/black
       rev: 22.1.0
@@ -24,14 +26,22 @@ repos:
           - id: prettier
             name: prettier
             language: node
-            entry:
-                ./frontend/node_modules/prettier/bin-prettier.js --write
-                --list-different --ignore-unknown
+            entry: prettier --write --list-different --ignore-unknown
+            additional_dependencies:
+                - "prettier@2.5.1"
+                - "prettier-plugin-svelte@2.6.0"
+                - "svelte@3.46.4"
           - id: stylelint
             name: stylelint
             language: node
-            entry: ./frontend/node_modules/stylelint/bin/stylelint.js --fix
+            entry: stylelint --fix
             files: \.(css|svelte)$
+            additional_dependencies:
+                - "stylelint@14.5.0"
+                - "stylelint-config-prettier@9.0.3"
+                - "stylelint-config-recess-order@3.0.0"
+                - "stylelint-config-standard@25.0.0"
+                - "postcss-html@1.3.0"
           - id: eslint
             name: eslint
             language: node
