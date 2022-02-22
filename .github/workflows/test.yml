@@ -10,7 +10,7 @@ on:
             - main
 
 jobs:
-    test:
+    test-py:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -21,14 +21,23 @@ jobs:
             - uses: actions/setup-python@v2
               with:
                   python-version: ${{ matrix.py }}
+            - run: pip install tox
+            - run: tox -e py
+    test-js:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: ["ubuntu-latest", "macos-latest", "windows-latest"]
+        steps:
+            - uses: actions/checkout@v2
             - uses: actions/setup-node@v2
               with:
                   node-version: "lts/*"
                   cache: "npm"
                   cache-dependency-path: frontend/package-lock.json
-            - run: pip install tox
             - run: cd frontend && npm ci
-            - run: make test
+            - run: cd frontend && npm run build
+            - run: cd frontend && npm test
     lint-js:
         runs-on: "ubuntu-latest"
         steps:
