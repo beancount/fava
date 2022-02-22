@@ -5,7 +5,6 @@ packages:
     - python
     - python-babel
     - python-pip
-    - python-pre-commit
     - python-setuptools
     - python-tox
     - python-wheel
@@ -14,7 +13,5 @@ sources:
 tasks:
     - build: |
           make -C fava
-    - lint: |
-          make -C fava lint
     - test: |
           make -C fava test
