@@ -37,7 +37,7 @@ repos:
             entry: stylelint --fix
             files: \.(css|svelte)$
             additional_dependencies:
-                - "stylelint@14.5.0"
+                - "stylelint@14.5.3"
                 - "stylelint-config-prettier@9.0.3"
                 - "stylelint-config-recess-order@3.0.0"
                 - "stylelint-config-standard@25.0.0"
