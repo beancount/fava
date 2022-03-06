@@ -1,5 +1,5 @@
 import { localStorageSyncedStore } from "../lib/store";
-import { array, string } from "../lib/validation";
+import { array, constant, string, tuple, union } from "../lib/validation";
 
 const defaultValue = [
   "balance",
@@ -14,9 +14,19 @@ const defaultValue = [
   "statement",
   "transaction",
 ];
+
 /** The types of entries to show in the journal. */
 export const journalShow = localStorageSyncedStore(
   "journal-show",
   array(string),
   () => defaultValue
+);
+
+const defaultSortOrder: [string, "asc" | "desc"] = ["date", "desc"];
+
+/** The types of entries to show in the journal. */
+export const journalSortOrder = localStorageSyncedStore(
+  "journal-sort-order",
+  tuple([string, union(constant("asc"), constant("desc"))]),
+  () => defaultSortOrder
 );
