@@ -2,10 +2,20 @@
 # we only need excludes here (except for the translations,
 # which are compiled and not tracked in git).
 
-exclude .editorconfig .gitignore .travis.yml appveyor.yml
+exclude .editorconfig
+exclude .gitignore
+exclude .pre-commit-config.yaml
+exclude .prettierignore
+exclude .prettierrc.json
+prune .builds
+prune .github
 
 graft src/fava/static
 exclude src/fava/translations/babel.conf
 recursive-include src/fava/translations *.mo
 
-global-exclude *.po *.py[co] *.orig __pycache__ .DS_Store
+global-exclude *.orig
+global-exclude *.po
+global-exclude *.py[co]
+global-exclude .DS_Store
+global-exclude __pycache__
