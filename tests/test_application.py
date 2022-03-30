@@ -125,9 +125,10 @@ def test_default_path_redirection(
             monkeypatch.setattr(g.ledger.fava_options, "default_page", option)
         result = test_client.get(url)
         get_url = result.headers.get("Location", "")
+        # pre Werkzeug 2.1:
         expect_url = werkzeug.urls.url_join("http://localhost/", expect)
         assert result.status_code == 302
-        assert get_url == expect_url
+        assert get_url in (expect, expect_url)
 
 
 @pytest.mark.parametrize(
@@ -156,9 +157,10 @@ def test_jump_handler(
     result = test_client.get(jump_link, headers=[("Referer", referer)])
     with app.test_request_context():
         get_url = result.headers.get("Location", "")
+        # pre Werkzeug 2.1:
         expect_url = werkzeug.urls.url_join("http://localhost/", expect)
         assert result.status_code == 302
-        assert get_url == expect_url
+        assert get_url in (expect, expect_url)
 
 
 def test_help_ages(test_client: FlaskClient) -> None:
