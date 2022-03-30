@@ -223,7 +223,9 @@ def _perform_global_filters() -> None:
 
 
 @app.after_request
-def _incognito(response: Response) -> Response:
+def _incognito(
+    response: werkzeug.wrappers.Response,
+) -> werkzeug.wrappers.Response:
     """Replace all numbers with 'X'."""
     if app.config.get("INCOGNITO") and response.content_type.startswith(
         "text/html"
@@ -269,7 +271,7 @@ def fava_api_exception(error: FavaAPIException) -> str:
 
 @app.route("/")
 @app.route("/<bfile>/")
-def index() -> werkzeug.wrappers.response.Response:
+def index() -> werkzeug.wrappers.Response:
     """Redirect to the Income Statement (of the given or first file)."""
     if not g.beancount_file_slug:
         g.beancount_file_slug = next(iter(app.config["LEDGERS"]))
@@ -390,7 +392,7 @@ def help_page(page_slug: str) -> str:
 
 
 @app.route("/jump")
-def jump() -> werkzeug.wrappers.response.Response:
+def jump() -> werkzeug.wrappers.Response:
     """Redirect back to the referer, replacing some parameters.
 
     This is useful for sidebar links, e.g. a link ``/jump?time=year``

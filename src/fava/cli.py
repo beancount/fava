@@ -137,4 +137,5 @@ def main(
 
 # needed for pyinstaller:
 if __name__ == "__main__":  # pragma: no cover
-    main()  # pylint: disable=no-value-for-parameter
+    # pylint: disable=no-value-for-parameter
+    main()  # type: ignore

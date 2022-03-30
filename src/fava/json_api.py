@@ -16,7 +16,6 @@ from os import path
 from os import remove
 from typing import Any
 from typing import Callable
-from typing import cast
 from typing import Mapping
 
 from flask import Blueprint
@@ -132,7 +131,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     def _wrapper() -> Response:
         if validator is not None:
             if method == "put":
-                request_json = request.get_json()
+                request_json = request.get_json(silent=True)
                 if request_json is None:
                     raise FavaAPIException("Invalid JSON request.")
                 data = request_json
@@ -143,7 +142,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
             res = func()
         return json_success(res)
 
-    return cast(Callable[[], Response], _wrapper)
+    return _wrapper
 
 
 @api_endpoint
