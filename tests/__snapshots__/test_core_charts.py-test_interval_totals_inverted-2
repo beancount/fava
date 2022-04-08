@@ -1,5 +1,6 @@
 [
  {
+  "account_balances": {},
   "balance": {
    "USD": -70.0000
   },
@@ -9,6 +10,7 @@
   "date": "2012-11-18"
  },
  {
+  "account_balances": {},
   "balance": {
    "USD": -40.000
   },

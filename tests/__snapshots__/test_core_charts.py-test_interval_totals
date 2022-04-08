@@ -1,5 +1,6 @@
 [
  {
+  "account_balances": {},
   "balance": {
    "EUR": 280.00
   },
@@ -9,6 +10,7 @@
   "date": "2012-11-18"
  },
  {
+  "account_balances": {},
   "balance": {
    "EUR": 80.00
   },

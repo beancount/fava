@@ -2,9 +2,9 @@
 
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
 
-{{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit'), invert=invert) }}
-{{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income'), invert=invert) }}
-{{ charts.interval_totals(g.interval, ledger.options['name_expenses'], label=_('Expenses')) }}
+{{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit'), invert=invert, children=ledger.fava_options.num_stackedbar_accounts) }}
+{{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income'), invert=invert, children=ledger.fava_options.num_stackedbar_accounts) }}
+{{ charts.interval_totals(g.interval, ledger.options['name_expenses'], label=_('Expenses'), children=ledger.fava_options.num_stackedbar_accounts) }}
 
 {{ charts.hierarchy(ledger.options['name_income']) }}
 {{ charts.hierarchy(ledger.options['name_expenses']) }}

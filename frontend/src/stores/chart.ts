@@ -20,6 +20,11 @@ export const lineChartMode = localStorageSyncedStore(
   string,
   () => "line"
 );
+export const barChartMode = localStorageSyncedStore(
+  "line-chart-mode",
+  string,
+  () => "bar"
+);
 export const chartCurrency = writable("");
 
 const currencySuggestions = derived(

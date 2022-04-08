@@ -12,7 +12,7 @@
 {% block content %}
 <div class="droptarget" data-account-name="{{ account_name }}">
   {{ charts.account_balance(account_name) }}
-  {{ charts.interval_totals(g.interval, account_name, label=_('Changes')) }}
+  {{ charts.interval_totals(g.interval, account_name, label=_('Changes'), children=ledger.fava_options.num_stackedbar_accounts) }}
 
   {% if not journal %}
   {{ charts.hierarchy(account_name) }}

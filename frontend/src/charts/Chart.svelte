@@ -6,6 +6,7 @@
   import { _ } from "../i18n";
   import { keyboardShortcut } from "../keyboard-shortcuts";
   import {
+    barChartMode,
     chartCurrency,
     hierarchyChartMode,
     lineChartMode,
@@ -77,6 +78,14 @@
         options={[
           ["line", _("Line chart")],
           ["area", _("Area chart")],
+        ]}
+      />
+    {:else if chart.type === "barchart" && chart.hasStackedData}
+      <ModeSwitch
+        bind:value={$barChartMode}
+        options={[
+          ["stacked", _("Stacked Bars")],
+          ["unstacked", _("Single Bar")],
         ]}
       />
     {/if}
