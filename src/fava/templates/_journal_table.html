@@ -114,8 +114,8 @@
           <span class="num">
           {%- for pos in balance|cost_or_value(entry.date) %}{{ commodity_macros.render_amount(ledger, pos.units) }}<br>{% endfor -%}
           </span>
-        </p>
         {% endif %}
+        </p>
         {{ render_metadata(metadata, entry_hash) }}
         {% if entry.postings %}
           <ul class="postings">
