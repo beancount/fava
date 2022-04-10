@@ -111,6 +111,7 @@
         {% set entry, _, change, balance = entry %}
     {% endif %}
     {% set type = entry.__class__.__name__.lower() %}
+    {% if type == 'price' %}{% continue %}{% endif %}
     {% set entry_hash = entry|hash_entry %}
     {% set metadata = entry.meta|remove_keys(['__tolerances__', '__automatic__', 'filename', 'lineno']) %}
     <li class="{{ type }} {{ entry.type or '' }} {{ entry.flag|flag_to_type if entry.flag else '' }}{{ ' linked' if entry.tags and 'linked' in entry.tags else '' }}{{ ' discovered' if entry.tags and 'discovered' in entry.tags else '' }}">
