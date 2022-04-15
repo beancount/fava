@@ -84,7 +84,7 @@ export function bar(
           text += "<br>";
         });
       } else {
-        text += `<em>${e.replace(/^:/, "")}</em>`;
+        text += `<em>${e}</em>`;
         d.values.forEach((a) => {
           text += `${c.currency(a.children.get(e) ?? 0)} ${a.name}<br>`;
         });

@@ -1,6 +1,7 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
 
+import { bar } from "../src/charts/bar";
 import { balances, commodities } from "../src/charts/line";
 import {
   parseGroupedQueryChart,
@@ -25,6 +26,7 @@ test("handle data for balances chart", () => {
     { date: "2000-02-01", balance: { EUR: 10 } },
   ];
   const parsed = force_ok(balances(data));
+
   assert.equal(parsed.data, [
     {
       name: "EUR",
@@ -96,4 +98,133 @@ test("handle invalid data for query charts", () => {
   assert.is(false, c.success);
 });
 
+test("handle data for bar chart with stacked data", () => {
+  const data: unknown = [
+    {
+      date: "2000-01-01",
+      balance: { EUR: 10, USD: 10 },
+      budgets: { USD: 20 },
+      account_balances: {
+        "Expenses:Dining": { USD: 8 },
+        "Expenses:Transportation": { EUR: 6 },
+        "Expenses:Taxes": { USD: 2, EUR: 4 },
+      },
+    },
+    {
+      date: "2000-02-01",
+      balance: { EUR: 100 },
+      budgets: { EUR: 50 },
+      account_balances: {
+        "Expenses:Shoes": { EUR: 60 },
+        "Expenses:Taxes": { EUR: 40 },
+      },
+    },
+  ];
+  const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const parsed = force_ok(bar(data, ctx2));
+  const parsed_data = parsed.data.map((d) => ({
+    ...d,
+    values: d.values.map((v) => ({
+      ...v,
+      children: Object.fromEntries(v.children),
+    })),
+  }));
+  assert.is(true, parsed.hasStackedData);
+  assert.equal(parsed_data, [
+    {
+      date: new Date("2000-01-01"),
+      label: "DATE",
+      values: [
+        {
+          name: "EUR",
+          value: 10,
+          children: {
+            "Expenses:Dining": 0,
+            "Expenses:Transportation": 6,
+            "Expenses:Taxes": 4,
+          },
+          budget: 0,
+        },
+        {
+          name: "USD",
+          value: 10,
+          children: {
+            "Expenses:Dining": 8,
+            "Expenses:Transportation": 0,
+            "Expenses:Taxes": 2,
+          },
+          budget: 20,
+        },
+      ],
+    },
+    {
+      date: new Date("2000-02-01"),
+      label: "DATE",
+      values: [
+        {
+          name: "EUR",
+          value: 100,
+          children: {
+            "Expenses:Shoes": 60,
+            "Expenses:Taxes": 40,
+          },
+          budget: 50,
+        },
+        {
+          name: "USD",
+          value: 0,
+          children: {
+            "Expenses:Shoes": 0,
+            "Expenses:Taxes": 0,
+          },
+          budget: 0,
+        },
+      ],
+    },
+  ]);
+});
+test("handle data for bar chart without stacked data", () => {
+  const data: unknown = [
+    {
+      date: "2000-01-01",
+      balance: { EUR: 10, USD: 10 },
+      budgets: { USD: 20 },
+      account_balances: {},
+    },
+    {
+      date: "2000-02-01",
+      balance: { EUR: 100 },
+      budgets: { EUR: 50 },
+      account_balances: {},
+    },
+  ];
+  const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
+  const parsed = force_ok(bar(data, ctx2));
+  const parsed_data = parsed.data.map((d) => ({
+    ...d,
+    values: d.values.map((v) => ({
+      ...v,
+      children: Object.fromEntries(v.children),
+    })),
+  }));
+  assert.is(false, parsed.hasStackedData);
+  assert.equal(parsed_data, [
+    {
+      date: new Date("2000-01-01"),
+      label: "DATE",
+      values: [
+        { name: "EUR", value: 10, children: {}, budget: 0 },
+        { name: "USD", value: 10, children: {}, budget: 20 },
+      ],
+    },
+    {
+      date: new Date("2000-02-01"),
+      label: "DATE",
+      values: [
+        { name: "EUR", value: 100, children: {}, budget: 50 },
+        { name: "USD", value: 0, children: {}, budget: 0 },
+      ],
+    },
+  ]);
+});
 test.run();

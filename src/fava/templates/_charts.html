@@ -11,7 +11,7 @@
 }) %}
 {% endmacro %}
 
-{% macro interval_totals(interval, account_name, label=None, invert=False, children=0) %}
+{% macro interval_totals(interval, account_name, label=None, invert=False, children=False) %}
 {% do chart_data.append({
 'type': 'bar',
 'label': account_name if not label else label,
