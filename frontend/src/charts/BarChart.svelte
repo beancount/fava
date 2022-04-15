@@ -204,11 +204,7 @@
                     highlighted = "";
                   }}
                   use:followingTooltip={() => tooltipText($ctx, bar.data, name)}
-                  on:click={() => {
-                    if (!name.startsWith(":")) {
-                      router.navigate(urlForAccount(name));
-                    }
-                  }}
+                  on:click={() => router.navigate(urlForAccount(name))}
                 />
               {/if}
             {/each}

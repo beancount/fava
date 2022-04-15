@@ -17,7 +17,6 @@ from beancount.core.data import Transaction
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.position import Position
-from flask_babel import gettext  # type: ignore
 from simplejson import JSONEncoder
 
 from fava.core._compat import FLAG_UNREALIZED
@@ -130,38 +129,6 @@ class ChartModule(FavaModule):
             if prices:
                 yield base, quote, prices
 
-    def _consolidate_accounts(
-        self, account_balances: dict[str, Any], count: int
-    ) -> None:
-        """Consolidate accounts into <= count buckets"""
-        # mypy doesn't understand that Inventory has __abs__ and add_inventory
-        # so declare as Any to bypass type checking
-        def sort_func(key: Any) -> Any:
-            return abs(account_balances[key])
-
-        consolidated_balances: dict[str, Any] = {}
-        ordered_accounts = sorted(
-            account_balances.keys(),
-            key=sort_func,
-            reverse=True,
-        )
-        while len(ordered_accounts) + len(consolidated_balances) > count:
-            account = ordered_accounts.pop()
-            base_account = account.split(":", 1)[0]
-            if base_account == self.ledger.options["name_expenses"]:
-                base_account = ":" + gettext("Other Expenses")
-            elif base_account == self.ledger.options["name_income"]:
-                base_account = ":" + gettext("Other Expenses")
-            else:
-                base_account = ":" + gettext("Other")
-            if base_account not in consolidated_balances:
-                consolidated_balances[base_account] = Inventory()
-            consolidated_balances[base_account].add_inventory(
-                account_balances[account]
-            )
-            del account_balances[account]
-        account_balances.update(consolidated_balances)
-
     @listify
     def interval_totals(
         self,
@@ -169,7 +136,7 @@ class ChartModule(FavaModule):
         accounts: str | tuple[str],
         conversion: str,
         invert: bool = False,
-        children: int = 0,
+        children: bool = False,
     ) -> Generator[DateAndBalanceWithBudget, None, None]:
         """Renders totals for account (or accounts) in the intervals.
 
@@ -177,7 +144,7 @@ class ChartModule(FavaModule):
             interval: An interval.
             accounts: A single account (str) or a tuple of accounts.
             conversion: The conversion to use.
-            children: number of categories to breakdown component accounts into
+            children: Report all sub-account costs
         """
         # pylint: disable=too-many-locals
         price_map = self.ledger.price_map
@@ -198,7 +165,7 @@ class ChartModule(FavaModule):
                 inventory, conversion, price_map, end - ONE_DAY
             )
             account_balances = {}
-            if children > 1:
+            if children:
                 for account, acct_value in account_inventories.items():
                     account_balances[account] = cost_or_value(
                         acct_value,
@@ -206,7 +173,6 @@ class ChartModule(FavaModule):
                         price_map,
                         end - ONE_DAY,
                     )
-                self._consolidate_accounts(account_balances, children)
             budgets = {}
             if isinstance(accounts, str):
                 budgets = self.ledger.budgets.calculate_children(
