@@ -70,6 +70,7 @@ class FavaOptions:
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
     use_external_editor: bool = False
+    float_point_precision: int = 0 #Equivalent to MOST_COMMON
 
     asdict = asdict
 

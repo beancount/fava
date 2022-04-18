@@ -70,7 +70,12 @@ class DecimalFormatModule(FavaModule):
 
         dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
-            prec = ccontext.get_fractional(Precision.MOST_COMMON)
+            if self.ledger.fava_options.float_point_precision == 0:
+                prec = ccontext.get_fractional(Precision.MOST_COMMON)
+            elif self.ledger.fava_options.float_point_precision > 0:
+                prec = self.ledger.fava_options.float_point_precision
+            else:
+                prec = ccontext.get_fractional(Precision.MAXIMUM)
             if prec is not None:
                 self.formatters[currency] = get_locale_format(
                     self.locale, prec
