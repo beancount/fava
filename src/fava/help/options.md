@@ -261,8 +261,9 @@ and the individual account pages are not affected by this configuration option.
 
 Default: `0` (which uses the most common precision)
 
-By default Fava outputs all reports using the most common precision retrieved in the Beancount files.
-This option allows to set a fixed number of digits after the comma, for example: 2. If this value is set
-with a positive number, Fava will use this amount of digits for precision. If the number is set to zero (default),
-Fava will use the most common precision found by Beancount. Set to a negative value, i.e -1, to use Beancount's
-max precision.
+By default Fava outputs all reports using the most common precision retrieved in
+the Beancount files. This option allows to set a fixed number of digits after
+the comma, for example: 2. If this value is set with a positive number, Fava
+will use this amount of digits for precision. If the number is set to zero
+(default), Fava will use the most common precision found by Beancount. Set to a
+negative value, i.e -1, to use Beancount's max precision.
