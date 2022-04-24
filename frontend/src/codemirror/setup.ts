@@ -1,15 +1,20 @@
-import { autocompletion, completionKeymap } from "@codemirror/autocomplete";
-import { closeBrackets, closeBracketsKeymap } from "@codemirror/closebrackets";
-import { defaultKeymap } from "@codemirror/commands";
-import { commentKeymap } from "@codemirror/comment";
-import { foldGutter, foldKeymap } from "@codemirror/fold";
-import { lineNumbers } from "@codemirror/gutter";
-import { defaultHighlightStyle } from "@codemirror/highlight";
-import { history, historyKeymap } from "@codemirror/history";
-import { indentOnInput, indentUnit } from "@codemirror/language";
+import {
+  autocompletion,
+  closeBrackets,
+  closeBracketsKeymap,
+  completionKeymap,
+} from "@codemirror/autocomplete";
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import {
+  bracketMatching,
+  defaultHighlightStyle,
+  foldGutter,
+  foldKeymap,
+  indentOnInput,
+  indentUnit,
+  syntaxHighlighting,
+} from "@codemirror/language";
 import { lintKeymap } from "@codemirror/lint";
-import { bracketMatching } from "@codemirror/matchbrackets";
-import { rectangularSelection } from "@codemirror/rectangular-selection";
 import { highlightSelectionMatches, searchKeymap } from "@codemirror/search";
 import type { Extension } from "@codemirror/state";
 import { EditorState } from "@codemirror/state";
@@ -20,7 +25,9 @@ import {
   highlightActiveLine,
   highlightSpecialChars,
   keymap,
+  lineNumbers,
   placeholder,
+  rectangularSelection,
 } from "@codemirror/view";
 import { get } from "svelte/store";
 
@@ -37,7 +44,7 @@ const baseExtensions = [
   drawSelection(),
   EditorState.allowMultipleSelections.of(true),
   indentOnInput(),
-  defaultHighlightStyle,
+  syntaxHighlighting(defaultHighlightStyle),
   bracketMatching(),
   closeBrackets(),
   autocompletion(),
@@ -50,7 +57,6 @@ const baseExtensions = [
     ...searchKeymap,
     ...historyKeymap,
     ...foldKeymap,
-    ...commentKeymap,
     ...completionKeymap,
     ...lintKeymap,
   ]),
@@ -93,7 +99,7 @@ export class BeancountTextarea extends HTMLTextAreaElement {
     super();
     const [view] = setup(this.value, [
       beancount,
-      defaultHighlightStyle,
+      syntaxHighlighting(defaultHighlightStyle),
       EditorView.editable.of(false),
     ]);
     this.parentNode?.insertBefore(view.dom, this);
@@ -128,7 +134,7 @@ export function initBeancountEditor(
 export function initReadonlyQueryEditor(value: string): EditorAndAction {
   return setup(value, [
     bql,
-    defaultHighlightStyle,
+    syntaxHighlighting(defaultHighlightStyle),
     EditorView.editable.of(false),
   ]);
 }
