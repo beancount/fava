@@ -1,5 +1,8 @@
-import { LanguageSupport } from "@codemirror/language";
-import { StreamLanguage } from "@codemirror/stream-parser";
+import {
+  LanguageSupport,
+  StreamLanguage,
+  syntaxHighlighting,
+} from "@codemirror/language";
 import { keymap } from "@codemirror/view";
 
 import { beancountCompletion } from "./beancount-autocomplete";
@@ -13,7 +16,7 @@ const beancountLanguage = StreamLanguage.define(beancountStreamParser);
 
 export const beancount = new LanguageSupport(beancountLanguage, [
   beancountFold,
-  beancountHighlight,
+  syntaxHighlighting(beancountHighlight),
   beancountIndent,
   keymap.of([{ key: "Control-d", mac: "Meta-d", run: beancountFormat }]),
   beancountLanguage.data.of({

@@ -1,5 +1,5 @@
 import type { CompletionSource } from "@codemirror/autocomplete";
-import { StreamLanguage } from "@codemirror/stream-parser";
+import { StreamLanguage } from "@codemirror/language";
 import type { Readable } from "svelte/store";
 import { get } from "svelte/store";
 

@@ -1,5 +1,4 @@
-import { LanguageSupport } from "@codemirror/language";
-import { StreamLanguage } from "@codemirror/stream-parser";
+import { LanguageSupport, StreamLanguage } from "@codemirror/language";
 
 import { bqlCompletion } from "./bql-autocomplete";
 import { bqlStreamParser } from "./bql-stream-parser";

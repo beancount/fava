@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { toggleComment } from "@codemirror/comment";
-  import { foldAll, unfoldAll } from "@codemirror/fold";
+  import { toggleComment } from "@codemirror/commands";
+  import { foldAll, unfoldAll } from "@codemirror/language";
   import type { EditorView } from "@codemirror/view";
 
   import { beancountFormat } from "../codemirror/beancount-format";

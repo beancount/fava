@@ -1,4 +1,4 @@
-import type { StreamParser } from "@codemirror/stream-parser";
+import type { StreamParser } from "@codemirror/language";
 
 import accountRegex from "./account-regex";
 
