@@ -32,7 +32,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-svelte3": "^3.2.1",
+    "eslint-plugin-svelte3": "^4.0.0",
     "js-yaml": "^4.1.0",
     "postcss-html": "^1.0.1",
     "prettier": "^2.5.1",

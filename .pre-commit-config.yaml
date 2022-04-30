@@ -30,14 +30,14 @@ repos:
             additional_dependencies:
                 - "prettier@2.6.2"
                 - "prettier-plugin-svelte@2.7.0"
-                - "svelte@3.47.0"
+                - "svelte@3.48.0"
           - id: stylelint
             name: stylelint
             language: node
             entry: stylelint --fix
             files: \.(css|svelte)$
             additional_dependencies:
-                - "stylelint@14.7.1"
+                - "stylelint@14.8.2"
                 - "stylelint-config-prettier@9.0.3"
                 - "stylelint-config-recess-order@3.0.0"
                 - "stylelint-config-standard@25.0.0"
