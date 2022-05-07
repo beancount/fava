@@ -217,7 +217,7 @@ def _perform_global_filters() -> None:
         if request.blueprint != "json_api":
             ledger.changed()
 
-        ledger.filter(
+        g.filtered = ledger.get_filtered(
             account=request.args.get("account"),
             filter=request.args.get("filter"),
             time=request.args.get("time"),
@@ -354,7 +354,7 @@ def extension_report(report_name: str) -> str:
 def download_query(result_format: str) -> Any:
     """Download a query result."""
     name, data = g.ledger.query_shell.query_to_file(
-        request.args.get("query_string", ""), result_format
+        g.filtered.entries, request.args.get("query_string", ""), result_format
     )
 
     filename = f"{secure_filename(name.strip())}.{result_format}"

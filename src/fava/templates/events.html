@@ -1,4 +1,4 @@
-{% set events = ledger.events() %}
+{% set events = g.filtered.events() %}
 {% if events %}
 {{ charts.events() }}
 {% for group in events|groupby('type') %}

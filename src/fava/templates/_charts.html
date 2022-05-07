@@ -6,7 +6,7 @@
 'label': account_name if not label else label,
 'data': {
   'modifier': ledger.get_account_sign(account_name),
-  'root': ledger.charts.hierarchy(account_name, g.conversion, begin_date, end_date or g.ledger.end_date),
+  'root': ledger.charts.hierarchy(g.filtered, account_name, g.conversion, begin_date, end_date or g.filtered.end_date),
 },
 }) %}
 {% endmacro %}
@@ -15,7 +15,7 @@
 {% do chart_data.append({
 'type': 'bar',
 'label': account_name if not label else label,
-'data': ledger.charts.interval_totals(interval, account_name, g.conversion, invert=invert),
+'data': ledger.charts.interval_totals(g.filtered, interval, account_name, g.conversion, invert=invert),
 }) %}
 {% endmacro %}
 
@@ -31,7 +31,7 @@
 {% do chart_data.append({
 'type': 'balances',
 'label': _('Net Worth'),
-'data': ledger.charts.net_worth(interval, g.conversion),
+'data': ledger.charts.net_worth(g.filtered, interval, g.conversion),
 }) %}
 {% endmacro %}
 
@@ -39,17 +39,17 @@
 {% do chart_data.append({
 'type': 'balances',
 'label': _('Account Balance'),
-'data': ledger.charts.linechart(account_name, g.conversion),
+'data': ledger.charts.linechart(g.filtered, account_name, g.conversion),
 }) %}
 {% endmacro %}
 
 {% macro commodities() %}
-{% for base, quote, prices in ledger.charts.prices() %}
+{% for base, quote, prices in ledger.charts.prices(g.filtered) %}
 {% do chart_data.append({
 'type': 'commodities',
 'label': '{0} / {1}'.format(base, quote),
 'data': {
-  'prices': ledger.prices(base, quote),
+  'prices': g.filtered.prices(base, quote),
   'base': base,
   'quote': quote,
 },

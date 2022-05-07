@@ -9,6 +9,7 @@ from pytest import MonkeyPatch
 
 from fava.core import FavaLedger
 from fava.helpers import FavaAPIException
+from fava.util.date import Interval
 
 if TYPE_CHECKING:
     from fava.util.typing import LoaderResult
@@ -90,3 +91,17 @@ def test_commodity_names(example_ledger: FavaLedger) -> None:
     assert example_ledger.commodity_names.get("USD") == "US Dollar"
     assert example_ledger.commodity_names.get("NOCOMMODITY") is None
     assert example_ledger.commodity_names.get("VMMXX") is None
+
+
+@pytest.mark.filterwarnings("ignore:FavaLedger.*deprecated")
+def test_deprecated_filtered(example_ledger: FavaLedger) -> None:
+    assert example_ledger.all_entries == example_ledger.entries
+    assert example_ledger.all_root_account == example_ledger.root_account
+    assert example_ledger.root_tree
+    assert not example_ledger.filters.time
+    assert not example_ledger.account_is_closed("test")
+    assert example_ledger.end_date is None
+    assert example_ledger.interval_ends(Interval.MONTH)
+    assert example_ledger.documents == []
+    assert example_ledger.events()
+    assert example_ledger.events("test") == []

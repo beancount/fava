@@ -4,4 +4,4 @@
 {{ charts.hierarchy(ledger.options['name_{}'.format(base_account)]) }}
 {% endfor %}
 
-{{ tree_table.tree(ledger.root_tree.get('')) }}
+{{ tree_table.tree(g.filtered.root_tree.get('')) }}

@@ -74,7 +74,7 @@ class QueryShell(BQLShell, FavaModule):
             )
 
     def _loadfun(self) -> None:
-        self.entries = self.ledger.entries
+        self.entries = self.ledger.all_entries
         self.errors = self.ledger.errors
         self.options_map = self.ledger.options
 
@@ -110,7 +110,7 @@ class QueryShell(BQLShell, FavaModule):
 
         self.result = rtypes, rrows
 
-    def execute_query(self, query: str):
+    def execute_query(self, entries: Entries, query: str):
         """Run a query.
 
         Arguments:
@@ -123,6 +123,7 @@ class QueryShell(BQLShell, FavaModule):
             contained in ``contents`` (as a string).
         """
         self._loadfun()
+        self.entries = entries
         with contextlib.redirect_stdout(self.buffer):
             self.onecmd(query)
         contents = self.buffer.getvalue()
@@ -151,7 +152,9 @@ class QueryShell(BQLShell, FavaModule):
                 statement = self.parser.parse(query.query_string)
                 self.dispatch(statement)
 
-    def query_to_file(self, query_string: str, result_format: str):
+    def query_to_file(
+        self, entries: Entries, query_string: str, result_format: str
+    ):
         """Get query result as file.
 
         Arguments:
@@ -187,7 +190,7 @@ class QueryShell(BQLShell, FavaModule):
 
         try:
             types, rows = run_query(
-                self.ledger.entries,
+                entries,
                 self.ledger.options,
                 query_string,
                 numberify=True,

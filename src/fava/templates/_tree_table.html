@@ -31,9 +31,10 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
       <span class="num other">{{ _('Other') }}</span>
     </p>
   </li>
+  {% set end_date = g.filtered.end_date %}
   {% for account in ([account_node] if account_node.name else account_node.children) if account|should_show recursive %}
-  {% set balance = account.balance|cost_or_value(ledger.end_date) %}
-  {% set balance_children = account.balance_children|cost_or_value(ledger.end_date) %}
+  {% set balance = account.balance|cost_or_value(end_date) %}
+  {% set balance_children = account.balance_children|cost_or_value(end_date) %}
   {% set cost = account.balance|cost if g.conversion == 'at_value' else {} %}
   {% set cost_children = account.balance_children|cost if g.conversion == 'at_value' else {} %}
   <li{{ ' class=toggled' if account.name|collapse_account else '' }}>

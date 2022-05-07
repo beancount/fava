@@ -119,10 +119,11 @@ def should_show(account: TreeNode) -> bool:
     ):
         return True
     ledger = g.ledger
+    filtered = g.filtered
     if account.name not in ledger.accounts:
         return False
     fava_options = ledger.fava_options
-    if not fava_options.show_closed_accounts and ledger.account_is_closed(
+    if not fava_options.show_closed_accounts and filtered.account_is_closed(
         account.name
     ):
         return False

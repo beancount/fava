@@ -175,7 +175,9 @@ class QueryResult:
 def get_query_result(query_string: str) -> Any:
     """Render a query result to HTML."""
     table = get_template_attribute("_query_table.html", "querytable")
-    contents, types, rows = g.ledger.query_shell.execute_query(query_string)
+    contents, types, rows = g.ledger.query_shell.execute_query(
+        g.filtered.entries, query_string
+    )
     if contents:
         if "ERROR" in contents:
             raise FavaAPIException(contents)

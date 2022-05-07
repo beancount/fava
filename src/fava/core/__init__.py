@@ -3,12 +3,18 @@ from __future__ import annotations
 
 import copy
 import datetime
+import warnings
+from functools import lru_cache
+from functools import wraps
 from operator import itemgetter
 from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
+from typing import Any
+from typing import Callable
 from typing import Iterable
+from typing import TYPE_CHECKING
 
 from beancount.core import realization
 from beancount.core.account_types import AccountTypes
@@ -66,6 +72,28 @@ from fava.util import pairwise
 from fava.util.typing import BeancountOptions
 
 
+if TYPE_CHECKING:
+    from beancount.core.prices import PriceMap
+
+
+def _deprecated_unfiltered(wrapped: Callable[..., Any]) -> Callable[..., Any]:
+    """Warn on deprecated attributes of the unfiltered ledger."""
+
+    name = wrapped.__name__
+
+    @wraps(wrapped)
+    def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+        warnings.warn(
+            f"FavaLedger.{name} is deprecated and does not filter anymore."
+            f"Please use FilteredLedger.{name} instead.",
+            DeprecationWarning,
+        )
+        print(f"FavaLedger.{name} has been deprecated.")
+        return wrapped(self, *args, **kwargs)
+
+    return wrapper
+
+
 class Filters:
     """The possible entry filters."""
 
@@ -114,6 +142,122 @@ MODULES = [
 ]
 
 
+class FilteredLedger:
+    """Filtered Beancount ledger."""
+
+    __slots__ = [
+        "ledger",
+        "entries",
+        "filters",
+        "root_account",
+        "root_tree",
+        "_date_first",
+        "_date_last",
+    ]
+    _date_first: datetime.date | None
+    _date_last: datetime.date | None
+
+    def __init__(
+        self,
+        ledger: FavaLedger,
+        account: str | None = None,
+        filter: str | None = None,  # pylint: disable=redefined-builtin
+        time: str | None = None,
+    ):
+        self.ledger = ledger
+        self.filters = Filters(ledger.options, ledger.fava_options)
+        self.filters.set(account=account, filter=filter, time=time)
+        self.entries = self.filters.apply(ledger.all_entries)
+
+        self.root_account = realization.realize(
+            self.entries, ledger.account_types
+        )
+        self.root_tree = Tree(self.entries)
+
+        self._date_first, self._date_last = get_min_max_dates(
+            self.entries, (Transaction, Price)
+        )
+        if self._date_last:
+            self._date_last = self._date_last + datetime.timedelta(1)
+
+        if self.filters.time:
+            self._date_first = self.filters.time.begin_date
+            self._date_last = self.filters.time.end_date
+
+    @property
+    def end_date(self) -> datetime.date | None:
+        """The date to use for prices."""
+        if self.filters.time:
+            return self.filters.time.end_date
+        return None
+
+    @property
+    def root_tree_closed(self) -> Tree:
+        """A root tree for the balance sheet."""
+        tree = Tree(self.entries)
+        tree.cap(self.ledger.options, self.ledger.fava_options.unrealized)
+        return tree
+
+    def interval_ends(
+        self, interval: date.Interval
+    ) -> Iterable[datetime.date]:
+        """Generator yielding dates corresponding to interval boundaries."""
+        if not self._date_first or not self._date_last:
+            return []
+        return date.interval_ends(self._date_first, self._date_last, interval)
+
+    @property
+    def documents(self) -> list[Document]:
+        """All currently filtered documents."""
+        return [e for e in self.entries if isinstance(e, Document)]
+
+    def events(self, event_type: str | None = None) -> list[Event]:
+        """List events (possibly filtered by type)."""
+        events = [e for e in self.entries if isinstance(e, Event)]
+        if event_type:
+            return [event for event in events if event.type == event_type]
+
+        return events
+
+    def prices(
+        self, base: str, quote: str
+    ) -> list[tuple[datetime.date, Decimal]]:
+        """List all prices."""
+        all_prices = get_all_prices(self.ledger.price_map, (base, quote))
+
+        if (
+            self.filters.time
+            and self.filters.time.begin_date is not None
+            and self.filters.time.end_date is not None
+        ):
+            return [
+                (date, price)
+                for date, price in all_prices
+                if self.filters.time.begin_date
+                <= date
+                < self.filters.time.end_date
+            ]
+        return all_prices
+
+    def account_is_closed(self, account_name: str) -> bool:
+        """Check if the account is closed.
+
+        Args:
+            account_name: An account name.
+
+        Returns:
+            True if the account is closed before the end date of the current
+            time filter.
+        """
+        if self.filters.time and self._date_last is not None:
+            return (
+                self.ledger.accounts[account_name].close_date < self._date_last
+            )
+        return (
+            self.ledger.accounts[account_name].close_date != datetime.date.max
+        )
+
+
 # pylint: disable=too-many-instance-attributes,too-many-public-methods
 class FavaLedger:
     """Create an interface for a Beancount ledger.
@@ -130,28 +274,22 @@ class FavaLedger:
         "all_root_account",
         "beancount_file_path",
         "commodity_names",
-        "_date_first",
-        "_date_last",
-        "entries",
         "errors",
         "fava_options",
-        "filters",
         "_is_encrypted",
         "options",
         "price_map",
-        "root_account",
-        "root_tree",
         "_watcher",
     ] + MODULES
 
     #: List of all (unfiltered) entries.
     all_entries: Entries
 
-    #: The entries filtered according to the chosen filters.
-    entries: Entries
-
     #: A NamedTuple containing the names of the five base accounts.
     account_types: AccountTypes
+
+    #: The price map.
+    price_map: PriceMap
 
     def __init__(self, path: str) -> None:
         #: The path to the main Beancount file.
@@ -208,9 +346,6 @@ class FavaLedger:
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = FavaOptions()
 
-        self._date_first: datetime.date | None = None
-        self._date_last: datetime.date | None = None
-
         self.load_file()
 
     def load_file(self) -> None:
@@ -225,6 +360,8 @@ class FavaLedger:
             self.all_entries, self.errors, self.options = load_file(
                 self.beancount_file_path
             )
+
+        self.get_filtered.cache_clear()
 
         self.account_types = get_account_types(self.options)
         self.price_map = build_price_map(self.all_entries)
@@ -257,47 +394,17 @@ class FavaLedger:
         for mod in MODULES:
             getattr(self, mod).load_file()
 
-        self.filters = Filters(self.options, self.fava_options)
-
-        self.filter(True)
-
-    # pylint: disable=attribute-defined-outside-init
-    def filter(
+    @lru_cache(maxsize=16)
+    def get_filtered(
         self,
-        force: bool = False,
         account: str | None = None,
         filter: str | None = None,  # pylint: disable=redefined-builtin
         time: str | None = None,
-    ) -> None:
-        """Set and apply (if necessary) filters."""
-        changed = self.filters.set(account=account, filter=filter, time=time)
-
-        if not (changed or force):
-            return
-
-        self.entries = self.filters.apply(self.all_entries)
-
-        self.root_account = realization.realize(
-            self.entries, self.account_types
+    ) -> FilteredLedger:
+        """Filter the ledger."""
+        return FilteredLedger(
+            ledger=self, account=account, filter=filter, time=time
         )
-        self.root_tree = Tree(self.entries)
-
-        self._date_first, self._date_last = get_min_max_dates(
-            self.entries, (Transaction, Price)
-        )
-        if self._date_last:
-            self._date_last = self._date_last + datetime.timedelta(1)
-
-        if self.filters.time:
-            self._date_first = self.filters.time.begin_date
-            self._date_last = self.filters.time.end_date
-
-    @property
-    def end_date(self) -> datetime.date | None:
-        """The date to use for prices."""
-        if self.filters.time:
-            return self.filters.time.end_date
-        return None
 
     def join_path(self, *args: str) -> str:
         """Path relative to the directory of the ledger."""
@@ -337,14 +444,6 @@ class FavaLedger:
             self.load_file()
         return changed
 
-    def interval_ends(
-        self, interval: date.Interval
-    ) -> Iterable[datetime.date]:
-        """Generator yielding dates corresponding to interval boundaries."""
-        if not self._date_first or not self._date_last:
-            return []
-        return date.interval_ends(self._date_first, self._date_last, interval)
-
     def get_account_sign(self, account_name: str) -> int:
         """Get account sign.
 
@@ -357,15 +456,9 @@ class FavaLedger:
         """
         return get_account_sign(account_name, self.account_types)
 
-    @property
-    def root_tree_closed(self) -> Tree:
-        """A root tree for the balance sheet."""
-        tree = Tree(self.entries)
-        tree.cap(self.options, self.fava_options.unrealized)
-        return tree
-
     def interval_balances(
         self,
+        filtered: FilteredLedger,
         interval: date.Interval,
         account_name: str,
         accumulate: bool = False,
@@ -376,6 +469,7 @@ class FavaLedger:
         """Balances by interval.
 
         Arguments:
+            filtered: The currently filtered ledger.
             interval: An interval.
             account_name: An account name.
             accumulate: A boolean, ``True`` if the balances for an interval
@@ -391,14 +485,14 @@ class FavaLedger:
         ]
 
         interval_tuples = list(
-            reversed(list(pairwise(self.interval_ends(interval))))
+            reversed(list(pairwise(filtered.interval_ends(interval))))
         )
 
         interval_balances = [
             realization.realize(
                 list(
                     iter_entry_dates(
-                        self.entries,
+                        filtered.entries,
                         datetime.date.min if accumulate else begin_date,
                         end_date,
                     )
@@ -411,11 +505,15 @@ class FavaLedger:
         return interval_balances, interval_tuples
 
     def account_journal(
-        self, account_name: str, with_journal_children: bool = False
+        self,
+        filtered: FilteredLedger,
+        account_name: str,
+        with_journal_children: bool = False,
     ) -> list[tuple[Directive, list[Posting], Inventory, Inventory]]:
         """Journal for an account.
 
         Args:
+            filtered: The currently filtered ledger.
             account_name: An account name.
             with_journal_children: Whether to include postings of subaccounts
                 of the given account.
@@ -425,7 +523,7 @@ class FavaLedger:
             change and balance have already been reduced to units.
         """
         real_account = realization.get_or_create(
-            self.root_account, account_name
+            filtered.root_account, account_name
         )
 
         if with_journal_children:
@@ -442,19 +540,6 @@ class FavaLedger:
                 balance,
             ) in realization.iterate_with_balance(postings)
         ]
-
-    @property
-    def documents(self) -> list[Document]:
-        """All currently filtered documents."""
-        return [e for e in self.entries if isinstance(e, Document)]
-
-    def events(self, event_type: str | None = None) -> list[Event]:
-        """List events (possibly filtered by type)."""
-        events = [e for e in self.entries if isinstance(e, Event)]
-        if event_type:
-            return [event for event in events if event.type == event_type]
-
-        return events
 
     def get_entry(self, entry_hash: str) -> Directive:
         """Find an entry.
@@ -531,26 +616,6 @@ class FavaLedger:
                 bw_pairs.append((currency_b, currency_a))
         return sorted(fw_pairs + bw_pairs)
 
-    def prices(
-        self, base: str, quote: str
-    ) -> list[tuple[datetime.date, Decimal]]:
-        """List all prices."""
-        all_prices = get_all_prices(self.price_map, (base, quote))
-
-        if (
-            self.filters.time
-            and self.filters.time.begin_date is not None
-            and self.filters.time.end_date is not None
-        ):
-            return [
-                (date, price)
-                for date, price in all_prices
-                if self.filters.time.begin_date
-                <= date
-                < self.filters.time.end_date
-            ]
-        return all_prices
-
     def last_entry(self, account_name: str) -> Directive | None:
         """Get last entry of an account.
 
@@ -617,20 +682,6 @@ class FavaLedger:
                 return "yellow"
         return None
 
-    def account_is_closed(self, account_name: str) -> bool:
-        """Check if the account is closed.
-
-        Args:
-            account_name: An account name.
-
-        Returns:
-            True if the account is closed before the end date of the current
-            time filter.
-        """
-        if self.filters.time and self._date_last is not None:
-            return self.accounts[account_name].close_date < self._date_last
-        return self.accounts[account_name].close_date != datetime.date.max
-
     @staticmethod
     def group_entries_by_type(entries: Entries) -> list[tuple[str, Entries]]:
         """Group the given entries by type.
@@ -647,3 +698,75 @@ class FavaLedger:
             groups.setdefault(entry.__class__.__name__, []).append(entry)
 
         return sorted(list(groups.items()), key=itemgetter(0))
+
+    # remove these deprecated functions and properties at some point
+
+    @property  # type: ignore
+    @_deprecated_unfiltered
+    def filters(self) -> Any:
+        """Filters."""
+        return Filters(self.options, self.fava_options)
+
+    @property  # type: ignore
+    @_deprecated_unfiltered
+    def entries(self) -> Any:
+        """Entries."""
+        return self.all_entries
+
+    @property  # type: ignore
+    @_deprecated_unfiltered
+    def root_account(self) -> Any:
+        """Root account."""
+        return self.all_root_account
+
+    @property  # type: ignore
+    @_deprecated_unfiltered
+    def root_tree(self) -> Any:
+        """Root tree."""
+        return Tree(self.entries)
+
+    @_deprecated_unfiltered
+    def account_is_closed(self, account_name: str) -> bool:
+        """Check if the account is closed.
+
+        Args:
+            account_name: An account name.
+
+        Returns:
+            True if the account is closed before the end date of the current
+            time filter.
+        """
+        return self.accounts[account_name].close_date != datetime.date.max
+
+    @property  # type: ignore
+    @_deprecated_unfiltered
+    def end_date(self) -> datetime.date | None:
+        """The date to use for prices."""
+        return None
+
+    @_deprecated_unfiltered
+    def interval_ends(
+        self, interval: date.Interval
+    ) -> Iterable[datetime.date]:
+        """Generator yielding dates corresponding to interval boundaries."""
+        first, last = get_min_max_dates(self.entries, (Transaction, Price))
+        if last:
+            last = last + datetime.timedelta(1)
+        if not first or not last:
+            return []
+        return date.interval_ends(first, last, interval)
+
+    @property  # type: ignore
+    @_deprecated_unfiltered
+    def documents(self) -> list[Document]:
+        """All currently filtered documents."""
+        return [e for e in self.entries if isinstance(e, Document)]
+
+    @_deprecated_unfiltered
+    def events(self, event_type: str | None = None) -> list[Event]:
+        """List events (possibly filtered by type)."""
+        events = [e for e in self.entries if isinstance(e, Event)]
+        if event_type:
+            return [event for event in events if event.type == event_type]
+
+        return events

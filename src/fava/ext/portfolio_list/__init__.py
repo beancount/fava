@@ -10,6 +10,7 @@ import re
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
 
+from fava.context import g
 from fava.ext import FavaExtensionBase
 from fava.helpers import FavaAPIException
 from fava.template_filters import cost_or_value
@@ -22,7 +23,7 @@ class PortfolioList(FavaExtensionBase):  # pragma: no cover
 
     def portfolio_accounts(self):
         """An account tree based on matching regex patterns."""
-        tree = self.ledger.root_tree
+        tree = g.filtered.root_tree
         portfolios = []
 
         for option in self.config:  # pylint: disable=not-an-iterable

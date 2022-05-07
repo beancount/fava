@@ -1,22 +1,25 @@
 {% import '_tree_table.html' as tree_table with context %}
 
+{% set root_tree = g.filtered.root_tree %}
+{% set options = ledger.options %}
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
 
-{{ charts.interval_totals(g.interval, (ledger.options['name_income'], ledger.options['name_expenses']), label=_('Net Profit'), invert=invert) }}
-{{ charts.interval_totals(g.interval, ledger.options['name_income'], label=_('Income'), invert=invert) }}
-{{ charts.interval_totals(g.interval, ledger.options['name_expenses'], label=_('Expenses')) }}
+{{ charts.interval_totals(g.interval, (options['name_income'], options['name_expenses']), label=_('Net Profit'), invert=invert) }}
+{{ charts.interval_totals(g.interval, options['name_income'], label=_('Income'), invert=invert) }}
+{{ charts.interval_totals(g.interval, options['name_expenses'], label=_('Expenses')) }}
 
-{{ charts.hierarchy(ledger.options['name_income']) }}
-{{ charts.hierarchy(ledger.options['name_expenses']) }}
+{{ charts.hierarchy(options['name_income']) }}
+{{ charts.hierarchy(options['name_expenses']) }}
+
 
 <div class="row">
   <div class="column">
-    {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_income']), invert=invert) }}
+    {{ tree_table.tree(root_tree.get(options['name_income']), invert=invert) }}
   </div>
   <div class="column">
-    {{ tree_table.tree(ledger.root_tree.get(ledger.options['name_expenses'])) }}
+    {{ tree_table.tree(root_tree.get(options['name_expenses'])) }}
   </div>
   <div class="column">
-    {{ tree_table.tree(ledger.root_tree.net_profit(ledger.options, _('Net Profit')), invert=invert) }}
+    {{ tree_table.tree(root_tree.net_profit(options, _('Net Profit')), invert=invert) }}
   </div>
 </div>

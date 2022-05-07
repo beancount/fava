@@ -18,7 +18,7 @@
     {{ _('Postings per Account') }}
     (<a href="{{ url_for('report', report_name='query', query_string=postings_per_account) }}">Query</a>)
   </h3>
-  {% set contents, result_types, result_rows = ledger.query_shell.execute_query(postings_per_account) %}
+  {% set contents, result_types, result_rows = ledger.query_shell.execute_query(g.filtered.entries, postings_per_account) %}
   {{ querytable.querytable(ledger, contents, result_types, result_rows) }}
 </div>
 
@@ -53,7 +53,7 @@
         {% endif %}
         <td><a href="#context-{{ last_entry|hash_entry }}">{{ last_entry.date }}</a></td>
         <td class="num">
-          {%- for position in (ledger.root_account|get_or_create(account)).balance|units -%}
+          {%- for position in (g.filtered.root_account|get_or_create(account)).balance|units -%}
           {{ commodity_macros.render_amount(ledger, position.units) }}<br>
           {% endfor -%}
         </td>
@@ -75,7 +75,7 @@
       </tr>
     </thead>
     <tbody>
-      {% for type, entries in ledger.group_entries_by_type(ledger.entries) %}
+      {% for type, entries in ledger.group_entries_by_type(g.filtered.entries) %}
       <tr>
         <td>{{ type }}</td>
         <td class="num">{{ entries|length }}</td>
@@ -85,7 +85,7 @@
     <tfoot>
       <tr>
         <td>{{ _('Total') }}</td>
-        <td class="num">{{ ledger.entries|length }}</td>
+        <td class="num">{{ g.filtered.entries|length }}</td>
       </tr>
     </tfoot>
   </table>

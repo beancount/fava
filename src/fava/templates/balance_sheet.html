@@ -5,7 +5,7 @@
 {{ charts.hierarchy(ledger.options['name_liabilities']) }}
 {{ charts.hierarchy(ledger.options['name_equity']) }}
 
-{% set root_tree_closed = ledger.root_tree_closed %}
+{% set root_tree_closed = g.filtered.root_tree_closed %}
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
 
 <div class="row">

@@ -1,7 +1,7 @@
 {{ charts.commodities() }}
 
 {% for commodity_pair in ledger.commodity_pairs() %}
-{% set prices = ledger.prices(*commodity_pair) %}
+{% set prices = g.filtered.prices(*commodity_pair) %}
 {% if prices %}
 <div class="left">
   <h3>{{ commodity_pair.0 }} / {{ commodity_pair.1 }}</h3>

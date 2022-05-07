@@ -9,6 +9,7 @@ from datetime import timedelta
 from typing import Any
 from typing import Generator
 from typing import Pattern
+from typing import TYPE_CHECKING
 
 from beancount.core import realization
 from beancount.core.amount import Amount
@@ -29,6 +30,10 @@ from fava.helpers import FavaAPIException
 from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
+
+if TYPE_CHECKING:
+    from fava.core import FilteredLedger
+
 
 ONE_DAY = timedelta(days=1)
 
@@ -100,6 +105,7 @@ class ChartModule(FavaModule):
 
     def hierarchy(
         self,
+        filtered: FilteredLedger,
         account_name: str,
         conversion: str,
         begin: date | None = None,
@@ -107,16 +113,16 @@ class ChartModule(FavaModule):
     ) -> SerialisedTreeNode:
         """An account tree."""
         if begin is not None and end is not None:
-            tree = Tree(iter_entry_dates(self.ledger.entries, begin, end))
+            tree = Tree(iter_entry_dates(filtered.entries, begin, end))
         else:
-            tree = self.ledger.root_tree
+            tree = filtered.root_tree
         return tree.get(account_name).serialise(
             conversion, self.ledger.price_map, end - ONE_DAY if end else None
         )
 
     @listify
     def prices(
-        self,
+        self, filtered: FilteredLedger
     ) -> Generator[tuple[str, str, list[tuple[date, Decimal]]], None, None]:
         """The prices for all commodity pairs.
 
@@ -125,13 +131,14 @@ class ChartModule(FavaModule):
             is a list of prices.
         """
         for base, quote in self.ledger.commodity_pairs():
-            prices = self.ledger.prices(base, quote)
+            prices = filtered.prices(base, quote)
             if prices:
                 yield base, quote, prices
 
     @listify
     def interval_totals(
         self,
+        filtered: FilteredLedger,
         interval: Interval,
         accounts: str | tuple[str],
         conversion: str,
@@ -147,9 +154,9 @@ class ChartModule(FavaModule):
         """
         # pylint: disable=too-many-locals
         price_map = self.ledger.price_map
-        for begin, end in pairwise(self.ledger.interval_ends(interval)):
+        for begin, end in pairwise(filtered.interval_ends(interval)):
             inventory = Inventory()
-            entries = iter_entry_dates(self.ledger.entries, begin, end)
+            entries = iter_entry_dates(filtered.entries, begin, end)
             account_inventories = {}
             for entry in (e for e in entries if isinstance(e, Transaction)):
                 for posting in entry.postings:
@@ -192,7 +199,7 @@ class ChartModule(FavaModule):
 
     @listify
     def linechart(
-        self, account_name: str, conversion: str
+        self, filtered: FilteredLedger, account_name: str, conversion: str
     ) -> Generator[DateAndBalance, None, None]:
         """The balance of an account.
 
@@ -206,7 +213,7 @@ class ChartModule(FavaModule):
             account at that date.
         """
         real_account = realization.get_or_create(
-            self.ledger.root_account, account_name
+            filtered.root_account, account_name
         )
         postings = realization.get_postings(real_account)
         journal = realization.iterate_with_balance(postings)
@@ -237,7 +244,7 @@ class ChartModule(FavaModule):
 
     @listify
     def net_worth(
-        self, interval: Interval, conversion: str
+        self, filtered: FilteredLedger, interval: Interval, conversion: str
     ) -> Generator[DateAndBalance, None, None]:
         """Compute net worth.
 
@@ -252,7 +259,7 @@ class ChartModule(FavaModule):
         """
         transactions = (
             entry
-            for entry in self.ledger.entries
+            for entry in filtered.entries
             if (
                 isinstance(entry, Transaction)
                 and entry.flag != FLAG_UNREALIZED
@@ -268,7 +275,7 @@ class ChartModule(FavaModule):
         inventory = Inventory()
 
         price_map = self.ledger.price_map
-        for end_date in self.ledger.interval_ends(interval):
+        for end_date in filtered.interval_ends(interval):
             while txn and txn.date < end_date:
                 for posting in txn.postings:
                     if posting.account.startswith(types):

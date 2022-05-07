@@ -16,7 +16,7 @@ QUERY = LEDGER.query_shell
 
 
 def run(query_string: str) -> Any:
-    return QUERY.execute_query(query_string)
+    return QUERY.execute_query(LEDGER.all_entries, query_string)
 
 
 def run_text(query_string: str) -> str:
@@ -47,7 +47,7 @@ def test_query() -> None:
     assert run("run custom_query") == bal
     assert run("run 'custom query with space'") == bal
     assert run("balances")[1:] == run_query(
-        LEDGER.entries, LEDGER.options, "balances"
+        LEDGER.all_entries, LEDGER.options, "balances"
     )
     assert (
         run_text("asdf")
@@ -56,14 +56,15 @@ def test_query() -> None:
 
 
 def test_query_to_file(snapshot: SnapshotFunc) -> None:
-    name, data = QUERY.query_to_file("run custom_query", "csv")
+    entries = LEDGER.all_entries
+    name, data = QUERY.query_to_file(entries, "run custom_query", "csv")
     assert name == "custom_query"
-    name, data = QUERY.query_to_file("balances", "csv")
+    name, data = QUERY.query_to_file(entries, "balances", "csv")
     assert name == "query_result"
     snapshot(data.getvalue())
 
     with pytest.raises(FavaAPIException):
-        QUERY.query_to_file("select sdf", "csv")
+        QUERY.query_to_file(entries, "select sdf", "csv")
 
     with pytest.raises(FavaAPIException):
-        QUERY.query_to_file("run testsetest", "csv")
+        QUERY.query_to_file(entries, "run testsetest", "csv")

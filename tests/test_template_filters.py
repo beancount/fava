@@ -77,8 +77,8 @@ def test_get_or_create(example_ledger: FavaLedger) -> None:
 def test_should_show(app: Flask) -> None:
     with app.test_request_context("/long-example/"):
         app.preprocess_request()
-        assert should_show(g.ledger.root_tree.get("")) is True
-        assert should_show(g.ledger.root_tree.get("Expenses")) is True
+        assert should_show(g.filtered.root_tree.get("")) is True
+        assert should_show(g.filtered.root_tree.get("Expenses")) is True
 
         account = TreeNode("name")
         assert should_show(account) is False
@@ -87,8 +87,8 @@ def test_should_show(app: Flask) -> None:
     with app.test_request_context("/long-example/income_statement/?time=2100"):
         app.preprocess_request()
         assert not g.ledger.fava_options.show_accounts_with_zero_balance
-        assert should_show(g.ledger.root_tree.get("")) is True
-        assert should_show(g.ledger.root_tree.get("Expenses")) is False
+        assert should_show(g.filtered.root_tree.get("")) is True
+        assert should_show(g.filtered.root_tree.get("Expenses")) is False
 
 
 def test_format_errormsg(app: Flask) -> None:
