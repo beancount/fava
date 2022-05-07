@@ -32,7 +32,7 @@ BASEPATH = Path(__file__).parent.parent
 
 def filter_api_changed(record: Any) -> bool:
     """Filter out LogRecords for requests that poll for changes."""
-    return "/api/changed HTTP" not in record.msg
+    return "/api/changed HTTP" not in record.getMessage()
 
 
 def setup_logging() -> None:
