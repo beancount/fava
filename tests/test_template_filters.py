@@ -66,12 +66,12 @@ def test_basename() -> None:
 
 def test_get_or_create(example_ledger: FavaLedger) -> None:
     assert (
-        get_or_create(example_ledger.root_account, "")
-        == example_ledger.root_account
+        get_or_create(example_ledger.all_root_account, "")
+        == example_ledger.all_root_account
     )
     assert get_or_create(
-        example_ledger.root_account, "Expenses"
-    ) == realization.get(example_ledger.root_account, "Expenses")
+        example_ledger.all_root_account, "Expenses"
+    ) == realization.get(example_ledger.all_root_account, "Expenses")
 
 
 def test_should_show(app: Flask) -> None:

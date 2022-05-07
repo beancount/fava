@@ -43,8 +43,8 @@ def _compare_inv_and_counter(
 
 
 def test_tree_from_entries(example_ledger: FavaLedger) -> None:
-    tree = Tree(example_ledger.entries)
-    real_account = realization.realize(example_ledger.entries)
+    tree = Tree(example_ledger.all_entries)
+    real_account = realization.realize(example_ledger.all_entries)
 
     for account in realization.iter_children(real_account):
         name = account.account
@@ -57,11 +57,11 @@ def test_tree_from_entries(example_ledger: FavaLedger) -> None:
 
 def test_tree_cap(example_ledger: FavaLedger) -> None:
     closing_entries = summarize.cap_opt(
-        example_ledger.entries, example_ledger.options
+        example_ledger.all_entries, example_ledger.options
     )
     real_account = realization.realize(closing_entries)
 
-    tree = Tree(example_ledger.entries)
+    tree = Tree(example_ledger.all_entries)
     tree.cap(example_ledger.options, "Unrealized")
 
     for account in realization.iter_children(real_account):
