@@ -133,7 +133,7 @@ def test_api_context(
     assert_api_success(response)
     snapshot(response.json)
 
-    entry_hash = hash_entry(example_ledger.entries[10])
+    entry_hash = hash_entry(example_ledger.all_entries[10])
     response = test_client.get(
         f"/long-example/api/context?entry_hash={entry_hash}"
     )
