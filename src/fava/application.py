@@ -209,6 +209,8 @@ def template_context() -> dict[str, FavaLedger]:
 
 @app.before_request
 def _perform_global_filters() -> None:
+    if request.endpoint in ("json_api.get_changed", "json_api.get_errors"):
+        return
     ledger = getattr(g, "ledger", None)
     if ledger:
         # check (and possibly reload) source file
