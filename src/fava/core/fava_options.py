@@ -70,6 +70,7 @@ class FavaOptions:
     upcoming_events: int = 7
     uptodate_indicator_grey_lookback_days: int = 60
     use_external_editor: bool = False
+    precision_overwrite: dict[str, int] = field(default_factory=dict)
 
     asdict = asdict
 
@@ -119,6 +120,16 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
         fye = parse_fye_string(value)
         assert fye, "Invalid 'fiscal_year_end' option."
         options.fiscal_year_end = fye
+    elif key == "precision_overwrite":
+        try:
+            currency_list = value.split(",")
+            for element in currency_list:
+                currency_pair = element.split(":")
+                options.precision_overwrite[currency_pair[0].strip()] = int(
+                    currency_pair[1]
+                )
+        except ValueError:
+            assert False, f"Invalid precision_overwrite: '{value}'."
     elif key in STR_OPTS:
         setattr(options, key, value)
     elif key in BOOL_OPTS:
