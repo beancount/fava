@@ -51,7 +51,7 @@ class Token:
 class FilterSyntaxLexer:
     """Lexer for Fava's filter syntax."""
 
-    # pylint: disable=missing-docstring,invalid-name,no-self-use
+    # pylint: disable=missing-docstring,invalid-name
 
     tokens = ("ANY", "ALL", "KEY", "LINK", "STRING", "TAG")
 
@@ -145,7 +145,7 @@ class Match:
 
 
 class FilterSyntaxParser:
-    # pylint: disable=missing-docstring,invalid-name,no-self-use
+    # pylint: disable=missing-docstring,invalid-name
 
     precedence = (("left", "AND"), ("right", "UMINUS"))
     tokens = FilterSyntaxLexer.tokens
