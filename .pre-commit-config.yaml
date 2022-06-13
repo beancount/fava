@@ -17,7 +17,7 @@ repos:
       hooks:
           - id: flake8
     - repo: https://github.com/asottile/pyupgrade
-      rev: v2.32.0
+      rev: v2.34.0
       hooks:
           - id: pyupgrade
             args: ["--py36-plus"]
@@ -37,10 +37,10 @@ repos:
             entry: stylelint --fix
             files: \.(css|svelte)$
             additional_dependencies:
-                - "stylelint@14.8.2"
+                - "stylelint@14.9.1"
                 - "stylelint-config-prettier@9.0.3"
                 - "stylelint-config-recess-order@3.0.0"
-                - "stylelint-config-standard@25.0.0"
+                - "stylelint-config-standard@26.0.0"
                 - "postcss-html@1.4.1"
           - id: eslint
             name: eslint
