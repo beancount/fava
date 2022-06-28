@@ -5,6 +5,8 @@ that matches your issue.
 
 When reporting a bug, provide details of the Fava version and browser used.
 
+If you want to report a security issue, please email mail@jakobschnitzer.de.
+
 ### Contributing code
 
 See [here](https://beancount.github.io/fava/development.html) how to setup a
