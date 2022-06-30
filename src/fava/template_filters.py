@@ -12,7 +12,6 @@ from typing import Any
 from typing import MutableMapping
 from typing import TypeVar
 
-import flask
 from beancount.core import compare
 from beancount.core import realization
 from beancount.core.account import ACCOUNT_RE
@@ -20,6 +19,8 @@ from beancount.core.data import Directive
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
+from flask import url_for
+from markupsafe import Markup
 
 from fava.context import g
 from fava.core.conversion import cost
@@ -145,14 +146,14 @@ def basename(file_path: str) -> str:
     return unicodedata.normalize("NFC", os.path.basename(file_path))
 
 
-def format_errormsg(message: str) -> str:
+def format_errormsg(message: str) -> Markup:
     """Match account names in error messages and insert HTML links for them."""
     match = re.search(ACCOUNT_RE, message)
     if not match:
-        return message
+        return Markup(message)
     account = match.group()
-    url = flask.url_for("account", name=account)
-    return (
+    url = url_for("account", name=account)
+    return Markup(
         message.replace(account, f'<a href="{url}">{account}</a>')
         .replace("for '", "for ")
         .replace("': ", ": ")

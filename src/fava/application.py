@@ -35,6 +35,7 @@ from flask import send_file
 from flask.wrappers import Response
 from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
+from markupsafe import Markup
 from werkzeug.utils import secure_filename
 
 from fava import __version__ as fava_version
@@ -384,10 +385,12 @@ def help_page(page_slug: str) -> str:
         "_layout.html",
         active_page="help",
         page_slug=page_slug,
-        help_html=render_template_string(
-            html,
-            beancount_version=beancount_version,
-            fava_version=fava_version,
+        help_html=Markup(
+            render_template_string(
+                html,
+                beancount_version=beancount_version,
+                fava_version=fava_version,
+            )
         ),
         HELP_PAGES=HELP_PAGES,
     )

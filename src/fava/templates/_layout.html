@@ -43,7 +43,7 @@
       <svelte-component type="charts"></svelte-component>
       {% block content %}
       {% if content %}
-      {{ content|safe }}
+      {{ content }}
       {% else %}
       {% include active_page + '.html' %}
       {% endif %}

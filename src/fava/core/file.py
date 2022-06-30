@@ -22,6 +22,7 @@ from beancount.core.flags import FLAG_PADDING
 from beancount.core.flags import FLAG_SUMMARIZE
 from beancount.core.flags import FLAG_TRANSFER
 from beancount.parser.printer import format_entry  # type: ignore
+from markupsafe import Markup
 
 from fava.core._compat import FLAG_RETURNS
 from fava.core._compat import FLAG_UNREALIZED
@@ -176,7 +177,9 @@ class FileModule(FavaModule):
                 )
                 self.ledger.extensions.after_insert_entry(entry)
 
-    def render_entries(self, entries: Entries) -> Generator[str, None, None]:
+    def render_entries(
+        self, entries: Entries
+    ) -> Generator[Markup, None, None]:
         """Return entries in Beancount format.
 
         Only renders :class:`.Balance` and :class:`.Transaction`.
@@ -193,12 +196,14 @@ class FileModule(FavaModule):
                 if isinstance(entry, Transaction) and entry.flag in EXCL_FLAGS:
                     continue
                 try:
-                    yield get_entry_slice(entry)[0] + "\n"
+                    yield Markup(get_entry_slice(entry)[0] + "\n")
                 except (KeyError, FileNotFoundError):
-                    yield _format_entry(
-                        entry,
-                        self.ledger.fava_options.currency_column,
-                        indent,
+                    yield Markup(
+                        _format_entry(
+                            entry,
+                            self.ledger.fava_options.currency_column,
+                            indent,
+                        )
                     )
 
 
