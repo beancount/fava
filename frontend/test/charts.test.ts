@@ -1,7 +1,6 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
 
-import type { BarChartDatum } from "../src/charts/bar";
 import { bar } from "../src/charts/bar";
 import { balances, commodities } from "../src/charts/line";
 import {
@@ -99,16 +98,6 @@ test("handle invalid data for query charts", () => {
   assert.is(false, c.success);
 });
 
-// Helper to allow for easier assertion comparisons.
-const bar_maps_to_objects = (vs: BarChartDatum[]) =>
-  vs.map((d) => ({
-    ...d,
-    values: d.values.map((v) => ({
-      ...v,
-      children: Object.fromEntries(v.children),
-    })),
-  }));
-
 test("handle data for bar chart with stacked data", () => {
   const data: unknown = [
     {
@@ -134,56 +123,97 @@ test("handle data for bar chart with stacked data", () => {
   const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
   const chart_data = force_ok(bar(data, ctx2)).data;
   assert.is(true, chart_data.hasStackedData);
-  assert.equal(bar_maps_to_objects(chart_data.series), [
+  assert.equal(chart_data.accounts, [
+    "Expenses:Dining",
+    "Expenses:Shoes",
+    "Expenses:Taxes",
+    "Expenses:Transportation",
+  ]);
+  assert.equal(chart_data.stacks, [
+    [
+      "EUR",
+      [
+        [
+          [0, 0],
+          [0, 0],
+        ],
+        [
+          [0, 0],
+          [0, 60],
+        ],
+        [
+          [0, 4],
+          [60, 100],
+        ],
+        [
+          [4, 10],
+          [0, 0],
+        ],
+      ],
+    ],
+    [
+      "USD",
+      [
+        [
+          [0, 8],
+          [0, 0],
+        ],
+        [
+          [0, 0],
+          [0, 0],
+        ],
+        [
+          [8, 10],
+          [0, 0],
+        ],
+        [
+          [0, 0],
+          [0, 0],
+        ],
+      ],
+    ],
+  ]);
+  assert.equal(chart_data.bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
       values: [
         {
-          name: "EUR",
+          currency: "EUR",
           value: 10,
-          children: {
-            "Expenses:Dining": 0,
-            "Expenses:Transportation": 6,
-            "Expenses:Taxes": 4,
-          },
           budget: 0,
         },
         {
-          name: "USD",
+          currency: "USD",
           value: 10,
-          children: {
-            "Expenses:Dining": 8,
-            "Expenses:Transportation": 0,
-            "Expenses:Taxes": 2,
-          },
           budget: 20,
         },
       ],
+      account_balances: {
+        "Expenses:Dining": { USD: 8 },
+        "Expenses:Transportation": { EUR: 6 },
+        "Expenses:Taxes": { USD: 2, EUR: 4 },
+      },
     },
     {
       date: new Date("2000-02-01"),
       label: "DATE",
       values: [
         {
-          name: "EUR",
+          currency: "EUR",
           value: 100,
-          children: {
-            "Expenses:Shoes": 60,
-            "Expenses:Taxes": 40,
-          },
           budget: 50,
         },
         {
-          name: "USD",
+          currency: "USD",
           value: 0,
-          children: {
-            "Expenses:Shoes": 0,
-            "Expenses:Taxes": 0,
-          },
           budget: 0,
         },
       ],
+      account_balances: {
+        "Expenses:Shoes": { EUR: 60 },
+        "Expenses:Taxes": { EUR: 40 },
+      },
     },
   ]);
 });
@@ -206,22 +236,28 @@ test("handle data for bar chart without stacked data", () => {
   const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
   const chart_data = force_ok(bar(data, ctx2)).data;
   assert.is(false, chart_data.hasStackedData);
-  assert.equal(bar_maps_to_objects(chart_data.series), [
+  assert.equal(chart_data.stacks, [
+    ["EUR", []],
+    ["USD", []],
+  ]);
+  assert.equal(chart_data.bar_groups, [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
       values: [
-        { name: "EUR", value: 10, children: {}, budget: 0 },
-        { name: "USD", value: 10, children: {}, budget: 20 },
+        { currency: "EUR", value: 10, budget: 0 },
+        { currency: "USD", value: 10, budget: 20 },
       ],
+      account_balances: {},
     },
     {
       date: new Date("2000-02-01"),
       label: "DATE",
       values: [
-        { name: "EUR", value: 100, children: {}, budget: 50 },
-        { name: "USD", value: 0, children: {}, budget: 0 },
+        { currency: "EUR", value: 100, budget: 50 },
+        { currency: "USD", value: 0, budget: 0 },
       ],
+      account_balances: {},
     },
   ]);
 });
