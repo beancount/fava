@@ -35,15 +35,13 @@
     left: 40,
   };
   const height = 250;
-  let hasStackedData = false;
+
+  $: series = data.series;
 
   function build_stack(_data: BarChartDatum[]) {
     const accounts = new Map<string, Series<BarChartDatum, string>[]>(
       allAccounts.map((d) => [d, []])
     );
-    if (accounts.size > 1) {
-      hasStackedData = true;
-    }
     for (let cur_idx = 0; cur_idx < _data[0].values.length; cur_idx += 1) {
       const bar_stack = stack<BarChartDatum>()
         .keys(accounts.keys())
@@ -58,7 +56,7 @@
 
   $: allAccounts = Array.from(
     new Set<string>(
-      data
+      series
         .map<string[]>((d: BarChartDatum) =>
           d.values
             .map<string[]>((e: BarChartDatumValue) =>
@@ -69,39 +67,47 @@
         .flat()
     )
   );
-  $: stacked_data = build_stack(data);
+  $: stacked_data = build_stack(series);
   $: innerHeight = height - margin.top - margin.bottom;
-  $: maxWidth = data.length * maxColumnWidth;
+  $: maxWidth = series.length * maxColumnWidth;
   $: offset = margin.left + Math.max(0, width - maxWidth) / 2;
   $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
+
+  // Whether to display stacked bars
+  $: showStackedBars = $barChartMode === "stacked" && data.hasStackedData;
 
   // Scales
   $: x0 = scaleBand()
     .padding(0.1)
-    .domain(data.map((d) => d.label))
+    .domain(series.map((d) => d.label))
     .range([0, innerWidth]);
   $: x1 = scaleBand()
-    .domain(data[0].values.map((d) => d.name))
+    .domain(series[0].values.map((d) => d.name))
     .range([0, x0.bandwidth()]);
-  $: stackedBar = $barChartMode === "stacked" && hasStackedData;
-  $: yMin = stackedBar
+  $: yMin = showStackedBars
     ? min(
         merge<number>(
-          data.map((b) =>
+          series.map((b) =>
             b.values.map((c) => sum(filter(c.children.values(), (d) => d < 0)))
           )
         )
       )
-    : min(merge<BarChartDatumValue>(data.map((d) => d.values)), (d) => d.value);
-  $: yMax = stackedBar
+    : min(
+        merge<BarChartDatumValue>(series.map((d) => d.values)),
+        (d) => d.value
+      );
+  $: yMax = showStackedBars
     ? max(
         merge<number>(
-          data.map((b) =>
+          series.map((b) =>
             b.values.map((c) => sum(filter(c.children.values(), (d) => d > 0)))
           )
         )
       )
-    : max(merge<BarChartDatumValue>(data.map((d) => d.values)), (d) => d.value);
+    : max(
+        merge<BarChartDatumValue>(series.map((d) => d.values)),
+        (d) => d.value
+      );
   $: y = scaleLinear()
     .range([innerHeight, 0])
     .domain([Math.min(0, yMin ?? 0), Math.max(0, yMax ?? 0)]);
@@ -112,7 +118,7 @@
 
   const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(
-    stackedBar
+    showStackedBars
       ? []
       : x1
           .domain()
@@ -132,7 +138,7 @@
   <g transform={`translate(${offset},${margin.top})`}>
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} />
-    {#each data as group}
+    {#each series as group}
       <g
         class="group"
         class:desaturate={group.date > today}
@@ -154,7 +160,7 @@
           width={x0.bandwidth()}
           height={margin.bottom}
         />
-        {#if !stackedBar}
+        {#if !showStackedBars}
           {#each group.values as bar}
             <rect
               fill={$currenciesScale(bar.name)}
@@ -174,7 +180,7 @@
         {/if}
       </g>
     {/each}
-    {#if stackedBar}
+    {#if showStackedBars}
       {#each [...stacked_data] as [name, account]}
         <g
           class="category"
