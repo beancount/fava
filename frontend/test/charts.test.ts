@@ -1,6 +1,7 @@
 import { test } from "uvu";
 import assert from "uvu/assert";
 
+import type { BarChartDatum } from "../src/charts/bar";
 import { bar } from "../src/charts/bar";
 import { balances, commodities } from "../src/charts/line";
 import {
@@ -98,6 +99,16 @@ test("handle invalid data for query charts", () => {
   assert.is(false, c.success);
 });
 
+// Helper to allow for easier assertion comparisons.
+const bar_maps_to_objects = (vs: BarChartDatum[]) =>
+  vs.map((d) => ({
+    ...d,
+    values: d.values.map((v) => ({
+      ...v,
+      children: Object.fromEntries(v.children),
+    })),
+  }));
+
 test("handle data for bar chart with stacked data", () => {
   const data: unknown = [
     {
@@ -121,16 +132,9 @@ test("handle data for bar chart with stacked data", () => {
     },
   ];
   const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const parsed = force_ok(bar(data, ctx2));
-  const parsed_data = parsed.data.map((d) => ({
-    ...d,
-    values: d.values.map((v) => ({
-      ...v,
-      children: Object.fromEntries(v.children),
-    })),
-  }));
-  assert.is(true, parsed.hasStackedData);
-  assert.equal(parsed_data, [
+  const chart_data = force_ok(bar(data, ctx2)).data;
+  assert.is(true, chart_data.hasStackedData);
+  assert.equal(bar_maps_to_objects(chart_data.series), [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
@@ -183,6 +187,7 @@ test("handle data for bar chart with stacked data", () => {
     },
   ]);
 });
+
 test("handle data for bar chart without stacked data", () => {
   const data: unknown = [
     {
@@ -199,16 +204,9 @@ test("handle data for bar chart without stacked data", () => {
     },
   ];
   const ctx2 = { currencies: ["EUR", "USD"], dateFormat: () => "DATE" };
-  const parsed = force_ok(bar(data, ctx2));
-  const parsed_data = parsed.data.map((d) => ({
-    ...d,
-    values: d.values.map((v) => ({
-      ...v,
-      children: Object.fromEntries(v.children),
-    })),
-  }));
-  assert.is(false, parsed.hasStackedData);
-  assert.equal(parsed_data, [
+  const chart_data = force_ok(bar(data, ctx2)).data;
+  assert.is(false, chart_data.hasStackedData);
+  assert.equal(bar_maps_to_objects(chart_data.series), [
     {
       date: new Date("2000-01-01"),
       label: "DATE",
@@ -227,4 +225,5 @@ test("handle data for bar chart without stacked data", () => {
     },
   ]);
 });
+
 test.run();

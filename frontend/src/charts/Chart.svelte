@@ -80,7 +80,7 @@
           ["area", _("Area chart")],
         ]}
       />
-    {:else if chart.type === "barchart" && chart.hasStackedData}
+    {:else if chart.type === "barchart" && chart.data.hasStackedData}
       <ModeSwitch
         bind:value={$barChartMode}
         options={[

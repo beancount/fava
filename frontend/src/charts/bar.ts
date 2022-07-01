@@ -20,8 +20,7 @@ export interface BarChartDatum {
 
 export interface BarChart {
   type: "barchart";
-  data: BarChartDatum[];
-  hasStackedData: boolean;
+  data: { series: BarChartDatum[]; hasStackedData: boolean };
   tooltipText: (c: FormatterContext, d: BarChartDatum, e: string) => string;
 }
 
@@ -46,33 +45,28 @@ export function bar(
     return res;
   }
   const parsedData = res.value;
-  const data = parsedData.map((d) => ({
-    values: currencies.map((name) => ({
-      name,
-      value: d.balance[name] ?? 0,
+  const series = parsedData.map((interval) => ({
+    values: currencies.map((currency) => ({
+      name: currency,
+      value: interval.balance[currency] ?? 0,
       children: new Map<string, number>(
-        Object.entries(
-          Object.keys(d.account_balances).reduce(
-            (o, key) => ({ ...o, [key]: d.account_balances[key][name] ?? 0 }),
-            {}
-          )
-        )
+        Object.keys(interval.account_balances).map((name) => [
+          name,
+          interval.account_balances[name][currency] ?? 0,
+        ])
       ),
-      budget: d.budgets[name] ?? 0,
+      budget: interval.budgets[currency] ?? 0,
     })),
-    date: d.date,
-    label: dateFormat(d.date),
+    date: interval.date,
+    label: dateFormat(interval.date),
   }));
+  const hasStackedData = series.some((interval) =>
+    interval.values.some((d) => d.children.size > 1)
+  );
+
   return ok({
     type: "barchart" as const,
-    data,
-    hasStackedData:
-      data.reduce(
-        (prev1, cur1) =>
-          prev1 +
-          cur1.values.reduce((prev2, cur2) => prev2 + cur2.children.size, 0),
-        0
-      ) > 1,
+    data: { series, hasStackedData },
     tooltipText: (c, d, e) => {
       let text = "";
       if (e === "") {
