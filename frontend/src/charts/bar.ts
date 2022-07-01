@@ -1,3 +1,6 @@
+import type { Series } from "d3-shape";
+import { stack, stackOffsetDiverging } from "d3-shape";
+
 import type { FormatterContext } from "../format";
 import { ok } from "../lib/result";
 import type { Result } from "../lib/result";
@@ -6,21 +9,35 @@ import { array, date, number, object, record } from "../lib/validation";
 import type { ChartContext } from "./context";
 
 export interface BarChartDatumValue {
-  name: string;
+  currency: string;
   value: number;
-  children: Map<string, number>;
   budget: number;
 }
 
+/** The data for the bars of one interval. */
 export interface BarChartDatum {
+  /** The label of this interval. */
   label: string;
+  /** The date of this interval. */
   date: Date;
+  /** One value for each (operating) currency. */
   values: BarChartDatumValue[];
+  /** The balances of the child accounts. */
+  account_balances: Record<string, Record<string, number>>;
 }
 
 export interface BarChart {
   type: "barchart";
-  data: { series: BarChartDatum[]; hasStackedData: boolean };
+  data: {
+    /** All accounts that occur as some child account. */
+    accounts: string[];
+    /** The data for the (single) bars for all the intervals in this chart. */
+    bar_groups: BarChartDatum[];
+    /** For each currency, the stacks (one series per account) */
+    stacks: [currency: string, stacks: Series<BarChartDatum, string>[]][];
+    /** Whether this chart contains any stacks (or is just a single account). */
+    hasStackedData: boolean;
+  };
   tooltipText: (c: FormatterContext, d: BarChartDatum, e: string) => string;
 }
 
@@ -45,42 +62,49 @@ export function bar(
     return res;
   }
   const parsedData = res.value;
-  const series = parsedData.map((interval) => ({
+  const bar_groups = parsedData.map((interval) => ({
     values: currencies.map((currency) => ({
-      name: currency,
+      currency,
       value: interval.balance[currency] ?? 0,
-      children: new Map<string, number>(
-        Object.keys(interval.account_balances).map((name) => [
-          name,
-          interval.account_balances[name][currency] ?? 0,
-        ])
-      ),
       budget: interval.budgets[currency] ?? 0,
     })),
     date: interval.date,
     label: dateFormat(interval.date),
+    account_balances: interval.account_balances,
   }));
-  const hasStackedData = series.some((interval) =>
-    interval.values.some((d) => d.children.size > 1)
+  const accounts = Array.from(
+    new Set(parsedData.map((d) => [...Object.keys(d.account_balances)]).flat(2))
+  ).sort();
+  const hasStackedData = accounts.length > 1;
+
+  const stacks = currencies.map(
+    (currency): [string, Series<BarChartDatum, string>[]] => [
+      currency,
+      stack<BarChartDatum>()
+        .keys(accounts)
+        .value((obj, key) => obj.account_balances[key]?.[currency] ?? 0)
+        .offset(stackOffsetDiverging)(bar_groups),
+    ]
   );
 
   return ok({
     type: "barchart" as const,
-    data: { series, hasStackedData },
+    data: { accounts, bar_groups, stacks, hasStackedData },
     tooltipText: (c, d, e) => {
       let text = "";
       if (e === "") {
         d.values.forEach((a) => {
-          text += `${c.currency(a.value)} ${a.name}`;
+          text += `${c.currency(a.value)} ${a.currency}`;
           if (a.budget) {
-            text += ` / ${c.currency(a.budget)} ${a.name}`;
+            text += ` / ${c.currency(a.budget)} ${a.currency}`;
           }
           text += "<br>";
         });
       } else {
         text += `<em>${e}</em>`;
         d.values.forEach((a) => {
-          text += `${c.currency(a.children.get(e) ?? 0)} ${a.name}<br>`;
+          const value = c.currency(d.account_balances[e]?.[a.currency] ?? 0);
+          text += `${value} ${a.currency}<br>`;
         });
       }
       text += `<em>${d.label}</em>`;

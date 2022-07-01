@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { filter, max, merge, min, sum } from "d3-array";
+  import { extent } from "d3-array";
   import { axisBottom, axisLeft } from "d3-axis";
   import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
-  import { stack, stackOffsetDiverging } from "d3-shape";
-  import type { Series } from "d3-shape";
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
@@ -13,7 +11,7 @@
   import { barChartMode } from "../stores/chart";
 
   import Axis from "./Axis.svelte";
-  import type { BarChart, BarChartDatum, BarChartDatumValue } from "./bar";
+  import type { BarChart } from "./bar";
   import {
     currenciesScale,
     filterTicks,
@@ -36,85 +34,39 @@
   };
   const height = 250;
 
-  $: series = data.series;
+  $: bar_groups = data.bar_groups;
+  $: accounts = data.accounts;
+  $: currencies = bar_groups[0].values.map((d) => d.currency);
 
-  function build_stack(_data: BarChartDatum[]) {
-    const accounts = new Map<string, Series<BarChartDatum, string>[]>(
-      allAccounts.map((d) => [d, []])
-    );
-    for (let cur_idx = 0; cur_idx < _data[0].values.length; cur_idx += 1) {
-      const bar_stack = stack<BarChartDatum>()
-        .keys(accounts.keys())
-        .value((obj, key) => obj.values[cur_idx].children.get(key) ?? 0)
-        .offset(stackOffsetDiverging)(_data);
-      for (let acct_idx = 0; acct_idx < bar_stack.length; acct_idx += 1) {
-        accounts.get(bar_stack[acct_idx].key)?.push(bar_stack[acct_idx]);
-      }
-    }
-    return accounts;
-  }
-
-  $: allAccounts = Array.from(
-    new Set<string>(
-      series
-        .map<string[]>((d: BarChartDatum) =>
-          d.values
-            .map<string[]>((e: BarChartDatumValue) =>
-              Array.from(e.children.keys())
-            )
-            .flat()
-        )
-        .flat()
-    )
-  );
-  $: stacked_data = build_stack(series);
   $: innerHeight = height - margin.top - margin.bottom;
-  $: maxWidth = series.length * maxColumnWidth;
+  $: maxWidth = bar_groups.length * maxColumnWidth;
   $: offset = margin.left + Math.max(0, width - maxWidth) / 2;
   $: innerWidth = Math.min(width - margin.left - margin.right, maxWidth);
 
-  // Whether to display stacked bars
+  /** Whether to display stacked bars. */
   $: showStackedBars = $barChartMode === "stacked" && data.hasStackedData;
+  /** The currently hovered account. */
+  let highlighted: string | null = null;
 
   // Scales
   $: x0 = scaleBand()
     .padding(0.1)
-    .domain(series.map((d) => d.label))
+    .domain(bar_groups.map((d) => d.label))
     .range([0, innerWidth]);
-  $: x1 = scaleBand()
-    .domain(series[0].values.map((d) => d.name))
-    .range([0, x0.bandwidth()]);
-  $: yMin = showStackedBars
-    ? min(
-        merge<number>(
-          series.map((b) =>
-            b.values.map((c) => sum(filter(c.children.values(), (d) => d < 0)))
-          )
-        )
-      )
-    : min(
-        merge<BarChartDatumValue>(series.map((d) => d.values)),
-        (d) => d.value
-      );
-  $: yMax = showStackedBars
-    ? max(
-        merge<number>(
-          series.map((b) =>
-            b.values.map((c) => sum(filter(c.children.values(), (d) => d > 0)))
-          )
-        )
-      )
-    : max(
-        merge<BarChartDatumValue>(series.map((d) => d.values)),
-        (d) => d.value
-      );
+  $: x1 = scaleBand().domain(currencies).range([0, x0.bandwidth()]);
+
+  let yMin: number;
+  let yMax: number;
+  $: [yMin = 0, yMax = 0] = showStackedBars
+    ? extent(data.stacks.flatMap(([, s]) => s.flat(2)))
+    : extent(bar_groups.map((d) => d.values).flat(), (d) => d.value);
   $: y = scaleLinear()
     .range([innerHeight, 0])
-    .domain([Math.min(0, yMin ?? 0), Math.max(0, yMax ?? 0)]);
+    .domain([Math.min(0, yMin), Math.max(0, yMax)]);
 
   $: colorScale = scaleOrdinal<string, string>()
-    .domain(allAccounts)
-    .range(hclColorRange(allAccounts.length));
+    .domain(accounts)
+    .range(hclColorRange(accounts.length));
 
   const legend: Writable<[string, string][]> = getContext("chart-legend");
   $: legend.set(
@@ -131,14 +83,13 @@
     .tickSizeOuter(0)
     .tickValues(filterTicks(x0.domain(), innerWidth / 70));
   $: yAxis = axisLeft(y).tickSize(-innerWidth).tickFormat($ctx.short);
-  let highlighted = "";
 </script>
 
 <svg {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
     <Axis x axis={xAxis} {innerHeight} />
     <Axis y axis={yAxis} />
-    {#each series as group}
+    {#each bar_groups as group}
       <g
         class="group"
         class:desaturate={group.date > today}
@@ -161,61 +112,60 @@
           height={margin.bottom}
         />
         {#if !showStackedBars}
-          {#each group.values as bar}
+          {#each group.values as { currency, value, budget }}
             <rect
-              fill={$currenciesScale(bar.name)}
+              fill={$currenciesScale(currency)}
               width={x1.bandwidth()}
-              x={x1(bar.name)}
-              y={y(Math.max(0, bar.value))}
-              height={Math.abs(y(bar.value) - y(0))}
+              x={x1(currency)}
+              y={y(Math.max(0, value))}
+              height={Math.abs(y(value) - y(0))}
             />
             <rect
               class="budget"
               width={x1.bandwidth()}
-              x={x1(bar.name)}
-              y={y(Math.max(0, bar.budget))}
-              height={Math.abs(y(bar.budget) - y(0))}
+              x={x1(currency)}
+              y={y(Math.max(0, budget))}
+              height={Math.abs(y(budget) - y(0))}
             />
           {/each}
         {/if}
       </g>
     {/each}
     {#if showStackedBars}
-      {#each [...stacked_data] as [name, account]}
-        <g
-          class="category"
-          class:faded={name !== highlighted && highlighted !== ""}
-        >
-          {#each account as group, currency_idx}
-            {#each group as bar}
-              {#if !Number.isNaN(bar[1])}
-                <rect
-                  class:desaturate={bar.data.date > today}
-                  width={x1.bandwidth()}
-                  x={(x0(bar.data.label) ?? 0) +
-                    (x1(bar.data.values[currency_idx].name) ?? 0)}
-                  y={y(Math.max(bar[0], bar[1]))}
-                  height={Math.abs(y(bar[1]) - y(bar[0]))}
-                  fill={colorScale(name)}
-                  on:mouseover={() => {
-                    highlighted = name;
-                  }}
-                  on:focus={() => {
-                    highlighted = name;
-                  }}
-                  on:mouseout={() => {
-                    highlighted = "";
-                  }}
-                  on:blur={() => {
-                    highlighted = "";
-                  }}
-                  use:followingTooltip={() => tooltipText($ctx, bar.data, name)}
-                  on:click={() => router.navigate(urlForAccount(name))}
-                />
-              {/if}
+      {#each data.stacks as [currency, account_stacks]}
+        {#each account_stacks as stack}
+          {@const account = stack.key}
+          <g
+            class="category"
+            class:faded={highlighted && account !== highlighted}
+          >
+            {#each stack.filter((b) => !Number.isNaN(b[1])) as bar}
+              <rect
+                class:desaturate={bar.data.date > today}
+                width={x1.bandwidth()}
+                x={(x0(bar.data.label) ?? 0) + (x1(currency) ?? 0)}
+                y={y(Math.max(bar[0], bar[1]))}
+                height={Math.abs(y(bar[1]) - y(bar[0]))}
+                fill={colorScale(account)}
+                on:mouseover={() => {
+                  highlighted = account;
+                }}
+                on:focus={() => {
+                  highlighted = account;
+                }}
+                on:mouseout={() => {
+                  highlighted = null;
+                }}
+                on:blur={() => {
+                  highlighted = null;
+                }}
+                use:followingTooltip={() =>
+                  tooltipText($ctx, bar.data, account)}
+                on:click={() => router.navigate(urlForAccount(account))}
+              />
             {/each}
-          {/each}
-        </g>
+          </g>
+        {/each}
       {/each}
     {/if}
   </g>
