@@ -136,7 +136,6 @@ class ChartModule(FavaModule):
         accounts: str | tuple[str],
         conversion: str,
         invert: bool = False,
-        children: bool = False,
     ) -> Generator[DateAndBalanceWithBudget, None, None]:
         """Renders totals for account (or accounts) in the intervals.
 
@@ -144,7 +143,7 @@ class ChartModule(FavaModule):
             interval: An interval.
             accounts: A single account (str) or a tuple of accounts.
             conversion: The conversion to use.
-            children: Report all sub-account costs
+            invert: invert all numbers.
         """
         # pylint: disable=too-many-locals
         price_map = self.ledger.price_map
@@ -165,14 +164,13 @@ class ChartModule(FavaModule):
                 inventory, conversion, price_map, end - ONE_DAY
             )
             account_balances = {}
-            if children:
-                for account, acct_value in account_inventories.items():
-                    account_balances[account] = cost_or_value(
-                        acct_value,
-                        conversion,
-                        price_map,
-                        end - ONE_DAY,
-                    )
+            for account, acct_value in account_inventories.items():
+                account_balances[account] = cost_or_value(
+                    acct_value,
+                    conversion,
+                    price_map,
+                    end - ONE_DAY,
+                )
             budgets = {}
             if isinstance(accounts, str):
                 budgets = self.ledger.budgets.calculate_children(
