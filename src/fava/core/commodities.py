@@ -15,10 +15,11 @@ class CommoditiesModule(FavaModule):
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
         self._names: dict[str, str] = {}
-        self._precisions: dict[str, int] = {}
+        self.precisions: dict[str, int] = {}
 
     def load_file(self) -> None:
         self._names = {}
+        self.precisions = {}
         for commodity in self.ledger.all_entries_by_type.Commodity:
             name = commodity.meta.get("name")
             if name:
@@ -26,7 +27,7 @@ class CommoditiesModule(FavaModule):
             precision = commodity.meta.get("precision")
             if precision:
                 try:
-                    self._precisions[commodity.currency] = int(precision)
+                    self.precisions[commodity.currency] = int(precision)
                 except ValueError:
                     pass
 
@@ -34,4 +35,4 @@ class CommoditiesModule(FavaModule):
         return self._names.get(commodity, commodity)
 
     def precision(self, commodity: str) -> int | None:
-        return self._precisions.get(commodity)
+        return self.precisions.get(commodity)

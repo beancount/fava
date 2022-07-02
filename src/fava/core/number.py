@@ -51,12 +51,13 @@ class DecimalFormatModule(FavaModule):
 
     def __init__(self, ledger: FavaLedger) -> None:
         super().__init__(ledger)
-        self.locale = None
-        self.formatters: dict[str, Formatter] = {}
-        self.default_pattern = get_locale_format(None, 2)
+        self._locale = None
+        self._formatters: dict[str, Formatter] = {}
+        self._default_pattern = get_locale_format(None, 2)
+        self.precisions: dict[str, int] = {}
 
     def load_file(self) -> None:
-        self.locale = None
+        locale = None
 
         locale_option = self.ledger.fava_options.locale
         if self.ledger.options["render_commas"] and not locale_option:
@@ -64,19 +65,23 @@ class DecimalFormatModule(FavaModule):
             self.ledger.fava_options.locale = locale_option
 
         if locale_option:
-            self.locale = Locale.parse(locale_option)
-
-        self.default_pattern = get_locale_format(self.locale, 2)
+            locale = Locale.parse(locale_option)
 
         dcontext = self.ledger.options["dcontext"]
+        precisions: dict[str, int] = {}
         for currency, ccontext in dcontext.ccontexts.items():
-            prec = self.ledger.commodities.precision(currency)
-            if prec is None:
-                prec = ccontext.get_fractional(Precision.MOST_COMMON)
+            prec = ccontext.get_fractional(Precision.MOST_COMMON)
             if prec is not None:
-                self.formatters[currency] = get_locale_format(
-                    self.locale, prec
-                )
+                precisions[currency] = prec
+        precisions.update(self.ledger.commodities.precisions)
+
+        self._locale = locale
+        self._default_pattern = get_locale_format(locale, 2)
+        self._formatters = {
+            currency: get_locale_format(locale, prec)
+            for currency, prec in precisions.items()
+        }
+        self.precisions = precisions
 
     def __call__(self, value: Decimal, currency: str | None = None) -> str:
         """Format a decimal to the right number of decimal digits with locale.
@@ -89,5 +94,5 @@ class DecimalFormatModule(FavaModule):
             A string, the formatted decimal.
         """
         if currency is None:
-            return self.default_pattern(value)
-        return self.formatters.get(currency, self.default_pattern)(value)
+            return self._default_pattern(value)
+        return self._formatters.get(currency, self._default_pattern)(value)

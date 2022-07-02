@@ -22,7 +22,7 @@ option "operating_currency" "USD"
 
 1900-01-01 commodity VMMXX
   export: "MUTF:VMMXX (MONEY:USD)"
-  precision: "2"
+  precision: "4"
 
 1980-05-12 commodity VACHR
   export: "IGNORE"
@@ -31,7 +31,7 @@ option "operating_currency" "USD"
 1980-05-12 commodity IRAUSD
   export: "IGNORE"
   name: "US 401k and IRA Contributions"
-  precision: "gibberish"
+  precision: "NOT-A_NUMBER"
 
 1995-09-18 commodity VBMPX
   export: "MUTF:VBMPX"

@@ -18,6 +18,24 @@ def test_get_locale_format() -> None:
     assert fmt(dec) == "1,00000000000000"
 
 
+def test_precisions(example_ledger: FavaLedger) -> None:
+    fmt = example_ledger.format_decimal
+    assert fmt.precisions == {
+        "ABC": 0,
+        "GLD": 0,
+        "IRAUSD": 2,
+        "ITOT": 0,
+        "RGAGX": 3,
+        "USD": 2,
+        "VACHR": 0,
+        "VBMPX": 3,
+        "VMMXX": 4,
+        "VEA": 0,
+        "VHT": 0,
+        "XYZ": 0,
+    }
+
+
 def test_format_decimal(example_ledger: FavaLedger) -> None:
     fmt = example_ledger.format_decimal
     assert fmt(D("12.333"), "USD") == "12.33"
