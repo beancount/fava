@@ -58,7 +58,7 @@ export function balances(json: unknown): Result<LineChart, string> {
     type: "linechart" as const,
     data,
     tooltipText: (c, d) =>
-      `${c.currency(d.value)} ${d.name}<em>${day(d.date)}</em>`,
+      `${c.amount(d.value, d.name)}<em>${day(d.date)}</em>`,
   });
 }
 
@@ -83,9 +83,7 @@ export function commodities(
     type: "linechart" as const,
     data: [{ name: label, values }],
     tooltipText(c, d) {
-      return `1 ${base} = ${c.currency(d.value)} ${quote}<em>${day(
-        d.date
-      )}</em>`;
+      return `1 ${base} = ${c.amount(d.value, quote)}<em>${day(d.date)}</em>`;
     },
   });
 }

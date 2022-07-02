@@ -24,9 +24,7 @@
   function balanceText(d: AccountHierarchyNode): string {
     const val = d.value ?? 0;
     const rootVal = root.value || 1;
-    return `${$ctx.currency(val)} ${currency} (${formatPercentage(
-      val / rootVal
-    )})`;
+    return `${$ctx.amount(val, currency)} (${formatPercentage(val / rootVal)})`;
   }
 
   $: root = partition<AccountHierarchyDatum>()(data);

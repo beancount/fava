@@ -6,20 +6,22 @@ import { format } from "d3-format";
 import { timeFormat, utcFormat } from "d3-time-format";
 import { derived } from "svelte/store";
 
-import { favaOptions, incognito, interval } from "./stores";
+import { favaOptions, incognito, interval, precisions } from "./stores";
 
 /**
  * A number formatting function for a locale.
  * @param locale - The locale to use.
+ * @param precision - The number of decimal digits to show.
  */
 export function localeFormatter(
-  locale: string | null
+  locale: string | null,
+  precision = 2
 ): (num: number) => string {
   if (!locale) {
-    return format(".2f");
+    return format(`.${precision}f`);
   }
   const opts = {
-    minimumFractionDigits: 2,
+    minimumFractionDigits: precision,
   };
   const fmt = new Intl.NumberFormat(locale.replace("_", "-"), opts);
   return fmt.format.bind(fmt);
@@ -33,23 +35,35 @@ export function formatPercentage(number: number): string {
 }
 
 export interface FormatterContext {
+  /** Render a number to a short string, for example for the y-axis of a line chart. */
   short: (number: number | { valueOf(): number }) => string;
-  currency: (num: number) => string;
+  /** Render an amount to a string like "2.00 USD" */
+  amount: (num: number, currency: string) => string;
 }
 
 const formatterShort = format(".3s");
 export const ctx = derived(
-  [incognito, favaOptions],
-  ([i, f]): FormatterContext => {
+  [incognito, favaOptions, precisions],
+  ([i, f, p]): FormatterContext => {
     const formatter = localeFormatter(f.locale);
+    const currencyFormatters = Object.fromEntries(
+      Object.entries(p).map(
+        ([currency, prec]) =>
+          [currency, localeFormatter(f.locale, prec)] as const
+      )
+    );
+    const formatWithCurrency = (n: number, c: string) => {
+      const currencyFormatter = currencyFormatters[c];
+      return currencyFormatter ? currencyFormatter(n) : formatter(n);
+    };
     return i
       ? {
           short: (n) => replaceNumbers(formatterShort(n)),
-          currency: (n) => replaceNumbers(formatter(n)),
+          amount: (n, c) => `${replaceNumbers(formatter(n))} ${c}`,
         }
       : {
           short: (n) => formatterShort(n),
-          currency: (n) => formatter(n),
+          amount: (n, c) => `${formatWithCurrency(n, c)} ${c}`,
         };
   }
 );

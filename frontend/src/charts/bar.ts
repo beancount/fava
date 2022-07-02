@@ -94,17 +94,17 @@ export function bar(
       let text = "";
       if (e === "") {
         d.values.forEach((a) => {
-          text += `${c.currency(a.value)} ${a.currency}`;
+          text += c.amount(a.value, a.currency);
           if (a.budget) {
-            text += ` / ${c.currency(a.budget)} ${a.currency}`;
+            text += ` / ${c.amount(a.budget, a.currency)}`;
           }
           text += "<br>";
         });
       } else {
         text += `<em>${e}</em>`;
         d.values.forEach((a) => {
-          const value = c.currency(d.account_balances[e]?.[a.currency] ?? 0);
-          text += `${value} ${a.currency}<br>`;
+          const value = d.account_balances[e]?.[a.currency] ?? 0;
+          text += `${c.amount(value, a.currency)}<br>`;
         });
       }
       text += `<em>${d.label}</em>`;

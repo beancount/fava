@@ -51,6 +51,7 @@ export const ledgerDataValidator = object({
     operating_currency: array(string),
   }),
   payees: array(string),
+  precisions: record(number),
   tags: array(string),
   years: array(string),
 });
@@ -72,6 +73,8 @@ export const ledgerData: Readable<LedgerData> = derived(rawLedgerData, (s) => {
 export const favaOptions = derived(ledgerData, (val) => val.favaOptions);
 /** Beancount's options */
 export const options = derived(ledgerData, (val) => val.options);
+/** Commodity display precisions. */
+export const precisions = derived(ledgerData, (val) => val.precisions);
 /** Whether Fava supports exporting to Excel. */
 export const HAVE_EXCEL = derived(ledgerData, (val) => val.have_excel);
 /** Whether Fava should obscure all numbers. */

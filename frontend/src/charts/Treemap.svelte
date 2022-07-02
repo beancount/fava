@@ -35,7 +35,7 @@
     const val = d.value ?? 0;
     const rootValue = root.value || 1;
 
-    return `${$ctx.currency(val)} ${currency} (${formatPercentage(
+    return `${$ctx.amount(val, currency)} (${formatPercentage(
       val / rootValue
     )})<em>${d.data.account}</em>`;
   }
