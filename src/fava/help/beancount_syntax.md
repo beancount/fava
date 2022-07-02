@@ -61,11 +61,16 @@ To open or close an account use the `open` and `close` directives:
 ### Commodities
 
 Declaring commodities is optional. Use this if you want to attach metadata by
-currency.
+currency. If you specify a `name` for a currency like below, this name will be
+displayed as a tooltip on hovering over currency names in Fava. Likewise, with
+the `precision` metadata, you can specify the number of decimal digits to show
+in Fava, overriding the precision that is otherwise automatically inferred from
+the input data.
 
 <pre><textarea is="beancount-textarea">
 1998-07-22 commodity AAPL
-  name: "Apple Computer Inc."</textarea></pre>
+  name: "Apple Computer Inc."
+  precision: 3</textarea></pre>
 
 ### Prices
 
