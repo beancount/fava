@@ -50,6 +50,7 @@ from fava.core.accounts import get_entry_accounts
 from fava.core.attributes import AttributesModule
 from fava.core.budgets import BudgetModule
 from fava.core.charts import ChartModule
+from fava.core.commodities import CommoditiesModule
 from fava.core.entries_by_type import group_entries_by_type
 from fava.core.extensions import ExtensionModule
 from fava.core.fava_options import FavaOptions
@@ -133,6 +134,7 @@ MODULES = [
     "attributes",
     "budgets",
     "charts",
+    "commodities",
     "extensions",
     "file",
     "format_decimal",
@@ -273,7 +275,6 @@ class FavaLedger:
         "all_entries_by_type",
         "all_root_account",
         "beancount_file_path",
-        "commodity_names",
         "errors",
         "fava_options",
         "_is_encrypted",
@@ -304,6 +305,9 @@ class FavaLedger:
 
         #: A :class:`.ChartModule` instance.
         self.charts = ChartModule(self)
+
+        #: A :class:`.CommoditiesModule` instance.
+        self.commodities = CommoditiesModule(self)
 
         #: A :class:`.ExtensionModule` instance.
         self.extensions = ExtensionModule(self)
@@ -340,9 +344,6 @@ class FavaLedger:
         #: A dict containing information about the accounts.
         self.accounts = AccountDict()
 
-        #: A dict with commodity names (from the 'name' metadata)
-        self.commodity_names: dict[str, str] = {}
-
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = FavaOptions()
 
@@ -376,12 +377,6 @@ class FavaLedger:
             self.accounts.setdefault(open_entry.account).meta = open_entry.meta
         for close in self.all_entries_by_type.Close:
             self.accounts.setdefault(close.account).close_date = close.date
-
-        self.commodity_names = {}
-        for commodity in self.all_entries_by_type.Commodity:
-            name = commodity.meta.get("name")
-            if name:
-                self.commodity_names[commodity.currency] = name
 
         self.fava_options, errors = parse_options(
             self.all_entries_by_type.Custom

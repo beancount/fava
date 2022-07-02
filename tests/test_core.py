@@ -88,9 +88,9 @@ def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
 
 
 def test_commodity_names(example_ledger: FavaLedger) -> None:
-    assert example_ledger.commodity_names.get("USD") == "US Dollar"
-    assert example_ledger.commodity_names.get("NOCOMMODITY") is None
-    assert example_ledger.commodity_names.get("VMMXX") is None
+    assert example_ledger.commodities.name("USD") == "US Dollar"
+    assert example_ledger.commodities.name("NOCOMMODITY") == "NOCOMMODITY"
+    assert example_ledger.commodities.name("VMMXX") == "VMMXX"
 
 
 @pytest.mark.filterwarnings("ignore:FavaLedger.*deprecated")
