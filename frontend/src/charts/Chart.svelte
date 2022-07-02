@@ -85,7 +85,7 @@
         bind:value={$barChartMode}
         options={[
           ["stacked", _("Stacked Bars")],
-          ["unstacked", _("Single Bar")],
+          ["single", _("Single Bars")],
         ]}
       />
     {/if}

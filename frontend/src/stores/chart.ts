@@ -21,9 +21,9 @@ export const lineChartMode = localStorageSyncedStore(
   () => "line"
 );
 export const barChartMode = localStorageSyncedStore(
-  "line-chart-mode",
+  "bar-chart-mode",
   string,
-  () => "bar"
+  () => "stacked"
 );
 export const chartCurrency = writable("");
 
