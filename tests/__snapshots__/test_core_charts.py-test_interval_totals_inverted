@@ -1,6 +1,10 @@
 [
  {
-  "account_balances": {},
+  "account_balances": {
+   "Expenses:Others": {
+    "EUR": -280.00
+   }
+  },
   "balance": {
    "EUR": -280.00
   },
@@ -10,7 +14,14 @@
   "date": "2012-11-18"
  },
  {
-  "account_balances": {},
+  "account_balances": {
+   "Expenses:Food": {
+    "EUR": -70.00
+   },
+   "Expenses:Others": {
+    "EUR": -10.00
+   }
+  },
   "balance": {
    "EUR": -80.00
   },
