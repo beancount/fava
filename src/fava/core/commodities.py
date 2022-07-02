@@ -32,7 +32,5 @@ class CommoditiesModule(FavaModule):
                     pass
 
     def name(self, commodity: str) -> str:
+        """Get the name of a commodity (or the commodity itself if not set)"""
         return self._names.get(commodity, commodity)
-
-    def precision(self, commodity: str) -> int | None:
-        return self.precisions.get(commodity)
