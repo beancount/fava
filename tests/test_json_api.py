@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+import datetime
 import hashlib
 from io import BytesIO
 from pathlib import Path
@@ -123,8 +124,9 @@ def test_api_context(
     entry_hash = hash_entry(
         next(
             entry
-            for entry in example_ledger.all_entries
-            if entry.meta["lineno"] == 3732
+            for entry in example_ledger.all_entries_by_type.Transaction
+            if entry.narration == r"Investing 40% of cash in VBMPX"
+            and entry.date == datetime.date(2016, 5, 9)
         )
     )
     response = test_client.get(

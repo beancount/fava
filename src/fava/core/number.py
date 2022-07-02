@@ -70,7 +70,9 @@ class DecimalFormatModule(FavaModule):
 
         dcontext = self.ledger.options["dcontext"]
         for currency, ccontext in dcontext.ccontexts.items():
-            prec = ccontext.get_fractional(Precision.MOST_COMMON)
+            prec = self.ledger.commodities.precision(currency)
+            if prec is None:
+                prec = ccontext.get_fractional(Precision.MOST_COMMON)
             if prec is not None:
                 self.formatters[currency] = get_locale_format(
                     self.locale, prec
