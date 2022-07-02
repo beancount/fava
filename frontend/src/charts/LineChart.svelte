@@ -118,7 +118,7 @@
         />
       {/each}
     </g>
-    {#if $lineChartMode !== "area"}
+    {#if $lineChartMode === "line"}
       <g>
         {#each data as d}
           <g fill={$currenciesScale(d.name)}>

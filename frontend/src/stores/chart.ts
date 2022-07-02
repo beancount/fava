@@ -4,25 +4,27 @@ import type { NamedChartTypes } from "../charts";
 import { _, format } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
-import { string } from "../lib/validation";
+import { constant, union } from "../lib/validation";
 
 import { currencies_sorted, operating_currency } from ".";
 
 export const showCharts = writable(true);
 export const activeChart = writable<NamedChartTypes | undefined>(undefined);
-export const hierarchyChartMode = localStorageSyncedStore(
+export const hierarchyChartMode = localStorageSyncedStore<
+  "treemap" | "sunburst"
+>(
   "hierarchy-chart-mode",
-  string,
+  union(constant("treemap"), constant("sunburst")),
   () => "treemap"
 );
-export const lineChartMode = localStorageSyncedStore(
+export const lineChartMode = localStorageSyncedStore<"line" | "area">(
   "line-chart-mode",
-  string,
+  union(constant("line"), constant("area")),
   () => "line"
 );
-export const barChartMode = localStorageSyncedStore(
+export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
   "bar-chart-mode",
-  string,
+  union(constant("stacked"), constant("single")),
   () => "stacked"
 );
 export const chartCurrency = writable("");
