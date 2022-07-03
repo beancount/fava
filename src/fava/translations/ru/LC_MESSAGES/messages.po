@@ -19,7 +19,7 @@ msgstr "Ошибки"
 msgid "Time"
 msgstr "Время"
 
-#: frontend/src/entry-forms/AccountInput.svelte:18
+#: frontend/src/entry-forms/AccountInput.svelte:41
 #: frontend/src/header/FilterForm.svelte:63
 #: frontend/src/modals/DocumentUpload.svelte:63
 msgid "Account"
@@ -193,7 +193,7 @@ msgstr "Помощь - %(title)s"
 msgid "Help pages"
 msgstr "Страницы помощи"
 
-#: frontend/src/entry-forms/Balance.svelte:28
+#: frontend/src/entry-forms/Balance.svelte:32
 msgid "Currency"
 msgstr "Валюта"
 
@@ -284,11 +284,11 @@ msgstr "Описание"
 msgid "Save and add new"
 msgstr "Записать и добавить новую"
 
-#: frontend/src/entry-forms/Balance.svelte:22
+#: frontend/src/entry-forms/Balance.svelte:26
 msgid "Number"
 msgstr "Количество"
 
-#: frontend/src/entry-forms/Posting.svelte:76
+#: frontend/src/entry-forms/Posting.svelte:82
 #: frontend/src/entry-forms/Transaction.svelte:80
 msgid "Add posting"
 msgstr "Добавить проводку"
@@ -297,7 +297,7 @@ msgstr "Добавить проводку"
 msgid "Import"
 msgstr "Импорт"
 
-#: frontend/src/journal/JournalFilters.svelte:41
+#: frontend/src/journal/JournalFilters.svelte:40
 msgid "Budget entries"
 msgstr ""
 
@@ -341,7 +341,7 @@ msgstr ""
 msgid "...enter a BQL query. 'help' to list available commands."
 msgstr "...введите BQL-запрос. 'help' для перечисления доступных команд."
 
-#: frontend/src/journal/JournalFilters.svelte:42
+#: frontend/src/journal/JournalFilters.svelte:41
 msgid "Metadata"
 msgstr "Метаданные"
 
@@ -371,24 +371,24 @@ msgstr ""
 msgid "Balances after entry"
 msgstr ""
 
-#: frontend/src/journal/JournalFilters.svelte:24
+#: frontend/src/journal/JournalFilters.svelte:23
 msgid "Cleared transactions"
 msgstr "Подтверждённые транзакции"
 
-#: frontend/src/journal/JournalFilters.svelte:25
+#: frontend/src/journal/JournalFilters.svelte:24
 msgid "Pending transactions"
 msgstr "Неподтверждённые транзакции"
 
-#: frontend/src/journal/JournalFilters.svelte:26
+#: frontend/src/journal/JournalFilters.svelte:25
 msgid "Other transactions"
 msgstr "Прочие транзакции"
 
-#: frontend/src/journal/JournalFilters.svelte:33
+#: frontend/src/journal/JournalFilters.svelte:32
 msgid "Documents with a #discovered tag"
 msgstr ""
 
 #: frontend/src/entry-forms/Transaction.svelte:88
-#: frontend/src/journal/JournalFilters.svelte:43
+#: frontend/src/journal/JournalFilters.svelte:42
 msgid "Postings"
 msgstr "Проводки"
 
@@ -481,11 +481,11 @@ msgstr "По дням"
 msgid "Edit"
 msgstr "Правка"
 
-#: frontend/src/entry-forms/Posting.svelte:68
+#: frontend/src/entry-forms/Posting.svelte:74
 msgid "Amount"
 msgstr "Сумма"
 
-#: frontend/src/journal/JournalFilters.svelte:37
+#: frontend/src/journal/JournalFilters.svelte:36
 msgid "Documents with a #linked tag"
 msgstr ""
 
@@ -493,15 +493,15 @@ msgstr ""
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
-#: frontend/src/stores/chart.ts:38
+#: frontend/src/stores/chart.ts:45
 msgid "At Cost"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:39
+#: frontend/src/stores/chart.ts:46
 msgid "At Market Value"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:40
+#: frontend/src/stores/chart.ts:47
 msgid "Units"
 msgstr ""
 
@@ -513,7 +513,7 @@ msgstr "Плоское дерево"
 msgid "Sunburst"
 msgstr "Солнечные лучи"
 
-#: frontend/src/entry-forms/AccountInput.svelte:13
+#: frontend/src/entry-forms/AccountInput.svelte:15
 msgid "Should be one of the declared accounts"
 msgstr ""
 
@@ -557,11 +557,11 @@ msgstr ""
 msgid "No importer matched this file."
 msgstr ""
 
-#: frontend/src/charts/Chart.svelte:78
+#: frontend/src/charts/Chart.svelte:79
 msgid "Line chart"
 msgstr "Линейная диаграмма"
 
-#: frontend/src/charts/Chart.svelte:79
+#: frontend/src/charts/Chart.svelte:80
 msgid "Area chart"
 msgstr "Диаграмма с областями"
 
@@ -585,11 +585,19 @@ msgstr ""
 msgid "No files were found for import."
 msgstr ""
 
-#: frontend/src/journal/JournalFilters.svelte:7
+#: frontend/src/journal/JournalFilters.svelte:6
 msgid "Toggle %(type)s entries"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:43
+#: frontend/src/stores/chart.ts:50
 msgid "Converted to %(currency)s"
+msgstr ""
+
+#: frontend/src/charts/Chart.svelte:87
+msgid "Stacked Bars"
+msgstr ""
+
+#: frontend/src/charts/Chart.svelte:88
+msgid "Single Bars"
 msgstr ""
 
