@@ -1,12 +1,23 @@
 Changelog
 =========
 
-Unreleased
-----------
+v1.22 (2022-07-03)
+------------------
+
+This release brings stacked bar charts, which are a great way to visualise
+income broken down per account per month for example. The inferred display
+precision for currencies is now also used in the frontend and can be
+overwritten with commodity metadata.
 
 The `journal-show`, `journal-show-document`, and `journal-show-transaction`
 fava-options have been removed. The types of entries that to show in the journal
 are now automatically stored in the browser of the user (in localStorage).
+
+As usual, this release also includes a couple of bug fixes and minor
+improvements. To avoid some race conditions and improve perfomance, the
+per-file Ledger class is not filtered anymore in-place but rather the filtered
+data is generated per request - some extensions might have to adjust for this
+and use `g.filtered` instead of `ledger` for some attributes.
 
 v1.21 (2022-02-06)
 ------------------
