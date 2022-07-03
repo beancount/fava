@@ -19,7 +19,6 @@ import threading
 from io import BytesIO
 from typing import Any
 
-import flask
 import markdown2  # type: ignore
 import werkzeug.urls
 from beancount import __version__ as beancount_version
@@ -32,6 +31,7 @@ from flask import render_template
 from flask import render_template_string
 from flask import request
 from flask import send_file
+from flask import url_for as flask_url_for
 from flask.wrappers import Response
 from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
@@ -170,7 +170,7 @@ def static_url(filename: str) -> str:
     return url_for("static", filename=filename, mtime=mtime)
 
 
-CACHED_URL_FOR = functools.lru_cache(2048)(flask.url_for)
+CACHED_URL_FOR = functools.lru_cache(2048)(flask_url_for)
 
 
 def url_for(endpoint: str, **values: str | int) -> str:

@@ -1,7 +1,7 @@
 """Specify types for the flask application context."""
 from __future__ import annotations
 
-import flask
+from flask import g as flask_g
 
 from fava.core import FavaLedger
 from fava.core import FilteredLedger
@@ -18,4 +18,4 @@ class Context:
     filtered: FilteredLedger
 
 
-g: Context = flask.g  # type: ignore
+g: Context = flask_g  # type: ignore

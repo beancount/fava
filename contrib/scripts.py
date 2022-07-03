@@ -5,11 +5,14 @@ from __future__ import annotations
 import json
 from os import environ
 from pathlib import Path
+from typing import Generator
 
-import click
 import requests
 from beancount.query import query_env
 from beancount.query import query_parser
+from click import echo
+from click import group
+from click import UsageError
 
 from fava import LOCALES
 
@@ -17,12 +20,14 @@ BASE_PATH = Path(__file__).parent.parent
 FAVA_PATH = BASE_PATH / "src" / "fava"
 
 
-@click.group()
-def cli():
+@group()
+def cli() -> None:
     """Various utilities."""
 
 
-def _env_to_list(attributes):
+def _env_to_list(
+    attributes: dict[str, str | tuple[str, str]]
+) -> Generator[str, None, None]:
     for name in attributes.keys():
         if isinstance(name, tuple):
             name = name[0]
@@ -30,7 +35,7 @@ def _env_to_list(attributes):
 
 
 @cli.command()
-def generate_bql_grammar_json():
+def generate_bql_grammar_json() -> None:
     """Generate a JSON file with BQL grammar attributes.
 
     The online code editor needs to have the list of available columns,
@@ -49,11 +54,11 @@ def generate_bql_grammar_json():
 
 
 @cli.command()
-def download_translations():
+def download_translations() -> None:
     """Fetch updated translations from POEditor.com."""
     token = environ.get("POEDITOR_TOKEN")
     if not token:
-        raise click.UsageError(
+        raise UsageError(
             "The POEDITOR_TOKEN environment variable needs to be set."
         )
     for language in LOCALES:
@@ -61,15 +66,15 @@ def download_translations():
 
 
 @cli.command()
-def upload_translations():
+def upload_translations() -> None:
     """Upload .pot message catalog to POEditor.com."""
     token = environ.get("POEDITOR_TOKEN")
     if not token:
-        raise click.UsageError(
+        raise UsageError(
             "The POEDITOR_TOKEN environment variable needs to be set."
         )
     path = FAVA_PATH / "translations" / "messages.pot"
-    click.echo(f"Uploading message catalog: {path}")
+    echo(f"Uploading message catalog: {path}")
     data = {
         "api_token": token,
         "id": 90283,
@@ -83,16 +88,16 @@ def upload_translations():
             data=data,
             files=files,
         )
-        click.echo("Done: " + str(request.json()["result"]["terms"]))
+        echo("Done: " + str(request.json()["result"]["terms"]))
 
 
 # For these languages, the name on POEDITOR is off.
 POEDITOR_LANGUAGE_NAME = {"zh": "zh-CN", "zh_Hant_TW": "zh-TW"}
 
 
-def download_from_poeditor(language, token):
+def download_from_poeditor(language: str, token: str) -> None:
     """Download .po-file from POEditor and save to disk."""
-    click.echo(f'Downloading .po-file for language "{language}"')
+    echo(f'Downloading .po-file for language "{language}"')
     poeditor_name = POEDITOR_LANGUAGE_NAME.get(language, language)
     data = {
         "api_token": token,
@@ -110,7 +115,7 @@ def download_from_poeditor(language, token):
         folder.mkdir(parents=True)
     path = folder / "messages.po"
     path.write_bytes(content)
-    click.echo(f'Downloaded to "{path}"')
+    echo(f'Downloaded to "{path}"')
 
 
 if __name__ == "__main__":
