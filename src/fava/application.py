@@ -343,7 +343,7 @@ def extension_report(report_name: str) -> str:
         template, extension = g.ledger.extensions.template_and_extension(
             report_name
         )
-        content = render_template_string(template, extension=extension)
+        content = Markup(render_template_string(template, extension=extension))
         return render_template(
             "_layout.html", content=content, page_title=extension.report_title
         )
