@@ -59,10 +59,7 @@ const baseExtensions = [
     ...foldKeymap,
     ...completionKeymap,
     ...lintKeymap,
-    {key:"Tab",
-      preventDefault: true,
-      run: indentMode,
-    },
+    { key: "Tab", preventDefault: true, run: indentMode },
   ]),
 ];
 
