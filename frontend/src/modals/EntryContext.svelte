@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Entry } from "../entries";
+  import type { EntryBaseAttributes } from "../entries";
   import { urlForAccount, urlForSource } from "../helpers";
   import { _ } from "../i18n";
 
   type ContextBalance = Record<string, string[]>;
-  export let entry: Entry;
-  export let balances_before: ContextBalance | undefined;
-  export let balances_after: ContextBalance | undefined;
+  export let entry: EntryBaseAttributes;
+  export let balances_before: ContextBalance | null;
+  export let balances_after: ContextBalance | null;
 </script>
 
 <p>

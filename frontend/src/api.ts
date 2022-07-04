@@ -1,5 +1,5 @@
 import type { Entry } from "./entries";
-import { entryValidator, Transaction } from "./entries";
+import { entryBaseValidator, entryValidator, Transaction } from "./entries";
 import { urlFor } from "./helpers";
 import { fetchJSON } from "./lib/fetch";
 import type { ValidationT } from "./lib/validation";
@@ -33,6 +33,7 @@ interface PutAPIInputs {
  * @param endpoint - the endpoint to fetch
  * @param body - either a FormData instance or an object that will be converted
  *               to JSON.
+ * @returns the response message string
  */
 export async function put<T extends keyof PutAPIInputs>(
   endpoint: T,
@@ -58,7 +59,7 @@ export async function put<T extends keyof PutAPIInputs>(
 const getAPIValidators = {
   changed: boolean,
   context: object({
-    entry: entryValidator,
+    entry: entryBaseValidator,
     balances_before: optional(record(array(string))),
     balances_after: optional(record(array(string))),
     sha256sum: string,
@@ -88,6 +89,7 @@ interface GetAPIParams {
  * Fetch an API endpoint and convert the JSON data to an object.
  * @param endpoint - the endpoint to fetch
  * @param params - a string to append as params or an object.
+ * @returns the validated response returned by the endpoint.
  */
 export async function get<T extends keyof GetAPIParams>(
   endpoint: T,
@@ -107,6 +109,9 @@ export async function get<T extends keyof GetAPIParams>(
 
 /**
  * Move a file, either in an import directory or a document.
+ * @param filename - the current name of the file.
+ * @param account - account to move the file to.
+ * @param new_name - the new filename.
  * @returns whether the file was moved successfully.
  */
 export async function moveDocument(
@@ -129,6 +134,7 @@ export async function moveDocument(
 
 /**
  * Delete a file, either in an import directory or a document.
+ * @param filename - the filename of the file to delete.
  * @returns whether the file was deleted successfully.
  */
 export async function deleteDocument(filename: string): Promise<boolean> {
@@ -149,6 +155,7 @@ export async function deleteDocument(filename: string): Promise<boolean> {
 
 /**
  * Save an array of entries.
+ * @param entries - an array of entries to save to the Beancount file.
  */
 export async function saveEntries(entries: Entry[]): Promise<void> {
   if (!entries.length) {

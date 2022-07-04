@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 
-import type { Entry } from "./entries";
+import type { EntryBaseAttributes } from "./entries";
 import { baseURL } from "./stores";
 import { urlSyncedParams } from "./stores/url";
 
@@ -35,7 +35,7 @@ export function urlFor(
 }
 
 /** URL for the editor to the source location of an entry. */
-export function urlForSource(entry: Entry): string {
+export function urlForSource(entry: EntryBaseAttributes): string {
   const file_path = entry.meta.filename.toString();
   const line = entry.meta.lineno.toString();
   return urlFor("editor/", { file_path, line });

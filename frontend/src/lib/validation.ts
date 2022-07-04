@@ -103,8 +103,9 @@ export function union<T extends unknown[]>(
 /**
  * Validator for an object that might be undefined.
  */
-export function optional<T>(validator: Validator<T>): Validator<T | undefined> {
-  return (json) => (json === undefined ? ok(undefined) : validator(json));
+export function optional<T>(validator: Validator<T>): Validator<T | null> {
+  return (json) =>
+    json === undefined || json === null ? ok(null) : validator(json);
 }
 
 /**
