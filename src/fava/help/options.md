@@ -256,3 +256,13 @@ if the income is greater than the expenses for a given timespan.
 
 Note: To keep consistency with the internal accounting of beancount, the journal
 and the individual account pages are not affected by this configuration option.
+
+---
+
+## `conversion-currencies`
+
+Default: Not set
+
+When set, the currency conversion select dropdown in all charts will show the
+list of currencies specified in this option. By default, Fava lists all
+operating currencies and those currencies that match ISO 4217 currency codes.

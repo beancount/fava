@@ -6,7 +6,11 @@ import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
 import { constant, union } from "../lib/validation";
 
-import { currencies_sorted, operating_currency } from ".";
+import {
+  conversion_currencies,
+  currencies_sorted,
+  operating_currency,
+} from ".";
 
 export const showCharts = writable(true);
 export const activeChart = writable<NamedChartTypes | undefined>(undefined);
@@ -30,13 +34,21 @@ export const barChartMode = localStorageSyncedStore<"stacked" | "single">(
 export const chartCurrency = writable("");
 
 const currencySuggestions = derived(
-  [operating_currency, currencies_sorted],
-  ([operating_currency_val, currencies_sorted_val]) => [
-    ...operating_currency_val,
-    ...currencies_sorted_val.filter(
-      (c) => !operating_currency_val.includes(c) && iso4217currencies.has(c)
-    ),
-  ]
+  [operating_currency, currencies_sorted, conversion_currencies],
+  ([
+    operating_currency_val,
+    currencies_sorted_val,
+    conversion_currencies_val,
+  ]) =>
+    conversion_currencies_val.length
+      ? conversion_currencies_val
+      : [
+          ...operating_currency_val,
+          ...currencies_sorted_val.filter(
+            (c) =>
+              !operating_currency_val.includes(c) && iso4217currencies.has(c)
+          ),
+        ]
 );
 
 export const conversions = derived(
