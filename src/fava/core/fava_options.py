@@ -52,6 +52,7 @@ class FavaOptions:
     auto_reload: bool = False
     collapse_pattern: list[Pattern[str]] = field(default_factory=list)
     currency_column: int = 61
+    conversion_currencies: tuple[str, ...] = ()
     default_file: str | None = None
     default_page: str = "income_statement/"
     fiscal_year_end: FiscalYearEnd = FiscalYearEnd(12, 31)

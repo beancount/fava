@@ -26,6 +26,7 @@ def test_fava_options(load_doc: LoaderResult) -> None:
     2016-04-14 custom "fava-option" "collapse-pattern" "Account:Name"
     2016-04-14 custom "fava-option" "collapse_pattern" "(invalid"
     2016-04-14 custom "fava-option" "fiscal-year-end" "01-11"
+    2016-04-14 custom "fava-option" "conversion-currencies" "USD EUR HOOLI"
     """
 
     entries, _, _ = load_doc
@@ -46,3 +47,4 @@ def test_fava_options(load_doc: LoaderResult) -> None:
     assert options.currency_column == 10
     assert options.collapse_pattern == [re.compile("Account:Name")]
     assert options.fiscal_year_end == FiscalYearEnd(1, 11)
+    assert options.conversion_currencies == ("USD", "EUR", "HOOLI")

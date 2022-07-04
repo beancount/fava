@@ -35,6 +35,7 @@ export const ledgerDataValidator = object({
   favaOptions: object({
     auto_reload: boolean,
     currency_column: number,
+    conversion_currencies: array(string),
     indent: number,
     locale: union(string, constant(null)),
     insert_entry: array(
@@ -103,6 +104,11 @@ export const years = derived_array(ledgerData, (val) => val.years);
 /** The sorted array of operating currencies. */
 export const operating_currency = derived_array(ledgerData, (val) =>
   val.options.operating_currency.sort()
+);
+/** The customized currency conversion select list */
+export const conversion_currencies = derived_array(
+  ledgerData,
+  (val) => val.favaOptions.conversion_currencies
 );
 
 /** The sorted array of all used currencies. */
