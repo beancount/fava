@@ -345,7 +345,7 @@ def extension_report(report_name: str) -> str:
         )
         content = render_template_string(template, extension=extension)
         return render_template(
-            "_layout.html", content=content, page_title=extension.report_title
+            "_layout.html", content=Markup(content), page_title=extension.report_title
         )
     except LookupError:
         return abort(404)
