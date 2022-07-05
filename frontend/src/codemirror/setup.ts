@@ -5,6 +5,7 @@ import {
   completionKeymap,
 } from "@codemirror/autocomplete";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
+import { defaultKeymap, indentMore } from "@codemirror/commands";
 import {
   bracketMatching,
   defaultHighlightStyle,
@@ -59,7 +60,11 @@ const baseExtensions = [
     ...foldKeymap,
     ...completionKeymap,
     ...lintKeymap,
-    { key: "Tab", preventDefault: true, run: indentMode },
+    { 
+     key: "Tab", 
+     preventDefault: true, 
+     run: indentMode,
+    },
   ]),
 ];
 
