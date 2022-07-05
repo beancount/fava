@@ -11,4 +11,4 @@ def test_commodity_names(example_ledger: FavaLedger) -> None:
 
 
 def test_commodity_precision(example_ledger: FavaLedger) -> None:
-    assert example_ledger.commodities.precisions == {"USD": 2, "VMMXX": 4}
+    assert example_ledger.commodities.precisions == {"USD": 2, "VMMXX": 4, "VACHR": 0}

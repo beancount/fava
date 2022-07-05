@@ -196,7 +196,7 @@
                     'flag': '*',
                     'meta': {'__tolerances__': {'USD': 0.005, 'VBMPX': 0.0005},
                              'filename': 'FAVA_LONG_EXAMPLE_PATH.beancount',
-                             'lineno': 3735},
+                             'lineno': 3736},
                     'narration': 'Investing 40% of cash in VBMPX',
                     'payee': '',
                     'postings': [{'account': 'Assets:US:Vanguard:VBMPX',

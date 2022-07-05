@@ -27,6 +27,7 @@ option "operating_currency" "USD"
 1980-05-12 commodity VACHR
   export: "IGNORE"
   name: "Employer Vacation Hours"
+  precision: 0
 
 1980-05-12 commodity IRAUSD
   export: "IGNORE"
