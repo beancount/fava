@@ -1,3 +1,4 @@
+import { defaultKeymap, indentMore } from "@codemirror/commands";
 import {
   autocompletion,
   closeBrackets,
@@ -5,7 +6,6 @@ import {
   completionKeymap,
 } from "@codemirror/autocomplete";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
-import { defaultKeymap, indentMore } from "@codemirror/commands";
 import {
   bracketMatching,
   defaultHighlightStyle,
