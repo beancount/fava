@@ -25,7 +25,7 @@ class CommoditiesModule(FavaModule):
             if name:
                 self._names[commodity.currency] = name
             precision = commodity.meta.get("precision")
-            if precision:
+            if precision is not None:
                 try:
                     self.precisions[commodity.currency] = int(precision)
                 except ValueError:
