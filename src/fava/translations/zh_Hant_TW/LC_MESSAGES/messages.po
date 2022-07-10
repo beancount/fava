@@ -594,7 +594,7 @@ msgstr "切換 %(type) 條目"
 
 #: frontend/src/stores/chart.ts:50
 msgid "Converted to %(currency)s"
-msgstr "轉為 %(currency)"
+msgstr "轉為 %(currency)s"
 
 #: frontend/src/charts/Chart.svelte:87
 msgid "Stacked Bars"
