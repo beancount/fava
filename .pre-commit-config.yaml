@@ -30,7 +30,7 @@ repos:
             additional_dependencies:
                 - "prettier@2.7.1"
                 - "prettier-plugin-svelte@2.7.0"
-                - "svelte@3.48.0"
+                - "svelte@3.49.0"
           - id: stylelint
             name: stylelint
             language: node
@@ -41,7 +41,7 @@ repos:
                 - "stylelint-config-prettier@9.0.3"
                 - "stylelint-config-recess-order@3.0.0"
                 - "stylelint-config-standard@26.0.0"
-                - "postcss-html@1.4.1"
+                - "postcss-html@1.5.0"
           - id: eslint
             name: eslint
             language: node

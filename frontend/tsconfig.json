@@ -3,7 +3,6 @@
         "target": "es2017",
         "module": "es2015",
         "moduleResolution": "Node",
-        "preserveValueImports": true,
         "resolveJsonModule": true,
         "allowJs": true,
         "checkJs": true,
