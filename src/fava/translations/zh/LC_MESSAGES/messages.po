@@ -592,13 +592,13 @@ msgstr "切换 %(type)s 条目"
 
 #: frontend/src/stores/chart.ts:50
 msgid "Converted to %(currency)s"
-msgstr "转换为 %(currency)"
+msgstr "转换为 %(currency)s"
 
 #: frontend/src/charts/Chart.svelte:87
 msgid "Stacked Bars"
-msgstr ""
+msgstr "堆叠条形图"
 
 #: frontend/src/charts/Chart.svelte:88
 msgid "Single Bars"
-msgstr ""
+msgstr "条形图"
 

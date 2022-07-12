@@ -596,9 +596,9 @@ msgstr "Преобразуване в %(currency)s"
 
 #: frontend/src/charts/Chart.svelte:87
 msgid "Stacked Bars"
-msgstr ""
+msgstr "Стълбовидна диаграма с натрупване"
 
 #: frontend/src/charts/Chart.svelte:88
 msgid "Single Bars"
-msgstr ""
+msgstr "Стълбовидна диаграма без натрупване"
 

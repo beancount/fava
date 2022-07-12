@@ -590,17 +590,17 @@ msgstr "未發現有可供匯入的檔案"
 
 #: frontend/src/journal/JournalFilters.svelte:6
 msgid "Toggle %(type)s entries"
-msgstr "切換 %(type) 條目"
+msgstr "切換 %(type)s 條目"
 
 #: frontend/src/stores/chart.ts:50
 msgid "Converted to %(currency)s"
-msgstr "轉為 %(currency)"
+msgstr "轉為 %(currency)s"
 
 #: frontend/src/charts/Chart.svelte:87
 msgid "Stacked Bars"
-msgstr ""
+msgstr "堆疊條形圖"
 
 #: frontend/src/charts/Chart.svelte:88
 msgid "Single Bars"
-msgstr ""
+msgstr "條形圖"
 
