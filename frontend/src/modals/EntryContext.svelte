@@ -35,7 +35,10 @@
             <tr>
               <td><a href={urlForAccount(account)}>{account}</a></td>
               <td>
-                {@html inventory.join("<br>")}
+                {#each inventory as amount}
+                  {amount}
+                  <br />
+                {/each}
               </td>
             </tr>
           {/each}
@@ -52,7 +55,10 @@
             <tr>
               <td><a href={urlForAccount(account)}>{account}</a></td>
               <td>
-                {@html inventory.join("<br>")}
+                {#each inventory as amount}
+                  {amount}
+                  <br />
+                {/each}
               </td>
             </tr>
           {/each}

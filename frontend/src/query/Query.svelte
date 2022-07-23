@@ -106,7 +106,7 @@
           {/if}
           {@html result.table}
         {:else if error}
-          {@html error}
+          {error}
         {/if}
       </div>
     </details>
