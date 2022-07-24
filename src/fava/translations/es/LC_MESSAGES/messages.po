@@ -11,7 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Enlaces personalizados"
 
-#: fava/templates/_aside.html:33 fava/templates/_globals.html:6
+#: src/fava/templates/_aside.html:37 src/fava/templates/_globals.html:6
 msgid "Errors"
 msgstr "Errores"
 
@@ -22,6 +22,7 @@ msgstr "Hora"
 #: frontend/src/entry-forms/AccountInput.svelte:41
 #: frontend/src/header/FilterForm.svelte:63
 #: frontend/src/modals/DocumentUpload.svelte:63
+#: src/fava/templates/holdings.html:45 src/fava/templates/statistics.html:33
 msgid "Account"
 msgstr "Cuenta"
 
@@ -30,86 +31,91 @@ msgstr "Cuenta"
 msgid "Payee"
 msgstr "Beneficiario"
 
-#: fava/templates/_globals.html:11
+#: src/fava/templates/_globals.html:11
 msgid "Income Statement"
 msgstr "Cuenta de resultados"
 
-#: fava/templates/_globals.html:2
+#: src/fava/templates/_globals.html:2
 msgid "Balance Sheet"
 msgstr "Hoja de balance"
 
-#: fava/templates/_globals.html:16
+#: src/fava/templates/_globals.html:16
 msgid "Trial Balance"
 msgstr "Balance de comprobación"
 
-#: fava/templates/_globals.html:12
+#: src/fava/templates/_globals.html:12
 msgid "Journal"
 msgstr "Diario"
 
-#: fava/templates/_globals.html:14
+#: src/fava/templates/_globals.html:14
 msgid "Query"
 msgstr "Consulta"
 
-#: fava/templates/_globals.html:9 fava/templates/holdings.html:44
+#: src/fava/templates/_globals.html:9 src/fava/templates/holdings.html:44
 msgid "Holdings"
 msgstr "Valores en cartera"
 
-#: fava/templates/_globals.html:3
+#: src/fava/templates/_globals.html:3
 msgid "Commodities"
 msgstr "Productos"
 
-#: fava/templates/_globals.html:7
+#: src/fava/templates/_charts.html:25 src/fava/templates/_globals.html:7
 msgid "Events"
 msgstr "Eventos"
 
-#: fava/templates/_globals.html:5
+#: src/fava/templates/_globals.html:5
 msgid "Editor"
 msgstr "Editor"
 
-#: frontend/src/editor/EditorMenu.svelte:75
+#: frontend/src/editor/EditorMenu.svelte:75 src/fava/templates/_globals.html:13
 msgid "Options"
 msgstr "Opciones"
 
-#: fava/templates/_globals.html:15
+#: src/fava/templates/_globals.html:15
 msgid "Statistics"
 msgstr "Estadísticas"
 
-#: fava/templates/_globals.html:8
+#: src/fava/templates/_globals.html:8
 msgid "Help"
 msgstr "Ayuda"
 
 #: frontend/src/documents/Table.svelte:21
+#: src/fava/templates/_journal_table.html:44
+#: src/fava/templates/commodities.html:10 src/fava/templates/events.html:11
 msgid "Date"
 msgstr "Fecha"
 
-#: fava/templates/_journal_table.html:87
+#: src/fava/templates/_journal_table.html:45
 #, fuzzy
 msgid "F"
 msgstr "M"
 
-#: fava/templates/_journal_table.html:88
+#: src/fava/templates/_journal_table.html:46
 msgid "Narration/Payee"
 msgstr "Narración / Beneficiario"
 
-#: fava/templates/_journal_table.html:89
+#: src/fava/templates/_journal_table.html:47
 msgid "Position"
 msgstr "Posición"
 
-#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
+#: src/fava/templates/_journal_table.html:48
+#: src/fava/templates/commodities.html:11
 msgid "Price"
 msgstr "Precio"
 
-#: fava/templates/_journal_table.html:91
+#: src/fava/templates/_journal_table.html:49
 msgid "Cost"
 msgstr "Costo"
 
-#: fava/templates/_journal_table.html:93
+#: src/fava/templates/_journal_table.html:51
 #, fuzzy
 msgid "Change"
 msgstr "Cambio"
 
 #: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:13
+#: src/fava/templates/_journal_table.html:52
+#: src/fava/templates/statistics.html:37
 msgid "Balance"
 msgstr "Saldo"
 
@@ -126,64 +132,65 @@ msgstr "Guardando..."
 msgid "File change detected. Click to reload."
 msgstr "Modificación del fichero detectada. Haga clic para recargar."
 
-#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+#: src/fava/templates/_tree_table.html:27
+#: src/fava/templates/_tree_table.html:89
 msgid "Expand all accounts"
 msgstr "Expandir todas las cuentas"
 
-#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+#: src/fava/templates/_tree_table.html:27
+#: src/fava/templates/_tree_table.html:89
 msgid "Expand all"
 msgstr "Expandir todo"
 
-#: fava/templates/_tree_table.html:29
+#: src/fava/templates/_tree_table.html:31
 msgid "Other"
 msgstr "Otro"
 
-#: fava/templates/account.html:22
+#: src/fava/templates/account.html:22
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Diario de todas las entradas para esta cuenta y subcuentas"
 
-#: fava/templates/account.html:22
+#: src/fava/templates/account.html:22
 msgid "Account Journal"
 msgstr "Diario de la cuenta"
 
-#: fava/templates/account.html:15 fava/templates/account.html:23
+#: src/fava/templates/account.html:15 src/fava/templates/account.html:23
 msgid "Changes"
 msgstr "Cambios"
 
-#: fava/templates/account.html:24
+#: src/fava/templates/account.html:24
 msgid "Balances"
 msgstr "Saldos"
 
-#: fava/templates/_context.html:4 fava/templates/errors.html:14
-#: fava/templates/errors.html:15
+#: src/fava/templates/errors.html:14 src/fava/templates/errors.html:15
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Mostrar origen %(file)s:%(lineno)s"
 
-#: frontend/src/editor/EditorMenu.svelte:39
+#: frontend/src/editor/EditorMenu.svelte:39 src/fava/templates/errors.html:5
 msgid "File"
 msgstr "Fichero"
 
-#: frontend/src/import/Extract.svelte:99
+#: frontend/src/import/Extract.svelte:99 src/fava/templates/errors.html:6
 msgid "Line"
 msgstr "Línea"
 
-#: fava/templates/errors.html:7
+#: src/fava/templates/errors.html:7
 msgid "Error"
 msgstr "Error"
 
-#: fava/templates/errors.html:24
+#: src/fava/templates/errors.html:24
 msgid "No errors."
 msgstr "Sin errores."
 
-#: fava/templates/events.html:13
+#: src/fava/templates/_charts.html:25
 msgid "Event: %(type)s"
 msgstr "Evento: %(type)s"
 
-#: fava/templates/events.html:12
+#: src/fava/templates/events.html:12
 msgid "Description"
 msgstr "Descripción"
 
-#: fava/templates/events.html:28
+#: src/fava/templates/events.html:28
 msgid "No events."
 msgstr "No hay eventos."
 
@@ -191,80 +198,84 @@ msgstr "No hay eventos."
 msgid "Help - %(title)s"
 msgstr "Ayuda - %(title)s"
 
-#: fava/templates/help.html:3
+#: src/fava/templates/help.html:3
 msgid "Help pages"
 msgstr "Páginas de ayuda"
 
 #: frontend/src/entry-forms/Balance.svelte:32
+#: src/fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "Moneda"
 
-#: fava/templates/holdings.html:45
+#: src/fava/templates/holdings.html:45
 msgid "Cost currency"
 msgstr "Divisa de costo"
 
-#: fava/templates/holdings.html:46
+#: src/fava/templates/holdings.html:46
 msgid "Holdings by"
 msgstr "Participaciones por parte de"
 
-#: fava/templates/income_statement.html:3
-#: fava/templates/income_statement.html:18
+#: src/fava/templates/income_statement.html:7
+#: src/fava/templates/income_statement.html:23
 msgid "Net Profit"
 msgstr "Beneficio neto"
 
-#: fava/templates/income_statement.html:4
+#: src/fava/templates/income_statement.html:8
 msgid "Income"
 msgstr "Ingresos"
 
-#: fava/templates/income_statement.html:5
+#: src/fava/templates/income_statement.html:9
 msgid "Expenses"
 msgstr "Gastos"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:48
+#: src/fava/templates/options.html:5 src/fava/templates/options.html:22
 msgid "Key"
 msgstr "Clave"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:58
+#: src/fava/templates/options.html:6 src/fava/templates/options.html:23
 msgid "Value"
 msgstr "Valor"
 
 #: frontend/src/query/QueryLinks.svelte:19
+#: src/fava/templates/_query_table.html:85
 msgid "Download as"
 msgstr "Descargar como"
 
-#: fava/templates/statistics.html:14
+#: src/fava/templates/statistics.html:18
 msgid "Postings per Account"
 msgstr "Asientos por cuenta"
 
-#: fava/templates/statistics.html:81
+#: src/fava/templates/statistics.html:87
 msgid "Total"
 msgstr "Total"
 
-#: fava/templates/statistics.html:23
+#: src/fava/templates/statistics.html:27
 msgid "Update Activity"
 msgstr "Actualizar actividad"
 
-#: fava/templates/statistics.html:23
+#: src/fava/templates/statistics.html:28
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Haga clic para copiar directivas de balance de las cuentas (con excepción de las verdes) en el portapapeles."
 
-#: fava/templates/statistics.html:24
+#: src/fava/templates/statistics.html:29
 msgid "Copy balance directives"
 msgstr "Copiar directivas de balance"
 
-#: fava/templates/statistics.html:31
+#: src/fava/templates/statistics.html:36
 msgid "Last Entry"
 msgstr "Última entrada"
 
-#: fava/templates/statistics.html:63
+#: src/fava/templates/statistics.html:69
 msgid "Entries per Type"
 msgstr "Entradas por Tipo"
 
-#: fava/templates/statistics.html:67
+#: src/fava/templates/statistics.html:73
 msgid "Type"
 msgstr "Tipo"
 
-#: fava/templates/statistics.html:68
+#: src/fava/templates/statistics.html:74
 msgid "# Entries"
 msgstr "Nº de entradas"
 
@@ -295,7 +306,7 @@ msgstr "Número"
 msgid "Add posting"
 msgstr "Añadir asiento"
 
-#: frontend/src/import/Extract.svelte:42
+#: frontend/src/import/Extract.svelte:42 src/fava/templates/_globals.html:10
 msgid "Import"
 msgstr ""
 
@@ -369,7 +380,7 @@ msgstr ""
 msgid "Balances before entry"
 msgstr ""
 
-#: frontend/src/modals/EntryContext.svelte:47
+#: frontend/src/modals/EntryContext.svelte:50
 msgid "Balances after entry"
 msgstr ""
 
@@ -422,15 +433,15 @@ msgstr ""
 msgid "Close all folds"
 msgstr ""
 
-#: fava/templates/options.html:1
+#: src/fava/templates/options.html:1
 msgid "Fava options"
 msgstr ""
 
-#: fava/templates/options.html:1
+#: src/fava/templates/options.html:1
 msgid "help"
 msgstr ""
 
-#: fava/templates/options.html:18
+#: src/fava/templates/options.html:18
 msgid "Beancount options"
 msgstr ""
 
@@ -438,12 +449,12 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: fava/templates/_tree_table.html:3
+#: src/fava/templates/_tree_table.html:23
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr ""
 
-#: frontend/src/modals/Export.svelte:14
+#: frontend/src/modals/Export.svelte:14 src/fava/templates/_aside.html:29
 msgid "Export"
 msgstr ""
 
@@ -459,23 +470,23 @@ msgstr ""
 msgid "Import entries"
 msgstr ""
 
-#: frontend/src/charts/ConversionAndInterval.svelte:7
+#: frontend/src/charts/ConversionAndInterval.svelte:7 src/fava/util/date.py:63
 msgid "Yearly"
 msgstr ""
 
-#: frontend/src/charts/ConversionAndInterval.svelte:8
+#: frontend/src/charts/ConversionAndInterval.svelte:8 src/fava/util/date.py:64
 msgid "Quarterly"
 msgstr ""
 
-#: frontend/src/charts/ConversionAndInterval.svelte:9
+#: frontend/src/charts/ConversionAndInterval.svelte:9 src/fava/util/date.py:65
 msgid "Monthly"
 msgstr ""
 
-#: frontend/src/charts/ConversionAndInterval.svelte:10
+#: frontend/src/charts/ConversionAndInterval.svelte:10 src/fava/util/date.py:66
 msgid "Weekly"
 msgstr ""
 
-#: frontend/src/charts/ConversionAndInterval.svelte:11
+#: frontend/src/charts/ConversionAndInterval.svelte:11 src/fava/util/date.py:67
 msgid "Daily"
 msgstr ""
 
@@ -495,15 +506,15 @@ msgstr ""
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr ""
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:57
 msgid "At Cost"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:46
+#: frontend/src/stores/chart.ts:58
 msgid "At Market Value"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:47
+#: frontend/src/stores/chart.ts:59
 msgid "Units"
 msgstr ""
 
@@ -519,7 +530,7 @@ msgstr ""
 msgid "Should be one of the declared accounts"
 msgstr ""
 
-#: fava/templates/events.html:7
+#: src/fava/templates/events.html:7
 msgid "Event"
 msgstr ""
 
@@ -547,7 +558,7 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: fava/templates/_globals.html:4
+#: src/fava/templates/_globals.html:4
 msgid "Documents"
 msgstr ""
 
@@ -591,7 +602,7 @@ msgstr ""
 msgid "Toggle %(type)s entries"
 msgstr ""
 
-#: frontend/src/stores/chart.ts:50
+#: frontend/src/stores/chart.ts:62
 msgid "Converted to %(currency)s"
 msgstr ""
 
@@ -601,5 +612,25 @@ msgstr ""
 
 #: frontend/src/charts/Chart.svelte:88
 msgid "Single Bars"
+msgstr ""
+
+#: frontend/src/charts/HierarchyContainer.svelte:26
+msgid "Chart is empty."
+msgstr ""
+
+#: frontend/src/journal/JournalFilters.svelte:41
+msgid "Toggle metadata"
+msgstr ""
+
+#: frontend/src/journal/JournalFilters.svelte:42
+msgid "Toggle postings"
+msgstr ""
+
+#: src/fava/templates/_charts.html:33
+msgid "Net Worth"
+msgstr ""
+
+#: src/fava/templates/_charts.html:41
+msgid "Account Balance"
 msgstr ""
 

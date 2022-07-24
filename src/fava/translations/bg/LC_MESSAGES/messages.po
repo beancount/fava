@@ -11,7 +11,7 @@ msgstr ""
 msgid "Custom Links"
 msgstr "Персонализирани Връзки"
 
-#: fava/templates/_aside.html:33 fava/templates/_globals.html:6
+#: src/fava/templates/_aside.html:37 src/fava/templates/_globals.html:6
 msgid "Errors"
 msgstr "Грешки"
 
@@ -22,6 +22,7 @@ msgstr "Време"
 #: frontend/src/entry-forms/AccountInput.svelte:41
 #: frontend/src/header/FilterForm.svelte:63
 #: frontend/src/modals/DocumentUpload.svelte:63
+#: src/fava/templates/holdings.html:45 src/fava/templates/statistics.html:33
 msgid "Account"
 msgstr "Сметка"
 
@@ -30,84 +31,89 @@ msgstr "Сметка"
 msgid "Payee"
 msgstr "Бенефициент"
 
-#: fava/templates/_globals.html:11
+#: src/fava/templates/_globals.html:11
 msgid "Income Statement"
 msgstr "Отчет за Доходи"
 
-#: fava/templates/_globals.html:2
+#: src/fava/templates/_globals.html:2
 msgid "Balance Sheet"
 msgstr "Баланси"
 
-#: fava/templates/_globals.html:16
+#: src/fava/templates/_globals.html:16
 msgid "Trial Balance"
 msgstr "Оборотна Ведомост"
 
-#: fava/templates/_globals.html:12
+#: src/fava/templates/_globals.html:12
 msgid "Journal"
 msgstr "Архив"
 
-#: fava/templates/_globals.html:14
+#: src/fava/templates/_globals.html:14
 msgid "Query"
 msgstr "Търсене"
 
-#: fava/templates/_globals.html:9 fava/templates/holdings.html:44
+#: src/fava/templates/_globals.html:9 src/fava/templates/holdings.html:44
 msgid "Holdings"
 msgstr "Стопанства"
 
-#: fava/templates/_globals.html:3
+#: src/fava/templates/_globals.html:3
 msgid "Commodities"
 msgstr "Стоки"
 
-#: fava/templates/_globals.html:7
+#: src/fava/templates/_charts.html:25 src/fava/templates/_globals.html:7
 msgid "Events"
 msgstr "Събития"
 
-#: fava/templates/_globals.html:5
+#: src/fava/templates/_globals.html:5
 msgid "Editor"
 msgstr "Редактор"
 
-#: frontend/src/editor/EditorMenu.svelte:75
+#: frontend/src/editor/EditorMenu.svelte:75 src/fava/templates/_globals.html:13
 msgid "Options"
 msgstr "Настройки"
 
-#: fava/templates/_globals.html:15
+#: src/fava/templates/_globals.html:15
 msgid "Statistics"
 msgstr "Статистика"
 
-#: fava/templates/_globals.html:8
+#: src/fava/templates/_globals.html:8
 msgid "Help"
 msgstr "Помощ"
 
 #: frontend/src/documents/Table.svelte:21
+#: src/fava/templates/_journal_table.html:44
+#: src/fava/templates/commodities.html:10 src/fava/templates/events.html:11
 msgid "Date"
 msgstr "Дата"
 
-#: fava/templates/_journal_table.html:87
+#: src/fava/templates/_journal_table.html:45
 msgid "F"
 msgstr "Ф"
 
-#: fava/templates/_journal_table.html:88
+#: src/fava/templates/_journal_table.html:46
 msgid "Narration/Payee"
 msgstr "Основание/Бенефициент"
 
-#: fava/templates/_journal_table.html:89
+#: src/fava/templates/_journal_table.html:47
 msgid "Position"
 msgstr "Позиция"
 
-#: fava/templates/_journal_table.html:90 fava/templates/commodities.html:11
+#: src/fava/templates/_journal_table.html:48
+#: src/fava/templates/commodities.html:11
 msgid "Price"
 msgstr "Цена"
 
-#: fava/templates/_journal_table.html:91
+#: src/fava/templates/_journal_table.html:49
 msgid "Cost"
 msgstr "Разходи"
 
-#: fava/templates/_journal_table.html:93
+#: src/fava/templates/_journal_table.html:51
 msgid "Change"
 msgstr "Промяна"
 
 #: frontend/src/entry-forms/Balance.svelte:17
 #: frontend/src/modals/AddEntry.svelte:13
+#: src/fava/templates/_journal_table.html:52
+#: src/fava/templates/statistics.html:37
 msgid "Balance"
 msgstr "Баланс"
 
@@ -124,64 +130,65 @@ msgstr "Запазване..."
 msgid "File change detected. Click to reload."
 msgstr "Файла е променен. Кликнете, за да презаредите."
 
-#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+#: src/fava/templates/_tree_table.html:27
+#: src/fava/templates/_tree_table.html:89
 msgid "Expand all accounts"
 msgstr "Разгънете всички сметки"
 
-#: fava/templates/_tree_table.html:24 fava/templates/_tree_table.html:87
+#: src/fava/templates/_tree_table.html:27
+#: src/fava/templates/_tree_table.html:89
 msgid "Expand all"
 msgstr "Разгънете всички"
 
-#: fava/templates/_tree_table.html:29
+#: src/fava/templates/_tree_table.html:31
 msgid "Other"
 msgstr "Други"
 
-#: fava/templates/account.html:22
+#: src/fava/templates/account.html:22
 msgid "Journal of all entries for this Account and Sub-Accounts"
 msgstr "Архив на всички записи за тази Сметка и Подсметки"
 
-#: fava/templates/account.html:22
+#: src/fava/templates/account.html:22
 msgid "Account Journal"
 msgstr "Счетоводен Дневник"
 
-#: fava/templates/account.html:15 fava/templates/account.html:23
+#: src/fava/templates/account.html:15 src/fava/templates/account.html:23
 msgid "Changes"
 msgstr "Промени"
 
-#: fava/templates/account.html:24
+#: src/fava/templates/account.html:24
 msgid "Balances"
 msgstr "Баланс"
 
-#: fava/templates/_context.html:4 fava/templates/errors.html:14
-#: fava/templates/errors.html:15
+#: src/fava/templates/errors.html:14 src/fava/templates/errors.html:15
 msgid "Show source %(file)s:%(lineno)s"
 msgstr "Показване на %(file)s:%(lineno)s на източника"
 
-#: frontend/src/editor/EditorMenu.svelte:39
+#: frontend/src/editor/EditorMenu.svelte:39 src/fava/templates/errors.html:5
 msgid "File"
 msgstr "Файл"
 
-#: frontend/src/import/Extract.svelte:99
+#: frontend/src/import/Extract.svelte:99 src/fava/templates/errors.html:6
 msgid "Line"
 msgstr "Ред"
 
-#: fava/templates/errors.html:7
+#: src/fava/templates/errors.html:7
 msgid "Error"
 msgstr "Грешка"
 
-#: fava/templates/errors.html:24
+#: src/fava/templates/errors.html:24
 msgid "No errors."
 msgstr "Няма грешки."
 
-#: fava/templates/events.html:13
+#: src/fava/templates/_charts.html:25
 msgid "Event: %(type)s"
 msgstr "Събитие: %(type)s"
 
-#: fava/templates/events.html:12
+#: src/fava/templates/events.html:12
 msgid "Description"
 msgstr "Описание"
 
-#: fava/templates/events.html:28
+#: src/fava/templates/events.html:28
 msgid "No events."
 msgstr "Няма събития."
 
@@ -189,80 +196,84 @@ msgstr "Няма събития."
 msgid "Help - %(title)s"
 msgstr "Помощ - %(title)s"
 
-#: fava/templates/help.html:3
+#: src/fava/templates/help.html:3
 msgid "Help pages"
 msgstr "Помощни страници"
 
 #: frontend/src/entry-forms/Balance.svelte:32
+#: src/fava/templates/holdings.html:45
 msgid "Currency"
 msgstr "Валута"
 
-#: fava/templates/holdings.html:45
+#: src/fava/templates/holdings.html:45
 msgid "Cost currency"
 msgstr "Валута на разходите"
 
-#: fava/templates/holdings.html:46
+#: src/fava/templates/holdings.html:46
 msgid "Holdings by"
 msgstr "Стопанства от"
 
-#: fava/templates/income_statement.html:3
-#: fava/templates/income_statement.html:18
+#: src/fava/templates/income_statement.html:7
+#: src/fava/templates/income_statement.html:23
 msgid "Net Profit"
 msgstr "Чиста Печалба"
 
-#: fava/templates/income_statement.html:4
+#: src/fava/templates/income_statement.html:8
 msgid "Income"
 msgstr "Доход"
 
-#: fava/templates/income_statement.html:5
+#: src/fava/templates/income_statement.html:9
 msgid "Expenses"
 msgstr "Разходи"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:48
+#: src/fava/templates/options.html:5 src/fava/templates/options.html:22
 msgid "Key"
 msgstr "Ключ"
 
 #: frontend/src/entry-forms/EntryMetadata.svelte:58
+#: src/fava/templates/options.html:6 src/fava/templates/options.html:23
 msgid "Value"
 msgstr "Стойност"
 
 #: frontend/src/query/QueryLinks.svelte:19
+#: src/fava/templates/_query_table.html:85
 msgid "Download as"
 msgstr "Изтеглете като"
 
-#: fava/templates/statistics.html:14
+#: src/fava/templates/statistics.html:18
 msgid "Postings per Account"
 msgstr "Публикации по Сметка"
 
-#: fava/templates/statistics.html:81
+#: src/fava/templates/statistics.html:87
 msgid "Total"
 msgstr "Общо"
 
-#: fava/templates/statistics.html:23
+#: src/fava/templates/statistics.html:27
 msgid "Update Activity"
 msgstr "Обновления"
 
-#: fava/templates/statistics.html:23
+#: src/fava/templates/statistics.html:28
 msgid "Click to copy balance directives for accounts (except green ones) to the clipboard."
 msgstr "Кликнете, за да копирате балансовите директивите на сметките (с изключение на зелените) в клипборда."
 
-#: fava/templates/statistics.html:24
+#: src/fava/templates/statistics.html:29
 msgid "Copy balance directives"
 msgstr "Копирайте балансовите директивите"
 
-#: fava/templates/statistics.html:31
+#: src/fava/templates/statistics.html:36
 msgid "Last Entry"
 msgstr "Последен Запис"
 
-#: fava/templates/statistics.html:63
+#: src/fava/templates/statistics.html:69
 msgid "Entries per Type"
 msgstr "Записи по Тип"
 
-#: fava/templates/statistics.html:67
+#: src/fava/templates/statistics.html:73
 msgid "Type"
 msgstr "Тип"
 
-#: fava/templates/statistics.html:68
+#: src/fava/templates/statistics.html:74
 msgid "# Entries"
 msgstr "Записи"
 
@@ -293,7 +304,7 @@ msgstr "Количество"
 msgid "Add posting"
 msgstr "Добавете публикация"
 
-#: frontend/src/import/Extract.svelte:42
+#: frontend/src/import/Extract.svelte:42 src/fava/templates/_globals.html:10
 msgid "Import"
 msgstr "Вкарване"
 
@@ -367,7 +378,7 @@ msgstr "Контекст"
 msgid "Balances before entry"
 msgstr "Баланс преди запис"
 
-#: frontend/src/modals/EntryContext.svelte:47
+#: frontend/src/modals/EntryContext.svelte:50
 msgid "Balances after entry"
 msgstr "Баланс след запис"
 
@@ -420,15 +431,15 @@ msgstr "Разпъни всички категории"
 msgid "Close all folds"
 msgstr "Събери всички категории"
 
-#: fava/templates/options.html:1
+#: src/fava/templates/options.html:1
 msgid "Fava options"
 msgstr "Fava настройки"
 
-#: fava/templates/options.html:1
+#: src/fava/templates/options.html:1
 msgid "help"
 msgstr "помощ"
 
-#: fava/templates/options.html:18
+#: src/fava/templates/options.html:18
 msgid "Beancount options"
 msgstr "Beancount настройки"
 
@@ -436,13 +447,13 @@ msgstr "Beancount настройки"
 msgid "Submit"
 msgstr "Изпращане"
 
-#: fava/templates/_tree_table.html:3
+#: src/fava/templates/_tree_table.html:23
 msgid "Hold Shift while clicking to expand all children.\n"
 "Hold Ctrl or Cmd while clicking to expand one level."
 msgstr "Задръжте Shift, докато кликате, за да разширите всички поднива.\n"
 "Задръжте Ctrl или Cmd, докато кликате, за да разширите едно ниво."
 
-#: frontend/src/modals/Export.svelte:14
+#: frontend/src/modals/Export.svelte:14 src/fava/templates/_aside.html:29
 msgid "Export"
 msgstr "Изкарване"
 
@@ -458,23 +469,23 @@ msgstr "Изтеглете филтрираните в момента запис
 msgid "Import entries"
 msgstr "Вкарване на записи"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:7
+#: frontend/src/charts/ConversionAndInterval.svelte:7 src/fava/util/date.py:63
 msgid "Yearly"
 msgstr "Годишен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:8
+#: frontend/src/charts/ConversionAndInterval.svelte:8 src/fava/util/date.py:64
 msgid "Quarterly"
 msgstr "Тримесечен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:9
+#: frontend/src/charts/ConversionAndInterval.svelte:9 src/fava/util/date.py:65
 msgid "Monthly"
 msgstr "Месечен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:10
+#: frontend/src/charts/ConversionAndInterval.svelte:10 src/fava/util/date.py:66
 msgid "Weekly"
 msgstr "Седмичен"
 
-#: frontend/src/charts/ConversionAndInterval.svelte:11
+#: frontend/src/charts/ConversionAndInterval.svelte:11 src/fava/util/date.py:67
 msgid "Daily"
 msgstr "Дневен"
 
@@ -494,15 +505,15 @@ msgstr "Документи с #linked таг"
 msgid "You need to set the \"documents\" Beancount option for file uploads."
 msgstr "Трябва да зададете Beancount опцията \"documents\" за качване на файлове."
 
-#: frontend/src/stores/chart.ts:45
+#: frontend/src/stores/chart.ts:57
 msgid "At Cost"
 msgstr "На Цена"
 
-#: frontend/src/stores/chart.ts:46
+#: frontend/src/stores/chart.ts:58
 msgid "At Market Value"
 msgstr "По Пазарна Стойност"
 
-#: frontend/src/stores/chart.ts:47
+#: frontend/src/stores/chart.ts:59
 msgid "Units"
 msgstr "Единици"
 
@@ -518,7 +529,7 @@ msgstr "Пръстеновиднa диаграмa"
 msgid "Should be one of the declared accounts"
 msgstr "Трябва да е една от декларираните сметки"
 
-#: fava/templates/events.html:7
+#: src/fava/templates/events.html:7
 msgid "Event"
 msgstr "Събитие"
 
@@ -546,7 +557,7 @@ msgstr "Преместване или преименуване на докуме
 msgid "Name"
 msgstr "Име"
 
-#: fava/templates/_globals.html:4
+#: src/fava/templates/_globals.html:4
 msgid "Documents"
 msgstr "Документи"
 
@@ -590,7 +601,7 @@ msgstr "Не бяха намерени файлове за вкарване."
 msgid "Toggle %(type)s entries"
 msgstr "Превключване на %(type)s записи"
 
-#: frontend/src/stores/chart.ts:50
+#: frontend/src/stores/chart.ts:62
 msgid "Converted to %(currency)s"
 msgstr "Преобразуване в %(currency)s"
 
@@ -601,4 +612,24 @@ msgstr "Стълбовидна диаграма с натрупване"
 #: frontend/src/charts/Chart.svelte:88
 msgid "Single Bars"
 msgstr "Стълбовидна диаграма без натрупване"
+
+#: frontend/src/charts/HierarchyContainer.svelte:26
+msgid "Chart is empty."
+msgstr ""
+
+#: frontend/src/journal/JournalFilters.svelte:41
+msgid "Toggle metadata"
+msgstr ""
+
+#: frontend/src/journal/JournalFilters.svelte:42
+msgid "Toggle postings"
+msgstr ""
+
+#: src/fava/templates/_charts.html:33
+msgid "Net Worth"
+msgstr ""
+
+#: src/fava/templates/_charts.html:41
+msgid "Account Balance"
+msgstr ""
 
