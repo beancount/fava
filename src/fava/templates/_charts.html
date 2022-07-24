@@ -22,7 +22,7 @@
 {% macro events(event_type=None) %}
 {% do chart_data.append({
 'type': 'scatterplot',
-'label': _('Events') if not event_type else _('Event: {}').format(event_type),
+'label': _('Events') if not event_type else _('Event: %(type)s', type=event_type),
 'data': g.filtered.events(event_type),
 }) %}
 {% endmacro %}

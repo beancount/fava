@@ -38,8 +38,8 @@
     ["query", "Query", null, "s q"],
     ["custom", "Custom", null, "s C"],
     ["budget", "B", _("Budget entries"), "s B", "custom"],
-    ["metadata", _("Metadata"), "Toggle metadata", "m"],
-    ["postings", _("Postings"), "Toggle postings", "p"],
+    ["metadata", _("Metadata"), _("Toggle metadata"), "m"],
+    ["postings", _("Postings"), _("Toggle postings"), "p"],
   ];
 </script>
 

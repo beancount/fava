@@ -2,6 +2,7 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
+  import { _ } from "../i18n";
   import { chartCurrency, hierarchyChartMode } from "../stores/chart";
 
   import type { HierarchyChart } from "./hierarchy";
@@ -22,7 +23,8 @@
 
 {#if currencies.length === 0}
   <svg {width}>
-    <text x={width / 2} y={80} text-anchor="middle">Chart is empty.</text>
+    <text x={width / 2} y={80} text-anchor="middle">{_("Chart is empty.")}</text
+    >
   </svg>
 {:else if treemapData}
   <Treemap data={treemapData} {currency} {width} />
