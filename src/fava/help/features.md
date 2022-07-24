@@ -10,7 +10,9 @@ the [`default-file`](./options#default-file) option. If you have
 jump to the (date-wise) latest one in the opened file.
 
 The editor supports auto-completion for various entities, e.g., account names,
-payees, and tags. Trailing whitespace is highlighted in red.
+payees, and tags. Trailing whitespace is highlighted in red. The Tab key in the
+editor can be used for indentation - to escape this keyboard trap, press Escape
+and then Tab directly after it.
 
 ## Queries
 
