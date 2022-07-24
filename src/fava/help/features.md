@@ -20,9 +20,16 @@ On the [Query](../query/) report you can execute queries like with the
 `bean-query` command-line tool. For an explanation of how these queries work see
 the [Beancount Query Language Reference](http://furius.ca/beancount/doc/query).
 
-Fava displays charts for BQL queries - if they have exactly two columns with the
-first being a date or string and the second an inventory, then a line chart or
-treemap chart is shown on the query page.
+Fava displays charts for BQL queries - if they have exactly two columns like the
+following example with the first being a date or string and the second an
+inventory, then a line chart or treemap chart is shown on the query page.
+
+    SELECT
+        payee,
+        SUM(COST(position)) AS balance
+    WHERE
+        account ~ 'Expenses'
+    GROUP BY payee, account
 
 Fava supports downloading the result of these queries in various file formats.
 By default, only exporting to `csv` is supported. For support of `xls`, `xlsx`
