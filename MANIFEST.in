@@ -13,9 +13,3 @@ prune .github
 graft src/fava/static
 exclude src/fava/translations/babel.conf
 recursive-include src/fava/translations *.mo
-
-global-exclude *.orig
-global-exclude *.po
-global-exclude *.py[co]
-global-exclude .DS_Store
-global-exclude __pycache__
