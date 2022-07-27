@@ -1,3 +1,8 @@
+<script lang="ts" context="module">
+  const TAGS_RE = /(?:^|\s)#([A-Za-z0-9\-_/.]+)/g;
+  const LINKS_RE = /(?:^|\s)\^([A-Za-z0-9\-_/.]+)/g;
+</script>
+
 <script lang="ts">
   import { get } from "../api";
   import AutocompleteInput from "../AutocompleteInput.svelte";
@@ -30,6 +35,34 @@
       });
     }
   }
+
+  /// Extract tags and links that can be provided in the narration <input>.
+  function onNarrationChange({
+    currentTarget,
+  }: {
+    currentTarget: HTMLInputElement;
+  }) {
+    const { value } = currentTarget;
+    entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1]);
+    entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1]);
+    entry.narration = value
+      .replaceAll(TAGS_RE, "")
+      .replaceAll(LINKS_RE, "")
+      .trim();
+  }
+
+  /// Output tags and links in the narration <input>
+  function combineNarrationTagsLinks(e: Transaction): string {
+    let val = e.narration;
+    if (e.tags.length) {
+      val += ` ${e.tags.map((t) => `#${t}`).join(" ")}`;
+    }
+    if (e.links.length) {
+      val += ` ${e.links.map((t) => `^${t}`).join(" ")}`;
+    }
+    return val;
+  }
+  $: narration = combineNarrationTagsLinks(entry);
 
   // Autofill complete transactions.
   async function autocompleteSelectPayee() {
@@ -69,7 +102,8 @@
         type="text"
         name="narration"
         placeholder={_("Narration")}
-        bind:value={entry.narration}
+        value={narration}
+        on:change={onNarrationChange}
       />
       <AddMetadataButton bind:meta={entry.meta} />
     </label>

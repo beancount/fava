@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import datetime
 import functools
-import re
 from typing import Any
 
 from beancount.core.amount import Amount
@@ -21,7 +20,6 @@ from beancount.core.data import Commodity
 from beancount.core.data import Custom
 from beancount.core.data import Directive
 from beancount.core.data import Document
-from beancount.core.data import EMPTY_SET
 from beancount.core.data import Event
 from beancount.core.data import Note
 from beancount.core.data import Open
@@ -36,30 +34,6 @@ from beancount.parser.parser import parse_string
 
 from fava.helpers import FavaAPIException
 from fava.util.date import parse_date
-
-
-def extract_tags_links(
-    string: str,
-) -> tuple[str | None, frozenset[str], frozenset[str]]:
-    """Extract tags and links from a narration string.
-
-    Args:
-        string: A string, possibly containing tags (`#tag`) and links
-        (`^link`).
-
-    Returns:
-        A triple (new_string, tags, links) where `new_string` is `string`
-        stripped of tags and links.
-    """
-
-    if string is None:
-        return None, EMPTY_SET, EMPTY_SET
-
-    tags = re.findall(r"(?:^|\s)#([A-Za-z0-9\-_/.]+)", string)
-    links = re.findall(r"(?:^|\s)\^([A-Za-z0-9\-_/.]+)", string)
-    new_string = re.sub(r"(?:^|\s)[#^]([A-Za-z0-9\-_/.]+)", "", string).strip()
-
-    return new_string, frozenset(tags), frozenset(links)
 
 
 ENTRY_TYPES = (
@@ -93,12 +67,6 @@ def _(entry: Transaction) -> Any:
     ret = entry._asdict()
     ret["type"] = "Transaction"
     ret["payee"] = entry.payee or ""
-    if entry.tags:
-        ret["narration"] += " " + " ".join(["#" + n for n in entry.tags])
-    if entry.links:
-        ret["narration"] += " " + " ".join(["^" + n for n in entry.links])
-    del ret["links"]
-    del ret["tags"]
     ret["postings"] = list(map(serialise, entry.postings))
     return ret
 
@@ -154,16 +122,15 @@ def deserialise(json_entry: Any) -> Directive:
     if not isinstance(date, datetime.date):
         raise FavaAPIException("Invalid entry date.")
     if json_entry["type"] == "Transaction":
-        narration, tags, links = extract_tags_links(json_entry["narration"])
         postings = [deserialise_posting(pos) for pos in json_entry["postings"]]
         return Transaction(
             json_entry["meta"],
             date,
             json_entry.get("flag", ""),
             json_entry.get("payee", ""),
-            narration or "",
-            tags,
-            links,
+            json_entry["narration"] or "",
+            frozenset(json_entry["tags"]),
+            frozenset(json_entry["links"]),
             postings,
         )
     if json_entry["type"] == "Balance":

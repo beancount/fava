@@ -194,6 +194,7 @@
                                                            '2014-02-03}']},
           'entry': {'date': '2016-05-09',
                     'flag': '*',
+                    'links': [],
                     'meta': {'__tolerances__': {'USD': 0.005, 'VBMPX': 0.0005},
                              'filename': 'FAVA_LONG_EXAMPLE_PATH.beancount',
                              'lineno': 3736},
@@ -204,6 +205,7 @@
                                             '2016-05-09}'},
                                  {'account': 'Assets:US:Vanguard:Cash',
                                   'amount': '-479.99 USD'}],
+                    'tags': [],
                     'type': 'Transaction'},
           'sha256sum': 'b8d184b8ffadddbdc915a9dbf7e4d94a045ed99d2af148ec815727c3b136906e',
           'slice': '2016-05-09 * "Investing 40% of cash in VBMPX"\n'

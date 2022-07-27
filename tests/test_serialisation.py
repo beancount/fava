@@ -32,7 +32,6 @@ from fava.core.file import _format_entry
 from fava.helpers import FavaAPIException
 from fava.serialisation import deserialise
 from fava.serialisation import deserialise_posting
-from fava.serialisation import extract_tags_links
 from fava.serialisation import serialise
 
 dumps = PRETTY_ENCODER.encode
@@ -56,7 +55,9 @@ def test_serialise_txn() -> None:
         "date": "2017-12-12",
         "flag": "*",
         "meta": {},
-        "narration": "asdfasd #tag ^link",
+        "narration": "asdfasd",
+        "tags": ["tag"],
+        "links": ["link"],
         "payee": "Test3",
         "type": "Transaction",
         "postings": [
@@ -216,7 +217,9 @@ def test_deserialise() -> None:
         "date": "2017-12-12",
         "flag": "*",
         "payee": "Test3",
-        "narration": "asdfasd #tag ^link",
+        "narration": "asdfasd",
+        "tags": ["tag"],
+        "links": ["link"],
         "meta": {},
         "postings": postings,
     }
@@ -278,32 +281,3 @@ def test_deserialise_note() -> None:
         "This is some comment or note",
     )
     assert deserialise(json_note) == note
-
-
-def test_extract_tags_links() -> None:
-    assert extract_tags_links("notag") == ("notag", frozenset(), frozenset())
-    extracted1: tuple[str, frozenset[str], frozenset[str]] = (
-        "Some text",
-        frozenset(["tag"]),
-        frozenset(),
-    )
-    assert extract_tags_links("Some text #tag") == extracted1
-    assert extract_tags_links("Some text ^link") == (
-        "Some text",
-        frozenset(),
-        frozenset(["link"]),
-    )
-
-    extracted2 = ("Some text", frozenset(["tag", "tag2"]), frozenset(["link"]))
-    assert extract_tags_links("Some text #tag #tag2 ^link") == extracted2
-    assert extract_tags_links("Some text#tag#tag2 ^link") == (
-        "Some text#tag#tag2",
-        frozenset(),
-        frozenset(["link"]),
-    )
-    assert extract_tags_links("Some text#tag#tag2^link") == (
-        "Some text#tag#tag2^link",
-        frozenset(),
-        frozenset(),
-    )
-    assert extract_tags_links("#tag") == ("", frozenset(["tag"]), frozenset())

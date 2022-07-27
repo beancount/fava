@@ -115,6 +115,10 @@ export class Transaction extends EntryBase {
 
   narration: string;
 
+  tags: string[];
+
+  links: string[];
+
   postings: Posting[];
 
   constructor() {
@@ -122,6 +126,8 @@ export class Transaction extends EntryBase {
     this.flag = "*";
     this.payee = "";
     this.narration = "";
+    this.tags = [];
+    this.links = [];
     this.postings = [emptyPosting(), emptyPosting()];
   }
 
@@ -139,6 +145,8 @@ export class Transaction extends EntryBase {
     flag: string,
     payee: optional_string,
     narration: optional_string,
+    tags: array(string),
+    links: array(string),
     postings: array(postingValidator),
   });
 
