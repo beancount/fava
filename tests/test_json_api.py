@@ -240,6 +240,8 @@ def test_api_add_entries(
                 "date": "2017-12-12",
                 "flag": "*",
                 "payee": "Test3",
+                "tags": [],
+                "links": [],
                 "narration": "",
                 "meta": {},
                 "postings": [
@@ -252,6 +254,8 @@ def test_api_add_entries(
                 "date": "2017-01-12",
                 "flag": "*",
                 "payee": "Test1",
+                "tags": [],
+                "links": [],
                 "narration": "",
                 "meta": {},
                 "postings": [
@@ -264,6 +268,8 @@ def test_api_add_entries(
                 "date": "2017-02-12",
                 "flag": "*",
                 "payee": "Test",
+                "tags": [],
+                "links": [],
                 "narration": "Test",
                 "meta": {},
                 "postings": [
