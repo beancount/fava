@@ -26,7 +26,7 @@ export function initSidebar(): void {
       errorCountEl.classList.toggle("hidden", errorCount_val === 0);
       const span = errorCountEl.querySelector("span");
       if (span) {
-        span.innerHTML = `${errorCount_val}`;
+        span.textContent = `${errorCount_val}`;
       }
     });
   }

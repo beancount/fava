@@ -19,6 +19,19 @@ const hide = (): void => {
   t.style.opacity = "0";
 };
 
+/** Some small utilities to create tooltip contents. */
+export const domHelpers = {
+  br: () => document.createElement("br"),
+  em: (content: string) => {
+    const em = document.createElement("em");
+    em.textContent = content;
+    return em;
+  },
+  t: (text: string) => document.createTextNode(text),
+};
+
+export type TooltipContent = (HTMLElement | Text)[];
+
 /**
  * Svelte action to have the given element act on mouse to show a tooltip.
  *
@@ -27,8 +40,8 @@ const hide = (): void => {
  */
 export function followingTooltip(
   node: SVGElement,
-  text: () => string
-): { destroy: () => void; update: (t: () => string) => void } {
+  text: () => TooltipContent
+): { destroy: () => void; update: (t: () => TooltipContent) => void } {
   let getter = text;
   /** Event listener to have the tooltip follow the mouse. */
   function followMouse(event: MouseEvent): void {
@@ -39,14 +52,14 @@ export function followingTooltip(
   }
   node.addEventListener("mouseenter", () => {
     const t = tooltip();
-    t.innerHTML = getter();
+    t.replaceChildren(...getter());
   });
   node.addEventListener("mousemove", followMouse);
   node.addEventListener("mouseleave", hide);
 
   return {
     destroy: hide,
-    update(t: () => string): void {
+    update(t: () => TooltipContent): void {
       getter = t;
     },
   };
@@ -56,7 +69,7 @@ export function followingTooltip(
 export type TooltipFindNode = (
   x: number,
   y: number
-) => [number, number, string] | undefined;
+) => [number, number, TooltipContent] | undefined;
 
 /**
  * Svelte action to have the given <g> element act on mouse to show a tooltip.
@@ -78,7 +91,7 @@ export function positionedTooltip(
       const [x, y, content] = res;
       const t = tooltip();
       t.style.opacity = "1";
-      t.innerHTML = content;
+      t.replaceChildren(...content);
       t.style.left = `${window.scrollX + x + matrix.e}px`;
       t.style.top = `${window.scrollY + y + matrix.f - 15}px`;
     } else {

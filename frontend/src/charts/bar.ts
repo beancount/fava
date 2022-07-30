@@ -7,6 +7,8 @@ import type { Result } from "../lib/result";
 import { array, date, number, object, record } from "../lib/validation";
 
 import type { ChartContext } from "./context";
+import type { TooltipContent } from "./tooltip";
+import { domHelpers } from "./tooltip";
 
 export interface BarChartDatumValue {
   currency: string;
@@ -38,7 +40,11 @@ export interface BarChart {
     /** Whether this chart contains any stacks (or is just a single account). */
     hasStackedData: boolean;
   };
-  tooltipText: (c: FormatterContext, d: BarChartDatum, e: string) => string;
+  tooltipText: (
+    c: FormatterContext,
+    d: BarChartDatum,
+    e: string
+  ) => TooltipContent;
 }
 
 const bar_validator = array(
@@ -91,24 +97,31 @@ export function bar(
     type: "barchart" as const,
     data: { accounts, bar_groups, stacks, hasStackedData },
     tooltipText: (c, d, e) => {
-      let text = "";
+      const content: TooltipContent = [];
       if (e === "") {
         d.values.forEach((a) => {
-          text += c.amount(a.value, a.currency);
-          if (a.budget) {
-            text += ` / ${c.amount(a.budget, a.currency)}`;
-          }
-          text += "<br>";
+          content.push(
+            domHelpers.t(
+              a.budget
+                ? `${c.amount(a.value, a.currency)} / ${c.amount(
+                    a.budget,
+                    a.currency
+                  )}`
+                : c.amount(a.value, a.currency)
+            )
+          );
+          content.push(domHelpers.br());
         });
       } else {
-        text += `<em>${e}</em>`;
+        content.push(domHelpers.em(e));
         d.values.forEach((a) => {
           const value = d.account_balances[e]?.[a.currency] ?? 0;
-          text += `${c.amount(value, a.currency)}<br>`;
+          content.push(domHelpers.t(`${c.amount(value, a.currency)}`));
+          content.push(domHelpers.br());
         });
       }
-      text += `<em>${d.label}</em>`;
-      return text;
+      content.push(domHelpers.em(d.label));
+      return content;
     },
   });
 }

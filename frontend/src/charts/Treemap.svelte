@@ -11,7 +11,7 @@
     AccountHierarchyDatum,
     AccountHierarchyNode,
   } from "./hierarchy";
-  import { followingTooltip } from "./tooltip";
+  import { domHelpers, followingTooltip } from "./tooltip";
 
   export let data: AccountHierarchyNode;
   export let width: number;
@@ -35,9 +35,12 @@
     const val = d.value ?? 0;
     const rootValue = root.value || 1;
 
-    return `${$ctx.amount(val, currency)} (${formatPercentage(
-      val / rootValue
-    )})<em>${d.data.account}</em>`;
+    return [
+      domHelpers.t(
+        `${$ctx.amount(val, currency)} (${formatPercentage(val / rootValue)})`
+      ),
+      domHelpers.em(d.data.account),
+    ];
   }
 
   function setVisibility(

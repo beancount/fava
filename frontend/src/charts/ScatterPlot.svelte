@@ -10,7 +10,7 @@
   import { scatterplotScale } from "./helpers";
   import type { ScatterPlotDatum } from "./scatterplot";
   import type { TooltipFindNode } from "./tooltip";
-  import { positionedTooltip } from "./tooltip";
+  import { domHelpers, positionedTooltip } from "./tooltip";
 
   export let data: ScatterPlotDatum[];
   export let width: number;
@@ -51,7 +51,7 @@
   );
 
   function tooltipText(d: ScatterPlotDatum) {
-    return `${d.description}<em>${day(d.date)}</em>`;
+    return [domHelpers.t(d.description), domHelpers.em(day(d.date))];
   }
 
   const tooltipFindNode: TooltipFindNode = (xPos, yPos) => {
