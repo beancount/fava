@@ -12,6 +12,9 @@ import {
   tuple,
 } from "../lib/validation";
 
+import type { TooltipContent } from "./tooltip";
+import { domHelpers } from "./tooltip";
+
 export interface LineChartDatum {
   name: string;
   date: Date;
@@ -26,7 +29,7 @@ export type LineChartData = {
 export interface LineChart {
   type: "linechart";
   data: LineChartData[];
-  tooltipText: (c: FormatterContext, d: LineChartDatum) => string;
+  tooltipText: (c: FormatterContext, d: LineChartDatum) => TooltipContent;
 }
 
 const balances_validator = array(object({ date, balance: record(number) }));
@@ -57,8 +60,10 @@ export function balances(json: unknown): Result<LineChart, string> {
   return ok({
     type: "linechart" as const,
     data,
-    tooltipText: (c, d) =>
-      `${c.amount(d.value, d.name)}<em>${day(d.date)}</em>`,
+    tooltipText: (c, d) => [
+      domHelpers.t(c.amount(d.value, d.name)),
+      domHelpers.em(day(d.date)),
+    ],
   });
 }
 
@@ -82,8 +87,9 @@ export function commodities(
   return ok({
     type: "linechart" as const,
     data: [{ name: label, values }],
-    tooltipText(c, d) {
-      return `1 ${base} = ${c.amount(d.value, quote)}<em>${day(d.date)}</em>`;
-    },
+    tooltipText: (c, d) => [
+      domHelpers.t(`1 ${base} = ${c.amount(d.value, quote)}`),
+      domHelpers.em(day(d.date)),
+    ],
   });
 }

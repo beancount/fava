@@ -10,7 +10,7 @@ function showTooltip(target: HTMLElement): () => void {
     target.classList.remove("hidden");
   }
   tooltip.className = "keyboard-tooltip";
-  tooltip.innerHTML = target.getAttribute("data-key") || "";
+  tooltip.textContent = target.getAttribute("data-key") ?? "";
   document.body.appendChild(tooltip);
   const parentCoords = target.getBoundingClientRect();
   // Padded 10px to the left if there is space or centered otherwise
