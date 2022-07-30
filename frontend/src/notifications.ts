@@ -1,6 +1,15 @@
-const notificationList = document.createElement("div");
-notificationList.className = "notifications";
-document.body.appendChild(notificationList);
+/** The notification list div, lazily created. */
+const notificationList = (() => {
+  let value: HTMLDivElement | null = null;
+  return () => {
+    if (value === null) {
+      value = document.createElement("div");
+      value.className = "notifications";
+      document.body.appendChild(value);
+    }
+    return value;
+  };
+})();
 
 type NotificationType = "info" | "warning" | "error";
 
@@ -22,7 +31,7 @@ export function notify(
   const notification = document.createElement("li");
   notification.classList.add(cls);
   notification.appendChild(document.createTextNode(msg));
-  notificationList.append(notification);
+  notificationList().append(notification);
   notification.addEventListener("click", () => {
     notification.remove();
     callback?.();
