@@ -148,16 +148,19 @@ app.add_template_filter(serialise)
 
 
 @app.url_defaults
-def _inject_filters(endpoint: str, values: dict[str, str | None]) -> None:
+def _inject_filters(endpoint: str, values: dict[str, str]) -> None:
     if "bfile" not in values and app.url_map.is_endpoint_expecting(
         endpoint, "bfile"
     ):
-        values["bfile"] = g.beancount_file_slug
+        if g.beancount_file_slug is not None:
+            values["bfile"] = g.beancount_file_slug
     if endpoint in ["static", "index"]:
         return
     for name in ["conversion", "interval", "account", "filter", "time"]:
         if name not in values:
-            values[name] = request.args.get(name)
+            val = request.args.get(name)
+            if val is not None:
+                values[name] = val
 
 
 def static_url(filename: str) -> str:
@@ -167,13 +170,13 @@ def static_url(filename: str) -> str:
         mtime = int(file_path.stat().st_mtime)
     except FileNotFoundError:
         mtime = 0
-    return url_for("static", filename=filename, mtime=mtime)
+    return url_for("static", filename=filename, mtime=str(mtime))
 
 
 CACHED_URL_FOR = functools.lru_cache(2048)(flask_url_for)
 
 
-def url_for(endpoint: str, **values: str | int) -> str:
+def url_for(endpoint: str, **values: str) -> str:
     """A wrapper around flask.url_for that uses a cache."""
     _inject_filters(endpoint, values)
     return CACHED_URL_FOR(endpoint, **values)

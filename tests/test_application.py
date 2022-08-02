@@ -6,7 +6,6 @@ import werkzeug.routing
 import werkzeug.urls
 from beancount import __version__ as beancount_version
 from flask import Flask
-from flask import url_for
 from flask.testing import FlaskClient
 from pytest import MonkeyPatch
 
@@ -14,6 +13,7 @@ from .conftest import SnapshotFunc
 from fava import __version__ as fava_version
 from fava.application import REPORTS
 from fava.application import static_url
+from fava.application import url_for
 from fava.context import g
 
 FILTER_COMBINATIONS = [
