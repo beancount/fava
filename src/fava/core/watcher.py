@@ -1,7 +1,8 @@
 """A simple file and folder watcher."""
 from __future__ import annotations
 
-import os
+from os import stat
+from os import walk
 from typing import Iterable
 
 
@@ -40,14 +41,14 @@ class Watcher:
         latest_mtime = 0
         for path in self._files:
             try:
-                mtime = os.stat(path).st_mtime_ns
+                mtime = stat(path).st_mtime_ns
             except FileNotFoundError:
                 return True
             if mtime > latest_mtime:
                 latest_mtime = mtime
         for path in self._folders:
-            for dirpath, _, _ in os.walk(path):
-                mtime = os.stat(dirpath).st_mtime_ns
+            for dirpath, _, _ in walk(path):
+                mtime = stat(dirpath).st_mtime_ns
                 if mtime > latest_mtime:
                     latest_mtime = mtime
 

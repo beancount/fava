@@ -13,12 +13,15 @@ from typing import TYPE_CHECKING
 
 from beancount.core import realization
 from beancount.core.amount import Amount
+from beancount.core.data import Booking
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Transaction
+from beancount.core.display_context import DisplayContext
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.position import Position
 from simplejson import JSONEncoder
+from simplejson import loads
 
 from fava.core._compat import FLAG_UNREALIZED
 from fava.core.conversion import cost_or_value
@@ -31,7 +34,13 @@ from fava.util import listify
 from fava.util import pairwise
 from fava.util.date import Interval
 
-if TYPE_CHECKING:
+try:
+    from flask.json.provider import JSONProvider
+except ImportError:
+    pass
+
+if TYPE_CHECKING:  # pragma: no cover
+    from flask import Flask
     from fava.core import FilteredLedger
 
 
@@ -62,9 +71,7 @@ class FavaJSONEncoder(JSONEncoder):
 
     def default(self, o: Any) -> Any:
         # pylint: disable=too-many-return-statements
-        if isinstance(o, Decimal):
-            return float(o)
-        if isinstance(o, (date, Amount, Position)):
+        if isinstance(o, (date, Amount, Booking, DisplayContext, Position)):
             return str(o)
         if isinstance(o, (set, frozenset)):
             return list(o)
@@ -72,14 +79,32 @@ class FavaJSONEncoder(JSONEncoder):
             return o.pattern
         if is_dataclass(o):
             return {field.name: getattr(o, field.name) for field in fields(o)}
-        try:
-            return JSONEncoder.default(self, o)
-        except TypeError:
-            return str(o)
+        return JSONEncoder.default(self, o)
 
 
 ENCODER = FavaJSONEncoder()
 PRETTY_ENCODER = FavaJSONEncoder(indent=True)
+
+
+def setup_json_for_app(app: Flask) -> None:
+    """Use custom JSON encoder."""
+    if hasattr(app, "json_provider_class"):  # Flask >=2.2
+
+        class FavaJSONProvider(JSONProvider):
+            """Use custom JSON encoder and decoder."""
+
+            def dumps(
+                self, obj: Any, *, _option: Any = None, **_kwargs: Any
+            ) -> Any:
+                return ENCODER.encode(obj)
+
+            def loads(self, s: str | bytes, **_kwargs: Any) -> Any:
+                return loads(s)
+
+        app.json = FavaJSONProvider(app)
+
+    else:  # pragma: no cover
+        app.json_encoder = FavaJSONEncoder  # type: ignore
 
 
 @dataclass

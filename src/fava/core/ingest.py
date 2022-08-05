@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 import datetime
-import os
 import sys
 import traceback
-from os import path
+from os import stat
+from os.path import basename
+from os.path import exists
+from os.path import isdir
 from runpy import run_path
 from typing import Any
 from typing import NamedTuple
@@ -60,7 +62,7 @@ def file_import_info(filename: str, importer: Any) -> FileImportInfo:
     try:
         name = importer.file_name(file)
     except Exception:
-        name = path.basename(filename)
+        name = basename(filename)
 
     return FileImportInfo(importer.name(), account, date, name)
 
@@ -91,11 +93,11 @@ class IngestModule(FavaModule):
         if module_path is None:
             return
 
-        if not path.exists(module_path) or path.isdir(module_path):
+        if not exists(module_path) or isdir(module_path):
             self._error(f"File does not exist: '{module_path}'")
             return
 
-        if os.stat(module_path).st_mtime_ns == self.mtime:
+        if stat(module_path).st_mtime_ns == self.mtime:
             return
 
         try:
@@ -105,7 +107,7 @@ class IngestModule(FavaModule):
             self._error(f"Error in importer '{module_path}': {message}")
             return
 
-        self.mtime = os.stat(module_path).st_mtime_ns
+        self.mtime = stat(module_path).st_mtime_ns
         self.config = mod["CONFIG"]
         self.hooks = [extract.find_duplicate_entries]
         if "HOOKS" in mod:
@@ -136,12 +138,12 @@ class IngestModule(FavaModule):
             full_path = self.ledger.join_path(directory)
             files = list(identify.find_imports(self.config, full_path))
             for (filename, importers) in files:
-                basename = path.basename(filename)
+                base = basename(filename)
                 infos = [
                     file_import_info(filename, importer)
                     for importer in importers
                 ]
-                ret.append(FileImporters(filename, basename, infos))
+                ret.append(FileImporters(filename, base, infos))
 
         return ret
 
@@ -165,7 +167,7 @@ class IngestModule(FavaModule):
 
         if (
             self.mtime is None
-            or os.stat(self.module_path).st_mtime_ns > self.mtime
+            or stat(self.module_path).st_mtime_ns > self.mtime
         ):
             self.load_file()
 

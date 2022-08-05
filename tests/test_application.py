@@ -2,12 +2,11 @@
 from __future__ import annotations
 
 import pytest
-import werkzeug.routing
-import werkzeug.urls
 from beancount import __version__ as beancount_version
 from flask import Flask
 from flask.testing import FlaskClient
 from pytest import MonkeyPatch
+from werkzeug.urls import url_join
 
 from .conftest import SnapshotFunc
 from fava import __version__ as fava_version
@@ -126,7 +125,7 @@ def test_default_path_redirection(
         result = test_client.get(url)
         get_url = result.headers.get("Location", "")
         # pre Werkzeug 2.1:
-        expect_url = werkzeug.urls.url_join("http://localhost/", expect)
+        expect_url = url_join("http://localhost/", expect)
         assert result.status_code == 302
         assert get_url in (expect, expect_url)
 
@@ -158,7 +157,7 @@ def test_jump_handler(
     with app.test_request_context():
         get_url = result.headers.get("Location", "")
         # pre Werkzeug 2.1:
-        expect_url = werkzeug.urls.url_join("http://localhost/", expect)
+        expect_url = url_join("http://localhost/", expect)
         assert result.status_code == 302
         assert get_url in (expect, expect_url)
 

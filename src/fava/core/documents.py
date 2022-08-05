@@ -1,8 +1,12 @@
 """Document path related helpers."""
 from __future__ import annotations
 
-import os
-from os import path
+from os import altsep
+from os import sep
+from os.path import abspath
+from os.path import dirname
+from os.path import join
+from os.path import normpath
 from typing import TYPE_CHECKING
 
 from fava.helpers import FavaAPIException
@@ -29,7 +33,7 @@ def is_document_or_import_file(filename: str, ledger: FavaLedger) -> bool:
     ]
     if filename in filenames:
         return True
-    file_path = path.abspath(filename)
+    file_path = abspath(filename)
     if any(file_path.startswith(d) for d in import_directories):
         return True
     return False
@@ -56,13 +60,13 @@ def filepath_in_document_folder(
     if account not in ledger.attributes.accounts:
         raise FavaAPIException(f"Not a valid account: '{account}'")
 
-    for sep in os.sep, os.altsep:
-        if sep:
-            filename = filename.replace(sep, " ")
+    for separator in sep, altsep:
+        if separator:
+            filename = filename.replace(separator, " ")
 
-    return path.normpath(
-        path.join(
-            path.dirname(ledger.beancount_file_path),
+    return normpath(
+        join(
+            dirname(ledger.beancount_file_path),
             documents_folder,
             *account.split(":"),
             filename,

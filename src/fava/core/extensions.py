@@ -1,8 +1,9 @@
 """Fava extensions"""
 from __future__ import annotations
 
-import inspect
-import os
+from inspect import getfile
+from os.path import dirname
+from os.path import join
 from typing import TYPE_CHECKING
 
 from beancount.core.data import Custom
@@ -31,7 +32,7 @@ class ExtensionModule(FavaModule):
 
         for extension in _extension_entries:
             extensions, errors = find_extensions(
-                os.path.dirname(self.ledger.beancount_file_path), extension
+                dirname(self.ledger.beancount_file_path), extension
             )
             all_extensions.extend(extensions)
             self.ledger.errors.extend(errors)
@@ -72,8 +73,8 @@ class ExtensionModule(FavaModule):
         """
         for ext_class, ext in self._instances.items():
             if ext_class.__qualname__ == name:
-                extension_dir = os.path.dirname(inspect.getfile(ext_class))
-                template_path = os.path.join(
+                extension_dir = dirname(getfile(ext_class))
+                template_path = join(
                     extension_dir,
                     "templates",
                     f"{ext_class.__qualname__}.html",

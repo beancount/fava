@@ -1,13 +1,12 @@
 """Some small utility functions."""
 from __future__ import annotations
 
-import functools
-import itertools
 import logging
-import os
 import re
 import time
-import unicodedata
+from functools import wraps
+from itertools import tee
+from os.path import basename
 from pathlib import Path
 from typing import Any
 from typing import Callable
@@ -16,13 +15,14 @@ from typing import Iterable
 from typing import Iterator
 from typing import TYPE_CHECKING
 from typing import TypeVar
+from unicodedata import normalize
 
 from flask import abort
 from flask import send_file
 from flask.wrappers import Response
 from werkzeug.urls import url_quote
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from _typeshed.wsgi import StartResponse
     from _typeshed.wsgi import WSGIEnvironment
 
@@ -54,7 +54,7 @@ def listify(
 ) -> Callable[..., list[Item]]:
     """Decorator to make generator function return a list."""
 
-    @functools.wraps(func)
+    @wraps(func)
     def _wrapper(*args: Any, **kwargs: Any) -> list[Item]:
         return list(func(*args, **kwargs))
 
@@ -66,7 +66,7 @@ def timefunc(
 ) -> Any:  # pragma: no cover - only used for debugging so far
     """Decorator to time function for debugging."""
 
-    @functools.wraps(func)
+    @wraps(func)
     def _wrapper(*args: Any, **kwargs: Any) -> Any:
         start = time.time()
         result = func(*args, **kwargs)
@@ -79,7 +79,7 @@ def timefunc(
 
 def pairwise(iterable: Iterable[Item]) -> Iterator[tuple[Item, Item]]:
     "s -> (s0,s1), (s1,s2), (s2, s3), ..."
-    left, right = itertools.tee(iterable)
+    left, right = tee(iterable)
     next(right, None)
     return zip(left, right)
 
@@ -109,7 +109,7 @@ def slugify(string: str) -> str:
         characters.
 
     """
-    string = unicodedata.normalize("NFKC", string)
+    string = normalize("NFKC", string)
     # remove all non-word characters (except '-')
     string = re.sub(r"[^\s\w-]", "", string).strip().lower()
     # replace spaces (or groups of spaces and dashes) with dashes
@@ -134,7 +134,7 @@ def send_file_inline(filename: str) -> Response:
         response: Response = send_file(filename)
     except FileNotFoundError:
         return abort(404)
-    basename = os.path.basename(filename)
-    cont_disp = f"inline; filename*=UTF-8''{url_quote(basename)}"
+    base = basename(filename)
+    cont_disp = f"inline; filename*=UTF-8''{url_quote(base)}"
     response.headers["Content-Disposition"] = cont_disp
     return response

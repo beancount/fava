@@ -19,7 +19,7 @@ from fava.core.conversion import cost_or_value
 from fava.core.inventory import CounterInventory
 from fava.core.inventory import SimpleCounterInventory
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from fava.util.typing import BeancountOptions
 
 

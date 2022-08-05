@@ -176,7 +176,7 @@ def test_api_source_put(
         json={
             "source": "asdf" + payload,
             "sha256sum": sha256sum,
-            "file_path": path,
+            "file_path": str(path),
         },
     )
     sha256sum = hashlib.sha256(path.read_bytes()).hexdigest()
@@ -188,7 +188,11 @@ def test_api_source_put(
     # write original source file
     result = test_client.put(
         url,
-        json={"source": payload, "sha256sum": sha256sum, "file_path": path},
+        json={
+            "source": payload,
+            "sha256sum": sha256sum,
+            "file_path": str(path),
+        },
     )
     assert result.status_code == 200
     assert path.read_text("utf-8") == payload

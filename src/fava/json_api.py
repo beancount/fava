@@ -6,10 +6,10 @@ interface for asynchronous functionality.
 # pylint: disable=no-name-in-module
 from __future__ import annotations
 
-import functools
 import os
 import shutil
 from dataclasses import dataclass
+from functools import wraps
 from inspect import Parameter
 from inspect import signature
 from os import path
@@ -127,7 +127,7 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     validator = validate_func_arguments(func)
 
     @json_api.route(f"/{name}", methods=[method])
-    @functools.wraps(func)
+    @wraps(func)
     def _wrapper() -> Response:
         if validator is not None:
             if method == "put":

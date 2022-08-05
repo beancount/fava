@@ -7,7 +7,7 @@ from beancount.core.data import Entries
 from beancount.core.display_context import DisplayContext
 
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from typing import TypedDict
 
     from fava.helpers import BeancountError

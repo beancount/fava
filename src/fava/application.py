@@ -13,14 +13,15 @@ Attributes:
 """
 from __future__ import annotations
 
-import datetime
-import functools
-import threading
+from datetime import date
+from datetime import datetime
+from functools import lru_cache
 from io import BytesIO
+from threading import Lock
 from typing import Any
+from typing import TYPE_CHECKING
 
 import markdown2  # type: ignore
-import werkzeug.urls
 from beancount import __version__ as beancount_version
 from beancount.core.account import ACCOUNT_RE
 from beancount.utils.text_utils import replace_numbers
@@ -32,10 +33,12 @@ from flask import render_template_string
 from flask import request
 from flask import send_file
 from flask import url_for as flask_url_for
-from flask.wrappers import Response
 from flask_babel import Babel  # type: ignore
 from flask_babel import get_translations
 from markupsafe import Markup
+from werkzeug.urls import url_encode
+from werkzeug.urls import url_parse
+from werkzeug.urls import url_unparse
 from werkzeug.utils import secure_filename
 
 from fava import __version__ as fava_version
@@ -43,7 +46,7 @@ from fava import LANGUAGES
 from fava import template_filters
 from fava.context import g
 from fava.core import FavaLedger
-from fava.core.charts import FavaJSONEncoder
+from fava.core.charts import setup_json_for_app
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIException
@@ -58,6 +61,11 @@ from fava.util.date import Interval
 from fava.util.excel import HAVE_EXCEL
 
 
+if TYPE_CHECKING:  # pragma: no cover
+    from flask.wrappers import Response
+    from werkzeug import Response as WerkzeugResponse
+
+
 STATIC_FOLDER = resource_path("static")
 setup_logging()
 app = Flask(  # pylint: disable=invalid-name
@@ -67,7 +75,7 @@ app = Flask(  # pylint: disable=invalid-name
 )
 app.register_blueprint(json_api, url_prefix="/<bfile>/api")
 
-app.json_encoder = FavaJSONEncoder  # type: ignore
+setup_json_for_app(app)
 jinja_extensions = app.jinja_options.setdefault("extensions", [])
 jinja_extensions.append("jinja2.ext.do")
 jinja_extensions.append("jinja2.ext.loopcontrols")
@@ -95,7 +103,7 @@ REPORTS = [
 ]
 
 
-LOAD_FILE_LOCK = threading.Lock()
+LOAD_FILE_LOCK = Lock()
 
 
 def ledger_slug(ledger: FavaLedger) -> str:
@@ -173,7 +181,7 @@ def static_url(filename: str) -> str:
     return url_for("static", filename=filename, mtime=str(mtime))
 
 
-CACHED_URL_FOR = functools.lru_cache(2048)(flask_url_for)
+CACHED_URL_FOR = lru_cache(2048)(flask_url_for)
 
 
 def url_for(endpoint: str, **values: str) -> str:
@@ -199,7 +207,7 @@ def translations() -> Any:
 
 
 app.add_template_global(static_url, "static_url")
-app.add_template_global(datetime.date.today, "today")
+app.add_template_global(date.today, "today")
 app.add_template_global(url_for, "url_for")
 app.add_template_global(url_for_source, "url_for_source")
 app.add_template_global(translations, "translations")
@@ -230,8 +238,8 @@ def _perform_global_filters() -> None:
 
 @app.after_request
 def _incognito(
-    response: werkzeug.wrappers.Response,
-) -> werkzeug.wrappers.Response:
+    response: WerkzeugResponse,
+) -> WerkzeugResponse:
     """Replace all numbers with 'X'."""
     if app.config.get("INCOGNITO") and response.content_type.startswith(
         "text/html"
@@ -277,7 +285,7 @@ def fava_api_exception(error: FavaAPIException) -> str:
 
 @app.route("/")
 @app.route("/<bfile>/")
-def index() -> werkzeug.wrappers.Response:
+def index() -> WerkzeugResponse:
     """Redirect to the Income Statement (of the given or first file)."""
     if not g.beancount_file_slug:
         g.beancount_file_slug = next(iter(app.config["LEDGERS"]))
@@ -368,7 +376,7 @@ def download_query(result_format: str) -> Any:
 @app.route("/<bfile>/download-journal/")
 def download_journal() -> Any:
     """Download a Journal file."""
-    now = datetime.datetime.now().replace(microsecond=0)
+    now = datetime.now().replace(microsecond=0)
     filename = f"journal_{now.isoformat()}.beancount"
     data = BytesIO(bytes(render_template("beancount_file"), "utf8"))
     return send_file(data, as_attachment=True, download_name=filename)
@@ -400,7 +408,7 @@ def help_page(page_slug: str) -> str:
 
 
 @app.route("/jump")
-def jump() -> werkzeug.wrappers.Response:
+def jump() -> WerkzeugResponse:
     """Redirect back to the referer, replacing some parameters.
 
     This is useful for sidebar links, e.g. a link ``/jump?time=year``
@@ -411,7 +419,7 @@ def jump() -> werkzeug.wrappers.Response:
     ``/example/page?param1=abc&param2=456``.
 
     """
-    url = werkzeug.urls.url_parse(request.referrer)
+    url = url_parse(request.referrer)
     qs_dict = url.decode_query()
     for key, values in request.args.lists():
         if values == [""]:
@@ -422,7 +430,5 @@ def jump() -> werkzeug.wrappers.Response:
         else:
             qs_dict.setlist(key, values)
 
-    redirect_url = url.replace(
-        query=werkzeug.urls.url_encode(qs_dict, sort=True)
-    )
-    return redirect(werkzeug.urls.url_unparse(redirect_url))
+    redirect_url = url.replace(query=url_encode(qs_dict, sort=True))
+    return redirect(url_unparse(redirect_url))

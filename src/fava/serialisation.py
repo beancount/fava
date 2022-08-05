@@ -10,7 +10,7 @@ This is not intended to work well enough for full roundtrips yet.
 from __future__ import annotations
 
 import datetime
-import functools
+from functools import singledispatch
 from typing import Any
 
 from beancount.core.amount import Amount
@@ -52,7 +52,7 @@ ENTRY_TYPES = (
 )
 
 
-@functools.singledispatch
+@singledispatch
 def serialise(entry: Directive | Posting) -> Any:
     """Serialise an entry or posting."""
     assert isinstance(entry, ENTRY_TYPES), f"Unsupported object {entry}"

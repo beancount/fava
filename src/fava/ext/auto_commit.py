@@ -7,16 +7,17 @@ really does hooks at the moment, works.
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
-import os
-import subprocess
+from os.path import dirname
+from subprocess import call
+from subprocess import DEVNULL
 
 from fava.ext import FavaExtensionBase
 
 
 class AutoCommit(FavaExtensionBase):
     def _run(self, args):
-        cwd = os.path.dirname(self.ledger.beancount_file_path)
-        subprocess.call(args, cwd=cwd, stdout=subprocess.DEVNULL)
+        cwd = dirname(self.ledger.beancount_file_path)
+        call(args, cwd=cwd, stdout=DEVNULL)
 
     def after_write_source(self, path, _):
         message = "autocommit: file saved"

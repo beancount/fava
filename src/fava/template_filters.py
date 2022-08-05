@@ -5,12 +5,12 @@ All functions in this module will be automatically added as template filters.
 from __future__ import annotations
 
 import datetime
-import os
 import re
-import unicodedata
+from os.path import basename as path_basename
 from typing import Any
 from typing import MutableMapping
 from typing import TypeVar
+from unicodedata import normalize
 
 from beancount.core import compare
 from beancount.core import realization
@@ -143,7 +143,7 @@ def should_show(account: TreeNode) -> bool:
 
 def basename(file_path: str) -> str:
     """Return the basename of a filepath."""
-    return unicodedata.normalize("NFC", os.path.basename(file_path))
+    return normalize("NFC", path_basename(file_path))
 
 
 def format_errormsg(message: str) -> Markup:

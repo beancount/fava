@@ -4,6 +4,7 @@ from __future__ import annotations
 import copy
 import datetime
 import warnings
+from datetime import date
 from functools import lru_cache
 from functools import wraps
 from operator import itemgetter
@@ -68,12 +69,13 @@ from fava.core.tree import Tree
 from fava.core.watcher import Watcher
 from fava.helpers import BeancountError
 from fava.helpers import FavaAPIException
-from fava.util import date
 from fava.util import pairwise
+from fava.util.date import Interval
+from fava.util.date import interval_ends
 from fava.util.typing import BeancountOptions
 
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.prices import PriceMap
 
 
@@ -156,8 +158,8 @@ class FilteredLedger:
         "_date_first",
         "_date_last",
     ]
-    _date_first: datetime.date | None
-    _date_last: datetime.date | None
+    _date_first: date | None
+    _date_last: date | None
 
     def __init__(
         self,
@@ -187,7 +189,7 @@ class FilteredLedger:
             self._date_last = self.filters.time.end_date
 
     @property
-    def end_date(self) -> datetime.date | None:
+    def end_date(self) -> date | None:
         """The date to use for prices."""
         if self.filters.time:
             return self.filters.time.end_date
@@ -200,13 +202,11 @@ class FilteredLedger:
         tree.cap(self.ledger.options, self.ledger.fava_options.unrealized)
         return tree
 
-    def interval_ends(
-        self, interval: date.Interval
-    ) -> Iterable[datetime.date]:
+    def interval_ends(self, interval: Interval) -> Iterable[date]:
         """Generator yielding dates corresponding to interval boundaries."""
         if not self._date_first or not self._date_last:
             return []
-        return date.interval_ends(self._date_first, self._date_last, interval)
+        return interval_ends(self._date_first, self._date_last, interval)
 
     @property
     def documents(self) -> list[Document]:
@@ -221,9 +221,7 @@ class FilteredLedger:
 
         return events
 
-    def prices(
-        self, base: str, quote: str
-    ) -> list[tuple[datetime.date, Decimal]]:
+    def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
         """List all prices."""
         all_prices = get_all_prices(self.ledger.price_map, (base, quote))
 
@@ -233,10 +231,10 @@ class FilteredLedger:
             and self.filters.time.end_date is not None
         ):
             return [
-                (date, price)
-                for date, price in all_prices
+                (date_, price)
+                for date_, price in all_prices
                 if self.filters.time.begin_date
-                <= date
+                <= date_
                 < self.filters.time.end_date
             ]
         return all_prices
@@ -255,9 +253,7 @@ class FilteredLedger:
             return (
                 self.ledger.accounts[account_name].close_date < self._date_last
             )
-        return (
-            self.ledger.accounts[account_name].close_date != datetime.date.max
-        )
+        return self.ledger.accounts[account_name].close_date != date.max
 
 
 # pylint: disable=too-many-instance-attributes,too-many-public-methods
@@ -454,13 +450,10 @@ class FavaLedger:
     def interval_balances(
         self,
         filtered: FilteredLedger,
-        interval: date.Interval,
+        interval: Interval,
         account_name: str,
         accumulate: bool = False,
-    ) -> tuple[
-        list[realization.RealAccount],
-        list[tuple[datetime.date, datetime.date]],
-    ]:
+    ) -> tuple[list[realization.RealAccount], list[tuple[date, date]]]:
         """Balances by interval.
 
         Arguments:
@@ -488,7 +481,7 @@ class FavaLedger:
                 list(
                     iter_entry_dates(
                         filtered.entries,
-                        datetime.date.min if accumulate else begin_date,
+                        date.min if accumulate else begin_date,
                         end_date,
                     )
                 ),
@@ -731,25 +724,23 @@ class FavaLedger:
             True if the account is closed before the end date of the current
             time filter.
         """
-        return self.accounts[account_name].close_date != datetime.date.max
+        return self.accounts[account_name].close_date != date.max
 
     @property  # type: ignore
     @_deprecated_unfiltered
-    def end_date(self) -> datetime.date | None:
+    def end_date(self) -> date | None:
         """The date to use for prices."""
         return None
 
     @_deprecated_unfiltered
-    def interval_ends(
-        self, interval: date.Interval
-    ) -> Iterable[datetime.date]:
+    def interval_ends(self, interval: Interval) -> Iterable[date]:
         """Generator yielding dates corresponding to interval boundaries."""
         first, last = get_min_max_dates(self.entries, (Transaction, Price))
         if last:
             last = last + datetime.timedelta(1)
         if not first or not last:
             return []
-        return date.interval_ends(first, last, interval)
+        return interval_ends(first, last, interval)
 
     @property  # type: ignore
     @_deprecated_unfiltered
