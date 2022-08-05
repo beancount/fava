@@ -3,17 +3,13 @@ from __future__ import annotations
 
 import copy
 import datetime
-import warnings
 from datetime import date
 from functools import lru_cache
-from functools import wraps
 from operator import itemgetter
 from os.path import basename
 from os.path import dirname
 from os.path import join
 from os.path import normpath
-from typing import Any
-from typing import Callable
 from typing import Iterable
 from typing import TYPE_CHECKING
 
@@ -77,24 +73,6 @@ from fava.util.typing import BeancountOptions
 
 if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.prices import PriceMap
-
-
-def _deprecated_unfiltered(wrapped: Callable[..., Any]) -> Callable[..., Any]:
-    """Warn on deprecated attributes of the unfiltered ledger."""
-
-    name = wrapped.__name__
-
-    @wraps(wrapped)
-    def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
-        warnings.warn(
-            f"FavaLedger.{name} is deprecated and does not filter anymore."
-            f"Please use FilteredLedger.{name} instead.",
-            DeprecationWarning,
-        )
-        print(f"FavaLedger.{name} has been deprecated.")
-        return wrapped(self, *args, **kwargs)
-
-    return wrapper
 
 
 class Filters:
@@ -686,73 +664,3 @@ class FavaLedger:
             groups.setdefault(entry.__class__.__name__, []).append(entry)
 
         return sorted(list(groups.items()), key=itemgetter(0))
-
-    # remove these deprecated functions and properties at some point
-
-    @property  # type: ignore
-    @_deprecated_unfiltered
-    def filters(self) -> Any:
-        """Filters."""
-        return Filters(self.options, self.fava_options)
-
-    @property  # type: ignore
-    @_deprecated_unfiltered
-    def entries(self) -> Any:
-        """Entries."""
-        return self.all_entries
-
-    @property  # type: ignore
-    @_deprecated_unfiltered
-    def root_account(self) -> Any:
-        """Root account."""
-        return self.all_root_account
-
-    @property  # type: ignore
-    @_deprecated_unfiltered
-    def root_tree(self) -> Any:
-        """Root tree."""
-        return Tree(self.entries)
-
-    @_deprecated_unfiltered
-    def account_is_closed(self, account_name: str) -> bool:
-        """Check if the account is closed.
-
-        Args:
-            account_name: An account name.
-
-        Returns:
-            True if the account is closed before the end date of the current
-            time filter.
-        """
-        return self.accounts[account_name].close_date != date.max
-
-    @property  # type: ignore
-    @_deprecated_unfiltered
-    def end_date(self) -> date | None:
-        """The date to use for prices."""
-        return None
-
-    @_deprecated_unfiltered
-    def interval_ends(self, interval: Interval) -> Iterable[date]:
-        """Generator yielding dates corresponding to interval boundaries."""
-        first, last = get_min_max_dates(self.entries, (Transaction, Price))
-        if last:
-            last = last + datetime.timedelta(1)
-        if not first or not last:
-            return []
-        return interval_ends(first, last, interval)
-
-    @property  # type: ignore
-    @_deprecated_unfiltered
-    def documents(self) -> list[Document]:
-        """All currently filtered documents."""
-        return [e for e in self.entries if isinstance(e, Document)]
-
-    @_deprecated_unfiltered
-    def events(self, event_type: str | None = None) -> list[Event]:
-        """List events (possibly filtered by type)."""
-        events = [e for e in self.entries if isinstance(e, Event)]
-        if event_type:
-            return [event for event in events if event.type == event_type]
-
-        return events
