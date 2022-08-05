@@ -5,6 +5,7 @@ import datetime
 import re
 from typing import TYPE_CHECKING
 
+from fava.core.charts import ENCODER
 from fava.core.fava_options import InsertEntryOption
 from fava.core.fava_options import parse_options
 from fava.util.date import FiscalYearEnd
@@ -31,6 +32,9 @@ def test_fava_options(load_doc: LoaderResult) -> None:
 
     entries, _, _ = load_doc
     options, errors = parse_options(entries)  # type: ignore
+
+    # The options can be encoded to JSON.
+    ENCODER.encode(options)
 
     assert len(errors) == 3
 
