@@ -40,11 +40,11 @@
     <aside>{% include "_aside.html" %}</aside>
     <article>
       {%- endif %}
-      <svelte-component type="charts"></svelte-component>
       {% block content %}
       {% if content %}
       {{ content }}
       {% else %}
+      <svelte-component type="charts"></svelte-component>
       {% include active_page + '.html' %}
       {% endif %}
       {% endblock %}
