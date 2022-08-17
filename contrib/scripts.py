@@ -87,6 +87,7 @@ def upload_translations() -> None:
             "https://api.poeditor.com/v2/projects/upload",
             data=data,
             files=files,
+            timeout=10,
         )
         echo("Done: " + str(request.json()["result"]["terms"]))
 
@@ -106,10 +107,10 @@ def download_from_poeditor(language: str, token: str) -> None:
         "type": "po",
     }
     request = requests.post(
-        "https://api.poeditor.com/v2/projects/export", data=data
+        "https://api.poeditor.com/v2/projects/export", data=data, timeout=10
     )
     url = request.json()["result"]["url"]
-    content = requests.get(url).content
+    content = requests.get(url, timeout=10).content
     folder = FAVA_PATH / "translations" / language / "LC_MESSAGES"
     if not folder.exists():
         folder.mkdir(parents=True)
