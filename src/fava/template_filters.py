@@ -86,6 +86,11 @@ def format_date(date: datetime.date) -> str:
     return date.strftime("%b %Y")
 
 
+def minus_one_day(date: datetime.date) -> datetime.date:
+    """Subtract one day of the given date"""
+    return date - datetime.timedelta(days=1)
+
+
 def hash_entry(entry: Directive) -> str:
     """Hash an entry."""
     return compare.hash_entry(entry)
@@ -179,6 +184,7 @@ FILTERS = [
     format_errormsg,
     get_or_create,
     hash_entry,
+    minus_one_day,
     remove_keys,
     should_show,
     units,

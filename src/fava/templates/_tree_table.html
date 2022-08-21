@@ -89,9 +89,9 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
         <span class="account-cell"><button type="button" class="link expand-all hidden" title="{{ _('Expand all accounts') }}">{{ _('Expand all') }}</button></span>
         {% for begin_date, end_date in dates %}
             {% if accumulate %}
-                {% set time_filter = dates[0][0]|string + ' - ' + end_date|string %}
+                {% set time_filter = dates[0][0]|string + ' - ' + end_date|minus_one_day|string %}
             {% else %}
-                {% set time_filter = begin_date|string + ' - ' + end_date|string %}
+                {% set time_filter = begin_date|string + ' - ' + end_date|minus_one_day|string %}
             {% endif %}
 
             <span class="num other"><a href="{{ url_for('account', name=account_name, time=time_filter) }}">{{ begin_date|format_date }}</a></span>
@@ -114,7 +114,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
         {% set balance = current_account.balance|cost_or_value(end_date) %}
         {% set balance_children = current_account|balance_children|cost_or_value(end_date) %}
         <span class="num other{{ ' has-balance' if (budget or not balance.is_empty()) else '' }}">
-            <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
+            <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|minus_one_day|string) }}">
             {% for pos in balance %}
                 <span class="balance">
                     {{ render_budget(budget, pos.units.currency, pos.units.number) }}
