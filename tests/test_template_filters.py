@@ -20,6 +20,7 @@ from fava.template_filters import basename
 from fava.template_filters import collapse_account
 from fava.template_filters import format_currency
 from fava.template_filters import format_date
+from fava.template_filters import format_date_filter
 from fava.template_filters import format_errormsg
 from fava.template_filters import get_or_create
 from fava.template_filters import remove_keys
@@ -33,16 +34,18 @@ def test_remove_keys() -> None:
 
 
 @pytest.mark.parametrize(
-    "interval,output",
+    "interval,output,output_filter",
     [
-        ("year", "2012"),
-        ("quarter", "2012Q4"),
-        ("month", "Dec 2012"),
-        ("week", "2012W51"),
-        ("day", "2012-12-20"),
+        ("year", "2012", "2012"),
+        ("quarter", "2012Q4", "2012-Q4"),
+        ("month", "Dec 2012", "2012-12"),
+        ("week", "2012W51", "2012-W51"),
+        ("day", "2012-12-20", "2012-12-20"),
     ],
 )
-def test_format_date(app: Flask, interval: str, output: str) -> None:
+def test_format_date(
+    app: Flask, interval: str, output: str, output_filter: str
+) -> None:
     test_date = date(2012, 12, 20)
     url = (
         f"/long-example/?interval={interval}" if interval else "/long-example"
@@ -50,6 +53,7 @@ def test_format_date(app: Flask, interval: str, output: str) -> None:
     with app.test_request_context(url):
         app.preprocess_request()
         assert format_date(test_date) == output
+        assert format_date_filter(test_date) == output_filter
 
 
 def test_format_currency(app: Flask) -> None:

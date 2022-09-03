@@ -27,7 +27,6 @@ from fava.core.conversion import cost
 from fava.core.conversion import cost_or_value as cost_or_value_without_context
 from fava.core.conversion import units
 from fava.core.tree import TreeNode
-from fava.util.date import Interval
 
 MappingValue = TypeVar("MappingValue")
 
@@ -74,16 +73,12 @@ def format_currency(
 
 def format_date(date: datetime.date) -> str:
     """Format a date according to the current interval."""
-    if g.interval is Interval.YEAR:
-        return date.strftime("%Y")
-    if g.interval is Interval.QUARTER:
-        return f"{date.year}Q{(date.month - 1) // 3 + 1}"
-    if g.interval is Interval.WEEK:
-        return date.strftime("%YW%W")
-    if g.interval is Interval.DAY:
-        return date.strftime("%Y-%m-%d")
-    assert g.interval is Interval.MONTH
-    return date.strftime("%b %Y")
+    return g.interval.format_date(date)
+
+
+def format_date_filter(date: datetime.date) -> str:
+    """Format a date according to the current interval for the time filter."""
+    return g.interval.format_date_filter(date)
 
 
 def hash_entry(entry: Directive) -> str:
@@ -176,6 +171,7 @@ FILTERS = [
     flag_to_type,
     format_currency,
     format_date,
+    format_date_filter,
     format_errormsg,
     get_or_create,
     hash_entry,

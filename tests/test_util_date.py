@@ -32,6 +32,26 @@ def _to_date(string: str) -> date:
 
 
 @pytest.mark.parametrize(
+    "input_date_string,interval,expect,expect_filter",
+    [
+        ("2016-01-01", Interval.DAY, "2016-01-01", "2016-01-01"),
+        ("2016-01-04", Interval.WEEK, "2016W01", "2016-W01"),
+        ("2016-01-04", Interval.MONTH, "Jan 2016", "2016-01"),
+        ("2016-01-04", Interval.QUARTER, "2016Q1", "2016-Q1"),
+        ("2016-01-04", Interval.YEAR, "2016", "2016"),
+    ],
+)
+def test_interval_format(
+    input_date_string: str, interval: Interval, expect: str, expect_filter: str
+) -> None:
+    assert interval.format_date(_to_date(input_date_string)) == expect
+    assert (
+        interval.format_date_filter(_to_date(input_date_string))
+        == expect_filter
+    )
+
+
+@pytest.mark.parametrize(
     "input_date_string,interval,expect",
     [
         ("2016-01-01", Interval.DAY, "2016-01-02"),

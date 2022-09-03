@@ -75,6 +75,32 @@ class Interval(enum.Enum):
         except KeyError:
             return Interval.MONTH
 
+    def format_date(self, date: datetime.date) -> str:
+        """Format a date for this interval for human consumption."""
+        if self is Interval.YEAR:
+            return date.strftime("%Y")
+        if self is Interval.QUARTER:
+            return f"{date.year}Q{(date.month - 1) // 3 + 1}"
+        if self is Interval.WEEK:
+            return date.strftime("%YW%W")
+        if self is Interval.DAY:
+            return date.strftime("%Y-%m-%d")
+        assert self is Interval.MONTH
+        return date.strftime("%b %Y")
+
+    def format_date_filter(self, date: datetime.date) -> str:
+        """Format a date for this interval for the Fava time filter."""
+        if self is Interval.YEAR:
+            return date.strftime("%Y")
+        if self is Interval.QUARTER:
+            return f"{date.year}-Q{(date.month - 1) // 3 + 1}"
+        if self is Interval.WEEK:
+            return date.strftime("%Y-W%W")
+        if self is Interval.DAY:
+            return date.strftime("%Y-%m-%d")
+        assert self is Interval.MONTH
+        return date.strftime("%Y-%m")
+
 
 def get_next_interval(
     date: datetime.date, interval: Interval
