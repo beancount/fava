@@ -60,7 +60,7 @@ class QueryShell(BQLShell, FavaModule):
         self.queries = self.ledger.all_entries_by_type.Query
 
     def add_help(self) -> None:
-        "Attach help functions for each of the parsed token handlers."
+        """Attach help functions for each of the parsed token handlers."""
         for attrname, func in BQLShell.__dict__.items():
             if attrname[:3] != "on_":
                 continue
@@ -114,6 +114,7 @@ class QueryShell(BQLShell, FavaModule):
         """Run a query.
 
         Arguments:
+            entries: The entries to run the query on.
             query: A query string.
 
         Returns:
@@ -158,6 +159,7 @@ class QueryShell(BQLShell, FavaModule):
         """Get query result as file.
 
         Arguments:
+            entries: The entries to run the query on.
             query_string: A string, the query to run.
             result_format: The file format to save to.
 
