@@ -114,7 +114,7 @@ Hold Ctrl or Cmd while clicking to expand one level.') }}">
         {% set balance = current_account.balance|cost_or_value(end_date) %}
         {% set balance_children = current_account|balance_children|cost_or_value(end_date) %}
         <span class="num other{{ ' has-balance' if (budget or not balance.is_empty()) else '' }}">
-            <a href="{{ url_for('account', name=account.account, time=begin_date|string + ' - ' + end_date|string) }}">
+            <a href="{{ url_for('account', name=account.account, time=begin_date|format_date_filter) }}">
             {% for pos in balance %}
                 <span class="balance">
                     {{ render_budget(budget, pos.units.currency, pos.units.number) }}
