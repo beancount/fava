@@ -20,10 +20,10 @@ def test_render_diff_and_number(app: Flask, snapshot: SnapshotFunc) -> None:
         )
 
         for invert in [False, True]:
-            balance = CounterInventory({"EUR": Decimal(12)})  # type: ignore
-            cost = CounterInventory({"EUR": Decimal(10)})  # type: ignore
+            balance = CounterInventory({"EUR": Decimal(12)})
+            cost = CounterInventory({"EUR": Decimal(10)})
             snapshot(macro(balance, cost, "EUR", invert))
         for invert in [False, True]:
-            balance = CounterInventory({"EUR": Decimal(10)})  # type: ignore
-            cost = CounterInventory({"EUR": Decimal(12)})  # type: ignore
+            balance = CounterInventory({"EUR": Decimal(10)})
+            cost = CounterInventory({"EUR": Decimal(12)})
             snapshot(macro(balance, cost, "EUR", invert))
