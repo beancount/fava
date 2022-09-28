@@ -26,7 +26,7 @@
           <ul>
             {% for file_slug, file_ledger in config['LEDGERS'].items() %}
             <li>
-              <a{% if file_slug == g.beancount_file_slug %} class="active"{% endif %} href="{{ url_for('report', report_name='income_statement', bfile=file_slug) }}" data-remote>{{ file_ledger.options.title or 'fava' }}</a>
+              <a{% if file_slug == g.beancount_file_slug %} class="active"{% endif %} href="{{ url_for('index', bfile=file_slug) }}" data-remote>{{ file_ledger.options.title or 'fava' }}</a>
             </li>
             {% endfor %}
           </ul>
