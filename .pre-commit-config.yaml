@@ -29,8 +29,8 @@ repos:
             entry: prettier --write --list-different --ignore-unknown
             additional_dependencies:
                 - "prettier@2.7.1"
-                - "prettier-plugin-svelte@2.7.1"
-                - "svelte@3.50.1"
+                - "prettier-plugin-svelte@2.8.0"
+                - "svelte@3.51.0"
           - id: stylelint
             name: stylelint
             language: node
