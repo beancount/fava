@@ -6,7 +6,6 @@
 
   import { ctx, formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
-  import router from "../router";
 
   import { sunburstScale } from "./helpers";
   import type {
@@ -60,19 +59,20 @@
   </text>
   <text class="balance" dy="1.2em" text-anchor="middle">{currentBalance}</text>
   {#each leaves as d}
-    <path
-      on:click={() => router.navigate(urlForAccount(d.data.account))}
-      on:mouseover={() => {
-        current = d;
-      }}
-      on:focus={() => {
-        current = d;
-      }}
-      class:half={current && !currentAccount.startsWith(d.data.account)}
-      fill-rule="evenodd"
-      fill={$sunburstScale(d.data.account)}
-      d={arcShape(d) ?? undefined}
-    />
+    <a href={urlForAccount(d.data.account)}>
+      <path
+        on:mouseover={() => {
+          current = d;
+        }}
+        on:focus={() => {
+          current = d;
+        }}
+        class:half={current && !currentAccount.startsWith(d.data.account)}
+        fill-rule="evenodd"
+        fill={$sunburstScale(d.data.account)}
+        d={arcShape(d) ?? undefined}
+      />
+    </a>
   {/each}
 </g>
 

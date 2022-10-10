@@ -144,7 +144,7 @@ a:visited {
 }
 
 a:hover,
-a:focus {
+a:focus-visible {
   color: var(--link-hover-color);
 }
 
@@ -153,6 +153,10 @@ a:focus,
 a img {
   border: 0;
   outline: none;
+}
+
+a:focus-visible {
+  outline: var(--link-color) dotted 2px;
 }
 
 /* fake fieldsets to work around browser bugs with <fieldset> */

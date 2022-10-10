@@ -4,14 +4,16 @@ import { derived, get } from "svelte/store";
 
 import { currentTimeFilterDateFormat } from "../format";
 import { accounts, currencies_sorted, operating_currency } from "../stores";
-import { time_filter } from "../stores/filters";
 
 /**
  * Set the time filter to the given value (formatted according to the current interval).
  * @param date - a date.
+ * @returns A URL for the given interval.
  */
-export function setTimeFilter(date: Date): void {
-  time_filter.set(get(currentTimeFilterDateFormat)(date));
+export function urlForTimeFilter(date: Date): string {
+  const url = new URL(window.location.href);
+  url.searchParams.set("time", get(currentTimeFilterDateFormat)(date));
+  return url.toString();
 }
 
 /**

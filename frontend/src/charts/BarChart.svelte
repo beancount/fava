@@ -7,7 +7,6 @@
 
   import { ctx } from "../format";
   import { urlForAccount } from "../helpers";
-  import router from "../router";
   import { barChartMode } from "../stores/chart";
 
   import Axis from "./Axis.svelte";
@@ -16,7 +15,7 @@
     currenciesScale,
     filterTicks,
     hclColorRange,
-    setTimeFilter,
+    urlForTimeFilter,
   } from "./helpers";
   import { followingTooltip } from "./tooltip";
 
@@ -102,15 +101,14 @@
           width={x0.step()}
           height={innerHeight}
         />
-        <rect
-          class="axis-group-box"
-          on:click={() => {
-            setTimeFilter(group.date);
-          }}
-          transform={`translate(0,${innerHeight})`}
-          width={x0.bandwidth()}
-          height={margin.bottom}
-        />
+        <a href={urlForTimeFilter(group.date)}>
+          <rect
+            class="axis-group-box"
+            transform={`translate(0,${innerHeight})`}
+            width={x0.bandwidth()}
+            height={margin.bottom}
+          />
+        </a>
         {#if !showStackedBars}
           {#each group.values as { currency, value, budget }}
             <rect
@@ -135,36 +133,37 @@
       {#each data.stacks as [currency, account_stacks]}
         {#each account_stacks as stack}
           {@const account = stack.key}
-          <g
-            class="category"
-            class:faded={highlighted && account !== highlighted}
-          >
-            {#each stack.filter((b) => !Number.isNaN(b[1])) as bar}
-              <rect
-                class:desaturate={bar.data.date > today}
-                width={x1.bandwidth()}
-                x={(x0(bar.data.label) ?? 0) + (x1(currency) ?? 0)}
-                y={y(Math.max(bar[0], bar[1]))}
-                height={Math.abs(y(bar[1]) - y(bar[0]))}
-                fill={colorScale(account)}
-                on:mouseover={() => {
-                  highlighted = account;
-                }}
-                on:focus={() => {
-                  highlighted = account;
-                }}
-                on:mouseout={() => {
-                  highlighted = null;
-                }}
-                on:blur={() => {
-                  highlighted = null;
-                }}
-                use:followingTooltip={() =>
-                  tooltipText($ctx, bar.data, account)}
-                on:click={() => router.navigate(urlForAccount(account))}
-              />
-            {/each}
-          </g>
+          <a href={urlForAccount(account)}>
+            <g
+              class="category"
+              class:faded={highlighted && account !== highlighted}
+            >
+              {#each stack.filter((b) => !Number.isNaN(b[1])) as bar}
+                <rect
+                  class:desaturate={bar.data.date > today}
+                  width={x1.bandwidth()}
+                  x={(x0(bar.data.label) ?? 0) + (x1(currency) ?? 0)}
+                  y={y(Math.max(bar[0], bar[1]))}
+                  height={Math.abs(y(bar[1]) - y(bar[0]))}
+                  fill={colorScale(account)}
+                  on:mouseover={() => {
+                    highlighted = account;
+                  }}
+                  on:focus={() => {
+                    highlighted = account;
+                  }}
+                  on:mouseout={() => {
+                    highlighted = null;
+                  }}
+                  on:blur={() => {
+                    highlighted = null;
+                  }}
+                  use:followingTooltip={() =>
+                    tooltipText($ctx, bar.data, account)}
+                />
+              {/each}
+            </g>
+          </a>v
         {/each}
       {/each}
     {/if}

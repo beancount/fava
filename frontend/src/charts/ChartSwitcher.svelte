@@ -53,14 +53,14 @@
   </Chart>
   <div hidden={!$showCharts}>
     {#each charts as chart}
-      <span
+      <button
         class:selected={chart === $activeChart}
         on:click={() => {
           $activeChart = chart;
         }}
       >
         {chart.name}
-      </span>
+      </button>
     {/each}
   </div>
 {/if}
@@ -73,17 +73,18 @@
     text-align: center;
   }
 
-  span {
+  button {
     padding: 0 0.5em;
-    cursor: pointer;
+    color: unset;
+    background: unset;
   }
 
-  span + span {
+  button + button {
     border-left: 1px solid var(--text-color-lighter);
   }
 
-  span.selected,
-  span:hover {
+  button.selected,
+  button:hover {
     color: var(--text-color-lighter);
   }
 </style>

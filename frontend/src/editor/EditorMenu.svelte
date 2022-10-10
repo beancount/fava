@@ -35,51 +35,59 @@
 
 <div class="fieldset">
   <div class="dropdown">
-    <span>
+    <span tabindex="0" role="menu">
       {_("File")}
       <ul>
         {#each sources as source}
-          <li
-            class:selected={source === file_path}
-            on:click={() => goToFileAndLine(source)}
-          >
-            {source}
+          <li class:selected={source === file_path}>
+            <button on:click={() => goToFileAndLine(source)}>
+              {source}
+            </button>
           </li>
         {/each}
       </ul>
     </span>
-    <span>
+    <span tabindex="0" role="menu">
       {_("Edit")}
       <ul>
-        <li on:click={() => beancountFormat(editor)}>
-          {_("Align Amounts")}
-          <span><Key key={`${modKey}+d`} /></span>
+        <li>
+          <button on:click={() => beancountFormat(editor)}>
+            {_("Align Amounts")}
+            <span><Key key={`${modKey}+d`} /></span>
+          </button>
         </li>
-        <li on:click={() => toggleComment(editor)}>
-          {_("Toggle Comment (selection)")}
-          <span><Key key={`${modKey}+/`} /></span>
+        <li>
+          <button on:click={() => toggleComment(editor)}>
+            {_("Toggle Comment (selection)")}
+            <span><Key key={`${modKey}+/`} /></span>
+          </button>
         </li>
-        <li on:click={() => unfoldAll(editor)}>
-          {_("Open all folds")}
-          <span><Key key="Ctrl+Alt+]" /></span>
+        <li>
+          <button on:click={() => unfoldAll(editor)}>
+            {_("Open all folds")}
+            <span><Key key="Ctrl+Alt+]" /></span>
+          </button>
         </li>
-        <li on:click={() => foldAll(editor)}>
-          {_("Close all folds")}
-          <span><Key key="Ctrl+Alt+[" /></span>
+        <li>
+          <button on:click={() => foldAll(editor)}>
+            {_("Close all folds")}
+            <span><Key key="Ctrl+Alt+[" /></span>
+          </button>
         </li>
       </ul>
     </span>
     {#if insertEntryOptions.length}
-      <span>
+      <span tabindex="0" role="menu">
         <code>insert-entry</code>
         {_("Options")}
         <ul>
           {#each insertEntryOptions as opt}
-            <li
-              on:click={() => goToFileAndLine(opt.filename, opt.lineno - 1)}
-              title={`${opt.filename}:${opt.lineno}`}
-            >
-              {opt.re} <span>{opt.date}</span>
+            <li title={`${opt.filename}:${opt.lineno}`}>
+              <button
+                on:click={() => goToFileAndLine(opt.filename, opt.lineno - 1)}
+              >
+                {opt.re} <span>{opt.date}</span>
+              </button>
             </li>
           {/each}
         </ul>
@@ -141,11 +149,18 @@
     box-shadow: 0 3px 6px var(--transparent-black);
   }
 
+  li button {
+    display: contents;
+    color: inherit;
+  }
+
   li:hover,
+  li:focus-visible,
   span:hover {
     background-color: var(--background-darker);
   }
 
+  span:focus-within > ul,
   span:hover > ul {
     display: block;
   }

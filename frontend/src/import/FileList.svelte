@@ -14,15 +14,12 @@
 </script>
 
 {#each files as file}
-  <div
-    class="header"
-    title={file.name}
-    class:selected={selected === file.name}
-    on:click|self={() => {
-      selected = selected === file.name ? null : file.name;
-    }}
-  >
-    {file.basename}
+  <div class="header" title={file.name} class:selected={selected === file.name}>
+    <button
+      on:click={() => {
+        selected = selected === file.name ? null : file.name;
+      }}>{file.basename}</button
+    >
     <button
       class="round"
       on:click={() => remove(file.name)}
@@ -74,11 +71,16 @@
   .header {
     padding: 0.5rem;
     margin: 0.5rem 0;
-    cursor: pointer;
     background-color: var(--summary-background);
   }
 
-  .header button {
+  .header button:first-child {
+    all: unset;
+    width: 90%;
+    cursor: pointer;
+  }
+
+  .header button:nth-child(2) {
     float: right;
   }
 

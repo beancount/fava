@@ -39,9 +39,6 @@
 
 {#if node.name}
   <p
-    on:click={() => {
-      $selectedAccount = selected ? "" : node.name;
-    }}
     on:dragenter={dragenter}
     on:dragover={dragenter}
     on:dragleave={() => {
@@ -55,16 +52,20 @@
     class:selected
     class:drag
   >
-    <span
+    <button
       class="toggle"
       on:click={(ev) => {
         expanded = !expanded;
         ev.stopPropagation();
-      }}>{expanded ? "▾" : "▸"}</span
+      }}>{expanded ? "▾" : "▸"}</button
     >
-    <span>{leaf(node.name)}</span>
+    <button
+      class="leaf"
+      on:click={() => {
+        $selectedAccount = selected ? "" : node.name;
+      }}>{leaf(node.name)}</button
+    >
     {#if node.count > 0}
-      <span class="spacer" />
       <span class="count"> {node.count}</span>
     {/if}
   </p>
@@ -88,7 +89,6 @@
   p {
     margin-bottom: -1px;
     overflow: hidden;
-    cursor: pointer;
     border: 1px solid var(--table-border);
   }
 
@@ -101,7 +101,17 @@
     background-color: var(--table-header-background);
   }
 
+  button {
+    all: unset;
+    cursor: pointer;
+  }
+
+  .leaf {
+    flex-grow: 1;
+  }
+
   .toggle {
+    margin: 0 0.25rem;
     color: var(--treetable-expander);
     visibility: hidden;
   }

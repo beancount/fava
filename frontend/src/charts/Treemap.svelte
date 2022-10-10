@@ -4,7 +4,6 @@
 
   import { ctx, formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
-  import router from "../router";
 
   import { treemapScale } from "./helpers";
   import type {
@@ -64,16 +63,17 @@
       use:followingTooltip={() => tooltipText(d)}
     >
       <rect fill={fill(d)} width={d.x1 - d.x0} height={d.y1 - d.y0} />
-      <text
-        use:setVisibility={d}
-        on:click={() => router.navigate(urlForAccount(d.data.account))}
-        dy=".5em"
-        x={(d.x1 - d.x0) / 2}
-        y={(d.y1 - d.y0) / 2}
-        text-anchor="middle"
-      >
-        {d.data.account.split(":").pop() || ""}
-      </text>
+      <a href={urlForAccount(d.data.account)}>
+        <text
+          use:setVisibility={d}
+          dy=".5em"
+          x={(d.x1 - d.x0) / 2}
+          y={(d.y1 - d.y0) / 2}
+          text-anchor="middle"
+        >
+          {d.data.account.split(":").pop() || ""}
+        </text>
+      </a>
     </g>
   {/each}
 </svg>
