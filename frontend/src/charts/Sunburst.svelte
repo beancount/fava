@@ -55,7 +55,7 @@
 >
   <circle style="opacity:0" r={radius} />
   <text class="account" text-anchor="middle">
-    {currentAccount || root.data.account}
+    {currentAccount}
   </text>
   <text class="balance" dy="1.2em" text-anchor="middle">{currentBalance}</text>
   {#each leaves as d}

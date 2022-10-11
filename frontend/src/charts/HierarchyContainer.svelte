@@ -23,8 +23,9 @@
 
 {#if currencies.length === 0}
   <svg {width}>
-    <text x={width / 2} y={80} text-anchor="middle">{_("Chart is empty.")}</text
-    >
+    <text x={width / 2} y={80} text-anchor="middle">
+      {_("Chart is empty.")}
+    </text>
   </svg>
 {:else if treemapData}
   <Treemap data={treemapData} {currency} {width} />

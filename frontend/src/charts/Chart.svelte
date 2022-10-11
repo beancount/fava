@@ -101,14 +101,12 @@
 </div>
 <div hidden={!$showCharts} bind:clientWidth={width}>
   {#if width}
-    {#if components[chart.type]}
-      <svelte:component
-        this={components[chart.type]}
-        data={chart.data}
-        tooltipText={chart.tooltipText}
-        {width}
-      />
-    {:else}Invalid chart: {chart.type}{/if}
+    <svelte:component
+      this={components[chart.type]}
+      data={chart.data}
+      tooltipText={chart.tooltipText}
+      {width}
+    />
   {/if}
 </div>
 

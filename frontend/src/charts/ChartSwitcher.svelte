@@ -21,12 +21,9 @@
     } else {
       log_error(res.value);
     }
-    // TODO log error
-    if (!charts.length) {
-      $activeChart = undefined;
-    }
-    $activeChart =
-      charts.find((c) => c.name === ($activeChart || {}).name) || charts[0];
+    $activeChart = charts.length
+      ? charts.find((c) => c.name === $activeChart?.name) || charts[0]
+      : undefined;
 
     const unbind = [
       bindKey("c", () => {
@@ -74,9 +71,9 @@
   }
 
   button {
+    all: unset;
     padding: 0 0.5em;
-    color: unset;
-    background: unset;
+    cursor: pointer;
   }
 
   button + button {
