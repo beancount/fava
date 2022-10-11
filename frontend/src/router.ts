@@ -46,7 +46,7 @@ class Router extends Events<"page-loaded"> {
    * If they return a string, that is displayed to the user in an alert to
    * confirm navigation.
    */
-  interruptHandlers: Set<() => string | null>;
+  private interruptHandlers: Set<() => string | null>;
 
   constructor() {
     super();
@@ -59,10 +59,22 @@ class Router extends Events<"page-loaded"> {
   }
 
   /**
+   * Add an interrupt handler. Returns a function that removes it.
+   * This can be used directly in a svelte onMount hook.
+   */
+  addInteruptHandler(handler: () => string | null) {
+    this.interruptHandlers.add(handler);
+
+    return () => {
+      this.interruptHandlers.delete(handler);
+    };
+  }
+
+  /**
    * Check whether any of the registered interruptHandlers wants to stop
    * navigation.
    */
-  shouldInterrupt(): string | null {
+  private shouldInterrupt(): string | null {
     for (const handler of this.interruptHandlers) {
       const ret = handler();
       if (ret) {
@@ -126,7 +138,7 @@ class Router extends Events<"page-loaded"> {
    * If `historyState` is false, do not create a history state and do not
    * scroll to top.
    */
-  async loadURL(url: string, historyState = true): Promise<void> {
+  private async loadURL(url: string, historyState = true): Promise<void> {
     const leaveMessage = this.shouldInterrupt();
     if (leaveMessage) {
       // eslint-disable-next-line no-alert
@@ -175,7 +187,7 @@ class Router extends Events<"page-loaded"> {
    * The routers state is used to distinguish between the user navigating the
    * browser history or the hash changing.
    */
-  updateState(): void {
+  private updateState(): void {
     this.hash = window.location.hash;
     this.pathname = window.location.pathname;
     this.search = window.location.search;
@@ -190,7 +202,7 @@ class Router extends Events<"page-loaded"> {
    *  - the link starts with a hash '#', or
    *  - the link has a `data-remote` attribute.
    */
-  takeOverLinks(): void {
+  private takeOverLinks(): void {
     delegate(
       document,
       "click",

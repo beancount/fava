@@ -64,9 +64,10 @@
       : null;
   }
 
+  onMount(() => router.addInteruptHandler(checkEditorChanges));
+
   onMount(() => {
     sha256sum = data.sha256sum;
-    router.interruptHandlers.add(checkEditorChanges);
 
     // keybindings when the focus is outside the editor
     const unbind = [
@@ -98,7 +99,6 @@
     }
 
     return () => {
-      router.interruptHandlers.delete(checkEditorChanges);
       unbind.forEach((u) => u());
     };
   });

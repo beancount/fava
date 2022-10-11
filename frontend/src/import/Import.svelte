@@ -35,13 +35,9 @@
       : null;
   }
 
+  onMount(() => router.addInteruptHandler(preventNavigation));
   onMount(() => {
     files = preprocessData(data);
-    router.interruptHandlers.add(preventNavigation);
-
-    return () => {
-      router.interruptHandlers.delete(preventNavigation);
-    };
   });
 
   /**
