@@ -22,7 +22,7 @@ jobs:
                       toxenv: "old_deps"
         steps:
             - uses: actions/checkout@v2
-            - uses: actions/setup-python@v2
+            - uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.py }}
             - run: pip install tox
@@ -33,8 +33,8 @@ jobs:
             matrix:
                 os: ["ubuntu-latest", "macos-latest", "windows-latest"]
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-node@v2
+            - uses: actions/checkout@v3
+            - uses: actions/setup-node@v3
               with:
                   node-version: "lts/*"
                   cache: "npm"
@@ -45,11 +45,11 @@ jobs:
     lint-js:
         runs-on: "ubuntu-latest"
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-python@v2
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
               with:
                   python-version: "3.10"
-            - uses: actions/setup-node@v2
+            - uses: actions/setup-node@v3
               with:
                   node-version: "lts/*"
                   cache: "npm"
@@ -62,8 +62,8 @@ jobs:
     lint-python:
         runs-on: "ubuntu-latest"
         steps:
-            - uses: actions/checkout@v2
-            - uses: actions/setup-python@v2
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v4
               with:
                   python-version: "3.10"
             - run: pip install tox
@@ -72,7 +72,7 @@ jobs:
         runs-on: "ubuntu-latest"
         steps:
             - uses: actions/checkout@v2
-            - uses: actions/setup-python@v2
+            - uses: actions/setup-python@v4
               with:
                   python-version: "3.10"
             - run: pip install tox
