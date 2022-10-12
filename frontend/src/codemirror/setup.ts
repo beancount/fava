@@ -36,7 +36,7 @@ import {
 } from "@codemirror/view";
 import { get } from "svelte/store";
 
-import { favaOptions } from "../stores";
+import { fava_options } from "../stores";
 
 import { beancount } from "./beancount";
 import { bql } from "./bql";
@@ -127,7 +127,7 @@ export function initBeancountEditor(
 ): EditorAndAction {
   return setup(value, [
     beancount,
-    indentUnit.of(" ".repeat(get(favaOptions).indent)),
+    indentUnit.of(" ".repeat(get(fava_options).indent)),
     keymap.of(commands),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {

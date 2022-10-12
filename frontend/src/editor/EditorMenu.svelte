@@ -9,7 +9,7 @@
   import { _ } from "../i18n";
   import { modKey } from "../keyboard-shortcuts";
   import router from "../router";
-  import { favaOptions, options } from "../stores";
+  import { fava_options, options } from "../stores";
 
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
@@ -23,7 +23,7 @@
     $options.filename,
     ...$options.include.filter((f) => f !== $options.filename),
   ];
-  $: insertEntryOptions = $favaOptions.insert_entry;
+  $: insertEntryOptions = $fava_options.insert_entry;
 
   function goToFileAndLine(filename: string, line?: number) {
     const url = urlFor("editor/", { file_path: filename, line });

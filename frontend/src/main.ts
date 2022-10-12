@@ -44,7 +44,7 @@ import { notify } from "./notifications";
 import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
 import { initSidebar, updateSidebar } from "./sidebar";
 import { SortableTable } from "./sort";
-import { errorCount, favaOptions, ledgerData, rawLedgerData } from "./stores";
+import { errorCount, fava_options, ledgerData, rawLedgerData } from "./stores";
 import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTable } from "./tree-table";
 
@@ -97,7 +97,7 @@ router.on("page-loaded", () => {
 function doPoll(): void {
   get("changed").then((changed) => {
     if (changed) {
-      if (store_get(favaOptions).auto_reload) {
+      if (store_get(fava_options).auto_reload) {
         router.reload();
       } else {
         document.getElementById("reload-page")?.classList.remove("hidden");

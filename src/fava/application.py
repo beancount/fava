@@ -50,6 +50,7 @@ from fava.core.charts import setup_json_for_app
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIException
+from fava.internal_api import get_ledger_data
 from fava.json_api import json_api
 from fava.serialisation import serialise
 from fava.util import next_key
@@ -211,6 +212,7 @@ app.add_template_global(date.today, "today")
 app.add_template_global(url_for, "url_for")
 app.add_template_global(url_for_source, "url_for_source")
 app.add_template_global(translations, "translations")
+app.add_template_global(get_ledger_data, "get_ledger_data")
 
 
 @app.context_processor

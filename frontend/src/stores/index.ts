@@ -29,10 +29,10 @@ export const ledgerDataValidator = object({
       close_date: date,
     })
   ),
-  baseURL: string,
+  base_url: string,
   currencies: array(string),
   errors: number,
-  favaOptions: object({
+  fava_options: object({
     auto_reload: boolean,
     currency_column: number,
     conversion_currencies: array(string),
@@ -71,7 +71,7 @@ export const ledgerData: Readable<LedgerData> = derived(rawLedgerData, (s) => {
 });
 
 /** Fava's options */
-export const favaOptions = derived(ledgerData, (val) => val.favaOptions);
+export const fava_options = derived(ledgerData, (val) => val.fava_options);
 /** Beancount's options */
 export const options = derived(ledgerData, (val) => val.options);
 /** Commodity display precisions. */
@@ -81,7 +81,7 @@ export const HAVE_EXCEL = derived(ledgerData, (val) => val.have_excel);
 /** Whether Fava should obscure all numbers. */
 export const incognito = derived(ledgerData, (val) => val.incognito);
 /** Base URL. */
-export const baseURL = derived(ledgerData, (val) => val.baseURL);
+export const base_url = derived(ledgerData, (val) => val.base_url);
 
 /** The ranked array of all accounts. */
 export const accounts = derived_array(ledgerData, (val) => val.accounts);
@@ -108,7 +108,7 @@ export const operating_currency = derived_array(ledgerData, (val) =>
 /** The customized currency conversion select list */
 export const conversion_currencies = derived_array(
   ledgerData,
-  (val) => val.favaOptions.conversion_currencies
+  (val) => val.fava_options.conversion_currencies
 );
 
 /** The sorted array of all used currencies. */

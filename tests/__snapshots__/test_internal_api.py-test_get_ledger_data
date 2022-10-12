@@ -1,0 +1,661 @@
+{
+ "account_details": {
+  "Assets:Testing:MultipleCommodities": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5808
+   }
+  },
+  "Assets:US:BayBook:Vacation": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3759
+   }
+  },
+  "Assets:US:BofA": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "address": "123 America Street, LargeTown, USA",
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "institution": "Bank of America",
+    "lineno": 78,
+    "phone": "+1.012.345.6789"
+   }
+  },
+  "Assets:US:BofA:Checking": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "account": "00234-48574897",
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 82
+   }
+  },
+  "Assets:US:ETrade:Cash": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2738
+   }
+  },
+  "Assets:US:ETrade:GLD": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2742
+   }
+  },
+  "Assets:US:ETrade:ITOT": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2739
+   }
+  },
+  "Assets:US:ETrade:VEA": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2740
+   }
+  },
+  "Assets:US:ETrade:VHT": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2741
+   }
+  },
+  "Assets:US:Federal:PreTax401k": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4967
+   }
+  },
+  "Assets:US:Vanguard": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "address": "P.O. Box 1110, Valley Forge, PA 19482-1110",
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "institution": "Vanguard Group",
+    "lineno": 2964,
+    "phone": "+1.800.523.1188"
+   }
+  },
+  "Assets:US:Vanguard:Cash": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2969,
+    "number": "882882"
+   }
+  },
+  "Assets:US:Vanguard:RGAGX": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2962,
+    "number": "882882"
+   }
+  },
+  "Assets:US:Vanguard:VBMPX": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2960,
+    "number": "882882"
+   }
+  },
+  "Equity:Opening-Balances": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 71
+   }
+  },
+  "Expenses:Financial:Commissions": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5063
+   }
+  },
+  "Expenses:Financial:Fees": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5062
+   }
+  },
+  "Expenses:Food:Alcohol": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5056
+   }
+  },
+  "Expenses:Food:Coffee": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5055
+   }
+  },
+  "Expenses:Food:Groceries": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5053
+   }
+  },
+  "Expenses:Food:Restaurant": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5054
+   }
+  },
+  "Expenses:Health:Dental:Insurance": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3763
+   }
+  },
+  "Expenses:Health:Life:GroupTermLife": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3761
+   }
+  },
+  "Expenses:Health:Medical:Insurance": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3762
+   }
+  },
+  "Expenses:Health:Vision:Insurance": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3764
+   }
+  },
+  "Expenses:Home:Electricity": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5059
+   }
+  },
+  "Expenses:Home:Internet": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5060
+   }
+  },
+  "Expenses:Home:Phone": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5061
+   }
+  },
+  "Expenses:Home:Rent": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5058
+   }
+  },
+  "Expenses:Taxes:Y2014:US:CityNYC": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4976
+   }
+  },
+  "Expenses:Taxes:Y2014:US:Federal": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4975
+   }
+  },
+  "Expenses:Taxes:Y2014:US:Federal:PreTax401k": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4973
+   }
+  },
+  "Expenses:Taxes:Y2014:US:Medicare": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4974
+   }
+  },
+  "Expenses:Taxes:Y2014:US:SDI": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4977
+   }
+  },
+  "Expenses:Taxes:Y2014:US:SocSec": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4979
+   }
+  },
+  "Expenses:Taxes:Y2014:US:State": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4978
+   }
+  },
+  "Expenses:Taxes:Y2015:US:CityNYC": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5007
+   }
+  },
+  "Expenses:Taxes:Y2015:US:Federal": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5006
+   }
+  },
+  "Expenses:Taxes:Y2015:US:Federal:PreTax401k": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5004
+   }
+  },
+  "Expenses:Taxes:Y2015:US:Medicare": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5005
+   }
+  },
+  "Expenses:Taxes:Y2015:US:SDI": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5008
+   }
+  },
+  "Expenses:Taxes:Y2015:US:SocSec": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5010
+   }
+  },
+  "Expenses:Taxes:Y2015:US:State": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5009
+   }
+  },
+  "Expenses:Taxes:Y2016:US:CityNYC": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5038
+   }
+  },
+  "Expenses:Taxes:Y2016:US:Federal": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5037
+   }
+  },
+  "Expenses:Taxes:Y2016:US:Federal:PreTax401k": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5035
+   }
+  },
+  "Expenses:Taxes:Y2016:US:Medicare": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5036
+   }
+  },
+  "Expenses:Taxes:Y2016:US:SDI": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5039
+   }
+  },
+  "Expenses:Taxes:Y2016:US:SocSec": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5041
+   }
+  },
+  "Expenses:Taxes:Y2016:US:State": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5040
+   }
+  },
+  "Expenses:Transport:Tram": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5057
+   }
+  },
+  "Expenses:Vacation": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3760
+   }
+  },
+  "Income:US:BayBook:GroupTermLife": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3757
+   }
+  },
+  "Income:US:BayBook:Match401k": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2968
+   }
+  },
+  "Income:US:BayBook:Salary": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3756
+   }
+  },
+  "Income:US:BayBook:Vacation": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3758
+   }
+  },
+  "Income:US:ETrade:Dividends": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2744
+   }
+  },
+  "Income:US:ETrade:Gains": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2743
+   }
+  },
+  "Income:US:Federal:PreTax401k": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4966
+   }
+  },
+  "Liabilities:AccountsPayable": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 72
+   }
+  },
+  "Liabilities:US:Chase:Slate": {
+   "close_date": "9999-12-31",
+   "meta": {
+    "fava-uptodate-indication": true,
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 754
+   }
+  }
+ },
+ "accounts": [
+  "Liabilities:US:Chase:Slate",
+  "Expenses:Food:Restaurant",
+  "Assets:US:BofA:Checking",
+  "Assets:US:Vanguard:Cash",
+  "Assets:US:Vanguard:RGAGX",
+  "Assets:US:Vanguard:VBMPX",
+  "Assets:US:BayBook:Vacation",
+  "Assets:US:Federal:PreTax401k",
+  "Expenses:Health:Dental:Insurance",
+  "Expenses:Health:Life:GroupTermLife",
+  "Expenses:Health:Medical:Insurance",
+  "Expenses:Health:Vision:Insurance",
+  "Income:US:BayBook:GroupTermLife",
+  "Income:US:BayBook:Salary",
+  "Income:US:BayBook:Vacation",
+  "Assets:US:ETrade:Cash",
+  "Expenses:Food:Groceries",
+  "Expenses:Financial:Commissions",
+  "Income:US:BayBook:Match401k",
+  "Expenses:Taxes:Y2015:US:Federal",
+  "Expenses:Taxes:Y2015:US:State",
+  "Expenses:Taxes:Y2015:US:CityNYC",
+  "Expenses:Taxes:Y2015:US:Medicare",
+  "Expenses:Taxes:Y2015:US:SDI",
+  "Expenses:Taxes:Y2015:US:SocSec",
+  "Expenses:Financial:Fees",
+  "Expenses:Home:Internet",
+  "Expenses:Home:Phone",
+  "Expenses:Home:Electricity",
+  "Expenses:Home:Rent",
+  "Expenses:Transport:Tram",
+  "Expenses:Food:Coffee",
+  "Expenses:Taxes:Y2016:US:CityNYC",
+  "Expenses:Taxes:Y2016:US:Federal",
+  "Expenses:Taxes:Y2016:US:Federal:PreTax401k",
+  "Expenses:Taxes:Y2016:US:Medicare",
+  "Expenses:Taxes:Y2016:US:SDI",
+  "Expenses:Taxes:Y2016:US:SocSec",
+  "Expenses:Taxes:Y2016:US:State",
+  "Expenses:Taxes:Y2014:US:Federal",
+  "Expenses:Taxes:Y2014:US:State",
+  "Expenses:Taxes:Y2014:US:CityNYC",
+  "Expenses:Taxes:Y2014:US:Medicare",
+  "Expenses:Taxes:Y2014:US:SDI",
+  "Expenses:Taxes:Y2014:US:SocSec",
+  "Expenses:Taxes:Y2015:US:Federal:PreTax401k",
+  "Assets:US:ETrade:GLD",
+  "Assets:US:ETrade:VEA",
+  "Income:US:ETrade:Gains",
+  "Liabilities:AccountsPayable",
+  "Assets:US:ETrade:VHT",
+  "Assets:US:ETrade:ITOT",
+  "Income:US:ETrade:Dividends",
+  "Expenses:Taxes:Y2014:US:Federal:PreTax401k",
+  "Expenses:Vacation",
+  "Income:US:Federal:PreTax401k",
+  "Expenses:Food:Alcohol",
+  "Equity:Opening-Balances",
+  "Assets:Testing:MultipleCommodities",
+  "Assets:US:BofA",
+  "Assets:US:Vanguard"
+ ],
+ "base_url": "/long-example/",
+ "currencies": [
+  "USD",
+  "VACHR",
+  "IRAUSD",
+  "VBMPX",
+  "RGAGX",
+  "GLD",
+  "VEA",
+  "VHT",
+  "ITOT",
+  "ABC",
+  "XYZ"
+ ],
+ "errors": 0,
+ "fava_options": {
+  "account_journal_include_children": true,
+  "auto_reload": false,
+  "collapse_pattern": [],
+  "conversion_currencies": [],
+  "currency_column": 61,
+  "default_file": null,
+  "default_page": "income_statement/",
+  "fiscal_year_end": {
+   "day": 31,
+   "month": 12
+  },
+  "import_config": null,
+  "import_dirs": [],
+  "indent": 2,
+  "insert_entry": [],
+  "invert_income_liabilities_equity": false,
+  "language": null,
+  "locale": null,
+  "show_accounts_with_zero_balance": false,
+  "show_accounts_with_zero_transactions": true,
+  "show_closed_accounts": false,
+  "sidebar_show_queries": 5,
+  "unrealized": "Unrealized",
+  "upcoming_events": 7,
+  "uptodate_indicator_grey_lookback_days": 60,
+  "use_external_editor": false
+ },
+ "have_excel": false,
+ "incognito": false,
+ "links": [
+  "test-link"
+ ],
+ "options": {
+  "account_current_conversions": "Conversions:Current",
+  "account_current_earnings": "Earnings:Current",
+  "account_previous_balances": "Opening-Balances",
+  "account_previous_conversions": "Conversions:Previous",
+  "account_previous_earnings": "Earnings:Previous",
+  "account_rounding": null,
+  "allow_deprecated_none_for_tags_and_links": false,
+  "allow_pipe_separator": false,
+  "booking_method": "Booking.STRICT",
+  "commodities": [],
+  "conversion_currency": "NOTHING",
+  "dcontext": "ABC             : sign=0   integer_max=1   fractional_common=0   fractional_max=0   \"0\" \"0\"\nGLD             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nIRAUSD          : sign=1   integer_max=5   fractional_common=2   fractional_max=2   \"-00000.00\" \"-00000.00\"\nITOT            : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nRGAGX           : sign=0   integer_max=1   fractional_common=3   fractional_max=3   \"0.000\" \"0.000\"\nUSD             : sign=1   integer_max=4   fractional_common=2   fractional_max=2   \"-0000.00\" \"-0000.00\"\nVACHR           : sign=1   integer_max=3   fractional_common=0   fractional_max=0   \"-000\" \"-000\"\nVBMPX           : sign=0   integer_max=2   fractional_common=3   fractional_max=3   \"00.000\" \"00.000\"\nVEA             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nVHT             : sign=1   integer_max=2   fractional_common=0   fractional_max=0   \"-00\" \"-00\"\nXYZ             : sign=0   integer_max=1   fractional_common=0   fractional_max=0   \"0\" \"0\"\n__default__     : sign=0   integer_max=1   fractional_common=_   fractional_max=_   \"0.*\" \"0.*\"\n",
+  "documents": [],
+  "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+  "include": [
+   "FAVA_LONG_EXAMPLE_PATH.beancount"
+  ],
+  "infer_tolerance_from_cost": false,
+  "inferred_tolerance_default": {},
+  "inferred_tolerance_multiplier": 0.5,
+  "insert_pythonpath": false,
+  "long_string_maxlines": 64,
+  "name_assets": "Assets",
+  "name_equity": "Equity",
+  "name_expenses": "Expenses",
+  "name_income": "Income",
+  "name_liabilities": "Liabilities",
+  "operating_currency": [
+   "USD"
+  ],
+  "plugin": [],
+  "plugin_processing_mode": "default",
+  "render_commas": false,
+  "title": "Long Example"
+ },
+ "payees": [
+  "BayBook",
+  "Rose Flower",
+  "Uncle Boons",
+  "Goba Goba",
+  "China Garden",
+  "Chichipotle",
+  "Kin Soy",
+  "BANK FEES",
+  "Jewel of Morroco",
+  "Wine-Tarner Cable",
+  "Verizon Wireless",
+  "Cafe Modagor",
+  "Chase:Slate",
+  "EDISON POWER",
+  "RiverBank Properties",
+  "Metro Transport Authority",
+  "Corner Deli",
+  "Onion Market",
+  "Laut",
+  "Good Moods Market",
+  "Pizza Delfina",
+  "Cafe Select",
+  "Waterbar",
+  "Gimme! Coffee",
+  "Starbucks",
+  "Mission Chinese Food",
+  "Farmer Fresh",
+  "Bar Crudo",
+  "La Colombe",
+  "Mercadito",
+  "Eataly Chicago",
+  "Takahachi",
+  "Star of Siam",
+  "Argo Tea",
+  "Another Sports Pub",
+  "25 Degrees Burger Bar",
+  "\u00c1rv\u00edzt\u0171r\u0151 t\u00fck\u00f6rf\u00far\u00f3g\u00e9p"
+ ],
+ "precisions": {
+  "ABC": 0,
+  "GLD": 0,
+  "IRAUSD": 2,
+  "ITOT": 0,
+  "RGAGX": 3,
+  "USD": 2,
+  "VACHR": 0,
+  "VBMPX": 3,
+  "VEA": 0,
+  "VHT": 0,
+  "VMMXX": 4,
+  "XYZ": 0
+ },
+ "tags": [
+  "test",
+  "trip-chicago-2015",
+  "trip-new-york-2016",
+  "trip-san-francisco-2015"
+ ],
+ "years": [
+  "2016",
+  "2015",
+  "2014",
+  "2009",
+  "2007",
+  "2004",
+  "2000",
+  "1995",
+  "1980",
+  "1900",
+  "1792"
+ ]
+}

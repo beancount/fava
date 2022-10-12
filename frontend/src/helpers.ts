@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 
 import type { EntryBaseAttributes } from "./entries";
-import { baseURL } from "./stores";
+import { base_url } from "./stores";
 import { urlSyncedParams } from "./stores/url";
 
 /**
@@ -12,7 +12,7 @@ export function urlFor(
   params?: Record<string, string | number | undefined>,
   update = true
 ): string {
-  const url = `${get(baseURL)}${report}`;
+  const url = `${get(base_url)}${report}`;
   const urlParams = new URLSearchParams();
   if (update) {
     const oldParams = new URL(window.location.href).searchParams;

@@ -10,7 +10,7 @@
   import { log_error } from "../log";
   import { notify } from "../notifications";
   import router from "../router";
-  import { errorCount, favaOptions } from "../stores";
+  import { errorCount, fava_options } from "../stores";
 
   import EditorMenu from "./EditorMenu.svelte";
   import SaveButton from "./SaveButton.svelte";
@@ -87,7 +87,7 @@
     ];
 
     editor.focus();
-    const opts = $favaOptions.insert_entry.filter(
+    const opts = $fava_options.insert_entry.filter(
       (f) => f.filename === data.file_path
     );
     const line = parseInt(

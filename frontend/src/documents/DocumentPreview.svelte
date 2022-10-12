@@ -15,12 +15,12 @@
 <script lang="ts">
   import DocumentPreviewEditor from "../editor/DocumentPreviewEditor.svelte";
   import { ext } from "../lib/paths";
-  import { baseURL } from "../stores";
+  import { base_url } from "../stores";
 
   export let filename: string;
 
   $: extension = ext(filename).toLowerCase();
-  $: url = `${$baseURL}document/?filename=${filename}`;
+  $: url = `${$base_url}document/?filename=${filename}`;
 </script>
 
 {#if extension === "pdf"}

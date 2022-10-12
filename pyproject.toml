@@ -14,6 +14,7 @@ strict = true
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
     "too-few-public-methods",
+    "too-many-instance-attributes",
     "not-callable",        # false positive for Beancount Entries
     "wrong-import-order",
     "isinstance-second-argument-not-valid-type"

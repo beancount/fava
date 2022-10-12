@@ -6,7 +6,7 @@ import { format } from "d3-format";
 import { timeFormat, utcFormat } from "d3-time-format";
 import { derived } from "svelte/store";
 
-import { favaOptions, incognito, interval, precisions } from "./stores";
+import { fava_options, incognito, interval, precisions } from "./stores";
 
 /**
  * A number formatting function for a locale.
@@ -43,7 +43,7 @@ export interface FormatterContext {
 
 const formatterShort = format(".3s");
 export const ctx = derived(
-  [incognito, favaOptions, precisions],
+  [incognito, fava_options, precisions],
   ([i, f, p]): FormatterContext => {
     const formatter = localeFormatter(f.locale);
     const currencyFormatters = Object.fromEntries(
