@@ -127,6 +127,7 @@
           class:selected={i === index}
           on:mousedown={(ev) => mousedown(ev, suggestion)}
         >
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html innerHTML}
         </li>
       {/each}

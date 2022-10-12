@@ -20,7 +20,7 @@
     currentIndex = 0;
   }
 
-  async function submitOrNext() {
+  function submitOrNext() {
     if (currentIndex < entries.length - 1) {
       currentIndex += 1;
     } else {

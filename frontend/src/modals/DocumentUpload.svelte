@@ -25,7 +25,9 @@
             notify(response);
           },
           (error) => {
-            notify(`Upload error: ${error}`, "error");
+            if (error instanceof Error) {
+              notify(`Upload error: ${error.message}`, "error");
+            }
           }
         );
       })

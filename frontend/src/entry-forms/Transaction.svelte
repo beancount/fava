@@ -9,6 +9,7 @@
   import { emptyPosting, Transaction } from "../entries";
   import type { Posting } from "../entries";
   import { _ } from "../i18n";
+  import { notify } from "../notifications";
   import { payees } from "../stores";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
@@ -30,9 +31,18 @@
   $: if (payee) {
     suggestions = undefined;
     if ($payees.includes(payee)) {
-      get("payee_accounts", { payee }).then((s) => {
-        suggestions = s;
-      });
+      get("payee_accounts", { payee })
+        .then((s) => {
+          suggestions = s;
+        })
+        .catch((error) => {
+          if (error instanceof Error) {
+            notify(
+              `Fetching account suggestions for payee ${payee} failed: ${error.message}`,
+              "error"
+            );
+          }
+        });
     }
   }
 
@@ -81,11 +91,11 @@
   }
 </script>
 
-<!-- svelte-ignore a11y-label-has-associated-control -->
 <div>
   <div class="flex-row">
     <input type="date" bind:value={entry.date} required />
     <input type="text" name="flag" bind:value={entry.flag} required />
+    <!-- svelte-ignore a11y-label-has-associated-control -->
     <label>
       <span>{_("Payee")}:</span>
       <AutocompleteInput

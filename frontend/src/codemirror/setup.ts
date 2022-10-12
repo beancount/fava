@@ -91,10 +91,14 @@ function setup(
 }
 
 /**
- * A basic readonly editor.
+ * A basic readonly editor for an asynchronously loaded document.
  */
-export function initReadonlyEditor(value: string): EditorAndAction {
-  return setup(value, [baseExtensions, EditorState.readOnly.of(true)]);
+export function initDocumentPreviewEditor(value: string): EditorAndAction {
+  return setup(value, [
+    baseExtensions,
+    EditorState.readOnly.of(true),
+    placeholder("Loading..."),
+  ]);
 }
 
 /**

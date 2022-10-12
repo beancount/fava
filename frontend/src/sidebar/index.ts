@@ -19,23 +19,30 @@ export function updateSidebar(): void {
   });
 }
 
-export function initSidebar(): void {
-  const errorCountEl = document.getElementById("error-count");
-  if (errorCountEl instanceof HTMLLIElement) {
-    errorCount.subscribe((errorCount_val) => {
-      errorCountEl.classList.toggle("hidden", errorCount_val === 0);
-      const span = errorCountEl.querySelector("span");
+function initErrorCount(): void {
+  const el = document.getElementById("error-count");
+  if (el instanceof HTMLLIElement) {
+    errorCount.subscribe((count) => {
+      el.classList.toggle("hidden", count === 0);
+      const span = el.querySelector("span");
       if (span) {
-        span.textContent = `${errorCount_val}`;
+        span.textContent = `${count}`;
       }
     });
   }
+}
 
-  const asideButton = document.getElementById("aside-button");
-  if (asideButton instanceof HTMLButtonElement) {
-    asideButton.addEventListener("click", () => {
+function initAsideButton(): void {
+  const el = document.getElementById("aside-button");
+  if (el instanceof HTMLButtonElement) {
+    el.addEventListener("click", () => {
       document.querySelector("aside")?.classList.toggle("active");
-      asideButton.classList.toggle("active");
+      el.classList.toggle("active");
     });
   }
+}
+
+export function initSidebar(): void {
+  initErrorCount();
+  initAsideButton();
 }

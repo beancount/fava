@@ -31,11 +31,11 @@
   <Treemap data={treemapData} {currency} {width} />
 {:else if $hierarchyChartMode === "sunburst"}
   <svg {width} height={500}>
-    {#each [...data] as [currency, d], i (currency)}
+    {#each [...data] as [chart_currency, d], i (currency)}
       <g transform={`translate(${(width * i) / currencies.length},0)`}>
         <Sunburst
           data={d}
-          {currency}
+          currency={chart_currency}
           width={width / currencies.length}
           height={500}
         />

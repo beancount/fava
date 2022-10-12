@@ -93,7 +93,7 @@
         class="group"
         class:desaturate={group.date > today}
         use:followingTooltip={() => tooltipText($ctx, group, "")}
-        transform={`translate(${x0(group.label)},0)`}
+        transform={`translate(${x0(group.label) ?? 0},0)`}
       >
         <rect
           class="group-box"

@@ -20,12 +20,6 @@
 
   $: radius = Math.min(width, height) / 2;
 
-  function balanceText(d: AccountHierarchyNode): string {
-    const val = d.value ?? 0;
-    const rootVal = root.value || 1;
-    return `${$ctx.amount(val, currency)} (${formatPercentage(val / rootVal)})`;
-  }
-
   $: root = partition<AccountHierarchyDatum>()(data);
   $: leaves = root.descendants().filter((d) => !d.data.dummy && d.depth);
 
@@ -33,6 +27,13 @@
   $: if (root) {
     current = null;
   }
+
+  function balanceText(d: AccountHierarchyNode): string {
+    const val = d.value ?? 0;
+    const rootVal = root.value || 1;
+    return `${$ctx.amount(val, currency)} (${formatPercentage(val / rootVal)})`;
+  }
+
   $: currentAccount = current ? current.data.account : root.data.account;
   $: currentBalance = current ? balanceText(current) : balanceText(root);
 

@@ -6,6 +6,7 @@
   import Chart from "../charts/Chart.svelte";
   import { chartContext } from "../charts/context";
   import { parseQueryChart } from "../charts/query-charts";
+  import { log_error } from "../log";
   import { getFilterParams } from "../stores/filters";
   import {
     addToHistory,
@@ -57,17 +58,25 @@
       return;
     }
     if (query.trim().toUpperCase() === "CLEAR") {
-      clearResults();
+      clearResults().catch(log_error);
       return;
     }
     get("query_result", { query_string: query, ...getFilterParams() }).then(
       (res) => {
         const r = parseQueryChart(res.chart, $chartContext);
         const chart = r.success ? r.value : null;
-        setResult(query, { result: { chart, table: res.table } });
+        setResult(query, { result: { chart, table: res.table } }).catch(
+          log_error
+        );
       },
       (error) => {
-        setResult(query, { error });
+        if (typeof error === "string") {
+          setResult(query, { error }).catch(log_error);
+        } else {
+          setResult(query, {
+            error: "Received invalid data as query error.",
+          }).catch(log_error);
+        }
       }
     );
   }
@@ -104,6 +113,7 @@
           {#if result.chart}
             <Chart chart={result.chart} />
           {/if}
+          <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html result.table}
         {:else if error}
           {error}

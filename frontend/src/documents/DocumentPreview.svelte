@@ -13,8 +13,7 @@
 </script>
 
 <script lang="ts">
-  import Editor from "../editor/Editor.svelte";
-  import { fetch, handleText } from "../lib/fetch";
+  import DocumentPreviewEditor from "../editor/DocumentPreviewEditor.svelte";
   import { ext } from "../lib/paths";
   import { baseURL } from "../stores";
 
@@ -27,11 +26,7 @@
 {#if extension === "pdf"}
   <object title={filename} data={url} />
 {:else if plainTextExtensions.includes(extension)}
-  {#await fetch(url).then(handleText)}
-    Loading...
-  {:then value}
-    <Editor {value} />
-  {/await}
+  <DocumentPreviewEditor {url} />
 {:else if imageExtensions.includes(extension)}
   <img src={url} alt={filename} />
 {:else if ["html", "htm"].includes(extension)}

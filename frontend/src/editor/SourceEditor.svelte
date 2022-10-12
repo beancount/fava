@@ -7,6 +7,7 @@
   import { scrollToLine } from "../codemirror/scroll-to-line";
   import { initBeancountEditor } from "../codemirror/setup";
   import { bindKey } from "../keyboard-shortcuts";
+  import { log_error } from "../log";
   import { notify } from "../notifications";
   import router from "../router";
   import { errorCount, favaOptions } from "../stores";
@@ -37,7 +38,7 @@
       });
       changed = false;
       cm.focus();
-      get("errors").then((count) => errorCount.set(count));
+      get("errors").then((count) => errorCount.set(count), log_error);
     } catch (error) {
       if (error instanceof Error) {
         notify(error.message, "error");
@@ -52,7 +53,9 @@
       key: "Control-s",
       mac: "Meta-s",
       run: () => {
-        save(editor);
+        save(editor).catch(() => {
+          // save should catch all errors itself, see above
+        });
         return true;
       },
     },
@@ -73,7 +76,9 @@
     const unbind = [
       bindKey({ key: "Control+s", mac: "Meta+s" }, (event) => {
         event.preventDefault();
-        save(editor);
+        save(editor).catch(() => {
+          // save should catch all errors itself, see above
+        });
       }),
       bindKey({ key: "Control+d", mac: "Meta+d" }, (event) => {
         event.preventDefault();

@@ -44,7 +44,9 @@
         key: "Control-s",
         mac: "Meta-s",
         run: () => {
-          save();
+          save().catch(() => {
+            // save should catch all errors itself, see above
+          });
           return true;
         },
       },
