@@ -1,5 +1,7 @@
+const OFF = 0;
+
 const airbnbConfigOverrides = {
-  "max-classes-per-file": 0,
+  "max-classes-per-file": OFF,
   "no-param-reassign": ["error", { props: false }],
   "no-restricted-syntax": [
     "error",
@@ -7,11 +9,11 @@ const airbnbConfigOverrides = {
     "LabelStatement",
     "WithStatement",
   ],
-  "no-underscore-dangle": 0,
-  "import/extensions": 0,
-  "import/no-unresolved": 0,
-  "import/prefer-default-export": 0,
-  "@typescript-eslint/naming-convention": 0,
+  "no-underscore-dangle": OFF,
+  "import/extensions": OFF,
+  "import/no-unresolved": OFF,
+  "import/prefer-default-export": OFF,
+  "@typescript-eslint/naming-convention": OFF,
 };
 
 // Sort import statements and members alphabetically.
@@ -27,22 +29,22 @@ const sortImports = {
 };
 
 module.exports = {
-  plugins: ["@typescript-eslint", "svelte3"],
+  plugins: ["@typescript-eslint", "svelte"],
   extends: [
     "airbnb-base",
     "airbnb-typescript/base",
+    "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:svelte/prettier",
     "prettier",
   ],
   env: { browser: true },
+  parser: "@typescript-eslint/parser",
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.json", "./tsconfig.confs.json"],
     extraFileExtensions: [".svelte"],
-  },
-  settings: {
-    // eslint-disable-next-line
-    "svelte3/typescript": () => require("typescript"),
   },
   rules: {
     ...airbnbConfigOverrides,
@@ -53,19 +55,22 @@ module.exports = {
   overrides: [
     {
       files: "*.svelte",
-      processor: "svelte3/svelte3",
-      rules: {
-        "no-undef-init": 0,
-        "import/first": 0,
-        "import/no-mutable-exports": 0,
+      parser: "svelte-eslint-parser",
+      parserOptions: {
+        parser: "@typescript-eslint/parser",
       },
-    },
-    {
-      files: "*.ts",
-      parser: "@typescript-eslint/parser",
-      extends: [
-        "plugin:@typescript-eslint/recommended-requiring-type-checking",
-      ],
+      rules: {
+        "svelte/button-has-type": 1,
+        "svelte/valid-compile": OFF,
+        "no-self-assign": OFF,
+        "no-undef-init": OFF,
+        "import/first": OFF,
+        "import/no-mutable-exports": OFF,
+        "@typescript-eslint/no-unsafe-argument": OFF,
+        "@typescript-eslint/no-unsafe-assignment": OFF,
+        "@typescript-eslint/no-unsafe-call": OFF,
+        "@typescript-eslint/no-unsafe-member-access": OFF,
+      },
     },
   ],
 };
