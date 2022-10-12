@@ -12,7 +12,7 @@
 </script>
 
 <li class:selected {title}>
-  <button on:click={action}>
+  <button type="button" on:click={action}>
     <slot />
     {#if $$slots.right}
       <span>

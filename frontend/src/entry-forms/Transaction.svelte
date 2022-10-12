@@ -108,8 +108,8 @@
       <AddMetadataButton bind:meta={entry.meta} />
     </label>
     <button
-      class="muted round"
       type="button"
+      class="muted round"
       on:click={addPosting}
       title={_("Add posting")}
       tabindex={-1}

@@ -11,8 +11,8 @@
 </script>
 
 <button
-  class="muted round"
   type="button"
+  class="muted round"
   on:click={addMetadata}
   tabindex={-1}
   title={_("Add metadata")}

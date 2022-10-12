@@ -16,14 +16,15 @@
 {#each files as file}
   <div class="header" title={file.name} class:selected={selected === file.name}>
     <button
+      type="button"
       on:click={() => {
         selected = selected === file.name ? null : file.name;
       }}>{file.basename}</button
     >
     <button
+      type="button"
       class="round"
       on:click={() => remove(file.name)}
-      type="button"
       title={_("Delete")}
       tabindex={-1}
     >

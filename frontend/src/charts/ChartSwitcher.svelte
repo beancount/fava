@@ -51,6 +51,7 @@
   <div hidden={!$showCharts}>
     {#each charts as chart}
       <button
+        type="button"
         class:selected={chart === $activeChart}
         on:click={() => {
           $activeChart = chart;

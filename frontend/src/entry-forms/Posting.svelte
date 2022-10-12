@@ -56,9 +56,9 @@
   on:drop|preventDefault={drop}
 >
   <button
+    type="button"
     class="muted round remove-row"
     on:click={remove}
-    type="button"
     tabindex={-1}
   >
     ×
@@ -76,8 +76,8 @@
     bind:value={posting.amount}
   />
   <button
-    class="muted round add-row"
     type="button"
+    class="muted round add-row"
     on:click={add}
     title={_("Add posting")}
   >

@@ -8,6 +8,6 @@
   $: buttonContent = saving ? _("Saving...") : _("Save");
 </script>
 
-<button disabled={!changed} title={`${_("Save")} (${modKey}+s)`}>
+<button type="submit" disabled={!changed} title={`${_("Save")} (${modKey}+s)`}>
   {buttonContent}
 </button>

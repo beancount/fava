@@ -53,6 +53,7 @@
     class:drag
   >
     <button
+      type="button"
       class="toggle"
       on:click={(ev) => {
         expanded = !expanded;
@@ -60,6 +61,7 @@
       }}>{expanded ? "▾" : "▸"}</button
     >
     <button
+      type="button"
       class="leaf"
       on:click={() => {
         $selectedAccount = selected ? "" : node.name;
