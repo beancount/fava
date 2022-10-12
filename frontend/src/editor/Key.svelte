@@ -1,8 +1,7 @@
 <script lang="ts">
-  export let key: string;
-  $: parts = key.split("+");
+  export let key: string[];
 </script>
 
-{#each parts as part, index}
-  <kbd>{part}</kbd>{index === parts.length - 1 ? "" : "+"}
+{#each key as part, index}
+  <kbd>{part}</kbd>{index === key.length - 1 ? "" : "+"}
 {/each}
