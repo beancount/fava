@@ -1,6 +1,5 @@
 import { derived, writable } from "svelte/store";
 
-import type { NamedChartTypes } from "../charts";
 import { _, format } from "../i18n";
 import iso4217currencies from "../lib/iso4217";
 import { localStorageSyncedStore } from "../lib/store";
@@ -12,8 +11,10 @@ import {
   operating_currency,
 } from ".";
 
+/** Whether the charts should be shown - this applies globally to all charts. */
 export const showCharts = writable(true);
-export const activeChart = writable<NamedChartTypes | undefined>(undefined);
+/** This store is used to switch to the same chart (as identified by name) on navigation. */
+export const lastActiveChartName = writable<string | undefined>(undefined);
 export const hierarchyChartMode = localStorageSyncedStore<
   "treemap" | "sunburst"
 >(

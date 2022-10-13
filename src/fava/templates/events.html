@@ -1,9 +1,12 @@
 {% set events = g.filtered.events() %}
+
 {% if events %}
-{{ charts.events() }}
-{% for group in events|groupby('type') %}
+<svelte-component type="charts"><script type="application/json">{{
+  chart_api.events()|tojson
+}}</script></svelte-component>
+
+{% for group in  events|groupby('type')  %}
 <div class="left">
-  {{ charts.events(group.grouper) }}
   <h3>{{ _('Event') + ': ' + group.grouper }}</h3>
   <table is="sortable-table">
     <thead>

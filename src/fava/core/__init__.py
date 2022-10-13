@@ -191,13 +191,9 @@ class FilteredLedger:
         """All currently filtered documents."""
         return [e for e in self.entries if isinstance(e, Document)]
 
-    def events(self, event_type: str | None = None) -> list[Event]:
-        """List events (possibly filtered by type)."""
-        events = [e for e in self.entries if isinstance(e, Event)]
-        if event_type:
-            return [event for event in events if event.type == event_type]
-
-        return events
+    def events(self) -> list[Event]:
+        """All currently filtered events."""
+        return [e for e in self.entries if isinstance(e, Event)]
 
     def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
         """List all prices."""

@@ -50,6 +50,7 @@ from fava.core.charts import setup_json_for_app
 from fava.core.documents import is_document_or_import_file
 from fava.help import HELP_PAGES
 from fava.helpers import FavaAPIException
+from fava.internal_api import ChartApi
 from fava.internal_api import get_ledger_data
 from fava.json_api import json_api
 from fava.serialisation import serialise
@@ -216,9 +217,9 @@ app.add_template_global(get_ledger_data, "get_ledger_data")
 
 
 @app.context_processor
-def template_context() -> dict[str, FavaLedger]:
+def template_context() -> dict[str, Any]:
     """Inject variables into the template context."""
-    return dict(ledger=g.ledger)
+    return dict(ledger=g.ledger, chart_api=ChartApi)
 
 
 @app.before_request

@@ -4,7 +4,6 @@
  * The charts heavily use d3 libraries.
  */
 
-import { getScriptTagValue } from "../lib/dom";
 import type { Result } from "../lib/result";
 import { ok } from "../lib/result";
 import { array, object, string, unknown } from "../lib/validation";
@@ -39,14 +38,14 @@ const parsers: Partial<
 export type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
 export type NamedChartTypes = ChartTypes & { name?: string };
 
-const chart_data_validator = array(
+export const chart_data_validator = array(
   object({ label: string, type: string, data: unknown })
 );
 
 export function parseChartData(
+  res: ReturnType<typeof chart_data_validator>,
   ctx: ChartContext
 ): Result<NamedChartTypes[], string> {
-  const res = getScriptTagValue("#chart-data", chart_data_validator);
   if (!res.success) {
     return res;
   }

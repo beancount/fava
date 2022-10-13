@@ -1,4 +1,6 @@
-{{ charts.commodities() }}
+<svelte-component type="charts"><script type="application/json">{{
+  chart_api.commodities()|tojson
+}}</script></svelte-component>
 
 {% for commodity_pair in ledger.commodity_pairs() %}
 {% set prices = g.filtered.prices(*commodity_pair) %}

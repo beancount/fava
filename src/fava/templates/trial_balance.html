@@ -1,7 +1,13 @@
 {% import '_tree_table.html' as tree_table with context %}
 
-{% for base_account in ['expenses', 'income', 'assets', 'equity', 'liabilities'] %}
-{{ charts.hierarchy(ledger.options['name_{}'.format(base_account)]) }}
-{% endfor %}
+<svelte-component type="charts"><script type="application/json">{{
+  [
+    chart_api.hierarchy(ledger.options['name_expenses']),
+    chart_api.hierarchy(ledger.options['name_income']),
+    chart_api.hierarchy(ledger.options['name_assets']),
+    chart_api.hierarchy(ledger.options['name_liabilities']),
+    chart_api.hierarchy(ledger.options['name_equity']),
+  ]|tojson
+}}</script></svelte-component>
 
 {{ tree_table.tree(g.filtered.root_tree.get('')) }}

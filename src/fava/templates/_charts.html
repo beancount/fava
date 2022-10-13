@@ -1,58 +1,21 @@
 {% set chart_data = [] %}
 
 {% macro hierarchy(account_name, begin_date=None, end_date=None, label=None) %}
-{% do chart_data.append({
-'type': 'hierarchy',
-'label': account_name if not label else label,
-'data': {
-  'modifier': ledger.get_account_sign(account_name),
-  'root': ledger.charts.hierarchy(g.filtered, account_name, g.conversion, begin_date, end_date or g.filtered.end_date),
-},
-}) %}
+{% do chart_data.append(chart_api.hierarchy(account_name, begin_date, end_date, label)) %}
 {% endmacro %}
 
 {% macro interval_totals(interval, account_name, label=None, invert=False) %}
-{% do chart_data.append({
-'type': 'bar',
-'label': account_name if not label else label,
-'data': ledger.charts.interval_totals(g.filtered, interval, account_name, g.conversion, invert=invert),
-}) %}
-{% endmacro %}
-
-{% macro events(event_type=None) %}
-{% do chart_data.append({
-'type': 'scatterplot',
-'label': _('Events') if not event_type else _('Event: %(type)s', type=event_type),
-'data': g.filtered.events(event_type),
-}) %}
+{% do chart_data.append(chart_api.interval_totals(interval, account_name, label, invert)) %}
 {% endmacro %}
 
 {% macro net_worth(interval) %}
-{% do chart_data.append({
-'type': 'balances',
-'label': _('Net Worth'),
-'data': ledger.charts.net_worth(g.filtered, interval, g.conversion),
-}) %}
+{% do chart_data.append(chart_api.net_worth()) %}
 {% endmacro %}
 
 {% macro account_balance(account_name) %}
-{% do chart_data.append({
-'type': 'balances',
-'label': _('Account Balance'),
-'data': ledger.charts.linechart(g.filtered, account_name, g.conversion),
-}) %}
+{% do chart_data.append(chart_api.account_balance(account_name)) %}
 {% endmacro %}
 
 {% macro commodities() %}
-{% for base, quote, prices in ledger.charts.prices(g.filtered) %}
-{% do chart_data.append({
-'type': 'commodities',
-'label': '{0} / {1}'.format(base, quote),
-'data': {
-  'prices': g.filtered.prices(base, quote),
-  'base': base,
-  'quote': quote,
-},
-}) %}
-{% endfor %}
+{% do chart_data.extend(chart_api.commodities()) %}
 {% endmacro %}

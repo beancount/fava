@@ -1,9 +1,13 @@
 {% import '_tree_table.html' as tree_table with context %}
 
-{{ charts.net_worth(g.interval) }}
-{{ charts.hierarchy(ledger.options['name_assets']) }}
-{{ charts.hierarchy(ledger.options['name_liabilities']) }}
-{{ charts.hierarchy(ledger.options['name_equity']) }}
+<svelte-component type="charts"><script type="application/json">{{
+  [
+    chart_api.net_worth(),
+    chart_api.hierarchy(ledger.options['name_assets']),
+    chart_api.hierarchy(ledger.options['name_liabilities']),
+    chart_api.hierarchy(ledger.options['name_equity']),
+  ]|tojson
+}}</script></svelte-component>
 
 {% set root_tree_closed = g.filtered.root_tree_closed %}
 {% set invert = ledger.fava_options.invert_income_liabilities_equity %}
