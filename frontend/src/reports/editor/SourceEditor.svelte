@@ -2,18 +2,18 @@
   import type { EditorView } from "@codemirror/view";
   import { onMount } from "svelte";
 
-  import { get, put } from "../api";
-  import { beancountFormat } from "../codemirror/beancount-format";
-  import { scrollToLine } from "../codemirror/scroll-to-line";
-  import { initBeancountEditor } from "../codemirror/setup";
-  import { bindKey } from "../keyboard-shortcuts";
-  import { log_error } from "../log";
-  import { notify } from "../notifications";
-  import router from "../router";
-  import { errorCount, fava_options } from "../stores";
+  import { get, put } from "../../api";
+  import { beancountFormat } from "../../codemirror/beancount-format";
+  import { scrollToLine } from "../../codemirror/scroll-to-line";
+  import { initBeancountEditor } from "../../codemirror/setup";
+  import SaveButton from "../../editor/SaveButton.svelte";
+  import { bindKey } from "../../keyboard-shortcuts";
+  import { log_error } from "../../log";
+  import { notify_err } from "../../notifications";
+  import router from "../../router";
+  import { errorCount, fava_options } from "../../stores";
 
   import EditorMenu from "./EditorMenu.svelte";
-  import SaveButton from "./SaveButton.svelte";
 
   export let data: { source: string; file_path: string; sha256sum: string };
 
@@ -40,9 +40,7 @@
       cm.focus();
       get("errors").then((count) => errorCount.set(count), log_error);
     } catch (error) {
-      if (error instanceof Error) {
-        notify(error.message, "error");
-      }
+      notify_err(error, (e) => e.message);
     } finally {
       saving = false;
     }

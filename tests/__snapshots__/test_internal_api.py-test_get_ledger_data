@@ -517,6 +517,7 @@
   "XYZ"
  ],
  "errors": 0,
+ "extension_reports": [],
  "fava_options": {
   "account_journal_include_children": true,
   "auto_reload": false,
@@ -639,11 +640,24 @@
   "VMMXX": 4,
   "XYZ": 0
  },
+ "sidebar_links": [],
  "tags": [
   "test",
   "trip-chicago-2015",
   "trip-new-york-2016",
   "trip-san-francisco-2015"
+ ],
+ "upcoming_events_count": 0,
+ "user_queries": [
+  {
+   "date": "2016-01-01",
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 11
+   },
+   "name": "fava",
+   "query_string": "journal"
+  }
  ],
  "years": [
   "2016",

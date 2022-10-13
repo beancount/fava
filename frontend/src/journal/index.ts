@@ -1,5 +1,3 @@
-import type { SvelteComponent } from "svelte";
-
 import { delegate } from "../lib/events";
 import { sortableJournal } from "../sort";
 import { fql_filter } from "../stores/filters";
@@ -71,7 +69,7 @@ function handleClick({ target }: MouseEvent): void {
 }
 
 export class FavaJournal extends HTMLElement {
-  component?: SvelteComponent;
+  component?: JournalFilters;
 
   unsubscribe?: () => void;
 

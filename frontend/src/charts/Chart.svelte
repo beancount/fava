@@ -20,12 +20,12 @@
   import ModeSwitch from "./ModeSwitch.svelte";
   import ScatterPlot from "./ScatterPlot.svelte";
 
-  import type { NamedChartTypes } from ".";
+  import type { NamedFavaChart } from ".";
 
   /**
    * The chart to render.
    */
-  export let chart: NamedChartTypes;
+  export let chart: NamedFavaChart;
 
   /**
    * Width of the chart.

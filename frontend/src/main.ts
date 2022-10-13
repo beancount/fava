@@ -10,7 +10,6 @@
 import "../css/style.css";
 import "../css/base.css";
 import "../css/layout.css";
-import "../css/aside.css";
 import "../css/charts.css";
 import "../css/components.css";
 import "../css/editor.css";
@@ -33,16 +32,13 @@ import { CopyableText } from "./clipboard";
 import { BeancountTextarea } from "./codemirror/setup";
 import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
-import {
-  initCurrentKeyboardShortcuts,
-  initGlobalKeyboardShortcuts,
-} from "./keyboard-shortcuts";
-import { getScriptTagValue } from "./lib/dom";
-import { object, string } from "./lib/validation";
+import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
 import { log_error } from "./log";
 import { notify } from "./notifications";
+import { updatePageTitle } from "./page-title";
+import { shouldRenderInFrontend } from "./reports/routes";
 import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
-import { initSidebar, updateSidebar } from "./sidebar";
+import { initSidebar } from "./sidebar";
 import { SortableTable } from "./sort";
 import { errorCount, fava_options, ledgerData, rawLedgerData } from "./stores";
 import { SvelteCustomElement } from "./svelte-custom-elements";
@@ -62,30 +58,10 @@ function defineCustomElements() {
   customElements.define("svelte-component", SvelteCustomElement);
 }
 
-const page_title_validator = object({
-  documentTitle: string,
-  pageTitle: string,
-});
-
-function updatePageTitle(): void {
-  const v = getScriptTagValue("#page-title", page_title_validator);
-  if (v.success) {
-    document.title = v.value.documentTitle;
-    const pageTitle = document.querySelector("h1 strong");
-    if (pageTitle) {
-      pageTitle.innerHTML = v.value.pageTitle;
-    }
-  } else {
-    log_error(`Loading page title failed: ${v.value}`);
-  }
-}
-
 router.on("page-loaded", () => {
   rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
   updatePageTitle();
-  initCurrentKeyboardShortcuts();
   document.getElementById("reload-page")?.classList.add("hidden");
-  updateSidebar();
 });
 
 /**
@@ -113,7 +89,7 @@ function doPoll(): void {
 function init(): void {
   rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
 
-  router.init();
+  router.init(shouldRenderInFrontend);
   setStoreValuesFromURL();
   syncStoreValuesToURL();
   initSidebar();

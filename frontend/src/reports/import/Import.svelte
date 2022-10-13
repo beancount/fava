@@ -1,19 +1,19 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import { deleteDocument, get, moveDocument, saveEntries } from "../api";
+  import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
+  import type { Entry } from "../../entries";
+  import { _ } from "../../i18n";
+  import { notify } from "../../notifications";
+  import router from "../../router";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
-  import type { Entry } from "../entries";
-  import { _ } from "../i18n";
-  import { notify } from "../notifications";
-  import router from "../router";
 
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
-  import { isDuplicate, preprocessData } from "./helpers";
-  import type { ImportableFile, ProcessedImportableFile } from "./helpers";
+  import { isDuplicate } from "./helpers";
+  import type { ProcessedImportableFile } from "./helpers";
 
-  export let data: ImportableFile[];
+  export let data: ProcessedImportableFile[];
 
   /** The array of entries to show the modal for. */
   let entries: Entry[] = [];
@@ -37,7 +37,7 @@
 
   onMount(() => router.addInteruptHandler(preventNavigation));
   onMount(() => {
-    files = preprocessData(data);
+    files = data;
   });
 
   /**

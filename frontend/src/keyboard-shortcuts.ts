@@ -129,7 +129,7 @@ export function getKeySpecKey(keySpec: KeySpec): string {
 
 /**
  * Bind an event handler to a key.
- * @param key - The key to bind.
+ * @param keySpec - The key to bind.
  * @param handler - The callback to run on key press.
  * @returns A function to unbind the keyboard handler.
  */
@@ -174,27 +174,6 @@ export function keyboardShortcut(
 }
 
 /**
- * Register keyboard shortcuts for all newly added elements with a
- * `data-keyboard-shortcut` attribute.
- */
-export function initCurrentKeyboardShortcuts(): void {
-  // clean up
-  for (const [key, action] of keyboardShortcuts.entries()) {
-    if (action instanceof HTMLElement && !document.contains(action)) {
-      keyboardShortcuts.delete(key);
-    }
-  }
-  document.querySelectorAll("[data-keyboard-shortcut]").forEach((element) => {
-    const key = element.getAttribute("data-keyboard-shortcut");
-    if (key && element instanceof HTMLElement) {
-      element.removeAttribute("data-keyboard-shortcut");
-      element.setAttribute("data-key", key);
-      bindKey(key, element);
-    }
-  });
-}
-
-/**
  * Register the keys to show/hide the tooltips
  */
 export function initGlobalKeyboardShortcuts(): void {
@@ -208,4 +187,10 @@ export function initGlobalKeyboardShortcuts(): void {
     document.addEventListener("mousedown", once);
     document.addEventListener("keydown", once);
   });
+
+  const reloadButton = document.getElementById("reload-page");
+  if (reloadButton) {
+    reloadButton.setAttribute("data-key", "r");
+    bindKey("r", reloadButton);
+  }
 }

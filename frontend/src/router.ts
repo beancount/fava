@@ -5,17 +5,20 @@
  * load the content of the page and replace the <article> contents with them.
  */
 
+import type { SvelteComponent } from "svelte";
 import type { Writable } from "svelte/store";
+import { writable } from "svelte/store";
 
 import { delegate, Events } from "./lib/events";
 import { fetch, handleText } from "./lib/fetch";
 import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
 import { log_error } from "./log";
-import { notify } from "./notifications";
+import { notify_err } from "./notifications";
+import type { GetFrontendComponent } from "./reports/routes";
 import { conversion, interval, urlHash } from "./stores";
 import { showCharts } from "./stores/chart";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
-import { urlSyncedParams } from "./stores/url";
+import { pathname, search } from "./stores/url";
 
 /**
  * Set a store's inital value from the URL.
@@ -30,15 +33,39 @@ export function setStoreValuesFromURL(): void {
   showCharts.set(params.get("charts") !== "false");
 }
 
+const is_loading = writable(false);
+
+is_loading.subscribe((v) => {
+  const svg = document.querySelector(".fava-icon");
+  if (v) {
+    svg?.classList.add("loading");
+  } else {
+    svg?.classList.remove("loading");
+  }
+});
+
+/** Use this store to force reloads in components. */
+export const should_reload = writable(1);
+
 class Router extends Events<"page-loaded"> {
   /** The URL hash. */
-  hash: string;
+  private hash: string;
 
   /** The URL pathname. */
-  pathname: string;
+  private pathname: string;
 
   /** The URL search string. */
-  search: string;
+  private search: string;
+
+  /** The <article> element. */
+  private article: HTMLElement;
+
+  private shouldRenderInFrontend?: GetFrontendComponent;
+
+  /** A possibly frontend rendered component. */
+  private component?: SvelteComponent;
+
+  page_title?: string;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -50,6 +77,12 @@ class Router extends Events<"page-loaded"> {
 
   constructor() {
     super();
+
+    const article = document.querySelector("article");
+    if (!article) {
+      throw new Error("<article> element is missing from markup");
+    }
+    this.article = article;
 
     this.hash = window.location.hash;
     this.pathname = window.location.pathname;
@@ -84,13 +117,34 @@ class Router extends Events<"page-loaded"> {
     return null;
   }
 
+  private frontendRender(url: URL | Location): void {
+    const frontend = this.shouldRenderInFrontend?.(url);
+    if (frontend) {
+      const [Cls, title] = frontend;
+      // Check if the component is changed - otherwise it should update itself.
+      if (Cls !== this.component?.constructor) {
+        this.component?.$destroy();
+        this.article.innerHTML = "";
+        this.component = new Cls({ target: this.article });
+        this.page_title = title;
+      }
+    } else {
+      this.component?.$destroy();
+      this.component = undefined;
+      this.page_title = undefined;
+    }
+  }
+
   /**
    * This should be called once when the page has been loaded. Initializes the
    * router and takes over clicking on links.
    */
-  init(): void {
+  init(shouldRenderInFrontend: GetFrontendComponent): void {
+    this.shouldRenderInFrontend = shouldRenderInFrontend;
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
+
+    this.frontendRender(window.location);
 
     window.addEventListener("beforeunload", (event) => {
       const leaveMessage = this.shouldInterrupt();
@@ -148,21 +202,26 @@ class Router extends Events<"page-loaded"> {
     }
 
     const getUrl = new URL(url, window.location.href);
-    getUrl.searchParams.set("partial", "true");
 
-    const svg = document.querySelector(".fava-icon");
-    svg?.classList.add("loading");
+    this.frontendRender(getUrl);
 
     try {
-      const content = await fetch(getUrl.toString()).then(handleText);
-      if (historyState) {
-        window.history.pushState(null, "", url);
-        window.scroll(0, 0);
-      }
-      this.updateState();
-      const article = document.querySelector("article");
-      if (article) {
-        article.innerHTML = content;
+      if (!this.component) {
+        getUrl.searchParams.set("partial", "true");
+        is_loading.set(true);
+        const content = await fetch(getUrl.toString()).then(handleText);
+        if (historyState) {
+          window.history.pushState(null, "", url);
+          window.scroll(0, 0);
+        }
+        this.updateState();
+        this.article.innerHTML = content;
+      } else {
+        if (historyState) {
+          window.history.pushState(null, "", url);
+          window.scroll(0, 0);
+        }
+        this.updateState();
       }
       this.trigger("page-loaded");
       const hash = window.location.hash.slice(1);
@@ -171,13 +230,9 @@ class Router extends Events<"page-loaded"> {
         document.getElementById(hash)?.scrollIntoView();
       }
     } catch (error) {
-      if (error instanceof Error) {
-        notify(`Loading ${url} failed: ${error.message}`, "error");
-      } else {
-        log_error(error);
-      }
+      notify_err(error, (e) => `Loading ${url} failed: ${e.message}`);
     } finally {
-      svg?.classList.remove("loading");
+      is_loading.set(false);
     }
   }
 
@@ -191,6 +246,8 @@ class Router extends Events<"page-loaded"> {
     this.hash = window.location.hash;
     this.pathname = window.location.pathname;
     this.search = window.location.search;
+    pathname.set(this.pathname);
+    search.set(this.search);
   }
 
   /*
@@ -217,20 +274,6 @@ class Router extends Events<"page-loaded"> {
         ) {
           return;
         }
-        // update sidebar links
-        if (link.closest("aside")) {
-          const newURL = new URL(link.href);
-          const oldParams = new URL(window.location.href).searchParams;
-          for (const name of urlSyncedParams) {
-            const value = oldParams.get(name);
-            if (value) {
-              newURL.searchParams.set(name, value);
-            } else {
-              newURL.searchParams.delete(name);
-            }
-          }
-          link.href = newURL.toString();
-        }
         if (
           event.button !== 0 ||
           event.altKey ||
@@ -251,7 +294,11 @@ class Router extends Events<"page-loaded"> {
    * Reload the page.
    */
   reload(): void {
-    this.loadURL(window.location.href, false).catch(log_error);
+    if (this.component) {
+      should_reload.update((v) => v + 1);
+    } else {
+      this.loadURL(window.location.href, false).catch(log_error);
+    }
   }
 }
 

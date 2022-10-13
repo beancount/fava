@@ -9,6 +9,7 @@ from __future__ import annotations
 import os
 import shutil
 from dataclasses import dataclass
+from datetime import date
 from functools import wraps
 from inspect import Parameter
 from inspect import signature
@@ -18,6 +19,7 @@ from typing import Any
 from typing import Callable
 from typing import Mapping
 
+from beancount.core.number import Decimal
 from flask import Blueprint
 from flask import get_template_attribute
 from flask import jsonify
@@ -243,6 +245,18 @@ def get_payee_transaction(payee: str) -> Any:
 
 
 @api_endpoint
+def get_source(filename: str) -> Any:
+    """Load one of the source files."""
+    file_path = (
+        filename
+        or g.ledger.fava_options.default_file
+        or g.ledger.beancount_file_path
+    )
+    source, sha256sum = g.ledger.file.get_source(file_path)
+    return {"source": source, "sha256sum": sha256sum, "file_path": file_path}
+
+
+@api_endpoint
 def put_source(file_path: str, source: str, sha256sum: str) -> str:
     """Write one of the source files and return the updated sha256sum."""
     return g.ledger.file.set_source(file_path, source, sha256sum)
@@ -327,3 +341,50 @@ def put_add_entries(entries: list[Any]) -> str:
     g.ledger.file.insert_entries(entries)
 
     return f"Stored {len(entries)} entries."
+
+
+########################################################################
+# Reports
+
+
+@api_endpoint
+def get_events() -> list[Any]:
+    """Get all (filtered) events."""
+    return g.filtered.events()
+
+
+@api_endpoint
+def get_imports() -> list[Any]:
+    """Get a list of the importable files."""
+    return g.ledger.ingest.import_data()
+
+
+@api_endpoint
+def get_documents() -> list[Any]:
+    """Get all (filtered) documents."""
+    return g.filtered.documents
+
+
+@dataclass
+class CommodityPairWithPrices:
+    """A pair of commodities and prices for them."""
+
+    base: str
+    quote: str
+    prices: list[tuple[date, Decimal]]
+
+
+@api_endpoint
+def get_commodities() -> list[CommodityPairWithPrices]:
+    """The prices for all commodity pairs.
+
+    Returns:
+        A list of CommodityPairWithPrices
+    """
+    ret = []
+    for base, quote in g.ledger.commodity_pairs():
+        prices = g.filtered.prices(base, quote)
+        if prices:
+            ret.append(CommodityPairWithPrices(base, quote, prices))
+
+    return ret

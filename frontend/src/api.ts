@@ -6,15 +6,17 @@ import type { ValidationT } from "./lib/validation";
 import {
   array,
   boolean,
+  date,
   number,
   object,
   optional,
   record,
   string,
+  tuple,
   unknown,
 } from "./lib/validation";
-import { log_error } from "./log";
-import { notify } from "./notifications";
+import { notify, notify_err } from "./notifications";
+import { importable_files_validator } from "./reports/import/helpers";
 import router from "./router";
 import type { Filters } from "./stores/filters";
 
@@ -65,20 +67,36 @@ const getAPIValidators = {
     sha256sum: string,
     slice: string,
   }),
+  commodities: array(
+    object({
+      base: string,
+      quote: string,
+      prices: array(tuple([date, number])),
+    })
+  ),
+  documents: array(object({ account: string, filename: string, date: string })),
   errors: number,
   extract: array(entryValidator),
+  events: array(object({ type: string, description: string, date })),
+  imports: importable_files_validator,
   move: string,
   payee_accounts: array(string),
   payee_transaction: Transaction.validator,
   query_result: object({ chart: unknown, table: string }),
+  source: object({ source: string, sha256sum: string, file_path: string }),
 };
 type GetAPITypes = typeof getAPIValidators;
 
 interface GetAPIParams {
   changed: undefined;
+  commodities: Filters;
   context: { entry_hash: string };
   errors: undefined;
   extract: { filename: string; importer: string };
+  events: Filters;
+  documents: Filters;
+  imports: undefined;
+  source: { filename: string };
   move: { filename: string; account: string; new_name: string };
   payee_accounts: { payee: string };
   payee_transaction: { payee: string };
@@ -94,8 +112,8 @@ interface GetAPIParams {
 export async function get<T extends keyof GetAPIParams>(
   endpoint: T,
   ...[params]: GetAPIParams[T] extends undefined
-    ? [undefined?]
-    : [GetAPIParams[T]]
+    ? [undefined?, number?]
+    : [GetAPIParams[T], number?]
 ): Promise<ValidationT<GetAPITypes[T]>> {
   const url = urlFor(`api/${endpoint}`, params, false);
   const json = await fetchJSON(url);
@@ -124,10 +142,7 @@ export async function moveDocument(
     notify(msg);
     return true;
   } catch (error) {
-    log_error(error);
-    if (error instanceof Error) {
-      notify(error.message, "error");
-    }
+    notify_err(error, (e) => e.message);
     return false;
   }
 }
@@ -145,10 +160,7 @@ export async function deleteDocument(filename: string): Promise<boolean> {
     notify(d.value);
     return d.success;
   } catch (error) {
-    log_error(error);
-    if (error instanceof Error) {
-      notify(error.message, "error");
-    }
+    notify_err(error, (e) => e.message);
     return false;
   }
 }
@@ -166,10 +178,7 @@ export async function saveEntries(entries: Entry[]): Promise<void> {
     router.reload();
     notify(data);
   } catch (error) {
-    log_error(error);
-    if (error instanceof Error) {
-      notify(`Saving failed: ${error.message}`, "error");
-    }
+    notify_err(error, (e) => `Saving failed: ${e.message}`);
     throw error;
   }
 }

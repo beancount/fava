@@ -13,7 +13,7 @@ import type { BarChart } from "./bar";
 import type { ChartContext } from "./context";
 import { hierarchy } from "./hierarchy";
 import type { HierarchyChart } from "./hierarchy";
-import { balances, commodities } from "./line";
+import { balances } from "./line";
 import type { LineChart } from "./line";
 import { scatterplot } from "./scatterplot";
 import type { ScatterPlot } from "./scatterplot";
@@ -25,18 +25,17 @@ const parsers: Partial<
       json: unknown,
       ctx: ChartContext,
       label: string
-    ) => Result<ChartTypes, string>
+    ) => Result<FavaChart, string>
   >
 > = {
   balances,
-  commodities,
   bar,
   hierarchy,
   scatterplot,
 };
 
-export type ChartTypes = HierarchyChart | BarChart | ScatterPlot | LineChart;
-export type NamedChartTypes = ChartTypes & { name?: string };
+export type FavaChart = HierarchyChart | BarChart | ScatterPlot | LineChart;
+export type NamedFavaChart = FavaChart & { name?: string };
 
 export const chart_data_validator = array(
   object({ label: string, type: string, data: unknown })
@@ -45,12 +44,12 @@ export const chart_data_validator = array(
 export function parseChartData(
   res: ReturnType<typeof chart_data_validator>,
   ctx: ChartContext
-): Result<NamedChartTypes[], string> {
+): Result<NamedFavaChart[], string> {
   if (!res.success) {
     return res;
   }
   const chartData = res.value;
-  const result: NamedChartTypes[] = [];
+  const result: NamedFavaChart[] = [];
   chartData.forEach((chart) => {
     const parser = parsers[chart.type];
     if (parser) {

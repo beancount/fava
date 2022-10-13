@@ -330,3 +330,11 @@ def test_api_query_result_filters(test_client: FlaskClient) -> None:
     )
     assert response.status_code == 200
     assert "6882" in response.get_data(True)
+
+
+def test_api_commodities(
+    test_client: FlaskClient, snapshot: SnapshotFunc
+) -> None:
+    response = test_client.get("/long-example/api/commodities")
+    assert_api_success(response)
+    snapshot(response.json)

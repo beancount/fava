@@ -10,10 +10,16 @@ export class Events<T = string> {
 
   /**
    * Register an event listener.
+   *
+   * @returns A function to remove the event listener.
    */
-  on(event: T, callback: () => void): void {
+  on(event: T, callback: () => void): () => void {
     const events = this.events.get(event) ?? [];
     this.events.set(event, [...events, callback]);
+
+    return () => {
+      this.remove(event, callback);
+    };
   }
 
   /**

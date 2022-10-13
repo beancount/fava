@@ -1,7 +1,10 @@
-import { get, writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
 
+/** The time filter. */
 export const time_filter = writable("");
+/** The account filter. */
 export const account_filter = writable("");
+/** The filter with our custom query syntax. */
 export const fql_filter = writable("");
 
 /** The three entry filters that Fava supports. */
@@ -11,11 +14,8 @@ export type Filters = {
   time: string;
 };
 
-/** Get the current filters. */
-export function getFilterParams(): Filters {
-  return {
-    account: get(account_filter),
-    filter: get(fql_filter),
-    time: get(time_filter),
-  };
-}
+/** The current filters, can be used as URL parameters. */
+export const filter_params = derived(
+  [time_filter, account_filter, fql_filter],
+  ([time, account, filter]): Filters => ({ time, account, filter })
+);

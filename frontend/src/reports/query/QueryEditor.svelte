@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { initQueryEditor } from "../codemirror/setup";
-  import { _ } from "../i18n";
-  import { keyboardShortcut } from "../keyboard-shortcuts";
+  import { initQueryEditor } from "../../codemirror/setup";
+  import { _ } from "../../i18n";
+  import { keyboardShortcut } from "../../keyboard-shortcuts";
 
   export let value: string;
   export let submit: () => void;

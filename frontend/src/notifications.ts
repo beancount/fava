@@ -1,3 +1,5 @@
+import { log_error } from "./log";
+
 /** The notification list div, lazily created. */
 const notificationList = (() => {
   let value: HTMLDivElement | null = null;
@@ -39,4 +41,14 @@ export function notify(
   setTimeout(() => {
     notification.remove();
   }, 5000);
+}
+
+/**
+ * Notify the user about an error and log to console.
+ */
+export function notify_err(error: unknown, msg: (e: Error) => string) {
+  if (error instanceof Error) {
+    notify(msg(error), "error");
+  }
+  log_error(error);
 }

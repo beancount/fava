@@ -1,6 +1,16 @@
 {% import "_charts.html" as charts with context %}
-{% import "_globals.html" as globals with context %}
-{% set page_title = globals.all_pages[active_page].0 if not page_title else page_title %}
+{% set all_pages = {
+    'balance_sheet':    _('Balance Sheet'),
+    'errors':           _('Errors'),
+    'help':             _('Help'),
+    'holdings':         _('Holdings'),
+    'income_statement': _('Income Statement'),
+    'journal':          _('Journal'),
+    'options':          _('Options'),
+    'statistics':       _('Statistics'),
+    'trial_balance':    _('Trial Balance'),
+} %}
+{% set page_title = all_pages.get(active_page, "") if not page_title else page_title %}
 {% set short_title = page_title if not short_title else short_title %}
 {% if not request.args.get('partial') %}
 <!doctype html>
@@ -20,7 +30,7 @@
       </svg>
       <h1>
         {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-        <button type=button id="reload-page" class="reload-page hidden" data-keyboard-shortcut="r">&#8635;</button>
+        <button type=button id="reload-page" class="reload-page hidden">&#8635;</button>
         {% if config['LEDGERS']|length > 1 %}
         <div class="beancount-files">
           <ul>
@@ -34,28 +44,28 @@
       </h1>
       <svelte-component type="filter-form"></svelte-component>
     </header>
-    <button type="button" id="aside-button" class="aside-button">
-      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="32px" width="32px" version="1.0" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-    </button>
-    <aside>{% include "_aside.html" %}</aside>
+    <!-- <aside> and button get inserted here -->
     <article>
       {%- endif %}
       <svelte-component type="charts"></svelte-component>
-      {% block content %}
-      {% if content %}
-      {{ content }}
-      {% else %}
-      {% include active_page + '.html' %}
+      {% if not client_side_rendered %}
+        {% block content %}
+          {% if content %}
+            {{ content }}
+          {% else %}
+            {% include active_page + '.html' %}
+          {% endif %}
+        {% endblock %}
       {% endif %}
-      {% endblock %}
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson }}</script>
       <script type="application/json" id="page-title">{{ {
-        'documentTitle': '{} - {}'.format(short_title, ledger.options.title),
+        'documentTitle': short_title,
         'pageTitle': page_title,
       }|tojson }}</script>
       <script type="application/json" id="ledger-data">{{ get_ledger_data()|tojson }}</script>
       {%- if not request.args.get('partial') %}
     </article>
+    <script type="application/json" id="ledger-data">{{ get_ledger_data()|tojson }}</script>
     <svelte-component type="modals"></svelte-component>
     <script type="application/json" id="translations">{{ translations()|tojson }}</script>
   </body>

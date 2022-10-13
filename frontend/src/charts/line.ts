@@ -2,15 +2,7 @@ import type { FormatterContext } from "../format";
 import { day } from "../format";
 import { ok } from "../lib/result";
 import type { Result } from "../lib/result";
-import {
-  array,
-  date,
-  number,
-  object,
-  record,
-  string,
-  tuple,
-} from "../lib/validation";
+import { array, date, number, object, record } from "../lib/validation";
 
 import type { TooltipContent } from "./tooltip";
 import { domHelpers } from "./tooltip";
@@ -62,33 +54,6 @@ export function balances(json: unknown): Result<LineChart, string> {
     data,
     tooltipText: (c, d) => [
       domHelpers.t(c.amount(d.value, d.name)),
-      domHelpers.em(day(d.date)),
-    ],
-  });
-}
-
-const commodities_validator = object({
-  quote: string,
-  base: string,
-  prices: array(tuple([date, number])),
-});
-
-export function commodities(
-  json: unknown,
-  _ctx: unknown,
-  label: string
-): Result<LineChart, string> {
-  const res = commodities_validator(json);
-  if (!res.success) {
-    return res;
-  }
-  const { base, quote, prices } = res.value;
-  const values = prices.map((d) => ({ name: label, date: d[0], value: d[1] }));
-  return ok({
-    type: "linechart" as const,
-    data: [{ name: label, values }],
-    tooltipText: (c, d) => [
-      domHelpers.t(`1 ${base} = ${c.amount(d.value, quote)}`),
       domHelpers.em(day(d.date)),
     ],
   });

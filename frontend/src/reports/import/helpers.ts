@@ -1,5 +1,7 @@
-import type { Entry } from "../entries";
-import { todayAsString } from "../format";
+import type { Entry } from "../../entries";
+import { todayAsString } from "../../format";
+import type { Validator } from "../../lib/validation";
+import { array, object, string } from "../../lib/validation";
 
 /**
  * Check whether the given entry is marked as duplicate.
@@ -29,6 +31,21 @@ type FileWithImporters<T> = {
 
 export type ImportableFile = FileWithImporters<{ date: string; name: string }>;
 export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
+
+export const importable_files_validator: Validator<ImportableFile[]> = array(
+  object({
+    name: string,
+    basename: string,
+    importers: array(
+      object({
+        account: string,
+        importer_name: string,
+        date: string,
+        name: string,
+      })
+    ),
+  })
+);
 
 /**
  * Initially set the file names for all importable files.

@@ -2,7 +2,7 @@ import { test } from "uvu";
 import assert from "uvu/assert";
 
 import { bar } from "../src/charts/bar";
-import { balances, commodities } from "../src/charts/line";
+import { balances } from "../src/charts/line";
 import {
   parseGroupedQueryChart,
   parseQueryChart,
@@ -42,28 +42,6 @@ test("handle data for balances chart", () => {
   ]);
   const queryChart = parseQueryChart(data, ctx);
   assert.equal(queryChart.success && queryChart.value.data, parsed.data);
-});
-
-test("handle data for commodities chart", () => {
-  assert.is(false, commodities("", null, "asdf").success);
-  const data: unknown = {
-    base: "EUR",
-    quote: "USD",
-    prices: [
-      ["2000-01-01", 10.0],
-      ["2000-02-01", 12.0],
-    ],
-  };
-  const parsed = force_ok(commodities(data, null, "asdf"));
-  assert.equal(parsed.data, [
-    {
-      name: "asdf",
-      values: [
-        { date: new Date("2000-01-01"), name: "asdf", value: 10 },
-        { date: new Date("2000-02-01"), name: "asdf", value: 12 },
-      ],
-    },
-  ]);
 });
 
 test("handle data for scatterplot chart", () => {

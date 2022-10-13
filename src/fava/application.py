@@ -87,23 +87,27 @@ app.jinja_env.lstrip_blocks = True
 app.config["HAVE_EXCEL"] = HAVE_EXCEL
 app.config["ACCOUNT_RE"] = ACCOUNT_RE
 
-REPORTS = [
+SERVER_SIDE_REPORTS = [
     "balance_sheet",
-    "commodities",
-    "documents",
-    "events",
-    "editor",
     "errors",
     "holdings",
-    "import",
     "income_statement",
     "journal",
     "options",
-    "query",
     "statistics",
     "trial_balance",
 ]
 
+CLIENT_SIDE_REPORTS = [
+    "commodities",
+    "documents",
+    "editor",
+    "events",
+    "import",
+    "query",
+]
+
+REPORTS = SERVER_SIDE_REPORTS + CLIENT_SIDE_REPORTS
 
 LOAD_FILE_LOCK = Lock()
 
@@ -345,6 +349,10 @@ def holdings_by(aggregation_key: str) -> str:
 @app.route("/<bfile>/<report_name>/")
 def report(report_name: str) -> str:
     """Endpoint for most reports."""
+    if report_name in CLIENT_SIDE_REPORTS:
+        return render_template(
+            "_layout.html", active_page=report_name, client_side_rendered=True
+        )
     if report_name in REPORTS:
         return render_template("_layout.html", active_page=report_name)
     return abort(404)

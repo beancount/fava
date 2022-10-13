@@ -14,6 +14,7 @@ import {
   object,
   record,
   string,
+  tuple,
   union,
 } from "../lib/validation";
 
@@ -50,11 +51,16 @@ export const ledgerDataValidator = object({
     filename: string,
     include: array(string),
     operating_currency: array(string),
+    title: string,
   }),
   payees: array(string),
   precisions: record(number),
   tags: array(string),
   years: array(string),
+  user_queries: array(object({ name: string, query_string: string })),
+  upcoming_events_count: number,
+  extension_reports: array(tuple([string, string])),
+  sidebar_links: array(tuple([string, string])),
 });
 
 export const rawLedgerData = writable("");
@@ -74,6 +80,8 @@ export const ledgerData: Readable<LedgerData> = derived(rawLedgerData, (s) => {
 export const fava_options = derived(ledgerData, (val) => val.fava_options);
 /** Beancount's options */
 export const options = derived(ledgerData, (val) => val.options);
+/** Beancount ledger title */
+export const ledger_title = derived(ledgerData, (val) => val.options.title);
 /** Commodity display precisions. */
 export const precisions = derived(ledgerData, (val) => val.precisions);
 /** Whether Fava supports exporting to Excel. */

@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
-from itertools import groupby
-from operator import attrgetter
 from typing import Any
 
 from flask import current_app
@@ -40,27 +38,37 @@ class LedgerData:
     precisions: dict[str, int]
     tags: list[str]
     years: list[str]
+    user_queries: list[Any]
+    upcoming_events_count: int
+    extension_reports: list[tuple[str, str]]
+    sidebar_links: list[tuple[str, str]]
 
 
 def get_ledger_data() -> LedgerData:
     """Get the report-independent ledger data."""
     options = dict(g.ledger.options)
     del options["input_hash"]
+
+    ledger = g.ledger
     return LedgerData(
-        g.ledger.attributes.accounts,
-        g.ledger.accounts,
+        ledger.attributes.accounts,
+        ledger.accounts,
         url_for("index"),
-        g.ledger.attributes.currencies,
-        len(g.ledger.errors),
-        g.ledger.fava_options,
+        ledger.attributes.currencies,
+        len(ledger.errors),
+        ledger.fava_options,
         current_app.config.get("INCOGNITO", False),
         HAVE_EXCEL,
-        g.ledger.attributes.links,
+        ledger.attributes.links,
         options,
-        g.ledger.attributes.payees,
-        g.ledger.format_decimal.precisions,
-        g.ledger.attributes.tags,
-        g.ledger.attributes.years,
+        ledger.attributes.payees,
+        ledger.format_decimal.precisions,
+        ledger.attributes.tags,
+        ledger.attributes.years,
+        ledger.query_shell.queries[: ledger.fava_options.sidebar_show_queries],
+        len(ledger.misc.upcoming_events),
+        ledger.extensions.reports,
+        ledger.misc.sidebar_links,
     )
 
 
@@ -110,42 +118,12 @@ def _chart_hierarchy(
     )
 
 
-def _chart_commodities() -> list[ChartData]:
-    return [
-        ChartData(
-            "commodities",
-            f"{base} / {quote}",
-            {
-                "prices": prices,
-                "base": base,
-                "quote": quote,
-            },
-        )
-        for base, quote, prices in g.ledger.charts.prices(g.filtered)
-    ]
-
-
 def _chart_net_worth() -> ChartData:
     return ChartData(
         "balances",
         gettext("Net Worth"),
         g.ledger.charts.net_worth(g.filtered, g.interval, g.conversion),
     )
-
-
-def _chart_events() -> list[ChartData]:
-    events = g.filtered.events()
-    charts = [ChartData("scatterplot", gettext("Events"), events)]
-    key = attrgetter("type")
-    for event_type, items in groupby(sorted(events, key=key), key):
-        charts.append(
-            ChartData(
-                "scatterplot",
-                gettext("Event: %(type)s", type=event_type),
-                list(items),
-            )
-        )
-    return charts
 
 
 def _chart_account_balance(account_name: str) -> ChartData:
@@ -160,8 +138,6 @@ class ChartApi:
     """Functions to generate chart data."""
 
     account_balance = _chart_account_balance
-    commodities = _chart_commodities
-    events = _chart_events
     hierarchy = _chart_hierarchy
     interval_totals = _chart_interval_totals
     net_worth = _chart_net_worth

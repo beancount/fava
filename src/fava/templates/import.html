@@ -1,7 +1,0 @@
-{% if not ledger.fava_options.import_config %}
-<p>
-No importers configured. See <a href="{{ url_for('help_page', page_slug='import') }}">Help (Import)</a> for more information.
-</p>
-{% else %}
-<svelte-component type="import"><script type="application/json">{{ ledger.ingest.import_data()|tojson }}</script></svelte-component>
-{% endif %}

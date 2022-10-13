@@ -13,9 +13,9 @@
 </script>
 
 <script lang="ts">
-  import DocumentPreviewEditor from "../editor/DocumentPreviewEditor.svelte";
-  import { ext } from "../lib/paths";
-  import { base_url } from "../stores";
+  import DocumentPreviewEditor from "../../editor/DocumentPreviewEditor.svelte";
+  import { ext } from "../../lib/paths";
+  import { base_url } from "../../stores";
 
   export let filename: string;
 

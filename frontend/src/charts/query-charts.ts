@@ -16,7 +16,7 @@ import type { ChartContext } from "./context";
 import type { AccountHierarchyNode, HierarchyChart } from "./hierarchy";
 import { balances } from "./line";
 
-import type { ChartTypes } from "./index";
+import type { FavaChart } from "./index";
 
 const grouped_chart_validator = array(
   object({ group: string, balance: record(number) })
@@ -56,7 +56,7 @@ export function parseGroupedQueryChart(
 export function parseQueryChart(
   json: unknown,
   ctx: ChartContext
-): Result<ChartTypes, string> {
+): Result<FavaChart, string> {
   const tree = parseGroupedQueryChart(json, ctx);
   if (tree.success) {
     return tree;

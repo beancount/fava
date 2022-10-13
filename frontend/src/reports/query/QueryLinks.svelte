@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { urlFor } from "../helpers";
-  import { _ } from "../i18n";
-  import { HAVE_EXCEL } from "../stores";
+  import { urlFor } from "../../helpers";
+  import { _ } from "../../i18n";
+  import { HAVE_EXCEL } from "../../stores";
 
   export let query: string;
 

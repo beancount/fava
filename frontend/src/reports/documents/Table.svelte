@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { _ } from "../i18n";
-  import { isDescendant } from "../lib/account";
-  import { basename } from "../lib/paths";
-  import { sortFunc } from "../sort";
+  import { _ } from "../../i18n";
+  import { isDescendant } from "../../lib/account";
+  import { basename } from "../../lib/paths";
+  import { sortFunc } from "../../sort";
 
   import { selectedAccount } from "./stores";
   import type { Document } from "./types";

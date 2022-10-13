@@ -15,7 +15,3 @@
 {% macro account_balance(account_name) %}
 {% do chart_data.append(chart_api.account_balance(account_name)) %}
 {% endmacro %}
-
-{% macro commodities() %}
-{% do chart_data.extend(chart_api.commodities()) %}
-{% endmacro %}

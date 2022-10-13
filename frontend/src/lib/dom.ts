@@ -13,7 +13,7 @@ function getScriptTagJSON(selector: string): Result<unknown, string> {
     return err(`<script> tag not found for selector '${selector}'`);
   }
   try {
-    return parseJSON(el.innerHTML);
+    return parseJSON(el.textContent ?? "");
   } catch (e) {
     return err(`<script> tag for selector '${selector}' contains invalid JSON`);
   }

@@ -34,12 +34,6 @@ def test_interval_totals_inverted(
         snapshot(dumps(data))
 
 
-def test_prices(example_ledger: FavaLedger, snapshot: SnapshotFunc) -> None:
-    data = example_ledger.charts.prices(example_ledger.get_filtered())
-    assert all(price[1] for price in data)
-    snapshot(data)
-
-
 def test_linechart_data(
     example_ledger: FavaLedger, snapshot: SnapshotFunc
 ) -> None:

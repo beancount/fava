@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { initReadonlyQueryEditor } from "../codemirror/setup";
+  import { initReadonlyQueryEditor } from "../../codemirror/setup";
 
   export let value: string;
 

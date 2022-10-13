@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { Entry as EntryType } from "../entries";
-  import Entry from "../entry-forms/Entry.svelte";
-  import { _ } from "../i18n";
-  import ModalBase from "../modals/ModalBase.svelte";
+  import type { Entry as EntryType } from "../../entries";
+  import Entry from "../../entry-forms/Entry.svelte";
+  import { _ } from "../../i18n";
+  import ModalBase from "../../modals/ModalBase.svelte";
 
   import { isDuplicate } from "./helpers";
 

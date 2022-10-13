@@ -2,28 +2,19 @@
  * A custom element that will render a Svelte component.
  */
 
-import type { SvelteComponent } from "svelte";
+import type { SvelteComponentTyped } from "svelte";
 
 import ChartSwitcher from "./charts/ChartSwitcher.svelte";
-import ConversionAndInterval from "./charts/ConversionAndInterval.svelte";
-import Documents from "./documents/Documents.svelte";
-import SourceEditor from "./editor/SourceEditor.svelte";
 import FilterForm from "./header/FilterForm.svelte";
-import Import from "./import/Import.svelte";
 import Modals from "./modals/Modals.svelte";
-import Query from "./query/Query.svelte";
-import AccountSelector from "./sidebar/AccountSelector.svelte";
 
-const components = new Map([
+const components = new Map<
+  string,
+  typeof SvelteComponentTyped<{ data?: unknown }>
+>([
   ["charts", ChartSwitcher],
-  ["documents", Documents],
-  ["editor", SourceEditor],
-  ["import", Import],
-  ["query", Query],
-  ["account-selector", AccountSelector],
   ["filter-form", FilterForm],
   ["modals", Modals],
-  ["conversion-and-interval", ConversionAndInterval],
 ]);
 
 /**
@@ -33,7 +24,7 @@ const components = new Map([
  * of the valid values in the Map above.
  */
 export class SvelteCustomElement extends HTMLElement {
-  component?: SvelteComponent;
+  component?: SvelteComponentTyped<{ data?: unknown }>;
 
   connectedCallback(): void {
     if (this.component) {
@@ -56,7 +47,11 @@ export class SvelteCustomElement extends HTMLElement {
   }
 
   disconnectedCallback(): void {
-    this.component?.$destroy();
-    this.component = undefined;
+    try {
+      this.component?.$destroy();
+      this.component = undefined;
+    } catch (e) {
+      // pass
+    }
   }
 }

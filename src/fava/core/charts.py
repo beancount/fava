@@ -146,21 +146,6 @@ class ChartModule(FavaModule):
         )
 
     @listify
-    def prices(
-        self, filtered: FilteredLedger
-    ) -> Generator[tuple[str, str, list[tuple[date, Decimal]]], None, None]:
-        """The prices for all commodity pairs.
-
-        Returns:
-            A list of tuples (base, quote, prices) where prices
-            is a list of prices.
-        """
-        for base, quote in self.ledger.commodity_pairs():
-            prices = filtered.prices(base, quote)
-            if prices:
-                yield base, quote, prices
-
-    @listify
     def interval_totals(
         self,
         filtered: FilteredLedger,

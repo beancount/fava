@@ -3,13 +3,13 @@
   import { foldAll, unfoldAll } from "@codemirror/language";
   import type { EditorView } from "@codemirror/view";
 
-  import { beancountFormat } from "../codemirror/beancount-format";
-  import { scrollToLine } from "../codemirror/scroll-to-line";
-  import { urlFor } from "../helpers";
-  import { _ } from "../i18n";
-  import { modKey } from "../keyboard-shortcuts";
-  import router from "../router";
-  import { fava_options, options } from "../stores";
+  import { beancountFormat } from "../../codemirror/beancount-format";
+  import { scrollToLine } from "../../codemirror/scroll-to-line";
+  import { urlFor } from "../../helpers";
+  import { _ } from "../../i18n";
+  import { modKey } from "../../keyboard-shortcuts";
+  import router from "../../router";
+  import { fava_options, options } from "../../stores";
 
   import AppMenu from "./AppMenu.svelte";
   import AppMenuItem from "./AppMenuItem.svelte";
@@ -27,9 +27,8 @@
 
   function goToFileAndLine(filename: string, line?: number) {
     const url = urlFor("editor/", { file_path: filename, line });
-    const shouldLoad = filename !== file_path;
-    router.navigate(url, shouldLoad);
-    if (!shouldLoad && line) {
+    router.navigate(url);
+    if (filename === file_path && line) {
       scrollToLine(editor, line);
       editor.focus();
     }

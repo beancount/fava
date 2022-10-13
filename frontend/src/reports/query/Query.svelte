@@ -1,18 +1,19 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
 
-  import { get } from "../api";
-  import type { ChartTypes } from "../charts";
-  import Chart from "../charts/Chart.svelte";
-  import { chartContext } from "../charts/context";
-  import { parseQueryChart } from "../charts/query-charts";
-  import { log_error } from "../log";
-  import { getFilterParams } from "../stores/filters";
+  import { get } from "../../api";
+  import type { FavaChart } from "../../charts";
+  import Chart from "../../charts/Chart.svelte";
+  import { chartContext } from "../../charts/context";
+  import { parseQueryChart } from "../../charts/query-charts";
+  import { log_error } from "../../log";
+  import router from "../../router";
+  import { filter_params } from "../../stores/filters";
   import {
     addToHistory,
     clearHistory,
     query_shell_history,
-  } from "../stores/query";
+  } from "../../stores/query";
 
   import QueryEditor from "./QueryEditor.svelte";
   import QueryLinks from "./QueryLinks.svelte";
@@ -23,7 +24,7 @@
   const resultElems: Record<string, HTMLElement> = {};
 
   type ResultType = {
-    result?: { table: string; chart: ChartTypes | null };
+    result?: { table: string; chart: FavaChart | null };
     error?: unknown;
   };
 
@@ -61,7 +62,7 @@
       clearResults().catch(log_error);
       return;
     }
-    get("query_result", { query_string: query, ...getFilterParams() }).then(
+    get("query_result", { query_string: query, ...$filter_params }).then(
       (res) => {
         const r = parseQueryChart(res.chart, $chartContext);
         const chart = r.success ? r.value : null;
@@ -70,8 +71,8 @@
         );
       },
       (error) => {
-        if (typeof error === "string") {
-          setResult(query, { error }).catch(log_error);
+        if (error instanceof Error) {
+          setResult(query, { error: error.message }).catch(log_error);
         } else {
           setResult(query, {
             error: "Received invalid data as query error.",
@@ -88,13 +89,15 @@
     }
   }
 
-  onMount(() => {
-    const url = new URL(window.location.href);
-    query_string = url.searchParams.get("query_string") || "";
-    if (query_string) {
-      submit();
-    }
-  });
+  onMount(() =>
+    router.on("page-loaded", () => {
+      const url = new URL(window.location.href);
+      query_string = url.searchParams.get("query_string") || "";
+      if (query_string) {
+        submit();
+      }
+    })
+  );
 </script>
 
 <QueryEditor bind:value={query_string} {submit} />
@@ -116,7 +119,9 @@
           <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html result.table}
         {:else if error}
+          <pre>
           {error}
+         </pre>
         {/if}
       </div>
     </details>

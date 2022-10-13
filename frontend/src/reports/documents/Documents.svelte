@@ -1,13 +1,13 @@
 <script lang="ts">
   import { group } from "d3-array";
 
-  import { moveDocument } from "../api";
-  import AccountInput from "../entry-forms/AccountInput.svelte";
-  import { _ } from "../i18n";
-  import { basename } from "../lib/paths";
-  import { stratify } from "../lib/tree";
-  import ModalBase from "../modals/ModalBase.svelte";
-  import router from "../router";
+  import { moveDocument } from "../../api";
+  import AccountInput from "../../entry-forms/AccountInput.svelte";
+  import { _ } from "../../i18n";
+  import { basename } from "../../lib/paths";
+  import { stratify } from "../../lib/tree";
+  import ModalBase from "../../modals/ModalBase.svelte";
+  import router from "../../router";
 
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";

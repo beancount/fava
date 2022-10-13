@@ -16,15 +16,17 @@
   }
 </script>
 
-<AutocompleteInput
-  bind:value
-  placeholder={_("Go to account")}
-  suggestions={$accounts}
-  className="account-selector"
-  key="g a"
-  on:select={select}
-  on:enter={select}
-/>
+<li>
+  <AutocompleteInput
+    bind:value
+    placeholder={_("Go to account")}
+    suggestions={$accounts}
+    className="account-selector"
+    key="g a"
+    on:select={select}
+    on:enter={select}
+  />
+</li>
 
 <style>
   :global(.account-selector input) {

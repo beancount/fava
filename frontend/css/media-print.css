@@ -14,9 +14,4 @@
   header h1 {
     display: block;
   }
-
-  aside,
-  .aside-button {
-    display: none;
-  }
 }

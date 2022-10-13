@@ -140,36 +140,42 @@ export function sortableJournal(ol: HTMLOListElement): void {
   });
 }
 
+/**
+ * A svelte action to turn a table into a sortable table.
+ */
+export function sortableTable(el: HTMLTableElement) {
+  const body = el.tBodies.item(0);
+  if (!el.tHead || !body) {
+    return;
+  }
+  const headers = [...el.tHead.querySelectorAll("th[data-sort]")];
+
+  headers.forEach((header) => {
+    header.addEventListener("click", () => {
+      const order = getSortOrder(header);
+      const type = header.getAttribute("data-sort");
+      const index = headers.indexOf(header);
+
+      // update sort order
+      headers.forEach((e) => {
+        e.removeAttribute("data-order");
+      });
+      header.setAttribute("data-order", order);
+
+      sortElements(
+        body,
+        [...body.querySelectorAll("tr")],
+        (tr: HTMLTableRowElement): HTMLElement | null => tr.cells.item(index),
+        order,
+        type
+      );
+    });
+  });
+}
+
 export class SortableTable extends HTMLTableElement {
   constructor() {
     super();
-
-    const body = this.tBodies.item(0);
-    if (!this.tHead || !body) {
-      return;
-    }
-    const headers = [...this.tHead.querySelectorAll("th[data-sort]")];
-
-    headers.forEach((header) => {
-      header.addEventListener("click", () => {
-        const order = getSortOrder(header);
-        const type = header.getAttribute("data-sort");
-        const index = headers.indexOf(header);
-
-        // update sort order
-        headers.forEach((el) => {
-          el.removeAttribute("data-order");
-        });
-        header.setAttribute("data-order", order);
-
-        sortElements(
-          body,
-          [...body.querySelectorAll("tr")],
-          (tr: HTMLTableRowElement): HTMLElement | null => tr.cells.item(index),
-          order,
-          type
-        );
-      });
-    });
+    sortableTable(this);
   }
 }
