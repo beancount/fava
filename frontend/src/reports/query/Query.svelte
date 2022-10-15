@@ -69,10 +69,12 @@
         setResult(query, { result: { chart, table: res.table } }).catch(
           log_error
         );
+        window.scroll(0, 0);
       },
       (error) => {
         if (error instanceof Error) {
           setResult(query, { error: error.message }).catch(log_error);
+          window.scroll(0, 0);
         } else {
           setResult(query, {
             error: "Received invalid data as query error.",
@@ -103,9 +105,12 @@
 <QueryEditor bind:value={query_string} {submit} />
 <div>
   {#each query_result_array as [history_item, { result, error }] (history_item)}
-    <details class:error bind:this={resultElems[history_item]}>
-      <summary on:click={() => click(history_item)}>
-        <ReadonlyQueryEditor value={history_item} />
+    <details bind:this={resultElems[history_item]}>
+      <summary
+        class:inactive={!result && !error}
+        on:click={() => click(history_item)}
+      >
+        <ReadonlyQueryEditor value={history_item} error={!!error} />
         {#if result}
           <span class="spacer" />
           <QueryLinks query={history_item} />
@@ -119,9 +124,7 @@
           <!-- eslint-disable-next-line svelte/no-at-html-tags -->
           {@html result.table}
         {:else if error}
-          <pre>
-          {error}
-         </pre>
+          <pre>{error}</pre>
         {/if}
       </div>
     </details>
@@ -132,6 +135,10 @@
   details > div {
     max-height: 80vh;
     overflow: auto;
+  }
+
+  .inactive {
+    filter: opacity(0.5);
   }
 
   div :global(.query-error) {
