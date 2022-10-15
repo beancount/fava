@@ -4,17 +4,6 @@
   }
 }
 
-.fava-icon.loading {
-  padding: 0;
-  border-top: 2px solid var(--header-color);
-  border-radius: 50%;
-  animation: spinner 1s linear infinite;
-}
-
-.fava-icon.loading path {
-  opacity: 0%;
-}
-
 .beancount-files ul {
   max-height: 400px;
   margin-bottom: 0;

@@ -33,16 +33,7 @@ export function setStoreValuesFromURL(): void {
   showCharts.set(params.get("charts") !== "false");
 }
 
-const is_loading = writable(false);
-
-is_loading.subscribe((v) => {
-  const svg = document.querySelector(".fava-icon");
-  if (v) {
-    svg?.classList.add("loading");
-  } else {
-    svg?.classList.remove("loading");
-  }
-});
+export const is_loading = writable(false);
 
 /** Use this store to force reloads in components. */
 export const should_reload = writable(1);
