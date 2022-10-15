@@ -1,4 +1,13 @@
-import { isJsonObject, object, unknown } from "./validation";
+import { log_error } from "../log";
+import { set_mtime } from "../stores/mtime";
+
+import {
+  defaultValue,
+  isJsonObject,
+  object,
+  string,
+  unknown,
+} from "./validation";
 
 class FetchError extends Error {}
 
@@ -32,7 +41,10 @@ async function handleJSON(response: Response): Promise<unknown> {
   return data;
 }
 
-const response_validator = object({ data: unknown });
+const response_validator = object({
+  data: unknown,
+  mtime: defaultValue(string, null),
+});
 
 export async function fetchJSON(
   input: string,
@@ -41,9 +53,13 @@ export async function fetchJSON(
   const res = await fetch(input, init).then(handleJSON);
   const parsed = response_validator(res);
   if (parsed.success) {
+    if (typeof parsed.value.mtime === "string") {
+      set_mtime(parsed.value.mtime);
+    }
     return parsed.value.data;
   }
-  throw new FetchError("Invalid response: missing data key.");
+  log_error(res, parsed);
+  throw new FetchError("Invalid response: missing data or mtime key.");
 }
 
 /**

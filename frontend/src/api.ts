@@ -18,6 +18,7 @@ import {
 import { notify, notify_err } from "./notifications";
 import { importable_files_validator } from "./reports/import/helpers";
 import router from "./router";
+import { ledgerDataValidator } from "./stores";
 import type { Filters } from "./stores/filters";
 
 /** Required arguments for the various PUT API endpoints. */
@@ -84,6 +85,7 @@ const getAPIValidators = {
   payee_transaction: Transaction.validator,
   query_result: object({ chart: unknown, table: string }),
   source: object({ source: string, sha256sum: string, file_path: string }),
+  ledger_data: ledgerDataValidator,
 };
 type GetAPITypes = typeof getAPIValidators;
 
@@ -95,6 +97,7 @@ interface GetAPIParams {
   extract: { filename: string; importer: string };
   events: Filters;
   documents: Filters;
+  ledger_data: undefined;
   imports: undefined;
   source: { filename: string };
   move: { filename: string; account: string; new_name: string };

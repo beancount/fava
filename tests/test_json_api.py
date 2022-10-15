@@ -51,23 +51,18 @@ def assert_api_error(response: TestResponse, msg: str | None = None) -> None:
         assert msg == response.json["error"]
 
 
-def assert_api_success(
-    response: TestResponse, data: Any | None = None
-) -> None:
+def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
     """Asserts that the request was successful and contains the data."""
     assert response.status_code == 200
     assert response.json
     assert response.json["success"], response.json
-    if data:
+    if data is not None:
         assert data == response.json["data"]
+    return response.json["data"]
 
 
 def test_api_changed(app: Flask, test_client: FlaskClient) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        url = url_for("json_api.get_changed")
-
-    response = test_client.get(url)
+    response = test_client.get("/long-example/api/changed")
     assert_api_success(response, False)
 
 
@@ -132,22 +127,23 @@ def test_api_context(
     response = test_client.get(
         f"/long-example/api/context?entry_hash={entry_hash}"
     )
-    assert_api_success(response)
-    snapshot(response.json)
+    data = assert_api_success(response)
+    snapshot(data)
 
     entry_hash = hash_entry(example_ledger.all_entries[10])
     response = test_client.get(
         f"/long-example/api/context?entry_hash={entry_hash}"
     )
     assert_api_success(response)
-    assert response.json
-    assert not response.json.get("balances_before")
-    snapshot(response.json)
+    data = assert_api_success(response)
+    snapshot(data)
+    assert not data.get("balances_before")
 
 
 def test_api_payee_accounts(test_client: FlaskClient) -> None:
     response = test_client.get("/long-example/api/payee_accounts?payee=test")
-    assert_api_success(response, [])
+    data = assert_api_success(response)
+    assert data[0] == "Liabilities:US:Chase:Slate"
 
 
 def test_api_move(test_client: FlaskClient) -> None:
@@ -310,7 +306,6 @@ def test_api_add_entries(
     "query_string,result_str",
     [
         ("balances from year = 2014", "5086.65 USD"),
-        ("nononono", "ERROR: Syntax error near"),
         ("select sum(day)", "43558"),
     ],
 )
@@ -320,21 +315,29 @@ def test_api_query_result(
     response = test_client.get(
         f"/long-example/api/query_result?query_string={query_string}"
     )
+    data = assert_api_success(response)
+    assert result_str in data["table"]
+
+
+def test_api_query_result_error(test_client: FlaskClient) -> None:
+    response = test_client.get(
+        "/long-example/api/query_result?query_string=nononono"
+    )
     assert response.status_code == 200
-    assert result_str in response.get_data(True)
+    assert "ERROR: Syntax error near" in response.get_data(True)
 
 
 def test_api_query_result_filters(test_client: FlaskClient) -> None:
     response = test_client.get(
         "/long-example/api/query_result?time=2021&query_string=select sum(day)"
     )
-    assert response.status_code == 200
-    assert "6882" in response.get_data(True)
+    data = assert_api_success(response)
+    assert "6882" in data["table"]
 
 
 def test_api_commodities(
     test_client: FlaskClient, snapshot: SnapshotFunc
 ) -> None:
     response = test_client.get("/long-example/api/commodities")
-    assert_api_success(response)
-    snapshot(response.json)
+    data = assert_api_success(response)
+    snapshot(data)

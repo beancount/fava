@@ -31,6 +31,7 @@ from fava.core.documents import filepath_in_document_folder
 from fava.core.documents import is_document_or_import_file
 from fava.core.misc import align
 from fava.helpers import FavaAPIException
+from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
 
@@ -49,7 +50,9 @@ def json_err(msg: str) -> Response:
 
 def json_success(data: Any) -> Response:
     """Jsonify the response."""
-    return jsonify({"success": True, "data": data})
+    return jsonify(
+        {"success": True, "data": data, "mtime": str(g.ledger.mtime)}
+    )
 
 
 @json_api.errorhandler(FavaAPIException)
@@ -157,6 +160,9 @@ def get_changed() -> bool:
 def get_errors() -> int:
     """Number of errors."""
     return len(g.ledger.errors)
+
+
+api_endpoint(get_ledger_data)
 
 
 @api_endpoint
@@ -350,18 +356,21 @@ def put_add_entries(entries: list[Any]) -> str:
 @api_endpoint
 def get_events() -> list[Any]:
     """Get all (filtered) events."""
+    g.ledger.changed()
     return g.filtered.events()
 
 
 @api_endpoint
 def get_imports() -> list[Any]:
     """Get a list of the importable files."""
+    g.ledger.changed()
     return g.ledger.ingest.import_data()
 
 
 @api_endpoint
 def get_documents() -> list[Any]:
     """Get all (filtered) documents."""
+    g.ledger.changed()
     return g.filtered.documents
 
 
@@ -381,6 +390,7 @@ def get_commodities() -> list[CommodityPairWithPrices]:
     Returns:
         A list of CommodityPairWithPrices
     """
+    g.ledger.changed()
     ret = []
     for base, quote in g.ledger.commodity_pairs():
         prices = g.filtered.prices(base, quote)

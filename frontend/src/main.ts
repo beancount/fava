@@ -32,14 +32,21 @@ import { BeancountTextarea } from "./codemirror/setup";
 import { _ } from "./i18n";
 import { FavaJournal } from "./journal";
 import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
+import { getScriptTagValue } from "./lib/dom";
 import { log_error } from "./log";
-import { notify } from "./notifications";
+import { notify, notify_err } from "./notifications";
 import { shouldRenderInFrontend } from "./reports/routes";
 import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
 import { initSidebar } from "./sidebar";
 import { has_changes, updatePageTitle } from "./sidebar/page-title";
 import { SortableTable } from "./sort";
-import { errorCount, fava_options, ledgerData, rawLedgerData } from "./stores";
+import {
+  errorCount,
+  fava_options,
+  ledgerData,
+  ledgerDataValidator,
+} from "./stores";
+import { ledger_mtime, read_mtime } from "./stores/mtime";
 import { SvelteCustomElement } from "./svelte-custom-elements";
 import { TreeTable } from "./tree-table";
 
@@ -58,7 +65,7 @@ function defineCustomElements() {
 }
 
 router.on("page-loaded", () => {
-  rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
+  read_mtime();
   updatePageTitle();
   has_changes.set(false);
 });
@@ -69,7 +76,7 @@ router.on("page-loaded", () => {
  *
  * This will be scheduled every 5 seconds.
  */
-function doPoll(): void {
+function pollForChanges(): void {
   get("changed").then((changed) => {
     if (changed) {
       has_changes.set(true);
@@ -86,7 +93,26 @@ function doPoll(): void {
 }
 
 function init(): void {
-  rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
+  const initial = getScriptTagValue("#ledger-data", ledgerDataValidator);
+  if (initial.success) {
+    ledgerData.set(initial.value);
+  }
+  read_mtime();
+
+  let initial_mtime = true;
+  ledger_mtime.subscribe(() => {
+    if (initial_mtime) {
+      initial_mtime = false;
+      return;
+    }
+    get("ledger_data")
+      .then((v) => {
+        ledgerData.set(v);
+      })
+      .catch((e) => {
+        notify_err(e, (err) => `Error fetching ledger data: ${err.message}`);
+      });
+  });
 
   router.init(shouldRenderInFrontend);
   setStoreValuesFromURL();
@@ -94,7 +120,7 @@ function init(): void {
   initSidebar();
   initGlobalKeyboardShortcuts();
   defineCustomElements();
-  setInterval(doPoll, 5000);
+  setInterval(pollForChanges, 5000);
 
   ledgerData.subscribe((val) => {
     errorCount.set(val.errors);

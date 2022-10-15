@@ -11,7 +11,8 @@
     'trial_balance':    _('Trial Balance'),
 } %}
 {% set page_title = all_pages.get(active_page, "") if not page_title else page_title %}
-{% if not request.args.get('partial') %}
+{% set partial = request.args.get('partial') %}
+{% if not partial %}
 <!doctype html>
 <html>
   <head>
@@ -37,10 +38,11 @@
       {% endif %}
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson }}</script>
       <script type="application/json" id="page-title">{{ page_title|tojson }}</script>
-      <script type="application/json" id="ledger-data">{{ get_ledger_data()|tojson }}</script>
-      {%- if not request.args.get('partial') %}
+      {% if partial %}<script type="application/json" id="ledger-mtime">{{ ledger.mtime|tojson }}</script>{% endif %}
+      {%- if not partial %}
     </article>
     <script type="application/json" id="ledger-data">{{ get_ledger_data()|tojson }}</script>
+    <script type="application/json" id="ledger-mtime">{{ ledger.mtime|tojson }}</script>
     <script type="application/json" id="translations">{{ translations()|tojson }}</script>
   </body>
 </html>
