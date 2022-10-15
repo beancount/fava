@@ -11,7 +11,6 @@
     'trial_balance':    _('Trial Balance'),
 } %}
 {% set page_title = all_pages.get(active_page, "") if not page_title else page_title %}
-{% set short_title = page_title if not short_title else short_title %}
 {% if not request.args.get('partial') %}
 <!doctype html>
 <html>
@@ -19,27 +18,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ static_url('favicon.ico') }}">
     <link rel="stylesheet" href="{{ static_url('app.css') }}">
-    <title>{{ short_title }} - {{ ledger.options.title }}</title>
+    <title>{{ page_title }} - {{ ledger.options.title }}</title>
     <script type="module" src="{{ static_url('app.js') }}"></script>
   </head>
   <body>
-    <header>
-      <h1>
-        {{ ledger.options.title or 'fava' }}{{ ' ▾' if config['LEDGERS']|length > 1 else '' }}<strong class="page-title">{{ page_title }}</strong>
-        <button type=button id="reload-page" class="reload-page hidden">&#8635;</button>
-        {% if config['LEDGERS']|length > 1 %}
-        <div class="beancount-files">
-          <ul>
-            {% for file_slug, file_ledger in config['LEDGERS'].items() %}
-            <li>
-              <a{% if file_slug == g.beancount_file_slug %} class="active"{% endif %} href="{{ url_for('index', bfile=file_slug) }}" data-remote>{{ file_ledger.options.title or 'fava' }}</a>
-            </li>
-            {% endfor %}
-          </ul>
-        </div>{% endif %}
-      </h1>
-    </header>
-    <!-- <aside> and button get inserted here -->
+    <!-- <header> and <aside> get inserted here -->
     <article>
       {%- endif %}
       <svelte-component type="charts"></svelte-component>
@@ -53,7 +36,7 @@
         {% endblock %}
       {% endif %}
       <script type="application/json" id="chart-data">{{ charts.chart_data|tojson }}</script>
-      <script type="application/json" id="page-title">{{ { 'documentTitle': short_title, 'pageTitle': page_title }|tojson }}</script>
+      <script type="application/json" id="page-title">{{ page_title|tojson }}</script>
       <script type="application/json" id="ledger-data">{{ get_ledger_data()|tojson }}</script>
       {%- if not request.args.get('partial') %}
     </article>

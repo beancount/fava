@@ -15,6 +15,7 @@ import { DEFAULT_INTERVAL, getInterval } from "./lib/interval";
 import { log_error } from "./log";
 import { notify_err } from "./notifications";
 import type { GetFrontendComponent } from "./reports/routes";
+import { raw_page_title } from "./sidebar/page-title";
 import { conversion, interval, urlHash } from "./stores";
 import { showCharts } from "./stores/chart";
 import { account_filter, fql_filter, time_filter } from "./stores/filters";
@@ -55,8 +56,6 @@ class Router extends Events<"page-loaded"> {
 
   /** A possibly frontend rendered component. */
   private component?: SvelteComponent;
-
-  page_title?: string;
 
   /**
    * Function to intercept navigation, e.g., when there are unsaved changes.
@@ -117,12 +116,11 @@ class Router extends Events<"page-loaded"> {
         this.component?.$destroy();
         this.article.innerHTML = "";
         this.component = new Cls({ target: this.article });
-        this.page_title = title;
+        raw_page_title.set(title);
       }
     } else {
       this.component?.$destroy();
       this.component = undefined;
-      this.page_title = undefined;
     }
   }
 
@@ -251,32 +249,42 @@ class Router extends Events<"page-loaded"> {
    *  - the link has a `data-remote` attribute.
    */
   private takeOverLinks(): void {
+    const is_normal_click = (event: MouseEvent) =>
+      event.button === 0 &&
+      !event.altKey &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.shiftKey;
+
+    const is_external_link = (link: HTMLAnchorElement | SVGAElement) =>
+      link.hasAttribute("data-remote") ||
+      (link instanceof HTMLAnchorElement &&
+        (link.host !== window.location.host ||
+          link.protocol.indexOf("http") !== 0));
+
     delegate(
       document,
       "click",
       "a",
-      (event: MouseEvent, link: HTMLAnchorElement) => {
-        if (
-          link.getAttribute("href")?.charAt(0) === "#" ||
-          link.hasAttribute("data-remote") ||
-          link.host !== window.location.host ||
-          link.protocol.indexOf("http") !== 0 ||
-          event.defaultPrevented
-        ) {
+      (event: MouseEvent, link: HTMLAnchorElement | SVGAElement) => {
+        if (!is_normal_click(event)) {
           return;
         }
-        if (
-          event.button !== 0 ||
-          event.altKey ||
-          event.ctrlKey ||
-          event.metaKey ||
-          event.shiftKey
-        ) {
+        if (event.defaultPrevented) {
+          return;
+        }
+        if (link.getAttribute("href")?.charAt(0) === "#") {
+          return;
+        }
+        if (is_external_link(link)) {
           return;
         }
 
         event.preventDefault();
-        this.navigate(link.href);
+        const href =
+          link instanceof HTMLAnchorElement ? link.href : link.href.baseVal;
+
+        this.navigate(href);
       }
     );
   }

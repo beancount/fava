@@ -20,6 +20,12 @@
 </svg>
 
 <style>
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   .loading {
     padding: 0;
     border-top: 2px solid var(--header-color);

@@ -42,6 +42,7 @@ class LedgerData:
     upcoming_events_count: int
     extension_reports: list[tuple[str, str]]
     sidebar_links: list[tuple[str, str]]
+    other_ledgers: list[tuple[str, str]]
 
 
 def get_ledger_data() -> LedgerData:
@@ -50,6 +51,7 @@ def get_ledger_data() -> LedgerData:
     del options["input_hash"]
 
     ledger = g.ledger
+
     return LedgerData(
         ledger.attributes.accounts,
         ledger.accounts,
@@ -69,6 +71,11 @@ def get_ledger_data() -> LedgerData:
         len(ledger.misc.upcoming_events),
         ledger.extensions.reports,
         ledger.misc.sidebar_links,
+        [
+            (ledger.options["title"], url_for("index", bfile=file_slug))
+            for (file_slug, ledger) in current_app.config["LEDGERS"].items()
+            if file_slug != g.beancount_file_slug
+        ],
     )
 
 

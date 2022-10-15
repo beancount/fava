@@ -61,6 +61,7 @@ export const ledgerDataValidator = object({
   upcoming_events_count: number,
   extension_reports: array(tuple([string, string])),
   sidebar_links: array(tuple([string, string])),
+  other_ledgers: array(tuple([string, string])),
 });
 
 export const rawLedgerData = writable("");

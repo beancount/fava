@@ -587,6 +587,24 @@
   "render_commas": false,
   "title": "Long Example"
  },
+ "other_ledgers": [
+  [
+   "Example",
+   "/example/"
+  ],
+  [
+   "Extension Report Beancount File",
+   "/extension-report-beancount-file/"
+  ],
+  [
+   "import",
+   "/import/"
+  ],
+  [
+   "Query Example",
+   "/query-example/"
+  ]
+ ],
  "payees": [
   "BayBook",
   "Rose Flower",

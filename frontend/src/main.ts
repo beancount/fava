@@ -15,7 +15,6 @@ import "../css/components.css";
 import "../css/editor.css";
 import "../css/grid.css";
 import "../css/fonts.css";
-import "../css/header.css";
 import "../css/help.css";
 import "../css/journal-table.css";
 import "../css/media-mobile.css";
@@ -35,10 +34,10 @@ import { FavaJournal } from "./journal";
 import { initGlobalKeyboardShortcuts } from "./keyboard-shortcuts";
 import { log_error } from "./log";
 import { notify } from "./notifications";
-import { updatePageTitle } from "./page-title";
 import { shouldRenderInFrontend } from "./reports/routes";
 import router, { setStoreValuesFromURL, syncStoreValuesToURL } from "./router";
 import { initSidebar } from "./sidebar";
+import { has_changes, updatePageTitle } from "./sidebar/page-title";
 import { SortableTable } from "./sort";
 import { errorCount, fava_options, ledgerData, rawLedgerData } from "./stores";
 import { SvelteCustomElement } from "./svelte-custom-elements";
@@ -61,7 +60,7 @@ function defineCustomElements() {
 router.on("page-loaded", () => {
   rawLedgerData.set(document.getElementById("ledger-data")?.innerHTML ?? "");
   updatePageTitle();
-  document.getElementById("reload-page")?.classList.add("hidden");
+  has_changes.set(false);
 });
 
 /**
@@ -73,10 +72,10 @@ router.on("page-loaded", () => {
 function doPoll(): void {
   get("changed").then((changed) => {
     if (changed) {
+      has_changes.set(true);
       if (store_get(fava_options).auto_reload) {
         router.reload();
       } else {
-        document.getElementById("reload-page")?.classList.remove("hidden");
         get("errors").then((count) => errorCount.set(count), log_error);
         notify(_("File change detected. Click to reload."), "warning", () => {
           router.reload();
@@ -96,9 +95,6 @@ function init(): void {
   initGlobalKeyboardShortcuts();
   defineCustomElements();
   setInterval(doPoll, 5000);
-  document.getElementById("reload-page")?.addEventListener("click", () => {
-    router.reload();
-  });
 
   ledgerData.subscribe((val) => {
     errorCount.set(val.errors);

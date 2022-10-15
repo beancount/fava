@@ -187,10 +187,4 @@ export function initGlobalKeyboardShortcuts(): void {
     document.addEventListener("mousedown", once);
     document.addEventListener("keydown", once);
   });
-
-  const reloadButton = document.getElementById("reload-page");
-  if (reloadButton) {
-    reloadButton.setAttribute("data-key", "r");
-    bindKey("r", reloadButton);
-  }
 }
