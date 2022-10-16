@@ -41,19 +41,25 @@ export function localStorageSyncedStore<T>(
   init: () => T
 ): Writable<T> {
   const fullKey = `fava-${key}`;
-  const stored_val = localStorage.getItem(fullKey);
-  let initial: T | null = null;
-  if (stored_val) {
-    const json = parseJSON(stored_val);
-    const parsed = json.success ? validator(json.value) : null;
-    if (parsed?.success) {
-      initial = parsed.value;
-    }
-  }
-  const store = writable(initial ?? init());
 
-  store.subscribe((val) => {
-    localStorage.setItem(fullKey, JSON.stringify(val));
+  // Create a store which is empty first but reads the value from
+  // localStorage on the first subscription.
+  const store = writable<T>(undefined, (set) => {
+    const stored_val = localStorage.getItem(fullKey);
+    let initial: T | null = null;
+    if (stored_val) {
+      const json = parseJSON(stored_val);
+      const parsed = json.success ? validator(json.value) : null;
+      if (parsed?.success) {
+        initial = parsed.value;
+      }
+    }
+    set(initial ?? init());
+
+    store.subscribe((val) => {
+      localStorage.setItem(fullKey, JSON.stringify(val));
+    });
   });
+
   return store;
 }

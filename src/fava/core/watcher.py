@@ -13,12 +13,12 @@ class Watcher:
     So a file change won't be noticed, but only new/deleted files.
     """
 
-    __slots__ = ["_files", "_folders", "_last_checked"]
+    __slots__ = ["_files", "_folders", "last_checked"]
 
     def __init__(self) -> None:
         self._files: list[str] = []
         self._folders: list[str] = []
-        self._last_checked = 0
+        self.last_checked = 0
 
     def update(self, files: Iterable[str], folders: Iterable[str]) -> None:
         """Update the folders/files to watch.
@@ -52,6 +52,6 @@ class Watcher:
                 if mtime > latest_mtime:
                     latest_mtime = mtime
 
-        changed = bool(latest_mtime != self._last_checked)
-        self._last_checked = latest_mtime
+        changed = bool(latest_mtime != self.last_checked)
+        self.last_checked = latest_mtime
         return changed

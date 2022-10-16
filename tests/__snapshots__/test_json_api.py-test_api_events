@@ -1,0 +1,65 @@
+[
+ {
+  "date": "2014-01-01",
+  "description": "BayBook, 1501 Billow Rd, Benlo Park, CA",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 3766
+  },
+  "type": "employer"
+ },
+ {
+  "date": "2015-01-21",
+  "description": "Chicago",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 1547
+  },
+  "type": "location"
+ },
+ {
+  "date": "2015-02-05",
+  "description": "New Metropolis",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 1627
+  },
+  "type": "location"
+ },
+ {
+  "date": "2015-07-07",
+  "description": "San Francisco",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 1913
+  },
+  "type": "location"
+ },
+ {
+  "date": "2015-07-26",
+  "description": "New Metropolis",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 2077
+  },
+  "type": "location"
+ },
+ {
+  "date": "2016-03-31",
+  "description": "New York",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 2559
+  },
+  "type": "location"
+ },
+ {
+  "date": "2016-04-15",
+  "description": "New Metropolis",
+  "meta": {
+   "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+   "lineno": 2685
+  },
+  "type": "location"
+ }
+]

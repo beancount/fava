@@ -374,7 +374,7 @@ class FavaLedger:
     @property
     def mtime(self) -> int:
         """The timestamp to the latest change of the underlying files."""
-        return self._watcher._last_checked
+        return self._watcher.last_checked
 
     def join_path(self, *args: str) -> str:
         """Path relative to the directory of the ledger."""

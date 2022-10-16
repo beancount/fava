@@ -10,10 +10,10 @@ export const urlSyncedParams = [
 ];
 
 /** The current URL pathname. Should only be updated by the router. */
-export const pathname = writable(window.location.pathname);
+export const pathname = writable<string>();
 
 /** The current URL search. Should only be updated by the router. */
-export const search = writable(window.location.search);
+export const search = writable<string>();
 
 /** The query string containing all values that are synced to the URL. */
 export const synced_query_string = derived([search], ([s]) => {

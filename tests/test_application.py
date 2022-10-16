@@ -10,7 +10,7 @@ from werkzeug.urls import url_join
 
 from .conftest import SnapshotFunc
 from fava import __version__ as fava_version
-from fava.application import REPORTS
+from fava.application import SERVER_SIDE_REPORTS
 from fava.application import static_url
 from fava.application import url_for
 from fava.context import g
@@ -26,7 +26,7 @@ FILTER_COMBINATIONS = [
     "report,filters",
     [
         (report, filters)
-        for report in REPORTS
+        for report in SERVER_SIDE_REPORTS
         for filters in FILTER_COMBINATIONS
     ],
 )

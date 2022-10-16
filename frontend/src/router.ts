@@ -34,6 +34,7 @@ export function setStoreValuesFromURL(): void {
   showCharts.set(params.get("charts") !== "false");
 }
 
+/** Whether the logo should be spinning to indicate that something is loading. */
 export const is_loading = writable(false);
 
 /** Use this store to force reloads in components. */

@@ -18,12 +18,16 @@ from pytest import MonkeyPatch
 from .conftest import SnapshotFunc
 from fava.context import g
 from fava.core import FavaLedger
+from fava.core.charts import PRETTY_ENCODER
 from fava.core.misc import align
 from fava.json_api import validate_func_arguments
 from fava.json_api import ValidationError
 
 if TYPE_CHECKING:
     from werkzeug.test import TestResponse
+
+
+pretty_dumps = PRETTY_ENCODER.encode
 
 
 def test_validate_get_args() -> None:
@@ -61,7 +65,7 @@ def assert_api_success(response: TestResponse, data: Any | None = None) -> Any:
     return response.json["data"]
 
 
-def test_api_changed(app: Flask, test_client: FlaskClient) -> None:
+def test_api_changed(test_client: FlaskClient) -> None:
     response = test_client.get("/long-example/api/changed")
     assert_api_success(response, False)
 
@@ -140,10 +144,14 @@ def test_api_context(
     assert not data.get("balances_before")
 
 
-def test_api_payee_accounts(test_client: FlaskClient) -> None:
+def test_api_payee_accounts(
+    test_client: FlaskClient,
+    snapshot: SnapshotFunc,
+) -> None:
     response = test_client.get("/long-example/api/payee_accounts?payee=test")
     data = assert_api_success(response)
     assert data[0] == "Liabilities:US:Chase:Slate"
+    snapshot(data)
 
 
 def test_api_move(test_client: FlaskClient) -> None:
@@ -332,7 +340,23 @@ def test_api_query_result_filters(test_client: FlaskClient) -> None:
         "/long-example/api/query_result?time=2021&query_string=select sum(day)"
     )
     data = assert_api_success(response)
+    assert data["chart"] is None
     assert "6882" in data["table"]
+
+
+def test_api_query_result_charts(
+    test_client: FlaskClient, snapshot: SnapshotFunc
+) -> None:
+    query_string = (
+        "SELECT payee, SUM(COST(position)) AS balance "
+        + "WHERE account ~ 'Assets' GROUP BY payee, account"
+    )
+    response = test_client.get(
+        f"/long-example/api/query_result?query_string={query_string}"
+    )
+    data = assert_api_success(response)
+    assert data["chart"]
+    snapshot(data["chart"])
 
 
 def test_api_commodities(
@@ -341,3 +365,9 @@ def test_api_commodities(
     response = test_client.get("/long-example/api/commodities")
     data = assert_api_success(response)
     snapshot(data)
+
+
+def test_api_events(test_client: FlaskClient, snapshot: SnapshotFunc) -> None:
+    response = test_client.get("/long-example/api/events")
+    data = assert_api_success(response)
+    snapshot(pretty_dumps(data))
