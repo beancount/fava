@@ -20,9 +20,7 @@ from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
 from beancount.core.data import Close
 from beancount.core.data import Directive
-from beancount.core.data import Document
 from beancount.core.data import Entries
-from beancount.core.data import Event
 from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Posting
@@ -185,15 +183,6 @@ class FilteredLedger:
         if not self._date_first or not self._date_last:
             return []
         return interval_ends(self._date_first, self._date_last, interval)
-
-    @property
-    def documents(self) -> list[Document]:
-        """All currently filtered documents."""
-        return [e for e in self.entries if isinstance(e, Document)]
-
-    def events(self) -> list[Event]:
-        """All currently filtered events."""
-        return [e for e in self.entries if isinstance(e, Event)]
 
     def prices(self, base: str, quote: str) -> list[tuple[date, Decimal]]:
         """List all prices."""

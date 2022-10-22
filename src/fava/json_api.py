@@ -18,7 +18,10 @@ from os import remove
 from typing import Any
 from typing import Callable
 from typing import Mapping
+from typing import TYPE_CHECKING
 
+from beancount.core.data import Document
+from beancount.core.data import Event
 from beancount.core.number import Decimal
 from flask import Blueprint
 from flask import get_template_attribute
@@ -34,6 +37,9 @@ from fava.helpers import FavaAPIException
 from fava.internal_api import get_ledger_data
 from fava.serialisation import deserialise
 from fava.serialisation import serialise
+
+if TYPE_CHECKING:
+    from fava.core.ingest import FileImporters
 
 
 json_api = Blueprint("json_api", __name__)  # pylint: disable=invalid-name
@@ -354,24 +360,24 @@ def put_add_entries(entries: list[Any]) -> str:
 
 
 @api_endpoint
-def get_events() -> list[Any]:
+def get_events() -> list[Event]:
     """Get all (filtered) events."""
     g.ledger.changed()
-    return g.filtered.events()
+    return [e for e in g.filtered.entries if isinstance(e, Event)]
 
 
 @api_endpoint
-def get_imports() -> list[Any]:
+def get_imports() -> list[FileImporters]:
     """Get a list of the importable files."""
     g.ledger.changed()
     return g.ledger.ingest.import_data()
 
 
 @api_endpoint
-def get_documents() -> list[Any]:
+def get_documents() -> list[Document]:
     """Get all (filtered) documents."""
     g.ledger.changed()
-    return g.filtered.documents
+    return [e for e in g.filtered.entries if isinstance(e, Document)]
 
 
 @dataclass
