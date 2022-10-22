@@ -1,442 +1,809 @@
 {
  "account_details": {
   "Assets:Testing:MultipleCommodities": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2000-01-03",
+    "entry_hash": "16f8e834edf4b7253b3be626bb9bbba7"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5808
-   }
+    "lineno": 5809
+   },
+   "uptodate_status": null
   },
   "Assets:US:BayBook:Vacation": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3759
-   }
+    "lineno": 3760
+   },
+   "uptodate_status": null
   },
   "Assets:US:BofA": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-01-01",
+    "entry_hash": "bf07f458c5fbee7f9b51c2d5927abe02"
+   },
    "meta": {
     "address": "123 America Street, LargeTown, USA",
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "institution": "Bank of America",
     "lineno": 78,
     "phone": "+1.012.345.6789"
-   }
+   },
+   "uptodate_status": null
   },
   "Assets:US:BofA:Checking": {
+   "balance_string": "TODAY balance Assets:US:BofA:Checking              1632.79 USD\n",
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
    "meta": {
     "account": "00234-48574897",
+    "fava-uptodate-indication": true,
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 82
-   }
+   },
+   "uptodate_status": "yellow"
   },
   "Assets:US:ETrade:Cash": {
+   "balance_string": null,
    "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2738
-   }
-  },
-  "Assets:US:ETrade:GLD": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2742
-   }
-  },
-  "Assets:US:ETrade:ITOT": {
-   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-30",
+    "entry_hash": "d3d6990976a302c9edf7c79ea508f046"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 2739
-   }
+   },
+   "uptodate_status": null
   },
-  "Assets:US:ETrade:VEA": {
+  "Assets:US:ETrade:GLD": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-30",
+    "entry_hash": "e96d1d3bdda8654910a504bdc3c1feb9"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2743
+   },
+   "uptodate_status": null
+  },
+  "Assets:US:ETrade:ITOT": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-11-23",
+    "entry_hash": "a03d7db5f1a5644cb58bb12a4de6608f"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 2740
-   }
+   },
+   "uptodate_status": null
   },
-  "Assets:US:ETrade:VHT": {
+  "Assets:US:ETrade:VEA": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-30",
+    "entry_hash": "d3d6990976a302c9edf7c79ea508f046"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 2741
-   }
+   },
+   "uptodate_status": null
   },
-  "Assets:US:Federal:PreTax401k": {
+  "Assets:US:ETrade:VHT": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-12-20",
+    "entry_hash": "5d1975c8703918da8ba064cb02d717cd"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4967
-   }
+    "lineno": 2742
+   },
+   "uptodate_status": null
+  },
+  "Assets:US:Federal:PreTax401k": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4968
+   },
+   "uptodate_status": null
   },
   "Assets:US:Vanguard": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-01-01",
+    "entry_hash": "93b475fa7d171c13d2f5279a0dd29a4f"
+   },
    "meta": {
     "address": "P.O. Box 1110, Valley Forge, PA 19482-1110",
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "institution": "Vanguard Group",
-    "lineno": 2964,
+    "lineno": 2965,
     "phone": "+1.800.523.1188"
-   }
+   },
+   "uptodate_status": null
   },
   "Assets:US:Vanguard:Cash": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-09",
+    "entry_hash": "15502f387a2b7efd77f209d8c48c9bcf"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2969,
+    "lineno": 2970,
     "number": "882882"
-   }
+   },
+   "uptodate_status": null
   },
   "Assets:US:Vanguard:RGAGX": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-09",
+    "entry_hash": "15502f387a2b7efd77f209d8c48c9bcf"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2962,
+    "lineno": 2963,
     "number": "882882"
-   }
+   },
+   "uptodate_status": null
   },
   "Assets:US:Vanguard:VBMPX": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-09",
+    "entry_hash": "97aae07dde099c3f99d4f093077fa4e6"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2960,
+    "lineno": 2961,
     "number": "882882"
-   }
+   },
+   "uptodate_status": null
   },
   "Equity:Opening-Balances": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-01-01",
+    "entry_hash": "ad0a7f5ce1aaeabd619df595a06ae042"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 71
-   }
+   },
+   "uptodate_status": null
   },
   "Expenses:Financial:Commissions": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-30",
+    "entry_hash": "d3d6990976a302c9edf7c79ea508f046"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5064
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Financial:Fees": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-04",
+    "entry_hash": "fc4b15de31365bd29c5ec7399512aac9"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 5063
-   }
-  },
-  "Expenses:Financial:Fees": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5062
-   }
+   },
+   "uptodate_status": null
   },
   "Expenses:Food:Alcohol": {
+   "balance_string": null,
    "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5056
-   }
-  },
-  "Expenses:Food:Coffee": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5055
-   }
-  },
-  "Expenses:Food:Groceries": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5053
-   }
-  },
-  "Expenses:Food:Restaurant": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5054
-   }
-  },
-  "Expenses:Health:Dental:Insurance": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3763
-   }
-  },
-  "Expenses:Health:Life:GroupTermLife": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3761
-   }
-  },
-  "Expenses:Health:Medical:Insurance": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3762
-   }
-  },
-  "Expenses:Health:Vision:Insurance": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3764
-   }
-  },
-  "Expenses:Home:Electricity": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5059
-   }
-  },
-  "Expenses:Home:Internet": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5060
-   }
-  },
-  "Expenses:Home:Phone": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5061
-   }
-  },
-  "Expenses:Home:Rent": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5058
-   }
-  },
-  "Expenses:Taxes:Y2014:US:CityNYC": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4976
-   }
-  },
-  "Expenses:Taxes:Y2014:US:Federal": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4975
-   }
-  },
-  "Expenses:Taxes:Y2014:US:Federal:PreTax401k": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4973
-   }
-  },
-  "Expenses:Taxes:Y2014:US:Medicare": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4974
-   }
-  },
-  "Expenses:Taxes:Y2014:US:SDI": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4977
-   }
-  },
-  "Expenses:Taxes:Y2014:US:SocSec": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4979
-   }
-  },
-  "Expenses:Taxes:Y2014:US:State": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4978
-   }
-  },
-  "Expenses:Taxes:Y2015:US:CityNYC": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5007
-   }
-  },
-  "Expenses:Taxes:Y2015:US:Federal": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5006
-   }
-  },
-  "Expenses:Taxes:Y2015:US:Federal:PreTax401k": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5004
-   }
-  },
-  "Expenses:Taxes:Y2015:US:Medicare": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5005
-   }
-  },
-  "Expenses:Taxes:Y2015:US:SDI": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5008
-   }
-  },
-  "Expenses:Taxes:Y2015:US:SocSec": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5010
-   }
-  },
-  "Expenses:Taxes:Y2015:US:State": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5009
-   }
-  },
-  "Expenses:Taxes:Y2016:US:CityNYC": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5038
-   }
-  },
-  "Expenses:Taxes:Y2016:US:Federal": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5037
-   }
-  },
-  "Expenses:Taxes:Y2016:US:Federal:PreTax401k": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5035
-   }
-  },
-  "Expenses:Taxes:Y2016:US:Medicare": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5036
-   }
-  },
-  "Expenses:Taxes:Y2016:US:SDI": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5039
-   }
-  },
-  "Expenses:Taxes:Y2016:US:SocSec": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5041
-   }
-  },
-  "Expenses:Taxes:Y2016:US:State": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 5040
-   }
-  },
-  "Expenses:Transport:Tram": {
-   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-02-01",
+    "entry_hash": "7b35a8d3eed8ee7bdf0a6378715c4a22"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 5057
-   }
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Food:Coffee": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-14",
+    "entry_hash": "6dd4022c804bfddb85931198f035f2c7"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5056
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Food:Groceries": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-21",
+    "entry_hash": "1d144549086bddfa88dd1d8803bfdc88"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5054
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Food:Restaurant": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-07",
+    "entry_hash": "6458a340329eea26ca21670c40e88900"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5055
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Health:Dental:Insurance": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3764
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Health:Life:GroupTermLife": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3762
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Health:Medical:Insurance": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3763
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Health:Vision:Insurance": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3765
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Home:Electricity": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-09",
+    "entry_hash": "eac837326345ddf311a2c108e8df9c3f"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5060
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Home:Internet": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-21",
+    "entry_hash": "2a55afbac42b9550474bf7606535d3ba"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5061
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Home:Phone": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-20",
+    "entry_hash": "670a044146ccff39a5646e0801407aed"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5062
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Home:Rent": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-06",
+    "entry_hash": "4012b0c803503d3bd5c8424ea427bd83"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5059
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:CityNYC": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-12-18",
+    "entry_hash": "1f99f7d301c2a2a6ded96147b613ac1f"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4977
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:Federal": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-03-22",
+    "entry_hash": "3bd4d4863517515183aa04ea000811d0"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4976
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:Federal:PreTax401k": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-07-17",
+    "entry_hash": "654eb1a40e764570230292c7b116e795"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4974
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:Medicare": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-12-18",
+    "entry_hash": "1f99f7d301c2a2a6ded96147b613ac1f"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4975
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:SDI": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-12-18",
+    "entry_hash": "1f99f7d301c2a2a6ded96147b613ac1f"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4978
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:SocSec": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2014-12-18",
+    "entry_hash": "1f99f7d301c2a2a6ded96147b613ac1f"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4980
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2014:US:State": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-03-22",
+    "entry_hash": "3bd4d4863517515183aa04ea000811d0"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 4979
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:CityNYC": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-12-31",
+    "entry_hash": "6bdfe61b7be85a65ef056d14b3c0c46b"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5008
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:Federal": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-03-22",
+    "entry_hash": "853b723bb2382ad0d8bf69f954e47b27"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5007
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:Federal:PreTax401k": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-07-16",
+    "entry_hash": "1860e03b9938f7abec993c9bc8c4cfad"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5005
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:Medicare": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-12-31",
+    "entry_hash": "6bdfe61b7be85a65ef056d14b3c0c46b"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5006
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:SDI": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-12-31",
+    "entry_hash": "6bdfe61b7be85a65ef056d14b3c0c46b"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5009
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:SocSec": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2015-12-31",
+    "entry_hash": "6bdfe61b7be85a65ef056d14b3c0c46b"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5011
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2015:US:State": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-03-22",
+    "entry_hash": "853b723bb2382ad0d8bf69f954e47b27"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5010
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:CityNYC": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5039
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:Federal": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5038
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:Federal:PreTax401k": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5036
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:Medicare": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5037
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:SDI": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5040
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:SocSec": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5042
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Taxes:Y2016:US:State": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5041
+   },
+   "uptodate_status": null
+  },
+  "Expenses:Transport:Tram": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-27",
+    "entry_hash": "1afd6c55790c74699b0223c5b14588c3"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 5058
+   },
+   "uptodate_status": null
   },
   "Expenses:Vacation": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-04-15",
+    "entry_hash": "268ef9117986189d3a6f2d7fedf3281f"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3760
-   }
+    "lineno": 3761
+   },
+   "uptodate_status": null
   },
   "Income:US:BayBook:GroupTermLife": {
+   "balance_string": null,
    "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3757
-   }
-  },
-  "Income:US:BayBook:Match401k": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2968
-   }
-  },
-  "Income:US:BayBook:Salary": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 3756
-   }
-  },
-  "Income:US:BayBook:Vacation": {
-   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 3758
-   }
+   },
+   "uptodate_status": null
+  },
+  "Income:US:BayBook:Match401k": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-06",
+    "entry_hash": "cc24a023617ee20fd45d28dff5efd98b"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2969
+   },
+   "uptodate_status": null
+  },
+  "Income:US:BayBook:Salary": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3757
+   },
+   "uptodate_status": null
+  },
+  "Income:US:BayBook:Vacation": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-05",
+    "entry_hash": "3eba253151863785db92bf79dae55a59"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 3759
+   },
+   "uptodate_status": null
   },
   "Income:US:ETrade:Dividends": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-03-17",
+    "entry_hash": "a5a4caa14573c4595c8b7b3c6d48efba"
+   },
+   "meta": {
+    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
+    "lineno": 2745
+   },
+   "uptodate_status": null
+  },
+  "Income:US:ETrade:Gains": {
+   "balance_string": null,
+   "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-01-23",
+    "entry_hash": "430fa60219975f21d92f66900dff98c3"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 2744
-   }
-  },
-  "Income:US:ETrade:Gains": {
-   "close_date": "9999-12-31",
-   "meta": {
-    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 2743
-   }
+   },
+   "uptodate_status": null
   },
   "Income:US:Federal:PreTax401k": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-01-01",
+    "entry_hash": "d112b991f197c685ab1d29a48528d9e6"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 4966
-   }
+    "lineno": 4967
+   },
+   "uptodate_status": null
   },
   "Liabilities:AccountsPayable": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-03-26",
+    "entry_hash": "aa7abbf2e4f1ab7892ab452bff9a6a35"
+   },
    "meta": {
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
     "lineno": 72
-   }
+   },
+   "uptodate_status": null
   },
   "Liabilities:US:Chase:Slate": {
+   "balance_string": null,
    "close_date": "9999-12-31",
+   "last_entry": {
+    "date": "2016-05-19",
+    "entry_hash": "4e1ad3a0c69abb71456297a3d06ad25e"
+   },
    "meta": {
     "fava-uptodate-indication": true,
     "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-    "lineno": 754
-   }
+    "lineno": 755
+   },
+   "uptodate_status": "green"
   }
  },
  "accounts": [

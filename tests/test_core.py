@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -80,10 +81,21 @@ def test_group_entries(
 
 
 def test_account_uptodate_status(example_ledger: FavaLedger) -> None:
-    func = example_ledger.account_uptodate_status
-    assert func("Assets:US:BofA") is None
-    assert func("Assets:US:BofA:Checking") == "yellow"
-    assert func("Liabilities:US:Chase:Slate") == "green"
+    accounts = example_ledger.accounts
+    assert accounts["Assets:US:BofA"].uptodate_status is None
+    assert accounts["Assets:US:BofA:Checking"].uptodate_status == "yellow"
+    assert accounts["Liabilities:US:Chase:Slate"].uptodate_status == "green"
+
+
+def test_account_balance_directive(example_ledger: FavaLedger) -> None:
+    today = datetime.date.today()
+    bal = f"{today} balance Assets:US:BofA:Checking              1632.79 USD\n"
+
+    assert (
+        example_ledger.accounts["Assets:US:BofA:Checking"].balance_string
+        == bal
+    )
+    assert example_ledger.accounts.all_balance_directives() == bal
 
 
 def test_commodity_names(example_ledger: FavaLedger) -> None:

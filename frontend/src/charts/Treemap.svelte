@@ -2,8 +2,9 @@
   import { treemap } from "d3-hierarchy";
   import type { HierarchyRectangularNode } from "d3-hierarchy";
 
-  import { ctx, formatPercentage } from "../format";
+  import { formatPercentage } from "../format";
   import { urlForAccount } from "../helpers";
+  import { ctx } from "../stores/format";
 
   import { treemapScale } from "./helpers";
   import type {

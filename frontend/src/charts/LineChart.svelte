@@ -7,8 +7,8 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
-  import { ctx } from "../format";
   import { lineChartMode } from "../stores/chart";
+  import { ctx } from "../stores/format";
 
   import Axis from "./Axis.svelte";
   import { currenciesScale } from "./helpers";

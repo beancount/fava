@@ -2,8 +2,8 @@ import { hcl } from "d3-color";
 import { scaleOrdinal } from "d3-scale";
 import { derived, get } from "svelte/store";
 
-import { currentTimeFilterDateFormat } from "../format";
 import { accounts, currencies_sorted, operating_currency } from "../stores";
+import { currentTimeFilterDateFormat } from "../stores/format";
 
 /**
  * Set the time filter to the given value (formatted according to the current interval).

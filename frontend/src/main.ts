@@ -96,6 +96,8 @@ function init(): void {
   const initial = getScriptTagValue("#ledger-data", ledgerDataValidator);
   if (initial.success) {
     ledgerData.set(initial.value);
+  } else {
+    log_error(initial.value);
   }
   read_mtime();
 

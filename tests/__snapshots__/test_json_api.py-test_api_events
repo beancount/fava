@@ -4,7 +4,7 @@
   "description": "BayBook, 1501 Billow Rd, Benlo Park, CA",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 3766
+   "lineno": 3767
   },
   "type": "employer"
  },
@@ -13,7 +13,7 @@
   "description": "Chicago",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 1547
+   "lineno": 1548
   },
   "type": "location"
  },
@@ -22,7 +22,7 @@
   "description": "New Metropolis",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 1627
+   "lineno": 1628
   },
   "type": "location"
  },
@@ -31,7 +31,7 @@
   "description": "San Francisco",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 1913
+   "lineno": 1914
   },
   "type": "location"
  },
@@ -40,7 +40,7 @@
   "description": "New Metropolis",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 2077
+   "lineno": 2078
   },
   "type": "location"
  },
@@ -49,7 +49,7 @@
   "description": "New York",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 2559
+   "lineno": 2560
   },
   "type": "location"
  },
@@ -58,7 +58,7 @@
   "description": "New Metropolis",
   "meta": {
    "filename": "FAVA_LONG_EXAMPLE_PATH.beancount",
-   "lineno": 2685
+   "lineno": 2686
   },
   "type": "location"
  }

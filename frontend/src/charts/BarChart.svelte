@@ -5,9 +5,9 @@
   import { getContext } from "svelte";
   import type { Writable } from "svelte/store";
 
-  import { ctx } from "../format";
   import { urlForAccount } from "../helpers";
   import { barChartMode } from "../stores/chart";
+  import { ctx } from "../stores/format";
 
   import Axis from "./Axis.svelte";
   import type { BarChart } from "./bar";

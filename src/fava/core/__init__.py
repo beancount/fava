@@ -18,15 +18,12 @@ from beancount.core.account_types import AccountTypes
 from beancount.core.account_types import get_account_sign
 from beancount.core.compare import hash_entry
 from beancount.core.data import Balance
-from beancount.core.data import Close
 from beancount.core.data import Directive
 from beancount.core.data import Entries
-from beancount.core.data import get_entry
 from beancount.core.data import iter_entry_dates
 from beancount.core.data import Posting
 from beancount.core.data import Price
 from beancount.core.data import Transaction
-from beancount.core.data import TxnPosting
 from beancount.core.getters import get_min_max_dates
 from beancount.core.interpolate import compute_entry_context
 from beancount.core.inventory import Inventory
@@ -39,7 +36,6 @@ from beancount.parser.options import get_account_types
 from beancount.parser.options import OPTIONS_DEFAULTS
 from beancount.utils.encryption import is_encrypted_file
 
-from fava.core._compat import FLAG_UNREALIZED
 from fava.core.accounts import AccountDict
 from fava.core.accounts import get_entry_accounts
 from fava.core.attributes import AttributesModule
@@ -71,6 +67,7 @@ from fava.util.typing import BeancountOptions
 
 if TYPE_CHECKING:  # pragma: no cover
     from beancount.core.prices import PriceMap
+    from beancount.core.realization import RealAccount
 
 
 class Filters:
@@ -109,6 +106,7 @@ class Filters:
 
 
 MODULES = [
+    "accounts",
     "attributes",
     "budgets",
     "charts",
@@ -251,6 +249,9 @@ class FavaLedger:
     #: The price map.
     price_map: PriceMap
 
+    #: The realized root account for all entries.
+    all_root_account: RealAccount
+
     def __init__(self, path: str) -> None:
         #: The path to the main Beancount file.
         self.beancount_file_path = path
@@ -301,7 +302,7 @@ class FavaLedger:
         self.options: BeancountOptions = OPTIONS_DEFAULTS
 
         #: A dict containing information about the accounts.
-        self.accounts = AccountDict()
+        self.accounts = AccountDict(self)
 
         #: A dict with all of Fava's option values.
         self.fava_options: FavaOptions = FavaOptions()
@@ -330,12 +331,6 @@ class FavaLedger:
         )
 
         self.all_entries_by_type = group_entries_by_type(self.all_entries)
-
-        self.accounts = AccountDict()
-        for open_entry in self.all_entries_by_type.Open:
-            self.accounts.setdefault(open_entry.account).meta = open_entry.meta
-        for close in self.all_entries_by_type.Close:
-            self.accounts.setdefault(close.account).close_date = close.date
 
         self.fava_options, errors = parse_options(
             self.all_entries_by_type.Custom
@@ -572,26 +567,6 @@ class FavaLedger:
                 bw_pairs.append((currency_b, currency_a))
         return sorted(fw_pairs + bw_pairs)
 
-    def last_entry(self, account_name: str) -> Directive | None:
-        """Get last entry of an account.
-
-        Args:
-            account_name: An account name.
-
-        Returns:
-            The last entry of the account if it is not a Close entry.
-        """
-        account = realization.get_or_create(
-            self.all_root_account, account_name
-        )
-
-        last = realization.find_last_active_posting(account.txn_postings)
-
-        if last is None or isinstance(last, Close):
-            return None
-
-        return get_entry(last)
-
     def statement_path(self, entry_hash: str, metadata_key: str) -> str:
         """Returns the path for a statement found in the specified entry."""
         entry = self.get_entry(entry_hash)
@@ -607,36 +582,6 @@ class FavaLedger:
                     return document.filename
 
         raise FavaAPIException("Statement not found.")
-
-    def account_uptodate_status(self, account_name: str) -> str | None:
-        """Status of the last balance or transaction.
-
-        Args:
-            account_name: An account name.
-
-        Returns:
-            A status string for the last balance or transaction of the account.
-
-            - 'green':  A balance check that passed.
-            - 'red':    A balance check that failed.
-            - 'yellow': Not a balance check.
-        """
-
-        real_account = realization.get_or_create(
-            self.all_root_account, account_name
-        )
-
-        for txn_posting in reversed(real_account.txn_postings):
-            if isinstance(txn_posting, Balance):
-                if txn_posting.diff_amount:
-                    return "red"
-                return "green"
-            if (
-                isinstance(txn_posting, TxnPosting)
-                and txn_posting.txn.flag != FLAG_UNREALIZED
-            ):
-                return "yellow"
-        return None
 
     @staticmethod
     def group_entries_by_type(entries: Entries) -> list[tuple[str, Entries]]:

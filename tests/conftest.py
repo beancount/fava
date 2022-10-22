@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 from __future__ import annotations
 
+import datetime
 import os
 from pathlib import Path
 from pprint import pformat
@@ -78,6 +79,7 @@ def snapshot(request: FixtureRequest) -> SnapshotFunc:
 
         # print strings directly, otherwise try pretty-printing
         out = data if isinstance(data, str) else pformat(data)
+        out = out.replace(str(datetime.date.today()), "TODAY")
         out = out.replace(
             LONG_EXAMPLE_FILE,
             "FAVA_LONG_EXAMPLE_PATH.beancount",

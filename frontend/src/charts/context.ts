@@ -1,8 +1,8 @@
 import type { Readable } from "svelte/store";
 import { derived } from "svelte/store";
 
-import { currentDateFormat } from "../format";
 import { conversion, currencies, operating_currency } from "../stores";
+import { currentDateFormat } from "../stores/format";
 
 export type ChartContext = {
   currencies: string[];

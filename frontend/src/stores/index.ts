@@ -12,6 +12,7 @@ import {
   date,
   number,
   object,
+  optional,
   record,
   string,
   tuple,
@@ -28,6 +29,9 @@ export const ledgerDataValidator = object({
   account_details: record(
     object({
       close_date: date,
+      uptodate_status: optional(string),
+      last_entry: optional(object({ date: string, entry_hash: string })),
+      balance_string: optional(string),
     })
   ),
   base_url: string,

@@ -38,12 +38,14 @@ export function emptyPosting(): Posting {
 export type EntryMetadata = Record<string, string | boolean | number>;
 export type EntryTypeName = "Balance" | "Note" | "Transaction";
 
+const entry_meta_validator = record(
+  defaultValue(union(boolean, number, string), "Unsupported metadata value")
+);
+
 const validatorBase = {
   type: string,
   date: string,
-  meta: record(
-    defaultValue(union(boolean, number, string), "Unsupported metadata value")
-  ),
+  meta: entry_meta_validator,
 };
 
 export const entryBaseValidator = object(validatorBase);

@@ -3,11 +3,12 @@
   import type { NamedFavaChart } from "../../charts";
   import ChartSwitcherTyped from "../../charts/ChartSwitcherTyped.svelte";
   import { domHelpers } from "../../charts/tooltip";
-  import { ctx, day } from "../../format";
+  import { day } from "../../format";
   import { _ } from "../../i18n";
   import { should_reload } from "../../router";
   import { sortableTable } from "../../sort";
   import { filter_params } from "../../stores/filters";
+  import { ctx } from "../../stores/format";
 
   $: load = get("commodities", $filter_params, $should_reload).then(
     (commodities) => {

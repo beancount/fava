@@ -81,6 +81,7 @@ option "operating_currency" "USD"
   phone: "+1.012.345.6789"
 2014-01-01 open Assets:US:BofA:Checking                        USD
   account: "00234-48574897"
+  fava-uptodate-indication: TRUE
 
 2014-01-01 * "Opening Balance for checking account"
   Assets:US:BofA:Checking                         3453.18 USD
