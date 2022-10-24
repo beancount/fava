@@ -36,8 +36,8 @@ export function urlFor(
 
 /** URL for the editor to the source location of an entry. */
 export function urlForSource(entry: EntryBaseAttributes): string {
-  const file_path = entry.meta.filename.toString();
-  const line = entry.meta.lineno.toString();
+  const file_path = entry.meta.filename?.toString() ?? "";
+  const line = entry.meta.lineno?.toString() ?? "";
   return urlFor("editor/", { file_path, line });
 }
 

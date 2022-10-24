@@ -12,17 +12,18 @@
 
   function valueExtractor(value: string, input: HTMLInputElement) {
     const match = value
-      .slice(0, input.selectionStart || undefined)
+      .slice(0, input.selectionStart ?? undefined)
       .match(/\S*$/);
-    return match ? match[0] : value;
+    return match?.[0] ?? value;
   }
   function valueSelector(value: string, input: HTMLInputElement) {
     const selectionStart = input.selectionStart ?? 0;
     const match = input.value.slice(0, selectionStart).match(/\S*$/);
-    return match
+    const matchLength = match?.[0]?.length;
+    return matchLength !== undefined
       ? `${input.value.slice(
           0,
-          selectionStart - match[0].length
+          selectionStart - matchLength
         )}${value}${input.value.slice(selectionStart)}`
       : value;
   }

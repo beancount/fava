@@ -18,7 +18,8 @@
   $: currency = $chartCurrency || currencies[0];
   $: context.set(currencies);
 
-  $: treemapData = $hierarchyChartMode === "treemap" && data.get(currency);
+  $: mode = $hierarchyChartMode;
+  $: treemap = mode === "treemap" && data.get(currency as string);
 </script>
 
 {#if currencies.length === 0}
@@ -27,9 +28,9 @@
       {_("Chart is empty.")}
     </text>
   </svg>
-{:else if treemapData}
-  <Treemap data={treemapData} {currency} {width} />
-{:else if $hierarchyChartMode === "sunburst"}
+{:else if treemap && currency}
+  <Treemap data={treemap} {currency} {width} />
+{:else if mode === "sunburst"}
   <svg {width} height={500}>
     {#each [...data] as [chart_currency, d], i (currency)}
       <g transform={`translate(${(width * i) / currencies.length},0)`}>

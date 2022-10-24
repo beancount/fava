@@ -3,7 +3,7 @@
  */
 export function basename(filename: string): string {
   const parts = filename.split(/\/|\\/);
-  return parts[parts.length - 1];
+  return parts[parts.length - 1] ?? "";
 }
 
 /**
@@ -11,7 +11,7 @@ export function basename(filename: string): string {
  */
 export function ext(filename: string): string {
   const match = /\.(\w+)$/.exec(filename);
-  return match ? match[1] : "";
+  return match?.[1] ?? "";
 }
 
 /**

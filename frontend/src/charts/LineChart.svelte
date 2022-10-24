@@ -44,8 +44,8 @@
 
   let xDomain: [Date, Date];
   $: xDomain = [
-    min(data, (s) => s.values[0].date) ?? today,
-    max(data, (s) => s.values[s.values.length - 1].date) ?? today,
+    min(data, (s) => s.values[0]?.date) ?? today,
+    max(data, (s) => s.values[s.values.length - 1]?.date) ?? today,
   ];
   $: x = scaleUtc().domain(xDomain).range([0, innerWidth]);
   let yMin: number;

@@ -145,13 +145,15 @@ export function tuple<A, B>(
   return (json) => {
     if (Array.isArray(json) && json.length === 2) {
       const result = [];
-      for (let i = 0; i < decoders.length; i += 1) {
-        const res = decoders[i](json[i]);
+      let i = 0;
+      for (const decoder of decoders) {
+        const res = decoder(json[i]);
         if (res.success) {
           result[i] = res.value;
         } else {
           return res;
         }
+        i += 1;
       }
       return ok(result as [A, B]);
     }

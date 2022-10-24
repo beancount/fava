@@ -39,7 +39,7 @@ async function main() {
     for (const { language, additional_dependencies } of hooks) {
       if (language === "node" && additional_dependencies) {
         for (const dep of additional_dependencies) {
-          const name = dep.split(/@[^@]*$/)[0];
+          const name = dep.split(/@[^@]*$/)[0] ?? "ERROR";
           const { version } = dependencies[name as keyof typeof dependencies];
           const currentDep = `${name}@${version}`;
           if (dep !== currentDep) {

@@ -30,7 +30,7 @@
     .filter((doc) => isDescendant(doc.account, $selectedAccount))
     .map((doc) => ({ doc, row: rowGetter(doc) }));
   $: sortedTable = table.sort(
-    sortFunc("string", sortOrder, ({ row }) => row[sortColumn])
+    sortFunc("string", sortOrder, ({ row }) => row[sortColumn] ?? "")
   );
 
   function setSort(index: number) {

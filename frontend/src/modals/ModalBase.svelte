@@ -8,19 +8,22 @@
   import { closeOverlay } from "../stores";
 
   export let shown = false;
-  export let focus = "";
+  export let focus: string | undefined = undefined;
   export let closeHandler = closeOverlay;
 
+  /**
+   * A Svelte action to handle focus within a modal.
+   */
   function handleFocus(el: HTMLElement) {
     function keydown(ev: KeyboardEvent) {
       if (ev.key === "Tab") {
         const focusable = getFocusableElements(el);
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
-        if (ev.shiftKey && document.activeElement === first) {
+        if (ev.shiftKey && document.activeElement === first && last) {
           ev.preventDefault();
           attemptFocus(last);
-        } else if (!ev.shiftKey && document.activeElement === last) {
+        } else if (!ev.shiftKey && document.activeElement === last && first) {
           ev.preventDefault();
           attemptFocus(first);
         }
@@ -31,8 +34,11 @@
     }
     document.addEventListener("keydown", keydown);
 
-    const focusEl = focus && el.querySelector(focus);
-    attemptFocus(focusEl || getFocusableElements(el)[0]);
+    const selectorFocusEl = focus ? el.querySelector(focus) : undefined;
+    const focusEl = selectorFocusEl ?? getFocusableElements(el)[0];
+    if (focusEl) {
+      attemptFocus(focusEl);
+    }
 
     return {
       destroy: () => document.removeEventListener("keydown", keydown),

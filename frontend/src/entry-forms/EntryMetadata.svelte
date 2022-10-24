@@ -18,9 +18,15 @@
   function updateMetakey(currentKey: string, newKey: string) {
     meta = Object.keys(meta).reduce<EntryMetadata>((m, key) => {
       if (key === currentKey) {
-        m[newKey] = meta[currentKey];
+        const val = meta[currentKey];
+        if (val !== undefined) {
+          m[newKey] = val;
+        }
       } else {
-        m[key] = meta[key];
+        const val = meta[key];
+        if (val) {
+          m[key] = val;
+        }
       }
       return m;
     }, {});
@@ -56,7 +62,7 @@
       type="text"
       class="value"
       placeholder={_("Value")}
-      value={metaValueToString(meta[metakey])}
+      value={metaValueToString(meta[metakey] ?? "")}
       on:change={(event) => {
         meta[metakey] = stringToMetaValue(event.currentTarget.value);
       }}

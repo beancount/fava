@@ -26,8 +26,10 @@
 
   let extractCache = new Map<string, Entry[]>();
 
-  $: importableFiles = files.filter((i) => i.importers[0].importer_name !== "");
-  $: otherFiles = files.filter((i) => i.importers[0].importer_name === "");
+  $: importableFiles = files.filter(
+    (i) => i.importers[0]?.importer_name !== ""
+  );
+  $: otherFiles = files.filter((i) => i.importers[0]?.importer_name === "");
 
   function preventNavigation() {
     return extractCache.size > 0

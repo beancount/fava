@@ -83,16 +83,17 @@ export const beancountCompletion: CompletionSource = (context) => {
       tokens.push({ name: node.name, from: node.from, to: node.to });
     }
   }
-  if (tokens.length > 0) {
-    const first = tokens[0];
-    const last = tokens[tokens.length - 1];
+  const first = tokens[0];
+  const last = tokens[tokens.length - 1];
+  if (first !== undefined && last !== undefined) {
     const lineFrom = line.from;
     // Dates have the 'number.special' token name
     if (first.name === "number.special" && line.length > last.to) {
-      if (tokens.length === 1) {
+      const second = tokens[1];
+      if (second === undefined) {
         return res(datedDirectives, lineFrom + first.to + 1);
       }
-      const directive = lineContent.slice(tokens[1].from, tokens[1].to);
+      const directive = lineContent.slice(second.from, second.to);
       const compl = directiveCompletions[directive];
       if (compl) {
         const completions = compl[tokens.length - 2];

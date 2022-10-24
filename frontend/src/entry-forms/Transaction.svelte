@@ -53,8 +53,8 @@
     currentTarget: HTMLInputElement;
   }) {
     const { value } = currentTarget;
-    entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1]);
-    entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1]);
+    entry.tags = [...value.matchAll(TAGS_RE)].map((a) => a[1] ?? "");
+    entry.links = [...value.matchAll(LINKS_RE)].map((a) => a[1] ?? "");
     entry.narration = value
       .replaceAll(TAGS_RE, "")
       .replaceAll(LINKS_RE, "")
@@ -85,9 +85,11 @@
 
   function movePosting({ from, to }: { from: number; to: number }) {
     const moved = entry.postings[from];
-    entry.postings.splice(from, 1);
-    entry.postings.splice(to, 0, moved);
-    entry.postings = entry.postings;
+    if (moved) {
+      entry.postings.splice(from, 1);
+      entry.postings.splice(to, 0, moved);
+      entry.postings = entry.postings;
+    }
   }
 </script>
 

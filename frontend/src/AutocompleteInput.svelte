@@ -43,7 +43,7 @@
         innerHTML: fuzzywrap(val, suggestion),
       }));
     filteredSuggestions =
-      filtered.length === 1 && filtered[0].suggestion === val ? [] : filtered;
+      filtered.length === 1 && filtered[0]?.suggestion === val ? [] : filtered;
     index = Math.min(index, filteredSuggestions.length - 1);
   }
 
@@ -64,7 +64,10 @@
     if (event.key === "Enter") {
       if (index > -1 && !hidden && filteredSuggestions[index]) {
         event.preventDefault();
-        select(filteredSuggestions[index].suggestion);
+        const suggestion = filteredSuggestions[index]?.suggestion;
+        if (suggestion) {
+          select(suggestion);
+        }
       } else {
         dispatch("enter", input);
       }

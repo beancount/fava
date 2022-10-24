@@ -41,7 +41,7 @@
     const url = new URL(window.location.href);
     url.searchParams.set("query_string", query);
     window.history.replaceState(null, "", url.toString());
-    resultElems[query].setAttribute("open", "true");
+    resultElems[query]?.setAttribute("open", "true");
   }
 
   async function clearResults() {

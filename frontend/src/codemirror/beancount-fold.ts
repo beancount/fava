@@ -4,7 +4,7 @@ const MAXDEPTH = 100;
 
 function headerLevel(line: string): number {
   const match = /^\*+/.exec(line);
-  return match ? match[0].length : MAXDEPTH;
+  return match?.[0]?.length ?? MAXDEPTH;
 }
 
 export const beancountFold = foldService.of(({ doc }, lineStart, lineEnd) => {

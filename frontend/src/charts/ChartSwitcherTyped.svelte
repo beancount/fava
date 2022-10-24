@@ -11,7 +11,7 @@
 
   export let charts: NamedFavaChart[];
 
-  let active_chart: NamedFavaChart | null = null;
+  let active_chart: NamedFavaChart | undefined = undefined;
 
   $: if (active_chart) {
     $lastActiveChartName = active_chart.name;
@@ -20,7 +20,7 @@
   onMount(() => {
     active_chart = charts.length
       ? charts.find((c) => c.name === $lastActiveChartName) || charts[0]
-      : null;
+      : undefined;
 
     if (!active_chart) {
       return () => {
@@ -31,13 +31,17 @@
     const unbind = [
       bindKey("c", () => {
         const currentIndex = charts.findIndex((e) => e === active_chart);
-        active_chart =
-          charts[(currentIndex + 1 + charts.length) % charts.length];
+        const next = charts[(currentIndex + 1 + charts.length) % charts.length];
+        if (next) {
+          active_chart = next;
+        }
       }),
       bindKey("C", () => {
         const currentIndex = charts.findIndex((e) => e === active_chart);
-        active_chart =
-          charts[(currentIndex - 1 + charts.length) % charts.length];
+        const prev = charts[(currentIndex - 1 + charts.length) % charts.length];
+        if (prev) {
+          active_chart = prev;
+        }
       }),
     ];
 

@@ -35,7 +35,7 @@
 
   $: bar_groups = data.bar_groups;
   $: accounts = data.accounts;
-  $: currencies = bar_groups[0].values.map((d) => d.currency);
+  $: currencies = bar_groups[0]?.values.map((d) => d.currency) ?? [];
 
   $: innerHeight = height - margin.top - margin.bottom;
   $: maxWidth = bar_groups.length * maxColumnWidth;

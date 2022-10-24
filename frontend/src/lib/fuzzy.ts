@@ -19,8 +19,7 @@ export function fuzzytest(pattern: string, text: string): number {
   let score = 0;
   let localScore = 0;
   let pindex = 0;
-  for (let index = 0; index < text.length; index += 1) {
-    const char = text[index];
+  for (const char of text) {
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
       pindex += 1;
@@ -53,7 +52,8 @@ const escapeChars: Record<string, string> = {
   "<": "&lt;",
   ">": "&gt;",
 };
-const e = (text: string) => text.replace(/["'&<>]/g, (m) => escapeChars[m]);
+const e = (text: string) =>
+  text.replace(/["'&<>]/g, (m) => escapeChars[m] ?? m);
 
 /**
  * Wrap fuzzy matched characters.
@@ -78,8 +78,7 @@ export function fuzzywrap(pattern: string, text: string): string {
   let pindex = 0;
   let inMatch = false;
   const result = [];
-  for (let index = 0; index < text.length; index += 1) {
-    const char = text[index];
+  for (const char of text) {
     const search = pattern[pindex];
     if (char === search || char.toLowerCase() === search) {
       if (!inMatch) {
