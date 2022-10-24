@@ -30,7 +30,7 @@ export const ledgerDataValidator = object({
     object({
       close_date: date,
       uptodate_status: optional(string),
-      last_entry: optional(object({ date: string, entry_hash: string })),
+      last_entry: optional(object({ date, entry_hash: string })),
       balance_string: optional(string),
     })
   ),
@@ -43,6 +43,7 @@ export const ledgerDataValidator = object({
     conversion_currencies: array(string),
     indent: number,
     locale: union(string, constant(null)),
+    uptodate_indicator_grey_lookback_days: number,
     insert_entry: array(
       object({ date: string, filename: string, lineno: number, re: string })
     ),
@@ -67,8 +68,6 @@ export const ledgerDataValidator = object({
   sidebar_links: array(tuple([string, string])),
   other_ledgers: array(tuple([string, string])),
 });
-
-// export const rawLedgerData = writable("");
 
 type LedgerData = ValidationT<typeof ledgerDataValidator>;
 

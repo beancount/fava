@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { day } from "../format";
   import { urlForAccount } from "../helpers";
-  import { ledgerData } from "../stores";
+  import { account_details } from "../stores";
 
   import AccountIndicator from "./AccountIndicator.svelte";
 
@@ -8,8 +9,8 @@
 
   $: parts = account.split(":");
 
-  $: account_details = $ledgerData.account_details[account];
-  $: last = account_details?.last_entry;
+  $: details = $account_details[account];
+  $: last = details?.last_entry;
 </script>
 
 <span class="droptarget" data-account-name={account}>
@@ -19,14 +20,9 @@
       title={name}>{part}</a
     >{#if index < parts.length - 1}:{/if}{/each}
   <AccountIndicator {account} />
-  <!-- TODO 
-    {%- if account_name and ledger.accounts[account_name].meta.get('fava-uptodate-indication') -%}
-    {{ last_account_activity(ledger, account_name) }}
-    {%- endif -%}
-    -->
   {#if last}
     <span class="last-activity">
-      (Last entry: <a href="#context-{last.entry_hash}">{last.date}</a>)
+      (Last entry: <a href="#context-{last.entry_hash}">{day(last.date)}</a>)
     </span>
   {/if}
 </span>

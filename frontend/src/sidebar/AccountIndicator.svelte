@@ -1,32 +1,48 @@
 <script lang="ts">
-  import { ledgerData } from "../stores";
+  import { timeDay } from "d3-time";
 
+  import { account_details, fava_options } from "../stores";
+
+  /** The account name. */
   export let account: string;
 
-  $: account_details = $ledgerData.account_details[account];
-  $: status = account_details?.uptodate_status;
-  $: balance = account_details?.balance_string ?? "";
+  $: details = $account_details[account];
+  $: status = details?.uptodate_status;
+  $: balance = details?.balance_string ?? "";
+  $: last_entry = details?.last_entry;
+
+  $: last_account_activity = last_entry
+    ? timeDay.count(last_entry.date, new Date())
+    : 0;
 </script>
 
-{#if status === "green"}
-  <span
-    class="status-indicator status-green"
-    title="The last entry is a passing balance check."
-  />
-{:else if status}
-  <copyable-text
-    class="status-indicator status-{status}"
-    title={`${
-      status === "yellow"
-        ? "The last entry is not a balance check."
-        : "The last entry is a failing balance check."
-    }
+{#if status}
+  {#if status === "green"}
+    <span
+      class="status-indicator status-green"
+      title="The last entry is a passing balance check."
+    />
+  {:else}
+    <copyable-text
+      class="status-indicator status-{status}"
+      title={`${
+        status === "yellow"
+          ? "The last entry is not a balance check."
+          : "The last entry is a failing balance check."
+      }
 
 Click to copy the balance directives to the clipboard:
 
 ${balance}`}
-    data-clipboard-text={balance}
-  />
+      data-clipboard-text={balance}
+    />
+  {/if}
+  {#if last_account_activity > $fava_options.uptodate_indicator_grey_lookback_days}
+    <span
+      class="status-indicator status-gray"
+      title="This account has not been updated in a while. ({last_account_activity} days ago)"
+    />
+  {/if}
 {/if}
 
 <style>
