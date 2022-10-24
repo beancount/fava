@@ -54,13 +54,14 @@ def uptodate_status(real_account: RealAccount) -> str | None:
 
 
 def balance_string(real_account: RealAccount) -> str:
+    """Balance directive for the given account for today."""
     account = real_account.account
     today = str(datetime.date.today())
     res = ""
-    for p in units(real_account.balance):
+    for pos in units(real_account.balance):
         res += (
             f"{today} balance {account:<28}"
-            + f" {p.units.number:>15} {p.units.currency}\n"
+            + f" {pos.units.number:>15} {pos.units.currency}\n"
         )
     return res
 

@@ -2,8 +2,6 @@
 import datetime
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.data import Posting
@@ -13,15 +11,15 @@ class Cost(NamedTuple):
     number: Decimal
     currency: str
     date: datetime.date
-    label: Optional[str]
+    label: str | None
 
 class CostSpec(NamedTuple):
-    number_per: Optional[Decimal]
-    number_total: Optional[Decimal]
-    currency: Optional[str]
-    date: Optional[datetime.date]
-    label: Optional[str]
-    merge: Optional[bool]
+    number_per: Decimal | None
+    number_total: Decimal | None
+    currency: str | None
+    date: datetime.date | None
+    label: str | None
+    merge: bool | None
 
 # def cost_to_str(cost: Any, dformat: Any, detail: bool = ...): ...
 
@@ -33,9 +31,7 @@ class _Position(NamedTuple):
     cost: Cost
 
 class Position(_Position):
-    def __new__(
-        cls, units: Amount, cost: Optional[Cost] = ...
-    ) -> "Position": ...
+    def __new__(cls, units: Amount, cost: Cost | None = ...) -> "Position": ...
     # cost_types: Any = ...
     # def __hash__(self) -> Any: ...
     # def to_string(self, dformat: Any = ..., detail: bool = ...) -> str: ...
@@ -59,5 +55,5 @@ class Position(_Position):
 
 # def get_position(posting: Any): ...
 def to_string(
-    pos: Union[Position, Posting], dformat: Any = ..., detail: bool = ...
+    pos: Position | Posting, dformat: Any = ..., detail: bool = ...
 ) -> str: ...

@@ -2,15 +2,9 @@
 import datetime
 import enum
 from typing import Any
-from typing import Dict
-from typing import FrozenSet
 from typing import Generator
-from typing import List
 from typing import NamedTuple
-from typing import Optional
-from typing import Set
 from typing import Type
-from typing import Union
 
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
@@ -21,18 +15,18 @@ from beancount.core.position import CostSpec
 Account = str
 Currency = str
 Flag = str
-Meta = Dict[str, Any]
-Tags = Union[Set[str], FrozenSet[str]]
+Meta = dict[str, Any]
+Tags = set[str] | frozenset[str]
 Links = Tags
 
 EMPTY_SET: Any
 
 class Booking(enum.Enum):
-    STRICT: str = ...
-    NONE: str = ...
-    AVERAGE: str = ...
-    FIFO: str = ...
-    LIFO: str = ...
+    STRICT: str
+    NONE: str
+    AVERAGE: str
+    FIFO: str
+    LIFO: str
 
 class Close(NamedTuple):
     meta: Meta
@@ -48,7 +42,7 @@ class Open(NamedTuple):
     meta: Meta
     date: datetime.date
     account: Account
-    currencies: List[Currency]
+    currencies: list[Currency]
     booking: Booking
 
 class Pad(NamedTuple):
@@ -62,26 +56,26 @@ class Balance(NamedTuple):
     date: datetime.date
     account: Account
     amount: Amount
-    tolerance: Optional[Decimal]
-    diff_amount: Optional[Amount]
+    tolerance: Decimal | None
+    diff_amount: Amount | None
 
 class Posting(NamedTuple):
     account: Account
-    units: Union[Amount, Type[MISSING]]
-    cost: Optional[Union[Cost, CostSpec]]
-    price: Optional[Amount]
-    flag: Optional[Flag]
-    meta: Optional[Meta]
+    units: Amount | Type[MISSING]
+    cost: Cost | CostSpec | None
+    price: Amount | None
+    flag: Flag | None
+    meta: Meta | None
 
 class Transaction(NamedTuple):
     meta: Meta
     date: datetime.date
     flag: Flag
-    payee: Optional[str]
+    payee: str | None
     narration: str
     tags: Tags
     links: Links
-    postings: List[Posting]
+    postings: list[Posting]
 
 class TxnPosting(NamedTuple):
     txn: Transaction
@@ -116,34 +110,35 @@ class Document(NamedTuple):
     date: datetime.date
     account: Account
     filename: str
-    tags: Optional[Tags]
-    links: Optional[Links]
+    tags: Tags | None
+    links: Links | None
 
 class Custom(NamedTuple):
     meta: Meta
     date: datetime.date
     type: str
-    values: List[Any]
+    values: list[Any]
 
 # ALL_DIRECTIVES: Any
-Directive = Union[
-    Open,
-    Close,
-    Commodity,
-    Pad,
-    Balance,
-    Transaction,
-    Note,
-    Event,
-    Query,
-    Price,
-    Document,
-    Custom,
-]
-Entries = List[Directive]
+Directive = (
+    Open
+    | Close
+    | Commodity
+    | Pad
+    | Balance
+    | Transaction
+    | Note
+    | Event
+    | Query
+    | Price
+    | Document
+    | Custom
+)
+
+Entries = list[Directive]
 
 def new_metadata(
-    filename: Any, lineno: Any, kvlist: Optional[Any] = ...
+    filename: Any, lineno: Any, kvlist: Any | None = ...
 ) -> Meta: ...
 def create_simple_posting(
     entry: Transaction,
@@ -168,7 +163,7 @@ NoneType: Any
 # ) -> None: ...
 # def posting_has_conversion(posting: Any): ...
 # def transaction_has_conversion(transaction: Any): ...
-def get_entry(posting_or_entry: Any) -> Optional[Directive]: ...
+def get_entry(posting_or_entry: Directive | TxnPosting) -> Directive: ...
 
 SORT_ORDER: Any
 

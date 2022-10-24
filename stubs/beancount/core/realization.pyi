@@ -1,10 +1,6 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-from typing import Dict
 from typing import Iterable
-from typing import List
-from typing import Optional
-from typing import Tuple, Iterator
-from typing import Union
+from typing import Iterator
 
 from beancount.core.data import Directive
 from beancount.core.data import Entries
@@ -12,12 +8,12 @@ from beancount.core.data import Posting
 from beancount.core.data import TxnPosting
 from beancount.core.inventory import Inventory
 
-TxnPostingList = List[Union[Directive, TxnPosting]]
+TxnPostingList = list[Directive | TxnPosting]
 
-class RealAccount(Dict[str, "RealAccount"]):
+class RealAccount(dict[str, "RealAccount"]):
     account: str = ...
     txn_postings: TxnPostingList = ...
-    balance: Optional[Inventory] = ...
+    balance: Inventory = ...
     # def __init__(
     #     self, account_name: Any, *args: Any, **kwargs: Any
     # ) -> None: ...
@@ -41,7 +37,7 @@ def get_or_create(
 # def contains(real_account: , account_name: ): ...
 def realize(
     entries: Entries,
-    min_accounts: Optional[Iterable[str]] = ...,
+    min_accounts: Iterable[str] | None = ...,
     compute_balance: bool = ...,
 ) -> RealAccount: ...
 
@@ -50,7 +46,7 @@ def realize(
 def get_postings(real_account: RealAccount) -> TxnPostingList: ...
 def iterate_with_balance(
     txn_postings: TxnPostingList,
-) -> List[Tuple[Directive, List[Posting], Inventory, Inventory]]: ...
+) -> list[tuple[Directive, list[Posting], Inventory, Inventory]]: ...
 def compute_balance(real_account: RealAccount) -> Inventory: ...
 def find_last_active_posting(txn_postings: TxnPostingList) -> Directive: ...
 
