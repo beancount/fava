@@ -17,6 +17,12 @@ test("locale number formatting", () => {
   assert.is(f(1000000), "1000000.00");
   assert.is(de(1000000), "1.000.000,00");
   assert.is(ind(1000000), "10,00,000.00");
+
+  // it silently clamps large or negative precisions
+  const de_large = localeFormatter("de_DE", 100);
+  assert.is(de_large(1000), "1.000,00000000000000000000");
+  const de_negative = localeFormatter("de_DE", -100);
+  assert.is(de_negative(1000), "1.000");
 });
 
 test("time filter date formatting", () => {
