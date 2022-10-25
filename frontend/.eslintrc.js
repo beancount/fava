@@ -70,6 +70,7 @@ module.exports = {
         "@typescript-eslint/no-unsafe-assignment": OFF,
         "@typescript-eslint/no-unsafe-call": OFF,
         "@typescript-eslint/no-unsafe-member-access": OFF,
+        "@typescript-eslint/no-misused-promises": OFF,
       },
     },
   ],
