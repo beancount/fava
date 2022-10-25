@@ -1,3 +1,9 @@
+<!--
+  @component
+  On drag-and-dropping of links (to documents) or files onto an entry or an
+  account, this modal overlay allows one to fill in account name and or change
+  the file name.
+-->
 <script lang="ts">
   import { put } from "../api";
   import { account, files, hash } from "../document-upload";
@@ -9,51 +15,49 @@
 
   import ModalBase from "./ModalBase.svelte";
 
-  let form: HTMLFormElement;
-
   $: shown = !!$files.length;
   $: documents = $options.documents;
+
+  let documents_folder = "";
+
+  function closeHandler() {
+    $files = [];
+    $account = "";
+    $hash = "";
+  }
 
   async function submit() {
     await Promise.all(
       $files.map(({ dataTransferFile, name }) => {
-        const formData = new FormData(form);
+        const formData = new FormData();
         formData.append("account", $account);
+        formData.append("hash", $hash);
+        formData.append("folder", documents_folder);
         formData.append("file", dataTransferFile, name);
-        return put("add_document", formData).then(
-          (response) => {
-            notify(response);
-          },
-          (error) => {
-            if (error instanceof Error) {
-              notify(`Upload error: ${error.message}`, "error");
-            }
+        return put("add_document", formData).then(notify, (error) => {
+          if (error instanceof Error) {
+            notify(`Upload error: ${error.message}`, "error");
           }
-        );
+        });
       })
     );
-    $files = [];
-    $account = "";
-    $hash = "";
+    closeHandler();
     router.reload();
-  }
-  function closeHandler() {
-    shown = false;
-    $files = [];
   }
 </script>
 
-<!-- svelte-ignore a11y-label-has-associated-control -->
 <ModalBase {shown} {closeHandler}>
-  <form bind:this={form} on:submit|preventDefault={submit}>
+  <form on:submit|preventDefault={submit}>
     <h3>{_("Upload file(s)")}:</h3>
     {#each $files as file}
-      <div class="fieldset"><input class="file" bind:value={file.name} /></div>
+      <div class="fieldset">
+        <input class="file" bind:value={file.name} />
+      </div>
     {/each}
     <div class="fieldset">
       <label>
         <span>{_("Documents folder")}:</span>
-        <select name="folder">
+        <select bind:value={documents_folder}>
           {#each documents as folder}
             <option>{folder}</option>
           {/each}
@@ -61,11 +65,11 @@
       </label>
     </div>
     <div class="fieldset account">
+      <!-- svelte-ignore a11y-label-has-associated-control -->
       <label>
         <span>{_("Account")}:</span>
         <AccountInput bind:value={$account} />
       </label>
-      <input type="hidden" name="hash" value={$hash} />
     </div>
     <button type="submit">{_("Upload")}</button>
   </form>
@@ -77,7 +81,7 @@
   }
 
   .fieldset {
-    display: "block";
+    display: block;
   }
 
   .fieldset :global(span):first-child {
