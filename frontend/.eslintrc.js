@@ -62,6 +62,8 @@ module.exports = {
       rules: {
         "svelte/button-has-type": 1,
         "svelte/valid-compile": OFF,
+        // this seems to have a few false positives
+        "svelte/no-unused-svelte-ignore": OFF,
         "no-self-assign": OFF,
         "no-undef-init": OFF,
         "import/first": OFF,

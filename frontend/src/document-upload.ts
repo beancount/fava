@@ -1,6 +1,6 @@
 /*
  * File uploads via Drag and Drop on elements with class "droptarget"
- * and attribute "data-account-name"
+ * and attribute "data-account-name".
  */
 
 import type { Writable } from "svelte/store";
@@ -12,11 +12,16 @@ import { delegate } from "./lib/events";
 import { basename, documentHasAccount } from "./lib/paths";
 import { notify } from "./notifications";
 
+/**
+ * Handle a dragenter or dragover event.
+ *
+ * We want to allow a drop if the dragged thing is either a file that could be
+ * dragged from a file manager or a URL (as dragged from a document link in Fava).
+ */
 function dragover(event: DragEvent, closestTarget: HTMLElement): void {
   if (
-    event.dataTransfer &&
-    (event.dataTransfer.types.includes("Files") ||
-      event.dataTransfer.types.includes("text/uri-list"))
+    event.dataTransfer?.types.includes("Files") ||
+    event.dataTransfer?.types.includes("text/uri-list")
   ) {
     closestTarget.classList.add("dragover");
     event.preventDefault();
@@ -34,12 +39,9 @@ delegate(document, "dragleave", ".droptarget", dragleave);
 /* Stores that the Svelte component accesses. */
 export const account = writable("");
 export const hash = writable("");
-export const files: Writable<
-  {
-    dataTransferFile: File;
-    name: string;
-  }[]
-> = writable([]);
+
+type DroppedFile = { dataTransferFile: File; name: string };
+export const files: Writable<DroppedFile[]> = writable([]);
 
 function drop(event: DragEvent, target: HTMLElement): void {
   target.classList.remove("dragover");
@@ -49,19 +51,36 @@ function drop(event: DragEvent, target: HTMLElement): void {
     return;
   }
 
-  const url = event.dataTransfer.getData("URL");
-  if (url) {
-    let filename = new URL(url).searchParams.get("filename");
-    const acc = target.getAttribute("data-account-name");
-    if (acc && filename && documentHasAccount(filename, acc)) {
-      filename = basename(filename);
+  // Account name that the document should be attached to.
+  const targetAccount = target.getAttribute("data-account-name");
+  // Hash of the entry that the document should be attached to.
+  const targetEntry = target.getAttribute("data-entry");
+
+  if (event.dataTransfer.types.includes("Files")) {
+    // Files are being dropped.
+    const date = target.getAttribute("data-entry-date") ?? todayAsString();
+    const uploadedFiles: DroppedFile[] = [];
+    for (const dataTransferFile of event.dataTransfer.files) {
+      let { name } = dataTransferFile;
+      if (!/^\d{4}-\d{2}-\d{2}/.test(name)) {
+        name = `${date} ${name}`;
+      }
+      uploadedFiles.push({ dataTransferFile, name });
     }
-    const entry_hash = target.getAttribute("data-entry");
-    if (filename && entry_hash) {
-      put("attach_document", { filename, entry_hash }).then(
-        (response) => {
-          notify(response);
-        },
+    account.set(targetAccount ?? "");
+    hash.set(targetEntry ?? "");
+    files.set(uploadedFiles);
+  } else if (event.dataTransfer.types.includes("text/uri-list")) {
+    // Links are being dropped
+    const url = event.dataTransfer.getData("URL");
+    // Try to extract the filename from the URL.
+    let filename = new URL(url).searchParams.get("filename");
+    if (filename && targetEntry) {
+      if (targetAccount && documentHasAccount(filename, targetAccount)) {
+        filename = basename(filename);
+      }
+      put("attach_document", { filename, entry_hash: targetEntry }).then(
+        notify,
         (error) => {
           if (error instanceof Error) {
             notify(error.message, "error");
@@ -69,28 +88,7 @@ function drop(event: DragEvent, target: HTMLElement): void {
         }
       );
     }
-    return;
   }
-
-  const dateAttribute = target.getAttribute("data-entry-date");
-  const entryDate = dateAttribute || todayAsString();
-  account.set(target.getAttribute("data-account-name") || "");
-  hash.set(target.getAttribute("data-entry") || "");
-
-  const uploadedFiles: { dataTransferFile: File; name: string }[] = [];
-  for (const dataTransferFile of event.dataTransfer.files) {
-    let { name } = dataTransferFile;
-
-    if (!/^\d{4}-\d{2}-\d{2}/.test(name)) {
-      name = `${entryDate} ${name}`;
-    }
-
-    uploadedFiles.push({
-      dataTransferFile,
-      name,
-    });
-  }
-  files.set(uploadedFiles);
 }
 
 delegate(document, "drop", ".droptarget", drop);
