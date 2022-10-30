@@ -116,7 +116,7 @@ gh-pages:
 	tox -e docs
 	ls | grep -v 'build' | xargs rm -r
 	mv -f build/docs/* ./
-	rm -r build .builds .github
+	rm -r build .github
 	touch .nojekyll
 	git add -A
 	git commit -m 'Update gh-pages' --no-verify
