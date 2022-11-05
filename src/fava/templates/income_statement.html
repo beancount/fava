@@ -7,8 +7,8 @@
 <svelte-component type="charts"><script type="application/json">{{
   [
     chart_api.interval_totals(g.interval, (options['name_income'], options['name_expenses']), label=_('Net Profit'), invert=invert),
-    chart_api.interval_totals(g.interval, options['name_income'], label=_('Income'), invert=invert),
-    chart_api.interval_totals(g.interval, options['name_expenses'], label=_('Expenses')),
+    chart_api.interval_totals(g.interval, options['name_income'], label='{} ({})'.format(_('Income'), g.interval.label), invert=invert),
+    chart_api.interval_totals(g.interval, options['name_expenses'], label='{} ({})'.format(_('Expenses'), g.interval.label)),
     chart_api.hierarchy(options['name_income']),
     chart_api.hierarchy(options['name_expenses']),
   ]|tojson
