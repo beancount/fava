@@ -14,7 +14,11 @@
   import Table from "./Table.svelte";
   import type { Document } from "./types";
 
-  type MoveDetails = { account: string; filename: string; newName: string };
+  interface MoveDetails {
+    account: string;
+    filename: string;
+    newName: string;
+  }
 
   export let data: Document[];
 

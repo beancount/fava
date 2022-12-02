@@ -4,9 +4,15 @@
  */
 
 /** A successful result. */
-export type Ok<T> = { success: true; value: T };
+export interface Ok<T> {
+  success: true;
+  value: T;
+}
 /** An error result. */
-export type Err<E> = { success: false; value: E };
+export interface Err<E> {
+  success: false;
+  value: E;
+}
 /** Result of an operation that might fail */
 export type Result<T, E> = Ok<T> | Err<E>;
 

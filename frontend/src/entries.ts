@@ -49,11 +49,11 @@ const validatorBase = {
 };
 
 export const entryBaseValidator = object(validatorBase);
-export type EntryBaseAttributes = {
+export interface EntryBaseAttributes {
   type: string;
   date: string;
   meta: EntryMetadata;
-};
+}
 
 abstract class EntryBase {
   type: EntryTypeName;

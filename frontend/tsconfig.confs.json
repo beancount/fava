@@ -2,6 +2,7 @@
     "compilerOptions": {
         "allowJs": true,
         "checkJs": true,
+        "strictNullChecks": true,
         "noEmit": true
     },
     "include": ["*.js", ".eslintrc.js"]

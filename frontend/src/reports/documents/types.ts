@@ -1,1 +1,5 @@
-export type Document = { account: string; filename: string; date: string };
+export interface Document {
+  account: string;
+  filename: string;
+  date: string;
+}

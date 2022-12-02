@@ -33,7 +33,7 @@ const lang = StreamLanguage.define(beancountStreamParser);
 
 const directiveCompletions: Record<
   string,
-  Array<Readable<string[]> | null> | undefined
+  (Readable<string[]> | null)[] | undefined
 > = {
   open: [accounts, currencies],
   close: [accounts],
@@ -61,7 +61,7 @@ export const beancountCompletion: CompletionSource = (context) => {
 
   const indented = context.matchBefore(/^\s+[A-Z]\S*/);
   if (indented) {
-    const indentation = indented.text.length - indented.text.trimLeft().length;
+    const indentation = indented.text.length - indented.text.trimStart().length;
     return res(get(accounts), indented.from + indentation);
   }
 

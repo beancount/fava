@@ -40,7 +40,10 @@ delegate(document, "dragleave", ".droptarget", dragleave);
 export const account = writable("");
 export const hash = writable("");
 
-type DroppedFile = { dataTransferFile: File; name: string };
+interface DroppedFile {
+  dataTransferFile: File;
+  name: string;
+}
 export const files: Writable<DroppedFile[]> = writable([]);
 
 function drop(event: DragEvent, target: HTMLElement): void {

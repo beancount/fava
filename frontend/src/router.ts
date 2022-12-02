@@ -261,7 +261,7 @@ class Router extends Events<"page-loaded"> {
       link.hasAttribute("data-remote") ||
       (link instanceof HTMLAnchorElement &&
         (link.host !== window.location.host ||
-          link.protocol.indexOf("http") !== 0));
+          !link.protocol.startsWith("http")));
 
     delegate(
       document,

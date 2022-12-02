@@ -34,10 +34,11 @@
       saving = false;
     }
   }
+
   const [, useEditor] = initBeancountEditor(
     slice,
     (state) => {
-      currentSlice = state.doc.toString();
+      currentSlice = state.sliceDoc();
     },
     [
       {

@@ -33,7 +33,7 @@
 
   function tooltipText(d: AccountHierarchyNode) {
     const val = d.value ?? 0;
-    const rootValue = root.value || 1;
+    const rootValue = root.value ?? 1;
 
     return [
       domHelpers.t(
@@ -72,7 +72,7 @@
           y={(d.y1 - d.y0) / 2}
           text-anchor="middle"
         >
-          {d.data.account.split(":").pop() || ""}
+          {d.data.account.split(":").pop() ?? ""}
         </text>
       </a>
     </g>

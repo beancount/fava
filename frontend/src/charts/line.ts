@@ -13,10 +13,10 @@ export interface LineChartDatum {
   value: number;
 }
 
-export type LineChartData = {
+export interface LineChartData {
   name: string;
   values: LineChartDatum[];
-};
+}
 
 export interface LineChart {
   type: "linechart";

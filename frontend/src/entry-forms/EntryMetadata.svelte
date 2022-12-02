@@ -11,8 +11,8 @@
   );
 
   function removeMetadata(metakey: string) {
-    delete meta[metakey];
-    meta = meta;
+    const { [metakey]: _m, ...rest } = meta;
+    meta = rest;
   }
 
   function updateMetakey(currentKey: string, newKey: string) {

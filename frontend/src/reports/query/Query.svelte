@@ -23,15 +23,15 @@
 
   const resultElems: Record<string, HTMLElement> = {};
 
-  type ResultType = {
+  interface ResultType {
     result?: { table: string; chart: FavaChart | null };
     error?: unknown;
-  };
+  }
 
   const query_results: Record<string, ResultType> = {};
 
   $: query_result_array = $query_shell_history.map(
-    (item): [string, ResultType] => [item, query_results[item] || {}]
+    (item): [string, ResultType] => [item, query_results[item] ?? {}]
   );
 
   async function setResult(query: string, res: ResultType) {
@@ -94,7 +94,7 @@
   onMount(() =>
     router.on("page-loaded", () => {
       const url = new URL(window.location.href);
-      query_string = url.searchParams.get("query_string") || "";
+      query_string = url.searchParams.get("query_string") ?? "";
       if (query_string) {
         submit();
       }

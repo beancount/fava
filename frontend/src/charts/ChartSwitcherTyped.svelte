@@ -19,7 +19,7 @@
 
   onMount(() => {
     active_chart = charts.length
-      ? charts.find((c) => c.name === $lastActiveChartName) || charts[0]
+      ? charts.find((c) => c.name === $lastActiveChartName) ?? charts[0]
       : undefined;
 
     if (!active_chart) {

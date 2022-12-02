@@ -4,10 +4,10 @@ import { derived } from "svelte/store";
 import { conversion, currencies, operating_currency } from "../stores";
 import { currentDateFormat } from "../stores/format";
 
-export type ChartContext = {
+export interface ChartContext {
   currencies: string[];
   dateFormat: (date: Date) => string;
-};
+}
 
 /**
  * The list of operating currencies, adding in the current conversion currency.

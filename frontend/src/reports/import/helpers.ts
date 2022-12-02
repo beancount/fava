@@ -23,11 +23,11 @@ function newFilename(date: string, basename: string): string {
   return `${date} ${basename}`;
 }
 
-type FileWithImporters<T> = {
+interface FileWithImporters<T> {
   name: string;
   basename: string;
   importers: ({ account: string; importer_name: string } & T)[];
-};
+}
 
 export type ImportableFile = FileWithImporters<{ date: string; name: string }>;
 export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;

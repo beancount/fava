@@ -110,7 +110,7 @@ document.addEventListener("keydown", keydown);
 export type KeySpec = string | { key: string; mac: string };
 
 const currentPlatform: "mac" | "key" =
-  typeof navigator !== "undefined" && /Mac/.test(navigator.platform)
+  typeof navigator !== "undefined" && navigator.platform.includes("Mac")
     ? "mac"
     : "key";
 

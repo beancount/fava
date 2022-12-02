@@ -33,7 +33,7 @@
     });
   }
 
-  $: account_suggestions = suggestions || $accounts;
+  $: account_suggestions = suggestions ?? $accounts;
   $: filtered_suggestions = filterSuggestions(account_suggestions, date);
 </script>
 

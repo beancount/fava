@@ -2,7 +2,7 @@ import { getScriptTagValue } from "./lib/dom";
 import { record, string } from "./lib/validation";
 import { log_error } from "./log";
 
-let translations: Record<string, string>;
+let translations: Record<string, string> | undefined;
 const validator = record(string);
 
 /**
@@ -16,7 +16,7 @@ export function _(text: string): string {
       log_error(`Loading translations failed: ${res.value}`);
     }
   }
-  return translations[text] || text;
+  return translations[text] ?? text;
 }
 
 /**

@@ -11,7 +11,10 @@ export const raw_page_title = writable("");
 
 export const has_changes = writable(false);
 
-type PageTitle = { title: string; type: "plain" | "account" };
+interface PageTitle {
+  title: string;
+  type: "plain" | "account";
+}
 
 export const page_title = derived(raw_page_title, (raw): PageTitle => {
   if (raw.startsWith("account:")) {

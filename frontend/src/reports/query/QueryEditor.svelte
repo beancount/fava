@@ -8,14 +8,14 @@
 
   const [editor, useEditor] = initQueryEditor(
     value,
-    (s) => {
-      value = s.doc.toString();
+    (state) => {
+      value = state.sliceDoc();
     },
     _("...enter a BQL query. 'help' to list available commands."),
     submit
   );
 
-  $: if (value !== editor.state.doc.toString()) {
+  $: if (value !== editor.state.sliceDoc()) {
     editor.dispatch({
       changes: { from: 0, to: editor.state.doc.length, insert: value },
     });

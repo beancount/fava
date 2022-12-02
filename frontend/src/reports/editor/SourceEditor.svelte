@@ -33,7 +33,7 @@
     try {
       sha256sum = await put("source", {
         file_path: data.file_path,
-        source: cm.state.doc.toString(),
+        source: cm.state.sliceDoc(),
         sha256sum,
       });
       changed = false;

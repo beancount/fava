@@ -8,6 +8,8 @@ export const account_filter = writable("");
 export const fql_filter = writable("");
 
 /** The three entry filters that Fava supports. */
+// this screws up the API type definitions otherwise
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type Filters = {
   account: string;
   filter: string;

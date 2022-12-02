@@ -19,7 +19,7 @@
   $: context.set(currencies);
 
   $: mode = $hierarchyChartMode;
-  $: treemap = mode === "treemap" && data.get(currency as string);
+  $: treemap = mode === "treemap" && data.get(currency ?? "");
 </script>
 
 {#if currencies.length === 0}

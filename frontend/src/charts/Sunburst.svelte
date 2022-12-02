@@ -31,8 +31,10 @@
 
   function balanceText(d: AccountHierarchyNode): string {
     const val = d.value ?? 0;
-    const rootVal = root.value || 1;
-    return `${$ctx.amount(val, currency)} (${formatPercentage(val / rootVal)})`;
+    const rootVal = root.value ?? 0;
+    return rootVal
+      ? `${$ctx.amount(val, currency)} (${formatPercentage(val / rootVal)})`
+      : $ctx.amount(val, currency);
   }
 
   $: currentAccount = current ? current.data.account : root.data.account;

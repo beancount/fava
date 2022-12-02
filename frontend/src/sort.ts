@@ -38,7 +38,7 @@ type SortOrder = "desc" | "asc";
  * Obtain the value to sort by for an element.
  */
 function getValue(el: HTMLElement | null): string {
-  return el?.getAttribute("data-sort-value") || el?.textContent || "";
+  return el?.getAttribute("data-sort-value") ?? el?.textContent ?? "";
 }
 
 /**

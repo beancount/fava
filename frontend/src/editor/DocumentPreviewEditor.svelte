@@ -22,7 +22,7 @@
       value = `Loading ${url} failed...`;
     });
 
-  $: if (value !== editor.state.doc.toString()) {
+  $: if (value !== editor.state.sliceDoc()) {
     editor.dispatch({
       changes: { from: 0, to: editor.state.doc.length, insert: value },
     });

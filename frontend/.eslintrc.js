@@ -36,6 +36,7 @@ module.exports = {
     "plugin:svelte/recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:@typescript-eslint/strict",
     "plugin:svelte/prettier",
     "prettier",
   ],
@@ -73,6 +74,9 @@ module.exports = {
         "@typescript-eslint/no-unsafe-call": OFF,
         "@typescript-eslint/no-unsafe-member-access": OFF,
         "@typescript-eslint/no-misused-promises": OFF,
+        // Has some false positives in Svelte files were we have if()
+        // checks to trigger re-computations:
+        "@typescript-eslint/no-unnecessary-condition": OFF,
       },
     },
   ],
