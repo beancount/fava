@@ -100,7 +100,7 @@
   }
 </script>
 
-{#if $fava_options.import_config}
+{#if !$fava_options.import_config}
   <p>
     No importers configured. See <a href={urlFor("help/import")}
       >Help (Import)</a
