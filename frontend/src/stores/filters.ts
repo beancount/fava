@@ -21,3 +21,11 @@ export const filter_params = derived(
   [time_filter, account_filter, fql_filter],
   ([time, account, filter]): Filters => ({ time, account, filter })
 );
+
+export function getURLFilters(url: URL): Filters {
+  return {
+    account: url.searchParams.get("account") ?? "",
+    filter: url.searchParams.get("filter") ?? "",
+    time: url.searchParams.get("time") ?? "",
+  };
+}

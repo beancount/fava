@@ -3,7 +3,7 @@
   import AccountInput from "../../entry-forms/AccountInput.svelte";
   import { _ } from "../../i18n";
 
-  import type { ProcessedImportableFile } from "./helpers";
+  import type { ProcessedImportableFile } from "./load";
 
   export let files: ProcessedImportableFile[];
   export let extractCache: Map<string, Entry[]>;

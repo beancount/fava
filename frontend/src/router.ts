@@ -6,7 +6,7 @@
  */
 
 import type { SvelteComponent } from "svelte";
-import type { Writable } from "svelte/store";
+import type { Readable, Writable } from "svelte/store";
 import { writable } from "svelte/store";
 
 import { delegate, Events } from "./lib/events";
@@ -34,11 +34,9 @@ export function setStoreValuesFromURL(): void {
   showCharts.set(params.get("charts") !== "false");
 }
 
+const is_loading_internal = writable(false);
 /** Whether the logo should be spinning to indicate that something is loading. */
-export const is_loading = writable(false);
-
-/** Use this store to force reloads in components. */
-export const should_reload = writable(1);
+export const is_loading: Readable<boolean> = is_loading_internal;
 
 class Router extends Events<"page-loaded"> {
   /** The URL hash. */
@@ -108,16 +106,21 @@ class Router extends Events<"page-loaded"> {
     return null;
   }
 
-  private frontendRender(url: URL | Location): void {
+  private async frontendRender(url: URL): Promise<void> {
     const frontend = this.shouldRenderInFrontend?.(url);
     if (frontend) {
-      const [Cls, title] = frontend;
-      // Check if the component is changed - otherwise it should update itself.
+      const [Cls, load, title] = frontend;
+      is_loading_internal.set(true);
+      const data = await load(url);
+      is_loading_internal.set(false);
+      // Check if the component is changed - otherwise only update the data.
       if (Cls !== this.component?.constructor) {
         this.component?.$destroy();
         this.article.innerHTML = "";
-        this.component = new Cls({ target: this.article });
+        this.component = new Cls({ target: this.article, props: { data } });
         raw_page_title.set(title);
+      } else {
+        this.component.$set({ data });
       }
     } else {
       this.component?.$destroy();
@@ -134,7 +137,7 @@ class Router extends Events<"page-loaded"> {
     urlHash.set(window.location.hash.slice(1));
     this.updateState();
 
-    this.frontendRender(window.location);
+    this.frontendRender(new URL(window.location.href)).catch(log_error);
 
     window.addEventListener("beforeunload", (event) => {
       const leaveMessage = this.shouldInterrupt();
@@ -193,12 +196,12 @@ class Router extends Events<"page-loaded"> {
 
     const getUrl = new URL(url, window.location.href);
 
-    this.frontendRender(getUrl);
+    await this.frontendRender(getUrl);
 
     try {
       if (!this.component) {
         getUrl.searchParams.set("partial", "true");
-        is_loading.set(true);
+        is_loading_internal.set(true);
         const content = await fetch(getUrl.toString()).then(handleText);
         if (historyState) {
           window.history.pushState(null, "", url);
@@ -222,7 +225,7 @@ class Router extends Events<"page-loaded"> {
     } catch (error) {
       notify_err(error, (e) => `Loading ${url} failed: ${e.message}`);
     } finally {
-      is_loading.set(false);
+      is_loading_internal.set(false);
     }
   }
 
@@ -294,11 +297,7 @@ class Router extends Events<"page-loaded"> {
    * Reload the page.
    */
   reload(): void {
-    if (this.component) {
-      should_reload.update((v) => v + 1);
-    } else {
-      this.loadURL(window.location.href, false).catch(log_error);
-    }
+    this.loadURL(window.location.href, false).catch(log_error);
   }
 }
 

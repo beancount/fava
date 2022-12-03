@@ -120,7 +120,7 @@ export const modKey = currentPlatform === "mac" ? "Cmd" : "Ctrl";
  * Get the keyboard key specifier string for the current platform.
  * @param keySpec - The key spec.
  */
-export function getKeySpecKey(keySpec: KeySpec): string {
+function getKeySpecKey(keySpec: KeySpec): string {
   if (typeof keySpec === "string") {
     return keySpec;
   }

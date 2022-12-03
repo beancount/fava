@@ -1,14 +1,5 @@
-import type { Entry } from "../../entries";
+import { get } from "../../api";
 import { todayAsString } from "../../format";
-import type { Validator } from "../../lib/validation";
-import { array, object, string } from "../../lib/validation";
-
-/**
- * Check whether the given entry is marked as duplicate.
- */
-export function isDuplicate(e: Entry): boolean {
-  return !!e.meta.__duplicate__;
-}
 
 /**
  * Construct the filename from date and basename.
@@ -32,21 +23,6 @@ interface FileWithImporters<T> {
 export type ImportableFile = FileWithImporters<{ date: string; name: string }>;
 export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
 
-export const importable_files_validator: Validator<ImportableFile[]> = array(
-  object({
-    name: string,
-    basename: string,
-    importers: array(
-      object({
-        account: string,
-        importer_name: string,
-        date: string,
-        name: string,
-      })
-    ),
-  })
-);
-
 /**
  * Initially set the file names for all importable files.
  */
@@ -69,3 +45,7 @@ export function preprocessData(
     return { ...file, importers };
   });
 }
+
+export const load = () => get("imports", undefined).then(preprocessData);
+
+export type PageData = Awaited<ReturnType<typeof load>>;

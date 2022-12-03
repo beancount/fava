@@ -15,6 +15,9 @@ export const pathname = writable<string>();
 /** The current URL search. Should only be updated by the router. */
 export const search = writable<string>();
 
+/** The current URL searchParams. */
+export const searchParams = derived(search, (s) => new URLSearchParams(s));
+
 /** The query string containing all values that are synced to the URL. */
 export const synced_query_string = derived([search], ([s]) => {
   const all_params = new URLSearchParams(s);

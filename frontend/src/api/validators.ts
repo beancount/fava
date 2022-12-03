@@ -1,4 +1,5 @@
 import { entryBaseValidator, entryValidator, Transaction } from "../entries";
+import type { Validator } from "../lib/validation";
 import {
   array,
   boolean,
@@ -11,8 +12,23 @@ import {
   tuple,
   unknown,
 } from "../lib/validation";
-import { importable_files_validator } from "../reports/import/helpers";
+import type { ImportableFile } from "../reports/import/load";
 import { ledgerDataValidator } from "../stores";
+
+const importable_files_validator: Validator<ImportableFile[]> = array(
+  object({
+    name: string,
+    basename: string,
+    importers: array(
+      object({
+        account: string,
+        importer_name: string,
+        date: string,
+        name: string,
+      })
+    ),
+  })
+);
 
 export const getAPIValidators = {
   changed: boolean,

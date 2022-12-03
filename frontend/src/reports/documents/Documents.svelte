@@ -11,16 +11,17 @@
 
   import Accounts from "./Accounts.svelte";
   import DocumentPreview from "./DocumentPreview.svelte";
+  import type { PageData } from "./load";
   import Table from "./Table.svelte";
   import type { Document } from "./types";
+
+  export let data: PageData;
 
   interface MoveDetails {
     account: string;
     filename: string;
     newName: string;
   }
-
-  export let data: Document[];
 
   $: grouped = group(data, (d) => d.account);
   $: node = stratify(

@@ -41,6 +41,8 @@ export const ledgerDataValidator = object({
     auto_reload: boolean,
     currency_column: number,
     conversion_currencies: array(string),
+    import_config: optional(string),
+
     indent: number,
     locale: union(string, constant(null)),
     uptodate_indicator_grey_lookback_days: number,

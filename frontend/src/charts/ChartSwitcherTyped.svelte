@@ -11,44 +11,30 @@
 
   export let charts: NamedFavaChart[];
 
-  let active_chart: NamedFavaChart | undefined = undefined;
+  const setChart = (c: NamedFavaChart) => {
+    $lastActiveChartName = c.name;
+  };
 
-  $: if (active_chart) {
-    $lastActiveChartName = active_chart.name;
-  }
+  $: active_chart =
+    charts.find((c) => c.name === $lastActiveChartName) ?? charts?.[0];
 
-  onMount(() => {
-    active_chart = charts.length
-      ? charts.find((c) => c.name === $lastActiveChartName) ?? charts[0]
-      : undefined;
-
-    if (!active_chart) {
-      return () => {
-        // noop
-      };
+  const nextChart = () => {
+    const currentIndex = charts.findIndex((e) => e === active_chart);
+    const next = charts[(currentIndex + 1 + charts.length) % charts.length];
+    if (next) {
+      setChart(next);
     }
+  };
+  const previousChart = () => {
+    const currentIndex = charts.findIndex((e) => e === active_chart);
+    const prev = charts[(currentIndex - 1 + charts.length) % charts.length];
+    if (prev) {
+      setChart(prev);
+    }
+  };
 
-    const unbind = [
-      bindKey("c", () => {
-        const currentIndex = charts.findIndex((e) => e === active_chart);
-        const next = charts[(currentIndex + 1 + charts.length) % charts.length];
-        if (next) {
-          active_chart = next;
-        }
-      }),
-      bindKey("C", () => {
-        const currentIndex = charts.findIndex((e) => e === active_chart);
-        const prev = charts[(currentIndex - 1 + charts.length) % charts.length];
-        if (prev) {
-          active_chart = prev;
-        }
-      }),
-    ];
-
-    return () => {
-      unbind.forEach((u) => u());
-    };
-  });
+  onMount(() => bindKey("c", nextChart));
+  onMount(() => bindKey("C", previousChart));
 </script>
 
 {#if charts.length > 0 && active_chart}
@@ -61,7 +47,7 @@
         type="button"
         class:selected={chart === active_chart}
         on:click={() => {
-          active_chart = chart;
+          setChart(chart);
         }}
       >
         {chart.name}

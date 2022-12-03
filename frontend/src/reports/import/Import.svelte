@@ -3,17 +3,19 @@
 
   import { deleteDocument, get, moveDocument, saveEntries } from "../../api";
   import type { Entry } from "../../entries";
+  import { isDuplicate } from "../../entries";
+  import { urlFor } from "../../helpers";
   import { _ } from "../../i18n";
   import { notify } from "../../notifications";
   import router from "../../router";
+  import { fava_options } from "../../stores";
   import DocumentPreview from "../documents/DocumentPreview.svelte";
 
   import Extract from "./Extract.svelte";
   import FileList from "./FileList.svelte";
-  import { isDuplicate } from "./helpers";
-  import type { ProcessedImportableFile } from "./helpers";
+  import type { PageData, ProcessedImportableFile } from "./load";
 
-  export let data: ProcessedImportableFile[];
+  export let data: PageData;
 
   /** The array of entries to show the modal for. */
   let entries: Entry[] = [];
@@ -31,11 +33,10 @@
   );
   $: otherFiles = files.filter((i) => i.importers[0]?.importer_name === "");
 
-  function preventNavigation() {
-    return extractCache.size > 0
+  const preventNavigation = () =>
+    extractCache.size > 0
       ? "There are unfinished imports, are you sure you want to continue?"
       : null;
-  }
 
   onMount(() => router.addInteruptHandler(preventNavigation));
   onMount(() => {
@@ -99,52 +100,60 @@
   }
 </script>
 
-<Extract
-  {entries}
-  close={() => {
-    entries = [];
-  }}
-  {save}
-/>
-<div class="fixed-fullsize-container">
-  <div class="filelist">
-    {#if files.length === 0}
-      <p>{_("No files were found for import.")}</p>
-    {/if}
-    {#if importableFiles.length > 0}
+{#if $fava_options.import_config}
+  <p>
+    No importers configured. See <a href={urlFor("help/import")}
+      >Help (Import)</a
+    > for more information.
+  </p>
+{:else}
+  <Extract
+    {entries}
+    close={() => {
+      entries = [];
+    }}
+    {save}
+  />
+  <div class="fixed-fullsize-container">
+    <div class="filelist">
+      {#if files.length === 0}
+        <p>{_("No files were found for import.")}</p>
+      {/if}
+      {#if importableFiles.length > 0}
+        <div>
+          <h2>{_("Importable Files")}</h2>
+          <FileList
+            files={importableFiles}
+            {extractCache}
+            bind:selected
+            {move}
+            {remove}
+            {extract}
+          />
+        </div>
+        <hr />
+      {/if}
+      {#if otherFiles.length > 0}
+        <details open={importableFiles.length === 0}>
+          <summary>{_("Non-importable Files")}</summary>
+          <FileList
+            files={otherFiles}
+            {extractCache}
+            bind:selected
+            {move}
+            {remove}
+            {extract}
+          />
+        </details>
+      {/if}
+    </div>
+    {#if selected}
       <div>
-        <h2>{_("Importable Files")}</h2>
-        <FileList
-          files={importableFiles}
-          {extractCache}
-          bind:selected
-          {move}
-          {remove}
-          {extract}
-        />
+        <DocumentPreview filename={selected} />
       </div>
-      <hr />
-    {/if}
-    {#if otherFiles.length > 0}
-      <details open={importableFiles.length === 0}>
-        <summary>{_("Non-importable Files")}</summary>
-        <FileList
-          files={otherFiles}
-          {extractCache}
-          bind:selected
-          {move}
-          {remove}
-          {extract}
-        />
-      </details>
     {/if}
   </div>
-  {#if selected}
-    <div>
-      <DocumentPreview filename={selected} />
-    </div>
-  {/if}
-</div>
+{/if}
 
 <style>
   .fixed-fullsize-container {
