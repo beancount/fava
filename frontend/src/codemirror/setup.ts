@@ -40,6 +40,7 @@ import { fava_options } from "../stores";
 
 import { beancount } from "./beancount";
 import { bql } from "./bql";
+import { rulerPlugin } from "./ruler";
 
 const baseExtensions = [
   lineNumbers(),
@@ -67,15 +68,6 @@ const baseExtensions = [
     indentWithTab,
   ]),
 ];
-
-/*
- TODO:
- - center cursor?
- - rulers:
-const rulers = currencyColumn
-    ? [{ column: currencyColumn - 1, lineStyle: "dotted" }]
-    : undefined;
-*/
 
 /** An editor and a function to attach it to a DOM element. */
 type EditorAndAction = [EditorView, (el: HTMLElement) => void];
@@ -125,9 +117,11 @@ export function initBeancountEditor(
   onDocChanges: (s: EditorState) => void,
   commands: KeyBinding[]
 ): EditorAndAction {
+  const { indent, currency_column } = get(fava_options);
   return setup(value, [
     beancount,
-    indentUnit.of(" ".repeat(get(fava_options).indent)),
+    indentUnit.of(" ".repeat(indent)),
+    ...(currency_column ? [rulerPlugin(currency_column - 1)] : []),
     keymap.of(commands),
     EditorView.updateListener.of((update) => {
       if (update.docChanged) {
