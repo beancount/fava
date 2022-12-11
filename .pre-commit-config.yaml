@@ -2,7 +2,7 @@ ci:
     skip: ["eslint"]
 repos:
     - repo: https://github.com/psf/black
-      rev: 22.10.0
+      rev: 22.12.0
       hooks:
           - id: black
     - repo: https://github.com/asottile/reorder_python_imports
@@ -17,7 +17,7 @@ repos:
       hooks:
           - id: flake8
     - repo: https://github.com/asottile/pyupgrade
-      rev: v3.3.0
+      rev: v3.3.1
       hooks:
           - id: pyupgrade
             args: ["--py36-plus"]
@@ -28,16 +28,16 @@ repos:
             language: node
             entry: prettier --write --list-different --ignore-unknown
             additional_dependencies:
-                - "prettier@2.8.0"
-                - "prettier-plugin-svelte@2.8.1"
-                - "svelte@3.53.1"
+                - "prettier@2.8.1"
+                - "prettier-plugin-svelte@2.9.0"
+                - "svelte@3.54.0"
           - id: stylelint
             name: stylelint
             language: node
             entry: stylelint --fix
             files: \.(css|svelte)$
             additional_dependencies:
-                - "stylelint@14.15.0"
+                - "stylelint@14.16.0"
                 - "stylelint-config-prettier@9.0.4"
                 - "stylelint-config-recess-order@3.0.0"
                 - "stylelint-config-standard@29.0.0"
