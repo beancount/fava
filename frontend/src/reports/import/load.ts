@@ -4,12 +4,12 @@ import { todayAsString } from "../../format";
 /**
  * Construct the filename from date and basename.
  */
-function newFilename(date: string, basename: string): string {
-  if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {
-    return basename;
-  }
+function newFilename(date: string | null, basename: string | null): string {
   if (!date || !basename) {
     return "";
+  }
+  if (/^\d{4}-\d{2}-\d{2}/.test(basename)) {
+    return basename;
   }
   return `${date} ${basename}`;
 }
@@ -20,7 +20,10 @@ interface FileWithImporters<T> {
   importers: ({ account: string; importer_name: string } & T)[];
 }
 
-export type ImportableFile = FileWithImporters<{ date: string; name: string }>;
+export type ImportableFile = FileWithImporters<{
+  date: string | null;
+  name: string | null;
+}>;
 export type ProcessedImportableFile = FileWithImporters<{ newName: string }>;
 
 /**

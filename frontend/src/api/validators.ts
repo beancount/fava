@@ -23,8 +23,8 @@ const importable_files_validator: Validator<ImportableFile[]> = array(
       object({
         account: string,
         importer_name: string,
-        date: string,
-        name: string,
+        date: optional(string),
+        name: optional(string),
       })
     ),
   })
