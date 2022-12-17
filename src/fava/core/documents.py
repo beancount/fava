@@ -53,7 +53,6 @@ def filepath_in_document_folder(
     Returns:
         The path that the document should be saved at.
     """
-
     if documents_folder not in ledger.options["documents"]:
         raise FavaAPIException(f"Not a documents folder: {documents_folder}.")
 

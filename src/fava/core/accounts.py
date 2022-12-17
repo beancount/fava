@@ -39,7 +39,6 @@ def uptodate_status(real_account: RealAccount) -> str | None:
         - 'red':    A balance check that failed.
         - 'yellow': Not a balance check.
     """
-
     for txn_posting in reversed(real_account.txn_postings):
         if isinstance(txn_posting, Balance):
             if txn_posting.diff_amount:

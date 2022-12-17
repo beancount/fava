@@ -92,7 +92,6 @@ def parse_budgets(
     Example:
         2015-04-09 custom "budget" Expenses:Books "monthly" 20.00 EUR
     """
-
     budgets: BudgetDict = defaultdict(list)
     errors = []
 

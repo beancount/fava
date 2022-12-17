@@ -78,10 +78,13 @@ def timefunc(
 
 
 def pairwise(iterable: Iterable[Item]) -> Iterator[tuple[Item, Item]]:
-    "s -> (s0,s1), (s1,s2), (s2, s3), ..."
+    """Iterate over consecutive pairs of the given iterable.
+
+    s -> (s0,s1), (s1,s2), (s2, s3), ...
+    """
     left, right = tee(iterable)
     next(right, None)
-    return zip(left, right)
+    return zip(left, right)  # noqa: B905
 
 
 def next_key(basekey: str, keys: dict[str, Any]) -> str:

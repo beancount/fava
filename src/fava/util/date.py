@@ -311,13 +311,12 @@ def parse_date(
 
 
 def month_offset(date: datetime.date, months: int) -> datetime.date:
-    """Offsets a date by a given number of months
+    """Offsets a date by a given number of months.
 
     Maintains the day, unless that day is invalid when it will
     raise a ValueError
 
     """
-
     year_delta, month = divmod(date.month - 1 + months, 12)
 
     return date.replace(year=date.year + year_delta, month=month + 1)
@@ -339,7 +338,7 @@ def parse_fye_string(fye: str) -> FiscalYearEnd | None:
 def get_fiscal_period(
     year: int, fye: FiscalYearEnd | None, quarter: int | None = None
 ) -> tuple[datetime.date | None, datetime.date | None]:
-    """Calculates fiscal periods
+    """Calculates fiscal periods.
 
     Uses the fava option "fiscal-year-end" which should be in "%m-%d" format.
     Defaults to calendar year [12-31]
@@ -409,7 +408,6 @@ def number_of_days_in_period(interval: Interval, date: datetime.date) -> int:
         A number, the number of days surrounding the given date in the
         interval.
     """
-
     if interval is Interval.DAY:
         return 1
     if interval is Interval.WEEK:

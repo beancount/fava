@@ -34,7 +34,6 @@ def link_documents(
     entries: Entries, _: Any
 ) -> tuple[Entries, list[DocumentError]]:
     """Link entries to documents."""
-
     errors = []
 
     # All document indices by their full file path.

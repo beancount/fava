@@ -215,8 +215,10 @@ def incomplete_sortkey(entry: Directive) -> tuple[datetime.date, int]:
 def insert_metadata_in_file(
     filename: str, lineno: int, indent: int, key: str, value: str
 ) -> None:
-    """Inserts the specified metadata in the file below lineno, taking into
-    account the whitespace in front of the line that lineno."""
+    """Inserts the specified metadata in the file below lineno.
+
+    Takes the whitespace in front of the line that lineno into account.
+    """
     with open(filename, encoding="utf-8") as file:
         contents = file.readlines()
 
@@ -281,7 +283,6 @@ def save_entry_slice(
         FavaAPIException: If the file at `path` is not one of the
             source files.
     """
-
     with open(entry.meta["filename"], encoding="utf-8") as file:
         lines = file.readlines()
 
@@ -376,7 +377,6 @@ def find_insert_position(
     Returns:
         A tuple of the filename and the line number.
     """
-
     # Get the list of accounts that should be considered for the entry.
     # For transactions, we want the reversed list of posting accounts.
     accounts = get_entry_accounts(entry)

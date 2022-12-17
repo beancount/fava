@@ -15,6 +15,8 @@ from fava.ext import FavaExtensionBase
 
 
 class AutoCommit(FavaExtensionBase):
+    """Auto-commit hook for Fava."""
+
     def _run(self, args):
         cwd = dirname(self.ledger.beancount_file_path)
         call(args, cwd=cwd, stdout=DEVNULL)

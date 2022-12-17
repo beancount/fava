@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
-from typing import Iterable
-from typing import Iterator
+from collections.abc import Iterable
+from collections.abc import Iterator
+from typing import TypeAlias
 
 from beancount.core.data import Directive
 from beancount.core.data import Entries
@@ -8,9 +9,9 @@ from beancount.core.data import Posting
 from beancount.core.data import TxnPosting
 from beancount.core.inventory import Inventory
 
-TxnPostingList = list[Directive | TxnPosting]
+TxnPostingList: TypeAlias = list[Directive | TxnPosting]
 
-class RealAccount(dict[str, "RealAccount"]):
+class RealAccount(dict[str, RealAccount]):
     account: str = ...
     txn_postings: TxnPostingList = ...
     balance: Inventory = ...

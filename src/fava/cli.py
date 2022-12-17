@@ -15,7 +15,7 @@ from fava.util import simple_wsgi
 
 
 # pylint: disable=too-many-arguments
-@click.command(context_settings=dict(auto_envvar_prefix="FAVA"))
+@click.command(context_settings={"auto_envvar_prefix": "FAVA"})
 @click.argument(
     "filenames",
     nargs=-1,
@@ -74,7 +74,6 @@ def main(
     For example, `--host=0.0.0.0` is equivalent to setting the environment
     variable `FAVA_HOST=0.0.0.0`.
     """
-
     if profile:
         debug = True
 
@@ -112,7 +111,7 @@ def main(
                     f"Cannot start Fava because port {port} is already in use."
                     "\nPlease choose a different port with the '-p' option."
                 )
-            raise click.Abort
+            raise click.Abort from error
     else:
         if profile:
             app.config["PROFILE"] = True
@@ -131,7 +130,7 @@ def main(
                     f"Cannot start Fava because port {port} is already in use."
                     "\nPlease choose a different port with the '-p' option."
                 )
-                raise click.Abort
+                raise click.Abort from error
             raise
 
 

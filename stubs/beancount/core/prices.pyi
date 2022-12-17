@@ -1,13 +1,14 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
 import datetime
+from typing import TypeAlias
 
 from beancount.core.data import Entries
 from beancount.core.number import Decimal
 
 # def get_last_price_entries(entries: Any, date: Any): ...
 
-BaseQuote = tuple[str, str]
-_DateAndPrice = tuple[datetime.date, Decimal]
+BaseQuote: TypeAlias = tuple[str, str]
+_DateAndPrice: TypeAlias = tuple[datetime.date, Decimal]
 
 class PriceMap(dict[tuple[str, str], _DateAndPrice]):
     forward_pairs: list[BaseQuote]

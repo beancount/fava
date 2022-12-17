@@ -98,7 +98,6 @@ ALIGN_RE = re.compile(
 
 def align(string: str, currency_column: int) -> str:
     """Align currencies in one column."""
-
     output = io.StringIO()
     for line in string.splitlines():
         match = ALIGN_RE.match(line)

@@ -1,10 +1,10 @@
 # pylint: disable=missing-docstring,unused-argument,multiple-statements
 import datetime
 import enum
+from collections.abc import Generator
 from typing import Any
-from typing import Generator
 from typing import NamedTuple
-from typing import Type
+from typing import TypeAlias
 
 from beancount.core.amount import Amount
 from beancount.core.number import Decimal
@@ -15,8 +15,8 @@ from beancount.core.position import CostSpec
 Account = str
 Currency = str
 Flag = str
-Meta = dict[str, Any]
-Tags = set[str] | frozenset[str]
+Meta: TypeAlias = dict[str, Any]
+Tags: TypeAlias = set[str] | frozenset[str]
 Links = Tags
 
 EMPTY_SET: Any
@@ -61,7 +61,7 @@ class Balance(NamedTuple):
 
 class Posting(NamedTuple):
     account: Account
-    units: Amount | Type[MISSING]
+    units: Amount | type[MISSING]
     cost: Cost | CostSpec | None
     price: Amount | None
     flag: Flag | None
@@ -120,7 +120,7 @@ class Custom(NamedTuple):
     values: list[Any]
 
 # ALL_DIRECTIVES: Any
-Directive = (
+Directive: TypeAlias = (
     Open
     | Close
     | Commodity
@@ -135,7 +135,7 @@ Directive = (
     | Custom
 )
 
-Entries = list[Directive]
+Entries: TypeAlias = list[Directive]
 
 def new_metadata(
     filename: Any, lineno: Any, kvlist: Any | None = ...

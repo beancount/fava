@@ -223,7 +223,7 @@ app.add_template_global(get_ledger_data, "get_ledger_data")
 @app.context_processor
 def template_context() -> dict[str, Any]:
     """Inject variables into the template context."""
-    return dict(ledger=g.ledger, chart_api=ChartApi)
+    return {"ledger": g.ledger, "chart_api": ChartApi}
 
 
 @app.before_request

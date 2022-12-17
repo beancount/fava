@@ -28,7 +28,6 @@ def get_active_years(entries: Entries, fye: FiscalYearEnd) -> list[str]:
         A reverse sorted list of years or fiscal years that occur in the
         entries.
     """
-
     if fye == (12, 31):
         return sorted(
             map(str, getters_get_active_years(entries)), reverse=True

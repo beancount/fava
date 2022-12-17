@@ -98,8 +98,10 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
     if key == "insert_entry":
         try:
             pattern = re.compile(value)
-        except re.error:
-            assert False, f"Should be a regular expression: '{value}'."
+        except re.error as err:
+            raise AssertionError(
+                f"Should be a regular expression: '{value}'."
+            ) from err
         opt = InsertEntryOption(
             entry.date, pattern, entry.meta["filename"], entry.meta["lineno"]
         )
@@ -107,15 +109,17 @@ def parse_option_custom_entry(entry: Custom, options: FavaOptions) -> None:
     elif key == "collapse_pattern":
         try:
             pattern = re.compile(value)
-        except re.error:
-            assert False, f"Should be a regular expression: '{value}'."
+        except re.error as err:
+            raise AssertionError(
+                f"Should be a regular expression: '{value}'."
+            ) from err
         options.collapse_pattern.append(pattern)
     elif key == "locale":
         try:
             Locale.parse(value)
             options.locale = value
-        except UnknownLocaleError:
-            assert False, f"Unknown locale: '{value}'."
+        except UnknownLocaleError as err:
+            raise AssertionError(f"Unknown locale: '{value}'.") from err
     elif key == "fiscal_year_end":
         fye = parse_fye_string(value)
         assert fye, "Invalid 'fiscal_year_end' option."
@@ -147,7 +151,6 @@ def parse_options(
         A tuple (options, errors) where options is a dictionary of all options
         to values, and errors contains possible parsing errors.
     """
-
     options = FavaOptions()
     errors = []
 

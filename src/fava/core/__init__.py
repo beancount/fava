@@ -343,7 +343,7 @@ class FavaLedger:
         for mod in MODULES:
             getattr(self, mod).load_file()
 
-    @lru_cache(maxsize=16)
+    @lru_cache(maxsize=16)  # noqa: B019
     def get_filtered(
         self,
         account: str | None = None,
@@ -598,4 +598,4 @@ class FavaLedger:
         for entry in entries:
             groups.setdefault(entry.__class__.__name__, []).append(entry)
 
-        return sorted(list(groups.items()), key=itemgetter(0))
+        return sorted(groups.items(), key=itemgetter(0))

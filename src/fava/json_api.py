@@ -132,7 +132,6 @@ def api_endpoint(func: Callable[..., Any]) -> Callable[[], Response]:
     parameters are extracted from the URL query string and passed to the
     decorated endpoint handler.
     """
-
     method, _, name = func.__name__.partition("_")
     assert method in {"get", "delete", "put"}, func.__name__
     validator = validate_func_arguments(func)

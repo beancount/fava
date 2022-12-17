@@ -1,4 +1,4 @@
-"""Provide data suitable for Fava's charts. """
+"""Provide data suitable for Fava's charts."""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -320,7 +320,6 @@ class ChartModule(FavaModule):
             types: The list of result row types.
             rows: The result rows.
         """
-
         if not self.can_plot_query(types):
             raise FavaAPIException("Can not plot the given chart.")
         if types[0][1] is date:

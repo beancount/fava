@@ -5,6 +5,7 @@ import datetime
 import math
 
 ZERO = float()
+DEFAULT_RATE = math.log(2) * 1 / 365
 
 
 class ExponentialDecayRanker:
@@ -41,7 +42,7 @@ class ExponentialDecayRanker:
     def __init__(
         self,
         list_: list[str] | None = None,
-        rate: float = math.log(2) * 1 / 365,
+        rate: float = DEFAULT_RATE,
     ):
         self.list = list_
         self.rate = rate

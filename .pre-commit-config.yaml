@@ -12,15 +12,15 @@ repos:
             args:
                 - "--application-directories=.:src"
                 - "--add-import=from __future__ import annotations"
-    - repo: https://github.com/PyCQA/flake8
-      rev: 6.0.0
-      hooks:
-          - id: flake8
     - repo: https://github.com/asottile/pyupgrade
       rev: v3.3.1
       hooks:
           - id: pyupgrade
             args: ["--py36-plus"]
+    - repo: https://github.com/charliermarsh/ruff-pre-commit
+      rev: v0.0.184
+      hooks:
+          - id: ruff
     - repo: local
       hooks:
           - id: prettier
