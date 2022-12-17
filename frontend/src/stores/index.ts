@@ -42,13 +42,13 @@ export const ledgerDataValidator = object({
     currency_column: number,
     conversion_currencies: array(string),
     import_config: optional(string),
-
     indent: number,
     locale: union(string, constant(null)),
     uptodate_indicator_grey_lookback_days: number,
     insert_entry: array(
       object({ date: string, filename: string, lineno: number, re: string })
     ),
+    use_external_editor: boolean,
   }),
   have_excel: boolean,
   incognito: boolean,

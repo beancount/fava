@@ -89,7 +89,6 @@ app.config["ACCOUNT_RE"] = ACCOUNT_RE
 
 SERVER_SIDE_REPORTS = [
     "balance_sheet",
-    "errors",
     "holdings",
     "income_statement",
     "journal",
@@ -102,6 +101,7 @@ CLIENT_SIDE_REPORTS = [
     "commodities",
     "documents",
     "editor",
+    "errors",
     "events",
     "import",
     "query",
@@ -196,16 +196,6 @@ def url_for(endpoint: str, **values: str) -> str:
     return CACHED_URL_FOR(endpoint, **values)
 
 
-def url_for_source(**kwargs: str) -> str:
-    """URL to source file (possibly link to external editor)."""
-    if g.ledger.fava_options.use_external_editor:
-        return (
-            f"beancount://{kwargs.get('file_path')}"
-            + f"?lineno={kwargs.get('line', 1)}"
-        )
-    return url_for("report", report_name="editor", **kwargs)
-
-
 def translations() -> Any:
     """Get translations catalog."""
     # pylint: disable=protected-access
@@ -215,7 +205,6 @@ def translations() -> Any:
 app.add_template_global(static_url, "static_url")
 app.add_template_global(date.today, "today")
 app.add_template_global(url_for, "url_for")
-app.add_template_global(url_for_source, "url_for_source")
 app.add_template_global(translations, "translations")
 app.add_template_global(get_ledger_data, "get_ledger_data")
 

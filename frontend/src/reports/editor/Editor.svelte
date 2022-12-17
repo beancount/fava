@@ -42,7 +42,7 @@
       });
       changed = false;
       cm.focus();
-      get("errors").then((count) => errorCount.set(count), log_error);
+      get("errors").then((errors) => errorCount.set(errors.length), log_error);
     } catch (error) {
       notify_err(error, (e) => e.message);
     } finally {

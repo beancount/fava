@@ -1,7 +1,6 @@
 import { get } from "svelte/store";
 
-import type { EntryBaseAttributes } from "./entries";
-import { base_url } from "./stores";
+import { base_url, fava_options } from "./stores";
 import { urlSyncedParams } from "./stores/url";
 
 /**
@@ -35,10 +34,10 @@ export function urlFor(
 }
 
 /** URL for the editor to the source location of an entry. */
-export function urlForSource(entry: EntryBaseAttributes): string {
-  const file_path = entry.meta.filename?.toString() ?? "";
-  const line = entry.meta.lineno?.toString() ?? "";
-  return urlFor("editor/", { file_path, line });
+export function urlForSource(file_path: string, line: string): string {
+  return get(fava_options).use_external_editor
+    ? `beancount://${file_path}?lineno=${line}`
+    : urlFor("editor/", { file_path, line });
 }
 
 /** URL for the account report. */

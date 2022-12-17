@@ -47,7 +47,12 @@ export const getAPIValidators = {
     })
   ),
   documents: array(object({ account: string, filename: string, date: string })),
-  errors: number,
+  errors: array(
+    object({
+      message: string,
+      source: object({ filename: string, lineno: number }),
+    })
+  ),
   extract: array(entryValidator),
   events: array(object({ type: string, description: string, date })),
   imports: importable_files_validator,

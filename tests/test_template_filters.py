@@ -21,7 +21,6 @@ from fava.template_filters import collapse_account
 from fava.template_filters import format_currency
 from fava.template_filters import format_date
 from fava.template_filters import format_date_filter
-from fava.template_filters import format_errormsg
 from fava.template_filters import get_or_create
 from fava.template_filters import remove_keys
 from fava.template_filters import should_show
@@ -93,22 +92,6 @@ def test_should_show(app: Flask) -> None:
         assert not g.ledger.fava_options.show_accounts_with_zero_balance
         assert should_show(g.filtered.root_tree.get("")) is True
         assert should_show(g.filtered.root_tree.get("Expenses")) is False
-
-
-def test_format_errormsg(app: Flask) -> None:
-    with app.test_request_context("/long-example/"):
-        app.preprocess_request()
-        assert (
-            format_errormsg("Test for 'Expenses:Acme:Cash': Test")
-            == 'Test for <a href="/long-example/account/Expenses:'
-            'Acme:Cash/">Expenses:Acme:Cash</a>: Test'
-        )
-        assert (
-            format_errormsg("Test Expenses:Acme:Cash Test")
-            == 'Test <a href="/long-example/account/Expenses:'
-            'Acme:Cash/">Expenses:Acme:Cash</a> Test'
-        )
-        assert format_errormsg("Test: Test") == "Test: Test"
 
 
 def test_collapse_account(app: Flask, monkeypatch: MonkeyPatch) -> None:

@@ -10,6 +10,8 @@ import DocumentsSvelte from "./documents/Documents.svelte";
 import { load as load_documents } from "./documents/load";
 import EditorSvelte from "./editor/Editor.svelte";
 import { load as load_editor } from "./editor/load";
+import ErrorsSvelte from "./errors/Errors.svelte";
+import { load as load_errors } from "./errors/load";
 import EventsSvelte from "./events/Events.svelte";
 import { load as load_events } from "./events/load";
 import ImportSvelte from "./import/Import.svelte";
@@ -40,6 +42,7 @@ const routes: [
   ["commodities", CommoditiesSvelte, load_commodities, () => _("Commodities")],
   ["documents", DocumentsSvelte, load_documents, () => _("Documents")],
   ["editor", EditorSvelte, load_editor, () => _("Editor")],
+  ["errors", ErrorsSvelte, load_errors, () => _("Errors")],
   ["events", EventsSvelte, load_events, () => _("Events")],
   ["import", ImportSvelte, load_import, () => _("Import")],
   ["query", QuerySvelte, noload, () => _("Query")],

@@ -162,9 +162,9 @@ def get_changed() -> bool:
 
 
 @api_endpoint
-def get_errors() -> int:
-    """Number of errors."""
-    return len(g.ledger.errors)
+def get_errors() -> list[Any]:
+    """Errors of the ledger."""
+    return g.ledger.errors
 
 
 api_endpoint(get_ledger_data)

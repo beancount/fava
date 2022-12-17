@@ -5,7 +5,6 @@ All functions in this module will be automatically added as template filters.
 from __future__ import annotations
 
 import datetime
-import re
 from os.path import basename as path_basename
 from typing import Any
 from typing import MutableMapping
@@ -14,13 +13,10 @@ from unicodedata import normalize
 
 from beancount.core import compare
 from beancount.core import realization
-from beancount.core.account import ACCOUNT_RE
 from beancount.core.data import Directive
 from beancount.core.inventory import Inventory
 from beancount.core.number import Decimal
 from beancount.core.number import ZERO
-from flask import url_for
-from markupsafe import Markup
 
 from fava.context import g
 from fava.core.conversion import cost
@@ -141,20 +137,6 @@ def basename(file_path: str) -> str:
     return normalize("NFC", path_basename(file_path))
 
 
-def format_errormsg(message: str) -> Markup:
-    """Match account names in error messages and insert HTML links for them."""
-    match = re.search(ACCOUNT_RE, message)
-    if not match:
-        return Markup(message)
-    account = match.group()
-    url = url_for("account", name=account)
-    return Markup(
-        message.replace(account, f'<a href="{url}">{account}</a>')
-        .replace("for '", "for ")
-        .replace("': ", ": ")
-    )
-
-
 def collapse_account(account_name: str) -> bool:
     """Return true if account should be collapsed."""
     collapse_patterns = g.ledger.fava_options.collapse_pattern
@@ -172,7 +154,6 @@ FILTERS = [
     format_currency,
     format_date,
     format_date_filter,
-    format_errormsg,
     get_or_create,
     hash_entry,
     remove_keys,
