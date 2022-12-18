@@ -10,6 +10,7 @@ This is not intended to work well enough for full roundtrips yet.
 from __future__ import annotations
 
 import datetime
+from copy import copy
 from functools import singledispatch
 from typing import Any
 
@@ -65,6 +66,8 @@ def serialise(entry: Directive | Posting) -> Any:
 def _(entry: Transaction) -> Any:
     """Serialise an entry."""
     ret = entry._asdict()
+    ret["meta"] = copy(entry.meta)
+    ret["meta"].pop("__tolerances__", None)
     ret["type"] = "Transaction"
     ret["payee"] = entry.payee or ""
     ret["postings"] = list(map(serialise, entry.postings))
