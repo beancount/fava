@@ -9,7 +9,7 @@
   import { emptyPosting, Transaction } from "../entries";
   import type { Posting } from "../entries";
   import { _ } from "../i18n";
-  import { notify } from "../notifications";
+  import { notify_err } from "../notifications";
   import { payees } from "../stores";
 
   import AddMetadataButton from "./AddMetadataButton.svelte";
@@ -36,12 +36,11 @@
           suggestions = s;
         })
         .catch((error) => {
-          if (error instanceof Error) {
-            notify(
-              `Fetching account suggestions for payee ${payee} failed: ${error.message}`,
-              "error"
-            );
-          }
+          notify_err(
+            error,
+            (err) =>
+              `Fetching account suggestions for payee ${payee} failed: ${err.message}`
+          );
         });
     }
   }

@@ -10,7 +10,7 @@ import { put } from "./api";
 import { todayAsString } from "./format";
 import { delegate } from "./lib/events";
 import { basename, documentHasAccount } from "./lib/paths";
-import { notify } from "./notifications";
+import { notify, notify_err } from "./notifications";
 
 /**
  * Handle a dragenter or dragover event.
@@ -85,9 +85,10 @@ function drop(event: DragEvent, target: HTMLElement): void {
       put("attach_document", { filename, entry_hash: targetEntry }).then(
         notify,
         (error) => {
-          if (error instanceof Error) {
-            notify(error.message, "error");
-          }
+          notify_err(
+            error,
+            (e) => `Adding document metadata failed: ${e.message}`
+          );
         }
       );
     }

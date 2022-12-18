@@ -9,7 +9,7 @@
   import { account, files, hash } from "../document-upload";
   import AccountInput from "../entry-forms/AccountInput.svelte";
   import { _ } from "../i18n";
-  import { notify } from "../notifications";
+  import { notify, notify_err } from "../notifications";
   import router from "../router";
   import { options } from "../stores";
 
@@ -35,9 +35,7 @@
         formData.append("folder", documents_folder);
         formData.append("file", dataTransferFile, name);
         return put("add_document", formData).then(notify, (error) => {
-          if (error instanceof Error) {
-            notify(`Upload error: ${error.message}`, "error");
-          }
+          notify_err(error, (err) => `Upload error: ${err.message}`);
         });
       })
     );
