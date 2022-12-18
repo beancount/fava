@@ -7,3 +7,10 @@ export const reloadAfterSavingEntrySlice = localStorageSyncedStore(
   boolean,
   () => true
 );
+
+/** Whether to continue (and add another entry) after adding an entry in the AddEntry dialog. */
+export const addEntryContinue = localStorageSyncedStore(
+  "add-entry-continue",
+  boolean,
+  () => false
+);

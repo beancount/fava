@@ -5,6 +5,7 @@
   import Entry from "../entry-forms/Entry.svelte";
   import { _ } from "../i18n";
   import { closeOverlay, urlHash } from "../stores";
+  import { addEntryContinue } from "../stores/editor";
 
   import ModalBase from "./ModalBase.svelte";
 
@@ -16,21 +17,12 @@
 
   let entry = create("Transaction");
 
-  async function submitAndNew({
-    currentTarget,
-  }: {
-    currentTarget: HTMLButtonElement;
-  }) {
-    if (currentTarget.form?.reportValidity()) {
-      await saveEntries([entry]);
-      entry = create(entry.type);
-    }
-  }
-
   async function submit() {
     await saveEntries([entry]);
     entry = create(entry.type);
-    closeOverlay();
+    if (!$addEntryContinue) {
+      closeOverlay();
+    }
   }
 
   $: shown = $urlHash === "add-transaction";
@@ -56,14 +48,17 @@
     <Entry bind:entry />
     <div class="flex-row">
       <span class="spacer" />
-      <button
-        type="submit"
-        on:click|preventDefault={submitAndNew}
-        class="muted"
-      >
-        {_("Save and add new")}
-      </button>
+      <label>
+        <input type="checkbox" bind:checked={$addEntryContinue} />
+        <span>{_("continue")}</span>
+      </label>
       <button type="submit">{_("Save")}</button>
     </div>
   </form>
 </ModalBase>
+
+<style>
+  label span {
+    margin-right: 1rem;
+  }
+</style>

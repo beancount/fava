@@ -70,7 +70,7 @@
 </form>
 
 <style>
-  span {
+  label span {
     margin-right: 1rem;
   }
 
