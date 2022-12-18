@@ -1,9 +1,11 @@
 <script lang="ts">
   import { put } from "../api";
   import { initBeancountEditor } from "../codemirror/setup";
-  import { notify } from "../notifications";
+  import { _ } from "../i18n";
+  import { notify_err } from "../notifications";
   import router from "../router";
   import { closeOverlay } from "../stores";
+  import { reloadAfterSavingEntrySlice } from "../stores/editor";
 
   import SaveButton from "./SaveButton.svelte";
 
@@ -24,12 +26,12 @@
         source: currentSlice,
         sha256sum,
       });
-      router.reload();
+      if ($reloadAfterSavingEntrySlice) {
+        router.reload();
+      }
       closeOverlay();
     } catch (error) {
-      if (error instanceof Error) {
-        notify(error.message, "error");
-      }
+      notify_err(error, (err) => `Saving failed: ${err.message}`);
     } finally {
       saving = false;
     }
@@ -56,12 +58,23 @@
 </script>
 
 <form on:submit|preventDefault={save}>
-  <div use:useEditor />
-  <SaveButton {changed} {saving} />
+  <div class="editor" use:useEditor />
+  <div class="flex-row">
+    <span class="spacer" />
+    <label>
+      <input type="checkbox" bind:checked={$reloadAfterSavingEntrySlice} />
+      <span>{_("reload")}</span>
+    </label>
+    <SaveButton {changed} {saving} />
+  </div>
 </form>
 
 <style>
-  div {
+  span {
+    margin-right: 1rem;
+  }
+
+  .editor {
     margin-bottom: 0.5rem;
     border: 1px solid var(--sidebar-border);
   }
