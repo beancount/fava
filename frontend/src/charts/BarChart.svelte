@@ -87,7 +87,7 @@
 <svg {width} {height}>
   <g transform={`translate(${offset},${margin.top})`}>
     <Axis x axis={xAxis} {innerHeight} />
-    <Axis y axis={yAxis} />
+    <Axis y axis={yAxis} lineAtZero={true} />
     {#each bar_groups as group}
       <g
         class="group"

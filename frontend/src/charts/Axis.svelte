@@ -9,11 +9,14 @@
   export let x = false;
   /** True if this is a y axis. */
   export let y = false;
+  /** Whether to show a more pronounced line at zero (for y axis). */
+  export let lineAtZero = false;
   /** Height of the chart (needed for the correct offset of an x axis) */
   export let innerHeight = 0;
 
   $: transform = x ? `translate(0,${innerHeight})` : undefined;
 
+  /** Svelte action to render the axis. */
   function use(
     node: SVGGElement,
     ax: Axis<unknown>
@@ -29,7 +32,13 @@
   }
 </script>
 
-<g class:y use:use={axis} {transform} />
+<g class:y use:use={axis} {transform}>
+  {#if y && lineAtZero}
+    <g class="zero" transform={`translate(0,${axis.scale()(0) ?? 0})`}>
+      <line x2={-axis.tickSizeInner()} />
+    </g>
+  {/if}
+</g>
 
 <style>
   g :global(path),
@@ -42,5 +51,10 @@
   g.y :global(line),
   g.y :global(path.domain) {
     opacity: 0.2;
+  }
+
+  g.y .zero line {
+    opacity: 1;
+    stroke: #666;
   }
 </style>
